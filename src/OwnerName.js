@@ -1,4 +1,6 @@
 import React from "react";
+import {connect} from "react-redux";
+
 import "./OwnerName.css";
 
 const OwnerName = ({name, generation}) => {
@@ -11,4 +13,6 @@ const OwnerName = ({name, generation}) => {
     }
 };
 
-export default OwnerName;
+const mapStateToProps = (state) => state.owner;
+
+export default connect(mapStateToProps)(OwnerName);

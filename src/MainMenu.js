@@ -4,7 +4,7 @@ import OwnerName from "./OwnerName";
 
 const MainMenu = () => (
     <Navbar bg="dark" variant="dark" expand="lg" sticky="top" className="mb-3">
-      <Navbar.Text><OwnerName name="unknown" generation={0} /></Navbar.Text>
+      <Navbar.Text><OwnerName /></Navbar.Text>
       <Navbar.Collapse>
         <Nav>
           <Nav.Link href="/">HOME</Nav.Link>
