@@ -1,0 +1,11 @@
+.owner-name {
+    font-weight: bold;
+    color: white;
+    margin-right: 1rem;
+}
+
+.owner-name .generation {
+    font-size: 60%;
+    position: relative;
+    bottom: -0.25em;
+}
