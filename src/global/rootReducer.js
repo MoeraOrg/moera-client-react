@@ -1,4 +1,4 @@
-const rootReducer = (state, action) => {
+export default (state, action) => {
     if (state === undefined) {
         const location = window.location.protocol + "//" + window.location.host;
         const page = location + "/moera";
@@ -8,5 +8,3 @@ const rootReducer = (state, action) => {
         return state;
     }
 }
-
-export default rootReducer;

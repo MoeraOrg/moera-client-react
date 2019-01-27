@@ -1,10 +1,18 @@
+import { OWNER_NAME_LOAD } from "./ownerActions";
+
 const initialState = {
-    name: "anonymous",
+    name: null,
     generation: 0
 };
 
-const ownerReducer = (state = initialState, action) => {
-    return state;
+export default (state = initialState, action) => {
+    switch (action.type) {
+        case OWNER_NAME_LOAD:
+            return {
+                name: "unknown",
+                generation: 1
+            }
+        default:
+            return state;
+    }
 }
-
-export default ownerReducer;
