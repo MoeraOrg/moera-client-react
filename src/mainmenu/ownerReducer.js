@@ -1,4 +1,4 @@
-import { OWNER_NAME_LOAD } from "./ownerActions";
+import { OWNER_NAME_SET } from "./ownerActions";
 
 const initialState = {
     name: null,
@@ -7,11 +7,8 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case OWNER_NAME_LOAD:
-            return {
-                name: "unknown",
-                generation: 1
-            }
+        case OWNER_NAME_SET:
+            return action.payload;
         default:
             return state;
     }

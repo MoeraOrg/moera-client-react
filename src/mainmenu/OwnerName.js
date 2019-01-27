@@ -1,5 +1,5 @@
 import React from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 import "./OwnerName.css";
 import { ownerNameLoad } from "./ownerActions";
@@ -11,7 +11,7 @@ class OwnerName extends React.Component {
     }
 
     render() {
-        const {name, generation} = this.props;
+        const { name, generation } = this.props;
         if (name) {
             return (
                 <span className="owner-name">{name}<span className="generation">{generation}</span></span>
