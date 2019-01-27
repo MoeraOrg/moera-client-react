@@ -1,4 +1,5 @@
-import { createStore } from "redux";
-import reducer from "./reducers";
+import { combineReducers, createStore } from "redux";
+import root from "./global/rootReducer";
+import owner from "./mainmenu/ownerReducer";
 
-export default createStore(reducer);
+export default createStore(combineReducers({root, owner}));

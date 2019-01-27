@@ -1,5 +1,5 @@
 import React from "react";
-import MainMenu from "./MainMenu";
+import MainMenu from "./mainmenu/MainMenu";
 import "./App.css";
 
 const App = () => (
