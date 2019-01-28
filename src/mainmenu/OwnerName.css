@@ -4,6 +4,15 @@
     margin-right: 1rem;
 }
 
+.owner-name.correct {
+    color: #68faff;
+}
+
+.owner-name.incorrect {
+    color: #ff6868;
+    text-decoration: line-through;
+}
+
 .owner-name .generation {
     font-size: 60%;
     position: relative;

@@ -2,7 +2,10 @@ import { OWNER_NAME_SET } from "./ownerActions";
 
 const initialState = {
     name: null,
-    generation: 0
+    generation: 0,
+    latest: false,
+    verified: false,
+    correct: false
 };
 
 export default (state = initialState, action) => {
