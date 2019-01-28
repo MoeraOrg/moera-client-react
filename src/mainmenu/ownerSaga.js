@@ -1,5 +1,6 @@
-import { select, call, put, apply } from "redux-saga/effects";
-import { ownerNameSet } from "./ownerActions";
+import { select, call, put, apply } from 'redux-saga/effects';
+
+import { ownerNameSet } from "mainmenu/ownerActions";
 
 export function* ownerNameLoadSaga() {
     const rootApi = yield select(state => state.root.api);

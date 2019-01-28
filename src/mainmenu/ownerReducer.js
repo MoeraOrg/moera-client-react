@@ -1,4 +1,4 @@
-import { OWNER_NAME_SET } from "./ownerActions";
+import { OWNER_NAME_SET } from "mainmenu/ownerActions";
 
 const initialState = {
     name: null,

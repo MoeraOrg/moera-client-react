@@ -1,7 +1,8 @@
-import React from "react";
-import {Navbar, Nav} from "react-bootstrap";
-import OwnerName from "./OwnerName";
-import MainMenuLink from "./MainMenuLink";
+import React from 'react';
+import {Navbar, Nav} from 'react-bootstrap';
+
+import OwnerName from "mainmenu/OwnerName";
+import MainMenuLink from "mainmenu/MainMenuLink";
 
 const MainMenu = () => (
     <Navbar bg="dark" variant="dark" expand="lg" sticky="top" className="mb-3">

@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 
-import "./OwnerName.css";
-import { ownerNameLoad } from "./ownerActions";
+import "mainmenu/OwnerName.css";
+import { ownerNameLoad } from "mainmenu/ownerActions";
 
 function OwnerNameGeneration({generation, latest}) {
     if (!latest) {
