@@ -1,4 +1,4 @@
-import { OWNER_NAME_SET } from "mainmenu/ownerActions";
+import { OWNER_NAME_SET, OWNER_NAME_VERIFIED } from "mainmenu/ownerActions";
 
 const initialState = {
     name: null,
@@ -11,7 +11,20 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case OWNER_NAME_SET:
-            return action.payload;
+            return {
+                ...state,
+                ...action.payload,
+                verified: false
+            };
+        case OWNER_NAME_VERIFIED:
+            if (state.name === action.payload.name) {
+                return {
+                    ...state,
+                    ...action.payload,
+                    verified: true
+                };
+            }
+            return state;
         default:
             return state;
     }
