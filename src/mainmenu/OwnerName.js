@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import cx from 'classnames';
 
 import "mainmenu/OwnerName.css";
 import { ownerNameLoad } from "mainmenu/ownerActions";
@@ -21,10 +22,12 @@ class OwnerName extends React.Component {
     render() {
         const { name, generation, latest, verified, correct } = this.props;
         if (name) {
-            let klass = "owner-name";
-            if (verified) {
-                klass += correct ? " correct" : " incorrect";
-            }
+            const klass = cx([
+                "owner-name", {
+                    "correct": verified && correct,
+                    "incorrect": verified && !correct
+                }
+            ]);
             return (
                 <span className={klass}>
                     {name}
