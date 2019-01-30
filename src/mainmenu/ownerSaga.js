@@ -1,10 +1,12 @@
 import { select, call, put, apply } from 'redux-saga/effects';
 
 import { ownerNameSet, ownerNameVerified } from "mainmenu/ownerActions";
-import { getCurrentSaga } from "naming/saga";
+import { getCurrentSaga } from "naming/namingSaga";
 
 export function* ownerNameLoadSaga() {
-    const rootApi = yield select(state => state.root.api);
+    const {rootApi, rootPage} = yield select(state => ({
+        rootApi: state.root.api,
+        rootPage:  state.root.page}));
     const response = yield call(fetch, rootApi + "/profile");
     const data = yield apply(response, response.json);
     yield put(ownerNameSet(data.registeredName, data.registeredNameGeneration));
@@ -12,7 +14,6 @@ export function* ownerNameLoadSaga() {
         return;
     }
     const ndata = yield* getCurrentSaga(data.registeredName, data.registeredNameGeneration);
-    const rootPage = yield select(state => state.root.page);
     const correct = rootPage.startsWith(ndata.nodeUri) && rootApi.startsWith(ndata.nodeUri);
     yield put(ownerNameVerified(data.registeredName, data.registeredNameGeneration, ndata.latest, correct));
 }

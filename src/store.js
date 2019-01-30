@@ -1,6 +1,7 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import root from "global/rootReducer";
 import owner from "mainmenu/ownerReducer";
+import naming from "naming/namingReducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
@@ -13,7 +14,7 @@ function* combinedSaga() {
 
 const sagaMiddleware = createSagaMiddleware()
 export default createStore(
-    combineReducers({ root, owner }),
+    combineReducers({ root, owner, naming }),
     applyMiddleware(sagaMiddleware)
 );
 
