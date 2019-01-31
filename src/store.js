@@ -1,18 +1,18 @@
 import { combineReducers, createStore, applyMiddleware } from 'redux';
-import root from "global/rootReducer";
-import owner from "mainmenu/ownerReducer";
-import naming from "naming/namingReducer";
+import root from "root/reducer";
+import owner from "mainmenu/owner/reducer";
+import naming from "naming/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
-import { ownerNameLoadSaga } from "mainmenu/ownerSaga";
-import { OWNER_NAME_LOAD } from "mainmenu/ownerActions";
+import { ownerLoadSaga } from "mainmenu/owner/sagas";
+import { OWNER_LOAD } from "mainmenu/owner/actions";
 
 function* combinedSaga() {
-    yield takeLatest(OWNER_NAME_LOAD, ownerNameLoadSaga);
+    yield takeLatest(OWNER_LOAD, ownerLoadSaga);
 }
 
-const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware();
 export default createStore(
     combineReducers({ root, owner, naming }),
     applyMiddleware(sagaMiddleware)
