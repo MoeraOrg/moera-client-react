@@ -7,7 +7,7 @@ import "./App.css";
 const App = () => (
     <>
         <ErrorPane/>
-        <div className="logobar"><img src="/pics/logo-w-64.png" alt="Moera" /></div>
+        <div className="logo-bar"><img src="/pics/logo-w-64.png" alt="Moera" /></div>
         <MainMenu />
     </>
 );
