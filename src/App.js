@@ -1,7 +1,7 @@
 import React from 'react';
 
 import MainMenu from "mainmenu/MainMenu";
-import "App.css";
+import "./App.css";
 
 const App = () => (
     <>
