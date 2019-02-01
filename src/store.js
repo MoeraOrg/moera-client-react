@@ -7,14 +7,17 @@ import profile from "profile/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
-import { errorSaga } from "error/sagas";
-import { ownerLoadSaga } from "mainmenu/owner/sagas";
 import { ERROR_THROWN } from "error/actions";
 import { OWNER_LOAD } from "mainmenu/owner/actions";
+import { PROFILE_LOAD } from "profile/actions";
+import { errorSaga } from "error/sagas";
+import { ownerLoadSaga } from "mainmenu/owner/sagas";
+import { profileLoadSaga } from "profile/sagas";
 
 function* combinedSaga() {
-    yield takeLatest(OWNER_LOAD, ownerLoadSaga);
     yield takeLatest(ERROR_THROWN, errorSaga);
+    yield takeLatest(OWNER_LOAD, ownerLoadSaga);
+    yield takeLatest(PROFILE_LOAD, profileLoadSaga);
 }
 
 const sagaMiddleware = createSagaMiddleware();
