@@ -2,7 +2,7 @@
 
 SERVER_CONFIG=node_modules/react-scripts/config/webpackDevServer.config.js
 
-if ! grep 'Access-Control-Allow-Origin' $SERVER_CONFIG; then
+if ! grep -q 'Access-Control-Allow-Origin' $SERVER_CONFIG; then
     patch $SERVER_CONFIG <<'END'
 @@ -36,6 +36,7 @@
      // So we will disable the host check normally, but enable it if you have
