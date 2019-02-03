@@ -2,6 +2,8 @@ import { applyMiddleware, combineReducers, createStore } from 'redux';
 import error from "error/reducer";
 import naming from "naming/reducer";
 import node from "node/reducer";
+import home from "home/reducer";
+import connectDialog from "logobar/connectionstatus/connectdialog/reducer";
 import owner from "mainmenu/owner/reducer";
 import profile from "profile/reducer";
 
@@ -22,7 +24,7 @@ function* combinedSaga() {
 
 const sagaMiddleware = createSagaMiddleware();
 export default createStore(
-    combineReducers({ error, naming, node, owner, profile }),
+    combineReducers({ error, naming, node, home, connectDialog, owner, profile }),
     applyMiddleware(sagaMiddleware)
 );
 
