@@ -6,6 +6,7 @@ import home from "home/reducer";
 import connectDialog from "logobar/connectionstatus/connectdialog/reducer";
 import owner from "mainmenu/owner/reducer";
 import profile from "profile/reducer";
+import messageBox from "messagebox/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
@@ -27,7 +28,7 @@ function* combinedSaga() {
 
 const sagaMiddleware = createSagaMiddleware();
 export default createStore(
-    combineReducers({ error, naming, node, home, connectDialog, owner, profile }),
+    combineReducers({ error, naming, node, home, connectDialog, owner, profile, messageBox }),
     applyMiddleware(sagaMiddleware)
 );
 

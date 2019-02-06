@@ -4,6 +4,7 @@ import ErrorPane from "error/ErrorPane";
 import LogoBar from "logobar/LogoBar";
 import MainMenu from "mainmenu/MainMenu";
 import Profile from "profile/Profile";
+import MessageBox from "messagebox/MessageBox";
 import "./App.css";
 
 const App = () => (
@@ -12,8 +13,7 @@ const App = () => (
         <LogoBar />
         <MainMenu />
         <Profile />
-
-        <div id="modal-root" />
+        <MessageBox />
     </>
 );
 
