@@ -2,7 +2,6 @@ import React from 'react';
 
 import ErrorPane from "error/ErrorPane";
 import LogoBar from "logobar/LogoBar";
-import ConnectDialog from "logobar/connectionstatus/connectdialog/ConnectDialog";
 import MainMenu from "mainmenu/MainMenu";
 import Profile from "profile/Profile";
 import "./App.css";
@@ -13,7 +12,8 @@ const App = () => (
         <LogoBar />
         <MainMenu />
         <Profile />
-        <ConnectDialog />
+
+        <div id="modal-root" />
     </>
 );
 
