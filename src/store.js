@@ -3,6 +3,7 @@ import error from "error/reducer";
 import naming from "naming/reducer";
 import node from "node/reducer";
 import home from "home/reducer";
+import tokens from "tokens/reducer";
 import connectDialog from "logobar/connectionstatus/connectdialog/reducer";
 import owner from "mainmenu/owner/reducer";
 import profile from "profile/reducer";
@@ -28,7 +29,7 @@ function* combinedSaga() {
 
 const sagaMiddleware = createSagaMiddleware();
 export default createStore(
-    combineReducers({ error, naming, node, home, connectDialog, owner, profile, messageBox }),
+    combineReducers({ error, naming, node, home, tokens, connectDialog, owner, profile, messageBox }),
     applyMiddleware(sagaMiddleware)
 );
 
