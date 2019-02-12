@@ -13,17 +13,18 @@ import createSagaMiddleware from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
 import { ERROR_THROWN } from "error/actions";
 import { OWNER_LOAD } from "mainmenu/owner/actions";
-import { CONNECT_TO_HOME } from "home/actions";
+import { CONNECT_TO_HOME, RESTORE_CONNECTION_TO_HOME } from "home/actions";
 import { PROFILE_LOAD } from "profile/actions";
 import { errorSaga } from "error/sagas";
 import { ownerLoadSaga } from "mainmenu/owner/sagas";
-import { connectToHomeSaga } from "home/connect";
+import { connectToHomeSaga, verifyHomeOwnerSaga } from "home/connect";
 import { profileLoadSaga } from "profile/sagas";
 
 function* combinedSaga() {
     yield takeLatest(ERROR_THROWN, errorSaga);
     yield takeLatest(OWNER_LOAD, ownerLoadSaga);
     yield takeLatest(CONNECT_TO_HOME, connectToHomeSaga);
+    yield takeLatest(RESTORE_CONNECTION_TO_HOME, verifyHomeOwnerSaga);
     yield takeLatest(PROFILE_LOAD, profileLoadSaga);
 }
 
