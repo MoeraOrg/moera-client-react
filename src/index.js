@@ -9,7 +9,6 @@ import App from "./App";
 
 import * as serviceWorker from "./serviceWorker";
 
-fetch("http://moera.please.start.com/"); // Call the browser extension to inject communication code
 ReactDOM.render(
     <Provider store={store}>
         <App />
