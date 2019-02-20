@@ -14,11 +14,11 @@ import { takeLatest } from 'redux-saga/effects';
 import { ERROR_THROWN } from "error/actions";
 import { OWNER_LOAD } from "mainmenu/owner/actions";
 import { CONNECT_TO_HOME, RESTORE_CONNECTION_TO_HOME } from "home/actions";
-import { PROFILE_LOAD } from "profile/actions";
+import { PROFILE_LOAD, PROFILE_UPDATE } from "profile/actions";
 import { errorSaga } from "error/sagas";
 import { ownerLoadSaga } from "mainmenu/owner/sagas";
 import { connectToHomeSaga, verifyHomeOwnerSaga } from "home/connect";
-import { profileLoadSaga } from "profile/sagas";
+import { profileLoadSaga, profileUpdateSaga } from "profile/sagas";
 
 function* combinedSaga() {
     yield takeLatest(ERROR_THROWN, errorSaga);
@@ -26,6 +26,7 @@ function* combinedSaga() {
     yield takeLatest(CONNECT_TO_HOME, connectToHomeSaga);
     yield takeLatest(RESTORE_CONNECTION_TO_HOME, verifyHomeOwnerSaga);
     yield takeLatest(PROFILE_LOAD, profileLoadSaga);
+    yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
 }
 
 const sagaMiddleware = createSagaMiddleware();
