@@ -4,7 +4,7 @@ import Storage from "storage/Storage";
 import ErrorPane from "error/ErrorPane";
 import LogoBar from "logobar/LogoBar";
 import MainMenu from "mainmenu/MainMenu";
-import Profile from "profile/Profile";
+import ProfilePage from "profile/ProfilePage";
 import MessageBox from "messagebox/MessageBox";
 import "./App.css";
 
@@ -14,7 +14,7 @@ const App = () => (
         <ErrorPane />
         <LogoBar />
         <MainMenu />
-        <Profile />
+        <ProfilePage />
         <MessageBox />
     </>
 );
