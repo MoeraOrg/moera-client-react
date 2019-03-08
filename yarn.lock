@@ -1065,6 +1065,16 @@ ajv@^6.0.1, ajv@^6.1.0, ajv@^6.5.3, ajv@^6.5.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+ajv@^6.10.0:
+  version "6.10.0"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.10.0.tgz#90d0d54439da587cd7e843bfb7045f50bd22bdf1"
+  integrity sha512-nffhOpkymDECQyR0mnsUtoCE8RlX38G0rYP+wgLWFyZuUyuuojSSvi/+euOiQBIn63whYwYVIIH1TvE3tu4OEg==
+  dependencies:
+    fast-deep-equal "^2.0.1"
+    fast-json-stable-stringify "^2.0.0"
+    json-schema-traverse "^0.4.1"
+    uri-js "^4.2.2"
+
 alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
@@ -7618,13 +7628,6 @@ schema-utils@^1.0.0:
     ajv "^6.1.0"
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
-
-schm@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/schm/-/schm-0.4.1.tgz#8550656119b3b5649549e0d75dd794a8ea90f5dd"
-  integrity sha512-Ndl+URhRV3//jAmt2e4LrijQOoN/PMws6OsNVEl6SxCctiaZcU+laW1Ya2iLPn9HrAQMQbzznLBd6D2cvNO0Wg==
-  dependencies:
-    lodash "^4.17.10"
 
 select-hose@^2.0.0:
   version "2.0.0"
