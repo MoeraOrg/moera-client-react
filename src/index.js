@@ -6,7 +6,7 @@ import store from "state/store";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from "ui/App";
-import { goToPage } from "state/navigation/actions";
+import { initFromLocation } from "state/navigation/actions";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -16,7 +16,7 @@ ReactDOM.render(
     </Provider>,
     document.getElementById("app-root")
 );
-store.dispatch(goToPage("index"));
+store.dispatch(initFromLocation(window.location.pathname, window.location.search));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
