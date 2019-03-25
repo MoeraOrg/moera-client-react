@@ -16,7 +16,10 @@ ReactDOM.render(
     </Provider>,
     document.getElementById("app-root")
 );
-store.dispatch(initFromLocation(window.location.pathname, window.location.search));
+store.dispatch(initFromLocation(
+    window.location.protocol + "//" + window.location.host,
+    window.location.pathname,
+    window.location.search));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
