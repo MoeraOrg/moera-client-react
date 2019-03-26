@@ -29,13 +29,13 @@ function buildInitAction() {
                 switch(name) {
                     case "root":
                         components = URI.parse(value);
-                        rootLocation += components.path;
+                        rootLocation += components.path || "";
                         break;
 
                     case "page":
                         components = URI.parse(value);
-                        path = components.path;
-                        query = components.query;
+                        path = components.path || "";
+                        query = components.query || "";
                         break;
 
                     default:
