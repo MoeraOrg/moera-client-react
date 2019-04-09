@@ -9,6 +9,7 @@
     "classnames": "^2.2.6",
     "deep-equal": "^1.0.1",
     "formik": "^1.4.3",
+    "general-category": "^1.6.0",
     "moment": "^2.24.0",
     "object-path-immutable": "^3.0.0",
     "prop-types": "^15.6.2",
