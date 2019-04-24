@@ -23,6 +23,7 @@
     "react-redux": "^6.0.0",
     "react-scripts": "2.1.8",
     "react-widgets": "^4.4.10",
+    "react-widgets-simple-number": "^4.1.22",
     "redux": "^4.0.1",
     "redux-saga": "^1.0.0",
     "selectn": "^1.1.2",

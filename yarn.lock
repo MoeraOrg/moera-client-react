@@ -3078,6 +3078,11 @@ decode-uri-component@^0.2.0:
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
   integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
 
+deconstruct-number-format@^0.0.1, deconstruct-number-format@~0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/deconstruct-number-format/-/deconstruct-number-format-0.0.1.tgz#fbb5d7dcd45bd2b2fa0e579ed91b59c7e29b386a"
+  integrity sha1-+7XX3NRb0rL6Dlee2RtZx+KbOGo=
+
 deep-equal@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
@@ -4192,6 +4197,19 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
+
+format-number-with-string@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/format-number-with-string/-/format-number-with-string-0.0.2.tgz#eb96e8f1640c921f7414466ccf8dcb3bb6802cba"
+  integrity sha1-65bo8WQMkh90FEZsz43LO7aALLo=
+  dependencies:
+    deconstruct-number-format "~0.0.1"
+    format-number "^2.0.1"
+
+format-number@^2.0.1:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/format-number/-/format-number-2.0.2.tgz#8be2aa6fa6ef5ec43830892b1daee72705f9b462"
+  integrity sha1-i+Kqb6bvXsQ4MIkrHa7nJwX5tGI=
 
 formik@^1.4.3:
   version "1.5.1"
@@ -8379,6 +8397,14 @@ react-transition-group@^2.4.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
+
+react-widgets-simple-number@^4.1.22:
+  version "4.1.22"
+  resolved "https://registry.yarnpkg.com/react-widgets-simple-number/-/react-widgets-simple-number-4.1.22.tgz#902e8e56587fcff0b9609f98ddf58e27e309cd4d"
+  integrity sha512-ikMqwfqREnYzBxv3cR9/z9OW7QaQUNoB0T5o4o1A89gu8GwmqcGAiULxM3WVcaoAQmz+WQuZGbWh5ZfMU1rHKw==
+  dependencies:
+    deconstruct-number-format "^0.0.1"
+    format-number-with-string "^0.0.2"
 
 react-widgets@^4.4.10:
   version "4.4.10"
