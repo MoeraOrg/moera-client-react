@@ -18,9 +18,12 @@ Installation instructions:
 4. By default, the server that serves the client runs on port 3000. If you want
    it to run on a different port, change the value of `PORT` variable in
    `./run` script.
-5. Execute `./run` script.
-6. New browser tab with the client in it is opened automatically. Since we
+5. Make sure that the [naming server][2] location is set correctly in
+   `src/node_modules/state/naming/reducer.js`.
+6. Execute `./run` script.
+7. New browser tab with the client in it is opened automatically. Since we
    don't use the client directly, but rather use the [browser extension][1]
    that loads it, you can close this browser tab.
 
 [1]: https://github.com/MoeraOrg/moera-browser-extension
+[2]: https://github.com/MoeraOrg/moera-naming
