@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
 import initIconLibrary from "./icons";
 import simpleNumberLocalizer from 'react-widgets-simple-number';
+import dateFnsLocalizer from 'react-widgets-date-fns';
 import App from "ui/App";
 
 import * as serviceWorker from "./serviceWorker";
@@ -52,6 +53,7 @@ function buildInitAction() {
 
 initIconLibrary();
 simpleNumberLocalizer();
+dateFnsLocalizer();
 ReactDOM.render(
     <Provider store={store}>
         <App />

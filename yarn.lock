@@ -3070,6 +3070,11 @@ date-arithmetic@^3.1.0:
   resolved "https://registry.yarnpkg.com/date-arithmetic/-/date-arithmetic-3.1.0.tgz#1fcd03dbd504b9dbee2b9078c85a5f1c7d3cc2d3"
   integrity sha1-H80D29UEudvuK5B4yFpfHH08wtM=
 
+date-fns@^2.0.0-beta.2:
+  version "2.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.0.0-beta.2.tgz#ccd556df832ef761baa88c600f53d2e829245999"
+  integrity sha512-4cicZF707RNerr3/Q3CcdLo+3OHMCfrRXE7h5iFgn7AMvX07sqKLxSf8Yp+WJW5bvKr2cy9/PkctXLv4iFtOaA==
+
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
@@ -8442,6 +8447,11 @@ react-transition-group@^2.4.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
+
+react-widgets-date-fns@^4.0.26:
+  version "4.0.26"
+  resolved "https://registry.yarnpkg.com/react-widgets-date-fns/-/react-widgets-date-fns-4.0.26.tgz#070d04440335ce29f586652d7decd35497091d5a"
+  integrity sha512-mopRJZBZ51ADgJ3+hc6QLO2ZawkE+HXbuv5lFiC1IFG5XGFiuVP1chU9ZfEWgf5z/3Uuu7jeZJHi+RxMMRU/dg==
 
 react-widgets-simple-number@^4.1.22:
   version "4.1.23"
