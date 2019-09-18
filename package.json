@@ -6,6 +6,7 @@
   "dependencies": {
     "@craco/craco": "^5.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-brands-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "ajv": "^6.10.0",
