@@ -3,6 +3,7 @@ import {
     faChevronDown,
     faClock,
     faCode,
+    faCog,
     faExclamationTriangle,
     faFileAlt,
     faFrown,
@@ -16,6 +17,7 @@ export default function initIconLibrary() {
     library.add(faChevronDown);
     library.add(faClock);
     library.add(faCode);
+    library.add(faCog);
     library.add(faExclamationTriangle);
     library.add(faFileAlt);
     library.add(faFrown);
