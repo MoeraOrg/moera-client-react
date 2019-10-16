@@ -9,7 +9,8 @@ import {
     faFrown,
     faHome,
     faNetworkWired,
-    faRemoveFormat
+    faRemoveFormat,
+    faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
 
@@ -25,4 +26,5 @@ export default function initIconLibrary() {
     library.add(faNetworkWired);
     library.add(faMarkdown);
     library.add(faRemoveFormat);
+    library.add(faSignOutAlt);
 }
