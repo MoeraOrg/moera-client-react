@@ -1,5 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faBackspace,
     faChevronDown,
     faClock,
     faCode,
@@ -10,11 +11,13 @@ import {
     faHome,
     faNetworkWired,
     faRemoveFormat,
-    faSignOutAlt
+    faSignOutAlt,
+    faUndoAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
 
 export default function initIconLibrary() {
+    library.add(faBackspace);
     library.add(faChevronDown);
     library.add(faClock);
     library.add(faCode);
@@ -27,4 +30,5 @@ export default function initIconLibrary() {
     library.add(faMarkdown);
     library.add(faRemoveFormat);
     library.add(faSignOutAlt);
+    library.add(faUndoAlt);
 }
