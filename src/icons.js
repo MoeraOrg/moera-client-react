@@ -12,9 +12,13 @@ import {
     faNetworkWired,
     faRemoveFormat,
     faSignOutAlt,
-    faUndoAlt
+    faUndoAlt,
+    faUserCheck,
+    faUserClock,
+    faUserTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
 
 export default function initIconLibrary() {
     library.add(faBackspace);
@@ -31,4 +35,8 @@ export default function initIconLibrary() {
     library.add(faRemoveFormat);
     library.add(faSignOutAlt);
     library.add(faUndoAlt);
+    library.add(faUser);
+    library.add(faUserCheck);
+    library.add(faUserClock);
+    library.add(faUserTimes);
 }
