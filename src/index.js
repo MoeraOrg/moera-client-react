@@ -19,6 +19,7 @@ function buildInitAction() {
     let rootLocation = window.location.protocol + "//" + window.location.host;
     let path = window.location.pathname;
     let query = window.location.search;
+    let hash = window.location.hash;
 
     const body = document.getElementsByTagName("body")[0];
     const header = body.getAttribute("data-x-moera");
@@ -48,7 +49,7 @@ function buildInitAction() {
             });
     }
 
-    return initFromLocation(rootLocation, path, query);
+    return initFromLocation(rootLocation, path, query, hash);
 }
 
 initIconLibrary();
