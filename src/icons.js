@@ -10,6 +10,7 @@ import {
     faFrown,
     faHome,
     faNetworkWired,
+    faPen,
     faRemoveFormat,
     faSignOutAlt,
     faThumbsDown,
@@ -38,6 +39,7 @@ export default function initIconLibrary() {
     library.add(faHome);
     library.add(faNetworkWired);
     library.add(faMarkdown);
+    library.add(faPen);
     library.add(faRemoveFormat);
     library.add(faSignOutAlt);
     library.add(faThumbsDown);
