@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faBackspace,
+    faCertificate,
     faChevronDown,
     faClock,
     faCode,
@@ -29,6 +30,7 @@ import {
 
 export default function initIconLibrary() {
     library.add(faBackspace);
+    library.add(faCertificate);
     library.add(faChevronDown);
     library.add(faClock);
     library.add(faCode);
