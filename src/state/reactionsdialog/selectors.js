@@ -24,3 +24,7 @@ export function getReactionsDialogRemainingCount(state) {
 export function isReactionsDialogTotalsToBeLoaded(state) {
     return !state.reactionsDialog.totals.loaded && !state.reactionsDialog.totals.loading;
 }
+
+export function getReactionVerificationStatus(state, ownerName) {
+    return state.reactionsDialog.verificationStatus[ownerName] ?? "none";
+}

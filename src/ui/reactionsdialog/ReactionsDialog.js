@@ -10,6 +10,7 @@ import {
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
 import "./ReactionsDialog.css";
+import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
 
 const TotalsTabsImpl = ({loading, loaded, total, emojis, activeTab, reactionsDialogSelectTab}) => (
     <>
@@ -48,7 +49,7 @@ class ReactionsDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, remaining, reactionsLoading, reactions, closeReactionsDialog} = this.props;
+        const {show, postingId, remaining, reactionsLoading, reactions, closeReactionsDialog} = this.props;
 
         if (!show) {
             return null;
@@ -65,7 +66,11 @@ class ReactionsDialog extends React.PureComponent {
                         {reactions.map(r =>
                             <div className="item" key={r.moment}>
                                 <div className="emoji"><Twemoji code={r.emoji}/></div>
-                                <div className="owner-name"><NodeName name={r.ownerName}/></div>
+                                <div className="owner-name">
+                                    <NodeName name={r.ownerName}/>
+                                    {" "}
+                                    <ReactionVerifyButton postingId={postingId} ownerName={r.ownerName}/>
+                                </div>
                             </div>
                         )}
                     </div>
@@ -81,6 +86,7 @@ class ReactionsDialog extends React.PureComponent {
 export default connect(
     state => ({
         show: state.reactionsDialog.show,
+        postingId: state.reactionsDialog.postingId,
         activeTab: state.reactionsDialog.activeTab,
         remaining: getReactionsDialogRemainingCount(state),
         reactionsLoading: isReactionsDialogReactionsLoading(state),

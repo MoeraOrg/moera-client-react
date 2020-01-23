@@ -3,6 +3,8 @@ import immutable from 'object-path-immutable';
 import {
     CLOSE_REACTIONS_DIALOG,
     OPEN_REACTIONS_DIALOG,
+    REACTION_VERIFY,
+    REACTION_VERIFY_FAILED,
     REACTIONS_DIALOG_PAST_REACTIONS_LOAD,
     REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED,
     REACTIONS_DIALOG_PAST_REACTIONS_LOADED,
@@ -12,6 +14,10 @@ import {
     REACTIONS_DIALOG_TOTALS_LOADED,
     REACTIONS_DIALOG_UNSET
 } from "state/reactionsdialog/actions";
+import {
+    EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED,
+    EVENT_HOME_REMOTE_REACTION_VERIFIED
+} from "api/events/actions";
 
 const emptyReactions = {
     loading: false,
@@ -31,7 +37,8 @@ const initialState = {
         loaded: false,
         total: 0,
         emojis: []
-    }
+    },
+    verificationStatus: {}
 };
 
 export default (state = initialState, action) => {
@@ -92,9 +99,8 @@ export default (state = initialState, action) => {
                     .set(["reactions", tab, "after"], action.payload.after)
                     .set(["reactions", tab, "items"], reactions)
                     .value();
-            } else {
-                return immutable.set(state, ["reactions", tab, "loading"], false);
             }
+            return immutable.set(state, ["reactions", tab, "loading"], false);
         }
 
         case REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED: {
@@ -129,6 +135,31 @@ export default (state = initialState, action) => {
 
         case REACTIONS_DIALOG_SELECT_TAB:
             return immutable.set(state, "activeTab", action.payload.tab);
+
+        case REACTION_VERIFY:
+            if (action.payload.postingId === state.postingId) {
+                return immutable.set(state, ["verificationStatus", action.payload.ownerName], "running");
+            }
+            return state;
+
+        case REACTION_VERIFY_FAILED:
+            if (action.payload.postingId === state.postingId) {
+                return immutable.set(state, ["verificationStatus", action.payload.ownerName], "none");
+            }
+            return state;
+
+        case EVENT_HOME_REMOTE_REACTION_VERIFIED:
+            if (action.payload.postingId === state.postingId) {
+                const status = action.payload.correct ? "correct" : "incorrect";
+                return immutable.set(state, ["verificationStatus", action.payload.reactionOwnerName], status);
+            }
+            return state;
+
+        case EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED:
+            if (action.payload.postingId === state.postingId) {
+                return immutable.set(state, ["verificationStatus", action.payload.reactionOwnerName], "none");
+            }
+            return state;
 
         default:
             return state;

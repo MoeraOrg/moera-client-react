@@ -36,7 +36,11 @@ import {
     SETTINGS_UPDATE_SUCCEEDED
 } from "state/settings/actions";
 import { NAMING_NAME_LOAD, NAMING_NAMES_MAINTENANCE } from "state/naming/actions";
-import { REACTIONS_DIALOG_PAST_REACTIONS_LOAD, REACTIONS_DIALOG_TOTALS_LOAD } from "state/reactionsdialog/actions";
+import {
+    REACTION_VERIFY,
+    REACTIONS_DIALOG_PAST_REACTIONS_LOAD,
+    REACTIONS_DIALOG_TOTALS_LOAD
+} from "state/reactionsdialog/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import error from "state/error/reducer";
@@ -95,7 +99,11 @@ import {
     settingsUpdateSucceededSaga
 } from "state/settings/sagas";
 import { namingNameLoadSaga, namingNamesMaintenanceSaga } from "state/naming/sagas";
-import { reactionsDialogPastReactionsLoadSaga, reactionsDialogTotalsLoadSaga } from "state/reactionsdialog/sagas";
+import {
+    reactionsDialogPastReactionsLoadSaga,
+    reactionsDialogTotalsLoadSaga,
+    reactionVerifySaga
+} from "state/reactionsdialog/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -174,6 +182,7 @@ function* combinedSaga() {
     yield takeEvery(POSTING_REACTION_DELETE, postingReactionDeleteSaga);
     yield takeLatest(REACTIONS_DIALOG_PAST_REACTIONS_LOAD, reactionsDialogPastReactionsLoadSaga);
     yield takeLatest(REACTIONS_DIALOG_TOTALS_LOAD, reactionsDialogTotalsLoadSaga);
+    yield takeEvery(REACTION_VERIFY, reactionVerifySaga);
 
     yield invokeTriggers(triggers);
 }

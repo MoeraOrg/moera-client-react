@@ -41,6 +41,22 @@ const remotePostingVerificationEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
+const remoteReactionVerificationEvent = (properties = {}) => baseEvent({
+    "id": {
+        type: "string"
+    },
+    "nodeName": {
+        type: "string"
+    },
+    "postingId": {
+        type: "string"
+    },
+    "reactionOwnerName": {
+        type: "string"
+    },
+    ...properties
+});
+
 export const EventPacket = schema({
     type: "object",
     properties: {
@@ -99,4 +115,17 @@ export const EVENT_SCHEMES = {
             type: "string"
         },
     }),
+    "REMOTE_REACTION_VERIFIED": remoteReactionVerificationEvent({
+        "correct": {
+            type: "boolean"
+        }
+    }),
+    "REMOTE_REACTION_VERIFICATION_FAILED": remoteReactionVerificationEvent({
+        "errorCode": {
+            type: "string"
+        },
+        "errorMessage": {
+            type: "string"
+        },
+    })
 };

@@ -1,13 +1,15 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Node } from "api";
+import { Home, Node } from "api";
 import {
     reactionsDialogPastReactionsLoaded,
     reactionsDialogPastReactionsLoadFailed,
     reactionsDialogTotalsLoaded,
-    reactionsDialogTotalsLoadFailed
+    reactionsDialogTotalsLoadFailed,
+    reactionVerifyFailed
 } from "state/reactionsdialog/actions";
 import { errorThrown } from "state/error/actions";
+import { getOwnerName } from "state/owner/selectors";
 
 export function* reactionsDialogPastReactionsLoadSaga() {
     const {postingId, negative, before, emoji} = yield select(state => ({
@@ -34,6 +36,16 @@ export function* reactionsDialogTotalsLoadSaga() {
         yield put(reactionsDialogTotalsLoaded(data.positive, data.negative));
     } catch (e) {
         yield put(reactionsDialogTotalsLoadFailed());
+        yield put(errorThrown(e));
+    }
+}
+
+export function* reactionVerifySaga(action) {
+    const nodeName = yield select(getOwnerName);
+    try {
+        yield call(Home.remoteReactionVerify, nodeName, action.payload.postingId, action.payload.ownerName);
+    } catch (e) {
+        yield put(reactionVerifyFailed());
         yield put(errorThrown(e));
     }
 }

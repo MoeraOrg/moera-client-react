@@ -93,3 +93,9 @@ export function* postRemoteReaction(nodeName, postingId, negative, emoji) {
     const location = yield call(authorized, `/nodes/${nodeName}/postings/${postingId}/reactions`);
     return yield call(callHome, {location, method: "POST", body: {negative, emoji}, schema: NodeApi.Result});
 }
+
+export function* remoteReactionVerify(nodeName, postingId, ownerName) {
+    const location = yield call(authorized,
+        `/nodes/${nodeName}/postings/${postingId}/reactions/${ownerName}/verify`);
+    return yield call(callHome, {location, method: "POST", schema: NodeApi.AsyncOperationCreated});
+}
