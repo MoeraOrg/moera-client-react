@@ -25,5 +25,16 @@ Installation instructions:
    don't use the client directly, but rather use the [browser extension][1]
    that loads it, you can close this browser tab.
 
+## Note for WebStorm/IntelliJ users
+
+The project uses absolute paths for imports. If your IDE complains about
+non-installed modules, you may do the following (or read [the full
+instructions](https://medium.com/hackernoon/absolute-imports-with-create-react-app-4c6cfb66c35d)):
+
+1. Mark the `src/` directory as a Resources Root.
+2. Go to **Settings > Editor > Code Style > JavaScript**, go to
+   the **Imports** tab and tick **Use paths relative to the project, resource
+   or sources roots**.
+
 [1]: https://github.com/MoeraOrg/moera-browser-extension
 [2]: https://github.com/MoeraOrg/moera-naming
