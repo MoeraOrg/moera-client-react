@@ -39,6 +39,7 @@ const SettingsField = ({name, fieldName, meta, initialValue}) => {
         case "string":
             if (modifiers.format) {
                 switch (modifiers.format) {
+                    default:
                     case "emoji-list-positive":
                         return <EmojiListInputField name={fieldName} title={title} negative={false}
                                                     initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
@@ -59,7 +60,6 @@ const SettingsField = ({name, fieldName, meta, initialValue}) => {
                 return <InputField name={fieldName} title={title}
                                    initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
             }
-            break;
 
         case "Duration":
             return <DurationField name={fieldName} title={title} min={modifiers.min} max={modifiers.max}
