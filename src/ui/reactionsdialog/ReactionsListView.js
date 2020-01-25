@@ -10,6 +10,7 @@ import {
     getReactionsDialogRemainingCount,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const TotalsTabsImpl = ({loading, loaded, total, emojis, activeTab, reactionsDialogSelectTab}) => (
     <>
@@ -39,12 +40,17 @@ const TotalsTabs = connect(
     { reactionsDialogSelectTab }
 )(TotalsTabsImpl);
 
-const ReactionsListView = ({postingId, itemsRef, remaining, reactionsLoading, reactions,
+const ReactionsListView = ({postingId, itemsRef, onSwitchView, remaining, reactionsLoading, reactions,
                                    closeReactionsDialog}) => (
     <>
         <div className="totals clearfix">
             <TotalsTabs/>
-            <button type="button" className="close" onClick={closeReactionsDialog}>&times;</button>
+            <div className="topright">
+                <div className="switch-view" title="View as chart" onClick={onSwitchView}>
+                    <FontAwesomeIcon icon="chart-bar"/>
+                </div>
+                <button type="button" className="close" onClick={closeReactionsDialog}>&times;</button>
+            </div>
         </div>
         <div className="items" tabIndex="-1" ref={itemsRef}>
             {reactions.map(r =>

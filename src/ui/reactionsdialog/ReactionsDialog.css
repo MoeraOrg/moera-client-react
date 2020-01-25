@@ -1,3 +1,25 @@
+.reactions-dialog .topright {
+    float: right;
+}
+
+.reactions-dialog .topright .close {
+    float: none;
+}
+
+.reactions-dialog .switch-view {
+    display: inline-block;
+    margin-right: 1rem;
+    font-size: 130%;
+    cursor: pointer;
+    padding: 0.3rem 0.5rem;
+    color: var(--gray);
+}
+
+.reactions-dialog .switch-view:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--gray-dark);
+}
+
 .reactions-dialog .totals {
     border-bottom: 1px #ccc solid;
     margin-bottom: 1rem;
@@ -28,6 +50,7 @@
     max-height: 80vh;
     overflow-y: auto;
     outline: none;
+    font-size: 1rem;
 }
 
 .reactions-dialog .items .item {
@@ -37,11 +60,46 @@
 .reactions-dialog .items .item .emoji {
     flex: none;
     width: 1.7em;
-    font-size: 1rem;
     padding-right: 0.5rem;
 }
 
+.reactions-dialog .items .item .all {
+    flex: none;
+    width: 5.7em;
+    padding-right: 0.5rem;
+    font-weight: bold;
+}
+
+.reactions-dialog .items .item .share {
+    flex: none;
+    width: 4em;
+    padding-right: 0.5rem;
+}
+
+.reactions-dialog .items .item .total {
+    flex: none;
+    width: 4em;
+    padding-right: 0.5rem;
+    text-align: right;
+}
+
 .reactions-dialog .items .item .owner-name {
+    flex: auto;
+}
+
+.reactions-dialog .items .item .bar {
+    flex: auto;
+    display: flex;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+
+.reactions-dialog .items .item .bar-left {
+    flex: none;
+    background-color: #ccc;
+}
+
+.reactions-dialog .items .item .bar-right {
     flex: auto;
 }
 

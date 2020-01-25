@@ -2,6 +2,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faBackspace,
     faCertificate,
+    faChartBar,
     faChevronDown,
     faClock,
     faCode,
@@ -10,6 +11,7 @@ import {
     faFileAlt,
     faFrown,
     faHome,
+    faList,
     faNetworkWired,
     faPen,
     faRemoveFormat,
@@ -31,6 +33,7 @@ import {
 export default function initIconLibrary() {
     library.add(faBackspace);
     library.add(faCertificate);
+    library.add(faChartBar);
     library.add(faChevronDown);
     library.add(faClock);
     library.add(faCode);
@@ -40,6 +43,7 @@ export default function initIconLibrary() {
     library.add(faFrown);
     library.add(faHome);
     library.add(faNetworkWired);
+    library.add(faList);
     library.add(faMarkdown);
     library.add(faPen);
     library.add(faRemoveFormat);
