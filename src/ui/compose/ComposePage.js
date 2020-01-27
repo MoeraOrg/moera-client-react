@@ -7,12 +7,12 @@ import moment from 'moment';
 import { Page } from "ui/page/Page";
 import { Button, ConflictWarning, Loading } from "ui/control";
 import { InputField, TextField } from "ui/control/field";
-import ComposeIconButton from "ui/compose/ComposeIconButton";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
 import ComposePublishAtButton from "ui/compose/ComposePublishAtButton";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeReactions from "ui/compose/ComposeReactions";
+import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import { goToPosting } from "state/navigation/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
@@ -47,10 +47,10 @@ class ComposePage extends React.PureComponent {
                 <h2>
                     {title}
                     {postingId != null &&
-                        <Button variant="outline-secondary" size="sm" className="ml-3"
-                                onClick={this.onGoToPostingClick}>
-                            &larr; Post
-                        </Button>
+                    <Button variant="outline-secondary" size="sm" className="ml-3"
+                            onClick={this.onGoToPostingClick}>
+                        &larr; Post
+                    </Button>
                     }
                     <Loading active={loadingFeatures || loadingPosting}/>
                 </h2>
@@ -60,7 +60,7 @@ class ComposePage extends React.PureComponent {
                         <ConflictWarning text="The post was edited by somebody." show={conflict}
                                          onClose={composeConflictClose}/>
                         {subjectPresent &&
-                            <InputField name="subject" title="Title" anyValue disabled={loadingPosting}/>
+                        <InputField name="subject" title="Title" anyValue disabled={loadingPosting}/>
                         }
                         <TextField name="body" anyValue autoFocus disabled={loadingPosting}/>
 
@@ -70,7 +70,7 @@ class ComposePage extends React.PureComponent {
 
                         <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
                         <ComposePublishAtButton/>
-                        <ComposeIconButton icon="thumbs-up" name="reactionsCustomized"/>
+                        <ComposeReactionsButton/>
 
                         <ComposeSubmitButton loading={beingPosted} update={postingId != null}/>
                     </Form>
@@ -84,20 +84,30 @@ class ComposePage extends React.PureComponent {
 const composePageLogic = {
 
     mapPropsToValues(props) {
+        const subject = props.posting != null && props.posting.bodySrc.subject != null
+            ? props.posting.bodySrc.subject : "";
+        const body = props.posting != null ? props.posting.bodySrc.text : "";
+        const bodyFormat = props.posting != null ? props.posting.bodySrcFormat : "markdown";
+        const publishAt = props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date();
+        const reactionsPositive = props.posting != null
+            ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault;
+        const reactionsNegative = props.posting != null
+            ? props.posting.acceptedReactions.negative : props.reactionsNegativeDefault;
+
         return {
-            subject:
-                props.posting != null && props.posting.bodySrc.subject != null ? props.posting.bodySrc.subject : "",
-            body: props.posting != null ? props.posting.bodySrc.text : "",
-            bodyFormatCustomized: false,
-            bodyFormat: props.posting != null ? props.posting.bodySrcFormat : "markdown",
-            publishAtCustomized: false,
-            publishAtDefault: props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date(),
-            publishAt: props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date(),
-            reactionsCustomized: false,
-            reactionsPositive:
-                props.posting != null ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault,
-            reactionsNegative:
-                props.posting != null ? props.posting.acceptedReactions.negative : props.reactionsNegativeDefault
+            subject,
+            body,
+            bodyFormatVisible: false,
+            bodyFormatDefault: bodyFormat,
+            bodyFormat,
+            publishAtVisible: false,
+            publishAtDefault: publishAt,
+            publishAt,
+            reactionsVisible: false,
+            reactionsPositiveDefault: reactionsPositive,
+            reactionsPositive,
+            reactionsNegativeDefault: reactionsNegative,
+            reactionsNegative
         };
     },
 

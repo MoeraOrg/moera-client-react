@@ -5,10 +5,15 @@ import cx from 'classnames';
 
 import "./ComposeIconButton.css";
 
-const ComposeIconButton = ({ icon, name, tooltip = null }) => (
+const ComposeIconButton = ({ icon, name, changed = false, tooltip = null }) => (
     <Field name={name}>
         {({field, form}) => (
-            <div className={cx("composer-icon", {"composer-icon-active": field.value})}
+            <div className={cx(
+                "composer-icon",
+                {
+                    "composer-icon-active": field.value,
+                    "composer-icon-changed": changed
+                })}
                  title={tooltip}
                  onClick={e => form.setFieldValue(field.name, !field.value)} onBlur={field.onBlur}>
                 <FontAwesomeIcon icon={icon} />

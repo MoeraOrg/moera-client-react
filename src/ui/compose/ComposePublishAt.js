@@ -4,7 +4,7 @@ import { connect as connectFormik } from 'formik';
 import { DateTimeField } from "ui/control/field";
 
 const ComposePublishAt = ({formik}) => (
-    formik.values.publishAtCustomized &&
+    formik.values.publishAtVisible &&
         <DateTimeField title="Publish at" name="publishAt" horizontal={true} groupClassName="pl-4" col="col-md-4"/>
 );
 

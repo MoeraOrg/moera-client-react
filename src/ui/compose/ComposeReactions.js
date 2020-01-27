@@ -4,7 +4,7 @@ import { connect as connectFormik } from 'formik';
 import { EmojiListInputField } from "ui/control/field";
 
 const ComposeReactions = ({formik}) => (
-    formik.values.reactionsCustomized &&
+    formik.values.reactionsVisible &&
         <>
             <EmojiListInputField title={"Allowed \"Support\" reactions"} name="reactionsPositive" horizontal={true}
                                  groupClassName="pl-2" labelClassName="col-md-3" col="col-md-8" negative={false}

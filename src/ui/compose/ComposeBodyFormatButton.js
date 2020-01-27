@@ -18,7 +18,9 @@ const ComposeBodyFormatButton = ({sourceFormats, formik}) => {
     const format = formik.values.bodyFormat;
     let icon = BODY_FORMAT_ICONS[format];
     icon = icon != null ? icon : "file-alt";
-    return <ComposeIconButton icon={icon} name="bodyFormatCustomized" tooltip={getTooltip(format, sourceFormats)} />
+    const changed = formik.values.bodyFormat !== formik.values.bodyFormatDefault;
+    return <ComposeIconButton icon={icon} name="bodyFormatVisible" changed={changed}
+                              tooltip={getTooltip(format, sourceFormats)}/>
 };
 
 export default connectFormik(ComposeBodyFormatButton);

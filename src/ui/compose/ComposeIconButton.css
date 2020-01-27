@@ -1,6 +1,6 @@
 .composer-icon {
     display: inline-block;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.7rem;
     margin-right: 0.5rem;
     font-size: 1.8rem;
     color: #ced4da;
@@ -17,4 +17,19 @@
 
 .composer-icon.composer-icon-active {
     color: var(--primary);
+}
+
+.composer-icon.composer-icon-changed {
+    color: #68dab8;
+    border-bottom: solid 3px #68dab8;
+}
+
+.composer-icon.composer-icon-changed:hover {
+    color: #3b7d69;
+    border-bottom-color: #3b7d69;
+}
+
+.composer-icon.composer-icon-changed.composer-icon-active {
+    color: var(--primary);
+    border-bottom: solid 3px var(--primary);
 }
