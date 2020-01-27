@@ -10,6 +10,7 @@ import { InputField, TextField } from "ui/control/field";
 import ComposeIconButton from "ui/compose/ComposeIconButton";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
+import ComposePublishAtButton from "ui/compose/ComposePublishAtButton";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeReactions from "ui/compose/ComposeReactions";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
@@ -21,23 +22,33 @@ import "./ComposePage.css";
 
 class ComposePage extends React.PureComponent {
 
+    constructor(props, context) {
+        super(props, context);
+
+        this.onGoToPostingClick = this.onGoToPostingClick.bind(this);
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.posting != null && prevProps.posting == null) {
             this.props.resetForm();
         }
     }
 
+    onGoToPostingClick() {
+        this.props.goToPosting(this.props.postingId);
+    }
+
     render() {
         const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, conflict, beingPosted,
-               goToPosting, composeConflictClose} = this.props;
+               composeConflictClose} = this.props;
         const title = postingId == null ? "New Post" : "Edit Post";
         return (
             <Page>
                 <h2>
                     {title}
                     {postingId != null &&
-                        <Button variant="outline-secondary" size="sm" onClick={e => goToPosting(postingId)}
-                                className="ml-3">
+                        <Button variant="outline-secondary" size="sm" className="ml-3"
+                                onClick={this.onGoToPostingClick}>
                             &larr; Post
                         </Button>
                     }
@@ -58,7 +69,7 @@ class ComposePage extends React.PureComponent {
                         <ComposeReactions/>
 
                         <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
-                        <ComposeIconButton icon="clock" name="publishAtCustomized"/>
+                        <ComposePublishAtButton/>
                         <ComposeIconButton icon="thumbs-up" name="reactionsCustomized"/>
 
                         <ComposeSubmitButton loading={beingPosted} update={postingId != null}/>
@@ -74,21 +85,19 @@ const composePageLogic = {
 
     mapPropsToValues(props) {
         return {
-            subject: props.subject
-                || (props.posting != null && props.posting.bodySrc.subject != null ? props.posting.bodySrc.subject : ""),
-            body: props.body || (props.posting != null ? props.posting.bodySrc.text : ""),
+            subject:
+                props.posting != null && props.posting.bodySrc.subject != null ? props.posting.bodySrc.subject : "",
+            body: props.posting != null ? props.posting.bodySrc.text : "",
             bodyFormatCustomized: false,
-            bodyFormat: props.bodyFormat || (props.posting != null ? props.posting.bodySrcFormat : "markdown"),
-            publishAtCustomized: props.publishAtCustomized || false,
-            publishAt: props.publishAt
-                || (props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date()),
-            reactionsCustomized: props.reactionsCustomized || false,
-            reactionsPositive: props.reactionsPositive != null
-                ? props.reactionsPositive
-                : (props.posting != null ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault),
-            reactionsNegative: props.reactionsNegative != null
-                ? props.reactionsNegative
-                : (props.posting != null ? props.posting.acceptedReactions.negative : props.reactionsNegativeDefault)
+            bodyFormat: props.posting != null ? props.posting.bodySrcFormat : "markdown",
+            publishAtCustomized: false,
+            publishAtDefault: props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date(),
+            publishAt: props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date(),
+            reactionsCustomized: false,
+            reactionsPositive:
+                props.posting != null ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault,
+            reactionsNegative:
+                props.posting != null ? props.posting.acceptedReactions.negative : props.reactionsNegativeDefault
         };
     },
 
@@ -104,15 +113,9 @@ const composePageLogic = {
                         text: values.body.trim()
                     }),
                 bodySrcFormat: values.bodyFormat.trim(),
-                publishAt: values.publishAtCustomized ? moment(values.publishAt).unix() : null,
-                acceptedReactions: values.reactionsCustomized
-                    ? {positive: values.reactionsPositive, negative: values.reactionsNegative}
-                    : (formik.props.posting == null
-                        ? {
-                              positive: formik.props.reactionsPositiveDefault,
-                              negative: formik.props.reactionsNegativeDefault
-                          }
-                        : null)
+                publishAt: values.publishAt.getTime() === values.publishAtDefault.getTime()
+                    ? moment(values.publishAt).unix() : null,
+                acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative}
             }
         );
         formik.setSubmitting(false);
