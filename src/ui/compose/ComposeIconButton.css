@@ -12,9 +12,9 @@
 
 .composer-icon:hover {
     background-color: rgba(0, 0, 0, 0.05);
-    color: #b7bdc3;
+    color: var(--gray);
 }
 
 .composer-icon.composer-icon-active {
-    color: #51a1f9;
+    color: var(--primary);
 }
