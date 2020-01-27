@@ -93,6 +93,10 @@ const composePageLogic = {
             ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault;
         const reactionsNegative = props.posting != null
             ? props.posting.acceptedReactions.negative : props.reactionsNegativeDefault;
+        const reactionsVisible =
+            props.posting != null ? props.posting.reactionsVisible : props.reactionsVisibleDefault;
+        const reactionTotalsVisible =
+            props.posting != null ? props.posting.reactionTotalsVisible : props.reactionTotalsVisibleDefault;
 
         return {
             subject,
@@ -103,11 +107,15 @@ const composePageLogic = {
             publishAtVisible: false,
             publishAtDefault: publishAt,
             publishAt,
-            reactionsVisible: false,
+            reactionVisible: false,
             reactionsPositiveDefault: reactionsPositive,
             reactionsPositive,
             reactionsNegativeDefault: reactionsNegative,
-            reactionsNegative
+            reactionsNegative,
+            reactionsVisibleDefault: reactionsVisible,
+            reactionsVisible,
+            reactionTotalsVisibleDefault: reactionTotalsVisible,
+            reactionTotalsVisible
         };
     },
 
@@ -125,7 +133,9 @@ const composePageLogic = {
                 bodySrcFormat: values.bodyFormat.trim(),
                 publishAt: values.publishAt.getTime() === values.publishAtDefault.getTime()
                     ? moment(values.publishAt).unix() : null,
-                acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative}
+                acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
+                reactionsVisible: values.reactionsVisible,
+                reactionTotalsVisible: values.reactionTotalsVisible
             }
         );
         formik.setSubmitting(false);
@@ -144,7 +154,9 @@ export default connect(
         conflict: state.compose.conflict,
         beingPosted: state.compose.beingPosted,
         reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default"),
-        reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default")
+        reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
+        reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
+        reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default")
     }),
     { goToPosting, composePost, composeConflictClose }
 )(withFormik(composePageLogic)(ComposePage));

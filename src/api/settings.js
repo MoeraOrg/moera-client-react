@@ -12,7 +12,7 @@ export const META = [
         name: "posting.time.relative",
         type: "bool",
         defaultValue: "false",
-        title: "Show relative time in postings",
+        title: "Show relative time in posts",
         modifiers: {}
     },
     {
@@ -32,6 +32,20 @@ export const META = [
         modifiers: {
             format: "emoji-list-negative"
         }
+    },
+    {
+        name: "posting.reactions.visible.default",
+        type: "bool",
+        defaultValue: "true",
+        title: "Show the detailed list of reactions to my post by default",
+        modifiers: {}
+    },
+    {
+        name: "posting.reactions.totals-visible.default",
+        type: "bool",
+        defaultValue: "true",
+        title: "Show the number of reactions to my post by default",
+        modifiers: {}
     },
     {
         name: "reactions.positive.available",

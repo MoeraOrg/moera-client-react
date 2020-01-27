@@ -286,7 +286,13 @@ const PostingInfoType = {
                 additionalProperties: false,
             }
         },
-        "reactions": ReactionTotalsInfoType
+        "reactions": ReactionTotalsInfoType,
+        "reactionsVisible": {
+            type: "boolean"
+        },
+        "reactionTotalsVisible": {
+            type: "boolean"
+        }
     },
     additionalProperties: false,
 };
