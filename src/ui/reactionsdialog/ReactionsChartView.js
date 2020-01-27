@@ -5,7 +5,7 @@ import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Loading, Twemoji } from "ui/control";
 
-const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis}) => (
+const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis, closeReactionsDialog}) => (
     loaded &&
         <>
             <div className="totals clearfix">
@@ -19,23 +19,25 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
                 </div>
             </div>
             <div className="items" tabIndex="-1" ref={itemsRef}>
-                <div className="item">
-                    <div className="all">All</div>
-                    <div className="total">{total}</div>
-                    <div className="bar"/>
-                </div>
+                {total !== 0 &&
+                    <div className="item">
+                        <div className="all">All</div>
+                        <div className="total">{total}</div>
+                        <div className="bar"/>
+                    </div>
+                }
                 {emojis
                     .map(t => ({
                         ...t,
-                        share: t.total * 100 / total
+                        percent: t.share != null ? t.share * 100 : t.total * 100 / total
                     }))
                     .map(t =>
                         <div className="item" key={t.emoji}>
                             <div className="emoji"><Twemoji code={t.emoji}/></div>
-                            <div className="share">{t.share.toFixed(1)}%</div>
-                            <div className="total">{t.total}</div>
+                            <div className="share">{t.percent.toFixed(1)}%</div>
+                            {t.total && <div className="total">{t.total}</div>}
                             <div className="bar">
-                                <div className="bar-left" style={{width: t.share.toFixed(1) + "%"}}/>
+                                <div className="bar-left" style={{width: t.percent.toFixed(1) + "%"}}/>
                                 <div className="bar-right"/>
                             </div>
                         </div>

@@ -152,6 +152,11 @@ const ReactionTotalInfoType = {
         },
         "total": {
             type: "integer"
+        },
+        "share": {
+            type: "number",
+            minimum: 0,
+            maximum: 1
         }
     },
     additionalProperties: false,

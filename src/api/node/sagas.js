@@ -225,7 +225,7 @@ export function* deleteReaction(postingId) {
 }
 
 export function* getReactionTotals(postingId) {
-    const location = `/postings/${postingId}/reaction-totals`;
+    const location = yield call(introduced, `/postings/${postingId}/reaction-totals`);
     return yield call(callNode, {location, schema: NodeApi.ReactionTotalsInfo});
 }
 
