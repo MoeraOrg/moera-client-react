@@ -19,8 +19,4 @@ export class Browser {
         Browser.storeData({home: {location, login, token, permissions}, cartes});
     }
 
-    static storeCartes(cartes) {
-        Browser.storeData({cartes});
-    }
-
 }

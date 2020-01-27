@@ -19,3 +19,12 @@ export function getHomeOwnerName(state) {
 export function isHomeOwnerNameSet(state) {
     return !!getHomeOwnerName(state);
 }
+
+export function getHomeConnectionData(state) {
+    return {
+        location: state.home.root.location,
+        login: state.home.login,
+        token: getHomeToken(state),
+        permissions: getHomePermissions(state)
+    }
+}

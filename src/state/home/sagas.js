@@ -16,7 +16,7 @@ export function* homeRestoreSaga(action) {
             const rootApi = normalizeUrl(location) + "/moera/api";
             try {
                 cartes = yield call(Home.getCartes, rootApi, token).cartes;
-                Browser.storeCartes(cartes);
+                Browser.storeHomeData(location, login, token, permissions, cartes);
             } catch (e) {
                 yield put(errorThrown(e));
             }
