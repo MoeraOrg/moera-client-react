@@ -230,7 +230,7 @@ export function* getReactionTotals(postingId) {
 }
 
 export function* getReactions(postingId, negative, emoji, before, limit) {
-    const location = urlWithParameters(`/postings/${postingId}/reactions`,
-        {negative, emoji, before, limit});
+    const location = yield call(introduced, urlWithParameters(`/postings/${postingId}/reactions`,
+        {negative, emoji, before, limit}));
     return yield call(callNode, {location, schema: NodeApi.ReactionsSliceInfo});
 }

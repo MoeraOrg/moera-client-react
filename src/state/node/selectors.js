@@ -18,12 +18,14 @@ export function isNodeAdmin(state) {
 }
 
 export function isPermitted(operation, object, state) {
-    const requirements = object.operations[operation];
-    if (!requirements) {
+    const requirements = selectn(["operations", operation], object);
+    if (requirements == null) {
         return false;
     }
     for (let r of requirements) {
         switch (r) {
+            case "public":
+                return true;
             case "owner":
                 if (state.home.owner.name === object.ownerName) {
                     return true;

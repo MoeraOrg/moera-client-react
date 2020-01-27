@@ -10,9 +10,11 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
         <>
             <div className="totals clearfix">
                 <div className="topright">
-                    <div className="switch-view" title="View as list" onClick={onSwitchView}>
-                        <FontAwesomeIcon icon="list"/>
-                    </div>
+                    {onSwitchView &&
+                        <div className="switch-view" title="View as list" onClick={onSwitchView}>
+                            <FontAwesomeIcon icon="list"/>
+                        </div>
+                    }
                     <button type="button" className="close" onClick={closeReactionsDialog}>&times;</button>
                 </div>
             </div>

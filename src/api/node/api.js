@@ -264,6 +264,12 @@ const PostingInfoType = {
                     items: {
                         type: "string"
                     }
+                },
+                "reactions": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
                 }
             },
             additionalProperties: false,
