@@ -15,7 +15,10 @@ export class SelectField extends React.PureComponent {
         groupClassName: PropType.string,
         col: PropType.string,
         size: PropType.string,
-        choices: PropType.arrayOf(PropType.object),
+        choices: PropType.arrayOf(PropType.shape({
+            title: PropType.string,
+            value: PropType.string
+        })),
         multiple: PropType.bool,
         autoFocus: PropType.bool,
         anyValue: PropType.bool,
