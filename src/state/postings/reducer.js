@@ -19,6 +19,9 @@ const initialState = {
 };
 
 function safeguard(posting) {
+    if (!posting.bodyPreview.text) {
+        posting = immutable.set(posting, "body.previewText", safePreviewHtml(posting.body.text));
+    }
     return immutable(posting)
         .update("bodyPreview.text", text => safePreviewHtml(text))
         .update("body.text", text => safeHtml(text))

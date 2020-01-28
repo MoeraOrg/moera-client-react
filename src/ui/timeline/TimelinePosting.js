@@ -24,7 +24,7 @@ const Content = ({posting, href, onClick}) => {
         );
     } else {
         return (
-            <div className="content" dangerouslySetInnerHTML={{__html: posting.body.text}} />
+            <div className="content" dangerouslySetInnerHTML={{__html: posting.body.previewText}} />
         );
     }
 };
