@@ -18,6 +18,7 @@ import {
     faSignOutAlt,
     faThumbsDown,
     faThumbsUp,
+    faThumbtack,
     faUndoAlt,
     faUserCheck,
     faUserClock,
@@ -54,6 +55,7 @@ export default function initIconLibrary() {
     library.add(faThumbsDownRegular);
     library.add(faThumbsUp);
     library.add(faThumbsUpRegular);
+    library.add(faThumbtack);
     library.add(faUndoAlt);
     library.add(faUser);
     library.add(faUserCheck);

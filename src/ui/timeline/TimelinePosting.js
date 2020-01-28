@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { goToPosting } from "state/navigation/actions";
 import { isPermitted } from "state/node/selectors";
 import PostingMenu from "ui/posting/PostingMenu";
+import PostingPin from "ui/posting/PostingPin";
 import PostingDate from "ui/posting/PostingDate";
 import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingDeleting from "ui/posting/PostingDeleting";
@@ -11,8 +12,8 @@ import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
-import "ui/posting/Posting.css";
 import { isConnectedToHome } from "state/home/selectors";
+import "ui/posting/Posting.css";
 
 const Content = ({posting, href, onClick}) => {
     if (posting.bodyPreview.text) {
@@ -53,6 +54,7 @@ class TimelinePosting extends React.PureComponent {
                 :
                     <>
                         <PostingMenu posting={posting} isPermitted={isPermitted}/>
+                        <PostingPin posting={posting}/>
                         <div className="owner-line">
                             <PostingOwner posting={posting}/>
                             <PostingDate posting={posting}/>

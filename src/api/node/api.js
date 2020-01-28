@@ -229,6 +229,9 @@ const PostingInfoType = {
         "deletedAt": {
             type: "integer"
         },
+        "pinned": {
+            type: "boolean"
+        },
         "signature": {
             type: "string"
         },

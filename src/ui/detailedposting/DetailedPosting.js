@@ -6,6 +6,7 @@ import { goToTimeline } from "state/navigation/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import PostingMenu from "ui/posting/PostingMenu";
+import PostingPin from "ui/posting/PostingPin";
 import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingDate from "ui/posting/PostingDate";
@@ -25,6 +26,7 @@ const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToT
             :
                 <>
                     <PostingMenu posting={posting} isPermitted={isPermitted}/>
+                    <PostingPin posting={posting}/>
                     <div className="owner-line">
                         <PostingOwner posting={posting}/>
                         <PostingDate posting={posting}/>
