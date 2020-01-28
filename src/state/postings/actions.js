@@ -69,3 +69,9 @@ export const postingReactionSet = (id, reaction, totals) => ({
     type: POSTING_REACTION_SET,
     payload: {id, reaction, totals}
 });
+
+export const POSTING_PINNING_UPDATE = "POSTING_PINNING_UPDATE";
+export const postingPinningUpdate = (id, pinned) => ({
+    type: POSTING_PINNING_UPDATE,
+    payload: {id, pinned}
+});

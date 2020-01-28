@@ -23,6 +23,7 @@ import { COMPOSE_FEATURES_LOAD, COMPOSE_POST, COMPOSE_POSTING_LOAD } from "state
 import {
     POSTING_DELETE,
     POSTING_LOAD,
+    POSTING_PINNING_UPDATE,
     POSTING_REACT,
     POSTING_REACTION_DELETE,
     POSTING_REACTION_LOAD,
@@ -86,6 +87,7 @@ import { composeFeaturesLoadSaga, composePostingLoadSaga, composePostSaga } from
 import {
     postingDeleteSaga,
     postingLoadSaga,
+    postingPinningUpdateSaga,
     postingReactionDeleteSaga,
     postingReactionLoadSaga,
     postingReactSaga,
@@ -183,6 +185,7 @@ function* combinedSaga() {
     yield takeLatest(REACTIONS_DIALOG_PAST_REACTIONS_LOAD, reactionsDialogPastReactionsLoadSaga);
     yield takeLatest(REACTIONS_DIALOG_TOTALS_LOAD, reactionsDialogTotalsLoadSaga);
     yield takeEvery(REACTION_VERIFY, reactionVerifySaga);
+    yield takeEvery(POSTING_PINNING_UPDATE, postingPinningUpdateSaga);
 
     yield invokeTriggers(triggers);
 }
