@@ -29,3 +29,8 @@ export function isCartesRunOut(state) {
 export function isCartesInitialized(state) {
     return state.cartes.initialized;
 }
+
+export function isCartesIpChanged(state) {
+    return state.cartes.clientIp != null && state.cartes.cartesIp != null
+        && state.cartes.clientIp !== state.cartes.cartesIp;
+}

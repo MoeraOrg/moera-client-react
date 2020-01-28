@@ -41,7 +41,7 @@ const ConnectionStatus = ({connecting,  connected, location, login, openConnectD
                                       "Disconnect",
                                       "Cancel",
                                       () => {
-                                          Browser.storeHomeData(location, login, null, null, null);
+                                          Browser.storeHomeData(location, login, null, null, null,null);
                                           disconnectFromHome(location, login);
                                       },
                                       null,

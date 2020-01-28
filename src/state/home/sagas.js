@@ -8,20 +8,22 @@ import { errorThrown } from "state/error/actions";
 import { normalizeUrl } from "util/misc";
 
 export function* homeRestoreSaga(action) {
-    let {location, login, token, permissions, cartes} = action.payload;
+    let {location, login, token, permissions, cartesIp, cartes} = action.payload;
 
     if (token) {
         yield put(restoreConnectDialog(location, login));
         if (getCartesListTtl(cartes) < 5 * 60) {
             const rootApi = normalizeUrl(location) + "/moera/api";
             try {
-                cartes = yield call(Home.getCartes, rootApi, token).cartes;
-                Browser.storeHomeData(location, login, token, permissions, cartes);
+                const data = yield call(Home.getCartes, rootApi, token);
+                cartesIp = data.cartesIp;
+                cartes = data.cartesIp;
+                Browser.storeHomeData(location, login, token, permissions, cartesIp, cartes);
             } catch (e) {
                 yield put(errorThrown(e));
             }
         }
-        yield put(connectedToHome(location, login, token, permissions, cartes));
+        yield put(connectedToHome(location, login, token, permissions, cartesIp, cartes));
     } else {
         yield put(disconnectFromHome(location, login));
     }

@@ -15,8 +15,8 @@ export class Browser {
         }, "*");
     }
 
-    static storeHomeData(location, login, token, permissions, cartes) {
-        Browser.storeData({home: {location, login, token, permissions}, cartes});
+    static storeHomeData(location, login, token, permissions, cartesIp, cartes) {
+        Browser.storeData({home: {location, login, token, permissions}, cartesIp, cartes});
     }
 
 }

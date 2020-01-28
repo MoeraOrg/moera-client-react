@@ -53,9 +53,9 @@ class Storage extends React.Component {
 
         const {location, login, token, permissions} = data.home || {};
         if (location != null || login != null || token != null || permissions != null) {
-            this.props.homeRestore(location, login, token, permissions, data.cartes);
+            this.props.homeRestore(location, login, token, permissions, data.cartesIp, data.cartes);
         } else {
-            this.props.cartesSet(data.cartes);
+            this.props.cartesSet(data.cartesIp, data.cartes);
         }
     }
 

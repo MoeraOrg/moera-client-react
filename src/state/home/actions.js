@@ -10,9 +10,9 @@ export const connectionToHomeFailed = () => ({
 });
 
 export const CONNECTED_TO_HOME = "CONNECTED_TO_HOME";
-export const connectedToHome = (location, login, token, permissions, cartes) => ({
+export const connectedToHome = (location, login, token, permissions, cartesIp, cartes) => ({
     type: CONNECTED_TO_HOME,
-    payload: {location, login, token, permissions, cartes}
+    payload: {location, login, token, permissions, cartesIp, cartes}
 });
 
 export const DISCONNECT_FROM_HOME = "DISCONNECT_FROM_HOME";
@@ -22,9 +22,9 @@ export const disconnectFromHome = (location, login) => ({
 });
 
 export const HOME_RESTORE = "HOME_RESTORE";
-export const homeRestore = (location, login, token, permissions, cartes) => ({
+export const homeRestore = (location, login, token, permissions, cartesIp, cartes) => ({
     type: HOME_RESTORE,
-    payload: {location, login, token, permissions, cartes}
+    payload: {location, login, token, permissions, cartesIp, cartes}
 });
 
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";

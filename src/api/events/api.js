@@ -87,7 +87,11 @@ export const EventPacket = schema({
 });
 
 export const EVENT_SCHEMES = {
-    "SUBSCRIBED": baseEvent(),
+    "SUBSCRIBED": baseEvent({
+        "clientIp": {
+            type: "string"
+        }
+    }),
     "PROFILE_UPDATED": baseEvent(),
     "NODE_SETTINGS_CHANGED": baseEvent(),
     "CLIENT_SETTINGS_CHANGED": baseEvent(),

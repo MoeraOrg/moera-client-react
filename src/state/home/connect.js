@@ -14,7 +14,7 @@ function* connectToHomeFailure(error, onClose = null) {
 
 export function* connectToHomeSaga(action) {
     const {location, assign, login, password} = action.payload;
-    Browser.storeHomeData(location, login, null, null, null);
+    Browser.storeHomeData(location, login, null, null, null, null);
     const rootApi = normalizeUrl(location) + "/moera/api";
     let data;
     try {
@@ -40,8 +40,10 @@ export function* connectToHomeSaga(action) {
         yield put(errorThrown(e));
     }
 
-    Browser.storeHomeData(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartes);
-    yield put(connectedToHome(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartes));
+    Browser.storeHomeData(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
+        cartesData.cartes);
+    yield put(connectedToHome(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
+        cartesData.cartes));
 }
 
 export function* verifyHomeOwnerSaga() {

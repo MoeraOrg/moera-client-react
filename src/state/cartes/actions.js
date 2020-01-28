@@ -4,9 +4,9 @@ export const cartesLoad = () => ({
 });
 
 export const CARTES_SET = "CARTES_SET";
-export const cartesSet = (cartes) => ({
+export const cartesSet = (cartesIp, cartes) => ({
     type: CARTES_SET,
-    payload: {cartes}
+    payload: {cartesIp, cartes}
 });
 
 export const CARTES_PURGE_EXPIRED = "CARTES_PURGE_EXPIRED";

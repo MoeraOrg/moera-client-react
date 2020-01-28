@@ -443,6 +443,9 @@ export const AsyncOperationCreated = schema({
 export const CarteSet = schema({
     type: "object",
     properties: {
+        "cartesIp": {
+            type: "string"
+        },
         "cartes": {
             type: "array",
             items: {
