@@ -4,8 +4,12 @@ export function getCartesListTtl(cartes) {
     if (!cartes) {
         return -now();
     }
-    const latest = cartes.reduce((latest, carte) => latest > carte.deadline ? latest : carte.deadline, 0);
-    return latest - now();
+    try {
+        const latest = cartes.reduce((latest, carte) => latest > carte.deadline ? latest : carte.deadline, 0);
+        return latest - now();
+    } catch (e) {
+        return -now();
+    }
 }
 
 export function getCartesTtl(state) {

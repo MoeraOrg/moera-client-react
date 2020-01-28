@@ -17,7 +17,7 @@ export function* homeRestoreSaga(action) {
             try {
                 const data = yield call(Home.getCartes, rootApi, token);
                 cartesIp = data.cartesIp;
-                cartes = data.cartesIp;
+                cartes = data.cartes;
                 Browser.storeHomeData(location, login, token, permissions, cartesIp, cartes);
             } catch (e) {
                 yield put(errorThrown(e));
