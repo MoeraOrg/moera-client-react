@@ -5,6 +5,11 @@ export function safePreviewHtml(html) {
         return "";
     }
     return sanitizeHtml(html, {
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+        allowedAttributes: {
+            ...sanitizeHtml.defaults.allowedAttributes,
+            img: ["src", "srcset", "width", "height"]
+        },
         transformTags: {
             "h1": "b",
             "h2": "b",
@@ -20,6 +25,10 @@ export function safeHtml(html) {
         return "";
     }
     return sanitizeHtml(html, {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["h1", "h2"])
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["h1", "h2", "img"]),
+        allowedAttributes: {
+            ...sanitizeHtml.defaults.allowedAttributes,
+            img: ["src", "srcset", "width", "height"]
+        }
     });
 }
