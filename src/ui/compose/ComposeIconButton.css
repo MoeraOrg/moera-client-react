@@ -3,8 +3,7 @@
     margin-bottom: 0.7rem;
     margin-right: 0.5rem;
     font-size: 1.8rem;
-    color: #ced4da;
-    background-color: rgba(0, 0, 0, 0);
+    color: var(--gray-light);
     border-radius: 3px;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
@@ -12,7 +11,7 @@
 }
 
 .composer-icon:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--highlight);
     color: var(--gray);
 }
 
@@ -21,13 +20,13 @@
 }
 
 .composer-icon.composer-icon-changed {
-    color: #68dab8;
-    border-bottom: solid 3px #68dab8;
+    color: mediumturquoise;
+    border-bottom: solid 3px mediumturquoise;
 }
 
 .composer-icon.composer-icon-changed:hover {
-    color: #3b7d69;
-    border-bottom-color: #3b7d69;
+    color: var(--cyan);
+    border-bottom-color: var(--cyan);
 }
 
 .composer-icon.composer-icon-changed.composer-icon-active {

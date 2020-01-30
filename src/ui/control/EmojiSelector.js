@@ -29,7 +29,7 @@ export class EmojiSelector extends React.PureComponent {
     render() {
         const {negative, reactions, fixedWidth, onClick} = this.props;
         return (
-            <div className="reaction-selector" tabIndex="-1" style={{width: fixedWidth ? "15rem" : "auto"}}
+            <div className="emoji-selector" tabIndex="-1" style={{width: fixedWidth ? "15rem" : "auto"}}
                  ref={dom => {this.domNode = dom}}>
                 {reactions.map(({emoji, invisible, dimmed, marked}) =>
                     <EmojiChoice key={emoji} negative={negative} emoji={emoji} invisible={invisible} dimmed={dimmed}

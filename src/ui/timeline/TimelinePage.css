@@ -1,6 +1,6 @@
 .no-postings {
     font-weight: bold;
-    color: #d0d0d0;
+    color: var(--gray-light);
     font-size: 4rem;
     margin-top: 5rem;
 }
@@ -10,6 +10,6 @@
     font-size: x-large;
     font-style: italic;
     font-weight: bold;
-    color: #007bff;
+    color: var(--primary);
     padding-bottom: 1rem;
 }

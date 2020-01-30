@@ -5,12 +5,12 @@
 }
 
 .posting .menu .chevron {
-    color: #a9a9a9;
+    color: var(--gray-medium);
     cursor: pointer;
 }
 
 .posting .menu .chevron:hover {
-    color: #333333;
+    color: var(--gray-dark);
 }
 
 .posting .menu .no-actions {

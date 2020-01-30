@@ -3,7 +3,7 @@ HTML {
 }
 
 BODY {
-    background-color: #e9ebee;
+    background-color: var(--body-background);
 }
 
 ABBR[title] {

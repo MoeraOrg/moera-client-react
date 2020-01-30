@@ -3,11 +3,11 @@
 }
 
 .node-name.correct {
-    color: #228B22; /* forest green */
+    color: var(--correct);
 }
 
 .node-name.incorrect {
-    color: #B22222; /* fire brick */
+    color: var(--incorrect);
     text-decoration: line-through;
 }
 

@@ -9,13 +9,13 @@
 
 #connection-status .connection-button {
     cursor: pointer;
-    color: rgba(255, 255, 255, .5);
+    color: var(--status-icon);
     margin: 0.3rem;
     font-size: 120%;
 }
 
 #connection-status .connection-button:hover {
-    color: rgba(255, 255, 255, .75);
+    color: var(--status-icon-highlight);
 }
 
 #connection-status .connection-button.active {

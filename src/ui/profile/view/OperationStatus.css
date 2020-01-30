@@ -3,11 +3,11 @@
 }
 
 .naming-operation-status.success {
-    color: #228B22; /* forest green */
+    color: var(--correct);
 }
 
 .naming-operation-status.failure {
-    color: #B22222; /* fire brick */
+    color: var(--incorrect);
 }
 
 .naming-operation-status .failure-reason {

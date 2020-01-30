@@ -1,14 +1,14 @@
-.reaction-selector {
+.emoji-selector {
     font-size: 2rem;
     display: flex;
     flex-wrap: wrap;
 }
 
-.reaction-selector:focus {
+.emoji-selector:focus {
     outline: none;
 }
 
-.reaction-selector .choice {
+.emoji-selector .choice {
     flex: none;
     position: relative;
     width: 3rem;
@@ -17,12 +17,12 @@
     padding-bottom: 0.3rem;
 }
 
-.reaction-selector .choice:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+.emoji-selector .choice:hover {
+    background-color: var(--highlight);
     border-radius: 5px;
 }
 
-.reaction-selector .choice .dimmer {
+.emoji-selector .choice .dimmer {
     position: absolute;
     z-index: 100;
     left: 0;
@@ -32,15 +32,15 @@
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-.reaction-selector .choice:hover .dimmer {
+.emoji-selector .choice:hover .dimmer {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
-.reaction-selector .choice .marker {
+.emoji-selector .choice .marker {
     position: absolute;
     z-index: 99;
     right: 0;
     top: 0;
     font-size: 0.8rem;
-    color: #2078f4;
+    color: var(--primary);
 }

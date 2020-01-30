@@ -1,7 +1,6 @@
 .posting .reactions {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #666;
     padding-top: 0.2rem;
     padding-left: 0.2rem;
     margin-top: 0.2rem;
@@ -15,7 +14,7 @@
 
 .posting .reactions .positive {
     margin-right: 1.3rem;
-    color: forestgreen;
+    color: var(--correct);
 }
 
 .posting .reactions .positive:hover {
@@ -24,7 +23,7 @@
 }
 
 .posting .reactions .negative {
-    color: firebrick;
+    color: var(--incorrect);
 }
 
 .posting .reactions .negative:hover {

@@ -3,13 +3,13 @@
 }
 
 .signature-verify-running {
-    color: darkcyan;
+    color: var(--verifying);
 }
 
 .signature-verify-correct {
-    color: forestgreen;
+    color: var(--correct);
 }
 
 .signature-verify-incorrect {
-    color: firebrick;
+    color: var(--incorrect);
 }

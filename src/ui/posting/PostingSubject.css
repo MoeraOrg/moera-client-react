@@ -3,7 +3,7 @@
     font-size: 1.75rem;
     line-height: 1.2;
     margin-bottom: 0.5rem;
-    color: #385898;
+    color: var(--node-name);
 }
 
 .posting .subject A {

@@ -2,7 +2,11 @@
     text-align: center;
     font-size: large;
     font-weight: bold;
-    color: #17a2b8;
-    border: 1px #17a2b8 solid;
+    color: var(--cyan);
+    border: 1px var(--cyan) solid;
     cursor: pointer;
+}
+
+.timeline-sentinel:hover {
+    background-color: var(--highlight);
 }

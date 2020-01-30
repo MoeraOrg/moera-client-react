@@ -1,6 +1,6 @@
 .profile-view {
-    background-color: #fff;
-    border: #dbdbdb 1px solid;
+    background-color: white;
+    border: var(--gray-light) 1px solid;
     border-radius: 5px;
     padding: 1rem;
     margin-top: 1rem;

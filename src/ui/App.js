@@ -22,6 +22,7 @@ import SettingsPage from "ui/settings/SettingsPage";
 import ReactionsDialog from "ui/reactionsdialog/ReactionsDialog";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
+import "./colors.css";
 import "./App.css";
 
 const ContentImpl = ({atTimelinePage, atProfilePage, atDetailedPostingPage, atComposePage, atSettingsPage}) => (

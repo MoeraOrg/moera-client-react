@@ -1,8 +1,13 @@
 .settings-menu .nav-link.active:hover {
-    background-color: var(--blue);
+    background-color: var(--primary);
 }
 
 .settings-menu .nav-link:hover {
-    background-color: rgba(0, 123, 255, .1);
+    background-color: var(--highlight-blue);
     cursor: pointer;
+}
+
+.settings-menu .nav-link A:hover {
+    text-decoration: none;
+    color: var(--primary);
 }

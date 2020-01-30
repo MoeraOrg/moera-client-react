@@ -2,9 +2,9 @@
     position: sticky;
     top: 2.5rem;
     display: flex;
-    background-color: #e9ebee;
+    background-color: var(--body-background);
     padding-top: 0.3rem;
-    border-bottom: #dbdbdb 1px solid;
+    border-bottom: var(--gray-light) 1px solid;
     z-index: 1010;
 }
 

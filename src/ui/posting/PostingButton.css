@@ -2,14 +2,14 @@
     flex: auto;
     max-width: 225px;
     text-align: center;
-    color: #555;
+    color: var(--gray-dark);
     padding: 0.3rem;
     margin-right: 0.3rem;
     cursor: pointer;
 }
 
 .posting-button:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--highlight);
 }
 
 .posting-button .caption {

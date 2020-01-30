@@ -7,9 +7,9 @@
 }
 
 .settings-tabs .nav-link {
-    color: #212529;
+    color: var(--gray-dark);
 }
 
 .settings-tabs .nav-link:hover {
-    background-color: rgba(0, 0, 0, .1);
+    background-color: var(--highlight);
 }

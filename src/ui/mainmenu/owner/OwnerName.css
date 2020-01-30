@@ -1,5 +1,5 @@
 #owner-name {
-    border: #343a40 0.1rem solid;
+    border: var(--dark) 0.1rem solid;
     border-radius: 0.25rem;
     margin-right: 0.7rem;
     text-decoration: none;
@@ -8,7 +8,7 @@
 }
 
 #owner-name:hover {
-    border-color: rgba(255,255,255,.5);
+    border-color: var(--status-icon);
 }
 
 #owner-name .node-name {
@@ -16,11 +16,11 @@
 }
 
 #owner-name .node-name.correct {
-    color: #42D042; /* forest green + 20% lighter */
+    color: var(--correct-light);
 }
 
 #owner-name .node-name.incorrect {
-    color: #DF5A5A; /* fire brick + 20% lighter */
+    color: var(--incorrect-light);
 }
 
 .owner-name-expiring {

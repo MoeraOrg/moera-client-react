@@ -8,9 +8,9 @@
 }
 
 .posting .owner .arrow {
-    color: #a9a9a9;
+    color: var(--gray-medium);
 }
 
 .posting .owner A {
-    color: #385898;
+    color: var(--node-name);
 }
