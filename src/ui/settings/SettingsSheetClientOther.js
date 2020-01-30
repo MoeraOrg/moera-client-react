@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SettingsSheetAutomatic from "ui/settings/SettingsSheetAutomatic";
+import { mapFilter } from "util/map";
 
 const SettingsSheetClientOther = ({clientValues, clientMeta}) => (
     <SettingsSheetAutomatic valuesMap={clientValues} metaMap={clientMeta}/>
@@ -10,6 +11,6 @@ const SettingsSheetClientOther = ({clientValues, clientMeta}) => (
 export default connect(
     state => ({
         clientValues: state.settings.client.values,
-        clientMeta: state.settings.client.meta
+        clientMeta: mapFilter(state.settings.client.meta, v => !v.internal)
     })
 )(SettingsSheetClientOther);

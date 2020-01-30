@@ -30,3 +30,16 @@ export function mapWithoutKeys(map, keys) {
     });
     return result;
 }
+
+export function mapFilter(map, filter) {
+    if (map == null) {
+        return map;
+    }
+    let result = new Map();
+    map.forEach((value, key) => {
+        if (filter(value, key)) {
+            result.set(key, value)
+        }
+    });
+    return result;
+}

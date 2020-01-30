@@ -17,6 +17,8 @@ import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import { goToPosting } from "state/navigation/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
 import { getSetting } from "state/settings/selectors";
+import { settingsUpdate } from "state/settings/actions";
+import { ClientSettings } from "api";
 
 import "./ComposePage.css";
 
@@ -87,7 +89,7 @@ const composePageLogic = {
         const subject = props.posting != null && props.posting.bodySrc.subject != null
             ? props.posting.bodySrc.subject : "";
         const body = props.posting != null ? props.posting.bodySrc.text : "";
-        const bodyFormat = props.posting != null ? props.posting.bodySrcFormat : "markdown";
+        const bodyFormat = props.posting != null ? props.posting.bodySrcFormat : props.sourceFormatDefault;
         const publishAt = props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date();
         const reactionsPositive = props.posting != null
             ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault;
@@ -138,6 +140,12 @@ const composePageLogic = {
                 reactionTotalsVisible: values.reactionTotalsVisible
             }
         );
+        if (values.bodyFormat.trim() !== formik.props.sourceFormatDefault) {
+            formik.props.settingsUpdate([{
+                name: ClientSettings.PREFIX + "posting.body-src-format.default",
+                value: values.bodyFormat.trim()
+            }]);
+        }
         formik.setSubmitting(false);
     }
 
@@ -156,7 +164,8 @@ export default connect(
         reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default"),
         reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
-        reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default")
+        reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default"),
+        sourceFormatDefault: getSetting(state, "posting.body-src-format.default")
     }),
-    { goToPosting, composePost, composeConflictClose }
+    { goToPosting, composePost, composeConflictClose, settingsUpdate }
 )(withFormik(composePageLogic)(ComposePage));

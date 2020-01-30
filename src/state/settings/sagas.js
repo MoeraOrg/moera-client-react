@@ -60,5 +60,7 @@ export function* settingsUpdateSaga(action) {
 }
 
 export function* settingsUpdateSucceededSaga(action) {
-    action.payload.onSuccess();
+    if (action.payload.onSuccess != null) {
+        action.payload.onSuccess();
+    }
 }
