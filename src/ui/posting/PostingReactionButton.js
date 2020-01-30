@@ -98,11 +98,20 @@ class PostingReactionButton extends React.PureComponent {
 
         const thumbsEmoji = negative ? 0x1f44e : 0x1f44d;
         const thumbs = reactions.find(r => r.emoji === thumbsEmoji);
+
+        if (thumbs && !thumbs.invisible && !thumbs.dimmed) {
+            return thumbsEmoji;
+        }
+        const first = reactions.find(r => !r.invisible && !r.dimmed);
+        if (first) {
+            return first.emoji;
+        }
+
         if (thumbs && !thumbs.invisible) {
             return thumbsEmoji;
         }
-        const first = reactions.find(r => !r.invisible);
-        return first ? first.emoji : null;
+        const second = reactions.find(r => !r.invisible);
+        return second ? second.emoji : null;
     }
 
     documentClick(event) {
