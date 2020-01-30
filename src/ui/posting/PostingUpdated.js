@@ -10,13 +10,14 @@ const PostingUpdated = ({posting, timeRelative}) => {
     }
 
     const date = moment.unix(posting.editedAt);
+    const editedSoon = Math.abs(posting.editedAt - posting.publishedAt) < 24 * 60 * 60;
     return (
         <span className="date">
             {" "}(updated {
                 timeRelative ?
                     <abbr title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</abbr>
                 :
-                    date.format("DD-MM-YYYY HH:mm")
+                    (editedSoon ? date.format("HH:mm") : date.format("DD-MM-YYYY HH:mm"))
             })
         </span>
     );
