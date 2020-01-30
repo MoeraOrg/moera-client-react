@@ -19,6 +19,7 @@
 
 .reaction-selector .choice:hover {
     background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
 }
 
 .reaction-selector .choice .dimmer {
