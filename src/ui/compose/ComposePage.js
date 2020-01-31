@@ -7,6 +7,7 @@ import moment from 'moment';
 import { Page } from "ui/page/Page";
 import { Button, ConflictWarning, Loading } from "ui/control";
 import { InputField, TextField } from "ui/control/field";
+import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
 import ComposePublishAtButton from "ui/compose/ComposePublishAtButton";
@@ -65,6 +66,7 @@ class ComposePage extends React.PureComponent {
                         <InputField name="subject" title="Title" anyValue disabled={loadingPosting}/>
                         }
                         <TextField name="body" anyValue autoFocus disabled={loadingPosting}/>
+                        <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>
                         <ComposePublishAt/>
@@ -105,6 +107,7 @@ const composePageLogic = {
             body,
             bodyFormatVisible: false,
             bodyFormatDefault: bodyFormat,
+            bodyFormatShowHelp: props.sourceFormatShowHelp,
             bodyFormat,
             publishAtVisible: false,
             publishAtDefault: publishAt,
@@ -140,12 +143,23 @@ const composePageLogic = {
                 reactionTotalsVisible: values.reactionTotalsVisible
             }
         );
+        let settings = [];
         if (values.bodyFormat.trim() !== formik.props.sourceFormatDefault) {
-            formik.props.settingsUpdate([{
+            settings.push({
                 name: ClientSettings.PREFIX + "posting.body-src-format.default",
                 value: values.bodyFormat.trim()
-            }]);
+            });
         }
+        if (values.bodyFormatShowHelp !== formik.props.sourceFormatShowHelp) {
+            settings.push({
+                name: ClientSettings.PREFIX + "posting.body-src-format.show-help",
+                value: values.bodyFormatShowHelp.toString()
+            });
+        }
+        if (settings.length > 0) {
+            formik.props.settingsUpdate(settings);
+        }
+
         formik.setSubmitting(false);
     }
 
@@ -165,7 +179,8 @@ export default connect(
         reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
         reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default"),
-        sourceFormatDefault: getSetting(state, "posting.body-src-format.default")
+        sourceFormatDefault: getSetting(state, "posting.body-src-format.default"),
+        sourceFormatShowHelp: getSetting(state, "posting.body-src-format.show-help")
     }),
     { goToPosting, composePost, composeConflictClose, settingsUpdate }
 )(withFormik(composePageLogic)(ComposePage));

@@ -1,0 +1,21 @@
+.composer .formatting-help {
+    border: solid 1px cornsilk;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin-bottom: 0.5rem;
+    margin-top: -0.5rem;
+    background-color: floralwhite;
+}
+
+.formatting-help-show {
+    font-size: 0.8rem;
+    color: var(--primary);
+    cursor: pointer;
+    width: max-content;
+    margin-bottom: 0.5rem;
+    margin-top: -0.5rem;
+}
+
+.formatting-help-show:hover {
+    text-decoration: underline;
+}

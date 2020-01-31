@@ -54,6 +54,12 @@ export const META = [
         internal: true
     },
     {
+        name: "posting.body-src-format.show-help",
+        type: "bool",
+        defaultValue: "true",
+        internal: true
+    },
+    {
         name: "reactions.positive.available",
         type: "string",
         defaultValue: "+0x1f4a1,+0x1f44d,+0x1f4af,+0x1f60d,+0x1f600,+0x1f926,+0x1f62e,+0x1f622,+0x1f620,+0x1f92e,"
