@@ -137,7 +137,7 @@ const composePageLogic = {
                         text: values.body.trim()
                     }),
                 bodySrcFormat: values.bodyFormat.trim(),
-                publishAt: values.publishAt.getTime() === values.publishAtDefault.getTime()
+                publishAt: values.publishAt.getTime() !== values.publishAtDefault.getTime()
                     ? moment(values.publishAt).unix() : null,
                 acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
                 reactionsVisible: values.reactionsVisible,
