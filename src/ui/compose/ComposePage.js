@@ -107,7 +107,6 @@ const composePageLogic = {
             body,
             bodyFormatVisible: false,
             bodyFormatDefault: bodyFormat,
-            bodyFormatShowHelp: props.sourceFormatShowHelp,
             bodyFormat,
             publishAtVisible: false,
             publishAtDefault: publishAt,
@@ -150,12 +149,6 @@ const composePageLogic = {
                 value: values.bodyFormat.trim()
             });
         }
-        if (values.bodyFormatShowHelp !== formik.props.sourceFormatShowHelp) {
-            settings.push({
-                name: ClientSettings.PREFIX + "posting.body-src-format.show-help",
-                value: values.bodyFormatShowHelp.toString()
-            });
-        }
         if (settings.length > 0) {
             formik.props.settingsUpdate(settings);
         }
@@ -179,8 +172,7 @@ export default connect(
         reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
         reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default"),
-        sourceFormatDefault: getSetting(state, "posting.body-src-format.default"),
-        sourceFormatShowHelp: getSetting(state, "posting.body-src-format.show-help")
+        sourceFormatDefault: getSetting(state, "posting.body-src-format.default")
     }),
     { goToPosting, composePost, composeConflictClose, settingsUpdate }
 )(withFormik(composePageLogic)(ComposePage));

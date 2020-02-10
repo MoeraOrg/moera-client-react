@@ -43,6 +43,9 @@ export function randomId() {
 }
 
 export function parseBool(val) {
+    if (typeof val === "boolean") {
+        return val;
+    }
     const ival = val.toLowerCase();
     return ival === "yes" || ival === "true" || ival === "1";
 }
