@@ -22,7 +22,9 @@ class ProfileEditor extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.loaded && !prevProps.loaded) {
-            this.props.resetForm();
+            this.props.resetForm({
+                values: profileEditorLogic.mapPropsToValues(this.props),
+            });
         }
     }
 

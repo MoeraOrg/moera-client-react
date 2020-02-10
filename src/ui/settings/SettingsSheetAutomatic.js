@@ -54,7 +54,9 @@ class SettingsSheetAutomatic extends React.PureComponent {
         if (((this.props.valuesMap.size > 0) !== (prevProps.valuesMap.size > 0))
             || ((this.props.metaMap.size > 0) !== (prevProps.metaMap.size > 0))) {
 
-            this.props.resetForm();
+            this.props.resetForm({
+                values: settingsSheetOtherLogic.mapPropsToValues(this.props),
+            });
         }
     }
 
@@ -126,7 +128,9 @@ const settingsSheetOtherLogic = {
         if (hasErrors) {
             messageBox("Some settings have incorrect values.");
         } else {
-            settingsUpdate(settingsToUpdate, () => formik.resetForm());
+            settingsUpdate(settingsToUpdate, () => formik.resetForm({
+                values: settingsSheetOtherLogic.mapPropsToValues(this.props),
+            }));
         }
 
         formik.setSubmitting(false);

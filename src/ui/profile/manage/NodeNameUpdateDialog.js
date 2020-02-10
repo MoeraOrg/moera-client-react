@@ -28,7 +28,9 @@ class NodeNameUpdateDialog extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show) { // Mnemonic must be cleared immediately after hiding the dialog
-            this.props.resetForm();
+            this.props.resetForm({
+                values: nodeNameUpdateDialogLogic.mapPropsToValues(this.props),
+            });
         }
     }
 

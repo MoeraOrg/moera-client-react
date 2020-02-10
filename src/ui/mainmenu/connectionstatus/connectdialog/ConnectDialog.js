@@ -12,7 +12,9 @@ class ConnectDialog extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show && this.props.show) {
-            this.props.resetForm();
+            this.props.resetForm({
+                values: connectDialogLogic.mapPropsToValues(this.props),
+            });
         }
     }
 
