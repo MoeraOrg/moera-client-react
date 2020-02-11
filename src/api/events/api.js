@@ -22,6 +22,13 @@ const postingEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
+const draftPostingEvent = (properties = {}) => baseEvent({
+    "id": {
+        type: "string"
+    },
+    ...properties
+});
+
 const remotePostingVerificationEvent = (properties = {}) => baseEvent({
     "id": {
         type: "string"
@@ -131,5 +138,10 @@ export const EVENT_SCHEMES = {
         "errorMessage": {
             type: "string"
         },
-    })
+    }),
+    "DRAFT_POSTING_ADDED": draftPostingEvent(),
+    "DRAFT_POSTING_UPDATED": draftPostingEvent(),
+    "DRAFT_POSTING_DELETED": draftPostingEvent(),
+    "POSTING_DRAFT_REVISION_UPDATED": draftPostingEvent(),
+    "POSTING_DRAFT_REVISION_DELETED": draftPostingEvent()
 };
