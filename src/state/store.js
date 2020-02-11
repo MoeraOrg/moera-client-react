@@ -170,7 +170,7 @@ function* combinedSaga() {
     yield takeEvery(CONNECTED_TO_HOME, flushPostponedSaga);
     yield takeEvery(DISCONNECT_FROM_HOME, flushPostponedSaga);
     yield takeEvery(CARTES_SET, flushPostponedSaga);
-    yield takeLatest(PROFILE_LOAD, profileLoadSaga);
+    yield takeLatest(PROFILE_LOAD, introduce(profileLoadSaga));
     yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
     yield takeLatest(REGISTER_NAME, registerNameSaga);
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
