@@ -43,7 +43,9 @@ export default (state = initialState, action) => {
                     postingId: action.payload.details.id,
                     posting: null,
                     conflict: false,
-                    draftId: null
+                    draftId: null,
+                    savingDraft: false,
+                    savedDraft: false
                 }
             }
             return state;

@@ -254,6 +254,13 @@ export function* deleteDraftPosting(id) {
     return yield call(callNode, {location, method: "DELETE", schema: NodeApi.Result});
 }
 
+export function* getPostingDraftRevision(id) {
+    const location = yield call(authorized, `/postings/${id}/revisions/draft`);
+    return yield call(callNode, {
+        location, schema: NodeApi.PostingInfo, withBodies: true, errorFilter: ["posting.not-found"]
+    });
+}
+
 export function* putPostingDraftRevision(id, postingText) {
     const location = yield call(authorized, `/postings/${id}/revisions/draft`);
     return yield call(callNode, {

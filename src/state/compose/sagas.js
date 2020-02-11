@@ -27,7 +27,7 @@ export function* composeFeaturesLoadSaga() {
 export function* composePostingLoadSaga() {
     try {
         const id = yield select(getComposePostingId);
-        const data = yield call(Node.getPosting, id, true);
+        const data = yield call(Node.getPostingDraftRevision, id);
         yield put(composePostingLoaded(data));
     } catch (e) {
         yield put(composePostingLoadFailed());
