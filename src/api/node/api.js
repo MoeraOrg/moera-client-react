@@ -232,6 +232,12 @@ const PostingInfoType = {
         "pinned": {
             type: "boolean"
         },
+        "draft": {
+            type: "boolean"
+        },
+        "draftPending": {
+            type: "boolean"
+        },
         "signature": {
             type: "string"
         },

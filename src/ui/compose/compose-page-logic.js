@@ -67,7 +67,11 @@ const composePageLogic = {
 
     handleSubmit(values, formik) {
         formik.setStatus("submitted");
-        formik.props.composePost(formik.props.postingId, composePageLogic.mapValuesToPostingText(values, formik.props));
+        formik.props.composePost(
+            formik.props.postingId,
+            formik.props.draftId,
+            composePageLogic.mapValuesToPostingText(values, formik.props)
+        );
         let settings = [];
         if (values.bodyFormat.trim() !== formik.props.sourceFormatDefault) {
             settings.push({

@@ -1,6 +1,6 @@
 import {
     COMPOSE_CONFLICT,
-    COMPOSE_CONFLICT_CLOSE,
+    COMPOSE_CONFLICT_CLOSE, COMPOSE_DRAFT_SAVE, COMPOSE_DRAFT_SAVE_FAILED, COMPOSE_DRAFT_SAVED,
     COMPOSE_FEATURES_LOAD,
     COMPOSE_FEATURES_LOAD_FAILED,
     COMPOSE_FEATURES_LOADED,
@@ -28,7 +28,10 @@ const initialState = {
     posting: null,
     loadingPosting: false,
     conflict: false,
-    beingPosted: false
+    beingPosted: false,
+    draftId: null,
+    savingDraft: false,
+    savedDraft: false
 };
 
 export default (state = initialState, action) => {
@@ -39,7 +42,8 @@ export default (state = initialState, action) => {
                     ...state,
                     postingId: action.payload.details.id,
                     posting: null,
-                    conflict: false
+                    conflict: false,
+                    draftId: null
                 }
             }
             return state;
@@ -115,6 +119,32 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 beingPosted: false
+            };
+
+        case COMPOSE_DRAFT_SAVE:
+            return {
+                ...state,
+                savingDraft: true,
+                savedDraft: false
+            };
+
+        case COMPOSE_DRAFT_SAVED:
+            if (action.payload.postingId === state.postingId) {
+                return {
+                    ...state,
+                    draftId: action.payload.draftId,
+                    savingDraft: false,
+                    savedDraft: true
+                };
+            } else {
+                return state;
+            }
+
+        case COMPOSE_DRAFT_SAVE_FAILED:
+            return {
+                ...state,
+                savingDraft: false,
+                savedDraft: false
             };
 
         default:

@@ -73,10 +73,16 @@ class ComposePage extends React.PureComponent {
                         <ComposePublishAt/>
                         <ComposeReactions/>
 
-                        <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
-                        <ComposePublishAtButton/>
-                        <ComposeReactionsButton/>
-                        <ComposeDraftSaver editing={postingId != null}/>
+                        <div className="features">
+                            <div className="feature-buttons">
+                                <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
+                                <ComposePublishAtButton/>
+                                <ComposeReactionsButton/>
+                            </div>
+                            <div className="drafts">
+                                <ComposeDraftSaver/>
+                            </div>
+                        </div>
 
                         <ComposeSubmitButton loading={beingPosted} update={postingId != null}/>
                     </Form>
@@ -94,6 +100,7 @@ export default connect(
         sourceFormats: state.compose.sourceFormats,
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,
+        draftId: state.compose.draftId,
         posting: state.compose.posting,
         conflict: state.compose.conflict,
         beingPosted: state.compose.beingPosted,

@@ -46,9 +46,9 @@ export const composeConflictClose = () => ({
 });
 
 export const COMPOSE_POST = "COMPOSE_POST";
-export const composePost = (id, postingText) => ({
+export const composePost = (id, draftId, postingText) => ({
     type: COMPOSE_POST,
-    payload: {id, postingText}
+    payload: {id, draftId, postingText}
 });
 
 export const COMPOSE_POST_SUCCEEDED = "COMPOSE_POST_SUCCEEDED";
@@ -60,4 +60,21 @@ export const composePostSucceeded = (posting) => ({
 export const COMPOSE_POST_FAILED = "COMPOSE_POST_FAILED";
 export const composePostFailed = () => ({
     type: COMPOSE_POST_FAILED
+});
+
+export const COMPOSE_DRAFT_SAVE = "COMPOSE_DRAFT_SAVE";
+export const composeDraftSave = (postingId, draftId, postingText) => ({
+    type: COMPOSE_DRAFT_SAVE,
+    payload: {postingId, draftId, postingText}
+});
+
+export const COMPOSE_DRAFT_SAVED = "COMPOSE_DRAFT_SAVED";
+export const composeDraftSaved = (postingId, draftId) => ({
+    type: COMPOSE_DRAFT_SAVED,
+    payload: {postingId, draftId}
+});
+
+export const COMPOSE_DRAFT_SAVE_FAILED = "COMPOSE_DRAFT_SAVE_FAILED";
+export const composeDraftSaveFailed = () => ({
+    type: COMPOSE_DRAFT_SAVE_FAILED
 });
