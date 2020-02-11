@@ -3,6 +3,8 @@ import { call, put, select } from 'redux-saga/effects';
 import { errorThrown } from "state/error/actions";
 import { Node } from "api";
 import {
+    composeDraftLoaded,
+    composeDraftLoadFailed,
     composeDraftSaved,
     composeDraftSaveFailed,
     composeFeaturesLoaded,
@@ -12,7 +14,7 @@ import {
     composePostingLoadFailed,
     composePostSucceeded
 } from "state/compose/actions";
-import { getComposePostingId } from "state/compose/selectors";
+import { getComposeDraftId, getComposePostingId } from "state/compose/selectors";
 
 export function* composeFeaturesLoadSaga() {
     try {
@@ -54,6 +56,17 @@ export function* composePostSaga(action) {
         yield put(composePostSucceeded(data));
     } catch (e) {
         yield put(composePostFailed());
+        yield put(errorThrown(e));
+    }
+}
+
+export function* composeDraftLoadSaga() {
+    try {
+        const id = yield select(getComposeDraftId);
+        const data = yield call(Node.getDraftPosting, id);
+        yield put(composeDraftLoaded(data));
+    } catch (e) {
+        yield put(composeDraftLoadFailed());
         yield put(errorThrown(e));
     }
 }

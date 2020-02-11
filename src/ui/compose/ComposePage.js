@@ -43,20 +43,21 @@ class ComposePage extends React.PureComponent {
     }
 
     render() {
-        const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, conflict, beingPosted,
-               composeConflictClose} = this.props;
+        const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, loadingDraft, conflict,
+               beingPosted, composeConflictClose} = this.props;
         const title = postingId == null ? "New Post" : "Edit Post";
+        const loadingContent = loadingPosting || loadingDraft;
         return (
             <Page>
                 <h2>
                     {title}
                     {postingId != null &&
-                    <Button variant="outline-secondary" size="sm" className="ml-3"
-                            onClick={this.onGoToPostingClick}>
-                        &larr; Post
-                    </Button>
+                        <Button variant="outline-secondary" size="sm" className="ml-3"
+                                onClick={this.onGoToPostingClick}>
+                            &larr; Post
+                        </Button>
                     }
-                    <Loading active={loadingFeatures || loadingPosting}/>
+                    <Loading active={loadingFeatures || loadingContent}/>
                 </h2>
 
                 <div className="composer">
@@ -64,9 +65,9 @@ class ComposePage extends React.PureComponent {
                         <ConflictWarning text="The post was edited by somebody." show={conflict}
                                          onClose={composeConflictClose}/>
                         {subjectPresent &&
-                            <InputField name="subject" title="Title" anyValue disabled={loadingPosting}/>
+                            <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
-                        <TextField name="body" anyValue autoFocus disabled={loadingPosting}/>
+                        <TextField name="body" anyValue autoFocus disabled={loadingContent}/>
                         <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>
@@ -100,6 +101,7 @@ export default connect(
         sourceFormats: state.compose.sourceFormats,
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,
+        loadingDraft: state.compose.loadingDraft,
         draftId: state.compose.draftId,
         posting: state.compose.posting,
         conflict: state.compose.conflict,

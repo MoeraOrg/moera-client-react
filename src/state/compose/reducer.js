@@ -1,6 +1,12 @@
 import {
     COMPOSE_CONFLICT,
-    COMPOSE_CONFLICT_CLOSE, COMPOSE_DRAFT_SAVE, COMPOSE_DRAFT_SAVE_FAILED, COMPOSE_DRAFT_SAVED,
+    COMPOSE_CONFLICT_CLOSE,
+    COMPOSE_DRAFT_LOAD,
+    COMPOSE_DRAFT_LOAD_FAILED,
+    COMPOSE_DRAFT_LOADED,
+    COMPOSE_DRAFT_SAVE,
+    COMPOSE_DRAFT_SAVE_FAILED,
+    COMPOSE_DRAFT_SAVED,
     COMPOSE_FEATURES_LOAD,
     COMPOSE_FEATURES_LOAD_FAILED,
     COMPOSE_FEATURES_LOADED,
@@ -20,18 +26,23 @@ const emptyFeatures = {
     sourceFormats: []
 };
 
-const initialState = {
-    loadingFeatures: false,
-    loadedFeatures: false,
-    ...emptyFeatures,
+const emptyPosting = {
     postingId: null,
     posting: null,
     loadingPosting: false,
     conflict: false,
     beingPosted: false,
     draftId: null,
+    loadingDraft: false,
     savingDraft: false,
     savedDraft: false
+};
+
+const initialState = {
+    loadingFeatures: false,
+    loadedFeatures: false,
+    ...emptyFeatures,
+    ...emptyPosting
 };
 
 export default (state = initialState, action) => {
@@ -40,12 +51,9 @@ export default (state = initialState, action) => {
             if (action.payload.page === PAGE_COMPOSE) {
                 return {
                     ...state,
+                    ...emptyPosting,
                     postingId: action.payload.details.id,
-                    posting: null,
-                    conflict: false,
-                    draftId: null,
-                    savingDraft: false,
-                    savedDraft: false
+                    draftId: action.payload.details.draftId
                 }
             }
             return state;
@@ -121,6 +129,25 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 beingPosted: false
+            };
+
+        case COMPOSE_DRAFT_LOAD:
+            return {
+                ...state,
+                loadingDraft: true
+            };
+
+        case COMPOSE_DRAFT_LOADED:
+            return {
+                ...state,
+                posting: action.payload.posting,
+                loadingDraft: false
+            };
+
+        case COMPOSE_DRAFT_LOAD_FAILED:
+            return {
+                ...state,
+                loadingDraft: false
             };
 
         case COMPOSE_DRAFT_SAVE:

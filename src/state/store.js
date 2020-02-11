@@ -19,7 +19,13 @@ import { NODE_NAME_LOAD, NODE_NAME_UPDATE, REGISTER_NAME } from "state/nodename/
 import { PROFILE_LOAD, PROFILE_UPDATE } from "state/profile/actions";
 import { TIMELINE_FUTURE_SLICE_LOAD, TIMELINE_GENERAL_LOAD, TIMELINE_PAST_SLICE_LOAD } from "state/timeline/actions";
 import { DETAILED_POSTING_LOAD } from "state/detailedposting/actions";
-import { COMPOSE_DRAFT_SAVE, COMPOSE_FEATURES_LOAD, COMPOSE_POST, COMPOSE_POSTING_LOAD } from "state/compose/actions";
+import {
+    COMPOSE_DRAFT_LOAD,
+    COMPOSE_DRAFT_SAVE,
+    COMPOSE_FEATURES_LOAD,
+    COMPOSE_POST,
+    COMPOSE_POSTING_LOAD
+} from "state/compose/actions";
 import {
     POSTING_DELETE,
     POSTING_LOAD,
@@ -84,6 +90,7 @@ import { profileLoadSaga, profileUpdateSaga } from "state/profile/sagas";
 import { timelineFutureSliceLoadSaga, timelineGeneralLoadSaga, timelinePastSliceLoadSaga } from "state/timeline/sagas";
 import { detailedPostingLoadSaga } from "state/detailedposting/sagas";
 import {
+    composeDraftLoadSaga,
     composeDraftSaveSaga,
     composeFeaturesLoadSaga,
     composePostingLoadSaga,
@@ -191,6 +198,7 @@ function* combinedSaga() {
     yield takeLatest(REACTIONS_DIALOG_TOTALS_LOAD, reactionsDialogTotalsLoadSaga);
     yield takeEvery(REACTION_VERIFY, reactionVerifySaga);
     yield takeEvery(POSTING_PINNING_UPDATE, postingPinningUpdateSaga);
+    yield takeLatest(COMPOSE_DRAFT_LOAD, introduce(composeDraftLoadSaga));
     yield takeLatest(COMPOSE_DRAFT_SAVE, composeDraftSaveSaga);
 
     yield invokeTriggers(triggers);

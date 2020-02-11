@@ -62,6 +62,22 @@ export const composePostFailed = () => ({
     type: COMPOSE_POST_FAILED
 });
 
+export const COMPOSE_DRAFT_LOAD = "COMPOSE_DRAFT_LOAD";
+export const composeDraftLoad = () => ({
+    type: COMPOSE_DRAFT_LOAD
+});
+
+export const COMPOSE_DRAFT_LOADED = "COMPOSE_DRAFT_LOADED";
+export const composeDraftLoaded = (posting) => ({
+    type: COMPOSE_DRAFT_LOADED,
+    payload: {posting}
+});
+
+export const COMPOSE_DRAFT_LOAD_FAILED = "COMPOSE_DRAFT_LOAD_FAILED";
+export const composeDraftLoadFailed = () => ({
+    type: COMPOSE_DRAFT_LOAD_FAILED
+});
+
 export const COMPOSE_DRAFT_SAVE = "COMPOSE_DRAFT_SAVE";
 export const composeDraftSave = (postingId, draftId, postingText) => ({
     type: COMPOSE_DRAFT_SAVE,
