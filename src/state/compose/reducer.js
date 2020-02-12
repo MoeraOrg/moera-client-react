@@ -1,12 +1,16 @@
 import {
     COMPOSE_CONFLICT,
-    COMPOSE_CONFLICT_CLOSE, COMPOSE_DRAFT_LIST_LOAD, COMPOSE_DRAFT_LIST_LOAD_FAILED, COMPOSE_DRAFT_LIST_LOADED,
+    COMPOSE_CONFLICT_CLOSE,
+    COMPOSE_DRAFT_LIST_LOAD,
+    COMPOSE_DRAFT_LIST_LOAD_FAILED,
+    COMPOSE_DRAFT_LIST_LOADED,
     COMPOSE_DRAFT_LOAD,
     COMPOSE_DRAFT_LOAD_FAILED,
     COMPOSE_DRAFT_LOADED,
     COMPOSE_DRAFT_SAVE,
     COMPOSE_DRAFT_SAVE_FAILED,
     COMPOSE_DRAFT_SAVED,
+    COMPOSE_DRAFT_SELECT,
     COMPOSE_FEATURES_LOAD,
     COMPOSE_FEATURES_LOAD_FAILED,
     COMPOSE_FEATURES_LOADED,
@@ -211,6 +215,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 loadingDraftList: false
+            };
+
+        case COMPOSE_DRAFT_SELECT:
+            return {
+                ...state,
+                ...emptyPosting,
+                draftId: action.payload.id
             };
 
         default:

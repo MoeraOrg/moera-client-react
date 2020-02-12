@@ -1,6 +1,7 @@
 import { conj, inv, trigger } from "state/trigger";
 import {
     COMPOSE_DRAFT_SAVED,
+    COMPOSE_DRAFT_SELECT,
     COMPOSE_POST_SUCCEEDED,
     COMPOSE_POSTING_LOADED,
     composeConflict,
@@ -46,5 +47,6 @@ export default [
         inv(isAtComposePage),
         composeFeaturesUnset
     ),
-    trigger(COMPOSE_DRAFT_SAVED, true, updateLocation)
+    trigger(COMPOSE_DRAFT_SAVED, true, updateLocation),
+    trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad)
 ];

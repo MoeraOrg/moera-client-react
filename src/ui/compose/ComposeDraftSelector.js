@@ -5,6 +5,7 @@ import cx from 'classnames';
 import moment from 'moment';
 
 import { Loading, LoadingInline } from "ui/control";
+import { composeDraftSelect } from "state/compose/actions";
 import "./ComposeDraftSelector.css";
 
 class ComposeDraftSelector extends React.PureComponent {
@@ -30,6 +31,10 @@ class ComposeDraftSelector extends React.PureComponent {
     hide = () => {
         this.setState({visible: false});
         document.removeEventListener("click", this.hide);
+    };
+
+    select = (id) => () => {
+        this.props.composeDraftSelect(id);
     };
 
     render() {
@@ -59,7 +64,9 @@ class ComposeDraftSelector extends React.PureComponent {
                                             {"show": visible}
                                         )}>
                                             {draftList.map(draft => (
-                                                <div className="dropdown-item" key={draft.id}>
+                                                <div className="dropdown-item" key={draft.id}
+                                                     onClick={this.select(draft.id)}
+                                                >
                                                     <div className="content">
                                                         <div className="fader">&nbsp;</div>
                                                         {draft.subject && <b>{draft.subject} </b>}
@@ -90,5 +97,6 @@ export default connect(
         draftList: state.compose.draftList,
         loadingDraftList: state.compose.loadingDraftList,
         loadedDraftList: state.compose.loadedDraftList
-    })
+    }),
+    { composeDraftSelect }
 )(ComposeDraftSelector);

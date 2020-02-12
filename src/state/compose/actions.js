@@ -110,3 +110,9 @@ export const COMPOSE_DRAFT_LIST_LOAD_FAILED = "COMPOSE_DRAFT_LIST_LOAD_FAILED";
 export const composeDraftListLoadFailed = () => ({
     type: COMPOSE_DRAFT_LIST_LOAD_FAILED
 });
+
+export const COMPOSE_DRAFT_SELECT = "COMPOSE_DRAFT_SELECT";
+export const composeDraftSelect = (id) => ({
+    type: COMPOSE_DRAFT_SELECT,
+    payload: {id}
+});
