@@ -74,6 +74,7 @@ class ComposeDraftSaver extends React.PureComponent {
 export default connectFormik(
     connect(
         state => ({
+            subjectPresent: state.compose.subjectPresent,
             postingId: state.compose.postingId,
             draftId: state.compose.draftId,
             savingDraft: state.compose.savingDraft,
