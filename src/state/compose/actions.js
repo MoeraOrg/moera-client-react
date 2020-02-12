@@ -94,3 +94,19 @@ export const COMPOSE_DRAFT_SAVE_FAILED = "COMPOSE_DRAFT_SAVE_FAILED";
 export const composeDraftSaveFailed = () => ({
     type: COMPOSE_DRAFT_SAVE_FAILED
 });
+
+export const COMPOSE_DRAFT_LIST_LOAD = "COMPOSE_DRAFT_LIST_LOAD";
+export const composeDraftListLoad = () => ({
+    type: COMPOSE_DRAFT_LIST_LOAD
+});
+
+export const COMPOSE_DRAFT_LIST_LOADED = "COMPOSE_DRAFT_LIST_LOADED";
+export const composeDraftListLoaded = (draftList) => ({
+    type: COMPOSE_DRAFT_LIST_LOADED,
+    payload: {draftList}
+});
+
+export const COMPOSE_DRAFT_LIST_LOAD_FAILED = "COMPOSE_DRAFT_LIST_LOAD_FAILED";
+export const composeDraftListLoadFailed = () => ({
+    type: COMPOSE_DRAFT_LIST_LOAD_FAILED
+});

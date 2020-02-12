@@ -313,6 +313,11 @@ const PostingInfoType = {
 
 export const PostingInfo = schema(PostingInfoType);
 
+export const PostingInfoList = schema({
+    type: "array",
+    items: PostingInfoType
+});
+
 export const TimelineInfo = schema({
     type: "object",
     properties: {

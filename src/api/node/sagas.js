@@ -235,6 +235,11 @@ export function* getReactions(postingId, negative, emoji, before, limit) {
     return yield call(callNode, {location, schema: NodeApi.ReactionsSliceInfo});
 }
 
+export function* getDraftPostings() {
+    const location = yield call(authorized, `/draft-postings`);
+    return yield call(callNode, {location, schema: NodeApi.PostingInfoList});
+}
+
 export function* getDraftPosting(id) {
     const location = yield call(authorized, `/draft-postings/${id}`);
     return yield call(callNode, {

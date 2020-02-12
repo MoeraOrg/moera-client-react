@@ -21,6 +21,7 @@ import { settingsUpdate } from "state/settings/actions";
 import composePageLogic from "ui/compose/compose-page-logic";
 
 import "./ComposePage.css";
+import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 
 class ComposePage extends React.PureComponent {
 
@@ -82,6 +83,7 @@ class ComposePage extends React.PureComponent {
                             </div>
                             <div className="drafts">
                                 <ComposeDraftSaver/>
+                                <ComposeDraftSelector/>
                             </div>
                         </div>
 

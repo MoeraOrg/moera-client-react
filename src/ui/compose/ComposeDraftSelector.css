@@ -1,0 +1,37 @@
+.draft-selector {
+    margin-left: 1em;
+}
+
+.draft-selector .dropdown-menu {
+}
+
+.draft-selector .dropdown-item {
+    font-size: 90%;
+    line-height: normal;
+}
+
+.draft-selector .dropdown-item .content {
+    max-width: 25em;
+    white-space: normal;
+    width: max-content;
+    max-height: 5em;
+    overflow-y: hidden;
+    position: relative;
+}
+
+.draft-selector .dropdown-item .fader {
+    height: 1em;
+    position: absolute;
+    width: 100%;
+    margin-top: 4em;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.draft-selector .dropdown-item:hover .fader {
+    background: linear-gradient(to bottom, rgba(248, 249, 250, 0) 0%, rgba(248, 249, 250, 1) 100%);
+}
+
+.draft-selector .dropdown-item .edited {
+    font-size: 90%;
+    color: var(--gray-medium);
+}

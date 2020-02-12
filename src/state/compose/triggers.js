@@ -4,6 +4,7 @@ import {
     COMPOSE_POST_SUCCEEDED,
     COMPOSE_POSTING_LOADED,
     composeConflict,
+    composeDraftListLoad,
     composeDraftLoad,
     composeFeaturesLoad,
     composeFeaturesUnset,
@@ -14,6 +15,7 @@ import { postingSet } from "state/postings/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposePostingId,
+    isComposeDraftListToBeLoaded,
     isComposeDraftToBeLoaded,
     isComposeFeaturesToBeLoaded,
     isComposePostingToBeLoaded
@@ -25,6 +27,7 @@ export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
+    trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
     trigger(COMPOSE_POSTING_LOADED, true, signal => postingSet(signal.payload.posting)),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => goToPosting(signal.payload.posting.id)),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => postingSet(signal.payload.posting)),

@@ -20,6 +20,7 @@ import { PROFILE_LOAD, PROFILE_UPDATE } from "state/profile/actions";
 import { TIMELINE_FUTURE_SLICE_LOAD, TIMELINE_GENERAL_LOAD, TIMELINE_PAST_SLICE_LOAD } from "state/timeline/actions";
 import { DETAILED_POSTING_LOAD } from "state/detailedposting/actions";
 import {
+    COMPOSE_DRAFT_LIST_LOAD,
     COMPOSE_DRAFT_LOAD,
     COMPOSE_DRAFT_SAVE,
     COMPOSE_FEATURES_LOAD,
@@ -90,6 +91,7 @@ import { profileLoadSaga, profileUpdateSaga } from "state/profile/sagas";
 import { timelineFutureSliceLoadSaga, timelineGeneralLoadSaga, timelinePastSliceLoadSaga } from "state/timeline/sagas";
 import { detailedPostingLoadSaga } from "state/detailedposting/sagas";
 import {
+    composeDraftListLoadSaga,
     composeDraftLoadSaga,
     composeDraftSaveSaga,
     composeFeaturesLoadSaga,
@@ -200,6 +202,7 @@ function* combinedSaga() {
     yield takeEvery(POSTING_PINNING_UPDATE, postingPinningUpdateSaga);
     yield takeLatest(COMPOSE_DRAFT_LOAD, introduce(composeDraftLoadSaga));
     yield takeLatest(COMPOSE_DRAFT_SAVE, composeDraftSaveSaga);
+    yield takeLatest(COMPOSE_DRAFT_LIST_LOAD, introduce(composeDraftListLoadSaga));
 
     yield invokeTriggers(triggers);
 }

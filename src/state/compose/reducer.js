@@ -1,6 +1,6 @@
 import {
     COMPOSE_CONFLICT,
-    COMPOSE_CONFLICT_CLOSE,
+    COMPOSE_CONFLICT_CLOSE, COMPOSE_DRAFT_LIST_LOAD, COMPOSE_DRAFT_LIST_LOAD_FAILED, COMPOSE_DRAFT_LIST_LOADED,
     COMPOSE_DRAFT_LOAD,
     COMPOSE_DRAFT_LOAD_FAILED,
     COMPOSE_DRAFT_LOADED,
@@ -42,8 +42,23 @@ const initialState = {
     loadingFeatures: false,
     loadedFeatures: false,
     ...emptyFeatures,
-    ...emptyPosting
+    ...emptyPosting,
+    draftList: [],
+    loadingDraftList: false,
+    loadedDraftList: false
 };
+
+function buildDraftInfo(postingInfo) {
+    const {id, bodySrc, editedAt} = postingInfo;
+    const body = JSON.parse(bodySrc);
+
+    return {
+        id,
+        subject: body.subject != null ? body.subject.substring(0, 64) : null,
+        text: body.text != null ? body.text.substring(0, 256) : null,
+        editedAt
+    }
+}
 
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -174,6 +189,28 @@ export default (state = initialState, action) => {
                 ...state,
                 savingDraft: false,
                 savedDraft: false
+            };
+
+        case COMPOSE_DRAFT_LIST_LOAD:
+            return {
+                ...state,
+                loadingDraftList: true
+            };
+
+        case COMPOSE_DRAFT_LIST_LOADED:
+            return {
+                ...state,
+                draftList: action.payload.draftList
+                    .map(buildDraftInfo)
+                    .sort((d1, d2) => d2.editedAt - d1.editedAt),
+                loadingDraftList: false,
+                loadedDraftList: true
+            };
+
+        case COMPOSE_DRAFT_LIST_LOAD_FAILED:
+            return {
+                ...state,
+                loadingDraftList: false
             };
 
         default:
