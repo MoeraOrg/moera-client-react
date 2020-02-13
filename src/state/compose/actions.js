@@ -116,3 +116,27 @@ export const composeDraftSelect = (id) => ({
     type: COMPOSE_DRAFT_SELECT,
     payload: {id}
 });
+
+export const COMPOSE_DRAFT_LIST_ITEM_RELOAD = "COMPOSE_DRAFT_LIST_ITEM_RELOAD";
+export const composeDraftListItemReload = (id) => ({
+    type: COMPOSE_DRAFT_LIST_ITEM_RELOAD,
+    payload: {id}
+});
+
+export const COMPOSE_DRAFT_LIST_ITEM_SET = "COMPOSE_DRAFT_LIST_ITEM_SET";
+export const composeDraftListItemSet = (id, posting) => ({
+    type: COMPOSE_DRAFT_LIST_ITEM_SET,
+    payload: {id, posting}
+});
+
+export const COMPOSE_DRAFT_LIST_ITEM_DELETE = "COMPOSE_DRAFT_LIST_ITEM_DELETE";
+export const composeDraftListItemDelete = (id) => ({
+    type: COMPOSE_DRAFT_LIST_ITEM_DELETE,
+    payload: {id}
+});
+
+export const COMPOSE_DRAFT_LIST_ITEM_DELETED = "COMPOSE_DRAFT_LIST_ITEM_DELETED";
+export const composeDraftListItemDeleted = (id) => ({
+    type: COMPOSE_DRAFT_LIST_ITEM_DELETED,
+    payload: {id}
+});

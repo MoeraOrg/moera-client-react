@@ -22,3 +22,7 @@ export function getComposeDraftId(state) {
 export function isComposeDraftListToBeLoaded(state) {
     return state.compose.postingId == null && !state.compose.loadedDraftList && !state.compose.loadingDraftList;
 }
+
+export function isComposeDraftListLoaded(state) {
+    return state.compose.loadedDraftList && !state.compose.loadingDraftList;
+}

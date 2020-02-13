@@ -1,6 +1,6 @@
 import {
     COMPOSE_CONFLICT,
-    COMPOSE_CONFLICT_CLOSE,
+    COMPOSE_CONFLICT_CLOSE, COMPOSE_DRAFT_LIST_ITEM_DELETED, COMPOSE_DRAFT_LIST_ITEM_SET,
     COMPOSE_DRAFT_LIST_LOAD,
     COMPOSE_DRAFT_LIST_LOAD_FAILED,
     COMPOSE_DRAFT_LIST_LOADED,
@@ -54,7 +54,7 @@ const initialState = {
 
 function buildDraftInfo(postingInfo) {
     const {id, bodySrc, editedAt} = postingInfo;
-    const body = JSON.parse(bodySrc);
+    const body = typeof bodySrc === "string" ? JSON.parse(bodySrc) : bodySrc;
 
     return {
         id,
@@ -62,6 +62,22 @@ function buildDraftInfo(postingInfo) {
         text: body.text != null ? body.text.substring(0, 256) : null,
         editedAt
     }
+}
+
+function sortDraftList(draftList) {
+    return draftList.sort((d1, d2) => d2.editedAt - d1.editedAt);
+}
+
+function appendToDraftList(draftList, postingInfo) {
+    const draftInfo = buildDraftInfo(postingInfo);
+    const list = draftList.slice();
+    const i = list.findIndex(d => d.id === draftInfo.id);
+    if (i >= 0) {
+        list[i] = draftInfo;
+    } else {
+        list.push(draftInfo);
+    }
+    return sortDraftList(list);
 }
 
 export default (state = initialState, action) => {
@@ -204,9 +220,7 @@ export default (state = initialState, action) => {
         case COMPOSE_DRAFT_LIST_LOADED:
             return {
                 ...state,
-                draftList: action.payload.draftList
-                    .map(buildDraftInfo)
-                    .sort((d1, d2) => d2.editedAt - d1.editedAt),
+                draftList: sortDraftList(action.payload.draftList.map(buildDraftInfo)),
                 loadingDraftList: false,
                 loadedDraftList: true
             };
@@ -223,6 +237,26 @@ export default (state = initialState, action) => {
                 ...emptyPosting,
                 draftId: action.payload.id
             };
+
+        case COMPOSE_DRAFT_LIST_ITEM_SET:
+            if (state.loadedDraftList) {
+                return {
+                    ...state,
+                    draftList: appendToDraftList(state.draftList, action.payload.posting)
+                };
+            } else {
+                return state;
+            }
+
+        case COMPOSE_DRAFT_LIST_ITEM_DELETED:
+            if (state.loadedDraftList) {
+                return {
+                    ...state,
+                    draftList: state.draftList.filter(d => d.id !== action.payload.id)
+                };
+            } else {
+                return state;
+            }
 
         default:
             return state;

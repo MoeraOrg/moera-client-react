@@ -3,6 +3,8 @@ import { call, put, select } from 'redux-saga/effects';
 import { errorThrown } from "state/error/actions";
 import { Node } from "api";
 import {
+    composeDraftListItemDeleted,
+    composeDraftListItemSet,
     composeDraftListLoaded,
     composeDraftListLoadFailed,
     composeDraftLoaded,
@@ -48,6 +50,7 @@ export function* composePostSaga(action) {
             data = yield call(Node.postPosting, postingText);
             if (draftId != null) {
                 yield call(Node.deleteDraftPosting, draftId);
+                yield put(composeDraftListItemDeleted(draftId));
             }
         } else {
             data = yield call(Node.putPosting, id, postingText);
@@ -67,6 +70,7 @@ export function* composeDraftLoadSaga() {
         const id = yield select(getComposeDraftId);
         const data = yield call(Node.getDraftPosting, id);
         yield put(composeDraftLoaded(data));
+        yield put(composeDraftListItemSet(id, data));
     } catch (e) {
         yield put(composeDraftLoadFailed());
         yield put(errorThrown(e));
@@ -84,6 +88,7 @@ export function* composeDraftSaveSaga(action) {
             } else {
                 data = yield call(Node.putDraftPosting, draftId, postingText);
             }
+            yield put(composeDraftListItemSet(data.id, data));
         } else {
             data = yield call(Node.putPostingDraftRevision, postingId, postingText);
         }
@@ -100,6 +105,15 @@ export function* composeDraftListLoadSaga() {
         yield put(composeDraftListLoaded(data));
     } catch (e) {
         yield put(composeDraftListLoadFailed());
+        yield put(errorThrown(e));
+    }
+}
+
+export function* composeDraftListItemReloadSaga(action) {
+    try {
+        const data = yield call(Node.getDraftPosting, action.payload.id);
+        yield put(composeDraftListItemSet(data.id, data));
+    } catch (e) {
         yield put(errorThrown(e));
     }
 }

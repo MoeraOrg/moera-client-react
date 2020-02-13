@@ -4,7 +4,8 @@ import {
     COMPOSE_DRAFT_SELECT,
     COMPOSE_POST_SUCCEEDED,
     COMPOSE_POSTING_LOADED,
-    composeConflict,
+    composeConflict, composeDraftListItemDeleted,
+    composeDraftListItemReload,
     composeDraftListLoad,
     composeDraftLoad,
     composeFeaturesLoad,
@@ -16,13 +17,19 @@ import { postingSet } from "state/postings/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposePostingId,
+    isComposeDraftListLoaded,
     isComposeDraftListToBeLoaded,
     isComposeDraftToBeLoaded,
     isComposeFeaturesToBeLoaded,
     isComposePostingToBeLoaded
 } from "state/compose/selectors";
 import { SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
-import { EVENT_HOME_NODE_SETTINGS_CHANGED, EVENT_NODE_POSTING_UPDATED } from "api/events/actions";
+import {
+    EVENT_HOME_DRAFT_POSTING_ADDED, EVENT_HOME_DRAFT_POSTING_DELETED,
+    EVENT_HOME_DRAFT_POSTING_UPDATED,
+    EVENT_HOME_NODE_SETTINGS_CHANGED,
+    EVENT_NODE_POSTING_UPDATED
+} from "api/events/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
@@ -48,5 +55,15 @@ export default [
         composeFeaturesUnset
     ),
     trigger(COMPOSE_DRAFT_SAVED, true, updateLocation),
-    trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad)
+    trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad),
+    trigger(
+        [EVENT_HOME_DRAFT_POSTING_ADDED, EVENT_HOME_DRAFT_POSTING_UPDATED],
+        isComposeDraftListLoaded,
+        signal => composeDraftListItemReload(signal.payload.id)
+    ),
+    trigger(
+        EVENT_HOME_DRAFT_POSTING_DELETED,
+        isComposeDraftListLoaded,
+        signal => composeDraftListItemDeleted(signal.payload.id)
+    )
 ];
