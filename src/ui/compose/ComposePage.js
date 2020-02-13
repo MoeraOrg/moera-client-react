@@ -32,7 +32,8 @@ class ComposePage extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.posting != null && prevProps.posting == null) {
+        if ((this.props.posting != null && prevProps.posting == null)
+            || (this.props.posting == null && prevProps.posting != null)) {
             this.props.resetForm({
                 values: composePageLogic.mapPropsToValues(this.props),
             });

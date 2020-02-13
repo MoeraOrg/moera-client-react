@@ -8,6 +8,32 @@
 .draft-selector .dropdown-item {
     font-size: 90%;
     line-height: normal;
+    display: flex;
+    align-items: center;
+}
+
+.draft-selector .dropdown-item .info {
+    flex: auto;
+}
+
+.draft-selector .dropdown-item .delete {
+    flex: none;
+    visibility: hidden;
+    margin-left: 0.7rem;
+    padding: 0.3rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.draft-selector .dropdown-item:hover .delete {
+    flex: none;
+    visibility: visible;
+    color: var(--red);
+}
+
+.draft-selector .dropdown-item:hover .delete:hover {
+    background-color: var(--red);
+    color: white;
 }
 
 .draft-selector .dropdown-item .content {

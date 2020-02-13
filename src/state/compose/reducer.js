@@ -248,15 +248,26 @@ export default (state = initialState, action) => {
                 return state;
             }
 
-        case COMPOSE_DRAFT_LIST_ITEM_DELETED:
-            if (state.loadedDraftList) {
-                return {
-                    ...state,
-                    draftList: state.draftList.filter(d => d.id !== action.payload.id)
-                };
-            } else {
+        case COMPOSE_DRAFT_LIST_ITEM_DELETED: {
+            if (!state.loadedDraftList && (state.postingId != null || state.draftId !== action.payload.id)) {
                 return state;
             }
+            let result;
+            if (state.postingId == null && state.draftId === action.payload.id) {
+                result = {
+                    ...state,
+                    ...emptyPosting
+                }
+            } else {
+                result = {
+                    ...state
+                }
+            }
+            if (state.loadedDraftList) {
+                result.draftList = state.draftList.filter(d => d.id !== action.payload.id);
+            }
+            return result;
+        }
 
         default:
             return state;

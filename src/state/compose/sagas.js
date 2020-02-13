@@ -117,3 +117,12 @@ export function* composeDraftListItemReloadSaga(action) {
         yield put(errorThrown(e));
     }
 }
+
+export function* composeDraftListItemDeleteSaga(action) {
+    try {
+        yield call(Node.deleteDraftPosting, action.payload.id);
+        yield put(composeDraftListItemDeleted(action.payload.id));
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}

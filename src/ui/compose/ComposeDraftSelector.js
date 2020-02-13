@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Manager, Popper, Reference } from 'react-popper';
 import cx from 'classnames';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Loading, LoadingInline } from "ui/control";
-import { composeDraftSelect } from "state/compose/actions";
+import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
 import "./ComposeDraftSelector.css";
 
 class ComposeDraftSelector extends React.PureComponent {
@@ -15,26 +16,34 @@ class ComposeDraftSelector extends React.PureComponent {
         this.state = {visible: false};
     }
 
-    toggle = () => {
+    onToggle = () => {
         if (!this.state.visible) {
-            this.show();
+            this.onShow();
         } else {
-            this.hide();
+            this.onHide();
         }
     };
 
-    show = () => {
+    onShow = () => {
         this.setState({visible: true});
-        document.addEventListener("click", this.hide);
+        document.addEventListener("click", this.onHide);
     };
 
-    hide = () => {
+    onHide = () => {
         this.setState({visible: false});
-        document.removeEventListener("click", this.hide);
+        document.removeEventListener("click", this.onHide);
     };
 
-    select = (id) => () => {
+    onSelect = (id) => (e) => {
+        if (e.target.closest(".delete") != null) {
+            return;
+        }
         this.props.composeDraftSelect(id);
+    };
+
+    onDelete = (id) => (e) => {
+        this.props.composeDraftListItemDelete(id);
+        e.preventDefault();
     };
 
     render() {
@@ -47,7 +56,7 @@ class ComposeDraftSelector extends React.PureComponent {
                     <Reference>
                         {({ref}) => (
                             <div ref={ref} className={cx("draft-selector", "btn-group", "dropdown", {"show": visible})}>
-                                <button type="button" className="btn btn-info dropdown-toggle" onClick={this.toggle}>
+                                <button type="button" className="btn btn-info dropdown-toggle" onClick={this.onToggle}>
                                     Drafts{" "}
                                     {loadingDraftList ?
                                         <LoadingInline active={loadingDraftList}/>
@@ -65,15 +74,22 @@ class ComposeDraftSelector extends React.PureComponent {
                                         )}>
                                             {draftList.map(draft => (
                                                 <div className="dropdown-item" key={draft.id}
-                                                     onClick={this.select(draft.id)}
+                                                     onClick={this.onSelect(draft.id)}
                                                 >
-                                                    <div className="content">
-                                                        <div className="fader">&nbsp;</div>
-                                                        {draft.subject && <b>{draft.subject} </b>}
-                                                        {draft.text}
+                                                    <div className="info">
+                                                        <div className="content">
+                                                            <div className="fader">&nbsp;</div>
+                                                            {draft.subject && <b>{draft.subject} </b>}
+                                                            {draft.text}
+                                                        </div>
+                                                        <div className="edited">
+                                                            {moment.unix(draft.editedAt).fromNow()}
+                                                        </div>
                                                     </div>
-                                                    <div className="edited">
-                                                        {moment.unix(draft.editedAt).fromNow()}
+                                                    <div className="delete" title="Delete draft"
+                                                         onClick={this.onDelete(draft.id)}
+                                                    >
+                                                        <FontAwesomeIcon icon="trash-alt"/>
                                                     </div>
                                                 </div>
                                             ))}
@@ -98,5 +114,5 @@ export default connect(
         loadingDraftList: state.compose.loadingDraftList,
         loadedDraftList: state.compose.loadedDraftList
     }),
-    { composeDraftSelect }
+    { composeDraftSelect, composeDraftListItemDelete }
 )(ComposeDraftSelector);

@@ -1,5 +1,6 @@
 import { conj, inv, trigger } from "state/trigger";
 import {
+    COMPOSE_DRAFT_LIST_ITEM_DELETED,
     COMPOSE_DRAFT_SAVED,
     COMPOSE_DRAFT_SELECT,
     COMPOSE_POST_SUCCEEDED,
@@ -56,6 +57,8 @@ export default [
     ),
     trigger(COMPOSE_DRAFT_SAVED, true, updateLocation),
     trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad),
+    trigger(COMPOSE_DRAFT_SELECT, true, updateLocation),
+    trigger(COMPOSE_DRAFT_LIST_ITEM_DELETED, true, updateLocation),
     trigger(
         [EVENT_HOME_DRAFT_POSTING_ADDED, EVENT_HOME_DRAFT_POSTING_UPDATED],
         isComposeDraftListLoaded,
