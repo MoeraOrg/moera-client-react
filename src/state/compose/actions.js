@@ -140,3 +140,8 @@ export const composeDraftListItemDeleted = (id) => ({
     type: COMPOSE_DRAFT_LIST_ITEM_DELETED,
     payload: {id}
 });
+
+export const COMPOSE_DRAFT_REVISION_DELETE = "COMPOSE_DRAFT_REVISION_DELETE";
+export const composeDraftRevisionDelete = () => ({
+    type: COMPOSE_DRAFT_REVISION_DELETE
+});

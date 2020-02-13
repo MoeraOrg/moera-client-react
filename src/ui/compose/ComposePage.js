@@ -13,7 +13,9 @@ import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeReactions from "ui/compose/ComposeReactions";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
 import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
+import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
+import ComposeResetButton from "ui/compose/ComposeResetButton";
 import { goToPosting } from "state/navigation/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
 import { getSetting } from "state/settings/selectors";
@@ -21,22 +23,23 @@ import { settingsUpdate } from "state/settings/actions";
 import composePageLogic from "ui/compose/compose-page-logic";
 
 import "./ComposePage.css";
-import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 
 class ComposePage extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);
 
+        this.state = {initialPostingText: {}};
         this.onGoToPostingClick = this.onGoToPostingClick.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if ((this.props.posting != null && prevProps.posting == null)
-            || (this.props.posting == null && prevProps.posting != null)) {
-            this.props.resetForm({
-                values: composePageLogic.mapPropsToValues(this.props),
-            });
+            || (this.props.posting == null && prevProps.posting != null)
+            || (this.props.draftId == null && prevProps.draftId != null)) {
+            const values = composePageLogic.mapPropsToValues(this.props);
+            this.setState({initialPostingText: composePageLogic.mapValuesToPostingText(values, this.props)});
+            this.props.resetForm({values});
         }
     }
 
@@ -83,12 +86,15 @@ class ComposePage extends React.PureComponent {
                                 <ComposeReactionsButton/>
                             </div>
                             <div className="drafts">
-                                <ComposeDraftSaver/>
+                                <ComposeDraftSaver initialPostingText={this.state.initialPostingText}/>
                                 <ComposeDraftSelector/>
                             </div>
                         </div>
 
-                        <ComposeSubmitButton loading={beingPosted} update={postingId != null}/>
+                        <div className="form-buttons">
+                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}/>
+                            <ComposeResetButton/>
+                        </div>
                     </Form>
                 </div>
             </Page>

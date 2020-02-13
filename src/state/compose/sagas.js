@@ -14,6 +14,7 @@ import {
     composeFeaturesLoaded,
     composeFeaturesLoadFailed,
     composePostFailed,
+    composePostingLoad,
     composePostingLoaded,
     composePostingLoadFailed,
     composePostSucceeded
@@ -122,6 +123,16 @@ export function* composeDraftListItemDeleteSaga(action) {
     try {
         yield call(Node.deleteDraftPosting, action.payload.id);
         yield put(composeDraftListItemDeleted(action.payload.id));
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
+
+export function* composeDraftRevisionDeleteSaga() {
+    try {
+        const id = yield select(getComposePostingId);
+        yield call(Node.deletePostingDraftRevision, id);
+        yield put(composePostingLoad());
     } catch (e) {
         yield put(errorThrown(e));
     }

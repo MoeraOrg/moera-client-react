@@ -44,13 +44,13 @@ class ComposeDraftSaver extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {postingId} = this.props;
-
         const prevText = postingText(prevProps);
         const thisText = postingText(this.props);
-        if (!deepEqual(prevText, thisText) && (postingId == null || !isEmpty(prevText))) {
+        if (!deepEqual(prevText, thisText) && !deepEqual(this.props.initialPostingText, thisText)) {
             this.setState({unsavedChanges: true});
-            this.onSave();
+            if (!isEmpty(thisText)) {
+                this.onSave();
+            }
         }
     }
 

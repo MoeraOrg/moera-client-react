@@ -16,3 +16,16 @@
 .features .drafts {
     color: var(--gray-medium);
 }
+
+.form-buttons {
+    display: flex;
+}
+
+.submit-button {
+    flex: auto;
+}
+
+.reset-button {
+    flex: none;
+    margin-left: 0.5rem;
+}

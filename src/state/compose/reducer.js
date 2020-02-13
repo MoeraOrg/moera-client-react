@@ -1,12 +1,17 @@
+import immutable from 'object-path-immutable';
+
 import {
     COMPOSE_CONFLICT,
-    COMPOSE_CONFLICT_CLOSE, COMPOSE_DRAFT_LIST_ITEM_DELETED, COMPOSE_DRAFT_LIST_ITEM_SET,
+    COMPOSE_CONFLICT_CLOSE,
+    COMPOSE_DRAFT_LIST_ITEM_DELETED,
+    COMPOSE_DRAFT_LIST_ITEM_SET,
     COMPOSE_DRAFT_LIST_LOAD,
     COMPOSE_DRAFT_LIST_LOAD_FAILED,
     COMPOSE_DRAFT_LIST_LOADED,
     COMPOSE_DRAFT_LOAD,
     COMPOSE_DRAFT_LOAD_FAILED,
     COMPOSE_DRAFT_LOADED,
+    COMPOSE_DRAFT_REVISION_DELETE,
     COMPOSE_DRAFT_SAVE,
     COMPOSE_DRAFT_SAVE_FAILED,
     COMPOSE_DRAFT_SAVED,
@@ -196,6 +201,8 @@ export default (state = initialState, action) => {
             if (action.payload.postingId === state.postingId) {
                 return {
                     ...state,
+                    posting: state.postingId != null && state.posting != null
+                        ? immutable.set(state.posting, "draftPending", true) : state.posting,
                     draftId: action.payload.draftId,
                     savingDraft: false,
                     savedDraft: true
@@ -268,6 +275,13 @@ export default (state = initialState, action) => {
             }
             return result;
         }
+
+        case COMPOSE_DRAFT_REVISION_DELETE:
+            return {
+                ...state,
+                ...emptyPosting,
+                postingId: state.postingId
+            };
 
         default:
             return state;

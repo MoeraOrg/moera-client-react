@@ -24,6 +24,7 @@ import {
     COMPOSE_DRAFT_LIST_ITEM_RELOAD,
     COMPOSE_DRAFT_LIST_LOAD,
     COMPOSE_DRAFT_LOAD,
+    COMPOSE_DRAFT_REVISION_DELETE,
     COMPOSE_DRAFT_SAVE,
     COMPOSE_FEATURES_LOAD,
     COMPOSE_POST,
@@ -97,6 +98,7 @@ import {
     composeDraftListItemReloadSaga,
     composeDraftListLoadSaga,
     composeDraftLoadSaga,
+    composeDraftRevisionDeleteSaga,
     composeDraftSaveSaga,
     composeFeaturesLoadSaga,
     composePostingLoadSaga,
@@ -209,6 +211,7 @@ function* combinedSaga() {
     yield takeLatest(COMPOSE_DRAFT_LIST_LOAD, introduce(composeDraftListLoadSaga));
     yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_RELOAD, composeDraftListItemReloadSaga);
     yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_DELETE, composeDraftListItemDeleteSaga);
+    yield takeLatest(COMPOSE_DRAFT_REVISION_DELETE, composeDraftRevisionDeleteSaga);
 
     yield invokeTriggers(triggers);
 }

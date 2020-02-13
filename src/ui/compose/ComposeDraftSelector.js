@@ -47,9 +47,12 @@ class ComposeDraftSelector extends React.PureComponent {
     };
 
     render() {
-        const {draftList, loadingDraftList, loadedDraftList} = this.props;
+        const {postingId, draftList, loadingDraftList, loadedDraftList} = this.props;
         const {visible} = this.state;
 
+        if (postingId != null) {
+            return null;
+        }
         if (loadedDraftList && draftList.length > 0) {
             return (
                 <Manager>
@@ -110,6 +113,7 @@ class ComposeDraftSelector extends React.PureComponent {
 
 export default connect(
     state => ({
+        postingId: state.compose.postingId,
         draftList: state.compose.draftList,
         loadingDraftList: state.compose.loadingDraftList,
         loadedDraftList: state.compose.loadedDraftList
