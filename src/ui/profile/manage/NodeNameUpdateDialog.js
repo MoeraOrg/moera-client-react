@@ -42,19 +42,20 @@ class NodeNameUpdateDialog extends React.Component {
         }
 
         return (
-            <ModalDialog title={showChangeName ? "Change Node Name" : "Prolong Node Name"} size="lg"
+            <ModalDialog title={showChangeName ? "Transfer Name From Another Node" : "Prolong Node Name"} size="lg"
                          onClose={nodeNameUpdateDialogCancel}>
                 <Form>
                     <div className="modal-body">
                         {showChangeName &&
-                        <div className="row">
-                            <div className="col-sm-4">
-                                <InputField name="name" title="Name" autoFocus/>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <InputField name="name" title="Name" autoFocus/>
+                                </div>
+                                <div className="col-sm-2">
+                                    <NumberField name="generation" title="Generation" min={0}/>
+                                </div>
                             </div>
-                            <div className="col-sm-2">
-                                <NumberField name="generation" title="Generation" min={0}/>
-                            </div>
-                        </div>}
+                        }
                         <h5 className="mnemonic-title">Secret Words</h5>
                         <div className="row">
                             <Column start={0} end={8} autoFocus={!showChangeName} />
@@ -66,7 +67,7 @@ class NodeNameUpdateDialog extends React.Component {
                         <Button variant="secondary" onClick={nodeNameUpdateDialogCancel}
                                 disabled={updating}>Cancel</Button>
                         <Button variant="primary" type="submit" loading={updating}>
-                            {showChangeName ? "Change" : "Prolong"}
+                            {showChangeName ? "Transfer" : "Prolong"}
                         </Button>
                     </div>
                 </Form>

@@ -17,20 +17,20 @@ import NodeNameUpdateDialog from "ui/profile/manage/NodeNameUpdateDialog";
 
 const ManagementButtonsImpl = ({nameDefined, operationPending, registerNameDialog, nodeNameUpdateDialog}) => (
     <div className="col-sm-9">
-        <Button variant="outline-secondary" size="sm" disabled={operationPending}
-                onClick={e => nodeNameUpdateDialog(true)}>
-            Change
-        </Button>
-        <Button variant={!nameDefined ? "primary" : "outline-secondary"} size="sm" disabled={operationPending}
-                style={{marginLeft: "0.2rem"}} onClick={registerNameDialog}>
-            Register New
-        </Button>
         {nameDefined &&
-            <Button variant="primary" size="sm" disabled={operationPending} style={{marginLeft: "0.2rem"}}
+            <Button variant="primary" size="sm" disabled={operationPending} style={{marginRight: "0.2rem"}}
                     onClick={e => nodeNameUpdateDialog(false)}>
                 Prolong
             </Button>
         }
+        <Button variant={!nameDefined ? "primary" : "secondary"} size="sm" disabled={operationPending}
+                onClick={registerNameDialog}>
+            Register {!nameDefined ? "New" : "Another"}
+        </Button>
+        <Button variant="outline-secondary" size="sm" disabled={operationPending} style={{marginLeft: "1.5rem"}}
+                onClick={e => nodeNameUpdateDialog(true)}>
+            Transfer Name
+        </Button>
     </div>
 );
 
