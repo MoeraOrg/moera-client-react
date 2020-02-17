@@ -10,6 +10,7 @@
     line-height: normal;
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 
 .draft-selector .dropdown-item .info {
@@ -22,7 +23,6 @@
     margin-left: 0.7rem;
     padding: 0.3rem;
     font-size: 1.2rem;
-    cursor: pointer;
 }
 
 .draft-selector .dropdown-item:hover .delete {
