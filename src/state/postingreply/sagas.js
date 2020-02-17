@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Home } from "api";
+import { Home, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { postingReplyFailed } from "state/postingreply/actions";
 import { getOwnerName } from "state/owner/selectors";
@@ -15,12 +15,14 @@ export function* postingReplySaga() {
         rootHomePage: state.home.root.page
     }));
     try {
+        const name = NodeName.parse(ownerName).name;
         const postingText = {
             bodySrc: JSON.stringify({
                 subject: posting.body.subject ? "Re: " + posting.body.subject : "",
-                text: `Reply to [post](${rootNodePage}/post/${posting.id}) by @${ownerName}:\n`
+                text: `Reply to [the post](${rootNodePage}/post/${posting.id}) by @${name}:\n`
                     + `>>>\n${posting.body.text.trim()}\n>>>\n`
-            })
+            }),
+            bodySrcFormat: "markdown"
         };
         const data = yield call(Home.postDraftPosting, postingText);
         window.location = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
