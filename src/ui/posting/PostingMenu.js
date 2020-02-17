@@ -48,12 +48,6 @@ class PostingMenu extends React.PureComponent {
                     show: isPermitted("edit", posting)
                 },
                 {
-                    title: "Delete",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
-                    onClick: this.onDelete,
-                    show: isPermitted("delete", posting)
-                },
-                {
                     title: "Pin",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onPin,
@@ -64,6 +58,13 @@ class PostingMenu extends React.PureComponent {
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onPin,
                     show: posting.pinned && isPermitted("edit", posting)
+                },
+                {
+                    title: "Delete",
+                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    onClick: this.onDelete,
+                    show: isPermitted("delete", posting),
+                    divider: true
                 }
             ]}/>
         );
