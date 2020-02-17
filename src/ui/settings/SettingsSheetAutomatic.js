@@ -128,9 +128,7 @@ const settingsSheetOtherLogic = {
         if (hasErrors) {
             messageBox("Some settings have incorrect values.");
         } else {
-            settingsUpdate(settingsToUpdate, () => formik.resetForm({
-                values: settingsSheetOtherLogic.mapPropsToValues(this.props),
-            }));
+            settingsUpdate(settingsToUpdate);
         }
 
         formik.setSubmitting(false);
