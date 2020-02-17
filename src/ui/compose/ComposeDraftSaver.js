@@ -37,7 +37,7 @@ class ComposeDraftSaver extends React.PureComponent {
         }
         composeDraftSave(postingId, draftId, postingText(this.props));
         this.setState({unsavedChanges: false});
-    }, 2000);
+    }, 1500);
 
     componentWillUnmount() {
         this.onSave.cancel();
