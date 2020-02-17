@@ -10,6 +10,7 @@ import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
+import PostingHtml from "ui/posting/PostingHtml";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
 import { isConnectedToHome } from "state/home/selectors";
@@ -19,13 +20,13 @@ const Content = ({posting, href, onClick}) => {
     if (posting.bodyPreview.text) {
         return (
             <div className="content">
-                <div dangerouslySetInnerHTML={{__html: posting.bodyPreview.text}} />
+                <PostingHtml html={posting.bodyPreview.text}/>
                 <a href={href} onClick={onClick}>Continue Reading &rarr;</a>
             </div>
         );
     } else {
         return (
-            <div className="content" dangerouslySetInnerHTML={{__html: posting.body.previewText}} />
+            <PostingHtml className="content" html={posting.body.previewText}/>
         );
     }
 };

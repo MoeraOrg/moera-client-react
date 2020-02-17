@@ -14,6 +14,7 @@ import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
+import PostingHtml from "ui/posting/PostingHtml";
 
 const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToTimeline}) => (
     <>
@@ -33,7 +34,7 @@ const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToT
                         <PostingUpdated posting={posting}/>
                     </div>
                     <PostingSubject posting={posting} preview={false}/>
-                    <div className="content" dangerouslySetInnerHTML={{__html: posting.body.text}}/>
+                    <PostingHtml className="content" html={posting.body.text}/>
                     <PostingReactions posting={posting}/>
                     {connectedToHome && <PostingButtons posting={posting}/>}
                 </>

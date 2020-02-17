@@ -26,7 +26,8 @@ export function safePreviewHtml(html) {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
-            img: ["src", "srcset", "width", "height", "style"]
+            img: ["src", "srcset", "width", "height", "style"],
+            a: ["href", "data-nodename"]
         },
         transformTags: {
             "h1": "b",
@@ -46,7 +47,8 @@ export function safeHtml(html) {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat(["h1", "h2", "img"]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
-            img: ["src", "srcset", "width", "height", "style"]
+            img: ["src", "srcset", "width", "height", "style"],
+            a: ["href", "data-nodename"]
         }
     });
 }
