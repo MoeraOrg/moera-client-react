@@ -7,3 +7,20 @@
     margin-bottom: 1rem;
     padding: 0.5rem;
 }
+
+.posting BLOCKQUOTE {
+    padding: 0.2rem 0.2rem 0.2rem 3rem;
+    position: relative;
+    background-color: var(--white-dark);
+    border-radius: 0.5rem;
+}
+
+.posting BLOCKQUOTE::before {
+    content: "\201C";
+    font-family: serif;
+    font-size: 4rem;
+    color: var(--cyan);
+    position: absolute;
+    left: 0.5rem;
+    top: -1rem;
+}
