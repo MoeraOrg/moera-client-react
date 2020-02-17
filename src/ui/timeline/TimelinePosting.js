@@ -21,7 +21,7 @@ const Content = ({posting, href, onClick}) => {
         return (
             <div className="content">
                 <PostingHtml html={posting.bodyPreview.text}/>
-                <a href={href} onClick={onClick}>Continue Reading &rarr;</a>
+                <p><a href={href} onClick={onClick}>Continue Reading &rarr;</a></p>
             </div>
         );
     } else {
