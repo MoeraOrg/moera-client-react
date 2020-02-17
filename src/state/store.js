@@ -52,6 +52,7 @@ import {
     REACTIONS_DIALOG_PAST_REACTIONS_LOAD,
     REACTIONS_DIALOG_TOTALS_LOAD
 } from "state/reactionsdialog/actions";
+import { POSTING_REPLY } from "state/postingreply/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import error from "state/error/reducer";
@@ -71,6 +72,7 @@ import timeline from "state/timeline/reducer";
 import settings from "state/settings/reducer";
 import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
+import postingReply from "state/postingreply/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 
@@ -141,6 +143,7 @@ import postingsTriggers from "state/postings/triggers";
 import settingsTriggers from "state/settings/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
+import { postingReplySaga } from "state/postingreply/sagas";
 
 const triggers = collectTriggers(
     homeTriggers,
@@ -212,6 +215,7 @@ function* combinedSaga() {
     yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_RELOAD, composeDraftListItemReloadSaga);
     yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_DELETE, composeDraftListItemDeleteSaga);
     yield takeLatest(COMPOSE_DRAFT_REVISION_DELETE, composeDraftRevisionDeleteSaga);
+    yield takeLatest(POSTING_REPLY, postingReplySaga);
 
     yield invokeTriggers(triggers);
 }
@@ -236,6 +240,7 @@ export default createStore(
         settings,
         cartes,
         reactionsDialog,
+        postingReply,
         messageBox,
         confirmBox
     }),

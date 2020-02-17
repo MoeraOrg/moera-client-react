@@ -15,6 +15,7 @@ import {
     faNetworkWired,
     faPen,
     faRemoveFormat,
+    faReply,
     faSignOutAlt,
     faThumbsDown,
     faThumbsUp,
@@ -51,6 +52,7 @@ export default function initIconLibrary() {
     library.add(faMarkdown);
     library.add(faPen);
     library.add(faRemoveFormat);
+    library.add(faReply);
     library.add(faSignOutAlt);
     library.add(faTrashAlt);
     library.add(faThumbsDown);

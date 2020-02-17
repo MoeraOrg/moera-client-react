@@ -235,37 +235,6 @@ export function* getReactions(postingId, negative, emoji, before, limit) {
     return yield call(callNode, {location, schema: NodeApi.ReactionsSliceInfo});
 }
 
-export function* getDraftPostings() {
-    const location = yield call(authorized, `/draft-postings`);
-    return yield call(callNode, {location, schema: NodeApi.PostingInfoList});
-}
-
-export function* getDraftPosting(id) {
-    const location = yield call(authorized, `/draft-postings/${id}`);
-    return yield call(callNode, {
-        location, schema: NodeApi.PostingInfo, withBodies: true, errorFilter: ["posting.not-found"]
-    });
-}
-
-export function* postDraftPosting(postingText) {
-    const location = yield call(authorized, "/draft-postings");
-    return yield call(callNode, {
-        location, method: "POST", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
-    });
-}
-
-export function* putDraftPosting(id, postingText) {
-    const location = yield call(authorized, `/draft-postings/${id}`);
-    return yield call(callNode, {
-        location, method: "PUT", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
-    });
-}
-
-export function* deleteDraftPosting(id) {
-    const location = yield call(authorized, `/draft-postings/${id}`);
-    return yield call(callNode, {location, method: "DELETE", schema: NodeApi.Result});
-}
-
 export function* getPostingDraftRevision(id) {
     const location = yield call(authorized, `/postings/${id}/revisions/draft`);
     return yield call(callNode, {

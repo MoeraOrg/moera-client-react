@@ -1,6 +1,7 @@
 import React from 'react';
 
 import PostingReactionButton from "ui/posting/PostingReactionButton";
+import PostingReplyButton from "ui/posting/PostingReplyButton";
 import "./PostingButtons.css";
 
 const PostingButtons = ({posting}) => {
@@ -13,6 +14,7 @@ const PostingButtons = ({posting}) => {
             <PostingReactionButton icon="thumbs-down" caption="Oppose" invisible={cr.emoji && !cr.negative}
                                    id={posting.id} negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions.negative}/>
+            <PostingReplyButton id={posting.id}/>
         </div>
     );
 };

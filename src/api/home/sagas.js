@@ -99,3 +99,34 @@ export function* remoteReactionVerify(nodeName, postingId, ownerName) {
         `/nodes/${nodeName}/postings/${postingId}/reactions/${ownerName}/verify`);
     return yield call(callHome, {location, method: "POST", schema: NodeApi.AsyncOperationCreated});
 }
+
+export function* getDraftPostings() {
+    const location = yield call(authorized, `/draft-postings`);
+    return yield call(callHome, {location, schema: NodeApi.PostingInfoList});
+}
+
+export function* getDraftPosting(id) {
+    const location = yield call(authorized, `/draft-postings/${id}`);
+    return yield call(callHome, {
+        location, schema: NodeApi.PostingInfo, withBodies: true, errorFilter: ["posting.not-found"]
+    });
+}
+
+export function* postDraftPosting(postingText) {
+    const location = yield call(authorized, "/draft-postings");
+    return yield call(callHome, {
+        location, method: "POST", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
+    });
+}
+
+export function* putDraftPosting(id, postingText) {
+    const location = yield call(authorized, `/draft-postings/${id}`);
+    return yield call(callHome, {
+        location, method: "PUT", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
+    });
+}
+
+export function* deleteDraftPosting(id) {
+    const location = yield call(authorized, `/draft-postings/${id}`);
+    return yield call(callHome, {location, method: "DELETE", schema: NodeApi.Result});
+}

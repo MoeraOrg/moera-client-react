@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects';
 
 import { errorThrown } from "state/error/actions";
-import { Node } from "api";
+import { Home, Node } from "api";
 import {
     composeDraftListItemDeleted,
     composeDraftListItemSet,
@@ -50,7 +50,7 @@ export function* composePostSaga(action) {
         if (id == null) {
             data = yield call(Node.postPosting, postingText);
             if (draftId != null) {
-                yield call(Node.deleteDraftPosting, draftId);
+                yield call(Home.deleteDraftPosting, draftId);
                 yield put(composeDraftListItemDeleted(draftId));
             }
         } else {
@@ -69,7 +69,7 @@ export function* composePostSaga(action) {
 export function* composeDraftLoadSaga() {
     try {
         const id = yield select(getComposeDraftId);
-        const data = yield call(Node.getDraftPosting, id);
+        const data = yield call(Home.getDraftPosting, id);
         yield put(composeDraftLoaded(data));
         yield put(composeDraftListItemSet(id, data));
     } catch (e) {
@@ -85,9 +85,9 @@ export function* composeDraftSaveSaga(action) {
         let data;
         if (postingId == null) {
             if (draftId == null) {
-                data = yield call(Node.postDraftPosting, postingText);
+                data = yield call(Home.postDraftPosting, postingText);
             } else {
-                data = yield call(Node.putDraftPosting, draftId, postingText);
+                data = yield call(Home.putDraftPosting, draftId, postingText);
             }
             yield put(composeDraftListItemSet(data.id, data));
         } else {
@@ -102,7 +102,7 @@ export function* composeDraftSaveSaga(action) {
 
 export function* composeDraftListLoadSaga() {
     try {
-        const data = yield call(Node.getDraftPostings);
+        const data = yield call(Home.getDraftPostings);
         yield put(composeDraftListLoaded(data));
     } catch (e) {
         yield put(composeDraftListLoadFailed());
@@ -112,7 +112,7 @@ export function* composeDraftListLoadSaga() {
 
 export function* composeDraftListItemReloadSaga(action) {
     try {
-        const data = yield call(Node.getDraftPosting, action.payload.id);
+        const data = yield call(Home.getDraftPosting, action.payload.id);
         yield put(composeDraftListItemSet(data.id, data));
     } catch (e) {
         yield put(errorThrown(e));
@@ -121,7 +121,7 @@ export function* composeDraftListItemReloadSaga(action) {
 
 export function* composeDraftListItemDeleteSaga(action) {
     try {
-        yield call(Node.deleteDraftPosting, action.payload.id);
+        yield call(Home.deleteDraftPosting, action.payload.id);
         yield put(composeDraftListItemDeleted(action.payload.id));
     } catch (e) {
         yield put(errorThrown(e));
