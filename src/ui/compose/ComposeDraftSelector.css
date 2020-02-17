@@ -28,7 +28,7 @@
 .draft-selector .dropdown-item:hover .delete {
     flex: none;
     visibility: visible;
-    color: var(--red);
+    color: var(--red-light);
 }
 
 .draft-selector .dropdown-item:hover .delete:hover {
