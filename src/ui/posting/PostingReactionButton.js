@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import { Manager, Popper, Reference } from 'react-popper';
 import cx from 'classnames';
+import debounce from 'lodash.debounce';
 
 import { REACTION_EMOJIS } from "api";
 import { EmojiSelector } from "ui/control";
@@ -37,14 +38,12 @@ class PostingReactionButton extends React.PureComponent {
         super(props, context);
 
         this.state = {locus: "out", popup: false, reactions: []};
-        this.timerId = null;
 
         this.documentClick = this.documentClick.bind(this);
         this.mainEnter = this.mainEnter.bind(this);
         this.mainLeave = this.mainLeave.bind(this);
         this.popupEnter = this.popupEnter.bind(this);
         this.popupLeave = this.popupLeave.bind(this);
-        this.timeout = this.timeout.bind(this);
     }
 
     componentDidMount() {
@@ -54,12 +53,6 @@ class PostingReactionButton extends React.PureComponent {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.available !== prevProps.available) {
             this.updateReactions();
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.timerId != null) {
-            clearTimeout(this.timerId);
         }
     }
 
@@ -142,14 +135,11 @@ class PostingReactionButton extends React.PureComponent {
         const changed = this.state.locus !== locus;
         this.setState({locus});
         if (changed) {
-            if (this.timerId != null) {
-                clearTimeout(this.timerId);
-            }
-            this.timerId = setTimeout(this.timeout, 1000);
+            this.onTimeout();
         }
     }
 
-    timeout() {
+    onTimeout = debounce(() => {
         this.timerId = null;
         switch (this.state.locus) {
             case "out":
@@ -161,7 +151,7 @@ class PostingReactionButton extends React.PureComponent {
             default:
                 // do nothing
         }
-    }
+    }, 1000);
 
     show() {
         this.setState({popup: true});
