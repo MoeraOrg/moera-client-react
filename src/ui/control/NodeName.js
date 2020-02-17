@@ -28,9 +28,9 @@ const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, 
             "incorrect": verified && !correct
         }
     );
-    let href = details.loaded ? details.nodeUri : urlWithParameters(homePageRoot + "/gotoname", {name});
-    if (!linked) {
-        href = "";
+    let href = "";
+    if (linked) {
+        href = details.loaded ? details.nodeUri : urlWithParameters(homePageRoot + "/gotoname", {name});
     }
     const parts = NodeNameParser.parse(name);
     return href ?
