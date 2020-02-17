@@ -17,7 +17,7 @@ NameGeneration.propTypes = {
     latest: PropType.bool
 };
 
-const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, nodePageRoot, details }) => {
+const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, homePageRoot, details }) => {
     if (!name) {
         return null;
     }
@@ -28,7 +28,7 @@ const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, 
             "incorrect": verified && !correct
         }
     );
-    let href = details.loaded ? details.nodeUri : urlWithParameters(nodePageRoot + "/gotoname", {name});
+    let href = details.loaded ? details.nodeUri : urlWithParameters(homePageRoot + "/gotoname", {name});
     if (!linked) {
         href = "";
     }
@@ -57,7 +57,7 @@ NodeNameImpl.propTypes = {
 
 export const NodeName = connect(
     (state, ownProps) => ({
-        nodePageRoot: state.node.root.page,
+        homePageRoot: state.home.root.page,
         details: getNamingNameDetails(state, ownProps.name)
     })
 )(NodeNameImpl);
