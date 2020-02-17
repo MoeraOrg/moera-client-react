@@ -35,6 +35,12 @@ class ComposeFormattingHelp extends React.PureComponent {
         this.toggleHelp(false);
     }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.show !== prevProps.show) {
+            this.setState({show: this.props.show});
+        }
+    }
+
     render() {
         if (this.props.formik.values.bodyFormat !== "markdown") {
             return null;
