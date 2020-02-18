@@ -8,7 +8,7 @@ import { CheckboxField, InputField } from "ui/control/field";
 import { cancelConnectDialog } from "state/connectdialog/actions";
 import { connectToHome } from "state/home/actions";
 
-class ConnectDialog extends React.Component {
+class ConnectDialog extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show && this.props.show) {

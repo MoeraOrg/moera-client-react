@@ -6,7 +6,7 @@ import * as URI from 'uri-js';
 import { Browser, EventPacket, EVENT_SCHEMES, formatSchemaErrors } from "api";
 import { eventAction } from "api/events/actions";
 
-class Events extends React.Component {
+class Events extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);

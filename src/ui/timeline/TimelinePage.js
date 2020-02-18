@@ -15,7 +15,7 @@ import { isAtTimelinePage } from "state/navigation/selectors";
 
 import "./TimelinePage.css";
 
-class TimelinePage extends React.Component {
+class TimelinePage extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);

@@ -5,7 +5,7 @@ import { Browser } from "api";
 import { homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 
-class Storage extends React.Component {
+class Storage extends React.PureComponent {
 
     componentDidMount() {
         window.addEventListener("message", this.messageReceived);

@@ -14,7 +14,7 @@ const Column = ({mnemonic, start, end}) => (
     </div>
 );
 
-class MnemonicDialog  extends React.Component {
+class MnemonicDialog  extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.mnemonic != null && prevProps.mnemonic == null) {

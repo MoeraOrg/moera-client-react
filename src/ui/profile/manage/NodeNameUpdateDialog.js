@@ -24,7 +24,7 @@ const Column = ({start, end, autoFocus = false}) => (
     </div>
 );
 
-class NodeNameUpdateDialog extends React.Component {
+class NodeNameUpdateDialog extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show) { // Mnemonic must be cleared immediately after hiding the dialog

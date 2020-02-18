@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { goToLocation } from "state/navigation/actions";
 
-class Navigation extends React.Component {
+class Navigation extends React.PureComponent {
 
     componentDidMount() {
         window.onpopstate = this.popState;

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { goToTimeline } from "state/navigation/actions";
 import { isAtComposePage, isAtDetailedPostingPage, isAtTimelinePage } from "state/navigation/selectors";
 
-class MainMenuTimelineAccessor extends React.Component {
+class MainMenuTimelineAccessor extends React.PureComponent {
 
     render() {
         const {rootLocation, active, anchor, goToTimeline} = this.props;
