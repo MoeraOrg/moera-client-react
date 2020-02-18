@@ -13,7 +13,7 @@ export function* errorSaga(action) {
 
     const {message, messageVerbose} = action.payload.e;
     yield put(errorShow(message, messageVerbose));
-    yield delay(3000);
+    yield delay(10000);
     yield put(errorDismiss());
 }
 

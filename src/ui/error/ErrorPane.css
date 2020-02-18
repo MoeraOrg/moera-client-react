@@ -3,6 +3,10 @@
     z-index: 1070;
 }
 
+.error-pane .close {
+    margin-left: 1rem;
+}
+
 .error-pane.error-pane-visible {
     visibility: visible;
     top: 0;
