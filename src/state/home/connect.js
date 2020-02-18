@@ -58,7 +58,7 @@ export function* verifyHomeOwnerSaga() {
         const rootPage = yield select(state => state.home.root.page);
         const correct = ndata && normalizeUrl(ndata.nodeUri) === rootPage;
         const latest = ndata && ndata.latest;
-        yield put(homeOwnerVerified(data.nodeName, latest, correct));
+        yield put(homeOwnerVerified(data.nodeName, latest, correct, ndata.deadline));
     } catch (e) {
         yield put(errorThrown(e));
     }

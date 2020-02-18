@@ -1,4 +1,5 @@
 import selectn from 'selectn';
+import moment from "moment";
 
 export function getHomeToken(state) {
     return selectn(["tokens", state.home.root.location, "token"], state);
@@ -27,4 +28,9 @@ export function getHomeConnectionData(state) {
         token: getHomeToken(state),
         permissions: getHomePermissions(state)
     }
+}
+
+export function isHomeOwnerNameExpiring(state) {
+    return state.home.owner.verified && state.home.owner.correct && state.home.owner.deadline != null
+        && moment().isSameOrAfter(moment.unix(state.home.owner.deadline).subtract(30, "days"));
 }

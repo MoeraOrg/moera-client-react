@@ -39,7 +39,7 @@ export const homeOwnerSet = (name) => ({
 });
 
 export const HOME_OWNER_VERIFIED = "HOME_OWNER_VERIFIED";
-export const homeOwnerVerified = (name, latest, correct) => ({
+export const homeOwnerVerified = (name, latest, correct, deadline) => ({
     type: HOME_OWNER_VERIFIED,
-    payload: {name, latest, correct}
+    payload: {name, latest, correct, deadline}
 });

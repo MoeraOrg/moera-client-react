@@ -21,7 +21,8 @@ const initialState = {
         name: null,
         latest: false,
         verified: false,
-        correct: false
+        correct: false,
+        deadline: null
     }
 };
 

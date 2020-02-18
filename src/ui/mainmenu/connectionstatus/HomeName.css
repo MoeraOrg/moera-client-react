@@ -10,3 +10,9 @@
     font-weight: normal;
     font-style: italic;
 }
+
+#connection-status .home-name-expiring {
+    color: gold;
+    margin-left: -0.5rem;
+    margin-right: 0.5rem;
+}

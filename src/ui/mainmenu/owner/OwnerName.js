@@ -12,7 +12,9 @@ const OwnerName = ({onClick, name, expiring, ...props}) => (
     <span id="owner" className="navbar-text" onClick={onClick}>
         <span id="owner-name">{name ? <NodeName name={name} linked={false} {...props}/> : "no name set"}</span>
         {expiring &&
-            <FontAwesomeIcon icon="exclamation-triangle" className="owner-name-expiring"/>
+            <span className="owner-name-expiring" title="Need to prolong the name">
+                <FontAwesomeIcon icon="exclamation-triangle"/>
+            </span>
         }
     </span>
 );
