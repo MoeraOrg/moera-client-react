@@ -6,7 +6,7 @@ import { Twemoji } from "ui/control";
 import "./PostingButton.css";
 
 const PostingButton = ({icon, emoji, caption, color, invisible, buttonRef, onMouseEnter, onMouseLeave, onClick}) => (
-    <div className={cx("posting-button", {"invisible": invisible})} onMouseEnter={onMouseEnter}
+    <button className={cx("posting-button", {"invisible": invisible})} onMouseEnter={onMouseEnter}
          onMouseLeave={onMouseLeave} onClick={onClick} ref={buttonRef}>
         {icon && <FontAwesomeIcon icon={icon}/>}
         {emoji && <Twemoji code={emoji}/>}
@@ -14,7 +14,7 @@ const PostingButton = ({icon, emoji, caption, color, invisible, buttonRef, onMou
             <span className="caption" style={{color}}>{caption}</span>
             :
             <span className="caption">{caption}</span>}
-    </div>
+    </button>
 );
 
 export default PostingButton;

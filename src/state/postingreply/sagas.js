@@ -5,7 +5,7 @@ import { errorThrown } from "state/error/actions";
 import { postingReplyFailed } from "state/postingreply/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { getPosting } from "state/postings/selectors";
-import { urlWithParameters } from "util/misc";
+import { getWindowSelectionHtml, urlWithParameters } from "util/misc";
 
 export function* postingReplySaga() {
     const {posting, rootNodePage, ownerName, rootHomePage} = yield select(state => ({
@@ -16,11 +16,15 @@ export function* postingReplySaga() {
     }));
     try {
         const name = NodeName.parse(ownerName).name;
+        let text = getWindowSelectionHtml();
+        if (!text) {
+            text = posting.body.text;
+        }
         const postingText = {
             bodySrc: JSON.stringify({
                 subject: posting.body.subject ? "Re: " + posting.body.subject : "",
                 text: `Reply to [the post](${rootNodePage}/post/${posting.id}) by @${name}:\n`
-                    + `>>>\n${posting.body.text.trim()}\n>>>\n`
+                    + `>>>\n${text.trim()}\n>>>\n`
             }),
             bodySrcFormat: "markdown"
         };

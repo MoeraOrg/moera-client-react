@@ -53,3 +53,18 @@ export function parseBool(val) {
 export function now() {
     return Math.floor(Date.now() / 1000);
 }
+
+export function getWindowSelectionHtml() {
+    if (document.selection && document.selection.createRange) {
+        return document.selection.createRange().htmlText;
+    } else if (window.getSelection) {
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) {
+            const clonedSelection = selection.getRangeAt(0).cloneContents();
+            const div = document.createElement("div");
+            div.appendChild(clonedSelection);
+            return div.innerHTML;
+        }
+    }
+    return null;
+}
