@@ -11,7 +11,7 @@
     cursor: pointer;
     color: var(--status-icon);
     margin: 0.3rem;
-    font-size: 120%;
+    font-size: 130%;
 }
 
 #connection-status .connection-button:hover {
