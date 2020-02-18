@@ -41,6 +41,7 @@ import {
 } from "state/postings/actions";
 import {
     SETTINGS_CLIENT_VALUES_LOAD,
+    SETTINGS_CLIENT_VALUES_LOADED,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
     SETTINGS_UPDATE,
@@ -78,7 +79,8 @@ import confirmBox from "state/confirmbox/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
-import { flushPostponedSaga, introduce } from "api/node/introduce";
+import { flushPostponedIntroducedSaga, introduce } from "api/node/introduce";
+import { askNaming, flushPostponedNamingSaga } from "api/node/ask-naming";
 import { pulseSaga } from "state/pulse/sagas";
 import {
     goToLocationSaga,
@@ -161,6 +163,11 @@ const triggers = collectTriggers(
     reactionsDialogTriggers
 );
 
+function* flushPostponedSaga() {
+    yield flushPostponedIntroducedSaga();
+    yield flushPostponedNamingSaga();
+}
+
 function* combinedSaga() {
     yield spawn(pulseSaga);
     yield takeLatest(INIT_FROM_LOCATION, initFromLocationSaga);
@@ -171,11 +178,11 @@ function* combinedSaga() {
     yield takeLatest(ERROR_THROWN, errorSaga);
     yield takeLatest(ERROR_AUTH_INVALID, errorAuthInvalidSaga);
     yield takeLatest(OWNER_LOAD, ownerLoadSaga);
-    yield takeLatest(OWNER_VERIFY, ownerVerifySaga);
+    yield takeLatest(OWNER_VERIFY, askNaming(ownerVerifySaga));
     yield takeLatest(OWNER_SWITCH, ownerSwitchSaga);
     yield takeLatest(CONNECT_TO_HOME, connectToHomeSaga);
     yield takeLatest(HOME_RESTORE, homeRestoreSaga);
-    yield takeLatest(HOME_OWNER_VERIFY, verifyHomeOwnerSaga);
+    yield takeLatest(HOME_OWNER_VERIFY, askNaming(verifyHomeOwnerSaga));
     yield takeLatest(NODE_NAME_LOAD, nodeNameLoadSaga);
     yield takeLatest(CARTES_LOAD, cartesLoadSaga);
     yield takeEvery(CONNECTED_TO_HOME, flushPostponedSaga);
@@ -197,9 +204,10 @@ function* combinedSaga() {
     yield takeLatest(SETTINGS_NODE_VALUES_LOAD, settingsNodeValuesLoadSaga);
     yield takeLatest(SETTINGS_NODE_META_LOAD, settingsNodeMetaLoadSaga);
     yield takeLatest(SETTINGS_CLIENT_VALUES_LOAD, settingsClientValuesLoadSaga);
+    yield takeLatest(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
     yield takeLatest(SETTINGS_UPDATE, settingsUpdateSaga);
     yield takeLatest(SETTINGS_UPDATE_SUCCEEDED, settingsUpdateSucceededSaga);
-    yield takeEvery(NAMING_NAME_LOAD, namingNameLoadSaga);
+    yield takeEvery(NAMING_NAME_LOAD, askNaming(namingNameLoadSaga));
     yield takeLatest(NAMING_NAMES_MAINTENANCE, namingNamesMaintenanceSaga);
     yield takeEvery(POSTING_VERIFY, postingVerifySaga);
     yield takeEvery(POSTING_REACT, postingReactSaga);
