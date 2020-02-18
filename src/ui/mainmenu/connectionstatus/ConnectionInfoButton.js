@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import { Popover, NodeName } from "ui/control";
 
-const ConnectionInfoButton = ({location, login, owner}) => (
+const ConnectionInfoButton = ({location, owner}) => (
     <Popover icon="network-wired" textClassName="connection-button" title="Connection details">
-        Connected to <a href={location}>{location}</a> as <b>{login}</b>
+        Connected to <a href={location}>{location}</a>
         {owner.name && <><br />Signing as <NodeName {...owner} linked={false}/></>}
     </Popover>
 );
@@ -13,7 +13,6 @@ const ConnectionInfoButton = ({location, login, owner}) => (
 export default connect(
     state => ({
         location: state.home.root.location,
-        login: state.home.login,
         owner: state.home.owner
     })
 )(ConnectionInfoButton);

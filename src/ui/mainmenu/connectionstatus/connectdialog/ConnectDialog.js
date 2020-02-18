@@ -31,8 +31,7 @@ class ConnectDialog extends React.Component {
                 <Form>
                     <div className="modal-body">
                         <InputField name="location" title="Node URL" autoFocus />
-                        <CheckboxField name="assign" title="Login and password haven't been set yet" />
-                        <InputField name="login" title={assign ? "New login" : "Login"} />
+                        <CheckboxField name="assign" title="Password haven't been set yet" />
                         <InputField name="password" title={assign ? "New password" : "Password"} />
                         {assign && <InputField name="confirmPassword" title="Confirm password" />}
                     </div>
@@ -53,7 +52,6 @@ const connectDialogLogic = {
         return {
             location: props.location || props.nodeRoot || "",
             assign: props.assign || false,
-            login: props.login || "",
             password: "",
             confirmPassword: ""
         }
@@ -62,7 +60,6 @@ const connectDialogLogic = {
     validationSchema: yup.object().shape({
         location: yup.string().trim().url("Must be a valid URL").required("Must not be empty"),
         assign: yup.boolean(),
-        login: yup.string().trim().required("Must not be empty"),
         password: yup.string().required("Must not be empty"),
         confirmPassword: yup.string().when(["assign", "password"], (assign, password, schema) =>
             assign
@@ -72,7 +69,7 @@ const connectDialogLogic = {
     }),
 
     handleSubmit(values, formik) {
-        formik.props.connectToHome(values.location.trim(), values.assign, values.login.trim(), values.password);
+        formik.props.connectToHome(values.location.trim(), values.assign, "admin", values.password);
         formik.setSubmitting(false);
     }
 
