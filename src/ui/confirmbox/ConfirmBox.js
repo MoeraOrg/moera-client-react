@@ -8,14 +8,7 @@ const forwardAction = (action) => action;
 
 class ConfirmBox extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
-
-        this.onYes = this.onYes.bind(this);
-        this.onNo = this.onNo.bind(this);
-    }
-
-    onYes() {
+    onYes = () => {
         const {closeConfirmBox, onYes, forwardAction} = this.props;
 
         closeConfirmBox();
@@ -26,9 +19,9 @@ class ConfirmBox extends React.PureComponent {
                 forwardAction(onYes);
             }
         }
-    }
+    };
 
-    onNo() {
+    onNo = () => {
         const {closeConfirmBox, onNo, forwardAction} = this.props;
 
         closeConfirmBox();
@@ -39,7 +32,7 @@ class ConfirmBox extends React.PureComponent {
                 forwardAction(onNo);
             }
         }
-    }
+    };
 
     render() {
         const {show, message, yes, no, variant} = this.props;

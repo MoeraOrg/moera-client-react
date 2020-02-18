@@ -38,12 +38,6 @@ class PostingReactionButton extends React.PureComponent {
         super(props, context);
 
         this.state = {locus: "out", popup: false, reactions: []};
-
-        this.documentClick = this.documentClick.bind(this);
-        this.mainEnter = this.mainEnter.bind(this);
-        this.mainLeave = this.mainLeave.bind(this);
-        this.popupEnter = this.popupEnter.bind(this);
-        this.popupLeave = this.popupLeave.bind(this);
     }
 
     componentDidMount() {
@@ -107,29 +101,29 @@ class PostingReactionButton extends React.PureComponent {
         return second ? second.emoji : null;
     }
 
-    documentClick(event) {
+    documentClick = event => {
         this.hide();
-    }
+    };
 
-    mainEnter() {
+    mainEnter = () => {
         this.setLocus("main");
-    }
+    };
 
-    mainLeave() {
+    mainLeave = () => {
         if (this.state.locus === "main") {
             this.setLocus("out");
         }
-    }
+    };
 
-    popupEnter() {
+    popupEnter = () => {
         this.setLocus("popup");
-    }
+    };
 
-    popupLeave() {
+    popupLeave = () => {
         if (this.state.locus === "popup") {
             this.setLocus("out");
         }
-    }
+    };
 
     setLocus(locus) {
         const changed = this.state.locus !== locus;

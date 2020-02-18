@@ -8,13 +8,7 @@ const forwardAction = (action) => action;
 
 class MessageBox extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
-
-        this.onClose = this.onClose.bind(this);
-    }
-
-    onClose() {
+    onClose = () => {
         const {closeMessageBox, onClose, forwardAction} = this.props;
 
         closeMessageBox();
@@ -25,7 +19,7 @@ class MessageBox extends React.PureComponent {
                 forwardAction(onClose);
             }
         }
-    }
+    };
 
     render() {
         const {show, message} = this.props;

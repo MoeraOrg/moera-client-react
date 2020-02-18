@@ -41,13 +41,6 @@ export class EmojiListDialog extends React.PureComponent {
                 {}
             );
         this.state = {choice, other: list.other()};
-
-        this.onOtherClick = this.onOtherClick.bind(this);
-        this.onSelectAll = this.onSelectAll.bind(this);
-        this.onUnselectAll = this.onUnselectAll.bind(this);
-        this.onClick = this.onClick.bind(this);
-        this.onConfirm = this.onConfirm.bind(this);
-        this.toggle = this.toggle.bind(this);
     }
 
     getAllEmojis() {
@@ -73,9 +66,9 @@ export class EmojiListDialog extends React.PureComponent {
         return this.getOtherEmojis().map(emoji => ({emoji, ...this.state.choice[emoji]}));
     }
 
-    onOtherClick() {
+    onOtherClick = () => {
         this.setState(state => ({...state, other: !state.other}));
-    }
+    };
 
     switchAll(dimmed) {
         this.setState(state => {
@@ -87,19 +80,19 @@ export class EmojiListDialog extends React.PureComponent {
         });
     }
 
-    onSelectAll() {
+    onSelectAll = () => {
         this.switchAll(false);
-    }
+    };
 
-    onUnselectAll() {
+    onUnselectAll = () => {
         this.switchAll(true);
-    }
+    };
 
-    onClick(negative, emoji) {
+    onClick = (negative, emoji) => {
         this.setState(state => immutable.update(state, ["choice", emoji], this.toggle));
-    }
+    };
 
-    toggle(choice) {
+    toggle = choice => {
         if (this.props.advanced) {
             if (choice.marked) {
                 return {
@@ -121,9 +114,9 @@ export class EmojiListDialog extends React.PureComponent {
         return {
             dimmed: !choice.dimmed
         }
-    }
+    };
 
-    onConfirm() {
+    onConfirm = () => {
         const {choice, other} = this.state;
 
         let value = this.getAllEmojis().filter(emoji => !choice[emoji].dimmed);
@@ -136,7 +129,7 @@ export class EmojiListDialog extends React.PureComponent {
             }
         }
         this.props.onConfirm(value.join(","));
-    }
+    };
 
     render() {
         const {negative, advanced, onCancel} = this.props;

@@ -26,10 +26,10 @@ export class InputField extends React.PureComponent {
         onEscape: PropType.func
     };
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.inputDom = null;
-        this.onKeyDown = this.onKeyDown.bind(this);
     }
 
     componentDidMount() {
@@ -38,13 +38,13 @@ export class InputField extends React.PureComponent {
         }
     }
 
-    onKeyDown(event) {
+    onKeyDown = event => {
         const {onEscape} = this.props;
 
         if (onEscape && (event.key === "Escape" || event.key === "Esc")) {
             onEscape();
         }
-    }
+    };
 
     render() {
         const {name, title, horizontal = false, groupClassName, labelClassName, col, anyValue, className, autoComplete,

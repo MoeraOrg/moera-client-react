@@ -6,13 +6,6 @@ import { goToTimeline } from "state/navigation/actions";
 
 class TimelineRewindButtons extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
-
-        this.toTop = this.toTop.bind(this);
-        this.toBottom = this.toBottom.bind(this);
-    }
-
     isAtTop() {
         if (this.props.before < Number.MAX_SAFE_INTEGER) {
             return false;
@@ -30,15 +23,15 @@ class TimelineRewindButtons extends React.PureComponent {
             && postings.item(postings.length - 1).getBoundingClientRect().bottom < window.innerHeight;
     }
 
-    toTop(e) {
+    toTop = e => {
         this.props.goToTimeline(Number.MAX_SAFE_INTEGER);
         e.preventDefault();
-    }
+    };
 
-    toBottom(e) {
+    toBottom = e => {
         this.props.goToTimeline(Number.MIN_SAFE_INTEGER);
         e.preventDefault();
-    }
+    };
 
     render() {
         return (

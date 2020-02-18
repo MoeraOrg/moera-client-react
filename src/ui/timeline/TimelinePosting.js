@@ -33,16 +33,10 @@ const Content = ({posting, href, onClick}) => {
 
 class TimelinePosting extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
-
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick(e) {
+    onClick = e => {
         this.props.goToPosting(this.props.posting.id);
         e.preventDefault();
-    }
+    };
 
     render() {
         const {posting, deleting, isPermitted, rootLocation, connectedToHome} = this.props;

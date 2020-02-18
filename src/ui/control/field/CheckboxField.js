@@ -20,8 +20,9 @@ export class CheckboxField extends React.PureComponent {
         defaultValue: PropType.bool
     };
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.inputDom = null;
     }
 

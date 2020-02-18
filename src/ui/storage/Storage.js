@@ -7,12 +7,6 @@ import { cartesSet } from "state/cartes/actions";
 
 class Storage extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.messageReceived = this.messageReceived.bind(this);
-    }
-
     componentDidMount() {
         window.addEventListener("message", this.messageReceived);
         try {
@@ -23,7 +17,7 @@ class Storage extends React.Component {
         }
     }
 
-    messageReceived(event) {
+    messageReceived = event => {
         // Only accept messages from the same frame
         if (event.source !== window) {
             return;
@@ -44,7 +38,7 @@ class Storage extends React.Component {
             default:
                 return;
         }
-    }
+    };
 
     loadedData(data) {
         if (!data || data.clientId === Browser.clientId) {

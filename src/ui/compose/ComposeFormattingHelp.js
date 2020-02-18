@@ -15,8 +15,6 @@ class ComposeFormattingHelp extends React.PureComponent {
         this.state = {
             show: this.props.show
         };
-        this.showHelp = this.showHelp.bind(this);
-        this.hideHelp = this.hideHelp.bind(this);
     }
 
     toggleHelp(show) {
@@ -27,13 +25,13 @@ class ComposeFormattingHelp extends React.PureComponent {
         }]);
     }
 
-    showHelp() {
+    showHelp = () => {
         this.toggleHelp(true);
-    }
+    };
 
-    hideHelp() {
+    hideHelp = () => {
         this.toggleHelp(false);
-    }
+    };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show) {

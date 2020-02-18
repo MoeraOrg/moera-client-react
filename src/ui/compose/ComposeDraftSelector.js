@@ -11,8 +11,9 @@ import "./ComposeDraftSelector.css";
 
 class ComposeDraftSelector extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.state = {visible: false};
     }
 

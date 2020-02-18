@@ -8,16 +8,10 @@ import { isConnectedToHome } from "state/home/selectors";
 
 class PostingVerifyButton extends React.PureComponent {
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.onVerify = this.onVerify.bind(this);
-    }
-
-    onVerify() {
+    onVerify = () => {
         const {id, postingVerify} = this.props;
         postingVerify(id);
-    }
+    };
 
     render() {
         const {connectedToHome, status} = this.props;

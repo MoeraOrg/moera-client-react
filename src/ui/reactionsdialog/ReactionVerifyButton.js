@@ -14,16 +14,10 @@ class ReactionVerifyButton extends React.PureComponent {
         ownerName: PropType.string
     };
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.onVerify = this.onVerify.bind(this);
-    }
-
-    onVerify() {
+    onVerify = () => {
         const {postingId, ownerName, reactionVerify} = this.props;
         reactionVerify(postingId, ownerName);
-    }
+    };
 
     render() {
         const {connectedToHome, status} = this.props;

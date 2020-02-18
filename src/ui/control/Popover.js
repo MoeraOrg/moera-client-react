@@ -14,23 +14,21 @@ export class Popover extends React.PureComponent {
         title: PropType.string
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {visible: false};
+    constructor(props, context) {
+        super(props, context);
 
-        this.toggle = this.toggle.bind(this);
-        this.documentClick = this.documentClick.bind(this);
+        this.state = {visible: false};
     }
 
-    toggle() {
+    toggle = () => {
         if (!this.state.visible) {
             this.show();
         } else {
             this.hide();
         }
-    }
+    };
 
-    documentClick(event) {
+    documentClick = event => {
         for (let element of document.querySelectorAll(".popover.show").values()) {
             const r = element.getBoundingClientRect();
             if (r.left <= event.clientX && r.right >= event.clientX
@@ -39,7 +37,7 @@ export class Popover extends React.PureComponent {
             }
         }
         this.hide();
-    }
+    };
 
     show() {
         this.setState({visible: true});

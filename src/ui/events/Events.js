@@ -8,16 +8,13 @@ import { eventAction } from "api/events/actions";
 
 class Events extends React.Component {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.stomp = null;
         this.location = null;
         this.queueStartedAt = null;
         this.lastEvent = null;
-
-        this.onConnect = this.onConnect.bind(this);
-        this.onMessage = this.onMessage.bind(this);
     }
 
     componentDidMount() {
@@ -64,15 +61,15 @@ class Events extends React.Component {
         }
     }
 
-    onConnect() {
+    onConnect = () => {
         let headers = {};
         if (this.queueStartedAt != null) {
             headers.seen = `${this.queueStartedAt},${this.lastEvent}`;
         }
         this.stomp.subscribe("/user/queue", this.onMessage, headers);
-    }
+    };
 
-    onMessage(message) {
+    onMessage = message => {
         const {prefix, eventAction} = this.props;
 
         let packet = JSON.parse(message.body);
@@ -94,7 +91,7 @@ class Events extends React.Component {
             this.queueStartedAt = packet.queueStartedAt;
             this.lastEvent = packet.ordinal;
         }
-    }
+    };
 
     render() {
         return null;

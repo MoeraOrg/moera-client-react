@@ -7,11 +7,6 @@ import { ownerSwitchClose, ownerSwitchOpen } from "state/owner/actions";
 
 class OwnerSwitcher extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
-        this.outerClick = this.outerClick.bind(this);
-    }
-
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (!prevProps.showNavigator && this.props.showNavigator) {
             document.addEventListener("click", this.outerClick);
@@ -21,7 +16,7 @@ class OwnerSwitcher extends React.PureComponent {
         }
     }
 
-    outerClick(e) {
+    outerClick = e => {
         const ownerArea = document.getElementById("owner-switcher").getBoundingClientRect();
         if (e.detail > 0 /* Not a simulated button click caused by Enter key */
             && (e.clientY < ownerArea.top || e.clientY >= ownerArea.bottom
@@ -29,7 +24,7 @@ class OwnerSwitcher extends React.PureComponent {
 
             this.props.ownerSwitchClose();
         }
-    }
+    };
 
     render() {
         const {showNavigator, ownerSwitchOpen} = this.props;

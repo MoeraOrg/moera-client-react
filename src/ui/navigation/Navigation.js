@@ -5,12 +5,6 @@ import { goToLocation } from "state/navigation/actions";
 
 class Navigation extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.popState = this.popState.bind(this);
-    }
-
     componentDidMount() {
         window.onpopstate = this.popState;
     }
@@ -34,10 +28,10 @@ class Navigation extends React.Component {
         }
     }
 
-    popState(event) {
+    popState = event => {
         this.props.goToLocation(window.location.pathname, window.location.search, window.location.hash);
         event.preventDefault();
-    }
+    };
 
     render() {
         return null;

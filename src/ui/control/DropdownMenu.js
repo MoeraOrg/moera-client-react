@@ -6,21 +6,19 @@ import "./DropdownMenu.css";
 
 export class DropdownMenu extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
-        this.state = {visible: false};
+    constructor(props, context) {
+        super(props, context);
 
-        this.toggle = this.toggle.bind(this);
-        this.hide = this.hide.bind(this);
+        this.state = {visible: false};
     }
 
-    toggle() {
+    toggle = () => {
         if (!this.state.visible) {
             this.show();
         } else {
             this.hide();
         }
-    }
+    };
 
     show() {
         this.setState({visible: true});
@@ -28,11 +26,11 @@ export class DropdownMenu extends React.PureComponent {
         document.addEventListener("click", this.hide);
     }
 
-    hide() {
+    hide = () => {
         this.setState({visible: false});
         this.scheduleUpdate();
         document.removeEventListener("click", this.hide);
-    }
+    };
 
     render() {
         const items = this.props.items.filter(item => item.show);

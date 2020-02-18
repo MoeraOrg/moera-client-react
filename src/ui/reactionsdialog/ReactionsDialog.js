@@ -16,7 +16,6 @@ class ReactionsDialog extends React.PureComponent {
         super(props, context);
 
         this.state = {chartView: false};
-        this.onSwitchView = this.onSwitchView.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -29,9 +28,9 @@ class ReactionsDialog extends React.PureComponent {
         }
     }
 
-    onSwitchView() {
+    onSwitchView = () => {
         this.setState(prev => ({chartView: !prev.chartView}));
-    }
+    };
 
     render() {
         const {show, postingId, reactionsVisible, closeReactionsDialog} = this.props;

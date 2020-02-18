@@ -16,10 +16,10 @@ function toFieldName(name) {
 
 class SettingsSheetAutomatic extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.state = { sheetMaxHeight: "none" };
-        this.onResize = this.onResize.bind(this);
     }
 
     componentDidMount() {
@@ -31,9 +31,9 @@ class SettingsSheetAutomatic extends React.PureComponent {
         window.removeEventListener("resize", this.onResize);
     }
 
-    onResize() {
+    onResize = () => {
         this.setState({ sheetMaxHeight: this._calcListMaxHeight() });
-    }
+    };
 
     _calcListMaxHeight() {
         const sheetElement = document.getElementsByClassName("settings-sheet").item(0);

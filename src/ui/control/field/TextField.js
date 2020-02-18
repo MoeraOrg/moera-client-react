@@ -22,8 +22,9 @@ export class TextField extends React.PureComponent {
         defaultValue: PropType.string
     };
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.inputDom = React.createRef();
     }
 

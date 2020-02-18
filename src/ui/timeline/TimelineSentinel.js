@@ -8,21 +8,19 @@ import "./TimelineSentinel.css";
 
 export default class TimelineSentinel extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
-        this.intersecting = true;
-        this.observeSentinel = this.observeSentinel.bind(this);
         this.observer = new IntersectionObserver(this.props.onSentinel, {rootMargin: this.props.margin});
     }
 
-    observeSentinel(sentinel) {
+    observeSentinel = sentinel => {
         if (sentinel == null) {
             this.observer.disconnect();
         } else {
             this.observer.observe(sentinel);
         }
-    }
+    };
 
     render() {
         const { visible, loading, title, onClick } = this.props;

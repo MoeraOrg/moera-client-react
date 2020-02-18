@@ -9,12 +9,10 @@ import { goToTimeline } from "state/navigation/actions";
 
 class TimelineCalendarButton extends React.PureComponent {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {active: false};
-        this.activate = this.activate.bind(this);
-        this.goToTimestamp = this.goToTimestamp.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -23,13 +21,13 @@ class TimelineCalendarButton extends React.PureComponent {
         }
     }
 
-    activate() {
+    activate = () => {
         this.setState({active: true});
-    }
+    };
 
-    goToTimestamp(value) {
+    goToTimestamp = value => {
         this.props.goToTimeline(moment(value).endOf('day').unix() * 100);
-    }
+    };
 
     render() {
         const {timestamp} = this.props;

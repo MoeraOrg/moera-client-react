@@ -33,13 +33,7 @@ export class DurationField extends React.PureComponent {
         defaultValue: PropType.string
     };
 
-    constructor(props) {
-        super(props);
-
-        this.onChange = this.onChange.bind(this);
-    }
-
-    onChange(form, fieldName, newUnit, newAmount) {
+    onChange = (form, fieldName, newUnit, newAmount) => {
         let duration = Duration.parse(form.values[fieldName]);
         if (newUnit != null) {
             duration.unit = newUnit;
@@ -48,7 +42,7 @@ export class DurationField extends React.PureComponent {
             duration.amount = newAmount;
         }
         form.setFieldValue(fieldName, duration.toString());
-    }
+    };
 
     render() {
         const {name, title, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,

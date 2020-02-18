@@ -27,8 +27,9 @@ export class SelectField extends React.PureComponent {
         noFeedback: PropType.bool
     };
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.inputDom = null;
     }
 

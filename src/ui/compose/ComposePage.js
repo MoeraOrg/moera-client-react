@@ -30,7 +30,6 @@ class ComposePage extends React.PureComponent {
         super(props, context);
 
         this.state = {initialPostingText: {}};
-        this.onGoToPostingClick = this.onGoToPostingClick.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -43,9 +42,9 @@ class ComposePage extends React.PureComponent {
         }
     }
 
-    onGoToPostingClick() {
+    onGoToPostingClick = () => {
         this.props.goToPosting(this.props.postingId);
-    }
+    };
 
     render() {
         const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, loadingDraft, conflict,

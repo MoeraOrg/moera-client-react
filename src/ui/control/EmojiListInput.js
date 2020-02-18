@@ -17,27 +17,24 @@ export class EmojiListInput extends React.PureComponent {
         onChange: PropType.func
     };
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {editing: false};
-        this.edit = this.edit.bind(this);
-        this.editingConfirmed = this.editingConfirmed.bind(this);
-        this.editingCancelled = this.editingCancelled.bind(this);
     }
 
-    edit() {
+    edit = () => {
         this.setState({editing: true});
-    }
+    };
 
-    editingConfirmed(value) {
+    editingConfirmed = value => {
         this.setState({editing: false});
         this.props.onChange(value);
-    }
+    };
 
-    editingCancelled() {
+    editingCancelled = () => {
         this.setState({editing: false});
-    }
+    };
 
     render() {
         const {className, negative, value, advanced} = this.props;

@@ -9,32 +9,24 @@ import "./PostingMenu.css";
 
 class PostingMenu extends React.PureComponent {
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.onEdit = this.onEdit.bind(this);
-        this.onDelete = this.onDelete.bind(this);
-        this.onPin = this.onPin.bind(this);
-    }
-
-    onEdit() {
+    onEdit = () => {
         const {posting, goToCompose} = this.props;
 
         goToCompose(posting.id);
-    }
+    };
 
-    onDelete() {
+    onDelete = () => {
         const {posting, confirmBox} = this.props;
 
         confirmBox(`Do you really want to delete the post "${posting.heading}"?`, "Delete", "Cancel",
             postingDelete(posting.id), null, "danger");
-    }
+    };
 
-    onPin() {
+    onPin = () => {
         const {posting, postingPinningUpdate} = this.props;
 
         postingPinningUpdate(posting.id, !posting.pinned);
-    }
+    };
 
     render() {
         const {posting, isPermitted, rootLocation} = this.props;

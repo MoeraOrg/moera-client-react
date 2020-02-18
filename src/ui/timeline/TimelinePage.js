@@ -17,20 +17,17 @@ import "./TimelinePage.css";
 
 class TimelinePage extends React.Component {
 
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
+
         this.prevAt = Number.MAX_SAFE_INTEGER;
         this.newAnchor = null;
         this.topmostBeforeUpdate = null;
 
-        this.onScroll = this.onScroll.bind(this);
         this.updateOnScrollHandler();
 
         this.futureIntersecting = true;
-        this.onSentinelFuture = this.onSentinelFuture.bind(this);
-
         this.pastIntersecting = true;
-        this.onSentinelPast = this.onSentinelPast.bind(this);
     }
 
     componentDidMount() {
@@ -84,14 +81,14 @@ class TimelinePage extends React.Component {
         window.onscroll = this.props.visible ? this.onScroll : null;
     }
 
-    onScroll() {
+    onScroll = () => {
         const at = TimelinePage.getTopmostMoment();
         if (at !== this.prevAt) {
             this.props.timelineScrolled(at);
         }
         this.prevAt = at;
 
-    }
+    };
 
     static getHeaderHeight() {
         const mainMenu = document.getElementById("main-menu");
@@ -137,12 +134,12 @@ class TimelinePage extends React.Component {
         return posting != null;
     }
 
-    onSentinelFuture(entry) {
+    onSentinelFuture = entry => {
         this.futureIntersecting = entry[0].isIntersecting;
         if (this.futureIntersecting) {
             this.loadFuture();
         }
-    }
+    };
 
     loadFuture() {
         if (this.props.loadingFuture || this.props.before >= Number.MAX_SAFE_INTEGER) {
@@ -151,12 +148,12 @@ class TimelinePage extends React.Component {
         this.props.timelineFutureSliceLoad();
     }
 
-    onSentinelPast(entry) {
+    onSentinelPast = entry => {
         this.pastIntersecting = entry[0].isIntersecting;
         if (this.pastIntersecting) {
             this.loadPast();
         }
-    }
+    };
 
     loadPast() {
         if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
