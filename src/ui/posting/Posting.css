@@ -11,7 +11,7 @@
 .posting BLOCKQUOTE {
     padding: 0.2rem 0.2rem 0.2rem 3rem;
     position: relative;
-    background-color: var(--white-dark);
+    background-color: snow;
     border-radius: 0.5rem;
 }
 

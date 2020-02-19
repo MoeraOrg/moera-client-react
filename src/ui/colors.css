@@ -7,7 +7,6 @@
     --gray-medium: #a9a9a9;
     --green-light: #42d042; /* forest green + 20% lighter */
     --red-light: #df5a5a; /* fire brick + 20% lighter */
-    --white-dark: #fafafa;
 
     --verifying: var(--cyan);
     --correct: forestgreen;
