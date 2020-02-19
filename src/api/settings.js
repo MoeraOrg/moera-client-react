@@ -72,6 +72,27 @@ export const META = [
         }
     },
     {
+        name: "posting.reply.subject-prefix",
+        type: "string",
+        defaultValue: "Re:",
+        title: "Posting reply title prefix",
+        modifiers: {}
+    },
+    {
+        name: "posting.reply.preamble",
+        type: "string",
+        defaultValue: "Reply to [the post](%POST%) by @%USER%:",
+        title: "Posting reply preamble",
+        modifiers: {}
+    },
+    {
+        name: "posting.reply.quote-all",
+        type: "bool",
+        defaultValue: "true",
+        title: "Quote the whole posting on reply",
+        modifiers: {}
+    },
+    {
         name: "reactions.positive.available",
         type: "string",
         defaultValue: "+0x1f4a1,+0x1f44d,+0x1f4af,+0x1f60d,+0x1f600,+0x1f926,+0x1f62e,+0x1f622,+0x1f620,+0x1f92e,"
