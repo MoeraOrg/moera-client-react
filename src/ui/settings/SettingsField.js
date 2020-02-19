@@ -18,6 +18,15 @@ function deserializeInt(value) {
     return value != null ? parseInt(value) : null;
 }
 
+function convertFormat(format) {
+    switch (format) {
+        case "percentage":
+            return "###%";
+        default:
+            return null;
+    }
+}
+
 const SettingsField = ({name, fieldName, meta, initialValue}) => {
     const type = meta ? meta.type : "string";
     const title = meta ? meta.title : name;
@@ -33,6 +42,8 @@ const SettingsField = ({name, fieldName, meta, initialValue}) => {
             return <NumberField name={fieldName} title={title}
                                 min={deserializeInt(modifiers.min)}
                                 max={deserializeInt(modifiers.max)}
+                                step={deserializeInt(modifiers.step)}
+                                format={convertFormat(modifiers.format)}
                                 initialValue={deserializeInt(initialValue)}
                                 defaultValue={deserializeInt(defaultValue)}/>;
 

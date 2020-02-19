@@ -60,6 +60,18 @@ export const META = [
         internal: true
     },
     {
+        name: "posting.body.font-magnitude",
+        type: "int",
+        defaultValue: "100",
+        title: "Posting font size",
+        modifiers: {
+            min: 15,
+            max: 300,
+            step: 5,
+            format: "percentage"
+        }
+    },
+    {
         name: "reactions.positive.available",
         type: "string",
         defaultValue: "+0x1f4a1,+0x1f44d,+0x1f4af,+0x1f60d,+0x1f600,+0x1f926,+0x1f62e,+0x1f622,+0x1f620,+0x1f92e,"

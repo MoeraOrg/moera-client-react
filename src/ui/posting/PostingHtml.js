@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import { getNamingNameDetails } from "state/naming/selectors";
 import { urlWithParameters } from "util/misc";
+import { getSetting } from "state/settings/selectors";
 
 class PostingHtml extends React.PureComponent {
 
@@ -14,9 +15,10 @@ class PostingHtml extends React.PureComponent {
     #dom;
 
     render() {
-        const {className, html} = this.props;
+        const {className, html, fontMagnitude} = this.props;
 
-        return <div ref={dom => this.#dom = dom} className={className} dangerouslySetInnerHTML={{__html: html}} />
+        return <div ref={dom => this.#dom = dom} className={className} style={{fontSize: `${fontMagnitude}%`}}
+                    dangerouslySetInnerHTML={{__html: html}} />
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -36,6 +38,7 @@ class PostingHtml extends React.PureComponent {
 export default connect(
     state => ({
         homePageRoot: state.home.root.page,
-        getNameDetails: name => getNamingNameDetails(state, name)
+        getNameDetails: name => getNamingNameDetails(state, name),
+        fontMagnitude: getSetting(state, "posting.body.font-magnitude")
     })
 )(PostingHtml);

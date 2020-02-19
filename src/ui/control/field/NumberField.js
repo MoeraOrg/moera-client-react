@@ -6,7 +6,7 @@ import { NumberPicker } from 'react-widgets';
 import { FormFieldGroup } from "ui/control/field";
 import "./NumberField.css";
 
-export const NumberField = ({name, title, autoFocus, format, min, max, initialValue, defaultValue}) => (
+export const NumberField = ({name, title, autoFocus, format, min, max, step, initialValue, defaultValue}) => (
     <Field name={name}>
         {({field, form}) => {
             const touched = form.touched[field.name];
@@ -31,6 +31,7 @@ export const NumberField = ({name, title, autoFocus, format, min, max, initialVa
                                 format={format}
                                 min={min}
                                 max={max}
+                                step={step}
                             />
                         </div>
                         {touched && error && <div className="invalid-feedback">{error}</div>}
@@ -48,6 +49,7 @@ NumberField.propTypes = {
     format: PropType.string,
     min: PropType.number,
     max: PropType.number,
+    step: PropType.number,
     initialValue: PropType.number,
     defaultValue: PropType.number
 };
