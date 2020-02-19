@@ -2,7 +2,7 @@
   "name": "moera-client-react",
   "version": "0.6.0",
   "private": true,
-  "homepage": "https://github.com/MoeraOrg/moera-client-react",
+  "homepage": ".",
   "dependencies": {
     "@craco/craco": "^5.6.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
