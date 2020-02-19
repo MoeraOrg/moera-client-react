@@ -45,7 +45,7 @@ class ComposeFormattingHelp extends React.PureComponent {
         }
         if (this.state.show) {
             return (
-                <div className="formatting-help">
+                <div className="dialog-help">
                     <button type="button" className="close" onClick={this.hideHelp}>&times;</button>
                     <b>Markdown:</b>{" "}
                     <code>**bold** _italic_ [link](http://en.wikipedia.org) ![image](https://site.com/img.jpg)</code>

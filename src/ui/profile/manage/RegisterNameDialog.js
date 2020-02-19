@@ -18,6 +18,11 @@ const RegisterNameDialog = ({show, registering, registerNameDialogCancel}) => {
             <Form>
                 <div className="modal-body">
                     <InputField name="name" title="Name" autoFocus />
+                    <div className="dialog-help">
+                        The name must be 4 - 120 characters long. You may use any Unicode character (including non-Latin
+                        alphabets), except whitespace and punctuation. Only this punctuation is allowed:
+                        {" "}<b>!</b> <b>%</b> <b>&</b> <b>*</b> <b>-</b> <b>.</b> <b>?</b>
+                    </div>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={registerNameDialogCancel}
@@ -41,6 +46,9 @@ const registerNameDialogLogic = {
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
             .test("is-allowed", "Name is not allowed", Rules.isNameValid)
     }),
+
+    validateOnBlur: false,
+    validateOnChange: false,
 
     handleSubmit(values, formik) {
         formik.props.registerName(

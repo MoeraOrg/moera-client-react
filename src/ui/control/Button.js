@@ -13,7 +13,7 @@ export class Button extends React.PureComponent {
 
     render() {
         const {variant, size, block = false, invisible = false, loading = false, disabled = false, className = "",
-               ...props} = this.props;
+               type = "button", ...props} = this.props;
         const klass = cx(
             "btn",
             `btn-${variant}`, {
@@ -25,7 +25,7 @@ export class Button extends React.PureComponent {
             className
         );
         return (
-            <button type="button" className={klass} disabled={loading || disabled} {...props}
+            <button type={type} className={klass} disabled={loading || disabled} {...props}
                     ref={dom => {this.domNode = dom}}>
                 <LoadingInline active={loading} />
                 {props.children}{loading && "…"}

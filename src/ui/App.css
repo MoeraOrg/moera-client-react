@@ -21,3 +21,12 @@ ABBR[title] {
 .popover.show {
     pointer-events: auto;
 }
+
+.dialog-help {
+    border: solid 1px cornsilk;
+    border-radius: 5px;
+    padding: 0.5em;
+    margin-bottom: 0.5rem;
+    margin-top: -0.5rem;
+    background-color: floralwhite;
+}
