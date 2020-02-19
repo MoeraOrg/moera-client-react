@@ -2,15 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SettingsSheetAutomatic from "ui/settings/SettingsSheetAutomatic";
-import { mapFilter, mapWithoutKeys } from "util/map";
+import { mapWithKeysOnly } from "util/map";
 import { PREFIX } from "api/settings";
 
-const EXCLUDE = new Set([
-    PREFIX + "posting.time.relative",
-    PREFIX + "posting.body.font-magnitude",
-    PREFIX + "posting.reply.subject-prefix",
-    PREFIX + "posting.reply.preamble",
-    PREFIX + "posting.reply.quote-all",
+const INCLUDE = new Set([
     PREFIX + "posting.reactions.positive.default",
     PREFIX + "posting.reactions.negative.default",
     PREFIX + "posting.reactions.visible.default",
@@ -19,13 +14,13 @@ const EXCLUDE = new Set([
     PREFIX + "reactions.negative.available"
 ]);
 
-const SettingsSheetClientOther = ({clientValues, clientMeta}) => (
+const SettingsSheetClientReactions = ({clientValues, clientMeta}) => (
     <SettingsSheetAutomatic valuesMap={clientValues} metaMap={clientMeta}/>
 );
 
 export default connect(
     state => ({
         clientValues: state.settings.client.values,
-        clientMeta: mapWithoutKeys(mapFilter(state.settings.client.meta, v => !v.internal), EXCLUDE)
+        clientMeta: mapWithKeysOnly(state.settings.client.meta, INCLUDE)
     })
-)(SettingsSheetClientOther);
+)(SettingsSheetClientReactions);

@@ -11,6 +11,8 @@ const MENU_ITEMS = {
         "other": "Other"
     },
     "client": {
+        "posting": "Post",
+        "reactions": "Reactions",
         "other": "Other"
     }
 };

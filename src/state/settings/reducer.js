@@ -53,6 +53,7 @@ export default (state = initialState, action) => {
         case SETTINGS_GO_TO_TAB:
             return immutable(state)
                 .set("tab", action.payload.tab)
+                .set("sheet", "posting")
                 .set("node.conflict", false)
                 .set("client.conflict", false)
                 .value();
