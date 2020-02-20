@@ -30,6 +30,12 @@ export function* postingReplySaga() {
         if (!text && quoteAll) {
             text = posting.body.text;
         }
+        if (text) {
+            text = text
+                .replace(/\n*<p>\n*/gi, "\n\n")
+                .replace(/<\/p>/gi, "")
+                .replace(/\n*<br\s*\/?>\n*/gi, "\n");
+        }
         const postingText = {
             bodySrc: JSON.stringify({
                 subject,
