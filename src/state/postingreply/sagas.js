@@ -9,7 +9,8 @@ import { getWindowSelectionHtml, urlWithParameters } from "util/misc";
 import { getSetting } from "state/settings/selectors";
 
 export function* postingReplySaga() {
-    const {posting, rootNodePage, ownerName, rootHomePage, subjectPrefix, preambleTemplate, quoteAll} =
+    const {posting, rootNodePage, ownerName, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
+           reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault} =
         yield select(state => ({
             posting: getPosting(state, state.postingReply.postingId),
             rootNodePage: state.node.root.page,
@@ -18,6 +19,10 @@ export function* postingReplySaga() {
             subjectPrefix: getSetting(state, "posting.reply.subject-prefix"),
             preambleTemplate: getSetting(state, "posting.reply.preamble"),
             quoteAll: getSetting(state, "posting.reply.quote-all"),
+            reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default"),
+            reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
+            reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
+            reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default")
         }));
     try {
         const name = NodeName.parse(ownerName).name;
@@ -41,7 +46,13 @@ export function* postingReplySaga() {
                 subject,
                 text: text ? `${preamble}\n>>>\n${text.trim()}\n>>>\n` : `${preamble}\n`
             }),
-            bodySrcFormat: "markdown"
+            bodySrcFormat: "markdown",
+            acceptedReactions: {
+                positive: reactionsPositiveDefault,
+                negative: reactionsNegativeDefault
+            },
+            reactionsVisible: reactionsVisibleDefault,
+            reactionTotalsVisible: reactionTotalsVisibleDefault
         };
         const data = yield call(Home.postDraftPosting, postingText);
         window.location = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
