@@ -120,7 +120,7 @@ export default (state = initialState, action) => {
         case REACTIONS_DIALOG_TOTALS_LOADED: {
             let totals = !state.negative ? action.payload.positive : action.payload.negative;
             totals = totals.slice().filter(rt => rt.total == null || rt.total > 0);
-            totals.sort((rt1, rt2) => rt1.total != null ? rt1.total - rt2.total : rt1.share - rt2.share);
+            totals.sort((rt1, rt2) => rt1.total != null ? rt2.total - rt1.total : rt2.share - rt1.share);
             const total = totals.map(rt => rt.total).filter(v => v != null).reduce((sum, v) => sum + v, 0);
             return immutable(state)
                 .set("totals.loading", false)

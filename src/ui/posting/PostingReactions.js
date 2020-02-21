@@ -11,7 +11,7 @@ function sum(reactionTotals) {
 
 function topEmojis(reactionTotals) {
     let actual = reactionTotals.filter(rt => rt.total == null || rt.total > 0);
-    actual.sort((rt1, rt2) => rt1.total != null ? rt1.total - rt2.total : rt1.share - rt2.share);
+    actual.sort((rt1, rt2) => rt1.total != null ? rt2.total - rt1.total : rt2.share - rt1.share);
     return actual.slice(0, 3).map(rt => Number(rt.emoji).toString(16));
 }
 
