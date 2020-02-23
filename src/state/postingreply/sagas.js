@@ -39,7 +39,8 @@ export function* postingReplySaga() {
             text = text
                 .replace(/\n*<p>\n*/gi, "\n\n")
                 .replace(/<\/p>/gi, "")
-                .replace(/\n*<br\s*\/?>\n*/gi, "\n");
+                .replace(/\n*<br\s*\/?>\n*/gi, "\n")
+                .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
         }
         const postingText = {
             bodySrc: JSON.stringify({
