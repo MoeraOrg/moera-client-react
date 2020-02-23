@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
+
 import { getNamingNameDetails } from "state/naming/selectors";
 import { urlWithParameters } from "util/misc";
 import { getSetting } from "state/settings/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 
 class PostingHtml extends React.PureComponent {
 
@@ -37,7 +39,7 @@ class PostingHtml extends React.PureComponent {
 
 export default connect(
     state => ({
-        homePageRoot: state.home.root.page,
+        homePageRoot: isConnectedToHome(state) ? state.home.root.page : state.node.root.page,
         getNameDetails: name => getNamingNameDetails(state, name),
         fontMagnitude: getSetting(state, "posting.body.font-magnitude")
     })
