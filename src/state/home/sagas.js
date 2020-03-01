@@ -2,13 +2,16 @@ import { call, put } from 'redux-saga/effects';
 
 import { Browser, Home } from "api";
 import { restoreConnectDialog } from "state/connectdialog/actions";
-import { connectedToHome, disconnectFromHome } from "state/home/actions";
+import { browserApiSet, connectedToHome, disconnectFromHome } from "state/home/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import { errorThrown } from "state/error/actions";
 import { normalizeUrl } from "util/misc";
 
 export function* homeRestoreSaga(action) {
-    let {location, login, token, permissions, cartesIp, cartes} = action.payload;
+    let {addonApiVersion, location, login, token, permissions, cartesIp, cartes} = action.payload;
+
+    addonApiVersion = addonApiVersion ?? 1;
+    yield put(browserApiSet(addonApiVersion));
 
     if (token) {
         yield put(restoreConnectDialog(location, login));
@@ -18,7 +21,11 @@ export function* homeRestoreSaga(action) {
                 const data = yield call(Home.getCartes, rootApi, token);
                 cartesIp = data.cartesIp;
                 cartes = data.cartes;
-                Browser.storeHomeData(location, login, token, permissions, cartesIp, cartes);
+                if (addonApiVersion >= 2) {
+                    Browser.storeCartesData(cartesIp, cartes);
+                } else {
+                    Browser.storeHomeData(location, login, token, permissions, cartesIp, cartes);
+                }
             } catch (e) {
                 yield put(errorThrown(e));
             }

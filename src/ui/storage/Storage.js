@@ -41,15 +41,17 @@ class Storage extends React.PureComponent {
     };
 
     loadedData(data) {
+        const {homeRestore, cartesSet} = this.props;
+
         if (!data || data.clientId === Browser.clientId) {
             return;
         }
 
         const {location, login, token, permissions} = data.home || {};
         if (location != null || login != null || token != null || permissions != null) {
-            this.props.homeRestore(location, login, token, permissions, data.cartesIp, data.cartes);
+            homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes);
         } else {
-            this.props.cartesSet(data.cartesIp, data.cartes);
+            cartesSet(data.cartesIp, data.cartes);
         }
     }
 

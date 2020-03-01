@@ -1,4 +1,5 @@
 import {
+    BROWSER_API_SET,
     CONNECT_TO_HOME,
     CONNECTED_TO_HOME,
     CONNECTION_TO_HOME_FAILED,
@@ -23,7 +24,8 @@ const initialState = {
         verified: false,
         correct: false,
         deadline: null
-    }
+    },
+    addonApiVersion: 1
 };
 
 export default (state = initialState, action) => {
@@ -78,6 +80,12 @@ export default (state = initialState, action) => {
                 };
             }
             return state;
+
+        case BROWSER_API_SET:
+            return {
+                ...state,
+                addonApiVersion: action.payload.version
+            };
 
         default:
             return state;

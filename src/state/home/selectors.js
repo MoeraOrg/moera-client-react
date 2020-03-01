@@ -23,6 +23,7 @@ export function isHomeOwnerNameSet(state) {
 
 export function getHomeConnectionData(state) {
     return {
+        addonApiVersion: getAddonApiVersion(state),
         location: state.home.root.location,
         login: state.home.login,
         token: getHomeToken(state),
@@ -33,4 +34,8 @@ export function getHomeConnectionData(state) {
 export function isHomeOwnerNameExpiring(state) {
     return state.home.owner.verified && state.home.owner.correct && state.home.owner.deadline != null
         && moment().isSameOrAfter(moment.unix(state.home.owner.deadline).subtract(30, "days"));
+}
+
+export function getAddonApiVersion(state) {
+    return state.home.addonApiVersion ?? 1;
 }

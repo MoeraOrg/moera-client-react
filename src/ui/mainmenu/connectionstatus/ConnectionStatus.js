@@ -10,12 +10,12 @@ import HomeName from "ui/mainmenu/connectionstatus/HomeName";
 import ConnectDialog from "ui/mainmenu/connectionstatus/connectdialog/ConnectDialog";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { disconnectFromHome } from "state/home/actions";
-import { isConnectedToHome } from "state/home/selectors";
+import { getAddonApiVersion, isConnectedToHome } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { Browser } from "api";
 import "./ConnectionStatus.css";
 
-const ConnectionStatus = ({connecting,  connected, location, login, openConnectDialog, confirmBox,
+const ConnectionStatus = ({addonApiVersion, connecting,  connected, location, login, openConnectDialog, confirmBox,
                            disconnectFromHome}) => (
     <>
         <div id="connection-status">{
@@ -41,7 +41,13 @@ const ConnectionStatus = ({connecting,  connected, location, login, openConnectD
                                       "Disconnect",
                                       "Cancel",
                                       () => {
-                                          Browser.storeHomeData(location, login, null, null, null,null);
+                                          if (addonApiVersion >= 2) {
+                                              Browser.storeConnectionData(location, login, null, null);
+                                              Browser.storeCartesData(null, null);
+                                          } else {
+                                              Browser.storeHomeData(location, login, null, null,
+                                                  null, null);
+                                          }
                                           disconnectFromHome(location, login);
                                       },
                                       null,
@@ -52,13 +58,15 @@ const ConnectionStatus = ({connecting,  connected, location, login, openConnectD
                         </span>
                     </>
             )
-        }</div>
+        }
+        </div>
         <ConnectDialog />
     </>
 );
 
 export default connect(
     state => ({
+        addonApiVersion: getAddonApiVersion(state),
         connecting: state.home.connecting,
         connected: isConnectedToHome(state),
         location: state.home.root.location,

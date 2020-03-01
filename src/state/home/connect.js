@@ -6,6 +6,7 @@ import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerifie
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Browser, Home, Naming, NodeApiError, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
+import { getAddonApiVersion } from "state/home/selectors";
 
 function* connectToHomeFailure(error, onClose = null) {
     yield put(connectionToHomeFailed());
@@ -14,7 +15,13 @@ function* connectToHomeFailure(error, onClose = null) {
 
 export function* connectToHomeSaga(action) {
     const {location, assign, login, password} = action.payload;
-    Browser.storeHomeData(location, login, null, null, null, null);
+    const addonApiVersion = yield select(getAddonApiVersion);
+    if (addonApiVersion >= 2) {
+        Browser.storeConnectionData(location, login, null, null);
+        Browser.storeCartesData(null, null);
+    } else {
+        Browser.storeHomeData(location, login, null, null, null, null);
+    }
     const rootApi = normalizeUrl(location) + "/moera/api";
     let data;
     try {
@@ -40,8 +47,13 @@ export function* connectToHomeSaga(action) {
         yield put(errorThrown(e));
     }
 
-    Browser.storeHomeData(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
-        cartesData.cartes);
+    if (addonApiVersion >= 2) {
+        Browser.storeConnectionData(normalizeUrl(location), login, data.token, data.permissions);
+        Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
+    } else {
+        Browser.storeHomeData(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
+            cartesData.cartes);
+    }
     yield put(connectedToHome(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
         cartesData.cartes));
 }

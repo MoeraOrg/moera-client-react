@@ -6,10 +6,14 @@ import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 
 export function* cartesLoadSaga() {
-    const {location, login, token, permissions} = yield select(getHomeConnectionData);
+    const {addonApiVersion, location, login, token, permissions} = yield select(getHomeConnectionData);
     try {
         const {cartesIp, cartes} = yield call(Home.getCartes);
-        Browser.storeHomeData(location, login, token, permissions, cartesIp, cartes);
+        if (addonApiVersion >= 2) {
+            Browser.storeCartesData(cartesIp, cartes);
+        } else {
+            Browser.storeHomeData(location, login, token, permissions, cartesIp, cartes);
+        }
         yield put(cartesSet(cartesIp, cartes));
     } catch (e) {
         yield put(errorThrown(e));

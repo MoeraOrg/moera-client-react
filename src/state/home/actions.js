@@ -22,9 +22,9 @@ export const disconnectFromHome = (location, login) => ({
 });
 
 export const HOME_RESTORE = "HOME_RESTORE";
-export const homeRestore = (location, login, token, permissions, cartesIp, cartes) => ({
+export const homeRestore = (addonApiVersion, location, login, token, permissions, cartesIp, cartes) => ({
     type: HOME_RESTORE,
-    payload: {location, login, token, permissions, cartesIp, cartes}
+    payload: {addonApiVersion, location, login, token, permissions, cartesIp, cartes}
 });
 
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";
@@ -42,4 +42,10 @@ export const HOME_OWNER_VERIFIED = "HOME_OWNER_VERIFIED";
 export const homeOwnerVerified = (name, latest, correct, deadline) => ({
     type: HOME_OWNER_VERIFIED,
     payload: {name, latest, correct, deadline}
+});
+
+export const BROWSER_API_SET = "BROWSER_API_SET";
+export const browserApiSet = (version) => ({
+    type: BROWSER_API_SET,
+    payload: {version}
 });

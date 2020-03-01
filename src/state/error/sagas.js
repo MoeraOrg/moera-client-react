@@ -5,6 +5,7 @@ import { errorDismiss, errorShow } from "state/error/actions";
 import { disconnectFromHome } from "state/home/actions";
 import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
+import { getAddonApiVersion } from "state/home/selectors";
 
 export function* errorSaga(action) {
     if (action.payload.e instanceof NodeApiError) {
@@ -18,11 +19,17 @@ export function* errorSaga(action) {
 }
 
 export function* errorAuthInvalidSaga() {
-    const {location, login} = yield select(state => ({
+    const {addonApiVersion, location, login} = yield select(state => ({
+        addonApiVersion: getAddonApiVersion(state),
         location: state.home.root.location,
         login: state.home.login
     }));
-    Browser.storeHomeData(location, login, null, null, null, null);
+    if (addonApiVersion >= 2) {
+        Browser.storeConnectionData(location, login, null, null);
+        Browser.storeCartesData(null, null);
+    } else {
+        Browser.storeHomeData(location, login, null, null, null, null);
+    }
     yield put(disconnectFromHome(location, login));
     yield put(messageBox("You have been disconnected from your home node.", openConnectDialog()));
 }
