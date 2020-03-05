@@ -9,7 +9,7 @@ import {
 } from "state/home/actions";
 import { toWsUrl } from "util/misc";
 
-const initialState = {
+const emptyConnection = {
     connecting: false,
     root: {
         location: null,
@@ -24,7 +24,11 @@ const initialState = {
         verified: false,
         correct: false,
         deadline: null
-    },
+    }
+};
+
+const initialState = {
+    ...emptyConnection,
     addonApiVersion: 1
 };
 
@@ -56,7 +60,10 @@ export default (state = initialState, action) => {
             };
 
         case DISCONNECT_FROM_HOME:
-            return initialState;
+            return {
+                ...state,
+                ...emptyConnection
+            };
 
         case HOME_OWNER_SET:
             return {

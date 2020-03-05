@@ -26,8 +26,7 @@ class DisconnectButton extends React.PureComponent {
         const {addonApiVersion, location, login, disconnectFromHome} = this.props;
 
         if (addonApiVersion >= 2) {
-            Browser.storeConnectionData(location, login, null, null);
-            Browser.storeCartesData(null, null);
+            Browser.deleteData(location);
         } else {
             Browser.storeHomeData(location, login, null, null,
                 null, null);

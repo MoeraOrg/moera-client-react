@@ -16,10 +16,7 @@ function* connectToHomeFailure(error, onClose = null) {
 export function* connectToHomeSaga(action) {
     const {location, assign, login, password} = action.payload;
     const addonApiVersion = yield select(getAddonApiVersion);
-    if (addonApiVersion >= 2) {
-        Browser.storeConnectionData(location, login, null, null);
-        Browser.storeCartesData(null, null);
-    } else {
+    if (addonApiVersion < 2) {
         Browser.storeHomeData(location, login, null, null, null, null);
     }
     const rootApi = normalizeUrl(location) + "/moera/api";

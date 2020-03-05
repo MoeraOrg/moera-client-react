@@ -25,8 +25,7 @@ export function* errorAuthInvalidSaga() {
         login: state.home.login
     }));
     if (addonApiVersion >= 2) {
-        Browser.storeConnectionData(location, login, null, null);
-        Browser.storeCartesData(null, null);
+        Browser.deleteData(location);
     } else {
         Browser.storeHomeData(location, login, null, null, null, null);
     }

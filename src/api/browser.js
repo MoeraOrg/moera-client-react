@@ -27,4 +27,12 @@ export class Browser {
         Browser.storeData({cartesIp, cartes});
     }
 
+    static deleteData(location) {
+        window.postMessage({
+            source: "moera",
+            action: "deleteData",
+            payload: location
+        }, "*");
+    }
+
 }
