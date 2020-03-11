@@ -11,7 +11,8 @@ export class Popover extends React.PureComponent {
         text: PropType.string,
         textClassName: PropType.string,
         icon: PropType.string,
-        title: PropType.string
+        title: PropType.string,
+        element: PropType.elementType
     };
 
     constructor(props, context) {
@@ -50,7 +51,7 @@ export class Popover extends React.PureComponent {
     }
 
     render() {
-        const {text, textClassName, icon, title} = this.props;
+        const {text, textClassName, icon, title, element} = this.props;
 
         return (
             <Manager>
@@ -60,6 +61,7 @@ export class Popover extends React.PureComponent {
                             textClassName,
                             {"active": this.state.visible}
                         )}>
+                            {element && React.createElement(element)}
                             {icon && <FontAwesomeIcon icon={icon}/>}
                             {text}
                         </span>

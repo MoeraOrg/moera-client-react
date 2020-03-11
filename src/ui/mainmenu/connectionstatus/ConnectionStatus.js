@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
-import ConnectionInfoButton from "ui/mainmenu/connectionstatus/ConnectionInfoButton";
-import HomeName from "ui/mainmenu/connectionstatus/HomeName";
+import ConnectionsButton from "ui/mainmenu/connectionstatus/ConnectionsButton";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import ConnectDialog from "ui/mainmenu/connectionstatus/connectdialog/ConnectDialog";
 import { openConnectDialog } from "state/connectdialog/actions";
@@ -26,10 +25,9 @@ const ConnectionStatus = ({connecting,  connected, openConnectDialog}) => (
                     </>
                 :
                     <>
-                        <HomeButton/>
                         <SettingsButton/>
-                        <ConnectionInfoButton/>
-                        <HomeName/>
+                        <HomeButton/>
+                        <ConnectionsButton/>
                         <DisconnectButton/>
                     </>
             )

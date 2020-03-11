@@ -4,6 +4,7 @@
     position: relative;
     top: -0.1rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 #connection-status .home-name::after {
@@ -17,6 +18,10 @@
     border-left: .3em solid transparent;
     position: relative;
     top: 0.1em;
+}
+
+#connection-status .home-name:hover {
+    color: var(--status-icon-highlight);
 }
 
 #connection-status .home-name.anonymous {
