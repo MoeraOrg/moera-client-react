@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Browser } from "api";
-import { homeRestore } from "state/home/actions";
+import { browserApiSet, connectionsSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 
 class Storage extends React.PureComponent {
@@ -41,16 +41,24 @@ class Storage extends React.PureComponent {
     };
 
     loadedData(data) {
-        const {homeRestore, cartesSet} = this.props;
+        const {homeRestore, cartesSet, browserApiSet, connectionsSet} = this.props;
 
-        if (!data || data.clientId === Browser.clientId) {
+        if (!data) {
             return;
         }
 
         const {location, login, token, permissions} = data.home || {};
-        if (location != null || login != null || token != null || permissions != null) {
-            homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes);
-        } else {
+        if (data.clientId !== Browser.clientId
+                && (location != null || login != null || token != null || permissions != null)) {
+            homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes, data.roots);
+            return;
+        }
+
+        browserApiSet(data.version);
+        if (data.roots != null) {
+            connectionsSet(data.roots);
+        }
+        if (data.clientId !== Browser.clientId) {
             cartesSet(data.cartesIp, data.cartes);
         }
     }
@@ -63,5 +71,5 @@ class Storage extends React.PureComponent {
 
 export default connect(
     null,
-    { homeRestore, cartesSet }
+    { homeRestore, cartesSet, browserApiSet, connectionsSet }
 )(Storage);

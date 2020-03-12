@@ -8,7 +8,7 @@ import { errorThrown } from "state/error/actions";
 import { normalizeUrl } from "util/misc";
 
 export function* homeRestoreSaga(action) {
-    let {addonApiVersion, location, login, token, permissions, cartesIp, cartes} = action.payload;
+    let {addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots} = action.payload;
 
     addonApiVersion = addonApiVersion ?? 1;
     yield put(browserApiSet(addonApiVersion));
@@ -30,7 +30,7 @@ export function* homeRestoreSaga(action) {
                 yield put(errorThrown(e));
             }
         }
-        yield put(connectedToHome(location, login, token, permissions, cartesIp, cartes));
+        yield put(connectedToHome(location, login, token, permissions, cartesIp, cartes, roots));
     } else {
         yield put(disconnectFromHome(location, login));
     }

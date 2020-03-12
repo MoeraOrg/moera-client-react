@@ -1,5 +1,19 @@
 #connections .connection {
     padding: 0.5em;
+    cursor: pointer;
+}
+
+#connections .connection.active {
+    cursor: auto;
+    border-left: 3px solid var(--green-light);
+}
+
+#connections .connection:hover {
+    background-color: var(--highlight);
+}
+
+#connections .connection.active:hover {
+    background-color: transparent;
 }
 
 #connections .connection .node-name {

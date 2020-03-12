@@ -10,9 +10,9 @@ export const connectionToHomeFailed = () => ({
 });
 
 export const CONNECTED_TO_HOME = "CONNECTED_TO_HOME";
-export const connectedToHome = (location, login, token, permissions, cartesIp, cartes) => ({
+export const connectedToHome = (location, login, token, permissions, cartesIp, cartes, roots) => ({
     type: CONNECTED_TO_HOME,
-    payload: {location, login, token, permissions, cartesIp, cartes}
+    payload: {location, login, token, permissions, cartesIp, cartes, roots}
 });
 
 export const DISCONNECT_FROM_HOME = "DISCONNECT_FROM_HOME";
@@ -22,9 +22,9 @@ export const disconnectFromHome = (location, login) => ({
 });
 
 export const HOME_RESTORE = "HOME_RESTORE";
-export const homeRestore = (addonApiVersion, location, login, token, permissions, cartesIp, cartes) => ({
+export const homeRestore = (addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots) => ({
     type: HOME_RESTORE,
-    payload: {addonApiVersion, location, login, token, permissions, cartesIp, cartes}
+    payload: {addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots}
 });
 
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";
@@ -48,4 +48,10 @@ export const BROWSER_API_SET = "BROWSER_API_SET";
 export const browserApiSet = (version) => ({
     type: BROWSER_API_SET,
     payload: {version}
+});
+
+export const CONNECTIONS_SET = "CONNECTIONS_SET";
+export const connectionsSet = (roots) => ({
+    type: CONNECTIONS_SET,
+    payload: {roots}
 });

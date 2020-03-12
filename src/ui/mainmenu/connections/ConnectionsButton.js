@@ -8,20 +8,27 @@ import { Popover, NodeName } from "ui/control";
 import HomeName from "ui/mainmenu/connections/HomeName";
 import "./ConnectionsButton.css";
 
-const ConnectionsButton = ({addonApiVersion, location, owner, openConnectDialog}) => (
+const ConnectionsButton = ({addonApiVersion, location, owner, roots, openConnectDialog}) => (
     <Popover element={HomeName}>
         {({hide}) => (
             <div id="connections">
-                <div className="connection active">
-                    <NodeName {...owner} linked={false}/><br/>
-                    {location}<br/>
-                    <span className="connected">Connected</span>
-                </div>
+                {roots.map(root => (
+                    root.url === location ?
+                        <div className="connection active">
+                            <NodeName {...owner} linked={false}/><br/>
+                            {location}<br/>
+                            <span className="connected">Connected</span>
+                        </div>
+                    :
+                        <div className="connection" key={root.url}>
+                            {root.url}
+                        </div>
+                ))}
                 {addonApiVersion >= 2 &&
-                <div className="connection-add" onClick={() => {openConnectDialog(); hide()}}>
-                    <FontAwesomeIcon icon="plus"/>
-                    {" "}Add connection
-                </div>
+                    <div className="connection-add" onClick={() => {openConnectDialog(); hide()}}>
+                        <FontAwesomeIcon icon="plus"/>
+                        {" "}Add connection
+                    </div>
                 }
             </div>
         )}
@@ -32,7 +39,8 @@ export default connect(
     state => ({
         addonApiVersion: getAddonApiVersion(state),
         location: state.home.root.location,
-        owner: state.home.owner
+        owner: state.home.owner,
+        roots: state.home.roots
     }),
     { openConnectDialog }
 )(ConnectionsButton);

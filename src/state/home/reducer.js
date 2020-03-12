@@ -3,6 +3,7 @@ import {
     CONNECT_TO_HOME,
     CONNECTED_TO_HOME,
     CONNECTION_TO_HOME_FAILED,
+    CONNECTIONS_SET,
     DISCONNECT_FROM_HOME,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
@@ -29,7 +30,8 @@ const emptyConnection = {
 
 const initialState = {
     ...emptyConnection,
-    addonApiVersion: 1
+    addonApiVersion: 1,
+    roots: []
 };
 
 export default (state = initialState, action) => {
@@ -56,7 +58,8 @@ export default (state = initialState, action) => {
                     api: action.payload.location + "/moera/api",
                     events: toWsUrl(action.payload.location + "/moera/api/events"),
                 },
-                login: action.payload.login
+                login: action.payload.login,
+                roots: action.payload.roots ?? state.roots
             };
 
         case DISCONNECT_FROM_HOME:
@@ -92,6 +95,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 addonApiVersion: action.payload.version
+            };
+
+        case CONNECTIONS_SET:
+            return {
+                ...state,
+                roots: action.payload.roots
             };
 
         default:
