@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
-import ConnectionsButton from "ui/mainmenu/connectionstatus/ConnectionsButton";
+import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
-import ConnectDialog from "ui/mainmenu/connectionstatus/connectdialog/ConnectDialog";
+import ConnectDialog from "ui/connectdialog/ConnectDialog";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { isConnectedToHome } from "state/home/selectors";
 

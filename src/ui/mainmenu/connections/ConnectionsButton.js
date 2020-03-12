@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Popover, NodeName } from "ui/control";
-import HomeName from "ui/mainmenu/connectionstatus/HomeName";
+import HomeName from "ui/mainmenu/connections/HomeName";
 
 const ConnectionsButton = ({location, owner}) => (
     <Popover element={HomeName}>
