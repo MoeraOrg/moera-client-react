@@ -14,6 +14,7 @@ import {
     faList,
     faNetworkWired,
     faPen,
+    faPlus,
     faRemoveFormat,
     faReply,
     faSignOutAlt,
@@ -51,6 +52,7 @@ export default function initIconLibrary() {
     library.add(faList);
     library.add(faMarkdown);
     library.add(faPen);
+    library.add(faPlus);
     library.add(faRemoveFormat);
     library.add(faReply);
     library.add(faSignOutAlt);

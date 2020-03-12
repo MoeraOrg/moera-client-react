@@ -40,18 +40,18 @@ export class Popover extends React.PureComponent {
         this.hide();
     };
 
-    show() {
+    show = () => {
         this.setState({visible: true});
         document.addEventListener("click", this.documentClick);
-    }
+    };
 
-    hide() {
+    hide = () => {
         this.setState({visible: false});
         document.removeEventListener("click", this.documentClick);
-    }
+    };
 
     render() {
-        const {text, textClassName, icon, title, element} = this.props;
+        const {text, textClassName, icon, title, element, children} = this.props;
 
         return (
             <Manager>
@@ -77,7 +77,7 @@ export class Popover extends React.PureComponent {
                                 {"show": this.state.visible}
                             )}>
                                 <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>
-                                <div className="popover-body">{this.props.children}</div>
+                                <div className="popover-body">{children({hide: this.hide})}</div>
                             </div>
                         )}
                     </Popper>,

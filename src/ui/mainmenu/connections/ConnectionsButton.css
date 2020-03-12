@@ -1,0 +1,22 @@
+#connections .connection {
+    padding: 0.5em;
+}
+
+#connections .connection .node-name {
+    font-size: 120%;
+}
+
+#connections .connection .connected {
+    color: var(--gray-light);
+}
+
+#connections .connection-add {
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 120%;
+    padding: 0.5em;
+}
+
+#connections .connection-add:hover {
+    background-color: var(--highlight);
+}
