@@ -14,7 +14,7 @@ const ConnectionsButton = ({addonApiVersion, location, owner, roots, openConnect
             <div id="connections">
                 {roots.map(root => (
                     root.url === location ?
-                        <div className="connection active">
+                        <div className="connection active" key={root.url}>
                             <NodeName {...owner} linked={false}/><br/>
                             {location}<br/>
                             <span className="connected">Connected</span>
