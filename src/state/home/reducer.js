@@ -63,10 +63,13 @@ export default (state = initialState, action) => {
             };
 
         case DISCONNECT_FROM_HOME:
-            return {
-                ...state,
-                ...emptyConnection
-            };
+            if (state.addonApiVersion < 2 || state.roots.length <= 1) {
+                return {
+                    ...state,
+                    ...emptyConnection
+                };
+            }
+            return state; // Wait for another connection to take place
 
         case HOME_OWNER_SET:
             return {
