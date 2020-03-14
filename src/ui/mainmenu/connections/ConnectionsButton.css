@@ -5,7 +5,7 @@
 
 #connections .connection.active {
     cursor: auto;
-    border-left: 3px solid var(--green-light);
+    background-color: var(--highlight-cyan);
 }
 
 #connections .connection:hover {
@@ -13,7 +13,7 @@
 }
 
 #connections .connection.active:hover {
-    background-color: transparent;
+    background-color: var(--highlight-cyan);
 }
 
 #connections .connection .node-name {
@@ -21,7 +21,7 @@
 }
 
 #connections .connection .connected {
-    color: var(--gray-light);
+    color: var(--gray);
 }
 
 #connections .connection-add {
