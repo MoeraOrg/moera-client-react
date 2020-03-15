@@ -17,7 +17,7 @@ import {
     settingsNodeValuesLoad,
     settingsNodeValuesUnset
 } from "state/settings/actions";
-import { CONNECTED_TO_HOME, DISCONNECT_FROM_HOME } from "state/home/actions";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { newLocation, updateLocation } from "state/navigation/actions";
 import { EVENT_HOME_CLIENT_SETTINGS_CHANGED, EVENT_HOME_NODE_SETTINGS_CHANGED } from "api/events/actions";
 
@@ -33,22 +33,22 @@ export default [
         settingsNodeMetaLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECT_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         conj(isAtSettingsPage, isAtSettingsNodeTab),
         settingsNodeValuesLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECT_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         conj(isAtSettingsPage, isAtSettingsNodeTab),
         settingsNodeMetaLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECT_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         disj(inv(isAtSettingsPage), conj(isAtSettingsPage, inv(isAtSettingsNodeTab))),
         settingsNodeValuesUnset
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECT_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         disj(inv(isAtSettingsPage), conj(isAtSettingsPage, inv(isAtSettingsNodeTab))),
         settingsNodeMetaUnset
     ),
@@ -58,7 +58,7 @@ export default [
         settingsClientValuesLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECT_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         true,
         settingsClientValuesLoad
     ),

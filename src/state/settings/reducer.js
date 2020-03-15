@@ -1,6 +1,6 @@
 import immutable from 'object-path-immutable';
 
-import { DISCONNECT_FROM_HOME } from "state/home/actions";
+import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
     SETTINGS_CLIENT_CONFLICT,
     SETTINGS_CLIENT_CONFLICT_CLOSE,
@@ -65,7 +65,7 @@ export default (state = initialState, action) => {
                 .set("client.conflict", false)
                 .value();
 
-        case DISCONNECT_FROM_HOME:
+        case DISCONNECTED_FROM_HOME:
             return {
                 ...state,
                 ...emptySettings

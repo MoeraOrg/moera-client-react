@@ -39,3 +39,7 @@ export function isHomeOwnerNameExpiring(state) {
 export function getAddonApiVersion(state) {
     return state.home.addonApiVersion ?? 1;
 }
+
+export function hasInactiveConnections(state) {
+    return getAddonApiVersion(state) >= 2 && state.home.roots.length > 1;
+}

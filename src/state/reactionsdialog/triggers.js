@@ -10,7 +10,7 @@ import {
     reactionsDialogTotalsLoad,
     reactionsDialogUnset
 } from "state/reactionsdialog/actions";
-import { CONNECTED_TO_HOME, DISCONNECT_FROM_HOME } from "state/home/actions";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 
 export default [
     trigger(
@@ -19,5 +19,5 @@ export default [
         reactionsDialogPastReactionsLoad
     ),
     trigger(OPEN_REACTIONS_DIALOG, isReactionsDialogTotalsToBeLoaded, reactionsDialogTotalsLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECT_FROM_HOME], true, reactionsDialogUnset)
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, reactionsDialogUnset)
 ];

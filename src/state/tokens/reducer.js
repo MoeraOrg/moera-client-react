@@ -1,6 +1,6 @@
 import immutable from 'object-path-immutable';
 
-import { CONNECTED_TO_HOME, DISCONNECT_FROM_HOME } from "state/home/actions";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 
 const initialState = {
 };
@@ -13,7 +13,7 @@ export default (state = initialState, action) => {
                 .set([action.payload.location, "permissions"], action.payload.permissions)
                 .value();
 
-        case DISCONNECT_FROM_HOME:
+        case DISCONNECTED_FROM_HOME:
             return immutable.del(state, [action.payload.location]);
 
         default:

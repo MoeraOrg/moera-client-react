@@ -21,6 +21,12 @@ export const disconnectFromHome = (location, login) => ({
     payload: {location, login}
 });
 
+export const DISCONNECTED_FROM_HOME = "DISCONNECTED_FROM_HOME";
+export const disconnectedFromHome = (location, login) => ({
+    type: DISCONNECTED_FROM_HOME,
+    payload: {location, login}
+});
+
 export const HOME_RESTORE = "HOME_RESTORE";
 export const homeRestore = (addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots) => ({
     type: HOME_RESTORE,

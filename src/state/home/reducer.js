@@ -4,7 +4,7 @@ import {
     CONNECTED_TO_HOME,
     CONNECTION_TO_HOME_FAILED,
     CONNECTIONS_SET,
-    DISCONNECT_FROM_HOME,
+    DISCONNECTED_FROM_HOME,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
@@ -62,14 +62,11 @@ export default (state = initialState, action) => {
                 roots: action.payload.roots ?? state.roots
             };
 
-        case DISCONNECT_FROM_HOME:
-            if (state.addonApiVersion < 2 || state.roots.length <= 1) {
-                return {
-                    ...state,
-                    ...emptyConnection
-                };
-            }
-            return state; // Wait for another connection to take place
+        case DISCONNECTED_FROM_HOME:
+            return {
+                ...state,
+                ...emptyConnection
+            };
 
         case HOME_OWNER_SET:
             return {
