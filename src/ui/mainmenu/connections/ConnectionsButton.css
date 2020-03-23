@@ -20,6 +20,12 @@
     font-size: 120%;
 }
 
+#connections .connection .no-name {
+    font-size: 120%;
+    font-style: italic;
+    color: var(--gray);
+}
+
 #connections .connection .connected {
     color: var(--gray);
 }

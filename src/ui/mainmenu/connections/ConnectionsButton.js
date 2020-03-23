@@ -37,7 +37,11 @@ class ConnectionsButton extends React.PureComponent {
                                 </div>
                             :
                                 <div className="connection" key={root.url} onClick={this.onItemClick(root.url, hide)}>
-                                    <NodeName name={root.name} linked={false}/><br/>
+                                    {root.name ?
+                                        <NodeName name={root.name} linked={false}/>
+                                    :
+                                        <span className="no-name">no name known</span>
+                                    }<br/>
                                     {root.url}
                                 </div>
                         ))}
