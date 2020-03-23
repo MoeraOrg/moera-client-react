@@ -35,4 +35,12 @@ export class Browser {
         }, "*");
     }
 
+    static switchData(location) {
+        window.postMessage({
+            source: "moera",
+            action: "switchData",
+            payload: location
+        }, "*");
+    }
+
 }
