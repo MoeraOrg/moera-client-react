@@ -60,8 +60,11 @@ export function* verifyHomeOwnerSaga() {
         const {nodeName} = yield call(Home.getWhoAmI);
         yield put(homeOwnerSet(nodeName));
 
-        const {location, login, token, permissions} = yield select(getHomeConnectionData);
-        Browser.storeConnectionData(location, nodeName, login, token, permissions);
+        const addonApiVersion = yield select(getAddonApiVersion);
+        if (addonApiVersion >= 2) {
+            const {location, login, token, permissions} = yield select(getHomeConnectionData);
+            Browser.storeConnectionData(location, nodeName, login, token, permissions);
+        }
 
         const {name, generation} = NodeName.parse(nodeName);
         if (name == null || generation == null) {

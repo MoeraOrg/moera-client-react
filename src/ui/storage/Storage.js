@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Browser } from "api";
-import { browserApiSet, connectionsSet, homeRestore } from "state/home/actions";
+import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 
 class Storage extends React.PureComponent {
@@ -41,16 +41,19 @@ class Storage extends React.PureComponent {
     };
 
     loadedData(data) {
-        const {homeRestore, cartesSet, browserApiSet, connectionsSet} = this.props;
+        const {homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet} = this.props;
 
         if (!data) {
             return;
         }
 
-        const {location, login, token, permissions} = data.home || {};
+        const {location, nodeName, login, token, permissions} = data.home || {};
         if (data.clientId !== Browser.clientId
                 && (location != null || login != null || token != null || permissions != null)) {
             homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes, data.roots);
+            if (nodeName) {
+                homeOwnerSet(nodeName);
+            }
             return;
         }
 
@@ -71,5 +74,5 @@ class Storage extends React.PureComponent {
 
 export default connect(
     null,
-    { homeRestore, cartesSet, browserApiSet, connectionsSet }
+    { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet }
 )(Storage);

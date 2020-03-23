@@ -73,8 +73,11 @@ export default (state = initialState, action) => {
                 ...state,
                 owner: {
                     ...state.owner,
-                    ...action.payload,
-                    verified: false
+                    name: action.payload.name,
+                    latest: false,
+                    verified: false,
+                    correct: false,
+                    deadline: null
                 }
             };
 
