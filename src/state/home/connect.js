@@ -6,7 +6,7 @@ import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerifie
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Browser, Home, Naming, NodeApiError, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
-import { getAddonApiVersion } from "state/home/selectors";
+import { getAddonApiVersion, getHomeConnectionData } from "state/home/selectors";
 
 function* connectToHomeFailure(error, onClose = null) {
     yield put(connectionToHomeFailed());
@@ -45,7 +45,7 @@ export function* connectToHomeSaga(action) {
     }
 
     if (addonApiVersion >= 2) {
-        Browser.storeConnectionData(normalizeUrl(location), login, data.token, data.permissions);
+        Browser.storeConnectionData(normalizeUrl(location), null, login, data.token, data.permissions);
         Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
     } else {
         Browser.storeHomeData(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
@@ -57,9 +57,13 @@ export function* connectToHomeSaga(action) {
 
 export function* verifyHomeOwnerSaga() {
     try {
-        const data = yield call(Home.getWhoAmI);
-        yield put(homeOwnerSet(data.nodeName));
-        const {name, generation} = NodeName.parse(data.nodeName);
+        const {nodeName} = yield call(Home.getWhoAmI);
+        yield put(homeOwnerSet(nodeName));
+
+        const {location, login, token, permissions} = yield select(getHomeConnectionData);
+        Browser.storeConnectionData(location, nodeName, login, token, permissions);
+
+        const {name, generation} = NodeName.parse(nodeName);
         if (name == null || generation == null) {
             return;
         }
@@ -67,7 +71,7 @@ export function* verifyHomeOwnerSaga() {
         const rootPage = yield select(state => state.home.root.page);
         const correct = ndata && normalizeUrl(ndata.nodeUri) === rootPage;
         const latest = ndata && ndata.latest;
-        yield put(homeOwnerVerified(data.nodeName, latest, correct, ndata.deadline));
+        yield put(homeOwnerVerified(nodeName, latest, correct, ndata.deadline));
     } catch (e) {
         yield put(errorThrown(e));
     }
