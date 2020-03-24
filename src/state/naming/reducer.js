@@ -5,7 +5,8 @@ import {
     NAMING_NAME_LOAD_FAILED,
     NAMING_NAME_LOADED,
     NAMING_NAME_PURGE,
-    NAMING_NAME_USED
+    NAMING_NAME_USED,
+    NAMING_NAMES_POPULATE
 } from "state/naming/actions";
 import { now } from "util/misc";
 
@@ -49,6 +50,22 @@ export default (state = initialState, action) => {
 
         case NAMING_NAME_PURGE:
             return immutable.del(state, ["names", action.payload.name]);
+
+        case NAMING_NAMES_POPULATE: {
+            let istate = immutable(state);
+            action.payload.names
+                .filter(info => state.names[info.name] == null)
+                .forEach(info => {
+                    istate = istate.set(["names", info.name], {
+                        accessed: info.updated,
+                        loading: false,
+                        loaded: true,
+                        latest: info.latest,
+                        nodeUri: info.nodeUri
+                    })
+                });
+            return istate.value();
+        }
 
         default:
             return state;

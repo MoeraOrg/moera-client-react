@@ -32,3 +32,9 @@ export const NAMING_NAMES_MAINTENANCE = "NAMING_NAMES_MAINTENANCE";
 export const namingNamesMaintenance = () => ({
     type: NAMING_NAMES_MAINTENANCE
 });
+
+export const NAMING_NAMES_POPULATE = "NAMING_NAMES_POPULATE";
+export const namingNamesPopulate = (names) => ({
+    type: NAMING_NAMES_POPULATE,
+    payload: {names}
+});

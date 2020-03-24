@@ -5,6 +5,7 @@ import { Browser } from "api";
 import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
+import { namingNamesPopulate } from "state/naming/actions";
 
 class Storage extends React.PureComponent {
 
@@ -42,10 +43,16 @@ class Storage extends React.PureComponent {
     };
 
     loadedData(data) {
-        const {home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet} = this.props;
+        const {
+            home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate
+        } = this.props;
 
         if (!data) {
             return;
+        }
+
+        if (data.names != null) {
+            namingNamesPopulate(data.names);
         }
 
         const {location, nodeName, login, token, permissions} = data.home || {};
@@ -78,5 +85,5 @@ export default connect(
     state => ({
         home: getHomeConnectionData(state)
     }),
-    { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet }
+    { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate }
 )(Storage);

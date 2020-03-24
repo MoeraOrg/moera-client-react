@@ -1,5 +1,7 @@
-import { call, put, select } from "@redux-saga/core/effects";
+import { call, put, select } from '@redux-saga/core/effects';
+
 import { Naming, NodeName } from "api";
+import { Browser } from "api/browser";
 import { errorThrown } from "state/error/actions";
 import { namingNameLoad, namingNameLoaded, namingNameLoadFailed, namingNamePurge } from "state/naming/actions";
 import { getDetailedPosting } from "state/detailedposting/selectors";
@@ -13,6 +15,9 @@ export function* namingNameLoadSaga(action) {
         const data = yield call(Naming.getCurrent, name, generation);
         const latest = !!(data && data.latest);
         const nodeUri = data ? data.nodeUri : null;
+        if (data) {
+            Browser.storeName(action.payload.name, latest, nodeUri);
+        }
         yield put(namingNameLoaded(action.payload.name, latest, nodeUri));
     } catch (e) {
         yield put(namingNameLoadFailed(action.payload.name));

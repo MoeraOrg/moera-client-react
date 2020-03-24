@@ -43,4 +43,12 @@ export class Browser {
         }, "*");
     }
 
+    static storeName(name, latest, nodeUri) {
+        window.postMessage({
+            source: "moera",
+            action: "storeName",
+            payload: {name, latest, nodeUri}
+        }, "*");
+    }
+
 }
