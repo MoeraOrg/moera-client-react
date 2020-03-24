@@ -7,6 +7,7 @@ import { getAddonApiVersion } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Popover, NodeName } from "ui/control";
 import HomeName from "ui/mainmenu/connections/HomeName";
+import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./ConnectionsButton.css";
 
 class ConnectionsButton extends React.PureComponent {
@@ -19,6 +20,10 @@ class ConnectionsButton extends React.PureComponent {
     onItemClick = (location, hide) => () => {
         Browser.switchData(location);
         hide();
+    };
+
+    onDisconnect = (location) => () => {
+        Browser.deleteData(location);
     };
 
     render() {
@@ -36,14 +41,9 @@ class ConnectionsButton extends React.PureComponent {
                                     <span className="connected">Connected</span>
                                 </div>
                             :
-                                <div className="connection" key={root.url} onClick={this.onItemClick(root.url, hide)}>
-                                    {root.name ?
-                                        <NodeName name={root.name} linked={false}/>
-                                    :
-                                        <span className="no-name">no name known</span>
-                                    }<br/>
-                                    {root.url}
-                                </div>
+                                <ConnectionItem key={root.url} name={root.name} url={root.url}
+                                                onClick={this.onItemClick(root.url, hide)}
+                                                onDisconnect={this.onDisconnect(root.url)}/>
                         ))}
                         {addonApiVersion >= 2 &&
                             <div className="connection-add" onClick={this.onAddClick(hide)}>

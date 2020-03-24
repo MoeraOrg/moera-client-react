@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Browser } from "api";
 import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
+import { getHomeConnectionData } from "state/home/selectors";
 
 class Storage extends React.PureComponent {
 
@@ -41,7 +42,7 @@ class Storage extends React.PureComponent {
     };
 
     loadedData(data) {
-        const {homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet} = this.props;
+        const {home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet} = this.props;
 
         if (!data) {
             return;
@@ -49,7 +50,8 @@ class Storage extends React.PureComponent {
 
         const {location, nodeName, login, token, permissions} = data.home || {};
         if (data.clientId !== Browser.clientId
-                && (location != null || login != null || token != null || permissions != null)) {
+                && (location != null || login != null || token != null || permissions != null)
+                && (location !== home.location || login !== home.login || token !== home.token)) {
             homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes, data.roots);
             if (nodeName) {
                 homeOwnerSet(nodeName);
@@ -73,6 +75,8 @@ class Storage extends React.PureComponent {
 }
 
 export default connect(
-    null,
+    state => ({
+        home: getHomeConnectionData(state)
+    }),
     { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet }
 )(Storage);

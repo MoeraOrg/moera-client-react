@@ -7,6 +7,7 @@ import {
     faCode,
     faCog,
     faExclamationTriangle,
+    faExternalLinkAlt,
     faFileAlt,
     faFrown,
     faHistory,
@@ -44,6 +45,7 @@ export default function initIconLibrary() {
     library.add(faCode);
     library.add(faCog);
     library.add(faExclamationTriangle);
+    library.add(faExternalLinkAlt);
     library.add(faFileAlt);
     library.add(faFrown);
     library.add(faHistory);
