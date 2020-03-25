@@ -15,7 +15,7 @@
     --correct-light: var(--green-light);
     --incorrect-light: var(--red-light);
     --node-name: #385898;
-    --blockquote: #fafaff;
+    --blockquote: var(--highlight-cyan);
 
     --status-icon: rgba(255, 255, 255, .5);
     --status-icon-highlight: rgba(255, 255, 255, .75);
