@@ -5,7 +5,7 @@ import { Browser } from "api";
 import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
-import { namingNamesPopulate } from "state/naming/actions";
+import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
 
 class Storage extends React.PureComponent {
 
@@ -35,6 +35,10 @@ class Storage extends React.PureComponent {
         switch (message.action) {
             case "loadedData":
                 this.loadedData(message.payload);
+                return;
+
+            case "storedName":
+                this.storedName(message.payload);
                 return;
 
             default:
@@ -75,6 +79,10 @@ class Storage extends React.PureComponent {
         }
     }
 
+    storedName(data) {
+        this.props.namingNameLoaded(data.name, data.latest, data.nodeUri);
+    }
+
     render() {
         return null;
     }
@@ -85,5 +93,5 @@ export default connect(
     state => ({
         home: getHomeConnectionData(state)
     }),
-    { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate }
+    { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded }
 )(Storage);
