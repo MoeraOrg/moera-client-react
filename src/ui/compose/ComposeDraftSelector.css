@@ -13,6 +13,11 @@
     cursor: pointer;
 }
 
+.draft-selector .dropdown-item.current {
+    background-color: var(--highlight-cyan);
+    cursor: default;
+}
+
 .draft-selector .dropdown-item .info {
     flex: auto;
 }

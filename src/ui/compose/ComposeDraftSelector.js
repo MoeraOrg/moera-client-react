@@ -35,20 +35,23 @@ class ComposeDraftSelector extends React.PureComponent {
         document.removeEventListener("click", this.onHide);
     };
 
-    onSelect = (id) => (e) => {
+    onSelect = id => e => {
         if (e.target.closest(".delete") != null) {
+            return;
+        }
+        if (id === this.props.draftId) {
             return;
         }
         this.props.composeDraftSelect(id);
     };
 
-    onDelete = (id) => (e) => {
+    onDelete = id => e => {
         this.props.composeDraftListItemDelete(id);
         e.preventDefault();
     };
 
     render() {
-        const {postingId, draftList, loadingDraftList, loadedDraftList} = this.props;
+        const {postingId, draftId, draftList, loadingDraftList, loadedDraftList} = this.props;
         const {visible} = this.state;
 
         if (postingId != null) {
@@ -64,7 +67,7 @@ class ComposeDraftSelector extends React.PureComponent {
                                     Drafts{" "}
                                     {loadingDraftList ?
                                         <LoadingInline active={loadingDraftList}/>
-                                        :
+                                    :
                                         <span className="badge badge-light">{draftList.length}</span>
                                     }
                                 </button>
@@ -77,8 +80,8 @@ class ComposeDraftSelector extends React.PureComponent {
                                             {"show": visible}
                                         )}>
                                             {draftList.map(draft => (
-                                                <div className="dropdown-item" key={draft.id}
-                                                     onClick={this.onSelect(draft.id)}
+                                                <div className={cx("dropdown-item", {"current": draftId === draft.id})}
+                                                     key={draft.id} onClick={this.onSelect(draft.id)}
                                                 >
                                                     <div className="info">
                                                         <div className="content">
@@ -115,6 +118,7 @@ class ComposeDraftSelector extends React.PureComponent {
 export default connect(
     state => ({
         postingId: state.compose.postingId,
+        draftId: state.compose.draftId,
         draftList: state.compose.draftList,
         loadingDraftList: state.compose.loadingDraftList,
         loadedDraftList: state.compose.loadedDraftList
