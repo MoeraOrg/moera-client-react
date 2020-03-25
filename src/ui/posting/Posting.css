@@ -24,3 +24,12 @@
     left: 0.5rem;
     top: -1rem;
 }
+
+.posting BLOCKQUOTE BLOCKQUOTE {
+    border-left: 3px solid var(--cyan);
+    border-radius: 0;
+}
+
+.posting BLOCKQUOTE BLOCKQUOTE::before {
+    top: -1.5rem;
+}
