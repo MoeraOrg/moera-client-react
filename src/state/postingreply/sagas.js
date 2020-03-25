@@ -41,6 +41,8 @@ export function* postingReplySaga() {
                 .replace(/<\/p>/gi, "")
                 .replace(/\n*<br\s*\/?>\n*/gi, "\n")
                 .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
+                .replace(/<img\s+src="https:\/\/twemoji\.[^"]*\/([0-9a-f]+).svg"[^>]*>/gi,
+                         (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
         }
         const postingText = {
             bodySrc: JSON.stringify({
