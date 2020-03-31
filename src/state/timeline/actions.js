@@ -35,15 +35,15 @@ export const timelineFutureSliceLoadFailed = () => ({
 });
 
 export const TIMELINE_PAST_SLICE_SET = "TIMELINE_PAST_SLICE_SET";
-export const timelinePastSliceSet = (postings, before, after) => ({
+export const timelinePastSliceSet = (stories, before, after) => ({
     type: TIMELINE_PAST_SLICE_SET,
-    payload: {postings, before, after}
+    payload: {stories, before, after}
 });
 
 export const TIMELINE_FUTURE_SLICE_SET = "TIMELINE_FUTURE_SLICE_SET";
-export const timelineFutureSliceSet = (postings, before, after) => ({
+export const timelineFutureSliceSet = (stories, before, after) => ({
     type: TIMELINE_FUTURE_SLICE_SET,
-    payload: {postings, before, after}
+    payload: {stories, before, after}
 });
 
 export const TIMELINE_UNSET = "TIMELINE_UNSET";

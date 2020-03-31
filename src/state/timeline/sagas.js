@@ -26,8 +26,8 @@ export function* timelinePastSliceLoadSaga() {
     try {
         const before = yield select(state => state.timeline.after);
         const data = yield call(Node.getTimelineSlice, null, before, 20);
-        yield put(timelinePastSliceSet(data.postings, data.before, data.after));
-        yield call(cacheNames, data.postings);
+        yield put(timelinePastSliceSet(data.stories, data.before, data.after));
+        yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(timelinePastSliceLoadFailed());
         yield put(errorThrown(e));
@@ -38,22 +38,22 @@ export function* timelineFutureSliceLoadSaga() {
     try {
         const after = yield select(state => state.timeline.before);
         const data = yield call(Node.getTimelineSlice, after, null, 20);
-        yield put(timelineFutureSliceSet(data.postings, data.before, data.after));
-        yield call(cacheNames, data.postings);
+        yield put(timelineFutureSliceSet(data.stories, data.before, data.after));
+        yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(timelineFutureSliceLoadFailed());
         yield put(errorThrown(e));
     }
 }
 
-function* cacheNames(postings) {
-    if (!postings) {
+function* cacheNames(stories) {
+    if (!stories) {
         return;
     }
     const usedNames = new Set();
-    postings.forEach(p => {
-        usedNames.add(p.ownerName);
-        usedNames.add(p.receiverName);
+    stories.forEach(s => {
+        usedNames.add(s.posting.ownerName);
+        usedNames.add(s.posting.receiverName);
     });
     for (let name of usedNames) {
         yield put(namingNameUsed(name));

@@ -184,9 +184,9 @@ class TimelinePage extends React.PureComponent {
                                   onClick={() => this.loadFuture()}/>
                 {timeline
                     .filter(t => postings[t.id])
-                    .map(t => postings[t.id])
-                    .map(({posting, deleting}) => <TimelinePosting key={posting.moment} posting={posting}
-                                                                   deleting={deleting} />)}
+                    .map(t => ({moment: t.moment, ...postings[t.id]}))
+                    .map(({moment, posting, deleting}) =>
+                        <TimelinePosting key={moment} posting={posting} moment={moment} deleting={deleting}/>)}
                 <TimelineSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"
                                   visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
                                   onClick={() => this.loadPast()}/>

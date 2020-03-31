@@ -111,6 +111,12 @@ function decodeBodies(data, exception) {
     if (data.postings) {
         decoded.postings = data.postings.map(p => decodeBodies(p, exception));
     }
+    if (data.stories) {
+        decoded.stories = data.stories.map(p => decodeBodies(p, exception));
+    }
+    if (data.posting) {
+        decoded.posting = decodeBodies(data.posting, exception);
+    }
     if (data.body) {
         decoded.body = decodeBody(data.body, exception);
     }
@@ -165,13 +171,13 @@ export function* updateNodeName(name, mnemonic) {
 }
 
 export function* getTimelineGeneral() {
-    return yield call(callNode, {location: "/timeline", schema: NodeApi.TimelineInfo});
+    return yield call(callNode, {location: "/feeds/timeline", schema: NodeApi.FeedInfo});
 }
 
 export function* getTimelineSlice(after, before, limit) {
     const location = yield call(introduced,
-        urlWithParameters("/timeline/postings", {after, before, limit}));
-    return yield call(callNode, {location, schema: NodeApi.TimelineSliceInfo, withBodies: true});
+        urlWithParameters("/feeds/timeline/stories", {after, before, limit}));
+    return yield call(callNode, {location, schema: NodeApi.FeedSliceInfo, withBodies: true});
 }
 
 export function* getPostingFeatures() {

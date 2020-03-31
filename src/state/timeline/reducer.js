@@ -131,19 +131,19 @@ export default (state = initialState, action) => {
 
         case TIMELINE_PAST_SLICE_SET:
             if (action.payload.before >= state.after && action.payload.after < state.after) {
-                let postings = state.postings.slice();
-                action.payload.postings
-                    .filter(p => p.moment <= state.after)
-                    .forEach(p => postings.push({
-                        id: p.id,
-                        moment: p.moment
+                let stories = state.postings.slice();
+                action.payload.stories
+                    .filter(s => s.moment <= state.after)
+                    .forEach(s => stories.push({
+                        id: s.posting.id,
+                        moment: s.moment
                     }));
-                postings.sort((a, b) => b.moment - a.moment);
+                stories.sort((a, b) => b.moment - a.moment);
                 return {
                     ...state,
                     loadingPast: false,
                     after: action.payload.after,
-                    postings
+                    postings: stories
                 }
             } else {
                 return {
@@ -154,19 +154,19 @@ export default (state = initialState, action) => {
 
         case TIMELINE_FUTURE_SLICE_SET:
             if (action.payload.before > state.before && action.payload.after <= state.before) {
-                let postings = state.postings.slice();
-                action.payload.postings
-                    .filter(p => p.moment > state.before)
-                    .forEach(p => postings.push({
-                        id: p.id,
-                        moment: p.moment
+                let stories = state.postings.slice();
+                action.payload.stories
+                    .filter(s => s.moment > state.before)
+                    .forEach(s => stories.push({
+                        id: s.posting.id,
+                        moment: s.moment
                     }));
-                postings.sort((a, b) => b.moment - a.moment);
+                stories.sort((a, b) => b.moment - a.moment);
                 return {
                     ...state,
                     loadingFuture: false,
                     before: action.payload.before,
-                    postings
+                    postings: stories
                 }
             } else {
                 return {

@@ -244,8 +244,20 @@ const PostingInfoType = {
         "signatureVersion": {
             type: "integer"
         },
-        "moment": {
-            type: "integer"
+        "feedReferences": {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    "feedName": {
+                        type: "string"
+                    },
+                    "moment": {
+                        type: "integer"
+                    }
+                },
+                additionalProperties: false,
+            }
         },
         "clientReaction": {
             type: "object",
@@ -262,7 +274,8 @@ const PostingInfoType = {
                 "deadline": {
                     type: "integer"
                 }
-            }
+            },
+            additionalProperties: false,
         },
         "operations": {
             type: "object",
@@ -297,8 +310,8 @@ const PostingInfoType = {
                 "negative": {
                     type: "string"
                 },
-                additionalProperties: false,
-            }
+            },
+            additionalProperties: false,
         },
         "reactions": ReactionTotalsInfoType,
         "reactionsVisible": {
@@ -318,9 +331,12 @@ export const PostingInfoList = schema({
     items: PostingInfoType
 });
 
-export const TimelineInfo = schema({
+export const FeedInfo = schema({
     type: "object",
     properties: {
+        "feedName": {
+            type: "string"
+        },
         "operations": {
             type: "object",
             properties: {
@@ -337,7 +353,36 @@ export const TimelineInfo = schema({
     additionalProperties: false,
 });
 
-export const TimelineSliceInfo = schema({
+const StoryInfoType = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "feedName": {
+            type: "string"
+        },
+        "storyType": {
+            type: "string"
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "moment": {
+            type: "integer"
+        },
+        "viewed": {
+            type: "boolean"
+        },
+        "read": {
+            type: "boolean"
+        },
+        "posting": PostingInfoType
+    },
+    additionalProperties: false,
+};
+
+export const FeedSliceInfo = schema({
     type: "object",
     properties: {
         "before": {
@@ -346,9 +391,9 @@ export const TimelineSliceInfo = schema({
         "after": {
             type: "integer"
         },
-        "postings": {
+        "stories": {
             type: "array",
-            items: PostingInfoType
+            items: StoryInfoType
         },
     },
     additionalProperties: false,

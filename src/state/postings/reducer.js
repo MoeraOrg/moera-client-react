@@ -31,13 +31,14 @@ function safeguard(posting) {
 export default (state = initialState, action) => {
     switch (action.type) {
         case TIMELINE_PAST_SLICE_SET:
-        case TIMELINE_FUTURE_SLICE_SET:
-            let istate = immutable(state);
-            action.payload.postings.forEach(p => istate
+        case TIMELINE_FUTURE_SLICE_SET: {
+            const istate = immutable(state);
+            action.payload.stories.map(s => s.posting).forEach(p => istate
                 .set([p.id, "posting"], safeguard(p))
                 .set([p.id, "deleting"], false)
                 .set([p.id, "verificationStatus"], "none"));
             return istate.value();
+        }
 
         case POSTING_SET:
             const posting = action.payload.posting;
