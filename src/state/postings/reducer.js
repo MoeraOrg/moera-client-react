@@ -28,12 +28,21 @@ function safeguard(posting) {
         .value();
 }
 
+function outsideIn(story) {
+    const posting = story.posting;
+    posting.feedReferences = [{
+        feedName: story.feedName,
+        moment: story.moment
+    }];
+    return posting;
+}
+
 export default (state = initialState, action) => {
     switch (action.type) {
         case TIMELINE_PAST_SLICE_SET:
         case TIMELINE_FUTURE_SLICE_SET: {
             const istate = immutable(state);
-            action.payload.stories.map(s => s.posting).forEach(p => istate
+            action.payload.stories.map(s => outsideIn(s)).forEach(p => istate
                 .set([p.id, "posting"], safeguard(p))
                 .set([p.id, "deleting"], false)
                 .set([p.id, "verificationStatus"], "none"));

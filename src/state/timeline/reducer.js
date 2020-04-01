@@ -14,6 +14,7 @@ import {
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_TIMELINE } from "state/navigation/pages";
 import { POSTING_DELETED, POSTING_SET } from "state/postings/actions";
+import { getPostingMoment } from "state/postings/selectors";
 
 const emptyInfo = {
     operations: {
@@ -186,12 +187,13 @@ export default (state = initialState, action) => {
 
         case POSTING_SET: {
             const posting = action.payload.posting;
-            if (posting.moment <= state.before && posting.moment > state.after) {
-                if (!state.postings.some(p => p.moment === posting.moment)) {
-                    let postings = state.postings.filter(p => p.id !== posting.id);
+            const moment = getPostingMoment(posting, "timeline");
+            if (moment != null && moment <= state.before && moment > state.after) {
+                if (!state.postings.some(p => p.moment === moment)) {
+                    const postings = state.postings.filter(p => p.id !== posting.id);
                     postings.push({
                         id: posting.id,
-                        moment: posting.moment
+                        moment
                     });
                     postings.sort((a, b) => b.moment - a.moment);
                     return {
