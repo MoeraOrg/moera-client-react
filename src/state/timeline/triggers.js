@@ -13,7 +13,7 @@ export default [
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, timelineUnset),
     trigger(
         [EVENT_NODE_POSTING_ADDED, EVENT_NODE_POSTING_RESTORED],
-        (state, signal) => isTimelineContainsMoment(state, signal.payload.moment),
+        (state, signal) => isTimelineContainsMoment(state, signal.payload.moment), // FIXME
         signal => postingLoad(signal.payload.id)
     )
 ];

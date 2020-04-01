@@ -16,7 +16,7 @@ export default [
     trigger(
         EVENT_NODE_POSTING_DELETED,
         true,
-        signal => postingDeleted(signal.payload.id, signal.payload.moment)
+        signal => postingDeleted(signal.payload.id, signal.payload.moment) // FIXME
     ),
     trigger(
         EVENT_NODE_POSTING_REACTIONS_CHANGED,

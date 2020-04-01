@@ -206,8 +206,9 @@ export default (state = initialState, action) => {
         }
 
         case POSTING_DELETED: {
-            const posting = action.payload;
-            if (posting.moment <= state.before && posting.moment > state.after) {
+            const posting = action.payload; // Not really, but we need only the feed reference
+            const moment = getPostingMoment(posting, "timeline");
+            if (moment <= state.before && moment > state.after) {
                 const index = state.postings.findIndex(p => p.id === posting.id);
                 if (index >= 0) {
                     let postings = state.postings.slice();

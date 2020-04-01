@@ -18,7 +18,7 @@ export function* postingDeleteSaga(action) {
     const posting = yield select(getPosting, id);
     try {
         yield call(Node.deletePosting, id);
-        yield put(postingDeleted(posting.id, posting.moment));
+        yield put(postingDeleted(posting.id, posting.feedReferences));
     } catch (e) {
         yield put(postingDeleteFailed(id));
         yield put(errorThrown(e));

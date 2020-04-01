@@ -11,9 +11,9 @@ export const postingDelete = (id) => ({
 });
 
 export const POSTING_DELETED = "POSTING_DELETED";
-export const postingDeleted = (id, moment) => ({
+export const postingDeleted = (id, feedReferences) => ({
     type: POSTING_DELETED,
-    payload: {id, moment}
+    payload: {id, feedReferences}
 });
 
 export const POSTING_DELETE_FAILED = "POSTING_DELETE_FAILED";
