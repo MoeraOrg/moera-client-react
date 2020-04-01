@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button } from "ui/control";
+import { getPostingMoment } from "state/postings/selectors";
 import { goToTimeline } from "state/navigation/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
@@ -16,32 +17,37 @@ import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
 import PostingHtml from "ui/posting/PostingHtml";
 
-const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToTimeline}) => (
-    <>
-        <Button variant="outline-secondary" size="sm"
-                onClick={e => goToTimeline(posting.moment)}>&larr; Timeline</Button>
-
-        <div className="posting">
-            {deleting ?
-                <PostingDeleting/>
-            :
-                <>
-                    <PostingMenu posting={posting} isPermitted={isPermitted}/>
-                    <PostingPin posting={posting}/>
-                    <div className="owner-line">
-                        <PostingOwner posting={posting}/>
-                        <PostingDate posting={posting}/>
-                        <PostingUpdated posting={posting}/>
-                    </div>
-                    <PostingSubject posting={posting} preview={false}/>
-                    <PostingHtml className="content" html={posting.body.text}/>
-                    <PostingReactions posting={posting}/>
-                    {connectedToHome && <PostingButtons posting={posting}/>}
-                </>
+const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToTimeline}) => {
+    const moment = getPostingMoment(posting, "timeline");
+    return (
+        <>
+            {moment != null &&
+                <Button variant="outline-secondary" size="sm"
+                        onClick={() => goToTimeline(moment)}>&larr; Timeline</Button>
             }
-        </div>
-    </>
-);
+
+            <div className="posting">
+                {deleting ?
+                    <PostingDeleting/>
+                :
+                    <>
+                        <PostingMenu posting={posting} isPermitted={isPermitted}/>
+                        <PostingPin posting={posting}/>
+                        <div className="owner-line">
+                            <PostingOwner posting={posting}/>
+                            <PostingDate posting={posting}/>
+                            <PostingUpdated posting={posting}/>
+                        </div>
+                        <PostingSubject posting={posting} preview={false}/>
+                        <PostingHtml className="content" html={posting.body.text}/>
+                        <PostingReactions posting={posting}/>
+                        {connectedToHome && <PostingButtons posting={posting}/>}
+                    </>
+                }
+            </div>
+        </>
+    );
+};
 
 export default connect(
     state => ({
