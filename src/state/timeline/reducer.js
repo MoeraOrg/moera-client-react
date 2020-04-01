@@ -30,7 +30,7 @@ const initialState = {
     loadingPast: false,
     before: Number.MAX_SAFE_INTEGER,
     after: Number.MAX_SAFE_INTEGER,
-    postings: [],
+    stories: [],
     anchor: null,
     scrollingActive: false,
     at: Number.MAX_SAFE_INTEGER
@@ -50,7 +50,7 @@ const goToPageTimeline = (state, action) => {
                 ...state,
                 before: anchor,
                 after: anchor,
-                postings: [],
+                stories: [],
                 anchor,
                 scrollingActive: true,
                 at: anchor
@@ -132,7 +132,7 @@ export default (state = initialState, action) => {
 
         case TIMELINE_PAST_SLICE_SET:
             if (action.payload.before >= state.after && action.payload.after < state.after) {
-                let stories = state.postings.slice();
+                let stories = state.stories.slice();
                 action.payload.stories
                     .filter(s => s.moment <= state.after)
                     .forEach(s => stories.push({
@@ -144,7 +144,7 @@ export default (state = initialState, action) => {
                     ...state,
                     loadingPast: false,
                     after: action.payload.after,
-                    postings: stories
+                    stories
                 }
             } else {
                 return {
@@ -155,7 +155,7 @@ export default (state = initialState, action) => {
 
         case TIMELINE_FUTURE_SLICE_SET:
             if (action.payload.before > state.before && action.payload.after <= state.before) {
-                let stories = state.postings.slice();
+                let stories = state.stories.slice();
                 action.payload.stories
                     .filter(s => s.moment > state.before)
                     .forEach(s => stories.push({
@@ -167,7 +167,7 @@ export default (state = initialState, action) => {
                     ...state,
                     loadingFuture: false,
                     before: action.payload.before,
-                    postings: stories
+                    stories
                 }
             } else {
                 return {
@@ -181,7 +181,7 @@ export default (state = initialState, action) => {
                 ...state,
                 before: state.at,
                 after: state.at,
-                postings: [],
+                stories: [],
                 anchor: state.at
             };
 
@@ -189,16 +189,16 @@ export default (state = initialState, action) => {
             const posting = action.payload.posting;
             const moment = getPostingMoment(posting, "timeline");
             if (moment != null && moment <= state.before && moment > state.after) {
-                if (!state.postings.some(p => p.moment === moment)) {
-                    const postings = state.postings.filter(p => p.id !== posting.id);
-                    postings.push({
+                if (!state.stories.some(p => p.moment === moment)) {
+                    const stories = state.stories.filter(p => p.id !== posting.id);
+                    stories.push({
                         id: posting.id,
                         moment
                     });
-                    postings.sort((a, b) => b.moment - a.moment);
+                    stories.sort((a, b) => b.moment - a.moment);
                     return {
                         ...state,
-                        postings
+                        stories
                     }
                 }
             }
@@ -209,13 +209,13 @@ export default (state = initialState, action) => {
             const posting = action.payload; // Not really, but we need only the feed reference
             const moment = getPostingMoment(posting, "timeline");
             if (moment <= state.before && moment > state.after) {
-                const index = state.postings.findIndex(p => p.id === posting.id);
+                const index = state.stories.findIndex(p => p.id === posting.id);
                 if (index >= 0) {
-                    let postings = state.postings.slice();
-                    postings.splice(index, 1);
+                    const stories = state.stories.slice();
+                    stories.splice(index, 1);
                     return {
                         ...state,
-                        postings
+                        stories
                     }
                 }
             }

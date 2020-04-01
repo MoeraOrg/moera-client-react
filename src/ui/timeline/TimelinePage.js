@@ -204,7 +204,7 @@ export default connect(
         loadingPast: state.timeline.loadingPast,
         before: state.timeline.before,
         after: state.timeline.after,
-        timeline: state.timeline.postings,
+        timeline: state.timeline.stories,
         postings: state.postings,
         anchor: state.timeline.anchor
     }),

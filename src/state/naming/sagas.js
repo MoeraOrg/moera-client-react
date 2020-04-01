@@ -48,10 +48,14 @@ export function* namingNamesMaintenanceSaga() {
 
 function* getUsedNames() {
     let used = new Set();
-    const timeline = yield select(state => state.timeline.postings);
-    timeline.forEach(p => {
-        used.add(p.ownerName);
-        used.add(p.receiverName);
+    const {timeline, postings} = yield select(state => ({
+        timeline: state.timeline.stories,
+        postings: state.postings
+    }));
+    timeline.forEach(t => {
+        const posting = postings[t.id];
+        used.add(posting.ownerName);
+        used.add(posting.receiverName);
     });
     const posting = yield select(getDetailedPosting);
     if (posting != null) {
