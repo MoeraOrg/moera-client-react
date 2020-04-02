@@ -16,9 +16,6 @@ const postingEvent = (properties = {}) => baseEvent({
     "id": {
         type: "string"
     },
-    "moment": {
-        type: "integer"
-    },
     ...properties
 });
 
@@ -59,6 +56,25 @@ const remoteReactionVerificationEvent = (properties = {}) => baseEvent({
         type: "string"
     },
     "reactionOwnerName": {
+        type: "string"
+    },
+    ...properties
+});
+
+const storyEvent = (properties = {}) => baseEvent({
+    "id": {
+        type: "string"
+    },
+    "storyType": {
+        type: "string"
+    },
+    "feedName": {
+        type: "string"
+    },
+    "moment": {
+        type: "integer"
+    },
+    "postingId": {
         type: "string"
     },
     ...properties
@@ -143,5 +159,7 @@ export const EVENT_SCHEMES = {
     "DRAFT_POSTING_UPDATED": draftPostingEvent(),
     "DRAFT_POSTING_DELETED": draftPostingEvent(),
     "POSTING_DRAFT_REVISION_UPDATED": draftPostingEvent(),
-    "POSTING_DRAFT_REVISION_DELETED": draftPostingEvent()
+    "POSTING_DRAFT_REVISION_DELETED": draftPostingEvent(),
+    "STORY_ADDED": storyEvent(),
+    "STORY_DELETED": storyEvent()
 };

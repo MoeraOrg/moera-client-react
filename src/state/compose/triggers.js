@@ -5,7 +5,8 @@ import {
     COMPOSE_DRAFT_SELECT,
     COMPOSE_POST_SUCCEEDED,
     COMPOSE_POSTING_LOADED,
-    composeConflict, composeDraftListItemDeleted,
+    composeConflict,
+    composeDraftListItemDeleted,
     composeDraftListItemReload,
     composeDraftListLoad,
     composeDraftLoad,
@@ -26,11 +27,14 @@ import {
 } from "state/compose/selectors";
 import { SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
 import {
-    EVENT_HOME_DRAFT_POSTING_ADDED, EVENT_HOME_DRAFT_POSTING_DELETED,
+    EVENT_HOME_DRAFT_POSTING_ADDED,
+    EVENT_HOME_DRAFT_POSTING_DELETED,
     EVENT_HOME_DRAFT_POSTING_UPDATED,
     EVENT_HOME_NODE_SETTINGS_CHANGED,
     EVENT_NODE_POSTING_UPDATED
 } from "api/events/actions";
+import { timelineStoryAdded } from "state/timeline/actions";
+import { getPostingMoment } from "state/postings/selectors";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
@@ -40,6 +44,14 @@ export default [
     trigger(COMPOSE_POSTING_LOADED, true, signal => postingSet(signal.payload.posting)),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => goToPosting(signal.payload.posting.id)),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => postingSet(signal.payload.posting)),
+    trigger(
+        COMPOSE_POST_SUCCEEDED,
+        true,
+        signal => timelineStoryAdded(
+            signal.payload.posting.id,
+            getPostingMoment(signal.payload.posting, "timeline")
+        )
+    ),
     trigger(
         EVENT_NODE_POSTING_UPDATED,
         (state, signal) => isAtComposePage(state) && getComposePostingId(state) === signal.payload.id,

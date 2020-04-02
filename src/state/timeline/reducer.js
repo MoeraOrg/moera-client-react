@@ -9,12 +9,13 @@ import {
     TIMELINE_PAST_SLICE_LOAD_FAILED,
     TIMELINE_PAST_SLICE_SET,
     TIMELINE_SCROLLED,
-    TIMELINE_SCROLLED_TO_ANCHOR, TIMELINE_UNSET
+    TIMELINE_SCROLLED_TO_ANCHOR,
+    TIMELINE_STORY_ADDED,
+    TIMELINE_STORY_DELETED,
+    TIMELINE_UNSET
 } from "state/timeline/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_TIMELINE } from "state/navigation/pages";
-import { POSTING_DELETED, POSTING_SET } from "state/postings/actions";
-import { getPostingMoment } from "state/postings/selectors";
 
 const emptyInfo = {
     operations: {
@@ -185,14 +186,13 @@ export default (state = initialState, action) => {
                 anchor: state.at
             };
 
-        case POSTING_SET: {
-            const posting = action.payload.posting;
-            const moment = getPostingMoment(posting, "timeline");
+        case TIMELINE_STORY_ADDED: {
+            const {moment, postingId} = action.payload;
             if (moment != null && moment <= state.before && moment > state.after) {
                 if (!state.stories.some(p => p.moment === moment)) {
-                    const stories = state.stories.filter(p => p.id !== posting.id);
+                    const stories = state.stories.filter(p => p.id !== postingId);
                     stories.push({
-                        id: posting.id,
+                        id: postingId,
                         moment
                     });
                     stories.sort((a, b) => b.moment - a.moment);
@@ -205,11 +205,10 @@ export default (state = initialState, action) => {
             return state;
         }
 
-        case POSTING_DELETED: {
-            const posting = action.payload; // Not really, but we need only the feed reference
-            const moment = getPostingMoment(posting, "timeline");
+        case TIMELINE_STORY_DELETED: {
+            const {moment, postingId} = action.payload;
             if (moment <= state.before && moment > state.after) {
-                const index = state.stories.findIndex(p => p.id === posting.id);
+                const index = state.stories.findIndex(p => p.id === postingId);
                 if (index >= 0) {
                     const stories = state.stories.slice();
                     stories.splice(index, 1);

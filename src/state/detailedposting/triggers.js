@@ -5,6 +5,7 @@ import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import { DETAILED_POSTING_LOADED, detailedPostingLoad } from "state/detailedposting/actions";
 import { isDetailedPostingId, isDetailedPostingToBeLoaded } from "state/detailedposting/selectors";
 import { POSTING_DELETED, POSTING_SET, postingSet } from "state/postings/actions";
+import { getPostingMoment } from "state/postings/selectors";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
@@ -19,6 +20,6 @@ export default [
     trigger(
         POSTING_DELETED,
         (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.id),
-        signal => goToTimeline(signal.payload.moment)
+        signal => goToTimeline(getPostingMoment(signal.payload, "timeline"))
     )
 ];

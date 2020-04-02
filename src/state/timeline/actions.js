@@ -61,3 +61,15 @@ export const TIMELINE_SCROLLED_TO_ANCHOR = "TIMELINE_SCROLLED_TO_ANCHOR";
 export const timelineScrolledToAnchor = () => ({
     type: TIMELINE_SCROLLED_TO_ANCHOR
 });
+
+export const TIMELINE_STORY_ADDED = "TIMELINE_STORY_ADDED";
+export const timelineStoryAdded = (postingId, moment) => ({
+    type: TIMELINE_STORY_ADDED,
+    payload: {postingId, moment}
+});
+
+export const TIMELINE_STORY_DELETED = "TIMELINE_STORY_DELETED";
+export const timelineStoryDeleted = (postingId, moment) => ({
+    type: TIMELINE_STORY_DELETED,
+    payload: {postingId, moment}
+});

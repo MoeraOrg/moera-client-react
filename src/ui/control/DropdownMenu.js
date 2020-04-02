@@ -51,13 +51,13 @@ export class DropdownMenu extends React.PureComponent {
                                              className={`bs-popover-${placement} fade dropdown-menu shadow-sm show`}>
                                             {items.length > 0 ?
                                                 items.map((item, index) => (
-                                                    <>
+                                                    <React.Fragment key={index}>
                                                         {item.divider && <div className="dropdown-divider"/>}
-                                                        <a key={index} className="dropdown-item" href={item.href}
+                                                        <a className="dropdown-item" href={item.href}
                                                            onClick={e => {item.onClick(); e.preventDefault()}}>
                                                             {item.title}
                                                         </a>
-                                                    </>
+                                                    </React.Fragment>
                                                 ))
                                             :
                                                 <span className="dropdown-item disabled no-actions">No actions</span>
