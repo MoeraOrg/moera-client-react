@@ -63,13 +63,13 @@ export const timelineScrolledToAnchor = () => ({
 });
 
 export const TIMELINE_STORY_ADDED = "TIMELINE_STORY_ADDED";
-export const timelineStoryAdded = (postingId, moment) => ({
+export const timelineStoryAdded = (id, postingId, moment) => ({
     type: TIMELINE_STORY_ADDED,
-    payload: {postingId, moment}
+    payload: {id, postingId, moment}
 });
 
 export const TIMELINE_STORY_DELETED = "TIMELINE_STORY_DELETED";
-export const timelineStoryDeleted = (postingId, moment) => ({
+export const timelineStoryDeleted = (id, moment) => ({
     type: TIMELINE_STORY_DELETED,
-    payload: {postingId, moment}
+    payload: {id, moment}
 });

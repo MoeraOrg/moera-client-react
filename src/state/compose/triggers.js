@@ -34,7 +34,7 @@ import {
     EVENT_NODE_POSTING_UPDATED
 } from "api/events/actions";
 import { timelineStoryAdded } from "state/timeline/actions";
-import { getPostingMoment } from "state/postings/selectors";
+import { getPostingMoment, getPostingStoryId } from "state/postings/selectors";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
@@ -48,6 +48,7 @@ export default [
         COMPOSE_POST_SUCCEEDED,
         true,
         signal => timelineStoryAdded(
+            getPostingStoryId(signal.payload.posting, "timeline"),
             signal.payload.posting.id,
             getPostingMoment(signal.payload.posting, "timeline")
         )

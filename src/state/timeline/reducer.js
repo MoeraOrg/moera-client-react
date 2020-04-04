@@ -137,8 +137,9 @@ export default (state = initialState, action) => {
                 action.payload.stories
                     .filter(s => s.moment <= state.after)
                     .forEach(s => stories.push({
-                        id: s.posting.id,
-                        moment: s.moment
+                        id: s.id,
+                        moment: s.moment,
+                        postingId: s.posting.id
                     }));
                 stories.sort((a, b) => b.moment - a.moment);
                 return {
@@ -160,8 +161,9 @@ export default (state = initialState, action) => {
                 action.payload.stories
                     .filter(s => s.moment > state.before)
                     .forEach(s => stories.push({
-                        id: s.posting.id,
-                        moment: s.moment
+                        id: s.id,
+                        moment: s.moment,
+                        postingId: s.posting.id
                     }));
                 stories.sort((a, b) => b.moment - a.moment);
                 return {
@@ -187,14 +189,11 @@ export default (state = initialState, action) => {
             };
 
         case TIMELINE_STORY_ADDED: {
-            const {moment, postingId} = action.payload;
+            const {id, moment, postingId} = action.payload;
             if (moment != null && moment <= state.before && moment > state.after) {
                 if (!state.stories.some(p => p.moment === moment)) {
-                    const stories = state.stories.filter(p => p.id !== postingId);
-                    stories.push({
-                        id: postingId,
-                        moment
-                    });
+                    const stories = state.stories.filter(p => p.postingId !== postingId);
+                    stories.push({id, moment, postingId});
                     stories.sort((a, b) => b.moment - a.moment);
                     return {
                         ...state,
@@ -206,9 +205,9 @@ export default (state = initialState, action) => {
         }
 
         case TIMELINE_STORY_DELETED: {
-            const {moment, postingId} = action.payload;
+            const {moment, id} = action.payload;
             if (moment <= state.before && moment > state.after) {
-                const index = state.stories.findIndex(p => p.id === postingId);
+                const index = state.stories.findIndex(p => p.id === id);
                 if (index >= 0) {
                     const stories = state.stories.slice();
                     stories.splice(index, 1);

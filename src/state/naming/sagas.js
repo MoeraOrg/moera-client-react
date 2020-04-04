@@ -53,7 +53,7 @@ function* getUsedNames() {
         postings: state.postings
     }));
     timeline.forEach(t => {
-        const posting = postings[t.id];
+        const posting = postings[t.postingId];
         used.add(posting.ownerName);
         used.add(posting.receiverName);
     });

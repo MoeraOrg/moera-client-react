@@ -32,7 +32,8 @@ function outsideIn(story) {
     const posting = story.posting;
     posting.feedReferences = [{
         feedName: story.feedName,
-        moment: story.moment
+        moment: story.moment,
+        storyId: story.id
     }];
     return posting;
 }

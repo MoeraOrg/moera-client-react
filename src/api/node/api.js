@@ -254,6 +254,9 @@ const PostingInfoType = {
                     },
                     "moment": {
                         type: "integer"
+                    },
+                    "storyId": {
+                        type: "string"
                     }
                 },
                 additionalProperties: false,
