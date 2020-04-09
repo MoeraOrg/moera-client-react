@@ -73,3 +73,9 @@ export const timelineStoryDeleted = (id, moment) => ({
     type: TIMELINE_STORY_DELETED,
     payload: {id, moment}
 });
+
+export const TIMELINE_STORY_UPDATED = "TIMELINE_STORY_UPDATED";
+export const timelineStoryUpdated = (id, postingId, moment) => ({
+    type: TIMELINE_STORY_UPDATED,
+    payload: {id, postingId, moment}
+});

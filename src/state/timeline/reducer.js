@@ -12,6 +12,7 @@ import {
     TIMELINE_SCROLLED_TO_ANCHOR,
     TIMELINE_STORY_ADDED,
     TIMELINE_STORY_DELETED,
+    TIMELINE_STORY_UPDATED,
     TIMELINE_UNSET
 } from "state/timeline/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
@@ -218,6 +219,24 @@ export default (state = initialState, action) => {
                 }
             }
             return state;
+        }
+
+        case TIMELINE_STORY_UPDATED: {
+            const {id, moment, postingId} = action.payload;
+            const index = state.stories.findIndex(p => p.id === id);
+            if (index < 0) {
+                return state;
+            }
+            const stories = state.stories.slice();
+            stories.splice(index, 1);
+            if (moment != null && moment <= state.before && moment > state.after) {
+                stories.push({id, moment, postingId});
+                stories.sort((a, b) => b.moment - a.moment);
+            }
+            return {
+                ...state,
+                stories
+            }
         }
 
         case TIMELINE_SCROLLED:

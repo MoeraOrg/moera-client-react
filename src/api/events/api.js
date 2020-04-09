@@ -161,5 +161,6 @@ export const EVENT_SCHEMES = {
     "POSTING_DRAFT_REVISION_UPDATED": draftPostingEvent(),
     "POSTING_DRAFT_REVISION_DELETED": draftPostingEvent(),
     "STORY_ADDED": storyEvent(),
-    "STORY_DELETED": storyEvent()
+    "STORY_DELETED": storyEvent(),
+    "STORY_UPDATED": storyEvent()
 };
