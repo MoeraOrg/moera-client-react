@@ -23,6 +23,7 @@ import {
     isComposeDraftListToBeLoaded,
     isComposeDraftToBeLoaded,
     isComposeFeaturesToBeLoaded,
+    isComposePostingEditing,
     isComposePostingToBeLoaded
 } from "state/compose/selectors";
 import { SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
@@ -33,7 +34,7 @@ import {
     EVENT_HOME_NODE_SETTINGS_CHANGED,
     EVENT_NODE_POSTING_UPDATED
 } from "api/events/actions";
-import { timelineStoryAdded } from "state/timeline/actions";
+import { timelineStoryAdded, timelineStoryUpdated } from "state/timeline/actions";
 import { getPostingMoment, getPostingStoryId } from "state/postings/selectors";
 
 export default [
@@ -46,8 +47,17 @@ export default [
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => postingSet(signal.payload.posting)),
     trigger(
         COMPOSE_POST_SUCCEEDED,
-        true,
+        inv(isComposePostingEditing),
         signal => timelineStoryAdded(
+            getPostingStoryId(signal.payload.posting, "timeline"),
+            signal.payload.posting.id,
+            getPostingMoment(signal.payload.posting, "timeline")
+        )
+    ),
+    trigger(
+        COMPOSE_POST_SUCCEEDED,
+        isComposePostingEditing,
+        signal => timelineStoryUpdated(
             getPostingStoryId(signal.payload.posting, "timeline"),
             signal.payload.posting.id,
             getPostingMoment(signal.payload.posting, "timeline")

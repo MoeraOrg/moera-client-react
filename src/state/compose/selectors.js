@@ -15,6 +15,10 @@ export function getComposePostingId(state) {
     return state.compose.postingId;
 }
 
+export function isComposePostingEditing(state) {
+    return getComposePostingId(state) != null;
+}
+
 export function getComposeDraftId(state) {
     return state.compose.draftId;
 }
