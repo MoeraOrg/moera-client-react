@@ -371,6 +371,9 @@ const StoryInfoType = {
         "createdAt": {
             type: "integer"
         },
+        "publishedAt": {
+            type: "integer"
+        },
         "moment": {
             type: "integer"
         },
