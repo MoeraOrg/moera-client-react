@@ -81,7 +81,9 @@ class ComposePage extends React.PureComponent {
                         <div className="features">
                             <div className="feature-buttons">
                                 <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
-                                <ComposePublishAtButton/>
+                                {postingId == null &&
+                                    <ComposePublishAtButton/>
+                                }
                                 <ComposeReactionsButton/>
                             </div>
                             <div className="drafts">
