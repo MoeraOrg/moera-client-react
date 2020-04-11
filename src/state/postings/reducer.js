@@ -1,7 +1,13 @@
 import immutable from 'object-path-immutable';
 import selectn from 'selectn';
 
-import { TIMELINE_FUTURE_SLICE_SET, TIMELINE_PAST_SLICE_SET } from "state/timeline/actions";
+import {
+    TIMELINE_FUTURE_SLICE_SET,
+    TIMELINE_PAST_SLICE_SET,
+    TIMELINE_STORY_ADDED,
+    TIMELINE_STORY_DELETED,
+    TIMELINE_STORY_UPDATED
+} from "state/timeline/actions";
 import {
     POSTING_DELETE,
     POSTING_DELETED,
@@ -48,6 +54,26 @@ export default (state = initialState, action) => {
                 .set([p.id, "deleting"], false)
                 .set([p.id, "verificationStatus"], "none"));
             return istate.value();
+        }
+
+        case TIMELINE_STORY_ADDED:
+        case TIMELINE_STORY_UPDATED: {
+            const {id, postingId, moment} = action.payload;
+            if (state[postingId]) {
+                const refs = (state[postingId].feedReferences ?? []).filter(r => r.storyId !== id);
+                refs.push({feedName: "timeline", moment, storyId: id});
+                return immutable.set(state, [postingId, "posting", "feedReferences"], refs);
+            }
+            return state;
+        }
+
+        case TIMELINE_STORY_DELETED: {
+            const {id, postingId} = action.payload;
+            if (state[postingId]) {
+                const refs = (state[postingId].feedReferences ?? []).filter(r => r.storyId !== id);
+                return immutable.set(state, [postingId, "posting", "feedReferences"], refs);
+            }
+            return state;
         }
 
         case POSTING_SET:

@@ -26,7 +26,7 @@ export default [
     trigger(
         EVENT_NODE_STORY_DELETED,
         (state, signal) => signal.payload.feedName === "timeline",
-        signal => timelineStoryDeleted(signal.payload.id, signal.payload.moment)
+        signal => timelineStoryDeleted(signal.payload.id, signal.payload.postingId, signal.payload.moment)
     ),
     trigger(
         EVENT_NODE_STORY_UPDATED,
