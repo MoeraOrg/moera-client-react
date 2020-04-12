@@ -2,13 +2,13 @@ import { trigger } from "state/trigger";
 import { EVENT_NODE_POSTING_REACTIONS_CHANGED, EVENT_NODE_POSTING_UPDATED } from "api/events/actions";
 import { postingLoad, postingReactionLoad } from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
-import { TIMELINE_STORY_ADDED, TIMELINE_STORY_UPDATED } from "state/timeline/actions";
+import { STORY_ADDED, STORY_UPDATED } from "state/stories/actions";
 
 export default [
     trigger(
-        [TIMELINE_STORY_ADDED, TIMELINE_STORY_UPDATED],
-        (state, signal) => !isPostingCached(state, signal.payload.postingId),
-        signal => postingLoad(signal.payload.postingId)
+        [STORY_ADDED, STORY_UPDATED],
+        (state, signal) => !isPostingCached(state, signal.payload.story.posting.id),
+        signal => postingLoad(signal.payload.story.posting.id)
     ),
     trigger(
         EVENT_NODE_POSTING_UPDATED,

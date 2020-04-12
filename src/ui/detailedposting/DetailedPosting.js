@@ -31,7 +31,7 @@ const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToT
                     <PostingDeleting/>
                 :
                     <>
-                        <PostingMenu posting={posting} isPermitted={isPermitted}/>
+                        <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
                         <PostingPin pinned={story.pinned}/>
                         <div className="owner-line">
                             <PostingOwner posting={posting}/>

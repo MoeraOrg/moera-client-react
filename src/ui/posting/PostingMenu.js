@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { DropdownMenu } from "ui/control";
 import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
-import { postingDelete, postingPinningUpdate } from "state/postings/actions";
+import { postingDelete } from "state/postings/actions";
+import { storyPinningUpdate } from "state/stories/actions";
 import "./PostingMenu.css";
 
 class PostingMenu extends React.PureComponent {
@@ -23,13 +24,13 @@ class PostingMenu extends React.PureComponent {
     };
 
     onPin = () => {
-        const {posting, postingPinningUpdate} = this.props;
+        const {story, storyPinningUpdate} = this.props;
 
-        postingPinningUpdate(posting.id, !posting.pinned);
+        storyPinningUpdate(story.id, !story.pinned);
     };
 
     render() {
-        const {posting, isPermitted, rootLocation} = this.props;
+        const {posting, story, isPermitted, rootLocation} = this.props;
 
         return (
             <DropdownMenu items={[
@@ -43,13 +44,13 @@ class PostingMenu extends React.PureComponent {
                     title: "Pin",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onPin,
-                    show: !posting.pinned && isPermitted("edit", posting)
+                    show: !story.pinned && isPermitted("edit", posting)
                 },
                 {
                     title: "Unpin",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onPin,
-                    show: posting.pinned && isPermitted("edit", posting)
+                    show: story.pinned && isPermitted("edit", posting)
                 },
                 {
                     title: "Delete",
@@ -68,5 +69,5 @@ export default connect(
     state => ({
         rootLocation: state.node.root.location,
     }),
-    {goToCompose, confirmBox, postingPinningUpdate}
+    {goToCompose, confirmBox, storyPinningUpdate}
 )(PostingMenu);

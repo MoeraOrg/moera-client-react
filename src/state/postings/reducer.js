@@ -1,13 +1,7 @@
 import immutable from 'object-path-immutable';
 import selectn from 'selectn';
 
-import {
-    TIMELINE_FUTURE_SLICE_SET,
-    TIMELINE_PAST_SLICE_SET,
-    TIMELINE_STORY_ADDED,
-    TIMELINE_STORY_DELETED,
-    TIMELINE_STORY_UPDATED
-} from "state/timeline/actions";
+import { TIMELINE_FUTURE_SLICE_SET, TIMELINE_PAST_SLICE_SET } from "state/timeline/actions";
 import {
     POSTING_DELETE,
     POSTING_DELETED,
@@ -19,6 +13,7 @@ import {
     POSTING_VERIFY_FAILED
 } from "state/postings/actions";
 import { EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED, EVENT_HOME_REMOTE_POSTING_VERIFIED } from "api/events/actions";
+import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
 import { safeHtml, safePreviewHtml } from "util/html";
 
 const initialState = {
@@ -34,15 +29,17 @@ function safeguard(posting) {
         .value();
 }
 
+function toFeedReference(story) {
+    const ref = {...story};
+    ref.storyId = story.id;
+    delete ref.id;
+    delete ref.posting;
+    return ref;
+}
+
 function outsideIn(story) {
     const posting = story.posting;
-    posting.feedReferences = [{
-        feedName: story.feedName,
-        publishedAt: story.publishedAt,
-        pinned: story.pinned,
-        moment: story.moment,
-        storyId: story.id
-    }];
+    posting.feedReferences = [toFeedReference(story)];
     return posting;
 }
 
@@ -58,22 +55,22 @@ export default (state = initialState, action) => {
             return istate.value();
         }
 
-        case TIMELINE_STORY_ADDED:
-        case TIMELINE_STORY_UPDATED: {
-            const {id, postingId, publishedAt, pinned, moment} = action.payload;
-            if (state[postingId]) {
-                const refs = (state[postingId].feedReferences ?? []).filter(r => r.storyId !== id);
-                refs.push({feedName: "timeline", publishedAt, pinned, moment, storyId: id});
-                return immutable.set(state, [postingId, "posting", "feedReferences"], refs);
+        case STORY_ADDED:
+        case STORY_UPDATED: {
+            const {id, posting} = action.payload.story;
+            if (state[posting.id]) {
+                const refs = (state[posting.id].feedReferences ?? []).filter(r => r.storyId !== id);
+                refs.push(toFeedReference(action.payload.story));
+                return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
             }
             return state;
         }
 
-        case TIMELINE_STORY_DELETED: {
-            const {id, postingId} = action.payload;
-            if (state[postingId]) {
-                const refs = (state[postingId].feedReferences ?? []).filter(r => r.storyId !== id);
-                return immutable.set(state, [postingId, "posting", "feedReferences"], refs);
+        case STORY_DELETED: {
+            const {id, posting} = action.payload.story;
+            if (state[posting.id]) {
+                const refs = (state[posting.id].feedReferences ?? []).filter(r => r.storyId !== id);
+                return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
             }
             return state;
         }

@@ -34,8 +34,8 @@ import {
     EVENT_HOME_NODE_SETTINGS_CHANGED,
     EVENT_NODE_POSTING_UPDATED
 } from "api/events/actions";
-import { timelineStoryAdded, timelineStoryUpdated } from "state/timeline/actions";
-import { getPostingFeedReference } from "state/postings/selectors";
+import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
+import { storyAdded, storyUpdated } from "state/stories/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
@@ -47,19 +47,15 @@ export default [
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => postingSet(signal.payload.posting)),
     trigger(
         COMPOSE_POST_SUCCEEDED,
-        inv(isComposePostingEditing),
-        signal => {
-            const ref = getPostingFeedReference(signal.payload.posting, "timeline");
-            return timelineStoryAdded(ref.storyId, signal.payload.posting.id, ref.publishedAt, ref.pinned, ref.moment)
-        }
+        (state, signal) => !isComposePostingEditing(state)
+            && hasPostingFeedReference(signal.payload.posting, "timeline"),
+        signal => storyAdded(getPostingStory(signal.payload.posting, "timeline"))
     ),
     trigger(
         COMPOSE_POST_SUCCEEDED,
-        isComposePostingEditing,
-        signal => {
-            const ref = getPostingFeedReference(signal.payload.posting, "timeline");
-            return timelineStoryUpdated(ref.storyId, signal.payload.posting.id, ref.publishedAt, ref.pinned, ref.moment)
-        }
+        (state, signal) => isComposePostingEditing(state)
+            && hasPostingFeedReference(signal.payload.posting, "timeline"),
+        signal => storyUpdated(getPostingStory(signal.payload.posting, "timeline"))
     ),
     trigger(
         EVENT_NODE_POSTING_UPDATED,

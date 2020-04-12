@@ -394,6 +394,8 @@ const StoryInfoType = {
     additionalProperties: false,
 };
 
+export const StoryInfo = schema(StoryInfoType);
+
 export const FeedSliceInfo = schema({
     type: "object",
     properties: {

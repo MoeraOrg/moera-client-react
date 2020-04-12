@@ -20,22 +20,23 @@ export function getPostingFeedReference(posting, feedName) {
     return posting.feedReferences ? posting.feedReferences.find(r => r.feedName === feedName) : null;
 }
 
-export function getPostingStoryId(posting, feedName) {
-    const ref = getPostingFeedReference(posting, feedName);
-    return ref ? ref.storyId : null;
-}
-
-export function getPostingPublishedAt(posting, feedName) {
-    const ref = getPostingFeedReference(posting, feedName);
-    return ref ? ref.publishedAt : null;
-}
-
-export function isPostingPinned(posting, feedName) {
-    const ref = getPostingFeedReference(posting, feedName);
-    return ref ? ref.pinned : null;
+export function hasPostingFeedReference(posting, feedName) {
+    return getPostingFeedReference(posting, feedName) != null;
 }
 
 export function getPostingMoment(posting, feedName) {
     const ref = getPostingFeedReference(posting, feedName);
     return ref ? ref.moment : null;
+}
+
+export function getPostingStory(posting, feedName) {
+    const ref = getPostingFeedReference(posting, feedName);
+    if (ref == null) {
+        return null;
+    }
+    const story = {...ref};
+    story.id = ref.storyId;
+    story.posting = posting;
+    delete story.storyId;
+    return story;
 }

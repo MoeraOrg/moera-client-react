@@ -259,3 +259,10 @@ export function* deletePostingDraftRevision(id) {
     const location = yield call(authorized, `/postings/${id}/revisions/draft`);
     return yield call(callNode, {location, method: "DELETE", schema: NodeApi.Result});
 }
+
+export function* putStory(id, storyAttributes) {
+    const location = yield call(authorized, `/stories/${id}`);
+    return yield call(callNode, {
+        location, method: "PUT", body: storyAttributes, schema: NodeApi.StoryInfo, withBodies: true
+    });
+}

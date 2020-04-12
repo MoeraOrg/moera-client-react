@@ -77,13 +77,3 @@ export function* postingReactionDeleteSaga(action) {
         yield put(errorThrown(e));
     }
 }
-
-export function* postingPinningUpdateSaga(action) {
-    const {id, pinned} = action.payload;
-    try {
-        const data = yield call(Node.putPosting, id, {pinned});
-        yield put(postingSet(data));
-    } catch (e) {
-        yield put(errorThrown(e));
-    }
-}

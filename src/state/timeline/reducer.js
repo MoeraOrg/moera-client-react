@@ -10,13 +10,11 @@ import {
     TIMELINE_PAST_SLICE_SET,
     TIMELINE_SCROLLED,
     TIMELINE_SCROLLED_TO_ANCHOR,
-    TIMELINE_STORY_ADDED,
-    TIMELINE_STORY_DELETED,
-    TIMELINE_STORY_UPDATED,
     TIMELINE_UNSET
 } from "state/timeline/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_TIMELINE } from "state/navigation/pages";
+import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
 
 const emptyInfo = {
     operations: {
@@ -193,12 +191,15 @@ export default (state = initialState, action) => {
                 anchor: state.at
             };
 
-        case TIMELINE_STORY_ADDED: {
-            const {id, publishedAt, pinned, moment, postingId} = action.payload;
-            if (moment != null && moment <= state.before && moment > state.after) {
+        case STORY_ADDED: {
+            const {feedName, moment, posting: {id: postingId}} = action.payload.story;
+            if (feedName === "timeline" && moment != null && moment <= state.before && moment > state.after) {
                 if (!state.stories.some(p => p.moment === moment)) {
                     const stories = state.stories.filter(p => p.postingId !== postingId);
-                    stories.push({id, publishedAt, pinned, moment, postingId});
+                    const story = {...action.payload.story};
+                    delete story.posting;
+                    story.postingId = postingId;
+                    stories.push(story);
                     stories.sort((a, b) => b.moment - a.moment);
                     return {
                         ...state,
@@ -209,9 +210,9 @@ export default (state = initialState, action) => {
             return state;
         }
 
-        case TIMELINE_STORY_DELETED: {
-            const {moment, id} = action.payload;
-            if (moment <= state.before && moment > state.after) {
+        case STORY_DELETED: {
+            const {feedName, moment, id} = action.payload.story;
+            if (feedName === "timeline" && moment <= state.before && moment > state.after) {
                 const index = state.stories.findIndex(p => p.id === id);
                 if (index >= 0) {
                     const stories = state.stories.slice();
@@ -225,8 +226,11 @@ export default (state = initialState, action) => {
             return state;
         }
 
-        case TIMELINE_STORY_UPDATED: {
-            const {id, publishedAt, pinned, moment, postingId} = action.payload;
+        case STORY_UPDATED: {
+            const {id, feedName, moment, posting: {id: postingId}} = action.payload.story;
+            if (feedName !== "timeline") {
+                return state;
+            }
             const index = state.stories.findIndex(p => p.id === id);
             if (index < 0) {
                 return state;
@@ -234,7 +238,10 @@ export default (state = initialState, action) => {
             const stories = state.stories.slice();
             stories.splice(index, 1);
             if (moment != null && moment <= state.before && moment > state.after) {
-                stories.push({id, publishedAt, pinned, moment, postingId});
+                const story = {...action.payload.story};
+                delete story.posting;
+                story.postingId = postingId;
+                stories.push(story);
                 stories.sort((a, b) => b.moment - a.moment);
             }
             return {

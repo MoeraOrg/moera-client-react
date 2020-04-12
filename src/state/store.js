@@ -33,7 +33,6 @@ import {
 import {
     POSTING_DELETE,
     POSTING_LOAD,
-    POSTING_PINNING_UPDATE,
     POSTING_REACT,
     POSTING_REACTION_DELETE,
     POSTING_REACTION_LOAD,
@@ -54,6 +53,7 @@ import {
     REACTIONS_DIALOG_TOTALS_LOAD
 } from "state/reactionsdialog/actions";
 import { POSTING_REPLY } from "state/postingreply/actions";
+import { STORY_PINNING_UPDATE } from "state/stories/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import error from "state/error/reducer";
@@ -111,7 +111,6 @@ import {
 import {
     postingDeleteSaga,
     postingLoadSaga,
-    postingPinningUpdateSaga,
     postingReactionDeleteSaga,
     postingReactionLoadSaga,
     postingReactSaga,
@@ -130,6 +129,8 @@ import {
     reactionsDialogTotalsLoadSaga,
     reactionVerifySaga
 } from "state/reactionsdialog/sagas";
+import { postingReplySaga } from "state/postingreply/sagas";
+import { storyPinningUpdateSaga } from "state/stories/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -145,7 +146,6 @@ import postingsTriggers from "state/postings/triggers";
 import settingsTriggers from "state/settings/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
-import { postingReplySaga } from "state/postingreply/sagas";
 
 const triggers = collectTriggers(
     homeTriggers,
@@ -216,7 +216,6 @@ function* combinedSaga() {
     yield takeLatest(REACTIONS_DIALOG_PAST_REACTIONS_LOAD, reactionsDialogPastReactionsLoadSaga);
     yield takeLatest(REACTIONS_DIALOG_TOTALS_LOAD, reactionsDialogTotalsLoadSaga);
     yield takeEvery(REACTION_VERIFY, reactionVerifySaga);
-    yield takeEvery(POSTING_PINNING_UPDATE, postingPinningUpdateSaga);
     yield takeLatest(COMPOSE_DRAFT_LOAD, introduce(composeDraftLoadSaga));
     yield takeLatest(COMPOSE_DRAFT_SAVE, composeDraftSaveSaga);
     yield takeLatest(COMPOSE_DRAFT_LIST_LOAD, introduce(composeDraftListLoadSaga));
@@ -224,6 +223,7 @@ function* combinedSaga() {
     yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_DELETE, composeDraftListItemDeleteSaga);
     yield takeLatest(COMPOSE_DRAFT_REVISION_DELETE, composeDraftRevisionDeleteSaga);
     yield takeLatest(POSTING_REPLY, postingReplySaga);
+    yield takeEvery(STORY_PINNING_UPDATE, storyPinningUpdateSaga);
 
     yield invokeTriggers(triggers);
 }
