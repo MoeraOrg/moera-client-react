@@ -35,7 +35,7 @@ import {
     EVENT_NODE_POSTING_UPDATED
 } from "api/events/actions";
 import { timelineStoryAdded, timelineStoryUpdated } from "state/timeline/actions";
-import { getPostingMoment, getPostingPublishedAt, getPostingStoryId } from "state/postings/selectors";
+import { getPostingFeedReference } from "state/postings/selectors";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
@@ -48,22 +48,18 @@ export default [
     trigger(
         COMPOSE_POST_SUCCEEDED,
         inv(isComposePostingEditing),
-        signal => timelineStoryAdded(
-            getPostingStoryId(signal.payload.posting, "timeline"),
-            signal.payload.posting.id,
-            getPostingPublishedAt(signal.payload.posting, "timeline"),
-            getPostingMoment(signal.payload.posting, "timeline")
-        )
+        signal => {
+            const ref = getPostingFeedReference(signal.payload.posting, "timeline");
+            return timelineStoryAdded(ref.storyId, signal.payload.posting.id, ref.publishedAt, ref.pinned, ref.moment)
+        }
     ),
     trigger(
         COMPOSE_POST_SUCCEEDED,
         isComposePostingEditing,
-        signal => timelineStoryUpdated(
-            getPostingStoryId(signal.payload.posting, "timeline"),
-            signal.payload.posting.id,
-            getPostingPublishedAt(signal.payload.posting, "timeline"),
-            getPostingMoment(signal.payload.posting, "timeline")
-        )
+        signal => {
+            const ref = getPostingFeedReference(signal.payload.posting, "timeline");
+            return timelineStoryUpdated(ref.storyId, signal.payload.posting.id, ref.publishedAt, ref.pinned, ref.moment)
+        }
     ),
     trigger(
         EVENT_NODE_POSTING_UPDATED,

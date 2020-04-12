@@ -74,6 +74,9 @@ const storyEvent = (properties = {}) => baseEvent({
     "publishedAt": {
         type: "integer"
     },
+    "pinned": {
+        type: "boolean"
+    },
     "moment": {
         type: "integer"
     },

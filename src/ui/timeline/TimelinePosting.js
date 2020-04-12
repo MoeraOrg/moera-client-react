@@ -49,7 +49,7 @@ class TimelinePosting extends React.PureComponent {
                 :
                     <>
                         <PostingMenu posting={posting} isPermitted={isPermitted}/>
-                        <PostingPin posting={posting}/>
+                        <PostingPin pinned={story.pinned}/>
                         <div className="owner-line">
                             <PostingOwner posting={posting}/>
                             <PostingDate id={posting.id} publishedAt={story.publishedAt}/>

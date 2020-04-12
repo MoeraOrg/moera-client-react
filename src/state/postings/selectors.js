@@ -30,6 +30,11 @@ export function getPostingPublishedAt(posting, feedName) {
     return ref ? ref.publishedAt : null;
 }
 
+export function isPostingPinned(posting, feedName) {
+    const ref = getPostingFeedReference(posting, feedName);
+    return ref ? ref.pinned : null;
+}
+
 export function getPostingMoment(posting, feedName) {
     const ref = getPostingFeedReference(posting, feedName);
     return ref ? ref.moment : null;

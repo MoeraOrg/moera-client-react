@@ -39,6 +39,7 @@ function outsideIn(story) {
     posting.feedReferences = [{
         feedName: story.feedName,
         publishedAt: story.publishedAt,
+        pinned: story.pinned,
         moment: story.moment,
         storyId: story.id
     }];
@@ -59,10 +60,10 @@ export default (state = initialState, action) => {
 
         case TIMELINE_STORY_ADDED:
         case TIMELINE_STORY_UPDATED: {
-            const {id, postingId, publishedAt, moment} = action.payload;
+            const {id, postingId, publishedAt, pinned, moment} = action.payload;
             if (state[postingId]) {
                 const refs = (state[postingId].feedReferences ?? []).filter(r => r.storyId !== id);
-                refs.push({feedName: "timeline", publishedAt, moment, storyId: id});
+                refs.push({feedName: "timeline", publishedAt, pinned, moment, storyId: id});
                 return immutable.set(state, [postingId, "posting", "feedReferences"], refs);
             }
             return state;

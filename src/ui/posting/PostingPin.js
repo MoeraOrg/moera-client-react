@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./PostingPin.css";
 
-const PostingPin = ({posting}) => (
-    posting.pinned ?
+const PostingPin = ({pinned}) => (
+    pinned ?
         <div className="pin-line">
             <span className="badge badge-secondary">
                 <FontAwesomeIcon icon="thumbtack" size="sm"/>

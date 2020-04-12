@@ -22,7 +22,7 @@ export default [
         (state, signal) => signal.payload.feedName === "timeline"
             && isTimelineContainsMoment(state, signal.payload.moment),
         signal => timelineStoryAdded(signal.payload.id, signal.payload.postingId, signal.payload.publishedAt,
-            signal.payload.moment)
+            signal.payload.pinned, signal.payload.moment)
     ),
     trigger(
         EVENT_NODE_STORY_DELETED,
@@ -33,6 +33,6 @@ export default [
         EVENT_NODE_STORY_UPDATED,
         (state, signal) => signal.payload.feedName === "timeline",
         signal => timelineStoryUpdated(signal.payload.id, signal.payload.postingId, signal.payload.publishedAt,
-            signal.payload.moment)
+            signal.payload.pinned, signal.payload.moment)
     )
 ];

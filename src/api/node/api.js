@@ -229,9 +229,6 @@ const PostingInfoType = {
         "deletedAt": {
             type: "integer"
         },
-        "pinned": {
-            type: "boolean"
-        },
         "draft": {
             type: "boolean"
         },
@@ -254,6 +251,9 @@ const PostingInfoType = {
                     },
                     "publishedAt": {
                         type: "integer"
+                    },
+                    "pinned": {
+                        type: "boolean"
                     },
                     "moment": {
                         type: "integer"
@@ -376,6 +376,9 @@ const StoryInfoType = {
         },
         "publishedAt": {
             type: "integer"
+        },
+        "pinned": {
+            type: "boolean"
         },
         "moment": {
             type: "integer"
