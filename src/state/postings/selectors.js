@@ -16,13 +16,18 @@ export function getPostingVerificationStatus(state, id) {
     return selectn(["postings", id, "verificationStatus"], state);
 }
 
-function getPostingFeedReference(posting, feedName) {
+export function getPostingFeedReference(posting, feedName) {
     return posting.feedReferences ? posting.feedReferences.find(r => r.feedName === feedName) : null;
 }
 
 export function getPostingStoryId(posting, feedName) {
     const ref = getPostingFeedReference(posting, feedName);
     return ref ? ref.storyId : null;
+}
+
+export function getPostingPublishedAt(posting, feedName) {
+    const ref = getPostingFeedReference(posting, feedName);
+    return ref ? ref.publishedAt : null;
 }
 
 export function getPostingMoment(posting, feedName) {

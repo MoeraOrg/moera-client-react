@@ -39,11 +39,11 @@ class TimelinePosting extends React.PureComponent {
     };
 
     render() {
-        const {posting, moment, deleting, isPermitted, rootLocation, connectedToHome} = this.props;
+        const {posting, story, deleting, isPermitted, rootLocation, connectedToHome} = this.props;
 
         const href = `${rootLocation}/post/${posting.id}`;
         return (
-            <div className="posting" data-moment={moment}>
+            <div className="posting" data-moment={story.moment}>
                 {deleting ?
                     <PostingDeleting/>
                 :
@@ -52,7 +52,7 @@ class TimelinePosting extends React.PureComponent {
                         <PostingPin posting={posting}/>
                         <div className="owner-line">
                             <PostingOwner posting={posting}/>
-                            <PostingDate posting={posting}/>
+                            <PostingDate id={posting.id} publishedAt={story.publishedAt}/>
                             <PostingUpdated posting={posting}/>
                         </div>
                         <PostingSubject posting={posting} preview={true}/>

@@ -252,6 +252,9 @@ const PostingInfoType = {
                     "feedName": {
                         type: "string"
                     },
+                    "publishedAt": {
+                        type: "integer"
+                    },
                     "moment": {
                         type: "integer"
                     },

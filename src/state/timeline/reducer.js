@@ -139,6 +139,7 @@ export default (state = initialState, action) => {
                     .filter(s => s.moment <= state.after)
                     .forEach(s => stories.push({
                         id: s.id,
+                        publishedAt: s.publishedAt,
                         moment: s.moment,
                         postingId: s.posting.id
                     }));
@@ -163,6 +164,7 @@ export default (state = initialState, action) => {
                     .filter(s => s.moment > state.before)
                     .forEach(s => stories.push({
                         id: s.id,
+                        publishedAt: s.publishedAt,
                         moment: s.moment,
                         postingId: s.posting.id
                     }));
@@ -190,11 +192,11 @@ export default (state = initialState, action) => {
             };
 
         case TIMELINE_STORY_ADDED: {
-            const {id, moment, postingId} = action.payload;
+            const {id, publishedAt, moment, postingId} = action.payload;
             if (moment != null && moment <= state.before && moment > state.after) {
                 if (!state.stories.some(p => p.moment === moment)) {
                     const stories = state.stories.filter(p => p.postingId !== postingId);
-                    stories.push({id, moment, postingId});
+                    stories.push({id, publishedAt, moment, postingId});
                     stories.sort((a, b) => b.moment - a.moment);
                     return {
                         ...state,
@@ -222,7 +224,7 @@ export default (state = initialState, action) => {
         }
 
         case TIMELINE_STORY_UPDATED: {
-            const {id, moment, postingId} = action.payload;
+            const {id, publishedAt, moment, postingId} = action.payload;
             const index = state.stories.findIndex(p => p.id === id);
             if (index < 0) {
                 return state;
@@ -230,7 +232,7 @@ export default (state = initialState, action) => {
             const stories = state.stories.slice();
             stories.splice(index, 1);
             if (moment != null && moment <= state.before && moment > state.after) {
-                stories.push({id, moment, postingId});
+                stories.push({id, publishedAt, moment, postingId});
                 stories.sort((a, b) => b.moment - a.moment);
             }
             return {

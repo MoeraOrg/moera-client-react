@@ -71,6 +71,9 @@ const storyEvent = (properties = {}) => baseEvent({
     "feedName": {
         type: "string"
     },
+    "publishedAt": {
+        type: "integer"
+    },
     "moment": {
         type: "integer"
     },

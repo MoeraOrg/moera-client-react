@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button } from "ui/control";
-import { getPostingMoment } from "state/postings/selectors";
+import { getPostingFeedReference } from "state/postings/selectors";
 import { goToTimeline } from "state/navigation/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
@@ -18,12 +18,12 @@ import PostingButtons from "ui/posting/PostingButtons";
 import PostingHtml from "ui/posting/PostingHtml";
 
 const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToTimeline}) => {
-    const moment = getPostingMoment(posting, "timeline");
+    const story = getPostingFeedReference(posting, "timeline");
     return (
         <>
-            {moment != null &&
+            {story != null &&
                 <Button variant="outline-secondary" size="sm"
-                        onClick={() => goToTimeline(moment)}>&larr; Timeline</Button>
+                        onClick={() => goToTimeline(story.moment)}>&larr; Timeline</Button>
             }
 
             <div className="posting">
@@ -35,7 +35,7 @@ const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToT
                         <PostingPin posting={posting}/>
                         <div className="owner-line">
                             <PostingOwner posting={posting}/>
-                            <PostingDate posting={posting}/>
+                            <PostingDate id={posting.id} publishedAt={story.publishedAt}/>
                             <PostingUpdated posting={posting}/>
                         </div>
                         <PostingSubject posting={posting} preview={false}/>

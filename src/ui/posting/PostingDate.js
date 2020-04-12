@@ -6,11 +6,11 @@ import { goToPosting } from "state/navigation/actions";
 import { getSetting } from "state/settings/selectors";
 import "./PostingDate.css"
 
-const PostingDate = ({posting, rootLocation, timeRelative, goToPosting}) => {
-    const date = moment.unix(posting.publishedAt);
+const PostingDate = ({id, publishedAt, rootLocation, timeRelative, goToPosting}) => {
+    const date = moment.unix(publishedAt);
     return (
-        <a className="date" href={`${rootLocation}/post/${posting.id}`} onClick={e => {
-            goToPosting(posting.id);
+        <a className="date" href={`${rootLocation}/post/${id}`} onClick={e => {
+            goToPosting(id);
             e.preventDefault();
         }}>{
             timeRelative ?
