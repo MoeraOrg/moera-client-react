@@ -192,13 +192,13 @@ export default (state = initialState, action) => {
             };
 
         case STORY_ADDED: {
-            const {feedName, moment, posting: {id: postingId}} = action.payload.story;
+            const {feedName, moment, posting} = action.payload.story;
             if (feedName === "timeline" && moment != null && moment <= state.before && moment > state.after) {
                 if (!state.stories.some(p => p.moment === moment)) {
-                    const stories = state.stories.filter(p => p.postingId !== postingId);
+                    const stories = state.stories.filter(p => p.postingId !== posting.id);
                     const story = {...action.payload.story};
                     delete story.posting;
-                    story.postingId = postingId;
+                    story.postingId = posting.id;
                     stories.push(story);
                     stories.sort((a, b) => b.moment - a.moment);
                     return {
@@ -227,27 +227,25 @@ export default (state = initialState, action) => {
         }
 
         case STORY_UPDATED: {
-            const {id, feedName, moment, posting: {id: postingId}} = action.payload.story;
-            if (feedName !== "timeline") {
-                return state;
-            }
+            const {id, feedName, moment, posting} = action.payload.story;
+            console.log(action.payload.story);
+            let stories = null;
             const index = state.stories.findIndex(p => p.id === id);
-            if (index < 0) {
-                return state;
+            if (index >= 0) {
+                stories = state.stories.slice();
+                stories.splice(index, 1);
             }
-            const stories = state.stories.slice();
-            stories.splice(index, 1);
-            if (moment != null && moment <= state.before && moment > state.after) {
+            if (feedName === "timeline" && moment != null && moment <= state.before && moment > state.after) {
                 const story = {...action.payload.story};
                 delete story.posting;
-                story.postingId = postingId;
+                story.postingId = posting.id;
+                if (stories == null) {
+                    stories = state.stories.slice();
+                }
                 stories.push(story);
                 stories.sort((a, b) => b.moment - a.moment);
             }
-            return {
-                ...state,
-                stories
-            }
+            return stories != null ? {...state, stories} : state;
         }
 
         case TIMELINE_SCROLLED:
