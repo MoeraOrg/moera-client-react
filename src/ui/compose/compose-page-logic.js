@@ -52,11 +52,14 @@ const composePageLogic = {
                 text: values.body.trim()
             }),
             bodySrcFormat: values.bodyFormat.trim(),
-            publishAt: values.publishAt.getTime() !== values.publishAtDefault.getTime()
-                ? moment(values.publishAt).unix() : null,
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
-            reactionTotalsVisible: values.reactionTotalsVisible
+            reactionTotalsVisible: values.reactionTotalsVisible,
+            publications: props.posting != null ? null : [{
+                feedName: "timeline",
+                publishAt: values.publishAt.getTime() !== values.publishAtDefault.getTime()
+                    ? moment(values.publishAt).unix() : null,
+            }]
         };
     },
 
