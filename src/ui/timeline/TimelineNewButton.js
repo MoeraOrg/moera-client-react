@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button } from "ui/control";
-import { isTimelineAddable } from "state/timeline/selectors";
+import { isFeedAddable } from "state/feeds/selectors";
 import { goToCompose } from "state/navigation/actions";
 import "./TimelineNewButton.css"
 
@@ -15,7 +15,7 @@ const TimelineNewButton = ({enabled, goToCompose}) => (
 
 export default connect(
     state => ({
-        enabled: isTimelineAddable(state)
+        enabled: isFeedAddable(state, "timeline")
     }),
     { goToCompose }
 )(TimelineNewButton);

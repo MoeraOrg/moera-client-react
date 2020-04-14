@@ -17,7 +17,7 @@ import {
 import { CARTES_LOAD, CARTES_SET } from "state/cartes/actions";
 import { NODE_NAME_LOAD, NODE_NAME_UPDATE, REGISTER_NAME } from "state/nodename/actions";
 import { PROFILE_LOAD, PROFILE_UPDATE } from "state/profile/actions";
-import { TIMELINE_FUTURE_SLICE_LOAD, TIMELINE_GENERAL_LOAD, TIMELINE_PAST_SLICE_LOAD } from "state/timeline/actions";
+import { FEED_FUTURE_SLICE_LOAD, FEED_GENERAL_LOAD, FEED_PAST_SLICE_LOAD } from "state/feeds/actions";
 import { DETAILED_POSTING_LOAD } from "state/detailedposting/actions";
 import {
     COMPOSE_DRAFT_LIST_ITEM_DELETE,
@@ -69,7 +69,7 @@ import profile from "state/profile/reducer";
 import detailedPosting from "state/detailedposting/reducer";
 import compose from "state/compose/reducer";
 import postings from "state/postings/reducer";
-import timeline from "state/timeline/reducer";
+import feeds from "state/feeds/reducer";
 import settings from "state/settings/reducer";
 import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
@@ -95,7 +95,7 @@ import { homeRestoreSaga } from "state/home/sagas";
 import { cartesLoadSaga } from "state/cartes/sagas";
 import { nodeNameLoadSaga, nodeNameUpdateSaga, registerNameSaga } from "state/nodename/sagas";
 import { profileLoadSaga, profileUpdateSaga } from "state/profile/sagas";
-import { timelineFutureSliceLoadSaga, timelineGeneralLoadSaga, timelinePastSliceLoadSaga } from "state/timeline/sagas";
+import { feedFutureSliceLoadSaga, feedGeneralLoadSaga, feedPastSliceLoadSaga } from "state/feeds/sagas";
 import { detailedPostingLoadSaga } from "state/detailedposting/sagas";
 import {
     composeDraftListItemDeleteSaga,
@@ -139,7 +139,7 @@ import navigationTriggers from "state/navigation/triggers";
 import ownerTriggers from "state/owner/triggers";
 import nodeNameTriggers from "state/nodename/triggers";
 import profileTriggers from "state/profile/triggers";
-import timelineTriggers from "state/timeline/triggers";
+import feedTriggers from "state/feeds/triggers";
 import detailedPostingTriggers from "state/detailedposting/triggers";
 import composeTriggers from "state/compose/triggers";
 import postingsTriggers from "state/postings/triggers";
@@ -154,7 +154,7 @@ const triggers = collectTriggers(
     ownerTriggers,
     nodeNameTriggers,
     profileTriggers,
-    timelineTriggers,
+    feedTriggers,
     detailedPostingTriggers,
     composeTriggers,
     postingsTriggers,
@@ -192,9 +192,9 @@ function* combinedSaga() {
     yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
     yield takeLatest(REGISTER_NAME, registerNameSaga);
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
-    yield takeLatest(TIMELINE_GENERAL_LOAD, timelineGeneralLoadSaga);
-    yield takeLatest(TIMELINE_PAST_SLICE_LOAD, introduce(timelinePastSliceLoadSaga));
-    yield takeLatest(TIMELINE_FUTURE_SLICE_LOAD, introduce(timelineFutureSliceLoadSaga));
+    yield takeLatest(FEED_GENERAL_LOAD, feedGeneralLoadSaga);
+    yield takeLatest(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
+    yield takeLatest(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
     yield takeLatest(DETAILED_POSTING_LOAD, introduce(detailedPostingLoadSaga));
     yield takeLatest(COMPOSE_FEATURES_LOAD, composeFeaturesLoadSaga);
     yield takeLatest(COMPOSE_POSTING_LOAD, introduce(composePostingLoadSaga));
@@ -244,7 +244,7 @@ export default createStore(
         detailedPosting,
         compose,
         postings,
-        timeline,
+        feeds,
         settings,
         cartes,
         reactionsDialog,

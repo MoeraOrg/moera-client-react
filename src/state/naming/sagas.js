@@ -7,6 +7,7 @@ import { namingNameLoad, namingNameLoaded, namingNameLoadFailed, namingNamePurge
 import { getDetailedPosting } from "state/detailedposting/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { getFeedState } from "state/feeds/selectors";
 import { now } from "util/misc";
 
 export function* namingNameLoadSaga(action) {
@@ -33,7 +34,7 @@ export function* namingNamesMaintenanceSaga() {
     const names = yield select(state => state.naming.names);
     const usedNameDeadline = now() - USED_NAME_RELOAD_PERIOD;
     const unusedNameDeadline = now() - UNUSED_NAME_TTL;
-    for (let [name, details] of names.entries()) {
+    for (let [name, details] of Object.entries(names)) {
         if (used.has(name)) {
             if (details.accessed < usedNameDeadline) {
                 yield put(namingNameLoad(name));
@@ -49,7 +50,7 @@ export function* namingNamesMaintenanceSaga() {
 function* getUsedNames() {
     let used = new Set();
     const {timeline, postings} = yield select(state => ({
-        timeline: state.timeline.stories,
+        timeline: getFeedState(state, "timeline").stories,
         postings: state.postings
     }));
     timeline.forEach(t => {

@@ -4,7 +4,7 @@ import { DateTimePicker } from 'react-widgets';
 import moment from 'moment';
 
 import { Button } from "ui/control";
-import { getTimelineAtTimestamp } from "state/timeline/selectors";
+import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { goToTimeline } from "state/navigation/actions";
 
 class TimelineCalendarButton extends React.PureComponent {
@@ -50,7 +50,7 @@ class TimelineCalendarButton extends React.PureComponent {
 
 export default connect(
     state => ({
-        timestamp: getTimelineAtTimestamp(state)
+        timestamp: getFeedAtTimestamp(state, "timeline")
     }),
     { goToTimeline }
 )(TimelineCalendarButton);

@@ -1,7 +1,7 @@
 import immutable from 'object-path-immutable';
 import selectn from 'selectn';
 
-import { TIMELINE_FUTURE_SLICE_SET, TIMELINE_PAST_SLICE_SET } from "state/timeline/actions";
+import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET } from "state/feeds/actions";
 import {
     POSTING_DELETE,
     POSTING_DELETED,
@@ -45,8 +45,8 @@ function outsideIn(story) {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case TIMELINE_PAST_SLICE_SET:
-        case TIMELINE_FUTURE_SLICE_SET: {
+        case FEED_PAST_SLICE_SET:
+        case FEED_FUTURE_SLICE_SET: {
             const istate = immutable(state);
             action.payload.stories.map(s => outsideIn(s)).forEach(p => istate
                 .set([p.id, "posting"], safeguard(p))

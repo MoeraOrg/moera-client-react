@@ -170,13 +170,15 @@ export function* updateNodeName(name, mnemonic) {
     return yield call(callNode, {location, method: "PUT", body, schema: NodeApi.Result});
 }
 
-export function* getTimelineGeneral() {
-    return yield call(callNode, {location: "/feeds/timeline", schema: NodeApi.FeedInfo});
+export function* getFeedGeneral(feedName) {
+    feedName = encodeURIComponent(feedName);
+    return yield call(callNode, {location: `/feeds/${feedName}`, schema: NodeApi.FeedInfo});
 }
 
-export function* getTimelineSlice(after, before, limit) {
+export function* getFeedSlice(feedName, after, before, limit) {
+    feedName = encodeURIComponent(feedName);
     const location = yield call(introduced,
-        urlWithParameters("/feeds/timeline/stories", {after, before, limit}));
+        urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit}));
     return yield call(callNode, {location, schema: NodeApi.FeedSliceInfo, withBodies: true});
 }
 

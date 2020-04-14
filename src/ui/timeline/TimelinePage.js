@@ -5,12 +5,8 @@ import { Page } from "ui/page/Page";
 import TimelinePageHeader from "ui/timeline/TimelinePageHeader";
 import TimelinePosting from "ui/timeline/TimelinePosting";
 import TimelineSentinel from "ui/timeline/TimelineSentinel";
-import {
-    timelineFutureSliceLoad,
-    timelinePastSliceLoad,
-    timelineScrolled,
-    timelineScrolledToAnchor
-} from "state/timeline/actions";
+import { getFeedState } from "state/feeds/selectors";
+import { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor } from "state/feeds/actions";
 import { isAtTimelinePage } from "state/navigation/selectors";
 
 import "./TimelinePage.css";
@@ -72,7 +68,7 @@ class TimelinePage extends React.PureComponent {
 
             if (TimelinePage.scrollTo(this.newAnchor)) {
                 this.newAnchor = null;
-                this.props.timelineScrolledToAnchor();
+                this.props.feedScrolledToAnchor("timeline");
             }
         }
     }
@@ -84,7 +80,7 @@ class TimelinePage extends React.PureComponent {
     onScroll = () => {
         const at = TimelinePage.getTopmostMoment();
         if (at !== this.prevAt) {
-            this.props.timelineScrolled(at);
+            this.props.feedScrolled("timeline", at);
         }
         this.prevAt = at;
 
@@ -145,7 +141,7 @@ class TimelinePage extends React.PureComponent {
         if (this.props.loadingFuture || this.props.before >= Number.MAX_SAFE_INTEGER) {
             return;
         }
-        this.props.timelineFutureSliceLoad();
+        this.props.feedFutureSliceLoad("timeline");
     }
 
     onSentinelPast = entry => {
@@ -159,7 +155,7 @@ class TimelinePage extends React.PureComponent {
         if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        this.props.timelinePastSliceLoad();
+        this.props.feedPastSliceLoad("timeline");
     }
 
     render() {
@@ -200,13 +196,13 @@ class TimelinePage extends React.PureComponent {
 export default connect(
     state => ({
         visible: isAtTimelinePage(state),
-        loadingFuture: state.timeline.loadingFuture,
-        loadingPast: state.timeline.loadingPast,
-        before: state.timeline.before,
-        after: state.timeline.after,
-        timeline: state.timeline.stories,
+        loadingFuture: getFeedState(state, "timeline").loadingFuture,
+        loadingPast: getFeedState(state, "timeline").loadingPast,
+        before: getFeedState(state, "timeline").before,
+        after: getFeedState(state, "timeline").after,
+        timeline: getFeedState(state, "timeline").stories,
         postings: state.postings,
-        anchor: state.timeline.anchor
+        anchor: getFeedState(state, "timeline").anchor
     }),
-    { timelineFutureSliceLoad, timelinePastSliceLoad, timelineScrolled, timelineScrolledToAnchor }
+    { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor }
 )(TimelinePage);

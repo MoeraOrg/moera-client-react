@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { Button } from "ui/control";
 import { goToTimeline } from "state/navigation/actions";
+import { getFeedState } from "state/feeds/selectors";
 
 class TimelineRewindButtons extends React.PureComponent {
 
@@ -54,9 +55,9 @@ class TimelineRewindButtons extends React.PureComponent {
 
 export default connect(
     state => ({
-        before: state.timeline.before,
-        after: state.timeline.after,
-        at: state.timeline.at // to force re-rendering only
+        before: getFeedState(state, "timeline").before,
+        after: getFeedState(state, "timeline").after,
+        at: getFeedState(state, "timeline").at // to force re-rendering only
     }),
     { goToTimeline }
 )(TimelineRewindButtons);
