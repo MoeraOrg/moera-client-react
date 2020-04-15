@@ -10,6 +10,7 @@ import {
     FEED_PAST_SLICE_LOAD,
     FEED_PAST_SLICE_LOAD_FAILED,
     FEED_PAST_SLICE_SET,
+    FEED_SCROLL_TO_ANCHOR,
     FEED_SCROLLED,
     FEED_SCROLLED_TO_ANCHOR,
     FEEDS_UNSET
@@ -264,6 +265,15 @@ export default (state = initialState, action) => {
             } else {
                 return istate.value();
             }
+        }
+
+        case FEED_SCROLL_TO_ANCHOR: {
+            const {feedName, at} = action.payload;
+            const {istate, feed} = getFeed(state, feedName);
+            if (feed.scrollingActive) {
+                updateScrollingOnActive(istate, feedName, feed, at);
+            }
+            return istate.value();
         }
 
         case FEED_SCROLLED_TO_ANCHOR: {

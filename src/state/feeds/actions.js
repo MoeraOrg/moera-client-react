@@ -63,6 +63,12 @@ export const feedScrolled = (feedName, at) => ({
     payload: {feedName, at}
 });
 
+export const FEED_SCROLL_TO_ANCHOR = "FEED_SCROLL_TO_ANCHOR";
+export const feedScrollToAnchor = (feedName, at) => ({
+    type: FEED_SCROLL_TO_ANCHOR,
+    payload: {feedName, at}
+});
+
 export const FEED_SCROLLED_TO_ANCHOR = "FEED_SCROLLED_TO_ANCHOR";
 export const feedScrolledToAnchor = (feedName) => ({
     type: FEED_SCROLLED_TO_ANCHOR,
