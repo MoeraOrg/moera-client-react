@@ -11,8 +11,7 @@ import {
     NEW_LOCATION
 } from "state/navigation/actions";
 import { settingsGoToTab } from "state/settings/actions";
-import LocationInfo from "state/navigation/LocationInfo";
-import { build as locationBuild, transform as locationTransform } from "state/location";
+import { locationBuild, LocationInfo, locationTransform } from "location";
 
 export function* goToPageWithDefaultSubpageSaga(action) {
     switch (action.payload.page) {

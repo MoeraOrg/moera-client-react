@@ -1,4 +1,4 @@
-export default class LocationInfo {
+export class LocationInfo {
 
     constructor() {
         this.directories = [];
