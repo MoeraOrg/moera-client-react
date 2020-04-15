@@ -85,7 +85,7 @@ class FeedPage extends React.PureComponent {
 
     static getHeaderHeight() {
         const mainMenu = document.getElementById("main-menu");
-        const header = document.getElementById("timeline-header");
+        const header = document.getElementById("feed-header");
         return mainMenu != null && header != null
             ? mainMenu.getBoundingClientRect().height + header.getBoundingClientRect().height : 0;
     }
@@ -184,7 +184,7 @@ class FeedPage extends React.PureComponent {
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
                               onClick={() => this.loadPast()}/>
                 {after <= Number.MIN_SAFE_INTEGER
-                    && <div className="timeline-end">&mdash; You've reached the bottom &mdash;</div>}
+                    && <div className="feed-end">&mdash; You've reached the bottom &mdash;</div>}
             </>
         );
     }

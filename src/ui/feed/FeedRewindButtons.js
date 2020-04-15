@@ -37,12 +37,12 @@ class FeedRewindButtons extends React.PureComponent {
     render() {
         return (
             <>
-                <div className="timeline-btn">
+                <div className="feed-btn">
                     <Button variant="outline-info" size="sm" invisible={this.isAtTop()} onClick={this.toTop}>
                         &#x23f6;&nbsp;Top
                     </Button>
                 </div>
-                <div className="timeline-btn">
+                <div className="feed-btn">
                     <Button variant="outline-info" size="sm" invisible={this.isAtBottom()} onClick={this.toBottom}>
                         &#x23f7;&nbsp;Bottom
                     </Button>

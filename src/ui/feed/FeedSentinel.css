@@ -1,4 +1,4 @@
-.timeline-sentinel {
+.feed-sentinel {
     text-align: center;
     font-size: large;
     font-weight: bold;
@@ -7,6 +7,6 @@
     cursor: pointer;
 }
 
-.timeline-sentinel:hover {
+.feed-sentinel:hover {
     background-color: var(--highlight);
 }

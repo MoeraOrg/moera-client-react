@@ -1,4 +1,4 @@
-#timeline-header {
+#feed-header {
     position: sticky;
     top: 2.5rem;
     display: flex;
@@ -8,16 +8,16 @@
     z-index: 1010;
 }
 
-#timeline-header H2 {
+#feed-header H2 {
     margin-right: 3rem;
 }
 
-.timeline-btn {
+.feed-btn {
     margin-left: 0.5rem;
     display: flex;
     align-items: center;
 }
 
-.timeline-btn > BUTTON {
+.feed-btn > BUTTON {
     width: 7em;
 }

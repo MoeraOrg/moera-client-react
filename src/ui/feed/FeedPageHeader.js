@@ -7,7 +7,7 @@ import FeedRewindButtons from "ui/feed/FeedRewindButtons";
 import "./FeedPageHeader.css";
 
 const FeedPageHeader = ({feedName, title, empty}) => (
-    <div id="timeline-header">
+    <div id="feed-header">
         <h2>{title}</h2>
         <FeedNewButton/>
         {!empty && <FeedCalendarButton feedName={feedName}/>}

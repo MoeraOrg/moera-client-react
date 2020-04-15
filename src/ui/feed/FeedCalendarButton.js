@@ -34,7 +34,7 @@ class FeedCalendarButton extends React.PureComponent {
         const {active} = this.state;
 
         return (
-            <div className="timeline-btn">
+            <div className="feed-btn">
                 {!active &&
                     <Button variant="outline-info" size="sm" onClick={this.activate}>Calendar</Button>
                 }

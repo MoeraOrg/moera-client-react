@@ -8,7 +8,7 @@ import "./FeedNewButton.css"
 
 const FeedNewButton = ({enabled, goToCompose}) => (
     enabled &&
-        <div className="timeline-new-btn timeline-btn">
+        <div className="feed-new-btn feed-btn">
             <Button variant="success" size="sm" onClick={() => goToCompose()}>New</Button>
         </div>
 );
