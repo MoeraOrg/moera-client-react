@@ -8,7 +8,7 @@ export const ModalDialog = ({title, size, children, onClose}) => {
         <>
             <div className="modal-backdrop show" />
             <div className="modal show" style={{display: "block"}} onClick={onClose}
-                 onKeyDown={(e) => {
+                 onKeyDown={e => {
                      if (e.key === "Escape" && onClose) {
                          onClose();
                      }
@@ -18,7 +18,7 @@ export const ModalDialog = ({title, size, children, onClose}) => {
                             "modal-dialog-centered", {
                                 [`modal-${size}`]: !!size
                             }
-                        )} onClick={(e) => e.stopPropagation()}>
+                        )} onClick={e => e.stopPropagation()}>
                     <div className="modal-content">{
                         title &&
                             <div className="modal-header">
