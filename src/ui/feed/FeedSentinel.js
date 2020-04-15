@@ -4,9 +4,9 @@ import cx from 'classnames';
 
 import { Loading } from "ui/control";
 
-import "./TimelineSentinel.css";
+import "./FeedSentinel.css";
 
-export default class TimelineSentinel extends React.PureComponent {
+export default class FeedSentinel extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);
@@ -36,7 +36,7 @@ export default class TimelineSentinel extends React.PureComponent {
 
 }
 
-TimelineSentinel.propTypes = {
+FeedSentinel.propTypes = {
     visible: PropType.bool,
     loading: PropType.bool,
     title: PropType.string,

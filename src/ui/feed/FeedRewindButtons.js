@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button } from "ui/control";
-import { goToTimeline } from "state/navigation/actions";
 import { getFeedState } from "state/feeds/selectors";
+import { feedScrollToAnchor } from "state/feeds/actions";
 
-class TimelineRewindButtons extends React.PureComponent {
+class FeedRewindButtons extends React.PureComponent {
 
     isAtTop() {
         if (this.props.before < Number.MAX_SAFE_INTEGER) {
@@ -25,12 +25,12 @@ class TimelineRewindButtons extends React.PureComponent {
     }
 
     toTop = e => {
-        this.props.goToTimeline(Number.MAX_SAFE_INTEGER);
+        this.props.feedScrollToAnchor(this.props.feedName, Number.MAX_SAFE_INTEGER);
         e.preventDefault();
     };
 
     toBottom = e => {
-        this.props.goToTimeline(Number.MIN_SAFE_INTEGER);
+        this.props.feedScrollToAnchor(this.props.feedName, Number.MIN_SAFE_INTEGER);
         e.preventDefault();
     };
 
@@ -54,10 +54,10 @@ class TimelineRewindButtons extends React.PureComponent {
 }
 
 export default connect(
-    state => ({
-        before: getFeedState(state, "timeline").before,
-        after: getFeedState(state, "timeline").after,
-        at: getFeedState(state, "timeline").at // to force re-rendering only
+    (state, ownProps) => ({
+        before: getFeedState(state, ownProps.feedName).before,
+        after: getFeedState(state, ownProps.feedName).after,
+        at: getFeedState(state, ownProps.feedName).at // to force re-rendering only
     }),
-    { goToTimeline }
-)(TimelineRewindButtons);
+    { feedScrollToAnchor }
+)(FeedRewindButtons);

@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Button } from "ui/control";
 import { isFeedAddable } from "state/feeds/selectors";
 import { goToCompose } from "state/navigation/actions";
-import "./TimelineNewButton.css"
+import "./FeedNewButton.css"
 
-const TimelineNewButton = ({enabled, goToCompose}) => (
+const FeedNewButton = ({enabled, goToCompose}) => (
     enabled &&
         <div className="timeline-new-btn timeline-btn">
             <Button variant="success" size="sm" onClick={() => goToCompose()}>New</Button>
@@ -18,4 +18,4 @@ export default connect(
         enabled: isFeedAddable(state, "timeline")
     }),
     { goToCompose }
-)(TimelineNewButton);
+)(FeedNewButton);

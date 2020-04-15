@@ -7,7 +7,7 @@ import { Button } from "ui/control";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 
-class TimelineCalendarButton extends React.PureComponent {
+class FeedCalendarButton extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);
@@ -26,7 +26,7 @@ class TimelineCalendarButton extends React.PureComponent {
     };
 
     goToTimestamp = value => {
-        this.props.feedScrollToAnchor("timeline", moment(value).endOf('day').unix() * 100);
+        this.props.feedScrollToAnchor(this.props.feedName, moment(value).endOf('day').unix() * 100);
     };
 
     render() {
@@ -49,8 +49,8 @@ class TimelineCalendarButton extends React.PureComponent {
 }
 
 export default connect(
-    state => ({
-        timestamp: getFeedAtTimestamp(state, "timeline")
+    (state, ownProps) => ({
+        timestamp: getFeedAtTimestamp(state, ownProps.feedName)
     }),
     { feedScrollToAnchor }
-)(TimelineCalendarButton);
+)(FeedCalendarButton);

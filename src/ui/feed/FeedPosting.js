@@ -31,7 +31,7 @@ const Content = ({posting, href, onClick}) => {
     }
 };
 
-class TimelinePosting extends React.PureComponent {
+class FeedPosting extends React.PureComponent {
 
     onClick = e => {
         this.props.goToPosting(this.props.posting.id);
@@ -74,4 +74,4 @@ export default connect(
         isPermitted: (operation, posting) => isPermitted(operation, posting, state)
     }),
     { goToPosting }
-)(TimelinePosting);
+)(FeedPosting);
