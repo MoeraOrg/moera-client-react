@@ -52,7 +52,7 @@ class ComposePage extends React.PureComponent {
         const title = postingId == null ? "New Post" : "Edit Post";
         const loadingContent = loadingPosting || loadingDraft;
         return (
-            <Page>
+            <Page className="mt-3">
                 <h2>
                     {title}
                     {postingId != null &&

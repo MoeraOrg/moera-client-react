@@ -6,7 +6,7 @@ import ProfileView from "ui/profile/view/ProfileView";
 import ProfileEditor from "ui/profile/edit/ProfileEditor";
 
 const ProfilePage = ({editing}) => (
-    <Page>
+    <Page className="mt-3">
         {!editing && <ProfileView />}
         {editing && <ProfileEditor />}
     </Page>

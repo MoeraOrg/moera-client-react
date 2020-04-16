@@ -10,7 +10,7 @@ import "./DetailedPostingPage.css";
 
 const DetailedPostingPage = ({loading, deleting, posting}) => {
     return (
-        <Page>
+        <Page className="mt-3">
             {posting && <DetailedPosting posting={posting} deleting={deleting} />}
             {!posting && loading &&
                 <div className="posting">

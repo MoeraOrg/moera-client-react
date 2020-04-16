@@ -10,7 +10,7 @@ import SettingsTabClient from "ui/settings/SettingsTabClient";
 import "./SettingsPage.css";
 
 const SettingsPage = ({tab}) => (
-    <Page>
+    <Page className="mt-3">
         <h2>Your Settings</h2>
         <br/>
 
