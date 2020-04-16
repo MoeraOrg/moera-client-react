@@ -21,6 +21,10 @@ class FeedPage extends React.PureComponent {
 
         this.futureIntersecting = true;
         this.pastIntersecting = true;
+        this.state = {
+            atTop: true,
+            atBottom: false
+        };
     }
 
     componentDidMount() {
@@ -127,36 +131,45 @@ class FeedPage extends React.PureComponent {
         return posting != null;
     }
 
-    onSentinelFuture = entry => {
-        this.futureIntersecting = entry[0].isIntersecting;
+    onSentinelFuture = intersecting => {
+        this.futureIntersecting = intersecting;
         if (this.futureIntersecting) {
             this.loadFuture();
         }
     };
 
-    loadFuture() {
+    loadFuture = () => {
         if (this.props.loadingFuture || this.props.before >= Number.MAX_SAFE_INTEGER) {
             return;
         }
         this.props.feedFutureSliceLoad(this.props.feedName);
     }
 
-    onSentinelPast = entry => {
-        this.pastIntersecting = entry[0].isIntersecting;
+    onSentinelPast = intersecting => {
+        this.pastIntersecting = intersecting;
         if (this.pastIntersecting) {
             this.loadPast();
         }
     };
 
-    loadPast() {
+    loadPast = () => {
         if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
         this.props.feedPastSliceLoad(this.props.feedName);
     }
 
+    onBoundaryFuture = intersecting => {
+        this.setState({atTop: intersecting});
+    };
+
+    onBoundaryPast = intersecting => {
+        this.setState({atBottom: intersecting});
+    };
+
     render() {
         const {feedName, title, loadingFuture, loadingPast, stories, postings, before, after} = this.props;
+        const {atTop, atBottom} = this.state;
 
         if (stories.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
@@ -171,10 +184,12 @@ class FeedPage extends React.PureComponent {
 
         return (
             <>
-                <FeedPageHeader feedName={feedName} title={title}/>
+                <FeedPageHeader feedName={feedName} title={title}
+                                atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
+                                atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}/>
                 <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"
                               visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
-                              onClick={() => this.loadFuture()}/>
+                              onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
                 {stories
                     .filter(t => postings[t.postingId])
                     .map(t => ({story: t, ...postings[t.postingId]}))
@@ -182,7 +197,7 @@ class FeedPage extends React.PureComponent {
                         <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
                 <FeedSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
-                              onClick={() => this.loadPast()}/>
+                              onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                 {after <= Number.MIN_SAFE_INTEGER
                     && <div className="feed-end">&mdash; You've reached the bottom &mdash;</div>}
             </>

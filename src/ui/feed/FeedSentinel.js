@@ -11,16 +11,27 @@ export default class FeedSentinel extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 
-        this.observer = new IntersectionObserver(this.props.onSentinel, {rootMargin: this.props.margin});
+        this.sentinelObserver = new IntersectionObserver(this.onSentinel, {rootMargin: this.props.margin});
+        this.boundaryObserver = new IntersectionObserver(this.onBoundary);
     }
 
     observeSentinel = sentinel => {
         if (sentinel == null) {
-            this.observer.disconnect();
+            this.sentinelObserver.disconnect();
+            this.boundaryObserver.disconnect();
         } else {
-            this.observer.observe(sentinel);
+            this.sentinelObserver.observe(sentinel);
+            this.boundaryObserver.observe(sentinel);
         }
     };
+
+    onSentinel = entry => {
+        this.props.onSentinel(entry[0].isIntersecting);
+    }
+
+    onBoundary = entry => {
+        this.props.onBoundary(entry[0].isIntersecting);
+    }
 
     render() {
         const { visible, loading, title, onClick } = this.props;
@@ -42,5 +53,6 @@ FeedSentinel.propTypes = {
     title: PropType.string,
     margin: PropType.string,
     onSentinel: PropType.func,
+    onBoundary: PropType.func,
     onClick: PropType.func
 };
