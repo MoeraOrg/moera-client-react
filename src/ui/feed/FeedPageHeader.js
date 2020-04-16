@@ -8,8 +8,12 @@ import "./FeedPageHeader.css";
 const FeedPageHeader = ({feedName, title, empty}) => (
     <div id="feed-header">
         <h2>{title}</h2>
-        {!empty && <FeedCalendarButton feedName={feedName}/>}
-        {!empty && <FeedRewindButtons feedName={feedName}/>}
+        {!empty &&
+            <div id="feed-buttons">
+                <FeedCalendarButton feedName={feedName}/>
+                <FeedRewindButtons feedName={feedName}/>
+            </div>
+        }
     </div>
 );
 
