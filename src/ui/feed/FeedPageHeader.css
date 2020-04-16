@@ -6,7 +6,6 @@
     background-color: var(--body-background);
     padding-top: 0.5rem;
     margin-bottom: 0.5rem;
-    border-bottom: var(--gray-light) 1px solid;
     z-index: 1010;
 }
 

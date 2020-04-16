@@ -85,7 +85,7 @@ class FeedPage extends React.PureComponent {
             this.props.feedScrolled(this.props.feedName, at);
         }
         this.prevAt = at;
-        this.setState({scrolled: window.scrollY > 0});
+        this.setState({scrolled: window.scrollY > 5});
     };
 
     static getHeaderHeight() {
