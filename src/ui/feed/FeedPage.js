@@ -23,7 +23,8 @@ class FeedPage extends React.PureComponent {
         this.pastIntersecting = true;
         this.state = {
             atTop: true,
-            atBottom: false
+            atBottom: false,
+            scrolled: false
         };
     }
 
@@ -84,7 +85,7 @@ class FeedPage extends React.PureComponent {
             this.props.feedScrolled(this.props.feedName, at);
         }
         this.prevAt = at;
-
+        this.setState({scrolled: window.scrollY > 0});
     };
 
     static getHeaderHeight() {
@@ -169,7 +170,7 @@ class FeedPage extends React.PureComponent {
 
     render() {
         const {feedName, title, loadingFuture, loadingPast, stories, postings, before, after} = this.props;
-        const {atTop, atBottom} = this.state;
+        const {atTop, atBottom, scrolled} = this.state;
 
         if (stories.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
@@ -184,7 +185,7 @@ class FeedPage extends React.PureComponent {
 
         return (
             <>
-                <FeedPageHeader feedName={feedName} title={title}
+                <FeedPageHeader feedName={feedName} title={title} scrolled={scrolled}
                                 atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
                                 atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}/>
                 <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"

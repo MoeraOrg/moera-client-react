@@ -5,8 +5,17 @@
     justify-content: space-between;
     background-color: var(--body-background);
     padding-top: 0.5rem;
+    margin-bottom: 0.5rem;
     border-bottom: var(--gray-light) 1px solid;
     z-index: 1010;
+}
+
+#feed-header H2 {
+    margin-left: 0.3em;
+}
+
+#feed-header.feed-header-shadow {
+    box-shadow: 0 10px 5px -5px var(--gray-light);
 }
 
 #feed-buttons {

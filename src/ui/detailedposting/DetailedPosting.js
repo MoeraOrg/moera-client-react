@@ -26,7 +26,7 @@ const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToT
                         onClick={() => goToTimeline(story.moment)}>&larr; Timeline</Button>
             }
 
-            <div className="posting">
+            <div className="posting mt-2">
                 {deleting ?
                     <PostingDeleting/>
                 :
