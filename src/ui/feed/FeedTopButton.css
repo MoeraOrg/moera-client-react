@@ -20,3 +20,9 @@
     font-size: .875rem;
     font-weight: 400;
 }
+
+.feed-top-button:hover {
+    background-color: var(--info);
+    border-color: var(--info);
+    color: white;
+}

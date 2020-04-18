@@ -17,16 +17,7 @@
     box-shadow: 0 10px 5px -5px var(--gray-light);
 }
 
-#feed-buttons {
-    display: flex;
-}
-
-.feed-btn {
-    margin-left: 0.5rem;
+.feed-buttons {
     display: flex;
     align-items: center;
-}
-
-.feed-btn > BUTTON {
-    width: 7em;
 }

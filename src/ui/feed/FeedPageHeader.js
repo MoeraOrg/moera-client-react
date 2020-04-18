@@ -2,8 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import cx from 'classnames';
 
-import FeedCalendarButton from "ui/feed/FeedCalendarButton";
-import FeedRewindButtons from "ui/feed/FeedRewindButtons";
+import FeedGotoButton from "ui/feed/FeedGotoButton";
 import FeedTopButton from "ui/feed/FeedTopButton";
 import "./FeedPageHeader.css";
 
@@ -11,10 +10,7 @@ const FeedPageHeader = ({feedName, title, empty, atTop, atBottom, scrolled}) => 
     <div id="feed-header" className={cx({"feed-header-shadow": scrolled})}>
         <h2>{title}</h2>
         {!empty &&
-            <div id="feed-buttons">
-                <FeedCalendarButton feedName={feedName}/>
-                <FeedRewindButtons feedName={feedName} atTop={atTop} atBottom={atBottom}/>
-            </div>
+            <FeedGotoButton feedName={feedName} atBottom={atBottom}/>
         }
         <FeedTopButton feedName={feedName} atTop={atTop}/>
     </div>

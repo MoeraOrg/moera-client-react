@@ -1,4 +1,5 @@
 import React from 'react';
+import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { DateTimePicker } from 'react-widgets';
 import moment from 'moment';
@@ -7,7 +8,7 @@ import { Button } from "ui/control";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 
-class FeedCalendarButton extends React.PureComponent {
+class FeedGotoButton extends React.PureComponent {
 
     constructor(props, context) {
         super(props, context);
@@ -29,18 +30,27 @@ class FeedCalendarButton extends React.PureComponent {
         this.props.feedScrollToAnchor(this.props.feedName, moment(value).endOf('day').unix() * 100);
     };
 
+    toBottom = e => {
+        this.props.feedScrollToAnchor(this.props.feedName, Number.MIN_SAFE_INTEGER);
+        e.preventDefault();
+    };
+
     render() {
-        const {timestamp} = this.props;
+        const {timestamp, atBottom} = this.props;
         const {active} = this.state;
 
         return (
-            <div className="feed-btn">
-                {!active &&
-                    <Button variant="outline-info" size="sm" onClick={this.activate}>Calendar</Button>
-                }
-                {active &&
-                    <DateTimePicker format="dd-MM-yyyy" value={moment.unix(timestamp).toDate()} time={false}
-                                    onChange={this.goToTimestamp}/>
+            <div className="feed-buttons">
+                {!active ?
+                    <Button variant="outline-info" size="sm" onClick={this.activate}>Go to...</Button>
+                :
+                    <>
+                        <DateTimePicker format="dd-MM-yyyy" value={moment.unix(timestamp).toDate()} time={false}
+                                        onChange={this.goToTimestamp}/>
+                        <Button variant="outline-info" className="ml-2" invisible={atBottom} onClick={this.toBottom}>
+                            &#x23f7;&nbsp;Bottom
+                        </Button>
+                    </>
                 }
             </div>
         );
@@ -48,9 +58,14 @@ class FeedCalendarButton extends React.PureComponent {
 
 }
 
+FeedGotoButton.propTypes = {
+    feedName: PropType.string,
+    atBottom: PropType.bool
+}
+
 export default connect(
     (state, ownProps) => ({
         timestamp: getFeedAtTimestamp(state, ownProps.feedName)
     }),
     { feedScrollToAnchor }
-)(FeedCalendarButton);
+)(FeedGotoButton);
