@@ -1,4 +1,4 @@
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 import selectn from 'selectn';
 
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET } from "state/feeds/actions";
@@ -23,7 +23,7 @@ function safeguard(posting) {
     if (!posting.bodyPreview.text) {
         posting = immutable.set(posting, "body.previewText", safePreviewHtml(posting.body.text));
     }
-    return immutable(posting)
+    return immutable.wrap(posting)
         .update("bodyPreview.text", text => safePreviewHtml(text))
         .update("body.text", text => safeHtml(text))
         .value();
@@ -47,7 +47,7 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case FEED_PAST_SLICE_SET:
         case FEED_FUTURE_SLICE_SET: {
-            const istate = immutable(state);
+            const istate = immutable.wrap(state);
             action.payload.stories.map(s => outsideIn(s)).forEach(p => istate
                 .set([p.id, "posting"], safeguard(p))
                 .set([p.id, "deleting"], false)
@@ -77,7 +77,7 @@ export default (state = initialState, action) => {
 
         case POSTING_SET:
             const posting = action.payload.posting;
-            return immutable(state)
+            return immutable.wrap(state)
                 .set([posting.id, "posting"], safeguard(posting))
                 .set([posting.id, "deleting"], false)
                 .set([posting.id, "verificationStatus"], "none")
@@ -133,7 +133,7 @@ export default (state = initialState, action) => {
         case POSTING_REACTION_SET: {
             const {id, reaction, totals} = action.payload;
             if (state[id]) {
-                return immutable(state)
+                return immutable.wrap(state)
                     .set([id, "posting", "clientReaction"], reaction)
                     .set([id, "posting", "reactions"], totals)
                     .value();

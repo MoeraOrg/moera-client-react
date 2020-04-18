@@ -1,4 +1,4 @@
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 
 import {
     COMPOSE_CONFLICT,

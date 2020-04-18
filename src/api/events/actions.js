@@ -1,4 +1,4 @@
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 
 export const EVENT_NODE_SUBSCRIBED = "EVENT_NODE_SUBSCRIBED";
 export const EVENT_HOME_SUBSCRIBED = "EVENT_HOME_SUBSCRIBED";

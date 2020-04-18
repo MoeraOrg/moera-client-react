@@ -1,6 +1,6 @@
 import React from 'react';
 import PropType from 'prop-types';
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -72,7 +72,7 @@ export class EmojiListDialog extends React.PureComponent {
 
     switchAll(dimmed) {
         this.setState(state => {
-            let im = immutable(state);
+            let im = immutable.wrap(state);
             for (let emoji of this.getMainEmojis()) {
                 im = im.set(["choice", emoji, "dimmed"], dimmed);
             }

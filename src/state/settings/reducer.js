@@ -1,4 +1,4 @@
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 
 import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
@@ -51,7 +51,7 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case SETTINGS_GO_TO_TAB:
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("tab", action.payload.tab)
                 .set("sheet", "posting")
                 .set("node.conflict", false)
@@ -59,7 +59,7 @@ export default (state = initialState, action) => {
                 .value();
 
         case SETTINGS_GO_TO_SHEET:
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("sheet", action.payload.sheet)
                 .set("node.conflict", false)
                 .set("client.conflict", false)
@@ -72,12 +72,12 @@ export default (state = initialState, action) => {
             };
 
         case SETTINGS_NODE_VALUES_LOAD:
-            return immutable(state).set("node.loadingValues", true).value();
+            return immutable.set(state, "node.loadingValues", true);
 
         case SETTINGS_NODE_VALUES_LOADED: {
             let values = new Map();
             action.payload.settings.forEach(({name, value}) => values.set(name, value));
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("node.loadingValues", false)
                 .set("node.loadedValues", true)
                 .set("node.values", values)
@@ -85,10 +85,10 @@ export default (state = initialState, action) => {
         }
 
         case SETTINGS_NODE_VALUES_LOAD_FAILED:
-            return immutable(state).set("node.loadingValues", false).value();
+            return immutable.set(state, "node.loadingValues", false);
 
         case SETTINGS_NODE_VALUES_UNSET:
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("node.loadingValues", false)
                 .set("node.loadedValues", false)
                 .set("node.conflict", false)
@@ -96,18 +96,18 @@ export default (state = initialState, action) => {
                 .value();
 
         case SETTINGS_NODE_CONFLICT:
-            return immutable(state).set("node.conflict", true).value();
+            return immutable.set(state, "node.conflict", true);
 
         case SETTINGS_NODE_CONFLICT_CLOSE:
-            return immutable(state).set("node.conflict", false).value();
+            return immutable.set(state, "node.conflict", false);
 
         case SETTINGS_NODE_META_LOAD:
-            return immutable(state).set("node.loadingMeta", true).value();
+            return immutable.set(state, "node.loadingMeta", true);
 
         case SETTINGS_NODE_META_LOADED: {
             let metadata = new Map();
             action.payload.meta.forEach(meta => metadata.set(meta.name, meta));
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("node.loadingMeta", false)
                 .set("node.loadedMeta", true)
                 .set("node.meta", metadata)
@@ -115,22 +115,22 @@ export default (state = initialState, action) => {
         }
 
         case SETTINGS_NODE_META_LOAD_FAILED:
-            return immutable(state).set("node.loadingMeta", false).value();
+            return immutable.set(state, "node.loadingMeta", false);
 
         case SETTINGS_NODE_META_UNSET:
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("node.loadingMeta", false)
                 .set("node.loadedMeta", false)
                 .set("node.meta", new Map())
                 .value();
 
         case SETTINGS_CLIENT_VALUES_LOAD:
-            return immutable(state).set("client.loadingValues", true).value();
+            return immutable.set(state, "client.loadingValues", true);
 
         case SETTINGS_CLIENT_VALUES_LOADED: {
             let values = new Map();
             action.payload.settings.forEach(({name, value}) => values.set(name, value));
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("client.loadingValues", false)
                 .set("client.loadedValues", true)
                 .set("client.values", values)
@@ -138,13 +138,13 @@ export default (state = initialState, action) => {
         }
 
         case SETTINGS_CLIENT_VALUES_LOAD_FAILED:
-            return immutable(state).set("client.loadingValues", false).value();
+            return immutable.set(state, "client.loadingValues", false);
 
         case SETTINGS_CLIENT_CONFLICT:
-            return immutable(state).set("client.conflict", true).value();
+            return immutable.set(state, "client.conflict", true);
 
         case SETTINGS_CLIENT_CONFLICT_CLOSE:
-            return immutable(state).set("client.conflict", false).value();
+            return immutable.set(state, "client.conflict", false);
 
         case SETTINGS_UPDATE:
             return {
@@ -162,7 +162,7 @@ export default (state = initialState, action) => {
                     nodeValues.set(name, value);
                 }
             });
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("node.conflict", false)
                 .set("client.conflict", false)
                 .set("node.values", nodeValues)

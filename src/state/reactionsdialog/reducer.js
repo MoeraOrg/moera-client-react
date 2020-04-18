@@ -1,4 +1,4 @@
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 
 import {
     CLOSE_REACTIONS_DIALOG,
@@ -93,7 +93,7 @@ export default (state = initialState, action) => {
                     .filter(p => p.moment <= state.reactions[tab].after)
                     .forEach(p => reactions.push(p));
                 reactions.sort((a, b) => b.moment - a.moment);
-                return immutable(state)
+                return immutable.wrap(state)
                     .set(["reactions", tab, "loading"], false)
                     .set(["reactions", tab, "total"], action.payload.total)
                     .set(["reactions", tab, "after"], action.payload.after)
@@ -122,7 +122,7 @@ export default (state = initialState, action) => {
             totals = totals.slice().filter(rt => rt.total == null || rt.total > 0);
             totals.sort((rt1, rt2) => rt1.total != null ? rt2.total - rt1.total : rt2.share - rt1.share);
             const total = totals.map(rt => rt.total).filter(v => v != null).reduce((sum, v) => sum + v, 0);
-            return immutable(state)
+            return immutable.wrap(state)
                 .set("totals.loading", false)
                 .set("totals.loaded", true)
                 .set("totals.total", total)

@@ -1,4 +1,4 @@
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 
 import {
     FEED_FUTURE_SLICE_LOAD,
@@ -24,7 +24,7 @@ const initialState = {
 };
 
 function getFeed(state, feedName) {
-    const istate = immutable(state);
+    const istate = immutable.wrap(state);
     let feed = state[feedName];
     if (feed == null) {
         feed = emptyFeed;
@@ -71,7 +71,7 @@ function updateScrollingOnInactive(istate, feedName, feed) {
 export default (state = initialState, action) => {
     switch (action.type) {
         case GO_TO_PAGE: {
-            const istate = immutable(state);
+            const istate = immutable.wrap(state);
             const feedName = PAGE_FEEDS.get(action.payload.page);
             if (feedName != null && state[feedName] == null) {
                 istate.set([feedName], emptyFeed);
@@ -192,7 +192,7 @@ export default (state = initialState, action) => {
         }
 
         case FEEDS_UNSET: {
-            const istate = immutable(state);
+            const istate = immutable.wrap(state);
             for (let [feedName, feed] of Object.entries(state)) {
                 istate.assign([feedName], {
                     before: feed.at,

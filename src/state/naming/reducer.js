@@ -1,4 +1,4 @@
-import immutable from 'object-path-immutable';
+import * as immutable from 'object-path-immutable';
 
 import {
     NAMING_NAME_LOAD,
@@ -52,7 +52,7 @@ export default (state = initialState, action) => {
             return immutable.del(state, ["names", action.payload.name]);
 
         case NAMING_NAMES_POPULATE: {
-            let istate = immutable(state);
+            let istate = immutable.wrap(state);
             action.payload.names
                 .filter(info => state.names[info.name] == null)
                 .forEach(info => {
