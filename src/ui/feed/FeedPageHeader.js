@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import FeedCalendarButton from "ui/feed/FeedCalendarButton";
 import FeedRewindButtons from "ui/feed/FeedRewindButtons";
+import FeedTopButton from "ui/feed/FeedTopButton";
 import "./FeedPageHeader.css";
 
 const FeedPageHeader = ({feedName, title, empty, atTop, atBottom, scrolled}) => (
@@ -15,6 +16,7 @@ const FeedPageHeader = ({feedName, title, empty, atTop, atBottom, scrolled}) => 
                 <FeedRewindButtons feedName={feedName} atTop={atTop} atBottom={atBottom}/>
             </div>
         }
+        <FeedTopButton feedName={feedName} atTop={atTop}/>
     </div>
 );
 
