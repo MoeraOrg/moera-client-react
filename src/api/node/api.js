@@ -389,7 +389,25 @@ const StoryInfoType = {
         "read": {
             type: "boolean"
         },
-        "posting": PostingInfoType
+        "posting": PostingInfoType,
+        "operations": {
+            type: "object",
+            properties: {
+                "edit": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                },
+                "delete": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                }
+            },
+            additionalProperties: false,
+        }
     },
     additionalProperties: false,
 };
@@ -408,7 +426,7 @@ export const FeedSliceInfo = schema({
         "stories": {
             type: "array",
             items: StoryInfoType
-        },
+        }
     },
     additionalProperties: false,
 });

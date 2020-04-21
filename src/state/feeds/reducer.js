@@ -37,6 +37,14 @@ const PAGE_FEEDS = new Map([
     [PAGE_TIMELINE, "timeline"]
 ]);
 
+function extractStory(story) {
+    const t = {...story};
+    delete t.feedName;
+    delete t.posting;
+    t.postingId = story.posting.id;
+    return t;
+}
+
 function updateScrollingOnActive(istate, feedName, feed, anchor) {
     if (anchor != null) {
         if (anchor <= feed.before && anchor > feed.after) {
@@ -145,16 +153,10 @@ export default (state = initialState, action) => {
             const {feedName} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (action.payload.before >= feed.after && action.payload.after < feed.after) {
-                let stories = feed.stories.slice();
+                const stories = feed.stories.slice();
                 action.payload.stories
-                    .filter(s => s.moment <= feed.after)
-                    .forEach(s => stories.push({
-                        id: s.id,
-                        publishedAt: s.publishedAt,
-                        pinned: s.pinned,
-                        moment: s.moment,
-                        postingId: s.posting.id
-                    }));
+                    .filter(t => t.moment <= feed.after)
+                    .forEach(t => stories.push(extractStory(t)));
                 stories.sort((a, b) => b.moment - a.moment);
                 return istate.assign([feedName], {
                     loadingPast: false,
@@ -173,13 +175,7 @@ export default (state = initialState, action) => {
                 let stories = feed.stories.slice();
                 action.payload.stories
                     .filter(s => s.moment > feed.before)
-                    .forEach(s => stories.push({
-                        id: s.id,
-                        publishedAt: s.publishedAt,
-                        pinned: s.pinned,
-                        moment: s.moment,
-                        postingId: s.posting.id
-                    }));
+                    .forEach(t => stories.push(extractStory(t)));
                 stories.sort((a, b) => b.moment - a.moment);
                 return istate.assign([feedName], {
                     loadingFuture: false,
@@ -210,10 +206,7 @@ export default (state = initialState, action) => {
             if (moment != null && moment <= feed.before && moment > feed.after) {
                 if (!feed.stories.some(p => p.moment === moment)) {
                     const stories = feed.stories.filter(p => p.postingId !== posting.id);
-                    const story = {...action.payload.story};
-                    delete story.posting;
-                    story.postingId = posting.id;
-                    stories.push(story);
+                    stories.push(extractStory(action.payload.story));
                     stories.sort((a, b) => b.moment - a.moment);
                     return istate.set([feedName, "stories"], stories).value();
                 }
@@ -236,7 +229,7 @@ export default (state = initialState, action) => {
         }
 
         case STORY_UPDATED: {
-            const {id, feedName, moment, posting} = action.payload.story;
+            const {id, feedName, moment} = action.payload.story;
             const {istate, feed} = getFeed(state, feedName);
             let stories = null;
             const index = feed.stories.findIndex(p => p.id === id);
@@ -245,9 +238,7 @@ export default (state = initialState, action) => {
                 stories.splice(index, 1);
             }
             if (moment != null && moment <= feed.before && moment > feed.after) {
-                const story = {...action.payload.story};
-                delete story.posting;
-                story.postingId = posting.id;
+                const story = extractStory(action.payload.story);
                 if (stories == null) {
                     stories = feed.stories.slice();
                 }

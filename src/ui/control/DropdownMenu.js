@@ -22,13 +22,11 @@ export class DropdownMenu extends React.PureComponent {
 
     show() {
         this.setState({visible: true});
-        this.scheduleUpdate();
         document.addEventListener("click", this.hide);
     }
 
     hide = () => {
         this.setState({visible: false});
-        this.scheduleUpdate();
         document.removeEventListener("click", this.hide);
     };
 
@@ -42,7 +40,6 @@ export class DropdownMenu extends React.PureComponent {
                             <FontAwesomeIcon icon="chevron-down" className="chevron" />
                             <Popper placement="bottom-end">
                                 {({ref, style, placement, scheduleUpdate}) => {
-                                    this.scheduleUpdate = scheduleUpdate;
                                     if (!this.state.visible) {
                                         return null;
                                     }
@@ -67,7 +64,7 @@ export class DropdownMenu extends React.PureComponent {
                                 }}
                             </Popper>
                         </div>
-                        )}
+                    )}
                 </Reference>
             </Manager>
         );
