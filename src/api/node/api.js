@@ -22,7 +22,7 @@ export const WhoAmI = schema({
             type: "string"
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 export const ProfileInfo = schema({
@@ -52,10 +52,10 @@ export const ProfileInfo = schema({
                     }
                 }
             },
-            additionalProperties: false,
+            additionalProperties: false
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 export const TokenCreated = schema({
@@ -104,10 +104,10 @@ export const NodeNameInfo = schema({
                     }
                 }
             },
-            additionalProperties: false,
+            additionalProperties: false
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 export const RegisteredNameSecret = schema({
@@ -128,7 +128,7 @@ export const RegisteredNameSecret = schema({
             type: "string"
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 export const Body = schema({
@@ -141,7 +141,7 @@ export const Body = schema({
             type: "string"
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 const ReactionTotalInfoType = {
@@ -159,7 +159,7 @@ const ReactionTotalInfoType = {
             maximum: 1
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 };
 
 const ReactionTotalsInfoType = {
@@ -176,7 +176,7 @@ const ReactionTotalsInfoType = {
             default: []
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 };
 
 export const ReactionTotalsInfo = schema(ReactionTotalsInfoType);
@@ -262,7 +262,7 @@ const PostingInfoType = {
                         type: "string"
                     }
                 },
-                additionalProperties: false,
+                additionalProperties: false
             }
         },
         "clientReaction": {
@@ -281,7 +281,7 @@ const PostingInfoType = {
                     type: "integer"
                 }
             },
-            additionalProperties: false,
+            additionalProperties: false
         },
         "operations": {
             type: "object",
@@ -305,7 +305,7 @@ const PostingInfoType = {
                     }
                 }
             },
-            additionalProperties: false,
+            additionalProperties: false
         },
         "acceptedReactions": {
             type: "object",
@@ -317,7 +317,7 @@ const PostingInfoType = {
                     type: "string"
                 },
             },
-            additionalProperties: false,
+            additionalProperties: false
         },
         "reactions": ReactionTotalsInfoType,
         "reactionsVisible": {
@@ -327,7 +327,7 @@ const PostingInfoType = {
             type: "boolean"
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 };
 
 export const PostingInfo = schema(PostingInfoType);
@@ -353,10 +353,10 @@ export const FeedInfo = schema({
                     }
                 }
             },
-            additionalProperties: false,
+            additionalProperties: false
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 const StoryInfoType = {
@@ -406,10 +406,10 @@ const StoryInfoType = {
                     }
                 }
             },
-            additionalProperties: false,
+            additionalProperties: false
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 };
 
 export const StoryInfo = schema(StoryInfoType);
@@ -428,7 +428,7 @@ export const FeedSliceInfo = schema({
             items: StoryInfoType
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 const ChoiceType = {
@@ -441,7 +441,7 @@ const ChoiceType = {
             type: "string"
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 };
 
 export const PostingFeatures = schema({
@@ -455,7 +455,7 @@ export const PostingFeatures = schema({
             items: ChoiceType
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 export const SettingInfoArray = schema({
@@ -470,7 +470,7 @@ export const SettingInfoArray = schema({
                 type: "string"
             }
         },
-        additionalProperties: false,
+        additionalProperties: false
     }
 });
 
@@ -508,13 +508,13 @@ export const SettingMetaInfoArray = schema({
                             type: "boolean"
                         }
                     },
-                    additionalProperties: false,
+                    additionalProperties: false
                 }, {
                     type: "null"
                 }]
             }
         },
-        additionalProperties: false,
+        additionalProperties: false
     }
 });
 
@@ -525,7 +525,7 @@ export const AsyncOperationCreated = schema({
             type: "string"
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 export const CarteSet = schema({
@@ -549,12 +549,12 @@ export const CarteSet = schema({
                         type: "integer"
                     }
                 },
-                additionalProperties: false,
+                additionalProperties: false
             },
             default: []
         }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 const ReactionInfoType = {
@@ -603,10 +603,10 @@ const ReactionInfoType = {
                     }
                 }
             },
-            additionalProperties: false,
-        },
+            additionalProperties: false
+        }
     },
-    additionalProperties: false,
+    additionalProperties: false
 };
 
 export const ReactionInfo = schema(ReactionInfoType);
@@ -617,7 +617,7 @@ export const ReactionCreated = schema({
         "reaction": ReactionInfoType,
         "totals": ReactionTotalsInfoType
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
 
 export const ReactionsSliceInfo = schema({
@@ -635,7 +635,7 @@ export const ReactionsSliceInfo = schema({
         "reactions": {
             type: "array",
             items: ReactionInfoType
-        },
+        }
     },
-    additionalProperties: false,
+    additionalProperties: false
 });
