@@ -6,6 +6,7 @@ import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { postingDelete } from "state/postings/actions";
 import { storyPinningUpdate } from "state/stories/actions";
+import { openChangeDateDialog } from "state/changedatedialog/actions";
 import "./PostingMenu.css";
 
 class PostingMenu extends React.PureComponent {
@@ -29,9 +30,14 @@ class PostingMenu extends React.PureComponent {
         storyPinningUpdate(story.id, !story.pinned);
     };
 
+    onChangeDate = () => {
+        const {story, openChangeDateDialog} = this.props;
+
+        openChangeDateDialog(story.id, story.publishedAt);
+    };
+
     render() {
         const {posting, story, isPermitted, rootLocation} = this.props;
-        console.log(story);
 
         return (
             <DropdownMenu items={[
@@ -54,6 +60,12 @@ class PostingMenu extends React.PureComponent {
                     show: story.pinned && isPermitted("edit", story)
                 },
                 {
+                    title: "Change date/time...",
+                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    onClick: this.onChangeDate,
+                    show: isPermitted("edit", story)
+                },
+                {
                     title: "Delete",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onDelete,
@@ -70,5 +82,5 @@ export default connect(
     state => ({
         rootLocation: state.node.root.location,
     }),
-    {goToCompose, confirmBox, storyPinningUpdate}
+    {goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog}
 )(PostingMenu);

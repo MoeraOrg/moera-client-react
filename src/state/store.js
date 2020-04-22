@@ -74,6 +74,7 @@ import settings from "state/settings/reducer";
 import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
 import postingReply from "state/postingreply/reducer";
+import changeDateDialog from "state/changedatedialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 
@@ -131,6 +132,7 @@ import {
 } from "state/reactionsdialog/sagas";
 import { postingReplySaga } from "state/postingreply/sagas";
 import { storyPinningUpdateSaga } from "state/stories/sagas";
+import { storyChangeDateSaga } from "state/changedatedialog/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -146,6 +148,7 @@ import postingsTriggers from "state/postings/triggers";
 import settingsTriggers from "state/settings/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
+import { STORY_CHANGE_DATE } from "state/changedatedialog/actions";
 
 const triggers = collectTriggers(
     homeTriggers,
@@ -224,6 +227,7 @@ function* combinedSaga() {
     yield takeLatest(COMPOSE_DRAFT_REVISION_DELETE, composeDraftRevisionDeleteSaga);
     yield takeLatest(POSTING_REPLY, postingReplySaga);
     yield takeEvery(STORY_PINNING_UPDATE, storyPinningUpdateSaga);
+    yield takeLatest(STORY_CHANGE_DATE, storyChangeDateSaga);
 
     yield invokeTriggers(triggers);
 }
@@ -249,6 +253,7 @@ export default createStore(
         cartes,
         reactionsDialog,
         postingReply,
+        changeDateDialog,
         messageBox,
         confirmBox
     }),

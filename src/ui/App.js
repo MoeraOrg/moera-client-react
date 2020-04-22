@@ -20,6 +20,7 @@ import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
 import ComposePage from "ui/compose/ComposePage";
 import SettingsPage from "ui/settings/SettingsPage";
 import ReactionsDialog from "ui/reactionsdialog/ReactionsDialog";
+import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import "./colors.css";
@@ -55,6 +56,7 @@ const App = () => (
         <MainMenu/>
         <Content/>
         <ReactionsDialog/>
+        <ChangeDateDialog/>
         <MessageBox/>
         <ConfirmBox/>
     </>
