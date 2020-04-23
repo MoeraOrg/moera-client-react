@@ -4,7 +4,6 @@ import {
     COMPOSE_DRAFT_SAVED,
     COMPOSE_DRAFT_SELECT,
     COMPOSE_POST_SUCCEEDED,
-    COMPOSE_POSTING_LOADED,
     composeConflict,
     composeDraftListItemDeleted,
     composeDraftListItemReload,
@@ -42,7 +41,6 @@ export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
-    trigger(COMPOSE_POSTING_LOADED, true, signal => postingSet(signal.payload.posting)),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => goToPosting(signal.payload.posting.id)),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => postingSet(signal.payload.posting)),
     trigger(
