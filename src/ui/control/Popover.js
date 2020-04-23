@@ -69,7 +69,7 @@ export class Popover extends React.PureComponent {
                 </Reference>
                 {ReactDOM.createPortal(
                     <Popper placement="bottom" positionFixed={true}>
-                        {({ref, style, placement, arrowProps}) => (
+                        {({ref, style, placement, arrowProps, forceUpdate}) => (
                             <div ref={ref} style={style} className={cx(
                                 "popover",
                                 `bs-popover-${placement}`,
@@ -77,7 +77,7 @@ export class Popover extends React.PureComponent {
                                 {"show": this.state.visible}
                             )}>
                                 <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>
-                                <div className="popover-body">{children({hide: this.hide})}</div>
+                                <div className="popover-body">{children({hide: this.hide, update: forceUpdate})}</div>
                             </div>
                         )}
                     </Popper>,
