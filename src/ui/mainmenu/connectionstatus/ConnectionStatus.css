@@ -23,6 +23,10 @@
     color: white;
 }
 
+#connection-status .active .connection-button {
+    color: white;
+}
+
 #connection-status .loading {
     color: white;
     fill: white !important;

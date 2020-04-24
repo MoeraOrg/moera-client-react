@@ -7,6 +7,10 @@
     cursor: pointer;
 }
 
+#connection-status .active .home-name {
+    color: white;
+}
+
 #connection-status .home-name::after {
     display: inline-block;
     margin-left: .255em;
