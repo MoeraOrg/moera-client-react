@@ -6,7 +6,9 @@ import Instants from "ui/instant/Instants";
 
 const InstantButton = () => (
     <Popover element={InstantBell}>
-        <Instants/>
+        {({update}) => (
+            <Instants update={update}/>
+        )}
     </Popover>
 );
 

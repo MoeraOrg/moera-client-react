@@ -41,7 +41,9 @@ function extractStory(story) {
     const t = {...story};
     delete t.feedName;
     delete t.posting;
-    t.postingId = story.posting.id;
+    if (story.posting) {
+        t.postingId = story.posting.id;
+    }
     return t;
 }
 

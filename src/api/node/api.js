@@ -390,6 +390,9 @@ const StoryInfoType = {
             type: "boolean"
         },
         "posting": PostingInfoType,
+        "summary": {
+            type: "string"
+        },
         "operations": {
             type: "object",
             properties: {

@@ -1,0 +1,16 @@
+#instants {
+    font-size: 90%;
+    max-width: 800px;
+    max-height: 70vh;
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
+}
+
+#instants .header {
+    font-weight: bold;
+    padding: 0 0.75rem;
+}
+
+#instants .content {
+    overflow-y: auto;
+}

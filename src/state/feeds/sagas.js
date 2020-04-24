@@ -55,7 +55,7 @@ function* cacheNames(stories) {
         return;
     }
     const usedNames = new Set();
-    stories.forEach(s => {
+    stories.filter(s => s.posting != null).forEach(s => {
         usedNames.add(s.posting.ownerName);
         usedNames.add(s.posting.receiverName);
     });

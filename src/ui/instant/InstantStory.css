@@ -1,0 +1,12 @@
+#instants .instant {
+    display: block;
+    color: black;
+    border-top: 1px solid #e8e8e8;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    min-height: 6em;
+}
+
+#instants .instant:hover {
+    background-color: var(--highlight);
+}

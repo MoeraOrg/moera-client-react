@@ -196,8 +196,8 @@ function* combinedSaga() {
     yield takeLatest(REGISTER_NAME, registerNameSaga);
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
     yield takeLatest(FEED_GENERAL_LOAD, feedGeneralLoadSaga);
-    yield takeLatest(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
-    yield takeLatest(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
+    yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
+    yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
     yield takeLatest(DETAILED_POSTING_LOAD, introduce(detailedPostingLoadSaga));
     yield takeLatest(COMPOSE_FEATURES_LOAD, composeFeaturesLoadSaga);
     yield takeLatest(COMPOSE_POSTING_LOAD, introduce(composePostingLoadSaga));

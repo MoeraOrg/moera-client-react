@@ -39,7 +39,9 @@ function toFeedReference(story) {
 
 function outsideIn(story) {
     const posting = story.posting;
-    posting.feedReferences = [toFeedReference(story)];
+    if (posting != null) {
+        posting.feedReferences = [toFeedReference(story)];
+    }
     return posting;
 }
 
@@ -48,10 +50,15 @@ export default (state = initialState, action) => {
         case FEED_PAST_SLICE_SET:
         case FEED_FUTURE_SLICE_SET: {
             const istate = immutable.wrap(state);
-            action.payload.stories.map(s => outsideIn(s)).forEach(p => istate
-                .set([p.id, "posting"], safeguard(p))
-                .set([p.id, "deleting"], false)
-                .set([p.id, "verificationStatus"], "none"));
+            action.payload.stories
+                .map(s => outsideIn(s))
+                .filter(p => p != null)
+                .forEach(
+                    p => istate
+                        .set([p.id, "posting"], safeguard(p))
+                        .set([p.id, "deleting"], false)
+                        .set([p.id, "verificationStatus"], "none")
+                );
             return istate.value();
         }
 

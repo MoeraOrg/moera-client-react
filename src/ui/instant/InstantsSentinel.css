@@ -1,0 +1,9 @@
+#instants .sentinel {
+    text-align: center;
+    color: var(--primary);
+    cursor: pointer;
+}
+
+#instants .sentinel:hover {
+    background-color: var(--highlight);
+}
