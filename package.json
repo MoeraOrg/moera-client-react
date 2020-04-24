@@ -20,6 +20,7 @@
     "formik": "^2.1.4",
     "general-category": "^1.6.0",
     "lodash.debounce": "^4.0.8",
+    "lodash.isfunction": "^3.0.9",
     "moment": "^2.24.0",
     "object-path-immutable": "^4.1.0",
     "prop-types": "^15.7.2",

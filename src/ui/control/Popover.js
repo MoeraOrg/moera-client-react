@@ -4,6 +4,7 @@ import PropType from 'prop-types';
 import cx from 'classnames';
 import { Manager, Popper, Reference } from 'react-popper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import isFunction from 'lodash.isfunction';
 
 export class Popover extends React.PureComponent {
 
@@ -77,7 +78,9 @@ export class Popover extends React.PureComponent {
                                 {"show": this.state.visible}
                             )}>
                                 <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>
-                                <div className="popover-body">{children({hide: this.hide, update: forceUpdate})}</div>
+                                <div className="popover-body">
+                                    {isFunction(children) ? children({hide: this.hide, update: forceUpdate}) : children}
+                                </div>
                             </div>
                         )}
                     </Popper>,
