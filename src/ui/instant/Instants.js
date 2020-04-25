@@ -30,7 +30,7 @@ class Instants extends React.PureComponent {
         if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        this.props.feedPastSliceLoad("instant");
+        this.props.feedPastSliceLoad(":instant");
     }
 
     render() {
@@ -55,9 +55,9 @@ class Instants extends React.PureComponent {
 
 export default connect(
     (state) => ({
-        loadingPast: getFeedState(state, "instant").loadingPast,
-        after: getFeedState(state, "instant").after,
-        stories: getFeedState(state, "instant").stories
+        loadingPast: getFeedState(state, ":instant").loadingPast,
+        after: getFeedState(state, ":instant").after,
+        stories: getFeedState(state, ":instant").stories
     }),
     { feedPastSliceLoad }
 )(Instants);

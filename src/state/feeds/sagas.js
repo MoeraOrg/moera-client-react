@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Node } from "api";
+import { Home, Node } from "api";
 import {
     feedFutureSliceLoadFailed,
     feedFutureSliceSet,
@@ -28,7 +28,9 @@ export function* feedPastSliceLoadSaga(action) {
     const {feedName} = action.payload;
     try {
         const before = (yield select(state => getFeedState(state, feedName))).after;
-        const data = yield call(Node.getFeedSlice, feedName, null, before, 20);
+        const data = feedName.startsWith(":")
+            ? yield call(Home.getFeedSlice, feedName.substring(1), null, before, 20)
+            : yield call(Node.getFeedSlice, feedName, null, before, 20);
         yield put(feedPastSliceSet(feedName, data.stories, data.before, data.after));
         yield call(cacheNames, data.stories);
     } catch (e) {
@@ -41,7 +43,9 @@ export function* feedFutureSliceLoadSaga(action) {
     const {feedName} = action.payload;
     try {
         const after = (yield select(state => getFeedState(state, feedName))).before;
-        const data = yield call(Node.getFeedSlice, feedName, after, null, 20);
+        const data = feedName.startsWith(":")
+            ? yield call(Home.getFeedSlice, feedName.substring(1), after, null, 20)
+            : yield call(Node.getFeedSlice, feedName, after, null, 20);
         yield put(feedFutureSliceSet(feedName, data.stories, data.before, data.after));
         yield call(cacheNames, data.stories);
     } catch (e) {
@@ -55,10 +59,12 @@ function* cacheNames(stories) {
         return;
     }
     const usedNames = new Set();
-    stories.filter(s => s.posting != null).forEach(s => {
-        usedNames.add(s.posting.ownerName);
-        usedNames.add(s.posting.receiverName);
-    });
+    stories
+        .filter(s => s.posting != null && s.posting.ownerName != null)
+        .forEach(s => {
+            usedNames.add(s.posting.ownerName);
+            usedNames.add(s.posting.receiverName);
+        });
     for (let name of usedNames) {
         yield put(namingNameUsed(name));
     }

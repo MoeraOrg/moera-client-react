@@ -39,9 +39,10 @@ function toFeedReference(story) {
 
 function outsideIn(story) {
     const posting = story.posting;
-    if (posting != null) {
-        posting.feedReferences = [toFeedReference(story)];
+    if (posting == null || posting.body == null) {
+        return null;
     }
+    posting.feedReferences = [toFeedReference(story)];
     return posting;
 }
 

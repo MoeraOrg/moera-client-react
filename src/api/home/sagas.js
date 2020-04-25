@@ -130,3 +130,10 @@ export function* deleteDraftPosting(id) {
     const location = yield call(authorized, `/draft-postings/${id}`);
     return yield call(callHome, {location, method: "DELETE", schema: NodeApi.Result});
 }
+
+export function* getFeedSlice(feedName, after, before, limit) {
+    feedName = encodeURIComponent(feedName);
+    const location = yield call(authorized,
+        urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit}));
+    return yield call(callHome, {location, schema: NodeApi.FeedSliceInfo, withBodies: true});
+}
