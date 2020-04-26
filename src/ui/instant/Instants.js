@@ -34,14 +34,14 @@ class Instants extends React.PureComponent {
     }
 
     render() {
-        const {loadingPast, after, stories} = this.props;
+        const {hide, loadingPast, after, stories} = this.props;
 
         return (
             <div id="instants">
                 <div className="header">Notifications</div>
                 <div className="content">
                     {stories
-                        .map(story => <InstantStory key={story.moment} story={story}/>)
+                        .map(story => <InstantStory key={story.moment} story={story} hide={hide}/>)
                     }
                 </div>
                 <InstantsSentinel loading={loadingPast} title="Load more..." margin="0px 0px 100px 0px"

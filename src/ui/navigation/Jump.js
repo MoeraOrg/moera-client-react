@@ -14,12 +14,35 @@ class Jump extends React.PureComponent {
     static propTypes = {
         nodeName: PropType.string,
         href: PropType.string,
-        className: PropType.string
+        className: PropType.string,
+        onNear: PropType.func,
+        onFar: PropType.func
     }
 
-    onClick = e => {
-        const {path, query, hash} = URI.parse(this.props.href);
-        this.props.goToLocation(path, query, hash);
+    onNear = e => {
+        const {href, onNear, goToLocation} = this.props;
+        const performJump = () => {
+            const {path, query, hash} = URI.parse(href);
+            goToLocation(path, query, hash);
+        }
+        if (onNear != null) {
+            onNear(href, performJump);
+        } else {
+            performJump();
+        }
+        e.preventDefault();
+    }
+
+    onFar = url => e => {
+        const {onFar} = this.props;
+        const performJump = () => {
+            window.location = url;
+        }
+        if (onFar != null) {
+            onFar(url, performJump);
+        } else {
+            performJump();
+        }
         e.preventDefault();
     }
 
@@ -28,7 +51,7 @@ class Jump extends React.PureComponent {
             children} = this.props;
 
         if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
-            return <a href={rootPage + href} className={className} title={title} onClick={this.onClick}>{children}</a>
+            return <a href={rootPage + href} className={className} title={title} onClick={this.onNear}>{children}</a>
         } else {
             let url;
             if (nodeName === ":" || nodeName === homeOwnerName) {
@@ -38,7 +61,7 @@ class Jump extends React.PureComponent {
                     ? details.nodeUri + href
                     : urlWithParameters(homeRootPage + "/gotoname", {nodeName, location: href});
             }
-            return <a href={url} className={className} title={title}>{children}</a>
+            return <a href={url} className={className} title={title} onClick={this.onFar(url)}>{children}</a>
         }
     }
 
