@@ -2,31 +2,22 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { getHomeOwnerName } from "state/home/selectors";
 import { isAtComposePage } from "state/navigation/selectors";
-import { isAtHomeNode } from "state/node/selectors";
-import { goToCompose } from "state/navigation/actions";
+import Jump from "ui/navigation/Jump";
 import "./NewPostButton.css";
 
-const NewPostButton = ({rootPage, atCompose, atHome, goToCompose}) => (
+const NewPostButton = ({homeOwnerName, atCompose}) => (
     !atCompose &&
-        <a href={rootPage + "/compose"}
-           className="btn btn-success btn-sm new-post-button"
-           onClick={event => {
-               if (atHome) {
-                   goToCompose();
-                   event.preventDefault();
-               }
-        }}>
+        <Jump nodeName={homeOwnerName} href="/compose" className="btn btn-success btn-sm new-post-button">
             <FontAwesomeIcon icon="pen-alt"/>
             &nbsp;&nbsp;New post
-        </a>
+        </Jump>
 );
 
 export default connect(
     state => ({
-        rootPage: state.home.root.page,
-        atCompose: isAtComposePage(state),
-        atHome: isAtHomeNode(state)
-    }),
-    { goToCompose }
+        homeOwnerName: getHomeOwnerName(state),
+        atCompose: isAtComposePage(state)
+    })
 )(NewPostButton);
