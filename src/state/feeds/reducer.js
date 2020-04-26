@@ -1,4 +1,5 @@
 import * as immutable from 'object-path-immutable';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
     FEED_FUTURE_SLICE_LOAD,
@@ -27,7 +28,7 @@ function getFeed(state, feedName) {
     const istate = immutable.wrap(state);
     let feed = state[feedName];
     if (feed == null) {
-        feed = emptyFeed;
+        feed = cloneDeep(emptyFeed);
         istate.set([feedName], feed);
     }
     return {istate, feed};
@@ -84,7 +85,7 @@ export default (state = initialState, action) => {
             const istate = immutable.wrap(state);
             const feedName = PAGE_FEEDS.get(action.payload.page);
             if (feedName != null && state[feedName] == null) {
-                istate.set([feedName], emptyFeed);
+                istate.set([feedName], cloneDeep(emptyFeed));
                 updateScrollingOnActive(istate, feedName, emptyFeed, action.payload.details.at);
             }
             for (let [fn, feed] of Object.entries(state)) {
