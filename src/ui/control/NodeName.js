@@ -4,8 +4,8 @@ import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { NodeName as NodeNameParser } from "api";
-import { urlWithParameters } from "util/misc";
 import { getNamingNameDetails } from "state/naming/selectors";
+import Jump from "ui/navigation/Jump";
 import "./NodeName.css";
 
 const NameGeneration = ({generation, latest}) => (
@@ -17,7 +17,7 @@ NameGeneration.propTypes = {
     latest: PropType.bool
 };
 
-const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, homePageRoot, details }) => {
+const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, details }) => {
     if (!name) {
         return null;
     }
@@ -28,17 +28,14 @@ const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, 
             "incorrect": verified && !correct
         }
     );
-    let href = "";
-    if (linked) {
-        href = details.loaded ? details.nodeUri : urlWithParameters(homePageRoot + "/gotoname", {name});
-    }
+    linked = linked && (!details.loaded || details.nodeUri);
     const parts = NodeNameParser.parse(name);
-    return href ?
+    return linked ?
         (
-            <a className={klass} href={href}>
+            <Jump className={klass} nodeName={name} href="/">
                 {parts.name}
                 <NameGeneration generation={parts.generation} latest={details.latest} />
-            </a>
+            </Jump>
         )
         :
         (
@@ -57,7 +54,6 @@ NodeNameImpl.propTypes = {
 
 export const NodeName = connect(
     (state, ownProps) => ({
-        homePageRoot: state.home.root.page,
         details: getNamingNameDetails(state, ownProps.name)
     })
 )(NodeNameImpl);

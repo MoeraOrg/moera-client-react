@@ -2,29 +2,24 @@ import React from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { goToPosting } from "state/navigation/actions";
 import { getSetting } from "state/settings/selectors";
+import Jump from "ui/navigation/Jump";
 import "./PostingDate.css"
 
-const PostingDate = ({id, publishedAt, rootLocation, timeRelative, goToPosting}) => {
+const PostingDate = ({id, publishedAt, timeRelative}) => {
     const date = moment.unix(publishedAt);
     return (
-        <a className="date" href={`${rootLocation}/post/${id}`} onClick={e => {
-            goToPosting(id);
-            e.preventDefault();
-        }}>{
+        <Jump className="date" href={`/post/${id}`}>{
             timeRelative ?
                 <span title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</span>
             :
                 date.format("DD-MM-YYYY HH:mm")
-        }</a>
+        }</Jump>
     );
 };
 
 export default connect(
     state => ({
-        rootLocation: state.node.root.location,
         timeRelative: getSetting(state, "posting.time.relative")
-    }),
-    { goToPosting }
+    })
 )(PostingDate);

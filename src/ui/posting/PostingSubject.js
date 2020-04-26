@@ -1,25 +1,16 @@
 import React from 'react';
 
+import Jump from "ui/navigation/Jump";
 import "./PostingSubject.css";
-import { connect } from "react-redux";
-import { goToPosting } from "state/navigation/actions";
 
-const PostingSubject = ({posting, preview, rootLocation, goToPosting}) => {
+const PostingSubject = ({posting, preview}) => {
     const subject = preview && posting.bodyPreview.subject ? posting.bodyPreview.subject : posting.body.subject;
     if (!subject) {
         return null;
     }
     return (
-        <div className="subject"><a href={`${rootLocation}/post/${posting.id}`} onClick={e => {
-            goToPosting(posting.id);
-            e.preventDefault();
-        }}>{subject}</a></div>
+        <div className="subject"><Jump href={`/post/${posting.id}`}>{subject}</Jump></div>
     );
 };
 
-export default connect(
-    state => ({
-        rootLocation: state.node.root.location,
-    }),
-    { goToPosting }
-)(PostingSubject);
+export default PostingSubject;

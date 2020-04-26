@@ -3,21 +3,17 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
-import { goToPage } from "state/navigation/actions";
+import Jump from "ui/navigation/Jump";
 
-const MainMenuLink = ({rootLocation, currentPage, page, otherPages, href, goToPage, children}) => (
+const MainMenuLink = ({currentPage, page, otherPages, href, children}) => (
     <li className={cx(
             "nav-item", {
                 "active": currentPage === page || (otherPages && otherPages.includes(currentPage))
             }
         )}>
-        <a className="nav-link" href={rootLocation + href}
-           onClick={event => {
-               goToPage(page);
-               event.preventDefault();
-           }}>
+        <Jump className="nav-link" href={href}>
             {children}
-        </a>
+        </Jump>
     </li>
 );
 
@@ -28,8 +24,6 @@ MainMenuLink.propTypes = {
 
 export default connect(
     state => ({
-        rootLocation: state.node.root.location,
         currentPage: state.navigation.page
-    }),
-    { goToPage }
+    })
 )(MainMenuLink);

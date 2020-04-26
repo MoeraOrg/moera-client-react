@@ -7,7 +7,8 @@ export function transform(srcInfo, dstInfo) {
     if (srcInfo.directories[0] !== "settings") {
         actions.push(goToSettings());
     }
-    const srcTab = srcInfo.directories.length > 1 && srcInfo.directories[1] === "client" ? "client" : "node";
+    const srcTab = srcInfo.directories.length > 1
+        && (srcInfo.directories[1] === "client" || srcInfo.directories[1] === "node") ? srcInfo.directories[1] : "";
     const dstTab = dstInfo.directories.length > 1 && dstInfo.directories[1] === "client" ? "client" : "node";
     if (srcTab !== dstTab) {
         actions.push(settingsGoToTab(dstTab));

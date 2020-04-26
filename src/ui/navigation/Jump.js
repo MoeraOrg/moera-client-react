@@ -24,17 +24,21 @@ class Jump extends React.PureComponent {
     }
 
     render() {
-        const {nodeName, href, className, ownerName, rootPage, homeOwnerName, homeRootPage, details, children} = this.props;
+        const {nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details,
+            children} = this.props;
 
-        if (nodeName == null || nodeName === ownerName) {
-            return <a href={rootPage + href} className={className} onClick={this.onClick}>{children}</a>
-        } else if (nodeName === homeOwnerName) {
-            return <a href={homeRootPage + href} className={className}>{children}</a>
+        if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
+            return <a href={rootPage + href} className={className} title={title} onClick={this.onClick}>{children}</a>
         } else {
-            const url = details.loaded
-                ? details.nodeUri + href
-                : urlWithParameters(homeRootPage + "/gotoname", {nodeName, location: href});
-            return <a href={url} className={className}>{children}</a>
+            let url;
+            if (nodeName === ":" || nodeName === homeOwnerName) {
+                url = homeRootPage + href;
+            } else {
+                url = details.loaded
+                    ? details.nodeUri + href
+                    : urlWithParameters(homeRootPage + "/gotoname", {nodeName, location: href});
+            }
+            return <a href={url} className={className} title={title}>{children}</a>
         }
     }
 

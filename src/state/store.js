@@ -204,9 +204,9 @@ function* combinedSaga() {
     yield takeLatest(COMPOSE_POST, composePostSaga);
     yield takeLatest(POSTING_DELETE, postingDeleteSaga);
     yield takeLatest(POSTING_LOAD, introduce(postingLoadSaga));
-    yield takeLatest(SETTINGS_NODE_VALUES_LOAD, settingsNodeValuesLoadSaga);
-    yield takeLatest(SETTINGS_NODE_META_LOAD, settingsNodeMetaLoadSaga);
-    yield takeLatest(SETTINGS_CLIENT_VALUES_LOAD, settingsClientValuesLoadSaga);
+    yield takeLatest(SETTINGS_NODE_VALUES_LOAD, introduce(settingsNodeValuesLoadSaga));
+    yield takeLatest(SETTINGS_NODE_META_LOAD, introduce(settingsNodeMetaLoadSaga));
+    yield takeLatest(SETTINGS_CLIENT_VALUES_LOAD, introduce(settingsClientValuesLoadSaga));
     yield takeLatest(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
     yield takeLatest(SETTINGS_UPDATE, settingsUpdateSaga);
     yield takeLatest(SETTINGS_UPDATE_SUCCEEDED, settingsUpdateSucceededSaga);

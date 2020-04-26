@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 
 import { settingsGoToSheet } from "state/settings/actions";
+import Jump from "ui/navigation/Jump";
 import "./SettingsMenu.css";
 
 const MENU_ITEMS = {
@@ -17,7 +18,7 @@ const MENU_ITEMS = {
     }
 };
 
-const SettingsMenu = ({tab, sheet, rootPage, settingsGoToSheet}) => {
+const SettingsMenu = ({tab, sheet, settingsGoToSheet}) => {
     const items = MENU_ITEMS[tab] ? MENU_ITEMS[tab] : MENU_ITEMS["node"];
     sheet = items[sheet] ? sheet : Object.keys(items)[0];
     return (
@@ -28,8 +29,7 @@ const SettingsMenu = ({tab, sheet, rootPage, settingsGoToSheet}) => {
                         s === sheet ?
                             items[s]
                         :
-                            <a href={`${rootPage}/settings/${tab}#${s}`}
-                               onClick={e => {settingsGoToSheet(s); e.preventDefault()}}>{items[s]}</a>
+                            <Jump href={`/settings/${tab}#${s}`}>{items[s]}</Jump>
                     }</span>
                 </li>
             )
@@ -40,8 +40,7 @@ const SettingsMenu = ({tab, sheet, rootPage, settingsGoToSheet}) => {
 export default connect(
     state => ({
         tab: state.settings.tab,
-        sheet: state.settings.sheet,
-        rootPage: state.home.root.page
+        sheet: state.settings.sheet
     }),
     { settingsGoToSheet }
 )(SettingsMenu);
