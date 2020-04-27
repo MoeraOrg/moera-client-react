@@ -16,6 +16,24 @@ export const feedGeneralSet = (feedName, info) => ({
     payload: {feedName, info}
 });
 
+export const FEED_STATUS_LOAD = "FEED_STATUS_LOAD";
+export const feedStatusLoad = (feedName) => ({
+    type: FEED_STATUS_LOAD,
+    payload: {feedName}
+});
+
+export const FEED_STATUS_LOAD_FAILED = "FEED_STATUS_LOAD_FAILED";
+export const feedStatusLoadFailed = (feedName) => ({
+    type: FEED_STATUS_LOAD_FAILED,
+    payload: {feedName}
+});
+
+export const FEED_STATUS_SET = "FEED_STATUS_SET";
+export const feedStatusSet = (feedName, status) => ({
+    type: FEED_STATUS_SET,
+    payload: {feedName, status}
+});
+
 export const FEED_PAST_SLICE_LOAD = "FEED_PAST_SLICE_LOAD";
 export const feedPastSliceLoad = (feedName) => ({
     type: FEED_PAST_SLICE_LOAD,

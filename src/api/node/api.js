@@ -359,6 +359,19 @@ export const FeedInfo = schema({
     additionalProperties: false
 });
 
+export const FeedStatus = schema({
+    type: "object",
+    properties: {
+        "notViewed": {
+            type: "integer"
+        },
+        "notRead": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false
+});
+
 const StoryInfoType = {
     type: "object",
     properties: {

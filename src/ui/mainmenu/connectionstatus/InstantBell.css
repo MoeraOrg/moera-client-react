@@ -1,0 +1,15 @@
+.bell-button {
+    position: relative;
+}
+
+.bell-button .count {
+    position: absolute;
+    top: -0.2rem;
+    right: 0;
+    background-color: var(--danger);
+    color: white;
+    font-weight: bold;
+    font-size: 0.7rem;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+}

@@ -13,7 +13,7 @@ import {
     FEED_PAST_SLICE_SET,
     FEED_SCROLL_TO_ANCHOR,
     FEED_SCROLLED,
-    FEED_SCROLLED_TO_ANCHOR,
+    FEED_SCROLLED_TO_ANCHOR, FEED_STATUS_LOAD, FEED_STATUS_LOAD_FAILED, FEED_STATUS_SET,
     FEEDS_UNSET
 } from "state/feeds/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
@@ -120,6 +120,31 @@ export default (state = initialState, action) => {
                     ...info,
                     loadingGeneral: false,
                     loadedGeneral: true
+                })
+                .value();
+        }
+
+        case FEED_STATUS_LOAD: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "loadingStatus"], true)
+                .value();
+        }
+
+        case FEED_STATUS_LOAD_FAILED: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "loadingStatus"], false)
+                .value();
+        }
+
+        case FEED_STATUS_SET: {
+            const {feedName, status} = action.payload;
+            return getFeed(state, feedName).istate
+                .assign([feedName], {
+                    ...status,
+                    loadingStatus: false,
+                    loadedStatus: true
                 })
                 .value();
         }

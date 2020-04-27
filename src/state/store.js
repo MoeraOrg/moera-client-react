@@ -17,7 +17,7 @@ import {
 import { CARTES_LOAD, CARTES_SET } from "state/cartes/actions";
 import { NODE_NAME_LOAD, NODE_NAME_UPDATE, REGISTER_NAME } from "state/nodename/actions";
 import { PROFILE_LOAD, PROFILE_UPDATE } from "state/profile/actions";
-import { FEED_FUTURE_SLICE_LOAD, FEED_GENERAL_LOAD, FEED_PAST_SLICE_LOAD } from "state/feeds/actions";
+import { FEED_FUTURE_SLICE_LOAD, FEED_GENERAL_LOAD, FEED_PAST_SLICE_LOAD, FEED_STATUS_LOAD } from "state/feeds/actions";
 import { DETAILED_POSTING_LOAD } from "state/detailedposting/actions";
 import {
     COMPOSE_DRAFT_LIST_ITEM_DELETE,
@@ -96,7 +96,12 @@ import { homeRestoreSaga } from "state/home/sagas";
 import { cartesLoadSaga } from "state/cartes/sagas";
 import { nodeNameLoadSaga, nodeNameUpdateSaga, registerNameSaga } from "state/nodename/sagas";
 import { profileLoadSaga, profileUpdateSaga } from "state/profile/sagas";
-import { feedFutureSliceLoadSaga, feedGeneralLoadSaga, feedPastSliceLoadSaga } from "state/feeds/sagas";
+import {
+    feedFutureSliceLoadSaga,
+    feedGeneralLoadSaga,
+    feedPastSliceLoadSaga,
+    feedStatusLoadSaga
+} from "state/feeds/sagas";
 import { detailedPostingLoadSaga } from "state/detailedposting/sagas";
 import {
     composeDraftListItemDeleteSaga,
@@ -195,7 +200,8 @@ function* combinedSaga() {
     yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
     yield takeLatest(REGISTER_NAME, registerNameSaga);
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
-    yield takeLatest(FEED_GENERAL_LOAD, feedGeneralLoadSaga);
+    yield takeEvery(FEED_GENERAL_LOAD, feedGeneralLoadSaga);
+    yield takeEvery(FEED_STATUS_LOAD, feedStatusLoadSaga);
     yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
     yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
     yield takeLatest(DETAILED_POSTING_LOAD, introduce(detailedPostingLoadSaga));

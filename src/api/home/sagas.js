@@ -131,6 +131,12 @@ export function* deleteDraftPosting(id) {
     return yield call(callHome, {location, method: "DELETE", schema: NodeApi.Result});
 }
 
+export function* getFeedStatus(feedName) {
+    feedName = encodeURIComponent(feedName);
+    const location = yield call(authorized, `/feeds/${feedName}/status`);
+    return yield call(callHome, {location, schema: NodeApi.FeedStatus});
+}
+
 export function* getFeedSlice(feedName, after, before, limit) {
     feedName = encodeURIComponent(feedName);
     const location = yield call(authorized,

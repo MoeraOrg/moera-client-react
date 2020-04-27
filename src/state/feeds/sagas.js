@@ -7,7 +7,9 @@ import {
     feedGeneralLoadFailed,
     feedGeneralSet,
     feedPastSliceLoadFailed,
-    feedPastSliceSet
+    feedPastSliceSet,
+    feedStatusLoadFailed,
+    feedStatusSet
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { namingNameUsed } from "state/naming/actions";
@@ -20,6 +22,17 @@ export function* feedGeneralLoadSaga(action) {
         yield put(feedGeneralSet(feedName, data));
     } catch (e) {
         yield put(feedGeneralLoadFailed(feedName));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* feedStatusLoadSaga(action) {
+    const {feedName} = action.payload;
+    try {
+        const data = yield call(Home.getFeedStatus, feedName.substring(1)); // feedName must start with ":"
+        yield put(feedStatusSet(feedName, data));
+    } catch (e) {
+        yield put(feedStatusLoadFailed(feedName));
         yield put(errorThrown(e));
     }
 }
