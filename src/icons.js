@@ -33,6 +33,8 @@ import {
 import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
 import {
     faClock,
+    faEnvelope,
+    faEnvelopeOpen,
     faThumbsDown as faThumbsDownRegular,
     faThumbsUp as faThumbsUpRegular,
     faUser
@@ -47,6 +49,8 @@ export default function initIconLibrary() {
     library.add(faClock);
     library.add(faCode);
     library.add(faCog);
+    library.add(faEnvelope);
+    library.add(faEnvelopeOpen);
     library.add(faExclamationTriangle);
     library.add(faExternalLinkAlt);
     library.add(faFileAlt);

@@ -1,8 +1,11 @@
+#instants .instant A {
+    color: black;
+    text-decoration: none;
+}
+
 #instants .instant {
     display: block;
-    color: black;
     border-top: 1px solid #e8e8e8;
-    text-decoration: none;
 }
 
 #instants .instant.unread {
@@ -11,7 +14,7 @@
 
 #instants .instant .cursor {
     position: relative;
-    padding: 0.2rem 0.5rem 1.7rem 0.5rem;
+    padding: 0.2rem 1.5rem 1.7rem 0.5rem;
     min-height: 7em;
 }
 
@@ -24,7 +27,25 @@
     bottom: 0.2rem;
 }
 
-#instants .instant .date {
+#instants .instant .footer .date {
     color: var(--gray-medium);
     margin-left: 0.5em;
+}
+
+#instants .instant .sidebar {
+    position: absolute;
+    right: 0;
+    padding: 0.5em;
+    height: 100%;
+    top: 0;
+    color: var(--cyan);
+    visibility: hidden;
+}
+
+#instants .instant:hover .sidebar {
+    visibility: visible;
+}
+
+#instants .instant:hover .sidebar .envelope {
+    cursor: pointer;
 }

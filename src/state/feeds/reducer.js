@@ -17,7 +17,7 @@ import {
     FEEDS_UNSET
 } from "state/feeds/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
-import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
+import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { PAGE_TIMELINE } from "state/navigation/pages";
 
@@ -275,6 +275,16 @@ export default (state = initialState, action) => {
             return getFeed(state, feedName).istate
                 .set([feedName, "anchor"], null)
                 .value();
+        }
+
+        case STORY_READING_UPDATE: {
+            const {feedName, id, read} = action.payload;
+            const {istate, feed} = getFeed(state, feedName);
+            const index = feed.stories.findIndex(t => t.id === id);
+            if (index >= 0) {
+                istate.set([feedName, "stories", index, "read"], read);
+            }
+            return istate.value();
         }
 
         default:

@@ -4,6 +4,12 @@ export const storyPinningUpdate = (id, pinned) => ({
     payload: {id, pinned}
 });
 
+export const STORY_READING_UPDATE = "STORY_READING_UPDATE";
+export const storyReadingUpdate = (feedName, id, read) => ({
+    type: STORY_READING_UPDATE,
+    payload: {feedName, id, read}
+});
+
 export const STORY_ADDED = "STORY_ADDED";
 export const storyAdded = (story) => ({
     type: STORY_ADDED,

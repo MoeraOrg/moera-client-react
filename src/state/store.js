@@ -53,7 +53,7 @@ import {
     REACTIONS_DIALOG_TOTALS_LOAD
 } from "state/reactionsdialog/actions";
 import { POSTING_REPLY } from "state/postingreply/actions";
-import { STORY_PINNING_UPDATE } from "state/stories/actions";
+import { STORY_PINNING_UPDATE, STORY_READING_UPDATE } from "state/stories/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import error from "state/error/reducer";
@@ -131,7 +131,7 @@ import {
     reactionVerifySaga
 } from "state/reactionsdialog/sagas";
 import { postingReplySaga } from "state/postingreply/sagas";
-import { storyPinningUpdateSaga } from "state/stories/sagas";
+import { storyPinningUpdateSaga, storyReadingUpdateSaga } from "state/stories/sagas";
 import { storyChangeDateSaga } from "state/changedatedialog/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
@@ -228,6 +228,7 @@ function* combinedSaga() {
     yield takeLatest(POSTING_REPLY, postingReplySaga);
     yield takeEvery(STORY_PINNING_UPDATE, storyPinningUpdateSaga);
     yield takeLatest(STORY_CHANGE_DATE, storyChangeDateSaga);
+    yield takeEvery(STORY_READING_UPDATE, storyReadingUpdateSaga);
 
     yield invokeTriggers(triggers);
 }

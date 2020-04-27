@@ -13,3 +13,13 @@ export function* storyPinningUpdateSaga(action) {
         yield put(errorThrown(e));
     }
 }
+
+export function* storyReadingUpdateSaga(action) {
+    const {id, read} = action.payload;
+    try {
+        const data = yield call(Node.putStory, id, {read});
+        yield put(storyUpdated(data));
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}

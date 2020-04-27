@@ -83,6 +83,33 @@ const storyEvent = (properties = {}) => baseEvent({
     "postingId": {
         type: "string"
     },
+    "viewed": {
+        type: "boolean"
+    },
+    "read": {
+        type: "boolean"
+    },
+    "summary": {
+        type: "string"
+    },
+    "operations": {
+        type: "object",
+        properties: {
+            "edit": {
+                type: "array",
+                items: {
+                    type: "string"
+                }
+            },
+            "delete": {
+                type: "array",
+                items: {
+                    type: "string"
+                }
+            }
+        },
+        additionalProperties: false
+    },
     ...properties
 });
 
