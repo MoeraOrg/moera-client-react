@@ -29,10 +29,12 @@ class InstantStory extends React.PureComponent {
         return (
             <Jump nodeName={nodeName} href={href} className={cx("instant", {"unread": !story.read})}
                   onNear={this.onJump}>
-                <div dangerouslySetInnerHTML={{__html: story.summary}}/>
-                <div className="footer">
-                    <InstantIcon story={story}/>
-                    <span className="date">{moment.unix(story.publishedAt).fromNow(true)}</span>
+                <div className="cursor">
+                    <div dangerouslySetInnerHTML={{__html: story.summary}}/>
+                    <div className="footer">
+                        <InstantIcon story={story}/>
+                        <span className="date">{moment.unix(story.publishedAt).fromNow(true)}</span>
+                    </div>
                 </div>
             </Jump>
         );

@@ -3,12 +3,19 @@
     color: black;
     border-top: 1px solid #e8e8e8;
     text-decoration: none;
-    padding: 0.2rem 0.5rem 1.7rem 0.5rem;
-    min-height: 7em;
-    position: relative;
 }
 
-#instants .instant:hover {
+#instants .instant.unread {
+    background-color: var(--highlight-cyan);
+}
+
+#instants .instant .cursor {
+    position: relative;
+    padding: 0.2rem 0.5rem 1.7rem 0.5rem;
+    min-height: 7em;
+}
+
+#instants .instant .cursor:hover {
     background-color: var(--highlight);
 }
 
