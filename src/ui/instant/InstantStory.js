@@ -22,9 +22,14 @@ function getStoryTarget(story) {
 
 class InstantStory extends React.PureComponent {
 
-    onJump = (href, performJump) => {
-        this.props.hide();
+    onJump = story => (href, performJump) => {
+        const {hide, storyReadingUpdate} = this.props;
+
+        hide();
         performJump();
+        if (!story.read) {
+            storyReadingUpdate(":instant", story.id, true);
+        }
     }
 
     onEnvelope = () => {
@@ -38,7 +43,7 @@ class InstantStory extends React.PureComponent {
         return (
             <div className={cx("instant", {"unread": !story.read})}>
                 <div className="cursor">
-                    <Jump nodeName={nodeName} href={href} onNear={this.onJump}>
+                    <Jump nodeName={nodeName} href={href} onNear={this.onJump(story)}>
                         <div dangerouslySetInnerHTML={{__html: story.summary}}/>
                         <div className="footer">
                             <InstantIcon story={story}/>
