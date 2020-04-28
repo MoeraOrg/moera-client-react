@@ -46,6 +46,12 @@ export const feedStatusUpdateFailed = (feedName) => ({
     payload: {feedName}
 });
 
+export const FEED_STATUS_UPDATED = "FEED_STATUS_UPDATED";
+export const feedStatusUpdated = (feedName, viewed, read, before) => ({
+    type: FEED_STATUS_UPDATED,
+    payload: {feedName, viewed, read, before}
+});
+
 export const FEED_PAST_SLICE_LOAD = "FEED_PAST_SLICE_LOAD";
 export const feedPastSliceLoad = (feedName) => ({
     type: FEED_PAST_SLICE_LOAD,

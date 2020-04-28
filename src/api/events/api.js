@@ -195,5 +195,30 @@ export const EVENT_SCHEMES = {
     "POSTING_DRAFT_REVISION_DELETED": draftPostingEvent(),
     "STORY_ADDED": storyEvent(),
     "STORY_DELETED": storyEvent(),
-    "STORY_UPDATED": storyEvent()
+    "STORY_UPDATED": storyEvent(),
+    "FEED_STATUS_UPDATED": baseEvent({
+        "feedName": {
+            type: "string"
+        },
+        "notViewed": {
+            type: "integer"
+        },
+        "notRead": {
+            type: "integer"
+        }
+    }),
+    "STORIES_STATUS_UPDATED": baseEvent({
+        "feedName": {
+            type: "string"
+        },
+        "viewed": {
+            type: "boolean"
+        },
+        "read": {
+            type: "boolean"
+        },
+        "before": {
+            type: "integer"
+        }
+    })
 };

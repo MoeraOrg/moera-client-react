@@ -10,6 +10,7 @@ import {
     feedPastSliceSet,
     feedStatusLoadFailed,
     feedStatusSet,
+    feedStatusUpdated,
     feedStatusUpdateFailed
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
@@ -41,6 +42,7 @@ export function* feedStatusLoadSaga(action) {
 export function* feedStatusUpdateSaga(action) {
     const {feedName, viewed, read, before} = action.payload;
     try {
+        yield put(feedStatusUpdated(feedName, viewed, read, before));
         // feedName must start with ":"
         const data = yield call(Home.putFeedStatus, feedName.substring(1), viewed, read, before);
         yield put(feedStatusSet(feedName, data));
