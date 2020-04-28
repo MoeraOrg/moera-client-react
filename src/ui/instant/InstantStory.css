@@ -13,31 +13,33 @@
 }
 
 #instants .instant .cursor {
-    position: relative;
-    padding: 0.2rem 1.5rem 1.7rem 0.5rem;
-    min-height: 7em;
+    display: flex;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    min-height: 5.5em;
 }
 
 #instants .instant .cursor:hover {
     background-color: var(--highlight);
 }
 
-#instants .instant .footer {
-    position: absolute;
-    bottom: 0.2rem;
+#instants .instant A {
+    display: block;
+    flex: auto;
 }
 
-#instants .instant .footer .date {
+#instants .instant A .footer {
+    margin-top: 0.3em;
+}
+
+#instants .instant A .footer .date {
     color: var(--gray-medium);
     margin-left: 0.5em;
 }
 
 #instants .instant .sidebar {
-    position: absolute;
-    right: 0;
+    flex: none;
     padding: 0.5em;
-    height: 100%;
-    top: 0;
     color: var(--cyan);
     visibility: hidden;
 }

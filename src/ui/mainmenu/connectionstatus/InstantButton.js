@@ -20,7 +20,7 @@ class InstantButton extends React.PureComponent {
 
     render() {
         return (
-            <Popover element={InstantBell} onToggle={this.onToggle}>
+            <Popover element={InstantBell} className="instant-popover" onToggle={this.onToggle}>
                 {({hide, update}) => (
                     <Instants hide={hide} update={update}/>
                 )}

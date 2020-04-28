@@ -1,5 +1,9 @@
+.instant-popover {
+    min-width: 25rem;
+}
+
 #instants {
-    font-size: 90%;
+    font-size: 0.835rem;
     max-width: 800px;
     max-height: 70vh;
     margin-left: -0.75rem;

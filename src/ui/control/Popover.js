@@ -9,6 +9,7 @@ import isFunction from 'lodash.isfunction';
 export class Popover extends React.PureComponent {
 
     static propTypes = {
+        className: PropType.string,
         text: PropType.string,
         textClassName: PropType.string,
         icon: PropType.string,
@@ -65,7 +66,7 @@ export class Popover extends React.PureComponent {
     };
 
     render() {
-        const {text, textClassName, icon, title, element, children} = this.props;
+        const {className, text, textClassName, icon, title, element, children} = this.props;
 
         return (
             <Manager>
@@ -88,7 +89,8 @@ export class Popover extends React.PureComponent {
                                 "popover",
                                 `bs-popover-${placement}`,
                                 "fade",
-                                {"show": this.state.visible}
+                                {"show": this.state.visible},
+                                className
                             )}>
                                 <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>
                                 <div className="popover-body">
