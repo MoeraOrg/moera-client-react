@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { goToLocation } from "state/navigation/actions";
+import { getFeedState } from "state/feeds/selectors";
 
 class Navigation extends React.PureComponent {
 
@@ -10,7 +11,7 @@ class Navigation extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {rootPage, location, title, update, locked} = this.props;
+        const {rootPage, location, title, update, locked, count} = this.props;
 
         if (!locked && location !== prevProps.location) {
             if (update) {
@@ -19,11 +20,12 @@ class Navigation extends React.PureComponent {
                 window.history.replaceState({location}, "", rootPage + location);
             }
         }
-        if (title !== prevProps.title) {
+        if (title !== prevProps.title || count !== prevProps.count) {
+            const counter = count > 0 ? `(${count}) ` : "";
             if (title) {
-                document.title = title + " | Moera";
+                document.title = counter + title + " | Moera";
             } else {
-                document.title = "Moera";
+                document.title = counter + "Moera";
             }
         }
     }
@@ -45,7 +47,8 @@ export default connect(
         location: state.navigation.location,
         title: state.navigation.title,
         update: state.navigation.update,
-        locked: state.navigation.locked
+        locked: state.navigation.locked,
+        count: getFeedState(state, ":instant").notViewed
     }),
     { goToLocation }
 )(Navigation);
