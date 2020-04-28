@@ -15,6 +15,7 @@ class Jump extends React.PureComponent {
         nodeName: PropType.string,
         href: PropType.string,
         className: PropType.string,
+        trackingId: PropType.string,
         onNear: PropType.func,
         onFar: PropType.func
     }
@@ -46,20 +47,31 @@ class Jump extends React.PureComponent {
         e.preventDefault();
     }
 
+    track(url) {
+        const {trackingId, homeRootPage} = this.props;
+
+        return trackingId != null
+            ? urlWithParameters(homeRootPage + "/track", {trackingId, href: url}) : url;
+    }
+
     render() {
-        const {nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details,
+        const {nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details, trackingId,
             children} = this.props;
 
         if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
-            return <a href={rootPage + href} className={className} title={title} onClick={this.onNear}>{children}</a>
+            return (
+                <a href={this.track(rootPage + href)} className={className} title={title} onClick={this.onNear}>
+                    {children}
+                </a>
+            );
         } else {
             let url;
             if (nodeName === ":" || nodeName === homeOwnerName) {
-                url = homeRootPage + href;
+                url = this.track(homeRootPage + href);
             } else {
                 url = details.loaded
-                    ? details.nodeUri + href
-                    : urlWithParameters(homeRootPage + "/gotoname", {nodeName, location: href});
+                    ? this.track(details.nodeUri + href)
+                    : urlWithParameters(homeRootPage + "/gotoname", {nodeName, location: href, trackingId});
             }
             return <a href={url} className={className} title={title} onClick={this.onFar(url)}>{children}</a>
         }

@@ -406,6 +406,9 @@ const StoryInfoType = {
         "summary": {
             type: "string"
         },
+        "trackingId": {
+            type: "string"
+        },
         "operations": {
             type: "object",
             properties: {

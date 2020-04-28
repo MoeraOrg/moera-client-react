@@ -92,6 +92,9 @@ const storyEvent = (properties = {}) => baseEvent({
     "summary": {
         type: "string"
     },
+    "trackingId": {
+        type: "string"
+    },
     "operations": {
         type: "object",
         properties: {
