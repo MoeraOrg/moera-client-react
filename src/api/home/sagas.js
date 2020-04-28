@@ -137,6 +137,14 @@ export function* getFeedStatus(feedName) {
     return yield call(callHome, {location, schema: NodeApi.FeedStatus});
 }
 
+export function* putFeedStatus(feedName, viewed, read, before) {
+    feedName = encodeURIComponent(feedName);
+    const location = yield call(authorized, `/feeds/${feedName}/status`);
+    return yield call(callHome, {
+        location, method: "PUT", body: {viewed, read, before}, schema: NodeApi.FeedStatus
+    });
+}
+
 export function* getFeedSlice(feedName, after, before, limit) {
     feedName = encodeURIComponent(feedName);
     const location = yield call(authorized,

@@ -9,7 +9,8 @@ import {
     feedPastSliceLoadFailed,
     feedPastSliceSet,
     feedStatusLoadFailed,
-    feedStatusSet
+    feedStatusSet,
+    feedStatusUpdateFailed
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { namingNameUsed } from "state/naming/actions";
@@ -33,6 +34,18 @@ export function* feedStatusLoadSaga(action) {
         yield put(feedStatusSet(feedName, data));
     } catch (e) {
         yield put(feedStatusLoadFailed(feedName));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* feedStatusUpdateSaga(action) {
+    const {feedName, viewed, read, before} = action.payload;
+    try {
+        // feedName must start with ":"
+        const data = yield call(Home.putFeedStatus, feedName.substring(1), viewed, read, before);
+        yield put(feedStatusSet(feedName, data));
+    } catch (e) {
+        yield put(feedStatusUpdateFailed(feedName));
         yield put(errorThrown(e));
     }
 }

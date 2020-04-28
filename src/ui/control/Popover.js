@@ -13,7 +13,8 @@ export class Popover extends React.PureComponent {
         textClassName: PropType.string,
         icon: PropType.string,
         title: PropType.string,
-        element: PropType.elementType
+        element: PropType.elementType,
+        onToggle: PropType.func
     };
 
     constructor(props, context) {
@@ -42,13 +43,25 @@ export class Popover extends React.PureComponent {
     };
 
     show = () => {
+        if (this.state.visible) {
+            return;
+        }
         this.setState({visible: true});
         document.addEventListener("click", this.documentClick);
+        if (this.props.onToggle != null) {
+            this.props.onToggle(true);
+        }
     };
 
     hide = () => {
+        if (!this.state.visible) {
+            return;
+        }
         this.setState({visible: false});
         document.removeEventListener("click", this.documentClick);
+        if (this.props.onToggle != null) {
+            this.props.onToggle(false);
+        }
     };
 
     render() {

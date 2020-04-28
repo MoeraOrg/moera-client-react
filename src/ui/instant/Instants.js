@@ -24,7 +24,7 @@ class Instants extends React.PureComponent {
         if (this.pastIntersecting) {
             this.loadPast();
         }
-    };
+    }
 
     loadPast = () => {
         if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {

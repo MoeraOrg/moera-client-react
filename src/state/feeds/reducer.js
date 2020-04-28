@@ -13,7 +13,11 @@ import {
     FEED_PAST_SLICE_SET,
     FEED_SCROLL_TO_ANCHOR,
     FEED_SCROLLED,
-    FEED_SCROLLED_TO_ANCHOR, FEED_STATUS_LOAD, FEED_STATUS_LOAD_FAILED, FEED_STATUS_SET,
+    FEED_SCROLLED_TO_ANCHOR,
+    FEED_STATUS_LOAD,
+    FEED_STATUS_LOAD_FAILED,
+    FEED_STATUS_SET,
+    FEED_STATUS_UPDATE,
     FEEDS_UNSET
 } from "state/feeds/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
@@ -147,6 +151,22 @@ export default (state = initialState, action) => {
                     loadedStatus: true
                 })
                 .value();
+        }
+
+        case FEED_STATUS_UPDATE: {
+            const {feedName, viewed, read, before} = action.payload;
+            const {istate, feed} = getFeed(state, feedName);
+            for (let i = 0; i < feed.stories.length; i++) {
+                if (feed.stories[i].moment <= before) {
+                    if (viewed != null) {
+                        istate.set([feedName, "stories", i, "viewed"], viewed);
+                    }
+                    if (read != null) {
+                        istate.set([feedName, "stories", i, "read"], read);
+                    }
+                }
+            }
+            return istate.value();
         }
 
         case FEED_PAST_SLICE_LOAD: {
