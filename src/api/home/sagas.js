@@ -151,3 +151,10 @@ export function* getFeedSlice(feedName, after, before, limit) {
         urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit}));
     return yield call(callHome, {location, schema: NodeApi.FeedSliceInfo, withBodies: true});
 }
+
+export function* putStory(id, storyAttributes) {
+    const location = yield call(authorized, `/stories/${id}`);
+    return yield call(callHome, {
+        location, method: "PUT", body: storyAttributes, schema: NodeApi.StoryInfo, withBodies: true
+    });
+}

@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 
-import { Node } from "api/node";
+import { Home, Node } from "api";
 import { errorThrown } from "state/error/actions";
 import { storyUpdated } from "state/stories/actions";
 
@@ -17,7 +17,7 @@ export function* storyPinningUpdateSaga(action) {
 export function* storyReadingUpdateSaga(action) {
     const {id, read} = action.payload;
     try {
-        const data = yield call(Node.putStory, id, {read});
+        const data = yield call(Home.putStory, id, {read});
         yield put(storyUpdated(data));
     } catch (e) {
         yield put(errorThrown(e));
