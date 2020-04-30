@@ -1,5 +1,6 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faAt,
     faBackspace,
     faBell,
     faCertificate,
@@ -41,6 +42,7 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 
 export default function initIconLibrary() {
+    library.add(faAt);
     library.add(faBackspace);
     library.add(faBell);
     library.add(faCertificate);

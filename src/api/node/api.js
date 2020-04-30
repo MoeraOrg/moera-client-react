@@ -409,6 +409,12 @@ const StoryInfoType = {
         "trackingId": {
             type: "string"
         },
+        "remoteNodeName": {
+            type: "string"
+        },
+        "remotePostingId": {
+            type: "string"
+        },
         "operations": {
             type: "object",
             properties: {

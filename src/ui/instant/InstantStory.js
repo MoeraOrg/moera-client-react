@@ -15,6 +15,8 @@ function getStoryTarget(story) {
         case "reaction-added-positive":
         case "reaction-added-negative":
             return {nodeName: ":", href: `/post/${story.postingId}`}
+        case "mention-posting":
+            return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
         default:
             return {nodeName: ":", href: "/"}
     }

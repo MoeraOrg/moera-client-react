@@ -66,7 +66,7 @@ export default (state = initialState, action) => {
         case STORY_ADDED:
         case STORY_UPDATED: {
             const {id, posting} = action.payload.story;
-            if (state[posting.id]) {
+            if (posting && state[posting.id]) {
                 const refs = (state[posting.id].posting.feedReferences ?? []).filter(r => r.storyId !== id);
                 refs.push(toFeedReference(action.payload.story));
                 return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
