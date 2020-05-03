@@ -13,6 +13,13 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case CONNECTED_TO_HOME:
+            return {
+                ...state,
+                initialized: true,
+                cartesIp: action.payload.cartesIp,
+                cartes: action.payload.cartes ?? []
+            };
+
         case CARTES_SET:
             return {
                 ...state,
