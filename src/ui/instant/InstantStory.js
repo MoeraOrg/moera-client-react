@@ -70,6 +70,8 @@ class InstantStory extends React.PureComponent {
 }
 
 export default connect(
-    null,
+    state => ({
+        pulse: state.pulse.pulse // To force re-rendering only
+    }),
     { storyReadingUpdate }
 )(InstantStory);

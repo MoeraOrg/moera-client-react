@@ -121,7 +121,8 @@ export default connect(
         draftId: state.compose.draftId,
         draftList: state.compose.draftList,
         loadingDraftList: state.compose.loadingDraftList,
-        loadedDraftList: state.compose.loadedDraftList
+        loadedDraftList: state.compose.loadedDraftList,
+        pulse: state.pulse.pulse // To force re-rendering only
     }),
     { composeDraftSelect, composeDraftListItemDelete }
 )(ComposeDraftSelector);

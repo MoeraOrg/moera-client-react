@@ -62,6 +62,7 @@ import { POSTING_REPLY } from "state/postingreply/actions";
 import { STORY_PINNING_UPDATE, STORY_READING_UPDATE } from "state/stories/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import pulse from "state/pulse/reducer";
 import error from "state/error/reducer";
 import naming from "state/naming/reducer";
 import node from "state/node/reducer";
@@ -250,6 +251,7 @@ function* combinedSaga() {
 const sagaMiddleware = createSagaMiddleware();
 export default createStore(
     combineReducers({
+        pulse,
         error,
         naming,
         node,

@@ -25,6 +25,7 @@ const PostingUpdated = ({posting, timeRelative}) => {
 
 export default connect(
     state => ({
-        timeRelative: getSetting(state, "posting.time.relative")
+        timeRelative: getSetting(state, "posting.time.relative"),
+        pulse: getSetting(state, "posting.time.relative") ? state.pulse.pulse : null // To force re-rendering only
     })
 )(PostingUpdated);
