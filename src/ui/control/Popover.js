@@ -15,6 +15,7 @@ export class Popover extends React.PureComponent {
         icon: PropType.string,
         title: PropType.string,
         element: PropType.elementType,
+        detached: PropType.bool,
         onToggle: PropType.func
     };
 
@@ -66,7 +67,7 @@ export class Popover extends React.PureComponent {
     };
 
     render() {
-        const {className, text, textClassName, icon, title, element, children} = this.props;
+        const {className, text, textClassName, icon, title, element, detached, children} = this.props;
 
         return (
             <Manager>
@@ -83,22 +84,26 @@ export class Popover extends React.PureComponent {
                     )}
                 </Reference>
                 {ReactDOM.createPortal(
-                    <Popper placement="bottom" positionFixed={true}>
-                        {({ref, style, placement, arrowProps, forceUpdate}) => (
-                            <div ref={ref} style={style} className={cx(
-                                "popover",
-                                `bs-popover-${placement}`,
-                                "fade",
-                                {"show": this.state.visible},
-                                className
-                            )}>
-                                <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>
-                                <div className="popover-body">
-                                    {isFunction(children) ? children({hide: this.hide, update: forceUpdate}) : children}
+                    (!detached || this.state.visible) &&
+                        <Popper placement="bottom" positionFixed={true}>
+                            {({ref, style, placement, arrowProps, forceUpdate}) => (
+                                <div ref={ref} style={style} className={cx(
+                                    "popover",
+                                    `bs-popover-${placement}`,
+                                    "fade",
+                                    {"show": this.state.visible},
+                                    className
+                                )}>
+                                    <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>
+                                    <div className="popover-body">{
+                                        isFunction(children) ?
+                                            children({hide: this.hide, update: forceUpdate})
+                                        :
+                                            children
+                                    }</div>
                                 </div>
-                            </div>
-                        )}
-                    </Popper>,
+                            )}
+                        </Popper>,
                     document.querySelector("#modal-root")
                 )}
             </Manager>

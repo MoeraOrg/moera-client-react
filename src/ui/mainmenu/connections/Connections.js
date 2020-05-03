@@ -10,16 +10,11 @@ import { NodeName } from "ui/control";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";
 
-class ConnectionsButton extends React.PureComponent {
+class Connections extends React.PureComponent {
 
     static propTypes = {
-        hide: PropType.func.isRequired,
-        update: PropType.func.isRequired
+        hide: PropType.func.isRequired
     };
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        this.props.update();
-    }
 
     onAddClick = (hide) => () => {
         this.props.openConnectDialog();
@@ -72,4 +67,4 @@ export default connect(
         roots: state.home.roots
     }),
     { openConnectDialog }
-)(ConnectionsButton);
+)(Connections);

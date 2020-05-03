@@ -15,10 +15,6 @@ class Instants extends React.PureComponent {
         this.pastIntersecting = true;
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        this.props.update();
-    }
-
     onSentinelPast = intersecting => {
         this.pastIntersecting = intersecting;
         if (this.pastIntersecting) {

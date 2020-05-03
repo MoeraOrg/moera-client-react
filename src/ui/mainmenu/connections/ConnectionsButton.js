@@ -5,9 +5,9 @@ import HomeName from "ui/mainmenu/connections/HomeName";
 import Connections from "ui/mainmenu/connections/Connections";
 
 const ConnectionsButton = () => (
-    <Popover element={HomeName}>
-        {({hide, update}) => (
-            <Connections hide={hide} update={update}/>
+    <Popover element={HomeName} detached={true}>
+        {({hide}) => (
+            <Connections hide={hide}/>
         )}
     </Popover>
 );
