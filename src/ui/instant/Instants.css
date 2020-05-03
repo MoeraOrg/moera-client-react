@@ -11,8 +11,22 @@
 }
 
 #instants .header {
-    font-weight: bold;
     padding: 0 0.75rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#instants .header .title {
+    font-weight: bold;
+}
+
+#instants .header .read-all {
+    color: var(--blue);
+    cursor: pointer;
+}
+
+#instants .header .read-all:hover {
+    text-decoration: underline;
 }
 
 #instants .content {

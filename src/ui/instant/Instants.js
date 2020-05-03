@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getFeedState } from "state/feeds/selectors";
-import { feedPastSliceLoad } from "state/feeds/actions";
+import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import "./Instants.css";
@@ -29,12 +29,24 @@ class Instants extends React.PureComponent {
         this.props.feedPastSliceLoad(":instant");
     }
 
+    onReadAll = () => {
+        const {stories, feedStatusUpdate} = this.props;
+
+        if (stories == null || stories.length === 0) {
+            return;
+        }
+        feedStatusUpdate(":instant", null, true, stories[0].moment);
+    }
+
     render() {
         const {hide, loadingPast, after, stories} = this.props;
 
         return (
             <div id="instants">
-                <div className="header">Notifications</div>
+                <div className="header">
+                    <div className="title">Notifications</div>
+                    <div className="read-all" onClick={this.onReadAll}>Mark All as Read</div>
+                </div>
                 <div className="content">
                     {stories
                         .map(story => <InstantStory key={story.moment} story={story} hide={hide}/>)
@@ -55,5 +67,5 @@ export default connect(
         after: getFeedState(state, ":instant").after,
         stories: getFeedState(state, ":instant").stories
     }),
-    { feedPastSliceLoad }
+    { feedPastSliceLoad, feedStatusUpdate }
 )(Instants);
