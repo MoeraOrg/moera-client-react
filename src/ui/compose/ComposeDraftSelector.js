@@ -71,38 +71,40 @@ class ComposeDraftSelector extends React.PureComponent {
                                         <span className="badge badge-light">{draftList.length}</span>
                                     }
                                 </button>
-                                <Popper placement="bottom-start">
-                                    {({ref, style, placement}) => (
-                                        <div ref={ref} style={style} x-placement={placement} className={cx(
-                                            "fade",
-                                            "dropdown-menu",
-                                            "shadow-sm",
-                                            {"show": visible}
-                                        )}>
-                                            {draftList.map(draft => (
-                                                <div className={cx("dropdown-item", {"current": draftId === draft.id})}
-                                                     key={draft.id} onClick={this.onSelect(draft.id)}
-                                                >
-                                                    <div className="info">
-                                                        <div className="content">
-                                                            <div className="fader">&nbsp;</div>
-                                                            {draft.subject && <b>{draft.subject} </b>}
-                                                            {draft.text}
-                                                        </div>
-                                                        <div className="edited">
-                                                            {moment.unix(draft.editedAt).fromNow()}
-                                                        </div>
-                                                    </div>
-                                                    <div className="delete" title="Delete draft"
-                                                         onClick={this.onDelete(draft.id)}
+                                {visible &&
+                                    <Popper placement="bottom-start">
+                                        {({ref, style, placement}) => (
+                                            <div ref={ref} style={style} x-placement={placement} className={cx(
+                                                "fade",
+                                                "dropdown-menu",
+                                                "shadow-sm",
+                                                {"show": visible}
+                                            )}>
+                                                {draftList.map(draft => (
+                                                    <div className={cx("dropdown-item", {"current": draftId === draft.id})}
+                                                         key={draft.id} onClick={this.onSelect(draft.id)}
                                                     >
-                                                        <FontAwesomeIcon icon="trash-alt"/>
+                                                        <div className="info">
+                                                            <div className="content">
+                                                                <div className="fader">&nbsp;</div>
+                                                                {draft.subject && <b>{draft.subject} </b>}
+                                                                {draft.text}
+                                                            </div>
+                                                            <div className="edited">
+                                                                {moment.unix(draft.editedAt).fromNow()}
+                                                            </div>
+                                                        </div>
+                                                        <div className="delete" title="Delete draft"
+                                                             onClick={this.onDelete(draft.id)}
+                                                        >
+                                                            <FontAwesomeIcon icon="trash-alt"/>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </Popper>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </Popper>
+                                }
                             </div>
                         )}
                     </Reference>
