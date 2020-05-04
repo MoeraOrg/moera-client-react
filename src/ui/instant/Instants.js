@@ -48,9 +48,7 @@ class Instants extends React.PureComponent {
                     <div className="read-all" onClick={this.onReadAll}>Mark All as Read</div>
                 </div>
                 <div className="content">
-                    {stories
-                        .map(story => <InstantStory key={story.moment} story={story} hide={hide}/>)
-                    }
+                    {stories.map(story => <InstantStory key={story.moment} story={story} hide={hide}/>)}
                 </div>
                 <InstantsSentinel loading={loadingPast} title="Load more..." margin="0px 0px 100px 0px"
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
