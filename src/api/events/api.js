@@ -231,3 +231,10 @@ export const EVENT_SCHEMES = {
         }
     })
 };
+
+export const ALLOWED_SELF_EVENTS = new Set([
+    "STORY_ADDED",
+    "STORY_DELETED",
+    "STORY_UPDATED",
+    "FEED_STATUS_UPDATED"
+]);

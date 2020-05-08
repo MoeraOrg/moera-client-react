@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Client } from '@stomp/stompjs';
 import * as URI from 'uri-js';
 
-import { Browser, EventPacket, EVENT_SCHEMES, formatSchemaErrors } from "api";
+import { ALLOWED_SELF_EVENTS, Browser, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
 import { eventAction } from "api/events/actions";
 
 class Events extends React.PureComponent {
@@ -86,7 +86,7 @@ class Events extends React.PureComponent {
             console.error("Incorrect event received", formatSchemaErrors(eventScheme.errors));
             return;
         }
-        if (packet.cid !== Browser.clientId) {
+        if (ALLOWED_SELF_EVENTS.has(packet.event.type) || packet.cid !== Browser.clientId) {
             eventAction(packet.event, prefix);
             this.queueStartedAt = packet.queueStartedAt;
             this.lastEvent = packet.ordinal;
