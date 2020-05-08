@@ -1,0 +1,44 @@
+#vertical-menu {
+    border-radius: 3px;
+    padding: 0.5rem;
+    border: solid var(--status-icon) 1px;
+}
+
+#vertical-menu BUTTON {
+    display: inline;
+    margin-left: 1rem;
+}
+
+#vertical-menu .new-post-button {
+    margin: 1rem 0;
+}
+
+#vertical-menu .connection-button {
+    cursor: pointer;
+    color: var(--status-icon);
+    margin-right: 0.7rem;
+    font-size: 150%;
+}
+
+#vertical-menu .connection-button:hover {
+    color: var(--status-icon-highlight);
+}
+
+#vertical-menu .connection-button.active {
+    cursor: default;
+    color: white;
+}
+
+#vertical-menu .active .connection-button {
+    color: white;
+}
+
+#vertical-menu .home-name {
+    display: block;
+    text-align: center;
+}
+
+#vertical-menu .loading {
+    color: white;
+    fill: white !important;
+}

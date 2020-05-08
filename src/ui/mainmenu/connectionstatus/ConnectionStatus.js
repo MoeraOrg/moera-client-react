@@ -34,7 +34,7 @@ const ConnectionStatus = ({connecting,  connected, openConnectDialog}) => (
                         <ConnectionsButton/>
                         <DisconnectButton/>
                     </>
-            )
+                )
         }
         </div>
         <ConnectDialog />

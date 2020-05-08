@@ -1,5 +1,12 @@
 #connection-status {
     color: white;
+    display: none;
+}
+
+@media (min-width:768px) {
+    #connection-status {
+        display: block;
+    }
 }
 
 #connection-status BUTTON {

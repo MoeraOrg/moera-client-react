@@ -5,6 +5,7 @@ import OwnerSwitcher from "ui/mainmenu/owner/OwnerSwitcher";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 import MainMenuTimelineLink from "ui/mainmenu/MainMenuTimelineLink";
 import ConnectionStatus from "ui/mainmenu/connectionstatus/ConnectionStatus";
+import VerticalMenuToggler from "ui/mainmenu/vertical/VerticalMenuToggler";
 import { PAGE_PROFILE } from "state/navigation/pages";
 import "./MainMenu.css";
 
@@ -18,7 +19,8 @@ const MainMenu = () => (
                 <MainMenuLink page={PAGE_PROFILE} href="/profile">PROFILE</MainMenuLink>
             </ul>
         </div>
-        <ConnectionStatus />
+        <ConnectionStatus/>
+        <VerticalMenuToggler/>
     </nav>
 );
 
