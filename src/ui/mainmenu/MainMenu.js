@@ -2,11 +2,9 @@ import React from 'react';
 
 import Logo from "ui/mainmenu/logo/Logo";
 import OwnerSwitcher from "ui/mainmenu/owner/OwnerSwitcher";
-import MainMenuLink from "ui/mainmenu/MainMenuLink";
-import MainMenuTimelineLink from "ui/mainmenu/MainMenuTimelineLink";
+import MainMenuPages from "ui/mainmenu/MainMenuPages";
 import ConnectionStatus from "ui/mainmenu/connectionstatus/ConnectionStatus";
 import VerticalMenuToggler from "ui/mainmenu/vertical/VerticalMenuToggler";
-import { PAGE_PROFILE } from "state/navigation/pages";
 import "./MainMenu.css";
 
 const MainMenu = () => (
@@ -14,10 +12,7 @@ const MainMenu = () => (
         <Logo/>
         <OwnerSwitcher/>
         <div className="collapse navbar-collapse">
-            <ul className="navbar-nav">
-                <MainMenuTimelineLink/>
-                <MainMenuLink page={PAGE_PROFILE} href="/profile">PROFILE</MainMenuLink>
-            </ul>
+            <MainMenuPages/>
         </div>
         <ConnectionStatus/>
         <VerticalMenuToggler/>

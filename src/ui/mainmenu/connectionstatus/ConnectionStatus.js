@@ -21,18 +21,22 @@ const ConnectionStatus = ({connecting,  connected, openConnectDialog}) => (
                 <>Connecting <Loading/></>
             :
                 (!connected ?
-                    <>
+                    <span className="d-none d-md-inline">
                         Not connected to home
                         <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
-                    </>
+                    </span>
                 :
                     <>
-                        <NewPostButton/>
+                        <span className="d-none d-md-inline">
+                            <NewPostButton/>
+                        </span>
                         <InstantButton/>
-                        <SettingsButton/>
-                        <HomeButton/>
-                        <ConnectionsButton/>
-                        <DisconnectButton/>
+                        <span className="d-none d-md-inline">
+                            <SettingsButton/>
+                            <HomeButton/>
+                            <ConnectionsButton/>
+                            <DisconnectButton/>
+                        </span>
                     </>
                 )
         }

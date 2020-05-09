@@ -9,6 +9,10 @@
     margin-left: 1rem;
 }
 
+#vertical-menu .connect-button {
+    margin: 1rem 0;
+}
+
 #vertical-menu .new-post-button {
     margin: 1rem 0;
 }

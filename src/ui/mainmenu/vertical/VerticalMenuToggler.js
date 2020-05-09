@@ -61,8 +61,8 @@ class VerticalMenuToggler extends React.PureComponent {
                 </Reference>
                 {ReactDOM.createPortal(
                     visible &&
-                        <Popper placement="bottom" positionFixed={true}>
-                            {({ref, style, placement, arrowProps, forceUpdate}) => (
+                        <Popper placement="bottom" strategy="fixed">
+                            {({ref, style}) => (
                                 <div ref={ref} style={style} className="vertical-menu-popper">
                                     <VerticalMenu/>
                                 </div>
