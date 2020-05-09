@@ -16,7 +16,12 @@ export class Popover extends React.PureComponent {
         title: PropType.string,
         element: PropType.elementType,
         detached: PropType.bool,
+        strategy: PropType.string,
         onToggle: PropType.func
+    };
+
+    static defaultProps = {
+        strategy: "fixed"
     };
 
     constructor(props, context) {
@@ -67,7 +72,7 @@ export class Popover extends React.PureComponent {
     };
 
     render() {
-        const {className, text, textClassName, icon, title, element, detached, children} = this.props;
+        const {className, text, textClassName, icon, title, element, detached, strategy, children} = this.props;
 
         return (
             <Manager>
@@ -85,7 +90,7 @@ export class Popover extends React.PureComponent {
                 </Reference>
                 {ReactDOM.createPortal(
                     (!detached || this.state.visible) &&
-                        <Popper placement="bottom" positionFixed={true}>
+                        <Popper placement="bottom" strategy={strategy}>
                             {({ref, style, placement, arrowProps, forceUpdate}) => (
                                 <div ref={ref} style={style} className={cx(
                                     "popover",
