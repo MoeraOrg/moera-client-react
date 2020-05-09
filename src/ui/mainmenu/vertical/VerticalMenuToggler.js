@@ -20,14 +20,7 @@ class VerticalMenuToggler extends React.PureComponent {
         }
     };
 
-    documentClick = event => {
-        for (let element of document.querySelectorAll(".vertical-menu").values()) {
-            const r = element.getBoundingClientRect();
-            if (r.left <= event.clientX && r.right >= event.clientX
-                && r.top <= event.clientY && r.bottom >= event.clientY) {
-                return;
-            }
-        }
+    documentClick = () => {
         this.hide();
     };
 
