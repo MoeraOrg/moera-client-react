@@ -28,7 +28,9 @@ function toStory(eventPayload, isHome) {
     if (isHome) {
         story.feedName = ":" + story.feedName;
     }
-    story.posting = {id: eventPayload.postingId};
+    if (eventPayload.postingId) {
+        story.posting = {id: eventPayload.postingId};
+    }
     delete story.postingId;
     return story;
 }

@@ -7,7 +7,8 @@ import { STORY_ADDED, STORY_UPDATED } from "state/stories/actions";
 export default [
     trigger(
         [STORY_ADDED, STORY_UPDATED],
-        (state, signal) => !isPostingCached(state, signal.payload.story.posting.id),
+        (state, signal) => signal.payload.story.posting
+            && !isPostingCached(state, signal.payload.story.posting.id),
         signal => postingLoad(signal.payload.story.posting.id)
     ),
     trigger(
