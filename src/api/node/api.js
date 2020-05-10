@@ -220,9 +220,6 @@ const PostingInfoType = {
         "createdAt": {
             type: "integer"
         },
-        "publishedAt": {
-            type: "integer"
-        },
         "editedAt": {
             type: "integer"
         },

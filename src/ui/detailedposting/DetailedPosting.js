@@ -32,10 +32,11 @@ const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToT
                 :
                     <>
                         <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
-                        <PostingPin pinned={story.pinned}/>
+                        <PostingPin pinned={story != null && story.pinned}/>
                         <div className="owner-line">
                             <PostingOwner posting={posting}/>
-                            <PostingDate id={posting.id} publishedAt={story.publishedAt}/>
+                            <PostingDate id={posting.id}
+                                         publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
                             <PostingUpdated posting={posting}/>
                         </div>
                         <PostingSubject posting={posting} preview={false}/>

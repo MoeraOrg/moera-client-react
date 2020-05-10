@@ -51,13 +51,13 @@ class PostingMenu extends React.PureComponent {
                     title: "Pin",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onPin,
-                    show: !story.pinned && isPermitted("edit", story)
+                    show: story != null && !story.pinned && isPermitted("edit", story)
                 },
                 {
                     title: "Unpin",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onPin,
-                    show: story.pinned && isPermitted("edit", story)
+                    show: story != null && story.pinned && isPermitted("edit", story)
                 },
                 {
                     title: "Change date/time...",
