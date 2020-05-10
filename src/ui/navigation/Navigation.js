@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { goToLocation } from "state/navigation/actions";
-import { getFeedState } from "state/feeds/selectors";
+import { getInstantCount } from "state/feeds/selectors";
 
 class Navigation extends React.PureComponent {
 
@@ -48,7 +48,7 @@ export default connect(
         title: state.navigation.title,
         update: state.navigation.update,
         locked: state.navigation.locked,
-        count: getFeedState(state, ":instant").notViewed
+        count: getInstantCount(state)
     }),
     { goToLocation }
 )(Navigation);

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { getFeedState } from "state/feeds/selectors";
+import { getInstantCount } from "state/feeds/selectors";
 import "./InstantBell.css";
 
 const Bell = ({count}) => (
@@ -14,6 +14,6 @@ const Bell = ({count}) => (
 
 export default connect(
     state => ({
-        count: getFeedState(state, ":instant").notViewed
+        count: getInstantCount(state)
     })
 )(Bell);
