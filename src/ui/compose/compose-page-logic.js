@@ -55,7 +55,7 @@ const composePageLogic = {
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,
-            publications: props.posting != null ? null : [{
+            publications: props.postingId != null ? null : [{
                 feedName: "timeline",
                 publishAt: values.publishAt.getTime() !== values.publishAtDefault.getTime()
                     ? moment(values.publishAt).unix() : null,
