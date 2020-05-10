@@ -77,6 +77,14 @@ export const REACTION_EMOJIS = {
         0x1f64f: {
             title: "Hope",
             color: "#f9ca55"
+        },
+        0x1f60c: {
+            title: "Keep calm",
+            color: "#ffcc4d"
+        },
+        0x1f917: {
+            title: "Hug",
+            color: "#f4900c"
         }
     },
     negative: {
