@@ -8,6 +8,7 @@
     max-height: 70vh;
     margin-left: -0.75rem;
     margin-right: -0.75rem;
+    overflow-y: auto;
 }
 
 #instants .header {
@@ -27,8 +28,4 @@
 
 #instants .header .read-all:hover {
     text-decoration: underline;
-}
-
-#instants .content {
-    overflow-y: auto;
 }
