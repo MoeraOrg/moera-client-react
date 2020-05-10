@@ -177,7 +177,7 @@ class FeedPage extends React.PureComponent {
 
             return (
                 <>
-                    <FeedPageHeader feedName={feedName} title={title} empty/>
+                    <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}/>
                     <div className="no-postings">Nothing yet.</div>
                 </>
             );
