@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
-import InstantButton from "ui/mainmenu/connectionstatus/InstantButton";
+import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";

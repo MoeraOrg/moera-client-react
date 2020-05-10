@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Popover } from "ui/control";
-import InstantBell from "ui/mainmenu/connectionstatus/InstantBell";
+import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
