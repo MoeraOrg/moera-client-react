@@ -2,6 +2,25 @@ export const PREFIX = "client.mercy.";
 
 export const META = [
     {
+        name: "instants.number.mode",
+        type: "string",
+        defaultValue: "not-viewed",
+        title: "Number of notifications to be displayed",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Not viewed",
+                    value: "not-viewed"
+                },
+                {
+                    title: "Not read",
+                    value: "not-read"
+                }
+            ]
+        }
+    },
+    {
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",

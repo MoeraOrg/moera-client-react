@@ -4,7 +4,8 @@ import { Field } from 'formik';
 import cx from 'classnames';
 import selectn from 'selectn';
 
-import { Column, FormGroup } from "ui/control";
+import { Column } from "ui/control";
+import { FormFieldGroup } from "ui/control/field";
 
 export class SelectField extends React.PureComponent {
 
@@ -13,6 +14,7 @@ export class SelectField extends React.PureComponent {
         title: PropType.string,
         horizontal: PropType.bool,
         groupClassName: PropType.string,
+        labelClassName: PropType.string,
         col: PropType.string,
         size: PropType.string,
         choices: PropType.arrayOf(PropType.shape({
@@ -24,7 +26,9 @@ export class SelectField extends React.PureComponent {
         anyValue: PropType.bool,
         className: PropType.string,
         autoComplete: PropType.string,
-        noFeedback: PropType.bool
+        noFeedback: PropType.bool,
+        initialValue: PropType.string,
+        defaultValue: PropType.string,
     };
 
     constructor(props, context) {
@@ -41,17 +45,27 @@ export class SelectField extends React.PureComponent {
 
     render() {
         const {
-            name, title, horizontal = false, groupClassName, col, size, choices, multiple, anyValue, className,
-            autoComplete, noFeedback = false
+            name, title, horizontal = false, groupClassName, labelClassName, col, size, choices, multiple, anyValue,
+            className, autoComplete, noFeedback = false, initialValue, defaultValue
         } = this.props;
 
         return (
-            <FormGroup title={title} name={name} horizontal={horizontal} groupClassName={groupClassName}>
-                <Field name={name}>
-                    {({field, form}) => {
-                        const touched = selectn(field.name, form.touched);
-                        const error = selectn(field.name, form.errors);
-                        return (
+            <Field name={name}>
+                {({field, form}) => {
+                    const touched = selectn(field.name, form.touched);
+                    const error = selectn(field.name, form.errors);
+                    return (
+                        <FormFieldGroup
+                            title={title}
+                            name={name}
+                            horizontal={horizontal}
+                            labelClassName={labelClassName}
+                            groupClassName={groupClassName}
+                            field={field}
+                            form={form}
+                            initialValue={initialValue}
+                            defaultValue={defaultValue}
+                        >
                             <Column className={col}>
                                 <select
                                     {...field}
@@ -72,10 +86,10 @@ export class SelectField extends React.PureComponent {
                                 </select>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
                             </Column>
-                        );
-                    }}
-                </Field>
-            </FormGroup>
+                        </FormFieldGroup>
+                    );
+                }}
+            </Field>
         );
     }
 

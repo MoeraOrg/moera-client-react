@@ -5,7 +5,7 @@ import {
     DurationField,
     EmojiListInputField,
     InputField,
-    NumberField,
+    NumberField, SelectField,
     TextField
 } from "ui/control/field";
 import { parseBool } from "util/misc";
@@ -51,6 +51,11 @@ const SettingsField = ({name, fieldName, meta, initialValue}) => {
             if (modifiers.format) {
                 switch (modifiers.format) {
                     default:
+                        return <InputField name={fieldName} title={title}
+                                           initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
+                    case "select":
+                        return <SelectField name={fieldName} title={title} choices={modifiers.items}
+                                            initialValue={initialValue} defaultValue={defaultValue} anyValue/>
                     case "emoji-list-positive":
                         return <EmojiListInputField name={fieldName} title={title} negative={false}
                                                     initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
