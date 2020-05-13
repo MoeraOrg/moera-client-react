@@ -34,6 +34,7 @@
     flex: none;
     visibility: visible;
     color: var(--red-light);
+    cursor: pointer;
 }
 
 .draft-selector .dropdown-item:hover .delete:hover {
