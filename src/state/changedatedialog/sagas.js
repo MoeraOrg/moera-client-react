@@ -8,7 +8,7 @@ import { closeChangeDateDialog, storyChangeDateFailed } from "state/changedatedi
 export function* storyChangeDateSaga(action) {
     const {id, publishedAt} = action.payload;
     try {
-        const data = yield call(Node.putStory, id, {publishAt: publishedAt});
+        const data = yield call(Node.putStory, "", id, {publishAt: publishedAt});
         yield put(closeChangeDateDialog());
         yield put(storyUpdated(data));
     } catch (e) {

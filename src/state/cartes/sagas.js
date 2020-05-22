@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Browser, Home } from "api";
+import { Browser, Node } from "api";
 import { errorThrown } from "state/error/actions";
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
@@ -8,7 +8,7 @@ import { getHomeConnectionData } from "state/home/selectors";
 export function* cartesLoadSaga() {
     const {addonApiVersion, location, login, token, permissions} = yield select(getHomeConnectionData);
     try {
-        const {cartesIp, cartes} = yield call(Home.getCartes);
+        const {cartesIp, cartes} = yield call(Node.getCartes, ":");
         if (addonApiVersion >= 2) {
             Browser.storeCartesData(cartesIp, cartes);
         } else {

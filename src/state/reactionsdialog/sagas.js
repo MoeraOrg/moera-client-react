@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Home, Node } from "api";
+import { Node } from "api";
 import {
     reactionsDialogPastReactionsLoaded,
     reactionsDialogPastReactionsLoadFailed,
@@ -19,7 +19,7 @@ export function* reactionsDialogPastReactionsLoadSaga() {
         emoji: state.reactionsDialog.activeTab
     }));
     try {
-        const data = yield call(Node.getReactions, postingId, negative, emoji, before, 40);
+        const data = yield call(Node.getReactions, "", postingId, negative, emoji, before, 40);
         yield put(reactionsDialogPastReactionsLoaded(
             data.reactions, postingId, negative, emoji, data.before, data.after, data.total));
         // TODO extract node names and put them into naming cache queue
@@ -32,7 +32,7 @@ export function* reactionsDialogPastReactionsLoadSaga() {
 export function* reactionsDialogTotalsLoadSaga() {
     try {
         const postingId = yield select(state => state.reactionsDialog.postingId);
-        const data = yield call(Node.getReactionTotals, postingId);
+        const data = yield call(Node.getReactionTotals, "", postingId);
         yield put(reactionsDialogTotalsLoaded(data.positive, data.negative));
     } catch (e) {
         yield put(reactionsDialogTotalsLoadFailed());
@@ -43,7 +43,7 @@ export function* reactionsDialogTotalsLoadSaga() {
 export function* reactionVerifySaga(action) {
     const nodeName = yield select(getOwnerName);
     try {
-        yield call(Home.remoteReactionVerify, nodeName, action.payload.postingId, action.payload.ownerName);
+        yield call(Node.remoteReactionVerify, ":", nodeName, action.payload.postingId, action.payload.ownerName);
     } catch (e) {
         yield put(reactionVerifyFailed());
         yield put(errorThrown(e));

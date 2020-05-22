@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Home, NodeName } from "api";
+import { Node, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { postingReplyFailed } from "state/postingreply/actions";
 import { getOwnerName } from "state/owner/selectors";
@@ -57,7 +57,7 @@ export function* postingReplySaga() {
             reactionsVisible: reactionsVisibleDefault,
             reactionTotalsVisible: reactionTotalsVisibleDefault
         };
-        const data = yield call(Home.postDraftPosting, postingText);
+        const data = yield call(Node.postDraftPosting, ":", postingText);
         window.location = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
     } catch (e) {
         yield put(postingReplyFailed());

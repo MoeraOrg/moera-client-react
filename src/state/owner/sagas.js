@@ -8,7 +8,7 @@ import { namingNameLoaded } from "state/naming/actions";
 
 export function* ownerLoadSaga() {
     try {
-        const data = yield call(Node.getWhoAmI);
+        const data = yield call(Node.getWhoAmI, "");
         yield put(ownerSet(data.nodeName));
     } catch (e) {
         yield put(errorThrown(e));

@@ -8,7 +8,7 @@ import { getDetailedPostingId } from "state/detailedposting/selectors";
 export function* detailedPostingLoadSaga() {
     try {
         const id = yield select(getDetailedPostingId);
-        const data = yield call(Node.getPosting, id);
+        const data = yield call(Node.getPosting, "", id);
         yield put(detailedPostingLoaded(data));
     } catch (e) {
         yield put(detailedPostingLoadFailed());

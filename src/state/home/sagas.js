@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 
-import { Browser, Home } from "api";
+import { Browser, Node } from "api";
 import { restoreConnectDialog } from "state/connectdialog/actions";
 import { browserApiSet, connectedToHome, disconnectFromHome } from "state/home/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
@@ -18,7 +18,7 @@ export function* homeRestoreSaga(action) {
         if (getCartesListTtl(cartes) < 5 * 60) {
             const rootApi = normalizeUrl(location) + "/moera/api";
             try {
-                const data = yield call(Home.getCartes, rootApi, token);
+                const data = yield call(Node.getCartes, rootApi, token);
                 cartesIp = data.cartesIp;
                 cartes = data.cartes;
                 if (addonApiVersion >= 2) {

@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Home, Node } from "api";
+import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
     postingDeleted,
@@ -17,7 +17,7 @@ export function* postingDeleteSaga(action) {
     const id = action.payload.id;
     const posting = yield select(getPosting, id);
     try {
-        yield call(Node.deletePosting, id);
+        yield call(Node.deletePosting, "", id);
         yield put(postingDeleted(posting.id, posting.feedReferences));
     } catch (e) {
         yield put(postingDeleteFailed(id));
@@ -27,7 +27,7 @@ export function* postingDeleteSaga(action) {
 
 export function* postingLoadSaga(action) {
     try {
-        const data = yield call(Node.getPosting, action.payload.id);
+        const data = yield call(Node.getPosting, "", action.payload.id);
         yield put(postingSet(data));
     } catch (e) {
         yield put(postingLoadFailed());
@@ -38,7 +38,7 @@ export function* postingLoadSaga(action) {
 export function* postingVerifySaga(action) {
     const ownerName = yield select(getOwnerName);
     try {
-        yield call(Home.remotePostingVerify, ownerName, action.payload.id);
+        yield call(Node.remotePostingVerify, ":", ownerName, action.payload.id);
     } catch (e) {
         yield put(postingVerifyFailed());
         yield put(errorThrown(e));
@@ -48,10 +48,10 @@ export function* postingVerifySaga(action) {
 export function* postingReactSaga(action) {
     const {id, negative, emoji} = action.payload;
     try {
-        const data = yield call(Node.postReaction, id, negative, emoji);
+        const data = yield call(Node.postReaction, "", id, negative, emoji);
         yield put(postingReactionSet(id, {negative, emoji}, data.totals));
         const ownerName = yield select(getOwnerName);
-        yield call(Home.postRemoteReaction, ownerName, id, negative, emoji);
+        yield call(Node.postRemoteReaction, ":", ownerName, id, negative, emoji);
     } catch (e) {
         yield put(errorThrown(e));
     }
@@ -60,8 +60,8 @@ export function* postingReactSaga(action) {
 export function* postingReactionLoadSaga(action) {
     const {id} = action.payload;
     try {
-        const {negative, emoji} = yield call(Node.getReaction, id);
-        const totals = yield call(Node.getReactionTotals, id);
+        const {negative, emoji} = yield call(Node.getReaction, "", id);
+        const totals = yield call(Node.getReactionTotals, "", id);
         yield put(postingReactionSet(id, {negative, emoji}, totals));
     } catch (e) {
         yield put(errorThrown(e));
@@ -71,7 +71,7 @@ export function* postingReactionLoadSaga(action) {
 export function* postingReactionDeleteSaga(action) {
     const {id} = action.payload;
     try {
-        const data = yield call(Node.deleteReaction, id);
+        const data = yield call(Node.deleteReaction, "", id);
         yield put(postingReactionSet(id, null, data));
     } catch (e) {
         yield put(errorThrown(e));

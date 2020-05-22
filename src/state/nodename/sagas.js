@@ -14,7 +14,7 @@ import { Naming, Node } from "api";
 
 export function* nodeNameLoadSaga() {
     try {
-        const data = yield call(Node.getNodeName);
+        const data = yield call(Node.getNodeName, "");
         yield put(nodeNameSet(data));
         if (data.name) {
             yield put(ownerSet(data.name));
@@ -34,7 +34,7 @@ export function* registerNameSaga(action) {
             yield put(registerNameFailed());
             return;
         }
-        const secret = yield call(Node.registerName, name);
+        const secret = yield call(Node.registerName, "", name);
         yield put(registerNameSucceeded(secret.name, secret.mnemonic));
     } catch (e) {
         yield put(registerNameFailed());
@@ -45,7 +45,7 @@ export function* registerNameSaga(action) {
 export function* nodeNameUpdateSaga(action) {
     const {name, mnemonic} = action.payload;
     try {
-        yield call(Node.updateNodeName, name, mnemonic);
+        yield call(Node.updateNodeName, "", name, mnemonic);
         yield put(nodeNameUpdateSucceeded());
     } catch (e) {
         yield put(nodeNameUpdateFailed());

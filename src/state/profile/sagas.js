@@ -6,7 +6,7 @@ import { Node } from "api/node";
 
 export function* profileLoadSaga() {
     try {
-        const data = yield call(Node.getProfile);
+        const data = yield call(Node.getProfile, "");
         yield put(profileSet(data));
     } catch (e) {
         yield put(profileLoadFailed());
@@ -16,7 +16,7 @@ export function* profileLoadSaga() {
 
 export function* profileUpdateSaga(action) {
     try {
-        const data = yield call(Node.putProfile, action.payload);
+        const data = yield call(Node.putProfile, "", action.payload);
         yield put(profileUpdateSucceeded());
         yield put(profileSet(data));
     } catch (e) {

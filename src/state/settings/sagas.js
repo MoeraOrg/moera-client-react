@@ -1,7 +1,7 @@
 import { call, put } from '@redux-saga/core/effects';
 
 import { errorThrown } from "state/error/actions";
-import { Home, HomeNotConnectedError } from "api";
+import { HomeNotConnectedError, Node } from "api";
 import {
     settingsClientValuesLoaded,
     settingsClientValuesLoadFailed,
@@ -15,7 +15,7 @@ import {
 
 export function* settingsNodeValuesLoadSaga() {
     try {
-        const data = yield call(Home.getNodeSettings);
+        const data = yield call(Node.getNodeSettings, ":");
         yield put(settingsNodeValuesLoaded(data));
     } catch (e) {
         yield put(settingsNodeValuesLoadFailed());
@@ -25,7 +25,7 @@ export function* settingsNodeValuesLoadSaga() {
 
 export function* settingsNodeMetaLoadSaga() {
     try {
-        const data = yield call(Home.getNodeSettingsMetadata);
+        const data = yield call(Node.getNodeSettingsMetadata, ":");
         yield put(settingsNodeMetaLoaded(data));
     } catch (e) {
         yield put(settingsNodeMetaLoadFailed());
@@ -35,7 +35,7 @@ export function* settingsNodeMetaLoadSaga() {
 
 export function* settingsClientValuesLoadSaga() {
     try {
-        const data = yield call(Home.getClientSettings);
+        const data = yield call(Node.getClientSettings, ":");
         yield put(settingsClientValuesLoaded(data));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
@@ -51,7 +51,7 @@ export function* settingsUpdateSaga(action) {
     const {settings, onSuccess} = action.payload;
 
     try {
-        yield call(Home.putSettings, settings);
+        yield call(Node.putSettings, ":", settings);
         yield put(settingsUpdateSucceeded(settings, onSuccess));
     } catch (e) {
         yield put(settingsUpdateFailed());
@@ -59,7 +59,7 @@ export function* settingsUpdateSaga(action) {
     }
 }
 
-export function* settingsUpdateSucceededSaga(action) {
+export function settingsUpdateSucceededSaga(action) {
     if (action.payload.onSuccess != null) {
         action.payload.onSuccess();
     }

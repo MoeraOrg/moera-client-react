@@ -1,7 +1,6 @@
 import * as ClientSettings from "api/settings";
 import * as SettingTypes from "api/setting-types";
 
-export { Home } from "api/home";
 export { NamingApi, Naming } from "api/naming";
 export { NodeApi, Node } from "api/node";
 export { ALLOWED_SELF_EVENTS, EventPacket, EVENT_SCHEMES } from "api/events/api";

@@ -4,7 +4,7 @@ import { messageBox } from "state/messagebox/actions";
 import { normalizeUrl } from "util/misc";
 import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerified } from "state/home/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { Browser, Home, Naming, NodeApiError, NodeName } from "api";
+import { Browser, Naming, Node, NodeApiError, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { getAddonApiVersion, getHomeConnectionData } from "state/home/selectors";
 
@@ -22,9 +22,9 @@ export function* connectToHomeSaga(action) {
     let data;
     try {
         if (assign) {
-            yield call(Home.createCredentials, location, login, password);
+            yield call(Node.createCredentials, location, login, password);
         }
-        data = yield call(Home.createToken, location, login, password);
+        data = yield call(Node.createToken, location, login, password);
     } catch (e) {
         if (e instanceof NodeApiError) {
             yield call(connectToHomeFailure, e, openConnectDialog());
@@ -38,7 +38,7 @@ export function* connectToHomeSaga(action) {
         cartes: []
     };
     try {
-        cartesData = yield call(Home.getCartes, location, data.token);
+        cartesData = yield call(Node.getCartes, location, data.token);
     } catch (e) {
         yield put(errorThrown(e));
     }
@@ -56,7 +56,7 @@ export function* connectToHomeSaga(action) {
 
 export function* verifyHomeOwnerSaga() {
     try {
-        const {nodeName} = yield call(Home.getWhoAmI);
+        const {nodeName} = yield call(Node.getWhoAmI, ":");
         yield put(homeOwnerSet(nodeName));
 
         const addonApiVersion = yield select(getAddonApiVersion);
