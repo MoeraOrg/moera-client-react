@@ -1,30 +1,13 @@
-import { call, select } from 'redux-saga/effects';
+import { call } from 'redux-saga/effects';
 
-import { Node, NodeApi } from "api";
+import { ClientSettings, NodeApi } from "api";
+import { callApi } from "api/node/call";
 import { urlWithParameters } from "util/misc";
-import { ClientSettings, HomeNotConnectedError } from "api";
-import { getHomeToken, isConnectedToHome } from "state/home/selectors";
 
-function* callHome(options) {
-    return yield call(Node.callApi, {
-        rootApiSelector: state => state.home.root.api,
-        ...options,
-        errorTitle: "Home access error"
-    });
-}
-
-export function* authorized(location, token = null) {
-    if (token == null && !(yield select(isConnectedToHome))) {
-        throw new HomeNotConnectedError();
-    }
-    token = token != null ? token : yield select(getHomeToken);
-    return urlWithParameters(location, {token});
-}
-
-export function* createCredentials(rootApi, login, password) {
-    yield call(callHome, {
+export function* createCredentials(nodeName, login, password) {
+    yield call(callApi, {
+        nodeName,
         location: "/credentials",
-        rootApiSelector: rootApi,
         method: "POST",
         body: {
             login,
@@ -35,10 +18,10 @@ export function* createCredentials(rootApi, login, password) {
     });
 }
 
-export function* createToken(rootApi, login, password) {
-    return yield call(callHome, {
+export function* createToken(nodeName, login, password) {
+    return yield call(callApi, {
+        nodeName,
         location: "/tokens",
-        rootApiSelector: rootApi,
         method: "POST",
         body: {
             login,
@@ -50,111 +33,116 @@ export function* createToken(rootApi, login, password) {
 }
 
 export function* getWhoAmI() {
-    return yield call(callHome, {location: "/whoami", schema: NodeApi.WhoAmI});
+    return yield call(callApi, {nodeName: ":", location: "/whoami", schema: NodeApi.WhoAmI});
 }
 
 export function* getNodeSettings() {
-    const location = yield call(authorized, "/settings/node");
-    return yield call(callHome, {location, schema: NodeApi.SettingInfoArray});
+    return yield call(callApi, {
+        nodeName: ":", location: "/settings/node", auth: true, schema: NodeApi.SettingInfoArray
+    });
 }
 
 export function* getNodeSettingsMetadata() {
-    const location = yield call(authorized, "/settings/node/metadata");
-    return yield call(callHome, {location, schema: NodeApi.SettingMetaInfoArray});
+    return yield call(callApi, {
+        nodeName: ":", location: "/settings/node/metadata", auth: true, schema: NodeApi.SettingMetaInfoArray
+    });
 }
 
 export function* getClientSettings() {
-    const location = yield call(authorized,
-        urlWithParameters("/settings/client", {prefix: ClientSettings.PREFIX}));
-    return yield call(callHome, {location, schema: NodeApi.SettingInfoArray});
+    const location = urlWithParameters("/settings/client", {prefix: ClientSettings.PREFIX});
+    return yield call(callApi, {nodeName: ":", location, auth: true, schema: NodeApi.SettingInfoArray});
 }
 
 export function* putSettings(settings) {
-    const location = yield call(authorized, "/settings");
-    return yield call(callHome, {location, method: "PUT", body: settings, schema: NodeApi.Result});
+    return yield call(callApi, {
+        nodeName: ":", location: "/settings", method: "PUT", auth: true, body: settings, schema: NodeApi.Result
+    });
 }
 
 export function* remotePostingVerify(nodeName, id) {
-    const location = yield call(authorized, `/nodes/${nodeName}/postings/${id}/verify`);
-    return yield call(callHome, {location, method: "POST", schema: NodeApi.AsyncOperationCreated});
+    return yield call(callApi, {
+        nodeName: ":", location: `/nodes/${nodeName}/postings/${id}/verify`, method: "POST", auth: true,
+        schema: NodeApi.AsyncOperationCreated
+    });
 }
 
-export function* getCartes(rootApi = null, token = null) {
-    if (rootApi != null) {
-        const location = yield call(authorized, "/cartes", token);
-        return yield call(callHome, {location, rootApiSelector: rootApi, schema: NodeApi.CarteSet});
-    } else {
-        const location = yield call(authorized, "/cartes");
-        return yield call(callHome, {location, schema: NodeApi.CarteSet});
-    }
+export function* getCartes(nodeName = ":", auth = true) {
+    return yield call(callApi, {nodeName, location: "/cartes", auth, schema: NodeApi.CarteSet});
 }
 
-export function* postRemoteReaction(nodeName, postingId, negative, emoji) {
-    const location = yield call(authorized, `/nodes/${nodeName}/postings/${postingId}/reactions`);
-    return yield call(callHome, {location, method: "POST", body: {negative, emoji}, schema: NodeApi.Result});
+export function* postRemoteReaction(remoteNodeName, postingId, negative, emoji) {
+    return yield call(callApi, {
+        nodeName: ":", location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "POST", auth: true,
+        body: {negative, emoji}, schema: NodeApi.Result
+    });
 }
 
-export function* remoteReactionVerify(nodeName, postingId, ownerName) {
-    const location = yield call(authorized,
-        `/nodes/${nodeName}/postings/${postingId}/reactions/${ownerName}/verify`);
-    return yield call(callHome, {location, method: "POST", schema: NodeApi.AsyncOperationCreated});
+export function* remoteReactionVerify(remoteNodeName, postingId, ownerName) {
+    return yield call(callApi, {
+        nodeName: ":", location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`,
+        method: "POST", auth: true, schema: NodeApi.AsyncOperationCreated
+    });
 }
 
 export function* getDraftPostings() {
-    const location = yield call(authorized, `/draft-postings`);
-    return yield call(callHome, {location, schema: NodeApi.PostingInfoList});
+    return yield call(callApi, {
+        nodeName: ":", location: "/draft-postings", auth: true, schema: NodeApi.PostingInfoList
+    });
 }
 
 export function* getDraftPosting(id) {
-    const location = yield call(authorized, `/draft-postings/${id}`);
-    return yield call(callHome, {
-        location, schema: NodeApi.PostingInfo, withBodies: true, errorFilter: ["posting.not-found"]
+    return yield call(callApi, {
+        nodeName: ":", location: `/draft-postings/${id}`, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
+        errorFilter: ["posting.not-found"]
     });
 }
 
 export function* postDraftPosting(postingText) {
-    const location = yield call(authorized, "/draft-postings");
-    return yield call(callHome, {
-        location, method: "POST", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
+    return yield call(callApi, {
+        nodeName: ":", location: "/draft-postings", method: "POST", auth: true, body: postingText,
+        schema: NodeApi.PostingInfo, withBodies: true
     });
 }
 
 export function* putDraftPosting(id, postingText) {
-    const location = yield call(authorized, `/draft-postings/${id}`);
-    return yield call(callHome, {
-        location, method: "PUT", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
+    return yield call(callApi, {
+        nodeName: ":", location: `/draft-postings/${id}`, method: "PUT", auth: true, body: postingText,
+        schema: NodeApi.PostingInfo, withBodies: true
     });
 }
 
 export function* deleteDraftPosting(id) {
-    const location = yield call(authorized, `/draft-postings/${id}`);
-    return yield call(callHome, {location, method: "DELETE", schema: NodeApi.Result});
+    return yield call(callApi, {
+        nodeName: ":", location: `/draft-postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
 }
 
 export function* getFeedStatus(feedName) {
     feedName = encodeURIComponent(feedName);
-    const location = yield call(authorized, `/feeds/${feedName}/status`);
-    return yield call(callHome, {location, schema: NodeApi.FeedStatus});
+    return yield call(callApi, {
+        nodeName: ":", location: `/feeds/${feedName}/status`, auth: true, schema: NodeApi.FeedStatus
+    });
 }
 
 export function* putFeedStatus(feedName, viewed, read, before) {
     feedName = encodeURIComponent(feedName);
-    const location = yield call(authorized, `/feeds/${feedName}/status`);
-    return yield call(callHome, {
-        location, method: "PUT", body: {viewed, read, before}, schema: NodeApi.FeedStatus
+    return yield call(callApi, {
+        nodeName: ":", location: `/feeds/${feedName}/status`, method: "PUT", auth: true, body: {viewed, read, before},
+        schema: NodeApi.FeedStatus
     });
 }
 
 export function* getFeedSlice(feedName, after, before, limit) {
     feedName = encodeURIComponent(feedName);
-    const location = yield call(authorized,
-        urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit}));
-    return yield call(callHome, {location, schema: NodeApi.FeedSliceInfo, withBodies: true});
+    const location = urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit});
+    return yield call(callApi, {
+        nodeName: ":", location, auth: true, schema: NodeApi.FeedSliceInfo, withBodies: true
+    });
 }
 
 export function* putStory(id, storyAttributes) {
-    const location = yield call(authorized, `/stories/${id}`);
-    return yield call(callHome, {
-        location, method: "PUT", body: storyAttributes, schema: NodeApi.StoryInfo, withBodies: true
+    return yield call(callApi, {
+        nodeName: ":", location: `/stories/${id}`, method: "PUT", auth: true, body: storyAttributes,
+        schema: NodeApi.StoryInfo, withBodies: true
     });
 }

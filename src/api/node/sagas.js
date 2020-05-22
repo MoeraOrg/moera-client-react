@@ -1,270 +1,140 @@
-import { apply, call, put, select } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
 
-import { Browser, formatSchemaErrors, NodeApi, NodeApiError, NodeError } from "api";
-import { getNodeToken } from "state/node/selectors";
-import { getCurrentCarte } from "state/cartes/selectors";
+import { NodeApi } from "api";
+import { callApi } from "api/node/call";
 import { getHomeOwnerName } from "state/home/selectors";
-import { errorAuthInvalid } from "state/error/actions";
 import { urlWithParameters } from "util/misc";
 
-function apiUrl(rootApi, location, method) {
-    if (["POST", "PUT", "DELETE"].includes(method)) {
-        return urlWithParameters(rootApi + location, {"cid": Browser.clientId});
-    } else {
-        return rootApi + location;
-    }
-}
-
-function isErrorCodeAllowed(errorCode, filter) {
-    if (typeof filter === "boolean") {
-        return filter;
-    }
-    if (Array.isArray(filter)) {
-        return filter.map(c => c.toLowerCase()).includes(errorCode.toLowerCase());
-    }
-    if (typeof filter === "function") {
-        return filter(errorCode);
-    }
-    return false;
-}
-
-export function* callApi({
-            location,
-            rootApiSelector,
-            method = "GET",
-            body = null,
-            schema = null,
-            withBodies = false,
-            errorTitle = "",
-            errorFilter = false
-        }) {
-    const rootApi = typeof rootApiSelector === "string" ? rootApiSelector : (yield select(rootApiSelector));
-    const exception = (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
-    let response;
-    try {
-        response = yield call(fetch, apiUrl(rootApi, location, method), {
-            method,
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: body != null ? JSON.stringify(body) : null
-        });
-    } catch (e) {
-        throw exception(e);
-    }
-    let data;
-    try {
-        data = yield apply(response, response.json);
-    } catch (e) {
-        if (!response.ok) {
-            throw exception("Server returned error status");
-        } else {
-            if (schema) {
-                throw exception("Server returned empty result");
-            } else {
-                return {};
-            }
-        }
-    }
-    if (!response.ok) {
-        if (!NodeApi.Result(data)) {
-            throw exception("Server returned error status");
-        }
-        if (data.errorCode === "authentication.invalid") {
-            yield put(errorAuthInvalid());
-            throw new NodeApiError(data.errorCode, data.message);
-        }
-        if (isErrorCodeAllowed(data.errorCode, errorFilter)) {
-            throw new NodeApiError(data.errorCode, data.message);
-        } else {
-            throw exception("Server returned error status: " + data.message);
-        }
-    }
-    if (schema && !schema(data)) {
-        throw exception("Server returned incorrect response", formatSchemaErrors(schema.errors));
-    }
-    if (withBodies) {
-        data = decodeBodies(data, exception);
-    }
-    return data;
-}
-
-function* callNode(options) {
-    return yield call(callApi, {
-        ...options,
-        rootApiSelector: state => state.node.root.api,
-        errorTitle: "Node access error"
-    });
-}
-
-function decodeBody(encoded, exception) {
-    let body = JSON.parse(encoded);
-    if (!NodeApi.Body(body)) {
-        throw exception("Server returned incorrect response", formatSchemaErrors(NodeApi.Body.errors));
-    }
-    return body;
-}
-
-function decodeBodies(data, exception) {
-    let decoded = {...data};
-    if (data.postings) {
-        decoded.postings = data.postings.map(p => decodeBodies(p, exception));
-    }
-    if (data.stories) {
-        decoded.stories = data.stories.map(p => decodeBodies(p, exception));
-    }
-    if (data.posting) {
-        decoded.posting = decodeBodies(data.posting, exception);
-    }
-    if (data.body) {
-        decoded.body = decodeBody(data.body, exception);
-    }
-    if (data.bodyPreview) {
-        decoded.bodyPreview = decodeBody(data.bodyPreview, exception);
-    }
-    if (data.bodySrc) {
-        decoded.bodySrc = decodeBody(data.bodySrc, exception);
-    }
-    return decoded;
-}
-
-function* authorized(location) {
-    const token = yield select(getNodeToken);
-    return urlWithParameters(location, {token});
-}
-
-function* introduced(location) {
-    const token = yield select(getNodeToken);
-    const carte = token == null ? yield select(getCurrentCarte) : null;
-    return urlWithParameters(location, {token, carte});
-}
-
 export function* getWhoAmI() {
-    return yield call(callNode, {location: "/whoami", schema: NodeApi.WhoAmI});
+    return yield call(callApi, {location: "/whoami", schema: NodeApi.WhoAmI});
 }
 
 export function* getProfile() {
-    const location = yield call(authorized, "/profile");
-    return yield call(callNode, {location, schema: NodeApi.ProfileInfo});
+    return yield call(callApi, {location: "/profile", auth: true, schema: NodeApi.ProfileInfo});
 }
 
 export function* putProfile(profile) {
-    const location = yield call(authorized, "/profile");
-    return yield call(callNode, {location, method: "PUT", body: profile, schema: NodeApi.ProfileInfo});
+    return yield call(callApi, {
+        location: "/profile", method: "PUT", auth: true, body: profile, schema: NodeApi.ProfileInfo
+    });
 }
 
 export function* getNodeName() {
-    const location = yield call(authorized, "/node-name");
-    return yield call(callNode, {location, schema: NodeApi.NodeNameInfo});
+    return yield call(callApi, {location: "/node-name", auth: true, schema: NodeApi.NodeNameInfo});
 }
 
 export function* registerName(name) {
-    const location = yield call(authorized, "/node-name");
-    return yield call(callNode, {location, method: "POST", body: {name}, schema: NodeApi.RegisteredNameSecret});
+    return yield call(callApi, {
+        location: "/node-name", method: "POST", auth: true, body: {name}, schema: NodeApi.RegisteredNameSecret
+    });
 }
 
 export function* updateNodeName(name, mnemonic) {
-    const location = yield call(authorized, "/node-name");
     const body = name ? {name, mnemonic} : {mnemonic};
-    return yield call(callNode, {location, method: "PUT", body, schema: NodeApi.Result});
+    return yield call(callApi, {location: "/node-name", method: "PUT", auth: true, body, schema: NodeApi.Result});
 }
 
 export function* getFeedGeneral(feedName) {
     feedName = encodeURIComponent(feedName);
-    return yield call(callNode, {location: `/feeds/${feedName}`, schema: NodeApi.FeedInfo});
+    return yield call(callApi, {location: `/feeds/${feedName}`, schema: NodeApi.FeedInfo});
 }
 
 export function* getFeedSlice(feedName, after, before, limit) {
     feedName = encodeURIComponent(feedName);
-    const location = yield call(introduced,
-        urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit}));
-    return yield call(callNode, {location, schema: NodeApi.FeedSliceInfo, withBodies: true});
+    const location = urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit});
+    return yield call(callApi, {location, auth: true, schema: NodeApi.FeedSliceInfo, withBodies: true});
 }
 
 export function* getPostingFeatures() {
-    return yield call(callNode, {location: "/postings/features", schema: NodeApi.PostingFeatures});
+    return yield call(callApi, {location: "/postings/features", schema: NodeApi.PostingFeatures});
 }
 
 export function* getPosting(id, withSource = false) {
     const include = withSource ? "source" : null;
-    const location = yield call(introduced, urlWithParameters(`/postings/${id}`, {include}));
-    return yield call(callNode, {
-        location, schema: NodeApi.PostingInfo, withBodies: true, errorFilter: ["posting.not-found"]
+    const location = urlWithParameters(`/postings/${id}`, {include});
+    return yield call(callApi, {
+        location, auth: true, schema: NodeApi.PostingInfo, withBodies: true, errorFilter: ["posting.not-found"]
     });
 }
 
 export function* postPosting(postingText) {
-    const location = yield call(authorized, "/postings");
-    return yield call(callNode, {
-        location, method: "POST", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
+    return yield call(callApi, {
+        location: "/postings", method: "POST", auth: true, body: postingText, schema: NodeApi.PostingInfo,
+        withBodies: true
     });
 }
 
 export function* putPosting(id, postingText) {
-    const location = yield call(authorized, `/postings/${id}`);
-    return yield call(callNode, {
-        location, method: "PUT", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
+    return yield call(callApi, {
+        location: `/postings/${id}`, method: "PUT", auth: true, body: postingText, schema: NodeApi.PostingInfo,
+        withBodies: true
     });
 }
 
 export function* deletePosting(id) {
-    const location = yield call(authorized, `/postings/${id}`);
-    return yield call(callNode, {location, method: "DELETE", schema: NodeApi.Result});
+    return yield call(callApi, {
+        location: `/postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
 }
 
 export function* postReaction(postingId, negative, emoji) {
     const ownerName = yield select(getHomeOwnerName);
     const body = {ownerName, negative, emoji};
-    const location = yield call(introduced, `/postings/${postingId}/reactions`);
-    return yield call(callNode, {location, method: "POST", body, schema: NodeApi.ReactionCreated});
+    return yield call(callApi, {
+        location: `/postings/${postingId}/reactions`, method: "POST", auth: true, body, schema: NodeApi.ReactionCreated
+    });
 }
 
 export function* getReaction(postingId) {
     const ownerName = yield select(getHomeOwnerName);
-    const location = yield call(introduced, `/postings/${postingId}/reactions/${ownerName}`);
-    return yield call(callNode, {location, schema: NodeApi.ReactionInfo});
+    return yield call(callApi, {
+        location: `/postings/${postingId}/reactions/${ownerName}`, auth: true, schema: NodeApi.ReactionInfo
+    });
 }
 
 export function* deleteReaction(postingId) {
     const ownerName = yield select(getHomeOwnerName);
-    const location = yield call(introduced, `/postings/${postingId}/reactions/${ownerName}`);
-    return yield call(callNode, {location, method: "DELETE", schema: NodeApi.ReactionTotalsInfo});
+    return yield call(callApi, {
+        location: `/postings/${postingId}/reactions/${ownerName}`, method: "DELETE", auth: true,
+        schema: NodeApi.ReactionTotalsInfo
+    });
 }
 
 export function* getReactionTotals(postingId) {
-    const location = yield call(introduced, `/postings/${postingId}/reaction-totals`);
-    return yield call(callNode, {location, schema: NodeApi.ReactionTotalsInfo});
+    return yield call(callApi, {
+        location: `/postings/${postingId}/reaction-totals`, auth: true, schema: NodeApi.ReactionTotalsInfo
+    });
 }
 
 export function* getReactions(postingId, negative, emoji, before, limit) {
-    const location = yield call(introduced, urlWithParameters(`/postings/${postingId}/reactions`,
-        {negative, emoji, before, limit}));
-    return yield call(callNode, {location, schema: NodeApi.ReactionsSliceInfo});
+    const location = urlWithParameters(`/postings/${postingId}/reactions`,
+        {negative, emoji, before, limit});
+    return yield call(callApi, {location, auth: true, schema: NodeApi.ReactionsSliceInfo});
 }
 
 export function* getPostingDraftRevision(id) {
-    const location = yield call(authorized, `/postings/${id}/revisions/draft`);
-    return yield call(callNode, {
-        location, schema: NodeApi.PostingInfo, withBodies: true, errorFilter: ["posting.not-found"]
+    return yield call(callApi, {
+        location: `/postings/${id}/revisions/draft`, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
+        errorFilter: ["posting.not-found"]
     });
 }
 
 export function* putPostingDraftRevision(id, postingText) {
-    const location = yield call(authorized, `/postings/${id}/revisions/draft`);
-    return yield call(callNode, {
-        location, method: "PUT", body: postingText, schema: NodeApi.PostingInfo, withBodies: true
+    return yield call(callApi, {
+        location: `/postings/${id}/revisions/draft`, method: "PUT", auth: true, body: postingText,
+        schema: NodeApi.PostingInfo, withBodies: true
     });
 }
 
 export function* deletePostingDraftRevision(id) {
-    const location = yield call(authorized, `/postings/${id}/revisions/draft`);
-    return yield call(callNode, {location, method: "DELETE", schema: NodeApi.Result});
+    return yield call(callApi, {
+        location: `/postings/${id}/revisions/draft`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
 }
 
 export function* putStory(id, storyAttributes) {
-    const location = yield call(authorized, `/stories/${id}`);
-    return yield call(callNode, {
-        location, method: "PUT", body: storyAttributes, schema: NodeApi.StoryInfo, withBodies: true
+    return yield call(callApi, {
+        location: `/stories/${id}`, method: "PUT", auth: true, body: storyAttributes, schema: NodeApi.StoryInfo,
+        withBodies: true
     });
 }

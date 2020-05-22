@@ -19,13 +19,12 @@ export function* connectToHomeSaga(action) {
     if (addonApiVersion < 2) {
         Browser.storeHomeData(location, login, null, null, null, null);
     }
-    const rootApi = normalizeUrl(location) + "/moera/api";
     let data;
     try {
         if (assign) {
-            yield call(Home.createCredentials, rootApi, login, password);
+            yield call(Home.createCredentials, location, login, password);
         }
-        data = yield call(Home.createToken, rootApi, login, password);
+        data = yield call(Home.createToken, location, login, password);
     } catch (e) {
         if (e instanceof NodeApiError) {
             yield call(connectToHomeFailure, e, openConnectDialog());
@@ -39,7 +38,7 @@ export function* connectToHomeSaga(action) {
         cartes: []
     };
     try {
-        cartesData = yield call(Home.getCartes, rootApi, data.token);
+        cartesData = yield call(Home.getCartes, location, data.token);
     } catch (e) {
         yield put(errorThrown(e));
     }

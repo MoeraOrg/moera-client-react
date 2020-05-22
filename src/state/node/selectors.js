@@ -4,8 +4,12 @@ export function isAtHomeNode(state) {
     return state.home.root.api === state.node.root.api;
 }
 
+export function getToken(state, rootLocation) {
+    return selectn(["tokens", rootLocation, "token"], state);
+}
+
 export function getNodeToken(state) {
-    return selectn(["tokens", state.node.root.location, "token"], state);
+    return getToken(state, state.node.root.location);
 }
 
 export function getNodePermissions(state) {

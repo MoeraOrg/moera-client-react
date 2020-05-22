@@ -1,8 +1,10 @@
 import selectn from 'selectn';
-import moment from "moment";
+import moment from 'moment';
+
+import { getToken } from "state/node/selectors";
 
 export function getHomeToken(state) {
-    return selectn(["tokens", state.home.root.location, "token"], state);
+    return getToken(state, state.home.root.location);
 }
 
 export function isConnectedToHome(state) {
