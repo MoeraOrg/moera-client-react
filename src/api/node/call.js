@@ -3,7 +3,7 @@ import { apply, call, put, select } from 'redux-saga/effects';
 import { Browser, formatSchemaErrors, HomeNotConnectedError, NodeApi, NodeApiError, NodeError } from "api";
 import { errorAuthInvalid } from "state/error/actions";
 import { normalizeUrl, urlWithParameters } from "util/misc";
-import { getNodeToken } from "state/node/selectors";
+import { getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 
@@ -114,7 +114,7 @@ function* authorize(location, rootLocation, auth) {
     if (auth === false) {
         return location;
     }
-    const token = auth === true ? yield select(state => getNodeToken(state, rootLocation)) : auth;
+    const token = auth === true ? yield select(state => getToken(state, rootLocation)) : auth;
     const carte = token == null ? yield select(getCurrentCarte) : null;
     return urlWithParameters(location, {token, carte});
 }
