@@ -6,6 +6,7 @@ import { normalizeUrl, urlWithParameters } from "util/misc";
 import { getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
 import { isConnectedToHome } from "state/home/selectors";
+import { getNodeUri } from "state/naming/sagas";
 
 export function* callApi({
     location,
@@ -103,7 +104,18 @@ function* selectApi(nodeName) {
                 };
                 errorTitle = "Home access error";
             } else {
-                // TODO
+                const nodeUri = call(getNodeUri, nodeName);
+                root = nodeUri != null ?
+                    {
+                        location: nodeUri.endsWith("/moera") ? nodeUri.substring(0, nodeUri.length - 6) : nodeUri,
+                        api: nodeUri + "/api"
+                    }
+                :
+                    {
+                        location: "",
+                        api: ""
+                    }
+                errorTitle = "Node access error";
             }
     }
 

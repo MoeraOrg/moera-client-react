@@ -9,21 +9,36 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { getFeedState } from "state/feeds/selectors";
 import { now } from "util/misc";
+import { getNamingNameDetails } from "state/naming/selectors";
 
 export function* namingNameLoadSaga(action) {
+    yield call(fetchNodeUri, action.payload.name);
+}
+
+export function* getNodeUri(nodeName) {
+    const details = yield select(state => getNamingNameDetails(state, nodeName));
+    if (details.loaded) {
+        return details.nodeUri;
+    }
+    return yield call(fetchNodeUri, nodeName);
+}
+
+function* fetchNodeUri(nodeName) {
+    let nodeUri = null;
     try {
-        const {name, generation} = NodeName.parse(action.payload.name);
+        const {name, generation} = NodeName.parse(nodeName);
         const data = yield call(Naming.getCurrent, name, generation);
         const latest = !!(data && data.latest);
-        const nodeUri = data ? data.nodeUri : null;
+        nodeUri = data ? data.nodeUri : null;
         if (data) {
-            Browser.storeName(action.payload.name, latest, nodeUri);
+            Browser.storeName(nodeName, latest, nodeUri);
         }
-        yield put(namingNameLoaded(action.payload.name, latest, nodeUri));
+        yield put(namingNameLoaded(nodeName, latest, nodeUri));
     } catch (e) {
-        yield put(namingNameLoadFailed(action.payload.name));
+        yield put(namingNameLoadFailed(nodeName));
         yield put(errorThrown(e));
     }
+    return nodeUri;
 }
 
 const USED_NAME_RELOAD_PERIOD = 6 * 60 * 60;

@@ -16,9 +16,8 @@ export function* homeRestoreSaga(action) {
     if (token) {
         yield put(restoreConnectDialog(location, login));
         if (getCartesListTtl(cartes) < 5 * 60) {
-            const rootApi = normalizeUrl(location) + "/moera/api";
             try {
-                const data = yield call(Node.getCartes, rootApi, token);
+                const data = yield call(Node.getCartes, normalizeUrl(location), token);
                 cartesIp = data.cartesIp;
                 cartes = data.cartes;
                 if (addonApiVersion >= 2) {
