@@ -12,7 +12,10 @@ export function* errorSaga(action) {
         return;
     }
 
-    const {message, messageVerbose} = action.payload.e;
+    const {message, messageVerbose, stack} = action.payload.e;
+    if (stack) {
+        console.error(stack);
+    }
     yield put(errorShow(message, messageVerbose));
     yield delay(10000);
     yield put(errorDismiss());
