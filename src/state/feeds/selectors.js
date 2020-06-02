@@ -29,6 +29,10 @@ export function isSubscribedToFeed(state, feedName) {
     return !!getFeedState(state, feedName).subscriberId;
 }
 
+export function isSubscribingToFeed(state, feedName) {
+    return getFeedState(state, feedName).subscribing;
+}
+
 export function isFeedAddable(state, feedName) {
     const feed = getFeedState(state, feedName);
     return isFeedGeneralReady(state, feedName) && isPermitted("add", feed, state)

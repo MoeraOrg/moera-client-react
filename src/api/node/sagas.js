@@ -124,6 +124,20 @@ export function* putStory(nodeName, id, storyAttributes) {
     });
 }
 
+export function* postSubscriber(nodeName, feedName) {
+    return yield call(callApi, {
+        nodeName, location: "/subscribers", method: "POST", auth: true, body: {type: "feed", feedName},
+        schema: NodeApi.SubscriberInfo
+    });
+}
+
+export function* postSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFeedName) {
+    return yield call(callApi, {
+        nodeName, location: "/subscriptions", method: "POST", auth: true,
+        body: {type: "feed", remoteSubscriberId, remoteNodeName, remoteFeedName}, schema: NodeApi.SubscriptionInfo
+    });
+}
+
 export function* getPostingFeatures(nodeName) {
     return yield call(callApi, {nodeName, location: "/postings/features", schema: NodeApi.PostingFeatures});
 }

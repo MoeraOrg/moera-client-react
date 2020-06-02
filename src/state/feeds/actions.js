@@ -16,6 +16,24 @@ export const feedGeneralSet = (feedName, info) => ({
     payload: {feedName, info}
 });
 
+export const FEED_SUBSCRIBE = "FEED_SUBSCRIBE";
+export const feedSubscribe = (feedName) => ({
+    type: FEED_SUBSCRIBE,
+    payload: {feedName}
+});
+
+export const FEED_SUBSCRIBED = "FEED_SUBSCRIBED";
+export const feedSubscribed = (feedName, subscriberId) => ({
+    type: FEED_SUBSCRIBED,
+    payload: {feedName, subscriberId}
+});
+
+export const FEED_SUBSCRIBE_FAILED = "FEED_SUBSCRIBE_FAILED";
+export const feedSubscribeFailed = (feedName) => ({
+    type: FEED_SUBSCRIBE_FAILED,
+    payload: {feedName}
+});
+
 export const FEED_STATUS_LOAD = "FEED_STATUS_LOAD";
 export const feedStatusLoad = (feedName) => ({
     type: FEED_STATUS_LOAD,

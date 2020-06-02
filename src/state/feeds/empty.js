@@ -8,6 +8,7 @@ export const emptyInfo = {
 export const emptyFeed = {
     loadingGeneral: false,
     loadedGeneral: false,
+    subscribing: false,
     ...emptyInfo,
     loadingStatus: false,
     loadedStatus: false,

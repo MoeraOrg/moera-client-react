@@ -11,11 +11,14 @@ import {
     feedStatusLoadFailed,
     feedStatusSet,
     feedStatusUpdated,
-    feedStatusUpdateFailed
+    feedStatusUpdateFailed,
+    feedSubscribed,
+    feedSubscribeFailed
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { namingNameUsed } from "state/naming/actions";
 import { getFeedState } from "state/feeds/selectors";
+import { getOwnerName } from "state/owner/selectors";
 
 export function* feedGeneralLoadSaga(action) {
     const {feedName} = action.payload;
@@ -24,6 +27,19 @@ export function* feedGeneralLoadSaga(action) {
         yield put(feedGeneralSet(feedName, data));
     } catch (e) {
         yield put(feedGeneralLoadFailed(feedName));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* feedSubscribeSaga(action) {
+    const {feedName} = action.payload;
+    const ownerName = yield select(getOwnerName)
+    try {
+        const data = yield call(Node.postSubscriber, "", feedName);
+        yield call(Node.postSubscription, ":", data.id, ownerName, feedName);
+        yield put(feedSubscribed(feedName, data.id));
+    } catch (e) {
+        yield put(feedSubscribeFailed(feedName));
         yield put(errorThrown(e));
     }
 }

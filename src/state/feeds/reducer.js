@@ -18,6 +18,9 @@ import {
     FEED_STATUS_LOAD_FAILED,
     FEED_STATUS_SET,
     FEED_STATUS_UPDATED,
+    FEED_SUBSCRIBE,
+    FEED_SUBSCRIBE_FAILED,
+    FEED_SUBSCRIBED,
     FEEDS_UNSET
 } from "state/feeds/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
@@ -127,6 +130,30 @@ export default (state = initialState, action) => {
                     loadingGeneral: false,
                     loadedGeneral: true
                 })
+                .value();
+        }
+
+        case FEED_SUBSCRIBE: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "subscribing"], true)
+                .value();
+        }
+
+        case FEED_SUBSCRIBED: {
+            const {feedName, subscriberId} = action.payload;
+            return getFeed(state, feedName).istate
+                .assign([feedName], {
+                    subscribing: false,
+                    subscriberId
+                })
+                .value();
+        }
+
+        case FEED_SUBSCRIBE_FAILED: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "subscribing"], false)
                 .value();
         }
 

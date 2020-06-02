@@ -664,3 +664,59 @@ export const ReactionsSliceInfo = schema({
     },
     additionalProperties: false
 });
+
+export const SubscriberInfo = schema({
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "type": {
+            type: "string"
+        },
+        "feedName": {
+            type: "string"
+        },
+        "postingId": {
+            type: "string"
+        },
+        "nodeName": {
+            type: "string"
+        },
+        "createdAt": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false
+});
+
+export const SubscriptionInfo = schema({
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "type": {
+            type: "string"
+        },
+        "feedName": {
+            type: "string"
+        },
+        "remoteSubscriberId": {
+            type: "string"
+        },
+        "remoteNodeName": {
+            type: "string"
+        },
+        "remoteFeedName": {
+            type: "string"
+        },
+        "remotePostingId": {
+            type: "string"
+        },
+        "createdAt": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false
+});

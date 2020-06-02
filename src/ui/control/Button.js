@@ -1,9 +1,21 @@
 import React from 'react';
+import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { LoadingInline } from "ui/control";
 
 export class Button extends React.PureComponent {
+
+    static propTypes = {
+        variant: PropType.string,
+        size: PropType.oneOf("sm", "lg"),
+        block: PropType.bool,
+        invisible: PropType.bool,
+        loading: PropType.bool,
+        disabled: PropType.bool,
+        className: PropType.string,
+        type: PropType.string
+    }
 
     componentDidMount() {
         if (this.props.autoFocus && this.domNode) {
