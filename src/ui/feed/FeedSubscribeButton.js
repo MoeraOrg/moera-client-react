@@ -10,6 +10,7 @@ import {
     isSubscribingToFeed
 } from "state/feeds/selectors";
 import { feedSubscribe } from "state/feeds/actions";
+import "./FeedSubscribeButton.css";
 
 class FeedSubscribeButton extends React.PureComponent {
 
@@ -25,12 +26,12 @@ class FeedSubscribeButton extends React.PureComponent {
                 {
                     !atHomeNode && generalReady && (
                         !subscribed ?
-                            <Button variant="outline-primary" size="sm" className="ml-3" loading={subscribing}
-                                    onClick={this.onSubscribe}>
+                            <Button variant="outline-primary" size="sm" className="feed-subscribe ml-3"
+                                    loading={subscribing} onClick={this.onSubscribe}>
                                 Subscribe
                             </Button>
                         :
-                            <Button variant="outline-danger" size="sm" className="ml-3">
+                            <Button variant="outline-secondary" size="sm" className="feed-unsubscribe ml-3">
                                 Unsubscribe
                             </Button>
                     )
