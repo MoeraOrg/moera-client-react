@@ -1,4 +1,5 @@
 export const emptyInfo = {
+    subscriberId: null,
     operations: {
         add: []
     }

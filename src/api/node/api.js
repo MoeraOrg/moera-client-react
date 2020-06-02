@@ -340,6 +340,9 @@ export const FeedInfo = schema({
         "feedName": {
             type: "string"
         },
+        "subscriberId": {
+            type: "string"
+        },
         "operations": {
             type: "object",
             properties: {

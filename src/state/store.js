@@ -208,7 +208,7 @@ function* combinedSaga() {
     yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
     yield takeLatest(REGISTER_NAME, registerNameSaga);
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
-    yield takeEvery(FEED_GENERAL_LOAD, feedGeneralLoadSaga);
+    yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga));
     yield takeEvery(FEED_STATUS_LOAD, feedStatusLoadSaga);
     yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
     yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));

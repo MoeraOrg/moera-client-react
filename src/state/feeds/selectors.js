@@ -21,6 +21,14 @@ export function isFeedGeneralReady(state, feedName) {
     return feed.loadedGeneral && !feed.loadingGeneral;
 }
 
+export function isFeedGeneralLoading(state, feedName) {
+    return getFeedState(state, feedName).loadingGeneral;
+}
+
+export function isSubscribedToFeed(state, feedName) {
+    return !!getFeedState(state, feedName).subscriberId;
+}
+
 export function isFeedAddable(state, feedName) {
     const feed = getFeedState(state, feedName);
     return isFeedGeneralReady(state, feedName) && isPermitted("add", feed, state)

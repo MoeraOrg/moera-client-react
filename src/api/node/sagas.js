@@ -93,7 +93,7 @@ export function* updateNodeName(nodeName, name, mnemonic) {
 
 export function* getFeedGeneral(nodeName, feedName) {
     feedName = encodeURIComponent(feedName);
-    return yield call(callApi, {nodeName, location: `/feeds/${feedName}`, schema: NodeApi.FeedInfo});
+    return yield call(callApi, {nodeName, location: `/feeds/${feedName}`, auth: true, schema: NodeApi.FeedInfo});
 }
 
 export function* getFeedSlice(nodeName, feedName, after, before, limit) {
