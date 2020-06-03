@@ -13,11 +13,13 @@ import {
     feedStatusUpdated,
     feedStatusUpdateFailed,
     feedSubscribed,
-    feedSubscribeFailed
+    feedSubscribeFailed,
+    feedUnsubscribed,
+    feedUnsubscribeFailed
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { namingNameUsed } from "state/naming/actions";
-import { getFeedState } from "state/feeds/selectors";
+import { getFeedState, getFeedSubscriberId } from "state/feeds/selectors";
 import { getOwnerName } from "state/owner/selectors";
 
 export function* feedGeneralLoadSaga(action) {
@@ -40,6 +42,22 @@ export function* feedSubscribeSaga(action) {
         yield put(feedSubscribed(feedName, data.id));
     } catch (e) {
         yield put(feedSubscribeFailed(feedName));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* feedUnsubscribeSaga(action) {
+    const {feedName} = action.payload;
+    const {subscriberId, ownerName} = yield select(state => ({
+        subscriberId: getFeedSubscriberId(state, feedName),
+        ownerName: getOwnerName(state)
+    }));
+    try {
+        yield call(Node.deleteSubscriber, "", subscriberId);
+        yield call(Node.deleteSubscription, ":", subscriberId, ownerName);
+        yield put(feedUnsubscribed(feedName));
+    } catch (e) {
+        yield put(feedUnsubscribeFailed(feedName));
         yield put(errorThrown(e));
     }
 }

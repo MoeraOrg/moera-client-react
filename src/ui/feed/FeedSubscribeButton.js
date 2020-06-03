@@ -7,9 +7,10 @@ import {
     isFeedGeneralLoading,
     isFeedGeneralReady,
     isSubscribedToFeed,
-    isSubscribingToFeed
+    isSubscribingToFeed,
+    isUnsubscribingFromFeed
 } from "state/feeds/selectors";
-import { feedSubscribe } from "state/feeds/actions";
+import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import "./FeedSubscribeButton.css";
 
 class FeedSubscribeButton extends React.PureComponent {
@@ -19,8 +20,13 @@ class FeedSubscribeButton extends React.PureComponent {
         feedSubscribe(feedName);
     }
 
+    onUnsubscribe = () => {
+        const {feedName, feedUnsubscribe} = this.props;
+        feedUnsubscribe(feedName);
+    }
+
     render() {
-        const {atHomeNode, generalReady, generalLoading, subscribed, subscribing} = this.props;
+        const {atHomeNode, generalReady, generalLoading, subscribed, subscribing, unsubscribing} = this.props;
         return (
             <>
                 {
@@ -31,7 +37,8 @@ class FeedSubscribeButton extends React.PureComponent {
                                 Subscribe
                             </Button>
                         :
-                            <Button variant="outline-secondary" size="sm" className="feed-unsubscribe ml-3">
+                            <Button variant="outline-secondary" size="sm" className="feed-unsubscribe ml-3"
+                                    loading={unsubscribing} onClick={this.onUnsubscribe}>
                                 Unsubscribe
                             </Button>
                     )
@@ -49,7 +56,8 @@ export default connect(
         generalReady: isFeedGeneralReady(state, ownProps.feedName),
         generalLoading: isFeedGeneralLoading(state, ownProps.feedName),
         subscribed: isSubscribedToFeed(state, ownProps.feedName),
-        subscribing: isSubscribingToFeed(state, ownProps.feedName)
+        subscribing: isSubscribingToFeed(state, ownProps.feedName),
+        unsubscribing: isUnsubscribingFromFeed(state, ownProps.feedName)
     }),
-    { feedSubscribe }
+    { feedSubscribe, feedUnsubscribe }
 )(FeedSubscribeButton);

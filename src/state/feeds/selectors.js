@@ -25,12 +25,20 @@ export function isFeedGeneralLoading(state, feedName) {
     return getFeedState(state, feedName).loadingGeneral;
 }
 
+export function getFeedSubscriberId(state, feedName) {
+    return getFeedState(state, feedName).subscriberId;
+}
+
 export function isSubscribedToFeed(state, feedName) {
-    return !!getFeedState(state, feedName).subscriberId;
+    return !!getFeedSubscriberId(state, feedName);
 }
 
 export function isSubscribingToFeed(state, feedName) {
     return getFeedState(state, feedName).subscribing;
+}
+
+export function isUnsubscribingFromFeed(state, feedName) {
+    return getFeedState(state, feedName).unsubscribing;
 }
 
 export function isFeedAddable(state, feedName) {

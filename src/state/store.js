@@ -23,7 +23,8 @@ import {
     FEED_PAST_SLICE_LOAD,
     FEED_STATUS_LOAD,
     FEED_STATUS_UPDATE,
-    FEED_SUBSCRIBE
+    FEED_SUBSCRIBE,
+    FEED_UNSUBSCRIBE
 } from "state/feeds/actions";
 import { DETAILED_POSTING_LOAD } from "state/detailedposting/actions";
 import {
@@ -110,7 +111,8 @@ import {
     feedPastSliceLoadSaga,
     feedStatusLoadSaga,
     feedStatusUpdateSaga,
-    feedSubscribeSaga
+    feedSubscribeSaga,
+    feedUnsubscribeSaga
 } from "state/feeds/sagas";
 import { detailedPostingLoadSaga } from "state/detailedposting/sagas";
 import {
@@ -212,6 +214,7 @@ function* combinedSaga() {
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
     yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga));
     yield takeEvery(FEED_SUBSCRIBE, feedSubscribeSaga);
+    yield takeEvery(FEED_UNSUBSCRIBE, feedUnsubscribeSaga);
     yield takeEvery(FEED_STATUS_LOAD, feedStatusLoadSaga);
     yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
     yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));

@@ -34,6 +34,24 @@ export const feedSubscribeFailed = (feedName) => ({
     payload: {feedName}
 });
 
+export const FEED_UNSUBSCRIBE = "FEED_UNSUBSCRIBE";
+export const feedUnsubscribe = (feedName) => ({
+    type: FEED_UNSUBSCRIBE,
+    payload: {feedName}
+});
+
+export const FEED_UNSUBSCRIBED = "FEED_UNSUBSCRIBED";
+export const feedUnsubscribed = (feedName) => ({
+    type: FEED_UNSUBSCRIBED,
+    payload: {feedName}
+});
+
+export const FEED_UNSUBSCRIBE_FAILED = "FEED_UNSUBSCRIBE_FAILED";
+export const feedUnsubscribeFailed = (feedName) => ({
+    type: FEED_UNSUBSCRIBE_FAILED,
+    payload: {feedName}
+});
+
 export const FEED_STATUS_LOAD = "FEED_STATUS_LOAD";
 export const feedStatusLoad = (feedName) => ({
     type: FEED_STATUS_LOAD,

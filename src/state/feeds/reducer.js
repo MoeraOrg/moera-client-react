@@ -21,6 +21,9 @@ import {
     FEED_SUBSCRIBE,
     FEED_SUBSCRIBE_FAILED,
     FEED_SUBSCRIBED,
+    FEED_UNSUBSCRIBE,
+    FEED_UNSUBSCRIBE_FAILED,
+    FEED_UNSUBSCRIBED,
     FEEDS_UNSET
 } from "state/feeds/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
@@ -154,6 +157,30 @@ export default (state = initialState, action) => {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "subscribing"], false)
+                .value();
+        }
+
+        case FEED_UNSUBSCRIBE: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "unsubscribing"], true)
+                .value();
+        }
+
+        case FEED_UNSUBSCRIBED: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .assign([feedName], {
+                    unsubscribing: false,
+                    subscriberId: null
+                })
+                .value();
+        }
+
+        case FEED_UNSUBSCRIBE_FAILED: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "unsubscribing"], false)
                 .value();
         }
 

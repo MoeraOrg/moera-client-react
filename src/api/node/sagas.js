@@ -131,11 +131,24 @@ export function* postSubscriber(nodeName, feedName) {
     });
 }
 
+export function* deleteSubscriber(nodeName, subscriberId) {
+    subscriberId = encodeURIComponent(subscriberId);
+    return yield call(callApi, {
+        nodeName, location: `/subscribers/${subscriberId}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}
+
 export function* postSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFeedName) {
     return yield call(callApi, {
         nodeName, location: "/subscriptions", method: "POST", auth: true,
         body: {type: "feed", remoteSubscriberId, remoteNodeName, remoteFeedName}, schema: NodeApi.SubscriptionInfo
     });
+}
+
+export function* deleteSubscription(nodeName, remoteSubscriberId, remoteNodeName) {
+    const location = urlWithParameters("/subscriptions",
+        {type: "feed", nodeName: remoteNodeName, subscriberId: remoteSubscriberId});
+    return yield call(callApi, {nodeName, location, method: "DELETE", auth: true, schema: NodeApi.Result});
 }
 
 export function* getPostingFeatures(nodeName) {
