@@ -1,4 +1,7 @@
 export function isNamingNameToBeLoaded(state, name) {
+    if (!name) {
+        return false;
+    }
     const details = state.naming.names[name];
     return details != null && !details.loaded && !details.loading;
 }

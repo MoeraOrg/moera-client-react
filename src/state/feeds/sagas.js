@@ -123,10 +123,10 @@ function* cacheNames(stories) {
     const usedNames = new Set();
     stories
         .filter(s => s.posting != null && s.posting.ownerName != null)
-        .forEach(s => {
-            usedNames.add(s.posting.ownerName);
-            usedNames.add(s.posting.receiverName);
-        });
+        .forEach(s => usedNames.add(s.posting.ownerName));
+    stories
+        .filter(s => s.posting != null && s.posting.receiverName != null)
+        .forEach(s => usedNames.add(s.posting.receiverName));
     for (let name of usedNames) {
         yield put(namingNameUsed(name));
     }

@@ -25,6 +25,9 @@ const emptyDetails = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case NAMING_NAME_USED:
+            if (!action.payload.name) {
+                return state;
+            }
             if (state.names[action.payload.name]) {
                 return immutable.set(state, ["names", action.payload.name, "accessed"], now());
             }

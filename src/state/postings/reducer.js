@@ -105,9 +105,7 @@ export default (state = initialState, action) => {
 
         case EVENT_HOME_REMOTE_POSTING_VERIFIED: {
             const posting = selectn([action.payload.postingId, "posting"], state);
-            if (posting && posting.receiverName === action.payload.receiverName
-                && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
-
+            if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
                 const status = action.payload.correct ? "correct" : "incorrect";
                 return immutable.set(state, [action.payload.postingId, "verificationStatus"], status);
             }
@@ -116,9 +114,7 @@ export default (state = initialState, action) => {
 
         case EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED: {
             const posting = selectn([action.payload.postingId, "posting"], state);
-            if (posting && posting.receiverName === action.payload.receiverName
-                && (!action.payload.revisionId && posting.revisionId === action.payload.revisionId)) {
-
+            if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
                 return immutable.set(state, [action.payload.postingId, "verificationStatus"], "none");
             }
             return state;

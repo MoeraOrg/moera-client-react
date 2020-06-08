@@ -1,15 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
 import { NodeName } from "ui/control";
 import PostingVerifyButton from "ui/posting/PostingVerifyButton";
 import "./PostingOwner.css";
 
-const PostingOwner = ({posting, nodeOwnerName}) => (
+const PostingOwner = ({posting}) => (
     <span className="owner">
         <NodeName name={posting.ownerName}/>
         {" "}<PostingVerifyButton id={posting.id}/>
-        {posting.receiverName !== nodeOwnerName &&
+        {posting.receiverName &&
             <>
                 <span className="arrow">{" "}&#x25b8;{" "}</span>
                 <NodeName name={posting.receiverName}/>
@@ -18,8 +17,4 @@ const PostingOwner = ({posting, nodeOwnerName}) => (
     </span>
 );
 
-export default connect(
-    state => ({
-        nodeOwnerName: state.owner.name
-    })
-)(PostingOwner);
+export default PostingOwner;
