@@ -6,9 +6,11 @@ import ProfilePage from "ui/profile/ProfilePage";
 import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
 import ComposePage from "ui/compose/ComposePage";
 import SettingsPage from "ui/settings/SettingsPage";
+import NewsPage from "ui/news/NewsPage";
 import {
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
+    PAGE_NEWS,
     PAGE_PROFILE,
     PAGE_SETTINGS,
     PAGE_TIMELINE
@@ -34,6 +36,8 @@ class CurrentPage extends React.PureComponent {
                 return <ComposePage/>;
             case PAGE_SETTINGS:
                 return <SettingsPage/>;
+            case PAGE_NEWS:
+                return <NewsPage/>;
             default:
                 return null;
         }

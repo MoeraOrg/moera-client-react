@@ -1,6 +1,7 @@
 import {
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
+    PAGE_NEWS,
     PAGE_PROFILE,
     PAGE_SETTINGS,
     PAGE_TIMELINE
@@ -24,4 +25,8 @@ export function isAtComposePage(state) {
 
 export function isAtSettingsPage(state) {
     return state.navigation.page === PAGE_SETTINGS;
+}
+
+export function isAtNewsPage(state) {
+    return state.navigation.page === PAGE_NEWS;
 }

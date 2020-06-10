@@ -1,6 +1,7 @@
 import {
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
+    PAGE_NEWS,
     PAGE_PROFILE,
     PAGE_SETTINGS,
     PAGE_TIMELINE
@@ -22,6 +23,7 @@ export const goToTimeline = (at = null) => goToPage(PAGE_TIMELINE, {at});
 export const goToPosting = (id) => goToPage(PAGE_DETAILED_POSTING, {id});
 export const goToCompose = (id = null, draftId = null) => goToPage(PAGE_COMPOSE, {id, draftId});
 export const goToSettings = () => goToPage(PAGE_SETTINGS);
+export const goToNews = (at = null) => goToPage(PAGE_NEWS, {at});
 
 export const GO_TO_PAGE_WITH_DEFAULT_SUBPAGE = "GO_TO_PAGE_WITH_DEFAULT_SUBPAGE";
 export const goToPageWithDefaultSubpage = (page, details = {}) => ({

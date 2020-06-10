@@ -2,11 +2,13 @@ import { goToTimeline } from "state/navigation/actions";
 import {
     isAtComposePage,
     isAtDetailedPostingPage,
+    isAtNewsPage,
     isAtProfilePage,
     isAtSettingsPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
 import { build as composeBuild, transform as composeTransform } from "./compose";
+import { build as newsBuild, transform as newsTransform } from "./news";
 import { build as postBuild, transform as postTransform } from "./post";
 import { build as profileBuild, transform as profileTransform } from "./profile";
 import { build as settingsBuild, transform as settingsTransform } from "./settings";
@@ -31,6 +33,9 @@ export function transform(srcInfo, dstInfo) {
     if (dstInfo.directories[0] === "settings") {
         return settingsTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "news") {
+        return newsTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -49,6 +54,9 @@ export function build(state, info) {
     }
     if (isAtSettingsPage(state)) {
         return settingsBuild(state, info);
+    }
+    if (isAtNewsPage(state)) {
+        return newsBuild(state, info);
     }
     return info;
 }
