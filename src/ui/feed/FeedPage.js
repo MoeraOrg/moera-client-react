@@ -1,12 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import debounce from 'lodash.debounce';
 
 import FeedPageHeader from "ui/feed/FeedPageHeader";
 import FeedPosting from "ui/feed/FeedPosting";
 import FeedSentinel from "ui/feed/FeedSentinel";
 import { getFeedState } from "state/feeds/selectors";
-import { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor } from "state/feeds/actions";
+import {
+    feedFutureSliceLoad,
+    feedPastSliceLoad,
+    feedScrolled,
+    feedScrolledToAnchor,
+    feedStatusUpdate
+} from "state/feeds/actions";
 import "./FeedPage.css";
+import { isAtHomeNode } from "state/node/selectors";
 
 class FeedPage extends React.PureComponent {
 
@@ -58,6 +66,7 @@ class FeedPage extends React.PureComponent {
                 this.topmostBeforeUpdate = null;
             }
             this.scrollToAnchor();
+            this.onView();
         }
     }
 
@@ -86,7 +95,21 @@ class FeedPage extends React.PureComponent {
         }
         this.prevAt = at;
         this.setState({scrolled: window.scrollY > 5});
+        this.onView();
     };
+
+    onView = debounce(() => {
+        const {feedName, atHomeNode, feedStatusUpdate} = this.props;
+
+        if (!atHomeNode) {
+            return;
+        }
+        const moment = FeedPage.getNotViewedMoment();
+        if (moment != null) {
+            FeedPage.markAllViewed();
+            feedStatusUpdate(":" + feedName, true, null, moment);
+        }
+    }, 1000);
 
     static getHeaderHeight() {
         const mainMenu = document.getElementById("main-menu");
@@ -119,6 +142,27 @@ class FeedPage extends React.PureComponent {
     static getEarliestPosting() {
         const postings = document.getElementsByClassName("posting");
         return postings.length > 0 ? postings.item(postings.length - 1) : null;
+    }
+
+    static getNotViewedMoment() {
+        const top = FeedPage.getHeaderHeight();
+        const postings = document.getElementsByClassName("posting");
+        for (let i = 0; i < postings.length; i++) {
+            if (postings.item(i).getBoundingClientRect().top >= top && postings.item(i).dataset.viewed === "false") {
+                return parseInt(postings.item(i).dataset.moment);
+            }
+        }
+        return null;
+    }
+
+    static markAllViewed() {
+        const top = FeedPage.getHeaderHeight();
+        const postings = document.getElementsByClassName("posting");
+        for (let i = 0; i < postings.length; i++) {
+            if (postings.item(i).getBoundingClientRect().top >= top) {
+                postings.item(i).dataset.viewed = "true";
+            }
+        }
     }
 
     static scrollTo(moment) {
@@ -214,7 +258,8 @@ export default connect(
         after: getFeedState(state, ownProps.feedName).after,
         stories: getFeedState(state, ownProps.feedName).stories,
         postings: state.postings,
-        anchor: getFeedState(state, ownProps.feedName).anchor
+        anchor: getFeedState(state, ownProps.feedName).anchor,
+        atHomeNode: isAtHomeNode(state)
     }),
-    { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor }
+    { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor, feedStatusUpdate }
 )(FeedPage);

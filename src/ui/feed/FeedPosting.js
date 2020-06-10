@@ -32,7 +32,7 @@ const Content = ({posting}) => {
 };
 
 const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) => (
-    <div className="posting" data-moment={story.moment}>
+    <div className="posting" data-moment={story.moment} data-viewed={story.viewed}>
         {deleting ?
             <PostingDeleting/>
         :

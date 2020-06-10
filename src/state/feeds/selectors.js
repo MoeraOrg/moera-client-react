@@ -29,6 +29,10 @@ export function getFeedSubscriberId(state, feedName) {
     return getFeedState(state, feedName).subscriberId;
 }
 
+export function getFeedNotViewed(state, feedName) {
+    return getFeedState(state, feedName).notViewed;
+}
+
 export function isSubscribedToFeed(state, feedName) {
     return !!getFeedSubscriberId(state, feedName);
 }

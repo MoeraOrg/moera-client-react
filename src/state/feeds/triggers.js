@@ -50,6 +50,7 @@ export default [
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, feedsUnset),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
+    trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),
     trigger(EVENT_NODE_STORY_ADDED, true, signal => storyAdded(toStory(signal.payload, false))),
     trigger(EVENT_NODE_STORY_DELETED, true, signal => storyDeleted(toStory(signal.payload, false))),
     trigger(EVENT_NODE_STORY_UPDATED, true, signal => storyUpdated(toStory(signal.payload, false))),

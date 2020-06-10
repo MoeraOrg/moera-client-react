@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
+import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
@@ -30,6 +31,7 @@ const ConnectionStatus = ({connecting,  connected, openConnectDialog}) => (
                         <span className="d-none d-md-inline">
                             <NewPostButton/>
                         </span>
+                        <NewsButton/>
                         <InstantButton/>
                         <span className="d-none d-md-inline">
                             <SettingsButton/>
