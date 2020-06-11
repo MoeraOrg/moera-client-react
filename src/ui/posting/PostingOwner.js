@@ -8,7 +8,7 @@ const PostingOwner = ({posting}) => (
     <span className="owner">
         <NodeName name={posting.ownerName}/>
         {" "}<PostingVerifyButton id={posting.id}/>
-        {posting.receiverName &&
+        {posting.receiverName && posting.receiverName !== posting.ownerName &&
             <>
                 <span className="arrow">{" "}&#x25b8;{" "}</span>
                 <NodeName name={posting.receiverName}/>
