@@ -141,7 +141,8 @@ export function* deleteSubscriber(nodeName, subscriberId) {
 export function* postSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFeedName) {
     return yield call(callApi, {
         nodeName, location: "/subscriptions", method: "POST", auth: true,
-        body: {type: "feed", remoteSubscriberId, remoteNodeName, remoteFeedName}, schema: NodeApi.SubscriptionInfo
+        body: {type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFeedName},
+        schema: NodeApi.SubscriptionInfo
     });
 }
 
