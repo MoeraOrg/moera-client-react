@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { goToTimeline } from "state/navigation/actions";
-import { isAtComposePage, isAtDetailedPostingPage, isAtTimelinePage } from "state/navigation/selectors";
+import { isAtTimelinePage } from "state/navigation/selectors";
 import { getFeedState } from "state/feeds/selectors";
 
 class MainMenuTimelineAccessor extends React.PureComponent {
@@ -27,7 +27,7 @@ class MainMenuTimelineAccessor extends React.PureComponent {
 export default connect(
     state => ({
         rootLocation: state.node.root.location,
-        active: isAtTimelinePage(state) || isAtDetailedPostingPage(state) || isAtComposePage(state),
+        active: isAtTimelinePage(state),
         anchor: getFeedState(state, "timeline").anchor
     }),
     { goToTimeline }
