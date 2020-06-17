@@ -190,10 +190,16 @@ const PostingInfoType = {
         "revisionId": {
             type: "string"
         },
+        "receiverRevisionId": {
+            type: "string"
+        },
         "totalRevisions": {
             type: "integer"
         },
         "receiverName": {
+            type: "string"
+        },
+        "receiverPostingId": {
             type: "string"
         },
         "ownerName": {
@@ -224,6 +230,15 @@ const PostingInfoType = {
             type: "integer"
         },
         "deletedAt": {
+            type: "integer"
+        },
+        "receiverCreatedAt": {
+            type: "integer"
+        },
+        "receiverEditedAt": {
+            type: "integer"
+        },
+        "receiverDeletedAt": {
             type: "integer"
         },
         "draft": {
