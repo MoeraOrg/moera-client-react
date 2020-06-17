@@ -11,5 +11,5 @@ export function build(state, info) {
     info = info.sub("news");
     const at = getFeedAt(state, "news");
     info = at < Number.MAX_SAFE_INTEGER ? info.withParameter("before", at) : info;
-    return info.withTitle("Newsfeed" + atOwner(state));
+    return info.withTitle("News" + atOwner(state));
 }

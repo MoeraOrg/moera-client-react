@@ -7,7 +7,7 @@ import FeedPage from "ui/feed/FeedPage";
 
 const NewsPage = ({visible}) => (
     <Page>
-        <FeedPage feedName="news" title="Newsfeed" visible={visible}/>
+        <FeedPage feedName="news" title="News" visible={visible}/>
     </Page>
 );
 
