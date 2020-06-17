@@ -235,6 +235,13 @@ export function* postRemoteReaction(nodeName, remoteNodeName, postingId, negativ
     });
 }
 
+export function* deleteRemoteReaction(nodeName, remoteNodeName, postingId) {
+    return yield call(callApi, {
+        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "DELETE", auth: true,
+        schema: NodeApi.Result
+    });
+}
+
 export function* remoteReactionVerify(nodeName, remoteNodeName, postingId, ownerName) {
     return yield call(callApi, {
         nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`,

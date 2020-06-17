@@ -12,6 +12,7 @@ import {
 } from "state/postings/actions";
 import { getPosting } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { isAtHomeNode } from "state/node/selectors";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
@@ -73,6 +74,13 @@ export function* postingReactionDeleteSaga(action) {
     try {
         const data = yield call(Node.deleteReaction, "", id);
         yield put(postingReactionSet(id, null, data));
+        const {atHome, ownerName} = yield select(state => ({
+            atHome: isAtHomeNode(state),
+            ownerName: getOwnerName(state)
+        }));
+        if (!atHome) {
+            yield call(Node.deleteRemoteReaction, ":", ownerName, id);
+        }
     } catch (e) {
         yield put(errorThrown(e));
     }
