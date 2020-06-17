@@ -104,7 +104,7 @@ function* selectApi(nodeName) {
                 };
                 errorTitle = "Home access error";
             } else {
-                const nodeUri = call(getNodeUri, nodeName);
+                const nodeUri = yield call(getNodeUri, nodeName);
                 root = nodeUri != null ?
                     {
                         location: nodeUri.endsWith("/moera") ? nodeUri.substring(0, nodeUri.length - 6) : nodeUri,

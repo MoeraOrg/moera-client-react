@@ -10,21 +10,24 @@ import {
 } from "state/reactionsdialog/actions";
 import { errorThrown } from "state/error/actions";
 import { getOwnerName } from "state/owner/selectors";
+import { getPosting } from "state/postings/selectors";
 
 export function* reactionsDialogPastReactionsLoadSaga() {
-    const {postingId, negative, before, emoji} = yield select(state => ({
-        postingId: state.reactionsDialog.postingId,
+    const {posting, negative, before, emoji} = yield select(state => ({
+        posting: getPosting(state, state.reactionsDialog.postingId),
         negative: state.reactionsDialog.negative,
         before: state.reactionsDialog.reactions.after,
         emoji: state.reactionsDialog.activeTab
     }));
+    const nodeName = posting.receiverName ?? "";
+    const postingId = posting.receiverPostingId ?? posting.id;
     try {
-        const data = yield call(Node.getReactions, "", postingId, negative, emoji, before, 40);
+        const data = yield call(Node.getReactions, nodeName, postingId, negative, emoji, before, 40);
         yield put(reactionsDialogPastReactionsLoaded(
-            data.reactions, postingId, negative, emoji, data.before, data.after, data.total));
+            data.reactions, posting.id, negative, emoji, data.before, data.after, data.total));
         // TODO extract node names and put them into naming cache queue
     } catch (e) {
-        yield put(reactionsDialogPastReactionsLoadFailed(postingId, negative, emoji));
+        yield put(reactionsDialogPastReactionsLoadFailed(posting.id, negative, emoji));
         yield put(errorThrown(e));
     }
 }

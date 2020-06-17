@@ -8,7 +8,7 @@ export class Button extends React.PureComponent {
 
     static propTypes = {
         variant: PropType.string,
-        size: PropType.oneOf("sm", "lg"),
+        size: PropType.oneOf(["sm", "lg"]),
         block: PropType.bool,
         invisible: PropType.bool,
         loading: PropType.bool,
