@@ -13,6 +13,7 @@ import {
 import { getPosting } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { isAtHomeNode } from "state/node/selectors";
+import { fillActivityReaction } from "state/activityreactions/sagas";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
@@ -29,6 +30,7 @@ export function* postingDeleteSaga(action) {
 export function* postingLoadSaga(action) {
     try {
         const data = yield call(Node.getPosting, "", action.payload.id);
+        yield call(fillActivityReaction, data)
         yield put(postingSet(data));
     } catch (e) {
         yield put(postingLoadFailed());
