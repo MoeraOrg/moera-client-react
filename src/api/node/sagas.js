@@ -301,3 +301,10 @@ export function* deletePostingDraftRevision(nodeName, id) {
         nodeName, location: `/postings/${id}/revisions/draft`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
+
+export function* getActivityReactions(nodeName, remotePostings) {
+    return yield call(callApi, {
+        nodeName, location: "/activity/reactions", method: "POST", auth: true, body: {postings: remotePostings},
+        schema: NodeApi.ActivityReactionInfoArray
+    });
+}

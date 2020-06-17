@@ -735,3 +735,28 @@ export const SubscriptionInfo = schema({
     },
     additionalProperties: false
 });
+
+export const ActivityReactionInfoArray = schema({
+    type: "array",
+    items: {
+        type: "object",
+        properties: {
+            "remoteNodeName": {
+                type: "string"
+            },
+            "remotePostingId": {
+                type: "string"
+            },
+            "negative": {
+                type: "boolean"
+            },
+            "emoji": {
+                type: "integer"
+            },
+            "createdAt": {
+                type: "integer"
+            }
+        },
+        additionalProperties: false
+    }
+});

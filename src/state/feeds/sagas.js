@@ -21,6 +21,7 @@ import { errorThrown } from "state/error/actions";
 import { namingNameUsed } from "state/naming/actions";
 import { getFeedState, getFeedSubscriberId } from "state/feeds/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { isAtHomeNode } from "state/node/selectors";
 
 export function* feedGeneralLoadSaga(action) {
     const {feedName} = action.payload;
@@ -93,6 +94,7 @@ export function* feedPastSliceLoadSaga(action) {
         const data = feedName.startsWith(":")
             ? yield call(Node.getFeedSlice, ":", feedName.substring(1), null, before, 20)
             : yield call(Node.getFeedSlice, "", feedName, null, before, 20);
+        yield call(fillClientReactions, data.stories);
         yield put(feedPastSliceSet(feedName, data.stories, data.before, data.after));
         yield call(cacheNames, data.stories);
     } catch (e) {
@@ -108,12 +110,41 @@ export function* feedFutureSliceLoadSaga(action) {
         const data = feedName.startsWith(":")
             ? yield call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
             : yield call(Node.getFeedSlice, "", feedName, after, null, 20);
+        yield call(fillClientReactions, data.stories);
         yield put(feedFutureSliceSet(feedName, data.stories, data.before, data.after));
         yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(feedFutureSliceLoadFailed(feedName));
         yield put(errorThrown(e));
     }
+}
+
+function* fillClientReactions(stories) {
+    const atHome = yield select(isAtHomeNode);
+    if (atHome) {
+        return;
+    }
+    const postings = stories
+                        .map(t => t.posting)
+                        .filter(p => p != null)
+                        .filter(p => p.receiverName != null);
+    if (postings.length === 0) {
+        return;
+    }
+    const remotePostings = postings.map(p => ({nodeName: p.receiverName, postingId: p.receiverPostingId}));
+    const reactions = yield call(Node.getActivityReactions, ":", remotePostings);
+    const reactionMap = new Map(reactions.map(r => [`${r.remoteNodeName} ${r.remotePostingId}`, r]));
+    postings.forEach(p => {
+        const key = `${p.receiverName} ${p.receiverPostingId}`;
+        const reaction = reactionMap.get(key);
+        if (reaction != null) {
+            p.clientReaction = {
+                negative: reaction.negative,
+                emoji: reaction.emoji,
+                createdAt: reaction.createdAt
+            }
+        }
+    })
 }
 
 function* cacheNames(stories) {
