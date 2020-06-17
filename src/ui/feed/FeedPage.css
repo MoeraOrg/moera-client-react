@@ -10,6 +10,6 @@
     font-size: x-large;
     font-style: italic;
     font-weight: bold;
-    color: var(--primary);
+    color: var(--gray-light);
     padding-bottom: 1rem;
 }
