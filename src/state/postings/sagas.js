@@ -12,7 +12,6 @@ import {
 } from "state/postings/actions";
 import { getPosting } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
-import { isAtHomeNode } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 
 export function* postingDeleteSaga(action) {
@@ -53,8 +52,12 @@ export function* postingReactSaga(action) {
     try {
         const data = yield call(Node.postReaction, "", id, negative, emoji);
         yield put(postingReactionSet(id, {negative, emoji}, data.totals));
-        const ownerName = yield select(getOwnerName);
-        yield call(Node.postRemoteReaction, ":", ownerName, id, negative, emoji);
+        const {ownerName, posting} = yield select(state => ({
+            ownerName: getOwnerName(state),
+            posting: getPosting(state, id)
+        }));
+        yield call(Node.postRemoteReaction, ":", posting.receiverName ?? ownerName,
+            posting.receiverPostingId ?? id, negative, emoji);
     } catch (e) {
         yield put(errorThrown(e));
     }
@@ -74,10 +77,17 @@ export function* postingReactionLoadSaga(action) {
 export function* postingReactionDeleteSaga(action) {
     const {id} = action.payload;
     try {
-        const data = yield call(Node.deleteReaction, "", id);
+        let data = yield call(Node.deleteReaction, "", id);
+        const {ownerName, posting} = yield select(state => ({
+            ownerName: getOwnerName(state),
+            posting: getPosting(state, id)
+        }));
+        if (posting.receiverName != null) {
+            data = yield call(Node.deleteReaction, posting.receiverName, posting.receiverPostingId);
+        }
         yield put(postingReactionSet(id, null, data));
-        const ownerName = yield select(getOwnerName);
-        yield call(Node.deleteRemoteReaction, ":", ownerName, id);
+        yield call(Node.deleteRemoteReaction, ":", posting.receiverName ?? ownerName,
+            posting.receiverPostingId ?? id);
     } catch (e) {
         yield put(errorThrown(e));
     }
