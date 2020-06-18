@@ -12,9 +12,15 @@ import {
     POSTING_VERIFY,
     POSTING_VERIFY_FAILED
 } from "state/postings/actions";
-import { EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED, EVENT_HOME_REMOTE_POSTING_VERIFIED } from "api/events/actions";
+import {
+    EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED,
+    EVENT_HOME_REMOTE_POSTING_VERIFIED,
+    EVENT_HOME_REMOTE_REACTION_ADDED,
+    EVENT_HOME_REMOTE_REACTION_DELETED
+} from "api/events/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
 import { safeHtml, safePreviewHtml } from "util/html";
+import { findPostingIdByRemote } from "state/postings/selectors";
 
 const initialState = {
 };
@@ -137,10 +143,30 @@ export default (state = initialState, action) => {
         case POSTING_REACTION_SET: {
             const {id, reaction, totals} = action.payload;
             if (state[id]) {
-                return immutable.wrap(state)
-                    .set([id, "posting", "clientReaction"], reaction)
-                    .set([id, "posting", "reactions"], totals)
-                    .value();
+                let istate = immutable.wrap(state)
+                                .set([id, "posting", "reactions"], totals);
+                if (state[id].posting.receiverName == null) {
+                    istate = istate.set([id, "posting", "clientReaction"], reaction)
+                }
+                return istate.value();
+            }
+            return state;
+        }
+
+        case EVENT_HOME_REMOTE_REACTION_ADDED: {
+            const {remoteNodeName, remotePostingId, negative, emoji} = action.payload;
+            const id = findPostingIdByRemote(state, remoteNodeName, remotePostingId);
+            if (id != null) {
+                return immutable.set(state, [id, "posting", "clientReaction"], {negative, emoji});
+            }
+            return state;
+        }
+
+        case EVENT_HOME_REMOTE_REACTION_DELETED: {
+            const {remoteNodeName, remotePostingId} = action.payload;
+            const id = findPostingIdByRemote(state, remoteNodeName, remotePostingId);
+            if (id != null) {
+                return immutable.del(state, [id, "posting", "clientReaction"]);
             }
             return state;
         }

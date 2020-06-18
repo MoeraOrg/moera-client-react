@@ -76,13 +76,8 @@ export function* postingReactionDeleteSaga(action) {
     try {
         const data = yield call(Node.deleteReaction, "", id);
         yield put(postingReactionSet(id, null, data));
-        const {atHome, ownerName} = yield select(state => ({
-            atHome: isAtHomeNode(state),
-            ownerName: getOwnerName(state)
-        }));
-        if (!atHome) {
-            yield call(Node.deleteRemoteReaction, ":", ownerName, id);
-        }
+        const ownerName = yield select(getOwnerName);
+        yield call(Node.deleteRemoteReaction, ":", ownerName, id);
     } catch (e) {
         yield put(errorThrown(e));
     }

@@ -302,9 +302,9 @@ export function* deletePostingDraftRevision(nodeName, id) {
     });
 }
 
-export function* getActivityReactions(nodeName, remotePostings) {
+export function* postActivityReactionsSearch(nodeName, remotePostings) {
     return yield call(callApi, {
-        nodeName, location: "/activity/reactions", method: "POST", auth: true, body: {postings: remotePostings},
+        nodeName, location: "/activity/reactions/search", method: "POST", auth: true, body: {postings: remotePostings},
         schema: NodeApi.ActivityReactionInfoArray
     });
 }

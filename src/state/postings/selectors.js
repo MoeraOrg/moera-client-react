@@ -40,3 +40,12 @@ export function getPostingStory(posting, feedName) {
     delete story.storyId;
     return story;
 }
+
+export function findPostingIdByRemote(postings, remoteNodeName, remotePostingId) {
+    for (let [id, {posting}] of Object.entries(postings)) {
+        if (posting.receiverName === remoteNodeName && posting.receiverPostingId === remotePostingId) {
+            return id;
+        }
+    }
+    return null;
+}

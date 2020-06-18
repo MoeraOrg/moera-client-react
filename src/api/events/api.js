@@ -45,6 +45,16 @@ const remotePostingVerificationEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
+const remoteReactionEvent = (properties = {}) => baseEvent({
+    "remoteNodeName": {
+        type: "string"
+    },
+    "remotePostingId": {
+        type: "string"
+    },
+    ...properties
+});
+
 const remoteReactionVerificationEvent = (properties = {}) => baseEvent({
     "id": {
         type: "string"
@@ -184,6 +194,18 @@ export const EVENT_SCHEMES = {
             type: "string"
         },
     }),
+    "REMOTE_REACTION_ADDED": remoteReactionEvent({
+        "negative": {
+            type: "boolean"
+        },
+        "emoji": {
+            type: "integer"
+        },
+        "createdAt": {
+            type: "integer"
+        }
+    }),
+    "REMOTE_REACTION_DELETED": remoteReactionEvent(),
     "REMOTE_REACTION_VERIFIED": remoteReactionVerificationEvent({
         "correct": {
             type: "boolean"
