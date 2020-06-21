@@ -3,11 +3,13 @@ import { EVENT_NODE_POSTING_REACTIONS_CHANGED, EVENT_NODE_POSTING_UPDATED } from
 import { postingLoad, postingReactionLoad } from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
 import { STORY_ADDED, STORY_UPDATED } from "state/stories/actions";
+import { isCurrentNodeStory } from "state/stories/selectors";
 
 export default [
     trigger(
         [STORY_ADDED, STORY_UPDATED],
         (state, signal) => signal.payload.story.posting
+            && isCurrentNodeStory(state, signal.payload.story)
             && !isPostingCached(state, signal.payload.story.posting.id),
         signal => postingLoad(signal.payload.story.posting.id)
     ),
