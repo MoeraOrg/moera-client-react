@@ -22,6 +22,7 @@ import {
     faPlus,
     faRemoveFormat,
     faReply,
+    faRetweet,
     faSignOutAlt,
     faThumbsDown,
     faThumbsUp,
@@ -69,6 +70,7 @@ export default function initIconLibrary() {
     library.add(faPlus);
     library.add(faRemoveFormat);
     library.add(faReply);
+    library.add(faRetweet);
     library.add(faSignOutAlt);
     library.add(faTrashAlt);
     library.add(faThumbsDown);

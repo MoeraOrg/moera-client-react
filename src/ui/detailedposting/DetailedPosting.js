@@ -11,6 +11,7 @@ import PostingPin from "ui/posting/PostingPin";
 import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingDate from "ui/posting/PostingDate";
+import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
@@ -33,6 +34,7 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
                     <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
                     <PostingPin pinned={story != null && story.pinned}/>
                     <div className="owner-line">
+                        <PostingSource posting={posting}/>
                         <PostingOwner posting={posting}/>
                         <PostingDate id={posting.id}
                                      publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
