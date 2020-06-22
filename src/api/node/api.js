@@ -337,6 +337,27 @@ const PostingInfoType = {
         },
         "reactionTotalsVisible": {
             type: "boolean"
+        },
+        "sources": {
+            type: "array",
+            items: {
+                type: "object",
+                properties: {
+                    "nodeName": {
+                        type: "string"
+                    },
+                    "feedName": {
+                        type: "string"
+                    },
+                    "postingId": {
+                        type: "string"
+                    },
+                    "createdAt": {
+                        type: "integer"
+                    }
+                },
+                additionalProperties: false
+            }
         }
     },
     additionalProperties: false
