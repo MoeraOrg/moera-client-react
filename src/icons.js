@@ -10,6 +10,8 @@ import {
     faCog,
     faExclamationTriangle,
     faExternalLinkAlt,
+    faEye,
+    faEyeSlash,
     faFileAlt,
     faFrown,
     faHistory,
@@ -59,6 +61,8 @@ export default function initIconLibrary() {
     library.add(faEnvelopeOpen);
     library.add(faExclamationTriangle);
     library.add(faExternalLinkAlt);
+    library.add(faEye);
+    library.add(faEyeSlash);
     library.add(faFileAlt);
     library.add(faFrown);
     library.add(faHistory);

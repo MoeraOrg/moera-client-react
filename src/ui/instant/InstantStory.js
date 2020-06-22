@@ -17,6 +17,10 @@ function getStoryTarget(story) {
             return {nodeName: ":", href: `/post/${story.postingId}`}
         case "mention-posting":
             return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
+        case "subscriber-added":
+            return {nodeName: story.remoteNodeName, href: "/"}
+        case "subscriber-deleted":
+            return {nodeName: story.remoteNodeName, href: "/"}
         default:
             return {nodeName: ":", href: "/"}
     }
