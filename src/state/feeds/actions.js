@@ -16,6 +16,12 @@ export const feedGeneralSet = (feedName, info) => ({
     payload: {feedName, info}
 });
 
+export const FEED_GENERAL_UNSET = "FEED_GENERAL_UNSET";
+export const feedGeneralUnset = (feedName) => ({
+    type: FEED_GENERAL_UNSET,
+    payload: {feedName}
+});
+
 export const FEED_SUBSCRIBE = "FEED_SUBSCRIBE";
 export const feedSubscribe = (feedName) => ({
     type: FEED_SUBSCRIBE,

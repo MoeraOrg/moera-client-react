@@ -1,17 +1,20 @@
-import { trigger } from "state/trigger";
+import { inv, trigger } from "state/trigger";
 import { GO_TO_PAGE, updateLocation } from "state/navigation/actions";
 import { isAtTimelinePage } from "state/navigation/selectors";
 import {
     FEED_SCROLLED,
     feedGeneralLoad,
+    feedGeneralUnset,
     FEEDS_UNSET,
     feedStatusLoad,
-    feedStatusSet, feedStatusUpdated,
+    feedStatusSet,
+    feedStatusUpdated,
     feedsUnset
 } from "state/feeds/actions";
 import { isFeedGeneralToBeLoaded } from "state/feeds/selectors";
 import {
-    EVENT_HOME_FEED_STATUS_UPDATED, EVENT_HOME_STORIES_STATUS_UPDATED,
+    EVENT_HOME_FEED_STATUS_UPDATED,
+    EVENT_HOME_STORIES_STATUS_UPDATED,
     EVENT_HOME_STORY_ADDED,
     EVENT_HOME_STORY_DELETED,
     EVENT_HOME_STORY_UPDATED,
@@ -48,6 +51,16 @@ export default [
         () => feedGeneralLoad("timeline")
     ),
     trigger(FEED_SCROLLED, true, updateLocation),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        isAtTimelinePage,
+        () => feedGeneralLoad("timeline")
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        inv(isAtTimelinePage),
+        () => feedGeneralUnset("timeline")
+    ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, feedsUnset),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),

@@ -8,6 +8,7 @@ import {
     FEED_GENERAL_LOAD,
     FEED_GENERAL_LOAD_FAILED,
     FEED_GENERAL_SET,
+    FEED_GENERAL_UNSET,
     FEED_PAST_SLICE_LOAD,
     FEED_PAST_SLICE_LOAD_FAILED,
     FEED_PAST_SLICE_SET,
@@ -132,6 +133,17 @@ export default (state = initialState, action) => {
                     ...info,
                     loadingGeneral: false,
                     loadedGeneral: true
+                })
+                .value();
+        }
+
+        case FEED_GENERAL_UNSET: {
+            const {feedName} = action.payload;
+            return getFeed(state, feedName).istate
+                .assign([feedName], {
+                    ...emptyInfo,
+                    loadingGeneral: false,
+                    loadedGeneral: false
                 })
                 .value();
         }
