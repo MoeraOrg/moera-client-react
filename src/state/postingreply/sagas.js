@@ -3,18 +3,17 @@ import { call, put, select } from 'redux-saga/effects';
 import { Node, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { postingReplyFailed } from "state/postingreply/actions";
-import { getOwnerName } from "state/owner/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getWindowSelectionHtml, urlWithParameters } from "util/misc";
 import { getSetting } from "state/settings/selectors";
+import { getNodeUri } from "state/naming/sagas";
 
 export function* postingReplySaga() {
-    const {posting, rootNodePage, ownerName, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
+    const {posting, rootNodePage, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
            reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault} =
         yield select(state => ({
             posting: getPosting(state, state.postingReply.postingId),
             rootNodePage: state.node.root.page,
-            ownerName: getOwnerName(state),
             rootHomePage: state.home.root.page,
             subjectPrefix: getSetting(state, "posting.reply.subject-prefix"),
             preambleTemplate: getSetting(state, "posting.reply.preamble"),
@@ -25,11 +24,11 @@ export function* postingReplySaga() {
             reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default")
         }));
     try {
-        const name = NodeName.parse(ownerName).name;
+        const name = NodeName.parse(posting.ownerName).name;
         const subject = posting.body.subject && subjectPrefix
             ? subjectPrefix + " " + posting.body.subject : posting.body.subject;
         const preamble = preambleTemplate
-            .replace("%POST%", `${rootNodePage}/post/${posting.id}`)
+            .replace("%POST%", yield call(postingHref, posting, rootNodePage))
             .replace("%USER%", name);
         let text = getWindowSelectionHtml();
         if (!text && quoteAll) {
@@ -62,5 +61,14 @@ export function* postingReplySaga() {
     } catch (e) {
         yield put(postingReplyFailed());
         yield put(errorThrown(e));
+    }
+}
+
+function* postingHref(posting, rootNodePage) {
+    if (posting.receiverName == null) {
+        return `${rootNodePage}/post/${posting.id}`;
+    } else {
+        const rootReceiverPage = yield call(getNodeUri, posting.receiverName);
+        return `${rootReceiverPage}/post/${posting.receiverPostingId}`;
     }
 }
