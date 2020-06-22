@@ -101,7 +101,7 @@ class PostingReactionButton extends React.PureComponent {
         return second ? second.emoji : null;
     }
 
-    documentClick = event => {
+    documentClick = () => {
         this.hide();
     };
 
@@ -134,7 +134,6 @@ class PostingReactionButton extends React.PureComponent {
     }
 
     onTimeout = debounce(() => {
-        this.timerId = null;
         switch (this.state.locus) {
             case "out":
                 this.hide();
