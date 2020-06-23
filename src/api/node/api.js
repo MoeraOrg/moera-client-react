@@ -781,3 +781,16 @@ export const ActivityReactionInfoArray = schema({
         additionalProperties: false
     }
 });
+
+export const PeopleGeneralInfo = schema({
+    type: "object",
+    properties: {
+        "feedSubscribersTotal": {
+            type: "integer"
+        },
+        "feedSubscriptionsTotal": {
+            type: "integer"
+        },
+    },
+    additionalProperties: false
+});

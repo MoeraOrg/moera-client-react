@@ -124,9 +124,13 @@ export function* putStory(nodeName, id, storyAttributes) {
     });
 }
 
+export function* getPeopleGeneral(nodeName) {
+    return yield call(callApi, {nodeName, location: "/people", schema: NodeApi.PeopleGeneralInfo});
+}
+
 export function* postSubscriber(nodeName, feedName) {
     return yield call(callApi, {
-        nodeName, location: "/subscribers", method: "POST", auth: true, body: {type: "feed", feedName},
+        nodeName, location: "/people/subscribers", method: "POST", auth: true, body: {type: "feed", feedName},
         schema: NodeApi.SubscriberInfo
     });
 }
@@ -134,20 +138,20 @@ export function* postSubscriber(nodeName, feedName) {
 export function* deleteSubscriber(nodeName, subscriberId) {
     subscriberId = encodeURIComponent(subscriberId);
     return yield call(callApi, {
-        nodeName, location: `/subscribers/${subscriberId}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: `/people/subscribers/${subscriberId}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 
 export function* postSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFeedName) {
     return yield call(callApi, {
-        nodeName, location: "/subscriptions", method: "POST", auth: true,
+        nodeName, location: "/people/subscriptions", method: "POST", auth: true,
         body: {type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFeedName},
         schema: NodeApi.SubscriptionInfo
     });
 }
 
 export function* deleteSubscription(nodeName, remoteSubscriberId, remoteNodeName) {
-    const location = urlWithParameters("/subscriptions",
+    const location = urlWithParameters("/people/subscriptions",
         {type: "feed", nodeName: remoteNodeName, subscriberId: remoteSubscriberId});
     return yield call(callApi, {nodeName, location, method: "DELETE", auth: true, schema: NodeApi.Result});
 }
