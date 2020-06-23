@@ -84,6 +84,7 @@ import cartes from "state/cartes/reducer";
 import reactionsDialog from "state/reactionsdialog/reducer";
 import postingReply from "state/postingreply/reducer";
 import changeDateDialog from "state/changedatedialog/reducer";
+import people from "state/people/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 
@@ -277,6 +278,7 @@ export default createStore(
         reactionsDialog,
         postingReply,
         changeDateDialog,
+        people,
         messageBox,
         confirmBox
     }),

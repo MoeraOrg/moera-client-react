@@ -7,10 +7,12 @@ import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
 import ComposePage from "ui/compose/ComposePage";
 import SettingsPage from "ui/settings/SettingsPage";
 import NewsPage from "ui/news/NewsPage";
+import PeoplePage from "ui/people/PeoplePage";
 import {
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
     PAGE_NEWS,
+    PAGE_PEOPLE,
     PAGE_PROFILE,
     PAGE_SETTINGS,
     PAGE_TIMELINE
@@ -38,6 +40,8 @@ class CurrentPage extends React.PureComponent {
                 return <SettingsPage/>;
             case PAGE_NEWS:
                 return <NewsPage/>;
+            case PAGE_PEOPLE:
+                return <PeoplePage/>;
             default:
                 return null;
         }

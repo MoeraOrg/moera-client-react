@@ -2,6 +2,7 @@ import {
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
     PAGE_NEWS,
+    PAGE_PEOPLE,
     PAGE_PROFILE,
     PAGE_SETTINGS,
     PAGE_TIMELINE
@@ -24,13 +25,13 @@ export const goToPosting = (id) => goToPage(PAGE_DETAILED_POSTING, {id});
 export const goToCompose = (id = null, draftId = null) => goToPage(PAGE_COMPOSE, {id, draftId});
 export const goToSettings = () => goToPage(PAGE_SETTINGS);
 export const goToNews = (at = null) => goToPage(PAGE_NEWS, {at});
+export const goToPeople = () => goToPage(PAGE_PEOPLE);
 
 export const GO_TO_PAGE_WITH_DEFAULT_SUBPAGE = "GO_TO_PAGE_WITH_DEFAULT_SUBPAGE";
 export const goToPageWithDefaultSubpage = (page, details = {}) => ({
     type: GO_TO_PAGE_WITH_DEFAULT_SUBPAGE,
     payload: {page, details}
 });
-export const goToSettingsWithDefaultSubpage = () => goToPageWithDefaultSubpage(PAGE_SETTINGS);
 
 export const NEW_LOCATION = "NEW_LOCATION";
 export const newLocation = () => ({

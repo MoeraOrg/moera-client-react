@@ -3,12 +3,14 @@ import {
     isAtComposePage,
     isAtDetailedPostingPage,
     isAtNewsPage,
+    isAtPeoplePage,
     isAtProfilePage,
     isAtSettingsPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
 import { build as composeBuild, transform as composeTransform } from "./compose";
 import { build as newsBuild, transform as newsTransform } from "./news";
+import { build as peopleBuild, transform as peopleTransform } from "./people";
 import { build as postBuild, transform as postTransform } from "./post";
 import { build as profileBuild, transform as profileTransform } from "./profile";
 import { build as settingsBuild, transform as settingsTransform } from "./settings";
@@ -36,6 +38,9 @@ export function transform(srcInfo, dstInfo) {
     if (dstInfo.directories[0] === "news") {
         return newsTransform(srcInfo, dstInfo);
     }
+    if (dstInfo.directories[0] === "people") {
+        return peopleTransform(srcInfo, dstInfo);
+    }
     return [];
 }
 
@@ -57,6 +62,9 @@ export function build(state, info) {
     }
     if (isAtNewsPage(state)) {
         return newsBuild(state, info);
+    }
+    if (isAtPeoplePage(state)) {
+        return peopleBuild(state, info);
     }
     return info;
 }
