@@ -1,3 +1,11 @@
+export function getReactionsDialogPostingId(state) {
+    return state.reactionsDialog.postingId;
+}
+
+export function isReactionsDialogShown(state) {
+    return state.reactionsDialog.show;
+}
+
 function getReactions(state) {
     return state.reactionsDialog.reactions[state.reactionsDialog.activeTab ?? 0];
 }
