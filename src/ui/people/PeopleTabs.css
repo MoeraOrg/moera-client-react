@@ -1,0 +1,31 @@
+.people-tabs {
+    display: flex;
+}
+
+.people-tabs .tab {
+    flex: 1;
+    max-width: 10em;
+    cursor: pointer;
+    padding: .3rem;
+    font-size: larger;
+    margin-right: 1rem;
+    color: var(--gray);
+}
+
+.people-tabs .tab:hover {
+    color: black;
+}
+
+.people-tabs .tab.active {
+    color: var(--primary);
+    cursor: default;
+    border-bottom: solid .25rem var(--primary);
+}
+
+.people-tabs .tab.active:hover {
+    color: var(--primary);
+}
+
+.people-tabs .rest {
+    flex: auto;
+}
