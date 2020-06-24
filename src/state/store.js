@@ -63,7 +63,7 @@ import {
 import { POSTING_REPLY } from "state/postingreply/actions";
 import { STORY_PINNING_UPDATE, STORY_READING_UPDATE } from "state/stories/actions";
 import { STORY_CHANGE_DATE } from "state/changedatedialog/actions";
-import { PEOPLE_GENERAL_LOAD } from "state/people/actions";
+import { PEOPLE_GENERAL_LOAD, SUBSCRIBERS_LOAD, SUBSCRIPTIONS_LOAD } from "state/people/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import pulse from "state/pulse/reducer";
@@ -153,7 +153,7 @@ import {
 import { postingReplySaga } from "state/postingreply/sagas";
 import { storyPinningUpdateSaga, storyReadingUpdateSaga } from "state/stories/sagas";
 import { storyChangeDateSaga } from "state/changedatedialog/sagas";
-import { peopleGeneralLoadSaga } from "state/people/sagas";
+import { peopleGeneralLoadSaga, subscribersLoadSaga, subscriptionsLoadSaga } from "state/people/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -256,6 +256,8 @@ function* combinedSaga() {
     yield takeLatest(STORY_CHANGE_DATE, storyChangeDateSaga);
     yield takeEvery(STORY_READING_UPDATE, storyReadingUpdateSaga);
     yield takeLatest(PEOPLE_GENERAL_LOAD, peopleGeneralLoadSaga);
+    yield takeLatest(SUBSCRIBERS_LOAD, subscribersLoadSaga);
+    yield takeLatest(SUBSCRIPTIONS_LOAD, subscriptionsLoadSaga);
 
     yield invokeTriggers(triggers);
 }

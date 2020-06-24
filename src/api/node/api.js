@@ -701,7 +701,7 @@ export const ReactionsSliceInfo = schema({
     additionalProperties: false
 });
 
-export const SubscriberInfo = schema({
+export const SubscriberInfoType = {
     type: "object",
     properties: {
         "id": {
@@ -724,9 +724,16 @@ export const SubscriberInfo = schema({
         }
     },
     additionalProperties: false
+};
+
+export const SubscriberInfo = schema(SubscriberInfoType);
+
+export const SubscriberInfoArray = schema({
+    type: "array",
+    items: SubscriberInfoType
 });
 
-export const SubscriptionInfo = schema({
+export const SubscriptionInfoType = {
     type: "object",
     properties: {
         "id": {
@@ -755,6 +762,13 @@ export const SubscriptionInfo = schema({
         }
     },
     additionalProperties: false
+};
+
+export const SubscriptionInfo = schema(SubscriptionInfoType);
+
+export const SubscriptionInfoArray = schema({
+    type: "array",
+    items: SubscriptionInfoType
 });
 
 export const ActivityReactionInfoArray = schema({

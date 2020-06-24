@@ -128,6 +128,12 @@ export function* getPeopleGeneral(nodeName) {
     return yield call(callApi, {nodeName, location: "/people", schema: NodeApi.PeopleGeneralInfo});
 }
 
+export function* getSubscribers(nodeName) {
+    return yield call(callApi, {
+        nodeName, location: "/people/subscribers?type=feed", schema: NodeApi.SubscriberInfoArray
+    });
+}
+
 export function* postSubscriber(nodeName, feedName) {
     return yield call(callApi, {
         nodeName, location: "/people/subscribers", method: "POST", auth: true, body: {type: "feed", feedName},
@@ -139,6 +145,12 @@ export function* deleteSubscriber(nodeName, subscriberId) {
     subscriberId = encodeURIComponent(subscriberId);
     return yield call(callApi, {
         nodeName, location: `/people/subscribers/${subscriberId}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}
+
+export function* getSubscriptions(nodeName) {
+    return yield call(callApi, {
+        nodeName, location: "/people/subscriptions?type=feed", schema: NodeApi.SubscriptionInfoArray
     });
 }
 
