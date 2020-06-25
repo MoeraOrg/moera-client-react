@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { Loading, NodeName } from "ui/control";
 
 const SubscriptionsSubpage = ({loading, subscriptions}) => (
-    <div>
+    <div className="row">
         <Loading active={loading}/>
         {subscriptions.map(sr =>
-            <div key={sr.id}>
+            <div key={sr.id} className="col-md-3 col-sm-4">
                 <NodeName name={sr.remoteNodeName}/>
             </div>
         )}

@@ -1,6 +1,7 @@
 .people-tabs {
     display: flex;
-    margin-bottom: 1em;
+    margin-top: -.5em;
+    margin-bottom: 1.5em;
 }
 
 .people-tabs .tab {

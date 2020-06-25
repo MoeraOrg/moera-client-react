@@ -6,14 +6,17 @@ import { Loading } from "ui/control";
 import PeopleTabs from "ui/people/PeopleTabs";
 import SubscribersSubpage from "ui/people/SubscribersSubpage";
 import SubscriptionsSubpage from "ui/people/SubscriptionsSubpage";
+import "./PeoplePage.css";
 
 const PeoplePage = ({tab, loadingGeneral}) => (
     <Page className="mt-3">
         <h2>People <Loading active={loadingGeneral}/></h2>
         <br/>
-        <PeopleTabs active={tab}/>
-        {tab === "subscribers" && <SubscribersSubpage/>}
-        {tab === "subscriptions" && <SubscriptionsSubpage/>}
+        <div className="people-page">
+            <PeopleTabs active={tab}/>
+            {tab === "subscribers" && <SubscribersSubpage/>}
+            {tab === "subscriptions" && <SubscriptionsSubpage/>}
+        </div>
     </Page>
 );
 
