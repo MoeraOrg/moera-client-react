@@ -12,6 +12,7 @@ import {
     SUBSCRIPTIONS_LOAD_FAILED,
     SUBSCRIPTIONS_LOADED
 } from "state/people/actions";
+import { FEED_UNSUBSCRIBED } from "state/feeds/actions";
 
 const initialState = {
     tab: "subscribers",
@@ -71,6 +72,19 @@ export default (state = initialState, action) => {
 
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
+
+        case FEED_UNSUBSCRIBED: {
+            const subscriptions = state.subscriptions
+                .filter(sr => sr.remoteNodeName !== action.payload.nodeName
+                    || sr.remoteFeedName !== action.payload.feedName);
+            if (subscriptions.length !== state.subscriptions.length) {
+                return immutable.wrap(state)
+                    .set("subscriptions", subscriptions)
+                    .set("subscriptionsTotal", subscriptions.length)
+                    .value()
+            }
+            return state;
+        }
 
         default:
             return state;
