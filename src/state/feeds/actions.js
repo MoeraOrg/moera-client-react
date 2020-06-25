@@ -23,39 +23,39 @@ export const feedGeneralUnset = (feedName) => ({
 });
 
 export const FEED_SUBSCRIBE = "FEED_SUBSCRIBE";
-export const feedSubscribe = (feedName) => ({
+export const feedSubscribe = (nodeName, feedName) => ({
     type: FEED_SUBSCRIBE,
-    payload: {feedName}
+    payload: {nodeName, feedName}
 });
 
 export const FEED_SUBSCRIBED = "FEED_SUBSCRIBED";
-export const feedSubscribed = (feedName, subscriberId) => ({
+export const feedSubscribed = (nodeName, feedName, subscriberId) => ({
     type: FEED_SUBSCRIBED,
-    payload: {feedName, subscriberId}
+    payload: {nodeName, feedName, subscriberId}
 });
 
 export const FEED_SUBSCRIBE_FAILED = "FEED_SUBSCRIBE_FAILED";
-export const feedSubscribeFailed = (feedName) => ({
+export const feedSubscribeFailed = (nodeName, feedName) => ({
     type: FEED_SUBSCRIBE_FAILED,
-    payload: {feedName}
+    payload: {nodeName, feedName}
 });
 
 export const FEED_UNSUBSCRIBE = "FEED_UNSUBSCRIBE";
-export const feedUnsubscribe = (feedName) => ({
+export const feedUnsubscribe = (nodeName, feedName, subscriberId) => ({
     type: FEED_UNSUBSCRIBE,
-    payload: {feedName}
+    payload: {nodeName, feedName, subscriberId}
 });
 
 export const FEED_UNSUBSCRIBED = "FEED_UNSUBSCRIBED";
-export const feedUnsubscribed = (feedName) => ({
+export const feedUnsubscribed = (nodeName, feedName) => ({
     type: FEED_UNSUBSCRIBED,
-    payload: {feedName}
+    payload: {nodeName, feedName}
 });
 
 export const FEED_UNSUBSCRIBE_FAILED = "FEED_UNSUBSCRIBE_FAILED";
-export const feedUnsubscribeFailed = (feedName) => ({
+export const feedUnsubscribeFailed = (nodeName, feedName) => ({
     type: FEED_UNSUBSCRIBE_FAILED,
-    payload: {feedName}
+    payload: {nodeName, feedName}
 });
 
 export const FEED_STATUS_LOAD = "FEED_STATUS_LOAD";

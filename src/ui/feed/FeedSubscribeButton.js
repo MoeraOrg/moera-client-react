@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button, Loading } from "ui/control";
 import { isAtHomeNode } from "state/node/selectors";
 import {
+    getFeedSubscriberId,
     isFeedGeneralLoading,
     isFeedGeneralReady,
     isSubscribedToFeed,
@@ -17,12 +18,12 @@ class FeedSubscribeButton extends React.PureComponent {
 
     onSubscribe = () => {
         const {feedName, feedSubscribe} = this.props;
-        feedSubscribe(feedName);
+        feedSubscribe("", feedName);
     }
 
     onUnsubscribe = () => {
-        const {feedName, feedUnsubscribe} = this.props;
-        feedUnsubscribe(feedName);
+        const {feedName, subscriberId, feedUnsubscribe} = this.props;
+        feedUnsubscribe("", feedName, subscriberId);
     }
 
     render() {
@@ -57,7 +58,8 @@ export default connect(
         generalLoading: isFeedGeneralLoading(state, ownProps.feedName),
         subscribed: isSubscribedToFeed(state, ownProps.feedName),
         subscribing: isSubscribingToFeed(state, ownProps.feedName),
-        unsubscribing: isUnsubscribingFromFeed(state, ownProps.feedName)
+        unsubscribing: isUnsubscribingFromFeed(state, ownProps.feedName),
+        subscriberId: getFeedSubscriberId(state, ownProps.feedName)
     }),
     { feedSubscribe, feedUnsubscribe }
 )(FeedSubscribeButton);

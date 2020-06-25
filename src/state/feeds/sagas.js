@@ -19,7 +19,7 @@ import {
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { namingNameUsed } from "state/naming/actions";
-import { getFeedState, getFeedSubscriberId } from "state/feeds/selectors";
+import { getFeedState } from "state/feeds/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReactions } from "state/activityreactions/sagas";
 
@@ -35,30 +35,27 @@ export function* feedGeneralLoadSaga(action) {
 }
 
 export function* feedSubscribeSaga(action) {
-    const {feedName} = action.payload;
-    const ownerName = yield select(getOwnerName)
+    const {nodeName, feedName} = action.payload;
+    const ownerName = yield select(getOwnerName);
     try {
-        const data = yield call(Node.postSubscriber, "", feedName);
-        yield call(Node.postSubscription, ":", data.id, ownerName, feedName);
-        yield put(feedSubscribed(feedName, data.id));
+        const data = yield call(Node.postSubscriber, nodeName, feedName);
+        yield call(Node.postSubscription, ":", data.id, nodeName ? nodeName : ownerName, feedName);
+        yield put(feedSubscribed(nodeName, feedName, data.id));
     } catch (e) {
-        yield put(feedSubscribeFailed(feedName));
+        yield put(feedSubscribeFailed(nodeName, feedName));
         yield put(errorThrown(e));
     }
 }
 
 export function* feedUnsubscribeSaga(action) {
-    const {feedName} = action.payload;
-    const {subscriberId, ownerName} = yield select(state => ({
-        subscriberId: getFeedSubscriberId(state, feedName),
-        ownerName: getOwnerName(state)
-    }));
+    const {nodeName, feedName, subscriberId} = action.payload;
+    const ownerName = yield select(getOwnerName);
     try {
-        yield call(Node.deleteSubscriber, "", subscriberId);
-        yield call(Node.deleteSubscription, ":", subscriberId, ownerName);
-        yield put(feedUnsubscribed(feedName));
+        yield call(Node.deleteSubscriber, nodeName, subscriberId);
+        yield call(Node.deleteSubscription, ":", subscriberId, nodeName ? nodeName : ownerName);
+        yield put(feedUnsubscribed(nodeName, feedName));
     } catch (e) {
-        yield put(feedUnsubscribeFailed(feedName));
+        yield put(feedUnsubscribeFailed(nodeName, feedName));
         yield put(errorThrown(e));
     }
 }

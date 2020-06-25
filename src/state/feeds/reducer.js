@@ -149,51 +149,69 @@ export default (state = initialState, action) => {
         }
 
         case FEED_SUBSCRIBE: {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "subscribing"], true)
-                .value();
+            const {nodeName, feedName} = action.payload;
+            if (nodeName === "") {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscribing"], true)
+                    .value();
+            }
+            return state;
         }
 
         case FEED_SUBSCRIBED: {
-            const {feedName, subscriberId} = action.payload;
-            return getFeed(state, feedName).istate
-                .assign([feedName], {
-                    subscribing: false,
-                    subscriberId
-                })
-                .value();
+            const {nodeName, feedName, subscriberId} = action.payload;
+            if (nodeName === "") {
+                return getFeed(state, feedName).istate
+                    .assign([feedName], {
+                        subscribing: false,
+                        subscriberId
+                    })
+                    .value();
+            }
+            return state;
         }
 
         case FEED_SUBSCRIBE_FAILED: {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "subscribing"], false)
-                .value();
+            const {nodeName, feedName} = action.payload;
+            if (nodeName === "") {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscribing"], false)
+                    .value();
+            }
+            return state;
         }
 
         case FEED_UNSUBSCRIBE: {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "unsubscribing"], true)
-                .value();
+            const {nodeName, feedName} = action.payload;
+            if (nodeName === "") {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "unsubscribing"], true)
+                    .value();
+            }
+            return state;
         }
 
         case FEED_UNSUBSCRIBED: {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .assign([feedName], {
-                    unsubscribing: false,
-                    subscriberId: null
-                })
-                .value();
+            const {nodeName, feedName} = action.payload;
+            if (nodeName === "") {
+                return getFeed(state, feedName).istate
+                    .assign([feedName], {
+                        unsubscribing: false,
+                        subscriberId: null
+                    })
+                    .value();
+            }
+            return state;
         }
 
         case FEED_UNSUBSCRIBE_FAILED: {
-            const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "unsubscribing"], false)
-                .value();
+            const {nodeName, feedName} = action.payload;
+            if (nodeName === "") {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "unsubscribing"], false)
+                    .value();
+            }
+            return state;
         }
 
         case FEED_STATUS_LOAD: {
