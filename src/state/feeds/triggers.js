@@ -9,7 +9,9 @@ import {
     feedStatusLoad,
     feedStatusSet,
     feedStatusUpdated,
-    feedsUnset
+    feedSubscribed,
+    feedsUnset,
+    feedUnsubscribed
 } from "state/feeds/actions";
 import { isFeedGeneralToBeLoaded } from "state/feeds/selectors";
 import {
@@ -18,6 +20,8 @@ import {
     EVENT_HOME_STORY_ADDED,
     EVENT_HOME_STORY_DELETED,
     EVENT_HOME_STORY_UPDATED,
+    EVENT_HOME_SUBSCRIPTION_ADDED,
+    EVENT_HOME_SUBSCRIPTION_DELETED,
     EVENT_NODE_STORY_ADDED,
     EVENT_NODE_STORY_DELETED,
     EVENT_NODE_STORY_UPDATED
@@ -25,6 +29,7 @@ import {
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
+import { getOwnerName } from "state/owner/selectors";
 
 function toStory(eventPayload, isHome) {
     const story = {...eventPayload};
@@ -80,5 +85,15 @@ export default [
         true,
         signal => feedStatusUpdated(
             ":" + signal.payload.feedName, signal.payload.viewed, signal.payload.read, signal.payload.before)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIPTION_ADDED,
+        (state, signal) => getOwnerName(state) === signal.payload.remoteNodeName,
+        signal => feedSubscribed("", signal.payload.remoteFeedName, signal.payload.remoteSubscriberId)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIPTION_DELETED,
+        (state, signal) => getOwnerName(state) === signal.payload.remoteNodeName,
+        signal => feedUnsubscribed("", signal.payload.remoteFeedName)
     )
 ];

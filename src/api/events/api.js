@@ -132,6 +132,56 @@ const storyEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
+const subscriberEvent = (properties = {}) => baseEvent({
+    "id": {
+        type: "string"
+    },
+    "subscriptionType": {
+        type: "string"
+    },
+    "feedName": {
+        type: "string"
+    },
+    "postingId": {
+        type: "string"
+    },
+    "nodeName": {
+        type: "string"
+    },
+    "createdAt": {
+        type: "integer"
+    },
+    ...properties
+});
+
+const subscriptionEvent = (properties = {}) => baseEvent({
+    "id": {
+        type: "string"
+    },
+    "subscriptionType": {
+        type: "string"
+    },
+    "feedName": {
+        type: "string"
+    },
+    "remoteSubscriberId": {
+        type: "string"
+    },
+    "remoteNodeName": {
+        type: "string"
+    },
+    "remoteFeedName": {
+        type: "string"
+    },
+    "remotePostingId": {
+        type: "string"
+    },
+    "createdAt": {
+        type: "integer"
+    },
+    ...properties
+});
+
 export const EventPacket = schema({
     type: "object",
     properties: {
@@ -251,7 +301,11 @@ export const EVENT_SCHEMES = {
         "before": {
             type: "integer"
         }
-    })
+    }),
+    "SUBSCRIBER_ADDED": subscriberEvent(),
+    "SUBSCRIBER_DELETED": subscriberEvent(),
+    "SUBSCRIPTION_ADDED": subscriptionEvent(),
+    "SUBSCRIPTION_DELETED": subscriptionEvent()
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([
