@@ -11,6 +11,7 @@ import ReactionsDialog from "ui/reactionsdialog/ReactionsDialog";
 import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
+import FlashBox from "ui/flashbox/FlashBox";
 import "./colors.css";
 import "./App.css";
 
@@ -28,6 +29,7 @@ const App = () => (
         <ChangeDateDialog/>
         <MessageBox/>
         <ConfirmBox/>
+        <FlashBox/>
     </>
 );
 

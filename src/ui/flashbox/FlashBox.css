@@ -1,0 +1,21 @@
+.flash-box {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 243, 205);
+    color: rgb(133, 100, 4);
+    border: 1px solid rgb(255, 238, 186);
+    border-radius: .25rem;
+    box-shadow: 3px 3px .25rem #ddd;
+    padding: .1rem .2rem;
+    z-index: 1050;
+}
+
+.flash-box.dismissing {
+    background-color: rgba(255, 243, 205, 0);
+    color: rgba(133, 100, 4, 0);
+    border: 1px solid rgba(255, 238, 186, 0);
+    box-shadow: 3px 3px .25rem rgba(221, 221, 221, 0);
+    transition: all 1s;
+}

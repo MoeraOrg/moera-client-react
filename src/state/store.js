@@ -39,6 +39,7 @@ import {
     COMPOSE_POSTING_LOAD
 } from "state/compose/actions";
 import {
+    POSTING_COPY_LINK,
     POSTING_DELETE,
     POSTING_LOAD,
     POSTING_REACT,
@@ -64,6 +65,7 @@ import { POSTING_REPLY } from "state/postingreply/actions";
 import { STORY_PINNING_UPDATE, STORY_READING_UPDATE } from "state/stories/actions";
 import { STORY_CHANGE_DATE } from "state/changedatedialog/actions";
 import { PEOPLE_GENERAL_LOAD, SUBSCRIBERS_LOAD, SUBSCRIPTIONS_LOAD } from "state/people/actions";
+import { FLASH_BOX } from "state/flashbox/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import pulse from "state/pulse/reducer";
@@ -89,6 +91,7 @@ import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
+import flashBox from "state/flashbox/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
@@ -130,6 +133,7 @@ import {
     composePostSaga
 } from "state/compose/sagas";
 import {
+    postingCopyLinkSaga,
     postingDeleteSaga,
     postingLoadSaga,
     postingReactionDeleteSaga,
@@ -154,6 +158,7 @@ import { postingReplySaga } from "state/postingreply/sagas";
 import { storyPinningUpdateSaga, storyReadingUpdateSaga } from "state/stories/sagas";
 import { storyChangeDateSaga } from "state/changedatedialog/sagas";
 import { peopleGeneralLoadSaga, subscribersLoadSaga, subscriptionsLoadSaga } from "state/people/sagas";
+import { flashBoxSaga } from "state/flashbox/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -258,6 +263,8 @@ function* combinedSaga() {
     yield takeLatest(PEOPLE_GENERAL_LOAD, peopleGeneralLoadSaga);
     yield takeLatest(SUBSCRIBERS_LOAD, subscribersLoadSaga);
     yield takeLatest(SUBSCRIPTIONS_LOAD, subscriptionsLoadSaga);
+    yield takeEvery(POSTING_COPY_LINK, postingCopyLinkSaga);
+    yield takeEvery(FLASH_BOX, flashBoxSaga);
 
     yield invokeTriggers(triggers);
 }
@@ -287,7 +294,8 @@ export default createStore(
         changeDateDialog,
         people,
         messageBox,
-        confirmBox
+        confirmBox,
+        flashBox
     }),
     applyMiddleware(sagaMiddleware)
 );

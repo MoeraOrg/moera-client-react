@@ -69,3 +69,9 @@ export const postingReactionSet = (id, reaction, totals) => ({
     type: POSTING_REACTION_SET,
     payload: {id, reaction, totals}
 });
+
+export const POSTING_COPY_LINK = "POSTING_COPY_LINK";
+export const postingCopyLink = (id) => ({
+    type: POSTING_COPY_LINK,
+    payload: {id}
+});

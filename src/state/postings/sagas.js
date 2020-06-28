@@ -1,4 +1,5 @@
 import { call, put, select } from 'redux-saga/effects';
+import clipboardCopy from 'clipboard-copy';
 
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
@@ -13,6 +14,8 @@ import {
 import { getPosting } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
+import { getNodeUri } from "state/naming/sagas";
+import { flashBox } from "state/flashbox/actions";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
@@ -88,6 +91,23 @@ export function* postingReactionDeleteSaga(action) {
         yield put(postingReactionSet(id, null, data));
         yield call(Node.deleteRemoteReaction, ":", posting.receiverName ?? ownerName,
             posting.receiverPostingId ?? id);
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
+
+export function* postingCopyLinkSaga(action) {
+    const {id} = action.payload;
+    const posting = yield select(getPosting, id);
+    try {
+        if (posting.receiverName == null) {
+            const rootLocation = yield select(state => state.node.root.location);
+            yield call(clipboardCopy, `${rootLocation}/moera/post/${id}`);
+        } else {
+            const nodeUri = yield call(getNodeUri, posting.receiverName);
+            yield call(clipboardCopy, `${nodeUri}/post/${posting.receiverPostingId}`);
+        }
+        yield put(flashBox("Link copied to the clipboard"));
     } catch (e) {
         yield put(errorThrown(e));
     }

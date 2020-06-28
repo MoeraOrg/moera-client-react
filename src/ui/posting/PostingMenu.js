@@ -4,12 +4,18 @@ import { connect } from 'react-redux';
 import { DropdownMenu } from "ui/control";
 import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
-import { postingDelete } from "state/postings/actions";
+import { postingCopyLink, postingDelete } from "state/postings/actions";
 import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import "./PostingMenu.css";
 
 class PostingMenu extends React.PureComponent {
+
+    onCopyLink = () => {
+        const {posting, postingCopyLink} = this.props;
+
+        postingCopyLink(posting.id);
+    };
 
     onEdit = () => {
         const {posting, goToCompose} = this.props;
@@ -42,10 +48,17 @@ class PostingMenu extends React.PureComponent {
         return (
             <DropdownMenu items={[
                 {
+                    title: "Copy link",
+                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    onClick: this.onCopyLink,
+                    show: true
+                },
+                {
                     title: "Edit...",
                     href: `${rootLocation}/moera/compose?id=${posting.id}`,
                     onClick: this.onEdit,
-                    show: isPermitted("edit", posting)
+                    show: isPermitted("edit", posting),
+                    divider: true
                 },
                 {
                     title: "Pin",
@@ -82,5 +95,5 @@ export default connect(
     state => ({
         rootLocation: state.node.root.location,
     }),
-    {goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog}
+    {goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink}
 )(PostingMenu);
