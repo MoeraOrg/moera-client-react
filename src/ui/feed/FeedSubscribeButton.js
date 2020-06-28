@@ -13,6 +13,8 @@ import {
 } from "state/feeds/selectors";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import "./FeedSubscribeButton.css";
+import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
+import { isOwnerNameSet } from "state/owner/selectors";
 
 class FeedSubscribeButton extends React.PureComponent {
 
@@ -53,7 +55,7 @@ class FeedSubscribeButton extends React.PureComponent {
 
 export default connect(
     (state, ownProps) => ({
-        atHomeNode: isAtHomeNode(state),
+        show: isConnectedToHome(state) && isHomeOwnerNameSet(state) && isOwnerNameSet(state) && !isAtHomeNode(state),
         generalReady: isFeedGeneralReady(state, ownProps.feedName),
         generalLoading: isFeedGeneralLoading(state, ownProps.feedName),
         subscribed: isSubscribedToFeed(state, ownProps.feedName),
