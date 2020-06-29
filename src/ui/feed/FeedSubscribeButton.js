@@ -29,11 +29,11 @@ class FeedSubscribeButton extends React.PureComponent {
     }
 
     render() {
-        const {atHomeNode, generalReady, generalLoading, subscribed, subscribing, unsubscribing} = this.props;
+        const {show, generalReady, generalLoading, subscribed, subscribing, unsubscribing} = this.props;
         return (
             <>
                 {
-                    !atHomeNode && generalReady && (
+                    show && generalReady && (
                         !subscribed ?
                             <Button variant="outline-primary" size="sm" className="feed-subscribe ml-3"
                                     loading={subscribing} onClick={this.onSubscribe}>
