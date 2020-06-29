@@ -71,7 +71,8 @@ class Jump extends React.PureComponent {
             } else {
                 url = details.loaded
                     ? this.track(details.nodeUri + href)
-                    : urlWithParameters(homeRootPage + "/gotoname", {nodeName, location: href, trackingId});
+                    : urlWithParameters(homeRootPage + "/gotoname",
+                        {name: nodeName, location: href, trackingId});
             }
             return <a href={url} className={className} title={title} onClick={this.onFar(url)}>{children}</a>
         }
