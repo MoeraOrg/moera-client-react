@@ -57,7 +57,7 @@ export function getFeedAt(state, feedName) {
 
 export function getFeedAtTimestamp(state, feedName) {
     const at = getFeedAt(state, feedName);
-    return at < MAX_MOMENT ? Math.floor(at / 100) : moment().unix();
+    return at < MAX_MOMENT ? Math.floor(at / 1000) : moment().unix();
 }
 
 export function getInstantCount(state) {

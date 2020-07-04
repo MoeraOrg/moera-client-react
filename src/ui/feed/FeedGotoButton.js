@@ -27,7 +27,7 @@ class FeedGotoButton extends React.PureComponent {
     };
 
     goToTimestamp = value => {
-        this.props.feedScrollToAnchor(this.props.feedName, moment(value).endOf('day').unix() * 100);
+        this.props.feedScrollToAnchor(this.props.feedName, moment(value).endOf('day').unix() * 1000);
     };
 
     toBottom = e => {
