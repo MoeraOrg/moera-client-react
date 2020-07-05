@@ -30,7 +30,7 @@ import {
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
-import { PAGE_TIMELINE } from "state/navigation/pages";
+import { PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { replaceEmojis } from "util/html";
 
 const initialState = {
@@ -47,7 +47,8 @@ function getFeed(state, feedName) {
 }
 
 const PAGE_FEEDS = new Map([
-    [PAGE_TIMELINE, "timeline"]
+    [PAGE_TIMELINE, "timeline"],
+    [PAGE_NEWS, "news"]
 ]);
 
 function extractStory(story) {
