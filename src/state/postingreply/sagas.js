@@ -7,6 +7,7 @@ import { getPosting } from "state/postings/selectors";
 import { getWindowSelectionHtml, urlWithParameters } from "util/misc";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
+import { goToLocation } from "state/navigation/actions";
 
 export function* postingReplySaga() {
     const {posting, rootNodePage, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
@@ -25,8 +26,7 @@ export function* postingReplySaga() {
         }));
     try {
         const name = NodeName.parse(posting.ownerName).name;
-        const subject = posting.body.subject && subjectPrefix
-            ? subjectPrefix + " " + posting.body.subject : posting.body.subject;
+        const subject = replySubject(posting.body.subject, subjectPrefix);
         const preamble = preambleTemplate
             .replace("%POST%", yield call(postingHref, posting, rootNodePage))
             .replace("%USER%", name);
@@ -57,11 +57,30 @@ export function* postingReplySaga() {
             reactionTotalsVisible: reactionTotalsVisibleDefault
         };
         const data = yield call(Node.postDraftPosting, ":", postingText);
-        window.location = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
+        if (rootNodePage !== rootHomePage) {
+            window.location = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
+        } else {
+            yield put(goToLocation("/compose", `?draft=${data.id}`, null))
+        }
     } catch (e) {
         yield put(postingReplyFailed());
         yield put(errorThrown(e));
     }
+}
+
+function replySubject(subject, subjectPrefix) {
+    if (!subject || !subjectPrefix) {
+        return subject;
+    }
+    if (!subject.startsWith(subjectPrefix)) {
+        return subjectPrefix + " " + subject;
+    }
+    const tail = subject.substring(subjectPrefix.length);
+    const m = tail.match(/^\s*\[(\d+)]\s+(.*)$/);
+    if (m == null) {
+        return subjectPrefix + "[2]" + tail;
+    }
+    return subjectPrefix + "[" + (parseInt(m[1]) + 1) + "] " + m[2];
 }
 
 function* postingHref(posting, rootNodePage) {
