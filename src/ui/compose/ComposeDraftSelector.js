@@ -4,6 +4,7 @@ import { Manager, Popper, Reference } from 'react-popper';
 import cx from 'classnames';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 import { Loading, LoadingInline } from "ui/control";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
@@ -86,9 +87,8 @@ class ComposeDraftSelector extends React.PureComponent {
                                                     >
                                                         <div className="info">
                                                             <div className="content">
-                                                                <div className="fader">&nbsp;</div>
                                                                 {draft.subject && <b>{draft.subject} </b>}
-                                                                {draft.text}
+                                                                <LinesEllipsis text={draft.text} maxLine="3"/>
                                                             </div>
                                                             <div className="edited">
                                                                 {moment.unix(draft.editedAt).fromNow()}
