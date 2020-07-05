@@ -118,6 +118,7 @@ export function* putFeedStatus(nodeName, feedName, viewed, read, before) {
 }
 
 export function* putStory(nodeName, id, storyAttributes) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/stories/${id}`, method: "PUT", auth: true, body: storyAttributes,
         schema: NodeApi.StoryInfo, withBodies: true
@@ -174,6 +175,7 @@ export function* getPostingFeatures(nodeName) {
 
 export function* getPosting(nodeName, id, withSource = false) {
     const include = withSource ? "source" : null;
+    id = encodeURIComponent(id);
     const location = urlWithParameters(`/postings/${id}`, {include});
     return yield call(callApi, {
         nodeName, location, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
@@ -189,6 +191,7 @@ export function* postPosting(nodeName, postingText) {
 }
 
 export function* putPosting(nodeName, id, postingText) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/postings/${id}`, method: "PUT", auth: true, body: postingText,
         schema: NodeApi.PostingInfo, withBodies: true
@@ -196,12 +199,15 @@ export function* putPosting(nodeName, id, postingText) {
 }
 
 export function* deletePosting(nodeName, id) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 
 export function* remotePostingVerify(nodeName, remoteNodeName, id) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName: ":", location: `/nodes/${remoteNodeName}/postings/${id}/verify`, method: "POST", auth: true,
         schema: NodeApi.AsyncOperationCreated
@@ -211,6 +217,7 @@ export function* remotePostingVerify(nodeName, remoteNodeName, id) {
 export function* postReaction(nodeName, postingId, negative, emoji) {
     const ownerName = yield select(getHomeOwnerName);
     const body = {ownerName, negative, emoji};
+    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
         nodeName, location: `/postings/${postingId}/reactions`, method: "POST", auth: true, body,
         schema: NodeApi.ReactionCreated
@@ -218,14 +225,16 @@ export function* postReaction(nodeName, postingId, negative, emoji) {
 }
 
 export function* getReaction(nodeName, postingId) {
-    const ownerName = yield select(getHomeOwnerName);
+    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
+    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
         nodeName, location: `/postings/${postingId}/reactions/${ownerName}`, auth: true, schema: NodeApi.ReactionInfo
     });
 }
 
 export function* deleteReaction(nodeName, postingId) {
-    const ownerName = yield select(getHomeOwnerName);
+    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
+    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
         nodeName, location: `/postings/${postingId}/reactions/${ownerName}`, method: "DELETE", auth: true,
         schema: NodeApi.ReactionTotalsInfo
@@ -233,18 +242,22 @@ export function* deleteReaction(nodeName, postingId) {
 }
 
 export function* getReactionTotals(nodeName, postingId) {
+    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
         nodeName, location: `/postings/${postingId}/reaction-totals`, auth: true, schema: NodeApi.ReactionTotalsInfo
     });
 }
 
 export function* getReactions(nodeName, postingId, negative, emoji, before, limit) {
+    postingId = encodeURIComponent(postingId);
     const location = urlWithParameters(`/postings/${postingId}/reactions`,
         {negative, emoji, before, limit});
     return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ReactionsSliceInfo});
 }
 
 export function* postRemoteReaction(nodeName, remoteNodeName, postingId, negative, emoji) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
         nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "POST", auth: true,
         body: {negative, emoji}, schema: NodeApi.Result
@@ -252,6 +265,8 @@ export function* postRemoteReaction(nodeName, remoteNodeName, postingId, negativ
 }
 
 export function* deleteRemoteReaction(nodeName, remoteNodeName, postingId) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
         nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "DELETE", auth: true,
         schema: NodeApi.Result
@@ -259,6 +274,9 @@ export function* deleteRemoteReaction(nodeName, remoteNodeName, postingId) {
 }
 
 export function* remoteReactionVerify(nodeName, remoteNodeName, postingId, ownerName) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
+    ownerName = encodeURIComponent(ownerName);
     return yield call(callApi, {
         nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`,
         method: "POST", auth: true, schema: NodeApi.AsyncOperationCreated
@@ -272,6 +290,7 @@ export function* getDraftPostings(nodeName) {
 }
 
 export function* getDraftPosting(nodeName, id) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/draft-postings/${id}`, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
         errorFilter: ["posting.not-found"]
@@ -286,6 +305,7 @@ export function* postDraftPosting(nodeName, postingText) {
 }
 
 export function* putDraftPosting(nodeName, id, postingText) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/draft-postings/${id}`, method: "PUT", auth: true, body: postingText,
         schema: NodeApi.PostingInfo, withBodies: true
@@ -293,12 +313,14 @@ export function* putDraftPosting(nodeName, id, postingText) {
 }
 
 export function* deleteDraftPosting(nodeName, id) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/draft-postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 
 export function* getPostingDraftRevision(nodeName, id) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/postings/${id}/revisions/draft`, auth: true, schema: NodeApi.PostingInfo,
         withBodies: true, errorFilter: ["posting.not-found"]
@@ -306,6 +328,7 @@ export function* getPostingDraftRevision(nodeName, id) {
 }
 
 export function* putPostingDraftRevision(nodeName, id, postingText) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/postings/${id}/revisions/draft`, method: "PUT", auth: true, body: postingText,
         schema: NodeApi.PostingInfo, withBodies: true
@@ -313,6 +336,7 @@ export function* putPostingDraftRevision(nodeName, id, postingText) {
 }
 
 export function* deletePostingDraftRevision(nodeName, id) {
+    id = encodeURIComponent(id);
     return yield call(callApi, {
         nodeName, location: `/postings/${id}/revisions/draft`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
