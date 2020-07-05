@@ -34,7 +34,8 @@ export function* createToken(nodeName, login, password) {
 }
 
 export function* getCartes(nodeName, auth = true) {
-    return yield call(callApi, {nodeName, location: "/cartes", auth, schema: NodeApi.CarteSet});
+    return yield call(callApi, {nodeName, location: "/cartes", auth, schema: NodeApi.CarteSet,
+        errorFilter: ["node-name-not-set"]});
 }
 
 export function* getWhoAmI(nodeName) {
