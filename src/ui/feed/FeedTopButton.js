@@ -1,6 +1,7 @@
 import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
 import "./FeedTopButton.css";
@@ -12,7 +13,7 @@ const FeedTopButton = ({feedName, atTop, feedScrollToAnchor}) => (
                 feedScrollToAnchor(feedName, Number.MAX_SAFE_INTEGER);
                 e.preventDefault();
             }}>
-                &#x23f6;&nbsp;Top
+                <FontAwesomeIcon icon="arrow-up"/>&nbsp;Top
             </div>
         </div>
 );

@@ -2,6 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { DateTimePicker } from 'react-widgets';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 
 import { Button } from "ui/control";
@@ -48,7 +49,7 @@ class FeedGotoButton extends React.PureComponent {
                         <DateTimePicker format="dd-MM-yyyy" value={moment.unix(timestamp).toDate()} time={false}
                                         onChange={this.goToTimestamp}/>
                         <Button variant="outline-info" className="ml-2" invisible={atBottom} onClick={this.toBottom}>
-                            &#x23f7;&nbsp;Bottom
+                            <FontAwesomeIcon icon="arrow-down"/>&nbsp;Bottom
                         </Button>
                     </>
                 }

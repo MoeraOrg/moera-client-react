@@ -1,5 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+    faArrowDown,
+    faArrowUp,
     faAt,
     faBackspace,
     faBell,
@@ -48,6 +50,8 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 
 export default function initIconLibrary() {
+    library.add(faArrowDown);
+    library.add(faArrowUp);
     library.add(faAt);
     library.add(faBackspace);
     library.add(faBell);
