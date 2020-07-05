@@ -85,6 +85,10 @@ export const REACTION_EMOJIS = {
         0x1f917: {
             title: "Hug",
             color: "#f4900c"
+        },
+        0x1f525: {
+            title: "Hot",
+            color: "#f4900c"
         }
     },
     negative: {
