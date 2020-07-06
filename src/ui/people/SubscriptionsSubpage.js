@@ -9,7 +9,7 @@ const SubscriptionsSubpage = ({loading, subscriptions}) => (
     <div className="row">
         <Loading active={loading}/>
         {subscriptions.map(sr =>
-            <div key={sr.id} className="subscription col-md-3 col-sm-4">
+            <div key={sr.id} className="subscription col-md-4 col-sm-6">
                 <NodeName name={sr.remoteNodeName}/>
                 <UnsubscribeButton nodeName={sr.remoteNodeName} feedName={sr.remoteFeedName}
                                    subscriberId={sr.remoteSubscriberId}/>
