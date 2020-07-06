@@ -4,13 +4,14 @@ import moment from 'moment';
 
 import { getSetting } from "state/settings/selectors";
 
-const PostingUpdated = ({posting, timeRelative}) => {
+const PostingUpdated = ({posting, story, timeRelative}) => {
     if (posting.totalRevisions <= 1) {
         return null;
     }
 
     const date = moment.unix(posting.editedAt);
-    const editedSoon = Math.abs(posting.editedAt - posting.publishedAt) < 24 * 60 * 60;
+    const publishedAt = story != null ? story.publishedAt : posting.createdAt;
+    const editedSoon = Math.abs(posting.editedAt - publishedAt) < 24 * 60 * 60;
     return (
         <span className="date">
             {" "}(updated {

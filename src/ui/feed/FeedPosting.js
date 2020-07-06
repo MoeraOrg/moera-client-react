@@ -43,8 +43,8 @@ const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) =
                 <div className="owner-line">
                     <PostingSource posting={posting}/>
                     <PostingOwner posting={posting}/>
-                    <PostingDate id={posting.id} publishedAt={story.publishedAt}/>
-                    <PostingUpdated posting={posting}/>
+                    <PostingDate posting={posting} story={story}/>
+                    <PostingUpdated posting={posting} story={story}/>
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>

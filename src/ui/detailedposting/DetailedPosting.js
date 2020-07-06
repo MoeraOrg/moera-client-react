@@ -36,9 +36,8 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
                     <div className="owner-line">
                         <PostingSource posting={posting}/>
                         <PostingOwner posting={posting}/>
-                        <PostingDate id={posting.id}
-                                     publishedAt={story != null ? story.publishedAt : posting.createdAt}/>
-                        <PostingUpdated posting={posting}/>
+                        <PostingDate posting={posting} story={story}/>
+                        <PostingUpdated posting={posting} story={story}/>
                     </div>
                     <PostingSubject posting={posting} preview={false}/>
                     <PostingHtml className="content" html={posting.body.text}/>

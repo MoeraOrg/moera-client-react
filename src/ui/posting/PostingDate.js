@@ -6,10 +6,16 @@ import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
 import "./PostingDate.css"
 
-const PostingDate = ({id, publishedAt, timeRelative}) => {
+const PostingDate = ({posting, story, timeRelative}) => {
+    let publishedAt;
+    if (posting.receiverName) {
+        publishedAt = posting.receiverCreatedAt;
+    } else {
+        publishedAt = story != null ? story.publishedAt : posting.createdAt;
+    }
     const date = moment.unix(publishedAt);
     return (
-        <Jump className="date" href={`/post/${id}`}>{
+        <Jump className="date" href={`/post/${posting.id}`}>{
             timeRelative ?
                 <span title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</span>
             :
