@@ -21,7 +21,7 @@ import {
 class CurrentPage extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.page !== prevProps.page && this.props.page !== PAGE_TIMELINE) {
+        if (this.props.page !== prevProps.page && this.props.page !== PAGE_TIMELINE && this.props.page !== PAGE_NEWS) {
             window.scrollTo(0, 0);
         }
     }
