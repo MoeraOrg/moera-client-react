@@ -32,3 +32,7 @@
 .posting BLOCKQUOTE BLOCKQUOTE::before {
     top: -1.5rem;
 }
+
+.posting .content P IMG {
+    max-width: min(900px - 3.5rem, 100vw - 4rem);
+}
