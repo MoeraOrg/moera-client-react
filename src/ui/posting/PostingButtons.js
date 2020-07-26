@@ -14,7 +14,7 @@ const PostingButtons = ({posting}) => {
             <PostingReactionButton icon="thumbs-down" caption="Oppose" invisible={cr.emoji && !cr.negative}
                                    id={posting.id} negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions.negative}/>
-            <PostingCommentButton id={posting.id}/>
+            <PostingCommentButton posting={posting}/>
         </div>
     );
 };

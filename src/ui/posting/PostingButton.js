@@ -12,8 +12,9 @@ const PostingButton = ({icon, emoji, caption, color, invisible, buttonRef, onMou
         {emoji && <Twemoji code={emoji}/>}
         {color ?
             <span className="caption" style={{color}}>{caption}</span>
-            :
-            <span className="caption">{caption}</span>}
+        :
+            <span className="caption">{caption}</span>
+        }
     </button>
 );
 

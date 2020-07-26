@@ -1,26 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import PostingButton from "ui/posting/PostingButton";
-import { goToLocation } from "state/navigation/actions";
+import Jump from "ui/navigation/Jump";
 
-class PostingCommentButton extends React.PureComponent {
+const PostingCommentButton = ({posting}) => {
+    const nodeName = posting.receiverName;
+    const postingId = nodeName != null ? posting.receiverPostingId : posting.id;
 
-    onClick = () => {
-        const {id, goToLocation} = this.props;
+    return (
+        <Jump className="posting-button" nodeName={nodeName} href={`/post/${postingId}`}>
+            <FontAwesomeIcon icon={["far", "comment"]}/>
+            <span className="caption">Comment</span>
+        </Jump>
+    );
+};
 
-        goToLocation(`/post/${id}`, null, "comment-add");
-    };
-
-    render() {
-        return <PostingButton icon={["far", "comment"]} caption="Comment" onClick={this.onClick}/>
-    }
-
-}
-
-export default connect(
-    state => ({
-        replyingId: state.postingReply.postingId
-    }),
-    { goToLocation }
-)(PostingCommentButton);
+export default PostingCommentButton;
