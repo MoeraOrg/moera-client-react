@@ -1,3 +1,9 @@
+.posting .reactions-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
 .posting .reactions {
     font-size: 0.9rem;
     font-weight: 600;

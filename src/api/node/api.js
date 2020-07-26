@@ -358,6 +358,9 @@ const PostingInfoType = {
                 },
                 additionalProperties: false
             }
+        },
+        "totalComments": {
+            type: "integer"
         }
     },
     additionalProperties: false

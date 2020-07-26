@@ -16,6 +16,7 @@ import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
+import PostingComments from "ui/posting/PostingComments";
 
 const Content = ({posting}) => {
     if (posting.bodyPreview.text) {
@@ -48,7 +49,10 @@ const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) =
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>
-                <PostingReactions posting={posting}/>
+                <div className="reactions-line">
+                    <PostingReactions posting={posting}/>
+                    <PostingComments posting={posting}/>
+                </div>
                 {connectedToHome && <PostingButtons posting={posting}/>}
             </>
         }

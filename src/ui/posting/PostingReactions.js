@@ -33,7 +33,7 @@ const PostingReactions = ({posting, openReactionsDialog}) => {
     if (positiveTotal === 0 && negativeTotal === 0
         && positiveTopEmojis.length === 0 && negativeTopEmojis.length === 0) {
 
-        return null;
+        return <div className="reactions"/>;
     }
 
     return (
