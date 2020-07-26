@@ -10,6 +10,7 @@ import {
     faChevronDown,
     faCode,
     faCog,
+    faComment,
     faExclamationTriangle,
     faExternalLinkAlt,
     faEye,
@@ -42,6 +43,7 @@ import {
 import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
 import {
     faClock,
+    faComment as faCommentRegular,
     faEnvelope,
     faEnvelopeOpen,
     faThumbsDown as faThumbsDownRegular,
@@ -61,6 +63,8 @@ export default function initIconLibrary() {
     library.add(faClock);
     library.add(faCode);
     library.add(faCog);
+    library.add(faComment);
+    library.add(faCommentRegular);
     library.add(faEnvelope);
     library.add(faEnvelopeOpen);
     library.add(faExclamationTriangle);

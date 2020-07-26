@@ -5,6 +5,7 @@ import { DropdownMenu } from "ui/control";
 import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { postingCopyLink, postingDelete } from "state/postings/actions";
+import { postingReply } from "state/postingreply/actions";
 import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import "./PostingMenu.css";
@@ -15,6 +16,12 @@ class PostingMenu extends React.PureComponent {
         const {posting, postingCopyLink} = this.props;
 
         postingCopyLink(posting.id);
+    };
+
+    onReply = () => {
+        const {posting, postingReply} = this.props;
+
+        postingReply(posting.id);
     };
 
     onEdit = () => {
@@ -51,6 +58,12 @@ class PostingMenu extends React.PureComponent {
                     title: "Copy link",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onCopyLink,
+                    show: true
+                },
+                {
+                    title: "Reply...",
+                    href: `${rootLocation}/moera/compose`,
+                    onClick: this.onReply,
                     show: true
                 },
                 {
@@ -95,5 +108,5 @@ export default connect(
     state => ({
         rootLocation: state.node.root.location,
     }),
-    {goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink}
+    {goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply}
 )(PostingMenu);
