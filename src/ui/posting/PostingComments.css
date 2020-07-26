@@ -1,3 +1,14 @@
+.posting .posting-comments {
+    padding-top: .4rem;
+}
+
 .posting .total-comments {
     text-decoration: none;
+    background-color: var(--comments);
+    border-radius: .8rem;
+    padding: .4rem 1rem;
+}
+
+.posting .total-comments:hover {
+    text-decoration: underline;
 }

@@ -21,6 +21,9 @@
 .posting .reactions .positive {
     margin-right: 1.3rem;
     color: var(--correct);
+    background-color: var(--reactions-positive);
+    border-radius: .8rem;
+    padding: .4rem 1rem;
 }
 
 .posting .reactions .positive:hover {
@@ -30,6 +33,9 @@
 
 .posting .reactions .negative {
     color: var(--incorrect);
+    background-color: var(--reactions-negative);
+    border-radius: .8rem;
+    padding: .4rem 1rem;
 }
 
 .posting .reactions .negative:hover {
