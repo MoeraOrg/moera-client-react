@@ -13,7 +13,7 @@ const PostingComments = ({posting}) => {
     const postingId = nodeName != null ? posting.receiverPostingId : posting.id;
     return (
         <div className="posting-comments">
-            <Jump className="total-comments" nodeName={nodeName} href={`/post/${postingId}`}>
+            <Jump className="total-comments" nodeName={nodeName} href={`/post/${postingId}#comments`}>
                 <FontAwesomeIcon icon="comment"/>{" "}&nbsp;
                 {posting.totalComments}&nbsp;{posting.totalComments === 1 ? "comment" : "comments"}
             </Jump>
