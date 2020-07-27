@@ -13,10 +13,10 @@ import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingHtml from "ui/posting/PostingHtml";
 import PostingReactions from "ui/posting/PostingReactions";
+import PostingComments from "ui/posting/PostingComments";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
-import PostingComments from "ui/posting/PostingComments";
 
 const Content = ({posting}) => {
     if (posting.bodyPreview.text) {

@@ -349,3 +349,11 @@ export function* postActivityReactionsSearch(nodeName, remotePostings) {
         schema: NodeApi.ActivityReactionInfoArray
     });
 }
+
+export function* getCommentsSlice(nodeName, postingId, after, before, limit) {
+    postingId = encodeURIComponent(postingId);
+    const location = urlWithParameters(`/postings/${postingId}/comments`, {after, before, limit});
+    return yield call(callApi, {
+        nodeName, location, auth: true, schema: NodeApi.CommentsSliceInfo, withBodies: true
+    });
+}

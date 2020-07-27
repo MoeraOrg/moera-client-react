@@ -26,7 +26,11 @@ import {
     FEED_SUBSCRIBE,
     FEED_UNSUBSCRIBE
 } from "state/feeds/actions";
-import { DETAILED_POSTING_LOAD } from "state/detailedposting/actions";
+import {
+    COMMENTS_FUTURE_SLICE_LOAD,
+    COMMENTS_PAST_SLICE_LOAD,
+    DETAILED_POSTING_LOAD
+} from "state/detailedposting/actions";
 import {
     COMPOSE_DRAFT_LIST_ITEM_DELETE,
     COMPOSE_DRAFT_LIST_ITEM_RELOAD,
@@ -120,7 +124,11 @@ import {
     feedSubscribeSaga,
     feedUnsubscribeSaga
 } from "state/feeds/sagas";
-import { detailedPostingLoadSaga } from "state/detailedposting/sagas";
+import {
+    commentsFutureSliceLoadSaga,
+    commentsPastSliceLoadSaga,
+    detailedPostingLoadSaga
+} from "state/detailedposting/sagas";
 import {
     composeDraftListItemDeleteSaga,
     composeDraftListItemReloadSaga,
@@ -265,6 +273,8 @@ function* combinedSaga() {
     yield takeLatest(SUBSCRIPTIONS_LOAD, subscriptionsLoadSaga);
     yield takeEvery(POSTING_COPY_LINK, postingCopyLinkSaga);
     yield takeEvery(FLASH_BOX, flashBoxSaga);
+    yield takeEvery(COMMENTS_PAST_SLICE_LOAD, introduce(commentsPastSliceLoadSaga));
+    yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
 
     yield invokeTriggers(triggers);
 }

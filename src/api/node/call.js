@@ -168,6 +168,9 @@ function decodeBodies(data, exception) {
     if (data.stories) {
         decoded.stories = data.stories.map(p => decodeBodies(p, exception));
     }
+    if (data.comments) {
+        decoded.comments = data.comments.map(p => decodeBodies(p, exception));
+    }
     if (data.posting) {
         decoded.posting = decodeBodies(data.posting, exception);
     }

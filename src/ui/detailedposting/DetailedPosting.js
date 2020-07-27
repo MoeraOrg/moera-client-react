@@ -17,6 +17,8 @@ import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
 import PostingHtml from "ui/posting/PostingHtml";
+import PostingComments from "ui/posting/PostingComments";
+import Comments from "ui/comment/Comments";
 
 const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermitted, feedTitle, goToFeed}) => (
     <>
@@ -41,8 +43,12 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
                     </div>
                     <PostingSubject posting={posting} preview={false}/>
                     <PostingHtml className="content" html={posting.body.text}/>
-                    <PostingReactions posting={posting}/>
+                    <div className="reactions-line">
+                        <PostingReactions posting={posting}/>
+                        <PostingComments posting={posting}/>
+                    </div>
                     {connectedToHome && <PostingButtons posting={posting}/>}
+                    {posting.receiverName == null && <Comments postingId={posting.id}/>}
                 </>
             }
         </div>

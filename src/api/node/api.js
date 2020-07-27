@@ -811,3 +811,150 @@ export const PeopleGeneralInfo = schema({
     },
     additionalProperties: false
 });
+
+export const CommentInfoType = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "ownerName": {
+            type: "string"
+        },
+        "postingId": {
+            type: "string"
+        },
+        "postingRevisionId": {
+            type: "string"
+        },
+        "revisionId": {
+            type: "string"
+        },
+        "totalRevisions": {
+            type: "integer"
+        },
+        "bodyPreview": {
+            type: "string"
+        },
+        "bodySrc": {
+            type: "string"
+        },
+        "bodySrcFormat": {
+            type: "string"
+        },
+        "body": {
+            type: "string"
+        },
+        "bodyFormat": {
+            type: "string"
+        },
+        "heading": {
+            type: "string"
+        },
+        "moment": {
+            type: "integer"
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "editedAt": {
+            type: "integer"
+        },
+        "deletedAt": {
+            type: "integer"
+        },
+        "revisionCreatedAt": {
+            type: "integer"
+        },
+        "deadline": {
+            type: "integer"
+        },
+        "signature": {
+            type: "string"
+        },
+        "signatureVersion": {
+            type: "integer"
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "edit": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                },
+                "delete": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                },
+                "revisions": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                },
+                "reactions": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    }
+                }
+            },
+            additionalProperties: false
+        },
+        "acceptedReactions": {
+            type: "object",
+            properties: {
+                "positive": {
+                    type: "string"
+                },
+                "negative": {
+                    type: "string"
+                },
+            },
+            additionalProperties: false
+        },
+        "clientReaction": {
+            type: "object",
+            properties: {
+                "negative": {
+                    type: "boolean"
+                },
+                "emoji": {
+                    type: "integer"
+                },
+                "createdAt": {
+                    type: "integer"
+                },
+                "deadline": {
+                    type: "integer"
+                }
+            },
+            additionalProperties: false
+        },
+        "reactions": ReactionTotalsInfoType
+    },
+    additionalProperties: false
+};
+
+export const CommentInfo = schema(CommentInfoType);
+
+export const CommentsSliceInfo = schema({
+    type: "object",
+    properties: {
+        "before": {
+            type: "integer"
+        },
+        "after": {
+            type: "integer"
+        },
+        "comments": {
+            type: "array",
+            items: CommentInfoType
+        }
+    },
+    additionalProperties: false
+});

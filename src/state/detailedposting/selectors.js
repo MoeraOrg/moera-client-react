@@ -19,3 +19,7 @@ export function isDetailedPostingBeingDeleted(state) {
 export function isDetailedPostingToBeLoaded(state) {
     return !state.detailedPosting.loading && getDetailedPosting(state) == null;
 }
+
+export function getCommentsState(state) {
+    return state.detailedPosting.comments;
+}

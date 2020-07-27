@@ -1,0 +1,10 @@
+.comments-sentinel {
+    color: var(--link);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.comments-sentinel:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
