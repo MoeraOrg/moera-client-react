@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import EntryHtml from "ui/posting/EntryHtml";
+import CommentOwner from "ui/comment/CommentOwner";
+import CommentDate from "ui/comment/CommentDate";
+import CommentUpdated from "ui/comment/CommentUpdated";
 import "./Comment.css";
 
 const Content = ({comment}) => {
@@ -23,6 +26,11 @@ const Content = ({comment}) => {
 
 const Comment = ({comment, deleting, isPermitted, connectedToHome}) => (
     <div className="comment entry" data-moment={comment.moment}>
+        <div className="owner-line">
+            <CommentOwner comment={comment}/>
+            <CommentDate comment={comment}/>
+            <CommentUpdated comment={comment}/>
+        </div>
         <Content className="content" comment={comment}/>
     </div>
 );

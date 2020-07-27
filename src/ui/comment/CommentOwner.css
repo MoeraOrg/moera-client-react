@@ -1,0 +1,9 @@
+.comment .owner-line {
+    margin-bottom: .3rem;
+}
+
+.comment .owner {
+    font-weight: bold;
+    margin-left: .3em;
+    margin-right: .5em;
+}
