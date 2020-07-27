@@ -307,9 +307,9 @@ export default (state = initialState, action) => {
             const {feedName} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (action.payload.before > feed.before && action.payload.after <= feed.before) {
-                let stories = feed.stories.slice();
+                const stories = feed.stories.slice();
                 action.payload.stories
-                    .filter(s => s.moment > feed.before)
+                    .filter(t => t.moment > feed.before)
                     .forEach(t => stories.push(extractStory(t)));
                 stories.sort((a, b) => b.moment - a.moment);
                 return istate.assign([feedName], {
