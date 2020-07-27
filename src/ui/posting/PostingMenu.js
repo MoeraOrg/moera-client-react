@@ -8,7 +8,7 @@ import { postingCopyLink, postingDelete } from "state/postings/actions";
 import { postingReply } from "state/postingreply/actions";
 import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
-import "./PostingMenu.css";
+import "./EntryMenu.css";
 
 class PostingMenu extends React.PureComponent {
 

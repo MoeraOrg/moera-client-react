@@ -1,18 +1,18 @@
-.posting .menu {
+.entry .menu {
     position: absolute;
     top: 0.2rem;
     right: 0.4rem;
 }
 
-.posting .menu .chevron {
+.entry .menu .chevron {
     color: var(--gray-medium);
     cursor: pointer;
 }
 
-.posting .menu .chevron:hover {
+.entry .menu .chevron:hover {
     color: var(--gray-dark);
 }
 
-.posting .menu .no-actions {
+.entry .menu .no-actions {
     font-style: italic;
 }

@@ -8,3 +8,7 @@
     border-radius: 5px;
     padding: 0.5rem;
 }
+
+.comment .content P:last-child {
+    margin-bottom: 0;
+}
