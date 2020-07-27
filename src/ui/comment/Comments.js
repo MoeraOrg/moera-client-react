@@ -10,6 +10,7 @@ import { getCommentsState } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinel from "ui/comment/CommentsSentinel";
 import Comment from "ui/comment/Comment";
+import "./Comments.css";
 
 class Comments extends React.PureComponent {
 
@@ -130,7 +131,7 @@ class Comments extends React.PureComponent {
         }
 
         return (
-            <>
+            <div className="comments">
                 <CommentsSentinel loading={loadingPast} title="View earlier comments"
                                   visible={after > Number.MIN_SAFE_INTEGER} onBoundary={this.onBoundaryPast}
                                   onClick={this.loadPast}/>
@@ -139,7 +140,7 @@ class Comments extends React.PureComponent {
                 <CommentsSentinel loading={loadingFuture} title="View later comments"
                                   visible={before < Number.MAX_SAFE_INTEGER} onBoundary={this.onBoundaryFuture}
                                   onClick={this.loadFuture}/>
-            </>
+            </div>
         );
     }
 }

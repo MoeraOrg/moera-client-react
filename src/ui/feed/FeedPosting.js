@@ -11,30 +11,31 @@ import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
-import PostingHtml from "ui/posting/PostingHtml";
+import EntryHtml from "ui/posting/EntryHtml";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingComments from "ui/posting/PostingComments";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
+import "ui/posting/Entry.css";
 
 const Content = ({posting}) => {
     if (posting.bodyPreview.text) {
         return (
             <div className="content">
-                <PostingHtml html={posting.bodyPreview.text}/>
+                <EntryHtml html={posting.bodyPreview.text}/>
                 <p><Jump href={`/post/${posting.id}`}>Continue Reading &rarr;</Jump></p>
             </div>
         );
     } else {
         return (
-            <PostingHtml className="content" html={posting.body.previewText}/>
+            <EntryHtml className="content" html={posting.body.previewText}/>
         );
     }
 };
 
 const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) => (
-    <div className="posting" data-moment={story.moment} data-viewed={story.viewed}>
+    <div className="posting entry" data-moment={story.moment} data-viewed={story.viewed}>
         {deleting ?
             <PostingDeleting/>
         :

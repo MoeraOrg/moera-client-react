@@ -7,7 +7,7 @@ import { urlWithParameters } from "util/misc";
 import { getSetting } from "state/settings/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 
-class PostingHtml extends React.PureComponent {
+class EntryHtml extends React.PureComponent {
 
     static propTypes = {
         className: PropType.string,
@@ -43,4 +43,4 @@ export default connect(
         getNameDetails: name => getNamingNameDetails(state, name),
         fontMagnitude: getSetting(state, "posting.body.font-magnitude")
     })
-)(PostingHtml);
+)(EntryHtml);

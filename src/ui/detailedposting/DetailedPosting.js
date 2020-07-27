@@ -16,7 +16,7 @@ import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
-import PostingHtml from "ui/posting/PostingHtml";
+import EntryHtml from "ui/posting/EntryHtml";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 
@@ -28,7 +28,7 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
             </Button>
         }
 
-        <div className="posting mt-2">
+        <div className="posting entry mt-2">
             {deleting ?
                 <PostingDeleting/>
             :
@@ -42,7 +42,7 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
                         <PostingUpdated posting={posting} story={story}/>
                     </div>
                     <PostingSubject posting={posting} preview={false}/>
-                    <PostingHtml className="content" html={posting.body.text}/>
+                    <EntryHtml className="content" html={posting.body.text}/>
                     <div className="reactions-line">
                         <PostingReactions posting={posting}/>
                         <PostingComments posting={posting}/>

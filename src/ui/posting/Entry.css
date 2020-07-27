@@ -1,0 +1,29 @@
+.entry BLOCKQUOTE {
+    padding: 0.2rem 0.2rem 0.2rem 3rem;
+    position: relative;
+    background-color: var(--blockquote);
+    border-radius: 0.5rem;
+}
+
+.entry BLOCKQUOTE::before {
+    content: "\201C";
+    font-family: serif;
+    font-size: 4rem;
+    color: var(--cyan);
+    position: absolute;
+    left: 0.5rem;
+    top: -1rem;
+}
+
+.entry BLOCKQUOTE BLOCKQUOTE {
+    border-left: 3px solid var(--cyan);
+    border-radius: 0;
+}
+
+.entry BLOCKQUOTE BLOCKQUOTE::before {
+    top: -1.5rem;
+}
+
+.entry .content P IMG {
+    max-width: min(900px - 3.5rem, 100vw - 4rem);
+}

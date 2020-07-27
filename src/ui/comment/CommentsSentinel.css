@@ -2,6 +2,8 @@
     color: var(--link);
     cursor: pointer;
     text-decoration: none;
+    background-color: transparent;
+    border: none;
 }
 
 .comments-sentinel:hover {

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropType from 'prop-types';
-import cx from 'classnames';
 
 import { Loading } from "ui/control";
 
@@ -29,12 +28,14 @@ export default class CommentsSentinel extends React.PureComponent {
     render() {
         const { visible, loading, title, onClick } = this.props;
 
+        if (!visible) {
+            return null;
+        }
         return (
-            <div className={cx({"comments-sentinel": !loading && visible})} ref={this.observeSentinel}
-                 onClick={onClick}>
-                {!loading && visible && title}
+            <button className="comments-sentinel" ref={this.observeSentinel} onClick={onClick}>
+                {!loading && title}
                 <Loading active={loading} />
-            </div>
+            </button>
         );
     }
 
