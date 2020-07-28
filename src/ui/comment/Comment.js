@@ -10,20 +10,49 @@ import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import "./Comment.css";
 
-const Content = ({comment}) => {
-    if (comment.bodyPreview.text) {
-        return (
-            <div className="content">
-                <EntryHtml html={comment.bodyPreview.text}/>
-                <p><a href="#">View more...</a></p>
-            </div>
-        );
-    } else {
-        return (
-            <EntryHtml className="content" html={comment.body.previewText}/>
-        );
+class Content extends React.PureComponent {
+
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {preview: true};
     }
-};
+
+    onClick = () => {
+        this.setState({preview: !this.state.preview});
+    }
+
+    render() {
+        const {comment} = this.props;
+
+        if (this.state.preview) {
+            if (comment.bodyPreview.text) {
+                return (
+                    <div className="content" onClick={this.onClick}>
+                        <EntryHtml html={comment.bodyPreview.text}/>
+                        <p>
+                            <button className="btn btn-link pl-0 pt-0" onClick={this.onClick}>View more...</button>
+                        </p>
+                    </div>
+                );
+            } else {
+                return (
+                    <div className="content" onClick={this.onClick}>
+                        <EntryHtml html={comment.body.previewText}/>
+                    </div>
+                );
+            }
+        } else {
+            return (
+                <div className="content" onClick={this.onClick}>
+                    <EntryHtml html={comment.body.text}/>
+                </div>
+            );
+        }
+    }
+
+}
 
 const Comment = ({comment, deleting, isPermitted, connectedToHome}) => (
     <div className="comment entry" data-moment={comment.moment}>
