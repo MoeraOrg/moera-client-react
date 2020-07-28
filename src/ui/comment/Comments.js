@@ -131,7 +131,7 @@ class Comments extends React.PureComponent {
         }
 
         return (
-            <div className="comments">
+            <div id="comments">
                 <CommentsSentinel loading={loadingPast} title="View earlier comments"
                                   visible={after > Number.MIN_SAFE_INTEGER} onBoundary={this.onBoundaryPast}
                                   onClick={this.loadPast}/>
