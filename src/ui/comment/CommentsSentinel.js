@@ -3,8 +3,6 @@ import PropType from 'prop-types';
 
 import { Loading } from "ui/control";
 
-import "./CommentsSentinel.css";
-
 export default class CommentsSentinel extends React.PureComponent {
 
     constructor(props, context) {
@@ -32,7 +30,7 @@ export default class CommentsSentinel extends React.PureComponent {
             return null;
         }
         return (
-            <button className="comments-sentinel" ref={this.observeSentinel} onClick={onClick}>
+            <button className="btn btn-link" ref={this.observeSentinel} onClick={onClick}>
                 {!loading && title}
                 <Loading active={loading} />
             </button>
