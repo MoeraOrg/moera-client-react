@@ -12,6 +12,8 @@ export class TextField extends React.PureComponent {
     static propTypes = {
         name: PropType.string,
         title: PropType.string,
+        rows: PropType.number,
+        placeholder: PropType.string,
         autoFocus: PropType.bool,
         anyValue: PropType.bool,
         className: PropType.string,
@@ -21,6 +23,11 @@ export class TextField extends React.PureComponent {
         initialValue: PropType.string,
         defaultValue: PropType.string
     };
+
+    static defaultProps = {
+        rows: 3,
+        placeholder: "Enter text here..."
+    }
 
     constructor(props, context) {
         super(props, context);
@@ -41,8 +48,8 @@ export class TextField extends React.PureComponent {
     }
 
     render() {
-        const {name, title, anyValue, className, autoComplete, noFeedback = false, disabled = false, initialValue,
-               defaultValue} = this.props;
+        const {name, title, rows, placeholder, anyValue, className, autoComplete, noFeedback = false, disabled = false,
+               initialValue, defaultValue} = this.props;
 
         return (
             <Field name={name}>
@@ -69,8 +76,8 @@ export class TextField extends React.PureComponent {
                                             [className]: !!className
                                         })}
                                     autoComplete={autoComplete}
-                                    placeholder="Enter text here..."
-                                    rows={3}
+                                    placeholder={placeholder}
+                                    rows={rows}
                                     maxRows={20}
                                     disabled={disabled}
                                     ref={this.inputDom} // impossible to pass lambda here

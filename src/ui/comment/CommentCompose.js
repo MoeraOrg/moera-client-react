@@ -30,7 +30,8 @@ class CommentCompose extends React.PureComponent {
             <div id="comment-composer">
                 <Form>
                     <div className="content">
-                        <TextField name="body" anyValue disabled={beingPosted}/>
+                        <TextField name="body" rows={1} placeholder="Write a comment here..." anyValue
+                                   disabled={beingPosted}/>
                     </div>
                     <CommentSubmitButton loading={beingPosted}/>
                 </Form>
