@@ -71,7 +71,7 @@ class ComposePage extends React.PureComponent {
                         {subjectPresent &&
                             <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
-                        <TextField name="body" anyValue autoFocus disabled={loadingContent}/>
+                        <TextField name="body" anyValue autoFocus disabled={loadingContent || beingPosted}/>
                         <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>

@@ -27,6 +27,7 @@ import {
     FEED_UNSUBSCRIBE
 } from "state/feeds/actions";
 import {
+    COMMENT_POST,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_PAST_SLICE_LOAD,
     DETAILED_POSTING_LOAD
@@ -125,6 +126,7 @@ import {
     feedUnsubscribeSaga
 } from "state/feeds/sagas";
 import {
+    commentPostSaga,
     commentsFutureSliceLoadSaga,
     commentsPastSliceLoadSaga,
     detailedPostingLoadSaga
@@ -275,6 +277,7 @@ function* combinedSaga() {
     yield takeEvery(FLASH_BOX, flashBoxSaga);
     yield takeEvery(COMMENTS_PAST_SLICE_LOAD, introduce(commentsPastSliceLoadSaga));
     yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
+    yield takeLatest(COMMENT_POST, commentPostSaga);
 
     yield invokeTriggers(triggers);
 }

@@ -357,3 +357,20 @@ export function* getCommentsSlice(nodeName, postingId, after, before, limit) {
         nodeName, location, auth: true, schema: NodeApi.CommentsSliceInfo, withBodies: true
     });
 }
+
+export function* postComment(nodeName, postingId, commentText) {
+    postingId = encodeURIComponent(postingId);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments`, method: "POST", auth: true, body: commentText,
+        schema: NodeApi.CommentCreated, withBodies: true
+    });
+}
+
+export function* putComment(nodeName, postingId, id, commentText) {
+    postingId = encodeURIComponent(postingId);
+    id = encodeURIComponent(id);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments/${id}`, method: "PUT", auth: true, body: commentText,
+        schema: NodeApi.CommentInfo, withBodies: true
+    });
+}

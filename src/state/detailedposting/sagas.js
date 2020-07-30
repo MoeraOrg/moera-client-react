@@ -3,6 +3,8 @@ import { call, put, select } from 'redux-saga/effects';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    commentPostFailed,
+    commentPostSucceeded,
     commentsFutureSliceLoadFailed,
     commentsFutureSliceSet,
     commentsPastSliceLoadFailed,
@@ -47,6 +49,24 @@ export function* commentsFutureSliceLoadSaga(action) {
         // yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(commentsFutureSliceLoadFailed(postingId));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentPostSaga(action) {
+    const {id, postingId, commentText} = action.payload;
+
+    try {
+        let data;
+        if (id == null) {
+            data = yield call(Node.postComment, "", postingId, commentText);
+            yield put(commentPostSucceeded(data.comment, data.total));
+        } else {
+            data = yield call(Node.putComment, "", postingId, id, commentText);
+            yield put(commentPostSucceeded(data, null));
+        }
+    } catch (e) {
+        yield put(commentPostFailed(postingId));
         yield put(errorThrown(e));
     }
 }

@@ -65,3 +65,21 @@ export const COMMENTS_SCROLLED_TO_ANCHOR = "COMMENTS_SCROLLED_TO_ANCHOR";
 export const commentsScrolledToAnchor = () => ({
     type: COMMENTS_SCROLLED_TO_ANCHOR
 });
+
+export const COMMENT_POST = "COMMENT_POST";
+export const commentPost = (postingId, commentText) => ({
+    type: COMMENT_POST,
+    payload: {postingId, commentText}
+});
+
+export const COMMENT_POST_SUCCEEDED = "COMMENT_POST_SUCCEEDED";
+export const commentPostSucceeded = (comment, total) => ({
+    type: COMMENT_POST_SUCCEEDED,
+    payload: {comment, total}
+});
+
+export const COMMENT_POST_FAILED = "COMMENT_POST_FAILED";
+export const commentPostFailed = (postingId) => ({
+    type: COMMENT_POST_FAILED,
+    payload: {postingId}
+});

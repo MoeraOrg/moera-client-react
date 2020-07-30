@@ -31,7 +31,10 @@ const emptyComments = {
 const initialState = {
     id: null,
     loading: false,
-    comments: cloneDeep(emptyComments)
+    comments: cloneDeep(emptyComments),
+    compose: {
+        beingPosted: false
+    }
 };
 
 function extractComment(comment) {

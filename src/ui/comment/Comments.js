@@ -10,6 +10,7 @@ import { getCommentsState } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinel from "ui/comment/CommentsSentinel";
 import Comment from "ui/comment/Comment";
+import CommentCompose from "ui/comment/CommentCompose";
 import "./Comments.css";
 
 class Comments extends React.PureComponent {
@@ -131,16 +132,19 @@ class Comments extends React.PureComponent {
         }
 
         return (
-            <div id="comments">
-                <CommentsSentinel loading={loadingPast} title="View earlier comments"
-                                  visible={after > Number.MIN_SAFE_INTEGER} onBoundary={this.onBoundaryPast}
-                                  onClick={this.loadPast}/>
-                {comments.map(comment =>
-                        <Comment key={comment.moment} comment={comment} deleting={comment.deleting}/>)}
-                <CommentsSentinel loading={loadingFuture} title="View later comments"
-                                  visible={before < Number.MAX_SAFE_INTEGER} onBoundary={this.onBoundaryFuture}
-                                  onClick={this.loadFuture}/>
-            </div>
+            <>
+                <div id="comments">
+                    <CommentsSentinel loading={loadingPast} title="View earlier comments"
+                                      visible={after > Number.MIN_SAFE_INTEGER} onBoundary={this.onBoundaryPast}
+                                      onClick={this.loadPast}/>
+                    {comments.map(comment =>
+                            <Comment key={comment.moment} comment={comment} deleting={comment.deleting}/>)}
+                    <CommentsSentinel loading={loadingFuture} title="View later comments"
+                                      visible={before < Number.MAX_SAFE_INTEGER} onBoundary={this.onBoundaryFuture}
+                                      onClick={this.loadFuture}/>
+                </div>
+                <CommentCompose/>
+            </>
         );
     }
 }

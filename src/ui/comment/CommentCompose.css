@@ -1,0 +1,16 @@
+#comment-composer .content {
+    background-color: var(--comments);
+    border-radius: 5px;
+    padding: .5rem;
+    margin: 0 1rem .5rem 1rem;
+}
+
+#comment-composer .content .form-group {
+    margin-bottom: 0;
+}
+
+#comment-composer .submit-button {
+    display: block;
+    margin-left: auto;
+    margin-right: 1rem;
+}

@@ -942,6 +942,17 @@ export const CommentInfoType = {
 
 export const CommentInfo = schema(CommentInfoType);
 
+export const CommentCreated = schema({
+    type: "object",
+    properties: {
+        "comment": CommentInfoType,
+        "total": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false
+});
+
 export const CommentsSliceInfo = schema({
     type: "object",
     properties: {

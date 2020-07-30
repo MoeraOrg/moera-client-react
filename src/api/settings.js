@@ -21,6 +21,47 @@ export const META = [
         }
     },
     {
+        name: "comment.reactions.positive.default",
+        type: "string",
+        defaultValue: "+0x1f4a1,+0x1f44d,+0x1f4af,+0x1f60d,+0x1f600,+0x1f926,+0x1f62e,+0x1f622,+0x1f620,+0x1f92e,*",
+        title: "Default set of \"Support\" reactions to my comment",
+        modifiers: {
+            format: "emoji-list-positive"
+        }
+    },
+    {
+        name: "comment.reactions.negative.default",
+        type: "string",
+        defaultValue: "+0x1f4a4,+0x1f44e,+0x1f4a9,+0x2694,+0x23f3,+0x1f3a9,+0x1f921,+0x1f61c,+0x1f494,+0x1f47f",
+        title: "Default set of \"Oppose\" reactions to my comment",
+        modifiers: {
+            format: "emoji-list-negative"
+        }
+    },
+    {
+        name: "comment.body-src-format.default",
+        type: "string",
+        defaultValue: "markdown",
+        title: "Default comment text formatting",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "No formatting",
+                    value: "plain-text"
+                },
+                {
+                    title: "HTML",
+                    value: "html"
+                },
+                {
+                    title: "Markdown",
+                    value: "markdown"
+                }
+            ]
+        }
+    },
+    {
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",
