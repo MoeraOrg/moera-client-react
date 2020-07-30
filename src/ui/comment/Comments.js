@@ -125,23 +125,24 @@ class Comments extends React.PureComponent {
     render() {
         const {loadingFuture, loadingPast, comments, before, after} = this.props;
 
-        if (comments.length === 0 && !loadingFuture && !loadingPast
-            && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
-
-            return null;
-        }
+        const empty = comments.length === 0 && !loadingFuture && !loadingPast
+            && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
 
         return (
             <>
                 <div id="comments">
-                    <CommentsSentinel loading={loadingPast} title="View earlier comments"
-                                      visible={after > Number.MIN_SAFE_INTEGER} onBoundary={this.onBoundaryPast}
-                                      onClick={this.loadPast}/>
-                    {comments.map(comment =>
-                            <Comment key={comment.moment} comment={comment} deleting={comment.deleting}/>)}
-                    <CommentsSentinel loading={loadingFuture} title="View later comments"
-                                      visible={before < Number.MAX_SAFE_INTEGER} onBoundary={this.onBoundaryFuture}
-                                      onClick={this.loadFuture}/>
+                    {empty ||
+                        <>
+                            <CommentsSentinel loading={loadingPast} title="View earlier comments"
+                                              visible={after > Number.MIN_SAFE_INTEGER}
+                                              onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
+                            {comments.map(comment =>
+                                <Comment key={comment.moment} comment={comment} deleting={comment.deleting}/>)}
+                            <CommentsSentinel loading={loadingFuture} title="View later comments"
+                                              visible={before < Number.MAX_SAFE_INTEGER}
+                                              onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
+                        </>
+                    }
                 </div>
                 <CommentCompose/>
             </>
