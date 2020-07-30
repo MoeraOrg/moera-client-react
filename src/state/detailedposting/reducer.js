@@ -74,9 +74,6 @@ export default (state = initialState, action) => {
             };
 
         case COMMENTS_PAST_SLICE_LOAD:
-            if (action.payload.postingId !== state.id) {
-                return state;
-            }
             return immutable.set(state, "comments.loadingPast", true);
 
         case COMMENTS_PAST_SLICE_LOAD_FAILED:
@@ -86,9 +83,6 @@ export default (state = initialState, action) => {
             return immutable.set(state, "comments.loadingPast", false);
 
         case COMMENTS_FUTURE_SLICE_LOAD:
-            if (action.payload.postingId !== state.id) {
-                return state;
-            }
             return immutable.set(state, "comments.loadingFuture", true);
 
         case COMMENTS_FUTURE_SLICE_LOAD_FAILED:

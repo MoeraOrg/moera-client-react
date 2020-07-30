@@ -15,9 +15,8 @@ export const detailedPostingLoadFailed = () => ({
 });
 
 export const COMMENTS_PAST_SLICE_LOAD = "COMMENTS_PAST_SLICE_LOAD";
-export const commentsPastSliceLoad = (postingId) => ({
-    type: COMMENTS_PAST_SLICE_LOAD,
-    payload: {postingId}
+export const commentsPastSliceLoad = () => ({
+    type: COMMENTS_PAST_SLICE_LOAD
 });
 
 export const COMMENTS_PAST_SLICE_LOAD_FAILED = "COMMENTS_PAST_SLICE_LOAD_FAILED";
@@ -27,9 +26,8 @@ export const commentsPastSliceLoadFailed = (postingId) => ({
 });
 
 export const COMMENTS_FUTURE_SLICE_LOAD = "COMMENTS_FUTURE_SLICE_LOAD";
-export const commentsFutureSliceLoad = (postingId) => ({
-    type: COMMENTS_FUTURE_SLICE_LOAD,
-    payload: {postingId}
+export const commentsFutureSliceLoad = () => ({
+    type: COMMENTS_FUTURE_SLICE_LOAD
 });
 
 export const COMMENTS_FUTURE_SLICE_LOAD_FAILED = "COMMENTS_FUTURE_SLICE_LOAD_FAILED";

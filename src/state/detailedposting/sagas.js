@@ -27,10 +27,12 @@ export function* detailedPostingLoadSaga() {
     }
 }
 
-export function* commentsPastSliceLoadSaga(action) {
-    const {postingId} = action.payload;
+export function* commentsPastSliceLoadSaga() {
+    const {postingId, before} = (yield select(state => ({
+        postingId: getDetailedPostingId(state),
+        before: getCommentsState(state).after
+    })));
     try {
-        const before = (yield select(state => getCommentsState(state))).after;
         const data = yield call(Node.getCommentsSlice, "", postingId, null, before, 20);
         yield put(commentsPastSliceSet(postingId, data.comments, data.before, data.after));
         // yield call(cacheNames, data.stories);
@@ -40,11 +42,13 @@ export function* commentsPastSliceLoadSaga(action) {
     }
 }
 
-export function* commentsFutureSliceLoadSaga(action) {
-    const {postingId} = action.payload;
+export function* commentsFutureSliceLoadSaga() {
+    const {postingId, after} = (yield select(state => ({
+        postingId: getDetailedPostingId(state),
+        after: getCommentsState(state).before
+    })));
     try {
-        const after = (yield select(state => getCommentsState(state))).before;
-        const data = yield call(Node.getFeedSlice, "", postingId, after, null, 20);
+        const data = yield call(Node.getCommentsSlice, "", postingId, after, null, 20);
         yield put(commentsFutureSliceSet(postingId, data.comments, data.before, data.after));
         // yield call(cacheNames, data.stories);
     } catch (e) {

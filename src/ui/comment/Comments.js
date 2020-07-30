@@ -104,14 +104,14 @@ class Comments extends React.PureComponent {
         if (this.props.loadingFuture || this.props.before >= Number.MAX_SAFE_INTEGER) {
             return;
         }
-        this.props.commentsFutureSliceLoad(this.props.postingId);
+        this.props.commentsFutureSliceLoad();
     }
 
     loadPast = () => {
         if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        this.props.commentsPastSliceLoad(this.props.postingId);
+        this.props.commentsPastSliceLoad();
     }
 
     onBoundaryFuture = intersecting => {
