@@ -21,6 +21,7 @@ class FeedPage extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
 
+        this.mounted = false;
         this.prevAt = Number.MAX_SAFE_INTEGER;
         this.newAnchor = null;
         this.topmostBeforeUpdate = null;
@@ -37,8 +38,15 @@ class FeedPage extends React.PureComponent {
     }
 
     componentDidMount() {
+        this.mounted = true;
+        this.updateOnScrollHandler();
         this.newAnchor = this.props.anchor;
         this.scrollToAnchor();
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+        this.updateOnScrollHandler();
     }
 
     getSnapshotBeforeUpdate(prevProps, prevState) {
@@ -85,7 +93,7 @@ class FeedPage extends React.PureComponent {
     }
 
     updateOnScrollHandler() {
-        window.onscroll = this.props.visible ? this.onScroll : null;
+        window.onscroll = this.mounted && this.props.visible ? this.onScroll : null;
     }
 
     onScroll = () => {
