@@ -70,14 +70,20 @@ export const commentPost = (postingId, commentText) => ({
     payload: {postingId, commentText}
 });
 
-export const COMMENT_POST_SUCCEEDED = "COMMENT_POST_SUCCEEDED";
-export const commentPostSucceeded = (comment, total) => ({
-    type: COMMENT_POST_SUCCEEDED,
-    payload: {comment, total}
+export const COMMENT_POSTED = "COMMENT_POSTED";
+export const commentPosted = (postingId) => ({
+    type: COMMENT_POSTED,
+    payload: {postingId}
 });
 
 export const COMMENT_POST_FAILED = "COMMENT_POST_FAILED";
 export const commentPostFailed = (postingId) => ({
     type: COMMENT_POST_FAILED,
     payload: {postingId}
+});
+
+export const COMMENT_SET = "COMMENT_SET";
+export const commentSet = (comment) => ({
+    type: COMMENT_SET,
+    payload: {comment}
 });

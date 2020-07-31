@@ -3,6 +3,7 @@ import selectn from 'selectn';
 
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET } from "state/feeds/actions";
 import {
+    POSTING_COMMENTS_SET,
     POSTING_DELETE,
     POSTING_DELETED,
     POSTING_REACT,
@@ -149,6 +150,14 @@ export default (state = initialState, action) => {
                     istate = istate.set([id, "posting", "clientReaction"], reaction)
                 }
                 return istate.value();
+            }
+            return state;
+        }
+
+        case POSTING_COMMENTS_SET: {
+            const {id, total} = action.payload;
+            if (state[id]) {
+                return immutable.set(state, [id, "posting", "totalComments"], total);
             }
             return state;
         }

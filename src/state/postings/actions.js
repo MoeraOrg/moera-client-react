@@ -75,3 +75,9 @@ export const postingCopyLink = (id) => ({
     type: POSTING_COPY_LINK,
     payload: {id}
 });
+
+export const POSTING_COMMENTS_SET = "POSTING_COMMENTS_SET";
+export const postingCommentsSet = (id, total) => ({
+    type: POSTING_COMMENTS_SET,
+    payload: {id, total}
+});

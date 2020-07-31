@@ -14,7 +14,7 @@ import "./CommentCompose.css";
 class CommentCompose extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.postingId !== prevProps.postingId) {
+        if (this.props.postingId !== prevProps.postingId || this.props.formId !== prevProps.formId) {
             const values = commentComposeLogic.mapPropsToValues(this.props);
             this.props.resetForm({values});
         }
@@ -45,6 +45,7 @@ export default connect(
     state => ({
         ownerName: getHomeOwnerName(state),
         postingId: getDetailedPostingId(state),
+        formId: state.detailedPosting.compose.formId,
         beingPosted: state.detailedPosting.compose.beingPosted,
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default"),
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),

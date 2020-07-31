@@ -4,6 +4,8 @@ import cloneDeep from 'lodash.clonedeep';
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
+    COMMENT_POSTED,
+    COMMENT_SET,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_FUTURE_SLICE_LOAD_FAILED,
     COMMENTS_FUTURE_SLICE_SET,
@@ -33,6 +35,7 @@ const initialState = {
     loading: false,
     comments: cloneDeep(emptyComments),
     compose: {
+        formId: 0,
         beingPosted: false
     }
 };
@@ -167,6 +170,26 @@ export default (state = initialState, action) => {
 
         case COMMENTS_SCROLLED_TO_ANCHOR:
             return immutable.set(state, "comments.anchor", null);
+
+        case COMMENT_POSTED:
+            if (action.payload.postingId !== state.id) {
+                return state;
+            }
+            return immutable.set(state, "compose.formId", state.compose.formId + 1);
+
+        case COMMENT_SET: {
+            const {comment} = action.payload;
+            if (comment.postingId === state.id
+                && comment.moment <= state.comments.before
+                && comment.moment > state.comments.after) {
+
+                const comments = state.comments.comments.filter(c => c.id !== comment.id);
+                comments.push(extractComment(comment));
+                comments.sort((a, b) => a.moment - b.moment);
+                return immutable.set(state, "comments.comments", comments);
+            }
+            return state;
+        }
 
         default:
             return state;
