@@ -62,6 +62,25 @@ export const META = [
         }
     },
     {
+        name: "comment.submit-key",
+        type: "string",
+        defaultValue: "enter",
+        title: "Send comment when pressed",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Enter",
+                    value: "enter"
+                },
+                {
+                    title: "Ctrl-Enter",
+                    value: "ctrl-enter"
+                }
+            ]
+        }
+    },
+    {
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",

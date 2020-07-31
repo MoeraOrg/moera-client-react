@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
+import * as textFieldEdit from 'text-field-edit'
 
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
@@ -20,6 +21,20 @@ class CommentCompose extends React.PureComponent {
         }
     }
 
+    onKeyDown = (event) => {
+        const {submitKey, submitForm} = this.props;
+
+        if (event.key === "Enter") {
+            const submit = (submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey);
+            if (submit) {
+                submitForm();
+            } else {
+                textFieldEdit.insert(event.target, "\n");
+            }
+            event.preventDefault();
+        }
+    }
+
     render() {
         const {ownerName, beingPosted} = this.props;
 
@@ -31,7 +46,7 @@ class CommentCompose extends React.PureComponent {
                 <Form>
                     <div className="content">
                         <TextField name="body" rows={1} placeholder="Write a comment here..." anyValue
-                                   disabled={beingPosted}/>
+                                   disabled={beingPosted} onKeyDown={this.onKeyDown}/>
                     </div>
                     <CommentSubmitButton loading={beingPosted}/>
                 </Form>
@@ -49,7 +64,8 @@ export default connect(
         beingPosted: state.detailedPosting.compose.beingPosted,
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default"),
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),
-        sourceFormatDefault: getSetting(state, "comment.body-src-format.default")
+        sourceFormatDefault: getSetting(state, "comment.body-src-format.default"),
+        submitKey: getSetting(state, "comment.submit-key")
     }),
     { commentPost }
 )(withFormik(commentComposeLogic)(CommentCompose));

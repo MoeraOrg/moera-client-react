@@ -21,7 +21,8 @@ export class TextField extends React.PureComponent {
         noFeedback: PropType.bool,
         disabled: PropType.bool,
         initialValue: PropType.string,
-        defaultValue: PropType.string
+        defaultValue: PropType.string,
+        onKeyDown: PropType.func
     };
 
     static defaultProps = {
@@ -49,7 +50,7 @@ export class TextField extends React.PureComponent {
 
     render() {
         const {name, title, rows, placeholder, anyValue, className, autoComplete, noFeedback = false, disabled = false,
-               initialValue, defaultValue} = this.props;
+               initialValue, defaultValue, onKeyDown} = this.props;
 
         return (
             <Field name={name}>
@@ -80,6 +81,7 @@ export class TextField extends React.PureComponent {
                                     rows={rows}
                                     maxRows={20}
                                     disabled={disabled}
+                                    onKeyDown={onKeyDown}
                                     ref={this.inputDom} // impossible to pass lambda here
                                 />
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
