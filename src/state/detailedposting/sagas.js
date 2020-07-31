@@ -16,6 +16,8 @@ import {
 import { getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { postingCommentsSet } from "state/postings/actions";
+import { getOwnerName } from "state/owner/selectors";
+import { getPosting } from "state/postings/selectors";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -62,16 +64,24 @@ export function* commentsFutureSliceLoadSaga() {
 export function* commentPostSaga(action) {
     const {id, postingId, commentText} = action.payload;
 
+    const {ownerName, posting} = yield select(state => ({
+        ownerName: getOwnerName(state),
+        posting: getPosting(state, postingId)
+    }));
+    const remoteNodeName = posting.receiverName ?? ownerName;
+    const remotePostingId = posting.receiverPostingId ?? postingId;
     try {
+        let comment;
         if (id == null) {
-            const data = yield call(Node.postComment, "", postingId, commentText);
-            yield put(commentSet(data.comment));
+            const data = yield call(Node.postComment, remoteNodeName, remotePostingId, commentText);
             yield put(postingCommentsSet(postingId, data.total));
+            comment = data.comment;
         } else {
-            const data = yield call(Node.putComment, "", postingId, id, commentText);
-            yield put(commentSet(data));
+            comment = yield call(Node.putComment, remoteNodeName, remotePostingId, id, commentText);
         }
+        yield put(commentSet(comment));
         yield put(commentPosted(postingId));
+        yield call(Node.putRemoteComment, ":", remoteNodeName, remotePostingId, comment.id, commentText);
     } catch (e) {
         yield put(commentPostFailed(postingId));
         yield put(errorThrown(e));

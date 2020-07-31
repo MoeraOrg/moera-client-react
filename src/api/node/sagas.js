@@ -374,3 +374,13 @@ export function* putComment(nodeName, postingId, id, commentText) {
         schema: NodeApi.CommentInfo, withBodies: true
     });
 }
+
+export function* putRemoteComment(nodeName, remoteNodeName, postingId, id, commentText) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
+    id = encodeURIComponent(id);
+    return yield call(callApi, {
+        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "PUT", auth: true,
+        body: commentText, schema: NodeApi.Result
+    });
+}
