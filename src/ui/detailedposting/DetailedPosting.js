@@ -48,7 +48,7 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
                         <PostingComments posting={posting}/>
                     </div>
                     {connectedToHome && <PostingButtons posting={posting}/>}
-                    {posting.receiverName == null && <Comments postingId={posting.id}/>}
+                    <Comments postingId={posting.id}/>
                 </>
             }
         </div>

@@ -28,7 +28,8 @@ const commentComposeLogic = {
     handleSubmit(values, formik) {
         formik.setStatus("submitted");
         formik.props.commentPost(
-            formik.props.postingId,
+            formik.props.receiverName,
+            formik.props.receiverPostingId,
             commentComposeLogic.mapValuesToCommentText(values, formik.props)
         );
         formik.setSubmitting(false);

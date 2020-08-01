@@ -5,7 +5,6 @@ import * as textFieldEdit from 'text-field-edit'
 
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
-import { getDetailedPostingId } from "state/detailedposting/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { TextField } from "ui/control/field";
 import CommentSubmitButton from "ui/comment/CommentSubmitButton";
@@ -15,7 +14,10 @@ import "./CommentCompose.css";
 class CommentCompose extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.postingId !== prevProps.postingId || this.props.formId !== prevProps.formId) {
+        if (this.props.receiverName !== prevProps.receiverName
+            || this.props.receiverPostingId !== prevProps.receiverPostingId
+            || this.props.formId !== prevProps.formId) {
+
             const values = commentComposeLogic.mapPropsToValues(this.props);
             this.props.resetForm({values});
         }
@@ -59,7 +61,8 @@ class CommentCompose extends React.PureComponent {
 export default connect(
     state => ({
         ownerName: getHomeOwnerName(state),
-        postingId: getDetailedPostingId(state),
+        receiverName: state.detailedPosting.comments.receiverName,
+        receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         formId: state.detailedPosting.compose.formId,
         beingPosted: state.detailedPosting.compose.beingPosted,
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default"),

@@ -12,9 +12,9 @@ import {
     COMMENTS_PAST_SLICE_LOAD,
     COMMENTS_PAST_SLICE_LOAD_FAILED,
     COMMENTS_PAST_SLICE_SET,
+    COMMENTS_RECEIVER_SWITCHED,
     COMMENTS_SCROLL_TO_ANCHOR,
     COMMENTS_SCROLLED_TO_ANCHOR,
-    COMMENTS_UNSET,
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_FAILED,
     DETAILED_POSTING_LOADED
@@ -22,6 +22,8 @@ import {
 import { safeHtml, safePreviewHtml } from "util/html";
 
 const emptyComments = {
+    receiverName: null,
+    receiverPostingId: null,
     loadingFuture: false,
     loadingPast: false,
     before: Number.MAX_SAFE_INTEGER,
@@ -51,6 +53,7 @@ function extractComment(comment) {
 }
 
 export default (state = initialState, action) => {
+    console.log(action);
     switch (action.type) {
         case GO_TO_PAGE:
             if (action.payload.page === PAGE_DETAILED_POSTING && state.id !== action.payload.details.id) {
@@ -76,11 +79,19 @@ export default (state = initialState, action) => {
                 loading: false
             };
 
+        case COMMENTS_RECEIVER_SWITCHED:
+            return immutable.assign(state, "comments", {
+                ...cloneDeep(emptyComments),
+                receiverName: action.payload.nodeName,
+                receiverPostingId: action.payload.postingId
+            });
+
         case COMMENTS_PAST_SLICE_LOAD:
             return immutable.set(state, "comments.loadingPast", true);
 
         case COMMENTS_PAST_SLICE_LOAD_FAILED:
-            if (action.payload.postingId !== state.id) {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
             return immutable.set(state, "comments.loadingPast", false);
@@ -89,13 +100,15 @@ export default (state = initialState, action) => {
             return immutable.set(state, "comments.loadingFuture", true);
 
         case COMMENTS_FUTURE_SLICE_LOAD_FAILED:
-            if (action.payload.postingId !== state.id) {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
             return immutable.set(state, "comments.loadingFuture", false);
 
         case COMMENTS_PAST_SLICE_SET: {
-            if (action.payload.postingId !== state.id) {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
             const istate = immutable.wrap(state);
@@ -116,7 +129,8 @@ export default (state = initialState, action) => {
         }
 
         case COMMENTS_FUTURE_SLICE_SET: {
-            if (action.payload.postingId !== state.id) {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
             const istate = immutable.wrap(state);
@@ -134,20 +148,6 @@ export default (state = initialState, action) => {
             } else {
                 return istate.set("comments.loadingFuture", false).value();
             }
-        }
-
-        case COMMENTS_UNSET: {
-            const anchor = state.anchor;
-            return immutable.wrap(state)
-                .assign("comments", {
-                    loadingFuture: false,
-                    loadingPast: false,
-                    before: anchor,
-                    after: anchor,
-                    comments: [],
-                    anchor
-                })
-                .value();
         }
 
         case COMMENTS_SCROLL_TO_ANCHOR: {
@@ -172,14 +172,16 @@ export default (state = initialState, action) => {
             return immutable.set(state, "comments.anchor", null);
 
         case COMMENT_POSTED:
-            if (action.payload.postingId !== state.id) {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
             return immutable.set(state, "compose.formId", state.compose.formId + 1);
 
         case COMMENT_SET: {
-            const {comment} = action.payload;
-            if (comment.postingId === state.id
+            const {nodeName, comment} = action.payload;
+            if (nodeName === state.comments.receiverName
+                && comment.postingId === state.comments.receiverPostingId
                 && comment.moment <= state.comments.before
                 && comment.moment > state.comments.after) {
 

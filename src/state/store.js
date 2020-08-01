@@ -30,6 +30,7 @@ import {
     COMMENT_POST,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_PAST_SLICE_LOAD,
+    COMMENTS_RECEIVER_SWITCH,
     DETAILED_POSTING_LOAD
 } from "state/detailedposting/actions";
 import {
@@ -129,6 +130,7 @@ import {
     commentPostSaga,
     commentsFutureSliceLoadSaga,
     commentsPastSliceLoadSaga,
+    commentsReceiverSwitchSaga,
     detailedPostingLoadSaga
 } from "state/detailedposting/sagas";
 import {
@@ -275,6 +277,7 @@ function* combinedSaga() {
     yield takeLatest(SUBSCRIPTIONS_LOAD, subscriptionsLoadSaga);
     yield takeEvery(POSTING_COPY_LINK, postingCopyLinkSaga);
     yield takeEvery(FLASH_BOX, flashBoxSaga);
+    yield takeLatest(COMMENTS_RECEIVER_SWITCH, introduce(commentsReceiverSwitchSaga));
     yield takeEvery(COMMENTS_PAST_SLICE_LOAD, introduce(commentsPastSliceLoadSaga));
     yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
     yield takeLatest(COMMENT_POST, commentPostSaga);

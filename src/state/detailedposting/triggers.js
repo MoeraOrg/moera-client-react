@@ -3,12 +3,15 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { GO_TO_PAGE, goToTimeline, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
+    COMMENTS_RECEIVER_SWITCHED,
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
+    commentsReceiverSwitch,
     DETAILED_POSTING_LOADED,
     detailedPostingLoad
 } from "state/detailedposting/actions";
 import {
+    isCommentsReceiverToBeSwitched,
     isDetailedPostingId,
     isDetailedPostingToBeLoaded,
     isFutureCommentsToBeLoaded,
@@ -19,15 +22,27 @@ import { getPostingMoment } from "state/postings/selectors";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
-    trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded), commentsFutureSliceLoad),
-    trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded), commentsPastSliceLoad),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtDetailedPostingPage, detailedPostingLoad),
     trigger(DETAILED_POSTING_LOADED, true, signal => postingSet(signal.payload.posting)),
-    trigger(DETAILED_POSTING_LOADED, isAtDetailedPostingPage, updateLocation),
     trigger(
         POSTING_SET,
         (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.posting.id),
         updateLocation
+    ),
+    trigger(
+        [GO_TO_PAGE, POSTING_SET],
+        conj(isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
+        commentsReceiverSwitch
+    ),
+    trigger(
+        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED],
+        conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded),
+        commentsFutureSliceLoad
+    ),
+    trigger(
+        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED],
+        conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
+        commentsPastSliceLoad
     ),
     trigger(
         POSTING_DELETED,

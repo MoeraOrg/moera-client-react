@@ -14,15 +14,26 @@ export const detailedPostingLoadFailed = () => ({
     type: DETAILED_POSTING_LOAD_FAILED
 });
 
+export const COMMENTS_RECEIVER_SWITCH = "COMMENTS_RECEIVER_SWITCH";
+export const commentsReceiverSwitch = () => ({
+    type: COMMENTS_RECEIVER_SWITCH
+});
+
+export const COMMENTS_RECEIVER_SWITCHED = "COMMENTS_RECEIVER_SWITCHED";
+export const commentsReceiverSwitched = (nodeName, postingId) => ({
+    type: COMMENTS_RECEIVER_SWITCHED,
+    payload: {nodeName, postingId}
+});
+
 export const COMMENTS_PAST_SLICE_LOAD = "COMMENTS_PAST_SLICE_LOAD";
 export const commentsPastSliceLoad = () => ({
     type: COMMENTS_PAST_SLICE_LOAD
 });
 
 export const COMMENTS_PAST_SLICE_LOAD_FAILED = "COMMENTS_PAST_SLICE_LOAD_FAILED";
-export const commentsPastSliceLoadFailed = (postingId) => ({
+export const commentsPastSliceLoadFailed = (nodeName, postingId) => ({
     type: COMMENTS_PAST_SLICE_LOAD_FAILED,
-    payload: {postingId}
+    payload: {nodeName, postingId}
 });
 
 export const COMMENTS_FUTURE_SLICE_LOAD = "COMMENTS_FUTURE_SLICE_LOAD";
@@ -31,26 +42,21 @@ export const commentsFutureSliceLoad = () => ({
 });
 
 export const COMMENTS_FUTURE_SLICE_LOAD_FAILED = "COMMENTS_FUTURE_SLICE_LOAD_FAILED";
-export const commentsFutureSliceLoadFailed = (postingId) => ({
+export const commentsFutureSliceLoadFailed = (nodeName, postingId) => ({
     type: COMMENTS_FUTURE_SLICE_LOAD_FAILED,
-    payload: {postingId}
+    payload: {nodeName, postingId}
 });
 
 export const COMMENTS_PAST_SLICE_SET = "COMMENTS_PAST_SLICE_SET";
-export const commentsPastSliceSet = (postingId, comments, before, after) => ({
+export const commentsPastSliceSet = (nodeName, postingId, comments, before, after) => ({
     type: COMMENTS_PAST_SLICE_SET,
-    payload: {postingId, comments, before, after}
+    payload: {nodeName, postingId, comments, before, after}
 });
 
 export const COMMENTS_FUTURE_SLICE_SET = "COMMENTS_FUTURE_SLICE_SET";
-export const commentsFutureSliceSet = (postingId, comments, before, after) => ({
+export const commentsFutureSliceSet = (nodeName, postingId, comments, before, after) => ({
     type: COMMENTS_FUTURE_SLICE_SET,
-    payload: {postingId, comments, before, after}
-});
-
-export const COMMENTS_UNSET = "COMMENTS_UNSET";
-export const commentsUnset = () => ({
-    type: COMMENTS_UNSET
+    payload: {nodeName, postingId, comments, before, after}
 });
 
 export const COMMENTS_SCROLL_TO_ANCHOR = "COMMENTS_SCROLL_TO_ANCHOR";
@@ -65,25 +71,25 @@ export const commentsScrolledToAnchor = () => ({
 });
 
 export const COMMENT_POST = "COMMENT_POST";
-export const commentPost = (postingId, commentText) => ({
+export const commentPost = (nodeName, postingId, commentText) => ({
     type: COMMENT_POST,
-    payload: {postingId, commentText}
+    payload: {nodeName, postingId, commentText}
 });
 
 export const COMMENT_POSTED = "COMMENT_POSTED";
-export const commentPosted = (postingId) => ({
+export const commentPosted = (nodeName, postingId) => ({
     type: COMMENT_POSTED,
-    payload: {postingId}
+    payload: {nodeName, postingId}
 });
 
 export const COMMENT_POST_FAILED = "COMMENT_POST_FAILED";
-export const commentPostFailed = (postingId) => ({
+export const commentPostFailed = (nodeName, postingId) => ({
     type: COMMENT_POST_FAILED,
-    payload: {postingId}
+    payload: {nodeName, postingId}
 });
 
 export const COMMENT_SET = "COMMENT_SET";
-export const commentSet = (comment) => ({
+export const commentSet = (nodeName, comment) => ({
     type: COMMENT_SET,
-    payload: {comment}
+    payload: {nodeName, comment}
 });

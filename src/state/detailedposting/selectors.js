@@ -1,4 +1,5 @@
 import { getPosting, isPostingBeingDeleted } from "state/postings/selectors";
+import { getOwnerName } from "state/owner/selectors";
 
 export function getDetailedPostingId(state) {
     return state.detailedPosting.id;
@@ -24,7 +25,25 @@ export function getCommentsState(state) {
     return state.detailedPosting.comments;
 }
 
+export function isCommentsReceiverToBeSwitched(state) {
+    const ownerName = getOwnerName(state);
+    const posting = getDetailedPosting(state);
+    if (ownerName == null || posting == null) {
+        return false;
+    }
+    const receiverName = posting.receiverName ?? ownerName;
+    const receiverPostingId = posting.receiverPostingId ?? posting.id;
+    const comments = getCommentsState(state);
+
+    return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
+}
+
 export function isCommentsToBeLoaded(state) {
+    const ownerName = getOwnerName(state);
+    const posting = getDetailedPosting(state);
+    if (ownerName == null || posting == null || isCommentsReceiverToBeSwitched(state)) {
+        return false;
+    }
     const comments = getCommentsState(state);
     return comments.comments.length === 0 && !comments.loadingFuture && !comments.loadingPast
         && (comments.before < Number.MAX_SAFE_INTEGER || comments.after > Number.MIN_SAFE_INTEGER);
