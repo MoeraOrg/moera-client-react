@@ -40,7 +40,7 @@ class Events extends React.PureComponent {
             this.lastEvent = null;
         }
 
-        let connectHeaders = {
+        const connectHeaders = {
             "host": URI.parse(location).host
         };
         if (token != null) {
@@ -62,7 +62,7 @@ class Events extends React.PureComponent {
     }
 
     onConnect = () => {
-        let headers = {};
+        const headers = {};
         if (this.queueStartedAt != null) {
             headers.seen = `${this.queueStartedAt},${this.lastEvent}`;
         }
@@ -72,7 +72,7 @@ class Events extends React.PureComponent {
     onMessage = message => {
         const {prefix, eventAction} = this.props;
 
-        let packet = JSON.parse(message.body);
+        const packet = JSON.parse(message.body);
         if (!EventPacket(packet)) {
             console.error("Incorrect event packet received", formatSchemaErrors(EventPacket.errors));
             return;

@@ -53,7 +53,6 @@ function extractComment(comment) {
 }
 
 export default (state = initialState, action) => {
-    console.log(action);
     switch (action.type) {
         case GO_TO_PAGE:
             if (action.payload.page === PAGE_DETAILED_POSTING && state.id !== action.payload.details.id) {
