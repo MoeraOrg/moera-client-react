@@ -70,7 +70,7 @@ class Events extends React.PureComponent {
     };
 
     onMessage = message => {
-        const {prefix, eventAction} = this.props;
+        const {prefix, eventAction, sourceNode} = this.props;
 
         const packet = JSON.parse(message.body);
         if (!EventPacket(packet)) {
@@ -87,7 +87,12 @@ class Events extends React.PureComponent {
             return;
         }
         if (ALLOWED_SELF_EVENTS.has(packet.event.type) || packet.cid !== Browser.clientId) {
-            eventAction(packet.event, prefix);
+            packet.event.sourceNode = sourceNode;
+            if (Array.isArray(prefix)) {
+                prefix.forEach(px => eventAction(packet.event, px));
+            } else {
+                eventAction(packet.event, prefix);
+            }
             this.queueStartedAt = packet.queueStartedAt;
             this.lastEvent = packet.ordinal;
         }

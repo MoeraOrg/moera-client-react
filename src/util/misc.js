@@ -22,9 +22,17 @@ export function urlWithParameters(url, parameters) {
 }
 
 export function toWsUrl(url) {
-    let components = URI.parse(url);
+    const components = URI.parse(url);
     components.scheme = components.scheme.toLowerCase() === "https" ? "wss" : "ws";
     return URI.serialize(components);
+}
+
+export function nodeUrlToLocation(url) {
+    return url != null && url.endsWith("/moera") ? url.substring(0, url.length - 6) : url;
+}
+
+export function nodeUrlToEvents(url) {
+    return url != null ? toWsUrl(normalizeUrl(url) + "/api/events") : null;
 }
 
 export function atOwner(state) {

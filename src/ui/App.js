@@ -3,6 +3,7 @@ import React from 'react';
 import Storage from "ui/storage/Storage";
 import HomeEvents from "ui/events/HomeEvents";
 import NodeEvents from "ui/events/NodeEvents";
+import ReceiverEvents from "ui/events/ReceiverEvents";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
 import MainMenu from "ui/mainmenu/MainMenu";
@@ -21,6 +22,7 @@ const App = () => (
         <Storage/>
         <HomeEvents/>
         <NodeEvents/>
+        <ReceiverEvents/>
         <Navigation/>
         <ErrorPane/>
         <MainMenu/>

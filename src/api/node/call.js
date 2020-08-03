@@ -2,7 +2,7 @@ import { apply, call, put, select } from 'redux-saga/effects';
 
 import { Browser, formatSchemaErrors, HomeNotConnectedError, NodeApi, NodeApiError, NodeError } from "api";
 import { errorAuthInvalid } from "state/error/actions";
-import { normalizeUrl, urlWithParameters } from "util/misc";
+import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/misc";
 import { getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
 import { isConnectedToHome } from "state/home/selectors";
@@ -107,7 +107,7 @@ function* selectApi(nodeName) {
                 const nodeUri = yield call(getNodeUri, nodeName);
                 root = nodeUri != null ?
                     {
-                        location: nodeUri.endsWith("/moera") ? nodeUri.substring(0, nodeUri.length - 6) : nodeUri,
+                        location: nodeUrlToLocation(nodeUri),
                         api: nodeUri + "/api"
                     }
                 :
