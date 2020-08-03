@@ -25,6 +25,10 @@ export function getCommentsState(state) {
     return state.detailedPosting.comments;
 }
 
+export function getCommentsReceiverPostingId(state) {
+    return getCommentsState(state).receiverPostingId;
+}
+
 export function isCommentsReceiverToBeSwitched(state) {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
@@ -55,4 +59,9 @@ export function isFutureCommentsToBeLoaded(state) {
 
 export function isPastCommentsToBeLoaded(state) {
     return isCommentsToBeLoaded(state) && getCommentsState(state).after > Number.MIN_SAFE_INTEGER;
+}
+
+export function isCommentMomentInLoadedRange(state, moment) {
+    const comments = getCommentsState(state);
+    return moment != null && moment <= comments.before && moment > comments.after;
 }

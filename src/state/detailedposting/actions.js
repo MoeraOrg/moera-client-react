@@ -71,9 +71,9 @@ export const commentsScrolledToAnchor = () => ({
 });
 
 export const COMMENT_POST = "COMMENT_POST";
-export const commentPost = (nodeName, postingId, commentText) => ({
+export const commentPost = (postingId, commentText) => ({
     type: COMMENT_POST,
-    payload: {nodeName, postingId, commentText}
+    payload: {postingId, commentText}
 });
 
 export const COMMENT_POSTED = "COMMENT_POSTED";
@@ -92,4 +92,16 @@ export const COMMENT_SET = "COMMENT_SET";
 export const commentSet = (nodeName, comment) => ({
     type: COMMENT_SET,
     payload: {nodeName, comment}
+});
+
+export const COMMENT_LOAD = "COMMENT_LOAD";
+export const commentLoad = (commentId) => ({
+    type: COMMENT_LOAD,
+    payload: {commentId}
+});
+
+export const COMMENT_LOAD_FAILED = "COMMENT_LOAD_FAILED";
+export const commentLoadFailed = (nodeName, postingId, commentId) => ({
+    type: COMMENT_LOAD_FAILED,
+    payload: {nodeName, postingId, commentId}
 });

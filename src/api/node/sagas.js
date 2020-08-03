@@ -358,6 +358,15 @@ export function* getCommentsSlice(nodeName, postingId, after, before, limit) {
     });
 }
 
+export function* getComment(nodeName, postingId, id) {
+    postingId = encodeURIComponent(postingId);
+    id = encodeURIComponent(id);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments/${id}`, auth: true, schema: NodeApi.CommentInfo,
+        withBodies: true
+    });
+}
+
 export function* postComment(nodeName, postingId, commentText) {
     postingId = encodeURIComponent(postingId);
     return yield call(callApi, {

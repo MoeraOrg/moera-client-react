@@ -182,6 +182,19 @@ const subscriptionEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
+const commentEvent = (properties = {}) => baseEvent({
+    "id": {
+        type: "string"
+    },
+    "postingId": {
+        type: "string"
+    },
+    "moment": {
+        type: "integer"
+    },
+    ...properties
+});
+
 export const EventPacket = schema({
     type: "object",
     properties: {
@@ -305,7 +318,9 @@ export const EVENT_SCHEMES = {
     "SUBSCRIBER_ADDED": subscriberEvent(),
     "SUBSCRIBER_DELETED": subscriberEvent(),
     "SUBSCRIPTION_ADDED": subscriptionEvent(),
-    "SUBSCRIPTION_DELETED": subscriptionEvent()
+    "SUBSCRIPTION_DELETED": subscriptionEvent(),
+    "COMMENT_ADDED": commentEvent(),
+    "COMMENT_UPDATED": commentEvent()
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([
