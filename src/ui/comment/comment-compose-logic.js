@@ -3,7 +3,7 @@ import * as yup from 'yup';
 const commentComposeLogic = {
 
     mapPropsToValues(props) {
-        const body = props.posting != null ? props.posting.bodySrc.text : "";
+        const body = props.comment != null ? props.comment.bodySrc.text : "";
 
         return {
             body
