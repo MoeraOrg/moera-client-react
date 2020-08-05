@@ -13,7 +13,9 @@ import {
     commentsPastSliceSet,
     commentsReceiverSwitched,
     detailedPostingLoaded,
-    detailedPostingLoadFailed
+    detailedPostingLoadFailed,
+    focusedCommentLoaded,
+    focusedCommentLoadFailed
 } from "state/detailedposting/actions";
 import { getCommentsState, getDetailedPosting, getDetailedPostingId } from "state/detailedposting/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
@@ -97,6 +99,17 @@ export function* commentPostSaga(action) {
         yield call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentText);
     } catch (e) {
         yield put(commentPostFailed(receiverName, receiverPostingId));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* focusedCommentLoadSaga() {
+    const {receiverName, receiverPostingId, focusedCommentId} = yield select(getCommentsState);
+    try {
+        const data = yield call(Node.getComment, receiverName, receiverPostingId, focusedCommentId);
+        yield put(focusedCommentLoaded(receiverName, data));
+    } catch (e) {
+        yield put(focusedCommentLoadFailed(receiverName, receiverPostingId));
         yield put(errorThrown(e));
     }
 }

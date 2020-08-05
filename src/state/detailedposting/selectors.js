@@ -42,23 +42,33 @@ export function isCommentsReceiverToBeSwitched(state) {
     return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
 }
 
-export function isCommentsToBeLoaded(state) {
+export function isFocusedCommentToBeLoaded(state) {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     if (ownerName == null || posting == null || isCommentsReceiverToBeSwitched(state)) {
         return false;
     }
     const comments = getCommentsState(state);
-    return comments.comments.length === 0 && !comments.loadingFuture && !comments.loadingPast
-        && (comments.before < Number.MAX_SAFE_INTEGER || comments.after > Number.MIN_SAFE_INTEGER);
+    return comments.focusedCommentId != null && !comments.loadedFocusedComment && !comments.loadingFocusedComment;
+}
+
+export function isCommentsReadyToBeLoaded(state) {
+    const ownerName = getOwnerName(state);
+    const posting = getDetailedPosting(state);
+    return ownerName != null && posting != null && !isCommentsReceiverToBeSwitched(state)
+        && !isFocusedCommentToBeLoaded(state);
 }
 
 export function isFutureCommentsToBeLoaded(state) {
-    return isCommentsToBeLoaded(state) && getCommentsState(state).before < Number.MAX_SAFE_INTEGER;
+    const comments = getCommentsState(state);
+    return isCommentsReadyToBeLoaded(state) && !comments.loadingFuture && comments.before === comments.focusedMoment
+        && comments.before < Number.MAX_SAFE_INTEGER;
 }
 
 export function isPastCommentsToBeLoaded(state) {
-    return isCommentsToBeLoaded(state) && getCommentsState(state).after > Number.MIN_SAFE_INTEGER;
+    const comments = getCommentsState(state);
+    return isCommentsReadyToBeLoaded(state) && !comments.loadingPast && comments.after === comments.focusedMoment - 1
+        && comments.after > Number.MIN_SAFE_INTEGER;
 }
 
 export function isCommentMomentInLoadedRange(state, moment) {

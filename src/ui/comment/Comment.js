@@ -54,12 +54,12 @@ class Content extends React.PureComponent {
 
 }
 
-const Comment = ({comment, deleting, isPermitted, connectedToHome}) => (
+const Comment = ({postingId, comment, deleting, isPermitted, connectedToHome}) => (
     <div className="comment entry" data-moment={comment.moment}>
         <CommentMenu comment={comment} isPermitted={isPermitted}/>
         <div className="owner-line">
             <CommentOwner comment={comment}/>
-            <CommentDate comment={comment}/>
+            <CommentDate postingId={postingId} comment={comment}/>
             <CommentUpdated comment={comment}/>
         </div>
         <Content className="content" comment={comment}/>

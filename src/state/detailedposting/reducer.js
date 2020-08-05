@@ -17,7 +17,10 @@ import {
     COMMENTS_SCROLLED_TO_ANCHOR,
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_FAILED,
-    DETAILED_POSTING_LOADED
+    DETAILED_POSTING_LOADED,
+    FOCUSED_COMMENT_LOAD,
+    FOCUSED_COMMENT_LOAD_FAILED,
+    FOCUSED_COMMENT_LOADED
 } from "state/detailedposting/actions";
 import { safeHtml, safePreviewHtml } from "util/html";
 
@@ -26,10 +29,14 @@ const emptyComments = {
     receiverPostingId: null,
     loadingFuture: false,
     loadingPast: false,
-    before: Number.MAX_SAFE_INTEGER,
-    after: Number.MAX_SAFE_INTEGER,
+    before: Number.MIN_SAFE_INTEGER,
+    after: Number.MIN_SAFE_INTEGER,
     comments: [],
-    anchor: null
+    anchor: null,
+    loadingFocusedComment: false,
+    loadedFocusedComment: false,
+    focusedCommentId: null,
+    focusedMoment: Number.MIN_SAFE_INTEGER
 };
 
 const initialState = {
@@ -54,16 +61,21 @@ function extractComment(comment) {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case GO_TO_PAGE:
-            if (action.payload.page === PAGE_DETAILED_POSTING && state.id !== action.payload.details.id) {
+        case GO_TO_PAGE: {
+            const {page, details: {id, commentId}} = action.payload;
+            if (page === PAGE_DETAILED_POSTING && state.id !== id) {
                 return {
                     ...state,
-                    id: action.payload.details.id,
+                    id,
                     loading: false,
-                    comments: cloneDeep(emptyComments)
+                    comments: {
+                        ...cloneDeep(emptyComments),
+                        focusedCommentId: commentId
+                    }
                 }
             }
             return state;
+        }
 
         case DETAILED_POSTING_LOAD:
             return {
@@ -82,7 +94,8 @@ export default (state = initialState, action) => {
             return immutable.assign(state, "comments", {
                 ...cloneDeep(emptyComments),
                 receiverName: action.payload.nodeName,
-                receiverPostingId: action.payload.postingId
+                receiverPostingId: action.payload.postingId,
+                focusedCommentId: state.comments.focusedCommentId
             });
 
         case COMMENTS_PAST_SLICE_LOAD:
@@ -190,6 +203,35 @@ export default (state = initialState, action) => {
                 return immutable.set(state, "comments.comments", comments);
             }
             return state;
+        }
+
+        case FOCUSED_COMMENT_LOAD:
+            return immutable.set(state, "comments.loadingFocusedComment", true);
+
+        case FOCUSED_COMMENT_LOAD_FAILED:
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            return immutable.assign(state, "comments", {
+                loadingFocusedComment: false,
+                focusedCommentId: null
+            });
+
+        case FOCUSED_COMMENT_LOADED: {
+            const {nodeName, comment} = action.payload;
+            if (nodeName !== state.comments.receiverName || comment.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            return immutable.assign(state, "comments", {
+                before: comment.moment,
+                after: comment.moment - 1,
+                comments: [comment],
+                anchor: comment.moment,
+                loadingFocusedComment: false,
+                loadedFocusedComment: true,
+                focusedMoment: comment.moment
+            });
         }
 
         default:

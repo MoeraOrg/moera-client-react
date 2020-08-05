@@ -6,7 +6,7 @@ import {
     commentsPastSliceLoad,
     commentsScrolledToAnchor
 } from "state/detailedposting/actions";
-import { getCommentsState } from "state/detailedposting/selectors";
+import { getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinel from "ui/comment/CommentsSentinel";
 import Comment from "ui/comment/Comment";
@@ -78,7 +78,7 @@ class Comments extends React.PureComponent {
     static getCommentAt(moment) {
         const comments = document.getElementsByClassName("comment");
         for (let i = 0; i < comments.length; i++) {
-            if (comments.item(i).dataset.moment <= moment) {
+            if (comments.item(i).dataset.moment >= moment) {
                 return comments.item(i);
             }
         }
@@ -95,7 +95,7 @@ class Comments extends React.PureComponent {
             Comments.getCommentAt(moment) : Comments.getEarliestComment();
         if (comment != null) {
             const y = comment.getBoundingClientRect().top;
-            window.scrollBy(0, y - 10);
+            window.scrollBy(0, y - 50);
         }
         return comment != null;
     }
@@ -123,7 +123,7 @@ class Comments extends React.PureComponent {
     };
 
     render() {
-        const {loadingFuture, loadingPast, comments, before, after} = this.props;
+        const {postingId, loadingFuture, loadingPast, comments, before, after} = this.props;
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
@@ -137,7 +137,9 @@ class Comments extends React.PureComponent {
                                               visible={after > Number.MIN_SAFE_INTEGER}
                                               onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                             {comments.map(comment =>
-                                <Comment key={comment.moment} comment={comment} deleting={comment.deleting}/>)}
+                                <Comment key={comment.moment} postingId={postingId} comment={comment}
+                                         deleting={comment.deleting}/>
+                            )}
                             <CommentsSentinel loading={loadingFuture} title="View later comments"
                                               visible={before < Number.MAX_SAFE_INTEGER}
                                               onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
@@ -153,6 +155,7 @@ class Comments extends React.PureComponent {
 export default connect(
     state => ({
         visible: isAtDetailedPostingPage(state),
+        postingId: getDetailedPostingId(state),
         loadingFuture: getCommentsState(state).loadingFuture,
         loadingPast: getCommentsState(state).loadingPast,
         before: getCommentsState(state).before,

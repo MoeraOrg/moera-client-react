@@ -9,7 +9,10 @@ import {
     commentsPastSliceLoad,
     commentsReceiverSwitch,
     DETAILED_POSTING_LOADED,
-    detailedPostingLoad
+    detailedPostingLoad,
+    FOCUSED_COMMENT_LOAD_FAILED,
+    FOCUSED_COMMENT_LOADED,
+    focusedCommentLoad
 } from "state/detailedposting/actions";
 import {
     getCommentsReceiverPostingId,
@@ -17,6 +20,7 @@ import {
     isCommentsReceiverToBeSwitched,
     isDetailedPostingId,
     isDetailedPostingToBeLoaded,
+    isFocusedCommentToBeLoaded,
     isFutureCommentsToBeLoaded,
     isPastCommentsToBeLoaded
 } from "state/detailedposting/selectors";
@@ -39,12 +43,17 @@ export default [
         commentsReceiverSwitch
     ),
     trigger(
-        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED],
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
+        conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded),
+        focusedCommentLoad
+    ),
+    trigger(
+        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED],
         conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded),
         commentsFutureSliceLoad
     ),
     trigger(
-        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED],
+        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED],
         conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
         commentsPastSliceLoad
     ),

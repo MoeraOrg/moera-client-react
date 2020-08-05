@@ -105,3 +105,20 @@ export const commentLoadFailed = (nodeName, postingId, commentId) => ({
     type: COMMENT_LOAD_FAILED,
     payload: {nodeName, postingId, commentId}
 });
+
+export const FOCUSED_COMMENT_LOAD = "FOCUSED_COMMENT_LOAD";
+export const focusedCommentLoad = () => ({
+    type: FOCUSED_COMMENT_LOAD
+});
+
+export const FOCUSED_COMMENT_LOADED = "FOCUSED_COMMENT_LOADED";
+export const focusedCommentLoaded = (nodeName, comment) => ({
+    type: FOCUSED_COMMENT_LOADED,
+    payload: {nodeName, comment}
+});
+
+export const FOCUSED_COMMENT_LOAD_FAILED = "FOCUSED_COMMENT_LOAD_FAILED";
+export const focusedCommentLoadFailed = (nodeName, postingId) => ({
+    type: FOCUSED_COMMENT_LOAD_FAILED,
+    payload: {nodeName, postingId}
+});

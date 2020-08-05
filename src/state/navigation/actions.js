@@ -21,7 +21,7 @@ export const goToPage = (page, details = {}) => ({
 });
 export const goToProfile = () => goToPage(PAGE_PROFILE);
 export const goToTimeline = (at = null) => goToPage(PAGE_TIMELINE, {at});
-export const goToPosting = (id) => goToPage(PAGE_DETAILED_POSTING, {id});
+export const goToPosting = (id, commentId = null) => goToPage(PAGE_DETAILED_POSTING, {id, commentId});
 export const goToCompose = (id = null, draftId = null) => goToPage(PAGE_COMPOSE, {id, draftId});
 export const goToSettings = () => goToPage(PAGE_SETTINGS);
 export const goToNews = (at = null) => goToPage(PAGE_NEWS, {at});

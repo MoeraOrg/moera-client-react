@@ -32,7 +32,8 @@ import {
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_PAST_SLICE_LOAD,
     COMMENTS_RECEIVER_SWITCH,
-    DETAILED_POSTING_LOAD
+    DETAILED_POSTING_LOAD,
+    FOCUSED_COMMENT_LOAD
 } from "state/detailedposting/actions";
 import {
     COMPOSE_DRAFT_LIST_ITEM_DELETE,
@@ -133,7 +134,8 @@ import {
     commentsFutureSliceLoadSaga,
     commentsPastSliceLoadSaga,
     commentsReceiverSwitchSaga,
-    detailedPostingLoadSaga
+    detailedPostingLoadSaga,
+    focusedCommentLoadSaga
 } from "state/detailedposting/sagas";
 import {
     composeDraftListItemDeleteSaga,
@@ -284,6 +286,7 @@ function* combinedSaga() {
     yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
     yield takeEvery(COMMENT_LOAD, commentLoadSaga);
     yield takeLatest(COMMENT_POST, commentPostSaga);
+    yield takeLatest(FOCUSED_COMMENT_LOAD, focusedCommentLoadSaga);
 
     yield invokeTriggers(triggers);
 }

@@ -3,7 +3,8 @@ import { getDetailedPosting, getDetailedPostingId } from "state/detailedposting/
 import { atOwner } from "util/misc";
 
 export function transform(srcInfo, dstInfo) {
-    return [goToPosting(dstInfo.directories[1])];
+    const commentId = dstInfo.parameters["comment"];
+    return [goToPosting(dstInfo.directories[1], commentId)];
 }
 
 export function build(state, info) {
