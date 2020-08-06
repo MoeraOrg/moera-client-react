@@ -4,9 +4,16 @@ import { connect } from 'react-redux';
 import {
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
-    commentsScrolledToAnchor
+    commentsScrolledToAnchor,
+    commentsScrolledToComments,
+    commentsScrolledToComposer
 } from "state/detailedposting/actions";
-import { getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
+import {
+    getCommentsState,
+    getDetailedPostingId,
+    isCommentComposerFocused,
+    isCommentsFocused
+} from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinel from "ui/comment/CommentsSentinel";
 import Comment from "ui/comment/Comment";
@@ -52,6 +59,20 @@ class Comments extends React.PureComponent {
     }
 
     scrollToAnchor() {
+        if (this.props.focused) {
+            Comments.scrollToElement(document.getElementById("comments"));
+            this.props.commentsScrolledToComments();
+            return;
+        }
+        if (this.props.composerFocused) {
+            Comments.scrollToElement(document.getElementById("comment-composer"));
+            const body = document.getElementById("body");
+            if (body != null) {
+                body.focus();
+            }
+            this.props.commentsScrolledToComposer();
+            return;
+        }
         if (this.newAnchor != null
             && (this.newAnchor <= this.props.before
                 || (this.newAnchor >= Number.MAX_SAFE_INTEGER && this.props.before >= Number.MAX_SAFE_INTEGER))
@@ -94,10 +115,14 @@ class Comments extends React.PureComponent {
         const comment = moment > Number.MIN_SAFE_INTEGER ?
             Comments.getCommentAt(moment) : Comments.getEarliestComment();
         if (comment != null) {
-            const y = comment.getBoundingClientRect().top;
-            window.scrollBy(0, y - 50);
+            Comments.scrollToElement(comment);
         }
         return comment != null;
+    }
+
+    static scrollToElement(element) {
+        const y = element.getBoundingClientRect().top;
+        window.scrollBy(0, y - 50);
     }
 
     loadFuture = () => {
@@ -140,7 +165,8 @@ class Comments extends React.PureComponent {
                                 <Comment key={comment.moment} postingId={postingId} comment={comment}
                                          focused={comment.id === focusedCommentId} deleting={comment.deleting}/>
                             )}
-                            <CommentsSentinel loading={loadingFuture} title="View later comments"
+                            <CommentsSentinel loading={loadingFuture}
+                                              title={comments.length !== 0 ? "View later comments" : "View comments"}
                                               visible={before < Number.MAX_SAFE_INTEGER}
                                               onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
                         </>
@@ -162,7 +188,12 @@ export default connect(
         after: getCommentsState(state).after,
         comments: getCommentsState(state).comments,
         anchor: getCommentsState(state).anchor,
-        focusedCommentId: getCommentsState(state).focusedCommentId
+        focusedCommentId: getCommentsState(state).focusedCommentId,
+        focused: isCommentsFocused(state),
+        composerFocused: isCommentComposerFocused(state)
     }),
-    { commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor }
+    {
+        commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor, commentsScrolledToComments,
+        commentsScrolledToComposer
+    }
 )(Comments);

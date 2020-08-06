@@ -15,6 +15,8 @@ import {
     COMMENTS_RECEIVER_SWITCHED,
     COMMENTS_SCROLL_TO_ANCHOR,
     COMMENTS_SCROLLED_TO_ANCHOR,
+    COMMENTS_SCROLLED_TO_COMMENTS,
+    COMMENTS_SCROLLED_TO_COMPOSER,
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_FAILED,
     DETAILED_POSTING_LOADED,
@@ -33,6 +35,7 @@ const emptyComments = {
     after: Number.MIN_SAFE_INTEGER,
     comments: [],
     anchor: null,
+    focused: false,
     loadingFocusedComment: false,
     loadedFocusedComment: false,
     focusedCommentId: null,
@@ -43,9 +46,11 @@ const initialState = {
     id: null,
     loading: false,
     comments: cloneDeep(emptyComments),
+    positioned: false,
     compose: {
         formId: 0,
-        beingPosted: false
+        beingPosted: false,
+        focused: false
     }
 };
 
@@ -63,16 +68,35 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case GO_TO_PAGE: {
             const {page, details: {id, commentId}} = action.payload;
-            if (page === PAGE_DETAILED_POSTING && state.id !== id) {
-                return {
-                    ...state,
-                    id,
-                    loading: false,
-                    comments: {
-                        ...cloneDeep(emptyComments),
-                        focusedCommentId: commentId
+            if (page === PAGE_DETAILED_POSTING) {
+                const istate = immutable.wrap(state);
+                if (state.id !== id) {
+                    istate.set("id", id)
+                        .set("loading", false)
+                        .assign("comments", cloneDeep(emptyComments))
+                        .set("compose.beingPosted", false)
+                        .set("compose.focused", false);
+                }
+                istate.set("positioned", commentId != null);
+                if (commentId != null) {
+                    switch (commentId) {
+                        case "comments":
+                            istate.set("comments.focused", true);
+                            break;
+                        case "comment-add":
+                            istate.set("compose.focused", true);
+                            break;
+                        default:
+                            istate.assign("comments", {
+                                loadingFocusedComment: false,
+                                loadedFocusedComment: false,
+                                focusedCommentId: commentId,
+                                focusedMoment: Number.MIN_SAFE_INTEGER
+                            });
+                            break;
                     }
                 }
+                return istate.value();
             }
             return state;
         }
@@ -95,6 +119,7 @@ export default (state = initialState, action) => {
                 ...cloneDeep(emptyComments),
                 receiverName: action.payload.nodeName,
                 receiverPostingId: action.payload.postingId,
+                focused: state.comments.focused,
                 focusedCommentId: state.comments.focusedCommentId
             });
 
@@ -182,6 +207,12 @@ export default (state = initialState, action) => {
 
         case COMMENTS_SCROLLED_TO_ANCHOR:
             return immutable.set(state, "comments.anchor", null);
+
+        case COMMENTS_SCROLLED_TO_COMMENTS:
+            return immutable.set(state, "comments.focused", false);
+
+        case COMMENTS_SCROLLED_TO_COMPOSER:
+            return immutable.set(state, "compose.focused", false);
 
         case COMMENT_POSTED:
             if (action.payload.nodeName !== state.comments.receiverName

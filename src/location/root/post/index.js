@@ -3,7 +3,7 @@ import { getDetailedPosting, getDetailedPostingId } from "state/detailedposting/
 import { atOwner } from "util/misc";
 
 export function transform(srcInfo, dstInfo) {
-    const commentId = dstInfo.parameters["comment"];
+    const commentId = dstInfo.hash ? dstInfo.hash : dstInfo.parameters["comment"];
     return [goToPosting(dstInfo.directories[1], commentId)];
 }
 

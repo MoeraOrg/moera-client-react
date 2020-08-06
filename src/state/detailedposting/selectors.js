@@ -21,6 +21,10 @@ export function isDetailedPostingToBeLoaded(state) {
     return !state.detailedPosting.loading && getDetailedPosting(state) == null;
 }
 
+export function isDetailedPostingPositioned(state) {
+    return state.detailedPosting.positioned;
+}
+
 export function getCommentsState(state) {
     return state.detailedPosting.comments;
 }
@@ -56,7 +60,7 @@ export function isCommentsReadyToBeLoaded(state) {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     return ownerName != null && posting != null && !isCommentsReceiverToBeSwitched(state)
-        && !isFocusedCommentToBeLoaded(state);
+        && !isFocusedCommentToBeLoaded(state) && !isCommentComposerFocused(state);
 }
 
 export function isFutureCommentsToBeLoaded(state) {
@@ -74,4 +78,12 @@ export function isPastCommentsToBeLoaded(state) {
 export function isCommentMomentInLoadedRange(state, moment) {
     const comments = getCommentsState(state);
     return moment != null && moment <= comments.before && moment > comments.after;
+}
+
+export function isCommentsFocused(state) {
+    return state.detailedPosting.comments.focused;
+}
+
+export function isCommentComposerFocused(state) {
+    return state.detailedPosting.compose.focused;
 }

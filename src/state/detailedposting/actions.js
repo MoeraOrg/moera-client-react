@@ -70,6 +70,16 @@ export const commentsScrolledToAnchor = () => ({
     type: COMMENTS_SCROLLED_TO_ANCHOR
 });
 
+export const COMMENTS_SCROLLED_TO_COMMENTS = "COMMENTS_SCROLLED_TO_COMMENTS";
+export const commentsScrolledToComments = () => ({
+    type: COMMENTS_SCROLLED_TO_COMMENTS
+});
+
+export const COMMENTS_SCROLLED_TO_COMPOSER = "COMMENTS_SCROLLED_TO_COMPOSER";
+export const commentsScrolledToComposer = () => ({
+    type: COMMENTS_SCROLLED_TO_COMPOSER
+});
+
 export const COMMENT_POST = "COMMENT_POST";
 export const commentPost = (postingId, commentText) => ({
     type: COMMENT_POST,

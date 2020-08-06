@@ -17,15 +17,15 @@ import {
     PAGE_SETTINGS,
     PAGE_TIMELINE
 } from "state/navigation/pages";
-import { getCommentsState } from "state/detailedposting/selectors";
+import { isDetailedPostingPositioned } from "state/detailedposting/selectors";
 
 class CurrentPage extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {page, commentsAnchor} = this.props;
+        const {page, positioned} = this.props;
 
         if (page !== prevProps.page && page !== PAGE_TIMELINE && page !== PAGE_NEWS
-            && (page !== PAGE_DETAILED_POSTING || commentsAnchor == null)) {
+            && (page !== PAGE_DETAILED_POSTING || !positioned)) {
 
             window.scrollTo(0, 0);
         }
@@ -57,6 +57,6 @@ class CurrentPage extends React.PureComponent {
 export default connect(
     state => ({
         page: state.navigation.page,
-        commentsAnchor: getCommentsState(state).anchor
+        positioned: isDetailedPostingPositioned(state)
     })
 )(CurrentPage);
