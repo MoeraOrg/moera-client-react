@@ -9,6 +9,10 @@
     padding: .5rem;
 }
 
+.comment.focused .content {
+    border: dashed 1px var(--primary);
+}
+
 .comment .content P:last-child {
     margin-bottom: 0;
 }

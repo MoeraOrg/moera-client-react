@@ -123,7 +123,7 @@ class Comments extends React.PureComponent {
     };
 
     render() {
-        const {postingId, loadingFuture, loadingPast, comments, before, after} = this.props;
+        const {postingId, loadingFuture, loadingPast, comments, before, after, focusedCommentId} = this.props;
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
@@ -138,7 +138,7 @@ class Comments extends React.PureComponent {
                                               onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                             {comments.map(comment =>
                                 <Comment key={comment.moment} postingId={postingId} comment={comment}
-                                         deleting={comment.deleting}/>
+                                         focused={comment.id === focusedCommentId} deleting={comment.deleting}/>
                             )}
                             <CommentsSentinel loading={loadingFuture} title="View later comments"
                                               visible={before < Number.MAX_SAFE_INTEGER}
@@ -161,7 +161,8 @@ export default connect(
         before: getCommentsState(state).before,
         after: getCommentsState(state).after,
         comments: getCommentsState(state).comments,
-        anchor: getCommentsState(state).anchor
+        anchor: getCommentsState(state).anchor,
+        focusedCommentId: getCommentsState(state).focusedCommentId
     }),
     { commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor }
 )(Comments);

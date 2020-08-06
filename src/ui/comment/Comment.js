@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import cx from 'classnames';
 
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
@@ -54,8 +55,8 @@ class Content extends React.PureComponent {
 
 }
 
-const Comment = ({postingId, comment, deleting, isPermitted, connectedToHome}) => (
-    <div className="comment entry" data-moment={comment.moment}>
+const Comment = ({postingId, comment, focused, deleting, isPermitted, connectedToHome}) => (
+    <div className={cx("comment", "entry", {"focused": focused})} data-moment={comment.moment}>
         <CommentMenu comment={comment} isPermitted={isPermitted}/>
         <div className="owner-line">
             <CommentOwner comment={comment}/>
