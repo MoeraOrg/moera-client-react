@@ -46,7 +46,7 @@ export function* initFromLocationSaga(action) {
 export function* goToLocationSaga(action) {
     const current = URI.parse(yield select(state => state.navigation.location));
     const {path, query, hash} = action.payload;
-    yield call(transformation, current.path || "", current.query || "", current.hash || "", path, query, hash);
+    yield call(transformation, current.path || "", current.query || "", current.fragment || "", path, query, hash);
 }
 
 export function* newLocationSaga(action) {

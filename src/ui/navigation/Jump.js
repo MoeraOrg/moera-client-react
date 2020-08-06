@@ -23,8 +23,8 @@ class Jump extends React.PureComponent {
     onNear = e => {
         const {href, onNear, goToLocation} = this.props;
         const performJump = () => {
-            const {path, query, hash} = URI.parse(href);
-            goToLocation(path, query, hash);
+            const {path, query, fragment} = URI.parse(href);
+            goToLocation(path, query, fragment);
         }
         if (onNear != null) {
             onNear(href, performJump);
