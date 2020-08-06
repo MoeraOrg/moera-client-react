@@ -144,10 +144,10 @@ export default (state = initialState, action) => {
         case POSTING_REACTION_SET: {
             const {id, reaction, totals} = action.payload;
             if (state[id]) {
-                let istate = immutable.wrap(state)
+                const istate = immutable.wrap(state)
                                 .set([id, "posting", "reactions"], totals);
                 if (state[id].posting.receiverName == null) {
-                    istate = istate.set([id, "posting", "clientReaction"], reaction)
+                    istate.set([id, "posting", "clientReaction"], reaction);
                 }
                 return istate.value();
             }

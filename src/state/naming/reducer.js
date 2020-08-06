@@ -55,11 +55,11 @@ export default (state = initialState, action) => {
             return immutable.del(state, ["names", action.payload.name]);
 
         case NAMING_NAMES_POPULATE: {
-            let istate = immutable.wrap(state);
+            const istate = immutable.wrap(state);
             action.payload.names
                 .filter(info => state.names[info.name] == null)
                 .forEach(info => {
-                    istate = istate.set(["names", info.name], {
+                    istate.set(["names", info.name], {
                         accessed: info.updated,
                         loading: false,
                         loaded: true,
