@@ -1,6 +1,10 @@
 import { trigger } from "state/trigger";
-import { EVENT_NODE_POSTING_REACTIONS_CHANGED, EVENT_NODE_POSTING_UPDATED } from "api/events/actions";
-import { postingLoad, postingReactionLoad } from "state/postings/actions";
+import {
+    EVENT_NODE_POSTING_COMMENTS_CHANGED,
+    EVENT_NODE_POSTING_REACTIONS_CHANGED,
+    EVENT_NODE_POSTING_UPDATED
+} from "api/events/actions";
+import { postingCommentsSet, postingLoad, postingReactionLoad } from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
 import { STORY_ADDED, STORY_UPDATED } from "state/stories/actions";
 import { isCurrentNodeStory } from "state/stories/selectors";
@@ -22,5 +26,10 @@ export default [
         EVENT_NODE_POSTING_REACTIONS_CHANGED,
         (state, signal) => isPostingCached(state, signal.payload.id),
         signal => postingReactionLoad(signal.payload.id)
+    ),
+    trigger(
+        EVENT_NODE_POSTING_COMMENTS_CHANGED,
+        (state, signal) => isPostingCached(state, signal.payload.id),
+        signal => postingCommentsSet(signal.payload.id, signal.payload.total)
     )
 ];

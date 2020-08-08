@@ -238,6 +238,11 @@ export const EVENT_SCHEMES = {
     "POSTING_DELETED": postingEvent(),
     "POSTING_RESTORED": postingEvent(),
     "POSTING_REACTIONS_CHANGED": postingEvent(),
+    "POSTING_COMMENTS_CHANGED": postingEvent({
+        "total": {
+            type: "integer"
+        }
+    }),
     "REGISTERED_NAME_OPERATION_STATUS": baseEvent(),
     "NODE_NAME_CHANGED": baseEvent({
         "name": {
