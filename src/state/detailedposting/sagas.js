@@ -4,6 +4,7 @@ import clipboardCopy from 'clipboard-copy';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    commentDialogCommentLoaded, commentDialogCommentLoadFailed,
     commentLoadFailed,
     commentPosted,
     commentPostFailed,
@@ -18,7 +19,12 @@ import {
     focusedCommentLoaded,
     focusedCommentLoadFailed
 } from "state/detailedposting/actions";
-import { getCommentsState, getDetailedPosting, getDetailedPostingId } from "state/detailedposting/selectors";
+import {
+    getCommentComposerCommentId,
+    getCommentsState,
+    getDetailedPosting,
+    getDetailedPostingId
+} from "state/detailedposting/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { postingCommentsSet } from "state/postings/actions";
 import { getOwnerName } from "state/owner/selectors";
@@ -85,17 +91,17 @@ export function* commentLoadSaga(action) {
 }
 
 export function* commentPostSaga(action) {
-    const {id, postingId, commentText} = action.payload;
+    const {commentId, postingId, commentText} = action.payload;
 
     const {receiverName, receiverPostingId} = yield select(getCommentsState);
     try {
         let comment;
-        if (id == null) {
+        if (commentId == null) {
             const data = yield call(Node.postComment, receiverName, receiverPostingId, commentText);
             yield put(postingCommentsSet(postingId, data.total));
             comment = data.comment;
         } else {
-            comment = yield call(Node.putComment, receiverName, receiverPostingId, id, commentText);
+            comment = yield call(Node.putComment, receiverName, receiverPostingId, commentId, commentText);
         }
         yield put(commentSet(receiverName, comment));
         yield put(commentPosted(receiverName, receiverPostingId));
@@ -124,6 +130,21 @@ export function* commentCopyLinkSaga(action) {
         yield call(clipboardCopy, `${href}?comment=${id}`);
         yield put(flashBox("Link copied to the clipboard"));
     } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentDialogCommentLoadSaga() {
+    const {receiverName, receiverPostingId, commentId} = yield select(state => ({
+        receiverName: getCommentsState(state).receiverName,
+        receiverPostingId: getCommentsState(state).receiverPostingId,
+        commentId: getCommentComposerCommentId(state)
+    }));
+    try {
+        const data = yield call(Node.getComment, receiverName, receiverPostingId, commentId, true);
+        yield put(commentDialogCommentLoaded(data));
+    } catch (e) {
+        yield put(commentDialogCommentLoadFailed());
         yield put(errorThrown(e));
     }
 }

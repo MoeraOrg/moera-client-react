@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { DropdownMenu } from "ui/control";
 import { postingDelete } from "state/postings/actions";
-import { commentCopyLink } from "state/detailedposting/actions";
+import { commentCopyLink, openCommentDialog } from "state/detailedposting/actions";
 
 class CommentMenu extends React.PureComponent {
 
@@ -14,9 +14,9 @@ class CommentMenu extends React.PureComponent {
     };
 
     onEdit = () => {
-        const {posting, goToCompose} = this.props;
+        const {comment, openCommentDialog} = this.props;
 
-        goToCompose(posting.id);
+        openCommentDialog(comment.id);
     };
 
     onDelete = () => {
@@ -60,5 +60,5 @@ export default connect(
     state => ({
         rootLocation: state.node.root.location,
     }),
-    { commentCopyLink }
+    { commentCopyLink, openCommentDialog }
 )(CommentMenu);

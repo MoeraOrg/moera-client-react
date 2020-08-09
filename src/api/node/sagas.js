@@ -358,12 +358,13 @@ export function* getCommentsSlice(nodeName, postingId, after, before, limit) {
     });
 }
 
-export function* getComment(nodeName, postingId, id) {
+export function* getComment(nodeName, postingId, id, withSource = false) {
+    const include = withSource ? "source" : null;
     postingId = encodeURIComponent(postingId);
     id = encodeURIComponent(id);
+    const location = urlWithParameters(`/postings/${postingId}/comments/${id}`, {include});
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments/${id}`, auth: true, schema: NodeApi.CommentInfo,
-        withBodies: true
+        nodeName, location, auth: true, schema: NodeApi.CommentInfo, withBodies: true
     });
 }
 

@@ -97,3 +97,15 @@ export function isCommentsFocused(state) {
 export function isCommentComposerFocused(state) {
     return state.detailedPosting.compose.focused;
 }
+
+export function getCommentComposerCommentId(state) {
+    return state.detailedPosting.compose.commentId;
+}
+
+export function getCommentComposerComment(state) {
+    return state.detailedPosting.compose.comment;
+}
+
+export function isCommentDialogShown(state) {
+    return state.detailedPosting.compose.showDialog;
+}

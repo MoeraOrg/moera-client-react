@@ -18,6 +18,7 @@ import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinel from "ui/comment/CommentsSentinel";
 import Comment from "ui/comment/Comment";
 import CommentCompose from "ui/comment/CommentCompose";
+import CommentDialog from "ui/comment/CommentDialog";
 import "./Comments.css";
 
 class Comments extends React.PureComponent {
@@ -173,6 +174,7 @@ class Comments extends React.PureComponent {
                     }
                 </div>
                 <CommentCompose/>
+                <CommentDialog/>
             </>
         );
     }

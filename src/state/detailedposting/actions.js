@@ -81,9 +81,9 @@ export const commentsScrolledToComposer = () => ({
 });
 
 export const COMMENT_POST = "COMMENT_POST";
-export const commentPost = (postingId, commentText) => ({
+export const commentPost = (postingId, commentId, commentText) => ({
     type: COMMENT_POST,
-    payload: {postingId, commentText}
+    payload: {postingId, commentId, commentText}
 });
 
 export const COMMENT_POSTED = "COMMENT_POSTED";
@@ -137,4 +137,31 @@ export const COMMENT_COPY_LINK = "COMMENT_COPY_LINK";
 export const commentCopyLink = (id, postingId) => ({
     type: COMMENT_COPY_LINK,
     payload: {id, postingId}
+});
+
+export const OPEN_COMMENT_DIALOG = "OPEN_COMMENT_DIALOG";
+export const openCommentDialog = (commentId) => ({
+    type: OPEN_COMMENT_DIALOG,
+    payload: {commentId}
+});
+
+export const CLOSE_COMMENT_DIALOG = "CLOSE_COMMENT_DIALOG";
+export const closeCommentDialog = () => ({
+    type: CLOSE_COMMENT_DIALOG
+});
+
+export const COMMENT_DIALOG_COMMENT_LOAD = "COMMENT_DIALOG_COMMENT_LOAD";
+export const commentDialogCommentLoad = () => ({
+    type: COMMENT_DIALOG_COMMENT_LOAD
+});
+
+export const COMMENT_DIALOG_COMMENT_LOADED = "COMMENT_DIALOG_COMMENT_LOADED";
+export const commentDialogCommentLoaded = (comment) => ({
+    type: COMMENT_DIALOG_COMMENT_LOADED,
+    payload: {comment}
+});
+
+export const COMMENT_DIALOG_COMMENT_LOAD_FAILED = "COMMENT_DIALOG_COMMENT_LOAD_FAILED";
+export const commentDialogCommentLoadFailed = () => ({
+    type: COMMENT_DIALOG_COMMENT_LOAD_FAILED
 });

@@ -4,6 +4,10 @@ import cloneDeep from 'lodash.clonedeep';
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
+    CLOSE_COMMENT_DIALOG,
+    COMMENT_DIALOG_COMMENT_LOAD,
+    COMMENT_DIALOG_COMMENT_LOAD_FAILED,
+    COMMENT_DIALOG_COMMENT_LOADED, COMMENT_POST, COMMENT_POST_FAILED,
     COMMENT_POSTED,
     COMMENT_SET,
     COMMENTS_FUTURE_SLICE_LOAD,
@@ -22,7 +26,8 @@ import {
     DETAILED_POSTING_LOADED,
     FOCUSED_COMMENT_LOAD,
     FOCUSED_COMMENT_LOAD_FAILED,
-    FOCUSED_COMMENT_LOADED
+    FOCUSED_COMMENT_LOADED,
+    OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import { safeHtml, safePreviewHtml } from "util/html";
 
@@ -42,6 +47,15 @@ const emptyComments = {
     focusedMoment: Number.MIN_SAFE_INTEGER
 };
 
+const emptyCompose = {
+    beingPosted: false,
+    focused: false,
+    showDialog: false,
+    loading: false,
+    commentId: null,
+    comment: null
+};
+
 const initialState = {
     id: null,
     loading: false,
@@ -49,8 +63,7 @@ const initialState = {
     positioned: false,
     compose: {
         formId: 0,
-        beingPosted: false,
-        focused: false
+        ...emptyCompose
     }
 };
 
@@ -74,8 +87,7 @@ export default (state = initialState, action) => {
                     istate.set("id", id)
                         .set("loading", false)
                         .assign("comments", cloneDeep(emptyComments))
-                        .set("compose.beingPosted", false)
-                        .set("compose.focused", false);
+                        .assign("compose", cloneDeep(emptyCompose))
                 }
                 istate.set("positioned", commentId != null);
                 if (commentId != null) {
@@ -214,12 +226,21 @@ export default (state = initialState, action) => {
         case COMMENTS_SCROLLED_TO_COMPOSER:
             return immutable.set(state, "compose.focused", false);
 
+        case COMMENT_POST:
+            return immutable.set(state, "compose.beingPosted", true);
+
         case COMMENT_POSTED:
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
-            return immutable.set(state, "compose.formId", state.compose.formId + 1);
+            return immutable.assign(state, "compose", {
+                formId: state.compose.formId + 1,
+                beingPosted: false
+            });
+
+        case COMMENT_POST_FAILED:
+            return immutable.set(state, "compose.beingPosted", false);
 
         case COMMENT_SET: {
             const {nodeName, comment} = action.payload;
@@ -264,6 +285,27 @@ export default (state = initialState, action) => {
                 focusedMoment: comment.moment
             });
         }
+
+        case OPEN_COMMENT_DIALOG:
+            return immutable.assign(state, "compose", {
+                showDialog: true,
+                commentId: action.payload.commentId
+            });
+
+        case CLOSE_COMMENT_DIALOG:
+            return immutable.set(state, "compose.showDialog", false);
+
+        case COMMENT_DIALOG_COMMENT_LOAD:
+            return immutable.set(state, "compose.loading", true);
+
+        case COMMENT_DIALOG_COMMENT_LOADED:
+            return immutable.assign(state, "compose", {
+                loading: true,
+                comment: action.payload.comment
+            });
+
+        case COMMENT_DIALOG_COMMENT_LOAD_FAILED:
+            return immutable.set(state, "compose.loading", false);
 
         default:
             return state;
