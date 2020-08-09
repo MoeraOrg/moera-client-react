@@ -96,17 +96,22 @@ export function* postingReactionDeleteSaga(action) {
     }
 }
 
+export function* postingGetLink(id) {
+    const posting = yield select(getPosting, id);
+    if (posting.receiverName == null) {
+        const rootLocation = yield select(state => state.node.root.location);
+        return `${rootLocation}/moera/post/${id}`;
+    } else {
+        const nodeUri = yield call(getNodeUri, posting.receiverName);
+        return `${nodeUri}/post/${posting.receiverPostingId}`;
+    }
+}
+
 export function* postingCopyLinkSaga(action) {
     const {id} = action.payload;
-    const posting = yield select(getPosting, id);
     try {
-        if (posting.receiverName == null) {
-            const rootLocation = yield select(state => state.node.root.location);
-            yield call(clipboardCopy, `${rootLocation}/moera/post/${id}`);
-        } else {
-            const nodeUri = yield call(getNodeUri, posting.receiverName);
-            yield call(clipboardCopy, `${nodeUri}/post/${posting.receiverPostingId}`);
-        }
+        const href = yield call(postingGetLink, id);
+        yield call(clipboardCopy, href);
         yield put(flashBox("Link copied to the clipboard"));
     } catch (e) {
         yield put(errorThrown(e));

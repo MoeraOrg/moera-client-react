@@ -22,9 +22,8 @@ import { getCommentsState, getDetailedPosting, getDetailedPostingId } from "stat
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { postingCommentsSet } from "state/postings/actions";
 import { getOwnerName } from "state/owner/selectors";
-import { getPosting } from "state/postings/selectors";
-import { getNodeUri } from "state/naming/sagas";
 import { flashBox } from "state/flashbox/actions";
+import { postingGetLink } from "state/postings/sagas";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -120,15 +119,9 @@ export function* focusedCommentLoadSaga() {
 
 export function* commentCopyLinkSaga(action) {
     const {id, postingId} = action.payload;
-    const posting = yield select(getPosting, postingId);
     try {
-        if (posting.receiverName == null) {
-            const rootLocation = yield select(state => state.node.root.location);
-            yield call(clipboardCopy, `${rootLocation}/moera/post/${postingId}?comment=${id}`);
-        } else {
-            const nodeUri = yield call(getNodeUri, posting.receiverName);
-            yield call(clipboardCopy, `${nodeUri}/post/${posting.receiverPostingId}?comment=${id}`);
-        }
+        const href = yield call(postingGetLink, postingId);
+        yield call(clipboardCopy, `${href}?comment=${id}`);
         yield put(flashBox("Link copied to the clipboard"));
     } catch (e) {
         yield put(errorThrown(e));
