@@ -108,5 +108,5 @@ export default connect(
     state => ({
         rootLocation: state.node.root.location,
     }),
-    {goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply}
+    { goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply }
 )(PostingMenu);
