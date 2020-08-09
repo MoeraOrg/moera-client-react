@@ -132,3 +132,9 @@ export const focusedCommentLoadFailed = (nodeName, postingId) => ({
     type: FOCUSED_COMMENT_LOAD_FAILED,
     payload: {nodeName, postingId}
 });
+
+export const COMMENT_COPY_LINK = "COMMENT_COPY_LINK";
+export const commentCopyLink = (id, postingId) => ({
+    type: COMMENT_COPY_LINK,
+    payload: {id, postingId}
+});

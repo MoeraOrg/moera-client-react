@@ -27,6 +27,7 @@ import {
     FEED_UNSUBSCRIBE
 } from "state/feeds/actions";
 import {
+    COMMENT_COPY_LINK,
     COMMENT_LOAD,
     COMMENT_POST,
     COMMENTS_FUTURE_SLICE_LOAD,
@@ -129,6 +130,7 @@ import {
     feedUnsubscribeSaga
 } from "state/feeds/sagas";
 import {
+    commentCopyLinkSaga,
     commentLoadSaga,
     commentPostSaga,
     commentsFutureSliceLoadSaga,
@@ -287,6 +289,7 @@ function* combinedSaga() {
     yield takeEvery(COMMENT_LOAD, commentLoadSaga);
     yield takeLatest(COMMENT_POST, commentPostSaga);
     yield takeLatest(FOCUSED_COMMENT_LOAD, focusedCommentLoadSaga);
+    yield takeEvery(COMMENT_COPY_LINK, commentCopyLinkSaga);
 
     yield invokeTriggers(triggers);
 }

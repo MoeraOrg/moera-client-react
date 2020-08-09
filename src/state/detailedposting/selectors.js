@@ -56,11 +56,21 @@ export function isFocusedCommentToBeLoaded(state) {
     return comments.focusedCommentId != null && !comments.loadedFocusedComment && !comments.loadingFocusedComment;
 }
 
+export function isFocusedCommentReady(state) {
+    const ownerName = getOwnerName(state);
+    const posting = getDetailedPosting(state);
+    if (ownerName == null || posting == null || isCommentsReceiverToBeSwitched(state)) {
+        return false;
+    }
+    const comments = getCommentsState(state);
+    return comments.focusedCommentId == null || comments.loadedFocusedComment;
+}
+
 export function isCommentsReadyToBeLoaded(state) {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     return ownerName != null && posting != null && !isCommentsReceiverToBeSwitched(state)
-        && !isFocusedCommentToBeLoaded(state) && !isCommentComposerFocused(state);
+        && isFocusedCommentReady(state) && !isCommentComposerFocused(state);
 }
 
 export function isFutureCommentsToBeLoaded(state) {

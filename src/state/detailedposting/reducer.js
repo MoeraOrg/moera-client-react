@@ -257,7 +257,7 @@ export default (state = initialState, action) => {
             return immutable.assign(state, "comments", {
                 before: comment.moment,
                 after: comment.moment - 1,
-                comments: [comment],
+                comments: [extractComment(comment)],
                 anchor: comment.moment,
                 loadingFocusedComment: false,
                 loadedFocusedComment: true,

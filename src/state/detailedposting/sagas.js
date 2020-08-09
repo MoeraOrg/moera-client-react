@@ -1,4 +1,5 @@
 import { call, put, select } from 'redux-saga/effects';
+import clipboardCopy from 'clipboard-copy';
 
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
@@ -21,6 +22,9 @@ import { getCommentsState, getDetailedPosting, getDetailedPostingId } from "stat
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { postingCommentsSet } from "state/postings/actions";
 import { getOwnerName } from "state/owner/selectors";
+import { getPosting } from "state/postings/selectors";
+import { getNodeUri } from "state/naming/sagas";
+import { flashBox } from "state/flashbox/actions";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -61,7 +65,7 @@ export function* commentsFutureSliceLoadSaga() {
     try {
         const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
         yield put(commentsFutureSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after));
-        // yield call(cacheNames, data.stories);
+        // TODO yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId));
         yield put(errorThrown(e));
@@ -110,6 +114,23 @@ export function* focusedCommentLoadSaga() {
         yield put(focusedCommentLoaded(receiverName, data));
     } catch (e) {
         yield put(focusedCommentLoadFailed(receiverName, receiverPostingId));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentCopyLinkSaga(action) {
+    const {id, postingId} = action.payload;
+    const posting = yield select(getPosting, postingId);
+    try {
+        if (posting.receiverName == null) {
+            const rootLocation = yield select(state => state.node.root.location);
+            yield call(clipboardCopy, `${rootLocation}/moera/post/${postingId}?comment=${id}`);
+        } else {
+            const nodeUri = yield call(getNodeUri, posting.receiverName);
+            yield call(clipboardCopy, `${nodeUri}/post/${posting.receiverPostingId}?comment=${id}`);
+        }
+        yield put(flashBox("Link copied to the clipboard"));
+    } catch (e) {
         yield put(errorThrown(e));
     }
 }

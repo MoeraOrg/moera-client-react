@@ -17,7 +17,7 @@ export function getNodeToken(state) {
 }
 
 export function getNodePermissions(state) {
-    return selectn(["tokens", state.node.root.location, "permissions"], state);
+    return selectn(["tokens", state.node.root.location, "permissions"], state) ?? [];
 }
 
 export function isNodeAdmin(state) {

@@ -57,7 +57,7 @@ class Content extends React.PureComponent {
 
 const Comment = ({postingId, comment, focused, deleting, isPermitted, connectedToHome}) => (
     <div className={cx("comment", "entry", {"focused": focused})} data-moment={comment.moment}>
-        <CommentMenu comment={comment} isPermitted={isPermitted}/>
+        <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
         <div className="owner-line">
             <CommentOwner comment={comment}/>
             <CommentDate postingId={postingId} comment={comment}/>
