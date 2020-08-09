@@ -3,7 +3,6 @@ import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import { getCommentsState } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
-import { normalizeUrl, toWsUrl } from "util/misc";
 
 export function isAtHomeNode(state) {
     return state.home.root.api === state.node.root.api;
