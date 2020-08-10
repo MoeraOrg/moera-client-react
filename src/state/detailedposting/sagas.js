@@ -4,6 +4,7 @@ import clipboardCopy from 'clipboard-copy';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    commentDeleted, commentDeleteFailed,
     commentDialogCommentLoaded, commentDialogCommentLoadFailed,
     commentLoadFailed,
     commentPosted,
@@ -26,10 +27,11 @@ import {
     getDetailedPostingId
 } from "state/detailedposting/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
-import { postingCommentsSet } from "state/postings/actions";
+import { postingCommentsSet, postingReactionSet } from "state/postings/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
+import { getPosting } from "state/postings/selectors";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -108,6 +110,25 @@ export function* commentPostSaga(action) {
         yield call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentText);
     } catch (e) {
         yield put(commentPostFailed(receiverName, receiverPostingId));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentDeleteSaga(action) {
+    const {commentId} = action.payload;
+
+    const {postingId, receiverName, receiverPostingId} = yield select(state => ({
+        postingId: getDetailedPostingId(state),
+        receiverName: getCommentsState(state).receiverName,
+        receiverPostingId: getCommentsState(state).receiverPostingId
+    }));
+    try {
+        const data = yield call(Node.deleteComment, receiverName, receiverPostingId, commentId);
+        yield put(commentDeleted(receiverName, receiverPostingId, commentId));
+        yield put(postingCommentsSet(postingId, data.total));
+        yield call(Node.deleteRemoteComment, ":", receiverName, receiverPostingId, commentId);
+    } catch (e) {
+        yield put(commentDeleteFailed(receiverName, receiverPostingId, commentId));
         yield put(errorThrown(e));
     }
 }

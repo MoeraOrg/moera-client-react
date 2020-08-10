@@ -1,0 +1,8 @@
+.comment .deleting {
+    color: var(--gray-medium);
+}
+
+.comment .deleting .loading {
+    color: var(--gray-medium);
+    fill: var(--gray-medium) !important;
+}

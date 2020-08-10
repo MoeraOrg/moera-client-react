@@ -394,3 +394,21 @@ export function* putRemoteComment(nodeName, remoteNodeName, postingId, id, comme
         body: commentText, schema: NodeApi.Result
     });
 }
+
+export function* deleteComment(nodeName, postingId, id) {
+    postingId = encodeURIComponent(postingId);
+    id = encodeURIComponent(id);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments/${id}`, method: "DELETE", auth: true,
+        schema: NodeApi.CommentTotalInfo
+    });
+}
+
+export function* deleteRemoteComment(nodeName, remoteNodeName, postingId, id) {
+    postingId = encodeURIComponent(postingId);
+    id = encodeURIComponent(id);
+    return yield call(callApi, {
+        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "DELETE",
+        auth: true, schema: NodeApi.Result
+    });
+}

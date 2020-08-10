@@ -969,3 +969,13 @@ export const CommentsSliceInfo = schema({
     },
     additionalProperties: false
 });
+
+export const CommentTotalInfo = schema({
+    type: "object",
+    properties: {
+        "total": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false
+});

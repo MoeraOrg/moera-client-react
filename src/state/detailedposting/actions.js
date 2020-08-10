@@ -116,6 +116,24 @@ export const commentLoadFailed = (nodeName, postingId, commentId) => ({
     payload: {nodeName, postingId, commentId}
 });
 
+export const COMMENT_DELETE = "COMMENT_DELETE";
+export const commentDelete = (commentId) => ({
+    type: COMMENT_DELETE,
+    payload: {commentId}
+});
+
+export const COMMENT_DELETED = "COMMENT_DELETED";
+export const commentDeleted = (nodeName, postingId, commentId) => ({
+    type: COMMENT_DELETED,
+    payload: {nodeName, postingId, commentId}
+});
+
+export const COMMENT_DELETE_FAILED = "COMMENT_DELETE_FAILED";
+export const commentDeleteFailed = (nodeName, postingId, commentId) => ({
+    type: COMMENT_DELETE_FAILED,
+    payload: {nodeName, postingId, commentId}
+});
+
 export const FOCUSED_COMMENT_LOAD = "FOCUSED_COMMENT_LOAD";
 export const focusedCommentLoad = () => ({
     type: FOCUSED_COMMENT_LOAD

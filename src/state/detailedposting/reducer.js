@@ -5,9 +5,14 @@ import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CLOSE_COMMENT_DIALOG,
+    COMMENT_DELETE,
+    COMMENT_DELETE_FAILED,
+    COMMENT_DELETED,
     COMMENT_DIALOG_COMMENT_LOAD,
     COMMENT_DIALOG_COMMENT_LOAD_FAILED,
-    COMMENT_DIALOG_COMMENT_LOADED, COMMENT_POST, COMMENT_POST_FAILED,
+    COMMENT_DIALOG_COMMENT_LOADED,
+    COMMENT_POST,
+    COMMENT_POST_FAILED,
     COMMENT_POSTED,
     COMMENT_SET,
     COMMENTS_FUTURE_SLICE_LOAD,
@@ -74,6 +79,7 @@ function extractComment(comment) {
     return immutable.wrap(comment)
         .update("bodyPreview.text", text => safePreviewHtml(text))
         .update("body.text", text => safeHtml(text))
+        .set("deleting", false)
         .value();
 }
 
@@ -255,6 +261,38 @@ export default (state = initialState, action) => {
                 return immutable.set(state, "comments.comments", comments);
             }
             return state;
+        }
+
+        case COMMENT_DELETE: {
+            const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
+            if (index < 0) {
+                return state;
+            }
+            return immutable.set(state, ["comments", "comments", index, "deleting"], true);
+        }
+
+        case COMMENT_DELETED: {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
+            if (index < 0) {
+                return state;
+            }
+            return immutable.del(state, ["comments", "comments", index, "deleting"]);
+        }
+
+        case COMMENT_DELETE_FAILED: {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
+            if (index < 0) {
+                return state;
+            }
+            return immutable.set(state, ["comments", "comments", index, "deleting"], false);
         }
 
         case FOCUSED_COMMENT_LOAD:

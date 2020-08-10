@@ -9,6 +9,7 @@ import CommentMenu from "ui/comment/CommentMenu";
 import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
+import CommentDeleting from "ui/comment/CommentDeleting";
 import "./Comment.css";
 
 class Content extends React.PureComponent {
@@ -55,15 +56,21 @@ class Content extends React.PureComponent {
 
 }
 
-const Comment = ({postingId, comment, focused, deleting, isPermitted, connectedToHome}) => (
+const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) => (
     <div className={cx("comment", "entry", {"focused": focused})} data-moment={comment.moment}>
-        <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
-        <div className="owner-line">
-            <CommentOwner comment={comment}/>
-            <CommentDate postingId={postingId} comment={comment}/>
-            <CommentUpdated comment={comment}/>
-        </div>
-        <Content className="content" comment={comment}/>
+        {comment.deleting ?
+            <CommentDeleting/>
+        :
+            <>
+                <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
+                <div className="owner-line">
+                    <CommentOwner comment={comment}/>
+                    <CommentDate postingId={postingId} comment={comment}/>
+                    <CommentUpdated comment={comment}/>
+                </div>
+                <Content className="content" comment={comment}/>
+            </>
+        }
     </div>
 );
 

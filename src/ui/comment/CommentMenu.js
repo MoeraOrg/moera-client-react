@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { DropdownMenu } from "ui/control";
-import { postingDelete } from "state/postings/actions";
-import { commentCopyLink, openCommentDialog } from "state/detailedposting/actions";
+import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
+import { confirmBox } from "state/confirmbox/actions";
 
 class CommentMenu extends React.PureComponent {
 
@@ -20,10 +20,10 @@ class CommentMenu extends React.PureComponent {
     };
 
     onDelete = () => {
-        const {posting, confirmBox} = this.props;
+        const {comment, confirmBox} = this.props;
 
-        confirmBox(`Do you really want to delete the post "${posting.heading}"?`, "Delete", "Cancel",
-            postingDelete(posting.id), null, "danger");
+        confirmBox(`Do you really want to delete the comment "${comment.heading}"?`, "Delete", "Cancel",
+            commentDelete(comment.id), null, "danger");
     };
 
     render() {
@@ -47,7 +47,7 @@ class CommentMenu extends React.PureComponent {
                     title: "Delete",
                     href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
                     onClick: this.onDelete,
-                    show: isPermitted("delete", comment),
+                    show: isPermitted("delete", comment), // FIXME all permissions work?
                     divider: true
                 }
             ]}/>
@@ -60,5 +60,5 @@ export default connect(
     state => ({
         rootLocation: state.node.root.location,
     }),
-    { commentCopyLink, openCommentDialog }
+    { commentCopyLink, openCommentDialog, confirmBox }
 )(CommentMenu);

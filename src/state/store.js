@@ -28,6 +28,7 @@ import {
 } from "state/feeds/actions";
 import {
     COMMENT_COPY_LINK,
+    COMMENT_DELETE,
     COMMENT_DIALOG_COMMENT_LOAD,
     COMMENT_LOAD,
     COMMENT_POST,
@@ -132,6 +133,7 @@ import {
 } from "state/feeds/sagas";
 import {
     commentCopyLinkSaga,
+    commentDeleteSaga,
     commentDialogCommentLoadSaga,
     commentLoadSaga,
     commentPostSaga,
@@ -290,6 +292,7 @@ function* combinedSaga() {
     yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
     yield takeEvery(COMMENT_LOAD, commentLoadSaga);
     yield takeLatest(COMMENT_POST, commentPostSaga);
+    yield takeEvery(COMMENT_DELETE, commentDeleteSaga);
     yield takeLatest(FOCUSED_COMMENT_LOAD, focusedCommentLoadSaga);
     yield takeEvery(COMMENT_COPY_LINK, commentCopyLinkSaga);
     yield takeLatest(COMMENT_DIALOG_COMMENT_LOAD, commentDialogCommentLoadSaga);
