@@ -35,6 +35,7 @@ import {
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import { safeHtml, safePreviewHtml } from "util/html";
+import { EVENT_RECEIVER_COMMENT_DELETED } from "api/events/actions";
 
 const emptyComments = {
     receiverName: null,
@@ -280,7 +281,7 @@ export default (state = initialState, action) => {
             if (index < 0) {
                 return state;
             }
-            return immutable.del(state, ["comments", "comments", index, "deleting"]);
+            return immutable.del(state, ["comments", "comments", index]);
         }
 
         case COMMENT_DELETE_FAILED: {
@@ -293,6 +294,21 @@ export default (state = initialState, action) => {
                 return state;
             }
             return immutable.set(state, ["comments", "comments", index, "deleting"], false);
+        }
+
+        case EVENT_RECEIVER_COMMENT_DELETED: {
+            const {id, postingId, moment} = action.payload;
+
+            if (state.comments.receiverPostingId !== postingId
+                || moment > state.comments.before
+                || moment <= state.comments.after) {
+                return state;
+            }
+            const index = state.comments.comments.findIndex(c => c.id === id);
+            if (index < 0) {
+                return state;
+            }
+            return immutable.del(state, ["comments", "comments", index]);
         }
 
         case FOCUSED_COMMENT_LOAD:
