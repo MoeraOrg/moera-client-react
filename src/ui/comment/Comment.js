@@ -11,6 +11,7 @@ import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentDeleting from "ui/comment/CommentDeleting";
 import "./Comment.css";
+import { getCommentsState } from "state/detailedposting/selectors";
 
 class Content extends React.PureComponent {
 
@@ -77,6 +78,7 @@ const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
 export default connect(
     state => ({
         connectedToHome: isConnectedToHome(state),
-        isPermitted: (operation, comment) => isPermitted(operation, comment, state)
+        isPermitted: (operation, comment) =>
+            isPermitted(operation, comment, state, getCommentsState(state).receiverName)
     })
 )(Comment);

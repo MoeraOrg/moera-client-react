@@ -1,8 +1,6 @@
 import selectn from 'selectn';
-import { isAtDetailedPostingPage } from "state/navigation/selectors";
-import { getCommentsState } from "state/detailedposting/selectors";
-import { getOwnerName } from "state/owner/selectors";
-import { getNamingNameDetails } from "state/naming/selectors";
+
+import { getHomeOwnerName } from "state/home/selectors";
 
 export function isAtHomeNode(state) {
     return state.home.root.api === state.node.root.api;
@@ -20,12 +18,21 @@ export function getNodePermissions(state) {
     return selectn(["tokens", state.node.root.location, "permissions"], state) ?? [];
 }
 
+export function getHomePermissions(state) {
+    return selectn(["tokens", state.home.root.location, "permissions"], state) ?? [];
+}
+
 export function isNodeAdmin(state) {
     const permissions = getNodePermissions(state);
     return isAtHomeNode(state) && permissions != null && permissions.includes("admin");
 }
 
-export function isPermitted(operation, object, state) {
+export function isReceiverAdmin(state, receiverName) {
+    const permissions = getHomePermissions(state);
+    return getHomeOwnerName(state) === receiverName && permissions != null && permissions.includes("admin");
+}
+
+export function isPermitted(operation, object, state, receiverName = null) {
     const requirements = selectn(["operations", operation], object);
     if (requirements == null) {
         return false;
@@ -40,7 +47,7 @@ export function isPermitted(operation, object, state) {
                 }
                 break;
             case "admin":
-                if (isNodeAdmin(state)) {
+                if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
                     return true;
                 }
                 break;
@@ -52,20 +59,4 @@ export function isPermitted(operation, object, state) {
         }
     }
     return false;
-}
-
-export function getReceiverNodeName(state) {
-    if (isAtDetailedPostingPage(state)) {
-        const receiverName = getCommentsState(state).receiverName;
-        return receiverName != null && receiverName !== getOwnerName(state) ? receiverName : null;
-    }
-}
-
-export function getReceiverNodeUri(state) {
-    const receiverName = getReceiverNodeName(state);
-    if (receiverName == null) {
-        return null;
-    }
-    const details = getNamingNameDetails(state, receiverName);
-    return details.loaded && details.nodeUri != null ? details.nodeUri : null;
 }

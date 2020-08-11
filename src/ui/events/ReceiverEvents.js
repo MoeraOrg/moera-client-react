@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Events from "ui/events/Events";
-import { getReceiverNodeName, getReceiverNodeUri, getToken } from "state/node/selectors";
+import { getToken } from "state/node/selectors";
+import { getReceiverNodeName, getReceiverNodeUri } from "state/receiver/selectors";
 import { nodeUrlToEvents, nodeUrlToLocation } from "util/misc";
 
 const ReceiverEvents = ({nodeEvents, token, sourceNode}) => (
