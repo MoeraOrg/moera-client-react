@@ -23,7 +23,7 @@ export function safePreviewHtml(html) {
         return "";
     }
     return sanitizeHtml(replaceEmojis(html), {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img"]),
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "del", "ins", "sub"]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
             img: ["src", "srcset", "width", "height", "style"],
@@ -44,7 +44,7 @@ export function safeHtml(html) {
         return "";
     }
     return sanitizeHtml(replaceEmojis(html), {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["h1", "h2", "img"]),
+        allowedTags: sanitizeHtml.defaults.allowedTags.concat(["h1", "h2", "img", "del", "ins", "sub"]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
             img: ["src", "srcset", "width", "height", "style"],
