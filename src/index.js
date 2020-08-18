@@ -21,8 +21,7 @@ function buildInitAction() {
     let query = window.location.search;
     let hash = window.location.hash;
 
-    const body = document.getElementsByTagName("body")[0];
-    const header = body.getAttribute("data-x-moera");
+    const header = document.body.getAttribute("data-x-moera");
     if (header) {
         header
             .split(/\s*;\s*/)
