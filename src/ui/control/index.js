@@ -2,6 +2,7 @@ export { Button } from "ui/control/Button";
 export { Column } from "ui/control/Column";
 export { ConflictWarning } from "ui/control/ConflictWarning";
 export { DropdownMenu } from "ui/control/DropdownMenu";
+export { EmojiButton } from "ui/control/EmojiButton";
 export { EmojiListDialog } from "ui/control/EmojiListDialog";
 export { EmojiListInput } from "ui/control/EmojiListInput";
 export { EmojiSelector } from "ui/control/EmojiSelector";
