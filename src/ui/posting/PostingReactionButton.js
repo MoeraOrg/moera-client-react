@@ -23,12 +23,12 @@ const PostingReactionButtonMain = ({id, icon, caption, invisible, negative, emoj
     if (emoji == null) {
         return <PostingButton icon={["far", icon]} caption={caption} invisible={invisible} buttonRef={buttonRef}
                               onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                              onClick={e => postingReact(id, negative, defaultEmoji)}/>;
+                              onClick={() => postingReact(id, negative, defaultEmoji)}/>;
     } else {
         const re = !negative ? REACTION_EMOJIS.positive[emoji] : REACTION_EMOJIS.negative[emoji];
         return <PostingButton emoji={emoji} caption={re ? re.title : caption} color={re ? re.color : null}
                               buttonRef={buttonRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                              onClick={e => postingReactionDelete(id)}/>;
+                              onClick={() => postingReactionDelete(id)}/>;
     }
 };
 
