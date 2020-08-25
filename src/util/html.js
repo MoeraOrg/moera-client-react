@@ -1,5 +1,5 @@
 import sanitizeHtml from 'sanitize-html';
-import { parse as parseEmojis } from 'twemoji-parser';
+import {parse as parseEmojis} from 'twemoji-parser';
 
 export function replaceEmojis(html) {
     if (!html) {
@@ -31,6 +31,9 @@ export function safePreviewHtml(html) {
             img: ["src", "srcset", "width", "height", "style"],
             a: ["href", "data-nodename"]
         },
+        allowedClasses: {
+            'details': 'spoiler'
+        },
         transformTags: {
             "h1": "b",
             "h2": "b",
@@ -53,6 +56,9 @@ export function safeHtml(html) {
             ...sanitizeHtml.defaults.allowedAttributes,
             img: ["src", "srcset", "width", "height", "style"],
             a: ["href", "data-nodename"]
+        },
+        allowedClasses: {
+            'details': 'spoiler'
         }
     });
 }
