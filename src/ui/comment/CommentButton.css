@@ -1,0 +1,17 @@
+.comment-button, A.comment-button {
+    text-decoration: none;
+    color: var(--link-button);
+    margin-right: .3rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-size: .8rem;
+}
+
+.comment-button:hover, A.comment-button:hover {
+    text-decoration: underline;
+}
+
+.comment-button .caption {
+    margin-left: .25rem;
+}

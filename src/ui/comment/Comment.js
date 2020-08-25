@@ -10,8 +10,9 @@ import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentDeleting from "ui/comment/CommentDeleting";
-import "./Comment.css";
+import CommentButtons from "ui/comment/CommentButtons";
 import { getCommentsState } from "state/detailedposting/selectors";
+import "./Comment.css";
 
 class Content extends React.PureComponent {
 
@@ -70,6 +71,7 @@ const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
                     <CommentUpdated comment={comment}/>
                 </div>
                 <Content className="content" comment={comment}/>
+                {connectedToHome && <CommentButtons comment={comment}/>}
             </>
         }
     </div>
