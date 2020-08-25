@@ -22,7 +22,7 @@ export function* reactionsDialogPastReactionsLoadSaga() {
     const nodeName = posting.receiverName ?? "";
     const postingId = posting.receiverPostingId ?? posting.id;
     try {
-        const data = yield call(Node.getReactions, nodeName, postingId, negative, emoji, before, 40);
+        const data = yield call(Node.getPostingReactions, nodeName, postingId, negative, emoji, before, 40);
         yield put(reactionsDialogPastReactionsLoaded(
             data.reactions, posting.id, negative, emoji, data.before, data.after, data.total));
         // TODO extract node names and put them into naming cache queue
@@ -35,7 +35,7 @@ export function* reactionsDialogPastReactionsLoadSaga() {
 export function* reactionsDialogTotalsLoadSaga() {
     try {
         const postingId = yield select(state => state.reactionsDialog.postingId);
-        const data = yield call(Node.getReactionTotals, "", postingId);
+        const data = yield call(Node.getPostingReactionTotals, "", postingId);
         yield put(reactionsDialogTotalsLoaded(data.positive, data.negative));
     } catch (e) {
         yield put(reactionsDialogTotalsLoadFailed());
@@ -46,7 +46,8 @@ export function* reactionsDialogTotalsLoadSaga() {
 export function* reactionVerifySaga(action) {
     const nodeName = yield select(getOwnerName);
     try {
-        yield call(Node.remoteReactionVerify, ":", nodeName, action.payload.postingId, action.payload.ownerName);
+        yield call(Node.remotePostingReactionVerify, ":", nodeName, action.payload.postingId,
+            action.payload.ownerName);
     } catch (e) {
         yield put(reactionVerifyFailed());
         yield put(errorThrown(e));

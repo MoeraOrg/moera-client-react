@@ -215,7 +215,7 @@ export function* remotePostingVerify(nodeName, remoteNodeName, id) {
     });
 }
 
-export function* postReaction(nodeName, postingId, negative, emoji) {
+export function* postPostingReaction(nodeName, postingId, negative, emoji) {
     const ownerName = yield select(getHomeOwnerName);
     const body = {ownerName, negative, emoji};
     postingId = encodeURIComponent(postingId);
@@ -225,7 +225,7 @@ export function* postReaction(nodeName, postingId, negative, emoji) {
     });
 }
 
-export function* getReaction(nodeName, postingId) {
+export function* getPostingReaction(nodeName, postingId) {
     const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
     postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
@@ -233,7 +233,7 @@ export function* getReaction(nodeName, postingId) {
     });
 }
 
-export function* deleteReaction(nodeName, postingId) {
+export function* deletePostingReaction(nodeName, postingId) {
     const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
     postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
@@ -242,21 +242,21 @@ export function* deleteReaction(nodeName, postingId) {
     });
 }
 
-export function* getReactionTotals(nodeName, postingId) {
+export function* getPostingReactionTotals(nodeName, postingId) {
     postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
         nodeName, location: `/postings/${postingId}/reaction-totals`, auth: true, schema: NodeApi.ReactionTotalsInfo
     });
 }
 
-export function* getReactions(nodeName, postingId, negative, emoji, before, limit) {
+export function* getPostingReactions(nodeName, postingId, negative, emoji, before, limit) {
     postingId = encodeURIComponent(postingId);
     const location = urlWithParameters(`/postings/${postingId}/reactions`,
         {negative, emoji, before, limit});
     return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ReactionsSliceInfo});
 }
 
-export function* postRemoteReaction(nodeName, remoteNodeName, postingId, negative, emoji) {
+export function* postRemotePostingReaction(nodeName, remoteNodeName, postingId, negative, emoji) {
     remoteNodeName = encodeURIComponent(remoteNodeName);
     postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
@@ -265,7 +265,7 @@ export function* postRemoteReaction(nodeName, remoteNodeName, postingId, negativ
     });
 }
 
-export function* deleteRemoteReaction(nodeName, remoteNodeName, postingId) {
+export function* deleteRemotePostingReaction(nodeName, remoteNodeName, postingId) {
     remoteNodeName = encodeURIComponent(remoteNodeName);
     postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
@@ -274,7 +274,7 @@ export function* deleteRemoteReaction(nodeName, remoteNodeName, postingId) {
     });
 }
 
-export function* remoteReactionVerify(nodeName, remoteNodeName, postingId, ownerName) {
+export function* remotePostingReactionVerify(nodeName, remoteNodeName, postingId, ownerName) {
     remoteNodeName = encodeURIComponent(remoteNodeName);
     postingId = encodeURIComponent(postingId);
     ownerName = encodeURIComponent(ownerName);
@@ -410,5 +410,84 @@ export function* deleteRemoteComment(nodeName, remoteNodeName, postingId, id) {
     return yield call(callApi, {
         nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "DELETE",
         auth: true, schema: NodeApi.Result
+    });
+}
+
+export function* postCommentReaction(nodeName, postingId, commentId, negative, emoji) {
+    const ownerName = yield select(getHomeOwnerName);
+    const body = {ownerName, negative, emoji};
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments/${commentId}/reactions`, method: "POST", auth: true, body,
+        schema: NodeApi.ReactionCreated
+    });
+}
+
+export function* getCommentReaction(nodeName, postingId, commentId) {
+    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`, auth: true,
+        schema: NodeApi.ReactionInfo
+    });
+}
+
+export function* deleteCommentReaction(nodeName, postingId, commentId) {
+    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`, method: "DELETE",
+        auth: true, schema: NodeApi.ReactionTotalsInfo
+    });
+}
+
+export function* getCommentReactionTotals(nodeName, postingId, commentId) {
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    return yield call(callApi, {
+        nodeName, location: `/postings/${postingId}/comments/${commentId}/reaction-totals`, auth: true,
+        schema: NodeApi.ReactionTotalsInfo
+    });
+}
+
+export function* getCommentReactions(nodeName, postingId, commentId, negative, emoji, before, limit) {
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    const location = urlWithParameters(`/postings/${postingId}/comments/${commentId}/reactions`,
+        {negative, emoji, before, limit});
+    return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ReactionsSliceInfo});
+}
+
+export function* postRemoteCommentReaction(nodeName, remoteNodeName, postingId, commentId, negative, emoji) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    return yield call(callApi, {
+        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`,
+        method: "POST", auth: true, body: {negative, emoji}, schema: NodeApi.Result
+    });
+}
+
+export function* deleteRemoteCommentReaction(nodeName, remoteNodeName, postingId, commentId) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    return yield call(callApi, {
+        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`,
+        method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}
+
+export function* remoteCommentReactionVerify(nodeName, remoteNodeName, postingId, commentId, ownerName) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
+    commentId = encodeURIComponent(commentId);
+    ownerName = encodeURIComponent(ownerName);
+    const location = `/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions/${ownerName}/verify`;
+    return yield call(callApi, {
+        nodeName, location, method: "POST", auth: true, schema: NodeApi.AsyncOperationCreated
     });
 }

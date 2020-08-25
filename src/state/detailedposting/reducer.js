@@ -14,6 +14,9 @@ import {
     COMMENT_POST,
     COMMENT_POST_FAILED,
     COMMENT_POSTED,
+    COMMENT_REACT,
+    COMMENT_REACTION_DELETE,
+    COMMENT_REACTION_SET,
     COMMENT_SET,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_FUTURE_SLICE_LOAD_FAILED,
@@ -360,6 +363,41 @@ export default (state = initialState, action) => {
 
         case COMMENT_DIALOG_COMMENT_LOAD_FAILED:
             return immutable.set(state, "compose.loading", false);
+
+        case COMMENT_REACT: {
+            const {id, negative, emoji} = action.payload;
+
+            const index = state.comments.comments.findIndex(c => c.id === id);
+            if (index >= 0) {
+                return immutable.set(state, ["comments", "comments", index, "clientReaction"],
+                    {negative, emoji});
+            }
+            return state;
+        }
+
+        case COMMENT_REACTION_DELETE: {
+            const index = state.comments.comments.findIndex(c => c.id === action.payload.id);
+            if (index >= 0) {
+                return immutable.del(state, ["comments", "comments", index, "clientReaction"]);
+            }
+            return state;
+        }
+
+        case COMMENT_REACTION_SET: {
+            const {nodeName, id, postingId, reaction, totals} = action.payload;
+
+            if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            const index = state.comments.comments.findIndex(c => c.id === id);
+            if (index < 0) {
+                return state;
+            }
+            return immutable.assign(state, ["comments", "comments", index], {
+                reactions: totals,
+                clientReaction: reaction
+            });
+        }
 
         default:
             return state;
