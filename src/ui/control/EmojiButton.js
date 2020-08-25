@@ -1,4 +1,5 @@
 import React from 'react';
+import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
@@ -17,5 +18,18 @@ const EmojiButton = ({icon, emoji, caption, color, invisible, className, buttonR
         }
     </button>
 );
+
+EmojiButton.propTypes = {
+    icon: PropType.string,
+    emoji: PropType.string,
+    caption: PropType.string,
+    color: PropType.string,
+    invisible: PropType.bool,
+    className: PropType.bool,
+    buttonRef: PropType.any,
+    onMouseEnter: PropType.func,
+    onMouseLeave: PropType.func,
+    onClick: PropType.func
+};
 
 export { EmojiButton };

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropType from 'prop-types';
 
 import { REACTION_EMOJIS } from "api";
 import { EmojiButton } from "ui/control";
@@ -16,5 +17,19 @@ const ReactionEmojiButton = ({icon, emoji, negative, caption, className, invisib
                             onMouseLeave={onMouseLeave} onClick={onReactionDelete}/>;
     }
 }
+
+ReactionEmojiButton.propTypes = {
+    icon: PropType.string,
+    emoji: PropType.string,
+    negative: PropType.bool,
+    caption: PropType.string,
+    className: PropType.bool,
+    invisible: PropType.bool,
+    buttonRef: PropType.any,
+    onMouseEnter: PropType.func,
+    onMouseLeave: PropType.func,
+    onReactionAdd: PropType.func,
+    onReactionDelete: PropType.func
+};
 
 export { ReactionEmojiButton };

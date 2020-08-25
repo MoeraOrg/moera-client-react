@@ -20,6 +20,19 @@ const EmojiChoice = ({negative, emoji, invisible, dimmed, marked, onClick}) => {
 
 export class EmojiSelector extends React.PureComponent {
 
+    static propTypes = {
+        negative: PropType.bool,
+        reactions: PropType.arrayOf(PropType.shape({
+            emoji: PropType.number,
+            invisible: PropType.bool,
+            dimmed: PropType.bool,
+            marked: PropType.bool
+        })),
+        fixedWidth: PropType.bool,
+        autoFocus: PropType.bool,
+        onClick: PropType.func
+    };
+
     componentDidMount() {
         if (this.props.autoFocus && this.domNode) {
             this.domNode.focus();
@@ -40,16 +53,3 @@ export class EmojiSelector extends React.PureComponent {
     }
 
 }
-
-EmojiSelector.propTypes = {
-    negative: PropType.bool,
-    reactions: PropType.arrayOf(PropType.shape({
-        emoji: PropType.number,
-        invisible: PropType.bool,
-        dimmed: PropType.bool,
-        marked: PropType.bool
-    })),
-    fixedWidth: PropType.bool,
-    autoFocus: PropType.bool,
-    onClick: PropType.func
-};
