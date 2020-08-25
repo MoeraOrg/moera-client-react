@@ -5,9 +5,7 @@ import { Manager, Popper, Reference } from 'react-popper';
 import cx from 'classnames';
 import debounce from 'lodash.debounce';
 
-import { REACTION_EMOJIS } from "api";
-import { EmojiSelector } from "ui/control";
-import PostingButton from "ui/posting/PostingButton";
+import { EmojiSelector, ReactionEmojiButton } from "ui/control";
 import { postingReact, postingReactionDelete } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -17,20 +15,7 @@ import {
     MAIN_POSITIVE_REACTIONS_SET
 } from "api/node/reaction-emojis";
 import EmojiList from "util/emoji-list";
-
-const PostingReactionButtonMain = ({id, icon, caption, invisible, negative, emoji, defaultEmoji, buttonRef,
-                                    onMouseEnter, onMouseLeave, postingReact, postingReactionDelete}) => {
-    if (emoji == null) {
-        return <PostingButton icon={["far", icon]} caption={caption} invisible={invisible} buttonRef={buttonRef}
-                              onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                              onClick={() => postingReact(id, negative, defaultEmoji)}/>;
-    } else {
-        const re = !negative ? REACTION_EMOJIS.positive[emoji] : REACTION_EMOJIS.negative[emoji];
-        return <PostingButton emoji={emoji} caption={re ? re.title : caption} color={re ? re.color : null}
-                              buttonRef={buttonRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                              onClick={() => postingReactionDelete(id)}/>;
-    }
-};
+import "./PostingButton.css";
 
 class PostingReactionButton extends React.PureComponent {
 
@@ -157,17 +142,21 @@ class PostingReactionButton extends React.PureComponent {
     }
 
     render() {
-        const {id, negative, postingReact} = this.props;
+        const {id, negative, postingReact, postingReactionDelete} = this.props;
         return (
             <Manager>
                 <Reference>
                     {({ref}) =>
-                        <PostingReactionButtonMain {...this.props}
-                                                   invisible={this.isInvisible()}
-                                                   defaultEmoji={this.getDefaultEmoji()}
-                                                   onMouseEnter={this.mainEnter}
-                                                   onMouseLeave={this.mainLeave}
-                                                   buttonRef={ref}/>
+                        <ReactionEmojiButton
+                            {...this.props}
+                            className="posting-button"
+                            invisible={this.isInvisible()}
+                            buttonRef={ref}
+                            onMouseEnter={this.mainEnter}
+                            onMouseLeave={this.mainLeave}
+                            onReactionAdd={() => postingReact(id, negative, this.getDefaultEmoji())}
+                            onReactionDelete={() => postingReactionDelete(id)}
+                        />
                     }
                 </Reference>
                 {ReactDOM.createPortal(
@@ -183,9 +172,12 @@ class PostingReactionButton extends React.PureComponent {
                                 )}>
                                     <div className="popover-body" onMouseEnter={this.popupEnter}
                                          onMouseLeave={this.popupLeave}>
-                                        <EmojiSelector negative={negative} reactions={this.state.reactions}
-                                                    fixedWidth={true}
-                                                    onClick={(negative, emoji) => postingReact(id, negative, emoji)}/>
+                                        <EmojiSelector
+                                            negative={negative}
+                                            reactions={this.state.reactions}
+                                            fixedWidth={true}
+                                            onClick={(negative, emoji) => postingReact(id, negative, emoji)}
+                                        />
                                     </div>
                                 </div>
                             )}
