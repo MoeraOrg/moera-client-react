@@ -31,11 +31,11 @@ class ReactionButtonImpl extends React.PureComponent {
         onReactionDelete: PropType.func
     };
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.state = {locus: "out", popup: false, reactions: []};
-    }
+    state = {
+        locus: "out",
+        popup: false,
+        reactions: []
+    };
 
     componentDidMount() {
         this.updateReactions();
