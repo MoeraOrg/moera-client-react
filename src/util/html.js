@@ -1,5 +1,5 @@
 import sanitizeHtml from 'sanitize-html';
-import {parse as parseEmojis} from 'twemoji-parser';
+import { parse as parseEmojis } from 'twemoji-parser';
 
 export function replaceEmojis(html) {
     if (!html) {
@@ -32,7 +32,7 @@ export function safePreviewHtml(html) {
             a: ["href", "data-nodename"]
         },
         allowedClasses: {
-            'details': 'spoiler'
+            "details": "spoiler"
         },
         transformTags: {
             "h1": "b",
@@ -58,7 +58,7 @@ export function safeHtml(html) {
             a: ["href", "data-nodename"]
         },
         allowedClasses: {
-            'details': 'spoiler'
+            "details": "spoiler"
         }
     });
 }
