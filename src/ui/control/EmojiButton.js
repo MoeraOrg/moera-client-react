@@ -20,12 +20,12 @@ const EmojiButton = ({icon, emoji, caption, color, invisible, className, buttonR
 );
 
 EmojiButton.propTypes = {
-    icon: PropType.string,
+    icon: PropType.oneOfType([PropType.arrayOf(PropType.string), PropType.string]),
     emoji: PropType.string,
     caption: PropType.string,
     color: PropType.string,
     invisible: PropType.bool,
-    className: PropType.bool,
+    className: PropType.string,
     buttonRef: PropType.any,
     onMouseEnter: PropType.func,
     onMouseLeave: PropType.func,
