@@ -16,5 +16,6 @@ export { NodeName } from "ui/control/NodeName";
 export { Popover } from "ui/control/Popover";
 export { ReactionButton } from "ui/control/ReactionButton";
 export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
+export { ReactionTotals } from "ui/control/ReactionTotals";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
 export { Twemoji } from "ui/control/Twemoji";
