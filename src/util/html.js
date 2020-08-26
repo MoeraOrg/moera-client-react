@@ -24,12 +24,13 @@ export function safePreviewHtml(html) {
     }
     return sanitizeHtml(replaceEmojis(html), {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            "img", "del", "ins", "sub", "details", "summary"
+            "img", "del", "ins", "sub", "details", "summary", "mr-spoiler"
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
             img: ["src", "srcset", "width", "height", "style"],
-            a: ["href", "data-nodename"]
+            a: ["href", "data-nodename"],
+            "mr-spoiler": ["title"]
         },
         transformTags: {
             "h1": "b",
@@ -47,12 +48,13 @@ export function safeHtml(html) {
     }
     return sanitizeHtml(replaceEmojis(html), {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            "h1", "h2", "img", "del", "ins", "sub", "details", "summary"
+            "h1", "h2", "img", "del", "ins", "sub", "details", "summary", "mr-spoiler"
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
             img: ["src", "srcset", "width", "height", "style"],
-            a: ["href", "data-nodename"]
+            a: ["href", "data-nodename"],
+            "mr-spoiler": ["title"]
         }
     });
 }

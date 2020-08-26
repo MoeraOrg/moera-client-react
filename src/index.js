@@ -5,6 +5,7 @@ import * as URI from 'uri-js';
 import { Provider } from 'react-redux';
 import store from "state/store";
 import { initFromLocation } from "state/navigation/actions";
+import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -54,6 +55,7 @@ function buildInitAction() {
 initIconLibrary();
 simpleNumberLocalizer();
 dateFnsLocalizer();
+registerSpoilerElement();
 ReactDOM.render(
     <Provider store={store}>
         <App />
