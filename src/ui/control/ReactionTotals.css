@@ -1,23 +1,23 @@
 .reactions {
-    font-size: 0.9rem;
+    font-size: .9rem;
     font-weight: 600;
-    padding-top: 0.2rem;
-    padding-left: 0.2rem;
-    margin-top: 0.2rem;
+    padding-top: .2em;
+    padding-left: .2em;
+    margin-top: .2em;
 }
 
 .reactions .emojis {
     font-family: sans-serif;
-    font-size: 1rem;
-    margin-right: 0.5rem;
+    font-size: 1.1em;
+    margin-right: .55em;
 }
 
 .reactions .positive {
-    margin-right: 1.3rem;
+    margin-right: 1.45em;
     color: var(--correct);
     background-color: var(--reactions-positive);
-    border-radius: .8rem;
-    padding: .4rem 1rem;
+    border-radius: .9em;
+    padding: .44em 1.1em;
 }
 
 .reactions .positive:hover {
@@ -28,8 +28,8 @@
 .reactions .negative {
     color: var(--incorrect);
     background-color: var(--reactions-negative);
-    border-radius: .8rem;
-    padding: .4rem 1rem;
+    border-radius: .9em;
+    padding: .44em 1.1em;
 }
 
 .reactions .negative:hover {

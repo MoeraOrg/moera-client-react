@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 
 import { ReactionTotals } from "ui/control";
 import { openReactionsDialog } from "state/reactionsdialog/actions";
+import "./CommentReactions.css";
 
-const PostingReactions = ({posting, openReactionsDialog}) => (
-    <ReactionTotals reactions={posting.reactions} onClick={negative => openReactionsDialog(posting.id, negative)}/>
+const CommentReactions = ({comment, openReactionsDialog}) => (
+    <ReactionTotals reactions={comment.reactions} onClick={negative => openReactionsDialog(comment.id, negative)}/>
 );
 
 export default connect(
     null,
     { openReactionsDialog }
-)(PostingReactions);
+)(CommentReactions);

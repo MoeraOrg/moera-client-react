@@ -22,6 +22,8 @@
 
     --reactions-positive: #e9fce5;
     --reactions-negative: #feeff0;
+    --reactions-positive-border: #cddfc9;
+    --reactions-negative-border: #e1d3d4;
     --comments: #f8faff;
 
     --link: var(--blue);

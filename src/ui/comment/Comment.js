@@ -11,6 +11,7 @@ import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentButtons from "ui/comment/CommentButtons";
+import CommentReactions from "ui/comment/CommentReactions";
 import { getCommentsState } from "state/detailedposting/selectors";
 import "./Comment.css";
 
@@ -71,7 +72,10 @@ const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
                     <CommentUpdated comment={comment}/>
                 </div>
                 <Content className="content" comment={comment}/>
-                {connectedToHome && <CommentButtons comment={comment}/>}
+                <div className="reactions-line">
+                    {connectedToHome && <CommentButtons comment={comment}/>}
+                    <CommentReactions comment={comment}/>
+                </div>
             </>
         }
     </div>

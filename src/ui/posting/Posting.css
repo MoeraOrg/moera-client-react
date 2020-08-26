@@ -6,3 +6,9 @@
     margin-bottom: 1rem;
     padding: 0.5rem;
 }
+
+.posting .reactions-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}

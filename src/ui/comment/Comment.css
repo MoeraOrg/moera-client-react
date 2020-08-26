@@ -24,3 +24,9 @@
 .comment:hover .chevron {
     visibility: visible;
 }
+
+.comment .reactions-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
