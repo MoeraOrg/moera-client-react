@@ -53,13 +53,13 @@ export function* postingVerifySaga(action) {
 export function* postingReactSaga(action) {
     const {id, negative, emoji} = action.payload;
     try {
-        const data = yield call(Node.postReaction, "", id, negative, emoji);
+        const data = yield call(Node.postPostingReaction, "", id, negative, emoji);
         yield put(postingReactionSet(id, {negative, emoji}, data.totals));
         const {ownerName, posting} = yield select(state => ({
             ownerName: getOwnerName(state),
             posting: getPosting(state, id)
         }));
-        yield call(Node.postRemoteReaction, ":", posting.receiverName ?? ownerName,
+        yield call(Node.postRemotePostingReaction, ":", posting.receiverName ?? ownerName,
             posting.receiverPostingId ?? id, negative, emoji);
     } catch (e) {
         yield put(errorThrown(e));
@@ -69,8 +69,8 @@ export function* postingReactSaga(action) {
 export function* postingReactionLoadSaga(action) {
     const {id} = action.payload;
     try {
-        const {negative, emoji} = yield call(Node.getReaction, "", id);
-        const totals = yield call(Node.getReactionTotals, "", id);
+        const {negative, emoji} = yield call(Node.getPostingReaction, "", id);
+        const totals = yield call(Node.getPostingReactionTotals, "", id);
         yield put(postingReactionSet(id, {negative, emoji}, totals));
     } catch (e) {
         yield put(errorThrown(e));
@@ -80,16 +80,16 @@ export function* postingReactionLoadSaga(action) {
 export function* postingReactionDeleteSaga(action) {
     const {id} = action.payload;
     try {
-        let data = yield call(Node.deleteReaction, "", id);
+        let data = yield call(Node.deletePostingReaction, "", id);
         const {ownerName, posting} = yield select(state => ({
             ownerName: getOwnerName(state),
             posting: getPosting(state, id)
         }));
         if (posting.receiverName != null) {
-            data = yield call(Node.deleteReaction, posting.receiverName, posting.receiverPostingId);
+            data = yield call(Node.deletePostingReaction, posting.receiverName, posting.receiverPostingId);
         }
         yield put(postingReactionSet(id, null, data));
-        yield call(Node.deleteRemoteReaction, ":", posting.receiverName ?? ownerName,
+        yield call(Node.deleteRemotePostingReaction, ":", posting.receiverName ?? ownerName,
             posting.receiverPostingId ?? id);
     } catch (e) {
         yield put(errorThrown(e));

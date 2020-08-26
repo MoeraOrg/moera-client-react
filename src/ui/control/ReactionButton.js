@@ -20,7 +20,7 @@ class ReactionButtonImpl extends React.PureComponent {
 
     static propTypes = {
         icon: PropType.oneOfType([PropType.arrayOf(PropType.string), PropType.string]),
-        emoji: PropType.string,
+        emoji: PropType.number,
         caption: PropType.string,
         className: PropType.string,
         negative: PropType.bool,

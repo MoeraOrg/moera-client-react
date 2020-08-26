@@ -20,7 +20,7 @@ const ReactionEmojiButton = ({icon, emoji, negative, caption, className, invisib
 
 ReactionEmojiButton.propTypes = {
     icon: PropType.oneOfType([PropType.arrayOf(PropType.string), PropType.string]),
-    emoji: PropType.string,
+    emoji: PropType.number,
     negative: PropType.bool,
     caption: PropType.string,
     className: PropType.string,

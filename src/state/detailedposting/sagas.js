@@ -4,11 +4,14 @@ import clipboardCopy from 'clipboard-copy';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
-    commentDeleted, commentDeleteFailed,
-    commentDialogCommentLoaded, commentDialogCommentLoadFailed,
+    commentDeleted,
+    commentDeleteFailed,
+    commentDialogCommentLoaded,
+    commentDialogCommentLoadFailed,
     commentLoadFailed,
     commentPosted,
     commentPostFailed,
+    commentReactionSet,
     commentSet,
     commentsFutureSliceLoadFailed,
     commentsFutureSliceSet,
@@ -27,11 +30,10 @@ import {
     getDetailedPostingId
 } from "state/detailedposting/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
-import { postingCommentsSet, postingReactionSet } from "state/postings/actions";
+import { postingCommentsSet } from "state/postings/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
-import { getPosting } from "state/postings/selectors";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -166,6 +168,45 @@ export function* commentDialogCommentLoadSaga() {
         yield put(commentDialogCommentLoaded(data));
     } catch (e) {
         yield put(commentDialogCommentLoadFailed());
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentReactSaga(action) {
+    const {id, negative, emoji} = action.payload;
+
+    const {receiverName, receiverPostingId} = yield select(getCommentsState);
+    try {
+        const data = yield call(Node.postCommentReaction, receiverName, receiverPostingId, id, negative, emoji);
+        yield put(commentReactionSet(receiverName, id, receiverPostingId, {negative, emoji}, data.totals));
+        yield call(Node.postRemoteCommentReaction, ":", receiverName, receiverPostingId, id, negative, emoji);
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentReactionLoadSaga(action) {
+    const {id} = action.payload;
+
+    const {receiverName, receiverPostingId} = yield select(getCommentsState);
+    try {
+        const {negative, emoji} = yield call(Node.getCommentReaction, receiverName, receiverPostingId, id);
+        const totals = yield call(Node.getCommentReactionTotals, receiverName, receiverPostingId, id);
+        yield put(commentReactionSet(receiverName, id, receiverPostingId, {negative, emoji}, totals));
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentReactionDeleteSaga(action) {
+    const {id} = action.payload;
+
+    const {receiverName, receiverPostingId} = yield select(getCommentsState);
+    try {
+        const data = yield call(Node.deleteCommentReaction, receiverName, receiverPostingId, id);
+        yield put(commentReactionSet(receiverName, id, receiverPostingId, null, data));
+        yield call(Node.deleteRemoteCommentReaction, ":", receiverName, receiverPostingId, id);
+    } catch (e) {
         yield put(errorThrown(e));
     }
 }

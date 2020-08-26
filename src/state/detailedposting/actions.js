@@ -183,3 +183,27 @@ export const COMMENT_DIALOG_COMMENT_LOAD_FAILED = "COMMENT_DIALOG_COMMENT_LOAD_F
 export const commentDialogCommentLoadFailed = () => ({
     type: COMMENT_DIALOG_COMMENT_LOAD_FAILED
 });
+
+export const COMMENT_REACT = "COMMENT_REACT";
+export const commentReact = (id, negative, emoji) => ({
+    type: COMMENT_REACT,
+    payload: {id, negative, emoji}
+});
+
+export const COMMENT_REACTION_LOAD = "COMMENT_REACTION_LOAD";
+export const commentReactionLoad = (id, postingId) => ({
+    type: COMMENT_REACTION_LOAD,
+    payload: {id, postingId}
+});
+
+export const COMMENT_REACTION_DELETE = "COMMENT_REACTION_DELETE";
+export const commentReactionDelete = (id, postingId) => ({
+    type: COMMENT_REACTION_DELETE,
+    payload: {id, postingId}
+});
+
+export const COMMENT_REACTION_SET = "COMMENT_REACTION_SET";
+export const commentReactionSet = (nodeName, id, postingId, reaction, totals) => ({
+    type: COMMENT_REACTION_SET,
+    payload: {nodeName, id, postingId, reaction, totals}
+});

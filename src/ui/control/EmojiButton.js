@@ -21,7 +21,7 @@ const EmojiButton = ({icon, emoji, caption, color, invisible, className, buttonR
 
 EmojiButton.propTypes = {
     icon: PropType.oneOfType([PropType.arrayOf(PropType.string), PropType.string]),
-    emoji: PropType.string,
+    emoji: PropType.number,
     caption: PropType.string,
     color: PropType.string,
     invisible: PropType.bool,

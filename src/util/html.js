@@ -32,6 +32,9 @@ export function safePreviewHtml(html) {
             a: ["href", "data-nodename"],
             "mr-spoiler": ["title"]
         },
+        allowedClasses: {
+            "details": "spoiler"
+        },
         transformTags: {
             "h1": "b",
             "h2": "b",
@@ -55,6 +58,9 @@ export function safeHtml(html) {
             img: ["src", "srcset", "width", "height", "style"],
             a: ["href", "data-nodename"],
             "mr-spoiler": ["title"]
+        },
+        allowedClasses: {
+            "details": "spoiler"
         }
     });
 }
