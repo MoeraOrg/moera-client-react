@@ -28,7 +28,9 @@ const emptyReactions = {
 
 const initialState = {
     show: false,
+    nodeName: null,
     postingId: null,
+    commentId: null,
     negative: false,
     activeTab: null,
     reactions: {},
@@ -43,8 +45,10 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case OPEN_REACTIONS_DIALOG:
-            if (state.postingId === action.payload.postingId && state.negative === action.payload.negative) {
+        case OPEN_REACTIONS_DIALOG: {
+            const {nodeName, postingId, commentId, negative} = action.payload;
+
+            if (state.postingId === postingId && state.commentId === commentId && state.negative === negative) {
                 return {
                     ...state,
                     show: true
@@ -53,9 +57,12 @@ export default (state = initialState, action) => {
             return {
                 ...initialState,
                 show: true,
-                postingId: action.payload.postingId,
-                negative: action.payload.negative
+                nodeName,
+                postingId,
+                commentId,
+                negative
             };
+        }
 
         case CLOSE_REACTIONS_DIALOG:
             return {
@@ -78,33 +85,34 @@ export default (state = initialState, action) => {
         }
 
         case REACTIONS_DIALOG_PAST_REACTIONS_LOADED: {
-            if (action.payload.postingId !== state.postingId || action.payload.negative !== state.negative) {
+            const {postingId, commentId, negative, emoji, before, after, total} = action.payload;
+
+            if (state.postingId !== postingId || state.commentId !== commentId || state.negative !== negative) {
                 return state;
             }
-            const tab = action.payload.emoji ?? 0;
+            const tab = emoji ?? 0;
             if (state.reactions[tab] == null) {
                 return state;
             }
-            if (action.payload.before >= state.reactions[tab].after
-                && action.payload.after < state.reactions[tab].after) {
-
+            if (before >= state.reactions[tab].after && after < state.reactions[tab].after) {
                 let reactions = state.reactions[tab].items.slice();
                 action.payload.reactions
                     .filter(p => p.moment <= state.reactions[tab].after)
                     .forEach(p => reactions.push(p));
                 reactions.sort((a, b) => b.moment - a.moment);
-                return immutable.wrap(state)
-                    .set(["reactions", tab, "loading"], false)
-                    .set(["reactions", tab, "total"], action.payload.total)
-                    .set(["reactions", tab, "after"], action.payload.after)
-                    .set(["reactions", tab, "items"], reactions)
-                    .value();
+                return immutable.assign(state, ["reactions", tab], {
+                    loading: false,
+                    total,
+                    after,
+                    items: reactions
+                });
             }
             return immutable.set(state, ["reactions", tab, "loading"], false);
         }
 
         case REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED: {
-            if (action.payload.postingId !== state.postingId || action.payload.negative !== state.negative) {
+            const {postingId, commentId, negative} = action.payload;
+            if (state.postingId !== postingId || state.commentId !== commentId || state.negative !== negative) {
                 return state;
             }
             const tab = state.activeTab ?? 0;
@@ -122,12 +130,12 @@ export default (state = initialState, action) => {
             totals = totals.slice().filter(rt => rt.total == null || rt.total > 0);
             totals.sort((rt1, rt2) => rt1.total != null ? rt2.total - rt1.total : rt2.share - rt1.share);
             const total = totals.map(rt => rt.total).filter(v => v != null).reduce((sum, v) => sum + v, 0);
-            return immutable.wrap(state)
-                .set("totals.loading", false)
-                .set("totals.loaded", true)
-                .set("totals.total", total)
-                .set("totals.emojis", totals)
-                .value();
+            return immutable.assign(state, "totals", {
+                loading: false,
+                loaded: true,
+                total,
+                emojis: totals
+            });
         }
 
         case REACTIONS_DIALOG_TOTALS_LOAD_FAILED:

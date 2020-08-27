@@ -74,7 +74,7 @@ const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
                 <Content className="content" comment={comment}/>
                 <div className="reactions-line">
                     {connectedToHome && <CommentButtons comment={comment}/>}
-                    <CommentReactions comment={comment}/>
+                    <CommentReactions postingId={postingId} comment={comment}/>
                 </div>
             </>
         }

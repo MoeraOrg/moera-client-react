@@ -1,7 +1,7 @@
 export const OPEN_REACTIONS_DIALOG = "OPEN_REACTIONS_DIALOG";
-export const openReactionsDialog = (postingId, negative) => ({
+export const openReactionsDialog = (nodeName, postingId, commentId, negative) => ({
     type: OPEN_REACTIONS_DIALOG,
-    payload: {postingId, negative}
+    payload: {nodeName, postingId, commentId, negative}
 });
 
 export const CLOSE_REACTIONS_DIALOG = "CLOSE_REACTIONS_DIALOG";
@@ -20,15 +20,16 @@ export const reactionsDialogPastReactionsLoad = () => ({
 });
 
 export const REACTIONS_DIALOG_PAST_REACTIONS_LOADED = "REACTIONS_DIALOG_PAST_REACTIONS_LOADED";
-export const reactionsDialogPastReactionsLoaded = (reactions, postingId, negative, emoji, before, after, total) => ({
+export const reactionsDialogPastReactionsLoaded = (reactions, postingId, commentId, negative, emoji, before, after,
+                                                   total) => ({
     type: REACTIONS_DIALOG_PAST_REACTIONS_LOADED,
-    payload: {reactions, postingId, negative, emoji, before, after, total}
+    payload: {reactions, postingId, commentId, negative, emoji, before, after, total}
 });
 
 export const REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED = "REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED";
-export const reactionsDialogPastReactionsLoadFailed = (postingId, negative, emoji) => ({
+export const reactionsDialogPastReactionsLoadFailed = (postingId, commentId, negative, emoji) => ({
     type: REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED,
-    payload: {postingId, negative, emoji}
+    payload: {postingId, commentId, negative, emoji}
 });
 
 export const REACTIONS_DIALOG_TOTALS_LOAD = "REACTIONS_DIALOG_TOTALS_LOAD";
