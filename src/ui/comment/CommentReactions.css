@@ -3,17 +3,17 @@
     font-size: .8rem;
     margin-right: .3rem;
     position: relative;
-    top: -1.1rem;
+    top: -.9rem;
 }
 
 .comment .reactions .positive {
     margin-right: 0;
-    box-shadow: 3px 3px 2px #ddd;
+    box-shadow: 2px 2px 3px #ddd;
     border: solid 1px var(--reactions-positive-border);
 }
 
 .comment .reactions .negative {
     margin-left: 1em;
-    box-shadow: 3px 3px 2px #ddd;
+    box-shadow: 2px 2px 3px #ddd;
     border: solid 1px var(--reactions-negative-border);
 }
