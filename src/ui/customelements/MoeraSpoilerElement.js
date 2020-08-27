@@ -9,13 +9,13 @@ class MoeraSpoilerElement extends HTMLElement {
         });
         const style = document.createElement("style");
         style.innerText = `
-			button {
-				color: white;
-				background-color: black;
-				font-weight: bold;
-				border: none;
-			}
-		`
+            button {
+                color: white;
+                background-color: black;
+                font-weight: bold;
+                border: none;
+            }
+        `;
         shadowRoot.appendChild(this._button);
         shadowRoot.appendChild(style);
         this._button.addEventListener("click", () => {
