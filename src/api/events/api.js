@@ -326,7 +326,8 @@ export const EVENT_SCHEMES = {
     "SUBSCRIPTION_DELETED": subscriptionEvent(),
     "COMMENT_ADDED": commentEvent(),
     "COMMENT_UPDATED": commentEvent(),
-    "COMMENT_DELETED": commentEvent()
+    "COMMENT_DELETED": commentEvent(),
+    "COMMENT_REACTIONS_CHANGED": commentEvent()
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

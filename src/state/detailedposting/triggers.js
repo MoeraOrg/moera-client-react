@@ -7,6 +7,7 @@ import {
     COMMENT_POSTED,
     commentDialogCommentLoad,
     commentLoad,
+    commentReactionLoad,
     COMMENTS_RECEIVER_SWITCHED,
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
@@ -31,7 +32,11 @@ import {
 } from "state/detailedposting/selectors";
 import { POSTING_DELETED, POSTING_SET, postingSet } from "state/postings/actions";
 import { getPostingMoment } from "state/postings/selectors";
-import { EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED } from "api/events/actions";
+import {
+    EVENT_RECEIVER_COMMENT_ADDED,
+    EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
+    EVENT_RECEIVER_COMMENT_UPDATED
+} from "api/events/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
@@ -72,6 +77,12 @@ export default [
         (state, signal) => getCommentsReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentLoad(signal.payload.id)
+    ),
+    trigger(
+        EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
+        (state, signal) => getCommentsReceiverPostingId(state) === signal.payload.postingId
+            && isCommentMomentInLoadedRange(state, signal.payload.moment),
+        signal => commentReactionLoad(signal.payload.id, signal.payload.postingId)
     ),
     trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad),
     trigger(COMMENT_POSTED, isCommentDialogShown, closeCommentDialog)

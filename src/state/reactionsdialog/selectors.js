@@ -1,5 +1,12 @@
+import { getPosting } from "state/postings/selectors";
+
 export function getReactionsDialogPostingId(state) {
     return state.reactionsDialog.postingId;
+}
+
+export function getReactionsDialogReceiverPostingId(state) {
+    const posting = getPosting(state, state.reactionsDialog.postingId);
+    return posting != null ? (posting.receiverPostingId ?? posting.id) : null;
 }
 
 export function isReactionsDialogShown(state) {
