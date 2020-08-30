@@ -27,21 +27,3 @@
 .entry .content P IMG {
     max-width: min(900px - 3.5rem, 100vw - 4rem);
 }
-
-.entry .content DETAILS.spoiler {
-    display: inline;
-}
-
-.entry .content DETAILS.spoiler SUMMARY {
-    display: inline;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: small;
-    padding: .2em;
-}
-
-.entry .content DETAILS.spoiler[open] SUMMARY {
-    display: none;
-}
