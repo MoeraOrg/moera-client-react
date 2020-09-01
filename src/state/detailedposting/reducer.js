@@ -18,6 +18,8 @@ import {
     COMMENT_REACTION_DELETE,
     COMMENT_REACTION_SET,
     COMMENT_SET,
+    COMMENT_VERIFY,
+    COMMENT_VERIFY_FAILED,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_FUTURE_SLICE_LOAD_FAILED,
     COMMENTS_FUTURE_SLICE_SET,
@@ -38,7 +40,11 @@ import {
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import { safeHtml, safePreviewHtml } from "util/html";
-import { EVENT_RECEIVER_COMMENT_DELETED } from "api/events/actions";
+import {
+    EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
+    EVENT_HOME_REMOTE_COMMENT_VERIFIED,
+    EVENT_RECEIVER_COMMENT_DELETED
+} from "api/events/actions";
 
 const emptyComments = {
     receiverName: null,
@@ -84,6 +90,7 @@ function extractComment(comment) {
         .update("bodyPreview.text", text => safePreviewHtml(text))
         .update("body.text", text => safeHtml(text))
         .set("deleting", false)
+        .set("verificationStatus", "none")
         .value();
 }
 
@@ -363,6 +370,42 @@ export default (state = initialState, action) => {
 
         case COMMENT_DIALOG_COMMENT_LOAD_FAILED:
             return immutable.set(state, "compose.loading", false);
+
+        case COMMENT_VERIFY: {
+            const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
+            if (index < 0) {
+                return state;
+            }
+            return immutable.set(state, ["comments", "comments", index, "verificationStatus"], "running");
+        }
+
+        case COMMENT_VERIFY_FAILED:
+        case EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED: {
+            const {nodeName, postingId, commentId} = action.payload;
+
+            if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            const index = state.comments.comments.findIndex(c => c.id === commentId);
+            if (index < 0) {
+                return state;
+            }
+            return immutable.set(state, ["comments", "comments", index, "verificationStatus"], "none");
+        }
+
+        case EVENT_HOME_REMOTE_COMMENT_VERIFIED: {
+            const {nodeName, postingId, commentId, correct} = action.payload;
+
+            if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            const index = state.comments.comments.findIndex(c => c.id === commentId);
+            if (index < 0) {
+                return state;
+            }
+            const status = correct ? "correct" : "incorrect";
+            return immutable.set(state, ["comments", "comments", index, "verificationStatus"], status);
+        }
 
         case COMMENT_REACT: {
             const {id, negative, emoji} = action.payload;

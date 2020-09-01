@@ -18,6 +18,7 @@ import {
     commentsPastSliceLoadFailed,
     commentsPastSliceSet,
     commentsReceiverSwitched,
+    commentVerifyFailed,
     detailedPostingLoaded,
     detailedPostingLoadFailed,
     focusedCommentLoaded,
@@ -168,6 +169,16 @@ export function* commentDialogCommentLoadSaga() {
         yield put(commentDialogCommentLoaded(data));
     } catch (e) {
         yield put(commentDialogCommentLoadFailed());
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentVerifySaga(action) {
+    const {receiverName, receiverPostingId} = yield select(getCommentsState);
+    try {
+        yield call(Node.remoteCommentVerify, ":", receiverName, receiverPostingId, action.payload.commentId);
+    } catch (e) {
+        yield put(commentVerifyFailed());
         yield put(errorThrown(e));
     }
 }

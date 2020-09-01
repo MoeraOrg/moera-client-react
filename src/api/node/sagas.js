@@ -413,6 +413,16 @@ export function* deleteRemoteComment(nodeName, remoteNodeName, postingId, id) {
     });
 }
 
+export function* remoteCommentVerify(nodeName, remoteNodeName, postingId, id) {
+    remoteNodeName = encodeURIComponent(remoteNodeName);
+    postingId = encodeURIComponent(postingId);
+    id = encodeURIComponent(id);
+    return yield call(callApi, {
+        nodeName: ":", location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}/verify`, method: "POST",
+        auth: true, schema: NodeApi.AsyncOperationCreated
+    });
+}
+
 export function* postCommentReaction(nodeName, postingId, commentId, negative, emoji) {
     const ownerName = yield select(getHomeOwnerName);
     const body = {ownerName, negative, emoji};

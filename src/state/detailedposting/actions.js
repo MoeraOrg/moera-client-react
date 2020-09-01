@@ -184,6 +184,18 @@ export const commentDialogCommentLoadFailed = () => ({
     type: COMMENT_DIALOG_COMMENT_LOAD_FAILED
 });
 
+export const COMMENT_VERIFY = "COMMENT_VERIFY";
+export const commentVerify = (commentId) => ({
+    type: COMMENT_VERIFY,
+    payload: {commentId}
+});
+
+export const COMMENT_VERIFY_FAILED = "COMMENT_VERIFY_FAILED";
+export const commentVerifyFailed = (nodeName, postingId, commentId) => ({
+    type: COMMENT_VERIFY_FAILED,
+    payload: {nodeName, postingId, commentId}
+});
+
 export const COMMENT_REACT = "COMMENT_REACT";
 export const commentReact = (id, negative, emoji) => ({
     type: COMMENT_REACT,

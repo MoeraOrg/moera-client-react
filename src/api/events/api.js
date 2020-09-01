@@ -195,6 +195,22 @@ const commentEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
+const remoteCommentVerificationEvent = (properties = {}) => baseEvent({
+    "id": {
+        type: "string"
+    },
+    "nodeName": {
+        type: "string"
+    },
+    "postingId": {
+        type: "string"
+    },
+    "commentId": {
+        type: "string"
+    },
+    ...properties
+});
+
 export const EventPacket = schema({
     type: "object",
     properties: {
@@ -327,7 +343,20 @@ export const EVENT_SCHEMES = {
     "COMMENT_ADDED": commentEvent(),
     "COMMENT_UPDATED": commentEvent(),
     "COMMENT_DELETED": commentEvent(),
-    "COMMENT_REACTIONS_CHANGED": commentEvent()
+    "COMMENT_REACTIONS_CHANGED": commentEvent(),
+    "REMOTE_COMMENT_VERIFIED": remoteCommentVerificationEvent({
+        "correct": {
+            type: "boolean"
+        }
+    }),
+    "REMOTE_COMMENT_VERIFICATION_FAILED": remoteCommentVerificationEvent({
+        "errorCode": {
+            type: "string"
+        },
+        "errorMessage": {
+            type: "string"
+        },
+    })
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([
