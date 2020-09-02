@@ -17,9 +17,10 @@ export function replaceEmojis(html) {
     const emojis = parseEmojis(html);
     let shift = 0;
     let current = html;
-    //debugger;
-    if (emojis.length === 1 && html.length <= MAX_LENGTH_TO_TRY_PARSE_AS_SINGLE_EMOJI) {
-        //debugger;
+    if (emojis.length === 1 &&
+        // Too long html-s are probably containing something besides one emoji,
+        // so we're not bothering to parse it
+        html.length <= MAX_LENGTH_TO_TRY_PARSE_AS_SINGLE_EMOJI) {
         const emoji = emojis[0];
         const beforeEmoji = html.substring(0, emoji.indices[0]);
         const afterEmoji = html.substring(emoji.indices[1]);
