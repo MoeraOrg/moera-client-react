@@ -1,13 +1,13 @@
 import sanitizeHtml from 'sanitize-html';
 import { parse as parseEmojis } from 'twemoji-parser';
 
-function emojiToImgTag(emoji, size=1) {
-    return `<img src="${emoji.url}" alt="${emoji.text}" style="width: ${size}em; height: ${size}em">`;
-}
-
 const MAX_LENGTH_TO_TRY_PARSE_AS_SINGLE_EMOJI = 50;
 const HTML_WITH_ONLY_EMOJI_BEFORE_REGEX = /^(\s*<\s*(mr-spoiler(\s+title="[^"]*")?|p)\s*>\s*)*/;
 const HTML_WITH_ONLY_EMOJI_AFTER_REGEX = /^(\s*<\/(mr-spoiler|p)>\s*)*$/;
+
+function emojiToImgTag(emoji, size=1) {
+    return `<img src="${emoji.url}" alt="${emoji.text}" style="width: ${size}em; height: ${size}em">`;
+}
 
 export function replaceEmojis(html) {
     if (!html) {
