@@ -31,7 +31,9 @@ const ReactionsListView = ({postingId, commentId, itemsRef, onSwitchView, remain
                     <div className="owner-name">
                         <NodeName name={r.ownerName}/>
                         {" "}
-                        <ReactionVerifyButton postingId={postingId} commentId={commentId} ownerName={r.ownerName}/>
+                        {r.signature &&
+                            <ReactionVerifyButton postingId={postingId} commentId={commentId} ownerName={r.ownerName}/>
+                        }
                     </div>
                 </div>
             )}
