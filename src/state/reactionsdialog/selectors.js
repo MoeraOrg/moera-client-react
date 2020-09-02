@@ -1,5 +1,9 @@
 import { getPosting } from "state/postings/selectors";
 
+export function getReactionsDialogNodeName(state) {
+    return state.reactionsDialog.nodeName;
+}
+
 export function getReactionsDialogPostingId(state) {
     return state.reactionsDialog.postingId;
 }

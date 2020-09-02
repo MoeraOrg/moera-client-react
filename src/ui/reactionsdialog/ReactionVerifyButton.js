@@ -11,12 +11,13 @@ class ReactionVerifyButton extends React.PureComponent {
 
     static propTypes = {
         postingId: PropType.string,
+        commentId: PropType.string,
         ownerName: PropType.string
     };
 
     onVerify = () => {
-        const {postingId, ownerName, reactionVerify} = this.props;
-        reactionVerify(postingId, ownerName);
+        const {postingId, commentId, ownerName, reactionVerify} = this.props;
+        reactionVerify(postingId, commentId, ownerName);
     };
 
     render() {

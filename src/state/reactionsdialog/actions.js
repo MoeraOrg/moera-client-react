@@ -55,13 +55,13 @@ export const reactionsDialogSelectTab = (tab) => ({
 });
 
 export const REACTION_VERIFY = "REACTION_VERIFY";
-export const reactionVerify = (postingId, ownerName) => ({
+export const reactionVerify = (postingId, commentId, ownerName) => ({
     type: REACTION_VERIFY,
-    payload: {postingId, ownerName}
+    payload: {postingId, commentId, ownerName}
 });
 
 export const REACTION_VERIFY_FAILED = "REACTION_VERIFY_FAILED";
-export const reactionVerifyFailed = (postingId, ownerName) => ({
+export const reactionVerifyFailed = (postingId, commentId, ownerName) => ({
     type: REACTION_VERIFY_FAILED,
-    payload: {postingId, ownerName}
+    payload: {postingId, commentId, ownerName}
 });

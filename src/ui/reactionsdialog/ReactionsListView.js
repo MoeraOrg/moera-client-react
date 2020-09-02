@@ -1,47 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import cx from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { closeReactionsDialog, reactionsDialogSelectTab } from "state/reactionsdialog/actions";
+import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { Loading, NodeName, Twemoji } from "ui/control";
 import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
+import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
 import {
     getReactionsDialogItems,
     getReactionsDialogRemainingCount,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const TotalsTabsImpl = ({loading, loaded, total, emojis, activeTab, reactionsDialogSelectTab}) => (
-    <>
-        {loaded &&
-        <div className="total-tabs">
-            <div className={cx("total", {"active": activeTab == null})}
-                 onClick={() => reactionsDialogSelectTab(null)}>
-                All {total}
-            </div>
-            {emojis.map(rt =>
-                <div key={rt.emoji} className={cx("total", {"active": activeTab === rt.emoji})}
-                     onClick={() => reactionsDialogSelectTab(rt.emoji)}>
-                    <Twemoji code={rt.emoji}/>{" "}{rt.total}
-                </div>
-            )}
-        </div>
-        }
-        <Loading active={loading}/>
-    </>
-);
-
-const TotalsTabs = connect(
-    state => ({
-        ...state.reactionsDialog.totals,
-        activeTab: state.reactionsDialog.activeTab
-    }),
-    { reactionsDialogSelectTab }
-)(TotalsTabsImpl);
-
-const ReactionsListView = ({postingId, itemsRef, onSwitchView, remaining, reactionsLoading, reactions,
-                                   closeReactionsDialog}) => (
+const ReactionsListView = ({postingId, commentId, itemsRef, onSwitchView, remaining, reactionsLoading, reactions,
+                            closeReactionsDialog}) => (
     <>
         <div className="totals clearfix">
             <TotalsTabs/>
@@ -59,7 +31,7 @@ const ReactionsListView = ({postingId, itemsRef, onSwitchView, remaining, reacti
                     <div className="owner-name">
                         <NodeName name={r.ownerName}/>
                         {" "}
-                        <ReactionVerifyButton postingId={postingId} ownerName={r.ownerName}/>
+                        <ReactionVerifyButton postingId={postingId} commentId={commentId} ownerName={r.ownerName}/>
                     </div>
                 </div>
             )}
@@ -72,6 +44,7 @@ const ReactionsListView = ({postingId, itemsRef, onSwitchView, remaining, reacti
 export default connect(
     state => ({
         postingId: state.reactionsDialog.postingId,
+        commentId: state.reactionsDialog.commentId,
         remaining: getReactionsDialogRemainingCount(state),
         reactionsLoading: isReactionsDialogReactionsLoading(state),
         reactions: getReactionsDialogItems(state)

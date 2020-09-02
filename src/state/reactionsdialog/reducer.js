@@ -144,17 +144,23 @@ export default (state = initialState, action) => {
         case REACTIONS_DIALOG_SELECT_TAB:
             return immutable.set(state, "activeTab", action.payload.tab);
 
-        case REACTION_VERIFY:
-            if (action.payload.postingId === state.postingId) {
-                return immutable.set(state, ["verificationStatus", action.payload.ownerName], "running");
-            }
-            return state;
+        case REACTION_VERIFY: {
+            const {postingId, commentId, ownerName} = action.payload;
 
-        case REACTION_VERIFY_FAILED:
-            if (action.payload.postingId === state.postingId) {
-                return immutable.set(state, ["verificationStatus", action.payload.ownerName], "none");
+            if (postingId === state.postingId && commentId === state.commentId) {
+                return immutable.set(state, ["verificationStatus", ownerName], "running");
             }
             return state;
+        }
+
+        case REACTION_VERIFY_FAILED: {
+            const {postingId, commentId, ownerName} = action.payload;
+
+            if (postingId === state.postingId && commentId === state.commentId) {
+                return immutable.set(state, ["verificationStatus", ownerName], "none");
+            }
+            return state;
+        }
 
         case EVENT_HOME_REMOTE_REACTION_VERIFIED:
             if (action.payload.postingId === state.postingId) {

@@ -54,12 +54,16 @@ export function* reactionsDialogTotalsLoadSaga() {
 }
 
 export function* reactionVerifySaga(action) {
+    const {postingId, commentId, ownerName} = action.payload;
     const nodeName = yield select(getOwnerName);
     try {
-        yield call(Node.remotePostingReactionVerify, ":", nodeName, action.payload.postingId,
-            action.payload.ownerName);
+        if (commentId == null) {
+            yield call(Node.remotePostingReactionVerify, ":", nodeName, postingId, ownerName);
+        } else {
+            yield call(Node.remoteCommentReactionVerify, ":", nodeName, postingId, commentId, ownerName);
+        }
     } catch (e) {
-        yield put(reactionVerifyFailed());
+        yield put(reactionVerifyFailed(postingId, commentId, ownerName));
         yield put(errorThrown(e));
     }
 }
