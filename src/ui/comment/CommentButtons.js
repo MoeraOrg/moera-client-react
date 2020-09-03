@@ -1,6 +1,7 @@
 import React from 'react';
 
 import CommentReactionButton from "ui/comment/CommentReactionButton";
+import CommentReplyButton from "ui/comment/CommentReplyButton";
 import "./CommentButtons.css";
 
 const CommentButtons = ({comment}) => {
@@ -13,6 +14,7 @@ const CommentButtons = ({comment}) => {
             <CommentReactionButton icon="thumbs-down" caption="Oppose" invisible={cr.emoji && !cr.negative}
                                    id={comment.id} negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions.negative}/>
+           <CommentReplyButton/>
         </div>
     );
 };
