@@ -58,8 +58,8 @@ class Content extends React.PureComponent {
 
 }
 
-const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) => {
-    return (
+const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
+    (
         <div className={cx("comment", "entry", {"focused": focused, "single-emoji": comment.singleEmoji})}
              data-moment={comment.moment}>
             {comment.deleting ?
@@ -81,7 +81,6 @@ const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
             }
         </div>
     );
-};
 
 export default connect(
     state => ({
