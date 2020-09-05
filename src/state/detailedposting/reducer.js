@@ -1,5 +1,6 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
+import { parse as parseEmojis } from 'twemoji-parser';
 
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
@@ -82,6 +83,31 @@ const initialState = {
     }
 };
 
+const SINGLE_EMOJI_COMMENT_ALLOWED_TAGS = ["mr-spoiler", "a", "del", "strike"];
+const SINGLE_EMOJI_COMMENT_ALLOWED_TAGS_REGEX = `(?:${SINGLE_EMOJI_COMMENT_ALLOWED_TAGS.join("|")})`
+const SINGLE_EMOJI_COMMENT_REGEX = new RegExp(
+    `^\\s*(?:<\\s*p\\s*>\\s*)?`+ // Optional opening <p>
+    `(?:<\\s*${SINGLE_EMOJI_COMMENT_ALLOWED_TAGS_REGEX}(?:\\s+[^>]+\\s+)?\\s*>\\s*)?` + // Optional opening tag
+    `([^<]{1,6})\\s*` + // Up to six chars (emojis may be long)
+    `(?:<\\s*\\/${SINGLE_EMOJI_COMMENT_ALLOWED_TAGS_REGEX}\\s*>\\s*)?` + // Optional closing tag
+    `(?:<\\/\\s*p\\s*>\\s*)?$`, // Optional closing <p>
+    'gi'
+);
+
+function isSingleEmojiComment(comment) {
+    const match = comment.body.text.matchAll(SINGLE_EMOJI_COMMENT_REGEX).next().value;
+    if (!match) {
+        return false;
+    }
+    const innerText = match[1];
+    const emojis = parseEmojis(innerText);
+    if (emojis.length !== 1) {
+        return false;
+    }
+    const indices = emojis[0].indices;
+    return indices[0] === 0 && indices[1] === innerText.length;
+}
+
 function extractComment(comment) {
     if (!comment.bodyPreview.text) {
         comment = immutable.set(comment, "body.previewText", safePreviewHtml(comment.body.text));
@@ -91,6 +117,7 @@ function extractComment(comment) {
         .update("body.text", text => safeHtml(text))
         .set("deleting", false)
         .set("verificationStatus", "none")
+        .set("singleEmoji", isSingleEmojiComment(comment))
         .value();
 }
 

@@ -17,7 +17,6 @@ import "./Comment.css";
 
 class Content extends React.PureComponent {
 
-
     constructor(props, context) {
         super(props, context);
 
@@ -59,27 +58,30 @@ class Content extends React.PureComponent {
 
 }
 
-const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) => (
-    <div className={cx("comment", "entry", {"focused": focused})} data-moment={comment.moment}>
-        {comment.deleting ?
-            <CommentDeleting/>
-        :
-            <>
-                <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
-                <div className="owner-line">
-                    <CommentOwner comment={comment}/>
-                    <CommentDate postingId={postingId} comment={comment}/>
-                    <CommentUpdated comment={comment}/>
-                </div>
-                <Content className="content" comment={comment}/>
-                <div className="reactions-line">
-                    {connectedToHome && <CommentButtons comment={comment}/>}
-                    <CommentReactions postingId={postingId} comment={comment}/>
-                </div>
-            </>
-        }
-    </div>
-);
+const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) => {
+    return (
+        <div className={cx("comment", "entry", {"focused": focused, "single-emoji": comment.singleEmoji})}
+             data-moment={comment.moment}>
+            {comment.deleting ?
+                <CommentDeleting/>
+                :
+                <>
+                    <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
+                    <div className="owner-line">
+                        <CommentOwner comment={comment}/>
+                        <CommentDate postingId={postingId} comment={comment}/>
+                        <CommentUpdated comment={comment}/>
+                    </div>
+                    <Content className="content" comment={comment}/>
+                    <div className="reactions-line">
+                        {connectedToHome && <CommentButtons comment={comment}/>}
+                        <CommentReactions postingId={postingId} comment={comment}/>
+                    </div>
+                </>
+            }
+        </div>
+    );
+};
 
 export default connect(
     state => ({

@@ -27,3 +27,13 @@
 .entry .content P IMG {
     max-width: min(900px - 3.5rem, 100vw - 4rem);
 }
+
+.entry .emoji {
+    width: 1em;
+    height: 1em;
+}
+
+.entry.single-emoji .emoji {
+    width: 3em;
+    height: 3em;
+}
