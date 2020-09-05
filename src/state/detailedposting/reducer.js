@@ -68,7 +68,9 @@ const emptyCompose = {
     showDialog: false,
     loading: false,
     commentId: null,
-    comment: null
+    comment: null,
+    repliedToId: null,
+    repliedToName: null
 };
 
 const initialState = {

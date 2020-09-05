@@ -24,6 +24,6 @@
     top: -1.5rem;
 }
 
-.entry .content P IMG {
+.entry .content IMG {
     max-width: min(900px - 3.5rem, 100vw - 4rem);
 }
