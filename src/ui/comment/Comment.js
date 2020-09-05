@@ -1,9 +1,9 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 
-import {isConnectedToHome} from "state/home/selectors";
-import {isPermitted} from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
+import { isPermitted } from "state/node/selectors";
 import EntryHtml from "ui/posting/EntryHtml";
 import CommentMenu from "ui/comment/CommentMenu";
 import CommentOwner from "ui/comment/CommentOwner";
@@ -12,7 +12,7 @@ import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
-import {getCommentsState} from "state/detailedposting/selectors";
+import { getCommentsState } from "state/detailedposting/selectors";
 import "./Comment.css";
 
 class Content extends React.PureComponent {
