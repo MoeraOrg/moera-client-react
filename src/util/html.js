@@ -37,7 +37,6 @@ export function safePreviewHtml(html) {
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
-            details: "spoiler",
             img: "emoji"
         },
         transformTags: {
@@ -65,7 +64,6 @@ export function safeHtml(html) {
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
-            details: "spoiler",
             img: "emoji"
         }
     });
