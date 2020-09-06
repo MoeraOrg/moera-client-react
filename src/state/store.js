@@ -35,6 +35,7 @@ import {
     COMMENT_REACT,
     COMMENT_REACTION_DELETE,
     COMMENT_REACTION_LOAD,
+    COMMENT_REPLY,
     COMMENT_VERIFY,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_PAST_SLICE_LOAD,
@@ -144,6 +145,7 @@ import {
     commentReactionDeleteSaga,
     commentReactionLoadSaga,
     commentReactSaga,
+    commentReplySaga,
     commentsFutureSliceLoadSaga,
     commentsPastSliceLoadSaga,
     commentsReceiverSwitchSaga,
@@ -308,6 +310,7 @@ function* combinedSaga() {
     yield takeEvery(COMMENT_REACT, commentReactSaga);
     yield takeEvery(COMMENT_REACTION_LOAD, commentReactionLoadSaga);
     yield takeEvery(COMMENT_REACTION_DELETE, commentReactionDeleteSaga);
+    yield takeEvery(COMMENT_REPLY, commentReplySaga);
 
     yield invokeTriggers(triggers);
 }

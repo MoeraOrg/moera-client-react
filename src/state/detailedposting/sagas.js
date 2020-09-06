@@ -1,5 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 import clipboardCopy from 'clipboard-copy';
+import * as textFieldEdit from 'text-field-edit';
 
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
@@ -12,12 +13,14 @@ import {
     commentPosted,
     commentPostFailed,
     commentReactionSet,
+    commentRepliedToSet,
     commentSet,
     commentsFutureSliceLoadFailed,
     commentsFutureSliceSet,
     commentsPastSliceLoadFailed,
     commentsPastSliceSet,
     commentsReceiverSwitched,
+    commentsScrollToComposer,
     commentVerifyFailed,
     detailedPostingLoaded,
     detailedPostingLoadFailed,
@@ -28,7 +31,8 @@ import {
     getCommentComposerCommentId,
     getCommentsState,
     getDetailedPosting,
-    getDetailedPostingId
+    getDetailedPostingId,
+    isCommentComposerReplied
 } from "state/detailedposting/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { postingCommentsSet } from "state/postings/actions";
@@ -220,4 +224,16 @@ export function* commentReactionDeleteSaga(action) {
     } catch (e) {
         yield put(errorThrown(e));
     }
+}
+
+export function* commentReplySaga(action) {
+    const {commentId, ownerName} = action.payload;
+
+    const replied = yield select(isCommentComposerReplied);
+    if (!replied) {
+        yield put(commentRepliedToSet(commentId, ownerName));
+    } else {
+        textFieldEdit.insert(document.getElementById("body"), `@${ownerName} `);
+    }
+    yield put(commentsScrollToComposer());
 }

@@ -17,6 +17,8 @@ import {
     COMMENT_REACT,
     COMMENT_REACTION_DELETE,
     COMMENT_REACTION_SET,
+    COMMENT_REPLIED_TO_SET,
+    COMMENT_REPLIED_TO_UNSET,
     COMMENT_SET,
     COMMENT_VERIFY,
     COMMENT_VERIFY_FAILED,
@@ -28,6 +30,7 @@ import {
     COMMENTS_PAST_SLICE_SET,
     COMMENTS_RECEIVER_SWITCHED,
     COMMENTS_SCROLL_TO_ANCHOR,
+    COMMENTS_SCROLL_TO_COMPOSER,
     COMMENTS_SCROLLED_TO_ANCHOR,
     COMMENTS_SCROLLED_TO_COMMENTS,
     COMMENTS_SCROLLED_TO_COMPOSER,
@@ -236,6 +239,9 @@ export default (state = initialState, action) => {
             return istate.value();
         }
 
+        case COMMENTS_SCROLL_TO_COMPOSER:
+            return immutable.set(state, "compose.focused", true);
+
         case COMMENTS_SCROLLED_TO_ANCHOR:
             return immutable.set(state, "comments.anchor", null);
 
@@ -443,6 +449,18 @@ export default (state = initialState, action) => {
                 clientReaction: reaction
             });
         }
+
+        case COMMENT_REPLIED_TO_SET:
+            return immutable.assign(state, "compose", {
+                repliedToId: action.payload.commentId,
+                repliedToName: action.payload.ownerName
+            });
+
+        case COMMENT_REPLIED_TO_UNSET:
+            return immutable.assign(state, "compose", {
+                repliedToId: null,
+                repliedToName: null
+            });
 
         default:
             return state;

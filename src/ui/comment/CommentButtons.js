@@ -14,7 +14,7 @@ const CommentButtons = ({comment}) => {
             <CommentReactionButton icon="thumbs-down" caption="Oppose" invisible={cr.emoji && !cr.negative}
                                    id={comment.id} negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions.negative}/>
-           <CommentReplyButton/>
+            <CommentReplyButton comment={comment}/>
         </div>
     );
 };

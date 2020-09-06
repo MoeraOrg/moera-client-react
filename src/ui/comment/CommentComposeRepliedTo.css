@@ -1,0 +1,26 @@
+.replied-to {
+    margin-bottom: .3rem;
+}
+
+.replied-to .icon {
+    color: var(--gray-medium);
+    margin-right: .7em;
+}
+
+.replied-to .node-name {
+    position: relative;
+    top: -.05em;
+}
+
+.replied-to .unset {
+    color: var(--gray-medium);
+    background-color: transparent;
+    border: 0;
+    font-weight: bold;
+    font-size: 120%;
+    margin-left: .2em;
+}
+
+.replied-to .unset:hover {
+    background-color: var(--highlight);
+}

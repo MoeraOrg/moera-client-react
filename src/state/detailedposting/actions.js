@@ -65,6 +65,11 @@ export const commentsScrollToAnchor = (anchor) => ({
     payload: {anchor}
 });
 
+export const COMMENTS_SCROLL_TO_COMPOSER = "COMMENTS_SCROLL_TO_COMPOSER";
+export const commentsScrollToComposer = () => ({
+    type: COMMENTS_SCROLL_TO_COMPOSER
+});
+
 export const COMMENTS_SCROLLED_TO_ANCHOR = "COMMENTS_SCROLLED_TO_ANCHOR";
 export const commentsScrolledToAnchor = () => ({
     type: COMMENTS_SCROLLED_TO_ANCHOR
@@ -218,4 +223,21 @@ export const COMMENT_REACTION_SET = "COMMENT_REACTION_SET";
 export const commentReactionSet = (nodeName, id, postingId, reaction, totals) => ({
     type: COMMENT_REACTION_SET,
     payload: {nodeName, id, postingId, reaction, totals}
+});
+
+export const COMMENT_REPLY = "COMMENT_REPLY";
+export const commentReply = (commentId, ownerName) => ({
+    type: COMMENT_REPLY,
+    payload: {commentId, ownerName}
+});
+
+export const COMMENT_REPLIED_TO_SET = "COMMENT_REPLIED_TO_SET";
+export const commentRepliedToSet = (commentId, ownerName) => ({
+    type: COMMENT_REPLIED_TO_SET,
+    payload: {commentId, ownerName}
+});
+
+export const COMMENT_REPLIED_TO_UNSET = "COMMENT_REPLIED_TO_UNSET";
+export const commentRepliedToUnset = () => ({
+    type: COMMENT_REPLIED_TO_UNSET
 });
