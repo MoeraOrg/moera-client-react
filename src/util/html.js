@@ -32,7 +32,7 @@ export function safePreviewHtml(html) {
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
-            img: ["src", "srcset", "width", "height"],
+            img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             "mr-spoiler": ["title"]
         },
@@ -59,7 +59,7 @@ export function safeHtml(html) {
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
-            img: ["src", "srcset", "width", "height"],
+            img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             "mr-spoiler": ["title"]
         },

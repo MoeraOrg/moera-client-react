@@ -63,7 +63,7 @@ const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
          data-moment={comment.moment}>
         {comment.deleting ?
             <CommentDeleting/>
-            :
+        :
             <>
                 <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
                 <div className="owner-line">
