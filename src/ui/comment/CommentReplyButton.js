@@ -9,7 +9,7 @@ class CommentReplyButton extends React.Component {
     onClick = () => {
         const {comment, commentReply} = this.props;
 
-        commentReply(comment.id, comment.ownerName);
+        commentReply(comment.id, comment.ownerName, comment.heading);
     }
 
     render() {

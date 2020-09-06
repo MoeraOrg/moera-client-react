@@ -74,7 +74,8 @@ const emptyCompose = {
     commentId: null,
     comment: null,
     repliedToId: null,
-    repliedToName: null
+    repliedToName: null,
+    repliedToHeading: null
 };
 
 const initialState = {
@@ -480,13 +481,15 @@ export default (state = initialState, action) => {
         case COMMENT_REPLIED_TO_SET:
             return immutable.assign(state, "compose", {
                 repliedToId: action.payload.commentId,
-                repliedToName: action.payload.ownerName
+                repliedToName: action.payload.ownerName,
+                repliedToHeading: action.payload.heading
             });
 
         case COMMENT_REPLIED_TO_UNSET:
             return immutable.assign(state, "compose", {
                 repliedToId: null,
-                repliedToName: null
+                repliedToName: null,
+                repliedToHeading: null
             });
 
         default:

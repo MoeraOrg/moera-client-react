@@ -227,11 +227,11 @@ export function* commentReactionDeleteSaga(action) {
 }
 
 export function* commentReplySaga(action) {
-    const {commentId, ownerName} = action.payload;
+    const {commentId, ownerName, heading} = action.payload;
 
     const replied = yield select(isCommentComposerReplied);
     if (!replied) {
-        yield put(commentRepliedToSet(commentId, ownerName));
+        yield put(commentRepliedToSet(commentId, ownerName, heading));
     } else {
         textFieldEdit.insert(document.getElementById("body"), `@${ownerName} `);
     }

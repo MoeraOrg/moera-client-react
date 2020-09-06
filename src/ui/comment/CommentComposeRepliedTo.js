@@ -13,7 +13,7 @@ class CommentComposeRepliedTo extends React.PureComponent {
     }
 
     render() {
-        const {commentId, ownerName} = this.props;
+        const {commentId, ownerName, heading} = this.props;
 
         if (commentId == null) {
             return null;
@@ -23,6 +23,7 @@ class CommentComposeRepliedTo extends React.PureComponent {
             <div className="replied-to">
                 <span className="icon"><FontAwesomeIcon icon="reply"/></span>
                 <NodeName name={ownerName} linked={false}/>
+                <span className="heading">{heading}</span>
                 <button className="unset" onClick={this.onUnset}>&times;</button>
             </div>
         );
@@ -34,6 +35,7 @@ export default connect(
     state => ({
         commentId: state.detailedPosting.compose.repliedToId,
         ownerName: state.detailedPosting.compose.repliedToName,
+        heading: state.detailedPosting.compose.repliedToHeading,
     }),
     { commentRepliedToUnset }
 )(CommentComposeRepliedTo);

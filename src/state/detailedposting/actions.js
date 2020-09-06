@@ -226,15 +226,15 @@ export const commentReactionSet = (nodeName, id, postingId, reaction, totals) =>
 });
 
 export const COMMENT_REPLY = "COMMENT_REPLY";
-export const commentReply = (commentId, ownerName) => ({
+export const commentReply = (commentId, ownerName, heading) => ({
     type: COMMENT_REPLY,
-    payload: {commentId, ownerName}
+    payload: {commentId, ownerName, heading}
 });
 
 export const COMMENT_REPLIED_TO_SET = "COMMENT_REPLIED_TO_SET";
-export const commentRepliedToSet = (commentId, ownerName) => ({
+export const commentRepliedToSet = (commentId, ownerName, heading) => ({
     type: COMMENT_REPLIED_TO_SET,
-    payload: {commentId, ownerName}
+    payload: {commentId, ownerName, heading}
 });
 
 export const COMMENT_REPLIED_TO_UNSET = "COMMENT_REPLIED_TO_UNSET";

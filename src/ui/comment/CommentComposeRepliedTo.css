@@ -1,5 +1,6 @@
 .replied-to {
     margin-bottom: .3rem;
+    font-size: 90%;
 }
 
 .replied-to .icon {
@@ -9,7 +10,13 @@
 
 .replied-to .node-name {
     position: relative;
-    top: -.05em;
+    top: -.1em;
+}
+
+.replied-to .heading {
+    position: relative;
+    top: -.1em;
+    margin-left: .5em;
 }
 
 .replied-to .unset {
@@ -17,7 +24,7 @@
     background-color: transparent;
     border: 0;
     font-weight: bold;
-    font-size: 120%;
+    font-size: 135%;
     margin-left: .2em;
 }
 
