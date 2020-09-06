@@ -17,7 +17,6 @@ import "./Comment.css";
 
 class Content extends React.PureComponent {
 
-
     constructor(props, context) {
         super(props, context);
 
@@ -60,7 +59,8 @@ class Content extends React.PureComponent {
 }
 
 const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) => (
-    <div className={cx("comment", "entry", {"focused": focused})} data-moment={comment.moment}>
+    <div className={cx("comment", "entry", {"focused": focused, "single-emoji": comment.singleEmoji})}
+         data-moment={comment.moment}>
         {comment.deleting ?
             <CommentDeleting/>
         :

@@ -1,6 +1,10 @@
 import sanitizeHtml from 'sanitize-html';
 import { parse as parseEmojis } from 'twemoji-parser';
 
+function createEmojiElement(entity) {
+    return `<img src="${entity.url}" alt="${entity.text}" class="emoji">`;
+}
+
 export function replaceEmojis(html) {
     if (!html) {
         return "";
@@ -10,7 +14,7 @@ export function replaceEmojis(html) {
     let shift = 0;
     let current = html;
     for (let entity of entities) {
-        const img = `<img src="${entity.url}" alt="${entity.text}" style="width: 1em; height: 1em">`;
+        const img = createEmojiElement(entity);
         current = current.substring(0, entity.indices[0] + shift) + img + current.substring(entity.indices[1] + shift);
         shift += img.length - (entity.indices[1] - entity.indices[0]);
     }
@@ -28,12 +32,12 @@ export function safePreviewHtml(html) {
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
-            img: ["src", "srcset", "width", "height", "style"],
+            img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
-            "details": "spoiler"
+            img: "emoji"
         },
         transformTags: {
             "h1": "b",
@@ -55,12 +59,12 @@ export function safeHtml(html) {
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
-            img: ["src", "srcset", "width", "height", "style"],
+            img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
-            "details": "spoiler"
+            img: "emoji"
         }
     });
 }
