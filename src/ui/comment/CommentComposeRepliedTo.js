@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { NodeName } from "ui/control";
 import { commentRepliedToUnset } from "state/detailedposting/actions";
-import "./CommentComposeRepliedTo.css";
 
 class CommentComposeRepliedTo extends React.PureComponent {
 

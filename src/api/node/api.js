@@ -704,7 +704,7 @@ export const ReactionsSliceInfo = schema({
     additionalProperties: false
 });
 
-export const SubscriberInfoType = {
+const SubscriberInfoType = {
     type: "object",
     properties: {
         "id": {
@@ -736,7 +736,7 @@ export const SubscriberInfoArray = schema({
     items: SubscriberInfoType
 });
 
-export const SubscriptionInfoType = {
+const SubscriptionInfoType = {
     type: "object",
     properties: {
         "id": {
@@ -812,7 +812,23 @@ export const PeopleGeneralInfo = schema({
     additionalProperties: false
 });
 
-export const CommentInfoType = {
+const RepliedToType = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "name": {
+            type: "string"
+        },
+        "heading": {
+            type: "string"
+        },
+    },
+    additionalProperties: false
+};
+
+const CommentInfoType = {
     type: "object",
     properties: {
         "id": {
@@ -851,6 +867,7 @@ export const CommentInfoType = {
         "heading": {
             type: "string"
         },
+        "repliedTo": RepliedToType,
         "moment": {
             type: "integer"
         },

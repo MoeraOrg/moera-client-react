@@ -3,8 +3,6 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { GO_TO_PAGE, goToTimeline, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
-    closeCommentDialog,
-    COMMENT_POSTED,
     commentDialogCommentLoad,
     commentLoad,
     commentReactionLoad,
@@ -21,7 +19,6 @@ import {
 } from "state/detailedposting/actions";
 import {
     getCommentsReceiverPostingId,
-    isCommentDialogShown,
     isCommentMomentInLoadedRange,
     isCommentsReceiverToBeSwitched,
     isDetailedPostingId,
@@ -84,6 +81,5 @@ export default [
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentReactionLoad(signal.payload.id, signal.payload.postingId)
     ),
-    trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad),
-    trigger(COMMENT_POSTED, isCommentDialogShown, closeCommentDialog)
+    trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad)
 ];

@@ -106,8 +106,12 @@ export function getCommentComposerComment(state) {
     return state.detailedPosting.compose.comment;
 }
 
+export function getCommentComposerRepliedToId(state) {
+    return state.detailedPosting.compose.repliedToId;
+}
+
 export function isCommentComposerReplied(state) {
-    return state.detailedPosting.compose.repliedToId != null;
+    return getCommentComposerRepliedToId(state) != null;
 }
 
 export function isCommentDialogShown(state) {

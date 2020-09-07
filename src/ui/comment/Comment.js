@@ -12,6 +12,7 @@ import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
+import CommentRepliedTo from "ui/comment/CommentRepliedTo";
 import { getCommentsState } from "state/detailedposting/selectors";
 import "./Comment.css";
 
@@ -30,29 +31,32 @@ class Content extends React.PureComponent {
     render() {
         const {comment} = this.props;
 
+        return (
+            <div className="content" onClick={this.onClick}>
+                <CommentRepliedTo comment={comment}/>
+                {this.renderText()}
+            </div>
+        );
+    }
+
+    renderText() {
+        const {comment} = this.props;
+
         if (this.state.preview) {
             if (comment.bodyPreview.text) {
                 return (
-                    <div className="content" onClick={this.onClick}>
+                    <>
                         <EntryHtml html={comment.bodyPreview.text}/>
                         <p>
                             <button className="btn btn-link pl-0 pt-0" onClick={this.onClick}>Read more...</button>
                         </p>
-                    </div>
+                    </>
                 );
             } else {
-                return (
-                    <div className="content" onClick={this.onClick}>
-                        <EntryHtml html={comment.body.previewText}/>
-                    </div>
-                );
+                return <EntryHtml html={comment.body.previewText}/>;
             }
         } else {
-            return (
-                <div className="content" onClick={this.onClick}>
-                    <EntryHtml html={comment.body.text}/>
-                </div>
-            );
+            return <EntryHtml html={comment.body.text}/>;
         }
     }
 

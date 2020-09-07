@@ -6,6 +6,7 @@ import * as textFieldEdit from 'text-field-edit'
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
 import { getHomeOwnerName } from "state/home/selectors";
+import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { TextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import CommentSubmitButton from "ui/comment/CommentSubmitButton";
@@ -66,6 +67,7 @@ export default connect(
         receiverName: state.detailedPosting.comments.receiverName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         formId: state.detailedPosting.compose.formId,
+        repliedToId: getCommentComposerRepliedToId(state),
         beingPosted: state.detailedPosting.compose.beingPosted,
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default"),
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),

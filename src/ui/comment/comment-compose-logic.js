@@ -21,7 +21,8 @@ const commentComposeLogic = {
                 text: values.body.trim()
             }),
             bodySrcFormat: props.sourceFormatDefault,
-            acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault}
+            acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
+            repliedToId: props.repliedToId
         };
     },
 

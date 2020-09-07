@@ -289,7 +289,7 @@ export default (state = initialState, action) => {
             }
             return immutable.assign(state, "compose", {
                 formId: state.compose.formId + 1,
-                beingPosted: false
+                ...emptyCompose
             });
 
         case COMMENT_POST_FAILED:

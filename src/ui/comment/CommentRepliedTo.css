@@ -1,6 +1,8 @@
 .replied-to {
     margin-bottom: .3rem;
     font-size: 90%;
+    border-left: 3px var(--gray-light) solid;
+    padding-left: .5em;
 }
 
 .replied-to .icon {
