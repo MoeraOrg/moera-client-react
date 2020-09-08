@@ -33,7 +33,7 @@
     height: 1em;
 }
 
-.entry.single-emoji .emoji {
+.entry.single-emoji .content .emoji {
     width: 3em;
     height: 3em;
 }
