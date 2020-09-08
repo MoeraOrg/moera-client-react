@@ -1,4 +1,4 @@
-import { conj, trigger } from "state/trigger";
+import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { GO_TO_PAGE, goToTimeline, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
@@ -12,6 +12,7 @@ import {
     commentsReceiverSwitch,
     DETAILED_POSTING_LOADED,
     detailedPostingLoad,
+    focusComment,
     FOCUSED_COMMENT_LOAD_FAILED,
     FOCUSED_COMMENT_LOADED,
     focusedCommentLoad,
@@ -23,6 +24,7 @@ import {
     isCommentsReceiverToBeSwitched,
     isDetailedPostingId,
     isDetailedPostingToBeLoaded,
+    isFocusedCommentInList,
     isFocusedCommentToBeLoaded,
     isFutureCommentsToBeLoaded,
     isPastCommentsToBeLoaded
@@ -51,7 +53,12 @@ export default [
     ),
     trigger(
         [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
-        conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded),
+        conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, isFocusedCommentInList),
+        focusComment
+    ),
+    trigger(
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
+        conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, inv(isFocusedCommentInList)),
         focusedCommentLoad
     ),
     trigger(

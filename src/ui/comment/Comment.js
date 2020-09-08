@@ -18,11 +18,9 @@ import "./Comment.css";
 
 class Content extends React.PureComponent {
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.state = {preview: true};
-    }
+    state = {
+        preview: true
+    };
 
     onClick = () => {
         this.setState({preview: !this.state.preview});

@@ -5,20 +5,30 @@
     padding-left: .5em;
 }
 
+.replied-to A {
+    text-decoration: none;
+}
+
 .replied-to .icon {
     color: var(--gray-medium);
     margin-right: .7em;
 }
 
 .replied-to .node-name {
+    color: var(--gray);
     position: relative;
     top: -.1em;
 }
 
 .replied-to .heading {
+    color: var(--gray);
     position: relative;
     top: -.1em;
     margin-left: .5em;
+}
+
+.replied-to A:hover .heading {
+    text-decoration: underline;
 }
 
 .replied-to .unset {

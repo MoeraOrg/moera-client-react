@@ -46,6 +46,10 @@ export function isCommentsReceiverToBeSwitched(state) {
     return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
 }
 
+export function getFocusedCommentId(state) {
+    return getCommentsState(state).focusedCommentId;
+}
+
 export function isFocusedCommentToBeLoaded(state) {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
@@ -64,6 +68,11 @@ export function isFocusedCommentReady(state) {
     }
     const comments = getCommentsState(state);
     return comments.focusedCommentId == null || comments.loadedFocusedComment;
+}
+
+export function isFocusedCommentInList(state) {
+    const comments = getCommentsState(state);
+    return comments.focusedCommentId == null || comments.comments.find(c => c.id === comments.focusedCommentId) != null
 }
 
 export function isCommentsReadyToBeLoaded(state) {

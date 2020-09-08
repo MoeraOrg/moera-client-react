@@ -139,6 +139,11 @@ export const commentDeleteFailed = (nodeName, postingId, commentId) => ({
     payload: {nodeName, postingId, commentId}
 });
 
+export const FOCUS_COMMENT = "FOCUS_COMMENT";
+export const focusComment = () => ({
+    type: FOCUS_COMMENT
+});
+
 export const FOCUSED_COMMENT_LOAD = "FOCUSED_COMMENT_LOAD";
 export const focusedCommentLoad = () => ({
     type: FOCUSED_COMMENT_LOAD

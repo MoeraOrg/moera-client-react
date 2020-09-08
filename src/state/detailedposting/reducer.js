@@ -38,6 +38,7 @@ import {
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_FAILED,
     DETAILED_POSTING_LOADED,
+    FOCUS_COMMENT,
     FOCUSED_COMMENT_LOAD,
     FOCUSED_COMMENT_LOAD_FAILED,
     FOCUSED_COMMENT_LOADED,
@@ -157,6 +158,15 @@ export default (state = initialState, action) => {
                             });
                             break;
                     }
+                } else {
+                    istate.set("compose.focused", false)
+                        .assign("comments", {
+                            focused: false,
+                            loadingFocusedComment: false,
+                            loadedFocusedComment: false,
+                            focusedCommentId: null,
+                            focusedMoment: null
+                        });
                 }
                 return istate.value();
             }
@@ -355,6 +365,16 @@ export default (state = initialState, action) => {
                 return state;
             }
             return immutable.del(state, ["comments", "comments", index]);
+        }
+
+        case FOCUS_COMMENT: {
+            const comment = state.comments.comments.find(c => c.id === state.comments.focusedCommentId);
+            return immutable.assign(state, "comments", {
+                anchor: comment.moment,
+                loadingFocusedComment: false,
+                loadedFocusedComment: true,
+                focusedMoment: comment.moment
+            });
         }
 
         case FOCUSED_COMMENT_LOAD:

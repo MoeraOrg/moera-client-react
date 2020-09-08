@@ -4,8 +4,10 @@
     --highlight-blue: rgba(0, 123, 255, .1);
     --highlight-cyan: #f0fafa;
     --cyan-light: #96d6e0;
-    --gray-light: #ced4da;
+    /* --gray-dark: #343a40; (Bootstrap) */
+    /* --gray: #6c757d; (Bootstrap) */
     --gray-medium: #a9a9a9;
+    --gray-light: #ced4da;
     --green-light: #42d042; /* forest green + 20% lighter */
     --red-light: #df5a5a; /* fire brick + 20% lighter */
 
