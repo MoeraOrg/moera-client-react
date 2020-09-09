@@ -99,13 +99,13 @@ const Reference = ({children}) => (
     </DelayedPopperContext.Consumer>
 );
 
-const DelayedPopper = ({placement, children}) => (
+const DelayedPopper = ({placement, arrow, children}) => (
     <DelayedPopperContext.Consumer>
         {context => (
             ReactDOM.createPortal(
                 (context.popup || context.locus !== "out") &&
                 <Popper placement={placement}>
-                    {({ref, style, placement}) => (
+                    {({ref, style, placement, arrowProps}) => (
                         <div ref={ref} style={style} className={cx(
                             "popover",
                             `bs-popover-${placement}`,
@@ -113,6 +113,7 @@ const DelayedPopper = ({placement, children}) => (
                             "fade",
                             {"show": context.popup}
                         )}>
+                            {arrow && <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>}
                             <div className="popover-body" onMouseEnter={context.popupEnter}
                                  onMouseLeave={context.popupLeave}>
                                 {children}
