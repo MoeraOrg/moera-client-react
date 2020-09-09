@@ -1,11 +1,8 @@
 import React from 'react';
 import PropType from 'prop-types';
-import * as ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import { Manager, Popper, Reference } from 'react-popper';
-import cx from 'classnames';
-import debounce from 'lodash.debounce';
 
+import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import { EmojiSelector, ReactionEmojiButton } from "ui/control";
 import { getSetting } from "state/settings/selectors";
 import {
@@ -32,8 +29,6 @@ class ReactionButtonImpl extends React.PureComponent {
     };
 
     state = {
-        locus: "out",
-        popup: false,
         reactions: []
     };
 
@@ -98,61 +93,6 @@ class ReactionButtonImpl extends React.PureComponent {
         return second ? second.emoji : null;
     }
 
-    documentClick = () => {
-        this.hide();
-    };
-
-    mainEnter = () => {
-        this.setLocus("main");
-    };
-
-    mainLeave = () => {
-        if (this.state.locus === "main") {
-            this.setLocus("out");
-        }
-    };
-
-    popupEnter = () => {
-        this.setLocus("popup");
-    };
-
-    popupLeave = () => {
-        if (this.state.locus === "popup") {
-            this.setLocus("out");
-        }
-    };
-
-    setLocus(locus) {
-        const changed = this.state.locus !== locus;
-        this.setState({locus});
-        if (changed) {
-            this.onTimeout();
-        }
-    }
-
-    onTimeout = debounce(() => {
-        switch (this.state.locus) {
-            case "out":
-                this.hide();
-                break;
-            case "main":
-                this.show();
-                break;
-            default:
-                // do nothing
-        }
-    }, 1000);
-
-    show() {
-        this.setState({popup: true});
-        document.addEventListener("click", this.documentClick);
-    }
-
-    hide() {
-        this.setState({popup: false});
-        document.removeEventListener("click", this.documentClick);
-    }
-
     defaultReactionAdd = () => {
         const {negative, onReactionAdd} = this.props;
 
@@ -169,46 +109,30 @@ class ReactionButtonImpl extends React.PureComponent {
 
     render() {
         const {negative} = this.props;
+
         return (
             <Manager>
                 <Reference>
-                    {({ref}) =>
+                    {(ref, mainEnter, mainLeave) =>
                         <ReactionEmojiButton
                             {...this.props}
                             invisible={this.isInvisible()}
                             buttonRef={ref}
-                            onMouseEnter={this.mainEnter}
-                            onMouseLeave={this.mainLeave}
+                            onMouseEnter={mainEnter}
+                            onMouseLeave={mainLeave}
                             onReactionAdd={this.defaultReactionAdd}
                             onReactionDelete={this.reactionDelete}
                         />
                     }
                 </Reference>
-                {ReactDOM.createPortal(
-                    (this.state.popup || this.state.locus !== "out") &&
-                        <Popper placement="top">
-                            {({ref, style, placement}) => (
-                                <div ref={ref} style={style} className={cx(
-                                    "popover",
-                                    `bs-popover-${placement}`,
-                                    "shadow",
-                                    "fade",
-                                    {"show": this.state.popup}
-                                )}>
-                                    <div className="popover-body" onMouseEnter={this.popupEnter}
-                                         onMouseLeave={this.popupLeave}>
-                                        <EmojiSelector
-                                            negative={negative}
-                                            reactions={this.state.reactions}
-                                            fixedWidth={true}
-                                            onClick={this.reactionAdd}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                        </Popper>,
-                    document.querySelector("#modal-root")
-                )}
+                <DelayedPopper placement="top">
+                    <EmojiSelector
+                        negative={negative}
+                        reactions={this.state.reactions}
+                        fixedWidth={true}
+                        onClick={this.reactionAdd}
+                    />
+                </DelayedPopper>
             </Manager>
         );
     }
