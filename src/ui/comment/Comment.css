@@ -1,12 +1,17 @@
 .comment {
     position: relative;
     margin: 0 1rem .6rem 1rem;
+    width: max-content;
+    max-width: calc(100% - 2rem);
 }
 
 .comment .content {
     background-color: var(--comments);
     border-radius: 5px;
     padding: .5rem;
+    width: max-content;
+    min-width: 16rem;
+    max-width: 100%;
 }
 
 .comment.focused .content {
