@@ -16,6 +16,8 @@ import {
     FOCUSED_COMMENT_LOAD_FAILED,
     FOCUSED_COMMENT_LOADED,
     focusedCommentLoad,
+    GLANCE_COMMENT,
+    glanceCommentLoad,
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import {
@@ -27,6 +29,7 @@ import {
     isFocusedCommentInList,
     isFocusedCommentToBeLoaded,
     isFutureCommentsToBeLoaded,
+    isGlanceCommentToBeLoaded,
     isPastCommentsToBeLoaded
 } from "state/detailedposting/selectors";
 import { POSTING_DELETED, POSTING_SET, postingSet } from "state/postings/actions";
@@ -88,5 +91,6 @@ export default [
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentReactionLoad(signal.payload.id, signal.payload.postingId)
     ),
-    trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad)
+    trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad),
+    trigger(GLANCE_COMMENT, isGlanceCommentToBeLoaded, glanceCommentLoad)
 ];

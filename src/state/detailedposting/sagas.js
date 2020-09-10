@@ -25,9 +25,12 @@ import {
     detailedPostingLoaded,
     detailedPostingLoadFailed,
     focusedCommentLoaded,
-    focusedCommentLoadFailed
+    focusedCommentLoadFailed,
+    glanceCommentLoaded,
+    glanceCommentLoadFailed
 } from "state/detailedposting/actions";
 import {
+    getComment,
     getCommentComposerCommentId,
     getCommentsState,
     getDetailedPosting,
@@ -236,4 +239,31 @@ export function* commentReplySaga(action) {
         textFieldEdit.insert(document.getElementById("body"), `@${ownerName} `);
     }
     yield put(commentsScrollToComposer());
+}
+
+export function* glanceCommentLoadSaga() {
+    const {receiverName, receiverPostingId, commentId, comment} = yield select(
+        state => {
+            const comments = getCommentsState(state);
+            return {
+                receiverName: comments.receiverName,
+                receiverPostingId: comments.receiverPostingId,
+                commentId: comments.glanceCommentId,
+                comment: getComment(state, comments.glanceCommentId)
+            }
+        }
+    );
+
+    if (comment != null) {
+        yield put(glanceCommentLoaded(receiverName, comment));
+        return;
+    }
+
+    try {
+        const data = yield call(Node.getComment, receiverName, receiverPostingId, commentId);
+        yield put(glanceCommentLoaded(receiverName, data));
+    } catch (e) {
+        yield put(glanceCommentLoadFailed(receiverName, receiverPostingId));
+        yield put(errorThrown(e));
+    }
 }

@@ -46,6 +46,10 @@ export function isCommentsReceiverToBeSwitched(state) {
     return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
 }
 
+export function getComment(state, id) {
+    return getCommentsState(state).comments.find(c => c.id === id);
+}
+
 export function getFocusedCommentId(state) {
     return getCommentsState(state).focusedCommentId;
 }
@@ -72,7 +76,7 @@ export function isFocusedCommentReady(state) {
 
 export function isFocusedCommentInList(state) {
     const comments = getCommentsState(state);
-    return comments.focusedCommentId == null || comments.comments.find(c => c.id === comments.focusedCommentId) != null
+    return comments.focusedCommentId == null || getComment(state, comments.focusedCommentId) != null;
 }
 
 export function isCommentsReadyToBeLoaded(state) {
@@ -125,4 +129,11 @@ export function isCommentComposerReplied(state) {
 
 export function isCommentDialogShown(state) {
     return state.detailedPosting.compose.showDialog;
+}
+
+export function isGlanceCommentToBeLoaded(state) {
+    const comments = getCommentsState(state);
+    return !comments.loadedGlanceComment
+        || (comments.glanceCommentId != null
+            && (comments.glanceComment == null || comments.glanceComment.id !== comments.glanceCommentId));
 }

@@ -246,3 +246,26 @@ export const COMMENT_REPLIED_TO_UNSET = "COMMENT_REPLIED_TO_UNSET";
 export const commentRepliedToUnset = () => ({
     type: COMMENT_REPLIED_TO_UNSET
 });
+
+export const GLANCE_COMMENT = "GLANCE_COMMENT";
+export const glanceComment = (commentId) => ({
+    type: GLANCE_COMMENT,
+    payload: {commentId}
+});
+
+export const GLANCE_COMMENT_LOAD = "GLANCE_COMMENT_LOAD";
+export const glanceCommentLoad = () => ({
+    type: GLANCE_COMMENT_LOAD
+});
+
+export const GLANCE_COMMENT_LOADED = "GLANCE_COMMENT_LOADED";
+export const glanceCommentLoaded = (nodeName, comment) => ({
+    type: GLANCE_COMMENT_LOADED,
+    payload: {nodeName, comment}
+});
+
+export const GLANCE_COMMENT_LOAD_FAILED = "GLANCE_COMMENT_LOAD_FAILED";
+export const glanceCommentLoadFailed = (nodeName, postingId) => ({
+    type: GLANCE_COMMENT_LOAD_FAILED,
+    payload: {nodeName, postingId}
+});

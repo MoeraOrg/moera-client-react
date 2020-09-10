@@ -50,6 +50,9 @@ class Manager extends React.PureComponent {
         const changed = this.state.locus !== locus;
         this.setState({locus});
         if (changed) {
+            if (locus === "main" && this.props.onPreparePopper) {
+                this.props.onPreparePopper();
+            }
             this.onTimeout();
         }
     }

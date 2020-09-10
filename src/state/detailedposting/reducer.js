@@ -42,6 +42,10 @@ import {
     FOCUSED_COMMENT_LOAD,
     FOCUSED_COMMENT_LOAD_FAILED,
     FOCUSED_COMMENT_LOADED,
+    GLANCE_COMMENT,
+    GLANCE_COMMENT_LOAD,
+    GLANCE_COMMENT_LOAD_FAILED,
+    GLANCE_COMMENT_LOADED,
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import { safeHtml, safePreviewHtml } from "util/html";
@@ -64,7 +68,11 @@ const emptyComments = {
     loadingFocusedComment: false,
     loadedFocusedComment: false,
     focusedCommentId: null,
-    focusedMoment: Number.MIN_SAFE_INTEGER
+    focusedMoment: Number.MIN_SAFE_INTEGER,
+    loadingGlanceComment: false,
+    loadedGlanceComment: false,
+    glanceCommentId: null,
+    glanceComment: null
 };
 
 const emptyCompose = {
@@ -116,6 +124,9 @@ function isSingleEmojiComment(comment) {
 }
 
 function extractComment(comment) {
+    if (comment.verificationStatus != null) { // Already extracted
+        return comment;
+    }
     if (!comment.bodyPreview.text) {
         comment = immutable.set(comment, "body.previewText", safePreviewHtml(comment.body.text));
     }
@@ -511,6 +522,36 @@ export default (state = initialState, action) => {
                 repliedToName: null,
                 repliedToHeading: null
             });
+
+        case GLANCE_COMMENT:
+            return immutable.set(state, "comments.glanceCommentId", action.payload.commentId);
+
+        case GLANCE_COMMENT_LOAD:
+            return immutable.assign(state, "comments", {
+                loadingGlanceComment: true,
+                loadedGlanceComment: false,
+                glanceComment: null
+            });
+
+        case GLANCE_COMMENT_LOADED: {
+            const {nodeName, comment} = action.payload;
+            if (nodeName !== state.comments.receiverName || comment.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            return immutable.assign(state, "comments", {
+                loadingGlanceComment: false,
+                loadedGlanceComment: true,
+                glanceComment: extractComment(comment)
+            });
+        }
+
+        case GLANCE_COMMENT_LOAD_FAILED: {
+            const {nodeName, postingId} = action.payload;
+            if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            return immutable.set(state, "comments.loadingGlanceComment", false);
+        }
 
         default:
             return state;
