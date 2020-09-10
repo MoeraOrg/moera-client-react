@@ -7,3 +7,7 @@
     margin-left: .3em;
     margin-right: .5em;
 }
+
+.comment .owner A {
+    color: var(--node-name);
+}

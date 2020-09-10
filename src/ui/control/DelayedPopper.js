@@ -102,7 +102,7 @@ const Reference = ({children}) => (
     </DelayedPopperContext.Consumer>
 );
 
-const DelayedPopper = ({placement, arrow, children}) => (
+const DelayedPopper = ({placement, arrow, className, children}) => (
     <DelayedPopperContext.Consumer>
         {context => (
             ReactDOM.createPortal(
@@ -114,7 +114,8 @@ const DelayedPopper = ({placement, arrow, children}) => (
                             `bs-popover-${placement}`,
                             "shadow",
                             "fade",
-                            {"show": context.popup}
+                            {"show": context.popup},
+                            className
                         )}>
                             {arrow && <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>}
                             <div className="popover-body" onMouseEnter={context.popupEnter}
