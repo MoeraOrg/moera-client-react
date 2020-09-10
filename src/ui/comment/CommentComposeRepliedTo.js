@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { NodeName } from "ui/control";
 import { commentRepliedToUnset } from "state/detailedposting/actions";
 import { getDetailedPostingId } from "state/detailedposting/selectors";
-import Jump from "ui/navigation/Jump";
+import RepliedTo from "ui/comment/RepliedTo";
 
 class CommentComposeRepliedTo extends React.PureComponent {
 
@@ -21,14 +19,8 @@ class CommentComposeRepliedTo extends React.PureComponent {
         }
 
         return (
-            <div className="replied-to">
-                <Jump href={`/post/${postingId}?comment=${commentId}`}>
-                    <span className="icon"><FontAwesomeIcon icon="reply"/></span>
-                    <NodeName name={ownerName} linked={false}/>
-                    <span className="heading">{heading}</span>
-                </Jump>
-                <button className="unset" onClick={this.onUnset}>&times;</button>
-            </div>
+            <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} heading={heading} unset={true}
+                       onUnset={this.onUnset}/>
         );
     }
 
