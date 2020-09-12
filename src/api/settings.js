@@ -81,6 +81,13 @@ export const META = [
         }
     },
     {
+        name: "comment.replied-to.glance.enabled",
+        type: "bool",
+        defaultValue: "true",
+        title: "Show quick preview of the comment replied to",
+        modifiers: {}
+    },
+    {
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",

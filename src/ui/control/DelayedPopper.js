@@ -1,5 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
+import PropType from 'prop-types';
 import { Manager as PopperManager, Popper, Reference as PopperReference } from 'react-popper';
 import cx from 'classnames';
 import debounce from 'lodash.debounce';
@@ -7,6 +8,11 @@ import debounce from 'lodash.debounce';
 const DelayedPopperContext = React.createContext({});
 
 class Manager extends React.PureComponent {
+
+    static propTypes = {
+        disabled: PropType.bool,
+        onPreparePopper: PropType.func
+    };
 
     constructor(props, context) {
         super(props, context);
@@ -23,7 +29,9 @@ class Manager extends React.PureComponent {
     }
 
     documentClick = () => {
-        this.hide();
+        if (!this.props.disabled) {
+            this.hide();
+        }
     };
 
     mainEnter = () => {
@@ -47,6 +55,10 @@ class Manager extends React.PureComponent {
     };
 
     setLocus(locus) {
+        if (this.props.disabled) {
+            return;
+        }
+
         const changed = this.state.locus !== locus;
         this.setState({locus});
         if (changed) {

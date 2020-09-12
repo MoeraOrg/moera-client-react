@@ -9,6 +9,7 @@ import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import GlanceComment from "ui/comment/GlanceComment";
 import { glanceComment } from "state/detailedposting/actions";
 import "./RepliedTo.css";
+import { getSetting } from "state/settings/selectors";
 
 class RepliedTo extends React.PureComponent {
 
@@ -33,7 +34,7 @@ class RepliedTo extends React.PureComponent {
     }
 
     render() {
-        const {postingId, commentId, ownerName, heading, unset} = this.props;
+        const {postingId, commentId, ownerName, heading, unset, popperEnabled} = this.props;
 
         if (commentId == null) {
             return null;
@@ -41,7 +42,7 @@ class RepliedTo extends React.PureComponent {
 
         return (
             <div className="replied-to">
-                <Manager onPreparePopper={this.onPreparePopper}>
+                <Manager onPreparePopper={this.onPreparePopper} disabled={!popperEnabled}>
                     <Reference>
                         {(ref, mainEnter, mainLeave) =>
                             <span ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}>
@@ -65,6 +66,8 @@ class RepliedTo extends React.PureComponent {
 }
 
 export default connect(
-    null,
+    state => ({
+        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled")
+    }),
     { glanceComment }
 )(RepliedTo);
