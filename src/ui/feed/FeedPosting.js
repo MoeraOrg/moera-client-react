@@ -35,7 +35,7 @@ const Content = ({posting}) => {
 };
 
 const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) => (
-    <div className="posting entry" data-moment={story.moment} data-viewed={story.viewed}>
+    <div className="posting entry preview" data-moment={story.moment} data-viewed={story.viewed}>
         {deleting ?
             <PostingDeleting/>
         :

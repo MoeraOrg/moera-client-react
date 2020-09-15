@@ -24,18 +24,6 @@
     top: -1.5rem;
 }
 
-@media only screen and (min-width: 901px) {
-    .entry .content IMG {
-        max-width: calc(900px - 3.5rem);
-    }
-}
-
-@media only screen and (max-width: 900px) {
-    .entry .content IMG {
-        max-width: calc(100vw - 4rem);
-    }
-}
-
 .entry .emoji {
     width: 1em;
     height: 1em;
