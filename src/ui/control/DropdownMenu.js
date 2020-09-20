@@ -6,11 +6,9 @@ import "./DropdownMenu.css";
 
 export class DropdownMenu extends React.PureComponent {
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.state = {visible: false};
-    }
+    state = {
+        visible: false
+    };
 
     toggle = () => {
         if (!this.state.visible) {
@@ -37,9 +35,9 @@ export class DropdownMenu extends React.PureComponent {
                 <Reference>
                     {({ref}) => (
                         <div className="menu" ref={ref} onClick={this.toggle}>
-                            <FontAwesomeIcon icon="chevron-down" className="chevron" />
+                            <FontAwesomeIcon icon="chevron-down" className="chevron"/>
                             <Popper placement="bottom-end">
-                                {({ref, style, placement, scheduleUpdate}) => {
+                                {({ref, style, placement}) => {
                                     if (!this.state.visible) {
                                         return null;
                                     }
