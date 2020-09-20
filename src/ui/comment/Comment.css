@@ -5,9 +5,14 @@
     max-width: calc(100% - 2rem);
 }
 
+.comment .owner-line {
+    padding-right: 1.7rem;
+}
+
 .comment .content {
     background-color: var(--comments);
     border-radius: 5px;
+    box-sizing: content-box;
     padding: .5rem;
     width: max-content;
     min-width: 16rem;
