@@ -11,3 +11,7 @@
 .comment .owner A {
     color: var(--node-name);
 }
+
+.comment.topic-starter .owner A {
+    color: var(--node-name-ts);
+}

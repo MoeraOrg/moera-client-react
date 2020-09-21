@@ -19,12 +19,12 @@
     max-width: 100%;
 }
 
-.comment.focused .content {
-    border: dashed 1px var(--primary);
-}
-
 .comment .content P:last-child {
     margin-bottom: 0;
+}
+
+.comment.focused .content {
+    border: dashed 1px var(--primary);
 }
 
 @media only screen and (min-width: 901px) {

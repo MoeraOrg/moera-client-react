@@ -60,9 +60,12 @@ class Content extends React.PureComponent {
 
 }
 
-const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) => (
-    <div className={cx("comment", "entry", {"focused": focused, "single-emoji": comment.singleEmoji})}
-         data-moment={comment.moment}>
+const Comment = ({postingId, comment, focused, connectedToHome, postingReceiverName, isPermitted}) => (
+    <div className={cx("comment", "entry", {
+        "focused": focused,
+        "single-emoji": comment.singleEmoji,
+        "topic-starter": comment.ownerName === postingReceiverName
+    })} data-moment={comment.moment}>
         {comment.deleting ?
             <CommentDeleting/>
         :
@@ -86,6 +89,7 @@ const Comment = ({postingId, comment, focused, isPermitted, connectedToHome}) =>
 export default connect(
     state => ({
         connectedToHome: isConnectedToHome(state),
+        postingReceiverName: getCommentsState(state).receiverName,
         isPermitted: (operation, comment) =>
             isPermitted(operation, comment, state, getCommentsState(state).receiverName)
     })
