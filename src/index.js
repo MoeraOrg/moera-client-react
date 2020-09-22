@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as URI from 'uri-js';
 
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import store from "state/store";
-import { initFromLocation } from "state/navigation/actions";
-import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
+import {initFromLocation} from "state/navigation/actions";
+import {registerSpoilerElement} from 'ui/customelements/MoeraSpoilerElement'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -31,7 +31,7 @@ function buildInitAction() {
             .map(([name, value]) => ([name.toLowerCase(), decodeURIComponent(value)]))
             .forEach(([name, value]) => {
                 let components;
-                switch(name) {
+                switch (name) {
                     case "root":
                         components = URI.parse(value);
                         rootLocation += components.path || "";
@@ -52,19 +52,24 @@ function buildInitAction() {
     return initFromLocation(rootLocation, path, query, hash);
 }
 
-initIconLibrary();
-simpleNumberLocalizer();
-dateFnsLocalizer();
-registerSpoilerElement();
-ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById("app-root")
-);
-store.dispatch(buildInitAction());
+if (document.contentType === 'text/plain') {
+    initIconLibrary();
+    simpleNumberLocalizer();
+    dateFnsLocalizer();
+    registerSpoilerElement();
+    ReactDOM.render(
+        <Provider store={store}>
+            <App/>
+        </Provider>,
+        document.getElementById("app-root")
+    );
+    store.dispatch(buildInitAction());
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+    // If you want your app to work offline and load faster, you can change
+    // unregister() to register() below. Note this comes with some pitfalls.
+    // Learn more about service workers: http://bit.ly/CRA-PWA
+    serviceWorker.unregister();
+} else {
+    document.body.innerText = `Page with content type ${document.contentType} is not supported for security reasons.
+    Let node owner know that he needs to upgrade his node to version >=0.9.0.`
+}
