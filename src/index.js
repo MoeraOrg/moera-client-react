@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as URI from 'uri-js';
 
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from "state/store";
-import {initFromLocation} from "state/navigation/actions";
-import {registerSpoilerElement} from 'ui/customelements/MoeraSpoilerElement'
+import { initFromLocation } from "state/navigation/actions";
+import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-widgets/dist/css/react-widgets.css';
@@ -31,7 +31,7 @@ function buildInitAction() {
             .map(([name, value]) => ([name.toLowerCase(), decodeURIComponent(value)]))
             .forEach(([name, value]) => {
                 let components;
-                switch (name) {
+                switch(name) {
                     case "root":
                         components = URI.parse(value);
                         rootLocation += components.path || "";
