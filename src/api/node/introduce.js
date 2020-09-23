@@ -19,7 +19,7 @@ export function introduce(saga) {
             return;
         }
         if (yield select(isCartesInitialized)) {
-            yield put(cartesLoad);
+            yield put(cartesLoad());
         }
         yield put(postponingChannel, action);
     }
