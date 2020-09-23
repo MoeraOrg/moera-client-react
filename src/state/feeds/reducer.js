@@ -58,6 +58,10 @@ function extractStory(story) {
     if (story.posting) {
         t.postingId = story.posting.id;
     }
+    delete t.comment;
+    if (story.comment) {
+        t.commentId = story.comment.id;
+    }
     t.summary = replaceEmojis(story.summary);
     return t;
 }

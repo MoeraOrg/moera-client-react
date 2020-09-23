@@ -21,6 +21,8 @@ function getStoryTarget(story) {
             return {nodeName: story.remoteNodeName, href: "/"}
         case "subscriber-deleted":
             return {nodeName: story.remoteNodeName, href: "/"}
+        case "comment-added":
+            return {nodeName: ":", href: `/post/${story.postingId}?comment=${story.remoteCommentId}`}
         default:
             return {nodeName: ":", href: "/"}
     }
