@@ -70,6 +70,6 @@ if (document.contentType === 'text/plain') {
     // Learn more about service workers: http://bit.ly/CRA-PWA
     serviceWorker.unregister();
 } else {
-    document.body.innerText = `Page with content type ${document.contentType} is not supported for security reasons.
-    Let node owner know that he needs to upgrade his node to version >=0.9.0.`
+    document.body.innerText = `Pages with content type '${document.contentType}' are not supported anymore for security reasons.
+    Please turn to administrator to upgrade the node software to version 0.9.0 or later.`
 }
