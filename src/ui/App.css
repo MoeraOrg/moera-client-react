@@ -4,6 +4,7 @@ HTML {
 
 BODY {
     background-color: var(--body-background);
+    padding-bottom: 2rem;
 }
 
 ABBR[title] {
