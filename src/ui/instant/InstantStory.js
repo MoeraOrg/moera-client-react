@@ -25,6 +25,8 @@ function getStoryTarget(story) {
             return {nodeName: ":", href: `/post/${story.postingId}?comment=${story.remoteCommentId}`}
         case "mention-comment":
         case "reply-comment":
+        case "comment-reaction-added-positive":
+        case "comment-reaction-added-negative":
             return {
                 nodeName: story.remoteNodeName,
                 href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
