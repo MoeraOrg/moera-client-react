@@ -232,11 +232,12 @@ export function* commentReactionDeleteSaga(action) {
 export function* commentReplySaga(action) {
     const {commentId, ownerName, heading} = action.payload;
 
-    const replied = yield select(isCommentComposerReplied);
-    if (!replied) {
+    const body = document.getElementById("body");
+    const reply = body.textLength === 0 && !(yield select(isCommentComposerReplied));
+    if (reply) {
         yield put(commentRepliedToSet(commentId, ownerName, heading));
     } else {
-        textFieldEdit.insert(document.getElementById("body"), `@${ownerName} `);
+        textFieldEdit.insert(body, `@${ownerName} `);
     }
     yield put(commentsScrollToComposer());
 }
