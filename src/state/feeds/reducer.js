@@ -344,7 +344,8 @@ export default (state = initialState, action) => {
             const {istate, feed} = getFeed(state, feedName);
             if (moment != null && moment <= feed.before && moment > feed.after) {
                 if (!feed.stories.some(p => p.moment === moment)) {
-                    const stories = feed.stories.filter(p => p.postingId !== posting.id);
+                    const postingId = posting != null ? posting.id : null;
+                    const stories = feed.stories.filter(p => p.postingId !== postingId);
                     stories.push(extractStory(action.payload.story));
                     stories.sort((a, b) => b.moment - a.moment);
                     return istate.set([feedName, "stories"], stories).value();

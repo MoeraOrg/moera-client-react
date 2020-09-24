@@ -23,6 +23,11 @@ function getStoryTarget(story) {
             return {nodeName: story.remoteNodeName, href: "/"}
         case "comment-added":
             return {nodeName: ":", href: `/post/${story.postingId}?comment=${story.remoteCommentId}`}
+        case "mention-comment":
+            return {
+                nodeName: story.remoteNodeName,
+                href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+            }
         default:
             return {nodeName: ":", href: "/"}
     }

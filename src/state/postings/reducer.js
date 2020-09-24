@@ -83,7 +83,7 @@ export default (state = initialState, action) => {
 
         case STORY_DELETED: {
             const {id, posting} = action.payload.story;
-            if (state[posting.id]) {
+            if (posting && state[posting.id]) {
                 const refs = (state[posting.id].posting.feedReferences ?? []).filter(r => r.storyId !== id);
                 return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
             }

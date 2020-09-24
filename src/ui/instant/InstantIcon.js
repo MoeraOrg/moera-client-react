@@ -8,6 +8,7 @@ const InstantIcon = ({story}) => {
         case "reaction-added-negative":
             return <span style={{color: "var(--incorrect)"}}><FontAwesomeIcon icon="thumbs-down"/></span>
         case "mention-posting":
+        case "mention-comment":
             return <span style={{color: "var(--blue)"}}><FontAwesomeIcon icon="at"/></span>
         case "subscriber-added":
             return <span style={{color: "var(--blue)"}}><FontAwesomeIcon icon="eye"/></span>
