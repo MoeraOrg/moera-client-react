@@ -18,11 +18,7 @@ export function* homeRestoreSaga(action) {
         if (getCartesListTtl(cartes) < 5 * 60) {
             try {
                 const {cartesIp, cartes} = yield call(Node.getCartes, normalizeUrl(location), token);
-                if (addonApiVersion >= 2) {
-                    Browser.storeCartesData(cartesIp, cartes);
-                } else {
-                    Browser.storeHomeData(location, login, token, permissions, cartesIp, cartes);
-                }
+                Browser.storeCartesData(cartesIp, cartes);
             } catch (e) {
                 yield put(errorThrown(e));
             }

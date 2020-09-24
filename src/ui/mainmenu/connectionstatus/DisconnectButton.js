@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Browser } from "api";
 import { confirmBox } from "state/confirmbox/actions";
 import { disconnectFromHome } from "state/home/actions";
-import { getAddonApiVersion } from "state/home/selectors";
 
 class DisconnectButton extends React.PureComponent {
 
@@ -23,14 +22,9 @@ class DisconnectButton extends React.PureComponent {
     };
 
     onConfirmed = () => {
-        const {addonApiVersion, location, login, disconnectFromHome} = this.props;
+        const {location, login, disconnectFromHome} = this.props;
 
-        if (addonApiVersion >= 2) {
-            Browser.deleteData(location);
-        } else {
-            Browser.storeHomeData(location, login, null, null,
-                null, null);
-        }
+        Browser.deleteData(location);
         disconnectFromHome(location, login);
     };
 
@@ -46,7 +40,6 @@ class DisconnectButton extends React.PureComponent {
 
 export default connect(
     state => ({
-        addonApiVersion: getAddonApiVersion(state),
         location: state.home.root.location,
         login: state.home.login
     }),

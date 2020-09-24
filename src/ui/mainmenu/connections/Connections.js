@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Browser } from "api/browser";
-import { getAddonApiVersion } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { NodeName } from "ui/control";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
@@ -31,7 +30,7 @@ class Connections extends React.PureComponent {
     };
 
     render() {
-        const {hide, addonApiVersion, location, owner, roots} = this.props;
+        const {hide, location, owner, roots} = this.props;
 
         return (
             <div id="connections">
@@ -47,12 +46,9 @@ class Connections extends React.PureComponent {
                                         onClick={this.onItemClick(root.url, hide)}
                                         onDisconnect={this.onDisconnect(root.url)}/>
                 ))}
-                {addonApiVersion >= 2 &&
-                    <div className="connection-add" onClick={this.onAddClick(hide)}>
-                        <FontAwesomeIcon icon="plus"/>
-                        {" "}Add connection
-                    </div>
-                }
+                <div className="connection-add" onClick={this.onAddClick(hide)}>
+                    <FontAwesomeIcon icon="plus"/> Add connection
+                </div>
             </div>
         );
     }
@@ -61,7 +57,6 @@ class Connections extends React.PureComponent {
 
 export default connect(
     state => ({
-        addonApiVersion: getAddonApiVersion(state),
         location: state.home.root.location,
         owner: state.home.owner,
         roots: state.home.roots

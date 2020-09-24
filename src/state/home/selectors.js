@@ -43,5 +43,5 @@ export function getAddonApiVersion(state) {
 }
 
 export function hasInactiveConnections(state) {
-    return getAddonApiVersion(state) >= 2 && state.home.roots.length > 1;
+    return state.home.roots.length > 1;
 }

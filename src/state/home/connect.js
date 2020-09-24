@@ -6,7 +6,7 @@ import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerifie
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Browser, Naming, Node, NodeApiError, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
-import { getAddonApiVersion, getHomeConnectionData } from "state/home/selectors";
+import { getHomeConnectionData } from "state/home/selectors";
 
 function* connectToHomeFailure(error, onClose = null) {
     yield put(connectionToHomeFailed());
@@ -15,10 +15,6 @@ function* connectToHomeFailure(error, onClose = null) {
 
 export function* connectToHomeSaga(action) {
     const {location, assign, login, password} = action.payload;
-    const addonApiVersion = yield select(getAddonApiVersion);
-    if (addonApiVersion < 2) {
-        Browser.storeHomeData(location, login, null, null, null, null);
-    }
     let data;
     try {
         if (assign) {
@@ -43,13 +39,8 @@ export function* connectToHomeSaga(action) {
         yield put(errorThrown(e));
     }
 
-    if (addonApiVersion >= 2) {
-        Browser.storeConnectionData(normalizeUrl(location), null, login, data.token, data.permissions);
-        Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
-    } else {
-        Browser.storeHomeData(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
-            cartesData.cartes);
-    }
+    Browser.storeConnectionData(normalizeUrl(location), null, login, data.token, data.permissions);
+    Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
     yield put(connectedToHome(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
         cartesData.cartes));
 }
@@ -59,11 +50,8 @@ export function* verifyHomeOwnerSaga() {
         const {nodeName} = yield call(Node.getWhoAmI, ":");
         yield put(homeOwnerSet(nodeName));
 
-        const addonApiVersion = yield select(getAddonApiVersion);
-        if (addonApiVersion >= 2) {
-            const {location, login, token, permissions} = yield select(getHomeConnectionData);
-            Browser.storeConnectionData(location, nodeName, login, token, permissions);
-        }
+        const {location, login, token, permissions} = yield select(getHomeConnectionData);
+        Browser.storeConnectionData(location, nodeName, login, token, permissions);
 
         const {name, generation} = NodeName.parse(nodeName);
         if (name == null || generation == null) {
