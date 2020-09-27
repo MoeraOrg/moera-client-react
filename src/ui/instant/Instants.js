@@ -47,10 +47,12 @@ class Instants extends React.PureComponent {
                     <div className="title">Notifications</div>
                     <div className="read-all" onClick={this.onReadAll}>Mark All as Read</div>
                 </div>
-                {stories.map(story => <InstantStory key={story.moment} story={story} hide={hide}/>)}
-                <InstantsSentinel loading={loadingPast} title="Load more..." margin="0px 0px 100px 0px"
-                              visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
-                              onClick={this.loadPast}/>
+                <div className="content">
+                    {stories.map(story => <InstantStory key={story.moment} story={story} hide={hide}/>)}
+                    <InstantsSentinel loading={loadingPast} title="Load more..." margin="0px 0px 100px 0px"
+                                  visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
+                                  onClick={this.loadPast}/>
+                </div>
             </div>
         );
     }

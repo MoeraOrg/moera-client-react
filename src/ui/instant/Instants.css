@@ -4,15 +4,13 @@
 
 #instants {
     font-size: 0.835rem;
-    max-width: 800px;
-    max-height: 70vh;
     margin-left: -0.75rem;
     margin-right: -0.75rem;
-    overflow-y: auto;
 }
 
 #instants .header {
     padding: 0 0.75rem;
+    border-bottom: 1px solid var(--gray-light);
     display: flex;
     justify-content: space-between;
 }
@@ -28,4 +26,10 @@
 
 #instants .header .read-all:hover {
     text-decoration: underline;
+}
+
+#instants .content {
+    max-width: 800px;
+    max-height: 70vh;
+    overflow-y: auto;
 }
