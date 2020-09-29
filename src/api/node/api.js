@@ -36,11 +36,14 @@ export const ProfileInfo = schema({
         },
         "email": {
             type: "string",
-            anyOf: [{
-                const: ""
-            }, {
-                format: "email"
-            }]
+            anyOf: [
+                {
+                    const: ""
+                },
+                {
+                    format: "email"
+                }
+            ]
         },
         "operations": {
             type: "object",
@@ -361,6 +364,25 @@ const PostingInfoType = {
         },
         "totalComments": {
             type: "integer"
+        },
+        "subscriptions": {
+            type: "object",
+            properties: {
+                "comments": {
+                    anyOf: [
+                        {
+                            type: "null"
+                        },
+                        {
+                            type: "string"
+                        }
+                    ]
+                }
+            },
+            default: {
+                comments: null
+            },
+            additionalProperties: false
         }
     },
     additionalProperties: false
@@ -707,26 +729,29 @@ export const SettingMetaInfoArray = schema({
                 type: "string"
             },
             "modifiers": {
-                anyOf: [{
-                    type: "object",
-                    properties: {
-                        "format": {
-                            type: "string"
+                anyOf: [
+                    {
+                        type: "object",
+                        properties: {
+                            "format": {
+                                type: "string"
+                            },
+                            "min": {
+                                type: "string"
+                            },
+                            "max": {
+                                type: "string"
+                            },
+                            "multiline": {
+                                type: "boolean"
+                            }
                         },
-                        "min": {
-                            type: "string"
-                        },
-                        "max": {
-                            type: "string"
-                        },
-                        "multiline": {
-                            type: "boolean"
-                        }
+                        additionalProperties: false
                     },
-                    additionalProperties: false
-                }, {
-                    type: "null"
-                }]
+                    {
+                        type: "null"
+                    }
+                ]
             }
         },
         additionalProperties: false

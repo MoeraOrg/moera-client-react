@@ -7,11 +7,14 @@ const Result = (type) => (schema({
             type: "string"
         },
         "result": {
-            anyOf: [{
-                type
-            }, {
-                type: "null"
-            }]
+            anyOf: [
+                {
+                    type
+                },
+                {
+                    type: "null"
+                }
+            ]
         },
         "id": {
             type: "integer"

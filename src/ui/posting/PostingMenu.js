@@ -4,11 +4,17 @@ import { connect } from 'react-redux';
 import { DropdownMenu } from "ui/control";
 import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
-import { postingCopyLink, postingDelete } from "state/postings/actions";
+import {
+    postingCommentsSubscribe,
+    postingCommentsUnsubscribe,
+    postingCopyLink,
+    postingDelete
+} from "state/postings/actions";
 import { postingReply } from "state/postingreply/actions";
 import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import "./EntryMenu.css";
+import { getHomeOwnerName } from "state/home/selectors";
 
 class PostingMenu extends React.PureComponent {
 
@@ -28,6 +34,18 @@ class PostingMenu extends React.PureComponent {
         const {posting, goToCompose} = this.props;
 
         goToCompose(posting.id);
+    };
+
+    onFollowComments = () => {
+        const {posting, postingCommentsSubscribe} = this.props;
+
+        postingCommentsSubscribe(posting.id);
+    };
+
+    onUnfollowComments = () => {
+        const {posting, postingCommentsUnsubscribe} = this.props;
+
+        postingCommentsUnsubscribe(posting.id);
     };
 
     onDelete = () => {
@@ -50,7 +68,7 @@ class PostingMenu extends React.PureComponent {
     };
 
     render() {
-        const {posting, story, isPermitted, rootLocation} = this.props;
+        const {posting, story, isPermitted, rootLocation, homeOwnerName} = this.props;
 
         return (
             <DropdownMenu items={[
@@ -65,6 +83,18 @@ class PostingMenu extends React.PureComponent {
                     href: `${rootLocation}/moera/compose`,
                     onClick: this.onReply,
                     show: true
+                },
+                {
+                    title: "Follow comments",
+                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    onClick: this.onFollowComments,
+                    show: posting.ownerName !== homeOwnerName && posting.subscriptions.comments == null
+                },
+                {
+                    title: "Unfollow comments",
+                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    onClick: this.onUnfollowComments,
+                    show: posting.ownerName !== homeOwnerName && posting.subscriptions.comments != null
                 },
                 {
                     title: "Edit...",
@@ -107,6 +137,10 @@ class PostingMenu extends React.PureComponent {
 export default connect(
     state => ({
         rootLocation: state.node.root.location,
+        homeOwnerName: getHomeOwnerName(state)
     }),
-    { goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply }
+    {
+        goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
+        postingCommentsSubscribe, postingCommentsUnsubscribe
+    }
 )(PostingMenu);

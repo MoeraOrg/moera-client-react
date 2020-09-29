@@ -81,3 +81,39 @@ export const postingCommentsSet = (id, total) => ({
     type: POSTING_COMMENTS_SET,
     payload: {id, total}
 });
+
+export const POSTING_COMMENTS_SUBSCRIBE = "POSTING_COMMENTS_SUBSCRIBE";
+export const postingCommentsSubscribe = (id) => ({
+    type: POSTING_COMMENTS_SUBSCRIBE,
+    payload: {id}
+});
+
+export const POSTING_COMMENTS_SUBSCRIBED = "POSTING_COMMENTS_SUBSCRIBED";
+export const postingCommentsSubscribed = (id, subscriberId) => ({
+    type: POSTING_COMMENTS_SUBSCRIBED,
+    payload: {id, subscriberId}
+});
+
+export const POSTING_COMMENTS_SUBSCRIBE_FAILED = "POSTING_COMMENTS_SUBSCRIBE_FAILED";
+export const postingCommentsSubscribeFailed = (id) => ({
+    type: POSTING_COMMENTS_SUBSCRIBE_FAILED,
+    payload: {id}
+});
+
+export const POSTING_COMMENTS_UNSUBSCRIBE = "POSTING_COMMENTS_UNSUBSCRIBE";
+export const postingCommentsUnsubscribe = (id, subscriberId) => ({
+    type: POSTING_COMMENTS_UNSUBSCRIBE,
+    payload: {id, subscriberId}
+});
+
+export const POSTING_COMMENTS_UNSUBSCRIBED = "POSTING_COMMENTS_UNSUBSCRIBED";
+export const postingCommentsUnsubscribed = (id) => ({
+    type: POSTING_COMMENTS_UNSUBSCRIBED,
+    payload: {id}
+});
+
+export const POSTING_COMMENTS_UNSUBSCRIBE_FAILED = "POSTING_COMMENTS_UNSUBSCRIBE_FAILED";
+export const postingCommentsUnsubscribeFailed = (id) => ({
+    type: POSTING_COMMENTS_UNSUBSCRIBE_FAILED,
+    payload: {id}
+});

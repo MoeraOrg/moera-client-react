@@ -22,7 +22,7 @@ export function* peopleGeneralLoadSaga() {
 
 export function* subscribersLoadSaga() {
     try {
-        const data = yield call(Node.getSubscribers, "");
+        const data = yield call(Node.getSubscribers, "", "feed");
         yield put(subscribersLoaded(data));
     } catch (e) {
         yield put(subscribersLoadFailed());
@@ -32,7 +32,7 @@ export function* subscribersLoadSaga() {
 
 export function* subscriptionsLoadSaga() {
     try {
-        const data = yield call(Node.getSubscriptions, "");
+        const data = yield call(Node.getSubscriptions, "", "feed");
         yield put(subscriptionsLoaded(data));
     } catch (e) {
         yield put(subscriptionsLoadFailed());

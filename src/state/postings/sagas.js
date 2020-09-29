@@ -4,6 +4,10 @@ import clipboardCopy from 'clipboard-copy';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    postingCommentsSubscribed,
+    postingCommentsSubscribeFailed,
+    postingCommentsUnsubscribed,
+    postingCommentsUnsubscribeFailed,
     postingDeleted,
     postingDeleteFailed,
     postingLoadFailed,
@@ -16,6 +20,7 @@ import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { flashBox } from "state/flashbox/actions";
+import { feedSubscribed, feedSubscribeFailed, feedUnsubscribed, feedUnsubscribeFailed } from "state/feeds/actions";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
@@ -114,6 +119,41 @@ export function* postingCopyLinkSaga(action) {
         yield call(clipboardCopy, href);
         yield put(flashBox("Link copied to the clipboard"));
     } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
+
+export function* postingCommentsSubscribeSaga(action) {
+    const {id} = action.payload;
+    const {posting, ownerName} = yield select(state => ({
+        posting: getPosting(state, id),
+        ownerName: getOwnerName(state)
+    }));
+    const nodeName = posting.receiverName ?? ownerName;
+    const postingId = posting.receiverPostingId ?? id;
+    try {
+        const data = yield call(Node.postPostingCommentsSubscriber, nodeName, postingId);
+        yield call(Node.postPostingCommentsSubscription, ":", data.id, nodeName, postingId);
+        yield put(postingCommentsSubscribed(id, data.id));
+    } catch (e) {
+        yield put(postingCommentsSubscribeFailed(id));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* postingCommentsUnsubscribeSaga(action) {
+    const {id} = action.payload;
+    const {posting, ownerName} = yield select(state => ({
+        posting: getPosting(state, id),
+        ownerName: getOwnerName(state)
+    }));
+    const nodeName = posting.receiverName ?? ownerName;
+    try {
+        yield call(Node.deleteSubscriber, nodeName, posting.subscriptions.comments);
+        yield call(Node.deleteSubscription, ":", posting.subscriptions.comments, nodeName);
+        yield put(postingCommentsUnsubscribed(id));
+    } catch (e) {
+        yield put(postingCommentsUnsubscribeFailed(id));
         yield put(errorThrown(e));
     }
 }

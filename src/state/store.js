@@ -56,6 +56,8 @@ import {
     COMPOSE_POSTING_LOAD
 } from "state/compose/actions";
 import {
+    POSTING_COMMENTS_SUBSCRIBE,
+    POSTING_COMMENTS_UNSUBSCRIBE,
     POSTING_COPY_LINK,
     POSTING_DELETE,
     POSTING_LOAD,
@@ -167,6 +169,8 @@ import {
     composePostSaga
 } from "state/compose/sagas";
 import {
+    postingCommentsSubscribeSaga,
+    postingCommentsUnsubscribeSaga,
     postingCopyLinkSaga,
     postingDeleteSaga,
     postingLoadSaga,
@@ -314,6 +318,8 @@ function* combinedSaga() {
     yield takeEvery(COMMENT_REACTION_DELETE, commentReactionDeleteSaga);
     yield takeEvery(COMMENT_REPLY, commentReplySaga);
     yield takeEvery(GLANCE_COMMENT_LOAD, glanceCommentLoadSaga);
+    yield takeEvery(POSTING_COMMENTS_SUBSCRIBE, postingCommentsSubscribeSaga);
+    yield takeEvery(POSTING_COMMENTS_UNSUBSCRIBE, postingCommentsUnsubscribeSaga);
 
     yield invokeTriggers(triggers);
 }

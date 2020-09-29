@@ -130,16 +130,24 @@ export function* getPeopleGeneral(nodeName) {
     return yield call(callApi, {nodeName, location: "/people", schema: NodeApi.PeopleGeneralInfo});
 }
 
-export function* getSubscribers(nodeName) {
+export function* getSubscribers(nodeName, type) {
+    type = encodeURIComponent(type);
     return yield call(callApi, {
-        nodeName, location: "/people/subscribers?type=feed", schema: NodeApi.SubscriberInfoArray
+        nodeName, location: `/people/subscribers?type=${type}`, schema: NodeApi.SubscriberInfoArray
     });
 }
 
-export function* postSubscriber(nodeName, feedName) {
+export function* postFeedSubscriber(nodeName, feedName) {
     return yield call(callApi, {
         nodeName, location: "/people/subscribers", method: "POST", auth: true, body: {type: "feed", feedName},
         schema: NodeApi.SubscriberInfo
+    });
+}
+
+export function* postPostingCommentsSubscriber(nodeName, postingId) {
+    return yield call(callApi, {
+        nodeName, location: "/people/subscribers", method: "POST", auth: true,
+        body: {type: "posting-comments", postingId}, schema: NodeApi.SubscriberInfo
     });
 }
 
@@ -150,13 +158,14 @@ export function* deleteSubscriber(nodeName, subscriberId) {
     });
 }
 
-export function* getSubscriptions(nodeName) {
+export function* getSubscriptions(nodeName, type) {
+    type = encodeURIComponent(type);
     return yield call(callApi, {
-        nodeName, location: "/people/subscriptions?type=feed", schema: NodeApi.SubscriptionInfoArray
+        nodeName, location: `/people/subscriptions?type=${type}`, schema: NodeApi.SubscriptionInfoArray
     });
 }
 
-export function* postSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFeedName) {
+export function* postFeedSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFeedName) {
     return yield call(callApi, {
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
         body: {type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFeedName},
@@ -164,9 +173,17 @@ export function* postSubscription(nodeName, remoteSubscriberId, remoteNodeName, 
     });
 }
 
+export function* postPostingCommentsSubscription(nodeName, remoteSubscriberId, remoteNodeName, remotePostingId) {
+    return yield call(callApi, {
+        nodeName, location: "/people/subscriptions", method: "POST", auth: true,
+        body: {type: "posting-comments", remoteSubscriberId, remoteNodeName, remotePostingId},
+        schema: NodeApi.SubscriptionInfo
+    });
+}
+
 export function* deleteSubscription(nodeName, remoteSubscriberId, remoteNodeName) {
     const location = urlWithParameters("/people/subscriptions",
-        {type: "feed", nodeName: remoteNodeName, subscriberId: remoteSubscriberId});
+        {nodeName: remoteNodeName, subscriberId: remoteSubscriberId});
     return yield call(callApi, {nodeName, location, method: "DELETE", auth: true, schema: NodeApi.Result});
 }
 

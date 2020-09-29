@@ -3,7 +3,7 @@ import selectn from 'selectn';
 
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET } from "state/feeds/actions";
 import {
-    POSTING_COMMENTS_SET,
+    POSTING_COMMENTS_SET, POSTING_COMMENTS_SUBSCRIBED, POSTING_COMMENTS_UNSUBSCRIBED,
     POSTING_DELETE,
     POSTING_DELETED,
     POSTING_REACT,
@@ -144,8 +144,7 @@ export default (state = initialState, action) => {
         case POSTING_REACTION_SET: {
             const {id, reaction, totals} = action.payload;
             if (state[id]) {
-                const istate = immutable.wrap(state)
-                                .set([id, "posting", "reactions"], totals);
+                const istate = immutable.wrap(state).set([id, "posting", "reactions"], totals);
                 if (state[id].posting.receiverName == null) {
                     istate.set([id, "posting", "clientReaction"], reaction);
                 }
@@ -176,6 +175,22 @@ export default (state = initialState, action) => {
             const id = findPostingIdByRemote(state, remoteNodeName, remotePostingId);
             if (id != null) {
                 return immutable.del(state, [id, "posting", "clientReaction"]);
+            }
+            return state;
+        }
+
+        case POSTING_COMMENTS_SUBSCRIBED: {
+            const {id, subscriberId} = action.payload;
+            if (state[id]) {
+                return immutable.set(state, [id, "posting", "subscriptions", "comments"], subscriberId);
+            }
+            return state;
+        }
+
+        case POSTING_COMMENTS_UNSUBSCRIBED: {
+            const {id} = action.payload;
+            if (state[id]) {
+                return immutable.set(state, [id, "posting", "subscriptions", "comments"], null);
             }
             return state;
         }

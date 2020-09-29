@@ -38,8 +38,8 @@ export function* feedSubscribeSaga(action) {
     const {nodeName, feedName} = action.payload;
     const ownerName = yield select(getOwnerName);
     try {
-        const data = yield call(Node.postSubscriber, nodeName, feedName);
-        yield call(Node.postSubscription, ":", data.id, nodeName ? nodeName : ownerName, feedName);
+        const data = yield call(Node.postFeedSubscriber, nodeName, feedName);
+        yield call(Node.postFeedSubscription, ":", data.id, nodeName ? nodeName : ownerName, feedName);
         yield put(feedSubscribed(nodeName, feedName, data.id));
     } catch (e) {
         yield put(feedSubscribeFailed(nodeName, feedName));
