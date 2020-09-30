@@ -22,6 +22,7 @@ import { namingNameUsed } from "state/naming/actions";
 import { getFeedState } from "state/feeds/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReactions } from "state/activityreactions/sagas";
+import { fillSubscriptions } from "state/subscriptions/sagas";
 
 export function* feedGeneralLoadSaga(action) {
     const {feedName} = action.payload;
@@ -92,6 +93,7 @@ export function* feedPastSliceLoadSaga(action) {
             ? yield call(Node.getFeedSlice, ":", feedName.substring(1), null, before, 20)
             : yield call(Node.getFeedSlice, "", feedName, null, before, 20);
         yield call(fillActivityReactions, data.stories);
+        yield call(fillSubscriptions, data.stories);
         yield put(feedPastSliceSet(feedName, data.stories, data.before, data.after));
         yield call(cacheNames, data.stories);
     } catch (e) {
@@ -108,6 +110,7 @@ export function* feedFutureSliceLoadSaga(action) {
             ? yield call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
             : yield call(Node.getFeedSlice, "", feedName, after, null, 20);
         yield call(fillActivityReactions, data.stories);
+        yield call(fillSubscriptions, data.stories);
         yield put(feedFutureSliceSet(feedName, data.stories, data.before, data.after));
         yield call(cacheNames, data.stories);
     } catch (e) {

@@ -187,6 +187,13 @@ export function* deleteSubscription(nodeName, remoteSubscriberId, remoteNodeName
     return yield call(callApi, {nodeName, location, method: "DELETE", auth: true, schema: NodeApi.Result});
 }
 
+export function* postSubscriptionsSearch(nodeName, remotePostings) {
+    return yield call(callApi, {
+        nodeName, location: "/people/subscriptions/search", method: "POST", auth: true,
+        body: {postings: remotePostings}, schema: NodeApi.SubscriptionInfoArray
+    });
+}
+
 export function* getPostingFeatures(nodeName) {
     return yield call(callApi, {nodeName, location: "/postings/features", schema: NodeApi.PostingFeatures});
 }

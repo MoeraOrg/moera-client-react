@@ -20,6 +20,7 @@ import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { flashBox } from "state/flashbox/actions";
+import { fillSubscription } from "state/subscriptions/sagas";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
@@ -36,7 +37,8 @@ export function* postingDeleteSaga(action) {
 export function* postingLoadSaga(action) {
     try {
         const data = yield call(Node.getPosting, "", action.payload.id);
-        yield call(fillActivityReaction, data)
+        yield call(fillActivityReaction, data);
+        yield call(fillSubscription, data);
         yield put(postingSet(data));
     } catch (e) {
         yield put(postingLoadFailed());

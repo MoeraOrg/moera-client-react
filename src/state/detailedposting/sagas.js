@@ -42,12 +42,14 @@ import { postingCommentsSet } from "state/postings/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
+import { fillSubscription } from "state/subscriptions/sagas";
 
 export function* detailedPostingLoadSaga() {
     try {
         const id = yield select(getDetailedPostingId);
         const data = yield call(Node.getPosting, "", id);
         yield call(fillActivityReaction, data)
+        yield call(fillSubscription, data)
         yield put(detailedPostingLoaded(data));
     } catch (e) {
         yield put(detailedPostingLoadFailed());
