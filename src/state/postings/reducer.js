@@ -3,15 +3,19 @@ import selectn from 'selectn';
 
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET } from "state/feeds/actions";
 import {
-    POSTING_COMMENTS_SET, POSTING_COMMENTS_SUBSCRIBED, POSTING_COMMENTS_UNSUBSCRIBED,
+    POSTING_COMMENTS_SET,
+    POSTING_COMMENTS_SUBSCRIBED,
+    POSTING_COMMENTS_UNSUBSCRIBED,
     POSTING_DELETE,
     POSTING_DELETED,
     POSTING_REACT,
     POSTING_REACTION_DELETE,
     POSTING_REACTION_SET,
     POSTING_SET,
+    POSTING_SUBSCRIPTION_SET,
     POSTING_VERIFY,
-    POSTING_VERIFY_FAILED
+    POSTING_VERIFY_FAILED,
+    REMOTE_POSTING_SUBSCRIPTION_SET
 } from "state/postings/actions";
 import {
     EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED,
@@ -20,8 +24,9 @@ import {
     EVENT_HOME_REMOTE_REACTION_DELETED
 } from "api/events/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
-import { safeHtml, safePreviewHtml } from "util/html";
 import { findPostingIdByRemote } from "state/postings/selectors";
+import { immutableSetSubscriptionId } from "state/subscriptions/util";
+import { safeHtml, safePreviewHtml } from "util/html";
 
 const initialState = {
 };
@@ -191,6 +196,23 @@ export default (state = initialState, action) => {
             const {id} = action.payload;
             if (state[id]) {
                 return immutable.set(state, [id, "posting", "subscriptions", "comments"], null);
+            }
+            return state;
+        }
+
+        case POSTING_SUBSCRIPTION_SET: {
+            const {id, type, subscriberId} = action.payload;
+            if (state[id]) {
+                return immutableSetSubscriptionId(state, id, type, subscriberId);
+            }
+            return state;
+        }
+
+        case REMOTE_POSTING_SUBSCRIPTION_SET: {
+            const {remoteNodeName, remotePostingId, type, subscriberId} = action.payload;
+            const id = findPostingIdByRemote(state, remoteNodeName, remotePostingId);
+            if (id != null) {
+                return immutableSetSubscriptionId(state, id, type, subscriberId);
             }
             return state;
         }

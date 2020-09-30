@@ -2,14 +2,7 @@ import { call, select } from 'redux-saga/effects';
 
 import { isAtHomeNode } from "state/node/selectors";
 import { Node } from "api/node";
-
-function fillSubscriptionId(posting, subscription) {
-    switch (subscription.type) {
-        case "posting-comments":
-            posting.subscriptions.comments = subscription.remoteSubscriberId;
-            break;
-    }
-}
+import { fillSubscriptionId } from "state/subscriptions/util";
 
 export function* fillSubscriptions(stories) {
     const postings = stories

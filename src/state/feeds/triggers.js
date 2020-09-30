@@ -30,6 +30,7 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
 
 function toStory(eventPayload, isHome) {
     const story = {...eventPayload};
@@ -95,5 +96,33 @@ export default [
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal) => getOwnerName(state) === signal.payload.remoteNodeName,
         signal => feedUnsubscribed("", signal.payload.remoteFeedName)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIPTION_ADDED,
+        (state, signal) => signal.payload.remotePostingId != null
+            && getOwnerName(state) === signal.payload.remoteNodeName,
+        signal => postingSubscriptionSet(signal.payload.remotePostingId, signal.payload.subscriptionType,
+            signal.payload.remoteSubscriberId)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIPTION_ADDED,
+        (state, signal) => signal.payload.remotePostingId != null
+            && getOwnerName(state) !== signal.payload.remoteNodeName,
+        signal => remotePostingSubscriptionSet(signal.payload.remoteNodeName, signal.payload.remotePostingId,
+            signal.payload.subscriptionType, signal.payload.remoteSubscriberId)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIPTION_DELETED,
+        (state, signal) => signal.payload.remotePostingId != null
+            && getOwnerName(state) === signal.payload.remoteNodeName,
+        signal => postingSubscriptionSet(signal.payload.remotePostingId, signal.payload.subscriptionType,
+            null)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIPTION_DELETED,
+        (state, signal) => signal.payload.remotePostingId != null
+            && getOwnerName(state) !== signal.payload.remoteNodeName,
+        signal => remotePostingSubscriptionSet(signal.payload.remoteNodeName, signal.payload.remotePostingId,
+            signal.payload.subscriptionType, null)
     )
 ];

@@ -117,3 +117,15 @@ export const postingCommentsUnsubscribeFailed = (id) => ({
     type: POSTING_COMMENTS_UNSUBSCRIBE_FAILED,
     payload: {id}
 });
+
+export const POSTING_SUBSCRIPTION_SET = "POSTING_SUBSCRIPTION_SET";
+export const postingSubscriptionSet = (id, type, subscriberId) => ({
+    type: POSTING_SUBSCRIPTION_SET,
+    payload: {id, type, subscriberId}
+});
+
+export const REMOTE_POSTING_SUBSCRIPTION_SET = "REMOTE_POSTING_SUBSCRIPTION_SET";
+export const remotePostingSubscriptionSet = (remoteNodeName, remotePostingId, type, subscriberId) => ({
+    type: REMOTE_POSTING_SUBSCRIPTION_SET,
+    payload: {remoteNodeName, remotePostingId, type, subscriberId}
+});
