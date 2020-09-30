@@ -20,7 +20,6 @@ import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { flashBox } from "state/flashbox/actions";
-import { feedSubscribed, feedSubscribeFailed, feedUnsubscribed, feedUnsubscribeFailed } from "state/feeds/actions";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
