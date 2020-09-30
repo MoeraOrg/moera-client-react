@@ -17,6 +17,7 @@ const InstantIcon = ({story}) => {
         case "subscriber-deleted":
             return <span style={{color: "var(--blue)"}}><FontAwesomeIcon icon="eye-slash"/></span>
         case "comment-added":
+        case "remote-comment-added":
             return <span style={{color: "var(--green)"}}><FontAwesomeIcon icon="comment"/></span>
         case "reply-comment":
             return <span style={{color: "var(--green)"}}><FontAwesomeIcon icon="reply"/></span>
