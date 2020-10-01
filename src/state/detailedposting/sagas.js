@@ -43,6 +43,7 @@ import { getOwnerName } from "state/owner/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
+import { mentionName } from "util/misc";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -239,7 +240,8 @@ export function* commentReplySaga(action) {
     if (reply) {
         yield put(commentRepliedToSet(commentId, ownerName, heading));
     } else {
-        textFieldEdit.insert(body, `@${ownerName} `);
+        const mention = yield select(mentionName, ownerName);
+        textFieldEdit.insert(body, mention + " ");
     }
     yield put(commentsScrollToComposer());
 }

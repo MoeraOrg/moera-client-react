@@ -12,6 +12,8 @@ import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import CommentSubmitButton from "ui/comment/CommentSubmitButton";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import "./CommentCompose.css";
+import { getOwnerName } from "state/owner/selectors";
+import { atOwner, mentionOwner } from "util/misc";
 
 class CommentCompose extends React.PureComponent {
 
@@ -40,9 +42,9 @@ class CommentCompose extends React.PureComponent {
     }
 
     render() {
-        const {ownerName, beingPosted} = this.props;
+        const {atOwnerName, homeOwnerName, beingPosted} = this.props;
 
-        if (!ownerName) {
+        if (!homeOwnerName) {
             return null;
         }
         return (
@@ -50,8 +52,8 @@ class CommentCompose extends React.PureComponent {
                 <Form>
                     <div className="content">
                         <CommentComposeRepliedTo/>
-                        <TextField name="body" rows={1} placeholder="Write a comment here..." anyValue
-                                   disabled={beingPosted} onKeyDown={this.onKeyDown}/>
+                        <TextField name="body" rows={1} placeholder={`Write a comment to ${atOwnerName} here...`}
+                                   anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}/>
                     </div>
                     <CommentSubmitButton loading={beingPosted}/>
                 </Form>
@@ -63,7 +65,8 @@ class CommentCompose extends React.PureComponent {
 
 export default connect(
     state => ({
-        ownerName: getHomeOwnerName(state),
+        atOwnerName: mentionOwner(state),
+        homeOwnerName: getHomeOwnerName(state),
         receiverName: state.detailedPosting.comments.receiverName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         formId: state.detailedPosting.compose.formId,
