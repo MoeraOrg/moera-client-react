@@ -150,6 +150,15 @@ export default (state = initialState, action) => {
                         .set("loading", false)
                         .assign("comments", cloneDeep(emptyComments))
                         .assign("compose", cloneDeep(emptyCompose))
+                } else {
+                    istate.set("compose.focused", false)
+                        .assign("comments", {
+                            focused: false,
+                            loadingFocusedComment: false,
+                            loadedFocusedComment: false,
+                            focusedCommentId: null,
+                            focusedMoment: Number.MIN_SAFE_INTEGER
+                        });
                 }
                 istate.set("positioned", commentId != null);
                 if (commentId != null) {
@@ -161,23 +170,9 @@ export default (state = initialState, action) => {
                             istate.set("compose.focused", true);
                             break;
                         default:
-                            istate.assign("comments", {
-                                loadingFocusedComment: false,
-                                loadedFocusedComment: false,
-                                focusedCommentId: commentId,
-                                focusedMoment: Number.MIN_SAFE_INTEGER
-                            });
+                            istate.set("comments.focusedCommentId", commentId);
                             break;
                     }
-                } else {
-                    istate.set("compose.focused", false)
-                        .assign("comments", {
-                            focused: false,
-                            loadingFocusedComment: false,
-                            loadedFocusedComment: false,
-                            focusedCommentId: null,
-                            focusedMoment: null
-                        });
                 }
                 return istate.value();
             }
@@ -308,10 +303,19 @@ export default (state = initialState, action) => {
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
-            return immutable.assign(state, "compose", {
-                formId: state.compose.formId + 1,
-                ...emptyCompose
-            });
+            return immutable.wrap(state)
+                .assign("compose", {
+                    formId: state.compose.formId + 1,
+                    ...emptyCompose
+                })
+                .set("compose.focused", false)
+                .assign("comments", {
+                    focused: false,
+                    loadingFocusedComment: false,
+                    loadedFocusedComment: false,
+                    focusedCommentId: action.payload.commentId,
+                    focusedMoment: Number.MIN_SAFE_INTEGER
+                }).value();
 
         case COMMENT_POST_FAILED:
             return immutable.set(state, "compose.beingPosted", false);

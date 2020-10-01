@@ -118,7 +118,7 @@ export function* commentPostSaga(action) {
             comment = yield call(Node.putComment, receiverName, receiverPostingId, commentId, commentText);
         }
         yield put(commentSet(receiverName, comment));
-        yield put(commentPosted(receiverName, receiverPostingId));
+        yield put(commentPosted(receiverName, receiverPostingId, comment.id));
         yield call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentText);
     } catch (e) {
         yield put(commentPostFailed(receiverName, receiverPostingId));

@@ -3,6 +3,7 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { GO_TO_PAGE, goToTimeline, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
+    COMMENT_POSTED,
     commentDialogCommentLoad,
     commentLoad,
     commentReactionLoad,
@@ -55,12 +56,12 @@ export default [
         commentsReceiverSwitch
     ),
     trigger(
-        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENT_POSTED],
         conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, isFocusedCommentInList),
         focusComment
     ),
     trigger(
-        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENT_POSTED],
         conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, inv(isFocusedCommentInList)),
         focusedCommentLoad
     ),
@@ -78,6 +79,11 @@ export default [
         POSTING_DELETED,
         (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.id),
         signal => goToTimeline(getPostingMoment(signal.payload, "timeline"))
+    ),
+    trigger(
+        COMMENT_POSTED,
+        (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.postingId),
+        updateLocation
     ),
     trigger(
         [EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED],
