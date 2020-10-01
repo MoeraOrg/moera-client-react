@@ -78,7 +78,9 @@ const Comment = ({postingId, comment, focused, connectedToHome, postingReceiverN
                 </div>
                 <Content className="content" comment={comment}/>
                 <div className="reactions-line">
-                    {connectedToHome && <CommentButtons comment={comment}/>}
+                    {connectedToHome && comment.signature != null &&
+                        <CommentButtons comment={comment}/>
+                    }
                     <CommentReactions postingId={postingId} comment={comment}/>
                 </div>
             </>
