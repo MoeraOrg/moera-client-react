@@ -23,6 +23,13 @@
     max-height: 35rem;
 }
 
+.posting .content .read-more {
+    width: 100%;
+    text-align: left;
+    padding-left: 0;
+    padding-top: 0;
+}
+
 .posting .reactions-line {
     display: flex;
     justify-content: space-between;

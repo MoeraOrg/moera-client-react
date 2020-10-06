@@ -46,7 +46,7 @@ class Content extends React.PureComponent {
                     <>
                         <EntryHtml html={comment.bodyPreview.text}/>
                         <p>
-                            <button className="btn btn-link pl-0 pt-0" onClick={this.onClick}>Read more...</button>
+                            <button className="btn btn-link read-more" onClick={this.onClick}>Read more...</button>
                         </p>
                     </>
                 );

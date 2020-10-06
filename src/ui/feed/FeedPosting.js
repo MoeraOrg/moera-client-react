@@ -24,7 +24,7 @@ const Content = ({posting}) => {
         return (
             <div className="content">
                 <EntryHtml html={posting.bodyPreview.text}/>
-                <p><Jump href={`/post/${posting.id}`}>Continue Reading &rarr;</Jump></p>
+                <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">Continue Reading &rarr;</Jump>
             </div>
         );
     } else {

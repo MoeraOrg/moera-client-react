@@ -43,6 +43,13 @@
     max-height: 16rem;
 }
 
+.comment .content .read-more {
+    width: 100%;
+    text-align: left;
+    padding-left: 0;
+    padding-top: 0;
+}
+
 .comment .chevron {
     visibility: hidden;
 }
