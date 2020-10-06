@@ -1,0 +1,14 @@
+.comments-rewind {
+    border: none;
+    background-color: transparent;
+    color: var(--gray-medium);
+    margin-left: .1rem;
+    margin-right: .1rem;
+    position: relative;
+    top: .05rem;
+}
+
+.comments-rewind:hover {
+    background-color: var(--highlight);
+    color: black;
+}

@@ -15,6 +15,8 @@ import {
     faExternalLinkAlt,
     faEye,
     faEyeSlash,
+    faFastBackward,
+    faFastForward,
     faFileAlt,
     faFrown,
     faHistory,
@@ -71,6 +73,8 @@ export default function initIconLibrary() {
     library.add(faExternalLinkAlt);
     library.add(faEye);
     library.add(faEyeSlash);
+    library.add(faFastBackward);
+    library.add(faFastForward);
     library.add(faFileAlt);
     library.add(faFrown);
     library.add(faHistory);

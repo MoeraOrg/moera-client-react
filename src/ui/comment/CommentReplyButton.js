@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { commentReply } from "state/detailedposting/actions";
 
-class CommentReplyButton extends React.Component {
+class CommentReplyButton extends React.PureComponent {
 
     onClick = () => {
         const {comment, commentReply} = this.props;

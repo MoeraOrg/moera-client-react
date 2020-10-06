@@ -9,13 +9,13 @@ import {
     commentsScrolledToComposer
 } from "state/detailedposting/actions";
 import {
-    getCommentsState,
+    getCommentsState, getDetailedPosting,
     getDetailedPostingId,
     isCommentComposerFocused,
     isCommentsFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
-import CommentsSentinel from "ui/comment/CommentsSentinel";
+import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
 import CommentCompose from "ui/comment/CommentCompose";
 import CommentDialog from "ui/comment/CommentDialog";
@@ -94,7 +94,7 @@ class Comments extends React.PureComponent {
                 return parseInt(comments.item(i).dataset.moment);
             }
         }
-        return Number.MAX_SAFE_INTEGER;
+        return null;
     }
 
     static getCommentAt(moment) {
@@ -107,18 +107,22 @@ class Comments extends React.PureComponent {
         return null;
     }
 
-    static getEarliestComment() {
-        const comments = document.getElementsByClassName("comment");
-        return comments.length > 0 ? comments.item(comments.length - 1) : null;
+    static scrollTo(moment) {
+        if (moment === Number.MAX_SAFE_INTEGER) {
+            Comments.scrollToEnd();
+            return true;
+        } else {
+            const comment = Comments.getCommentAt(moment);
+            if (comment != null) {
+                Comments.scrollToElement(comment);
+            }
+            return comment != null;
+        }
     }
 
-    static scrollTo(moment) {
-        const comment = moment > Number.MIN_SAFE_INTEGER ?
-            Comments.getCommentAt(moment) : Comments.getEarliestComment();
-        if (comment != null) {
-            Comments.scrollToElement(comment);
-        }
-        return comment != null;
+    static scrollToEnd() {
+        const y = document.getElementById("comments").getBoundingClientRect().bottom;
+        window.scrollBy(0, y - 50);
     }
 
     static scrollToElement(element) {
@@ -149,7 +153,7 @@ class Comments extends React.PureComponent {
     };
 
     render() {
-        const {postingId, loadingFuture, loadingPast, comments, before, after, focusedCommentId} = this.props;
+        const {postingId, total, loadingFuture, loadingPast, comments, before, after, focusedCommentId} = this.props;
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
@@ -159,17 +163,19 @@ class Comments extends React.PureComponent {
                 <div id="comments">
                     {empty ||
                         <>
-                            <CommentsSentinel loading={loadingPast} title="View earlier comments"
-                                              visible={after > Number.MIN_SAFE_INTEGER}
-                                              onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
+                            {comments.length > 0 &&
+                                <CommentsSentinelLine end={false} loading={loadingPast} title="View earlier comments"
+                                                      visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
+                                                      onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
+                            }
                             {comments.map(comment =>
                                 <Comment key={comment.moment} postingId={postingId} comment={comment}
                                          focused={comment.id === focusedCommentId} deleting={comment.deleting}/>
                             )}
-                            <CommentsSentinel loading={loadingFuture}
-                                              title={comments.length !== 0 ? "View later comments" : "View comments"}
-                                              visible={before < Number.MAX_SAFE_INTEGER}
-                                              onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
+                            <CommentsSentinelLine end={true} loading={loadingFuture}
+                                                  title={comments.length !== 0 ? "View later comments" : "View comments"}
+                                                  visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
+                                                  onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
                         </>
                     }
                 </div>
@@ -184,6 +190,7 @@ export default connect(
     state => ({
         visible: isAtDetailedPostingPage(state),
         postingId: getDetailedPostingId(state),
+        total: getDetailedPosting(state).totalComments,
         loadingFuture: getCommentsState(state).loadingFuture,
         loadingPast: getCommentsState(state).loadingPast,
         before: getCommentsState(state).before,

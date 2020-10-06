@@ -6,6 +6,14 @@ import "./CommentsSentinel.css";
 
 export default class CommentsSentinel extends React.PureComponent {
 
+    static propTypes = {
+        visible: PropType.bool,
+        loading: PropType.bool,
+        title: PropType.string,
+        onBoundary: PropType.func,
+        onClick: PropType.func
+    };
+
     constructor(props, context) {
         super(props, context);
 
@@ -28,7 +36,7 @@ export default class CommentsSentinel extends React.PureComponent {
         const { visible, loading, title, onClick } = this.props;
 
         if (!visible) {
-            return null;
+            return <div className="comments-sentinel"/>;
         }
         return (
             <button className="btn btn-link comments-sentinel" ref={this.observeSentinel} onClick={onClick}>
@@ -39,11 +47,3 @@ export default class CommentsSentinel extends React.PureComponent {
     }
 
 }
-
-CommentsSentinel.propTypes = {
-    visible: PropType.bool,
-    loading: PropType.bool,
-    title: PropType.string,
-    onBoundary: PropType.func,
-    onClick: PropType.func
-};

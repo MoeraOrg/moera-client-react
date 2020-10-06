@@ -1,0 +1,13 @@
+.comments-sentinel-line {
+    display: flex;
+}
+
+.comments-sentinel-line .comments-sentinel {
+    flex: auto;
+}
+
+.comments-sentinel-line .comments-counter {
+    flex: none;
+    font-weight: bold;
+    color: var(--gray-medium);
+}

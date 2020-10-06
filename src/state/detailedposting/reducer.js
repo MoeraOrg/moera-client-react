@@ -269,6 +269,7 @@ export default (state = initialState, action) => {
             const {anchor} = action.payload;
             const istate = immutable.wrap(state);
             if (anchor != null) {
+                console.log(anchor, state.comments.before, state.comments.after);
                 if (anchor <= state.comments.before && anchor > state.comments.after) {
                     istate.set("comments.anchor", anchor);
                 } else {
