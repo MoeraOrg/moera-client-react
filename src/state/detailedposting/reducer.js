@@ -313,7 +313,7 @@ export default (state = initialState, action) => {
                     focused: false,
                     loadingFocusedComment: false,
                     loadedFocusedComment: false,
-                    focusedCommentId: action.payload.commentId,
+                    focusedCommentId: null,
                     focusedMoment: Number.MIN_SAFE_INTEGER
                 }).value();
 

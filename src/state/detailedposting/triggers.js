@@ -8,9 +8,11 @@ import {
     commentLoad,
     commentReactionLoad,
     COMMENTS_RECEIVER_SWITCHED,
+    COMMENTS_SCROLL_TO_ANCHOR,
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
     commentsReceiverSwitch,
+    commentsScrollToAnchor,
     DETAILED_POSTING_LOADED,
     detailedPostingLoad,
     focusComment,
@@ -56,22 +58,28 @@ export default [
         commentsReceiverSwitch
     ),
     trigger(
-        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENT_POSTED],
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
         conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, isFocusedCommentInList),
         focusComment
     ),
     trigger(
-        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENT_POSTED],
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
         conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, inv(isFocusedCommentInList)),
         focusedCommentLoad
     ),
     trigger(
-        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED],
+        [
+            GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED,
+            COMMENTS_SCROLL_TO_ANCHOR
+        ],
         conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded),
         commentsFutureSliceLoad
     ),
     trigger(
-        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED],
+        [
+            GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED,
+            COMMENTS_SCROLL_TO_ANCHOR
+        ],
         conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
         commentsPastSliceLoad
     ),
@@ -84,6 +92,11 @@ export default [
         COMMENT_POSTED,
         (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.postingId),
         updateLocation
+    ),
+    trigger(
+        COMMENT_POSTED,
+        (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.postingId),
+        signal => commentsScrollToAnchor(signal.payload.moment)
     ),
     trigger(
         [EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED],

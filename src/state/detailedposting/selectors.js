@@ -88,13 +88,15 @@ export function isCommentsReadyToBeLoaded(state) {
 
 export function isFutureCommentsToBeLoaded(state) {
     const comments = getCommentsState(state);
-    return isCommentsReadyToBeLoaded(state) && !comments.loadingFuture && comments.before === comments.focusedMoment
+    return isCommentsReadyToBeLoaded(state) && !comments.loadingFuture
+        && (comments.before === comments.focusedMoment || comments.before === comments.anchor)
         && comments.before < Number.MAX_SAFE_INTEGER;
 }
 
 export function isPastCommentsToBeLoaded(state) {
     const comments = getCommentsState(state);
-    return isCommentsReadyToBeLoaded(state) && !comments.loadingPast && comments.after === comments.focusedMoment - 1
+    return isCommentsReadyToBeLoaded(state) && !comments.loadingPast
+        && (comments.after === comments.focusedMoment - 1 || comments.after === comments.anchor)
         && comments.after > Number.MIN_SAFE_INTEGER;
 }
 

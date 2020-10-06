@@ -92,9 +92,9 @@ export const commentPost = (postingId, commentId, commentText) => ({
 });
 
 export const COMMENT_POSTED = "COMMENT_POSTED";
-export const commentPosted = (nodeName, postingId, commentId) => ({
+export const commentPosted = (nodeName, postingId, commentId, moment) => ({
     type: COMMENT_POSTED,
-    payload: {nodeName, postingId, commentId}
+    payload: {nodeName, postingId, commentId, moment}
 });
 
 export const COMMENT_POST_FAILED = "COMMENT_POST_FAILED";
