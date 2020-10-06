@@ -1,11 +1,10 @@
 .comments-rewind {
     border: none;
     background-color: transparent;
-    color: var(--gray-medium);
-    margin-left: .1rem;
-    margin-right: .1rem;
+    color: inherit;
     position: relative;
     top: .05rem;
+    padding: .1rem .3rem;
 }
 
 .comments-rewind:hover {

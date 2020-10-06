@@ -2,12 +2,24 @@
     display: flex;
 }
 
-.comments-sentinel-line .comments-sentinel {
+.comments-sentinel {
     flex: auto;
 }
 
-.comments-sentinel-line .comments-counter {
+.comments-counter {
     flex: none;
-    font-weight: bold;
     color: var(--gray-medium);
+}
+
+.comments-load-all {
+    border: none;
+    background-color: transparent;
+    font-weight: bold;
+    color: inherit;
+    padding: .1rem .3rem;
+}
+
+.comments-load-all:hover {
+    background-color: var(--highlight);
+    color: black;
 }

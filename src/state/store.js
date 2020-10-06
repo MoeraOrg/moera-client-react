@@ -38,6 +38,7 @@ import {
     COMMENT_REPLY,
     COMMENT_VERIFY,
     COMMENTS_FUTURE_SLICE_LOAD,
+    COMMENTS_LOAD_ALL,
     COMMENTS_PAST_SLICE_LOAD,
     COMMENTS_RECEIVER_SWITCH,
     DETAILED_POSTING_LOAD,
@@ -150,6 +151,7 @@ import {
     commentReactSaga,
     commentReplySaga,
     commentsFutureSliceLoadSaga,
+    commentsLoadAllSaga,
     commentsPastSliceLoadSaga,
     commentsReceiverSwitchSaga,
     commentVerifySaga,
@@ -304,6 +306,7 @@ function* combinedSaga() {
     yield takeEvery(POSTING_COPY_LINK, postingCopyLinkSaga);
     yield takeEvery(FLASH_BOX, flashBoxSaga);
     yield takeLatest(COMMENTS_RECEIVER_SWITCH, introduce(commentsReceiverSwitchSaga));
+    yield takeLatest(COMMENTS_LOAD_ALL, introduce(commentsLoadAllSaga));
     yield takeEvery(COMMENTS_PAST_SLICE_LOAD, introduce(commentsPastSliceLoadSaga));
     yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
     yield takeEvery(COMMENT_LOAD, commentLoadSaga);

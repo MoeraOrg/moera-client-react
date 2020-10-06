@@ -25,6 +25,11 @@ export const commentsReceiverSwitched = (nodeName, postingId) => ({
     payload: {nodeName, postingId}
 });
 
+export const COMMENTS_LOAD_ALL = "COMMENTS_LOAD_ALL";
+export const commentsLoadAll = () => ({
+    type: COMMENTS_LOAD_ALL
+});
+
 export const COMMENTS_PAST_SLICE_LOAD = "COMMENTS_PAST_SLICE_LOAD";
 export const commentsPastSliceLoad = () => ({
     type: COMMENTS_PAST_SLICE_LOAD
