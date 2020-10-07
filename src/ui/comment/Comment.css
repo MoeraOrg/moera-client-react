@@ -28,12 +28,22 @@
 }
 
 @media only screen and (min-width: 901px) {
+    .comment .content.preview {
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+
     .comment .content IMG {
         max-width: calc(900px - 6.5rem);
     }
 }
 
 @media only screen and (max-width: 900px) {
+    .comment .content.preview {
+        max-height: 150vh;
+        overflow-y: auto;
+    }
+
     .comment .content IMG {
         max-width: calc(100vw - 7rem);
     }

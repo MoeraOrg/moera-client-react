@@ -3,6 +3,7 @@
     position: relative;
     background-color: var(--blockquote);
     border-radius: 0.5rem;
+    overflow: hidden;
 }
 
 .entry BLOCKQUOTE::before {

@@ -28,9 +28,10 @@ class Content extends React.PureComponent {
 
     render() {
         const {comment} = this.props;
+        const {preview} = this.state;
 
         return (
-            <div className="content" onClick={this.onClick}>
+            <div className={cx("content", {"preview": preview})} onClick={this.onClick}>
                 <CommentRepliedTo comment={comment}/>
                 {this.renderText()}
             </div>

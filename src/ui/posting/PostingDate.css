@@ -1,4 +1,4 @@
-.posting .date {
+.posting > .owner-line .date {
     font-size: 0.8rem;
     color: var(--gray-medium);
 }

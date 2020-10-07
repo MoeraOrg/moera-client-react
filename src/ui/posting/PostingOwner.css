@@ -1,16 +1,16 @@
-.posting .owner-line {
+.posting > .owner-line {
     margin-bottom: 0.3rem;
 }
 
-.posting .owner {
+.posting > .owner-line .owner {
     font-weight: bold;
     margin-right: 0.5em;
 }
 
-.posting .owner .arrow {
+.posting > .owner-line .owner .arrow {
     color: var(--gray-medium);
 }
 
-.posting .owner A {
+.posting > .owner-line .owner A {
     color: var(--node-name);
 }

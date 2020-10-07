@@ -8,29 +8,39 @@
 }
 
 @media only screen and (min-width: 901px) {
-    .posting .content IMG {
+    .posting.preview > .content {
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .posting > .content IMG {
         max-width: calc(900px - 3.5rem);
     }
 }
 
 @media only screen and (max-width: 900px) {
-    .posting .content IMG {
+    .posting.preview > .content {
+        max-height: 150vh;
+        overflow-y: auto;
+    }
+
+    .posting > .content IMG {
         max-width: calc(100vw - 4rem);
     }
 }
 
-.posting.preview .content IMG {
+.posting.preview > .content IMG {
     max-height: 35rem;
 }
 
-.posting .content .read-more {
+.posting > .content .read-more {
     width: 100%;
     text-align: left;
     padding-left: 0;
     padding-top: 0;
 }
 
-.posting .reactions-line {
+.posting > .reactions-line {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
