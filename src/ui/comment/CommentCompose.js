@@ -11,9 +11,8 @@ import { TextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import CommentSubmitButton from "ui/comment/CommentSubmitButton";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
+import { mentionOwner } from "util/misc";
 import "./CommentCompose.css";
-import { getOwnerName } from "state/owner/selectors";
-import { atOwner, mentionOwner } from "util/misc";
 
 class CommentCompose extends React.PureComponent {
 
@@ -31,7 +30,8 @@ class CommentCompose extends React.PureComponent {
         const {submitKey, submitForm} = this.props;
 
         if (event.key === "Enter") {
-            const submit = (submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey);
+            const submit = !event.shiftKey
+                && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
             if (submit) {
                 submitForm();
             } else {
