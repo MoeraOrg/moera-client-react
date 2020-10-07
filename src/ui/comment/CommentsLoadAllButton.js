@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
 import { commentsLoadAll } from "state/detailedposting/actions";
+import "./CommentsLoadAllButton.css";
 
 const CommentsLoadAllButton = ({loadedCount, totalCount, commentsLoadAll}) => (
     totalCount > 0 &&

@@ -63,6 +63,8 @@ const emptyComments = {
     before: Number.MIN_SAFE_INTEGER,
     after: Number.MIN_SAFE_INTEGER,
     comments: [],
+    totalInFuture: 0,
+    totalInPast: 0,
     anchor: null,
     focused: false,
     loadingFocusedComment: false,
@@ -236,7 +238,8 @@ export default (state = initialState, action) => {
                 return istate.assign("comments", {
                     loadingPast: false,
                     after: action.payload.after,
-                    comments
+                    comments,
+                    totalInPast: action.payload.totalInPast
                 }).value();
             } else {
                 return istate.set("comments.loadingPast", false).value();
@@ -258,7 +261,8 @@ export default (state = initialState, action) => {
                 return istate.assign("comments", {
                     loadingFuture: false,
                     before: action.payload.before,
-                    comments
+                    comments,
+                    totalInFuture: action.payload.totalInFuture
                 }).value();
             } else {
                 return istate.set("comments.loadingFuture", false).value();
@@ -277,6 +281,8 @@ export default (state = initialState, action) => {
                         before: anchor,
                         after: anchor,
                         comments: [],
+                        totalInFuture: 0,
+                        totalInPast: 0,
                         anchor
                     });
                 }
@@ -415,6 +421,8 @@ export default (state = initialState, action) => {
                 before: comment.moment,
                 after: comment.moment - 1,
                 comments: [extractComment(comment)],
+                totalInFuture: 0,
+                totalInPast: 0,
                 anchor: comment.moment,
                 loadingFocusedComment: false,
                 loadedFocusedComment: true,

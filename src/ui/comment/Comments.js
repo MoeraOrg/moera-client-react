@@ -153,7 +153,10 @@ class Comments extends React.PureComponent {
     };
 
     render() {
-        const {postingId, total, loadingFuture, loadingPast, comments, before, after, focusedCommentId} = this.props;
+        const {
+            postingId, total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture,
+            focusedCommentId
+        } = this.props;
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
@@ -165,6 +168,7 @@ class Comments extends React.PureComponent {
                         <>
                             {comments.length > 0 &&
                                 <CommentsSentinelLine end={false} loading={loadingPast} title="View earlier comments"
+                                                      total={totalInPast}
                                                       visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
                                                       onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                             }
@@ -174,6 +178,7 @@ class Comments extends React.PureComponent {
                             )}
                             <CommentsSentinelLine end={true} loading={loadingFuture}
                                                   title={comments.length !== 0 ? "View later comments" : "View comments"}
+                                                  total={totalInFuture}
                                                   visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
                                                   onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
                         </>
@@ -195,6 +200,8 @@ export default connect(
         loadingPast: getCommentsState(state).loadingPast,
         before: getCommentsState(state).before,
         after: getCommentsState(state).after,
+        totalInPast: getCommentsState(state).totalInPast,
+        totalInFuture: getCommentsState(state).totalInFuture,
         comments: getCommentsState(state).comments,
         anchor: getCommentsState(state).anchor,
         focusedCommentId: getCommentsState(state).focusedCommentId,

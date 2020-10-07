@@ -6,9 +6,10 @@ import CommentsRewindButton from "ui/comment/CommentsRewindButton";
 import CommentsLoadAllButton from "ui/comment/CommentsLoadAllButton";
 import "./CommentsSentinelLine.css";
 
-const CommentsSentinelLine = ({visible, loading, title, onBoundary, onClick, end}) => (
+const CommentsSentinelLine = ({visible, loading, title, total, onBoundary, onClick, end}) => (
     <div className="comments-sentinel-line">
-        <CommentsSentinel loading={loading} title={title} visible={visible} onBoundary={onBoundary} onClick={onClick}/>
+        <CommentsSentinel loading={loading} title={title} total={total} visible={visible} onBoundary={onBoundary}
+                          onClick={onClick}/>
         <div className="comments-counter">
             <CommentsRewindButton end={end} forward={false}/>
             <CommentsLoadAllButton/>
@@ -21,6 +22,7 @@ CommentsSentinelLine.propTypes = {
     visible: PropType.bool,
     loading: PropType.bool,
     title: PropType.string,
+    total: PropType.number,
     onBoundary: PropType.func,
     onClick: PropType.func,
     end: PropType.bool

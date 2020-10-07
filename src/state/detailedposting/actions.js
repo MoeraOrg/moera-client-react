@@ -53,15 +53,15 @@ export const commentsFutureSliceLoadFailed = (nodeName, postingId) => ({
 });
 
 export const COMMENTS_PAST_SLICE_SET = "COMMENTS_PAST_SLICE_SET";
-export const commentsPastSliceSet = (nodeName, postingId, comments, before, after) => ({
+export const commentsPastSliceSet = (nodeName, postingId, comments, before, after, totalInPast, totalInFuture) => ({
     type: COMMENTS_PAST_SLICE_SET,
-    payload: {nodeName, postingId, comments, before, after}
+    payload: {nodeName, postingId, comments, before, after, totalInPast, totalInFuture}
 });
 
 export const COMMENTS_FUTURE_SLICE_SET = "COMMENTS_FUTURE_SLICE_SET";
-export const commentsFutureSliceSet = (nodeName, postingId, comments, before, after) => ({
+export const commentsFutureSliceSet = (nodeName, postingId, comments, before, after, totalInPast, totalInFuture) => ({
     type: COMMENTS_FUTURE_SLICE_SET,
-    payload: {nodeName, postingId, comments, before, after}
+    payload: {nodeName, postingId, comments, before, after, totalInPast, totalInFuture}
 });
 
 export const COMMENTS_SCROLL_TO_ANCHOR = "COMMENTS_SCROLL_TO_ANCHOR";

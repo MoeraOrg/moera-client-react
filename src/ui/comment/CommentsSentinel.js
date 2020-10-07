@@ -10,6 +10,7 @@ export default class CommentsSentinel extends React.PureComponent {
         visible: PropType.bool,
         loading: PropType.bool,
         title: PropType.string,
+        total: PropType.number,
         onBoundary: PropType.func,
         onClick: PropType.func
     };
@@ -33,14 +34,15 @@ export default class CommentsSentinel extends React.PureComponent {
     }
 
     render() {
-        const { visible, loading, title, onClick } = this.props;
+        const {visible, loading, title, total, onClick} = this.props;
 
         if (!visible) {
             return <div className="comments-sentinel"/>;
         }
+        const fullTitle = total > 0 ? `${title} (${total})` : title;
         return (
             <button className="btn btn-link comments-sentinel" ref={this.observeSentinel} onClick={onClick}>
-                {!loading && title}
+                {!loading && fullTitle}
                 <Loading active={loading} />
             </button>
         );
