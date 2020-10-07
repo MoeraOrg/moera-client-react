@@ -5,8 +5,9 @@ import { getCommentsState, getDetailedPosting } from "state/detailedposting/sele
 import { commentsLoadAll } from "state/detailedposting/actions";
 
 const CommentsLoadAllButton = ({loadedCount, totalCount, commentsLoadAll}) => (
-    totalCount > 0 && loadedCount < totalCount &&
-        <button className="comments-load-all" title="Load add comments" onClick={commentsLoadAll}>
+    totalCount > 0 &&
+        <button className="comments-load-all" title="Load add comments" onClick={commentsLoadAll}
+                disabled={loadedCount >= totalCount}>
             {loadedCount} of {totalCount}
         </button>
 );
