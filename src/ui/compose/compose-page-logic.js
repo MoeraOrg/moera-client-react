@@ -10,7 +10,8 @@ const composePageLogic = {
             ? props.posting.bodySrc.subject : "";
         const body = props.posting != null ? props.posting.bodySrc.text : "";
         const bodyFormat = props.posting != null ? props.posting.bodySrcFormat : props.sourceFormatDefault;
-        const publishAt = props.posting != null ? moment.unix(props.posting.publishedAt).toDate() : new Date();
+        const publishAt = props.posting != null && props.posting.publishedAt != null
+            ? moment.unix(props.posting.publishedAt).toDate() : new Date();
         const reactionsPositive = props.posting != null
             ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault;
         const reactionsNegative = props.posting != null
