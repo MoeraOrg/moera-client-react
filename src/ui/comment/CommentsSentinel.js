@@ -1,5 +1,6 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Loading } from "ui/control";
 import "./CommentsSentinel.css";
@@ -42,7 +43,13 @@ export default class CommentsSentinel extends React.PureComponent {
         const fullTitle = total > 0 ? `${title} (${total})` : title;
         return (
             <button className="btn btn-link comments-sentinel" ref={this.observeSentinel} onClick={onClick}>
-                {!loading && fullTitle}
+                {!loading &&
+                    <>
+                        <FontAwesomeIcon className="icon" icon="sync-alt"/>
+                        &nbsp;&nbsp;
+                        {fullTitle}
+                    </>
+                }
                 <Loading active={loading} />
             </button>
         );

@@ -33,6 +33,7 @@ import {
     faShareSquare,
     faSignOutAlt,
     faStar,
+    faSyncAlt,
     faThumbsDown,
     faThumbsUp,
     faThumbtack,
@@ -92,6 +93,7 @@ export default function initIconLibrary() {
     library.add(faShareSquare);
     library.add(faSignOutAlt);
     library.add(faStar);
+    library.add(faSyncAlt);
     library.add(faTrashAlt);
     library.add(faThumbsDown);
     library.add(faThumbsDownRegular);
