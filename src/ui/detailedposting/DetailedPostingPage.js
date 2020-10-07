@@ -11,15 +11,15 @@ import "./DetailedPostingPage.css";
 const DetailedPostingPage = ({loading, deleting, posting}) => {
     return (
         <Page className="mt-3">
-            {posting && <DetailedPosting posting={posting} deleting={deleting} />}
+            {posting && <DetailedPosting posting={posting} deleting={deleting}/>}
             {!posting && loading &&
                 <div className="posting">
-                    <Loading active={loading} />
+                    <Loading active={loading}/>
                 </div>
             }
             {!posting && !loading &&
                 <div className="posting-not-found">
-                    <FontAwesomeIcon className="icon" icon="frown" size="3x" />
+                    <FontAwesomeIcon className="icon" icon="frown" size="3x"/>
                     <div className="message">Posting not found or cannot be displayed.</div>
                 </div>
             }
