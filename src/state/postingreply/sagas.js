@@ -37,6 +37,7 @@ export function* postingReplySaga() {
         if (text) {
             text = text
                 .replace(/\n*<p>\n*/gi, "\n\n")
+                .replace(/<blockquote>\n+/gi, "<blockquote>\n")
                 .replace(/<\/p>/gi, "")
                 .replace(/\n*<br\s*\/?>\n*/gi, "\n")
                 .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
