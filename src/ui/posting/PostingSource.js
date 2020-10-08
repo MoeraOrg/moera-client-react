@@ -12,10 +12,10 @@ const PostingSource = ({posting}) => (
             <Reference>
                 {(ref, mainEnter, mainLeave) =>
                     <span className="posting-source" ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}>
-                            <Jump nodeName={posting.receiverName} href={`/post/${posting.receiverPostingId}`}>
-                                <FontAwesomeIcon icon="retweet"/>
-                            </Jump>
-                        </span>
+                        <Jump nodeName={posting.receiverName} href={`/post/${posting.receiverPostingId}`}>
+                            <FontAwesomeIcon icon="retweet"/>
+                        </Jump>
+                    </span>
                 }
             </Reference>
             <DelayedPopper placement="bottom-start" arrow={true}>
