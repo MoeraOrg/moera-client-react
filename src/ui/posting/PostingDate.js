@@ -14,8 +14,10 @@ const PostingDate = ({posting, story, timeRelative}) => {
         publishedAt = story != null ? story.publishedAt : posting.createdAt;
     }
     const date = moment.unix(publishedAt);
+    const nodeName = posting.receiverName ?? ":";
+    const postingId = posting.receiverPostingId ?? posting.id;
     return (
-        <Jump className="date" href={`/post/${posting.id}`}>{
+        <Jump className="date" nodeName={nodeName} href={`/post/${postingId}`}>{
             timeRelative ?
                 <span title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</span>
             :

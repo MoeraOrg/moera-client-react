@@ -13,7 +13,7 @@ import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
-import { getCommentsState } from "state/detailedposting/selectors";
+import { getCommentsReceiverPostingId, getCommentsState } from "state/detailedposting/selectors";
 import "./Comment.css";
 
 class Content extends React.PureComponent {
@@ -61,7 +61,9 @@ class Content extends React.PureComponent {
 
 }
 
-const Comment = ({postingId, comment, focused, connectedToHome, postingReceiverName, isPermitted}) => (
+const Comment = ({
+     postingId, comment, focused, connectedToHome, postingReceiverName, postingReceiverPostingId, isPermitted
+}) => (
     <div className={cx("comment", "entry", {
         "focused": focused,
         "single-emoji": comment.singleEmoji,
@@ -74,7 +76,8 @@ const Comment = ({postingId, comment, focused, connectedToHome, postingReceiverN
                 <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
                 <div className="owner-line">
                     <CommentOwner comment={comment}/>
-                    <CommentDate postingId={postingId} comment={comment}/>
+                    <CommentDate nodeName={postingReceiverName ?? ":"} postingId={postingReceiverPostingId ?? postingId}
+                                 comment={comment}/>
                     <CommentUpdated comment={comment}/>
                 </div>
                 <Content className="content" comment={comment}/>
@@ -93,6 +96,7 @@ export default connect(
     state => ({
         connectedToHome: isConnectedToHome(state),
         postingReceiverName: getCommentsState(state).receiverName,
+        postingReceiverPostingId: getCommentsReceiverPostingId(state),
         isPermitted: (operation, comment) =>
             isPermitted(operation, comment, state, getCommentsState(state).receiverName)
     })

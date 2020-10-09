@@ -5,10 +5,10 @@ import moment from 'moment';
 import Jump from "ui/navigation/Jump";
 import "./CommentDate.css"
 
-const CommentDate = ({postingId, comment}) => {
+const CommentDate = ({nodeName, postingId, comment}) => {
     const date = moment.unix(comment.createdAt);
     return (
-        <Jump className="date" href={`/post/${postingId}?comment=${comment.id}`}>
+        <Jump className="date" nodeName={nodeName} href={`/post/${postingId}?comment=${comment.id}`}>
             <span title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</span>
         </Jump>
     );
