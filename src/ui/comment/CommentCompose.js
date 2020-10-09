@@ -11,7 +11,7 @@ import { TextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import CommentSubmitButton from "ui/comment/CommentSubmitButton";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
-import { mentionOwner } from "util/misc";
+import { mentionName } from "util/misc";
 import "./CommentCompose.css";
 
 class CommentCompose extends React.PureComponent {
@@ -42,7 +42,7 @@ class CommentCompose extends React.PureComponent {
     }
 
     render() {
-        const {atOwnerName, homeOwnerName, beingPosted} = this.props;
+        const {homeOwnerName, beingPosted, atReceiverName} = this.props;
 
         if (!homeOwnerName) {
             return null;
@@ -52,7 +52,8 @@ class CommentCompose extends React.PureComponent {
                 <Form>
                     <div className="content">
                         <CommentComposeRepliedTo/>
-                        <TextField name="body" rows={1} placeholder={`Write a comment to ${atOwnerName} here...`}
+                        <TextField name="body" rows={1}
+                                   placeholder={`Write a comment to ${atReceiverName} here...`}
                                    anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}/>
                     </div>
                     <CommentSubmitButton loading={beingPosted}/>
@@ -65,10 +66,10 @@ class CommentCompose extends React.PureComponent {
 
 export default connect(
     state => ({
-        atOwnerName: mentionOwner(state),
         homeOwnerName: getHomeOwnerName(state),
         receiverName: state.detailedPosting.comments.receiverName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
+        atReceiverName: mentionName(state, state.detailedPosting.comments.receiverName),
         formId: state.detailedPosting.compose.formId,
         repliedToId: getCommentComposerRepliedToId(state),
         beingPosted: state.detailedPosting.compose.beingPosted,

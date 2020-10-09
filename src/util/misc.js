@@ -39,10 +39,6 @@ export function mentionName(state, name) {
     return name ? "@" + NodeName.shorten(name, isNamingNameLatest(state, name)) : "";
 }
 
-export function mentionOwner(state) {
-    return mentionName(state, state.owner.name);
-}
-
 export function atOwner(state) {
     const ownerName = state.owner.name;
     return ownerName ? " @ " + NodeName.shorten(ownerName, isNamingNameLatest(state, ownerName)) : "";
