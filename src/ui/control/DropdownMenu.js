@@ -10,12 +10,13 @@ export class DropdownMenu extends React.PureComponent {
         visible: false
     };
 
-    toggle = () => {
+    toggle = e => {
         if (!this.state.visible) {
             this.show();
         } else {
             this.hide();
         }
+        e.preventDefault();
     };
 
     show() {
