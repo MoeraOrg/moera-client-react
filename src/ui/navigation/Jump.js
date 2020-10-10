@@ -22,6 +22,11 @@ class Jump extends React.PureComponent {
 
     onNear = e => {
         const {href, onNear, goToLocation} = this.props;
+
+        if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
+            return;
+        }
+
         const performJump = () => {
             const {path, query, fragment} = URI.parse(href);
             goToLocation(path, query, fragment);
@@ -36,6 +41,11 @@ class Jump extends React.PureComponent {
 
     onFar = url => e => {
         const {onFar} = this.props;
+
+        if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
+            return;
+        }
+
         const performJump = () => {
             window.location = url;
         }
