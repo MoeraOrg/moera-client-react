@@ -14,7 +14,7 @@ const PostingDate = ({posting, story, timeRelative}) => {
         publishedAt = story != null ? story.publishedAt : posting.createdAt;
     }
     const date = moment.unix(publishedAt);
-    const nodeName = posting.receiverName ?? ":";
+    const nodeName = posting.receiverName ?? posting.ownerName;
     const postingId = posting.receiverPostingId ?? posting.id;
     return (
         <Jump className="date" nodeName={nodeName} href={`/post/${postingId}`}>{

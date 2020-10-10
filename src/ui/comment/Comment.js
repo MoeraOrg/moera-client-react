@@ -13,7 +13,7 @@ import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
-import { getCommentsReceiverPostingId, getCommentsState } from "state/detailedposting/selectors";
+import { getCommentsReceiverPostingId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
 import "./Comment.css";
 
 class Content extends React.PureComponent {
@@ -62,7 +62,8 @@ class Content extends React.PureComponent {
 }
 
 const Comment = ({
-     postingId, comment, focused, connectedToHome, postingReceiverName, postingReceiverPostingId, isPermitted
+     postingId, comment, focused, connectedToHome, postingOwnerName, postingReceiverName, postingReceiverPostingId,
+     isPermitted
 }) => (
     <div className={cx("comment", "entry", {
         "focused": focused,
@@ -76,8 +77,8 @@ const Comment = ({
                 <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
                 <div className="owner-line">
                     <CommentOwner comment={comment}/>
-                    <CommentDate nodeName={postingReceiverName ?? ":"} postingId={postingReceiverPostingId ?? postingId}
-                                 comment={comment}/>
+                    <CommentDate nodeName={postingReceiverName ?? postingOwnerName}
+                                 postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
                     <CommentUpdated comment={comment}/>
                 </div>
                 <Content className="content" comment={comment}/>
@@ -95,6 +96,7 @@ const Comment = ({
 export default connect(
     state => ({
         connectedToHome: isConnectedToHome(state),
+        postingOwnerName: getDetailedPosting(state).ownerName,
         postingReceiverName: getCommentsState(state).receiverName,
         postingReceiverPostingId: getCommentsReceiverPostingId(state),
         isPermitted: (operation, comment) =>
