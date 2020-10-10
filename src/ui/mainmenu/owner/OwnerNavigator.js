@@ -11,7 +11,7 @@ import { NodeName } from "api";
 
 const OwnerNavigator = ({switching, ownerSwitchClose}) => (
     <Form className="form-inline ml-3 mr-3">
-        <InputField name="name" horizontal={true} groupClassName="mr-2" autoFocus={true} anyValue
+        <InputField name="ownerName" horizontal={true} groupClassName="mr-2" autoFocus={true} anyValue
                     onEscape={ownerSwitchClose}/>
         <Button variant="secondary" type="submit" size="sm" loading={switching}>Go</Button>
     </Form>
@@ -21,16 +21,16 @@ const ownerNavigatorLogic = {
 
     mapPropsToValues(props) {
         return {
-            name: NodeName.shorten(props.ownerName, props.latest) || ""
+            ownerName: NodeName.shorten(props.ownerName, props.latest) || ""
         };
     },
 
     validationSchema: yup.object().shape({
-        name: yup.string().trim().required("Must not be empty")
+        ownerName: yup.string().trim().required("Must not be empty")
     }),
 
     handleSubmit(values, formik) {
-        formik.props.ownerSwitch(values.name.trim());
+        formik.props.ownerSwitch(values.ownerName.trim());
         formik.setSubmitting(false);
     }
 

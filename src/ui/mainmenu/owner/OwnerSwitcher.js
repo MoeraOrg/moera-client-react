@@ -7,24 +7,39 @@ import { ownerSwitchClose, ownerSwitchOpen } from "state/owner/actions";
 
 class OwnerSwitcher extends React.PureComponent {
 
+    #startedInner;
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (!prevProps.showNavigator && this.props.showNavigator) {
             document.addEventListener("click", this.outerClick);
+            document.getElementById("ownerName").select();
+            document.addEventListener("mousedown", this.mouseDown);
         }
         if (prevProps.showNavigator && !this.props.showNavigator) {
             document.removeEventListener("click", this.outerClick);
+            document.removeEventListener("mousedown", this.mouseDown);
         }
     }
 
-    outerClick = e => {
-        const ownerArea = document.getElementById("owner-switcher").getBoundingClientRect();
-        if (e.detail > 0 /* Not a simulated button click caused by Enter key */
-            && (e.clientY < ownerArea.top || e.clientY >= ownerArea.bottom
-            || e.clientX < ownerArea.left || e.clientX >= ownerArea.right)) {
+    mouseDown = e => {
+        this.#startedInner = this.isInner(e);
+    }
 
+    outerClick = e => {
+        if (this.#startedInner) {
+            return;
+        }
+
+        if (e.detail > 0 /* Not a simulated button click caused by Enter key */ && !this.isInner(e)) {
             this.props.ownerSwitchClose();
         }
     };
+
+    isInner(e) {
+        const ownerArea = document.getElementById("owner-switcher").getBoundingClientRect();
+        return e.clientY >= ownerArea.top && e.clientY < ownerArea.bottom
+            && e.clientX >= ownerArea.left && e.clientX < ownerArea.right;
+    }
 
     render() {
         const {showNavigator, ownerSwitchOpen} = this.props;
