@@ -28,8 +28,29 @@ export class DropdownMenu extends React.PureComponent {
         document.removeEventListener("click", this.hide);
     };
 
+    buildItems() {
+        const items = [];
+        let divider = false;
+        for (let item of this.props.items) {
+            if (item.divider) {
+                divider = true;
+                continue;
+            }
+            if (!item.show) {
+                continue;
+            }
+            items.push({
+                title: item.title,
+                href: item.href,
+                onClick: item.onClick,
+                divider: divider && items.length > 0
+            });
+            divider = false;
+        }
+        return items;
+    }
+
     render() {
-        const items = this.props.items.filter(item => item.show);
         return (
             <Manager>
                 <Reference>
@@ -41,6 +62,7 @@ export class DropdownMenu extends React.PureComponent {
                                     if (!this.state.visible) {
                                         return null;
                                     }
+                                    const items = this.buildItems();
                                     return (
                                         <div ref={ref} style={style}
                                              className={`bs-popover-${placement} fade dropdown-menu shadow-sm show`}>

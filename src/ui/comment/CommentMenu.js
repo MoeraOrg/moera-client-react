@@ -44,11 +44,13 @@ class CommentMenu extends React.PureComponent {
                     show: isPermitted("edit", comment),
                 },
                 {
+                    divider: true
+                },
+                {
                     title: "Delete",
                     href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
                     onClick: this.onDelete,
-                    show: isPermitted("delete", comment), // FIXME all permissions work?
-                    divider: true
+                    show: isPermitted("delete", comment) // FIXME all permissions work?
                 }
             ]}/>
         );

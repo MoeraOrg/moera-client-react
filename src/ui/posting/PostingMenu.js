@@ -97,23 +97,19 @@ class PostingMenu extends React.PureComponent {
                     show: posting.ownerName !== homeOwnerName && posting.subscriptions.comments != null
                 },
                 {
-                    title: "Edit...",
-                    href: `${rootLocation}/moera/compose?id=${posting.id}`,
-                    onClick: this.onEdit,
-                    show: isPermitted("edit", posting),
                     divider: true
                 },
                 {
-                    title: "Pin",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
-                    onClick: this.onPin,
-                    show: story != null && !story.pinned && isPermitted("edit", story)
+                    title: "Edit...",
+                    href: `${rootLocation}/moera/compose?id=${posting.id}`,
+                    onClick: this.onEdit,
+                    show: isPermitted("edit", posting)
                 },
                 {
-                    title: "Unpin",
+                    title: story != null && !story.pinned ? "Pin" : "Unpin",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onPin,
-                    show: story != null && story.pinned && isPermitted("edit", story)
+                    show: story != null && isPermitted("edit", story)
                 },
                 {
                     title: "Change date/time...",
@@ -122,11 +118,13 @@ class PostingMenu extends React.PureComponent {
                     show: isPermitted("edit", story)
                 },
                 {
+                    divider: true
+                },
+                {
                     title: "Delete",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onDelete,
-                    show: isPermitted("delete", posting),
-                    divider: true
+                    show: isPermitted("delete", posting)
                 }
             ]}/>
         );
