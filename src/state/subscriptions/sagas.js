@@ -3,6 +3,7 @@ import { call, select } from 'redux-saga/effects';
 import { isAtHomeNode } from "state/node/selectors";
 import { Node } from "api/node";
 import { fillSubscriptionId } from "state/subscriptions/util";
+import { isConnectedToHome } from "state/home/selectors";
 
 export function* fillSubscriptions(stories) {
     const postings = stories
@@ -12,8 +13,8 @@ export function* fillSubscriptions(stories) {
     if (postings.length === 0) {
         return;
     }
-    const atHome = yield select(isAtHomeNode);
-    if (atHome) {
+    const toBeFilled = yield select(state => isConnectedToHome(state) && !isAtHomeNode(state));
+    if (!toBeFilled) {
         return;
     }
     const remotePostings = postings.map(p => ({nodeName: p.receiverName, postingId: p.receiverPostingId}));
@@ -30,6 +31,10 @@ export function* fillSubscriptions(stories) {
 
 export function* fillSubscription(posting) {
     if (posting.receiverName == null) {
+        return;
+    }
+    const toBeFilled = yield select(state => isConnectedToHome(state) && !isAtHomeNode(state));
+    if (!toBeFilled) {
         return;
     }
     const remotePostings = [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}];
