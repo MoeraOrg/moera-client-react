@@ -8,10 +8,22 @@
     font-size: .8rem;
 }
 
-.comment-button:hover, A.comment-button:hover {
-    text-decoration: underline;
+@media only screen and (min-width: 576px) {
+    .comment-button .caption, A.comment-button .caption {
+        margin-left: .25rem;
+    }
+
+    .comment-button:hover, A.comment-button:hover {
+        text-decoration: underline;
+    }
 }
 
-.comment-button .caption {
-    margin-left: .25rem;
+@media only screen and (max-width: 575px) {
+    .comment-button .caption, A.comment-button .caption {
+        display: none;
+    }
+
+    .comment-button:hover, A.comment-button:hover {
+        background-color: var(--highlight-blue);
+    }
 }
