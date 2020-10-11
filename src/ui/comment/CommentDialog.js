@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as textFieldEdit from 'text-field-edit';
 
-import { Button, ModalDialog } from "ui/control";
+import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { TextField } from "ui/control/field";
-import { closeCommentDialog, commentPost } from "state/detailedposting/actions";
+import { closeCommentDialog, commentDialogConflictClose, commentPost } from "state/detailedposting/actions";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getCommentComposerComment } from "state/detailedposting/selectors";
+import { getCommentComposerComment, isCommentComposerConflict } from "state/detailedposting/selectors";
 
 class CommentDialog extends React.PureComponent {
 
@@ -38,7 +38,7 @@ class CommentDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, beingPosted, closeCommentDialog} = this.props;
+        const {show, conflict, beingPosted, closeCommentDialog, commentDialogConflictClose} = this.props;
 
         if (!show) {
             return null;
@@ -46,6 +46,8 @@ class CommentDialog extends React.PureComponent {
 
         return (
             <ModalDialog title="Edit a comment" onClose={closeCommentDialog}>
+                <ConflictWarning text="The comment was edited by somebody." show={conflict}
+                                 onClose={commentDialogConflictClose}/>
                 <Form>
                     <div className="modal-body">
                         <TextField name="body" rows={5} anyValue autoFocus disabled={beingPosted}
@@ -68,11 +70,12 @@ export default connect(
         ownerName: getHomeOwnerName(state),
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         comment: getCommentComposerComment(state),
+        conflict: isCommentComposerConflict(state),
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default"),
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default"),
         beingPosted: state.detailedPosting.compose.beingPosted,
         submitKey: getSetting(state, "comment.submit-key")
     }),
-    { commentPost, closeCommentDialog }
+    { commentPost, closeCommentDialog, commentDialogConflictClose }
 )(withFormik(commentComposeLogic)(CommentDialog));

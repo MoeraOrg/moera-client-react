@@ -12,6 +12,8 @@ import {
     COMMENT_DIALOG_COMMENT_LOAD,
     COMMENT_DIALOG_COMMENT_LOAD_FAILED,
     COMMENT_DIALOG_COMMENT_LOADED,
+    COMMENT_DIALOG_CONFLICT,
+    COMMENT_DIALOG_CONFLICT_CLOSE,
     COMMENT_POST,
     COMMENT_POST_FAILED,
     COMMENT_POSTED,
@@ -86,7 +88,8 @@ const emptyCompose = {
     comment: null,
     repliedToId: null,
     repliedToName: null,
-    repliedToHeading: null
+    repliedToHeading: null,
+    conflict: false
 };
 
 const initialState = {
@@ -315,7 +318,6 @@ export default (state = initialState, action) => {
                     formId: state.compose.formId + 1,
                     ...emptyCompose
                 })
-                .set("compose.focused", false)
                 .assign("comments", {
                     focused: false,
                     loadingFocusedComment: false,
@@ -432,6 +434,7 @@ export default (state = initialState, action) => {
 
         case OPEN_COMMENT_DIALOG:
             return immutable.assign(state, "compose", {
+                ...emptyCompose,
                 showDialog: true,
                 commentId: action.payload.commentId
             });
@@ -450,6 +453,12 @@ export default (state = initialState, action) => {
 
         case COMMENT_DIALOG_COMMENT_LOAD_FAILED:
             return immutable.set(state, "compose.loading", false);
+
+        case COMMENT_DIALOG_CONFLICT:
+            return immutable.set(state, "compose.conflict", true);
+
+        case COMMENT_DIALOG_CONFLICT_CLOSE:
+            return immutable.set(state, "compose.conflict", false);
 
         case COMMENT_VERIFY: {
             const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);

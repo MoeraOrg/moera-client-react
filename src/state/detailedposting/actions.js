@@ -199,6 +199,16 @@ export const commentDialogCommentLoadFailed = () => ({
     type: COMMENT_DIALOG_COMMENT_LOAD_FAILED
 });
 
+export const COMMENT_DIALOG_CONFLICT = "COMMENT_DIALOG_CONFLICT";
+export const commentDialogConflict = () => ({
+    type: COMMENT_DIALOG_CONFLICT
+});
+
+export const COMMENT_DIALOG_CONFLICT_CLOSE = "COMMENT_DIALOG_CONFLICT_CLOSE";
+export const commentDialogConflictClose = () => ({
+    type: COMMENT_DIALOG_CONFLICT_CLOSE
+});
+
 export const COMMENT_VERIFY = "COMMENT_VERIFY";
 export const commentVerify = (commentId) => ({
     type: COMMENT_VERIFY,

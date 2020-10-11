@@ -5,6 +5,7 @@ import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
     COMMENT_POSTED,
     commentDialogCommentLoad,
+    commentDialogConflict,
     commentLoad,
     commentReactionLoad,
     COMMENTS_RECEIVER_SWITCHED,
@@ -24,7 +25,9 @@ import {
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import {
+    getCommentComposerCommentId,
     getCommentsReceiverPostingId,
+    isCommentDialogShown,
     isCommentMomentInLoadedRange,
     isCommentsReceiverToBeSwitched,
     isDetailedPostingId,
@@ -100,16 +103,25 @@ export default [
     ),
     trigger(
         [EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED],
-        (state, signal) => getCommentsReceiverPostingId(state) === signal.payload.postingId
+        (state, signal) => isAtDetailedPostingPage(state)
+            && getCommentsReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentLoad(signal.payload.id)
     ),
     trigger(
         EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
-        (state, signal) => getCommentsReceiverPostingId(state) === signal.payload.postingId
+        (state, signal) => isAtDetailedPostingPage(state)
+            && getCommentsReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentReactionLoad(signal.payload.id, signal.payload.postingId)
     ),
     trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad),
+    trigger(
+        EVENT_RECEIVER_COMMENT_UPDATED,
+        (state, signal) => isAtDetailedPostingPage(state) && isCommentDialogShown(state)
+            && getCommentsReceiverPostingId(state) === signal.payload.postingId
+            && getCommentComposerCommentId(state) === signal.payload.id,
+        commentDialogConflict
+    ),
     trigger(GLANCE_COMMENT, isGlanceCommentToBeLoaded, glanceCommentLoad)
 ];

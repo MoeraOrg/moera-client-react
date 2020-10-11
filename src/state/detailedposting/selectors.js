@@ -133,6 +133,10 @@ export function isCommentDialogShown(state) {
     return state.detailedPosting.compose.showDialog;
 }
 
+export function isCommentComposerConflict(state) {
+    return state.detailedPosting.compose.conflict;
+}
+
 export function isGlanceCommentToBeLoaded(state) {
     const comments = getCommentsState(state);
     return !comments.loadedGlanceComment
