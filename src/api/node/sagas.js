@@ -388,7 +388,8 @@ export function* getComment(nodeName, postingId, id, withSource = false) {
     id = encodeURIComponent(id);
     const location = urlWithParameters(`/postings/${postingId}/comments/${id}`, {include});
     return yield call(callApi, {
-        nodeName, location, auth: true, schema: NodeApi.CommentInfo, withBodies: true
+        nodeName, location, auth: true, schema: NodeApi.CommentInfo, withBodies: true,
+        errorFilter: ["comment.not-found"]
     });
 }
 

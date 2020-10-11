@@ -2,7 +2,7 @@ import { call, put, select } from 'redux-saga/effects';
 import clipboardCopy from 'clipboard-copy';
 import * as textFieldEdit from 'text-field-edit';
 
-import { Node } from "api";
+import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
     commentDeleted,
@@ -178,7 +178,11 @@ export function* focusedCommentLoadSaga() {
         yield put(focusedCommentLoaded(receiverName, data));
     } catch (e) {
         yield put(focusedCommentLoadFailed(receiverName, receiverPostingId));
-        yield put(errorThrown(e));
+        if (!(e instanceof NodeApiError) || e.errorCode !== "comment.not-found") {
+            yield put(errorThrown(e));
+        } else {
+            yield put(flashBox("Comment not found"));
+        }
     }
 }
 
