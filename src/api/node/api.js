@@ -275,6 +275,24 @@ const PostingInfoType = {
                     },
                     "storyId": {
                         type: "string"
+                    },
+                    "operations": {
+                        type: "object",
+                        properties: {
+                            "edit": {
+                                type: "array",
+                                items: {
+                                    type: "string"
+                                }
+                            },
+                            "delete": {
+                                type: "array",
+                                items: {
+                                    type: "string"
+                                }
+                            }
+                        },
+                        additionalProperties: false
                     }
                 },
                 additionalProperties: false
