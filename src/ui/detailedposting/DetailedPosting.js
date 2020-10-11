@@ -55,14 +55,22 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
     </>
 );
 
+function getStory(posting, feedName) {
+    const story = getPostingFeedReference(posting, feedName);
+    if (story != null) {
+        story.id = story.storyId;
+    }
+    return story;
+}
+
 const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToTimeline, goToNews}) => {
-    let story = getPostingFeedReference(posting, "timeline");
+    let story = getStory(posting, "timeline");
     if (story != null) {
         return <DetailedPostingImpl story={story} posting={posting} deleting={deleting}
                                     connectedToHome={connectedToHome} isPermitted={isPermitted} feedTitle="Timeline"
                                     goToFeed={goToTimeline}/>
     } else {
-        story = getPostingFeedReference(posting, "news");
+        story = getStory(posting, "news");
         return <DetailedPostingImpl story={story} posting={posting} deleting={deleting}
                                     connectedToHome={connectedToHome} isPermitted={isPermitted} feedTitle="News"
                                     goToFeed={goToNews}/>
