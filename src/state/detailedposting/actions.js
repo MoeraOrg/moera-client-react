@@ -64,6 +64,11 @@ export const commentsFutureSliceSet = (nodeName, postingId, comments, before, af
     payload: {nodeName, postingId, comments, before, after, totalInPast, totalInFuture}
 });
 
+export const COMMENTS_UNSET = "COMMENTS_UNSET";
+export const commentsUnset = () => ({
+    type: COMMENTS_UNSET
+});
+
 export const COMMENTS_SCROLL_TO_ANCHOR = "COMMENTS_SCROLL_TO_ANCHOR";
 export const commentsScrollToAnchor = (anchor) => ({
     type: COMMENTS_SCROLL_TO_ANCHOR,

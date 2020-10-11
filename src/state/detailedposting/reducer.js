@@ -1,6 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
+import selectn from 'selectn';
 
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
@@ -37,6 +38,7 @@ import {
     COMMENTS_SCROLLED_TO_ANCHOR,
     COMMENTS_SCROLLED_TO_COMMENTS,
     COMMENTS_SCROLLED_TO_COMPOSER,
+    COMMENTS_UNSET,
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_FAILED,
     DETAILED_POSTING_LOADED,
@@ -291,6 +293,23 @@ export default (state = initialState, action) => {
                 }
             }
             return istate.value();
+        }
+
+        case COMMENTS_UNSET: {
+            const commentsFocused = selectn("comments.focused", state);
+            const commentsFocusedCommentId = selectn("comments.focusedCommentId", state);
+            const composeFocused = selectn("compose.focused", state);
+            return immutable.wrap(state)
+                .assign("comments", {
+                    ...cloneDeep(emptyComments),
+                    focused: commentsFocused,
+                    focusedCommentId: commentsFocusedCommentId
+                })
+                .assign("compose", {
+                    ...emptyCompose,
+                    focused: composeFocused
+                })
+                .value()
         }
 
         case COMMENTS_SCROLL_TO_COMPOSER:

@@ -10,10 +10,12 @@ import {
     commentReactionLoad,
     COMMENTS_RECEIVER_SWITCHED,
     COMMENTS_SCROLL_TO_ANCHOR,
+    COMMENTS_UNSET,
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
     commentsReceiverSwitch,
     commentsScrollToAnchor,
+    commentsUnset,
     DETAILED_POSTING_LOADED,
     detailedPostingLoad,
     focusComment,
@@ -49,6 +51,7 @@ import {
 export default [
     trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtDetailedPostingPage, detailedPostingLoad),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtDetailedPostingPage, commentsUnset),
     trigger(DETAILED_POSTING_LOADED, true, signal => postingSet(signal.payload.posting)),
     trigger(
         POSTING_SET,
@@ -61,18 +64,18 @@ export default [
         commentsReceiverSwitch
     ),
     trigger(
-        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENTS_UNSET],
         conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, isFocusedCommentInList),
         focusComment
     ),
     trigger(
-        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED],
+        [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENTS_UNSET],
         conj(isAtDetailedPostingPage, isFocusedCommentToBeLoaded, inv(isFocusedCommentInList)),
         focusedCommentLoad
     ),
     trigger(
         [
-            GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED,
+            GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, COMMENTS_UNSET, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED,
             COMMENTS_SCROLL_TO_ANCHOR
         ],
         conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded),
@@ -80,7 +83,7 @@ export default [
     ),
     trigger(
         [
-            GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED,
+            GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, COMMENTS_UNSET, FOCUSED_COMMENT_LOADED, FOCUSED_COMMENT_LOAD_FAILED,
             COMMENTS_SCROLL_TO_ANCHOR
         ],
         conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
