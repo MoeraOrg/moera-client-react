@@ -111,6 +111,9 @@ const storyEvent = (properties = {}) => baseEvent({
     "remotePostingId": {
         type: "string"
     },
+    "remoteCommentId": {
+        type: "string"
+    },
     "operations": {
         type: "object",
         properties: {
