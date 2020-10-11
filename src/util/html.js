@@ -61,6 +61,7 @@ export function safeHtml(html) {
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
+            "*": ["dir"],
             img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             "mr-spoiler": ["title"]
