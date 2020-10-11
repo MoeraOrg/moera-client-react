@@ -13,6 +13,7 @@ const MENU_ITEMS = {
     },
     "client": {
         "posting": "Post",
+        "comment": "Comment",
         "reactions": "Reactions",
         "other": "Other"
     }

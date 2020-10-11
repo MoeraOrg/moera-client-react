@@ -6,6 +6,10 @@ import { mapFilter, mapWithoutKeys } from "util/map";
 import { PREFIX } from "api/settings";
 
 const EXCLUDE = new Set([
+    PREFIX + "comment.reactions.positive.default",
+    PREFIX + "comment.reactions.negative.default",
+    PREFIX + "comment.submit-key",
+    PREFIX + "comment.replied-to.glance.enabled",
     PREFIX + "posting.time.relative",
     PREFIX + "posting.body.font-magnitude",
     PREFIX + "posting.reply.subject-prefix",
