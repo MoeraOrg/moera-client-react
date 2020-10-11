@@ -16,7 +16,8 @@
     padding: .5rem;
     width: max-content;
     min-width: 16rem;
-    max-width: 100%;
+    max-width: calc(100% - 1rem);
+    overflow-wrap: break-word;
 }
 
 .comment .content P:last-child {
