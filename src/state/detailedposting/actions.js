@@ -95,6 +95,11 @@ export const commentsScrolledToComposer = () => ({
     type: COMMENTS_SCROLLED_TO_COMPOSER
 });
 
+export const COMMENT_COMPOSE_UNSET = "COMMENT_COMPOSE_UNSET";
+export const commentComposeUnset = () => ({
+    type: COMMENT_COMPOSE_UNSET
+});
+
 export const COMMENT_POST = "COMMENT_POST";
 export const commentPost = (postingId, commentId, commentText) => ({
     type: COMMENT_POST,

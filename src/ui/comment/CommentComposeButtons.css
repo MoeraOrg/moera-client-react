@@ -1,0 +1,8 @@
+#comment-composer .buttons {
+    text-align: right;
+}
+
+#comment-composer .buttons BUTTON[type=submit] {
+    margin-left: .5rem;
+    margin-right: 1rem;
+}

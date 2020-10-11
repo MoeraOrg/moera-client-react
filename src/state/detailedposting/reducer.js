@@ -7,6 +7,7 @@ import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CLOSE_COMMENT_DIALOG,
+    COMMENT_COMPOSE_UNSET,
     COMMENT_DELETE,
     COMMENT_DELETE_FAILED,
     COMMENT_DELETED,
@@ -323,6 +324,12 @@ export default (state = initialState, action) => {
 
         case COMMENTS_SCROLLED_TO_COMPOSER:
             return immutable.set(state, "compose.focused", false);
+
+        case COMMENT_COMPOSE_UNSET:
+            return immutable.assign(state, "compose", {
+                formId: state.compose.formId + 1,
+                ...emptyCompose
+            });
 
         case COMMENT_POST:
             return immutable.set(state, "compose.beingPosted", true);

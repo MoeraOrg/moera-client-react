@@ -9,8 +9,8 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { TextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
-import CommentSubmitButton from "ui/comment/CommentSubmitButton";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
+import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { mentionName } from "util/misc";
 import "./CommentCompose.css";
 
@@ -56,7 +56,7 @@ class CommentCompose extends React.PureComponent {
                                    placeholder={`Write a comment to ${atReceiverName} here...`}
                                    anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}/>
                     </div>
-                    <CommentSubmitButton loading={beingPosted}/>
+                    <CommentComposeButtons loading={beingPosted}/>
                 </Form>
             </div>
         );
