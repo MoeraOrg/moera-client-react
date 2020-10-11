@@ -50,6 +50,7 @@ export function safePreviewHtml(html) {
         }
     });
 }
+
 export function safeHtml(html) {
     if (!html) {
         return "";
@@ -68,4 +69,19 @@ export function safeHtml(html) {
             img: "emoji"
         }
     });
+}
+
+export function quoteHtml(html) {
+    if (html == null) {
+        return null;
+    }
+    return html
+        .replace(/\n*<p>\n*/gi, "\n\n")
+        .replace(/<blockquote>\n+/gi, "<blockquote>\n")
+        .replace(/<\/p>/gi, "")
+        .replace(/\n*<br\s*\/?>\n*/gi, "\n")
+        .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
+        .replace(/<img\s+src="https:\/\/twemoji\.[^"]*\/([0-9a-f]+).svg"[^>]*>/gi,
+            (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
+        .trim()
 }

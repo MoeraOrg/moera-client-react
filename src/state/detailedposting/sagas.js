@@ -43,7 +43,8 @@ import { getOwnerName } from "state/owner/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { mentionName } from "util/misc";
+import { getWindowSelectionHtml, mentionName } from "util/misc";
+import { quoteHtml } from "util/html";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -261,11 +262,19 @@ export function* commentReplySaga(action) {
 
     const body = document.getElementById("body");
     const reply = body.textLength === 0 && !(yield select(isCommentComposerReplied));
+    const text = quoteHtml(getWindowSelectionHtml());
     if (reply) {
         yield put(commentRepliedToSet(commentId, ownerName, heading));
+        if (text) {
+            textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
+        }
     } else {
         const mention = yield select(mentionName, ownerName);
-        textFieldEdit.insert(body, mention + " ");
+        if (text) {
+            textFieldEdit.insert(body, `${mention}:\n>>>\n${text}\n>>>\n`);
+        } else {
+            textFieldEdit.insert(body, `${mention} `);
+        }
     }
     yield put(commentsScrollToComposer());
 }

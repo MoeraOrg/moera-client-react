@@ -4,10 +4,11 @@ import { Node, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
-import { getWindowSelectionHtml, urlWithParameters } from "util/misc";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { goToLocation } from "state/navigation/actions";
+import { getWindowSelectionHtml, urlWithParameters } from "util/misc";
+import { quoteHtml } from "util/html";
 
 export function* postingReplySaga() {
     const {posting, rootNodePage, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
@@ -31,23 +32,15 @@ export function* postingReplySaga() {
             .replace("%POST%", yield call(postingHref, posting, rootNodePage))
             .replace("%USER%", name);
         let text = getWindowSelectionHtml();
-        if (!text && quoteAll) {
-            text = posting.body.text;
-        }
         if (text) {
-            text = text
-                .replace(/\n*<p>\n*/gi, "\n\n")
-                .replace(/<blockquote>\n+/gi, "<blockquote>\n")
-                .replace(/<\/p>/gi, "")
-                .replace(/\n*<br\s*\/?>\n*/gi, "\n")
-                .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
-                .replace(/<img\s+src="https:\/\/twemoji\.[^"]*\/([0-9a-f]+).svg"[^>]*>/gi,
-                         (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
+            text = quoteHtml(text);
+        } else if (quoteAll) {
+            text = posting.body.text.trim();
         }
         const postingText = {
             bodySrc: JSON.stringify({
                 subject,
-                text: text ? `${preamble}\n>>>\n${text.trim()}\n>>>\n` : `${preamble}\n`
+                text: text ? `${preamble}\n>>>\n${text}\n>>>\n` : `${preamble}\n`
             }),
             bodySrcFormat: "markdown",
             acceptedReactions: {
