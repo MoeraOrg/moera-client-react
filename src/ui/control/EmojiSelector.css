@@ -8,13 +8,22 @@
     outline: none;
 }
 
+.emoji-selector .choice IMG {
+    vertical-align: baseline;
+}
+
+.emoji-selector .choice .svg-inline--fa {
+    vertical-align: .125em;
+}
+
 .emoji-selector .choice {
     flex: none;
     position: relative;
     width: 3rem;
     height: 3.3rem;
     text-align: center;
-    padding-bottom: 0.3rem;
+    padding-top: .6rem;
+    padding-bottom: .3rem;
 }
 
 .emoji-selector .choice:hover {
