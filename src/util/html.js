@@ -35,10 +35,16 @@ export function safePreviewHtml(html) {
             "*": ["dir"],
             img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
+            p: ["style"],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
             img: "emoji"
+        },
+        allowedStyles: {
+            "*": {
+                "text-align": [/^left$/, /^right$/, /^center$/],
+            }
         },
         transformTags: {
             "h1": "b",
@@ -64,10 +70,16 @@ export function safeHtml(html) {
             "*": ["dir"],
             img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
+            p: ["style"],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
             img: "emoji"
+        },
+        allowedStyles: {
+            "*": {
+                "text-align": [/^left$/, /^right$/, /^center$/],
+            }
         }
     });
 }
