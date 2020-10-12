@@ -5,16 +5,17 @@ import { getCommentsState, getDetailedPosting } from "state/detailedposting/sele
 import { commentsLoadAll } from "state/detailedposting/actions";
 import "./CommentsLoadAllButton.css";
 
-const CommentsLoadAllButton = ({loadedCount, totalCount, commentsLoadAll}) => (
+const CommentsLoadAllButton = ({totalInPast, loadedCount, totalCount, commentsLoadAll}) => (
     totalCount > 0 &&
         <button className="comments-load-all" title="Load add comments" onClick={commentsLoadAll}
                 disabled={loadedCount >= totalCount}>
-            {loadedCount} of {totalCount}
+            {loadedCount > 0 ? `${totalInPast + 1}..${totalInPast + loadedCount}` : "0"} of {totalCount}
         </button>
 );
 
 export default connect(
     state => ({
+        totalInPast: getCommentsState(state).totalInPast,
         loadedCount: getCommentsState(state).comments.length,
         totalCount: getDetailedPosting(state).totalComments
     }),
