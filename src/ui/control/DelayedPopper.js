@@ -1,5 +1,4 @@
 import React from 'react';
-import * as ReactDOM from 'react-dom';
 import PropType from 'prop-types';
 import { Manager as PopperManager, Popper, Reference as PopperReference } from 'react-popper';
 import cx from 'classnames';
@@ -117,8 +116,7 @@ const Reference = ({children}) => (
 const DelayedPopper = ({placement, arrow, className, children}) => (
     <DelayedPopperContext.Consumer>
         {context => (
-            ReactDOM.createPortal(
-                (context.popup || context.locus !== "out") &&
+            (context.popup || context.locus !== "out") &&
                 <Popper placement={placement}>
                     {({ref, style, placement, arrowProps}) => (
                         <div ref={ref} style={style} className={cx(
@@ -136,9 +134,7 @@ const DelayedPopper = ({placement, arrow, className, children}) => (
                             </div>
                         </div>
                     )}
-                </Popper>,
-                document.querySelector("#modal-root")
-            )
+                </Popper>
         )}
     </DelayedPopperContext.Consumer>
 );
