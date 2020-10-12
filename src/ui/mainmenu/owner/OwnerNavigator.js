@@ -10,7 +10,7 @@ import { isNamingNameLatest } from "state/naming/selectors";
 import { NodeName } from "api";
 
 const OwnerNavigator = ({switching, ownerSwitchClose}) => (
-    <Form className="form-inline ml-3 mr-3">
+    <Form className="form-inline ml-3 mr-3 mb-0">
         <InputField name="ownerName" horizontal={true} groupClassName="mr-2" autoFocus={true} anyValue
                     onEscape={ownerSwitchClose}/>
         <Button variant="secondary" type="submit" size="sm" loading={switching}>Go</Button>

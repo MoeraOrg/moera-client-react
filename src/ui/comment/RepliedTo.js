@@ -8,8 +8,8 @@ import Jump from "ui/navigation/Jump";
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import GlanceComment from "ui/comment/GlanceComment";
 import { glanceComment } from "state/detailedposting/actions";
-import "./RepliedTo.css";
 import { getSetting } from "state/settings/selectors";
+import "./RepliedTo.css";
 
 class RepliedTo extends React.PureComponent {
 
