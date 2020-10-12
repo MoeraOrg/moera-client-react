@@ -54,7 +54,7 @@ class RepliedTo extends React.PureComponent {
                             </span>
                         }
                     </Reference>
-                    <DelayedPopper placement="top" arrow={true} className="glance-comment-popover">
+                    <DelayedPopper placement="top" className="glance-comment-popover">
                         <GlanceComment/>
                     </DelayedPopper>
                 </Manager>
