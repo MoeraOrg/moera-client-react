@@ -8,3 +8,11 @@
 #comment-composer .content .form-group {
     margin-bottom: 0;
 }
+
+#comment-composer TEXTAREA {
+    background-color: var(--comment-compose);
+}
+
+#comment-composer TEXTAREA:focus {
+    background-color: white;
+}

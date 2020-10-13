@@ -28,6 +28,7 @@
     --reactions-positive-border: #cddfc9;
     --reactions-negative-border: #e1d3d4;
     --comments: #f8faff;
+    --comment-compose: #e0faff;
 
     --link: var(--blue);
     --link-hover: #0056b3;
