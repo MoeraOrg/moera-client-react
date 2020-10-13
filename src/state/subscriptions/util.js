@@ -5,6 +5,7 @@ export function fillSubscriptionId(posting, subscription) {
         case "posting-comments":
             posting.subscriptions.comments = subscription.remoteSubscriberId;
             break;
+        default:
     }
 }
 

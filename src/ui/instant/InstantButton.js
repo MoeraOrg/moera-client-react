@@ -5,7 +5,7 @@ import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 import { feedStatusUpdate } from "state/feeds/actions";
-import { getFeedNotViewed, getFeedState, getInstantCount } from "state/feeds/selectors";
+import { getFeedState, getInstantCount } from "state/feeds/selectors";
 
 class InstantButton extends React.PureComponent {
 
@@ -20,7 +20,6 @@ class InstantButton extends React.PureComponent {
 
     onToggle = (visible) => {
         if (visible && this.#visible !== visible) {
-            console.log(this.props.instantCount);
             this.setState({instantCount: this.props.instantCount});
         }
         this.#visible = visible;

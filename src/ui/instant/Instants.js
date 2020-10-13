@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFeedNotViewed, getFeedState } from "state/feeds/selectors";
+import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
@@ -41,7 +41,6 @@ class Instants extends React.PureComponent {
     render() {
         const {hide, loadingPast, after, stories, instantCount} = this.props;
 
-        console.log("Instants", instantCount);
         return (
             <div id="instants">
                 <div className="header">
