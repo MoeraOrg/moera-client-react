@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getFeedState } from "state/feeds/selectors";
+import { getFeedNotViewed, getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
@@ -39,8 +39,9 @@ class Instants extends React.PureComponent {
     }
 
     render() {
-        const {hide, loadingPast, after, stories} = this.props;
+        const {hide, loadingPast, after, stories, instantCount} = this.props;
 
+        console.log("Instants", instantCount);
         return (
             <div id="instants">
                 <div className="header">
@@ -48,7 +49,9 @@ class Instants extends React.PureComponent {
                     <div className="read-all" onClick={this.onReadAll}>Mark All as Read</div>
                 </div>
                 <div className="content">
-                    {stories.map(story => <InstantStory key={story.moment} story={story} hide={hide}/>)}
+                    {stories.map((story, i) =>
+                        <InstantStory key={story.moment} story={story} hide={hide} lastNew={i + 1 === instantCount}/>
+                    )}
                     <InstantsSentinel loading={loadingPast} title="Load more..." margin="0px 0px 100px 0px"
                                   visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
                                   onClick={this.loadPast}/>

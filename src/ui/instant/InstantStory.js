@@ -55,10 +55,10 @@ class InstantStory extends React.PureComponent {
     }
 
     render() {
-        const {story} = this.props;
+        const {story, lastNew} = this.props;
         const {nodeName, href} = getStoryTarget(story);
         return (
-            <div className={cx("instant", {"unread": !story.read})}>
+            <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
                 <div className="cursor">
                     <Jump nodeName={nodeName} href={href} trackingId={story.read ? null : story.trackingId}
                           onNear={this.onJump(story)}>

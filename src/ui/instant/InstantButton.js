@@ -5,10 +5,13 @@ import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 import { feedStatusUpdate } from "state/feeds/actions";
-import { getFeedState } from "state/feeds/selectors";
+import { getFeedNotViewed, getFeedState, getInstantCount } from "state/feeds/selectors";
 
 class InstantButton extends React.PureComponent {
 
+    state = {
+        instantCount: 0
+    };
     #visible;
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -16,6 +19,10 @@ class InstantButton extends React.PureComponent {
     }
 
     onToggle = (visible) => {
+        if (visible && this.#visible !== visible) {
+            console.log(this.props.instantCount);
+            this.setState({instantCount: this.props.instantCount});
+        }
         this.#visible = visible;
         this.viewAll();
     }
@@ -33,7 +40,7 @@ class InstantButton extends React.PureComponent {
         return (
             <Popover element={InstantBell} className="instant-popover" detached={true} onToggle={this.onToggle}>
                 {({hide}) => (
-                    <Instants hide={hide}/>
+                    <Instants hide={hide} instantCount={this.state.instantCount}/>
                 )}
             </Popover>
         );
@@ -43,7 +50,8 @@ class InstantButton extends React.PureComponent {
 
 export default connect(
     state => ({
-        stories: getFeedState(state, ":instant").stories
+        stories: getFeedState(state, ":instant").stories,
+        instantCount: getInstantCount(state)
     }),
     { feedStatusUpdate }
 )(InstantButton);
