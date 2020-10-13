@@ -47,7 +47,7 @@ class ReactionsDialog extends React.PureComponent {
                         <ReactionsChartView itemsRef={dom => {this.#itemsDom = dom}}
                                             onSwitchView={reactionsVisible ? this.onSwitchView : null}/>
                     :
-                        <ReactionsListView postingId={posting.id} itemsRef={dom => {this.#itemsDom = dom}}
+                        <ReactionsListView itemsRef={dom => {this.#itemsDom = dom}}
                                            onSwitchView={this.onSwitchView}/>
                     }
                 </div>
