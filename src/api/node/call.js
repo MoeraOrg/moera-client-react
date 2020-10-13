@@ -152,7 +152,10 @@ function isErrorCodeAllowed(errorCode, filter) {
     return false;
 }
 
-function decodeBody(encoded, exception) {
+function decodeBody(encoded, format, exception) {
+    if (format != null && format.toLowerCase() === "application") {
+        return {text: ""};
+    }
     let body = JSON.parse(encoded);
     if (!NodeApi.Body(body)) {
         throw exception("Server returned incorrect response", formatSchemaErrors(NodeApi.Body.errors));
@@ -178,13 +181,13 @@ function decodeBodies(data, exception) {
         decoded.posting = decodeBodies(data.posting, exception);
     }
     if (data.body) {
-        decoded.body = decodeBody(data.body, exception);
+        decoded.body = decodeBody(data.body, data.bodyFormat, exception);
     }
     if (data.bodyPreview) {
-        decoded.bodyPreview = decodeBody(data.bodyPreview, exception);
+        decoded.bodyPreview = decodeBody(data.bodyPreview, data.bodyFormat, exception);
     }
     if (data.bodySrc) {
-        decoded.bodySrc = decodeBody(data.bodySrc, exception);
+        decoded.bodySrc = decodeBody(data.bodySrc, data.bodySrcFormat, exception);
     }
     return decoded;
 }
