@@ -66,6 +66,16 @@ export function now() {
     return Math.floor(Date.now() / 1000);
 }
 
+export function hasWindowSelection() {
+    if (document.selection && document.selection.createRange) {
+        return document.selection.createRange().htmlText.length > 0;
+    } else if (window.getSelection) {
+        const selection = window.getSelection();
+        return selection.rangeCount > 0 && !selection.getRangeAt(0).collapsed;
+    }
+    return false;
+}
+
 export function getWindowSelectionHtml() {
     if (document.selection && document.selection.createRange) {
         return document.selection.createRange().htmlText;

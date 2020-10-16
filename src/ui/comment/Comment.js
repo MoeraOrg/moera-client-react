@@ -14,6 +14,7 @@ import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
 import { getCommentsReceiverPostingId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
+import { hasWindowSelection } from "util/misc";
 import "./Comment.css";
 
 class Content extends React.PureComponent {
@@ -23,7 +24,9 @@ class Content extends React.PureComponent {
     };
 
     onClick = () => {
-        this.setState({preview: !this.state.preview});
+        if (!hasWindowSelection()) {
+            this.setState({preview: !this.state.preview});
+        }
     }
 
     render() {
