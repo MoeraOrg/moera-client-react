@@ -36,11 +36,13 @@ export function safePreviewHtml(html) {
             img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             p: ["style"],
+            iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
             img: "emoji"
         },
+        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
         allowedStyles: {
             "*": {
                 "text-align": [/^left$/, /^right$/, /^center$/],
@@ -71,11 +73,13 @@ export function safeHtml(html) {
             img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             p: ["style"],
+            iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
             img: "emoji"
         },
+        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
         allowedStyles: {
             "*": {
                 "text-align": [/^left$/, /^right$/, /^center$/],
