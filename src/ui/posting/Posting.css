@@ -17,7 +17,7 @@
         overflow-y: auto;
     }
 
-    .posting > .content IMG {
+    .posting > .content IMG, .posting > .content IFRAME {
         max-width: calc(900px - 3.5rem);
     }
 }
@@ -28,12 +28,12 @@
         overflow-y: auto;
     }
 
-    .posting > .content IMG {
+    .posting > .content IMG, .posting > .content IFRAME {
         max-width: calc(100vw - 4rem);
     }
 }
 
-.posting.preview > .content IMG {
+.posting.preview > .content IMG, .posting.preview > .content IFRAME {
     max-height: 35rem;
 }
 
