@@ -36,13 +36,16 @@ export function safePreviewHtml(html) {
             img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             p: ["style"],
-            iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
+            iframe: [
+                "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
+                "allowtransparency"
+            ],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
             img: "emoji"
         },
-        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
+        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
         allowedStyles: {
             "*": {
                 "text-align": [/^left$/, /^right$/, /^center$/],
@@ -73,13 +76,16 @@ export function safeHtml(html) {
             img: ["src", "srcset", "width", "height", "alt"],
             a: ["href", "data-nodename"],
             p: ["style"],
-            iframe: ["src", "width", "height", "frameborder", "allow", "allowfullscreen"],
+            iframe: [
+                "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
+                "allowtransparency"
+            ],
             "mr-spoiler": ["title"]
         },
         allowedClasses: {
             img: "emoji"
         },
-        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com"],
+        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
         allowedStyles: {
             "*": {
                 "text-align": [/^left$/, /^right$/, /^center$/],
