@@ -6,16 +6,19 @@ import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
+import { isStandaloneMode } from "state/navigation/selectors";
 
 class Storage extends React.PureComponent {
 
     componentDidMount() {
         window.addEventListener("message", this.messageReceived);
-        try {
-            // Call the browser extension to inject communication code
-            fetch("https://moera.please.start.communication/");
-        } catch (e) {
-            // The request must fail
+        if (!this.props.standalone) {
+            try {
+                // Call the browser extension to inject communication code
+                fetch("https://moera.please.start.communication/");
+            } catch (e) {
+                // The request must fail
+            }
         }
     }
 
@@ -91,6 +94,7 @@ class Storage extends React.PureComponent {
 
 export default connect(
     state => ({
+        standalone: isStandaloneMode(state),
         home: getHomeConnectionData(state)
     }),
     { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded }

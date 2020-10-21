@@ -6,9 +6,10 @@ import { getOwnerName, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/
 import { messageBox } from "state/messagebox/actions";
 import { EVENT_NODE_NODE_NAME_CHANGED } from "api/events/actions";
 import { NAMING_NAME_LOADED } from "state/naming/actions";
+import { isAtNode } from "state/node/selectors";
 
 export default [
-    trigger(INIT_FROM_LOCATION, true, ownerLoad),
+    trigger(INIT_FROM_LOCATION, isAtNode, ownerLoad),
     trigger(OWNER_SET, isOwnerNameRecentlyChanged, ownerVerify),
     trigger(OWNER_SET, true, newLocation),
     trigger(NAMING_NAME_LOADED, (state, signal) => signal.payload.name === getOwnerName(state), updateLocation),

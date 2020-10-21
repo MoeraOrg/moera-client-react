@@ -2,6 +2,10 @@ import selectn from 'selectn';
 
 import { getHomeOwnerName } from "state/home/selectors";
 
+export function isAtNode(state) {
+    return !!state.node.root.api;
+}
+
 export function isAtHomeNode(state) {
     return state.home.root.api === state.node.root.api;
 }

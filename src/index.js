@@ -17,7 +17,7 @@ import * as serviceWorker from "./serviceWorker";
 
 function buildInitAction(standalone) {
     const {rootLocation, path, query, hash} = !standalone ? Browser.getDocumentLocation() : Browser.getPassedLocation();
-    return initFromLocation(rootLocation, path, query, hash);
+    return initFromLocation(standalone, rootLocation, path, query, hash);
 }
 
 const standalone = !document.body.dataset.comPassword;

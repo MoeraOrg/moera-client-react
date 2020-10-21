@@ -8,6 +8,10 @@ import {
     PAGE_TIMELINE
 } from "state/navigation/pages";
 
+export function isStandaloneMode(state) {
+    return state.navigation.standalone;
+}
+
 export function isAtTimelinePage(state) {
     return state.navigation.page === PAGE_TIMELINE;
 }

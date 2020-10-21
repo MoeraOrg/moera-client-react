@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { isAtNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Button } from "ui/control";
@@ -12,9 +13,9 @@ import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import HomeName from "ui/mainmenu/connections/HomeName";
 import "./VerticalMenu.css";
 
-const VerticalMenu = ({connected}) => (
+const VerticalMenu = ({atNode, connected}) => (
     <div id="vertical-menu" className="navbar-dark bg-dark">
-        <MainMenuPages/>
+        {atNode && <MainMenuPages/>}
         {!connected ?
             <>
                 <Button variant="success" size="sm"  className="connect-button"
@@ -36,6 +37,7 @@ const VerticalMenu = ({connected}) => (
 
 export default connect(
     state => ({
+        atNode: isAtNode(state),
         connected: isConnectedToHome(state)
     }),
     { openConnectDialog }

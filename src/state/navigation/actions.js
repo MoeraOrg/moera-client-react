@@ -9,9 +9,9 @@ import {
 } from "state/navigation/pages";
 
 export const INIT_FROM_LOCATION = "INIT_FROM_LOCATION";
-export const initFromLocation = (rootLocation, path, query, hash) => ({
+export const initFromLocation = (standalone, rootLocation, path, query, hash) => ({
     type: INIT_FROM_LOCATION,
-    payload: {rootLocation, path, query, hash}
+    payload: {standalone, rootLocation, path, query, hash}
 });
 
 export const GO_TO_PAGE = "GO_TO_PAGE";

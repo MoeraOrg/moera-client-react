@@ -12,7 +12,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case INIT_FROM_LOCATION:
+        case INIT_FROM_LOCATION: {
+            if (!action.payload.rootLocation) {
+                return state;
+            }
+
             const location = action.payload.rootLocation;
             const page = location + "/moera";
             const api = page + "/api";
@@ -26,6 +30,7 @@ export default (state = initialState, action) => {
                     events
                 }
             };
+        }
 
         default:
             return state;
