@@ -115,7 +115,7 @@ class PostingMenu extends React.PureComponent {
                     title: "Change date/time...",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onChangeDate,
-                    show: isPermitted("edit", story)
+                    show: posting.receiverName == null && isPermitted("edit", story)
                 },
                 {
                     divider: true
