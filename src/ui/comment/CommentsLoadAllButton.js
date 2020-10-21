@@ -7,7 +7,7 @@ import "./CommentsLoadAllButton.css";
 
 const CommentsLoadAllButton = ({totalInPast, loadedCount, totalCount, commentsLoadAll}) => (
     totalCount > 0 &&
-        <button className="comments-load-all" title="Load add comments" onClick={commentsLoadAll}
+        <button className="comments-load-all" title="Load all comments" onClick={commentsLoadAll}
                 disabled={loadedCount >= totalCount}>
             {loadedCount > 0 ? `${totalInPast + 1}..${totalInPast + loadedCount}` : "0"} of {totalCount}
         </button>
