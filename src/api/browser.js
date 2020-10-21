@@ -1,8 +1,70 @@
 import { randomId } from "util/misc";
+import * as URI from "uri-js";
 
 export class Browser {
 
     static clientId = randomId();
+
+    static getDocumentLocation() {
+        let {protocol, host, pathname: path, search: query, hash} = window.location;
+        let rootLocation = `${protocol}//${host}`;
+
+        const header = document.body.dataset.xMoera;
+        if (header) {
+            header
+                .split(/\s*;\s*/)
+                .filter(s => s.includes("="))
+                .map(s => s.split("="))
+                .map(([name, value]) => ([name.toLowerCase(), decodeURIComponent(value)]))
+                .forEach(([name, value]) => {
+                    let components;
+                    switch(name) {
+                        case "root":
+                            components = URI.parse(value);
+                            rootLocation += components.path || "";
+                            break;
+
+                        case "page":
+                            components = URI.parse(value);
+                            path = components.path || "";
+                            query = components.query || "";
+                            break;
+
+                        default:
+                            break;
+                    }
+                });
+        }
+
+        return {rootLocation, path, query, hash};
+    }
+
+    static getPassedLocation() {
+        const search = window.location.search;
+        if (!search) {
+            return {};
+        }
+        let components = {};
+        search.substring(1)
+            .split("&")
+            .map(s => s.split("="))
+            .filter(([name]) => name === "href")
+            .forEach(([_, value]) => {
+                let {scheme, host, port, path, query, fragment} = URI.parse(value);
+                let rootLocation = `${scheme}://${host}`;
+                if (port) {
+                    rootLocation += `:${port}`;
+                }
+                if (query) {
+                    query = `?${query}`;
+                }
+                if (fragment) {
+                    fragment = `#${fragment}`;
+                }
+                components = {rootLocation, path, query, hash: fragment};
+        });
+        return components;
+    }
 
     static storeData(data) {
         window.postMessage({
@@ -13,10 +75,6 @@ export class Browser {
                 clientId: Browser.clientId
             }
         }, "*");
-    }
-
-    static storeHomeData(location, login, token, permissions, cartesIp, cartes) {
-        Browser.storeData({home: {location, login, token, permissions}, cartesIp, cartes});
     }
 
     static storeConnectionData(location, nodeName, login, token, permissions) {

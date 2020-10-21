@@ -1,58 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as URI from 'uri-js';
-
 import { Provider } from 'react-redux';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-widgets/dist/css/react-widgets.css';
+import simpleNumberLocalizer from 'react-widgets-simple-number';
+import dateFnsLocalizer from 'react-widgets-date-fns';
+
+import { Browser } from "api";
 import store from "state/store";
 import { initFromLocation } from "state/navigation/actions";
 import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-widgets/dist/css/react-widgets.css';
 import initIconLibrary from "./icons";
-import simpleNumberLocalizer from 'react-widgets-simple-number';
-import dateFnsLocalizer from 'react-widgets-date-fns';
 import App from "ui/App";
 
 import * as serviceWorker from "./serviceWorker";
 
-function buildInitAction() {
-    let rootLocation = window.location.protocol + "//" + window.location.host;
-    let path = window.location.pathname;
-    let query = window.location.search;
-    let hash = window.location.hash;
-
-    const header = document.body.getAttribute("data-x-moera");
-    if (header) {
-        header
-            .split(/\s*;\s*/)
-            .filter(s => s.includes("="))
-            .map(s => s.split("="))
-            .map(([name, value]) => ([name.toLowerCase(), decodeURIComponent(value)]))
-            .forEach(([name, value]) => {
-                let components;
-                switch(name) {
-                    case "root":
-                        components = URI.parse(value);
-                        rootLocation += components.path || "";
-                        break;
-
-                    case "page":
-                        components = URI.parse(value);
-                        path = components.path || "";
-                        query = components.query || "";
-                        break;
-
-                    default:
-                        break;
-                }
-            });
-    }
-
+function buildInitAction(standalone) {
+    const {rootLocation, path, query, hash} = !standalone ? Browser.getDocumentLocation() : Browser.getPassedLocation();
     return initFromLocation(rootLocation, path, query, hash);
 }
 
-if (document.contentType === "text/plain") {
+const standalone = !document.body.dataset.comPassword;
+if (standalone || document.contentType === "text/plain") {
     initIconLibrary();
     simpleNumberLocalizer();
     dateFnsLocalizer();
@@ -63,7 +32,7 @@ if (document.contentType === "text/plain") {
         </Provider>,
         document.getElementById("app-root")
     );
-    store.dispatch(buildInitAction());
+    store.dispatch(buildInitAction(standalone));
 
     // If you want your app to work offline and load faster, you can change
     // unregister() to register() below. Note this comes with some pitfalls.
