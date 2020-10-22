@@ -35,7 +35,14 @@ class Navigation extends React.PureComponent {
     }
 
     popState = event => {
-        this.props.goToLocation(window.location.pathname, window.location.search, window.location.hash);
+        const {standalone, goToLocation} = this.props;
+
+        if (!standalone) {
+            goToLocation(window.location.pathname, window.location.search, window.location.hash);
+        } else {
+            const {path, query, hash} = Browser.getPassedLocation();
+            goToLocation(path, query, hash);
+        }
         event.preventDefault();
     };
 
