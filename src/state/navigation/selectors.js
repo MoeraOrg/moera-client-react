@@ -7,35 +7,36 @@ import {
     PAGE_SETTINGS,
     PAGE_TIMELINE
 } from "state/navigation/pages";
+import { isAtNode } from "state/node/selectors";
 
 export function isStandaloneMode(state) {
     return state.navigation.standalone;
 }
 
 export function isAtTimelinePage(state) {
-    return state.navigation.page === PAGE_TIMELINE;
+    return isAtNode(state) && state.navigation.page === PAGE_TIMELINE;
 }
 
 export function isAtProfilePage(state) {
-    return state.navigation.page === PAGE_PROFILE;
+    return isAtNode(state) && state.navigation.page === PAGE_PROFILE;
 }
 
 export function isAtDetailedPostingPage(state) {
-    return state.navigation.page === PAGE_DETAILED_POSTING;
+    return isAtNode(state) && state.navigation.page === PAGE_DETAILED_POSTING;
 }
 
 export function isAtComposePage(state) {
-    return state.navigation.page === PAGE_COMPOSE;
+    return isAtNode(state) && state.navigation.page === PAGE_COMPOSE;
 }
 
 export function isAtSettingsPage(state) {
-    return state.navigation.page === PAGE_SETTINGS;
+    return isAtNode(state) && state.navigation.page === PAGE_SETTINGS;
 }
 
 export function isAtNewsPage(state) {
-    return state.navigation.page === PAGE_NEWS;
+    return isAtNode(state) && state.navigation.page === PAGE_NEWS;
 }
 
 export function isAtPeoplePage(state) {
-    return state.navigation.page === PAGE_PEOPLE;
+    return isAtNode(state) && state.navigation.page === PAGE_PEOPLE;
 }
