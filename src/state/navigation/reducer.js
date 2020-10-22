@@ -1,4 +1,4 @@
-import { GO_TO_PAGE, INIT_FROM_LOCATION, LOCATION_LOCK, LOCATION_SET, LOCATION_UNLOCK } from "state/navigation/actions";
+import { GO_TO_PAGE, INIT_STORAGE, LOCATION_LOCK, LOCATION_SET, LOCATION_UNLOCK } from "state/navigation/actions";
 import { PAGE_TIMELINE } from "state/navigation/pages";
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case INIT_FROM_LOCATION:
+        case INIT_STORAGE:
             return {
                 ...state,
                 standalone: action.payload.standalone

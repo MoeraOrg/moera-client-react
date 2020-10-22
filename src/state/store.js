@@ -2,6 +2,7 @@ import {
     GO_TO_LOCATION,
     GO_TO_PAGE_WITH_DEFAULT_SUBPAGE,
     INIT_FROM_LOCATION,
+    INIT_STORAGE,
     NEW_LOCATION,
     UPDATE_LOCATION
 } from "state/navigation/actions";
@@ -122,6 +123,7 @@ import {
     goToLocationSaga,
     goToPageWithDefaultSubpageSaga,
     initFromLocationSaga,
+    initStorageSaga,
     newLocationSaga
 } from "state/navigation/sagas";
 import { errorAuthInvalidSaga, errorSaga } from "state/error/sagas";
@@ -240,6 +242,7 @@ function* flushPostponedSaga() {
 
 function* combinedSaga() {
     yield spawn(pulseSaga);
+    yield takeLatest(INIT_STORAGE, initStorageSaga);
     yield takeLatest(INIT_FROM_LOCATION, initFromLocationSaga);
     yield takeEvery(NEW_LOCATION, newLocationSaga);
     yield takeEvery(UPDATE_LOCATION, newLocationSaga);

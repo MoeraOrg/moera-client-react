@@ -8,10 +8,16 @@ import {
     PAGE_TIMELINE
 } from "state/navigation/pages";
 
+export const INIT_STORAGE = "INIT_STORAGE";
+export const initStorage = (standalone) => ({
+    type: INIT_STORAGE,
+    payload: {standalone}
+});
+
 export const INIT_FROM_LOCATION = "INIT_FROM_LOCATION";
-export const initFromLocation = (standalone, rootLocation, path, query, hash) => ({
+export const initFromLocation = (rootLocation, path, query, hash) => ({
     type: INIT_FROM_LOCATION,
-    payload: {standalone, rootLocation, path, query, hash}
+    payload: {rootLocation, path, query, hash}
 });
 
 export const GO_TO_PAGE = "GO_TO_PAGE";

@@ -38,6 +38,23 @@ function* transformation(srcPath, srcQuery, srcHash, dstPath, dstQuery, dstHash)
     yield put(locationUnlock());
 }
 
+export function initStorageSaga(action) {
+    if (!action.payload.standalone) {
+        try {
+            // Call the browser extension to inject communication code
+            fetch("https://moera.please.start.communication/");
+        } catch (e) {
+            // The request must fail
+        }
+    } else {
+        window.postMessage({
+            source: "moera",
+            action: "loadedData",
+            payload: {}
+        }, "*");
+    }
+}
+
 export function* initFromLocationSaga(action) {
     const {path, query, hash} = action.payload;
     yield call(transformation, null, null, null, path, query, hash);

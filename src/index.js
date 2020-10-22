@@ -8,16 +8,19 @@ import dateFnsLocalizer from 'react-widgets-date-fns';
 
 import { Browser } from "api";
 import store from "state/store";
-import { initFromLocation } from "state/navigation/actions";
+import { initFromLocation, initStorage } from "state/navigation/actions";
 import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
 import initIconLibrary from "./icons";
 import App from "ui/App";
 
 import * as serviceWorker from "./serviceWorker";
 
-function buildInitAction(standalone) {
+function sendInitAction(standalone) {
+    store.dispatch(initStorage(standalone));
     const {rootLocation, path, query, hash} = !standalone ? Browser.getDocumentLocation() : Browser.getPassedLocation();
-    return initFromLocation(standalone, rootLocation, path, query, hash);
+    if (rootLocation != null) {
+        store.dispatch(initFromLocation(rootLocation, path, query, hash));
+    }
 }
 
 const standalone = !document.body.dataset.comPassword;
@@ -32,7 +35,7 @@ if (standalone || document.contentType === "text/plain") {
         </Provider>,
         document.getElementById("app-root")
     );
-    store.dispatch(buildInitAction(standalone));
+    sendInitAction(standalone);
 
     // If you want your app to work offline and load faster, you can change
     // unregister() to register() below. Note this comes with some pitfalls.
