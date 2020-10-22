@@ -2,7 +2,7 @@ import { GO_TO_PAGE, INIT_STORAGE, LOCATION_LOCK, LOCATION_SET, LOCATION_UNLOCK 
 import { PAGE_TIMELINE } from "state/navigation/pages";
 
 const initialState = {
-    standalone: false,
+    standalone: true,
     page: PAGE_TIMELINE,
     location: "",
     title: "",
