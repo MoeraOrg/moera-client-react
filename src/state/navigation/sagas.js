@@ -46,12 +46,6 @@ export function initStorageSaga(action) {
         } catch (e) {
             // The request must fail
         }
-    } else {
-        window.postMessage({
-            source: "moera",
-            action: "loadedData",
-            payload: {}
-        }, "*");
     }
 }
 

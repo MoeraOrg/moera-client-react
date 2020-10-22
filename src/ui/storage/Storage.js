@@ -6,11 +6,19 @@ import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
+import { isStandaloneMode } from "state/navigation/selectors";
+import LocalStorageBackend from "ui/storage/LocalStorageBackend";
 
 class Storage extends React.PureComponent {
 
     componentDidMount() {
         window.addEventListener("message", this.messageReceived);
+        if (this.props.standalone) {
+            window.postMessage({
+                source: "moera",
+                action: "loadData",
+            }, "*");
+        }
     }
 
     messageReceived = event => {
@@ -22,7 +30,7 @@ class Storage extends React.PureComponent {
         const message = event.data;
 
         // Only accept messages that we know are ours
-        if (message === null || typeof message !== "object" || !message.source || message.source !== "moera") {
+        if (message === null || typeof message !== "object" || message.source !== "moera") {
             return;
         }
 
@@ -78,13 +86,14 @@ class Storage extends React.PureComponent {
     }
 
     render() {
-        return null;
+        return this.props.standalone ? <LocalStorageBackend/> : null;
     }
 
 }
 
 export default connect(
     state => ({
+        standalone: isStandaloneMode(state),
         home: getHomeConnectionData(state)
     }),
     { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded }
