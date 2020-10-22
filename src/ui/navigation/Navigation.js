@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { goToLocation } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
+import { isStandaloneMode } from "state/navigation/selectors";
+import { Browser } from "api";
 
 class Navigation extends React.PureComponent {
 
@@ -11,13 +13,15 @@ class Navigation extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        const {rootPage, location, title, update, locked, count} = this.props;
+        const {standalone, rootPage, location, title, update, locked, count} = this.props;
 
         if (!locked && location !== prevProps.location) {
+            const data = !standalone ? {location} : {location: rootPage + location};
+            const url = !standalone ? rootPage + location : Browser.passedLocation(rootPage + location);
             if (update) {
-                window.history.pushState({location}, "", rootPage + location);
+                window.history.pushState(data, "", url);
             } else {
-                window.history.replaceState({location}, "", rootPage + location);
+                window.history.replaceState(data, "", url);
             }
         }
         if (title !== prevProps.title || count !== prevProps.count) {
@@ -43,6 +47,7 @@ class Navigation extends React.PureComponent {
 
 export default connect(
     state => ({
+        standalone: isStandaloneMode(state),
         rootPage: state.node.root.page,
         location: state.navigation.location,
         title: state.navigation.title,

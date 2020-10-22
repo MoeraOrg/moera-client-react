@@ -5,9 +5,14 @@ export class Browser {
 
     static clientId = randomId();
 
+    static getRootLocation() {
+        const {protocol, host} = window.location;
+        return `${protocol}//${host}`;
+    }
+
     static getDocumentLocation() {
-        let {protocol, host, pathname: path, search: query, hash} = window.location;
-        let rootLocation = `${protocol}//${host}`;
+        let {pathname: path, search: query, hash} = window.location;
+        let rootLocation = Browser.getRootLocation();
 
         const header = document.body.dataset.xMoera;
         if (header) {
@@ -50,7 +55,7 @@ export class Browser {
             .map(s => s.split("="))
             .filter(([name]) => name === "href")
             .forEach(([_, value]) => {
-                let {scheme, host, port, path, query, fragment} = URI.parse(value);
+                let {scheme, host, port, path, query, fragment} = URI.parse(decodeURIComponent(value));
                 let rootLocation = `${scheme}://${host}`;
                 if (port) {
                     rootLocation += `:${port}`;
@@ -64,6 +69,10 @@ export class Browser {
                 components = {rootLocation, path, query, hash: fragment};
         });
         return components;
+    }
+
+    static passedLocation(location) {
+        return Browser.getRootLocation() + "/?href=" + encodeURIComponent(location);
     }
 
     static storeData(data) {
