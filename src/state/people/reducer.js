@@ -1,4 +1,5 @@
 import * as immutable from 'object-path-immutable';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
     PEOPLE_GENERAL_LOAD,
@@ -19,6 +20,7 @@ import {
     EVENT_NODE_SUBSCRIPTION_ADDED,
     EVENT_NODE_SUBSCRIPTION_DELETED
 } from "api/events/actions";
+import { INIT_FROM_LOCATION } from "state/navigation/actions";
 
 const initialState = {
     tab: "subscribers",
@@ -36,6 +38,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case INIT_FROM_LOCATION:
+            return cloneDeep(initialState);
+
         case PEOPLE_GO_TO_TAB:
             return immutable.set(state, "tab", action.payload.tab);
 

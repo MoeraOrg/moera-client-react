@@ -21,6 +21,7 @@ import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
+import { getNodeRootLocation } from "state/node/selectors";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
@@ -105,7 +106,7 @@ export function* postingReactionDeleteSaga(action) {
 export function* postingGetLink(id) {
     const posting = yield select(getPosting, id);
     if (posting.receiverName == null) {
-        const rootLocation = yield select(state => state.node.root.location);
+        const rootLocation = yield select(getNodeRootLocation);
         return `${rootLocation}/moera/post/${id}`;
     } else {
         const nodeUri = yield call(getNodeUri, posting.receiverName);

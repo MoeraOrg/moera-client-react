@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { DropdownMenu } from "ui/control";
 import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { getNodeRootLocation } from "state/node/selectors";
 
 class CommentMenu extends React.PureComponent {
 
@@ -60,7 +61,7 @@ class CommentMenu extends React.PureComponent {
 
 export default connect(
     state => ({
-        rootLocation: state.node.root.location,
+        rootLocation: getNodeRootLocation(state),
     }),
     { commentCopyLink, openCommentDialog, confirmBox }
 )(CommentMenu);

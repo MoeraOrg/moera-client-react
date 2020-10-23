@@ -21,6 +21,7 @@ import {
     EVENT_RECEIVER_COMMENT_UPDATED
 } from "api/events/actions";
 import { isCommentMomentInLoadedRange } from "state/detailedposting/selectors";
+import { INIT_FROM_LOCATION } from "state/navigation/actions";
 
 export default [
     trigger(
@@ -29,7 +30,7 @@ export default [
         reactionsDialogPastReactionsLoad
     ),
     trigger(OPEN_REACTIONS_DIALOG, isReactionsDialogTotalsToBeLoaded, reactionsDialogTotalsLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, reactionsDialogUnset),
+    trigger([INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, reactionsDialogUnset),
     trigger(
         [EVENT_NODE_POSTING_UPDATED, EVENT_NODE_POSTING_REACTIONS_CHANGED],
         (state, signal) =>

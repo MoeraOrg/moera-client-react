@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { goToLocation } from "state/navigation/actions";
+import { Browser } from "api";
+import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { Browser } from "api";
+import { getNodeRootLocation } from "state/node/selectors";
 
 class Navigation extends React.PureComponent {
 
@@ -35,13 +36,17 @@ class Navigation extends React.PureComponent {
     }
 
     popState = event => {
-        const {standalone, goToLocation} = this.props;
+        const {standalone, rootLocation, initFromLocation, goToLocation} = this.props;
 
         if (!standalone) {
             goToLocation(window.location.pathname, window.location.search, window.location.hash);
         } else {
-            const {path, query, hash} = Browser.getDocumentPassedLocation();
-            goToLocation(path, query, hash);
+            const {rootLocation: root, path, query, hash} = Browser.getDocumentPassedLocation();
+            if (root === rootLocation) {
+                goToLocation(path, query, hash);
+            } else {
+                initFromLocation(root, path, query, hash);
+            }
         }
         event.preventDefault();
     };
@@ -55,6 +60,7 @@ class Navigation extends React.PureComponent {
 export default connect(
     state => ({
         standalone: isStandaloneMode(state),
+        rootLocation: getNodeRootLocation(state),
         rootPage: state.node.root.page,
         location: state.navigation.location,
         title: state.navigation.title,
@@ -62,5 +68,5 @@ export default connect(
         locked: state.navigation.locked,
         count: getInstantCount(state)
     }),
-    { goToLocation }
+    { initFromLocation, goToLocation }
 )(Navigation);

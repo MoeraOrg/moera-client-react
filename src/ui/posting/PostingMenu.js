@@ -15,6 +15,7 @@ import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import "./EntryMenu.css";
 import { getHomeOwnerName } from "state/home/selectors";
+import { getNodeRootLocation } from "state/node/selectors";
 
 class PostingMenu extends React.PureComponent {
 
@@ -134,7 +135,7 @@ class PostingMenu extends React.PureComponent {
 
 export default connect(
     state => ({
-        rootLocation: state.node.root.location,
+        rootLocation: getNodeRootLocation(state),
         homeOwnerName: getHomeOwnerName(state)
     }),
     {

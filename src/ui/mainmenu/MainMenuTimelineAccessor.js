@@ -5,6 +5,7 @@ import { Browser } from "api";
 import { goToTimeline } from "state/navigation/actions";
 import { isAtTimelinePage, isStandaloneMode } from "state/navigation/selectors";
 import { getFeedState } from "state/feeds/selectors";
+import { getNodeRootLocation } from "state/node/selectors";
 
 class MainMenuTimelineAccessor extends React.PureComponent {
 
@@ -29,7 +30,7 @@ class MainMenuTimelineAccessor extends React.PureComponent {
 export default connect(
     state => ({
         standalone: isStandaloneMode(state),
-        rootLocation: state.node.root.location,
+        rootLocation: getNodeRootLocation(state),
         active: isAtTimelinePage(state),
         anchor: getFeedState(state, "timeline").anchor
     }),

@@ -1,3 +1,4 @@
+import cloneDeep from 'lodash.clonedeep';
 import moment from 'moment';
 
 import {
@@ -8,6 +9,7 @@ import {
     OWNER_SWITCH_OPEN,
     OWNER_VERIFIED
 } from "state/owner/actions";
+import { INIT_FROM_LOCATION } from "state/navigation/actions";
 
 const initialState = {
     name: null,
@@ -21,6 +23,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case INIT_FROM_LOCATION:
+            return cloneDeep(initialState);
+
         case OWNER_SET:
             if (state.name !== action.payload.name) {
                 return {

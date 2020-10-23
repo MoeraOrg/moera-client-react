@@ -10,20 +10,24 @@ export function isAtHomeNode(state) {
     return state.home.root.api === state.node.root.api;
 }
 
+export function getNodeRootLocation(state) {
+    return state.node.root.location;
+}
+
 export function getToken(state, rootLocation) {
     return selectn(["tokens", rootLocation, "token"], state);
 }
 
 export function getNodeToken(state) {
-    return getToken(state, state.node.root.location);
+    return getToken(state, getNodeRootLocation(state));
 }
 
 export function getNodePermissions(state) {
-    return selectn(["tokens", state.node.root.location, "permissions"], state) ?? [];
+    return selectn(["tokens", getNodeRootLocation(state), "permissions"], state) ?? [];
 }
 
 export function getHomePermissions(state) {
-    return selectn(["tokens", state.home.root.location, "permissions"], state) ?? [];
+    return selectn(["tokens", getNodeRootLocation(state), "permissions"], state) ?? [];
 }
 
 export function isNodeAdmin(state) {

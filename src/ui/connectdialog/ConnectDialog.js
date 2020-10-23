@@ -7,6 +7,7 @@ import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField } from "ui/control/field";
 import { cancelConnectDialog } from "state/connectdialog/actions";
 import { connectToHome } from "state/home/actions";
+import { getNodeRootLocation } from "state/node/selectors";
 
 class ConnectDialog extends React.PureComponent {
 
@@ -78,7 +79,7 @@ const connectDialogLogic = {
 export default connect(
     state => ({
         ...state.connectDialog,
-        nodeRoot: state.node.root.location
+        nodeRoot: getNodeRootLocation(state)
     }),
     { cancelConnectDialog, connectToHome }
 )(withFormik(connectDialogLogic)(ConnectDialog));

@@ -27,6 +27,7 @@ import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions
 import { findPostingIdByRemote } from "state/postings/selectors";
 import { immutableSetSubscriptionId } from "state/subscriptions/util";
 import { safeHtml, safePreviewHtml } from "util/html";
+import { INIT_FROM_LOCATION } from "state/navigation/actions";
 
 const initialState = {
 };
@@ -60,6 +61,9 @@ function outsideIn(story) {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case INIT_FROM_LOCATION:
+            return {};
+
         case FEED_PAST_SLICE_SET:
         case FEED_FUTURE_SLICE_SET: {
             const istate = immutable.wrap(state);

@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash.clonedeep';
+
 import {
     MNEMONIC_CLOSE,
     REGISTER_NAME,
@@ -15,6 +17,7 @@ import {
     NODE_NAME_UPDATE_FAILED,
     NODE_NAME_UPDATE_SUCCEEDED
 } from "state/nodename/actions";
+import { INIT_FROM_LOCATION } from "state/navigation/actions";
 
 const emptyInfo = {
     name: null,
@@ -42,6 +45,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case INIT_FROM_LOCATION:
+            return cloneDeep(initialState);
+
         case NODE_NAME_LOAD:
             return {
                 ...state,
