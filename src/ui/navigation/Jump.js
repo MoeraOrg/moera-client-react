@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import * as URI from 'uri-js';
 
-import { goToLocation } from "state/navigation/actions";
+import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { urlWithParameters } from "util/misc";
+import { isStandaloneMode } from "state/navigation/selectors";
+import { Browser } from "api";
 
 class Jump extends React.PureComponent {
 
@@ -40,14 +42,20 @@ class Jump extends React.PureComponent {
     }
 
     onFar = url => e => {
-        const {onFar} = this.props;
+        const {standalone, onFar, initFromLocation} = this.props;
 
         if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
             return;
         }
 
         const performJump = () => {
-            window.location = url;
+            if (!standalone) {
+                window.location = url;
+            } else {
+                const {query: documentQuery} = URI.parse(url);
+                const {rootLocation, path, query, hash} = Browser.getPassedLocation(documentQuery);
+                initFromLocation(rootLocation, path, query, hash)
+            }
         }
         if (onFar != null) {
             onFar(url, performJump);
@@ -58,8 +66,11 @@ class Jump extends React.PureComponent {
     }
 
     track(url) {
-        const {trackingId, homeRootPage} = this.props;
+        const {standalone, trackingId, homeRootPage} = this.props;
 
+        if (standalone) {
+            url = Browser.passedLocation(url);
+        }
         return trackingId != null
             ? urlWithParameters(homeRootPage + "/track", {trackingId, href: url}) : url;
     }
@@ -92,11 +103,12 @@ class Jump extends React.PureComponent {
 
 export default connect(
     (state, ownProps) => ({
+        standalone: isStandaloneMode(state),
         ownerName: getOwnerName(state),
         rootPage: state.node.root.page,
         homeOwnerName: getHomeOwnerName(state),
         homeRootPage: state.home.root.page,
         details: getNamingNameDetails(state, ownProps.nodeName)
     }),
-    { goToLocation }
+    { initFromLocation, goToLocation }
 )(Jump);

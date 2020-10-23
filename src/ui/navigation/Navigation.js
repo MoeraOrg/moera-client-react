@@ -40,7 +40,7 @@ class Navigation extends React.PureComponent {
         if (!standalone) {
             goToLocation(window.location.pathname, window.location.search, window.location.hash);
         } else {
-            const {path, query, hash} = Browser.getPassedLocation();
+            const {path, query, hash} = Browser.getDocumentPassedLocation();
             goToLocation(path, query, hash);
         }
         event.preventDefault();

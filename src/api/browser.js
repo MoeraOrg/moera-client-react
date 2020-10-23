@@ -44,13 +44,20 @@ export class Browser {
         return {rootLocation, path, query, hash};
     }
 
-    static getPassedLocation() {
+    static getDocumentPassedLocation() {
         const search = window.location.search;
         if (!search) {
             return {};
         }
+        return Browser.getPassedLocation(search.substring(1));
+    }
+
+    static getPassedLocation(query) {
+        if (!query) {
+            return {};
+        }
         let components = {};
-        search.substring(1)
+        query
             .split("&")
             .map(s => s.split("="))
             .filter(([name]) => name === "href")
