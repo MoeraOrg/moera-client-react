@@ -1,10 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Manager, Popper, Reference } from 'react-popper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Browser } from "api";
+import { isStandaloneMode } from "state/navigation/selectors";
 import "./DropdownMenu.css";
 
-export class DropdownMenu extends React.PureComponent {
+class DropdownMenuImpl extends React.PureComponent {
 
     state = {
         visible: false
@@ -42,7 +45,7 @@ export class DropdownMenu extends React.PureComponent {
             }
             items.push({
                 title: item.title,
-                href: item.href,
+                href: !this.props.standalone ? item.href : Browser.passedLocation(item.href),
                 onClick: item.onClick,
                 divider: divider && items.length > 0
             });
@@ -92,3 +95,9 @@ export class DropdownMenu extends React.PureComponent {
     }
 
 }
+
+export const DropdownMenu = connect(
+    state => ({
+        standalone: isStandaloneMode(state)
+    })
+)(DropdownMenuImpl);

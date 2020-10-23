@@ -1,9 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { Browser } from "api";
 import { NodeName } from "ui/control";
+import { isStandaloneMode } from "state/navigation/selectors";
 
-const ConnectionItem = ({name, url, onClick, onDisconnect}) => (
+const ConnectionItem = ({name, url, onClick, onDisconnect, standalone}) => (
     <div className="connection-item">
         <div className="connection" onClick={onClick}>
             {name ?
@@ -14,7 +17,7 @@ const ConnectionItem = ({name, url, onClick, onDisconnect}) => (
             {url}
         </div>
         <div className="connection-buttons">
-            <a className="link" title="Open" href={url}>
+            <a className="link" title="Open" href={!standalone ? url : Browser.passedLocation(url)}>
                 <FontAwesomeIcon icon="external-link-alt"/>
             </a>
             <div className="disconnect" title="Disconnect" onClick={onDisconnect}>
@@ -24,4 +27,8 @@ const ConnectionItem = ({name, url, onClick, onDisconnect}) => (
     </div>
 );
 
-export default ConnectionItem;
+export default connect(
+    state => ({
+        standalone: isStandaloneMode(state)
+    })
+)(ConnectionItem);
