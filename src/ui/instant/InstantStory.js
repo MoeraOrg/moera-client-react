@@ -61,7 +61,7 @@ class InstantStory extends React.PureComponent {
             <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
                 <div className="cursor">
                     <Jump nodeName={nodeName} href={href} trackingId={story.read ? null : story.trackingId}
-                          onNear={this.onJump(story)}>
+                          onNear={this.onJump(story)} onFar={this.onJump(story)}>
                         <div dangerouslySetInnerHTML={{__html: story.summary}}/>
                         <div className="footer">
                             <InstantIcon story={story}/>

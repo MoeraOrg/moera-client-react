@@ -41,7 +41,7 @@ class Jump extends React.PureComponent {
         e.preventDefault();
     }
 
-    onFar = url => e => {
+    onFar = (url, rootLocation, location) => e => {
         const {standalone, onFar, initFromLocation} = this.props;
 
         if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
@@ -49,12 +49,11 @@ class Jump extends React.PureComponent {
         }
 
         const performJump = () => {
-            if (!standalone) {
+            if (!standalone || rootLocation == null) {
                 window.location = url;
             } else {
-                const {query: documentQuery} = URI.parse(url);
-                const {rootLocation, path, query, hash} = Browser.getPassedLocation(documentQuery);
-                initFromLocation(rootLocation, path, query, hash)
+                const {path, query, fragment} = URI.parse(location);
+                initFromLocation(rootLocation, path, query, fragment);
             }
         }
         if (onFar != null) {
@@ -88,17 +87,22 @@ class Jump extends React.PureComponent {
                 </a>
             );
         } else {
-            let url;
+            let url, nodeLocation = null;
             if (nodeName === ":" || nodeName === homeOwnerName) {
-                url = this.track(homeRootPage + href);
+                nodeLocation = homeRootPage;
+                url = this.track(nodeLocation + href);
             } else {
                 const client = standalone ? Browser.getRootLocation() : null;
-                url = details.loaded
-                    ? this.track(details.nodeUri + href)
-                    : urlWithParameters(homeRootPage + "/gotoname",
+                if (details.loaded) {
+                    nodeLocation = details.nodeUri;
+                    url = this.track(nodeLocation + href);
+                } else {
+                    url = urlWithParameters(homeRootPage + "/gotoname",
                         {client, name: nodeName, location: href, trackingId});
+                }
             }
-            return <a href={url} className={className} title={title} onClick={this.onFar(url)}>{children}</a>
+            return <a href={url} className={className} title={title}
+                      onClick={this.onFar(url, nodeLocation, href)}>{children}</a>
         }
     }
 
