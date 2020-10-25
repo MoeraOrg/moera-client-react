@@ -13,7 +13,7 @@ import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import HomeName from "ui/mainmenu/connections/HomeName";
 import "./VerticalMenu.css";
 
-const VerticalMenu = ({atNode, connected}) => (
+const VerticalMenu = ({atNode, connected, openConnectDialog}) => (
     <div id="vertical-menu" className="navbar-dark bg-dark">
         {atNode && <MainMenuPages/>}
         {!connected ?
