@@ -41,7 +41,7 @@ class Jump extends React.PureComponent {
         e.preventDefault();
     }
 
-    onFar = (url, rootLocation, location) => e => {
+    onFar = (url, nodeLocation, location) => e => {
         const {standalone, onFar, initFromLocation} = this.props;
 
         if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
@@ -49,9 +49,14 @@ class Jump extends React.PureComponent {
         }
 
         const performJump = () => {
-            if (!standalone || rootLocation == null) {
+            if (!standalone || nodeLocation == null) {
                 window.location = url;
             } else {
+                const {scheme, host, port} = URI.parse(nodeLocation);
+                let rootLocation = `${scheme}://${host}`;
+                if (port) {
+                    rootLocation += `:${port}`;
+                }
                 const {path, query, fragment} = URI.parse(location);
                 initFromLocation(rootLocation, path, query, fragment);
             }
