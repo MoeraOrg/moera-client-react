@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import * as URI from 'uri-js';
 
+import { Browser } from "api";
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
-import { urlWithParameters } from "util/misc";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { Browser } from "api";
+import { urlWithParameters } from "util/misc";
 
 class Jump extends React.PureComponent {
 
@@ -76,8 +76,10 @@ class Jump extends React.PureComponent {
     }
 
     render() {
-        const {nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details, trackingId,
-            children} = this.props;
+        const {
+            standalone, nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details,
+            trackingId, children
+        } = this.props;
 
         if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
             return (
@@ -90,10 +92,11 @@ class Jump extends React.PureComponent {
             if (nodeName === ":" || nodeName === homeOwnerName) {
                 url = this.track(homeRootPage + href);
             } else {
+                const client = standalone ? Browser.getRootLocation() : null;
                 url = details.loaded
                     ? this.track(details.nodeUri + href)
                     : urlWithParameters(homeRootPage + "/gotoname",
-                        {name: nodeName, location: href, trackingId});
+                        {client, name: nodeName, location: href, trackingId});
             }
             return <a href={url} className={className} title={title} onClick={this.onFar(url)}>{children}</a>
         }
