@@ -12,6 +12,7 @@ export class InputField extends React.PureComponent {
     static propTypes = {
         name: PropType.string,
         title: PropType.string,
+        placeholder: PropType.string,
         horizontal: PropType.bool,
         groupClassName: PropType.string,
         labelClassName: PropType.string,
@@ -47,8 +48,8 @@ export class InputField extends React.PureComponent {
     };
 
     render() {
-        const {name, title, horizontal = false, groupClassName, labelClassName, col, anyValue, className, autoComplete,
-               noFeedback = false, initialValue, defaultValue} = this.props;
+        const {name, title, placeholder, horizontal = false, groupClassName, labelClassName, col, anyValue, className,
+               autoComplete, noFeedback = false, initialValue, defaultValue} = this.props;
 
         return (
             <Field name={name}>
@@ -78,6 +79,7 @@ export class InputField extends React.PureComponent {
                                             "is-invalid": !anyValue && touched && error,
                                             [className]: !!className
                                         })}
+                                    placeholder={placeholder}
                                     autoComplete={autoComplete}
                                     ref={dom => this.inputDom = dom}
                                     onKeyDown={this.onKeyDown}
