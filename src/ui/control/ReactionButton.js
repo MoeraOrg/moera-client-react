@@ -113,13 +113,14 @@ class ReactionButtonImpl extends React.PureComponent {
         return (
             <Manager>
                 <Reference>
-                    {(ref, mainEnter, mainLeave) =>
+                    {(ref, mainEnter, mainLeave, mainTouch) =>
                         <ReactionEmojiButton
                             {...this.props}
                             invisible={this.isInvisible()}
                             buttonRef={ref}
                             onMouseEnter={mainEnter}
                             onMouseLeave={mainLeave}
+                            onTouchStart={mainTouch}
                             onReactionAdd={this.defaultReactionAdd}
                             onReactionDelete={this.reactionDelete}
                         />

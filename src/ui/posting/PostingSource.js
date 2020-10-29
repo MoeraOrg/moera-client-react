@@ -10,8 +10,9 @@ const PostingSource = ({posting}) => (
     posting.receiverName != null ?
         <Manager>
             <Reference>
-                {(ref, mainEnter, mainLeave) =>
-                    <span className="posting-source" ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}>
+                {(ref, mainEnter, mainLeave, mainTouch) =>
+                    <span className="posting-source" ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}
+                          onTouchStart={mainTouch}>
                         <Jump nodeName={posting.receiverName} href={`/post/${posting.receiverPostingId}`}>
                             <FontAwesomeIcon icon="retweet"/>
                         </Jump>

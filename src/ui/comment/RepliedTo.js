@@ -44,8 +44,8 @@ class RepliedTo extends React.PureComponent {
             <div className="replied-to">
                 <Manager onPreparePopper={this.onPreparePopper} disabled={!popperEnabled}>
                     <Reference>
-                        {(ref, mainEnter, mainLeave) =>
-                            <span ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}>
+                        {(ref, mainEnter, mainLeave, mainTouch) =>
+                            <span ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
                                 <Jump href={`/post/${postingId}?comment=${commentId}`}>
                                     <span className="icon"><FontAwesomeIcon icon="reply"/></span>
                                     <NodeName name={ownerName} linked={false}/>

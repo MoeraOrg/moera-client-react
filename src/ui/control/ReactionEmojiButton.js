@@ -5,16 +5,16 @@ import { REACTION_EMOJIS } from "api";
 import { EmojiButton } from "ui/control";
 
 const ReactionEmojiButton = ({icon, emoji, negative, caption, className, invisible, buttonRef, onMouseEnter,
-                              onMouseLeave, onReactionAdd, onReactionDelete}) => {
+                              onMouseLeave, onTouchStart, onReactionAdd, onReactionDelete}) => {
     if (emoji == null) {
         return <EmojiButton icon={["far", icon]} caption={caption} className={className} invisible={invisible}
                             buttonRef={buttonRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                            onClick={onReactionAdd}/>;
+                            onTouchStart={onTouchStart} onClick={onReactionAdd}/>;
     } else {
         const re = !negative ? REACTION_EMOJIS.positive[emoji] : REACTION_EMOJIS.negative[emoji];
         return <EmojiButton emoji={emoji} caption={re ? re.title : caption} color={re ? re.color : null}
                             className={className} buttonRef={buttonRef} onMouseEnter={onMouseEnter}
-                            onMouseLeave={onMouseLeave} onClick={onReactionDelete}/>;
+                            onMouseLeave={onMouseLeave} onTouchStart={onTouchStart} onClick={onReactionDelete}/>;
     }
 }
 
@@ -28,6 +28,7 @@ ReactionEmojiButton.propTypes = {
     buttonRef: PropType.any,
     onMouseEnter: PropType.func,
     onMouseLeave: PropType.func,
+    onTouchStart: PropType.func,
     onReactionAdd: PropType.func,
     onReactionDelete: PropType.func
 };

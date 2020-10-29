@@ -17,15 +17,42 @@ class Manager extends React.PureComponent {
         super(props, context);
 
         this.state = {
-            locus: "out",
+            locus: "out", // out, main, popup
+            touch: "none", // none, touch, hold, lock
             popup: false,
             reactions: [],
             mainEnter: this.mainEnter,
             mainLeave: this.mainLeave,
+            mainTouch: this.mainTouch,
             popupEnter: this.popupEnter,
             popupLeave: this.popupLeave
         };
     }
+
+    documentClickCapture = e => {
+        if (!this.props.disabled) {
+            switch (this.state.touch) {
+                case "touch":
+                    this.setLocus("out");
+                    this.setTouch("none");
+                    break;
+                case "hold":
+                    this.setTouch("lock");
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                case "lock":
+                    this.setLocus("out");
+                    this.setTouch("none");
+                    this.hide();
+                    e.preventDefault();
+                    e.stopPropagation();
+                    break;
+                default:
+                    // do nothing
+            }
+        }
+    };
 
     documentClick = () => {
         if (!this.props.disabled) {
@@ -40,6 +67,13 @@ class Manager extends React.PureComponent {
     mainLeave = () => {
         if (this.state.locus === "main") {
             this.setLocus("out");
+        }
+    };
+
+    mainTouch = () => {
+        if (this.state.locus === "out") {
+            this.setLocus("main");
+            this.setTouch("touch");
         }
     };
 
@@ -68,6 +102,19 @@ class Manager extends React.PureComponent {
         }
     }
 
+    setTouch(touch) {
+        if (this.props.disabled) {
+            return;
+        }
+
+        this.setState({touch});
+        if (touch !== "none") {
+            document.addEventListener("click", this.documentClickCapture, {capture: true, passive: false});
+        } else {
+            document.removeEventListener("click", this.documentClickCapture, {capture: true});
+        }
+    }
+
     onTimeout = debounce(() => {
         switch (this.state.locus) {
             case "out":
@@ -83,6 +130,9 @@ class Manager extends React.PureComponent {
 
     show() {
         this.setState({popup: true});
+        if (this.state.touch === "touch") {
+            this.setTouch("hold");
+        }
         document.addEventListener("click", this.documentClick);
     }
 
@@ -107,7 +157,7 @@ const Reference = ({children}) => (
     <DelayedPopperContext.Consumer>
         {context => (
             <PopperReference>
-                {({ref}) => children(ref, context.mainEnter, context.mainLeave)}
+                {({ref}) => children(ref, context.mainEnter, context.mainLeave, context.mainTouch)}
             </PopperReference>
         )}
     </DelayedPopperContext.Consumer>
