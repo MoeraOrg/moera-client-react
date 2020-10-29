@@ -3,6 +3,7 @@
     top: 2.7rem;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     background-color: var(--body-background);
     padding-top: 0.5rem;
     margin-bottom: 0.5rem;

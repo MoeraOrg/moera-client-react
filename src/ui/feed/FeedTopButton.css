@@ -1,11 +1,22 @@
 .feed-top-box {
-    position: fixed;
+    position: absolute;
     z-index: 1020;
-    top: 5.3rem;
     left: 0;
     width: 100%;
     display: block;
     text-align: center;
+}
+
+@media only screen and (min-width: 576px) {
+    .feed-top-box {
+        bottom: -.8rem;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .feed-top-box {
+        bottom: -2.2rem;
+    }
 }
 
 .feed-top-button {
