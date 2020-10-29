@@ -2,6 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import cx from 'classnames';
 
+import { Browser } from "api";
 import { LoadingInline } from "ui/control";
 
 export class Button extends React.PureComponent {
@@ -39,8 +40,10 @@ export class Button extends React.PureComponent {
         return (
             <button type={type} className={klass} disabled={loading || disabled} {...props}
                     ref={dom => {this.domNode = dom}}>
-                <LoadingInline active={loading} />
-                {props.children}{loading && "…"}
+                <LoadingInline active={loading}/>
+                {!(loading && Browser.isTinyScreen()) &&
+                    <>{props.children}{loading && "…"}</>
+                }
             </button>
         );
     }
