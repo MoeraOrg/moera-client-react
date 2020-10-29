@@ -16,7 +16,7 @@ class Navigation extends React.PureComponent {
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {standalone, rootPage, location, title, update, locked, count} = this.props;
 
-        if (!locked && location !== prevProps.location) {
+        if (!locked && (rootPage !== prevProps.rootPage || location !== prevProps.location)) {
             const data = !standalone ? {location} : {location: rootPage + location};
             const url = !standalone ? rootPage + location : Browser.passedLocation(rootPage + location);
             if (update) {
