@@ -49,8 +49,10 @@ class Manager extends React.PureComponent {
                     break;
                 case "hold":
                     this.setTouch("lock");
-                    event.preventDefault();
-                    event.stopPropagation();
+                    if (!this.isInPopover(event)) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
                     break;
                 case "lock":
                     if (this.isInPopover(event)) {
