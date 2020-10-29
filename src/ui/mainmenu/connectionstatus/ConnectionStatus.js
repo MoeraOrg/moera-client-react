@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { Browser } from "api";
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
@@ -12,11 +13,10 @@ import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import ConnectDialog from "ui/connectdialog/ConnectDialog";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { isConnectedToHome } from "state/home/selectors";
-
+import { isAtNode } from "state/node/selectors";
 import "./ConnectionStatus.css";
-import { Browser } from "api";
 
-const ConnectionButtons = ({connecting,  connected, showNavigator, openConnectDialog}) => {
+const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openConnectDialog}) => {
     if (showNavigator && Browser.isTinyScreen()) {
         return null;
     }
@@ -24,6 +24,9 @@ const ConnectionButtons = ({connecting,  connected, showNavigator, openConnectDi
         return <>Connecting <Loading/></>;
     }
     if (!connected) {
+        if (!atNode) {
+            return null;
+        }
         return (
             <span className="d-none d-md-inline">
                 Not connected to home
@@ -60,6 +63,7 @@ const ConnectionStatus = ({connecting,  connected, showNavigator, openConnectDia
 
 export default connect(
     state => ({
+        atNode: isAtNode(state),
         connecting: state.home.connecting,
         connected: isConnectedToHome(state),
         showNavigator: state.owner.showNavigator
