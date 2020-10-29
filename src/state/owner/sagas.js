@@ -1,10 +1,13 @@
 import { call, put, select } from 'redux-saga/effects';
+import * as URI from 'uri-js';
 
-import { normalizeUrl } from "util/misc";
-import { errorThrown } from "state/error/actions";
 import { Naming, Node, NodeName } from "api";
+import { errorThrown } from "state/error/actions";
 import { ownerSet, ownerSwitchClose, ownerSwitchFailed, ownerVerified } from "state/owner/actions";
 import { namingNameLoaded } from "state/naming/actions";
+import { isStandaloneMode } from "state/navigation/selectors";
+import { initFromLocation } from "state/navigation/actions";
+import { normalizeUrl, rootUrl } from "util/misc";
 
 export function* ownerLoadSaga() {
     try {
@@ -35,7 +38,11 @@ export function* ownerVerifySaga() {
 }
 
 export function* ownerSwitchSaga(action) {
-    const ownerName = yield select(state => state.owner.name);
+    const {standalone, ownerName} = yield select(state => ({
+        standalone: isStandaloneMode(state),
+        ownerName: state.owner.name
+    }));
+
     if (action.payload.name === ownerName) {
         yield put(ownerSwitchClose());
         return;
@@ -50,7 +57,13 @@ export function* ownerSwitchSaga(action) {
             info = yield Naming.getCurrentForLatest(name);
         }
         if (info && info.nodeUri) {
-            document.location.href = info.nodeUri;
+            if (!standalone) {
+                window.location = info.nodeUri;
+            } else {
+                const {scheme, host, port, path} = URI.parse(info.nodeUri);
+                const rootLocation = rootUrl(scheme, host, port);
+                yield put(initFromLocation(rootLocation, path, null, null));
+            }
         } else {
             yield put(ownerSwitchFailed());
         }

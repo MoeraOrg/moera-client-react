@@ -9,7 +9,7 @@ import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { urlWithParameters } from "util/misc";
+import { rootUrl, urlWithParameters } from "util/misc";
 
 class Jump extends React.PureComponent {
 
@@ -53,10 +53,7 @@ class Jump extends React.PureComponent {
                 window.location = url;
             } else {
                 const {scheme, host, port} = URI.parse(nodeLocation);
-                let rootLocation = `${scheme}://${host}`;
-                if (port) {
-                    rootLocation += `:${port}`;
-                }
+                const rootLocation = rootUrl(scheme, host, port);
                 const {path, query, fragment} = URI.parse(location);
                 initFromLocation(rootLocation, path, query, fragment);
             }

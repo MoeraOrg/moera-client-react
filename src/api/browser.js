@@ -1,5 +1,6 @@
-import { randomId } from "util/misc";
-import * as URI from "uri-js";
+import * as URI from 'uri-js';
+
+import { randomId, rootUrl } from "util/misc";
 
 export class Browser {
 
@@ -11,7 +12,7 @@ export class Browser {
 
     static getRootLocation() {
         const {protocol, host} = window.location;
-        return `${protocol}//${host}`;
+        return rootUrl(protocol, host);
     }
 
     static getDocumentLocation() {
@@ -67,10 +68,7 @@ export class Browser {
             .filter(([name]) => name === "href")
             .forEach(([_, value]) => {
                 let {scheme, host, port, path, query, fragment} = URI.parse(decodeURIComponent(value));
-                let rootLocation = `${scheme}://${host}`;
-                if (port) {
-                    rootLocation += `:${port}`;
-                }
+                const rootLocation = rootUrl(scheme, host, port);
                 if (query) {
                     query = `?${query}`;
                 }

@@ -39,6 +39,17 @@ export function mentionName(state, name) {
     return name ? "@" + NodeName.shorten(name, isNamingNameLatest(state, name)) : "";
 }
 
+export function rootUrl(scheme, host, port) {
+    if (!scheme.endsWith(":")) {
+        scheme += ":";
+    }
+    let rootLocation = `${scheme}//${host}`;
+    if (port) {
+        rootLocation += `:${port}`;
+    }
+    return rootLocation;
+}
+
 export function atOwner(state) {
     const ownerName = state.owner.name;
     return ownerName ? " @ " + NodeName.shorten(ownerName, isNamingNameLatest(state, ownerName)) : "";
