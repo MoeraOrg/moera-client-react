@@ -29,7 +29,18 @@ class Manager extends React.PureComponent {
         };
     }
 
-    documentClickCapture = e => {
+    isInPopover(event) {
+        for (let element of document.querySelectorAll(".popover-body").values()) {
+            const r = element.getBoundingClientRect();
+            if (r.left <= event.clientX && r.right >= event.clientX
+                && r.top <= event.clientY && r.bottom >= event.clientY) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    documentClickCapture = event => {
         if (!this.props.disabled) {
             switch (this.state.touch) {
                 case "touch":
@@ -38,15 +49,16 @@ class Manager extends React.PureComponent {
                     break;
                 case "hold":
                     this.setTouch("lock");
-                    e.preventDefault();
-                    e.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
                     break;
                 case "lock":
-                    this.setLocus("out");
-                    this.setTouch("none");
+                    if (this.isInPopover(event)) {
+                        break;
+                    }
                     this.hide();
-                    e.preventDefault();
-                    e.stopPropagation();
+                    event.preventDefault();
+                    event.stopPropagation();
                     break;
                 default:
                     // do nothing
@@ -138,6 +150,10 @@ class Manager extends React.PureComponent {
 
     hide() {
         this.setState({popup: false});
+        if (this.state.touch !== "none") {
+            this.setLocus("out");
+            this.setTouch("none");
+        }
         document.removeEventListener("click", this.documentClick);
     }
 
