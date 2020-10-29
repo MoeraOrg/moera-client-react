@@ -5,6 +5,10 @@ export class Browser {
 
     static clientId = randomId();
 
+    static isTinyScreen() {
+        return window.screen.width <= 575;
+    }
+
     static getRootLocation() {
         const {protocol, host} = window.location;
         return `${protocol}//${host}`;

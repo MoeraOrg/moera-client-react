@@ -8,12 +8,14 @@ import { Button } from "ui/control";
 import { ownerSwitch, ownerSwitchClose } from "state/owner/actions";
 import { isNamingNameLatest } from "state/naming/selectors";
 import { NodeName } from "api";
+import "./OwnerNavigator.css";
 
 const OwnerNavigator = ({switching, ownerSwitchClose}) => (
-    <Form className="form-inline ml-3 mr-3 mb-0">
-        <InputField name="ownerName" horizontal={true} groupClassName="mr-2 mb-0" autoFocus={true} anyValue
-                    onEscape={ownerSwitchClose}/>
+    <Form id="owner-navigator" className="form-inline">
+        <div className="gap"/>
+        <InputField name="ownerName" horizontal={true} autoFocus={true} anyValue onEscape={ownerSwitchClose}/>
         <Button variant="secondary" type="submit" size="sm" loading={switching}>Go</Button>
+        <div className="gap"/>
     </Form>
 );
 

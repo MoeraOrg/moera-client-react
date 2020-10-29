@@ -14,34 +14,45 @@ import { openConnectDialog } from "state/connectdialog/actions";
 import { isConnectedToHome } from "state/home/selectors";
 
 import "./ConnectionStatus.css";
+import { Browser } from "api";
 
-const ConnectionStatus = ({connecting,  connected, openConnectDialog}) => (
+const ConnectionButtons = ({connecting,  connected, showNavigator, openConnectDialog}) => {
+    if (showNavigator && Browser.isTinyScreen()) {
+        return null;
+    }
+    if (connecting) {
+        return <>Connecting <Loading/></>;
+    }
+    if (!connected) {
+        return (
+            <span className="d-none d-md-inline">
+                Not connected to home
+                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
+            </span>
+        );
+    }
+    return (
+        <>
+            <span className="d-none d-md-inline">
+                <NewPostButton/>
+            </span>
+            <NewsButton/>
+            <InstantButton/>
+            <span className="d-none d-md-inline">
+                <SettingsButton/>
+                <HomeButton/>
+                <ConnectionsButton/>
+                <DisconnectButton/>
+            </span>
+        </>
+    );
+}
+
+const ConnectionStatus = ({connecting,  connected, showNavigator, openConnectDialog}) => (
     <>
-        <div id="connection-status">{
-            connecting ?
-                <>Connecting <Loading/></>
-            :
-                (!connected ?
-                    <span className="d-none d-md-inline">
-                        Not connected to home
-                        <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
-                    </span>
-                :
-                    <>
-                        <span className="d-none d-md-inline">
-                            <NewPostButton/>
-                        </span>
-                        <NewsButton/>
-                        <InstantButton/>
-                        <span className="d-none d-md-inline">
-                            <SettingsButton/>
-                            <HomeButton/>
-                            <ConnectionsButton/>
-                            <DisconnectButton/>
-                        </span>
-                    </>
-                )
-        }
+        <div id="connection-status">
+            <ConnectionButtons connecting={connecting} connected={connected} showNavigator={showNavigator}
+                               openConnectDialog={openConnectDialog}/>
         </div>
         <ConnectDialog />
     </>
@@ -50,7 +61,8 @@ const ConnectionStatus = ({connecting,  connected, openConnectDialog}) => (
 export default connect(
     state => ({
         connecting: state.home.connecting,
-        connected: isConnectedToHome(state)
+        connected: isConnectedToHome(state),
+        showNavigator: state.owner.showNavigator
     }),
     { openConnectDialog }
 )(ConnectionStatus);

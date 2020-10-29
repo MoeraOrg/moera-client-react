@@ -1,4 +1,5 @@
 #main-menu {
     padding-top: 0;
     padding-bottom: 0;
+    flex-wrap: nowrap;
 }
