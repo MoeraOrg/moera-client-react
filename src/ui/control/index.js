@@ -12,6 +12,7 @@ export { LabelButton } from "ui/control/LabelButton";
 export { Loading } from "ui/control/Loading";
 export { LoadingInline } from "ui/control/LoadingInline";
 export { ModalDialog } from "ui/control/ModalDialog";
+export { NameHelp } from "ui/control/NameHelp";
 export { NodeName } from "ui/control/NodeName";
 export { Popover } from "ui/control/Popover";
 export { ReactionButton } from "ui/control/ReactionButton";

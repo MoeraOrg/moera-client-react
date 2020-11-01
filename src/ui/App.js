@@ -16,6 +16,7 @@ import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
+import SignUpDialog from "ui/signupdialog/SignUpDialog";
 import "./colors.css";
 import "./App.css";
 
@@ -36,7 +37,10 @@ const App = ({atNode}) => (
                 <ChangeDateDialog/>
             </>
         :
-            <WelcomePage/>
+            <>
+                <WelcomePage/>
+                <SignUpDialog/>
+            </>
         }
         <MessageBox/>
         <ConfirmBox/>

@@ -113,6 +113,7 @@ import people from "state/people/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
+import signUpDialog from "state/signupdialog/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
@@ -356,7 +357,8 @@ export default createStore(
         people,
         messageBox,
         confirmBox,
-        flashBox
+        flashBox,
+        signUpDialog
     }),
     applyMiddleware(sagaMiddleware)
 );

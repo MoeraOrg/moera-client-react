@@ -17,6 +17,7 @@ export class InputField extends React.PureComponent {
         groupClassName: PropType.string,
         labelClassName: PropType.string,
         col: PropType.string,
+        wrapper: PropType.string,
         autoFocus: PropType.bool,
         anyValue: PropType.bool,
         className: PropType.string,
@@ -48,8 +49,10 @@ export class InputField extends React.PureComponent {
     };
 
     render() {
-        const {name, title, placeholder, horizontal = false, groupClassName, labelClassName, col, anyValue, className,
-               autoComplete, noFeedback = false, initialValue, defaultValue} = this.props;
+        const {
+            name, title, placeholder, horizontal = false, groupClassName, labelClassName, col, wrapper, anyValue,
+            className, autoComplete, noFeedback = false, initialValue, defaultValue
+        } = this.props;
 
         return (
             <Field name={name}>
@@ -69,21 +72,28 @@ export class InputField extends React.PureComponent {
                             defaultValue={defaultValue}
                         >
                             <Column className={col}>
-                                <input
-                                    {...field}
-                                    id={name}
-                                    type={!name.toLowerCase().includes("password") ? "text" : "password"}
-                                    className={cx(
-                                        "form-control", {
-                                            "is-valid": !anyValue && touched && !error,
-                                            "is-invalid": !anyValue && touched && error,
-                                            [className]: !!className
-                                        })}
-                                    placeholder={placeholder}
-                                    autoComplete={autoComplete}
-                                    ref={dom => this.inputDom = dom}
-                                    onKeyDown={this.onKeyDown}
-                                />
+                                <Column className={cx(
+                                    wrapper,
+                                    {
+                                        "is-invalid": !!wrapper && !anyValue && touched && error
+                                    }
+                                )}>
+                                    <input
+                                        {...field}
+                                        id={name}
+                                        type={!name.toLowerCase().includes("password") ? "text" : "password"}
+                                        className={cx(
+                                            "form-control", {
+                                                "is-valid": !anyValue && touched && !error,
+                                                "is-invalid": !anyValue && touched && error,
+                                                [className]: !!className
+                                            })}
+                                        placeholder={placeholder}
+                                        autoComplete={autoComplete}
+                                        ref={dom => this.inputDom = dom}
+                                        onKeyDown={this.onKeyDown}
+                                    />
+                                </Column>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
                             </Column>
                         </FormFieldGroup>

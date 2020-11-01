@@ -31,10 +31,10 @@ class ConnectDialog extends React.PureComponent {
             <ModalDialog title="Connect to Home" onClose={cancelConnectDialog}>
                 <Form>
                     <div className="modal-body">
-                        <InputField name="location" title="Node URL" autoFocus />
-                        <CheckboxField name="assign" title="Password haven't been set yet" />
-                        <InputField name="password" title={assign ? "New password" : "Password"} />
-                        {assign && <InputField name="confirmPassword" title="Confirm password" />}
+                        <InputField name="location" title="Node URL" autoFocus/>
+                        <CheckboxField name="assign" title="Password haven't been set yet"/>
+                        <InputField name="password" title={assign ? "New password" : "Password"}/>
+                        {assign && <InputField name="confirmPassword" title="Confirm password"/>}
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={cancelConnectDialog}>Cancel</Button>

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as yup from 'yup';
 
-import { Button, ModalDialog } from "ui/control";
+import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
 import * as Rules from "api/naming/rules";
@@ -17,12 +17,8 @@ const RegisterNameDialog = ({show, registering, registerNameDialogCancel}) => {
         <ModalDialog title="Register a New Name" onClose={registerNameDialogCancel}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="name" title="Name" autoFocus />
-                    <div className="dialog-help">
-                        The name must be 4 - 120 characters long. You may use any Unicode character (including non-Latin
-                        alphabets), except whitespace and punctuation. Only this punctuation is allowed:
-                        {" "}<b>!</b> <b>%</b> <b>&</b> <b>*</b> <b>-</b> <b>.</b> <b>?</b>
-                    </div>
+                    <InputField name="name" title="Name" autoFocus/>
+                    <NameHelp/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={registerNameDialogCancel}
