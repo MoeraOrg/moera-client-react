@@ -1049,3 +1049,16 @@ export const CommentTotalInfo = schema({
     },
     additionalProperties: false
 });
+
+export const DomainInfo = schema({
+    type: "object",
+    properties: {
+        "name": {
+            type: "string"
+        },
+        "nodeId": {
+            type: "string"
+        }
+    },
+    additionalProperties: false
+});

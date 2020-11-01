@@ -4,7 +4,7 @@ import { Form, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import * as Rules from "api/naming/rules";
-import { cancelSignUpDialog } from "state/signupdialog/actions";
+import { cancelSignUpDialog, signUp } from "state/signupdialog/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
 import "./SignUpDialog.css";
@@ -20,7 +20,7 @@ class SignUpDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, cancelSignUpDialog} = this.props;
+        const {show, processing, cancelSignUpDialog} = this.props;
 
         if (!show) {
             return null;
@@ -30,15 +30,15 @@ class SignUpDialog extends React.PureComponent {
             <ModalDialog title="Create a Blog" onClose={cancelSignUpDialog}>
                 <Form>
                     <div className="modal-body sign-up-dialog">
-                        <InputField name="name" title="Name" autoFocus/>
+                        <InputField name="name" title="Name" autoFocus disabled={processing}/>
                         <NameHelp/>
-                        <InputField name="domain" title="Domain" wrapper="domain-group"/>
-                        <InputField name="password" title="New password"/>
-                        <InputField name="confirmPassword" title="Confirm password"/>
+                        <InputField name="domain" title="Domain" wrapper="domain-group" disabled={processing}/>
+                        <InputField name="password" title="New password" disabled={processing}/>
+                        <InputField name="confirmPassword" title="Confirm password" disabled={processing}/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={cancelSignUpDialog}>Cancel</Button>
-                        <Button variant="primary" type="submit">Create</Button>
+                        <Button variant="primary" type="submit" loading={processing}>Create</Button>
                     </div>
                 </Form>
             </ModalDialog>
@@ -61,7 +61,7 @@ const signUpDialogLogic = {
             .test("is-allowed", "Not allowed", Rules.isNameValid),
         domain: yup.string().trim().required("Must not be empty")
             .min(4, "Too short, should be 4 characters at least")
-            .lowercase().matches("^[a-z-][a-z0-9-]+$", "Not allowed"),
+            .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "Not allowed"),
         password: yup.string().required("Must not be empty"),
         confirmPassword: yup.string().when(["password"],
             (password, schema) =>
@@ -70,7 +70,8 @@ const signUpDialogLogic = {
     }),
 
     handleSubmit(values, formik) {
-        // formik.props.connectToHome(values.location.trim(), values.assign, "admin", values.password);
+        formik.props.signUp(values.name.trim(), values.domain.trim(), values.password,
+            (fieldName, message) => formik.setFieldError(fieldName, message));
         formik.setSubmitting(false);
     }
 
@@ -80,5 +81,5 @@ export default connect(
     state => ({
         ...state.signUpDialog
     }),
-    { cancelSignUpDialog }
+    { cancelSignUpDialog, signUp }
 )(withFormik(signUpDialogLogic)(SignUpDialog));

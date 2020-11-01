@@ -5,6 +5,11 @@ import { callApi } from "api/node/call";
 import { getHomeOwnerName } from "state/home/selectors";
 import { urlWithParameters } from "util/misc";
 
+export function* createDomain(nodeName, name) {
+    yield call(callApi, {nodeName, location: "/domains", method: "POST", body: {name}, schema: NodeApi.DomainInfo,
+        errorFilter: ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]});
+}
+
 export function* createCredentials(nodeName, login, password) {
     yield call(callApi, {
         nodeName,
