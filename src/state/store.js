@@ -1,4 +1,5 @@
 import {
+    GO_HOME,
     GO_TO_LOCATION,
     GO_TO_PAGE_WITH_DEFAULT_SUBPAGE,
     INIT_FROM_LOCATION,
@@ -122,6 +123,7 @@ import { flushPostponedIntroducedSaga, introduce } from "api/node/introduce";
 import { askNaming, flushPostponedNamingSaga } from "api/node/ask-naming";
 import { pulseSaga } from "state/pulse/sagas";
 import {
+    goHomeSaga,
     goToLocationSaga,
     goToPageWithDefaultSubpageSaga,
     initFromLocationSaga,
@@ -220,6 +222,7 @@ import settingsTriggers from "state/settings/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
+import signUpDialogTriggers from "state/signupdialog/triggers";
 
 const triggers = collectTriggers(
     homeTriggers,
@@ -235,7 +238,8 @@ const triggers = collectTriggers(
     settingsTriggers,
     namingTriggers,
     reactionsDialogTriggers,
-    peopleTriggers
+    peopleTriggers,
+    signUpDialogTriggers
 );
 
 function* flushPostponedSaga() {
@@ -330,6 +334,7 @@ function* combinedSaga() {
     yield takeEvery(POSTING_COMMENTS_SUBSCRIBE, postingCommentsSubscribeSaga);
     yield takeEvery(POSTING_COMMENTS_UNSUBSCRIBE, postingCommentsUnsubscribeSaga);
     yield takeLatest(SIGN_UP, signUpSaga);
+    yield takeLatest(GO_HOME, goHomeSaga);
 
     yield invokeTriggers(triggers);
 }

@@ -1,10 +1,17 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
-import { Browser, Node, NodeApiError } from "api";
-import { signedUp, signUpFailed } from "state/signupdialog/actions";
+import { Browser, Naming, Node, NodeApiError } from "api";
+import {
+    SIGN_UP_STAGE_CONNECT,
+    SIGN_UP_STAGE_DOMAIN,
+    SIGN_UP_STAGE_NAME,
+    SIGN_UP_STAGE_PASSWORD,
+    signedUp,
+    signUpFailed
+} from "state/signupdialog/actions";
 import { errorThrown } from "state/error/actions";
-import { initFromLocation } from "state/navigation/actions";
 import { connectedToHome } from "state/home/actions";
+import { registerNameSucceeded } from "state/nodename/actions";
 import { rootUrl } from "util/misc";
 
 const PROVIDER_SCHEME = "https";
@@ -17,33 +24,49 @@ const PROVIDER_PORT = 0;
 export function* signUpSaga(action) {
     const {name, domain, password, onError} = action.payload;
 
+    const stage = yield select(state => state.signUpDialog.stage);
     const nodeDomainName = domain + "." + PROVIDER_DOMAIN;
     const rootLocation = rootUrl(PROVIDER_SCHEME, nodeDomainName, PROVIDER_PORT);
     const login = "admin";
-    try {
-        yield call(Node.createDomain, rootUrl(PROVIDER_SCHEME, PROVIDER_DOMAIN, PROVIDER_PORT), nodeDomainName);
-    } catch(e) {
-        yield put(signUpFailed());
-        if (e instanceof NodeApiError) {
-            onError("domain", e.message);
-        } else {
-            yield put(errorThrown(e));
-        }
-        return;
-    }
 
-    let data;
-    try {
-        yield call(Node.createCredentials, rootLocation, login, password);
-        data = yield call(Node.createToken, rootLocation, login, password);
-    } catch (e) {
-        console.log(e);
-        if (!(e instanceof NodeApiError)) {
-            yield put(errorThrown(e));
+    if (stage <= SIGN_UP_STAGE_DOMAIN) {
+        try {
+            yield call(Node.createDomain, rootUrl(PROVIDER_SCHEME, PROVIDER_DOMAIN, PROVIDER_PORT), nodeDomainName);
+        } catch (e) {
+            yield put(signUpFailed(SIGN_UP_STAGE_DOMAIN));
+            if (e instanceof NodeApiError) {
+                onError("domain", e.message);
+            } else {
+                yield put(errorThrown(e));
+            }
+            return;
         }
     }
 
-    if (data) {
+    if (stage <= SIGN_UP_STAGE_PASSWORD) {
+        try {
+            yield call(Node.createCredentials, rootLocation, login, password);
+        } catch (e) {
+            if (!(e instanceof NodeApiError)) {
+                yield put(errorThrown(e));
+            }
+            yield put(signUpFailed(SIGN_UP_STAGE_PASSWORD));
+            return;
+        }
+    }
+
+    if (stage <= SIGN_UP_STAGE_CONNECT) {
+        let data;
+        try {
+            data = yield call(Node.createToken, rootLocation, login, password);
+        } catch (e) {
+            if (!(e instanceof NodeApiError)) {
+                yield put(errorThrown(e));
+            }
+            yield put(signUpFailed(SIGN_UP_STAGE_CONNECT));
+            return;
+        }
+
         let cartesData = {
             cartes: []
         };
@@ -59,6 +82,20 @@ export function* signUpSaga(action) {
             cartesData.cartes));
     }
 
-    yield put(initFromLocation(rootLocation, "/", null, null));
-    yield put(signedUp());
+    if (stage <= SIGN_UP_STAGE_NAME) {
+        try {
+            const free = yield call(Naming.isFree, name);
+            if (!free) {
+                onError("name", "Name is already taken");
+                yield put(signUpFailed(SIGN_UP_STAGE_NAME));
+                return;
+            }
+            const secret = yield call(Node.registerName, ":", name);
+            yield put(signedUp());
+            yield put(registerNameSucceeded(secret.name, secret.mnemonic));
+        } catch (e) {
+            yield put(signUpFailed());
+            yield put(errorThrown(e));
+        }
+    }
 }

@@ -1,3 +1,8 @@
+export const SIGN_UP_STAGE_DOMAIN = 0;
+export const SIGN_UP_STAGE_PASSWORD = 1;
+export const SIGN_UP_STAGE_CONNECT = 2;
+export const SIGN_UP_STAGE_NAME = 3;
+
 export const OPEN_SIGN_UP_DIALOG = "OPEN_SIGN_UP_DIALOG";
 export const openSignUpDialog = () => ({
     type: OPEN_SIGN_UP_DIALOG
@@ -20,6 +25,7 @@ export const signedUp = () => ({
 });
 
 export const SIGN_UP_FAILED = "SIGN_UP_FAILED";
-export const signUpFailed = () => ({
-    type: SIGN_UP_FAILED
+export const signUpFailed = (stage) => ({
+    type: SIGN_UP_FAILED,
+    payload: {stage}
 });

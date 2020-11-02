@@ -70,3 +70,8 @@ export const goToLocation = (path, query, hash) => ({
     type: GO_TO_LOCATION,
     payload: {path, query, hash}
 });
+
+export const GO_HOME = "GO_HOME";
+export const goHome = () => ({
+    type: GO_HOME
+});

@@ -5,13 +5,16 @@ import { PAGE_SETTINGS } from "state/navigation/pages";
 import {
     goToPage,
     goToSettings,
+    initFromLocation,
     locationLock,
     locationSet,
     locationUnlock,
     NEW_LOCATION
 } from "state/navigation/actions";
 import { settingsGoToTab } from "state/settings/actions";
+import { isStandaloneMode } from "state/navigation/selectors";
 import { locationBuild, LocationInfo, locationTransform } from "location";
+import { rootUrl } from "util/misc";
 
 export function* goToPageWithDefaultSubpageSaga(action) {
     switch (action.payload.page) {
@@ -63,4 +66,18 @@ export function* goToLocationSaga(action) {
 export function* newLocationSaga(action) {
     const info = yield select(locationBuild, new LocationInfo());
     yield put(locationSet(info.toUrl(), info.title, action == null || action.type === NEW_LOCATION));
+}
+
+export function* goHomeSaga() {
+    const {standalone, homeRootPage} = yield select(state => ({
+        standalone: isStandaloneMode(state),
+        homeRootPage: state.home.root.page
+    }));
+    if (!standalone) {
+        window.location = homeRootPage;
+    } else {
+        const {scheme, host, port, path} = URI.parse(homeRootPage);
+        const rootLocation = rootUrl(scheme, host, port);
+        yield put(initFromLocation(rootLocation, path, null, null));
+    }
 }

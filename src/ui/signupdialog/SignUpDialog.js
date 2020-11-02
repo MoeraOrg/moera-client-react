@@ -4,7 +4,13 @@ import { Form, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import * as Rules from "api/naming/rules";
-import { cancelSignUpDialog, signUp } from "state/signupdialog/actions";
+import {
+    cancelSignUpDialog,
+    SIGN_UP_STAGE_DOMAIN,
+    SIGN_UP_STAGE_NAME,
+    SIGN_UP_STAGE_PASSWORD,
+    signUp
+} from "state/signupdialog/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
 import "./SignUpDialog.css";
@@ -20,7 +26,7 @@ class SignUpDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, processing, cancelSignUpDialog} = this.props;
+        const {show, processing, stage, cancelSignUpDialog} = this.props;
 
         if (!show) {
             return null;
@@ -30,11 +36,15 @@ class SignUpDialog extends React.PureComponent {
             <ModalDialog title="Create a Blog" onClose={cancelSignUpDialog}>
                 <Form>
                     <div className="modal-body sign-up-dialog">
-                        <InputField name="name" title="Name" autoFocus disabled={processing}/>
+                        <InputField name="name" title="Name" autoFocus
+                                    disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
                         <NameHelp/>
-                        <InputField name="domain" title="Domain" wrapper="domain-group" disabled={processing}/>
-                        <InputField name="password" title="New password" disabled={processing}/>
-                        <InputField name="confirmPassword" title="Confirm password" disabled={processing}/>
+                        <InputField name="domain" title="Domain" wrapper="domain-group"
+                                    disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
+                        <InputField name="password" title="New password"
+                                    disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
+                        <InputField name="confirmPassword" title="Confirm password"
+                                    disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={cancelSignUpDialog}>Cancel</Button>
@@ -51,8 +61,10 @@ const signUpDialogLogic = {
 
     mapPropsToValues(props) {
         return {
-            password: "",
-            confirmPassword: ""
+            name: props.name ?? "",
+            domain: props.domain ?? "",
+            password: props.password ?? "",
+            confirmPassword: props.password ?? ""
         }
     },
 

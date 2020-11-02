@@ -17,6 +17,7 @@ import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
 import SignUpDialog from "ui/signupdialog/SignUpDialog";
+import MnemonicDialog from "ui/profile/manage/MnemonicDialog";
 import "./colors.css";
 import "./App.css";
 
@@ -40,6 +41,7 @@ const App = ({atNode}) => (
             <>
                 <WelcomePage/>
                 <SignUpDialog/>
+                <MnemonicDialog/>
             </>
         }
         <MessageBox/>
