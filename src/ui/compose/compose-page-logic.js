@@ -1,5 +1,5 @@
-import moment from 'moment';
 import * as yup from 'yup';
+import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 
 import { ClientSettings } from "api";
 
@@ -11,7 +11,7 @@ const composePageLogic = {
         const body = props.posting != null ? props.posting.bodySrc.text : "";
         const bodyFormat = props.posting != null ? props.posting.bodySrcFormat : props.sourceFormatDefault;
         const publishAt = props.posting != null && props.posting.publishedAt != null
-            ? moment.unix(props.posting.publishedAt).toDate() : new Date();
+            ? fromUnixTime(props.posting.publishedAt) : new Date();
         const reactionsPositive = props.posting != null
             ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault;
         const reactionsNegative = props.posting != null
@@ -58,8 +58,7 @@ const composePageLogic = {
             reactionTotalsVisible: values.reactionTotalsVisible,
             publications: props.postingId != null ? null : [{
                 feedName: "timeline",
-                publishAt: values.publishAt.getTime() !== values.publishAtDefault.getTime()
-                    ? moment(values.publishAt).unix() : null,
+                publishAt: isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null,
             }]
         };
     },

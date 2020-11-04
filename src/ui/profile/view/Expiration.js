@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { format, fromUnixTime } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { isOwnerNameExpired, isOwnerNameExpiring } from "state/owner/selectors";
@@ -11,7 +11,7 @@ const Expiration = ({deadline, expiring, expired}) => {
         return null;
     }
     const message = (!expired ? "Expiring at " : "Expired at ")
-        + moment.unix(deadline).format("DD-MM-YYYY HH:mm:ss");
+        + format(fromUnixTime(deadline), "dd-MM-yyyy HH:mm:ss");
     return (
         <div className="expiration">
             {expiring && <FontAwesomeIcon icon="exclamation-triangle" className="expiring" />}

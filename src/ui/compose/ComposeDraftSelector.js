@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Manager, Popper, Reference } from 'react-popper';
 import cx from 'classnames';
-import moment from 'moment';
+import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LinesEllipsis from 'react-lines-ellipsis';
 
@@ -91,7 +91,7 @@ class ComposeDraftSelector extends React.PureComponent {
                                                                 <LinesEllipsis text={draft.text} maxLine="3"/>
                                                             </div>
                                                             <div className="edited">
-                                                                {moment.unix(draft.editedAt).fromNow()}
+                                                                {formatDistanceToNow(fromUnixTime(draft.editedAt))}
                                                             </div>
                                                         </div>
                                                         <div className="delete" title="Delete draft"

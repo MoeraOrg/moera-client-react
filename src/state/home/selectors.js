@@ -1,5 +1,5 @@
 import selectn from 'selectn';
-import moment from 'moment';
+import { fromUnixTime, isBefore, subDays } from 'date-fns';
 
 import { getToken } from "state/node/selectors";
 
@@ -35,7 +35,7 @@ export function getHomeConnectionData(state) {
 
 export function isHomeOwnerNameExpiring(state) {
     return state.home.owner.verified && state.home.owner.correct && state.home.owner.deadline != null
-        && moment().isSameOrAfter(moment.unix(state.home.owner.deadline).subtract(30, "days"));
+        && !isBefore(new Date(), subDays(fromUnixTime(state.home.owner.deadline), 30));
 }
 
 export function getAddonApiVersion(state) {

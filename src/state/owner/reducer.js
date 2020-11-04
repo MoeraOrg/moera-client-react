@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
-import moment from 'moment';
+import { getUnixTime } from 'date-fns';
 
 import {
     OWNER_SET,
@@ -43,7 +43,7 @@ export default (state = initialState, action) => {
                     correct: action.payload.correct,
                     deadline: action.payload.deadline,
                     verified: true,
-                    verifiedAt: moment().unix()
+                    verifiedAt: getUnixTime(new Date())
                 };
             }
             return state;

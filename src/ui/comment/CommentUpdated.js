@@ -1,16 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
 const CommentUpdated = ({comment}) => {
     if (comment.totalRevisions <= 1) {
         return null;
     }
 
-    const date = moment.unix(comment.editedAt);
+    const date = fromUnixTime(comment.editedAt);
     return (
         <span className="date">
-            {" "}(updated <abbr title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</abbr>)
+            {" "}(updated <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>)
         </span>
     );
 };

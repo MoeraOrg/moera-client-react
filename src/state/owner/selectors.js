@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { fromUnixTime, isBefore, subDays } from 'date-fns';
 
 import { isNodeNameOperationFinished } from "state/nodename/selectors";
 
@@ -19,10 +19,10 @@ export function isOwnerNameRecentlyChanged(state) {
 
 export function isOwnerNameExpiring(state) {
     return state.owner.verified && state.owner.correct && state.owner.deadline != null
-        && moment().isSameOrAfter(moment.unix(state.owner.deadline).subtract(30, "days"));
+        && !isBefore(new Date(), subDays(fromUnixTime(state.home.owner.deadline), 30));
 }
 
 export function isOwnerNameExpired(state) {
     return state.owner.verified && state.owner.correct && state.owner.deadline != null
-        && moment().isSameOrAfter(moment.unix(state.owner.deadline));
+        && !isBefore(new Date(), fromUnixTime(state.home.owner.deadline));
 }

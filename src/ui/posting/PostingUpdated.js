@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
 import { getSetting } from "state/settings/selectors";
 
@@ -9,16 +9,16 @@ const PostingUpdated = ({posting, story, timeRelative}) => {
         return null;
     }
 
-    const date = moment.unix(posting.editedAt);
+    const date = fromUnixTime(posting.editedAt);
     const publishedAt = story != null ? story.publishedAt : posting.createdAt;
     const editedSoon = Math.abs(posting.editedAt - publishedAt) < 24 * 60 * 60;
     return (
         <span className="date">
             {" "}(updated {
                 timeRelative ?
-                    <abbr title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</abbr>
+                    <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>
                 :
-                    (editedSoon ? date.format("HH:mm") : date.format("DD-MM-YYYY HH:mm"))
+                    (editedSoon ? format(date, "HH:mm") : format(date, "dd-MM-yyyy HH:mm"))
             })
         </span>
     );

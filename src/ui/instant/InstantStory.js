@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import moment from 'moment';
+import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 
 import InstantIcon from "ui/instant/InstantIcon";
 import Jump from "ui/navigation/Jump";
@@ -65,7 +65,7 @@ class InstantStory extends React.PureComponent {
                         <div dangerouslySetInnerHTML={{__html: story.summary}}/>
                         <div className="footer">
                             <InstantIcon story={story}/>
-                            <span className="date">{moment.unix(story.publishedAt).fromNow(true)}</span>
+                            <span className="date">{formatDistanceToNow(fromUnixTime(story.publishedAt))}</span>
                         </div>
                     </Jump>
                     <div className="sidebar">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
-import moment from 'moment';
+import { fromUnixTime, getUnixTime } from 'date-fns';
 
 import { closeChangeDateDialog, storyChangeDate } from "state/changedatedialog/actions";
 import { Button, ModalDialog } from "ui/control";
@@ -44,12 +44,12 @@ const changeDateDialogLogic = {
 
     mapPropsToValues(props) {
         return {
-            publishedAt: moment.unix(props.publishedAt).toDate()
+            publishedAt: fromUnixTime(props.publishedAt)
         }
     },
 
     handleSubmit(values, formik) {
-        formik.props.storyChangeDate(formik.props.storyId, moment(values.publishedAt).unix());
+        formik.props.storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt));
         formik.setSubmitting(false);
     }
 

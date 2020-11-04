@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { getUnixTime } from 'date-fns';
 
 import { isPermitted } from "state/node/selectors";
 import { isHomeOwnerNameSet } from "state/home/selectors";
@@ -57,7 +57,7 @@ export function getFeedAt(state, feedName) {
 
 export function getFeedAtTimestamp(state, feedName) {
     const at = getFeedAt(state, feedName);
-    return at < MAX_MOMENT ? Math.floor(at / 1000) : moment().unix();
+    return at < MAX_MOMENT ? Math.floor(at / 1000) : getUnixTime(new Date());
 }
 
 export function getInstantCount(state) {

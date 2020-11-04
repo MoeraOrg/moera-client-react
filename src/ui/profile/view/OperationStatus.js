@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { format, fromUnixTime } from 'date-fns';
 import cx from 'classnames';
 
-import "./OperationStatus.css";
 import { Popover } from "ui/control";
+import "./OperationStatus.css";
 
 const OperationStatus = ({status, statusUpdated, errorCode, errorMessage}) => {
     let text;
@@ -34,7 +34,7 @@ const OperationStatus = ({status, statusUpdated, errorCode, errorMessage}) => {
         default:
             return null;
     }
-    const dateTime = statusUpdated ? " at " + moment.unix(statusUpdated).format("DD-MM-YYYY HH:mm:ss") : "";
+    const dateTime = statusUpdated ? " at " + format(fromUnixTime(statusUpdated), "dd-MM-yyyy HH:mm:ss") : "";
     return (
         <span className={cx(
             "naming-operation-status", {

@@ -3,7 +3,7 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { DateTimePicker } from 'react-widgets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import moment from 'moment';
+import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 
 import { Button } from "ui/control";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
@@ -27,8 +27,8 @@ class FeedGotoButton extends React.PureComponent {
         this.setState({active: true});
     };
 
-    goToTimestamp = value => {
-        this.props.feedScrollToAnchor(this.props.feedName, moment(value).endOf('day').unix() * 1000);
+    goToTimestamp = date => {
+        this.props.feedScrollToAnchor(this.props.feedName, getUnixTime(endOfDay(date)) * 1000);
     };
 
     toBottom = e => {
@@ -46,7 +46,7 @@ class FeedGotoButton extends React.PureComponent {
                     <Button variant="outline-info" size="sm" onClick={this.activate}>Go to...</Button>
                 :
                     <>
-                        <DateTimePicker format="dd-MM-yyyy" value={moment.unix(timestamp).toDate()} time={false}
+                        <DateTimePicker format="dd-MM-yyyy" value={fromUnixTime(timestamp)} time={false}
                                         onChange={this.goToTimestamp}/>
                         <Button variant="outline-info" className="ml-2" invisible={atBottom} onClick={this.toBottom}>
                             <FontAwesomeIcon icon="arrow-down"/>&nbsp;Bottom

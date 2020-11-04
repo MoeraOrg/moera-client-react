@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
+import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
@@ -13,15 +13,15 @@ const PostingDate = ({posting, story, timeRelative}) => {
     } else {
         publishedAt = story != null ? story.publishedAt : posting.createdAt;
     }
-    const date = moment.unix(publishedAt);
+    const date = fromUnixTime(publishedAt);
     const nodeName = posting.receiverName ?? posting.ownerName;
     const postingId = posting.receiverPostingId ?? posting.id;
     return (
         <Jump className="date" nodeName={nodeName} href={`/post/${postingId}`}>{
             timeRelative ?
-                <span title={date.format("DD-MM-YYYY HH:mm")}>{date.fromNow()}</span>
+                <span title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</span>
             :
-                date.format("DD-MM-YYYY HH:mm")
+                <span title={formatDistanceToNow(date)}>{format(date, "dd-MM-yyyy HH:mm")}</span>
         }</Jump>
     );
 };
