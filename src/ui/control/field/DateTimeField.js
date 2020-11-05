@@ -3,7 +3,7 @@ import PropType from 'prop-types';
 import { Field } from 'formik';
 import { DateTimePicker } from 'react-widgets';
 
-import { Column, FormGroup } from "ui/control";
+import { FormGroup, Wrapper } from "ui/control";
 
 export const DateTimeField = ({name, title, horizontal = false, groupClassName, labelClassName, col, autoFocus}) => (
     <FormGroup name={name} title={title} horizontal={horizontal} groupClassName={groupClassName}
@@ -14,7 +14,7 @@ export const DateTimeField = ({name, title, horizontal = false, groupClassName, 
                 const touched = form.touched[field.name];
                 const error = form.errors[field.name];
                 return (
-                    <Column className={col}>
+                    <Wrapper className={col}>
                         <DateTimePicker
                             name={field.name}
                             value={field.value}
@@ -25,7 +25,7 @@ export const DateTimeField = ({name, title, horizontal = false, groupClassName, 
                             timeFormat="HH:mm"
                         />
                         {touched && error && <div className="invalid-feedback">{error}</div>}
-                    </Column>
+                    </Wrapper>
                 );
             }}
         </Field>

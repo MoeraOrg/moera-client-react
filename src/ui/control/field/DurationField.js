@@ -4,7 +4,7 @@ import { NumberPicker } from 'react-widgets';
 import { Field } from 'formik';
 import selectn from 'selectn';
 
-import { Column } from "ui/control";
+import { Wrapper } from "ui/control";
 import { FormFieldGroup } from "ui/control/field";
 import Duration from "util/duration";
 import "./DurationField.css";
@@ -69,7 +69,7 @@ export class DurationField extends React.PureComponent {
                             defaultValue={defaultValue}
                         >
                             {/* <label> is not functional, because NumberPicker doesn't allow to set id */}
-                            <Column className={col}>
+                            <Wrapper className={col}>
                                 <div className="duration-control">
                                     <NumberPicker
                                         name={field.name + "_amount"}
@@ -90,7 +90,7 @@ export class DurationField extends React.PureComponent {
                                     </select>
                                 </div>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
-                            </Column>
+                            </Wrapper>
                         </FormFieldGroup>
                     );
                 }}

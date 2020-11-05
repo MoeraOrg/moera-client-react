@@ -1,5 +1,4 @@
 export { Button } from "ui/control/Button";
-export { Column } from "ui/control/Column";
 export { ConflictWarning } from "ui/control/ConflictWarning";
 export { DropdownMenu } from "ui/control/DropdownMenu";
 export { EmojiButton } from "ui/control/EmojiButton";
@@ -20,3 +19,4 @@ export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
 export { ReactionTotals } from "ui/control/ReactionTotals";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
 export { Twemoji } from "ui/control/Twemoji";
+export { Wrapper } from "ui/control/Wrapper";

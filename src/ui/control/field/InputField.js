@@ -4,7 +4,7 @@ import { Field } from 'formik';
 import cx from 'classnames';
 import selectn from 'selectn';
 
-import { Column } from "ui/control";
+import { Wrapper } from "ui/control";
 import { FormFieldGroup } from "ui/control/field";
 
 export class InputField extends React.PureComponent {
@@ -71,8 +71,8 @@ export class InputField extends React.PureComponent {
                             initialValue={initialValue}
                             defaultValue={defaultValue}
                         >
-                            <Column className={col}>
-                                <Column className={cx(
+                            <Wrapper className={col}>
+                                <Wrapper className={cx(
                                     wrapper,
                                     {
                                         "is-invalid": !!wrapper && !anyValue && touched && error
@@ -93,9 +93,9 @@ export class InputField extends React.PureComponent {
                                         ref={dom => this.inputDom = dom}
                                         onKeyDown={this.onKeyDown}
                                     />
-                                </Column>
+                                </Wrapper>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
-                            </Column>
+                            </Wrapper>
                         </FormFieldGroup>
                     );
                 }}

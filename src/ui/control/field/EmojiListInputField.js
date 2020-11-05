@@ -3,7 +3,7 @@ import PropType from 'prop-types';
 import { Field } from 'formik';
 import selectn from 'selectn';
 
-import { Column, EmojiListInput } from "ui/control";
+import { EmojiListInput, Wrapper } from "ui/control";
 import { FormFieldGroup } from "ui/control/field";
 
 export class EmojiListInputField extends React.PureComponent {
@@ -43,12 +43,12 @@ export class EmojiListInputField extends React.PureComponent {
                             initialValue={initialValue}
                             defaultValue={defaultValue}
                         >
-                            <Column className={col}>
+                            <Wrapper className={col}>
                                 <EmojiListInput className="form-control" negative={negative} value={field.value}
                                                 advanced={advanced}
                                                 onChange={v => form.setFieldValue(field.name, v)}/>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
-                            </Column>
+                            </Wrapper>
                         </FormFieldGroup>
                     );
                 }}

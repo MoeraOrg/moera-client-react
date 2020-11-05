@@ -4,7 +4,7 @@ import { Field } from 'formik';
 import cx from 'classnames';
 import selectn from 'selectn';
 
-import { Column } from "ui/control";
+import { Wrapper } from "ui/control";
 import { FormFieldGroup } from "ui/control/field";
 
 export class SelectField extends React.PureComponent {
@@ -66,7 +66,7 @@ export class SelectField extends React.PureComponent {
                             initialValue={initialValue}
                             defaultValue={defaultValue}
                         >
-                            <Column className={col}>
+                            <Wrapper className={col}>
                                 <select
                                     {...field}
                                     id={name}
@@ -85,7 +85,7 @@ export class SelectField extends React.PureComponent {
                                     {choices.map(c => <option key={c.value} value={c.value}>{c.title}</option>)}
                                 </select>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
-                            </Column>
+                            </Wrapper>
                         </FormFieldGroup>
                     );
                 }}
