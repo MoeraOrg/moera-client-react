@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as yup from 'yup';
+import debounce from 'lodash.debounce';
 
 import * as Rules from "api/naming/rules";
 import {
@@ -9,13 +10,32 @@ import {
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
     SIGN_UP_STAGE_PASSWORD,
-    signUp
+    signUp,
+    signUpNameVerify
 } from "state/signupdialog/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
 import "./SignUpDialog.css";
 
 class SignUpDialog extends React.PureComponent {
+
+    #nameInputDom;
+    #lastVerifiedName = null;
+
+    setNameInputRef = dom => {
+        this.#nameInputDom = dom;
+        if (this.#nameInputDom) {
+            this.#nameInputDom.addEventListener("input", this.onNameInput);
+            this.#nameInputDom.addEventListener("blur", this.onNameBlur);
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.#nameInputDom) {
+            this.#nameInputDom.removeEventListener("input", this.onNameInput);
+            this.#nameInputDom.removeEventListener("blur", this.onNameBlur);
+        }
+    }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show && this.props.show) {
@@ -24,6 +44,31 @@ class SignUpDialog extends React.PureComponent {
             });
         }
     }
+
+    onNameInput = event => {
+        this.verifyName(event.target.value);
+    };
+
+    onNameBlur = event => {
+        this.verifyName(event.target.value);
+        this.verifyName.flush();
+    };
+
+    verifyName = debounce(name => {
+        if (this.#lastVerifiedName === name) {
+            return;
+        }
+        this.#lastVerifiedName = name;
+        if (!name || name.length > Rules.NAME_MAX_LENGTH || !Rules.isNameValid(name)) {
+            return;
+        }
+        this.props.signUpNameVerify(name, (name, free) => {
+            if (name === this.props.values.name && !free) {
+                console.log(name, free, this.props);
+                this.props.setFieldError("name", "Name is already taken");
+            }
+        });
+    }, 500);
 
     render() {
         const {show, processing, stage, cancelSignUpDialog} = this.props;
@@ -36,7 +81,7 @@ class SignUpDialog extends React.PureComponent {
             <ModalDialog title="Create a Blog" onClose={cancelSignUpDialog}>
                 <Form>
                     <div className="modal-body sign-up-dialog">
-                        <InputField name="name" title="Name" autoFocus
+                        <InputField name="name" title="Name" autoFocus inputRef={this.setNameInputRef}
                                     disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
                         <NameHelp/>
                         <InputField name="domain" title="Domain" wrapper="domain-group"
@@ -93,5 +138,5 @@ export default connect(
     state => ({
         ...state.signUpDialog
     }),
-    { cancelSignUpDialog, signUp }
+    { cancelSignUpDialog, signUp, signUpNameVerify }
 )(withFormik(signUpDialogLogic)(SignUpDialog));

@@ -99,3 +99,10 @@ export function* signUpSaga(action) {
         }
     }
 }
+
+export function* signUpNameVerifySaga(action) {
+    const {name, onVerify} = action.payload;
+
+    const free = yield call(Naming.isFree, name);
+    onVerify(name, free);
+}

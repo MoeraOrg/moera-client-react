@@ -29,3 +29,9 @@ export const signUpFailed = (stage) => ({
     type: SIGN_UP_FAILED,
     payload: {stage}
 });
+
+export const SIGN_UP_NAME_VERIFY = "SIGN_UP_NAME_VERIFY";
+export const signUpNameVerify = (name, onVerify) => ({
+    type: SIGN_UP_NAME_VERIFY,
+    payload: {name, onVerify}
+});

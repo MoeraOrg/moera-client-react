@@ -25,7 +25,8 @@ export class InputField extends React.PureComponent {
         noFeedback: PropType.bool,
         initialValue: PropType.string,
         defaultValue: PropType.string,
-        onEscape: PropType.func
+        onEscape: PropType.func,
+        inputRef: PropType.func
     };
 
     constructor(props, context) {
@@ -51,7 +52,7 @@ export class InputField extends React.PureComponent {
     render() {
         const {
             name, title, placeholder, horizontal = false, groupClassName, labelClassName, col, wrapper, anyValue,
-            className, autoComplete, noFeedback = false, initialValue, defaultValue
+            className, autoComplete, noFeedback = false, initialValue, defaultValue, inputRef
         } = this.props;
 
         return (
@@ -90,7 +91,12 @@ export class InputField extends React.PureComponent {
                                             })}
                                         placeholder={placeholder}
                                         autoComplete={autoComplete}
-                                        ref={dom => this.inputDom = dom}
+                                        ref={dom => {
+                                            this.inputDom = dom;
+                                            if (inputRef != null) {
+                                                inputRef(dom);
+                                            }
+                                        }}
                                         onKeyDown={this.onKeyDown}
                                     />
                                 </Wrapper>
