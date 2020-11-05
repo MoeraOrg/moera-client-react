@@ -15,7 +15,7 @@ import {
 } from "state/signupdialog/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
-import "./SignUpDialog.css";
+import DomainField from "ui/signupdialog/DomainField";
 
 class SignUpDialog extends React.PureComponent {
 
@@ -84,8 +84,8 @@ class SignUpDialog extends React.PureComponent {
                         <InputField name="name" title="Name" autoFocus inputRef={this.setNameInputRef}
                                     disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
                         <NameHelp/>
-                        <InputField name="domain" title="Domain" wrapper="domain-group"
-                                    disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
+                        <DomainField name="domain" title="Domain"
+                                     disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
                         <InputField name="password" title="New password"
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
                         <InputField name="confirmPassword" title="Confirm password"
@@ -108,6 +108,7 @@ const signUpDialogLogic = {
         return {
             name: props.name ?? "",
             domain: props.domain ?? "",
+            autoDomain: !props.domain,
             password: props.password ?? "",
             confirmPassword: props.password ?? ""
         }
@@ -116,18 +117,24 @@ const signUpDialogLogic = {
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
             .test("is-allowed", "Not allowed", Rules.isNameValid),
-        domain: yup.string().trim().required("Must not be empty")
-            .min(4, "Too short, should be 4 characters at least")
-            .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "Not allowed"),
+        domain: yup.string()
+            .when("autoDomain", {
+                is: true,
+                then: yup.string().notRequired(),
+                otherwise: yup.string().trim()
+                    .required("Must not be empty")
+                    .min(4, "Too short, should be 4 characters at least")
+                    .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "Not allowed")
+            }),
         password: yup.string().required("Must not be empty"),
-        confirmPassword: yup.string().when(["password"],
+        confirmPassword: yup.string().when("password",
             (password, schema) =>
                 schema.required("Please type the password again").oneOf([password], "Passwords are different")
         )
     }),
 
     handleSubmit(values, formik) {
-        formik.props.signUp(values.name.trim(), values.domain.trim(), values.password,
+        formik.props.signUp(values.name.trim(), values.autoDomain ? null : values.domain.trim(), values.password,
             (fieldName, message) => formik.setFieldError(fieldName, message));
         formik.setSubmitting(false);
     }

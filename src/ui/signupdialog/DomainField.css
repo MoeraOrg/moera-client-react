@@ -1,0 +1,26 @@
+.domain-field {
+    display: flex;
+    align-items: center;
+}
+
+.domain-field .suffix {
+    display: block;
+    margin-left: .2em;
+    font-family: var(--font-family-monospace);
+}
+
+.domain-field .domain-name {
+    font-family: var(--font-family-monospace);
+}
+
+.domain-field .domain-auto {
+    font-style: italic;
+}
+
+.domain-field .domain-name .hostname {
+    color: var(--pink);
+}
+
+.domain-field BUTTON {
+    margin-left: 1em;
+}

@@ -13,11 +13,11 @@ export class InputField extends React.PureComponent {
         name: PropType.string,
         title: PropType.string,
         placeholder: PropType.string,
+        disabled: PropType.bool,
         horizontal: PropType.bool,
         groupClassName: PropType.string,
         labelClassName: PropType.string,
         col: PropType.string,
-        wrapper: PropType.string,
         autoFocus: PropType.bool,
         anyValue: PropType.bool,
         className: PropType.string,
@@ -51,7 +51,7 @@ export class InputField extends React.PureComponent {
 
     render() {
         const {
-            name, title, placeholder, horizontal = false, groupClassName, labelClassName, col, wrapper, anyValue,
+            name, title, placeholder, disabled, horizontal = false, groupClassName, labelClassName, col, anyValue,
             className, autoComplete, noFeedback = false, initialValue, defaultValue, inputRef
         } = this.props;
 
@@ -73,33 +73,27 @@ export class InputField extends React.PureComponent {
                             defaultValue={defaultValue}
                         >
                             <Wrapper className={col}>
-                                <Wrapper className={cx(
-                                    wrapper,
-                                    {
-                                        "is-invalid": !!wrapper && !anyValue && touched && error
-                                    }
-                                )}>
-                                    <input
-                                        {...field}
-                                        id={name}
-                                        type={!name.toLowerCase().includes("password") ? "text" : "password"}
-                                        className={cx(
-                                            "form-control", {
-                                                "is-valid": !anyValue && touched && !error,
-                                                "is-invalid": !anyValue && touched && error,
-                                                [className]: !!className
-                                            })}
-                                        placeholder={placeholder}
-                                        autoComplete={autoComplete}
-                                        ref={dom => {
-                                            this.inputDom = dom;
-                                            if (inputRef != null) {
-                                                inputRef(dom);
-                                            }
-                                        }}
-                                        onKeyDown={this.onKeyDown}
-                                    />
-                                </Wrapper>
+                                <input
+                                    {...field}
+                                    id={name}
+                                    type={!name.toLowerCase().includes("password") ? "text" : "password"}
+                                    className={cx(
+                                        "form-control", {
+                                            "is-valid": !anyValue && touched && !error,
+                                            "is-invalid": !anyValue && touched && error,
+                                            [className]: !!className
+                                        })}
+                                    placeholder={placeholder}
+                                    autoComplete={autoComplete}
+                                    disabled={disabled}
+                                    ref={dom => {
+                                        this.inputDom = dom;
+                                        if (inputRef != null) {
+                                            inputRef(dom);
+                                        }
+                                    }}
+                                    onKeyDown={this.onKeyDown}
+                                />
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
                             </Wrapper>
                         </FormFieldGroup>
