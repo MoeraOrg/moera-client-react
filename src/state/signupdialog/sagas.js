@@ -106,3 +106,11 @@ export function* signUpNameVerifySaga(action) {
     const free = yield call(Naming.isFree, name);
     onVerify(name, free);
 }
+
+export function* signUpFindDomainSaga(action) {
+    const {name, onFound} = action.payload;
+
+    const rootLocation = rootUrl(PROVIDER_SCHEME, PROVIDER_DOMAIN, PROVIDER_PORT);
+    const domain = yield call(Node.getDomainAvailable, rootLocation, name);
+    onFound(name, domain.name);
+}

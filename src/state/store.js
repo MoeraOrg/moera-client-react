@@ -88,7 +88,7 @@ import { STORY_PINNING_UPDATE, STORY_READING_UPDATE } from "state/stories/action
 import { STORY_CHANGE_DATE } from "state/changedatedialog/actions";
 import { PEOPLE_GENERAL_LOAD, SUBSCRIBERS_LOAD, SUBSCRIPTIONS_LOAD } from "state/people/actions";
 import { FLASH_BOX } from "state/flashbox/actions";
-import { SIGN_UP, SIGN_UP_NAME_VERIFY } from "state/signupdialog/actions";
+import { SIGN_UP, SIGN_UP_FIND_DOMAIN, SIGN_UP_NAME_VERIFY } from "state/signupdialog/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import pulse from "state/pulse/reducer";
@@ -205,7 +205,7 @@ import { storyPinningUpdateSaga, storyReadingUpdateSaga } from "state/stories/sa
 import { storyChangeDateSaga } from "state/changedatedialog/sagas";
 import { peopleGeneralLoadSaga, subscribersLoadSaga, subscriptionsLoadSaga } from "state/people/sagas";
 import { flashBoxSaga } from "state/flashbox/sagas";
-import { signUpNameVerifySaga, signUpSaga } from "state/signupdialog/sagas";
+import { signUpFindDomainSaga, signUpNameVerifySaga, signUpSaga } from "state/signupdialog/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -335,6 +335,7 @@ function* combinedSaga() {
     yield takeEvery(POSTING_COMMENTS_UNSUBSCRIBE, postingCommentsUnsubscribeSaga);
     yield takeLatest(SIGN_UP, signUpSaga);
     yield takeLatest(SIGN_UP_NAME_VERIFY, signUpNameVerifySaga);
+    yield takeLatest(SIGN_UP_FIND_DOMAIN, signUpFindDomainSaga);
     yield takeLatest(GO_HOME, goHomeSaga);
 
     yield invokeTriggers(triggers);

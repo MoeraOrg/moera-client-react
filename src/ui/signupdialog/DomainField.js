@@ -31,36 +31,38 @@ export default class DomainField extends React.PureComponent {
                     const error = selectn(field.name, form.errors);
                     return (
                         <FormFieldGroup title={title} name={name} field={field} form={form}>
-                            <div className={cx("domain-field", {"is-invalid": touched && error})}>
-                                {form.values.autoDomain ?
-                                    (field.value ?
-                                        <div className="domain-name">
-                                            <span className="hostname">{field.value}</span>.moera.blog
-                                        </div>
+                            <>
+                                <div className={cx("domain-field", {"is-invalid": touched && error})}>
+                                    {form.values.autoDomain ?
+                                        (field.value ?
+                                            <div className="domain-name">
+                                                <span className="hostname">{field.value}</span>.moera.blog
+                                            </div>
+                                        :
+                                            <div className="domain-auto">Selected automatically</div>
+                                        )
                                     :
-                                        <div className="domain-auto">Selected automatically</div>
-                                    )
-                                :
-                                    <>
-                                        <input
-                                            {...field}
-                                            id={name}
-                                            type="text"
-                                            className={cx(
-                                                "form-control", {
-                                                    "is-valid": touched && !error,
-                                                    "is-invalid": touched && error,
-                                                })}
-                                            disabled={disabled}
-                                        />
-                                        <div className="suffix">.moera.blog</div>
-                                    </>
-                                }
-                                <Button variant="outline-secondary" size="sm" onClick={this.onClick(form)}>
-                                    {form.values.autoDomain ? "Edit" : "Auto"}
-                                </Button>
-                            </div>
-                            {touched && error && <div className="invalid-feedback">{error}</div>}
+                                        <>
+                                            <input
+                                                {...field}
+                                                id={name}
+                                                type="text"
+                                                className={cx(
+                                                    "form-control", {
+                                                        "is-valid": touched && !error,
+                                                        "is-invalid": touched && error,
+                                                    })}
+                                                disabled={disabled}
+                                            />
+                                            <div className="suffix">.moera.blog</div>
+                                        </>
+                                    }
+                                    <Button variant="outline-secondary" size="sm" onClick={this.onClick(form)}>
+                                        {form.values.autoDomain ? "Edit" : "Auto"}
+                                    </Button>
+                                </div>
+                                {touched && error && <div className="invalid-feedback">{error}</div>}
+                            </>
                         </FormFieldGroup>
                     );
                 }}

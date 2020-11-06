@@ -11,6 +11,7 @@ import {
     SIGN_UP_STAGE_NAME,
     SIGN_UP_STAGE_PASSWORD,
     signUp,
+    signUpFindDomain,
     signUpNameVerify
 } from "state/signupdialog/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
@@ -60,12 +61,18 @@ class SignUpDialog extends React.PureComponent {
         }
         this.#lastVerifiedName = name;
         if (!name || name.length > Rules.NAME_MAX_LENGTH || !Rules.isNameValid(name)) {
+            this.props.setFieldValue("domain", "");
             return;
         }
         this.props.signUpNameVerify(name, (name, free) => {
             if (name === this.props.values.name && !free) {
-                console.log(name, free, this.props);
                 this.props.setFieldError("name", "Name is already taken");
+            }
+        });
+        this.props.signUpFindDomain(name, (name, domainName) => {
+            if (name === this.props.values.name) {
+                const i = domainName.indexOf(".");
+                this.props.setFieldValue("domain", i > 0 ? domainName.substring(0, i) : domainName);
             }
         });
     }, 500);
@@ -145,5 +152,5 @@ export default connect(
     state => ({
         ...state.signUpDialog
     }),
-    { cancelSignUpDialog, signUp, signUpNameVerify }
+    { cancelSignUpDialog, signUp, signUpNameVerify, signUpFindDomain }
 )(withFormik(signUpDialogLogic)(SignUpDialog));

@@ -10,6 +10,12 @@ export function* createDomain(nodeName, name) {
         errorFilter: ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]});
 }
 
+export function* getDomainAvailable(nodeName, name) {
+    return yield call(callApi, {
+        nodeName, location: `/domains/available?nodeName=${name}`, schema: NodeApi.DomainAvailable
+    });
+}
+
 export function* createCredentials(nodeName, login, password) {
     yield call(callApi, {
         nodeName,

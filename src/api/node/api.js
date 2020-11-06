@@ -1062,3 +1062,13 @@ export const DomainInfo = schema({
     },
     additionalProperties: false
 });
+
+export const DomainAvailable = schema({
+    type: "object",
+    properties: {
+        "name": {
+            type: "string"
+        }
+    },
+    additionalProperties: false
+});
