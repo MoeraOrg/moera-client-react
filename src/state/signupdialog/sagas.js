@@ -14,12 +14,12 @@ import { connectedToHome } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import { rootUrl } from "util/misc";
 
-// const PROVIDER_SCHEME = "https";
-// const PROVIDER_DOMAIN = "moera.blog";
-// const PROVIDER_PORT = 0;
-const PROVIDER_SCHEME = "http";
-const PROVIDER_DOMAIN = "localhost.localdomain";
-const PROVIDER_PORT = 8082;
+const PROVIDER_SCHEME = "https";
+const PROVIDER_DOMAIN = "moera.blog";
+const PROVIDER_PORT = 0;
+// const PROVIDER_SCHEME = "http";
+// const PROVIDER_DOMAIN = "localhost.localdomain";
+// const PROVIDER_PORT = 8082;
 
 export function* signUpSaga(action) {
     const {name, domain, password, onError} = action.payload;
