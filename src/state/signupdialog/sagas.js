@@ -14,24 +14,40 @@ import { connectedToHome } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import { rootUrl } from "util/misc";
 
-const PROVIDER_SCHEME = "https";
-const PROVIDER_DOMAIN = "moera.blog";
-const PROVIDER_PORT = 0;
-// const PROVIDER_SCHEME = "http";
-// const PROVIDER_DOMAIN = "localhost.localdomain";
-// const PROVIDER_PORT = 8082;
+// const PROVIDER_SCHEME = "https";
+// const PROVIDER_DOMAIN = "moera.blog";
+// const PROVIDER_PORT = 0;
+const PROVIDER_SCHEME = "http";
+const PROVIDER_DOMAIN = "localhost.localdomain";
+const PROVIDER_PORT = 8082;
 
 export function* signUpSaga(action) {
     const {name, domain, password, onError} = action.payload;
 
     const stage = yield select(state => state.signUpDialog.stage);
-    const nodeDomainName = domain + "." + PROVIDER_DOMAIN;
-    const rootLocation = rootUrl(PROVIDER_SCHEME, nodeDomainName, PROVIDER_PORT);
-    const login = "admin";
+    const providerLocation = rootUrl(PROVIDER_SCHEME, PROVIDER_DOMAIN, PROVIDER_PORT);
+
+    let nodeDomainName;
+    if (!domain) {
+        try {
+            const domain = yield call(Node.getDomainAvailable, providerLocation, name);
+            nodeDomainName = domain.name;
+        } catch (e) {
+            yield put(signUpFailed(SIGN_UP_STAGE_DOMAIN));
+            if (e instanceof NodeApiError) {
+                onError("domain", e.message);
+            } else {
+                yield put(errorThrown(e));
+            }
+            return;
+        }
+    } else {
+        nodeDomainName = domain + "." + PROVIDER_DOMAIN;
+    }
 
     if (stage <= SIGN_UP_STAGE_DOMAIN) {
         try {
-            yield call(Node.createDomain, rootUrl(PROVIDER_SCHEME, PROVIDER_DOMAIN, PROVIDER_PORT), nodeDomainName);
+            yield call(Node.createDomain, providerLocation, nodeDomainName);
         } catch (e) {
             yield put(signUpFailed(SIGN_UP_STAGE_DOMAIN));
             if (e instanceof NodeApiError) {
@@ -42,6 +58,9 @@ export function* signUpSaga(action) {
             return;
         }
     }
+
+    const rootLocation = rootUrl(PROVIDER_SCHEME, nodeDomainName, PROVIDER_PORT);
+    const login = "admin";
 
     if (stage <= SIGN_UP_STAGE_PASSWORD) {
         try {
