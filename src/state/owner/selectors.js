@@ -19,10 +19,10 @@ export function isOwnerNameRecentlyChanged(state) {
 
 export function isOwnerNameExpiring(state) {
     return state.owner.verified && state.owner.correct && state.owner.deadline != null
-        && !isBefore(new Date(), subDays(fromUnixTime(state.home.owner.deadline), 30));
+        && !isBefore(new Date(), subDays(fromUnixTime(state.owner.deadline), 30));
 }
 
 export function isOwnerNameExpired(state) {
     return state.owner.verified && state.owner.correct && state.owner.deadline != null
-        && !isBefore(new Date(), fromUnixTime(state.home.owner.deadline));
+        && !isBefore(new Date(), fromUnixTime(state.owner.deadline));
 }
