@@ -58,7 +58,7 @@ export default class DomainField extends React.PureComponent {
                                         </>
                                     }
                                     <Button variant="outline-secondary" size="sm" onClick={this.onClick(form)}>
-                                        {form.values.autoDomain ? "Edit" : "Auto"}
+                                        {form.values.autoDomain ? "Change" : "Auto"}
                                     </Button>
                                 </div>
                                 {touched && error && <div className="invalid-feedback">{error}</div>}
