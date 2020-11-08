@@ -6,6 +6,10 @@ export class Browser {
 
     static clientId = randomId();
 
+    static isDevMode() {
+        return !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+    }
+
     static isTinyScreen() {
         return window.screen.width <= 575;
     }

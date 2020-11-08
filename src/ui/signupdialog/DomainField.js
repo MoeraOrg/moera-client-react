@@ -7,6 +7,7 @@ import selectn from 'selectn';
 import { FormFieldGroup } from "ui/control/field";
 import { Button } from "ui/control";
 import "./DomainField.css";
+import PROVIDERS from "providers";
 
 export default class DomainField extends React.PureComponent {
 
@@ -21,6 +22,10 @@ export default class DomainField extends React.PureComponent {
         form.setFieldValue("autoDomain", !form.values.autoDomain);
     }
 
+    getProviderSuffix(provider) {
+        return PROVIDERS.find(p => p.name === provider)?.domain;
+    }
+
     render() {
         const {name, title, disabled} = this.props;
 
@@ -29,6 +34,7 @@ export default class DomainField extends React.PureComponent {
                 {({field, form}) => {
                     const touched = selectn(field.name, form.touched);
                     const error = selectn(field.name, form.errors);
+                    const suffix = `.${this.getProviderSuffix(form.values.provider)}`;
                     return (
                         <FormFieldGroup title={title} name={name} field={field} form={form}>
                             <>
@@ -36,7 +42,7 @@ export default class DomainField extends React.PureComponent {
                                     {form.values.autoDomain ?
                                         (field.value ?
                                             <div className="domain-name">
-                                                <span className="hostname">{field.value}</span>.moera.blog
+                                                <span className="hostname">{field.value}</span>{suffix}
                                             </div>
                                         :
                                             <div className="domain-auto">Selected automatically</div>
@@ -54,7 +60,7 @@ export default class DomainField extends React.PureComponent {
                                                     })}
                                                 disabled={disabled}
                                             />
-                                            <div className="suffix">.moera.blog</div>
+                                            <div className="suffix">{suffix}</div>
                                         </>
                                     }
                                     <Button variant="outline-secondary" size="sm" onClick={this.onClick(form)}>

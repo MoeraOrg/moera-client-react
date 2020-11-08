@@ -14,9 +14,9 @@ export const cancelSignUpDialog = () => ({
 });
 
 export const SIGN_UP = "SIGN_UP";
-export const signUp = (name, domain, password, onError) => ({
+export const signUp = (provider, name, domain, password, onError) => ({
     type: SIGN_UP,
-    payload: {name, domain, password, onError}
+    payload: {provider, name, domain, password, onError}
 });
 
 export const SIGNED_UP = "SIGNED_UP";
@@ -37,7 +37,7 @@ export const signUpNameVerify = (name, onVerify) => ({
 });
 
 export const SIGN_UP_FIND_DOMAIN = "SIGN_UP_FIND_DOMAIN";
-export const signUpFindDomain = (name, onFound) => ({
+export const signUpFindDomain = (provider, name, onFound) => ({
     type: SIGN_UP_FIND_DOMAIN,
-    payload: {name, onFound}
+    payload: {provider, name, onFound}
 });

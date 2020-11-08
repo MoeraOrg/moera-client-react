@@ -15,13 +15,23 @@ import {
     signUpNameVerify
 } from "state/signupdialog/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
-import { InputField } from "ui/control/field";
+import { InputField, SelectField } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
+import { Browser } from "api";
+import PROVIDERS from "providers";
 
 class SignUpDialog extends React.PureComponent {
 
+    #providerSelectDom;
     #nameInputDom;
     #lastVerifiedName = null;
+
+    setProviderSelectRef = dom => {
+        this.#providerSelectDom = dom;
+        if (this.#providerSelectDom) {
+            this.#providerSelectDom.addEventListener("click", this.onProviderChange);
+        }
+    }
 
     setNameInputRef = dom => {
         this.#nameInputDom = dom;
@@ -32,6 +42,9 @@ class SignUpDialog extends React.PureComponent {
     }
 
     componentWillUnmount() {
+        if (this.#providerSelectDom) {
+            this.#providerSelectDom.removeEventListener("click", this.onProviderChange);
+        }
         if (this.#nameInputDom) {
             this.#nameInputDom.removeEventListener("input", this.onNameInput);
             this.#nameInputDom.removeEventListener("blur", this.onNameBlur);
@@ -46,6 +59,11 @@ class SignUpDialog extends React.PureComponent {
         }
     }
 
+    onProviderChange = () => {
+        this.verifyName(this.props.values.name);
+        this.verifyName.flush();
+    }
+
     onNameInput = event => {
         this.verifyName(event.target.value);
     };
@@ -56,26 +74,33 @@ class SignUpDialog extends React.PureComponent {
     };
 
     verifyName = debounce(name => {
-        if (this.#lastVerifiedName === name) {
+        const {values, setFieldValue, setFieldError, signUpNameVerify, signUpFindDomain} = this.props;
+
+        if (this.#lastVerifiedName === `${values.provider};${name}`) {
             return;
         }
-        this.#lastVerifiedName = name;
+        this.#lastVerifiedName = `${values.provider};${name}`;
         if (!name || name.length > Rules.NAME_MAX_LENGTH || !Rules.isNameValid(name)) {
-            this.props.setFieldValue("domain", "");
+            setFieldValue("domain", "");
             return;
         }
-        this.props.signUpNameVerify(name, (name, free) => {
-            if (name === this.props.values.name && !free) {
-                this.props.setFieldError("name", "Name is already taken");
+        signUpNameVerify(name, (provider, name, free) => {
+            if (name === values.name && !free) {
+                setFieldError("name", "Name is already taken");
             }
         });
-        this.props.signUpFindDomain(name, (name, domainName) => {
-            if (name === this.props.values.name) {
+        signUpFindDomain(values.provider, name, (provider, name, domainName) => {
+            if (name === values.name && provider === values.provider) {
                 const i = domainName.indexOf(".");
-                this.props.setFieldValue("domain", i > 0 ? domainName.substring(0, i) : domainName);
+                setFieldValue("domain", i > 0 ? domainName.substring(0, i) : domainName);
             }
         });
     }, 500);
+
+    getProviders() {
+        const providers = Browser.isDevMode() ? PROVIDERS : PROVIDERS.filter(p => !p.dev);
+        return providers.map(p => ({title: p.title, value: p.name}));
+    }
 
     render() {
         const {show, processing, stage, cancelSignUpDialog} = this.props;
@@ -88,6 +113,9 @@ class SignUpDialog extends React.PureComponent {
             <ModalDialog title="Create a Blog" onClose={cancelSignUpDialog}>
                 <Form>
                     <div className="modal-body sign-up-dialog">
+                        <SelectField name="provider" title="Provider" choices={this.getProviders()} anyValue
+                                     disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
+                                     selectRef={this.setProviderSelectRef}/>
                         <InputField name="name" title="Name" autoFocus inputRef={this.setNameInputRef}
                                     disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
                         <NameHelp/>
@@ -113,6 +141,7 @@ const signUpDialogLogic = {
 
     mapPropsToValues(props) {
         return {
+            provider: props.provider ?? (Browser.isDevMode() ? "local" : "moera.blog"),
             name: props.name ?? "",
             domain: props.domain ?? "",
             autoDomain: !props.domain,
@@ -141,8 +170,8 @@ const signUpDialogLogic = {
     }),
 
     handleSubmit(values, formik) {
-        formik.props.signUp(values.name.trim(), values.autoDomain ? null : values.domain.trim(), values.password,
-            (fieldName, message) => formik.setFieldError(fieldName, message));
+        formik.props.signUp(values.provider, values.name.trim(), values.autoDomain ? null : values.domain.trim(),
+            values.password, (fieldName, message) => formik.setFieldError(fieldName, message));
         formik.setSubmitting(false);
     }
 

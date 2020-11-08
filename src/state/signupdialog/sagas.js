@@ -13,24 +13,22 @@ import { errorThrown } from "state/error/actions";
 import { connectedToHome } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import { rootUrl } from "util/misc";
+import PROVIDERS from "providers";
 
-const PROVIDER_SCHEME = "https";
-const PROVIDER_DOMAIN = "moera.blog";
-const PROVIDER_PORT = 0;
-// const PROVIDER_SCHEME = "http";
-// const PROVIDER_DOMAIN = "localhost.localdomain";
-// const PROVIDER_PORT = 8082;
+function getProvider(name) {
+    return PROVIDERS.find(p => p.name === name);
+}
 
 export function* signUpSaga(action) {
-    const {name, domain, password, onError} = action.payload;
+    const {provider: providerName, name, domain, password, onError} = action.payload;
 
     const stage = yield select(state => state.signUpDialog.stage);
-    const providerLocation = rootUrl(PROVIDER_SCHEME, PROVIDER_DOMAIN, PROVIDER_PORT);
+    const provider = getProvider(providerName);
 
     let nodeDomainName;
     if (!domain) {
         try {
-            const domain = yield call(Node.getDomainAvailable, providerLocation, name);
+            const domain = yield call(Node.getDomainAvailable, provider.controller, name);
             nodeDomainName = domain.name;
         } catch (e) {
             yield put(signUpFailed(SIGN_UP_STAGE_DOMAIN));
@@ -42,12 +40,12 @@ export function* signUpSaga(action) {
             return;
         }
     } else {
-        nodeDomainName = domain + "." + PROVIDER_DOMAIN;
+        nodeDomainName = domain + "." + provider.domain;
     }
 
     if (stage <= SIGN_UP_STAGE_DOMAIN) {
         try {
-            yield call(Node.createDomain, providerLocation, nodeDomainName);
+            yield call(Node.createDomain, provider.controller, nodeDomainName);
         } catch (e) {
             yield put(signUpFailed(SIGN_UP_STAGE_DOMAIN));
             if (e instanceof NodeApiError) {
@@ -59,7 +57,7 @@ export function* signUpSaga(action) {
         }
     }
 
-    const rootLocation = rootUrl(PROVIDER_SCHEME, nodeDomainName, PROVIDER_PORT);
+    const rootLocation = rootUrl(provider.scheme, nodeDomainName, provider.port);
     const login = "admin";
 
     if (stage <= SIGN_UP_STAGE_PASSWORD) {
@@ -122,14 +120,21 @@ export function* signUpSaga(action) {
 export function* signUpNameVerifySaga(action) {
     const {name, onVerify} = action.payload;
 
-    const free = yield call(Naming.isFree, name);
-    onVerify(name, free);
+    try {
+        const free = yield call(Naming.isFree, name);
+        onVerify(name, free);
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
 }
 
 export function* signUpFindDomainSaga(action) {
-    const {name, onFound} = action.payload;
+    const {provider, name, onFound} = action.payload;
 
-    const rootLocation = rootUrl(PROVIDER_SCHEME, PROVIDER_DOMAIN, PROVIDER_PORT);
-    const domain = yield call(Node.getDomainAvailable, rootLocation, name);
-    onFound(name, domain.name);
+    try {
+        const domain = yield call(Node.getDomainAvailable, getProvider(provider).controller, name);
+        onFound(provider, name, domain.name);
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
 }

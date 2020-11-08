@@ -29,6 +29,8 @@ export class SelectField extends React.PureComponent {
         noFeedback: PropType.bool,
         initialValue: PropType.string,
         defaultValue: PropType.string,
+        disabled: PropType.bool,
+        selectRef: PropType.func
     };
 
     constructor(props, context) {
@@ -46,7 +48,7 @@ export class SelectField extends React.PureComponent {
     render() {
         const {
             name, title, horizontal = false, groupClassName, labelClassName, col, size, choices, multiple, anyValue,
-            className, autoComplete, noFeedback = false, initialValue, defaultValue
+            className, autoComplete, noFeedback = false, initialValue, defaultValue, disabled, selectRef
         } = this.props;
 
         return (
@@ -80,7 +82,13 @@ export class SelectField extends React.PureComponent {
                                         })}
                                     multiple={multiple}
                                     autoComplete={autoComplete}
-                                    ref={dom => this.inputDom = dom}
+                                    disabled={disabled}
+                                    ref={dom => {
+                                        this.inputDom = dom;
+                                        if (selectRef != null) {
+                                            selectRef(dom);
+                                        }
+                                    }}
                                 >
                                     {choices.map(c => <option key={c.value} value={c.value}>{c.title}</option>)}
                                 </select>
