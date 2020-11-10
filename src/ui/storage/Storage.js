@@ -17,7 +17,7 @@ class Storage extends React.PureComponent {
             window.postMessage({
                 source: "moera",
                 action: "loadData",
-            }, "*");
+            }, window.location.href);
         }
     }
 

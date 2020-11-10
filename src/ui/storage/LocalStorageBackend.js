@@ -110,7 +110,7 @@ class LocalStorageBackend extends React.PureComponent {
                 version: 2,
                 ...this.buildData(homeRoot, clientData, roots, names)
             }
-        }, "*");
+        }, window.location.href);
     }
 
     transferredData = (homeRoot, clientData, roots, names) => {
@@ -118,7 +118,7 @@ class LocalStorageBackend extends React.PureComponent {
             source: "moera",
             action: "transferredData",
             payload: this.buildData(homeRoot, clientData, roots, names)
-        }, "*");
+        }, window.location.href);
     }
 
     redirect = (homeRoot) => {

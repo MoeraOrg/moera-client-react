@@ -96,7 +96,7 @@ export class Browser {
                 ...data,
                 clientId: Browser.clientId
             }
-        }, "*");
+        }, window.location.href);
     }
 
     static storeConnectionData(location, nodeName, login, token, permissions) {
@@ -112,7 +112,7 @@ export class Browser {
             source: "moera",
             action: "deleteData",
             payload: location
-        }, "*");
+        }, window.location.href);
     }
 
     static switchData(location) {
@@ -120,7 +120,7 @@ export class Browser {
             source: "moera",
             action: "switchData",
             payload: location
-        }, "*");
+        }, window.location.href);
     }
 
     static storeName(name, latest, nodeUri) {
@@ -128,7 +128,7 @@ export class Browser {
             source: "moera",
             action: "storeName",
             payload: {name, latest, nodeUri}
-        }, "*");
+        }, window.location.href);
     }
 
 }
