@@ -1,6 +1,8 @@
 import React from 'react';
 import ObjectPath from 'object-path';
 
+import { Browser } from "api";
+
 const NAME_TTL = 6 * 60 * 60; // seconds
 const MAX_NAMES_SIZE = 500;
 
@@ -23,9 +25,16 @@ class LocalStorageBackend extends React.PureComponent {
             return;
         }
 
+        console.log(message);
         switch (message.action) {
             case "loadData":
-                this.loadData();
+                this.loadData(this.loadedData);
+                break;
+            case "transferData":
+                this.loadData(this.transferredData);
+                break;
+            case "redirect":
+                this.loadData(this.redirect);
                 break;
             case "storeData":
                 this.storeData(message.payload);
@@ -79,7 +88,7 @@ class LocalStorageBackend extends React.PureComponent {
         return this.getStorageItem("names") ?? [];
     }
 
-    loadedData(homeRoot, clientData, roots, names) {
+    buildData(homeRoot, clientData, roots, names) {
         let data = {};
         if (homeRoot) {
             data = {...clientData};
@@ -91,26 +100,47 @@ class LocalStorageBackend extends React.PureComponent {
         if (names != null) {
             data = {...data, names}
         }
+        return data;
+    }
+
+    loadedData = (homeRoot, clientData, roots, names) => {
         window.postMessage({
             source: "moera",
             action: "loadedData",
             payload: {
                 version: 2,
-                ...data
+                ...this.buildData(homeRoot, clientData, roots, names)
             }
         }, "*");
     }
 
-    loadData() {
+    transferredData = (homeRoot, clientData, roots, names) => {
+        window.postMessage({
+            source: "moera",
+            action: "transferredData",
+            payload: this.buildData(homeRoot, clientData, roots, names)
+        }, "*");
+    }
+
+    redirect = (homeRoot) => {
+        const location = Browser.getDocumentPassedLocation().rootLocation;
+        if (location) {
+            window.location.href = location;
+        } else if (homeRoot) {
+            window.location.href = homeRoot;
+        }
+    }
+
+    loadData(sender) {
         const homeRoot = this.getStorageItem("currentRoot");
         const roots = this.getStorageItem("roots");
         if (!homeRoot) {
-            this.loadedData();
+            sender();
             return;
         }
         const clientData = this.getStorageItem(`clientData;${homeRoot}`);
         ObjectPath.set(clientData, "home.nodeName", this.getRootName(roots, homeRoot));
-        this.loadedData(homeRoot, clientData, roots, this.getNames());
+        sender(homeRoot, clientData, roots, this.getNames());
     }
 
     storeData(data) {

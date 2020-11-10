@@ -41,14 +41,12 @@ function* transformation(srcPath, srcQuery, srcHash, dstPath, dstQuery, dstHash)
     yield put(locationUnlock());
 }
 
-export function initStorageSaga(action) {
-    if (!action.payload.standalone) {
-        try {
-            // Call the browser extension to inject communication code
-            fetch("https://moera.please.start.communication/");
-        } catch (e) {
-            // The request must fail
-        }
+export function initStorageSaga() {
+    try {
+        // Call the browser extension to inject communication code
+        fetch("https://moera.please.start.communication/");
+    } catch (e) {
+        // The request must fail
     }
 }
 

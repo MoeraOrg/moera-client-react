@@ -51,11 +51,11 @@ const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openC
     );
 }
 
-const ConnectionStatus = ({connecting,  connected, showNavigator, openConnectDialog}) => (
+const ConnectionStatus = ({atNode, connecting,  connected, showNavigator, openConnectDialog}) => (
     <>
         <div id="connection-status">
-            <ConnectionButtons connecting={connecting} connected={connected} showNavigator={showNavigator}
-                               openConnectDialog={openConnectDialog}/>
+            <ConnectionButtons atNode={atNode} connecting={connecting} connected={connected}
+                               showNavigator={showNavigator} openConnectDialog={openConnectDialog}/>
         </div>
         <ConnectDialog />
     </>
