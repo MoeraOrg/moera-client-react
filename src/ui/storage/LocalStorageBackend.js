@@ -25,7 +25,6 @@ class LocalStorageBackend extends React.PureComponent {
             return;
         }
 
-        console.log(message);
         switch (message.action) {
             case "loadData":
                 this.loadData(this.loadedData);
