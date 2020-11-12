@@ -33,6 +33,10 @@ export function getCommentsReceiverPostingId(state) {
     return getCommentsState(state).receiverPostingId;
 }
 
+export function isCommentsReceiverPostingId(state, id) {
+    return getCommentsState(state).receiverPostingId === id;
+}
+
 export function isCommentsReceiverToBeSwitched(state) {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);

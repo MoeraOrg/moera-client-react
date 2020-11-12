@@ -31,6 +31,7 @@ import {
     getCommentsReceiverPostingId,
     isCommentDialogShown,
     isCommentMomentInLoadedRange,
+    isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
     isDetailedPostingId,
     isDetailedPostingToBeLoaded,
@@ -96,12 +97,14 @@ export default [
     ),
     trigger(
         COMMENT_POSTED,
-        (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.postingId),
+        (state, signal) => isAtDetailedPostingPage(state)
+            && isCommentsReceiverPostingId(state, signal.payload.postingId),
         updateLocation
     ),
     trigger(
         COMMENT_POSTED,
-        (state, signal) => isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.postingId),
+        (state, signal) => isAtDetailedPostingPage(state)
+            && isCommentsReceiverPostingId(state, signal.payload.postingId),
         signal => commentsScrollToAnchor(signal.payload.moment)
     ),
     trigger(
