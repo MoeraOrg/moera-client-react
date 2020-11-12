@@ -1,10 +1,15 @@
 #owner-name {
-    border: var(--dark) 0.1rem solid;
-    border-radius: 0.25rem;
-    margin-right: 0.7rem;
+    border: var(--dark) .1rem solid;
+    border-radius: .25rem;
     text-decoration: none;
-    padding: 0.5rem;
+    padding: .5rem;
     cursor: text;
+}
+
+@media only screen and (min-width: 576px) {
+    #owner-name {
+        margin-right: .7rem;
+    }
 }
 
 #owner-name:hover {
@@ -25,6 +30,6 @@
 
 .owner-name-expiring {
     color: gold;
-    margin-left: -0.5rem;
-    margin-right: 0.5rem;
+    margin-left: -.5rem;
+    margin-right: .5rem;
 }
