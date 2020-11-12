@@ -1,4 +1,11 @@
-import { GO_TO_PAGE, INIT_STORAGE, LOCATION_LOCK, LOCATION_SET, LOCATION_UNLOCK } from "state/navigation/actions";
+import {
+    GO_TO_PAGE,
+    INIT_FROM_LOCATION,
+    INIT_STORAGE,
+    LOCATION_LOCK,
+    LOCATION_SET,
+    LOCATION_UNLOCK
+} from "state/navigation/actions";
 import { PAGE_TIMELINE } from "state/navigation/pages";
 
 const initialState = {
@@ -17,6 +24,15 @@ export default (state = initialState, action) => {
                 ...state,
                 standalone: action.payload.standalone
             };
+
+        case INIT_FROM_LOCATION: {
+            let {path, query, hash} = action.payload;
+            path = path.startsWith("/moera") ? path.substring(6) : path;
+            return {
+                ...state,
+                location: `${path}${query}${hash}`
+            };
+        }
 
         case GO_TO_PAGE:
             return {
