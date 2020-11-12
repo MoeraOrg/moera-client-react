@@ -87,7 +87,7 @@ export function isCommentsReadyToBeLoaded(state) {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     return ownerName != null && posting != null && !isCommentsReceiverToBeSwitched(state)
-        && isFocusedCommentReady(state) && !isCommentComposerFocused(state);
+        && isFocusedCommentReady(state);
 }
 
 export function isFutureCommentsToBeLoaded(state) {

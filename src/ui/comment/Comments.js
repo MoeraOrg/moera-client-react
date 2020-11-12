@@ -9,7 +9,8 @@ import {
     commentsScrolledToComposer
 } from "state/detailedposting/actions";
 import {
-    getCommentsState, getDetailedPosting,
+    getCommentsState,
+    getDetailedPosting,
     getDetailedPostingId,
     isCommentComposerFocused,
     isCommentsFocused
@@ -94,7 +95,7 @@ class Comments extends React.PureComponent {
                 return parseInt(comments.item(i).dataset.moment);
             }
         }
-        return null;
+        return Number.MAX_SAFE_INTEGER;
     }
 
     static getCommentAt(moment) {
