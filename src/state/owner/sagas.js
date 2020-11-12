@@ -58,7 +58,11 @@ export function* ownerSwitchSaga(action) {
         }
         if (info && info.nodeUri) {
             if (!standalone) {
-                window.location = info.nodeUri;
+                try {
+                    window.location = info.nodeUri;
+                } catch (e) {
+                    throw new Error("Node location is incorrect: " + info.nodeUri);
+                }
             } else {
                 const {scheme, host, port, path} = URI.parse(info.nodeUri);
                 const rootLocation = rootUrl(scheme, host, port);
