@@ -43,11 +43,23 @@
 }
 
 .draft-selector .dropdown-item .content {
-    max-width: 25em;
     white-space: normal;
     width: max-content;
     max-height: 5em;
     overflow-y: hidden;
+    overflow-wrap: break-word;
+}
+
+@media only screen and (min-width: 576px) {
+    .draft-selector .dropdown-item .content {
+        max-width: 25em;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .draft-selector .dropdown-item .content {
+        max-width: calc(100vw - 6rem);
+    }
 }
 
 .draft-selector .dropdown-item .edited {
