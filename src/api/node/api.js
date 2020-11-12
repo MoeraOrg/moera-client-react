@@ -1030,6 +1030,10 @@ export const CommentsSliceInfo = schema({
             type: "array",
             items: CommentInfoType
         },
+        "total": {
+            type: "integer",
+            default: null
+        },
         "totalInPast": {
             type: "integer"
         },

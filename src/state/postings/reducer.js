@@ -28,6 +28,7 @@ import { findPostingIdByRemote } from "state/postings/selectors";
 import { immutableSetSubscriptionId } from "state/subscriptions/util";
 import { safeHtml, safePreviewHtml } from "util/html";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
+import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
 
 const initialState = {
 };
@@ -217,6 +218,21 @@ export default (state = initialState, action) => {
             const id = findPostingIdByRemote(state, remoteNodeName, remotePostingId);
             if (id != null) {
                 return immutableSetSubscriptionId(state, id, type, subscriberId);
+            }
+            return state;
+        }
+
+        case COMMENTS_PAST_SLICE_SET:
+        case COMMENTS_FUTURE_SLICE_SET: {
+            const {nodeName, postingId, total} = action.payload;
+            if (total == null) {
+                return state;
+            }
+            const id = state[postingId] && state[postingId].posting.ownerName === nodeName
+                ? postingId
+                : findPostingIdByRemote(state, nodeName, postingId);
+            if (id != null) {
+                return immutable.set(state, [id, "posting", "totalComments"], total);
             }
             return state;
         }

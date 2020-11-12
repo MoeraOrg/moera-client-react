@@ -75,14 +75,14 @@ export function* commentsLoadAllSaga() {
         while (after > Number.MIN_SAFE_INTEGER) {
             const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, null, after, 20);
             yield put(commentsPastSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
-                data.totalInPast, data.totalInFuture));
+                data.total, data.totalInPast, data.totalInFuture));
             // TODO yield call(cacheNames, data.stories);
             after = data.after;
         }
         while (before < Number.MAX_SAFE_INTEGER) {
             const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
             yield put(commentsFutureSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
-                data.totalInPast, data.totalInFuture));
+                data.total, data.totalInPast, data.totalInFuture));
             // TODO yield call(cacheNames, data.stories);
             before = data.before;
         }
@@ -96,7 +96,7 @@ export function* commentsPastSliceLoadSaga() {
     try {
         const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, null, after, 20);
         yield put(commentsPastSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
-            data.totalInPast, data.totalInFuture));
+            data.total, data.totalInPast, data.totalInFuture));
         // TODO yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(commentsPastSliceLoadFailed(receiverName, receiverPostingId));
@@ -109,7 +109,7 @@ export function* commentsFutureSliceLoadSaga() {
     try {
         const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
         yield put(commentsFutureSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
-            data.totalInPast, data.totalInFuture));
+            data.total, data.totalInPast, data.totalInFuture));
         // TODO yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId));
