@@ -10,7 +10,7 @@ import VerticalMenuToggler from "ui/mainmenu/vertical/VerticalMenuToggler";
 import "./MainMenu.css";
 
 const MainMenu = ({atNode}) => (
-    <nav id="main-menu" className="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
+    <nav id="main-menu" className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
         <Logo/>
         {atNode ?
             <>

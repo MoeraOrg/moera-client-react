@@ -28,7 +28,7 @@ const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openC
             return null;
         }
         return (
-            <span className="d-none d-md-inline">
+            <span className="d-none d-lg-inline">
                 Not connected to home
                 <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
             </span>
@@ -36,12 +36,12 @@ const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openC
     }
     return (
         <>
-            <span className="d-none d-md-inline">
+            <span className="d-none d-lg-inline">
                 <NewPostButton/>
             </span>
             <NewsButton/>
             <InstantButton/>
-            <span className="d-none d-md-inline">
+            <span className="d-none d-lg-inline">
                 <SettingsButton/>
                 <HomeButton/>
                 <ConnectionsButton/>
