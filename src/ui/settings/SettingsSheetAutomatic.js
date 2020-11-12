@@ -45,7 +45,7 @@ class SettingsSheetAutomatic extends React.PureComponent {
             return "none";
         }
         const topHeight = sheetElement.getBoundingClientRect().top + window.scrollY;
-        const bottomHeight = buttonsElement.getBoundingClientRect().height + 10;
+        const bottomHeight = buttonsElement.getBoundingClientRect().height + 40;
         const maxHeight = window.innerHeight - topHeight - bottomHeight;
         return `${maxHeight}px`;
     }

@@ -23,7 +23,7 @@ const SettingsMenu = ({tab, sheet, settingsGoToSheet}) => {
     const items = MENU_ITEMS[tab] ? MENU_ITEMS[tab] : MENU_ITEMS["node"];
     sheet = items[sheet] ? sheet : Object.keys(items)[0];
     return (
-        <ul className="nav nav-pills flex-column col-md-2 settings-menu">{
+        <ul className="nav nav-pills flex-md-column col-md-2 settings-menu">{
             Object.keys(items).map(s =>
                 <li className="nav-item" key={s}>
                     <span className={cx("nav-link", {"active": s === sheet})} onClick={() => settingsGoToSheet(s)}>{

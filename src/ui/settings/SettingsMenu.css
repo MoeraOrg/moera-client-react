@@ -1,3 +1,9 @@
+@media only screen and (max-width: 575px) {
+    .settings-menu {
+        margin-bottom: 1.5rem;
+    }
+}
+
 .settings-menu .nav-link.active:hover {
     background-color: var(--primary);
 }
