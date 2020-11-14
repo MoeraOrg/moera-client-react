@@ -10,6 +10,7 @@ import GlanceComment from "ui/comment/GlanceComment";
 import { glanceComment } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
 import "./RepliedTo.css";
+import { Browser } from "api";
 
 class RepliedTo extends React.PureComponent {
 
@@ -67,7 +68,7 @@ class RepliedTo extends React.PureComponent {
 
 export default connect(
     state => ({
-        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled")
+        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled") && !Browser.isTinyScreen()
     }),
     { glanceComment }
 )(RepliedTo);
