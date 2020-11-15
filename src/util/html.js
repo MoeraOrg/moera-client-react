@@ -28,7 +28,7 @@ export function safePreviewHtml(html) {
     }
     return sanitizeHtml(replaceEmojis(html), {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            "img", "del", "ins", "sub", "details", "summary", "mr-spoiler"
+            "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe"
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
@@ -68,7 +68,7 @@ export function safeHtml(html) {
     }
     return sanitizeHtml(replaceEmojis(html), {
         allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            "h1", "h2", "img", "del", "ins", "sub", "details", "summary", "mr-spoiler"
+            "h1", "h2", "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe"
         ]),
         allowedAttributes: {
             ...sanitizeHtml.defaults.allowedAttributes,
