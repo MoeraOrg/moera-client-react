@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
             path = path.startsWith("/moera") ? path.substring(6) : path;
             return {
                 ...state,
-                location: `${path}${query}${hash}`
+                location: path + (query ?? "") + (hash ?? "")
             };
         }
 
