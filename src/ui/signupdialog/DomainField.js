@@ -15,11 +15,18 @@ export default class DomainField extends React.PureComponent {
         name: PropType.string,
         title: PropType.string,
         wrapper: PropType.string,
-        disabled: PropType.bool
+        disabled: PropType.bool,
+        onAutoChange: PropType.func
     };
 
     onClick = form => () => {
-        form.setFieldValue("autoDomain", !form.values.autoDomain);
+        const {onAutoChange} = this.props;
+
+        const auto = !form.values.autoDomain;
+        form.setFieldValue("autoDomain", auto);
+        if (onAutoChange) {
+            onAutoChange(auto);
+        }
     }
 
     getProviderSuffix(provider) {

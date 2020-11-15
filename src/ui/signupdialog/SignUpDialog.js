@@ -73,13 +73,18 @@ class SignUpDialog extends React.PureComponent {
         this.verifyName.flush();
     };
 
+    onAutoDomainChange = auto => {
+        this.verifyName(this.props.values.name);
+    }
+
     verifyName = debounce(name => {
         const {values, setFieldValue, setFieldTouched, signUpNameVerify, signUpFindDomain} = this.props;
 
-        if (this.#lastVerifiedName === `${values.provider};${name}`) {
+        const verifiedName = `${values.provider};${values.autoDomain};${name}`;
+        if (this.#lastVerifiedName === verifiedName) {
             return;
         }
-        this.#lastVerifiedName = `${values.provider};${name}`;
+        this.#lastVerifiedName = verifiedName;
         if (!name || name.length > Rules.NAME_MAX_LENGTH || !Rules.isNameValid(name)) {
             setFieldValue("domain", "");
             return;
@@ -88,12 +93,14 @@ class SignUpDialog extends React.PureComponent {
             setFieldValue("nameTaken", free ? null : name);
             setFieldTouched("name", true, true);
         });
-        signUpFindDomain(values.provider, name, (provider, name, domainName) => {
-            if (name === values.name && provider === values.provider) {
-                const i = domainName.indexOf(".");
-                setFieldValue("domain", i > 0 ? domainName.substring(0, i) : domainName);
-            }
-        });
+        if (values.autoDomain) {
+            signUpFindDomain(values.provider, name, (provider, name, domainName) => {
+                if (name === values.name && provider === values.provider) {
+                    const i = domainName.indexOf(".");
+                    setFieldValue("domain", i > 0 ? domainName.substring(0, i) : domainName);
+                }
+            });
+        }
     }, 500);
 
     getProviders() {
@@ -119,7 +126,8 @@ class SignUpDialog extends React.PureComponent {
                                     disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
                         <NameHelp/>
                         <DomainField name="domain" title="Domain"
-                                     disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}/>
+                                     disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
+                                     onAutoChange={this.onAutoDomainChange}/>
                         <InputField name="password" title="New password"
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
                         <InputField name="confirmPassword" title="Confirm password"
