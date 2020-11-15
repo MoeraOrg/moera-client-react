@@ -74,7 +74,7 @@ class SignUpDialog extends React.PureComponent {
     };
 
     verifyName = debounce(name => {
-        const {values, setFieldValue, setFieldError, signUpNameVerify, signUpFindDomain} = this.props;
+        const {values, setFieldValue, setFieldTouched, signUpNameVerify, signUpFindDomain} = this.props;
 
         if (this.#lastVerifiedName === `${values.provider};${name}`) {
             return;
@@ -84,10 +84,9 @@ class SignUpDialog extends React.PureComponent {
             setFieldValue("domain", "");
             return;
         }
-        signUpNameVerify(name, (provider, name, free) => {
-            if (name === values.name && !free) {
-                setFieldError("name", "Name is already taken");
-            }
+        signUpNameVerify(name, (name, free) => {
+            setFieldValue("nameTaken", free ? null : name);
+            setFieldTouched("name", true, true);
         });
         signUpFindDomain(values.provider, name, (provider, name, domainName) => {
             if (name === values.name && provider === values.provider) {
@@ -143,6 +142,7 @@ const signUpDialogLogic = {
         return {
             provider: props.provider ?? (Browser.isDevMode() ? "local" : "moera.blog"),
             name: props.name ?? "",
+            nameTaken: null,
             domain: props.domain ?? "",
             autoDomain: !props.domain,
             password: props.password ?? "",
@@ -152,7 +152,8 @@ const signUpDialogLogic = {
 
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
-            .test("is-allowed", "Not allowed", Rules.isNameValid),
+            .test("is-allowed", "Not allowed", Rules.isNameValid)
+            .when("nameTaken", (nameTaken, schema) => schema.notOneOf([nameTaken], "Name is already taken")),
         domain: yup.string()
             .when("autoDomain", {
                 is: true,
