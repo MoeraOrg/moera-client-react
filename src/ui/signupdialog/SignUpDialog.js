@@ -11,6 +11,7 @@ import {
     SIGN_UP_STAGE_NAME,
     SIGN_UP_STAGE_PASSWORD,
     signUp,
+    signUpDomainVerify,
     signUpFindDomain,
     signUpNameVerify
 } from "state/signupdialog/actions";
@@ -25,6 +26,7 @@ class SignUpDialog extends React.PureComponent {
     #providerSelectDom;
     #nameInputDom;
     #lastVerifiedName = null;
+    #lastVerifiedDomain = null;
 
     setProviderSelectRef = dom => {
         this.#providerSelectDom = dom;
@@ -73,6 +75,15 @@ class SignUpDialog extends React.PureComponent {
         this.verifyName.flush();
     };
 
+    onDomainInput = domain => {
+        this.verifyDomain(domain);
+    };
+
+    onDomainBlur = domain => {
+        this.verifyDomain(domain);
+        this.verifyDomain.flush();
+    };
+
     onAutoDomainChange = auto => {
         this.verifyName(this.props.values.name);
     }
@@ -103,6 +114,20 @@ class SignUpDialog extends React.PureComponent {
         }
     }, 500);
 
+    verifyDomain = debounce(domain => {
+        const {values, setFieldValue, setFieldTouched, signUpDomainVerify} = this.props;
+
+        const verifiedDomain = `${values.provider};${domain}`;
+        if (this.#lastVerifiedDomain === verifiedDomain) {
+            return;
+        }
+        this.#lastVerifiedDomain = verifiedDomain;
+        signUpDomainVerify(values.provider, domain, (domain, free) => {
+            setFieldValue("domainTaken", free ? null : domain);
+            setFieldTouched("domain", true, true);
+        });
+    }, 500);
+
     getProviders() {
         const providers = Browser.isDevMode() ? PROVIDERS : PROVIDERS.filter(p => !p.dev);
         return providers.map(p => ({title: p.title, value: p.name}));
@@ -127,6 +152,7 @@ class SignUpDialog extends React.PureComponent {
                         <NameHelp/>
                         <DomainField name="domain" title="Domain"
                                      disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
+                                     onDomainInput={this.onDomainInput} onDomainBlur={this.onDomainBlur}
                                      onAutoChange={this.onAutoDomainChange}/>
                         <InputField name="password" title="New password"
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
@@ -152,6 +178,7 @@ const signUpDialogLogic = {
             name: props.name ?? "",
             nameTaken: null,
             domain: props.domain ?? "",
+            domainTaken: null,
             autoDomain: !props.domain,
             password: props.password ?? "",
             confirmPassword: props.password ?? ""
@@ -170,6 +197,8 @@ const signUpDialogLogic = {
                     .required("Must not be empty")
                     .min(4, "Too short, should be 4 characters at least")
                     .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "Not allowed")
+                    .when("domainTaken",
+                        (domainTaken, schema) => schema.notOneOf([domainTaken], "Domain is already taken")),
             }),
         password: yup.string().required("Must not be empty"),
         confirmPassword: yup.string().when("password",
@@ -190,5 +219,5 @@ export default connect(
     state => ({
         ...state.signUpDialog
     }),
-    { cancelSignUpDialog, signUp, signUpNameVerify, signUpFindDomain }
+    { cancelSignUpDialog, signUp, signUpNameVerify, signUpFindDomain, signUpDomainVerify }
 )(withFormik(signUpDialogLogic)(SignUpDialog));

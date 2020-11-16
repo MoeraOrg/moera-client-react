@@ -10,7 +10,14 @@ export function* createDomain(nodeName, name) {
         errorFilter: ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]});
 }
 
+export function* getDomain(nodeName, name) {
+    name = encodeURIComponent(name);
+    return yield call(callApi, {nodeName, location: `/domains/${name}`, schema: NodeApi.DomainInfo,
+        errorFilter: ["domain.not-found"]});
+}
+
 export function* getDomainAvailable(nodeName, name) {
+    name = encodeURIComponent(name);
     return yield call(callApi, {
         nodeName, location: `/domains/available?nodeName=${name}`, schema: NodeApi.DomainAvailable
     });

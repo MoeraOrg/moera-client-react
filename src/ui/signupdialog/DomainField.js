@@ -16,10 +16,45 @@ export default class DomainField extends React.PureComponent {
         title: PropType.string,
         wrapper: PropType.string,
         disabled: PropType.bool,
+        onDomainInput: PropType.func,
+        onDomainBlur: PropType.func,
         onAutoChange: PropType.func
     };
 
-    onClick = form => () => {
+    #inputDom;
+
+    setInputRef = dom => {
+        this.#inputDom = dom;
+        if (this.#inputDom) {
+            this.#inputDom.addEventListener("input", this.onInputInput);
+            this.#inputDom.addEventListener("blur", this.onInputBlur);
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.#inputDom) {
+            this.#inputDom.removeEventListener("input", this.onInputInput);
+            this.#inputDom.removeEventListener("blur", this.onInputBlur);
+        }
+    }
+
+    onInputInput = event => {
+        const {onDomainInput} = this.props;
+
+        if (onDomainInput) {
+            onDomainInput(event.target.value);
+        }
+    }
+
+    onInputBlur = event => {
+        const {onDomainBlur} = this.props;
+
+        if (onDomainBlur) {
+            onDomainBlur(event.target.value);
+        }
+    }
+
+    onAutoClick = form => () => {
         const {onAutoChange} = this.props;
 
         const auto = !form.values.autoDomain;
@@ -66,11 +101,12 @@ export default class DomainField extends React.PureComponent {
                                                         "is-invalid": touched && error,
                                                     })}
                                                 disabled={disabled}
+                                                ref={this.setInputRef}
                                             />
                                             <div className="suffix">{suffix}</div>
                                         </>
                                     }
-                                    <Button variant="outline-secondary" size="sm" onClick={this.onClick(form)}>
+                                    <Button variant="outline-secondary" size="sm" onClick={this.onAutoClick(form)}>
                                         {form.values.autoDomain ? "Change" : "Auto"}
                                     </Button>
                                 </div>

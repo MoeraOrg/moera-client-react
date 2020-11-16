@@ -41,3 +41,9 @@ export const signUpFindDomain = (provider, name, onFound) => ({
     type: SIGN_UP_FIND_DOMAIN,
     payload: {provider, name, onFound}
 });
+
+export const SIGN_UP_DOMAIN_VERIFY = "SIGN_UP_DOMAIN_VERIFY";
+export const signUpDomainVerify = (provider, name, onVerify) => ({
+    type: SIGN_UP_DOMAIN_VERIFY,
+    payload: {provider, name, onVerify}
+});

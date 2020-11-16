@@ -138,3 +138,20 @@ export function* signUpFindDomainSaga(action) {
         yield put(errorThrown(e));
     }
 }
+
+export function* signUpDomainVerifySaga(action) {
+    const {provider: providerName, name, onVerify} = action.payload;
+
+    const provider = getProvider(providerName);
+    const domain = name + "." + provider.domain;
+
+    try {
+        yield call(Node.getDomain, provider.controller, domain);
+        onVerify(name, false);
+    } catch (e) {
+        if (!(e instanceof NodeApiError)) {
+            yield put(errorThrown(e));
+        }
+        onVerify(name, true);
+    }
+}
