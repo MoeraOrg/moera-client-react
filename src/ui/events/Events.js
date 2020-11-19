@@ -13,7 +13,7 @@ class Events extends React.PureComponent {
     static propTypes = {
         location: PropType.string,
         token: PropType.string,
-        prefix: PropType.string,
+        prefix: PropType.oneOfType([PropType.arrayOf(PropType.string), PropType.string]),
         sourceNode: PropType.string,
         onWakeUp: PropType.func
     }
