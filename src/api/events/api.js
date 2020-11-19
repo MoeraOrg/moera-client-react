@@ -249,6 +249,7 @@ export const EVENT_SCHEMES = {
             type: "string"
         }
     }),
+    "PING": baseEvent(),
     "PROFILE_UPDATED": baseEvent(),
     "NODE_SETTINGS_CHANGED": baseEvent(),
     "CLIENT_SETTINGS_CHANGED": baseEvent(),
