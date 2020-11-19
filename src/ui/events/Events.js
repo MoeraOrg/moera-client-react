@@ -1,21 +1,28 @@
 import React from 'react';
+import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { Client } from '@stomp/stompjs';
 import * as URI from 'uri-js';
 
 import { ALLOWED_SELF_EVENTS, Browser, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
 import { eventAction } from "api/events/actions";
+import { now } from "util/misc";
 
 class Events extends React.PureComponent {
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.stomp = null;
-        this.location = null;
-        this.queueStartedAt = null;
-        this.lastEvent = null;
+    static propTypes = {
+        location: PropType.string,
+        token: PropType.string,
+        prefix: PropType.string,
+        sourceNode: PropType.string,
+        onWakeUp: PropType.func
     }
+
+    #stomp = null;
+    #location = null;
+    #queueStartedAt = null;
+    #lastEvent = null;
+    #lastEventSentAt = null;
 
     componentDidMount() {
         this._connect();
@@ -34,10 +41,11 @@ class Events extends React.PureComponent {
         if (location == null) {
             return;
         }
-        if (location !== this.location) {
-            this.location = location;
-            this.queueStartedAt = null;
-            this.lastEvent = null;
+        if (location !== this.#location) {
+            this.#location = location;
+            this.#queueStartedAt = null;
+            this.#lastEvent = null;
+            this.#lastEventSentAt = null;
         }
 
         const connectHeaders = {
@@ -46,27 +54,36 @@ class Events extends React.PureComponent {
         if (token != null) {
             connectHeaders["token"] = token;
         }
-        this.stomp = new Client({
+        this.#stomp = new Client({
             brokerURL: location,
             onConnect: this.onConnect,
             connectHeaders
         });
-        this.stomp.activate();
+        this.#stomp.activate();
     }
 
     _disconnect() {
-        if (this.stomp != null) {
-            this.stomp.deactivate();
-            this.stomp = null;
+        if (this.#stomp != null) {
+            this.#stomp.deactivate();
+            this.#stomp = null;
         }
     }
 
     onConnect = () => {
-        const headers = {};
-        if (this.queueStartedAt != null) {
-            headers.seen = `${this.queueStartedAt},${this.lastEvent}`;
+        const {onWakeUp} = this.props;
+
+        if (this.#lastEventSentAt != null && onWakeUp != null) {
+            const sleepTime = now() - this.#lastEventSentAt;
+            if (sleepTime > 10 * 60) { // 10 minutes
+                onWakeUp();
+            }
         }
-        this.stomp.subscribe("/user/queue", this.onMessage, headers);
+
+        const headers = {};
+        if (this.#queueStartedAt != null) {
+            headers.seen = `${this.#queueStartedAt},${this.#lastEvent}`;
+        }
+        this.#stomp.subscribe("/user/queue", this.onMessage, headers);
     };
 
     onMessage = message => {
@@ -93,8 +110,9 @@ class Events extends React.PureComponent {
             } else {
                 eventAction(packet.event, prefix);
             }
-            this.queueStartedAt = packet.queueStartedAt;
-            this.lastEvent = packet.ordinal;
+            this.#queueStartedAt = packet.queueStartedAt;
+            this.#lastEvent = packet.ordinal;
+            this.#lastEventSentAt = packet.sentAt;
         }
     };
 

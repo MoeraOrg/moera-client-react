@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 
 import Events from "ui/events/Events";
 import { getHomeOwnerName, getHomeToken } from "state/home/selectors";
+import { wakeUp } from "state/navigation/actions";
 
-const HomeEvents = ({homeEvents, token, sourceNode}) => (
-    <Events location={homeEvents} token={token} prefix="EVENT_HOME_" sourceNode={sourceNode}/>
+const HomeEvents = ({homeEvents, token, sourceNode, wakeUp}) => (
+    <Events location={homeEvents} token={token} prefix="EVENT_HOME_" sourceNode={sourceNode}
+            onWakeUp={() => wakeUp()}/>
 );
 
 export default connect(
@@ -13,5 +15,6 @@ export default connect(
         homeEvents: state.home.root.events,
         token: getHomeToken(state),
         sourceNode: getHomeOwnerName(state)
-    })
+    }),
+    { wakeUp }
 )(HomeEvents);

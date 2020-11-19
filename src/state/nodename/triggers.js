@@ -4,10 +4,10 @@ import { GO_TO_PAGE } from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
 import { isNodeNameToBeLoaded } from "state/nodename/selectors";
 import {
-    REGISTER_NAME_SUCCEEDED,
     NODE_NAME_UPDATE_SUCCEEDED,
     nodeNameLoad,
-    nodeNameUnset
+    nodeNameUnset,
+    REGISTER_NAME_SUCCEEDED
 } from "state/nodename/actions";
 import { EVENT_NODE_NODE_NAME_CHANGED, EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS } from "api/events/actions";
 import { isAtNode } from "state/node/selectors";

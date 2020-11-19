@@ -1,5 +1,5 @@
 import { inv, trigger } from "state/trigger";
-import { GO_TO_PAGE, updateLocation } from "state/navigation/actions";
+import { GO_TO_PAGE, updateLocation, WAKE_UP } from "state/navigation/actions";
 import { isAtTimelinePage } from "state/navigation/selectors";
 import {
     FEED_SCROLLED,
@@ -67,7 +67,7 @@ export default [
         inv(isAtTimelinePage),
         () => feedGeneralUnset("timeline")
     ),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, feedsUnset),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], true, feedsUnset),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),
     trigger(EVENT_NODE_STORY_ADDED, true, signal => storyAdded(toStory(signal.payload, false))),

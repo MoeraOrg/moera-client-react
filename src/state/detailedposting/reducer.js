@@ -3,7 +3,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
 import selectn from 'selectn';
 
-import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
+import { GO_TO_PAGE, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CLOSE_COMMENT_DIALOG,
@@ -150,6 +150,7 @@ function extractComment(comment) {
 export default (state = initialState, action) => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
+        case WAKE_UP:
             return cloneDeep(initialState);
 
         case GO_TO_PAGE: {

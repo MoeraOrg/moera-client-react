@@ -5,9 +5,10 @@ import { isConnectedToHome } from "state/home/selectors";
 import { isCartesIpChanged, isCartesToBeUpdated } from "state/cartes/selectors";
 import { CONNECTED_TO_HOME } from "state/home/actions";
 import { EVENT_HOME_SUBSCRIBED } from "api/events/actions";
+import { WAKE_UP } from "state/navigation/actions";
 
 export default [
     trigger([CONNECTED_TO_HOME, EVENT_HOME_SUBSCRIBED], isCartesIpChanged, cartesLoad),
     trigger(PULSE_1MIN, true, cartesPurgeExpired),
-    trigger(PULSE_1MIN, conj(isConnectedToHome, isCartesToBeUpdated), cartesLoad),
+    trigger([PULSE_1MIN, WAKE_UP], conj(isConnectedToHome, isCartesToBeUpdated), cartesLoad),
 ];

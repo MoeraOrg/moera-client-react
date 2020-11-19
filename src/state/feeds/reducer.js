@@ -27,7 +27,7 @@ import {
     FEED_UNSUBSCRIBED,
     FEEDS_UNSET
 } from "state/feeds/actions";
-import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
+import { GO_TO_PAGE, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
@@ -99,7 +99,8 @@ function updateScrollingOnInactive(istate, feedName, feed) {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case INIT_FROM_LOCATION: {
+        case INIT_FROM_LOCATION:
+        case WAKE_UP: {
             const istate = immutable.wrap(state);
             Object.getOwnPropertyNames(state)
                 .filter(name => !name.startsWith(":"))

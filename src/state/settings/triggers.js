@@ -18,7 +18,7 @@ import {
     settingsNodeValuesUnset
 } from "state/settings/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
-import { newLocation, updateLocation } from "state/navigation/actions";
+import { newLocation, updateLocation, WAKE_UP } from "state/navigation/actions";
 import { EVENT_HOME_CLIENT_SETTINGS_CHANGED, EVENT_HOME_NODE_SETTINGS_CHANGED } from "api/events/actions";
 
 export default [
@@ -33,7 +33,7 @@ export default [
         settingsNodeMetaLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
         conj(isAtSettingsPage, isAtSettingsNodeTab),
         settingsNodeValuesLoad
     ),
@@ -43,7 +43,7 @@ export default [
         settingsNodeMetaLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
         disj(inv(isAtSettingsPage), conj(isAtSettingsPage, inv(isAtSettingsNodeTab))),
         settingsNodeValuesUnset
     ),
@@ -58,7 +58,7 @@ export default [
         settingsClientValuesLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
         true,
         settingsClientValuesLoad
     ),

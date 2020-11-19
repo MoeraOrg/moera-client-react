@@ -20,6 +20,11 @@ export const initFromLocation = (rootLocation, path, query, hash) => ({
     payload: {rootLocation, path, query, hash}
 });
 
+export const WAKE_UP = "WAKE_UP";
+export const wakeUp = () => ({
+    type: WAKE_UP
+});
+
 export const GO_TO_PAGE = "GO_TO_PAGE";
 export const goToPage = (page, details = {}) => ({
     type: GO_TO_PAGE,
