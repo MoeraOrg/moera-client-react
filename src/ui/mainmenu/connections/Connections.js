@@ -5,7 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Browser } from "api/browser";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { NodeName } from "ui/control";
+import { openSignUpDialog } from "state/signupdialog/actions";
+import { Button, NodeName } from "ui/control";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";
 
@@ -15,8 +16,13 @@ class Connections extends React.PureComponent {
         hide: PropType.func.isRequired
     };
 
-    onAddClick = (hide) => () => {
+    onAddClick = hide => () => {
         this.props.openConnectDialog();
+        hide();
+    };
+
+    onSignUpClick = hide => () => {
+        this.props.openSignUpDialog();
         hide();
     };
 
@@ -25,7 +31,7 @@ class Connections extends React.PureComponent {
         hide();
     };
 
-    onDisconnect = (location) => () => {
+    onDisconnect = location => () => {
         Browser.deleteData(location);
     };
 
@@ -49,6 +55,9 @@ class Connections extends React.PureComponent {
                 <div className="connection-add" onClick={this.onAddClick(hide)}>
                     <FontAwesomeIcon icon="plus"/> Add connection
                 </div>
+                <div className="connection-sign-up">
+                    <Button variant="primary" size="sm" onClick={this.onSignUpClick(hide)}>Sign Up</Button>
+                </div>
             </div>
         );
     }
@@ -61,5 +70,5 @@ export default connect(
         owner: state.home.owner,
         roots: state.home.roots
     }),
-    { openConnectDialog }
+    { openConnectDialog, openSignUpDialog }
 )(Connections);

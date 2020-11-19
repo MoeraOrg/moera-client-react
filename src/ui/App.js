@@ -38,12 +38,10 @@ const App = ({atNode}) => (
                 <ChangeDateDialog/>
             </>
         :
-            <>
-                <WelcomePage/>
-                <SignUpDialog/>
-                <MnemonicDialog/>
-            </>
+            <WelcomePage/>
         }
+        <SignUpDialog/>
+        <MnemonicDialog/>
         <MessageBox/>
         <ConfirmBox/>
         <FlashBox/>

@@ -42,6 +42,10 @@
     padding: 0.5em;
 }
 
+#connections .connection-sign-up {
+    text-align: right;
+}
+
 #connections .connection-add:hover {
     background-color: var(--highlight);
 }
