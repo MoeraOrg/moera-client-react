@@ -46,6 +46,7 @@ export function safePreviewHtml(html) {
             img: "emoji"
         },
         allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
+        allowedIframeDomains: ["livejournal.com"],
         allowedStyles: {
             "*": {
                 "text-align": [/^left$/, /^right$/, /^center$/],
@@ -86,6 +87,7 @@ export function safeHtml(html) {
             img: "emoji"
         },
         allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
+        allowedIframeDomains: ["livejournal.com"],
         allowedStyles: {
             "*": {
                 "text-align": [/^left$/, /^right$/, /^center$/],
