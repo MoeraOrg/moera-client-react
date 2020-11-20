@@ -150,8 +150,13 @@ function extractComment(comment) {
 export default (state = initialState, action) => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
-        case WAKE_UP:
             return cloneDeep(initialState);
+
+        case WAKE_UP:
+            return {
+                ...state,
+                comments: cloneDeep(emptyComments)
+            }
 
         case GO_TO_PAGE: {
             const {page, details: {id, commentId}} = action.payload;
