@@ -3,6 +3,7 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { Client } from '@stomp/stompjs';
 import * as URI from 'uri-js';
+import { addMinutes, isBefore } from 'date-fns';
 
 import { ALLOWED_SELF_EVENTS, Browser, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
 import { eventAction } from "api/events/actions";
@@ -23,9 +24,11 @@ class Events extends React.PureComponent {
     #queueStartedAt = null;
     #lastEvent = null;
     #lastEventSentAt = null;
+    #lastWakeUp = new Date();
 
     componentDidMount() {
         this._connect();
+        document.addEventListener("visibilitychange", this.onVisibilityChange);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -33,6 +36,10 @@ class Events extends React.PureComponent {
             this._disconnect();
             this._connect();
         }
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("visibilitychange", this.onVisibilityChange);
     }
 
     _connect() {
@@ -69,15 +76,24 @@ class Events extends React.PureComponent {
         }
     }
 
-    onConnect = () => {
+    _wakeUp() {
         const {onWakeUp} = this.props;
 
-        if (this.#lastEventSentAt != null && onWakeUp != null) {
-            const sleepTime = now() - this.#lastEventSentAt;
-            if (sleepTime > 10 * 60) { // 10 minutes
+        if (!navigator.onLine || this.#lastEventSentAt == null || onWakeUp == null) {
+            return;
+        }
+
+        const sleepTime = now() - this.#lastEventSentAt; // we really were sleeping
+        if (sleepTime > 10 * 60) { // 10 minutes
+            if (!isBefore(addMinutes(this.#lastWakeUp, 10), new Date())) { // do not wake up too often
+                this.#lastWakeUp = new Date();
                 onWakeUp();
             }
         }
+    }
+
+    onConnect = () => {
+        this._wakeUp();
 
         const headers = {};
         if (this.#queueStartedAt != null) {
@@ -115,6 +131,12 @@ class Events extends React.PureComponent {
             this.#lastEventSentAt = packet.sentAt;
         }
     };
+
+    onVisibilityChange = () => {
+        if (document.visibilityState === "visible") {
+            this._wakeUp();
+        }
+    }
 
     render() {
         return null;
