@@ -32,6 +32,15 @@ export class HomeNotConnectedError extends Error {
 
 }
 
+export class NameResolvingError extends Error {
+
+    constructor(nodeName) {
+        super("Name not found: " + nodeName);
+        this.nodeName = nodeName;
+    }
+
+}
+
 export class NamingError extends Error {
 
     constructor(method, messageOrError, details = null) {

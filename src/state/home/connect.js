@@ -4,9 +4,10 @@ import { messageBox } from "state/messagebox/actions";
 import { normalizeUrl } from "util/misc";
 import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerified } from "state/home/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { Browser, Naming, Node, NodeApiError, NodeName } from "api";
+import { Browser, NameResolvingError, Naming, Node, NodeApiError, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData } from "state/home/selectors";
+import { selectApi } from "api/node/call";
 
 function* connectToHomeFailure(error, onClose = null) {
     yield put(connectionToHomeFailed());
@@ -22,7 +23,7 @@ export function* connectToHomeSaga(action) {
         }
         data = yield call(Node.createToken, location, login, password);
     } catch (e) {
-        if (e instanceof NodeApiError) {
+        if (e instanceof NodeApiError || e instanceof NameResolvingError) {
             yield call(connectToHomeFailure, e, openConnectDialog());
         } else {
             yield call(connectToHomeFailure, e);
@@ -39,9 +40,10 @@ export function* connectToHomeSaga(action) {
         yield put(errorThrown(e));
     }
 
-    Browser.storeConnectionData(normalizeUrl(location), null, login, data.token, data.permissions);
+    const nodeUrl = normalizeUrl((yield call(selectApi, location)).rootLocation);
+    Browser.storeConnectionData(nodeUrl, null, login, data.token, data.permissions);
     Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
-    yield put(connectedToHome(normalizeUrl(location), login, data.token, data.permissions, cartesData.cartesIp,
+    yield put(connectedToHome(nodeUrl, login, data.token, data.permissions, cartesData.cartesIp,
         cartesData.cartes));
 }
 

@@ -1,6 +1,14 @@
 import { apply, call, put, select } from 'redux-saga/effects';
 
-import { Browser, formatSchemaErrors, HomeNotConnectedError, NodeApi, NodeApiError, NodeError } from "api";
+import {
+    Browser,
+    formatSchemaErrors,
+    HomeNotConnectedError,
+    NameResolvingError,
+    NodeApi,
+    NodeApiError,
+    NodeError
+} from "api";
 import { errorAuthInvalid } from "state/error/actions";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/misc";
 import { getToken } from "state/node/selectors";
@@ -19,6 +27,9 @@ export function* callApi({
     errorFilter = false
 }) {
     const {rootLocation, rootApi, errorTitle} = yield call(selectApi, nodeName);
+    if (!rootLocation) {
+        throw new NameResolvingError(nodeName);
+    }
     const exception = (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
     location = yield call(authorize, location, rootLocation, auth);
     let response;
@@ -71,7 +82,7 @@ export function* callApi({
     return data;
 }
 
-function* selectApi(nodeName) {
+export function* selectApi(nodeName) {
     let root;
     let errorTitle = "";
     switch (nodeName) {

@@ -31,7 +31,7 @@ class ConnectDialog extends React.PureComponent {
             <ModalDialog title="Connect to Home" onClose={cancelConnectDialog}>
                 <Form>
                     <div className="modal-body">
-                        <InputField name="location" title="Node URL" autoFocus/>
+                        <InputField name="location" title="Name or node URL" autoFocus/>
                         <CheckboxField name="assign" title="Password haven't been set yet"/>
                         <InputField name="password" title={assign ? "New password" : "Password"}/>
                         {assign && <InputField name="confirmPassword" title="Confirm password"/>}
@@ -59,7 +59,7 @@ const connectDialogLogic = {
     },
 
     validationSchema: yup.object().shape({
-        location: yup.string().trim().url("Must be a valid URL").required("Must not be empty"),
+        location: yup.string().trim().required("Must not be empty"),
         assign: yup.boolean(),
         password: yup.string().required("Must not be empty"),
         confirmPassword: yup.string().when(["assign", "password"], (assign, password, schema) =>
