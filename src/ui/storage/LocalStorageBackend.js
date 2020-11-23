@@ -12,6 +12,10 @@ class LocalStorageBackend extends React.PureComponent {
         window.addEventListener("message", this.messageReceived);
     }
 
+    componentWillUnmount() {
+        window.removeEventListener("message", this.messageReceived);
+    }
+
     messageReceived = event => {
         // Only accept messages from the same frame
         if (event.source !== window) {

@@ -25,7 +25,7 @@ function sendInitAction(standalone) {
     }
 }
 
-const standalone = !document.body.dataset.comPassword;
+const standalone = document.body.dataset.comPassword == null && document.body.dataset.comInitialized == null;
 if (standalone || document.contentType === "text/plain") {
     initIconLibrary();
     simpleNumberLocalizer();
