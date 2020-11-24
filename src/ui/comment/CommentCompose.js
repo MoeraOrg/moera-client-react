@@ -5,8 +5,11 @@ import * as textFieldEdit from 'text-field-edit'
 
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
+import { openSignUpDialog } from "state/signupdialog/actions";
+import { openConnectDialog } from "state/connectdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
+import { Button } from "ui/control";
 import { TextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
@@ -42,24 +45,32 @@ class CommentCompose extends React.PureComponent {
     }
 
     render() {
-        const {homeOwnerName, beingPosted, atReceiverName} = this.props;
+        const {homeOwnerName, beingPosted, atReceiverName, openSignUpDialog, openConnectDialog} = this.props;
 
-        if (!homeOwnerName) {
-            return null;
+        if (homeOwnerName) {
+            return (
+                <div id="comment-composer">
+                    <Form>
+                        <div className="content">
+                            <CommentComposeRepliedTo/>
+                            <TextField name="body" rows={1}
+                                       placeholder={`Write a comment to ${atReceiverName} here...`}
+                                       anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}/>
+                        </div>
+                        <CommentComposeButtons loading={beingPosted}/>
+                    </Form>
+                </div>
+            );
+        } else {
+            return (
+                <div className="alert alert-info">
+                    To add comments, you need to&nbsp;
+                    <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
+                    &nbsp;or&nbsp;
+                    <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
+                </div>
+            );
         }
-        return (
-            <div id="comment-composer">
-                <Form>
-                    <div className="content">
-                        <CommentComposeRepliedTo/>
-                        <TextField name="body" rows={1}
-                                   placeholder={`Write a comment to ${atReceiverName} here...`}
-                                   anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}/>
-                    </div>
-                    <CommentComposeButtons loading={beingPosted}/>
-                </Form>
-            </div>
-        );
     }
 
 }
@@ -78,5 +89,5 @@ export default connect(
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default"),
         submitKey: getSetting(state, "comment.submit-key")
     }),
-    { commentPost }
+    { commentPost, openSignUpDialog, openConnectDialog }
 )(withFormik(commentComposeLogic)(CommentCompose));
