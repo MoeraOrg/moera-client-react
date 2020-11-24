@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 
 import { Page } from "ui/page/Page";
-import { Button, ConflictWarning, Loading } from "ui/control";
+import { ConflictWarning, Loading } from "ui/control";
 import { InputField, TextField } from "ui/control/field";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
@@ -16,13 +16,13 @@ import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
 import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposeResetButton from "ui/compose/ComposeResetButton";
-import { goToPosting } from "state/navigation/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import composePageLogic from "ui/compose/compose-page-logic";
 
 import "./ComposePage.css";
+import Jump from "ui/navigation/Jump";
 
 class ComposePage extends React.PureComponent {
 
@@ -42,10 +42,6 @@ class ComposePage extends React.PureComponent {
         }
     }
 
-    onGoToPostingClick = () => {
-        this.props.goToPosting(this.props.postingId);
-    };
-
     render() {
         const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, loadingDraft, conflict,
                beingPosted, composeConflictClose} = this.props;
@@ -56,10 +52,9 @@ class ComposePage extends React.PureComponent {
                 <h2>
                     {title}
                     {postingId != null &&
-                        <Button variant="outline-secondary" size="sm" className="ml-3"
-                                onClick={this.onGoToPostingClick}>
+                        <Jump className="btn btn-sm btn-outline-secondary ml-3" href={`/post/${postingId}`}>
                             &larr; Post
-                        </Button>
+                        </Jump>
                     }
                     <Loading active={loadingFeatures || loadingContent}/>
                 </h2>
@@ -122,5 +117,5 @@ export default connect(
         reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default"),
         sourceFormatDefault: getSetting(state, "posting.body-src-format.default")
     }),
-    { goToPosting, composePost, composeConflictClose, settingsUpdate }
+    { composePost, composeConflictClose, settingsUpdate }
 )(withFormik(composePageLogic)(ComposePage));

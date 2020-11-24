@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Button } from "ui/control";
 import { getPostingFeedReference } from "state/postings/selectors";
-import { goToNews, goToTimeline } from "state/navigation/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import PostingMenu from "ui/posting/PostingMenu";
@@ -19,13 +17,14 @@ import PostingButtons from "ui/posting/PostingButtons";
 import EntryHtml from "ui/posting/EntryHtml";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
+import Jump from "ui/navigation/Jump";
 
-const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermitted, feedTitle, goToFeed}) => (
+const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermitted, href, feedTitle}) => (
     <>
         {story != null &&
-            <Button variant="outline-secondary" size="sm" onClick={() => goToFeed(story.moment)}>
+            <Jump href={`${href}?before=${story.moment}`} className="btn btn-sm btn-outline-secondary">
                 &larr; {feedTitle}
-            </Button>
+            </Jump>
         }
 
         <div className="posting entry mt-2">
@@ -63,24 +62,22 @@ function getStory(posting, feedName) {
     return story;
 }
 
-const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted, goToTimeline, goToNews}) => {
+const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted}) => {
     let story = getStory(posting, "timeline");
-    if (story != null) {
-        return <DetailedPostingImpl story={story} posting={posting} deleting={deleting}
-                                    connectedToHome={connectedToHome} isPermitted={isPermitted} feedTitle="Timeline"
-                                    goToFeed={goToTimeline}/>
-    } else {
+    let href = "/timeline";
+    let feedTitle = "Timeline";
+    if (story == null) {
         story = getStory(posting, "news");
-        return <DetailedPostingImpl story={story} posting={posting} deleting={deleting}
-                                    connectedToHome={connectedToHome} isPermitted={isPermitted} feedTitle="News"
-                                    goToFeed={goToNews}/>
+        href = "/news";
+        feedTitle = "News";
     }
+    return <DetailedPostingImpl story={story} posting={posting} deleting={deleting} connectedToHome={connectedToHome}
+                                isPermitted={isPermitted} href={href} feedTitle={feedTitle}/>
 }
 
 export default connect(
     state => ({
         connectedToHome: isConnectedToHome(state),
         isPermitted: (operation, posting) => isPermitted(operation, posting, state)
-    }),
-    { goToTimeline, goToNews }
+    })
 )(DetailedPosting);
