@@ -1,6 +1,6 @@
-import { inv, trigger } from "state/trigger";
+import { disj, inv, trigger } from "state/trigger";
 import { GO_TO_PAGE, updateLocation, WAKE_UP } from "state/navigation/actions";
-import { isAtTimelinePage } from "state/navigation/selectors";
+import { isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
 import {
     FEED_SCROLLED,
     feedGeneralLoad,
@@ -53,18 +53,19 @@ function toStatus(eventPayload) {
 export default [
     trigger(
         GO_TO_PAGE,
-        state => isAtTimelinePage(state) && isFeedGeneralToBeLoaded(state, "timeline"),
+        state => (isAtTimelinePage(state) || isAtProfilePage(state))
+            && isFeedGeneralToBeLoaded(state, "timeline"),
         () => feedGeneralLoad("timeline")
     ),
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
-        isAtTimelinePage,
+        disj(isAtTimelinePage, isAtProfilePage),
         () => feedGeneralLoad("timeline")
     ),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
-        inv(isAtTimelinePage),
+        inv(disj(isAtTimelinePage, isAtProfilePage)),
         () => feedGeneralUnset("timeline")
     ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], true, feedsUnset),

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropType from 'prop-types';
 import { connect } from 'react-redux';
 
 import { Button, Loading } from "ui/control";
@@ -12,11 +13,15 @@ import {
     isUnsubscribingFromFeed
 } from "state/feeds/selectors";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
-import "./FeedSubscribeButton.css";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isOwnerNameSet } from "state/owner/selectors";
+import "./FeedSubscribeButton.css";
 
 class FeedSubscribeButton extends React.PureComponent {
+
+    static propTypes = {
+        feedName: PropType.string
+    };
 
     onSubscribe = () => {
         const {feedName, feedSubscribe} = this.props;

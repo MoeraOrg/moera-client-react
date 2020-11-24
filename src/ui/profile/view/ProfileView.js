@@ -7,6 +7,7 @@ import NodeNameView from "ui/profile/view/NodeNameView";
 import { profileEdit } from "state/profile/actions";
 import { isProfileEditable } from "state/profile/selectors";
 import "./ProfileView.css";
+import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 
 const EditButtonImpl = ({profileEdit}) => (
     <Button variant="outline-primary" size="sm" style={{marginLeft: "1rem"}} onClick={profileEdit}>
@@ -34,7 +35,7 @@ ProfileLine.propTypes = {
 
 const ProfileView = ({loading, fullName, gender, email, editable}) => (
     <>
-        <h2>Profile</h2>
+        <h2>Profile <FeedSubscribeButton feedName="timeline"/></h2>
         <div className="profile-view">
             <NodeNameView />
             <br />
