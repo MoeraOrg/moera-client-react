@@ -1,6 +1,34 @@
 import sanitizeHtml from 'sanitize-html';
 import { parse as parseEmojis } from 'twemoji-parser';
 
+const SAFE_HTML_SETTINGS = {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+        "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe"
+    ]),
+    allowedAttributes: {
+        ...sanitizeHtml.defaults.allowedAttributes,
+        "*": ["dir"],
+        img: ["src", "srcset", "width", "height", "alt"],
+        a: ["href", "data-nodename"],
+        p: ["style"],
+        iframe: [
+            "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
+            "allowtransparency"
+        ],
+        "mr-spoiler": ["title"]
+    },
+    allowedClasses: {
+        img: "emoji"
+    },
+    allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
+    allowedIframeDomains: ["livejournal.com"],
+    allowedStyles: {
+        "*": {
+            "text-align": [/^left$/, /^right$/, /^center$/],
+        }
+    }
+};
+
 function createEmojiElement(entity) {
     return `<img src="${entity.url}" alt="${entity.text}" class="emoji">`;
 }
@@ -27,31 +55,7 @@ export function safePreviewHtml(html) {
         return "";
     }
     return sanitizeHtml(replaceEmojis(html), {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe"
-        ]),
-        allowedAttributes: {
-            ...sanitizeHtml.defaults.allowedAttributes,
-            "*": ["dir"],
-            img: ["src", "srcset", "width", "height", "alt"],
-            a: ["href", "data-nodename"],
-            p: ["style"],
-            iframe: [
-                "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
-                "allowtransparency"
-            ],
-            "mr-spoiler": ["title"]
-        },
-        allowedClasses: {
-            img: "emoji"
-        },
-        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
-        allowedIframeDomains: ["livejournal.com"],
-        allowedStyles: {
-            "*": {
-                "text-align": [/^left$/, /^right$/, /^center$/],
-            }
-        },
+        ...SAFE_HTML_SETTINGS,
         transformTags: {
             "h1": "b",
             "h2": "b",
@@ -68,31 +72,10 @@ export function safeHtml(html) {
         return "";
     }
     return sanitizeHtml(replaceEmojis(html), {
-        allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-            "h1", "h2", "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe"
-        ]),
-        allowedAttributes: {
-            ...sanitizeHtml.defaults.allowedAttributes,
-            "*": ["dir"],
-            img: ["src", "srcset", "width", "height", "alt"],
-            a: ["href", "data-nodename"],
-            p: ["style"],
-            iframe: [
-                "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
-                "allowtransparency"
-            ],
-            "mr-spoiler": ["title"]
-        },
-        allowedClasses: {
-            img: "emoji"
-        },
-        allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
-        allowedIframeDomains: ["livejournal.com"],
-        allowedStyles: {
-            "*": {
-                "text-align": [/^left$/, /^right$/, /^center$/],
-            }
-        }
+        ...SAFE_HTML_SETTINGS,
+        allowedTags: SAFE_HTML_SETTINGS.allowedTags.concat([
+            "h1", "h2"
+        ])
     });
 }
 
