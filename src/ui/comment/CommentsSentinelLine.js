@@ -4,6 +4,7 @@ import PropType from 'prop-types';
 import CommentsSentinel from "ui/comment/CommentsSentinel";
 import CommentsRewindButton from "ui/comment/CommentsRewindButton";
 import CommentsLoadAllButton from "ui/comment/CommentsLoadAllButton";
+import CommentsLeapButton from "ui/comment/CommentsLeapButton";
 import "./CommentsSentinelLine.css";
 
 const CommentsSentinelLine = ({visible, loading, title, total, onBoundary, onClick, end}) => (
@@ -14,6 +15,7 @@ const CommentsSentinelLine = ({visible, loading, title, total, onBoundary, onCli
             <CommentsRewindButton end={end} forward={false}/>
             <CommentsLoadAllButton/>
             <CommentsRewindButton end={end} forward={true}/>
+            <CommentsLeapButton end={end}/>
         </div>
     </div>
 );
