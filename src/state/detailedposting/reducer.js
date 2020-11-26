@@ -53,7 +53,7 @@ import {
     GLANCE_COMMENT_LOADED,
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
-import { safeHtml, safePreviewHtml } from "util/html";
+import { replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import {
     EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
@@ -135,10 +135,14 @@ function extractComment(comment) {
     if (comment.verificationStatus != null) { // Already extracted
         return comment;
     }
+    const icomment = immutable.wrap(comment);
     if (!comment.bodyPreview.text) {
-        comment = immutable.set(comment, "body.previewText", safePreviewHtml(comment.body.text));
+        icomment.set("body.previewText", safePreviewHtml(comment.body.text));
     }
-    return immutable.wrap(comment)
+    if (comment.repliedTo) {
+        icomment.set("repliedTo.headingHtml", replaceEmojis(comment.repliedTo.heading));
+    }
+    return icomment
         .update("bodyPreview.text", text => safePreviewHtml(text))
         .update("body.text", text => safeHtml(text))
         .set("deleting", false)

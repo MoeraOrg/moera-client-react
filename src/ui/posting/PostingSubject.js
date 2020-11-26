@@ -4,12 +4,16 @@ import Jump from "ui/navigation/Jump";
 import "./PostingSubject.css";
 
 const PostingSubject = ({posting, preview}) => {
-    const subject = preview && posting.bodyPreview.subject ? posting.bodyPreview.subject : posting.body.subject;
-    if (!subject) {
+    const subjectHtml = preview && posting.bodyPreview.subjectHtml
+        ? posting.bodyPreview.subjectHtml
+        : posting.body.subjectHtml;
+    if (!subjectHtml) {
         return null;
     }
     return (
-        <div className="subject"><Jump href={`/post/${posting.id}`}>{subject}</Jump></div>
+        <div className="subject">
+            <Jump href={`/post/${posting.id}`}><span dangerouslySetInnerHTML={{__html: subjectHtml}}/></Jump>
+        </div>
     );
 };
 

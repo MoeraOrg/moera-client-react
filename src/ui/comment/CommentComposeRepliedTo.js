@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { commentRepliedToUnset } from "state/detailedposting/actions";
 import { getDetailedPostingId } from "state/detailedposting/selectors";
 import RepliedTo from "ui/comment/RepliedTo";
+import { replaceEmojis } from "util/html";
 
 class CommentComposeRepliedTo extends React.PureComponent {
 
@@ -19,8 +20,8 @@ class CommentComposeRepliedTo extends React.PureComponent {
         }
 
         return (
-            <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} heading={heading} unset={true}
-                       onUnset={this.onUnset}/>
+            <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName}
+                       heading={replaceEmojis(heading)} unset={true} onUnset={this.onUnset}/>
         );
     }
 
