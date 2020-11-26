@@ -9,12 +9,33 @@
 
 .features {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+}
+
+@media only screen and (min-width: 576px) {
+    .features {
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .features {
+        flex-direction: column;
+    }
 }
 
 .features .drafts {
+    display: flex;
+    align-items: center;
+    justify-content: start;
     color: var(--gray-medium);
+    margin-bottom: .5rem;
+}
+
+@media only screen and (max-width: 575px) {
+    .features .drafts {
+        flex-direction: row-reverse;
+    }
 }
 
 .form-buttons {

@@ -6,6 +6,7 @@ import deepEqual from 'react-fast-compare';
 
 import composePageLogic from "ui/compose/compose-page-logic";
 import { composeDraftSave } from "state/compose/actions";
+import "./ComposeDraftSaver.css";
 
 function postingText(props) {
     return composePageLogic.mapValuesToPostingText(props.formik.values, props);
@@ -60,10 +61,10 @@ class ComposeDraftSaver extends React.PureComponent {
 
         if (!unsavedChanges) {
             return (
-                <>
+                <div className="draft-saver">
                     {savingDraft && "Saving..."}
                     {savedDraft && "Draft saved."}
-                </>
+                </div>
             );
         }
         return null;
