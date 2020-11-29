@@ -13,7 +13,8 @@ const initialState = {
     stage: SIGN_UP_STAGE_DOMAIN,
     name: null,
     domain: null,
-    password: null
+    password: null,
+    email: null
 };
 
 export default (state = initialState, action) => {
@@ -37,7 +38,8 @@ export default (state = initialState, action) => {
                 processing: true,
                 name: action.payload.name,
                 domain: action.payload.domain,
-                password: action.payload.password
+                password: action.payload.password,
+                email: action.payload.email
             };
 
         case SIGN_UP_FAILED:

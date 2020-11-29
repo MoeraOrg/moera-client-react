@@ -1,7 +1,8 @@
 export const SIGN_UP_STAGE_DOMAIN = 0;
 export const SIGN_UP_STAGE_PASSWORD = 1;
 export const SIGN_UP_STAGE_CONNECT = 2;
-export const SIGN_UP_STAGE_NAME = 3;
+export const SIGN_UP_STAGE_PROFILE = 3;
+export const SIGN_UP_STAGE_NAME = 4;
 
 export const OPEN_SIGN_UP_DIALOG = "OPEN_SIGN_UP_DIALOG";
 export const openSignUpDialog = () => ({
@@ -14,9 +15,9 @@ export const cancelSignUpDialog = () => ({
 });
 
 export const SIGN_UP = "SIGN_UP";
-export const signUp = (provider, name, domain, password, onError) => ({
+export const signUp = (provider, name, domain, password, email, onError) => ({
     type: SIGN_UP,
-    payload: {provider, name, domain, password, onError}
+    payload: {provider, name, domain, password, email, onError}
 });
 
 export const SIGNED_UP = "SIGNED_UP";

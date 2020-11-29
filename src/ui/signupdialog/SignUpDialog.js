@@ -9,7 +9,7 @@ import {
     cancelSignUpDialog,
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
-    SIGN_UP_STAGE_PASSWORD,
+    SIGN_UP_STAGE_PASSWORD, SIGN_UP_STAGE_PROFILE,
     signUp,
     signUpDomainVerify,
     signUpFindDomain,
@@ -158,6 +158,8 @@ class SignUpDialog extends React.PureComponent {
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
                         <InputField name="confirmPassword" title="Confirm password"
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
+                        <InputField name="email" title="E-mail"
+                                    disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={cancelSignUpDialog}>Cancel</Button>
@@ -181,7 +183,8 @@ const signUpDialogLogic = {
             domainTaken: null,
             autoDomain: !props.domain,
             password: props.password ?? "",
-            confirmPassword: props.password ?? ""
+            confirmPassword: props.password ?? "",
+            email: props.email ?? ""
         }
     },
 
@@ -204,12 +207,14 @@ const signUpDialogLogic = {
         confirmPassword: yup.string().when("password",
             (password, schema) =>
                 schema.required("Please type the password again").oneOf([password], "Passwords are different")
-        )
+        ),
+        email: yup.string().email("Not a valid e-mail address")
     }),
 
     handleSubmit(values, formik) {
-        formik.props.signUp(values.provider, values.name.trim(), values.autoDomain ? null : values.domain.trim(),
-            values.password, (fieldName, message) => formik.setFieldError(fieldName, message));
+        formik.props.signUp(values.provider, values.name.trim(),
+            values.autoDomain && formik.props.stage <= SIGN_UP_STAGE_DOMAIN ? null : values.domain.trim(),
+            values.password, values.email, (fieldName, message) => formik.setFieldError(fieldName, message));
         formik.setSubmitting(false);
     }
 

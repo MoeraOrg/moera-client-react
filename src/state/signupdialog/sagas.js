@@ -5,7 +5,7 @@ import {
     SIGN_UP_STAGE_CONNECT,
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
-    SIGN_UP_STAGE_PASSWORD,
+    SIGN_UP_STAGE_PASSWORD, SIGN_UP_STAGE_PROFILE,
     signedUp,
     signUpFailed
 } from "state/signupdialog/actions";
@@ -20,7 +20,7 @@ function getProvider(name) {
 }
 
 export function* signUpSaga(action) {
-    const {provider: providerName, name, domain, password, onError} = action.payload;
+    const {provider: providerName, name, domain, password, email, onError} = action.payload;
 
     const stage = yield select(state => state.signUpDialog.stage);
     const provider = getProvider(providerName);
@@ -97,6 +97,18 @@ export function* signUpSaga(action) {
         Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
         yield put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp,
             cartesData.cartes));
+    }
+
+    if (stage <= SIGN_UP_STAGE_PROFILE && email) {
+        try {
+            yield call(Node.putProfile, rootLocation, {email});
+        } catch (e) {
+            if (!(e instanceof NodeApiError)) {
+                yield put(errorThrown(e));
+            }
+            yield put(signUpFailed(SIGN_UP_STAGE_PROFILE));
+            return;
+        }
     }
 
     if (stage <= SIGN_UP_STAGE_NAME) {
