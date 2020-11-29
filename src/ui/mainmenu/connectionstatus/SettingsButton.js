@@ -9,7 +9,9 @@ const SettingsButton = ({atSettings}) => (
     atSettings ?
         <span className="connection-button active" title="Settings"><FontAwesomeIcon icon="cog"/></span>
     :
-        <Jump href="/settings" className="connection-button" title="Settings"><FontAwesomeIcon icon="cog"/></Jump>
+        <Jump nodeName=":" href="/settings" className="connection-button" title="Settings">
+            <FontAwesomeIcon icon="cog"/>
+        </Jump>
 );
 
 export default connect(
