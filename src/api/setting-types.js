@@ -1,3 +1,5 @@
+import { fromUnixTime } from 'date-fns';
+
 import { parseBool } from "util/misc";
 import Duration from "util/duration";
 
@@ -8,6 +10,9 @@ export function toValue(type, valueString) {
 
         case "int":
             return parseInt(valueString) || 0;
+
+        case "timestamp":
+            return fromUnixTime(parseInt(valueString) || 0);
 
         default:
             return valueString || "";

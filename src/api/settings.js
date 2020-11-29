@@ -2,6 +2,12 @@ export const PREFIX = "client.mercy.";
 
 export const META = [
     {
+        name: "invitation.addon.shown-at",
+        type: "timestamp",
+        defaultValue: "0",
+        internal: true
+    },
+    {
         name: "instants.number.mode",
         type: "string",
         defaultValue: "not-viewed",

@@ -68,6 +68,9 @@ class SettingsSheetAutomatic extends React.PureComponent {
                 <div className="settings-sheet" style={{maxHeight: this.state.sheetMaxHeight}}>
                     {[...metaMap.keys()].sort().map(name => {
                         const meta = metaMap.get(name);
+                        if (meta.internal) {
+                            return null;
+                        }
                         let initialValue = valuesMap.get(name);
                         initialValue = initialValue ? initialValue : meta.defaultValue;
                         return <SettingsField key={name} name={name} fieldName={toFieldName(name)} meta={meta}
