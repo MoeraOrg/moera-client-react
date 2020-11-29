@@ -7,7 +7,7 @@ import { Form, withFormik } from 'formik';
 import { mnemonicClose } from "state/nodename/actions";
 
 const Column = ({mnemonic, start, end}) => (
-    <div className="col-sm-4">
+    <div className="col-12 col-sm-4">
         <ol start={start + 1}>
             {mnemonic.slice(start, end).map((value, index) => (<li key={index}>{value}</li>))}
         </ol>
