@@ -6,6 +6,7 @@ import { PREFIX } from "api/settings";
 import { isConnectedToHome } from "state/home/selectors";
 import { getSetting, isSettingsClientValuesLoaded } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
+import { isStandaloneMode } from "state/navigation/selectors";
 import { now } from "util/misc";
 
 class AddonInvitation extends React.Component {
@@ -25,10 +26,10 @@ class AddonInvitation extends React.Component {
     }
 
     render() {
-        const {settingsLoaded, shownAt} = this.props;
+        const {standalone, settingsLoaded, shownAt} = this.props;
         const {hidden} = this.state;
 
-        if (hidden || !settingsLoaded || !isBefore(addDays(shownAt, 31), new Date())) {
+        if (!standalone || hidden || !settingsLoaded || !isBefore(addDays(shownAt, 31), new Date())) {
             return null;
         }
 
@@ -46,6 +47,7 @@ class AddonInvitation extends React.Component {
 
 export default connect(
     state => ({
+        standalone: isStandaloneMode(state),
         settingsLoaded: isConnectedToHome(state) && isSettingsClientValuesLoaded(state),
         shownAt: getSetting(state, "invitation.addon.shown-at")
     }),
