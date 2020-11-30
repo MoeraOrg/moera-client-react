@@ -2,26 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
+import { getActualSheet, getActualTab, getMenuItems } from "ui/settings/settings-menu";
 import { settingsGoToSheet } from "state/settings/actions";
 import Jump from "ui/navigation/Jump";
 import "./SettingsMenu.css";
 
-const MENU_ITEMS = {
-    "node": {
-        "posting": "Post",
-        "other": "Other"
-    },
-    "client": {
-        "posting": "Post",
-        "comment": "Comment",
-        "reactions": "Reactions",
-        "other": "Other"
-    }
-};
-
 const SettingsMenu = ({tab, sheet, settingsGoToSheet}) => {
-    const items = MENU_ITEMS[tab] ? MENU_ITEMS[tab] : MENU_ITEMS["node"];
-    sheet = items[sheet] ? sheet : Object.keys(items)[0];
+    const items = getMenuItems(tab);
     return (
         <ul className="nav nav-pills flex-md-column col-md-2 settings-menu">{
             Object.keys(items).map(s =>
@@ -40,8 +27,8 @@ const SettingsMenu = ({tab, sheet, settingsGoToSheet}) => {
 
 export default connect(
     state => ({
-        tab: state.settings.tab,
-        sheet: state.settings.sheet
+        tab: getActualTab(state.settings.tab),
+        sheet: getActualSheet(state.settings.tab, state.settings.sheet)
     }),
     { settingsGoToSheet }
 )(SettingsMenu);

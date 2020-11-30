@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { getActualSheet } from "ui/settings/settings-menu";
 import SettingsSheetNodeOther from "ui/settings/SettingsSheetNodeOther";
 import SettingsSheetNodePosting from "ui/settings/SettingsSheetNodePosting";
 
@@ -15,6 +16,6 @@ const SettingsTabNode = ({sheet}) => {
 
 export default connect(
     state => ({
-        sheet: state.settings.sheet
+        sheet: getActualSheet("node", state.settings.sheet)
     })
 )(SettingsTabNode);

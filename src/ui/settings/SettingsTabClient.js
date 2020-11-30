@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import { getActualSheet } from "ui/settings/settings-menu";
 import SettingsSheetClientOther from "ui/settings/SettingsSheetClientOther";
 import SettingsSheetClientPosting from "ui/settings/SettingsSheetClientPosting";
 import SettingsSheetClientReactions from "ui/settings/SettingsSheetClientReactions";
@@ -21,6 +22,6 @@ const SettingsTabClient = ({sheet}) => {
 
 export default connect(
     state => ({
-        sheet: state.settings.sheet
+        sheet: getActualSheet("client", state.settings.sheet)
     })
 )(SettingsTabClient);
