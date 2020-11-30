@@ -5,6 +5,38 @@ import { randomId, rootUrl } from "util/misc";
 export class Browser {
 
     static clientId = randomId();
+    static userAgent = "unknown";
+    static userAgentOs = "unknown";
+
+    static init() {
+        this._initUserAgent();
+    }
+
+    static _initUserAgent() {
+        if (navigator.userAgent.includes("Firefox")) {
+            this.userAgent = "firefox";
+        } else if (navigator.userAgent.includes("Opera")) {
+            this.userAgent = "opera";
+        } else if (navigator.userAgent.includes("Chrome")) {
+            if (navigator.userAgent.includes("YaBrowser")) {
+                this.userAgent = "yandex";
+            } else if (navigator.userAgent.includes("Brave")) {
+                this.userAgent = "brave";
+            } else if (navigator.userAgent.includes("Vivaldi")) {
+                this.userAgent = "vivaldi";
+            } else {
+                this.userAgent = "chrome";
+            }
+        } else if (navigator.userAgent.includes("Dolphin")) {
+            this.userAgent = "dolphin";
+        }
+
+        if (navigator.userAgent.includes("Android")) {
+            this.userAgentOs = "android";
+        } else if (navigator.userAgent.includes("iPhone")) {
+            this.userAgentOs = "ios";
+        }
+    }
 
     static isDevMode() {
         return !process.env.NODE_ENV || process.env.NODE_ENV === "development";
@@ -12,6 +44,23 @@ export class Browser {
 
     static isTinyScreen() {
         return window.screen.width <= 575;
+    }
+
+    static isAddonSupported() {
+        switch (this.userAgent) {
+            default:
+            case "unknown":
+            case "opera":
+            case "dolphin":
+                return false;
+            case "firefox":
+            case "chrome":
+                return this.userAgentOs === "unknown";
+            case "yandex":
+            case "brave":
+            case "vivaldi":
+                return true;
+        }
     }
 
     static getRootLocation() {
@@ -58,7 +107,7 @@ export class Browser {
         if (!search) {
             return {};
         }
-        return Browser.getPassedLocation(search.substring(1));
+        return this.getPassedLocation(search.substring(1));
     }
 
     static getPassedLocation(query) {
@@ -85,7 +134,7 @@ export class Browser {
     }
 
     static passedLocation(location) {
-        return Browser.getRootLocation() + "/?href=" + encodeURIComponent(location);
+        return this.getRootLocation() + "/?href=" + encodeURIComponent(location);
     }
 
     static storeData(data) {
@@ -94,17 +143,17 @@ export class Browser {
             action: "storeData",
             payload: {
                 ...data,
-                clientId: Browser.clientId
+                clientId: this.clientId
             }
         }, window.location.href);
     }
 
     static storeConnectionData(location, nodeName, login, token, permissions) {
-        Browser.storeData({home: {location, nodeName, login, token, permissions}});
+        this.storeData({home: {location, nodeName, login, token, permissions}});
     }
 
     static storeCartesData(cartesIp, cartes) {
-        Browser.storeData({cartesIp, cartes});
+        this.storeData({cartesIp, cartes});
     }
 
     static deleteData(location) {

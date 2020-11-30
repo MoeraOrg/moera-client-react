@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addDays, isBefore } from 'date-fns';
 
+import { Browser } from "api";
 import { PREFIX } from "api/settings";
 import { isConnectedToHome } from "state/home/selectors";
 import { getSetting, isSettingsClientValuesLoaded } from "state/settings/selectors";
@@ -25,19 +26,33 @@ class AddonInvitation extends React.Component {
         }]);
     }
 
+    getHtml() {
+        let buf = "For the best Moera experience it is recommended to install ";
+        if (Browser.userAgent === "firefox") {
+            buf += "<a href=\"https://addons.mozilla.org/en-US/firefox/addon/moera/\">"
+                + "the Moera add-on for Firefox</a>";
+        } else {
+            buf += "<a href=\"https://chrome.google.com/webstore/detail/moera/"
+                + "endpkknmpgamhhlojbgifimfcleeeghb\">the Moera add-on for Chrome</a>";
+        }
+        return buf;
+    }
+
     render() {
         const {standalone, settingsLoaded, shownAt} = this.props;
         const {hidden} = this.state;
 
-        if (!standalone || hidden || !settingsLoaded || !isBefore(addDays(shownAt, 31), new Date())) {
+        if (!standalone || !Browser.isAddonSupported() || hidden || !settingsLoaded
+            || !isBefore(addDays(shownAt, 31), new Date())) {
+
             return null;
         }
 
         return (
             <div className="alert alert-primary alert-dismissible fade show" role="alert">
-                Install addon!
-                <button type="button" className="close" aria-label="Close">
-                    <span aria-hidden="true" onClick={this.onClick}>&times;</span>
+                <span dangerouslySetInnerHTML={{__html: this.getHtml()}}/>
+                <button type="button" className="close" aria-label="Close" onClick={this.onClick}>
+                    <span aria-hidden="true">&times;</span>
                 </button>
             </div>
         );
