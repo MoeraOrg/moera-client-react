@@ -18,5 +18,4 @@ export { ReactionButton } from "ui/control/ReactionButton";
 export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
 export { ReactionTotals } from "ui/control/ReactionTotals";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
-export { Twemoji } from "ui/control/Twemoji";
 export { Wrapper } from "ui/control/Wrapper";

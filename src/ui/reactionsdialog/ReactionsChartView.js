@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Loading, Twemoji } from "ui/control";
+import { Loading } from "ui/control";
+import Twemoji from "ui/twemoji/Twemoji";
 
 const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis, closeReactionsDialog}) => (
     loaded &&

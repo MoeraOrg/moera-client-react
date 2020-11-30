@@ -1,7 +1,7 @@
 import React from 'react';
 import PropType from 'prop-types';
 
-import { Twemoji } from "ui/control";
+import Twemoji from "ui/twemoji/Twemoji";
 import "./ReactionTotals.css";
 
 function sum(reactionTotals) {

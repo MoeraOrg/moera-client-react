@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { REACTION_EMOJIS } from "api";
-import { Twemoji } from "ui/control";
+import Twemoji from "ui/twemoji/Twemoji";
 import "./EmojiSelector.css";
 
 const EmojiChoice = ({negative, emoji, invisible, dimmed, marked, onClick}) => {

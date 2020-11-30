@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 
-import { Loading, Twemoji } from "ui/control";
+import { Loading } from "ui/control";
+import Twemoji from "ui/twemoji/Twemoji";
 import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
 
 const TotalsTabs = ({loading, loaded, total, emojis, activeTab, reactionsDialogSelectTab}) => (

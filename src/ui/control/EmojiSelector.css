@@ -12,6 +12,10 @@
     vertical-align: baseline;
 }
 
+.emoji-selector .choice .twemoji {
+    vertical-align: baseline;
+}
+
 .emoji-selector .choice .svg-inline--fa {
     vertical-align: .125em;
 }

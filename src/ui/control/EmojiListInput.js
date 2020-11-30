@@ -3,7 +3,8 @@ import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
-import { EmojiListDialog, Twemoji } from "ui/control";
+import { EmojiListDialog } from "ui/control";
+import Twemoji from "ui/twemoji/Twemoji";
 import EmojiList from "util/emoji-list";
 import "./EmojiListInput.css"
 

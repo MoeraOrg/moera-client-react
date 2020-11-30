@@ -3,11 +3,11 @@ import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
-import { Twemoji } from "ui/control";
+import Twemoji from "ui/twemoji/Twemoji";
 
 const EmojiButton = ({icon, emoji, caption, color, invisible, className, buttonRef, onMouseEnter, onMouseLeave,
                       onTouchStart, onClick}) => (
-    <button className={cx(className, {"invisible": invisible})}  style={color ? {color} : null}
+    <button className={cx(className, {"invisible": invisible})} style={color ? {color} : null}
             onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseDown={onMouseEnter}
             onTouchStart={onTouchStart} onClick={onClick} ref={buttonRef}>
         {icon && <FontAwesomeIcon icon={icon}/>}

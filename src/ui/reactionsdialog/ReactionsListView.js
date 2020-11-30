@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
-import { Loading, NodeName, Twemoji } from "ui/control";
+import { Loading, NodeName } from "ui/control";
+import Twemoji from "ui/twemoji/Twemoji";
 import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
 import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
 import {
