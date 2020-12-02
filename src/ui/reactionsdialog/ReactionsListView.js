@@ -28,7 +28,7 @@ const ReactionsListView = ({postingId, commentId, itemsRef, onSwitchView, remain
         <div className="items" tabIndex="-1" ref={itemsRef}>
             {reactions.map(r =>
                 <div className="item" key={r.moment}>
-                    <div className="emoji"><Twemoji code={r.emoji}/></div>
+                    <div className="emoji-type"><Twemoji code={r.emoji}/></div>
                     <div className="owner-name">
                         <NodeName name={r.ownerName}/>
                         {" "}

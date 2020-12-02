@@ -57,7 +57,7 @@
     display: flex;
 }
 
-.reactions-dialog .items .item .emoji {
+.reactions-dialog .items .item .emoji-type {
     flex: none;
     width: 1.7em;
     padding-right: 0.5rem;

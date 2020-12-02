@@ -25,11 +25,6 @@
     top: -1.5rem;
 }
 
-.entry .emoji {
-    width: 1em;
-    height: 1em;
-}
-
 .entry.single-emoji .content .emoji {
     width: 3em;
     height: 3em;

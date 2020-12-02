@@ -11,6 +11,11 @@ ABBR[title] {
     cursor: pointer !important;
 }
 
+.emoji {
+    width: 1em;
+    height: 1em;
+}
+
 .container {
     max-width: 900px;
 }

@@ -34,7 +34,7 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
                     }))
                     .map(t =>
                         <div className="item" key={t.emoji}>
-                            <div className="emoji"><Twemoji code={t.emoji}/></div>
+                            <div className="emoji-type"><Twemoji code={t.emoji}/></div>
                             <div className="share">{t.percent.toFixed(1)}%</div>
                             {t.total && <div className="total">{t.total}</div>}
                             <div className="bar">

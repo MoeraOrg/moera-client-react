@@ -33,8 +33,3 @@
     max-height: 70vh;
     overflow-y: auto;
 }
-
-#instants .content .emoji {
-    width: 1em;
-    height: 1em;
-}
