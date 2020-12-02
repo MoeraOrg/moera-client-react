@@ -26,6 +26,5 @@
 }
 
 .entry.single-emoji .content .emoji {
-    width: 3em;
-    height: 3em;
+    font-size: 3em;
 }

@@ -10,6 +10,7 @@ const SAFE_HTML_SETTINGS = {
         "*": ["dir"],
         img: ["src", "srcset", "width", "height", "alt"],
         a: ["href", "data-nodename"],
+        b: ["style"],
         p: ["style"],
         iframe: [
             "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
@@ -18,19 +19,23 @@ const SAFE_HTML_SETTINGS = {
         "mr-spoiler": ["title"]
     },
     allowedClasses: {
-        img: "emoji"
+        img: "emoji",
+        b: "emoji"
     },
     allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
         "*": {
             "text-align": [/^left$/, /^right$/, /^center$/],
+        },
+        "b": {
+            "background-image": [/^url\('https:\/\/twemoji.maxcdn.com\//]
         }
     }
 };
 
 function createEmojiElement(entity) {
-    return `<img src="${entity.url}" alt="${entity.text}" class="emoji">`;
+    return `<b style="background-image: url('${entity.url}')" class="emoji">${entity.text}</b>`;
 }
 
 export function replaceEmojis(html) {
