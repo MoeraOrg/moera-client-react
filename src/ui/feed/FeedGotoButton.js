@@ -29,7 +29,11 @@ class FeedGotoButton extends React.PureComponent {
     };
 
     goToTimestamp = date => {
-        this.props.feedScrollToAnchor(this.props.feedName, getUnixTime(endOfDay(date)) * 1000);
+        const moment = getUnixTime(endOfDay(date)) * 1000;
+        if (isNaN(moment)) {
+            return;
+        }
+        this.props.feedScrollToAnchor(this.props.feedName, moment);
     };
 
     toBottom = e => {
