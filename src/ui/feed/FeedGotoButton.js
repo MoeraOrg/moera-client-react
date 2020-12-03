@@ -8,6 +8,7 @@ import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 import { Button } from "ui/control";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
+import "./FeedGotoButton.css";
 
 class FeedGotoButton extends React.PureComponent {
 
@@ -48,7 +49,8 @@ class FeedGotoButton extends React.PureComponent {
                     <>
                         <DateTimePicker format="dd-MM-yyyy" value={fromUnixTime(timestamp)} time={false}
                                         onChange={this.goToTimestamp}/>
-                        <Button variant="outline-info" className="ml-2" invisible={atBottom} onClick={this.toBottom}>
+                        <Button variant="outline-info" size="sm" className="ml-2" invisible={atBottom}
+                                onClick={this.toBottom}>
                             <FontAwesomeIcon icon="arrow-down"/>&nbsp;Bottom
                         </Button>
                     </>

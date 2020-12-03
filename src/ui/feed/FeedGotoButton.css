@@ -1,0 +1,8 @@
+.feed-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.feed-buttons BUTTON {
+    white-space: nowrap;
+}
