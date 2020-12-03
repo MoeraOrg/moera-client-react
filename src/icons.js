@@ -27,6 +27,7 @@ import {
     faPen,
     faPenAlt,
     faPlus,
+    faQuestionCircle,
     faRemoveFormat,
     faReply,
     faRetweet,
@@ -87,6 +88,7 @@ export default function initIconLibrary() {
     library.add(faPen);
     library.add(faPenAlt);
     library.add(faPlus);
+    library.add(faQuestionCircle);
     library.add(faRemoveFormat);
     library.add(faReply);
     library.add(faRetweet);

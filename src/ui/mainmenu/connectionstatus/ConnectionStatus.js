@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Browser } from "api";
 import { Button, Loading } from "ui/control";
@@ -12,12 +13,15 @@ import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import ConnectDialog from "ui/connectdialog/ConnectDialog";
 import { openConnectDialog } from "state/connectdialog/actions";
+import { openQuickTips } from "state/quicktips/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import "./ConnectionStatus.css";
 
-const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openConnectDialog, openSignUpDialog}) => {
+const ConnectionButtons = ({
+    atNode, connecting,  connected, showNavigator, openConnectDialog, openQuickTips, openSignUpDialog
+}) => {
     if (showNavigator && Browser.isTinyScreen()) {
         return null;
     }
@@ -38,6 +42,9 @@ const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openC
     }
     return (
         <>
+            <span className="connection-button d-none d-lg-inline" title="Help" onClick={() => openQuickTips()}>
+                <FontAwesomeIcon icon="question-circle"/>
+            </span>
             <span className="d-none d-lg-inline">
                 <NewPostButton/>
             </span>
@@ -53,12 +60,10 @@ const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openC
     );
 }
 
-const ConnectionStatus = ({atNode, connecting,  connected, showNavigator, openConnectDialog, openSignUpDialog}) => (
+const ConnectionStatus = (props) => (
     <>
         <div id="connection-status">
-            <ConnectionButtons atNode={atNode} connecting={connecting} connected={connected}
-                               showNavigator={showNavigator} openConnectDialog={openConnectDialog}
-                               openSignUpDialog={openSignUpDialog}/>
+            <ConnectionButtons {...props}/>
         </div>
         <ConnectDialog />
     </>
@@ -71,5 +76,5 @@ export default connect(
         connected: isConnectedToHome(state),
         showNavigator: state.owner.showNavigator
     }),
-    { openConnectDialog, openSignUpDialog }
+    { openConnectDialog, openQuickTips, openSignUpDialog }
 )(ConnectionStatus);

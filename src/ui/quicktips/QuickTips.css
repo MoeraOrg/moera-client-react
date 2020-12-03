@@ -1,0 +1,45 @@
+.quick-tips .modal-title {
+    color: var(--info);
+    font-size: 200%;
+    font-weight: bold;
+}
+
+.quick-tips UL {
+    margin-top: .5em;
+    padding-left: 1em;
+    list-style-type: "\2b9a";
+}
+
+.quick-tips LI {
+    margin-bottom: .7em;
+    padding-left: .4em;
+}
+
+.quick-tips .new-post button {
+    margin-left: .7em;
+    margin-right: .7em;
+}
+
+.quick-tips .visit .node-name {
+    color: var(--success);
+}
+
+.quick-tips .subscribe button {
+    margin-left: .7em;
+    margin-right: .7em;
+}
+
+.quick-tips .blog P {
+    margin-top: .5em;
+}
+
+.quick-tips .blog BUTTON {
+    color: white;
+    background-color: var(--gray-dark);
+    font-size: 1.5em;
+    width: 1.8em;
+    border: 0;
+    display: inline-block;
+    margin: .1em;
+    vertical-align: middle;
+}

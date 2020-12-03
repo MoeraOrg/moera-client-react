@@ -10,6 +10,7 @@ export class ModalDialog extends React.PureComponent {
     static propTypes = {
         title: PropType.string,
         size: PropType.string,
+        className: PropType.string,
         onClose: PropType.func
     };
 
@@ -24,7 +25,7 @@ export class ModalDialog extends React.PureComponent {
     onModalDialogClick = e => e.stopPropagation();
 
     render() {
-        const {title, size, children, onClose} = this.props;
+        const {title, size, className, children, onClose} = this.props;
 
         return ReactDOM.createPortal(
             <>
@@ -33,6 +34,7 @@ export class ModalDialog extends React.PureComponent {
                     <div className={cx(
                         "modal-dialog",
                         "modal-dialog-centered",
+                        className,
                         {
                             [`modal-${size}`]: !!size
                         }

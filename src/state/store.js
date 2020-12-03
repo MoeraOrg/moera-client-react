@@ -116,6 +116,7 @@ import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
 import signUpDialog from "state/signupdialog/reducer";
+import quickTips from "state/quicktips/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
@@ -228,6 +229,7 @@ import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
+import quickTipsTriggers from "state/quicktips/triggers";
 
 const triggers = collectTriggers(
     homeTriggers,
@@ -244,7 +246,8 @@ const triggers = collectTriggers(
     namingTriggers,
     reactionsDialogTriggers,
     peopleTriggers,
-    signUpDialogTriggers
+    signUpDialogTriggers,
+    quickTipsTriggers
 );
 
 function* flushPostponedSaga() {
@@ -374,7 +377,8 @@ export default createStore(
         messageBox,
         confirmBox,
         flashBox,
-        signUpDialog
+        signUpDialog,
+        quickTips
     }),
     applyMiddleware(sagaMiddleware)
 );

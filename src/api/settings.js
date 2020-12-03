@@ -8,6 +8,12 @@ export const META = [
         internal: true
     },
     {
+        name: "invitation.quick-tips.shown",
+        type: "bool",
+        defaultValue: "false",
+        internal: true
+    },
+    {
         name: "instants.number.mode",
         type: "string",
         defaultValue: "not-viewed",
