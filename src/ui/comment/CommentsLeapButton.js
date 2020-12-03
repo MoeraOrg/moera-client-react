@@ -1,6 +1,9 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { getCommentsState } from "state/detailedposting/selectors";
 
 class CommentsLeapButton extends React.PureComponent {
 
@@ -15,8 +18,11 @@ class CommentsLeapButton extends React.PureComponent {
     }
 
     render() {
-        const {end} = this.props;
+        const {end, loadedCount} = this.props;
 
+        if (loadedCount === 0) {
+            return null;
+        }
         return (
             <button className="comments-rewind" title={end ? "Go to the top" : "Go to the bottom"}
                     onClick={this.onClick}>
@@ -27,4 +33,8 @@ class CommentsLeapButton extends React.PureComponent {
 
 }
 
-export default CommentsLeapButton;
+export default connect(
+    state => ({
+        loadedCount: getCommentsState(state).comments.length,
+    })
+)(CommentsLeapButton);
