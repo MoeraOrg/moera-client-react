@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
+import * as yup from 'yup';
 import { fromUnixTime, getUnixTime } from 'date-fns';
 
 import { closeChangeDateDialog, storyChangeDate } from "state/changedatedialog/actions";
@@ -47,6 +48,10 @@ const changeDateDialogLogic = {
             publishedAt: fromUnixTime(props.publishedAt)
         }
     },
+
+    validationSchema: yup.object().shape({
+        publishedAt: yup.date()
+    }),
 
     handleSubmit(values, formik) {
         formik.props.storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt));
