@@ -11,6 +11,7 @@
     padding: .3rem;
     font-size: larger;
     margin-right: 1rem;
+    white-space: nowrap;
     color: var(--gray);
 }
 
