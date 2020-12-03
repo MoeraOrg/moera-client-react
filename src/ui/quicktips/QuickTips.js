@@ -49,7 +49,7 @@ class QuickTips extends React.PureComponent {
                             </li>
                         }
                         <li className="subscribe">
-                            To subscribe to a blog, click
+                            To subscribe to a blog, open it and click
                             <Button variant="outline-primary" size="sm">Subscribe</Button>
                             button.
                         </li>
