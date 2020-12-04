@@ -1,6 +1,3 @@
-.draft-selector .dropdown-menu {
-}
-
 .draft-selector .dropdown-item {
     font-size: 90%;
     line-height: normal;
@@ -26,8 +23,7 @@
     font-size: 1.2rem;
 }
 
-.draft-selector .dropdown-item:hover .delete {
-    flex: none;
+.draft-selector .dropdown-item:hover .delete, .draft-selector .dropdown-item.touch .delete {
     visibility: visible;
     color: var(--red-light);
     cursor: pointer;

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as textFieldEdit from 'text-field-edit';
 
+import { Browser } from "api";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { TextField } from "ui/control/field";
 import { closeCommentDialog, commentDialogConflictClose, commentPost } from "state/detailedposting/actions";
@@ -26,7 +27,7 @@ class CommentDialog extends React.PureComponent {
     onKeyDown = (event) => {
         const {submitKey, submitForm} = this.props;
 
-        if (event.key === "Enter") {
+        if (!Browser.isTouchScreen() && event.key === "Enter") {
             const submit = (submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey);
             if (submit) {
                 submitForm();

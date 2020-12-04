@@ -63,6 +63,10 @@ export class Browser {
         }
     }
 
+    static isTouchScreen() {
+        return this.userAgentOs === "android" || this.userAgentOs === "ios";
+    }
+
     static getRootLocation() {
         const {protocol, host} = window.location;
         return rootUrl(protocol, host);

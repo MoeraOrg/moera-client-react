@@ -2,13 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Manager, Popper, Reference } from 'react-popper';
 import cx from 'classnames';
-import { formatDistanceToNow, fromUnixTime } from 'date-fns';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import LinesEllipsis from 'react-lines-ellipsis';
 
 import { Loading, LoadingInline } from "ui/control";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
-import "./ComposeDraftSelector.css";
+import ComposeDraftItem from "ui/compose/ComposeDraftItem";
 
 class ComposeDraftSelector extends React.PureComponent {
 
@@ -36,19 +33,15 @@ class ComposeDraftSelector extends React.PureComponent {
         document.removeEventListener("click", this.onHide);
     };
 
-    onSelect = id => e => {
-        if (e.target.closest(".delete") != null) {
-            return;
-        }
+    onSelect = id => {
         if (id === this.props.draftId) {
             return;
         }
         this.props.composeDraftSelect(id);
     };
 
-    onDelete = id => e => {
+    onDelete = id => {
         this.props.composeDraftListItemDelete(id);
-        e.preventDefault();
     };
 
     render() {
@@ -81,26 +74,11 @@ class ComposeDraftSelector extends React.PureComponent {
                                                 "shadow-sm",
                                                 {"show": visible}
                                             )}>
-                                                {draftList.map(draft => (
-                                                    <div className={cx("dropdown-item", {"current": draftId === draft.id})}
-                                                         key={draft.id} onClick={this.onSelect(draft.id)}
-                                                    >
-                                                        <div className="info">
-                                                            <div className="content">
-                                                                {draft.subject && <b>{draft.subject} </b>}
-                                                                <LinesEllipsis text={draft.text} maxLine="3"/>
-                                                            </div>
-                                                            <div className="edited">
-                                                                {formatDistanceToNow(fromUnixTime(draft.editedAt))}
-                                                            </div>
-                                                        </div>
-                                                        <div className="delete" title="Delete draft"
-                                                             onClick={this.onDelete(draft.id)}
-                                                        >
-                                                            <FontAwesomeIcon icon="trash-alt"/>
-                                                        </div>
-                                                    </div>
-                                                ))}
+                                                {draftList.map(draft =>
+                                                    <ComposeDraftItem draft={draft} current={draftId === draft.id}
+                                                                      onSelect={this.onSelect}
+                                                                      onDelete={this.onDelete}/>
+                                                )}
                                             </div>
                                         )}
                                     </Popper>
