@@ -27,7 +27,7 @@
 .features .drafts {
     display: flex;
     align-items: center;
-    justify-content: left;
+    justify-content: space-between;
     color: var(--gray-medium);
     margin-bottom: .5rem;
 }

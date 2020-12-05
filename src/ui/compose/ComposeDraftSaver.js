@@ -59,15 +59,12 @@ class ComposeDraftSaver extends React.PureComponent {
         const {savingDraft, savedDraft} = this.props;
         const {unsavedChanges} = this.state;
 
-        if (!unsavedChanges) {
-            return (
-                <div className="draft-saver">
-                    {savingDraft && "Saving..."}
-                    {savedDraft && "Draft saved."}
-                </div>
-            );
-        }
-        return null;
+        return (
+            <div className="draft-saver">
+                {!unsavedChanges && savingDraft && "Saving..."}
+                {!unsavedChanges && savedDraft && "Draft saved."}
+            </div>
+        );
     }
 
 }
