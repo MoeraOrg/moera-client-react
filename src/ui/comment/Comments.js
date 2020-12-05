@@ -13,7 +13,7 @@ import {
     getDetailedPosting,
     getDetailedPostingId,
     isCommentComposerFocused,
-    isCommentsFocused
+    isCommentsFocused, isDetailedPostingCached
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
@@ -196,7 +196,7 @@ export default connect(
     state => ({
         visible: isAtDetailedPostingPage(state),
         postingId: getDetailedPostingId(state),
-        total: getDetailedPosting(state).totalComments,
+        total: isDetailedPostingCached(state) ? getDetailedPosting(state).totalComments : 0,
         loadingFuture: getCommentsState(state).loadingFuture,
         loadingPast: getCommentsState(state).loadingPast,
         before: getCommentsState(state).before,

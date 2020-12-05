@@ -11,6 +11,7 @@ import {
     faCode,
     faCog,
     faComment,
+    faExclamationCircle,
     faExclamationTriangle,
     faExternalLinkAlt,
     faEye,
@@ -71,6 +72,7 @@ export default function initIconLibrary() {
     library.add(faCommentRegular);
     library.add(faEnvelope);
     library.add(faEnvelopeOpen);
+    library.add(faExclamationCircle);
     library.add(faExclamationTriangle);
     library.add(faExternalLinkAlt);
     library.add(faEye);

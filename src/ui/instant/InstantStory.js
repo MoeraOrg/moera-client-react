@@ -16,9 +16,9 @@ function getStoryTarget(story) {
         case "reaction-added-negative":
             return {nodeName: ":", href: `/post/${story.postingId}`}
         case "mention-posting":
+        case "posting-task-failed":
             return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
         case "subscriber-added":
-            return {nodeName: story.remoteNodeName, href: "/"}
         case "subscriber-deleted":
             return {nodeName: story.remoteNodeName, href: "/"}
         case "comment-added":
@@ -28,6 +28,7 @@ function getStoryTarget(story) {
         case "comment-reaction-added-positive":
         case "comment-reaction-added-negative":
         case "remote-comment-added":
+        case "comment-task-failed":
             return {
                 nodeName: story.remoteNodeName,
                 href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`

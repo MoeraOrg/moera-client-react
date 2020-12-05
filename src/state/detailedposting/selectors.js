@@ -1,4 +1,4 @@
-import { getPosting, isPostingBeingDeleted } from "state/postings/selectors";
+import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
 
 export function getDetailedPostingId(state) {
@@ -7,6 +7,10 @@ export function getDetailedPostingId(state) {
 
 export function isDetailedPostingId(state, id) {
     return state.detailedPosting.id === id;
+}
+
+export function isDetailedPostingCached(state) {
+    return isPostingCached(state, getDetailedPostingId(state));
 }
 
 export function getDetailedPosting(state) {
