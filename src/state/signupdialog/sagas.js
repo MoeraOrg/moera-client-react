@@ -5,12 +5,13 @@ import {
     SIGN_UP_STAGE_CONNECT,
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
-    SIGN_UP_STAGE_PASSWORD, SIGN_UP_STAGE_PROFILE,
+    SIGN_UP_STAGE_PASSWORD,
+    SIGN_UP_STAGE_PROFILE,
     signedUp,
     signUpFailed
 } from "state/signupdialog/actions";
 import { errorThrown } from "state/error/actions";
-import { connectedToHome } from "state/home/actions";
+import { connectedToHome, homeOwnerSet } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import { rootUrl } from "util/misc";
 import PROVIDERS from "providers";
@@ -120,6 +121,7 @@ export function* signUpSaga(action) {
                 return;
             }
             const secret = yield call(Node.registerName, ":", name);
+            yield put(homeOwnerSet(null, true));
             yield put(signedUp());
             yield put(registerNameSucceeded(secret.name, secret.mnemonic));
         } catch (e) {

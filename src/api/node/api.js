@@ -20,6 +20,9 @@ export const WhoAmI = schema({
     properties: {
         "nodeName": {
             type: "string"
+        },
+        "nodeNameChanging": {
+            type: "boolean"
         }
     },
     additionalProperties: false

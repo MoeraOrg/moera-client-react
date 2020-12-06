@@ -27,9 +27,3 @@
 #owner-name .node-name.incorrect {
     color: var(--incorrect-light);
 }
-
-.owner-name-expiring {
-    color: gold;
-    margin-left: -.5rem;
-    margin-right: .5rem;
-}

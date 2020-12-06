@@ -17,7 +17,7 @@ export function* nodeNameLoadSaga() {
         const data = yield call(Node.getNodeName, "");
         yield put(nodeNameSet(data));
         if (data.name) {
-            yield put(ownerSet(data.name));
+            yield put(ownerSet(data.name, null));
         }
     } catch (e) {
         yield put(nodeNameLoadFailed());

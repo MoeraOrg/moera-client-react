@@ -49,8 +49,8 @@ export function* connectToHomeSaga(action) {
 
 export function* verifyHomeOwnerSaga() {
     try {
-        const {nodeName} = yield call(Node.getWhoAmI, ":");
-        yield put(homeOwnerSet(nodeName));
+        const {nodeName, nodeNameChanging} = yield call(Node.getWhoAmI, ":");
+        yield put(homeOwnerSet(nodeName, nodeNameChanging));
 
         const {location, login, token, permissions} = yield select(getHomeConnectionData);
         Browser.storeConnectionData(location, nodeName, login, token, permissions);

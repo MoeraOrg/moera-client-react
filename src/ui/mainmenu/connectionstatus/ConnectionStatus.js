@@ -65,7 +65,7 @@ const ConnectionStatus = (props) => (
         <div id="connection-status">
             <ConnectionButtons {...props}/>
         </div>
-        <ConnectDialog />
+        <ConnectDialog/>
     </>
 );
 

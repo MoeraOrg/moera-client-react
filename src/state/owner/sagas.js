@@ -12,7 +12,7 @@ import { normalizeUrl, rootUrl } from "util/misc";
 export function* ownerLoadSaga() {
     try {
         const data = yield call(Node.getWhoAmI, "");
-        yield put(ownerSet(data.nodeName));
+        yield put(ownerSet(data.nodeName, data.nodeNameChanging));
     } catch (e) {
         yield put(errorThrown(e));
     }

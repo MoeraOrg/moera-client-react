@@ -67,7 +67,7 @@ class Storage extends React.PureComponent {
                 && (location !== home.location || login !== home.login || token !== home.token)) {
             homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes, data.roots);
             if (nodeName) {
-                homeOwnerSet(nodeName);
+                homeOwnerSet(nodeName, null);
             }
             return;
         }

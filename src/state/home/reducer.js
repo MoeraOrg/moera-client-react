@@ -24,7 +24,8 @@ const emptyConnection = {
         latest: false,
         verified: false,
         correct: false,
-        deadline: null
+        deadline: null,
+        changing: false
     }
 };
 
@@ -77,7 +78,8 @@ export default (state = initialState, action) => {
                     latest: false,
                     verified: false,
                     correct: false,
-                    deadline: null
+                    deadline: null,
+                    changing: action.payload.changing ?? state.owner.changing
                 }
             };
 

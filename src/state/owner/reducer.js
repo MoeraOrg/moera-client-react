@@ -17,6 +17,7 @@ const initialState = {
     deadline: null,
     verified: false,
     verifiedAt: 0,
+    changing: false,
     showNavigator: false,
     switching: false
 };
@@ -30,8 +31,14 @@ export default (state = initialState, action) => {
             if (state.name !== action.payload.name) {
                 return {
                     ...initialState,
-                    name: action.payload.name
+                    name: action.payload.name,
+                    changing: action.payload.changing ?? false
                 };
+            } else if (action.payload.changing != null) {
+                return {
+                    ...state,
+                    changing: action.payload.changing
+                }
             } else {
                 return state;
             }
