@@ -8,7 +8,6 @@ import {
     isNodeNameManageable,
     isNodeNameOperationPending
 } from "state/nodename/selectors";
-import Expiration from "ui/profile/view/Expiration";
 import OperationStatus from "ui/profile/view/OperationStatus";
 import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions";
 import RegisterNameDialog from "ui/profile/manage/RegisterNameDialog";
@@ -18,9 +17,9 @@ import NodeNameUpdateDialog from "ui/profile/manage/NodeNameUpdateDialog";
 const ManagementButtonsImpl = ({nameDefined, operationPending, registerNameDialog, nodeNameUpdateDialog}) => (
     <div className="col-sm-9">
         {nameDefined &&
-            <Button variant="primary" size="sm" disabled={operationPending} style={{marginRight: "0.2rem"}}
-                    onClick={e => nodeNameUpdateDialog(false)}>
-                Prolong
+            <Button variant="secondary" size="sm" disabled={operationPending} style={{marginRight: "0.2rem"}}
+                    onClick={() => nodeNameUpdateDialog(false)}>
+                Update
             </Button>
         }
         <Button variant={!nameDefined ? "primary" : "secondary"} size="sm" disabled={operationPending}
@@ -28,7 +27,7 @@ const ManagementButtonsImpl = ({nameDefined, operationPending, registerNameDialo
             Register {!nameDefined ? "New" : "Another"}
         </Button>
         <Button variant="outline-secondary" size="sm" disabled={operationPending} style={{marginLeft: "1.5rem"}}
-                onClick={e => nodeNameUpdateDialog(true)}>
+                onClick={() => nodeNameUpdateDialog(true)}>
             Transfer Name
         </Button>
     </div>
@@ -51,7 +50,6 @@ const NodeNameView = ({loading, name, manageable}) => (
             {name &&
                 <div className="col-sm-3">
                     <NodeName name={name} linked={false}/>
-                    {manageable && <Expiration/>}
                 </div>
             }
             {manageable && <ManagementButtons/>}

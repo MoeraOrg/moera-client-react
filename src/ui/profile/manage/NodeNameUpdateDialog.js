@@ -42,7 +42,7 @@ class NodeNameUpdateDialog extends React.PureComponent {
         }
 
         return (
-            <ModalDialog title={showChangeName ? "Transfer Name From Another Node" : "Prolong Node Name"} size="lg"
+            <ModalDialog title={showChangeName ? "Transfer Name From Another Node" : "Update Node Name"} size="lg"
                          onClose={nodeNameUpdateDialogCancel}>
                 <Form>
                     <div className="modal-body">
@@ -67,7 +67,7 @@ class NodeNameUpdateDialog extends React.PureComponent {
                         <Button variant="secondary" onClick={nodeNameUpdateDialogCancel}
                                 disabled={updating}>Cancel</Button>
                         <Button variant="primary" type="submit" loading={updating}>
-                            {showChangeName ? "Transfer" : "Prolong"}
+                            {showChangeName ? "Transfer" : "Update"}
                         </Button>
                     </div>
                 </Form>

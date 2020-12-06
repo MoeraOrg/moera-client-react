@@ -1,5 +1,3 @@
-import { fromUnixTime, isBefore, subDays } from 'date-fns';
-
 import { isNodeNameOperationFinished } from "state/nodename/selectors";
 
 export function getOwnerName(state) {
@@ -15,14 +13,4 @@ export function isOwnerNameRecentlyChanged(state) {
         && (state.owner.verifiedAt === 0
             || (isNodeNameOperationFinished(state)
                 && state.owner.verifiedAt < state.nodeName.operationStatusUpdated));
-}
-
-export function isOwnerNameExpiring(state) {
-    return state.owner.verified && state.owner.correct && state.owner.deadline != null
-        && !isBefore(new Date(), subDays(fromUnixTime(state.owner.deadline), 30));
-}
-
-export function isOwnerNameExpired(state) {
-    return state.owner.verified && state.owner.correct && state.owner.deadline != null
-        && !isBefore(new Date(), fromUnixTime(state.owner.deadline));
 }
