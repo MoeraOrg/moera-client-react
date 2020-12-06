@@ -26,7 +26,8 @@ import {
     FEED_STATUS_LOAD,
     FEED_STATUS_UPDATE,
     FEED_SUBSCRIBE,
-    FEED_UNSUBSCRIBE
+    FEED_UNSUBSCRIBE,
+    FEEDS_UPDATE
 } from "state/feeds/actions";
 import {
     COMMENT_COPY_LINK,
@@ -145,6 +146,7 @@ import {
     feedStatusLoadSaga,
     feedStatusUpdateSaga,
     feedSubscribeSaga,
+    feedsUpdateSaga,
     feedUnsubscribeSaga
 } from "state/feeds/sagas";
 import {
@@ -287,6 +289,7 @@ function* combinedSaga() {
     yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
     yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
     yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
+    yield takeLatest(FEEDS_UPDATE, introduce(feedsUpdateSaga));
     yield takeLatest(DETAILED_POSTING_LOAD, introduce(detailedPostingLoadSaga));
     yield takeLatest(COMPOSE_FEATURES_LOAD, composeFeaturesLoadSaga);
     yield takeLatest(COMPOSE_POSTING_LOAD, introduce(composePostingLoadSaga));

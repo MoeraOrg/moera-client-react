@@ -15,6 +15,7 @@ import {
     FEED_SCROLL_TO_ANCHOR,
     FEED_SCROLLED,
     FEED_SCROLLED_TO_ANCHOR,
+    FEED_SLICE_UPDATE,
     FEED_STATUS_LOAD,
     FEED_STATUS_LOAD_FAILED,
     FEED_STATUS_SET,
@@ -27,7 +28,7 @@ import {
     FEED_UNSUBSCRIBED,
     FEEDS_UNSET
 } from "state/feeds/actions";
-import { GO_TO_PAGE, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
+import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
@@ -99,8 +100,7 @@ function updateScrollingOnInactive(istate, feedName, feed) {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case INIT_FROM_LOCATION:
-        case WAKE_UP: {
+        case INIT_FROM_LOCATION: {
             const istate = immutable.wrap(state);
             Object.getOwnPropertyNames(state)
                 .filter(name => !name.startsWith(":"))
@@ -333,6 +333,18 @@ export default (state = initialState, action) => {
             } else {
                 return istate.set([feedName, "loadingFuture"], false).value();
             }
+        }
+
+        case FEED_SLICE_UPDATE: {
+            const {feedName} = action.payload;
+            const {istate, feed} = getFeed(state, feedName);
+            const stories = feed.stories.slice()
+                .filter(t => t.moment > action.payload.before || t.moment <= action.payload.after);
+            action.payload.stories
+                .filter(t => t.moment <= feed.before && t.moment > feed.after)
+                .forEach(t => stories.push(extractStory(t)));
+            stories.sort((a, b) => b.moment - a.moment);
+            return istate.assign([feedName], {stories}).value();
         }
 
         case FEEDS_UNSET: {

@@ -7,6 +7,10 @@ import { getSetting } from "state/settings/selectors";
 
 const MAX_MOMENT = 25337597040000; // January 1, 9999
 
+export function getAllFeeds(state) {
+    return Object.getOwnPropertyNames(state.feeds);
+}
+
 export function getFeedState(state, feedName) {
     return state.feeds[feedName] != null ? state.feeds[feedName] : emptyFeed;
 }

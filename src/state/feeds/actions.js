@@ -130,9 +130,20 @@ export const feedFutureSliceSet = (feedName, stories, before, after) => ({
     payload: {feedName, stories, before, after}
 });
 
+export const FEED_SLICE_UPDATE = "FEED_SLICE_UPDATE";
+export const feedSliceUpdate = (feedName, stories, before, after) => ({
+    type: FEED_SLICE_UPDATE,
+    payload: {feedName, stories, before, after}
+});
+
 export const FEEDS_UNSET = "FEEDS_UNSET";
 export const feedsUnset = () => ({
     type: FEEDS_UNSET
+});
+
+export const FEEDS_UPDATE = "FEEDS_UPDATE";
+export const feedsUpdate = () => ({
+    type: FEEDS_UPDATE
 });
 
 export const FEED_SCROLLED = "FEED_SCROLLED";

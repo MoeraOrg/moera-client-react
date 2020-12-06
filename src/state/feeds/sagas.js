@@ -8,6 +8,7 @@ import {
     feedGeneralSet,
     feedPastSliceLoadFailed,
     feedPastSliceSet,
+    feedSliceUpdate,
     feedStatusLoadFailed,
     feedStatusSet,
     feedStatusUpdated,
@@ -19,7 +20,7 @@ import {
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { namingNameUsed } from "state/naming/actions";
-import { getFeedState } from "state/feeds/selectors";
+import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReactions } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
@@ -116,6 +117,27 @@ export function* feedFutureSliceLoadSaga(action) {
     } catch (e) {
         yield put(feedFutureSliceLoadFailed(feedName));
         yield put(errorThrown(e));
+    }
+}
+
+export function* feedsUpdateSaga() {
+    const feedNames = yield select(getAllFeeds);
+    for (const feedName of feedNames) {
+        try {
+            let {before, after} = yield select(state => getFeedState(state, feedName));
+            while (before > after) {
+                const data = feedName.startsWith(":")
+                    ? yield call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
+                    : yield call(Node.getFeedSlice, "", feedName, after, null, 20);
+                yield call(fillActivityReactions, data.stories);
+                yield call(fillSubscriptions, data.stories);
+                yield put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
+                yield call(cacheNames, data.stories);
+                after = data.before;
+            }
+        } catch (e) {
+            yield put(errorThrown(e));
+        }
     }
 }
 

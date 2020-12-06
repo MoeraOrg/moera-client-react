@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import selectn from 'selectn';
 
-import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET } from "state/feeds/actions";
+import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
 import {
     POSTING_COMMENTS_SET,
     POSTING_COMMENTS_SUBSCRIBED,
@@ -27,7 +27,7 @@ import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions
 import { findPostingIdByRemote } from "state/postings/selectors";
 import { immutableSetSubscriptionId } from "state/subscriptions/util";
 import { replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
-import { INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
+import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
 
 const initialState = {
@@ -70,11 +70,11 @@ function outsideIn(story) {
 export default (state = initialState, action) => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
-        case WAKE_UP:
             return {};
 
         case FEED_PAST_SLICE_SET:
-        case FEED_FUTURE_SLICE_SET: {
+        case FEED_FUTURE_SLICE_SET:
+        case FEED_SLICE_UPDATE: {
             const istate = immutable.wrap(state);
             action.payload.stories
                 .map(s => outsideIn(s))

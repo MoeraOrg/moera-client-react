@@ -11,6 +11,7 @@ import {
     feedStatusUpdated,
     feedSubscribed,
     feedsUnset,
+    feedsUpdate,
     feedUnsubscribed
 } from "state/feeds/actions";
 import { isFeedGeneralToBeLoaded } from "state/feeds/selectors";
@@ -68,7 +69,8 @@ export default [
         inv(disj(isAtTimelinePage, isAtProfilePage)),
         () => feedGeneralUnset("timeline")
     ),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], true, feedsUnset),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, feedsUnset),
+    trigger(WAKE_UP, true, feedsUpdate),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),
     trigger(EVENT_NODE_STORY_ADDED, true, signal => storyAdded(toStory(signal.payload, false))),
