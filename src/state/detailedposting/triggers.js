@@ -16,6 +16,7 @@ import {
     commentsReceiverSwitch,
     commentsScrollToAnchor,
     commentsUnset,
+    commentsUpdate,
     DETAILED_POSTING_LOADED,
     detailedPostingLoad,
     focusComment,
@@ -33,6 +34,7 @@ import {
     isCommentMomentInLoadedRange,
     isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
+    isDetailedPostingDefined,
     isDetailedPostingId,
     isDetailedPostingToBeLoaded,
     isFocusedCommentInList,
@@ -51,8 +53,10 @@ import {
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], isAtDetailedPostingPage, detailedPostingLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], isAtDetailedPostingPage, commentsUnset),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], isDetailedPostingDefined, detailedPostingLoad),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, commentsUnset),
+    trigger(WAKE_UP, isAtDetailedPostingPage, commentsUpdate),
+    trigger(WAKE_UP, inv(isAtDetailedPostingPage), commentsUnset),
     trigger(DETAILED_POSTING_LOADED, true, signal => postingSet(signal.payload.posting)),
     trigger(
         POSTING_SET,

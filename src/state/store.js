@@ -44,6 +44,7 @@ import {
     COMMENTS_LOAD_ALL,
     COMMENTS_PAST_SLICE_LOAD,
     COMMENTS_RECEIVER_SWITCH,
+    COMMENTS_UPDATE,
     DETAILED_POSTING_LOAD,
     FOCUSED_COMMENT_LOAD,
     GLANCE_COMMENT_LOAD
@@ -163,6 +164,7 @@ import {
     commentsLoadAllSaga,
     commentsPastSliceLoadSaga,
     commentsReceiverSwitchSaga,
+    commentsUpdateSaga,
     commentVerifySaga,
     detailedPostingLoadSaga,
     focusedCommentLoadSaga,
@@ -330,6 +332,7 @@ function* combinedSaga() {
     yield takeLatest(COMMENTS_LOAD_ALL, introduce(commentsLoadAllSaga));
     yield takeEvery(COMMENTS_PAST_SLICE_LOAD, introduce(commentsPastSliceLoadSaga));
     yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
+    yield takeLatest(COMMENTS_UPDATE, introduce(commentsUpdateSaga));
     yield takeEvery(COMMENT_LOAD, commentLoadSaga);
     yield takeLatest(COMMENT_POST, commentPostSaga);
     yield takeEvery(COMMENT_DELETE, commentDeleteSaga);

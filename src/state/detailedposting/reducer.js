@@ -3,7 +3,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
 import selectn from 'selectn';
 
-import { GO_TO_PAGE, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
+import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CLOSE_COMMENT_DIALOG,
@@ -39,6 +39,7 @@ import {
     COMMENTS_SCROLLED_TO_ANCHOR,
     COMMENTS_SCROLLED_TO_COMMENTS,
     COMMENTS_SCROLLED_TO_COMPOSER,
+    COMMENTS_SLICE_UPDATE,
     COMMENTS_UNSET,
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_FAILED,
@@ -155,12 +156,6 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
-
-        case WAKE_UP:
-            return {
-                ...state,
-                comments: cloneDeep(emptyComments)
-            }
 
         case GO_TO_PAGE: {
             const {page, details: {id, commentId}} = action.payload;
@@ -286,6 +281,28 @@ export default (state = initialState, action) => {
             } else {
                 return istate.set("comments.loadingFuture", false).value();
             }
+        }
+
+        case COMMENTS_SLICE_UPDATE: {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            const istate = immutable.wrap(state);
+            const comments = state.comments.comments.slice()
+                    .filter(c => c.moment > action.payload.before || c.moment <= action.payload.after);
+            action.payload.comments
+                .filter(c => c.moment <= state.comments.before && c.moment > state.comments.after)
+                .forEach(c => comments.push(extractComment(c)));
+            comments.sort((a, b) => a.moment - b.moment);
+            istate.assign("comments", {comments});
+            if (action.payload.before === state.comments.before) {
+                istate.set("comments.totalInFuture", action.payload.totalInFuture);
+            }
+            if (action.payload.after === state.comments.after) {
+                istate.set("comments.totalInPast", action.payload.totalInPast);
+            }
+            return istate.value();
         }
 
         case COMMENTS_SCROLL_TO_ANCHOR: {

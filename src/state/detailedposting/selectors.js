@@ -5,6 +5,10 @@ export function getDetailedPostingId(state) {
     return state.detailedPosting.id;
 }
 
+export function isDetailedPostingDefined(state) {
+    return !!getDetailedPostingId(state);
+}
+
 export function isDetailedPostingId(state, id) {
     return state.detailedPosting.id === id;
 }

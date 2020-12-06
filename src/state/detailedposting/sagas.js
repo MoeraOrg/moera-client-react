@@ -21,6 +21,7 @@ import {
     commentsPastSliceSet,
     commentsReceiverSwitched,
     commentsScrollToComposer,
+    commentsSliceUpdate,
     commentVerifyFailed,
     detailedPostingLoaded,
     detailedPostingLoadFailed,
@@ -113,6 +114,21 @@ export function* commentsFutureSliceLoadSaga() {
         // TODO yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId));
+        yield put(errorThrown(e));
+    }
+}
+
+export function* commentsUpdateSaga() {
+    let {receiverName, receiverPostingId, before, after} = yield select(getCommentsState);
+    try {
+        while (before > after) {
+            const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, after, null, 20);
+            yield put(commentsSliceUpdate(receiverName, receiverPostingId, data.comments, data.before, data.after,
+                data.total, data.totalInPast, data.totalInFuture));
+            // TODO yield call(cacheNames, data.stories);
+            after = data.before;
+        }
+    } catch (e) {
         yield put(errorThrown(e));
     }
 }

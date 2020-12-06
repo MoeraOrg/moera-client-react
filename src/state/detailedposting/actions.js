@@ -66,6 +66,18 @@ export const commentsFutureSliceSet = (nodeName, postingId, comments, before, af
     payload: {nodeName, postingId, comments, before, after, total, totalInPast, totalInFuture}
 });
 
+export const COMMENTS_SLICE_UPDATE = "COMMENTS_SLICE_UPDATE";
+export const commentsSliceUpdate = (nodeName, postingId, comments, before, after, total,
+                                    totalInPast, totalInFuture) => ({
+    type: COMMENTS_SLICE_UPDATE,
+    payload: {nodeName, postingId, comments, before, after, total, totalInPast, totalInFuture}
+});
+
+export const COMMENTS_UPDATE = "COMMENTS_UPDATE";
+export const commentsUpdate = () => ({
+    type: COMMENTS_UPDATE
+});
+
 export const COMMENTS_UNSET = "COMMENTS_UNSET";
 export const commentsUnset = () => ({
     type: COMMENTS_UNSET
