@@ -1,0 +1,25 @@
+.refresh-indicator {
+    display: flex;
+    position: fixed;
+    visibility: hidden;
+    height: 3px;
+    width: 0;
+    z-index: 1020;
+}
+
+.refresh-indicator.active {
+    transition: width 2s linear;
+    visibility: visible;
+    width: 100%;
+}
+
+.refresh-indicator .body {
+    flex: auto;
+    background-color: var(--orange);
+}
+
+.refresh-indicator .tail {
+    flex: none;
+    width: 1rem;
+    background-image: linear-gradient(to right, var(--orange), transparent);
+}

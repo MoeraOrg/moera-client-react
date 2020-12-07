@@ -91,6 +91,7 @@ import { STORY_CHANGE_DATE } from "state/changedatedialog/actions";
 import { PEOPLE_GENERAL_LOAD, SUBSCRIBERS_LOAD, SUBSCRIPTIONS_LOAD } from "state/people/actions";
 import { FLASH_BOX } from "state/flashbox/actions";
 import { SIGN_UP, SIGN_UP_DOMAIN_VERIFY, SIGN_UP_FIND_DOMAIN, SIGN_UP_NAME_VERIFY } from "state/signupdialog/actions";
+import { REFRESH_SHOW } from "state/refresh/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import pulse from "state/pulse/reducer";
@@ -119,6 +120,7 @@ import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
 import signUpDialog from "state/signupdialog/reducer";
 import quickTips from "state/quicktips/reducer";
+import refresh from "state/refresh/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
@@ -216,6 +218,7 @@ import {
     signUpNameVerifySaga,
     signUpSaga
 } from "state/signupdialog/sagas";
+import { refreshShowSaga } from "state/refresh/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -234,6 +237,7 @@ import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
+import refreshTriggers from "state/refresh/triggers";
 
 const triggers = collectTriggers(
     homeTriggers,
@@ -251,7 +255,8 @@ const triggers = collectTriggers(
     reactionsDialogTriggers,
     peopleTriggers,
     signUpDialogTriggers,
-    quickTipsTriggers
+    quickTipsTriggers,
+    refreshTriggers
 );
 
 function* flushPostponedSaga() {
@@ -352,6 +357,7 @@ function* combinedSaga() {
     yield takeLatest(SIGN_UP_FIND_DOMAIN, signUpFindDomainSaga);
     yield takeLatest(SIGN_UP_DOMAIN_VERIFY, signUpDomainVerifySaga);
     yield takeLatest(GO_HOME, goHomeSaga);
+    yield takeLatest(REFRESH_SHOW, refreshShowSaga);
 
     yield invokeTriggers(triggers);
 }
@@ -384,7 +390,8 @@ export default createStore(
         confirmBox,
         flashBox,
         signUpDialog,
-        quickTips
+        quickTips,
+        refresh
     }),
     applyMiddleware(sagaMiddleware)
 );

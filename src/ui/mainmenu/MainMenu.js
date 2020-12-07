@@ -8,6 +8,7 @@ import MainMenuPages from "ui/mainmenu/MainMenuPages";
 import ConnectionStatus from "ui/mainmenu/connectionstatus/ConnectionStatus";
 import VerticalMenuToggler from "ui/mainmenu/vertical/VerticalMenuToggler";
 import AddonInvitation from "ui/mainmenu/AddonInvitation";
+import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
 import "./MainMenu.css";
 
 const MainMenu = ({atNode}) => (
@@ -28,6 +29,7 @@ const MainMenu = ({atNode}) => (
             <VerticalMenuToggler/>
         </nav>
         <AddonInvitation/>
+        <RefreshIndicator/>
     </>
 );
 
