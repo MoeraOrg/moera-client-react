@@ -16,6 +16,7 @@ import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { mentionName } from "util/misc";
+import { replaceSmileys } from "util/text";
 import "./CommentCompose.css";
 
 class CommentCompose extends React.PureComponent {
@@ -33,15 +34,26 @@ class CommentCompose extends React.PureComponent {
     onKeyDown = (event) => {
         const {submitKey, submitForm} = this.props;
 
-        if (!Browser.isTouchScreen() && event.key === "Enter") {
-            const submit = !event.shiftKey
-                && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
-            if (submit) {
-                submitForm();
-            } else {
-                textFieldEdit.insert(event.target, "\n");
-            }
-            event.preventDefault();
+        switch (event.key) {
+            case "Enter":
+                const submit = !Browser.isTouchScreen() && !event.shiftKey
+                    && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
+                if (submit) {
+                    submitForm();
+                } else {
+                    textFieldEdit.insert(event.target, "\n");
+                    event.target.value = replaceSmileys(event.target.value);
+                }
+                event.preventDefault();
+                break;
+
+            case "Tab":
+            case " ":
+                event.target.value = replaceSmileys(event.target.value);
+                break;
+
+            default:
+                // do nothing
         }
     }
 

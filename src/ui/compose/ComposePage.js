@@ -2,9 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 
-import { Page } from "ui/page/Page";
+import { getSetting } from "state/settings/selectors";
+import { settingsUpdate } from "state/settings/actions";
+import { composeConflictClose, composePost } from "state/compose/actions";
 import { ConflictWarning, Loading } from "ui/control";
 import { InputField, TextField } from "ui/control/field";
+import { Page } from "ui/page/Page";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
@@ -16,13 +19,10 @@ import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
 import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposeResetButton from "ui/compose/ComposeResetButton";
-import { composeConflictClose, composePost } from "state/compose/actions";
-import { getSetting } from "state/settings/selectors";
-import { settingsUpdate } from "state/settings/actions";
-import composePageLogic from "ui/compose/compose-page-logic";
-
-import "./ComposePage.css";
 import Jump from "ui/navigation/Jump";
+import composePageLogic from "ui/compose/compose-page-logic";
+import { replaceSmileys } from "util/text";
+import "./ComposePage.css";
 
 class ComposePage extends React.PureComponent {
 
@@ -39,6 +39,19 @@ class ComposePage extends React.PureComponent {
             const values = composePageLogic.mapPropsToValues(this.props);
             this.setState({initialPostingText: composePageLogic.mapValuesToPostingText(values, this.props)});
             this.props.resetForm({values});
+        }
+    }
+
+    onKeyDown = event => {
+        switch (event.key) {
+            case "Enter":
+            case "Tab":
+            case " ":
+                event.target.value = replaceSmileys(event.target.value);
+                break;
+
+            default:
+            // do nothing
         }
     }
 
@@ -66,7 +79,8 @@ class ComposePage extends React.PureComponent {
                         {subjectPresent &&
                             <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
-                        <TextField name="body" anyValue autoFocus disabled={loadingContent || beingPosted}/>
+                        <TextField name="body" anyValue autoFocus disabled={loadingContent || beingPosted}
+                                   onKeyDown={this.onKeyDown}/>
                         <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>

@@ -1,5 +1,7 @@
 import * as yup from 'yup';
 
+import { replaceSmileys } from "util/text";
+
 const commentComposeLogic = {
 
     mapPropsToValues(props) {
@@ -18,7 +20,7 @@ const commentComposeLogic = {
         return {
             ownerName: props.ownerName,
             bodySrc: JSON.stringify({
-                text: values.body.trim()
+                text: replaceSmileys(values.body.trim())
             }),
             bodySrcFormat: props.sourceFormatDefault,
             acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},

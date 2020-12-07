@@ -2,6 +2,7 @@ import * as yup from 'yup';
 import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 
 import { ClientSettings } from "api";
+import { replaceSmileys } from "util/text";
 
 const composePageLogic = {
 
@@ -49,8 +50,8 @@ const composePageLogic = {
     mapValuesToPostingText(values, props) {
         return {
             bodySrc: JSON.stringify({
-                subject: props.subjectPresent ? values.subject.trim() : null,
-                text: values.body.trim()
+                subject: props.subjectPresent ? replaceSmileys(values.subject.trim()) : null,
+                text: replaceSmileys(values.body.trim())
             }),
             bodySrcFormat: values.bodyFormat.trim(),
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
