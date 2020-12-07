@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as textFieldEdit from 'text-field-edit'
 
-import { Browser } from "api";
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
+import { Browser } from "ui/browser";
 import { Button } from "ui/control";
 import { TextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";

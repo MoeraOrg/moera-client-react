@@ -5,8 +5,9 @@ import { Client } from '@stomp/stompjs';
 import * as URI from 'uri-js';
 import { addMinutes, isBefore } from 'date-fns';
 
-import { ALLOWED_SELF_EVENTS, Browser, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
+import { ALLOWED_SELF_EVENTS, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
 import { eventAction } from "api/events/actions";
+import { Browser } from "ui/browser";
 import { now } from "util/misc";
 
 class Events extends React.PureComponent {

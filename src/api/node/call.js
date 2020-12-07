@@ -1,7 +1,6 @@
 import { apply, call, put, select } from 'redux-saga/effects';
 
 import {
-    Browser,
     formatSchemaErrors,
     HomeNotConnectedError,
     NameResolvingError,
@@ -15,6 +14,7 @@ import { getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
+import { Browser } from "ui/browser";
 
 export function* callApi({
     location,

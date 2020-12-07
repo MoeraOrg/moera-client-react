@@ -2,7 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import cx from 'classnames';
 
-import { Browser } from "api";
+import { Browser } from "ui/browser";
 import { LoadingInline } from "ui/control";
 
 export class Button extends React.PureComponent {

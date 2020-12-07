@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Browser } from "api";
+import { Browser } from "ui/browser";
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";

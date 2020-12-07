@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Browser } from "api";
 import { goToTimeline } from "state/navigation/actions";
 import { isAtTimelinePage, isStandaloneMode } from "state/navigation/selectors";
 import { getFeedState } from "state/feeds/selectors";
 import { getNodeRootLocation } from "state/node/selectors";
+import { Browser } from "ui/browser";
 
 class MainMenuTimelineAccessor extends React.PureComponent {
 

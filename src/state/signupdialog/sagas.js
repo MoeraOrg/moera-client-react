@@ -1,6 +1,10 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Browser, Naming, Node, NodeApiError } from "api";
+import { Naming, Node, NodeApiError } from "api";
+import PROVIDERS from "providers";
+import { errorThrown } from "state/error/actions";
+import { connectedToHome, homeOwnerSet } from "state/home/actions";
+import { registerNameSucceeded } from "state/nodename/actions";
 import {
     SIGN_UP_STAGE_CONNECT,
     SIGN_UP_STAGE_DOMAIN,
@@ -10,11 +14,8 @@ import {
     signedUp,
     signUpFailed
 } from "state/signupdialog/actions";
-import { errorThrown } from "state/error/actions";
-import { connectedToHome, homeOwnerSet } from "state/home/actions";
-import { registerNameSucceeded } from "state/nodename/actions";
+import { Browser } from "ui/browser";
 import { rootUrl } from "util/misc";
-import PROVIDERS from "providers";
 
 function getProvider(name) {
     return PROVIDERS.find(p => p.name === name);

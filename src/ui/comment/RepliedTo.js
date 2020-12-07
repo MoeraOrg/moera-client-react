@@ -3,13 +3,13 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Browser } from "api";
+import { glanceComment } from "state/detailedposting/actions";
+import { getSetting } from "state/settings/selectors";
+import { Browser } from "ui/browser";
 import { NodeName } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import GlanceComment from "ui/comment/GlanceComment";
-import { glanceComment } from "state/detailedposting/actions";
-import { getSetting } from "state/settings/selectors";
 import "./RepliedTo.css";
 
 class RepliedTo extends React.PureComponent {

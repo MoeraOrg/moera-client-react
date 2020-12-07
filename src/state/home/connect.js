@@ -4,10 +4,11 @@ import { messageBox } from "state/messagebox/actions";
 import { normalizeUrl } from "util/misc";
 import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerified } from "state/home/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { Browser, NameResolvingError, Naming, Node, NodeApiError, NodeName } from "api";
+import { NameResolvingError, Naming, Node, NodeApiError, NodeName } from "api";
+import { selectApi } from "api/node/call";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData } from "state/home/selectors";
-import { selectApi } from "api/node/call";
+import { Browser } from "ui/browser";
 
 function* connectToHomeFailure(error, onClose = null) {
     yield put(connectionToHomeFailed());

@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Browser } from "api";
 import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import LocalStorageBackend from "ui/storage/LocalStorageBackend";
+import { Browser } from "ui/browser";
 
 class Storage extends React.PureComponent {
 

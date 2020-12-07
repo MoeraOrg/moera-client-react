@@ -4,7 +4,7 @@ import cx from 'classnames';
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 
-import { Browser } from "api";
+import { Browser } from "ui/browser";
 import "./ComposeDraftItem.css";
 
 class ComposeDraftItem extends React.PureComponent {

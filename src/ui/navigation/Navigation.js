@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Browser } from "api";
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { getNodeRootLocation } from "state/node/selectors";
+import { Browser } from "ui/browser";
 
 class Navigation extends React.PureComponent {
 

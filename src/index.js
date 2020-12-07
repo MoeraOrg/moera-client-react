@@ -6,13 +6,12 @@ import 'react-widgets/dist/css/react-widgets.css';
 import simpleNumberLocalizer from 'react-widgets-simple-number';
 import dateFnsLocalizer from 'react-widgets-date-fns';
 
-import { Browser } from "api";
 import store from "state/store";
 import { initFromLocation, initStorage } from "state/navigation/actions";
 import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
 import initIconLibrary from "./icons";
+import { Browser } from "ui/browser";
 import App from "ui/App";
-
 import * as serviceWorker from "./serviceWorker";
 
 function sendInitAction(standalone) {

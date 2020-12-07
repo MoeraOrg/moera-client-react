@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Browser } from "api";
-import { NodeName } from "ui/control";
 import { isStandaloneMode } from "state/navigation/selectors";
+import { Browser } from "ui/browser";
+import { NodeName } from "ui/control";
 
 const ConnectionItem = ({name, url, onClick, onDisconnect, standalone}) => (
     <div className="connection-item">

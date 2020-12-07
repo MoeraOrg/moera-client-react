@@ -1,7 +1,7 @@
 import React from 'react';
 import ObjectPath from 'object-path';
 
-import { Browser } from "api";
+import { Browser } from "ui/browser";
 
 const NAME_TTL = 6 * 60 * 60; // seconds
 const MAX_NAMES_SIZE = 500;

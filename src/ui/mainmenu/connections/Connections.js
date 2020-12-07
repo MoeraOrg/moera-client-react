@@ -3,9 +3,9 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Browser } from "api/browser";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
+import { Browser } from "ui/browser";
 import { Button, NodeName } from "ui/control";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";

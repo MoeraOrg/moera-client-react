@@ -1,15 +1,15 @@
 import { call, put, select } from '@redux-saga/core/effects';
 
 import { Naming, NodeName } from "api";
-import { Browser } from "api/browser";
-import { errorThrown } from "state/error/actions";
-import { namingNameLoad, namingNameLoaded, namingNameLoadFailed, namingNamePurge } from "state/naming/actions";
 import { getDetailedPosting } from "state/detailedposting/selectors";
-import { getHomeOwnerName } from "state/home/selectors";
-import { getOwnerName } from "state/owner/selectors";
+import { errorThrown } from "state/error/actions";
 import { getFeedState } from "state/feeds/selectors";
-import { now } from "util/misc";
+import { getHomeOwnerName } from "state/home/selectors";
+import { namingNameLoad, namingNameLoaded, namingNameLoadFailed, namingNamePurge } from "state/naming/actions";
 import { getNamingNameDetails } from "state/naming/selectors";
+import { getOwnerName } from "state/owner/selectors";
+import { Browser } from "ui/browser";
+import { now } from "util/misc";
 
 export function* namingNameLoadSaga(action) {
     yield call(fetchNodeUri, action.payload.name);

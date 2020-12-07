@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import * as URI from 'uri-js';
 
-import { Browser } from "api";
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
+import { Browser } from "ui/browser";
 import { rootUrl, urlWithParameters } from "util/misc";
 
 class Jump extends React.PureComponent {

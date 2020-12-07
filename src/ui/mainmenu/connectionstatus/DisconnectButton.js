@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Browser } from "api";
 import { confirmBox } from "state/confirmbox/actions";
 import { disconnectFromHome } from "state/home/actions";
+import { Browser } from "ui/browser";
 
 class DisconnectButton extends React.PureComponent {
 

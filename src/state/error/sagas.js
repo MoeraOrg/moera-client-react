@@ -1,10 +1,11 @@
 import { delay, put, select } from 'redux-saga/effects';
 
-import { Browser, NodeApiError } from "api";
+import { NodeApiError } from "api";
 import { errorDismiss, errorShow } from "state/error/actions";
 import { disconnectFromHome } from "state/home/actions";
 import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
+import { Browser } from "ui/browser";
 
 export function* errorSaga(action) {
     if (action.payload.e instanceof NodeApiError) {

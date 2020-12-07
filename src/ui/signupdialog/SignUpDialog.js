@@ -15,10 +15,10 @@ import {
     signUpFindDomain,
     signUpNameVerify
 } from "state/signupdialog/actions";
+import { Browser } from "ui/browser";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField, SelectField } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
-import { Browser } from "api";
 import PROVIDERS from "providers";
 
 class SignUpDialog extends React.PureComponent {

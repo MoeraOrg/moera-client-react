@@ -1,10 +1,11 @@
 import { call, put } from 'redux-saga/effects';
 
-import { Browser, Node } from "api";
+import { Node } from "api";
 import { restoreConnectDialog } from "state/connectdialog/actions";
 import { browserApiSet, connectedToHome, disconnectFromHome } from "state/home/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import { errorThrown } from "state/error/actions";
+import { Browser } from "ui/browser";
 import { normalizeUrl } from "util/misc";
 
 export function* homeRestoreSaga(action) {

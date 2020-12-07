@@ -13,6 +13,5 @@ export {
     formatSchemaErrors
 } from "api/error";
 export { NodeName, RegisteredName } from "api/node-name";
-export { Browser } from "api/browser";
 export { ClientSettings, SettingTypes };
 export { REACTION_EMOJIS } from "api/node/reaction-emojis";

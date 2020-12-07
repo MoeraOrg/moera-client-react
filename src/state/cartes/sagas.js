@@ -1,8 +1,9 @@
 import { call, put } from 'redux-saga/effects';
 
-import { Browser, Node } from "api";
+import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import { cartesSet } from "state/cartes/actions";
+import { Browser } from "ui/browser";
 
 export function* cartesLoadSaga() {
     try {

@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Manager, Popper, Reference } from 'react-popper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Browser } from "api";
 import { isStandaloneMode } from "state/navigation/selectors";
+import { Browser } from "ui/browser";
 import "./DropdownMenu.css";
 
 class DropdownMenuImpl extends React.PureComponent {

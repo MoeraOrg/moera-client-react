@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 
-import { Browser } from "api";
 import { getNamingNameDetails } from "state/naming/selectors";
-import { urlWithParameters } from "util/misc";
 import { getSetting } from "state/settings/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
+import { Browser } from "ui/browser";
+import { urlWithParameters } from "util/misc";
 
 class EntryHtml extends React.PureComponent {
 
