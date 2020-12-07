@@ -42,14 +42,14 @@ class CommentCompose extends React.PureComponent {
                     submitForm();
                 } else {
                     textFieldEdit.insert(event.target, "\n");
-                    event.target.value = replaceSmileys(event.target.value);
+                    event.target.value = replaceSmileys(event.target.value, false);
                 }
                 event.preventDefault();
                 break;
 
             case "Tab":
             case " ":
-                event.target.value = replaceSmileys(event.target.value);
+                event.target.value = replaceSmileys(event.target.value, false);
                 break;
 
             default:

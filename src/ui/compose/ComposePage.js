@@ -47,7 +47,7 @@ class ComposePage extends React.PureComponent {
             case "Enter":
             case "Tab":
             case " ":
-                event.target.value = replaceSmileys(event.target.value);
+                event.target.value = replaceSmileys(event.target.value, false);
                 break;
 
             default:

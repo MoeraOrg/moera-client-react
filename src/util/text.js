@@ -1,12 +1,12 @@
 import { SMILEY_LIKE, SMILEYS } from "smileys";
 
-export function replaceSmileys(text) {
+export function replaceSmileys(text, removeEscapes = true) {
     if (text == null) {
         return text;
     }
     return text.replace(SMILEY_LIKE, (match, p1, p2) => {
         if (p2.startsWith("\\")) {
-            return p1 + p2.substring(1);
+            return removeEscapes ? p1 + p2.substring(1) : match;
         }
         for (const smiley of SMILEYS) {
             if (smiley.regex.test(p2)) {
