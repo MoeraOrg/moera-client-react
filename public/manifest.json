@@ -1,15 +1,15 @@
 {
   "short_name": "Moera",
-  "name": "Moera Decentralized Social Network Client",
+  "name": "Moera Social Network Client",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "pics/icon-o-128.png",
       "sizes": "128x128",
-      "type": "image/x-icon"
+      "type": "image/png"
     }
   ],
-  "start_url": ".",
+  "start_url": "https://web.moera.org/",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#f8fc30",
   "background_color": "#ffffff"
 }
