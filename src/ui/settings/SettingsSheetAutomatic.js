@@ -2,12 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 
+import { SettingTypes } from "api";
 import SettingsField from "ui/settings/SettingsField";
 import SettingsButtons from "ui/settings/SettingsButtons";
-import { SettingTypes } from "api";
 import { messageBox } from "state/messagebox/actions";
 import { settingsUpdate } from "state/settings/actions";
-
+import { mapEquals } from "util/map";
 import "./SettingsSheetAutomatic.css";
 
 function toFieldName(name) {
@@ -51,7 +51,7 @@ class SettingsSheetAutomatic extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (((this.props.valuesMap.size > 0) !== (prevProps.valuesMap.size > 0))
+        if (!mapEquals(this.props.valuesMap, prevProps.valuesMap)
             || ((this.props.metaMap.size > 0) !== (prevProps.metaMap.size > 0))) {
 
             this.props.resetForm({
@@ -68,16 +68,12 @@ class SettingsSheetAutomatic extends React.PureComponent {
                 <div className="settings-sheet" style={{maxHeight: this.state.sheetMaxHeight}}>
                     {[...metaMap.keys()].sort().map(name => {
                         const meta = metaMap.get(name);
-                        if (meta.internal) {
-                            return null;
-                        }
-                        let initialValue = valuesMap.get(name);
-                        initialValue = initialValue ? initialValue : meta.defaultValue;
+                        const initialValue = valuesMap.get(name) ?? meta.defaultValue;
                         return <SettingsField key={name} name={name} fieldName={toFieldName(name)} meta={meta}
                                               initialValue={initialValue}/>
                     })}
                 </div>
-                <SettingsButtons />
+                <SettingsButtons/>
             </Form>
         );
     }
@@ -95,8 +91,7 @@ const settingsSheetOtherLogic = {
 
         let values = {};
         metaMap.forEach((meta, name) => {
-            let value = valuesMap.get(name);
-            value = value ? value : meta.defaultValue;
+            const value = valuesMap.get(name) ?? meta.defaultValue;
             values[toFieldName(name)] = SettingTypes.toValue(meta.type, value);
         });
         return values;

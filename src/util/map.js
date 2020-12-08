@@ -43,3 +43,21 @@ export function mapFilter(map, filter) {
     });
     return result;
 }
+
+export function mapEquals(map1, map2) {
+    if ((map1 == null || map1.size === 0) && (map2 == null || map2.size === 0)) {
+        return true;
+    }
+    if (map1 == null || map1.size === 0 || map2 == null || map2.size === 0) {
+        return false;
+    }
+    if (map1.size !== map2.size) {
+        return false;
+    }
+    for (const [key, value] of map1) {
+        if (!map2.has(key) || map2.get(key) !== value) {
+            return false;
+        }
+    }
+    return true;
+}
