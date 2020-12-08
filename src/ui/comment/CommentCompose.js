@@ -32,7 +32,7 @@ class CommentCompose extends React.PureComponent {
     }
 
     onKeyDown = (event) => {
-        const {submitKey, submitForm, smileys, smileysEnabled} = this.props;
+        const {submitKey, submitForm, smileysEnabled} = this.props;
 
         switch (event.key) {
             case "Enter":
@@ -105,7 +105,6 @@ export default connect(
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default"),
         submitKey: getSetting(state, "comment.submit-key"),
-        smileys: getSetting(state, "comment.smileys.enabled"),
         smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled"))
     }),
     { commentPost, openSignUpDialog, openConnectDialog }
