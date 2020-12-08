@@ -42,7 +42,7 @@ if (standalone || document.contentType === "text/plain") {
     // If you want your app to work offline and load faster, you can change
     // unregister() to register() below. Note this comes with some pitfalls.
     // Learn more about service workers: http://bit.ly/CRA-PWA
-    serviceWorker.unregister();
+    serviceWorker.register();
 } else {
     document.body.innerText = `Pages with content type '${document.contentType}' are not supported anymore
                                for security reasons. Please turn to administrator to upgrade the node software
