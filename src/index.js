@@ -12,7 +12,7 @@ import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
 import initIconLibrary from "./icons";
 import { Browser } from "ui/browser";
 import App from "ui/App";
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker from "serviceWorker";
 
 function sendInitAction(standalone) {
     store.dispatch(initStorage(standalone));
@@ -26,6 +26,8 @@ function sendInitAction(standalone) {
 
 const standalone = document.body.dataset.comPassword == null && document.body.dataset.comInitialized == null;
 if (standalone || document.contentType === "text/plain") {
+    serviceWorker.register();
+
     Browser.init();
     initIconLibrary();
     simpleNumberLocalizer();
@@ -38,11 +40,6 @@ if (standalone || document.contentType === "text/plain") {
         document.getElementById("app-root")
     );
     sendInitAction(standalone);
-
-    // If you want your app to work offline and load faster, you can change
-    // unregister() to register() below. Note this comes with some pitfalls.
-    // Learn more about service workers: http://bit.ly/CRA-PWA
-    serviceWorker.register();
 } else {
     document.body.innerText = `Pages with content type '${document.contentType}' are not supported anymore
                                for security reasons. Please turn to administrator to upgrade the node software
