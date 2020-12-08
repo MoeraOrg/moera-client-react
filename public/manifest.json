@@ -1,4 +1,5 @@
 {
+  "lang": "en-US",
   "short_name": "Moera",
   "name": "Moera Social Network Client",
   "icons": [
@@ -18,7 +19,8 @@
       "type": "image/png"
     }
   ],
-  "start_url": "https://web.moera.org/",
+  "categories": ["social"],
+  "start_url": ".",
   "display": "standalone",
   "theme_color": "#f8fc30",
   "background_color": "#ffffff"
