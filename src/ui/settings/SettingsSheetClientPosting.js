@@ -10,7 +10,8 @@ const INCLUDE = new Set([
     PREFIX + "posting.body.font-magnitude",
     PREFIX + "posting.reply.subject-prefix",
     PREFIX + "posting.reply.preamble",
-    PREFIX + "posting.reply.quote-all"
+    PREFIX + "posting.reply.quote-all",
+    PREFIX + "posting.smileys.enabled"
 ]);
 
 const SettingsSheetClientPosting = ({clientValues, clientMeta}) => (

@@ -1,4 +1,4 @@
-export const SMILEY_LIKE = /(^|\s)([-+:;'`,.=^cсDEЕoоOОPРpрbЬьÞþxхXХЖ0138<>[\](){}|#@$&%*\\/]{2,})(?=\s|$)/;
+export const SMILEY_LIKE = /(^|\s)([-+:;'`,.=^cсDEЕoоOОPРpрbЬьÞþxхXХЖ0138<>[\](){}|#@$&%*\\/]{2,})(?=\s|$)/g;
 
 export const SMILEYS = [
     {

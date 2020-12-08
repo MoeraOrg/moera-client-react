@@ -16,11 +16,15 @@ const commentComposeLogic = {
         body: yup.string().trim().required("Must not be empty")
     }),
 
+    _replaceSmileys(props, text) {
+        return props.smileysEnabled ? replaceSmileys(text) : text;
+    },
+
     mapValuesToCommentText(values, props) {
         return {
             ownerName: props.ownerName,
             bodySrc: JSON.stringify({
-                text: replaceSmileys(values.body.trim())
+                text: this._replaceSmileys(props, values.body.trim())
             }),
             bodySrcFormat: props.sourceFormatDefault,
             acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},

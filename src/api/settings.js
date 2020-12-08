@@ -100,6 +100,13 @@ export const META = [
         modifiers: {}
     },
     {
+        name: "comment.smileys.enabled",
+        type: "bool",
+        defaultValue: "true",
+        title: "Replace simple smileys with emojis",
+        modifiers: {}
+    },
+    {
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",
@@ -161,7 +168,7 @@ export const META = [
         name: "posting.body.font-magnitude",
         type: "int",
         defaultValue: "100",
-        title: "Posting font size",
+        title: "Post font size",
         modifiers: {
             min: 15,
             max: 300,
@@ -173,21 +180,28 @@ export const META = [
         name: "posting.reply.subject-prefix",
         type: "string",
         defaultValue: "Re:",
-        title: "Posting reply title prefix",
+        title: "Post reply title prefix",
         modifiers: {}
     },
     {
         name: "posting.reply.preamble",
         type: "string",
         defaultValue: "Reply to [the post](%POST%) by @%USER%:",
-        title: "Posting reply preamble",
+        title: "Post reply preamble",
         modifiers: {}
     },
     {
         name: "posting.reply.quote-all",
         type: "bool",
         defaultValue: "true",
-        title: "Quote the whole posting on reply",
+        title: "Quote the whole post on reply",
+        modifiers: {}
+    },
+    {
+        name: "posting.smileys.enabled",
+        type: "bool",
+        defaultValue: "true",
+        title: "Replace simple smileys with emojis",
         modifiers: {}
     },
     {

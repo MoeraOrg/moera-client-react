@@ -9,7 +9,8 @@ const INCLUDE = new Set([
     PREFIX + "comment.reactions.positive.default",
     PREFIX + "comment.reactions.negative.default",
     PREFIX + "comment.submit-key",
-    PREFIX + "comment.replied-to.glance.enabled"
+    PREFIX + "comment.replied-to.glance.enabled",
+    PREFIX + "comment.smileys.enabled"
 ]);
 
 const SettingsSheetClientComment = ({clientValues, clientMeta}) => (

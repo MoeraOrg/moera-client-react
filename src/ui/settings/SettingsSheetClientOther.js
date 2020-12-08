@@ -10,6 +10,7 @@ const EXCLUDE = new Set([
     PREFIX + "comment.reactions.negative.default",
     PREFIX + "comment.submit-key",
     PREFIX + "comment.replied-to.glance.enabled",
+    PREFIX + "comment.smileys.enabled",
     PREFIX + "posting.time.relative",
     PREFIX + "posting.body.font-magnitude",
     PREFIX + "posting.reply.subject-prefix",
@@ -19,6 +20,7 @@ const EXCLUDE = new Set([
     PREFIX + "posting.reactions.negative.default",
     PREFIX + "posting.reactions.visible.default",
     PREFIX + "posting.reactions.totals-visible.default",
+    PREFIX + "posting.smileys.enabled",
     PREFIX + "reactions.positive.available",
     PREFIX + "reactions.negative.available"
 ]);

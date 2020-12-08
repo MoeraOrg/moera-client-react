@@ -47,11 +47,15 @@ const composePageLogic = {
         body: yup.string().trim().required("Must not be empty")
     }),
 
+    _replaceSmileys(props, text) {
+        return props.smileysEnabled ? replaceSmileys(text) : text;
+    },
+
     mapValuesToPostingText(values, props) {
         return {
             bodySrc: JSON.stringify({
-                subject: props.subjectPresent ? replaceSmileys(values.subject.trim()) : null,
-                text: replaceSmileys(values.body.trim())
+                subject: props.subjectPresent ? this._replaceSmileys(props, values.subject.trim()) : null,
+                text: this._replaceSmileys(props, values.body.trim())
             }),
             bodySrcFormat: values.bodyFormat.trim(),
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},

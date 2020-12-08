@@ -21,6 +21,7 @@ import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposeResetButton from "ui/compose/ComposeResetButton";
 import Jump from "ui/navigation/Jump";
 import composePageLogic from "ui/compose/compose-page-logic";
+import { parseBool } from "util/misc";
 import { replaceSmileys } from "util/text";
 import "./ComposePage.css";
 
@@ -47,7 +48,9 @@ class ComposePage extends React.PureComponent {
             case "Enter":
             case "Tab":
             case " ":
-                event.target.value = replaceSmileys(event.target.value, false);
+                if (this.props.smileysEnabled) {
+                    event.target.value = replaceSmileys(event.target.value, false);
+                }
                 break;
 
             default:
@@ -129,7 +132,8 @@ export default connect(
         reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
         reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default"),
-        sourceFormatDefault: getSetting(state, "posting.body-src-format.default")
+        sourceFormatDefault: getSetting(state, "posting.body-src-format.default"),
+        smileysEnabled: parseBool(getSetting(state, "posting.smileys.enabled"))
     }),
     { composePost, composeConflictClose, settingsUpdate }
 )(withFormik(composePageLogic)(ComposePage));

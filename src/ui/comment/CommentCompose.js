@@ -15,7 +15,7 @@ import { TextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
-import { mentionName } from "util/misc";
+import { mentionName, parseBool } from "util/misc";
 import { replaceSmileys } from "util/text";
 import "./CommentCompose.css";
 
@@ -32,7 +32,7 @@ class CommentCompose extends React.PureComponent {
     }
 
     onKeyDown = (event) => {
-        const {submitKey, submitForm} = this.props;
+        const {submitKey, submitForm, smileys, smileysEnabled} = this.props;
 
         switch (event.key) {
             case "Enter":
@@ -42,14 +42,18 @@ class CommentCompose extends React.PureComponent {
                     submitForm();
                 } else {
                     textFieldEdit.insert(event.target, "\n");
-                    event.target.value = replaceSmileys(event.target.value, false);
+                    if (smileysEnabled) {
+                        event.target.value = replaceSmileys(event.target.value, false);
+                    }
                 }
                 event.preventDefault();
                 break;
 
             case "Tab":
             case " ":
-                event.target.value = replaceSmileys(event.target.value, false);
+                if (smileysEnabled) {
+                    event.target.value = replaceSmileys(event.target.value, false);
+                }
                 break;
 
             default:
@@ -100,7 +104,9 @@ export default connect(
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default"),
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default"),
-        submitKey: getSetting(state, "comment.submit-key")
+        submitKey: getSetting(state, "comment.submit-key"),
+        smileys: getSetting(state, "comment.smileys.enabled"),
+        smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled"))
     }),
     { commentPost, openSignUpDialog, openConnectDialog }
 )(withFormik(commentComposeLogic)(CommentCompose));
