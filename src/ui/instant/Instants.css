@@ -3,13 +3,13 @@
 }
 
 #instants {
-    font-size: 0.835rem;
-    margin-left: -0.75rem;
-    margin-right: -0.75rem;
+    font-size: .835rem;
+    margin-left: -.75rem;
+    margin-right: -.75rem;
 }
 
 #instants .header {
-    padding: 0 0.75rem;
+    padding: 0 .75rem;
     border-bottom: 1px solid var(--gray-light);
     display: flex;
     justify-content: space-between;
@@ -19,12 +19,20 @@
     font-weight: bold;
 }
 
-#instants .header .read-all {
+#instants .footer {
+    padding-top: .25rem;
+    padding-left: .75rem;
+    padding-right: .75rem;
+    border-top: 1px solid var(--gray-light);
+    display: flex;
+}
+
+#instants .action {
     color: var(--blue);
     cursor: pointer;
 }
 
-#instants .header .read-all:hover {
+#instants .action:hover {
     text-decoration: underline;
 }
 

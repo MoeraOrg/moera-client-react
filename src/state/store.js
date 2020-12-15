@@ -121,6 +121,7 @@ import flashBox from "state/flashbox/reducer";
 import signUpDialog from "state/signupdialog/reducer";
 import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
+import webPush from "state/webpush/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
@@ -391,7 +392,8 @@ export default createStore(
         flashBox,
         signUpDialog,
         quickTips,
-        refresh
+        refresh,
+        webPush
     }),
     applyMiddleware(sagaMiddleware)
 );

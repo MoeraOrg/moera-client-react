@@ -3,21 +3,19 @@ import { connect } from 'react-redux';
 
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
+import { isWebPushEnabled } from "state/webpush/selectors";
+import { confirmBox } from "state/confirmbox/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import "./Instants.css";
 
 class Instants extends React.PureComponent {
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.pastIntersecting = true;
-    }
+    #pastIntersecting = true;
 
     onSentinelPast = intersecting => {
-        this.pastIntersecting = intersecting;
-        if (this.pastIntersecting) {
+        this.#pastIntersecting = intersecting;
+        if (this.#pastIntersecting) {
             this.loadPast();
         }
     }
@@ -38,14 +36,26 @@ class Instants extends React.PureComponent {
         feedStatusUpdate(":instant", null, true, stories[0].moment);
     }
 
+    onEnablePush = () => {
+        const {confirmBox} = this.props;
+
+        confirmBox("Do you want to receive notifications from Moera when the application is closed?");
+    }
+
+    onDisablePush = () => {
+        const {confirmBox} = this.props;
+
+        confirmBox("Do you want to stop receiving notifications from Moera when the application is closed?");
+    }
+
     render() {
-        const {hide, loadingPast, after, stories, instantCount} = this.props;
+        const {hide, loadingPast, after, stories, instantCount, webPushEnabled} = this.props;
 
         return (
             <div id="instants">
                 <div className="header">
                     <div className="title">Notifications</div>
-                    <div className="read-all" onClick={this.onReadAll}>Mark All as Read</div>
+                    <div className="action" onClick={this.onReadAll}>Mark All as Read</div>
                 </div>
                 <div className="content">
                     {stories.map((story, i) =>
@@ -55,6 +65,11 @@ class Instants extends React.PureComponent {
                                   visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
                                   onClick={this.loadPast}/>
                 </div>
+                <div className="footer">
+                    <div className="action" onClick={webPushEnabled ? this.onDisablePush : this.onEnablePush}>
+                        {webPushEnabled ? "Disable Push" : "Enable Push"}
+                    </div>
+                </div>
             </div>
         );
     }
@@ -62,10 +77,11 @@ class Instants extends React.PureComponent {
 }
 
 export default connect(
-    (state) => ({
+    state => ({
         loadingPast: getFeedState(state, ":instant").loadingPast,
         after: getFeedState(state, ":instant").after,
-        stories: getFeedState(state, ":instant").stories
+        stories: getFeedState(state, ":instant").stories,
+        webPushEnabled: isWebPushEnabled(state)
     }),
-    { feedPastSliceLoad, feedStatusUpdate }
+    { feedPastSliceLoad, feedStatusUpdate, confirmBox }
 )(Instants);
