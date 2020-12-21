@@ -1,4 +1,4 @@
-import { call, put } from '@redux-saga/core/effects';
+import { call, put } from 'redux-saga/effects';
 
 import { errorThrown } from "state/error/actions";
 import { HomeNotConnectedError, Node } from "api";
