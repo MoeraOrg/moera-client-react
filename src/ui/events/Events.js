@@ -86,7 +86,7 @@ class Events extends React.PureComponent {
 
         const sleepTime = now() - this.#lastEventSentAt; // we really were sleeping
         if (sleepTime > 10 * 60) { // 10 minutes
-            if (!isBefore(addMinutes(this.#lastWakeUp, 10), new Date())) { // do not wake up too often
+            if (isBefore(addMinutes(this.#lastWakeUp, 10), new Date())) { // do not wake up too often
                 this.#lastWakeUp = new Date();
                 onWakeUp();
             }
