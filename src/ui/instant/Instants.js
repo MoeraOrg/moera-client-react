@@ -5,6 +5,7 @@ import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import { isWebPushEnabled } from "state/webpush/selectors";
 import { confirmBox } from "state/confirmbox/actions";
+import { webPushSubscribe } from "state/webpush/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import "./Instants.css";
@@ -37,14 +38,17 @@ class Instants extends React.PureComponent {
     }
 
     onEnablePush = () => {
-        const {confirmBox} = this.props;
+        const {hide, confirmBox} = this.props;
 
-        confirmBox("Do you want to receive notifications from Moera when the application is closed?");
+        hide();
+        confirmBox("Do you want to receive notifications from Moera when the application is closed?",
+            "Yes", "No", webPushSubscribe());
     }
 
     onDisablePush = () => {
-        const {confirmBox} = this.props;
+        const {hide, confirmBox} = this.props;
 
+        hide();
         confirmBox("Do you want to stop receiving notifications from Moera when the application is closed?");
     }
 

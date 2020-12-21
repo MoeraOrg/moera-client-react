@@ -544,3 +544,7 @@ export function* remoteCommentReactionVerify(nodeName, remoteNodeName, postingId
         nodeName, location, method: "POST", auth: true, schema: NodeApi.AsyncOperationCreated
     });
 }
+
+export function* getWebPushKey(nodeName) {
+    return yield call(callApi, {nodeName, location: "/web-push/key", auth: true, schema: NodeApi.WebPushKey});
+}

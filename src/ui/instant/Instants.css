@@ -19,7 +19,7 @@
     font-weight: bold;
 }
 
-#instants .footer {
+#instants > .footer {
     padding-top: .25rem;
     padding-left: .75rem;
     padding-right: .75rem;

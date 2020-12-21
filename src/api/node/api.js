@@ -1079,3 +1079,13 @@ export const DomainAvailable = schema({
     },
     additionalProperties: false
 });
+
+export const WebPushKey = schema({
+    type: "object",
+    properties: {
+        "key": {
+            type: "string"
+        }
+    },
+    additionalProperties: false
+});
