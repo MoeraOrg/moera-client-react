@@ -176,11 +176,11 @@ export class Browser {
         }, window.location.href);
     }
 
-    static storeName(name, latest, nodeUri) {
+    static storeName(name, latest, nodeUri, updated) {
         window.postMessage({
             source: "moera",
             action: "storeName",
-            payload: {name, latest, nodeUri}
+            payload: {name, latest, nodeUri, updated}
         }, window.location.href);
     }
 

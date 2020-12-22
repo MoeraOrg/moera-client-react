@@ -58,6 +58,10 @@ export function isCommentsReceiverToBeSwitched(state) {
     return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
 }
 
+export function getComments(state) {
+    return getCommentsState(state).comments;
+}
+
 export function getComment(state, id) {
     return getCommentsState(state).comments.find(c => c.id === id);
 }

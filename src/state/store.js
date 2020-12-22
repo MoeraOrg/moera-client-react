@@ -79,7 +79,7 @@ import {
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_SUCCEEDED
 } from "state/settings/actions";
-import { NAMING_NAME_LOAD, NAMING_NAMES_MAINTENANCE } from "state/naming/actions";
+import { NAMING_NAME_LOAD, NAMING_NAMES_MAINTENANCE, NAMING_NAMES_USED } from "state/naming/actions";
 import {
     REACTION_VERIFY,
     REACTIONS_DIALOG_PAST_REACTIONS_LOAD,
@@ -203,7 +203,7 @@ import {
     settingsUpdateSaga,
     settingsUpdateSucceededSaga
 } from "state/settings/sagas";
-import { namingNameLoadSaga, namingNamesMaintenanceSaga } from "state/naming/sagas";
+import { namingNameLoadSaga, namingNamesMaintenanceSaga, namingNamesUsedSaga } from "state/naming/sagas";
 import {
     reactionsDialogPastReactionsLoadSaga,
     reactionsDialogTotalsLoadSaga,
@@ -312,6 +312,7 @@ function* combinedSaga() {
     yield takeLatest(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
     yield takeLatest(SETTINGS_UPDATE, settingsUpdateSaga);
     yield takeLatest(SETTINGS_UPDATE_SUCCEEDED, settingsUpdateSucceededSaga);
+    yield takeEvery(NAMING_NAMES_USED, askNaming(namingNamesUsedSaga));
     yield takeEvery(NAMING_NAME_LOAD, askNaming(namingNameLoadSaga));
     yield takeLatest(NAMING_NAMES_MAINTENANCE, namingNamesMaintenanceSaga);
     yield takeEvery(POSTING_VERIFY, postingVerifySaga);

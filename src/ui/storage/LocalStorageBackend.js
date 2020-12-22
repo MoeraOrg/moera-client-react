@@ -2,8 +2,8 @@ import React from 'react';
 import ObjectPath from 'object-path';
 
 import { Browser } from "ui/browser";
+import { now } from "util/misc";
 
-const NAME_TTL = 6 * 60 * 60; // seconds
 const MAX_NAMES_SIZE = 500;
 
 class LocalStorageBackend extends React.PureComponent {
@@ -246,10 +246,10 @@ class LocalStorageBackend extends React.PureComponent {
         if (names == null) {
             names = [];
         }
-        const now = Math.round(Date.now() / 1000);
-        names = names.filter(info => info.name !== details.name && (now - info.updated) <= NAME_TTL);
-        details.updated = now;
+        names = names.filter(info => info.name !== details.name);
+        details.updated ??= now();
         names.push(details);
+        names.sort((a, b) => a.updated - b.updated);
         if (names.length > MAX_NAMES_SIZE) {
             names.splice(0, names.length - MAX_NAMES_SIZE);
         }

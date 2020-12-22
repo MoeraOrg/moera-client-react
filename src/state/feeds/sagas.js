@@ -19,7 +19,6 @@ import {
     feedUnsubscribeFailed
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
-import { namingNameUsed } from "state/naming/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReactions } from "state/activityreactions/sagas";
@@ -96,7 +95,6 @@ export function* feedPastSliceLoadSaga(action) {
         yield call(fillActivityReactions, data.stories);
         yield call(fillSubscriptions, data.stories);
         yield put(feedPastSliceSet(feedName, data.stories, data.before, data.after));
-        yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(feedPastSliceLoadFailed(feedName));
         yield put(errorThrown(e));
@@ -113,7 +111,6 @@ export function* feedFutureSliceLoadSaga(action) {
         yield call(fillActivityReactions, data.stories);
         yield call(fillSubscriptions, data.stories);
         yield put(feedFutureSliceSet(feedName, data.stories, data.before, data.after));
-        yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(feedFutureSliceLoadFailed(feedName));
         yield put(errorThrown(e));
@@ -132,27 +129,10 @@ export function* feedsUpdateSaga() {
                 yield call(fillActivityReactions, data.stories);
                 yield call(fillSubscriptions, data.stories);
                 yield put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
-                yield call(cacheNames, data.stories);
                 after = data.before;
             }
         } catch (e) {
             yield put(errorThrown(e));
         }
-    }
-}
-
-function* cacheNames(stories) {
-    if (!stories) {
-        return;
-    }
-    const usedNames = new Set();
-    stories
-        .filter(s => s.posting != null && s.posting.ownerName != null)
-        .forEach(s => usedNames.add(s.posting.ownerName));
-    stories
-        .filter(s => s.posting != null && s.posting.receiverName != null)
-        .forEach(s => usedNames.add(s.posting.receiverName));
-    for (let name of usedNames) {
-        yield put(namingNameUsed(name));
     }
 }

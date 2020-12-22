@@ -28,7 +28,6 @@ export function* reactionsDialogPastReactionsLoadSaga() {
             : yield call(Node.getCommentReactions, nodeName, postingId, commentId, negative, emoji, before, 40);
         yield put(reactionsDialogPastReactionsLoaded(
             data.reactions, posting.id, commentId, negative, emoji, data.before, data.after, data.total));
-        // TODO extract node names and put them into naming cache queue
     } catch (e) {
         yield put(reactionsDialogPastReactionsLoadFailed(posting.id, null, negative, emoji));
         yield put(errorThrown(e));

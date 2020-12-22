@@ -4,9 +4,9 @@ import {
     NAMING_NAME_LOAD,
     NAMING_NAME_LOAD_FAILED,
     NAMING_NAME_LOADED,
-    NAMING_NAME_PURGE,
-    NAMING_NAME_USED,
-    NAMING_NAMES_POPULATE
+    NAMING_NAMES_POPULATE,
+    NAMING_NAMES_PURGE,
+    NAMING_NAMES_USED
 } from "state/naming/actions";
 import { now } from "util/misc";
 
@@ -24,17 +24,26 @@ const emptyDetails = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case NAMING_NAME_USED:
-            if (!action.payload.name) {
+        case NAMING_NAMES_USED: {
+            const {names} = action.payload;
+
+            if (!names || names.length === 0) {
                 return state;
             }
-            if (state.names[action.payload.name]) {
-                return immutable.set(state, ["names", action.payload.name, "accessed"], now());
+
+            const istate = immutable.wrap(state);
+            for (const name of names) {
+                if (!name) {
+                    continue;
+                }
+                if (state.names[name]) {
+                    istate.set(["names", name, "accessed"], now());
+                } else {
+                    istate.set(["names", name], {...emptyDetails, accessed: now()});
+                }
             }
-            return immutable.set(state, ["names", action.payload.name], {
-                ...emptyDetails,
-                accessed: now()
-            });
+            return istate.value();
+        }
 
         case NAMING_NAME_LOAD:
             return immutable.set(state, ["names", action.payload.name, "loading"], true);
@@ -45,14 +54,24 @@ export default (state = initialState, action) => {
                 loading: false,
                 loaded: true,
                 latest: action.payload.latest,
-                nodeUri: action.payload.nodeUri
+                nodeUri: action.payload.nodeUri,
+                updated: action.payload.updated
             });
 
         case NAMING_NAME_LOAD_FAILED:
             return immutable.set(state, ["names", action.payload.name, "loading"], false);
 
-        case NAMING_NAME_PURGE:
-            return immutable.del(state, ["names", action.payload.name]);
+        case NAMING_NAMES_PURGE: {
+            const {names} = action.payload;
+
+            if (!names || names.length === 0) {
+                return state;
+            }
+
+            const istate = immutable.wrap(state);
+            names.forEach(name => istate.del(state, ["names", name]));
+            return istate.value();
+        }
 
         case NAMING_NAMES_POPULATE: {
             const istate = immutable.wrap(state);

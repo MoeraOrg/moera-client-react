@@ -77,14 +77,12 @@ export function* commentsLoadAllSaga() {
             const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, null, after, 20);
             yield put(commentsPastSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
                 data.total, data.totalInPast, data.totalInFuture));
-            // TODO yield call(cacheNames, data.stories);
             after = data.after;
         }
         while (before < Number.MAX_SAFE_INTEGER) {
             const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
             yield put(commentsFutureSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
                 data.total, data.totalInPast, data.totalInFuture));
-            // TODO yield call(cacheNames, data.stories);
             before = data.before;
         }
     } catch (e) {
@@ -98,7 +96,6 @@ export function* commentsPastSliceLoadSaga() {
         const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, null, after, 20);
         yield put(commentsPastSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
             data.total, data.totalInPast, data.totalInFuture));
-        // TODO yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(commentsPastSliceLoadFailed(receiverName, receiverPostingId));
         yield put(errorThrown(e));
@@ -111,7 +108,6 @@ export function* commentsFutureSliceLoadSaga() {
         const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
         yield put(commentsFutureSliceSet(receiverName, receiverPostingId, data.comments, data.before, data.after,
             data.total, data.totalInPast, data.totalInFuture));
-        // TODO yield call(cacheNames, data.stories);
     } catch (e) {
         yield put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId));
         yield put(errorThrown(e));
@@ -125,7 +121,6 @@ export function* commentsUpdateSaga() {
             const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, after, null, 20);
             yield put(commentsSliceUpdate(receiverName, receiverPostingId, data.comments, data.before, data.after,
                 data.total, data.totalInPast, data.totalInFuture));
-            // TODO yield call(cacheNames, data.stories);
             after = data.before;
         }
     } catch (e) {

@@ -7,7 +7,7 @@ import { ownerSet, ownerSwitchClose, ownerSwitchFailed, ownerVerified } from "st
 import { namingNameLoaded } from "state/naming/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { initFromLocation } from "state/navigation/actions";
-import { normalizeUrl, rootUrl } from "util/misc";
+import { normalizeUrl, now, rootUrl } from "util/misc";
 
 export function* ownerLoadSaga() {
     try {
@@ -31,7 +31,7 @@ export function* ownerVerifySaga() {
         const latest = !!(data && data.latest);
         const deadline = data ? data.deadline : null;
         yield put(ownerVerified(ownerName, correct, deadline));
-        yield put(namingNameLoaded(ownerName, latest, nodeUri));
+        yield put(namingNameLoaded(ownerName, latest, nodeUri, now()));
     } catch (e) {
         yield put(errorThrown(e));
     }

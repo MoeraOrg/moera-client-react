@@ -1,7 +1,7 @@
-export const NAMING_NAME_USED = "NAMING_NAME_USED";
-export const namingNameUsed = (name) => ({
-    type: NAMING_NAME_USED,
-    payload: {name}
+export const NAMING_NAMES_USED = "NAMING_NAMES_USED";
+export const namingNamesUsed = (names) => ({
+    type: NAMING_NAMES_USED,
+    payload: {names}
 });
 
 export const NAMING_NAME_LOAD = "NAMING_NAME_LOAD";
@@ -11,9 +11,9 @@ export const namingNameLoad = (name) => ({
 });
 
 export const NAMING_NAME_LOADED = "NAMING_NAME_LOADED";
-export const namingNameLoaded = (name, latest, nodeUri) => ({
+export const namingNameLoaded = (name, latest, nodeUri, updated) => ({
     type: NAMING_NAME_LOADED,
-    payload: {name, latest, nodeUri}
+    payload: {name, latest, nodeUri, updated}
 });
 
 export const NAMING_NAME_LOAD_FAILED = "NAMING_NAME_LOAD_FAILED";
@@ -22,10 +22,10 @@ export const namingNameLoadFailed = (name) => ({
     payload: {name}
 });
 
-export const NAMING_NAME_PURGE = "NAMING_NAME_PURGE";
-export const namingNamePurge = (name) => ({
-    type: NAMING_NAME_PURGE,
-    payload: {name}
+export const NAMING_NAMES_PURGE = "NAMING_NAMES_PURGE";
+export const namingNamesPurge = (names) => ({
+    type: NAMING_NAMES_PURGE,
+    payload: {names}
 });
 
 export const NAMING_NAMES_MAINTENANCE = "NAMING_NAMES_MAINTENANCE";
