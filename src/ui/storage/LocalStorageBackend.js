@@ -126,9 +126,9 @@ class LocalStorageBackend extends React.PureComponent {
     }
 
     redirect = (homeRoot) => {
-        const location = Browser.getDocumentPassedLocation().rootLocation;
+        const {rootLocation: location, path, query, hash} = Browser.getDocumentPassedLocation();
         if (location) {
-            window.location.href = location;
+            window.location.href = location + (path ?? "") + (query ?? "") + (hash ?? "");
         } else if (homeRoot) {
             window.location.href = homeRoot;
         }
