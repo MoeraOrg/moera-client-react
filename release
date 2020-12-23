@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./build-number -j > src/build-number.js
+craco build
+echo
+echo "Build number is `./build-number`"

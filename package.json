@@ -49,7 +49,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build; echo; echo 'Did not you forget to update build number (`yarn rev`)?'",
+    "build": "./release",
     "test": "craco test",
     "eject": "craco eject",
     "rev": "./build-number -j > src/build-number.js"
