@@ -8,6 +8,7 @@ import { confirmBox } from "state/confirmbox/actions";
 import { webPushSubscribe } from "state/webpush/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
+import { BUILD_NUMBER } from "build-number";
 import "./Instants.css";
 
 class Instants extends React.PureComponent {
@@ -73,6 +74,7 @@ class Instants extends React.PureComponent {
                     <div className="action" onClick={webPushEnabled ? this.onDisablePush : this.onEnablePush}>
                         {webPushEnabled ? "Disable Push" : "Enable Push"}
                     </div>
+                    <div className="build-number">rev {BUILD_NUMBER}</div>
                 </div>
             </div>
         );

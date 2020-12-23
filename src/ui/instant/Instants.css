@@ -26,6 +26,7 @@
     margin-bottom: -.25rem;
     border-top: 1px solid var(--gray-light);
     display: flex;
+    justify-content: space-between;
 }
 
 #instants .action {
@@ -35,6 +36,14 @@
 
 #instants .action:hover {
     text-decoration: underline;
+}
+
+#instants .build-number {
+    color: var(--gray-light);
+    font-size: .7rem;
+    position: relative;
+    top: .5em;
+    left: .5rem;
 }
 
 #instants .content {

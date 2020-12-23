@@ -1,0 +1,33 @@
+#!/bin/bash
+
+JS=
+
+while getopts 'hj' OPTION; do
+    case "$OPTION" in
+        h) echo "Usage: $0 [OPTION]..."
+        cat <<END
+
+  -h  Show this help
+  -j  Generate JavaScript variable
+END
+        exit 0
+        ;;
+        j) JS=yes
+        ;;
+        *)
+        exit 1
+        ;;
+    esac
+done
+
+REVISION=`git rev-parse --short HEAD`
+LOCAL=
+if [ -n "`git status -s`" ]; then
+    LOCAL="+`git diff HEAD|sha1sum|cut -b 1-4`"
+fi
+
+if [ -z "$JS" ]; then
+    echo $REVISION$LOCAL
+else
+    echo "export const BUILD_NUMBER=\"$REVISION$LOCAL\";"
+fi

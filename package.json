@@ -49,9 +49,10 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build": "craco build; echo; echo 'Did not you forget to update build number (`yarn rev`)?'",
     "test": "craco test",
-    "eject": "craco eject"
+    "eject": "craco eject",
+    "rev": "./build-number -j > src/build-number.js"
   },
   "eslintConfig": {
     "extends": "react-app",
