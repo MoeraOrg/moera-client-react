@@ -90,6 +90,9 @@ class Comments extends React.PureComponent {
 
     static getTopmostMoment() {
         const comments = document.getElementsByClassName("comment");
+        if (comments.length === 0) {
+            return null;
+        }
         for (let i = 0; i < comments.length; i++) {
             if (comments.item(i).getBoundingClientRect().top >= 0) {
                 return parseInt(comments.item(i).dataset.moment);
