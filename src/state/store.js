@@ -92,7 +92,7 @@ import { PEOPLE_GENERAL_LOAD, SUBSCRIBERS_LOAD, SUBSCRIPTIONS_LOAD } from "state
 import { FLASH_BOX } from "state/flashbox/actions";
 import { SIGN_UP, SIGN_UP_DOMAIN_VERIFY, SIGN_UP_FIND_DOMAIN, SIGN_UP_NAME_VERIFY } from "state/signupdialog/actions";
 import { REFRESH_SHOW } from "state/refresh/actions";
-import { WEB_PUSH_SUBSCRIBE } from "state/webpush/actions";
+import { WEB_PUSH_SUBSCRIBE, WEB_PUSH_UNSUBSCRIBE } from "state/webpush/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import pulse from "state/pulse/reducer";
@@ -221,7 +221,7 @@ import {
     signUpSaga
 } from "state/signupdialog/sagas";
 import { refreshShowSaga } from "state/refresh/sagas";
-import { webPushSubscribeSaga } from "state/webpush/sagas";
+import { webPushSubscribeSaga, webPushUnsubscribeSaga } from "state/webpush/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -363,6 +363,7 @@ function* combinedSaga() {
     yield takeLatest(GO_HOME, goHomeSaga);
     yield takeLatest(REFRESH_SHOW, refreshShowSaga);
     yield takeLatest(WEB_PUSH_SUBSCRIBE, webPushSubscribeSaga);
+    yield takeLatest(WEB_PUSH_UNSUBSCRIBE, webPushUnsubscribeSaga);
 
     yield invokeTriggers(triggers);
 }

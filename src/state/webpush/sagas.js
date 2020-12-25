@@ -29,3 +29,12 @@ export function* webPushSubscribeSaga() {
         yield put(errorThrown(e));
     }
 }
+
+export function* webPushUnsubscribeSaga() {
+    try {
+        Browser.storeWebPushData(null);
+        yield put(webPushSubscriptionSet(null));
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
