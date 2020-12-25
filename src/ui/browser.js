@@ -160,6 +160,10 @@ export class Browser {
         this.storeData({cartesIp, cartes});
     }
 
+    static storeWebPushData(subscriptionId) {
+        this.storeData({webPush: {subscriptionId}});
+    }
+
     static deleteData(location) {
         window.postMessage({
             source: "moera",

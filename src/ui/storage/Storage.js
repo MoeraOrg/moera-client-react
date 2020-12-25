@@ -8,6 +8,7 @@ import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import LocalStorageBackend from "ui/storage/LocalStorageBackend";
 import { Browser } from "ui/browser";
+import { webPushSubscriptionSet } from "state/webpush/actions";
 
 class Storage extends React.PureComponent {
 
@@ -50,7 +51,8 @@ class Storage extends React.PureComponent {
 
     loadedData(data) {
         const {
-            home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate
+            home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
+            webPushSubscriptionSet
         } = this.props;
 
         if (!data) {
@@ -79,6 +81,9 @@ class Storage extends React.PureComponent {
         if (data.clientId !== Browser.clientId) {
             cartesSet(data.cartesIp, data.cartes);
         }
+
+        const {subscriptionId} = data.webPush || {subscriptionId: null};
+        webPushSubscriptionSet(subscriptionId);
     }
 
     storedName(data) {
@@ -96,5 +101,8 @@ export default connect(
         standalone: isStandaloneMode(state),
         home: getHomeConnectionData(state)
     }),
-    { homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded }
+    {
+        homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded,
+        webPushSubscriptionSet
+    }
 )(Storage);

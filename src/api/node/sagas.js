@@ -548,3 +548,10 @@ export function* remoteCommentReactionVerify(nodeName, remoteNodeName, postingId
 export function* getWebPushKey(nodeName) {
     return yield call(callApi, {nodeName, location: "/web-push/key", auth: true, schema: NodeApi.WebPushKey});
 }
+
+export function* postWebPushSubscription(nodeName, endpoint, publicKey, authKey) {
+    return yield call(callApi, {
+        nodeName, location: "/web-push/subscriptions", method: "POST", auth: true, body: {endpoint, publicKey, authKey},
+        schema: NodeApi.WebPushSubscriptionInfo
+    });
+}

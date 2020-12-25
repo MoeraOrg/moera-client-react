@@ -1089,3 +1089,13 @@ export const WebPushKey = schema({
     },
     additionalProperties: false
 });
+
+export const WebPushSubscriptionInfo = schema({
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        }
+    },
+    additionalProperties: false
+});
