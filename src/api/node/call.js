@@ -1,13 +1,6 @@
 import { apply, call, put, select } from 'redux-saga/effects';
 
-import {
-    formatSchemaErrors,
-    HomeNotConnectedError,
-    NameResolvingError,
-    NodeApi,
-    NodeApiError,
-    NodeError
-} from "api";
+import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApi, NodeApiError, NodeError } from "api";
 import { errorAuthInvalid } from "state/error/actions";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/misc";
 import { getToken } from "state/node/selectors";
@@ -15,6 +8,7 @@ import { getCurrentCarte } from "state/cartes/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { Browser } from "ui/browser";
+import { retryFetch } from "api/fetch-timeout";
 
 export function* callApi({
     location,
@@ -34,7 +28,7 @@ export function* callApi({
     location = yield call(authorize, location, rootLocation, auth);
     let response;
     try {
-        response = yield call(fetch, apiUrl(rootApi, location, method), {
+        response = yield call(retryFetch, apiUrl(rootApi, location, method), {
             method,
             headers: {
                 "Accept": "application/json",
@@ -47,7 +41,7 @@ export function* callApi({
     }
     let data;
     try {
-        data = yield apply(response, response.json);
+        data = yield apply(response, "json");
     } catch (e) {
         if (!response.ok) {
             throw exception("Server returned error status");

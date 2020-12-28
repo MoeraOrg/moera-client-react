@@ -2,6 +2,7 @@ import { apply, call, select } from 'redux-saga/effects';
 
 import { formatSchemaErrors, NamingApi, NamingError } from "api";
 import { getSetting } from "state/settings/selectors";
+import { retryFetch } from "api/fetch-timeout";
 
 let callId = 1;
 
@@ -10,7 +11,7 @@ function* callNaming({method, params, schema = null, notNull = false}) {
     const location = yield select(state => getSetting(state, "naming.location"));
     let response;
     try {
-        response = yield call(fetch, location, {
+        response = yield call(retryFetch, location, {
             method: "POST",
             headers: {
                 "Accept": "application/json",
@@ -31,7 +32,7 @@ function* callNaming({method, params, schema = null, notNull = false}) {
     }
     let data;
     try {
-        data = yield apply(response, response.json);
+        data = yield apply(response, "json");
     } catch (e) {
         throw exception("Server returned empty result");
     }
