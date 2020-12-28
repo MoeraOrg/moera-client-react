@@ -559,6 +559,7 @@ export function* postWebPushSubscription(nodeName, endpoint, publicKey, authKey)
 export function* deleteWebPushSubscription(nodeName, id) {
     id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/web-push/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: `/web-push/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result,
+        errorFilter: ["web-push-subscription.not-found"]
     });
 }

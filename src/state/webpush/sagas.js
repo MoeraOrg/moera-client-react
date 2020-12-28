@@ -1,7 +1,7 @@
 import { apply, call, put, select } from 'redux-saga/effects';
 import * as Base64js from 'base64-js';
 
-import { Node } from "api";
+import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import { Browser } from "ui/browser";
 import { webPushSubscriptionSet } from "state/webpush/actions";
@@ -40,7 +40,13 @@ export function* webPushUnsubscribeSaga() {
         }
         const subscriptionId = yield select(getWebPushSubscriptionId);
         if (subscriptionId != null) {
-            yield call(Node.deleteWebPushSubscription, ":", subscriptionId);
+            try {
+                yield call(Node.deleteWebPushSubscription, ":", subscriptionId);
+            } catch (e) {
+                if (!(e instanceof NodeApiError)) {
+                    throw e;
+                }
+            }
             Browser.storeWebPushData(null);
             yield put(webPushSubscriptionSet(null));
         }
