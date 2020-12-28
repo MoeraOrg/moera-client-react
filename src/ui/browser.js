@@ -63,8 +63,9 @@ export class Browser {
         }
     }
 
-    static isServiceWorkerSupported() {
-        return !!navigator.serviceWorker;
+    static isWebPushSupported() {
+        return !!navigator.serviceWorker
+            && !(this.userAgent === "firefox" && (this.userAgentOs === "android" || this.userAgentOs === "ios"));
     }
 
     static isTouchScreen() {

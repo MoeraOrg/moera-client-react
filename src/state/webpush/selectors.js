@@ -3,7 +3,7 @@ import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
 
 export function isWebPushSupported(state) {
-    return Browser.isServiceWorkerSupported() && isStandaloneMode(state);
+    return Browser.isWebPushSupported() && isStandaloneMode(state);
 }
 
 export function getWebPushSubscriptionId(state) {
