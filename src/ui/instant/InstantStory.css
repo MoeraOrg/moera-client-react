@@ -6,6 +6,7 @@
 #instants .instant {
     display: block;
     border-bottom: 1px solid var(--gray-ultralight);
+    overflow-wrap: anywhere;
 }
 
 #instants .instant.unread {
