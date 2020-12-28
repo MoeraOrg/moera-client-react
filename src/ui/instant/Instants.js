@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
-import { isWebPushEnabled } from "state/webpush/selectors";
+import { isWebPushEnabled, isWebPushSupported } from "state/webpush/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { webPushSubscribe, webPushUnsubscribe } from "state/webpush/actions";
 import InstantStory from "ui/instant/InstantStory";
@@ -55,7 +55,7 @@ class Instants extends React.PureComponent {
     }
 
     render() {
-        const {hide, loadingPast, after, stories, instantCount, webPushEnabled} = this.props;
+        const {hide, loadingPast, after, stories, instantCount, webPushSupported, webPushEnabled} = this.props;
 
         return (
             <div id="instants">
@@ -72,9 +72,13 @@ class Instants extends React.PureComponent {
                                   onClick={this.loadPast}/>
                 </div>
                 <div className="footer">
-                    <div className="action" onClick={webPushEnabled ? this.onDisablePush : this.onEnablePush}>
-                        {webPushEnabled ? "Disable Push" : "Enable Push"}
-                    </div>
+                    {webPushSupported ?
+                        <div className="action" onClick={webPushEnabled ? this.onDisablePush : this.onEnablePush}>
+                            {webPushEnabled ? "Disable Push" : "Enable Push"}
+                        </div>
+                    :
+                        <div className="action"/>
+                    }
                     <div className="build-number">rev {BUILD_NUMBER}</div>
                 </div>
             </div>
@@ -88,6 +92,7 @@ export default connect(
         loadingPast: getFeedState(state, ":instant").loadingPast,
         after: getFeedState(state, ":instant").after,
         stories: getFeedState(state, ":instant").stories,
+        webPushSupported: isWebPushSupported(state),
         webPushEnabled: isWebPushEnabled(state)
     }),
     { feedPastSliceLoad, feedStatusUpdate, confirmBox }

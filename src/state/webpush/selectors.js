@@ -1,4 +1,10 @@
 import { isConnectedToHome } from "state/home/selectors";
+import { isStandaloneMode } from "state/navigation/selectors";
+import { Browser } from "ui/browser";
+
+export function isWebPushSupported(state) {
+    return Browser.isServiceWorkerSupported() && isStandaloneMode(state);
+}
 
 export function getWebPushSubscriptionId(state) {
     return state.webPush.subscriptionId;

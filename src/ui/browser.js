@@ -63,6 +63,10 @@ export class Browser {
         }
     }
 
+    static isServiceWorkerSupported() {
+        return !!navigator.serviceWorker;
+    }
+
     static isTouchScreen() {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
     }

@@ -6,6 +6,7 @@ import { errorThrown } from "state/error/actions";
 import { Browser } from "ui/browser";
 import { webPushSubscriptionSet } from "state/webpush/actions";
 import { getWebPushSubscriptionId } from "state/webpush/selectors";
+import { flashBox } from "state/flashbox/actions";
 
 export function* webPushSubscribeSaga() {
     try {
@@ -16,6 +17,7 @@ export function* webPushSubscribeSaga() {
             applicationServerKey: Base64js.toByteArray(data.key)
         }]);
         if (subscription == null) {
+            yield put(flashBox("Your browser does not support push notifications"));
             return;
         }
         const publicKey = Base64js.fromByteArray(new Uint8Array(subscription.getKey("p256dh")));
@@ -25,6 +27,7 @@ export function* webPushSubscribeSaga() {
         if (subscriptionId != null) {
             Browser.storeWebPushData(subscriptionId);
             yield put(webPushSubscriptionSet(subscriptionId));
+            yield put(flashBox("Push notifications enabled"));
         }
     } catch (e) {
         yield put(errorThrown(e));
@@ -50,6 +53,7 @@ export function* webPushUnsubscribeSaga() {
             Browser.storeWebPushData(null);
             yield put(webPushSubscriptionSet(null));
         }
+        yield put(flashBox("Push notifications disabled"));
     } catch (e) {
         yield put(errorThrown(e));
     }
