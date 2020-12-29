@@ -14,6 +14,7 @@ import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
 import { htmlToText } from "util/html";
+import { getInstantTypeDetails } from "ui/instant/instant-types";
 
 clientsClaim();
 
@@ -80,7 +81,8 @@ self.addEventListener("message", event => {
 
 self.addEventListener("push", event => {
     const story = event.data.json();
-    event.waitUntil(self.registration.showNotification("Notification", {
+    const details = getInstantTypeDetails(story.storyType);
+    event.waitUntil(self.registration.showNotification(details != null ? details.title : "Moera", {
         body: htmlToText(story.summary),
         tag: story.id
     }));

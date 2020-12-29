@@ -8,35 +8,8 @@ import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 import InstantIcon from "ui/instant/InstantIcon";
 import Jump from "ui/navigation/Jump";
 import { storyReadingUpdate } from "state/stories/actions";
+import { getInstantTarget } from "ui/instant/instant-types";
 import "./InstantStory.css";
-
-function getStoryTarget(story) {
-    switch(story.storyType) {
-        case "reaction-added-positive":
-        case "reaction-added-negative":
-            return {nodeName: ":", href: `/post/${story.postingId}`}
-        case "mention-posting":
-        case "posting-task-failed":
-            return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
-        case "subscriber-added":
-        case "subscriber-deleted":
-            return {nodeName: story.remoteNodeName, href: "/"}
-        case "comment-added":
-            return {nodeName: ":", href: `/post/${story.postingId}?comment=${story.remoteCommentId}`}
-        case "mention-comment":
-        case "reply-comment":
-        case "comment-reaction-added-positive":
-        case "comment-reaction-added-negative":
-        case "remote-comment-added":
-        case "comment-task-failed":
-            return {
-                nodeName: story.remoteNodeName,
-                href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
-            }
-        default:
-            return {nodeName: ":", href: "/"}
-    }
-}
 
 class InstantStory extends React.PureComponent {
 
@@ -57,7 +30,7 @@ class InstantStory extends React.PureComponent {
 
     render() {
         const {story, lastNew} = this.props;
-        const {nodeName, href} = getStoryTarget(story);
+        const {nodeName, href} = getInstantTarget(story);
         return (
             <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
                 <div className="cursor">
