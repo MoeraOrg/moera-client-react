@@ -98,3 +98,16 @@ export function quoteHtml(html) {
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
         .trim()
 }
+
+export function htmlToText(html) {
+    if (html == null) {
+        return null;
+    }
+    return sanitizeHtml(replaceEmojis(html), {
+        allowedTags: [],
+        allowedAttributes: {},
+        transformTags: {
+            "span": (tagName, attribs) => attribs["class"] === "generation" ? {text: ""} : {}
+        }
+    });
+}
