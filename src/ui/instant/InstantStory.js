@@ -71,12 +71,9 @@ class InstantStory extends React.PureComponent {
                     </Jump>
                     <div className="sidebar">
                         <span className="envelope" title={story.read ? "Mark as Unread" : "Mark as Read"}
-                              onClick={this.onEnvelope}>{
-                            story.read ?
-                                <FontAwesomeIcon icon={["far", "envelope-open"]}/>
-                            :
-                                <FontAwesomeIcon icon={["far", "envelope"]}/>
-                        }</span>
+                              onClick={this.onEnvelope}>
+                            <FontAwesomeIcon icon={["far", story.read ? "envelope-open" : "envelope"]}/>
+                        </span>
                     </div>
                 </div>
             </div>
