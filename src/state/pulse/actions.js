@@ -1,3 +1,8 @@
+export const POST_INIT = "POST_INIT";
+export const postInit = () => ({
+    type: POST_INIT
+});
+
 export const PULSE_1MIN = "PULSE_1MIN";
 export const pulse1Min = () => ({
     type: PULSE_1MIN

@@ -1,6 +1,21 @@
-import { delay, put } from 'redux-saga/effects';
+import { delay, put, race, take } from 'redux-saga/effects';
 
-import { pulse10Min, pulse1Min, pulse6H } from "state/pulse/actions";
+import { postInit, pulse10Min, pulse1Min, pulse6H } from "state/pulse/actions";
+
+export function* signalPostInitSaga() {
+    yield delay(1000);
+    while (true) {
+        const { debounced } = yield race({
+            debounced: delay(1000),
+            latestAction: take("*")
+        });
+
+        if (debounced) {
+            yield put(postInit());
+            return;
+        }
+    }
+}
 
 export function* pulseSaga() {
     let count = 0;

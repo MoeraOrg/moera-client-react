@@ -128,7 +128,7 @@ import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
 import { flushPostponedIntroducedSaga, introduce } from "api/node/introduce";
 import { askNaming, flushPostponedNamingSaga } from "api/node/ask-naming";
-import { pulseSaga } from "state/pulse/sagas";
+import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import {
     goHomeSaga,
     goToLocationSaga,
@@ -269,6 +269,7 @@ function* flushPostponedSaga() {
 }
 
 function* combinedSaga() {
+    yield spawn(signalPostInitSaga);
     yield spawn(pulseSaga);
     yield takeLatest(INIT_STORAGE, initStorageSaga);
     yield takeLatest(INIT_FROM_LOCATION, initFromLocationSaga);

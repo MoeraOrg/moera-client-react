@@ -5,6 +5,7 @@ import {
     FEED_SCROLLED,
     feedGeneralLoad,
     feedGeneralUnset,
+    feedPastSliceLoad,
     FEEDS_UNSET,
     feedStatusLoad,
     feedStatusSet,
@@ -14,7 +15,7 @@ import {
     feedsUpdate,
     feedUnsubscribed
 } from "state/feeds/actions";
-import { isFeedGeneralToBeLoaded } from "state/feeds/selectors";
+import { isFeedGeneralToBeLoaded, isFeedToBeLoaded } from "state/feeds/selectors";
 import {
     EVENT_HOME_FEED_STATUS_UPDATED,
     EVENT_HOME_STORIES_STATUS_UPDATED,
@@ -32,6 +33,7 @@ import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
+import { POST_INIT } from "state/pulse/actions";
 
 function toStory(eventPayload, isHome) {
     const story = {...eventPayload};
@@ -56,23 +58,28 @@ export default [
         GO_TO_PAGE,
         state => (isAtTimelinePage(state) || isAtProfilePage(state))
             && isFeedGeneralToBeLoaded(state, "timeline"),
-        () => feedGeneralLoad("timeline")
+        feedGeneralLoad("timeline")
     ),
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         disj(isAtTimelinePage, isAtProfilePage),
-        () => feedGeneralLoad("timeline")
+        feedGeneralLoad("timeline")
     ),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         inv(disj(isAtTimelinePage, isAtProfilePage)),
-        () => feedGeneralUnset("timeline")
+        feedGeneralUnset("timeline")
     ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, feedsUnset),
     trigger(WAKE_UP, true, feedsUpdate),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),
+    trigger(
+        POST_INIT,
+        state => isFeedToBeLoaded(state, ":instant"),
+        feedPastSliceLoad(":instant")
+    ),
     trigger(EVENT_NODE_STORY_ADDED, true, signal => storyAdded(toStory(signal.payload, false))),
     trigger(EVENT_NODE_STORY_DELETED, true, signal => storyDeleted(toStory(signal.payload, false))),
     trigger(EVENT_NODE_STORY_UPDATED, true, signal => storyUpdated(toStory(signal.payload, false))),

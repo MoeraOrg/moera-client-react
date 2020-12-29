@@ -8,7 +8,7 @@ import { getSetting } from "state/settings/selectors";
 const MAX_MOMENT = 25337597040000; // January 1, 9999
 
 export function isHomeFeedAction(action) {
-    return action.feedName.startsWith(":");
+    return action.payload.feedName.startsWith(":");
 }
 
 export function getAllFeeds(state) {
@@ -72,4 +72,10 @@ export function getInstantCount(state) {
     const feed = getFeedState(state, ":instant");
     const mode = getSetting(state, "instants.number.mode")
     return mode === "not-viewed" ? feed.notViewed : feed.notRead;
+}
+
+export function isFeedToBeLoaded(state, feedName) {
+    const feed = getFeedState(state, feedName);
+    return feed.stories.length === 0 && !feed.loadingFuture && !feed.loadingPast
+        && (feed.after > Number.MIN_SAFE_INTEGER || feed.before < Number.MAX_SAFE_INTEGER);
 }
