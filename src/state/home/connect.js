@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects';
 
 import { messageBox } from "state/messagebox/actions";
-import { normalizeUrl } from "util/misc";
+import { normalizeUrl } from "util/url";
 import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerified } from "state/home/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { NameResolvingError, Naming, Node, NodeApiError, NodeName } from "api";

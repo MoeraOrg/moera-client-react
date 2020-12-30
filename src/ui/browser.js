@@ -1,6 +1,7 @@
 import * as URI from 'uri-js';
 
-import { randomId, rootUrl } from "util/misc";
+import { rootUrl } from "util/url";
+import { randomId } from "util/misc";
 
 export class Browser {
 

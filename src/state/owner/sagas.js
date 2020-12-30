@@ -7,7 +7,8 @@ import { ownerSet, ownerSwitchClose, ownerSwitchFailed, ownerVerified } from "st
 import { namingNameLoaded } from "state/naming/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { initFromLocation } from "state/navigation/actions";
-import { normalizeUrl, now, rootUrl } from "util/misc";
+import { normalizeUrl, rootUrl } from "util/url";
+import { now } from "util/misc";
 
 export function* ownerLoadSaga() {
     try {

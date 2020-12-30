@@ -9,12 +9,11 @@
 
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
 
-import { htmlToText } from "util/html";
-import { getInstantTypeDetails } from "ui/instant/instant-types";
+import { buildNotification, notificationClick } from "state/webpush/notification";
 
 clientsClaim();
 
@@ -72,8 +71,17 @@ registerRoute(
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: "SKIP_WAITING"})
 self.addEventListener("message", event => {
-    if (event.data && event.data.type === "SKIP_WAITING") {
-        self.skipWaiting();
+    if (event.data) {
+        switch (event.data.type) {
+            case "SKIP_WAITING":
+                self.skipWaiting();
+                break;
+            case "HOME_ROOT_PAGE":
+                self.homeRootPage = event.data.location + "/moera";
+                break;
+            default:
+                // do nothing
+        }
     }
 });
 
@@ -81,9 +89,9 @@ self.addEventListener("message", event => {
 
 self.addEventListener("push", event => {
     const story = event.data.json();
-    const details = getInstantTypeDetails(story.storyType);
-    event.waitUntil(self.registration.showNotification(details != null ? details.title : "Moera", {
-        body: htmlToText(story.summary),
-        tag: story.id
-    }));
+    console.log("Arrived", story);
+    const {title, options} = buildNotification(story);
+    event.waitUntil(self.registration.showNotification(title, options));
 });
+
+self.addEventListener("notificationclick", event => event.waitUntil(notificationClick(event)));

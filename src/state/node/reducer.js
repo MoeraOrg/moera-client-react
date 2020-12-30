@@ -1,5 +1,5 @@
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import { toWsUrl } from "util/misc";
+import { toWsUrl } from "util/url";
 
 const initialState = {
     root: {

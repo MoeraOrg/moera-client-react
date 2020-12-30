@@ -15,7 +15,7 @@ import {
     signUpFailed
 } from "state/signupdialog/actions";
 import { Browser } from "ui/browser";
-import { rootUrl } from "util/misc";
+import { rootUrl } from "util/url";
 
 function getProvider(name) {
     return PROVIDERS.find(p => p.name === name);

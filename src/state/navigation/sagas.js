@@ -14,7 +14,7 @@ import {
 import { settingsGoToTab } from "state/settings/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { locationBuild, LocationInfo, locationTransform } from "location";
-import { rootUrl } from "util/misc";
+import { rootUrl } from "util/url";
 
 export function* goToPageWithDefaultSubpageSaga(action) {
     switch (action.payload.page) {

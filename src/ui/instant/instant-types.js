@@ -71,10 +71,12 @@ export function getInstantTypeDetails(storyType) {
 }
 
 export function getInstantTarget(story) {
+    const postingId = story.posting ? story.posting.id : story.postingId;
+
     switch(story.storyType) {
         case "reaction-added-positive":
         case "reaction-added-negative":
-            return {nodeName: ":", href: `/post/${story.postingId}`}
+            return {nodeName: ":", href: `/post/${postingId}`}
         case "mention-posting":
         case "posting-task-failed":
             return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
@@ -82,7 +84,7 @@ export function getInstantTarget(story) {
         case "subscriber-deleted":
             return {nodeName: story.remoteNodeName, href: "/"}
         case "comment-added":
-            return {nodeName: ":", href: `/post/${story.postingId}?comment=${story.remoteCommentId}`}
+            return {nodeName: ":", href: `/post/${postingId}?comment=${story.remoteCommentId}`}
         case "mention-comment":
         case "reply-comment":
         case "comment-reaction-added-positive":

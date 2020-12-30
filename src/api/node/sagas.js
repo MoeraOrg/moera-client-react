@@ -3,7 +3,7 @@ import { call, select } from 'redux-saga/effects';
 import { ClientSettings, NodeApi } from "api";
 import { callApi } from "api/node/call";
 import { getHomeOwnerName } from "state/home/selectors";
-import { urlWithParameters } from "util/misc";
+import { urlWithParameters } from "util/url";
 
 export function* createDomain(nodeName, name) {
     yield call(callApi, {nodeName, location: "/domains", method: "POST", body: {name}, schema: NodeApi.DomainInfo,

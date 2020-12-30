@@ -6,7 +6,7 @@ import { browserApiSet, connectedToHome, disconnectFromHome } from "state/home/a
 import { getCartesListTtl } from "state/cartes/selectors";
 import { errorThrown } from "state/error/actions";
 import { Browser } from "ui/browser";
-import { normalizeUrl } from "util/misc";
+import { normalizeUrl } from "util/url";
 
 export function* homeRestoreSaga(action) {
     let {addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots} = action.payload;

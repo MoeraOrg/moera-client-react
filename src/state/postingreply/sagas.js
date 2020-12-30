@@ -7,7 +7,8 @@ import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { goToLocation } from "state/navigation/actions";
-import { getWindowSelectionHtml, urlWithParameters } from "util/misc";
+import { urlWithParameters } from "util/url";
+import { getWindowSelectionHtml } from "util/misc";
 import { quoteHtml } from "util/html";
 
 export function* postingReplySaga() {

@@ -7,7 +7,7 @@ import { getSetting } from "state/settings/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
-import { urlWithParameters } from "util/misc";
+import { urlWithParameters } from "util/url";
 
 class EntryHtml extends React.PureComponent {
 

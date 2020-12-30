@@ -9,7 +9,7 @@ import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
-import { rootUrl, urlWithParameters } from "util/misc";
+import { rootUrl, urlWithParameters } from "util/url";
 
 class Jump extends React.PureComponent {
 

@@ -8,7 +8,7 @@ import {
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
-import { toWsUrl } from "util/misc";
+import { toWsUrl } from "util/url";
 
 const emptyConnection = {
     connecting: false,

@@ -2,7 +2,7 @@ import { apply, call, put, select } from 'redux-saga/effects';
 
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApi, NodeApiError, NodeError } from "api";
 import { errorAuthInvalid } from "state/error/actions";
-import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/misc";
+import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
 import { getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
 import { isConnectedToHome } from "state/home/selectors";
