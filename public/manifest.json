@@ -4,18 +4,8 @@
   "name": "Moera Social Network Client",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "pics/icon-o-128.png",
-      "sizes": "128x128",
-      "type": "image/png"
-    },
-    {
-      "src": "pics/icon-o-256.png",
-      "sizes": "256x256",
+      "src": "pics/icon-o-192.png",
+      "sizes": "192x192",
       "type": "image/png"
     },
     {
