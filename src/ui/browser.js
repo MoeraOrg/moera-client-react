@@ -65,8 +65,7 @@ export class Browser {
     }
 
     static isWebPushSupported() {
-        return !!navigator.serviceWorker
-            && !(this.userAgent === "firefox" && (this.userAgentOs === "android" || this.userAgentOs === "ios"));
+        return !!navigator.serviceWorker;
     }
 
     static isTouchScreen() {
