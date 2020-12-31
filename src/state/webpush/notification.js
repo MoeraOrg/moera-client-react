@@ -6,12 +6,15 @@ import { urlWithParameters } from "util/url";
 
 export function buildNotification(story) {
     const details = getInstantTypeDetails(story.storyType);
+    const {nodeName, href} = getInstantTarget(story);
     return {
         title: details != null ? details.title : "Moera",
         options: {
             body: htmlToText(story.summary),
+            badge: "/pics/icon-72.png",
+            icon: "/pics/icon-o-512.png",
             data: story,
-            tag: story.id
+            tag: nodeName + href
         }
     }
 }
@@ -24,8 +27,6 @@ function track(url, trackingId) {
 
 async function getInstantUrl(story) {
     const {nodeName, href} = getInstantTarget(story);
-    console.log(story);
-    console.log(href);
     if (nodeName === ":") {
         return track(self.homeRootPage + href, story.trackingId);
     } else {

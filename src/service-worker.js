@@ -89,7 +89,6 @@ self.addEventListener("message", event => {
 
 self.addEventListener("push", event => {
     const story = event.data.json();
-    console.log("Arrived", story);
     const {title, options} = buildNotification(story);
     event.waitUntil(self.registration.showNotification(title, options));
 });
