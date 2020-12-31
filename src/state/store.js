@@ -297,7 +297,7 @@ function* combinedSaga() {
     yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga, isHomeFeedAction));
     yield takeEvery(FEED_SUBSCRIBE, feedSubscribeSaga);
     yield takeEvery(FEED_UNSUBSCRIBE, feedUnsubscribeSaga);
-    yield takeEvery(FEED_STATUS_LOAD, feedStatusLoadSaga);
+    yield takeEvery(FEED_STATUS_LOAD, introduce(feedStatusLoadSaga, isHomeFeedAction));
     yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
     yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga, isHomeFeedAction));
     yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga, isHomeFeedAction));
@@ -344,7 +344,7 @@ function* combinedSaga() {
     yield takeEvery(COMMENTS_PAST_SLICE_LOAD, introduce(commentsPastSliceLoadSaga));
     yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
     yield takeLatest(COMMENTS_UPDATE, introduce(commentsUpdateSaga));
-    yield takeEvery(COMMENT_LOAD, commentLoadSaga);
+    yield takeEvery(COMMENT_LOAD, introduce(commentLoadSaga));
     yield takeLatest(COMMENT_POST, commentPostSaga);
     yield takeEvery(COMMENT_DELETE, commentDeleteSaga);
     yield takeLatest(FOCUSED_COMMENT_LOAD, focusedCommentLoadSaga);
