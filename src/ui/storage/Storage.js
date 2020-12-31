@@ -52,6 +52,7 @@ class Storage extends React.PureComponent {
     sendServiceWorkerHomeLocation(location) {
         if (!window.navigator.serviceWorker) {
             console.log("No Service Worker.");
+            return;
         }
 
         window.navigator.serviceWorker.getRegistration().then(registration => {
