@@ -17,7 +17,7 @@ export function* webPushSubscribeSaga() {
             applicationServerKey: Base64js.toByteArray(data.key)
         }]);
         if (subscription == null) {
-            yield put(flashBox("Your browser does not support push notifications"));
+            yield put(flashBox("Browser did not allow push notifications"));
             return;
         }
         const publicKey = Base64js.fromByteArray(new Uint8Array(subscription.getKey("p256dh")));
