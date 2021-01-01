@@ -9,6 +9,7 @@ import { isStandaloneMode } from "state/navigation/selectors";
 import LocalStorageBackend from "ui/storage/LocalStorageBackend";
 import { Browser } from "ui/browser";
 import { webPushInvitationRestore, webPushSubscriptionSet } from "state/webpush/actions";
+import { ServiceWorkerService } from "ui/service-worker";
 
 class Storage extends React.PureComponent {
 
@@ -49,24 +50,6 @@ class Storage extends React.PureComponent {
         }
     };
 
-    sendServiceWorkerHomeLocation(location) {
-        if (!window.navigator.serviceWorker) {
-            console.log("No Service Worker.");
-            return;
-        }
-
-        window.navigator.serviceWorker.getRegistration().then(registration => {
-            if (registration && registration.active) {
-                registration.active.postMessage({
-                    type: "HOME_ROOT_PAGE",
-                    location
-                });
-            } else {
-                console.log("No active Service Worker.");
-            }
-        });
-    }
-
     loadedData(data) {
         const {
             home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
@@ -89,7 +72,7 @@ class Storage extends React.PureComponent {
             if (nodeName) {
                 homeOwnerSet(nodeName, null);
             }
-            this.sendServiceWorkerHomeLocation(location);
+            ServiceWorkerService.sendHomeLocation(location);
             return;
         }
 
