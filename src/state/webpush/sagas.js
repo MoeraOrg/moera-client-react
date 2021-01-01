@@ -4,9 +4,10 @@ import * as Base64js from 'base64-js';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import { Browser } from "ui/browser";
-import { webPushSubscriptionSet } from "state/webpush/actions";
+import { webPushInvitationDeclined, webPushSubscribe, webPushSubscriptionSet } from "state/webpush/actions";
 import { getWebPushSubscriptionId } from "state/webpush/selectors";
 import { flashBox } from "state/flashbox/actions";
+import { confirmBox } from "state/confirmbox/actions";
 
 export function* webPushSubscribeSaga() {
     try {
@@ -57,4 +58,14 @@ export function* webPushUnsubscribeSaga() {
     } catch (e) {
         yield put(errorThrown(e));
     }
+}
+
+export function* webPushInviteSaga() {
+    yield put(confirmBox("Do you want to receive notifications from Moera when the application is closed?",
+        "Yes", "No", webPushSubscribe(), webPushInvitationDeclined()));
+}
+
+export function* webPushInvitationDeclinedSaga() {
+    const {subscriptionId, invitationStage, invitationTimestamp} = yield select(state => state.webPush);
+    Browser.storeWebPushData(subscriptionId, invitationStage, invitationTimestamp);
 }

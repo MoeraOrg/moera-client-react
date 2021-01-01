@@ -72,6 +72,10 @@ export class Browser {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
     }
 
+    static isMobile() {
+        return this.userAgentOs === "android" || this.userAgentOs === "ios";
+    }
+
     static getRootLocation() {
         const {protocol, host} = window.location;
         return rootUrl(protocol, host);
@@ -165,8 +169,8 @@ export class Browser {
         this.storeData({cartesIp, cartes});
     }
 
-    static storeWebPushData(subscriptionId) {
-        this.storeData({webPush: {subscriptionId}});
+    static storeWebPushData(subscriptionId, invitationStage, invitationTimestamp) {
+        this.storeData({webPush: {subscriptionId, invitationStage, invitationTimestamp}});
     }
 
     static deleteData(location) {
