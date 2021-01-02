@@ -17,6 +17,7 @@ class Jump extends React.PureComponent {
         nodeName: PropType.string,
         href: PropType.string,
         className: PropType.string,
+        title: PropType.string,
         trackingId: PropType.string,
         onNear: PropType.func,
         onFar: PropType.func

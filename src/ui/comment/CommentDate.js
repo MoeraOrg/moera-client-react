@@ -8,8 +8,9 @@ import "./CommentDate.css"
 const CommentDate = ({nodeName, postingId, comment}) => {
     const date = fromUnixTime(comment.createdAt);
     return (
-        <Jump className="date" nodeName={nodeName} href={`/post/${postingId}?comment=${comment.id}`}>
-            <span title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</span>
+        <Jump className="date" nodeName={nodeName} title={format(date, "dd-MM-yyyy HH:mm")}
+              href={`/post/${postingId}?comment=${comment.id}`}>
+            {formatDistanceToNow(date)}
         </Jump>
     );
 };
