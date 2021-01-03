@@ -88,9 +88,23 @@ self.addEventListener("message", event => {
 // Any other custom service worker logic can go here.
 
 self.addEventListener("push", event => {
-    const story = event.data.json();
-    const {title, options} = buildNotification(story);
-    event.waitUntil(self.registration.showNotification(title, options));
+    const packet = event.data.json();
+    const notification = buildNotification(packet);
+    if (notification != null) {
+        switch (notification.type) {
+            case "add":
+                event.waitUntil(self.registration.showNotification(notification.title, notification.options));
+                break;
+
+            case "delete":
+                self.registration.getNotifications()
+                    .then(nts => nts.filter(nt => nt.tag === notification.id).forEach(nt => nt.close()));
+                break;
+
+            default:
+                // do nothing
+        }
+    }
 });
 
 self.addEventListener("notificationclick", event => event.waitUntil(notificationClick(event)));

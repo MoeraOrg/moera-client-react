@@ -4,18 +4,33 @@ import { getInstantTarget, getInstantTypeDetails } from "ui/instant/instant-type
 import { htmlToText } from "util/html";
 import { urlWithParameters } from "util/url";
 
-export function buildNotification(story) {
-    const details = getInstantTypeDetails(story.storyType);
-    const {nodeName, href} = getInstantTarget(story);
-    return {
-        title: details != null ? details.title : "Moera",
-        options: {
-            body: htmlToText(story.summary),
-            badge: "/pics/icon-72.png",
-            icon: "/pics/icon-o-512.png",
-            data: story,
-            tag: nodeName + href
+export function buildNotification(packet) {
+    switch (packet.type) {
+        case "story-added": {
+            const story = packet.story;
+            const details = getInstantTypeDetails(story.storyType);
+            return {
+                type: "add",
+                title: details != null ? details.title : "Moera",
+                options: {
+                    body: htmlToText(story.summary),
+                    badge: "/pics/icon-72.png",
+                    icon: "/pics/icon-o-512.png",
+                    data: story,
+                    tag: story.id
+                }
+            }
         }
+
+        case "story-deleted": {
+            return {
+                type: "delete",
+                id: packet.id
+            }
+        }
+
+        default:
+            return null;
     }
 }
 
