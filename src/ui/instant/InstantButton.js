@@ -6,6 +6,7 @@ import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedState, getInstantCount } from "state/feeds/selectors";
+import { ServiceWorkerService } from "ui/service-worker";
 
 class InstantButton extends React.PureComponent {
 
@@ -33,6 +34,7 @@ class InstantButton extends React.PureComponent {
             return;
         }
         feedStatusUpdate(":instant", true, null, stories[0].moment);
+        ServiceWorkerService.closeAllNotifications();
     }
 
     render() {
