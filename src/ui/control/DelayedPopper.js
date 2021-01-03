@@ -10,7 +10,8 @@ class Manager extends React.PureComponent {
 
     static propTypes = {
         disabled: PropType.bool,
-        onPreparePopper: PropType.func
+        onPreparePopper: PropType.func,
+        onShow: PropType.func
     };
 
     constructor(props, context) {
@@ -143,6 +144,10 @@ class Manager extends React.PureComponent {
     }, 1000);
 
     show() {
+        if (this.props.onShow && !this.props.onShow()) {
+            return;
+        }
+
         this.setState({popup: true});
         if (this.state.touch === "touch") {
             this.setTouch("hold");

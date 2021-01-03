@@ -32,6 +32,8 @@ class ReactionButtonImpl extends React.PureComponent {
         reactions: []
     };
 
+    #pastEmoji;
+
     componentDidMount() {
         this.updateReactions();
     }
@@ -107,11 +109,19 @@ class ReactionButtonImpl extends React.PureComponent {
         this.props.onReactionDelete();
     }
 
+    preparePopper = () => {
+        this.#pastEmoji = this.props.emoji;
+    }
+
+    show = () => {
+        return this.#pastEmoji === this.props.emoji;
+    }
+
     render() {
         const {negative} = this.props;
 
         return (
-            <Manager>
+            <Manager onPreparePopper={this.preparePopper} onShow={this.show}>
                 <Reference>
                     {(ref, mainEnter, mainLeave, mainTouch) =>
                         <ReactionEmojiButton
