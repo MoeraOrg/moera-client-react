@@ -71,17 +71,8 @@ registerRoute(
 // This allows the web app to trigger skipWaiting via
 // registration.waiting.postMessage({type: "SKIP_WAITING"})
 self.addEventListener("message", event => {
-    if (event.data) {
-        switch (event.data.type) {
-            case "SKIP_WAITING":
-                self.skipWaiting();
-                break;
-            case "HOME_ROOT_PAGE":
-                self.homeRootPage = event.data.location + "/moera";
-                break;
-            default:
-                // do nothing
-        }
+    if (event.data && event.data.type === "SKIP_WAITING") {
+        self.skipWaiting();
     }
 });
 

@@ -16,7 +16,7 @@ export function buildNotification(packet) {
                     body: htmlToText(story.summary),
                     badge: "/pics/icon-72.png",
                     icon: "/pics/icon-o-512.png",
-                    data: story,
+                    data: packet,
                     tag: story.id
                 }
             }
@@ -34,18 +34,19 @@ export function buildNotification(packet) {
     }
 }
 
-function track(url, trackingId) {
+function track(url, trackingId, originUrl) {
     url = self.origin + "/?href=" + encodeURIComponent(url);
     return trackingId != null
-        ? urlWithParameters(self.homeRootPage + "/track", {trackingId, href: url}) : url;
+        ? urlWithParameters(originUrl + "/track", {trackingId, href: url}) : url;
 }
 
-async function getInstantUrl(story) {
+async function getInstantUrl(packet) {
+    const {originUrl, story} = packet;
     const {nodeName, href} = getInstantTarget(story);
     if (nodeName === ":") {
-        return track(self.homeRootPage + href, story.trackingId);
+        return track(originUrl + href, story.trackingId, originUrl);
     } else {
-        return urlWithParameters(self.homeRootPage + "/gotoname",
+        return urlWithParameters(originUrl + "/gotoname",
             {client: self.origin, name: nodeName, location: href, trackingId: story.trackingId});
     }
 }
