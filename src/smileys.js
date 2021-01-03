@@ -3,8 +3,9 @@ export const SMILEY_LIKE = /(^|\s)([-+:;'`,.=^cсDEЕoоOОPРpрbЬьÞþxхXХ
 export const SMILEYS = [
     {
         // :-) :o) :c) :^)
-        regex: /^:[-oоcс^]?\)$/,
-        emoji: 0x263a
+        regex: /^:[-oоcс^]?(\)+)$/,
+        emoji: 0x263a,
+        repeatGroup: 1
     },
     {
         // :-] :-3 :->
@@ -53,8 +54,9 @@ export const SMILEYS = [
     },
     {
         // :-( ;-(
-        regex: /^[:;]-?\($/,
-        emoji: 0x2639
+        regex: /^[:;]-?(\(+)$/,
+        emoji: 0x2639,
+        repeatGroup: 1
     },
     {
         // :-c :-<
