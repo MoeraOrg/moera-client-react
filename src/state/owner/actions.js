@@ -15,9 +15,9 @@ export const ownerVerify = () => ({
 });
 
 export const OWNER_VERIFIED = "OWNER_VERIFIED";
-export const ownerVerified = (name, correct, deadline) => ({
+export const ownerVerified = (name, correct) => ({
     type: OWNER_VERIFIED,
-    payload: {name, correct, deadline}
+    payload: {name, correct}
 });
 
 export const OWNER_SWITCH_OPEN = "OWNER_SWITCH_OPEN";

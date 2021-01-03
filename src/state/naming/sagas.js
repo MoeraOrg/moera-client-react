@@ -34,27 +34,32 @@ export function* namingNamesUsedSaga(action) {
 }
 
 export function* namingNameLoadSaga(action) {
-    yield call(fetchNodeUri, action.payload.name);
+    yield call(fetchName, action.payload.name);
 }
 
 export function* getNodeUri(nodeName) {
+    return (yield call(getNameDetails, nodeName)).nodeUri;
+}
+
+export function* getNameDetails(nodeName) {
     const details = yield select(state => getNamingNameDetails(state, nodeName));
     if (details.loaded) {
         if (now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
             Browser.storeName(nodeName, details.latest, details.nodeUri, details.updated);
             yield put(namingNamesUsed([nodeName]));
         }
-        return details.nodeUri;
+        return details;
     }
-    return yield call(fetchNodeUri, nodeName);
+    return yield call(fetchName, nodeName);
 }
 
-function* fetchNodeUri(nodeName) {
+function* fetchName(nodeName) {
     let nodeUri = null;
+    let latest = false;
     try {
         const {name, generation} = NodeName.parse(nodeName);
         const data = yield call(Naming.getCurrent, name, generation);
-        const latest = !!(data && data.latest);
+        latest = !!(data && data.latest);
         nodeUri = data ? data.nodeUri : null;
         if (data) {
             Browser.storeName(nodeName, latest, nodeUri, now());
@@ -64,7 +69,7 @@ function* fetchNodeUri(nodeName) {
         yield put(namingNameLoadFailed(nodeName));
         yield put(errorThrown(e));
     }
-    return nodeUri;
+    return {loading: false, loaded: true, nodeUri, latest};
 }
 
 export function* namingNamesMaintenanceSaga() {

@@ -4,11 +4,10 @@ import * as URI from 'uri-js';
 import { Naming, Node, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { ownerSet, ownerSwitchClose, ownerSwitchFailed, ownerVerified } from "state/owner/actions";
-import { namingNameLoaded } from "state/naming/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { initFromLocation } from "state/navigation/actions";
 import { normalizeUrl, rootUrl } from "util/url";
-import { now } from "util/misc";
+import { getNodeUri } from "state/naming/sagas";
 
 export function* ownerLoadSaga() {
     try {
@@ -25,14 +24,9 @@ export function* ownerVerifySaga() {
         ownerName: state.owner.name
     }));
     try {
-        const {name, generation} = NodeName.parse(ownerName);
-        const data = yield call(Naming.getCurrent, name, generation);
-        const nodeUri = normalizeUrl(data.nodeUri);
-        const correct = !!(data && rootPage === nodeUri);
-        const latest = !!(data && data.latest);
-        const deadline = data ? data.deadline : null;
-        yield put(ownerVerified(ownerName, correct, deadline));
-        yield put(namingNameLoaded(ownerName, latest, nodeUri, now()));
+        const nodeUri = normalizeUrl(yield call(getNodeUri, ownerName));
+        const correct = rootPage === nodeUri;
+        yield put(ownerVerified(ownerName, correct));
     } catch (e) {
         yield put(errorThrown(e));
     }

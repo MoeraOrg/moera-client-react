@@ -48,7 +48,6 @@ export default (state = initialState, action) => {
                 return {
                     ...state,
                     correct: action.payload.correct,
-                    deadline: action.payload.deadline,
                     verified: true,
                     verifiedAt: getUnixTime(new Date())
                 };

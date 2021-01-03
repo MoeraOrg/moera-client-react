@@ -1,6 +1,9 @@
 import * as URI from 'uri-js';
 
 export function normalizeUrl(url) {
+    if (url == null) {
+        return null;
+    }
     return url.endsWith("/") ? url.substring(0, url.length - 1) : url;
 }
 
