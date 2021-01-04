@@ -93,9 +93,9 @@ export default class DomainField extends React.PureComponent {
                                         <>
                                             <input
                                                 {...field}
-                                                id={name}
                                                 type="text"
                                                 className={cx(
+                                                    "domain",
                                                     "form-control", {
                                                         "is-valid": touched && !error,
                                                         "is-invalid": touched && error,

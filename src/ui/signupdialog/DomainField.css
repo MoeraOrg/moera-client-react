@@ -3,7 +3,13 @@
     align-items: center;
 }
 
+.domain-field .domain {
+    flex: auto;
+    min-width: 0;
+}
+
 .domain-field .suffix {
+    flex: none;
     display: block;
     margin-left: .2em;
     font-family: var(--font-family-monospace);
@@ -22,5 +28,6 @@
 }
 
 .domain-field BUTTON {
+    flex: none;
     margin-left: 1em;
 }
