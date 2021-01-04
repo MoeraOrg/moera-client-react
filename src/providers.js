@@ -2,6 +2,7 @@ const PROVIDERS = [
     {
         name: "moera.blog",
         title: "Moera.Blog",
+        scheme: "https",
         domain: "moera.blog",
         controller: "https://lamed.moera.blog"
     },
