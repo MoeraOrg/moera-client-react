@@ -9,7 +9,6 @@ import { isStandaloneMode } from "state/navigation/selectors";
 import LocalStorageBackend from "ui/storage/LocalStorageBackend";
 import { Browser } from "ui/browser";
 import { webPushInvitationRestore, webPushSubscriptionSet } from "state/webpush/actions";
-import { ServiceWorkerService } from "ui/service-worker";
 
 class Storage extends React.PureComponent {
 
@@ -60,33 +59,32 @@ class Storage extends React.PureComponent {
             return;
         }
 
+        browserApiSet(data.version);
         if (data.names != null) {
             namingNamesPopulate(data.names);
         }
-
-        const {location, nodeName, login, token, permissions} = data.home || {};
-        if (data.clientId !== Browser.clientId
-                && (location != null || login != null || token != null || permissions != null)
-                && (location !== home.location || login !== home.login || token !== home.token)) {
-            homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes, data.roots);
-            if (nodeName) {
-                homeOwnerSet(nodeName, null);
-            }
-            ServiceWorkerService.sendHomeLocation(location);
-            return;
-        }
-
-        browserApiSet(data.version);
         if (data.roots != null) {
             connectionsSet(data.roots);
-        }
-        if (data.clientId !== Browser.clientId) {
-            cartesSet(data.cartesIp, data.cartes);
         }
 
         const webPush = data.webPush || {};
         webPushSubscriptionSet(webPush.subscriptionId || null);
         webPushInvitationRestore(webPush.invitationStage || 0, webPush.invitationTimestamp || 0);
+
+        if (data.clientId === Browser.clientId) {
+            return;
+        }
+
+        const {location, nodeName, login, token, permissions} = data.home || {};
+        if ((location != null || login != null || token != null || permissions != null)
+                && (location !== home.location || login !== home.login || token !== home.token)) {
+            homeRestore(data.version, location, login, token, permissions, data.cartesIp, data.cartes, data.roots);
+            if (nodeName) {
+                homeOwnerSet(nodeName, null);
+            }
+        } else {
+            cartesSet(data.cartesIp, data.cartes);
+        }
     }
 
     storedName(data) {
