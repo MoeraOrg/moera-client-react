@@ -22,6 +22,7 @@ import { getNodeUri } from "state/naming/sagas";
 import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { getNodeRootLocation } from "state/node/selectors";
+import { Browser } from "ui/browser";
 
 export function* postingDeleteSaga(action) {
     const id = action.payload.id;
@@ -119,7 +120,9 @@ export function* postingCopyLinkSaga(action) {
     try {
         const href = yield call(postingGetLink, id);
         yield call(clipboardCopy, href);
-        yield put(flashBox("Link copied to the clipboard"));
+        if (Browser.userAgentOs !== "android") {
+            yield put(flashBox("Link copied to the clipboard"));
+        }
     } catch (e) {
         yield put(errorThrown(e));
     }

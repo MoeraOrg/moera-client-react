@@ -46,6 +46,7 @@ import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { getWindowSelectionHtml, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
+import { Browser } from "ui/browser";
 
 export function* detailedPostingLoadSaga() {
     try {
@@ -202,7 +203,9 @@ export function* commentCopyLinkSaga(action) {
     try {
         const href = yield call(postingGetLink, postingId);
         yield call(clipboardCopy, `${href}?comment=${id}`);
-        yield put(flashBox("Link copied to the clipboard"));
+        if (Browser.userAgentOs !== "android") {
+            yield put(flashBox("Link copied to the clipboard"));
+        }
     } catch (e) {
         yield put(errorThrown(e));
     }
