@@ -3,6 +3,11 @@ export const postInit = () => ({
     type: POST_INIT
 });
 
+export const POST_INIT_DELAYED = "POST_INIT_DELAYED";
+export const postInitDelayed = () => ({
+    type: POST_INIT_DELAYED
+});
+
 export const PULSE_1MIN = "PULSE_1MIN";
 export const pulse1Min = () => ({
     type: PULSE_1MIN

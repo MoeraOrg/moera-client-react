@@ -33,7 +33,7 @@ import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
-import { POST_INIT } from "state/pulse/actions";
+import { POST_INIT, POST_INIT_DELAYED } from "state/pulse/actions";
 
 function toStory(eventPayload, isHome) {
     const story = {...eventPayload};
@@ -76,8 +76,8 @@ export default [
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),
     trigger(
-        POST_INIT,
-        state => isFeedToBeLoaded(state, ":instant"),
+        [POST_INIT, POST_INIT_DELAYED],
+        state => isConnectedToHome(state) && isFeedToBeLoaded(state, ":instant"),
         feedPastSliceLoad(":instant")
     ),
     trigger(EVENT_NODE_STORY_ADDED, true, signal => storyAdded(toStory(signal.payload, false))),

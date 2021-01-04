@@ -1,6 +1,6 @@
 import { delay, put, race, take } from 'redux-saga/effects';
 
-import { postInit, pulse10Min, pulse1Min, pulse6H } from "state/pulse/actions";
+import { postInit, postInitDelayed, pulse10Min, pulse1Min, pulse6H } from "state/pulse/actions";
 
 export function* signalPostInitSaga() {
     yield delay(1000);
@@ -12,6 +12,8 @@ export function* signalPostInitSaga() {
 
         if (debounced) {
             yield put(postInit());
+            yield delay(5000);
+            yield put(postInitDelayed());
             return;
         }
     }
