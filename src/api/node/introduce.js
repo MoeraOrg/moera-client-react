@@ -8,18 +8,13 @@ import { cartesLoad } from "state/cartes/actions";
 
 const postponingChannel = channel(buffers.expanding(10));
 
-function canRun(state, action, isHomeStuff) {
-    if (isHomeStuff != null && isConnectedToHome(state)
-        && (typeof(isHomeStuff) === "function" ? isHomeStuff(action, state) : !!isHomeStuff)) {
-
-        return true;
-    }
+function canRun(state) {
     return isAtHomeNode(state) || !isCartesRunOut(state) || (isCartesInitialized(state) && !isConnectedToHome(state));
 }
 
-export function introduce(saga, isHomeStuff = null) {
+export function introduce(saga) {
     return function* (action) {
-        if (yield select(state => canRun(state, action, isHomeStuff))) {
+        if (yield select(canRun)) {
             yield call(saga, action);
             return;
         }

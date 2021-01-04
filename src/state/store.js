@@ -253,8 +253,6 @@ import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
 import webPushTriggers from "state/webpush/triggers";
 
-import { isHomeFeedAction } from "state/feeds/selectors";
-
 const triggers = collectTriggers(
     homeTriggers,
     cartesTriggers,
@@ -306,13 +304,13 @@ function* combinedSaga() {
     yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
     yield takeLatest(REGISTER_NAME, registerNameSaga);
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
-    yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga, isHomeFeedAction));
+    yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga));
     yield takeEvery(FEED_SUBSCRIBE, feedSubscribeSaga);
     yield takeEvery(FEED_UNSUBSCRIBE, feedUnsubscribeSaga);
     yield takeEvery(FEED_STATUS_LOAD, introduce(feedStatusLoadSaga, isHomeFeedAction));
     yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
-    yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga, isHomeFeedAction));
-    yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga, isHomeFeedAction));
+    yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
+    yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
     yield takeLatest(FEEDS_UPDATE, introduce(feedsUpdateSaga));
     yield takeLatest(DETAILED_POSTING_LOAD, introduce(detailedPostingLoadSaga));
     yield takeLatest(COMPOSE_FEATURES_LOAD, composeFeaturesLoadSaga);
@@ -322,7 +320,7 @@ function* combinedSaga() {
     yield takeLatest(POSTING_LOAD, introduce(postingLoadSaga));
     yield takeLatest(SETTINGS_NODE_VALUES_LOAD, introduce(settingsNodeValuesLoadSaga));
     yield takeLatest(SETTINGS_NODE_META_LOAD, introduce(settingsNodeMetaLoadSaga));
-    yield takeLatest(SETTINGS_CLIENT_VALUES_LOAD, introduce(settingsClientValuesLoadSaga, true));
+    yield takeLatest(SETTINGS_CLIENT_VALUES_LOAD, introduce(settingsClientValuesLoadSaga));
     yield takeLatest(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
     yield takeLatest(SETTINGS_UPDATE, settingsUpdateSaga);
     yield takeLatest(SETTINGS_UPDATE_SUCCEEDED, settingsUpdateSucceededSaga);
@@ -336,9 +334,9 @@ function* combinedSaga() {
     yield takeLatest(REACTIONS_DIALOG_PAST_REACTIONS_LOAD, reactionsDialogPastReactionsLoadSaga);
     yield takeLatest(REACTIONS_DIALOG_TOTALS_LOAD, reactionsDialogTotalsLoadSaga);
     yield takeEvery(REACTION_VERIFY, reactionVerifySaga);
-    yield takeLatest(COMPOSE_DRAFT_LOAD, introduce(composeDraftLoadSaga, true));
+    yield takeLatest(COMPOSE_DRAFT_LOAD, introduce(composeDraftLoadSaga));
     yield takeLatest(COMPOSE_DRAFT_SAVE, composeDraftSaveSaga);
-    yield takeLatest(COMPOSE_DRAFT_LIST_LOAD, introduce(composeDraftListLoadSaga, true));
+    yield takeLatest(COMPOSE_DRAFT_LIST_LOAD, introduce(composeDraftListLoadSaga));
     yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_RELOAD, composeDraftListItemReloadSaga);
     yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_DELETE, composeDraftListItemDeleteSaga);
     yield takeLatest(COMPOSE_DRAFT_REVISION_DELETE, composeDraftRevisionDeleteSaga);
