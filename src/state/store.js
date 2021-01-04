@@ -16,7 +16,7 @@ import {
     HOME_OWNER_VERIFY,
     HOME_RESTORE
 } from "state/home/actions";
-import { CARTES_LOAD, CARTES_SET } from "state/cartes/actions";
+import { CARTES_LOAD } from "state/cartes/actions";
 import { NODE_NAME_LOAD, NODE_NAME_UPDATE, REGISTER_NAME } from "state/nodename/actions";
 import { PROFILE_LOAD, PROFILE_UPDATE } from "state/profile/actions";
 import {
@@ -307,7 +307,7 @@ function* combinedSaga() {
     yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga));
     yield takeEvery(FEED_SUBSCRIBE, feedSubscribeSaga);
     yield takeEvery(FEED_UNSUBSCRIBE, feedUnsubscribeSaga);
-    yield takeEvery(FEED_STATUS_LOAD, introduce(feedStatusLoadSaga, isHomeFeedAction));
+    yield takeEvery(FEED_STATUS_LOAD, introduce(feedStatusLoadSaga));
     yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
     yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
     yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
