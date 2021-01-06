@@ -12,7 +12,7 @@ import { OWNER_LOAD, OWNER_SWITCH, OWNER_VERIFY } from "state/owner/actions";
 import {
     CONNECT_TO_HOME,
     CONNECTED_TO_HOME,
-    DISCONNECTED_FROM_HOME,
+    DISCONNECT_FROM_HOME,
     HOME_OWNER_VERIFY,
     HOME_RESTORE
 } from "state/home/actions";
@@ -299,7 +299,7 @@ function* combinedSaga() {
     yield takeLatest(NODE_NAME_LOAD, nodeNameLoadSaga);
     yield takeLatest(CARTES_LOAD, cartesLoadSaga);
     yield takeEvery(CONNECTED_TO_HOME, flushPostponedSaga);
-    yield takeEvery(DISCONNECTED_FROM_HOME, flushPostponedSaga);
+    yield takeEvery(DISCONNECT_FROM_HOME, flushPostponedSaga);
     yield takeLatest(PROFILE_LOAD, introduce(profileLoadSaga));
     yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
     yield takeLatest(REGISTER_NAME, registerNameSaga);

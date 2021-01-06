@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { browserApiSet, connectionsSet, homeOwnerSet, homeRestore } from "state/home/actions";
+import { browserApiSet, connectionsSet, disconnectFromHome, homeOwnerSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
@@ -52,7 +52,7 @@ class Storage extends React.PureComponent {
     loadedData(data) {
         const {
             home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
-            webPushSubscriptionSet, webPushInvitationRestore
+            webPushSubscriptionSet, webPushInvitationRestore, disconnectFromHome
         } = this.props;
 
         if (!data) {
@@ -84,6 +84,7 @@ class Storage extends React.PureComponent {
             }
         } else {
             cartesSet(data.cartesIp, data.cartes);
+            disconnectFromHome(location, login);
         }
     }
 
@@ -104,6 +105,6 @@ export default connect(
     }),
     {
         homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded,
-        webPushSubscriptionSet, webPushInvitationRestore
+        webPushSubscriptionSet, webPushInvitationRestore, disconnectFromHome
     }
 )(Storage);
