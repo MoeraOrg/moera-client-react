@@ -11,7 +11,7 @@ http://moera.org/development/setup/index.html
 
 Installation instructions:
 
-1. As prerequisites you need to have Node.js 8.12+ and Yarn installed.
+1. As prerequisites, you need to have Node.js 8.12+ and Yarn installed.
 2. Go to the source directory.
 3. Install project dependencies:
    ```
@@ -23,15 +23,17 @@ Installation instructions:
 5. If you use your own [naming server][2], make sure its location is set correctly
    in client settings.
 6. Execute `./run` script.
-7. New browser tab with the client in it is opened automatically. Since we
-   don't use the client directly, but rather use the [browser extension][1]
-   that loads it, you can close this browser tab.
+7. New browser tab with the client in it is opened automatically, you can use
+   it directly as a standalone client. But if you have [browser extension][1]
+   installed, set your client URL in the browser extension settings and let the
+   browser extension to load the client. In this case, the browser tab with the
+   client can be closed.
 
 ## Note for WebStorm/IntelliJ users
 
 The project uses absolute paths for imports. If your IDE complains about
 non-installed modules, you may do the following (or read [the full
-instructions](https://medium.com/hackernoon/absolute-imports-with-create-react-app-4c6cfb66c35d)):
+instructions][3]):
 
 1. Mark the `src/` directory as a Resources Root.
 2. Go to **Settings > Editor > Code Style > JavaScript**, go to
@@ -40,3 +42,5 @@ instructions](https://medium.com/hackernoon/absolute-imports-with-create-react-a
 
 [1]: https://github.com/MoeraOrg/moera-browser-extension
 [2]: https://github.com/MoeraOrg/moera-naming
+[3]: https://medium.com/hackernoon/absolute-imports-with-create-react-app-4c6cfb66c35d
+
