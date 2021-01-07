@@ -1,6 +1,7 @@
 import { retry } from "redux-saga/effects";
 
 const FETCH_TIMEOUT = 5000; // ms
+const UPDATE_TIMEOUT = 300000; // ms
 const RETRY_DELAY = 1000; // ms
 const RETRY_LIMIT = 3;
 
@@ -16,5 +17,14 @@ export function fetchTimeout(url, ms, { signal, ...options } = {}) {
 }
 
 export function* retryFetch(url, options) {
-    return yield retry(RETRY_LIMIT, RETRY_DELAY, fetchTimeout, url, FETCH_TIMEOUT, options);
+    let limit;
+    let timeout;
+    if (options.method === "POST" || options.method === "PUT") {
+        limit = 1;
+        timeout = UPDATE_TIMEOUT;
+    } else {
+        limit = RETRY_LIMIT;
+        timeout = FETCH_TIMEOUT;
+    }
+    return yield retry(limit, RETRY_DELAY, fetchTimeout, url, timeout, options);
 }
