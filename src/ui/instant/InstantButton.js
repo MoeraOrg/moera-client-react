@@ -5,7 +5,7 @@ import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 import { feedStatusUpdate } from "state/feeds/actions";
-import { getFeedState, getInstantCount } from "state/feeds/selectors";
+import { getFeedNotViewed, getFeedState, getInstantCount } from "state/feeds/selectors";
 import { ServiceWorkerService } from "ui/service-worker";
 
 class InstantButton extends React.PureComponent {
@@ -24,13 +24,15 @@ class InstantButton extends React.PureComponent {
             this.setState({instantCount: this.props.instantCount});
         }
         this.#visible = visible;
-        this.viewAll();
+        if (this.#visible) {
+            this.viewAll();
+        }
     }
 
     viewAll() {
-        const {stories, feedStatusUpdate} = this.props;
+        const {stories, notViewedCount, feedStatusUpdate} = this.props;
 
-        if (!this.#visible || stories == null || stories.length === 0 || stories[0].viewed) {
+        if (stories == null || stories.length === 0 || notViewedCount === 0) {
             return;
         }
         feedStatusUpdate(":instant", true, null, stories[0].moment);
@@ -52,6 +54,7 @@ class InstantButton extends React.PureComponent {
 export default connect(
     state => ({
         stories: getFeedState(state, ":instant").stories,
+        notViewedCount: getFeedNotViewed(state, ":instant"),
         instantCount: getInstantCount(state)
     }),
     { feedStatusUpdate }
