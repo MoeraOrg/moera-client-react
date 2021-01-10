@@ -16,7 +16,7 @@ import {
     HOME_OWNER_VERIFY,
     HOME_RESTORE
 } from "state/home/actions";
-import { CARTES_LOAD } from "state/cartes/actions";
+import { CARTES_LOAD, CARTES_SET } from "state/cartes/actions";
 import { NODE_NAME_LOAD, NODE_NAME_UPDATE, REGISTER_NAME } from "state/nodename/actions";
 import { PROFILE_LOAD, PROFILE_UPDATE } from "state/profile/actions";
 import {
@@ -300,13 +300,14 @@ function* combinedSaga() {
     yield takeLatest(CARTES_LOAD, cartesLoadSaga);
     yield takeEvery(CONNECTED_TO_HOME, flushPostponedSaga);
     yield takeEvery(DISCONNECTED_FROM_HOME, flushPostponedSaga);
+    yield takeEvery(CARTES_SET, flushPostponedSaga);
     yield takeLatest(PROFILE_LOAD, introduce(profileLoadSaga));
     yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
     yield takeLatest(REGISTER_NAME, registerNameSaga);
     yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
     yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga));
-    yield takeEvery(FEED_SUBSCRIBE, feedSubscribeSaga);
-    yield takeEvery(FEED_UNSUBSCRIBE, feedUnsubscribeSaga);
+    yield takeEvery(FEED_SUBSCRIBE, introduce(feedSubscribeSaga));
+    yield takeEvery(FEED_UNSUBSCRIBE, introduce(feedUnsubscribeSaga));
     yield takeEvery(FEED_STATUS_LOAD, introduce(feedStatusLoadSaga));
     yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
     yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
@@ -328,9 +329,9 @@ function* combinedSaga() {
     yield takeEvery(NAMING_NAME_LOAD, askNaming(namingNameLoadSaga));
     yield takeLatest(NAMING_NAMES_MAINTENANCE, namingNamesMaintenanceSaga);
     yield takeEvery(POSTING_VERIFY, postingVerifySaga);
-    yield takeEvery(POSTING_REACT, postingReactSaga);
+    yield takeEvery(POSTING_REACT, introduce(postingReactSaga));
     yield takeEvery(POSTING_REACTION_LOAD, postingReactionLoadSaga);
-    yield takeEvery(POSTING_REACTION_DELETE, postingReactionDeleteSaga);
+    yield takeEvery(POSTING_REACTION_DELETE, introduce(postingReactionDeleteSaga));
     yield takeLatest(REACTIONS_DIALOG_PAST_REACTIONS_LOAD, reactionsDialogPastReactionsLoadSaga);
     yield takeLatest(REACTIONS_DIALOG_TOTALS_LOAD, reactionsDialogTotalsLoadSaga);
     yield takeEvery(REACTION_VERIFY, reactionVerifySaga);
@@ -361,13 +362,13 @@ function* combinedSaga() {
     yield takeEvery(COMMENT_COPY_LINK, commentCopyLinkSaga);
     yield takeLatest(COMMENT_DIALOG_COMMENT_LOAD, commentDialogCommentLoadSaga);
     yield takeEvery(COMMENT_VERIFY, commentVerifySaga);
-    yield takeEvery(COMMENT_REACT, commentReactSaga);
-    yield takeEvery(COMMENT_REACTION_LOAD, commentReactionLoadSaga);
-    yield takeEvery(COMMENT_REACTION_DELETE, commentReactionDeleteSaga);
+    yield takeEvery(COMMENT_REACT, introduce(commentReactSaga));
+    yield takeEvery(COMMENT_REACTION_LOAD, introduce(commentReactionLoadSaga));
+    yield takeEvery(COMMENT_REACTION_DELETE, introduce(commentReactionDeleteSaga));
     yield takeEvery(COMMENT_REPLY, commentReplySaga);
     yield takeEvery(GLANCE_COMMENT_LOAD, glanceCommentLoadSaga);
-    yield takeEvery(POSTING_COMMENTS_SUBSCRIBE, postingCommentsSubscribeSaga);
-    yield takeEvery(POSTING_COMMENTS_UNSUBSCRIBE, postingCommentsUnsubscribeSaga);
+    yield takeEvery(POSTING_COMMENTS_SUBSCRIBE, introduce(postingCommentsSubscribeSaga));
+    yield takeEvery(POSTING_COMMENTS_UNSUBSCRIBE, introduce(postingCommentsUnsubscribeSaga));
     yield takeLatest(SIGN_UP, signUpSaga);
     yield takeLatest(SIGN_UP_NAME_VERIFY, signUpNameVerifySaga);
     yield takeLatest(SIGN_UP_FIND_DOMAIN, signUpFindDomainSaga);
