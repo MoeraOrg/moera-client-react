@@ -13,7 +13,8 @@ class InstantButton extends React.PureComponent {
     state = {
         instantCount: 0
     };
-    #visible;
+    #visible = false;
+    #topMoment = Number.MIN_SAFE_INTEGER;
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.viewAll();
@@ -30,10 +31,13 @@ class InstantButton extends React.PureComponent {
     viewAll() {
         const {stories, notViewedCount, feedStatusUpdate} = this.props;
 
-        if (!this.#visible || stories == null || stories.length === 0 || notViewedCount === 0) {
+        if (!this.#visible || stories == null || stories.length === 0 || notViewedCount === 0
+            || this.#topMoment === stories[0].moment) {
+
             return;
         }
-        feedStatusUpdate(":instant", true, null, stories[0].moment);
+        this.#topMoment = stories[0].moment;
+        feedStatusUpdate(":instant", true, null, this.#topMoment);
         ServiceWorkerService.closeAllNotifications();
     }
 
