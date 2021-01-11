@@ -5,3 +5,15 @@
     text-align: center;
     margin-top: 4rem;
 }
+
+.welcome .discover {
+    text-align: center;
+    margin-top: .7rem;
+}
+
+.welcome .discover A {
+    padding-left: 2em;
+    padding-right: 1.5em;
+    position: relative;
+    left: -3rem;
+}
