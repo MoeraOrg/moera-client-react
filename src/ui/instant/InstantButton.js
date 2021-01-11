@@ -24,15 +24,13 @@ class InstantButton extends React.PureComponent {
             this.setState({instantCount: this.props.instantCount});
         }
         this.#visible = visible;
-        if (this.#visible) {
-            this.viewAll();
-        }
+        this.viewAll();
     }
 
     viewAll() {
         const {stories, notViewedCount, feedStatusUpdate} = this.props;
 
-        if (stories == null || stories.length === 0 || notViewedCount === 0) {
+        if (!this.#visible || stories == null || stories.length === 0 || notViewedCount === 0) {
             return;
         }
         feedStatusUpdate(":instant", true, null, stories[0].moment);
