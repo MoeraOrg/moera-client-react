@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Browser } from "ui/browser";
 import { Button, Loading } from "ui/control";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
+import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
@@ -13,15 +13,12 @@ import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import ConnectDialog from "ui/connectdialog/ConnectDialog";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { openQuickTips } from "state/quicktips/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import "./ConnectionStatus.css";
 
-const ConnectionButtons = ({
-    atNode, connecting,  connected, showNavigator, openConnectDialog, openQuickTips, openSignUpDialog
-}) => {
+const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openConnectDialog, openSignUpDialog}) => {
     if (showNavigator && Browser.isTinyScreen()) {
         return null;
     }
@@ -42,8 +39,8 @@ const ConnectionButtons = ({
     }
     return (
         <>
-            <span className="connection-button d-none d-lg-inline" title="Help" onClick={() => openQuickTips()}>
-                <FontAwesomeIcon icon="question-circle"/>
+            <span className="d-none d-lg-inline">
+                <QuickTipsButton/>
             </span>
             <span className="d-none d-lg-inline">
                 <NewPostButton/>
@@ -76,5 +73,5 @@ export default connect(
         connected: isConnectedToHome(state),
         showNavigator: state.owner.showNavigator
     }),
-    { openConnectDialog, openQuickTips, openSignUpDialog }
+    { openConnectDialog, openSignUpDialog }
 )(ConnectionStatus);

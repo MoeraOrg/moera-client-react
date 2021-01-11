@@ -4,6 +4,10 @@
     border: solid var(--status-icon) 1px;
 }
 
+#vertical-menu .navbar-nav {
+    line-height: 1.1;
+}
+
 #vertical-menu BUTTON {
     display: inline;
     margin-left: 1rem;

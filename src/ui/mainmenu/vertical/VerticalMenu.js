@@ -12,6 +12,7 @@ import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import HomeName from "ui/mainmenu/connections/HomeName";
+import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import "./VerticalMenu.css";
 
 const VerticalMenu = ({atNode, connected, openConnectDialog, openSignUpDialog}) => (
@@ -34,6 +35,9 @@ const VerticalMenu = ({atNode, connected, openConnectDialog, openSignUpDialog}) 
                 <DisconnectButton/>
                 <br/>
                 <HomeName/>
+                <div className="text-right">
+                    <QuickTipsButton/>
+                </div>
             </>
         }
     </div>
