@@ -1,6 +1,6 @@
 import { retry } from "redux-saga/effects";
 
-const FETCH_TIMEOUT = 5000; // ms
+const FETCH_TIMEOUT = 10000; // ms
 const UPDATE_TIMEOUT = 300000; // ms
 const RETRY_DELAY = 1000; // ms
 const RETRY_LIMIT = 3;
