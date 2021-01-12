@@ -129,6 +129,9 @@ export function* feedsUpdateSaga() {
                 yield call(fillActivityReactions, data.stories);
                 yield call(fillSubscriptions, data.stories);
                 yield put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
+                if (after === data.before) {
+                    break;
+                }
                 after = data.before;
             }
         } catch (e) {

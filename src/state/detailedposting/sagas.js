@@ -122,6 +122,9 @@ export function* commentsUpdateSaga() {
             const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, after, null, 20);
             yield put(commentsSliceUpdate(receiverName, receiverPostingId, data.comments, data.before, data.after,
                 data.total, data.totalInPast, data.totalInFuture));
+            if (after === data.before) {
+                break;
+            }
             after = data.before;
         }
     } catch (e) {
