@@ -23,6 +23,7 @@ class InstantButton extends React.PureComponent {
     onToggle = (visible) => {
         if (visible && this.#visible !== visible) {
             this.setState({instantCount: this.props.instantCount});
+            ServiceWorkerService.closeAllNotifications();
         }
         this.#visible = visible;
         this.viewAll();
@@ -38,7 +39,6 @@ class InstantButton extends React.PureComponent {
         }
         this.#topMoment = stories[0].moment;
         feedStatusUpdate(":instant", true, null, this.#topMoment);
-        ServiceWorkerService.closeAllNotifications();
     }
 
     render() {
