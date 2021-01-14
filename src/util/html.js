@@ -3,7 +3,7 @@ import { parse as parseEmojis } from 'twemoji-parser';
 
 const SAFE_HTML_SETTINGS = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-        "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe"
+        "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe", "video", "audio"
     ]),
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
@@ -22,7 +22,7 @@ const SAFE_HTML_SETTINGS = {
         img: "emoji",
         b: "emoji"
     },
-    allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube"],
+    allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube", "rumble.com"],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
         "*": {
