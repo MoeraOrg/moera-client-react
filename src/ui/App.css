@@ -14,6 +14,8 @@ ABBR[title] {
 .emoji {
     background-repeat: no-repeat;
     color: transparent;
+    display: inline-block;
+    min-width: 1.3em;
 }
 
 .container {
