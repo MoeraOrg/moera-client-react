@@ -22,7 +22,9 @@ const SAFE_HTML_SETTINGS = {
         img: "emoji",
         b: "emoji"
     },
-    allowedIframeHostnames: ["www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube", "rumble.com"],
+    allowedIframeHostnames: [
+        "www.youtube.com", "player.vimeo.com", "www.facebook.com", "peer.tube", "rumble.com", "open.spotify.com"
+    ],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
         "*": {
