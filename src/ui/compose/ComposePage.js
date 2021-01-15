@@ -43,18 +43,11 @@ class ComposePage extends React.PureComponent {
         }
     }
 
-    onKeyDown = event => {
-        switch (event.key) {
-            case "Enter":
-            case "Tab":
-            case " ":
-                if (this.props.smileysEnabled) {
-                    event.target.value = replaceSmileys(event.target.value, false);
-                }
-                break;
+    onInput = event => {
+        if (this.props.smileysEnabled && (event.inputType === "insertLineBreak"
+            || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/)))) {
 
-            default:
-            // do nothing
+            event.target.value = replaceSmileys(event.target.value, false);
         }
     }
 
@@ -83,7 +76,7 @@ class ComposePage extends React.PureComponent {
                             <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
                         <TextField name="body" anyValue autoFocus disabled={loadingContent || beingPosted}
-                                   onKeyDown={this.onKeyDown}/>
+                                   onInput={this.onInput}/>
                         <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>

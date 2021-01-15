@@ -22,7 +22,8 @@ export class TextField extends React.PureComponent {
         disabled: PropType.bool,
         initialValue: PropType.string,
         defaultValue: PropType.string,
-        onKeyDown: PropType.func
+        onKeyDown: PropType.func,
+        onInput: PropType.func,
     };
 
     static defaultProps = {
@@ -37,8 +38,23 @@ export class TextField extends React.PureComponent {
     }
 
     componentDidMount() {
-        if (this.props.autoFocus && this.inputDom.current) {
-            this.inputDom.current.focus();
+        const {autoFocus, onInput} = this.props;
+
+        if (this.inputDom.current) {
+            if (onInput) {
+                this.inputDom.current.addEventListener("input", onInput);
+            }
+            if (autoFocus) {
+                this.inputDom.current.focus();
+            }
+        }
+    }
+
+    componentWillUnmount() {
+        const {onInput} = this.props;
+
+        if (this.inputDom.current && onInput) {
+            this.inputDom.current.removeEventListener("input", onInput);
         }
     }
 

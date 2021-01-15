@@ -32,32 +32,25 @@ class CommentCompose extends React.PureComponent {
     }
 
     onKeyDown = (event) => {
-        const {submitKey, submitForm, smileysEnabled} = this.props;
+        const {submitKey, submitForm} = this.props;
 
-        switch (event.key) {
-            case "Enter":
-                const submit = !Browser.isTouchScreen() && !event.shiftKey
-                    && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
-                if (submit) {
-                    submitForm();
-                } else {
-                    textFieldEdit.insert(event.target, "\n");
-                    if (smileysEnabled) {
-                        event.target.value = replaceSmileys(event.target.value, false);
-                    }
-                }
-                event.preventDefault();
-                break;
+        if (event.key === "Enter") {
+            const submit = !Browser.isTouchScreen() && !event.shiftKey
+                && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
+            if (submit) {
+                submitForm();
+            } else {
+                textFieldEdit.insert(event.target, "\n");
+            }
+            event.preventDefault();
+        }
+    }
 
-            case "Tab":
-            case " ":
-                if (smileysEnabled) {
-                    event.target.value = replaceSmileys(event.target.value, false);
-                }
-                break;
+    onInput = event => {
+        if (this.props.smileysEnabled && (event.inputType === "insertLineBreak"
+            || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/)))) {
 
-            default:
-                // do nothing
+            event.target.value = replaceSmileys(event.target.value, false);
         }
     }
 
