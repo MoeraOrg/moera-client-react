@@ -31,7 +31,7 @@ class CommentCompose extends React.PureComponent {
         }
     }
 
-    onKeyDown = (event) => {
+    onKeyDown = event => {
         const {submitKey, submitForm} = this.props;
 
         if (event.key === "Enter") {
@@ -65,7 +65,8 @@ class CommentCompose extends React.PureComponent {
                             <CommentComposeRepliedTo/>
                             <TextField name="body" rows={1}
                                        placeholder={`Write a comment to ${atReceiverName} here...`}
-                                       anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}/>
+                                       anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}
+                                       onInput={this.onInput}/>
                         </div>
                         <CommentComposeButtons loading={beingPosted}/>
                     </Form>
