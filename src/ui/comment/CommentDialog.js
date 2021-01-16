@@ -11,6 +11,8 @@ import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { TextField } from "ui/control/field";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
+import { replaceSmileys } from "util/text";
+import { parseBool } from "util/misc";
 
 class CommentDialog extends React.PureComponent {
 
@@ -27,14 +29,23 @@ class CommentDialog extends React.PureComponent {
     onKeyDown = (event) => {
         const {submitKey, submitForm} = this.props;
 
-        if (!Browser.isTouchScreen() && event.key === "Enter") {
-            const submit = (submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey);
+        if (event.key === "Enter") {
+            const submit = !Browser.isTouchScreen() && !event.shiftKey
+                && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
             if (submit) {
                 submitForm();
             } else {
                 textFieldEdit.insert(event.target, "\n");
             }
             event.preventDefault();
+        }
+    }
+
+    onInput = event => {
+        if (this.props.smileysEnabled && (event.inputType === "insertLineBreak"
+            || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/)))) {
+
+            event.target.value = replaceSmileys(event.target.value, false);
         }
     }
 
@@ -76,7 +87,8 @@ export default connect(
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default"),
         beingPosted: state.detailedPosting.compose.beingPosted,
-        submitKey: getSetting(state, "comment.submit-key")
+        submitKey: getSetting(state, "comment.submit-key"),
+        smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled"))
     }),
     { commentPost, closeCommentDialog, commentDialogConflictClose }
 )(withFormik(commentComposeLogic)(CommentDialog));
