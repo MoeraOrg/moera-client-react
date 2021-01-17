@@ -1,5 +1,6 @@
 import {
     GO_HOME,
+    GO_HOME_NEWS,
     GO_TO_LOCATION,
     GO_TO_PAGE_WITH_DEFAULT_SUBPAGE,
     INIT_FROM_LOCATION,
@@ -135,6 +136,7 @@ import { flushPostponedIntroducedSaga, introduce } from "api/node/introduce";
 import { askNaming, flushPostponedNamingSaga } from "api/node/ask-naming";
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import {
+    goHomeNewsSaga,
     goHomeSaga,
     goToLocationSaga,
     goToPageWithDefaultSubpageSaga,
@@ -374,6 +376,7 @@ function* combinedSaga() {
     yield takeLatest(SIGN_UP_FIND_DOMAIN, signUpFindDomainSaga);
     yield takeLatest(SIGN_UP_DOMAIN_VERIFY, signUpDomainVerifySaga);
     yield takeLatest(GO_HOME, goHomeSaga);
+    yield takeLatest(GO_HOME_NEWS, goHomeNewsSaga);
     yield takeLatest(REFRESH_SHOW, refreshShowSaga);
     yield takeLatest(WEB_PUSH_SUBSCRIBE, webPushSubscribeSaga);
     yield takeLatest(WEB_PUSH_UNSUBSCRIBE, webPushUnsubscribeSaga);

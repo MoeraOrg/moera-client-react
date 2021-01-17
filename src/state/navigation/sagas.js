@@ -80,3 +80,17 @@ export function* goHomeSaga() {
         yield put(initFromLocation(rootLocation, path, null, null));
     }
 }
+
+export function* goHomeNewsSaga() {
+    const {standalone, homeRootPage} = yield select(state => ({
+        standalone: isStandaloneMode(state),
+        homeRootPage: getHomeRootPage(state)
+    }));
+    if (!standalone) {
+        window.location = homeRootPage + "/news";
+    } else {
+        const {scheme, host, port, path} = URI.parse(homeRootPage);
+        const rootLocation = rootUrl(scheme, host, port);
+        yield put(initFromLocation(rootLocation, path + "/news", null, null));
+    }
+}

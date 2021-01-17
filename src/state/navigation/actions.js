@@ -80,3 +80,8 @@ export const GO_HOME = "GO_HOME";
 export const goHome = () => ({
     type: GO_HOME
 });
+
+export const GO_HOME_NEWS = "GO_HOME_NEWS";
+export const goHomeNews = () => ({
+    type: GO_HOME_NEWS
+});
