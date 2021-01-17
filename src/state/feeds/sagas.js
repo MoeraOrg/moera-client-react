@@ -120,6 +120,14 @@ export function* feedFutureSliceLoadSaga(action) {
 export function* feedsUpdateSaga() {
     const feedNames = yield select(getAllFeeds);
     for (const feedName of feedNames) {
+        if (feedName.startsWith(":")) {
+            try {
+                const data = yield call(Node.getFeedStatus, ":", feedName.substring(1));
+                yield put(feedStatusSet(feedName, data));
+            } catch (e) {
+                yield put(errorThrown(e));
+            }
+        }
         try {
             let {before, after} = yield select(state => getFeedState(state, feedName));
             while (before > after) {
