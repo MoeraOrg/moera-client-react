@@ -8,6 +8,8 @@ import { isStandaloneMode } from "state/navigation/selectors";
 import { initFromLocation } from "state/navigation/actions";
 import { normalizeUrl, rootUrl } from "util/url";
 import { getNodeUri } from "state/naming/sagas";
+import { getNodeRootPage } from "state/node/selectors";
+import { getOwnerName } from "state/owner/selectors";
 
 export function* ownerLoadSaga() {
     try {
@@ -20,8 +22,8 @@ export function* ownerLoadSaga() {
 
 export function* ownerVerifySaga() {
     const {rootPage, ownerName} = yield select(state => ({
-        rootPage: state.node.root.page,
-        ownerName: state.owner.name
+        rootPage: getNodeRootPage(state),
+        ownerName: getOwnerName(state)
     }));
     try {
         const nodeUri = normalizeUrl(yield call(getNodeUri, ownerName));
@@ -35,7 +37,7 @@ export function* ownerVerifySaga() {
 export function* ownerSwitchSaga(action) {
     const {standalone, ownerName} = yield select(state => ({
         standalone: isStandaloneMode(state),
-        ownerName: state.owner.name
+        ownerName: getOwnerName(state)
     }));
 
     if (action.payload.name === ownerName) {

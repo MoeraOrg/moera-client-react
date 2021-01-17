@@ -4,10 +4,11 @@ import PropType from 'prop-types';
 
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
-import { isConnectedToHome } from "state/home/selectors";
+import { getHomeRootPage, isConnectedToHome } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
 import { urlWithParameters } from "util/url";
+import { getNodeRootPage } from "state/node/selectors";
 
 class EntryHtml extends React.PureComponent {
 
@@ -47,7 +48,7 @@ class EntryHtml extends React.PureComponent {
 export default connect(
     state => ({
         standalone: isStandaloneMode(state),
-        homePageRoot: isConnectedToHome(state) ? state.home.root.page : state.node.root.page,
+        homePageRoot: isConnectedToHome(state) ? getHomeRootPage(state) : getNodeRootPage(state),
         getNameDetails: name => getNamingNameDetails(state, name),
         fontMagnitude: getSetting(state, "posting.body.font-magnitude")
     })

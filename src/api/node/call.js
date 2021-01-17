@@ -3,9 +3,9 @@ import { apply, call, put, select } from 'redux-saga/effects';
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApi, NodeApiError, NodeError } from "api";
 import { errorAuthInvalid } from "state/error/actions";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
-import { getToken } from "state/node/selectors";
+import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
-import { isConnectedToHome } from "state/home/selectors";
+import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { Browser } from "ui/browser";
 import { retryFetch } from "api/fetch-timeout";
@@ -84,7 +84,7 @@ export function* selectApi(nodeName) {
         case undefined:
         case "":
             root = yield select(state => ({
-                location: state.node.root.location,
+                location: getNodeRootLocation(state),
                 api: state.node.root.api
             }));
             errorTitle = "Node access error";
@@ -93,7 +93,7 @@ export function* selectApi(nodeName) {
         case ":":
             root = yield select(state => ({
                 connected: isConnectedToHome(state),
-                location: state.home.root.location,
+                location: getHomeRootLocation(state),
                 api: state.home.root.api
             }));
             if (!root.connected) {

@@ -7,7 +7,7 @@ import { openConnectDialog } from "state/connectdialog/actions";
 import { NameResolvingError, Naming, Node, NodeApiError, NodeName } from "api";
 import { selectApi } from "api/node/call";
 import { errorThrown } from "state/error/actions";
-import { getHomeConnectionData } from "state/home/selectors";
+import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
 import { Browser } from "ui/browser";
 
 function* connectToHomeFailure(error, onClose = null) {
@@ -61,7 +61,7 @@ export function* verifyHomeOwnerSaga() {
             return;
         }
         const ndata = yield call(Naming.getCurrent, name, generation);
-        const rootPage = yield select(state => state.home.root.page);
+        const rootPage = yield select(getHomeRootPage);
         const correct = ndata && normalizeUrl(ndata.nodeUri) === rootPage;
         const latest = ndata && ndata.latest;
         yield put(homeOwnerVerified(nodeName, latest, correct, ndata.deadline));

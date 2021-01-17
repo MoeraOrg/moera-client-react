@@ -10,14 +10,16 @@ import { goToLocation } from "state/navigation/actions";
 import { urlWithParameters } from "util/url";
 import { getWindowSelectionHtml } from "util/misc";
 import { quoteHtml } from "util/html";
+import { getHomeRootPage } from "state/home/selectors";
+import { getNodeRootPage } from "state/node/selectors";
 
 export function* postingReplySaga() {
     const {posting, rootNodePage, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
            reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault} =
         yield select(state => ({
             posting: getPosting(state, state.postingReply.postingId),
-            rootNodePage: state.node.root.page,
-            rootHomePage: state.home.root.page,
+            rootNodePage: getNodeRootPage(state),
+            rootHomePage: getHomeRootPage(state),
             subjectPrefix: getSetting(state, "posting.reply.subject-prefix"),
             preambleTemplate: getSetting(state, "posting.reply.preamble"),
             quoteAll: getSetting(state, "posting.reply.quote-all"),

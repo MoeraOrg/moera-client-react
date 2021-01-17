@@ -6,10 +6,11 @@ import * as URI from 'uri-js';
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
-import { getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
 import { rootUrl, urlWithParameters } from "util/url";
+import { getNodeRootPage } from "state/node/selectors";
 
 class Jump extends React.PureComponent {
 
@@ -115,9 +116,9 @@ export default connect(
     (state, ownProps) => ({
         standalone: isStandaloneMode(state),
         ownerName: getOwnerName(state),
-        rootPage: state.node.root.page,
+        rootPage: getNodeRootPage(state),
         homeOwnerName: getHomeOwnerName(state),
-        homeRootPage: state.home.root.page,
+        homeRootPage: getHomeRootPage(state),
         details: getNamingNameDetails(state, ownProps.nodeName)
     }),
     { initFromLocation, goToLocation }

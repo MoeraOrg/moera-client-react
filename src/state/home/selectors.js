@@ -2,8 +2,16 @@ import selectn from 'selectn';
 
 import { getToken } from "state/node/selectors";
 
+export function getHomeRootLocation(state) {
+    return state.home.root.location;
+}
+
+export function getHomeRootPage(state) {
+    return state.home.root.page;
+}
+
 export function getHomeToken(state) {
-    return getToken(state, state.home.root.location);
+    return getToken(state, getHomeRootLocation(state));
 }
 
 export function isConnectedToHome(state) {
@@ -11,7 +19,7 @@ export function isConnectedToHome(state) {
 }
 
 export function getHomePermissions(state) {
-    return selectn(["tokens", state.home.root.location, "permissions"], state);
+    return selectn(["tokens", getHomeRootLocation(state), "permissions"], state);
 }
 
 export function getHomeOwnerName(state) {
@@ -25,7 +33,7 @@ export function isHomeOwnerNameSet(state) {
 export function getHomeConnectionData(state) {
     return {
         addonApiVersion: getAddonApiVersion(state),
-        location: state.home.root.location,
+        location: getHomeRootLocation(state),
         login: state.home.login,
         token: getHomeToken(state),
         permissions: getHomePermissions(state)

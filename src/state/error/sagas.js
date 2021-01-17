@@ -6,6 +6,7 @@ import { disconnectFromHome } from "state/home/actions";
 import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Browser } from "ui/browser";
+import { getHomeRootLocation } from "state/home/selectors";
 
 export function* errorSaga(action) {
     if (action.payload.e instanceof NodeApiError) {
@@ -26,7 +27,7 @@ export function* errorSaga(action) {
 
 export function* errorAuthInvalidSaga() {
     const {location, login} = yield select(state => ({
-        location: state.home.root.location,
+        location: getHomeRootLocation(state),
         login: state.home.login
     }));
     Browser.deleteData(location);

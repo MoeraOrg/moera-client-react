@@ -9,6 +9,7 @@ import { Browser } from "ui/browser";
 import { Button, NodeName } from "ui/control";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";
+import { getHomeRootLocation } from "state/home/selectors";
 
 class Connections extends React.PureComponent {
 
@@ -66,7 +67,7 @@ class Connections extends React.PureComponent {
 
 export default connect(
     state => ({
-        location: state.home.root.location,
+        location: getHomeRootLocation(state),
         owner: state.home.owner,
         roots: state.home.roots
     }),

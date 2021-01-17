@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { confirmBox } from "state/confirmbox/actions";
 import { disconnectFromHome } from "state/home/actions";
+import { getHomeRootLocation } from "state/home/selectors";
 import { Browser } from "ui/browser";
 
 class DisconnectButton extends React.PureComponent {
@@ -40,7 +41,7 @@ class DisconnectButton extends React.PureComponent {
 
 export default connect(
     state => ({
-        location: state.home.root.location,
+        location: getHomeRootLocation(state),
         login: state.home.login
     }),
     { confirmBox, disconnectFromHome }

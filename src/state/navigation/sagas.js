@@ -15,6 +15,7 @@ import { settingsGoToTab } from "state/settings/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { locationBuild, LocationInfo, locationTransform } from "location";
 import { rootUrl } from "util/url";
+import { getHomeRootPage } from "state/home/selectors";
 
 export function* goToPageWithDefaultSubpageSaga(action) {
     switch (action.payload.page) {
@@ -69,7 +70,7 @@ export function* newLocationSaga(action) {
 export function* goHomeSaga() {
     const {standalone, homeRootPage} = yield select(state => ({
         standalone: isStandaloneMode(state),
-        homeRootPage: state.home.root.page
+        homeRootPage: getHomeRootPage(state)
     }));
     if (!standalone) {
         window.location = homeRootPage;

@@ -14,6 +14,10 @@ export function getNodeRootLocation(state) {
     return state.node.root.location;
 }
 
+export function getNodeRootPage(state) {
+    return state.node.root.page;
+}
+
 export function getToken(state, rootLocation) {
     return selectn(["tokens", rootLocation, "token"], state);
 }

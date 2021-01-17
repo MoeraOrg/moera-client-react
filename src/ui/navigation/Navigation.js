@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { getNodeRootLocation } from "state/node/selectors";
+import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
 import { Browser } from "ui/browser";
 
 class Navigation extends React.PureComponent {
@@ -61,7 +61,7 @@ export default connect(
     state => ({
         standalone: isStandaloneMode(state),
         rootLocation: getNodeRootLocation(state),
-        rootPage: state.node.root.page,
+        rootPage: getNodeRootPage(state),
         location: state.navigation.location,
         title: state.navigation.title,
         update: state.navigation.update,
