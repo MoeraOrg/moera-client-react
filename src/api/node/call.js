@@ -80,6 +80,8 @@ export function* selectApi(nodeName) {
     let root;
     let errorTitle = "";
     switch (nodeName) {
+        case null:
+        case undefined:
         case "":
             root = yield select(state => ({
                 location: state.node.root.location,
