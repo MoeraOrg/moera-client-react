@@ -27,13 +27,13 @@ class ComposeDraftSaver extends React.PureComponent {
     }
 
     onSave = debounce(() => {
-        const {formik, postingId, draftId, composeDraftSave} = this.props;
+        const {formik, postingId, draftId, savingDraft, composeDraftSave} = this.props;
 
         if (formik.status === "submitted") {
             return;
         }
         const thisText = postingText(this.props);
-        if (isEmpty(thisText)) {
+        if (isEmpty(thisText) || savingDraft) {
             return;
         }
         composeDraftSave(postingId, draftId, postingText(this.props));
