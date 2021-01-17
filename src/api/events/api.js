@@ -214,6 +214,19 @@ const remoteCommentVerificationEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
+const remoteCommentEvent = (properties = {}) => baseEvent({
+    "remoteNodeName": {
+        type: "string"
+    },
+    "remotePostingId": {
+        type: "string"
+    },
+    "remoteCommentId": {
+        type: "string"
+    },
+    ...properties
+});
+
 export const EventPacket = schema({
     type: "object",
     properties: {
@@ -348,6 +361,9 @@ export const EVENT_SCHEMES = {
     "COMMENT_UPDATED": commentEvent(),
     "COMMENT_DELETED": commentEvent(),
     "COMMENT_REACTIONS_CHANGED": commentEvent(),
+    "REMOTE_COMMENT_ADDED": remoteCommentEvent(),
+    "REMOTE_COMMENT_UPDATED": remoteCommentEvent(),
+    "REMOTE_COMMENT_DELETED": remoteCommentEvent(),
     "REMOTE_COMMENT_VERIFIED": remoteCommentVerificationEvent({
         "correct": {
             type: "boolean"
