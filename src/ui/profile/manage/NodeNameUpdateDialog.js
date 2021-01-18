@@ -82,8 +82,8 @@ const nodeNameUpdateDialogLogic = {
     mapPropsToValues(props) {
         const registeredName = NodeName.parse(props.name);
         return {
-            name: registeredName.name ? registeredName.name : "",
-            generation: registeredName.generation ? registeredName.generation : 0,
+            name: registeredName.name ?? "",
+            generation: registeredName.generation ?? 0,
             mnemonic: Array(24).fill("")
         }
     },

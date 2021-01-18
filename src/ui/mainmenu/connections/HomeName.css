@@ -7,6 +7,12 @@
     cursor: pointer;
 }
 
+#connection-status .home-name .generation {
+    font-size: 60%;
+    position: relative;
+    bottom: -0.25em;
+}
+
 #connection-status .active .home-name {
     color: white;
 }

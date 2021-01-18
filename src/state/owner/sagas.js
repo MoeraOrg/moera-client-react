@@ -47,12 +47,7 @@ export function* ownerSwitchSaga(action) {
 
     try {
         const {name, generation} = NodeName.parse(action.payload.name);
-        let info;
-        if (generation != null) {
-            info = yield Naming.getCurrent(name, generation);
-        } else {
-            info = yield Naming.getCurrentForLatest(name);
-        }
+        const info = yield Naming.getCurrent(name, generation);
         if (info && info.nodeUri) {
             if (!standalone) {
                 try {

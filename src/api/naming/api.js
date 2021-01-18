@@ -62,17 +62,11 @@ export const RegisteredNameInfo = schema({
             type: "integer",
             minimum: 0
         },
-        "latest": {
-            type: "boolean"
-        },
         "updatingKey": {
             type: "string"
         },
         "nodeUri": {
             type: "string"
-        },
-        "deadline": {
-            type: "integer"
         },
         "signingKey": {
             type: "string"
@@ -82,5 +76,5 @@ export const RegisteredNameInfo = schema({
         }
     },
     additionalProperties: false,
-    required: ["name", "generation", "latest", "updatingKey", "deadline"]
+    required: ["name", "generation", "updatingKey"]
 });

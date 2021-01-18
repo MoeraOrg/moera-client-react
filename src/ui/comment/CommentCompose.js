@@ -55,7 +55,7 @@ class CommentCompose extends React.PureComponent {
     }
 
     render() {
-        const {homeOwnerName, beingPosted, atReceiverName, openSignUpDialog, openConnectDialog} = this.props;
+        const {homeOwnerName, beingPosted, receiverName, openSignUpDialog, openConnectDialog} = this.props;
 
         if (homeOwnerName) {
             return (
@@ -64,7 +64,7 @@ class CommentCompose extends React.PureComponent {
                         <div className="content">
                             <CommentComposeRepliedTo/>
                             <TextField name="body" rows={1}
-                                       placeholder={`Write a comment to ${atReceiverName} here...`}
+                                       placeholder={`Write a comment to ${mentionName(receiverName)} here...`}
                                        anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}
                                        onInput={this.onInput}/>
                         </div>
@@ -91,7 +91,6 @@ export default connect(
         homeOwnerName: getHomeOwnerName(state),
         receiverName: state.detailedPosting.comments.receiverName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
-        atReceiverName: mentionName(state, state.detailedPosting.comments.receiverName),
         formId: state.detailedPosting.compose.formId,
         repliedToId: getCommentComposerRepliedToId(state),
         beingPosted: state.detailedPosting.compose.beingPosted,

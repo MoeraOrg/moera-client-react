@@ -11,9 +11,9 @@ export const namingNameLoad = (name) => ({
 });
 
 export const NAMING_NAME_LOADED = "NAMING_NAME_LOADED";
-export const namingNameLoaded = (name, latest, nodeUri, updated) => ({
+export const namingNameLoaded = (name, nodeUri, updated) => ({
     type: NAMING_NAME_LOADED,
-    payload: {name, latest, nodeUri, updated}
+    payload: {name, nodeUri, updated}
 });
 
 export const NAMING_NAME_LOAD_FAILED = "NAMING_NAME_LOAD_FAILED";

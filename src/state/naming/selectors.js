@@ -21,11 +21,6 @@ export function getNamingNameDetails(state, name) {
     return details ? details : {
         loading: false,
         loaded: false,
-        latest: false,
         nodeUri: null
     }
-}
-
-export function isNamingNameLatest(state, name) {
-    return getNamingNameDetails(state, name).latest;
 }

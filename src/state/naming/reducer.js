@@ -18,7 +18,6 @@ const emptyDetails = {
     accessed: 0,
     loading: false,
     loaded: false,
-    latest: false,
     nodeUri: null
 };
 
@@ -53,7 +52,6 @@ export default (state = initialState, action) => {
                 accessed: now(),
                 loading: false,
                 loaded: true,
-                latest: action.payload.latest,
                 nodeUri: action.payload.nodeUri,
                 updated: action.payload.updated
             });
@@ -82,7 +80,6 @@ export default (state = initialState, action) => {
                         accessed: info.updated,
                         loading: false,
                         loaded: true,
-                        latest: info.latest,
                         nodeUri: info.nodeUri
                     })
                 });

@@ -14,7 +14,6 @@ import { INIT_FROM_LOCATION } from "state/navigation/actions";
 const initialState = {
     name: null,
     correct: false,
-    deadline: null,
     verified: false,
     verifiedAt: 0,
     changing: false,

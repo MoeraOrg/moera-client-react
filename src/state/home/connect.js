@@ -57,14 +57,13 @@ export function* verifyHomeOwnerSaga() {
         Browser.storeConnectionData(location, nodeName, login, token, permissions);
 
         const {name, generation} = NodeName.parse(nodeName);
-        if (name == null || generation == null) {
+        if (name == null) {
             return;
         }
         const ndata = yield call(Naming.getCurrent, name, generation);
         const rootPage = yield select(getHomeRootPage);
         const correct = ndata && normalizeUrl(ndata.nodeUri) === rootPage;
-        const latest = ndata && ndata.latest;
-        yield put(homeOwnerVerified(nodeName, latest, correct, ndata.deadline));
+        yield put(homeOwnerVerified(nodeName, correct));
     } catch (e) {
         yield put(errorThrown(e));
     }

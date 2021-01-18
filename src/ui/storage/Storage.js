@@ -91,7 +91,7 @@ class Storage extends React.PureComponent {
     }
 
     storedName(data) {
-        this.props.namingNameLoaded(data.name, data.latest, data.nodeUri);
+        this.props.namingNameLoaded(data.name, data.nodeUri);
     }
 
     render() {

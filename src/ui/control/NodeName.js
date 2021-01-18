@@ -8,15 +8,6 @@ import { getNamingNameDetails } from "state/naming/selectors";
 import Jump from "ui/navigation/Jump";
 import "./NodeName.css";
 
-const NameGeneration = ({generation, latest}) => (
-    latest || <span className="generation">{generation}</span>
-);
-
-NameGeneration.propTypes = {
-    generation: PropType.number,
-    latest: PropType.bool
-};
-
 const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, details }) => {
     if (!name) {
         return null;
@@ -34,14 +25,14 @@ const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, 
         (
             <Jump className={klass} nodeName={name} href="/">
                 {parts.name}
-                <NameGeneration generation={parts.generation} latest={details.latest} />
+                {parts.generation ? <span className="generation">{parts.generation}</span> : ""}
             </Jump>
         )
         :
         (
             <span className={klass}>
                 {parts.name}
-                <NameGeneration generation={parts.generation} latest={details.latest} />
+                {parts.generation ? <span className="generation">{parts.generation}</span> : ""}
             </span>
         );
 };

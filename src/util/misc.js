@@ -1,15 +1,14 @@
 import * as Base64js from 'base64-js';
 
 import { NodeName } from "api";
-import { isNamingNameLatest } from "state/naming/selectors";
 
-export function mentionName(state, name) {
-    return name ? "@" + NodeName.shorten(name, isNamingNameLatest(state, name)) : "";
+export function mentionName(name) {
+    return name ? "@" + NodeName.shorten(name) : "";
 }
 
 export function atOwner(state) {
     const ownerName = state.owner.name;
-    return ownerName ? " @ " + NodeName.shorten(ownerName, isNamingNameLatest(state, ownerName)) : "";
+    return ownerName ? " @ " + NodeName.shorten(ownerName) : "";
 }
 
 export function range(length) {

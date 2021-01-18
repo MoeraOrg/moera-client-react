@@ -71,11 +71,6 @@ export function* getCurrent(name, generation) {
         {method: "getCurrent", params: [name, generation], schema: NamingApi.RegisteredNameInfo});
 }
 
-export function* getCurrentForLatest(name) {
-    return yield call(callNaming,
-        {method: "getCurrentForLatest", params: [name], schema: NamingApi.RegisteredNameInfo});
-}
-
 export function* isFree(name) {
     return yield call(callNaming,
         {method: "isFree", params: [name], schema: "boolean", notNull: true});

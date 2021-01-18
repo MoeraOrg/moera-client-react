@@ -6,7 +6,6 @@ import * as yup from 'yup';
 import { InputField } from "ui/control/field";
 import { Button } from "ui/control";
 import { ownerSwitch, ownerSwitchClose } from "state/owner/actions";
-import { isNamingNameLatest } from "state/naming/selectors";
 import { NodeName } from "api";
 import "./OwnerNavigator.css";
 
@@ -23,7 +22,7 @@ const ownerNavigatorLogic = {
 
     mapPropsToValues(props) {
         return {
-            ownerName: NodeName.shorten(props.ownerName, props.latest) || ""
+            ownerName: NodeName.shorten(props.ownerName) || ""
         };
     },
 
@@ -41,7 +40,6 @@ const ownerNavigatorLogic = {
 export default connect(
     state => ({
         ownerName: state.owner.name,
-        latest: isNamingNameLatest(state, state.owner.name),
         switching: state.owner.switching
     }),
     { ownerSwitch, ownerSwitchClose }

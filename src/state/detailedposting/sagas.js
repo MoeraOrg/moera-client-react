@@ -290,7 +290,7 @@ export function* commentReplySaga(action) {
             textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
         }
     } else {
-        const mention = yield select(mentionName, ownerName);
+        const mention = mentionName(ownerName);
         if (text) {
             textFieldEdit.insert(body, `${mention}:\n>>>\n${text}\n>>>\n`);
         } else {

@@ -5,9 +5,13 @@ import { NodeName } from "api";
 import "./HomeName.css";
 
 const HomeName = ({ownerName, changing}) => {
-    const {name} = NodeName.parse(ownerName);
+    const {name, generation} = NodeName.parse(ownerName);
     if (name) {
-        return <span className="navbar-text home-name">{name}</span>;
+        return (
+            <span className="navbar-text home-name">
+                {name}{generation ? <span className="generation">{generation}</span> : ""}
+            </span>
+        );
     } else {
         return <span className="navbar-text home-name anonymous">{changing ? "\u22ef" : "no name set"}</span>
     }
