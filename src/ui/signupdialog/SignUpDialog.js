@@ -96,7 +96,7 @@ class SignUpDialog extends React.PureComponent {
             return;
         }
         this.#lastVerifiedName = verifiedName;
-        if (!name || name.length > Rules.NAME_MAX_LENGTH || !Rules.isNameValid(name)) {
+        if (!name || name.length > Rules.NAME_MAX_LENGTH || !Rules.isRegisteredNameValid(name)) {
             setFieldValue("domain", "");
             return;
         }
@@ -190,7 +190,7 @@ const signUpDialogLogic = {
 
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
-            .test("is-allowed", "Not allowed", Rules.isNameValid)
+            .test("is-allowed", "Not allowed", Rules.isRegisteredNameValid)
             .when("nameTaken", (nameTaken, schema) => schema.notOneOf([nameTaken], "Name is already taken")),
         domain: yup.string()
             .when("autoDomain", {

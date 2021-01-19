@@ -4,8 +4,17 @@ export const NAME_MAX_LENGTH = 127;
 export const NAME_PUNCTUATION_ALLOWED ="!%&*-.?";
 
 const LATIN_CHARS = /^[A-Za-z]+$/;
+const DIGITS = /^[0-9]+$/;
 
-export function isNameValid(name) {
+export function isRegisteredNameValid(qName) {
+    const parts = qName.split("_");
+    if (parts.length > 2) {
+        return false;
+    }
+    return isNameValid(parts[0]) && (parts.length === 1 || isGenerationValid(parts[1]));
+}
+
+function isNameValid(name) {
     if (!name) {
         return false;
     }
@@ -20,7 +29,14 @@ export function isNameValid(name) {
     return true;
 }
 
-export function isNameCharacterValid(c) {
+function isGenerationValid(generation) {
+    if (!generation.match(DIGITS)) {
+        return false;
+    }
+    return parseInt(generation) < 2147483647;
+}
+
+function isNameCharacterValid(c) {
     switch (charCategory(c)) {
         case "Lu":
         case "Ll":

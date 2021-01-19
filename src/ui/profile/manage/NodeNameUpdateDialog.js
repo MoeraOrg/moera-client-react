@@ -4,10 +4,10 @@ import { Form, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import { Button, ModalDialog } from "ui/control";
-import { InputField, NumberField } from "ui/control/field";
+import { InputField } from "ui/control/field";
 import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
 import * as Rules from "api/naming/rules";
-import { NodeName, RegisteredName } from "api";
+import { NodeName } from "api";
 import { range } from "util/misc";
 import "./NodeNameUpdateDialog.css";
 
@@ -48,11 +48,8 @@ class NodeNameUpdateDialog extends React.PureComponent {
                     <div className="modal-body">
                         {showChangeName &&
                             <div className="row">
-                                <div className="col-sm-4">
+                                <div className="col-sm-6">
                                     <InputField name="name" title="Name" autoFocus/>
-                                </div>
-                                <div className="col-sm-2">
-                                    <NumberField name="generation" title="Generation" min={0}/>
                                 </div>
                             </div>
                         }
@@ -80,34 +77,35 @@ class NodeNameUpdateDialog extends React.PureComponent {
 const nodeNameUpdateDialogLogic = {
 
     mapPropsToValues(props) {
-        const registeredName = NodeName.parse(props.name);
         return {
-            name: registeredName.name ?? "",
-            generation: registeredName.generation ?? 0,
+            name: NodeName.shorten(props.name) ?? "",
             mnemonic: Array(24).fill("")
         }
     },
 
     validationSchema(props) {
-        const mnemonic = yup.array().transform((value, originalValue) => (
-                Array(24).fill("").map((v, i) => (value[i] ? value[i] : v))
-            )).of(yup.string().trim().required("Must not be empty")
+        const mnemonic = yup.array().transform(value =>
+                Array(24).fill("").map((v, i) => value[i] ?? v)
+            ).of(yup.string().trim()
+                    .required("Must not be empty")
                     .matches(/^[A-Za-z]*$/, "Must be a single English word"));
-        return props.showChangeName
-            ? yup.object().shape({
-                name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
-                    .test("is-allowed", "Name is not allowed", Rules.isNameValid),
-                generation: yup.number().min(0, "Must be 0 or greater"),
+        return props.showChangeName ?
+            yup.object().shape({
+                name: yup.string().trim()
+                    .required("Must not be empty")
+                    .max(Rules.NAME_MAX_LENGTH)
+                    .test("is-allowed", "Name is not allowed", Rules.isRegisteredNameValid),
                 mnemonic
             })
-            : yup.object().shape({
+        :
+            yup.object().shape({
                 mnemonic
             })
     },
 
     handleSubmit(values, formik) {
         formik.props.nodeNameUpdate(
-            new RegisteredName(values.name.trim(), values.generation).format(),
+            NodeName.parse(values.name.trim()).format(),
             values.mnemonic.map(v => v.trim().toLowerCase()));
         formik.setSubmitting(false);
     }

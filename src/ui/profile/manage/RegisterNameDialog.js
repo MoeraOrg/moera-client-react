@@ -40,7 +40,7 @@ const registerNameDialogLogic = {
 
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
-            .test("is-allowed", "Name is not allowed", Rules.isNameValid)
+            .test("is-allowed", "Name is not allowed", Rules.isRegisteredNameValid)
     }),
 
     validateOnBlur: false,
