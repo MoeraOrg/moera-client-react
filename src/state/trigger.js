@@ -21,7 +21,7 @@ function addTrigger(triggers, trigger) {
         return;
     }
     if (Array.isArray(signal)) {
-        for (let sg of signal) {
+        for (const sg of signal) {
             addTrigger(triggers, {signal: sg, filter, action});
         }
         return;
@@ -35,10 +35,10 @@ function addTrigger(triggers, trigger) {
 }
 
 export function collectTriggers(...lists) {
-    let triggers = new Map();
-    for (let list of lists) {
+    const triggers = new Map();
+    for (const list of lists) {
         if (Array.isArray(list)) {
-            for (let trigger of list) {
+            for (const trigger of list) {
                 addTrigger(triggers, trigger);
             }
         } else {
@@ -50,11 +50,11 @@ export function collectTriggers(...lists) {
 
 function* triggersSaga(triggers, action) {
     const signal = action.type;
-    let list = triggers.get(signal);
+    const list = triggers.get(signal);
     if (list === undefined) {
         return;
     }
-    for (let trigger of list) {
+    for (const trigger of list) {
         let enabled;
         if (typeof(trigger.filter) === "function") {
             enabled = !!(yield select(trigger.filter, action));
@@ -86,7 +86,7 @@ export function conj(...funcs) {
         return funcs;
     }
     return function (...params) {
-        for (let func of funcs) {
+        for (const func of funcs) {
             if (!func(...params)) {
                 return false;
             }
@@ -100,7 +100,7 @@ export function disj(...funcs) {
         return funcs;
     }
     return function (...params) {
-        for (let func of funcs) {
+        for (const func of funcs) {
             if (func(...params)) {
                 return true;
             }
