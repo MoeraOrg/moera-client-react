@@ -5,6 +5,16 @@ import * as textFieldEdit from 'text-field-edit';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    COMMENT_COPY_LINK,
+    COMMENT_DELETE,
+    COMMENT_DIALOG_COMMENT_LOAD,
+    COMMENT_LOAD,
+    COMMENT_POST,
+    COMMENT_REACT,
+    COMMENT_REACTION_DELETE,
+    COMMENT_REACTION_LOAD,
+    COMMENT_REPLY,
+    COMMENT_VERIFY,
     commentDeleted,
     commentDeleteFailed,
     commentDialogCommentLoaded,
@@ -14,6 +24,11 @@ import {
     commentPostFailed,
     commentReactionSet,
     commentRepliedToSet,
+    COMMENTS_FUTURE_SLICE_LOAD,
+    COMMENTS_LOAD_ALL,
+    COMMENTS_PAST_SLICE_LOAD,
+    COMMENTS_RECEIVER_SWITCH,
+    COMMENTS_UPDATE,
     commentSet,
     commentsFutureSliceLoadFailed,
     commentsFutureSliceSet,
@@ -23,10 +38,13 @@ import {
     commentsScrollToComposer,
     commentsSliceUpdate,
     commentVerifyFailed,
+    DETAILED_POSTING_LOAD,
     detailedPostingLoaded,
     detailedPostingLoadFailed,
+    FOCUSED_COMMENT_LOAD,
     focusedCommentLoaded,
     focusedCommentLoadFailed,
+    GLANCE_COMMENT_LOAD,
     glanceCommentLoaded,
     glanceCommentLoadFailed
 } from "state/detailedposting/actions";
@@ -47,8 +65,39 @@ import { fillSubscription } from "state/subscriptions/sagas";
 import { getWindowSelectionHtml, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
 import { Browser } from "ui/browser";
+import { introduce } from "api/node/introduce";
+import { executor } from "state/executor";
 
-export function* detailedPostingLoadSaga() {
+export default [
+    executor(DETAILED_POSTING_LOAD, "", introduce(detailedPostingLoadSaga)),
+    executor(COMMENTS_RECEIVER_SWITCH, "", introduce(commentsReceiverSwitchSaga)),
+    executor(COMMENTS_LOAD_ALL, "", introduce(commentsLoadAllSaga)),
+    executor(COMMENTS_PAST_SLICE_LOAD, "", introduce(commentsPastSliceLoadSaga)),
+    executor(COMMENTS_FUTURE_SLICE_LOAD, "", introduce(commentsFutureSliceLoadSaga)),
+    executor(COMMENTS_UPDATE, "", introduce(commentsUpdateSaga)),
+    executor(COMMENT_LOAD, payload => payload.commentId, introduce(commentLoadSaga)),
+    executor(COMMENT_POST, null, commentPostSaga),
+    executor(COMMENT_DELETE, payload => payload.commentId, commentDeleteSaga),
+    executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
+    executor(COMMENT_COPY_LINK, null, commentCopyLinkSaga),
+    executor(COMMENT_DIALOG_COMMENT_LOAD, "", commentDialogCommentLoadSaga),
+    executor(COMMENT_VERIFY, payload => payload.commentId, commentVerifySaga),
+    executor(COMMENT_REACT, null, introduce(commentReactSaga)),
+    executor(
+        COMMENT_REACTION_LOAD,
+        payload => `${payload.id}:${payload.postingId}`,
+        introduce(commentReactionLoadSaga)
+    ),
+    executor(
+        COMMENT_REACTION_DELETE,
+        payload => `${payload.id}:${payload.postingId}`,
+        introduce(commentReactionDeleteSaga)
+    ),
+    executor(COMMENT_REPLY, "", commentReplySaga),
+    executor(GLANCE_COMMENT_LOAD, null, glanceCommentLoadSaga)
+];
+
+function* detailedPostingLoadSaga() {
     try {
         const id = yield select(getDetailedPostingId);
         const data = yield call(Node.getPosting, "", id);
@@ -61,7 +110,7 @@ export function* detailedPostingLoadSaga() {
     }
 }
 
-export function* commentsReceiverSwitchSaga() {
+function* commentsReceiverSwitchSaga() {
     const {ownerName, posting} = yield select(state => ({
         ownerName: getOwnerName(state),
         posting: getDetailedPosting(state)
@@ -71,7 +120,7 @@ export function* commentsReceiverSwitchSaga() {
     yield put(commentsReceiverSwitched(receiverName, receiverPostingId));
 }
 
-export function* commentsLoadAllSaga() {
+function* commentsLoadAllSaga() {
     let {receiverName, receiverPostingId, before, after} = yield select(getCommentsState);
     try {
         while (after > Number.MIN_SAFE_INTEGER) {
@@ -91,7 +140,7 @@ export function* commentsLoadAllSaga() {
     }
 }
 
-export function* commentsPastSliceLoadSaga() {
+function* commentsPastSliceLoadSaga() {
     const {receiverName, receiverPostingId, after} = yield select(getCommentsState);
     try {
         const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, null, after, 20);
@@ -103,7 +152,7 @@ export function* commentsPastSliceLoadSaga() {
     }
 }
 
-export function* commentsFutureSliceLoadSaga() {
+function* commentsFutureSliceLoadSaga() {
     const {receiverName, receiverPostingId, before} = yield select(getCommentsState);
     try {
         const data = yield call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
@@ -115,7 +164,7 @@ export function* commentsFutureSliceLoadSaga() {
     }
 }
 
-export function* commentsUpdateSaga() {
+function* commentsUpdateSaga() {
     let {receiverName, receiverPostingId, before, after} = yield select(getCommentsState);
     try {
         while (before > after) {
@@ -132,7 +181,7 @@ export function* commentsUpdateSaga() {
     }
 }
 
-export function* commentLoadSaga(action) {
+function* commentLoadSaga(action) {
     const {commentId} = action.payload;
 
     const {receiverName, receiverPostingId} = yield select(getCommentsState);
@@ -145,7 +194,7 @@ export function* commentLoadSaga(action) {
     }
 }
 
-export function* commentPostSaga(action) {
+function* commentPostSaga(action) {
     const {commentId, postingId, commentText} = action.payload;
 
     const {receiverName, receiverPostingId} = yield select(getCommentsState);
@@ -167,7 +216,7 @@ export function* commentPostSaga(action) {
     }
 }
 
-export function* commentDeleteSaga(action) {
+function* commentDeleteSaga(action) {
     const {commentId} = action.payload;
 
     const {postingId, receiverName, receiverPostingId} = yield select(state => ({
@@ -186,7 +235,7 @@ export function* commentDeleteSaga(action) {
     }
 }
 
-export function* focusedCommentLoadSaga() {
+function* focusedCommentLoadSaga() {
     const {receiverName, receiverPostingId, focusedCommentId} = yield select(getCommentsState);
     try {
         const data = yield call(Node.getComment, receiverName, receiverPostingId, focusedCommentId);
@@ -201,7 +250,7 @@ export function* focusedCommentLoadSaga() {
     }
 }
 
-export function* commentCopyLinkSaga(action) {
+function* commentCopyLinkSaga(action) {
     const {id, postingId} = action.payload;
     try {
         const href = yield call(postingGetLink, postingId);
@@ -214,7 +263,7 @@ export function* commentCopyLinkSaga(action) {
     }
 }
 
-export function* commentDialogCommentLoadSaga() {
+function* commentDialogCommentLoadSaga() {
     const {receiverName, receiverPostingId, commentId} = yield select(state => ({
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
@@ -229,7 +278,7 @@ export function* commentDialogCommentLoadSaga() {
     }
 }
 
-export function* commentVerifySaga(action) {
+function* commentVerifySaga(action) {
     const {receiverName, receiverPostingId} = yield select(getCommentsState);
     try {
         yield call(Node.remoteCommentVerify, ":", receiverName, receiverPostingId, action.payload.commentId);
@@ -239,7 +288,7 @@ export function* commentVerifySaga(action) {
     }
 }
 
-export function* commentReactSaga(action) {
+function* commentReactSaga(action) {
     const {id, negative, emoji} = action.payload;
 
     const {receiverName, receiverPostingId} = yield select(getCommentsState);
@@ -252,7 +301,7 @@ export function* commentReactSaga(action) {
     }
 }
 
-export function* commentReactionLoadSaga(action) {
+function* commentReactionLoadSaga(action) {
     const {id} = action.payload;
 
     const {receiverName, receiverPostingId} = yield select(getCommentsState);
@@ -265,7 +314,7 @@ export function* commentReactionLoadSaga(action) {
     }
 }
 
-export function* commentReactionDeleteSaga(action) {
+function* commentReactionDeleteSaga(action) {
     const {id} = action.payload;
 
     const {receiverName, receiverPostingId} = yield select(getCommentsState);
@@ -278,7 +327,7 @@ export function* commentReactionDeleteSaga(action) {
     }
 }
 
-export function* commentReplySaga(action) {
+function* commentReplySaga(action) {
     const {commentId, ownerName, heading} = action.payload;
 
     const body = document.getElementById("body");
@@ -300,7 +349,7 @@ export function* commentReplySaga(action) {
     yield put(commentsScrollToComposer());
 }
 
-export function* glanceCommentLoadSaga() {
+function* glanceCommentLoadSaga() {
     const {receiverName, receiverPostingId, commentId, comment} = yield select(
         state => {
             const comments = getCommentsState(state);

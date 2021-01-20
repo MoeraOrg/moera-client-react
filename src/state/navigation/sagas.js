@@ -3,21 +3,40 @@ import * as URI from 'uri-js';
 
 import { PAGE_SETTINGS } from "state/navigation/pages";
 import {
+    GO_HOME,
+    GO_HOME_NEWS,
+    GO_TO_LOCATION,
+    GO_TO_PAGE_WITH_DEFAULT_SUBPAGE,
     goToPage,
     goToSettings,
+    INIT_FROM_LOCATION,
+    INIT_STORAGE,
     initFromLocation,
     locationLock,
     locationSet,
     locationUnlock,
-    NEW_LOCATION
+    NEW_LOCATION,
+    UPDATE_LOCATION
 } from "state/navigation/actions";
 import { settingsGoToTab } from "state/settings/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { locationBuild, LocationInfo, locationTransform } from "location";
 import { rootUrl } from "util/url";
 import { getHomeRootPage } from "state/home/selectors";
+import { executor } from "state/executor";
 
-export function* goToPageWithDefaultSubpageSaga(action) {
+export default [
+    executor(INIT_STORAGE, "", initStorageSaga),
+    executor(INIT_FROM_LOCATION, "", initFromLocationSaga),
+    executor(NEW_LOCATION, null, newLocationSaga),
+    executor(UPDATE_LOCATION, null, newLocationSaga),
+    executor(GO_TO_LOCATION, payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
+    executor(GO_TO_PAGE_WITH_DEFAULT_SUBPAGE, null, goToPageWithDefaultSubpageSaga),
+    executor(GO_HOME, "", goHomeSaga),
+    executor(GO_HOME_NEWS, "", goHomeNewsSaga)
+];
+
+function* goToPageWithDefaultSubpageSaga(action) {
     switch (action.payload.page) {
         case PAGE_SETTINGS:
             yield put(goToSettings());
@@ -42,7 +61,7 @@ function* transformation(srcPath, srcQuery, srcHash, dstPath, dstQuery, dstHash)
     yield put(locationUnlock());
 }
 
-export function initStorageSaga() {
+function initStorageSaga() {
     try {
         // Call the browser extension to inject communication code
         fetch("https://moera.please.start.communication/");
@@ -51,23 +70,23 @@ export function initStorageSaga() {
     }
 }
 
-export function* initFromLocationSaga(action) {
+function* initFromLocationSaga(action) {
     const {path, query, hash} = action.payload;
     yield call(transformation, null, null, null, path, query, hash);
 }
 
-export function* goToLocationSaga(action) {
+function* goToLocationSaga(action) {
     const current = URI.parse(yield select(state => state.navigation.location));
     const {path, query, hash} = action.payload;
     yield call(transformation, current.path || "", current.query || "", current.fragment || "", path, query, hash);
 }
 
-export function* newLocationSaga(action) {
+function* newLocationSaga(action) {
     const info = yield select(locationBuild, new LocationInfo());
     yield put(locationSet(info.toUrl(), info.title, action == null || action.type === NEW_LOCATION));
 }
 
-export function* goHomeSaga() {
+function* goHomeSaga() {
     const {standalone, homeRootPage} = yield select(state => ({
         standalone: isStandaloneMode(state),
         homeRootPage: getHomeRootPage(state)
@@ -81,7 +100,7 @@ export function* goHomeSaga() {
     }
 }
 
-export function* goHomeNewsSaga() {
+function* goHomeNewsSaga() {
     const {standalone, homeRootPage} = yield select(state => ({
         standalone: isStandaloneMode(state),
         homeRootPage: getHomeRootPage(state)

@@ -2,10 +2,15 @@ import { call, put } from 'redux-saga/effects';
 
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
-import { cartesSet } from "state/cartes/actions";
+import { CARTES_LOAD, cartesSet } from "state/cartes/actions";
 import { Browser } from "ui/browser";
+import { executor } from "state/executor";
 
-export function* cartesLoadSaga() {
+export default [
+    executor(CARTES_LOAD, "", cartesLoadSaga)
+];
+
+function* cartesLoadSaga() {
     try {
         const {cartesIp, cartes} = yield call(Node.getCartes, ":");
         Browser.storeCartesData(cartesIp, cartes);

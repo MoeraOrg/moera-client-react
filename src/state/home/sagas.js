@@ -2,13 +2,18 @@ import { call, put } from 'redux-saga/effects';
 
 import { Node } from "api";
 import { restoreConnectDialog } from "state/connectdialog/actions";
-import { browserApiSet, connectedToHome, disconnectFromHome } from "state/home/actions";
+import { browserApiSet, connectedToHome, disconnectFromHome, HOME_RESTORE } from "state/home/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import { errorThrown } from "state/error/actions";
 import { Browser } from "ui/browser";
 import { normalizeUrl } from "util/url";
+import { executor } from "state/executor";
 
-export function* homeRestoreSaga(action) {
+export default [
+    executor(HOME_RESTORE, null, homeRestoreSaga)
+];
+
+function* homeRestoreSaga(action) {
     let {addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots} = action.payload;
 
     addonApiVersion = addonApiVersion ?? 1;

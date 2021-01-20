@@ -2,7 +2,7 @@ import { call, put, select } from 'redux-saga/effects';
 
 import { Node, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
-import { postingReplyFailed } from "state/postingreply/actions";
+import { POSTING_REPLY, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
@@ -12,8 +12,13 @@ import { getWindowSelectionHtml } from "util/misc";
 import { quoteHtml } from "util/html";
 import { getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
+import { executor } from "state/executor";
 
-export function* postingReplySaga() {
+export default [
+    executor(POSTING_REPLY, "", postingReplySaga)
+];
+
+function* postingReplySaga() {
     const {posting, rootNodePage, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
            reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault} =
         yield select(state => ({

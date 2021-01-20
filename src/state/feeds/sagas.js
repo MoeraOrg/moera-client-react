@@ -2,12 +2,20 @@ import { call, put, select } from 'redux-saga/effects';
 
 import { Node } from "api";
 import {
+    FEED_FUTURE_SLICE_LOAD,
+    FEED_GENERAL_LOAD,
+    FEED_PAST_SLICE_LOAD,
+    FEED_STATUS_LOAD,
+    FEED_STATUS_UPDATE,
+    FEED_SUBSCRIBE,
+    FEED_UNSUBSCRIBE,
     feedFutureSliceLoadFailed,
     feedFutureSliceSet,
     feedGeneralLoadFailed,
     feedGeneralSet,
     feedPastSliceLoadFailed,
     feedPastSliceSet,
+    FEEDS_UPDATE,
     feedSliceUpdate,
     feedStatusLoadFailed,
     feedStatusSet,
@@ -23,8 +31,21 @@ import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReactions } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
+import { introduce } from "api/node/introduce";
+import { executor } from "state/executor";
 
-export function* feedGeneralLoadSaga(action) {
+export default [
+    executor(FEED_GENERAL_LOAD, payload => payload.feedName, introduce(feedGeneralLoadSaga)),
+    executor(FEED_SUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, introduce(feedSubscribeSaga)),
+    executor(FEED_UNSUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, introduce(feedUnsubscribeSaga)),
+    executor(FEED_STATUS_LOAD, payload => payload.feedName, introduce(feedStatusLoadSaga)),
+    executor(FEED_STATUS_UPDATE, payload => payload.feedName, feedStatusUpdateSaga),
+    executor(FEED_PAST_SLICE_LOAD, payload => payload.feedName, introduce(feedPastSliceLoadSaga)),
+    executor(FEED_FUTURE_SLICE_LOAD, payload => payload.feedName, introduce(feedFutureSliceLoadSaga)),
+    executor(FEEDS_UPDATE, "", introduce(feedsUpdateSaga))
+];
+
+function* feedGeneralLoadSaga(action) {
     const {feedName} = action.payload;
     try {
         const data = yield call(Node.getFeedGeneral, "", feedName);
@@ -35,7 +56,7 @@ export function* feedGeneralLoadSaga(action) {
     }
 }
 
-export function* feedSubscribeSaga(action) {
+function* feedSubscribeSaga(action) {
     const {nodeName, feedName} = action.payload;
     const ownerName = yield select(getOwnerName);
     try {
@@ -48,7 +69,7 @@ export function* feedSubscribeSaga(action) {
     }
 }
 
-export function* feedUnsubscribeSaga(action) {
+function* feedUnsubscribeSaga(action) {
     const {nodeName, feedName, subscriberId} = action.payload;
     const ownerName = yield select(getOwnerName);
     try {
@@ -61,7 +82,7 @@ export function* feedUnsubscribeSaga(action) {
     }
 }
 
-export function* feedStatusLoadSaga(action) {
+function* feedStatusLoadSaga(action) {
     const {feedName} = action.payload;
     try {
         const data = yield call(Node.getFeedStatus, ":", feedName.substring(1)); // feedName must start with ":"
@@ -72,7 +93,7 @@ export function* feedStatusLoadSaga(action) {
     }
 }
 
-export function* feedStatusUpdateSaga(action) {
+function* feedStatusUpdateSaga(action) {
     const {feedName, viewed, read, before} = action.payload;
     try {
         yield put(feedStatusUpdated(feedName, viewed, read, before));
@@ -85,7 +106,7 @@ export function* feedStatusUpdateSaga(action) {
     }
 }
 
-export function* feedPastSliceLoadSaga(action) {
+function* feedPastSliceLoadSaga(action) {
     const {feedName} = action.payload;
     try {
         const before = (yield select(state => getFeedState(state, feedName))).after;
@@ -101,7 +122,7 @@ export function* feedPastSliceLoadSaga(action) {
     }
 }
 
-export function* feedFutureSliceLoadSaga(action) {
+function* feedFutureSliceLoadSaga(action) {
     const {feedName} = action.payload;
     try {
         const after = (yield select(state => getFeedState(state, feedName))).before;
@@ -117,7 +138,7 @@ export function* feedFutureSliceLoadSaga(action) {
     }
 }
 
-export function* feedsUpdateSaga() {
+function* feedsUpdateSaga() {
     const feedNames = yield select(getAllFeeds);
     for (const feedName of feedNames) {
         if (feedName.startsWith(":")) {

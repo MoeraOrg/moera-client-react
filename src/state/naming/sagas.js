@@ -6,6 +6,9 @@ import { errorThrown } from "state/error/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import {
+    NAMING_NAME_LOAD,
+    NAMING_NAMES_MAINTENANCE,
+    NAMING_NAMES_USED,
     namingNameLoad,
     namingNameLoaded,
     namingNameLoadFailed,
@@ -17,11 +20,19 @@ import { getOwnerName } from "state/owner/selectors";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
 import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
+import { askNaming } from "api/node/ask-naming";
+import { executor } from "state/executor";
 
 const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
 
-export function* namingNamesUsedSaga(action) {
+export default [
+    executor(NAMING_NAMES_USED, null, askNaming(namingNamesUsedSaga)),
+    executor(NAMING_NAME_LOAD, payload => payload.name, askNaming(namingNameLoadSaga)),
+    executor(NAMING_NAMES_MAINTENANCE, "", namingNamesMaintenanceSaga)
+];
+
+function* namingNamesUsedSaga(action) {
     const {names} = action.payload;
 
     if (!names || names.length === 0) {
@@ -33,7 +44,7 @@ export function* namingNamesUsedSaga(action) {
     }
 }
 
-export function* namingNameLoadSaga(action) {
+function* namingNameLoadSaga(action) {
     yield call(fetchName, action.payload.name);
 }
 
@@ -70,7 +81,7 @@ function* fetchName(nodeName) {
     return {loading: false, loaded: true, nodeUri};
 }
 
-export function* namingNamesMaintenanceSaga() {
+function* namingNamesMaintenanceSaga() {
     const used = yield call(getUsedNames);
     if (used.size > 0) {
         yield put(namingNamesUsed(Array.from(used)));

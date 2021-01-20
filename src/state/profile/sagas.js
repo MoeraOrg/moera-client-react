@@ -1,10 +1,24 @@
 import { call, put } from 'redux-saga/effects';
 
 import { errorThrown } from "state/error/actions";
-import { profileLoadFailed, profileSet, profileUpdateFailed, profileUpdateSucceeded } from "state/profile/actions";
+import {
+    PROFILE_LOAD,
+    PROFILE_UPDATE,
+    profileLoadFailed,
+    profileSet,
+    profileUpdateFailed,
+    profileUpdateSucceeded
+} from "state/profile/actions";
 import { Node } from "api/node";
+import { introduce } from "api/node/introduce";
+import { executor } from "state/executor";
 
-export function* profileLoadSaga() {
+export default [
+    executor(PROFILE_LOAD, "", introduce(profileLoadSaga)),
+    executor(PROFILE_UPDATE, null, profileUpdateSaga)
+];
+
+function* profileLoadSaga() {
     try {
         const data = yield call(Node.getProfile, "");
         yield put(profileSet(data));
@@ -14,7 +28,7 @@ export function* profileLoadSaga() {
     }
 }
 
-export function* profileUpdateSaga(action) {
+function* profileUpdateSaga(action) {
     try {
         const data = yield call(Node.putProfile, "", action.payload);
         yield put(profileUpdateSucceeded());

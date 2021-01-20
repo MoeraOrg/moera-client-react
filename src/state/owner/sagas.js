@@ -3,15 +3,31 @@ import * as URI from 'uri-js';
 
 import { Naming, Node, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
-import { ownerSet, ownerSwitchClose, ownerSwitchFailed, ownerVerified } from "state/owner/actions";
+import {
+    OWNER_LOAD,
+    OWNER_SWITCH,
+    OWNER_VERIFY,
+    ownerSet,
+    ownerSwitchClose,
+    ownerSwitchFailed,
+    ownerVerified
+} from "state/owner/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { initFromLocation } from "state/navigation/actions";
 import { normalizeUrl, rootUrl } from "util/url";
 import { getNodeUri } from "state/naming/sagas";
 import { getNodeRootPage } from "state/node/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { askNaming } from "api/node/ask-naming";
+import { executor } from "state/executor";
 
-export function* ownerLoadSaga() {
+export default [
+    executor(OWNER_LOAD, "", ownerLoadSaga),
+    executor(OWNER_VERIFY, null, askNaming(ownerVerifySaga)),
+    executor(OWNER_SWITCH, payload => payload.name, ownerSwitchSaga)
+];
+
+function* ownerLoadSaga() {
     try {
         const data = yield call(Node.getWhoAmI, "");
         yield put(ownerSet(data.nodeName, data.nodeNameChanging));
@@ -20,7 +36,7 @@ export function* ownerLoadSaga() {
     }
 }
 
-export function* ownerVerifySaga() {
+function* ownerVerifySaga() {
     const {rootPage, ownerName} = yield select(state => ({
         rootPage: getNodeRootPage(state),
         ownerName: getOwnerName(state)
@@ -34,7 +50,7 @@ export function* ownerVerifySaga() {
     }
 }
 
-export function* ownerSwitchSaga(action) {
+function* ownerSwitchSaga(action) {
     const {standalone, ownerName} = yield select(state => ({
         standalone: isStandaloneMode(state),
         ownerName: getOwnerName(state)

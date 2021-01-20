@@ -2,20 +2,34 @@ import { call, put, select } from 'redux-saga/effects';
 
 import { messageBox } from "state/messagebox/actions";
 import { normalizeUrl } from "util/url";
-import { connectedToHome, connectionToHomeFailed, homeOwnerSet, homeOwnerVerified } from "state/home/actions";
+import {
+    CONNECT_TO_HOME,
+    connectedToHome,
+    connectionToHomeFailed,
+    HOME_OWNER_VERIFY,
+    homeOwnerSet,
+    homeOwnerVerified
+} from "state/home/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { NameResolvingError, Naming, Node, NodeApiError, NodeName } from "api";
 import { selectApi } from "api/node/call";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
 import { Browser } from "ui/browser";
+import { askNaming } from "api/node/ask-naming";
+import { executor } from "state/executor";
+
+export default [
+    executor(CONNECT_TO_HOME, null, connectToHomeSaga),
+    executor(HOME_OWNER_VERIFY, null, askNaming(verifyHomeOwnerSaga))
+];
 
 function* connectToHomeFailure(error, onClose = null) {
     yield put(connectionToHomeFailed());
     yield put(messageBox("Connection to home failed: " + error.message, onClose));
 }
 
-export function* connectToHomeSaga(action) {
+function* connectToHomeSaga(action) {
     const {location, assign, login, password} = action.payload;
     let data;
     try {
@@ -48,7 +62,7 @@ export function* connectToHomeSaga(action) {
         cartesData.cartes));
 }
 
-export function* verifyHomeOwnerSaga() {
+function* verifyHomeOwnerSaga() {
     try {
         const {nodeName, nodeNameChanging} = yield call(Node.getWhoAmI, ":");
         yield put(homeOwnerSet(nodeName, nodeNameChanging));

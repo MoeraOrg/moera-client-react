@@ -3,6 +3,11 @@ import { call, put } from 'redux-saga/effects';
 import { errorThrown } from "state/error/actions";
 import { HomeNotConnectedError, Node } from "api";
 import {
+    SETTINGS_CLIENT_VALUES_LOAD,
+    SETTINGS_NODE_META_LOAD,
+    SETTINGS_NODE_VALUES_LOAD,
+    SETTINGS_UPDATE,
+    SETTINGS_UPDATE_SUCCEEDED,
     settingsClientValuesLoaded,
     settingsClientValuesLoadFailed,
     settingsNodeMetaLoaded,
@@ -12,8 +17,18 @@ import {
     settingsUpdateFailed,
     settingsUpdateSucceeded
 } from "state/settings/actions";
+import { introduce } from "api/node/introduce";
+import { executor } from "state/executor";
 
-export function* settingsNodeValuesLoadSaga() {
+export default [
+    executor(SETTINGS_NODE_VALUES_LOAD, "", introduce(settingsNodeValuesLoadSaga)),
+    executor(SETTINGS_NODE_META_LOAD, "", introduce(settingsNodeMetaLoadSaga)),
+    executor(SETTINGS_CLIENT_VALUES_LOAD, "", introduce(settingsClientValuesLoadSaga)),
+    executor(SETTINGS_UPDATE, null, settingsUpdateSaga),
+    executor(SETTINGS_UPDATE_SUCCEEDED, null, settingsUpdateSucceededSaga)
+];
+
+function* settingsNodeValuesLoadSaga() {
     try {
         const data = yield call(Node.getNodeSettings, ":");
         yield put(settingsNodeValuesLoaded(data));
@@ -23,7 +38,7 @@ export function* settingsNodeValuesLoadSaga() {
     }
 }
 
-export function* settingsNodeMetaLoadSaga() {
+function* settingsNodeMetaLoadSaga() {
     try {
         const data = yield call(Node.getNodeSettingsMetadata, ":");
         yield put(settingsNodeMetaLoaded(data));
@@ -33,7 +48,7 @@ export function* settingsNodeMetaLoadSaga() {
     }
 }
 
-export function* settingsClientValuesLoadSaga() {
+function* settingsClientValuesLoadSaga() {
     try {
         const data = yield call(Node.getClientSettings, ":");
         yield put(settingsClientValuesLoaded(data));
@@ -47,7 +62,7 @@ export function* settingsClientValuesLoadSaga() {
     }
 }
 
-export function* settingsUpdateSaga(action) {
+function* settingsUpdateSaga(action) {
     const {settings, onSuccess} = action.payload;
 
     try {
@@ -59,7 +74,7 @@ export function* settingsUpdateSaga(action) {
     }
 }
 
-export function settingsUpdateSucceededSaga(action) {
+function settingsUpdateSucceededSaga(action) {
     if (action.payload.onSuccess != null) {
         action.payload.onSuccess();
     }

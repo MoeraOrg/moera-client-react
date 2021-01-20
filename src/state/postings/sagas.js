@@ -4,6 +4,15 @@ import clipboardCopy from 'clipboard-copy';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    POSTING_COMMENTS_SUBSCRIBE,
+    POSTING_COMMENTS_UNSUBSCRIBE,
+    POSTING_COPY_LINK,
+    POSTING_DELETE,
+    POSTING_LOAD,
+    POSTING_REACT,
+    POSTING_REACTION_DELETE,
+    POSTING_REACTION_LOAD,
+    POSTING_VERIFY,
     postingCommentsSubscribed,
     postingCommentsSubscribeFailed,
     postingCommentsUnsubscribed,
@@ -23,8 +32,22 @@ import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { getNodeRootLocation } from "state/node/selectors";
 import { Browser } from "ui/browser";
+import { introduce } from "api/node/introduce";
+import { executor } from "state/executor";
 
-export function* postingDeleteSaga(action) {
+export default [
+    executor(POSTING_DELETE, payload => payload.id, postingDeleteSaga),
+    executor(POSTING_LOAD, payload => payload.id, introduce(postingLoadSaga)),
+    executor(POSTING_VERIFY, payload => payload.id, postingVerifySaga),
+    executor(POSTING_REACT, null, introduce(postingReactSaga)),
+    executor(POSTING_REACTION_LOAD, payload => payload.id, postingReactionLoadSaga),
+    executor(POSTING_REACTION_DELETE, payload => payload.id, introduce(postingReactionDeleteSaga)),
+    executor(POSTING_COPY_LINK, payload => payload.id, postingCopyLinkSaga),
+    executor(POSTING_COMMENTS_SUBSCRIBE, payload => payload.id, introduce(postingCommentsSubscribeSaga)),
+    executor(POSTING_COMMENTS_UNSUBSCRIBE, payload => payload.id, introduce(postingCommentsUnsubscribeSaga))
+];
+
+function* postingDeleteSaga(action) {
     const id = action.payload.id;
     const posting = yield select(getPosting, id);
     try {
@@ -36,7 +59,7 @@ export function* postingDeleteSaga(action) {
     }
 }
 
-export function* postingLoadSaga(action) {
+function* postingLoadSaga(action) {
     try {
         const data = yield call(Node.getPosting, "", action.payload.id);
         yield call(fillActivityReaction, data);
@@ -48,7 +71,7 @@ export function* postingLoadSaga(action) {
     }
 }
 
-export function* postingVerifySaga(action) {
+function* postingVerifySaga(action) {
     const ownerName = yield select(getOwnerName);
     try {
         yield call(Node.remotePostingVerify, ":", ownerName, action.payload.id);
@@ -58,7 +81,7 @@ export function* postingVerifySaga(action) {
     }
 }
 
-export function* postingReactSaga(action) {
+function* postingReactSaga(action) {
     const {id, negative, emoji} = action.payload;
     try {
         const data = yield call(Node.postPostingReaction, "", id, negative, emoji);
@@ -74,7 +97,7 @@ export function* postingReactSaga(action) {
     }
 }
 
-export function* postingReactionLoadSaga(action) {
+function* postingReactionLoadSaga(action) {
     const {id} = action.payload;
     try {
         const {negative, emoji} = yield call(Node.getPostingReaction, "", id);
@@ -85,7 +108,7 @@ export function* postingReactionLoadSaga(action) {
     }
 }
 
-export function* postingReactionDeleteSaga(action) {
+function* postingReactionDeleteSaga(action) {
     const {id} = action.payload;
     try {
         let data = yield call(Node.deletePostingReaction, "", id);
@@ -115,7 +138,7 @@ export function* postingGetLink(id) {
     }
 }
 
-export function* postingCopyLinkSaga(action) {
+function* postingCopyLinkSaga(action) {
     const {id} = action.payload;
     try {
         const href = yield call(postingGetLink, id);
@@ -128,7 +151,7 @@ export function* postingCopyLinkSaga(action) {
     }
 }
 
-export function* postingCommentsSubscribeSaga(action) {
+function* postingCommentsSubscribeSaga(action) {
     const {id} = action.payload;
     const {posting, ownerName} = yield select(state => ({
         posting: getPosting(state, id),
@@ -146,7 +169,7 @@ export function* postingCommentsSubscribeSaga(action) {
     }
 }
 
-export function* postingCommentsUnsubscribeSaga(action) {
+function* postingCommentsUnsubscribeSaga(action) {
     const {id} = action.payload;
     const {posting, ownerName} = yield select(state => ({
         posting: getPosting(state, id),

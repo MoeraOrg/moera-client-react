@@ -1,14 +1,20 @@
 import { delay, put, select } from 'redux-saga/effects';
 
 import { NodeApiError } from "api";
-import { errorDismiss, errorShow } from "state/error/actions";
+import { ERROR_AUTH_INVALID, ERROR_THROWN, errorDismiss, errorShow } from "state/error/actions";
 import { disconnectFromHome } from "state/home/actions";
 import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { Browser } from "ui/browser";
 import { getHomeRootLocation } from "state/home/selectors";
+import { executor } from "state/executor";
 
-export function* errorSaga(action) {
+export default [
+    executor(ERROR_THROWN, "", errorSaga),
+    executor(ERROR_AUTH_INVALID, "", errorAuthInvalidSaga)
+];
+
+function* errorSaga(action) {
     if (action.payload.e instanceof NodeApiError) {
         return;
     }
@@ -25,7 +31,7 @@ export function* errorSaga(action) {
     yield put(errorDismiss());
 }
 
-export function* errorAuthInvalidSaga() {
+function* errorAuthInvalidSaga() {
     const {location, login} = yield select(state => ({
         location: getHomeRootLocation(state),
         login: state.home.login

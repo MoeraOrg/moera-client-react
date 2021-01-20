@@ -1,16 +1,24 @@
-import { call, put } from "redux-saga/effects";
+import { call, put, takeLatest } from "redux-saga/effects";
 import { Node } from "api/node";
 import { errorThrown } from "state/error/actions";
 import {
+    PEOPLE_GENERAL_LOAD,
     peopleGeneralLoaded,
-    peopleGeneralLoadFailed,
+    peopleGeneralLoadFailed, SUBSCRIBERS_LOAD,
     subscribersLoaded,
-    subscribersLoadFailed,
+    subscribersLoadFailed, SUBSCRIPTIONS_LOAD,
     subscriptionsLoaded,
     subscriptionsLoadFailed
 } from "state/people/actions";
+import { executor } from "state/executor";
 
-export function* peopleGeneralLoadSaga() {
+export default [
+    executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga),
+    executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga),
+    executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga)
+];
+
+function* peopleGeneralLoadSaga() {
     try {
         const data = yield call(Node.getPeopleGeneral, "");
         yield put(peopleGeneralLoaded(data));
@@ -20,7 +28,7 @@ export function* peopleGeneralLoadSaga() {
     }
 }
 
-export function* subscribersLoadSaga() {
+function* subscribersLoadSaga() {
     try {
         const data = yield call(Node.getSubscribers, "", "feed");
         yield put(subscribersLoaded(data));
@@ -30,7 +38,7 @@ export function* subscribersLoadSaga() {
     }
 }
 
-export function* subscriptionsLoadSaga() {
+function* subscriptionsLoadSaga() {
     try {
         const data = yield call(Node.getSubscriptions, "", "feed");
         yield put(subscriptionsLoaded(data));

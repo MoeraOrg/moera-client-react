@@ -4,10 +4,26 @@ import * as Base64js from 'base64-js';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import { Browser } from "ui/browser";
-import { webPushInvitationDeclined, webPushSubscribe, webPushSubscriptionSet } from "state/webpush/actions";
+import {
+    WEB_PUSH_INVITATION_DECLINED,
+    WEB_PUSH_INVITE,
+    WEB_PUSH_SUBSCRIBE,
+    WEB_PUSH_UNSUBSCRIBE,
+    webPushInvitationDeclined,
+    webPushSubscribe,
+    webPushSubscriptionSet
+} from "state/webpush/actions";
 import { getWebPushSubscriptionId } from "state/webpush/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { executor } from "state/executor";
+
+export default [
+    executor(WEB_PUSH_SUBSCRIBE, "", webPushSubscribeSaga),
+    executor(WEB_PUSH_UNSUBSCRIBE, "", webPushUnsubscribeSaga),
+    executor(WEB_PUSH_INVITE, "", webPushInviteSaga),
+    executor(WEB_PUSH_INVITATION_DECLINED, "", webPushInvitationDeclinedSaga)
+];
 
 export function* webPushSubscribeSaga() {
     try {

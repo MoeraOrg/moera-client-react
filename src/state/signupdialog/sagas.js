@@ -6,6 +6,10 @@ import { errorThrown } from "state/error/actions";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import {
+    SIGN_UP,
+    SIGN_UP_DOMAIN_VERIFY,
+    SIGN_UP_FIND_DOMAIN,
+    SIGN_UP_NAME_VERIFY,
     SIGN_UP_STAGE_CONNECT,
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
@@ -16,12 +20,20 @@ import {
 } from "state/signupdialog/actions";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
+import { executor } from "state/executor";
+
+export default [
+    executor(SIGN_UP, "", signUpSaga),
+    executor(SIGN_UP_NAME_VERIFY, "", signUpNameVerifySaga),
+    executor(SIGN_UP_FIND_DOMAIN, "", signUpFindDomainSaga),
+    executor(SIGN_UP_DOMAIN_VERIFY, "", signUpDomainVerifySaga)
+];
 
 function getProvider(name) {
     return PROVIDERS.find(p => p.name === name);
 }
 
-export function* signUpSaga(action) {
+function* signUpSaga(action) {
     const {provider: providerName, name, domain, password, email, onError} = action.payload;
 
     const stage = yield select(state => state.signUpDialog.stage);
@@ -132,7 +144,7 @@ export function* signUpSaga(action) {
     }
 }
 
-export function* signUpNameVerifySaga(action) {
+function* signUpNameVerifySaga(action) {
     const {name, onVerify} = action.payload;
 
     try {
@@ -143,7 +155,7 @@ export function* signUpNameVerifySaga(action) {
     }
 }
 
-export function* signUpFindDomainSaga(action) {
+function* signUpFindDomainSaga(action) {
     const {provider, name, onFound} = action.payload;
 
     try {
@@ -154,7 +166,7 @@ export function* signUpFindDomainSaga(action) {
     }
 }
 
-export function* signUpDomainVerifySaga(action) {
+function* signUpDomainVerifySaga(action) {
     const {provider: providerName, name, onVerify} = action.payload;
 
     const provider = getProvider(providerName);

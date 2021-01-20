@@ -1,104 +1,6 @@
-import {
-    GO_HOME,
-    GO_HOME_NEWS,
-    GO_TO_LOCATION,
-    GO_TO_PAGE_WITH_DEFAULT_SUBPAGE,
-    INIT_FROM_LOCATION,
-    INIT_STORAGE,
-    NEW_LOCATION,
-    UPDATE_LOCATION
-} from "state/navigation/actions";
-import { ERROR_AUTH_INVALID, ERROR_THROWN } from "state/error/actions";
-import { OWNER_LOAD, OWNER_SWITCH, OWNER_VERIFY } from "state/owner/actions";
-import {
-    CONNECT_TO_HOME,
-    CONNECTED_TO_HOME,
-    DISCONNECTED_FROM_HOME,
-    HOME_OWNER_VERIFY,
-    HOME_RESTORE
-} from "state/home/actions";
-import { CARTES_LOAD, CARTES_SET } from "state/cartes/actions";
-import { NODE_NAME_LOAD, NODE_NAME_UPDATE, REGISTER_NAME } from "state/nodename/actions";
-import { PROFILE_LOAD, PROFILE_UPDATE } from "state/profile/actions";
-import {
-    FEED_FUTURE_SLICE_LOAD,
-    FEED_GENERAL_LOAD,
-    FEED_PAST_SLICE_LOAD,
-    FEED_STATUS_LOAD,
-    FEED_STATUS_UPDATE,
-    FEED_SUBSCRIBE,
-    FEED_UNSUBSCRIBE,
-    FEEDS_UPDATE
-} from "state/feeds/actions";
-import {
-    COMMENT_COPY_LINK,
-    COMMENT_DELETE,
-    COMMENT_DIALOG_COMMENT_LOAD,
-    COMMENT_LOAD,
-    COMMENT_POST,
-    COMMENT_REACT,
-    COMMENT_REACTION_DELETE,
-    COMMENT_REACTION_LOAD,
-    COMMENT_REPLY,
-    COMMENT_VERIFY,
-    COMMENTS_FUTURE_SLICE_LOAD,
-    COMMENTS_LOAD_ALL,
-    COMMENTS_PAST_SLICE_LOAD,
-    COMMENTS_RECEIVER_SWITCH,
-    COMMENTS_UPDATE,
-    DETAILED_POSTING_LOAD,
-    FOCUSED_COMMENT_LOAD,
-    GLANCE_COMMENT_LOAD
-} from "state/detailedposting/actions";
-import {
-    COMPOSE_DRAFT_LIST_ITEM_DELETE,
-    COMPOSE_DRAFT_LIST_ITEM_RELOAD,
-    COMPOSE_DRAFT_LIST_LOAD,
-    COMPOSE_DRAFT_LOAD,
-    COMPOSE_DRAFT_REVISION_DELETE,
-    COMPOSE_DRAFT_SAVE,
-    COMPOSE_FEATURES_LOAD,
-    COMPOSE_POST,
-    COMPOSE_POSTING_LOAD
-} from "state/compose/actions";
-import {
-    POSTING_COMMENTS_SUBSCRIBE,
-    POSTING_COMMENTS_UNSUBSCRIBE,
-    POSTING_COPY_LINK,
-    POSTING_DELETE,
-    POSTING_LOAD,
-    POSTING_REACT,
-    POSTING_REACTION_DELETE,
-    POSTING_REACTION_LOAD,
-    POSTING_VERIFY
-} from "state/postings/actions";
-import {
-    SETTINGS_CLIENT_VALUES_LOAD,
-    SETTINGS_CLIENT_VALUES_LOADED,
-    SETTINGS_NODE_META_LOAD,
-    SETTINGS_NODE_VALUES_LOAD,
-    SETTINGS_UPDATE,
-    SETTINGS_UPDATE_SUCCEEDED
-} from "state/settings/actions";
-import { NAMING_NAME_LOAD, NAMING_NAMES_MAINTENANCE, NAMING_NAMES_USED } from "state/naming/actions";
-import {
-    REACTION_VERIFY,
-    REACTIONS_DIALOG_PAST_REACTIONS_LOAD,
-    REACTIONS_DIALOG_TOTALS_LOAD
-} from "state/reactionsdialog/actions";
-import { POSTING_REPLY } from "state/postingreply/actions";
-import { STORY_PINNING_UPDATE, STORY_READING_UPDATE } from "state/stories/actions";
-import { STORY_CHANGE_DATE } from "state/changedatedialog/actions";
-import { PEOPLE_GENERAL_LOAD, SUBSCRIBERS_LOAD, SUBSCRIPTIONS_LOAD } from "state/people/actions";
-import { FLASH_BOX } from "state/flashbox/actions";
-import { SIGN_UP, SIGN_UP_DOMAIN_VERIFY, SIGN_UP_FIND_DOMAIN, SIGN_UP_NAME_VERIFY } from "state/signupdialog/actions";
-import { REFRESH_SHOW } from "state/refresh/actions";
-import {
-    WEB_PUSH_INVITATION_DECLINED,
-    WEB_PUSH_INVITE,
-    WEB_PUSH_SUBSCRIBE,
-    WEB_PUSH_UNSUBSCRIBE
-} from "state/webpush/actions";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { CARTES_SET } from "state/cartes/actions";
+import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import pulse from "state/pulse/reducer";
@@ -131,109 +33,33 @@ import refresh from "state/refresh/reducer";
 import webPush from "state/webpush/reducer";
 
 import createSagaMiddleware from 'redux-saga';
-import { spawn, takeEvery, takeLatest } from 'redux-saga/effects';
-import { flushPostponedIntroducedSaga, introduce } from "api/node/introduce";
-import { askNaming, flushPostponedNamingSaga } from "api/node/ask-naming";
+import { spawn, takeEvery } from 'redux-saga/effects';
+import { flushPostponedIntroducedSaga } from "api/node/introduce";
+import { flushPostponedNamingSaga } from "api/node/ask-naming";
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
-import {
-    goHomeNewsSaga,
-    goHomeSaga,
-    goToLocationSaga,
-    goToPageWithDefaultSubpageSaga,
-    initFromLocationSaga,
-    initStorageSaga,
-    newLocationSaga
-} from "state/navigation/sagas";
-import { errorAuthInvalidSaga, errorSaga } from "state/error/sagas";
-import { ownerLoadSaga, ownerSwitchSaga, ownerVerifySaga } from "state/owner/sagas";
-import { connectToHomeSaga, verifyHomeOwnerSaga } from "state/home/connect";
-import { homeRestoreSaga } from "state/home/sagas";
-import { cartesLoadSaga } from "state/cartes/sagas";
-import { nodeNameLoadSaga, nodeNameUpdateSaga, registerNameSaga } from "state/nodename/sagas";
-import { profileLoadSaga, profileUpdateSaga } from "state/profile/sagas";
-import {
-    feedFutureSliceLoadSaga,
-    feedGeneralLoadSaga,
-    feedPastSliceLoadSaga,
-    feedStatusLoadSaga,
-    feedStatusUpdateSaga,
-    feedSubscribeSaga,
-    feedsUpdateSaga,
-    feedUnsubscribeSaga
-} from "state/feeds/sagas";
-import {
-    commentCopyLinkSaga,
-    commentDeleteSaga,
-    commentDialogCommentLoadSaga,
-    commentLoadSaga,
-    commentPostSaga,
-    commentReactionDeleteSaga,
-    commentReactionLoadSaga,
-    commentReactSaga,
-    commentReplySaga,
-    commentsFutureSliceLoadSaga,
-    commentsLoadAllSaga,
-    commentsPastSliceLoadSaga,
-    commentsReceiverSwitchSaga,
-    commentsUpdateSaga,
-    commentVerifySaga,
-    detailedPostingLoadSaga,
-    focusedCommentLoadSaga,
-    glanceCommentLoadSaga
-} from "state/detailedposting/sagas";
-import {
-    composeDraftListItemDeleteSaga,
-    composeDraftListItemReloadSaga,
-    composeDraftListLoadSaga,
-    composeDraftLoadSaga,
-    composeDraftRevisionDeleteSaga,
-    composeDraftSaveSaga,
-    composeFeaturesLoadSaga,
-    composePostingLoadSaga,
-    composePostSaga
-} from "state/compose/sagas";
-import {
-    postingCommentsSubscribeSaga,
-    postingCommentsUnsubscribeSaga,
-    postingCopyLinkSaga,
-    postingDeleteSaga,
-    postingLoadSaga,
-    postingReactionDeleteSaga,
-    postingReactionLoadSaga,
-    postingReactSaga,
-    postingVerifySaga
-} from "state/postings/sagas";
-import {
-    settingsClientValuesLoadSaga,
-    settingsNodeMetaLoadSaga,
-    settingsNodeValuesLoadSaga,
-    settingsUpdateSaga,
-    settingsUpdateSucceededSaga
-} from "state/settings/sagas";
-import { namingNameLoadSaga, namingNamesMaintenanceSaga, namingNamesUsedSaga } from "state/naming/sagas";
-import {
-    reactionsDialogPastReactionsLoadSaga,
-    reactionsDialogTotalsLoadSaga,
-    reactionVerifySaga
-} from "state/reactionsdialog/sagas";
-import { postingReplySaga } from "state/postingreply/sagas";
-import { storyPinningUpdateSaga, storyReadingUpdateSaga } from "state/stories/sagas";
-import { storyChangeDateSaga } from "state/changedatedialog/sagas";
-import { peopleGeneralLoadSaga, subscribersLoadSaga, subscriptionsLoadSaga } from "state/people/sagas";
-import { flashBoxSaga } from "state/flashbox/sagas";
-import {
-    signUpDomainVerifySaga,
-    signUpFindDomainSaga,
-    signUpNameVerifySaga,
-    signUpSaga
-} from "state/signupdialog/sagas";
-import { refreshShowSaga } from "state/refresh/sagas";
-import {
-    webPushInvitationDeclinedSaga,
-    webPushInviteSaga,
-    webPushSubscribeSaga,
-    webPushUnsubscribeSaga
-} from "state/webpush/sagas";
+import navigationExecutors from "state/navigation/sagas";
+import errorExecutors from "state/error/sagas";
+import ownerExecutors from "state/owner/sagas";
+import connectExecutors from "state/home/connect";
+import homeExecutors from "state/home/sagas";
+import cartesExecutors from "state/cartes/sagas";
+import nodeNameExecutors from "state/nodename/sagas";
+import profileExecutors from "state/profile/sagas";
+import feedExecutors from "state/feeds/sagas";
+import detailedPostingExecutors from "state/detailedposting/sagas";
+import composeExecutors from "state/compose/sagas";
+import postingsExecutors from "state/postings/sagas";
+import settingsExecutors from "state/settings/sagas";
+import namingExecutors from "state/naming/sagas";
+import reactionsDialogExecutors from "state/reactionsdialog/sagas";
+import postingReplyExecutors from "state/postingreply/sagas";
+import storiesExecutors from "state/stories/sagas";
+import changeDateDialogExecutors from "state/changedatedialog/sagas";
+import peopleExecutors from "state/people/sagas";
+import flashBoxExecutors from "state/flashbox/sagas";
+import signUpDialogExecutors from "state/signupdialog/sagas";
+import refreshExecutors from "state/refresh/sagas";
+import webPushExecutors from "state/webpush/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -254,6 +80,39 @@ import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
 import webPushTriggers from "state/webpush/triggers";
+
+import { collectExecutors, invokeExecutors } from "state/executor";
+
+const reducers = combineReducers({
+    pulse,
+    error,
+    naming,
+    node,
+    home,
+    tokens,
+    navigation,
+    connectDialog,
+    owner,
+    nodeName,
+    profile,
+    detailedPosting,
+    compose,
+    postings,
+    feeds,
+    settings,
+    cartes,
+    reactionsDialog,
+    postingReply,
+    changeDateDialog,
+    people,
+    messageBox,
+    confirmBox,
+    flashBox,
+    signUpDialog,
+    quickTips,
+    refresh,
+    webPush
+});
 
 const triggers = collectTriggers(
     homeTriggers,
@@ -276,6 +135,32 @@ const triggers = collectTriggers(
     webPushTriggers
 );
 
+const executors = collectExecutors(
+    navigationExecutors,
+    errorExecutors,
+    ownerExecutors,
+    connectExecutors,
+    homeExecutors,
+    nodeNameExecutors,
+    cartesExecutors,
+    profileExecutors,
+    feedExecutors,
+    detailedPostingExecutors,
+    composeExecutors,
+    postingsExecutors,
+    settingsExecutors,
+    namingExecutors,
+    reactionsDialogExecutors,
+    postingReplyExecutors,
+    storiesExecutors,
+    changeDateDialogExecutors,
+    peopleExecutors,
+    flashBoxExecutors,
+    signUpDialogExecutors,
+    refreshExecutors,
+    webPushExecutors
+);
+
 function* flushPostponedSaga() {
     yield flushPostponedIntroducedSaga();
     yield flushPostponedNamingSaga();
@@ -284,141 +169,17 @@ function* flushPostponedSaga() {
 function* combinedSaga() {
     yield spawn(signalPostInitSaga);
     yield spawn(pulseSaga);
-    yield takeLatest(INIT_STORAGE, initStorageSaga);
-    yield takeLatest(INIT_FROM_LOCATION, initFromLocationSaga);
-    yield takeEvery(NEW_LOCATION, newLocationSaga);
-    yield takeEvery(UPDATE_LOCATION, newLocationSaga);
-    yield takeLatest(GO_TO_LOCATION, goToLocationSaga);
-    yield takeLatest(GO_TO_PAGE_WITH_DEFAULT_SUBPAGE, goToPageWithDefaultSubpageSaga);
-    yield takeLatest(ERROR_THROWN, errorSaga);
-    yield takeLatest(ERROR_AUTH_INVALID, errorAuthInvalidSaga);
-    yield takeLatest(OWNER_LOAD, ownerLoadSaga);
-    yield takeLatest(OWNER_VERIFY, askNaming(ownerVerifySaga));
-    yield takeLatest(OWNER_SWITCH, ownerSwitchSaga);
-    yield takeLatest(CONNECT_TO_HOME, connectToHomeSaga);
-    yield takeLatest(HOME_RESTORE, homeRestoreSaga);
-    yield takeLatest(HOME_OWNER_VERIFY, askNaming(verifyHomeOwnerSaga));
-    yield takeLatest(NODE_NAME_LOAD, nodeNameLoadSaga);
-    yield takeLatest(CARTES_LOAD, cartesLoadSaga);
-    yield takeEvery(CONNECTED_TO_HOME, flushPostponedSaga);
-    yield takeEvery(DISCONNECTED_FROM_HOME, flushPostponedSaga);
-    yield takeEvery(CARTES_SET, flushPostponedSaga);
-    yield takeLatest(PROFILE_LOAD, introduce(profileLoadSaga));
-    yield takeLatest(PROFILE_UPDATE, profileUpdateSaga);
-    yield takeLatest(REGISTER_NAME, registerNameSaga);
-    yield takeLatest(NODE_NAME_UPDATE, nodeNameUpdateSaga);
-    yield takeEvery(FEED_GENERAL_LOAD, introduce(feedGeneralLoadSaga));
-    yield takeEvery(FEED_SUBSCRIBE, introduce(feedSubscribeSaga));
-    yield takeEvery(FEED_UNSUBSCRIBE, introduce(feedUnsubscribeSaga));
-    yield takeEvery(FEED_STATUS_LOAD, introduce(feedStatusLoadSaga));
-    yield takeEvery(FEED_STATUS_UPDATE, feedStatusUpdateSaga);
-    yield takeEvery(FEED_PAST_SLICE_LOAD, introduce(feedPastSliceLoadSaga));
-    yield takeEvery(FEED_FUTURE_SLICE_LOAD, introduce(feedFutureSliceLoadSaga));
-    yield takeLatest(FEEDS_UPDATE, introduce(feedsUpdateSaga));
-    yield takeLatest(DETAILED_POSTING_LOAD, introduce(detailedPostingLoadSaga));
-    yield takeLatest(COMPOSE_FEATURES_LOAD, composeFeaturesLoadSaga);
-    yield takeLatest(COMPOSE_POSTING_LOAD, introduce(composePostingLoadSaga));
-    yield takeLatest(COMPOSE_POST, composePostSaga);
-    yield takeLatest(POSTING_DELETE, postingDeleteSaga);
-    yield takeLatest(POSTING_LOAD, introduce(postingLoadSaga));
-    yield takeLatest(SETTINGS_NODE_VALUES_LOAD, introduce(settingsNodeValuesLoadSaga));
-    yield takeLatest(SETTINGS_NODE_META_LOAD, introduce(settingsNodeMetaLoadSaga));
-    yield takeLatest(SETTINGS_CLIENT_VALUES_LOAD, introduce(settingsClientValuesLoadSaga));
-    yield takeLatest(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
-    yield takeLatest(SETTINGS_UPDATE, settingsUpdateSaga);
-    yield takeLatest(SETTINGS_UPDATE_SUCCEEDED, settingsUpdateSucceededSaga);
-    yield takeEvery(NAMING_NAMES_USED, askNaming(namingNamesUsedSaga));
-    yield takeEvery(NAMING_NAME_LOAD, askNaming(namingNameLoadSaga));
-    yield takeLatest(NAMING_NAMES_MAINTENANCE, namingNamesMaintenanceSaga);
-    yield takeEvery(POSTING_VERIFY, postingVerifySaga);
-    yield takeEvery(POSTING_REACT, introduce(postingReactSaga));
-    yield takeEvery(POSTING_REACTION_LOAD, postingReactionLoadSaga);
-    yield takeEvery(POSTING_REACTION_DELETE, introduce(postingReactionDeleteSaga));
-    yield takeLatest(REACTIONS_DIALOG_PAST_REACTIONS_LOAD, reactionsDialogPastReactionsLoadSaga);
-    yield takeLatest(REACTIONS_DIALOG_TOTALS_LOAD, reactionsDialogTotalsLoadSaga);
-    yield takeEvery(REACTION_VERIFY, reactionVerifySaga);
-    yield takeLatest(COMPOSE_DRAFT_LOAD, introduce(composeDraftLoadSaga));
-    yield takeLatest(COMPOSE_DRAFT_SAVE, composeDraftSaveSaga);
-    yield takeLatest(COMPOSE_DRAFT_LIST_LOAD, introduce(composeDraftListLoadSaga));
-    yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_RELOAD, composeDraftListItemReloadSaga);
-    yield takeLatest(COMPOSE_DRAFT_LIST_ITEM_DELETE, composeDraftListItemDeleteSaga);
-    yield takeLatest(COMPOSE_DRAFT_REVISION_DELETE, composeDraftRevisionDeleteSaga);
-    yield takeLatest(POSTING_REPLY, postingReplySaga);
-    yield takeEvery(STORY_PINNING_UPDATE, storyPinningUpdateSaga);
-    yield takeLatest(STORY_CHANGE_DATE, storyChangeDateSaga);
-    yield takeEvery(STORY_READING_UPDATE, storyReadingUpdateSaga);
-    yield takeLatest(PEOPLE_GENERAL_LOAD, peopleGeneralLoadSaga);
-    yield takeLatest(SUBSCRIBERS_LOAD, subscribersLoadSaga);
-    yield takeLatest(SUBSCRIPTIONS_LOAD, subscriptionsLoadSaga);
-    yield takeEvery(POSTING_COPY_LINK, postingCopyLinkSaga);
-    yield takeEvery(FLASH_BOX, flashBoxSaga);
-    yield takeLatest(COMMENTS_RECEIVER_SWITCH, introduce(commentsReceiverSwitchSaga));
-    yield takeLatest(COMMENTS_LOAD_ALL, introduce(commentsLoadAllSaga));
-    yield takeEvery(COMMENTS_PAST_SLICE_LOAD, introduce(commentsPastSliceLoadSaga));
-    yield takeEvery(COMMENTS_FUTURE_SLICE_LOAD, introduce(commentsFutureSliceLoadSaga));
-    yield takeLatest(COMMENTS_UPDATE, introduce(commentsUpdateSaga));
-    yield takeEvery(COMMENT_LOAD, introduce(commentLoadSaga));
-    yield takeLatest(COMMENT_POST, commentPostSaga);
-    yield takeEvery(COMMENT_DELETE, commentDeleteSaga);
-    yield takeLatest(FOCUSED_COMMENT_LOAD, focusedCommentLoadSaga);
-    yield takeEvery(COMMENT_COPY_LINK, commentCopyLinkSaga);
-    yield takeLatest(COMMENT_DIALOG_COMMENT_LOAD, commentDialogCommentLoadSaga);
-    yield takeEvery(COMMENT_VERIFY, commentVerifySaga);
-    yield takeEvery(COMMENT_REACT, introduce(commentReactSaga));
-    yield takeEvery(COMMENT_REACTION_LOAD, introduce(commentReactionLoadSaga));
-    yield takeEvery(COMMENT_REACTION_DELETE, introduce(commentReactionDeleteSaga));
-    yield takeEvery(COMMENT_REPLY, commentReplySaga);
-    yield takeEvery(GLANCE_COMMENT_LOAD, glanceCommentLoadSaga);
-    yield takeEvery(POSTING_COMMENTS_SUBSCRIBE, introduce(postingCommentsSubscribeSaga));
-    yield takeEvery(POSTING_COMMENTS_UNSUBSCRIBE, introduce(postingCommentsUnsubscribeSaga));
-    yield takeLatest(SIGN_UP, signUpSaga);
-    yield takeLatest(SIGN_UP_NAME_VERIFY, signUpNameVerifySaga);
-    yield takeLatest(SIGN_UP_FIND_DOMAIN, signUpFindDomainSaga);
-    yield takeLatest(SIGN_UP_DOMAIN_VERIFY, signUpDomainVerifySaga);
-    yield takeLatest(GO_HOME, goHomeSaga);
-    yield takeLatest(GO_HOME_NEWS, goHomeNewsSaga);
-    yield takeLatest(REFRESH_SHOW, refreshShowSaga);
-    yield takeLatest(WEB_PUSH_SUBSCRIBE, webPushSubscribeSaga);
-    yield takeLatest(WEB_PUSH_UNSUBSCRIBE, webPushUnsubscribeSaga);
-    yield takeLatest(WEB_PUSH_INVITE, webPushInviteSaga);
-    yield takeLatest(WEB_PUSH_INVITATION_DECLINED, webPushInvitationDeclinedSaga);
 
-    yield invokeTriggers(triggers);
+    yield takeEvery(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, CARTES_SET, SETTINGS_CLIENT_VALUES_LOADED],
+        flushPostponedSaga
+    );
+    yield takeEvery(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
+
+    yield* invokeTriggers(triggers);
+    yield* invokeExecutors(executors);
 }
 
 const sagaMiddleware = createSagaMiddleware();
-export default createStore(
-    combineReducers({
-        pulse,
-        error,
-        naming,
-        node,
-        home,
-        tokens,
-        navigation,
-        connectDialog,
-        owner,
-        nodeName,
-        profile,
-        detailedPosting,
-        compose,
-        postings,
-        feeds,
-        settings,
-        cartes,
-        reactionsDialog,
-        postingReply,
-        changeDateDialog,
-        people,
-        messageBox,
-        confirmBox,
-        flashBox,
-        signUpDialog,
-        quickTips,
-        refresh,
-        webPush
-    }),
-    applyMiddleware(sagaMiddleware)
-);
-
+export default createStore(reducers, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(combinedSaga);
