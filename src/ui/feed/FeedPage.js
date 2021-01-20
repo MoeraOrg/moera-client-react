@@ -97,14 +97,18 @@ class FeedPage extends React.PureComponent {
     }
 
     onScroll = () => {
+        this.updateAtMoment();
+        this.onView();
+    };
+
+    updateAtMoment = debounce(() => {
         const at = FeedPage.getTopmostMoment();
         if (at !== this.prevAt) {
             this.props.feedScrolled(this.props.feedName, at);
         }
         this.prevAt = at;
         this.setState({scrolled: window.scrollY > 5});
-        this.onView();
-    };
+    }, 500);
 
     onView = debounce(() => {
         const {feedName, atHomeNode, feedStatusUpdate} = this.props;
