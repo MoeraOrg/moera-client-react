@@ -1,12 +1,14 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 import { Node } from "api/node";
 import { errorThrown } from "state/error/actions";
 import {
     PEOPLE_GENERAL_LOAD,
     peopleGeneralLoaded,
-    peopleGeneralLoadFailed, SUBSCRIBERS_LOAD,
+    peopleGeneralLoadFailed,
+    SUBSCRIBERS_LOAD,
     subscribersLoaded,
-    subscribersLoadFailed, SUBSCRIPTIONS_LOAD,
+    subscribersLoadFailed,
+    SUBSCRIPTIONS_LOAD,
     subscriptionsLoaded,
     subscriptionsLoadFailed
 } from "state/people/actions";
