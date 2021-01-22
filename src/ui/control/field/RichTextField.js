@@ -5,7 +5,7 @@ import selectn from 'selectn';
 import cx from 'classnames';
 
 import { FormFieldGroup } from "ui/control/field";
-import { RichTextArea } from "ui/control";
+import { RichTextEditor } from "ui/control";
 
 export class RichTextField extends React.PureComponent {
 
@@ -52,7 +52,7 @@ export class RichTextField extends React.PureComponent {
                             defaultValue={defaultValue}
                         >
                             <>
-                                <RichTextArea
+                                <RichTextEditor
                                     {...field}
                                     id={name}
                                     className={cx(

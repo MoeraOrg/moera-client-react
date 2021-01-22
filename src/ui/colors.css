@@ -34,4 +34,7 @@
     --link: var(--blue);
     --link-hover: #0056b3;
     --link-button: #385898;
+
+    --input-focus-border: #80bdff;
+    --input-focus-shadow: rgba(0,123,255,.25);
 }

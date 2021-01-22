@@ -4,15 +4,15 @@ import TextareaAutosize from 'react-autosize-textarea';
 
 import { replaceSmileys } from "util/text";
 
-export class RichTextArea extends React.PureComponent {
+export default class RichTextArea extends React.PureComponent {
 
     static propTypes = {
         name: PropType.string,
         value: PropType.string,
         rows: PropType.number,
         placeholder: PropType.string,
-        autoFocus: PropType.bool,
         className: PropType.string,
+        autoFocus: PropType.bool,
         autoComplete: PropType.string,
         disabled: PropType.bool,
         smileysEnabled: PropType.bool,

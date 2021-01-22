@@ -17,6 +17,6 @@ export { Popover } from "ui/control/Popover";
 export { ReactionButton } from "ui/control/ReactionButton";
 export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
 export { ReactionTotals } from "ui/control/ReactionTotals";
-export { RichTextArea } from "ui/control/RichTextArea";
+export { RichTextEditor } from "ui/control/richtexteditor/RichTextEditor";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
 export { Wrapper } from "ui/control/Wrapper";

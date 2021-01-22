@@ -1,0 +1,14 @@
+.rich-text-editor {
+    height: min-content;
+}
+
+.rich-text-editor:focus-within {
+    border-color: var(--input-focus-border);
+    outline: 0;
+    box-shadow: 0 0 0 .2rem var(--input-focus-shadow);
+}
+
+.rich-text-editor TEXTAREA {
+    width: 100%;
+    border: 0;
+}
