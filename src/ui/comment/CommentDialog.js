@@ -64,7 +64,7 @@ class CommentDialog extends React.PureComponent {
                                  onClose={commentDialogConflictClose}/>
                 <Form>
                     <div className="modal-body">
-                        <RichTextField name="body" rows={5} autoFocus disabled={beingPosted}
+                        <RichTextField name="body" rows={5} anyValue autoFocus disabled={beingPosted}
                                        smileysEnabled={smileysEnabled} onKeyDown={this.onKeyDown}/>
                     </div>
                     <div className="modal-footer">

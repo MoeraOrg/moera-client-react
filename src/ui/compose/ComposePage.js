@@ -67,7 +67,7 @@ class ComposePage extends React.PureComponent {
                             <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
                         <RichTextField name="body" disabled={loadingContent || beingPosted}
-                                       smileysEnabled={smileysEnabled} autoFocus/>
+                                       smileysEnabled={smileysEnabled} anyValue autoFocus/>
                         <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>

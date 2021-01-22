@@ -1,17 +1,27 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { Field } from 'formik';
+import selectn from 'selectn';
+import cx from 'classnames';
 
-import { TextField } from "ui/control/field/TextField";
-import { replaceSmileys } from "util/text";
+import { FormFieldGroup } from "ui/control/field";
+import { RichTextArea } from "ui/control";
 
 export class RichTextField extends React.PureComponent {
 
     static propTypes = {
         name: PropType.string,
+        title: PropType.string,
         rows: PropType.number,
         placeholder: PropType.string,
         autoFocus: PropType.bool,
+        anyValue: PropType.bool,
+        className: PropType.string,
+        autoComplete: PropType.string,
+        noFeedback: PropType.bool,
         disabled: PropType.bool,
+        initialValue: PropType.string,
+        defaultValue: PropType.string,
         smileysEnabled: PropType.bool,
         onKeyDown: PropType.func
     };
@@ -21,27 +31,50 @@ export class RichTextField extends React.PureComponent {
         placeholder: "Enter text here..."
     }
 
-    #spaceInput = false;
-
-    onChange = event => {
-        const {smileysEnabled} = this.props;
-
-        if (smileysEnabled && this.#spaceInput) {
-            event.target.value = replaceSmileys(event.target.value, false);
-        }
-    }
-
-    onInput = event => {
-        this.#spaceInput = event.inputType === "insertLineBreak"
-            || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/));
-    }
-
     render() {
-        const {name, disabled, autoFocus, onKeyDown} = this.props;
+        const {
+            name, title, rows, placeholder, autoFocus, anyValue, className, autoComplete, noFeedback = false,
+            disabled = false, initialValue, defaultValue, smileysEnabled, onKeyDown
+        } = this.props;
 
         return (
-            <TextField name={name} anyValue autoFocus={autoFocus} disabled={disabled} onChange={this.onChange}
-                       onInput={this.onInput} onKeyDown={onKeyDown}/>
+            <Field name={name}>
+                {({field, form}) => {
+                    const touched = selectn(field.name, form.touched);
+                    const error = selectn(field.name, form.errors);
+                    return (
+                        <FormFieldGroup
+                            title={title}
+                            name={name}
+                            field={field}
+                            form={form}
+                            initialValue={initialValue}
+                            defaultValue={defaultValue}
+                        >
+                            <>
+                                <RichTextArea
+                                    {...field}
+                                    id={name}
+                                    className={cx(
+                                        "form-control", {
+                                            "is-valid": !anyValue && touched && !error,
+                                            "is-invalid": !anyValue && touched && error,
+                                            [className]: !!className
+                                        })}
+                                    autoFocus={autoFocus}
+                                    autoComplete={autoComplete}
+                                    placeholder={placeholder}
+                                    rows={rows}
+                                    disabled={disabled}
+                                    smileysEnabled={smileysEnabled}
+                                    onKeyDown={onKeyDown}
+                                />
+                                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                            </>
+                        </FormFieldGroup>
+                    );
+                }}
+            </Field>
         );
     }
 

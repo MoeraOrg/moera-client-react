@@ -56,7 +56,7 @@ class CommentCompose extends React.PureComponent {
                     <Form>
                         <div className="content">
                             <CommentComposeRepliedTo/>
-                            <RichTextField name="body" rows={1}
+                            <RichTextField name="body" rows={1} anyValue
                                            placeholder={`Write a comment to ${mentionName(receiverName)} here...`}
                                            disabled={beingPosted} smileysEnabled={smileysEnabled}
                                            onKeyDown={this.onKeyDown}/>

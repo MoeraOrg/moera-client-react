@@ -22,9 +22,7 @@ export class TextField extends React.PureComponent {
         disabled: PropType.bool,
         initialValue: PropType.string,
         defaultValue: PropType.string,
-        onKeyDown: PropType.func,
-        onChange: PropType.func,
-        onInput: PropType.func
+        onKeyDown: PropType.func
     };
 
     static defaultProps = {
@@ -39,38 +37,16 @@ export class TextField extends React.PureComponent {
     }
 
     componentDidMount() {
-        const {autoFocus, onInput} = this.props;
+        const {autoFocus} = this.props;
 
-        if (this.inputDom.current) {
-            if (onInput) {
-                this.inputDom.current.addEventListener("input", onInput);
-            }
-            if (autoFocus) {
-                this.inputDom.current.focus();
-            }
-        }
-    }
-
-    componentWillUnmount() {
-        const {onInput} = this.props;
-
-        if (this.inputDom.current && onInput) {
-            this.inputDom.current.removeEventListener("input", onInput);
+        if (this.inputDom.current && autoFocus) {
+            this.inputDom.current.focus();
         }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (!this.props.disabled && prevProps.disabled && this.props.autoFocus && this.inputDom.current) {
             this.inputDom.current.focus();
-        }
-    }
-
-    onChange = fieldOnChange => event => {
-        if (this.props.onChange) {
-            this.props.onChange(event);
-        }
-        if (fieldOnChange) {
-            fieldOnChange(event);
         }
     }
 
@@ -94,8 +70,7 @@ export class TextField extends React.PureComponent {
                         >
                             <>
                                 <TextareaAutosize
-                                    name={field.name}
-                                    value={field.value}
+                                    {...field}
                                     id={name}
                                     className={cx(
                                         "form-control", {
@@ -109,9 +84,6 @@ export class TextField extends React.PureComponent {
                                     maxRows={20}
                                     disabled={disabled}
                                     onKeyDown={onKeyDown}
-                                    onBlur={field.onBlur}
-                                    onChange={this.onChange(field.onChange)}
-                                    ref={this.inputDom} // impossible to pass lambda here
                                 />
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
                             </>
