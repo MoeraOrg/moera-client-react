@@ -75,7 +75,8 @@ class ComposeDraftSelector extends React.PureComponent {
                                                 {"show": visible}
                                             )}>
                                                 {draftList.map(draft =>
-                                                    <ComposeDraftItem draft={draft} current={draftId === draft.id}
+                                                    <ComposeDraftItem key={draft.id} draft={draft}
+                                                                      current={draftId === draft.id}
                                                                       onSelect={this.onSelect}
                                                                       onDelete={this.onDelete}/>
                                                 )}
