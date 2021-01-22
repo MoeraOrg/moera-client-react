@@ -35,11 +35,13 @@ export const ErrorResult = schema({
         },
         "error": {
             type: "object",
-            "code": {
-                type: "integer"
-            },
-            "message": {
-                type: "string"
+            properties: {
+                "code": {
+                    type: "integer"
+                },
+                "message": {
+                    type: "string"
+                }
             },
             additionalProperties: false,
             required: ["code", "message"]
