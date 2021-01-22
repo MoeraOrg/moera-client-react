@@ -9,7 +9,7 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerComment, isCommentComposerConflict } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
-import { TextField } from "ui/control/field";
+import { RichTextField } from "ui/control/field";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import { replaceSmileys } from "util/text";
 import { parseBool } from "util/misc";
@@ -50,7 +50,9 @@ class CommentDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, conflict, beingPosted, closeCommentDialog, commentDialogConflictClose} = this.props;
+        const {
+            show, conflict, beingPosted, smileysEnabled, closeCommentDialog, commentDialogConflictClose
+        } = this.props;
 
         if (!show) {
             return null;
@@ -62,8 +64,8 @@ class CommentDialog extends React.PureComponent {
                                  onClose={commentDialogConflictClose}/>
                 <Form>
                     <div className="modal-body">
-                        <TextField name="body" rows={5} anyValue autoFocus disabled={beingPosted}
-                                   onKeyDown={this.onKeyDown}/>
+                        <RichTextField name="body" rows={5} autoFocus disabled={beingPosted}
+                                       smileysEnabled={smileysEnabled} onKeyDown={this.onKeyDown}/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={closeCommentDialog}>Cancel</Button>

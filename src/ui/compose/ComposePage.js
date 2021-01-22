@@ -6,7 +6,7 @@ import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
 import { ConflictWarning, Loading } from "ui/control";
-import { InputField, TextField } from "ui/control/field";
+import { InputField, RichTextField } from "ui/control/field";
 import { Page } from "ui/page/Page";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
@@ -22,7 +22,6 @@ import ComposeResetButton from "ui/compose/ComposeResetButton";
 import Jump from "ui/navigation/Jump";
 import composePageLogic from "ui/compose/compose-page-logic";
 import { parseBool } from "util/misc";
-import { replaceSmileys } from "util/text";
 import "./ComposePage.css";
 
 class ComposePage extends React.PureComponent {
@@ -43,17 +42,9 @@ class ComposePage extends React.PureComponent {
         }
     }
 
-    onInput = event => {
-        if (this.props.smileysEnabled && (event.inputType === "insertLineBreak"
-            || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/)))) {
-
-            event.target.value = replaceSmileys(event.target.value, false);
-        }
-    }
-
     render() {
         const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, loadingDraft, conflict,
-               beingPosted, composeConflictClose} = this.props;
+               beingPosted, smileysEnabled, composeConflictClose} = this.props;
         const title = postingId == null ? "New Post" : "Edit Post";
         const loadingContent = loadingPosting || loadingDraft;
         return (
@@ -75,8 +66,8 @@ class ComposePage extends React.PureComponent {
                         {subjectPresent &&
                             <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
-                        <TextField name="body" anyValue autoFocus disabled={loadingContent || beingPosted}
-                                   onInput={this.onInput}/>
+                        <RichTextField name="body" disabled={loadingContent || beingPosted}
+                                       smileysEnabled={smileysEnabled} autoFocus/>
                         <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>

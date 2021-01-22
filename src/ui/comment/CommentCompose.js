@@ -11,12 +11,11 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
-import { TextField } from "ui/control/field";
+import { RichTextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { mentionName, parseBool } from "util/misc";
-import { replaceSmileys } from "util/text";
 import "./CommentCompose.css";
 
 class CommentCompose extends React.PureComponent {
@@ -46,16 +45,10 @@ class CommentCompose extends React.PureComponent {
         }
     }
 
-    onInput = event => {
-        if (this.props.smileysEnabled && (event.inputType === "insertLineBreak"
-            || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/)))) {
-
-            event.target.value = replaceSmileys(event.target.value, false);
-        }
-    }
-
     render() {
-        const {homeOwnerName, beingPosted, receiverName, openSignUpDialog, openConnectDialog} = this.props;
+        const {
+            homeOwnerName, beingPosted, receiverName, smileysEnabled, openSignUpDialog, openConnectDialog
+        } = this.props;
 
         if (homeOwnerName) {
             return (
@@ -63,10 +56,10 @@ class CommentCompose extends React.PureComponent {
                     <Form>
                         <div className="content">
                             <CommentComposeRepliedTo/>
-                            <TextField name="body" rows={1}
-                                       placeholder={`Write a comment to ${mentionName(receiverName)} here...`}
-                                       anyValue disabled={beingPosted} onKeyDown={this.onKeyDown}
-                                       onInput={this.onInput}/>
+                            <RichTextField name="body" rows={1}
+                                           placeholder={`Write a comment to ${mentionName(receiverName)} here...`}
+                                           disabled={beingPosted} smileysEnabled={smileysEnabled}
+                                           onKeyDown={this.onKeyDown}/>
                         </div>
                         <CommentComposeButtons loading={beingPosted}/>
                     </Form>

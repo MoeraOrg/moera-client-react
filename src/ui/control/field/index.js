@@ -6,5 +6,6 @@ export { EmojiListInputField } from "ui/control/field/EmojiListInputField";
 export { FormFieldGroup } from "ui/control/field/FormFieldGroup";
 export { InputField } from "ui/control/field/InputField";
 export { NumberField } from "ui/control/field/NumberField";
+export { RichTextField } from "ui/control/field/RichTextField";
 export { SelectField } from "ui/control/field/SelectField";
 export { TextField } from "ui/control/field/TextField";

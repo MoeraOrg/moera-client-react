@@ -23,7 +23,8 @@ export class TextField extends React.PureComponent {
         initialValue: PropType.string,
         defaultValue: PropType.string,
         onKeyDown: PropType.func,
-        onInput: PropType.func,
+        onChange: PropType.func,
+        onInput: PropType.func
     };
 
     static defaultProps = {
@@ -64,6 +65,15 @@ export class TextField extends React.PureComponent {
         }
     }
 
+    onChange = fieldOnChange => event => {
+        if (this.props.onChange) {
+            this.props.onChange(event);
+        }
+        if (fieldOnChange) {
+            fieldOnChange(event);
+        }
+    }
+
     render() {
         const {name, title, rows, placeholder, anyValue, className, autoComplete, noFeedback = false, disabled = false,
                initialValue, defaultValue, onKeyDown} = this.props;
@@ -84,7 +94,8 @@ export class TextField extends React.PureComponent {
                         >
                             <>
                                 <TextareaAutosize
-                                    {...field}
+                                    name={field.name}
+                                    value={field.value}
                                     id={name}
                                     className={cx(
                                         "form-control", {
@@ -98,6 +109,8 @@ export class TextField extends React.PureComponent {
                                     maxRows={20}
                                     disabled={disabled}
                                     onKeyDown={onKeyDown}
+                                    onBlur={field.onBlur}
+                                    onChange={this.onChange(field.onChange)}
                                     ref={this.inputDom} // impossible to pass lambda here
                                 />
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
@@ -108,4 +121,5 @@ export class TextField extends React.PureComponent {
             </Field>
         );
     }
+
 }
