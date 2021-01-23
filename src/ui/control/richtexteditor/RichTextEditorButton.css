@@ -1,9 +1,11 @@
 .rich-text-editor-button {
-    font-size: 1.2em;
-    border: 0;
     background-color: transparent;
     color: var(--gray);
-    padding: .25em .5em;
+    font-size: 1.2em;
+    border: 0;
+    padding: 0;
+    width: 1.9em;
+    height: 1.9em;
 }
 
 .rich-text-editor-button:hover {
