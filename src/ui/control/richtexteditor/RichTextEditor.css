@@ -11,7 +11,7 @@
 
 .rich-text-editor TEXTAREA {
     display: block;
-    width: calc(100% - 1.5rem);
+    width: 100%;
     border: 0;
-    margin: .375rem .75rem;
+    padding: .375rem .75rem;
 }

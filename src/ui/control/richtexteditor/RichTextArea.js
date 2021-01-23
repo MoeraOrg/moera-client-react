@@ -18,7 +18,8 @@ export default class RichTextArea extends React.PureComponent {
         smileysEnabled: PropType.bool,
         onKeyDown: PropType.func,
         onChange: PropType.func,
-        onBlur: PropType.func
+        onBlur: PropType.func,
+        textArea: PropType.object
     };
 
     static defaultProps = {
@@ -26,37 +27,45 @@ export default class RichTextArea extends React.PureComponent {
         placeholder: "Enter text here..."
     }
 
-    #inputDom;
     #spaceInput = false;
 
     constructor(props, context) {
         super(props, context);
 
-        this.#inputDom = React.createRef();
+        this.state = {
+            textArea: props.textArea ?? React.createRef()
+        }
     }
 
     componentDidMount() {
         const {autoFocus} = this.props;
+        const {textArea} = this.state;
 
-        if (this.#inputDom.current) {
-            this.#inputDom.current.addEventListener("input", this.onInput);
+        if (textArea.current) {
+            textArea.current.addEventListener("input", this.onInput);
             if (autoFocus) {
-                this.#inputDom.current.focus();
+                textArea.current.focus();
             }
         }
     }
 
     componentWillUnmount() {
-        if (this.#inputDom.current) {
-            this.#inputDom.current.removeEventListener("input", this.onInput);
+        const {textArea} = this.state;
+
+        if (textArea.current) {
+            textArea.current.removeEventListener("input", this.onInput);
         }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {disabled, autoFocus} = this.props;
 
-        if (!disabled && prevProps.disabled && autoFocus && this.#inputDom.current) {
-            this.#inputDom.current.focus();
+        if (!disabled && prevProps.disabled && autoFocus && this.state.textArea.current) {
+            this.state.textArea.current.focus();
+        }
+        if (this.props.textArea !== prevProps.textArea) {
+            this.props.textArea.current = this.state.textArea.current;
+            this.setState({textArea: this.props.textArea});
         }
     }
 
@@ -78,6 +87,7 @@ export default class RichTextArea extends React.PureComponent {
 
     render() {
         const {name, value, className, autoComplete, placeholder, rows, disabled, onKeyDown, onBlur} = this.props;
+        const {textArea} = this.state;
 
         return (
             <TextareaAutosize
@@ -93,7 +103,7 @@ export default class RichTextArea extends React.PureComponent {
                 onKeyDown={onKeyDown}
                 onBlur={onBlur}
                 onChange={this.onChange}
-                ref={this.#inputDom} // impossible to pass lambda here
+                ref={textArea} // impossible to pass lambda here
             />
         );
     }

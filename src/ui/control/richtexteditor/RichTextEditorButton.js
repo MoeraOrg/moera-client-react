@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./RichTextEditorButton.css";
 
-const RichTextEditorButton = ({icon}) => (
-    <button className="rich-text-editor-button">
+const RichTextEditorButton = ({icon, title, onClick}) => (
+    <button className="rich-text-editor-button" title={title} onClick={onClick}>
         <FontAwesomeIcon icon={icon}/>
     </button>
 )

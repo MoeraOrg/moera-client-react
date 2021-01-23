@@ -7,14 +7,17 @@ import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
 import "./RichTextEditor.css";
 
 const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
-                         onKeyDown, onChange, onBlur}) => (
-    <div className={cx("rich-text-editor", className)}>
-        <RichTextEditorPanel/>
-        <RichTextArea name={name} value={value} rows={rows} placeholder={placeholder} autoFocus={autoFocus}
-                      autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
-                      onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur}/>
-    </div>
-);
+                         onKeyDown, onChange, onBlur}) => {
+    const textArea = React.createRef();
+    return (
+        <div className={cx("rich-text-editor", className)}>
+            <RichTextEditorPanel textArea={textArea}/>
+            <RichTextArea name={name} value={value} rows={rows} placeholder={placeholder} autoFocus={autoFocus}
+                          autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
+                          onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur} textArea={textArea}/>
+        </div>
+    );
+};
 
 RichTextEditor.propTypes = {
     name: PropType.string,
