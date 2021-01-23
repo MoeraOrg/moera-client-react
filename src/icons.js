@@ -5,6 +5,8 @@ import {
     faAt,
     faBackspace,
     faBell,
+    faBold,
+    faCaretSquareDown,
     faCertificate,
     faChartBar,
     faChevronDown,
@@ -22,6 +24,9 @@ import {
     faFrown,
     faHistory,
     faHome,
+    faImage,
+    faItalic,
+    faLink,
     faList,
     faNetworkWired,
     faNewspaper,
@@ -29,12 +34,14 @@ import {
     faPenAlt,
     faPlus,
     faQuestionCircle,
+    faQuoteLeft,
     faRemoveFormat,
     faReply,
     faRetweet,
     faShareSquare,
     faSignOutAlt,
     faStar,
+    faStrikethrough,
     faSyncAlt,
     faThumbsDown,
     faThumbsUp,
@@ -62,6 +69,8 @@ export default function initIconLibrary() {
     library.add(faAt);
     library.add(faBackspace);
     library.add(faBell);
+    library.add(faBold);
+    library.add(faCaretSquareDown);
     library.add(faCertificate);
     library.add(faChartBar);
     library.add(faChevronDown);
@@ -83,7 +92,10 @@ export default function initIconLibrary() {
     library.add(faFrown);
     library.add(faHistory);
     library.add(faHome);
+    library.add(faImage);
+    library.add(faItalic);
     library.add(faNetworkWired);
+    library.add(faLink);
     library.add(faList);
     library.add(faMarkdown);
     library.add(faNewspaper);
@@ -91,12 +103,14 @@ export default function initIconLibrary() {
     library.add(faPenAlt);
     library.add(faPlus);
     library.add(faQuestionCircle);
+    library.add(faQuoteLeft);
     library.add(faRemoveFormat);
     library.add(faReply);
     library.add(faRetweet);
     library.add(faShareSquare);
     library.add(faSignOutAlt);
     library.add(faStar);
+    library.add(faStrikethrough);
     library.add(faSyncAlt);
     library.add(faTrashAlt);
     library.add(faThumbsDown);

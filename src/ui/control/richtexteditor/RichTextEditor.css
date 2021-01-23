@@ -1,5 +1,6 @@
 .rich-text-editor {
     height: min-content;
+    padding: 0;
 }
 
 .rich-text-editor:focus-within {
@@ -9,6 +10,8 @@
 }
 
 .rich-text-editor TEXTAREA {
-    width: 100%;
+    display: block;
+    width: calc(100% - 1.5rem);
     border: 0;
+    margin: .375rem .75rem;
 }
