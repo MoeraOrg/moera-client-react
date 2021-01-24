@@ -5,6 +5,7 @@ import * as textFieldEdit from 'text-field-edit';
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import RichTextSpoilerDialog from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextFoldDialog from "ui/control/richtexteditor/RichTextFoldDialog";
+import RichTextLinkDialog from "ui/control/richtexteditor/RichTextLinkDialog";
 import { htmlEntities } from "util/html";
 import "./RichTextEditorPanel.css";
 
@@ -16,7 +17,9 @@ export default class RichTextEditorPanel extends React.PureComponent {
 
     state = {
         spoilerDialog: false,
-        foldDialog: false
+        foldDialog: false,
+        linkDialog: false,
+        dialogText: ""
     };
 
     onBold = event => {
@@ -109,8 +112,36 @@ export default class RichTextEditorPanel extends React.PureComponent {
         event.preventDefault();
     }
 
+    onLink = event => {
+        const {textArea} = this.props;
+
+        this.setState({
+            linkDialog: true,
+            dialogText: textFieldEdit.getSelection(textArea.current)
+        });
+        event.preventDefault();
+    }
+
+    onLinkSubmit = (ok, {href, text}) => {
+        const {textArea} = this.props;
+
+        this.setState({linkDialog: false});
+        if (ok) {
+            if (text) {
+                textFieldEdit.insert(textArea.current, `[${text}](${href})`);
+            } else {
+                if (href) {
+                    textFieldEdit.insert(textArea.current, href);
+                } else {
+                    textFieldEdit.wrapSelection(textArea.current, "[](", ")");
+                }
+            }
+        }
+        textArea.current.focus();
+    }
+
     render() {
-        const {spoilerDialog, foldDialog} = this.state;
+        const {spoilerDialog, foldDialog, linkDialog, dialogText} = this.state;
 
         return (
             <div className="rich-text-editor-panel">
@@ -127,11 +158,12 @@ export default class RichTextEditorPanel extends React.PureComponent {
                     <RichTextEditorButton icon="quote-left" title="Quote" onClick={this.onQuote}/>
                 </div>
                 <div className="group">
-                    <RichTextEditorButton icon="link" title="Link"/>
+                    <RichTextEditorButton icon="link" title="Link" onClick={this.onLink}/>
                     <RichTextEditorButton icon="image" title="Image"/>
                 </div>
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
+                <RichTextLinkDialog show={linkDialog} text={dialogText} onSubmit={this.onLinkSubmit}/>
             </div>
         );
     }
