@@ -3,16 +3,16 @@ import React from 'react';
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog } from "ui/control/richtexteditor/rich-text-editor-dialog";
 
-const RichTextLinkDialog = () => (
+const RichTextImageDialog = () => (
     <>
-        <InputField name="text" title="Text"/>
         <InputField name="href" title="URL" autoFocus/>
+        <InputField name="alt" title="Alternative text"/>
     </>
 );
 
 const mapPropsToValues = props => ({
-    text: props.text ?? "",
-    href: props.href ?? ""
+    href: props.href ?? "",
+    alt: props.alt ?? ""
 });
 
-export default richTextEditorDialog("Insert a link", mapPropsToValues, RichTextLinkDialog);
+export default richTextEditorDialog("Insert an image", mapPropsToValues, RichTextImageDialog);

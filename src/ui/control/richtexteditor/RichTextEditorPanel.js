@@ -6,6 +6,7 @@ import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton
 import RichTextSpoilerDialog from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextFoldDialog from "ui/control/richtexteditor/RichTextFoldDialog";
 import RichTextLinkDialog from "ui/control/richtexteditor/RichTextLinkDialog";
+import RichTextImageDialog from "ui/control/richtexteditor/RichTextImageDialog";
 import { htmlEntities } from "util/html";
 import "./RichTextEditorPanel.css";
 
@@ -19,6 +20,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
         spoilerDialog: false,
         foldDialog: false,
         linkDialog: false,
+        imageDialog: false,
         dialogText: ""
     };
 
@@ -128,7 +130,12 @@ export default class RichTextEditorPanel extends React.PureComponent {
         this.setState({linkDialog: false});
         if (ok) {
             if (text) {
-                textFieldEdit.insert(textArea.current, `[${text}](${href})`);
+                if (href) {
+                    textFieldEdit.insert(textArea.current, `[${text}](${href})`);
+                } else {
+                    textFieldEdit.insert(textArea.current, `[${text}]`);
+                    textFieldEdit.wrapSelection(textArea.current, "(", ")");
+                }
             } else {
                 if (href) {
                     textFieldEdit.insert(textArea.current, href);
@@ -140,8 +147,35 @@ export default class RichTextEditorPanel extends React.PureComponent {
         textArea.current.focus();
     }
 
+    onImage = event => {
+        this.setState({imageDialog: true});
+        event.preventDefault();
+    }
+
+    onImageSubmit = (ok, {href, alt}) => {
+        const {textArea} = this.props;
+
+        this.setState({imageDialog: false});
+        if (ok) {
+            if (alt) {
+                if (href) {
+                    textFieldEdit.insert(textArea.current, `![${alt}](${href})`);
+                } else {
+                    textFieldEdit.wrapSelection(textArea.current, `![${alt}](`, ")");
+                }
+            } else {
+                if (href) {
+                    textFieldEdit.insert(textArea.current, `![](${href})`);
+                } else {
+                    textFieldEdit.wrapSelection(textArea.current, "![](", ")");
+                }
+            }
+        }
+        textArea.current.focus();
+    }
+
     render() {
-        const {spoilerDialog, foldDialog, linkDialog, dialogText} = this.state;
+        const {spoilerDialog, foldDialog, linkDialog, imageDialog, dialogText} = this.state;
 
         return (
             <div className="rich-text-editor-panel">
@@ -159,11 +193,12 @@ export default class RichTextEditorPanel extends React.PureComponent {
                 </div>
                 <div className="group">
                     <RichTextEditorButton icon="link" title="Link" onClick={this.onLink}/>
-                    <RichTextEditorButton icon="image" title="Image"/>
+                    <RichTextEditorButton icon="image" title="Image" onClick={this.onImage}/>
                 </div>
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
                 <RichTextLinkDialog show={linkDialog} text={dialogText} onSubmit={this.onLinkSubmit}/>
+                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit}/>
             </div>
         );
     }
