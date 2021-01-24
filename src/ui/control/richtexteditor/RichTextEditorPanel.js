@@ -92,6 +92,23 @@ export default class RichTextEditorPanel extends React.PureComponent {
         textArea.current.focus();
     }
 
+    onQuote = event => {
+        const {textArea} = this.props;
+
+        let wrapBegin = "\n>>>";
+        let wrapEnd = ">>>\n";
+        const selection = textFieldEdit.getSelection(textArea.current);
+        if (!selection || !selection.startsWith("\n")) {
+            wrapBegin += "\n";
+        }
+        if (!selection || !selection.endsWith("\n")) {
+            wrapEnd = "\n" + wrapEnd;
+        }
+        textFieldEdit.wrapSelection(textArea.current, wrapBegin, wrapEnd);
+        textArea.current.focus();
+        event.preventDefault();
+    }
+
     render() {
         const {spoilerDialog, foldDialog} = this.state;
 
@@ -107,7 +124,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
                     <RichTextEditorButton icon="caret-square-down" title="Fold" onClick={this.onFold}/>
                 </div>
                 <div className="group">
-                    <RichTextEditorButton icon="quote-left" title="Quote"/>
+                    <RichTextEditorButton icon="quote-left" title="Quote" onClick={this.onQuote}/>
                 </div>
                 <div className="group">
                     <RichTextEditorButton icon="link" title="Link"/>
