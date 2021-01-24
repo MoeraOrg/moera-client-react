@@ -13,5 +13,6 @@
     display: block;
     width: 100%;
     border: 0;
+    border-radius: .25rem;
     padding: .375rem .75rem;
 }

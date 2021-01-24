@@ -1,5 +1,7 @@
 .rich-text-editor-panel {
     background-color: var(--gray-ultralight);
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
 }
 
 .rich-text-editor-panel .group {
