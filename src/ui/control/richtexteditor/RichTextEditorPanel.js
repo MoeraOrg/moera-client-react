@@ -4,6 +4,7 @@ import * as textFieldEdit from 'text-field-edit';
 
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import RichTextSpoilerDialog from "ui/control/richtexteditor/RichTextSpoilerDialog";
+import RichTextFoldDialog from "ui/control/richtexteditor/RichTextFoldDialog";
 import { htmlEntities } from "util/html";
 import "./RichTextEditorPanel.css";
 
@@ -14,7 +15,8 @@ export default class RichTextEditorPanel extends React.PureComponent {
     };
 
     state = {
-        spoilerDialog: false
+        spoilerDialog: false,
+        foldDialog: false
     };
 
     onBold = event => {
@@ -57,12 +59,41 @@ export default class RichTextEditorPanel extends React.PureComponent {
             } else {
                 textFieldEdit.wrapSelection(textArea.current, "||");
             }
-            textArea.current.focus();
         }
+        textArea.current.focus();
+    }
+
+    onFold = event => {
+        this.setState({foldDialog: true});
+        event.preventDefault();
+    }
+
+    onFoldSubmit = (ok, {summary}) => {
+        const {textArea} = this.props;
+
+        this.setState({foldDialog: false});
+        if (ok) {
+            let wrapBegin = "<details>";
+            let wrapEnd = "</details>";
+            if (summary) {
+                wrapBegin += `<summary>${htmlEntities(summary)}</summary>`;
+            }
+            const selection = textFieldEdit.getSelection(textArea.current);
+            if (!selection || !selection.startsWith("\n")) {
+                wrapBegin += "\n";
+            }
+            if (!selection || !selection.endsWith("\n")) {
+                wrapEnd = "\n" + wrapEnd;
+            } else {
+                wrapEnd += "\n";
+            }
+            textFieldEdit.wrapSelection(textArea.current, wrapBegin, wrapEnd);
+        }
+        textArea.current.focus();
     }
 
     render() {
-        const {spoilerDialog} = this.state;
+        const {spoilerDialog, foldDialog} = this.state;
 
         return (
             <div className="rich-text-editor-panel">
@@ -73,7 +104,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
                 </div>
                 <div className="group">
                     <RichTextEditorButton icon="exclamation-circle" title="Spoiler" onClick={this.onSpoiler}/>
-                    <RichTextEditorButton icon="caret-square-down" title="Fold"/>
+                    <RichTextEditorButton icon="caret-square-down" title="Fold" onClick={this.onFold}/>
                 </div>
                 <div className="group">
                     <RichTextEditorButton icon="quote-left" title="Quote"/>
@@ -83,6 +114,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
                     <RichTextEditorButton icon="image" title="Image"/>
                 </div>
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
+                <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
             </div>
         );
     }
