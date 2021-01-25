@@ -4,6 +4,14 @@
     border-top-right-radius: .25rem;
 }
 
+.rich-text-editor-panel.hiding {
+    display: none;
+}
+
+.rich-text-editor:focus-within .rich-text-editor-panel.hiding {
+    display: block;
+}
+
 .rich-text-editor-panel .group {
     display: inline-block;
 }

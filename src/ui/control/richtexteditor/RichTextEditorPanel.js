@@ -1,6 +1,7 @@
 import React from 'react';
 import PropType from 'prop-types';
 import * as textFieldEdit from 'text-field-edit';
+import cx from 'classnames';
 
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import RichTextSpoilerDialog from "ui/control/richtexteditor/RichTextSpoilerDialog";
@@ -13,7 +14,8 @@ import "./RichTextEditorPanel.css";
 export default class RichTextEditorPanel extends React.PureComponent {
 
     static propTypes = {
-        textArea: PropType.object
+        textArea: PropType.object,
+        hiding: PropType.bool
     };
 
     state = {
@@ -175,10 +177,11 @@ export default class RichTextEditorPanel extends React.PureComponent {
     }
 
     render() {
+        const {hiding} = this.props;
         const {spoilerDialog, foldDialog, linkDialog, imageDialog, dialogText} = this.state;
 
         return (
-            <div className="rich-text-editor-panel">
+            <div className={cx("rich-text-editor-panel", {"hiding": hiding})}>
                 <div className="group">
                     <RichTextEditorButton icon="bold" title="Bold" onClick={this.onBold}/>
                     <RichTextEditorButton icon="italic" title="Italic" onClick={this.onItalic}/>
