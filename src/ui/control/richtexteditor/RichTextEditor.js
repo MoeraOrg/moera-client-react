@@ -7,11 +7,11 @@ import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
 import "./RichTextEditor.css";
 
 const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
-                         hidingPanel, onKeyDown, onChange, onBlur}) => {
+                         hidingPanel, format, onKeyDown, onChange, onBlur}) => {
     const textArea = React.createRef();
     return (
         <div className={cx("rich-text-editor", className)}>
-            <RichTextEditorPanel textArea={textArea} hiding={hidingPanel}/>
+            <RichTextEditorPanel textArea={textArea} hiding={hidingPanel} format={format}/>
             <RichTextArea name={name} value={value} rows={rows} placeholder={placeholder} autoFocus={autoFocus}
                           autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
                           onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur} textArea={textArea}/>
@@ -30,6 +30,7 @@ RichTextEditor.propTypes = {
     disabled: PropType.bool,
     smileysEnabled: PropType.bool,
     hidingPanel: PropType.bool,
+    format: PropType.string,
     onKeyDown: PropType.func,
     onChange: PropType.func,
     onBlur: PropType.func

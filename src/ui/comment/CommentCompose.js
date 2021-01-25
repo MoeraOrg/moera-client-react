@@ -46,9 +46,8 @@ class CommentCompose extends React.PureComponent {
     }
 
     render() {
-        const {
-            homeOwnerName, beingPosted, receiverName, smileysEnabled, openSignUpDialog, openConnectDialog
-        } = this.props;
+        const {homeOwnerName, beingPosted, receiverName, smileysEnabled, sourceFormatDefault, openSignUpDialog,
+               openConnectDialog} = this.props;
 
         if (homeOwnerName) {
             return (
@@ -59,7 +58,7 @@ class CommentCompose extends React.PureComponent {
                             <RichTextField name="body" rows={1} anyValue
                                            placeholder={`Write a comment to ${mentionName(receiverName)} here...`}
                                            disabled={beingPosted} smileysEnabled={smileysEnabled} hidingPanel={true}
-                                           onKeyDown={this.onKeyDown}/>
+                                           format={sourceFormatDefault} onKeyDown={this.onKeyDown}/>
                         </div>
                         <CommentComposeButtons loading={beingPosted}/>
                     </Form>

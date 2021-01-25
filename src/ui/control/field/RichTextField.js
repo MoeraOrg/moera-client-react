@@ -24,6 +24,7 @@ export class RichTextField extends React.PureComponent {
         defaultValue: PropType.string,
         smileysEnabled: PropType.bool,
         hidingPanel: PropType.bool,
+        format: PropType.string,
         onKeyDown: PropType.func
     };
 
@@ -35,7 +36,7 @@ export class RichTextField extends React.PureComponent {
     render() {
         const {
             name, title, rows, placeholder, autoFocus, anyValue, className, autoComplete, noFeedback = false,
-            disabled = false, initialValue, defaultValue, smileysEnabled, hidingPanel, onKeyDown
+            disabled = false, initialValue, defaultValue, smileysEnabled, hidingPanel, format, onKeyDown
         } = this.props;
 
         return (
@@ -69,6 +70,7 @@ export class RichTextField extends React.PureComponent {
                                     disabled={disabled}
                                     smileysEnabled={smileysEnabled}
                                     hidingPanel={hidingPanel}
+                                    format={format ?? form.values.bodyFormat ?? "markdown"}
                                     onKeyDown={onKeyDown}
                                 />
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}

@@ -15,7 +15,8 @@ export default class RichTextEditorPanel extends React.PureComponent {
 
     static propTypes = {
         textArea: PropType.object,
-        hiding: PropType.bool
+        hiding: PropType.bool,
+        format: PropType.string
     };
 
     state = {
@@ -26,10 +27,18 @@ export default class RichTextEditorPanel extends React.PureComponent {
         dialogText: ""
     };
 
+    isMarkdown() {
+        return this.props.format === "markdown";
+    }
+
     onBold = event => {
         const {textArea} = this.props;
 
-        textFieldEdit.wrapSelection(textArea.current, "**");
+        if (this.isMarkdown()) {
+            textFieldEdit.wrapSelection(textArea.current, "**");
+        } else {
+            textFieldEdit.wrapSelection(textArea.current, "<b>", "</b>");
+        }
         textArea.current.focus();
         event.preventDefault();
     }
@@ -37,7 +46,11 @@ export default class RichTextEditorPanel extends React.PureComponent {
     onItalic = event => {
         const {textArea} = this.props;
 
-        textFieldEdit.wrapSelection(textArea.current, "_");
+        if (this.isMarkdown()) {
+            textFieldEdit.wrapSelection(textArea.current, "_");
+        } else {
+            textFieldEdit.wrapSelection(textArea.current, "<i>", "</i>");
+        }
         textArea.current.focus();
         event.preventDefault();
     }
@@ -45,7 +58,11 @@ export default class RichTextEditorPanel extends React.PureComponent {
     onStrike = event => {
         const {textArea} = this.props;
 
-        textFieldEdit.wrapSelection(textArea.current, "~~");
+        if (this.isMarkdown()) {
+            textFieldEdit.wrapSelection(textArea.current, "~~");
+        } else {
+            textFieldEdit.wrapSelection(textArea.current, "<strike>", "</strike>");
+        }
         textArea.current.focus();
         event.preventDefault();
     }
@@ -64,7 +81,11 @@ export default class RichTextEditorPanel extends React.PureComponent {
                 textFieldEdit.wrapSelection(textArea.current,
                     `<mr-spoiler title="${htmlEntities(title)}">`, "</mr-spoiler>");
             } else {
-                textFieldEdit.wrapSelection(textArea.current, "||");
+                if (this.isMarkdown()) {
+                    textFieldEdit.wrapSelection(textArea.current, "||");
+                } else {
+                    textFieldEdit.wrapSelection(textArea.current, "<mr-spoiler>", "</mr-spoiler>");
+                }
             }
         }
         textArea.current.focus();
@@ -102,8 +123,8 @@ export default class RichTextEditorPanel extends React.PureComponent {
     onQuote = event => {
         const {textArea} = this.props;
 
-        let wrapBegin = "\n>>>";
-        let wrapEnd = ">>>\n";
+        let wrapBegin = this.isMarkdown() ? "\n>>>" : "\n<blockquote>";
+        let wrapEnd = this.isMarkdown() ? ">>>\n" : "</blockquote>\n";
         const selection = textFieldEdit.getSelection(textArea.current);
         if (!selection || !selection.startsWith("\n")) {
             wrapBegin += "\n";
@@ -131,18 +152,38 @@ export default class RichTextEditorPanel extends React.PureComponent {
 
         this.setState({linkDialog: false});
         if (ok) {
-            if (text) {
-                if (href) {
-                    textFieldEdit.insert(textArea.current, `[${text}](${href})`);
+            if (this.isMarkdown()) {
+                if (text) {
+                    if (href) {
+                        textFieldEdit.insert(textArea.current, `[${text}](${href})`);
+                    } else {
+                        textFieldEdit.insert(textArea.current, `[${text}]`);
+                        textFieldEdit.wrapSelection(textArea.current, "(", ")");
+                    }
                 } else {
-                    textFieldEdit.insert(textArea.current, `[${text}]`);
-                    textFieldEdit.wrapSelection(textArea.current, "(", ")");
+                    if (href) {
+                        textFieldEdit.insert(textArea.current, href);
+                    } else {
+                        textFieldEdit.wrapSelection(textArea.current, "[](", ")");
+                    }
                 }
             } else {
-                if (href) {
-                    textFieldEdit.insert(textArea.current, href);
+                if (text) {
+                    if (href) {
+                        textFieldEdit.insert(textArea.current,
+                            `<a href="${htmlEntities(href)}">${htmlEntities(text)}</a>`);
+                    } else {
+                        textFieldEdit.insert(textArea.current, "");
+                        textFieldEdit.wrapSelection(textArea.current,
+                            "<a href=\"", `">${htmlEntities(text)}</a>`);
+                    }
                 } else {
-                    textFieldEdit.wrapSelection(textArea.current, "[](", ")");
+                    if (href) {
+                        textFieldEdit.insert(textArea.current,
+                            `<a href="${htmlEntities(href)}">${htmlEntities(href)}</a>`);
+                    } else {
+                        textFieldEdit.wrapSelection(textArea.current, "<a href=\"", "\"></a>");
+                    }
                 }
             }
         }
@@ -159,17 +200,35 @@ export default class RichTextEditorPanel extends React.PureComponent {
 
         this.setState({imageDialog: false});
         if (ok) {
-            if (alt) {
-                if (href) {
-                    textFieldEdit.insert(textArea.current, `![${alt}](${href})`);
+            if (this.isMarkdown()) {
+                if (alt) {
+                    if (href) {
+                        textFieldEdit.insert(textArea.current, `![${alt}](${href})`);
+                    } else {
+                        textFieldEdit.wrapSelection(textArea.current, `![${alt}](`, ")");
+                    }
                 } else {
-                    textFieldEdit.wrapSelection(textArea.current, `![${alt}](`, ")");
+                    if (href) {
+                        textFieldEdit.insert(textArea.current, `![](${href})`);
+                    } else {
+                        textFieldEdit.wrapSelection(textArea.current, "![](", ")");
+                    }
                 }
             } else {
-                if (href) {
-                    textFieldEdit.insert(textArea.current, `![](${href})`);
+                if (alt) {
+                    if (href) {
+                        textFieldEdit.insert(textArea.current,
+                            `<img alt="${htmlEntities(alt)}" src="${htmlEntities(href)}">`);
+                    } else {
+                        textFieldEdit.wrapSelection(textArea.current,
+                            `<img alt="${htmlEntities(alt)}" src="`, "\">");
+                    }
                 } else {
-                    textFieldEdit.wrapSelection(textArea.current, "![](", ")");
+                    if (href) {
+                        textFieldEdit.insert(textArea.current, `<img src="${htmlEntities(href)}">`);
+                    } else {
+                        textFieldEdit.wrapSelection(textArea.current, `<img src="`, "\">");
+                    }
                 }
             }
         }
@@ -177,8 +236,12 @@ export default class RichTextEditorPanel extends React.PureComponent {
     }
 
     render() {
-        const {hiding} = this.props;
+        const {hiding, format} = this.props;
         const {spoilerDialog, foldDialog, linkDialog, imageDialog, dialogText} = this.state;
+
+        if (format === "plain-text") {
+            return null;
+        }
 
         return (
             <div className={cx("rich-text-editor-panel", {"hiding": hiding})}>

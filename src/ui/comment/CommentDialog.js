@@ -50,9 +50,8 @@ class CommentDialog extends React.PureComponent {
     }
 
     render() {
-        const {
-            show, conflict, beingPosted, smileysEnabled, closeCommentDialog, commentDialogConflictClose
-        } = this.props;
+        const {show, conflict, beingPosted, smileysEnabled, sourceFormatDefault, closeCommentDialog,
+               commentDialogConflictClose} = this.props;
 
         if (!show) {
             return null;
@@ -65,7 +64,8 @@ class CommentDialog extends React.PureComponent {
                 <Form>
                     <div className="modal-body">
                         <RichTextField name="body" rows={5} anyValue autoFocus disabled={beingPosted}
-                                       smileysEnabled={smileysEnabled} onKeyDown={this.onKeyDown}/>
+                                       smileysEnabled={smileysEnabled} format={sourceFormatDefault}
+                                       onKeyDown={this.onKeyDown}/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={closeCommentDialog}>Cancel</Button>
