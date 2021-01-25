@@ -51,6 +51,7 @@ import {
 import {
     getComment,
     getCommentComposerCommentId,
+    getCommentComposerRepliedToName,
     getCommentsState,
     getDetailedPosting,
     getDetailedPostingId,
@@ -331,9 +332,12 @@ function* commentReplySaga(action) {
     const {commentId, ownerName, heading} = action.payload;
 
     const body = document.getElementById("body");
-    const reply = body.textLength === 0 && !(yield select(isCommentComposerReplied));
+    const {replied, repliedToName} = yield select(state => ({
+        replied: isCommentComposerReplied(state),
+        repliedToName: getCommentComposerRepliedToName(state)
+    }));
     const text = quoteHtml(getWindowSelectionHtml());
-    if (reply) {
+    if (body.textLength === 0 && !replied) {
         yield put(commentRepliedToSet(commentId, ownerName, heading));
         if (text) {
             textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
@@ -341,7 +345,11 @@ function* commentReplySaga(action) {
     } else {
         const mention = mentionName(ownerName);
         if (text) {
-            textFieldEdit.insert(body, `${mention}:\n>>>\n${text}\n>>>\n`);
+            if (ownerName !== repliedToName) {
+                textFieldEdit.insert(body, `${mention}:\n>>>\n${text}\n>>>\n`);
+            } else {
+                textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
+            }
         } else {
             textFieldEdit.insert(body, `${mention} `);
         }

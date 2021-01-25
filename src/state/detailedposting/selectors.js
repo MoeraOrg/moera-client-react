@@ -141,6 +141,10 @@ export function getCommentComposerRepliedToId(state) {
     return state.detailedPosting.compose.repliedToId;
 }
 
+export function getCommentComposerRepliedToName(state) {
+    return state.detailedPosting.compose.repliedToName;
+}
+
 export function isCommentComposerReplied(state) {
     return getCommentComposerRepliedToId(state) != null;
 }
