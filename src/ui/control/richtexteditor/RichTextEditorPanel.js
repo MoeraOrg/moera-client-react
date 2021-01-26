@@ -15,6 +15,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
 
     static propTypes = {
         textArea: PropType.object,
+        panel: PropType.object,
         hiding: PropType.bool,
         format: PropType.string
     };
@@ -26,6 +27,21 @@ export default class RichTextEditorPanel extends React.PureComponent {
         imageDialog: false,
         dialogText: ""
     };
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            panel: props.panel ?? React.createRef()
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.panel !== prevProps.panel) {
+            this.props.panel.current = this.state.panel.current;
+            this.setState({panel: this.props.panel});
+        }
+    }
 
     isMarkdown() {
         return this.props.format === "markdown";
@@ -237,29 +253,29 @@ export default class RichTextEditorPanel extends React.PureComponent {
 
     render() {
         const {hiding, format} = this.props;
-        const {spoilerDialog, foldDialog, linkDialog, imageDialog, dialogText} = this.state;
+        const {spoilerDialog, foldDialog, linkDialog, imageDialog, dialogText, panel} = this.state;
 
         if (format === "plain-text") {
             return null;
         }
 
         return (
-            <div className={cx("rich-text-editor-panel", {"hiding": hiding})}>
+            <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
                 <div className="group">
-                    <RichTextEditorButton icon="bold" title="Bold" onClick={this.onBold}/>
-                    <RichTextEditorButton icon="italic" title="Italic" onClick={this.onItalic}/>
-                    <RichTextEditorButton icon="strikethrough" title="Strikeout" onClick={this.onStrike}/>
+                    <RichTextEditorButton icon="bold" title="Bold" letter="B" onClick={this.onBold}/>
+                    <RichTextEditorButton icon="italic" title="Italic" letter="I" onClick={this.onItalic}/>
+                    <RichTextEditorButton icon="strikethrough" title="Strikeout" letter="X" onClick={this.onStrike}/>
                 </div>
                 <div className="group">
                     <RichTextEditorButton icon="exclamation-circle" title="Spoiler" onClick={this.onSpoiler}/>
                     <RichTextEditorButton icon="caret-square-down" title="Fold" onClick={this.onFold}/>
                 </div>
                 <div className="group">
-                    <RichTextEditorButton icon="quote-left" title="Quote" onClick={this.onQuote}/>
+                    <RichTextEditorButton icon="quote-left" title="Quote" letter="Q" onClick={this.onQuote}/>
                 </div>
                 <div className="group">
-                    <RichTextEditorButton icon="link" title="Link" onClick={this.onLink}/>
-                    <RichTextEditorButton icon="image" title="Image" onClick={this.onImage}/>
+                    <RichTextEditorButton icon="link" title="Link" letter="L" onClick={this.onLink}/>
+                    <RichTextEditorButton icon="image" title="Image" letter="M" onClick={this.onImage}/>
                 </div>
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>

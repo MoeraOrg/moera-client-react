@@ -19,7 +19,8 @@ export default class RichTextArea extends React.PureComponent {
         onKeyDown: PropType.func,
         onChange: PropType.func,
         onBlur: PropType.func,
-        textArea: PropType.object
+        textArea: PropType.object,
+        panel: PropType.object
     };
 
     static defaultProps = {
@@ -85,8 +86,35 @@ export default class RichTextArea extends React.PureComponent {
             || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/));
     }
 
+    onKeyDown = event => {
+        const {onKeyDown} = this.props;
+
+        if (this.onControlKey(event)) {
+            event.preventDefault();
+            return;
+        }
+        if (onKeyDown) {
+            onKeyDown(event);
+        }
+    }
+
+    onControlKey = event => {
+        const {panel} = this.props;
+
+        if (!panel.current || !event.ctrlKey || event.shiftKey || event.altKey || event.metaKey || !event.key
+            || event.key.length !== 1) {
+            return false;
+        }
+        const button = panel.current.querySelector(`button[data-letter=${event.key.toUpperCase()}]`);
+        if (!button) {
+            return false;
+        }
+        button.click();
+        return true;
+    }
+
     render() {
-        const {name, value, className, autoComplete, placeholder, rows, disabled, onKeyDown, onBlur} = this.props;
+        const {name, value, className, autoComplete, placeholder, rows, disabled, onBlur} = this.props;
         const {textArea} = this.state;
 
         return (
@@ -100,7 +128,7 @@ export default class RichTextArea extends React.PureComponent {
                 rows={rows}
                 maxRows={20}
                 disabled={disabled}
-                onKeyDown={onKeyDown}
+                onKeyDown={this.onKeyDown}
                 onBlur={onBlur}
                 onChange={this.onChange}
                 ref={textArea} // impossible to pass lambda here
