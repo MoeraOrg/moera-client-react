@@ -70,7 +70,7 @@ export class RichTextField extends React.PureComponent {
                                     disabled={disabled}
                                     smileysEnabled={smileysEnabled}
                                     hidingPanel={hidingPanel}
-                                    format={format ?? form.values.bodyFormat ?? "markdown"}
+                                    format={format}
                                     onKeyDown={onKeyDown}
                                 />
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}

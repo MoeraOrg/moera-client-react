@@ -44,7 +44,7 @@ class ComposePage extends React.PureComponent {
 
     render() {
         const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, loadingDraft, conflict,
-               beingPosted, smileysEnabled, composeConflictClose} = this.props;
+               beingPosted, smileysEnabled, composeConflictClose, values} = this.props;
         const title = postingId == null ? "New Post" : "Edit Post";
         const loadingContent = loadingPosting || loadingDraft;
         return (
@@ -67,7 +67,8 @@ class ComposePage extends React.PureComponent {
                             <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
                         <RichTextField name="body" disabled={loadingContent || beingPosted}
-                                       smileysEnabled={smileysEnabled} anyValue autoFocus/>
+                                       format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
+                                       anyValue autoFocus/>
                         <ComposeFormattingHelp/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>
