@@ -21,9 +21,3 @@
         margin-right: .75rem;
     }
 }
-
-@media only screen and (max-width: 575px) {
-    .rich-text-editor-panel .group {
-        margin-right: .5rem;
-    }
-}
