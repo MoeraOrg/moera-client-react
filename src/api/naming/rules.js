@@ -7,6 +7,9 @@ const LATIN_CHARS = /^[A-Za-z]+$/;
 const DIGITS = /^[0-9]+$/;
 
 export function isRegisteredNameValid(qName) {
+    if (!qName) {
+        return false;
+    }
     const parts = qName.split("_");
     if (parts.length > 2) {
         return false;
