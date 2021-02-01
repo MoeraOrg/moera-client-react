@@ -47,10 +47,7 @@ class ComposeFormattingHelp extends React.PureComponent {
             return (
                 <div className="dialog-help">
                     <button type="button" className="close" onClick={this.hideHelp}>&times;</button>
-                    <b>Markdown:</b>{" "}
-                    <code>**bold** _italic_ [link](http://en.wikipedia.org) ![image](https://site.com/img.jpg)</code>
-                    <br/>
-                    See Markdown{" "}
+                    <b>Markdown:</b> see{" "}
                     <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">cheatsheet</a>
                     {" or "}<a href="https://www.markdowntutorial.com/">tutorial</a> to see how to do more.
                     See also <a href="https://www.webfx.com/tools/emoji-cheat-sheet/">emoji cheatsheet</a>.
