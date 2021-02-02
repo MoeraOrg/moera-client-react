@@ -1,50 +1,54 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { connect as connectFormik } from 'formik';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from "ui/control";
-import composePageLogic from "ui/compose/compose-page-logic";
-import { composeDraftRevisionDelete, composeDraftSelect } from "state/compose/actions";
-
-function postingText(props) {
-    return composePageLogic.mapValuesToPostingText(props.formik.values, props);
-}
-
-function isEmpty(postingText) {
-    return composePageLogic.isPostingTextEmpty(postingText);
-}
+import { composeDraftListItemDelete, composeDraftRevisionDelete } from "state/compose/actions";
 
 class ComposeResetButton extends React.PureComponent {
 
     onClick = () => {
-        if (this.props.postingId == null) {
-            this.props.composeDraftSelect(null);
+        const {postingId, draftId, composeDraftListItemDelete, composeDraftRevisionDelete} = this.props;
+
+        if (postingId == null) {
+            composeDraftListItemDelete(draftId);
         } else {
-            this.props.composeDraftRevisionDelete();
+            composeDraftRevisionDelete();
         }
     };
 
     render() {
-        const disabled = this.props.postingId == null
-            ? isEmpty(postingText(this.props))
-            : this.props.posting == null || !this.props.posting.draftPending;
-        return (
-            <Button variant="secondary" className="reset-button" type="button" disabled={disabled}
-                    onClick={this.onClick}>
-                RESET
-            </Button>
-        );
+        const {postingId, draftId, posting} = this.props;
+
+        if (postingId == null) {
+            if (draftId == null) {
+                return null;
+            }
+            return (
+                <Button variant="danger" className="reset-button" title="Delete draft" onClick={this.onClick}>
+                    <FontAwesomeIcon icon="trash-alt"/>
+                </Button>
+            );
+        } else {
+            if (posting == null || !posting.draftPending) {
+                return null;
+            }
+            return (
+                <Button variant="info" className="reset-button" onClick={this.onClick}>
+                    <FontAwesomeIcon icon="undo-alt"/>
+                    {" "}Undo
+                </Button>
+            );
+        }
     }
 
 }
 
-export default connectFormik(
-    connect(
-        state => ({
-            subjectPresent: state.compose.subjectPresent,
-            postingId: state.compose.postingId,
-            posting: state.compose.posting
-        }),
-        { composeDraftSelect, composeDraftRevisionDelete }
-    )(ComposeResetButton)
-);
+export default connect(
+    state => ({
+        postingId: state.compose.postingId,
+        draftId: state.compose.draftId,
+        posting: state.compose.posting
+    }),
+    { composeDraftListItemDelete, composeDraftRevisionDelete }
+)(ComposeResetButton);

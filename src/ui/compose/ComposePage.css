@@ -38,15 +38,15 @@
     }
 }
 
+.reset-button {
+    flex: none;
+    margin-right: .25rem;
+}
+
 .form-buttons {
     display: flex;
 }
 
 .submit-button {
     flex: auto;
-}
-
-.reset-button {
-    flex: none;
-    margin-left: 0.5rem;
 }

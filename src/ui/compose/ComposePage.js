@@ -85,13 +85,13 @@ class ComposePage extends React.PureComponent {
                             </div>
                             <div className="drafts">
                                 <ComposeDraftSaver initialPostingText={this.state.initialPostingText}/>
+                                <ComposeResetButton/>
                                 <ComposeDraftSelector/>
                             </div>
                         </div>
 
                         <div className="form-buttons">
                             <ComposeSubmitButton loading={beingPosted} update={postingId != null}/>
-                            <ComposeResetButton/>
                         </div>
                     </Form>
                 </div>

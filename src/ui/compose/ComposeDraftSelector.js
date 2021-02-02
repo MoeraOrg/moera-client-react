@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { Manager, Popper, Reference } from 'react-popper';
 import cx from 'classnames';
 
-import { Loading, LoadingInline } from "ui/control";
+import { Button, Loading, LoadingInline } from "ui/control";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
 import ComposeDraftItem from "ui/compose/ComposeDraftItem";
+import ComposeNewPost from "ui/compose/ComposeNewPost";
 
 class ComposeDraftSelector extends React.PureComponent {
 
@@ -57,14 +58,14 @@ class ComposeDraftSelector extends React.PureComponent {
                     <Reference>
                         {({ref}) => (
                             <div ref={ref} className={cx("draft-selector", "btn-group", "dropdown", {"show": visible})}>
-                                <button type="button" className="btn btn-info dropdown-toggle" onClick={this.onToggle}>
+                                <Button variant="info" className="dropdown-toggle" onClick={this.onToggle}>
                                     Drafts{" "}
                                     {loadingDraftList ?
                                         <LoadingInline active={loadingDraftList}/>
                                     :
                                         <span className="badge badge-light">{draftList.length}</span>
                                     }
-                                </button>
+                                </Button>
                                 {visible &&
                                     <Popper placement="bottom-start">
                                         {({ref, style, placement}) => (
@@ -74,6 +75,7 @@ class ComposeDraftSelector extends React.PureComponent {
                                                 "shadow-sm",
                                                 {"show": visible}
                                             )}>
+                                                <ComposeNewPost/>
                                                 {draftList.map(draft =>
                                                     <ComposeDraftItem key={draft.id} draft={draft}
                                                                       current={draftId === draft.id}
