@@ -264,7 +264,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
                 <div className="group">
                     <RichTextEditorButton icon="bold" title="Bold" letter="B" onClick={this.onBold}/>
                     <RichTextEditorButton icon="italic" title="Italic" letter="I" onClick={this.onItalic}/>
-                    <RichTextEditorButton icon="strikethrough" title="Strikeout" letter="X" onClick={this.onStrike}/>
+                    <RichTextEditorButton icon="strikethrough" title="Strikeout" letter="R" onClick={this.onStrike}/>
                 </div>
                 <div className="group">
                     <RichTextEditorButton icon="exclamation-circle" title="Spoiler" onClick={this.onSpoiler}/>
