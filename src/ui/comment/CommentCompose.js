@@ -30,6 +30,10 @@ class CommentCompose extends React.PureComponent {
         }
     }
 
+    onFocus = event => {
+        event.target.scrollIntoView();
+    }
+
     onKeyDown = event => {
         const {submitKey, submitForm} = this.props;
 
@@ -51,7 +55,7 @@ class CommentCompose extends React.PureComponent {
 
         if (homeOwnerName) {
             return (
-                <div id="comment-composer">
+                <div id="comment-composer" onFocus={this.onFocus}>
                     <Form>
                         <div className="content">
                             <CommentComposeRepliedTo/>
