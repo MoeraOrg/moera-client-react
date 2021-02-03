@@ -19,8 +19,8 @@ import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
 import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposeResetButton from "ui/compose/ComposeResetButton";
-import Jump from "ui/navigation/Jump";
 import composePageLogic from "ui/compose/compose-page-logic";
+import Jump from "ui/navigation/Jump";
 import { parseBool } from "util/misc";
 import "./ComposePage.css";
 

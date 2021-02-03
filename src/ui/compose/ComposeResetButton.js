@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from "ui/control";
 import { composeDraftListItemDelete, composeDraftRevisionDelete } from "state/compose/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import "./ComposeResetButton.css";
 
 class ComposeResetButton extends React.PureComponent {
 

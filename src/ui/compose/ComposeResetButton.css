@@ -1,0 +1,5 @@
+.reset-button {
+    flex: none;
+    margin-right: .25rem;
+    order: 3;
+}

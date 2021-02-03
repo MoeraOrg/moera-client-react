@@ -7,6 +7,7 @@ import { Button, Loading, LoadingInline } from "ui/control";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
 import ComposeDraftItem from "ui/compose/ComposeDraftItem";
 import ComposeNewPost from "ui/compose/ComposeNewPost";
+import "./ComposeDraftSelector.css";
 
 class ComposeDraftSelector extends React.PureComponent {
 
