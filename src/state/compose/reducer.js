@@ -1,4 +1,5 @@
 import * as immutable from 'object-path-immutable';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
     COMPOSE_CONFLICT,
@@ -12,6 +13,7 @@ import {
     COMPOSE_DRAFT_LOAD_FAILED,
     COMPOSE_DRAFT_LOADED,
     COMPOSE_DRAFT_REVISION_DELETE,
+    COMPOSE_DRAFT_REVISION_SET,
     COMPOSE_DRAFT_SAVE,
     COMPOSE_DRAFT_SAVE_FAILED,
     COMPOSE_DRAFT_SAVED,
@@ -25,7 +27,9 @@ import {
     COMPOSE_POST_SUCCEEDED,
     COMPOSE_POSTING_LOAD,
     COMPOSE_POSTING_LOAD_FAILED,
-    COMPOSE_POSTING_LOADED
+    COMPOSE_POSTING_LOADED,
+    COMPOSE_PREVIEW,
+    COMPOSE_PREVIEW_CLOSE
 } from "state/compose/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
@@ -42,6 +46,7 @@ const emptyPosting = {
     conflict: false,
     beingPosted: false,
     draftId: null,
+    draftRevision: null,
     loadingDraft: false,
     savingDraft: false,
     savedDraft: false
@@ -54,18 +59,18 @@ const initialState = {
     ...emptyPosting,
     draftList: [],
     loadingDraftList: false,
-    loadedDraftList: false
+    loadedDraftList: false,
+    showPreview: false
 };
 
 function buildDraftInfo(postingInfo) {
-    const {id, bodySrc, editedAt} = postingInfo;
-    const body = typeof bodySrc === "string" ? JSON.parse(bodySrc) : bodySrc;
+    const {bodySrc} = postingInfo;
+    const source = typeof bodySrc === "string" ? JSON.parse(bodySrc) : bodySrc;
 
     return {
-        id,
-        subject: body.subject != null ? body.subject.substring(0, 64) : null,
-        text: body.text != null ? body.text.substring(0, 256) : null,
-        editedAt
+        ...postingInfo,
+        subject: source.subject != null ? source.subject.substring(0, 64) : null,
+        text: source.text != null ? source.text.substring(0, 256) : null,
     }
 }
 
@@ -137,6 +142,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 posting: action.payload.posting,
+                draftRevision: cloneDeep(action.payload.posting),
                 loadingPosting: false
             };
 
@@ -218,6 +224,12 @@ export default (state = initialState, action) => {
                 savedDraft: false
             };
 
+        case COMPOSE_DRAFT_REVISION_SET:
+            return {
+                ...state,
+                draftRevision: action.payload.draftRevision
+            };
+
         case COMPOSE_DRAFT_LIST_LOAD:
             return {
                 ...state,
@@ -281,6 +293,18 @@ export default (state = initialState, action) => {
                 ...state,
                 ...emptyPosting,
                 postingId: state.postingId
+            };
+
+        case COMPOSE_PREVIEW:
+            return {
+                ...state,
+                showPreview: true
+            };
+
+        case COMPOSE_PREVIEW_CLOSE:
+            return {
+                ...state,
+                showPreview: false
             };
 
         default:

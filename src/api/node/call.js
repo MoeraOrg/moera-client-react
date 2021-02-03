@@ -171,7 +171,11 @@ function decodeBody(encoded, format, exception) {
 }
 
 function decodeBodies(data, exception) {
-    let decoded = {...data};
+    if (Array.isArray(data)) {
+        return data.map(p => decodeBodies(p, exception));
+    }
+
+    const decoded = {...data};
     if (data.postings) {
         decoded.postings = data.postings.map(p => decodeBodies(p, exception));
     }

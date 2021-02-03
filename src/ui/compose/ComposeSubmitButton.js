@@ -1,10 +1,9 @@
 import React from 'react';
-import { connect as connectFormik } from 'formik';
 
 import { Button } from "ui/control";
+import "./ComposeSubmitButton.css";
 
-const ComposeSubmitButton = ({loading, update, formik}) => {
-    const disabled = formik.values["body"].trim().length === 0;
+const ComposeSubmitButton = ({loading, update, disabled}) => {
     const title = !update ? "POST" : "UPDATE";
     return (
         <Button variant="primary" className="submit-button" type="submit" loading={loading} disabled={disabled}>
@@ -13,4 +12,4 @@ const ComposeSubmitButton = ({loading, update, formik}) => {
     );
 };
 
-export default connectFormik(ComposeSubmitButton);
+export default ComposeSubmitButton;

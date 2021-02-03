@@ -18,6 +18,7 @@ import {
     composeDraftListLoadFailed,
     composeDraftLoaded,
     composeDraftLoadFailed,
+    composeDraftRevisionSet,
     composeDraftSaved,
     composeDraftSaveFailed,
     composeFeaturesLoaded,
@@ -115,6 +116,7 @@ function* composeDraftSaveSaga(action) {
             yield put(composeDraftListItemSet(data.id, data));
         } else {
             data = yield call(Node.putPostingDraftRevision, "", postingId, postingText);
+            yield put(composeDraftRevisionSet(data));
         }
         yield put(composeDraftSaved(postingId, data.id));
     } catch (e) {

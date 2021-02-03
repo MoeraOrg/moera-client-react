@@ -35,6 +35,6 @@ export const SignatureVerifyButton = ({status, onVerify}) => {
 };
 
 SignatureVerifyButton.propTypes = {
-    status: PropType.string.isRequired,
+    status: PropType.string,
     onVerify: PropType.func
 };

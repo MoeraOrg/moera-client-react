@@ -95,6 +95,12 @@ export const composeDraftSaveFailed = () => ({
     type: COMPOSE_DRAFT_SAVE_FAILED
 });
 
+export const COMPOSE_DRAFT_REVISION_SET = "COMPOSE_DRAFT_REVISION_SET";
+export const composeDraftRevisionSet = (draftRevision) => ({
+    type: COMPOSE_DRAFT_REVISION_SET,
+    payload: {draftRevision}
+});
+
 export const COMPOSE_DRAFT_LIST_LOAD = "COMPOSE_DRAFT_LIST_LOAD";
 export const composeDraftListLoad = () => ({
     type: COMPOSE_DRAFT_LIST_LOAD
@@ -144,4 +150,14 @@ export const composeDraftListItemDeleted = (id) => ({
 export const COMPOSE_DRAFT_REVISION_DELETE = "COMPOSE_DRAFT_REVISION_DELETE";
 export const composeDraftRevisionDelete = () => ({
     type: COMPOSE_DRAFT_REVISION_DELETE
+});
+
+export const COMPOSE_PREVIEW = "COMPOSE_PREVIEW";
+export const composePreview = () => ({
+    type: COMPOSE_PREVIEW
+});
+
+export const COMPOSE_PREVIEW_CLOSE = "COMPOSE_PREVIEW_CLOSE";
+export const composePreviewClose = () => ({
+    type: COMPOSE_PREVIEW_CLOSE
 });

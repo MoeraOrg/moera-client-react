@@ -328,7 +328,7 @@ export function* remotePostingReactionVerify(nodeName, remoteNodeName, postingId
 
 export function* getDraftPostings(nodeName) {
     return yield call(callApi, {
-        nodeName, location: "/draft-postings", auth: true, schema: NodeApi.PostingInfoList
+        nodeName, location: "/draft-postings", auth: true, schema: NodeApi.PostingInfoList, withBodies: true
     });
 }
 

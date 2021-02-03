@@ -23,6 +23,15 @@ export function getComposeDraftId(state) {
     return state.compose.draftId;
 }
 
+export function getComposeDraft(state) {
+    const draftId = getComposeDraftId(state);
+    return draftId ? state.compose.draftList.find(d => d.id === draftId) : null;
+}
+
+export function getComposeDraftRevision(state) {
+    return state.compose.draftRevision;
+}
+
 export function isComposeDraftListToBeLoaded(state) {
     return state.compose.postingId == null && !state.compose.loadedDraftList && !state.compose.loadingDraftList;
 }

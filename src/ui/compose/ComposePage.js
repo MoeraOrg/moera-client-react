@@ -17,9 +17,11 @@ import ComposeReactions from "ui/compose/ComposeReactions";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
 import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
 import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
-import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import ComposeResetButton from "ui/compose/ComposeResetButton";
+import ComposePreviewButton from "ui/compose/ComposePreviewButton";
+import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
 import composePageLogic from "ui/compose/compose-page-logic";
+import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import Jump from "ui/navigation/Jump";
 import { parseBool } from "util/misc";
 import "./ComposePage.css";
@@ -47,6 +49,7 @@ class ComposePage extends React.PureComponent {
                beingPosted, smileysEnabled, composeConflictClose, values} = this.props;
         const title = postingId == null ? "New Post" : "Edit Post";
         const loadingContent = loadingPosting || loadingDraft;
+        const submitDisabled = values["body"].trim().length === 0;
         return (
             <Page className="mt-3">
                 <h2>
@@ -91,10 +94,13 @@ class ComposePage extends React.PureComponent {
                         </div>
 
                         <div className="form-buttons">
-                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}/>
+                            <ComposePreviewButton disabled={submitDisabled}/>
+                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}
+                                                 disabled={submitDisabled}/>
                         </div>
                     </Form>
                 </div>
+                <ComposePreviewDialog/>
             </Page>
         );
     }

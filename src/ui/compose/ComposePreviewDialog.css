@@ -1,0 +1,12 @@
+.modal-dialog.compose-preview-dialog {
+    max-width: 900px;
+}
+
+.compose-preview-dialog .modal-children {
+    max-height: unset;
+}
+
+.compose-preview-dialog .modal-body {
+    max-height: calc(100vh - 16rem);
+    overflow-y: auto;
+}
