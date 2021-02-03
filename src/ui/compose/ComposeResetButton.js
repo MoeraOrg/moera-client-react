@@ -4,16 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from "ui/control";
 import { composeDraftListItemDelete, composeDraftRevisionDelete } from "state/compose/actions";
+import { confirmBox } from "state/confirmbox/actions";
 
 class ComposeResetButton extends React.PureComponent {
 
     onClick = () => {
-        const {postingId, draftId, composeDraftListItemDelete, composeDraftRevisionDelete} = this.props;
+        const {postingId, draftId, confirmBox} = this.props;
 
         if (postingId == null) {
-            composeDraftListItemDelete(draftId);
+            confirmBox("Do you really want to delete the draft?", "Yes", "No",
+                composeDraftListItemDelete(draftId));
         } else {
-            composeDraftRevisionDelete();
+            confirmBox("Do you really want to forget all changes?", "Yes", "No",
+                composeDraftRevisionDelete());
         }
     };
 
@@ -50,5 +53,5 @@ export default connect(
         draftId: state.compose.draftId,
         posting: state.compose.posting
     }),
-    { composeDraftListItemDelete, composeDraftRevisionDelete }
+    { confirmBox }
 )(ComposeResetButton);
