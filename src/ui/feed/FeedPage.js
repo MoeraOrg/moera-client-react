@@ -98,6 +98,7 @@ class FeedPage extends React.PureComponent {
 
     onScroll = () => {
         this.updateAtMoment();
+        this.setState({scrolled: window.scrollY > 5});
         this.onView();
     };
 
@@ -107,7 +108,6 @@ class FeedPage extends React.PureComponent {
             this.props.feedScrolled(this.props.feedName, at);
         }
         this.prevAt = at;
-        this.setState({scrolled: window.scrollY > 5});
     }, 500);
 
     onView = debounce(() => {

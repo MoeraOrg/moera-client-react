@@ -6,7 +6,11 @@
     flex-wrap: wrap;
     background-color: var(--body-background);
     padding-top: 0.5rem;
+    padding-left: 4px;
+    padding-right: 4px;
     margin-bottom: 0.5rem;
+    margin-left: -4px;
+    margin-right: -4px;
     z-index: 1010;
 }
 
@@ -15,5 +19,5 @@
 }
 
 #feed-header.feed-header-shadow {
-    box-shadow: 0 10px 5px -5px var(--gray-light);
+    box-shadow: 0 10px 5px -3px var(--gray-light);
 }
