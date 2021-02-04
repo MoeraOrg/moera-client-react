@@ -20,6 +20,8 @@ ABBR[title] {
 
 .container {
     max-width: 900px;
+    padding-left: .25rem;
+    padding-right: .25rem;
 }
 
 .popover {
