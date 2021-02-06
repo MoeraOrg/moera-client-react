@@ -108,6 +108,9 @@ const storyEvent = (properties = {}) => baseEvent({
     "remoteNodeName": {
         type: "string"
     },
+    "remoteFullName": {
+        type: "string"
+    },
     "remotePostingId": {
         type: "string"
     },
@@ -151,6 +154,9 @@ const subscriberEvent = (properties = {}) => baseEvent({
     "nodeName": {
         type: "string"
     },
+    "fullName": {
+        type: "string"
+    },
     "createdAt": {
         type: "integer"
     },
@@ -171,6 +177,9 @@ const subscriptionEvent = (properties = {}) => baseEvent({
         type: "string"
     },
     "remoteNodeName": {
+        type: "string"
+    },
+    "remoteFullName": {
         type: "string"
     },
     "remoteFeedName": {

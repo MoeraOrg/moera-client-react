@@ -23,6 +23,9 @@ export const WhoAmI = schema({
         },
         "nodeNameChanging": {
             type: "boolean"
+        },
+        "fullName": {
+            type: "string"
         }
     },
     additionalProperties: false
@@ -205,10 +208,16 @@ const PostingInfoType = {
         "receiverName": {
             type: "string"
         },
+        "receiverFullName": {
+            type: "string"
+        },
         "receiverPostingId": {
             type: "string"
         },
         "ownerName": {
+            type: "string"
+        },
+        "ownerFullName": {
             type: "string"
         },
         "bodyPreview": {
@@ -370,6 +379,9 @@ const PostingInfoType = {
                     "nodeName": {
                         type: "string"
                     },
+                    "fullName": {
+                        type: "string"
+                    },
                     "feedName": {
                         type: "string"
                     },
@@ -463,6 +475,9 @@ const RepliedToType = {
         "name": {
             type: "string"
         },
+        "fullName": {
+            type: "string"
+        },
         "heading": {
             type: "string"
         },
@@ -477,6 +492,9 @@ const CommentInfoType = {
             type: "string"
         },
         "ownerName": {
+            type: "string"
+        },
+        "ownerFullName": {
             type: "string"
         },
         "postingId": {
@@ -640,6 +658,9 @@ const StoryInfoType = {
             type: "string"
         },
         "remoteNodeName": {
+            type: "string"
+        },
+        "remoteFullName": {
             type: "string"
         },
         "remotePostingId": {
@@ -827,6 +848,9 @@ const ReactionInfoType = {
         "ownerName": {
             type: "string"
         },
+        "ownerFullName": {
+            type: "string"
+        },
         "postingId": {
             type: "string"
         },
@@ -919,6 +943,9 @@ const SubscriberInfoType = {
         "nodeName": {
             type: "string"
         },
+        "fullName": {
+            type: "string"
+        },
         "createdAt": {
             type: "integer"
         }
@@ -951,6 +978,9 @@ const SubscriptionInfoType = {
         "remoteNodeName": {
             type: "string"
         },
+        "remoteFullName": {
+            type: "string"
+        },
         "remoteFeedName": {
             type: "string"
         },
@@ -977,6 +1007,9 @@ export const ActivityReactionInfoArray = schema({
         type: "object",
         properties: {
             "remoteNodeName": {
+                type: "string"
+            },
+            "remoteFullName": {
                 type: "string"
             },
             "remotePostingId": {
