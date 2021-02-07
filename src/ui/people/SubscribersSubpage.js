@@ -8,7 +8,7 @@ const SubscribersSubpage = ({loading, subscribers}) => (
         <Loading active={loading}/>
         {subscribers.map(sr =>
             <div key={sr.id} className="col-md-3 col-sm-4">
-                <NodeName name={sr.nodeName}/>
+                <NodeName name={sr.nodeName} fullName={sr.fullName}/>
             </div>
         )}
     </div>

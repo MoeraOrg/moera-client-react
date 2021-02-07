@@ -30,7 +30,7 @@ const ReactionsListView = ({postingId, commentId, itemsRef, onSwitchView, remain
                 <div className="item" key={r.moment}>
                     <div className="emoji-type"><Twemoji code={r.emoji}/></div>
                     <div className="owner-name">
-                        <NodeName name={r.ownerName}/>
+                        <NodeName name={r.ownerName} fullName={r.ownerFullName}/>
                         {" "}
                         {r.signature &&
                             <ReactionVerifyButton postingId={postingId} commentId={commentId} ownerName={r.ownerName}/>

@@ -18,6 +18,7 @@ class RepliedTo extends React.PureComponent {
         postingId: PropType.string,
         commentId: PropType.string,
         ownerName: PropType.string,
+        ownerFullName: PropType.string,
         heading: PropType.string,
         unset: PropType.bool,
         onUnset: PropType.func,
@@ -35,7 +36,7 @@ class RepliedTo extends React.PureComponent {
     }
 
     render() {
-        const {postingId, commentId, ownerName, heading, unset, popperEnabled} = this.props;
+        const {postingId, commentId, ownerName, ownerFullName, heading, unset, popperEnabled} = this.props;
 
         if (commentId == null) {
             return null;
@@ -49,7 +50,7 @@ class RepliedTo extends React.PureComponent {
                             <span ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
                                 <Jump href={`/post/${postingId}?comment=${commentId}`}>
                                     <span className="icon"><FontAwesomeIcon icon="reply"/></span>
-                                    <NodeName name={ownerName} linked={false}/>
+                                    <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
                                     <span className="heading" dangerouslySetInnerHTML={{__html: heading}}/>
                                 </Jump>
                             </span>

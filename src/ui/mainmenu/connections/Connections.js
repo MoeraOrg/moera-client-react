@@ -44,7 +44,8 @@ class Connections extends React.PureComponent {
                 {roots.map(root => (
                     root.url === location ?
                         <div className="connection active" key={root.url}>
-                            <NodeName {...owner} linked={false}/><br/>
+                            <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
+                                      linked={false}/><br/>
                             {location}<br/>
                             <span className="connected">Connected</span>
                         </div>

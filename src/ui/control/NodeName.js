@@ -48,15 +48,15 @@ const NodeNameImpl = ({name, fullName, verified = false, correct = false, linked
         );
 };
 
-NodeNameImpl.propTypes = {
-    name: PropType.string,
-    fullName: PropType.string,
-    verified: PropType.bool,
-    correct: PropType.bool
-};
-
 export const NodeName = connect(
     (state, ownProps) => ({
         details: getNamingNameDetails(state, ownProps.name)
     })
 )(NodeNameImpl);
+
+NodeName.propTypes = {
+    name: PropType.string,
+    fullName: PropType.string,
+    verified: PropType.bool,
+    correct: PropType.bool
+};

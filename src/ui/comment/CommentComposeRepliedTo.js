@@ -13,14 +13,14 @@ class CommentComposeRepliedTo extends React.PureComponent {
     }
 
     render() {
-        const {postingId, commentId, ownerName, heading} = this.props;
+        const {postingId, commentId, ownerName, ownerFullName, heading} = this.props;
 
         if (commentId == null) {
             return null;
         }
 
         return (
-            <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName}
+            <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} ownerFullName={ownerFullName}
                        heading={replaceEmojis(heading)} unset={true} onUnset={this.onUnset}/>
         );
     }
@@ -32,6 +32,7 @@ export default connect(
         postingId: getDetailedPostingId(state),
         commentId: state.detailedPosting.compose.repliedToId,
         ownerName: state.detailedPosting.compose.repliedToName,
+        ownerFullName: state.detailedPosting.compose.repliedToFullName,
         heading: state.detailedPosting.compose.repliedToHeading,
     }),
     { commentRepliedToUnset }

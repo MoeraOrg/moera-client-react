@@ -15,7 +15,7 @@ const PostingSources = ({posting}) => (
                     <FontAwesomeIcon icon={line.original ? "star" : "share-square"}/>
                 </span>
                 <Jump nodeName={line.nodeName} href={`/post/${line.postingId}`}>
-                    <NodeName name={line.nodeName} linked={false}/> in {line.feedTitle}
+                    <NodeName name={line.nodeName} fullName={line.fullName} linked={false}/> in {line.feedTitle}
                 </Jump>
             </div>
         )}
@@ -28,6 +28,7 @@ function sourcesList(posting) {
         .sort((sr1, sr2) => sr1.createdAt - sr2.createdAt)
         .map(sr => ({
             nodeName: sr.nodeName,
+            fullName: sr.fullName,
             feedTitle: feedTitle(sr.feedName),
             postingId: sr.postingId,
             original: false
@@ -38,6 +39,7 @@ function sourcesList(posting) {
         .feedName;
     list.unshift({
         nodeName: posting.receiverName,
+        fullName: posting.receiverFullName,
         feedTitle: feedTitle(receiverFeedName),
         postingId: posting.receiverPostingId,
         original: true
