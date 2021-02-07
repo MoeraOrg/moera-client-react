@@ -8,7 +8,21 @@ import { getNamingNameDetails } from "state/naming/selectors";
 import Jump from "ui/navigation/Jump";
 import "./NodeName.css";
 
-const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, details }) => {
+const NodeNameText = ({name, fullName}) => {
+    if (fullName != null) {
+        return fullName;
+    } else {
+        const parts = NodeNameParser.parse(name);
+        return (
+            <>
+                {parts.name}
+                {parts.generation ? <span className="generation">{parts.generation}</span> : ""}
+            </>
+        );
+    }
+}
+
+const NodeNameImpl = ({name, fullName, verified = false, correct = false, linked = true, details}) => {
     if (!name) {
         return null;
     }
@@ -20,25 +34,23 @@ const NodeNameImpl = ({ name, verified = false, correct = false, linked = true, 
         }
     );
     linked = linked && (!details.loaded || details.nodeUri);
-    const parts = NodeNameParser.parse(name);
     return linked ?
         (
             <Jump className={klass} nodeName={name} href="/">
-                {parts.name}
-                {parts.generation ? <span className="generation">{parts.generation}</span> : ""}
+                <NodeNameText name={name} fullName={fullName}/>
             </Jump>
         )
         :
         (
             <span className={klass}>
-                {parts.name}
-                {parts.generation ? <span className="generation">{parts.generation}</span> : ""}
+                <NodeNameText name={name} fullName={fullName}/>
             </span>
         );
 };
 
 NodeNameImpl.propTypes = {
     name: PropType.string,
+    fullName: PropType.string,
     verified: PropType.bool,
     correct: PropType.bool
 };
