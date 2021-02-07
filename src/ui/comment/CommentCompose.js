@@ -7,7 +7,7 @@ import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
-import { getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
@@ -50,10 +50,10 @@ class CommentCompose extends React.PureComponent {
     }
 
     render() {
-        const {homeOwnerName, beingPosted, receiverName, smileysEnabled, sourceFormatDefault, openSignUpDialog,
+        const {ownerName, beingPosted, receiverName, smileysEnabled, sourceFormatDefault, openSignUpDialog,
                openConnectDialog, values} = this.props;
 
-        if (homeOwnerName) {
+        if (ownerName) {
             return (
                 <div id="comment-composer" onFocus={this.onFocus}>
                     <Form>
@@ -85,7 +85,8 @@ class CommentCompose extends React.PureComponent {
 
 export default connect(
     state => ({
-        homeOwnerName: getHomeOwnerName(state),
+        ownerName: getHomeOwnerName(state),
+        ownerFullName: getHomeOwnerFullName(state),
         receiverName: state.detailedPosting.comments.receiverName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         formId: state.detailedPosting.compose.formId,

@@ -5,7 +5,7 @@ import * as textFieldEdit from 'text-field-edit';
 
 import { closeCommentDialog, commentDialogConflictClose, commentPost } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerComment, isCommentComposerConflict } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
@@ -82,6 +82,7 @@ export default connect(
     state => ({
         show: state.detailedPosting.compose.showDialog,
         ownerName: getHomeOwnerName(state),
+        ownerFullName: getHomeOwnerFullName(state),
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         comment: getCommentComposerComment(state),
         conflict: isCommentComposerConflict(state),

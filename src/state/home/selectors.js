@@ -26,6 +26,10 @@ export function getHomeOwnerName(state) {
     return state.home.owner.name;
 }
 
+export function getHomeOwnerFullName(state) {
+    return state.home.owner.fullName;
+}
+
 export function isHomeOwnerNameSet(state) {
     return !!getHomeOwnerName(state);
 }

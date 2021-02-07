@@ -23,6 +23,7 @@ const commentComposeLogic = {
     mapValuesToCommentText(values, props) {
         return {
             ownerName: props.ownerName,
+            ownerFullName: props.ownerFullName,
             bodySrc: JSON.stringify({
                 text: this._replaceSmileys(props, values.body.trim())
             }),
