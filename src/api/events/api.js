@@ -289,6 +289,9 @@ export const EVENT_SCHEMES = {
     "NODE_NAME_CHANGED": baseEvent({
         "name": {
             type: "string"
+        },
+        "fullName": {
+            type: "string"
         }
     }),
     "REMOTE_POSTING_VERIFIED": remotePostingVerificationEvent({

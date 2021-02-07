@@ -161,8 +161,8 @@ export class Browser {
         }, window.location.href);
     }
 
-    static storeConnectionData(location, nodeName, login, token, permissions) {
-        this.storeData({home: {location, nodeName, login, token, permissions}});
+    static storeConnectionData(location, nodeName, fullName, login, token, permissions) {
+        this.storeData({home: {location, nodeName, fullName, login, token, permissions}});
     }
 
     static storeCartesData(cartesIp, cartes) {

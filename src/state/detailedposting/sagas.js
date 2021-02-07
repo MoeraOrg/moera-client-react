@@ -59,7 +59,7 @@ import {
 } from "state/detailedposting/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { postingCommentsSet } from "state/postings/actions";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerFullName, getOwnerName } from "state/owner/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
@@ -112,13 +112,15 @@ function* detailedPostingLoadSaga() {
 }
 
 function* commentsReceiverSwitchSaga() {
-    const {ownerName, posting} = yield select(state => ({
+    const {ownerName, ownerFullName, posting} = yield select(state => ({
         ownerName: getOwnerName(state),
+        ownerFullName: getOwnerFullName(state),
         posting: getDetailedPosting(state)
     }));
     const receiverName = posting.receiverName ?? ownerName;
+    const receiverFullName = posting.receiverFullName ?? ownerFullName;
     const receiverPostingId = posting.receiverPostingId ?? posting.id;
-    yield put(commentsReceiverSwitched(receiverName, receiverPostingId));
+    yield put(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId));
 }
 
 function* commentsLoadAllSaga() {
@@ -329,7 +331,7 @@ function* commentReactionDeleteSaga(action) {
 }
 
 function* commentReplySaga(action) {
-    const {commentId, ownerName, heading} = action.payload;
+    const {commentId, ownerName, ownerFullName, heading} = action.payload;
 
     const body = document.getElementById("body");
     const {replied, repliedToName} = yield select(state => ({
@@ -338,7 +340,7 @@ function* commentReplySaga(action) {
     }));
     const text = quoteHtml(getWindowSelectionHtml());
     if (body.textLength === 0 && !replied) {
-        yield put(commentRepliedToSet(commentId, ownerName, heading));
+        yield put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading));
         if (text) {
             textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
         }

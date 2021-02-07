@@ -4,6 +4,10 @@ export function getOwnerName(state) {
     return state.owner.name;
 }
 
+export function getOwnerFullName(state) {
+    return state.owner.fullName;
+}
+
 export function isOwnerNameSet(state) {
     return getOwnerName(state) != null;
 }

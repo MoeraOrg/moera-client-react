@@ -20,9 +20,9 @@ export const commentsReceiverSwitch = () => ({
 });
 
 export const COMMENTS_RECEIVER_SWITCHED = "COMMENTS_RECEIVER_SWITCHED";
-export const commentsReceiverSwitched = (nodeName, postingId) => ({
+export const commentsReceiverSwitched = (nodeName, fullName, postingId) => ({
     type: COMMENTS_RECEIVER_SWITCHED,
-    payload: {nodeName, postingId}
+    payload: {nodeName, fullName, postingId}
 });
 
 export const COMMENTS_LOAD_ALL = "COMMENTS_LOAD_ALL";
@@ -270,15 +270,15 @@ export const commentReactionSet = (nodeName, id, postingId, reaction, totals) =>
 });
 
 export const COMMENT_REPLY = "COMMENT_REPLY";
-export const commentReply = (commentId, ownerName, heading) => ({
+export const commentReply = (commentId, ownerName, ownerFullName, heading) => ({
     type: COMMENT_REPLY,
-    payload: {commentId, ownerName, heading}
+    payload: {commentId, ownerName, ownerFullName, heading}
 });
 
 export const COMMENT_REPLIED_TO_SET = "COMMENT_REPLIED_TO_SET";
-export const commentRepliedToSet = (commentId, ownerName, heading) => ({
+export const commentRepliedToSet = (commentId, ownerName, ownerFullName, heading) => ({
     type: COMMENT_REPLIED_TO_SET,
-    payload: {commentId, ownerName, heading}
+    payload: {commentId, ownerName, ownerFullName, heading}
 });
 
 export const COMMENT_REPLIED_TO_UNSET = "COMMENT_REPLIED_TO_UNSET";

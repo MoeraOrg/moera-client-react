@@ -107,7 +107,7 @@ function* signUpSaga(action) {
             yield put(errorThrown(e));
         }
 
-        Browser.storeConnectionData(rootLocation, null, login, data.token, data.permissions);
+        Browser.storeConnectionData(rootLocation, null, null, login, data.token, data.permissions);
         Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
         yield put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp,
             cartesData.cartes));
@@ -134,7 +134,7 @@ function* signUpSaga(action) {
                 return;
             }
             const secret = yield call(Node.registerName, ":", name);
-            yield put(homeOwnerSet(null, true));
+            yield put(homeOwnerSet(null, true, null));
             yield put(signedUp());
             yield put(registerNameSucceeded(secret.name, secret.mnemonic));
         } catch (e) {

@@ -16,6 +16,10 @@ export default [
         conj(isConnectedToHome, inv(hasInactiveConnections)),
         signal => disconnectedFromHome(signal.payload.location, signal.payload.login)
     ),
-    trigger(EVENT_HOME_NODE_NAME_CHANGED, true, signal => homeOwnerSet(signal.payload.name, false)),
+    trigger(
+        EVENT_HOME_NODE_NAME_CHANGED,
+        true,
+        signal => homeOwnerSet(signal.payload.name, false, signal.payload.fullName)
+    ),
     trigger(EVENT_HOME_NODE_NAME_CHANGED, true, homeOwnerVerify),
 ];

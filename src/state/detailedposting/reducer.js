@@ -63,6 +63,7 @@ import {
 
 const emptyComments = {
     receiverName: null,
+    receiverFullName: null,
     receiverPostingId: null,
     loadingFuture: false,
     loadingPast: false,
@@ -92,6 +93,7 @@ const emptyCompose = {
     comment: null,
     repliedToId: null,
     repliedToName: null,
+    repliedToFullName: null,
     repliedToHeading: null,
     conflict: false
 };
@@ -212,6 +214,7 @@ export default (state = initialState, action) => {
             return immutable.assign(state, "comments", {
                 ...cloneDeep(emptyComments),
                 receiverName: action.payload.nodeName,
+                receiverFullName: action.payload.fullName,
                 receiverPostingId: action.payload.postingId,
                 focused: state.comments.focused,
                 focusedCommentId: state.comments.focusedCommentId
@@ -590,6 +593,7 @@ export default (state = initialState, action) => {
             return immutable.assign(state, "compose", {
                 repliedToId: action.payload.commentId,
                 repliedToName: action.payload.ownerName,
+                repliedToFullName: action.payload.ownerFullName,
                 repliedToHeading: action.payload.heading
             });
 
@@ -597,6 +601,7 @@ export default (state = initialState, action) => {
             return immutable.assign(state, "compose", {
                 repliedToId: null,
                 repliedToName: null,
+                repliedToFullName: null,
                 repliedToHeading: null
             });
 

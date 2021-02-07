@@ -13,6 +13,7 @@ import { INIT_FROM_LOCATION } from "state/navigation/actions";
 
 const initialState = {
     name: null,
+    fullName: null,
     correct: false,
     verified: false,
     verifiedAt: 0,
@@ -31,12 +32,18 @@ export default (state = initialState, action) => {
                 return {
                     ...initialState,
                     name: action.payload.name,
+                    fullName: action.payload.fullName,
                     changing: action.payload.changing ?? false
                 };
             } else if (action.payload.changing != null) {
                 return {
                     ...state,
                     changing: action.payload.changing
+                }
+            } else if (action.payload.fullName !== false) {
+                return {
+                    ...state,
+                    fullName: action.payload.fullName
                 }
             } else {
                 return state;

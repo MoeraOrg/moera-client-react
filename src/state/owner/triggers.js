@@ -15,5 +15,9 @@ export default [
     trigger(NAMING_NAME_LOADED, (state, signal) => signal.payload.name === getOwnerName(state), updateLocation),
     trigger(PULSE_6H, isOwnerNameSet, ownerVerify),
     trigger(OWNER_SWITCH_FAILED, true, messageBox("No node with such name exist.")),
-    trigger(EVENT_NODE_NODE_NAME_CHANGED, true, signal => ownerSet(signal.payload.name, false))
+    trigger(
+        EVENT_NODE_NODE_NAME_CHANGED,
+        true,
+        signal => ownerSet(signal.payload.name, false, signal.payload.fullName)
+    )
 ]
