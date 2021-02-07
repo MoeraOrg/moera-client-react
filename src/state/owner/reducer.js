@@ -1,5 +1,6 @@
 import cloneDeep from 'lodash.clonedeep';
 import { getUnixTime } from 'date-fns';
+import * as immutable from 'object-path-immutable';
 
 import {
     OWNER_SET,
@@ -27,27 +28,19 @@ export default (state = initialState, action) => {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
 
-        case OWNER_SET:
+        case OWNER_SET: {
+            const istate = immutable.wrap(state);
             if (state.name !== action.payload.name) {
-                return {
-                    ...initialState,
-                    name: action.payload.name,
-                    fullName: action.payload.fullName,
-                    changing: action.payload.changing ?? false
-                };
-            } else if (action.payload.changing != null) {
-                return {
-                    ...state,
-                    changing: action.payload.changing
-                }
-            } else if (action.payload.fullName !== false) {
-                return {
-                    ...state,
-                    fullName: action.payload.fullName
-                }
-            } else {
-                return state;
+                istate.assign("", initialState).set("name", action.payload.name);
             }
+            if (action.payload.changing != null) {
+                istate.set("changing", action.payload.changing);
+            }
+            if (action.payload.fullName !== false) {
+                istate.set("fullName", action.payload.fullName);
+            }
+            return istate.value();
+        }
 
         case OWNER_VERIFIED:
             if (state.name === action.payload.name) {
