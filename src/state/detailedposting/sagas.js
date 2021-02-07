@@ -345,7 +345,7 @@ function* commentReplySaga(action) {
             textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
         }
     } else {
-        const mention = mentionName(ownerName);
+        const mention = mentionName(ownerName, ownerFullName);
         if (text) {
             if (ownerName !== repliedToName) {
                 textFieldEdit.insert(body, `${mention}:\n>>>\n${text}\n>>>\n`);

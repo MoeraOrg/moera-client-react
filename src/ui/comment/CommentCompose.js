@@ -50,9 +50,10 @@ class CommentCompose extends React.PureComponent {
     }
 
     render() {
-        const {ownerName, beingPosted, receiverName, smileysEnabled, sourceFormatDefault, openSignUpDialog,
-               openConnectDialog, values} = this.props;
+        const {ownerName, beingPosted, receiverName, receiverFullName, smileysEnabled, sourceFormatDefault,
+               openSignUpDialog, openConnectDialog, values} = this.props;
 
+        const mention = receiverFullName ? receiverFullName : mentionName(receiverName);
         if (ownerName) {
             return (
                 <div id="comment-composer" onFocus={this.onFocus}>
@@ -60,7 +61,7 @@ class CommentCompose extends React.PureComponent {
                         <div className="content">
                             <CommentComposeRepliedTo/>
                             <RichTextField name="body" rows={1} anyValue
-                                           placeholder={`Write a comment to ${mentionName(receiverName)} here...`}
+                                           placeholder={`Write a comment to ${mention} here...`}
                                            disabled={beingPosted} smileysEnabled={smileysEnabled}
                                            hidingPanel={values.body.trim() === ""} format={sourceFormatDefault}
                                            onKeyDown={this.onKeyDown}/>
@@ -88,6 +89,7 @@ export default connect(
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         receiverName: state.detailedPosting.comments.receiverName,
+        receiverFullName: state.detailedPosting.comments.receiverFullName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         formId: state.detailedPosting.compose.formId,
         repliedToId: getCommentComposerRepliedToId(state),

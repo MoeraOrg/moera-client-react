@@ -2,8 +2,11 @@ import * as Base64js from 'base64-js';
 
 import { NodeName } from "api";
 
-export function mentionName(name) {
-    return name ? "@" + NodeName.shorten(name) : "";
+export function mentionName(name, fullName) {
+    if (!name) {
+        return "";
+    }
+    return "@" + NodeName.shorten(name) + (fullName ? `[${fullName}]` : "");
 }
 
 export function atOwner(state) {
