@@ -88,10 +88,12 @@ class Jump extends React.PureComponent {
             trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
         } = this.props;
 
+        const dataNodeName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
         if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
-            return <a href={this.track(rootPage + href)} className={className} title={title} ref={anchorRef}
-                      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
-                      onClick={this.onNear}>{children}</a>;
+            return <a href={this.track(rootPage + href)} className={className} title={title}
+                      data-nodename={dataNodeName} ref={anchorRef} onMouseEnter={onMouseEnter}
+                      onMouseLeave={onMouseLeave} onTouchStart={onTouchStart} onClick={this.onNear}
+                      suppressHydrationWarning={true}>{children}</a>;
         } else {
             let url, nodeLocation = null;
             if (nodeName === ":" || nodeName === homeOwnerName) {
@@ -107,9 +109,9 @@ class Jump extends React.PureComponent {
                         {client, name: nodeName, location: href, trackingId});
                 }
             }
-            return <a href={url} className={className} title={title} ref={anchorRef} onMouseEnter={onMouseEnter}
-                      onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
-                      onClick={this.onFar(url, nodeLocation, href)}>{children}</a>;
+            return <a href={url} className={className} title={title} data-nodename={dataNodeName} ref={anchorRef}
+                      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
+                      onClick={this.onFar(url, nodeLocation, href)} suppressHydrationWarning={true}>{children}</a>;
         }
     }
 
