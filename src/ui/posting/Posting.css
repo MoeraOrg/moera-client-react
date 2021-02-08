@@ -9,6 +9,7 @@
 
 .posting > .content {
     overflow-wrap: break-word;
+    text-align: start;
 }
 
 @media only screen and (min-width: 901px) {

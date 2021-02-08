@@ -18,6 +18,7 @@
     min-width: 16rem;
     max-width: calc(100% - 1rem);
     overflow-wrap: break-word;
+    text-align: start;
 }
 
 .comment .content P:last-child {

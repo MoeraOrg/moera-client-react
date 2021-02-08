@@ -31,9 +31,12 @@ const SAFE_HTML_SETTINGS = {
         "*": {
             "text-align": [/^left$/, /^right$/, /^center$/],
         },
-        "b": {
+        b: {
             "background-image": [/^url\('https:\/\/twemoji.maxcdn.com\//]
         }
+    },
+    transformTags: {
+        p: (tagName, attribs) => attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}}
     }
 };
 
@@ -65,6 +68,7 @@ export function safePreviewHtml(html) {
     return sanitizeHtml(replaceEmojis(html), {
         ...SAFE_HTML_SETTINGS,
         transformTags: {
+            ...SAFE_HTML_SETTINGS.transformTags,
             "h1": "b",
             "h2": "b",
             "h3": "b",
