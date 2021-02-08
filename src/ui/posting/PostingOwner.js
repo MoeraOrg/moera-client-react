@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NodeName } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 import PostingVerifyButton from "ui/posting/PostingVerifyButton";
 import "./PostingOwner.css";
 

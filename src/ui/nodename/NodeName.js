@@ -3,26 +3,12 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 import cx from 'classnames';
 
-import { NodeName as NodeNameParser } from "api";
 import { getNamingNameDetails } from "state/naming/selectors";
 import Jump from "ui/navigation/Jump";
+import NodeNameText from "ui/nodename/NodeNameText";
 import "./NodeName.css";
 
-const NodeNameText = ({name, fullName}) => {
-    if (fullName != null) {
-        return fullName;
-    } else {
-        const parts = NodeNameParser.parse(name);
-        return (
-            <>
-                {parts.name}
-                {parts.generation ? <span className="generation">{parts.generation}</span> : ""}
-            </>
-        );
-    }
-}
-
-const NodeNameImpl = ({name, fullName, verified = false, correct = false, linked = true, details}) => {
+const NodeName = ({name, fullName, verified = false, correct = false, linked = true, details}) => {
     if (!name) {
         return null;
     }
@@ -40,7 +26,7 @@ const NodeNameImpl = ({name, fullName, verified = false, correct = false, linked
                 <NodeNameText name={name} fullName={fullName}/>
             </Jump>
         )
-        :
+    :
         (
             <span className={klass}>
                 <NodeNameText name={name} fullName={fullName}/>
@@ -48,15 +34,15 @@ const NodeNameImpl = ({name, fullName, verified = false, correct = false, linked
         );
 };
 
-export const NodeName = connect(
-    (state, ownProps) => ({
-        details: getNamingNameDetails(state, ownProps.name)
-    })
-)(NodeNameImpl);
-
 NodeName.propTypes = {
     name: PropType.string,
     fullName: PropType.string,
     verified: PropType.bool,
     correct: PropType.bool
 };
+
+export default connect(
+    (state, ownProps) => ({
+        details: getNamingNameDetails(state, ownProps.name)
+    })
+)(NodeName);

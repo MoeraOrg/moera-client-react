@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
-import { NodeName } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 
 const ConnectionItem = ({name, url, onClick, onDisconnect, standalone}) => (
     <div className="connection-item">

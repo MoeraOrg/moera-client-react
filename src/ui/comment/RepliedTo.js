@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { glanceComment } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
 import { Browser } from "ui/browser";
-import { NodeName } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import GlanceComment from "ui/comment/GlanceComment";

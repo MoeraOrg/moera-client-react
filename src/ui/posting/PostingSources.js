@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
 import Jump from "ui/navigation/Jump";
-import { NodeName } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 import "./PostingSources.css";
 
 const PostingSources = ({posting}) => (

@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropType from 'prop-types';
 
-import { Button, Loading, NodeName } from "ui/control";
+import { Button, Loading } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 import {
     isNodeNameDefined,
     isNodeNameManageable,

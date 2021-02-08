@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { isAtHomeNode } from "state/node/selectors";
-import { NodeName } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 import "./OwnerName.css";
 
 const OwnerName = ({onClick, name, changing, atHome, ...props}) => (

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NodeName } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 import CommentVerifyButton from "ui/comment/CommentVerifyButton";
 import "./CommentOwner.css";
 

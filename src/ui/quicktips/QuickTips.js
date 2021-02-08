@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Button, ModalDialog, NodeName } from "ui/control";
+import { Button, ModalDialog } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 import { getOwnerName } from "state/owner/selectors";
 import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";

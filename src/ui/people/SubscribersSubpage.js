@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Loading, NodeName } from "ui/control";
+import { Loading } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
 
 const SubscribersSubpage = ({loading, subscribers}) => (
     <div className="row">
