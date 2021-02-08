@@ -25,15 +25,16 @@ export function* callApi({
         throw new NameResolvingError(nodeName);
     }
     const exception = (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
-    location = yield call(authorize, location, rootLocation, auth);
+    const headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    };
+    yield call(authorize, headers, rootLocation, auth);
     let response;
     try {
         response = yield call(retryFetch, apiUrl(rootApi, location, method), {
             method,
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
+            headers,
             body: body != null ? JSON.stringify(body) : null
         });
     } catch (e) {
@@ -129,13 +130,19 @@ export function* selectApi(nodeName) {
     return {rootLocation: root.location, rootApi: root.api, errorTitle};
 }
 
-function* authorize(location, rootLocation, auth) {
+function* authorize(headers, rootLocation, auth) {
     if (auth === false) {
-        return location;
+        return;
     }
     const token = auth === true ? yield select(state => getToken(state, rootLocation)) : auth;
-    const carte = token == null ? yield select(getCurrentCarte) : null;
-    return urlWithParameters(location, {token, carte});
+    if (token != null) {
+        headers["Authorization"] = `Bearer token:${token}`;
+    } else {
+        const carte = yield select(getCurrentCarte);
+        if (carte != null) {
+            headers["Authorization"] = `Bearer carte:${carte}`;
+        }
+    }
 }
 
 function apiUrl(rootApi, location, method) {
