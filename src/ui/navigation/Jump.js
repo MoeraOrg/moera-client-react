@@ -21,7 +21,11 @@ class Jump extends React.PureComponent {
         title: PropType.string,
         trackingId: PropType.string,
         onNear: PropType.func,
-        onFar: PropType.func
+        onFar: PropType.func,
+        anchorRef: PropType.any,
+        onMouseEnter: PropType.func,
+        onMouseLeave: PropType.func,
+        onTouchStart: PropType.func
     }
 
     onNear = e => {
@@ -81,15 +85,13 @@ class Jump extends React.PureComponent {
     render() {
         const {
             standalone, nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details,
-            trackingId, children
+            trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
         } = this.props;
 
         if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
-            return (
-                <a href={this.track(rootPage + href)} className={className} title={title} onClick={this.onNear}>
-                    {children}
-                </a>
-            );
+            return <a href={this.track(rootPage + href)} className={className} title={title} ref={anchorRef}
+                      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
+                      onClick={this.onNear}>{children}</a>;
         } else {
             let url, nodeLocation = null;
             if (nodeName === ":" || nodeName === homeOwnerName) {
@@ -105,8 +107,9 @@ class Jump extends React.PureComponent {
                         {client, name: nodeName, location: href, trackingId});
                 }
             }
-            return <a href={url} className={className} title={title}
-                      onClick={this.onFar(url, nodeLocation, href)}>{children}</a>
+            return <a href={url} className={className} title={title} ref={anchorRef} onMouseEnter={onMouseEnter}
+                      onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
+                      onClick={this.onFar(url, nodeLocation, href)}>{children}</a>;
         }
     }
 

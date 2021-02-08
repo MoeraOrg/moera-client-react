@@ -16,7 +16,7 @@ const PostingSources = ({posting}) => (
                 </span>
                 <Jump nodeName={line.nodeName} href={`/post/${line.postingId}`}>
                     <NodeName name={line.nodeName} fullName={line.fullName} linked={false} popup={false}/>
-                    in {line.feedTitle}
+                    {" "}in {line.feedTitle}
                 </Jump>
             </div>
         )}

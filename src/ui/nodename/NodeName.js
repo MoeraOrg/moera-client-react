@@ -25,11 +25,10 @@ const NodeName = ({name, fullName, verified = false, correct = false, linked = t
         (
             <NodeNamePopup nodeName={name} fullName={fullName} disabled={!popup}>
                 {(ref, mainEnter, mainLeave, mainTouch) =>
-                    <span ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
-                        <Jump className={klass} nodeName={name} href="/">
-                            <NodeNameText name={name} fullName={fullName}/>
-                        </Jump>
-                    </span>
+                    <Jump className={klass} nodeName={name} href="/" anchorRef={ref} onMouseEnter={mainEnter}
+                          onMouseLeave={mainLeave} onTouchStart={mainTouch}>
+                        <NodeNameText name={name} fullName={fullName}/>
+                    </Jump>
                 }
             </NodeNamePopup>
         )

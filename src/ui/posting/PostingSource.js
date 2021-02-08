@@ -11,12 +11,11 @@ const PostingSource = ({posting}) => (
         <Manager>
             <Reference>
                 {(ref, mainEnter, mainLeave, mainTouch) =>
-                    <span className="posting-source" ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}
-                          onTouchStart={mainTouch}>
-                        <Jump nodeName={posting.receiverName} href={`/post/${posting.receiverPostingId}`}>
-                            <FontAwesomeIcon icon="retweet"/>
-                        </Jump>
-                    </span>
+                    <Jump className="posting-source" nodeName={posting.receiverName}
+                          href={`/post/${posting.receiverPostingId}`} anchorRef={ref} onMouseEnter={mainEnter}
+                          onMouseLeave={mainLeave} onTouchStart={mainTouch}>
+                        <FontAwesomeIcon icon="retweet"/>
+                    </Jump>
                 }
             </Reference>
             <DelayedPopper placement="bottom-start" arrow={true}>

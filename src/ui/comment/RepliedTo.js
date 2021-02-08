@@ -47,13 +47,12 @@ class RepliedTo extends React.PureComponent {
                 <Manager onPreparePopper={this.onPreparePopper} disabled={!popperEnabled}>
                     <Reference>
                         {(ref, mainEnter, mainLeave, mainTouch) =>
-                            <span ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
-                                <Jump href={`/post/${postingId}?comment=${commentId}`}>
-                                    <span className="icon"><FontAwesomeIcon icon="reply"/></span>
-                                    <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
-                                    <span className="heading" dangerouslySetInnerHTML={{__html: heading}}/>
-                                </Jump>
-                            </span>
+                            <Jump href={`/post/${postingId}?comment=${commentId}`} anchorRef={ref}
+                                  onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
+                                <span className="icon"><FontAwesomeIcon icon="reply"/></span>
+                                <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
+                                <span className="heading" dangerouslySetInnerHTML={{__html: heading}}/>
+                            </Jump>
                         }
                     </Reference>
                     <DelayedPopper placement="top" className="glance-comment-popover">
