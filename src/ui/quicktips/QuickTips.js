@@ -9,6 +9,7 @@ import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { PREFIX } from "api/settings";
+import Jump from "ui/navigation/Jump";
 import "./QuickTips.css";
 
 class QuickTips extends React.PureComponent {
@@ -65,9 +66,9 @@ class QuickTips extends React.PureComponent {
                         </li>
                         <li>
                             Discover new blogs in the{" "}
-                            <a href="https://lamed.moera.blog/moera/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74">{
-                                }<b>list of blogs</b>{
-                            }</a>.
+                            <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74">
+                                <b>list of blogs</b>
+                            </Jump>.
                         </li>
                     </ul>
                 </div>
