@@ -6,6 +6,7 @@ import PropType from 'prop-types';
 import store from "state/store";
 import { getSetting } from "state/settings/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
+import Jump from "ui/navigation/Jump";
 
 class EntryHtml extends React.PureComponent {
 
@@ -27,16 +28,25 @@ class EntryHtml extends React.PureComponent {
     hydrate() {
         this.#dom.querySelectorAll("a[data-nodename]").forEach(node => {
             const name = node.getAttribute("data-nodename");
+            const href = node.getAttribute("data-href");
             const text = node.innerText;
+            const html = node.innerHTML;
 
             const span = document.createElement("span");
             node.replaceWith(span);
-            span.appendChild(node);
 
-            ReactDOM.hydrate(
-                <Provider store={store}>
-                    <NodeNameMention name={name} text={text}/>
-                </Provider>, span);
+            if (!href || href === "/") {
+                span.appendChild(node);
+                ReactDOM.hydrate(
+                    <Provider store={store}>
+                        <NodeNameMention name={name} text={text}/>
+                    </Provider>, span);
+            } else {
+                ReactDOM.render(
+                    <Provider store={store}>
+                        <Jump nodeName={name} href={href}><span dangerouslySetInnerHTML={{__html: html}}/></Jump>
+                    </Provider>, span);
+            }
         });
     }
 
@@ -44,7 +54,7 @@ class EntryHtml extends React.PureComponent {
         const {className, html, fontMagnitude} = this.props;
 
         return <div ref={dom => this.#dom = dom} className={className} style={{fontSize: `${fontMagnitude}%`}}
-                    dangerouslySetInnerHTML={{__html: html}} />
+                    dangerouslySetInnerHTML={{__html: html}}/>
     }
 
 }

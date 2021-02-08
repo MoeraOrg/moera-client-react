@@ -91,7 +91,7 @@ class Jump extends React.PureComponent {
         const dataNodeName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
         if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
             return <a href={this.track(rootPage + href)} className={className} title={title}
-                      data-nodename={dataNodeName} ref={anchorRef} onMouseEnter={onMouseEnter}
+                      data-nodename={dataNodeName} data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter}
                       onMouseLeave={onMouseLeave} onTouchStart={onTouchStart} onClick={this.onNear}
                       suppressHydrationWarning={true}>{children}</a>;
         } else {
@@ -109,9 +109,10 @@ class Jump extends React.PureComponent {
                         {client, name: nodeName, location: href, trackingId});
                 }
             }
-            return <a href={url} className={className} title={title} data-nodename={dataNodeName} ref={anchorRef}
-                      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
-                      onClick={this.onFar(url, nodeLocation, href)} suppressHydrationWarning={true}>{children}</a>;
+            return <a href={url} className={className} title={title} data-nodename={dataNodeName} data-href={href}
+                      ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+                      onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, href)}
+                      suppressHydrationWarning={true}>{children}</a>;
         }
     }
 

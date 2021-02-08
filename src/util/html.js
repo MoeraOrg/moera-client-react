@@ -9,7 +9,7 @@ const SAFE_HTML_SETTINGS = {
         ...sanitizeHtml.defaults.allowedAttributes,
         "*": ["dir"],
         img: ["src", "srcset", "width", "height", "alt"],
-        a: ["href", "data-nodename"],
+        a: ["href", "data-nodename", "data-href"],
         b: ["style"],
         p: ["style"],
         iframe: [
