@@ -50,7 +50,7 @@ const NodeNameView = ({loading, name, manageable}) => (
         <div className="row">
             {name &&
                 <div className="col-sm-3">
-                    <NodeName name={name} linked={false}/>
+                    <NodeName name={name} linked={false} popup={false}/>
                 </div>
             }
             {manageable && <ManagementButtons/>}

@@ -12,7 +12,7 @@ const OwnerName = ({onClick, name, changing, atHome, ...props}) => (
         {atHome && <span className="home" title="You are at your home node"><FontAwesomeIcon icon="home"/></span>}
         <span id="owner-name">
             {name ?
-                <NodeName name={name} linked={false} {...props}/>
+                <NodeName name={name} linked={false} popup={false} {...props}/>
             :
                 (changing ? "\u22ef" : "no name set")
             }

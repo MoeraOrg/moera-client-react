@@ -15,7 +15,8 @@ const PostingSources = ({posting}) => (
                     <FontAwesomeIcon icon={line.original ? "star" : "share-square"}/>
                 </span>
                 <Jump nodeName={line.nodeName} href={`/post/${line.postingId}`}>
-                    <NodeName name={line.nodeName} fullName={line.fullName} linked={false}/> in {line.feedTitle}
+                    <NodeName name={line.nodeName} fullName={line.fullName} linked={false} popup={false}/>
+                    in {line.feedTitle}
                 </Jump>
             </div>
         )}

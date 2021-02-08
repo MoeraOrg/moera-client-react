@@ -14,7 +14,7 @@ const GlanceComment = ({loading, loaded, postingId, comment}) => (
     loaded && !loading && comment != null ?
         <div className={cx("comment", "entry", {"single-emoji": comment.singleEmoji})}>
             <div className="owner-line">
-                <CommentOwner comment={comment}/>
+                <CommentOwner comment={comment} popup={false}/>
                 <CommentDate postingId={postingId} comment={comment}/>
                 <CommentUpdated comment={comment}/>
             </div>
