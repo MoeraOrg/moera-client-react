@@ -1,7 +1,13 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { NODE_CARD_LOAD, NODE_CARD_LOAD_FAILED, NODE_CARD_LOADED, NODE_CARD_PEOPLE_SET } from "state/nodecards/actions";
+import {
+    NODE_CARD_LOAD,
+    NODE_CARD_LOAD_FAILED,
+    NODE_CARD_LOADED,
+    NODE_CARD_PEOPLE_SET,
+    NODE_CARDS_UNSET
+} from "state/nodecards/actions";
 
 const initialState = {
 };
@@ -55,6 +61,9 @@ export default (state = initialState, action) => {
             }
             return state;
         }
+
+        case NODE_CARDS_UNSET:
+            return cloneDeep(initialState);
 
         default:
             return state;
