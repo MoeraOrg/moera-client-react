@@ -48,7 +48,7 @@ export default [
 ];
 
 function* postingDeleteSaga(action) {
-    const id = action.payload.id;
+    const {id} = action.payload;
     const posting = yield select(getPosting, id);
     try {
         yield call(Node.deletePosting, "", id);

@@ -1,8 +1,10 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { connect } from 'react-redux';
 
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
-import NodeNameCard from "ui/nodename/NodeNameCard";
+import NodeCard from "ui/nodename/NodeCard";
+import { nodeCardPrepare } from "state/nodecards/actions";
 
 class NodeNamePopup extends React.PureComponent {
 
@@ -13,11 +15,12 @@ class NodeNamePopup extends React.PureComponent {
     };
 
     onPreparePopper = () => {
-        const {disabled} = this.props;
+        const {nodeName, disabled, nodeCardPrepare} = this.props;
 
         if (disabled) {
             return;
         }
+        nodeCardPrepare(nodeName);
     }
 
     render() {
@@ -29,7 +32,7 @@ class NodeNamePopup extends React.PureComponent {
                     {(ref, mainEnter, mainLeave, mainTouch) => children(ref, mainEnter, mainLeave, mainTouch)}
                 </Reference>
                 <DelayedPopper placement="top" className="node-name-popover">
-                    <NodeNameCard nodeName={nodeName} fullName={fullName}/>
+                    <NodeCard nodeName={nodeName} fullName={fullName}/>
                 </DelayedPopper>
             </Manager>
         );
@@ -37,4 +40,7 @@ class NodeNamePopup extends React.PureComponent {
 
 }
 
-export default NodeNamePopup;
+export default connect(
+    null,
+    { nodeCardPrepare }
+)(NodeNamePopup);

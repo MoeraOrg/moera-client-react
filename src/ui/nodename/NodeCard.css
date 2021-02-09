@@ -1,0 +1,22 @@
+.node-card .full-name {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+.node-card .name {
+    color: var(--gray);
+}
+
+.node-card .people {
+    margin-top: 1em;
+}
+
+.node-card .counter {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+.node-card .counter EM {
+    font-weight: bold;
+    font-style: normal;
+}

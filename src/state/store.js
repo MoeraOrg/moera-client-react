@@ -24,6 +24,7 @@ import reactionsDialog from "state/reactionsdialog/reducer";
 import postingReply from "state/postingreply/reducer";
 import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
+import nodeCards from "state/nodecards/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -56,6 +57,7 @@ import postingReplyExecutors from "state/postingreply/sagas";
 import storiesExecutors from "state/stories/sagas";
 import changeDateDialogExecutors from "state/changedatedialog/sagas";
 import peopleExecutors from "state/people/sagas";
+import nodeCardsExecutors from "state/nodecards/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -76,6 +78,7 @@ import settingsTriggers from "state/settings/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
+import nodeCardsTriggers from "state/nodecards/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
@@ -105,13 +108,14 @@ const reducers = combineReducers({
     postingReply,
     changeDateDialog,
     people,
+    nodeCards,
     messageBox,
     confirmBox,
     flashBox,
     signUpDialog,
     quickTips,
     refresh,
-    webPush
+    webPush,
 });
 
 const triggers = collectTriggers(
@@ -129,6 +133,7 @@ const triggers = collectTriggers(
     namingTriggers,
     reactionsDialogTriggers,
     peopleTriggers,
+    nodeCardsTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
     refreshTriggers,
@@ -155,6 +160,7 @@ const executors = collectExecutors(
     storiesExecutors,
     changeDateDialogExecutors,
     peopleExecutors,
+    nodeCardsExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors,
