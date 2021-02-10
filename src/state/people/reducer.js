@@ -37,6 +37,28 @@ const initialState = {
     subscriptions: []
 };
 
+function sortSubscribers(list) {
+    if (list) {
+        list.sort((sr1, sr2) => {
+            const sr1name = sr1.fullName ?? sr1.nodeName;
+            const sr2name = sr2.fullName ?? sr2.nodeName;
+            return sr1name.localeCompare(sr2name);
+        });
+    }
+    return list;
+}
+
+function sortSubscriptions(list) {
+    if (list) {
+        list.sort((sr1, sr2) => {
+            const sr1name = sr1.remoteFullName ?? sr1.remoteNodeName;
+            const sr2name = sr2.remoteFullName ?? sr2.remoteNodeName;
+            return sr1name.localeCompare(sr2name);
+        });
+    }
+    return list;
+}
+
 export default (state = initialState, action) => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
@@ -66,7 +88,7 @@ export default (state = initialState, action) => {
             return immutable.wrap(state)
                 .set("loadingSubscribers", false)
                 .set("loadedSubscribers", true)
-                .set("subscribers", action.payload.list)
+                .set("subscribers", sortSubscribers(action.payload.list))
                 .value();
 
         case SUBSCRIBERS_LOAD_FAILED:
@@ -79,7 +101,7 @@ export default (state = initialState, action) => {
             return immutable.wrap(state)
                 .set("loadingSubscriptions", false)
                 .set("loadedSubscriptions", true)
-                .set("subscriptions", action.payload.list)
+                .set("subscriptions", sortSubscriptions(action.payload.list))
                 .value();
 
         case SUBSCRIPTIONS_LOAD_FAILED:
@@ -94,7 +116,7 @@ export default (state = initialState, action) => {
                     subscribers.push(cloneDeep(action.payload.subscriber));
                 }
                 if (subscribers.length !== state.subscribers.length) {
-                    subscribers.sort((sr1, sr2) => sr1.nodeName.localeCompare(sr2.nodeName));
+                    sortSubscribers(subscribers);
                     istate.set("subscribers", subscribers)
                         .set("subscribersTotal", subscribers.length);
                 }
@@ -104,11 +126,11 @@ export default (state = initialState, action) => {
                 if (action.context.ownerName === action.context.homeOwnerName) {
                     subscriptions = state.subscriptions
                         .filter(sr => sr.remoteNodeName !== action.payload.nodeName);
-                    subscriptions.push(subscriberToSubscription(action.payload.subscriber, "timeline",
+                    subscriptions.push(subscriberToSubscription(action.payload.subscriber, "news",
                         action.payload.nodeName, action.payload.fullName));
                 }
                 if (subscriptions.length !== state.subscriptions.length) {
-                    subscriptions.sort((sr1, sr2) => sr1.remoteNodeName.localeCompare(sr2.remoteNodeName));
+                    sortSubscriptions(subscriptions);
                     istate.set("subscriptions", subscriptions)
                         .set("subscriptionsTotal", subscriptions.length);
                 }
@@ -156,7 +178,7 @@ export default (state = initialState, action) => {
                 }
                 delete subscriber.subscriptionType;
                 subscribers.push(subscriber);
-                subscribers.sort((sr1, sr2) => sr1.nodeName.localeCompare(sr2.nodeName));
+                sortSubscribers(subscribers);
                 return immutable.wrap(state)
                     .set("subscribers", subscribers)
                     .set("subscribersTotal", subscribers.length)
@@ -185,7 +207,7 @@ export default (state = initialState, action) => {
                 }
                 delete subscription.subscriptionType;
                 subscriptions.push(subscription);
-                subscriptions.sort((sr1, sr2) => sr1.remoteNodeName.localeCompare(sr2.remoteNodeName));
+                sortSubscriptions(subscriptions);
                 return immutable.wrap(state)
                     .set("subscriptions", subscriptions)
                     .set("subscriptionsTotal", subscriptions.length)
