@@ -93,17 +93,20 @@ export default (state = initialState, action) => {
 
         case FEED_SUBSCRIBED: {
             const {nodeName, subscriber} = action.payload;
+            const {homeOwnerName} = action.context;
+            const istate = immutable.wrap(state);
             if (state[nodeName]) {
-                return immutable.wrap(state)
-                    .assign([nodeName], {
-                        subscribing: false,
-                        subscribed: true,
-                        subscriberId: subscriber.id
-                    })
-                    .update([nodeName, "subscribersTotal"], total => total + 1)
-                    .value();
+                istate.assign([nodeName], {
+                    subscribing: false,
+                    subscribed: true,
+                    subscriberId: subscriber.id
+                })
+                .update([nodeName, "subscribersTotal"], total => total + 1);
             }
-            return state;
+            if (state[homeOwnerName]) {
+                istate.update([homeOwnerName, "subscriptionsTotal"], total => total + 1);
+            }
+            return istate.value();
         }
 
         case FEED_SUBSCRIBE_FAILED: {
@@ -124,17 +127,20 @@ export default (state = initialState, action) => {
 
         case FEED_UNSUBSCRIBED: {
             const {nodeName} = action.payload;
+            const {homeOwnerName} = action.context;
+            const istate = immutable.wrap(state);
             if (state[nodeName]) {
-                return immutable.wrap(state)
-                    .assign([nodeName], {
-                        unsubscribing: false,
-                        subscribed: false,
-                        subscriberId: null
-                    })
-                    .update([nodeName, "subscribersTotal"], total => total > 0 ? total - 1 : 0)
-                    .value();
+                istate.assign([nodeName], {
+                    unsubscribing: false,
+                    subscribed: false,
+                    subscriberId: null
+                })
+                .update([nodeName, "subscribersTotal"], total => total > 0 ? total - 1 : 0);
             }
-            return state;
+            if (state[homeOwnerName]) {
+                istate.update([homeOwnerName, "subscriptionsTotal"], total => total > 0 ? total - 1 : 0);
+            }
+            return istate.value();
         }
 
         case FEED_UNSUBSCRIBE_FAILED: {
