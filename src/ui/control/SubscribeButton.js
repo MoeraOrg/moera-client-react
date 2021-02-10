@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Button } from "ui/control";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
-import { getOwnerName } from "state/owner/selectors";
 import "./SubscribeButton.css";
 
 class SubscribeButton extends React.PureComponent {
@@ -22,13 +21,13 @@ class SubscribeButton extends React.PureComponent {
     };
 
     onSubscribe = () => {
-        const {nodeName, ownerName, feedName, feedSubscribe} = this.props;
-        feedSubscribe(nodeName, nodeName === ownerName, feedName);
+        const {nodeName, feedName, feedSubscribe} = this.props;
+        feedSubscribe(nodeName, feedName);
     }
 
     onUnsubscribe = () => {
-        const {nodeName, ownerName, feedName, subscriberId, feedUnsubscribe} = this.props;
-        feedUnsubscribe(nodeName, nodeName === ownerName, feedName, subscriberId);
+        const {nodeName, feedName, subscriberId, feedUnsubscribe} = this.props;
+        feedUnsubscribe(nodeName, feedName, subscriberId);
     }
 
     render() {
@@ -59,8 +58,7 @@ class SubscribeButton extends React.PureComponent {
 
 export default connect(
     state => ({
-        homeSet: isConnectedToHome(state) && isHomeOwnerNameSet(state),
-        ownerName: getOwnerName(state)
+        homeSet: isConnectedToHome(state) && isHomeOwnerNameSet(state)
     }),
     { feedSubscribe, feedUnsubscribe }
 )(SubscribeButton);

@@ -34,7 +34,6 @@ const emptyCard = {
 };
 
 export default (state = initialState, action) => {
-    console.log(action, state);
     switch (action.type) {
         case NODE_CARD_LOAD: {
             const {nodeName} = action.payload;

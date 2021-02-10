@@ -9,7 +9,7 @@ class UnsubscribeButton extends React.PureComponent {
 
     onUnsubscribe = () => {
         const {nodeName, feedName, subscriberId, feedUnsubscribe} = this.props;
-        feedUnsubscribe(nodeName, false, feedName, subscriberId);
+        feedUnsubscribe(nodeName, feedName, subscriberId);
     }
 
     render() {

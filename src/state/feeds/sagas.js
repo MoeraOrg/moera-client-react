@@ -57,25 +57,25 @@ function* feedGeneralLoadSaga(action) {
 }
 
 function* feedSubscribeSaga(action) {
-    const {nodeName, current, feedName} = action.payload;
+    const {nodeName, feedName} = action.payload;
     try {
         const data = yield call(Node.postFeedSubscriber, nodeName, feedName);
         yield call(Node.postFeedSubscription, ":", data.id, nodeName, feedName);
-        yield put(feedSubscribed(nodeName, current, feedName, data.id));
+        yield put(feedSubscribed(nodeName, feedName, data.id));
     } catch (e) {
-        yield put(feedSubscribeFailed(nodeName, current, feedName));
+        yield put(feedSubscribeFailed(nodeName, feedName));
         yield put(errorThrown(e));
     }
 }
 
 function* feedUnsubscribeSaga(action) {
-    const {nodeName, current, feedName, subscriberId} = action.payload;
+    const {nodeName, feedName, subscriberId} = action.payload;
     try {
         yield call(Node.deleteSubscriber, nodeName, subscriberId);
         yield call(Node.deleteSubscription, ":", subscriberId, nodeName);
-        yield put(feedUnsubscribed(nodeName, current, feedName));
+        yield put(feedUnsubscribed(nodeName, feedName));
     } catch (e) {
-        yield put(feedUnsubscribeFailed(nodeName, current, feedName));
+        yield put(feedUnsubscribeFailed(nodeName, feedName));
         yield put(errorThrown(e));
     }
 }

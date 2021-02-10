@@ -3,6 +3,7 @@ import { CARTES_SET } from "state/cartes/actions";
 import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
+import getContext from "state/context";
 import pulse from "state/pulse/reducer";
 import error from "state/error/reducer";
 import naming from "state/naming/reducer";
@@ -118,6 +119,11 @@ const reducers = combineReducers({
     webPush,
 });
 
+function combinedReducer(state, action) {
+    action.context = getContext(state);
+    return reducers(state, action);
+}
+
 const triggers = collectTriggers(
     homeTriggers,
     cartesTriggers,
@@ -187,5 +193,5 @@ function* combinedSaga() {
 }
 
 const sagaMiddleware = createSagaMiddleware();
-export default createStore(reducers, applyMiddleware(sagaMiddleware));
+export default createStore(combinedReducer, applyMiddleware(sagaMiddleware));
 sagaMiddleware.run(combinedSaga);
