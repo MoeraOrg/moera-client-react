@@ -2,7 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 
-import { Button, Loading } from "ui/control";
+import { Loading } from "ui/control";
 import { isAtHomeNode } from "state/node/selectors";
 import {
     getFeedSubscriberId,
@@ -12,61 +12,30 @@ import {
     isSubscribingToFeed,
     isUnsubscribingFromFeed
 } from "state/feeds/selectors";
-import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
-import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isOwnerNameSet } from "state/owner/selectors";
-import "./FeedSubscribeButton.css";
+import SubscribeButton from "ui/control/SubscribeButton";
 
-class FeedSubscribeButton extends React.PureComponent {
+const FeedSubscribeButton = ({feedName, show, generalReady, generalLoading, subscribed, subscribing, unsubscribing,
+                              subscriberId}) => (
+    <>
+        <SubscribeButton nodeName="" feedName={feedName} show={show} ready={generalReady} subscribed={subscribed}
+                         subscribing={subscribing} unsubscribing={unsubscribing} subscriberId={subscriberId}/>
+        <Loading active={generalLoading}/>
+    </>
+);
 
-    static propTypes = {
-        feedName: PropType.string
-    };
-
-    onSubscribe = () => {
-        const {feedName, feedSubscribe} = this.props;
-        feedSubscribe("", feedName);
-    }
-
-    onUnsubscribe = () => {
-        const {feedName, subscriberId, feedUnsubscribe} = this.props;
-        feedUnsubscribe("", feedName, subscriberId);
-    }
-
-    render() {
-        const {show, generalReady, generalLoading, subscribed, subscribing, unsubscribing} = this.props;
-        return (
-            <>
-                {
-                    show && generalReady && (
-                        !subscribed ?
-                            <Button variant="outline-primary" size="sm" className="feed-subscribe ml-3"
-                                    loading={subscribing} onClick={this.onSubscribe}>
-                                Subscribe
-                            </Button>
-                        :
-                            <Button variant="outline-secondary" size="sm" className="feed-unsubscribe ml-3"
-                                    loading={unsubscribing} onClick={this.onUnsubscribe}>
-                                Unsubscribe
-                            </Button>
-                    )
-                }
-                <Loading active={generalLoading}/>
-            </>
-        );
-    }
-
+FeedSubscribeButton.propTypes = {
+    feedName: PropType.string
 }
 
 export default connect(
     (state, ownProps) => ({
-        show: isConnectedToHome(state) && isHomeOwnerNameSet(state) && isOwnerNameSet(state) && !isAtHomeNode(state),
+        show: isOwnerNameSet(state) && !isAtHomeNode(state),
         generalReady: isFeedGeneralReady(state, ownProps.feedName),
         generalLoading: isFeedGeneralLoading(state, ownProps.feedName),
         subscribed: isSubscribedToFeed(state, ownProps.feedName),
         subscribing: isSubscribingToFeed(state, ownProps.feedName),
         unsubscribing: isUnsubscribingFromFeed(state, ownProps.feedName),
         subscriberId: getFeedSubscriberId(state, ownProps.feedName)
-    }),
-    { feedSubscribe, feedUnsubscribe }
+    })
 )(FeedSubscribeButton);

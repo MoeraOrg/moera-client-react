@@ -1,0 +1,9 @@
+.subscribe-button {
+    margin-left: 1rem;
+}
+
+.subscribe-button.btn-outline-secondary:hover {
+    color: white;
+    background-color: var(--danger);
+    border-color: var(--danger);
+}
