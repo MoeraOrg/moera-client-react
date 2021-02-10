@@ -1,5 +1,7 @@
 import { put, select, takeEvery } from 'redux-saga/effects';
 
+import getContext from "state/context";
+
 /*
  * Trigger:
  *
@@ -49,6 +51,7 @@ export function collectTriggers(...lists) {
 }
 
 function* triggersSaga(triggers, action) {
+    action.context = yield select(getContext);
     const signal = action.type;
     const list = triggers.get(signal);
     if (list === undefined) {

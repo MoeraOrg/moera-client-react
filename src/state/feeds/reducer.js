@@ -173,12 +173,12 @@ export default (state = initialState, action) => {
         }
 
         case FEED_SUBSCRIBED: {
-            const {nodeName, feedName, subscriberId} = action.payload;
+            const {nodeName, feedName, subscriber} = action.payload;
             if (nodeName === action.context.ownerName) {
                 return getFeed(state, feedName).istate
                     .assign([feedName], {
                         subscribing: false,
-                        subscriberId
+                        subscriberId: subscriber.id
                     })
                     .value();
             }

@@ -34,6 +34,7 @@ import { getNodeRootLocation } from "state/node/selectors";
 import { Browser } from "ui/browser";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
+import { getHomeOwnerFullName } from "state/home/selectors";
 
 export default [
     executor(POSTING_DELETE, payload => payload.id, postingDeleteSaga),
@@ -153,16 +154,18 @@ function* postingCopyLinkSaga(action) {
 
 function* postingCommentsSubscribeSaga(action) {
     const {id} = action.payload;
-    const {posting, ownerName} = yield select(state => ({
+    const {posting, ownerName, homeOwnerFullName} = yield select(state => ({
         posting: getPosting(state, id),
-        ownerName: getOwnerName(state)
+        ownerName: getOwnerName(state),
+        homeOwnerFullName: getHomeOwnerFullName(state)
     }));
     const nodeName = posting.receiverName ?? ownerName;
     const postingId = posting.receiverPostingId ?? id;
     try {
-        const data = yield call(Node.postPostingCommentsSubscriber, nodeName, postingId);
-        yield call(Node.postPostingCommentsSubscription, ":", data.id, nodeName, postingId);
-        yield put(postingCommentsSubscribed(id, data.id));
+        const whoAmI = yield call(Node.getWhoAmI, nodeName);
+        const subscriber = yield call(Node.postPostingCommentsSubscriber, nodeName, postingId, homeOwnerFullName);
+        yield call(Node.postPostingCommentsSubscription, ":", subscriber.id, nodeName, whoAmI.fullName, postingId);
+        yield put(postingCommentsSubscribed(id, subscriber.id));
     } catch (e) {
         yield put(postingCommentsSubscribeFailed(id));
         yield put(errorThrown(e));

@@ -155,17 +155,17 @@ export function* getSubscribers(nodeName, type) {
     });
 }
 
-export function* postFeedSubscriber(nodeName, feedName) {
+export function* postFeedSubscriber(nodeName, feedName, ownerFullName) {
     return yield call(callApi, {
-        nodeName, location: "/people/subscribers", method: "POST", auth: true, body: {type: "feed", feedName},
-        schema: NodeApi.SubscriberInfo
+        nodeName, location: "/people/subscribers", method: "POST", auth: true,
+        body: {type: "feed", feedName, ownerFullName}, schema: NodeApi.SubscriberInfo
     });
 }
 
-export function* postPostingCommentsSubscriber(nodeName, postingId) {
+export function* postPostingCommentsSubscriber(nodeName, postingId, ownerFullName) {
     return yield call(callApi, {
         nodeName, location: "/people/subscribers", method: "POST", auth: true,
-        body: {type: "posting-comments", postingId}, schema: NodeApi.SubscriberInfo
+        body: {type: "posting-comments", postingId, ownerFullName}, schema: NodeApi.SubscriberInfo
     });
 }
 
@@ -183,18 +183,19 @@ export function* getSubscriptions(nodeName, type) {
     });
 }
 
-export function* postFeedSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFeedName) {
+export function* postFeedSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFullName, remoteFeedName) {
     return yield call(callApi, {
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
-        body: {type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFeedName},
+        body: {type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFullName, remoteFeedName},
         schema: NodeApi.SubscriptionInfo
     });
 }
 
-export function* postPostingCommentsSubscription(nodeName, remoteSubscriberId, remoteNodeName, remotePostingId) {
+export function* postPostingCommentsSubscription(nodeName, remoteSubscriberId, remoteNodeName, remoteFullName,
+                                                 remotePostingId) {
     return yield call(callApi, {
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
-        body: {type: "posting-comments", remoteSubscriberId, remoteNodeName, remotePostingId},
+        body: {type: "posting-comments", remoteSubscriberId, remoteNodeName, remoteFullName, remotePostingId},
         schema: NodeApi.SubscriptionInfo
     });
 }

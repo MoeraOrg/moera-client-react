@@ -28,11 +28,11 @@ import {
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
-import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReactions } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
+import { getHomeOwnerFullName } from "state/home/selectors";
 
 export default [
     executor(FEED_GENERAL_LOAD, payload => payload.feedName, introduce(feedGeneralLoadSaga)),
@@ -59,9 +59,11 @@ function* feedGeneralLoadSaga(action) {
 function* feedSubscribeSaga(action) {
     const {nodeName, feedName} = action.payload;
     try {
-        const data = yield call(Node.postFeedSubscriber, nodeName, feedName);
-        yield call(Node.postFeedSubscription, ":", data.id, nodeName, feedName);
-        yield put(feedSubscribed(nodeName, feedName, data.id));
+        const whoAmI = yield call(Node.getWhoAmI, nodeName);
+        const homeOwnerFullName = yield select(getHomeOwnerFullName);
+        const subscriber = yield call(Node.postFeedSubscriber, nodeName, feedName, homeOwnerFullName);
+        yield call(Node.postFeedSubscription, ":", subscriber.id, nodeName, whoAmI.fullName, feedName);
+        yield put(feedSubscribed(nodeName, whoAmI.fullName, feedName, subscriber));
     } catch (e) {
         yield put(feedSubscribeFailed(nodeName, feedName));
         yield put(errorThrown(e));

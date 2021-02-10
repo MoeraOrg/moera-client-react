@@ -29,9 +29,9 @@ export const feedSubscribe = (nodeName, feedName) => ({
 });
 
 export const FEED_SUBSCRIBED = "FEED_SUBSCRIBED";
-export const feedSubscribed = (nodeName, feedName, subscriberId) => ({
+export const feedSubscribed = (nodeName, fullName, feedName, subscriber) => ({
     type: FEED_SUBSCRIBED,
-    payload: {nodeName, feedName, subscriberId}
+    payload: {nodeName, fullName, feedName, subscriber}
 });
 
 export const FEED_SUBSCRIBE_FAILED = "FEED_SUBSCRIBE_FAILED";

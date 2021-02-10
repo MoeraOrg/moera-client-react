@@ -13,7 +13,7 @@ import {
     SUBSCRIPTIONS_LOAD_FAILED,
     SUBSCRIPTIONS_LOADED
 } from "state/people/actions";
-import { FEED_UNSUBSCRIBED } from "state/feeds/actions";
+import { FEED_SUBSCRIBED, FEED_UNSUBSCRIBED } from "state/feeds/actions";
 import {
     EVENT_NODE_SUBSCRIBER_ADDED,
     EVENT_NODE_SUBSCRIBER_DELETED,
@@ -21,6 +21,7 @@ import {
     EVENT_NODE_SUBSCRIPTION_DELETED
 } from "api/events/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
+import { subscriberToSubscription } from "state/feeds/selectors";
 
 const initialState = {
     tab: "subscribers",
@@ -84,25 +85,71 @@ export default (state = initialState, action) => {
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
 
-        // TODO case FEED_SUBSCRIBED:
-        case FEED_UNSUBSCRIBED: // FIXME on home node only
-            if (state.loadedSubscriptions) {
-                const subscriptions = state.subscriptions
-                    .filter(sr => sr.remoteNodeName !== action.payload.nodeName
-                        || sr.remoteFeedName !== action.payload.feedName);
-                if (subscriptions.length !== state.subscriptions.length) {
-                    return immutable.wrap(state)
-                        .set("subscriptions", subscriptions)
-                        .set("subscriptionsTotal", subscriptions.length)
-                        .value()
+        case FEED_SUBSCRIBED: {
+            const istate = immutable.wrap(state);
+            if (state.loadedSubscribers) {
+                let subscribers = state.subscribers;
+                if (action.context.ownerName === action.payload.nodeName) {
+                    subscribers = state.subscribers.filter(sr => sr.id !== action.payload.subscriber.id);
+                    subscribers.push(cloneDeep(action.payload.subscriber));
+                }
+                if (subscribers.length !== state.subscribers.length) {
+                    subscribers.sort((sr1, sr2) => sr1.nodeName.localeCompare(sr2.nodeName));
+                    istate.set("subscribers", subscribers)
+                        .set("subscribersTotal", subscribers.length);
                 }
             }
-            return state;
+            if (state.loadedSubscriptions) {
+                let subscriptions = state.subscriptions;
+                if (action.context.ownerName === action.context.homeOwnerName) {
+                    subscriptions = state.subscriptions
+                        .filter(sr => sr.remoteNodeName !== action.payload.nodeName);
+                    subscriptions.push(subscriberToSubscription(action.payload.subscriber, "timeline",
+                        action.payload.nodeName, action.payload.fullName));
+                }
+                if (subscriptions.length !== state.subscriptions.length) {
+                    subscriptions.sort((sr1, sr2) => sr1.remoteNodeName.localeCompare(sr2.remoteNodeName));
+                    istate.set("subscriptions", subscriptions)
+                        .set("subscriptionsTotal", subscriptions.length);
+                }
+            }
+            return istate.value();
+        }
+
+        case FEED_UNSUBSCRIBED: {
+            const istate = immutable.wrap(state);
+            if (state.loadedSubscribers) {
+                let subscribers = state.subscribers;
+                if (action.context.ownerName === action.payload.nodeName) {
+                    subscribers = subscribers.filter(
+                        sr => sr.nodeName !== action.context.homeOwnerName
+                            || sr.feedName !== action.payload.feedName
+                    );
+                }
+                if (subscribers.length !== state.subscribers.length) {
+                    istate.set("subscribers", subscribers)
+                        .set("subscribersTotal", subscribers.length);
+                }
+            }
+            if (state.loadedSubscriptions) {
+                let subscriptions = state.subscriptions;
+                if (action.context.ownerName === action.context.homeOwnerName) {
+                    subscriptions = subscriptions.filter(
+                        sr => sr.remoteNodeName !== action.payload.nodeName
+                            || sr.remoteFeedName !== action.payload.feedName
+                    );
+                }
+                if (subscriptions.length !== state.subscriptions.length) {
+                    istate.set("subscriptions", subscriptions)
+                        .set("subscriptionsTotal", subscriptions.length);
+                }
+            }
+            return istate.value();
+        }
 
         case EVENT_NODE_SUBSCRIBER_ADDED:
             if (state.loadedSubscribers && action.payload.subscriptionType === "feed") {
-                const subscribers = state.subscribers
-                    .filter(sr => sr.id !== action.payload.id);
+                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.id);
                 const subscriber = {
                     ...action.payload,
                     type: "feed"
@@ -119,8 +166,7 @@ export default (state = initialState, action) => {
 
         case EVENT_NODE_SUBSCRIBER_DELETED:
             if (state.loadedSubscribers && action.payload.subscriptionType === "feed") {
-                const subscribers = state.subscribers
-                    .filter(sr => sr.id !== action.payload.id);
+                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.id);
                 if (subscribers.length !== state.subscribers.length) {
                     return immutable.wrap(state)
                         .set("subscribers", subscribers)
@@ -132,8 +178,7 @@ export default (state = initialState, action) => {
 
         case EVENT_NODE_SUBSCRIPTION_ADDED:
             if (state.loadedSubscriptions && action.payload.subscriptionType === "feed") {
-                const subscriptions = state.subscriptions
-                    .filter(sr => sr.id !== action.payload.id);
+                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.id);
                 const subscription = {
                     ...action.payload,
                     type: "feed"
@@ -150,8 +195,7 @@ export default (state = initialState, action) => {
 
         case EVENT_NODE_SUBSCRIPTION_DELETED:
             if (state.loadedSubscriptions && action.payload.subscriptionType === "feed") {
-                const subscriptions = state.subscriptions
-                    .filter(sr => sr.id !== action.payload.id);
+                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.id);
                 if (subscriptions.length !== state.subscriptions.length) {
                     return immutable.wrap(state)
                         .set("subscriptions", subscriptions)

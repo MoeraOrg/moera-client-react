@@ -92,13 +92,13 @@ export default (state = initialState, action) => {
         }
 
         case FEED_SUBSCRIBED: {
-            const {nodeName, subscriberId} = action.payload;
+            const {nodeName, subscriber} = action.payload;
             if (state[nodeName]) {
                 return immutable.wrap(state)
                     .assign([nodeName], {
                         subscribing: false,
                         subscribed: true,
-                        subscriberId
+                        subscriberId: subscriber.id
                     })
                     .update([nodeName, "subscribersTotal"], total => total + 1)
                     .value();
