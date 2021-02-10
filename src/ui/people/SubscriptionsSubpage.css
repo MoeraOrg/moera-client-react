@@ -1,7 +1,0 @@
-.people-page .subscription .feed-unsubscribe {
-    visibility: hidden;
-}
-
-.people-page .subscription:hover .feed-unsubscribe {
-    visibility: visible;
-}
