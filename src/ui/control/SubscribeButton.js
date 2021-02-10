@@ -21,19 +21,14 @@ class SubscribeButton extends React.PureComponent {
         subscriberId: PropType.string
     };
 
-    getNodeCodeName() {
-        const {nodeName, ownerName} = this.props;
-        return nodeName !== ownerName ? nodeName : "";
-    }
-
     onSubscribe = () => {
-        const {feedName, feedSubscribe} = this.props;
-        feedSubscribe(this.getNodeCodeName(), feedName);
+        const {nodeName, ownerName, feedName, feedSubscribe} = this.props;
+        feedSubscribe(nodeName, nodeName === ownerName, feedName);
     }
 
     onUnsubscribe = () => {
-        const {feedName, subscriberId, feedUnsubscribe} = this.props;
-        feedUnsubscribe(this.getNodeCodeName(), feedName, subscriberId);
+        const {nodeName, ownerName, feedName, subscriberId, feedUnsubscribe} = this.props;
+        feedUnsubscribe(nodeName, nodeName === ownerName, feedName, subscriberId);
     }
 
     render() {

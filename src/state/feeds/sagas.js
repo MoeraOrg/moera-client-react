@@ -57,27 +57,25 @@ function* feedGeneralLoadSaga(action) {
 }
 
 function* feedSubscribeSaga(action) {
-    const {nodeName, feedName} = action.payload;
-    const ownerName = yield select(getOwnerName);
+    const {nodeName, current, feedName} = action.payload;
     try {
         const data = yield call(Node.postFeedSubscriber, nodeName, feedName);
-        yield call(Node.postFeedSubscription, ":", data.id, nodeName ? nodeName : ownerName, feedName);
-        yield put(feedSubscribed(nodeName, feedName, data.id));
+        yield call(Node.postFeedSubscription, ":", data.id, nodeName, feedName);
+        yield put(feedSubscribed(nodeName, current, feedName, data.id));
     } catch (e) {
-        yield put(feedSubscribeFailed(nodeName, feedName));
+        yield put(feedSubscribeFailed(nodeName, current, feedName));
         yield put(errorThrown(e));
     }
 }
 
 function* feedUnsubscribeSaga(action) {
-    const {nodeName, feedName, subscriberId} = action.payload;
-    const ownerName = yield select(getOwnerName);
+    const {nodeName, current, feedName, subscriberId} = action.payload;
     try {
         yield call(Node.deleteSubscriber, nodeName, subscriberId);
-        yield call(Node.deleteSubscription, ":", subscriberId, nodeName ? nodeName : ownerName);
-        yield put(feedUnsubscribed(nodeName, feedName));
+        yield call(Node.deleteSubscription, ":", subscriberId, nodeName);
+        yield put(feedUnsubscribed(nodeName, current, feedName));
     } catch (e) {
-        yield put(feedUnsubscribeFailed(nodeName, feedName));
+        yield put(feedUnsubscribeFailed(nodeName, current, feedName));
         yield put(errorThrown(e));
     }
 }

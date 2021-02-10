@@ -10,6 +10,7 @@ class Manager extends React.PureComponent {
 
     static propTypes = {
         disabled: PropType.bool,
+        clickable: PropType.bool,
         onPreparePopper: PropType.func,
         onShow: PropType.func
     };
@@ -69,8 +70,8 @@ class Manager extends React.PureComponent {
         }
     };
 
-    documentClick = () => {
-        if (!this.props.disabled) {
+    documentClick = event => {
+        if (!this.props.disabled && (!this.props.clickable || !this.isInPopover(event))) {
             this.hide();
         }
     };

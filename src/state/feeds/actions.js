@@ -23,39 +23,39 @@ export const feedGeneralUnset = (feedName) => ({
 });
 
 export const FEED_SUBSCRIBE = "FEED_SUBSCRIBE";
-export const feedSubscribe = (nodeName, feedName) => ({
+export const feedSubscribe = (nodeName, current, feedName) => ({
     type: FEED_SUBSCRIBE,
-    payload: {nodeName, feedName}
+    payload: {nodeName, current, feedName}
 });
 
 export const FEED_SUBSCRIBED = "FEED_SUBSCRIBED";
-export const feedSubscribed = (nodeName, feedName, subscriberId) => ({
+export const feedSubscribed = (nodeName, current, feedName, subscriberId) => ({
     type: FEED_SUBSCRIBED,
-    payload: {nodeName, feedName, subscriberId}
+    payload: {nodeName, current, feedName, subscriberId}
 });
 
 export const FEED_SUBSCRIBE_FAILED = "FEED_SUBSCRIBE_FAILED";
-export const feedSubscribeFailed = (nodeName, feedName) => ({
+export const feedSubscribeFailed = (nodeName, current, feedName) => ({
     type: FEED_SUBSCRIBE_FAILED,
-    payload: {nodeName, feedName}
+    payload: {nodeName, current, feedName}
 });
 
 export const FEED_UNSUBSCRIBE = "FEED_UNSUBSCRIBE";
-export const feedUnsubscribe = (nodeName, feedName, subscriberId) => ({
+export const feedUnsubscribe = (nodeName, current, feedName, subscriberId) => ({
     type: FEED_UNSUBSCRIBE,
-    payload: {nodeName, feedName, subscriberId}
+    payload: {nodeName, current, feedName, subscriberId}
 });
 
 export const FEED_UNSUBSCRIBED = "FEED_UNSUBSCRIBED";
-export const feedUnsubscribed = (nodeName, feedName) => ({
+export const feedUnsubscribed = (nodeName, current, feedName) => ({
     type: FEED_UNSUBSCRIBED,
-    payload: {nodeName, feedName}
+    payload: {nodeName, current, feedName}
 });
 
 export const FEED_UNSUBSCRIBE_FAILED = "FEED_UNSUBSCRIBE_FAILED";
-export const feedUnsubscribeFailed = (nodeName, feedName) => ({
+export const feedUnsubscribeFailed = (nodeName, current, feedName) => ({
     type: FEED_UNSUBSCRIBE_FAILED,
-    payload: {nodeName, feedName}
+    payload: {nodeName, current, feedName}
 });
 
 export const FEED_STATUS_LOAD = "FEED_STATUS_LOAD";

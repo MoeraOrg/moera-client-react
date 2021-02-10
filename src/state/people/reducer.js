@@ -84,7 +84,8 @@ export default (state = initialState, action) => {
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
 
-        case FEED_UNSUBSCRIBED:
+        // TODO case FEED_SUBSCRIBED:
+        case FEED_UNSUBSCRIBED: // FIXME on home node only
             if (state.loadedSubscriptions) {
                 const subscriptions = state.subscriptions
                     .filter(sr => sr.remoteNodeName !== action.payload.nodeName

@@ -20,3 +20,8 @@
     font-weight: bold;
     font-style: normal;
 }
+
+.node-card .buttons {
+    margin-top: .5em;
+    text-align: right;
+}

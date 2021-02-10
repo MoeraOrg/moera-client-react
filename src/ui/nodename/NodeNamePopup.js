@@ -27,7 +27,7 @@ class NodeNamePopup extends React.PureComponent {
         const {nodeName, fullName, disabled, children} = this.props;
 
         return (
-            <Manager onPreparePopper={this.onPreparePopper} disabled={disabled}>
+            <Manager onPreparePopper={this.onPreparePopper} disabled={disabled} clickable={true}>
                 <Reference>
                     {(ref, mainEnter, mainLeave, mainTouch) => children(ref, mainEnter, mainLeave, mainTouch)}
                 </Reference>

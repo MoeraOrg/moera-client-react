@@ -28,6 +28,12 @@ export const nodeCardPeopleSet = (nodeName, subscribersTotal, subscriptionsTotal
     payload: {nodeName, subscribersTotal, subscriptionsTotal}
 });
 
+export const NODE_CARD_SUBSCRIPTION_SET = "NODE_CARD_SUBSCRIPTION_SET";
+export const nodeCardSubscriptionSet = (nodeName, subscriberId) => ({
+    type: NODE_CARD_SUBSCRIPTION_SET,
+    payload: {nodeName, subscriberId}
+});
+
 export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
 export const nodeCardsUnset = () => ({
     type: NODE_CARDS_UNSET

@@ -100,12 +100,13 @@ export default [
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal) => getOwnerName(state) === signal.payload.remoteNodeName,
-        signal => feedSubscribed("", signal.payload.remoteFeedName, signal.payload.remoteSubscriberId)
+        signal => feedSubscribed(signal.payload.remoteNodeName, true, signal.payload.remoteFeedName,
+            signal.payload.remoteSubscriberId)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal) => getOwnerName(state) === signal.payload.remoteNodeName,
-        signal => feedUnsubscribed("", signal.payload.remoteFeedName)
+        signal => feedUnsubscribed(signal.payload.remoteNodeName, true, signal.payload.remoteFeedName)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
