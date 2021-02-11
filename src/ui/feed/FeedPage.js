@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import debounce from 'lodash.debounce';
 
+import FeedTitle from "ui/feed/FeedTitle";
 import FeedPageHeader from "ui/feed/FeedPageHeader";
+import { Page } from "ui/page/Page";
 import FeedPosting from "ui/feed/FeedPosting";
 import FeedSentinel from "ui/feed/FeedSentinel";
 import { getFeedState } from "state/feeds/selectors";
@@ -13,8 +15,8 @@ import {
     feedScrolledToAnchor,
     feedStatusUpdate
 } from "state/feeds/actions";
-import "./FeedPage.css";
 import { isAtHomeNode } from "state/node/selectors";
+import "./FeedPage.css";
 
 class FeedPage extends React.PureComponent {
 
@@ -226,7 +228,7 @@ class FeedPage extends React.PureComponent {
 
     render() {
         const {feedName, title, loadingFuture, loadingPast, stories, postings, before, after} = this.props;
-        const {atTop, atBottom, scrolled} = this.state;
+        const {atTop, atBottom} = this.state;
 
         if (stories.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
@@ -241,22 +243,25 @@ class FeedPage extends React.PureComponent {
 
         return (
             <>
-                <FeedPageHeader feedName={feedName} title={title} scrolled={scrolled}
+                <FeedTitle/>
+                <FeedPageHeader feedName={feedName} title={title}
                                 atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
                                 atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}/>
-                <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"
-                              visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
-                              onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
-                {stories
-                    .filter(t => postings[t.postingId])
-                    .map(t => ({story: t, ...postings[t.postingId]}))
-                    .map(({story, posting, deleting}) =>
-                        <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
-                <FeedSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"
-                              visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
-                              onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
-                {after <= Number.MIN_SAFE_INTEGER
-                    && <div className="feed-end">&mdash; You've reached the bottom &mdash;</div>}
+                <Page>
+                    <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"
+                                  visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
+                                  onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
+                    {stories
+                        .filter(t => postings[t.postingId])
+                        .map(t => ({story: t, ...postings[t.postingId]}))
+                        .map(({story, posting, deleting}) =>
+                            <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
+                    <FeedSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"
+                                  visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
+                                  onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
+                    {after <= Number.MIN_SAFE_INTEGER
+                        && <div className="feed-end">&mdash; You've reached the bottom &mdash;</div>}
+                </Page>
             </>
         );
     }
