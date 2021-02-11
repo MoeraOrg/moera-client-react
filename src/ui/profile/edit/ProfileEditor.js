@@ -40,8 +40,8 @@ class ProfileEditor extends React.PureComponent {
                     <Form>
                         <ConflictWarning text="Profile was edited by somebody." show={conflict}
                                          onClose={profileEditConflictClose}/>
-                        <InputField title="Full name" name="fullName" anyValue autoFocus horizontal={true}
-                                    labelClassName="col-sm-2" col="col-sm-10" />
+                        <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus
+                                    horizontal={true} labelClassName="col-sm-2" col="col-sm-10" />
                         <ComboboxField title="Gender" name="gender" data={["Male", "Female"]} horizontal={true}
                                        labelClassName="col-sm-2" col="col-sm-10" />
                         <InputField title="E-Mail" name="email" horizontal={true} labelClassName="col-sm-2"

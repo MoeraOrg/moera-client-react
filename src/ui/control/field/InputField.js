@@ -14,6 +14,7 @@ export class InputField extends React.PureComponent {
         title: PropType.string,
         placeholder: PropType.string,
         disabled: PropType.bool,
+        maxLength: PropType.number,
         horizontal: PropType.bool,
         groupClassName: PropType.string,
         labelClassName: PropType.string,
@@ -51,8 +52,8 @@ export class InputField extends React.PureComponent {
 
     render() {
         const {
-            name, title, placeholder, disabled, horizontal = false, groupClassName, labelClassName, col, anyValue,
-            className, autoComplete, noFeedback = false, initialValue, defaultValue, inputRef
+            name, title, placeholder, disabled, maxLength, horizontal = false, groupClassName, labelClassName, col,
+            anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, inputRef
         } = this.props;
 
         return (
@@ -86,6 +87,7 @@ export class InputField extends React.PureComponent {
                                     placeholder={placeholder}
                                     autoComplete={autoComplete}
                                     disabled={disabled}
+                                    maxLength={maxLength}
                                     ref={dom => {
                                         this.inputDom = dom;
                                         if (inputRef != null) {
