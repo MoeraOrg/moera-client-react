@@ -2,7 +2,7 @@
     background-color: var(--comments);
     border-radius: 5px;
     padding: .5rem;
-    margin: 0 1rem .5rem 1rem;
+    margin-bottom: .5rem;
 }
 
 #comment-composer .content .form-group {
