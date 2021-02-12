@@ -4,7 +4,6 @@ import cx from 'classnames';
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 
-import { Browser } from "ui/browser";
 import "./ComposeDraftItem.css";
 
 class ComposeDraftItem extends React.PureComponent {
@@ -29,7 +28,7 @@ class ComposeDraftItem extends React.PureComponent {
         const {draft, current} = this.props;
 
         return (
-            <div key={draft.id} className={cx("dropdown-item", {"current": current, "touch": Browser.isTouchScreen()})}
+            <div key={draft.id} className={cx("dropdown-item", {"current": current})}
                  onClick={this.onSelect}>
                 <div className="info">
                     <div className="content">

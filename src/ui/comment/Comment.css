@@ -62,12 +62,14 @@
     padding-top: 0;
 }
 
-.comment .chevron {
-    visibility: hidden;
-}
+@media (any-hover: hover) {
+    .comment .chevron {
+        visibility: hidden;
+    }
 
-.comment:hover .chevron {
-    visibility: visible;
+    .comment:hover .chevron {
+        visibility: visible;
+    }
 }
 
 .comment .reactions-line {

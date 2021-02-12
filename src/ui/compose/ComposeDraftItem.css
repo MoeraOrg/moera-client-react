@@ -17,16 +17,24 @@
 
 .draft-selector .dropdown-item .delete {
     flex: none;
-    visibility: hidden;
     margin-left: 0.7rem;
     padding: 0.3rem;
     font-size: 1.2rem;
+    color: var(--red-light);
 }
 
-.draft-selector .dropdown-item:hover .delete, .draft-selector .dropdown-item.touch .delete {
-    visibility: visible;
-    color: var(--red-light);
+.draft-selector .dropdown-item:hover .delete {
     cursor: pointer;
+}
+
+@media (any-hover: hover) {
+    .draft-selector .dropdown-item .delete {
+        visibility: hidden;
+    }
+
+    .draft-selector .dropdown-item:hover .delete {
+        visibility: visible;
+    }
 }
 
 .draft-selector .dropdown-item:hover .delete:hover {
