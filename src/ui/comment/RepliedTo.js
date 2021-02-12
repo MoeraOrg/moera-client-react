@@ -68,7 +68,7 @@ class RepliedTo extends React.PureComponent {
 
 export default connect(
     state => ({
-        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled") && !Browser.isTinyScreen()
+        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled") && !Browser.isTouchScreen()
     }),
     { glanceComment }
 )(RepliedTo);
