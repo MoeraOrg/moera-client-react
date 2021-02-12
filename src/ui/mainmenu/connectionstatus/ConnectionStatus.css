@@ -1,5 +1,6 @@
 #connection-status {
     color: white;
+    white-space: nowrap;
 }
 
 #connection-status BUTTON {

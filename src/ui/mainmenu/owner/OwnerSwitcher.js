@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import OwnerName from "ui/mainmenu/owner/OwnerName";
 import OwnerNavigator from "ui/mainmenu/owner/OwnerNavigator";
 import { ownerSwitchClose, ownerSwitchOpen } from "state/owner/actions";
+import "./OwnerSwitcher.css";
 
 class OwnerSwitcher extends React.PureComponent {
 
