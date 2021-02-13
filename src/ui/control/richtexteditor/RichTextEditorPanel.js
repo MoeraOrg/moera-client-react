@@ -211,40 +211,28 @@ export default class RichTextEditorPanel extends React.PureComponent {
         event.preventDefault();
     }
 
-    onImageSubmit = (ok, {href, alt}) => {
+    onImageSubmit = (ok, {href, title, alt}) => {
         const {textArea} = this.props;
 
         this.setState({imageDialog: false});
         if (ok) {
             if (this.isMarkdown()) {
-                if (alt) {
-                    if (href) {
-                        textFieldEdit.insert(textArea.current, `![${alt}](${href})`);
-                    } else {
-                        textFieldEdit.wrapSelection(textArea.current, `![${alt}](`, ")");
-                    }
+                const titleAttr = title ? ` "${title}"`: "";
+                const altAttr = alt ?? "";
+                if (href) {
+                    textFieldEdit.insert(textArea.current, `![${altAttr}](${href}${titleAttr})`);
                 } else {
-                    if (href) {
-                        textFieldEdit.insert(textArea.current, `![](${href})`);
-                    } else {
-                        textFieldEdit.wrapSelection(textArea.current, "![](", ")");
-                    }
+                    textFieldEdit.wrapSelection(textArea.current, `![${altAttr}](`, `${titleAttr})`);
                 }
             } else {
-                if (alt) {
-                    if (href) {
-                        textFieldEdit.insert(textArea.current,
-                            `<img alt="${htmlEntities(alt)}" src="${htmlEntities(href)}">`);
-                    } else {
-                        textFieldEdit.wrapSelection(textArea.current,
-                            `<img alt="${htmlEntities(alt)}" src="`, "\">");
-                    }
+                const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
+                const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
+                if (href) {
+                    textFieldEdit.insert(textArea.current,
+                        `<img${altAttr}${titleAttr} src="${htmlEntities(href)}">`);
                 } else {
-                    if (href) {
-                        textFieldEdit.insert(textArea.current, `<img src="${htmlEntities(href)}">`);
-                    } else {
-                        textFieldEdit.wrapSelection(textArea.current, `<img src="`, "\">");
-                    }
+                    textFieldEdit.wrapSelection(textArea.current,
+                        `<img${altAttr}${titleAttr} src="`, "\">");
                 }
             }
         }

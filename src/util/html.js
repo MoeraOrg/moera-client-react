@@ -8,8 +8,8 @@ const SAFE_HTML_SETTINGS = {
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
         "*": ["dir"],
-        img: ["src", "srcset", "width", "height", "alt"],
-        a: ["href", "data-nodename", "data-href"],
+        img: ["src", "srcset", "width", "height", "alt", "title"],
+        a: ["href", "title", "data-nodename", "data-href"],
         b: ["style"],
         p: ["style"],
         iframe: [
