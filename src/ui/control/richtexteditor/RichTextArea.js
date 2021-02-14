@@ -4,6 +4,8 @@ import TextareaAutosize from 'react-autosize-textarea';
 
 import { replaceSmileys } from "util/text";
 
+const MENTION_START = RegExp(/(^|\s)@$/);
+
 export default class RichTextArea extends React.PureComponent {
 
     static propTypes = {
@@ -71,10 +73,19 @@ export default class RichTextArea extends React.PureComponent {
     }
 
     onChange = event => {
-        const {smileysEnabled, onChange} = this.props;
+        const {panel, smileysEnabled, onChange} = this.props;
 
+        const value = event.target.value;
+        const start = event.target.selectionStart;
         if (smileysEnabled && this.#spaceInput) {
-            event.target.value = replaceSmileys(event.target.value, false);
+            event.target.value = replaceSmileys(value, false);
+        }
+        if (value.length >= start && MENTION_START.test(value.substring(0, start))) {
+            const button = panel.current.querySelector("button.mention");
+            if (!button) {
+                return false;
+            }
+            button.click();
         }
         if (onChange) {
             onChange(event);

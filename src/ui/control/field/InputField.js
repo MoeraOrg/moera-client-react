@@ -30,15 +30,11 @@ export class InputField extends React.PureComponent {
         inputRef: PropType.func
     };
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.inputDom = null;
-    }
+    #inputDom = null;
 
     componentDidMount() {
-        if (this.props.autoFocus && this.inputDom) {
-            this.inputDom.focus();
+        if (this.props.autoFocus && this.#inputDom) {
+            this.#inputDom.focus();
         }
     }
 
@@ -89,7 +85,7 @@ export class InputField extends React.PureComponent {
                                     disabled={disabled}
                                     maxLength={maxLength}
                                     ref={dom => {
-                                        this.inputDom = dom;
+                                        this.#inputDom = dom;
                                         if (inputRef != null) {
                                             inputRef(dom);
                                         }

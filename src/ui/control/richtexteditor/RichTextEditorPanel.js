@@ -1,5 +1,6 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { connect } from 'react-redux';
 import * as textFieldEdit from 'text-field-edit';
 import cx from 'classnames';
 
@@ -8,10 +9,15 @@ import RichTextSpoilerDialog from "ui/control/richtexteditor/RichTextSpoilerDial
 import RichTextFoldDialog from "ui/control/richtexteditor/RichTextFoldDialog";
 import RichTextLinkDialog from "ui/control/richtexteditor/RichTextLinkDialog";
 import RichTextImageDialog from "ui/control/richtexteditor/RichTextImageDialog";
+import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
+import { getNodeRootPage } from "state/node/selectors";
 import { htmlEntities } from "util/html";
+import { mentionName } from "util/misc";
+import { urlWithParameters } from "util/url";
+import { NodeName } from "api";
 import "./RichTextEditorPanel.css";
 
-export default class RichTextEditorPanel extends React.PureComponent {
+class RichTextEditorPanel extends React.PureComponent {
 
     static propTypes = {
         textArea: PropType.object,
@@ -25,6 +31,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
         foldDialog: false,
         linkDialog: false,
         imageDialog: false,
+        mentionDialog: false,
         dialogText: ""
     };
 
@@ -136,6 +143,35 @@ export default class RichTextEditorPanel extends React.PureComponent {
         textArea.current.focus();
     }
 
+    onMention = event => {
+        this.setState({mentionDialog: true});
+        event.preventDefault();
+    }
+
+    onMentionSubmit = (ok, {nodeName, fullName}) => {
+        const {textArea, nodeRootPage} = this.props;
+
+        this.setState({mentionDialog: false});
+        if (ok) {
+            const value = textArea.current.value;
+            const start = textArea.current.selectionStart;
+            if (value.length >= start && value[start - 1] === "@") {
+                textArea.current.selectionStart = start - 1;
+            }
+            if (this.isMarkdown()) {
+                textFieldEdit.insert(textArea.current, mentionName(nodeName, fullName))
+            } else {
+                const text = fullName ?? NodeName.shorten(nodeName);
+                const href = urlWithParameters(nodeRootPage + "/gotoname",
+                    {name: nodeName, location: "/"});
+                textFieldEdit.insert(textArea.current,
+                    `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName)}" data-href="/">`
+                    + `${htmlEntities(text)}</a>`);
+            }
+        }
+        textArea.current.focus();
+    }
+
     onQuote = event => {
         const {textArea} = this.props;
 
@@ -241,7 +277,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
 
     render() {
         const {hiding, format} = this.props;
-        const {spoilerDialog, foldDialog, linkDialog, imageDialog, dialogText, panel} = this.state;
+        const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText, panel} = this.state;
 
         if (format === "plain-text") {
             return null;
@@ -259,6 +295,7 @@ export default class RichTextEditorPanel extends React.PureComponent {
                     <RichTextEditorButton icon="caret-square-down" title="Fold" onClick={this.onFold}/>
                 </div>
                 <div className="group">
+                    <RichTextEditorButton icon="at" title="Mention" className="mention" onClick={this.onMention}/>
                     <RichTextEditorButton icon="quote-left" title="Quote" letter="Q" onClick={this.onQuote}/>
                 </div>
                 <div className="group">
@@ -269,8 +306,15 @@ export default class RichTextEditorPanel extends React.PureComponent {
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
                 <RichTextLinkDialog show={linkDialog} text={dialogText} onSubmit={this.onLinkSubmit}/>
                 <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit}/>
+                <RichTextMentionDialog show={mentionDialog} onSubmit={this.onMentionSubmit}/>
             </div>
         );
     }
 
 }
+
+export default connect(
+    state => ({
+        nodeRootPage: getNodeRootPage(state)
+    })
+)(RichTextEditorPanel);
