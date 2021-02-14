@@ -82,7 +82,7 @@ export default class RichTextMentionDialog extends React.PureComponent {
     }
 
     onClose = () => {
-        this.props.onSubmit(false, {});
+        this.props.onSubmit(false, {nodeName: this.#inputDom.value});
     }
 
     render() {

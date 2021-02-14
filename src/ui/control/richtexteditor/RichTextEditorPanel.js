@@ -152,12 +152,14 @@ class RichTextEditorPanel extends React.PureComponent {
         const {textArea, nodeRootPage} = this.props;
 
         this.setState({mentionDialog: false});
+
+        const value = textArea.current.value;
+        const start = textArea.current.selectionStart;
+        if (value.length >= start && value[start - 1] === "@") {
+            textArea.current.selectionStart = start - 1;
+        }
+
         if (ok) {
-            const value = textArea.current.value;
-            const start = textArea.current.selectionStart;
-            if (value.length >= start && value[start - 1] === "@") {
-                textArea.current.selectionStart = start - 1;
-            }
             if (this.isMarkdown()) {
                 textFieldEdit.insert(textArea.current, mentionName(nodeName, fullName))
             } else {
@@ -168,6 +170,8 @@ class RichTextEditorPanel extends React.PureComponent {
                     `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName)}" data-href="/">`
                     + `${htmlEntities(text)}</a>`);
             }
+        } else {
+            textFieldEdit.insert(textArea.current, nodeName ? mentionName(nodeName) : "@")
         }
         textArea.current.focus();
     }
