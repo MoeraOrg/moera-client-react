@@ -41,10 +41,14 @@ class RichTextMentionDialog extends React.PureComponent {
 
     refreshNames(query) {
         this.setState({query});
-        const names = this.props.names
-            .filter(item => item.nodeName.startsWith(query)
-                || (item.fullName != null && item.fullName.startsWith(query)));
+        const regexes = query.trim().split(/\s+/).map(prefix => RegExp("(^|\\s)" + prefix, "i"));
+        const names = this.props.names.filter(item => this.constructor.itemMatch(item, regexes));
         this.setState({names, selectedIndex: 0});
+    }
+
+    static itemMatch(item, regexes) {
+        const haystack = item.fullName ? item.fullName + " " + item.nodeName : item.nodeName;
+        return regexes.every(regex => regex.test(haystack));
     }
 
     selectIndex(index) {
