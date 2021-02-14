@@ -1,3 +1,5 @@
+import { createSelector } from 'reselect';
+
 import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
 
@@ -163,3 +165,27 @@ export function isGlanceCommentToBeLoaded(state) {
         || (comments.glanceCommentId != null
             && (comments.glanceComment == null || comments.glanceComment.id !== comments.glanceCommentId));
 }
+
+function putName(names, nodeName, fullName) {
+    if (!names.has(nodeName)) {
+        names.set(nodeName, {nodeName, fullName, count: 1});
+    } else {
+        names.get(nodeName).count++;
+    }
+}
+
+export const getNamesInComments = createSelector(
+    getComments,
+    comments => {
+        const names = new Map();
+        for (const comment of comments) {
+            putName(names, comment.ownerName, comment.ownerFullName);
+            if (comment.repliedTo) {
+                putName(names, comment.repliedTo.name, comment.repliedTo.fullName);
+            }
+        }
+        const result = [...names.values()];
+        result.sort((item1, item2) => item1.count - item2.count);
+        return result;
+    }
+);

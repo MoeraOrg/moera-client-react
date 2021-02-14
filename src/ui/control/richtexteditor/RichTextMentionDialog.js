@@ -1,25 +1,17 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { connect } from 'react-redux';
 import cx from 'classnames';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import deepEqual from 'react-fast-compare';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { mentionName } from "util/misc";
 import { NodeName } from "api";
+import { getNamesInComments } from "state/detailedposting/selectors";
 import "./RichTextMentionDialog.css";
 
-const NAMES = [
-    {nodeName: "alice_0", fullName: "Alice Melamud"},
-    {nodeName: "balu_0", fullName: "Shmuel Melamud"},
-    {nodeName: "carol_0"},
-    {nodeName: "eugene_0", fullName: "Eugene Melamud"},
-    {nodeName: "nelly_0", fullName: "Nelly Brover"},
-    {nodeName: "tigra_0", fullName: "Alexey Tigarev"},
-    {nodeName: "unicorn_0", fullName: "Victor Dragomiretsky"},
-    {nodeName: "witch_0", fullName: "Anna Scherbakova"},
-];
-
-export default class RichTextMentionDialog extends React.PureComponent {
+class RichTextMentionDialog extends React.PureComponent {
 
     static propTypes = {
         show: PropType.bool,
@@ -27,20 +19,38 @@ export default class RichTextMentionDialog extends React.PureComponent {
     }
 
     state = {
-        selectedIndex: 0
+        selectedIndex: 0,
+        names: [],
+        query: ""
     }
 
     #inputDom;
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.show && this.props.show !== prevProps.show && this.#inputDom) {
-            this.#inputDom.focus();
+        if (this.props.show && this.props.show !== prevProps.show) {
+            if (this.#inputDom) {
+                this.#inputDom.focus();
+            }
             this.selectIndex(0);
+            this.refreshNames("");
+        }
+        if (!deepEqual(this.props.names, prevProps.names)) {
+            this.refreshNames(this.state.query);
         }
     }
 
+    refreshNames(query) {
+        this.setState({query});
+        const names = this.props.names
+            .filter(item => item.nodeName.startsWith(query)
+                || (item.fullName != null && item.fullName.startsWith(query)));
+        this.setState({names, selectedIndex: 0});
+    }
+
     selectIndex(index) {
-        index = Math.max(0, Math.min(index, NAMES.length - 1));
+        const {names} = this.state;
+
+        index = names.length > 0 ? Math.max(0, Math.min(index, names.length - 1)) : 0;
         this.setState({selectedIndex: index});
         const item = document.getElementById(`mention-item-${index}`);
         if (item != null) {
@@ -49,7 +59,7 @@ export default class RichTextMentionDialog extends React.PureComponent {
     }
 
     onKeyDown = event => {
-        const {selectedIndex} = this.state;
+        const {names, selectedIndex} = this.state;
 
         switch (event.key) {
             case "Escape":
@@ -66,10 +76,14 @@ export default class RichTextMentionDialog extends React.PureComponent {
                 this.selectIndex(0);
                 break;
             case "End":
-                this.selectIndex(NAMES.length - 1);
+                this.selectIndex(names.length - 1);
                 break;
             case "Enter":
-                this.props.onSubmit(true, NAMES[selectedIndex]);
+                if (names.length > 0) {
+                    this.onSubmit(selectedIndex);
+                } else {
+                    this.onClose();
+                }
                 break;
             default:
                 return;
@@ -77,17 +91,25 @@ export default class RichTextMentionDialog extends React.PureComponent {
         event.preventDefault();
     }
 
+    onChange = event => {
+        this.refreshNames(event.target.value);
+    }
+
     onClick = index => () => {
-        this.props.onSubmit(true, NAMES[index]);
+        this.onSubmit(index);
+    }
+
+    onSubmit(index) {
+        this.props.onSubmit(true, this.state.names[index]);
     }
 
     onClose = () => {
-        this.props.onSubmit(false, {nodeName: this.#inputDom.value});
+        this.props.onSubmit(false, {nodeName: this.state.query});
     }
 
     render() {
         const {show} = this.props;
-        const {selectedIndex} = this.state;
+        const {names, selectedIndex, query} = this.state;
 
         if (!show) {
             return null;
@@ -96,10 +118,10 @@ export default class RichTextMentionDialog extends React.PureComponent {
         return (
             <ModalDialog title="Insert a mention" onClose={this.onClose}>
                 <div className="modal-body">
-                    <input type="text" className="form-control" ref={dom => this.#inputDom = dom}
-                           onKeyDown={this.onKeyDown}/>
+                    <input type="text" className="form-control" value={query} ref={dom => this.#inputDom = dom}
+                           onKeyDown={this.onKeyDown} onChange={this.onChange}/>
                     <div className="mention-select">
-                        {NAMES.map((item, index) =>
+                        {names.map((item, index) =>
                             <div key={index} id={`mention-item-${index}`}
                                  className={cx("item", {"selected": index === selectedIndex})}
                                  onClick={this.onClick(index)}>
@@ -114,3 +136,9 @@ export default class RichTextMentionDialog extends React.PureComponent {
     }
 
 }
+
+export default connect(
+    state => ({
+        names: getNamesInComments(state)
+    })
+)(RichTextMentionDialog);
