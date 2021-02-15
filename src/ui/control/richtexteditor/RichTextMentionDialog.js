@@ -5,10 +5,11 @@ import cx from 'classnames';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import deepEqual from 'react-fast-compare';
 
+import { getNamesInComments } from "state/detailedposting/selectors";
 import { ModalDialog } from "ui/control/ModalDialog";
 import { mentionName } from "util/misc";
+import { namesListQuery } from "util/names-list";
 import { NodeName } from "api";
-import { getNamesInComments } from "state/detailedposting/selectors";
 import "./RichTextMentionDialog.css";
 
 class RichTextMentionDialog extends React.PureComponent {
@@ -40,15 +41,7 @@ class RichTextMentionDialog extends React.PureComponent {
     }
 
     refreshNames(query) {
-        this.setState({query});
-        const regexes = query.trim().split(/\s+/).map(prefix => RegExp("(^|\\s)" + prefix, "i"));
-        const names = this.props.names.filter(item => this.constructor.itemMatch(item, regexes));
-        this.setState({names, selectedIndex: 0});
-    }
-
-    static itemMatch(item, regexes) {
-        const haystack = item.fullName ? item.fullName + " " + item.nodeName : item.nodeName;
-        return regexes.every(regex => regex.test(haystack));
+        this.setState({names: namesListQuery(this.props.names, query), query, selectedIndex: 0});
     }
 
     selectIndex(index) {
@@ -75,12 +68,6 @@ class RichTextMentionDialog extends React.PureComponent {
                 break;
             case "ArrowDown":
                 this.selectIndex(selectedIndex + 1);
-                break;
-            case "Home":
-                this.selectIndex(0);
-                break;
-            case "End":
-                this.selectIndex(names.length - 1);
                 break;
             case "Enter":
                 if (names.length > 0) {
