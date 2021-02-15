@@ -31,6 +31,7 @@ export default class RichTextArea extends React.PureComponent {
     }
 
     #spaceInput = false;
+    #anyInput = false;
 
     constructor(props, context) {
         super(props, context);
@@ -80,7 +81,7 @@ export default class RichTextArea extends React.PureComponent {
         if (smileysEnabled && this.#spaceInput) {
             event.target.value = replaceSmileys(value, false);
         }
-        if (value.length >= start && MENTION_START.test(value.substring(0, start))) {
+        if (this.#anyInput && value.length >= start && MENTION_START.test(value.substring(0, start))) {
             const button = panel.current.querySelector("button.mention");
             if (!button) {
                 return false;
@@ -93,8 +94,9 @@ export default class RichTextArea extends React.PureComponent {
     }
 
     onInput = event => {
+        this.#anyInput = event.inputType.startsWith("insert");
         this.#spaceInput = event.inputType === "insertLineBreak"
-            || (event.inputType.startsWith("insert") && event.data != null && event.data.match(/\s/));
+            || (this.#anyInput && event.data != null && event.data.match(/\s/));
     }
 
     onKeyDown = event => {
