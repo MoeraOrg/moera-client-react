@@ -1,7 +1,3 @@
-#logo {
-    border-right: solid var(--status-icon) 1px;
-}
-
 @media only screen and (min-width: 576px) {
     #logo {
         margin-right: 1rem;
