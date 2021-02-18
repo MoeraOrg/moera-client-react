@@ -8,14 +8,14 @@
 
 .comment .reactions .positive {
     margin-right: 0;
-    box-shadow: 2px 2px 3px #ddd;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, .12);
     border: solid 1px var(--reactions-positive-border);
     padding: .3em .9em;
 }
 
 .comment .reactions .negative {
     margin-left: 1em;
-    box-shadow: 2px 2px 3px #ddd;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, .12);
     border: solid 1px var(--reactions-negative-border);
     padding: .3em .9em;
 }
