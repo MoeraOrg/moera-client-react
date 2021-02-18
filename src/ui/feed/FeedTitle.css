@@ -1,16 +1,14 @@
 .feed-title {
     background-color: var(--white-dark);
-    padding-top: 1rem;
-    padding-bottom: 2rem;
+    padding: 1rem 1rem 2rem 1rem;
+    text-align: center;
 }
 
 .feed-title .full-name {
     font-size: 1.9rem;
     font-weight: bold;
-    text-align: center;
 }
 
 .feed-title .mention {
     color: var(--gray-medium);
-    text-align: center;
 }
