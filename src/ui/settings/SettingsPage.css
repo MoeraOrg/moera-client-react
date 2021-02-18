@@ -1,4 +1,18 @@
 .settings-notebook {
     background-color: white;
     padding: 0.5rem;
+    border-left: var(--gray-light) 1px solid;
+    border-right: var(--gray-light) 1px solid;
+    border-bottom: var(--gray-light) 1px solid;
+    border-radius: 5px;
+}
+
+@media only screen and (max-width: 575px) {
+    .row.settings-notebook {
+        margin-left: 0;
+        margin-right: 0;
+        border-left-width: 0;
+        border-right-width: 0;
+        border-radius: 0;
+    }
 }

@@ -24,6 +24,13 @@ ABBR[title] {
     padding-right: .25rem;
 }
 
+@media only screen and (max-width: 575px) {
+    .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 .popover {
     pointer-events: none;
 }
