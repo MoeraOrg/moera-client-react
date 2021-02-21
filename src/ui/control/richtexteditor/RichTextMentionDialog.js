@@ -31,6 +31,7 @@ class RichTextMentionDialog extends React.PureComponent {
     }
 
     #inputDom;
+    #listDom;
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show && this.props.show !== prevProps.show) {
@@ -58,9 +59,11 @@ class RichTextMentionDialog extends React.PureComponent {
 
     selectIndex(index) {
         this.setState({selectedIndex: index});
-        const item = document.getElementById(`mention-item-${index}`);
-        if (item != null) {
-            scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"});
+        if (this.#listDom && index >= 0) {
+            const item = this.#listDom.querySelector(`.item[data-index="${index}"]`);
+            if (item != null) {
+                scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"});
+            }
         }
     }
 
@@ -126,9 +129,9 @@ class RichTextMentionDialog extends React.PureComponent {
                 <div className="modal-body">
                     <input type="text" className="form-control" value={query} ref={dom => this.#inputDom = dom}
                            onKeyDown={this.onKeyDown} onChange={this.onChange}/>
-                    <div className="mention-select">
+                    <div className="mention-select" ref={dom => this.#listDom = dom}>
                         {names.map((item, index) =>
-                            <div key={index} id={`mention-item-${index}`}
+                            <div key={index} data-index={index}
                                  className={cx("item", {"selected": index === selectedIndex})}
                                  onClick={this.onClick(index)}>
                                 <div className="full-name">{item.fullName ?? NodeName.shorten(item.nodeName)}</div>
@@ -159,7 +162,6 @@ const getNames = createSelector(
             .map(({nodeName, fullName, count}) => ({nodeName, fullName, closeness: count * 1000}))
             .forEach(c => result.push(c));
         result.sort((c1, c2) => c2.closeness - c1.closeness);
-        console.log(contacts, comments, result);
         return result;
     }
 );
