@@ -20,7 +20,7 @@ class RichTextMentionDialog extends React.PureComponent {
     }
 
     state = {
-        selectedIndex: 0,
+        selectedIndex: -1,
         names: [],
         query: ""
     }
@@ -32,7 +32,7 @@ class RichTextMentionDialog extends React.PureComponent {
             if (this.#inputDom) {
                 this.#inputDom.focus();
             }
-            this.selectIndex(0);
+            this.selectIndex(-1);
             this.refreshNames("");
         }
         if (!deepEqual(this.props.names, prevProps.names)) {
@@ -41,13 +41,10 @@ class RichTextMentionDialog extends React.PureComponent {
     }
 
     refreshNames(query) {
-        this.setState({names: namesListQuery(this.props.names, query), query, selectedIndex: 0});
+        this.setState({names: namesListQuery(this.props.names, query), query, selectedIndex: -1});
     }
 
     selectIndex(index) {
-        const {names} = this.state;
-
-        index = names.length > 0 ? Math.max(0, Math.min(index, names.length - 1)) : 0;
         this.setState({selectedIndex: index});
         const item = document.getElementById(`mention-item-${index}`);
         if (item != null) {
@@ -64,10 +61,10 @@ class RichTextMentionDialog extends React.PureComponent {
                 this.onClose();
                 break;
             case "ArrowUp":
-                this.selectIndex(selectedIndex - 1);
+                this.selectIndex(Math.max(0, selectedIndex - 1));
                 break;
             case "ArrowDown":
-                this.selectIndex(selectedIndex + 1);
+                this.selectIndex(Math.min(selectedIndex + 1, names.length - 1));
                 break;
             case "Enter":
                 if (names.length > 0) {
@@ -91,11 +88,17 @@ class RichTextMentionDialog extends React.PureComponent {
     }
 
     onSubmit(index) {
-        this.props.onSubmit(true, this.state.names[index]);
+        const {names, query} = this.state;
+
+        if (index >= 0 && index < names.length) {
+            this.props.onSubmit(true, names[index]);
+        } else {
+            this.props.onSubmit(false, {nodeName: query});
+        }
     }
 
     onClose = () => {
-        this.props.onSubmit(false, {nodeName: this.state.query});
+        this.onSubmit(-1);
     }
 
     render() {
