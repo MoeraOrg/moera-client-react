@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import cx from 'classnames';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import deepEqual from 'react-fast-compare';
+import debounce from 'lodash.debounce';
 
 import { getNamesInComments } from "state/detailedposting/selectors";
+import { contactsPrepare } from "state/contacts/actions";
 import { ModalDialog } from "ui/control/ModalDialog";
 import { mentionName } from "util/misc";
 import { namesListQuery } from "util/names-list";
@@ -42,7 +44,14 @@ class RichTextMentionDialog extends React.PureComponent {
 
     refreshNames(query) {
         this.setState({names: namesListQuery(this.props.names, query), query, selectedIndex: -1});
+        this.loadContacts();
     }
+
+    loadContacts = debounce(() => {
+        if (this.props.show) {
+            this.props.contactsPrepare(this.state.query);
+        }
+    }, 500)
 
     selectIndex(index) {
         this.setState({selectedIndex: index});
@@ -134,5 +143,6 @@ class RichTextMentionDialog extends React.PureComponent {
 export default connect(
     state => ({
         names: getNamesInComments(state)
-    })
+    }),
+    { contactsPrepare }
 )(RichTextMentionDialog);

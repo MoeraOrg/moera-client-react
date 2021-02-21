@@ -564,3 +564,8 @@ export function* deleteWebPushSubscription(nodeName, id) {
         errorFilter: ["web-push-subscription.not-found"]
     });
 }
+
+export function* getContacts(nodeName, query, limit) {
+    const location = urlWithParameters("/people/contacts", {query, limit});
+    return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ContactInfoArray});
+}

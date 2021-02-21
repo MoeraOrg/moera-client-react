@@ -1132,3 +1132,26 @@ export const WebPushSubscriptionInfo = schema({
     },
     additionalProperties: false
 });
+
+export const ContactInfoType = {
+    type: "object",
+    properties: {
+        "nodeName": {
+            type: "string"
+        },
+        "fullName": {
+            type: "string"
+        },
+        "closeness": {
+            type: "number"
+        }
+    },
+    additionalProperties: false
+};
+
+export const ContactInfo = schema(ContactInfoType);
+
+export const ContactInfoArray = schema({
+    type: "array",
+    items: ContactInfoType
+});

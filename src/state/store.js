@@ -26,6 +26,7 @@ import postingReply from "state/postingreply/reducer";
 import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
 import nodeCards from "state/nodecards/reducer";
+import contacts from "state/contacts/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -59,6 +60,7 @@ import storiesExecutors from "state/stories/sagas";
 import changeDateDialogExecutors from "state/changedatedialog/sagas";
 import peopleExecutors from "state/people/sagas";
 import nodeCardsExecutors from "state/nodecards/sagas";
+import contactsExecutors from "state/contacts/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -80,6 +82,7 @@ import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
+import contactsTriggers from "state/contacts/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
@@ -110,6 +113,7 @@ const reducers = combineReducers({
     changeDateDialog,
     people,
     nodeCards,
+    contacts,
     messageBox,
     confirmBox,
     flashBox,
@@ -140,6 +144,7 @@ const triggers = collectTriggers(
     reactionsDialogTriggers,
     peopleTriggers,
     nodeCardsTriggers,
+    contactsTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
     refreshTriggers,
@@ -167,6 +172,7 @@ const executors = collectExecutors(
     changeDateDialogExecutors,
     peopleExecutors,
     nodeCardsExecutors,
+    contactsExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors,
