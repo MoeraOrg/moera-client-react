@@ -1140,7 +1140,14 @@ export const ContactInfoType = {
             type: "string"
         },
         "fullName": {
-            type: "string"
+            anyOf: [
+                {
+                    type: "null"
+                },
+                {
+                    type: "string"
+                }
+            ]
         },
         "closeness": {
             type: "number"

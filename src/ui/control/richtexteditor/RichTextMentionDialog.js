@@ -3,11 +3,14 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import cloneDeep from 'lodash.clonedeep';
 import deepEqual from 'react-fast-compare';
 import debounce from 'lodash.debounce';
+import { createSelector } from 'reselect';
 
 import { getNamesInComments } from "state/detailedposting/selectors";
 import { contactsPrepare } from "state/contacts/actions";
+import { getContacts } from "state/contacts/selectors";
 import { ModalDialog } from "ui/control/ModalDialog";
 import { mentionName } from "util/misc";
 import { namesListQuery } from "util/names-list";
@@ -140,9 +143,30 @@ class RichTextMentionDialog extends React.PureComponent {
 
 }
 
+const getNames = createSelector(
+    [getContacts, getNamesInComments],
+    (contacts, comments) => {
+        const contactNames = new Set(contacts.map(c => c.nodeName));
+        const commentMap = new Map(comments.map(c => [c.nodeName, c]));
+        const result = cloneDeep(contacts);
+        for (const c of result) {
+            if (commentMap.has(c.nodeName)) {
+                c.closeness += 1000 * commentMap.get(c.nodeName).count;
+            }
+        }
+        comments
+            .filter(c => !contactNames.has(c.nodeName))
+            .map(({nodeName, fullName, count}) => ({nodeName, fullName, closeness: count * 1000}))
+            .forEach(c => result.push(c));
+        result.sort((c1, c2) => c2.closeness - c1.closeness);
+        console.log(contacts, comments, result);
+        return result;
+    }
+);
+
 export default connect(
     state => ({
-        names: getNamesInComments(state)
+        names: getNames(state)
     }),
     { contactsPrepare }
 )(RichTextMentionDialog);

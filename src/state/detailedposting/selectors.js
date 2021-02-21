@@ -184,8 +184,6 @@ export const getNamesInComments = createSelector(
                 putName(names, comment.repliedTo.name, comment.repliedTo.fullName);
             }
         }
-        const result = [...names.values()];
-        result.sort((item1, item2) => item1.count - item2.count);
-        return result;
+        return [...names.values()];
     }
 );
