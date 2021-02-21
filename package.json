@@ -19,6 +19,7 @@
     "classnames": "^2.2.6",
     "clipboard-copy": "^4.0.1",
     "date-fns": "^2.16.1",
+    "escape-string-regexp": "^4.0.0",
     "formik": "^2.2.6",
     "general-category": "^1.6.0",
     "lodash.clonedeep": "^4.5.0",

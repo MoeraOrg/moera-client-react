@@ -1,7 +1,9 @@
+import regexEscape from 'escape-string-regexp';
+
 const ARRANGEMENT_DEPTH = 5;
 
 export function namesListQuery(list, query) {
-    const regexes = query.trim().split(/\s+/).map(prefix => RegExp("(?:^|\\s)" + prefix, "ig"));
+    const regexes = query.trim().split(/\s+/).map(prefix => RegExp("(?:^|\\s)" + regexEscape(prefix), "ig"));
     return list.filter(item => itemMatch(item, regexes));
 }
 
