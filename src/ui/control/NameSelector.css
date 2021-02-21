@@ -1,36 +1,36 @@
-.mention-select {
+.name-select {
     border: solid 1px var(--gray-light);
     border-radius: 5px;
     max-height: 18em;
     overflow-y: auto;
 }
 
-.mention-select .item {
+.name-select .item {
     padding: .25em .5em;
     cursor: pointer;
 }
 
-.mention-select .item.selected, .mention-select .item.selected:hover {
+.name-select .item.selected, .name-select .item.selected:hover {
     background-color: var(--primary);
     color: white;
 }
 
-.mention-select .item:hover {
+.name-select .item:hover {
     background-color: var(--highlight);
 }
 
-.mention-select .item ~ .item {
+.name-select .item ~ .item {
     border-top: dotted 1px var(--gray-ultralight);
 }
 
-.mention-select .item .full-name {
+.name-select .item .full-name {
     font-weight: bold;
 }
 
-.mention-select .item .name {
+.name-select .item .name {
     color: var(--gray-medium);
 }
 
-.mention-select .item.selected .name {
+.name-select .item.selected .name {
     color: var(--white-dark);
 }
