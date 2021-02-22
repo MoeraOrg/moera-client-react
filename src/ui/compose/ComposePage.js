@@ -8,6 +8,7 @@ import { composeConflictClose, composePost } from "state/compose/actions";
 import { ConflictWarning, Loading } from "ui/control";
 import { InputField, RichTextField } from "ui/control/field";
 import { Page } from "ui/page/Page";
+import PageHeader from "ui/page/PageHeader";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
@@ -51,57 +52,60 @@ class ComposePage extends React.PureComponent {
         const loadingContent = loadingPosting || loadingDraft;
         const submitDisabled = values["body"].trim().length === 0;
         return (
-            <Page className="mt-3">
-                <h2>
-                    {title}
-                    {postingId != null &&
+            <>
+                <PageHeader>
+                    <h2>
+                        {title}
+                        {postingId != null &&
                         <Jump className="btn btn-sm btn-outline-secondary ml-3" href={`/post/${postingId}`}>
                             &larr; Post
                         </Jump>
-                    }
-                    <Loading active={loadingFeatures || loadingContent}/>
-                </h2>
-
-                <div className="composer">
-                    <Form>
-                        <ConflictWarning text="The post was edited by somebody." show={conflict}
-                                         onClose={composeConflictClose}/>
-                        {subjectPresent &&
-                            <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
-                        <RichTextField name="body" disabled={loadingContent || beingPosted}
-                                       format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
-                                       anyValue autoFocus/>
-                        <ComposeFormattingHelp/>
+                        <Loading active={loadingFeatures || loadingContent}/>
+                    </h2>
+                </PageHeader>
+                <Page>
+                    <div className="composer">
+                        <Form>
+                            <ConflictWarning text="The post was edited by somebody." show={conflict}
+                                             onClose={composeConflictClose}/>
+                            {subjectPresent &&
+                                <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
+                            }
+                            <RichTextField name="body" disabled={loadingContent || beingPosted}
+                                           format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
+                                           anyValue autoFocus/>
+                            <ComposeFormattingHelp/>
 
-                        <ComposeBodyFormat sourceFormats={sourceFormats}/>
-                        <ComposePublishAt/>
-                        <ComposeReactions/>
+                            <ComposeBodyFormat sourceFormats={sourceFormats}/>
+                            <ComposePublishAt/>
+                            <ComposeReactions/>
 
-                        <div className="features">
-                            <div className="feature-buttons">
-                                <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
-                                {postingId == null &&
-                                    <ComposePublishAtButton/>
-                                }
-                                <ComposeReactionsButton/>
+                            <div className="features">
+                                <div className="feature-buttons">
+                                    <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
+                                    {postingId == null &&
+                                        <ComposePublishAtButton/>
+                                    }
+                                    <ComposeReactionsButton/>
+                                </div>
+                                <div className="drafts">
+                                    <ComposeDraftSaver initialPostingText={this.state.initialPostingText}/>
+                                    <ComposeResetButton/>
+                                    <ComposeDraftSelector/>
+                                </div>
                             </div>
-                            <div className="drafts">
-                                <ComposeDraftSaver initialPostingText={this.state.initialPostingText}/>
-                                <ComposeResetButton/>
-                                <ComposeDraftSelector/>
-                            </div>
-                        </div>
 
-                        <div className="form-buttons">
-                            <ComposePreviewButton disabled={submitDisabled}/>
-                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}
-                                                 disabled={submitDisabled}/>
-                        </div>
-                    </Form>
-                </div>
-                <ComposePreviewDialog/>
-            </Page>
+                            <div className="form-buttons">
+                                <ComposePreviewButton disabled={submitDisabled}/>
+                                <ComposeSubmitButton loading={beingPosted} update={postingId != null}
+                                                     disabled={submitDisabled}/>
+                            </div>
+                        </Form>
+                    </div>
+                    <ComposePreviewDialog/>
+                </Page>
+            </>
         );
     }
 
