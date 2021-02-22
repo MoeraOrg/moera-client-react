@@ -121,7 +121,7 @@ class NameSelectorImpl extends React.PureComponent {
             <>
                 <input type="text" className="form-control" value={query ?? defaultQuery}
                        ref={dom => this.#inputDom = dom} onKeyDown={this.onKeyDown} onChange={this.onChange}/>
-                <div className="name-select" ref={dom => this.#listDom = dom}>
+                <div className={cx("name-select", {"d-none": names.length === 0})} ref={dom => this.#listDom = dom}>
                     {names.map((item, index) =>
                         <div key={index} data-index={index}
                              className={cx("item", {"selected": index === selectedIndex})}
