@@ -1,7 +1,12 @@
 .feed-title {
     background-color: var(--white-dark);
-    padding: 1rem 1rem 2rem 1rem;
-    text-align: center;
+    padding: 1rem;
+}
+
+.feed-title .panel {
+    width: min(900px, 100vw);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .feed-title .full-name {
@@ -11,4 +16,5 @@
 
 .feed-title .mention {
     color: var(--gray-medium);
+    margin-left: .5em;
 }

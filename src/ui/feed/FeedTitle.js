@@ -8,8 +8,10 @@ import "./FeedTitle.css";
 
 const FeedTitle = ({nodeName, fullName}) => (
     <div className="feed-title">
-        <div className="full-name">{fullName ?? NodeName.shorten(nodeName)}</div>
-        <div className="mention">{mentionName(nodeName)}</div>
+        <div className="panel">
+            <span className="full-name">{fullName ?? NodeName.shorten(nodeName)}</span>
+            <span className="mention">{mentionName(nodeName)}</span>
+        </div>
     </div>
 );
 
