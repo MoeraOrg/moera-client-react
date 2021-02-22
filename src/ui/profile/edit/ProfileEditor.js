@@ -7,6 +7,8 @@ import * as yup from 'yup';
 import { Button, ConflictWarning, Loading } from "ui/control";
 import { ComboboxField, InputField } from "ui/control/field";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
+import PageHeader from "ui/page/PageHeader";
+import { Page } from "ui/page/Page";
 import "./ProfileEditor.css";
 
 class ProfileEditor extends React.PureComponent {
@@ -33,25 +35,28 @@ class ProfileEditor extends React.PureComponent {
 
         return (
             <>
-                <h2>
-                    Edit Profile <Loading active={loading} />
-                </h2>
-                <div className="profile-editor">
-                    <Form>
-                        <ConflictWarning text="Profile was edited by somebody." show={conflict}
-                                         onClose={profileEditConflictClose}/>
-                        <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus
-                                    horizontal={true} labelClassName="col-sm-2" col="col-sm-10" />
-                        <ComboboxField title="Gender" name="gender" data={["Male", "Female"]} horizontal={true}
-                                       labelClassName="col-sm-2" col="col-sm-10" />
-                        <InputField title="E-Mail" name="email" horizontal={true} labelClassName="col-sm-2"
-                                    col="col-sm-10" />
-                        <div className="profile-editor-footer">
-                            <Button variant="secondary" onClick={profileEditCancel} disabled={updating}>Cancel</Button>
-                            <Button variant="primary" type="submit" loading={updating}>Update</Button>
-                        </div>
-                    </Form>
-                </div>
+                <PageHeader>
+                    <h2>Edit Profile <Loading active={loading} /></h2>
+                </PageHeader>
+                <Page>
+                    <div className="profile-editor">
+                        <Form>
+                            <ConflictWarning text="Profile was edited by somebody." show={conflict}
+                                             onClose={profileEditConflictClose}/>
+                            <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus
+                                        horizontal={true} labelClassName="col-sm-2" col="col-sm-10" />
+                            <ComboboxField title="Gender" name="gender" data={["Male", "Female"]} horizontal={true}
+                                           labelClassName="col-sm-2" col="col-sm-10" />
+                            <InputField title="E-Mail" name="email" horizontal={true} labelClassName="col-sm-2"
+                                        col="col-sm-10" />
+                            <div className="profile-editor-footer">
+                                <Button variant="secondary" onClick={profileEditCancel}
+                                        disabled={updating}>Cancel</Button>
+                                <Button variant="primary" type="submit" loading={updating}>Update</Button>
+                            </div>
+                        </Form>
+                    </div>
+                </Page>
             </>
         );
     }

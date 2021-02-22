@@ -127,7 +127,7 @@ class FeedPage extends React.PureComponent {
 
     static getHeaderHeight() {
         const mainMenu = document.getElementById("main-menu");
-        const header = document.getElementById("feed-header");
+        const header = document.getElementById("page-header");
         return mainMenu != null && header != null
             ? mainMenu.getBoundingClientRect().height + header.getBoundingClientRect().height : 0;
     }

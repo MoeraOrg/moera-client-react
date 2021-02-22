@@ -1,4 +1,4 @@
-#feed-header {
+#page-header {
     position: sticky;
     top: 2.7rem;
     background-color: white;
@@ -10,7 +10,7 @@
                 0 2px 4px -1px rgba(0, 0, 0, .2)
 }
 
-#feed-header .panel {
+#page-header .panel {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -20,6 +20,6 @@
     margin-right: auto;
 }
 
-#feed-header H2 {
+#page-header H2 {
     margin-left: 0.3em;
 }
