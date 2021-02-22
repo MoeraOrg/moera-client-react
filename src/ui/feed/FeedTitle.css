@@ -18,4 +18,5 @@
 .feed-title .mention {
     color: var(--gray-medium);
     margin-left: .5em;
+    white-space: nowrap;
 }
