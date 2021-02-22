@@ -21,7 +21,7 @@ class NameSelectorImpl extends React.PureComponent {
     state = {
         selectedIndex: -1,
         names: [],
-        query: ""
+        query: null
     }
 
     #inputDom;
@@ -30,9 +30,10 @@ class NameSelectorImpl extends React.PureComponent {
     componentDidMount() {
         if (this.#inputDom) {
             this.#inputDom.focus();
+            this.#inputDom.select();
         }
         this.selectIndex(-1);
-        this.refreshNames("");
+        this.refreshNames(this.props.defaultQuery);
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -80,11 +81,7 @@ class NameSelectorImpl extends React.PureComponent {
                 this.selectIndex(Math.min(selectedIndex + 1, names.length - 1));
                 break;
             case "Enter":
-                if (names.length > 0) {
-                    this.onSubmit(selectedIndex);
-                } else {
-                    this.onClose();
-                }
+                this.onSubmit(true, selectedIndex);
                 break;
             default:
                 return;
@@ -97,32 +94,33 @@ class NameSelectorImpl extends React.PureComponent {
     }
 
     onClick = index => () => {
-        this.onSubmit(index);
+        this.onSubmit(true, index);
     }
 
-    onSubmit(index) {
+    onSubmit(success, index) {
         const {names, query} = this.state;
 
         if (this.props.onSubmit) {
             if (index >= 0 && index < names.length) {
-                this.props.onSubmit(true, names[index]);
+                this.props.onSubmit(success, names[index]);
             } else {
-                this.props.onSubmit(false, {nodeName: query});
+                this.props.onSubmit(success, {nodeName: query});
             }
         }
     }
 
     onClose = () => {
-        this.onSubmit(-1);
+        this.onSubmit(false, -1);
     }
 
     render() {
+        const {defaultQuery} = this.props;
         const {names, selectedIndex, query} = this.state;
 
         return (
             <>
-                <input type="text" className="form-control" value={query} ref={dom => this.#inputDom = dom}
-                       onKeyDown={this.onKeyDown} onChange={this.onChange}/>
+                <input type="text" className="form-control" value={query ?? defaultQuery}
+                       ref={dom => this.#inputDom = dom} onKeyDown={this.onKeyDown} onChange={this.onChange}/>
                 <div className="name-select" ref={dom => this.#listDom = dom}>
                     {names.map((item, index) =>
                         <div key={index} data-index={index}
@@ -167,6 +165,11 @@ export const NameSelector = connect(
 )(NameSelectorImpl);
 
 NameSelector.propTypes = {
+    defaultQuery: PropType.string,
     onChange: PropType.func,
     onSubmit: PropType.func
+}
+
+NameSelector.defaultProps = {
+    defaultQuery: ""
 }

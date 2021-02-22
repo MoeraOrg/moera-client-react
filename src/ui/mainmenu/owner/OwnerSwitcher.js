@@ -13,7 +13,6 @@ class OwnerSwitcher extends React.PureComponent {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (!prevProps.showNavigator && this.props.showNavigator) {
             document.addEventListener("click", this.outerClick);
-            document.getElementById("ownerName").select();
             document.addEventListener("mousedown", this.mouseDown);
         }
         if (prevProps.showNavigator && !this.props.showNavigator) {

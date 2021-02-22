@@ -1,18 +1,33 @@
 #owner-navigator {
-    margin-bottom: 0;
+    display: flex;
     flex-wrap: nowrap;
-}
-
-#owner-navigator .gap {
-    width: 1rem;
-}
-
-#owner-navigator .form-group {
-    margin-right: .5rem;
-    margin-bottom: 0;
-    flex: 0 1 auto;
+    align-items: center;
+    padding-right: 1rem;
 }
 
 #owner-navigator INPUT {
+    margin-right: .5rem;
+    margin-bottom: 0;
     flex: 0 1 auto;
+    min-width: 0;
+}
+
+#owner-navigator .name-select {
+    position: fixed;
+    z-index: 1020;
+    top: 2.5rem;
+    width: 18rem;
+    background-color: white;
+}
+
+@media only screen and (max-width: 575px) {
+    #owner-navigator .name-select {
+        left: 5.3rem;
+    }
+}
+
+@media only screen and (min-width: 576px) {
+    #owner-navigator .name-select {
+        left: 6.8rem;
+    }
 }
