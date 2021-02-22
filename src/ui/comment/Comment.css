@@ -29,18 +29,7 @@
     border: dashed 1px var(--primary);
 }
 
-@media only screen and (min-width: 901px) {
-    .comment .content.preview {
-        max-height: 100vh;
-        overflow-y: auto;
-    }
-
-    .comment .content IMG, .comment .content IFRAME {
-        max-width: calc(900px - 6.5rem);
-    }
-}
-
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: var(--feed-width)) {
     .comment .content.preview {
         max-height: 150vh;
         overflow-y: auto;
@@ -48,6 +37,17 @@
 
     .comment .content IMG, .comment .content IFRAME {
         max-width: calc(100vw - 7rem);
+    }
+}
+
+@media only screen and (min-width: var(--feed-width)) {
+    .comment .content.preview {
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .comment .content IMG, .comment .content IFRAME {
+        max-width: calc(var(--feed-width) - 6.5rem);
     }
 }
 

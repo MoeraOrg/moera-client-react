@@ -107,6 +107,16 @@ export const META = [
         modifiers: {}
     },
     {
+        name: "feed.width",
+        type: "int",
+        defaultValue: "900",
+        title: "Feed width (in pixels)",
+        modifiers: {
+            min: 100,
+            max: 10000
+        }
+    },
+    {
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",

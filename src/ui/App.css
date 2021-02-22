@@ -19,7 +19,7 @@ ABBR[title] {
 }
 
 .container {
-    max-width: 900px;
+    max-width: var(--feed-width);
     padding-left: .25rem;
     padding-right: .25rem;
 }

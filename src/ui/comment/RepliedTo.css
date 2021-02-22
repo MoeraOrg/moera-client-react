@@ -52,7 +52,7 @@
 
 @media only screen and (min-width: 992px) {
     .glance-comment-popover {
-        max-width: calc(900px - 2rem);
+        max-width: calc(var(--feed-width) - 2rem);
     }
 }
 

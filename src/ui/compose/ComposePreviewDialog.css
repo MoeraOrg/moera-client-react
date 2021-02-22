@@ -1,5 +1,5 @@
 .modal-dialog.compose-preview-dialog {
-    max-width: 900px;
+    max-width: var(--feed-width);
 }
 
 .compose-preview-dialog .modal-children {

@@ -20,18 +20,7 @@
     text-align: start;
 }
 
-@media only screen and (min-width: 901px) {
-    .posting.preview > .content {
-        max-height: 100vh;
-        overflow-y: auto;
-    }
-
-    .posting > .content IMG, .posting > .content IFRAME {
-        max-width: calc(900px - 3.5rem);
-    }
-}
-
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: var(--feed-width)) {
     .posting.preview > .content {
         max-height: 150vh;
         overflow-y: auto;
@@ -39,6 +28,17 @@
 
     .posting > .content IMG, .posting > .content IFRAME {
         max-width: calc(100vw - 4rem);
+    }
+}
+
+@media only screen and (min-width: var(--feed-width)) {
+    .posting.preview > .content {
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .posting > .content IMG, .posting > .content IFRAME {
+        max-width: calc(var(--feed-width) - 3.5rem);
     }
 }
 

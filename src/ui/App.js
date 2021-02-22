@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { isAtNode } from "state/node/selectors";
+import { getSetting } from "state/settings/selectors";
 import Storage from "ui/storage/Storage";
 import HomeEvents from "ui/events/HomeEvents";
 import NodeEvents from "ui/events/NodeEvents";
@@ -23,8 +24,8 @@ import "./colors.css";
 import "./App.css";
 
 
-const App = ({atNode}) => (
-    <>
+const App = ({atNode, feedWidth}) => (
+    <div style={{"--feed-width": feedWidth + "px"}}>
         <Storage/>
         <HomeEvents/>
         <NodeEvents/>
@@ -47,11 +48,12 @@ const App = ({atNode}) => (
         <MessageBox/>
         <ConfirmBox/>
         <FlashBox/>
-    </>
+    </div>
 );
 
 export default connect(
     state => ({
-        atNode: isAtNode(state)
+        atNode: isAtNode(state),
+        feedWidth: getSetting(state, "feed.width")
     })
 )(App);
