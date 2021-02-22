@@ -4,7 +4,7 @@
 }
 
 .feed-title .panel {
-    width: min(900px, 100vw);
+    width: min(900px, 100%);
     margin-left: auto;
     margin-right: auto;
 }
