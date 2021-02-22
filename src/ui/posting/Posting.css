@@ -20,26 +20,24 @@
     text-align: start;
 }
 
-@media only screen and (max-width: var(--feed-width)) {
+.posting.preview > .content {
+    overflow-y: auto;
+}
+
+@media only screen and (max-width: 575px) {
     .posting.preview > .content {
         max-height: 150vh;
-        overflow-y: auto;
-    }
-
-    .posting > .content IMG, .posting > .content IFRAME {
-        max-width: calc(100vw - 4rem);
     }
 }
 
-@media only screen and (min-width: var(--feed-width)) {
+@media only screen and (min-width: 576px) {
     .posting.preview > .content {
         max-height: 100vh;
-        overflow-y: auto;
     }
+}
 
-    .posting > .content IMG, .posting > .content IFRAME {
-        max-width: calc(var(--feed-width) - 3.5rem);
-    }
+.posting > .content IMG, .posting > .content IFRAME {
+    max-width: min(100vw - 4rem, var(--feed-width) - 3.5rem);
 }
 
 .posting.preview > .content IMG, .posting.preview > .content IFRAME {

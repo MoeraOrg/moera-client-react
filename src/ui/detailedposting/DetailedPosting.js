@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { getPostingFeedReference } from "state/postings/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import PostingMenu from "ui/posting/PostingMenu";
@@ -17,16 +16,9 @@ import PostingButtons from "ui/posting/PostingButtons";
 import EntryHtml from "ui/posting/EntryHtml";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
-import Jump from "ui/navigation/Jump";
 
-const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermitted, href, feedTitle}) => (
+const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermitted}) => (
     <>
-        {story != null &&
-            <Jump href={`${href}?before=${story.moment}`} className="btn btn-sm btn-outline-secondary">
-                &larr; {feedTitle}
-            </Jump>
-        }
-
         <div className="posting entry mt-2">
             {deleting ?
                 <PostingDeleting/>
@@ -54,25 +46,9 @@ const DetailedPostingImpl = ({story, posting, deleting, connectedToHome, isPermi
     </>
 );
 
-function getStory(posting, feedName) {
-    const story = getPostingFeedReference(posting, feedName);
-    if (story != null) {
-        story.id = story.storyId;
-    }
-    return story;
-}
-
-const DetailedPosting = ({posting, deleting, connectedToHome, isPermitted}) => {
-    let story = getStory(posting, "timeline");
-    let href = "/timeline";
-    let feedTitle = "Timeline";
-    if (story == null) {
-        story = getStory(posting, "news");
-        href = "/news";
-        feedTitle = "News";
-    }
+const DetailedPosting = ({posting, story, deleting, connectedToHome, isPermitted}) => {
     return <DetailedPostingImpl story={story} posting={posting} deleting={deleting} connectedToHome={connectedToHome}
-                                isPermitted={isPermitted} href={href} feedTitle={feedTitle}/>
+                                isPermitted={isPermitted}/>
 }
 
 export default connect(

@@ -29,29 +29,24 @@
     border: dashed 1px var(--primary);
 }
 
+.comment .content.preview {
+    overflow-y: auto;
+}
+
 @media only screen and (max-width: var(--feed-width)) {
     .comment .content.preview {
         max-height: 150vh;
-        overflow-y: auto;
-    }
-
-    .comment .content IMG, .comment .content IFRAME {
-        max-width: calc(100vw - 7rem);
     }
 }
 
 @media only screen and (min-width: var(--feed-width)) {
     .comment .content.preview {
         max-height: 100vh;
-        overflow-y: auto;
-    }
-
-    .comment .content IMG, .comment .content IFRAME {
-        max-width: calc(var(--feed-width) - 6.5rem);
     }
 }
 
 .comment .content IMG, .comment .content IFRAME {
+    max-width: min(100vw - 7rem, var(--feed-width) - 6.5rem);
     max-height: 16rem;
 }
 

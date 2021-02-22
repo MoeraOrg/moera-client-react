@@ -21,5 +21,14 @@
 }
 
 #page-header H2 {
-    margin-left: 0.3em;
+    margin-left: .3em;
+}
+
+#page-header H2 .btn {
+    margin-bottom: 0;
+}
+
+#page-header .btn {
+    margin-left: .5rem;
+    margin-bottom: .5rem;
 }
