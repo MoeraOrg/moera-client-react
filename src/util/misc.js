@@ -60,3 +60,11 @@ export function getWindowSelectionHtml() {
     }
     return null;
 }
+
+export function getPageHeaderHeight() {
+    const mainMenu = document.getElementById("main-menu");
+    const header = document.getElementById("page-header");
+    const mainMenuHeight = mainMenu != null ? mainMenu.getBoundingClientRect().height : 0;
+    const headerHeight = header != null ? header.getBoundingClientRect().height : 0;
+    return mainMenuHeight + headerHeight;
+}

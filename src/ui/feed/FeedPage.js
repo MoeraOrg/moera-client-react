@@ -16,6 +16,7 @@ import {
     feedStatusUpdate
 } from "state/feeds/actions";
 import { isAtHomeNode } from "state/node/selectors";
+import { getPageHeaderHeight } from "util/misc";
 import "./FeedPage.css";
 
 class FeedPage extends React.PureComponent {
@@ -125,15 +126,8 @@ class FeedPage extends React.PureComponent {
         }
     }, 1000);
 
-    static getHeaderHeight() {
-        const mainMenu = document.getElementById("main-menu");
-        const header = document.getElementById("page-header");
-        return mainMenu != null && header != null
-            ? mainMenu.getBoundingClientRect().height + header.getBoundingClientRect().height : 0;
-    }
-
     static getTopmostMoment() {
-        const top = FeedPage.getHeaderHeight();
+        const top = getPageHeaderHeight();
         const postings = document.getElementsByClassName("posting");
         for (let i = 0; i < postings.length; i++) {
             if (postings.item(i).getBoundingClientRect().top >= top) {
@@ -159,7 +153,7 @@ class FeedPage extends React.PureComponent {
     }
 
     static getNotViewedMoment() {
-        const top = FeedPage.getHeaderHeight();
+        const top = getPageHeaderHeight();
         const postings = document.getElementsByClassName("posting");
         for (let i = 0; i < postings.length; i++) {
             if (postings.item(i).getBoundingClientRect().top >= top && postings.item(i).dataset.viewed === "false") {
@@ -170,7 +164,7 @@ class FeedPage extends React.PureComponent {
     }
 
     static markAllViewed() {
-        const top = FeedPage.getHeaderHeight();
+        const top = getPageHeaderHeight();
         const postings = document.getElementsByClassName("posting");
         for (let i = 0; i < postings.length; i++) {
             if (postings.item(i).getBoundingClientRect().top >= top) {
@@ -184,7 +178,7 @@ class FeedPage extends React.PureComponent {
             FeedPage.getPostingAt(moment) : FeedPage.getEarliestPosting();
         if (posting != null) {
             const y = posting.getBoundingClientRect().top;
-            const minY = FeedPage.getHeaderHeight() + 10;
+            const minY = getPageHeaderHeight() + 10;
             window.scrollBy(0, y - minY);
         }
         return posting != null;
