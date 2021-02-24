@@ -6,25 +6,12 @@
 
 #vertical-menu .navbar-nav {
     line-height: 1.1;
-}
-
-#vertical-menu BUTTON {
-    display: inline;
-    margin-left: 1rem;
-}
-
-#vertical-menu .connect-button {
-    margin: 1rem 0;
-}
-
-#vertical-menu .new-post-button {
-    margin: 1rem 0;
+    padding: 0 .5rem 1rem .5rem;
 }
 
 #vertical-menu .connection-button {
     cursor: pointer;
     color: var(--status-icon);
-    margin-right: 0.7rem;
     font-size: 150%;
 }
 
@@ -32,21 +19,7 @@
     color: var(--status-icon-highlight);
 }
 
-#vertical-menu .connection-button.active {
-    cursor: default;
-    color: white;
-}
-
-#vertical-menu .active .connection-button {
-    color: white;
-}
-
 #vertical-menu .home-name {
     display: block;
     text-align: center;
-}
-
-#vertical-menu .loading {
-    color: white;
-    fill: white !important;
 }

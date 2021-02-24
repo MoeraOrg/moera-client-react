@@ -1,27 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Browser } from "ui/browser";
 import { Button, Loading } from "ui/control";
-import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
 import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
 import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
-import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
-import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
-import ConnectDialog from "ui/connectdialog/ConnectDialog";
+import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
+import { isAtNode } from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
-import { isConnectedToHome } from "state/home/selectors";
-import { isAtNode } from "state/node/selectors";
-import "./ConnectionStatus.css";
+import "./BottomMenu.css";
 
-const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openConnectDialog, openSignUpDialog}) => {
-    if (showNavigator && Browser.isTinyScreen()) {
-        return null;
-    }
+const BottomMenu = ({atNode, connecting,  connected, openConnectDialog, openSignUpDialog}) => {
     if (connecting) {
         return <>Connecting <Loading/></>;
     }
@@ -30,42 +23,30 @@ const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openC
             return null;
         }
         return (
-            <span className="d-none d-lg-inline">
+            <div id="bottom-menu" className="connection-status d-lg-none navbar-dark bg-dark">
                 Not connected to home
                 <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
                 <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
-            </span>
+            </div>
         );
     }
     return (
-        <span className="d-none d-lg-inline">
-            <QuickTipsButton/>
-            <NewPostButton/>
+        <div id="bottom-menu" className="connection-status d-lg-none navbar-dark bg-dark">
             <NewsButton/>
             <InstantButton/>
-            <SettingsButton/>
             <HomeButton/>
-            <ConnectionsButton/>
-            <DisconnectButton/>
-        </span>
-    );
-}
-
-const ConnectionStatus = (props) => (
-    <>
-        <div className="connection-status">
-            <ConnectionButtons {...props}/>
+            <SettingsButton/>
+            <QuickTipsButton/>
+            <NewPostButton/>
         </div>
-        <ConnectDialog/>
-    </>
-);
+    );
+};
 
 export default connect(
     state => ({
         atNode: isAtNode(state),
         connecting: state.home.connecting,
-        connected: isConnectedToHome(state),
-        showNavigator: state.owner.showNavigator
+        connected: isConnectedToHome(state)
     }),
     { openConnectDialog, openSignUpDialog }
-)(ConnectionStatus);
+)(BottomMenu);

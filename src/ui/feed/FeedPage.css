@@ -19,3 +19,10 @@
     color: var(--gray-light);
     padding-bottom: 1rem;
 }
+
+@media only screen and (max-width: 575px) {
+    .feed-end {
+        font-size: large;
+        padding-bottom: 2rem;
+    }
+}

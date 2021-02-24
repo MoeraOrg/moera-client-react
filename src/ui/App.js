@@ -12,6 +12,7 @@ import ErrorPane from "ui/error/ErrorPane";
 import MainMenu from "ui/mainmenu/MainMenu";
 import CurrentPage from "ui/page/CurrentPage";
 import WelcomePage from "ui/welcome/WelcomePage";
+import BottomMenu from "ui/bottommenu/BottomMenu";
 import ReactionsDialog from "ui/reactionsdialog/ReactionsDialog";
 import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import MessageBox from "ui/messagebox/MessageBox";
@@ -42,6 +43,7 @@ const App = ({atNode, feedWidth}) => (
         :
             <WelcomePage/>
         }
+        <BottomMenu/>
         <SignUpDialog/>
         <MnemonicDialog/>
         <QuickTips/>

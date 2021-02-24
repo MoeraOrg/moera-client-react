@@ -1,4 +1,4 @@
-#connection-status .home-name {
+.connection-status .home-name {
     margin-left: 1rem;
     margin-right: 1rem;
     position: relative;
@@ -7,17 +7,17 @@
     cursor: pointer;
 }
 
-#connection-status .home-name .generation {
+.connection-status .home-name .generation {
     font-size: 60%;
     position: relative;
     bottom: -0.25em;
 }
 
-#connection-status .active .home-name {
+.connection-status .active .home-name {
     color: white;
 }
 
-#connection-status .home-name::after {
+.connection-status .home-name::after {
     display: inline-block;
     margin-left: .255em;
     vertical-align: .255em;
@@ -30,11 +30,11 @@
     top: 0.1em;
 }
 
-#connection-status .home-name:hover {
+.connection-status .home-name:hover {
     color: var(--status-icon-highlight);
 }
 
-#connection-status .home-name.anonymous {
+.connection-status .home-name.anonymous {
     font-weight: normal;
     font-style: italic;
 }

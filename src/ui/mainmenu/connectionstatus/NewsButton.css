@@ -14,6 +14,6 @@
     padding-right: 0.2rem;
 }
 
-#connection-status .news-button.connection-button.active {
+.connection-status .news-button.connection-button.active {
     cursor: pointer;
 }

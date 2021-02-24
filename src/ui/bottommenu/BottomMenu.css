@@ -1,0 +1,13 @@
+#bottom-menu {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    min-height: 2.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#bottom-menu .new-post-button {
+    margin: 0;
+}

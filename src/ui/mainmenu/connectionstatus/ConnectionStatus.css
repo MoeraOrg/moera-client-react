@@ -1,14 +1,14 @@
-#connection-status {
+.connection-status {
     color: white;
     white-space: nowrap;
 }
 
-#connection-status BUTTON {
+.connection-status BUTTON {
     display: inline;
     margin-left: 1rem;
 }
 
-#connection-status .connection-button {
+.connection-status .connection-button {
     cursor: pointer;
     color: var(--status-icon);
     margin: 0.3rem;
@@ -17,20 +17,20 @@
     top: 0.15rem;
 }
 
-#connection-status .connection-button:hover {
+.connection-status .connection-button:hover {
     color: var(--status-icon-highlight);
 }
 
-#connection-status .connection-button.active {
+.connection-status .connection-button.active {
     cursor: default;
     color: white;
 }
 
-#connection-status .active .connection-button {
+.connection-status .active .connection-button {
     color: white;
 }
 
-#connection-status .loading {
+.connection-status .loading {
     color: white;
     fill: white !important;
 }
