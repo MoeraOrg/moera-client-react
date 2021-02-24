@@ -2,6 +2,7 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import { CONTACTS_LOAD, CONTACTS_LOAD_FAILED, CONTACTS_LOADED, CONTACTS_UNSET } from "state/contacts/actions";
+import { EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events/actions";
 
 const emptyQuery = {
     loading: false,
@@ -36,6 +37,15 @@ export default (state = initialState, action) => {
 
         case CONTACTS_UNSET:
             return cloneDeep(initialState);
+
+        case EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED: {
+            const index = state.contacts.findIndex(c => c.nodeName === action.payload.name);
+            if (index >= 0) {
+                return immutable.update(state, ["contacts", index],
+                        c => ({...c, fullName: action.payload.fullName}));
+            }
+            return state;
+        }
 
         default:
             return state;

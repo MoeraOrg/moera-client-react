@@ -15,6 +15,7 @@ import {
 } from "state/people/actions";
 import { FEED_SUBSCRIBED, FEED_UNSUBSCRIBED } from "state/feeds/actions";
 import {
+    EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_NODE_SUBSCRIBER_ADDED,
     EVENT_NODE_SUBSCRIBER_DELETED,
     EVENT_NODE_SUBSCRIPTION_ADDED,
@@ -224,6 +225,27 @@ export default (state = initialState, action) => {
                         .set("subscriptionsTotal", subscriptions.length)
                         .value();
                 }
+            }
+            return state;
+
+        case EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED:
+            if (state.loadedSubscribers || state.loadedSubscriptions) {
+                const istate = immutable.wrap(state);
+                if (state.loadedSubscribers) {
+                    const index = state.subscribers.findIndex(sr => sr.nodeName === action.payload.name);
+                    if (index >= 0) {
+                        istate.update(["subscribers", index],
+                            sr => ({...sr, fullName: action.payload.fullName}));
+                    }
+                }
+                if (state.loadedSubscriptions) {
+                    const index = state.subscriptions.findIndex(sr => sr.nodeName === action.payload.name);
+                    if (index >= 0) {
+                        istate.update(["subscriptions", index],
+                            sr => ({...sr, fullName: action.payload.fullName}));
+                    }
+                }
+                return istate.value();
             }
             return state;
 

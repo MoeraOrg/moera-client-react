@@ -388,6 +388,14 @@ export const EVENT_SCHEMES = {
         "errorMessage": {
             type: "string"
         },
+    }),
+    "REMOTE_NODE_FULL_NAME_CHANGED": baseEvent({
+        "name": {
+            type: "string"
+        },
+        "fullName": {
+            type: "string"
+        }
     })
 };
 
