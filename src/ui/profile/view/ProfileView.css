@@ -13,3 +13,31 @@
         border-radius: 0;
     }
 }
+
+.profile-view .full-name {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.profile-view .full-name .gender {
+    margin-left: .5em;
+    font-size: medium;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.profile-view > .title {
+    font-size: larger;
+}
+
+.profile-view .email {
+    margin-top: 1em;
+}
+
+.profile-view .email .title {
+    font-weight: bold;
+}
+
+.profile-view .bio {
+    margin-top: 1em;
+}

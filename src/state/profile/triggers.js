@@ -14,9 +14,19 @@ import { isAtProfilePage } from "state/navigation/selectors";
 import { EVENT_NODE_PROFILE_UPDATED } from "api/events/actions";
 
 export default [
-    trigger(GO_TO_PAGE, conj(isAtProfilePage, isProfileToBeLoaded), profileLoad),
+    trigger(GO_TO_PAGE, conj(isAtProfilePage, inv(isProfileEditing), isProfileToBeLoaded), profileLoad),
+    trigger(GO_TO_PAGE, conj(isAtProfilePage, isProfileEditing), () => profileLoad(true)),
     trigger(INIT_FROM_LOCATION, inv(isAtProfilePage), profileUnset),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], isAtProfilePage, profileLoad),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
+        conj(isAtProfilePage, inv(isProfileEditing)),
+        profileLoad
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP, PROFILE_EDIT],
+        conj(isAtProfilePage, isProfileEditing),
+        () => profileLoad(true)
+    ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], inv(isAtProfilePage), profileUnset),
     trigger([PROFILE_EDIT, PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, newLocation),
     trigger(EVENT_NODE_PROFILE_UPDATED, isAtProfilePage, profileLoad),

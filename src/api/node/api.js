@@ -51,6 +51,15 @@ export const ProfileInfo = schema({
                 }
             ]
         },
+        "title": {
+            type: "string"
+        },
+        "bioSrc": {
+            type: "string"
+        },
+        "bioHtml": {
+            type: "string"
+        },
         "operations": {
             type: "object",
             properties: {

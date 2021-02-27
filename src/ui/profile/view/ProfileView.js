@@ -9,6 +9,7 @@ import { Page } from "ui/page/Page";
 import NodeNameView from "ui/profile/view/NodeNameView";
 import { profileEdit } from "state/profile/actions";
 import { isProfileEditable } from "state/profile/selectors";
+import { getOwnerName } from "state/owner/selectors";
 import "./ProfileView.css";
 
 const EditButtonImpl = ({profileEdit}) => (
@@ -22,20 +23,7 @@ const EditButton = connect(
     {profileEdit}
 )(EditButtonImpl);
 
-const ProfileLine = ({title, children, visible = true}) => (
-    visible &&
-        <>
-            <dt className="col-sm-2">{title}</dt>
-            <dd className="col-sm-10">{children}</dd>
-        </>
-);
-
-ProfileLine.propTypes = {
-    title: PropType.string,
-    visible: PropType.bool
-};
-
-const ProfileView = ({loading, fullName, gender, email, editable}) => (
+const ProfileView = ({loading, fullName, gender, email, title, bioHtml, ownerName, editable}) => (
     <>
         <PageHeader>
             <h2>Profile <FeedSubscribeButton feedName="timeline"/></h2>
@@ -46,20 +34,19 @@ const ProfileView = ({loading, fullName, gender, email, editable}) => (
                 <br />
                 <br />
                 <h4>
-                    Details <Loading active={loading} />
-                    {editable && <EditButton />}
+                    Details <Loading active={loading}/>
+                    {editable && <EditButton/>}
                 </h4>
-                <dl className="row">
-                    <ProfileLine title="Full name" visible={!!fullName}>
-                        {fullName}
-                    </ProfileLine>
-                    <ProfileLine title="Gender" visible={!!gender}>
-                        {gender}
-                    </ProfileLine>
-                    <ProfileLine title="E-mail" visible={!!email}>
-                        <a href={`mailto:${email}`}>{email}</a>
-                    </ProfileLine>
-                </dl>
+                <div className="full-name">
+                    {fullName ? fullName : ownerName}{gender && <span className="gender">({gender})</span>}
+                </div>
+                {title && <div className="title">{title}</div>}
+                {email &&
+                    <div className="email">
+                        <span className="title">E-mail:</span> <a href={`mailto:${email}`}>{email}</a>
+                    </div>
+                }
+                {bioHtml && <div className="bio" dangerouslySetInnerHTML={{__html: bioHtml}}/>}
             </div>
         </Page>
     </>
@@ -70,12 +57,16 @@ ProfileView.propTypes = {
     fullName: PropType.string,
     gender: PropType.string,
     email: PropType.string,
+    title: PropType.string,
+    bioHtml: PropType.string,
+    ownerName: PropType.string,
     editable: PropType.bool
 };
 
 export default connect(
     state => ({
         ...state.profile,
+        ownerName: getOwnerName(state),
         editable: isProfileEditable(state)
     })
 )(ProfileView);

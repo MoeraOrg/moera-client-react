@@ -1,6 +1,7 @@
 export const PROFILE_LOAD = "PROFILE_LOAD";
-export const profileLoad = () => ({
-    type: PROFILE_LOAD
+export const profileLoad = (withSource = false) => ({
+    type: PROFILE_LOAD,
+    payload: {withSource}
 });
 
 export const PROFILE_LOAD_FAILED = "PROFILE_LOAD_FAILED";

@@ -17,6 +17,9 @@ const emptyProfile = {
     fullName: null,
     gender: null,
     email: null,
+    title: null,
+    bioSrc: null,
+    bioHtml: null,
     operations: {
         edit: []
     }

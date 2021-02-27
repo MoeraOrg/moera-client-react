@@ -18,9 +18,9 @@ export default [
     executor(PROFILE_UPDATE, null, profileUpdateSaga)
 ];
 
-function* profileLoadSaga() {
+function* profileLoadSaga(action) {
     try {
-        const data = yield call(Node.getProfile, "");
+        const data = yield call(Node.getProfile, "", action.payload.withSource);
         yield put(profileSet(data));
     } catch (e) {
         yield put(profileLoadFailed());

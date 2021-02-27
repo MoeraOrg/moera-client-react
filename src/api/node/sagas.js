@@ -83,8 +83,10 @@ export function* putSettings(nodeName, settings) {
     });
 }
 
-export function* getProfile(nodeName) {
-    return yield call(callApi, {nodeName, location: "/profile", auth: true, schema: NodeApi.ProfileInfo});
+export function* getProfile(nodeName, withSource = false) {
+    const include = withSource ? "source" : null;
+    const location = urlWithParameters("/profile", {include});
+    return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ProfileInfo});
 }
 
 export function* putProfile(nodeName, profile) {
