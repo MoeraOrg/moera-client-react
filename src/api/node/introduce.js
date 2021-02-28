@@ -3,13 +3,15 @@ import { call, flush, put, select } from 'redux-saga/effects';
 
 import { isAtHomeNode } from "state/node/selectors";
 import { isCartesInitialized, isCartesRunOut } from "state/cartes/selectors";
-import { isConnectedToHome } from "state/home/selectors";
+import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { cartesLoad } from "state/cartes/actions";
 
 const postponingChannel = channel(buffers.expanding(10));
 
 function canRun(state) {
-    return isAtHomeNode(state) || !isCartesRunOut(state) || (isCartesInitialized(state) && !isConnectedToHome(state));
+    return isAtHomeNode(state) || !isCartesRunOut(state)
+        || (isCartesInitialized(state)
+            && (!isConnectedToHome(state) || (isConnectedToHome(state) && !isHomeOwnerNameSet(state))));
 }
 
 export function introduce(saga) {

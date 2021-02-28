@@ -47,6 +47,7 @@ function* connectToHomeSaga(action) {
     }
 
     let cartesData = {
+        cartesIp: null,
         cartes: []
     };
     try {

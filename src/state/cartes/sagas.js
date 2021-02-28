@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 
-import { Node } from "api";
+import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import { CARTES_LOAD, cartesSet } from "state/cartes/actions";
 import { Browser } from "ui/browser";
@@ -16,6 +16,10 @@ function* cartesLoadSaga() {
         Browser.storeCartesData(cartesIp, cartes);
         yield put(cartesSet(cartesIp, cartes));
     } catch (e) {
-        yield put(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            yield put(cartesSet(null, null));
+        } else {
+            yield put(errorThrown(e));
+        }
     }
 }
