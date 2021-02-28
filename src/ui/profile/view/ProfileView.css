@@ -28,6 +28,7 @@
 
 .profile-view > .title {
     font-size: larger;
+    margin-top: .2em;
 }
 
 .profile-view .email {

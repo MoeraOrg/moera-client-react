@@ -1,0 +1,21 @@
+.node-name-view {
+    margin-top: -.2em;
+}
+
+.node-name-view .name {
+    color: var(--gray);
+    margin-right: .5em;
+}
+
+.node-name-view .menu {
+    display: inline;
+}
+
+.node-name-view .menu .chevron {
+    color: var(--gray-medium);
+    cursor: pointer;
+}
+
+.node-name-view .menu .chevron:hover {
+    color: var(--gray-dark);
+}

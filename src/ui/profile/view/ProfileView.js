@@ -2,6 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 
+import { NodeName } from "api";
 import { Button, Loading } from "ui/control";
 import PageHeader from "ui/page/PageHeader";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
@@ -10,6 +11,7 @@ import NodeNameView from "ui/profile/view/NodeNameView";
 import { profileEdit } from "state/profile/actions";
 import { isProfileEditable } from "state/profile/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { shortGender } from "util/misc";
 import "./ProfileView.css";
 
 const EditButtonImpl = ({profileEdit}) => (
@@ -26,20 +28,20 @@ const EditButton = connect(
 const ProfileView = ({loading, fullName, gender, email, title, bioHtml, ownerName, editable}) => (
     <>
         <PageHeader>
-            <h2>Profile <FeedSubscribeButton feedName="timeline"/></h2>
+            <h2>
+                Profile
+                {" "}<FeedSubscribeButton feedName="timeline"/>
+                {" "}{editable && <EditButton/>}
+            </h2>
         </PageHeader>
         <Page>
             <div className="profile-view">
-                <NodeNameView />
-                <br />
-                <br />
-                <h4>
-                    Details <Loading active={loading}/>
-                    {editable && <EditButton/>}
-                </h4>
+                <Loading active={loading}/>
                 <div className="full-name">
-                    {fullName ? fullName : ownerName}{gender && <span className="gender">({gender})</span>}
+                    {fullName ? fullName : NodeName.shorten(ownerName)}
+                    {gender && <span className="gender">{shortGender(gender)}</span>}
                 </div>
+                <NodeNameView/>
                 {title && <div className="title">{title}</div>}
                 {email &&
                     <div className="email">

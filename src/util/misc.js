@@ -9,6 +9,17 @@ export function mentionName(name, fullName) {
     return "@" + NodeName.shorten(name) + (fullName ? `[${fullName}]` : "");
 }
 
+export function shortGender(gender) {
+    switch (gender.toLowerCase()) {
+        case "male":
+            return "m.";
+        case "female":
+            return "f.";
+        default:
+            return gender;
+    }
+}
+
 export function atOwner(state) {
     const ownerName = state.owner.name;
     return ownerName ? " @ " + NodeName.shorten(ownerName) : "";
