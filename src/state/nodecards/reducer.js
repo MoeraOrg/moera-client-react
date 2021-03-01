@@ -2,6 +2,7 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import {
+    NODE_CARD_DETAILS_SET,
     NODE_CARD_LOAD,
     NODE_CARD_LOAD_FAILED,
     NODE_CARD_LOADED,
@@ -23,6 +24,8 @@ const initialState = {
 
 const emptyCard = {
     fullName: null,
+    gender: null,
+    title: null,
     subscribersTotal: null,
     subscriptionsTotal: null,
     subscribed: null,
@@ -60,6 +63,14 @@ export default (state = initialState, action) => {
             const {nodeName} = action.payload;
             if (state[nodeName]) {
                 return immutable.set(state, [nodeName, "loading"], false);
+            }
+            return state;
+        }
+
+        case NODE_CARD_DETAILS_SET: {
+            const {nodeName, fullName, gender, title} = action.payload;
+            if (state[nodeName]) {
+                return immutable.assign(state, [nodeName], {fullName, gender, title});
             }
             return state;
         }

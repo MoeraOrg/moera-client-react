@@ -10,6 +10,9 @@ export function mentionName(name, fullName) {
 }
 
 export function shortGender(gender) {
+    if (gender == null) {
+        return null;
+    }
     switch (gender.toLowerCase()) {
         case "male":
             return "m.";

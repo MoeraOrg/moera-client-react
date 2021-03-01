@@ -4,6 +4,7 @@ import { executor } from "state/executor";
 import { Node } from "api";
 import {
     NODE_CARD_LOAD,
+    nodeCardDetailsSet,
     nodeCardLoaded,
     nodeCardLoadFailed,
     nodeCardPeopleSet,
@@ -20,6 +21,7 @@ function* nodeCardLoadSaga(action) {
     const {nodeName} = action.payload;
     try {
         yield all([
+            call(loadDetails, nodeName),
             call(loadPeople, nodeName),
             call(loadSubscription, nodeName)
         ]);
@@ -28,6 +30,11 @@ function* nodeCardLoadSaga(action) {
         yield put(nodeCardLoadFailed(nodeName));
         yield put(errorThrown(e));
     }
+}
+
+function* loadDetails(nodeName) {
+    const data = yield call(Node.getWhoAmI, nodeName);
+    yield put(nodeCardDetailsSet(nodeName, data.fullName, data.gender, data.title));
 }
 
 function* loadPeople(nodeName) {

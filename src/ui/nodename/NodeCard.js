@@ -6,11 +6,13 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import SubscribeButton from "ui/control/SubscribeButton";
 import { Loading } from "ui/control";
-import { mentionName } from "util/misc";
+import { mentionName, shortGender } from "util/misc";
 import "./NodeCard.css";
 
 const NodeCard = ({nodeName, fullName, card, homeOwnerName}) => {
     const realFullName = card != null && card.fullName != null ? card.fullName : fullName;
+    const gender = card != null ? shortGender(card.gender) : null;
+    const title = card != null ? card.title : null;
     const subscribersTotal = card != null && card.subscribersTotal != null ? card.subscribersTotal : "?";
     const subscriptionsTotal = card != null && card.subscriptionsTotal != null ? card.subscriptionsTotal : "?";
     const subscribed = card != null && (card.subscribed ?? false);
@@ -19,8 +21,14 @@ const NodeCard = ({nodeName, fullName, card, homeOwnerName}) => {
     const subscriberId = card != null ? card.subscriberId : null;
     return (
         <div className="node-card">
-            {realFullName && <div className="full-name">{realFullName}</div>}
+            {realFullName &&
+                <div>
+                    <span className="full-name">{realFullName}</span>
+                    {gender && <span className="gender">{gender}</span>}
+                </div>
+            }
             <div className="name">{mentionName(nodeName)}</div>
+            {title && <div className="title">{title}</div>}
             <div className="people">
                 <span className="counter">
                     <em>{subscribersTotal}</em> {subscribersTotal === 1 ? "subscriber" : "subscribers"}

@@ -3,8 +3,19 @@
     font-size: 150%;
 }
 
+.node-card .gender {
+    font-style: italic;
+    margin-left: .5em;
+}
+
 .node-card .name {
     color: var(--gray);
+    margin-top: -.2em;
+}
+
+.node-card .title {
+    font-size: larger;
+    margin-top: .2em;
 }
 
 .node-card .people {
