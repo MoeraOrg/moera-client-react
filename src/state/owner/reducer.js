@@ -15,6 +15,8 @@ import { INIT_FROM_LOCATION } from "state/navigation/actions";
 const initialState = {
     name: null,
     fullName: null,
+    gender: null,
+    title: null,
     correct: false,
     verified: false,
     verifiedAt: 0,
@@ -38,6 +40,12 @@ export default (state = initialState, action) => {
             }
             if (action.payload.fullName !== false) {
                 istate.set("fullName", action.payload.fullName);
+            }
+            if (action.payload.gender !== false) {
+                istate.set("gender", action.payload.gender);
+            }
+            if (action.payload.title !== false) {
+                istate.set("title", action.payload.title);
             }
             return istate.value();
         }

@@ -8,6 +8,14 @@ export function getOwnerFullName(state) {
     return state.owner.fullName;
 }
 
+export function getOwnerGender(state) {
+    return state.owner.gender;
+}
+
+export function getOwnerTitle(state) {
+    return state.owner.title;
+}
+
 export function isOwnerNameSet(state) {
     return getOwnerName(state) != null;
 }

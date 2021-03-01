@@ -20,3 +20,7 @@
     margin-left: .5em;
     white-space: nowrap;
 }
+
+.feed-title .title {
+    font-size: larger;
+}

@@ -26,6 +26,12 @@ export const WhoAmI = schema({
         },
         "fullName": {
             type: "string"
+        },
+        "gender": {
+            type: "string"
+        },
+        "title": {
+            type: "string"
         }
     },
     additionalProperties: false

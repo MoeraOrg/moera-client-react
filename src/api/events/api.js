@@ -292,6 +292,12 @@ export const EVENT_SCHEMES = {
         },
         "fullName": {
             type: "string"
+        },
+        "gender": {
+            type: "string"
+        },
+        "title": {
+            type: "string"
         }
     }),
     "REMOTE_POSTING_VERIFIED": remotePostingVerificationEvent({

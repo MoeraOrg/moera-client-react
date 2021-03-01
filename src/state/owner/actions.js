@@ -4,9 +4,9 @@ export const ownerLoad = () => ({
 });
 
 export const OWNER_SET = "OWNER_SET";
-export const ownerSet = (name, changing, fullName) => ({
+export const ownerSet = (name, changing, fullName, gender, title) => ({
     type: OWNER_SET,
-    payload: {name, changing, fullName}
+    payload: {name, changing, fullName, gender, title}
 });
 
 export const OWNER_VERIFY = "OWNER_VERIFY";
