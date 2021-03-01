@@ -54,7 +54,7 @@ export class Popover extends React.PureComponent {
             return;
         }
         this.setState({visible: true});
-        document.addEventListener("click", this.documentClick);
+        document.getElementById("app-root").addEventListener("click", this.documentClick);
         if (this.props.onToggle != null) {
             this.props.onToggle(true);
         }
@@ -65,7 +65,7 @@ export class Popover extends React.PureComponent {
             return;
         }
         this.setState({visible: false});
-        document.removeEventListener("click", this.documentClick);
+        document.getElementById("app-root").removeEventListener("click", this.documentClick);
         if (this.props.onToggle != null) {
             this.props.onToggle(false);
         }

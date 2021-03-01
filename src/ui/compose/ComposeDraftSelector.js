@@ -27,12 +27,12 @@ class ComposeDraftSelector extends React.PureComponent {
 
     onShow = () => {
         this.setState({visible: true});
-        document.addEventListener("click", this.onHide);
+        document.getElementById("app-root").addEventListener("click", this.onHide);
     };
 
     onHide = () => {
         this.setState({visible: false});
-        document.removeEventListener("click", this.onHide);
+        document.getElementById("app-root").removeEventListener("click", this.onHide);
     };
 
     onSelect = id => {

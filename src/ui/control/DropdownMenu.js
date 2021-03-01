@@ -24,12 +24,12 @@ class DropdownMenuImpl extends React.PureComponent {
 
     show() {
         this.setState({visible: true});
-        document.addEventListener("click", this.hide);
+        document.getElementById("app-root").addEventListener("click", this.hide);
     }
 
     hide = () => {
         this.setState({visible: false});
-        document.removeEventListener("click", this.hide);
+        document.getElementById("app-root").removeEventListener("click", this.hide);
     };
 
     buildItems() {

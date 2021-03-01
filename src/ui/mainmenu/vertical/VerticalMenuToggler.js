@@ -29,7 +29,7 @@ class VerticalMenuToggler extends React.PureComponent {
             return;
         }
         this.setState({visible: true});
-        document.addEventListener("click", this.documentClick);
+        document.getElementById("app-root").addEventListener("click", this.documentClick);
     };
 
     hide = () => {
@@ -37,7 +37,7 @@ class VerticalMenuToggler extends React.PureComponent {
             return;
         }
         this.setState({visible: false});
-        document.removeEventListener("click", this.documentClick);
+        document.getElementById("app-root").removeEventListener("click", this.documentClick);
     };
 
     render() {
