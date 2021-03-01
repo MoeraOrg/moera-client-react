@@ -8,10 +8,10 @@
     margin-right: .5em;
 }
 
-.comment .owner A {
+.comment .owner > A {
     color: var(--node-name);
 }
 
-.comment.topic-starter .owner A {
+.comment.topic-starter .owner > A {
     color: var(--node-name-ts);
 }

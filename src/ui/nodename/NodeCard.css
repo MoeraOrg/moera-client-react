@@ -1,3 +1,7 @@
+.node-card {
+    min-width: 16rem;
+}
+
 .node-card .full-name {
     font-weight: bold;
     font-size: 150%;
@@ -25,6 +29,7 @@
 .node-card .counter {
     display: inline-block;
     margin-right: 1em;
+    color: black;
 }
 
 .node-card .counter EM {
@@ -35,4 +40,5 @@
 .node-card .buttons {
     margin-top: .5em;
     text-align: right;
+    width: 100%;
 }

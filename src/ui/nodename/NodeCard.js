@@ -6,6 +6,7 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import SubscribeButton from "ui/control/SubscribeButton";
 import { Loading } from "ui/control";
+import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/misc";
 import "./NodeCard.css";
 
@@ -23,19 +24,21 @@ const NodeCard = ({nodeName, fullName, card, homeOwnerName}) => {
         <div className="node-card">
             {realFullName &&
                 <div>
-                    <span className="full-name">{realFullName}</span>
+                    <Jump className="full-name" nodeName={nodeName} href="/">{realFullName}</Jump>
                     {gender && <span className="gender">{gender}</span>}
                 </div>
             }
-            <div className="name">{mentionName(nodeName)}</div>
+            <div>
+                <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
+            </div>
             {title && <div className="title">{title}</div>}
             <div className="people">
-                <span className="counter">
+                <Jump className="counter" nodeName={nodeName} href="/people/subscribers">
                     <em>{subscribersTotal}</em> {subscribersTotal === 1 ? "subscriber" : "subscribers"}
-                </span>
-                <span className="counter">
+                </Jump>
+                <Jump className="counter" nodeName={nodeName} href="/people/subscriptions">
                     <em>{subscriptionsTotal}</em> {subscriptionsTotal === 1 ? "subscription" : "subscriptions"}
-                </span>
+                </Jump>
             </div>
             <div className="buttons">
                 <SubscribeButton show={nodeName !== homeOwnerName} ready={card != null && card.subscribed != null}
