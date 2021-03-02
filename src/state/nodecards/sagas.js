@@ -1,7 +1,7 @@
 import { all, call, put, select } from 'redux-saga/effects';
 
 import { executor } from "state/executor";
-import { Node } from "api";
+import { NameResolvingError, Node } from "api";
 import {
     NODE_CARD_LOAD,
     nodeCardDetailsSet,
@@ -28,7 +28,9 @@ function* nodeCardLoadSaga(action) {
         yield put(nodeCardLoaded(nodeName));
     } catch (e) {
         yield put(nodeCardLoadFailed(nodeName));
-        yield put(errorThrown(e));
+        if (!(e instanceof NameResolvingError)) {
+            yield put(errorThrown(e));
+        }
     }
 }
 

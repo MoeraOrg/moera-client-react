@@ -2,6 +2,11 @@
     min-width: 16rem;
 }
 
+.node-card .unknown {
+    font-style: italic;
+    color: var(--gray);
+}
+
 .node-card .full-name {
     font-weight: bold;
     font-size: 150%;
