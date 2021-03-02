@@ -20,7 +20,7 @@ class Manager extends React.PureComponent {
 
         this.state = {
             locus: "out", // out, main, popup
-            touch: "none", // none, touch, hold, lock
+            touch: "none", // none, touch, lock
             popup: false,
             reactions: [],
             mainEnter: this.mainEnter,
@@ -48,13 +48,6 @@ class Manager extends React.PureComponent {
                 case "touch":
                     this.setLocus("out");
                     this.setTouch("none");
-                    break;
-                case "hold":
-                    this.setTouch("lock");
-                    if (!this.isInPopover(event)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
                     break;
                 case "lock":
                     if (this.isInPopover(event)) {
@@ -151,7 +144,7 @@ class Manager extends React.PureComponent {
 
         this.setState({popup: true});
         if (this.state.touch === "touch") {
-            this.setTouch("hold");
+            this.setTouch("lock");
         }
         document.addEventListener("click", this.documentClick);
     }
