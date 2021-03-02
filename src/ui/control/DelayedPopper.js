@@ -21,6 +21,7 @@ class Manager extends React.PureComponent {
         this.state = {
             locus: "out", // out, main, popup
             touch: "none", // none, touch, lock
+            scrollY: null,
             popup: false,
             reactions: [],
             mainEnter: this.mainEnter,
@@ -124,8 +125,10 @@ class Manager extends React.PureComponent {
 
         this.setState({touch});
         if (touch !== "none") {
+            this.setState({scrollY: window.scrollY});
             document.addEventListener("click", this.documentClickCapture, {capture: true, passive: false});
         } else {
+            this.setState({scrollY: null});
             document.removeEventListener("click", this.documentClickCapture, {capture: true});
         }
         if (touch === "touch") {
@@ -136,7 +139,15 @@ class Manager extends React.PureComponent {
     }
 
     onTimeout = debounce(() => {
-        switch (this.state.locus) {
+        const {locus, touch, scrollY} = this.state;
+
+        if (touch !== "none" && scrollY != null && Math.abs(scrollY - window.scrollY) > 10) {
+            this.setLocus("out");
+            this.setTouch("none");
+            return;
+        }
+
+        switch (locus) {
             case "out":
                 this.hide();
                 break;
