@@ -69,6 +69,12 @@ class Manager extends React.PureComponent {
         }
     };
 
+    contextMenu = event => {
+        if (this.state.touch === "touch") {
+            event.preventDefault();
+        }
+    }
+
     mainEnter = () => {
         this.setLocus("main");
     };
@@ -121,6 +127,11 @@ class Manager extends React.PureComponent {
             document.addEventListener("click", this.documentClickCapture, {capture: true, passive: false});
         } else {
             document.removeEventListener("click", this.documentClickCapture, {capture: true});
+        }
+        if (touch === "touch") {
+            document.addEventListener("contextmenu", this.contextMenu);
+        } else {
+            document.removeEventListener("contextmenu", this.contextMenu);
         }
     }
 
