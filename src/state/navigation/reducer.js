@@ -43,13 +43,16 @@ export default (state = initialState, action) => {
         case LOCATION_SET:
             return {
                 ...state,
-                ...action.payload
+                location: action.payload.location,
+                title: action.payload.title,
+                update: !state.locked ? action.payload.update : state.update && action.payload.update
             };
 
         case LOCATION_LOCK:
             return {
                 ...state,
-                locked: true
+                locked: true,
+                update: true
             };
 
         case LOCATION_UNLOCK:

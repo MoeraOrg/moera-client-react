@@ -9,6 +9,9 @@ import { Browser } from "ui/browser";
 
 class Navigation extends React.PureComponent {
 
+    #rootPage;
+    #location;
+
     componentDidMount() {
         window.onpopstate = this.popState;
     }
@@ -16,7 +19,10 @@ class Navigation extends React.PureComponent {
     componentDidUpdate(prevProps, prevState, snapshot) {
         const {standalone, rootPage, location, title, update, locked, count} = this.props;
 
-        if (!locked && (rootPage !== prevProps.rootPage || location !== prevProps.location)) {
+        if (!locked
+            && (rootPage !== this.#rootPage || location !== this.#location)
+            && rootPage != null && location != null) {
+
             const data = !standalone ? {location} : {location: rootPage + location};
             const url = !standalone ? rootPage + location : Browser.passedLocation(rootPage + location);
             if (update) {
@@ -24,6 +30,8 @@ class Navigation extends React.PureComponent {
             } else {
                 window.history.replaceState(data, "", url);
             }
+            this.#rootPage = rootPage;
+            this.#location = location;
         }
         if (title !== prevProps.title || count !== prevProps.count) {
             const counter = count > 0 ? `(${count}) ` : "";
