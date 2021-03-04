@@ -43,7 +43,7 @@ function* postingReplySaga() {
         if (text) {
             text = quoteHtml(text);
         } else if (quoteAll) {
-            text = posting.body.text.trim();
+            text = quoteHtml(posting.body.text.trim());
         }
         const postingText = {
             bodySrc: JSON.stringify({

@@ -96,7 +96,7 @@ export function quoteHtml(html) {
         return null;
     }
     return html
-        .replace(/\n*<p>\n*/gi, "\n\n")
+        .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
         .replace(/<blockquote>\n+/gi, "<blockquote>\n")
         .replace(/<\/p>/gi, "")
         .replace(/\n*<br\s*\/?>\n*/gi, "\n")
