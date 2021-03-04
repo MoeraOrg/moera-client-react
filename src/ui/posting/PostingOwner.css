@@ -11,6 +11,6 @@
     color: var(--gray-medium);
 }
 
-.posting > .owner-line .owner A {
+.posting > .owner-line .owner > A {
     color: var(--node-name);
 }
