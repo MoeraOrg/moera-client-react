@@ -2,6 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 
+import { NodeName } from "api";
 import { getNodeCard, isNodeCardToBeLoaded } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import SubscribeButton from "ui/control/SubscribeButton";
@@ -19,7 +20,7 @@ const NodeCard = ({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) => {
         );
     }
 
-    const realFullName = card.fullName != null ? card.fullName : fullName;
+    const realFullName = card.fullName != null ? card.fullName : (fullName ?? NodeName.shorten(nodeName));
     const gender = shortGender(card.gender);
     const subscribersTotal = card.subscribersTotal != null ? card.subscribersTotal : "?";
     const subscriptionsTotal = card.subscriptionsTotal != null ? card.subscriptionsTotal : "?";

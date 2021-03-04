@@ -29,19 +29,21 @@ class EntryHtml extends React.PureComponent {
         this.#dom.querySelectorAll("a[data-nodename]").forEach(node => {
             const name = node.getAttribute("data-nodename");
             const href = node.getAttribute("data-href");
-            const text = node.innerText;
-            const html = node.innerHTML;
 
             const span = document.createElement("span");
             node.replaceWith(span);
 
             if (!href || href === "/") {
                 span.appendChild(node);
+
+                const text = node.innerText;
+                const fullName = text.startsWith("@") ? text.substring(1) : text;
                 ReactDOM.hydrate(
                     <Provider store={store}>
-                        <NodeNameMention name={name} text={text}/>
+                        <NodeNameMention name={name} fullName={fullName} text={text}/>
                     </Provider>, span);
             } else {
+                const html = node.innerHTML;
                 ReactDOM.render(
                     <Provider store={store}>
                         <Jump nodeName={name} href={href}><span dangerouslySetInnerHTML={{__html: html}}/></Jump>
