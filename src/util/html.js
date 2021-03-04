@@ -1,6 +1,10 @@
 import sanitizeHtml from 'sanitize-html';
 import { parse as parseEmojis } from 'twemoji-parser';
 
+function addDirAuto(tagName, attribs) {
+    return attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}};
+}
+
 const SAFE_HTML_SETTINGS = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
         "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe", "video", "audio"
@@ -36,7 +40,9 @@ const SAFE_HTML_SETTINGS = {
         }
     },
     transformTags: {
-        p: (tagName, attribs) => attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}}
+        p: addDirAuto,
+        ol: addDirAuto,
+        ul: addDirAuto
     }
 };
 
