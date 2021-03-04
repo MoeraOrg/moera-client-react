@@ -179,9 +179,16 @@ class RichTextEditorPanel extends React.PureComponent {
     onQuote = event => {
         const {textArea} = this.props;
 
-        let wrapBegin = this.isMarkdown() ? "\n>>>" : "\n<blockquote>";
+        let wrapBegin = this.isMarkdown() ? ">>>" : "<blockquote>";
         let wrapEnd = this.isMarkdown() ? ">>>\n" : "</blockquote>\n";
+
+        const value = textArea.current.value;
+        const start = textArea.current.selectionStart;
         const selection = textFieldEdit.getSelection(textArea.current);
+
+        if (start > 0 && value[start - 1] !== "\n") {
+            wrapBegin = "\n" + wrapBegin;
+        }
         if (!selection || !selection.startsWith("\n")) {
             wrapBegin += "\n";
         }
