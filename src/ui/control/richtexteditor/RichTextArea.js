@@ -114,11 +114,11 @@ export default class RichTextArea extends React.PureComponent {
     onControlKey = event => {
         const {panel} = this.props;
 
-        if (!panel.current || !event.ctrlKey || event.shiftKey || event.altKey || event.metaKey || !event.key
-            || event.key.length !== 1) {
+        if (!panel.current || !event.ctrlKey || event.shiftKey || event.altKey || event.metaKey || !event.code
+            || !event.code.startsWith("Key")) {
             return false;
         }
-        const button = panel.current.querySelector(`button[data-letter=${event.key.toUpperCase()}]`);
+        const button = panel.current.querySelector(`button[data-letter=${event.code.substring(3)}]`);
         if (!button) {
             return false;
         }
