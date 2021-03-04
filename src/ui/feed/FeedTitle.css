@@ -1,26 +1,26 @@
-.feed-title {
+#feed-title {
     background-color: var(--white-dark);
     padding: 1rem;
 }
 
-.feed-title .panel {
+#feed-title .panel {
     width: min(var(--feed-width), 100%);
     margin-left: auto;
     margin-right: auto;
     line-height: 1.2;
 }
 
-.feed-title .full-name {
+#feed-title .full-name {
     font-size: 1.9rem;
     font-weight: bold;
 }
 
-.feed-title .mention {
+#feed-title .mention {
     color: var(--gray-medium);
     margin-left: .5em;
     white-space: nowrap;
 }
 
-.feed-title .title {
+#feed-title .title {
     font-size: larger;
 }

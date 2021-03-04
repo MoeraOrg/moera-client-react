@@ -7,7 +7,7 @@ import { mentionName } from "util/misc";
 import "./FeedTitle.css";
 
 const FeedTitle = ({nodeName, fullName, title}) => (
-    <div className="feed-title">
+    <div id="feed-title">
         <div className="panel">
             <span className="full-name">{fullName ?? NodeName.shorten(nodeName)}</span>
             <span className="mention">{mentionName(nodeName)}</span>

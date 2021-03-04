@@ -6,6 +6,13 @@ import { Browser } from "ui/browser";
 import { getPageHeaderHeight } from "util/misc";
 import "./PageHeader.css";
 
+function getHideThreshold() {
+    const headerHeight = getPageHeaderHeight();
+    const feedTitle = document.getElementById("feed-title");
+    const feedTitleHeight = feedTitle != null ? feedTitle.getBoundingClientRect().height : 0;
+    return headerHeight + feedTitleHeight;
+}
+
 class PageHeader extends React.Component {
 
     state = {
@@ -24,8 +31,8 @@ class PageHeader extends React.Component {
 
     onScroll = () => {
         if (Browser.isTinyScreen() && this.#scroll != null) {
-            const headerHeight = getPageHeaderHeight();
-            this.setState({invisible: window.scrollY > this.#scroll && window.scrollY > headerHeight});
+            const threshold = getHideThreshold();
+            this.setState({invisible: window.scrollY > this.#scroll && window.scrollY > threshold});
         }
         this.#scroll = window.scrollY;
     }
