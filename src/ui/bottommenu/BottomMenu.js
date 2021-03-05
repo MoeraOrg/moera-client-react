@@ -32,12 +32,12 @@ const BottomMenu = ({atNode, connecting,  connected, openConnectDialog, openSign
     }
     return (
         <div id="bottom-menu" className="connection-status d-lg-none navbar-dark bg-dark">
-            <NewsButton/>
-            <InstantButton/>
-            <HomeButton/>
-            <SettingsButton/>
-            <QuickTipsButton/>
             <NewPostButton/>
+            <QuickTipsButton/>
+            <SettingsButton/>
+            <HomeButton/>
+            <InstantButton/>
+            <NewsButton/>
         </div>
     );
 };
