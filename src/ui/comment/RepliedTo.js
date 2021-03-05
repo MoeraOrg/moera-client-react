@@ -44,6 +44,7 @@ class RepliedTo extends React.PureComponent {
 
         return (
             <div className="replied-to">
+                {unset && <button className="unset" onClick={this.onUnset}>&times;</button>}
                 <Manager onPreparePopper={this.onPreparePopper} disabled={!popperEnabled}>
                     <Reference>
                         {(ref, mainEnter, mainLeave, mainTouch) =>
@@ -59,7 +60,6 @@ class RepliedTo extends React.PureComponent {
                         <GlanceComment/>
                     </DelayedPopper>
                 </Manager>
-                {unset && <button className="unset" onClick={this.onUnset}>&times;</button>}
             </div>
         );
     }

@@ -37,7 +37,9 @@
     border: 0;
     font-weight: bold;
     font-size: 135%;
-    margin-left: .2em;
+    margin-top: -.3em;
+    margin-right: -.3em;
+    float: right;
 }
 
 .replied-to .unset:hover {
