@@ -1,6 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 
-import { Node, NodeName } from "api";
+import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import { POSTING_REPLY, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
@@ -8,7 +8,7 @@ import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { goToLocation } from "state/navigation/actions";
 import { urlWithParameters } from "util/url";
-import { getWindowSelectionHtml } from "util/misc";
+import { getWindowSelectionHtml, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
 import { getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
@@ -34,11 +34,10 @@ function* postingReplySaga() {
             reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default")
         }));
     try {
-        const name = NodeName.parse(posting.ownerName).name;
         const subject = replySubject(posting.body.subject, subjectPrefix);
         const preamble = preambleTemplate
             .replace("%POST%", yield call(postingHref, posting, rootNodePage))
-            .replace("%USER%", name);
+            .replace("%USER%", mentionName(posting.ownerName, posting.ownerFullName));
         let text = getWindowSelectionHtml();
         if (text) {
             text = quoteHtml(text);

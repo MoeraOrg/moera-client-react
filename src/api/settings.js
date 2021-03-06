@@ -219,7 +219,7 @@ export const META = [
     {
         name: "posting.reply.preamble",
         type: "string",
-        defaultValue: "Reply to [the post](%POST%) by @%USER%:",
+        defaultValue: "Reply to [the post](%POST%) by %USER%:",
         title: "Post reply preamble",
         modifiers: {}
     },
