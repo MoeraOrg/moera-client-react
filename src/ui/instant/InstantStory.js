@@ -9,6 +9,7 @@ import InstantIcon from "ui/instant/InstantIcon";
 import Jump from "ui/navigation/Jump";
 import { storyReadingUpdate } from "state/stories/actions";
 import { getInstantTarget } from "ui/instant/instant-types";
+import InstantHtml from "ui/instant/InstantHtml";
 import "./InstantStory.css";
 
 class InstantStory extends React.PureComponent {
@@ -36,7 +37,7 @@ class InstantStory extends React.PureComponent {
                 <div className="cursor">
                     <Jump nodeName={nodeName} href={href} trackingId={story.read ? null : story.trackingId}
                           onNear={this.onJump(story)} onFar={this.onJump(story)}>
-                        <div dangerouslySetInnerHTML={{__html: story.summary}}/>
+                        <InstantHtml html={story.summary}/>
                         <div className="footer">
                             <InstantIcon story={story}/>
                             <span className="date">{formatDistanceToNow(fromUnixTime(story.publishedAt))}</span>
