@@ -4,12 +4,13 @@ import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { getNamingNameDetails } from "state/naming/selectors";
+import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
 import NodeNameText from "ui/nodename/NodeNameText";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import "./NodeName.css";
 
-const NodeName = ({name, fullName, verified = false, correct = false, linked = true, popup = true, details}) => {
+const NodeName = ({name, fullName, verified = false, correct = false, linked = true, popup = true, details, mode}) => {
     if (!name) {
         return null;
     }
@@ -21,28 +22,24 @@ const NodeName = ({name, fullName, verified = false, correct = false, linked = t
         }
     );
     linked = linked && (!details.loaded || details.nodeUri);
-    return linked ?
-        (
-            <NodeNamePopup nodeName={name} fullName={fullName} disabled={!popup}>
-                {(ref, mainEnter, mainLeave, mainTouch) =>
+    return (
+        <NodeNamePopup nodeName={name} fullName={fullName} disabled={!popup}>
+            {(ref, mainEnter, mainLeave, mainTouch) =>
+                linked ? (
                     <Jump className={klass} nodeName={name} href="/" anchorRef={ref} onMouseEnter={mainEnter}
                           onMouseLeave={mainLeave} onTouchStart={mainTouch}>
-                        <NodeNameText name={name} fullName={fullName}/>
+                        <NodeNameText name={name} fullName={fullName} mode={mode}/>
                     </Jump>
-                }
-            </NodeNamePopup>
-        )
-    :
-        (
-            <NodeNamePopup nodeName={name} fullName={fullName} disabled={!popup}>
-                {(ref, mainEnter, mainLeave, mainTouch) =>
+                ) : (
                     <span className={klass} ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}
                           onTouchStart={mainTouch}>
-                        <NodeNameText name={name} fullName={fullName}/>
+                        <NodeNameText name={name} fullName={fullName} mode={mode}/>
                     </span>
-                }
-            </NodeNamePopup>
-        );
+                )
+            }
+        </NodeNamePopup>
+
+    );
 };
 
 NodeName.propTypes = {
@@ -56,6 +53,7 @@ NodeName.propTypes = {
 
 export default connect(
     (state, ownProps) => ({
-        details: getNamingNameDetails(state, ownProps.name)
+        details: getNamingNameDetails(state, ownProps.name),
+        mode: getSetting(state, "full-name.display")
     })
 )(NodeName);

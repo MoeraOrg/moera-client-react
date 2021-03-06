@@ -117,6 +117,29 @@ export const META = [
         }
     },
     {
+        name: "full-name.display",
+        type: "string",
+        defaultValue: "full-name",
+        title: "Displaying full names of users",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Nickname only",
+                    value: "name"
+                },
+                {
+                    title: "Full name only",
+                    value: "full-name"
+                },
+                {
+                    title: "Both",
+                    value: "both"
+                }
+            ]
+        }
+    },
+    {
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",

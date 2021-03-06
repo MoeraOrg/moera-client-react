@@ -27,3 +27,7 @@
 #owner-name .node-name.incorrect {
     color: var(--incorrect-light);
 }
+
+#owner-name .node-name .mention {
+    color: var(--gray-light);
+}

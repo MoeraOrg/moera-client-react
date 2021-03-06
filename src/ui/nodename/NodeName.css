@@ -16,3 +16,8 @@
     position: relative;
     bottom: -0.25em;
 }
+
+.node-name .mention {
+    color: var(--gray);
+    font-weight: normal;
+}
