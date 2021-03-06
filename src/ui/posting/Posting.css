@@ -4,7 +4,7 @@
     border: var(--gray-light) 1px solid;
     border-radius: 5px;
     margin-bottom: 1rem;
-    padding: 0.5rem;
+    padding: .5rem;
 }
 
 @media only screen and (max-width: 575px) {
@@ -12,6 +12,7 @@
         border-left-width: 0;
         border-right-width: 0;
         border-radius: 0;
+        margin-bottom: .5rem;
     }
 }
 
