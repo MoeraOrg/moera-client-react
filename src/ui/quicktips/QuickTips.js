@@ -47,7 +47,7 @@ class QuickTips extends React.PureComponent {
                         {ownerName &&
                             <li className="visit">
                                 To visit someone's blog, click <NodeName name={ownerName} linked={false} popup={false}/>
-                                in the top-left corner and type the blog name.
+                                {" "}in the top-left corner and type the blog name.
                             </li>
                         }
                         <li className="subscribe">
