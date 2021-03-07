@@ -21,6 +21,14 @@ class OwnerSwitcher extends React.PureComponent {
         }
     }
 
+    nameClick = () => {
+        const {showNavigator, ownerSwitchOpen} = this.props;
+
+        if (!showNavigator) {
+            ownerSwitchOpen();
+        }
+    }
+
     mouseDown = e => {
         this.#startedInner = this.isInner(e);
     }
@@ -42,14 +50,14 @@ class OwnerSwitcher extends React.PureComponent {
     }
 
     render() {
-        const {showNavigator, ownerSwitchOpen} = this.props;
+        const {showNavigator} = this.props;
 
         return (
-            <div id="owner-switcher">
+            <div id="owner-switcher" onClick={this.nameClick}>
                 {showNavigator ?
                     <OwnerNavigator/>
                 :
-                    <OwnerName onClick={() => ownerSwitchOpen()}/>
+                    <OwnerName/>
                 }
             </div>
         );
