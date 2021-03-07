@@ -13,9 +13,10 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
     return (
         <div className={cx("rich-text-editor", className)}>
             <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}/>
-            <RichTextArea name={name} value={value} rows={rows} placeholder={placeholder} autoFocus={autoFocus}
-                          autoComplete={autoComplete} disabled={disabled} smileysEnabled={smileysEnabled}
-                          onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur} textArea={textArea} panel={panel}/>
+            <RichTextArea name={name} value={value} format={format} rows={rows} placeholder={placeholder}
+                          autoFocus={autoFocus} autoComplete={autoComplete} disabled={disabled}
+                          smileysEnabled={smileysEnabled} onKeyDown={onKeyDown} onChange={onChange} onBlur={onBlur}
+                          textArea={textArea} panel={panel}/>
         </div>
     );
 };

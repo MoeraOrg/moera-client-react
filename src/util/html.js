@@ -5,7 +5,7 @@ function addDirAuto(tagName, attribs) {
     return attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}};
 }
 
-const SAFE_HTML_SETTINGS = {
+const BASE_SAFE_HTML_SETTINGS = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
         "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe", "video", "audio"
     ]),
@@ -46,6 +46,32 @@ const SAFE_HTML_SETTINGS = {
     }
 };
 
+const SAFE_PREVIEW_HTML_SETTINGS = {
+    ...BASE_SAFE_HTML_SETTINGS,
+    transformTags: {
+        ...BASE_SAFE_HTML_SETTINGS.transformTags,
+        "h1": "b",
+        "h2": "b",
+        "h3": "b",
+        "h4": "b",
+        "h5": "b",
+        "h6": "b"
+    }
+};
+
+const SAFE_HTML_SETTINGS = {
+    ...BASE_SAFE_HTML_SETTINGS
+};
+
+const SAFE_IMPORT_HTML_SETTINGS = {
+    ...BASE_SAFE_HTML_SETTINGS,
+    allowedTags: BASE_SAFE_HTML_SETTINGS.allowedTags
+        .filter(tag => ![
+            "div", "span"
+        ].includes(tag)),
+    transformTags: null
+};
+
 function createEmojiElement(entity) {
     return `<b style="background-image: url('${entity.url}')" class="emoji">${entity.text}</b>`;
 }
@@ -71,30 +97,21 @@ export function safePreviewHtml(html) {
     if (!html) {
         return "";
     }
-    return sanitizeHtml(replaceEmojis(html), {
-        ...SAFE_HTML_SETTINGS,
-        transformTags: {
-            ...SAFE_HTML_SETTINGS.transformTags,
-            "h1": "b",
-            "h2": "b",
-            "h3": "b",
-            "h4": "b",
-            "h5": "b",
-            "h6": "b"
-        }
-    });
+    return sanitizeHtml(replaceEmojis(html), SAFE_PREVIEW_HTML_SETTINGS);
 }
 
 export function safeHtml(html) {
     if (!html) {
         return "";
     }
-    return sanitizeHtml(replaceEmojis(html), {
-        ...SAFE_HTML_SETTINGS,
-        allowedTags: SAFE_HTML_SETTINGS.allowedTags.concat([
-            "h1", "h2"
-        ])
-    });
+    return sanitizeHtml(replaceEmojis(html), SAFE_HTML_SETTINGS);
+}
+
+export function safeImportHtml(html) {
+    if (!html) {
+        return "";
+    }
+    return sanitizeHtml(html.replace(/([^>\s])\s*\n\s*([^<\s])/g, "$1 $2"), SAFE_IMPORT_HTML_SETTINGS);
 }
 
 export function quoteHtml(html) {

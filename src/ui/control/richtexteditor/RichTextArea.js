@@ -1,9 +1,11 @@
 import React from 'react';
 import PropType from 'prop-types';
 import TextareaAutosize from 'react-autosize-textarea';
+import * as textFieldEdit from 'text-field-edit';
 
 import { Browser } from "ui/browser";
 import { replaceSmileys } from "util/text";
+import { quoteHtml, safeImportHtml } from "util/html";
 
 const MENTION_START = RegExp(/(^|\s)@$/);
 
@@ -12,6 +14,7 @@ export default class RichTextArea extends React.PureComponent {
     static propTypes = {
         name: PropType.string,
         value: PropType.string,
+        format: PropType.string,
         rows: PropType.number,
         placeholder: PropType.string,
         className: PropType.string,
@@ -48,6 +51,7 @@ export default class RichTextArea extends React.PureComponent {
 
         if (textArea.current) {
             textArea.current.addEventListener("input", this.onInput);
+            textArea.current.addEventListener("paste", this.onPaste);
             if (autoFocus) {
                 textArea.current.focus();
             }
@@ -59,6 +63,7 @@ export default class RichTextArea extends React.PureComponent {
 
         if (textArea.current) {
             textArea.current.removeEventListener("input", this.onInput);
+            textArea.current.removeEventListener("paste", this.onPaste);
         }
     }
 
@@ -125,6 +130,31 @@ export default class RichTextArea extends React.PureComponent {
         }
         button.click();
         return true;
+    }
+
+    onPaste = event => {
+        const {format} = this.props;
+        const {textArea} = this.state;
+
+        if (!textArea.current || format === "plain-text") {
+            return;
+        }
+        let html = event.clipboardData.getData("text/html");
+        if (!html) {
+            return;
+        }
+        event.preventDefault();
+
+        html = safeImportHtml(html);
+        if (format === "markdown") {
+            html = quoteHtml(html);
+        }
+        textFieldEdit.insert(textArea.current, html);
+        textArea.current.dispatchEvent(new InputEvent("input", {
+            data: html,
+            inputType: "insertText",
+            bubbles: true
+        }));
     }
 
     render() {
