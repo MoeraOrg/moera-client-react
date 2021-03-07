@@ -19,7 +19,7 @@ class RepliedTo extends React.PureComponent {
         commentId: PropType.string,
         ownerName: PropType.string,
         ownerFullName: PropType.string,
-        heading: PropType.string,
+        headingHtml: PropType.string,
         unset: PropType.bool,
         onUnset: PropType.func,
         glanceComment: PropType.func
@@ -36,7 +36,7 @@ class RepliedTo extends React.PureComponent {
     }
 
     render() {
-        const {postingId, commentId, ownerName, ownerFullName, heading, unset, popperEnabled} = this.props;
+        const {postingId, commentId, ownerName, ownerFullName, headingHtml, unset, popperEnabled} = this.props;
 
         if (commentId == null) {
             return null;
@@ -52,7 +52,7 @@ class RepliedTo extends React.PureComponent {
                                   onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
                                 <span className="icon"><FontAwesomeIcon icon="reply"/></span>
                                 <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
-                                <span className="heading" dangerouslySetInnerHTML={{__html: heading}}/>
+                                <span className="heading" dangerouslySetInnerHTML={{__html: headingHtml}}/>
                             </Jump>
                         }
                     </Reference>

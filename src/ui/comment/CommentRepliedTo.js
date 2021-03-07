@@ -7,7 +7,8 @@ import RepliedTo from "ui/comment/RepliedTo";
 const CommentRepliedTo = ({comment, postingId}) => (
     comment.repliedTo ?
         <RepliedTo postingId={postingId} commentId={comment.repliedTo.id} ownerName={comment.repliedTo.name}
-                   ownerFullName={comment.repliedTo.fullName} heading={comment.repliedTo.headingHtml} unset={false}/>
+                   ownerFullName={comment.repliedTo.fullName} headingHtml={comment.repliedTo.headingHtml}
+                   unset={false}/>
     :
         null
 );

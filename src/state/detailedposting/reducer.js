@@ -54,7 +54,7 @@ import {
     GLANCE_COMMENT_LOADED,
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
-import { replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
+import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import {
     EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
@@ -143,7 +143,7 @@ function extractComment(comment) {
         icomment.set("body.previewText", safePreviewHtml(comment.body.text));
     }
     if (comment.repliedTo) {
-        icomment.set("repliedTo.headingHtml", replaceEmojis(comment.repliedTo.heading));
+        icomment.set("repliedTo.headingHtml", replaceEmojis(htmlEntities(comment.repliedTo.heading)));
     }
     return icomment
         .update("bodyPreview.text", text => safePreviewHtml(text))

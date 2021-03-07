@@ -26,7 +26,7 @@ import {
 import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
 import { findPostingIdByRemote } from "state/postings/selectors";
 import { immutableSetSubscriptionId } from "state/subscriptions/util";
-import { replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
+import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
 
@@ -39,10 +39,10 @@ function safeguard(posting) {
         iposting.set("body.previewText", safePreviewHtml(posting.body.text));
     }
     if (posting.bodyPreview.subject) {
-        iposting.set("bodyPreview.subjectHtml", replaceEmojis(posting.bodyPreview.subject));
+        iposting.set("bodyPreview.subjectHtml", replaceEmojis(htmlEntities(posting.bodyPreview.subject)));
     }
     if (posting.body.subject) {
-        iposting.set("body.subjectHtml", replaceEmojis(posting.body.subject));
+        iposting.set("body.subjectHtml", replaceEmojis(htmlEntities(posting.body.subject)));
     }
     return iposting
         .update("bodyPreview.text", text => safePreviewHtml(text))
