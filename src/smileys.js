@@ -4,13 +4,13 @@ export const SMILEYS = [
     {
         // :-) :o) :c) :^)
         regex: /^:[-oоcс^]?(\)+)$/,
-        emoji: 0x263a,
+        emoji: 0x1f642,
         repeatGroup: 1
     },
     {
         // :-] :-3 :->
         regex: /^:-?[3>\]]$/,
-        emoji: 0x1f642
+        emoji: 0x263a
     },
     {
         // 8-)
@@ -55,13 +55,13 @@ export const SMILEYS = [
     {
         // :-( ;-(
         regex: /^[:;]-?(\(+)$/,
-        emoji: 0x2639,
+        emoji: 0x1f641,
         repeatGroup: 1
     },
     {
         // :-c :-<
         regex: /^:-?[cс<]$/,
-        emoji: 0x1f641
+        emoji: 0x2639
     },
     {
         // :-[
