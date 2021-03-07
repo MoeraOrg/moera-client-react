@@ -11,6 +11,7 @@ export class ModalDialog extends React.PureComponent {
         title: PropType.string,
         size: PropType.string,
         className: PropType.string,
+        style: PropType.object,
         onClose: PropType.func
     };
 
@@ -25,7 +26,7 @@ export class ModalDialog extends React.PureComponent {
     onModalDialogClick = e => e.stopPropagation();
 
     render() {
-        const {title, size, className, children, onClose} = this.props;
+        const {title, size, className, style, children, onClose} = this.props;
 
         return ReactDOM.createPortal(
             <>
@@ -38,7 +39,7 @@ export class ModalDialog extends React.PureComponent {
                         {
                             [`modal-${size}`]: !!size
                         }
-                    )} onClick={this.onModalDialogClick}>
+                    )} style={style} onClick={this.onModalDialogClick}>
                         <div className="modal-content">
                             {title &&
                                 <div className="modal-header">

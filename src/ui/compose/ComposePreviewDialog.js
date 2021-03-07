@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Button, ModalDialog } from "ui/control";
 import { composePreviewClose } from "state/compose/actions";
 import { getComposeDraft, getComposeDraftRevision } from "state/compose/selectors";
+import { getSetting } from "state/settings/selectors";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import EntryHtml from "ui/posting/EntryHtml";
@@ -18,14 +19,15 @@ class ComposePreviewDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, posting} = this.props;
+        const {show, posting, feedWidth} = this.props;
 
         if (!show) {
             return null;
         }
 
         return (
-            <ModalDialog className="compose-preview-dialog" title="Post Preview" onClose={this.onClose}>
+            <ModalDialog className="compose-preview-dialog" style={{"--feed-width": feedWidth + "px"}}
+                         title="Post Preview" onClose={this.onClose}>
                 <div className="modal-body">
                     {posting &&
                         <div className="posting entry">
@@ -49,7 +51,8 @@ class ComposePreviewDialog extends React.PureComponent {
 export default connect(
     state => ({
         show: state.compose.showPreview,
-        posting: getComposeDraft(state) ?? getComposeDraftRevision(state)
+        posting: getComposeDraft(state) ?? getComposeDraftRevision(state),
+        feedWidth: getSetting(state, "feed.width")
     }),
     { composePreviewClose }
 )(ComposePreviewDialog);
