@@ -49,7 +49,7 @@ class AddonInvitation extends React.Component {
         }
 
         return (
-            <div className="alert alert-primary alert-dismissible fade show" role="alert">
+            <div className="alert alert-primary alert-dismissible mb-0 fade show" role="alert">
                 <span dangerouslySetInnerHTML={{__html: this.getHtml()}}/>
                 <button type="button" className="close" aria-label="Close" onClick={this.onClick}>
                     <span aria-hidden="true">&times;</span>
