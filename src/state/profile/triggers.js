@@ -9,7 +9,14 @@ import {
     profileUnset
 } from "state/profile/actions";
 import { isProfileEditing, isProfileToBeLoaded } from "state/profile/selectors";
-import { GO_TO_PAGE, INIT_FROM_LOCATION, newLocation, WAKE_UP } from "state/navigation/actions";
+import {
+    bottomMenuHide,
+    bottomMenuShow,
+    GO_TO_PAGE,
+    INIT_FROM_LOCATION,
+    newLocation,
+    WAKE_UP
+} from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
 import { EVENT_NODE_PROFILE_UPDATED } from "api/events/actions";
 
@@ -29,6 +36,8 @@ export default [
     ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], inv(isAtProfilePage), profileUnset),
     trigger([PROFILE_EDIT, PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, newLocation),
+    trigger(PROFILE_EDIT, isAtProfilePage, bottomMenuHide),
+    trigger([PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, bottomMenuShow),
     trigger(EVENT_NODE_PROFILE_UPDATED, isAtProfilePage, profileLoad),
     trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict),
     trigger(EVENT_NODE_PROFILE_UPDATED, inv(isAtProfilePage), profileUnset)

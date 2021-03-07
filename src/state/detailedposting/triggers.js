@@ -1,8 +1,9 @@
 import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
-import { GO_TO_PAGE, goToTimeline, updateLocation, WAKE_UP } from "state/navigation/actions";
+import { bottomMenuShow, GO_TO_PAGE, goToTimeline, updateLocation, WAKE_UP } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
+    COMMENT_COMPOSE_UNSET,
     COMMENT_POSTED,
     commentDialogCommentLoad,
     commentDialogConflict,
@@ -111,6 +112,7 @@ export default [
             && isCommentsReceiverPostingId(state, signal.payload.postingId),
         signal => commentsScrollToAnchor(signal.payload.moment)
     ),
+    trigger([COMMENT_POSTED, COMMENT_COMPOSE_UNSET], true, bottomMenuShow),
     trigger(
         [EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED],
         (state, signal) => isAtDetailedPostingPage(state)

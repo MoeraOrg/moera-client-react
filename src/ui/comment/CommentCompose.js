@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as textFieldEdit from 'text-field-edit'
+import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
+import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
 import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
@@ -30,13 +32,26 @@ class CommentCompose extends React.PureComponent {
         }
     }
 
-    onFocus = event => {
-        event.target.scrollIntoView();
+    view() {
+        const composer = document.getElementById("comment-composer");
+        scrollIntoView(composer, {scrollMode: "if-needed", block: "end"});
+    }
+
+    onFocus = () => {
+        this.view();
+        this.props.bottomMenuHide();
+    }
+
+    onBlur = () => {
+        if (this.props.values["body"].trim().length === 0) {
+            this.props.bottomMenuShow();
+        }
     }
 
     onKeyDown = event => {
         const {submitKey, submitForm} = this.props;
 
+        this.view();
         if (event.key === "Enter") {
             const submit = !Browser.isTouchScreen() && !event.shiftKey
                 && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
@@ -56,7 +71,7 @@ class CommentCompose extends React.PureComponent {
         const mention = receiverFullName ? receiverFullName : mentionName(receiverName);
         if (ownerName) {
             return (
-                <div id="comment-composer" onFocus={this.onFocus}>
+                <div id="comment-composer" onFocus={this.onFocus} onBlur={this.onBlur}>
                     <Form>
                         <div className="content">
                             <CommentComposeRepliedTo/>
@@ -100,5 +115,5 @@ export default connect(
         submitKey: getSetting(state, "comment.submit-key"),
         smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled"))
     }),
-    { commentPost, openSignUpDialog, openConnectDialog }
+    { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
 )(withFormik(commentComposeLogic)(CommentCompose));

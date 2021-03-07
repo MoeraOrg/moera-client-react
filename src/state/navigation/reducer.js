@@ -1,4 +1,6 @@
 import {
+    BOTTOM_MENU_HIDE,
+    BOTTOM_MENU_SHOW,
     GO_TO_PAGE,
     INIT_FROM_LOCATION,
     INIT_STORAGE,
@@ -14,7 +16,8 @@ const initialState = {
     location: "",
     title: "",
     update: false,
-    locked: false
+    locked: false,
+    bottomMenuVisible: true
 };
 
 export default (state = initialState, action) => {
@@ -37,7 +40,8 @@ export default (state = initialState, action) => {
         case GO_TO_PAGE:
             return {
                 ...state,
-                page: action.payload.page
+                page: action.payload.page,
+                bottomMenuVisible: true
             };
 
         case LOCATION_SET:
@@ -60,6 +64,18 @@ export default (state = initialState, action) => {
                 ...state,
                 locked: false
             };
+
+        case BOTTOM_MENU_HIDE:
+            return {
+                ...state,
+                bottomMenuVisible: false
+            }
+
+        case BOTTOM_MENU_SHOW:
+            return {
+                ...state,
+                bottomMenuVisible: true
+            }
 
         default:
             return state;

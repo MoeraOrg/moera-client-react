@@ -40,3 +40,7 @@ export function isAtNewsPage(state) {
 export function isAtPeoplePage(state) {
     return isAtNode(state) && state.navigation.page === PAGE_PEOPLE;
 }
+
+export function isBottomMenuVisible(state) {
+    return state.navigation.bottomMenuVisible;
+}

@@ -85,3 +85,13 @@ export const GO_HOME_NEWS = "GO_HOME_NEWS";
 export const goHomeNews = () => ({
     type: GO_HOME_NEWS
 });
+
+export const BOTTOM_MENU_HIDE = "BOTTOM_MENU_HIDE";
+export const bottomMenuHide = () => ({
+    type: BOTTOM_MENU_HIDE
+});
+
+export const BOTTOM_MENU_SHOW = "BOTTOM_MENU_SHOW";
+export const bottomMenuShow = () => ({
+    type: BOTTOM_MENU_SHOW
+});
