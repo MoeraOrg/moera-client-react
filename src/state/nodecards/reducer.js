@@ -18,6 +18,7 @@ import {
     FEED_UNSUBSCRIBE_FAILED,
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
+import { EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events/actions";
 
 const initialState = {
 };
@@ -164,6 +165,14 @@ export default (state = initialState, action) => {
 
         case NODE_CARDS_UNSET:
             return cloneDeep(initialState);
+
+        case EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED: {
+            const {name, fullName} = action.payload;
+            if (state[name]) {
+                return immutable.set(state, [name], fullName);
+            }
+            return state;
+        }
 
         default:
             return state;
