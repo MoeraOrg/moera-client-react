@@ -2,6 +2,7 @@ import React from 'react';
 import PropType from 'prop-types';
 import TextareaAutosize from 'react-autosize-textarea';
 
+import { Browser } from "ui/browser";
 import { replaceSmileys } from "util/text";
 
 const MENTION_START = RegExp(/(^|\s)@$/);
@@ -139,7 +140,7 @@ export default class RichTextArea extends React.PureComponent {
                 autoComplete={autoComplete}
                 placeholder={placeholder}
                 rows={rows}
-                maxRows={20}
+                maxRows={Browser.isTinyScreen() ? 15 : 20}
                 disabled={disabled}
                 onKeyDown={this.onKeyDown}
                 onBlur={onBlur}
