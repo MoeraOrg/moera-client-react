@@ -54,9 +54,9 @@ export const REACTION_EMOJIS = {
             title: "Damn",
             color: "#664500"
         },
-        0x1f381: {
+        0x1f49d: {
             title: "Congrats",
-            color: "#da2f47"
+            color: "#dd2944"
         },
         0x1f62d: {
             title: "Cry",
@@ -89,6 +89,14 @@ export const REACTION_EMOJIS = {
         0x1f525: {
             title: "Hot",
             color: "#f4900c"
+        },
+        0x1f923: {
+            title: "LOL",
+            color: "#ffcb4c"
+        },
+        0x1f970: {
+            title: "Sweet",
+            color: "#dd2e44"
         }
     },
     negative: {
@@ -116,9 +124,9 @@ export const REACTION_EMOJIS = {
             title: "Arrogant",
             color: "#744eaa"
         },
-        0x1f921: {
-            title: "Foolish",
-            color: "#ff7892"
+        0x1f643: {
+            title: "Absurd",
+            color: "#ffcc4d"
         },
         0x1f61c: {
             title: "Be-be",
@@ -141,6 +149,6 @@ export const MAIN_POSITIVE_REACTIONS = [
 export const MAIN_POSITIVE_REACTIONS_SET = new Set(MAIN_POSITIVE_REACTIONS);
 
 export const MAIN_NEGATIVE_REACTIONS = [
-    0x1f4a4, 0x1f44e, 0x1f4a9, 0x2694, 0x23f3, 0x1f3a9, 0x1f921, 0x1f61c, 0x1f494, 0x1f47f
+    0x1f4a4, 0x1f44e, 0x1f4a9, 0x2694, 0x23f3, 0x1f3a9, 0x1f643, 0x1f61c, 0x1f494, 0x1f47f
 ];
 export const MAIN_NEGATIVE_REACTIONS_SET = new Set(MAIN_NEGATIVE_REACTIONS);

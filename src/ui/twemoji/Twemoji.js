@@ -14,6 +14,7 @@ import { ReactComponent as Twemoji1f44e } from "./1f44e.svg";
 import { ReactComponent as Twemoji1f47f } from "./1f47f.svg";
 import { ReactComponent as Twemoji1f48e } from "./1f48e.svg";
 import { ReactComponent as Twemoji1f494 } from "./1f494.svg";
+import { ReactComponent as Twemoji1f49d } from "./1f49d.svg";
 import { ReactComponent as Twemoji1f4a1 } from "./1f4a1.svg";
 import { ReactComponent as Twemoji1f4a4 } from "./1f4a4.svg";
 import { ReactComponent as Twemoji1f4a9 } from "./1f4a9.svg";
@@ -28,11 +29,14 @@ import { ReactComponent as Twemoji1f622 } from "./1f622.svg";
 import { ReactComponent as Twemoji1f62b } from "./1f62b.svg";
 import { ReactComponent as Twemoji1f62d } from "./1f62d.svg";
 import { ReactComponent as Twemoji1f62e } from "./1f62e.svg";
+import { ReactComponent as Twemoji1f643 } from "./1f643.svg";
 import { ReactComponent as Twemoji1f64f } from "./1f64f.svg";
 import { ReactComponent as Twemoji1f917 } from "./1f917.svg";
 import { ReactComponent as Twemoji1f921 } from "./1f921.svg";
+import { ReactComponent as Twemoji1f923 } from "./1f923.svg";
 import { ReactComponent as Twemoji1f926 } from "./1f926.svg";
 import { ReactComponent as Twemoji1f92e } from "./1f92e.svg";
+import { ReactComponent as Twemoji1f970 } from "./1f970.svg";
 import { ReactComponent as Twemoji1f9f8 } from "./1f9f8.svg";
 
 import "./Twemoji.css";
@@ -50,6 +54,7 @@ const CACHED = new Map([
     ["1f47f", Twemoji1f47f],
     ["1f48e", Twemoji1f48e],
     ["1f494", Twemoji1f494],
+    ["1f49d", Twemoji1f49d],
     ["1f4a1", Twemoji1f4a1],
     ["1f4a4", Twemoji1f4a4],
     ["1f4a9", Twemoji1f4a9],
@@ -64,11 +69,14 @@ const CACHED = new Map([
     ["1f62b", Twemoji1f62b],
     ["1f62d", Twemoji1f62d],
     ["1f62e", Twemoji1f62e],
+    ["1f643", Twemoji1f643],
     ["1f64f", Twemoji1f64f],
     ["1f917", Twemoji1f917],
     ["1f921", Twemoji1f921],
+    ["1f923", Twemoji1f923],
     ["1f926", Twemoji1f926],
     ["1f92e", Twemoji1f92e],
+    ["1f970", Twemoji1f970],
     ["1f9f8", Twemoji1f9f8]
 ]);
 

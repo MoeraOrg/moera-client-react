@@ -93,6 +93,12 @@ export class EmojiListDialog extends React.PureComponent {
     };
 
     toggle = choice => {
+        if (choice == null) {
+            return {
+                dimmed: true,
+                marked: false
+            }
+        }
         if (this.props.advanced) {
             if (choice.marked) {
                 return {
