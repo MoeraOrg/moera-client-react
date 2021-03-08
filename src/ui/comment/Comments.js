@@ -20,6 +20,7 @@ import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
 import CommentCompose from "ui/comment/CommentCompose";
 import CommentDialog from "ui/comment/CommentDialog";
+import { getPageHeaderHeight } from "util/misc";
 import "./Comments.css";
 
 class Comments extends React.PureComponent {
@@ -126,12 +127,12 @@ class Comments extends React.PureComponent {
 
     static scrollToEnd() {
         const y = document.getElementById("comments").getBoundingClientRect().bottom;
-        window.scrollBy(0, y - 50);
+        window.scrollBy(0, y - getPageHeaderHeight());
     }
 
     static scrollToElement(element) {
         const y = element.getBoundingClientRect().top;
-        window.scrollBy(0, y - 50);
+        window.scrollBy(0, y - getPageHeaderHeight());
     }
 
     loadFuture = () => {
