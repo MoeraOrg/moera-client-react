@@ -1,8 +1,7 @@
 .entry BLOCKQUOTE {
+    border-left: 3px solid var(--cyan);
     padding: 0.2rem 0.2rem 0.2rem 3rem;
     position: relative;
-    background-color: var(--blockquote);
-    border-radius: 0.5rem;
     overflow: hidden;
 }
 
@@ -14,11 +13,6 @@
     position: absolute;
     left: 0.5rem;
     top: -1rem;
-}
-
-.entry BLOCKQUOTE BLOCKQUOTE {
-    border-left: 3px solid var(--cyan);
-    border-radius: 0;
 }
 
 .entry BLOCKQUOTE BLOCKQUOTE::before {
