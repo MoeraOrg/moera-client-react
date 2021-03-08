@@ -24,7 +24,9 @@ const BASE_SAFE_HTML_SETTINGS = {
     },
     allowedClasses: {
         img: "emoji",
-        b: "emoji"
+        b: "emoji",
+        span: "katex",
+        div: "katex"
     },
     allowedIframeHostnames: [
         "www.youtube.com", "www.youtube-nocookie.com", "player.vimeo.com", "www.facebook.com", "peer.tube",

@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
 import PropType from 'prop-types';
+import 'katex/dist/katex.min.css';
 
 import store from "state/store";
 import { getSetting } from "state/settings/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
+
+const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
+const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
 
 class EntryHtml extends React.PureComponent {
 
@@ -49,6 +53,18 @@ class EntryHtml extends React.PureComponent {
                         <Jump nodeName={name} href={href}><span dangerouslySetInnerHTML={{__html: html}}/></Jump>
                     </Provider>, span);
             }
+        });
+        this.#dom.querySelectorAll("span.katex").forEach(node => {
+            ReactDOM.render(
+                <Suspense fallback={<>Loading math...</>}>
+                    <InlineMath math={node.innerText}/>
+                </Suspense>, node);
+        });
+        this.#dom.querySelectorAll("div.katex").forEach(node => {
+            ReactDOM.render(
+                <Suspense fallback={<>Loading math...</>}>
+                    <BlockMath math={node.innerText}/>
+                </Suspense>, node);
         });
     }
 
