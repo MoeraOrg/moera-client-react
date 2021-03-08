@@ -15,6 +15,7 @@ export class EmojiListInput extends React.PureComponent {
         negative: PropType.bool,
         value: PropType.string,
         advanced: PropType.bool,
+        disabled: PropType.bool,
         onChange: PropType.func
     };
 
@@ -25,7 +26,9 @@ export class EmojiListInput extends React.PureComponent {
     }
 
     edit = () => {
-        this.setState({editing: true});
+        if (!this.props.disabled) {
+            this.setState({editing: true});
+        }
     };
 
     editingConfirmed = value => {
@@ -38,7 +41,7 @@ export class EmojiListInput extends React.PureComponent {
     };
 
     render() {
-        const {className, negative, value, advanced} = this.props;
+        const {className, negative, value, advanced, disabled} = this.props;
 
         const list = new EmojiList(value);
         return (
@@ -46,9 +49,11 @@ export class EmojiListInput extends React.PureComponent {
                 <div className="content" onClick={this.edit}>
                     {list.included().map(e => <Twemoji key={e} code={e}/>)}
                 </div>
-                <div className="button" onClick={this.edit}>
-                    <FontAwesomeIcon icon="pen"/>
-                </div>
+                {!disabled &&
+                    <div className="button" onClick={this.edit}>
+                        <FontAwesomeIcon icon="pen"/>
+                    </div>
+                }
                 {this.state.editing &&
                     <EmojiListDialog negative={negative} value={value} advanced={advanced}
                                      onConfirm={this.editingConfirmed} onCancel={this.editingCancelled}/>}

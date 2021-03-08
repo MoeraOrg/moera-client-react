@@ -779,6 +779,10 @@ export const SettingMetaInfoArray = schema({
             "type": {
                 type: "string"
             },
+            "privileged": {
+                type: "boolean",
+                default: false
+            },
             "defaultValue": {
                 type: "string"
             },

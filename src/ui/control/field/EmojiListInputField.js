@@ -11,6 +11,7 @@ export class EmojiListInputField extends React.PureComponent {
     static propTypes = {
         name: PropType.string,
         title: PropType.string,
+        disabled: PropType.bool,
         horizontal: PropType.bool,
         groupClassName: PropType.string,
         labelClassName: PropType.string,
@@ -23,7 +24,7 @@ export class EmojiListInputField extends React.PureComponent {
     };
 
     render() {
-        const {name, title, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,
+        const {name, title, disabled, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,
                initialValue, defaultValue, negative, advanced} = this.props;
 
         return (
@@ -45,7 +46,7 @@ export class EmojiListInputField extends React.PureComponent {
                         >
                             <Wrapper className={col}>
                                 <EmojiListInput className="form-control" negative={negative} value={field.value}
-                                                advanced={advanced}
+                                                advanced={advanced} disabled={disabled}
                                                 onChange={v => form.setFieldValue(field.name, v)}/>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
                             </Wrapper>

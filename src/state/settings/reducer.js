@@ -105,7 +105,7 @@ export default (state = initialState, action) => {
             return immutable.set(state, "node.loadingMeta", true);
 
         case SETTINGS_NODE_META_LOADED: {
-            let metadata = new Map();
+            const metadata = new Map();
             action.payload.meta.forEach(meta => metadata.set(meta.name, meta));
             return immutable.wrap(state)
                 .set("node.loadingMeta", false)
@@ -128,7 +128,7 @@ export default (state = initialState, action) => {
             return immutable.set(state, "client.loadingValues", true);
 
         case SETTINGS_CLIENT_VALUES_LOADED: {
-            let values = new Map();
+            const values = new Map();
             action.payload.settings.forEach(({name, value}) => values.set(name, value));
             return immutable.wrap(state)
                 .set("client.loadingValues", false)
@@ -153,8 +153,8 @@ export default (state = initialState, action) => {
             };
 
         case SETTINGS_UPDATE_SUCCEEDED:
-            let nodeValues = new Map(state.node.values);
-            let clientValues = new Map(state.client.values);
+            const nodeValues = new Map(state.node.values);
+            const clientValues = new Map(state.client.values);
             action.payload.settings.forEach(({name, value}) => {
                 if (name.startsWith(ClientSettings.PREFIX)) {
                     clientValues.set(name, value);

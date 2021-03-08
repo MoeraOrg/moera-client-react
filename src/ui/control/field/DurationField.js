@@ -26,6 +26,7 @@ export class DurationField extends React.PureComponent {
         labelClassName: PropType.string,
         col: PropType.string,
         autoFocus: PropType.bool,
+        disabled: PropType.bool,
         noFeedback: PropType.bool,
         min: PropType.string,
         max: PropType.string,
@@ -46,7 +47,7 @@ export class DurationField extends React.PureComponent {
 
     render() {
         const {name, title, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,
-               autoFocus, initialValue, defaultValue} = this.props;
+               autoFocus, disabled, initialValue, defaultValue} = this.props;
         const min = this.props.min != null ? Duration.parse(this.props.min) : Duration.MIN;
         const max = this.props.max != null ? Duration.parse(this.props.max) : Duration.MAX;
 
@@ -76,10 +77,11 @@ export class DurationField extends React.PureComponent {
                                         value={duration.amount}
                                         onChange={v => this.onChange(form, field.name, null, v)}
                                         autoFocus={autoFocus}
+                                        disabled={disabled}
                                         min={min.toUnitCeil(duration.unit)}
                                         max={max.toUnitFloor(duration.unit)}
                                     />
-                                    <select name={field.name + "_unit"} value={duration.unit}
+                                    <select name={field.name + "_unit"} value={duration.unit} disabled={disabled}
                                             onChange={e => this.onChange(form, field.name, e.target.value, null)}>
                                         {UNITS.map(({short, long}) => (
                                             max.toSeconds() >= new Duration(1, short).toSeconds() ?

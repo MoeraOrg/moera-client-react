@@ -12,6 +12,7 @@ export class CheckboxField extends React.PureComponent {
     static propTypes = {
         name: PropType.string,
         title: PropType.string,
+        disabled: PropType.bool,
         groupClassName: PropType.string,
         labelClassName: PropType.string,
         autoFocus: PropType.bool,
@@ -33,7 +34,7 @@ export class CheckboxField extends React.PureComponent {
     }
 
     render() {
-        const {name, title, groupClassName, labelClassName, single, initialValue, defaultValue} = this.props;
+        const {name, title, disabled, groupClassName, labelClassName, single, initialValue, defaultValue} = this.props;
 
         return (
             <Field name={name}>
@@ -58,6 +59,7 @@ export class CheckboxField extends React.PureComponent {
                                     checked={!!field.value}
                                     id={name}
                                     type="checkbox"
+                                    disabled={disabled}
                                     className={cx({
                                         "form-check-input": !single,
                                         "form-control": single,
