@@ -3,7 +3,7 @@ export const REACTION_EMOJIS = {
         // Main
         0x1f4a1: {
             title: "Hmm",
-            color: "#ffd983"
+            color: "#ffcc4d"
         },
         0x1f44d: {
             title: "Like",
@@ -23,7 +23,7 @@ export const REACTION_EMOJIS = {
         },
         0x1f926: {
             title: "Facepalm",
-            color: "#ffdc5d"
+            color: "#ffcc4d"
         },
         0x1f62e: {
             title: "Wow",
@@ -48,7 +48,7 @@ export const REACTION_EMOJIS = {
         },
         0x1f37f: {
             title: "Popcorn",
-            color: "#ffd983"
+            color: "#ffcc4d"
         },
         0x1f62b: {
             title: "Damn",
@@ -76,7 +76,7 @@ export const REACTION_EMOJIS = {
         },
         0x1f64f: {
             title: "Hope",
-            color: "#f9ca55"
+            color: "#ffcc4d"
         },
         0x1f60c: {
             title: "Keep calm",
