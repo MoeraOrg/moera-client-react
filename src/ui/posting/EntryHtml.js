@@ -42,7 +42,7 @@ class EntryHtml extends React.PureComponent {
 
                 const text = node.innerText;
                 const fullName = text.startsWith("@") ? text.substring(1) : text;
-                ReactDOM.hydrate(
+                ReactDOM.render(
                     <Provider store={store}>
                         <NodeNameMention name={name} fullName={fullName} text={text}/>
                     </Provider>, span);
