@@ -18,7 +18,7 @@ const BASE_SAFE_HTML_SETTINGS = {
         p: ["style"],
         iframe: [
             "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
-            "allowtransparency"
+            "allowtransparency", "style"
         ],
         "mr-spoiler": ["title"]
     },
@@ -39,6 +39,10 @@ const BASE_SAFE_HTML_SETTINGS = {
         },
         b: {
             "background-image": [/^url\('https:\/\/twemoji.maxcdn.com\//]
+        },
+        "iframe": {
+            "width": [/^\d+px$/],
+            "height": [/^\d+px$/]
         }
     },
     transformTags: {
