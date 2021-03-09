@@ -71,6 +71,11 @@ export function* getCurrent(name, generation) {
         {method: "getCurrent", params: [name, generation], schema: NamingApi.RegisteredNameInfo});
 }
 
+export function* getSimilar(name) {
+    return yield call(callNaming,
+        {method: "getSimilar", params: [name], schema: NamingApi.RegisteredNameInfo});
+}
+
 export function* isFree(name) {
     return yield call(callNaming,
         {method: "isFree", params: [name], schema: "boolean", notNull: true});

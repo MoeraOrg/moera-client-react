@@ -63,7 +63,10 @@ function* ownerSwitchSaga(action) {
 
     try {
         const {name, generation} = NodeName.parse(action.payload.name);
-        const info = yield Naming.getCurrent(name, generation);
+        let info = yield Naming.getCurrent(name, generation);
+        if (!info || !info.nodeUri) {
+            info = yield Naming.getSimilar(name);
+        }
         if (info && info.nodeUri) {
             if (!standalone) {
                 try {
