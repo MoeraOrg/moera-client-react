@@ -13,7 +13,7 @@ import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDial
 import { getNodeRootPage } from "state/node/selectors";
 import { htmlEntities } from "util/html";
 import { mentionName } from "util/misc";
-import { urlWithParameters } from "util/url";
+import { redirectUrl, urlWithParameters } from "util/url";
 import { NodeName } from "api";
 import "./RichTextEditorPanel.css";
 
@@ -164,8 +164,8 @@ class RichTextEditorPanel extends React.PureComponent {
                 textFieldEdit.insert(textArea.current, mentionName(nodeName, fullName))
             } else {
                 const text = fullName ?? NodeName.shorten(nodeName);
-                const href = urlWithParameters(nodeRootPage + "/gotoname",
-                    {name: nodeName, location: "/"});
+                const href =
+                    redirectUrl(false, nodeRootPage, nodeName, null, "/", null);
                 textFieldEdit.insert(textArea.current,
                     `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName)}" data-href="/">`
                     + `${htmlEntities(text)}</a>`);

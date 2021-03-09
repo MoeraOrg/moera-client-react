@@ -8,8 +8,7 @@ import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { Browser } from "ui/browser";
-import { rootUrl, urlWithParameters } from "util/url";
+import { redirectUrl, rootUrl } from "util/url";
 import { getNodeRootPage } from "state/node/selectors";
 
 class Jump extends React.PureComponent {
@@ -72,44 +71,27 @@ class Jump extends React.PureComponent {
         e.preventDefault();
     }
 
-    track(url) {
-        const {standalone, trackingId, homeRootPage} = this.props;
-
-        if (standalone) {
-            url = Browser.passedLocation(url);
-        }
-        return trackingId != null
-            ? urlWithParameters(homeRootPage + "/track", {trackingId, href: url}) : url;
-    }
-
     render() {
         const {
             standalone, nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details,
             trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
         } = this.props;
 
-        const dataNodeName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
-        if (nodeName == null || nodeName === ownerName || (nodeName === ":" && homeOwnerName === ownerName)) {
-            return <a href={this.track(rootPage + href)} className={className} title={title}
-                      data-nodename={dataNodeName} data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter}
-                      onMouseLeave={onMouseLeave} onTouchStart={onTouchStart} onClick={this.onNear}
-                      suppressHydrationWarning={true}>{children}</a>;
+        const nodeOwnerName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
+        if (nodeOwnerName === ownerName) {
+            const url = redirectUrl(standalone, homeRootPage, ownerName, rootPage, href, trackingId);
+            return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
+                      ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+                      onTouchStart={onTouchStart} onClick={this.onNear} suppressHydrationWarning={true}>{children}</a>;
         } else {
-            let url, nodeLocation = null;
-            if (nodeName === ":" || nodeName === homeOwnerName) {
+            let nodeLocation = null;
+            if (nodeOwnerName === homeOwnerName) {
                 nodeLocation = homeRootPage;
-                url = this.track(nodeLocation + href);
-            } else {
-                const client = standalone ? Browser.getRootLocation() : null;
-                if (details.loaded && false) {
-                    nodeLocation = details.nodeUri;
-                    url = this.track(nodeLocation + href);
-                } else {
-                    url = urlWithParameters(homeRootPage + "/gotoname",
-                        {client, name: nodeName, location: href, trackingId});
-                }
+            } else if (details.loaded) {
+                nodeLocation = details.nodeUri;
             }
-            return <a href={url} className={className} title={title} data-nodename={dataNodeName} data-href={href}
+            const url = redirectUrl(standalone, homeRootPage, nodeOwnerName, nodeLocation, href, trackingId);
+            return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
                       ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, href)}
                       suppressHydrationWarning={true}>{children}</a>;

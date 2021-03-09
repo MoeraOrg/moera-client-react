@@ -1,4 +1,5 @@
 import * as URI from 'uri-js';
+import { Browser } from "ui/browser";
 
 export function normalizeUrl(url) {
     if (url == null) {
@@ -43,4 +44,13 @@ export function nodeUrlToLocation(url) {
 
 export function nodeUrlToEvents(url) {
     return url != null ? toWsUrl(normalizeUrl(url) + "/api/events") : null;
+}
+
+export function redirectUrl(standalone, homeRootPage, nodeName, nodeRootPage, location, trackingId) {
+    if (nodeRootPage && !trackingId) {
+        return standalone ? Browser.passedLocation(nodeRootPage + location) : nodeRootPage + location;
+    }
+    const client = standalone ? Browser.getRootLocation() : null;
+    return urlWithParameters(homeRootPage + "/gotoname",
+        {client, name: nodeName, location: location, trackingId});
 }

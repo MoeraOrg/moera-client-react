@@ -2,7 +2,7 @@
 
 import { getInstantTarget, getInstantTypeDetails } from "ui/instant/instant-types";
 import { htmlToText } from "util/html";
-import { urlWithParameters } from "util/url";
+import { redirectUrl } from "util/url";
 
 export function buildNotification(packet) {
     switch (packet.type) {
@@ -34,20 +34,13 @@ export function buildNotification(packet) {
     }
 }
 
-function track(url, trackingId, originUrl) {
-    url = self.origin + "/?href=" + encodeURIComponent(url);
-    return trackingId != null
-        ? urlWithParameters(originUrl + "/track", {trackingId, href: url}) : url;
-}
-
 async function getInstantUrl(packet) {
     const {originUrl, story} = packet;
     const {nodeName, href} = getInstantTarget(story);
     if (nodeName === ":") {
-        return track(originUrl + href, story.trackingId, originUrl);
+        return redirectUrl(self.origin, originUrl, null, originUrl, originUrl + href, story.trackingId);
     } else {
-        return urlWithParameters(originUrl + "/gotoname",
-            {client: self.origin, name: nodeName, location: href, trackingId: story.trackingId});
+        return redirectUrl(self.origin, originUrl, nodeName, null, href, story.trackingId);
     }
 }
 
