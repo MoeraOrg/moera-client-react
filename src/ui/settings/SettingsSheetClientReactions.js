@@ -6,10 +6,6 @@ import { mapWithKeysOnly } from "util/map";
 import { PREFIX } from "api/settings";
 
 const INCLUDE = new Set([
-    PREFIX + "posting.reactions.positive.default",
-    PREFIX + "posting.reactions.negative.default",
-    PREFIX + "posting.reactions.visible.default",
-    PREFIX + "posting.reactions.totals-visible.default",
     PREFIX + "reactions.positive.available",
     PREFIX + "reactions.negative.available"
 ]);
