@@ -1,4 +1,5 @@
 #owner-name {
+    display: inline-block;
     border: var(--dark) .1rem solid;
     border-radius: .25rem;
     text-decoration: none;
