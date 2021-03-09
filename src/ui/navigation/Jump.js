@@ -107,7 +107,6 @@ class Jump extends React.PureComponent {
                 } else {
                     url = urlWithParameters(homeRootPage + "/gotoname",
                         {client, name: nodeName, location: href, trackingId});
-                    console.log(homeRootPage, url, client, href, trackingId);
                 }
             }
             return <a href={url} className={className} title={title} data-nodename={dataNodeName} data-href={href}
