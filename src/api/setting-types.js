@@ -34,14 +34,24 @@ export function validate(value, type, modifiers) {
             }
             return true;
 
-        case "Duration":
-            if (modifiers.min && Duration.parse(value).toSeconds() < Duration.parse(modifiers.min).toSeconds()) {
+        case "Duration": {
+            const duration = Duration.parse(value);
+            if (modifiers.min && duration.isFixed()
+                    && duration.toSeconds() < Duration.parse(modifiers.min).toSeconds()) {
                 return "The value must be not less than " + modifiers.min;
             }
-            if (modifiers.max && Duration.parse(value).toSeconds() > Duration.parse(modifiers.max).toSeconds()) {
+            if (modifiers.max && duration.isFixed()
+                    && duration.toSeconds() > Duration.parse(modifiers.max).toSeconds()) {
                 return "The value must be not more than " + modifiers.max;
             }
+            if (!modifiers.never && duration.isNever()) {
+                return "The value cannot be 'never'";
+            }
+            if (!modifiers.always && duration.isAlways()) {
+                return "The value cannot be 'always'";
+            }
             return true;
+        }
 
         default:
             return true;

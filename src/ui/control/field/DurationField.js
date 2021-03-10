@@ -1,6 +1,7 @@
 import React from 'react';
 import PropType from 'prop-types';
 import { NumberPicker } from 'react-widgets';
+import cx from 'classnames';
 import { Field } from 'formik';
 import selectn from 'selectn';
 
@@ -30,6 +31,8 @@ export class DurationField extends React.PureComponent {
         noFeedback: PropType.bool,
         min: PropType.string,
         max: PropType.string,
+        never: PropType.bool,
+        always: PropType.bool,
         initialValue: PropType.string,
         defaultValue: PropType.string
     };
@@ -42,14 +45,28 @@ export class DurationField extends React.PureComponent {
         if (newAmount != null) {
             duration.amount = newAmount;
         }
+        const min = this.getMin().toUnitCeil(duration.unit);
+        const max = this.getMax().toUnitFloor(duration.unit);
+        if (duration.amount < min) {
+            duration.amount = min;
+        }
+        if (duration.amount > max) {
+            duration.amount = max;
+        }
         form.setFieldValue(fieldName, duration.toString());
     };
 
+    getMin() {
+        return this.props.min != null ? Duration.parse(this.props.min) : Duration.MIN;
+    }
+
+    getMax() {
+        return this.props.max != null ? Duration.parse(this.props.max) : Duration.MAX;
+    }
+
     render() {
         const {name, title, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,
-               autoFocus, disabled, initialValue, defaultValue} = this.props;
-        const min = this.props.min != null ? Duration.parse(this.props.min) : Duration.MIN;
-        const max = this.props.max != null ? Duration.parse(this.props.max) : Duration.MAX;
+               autoFocus, disabled, initialValue, defaultValue, never, always} = this.props;
 
         return (
             <Field name={name}>
@@ -72,23 +89,27 @@ export class DurationField extends React.PureComponent {
                             {/* <label> is not functional, because NumberPicker doesn't allow to set id */}
                             <Wrapper className={col}>
                                 <div className="duration-control">
-                                    <NumberPicker
-                                        name={field.name + "_amount"}
-                                        value={duration.amount}
-                                        onChange={v => this.onChange(form, field.name, null, v)}
-                                        autoFocus={autoFocus}
-                                        disabled={disabled}
-                                        min={min.toUnitCeil(duration.unit)}
-                                        max={max.toUnitFloor(duration.unit)}
-                                    />
+                                    <span className={cx({"d-none": !duration.isFixed()})}>
+                                        <NumberPicker
+                                            name={field.name + "_amount"}
+                                            value={duration.amount}
+                                            onChange={v => this.onChange(form, field.name, null, v)}
+                                            autoFocus={autoFocus}
+                                            disabled={disabled}
+                                            min={this.getMin().toUnitCeil(duration.unit)}
+                                            max={this.getMax().toUnitFloor(duration.unit)}
+                                        />
+                                    </span>
                                     <select name={field.name + "_unit"} value={duration.unit} disabled={disabled}
                                             onChange={e => this.onChange(form, field.name, e.target.value, null)}>
+                                        {never && <option value="never">never</option>}
                                         {UNITS.map(({short, long}) => (
-                                            max.toSeconds() >= new Duration(1, short).toSeconds() ?
+                                            this.getMax().toSeconds() >= new Duration(1, short).toSeconds() ?
                                                 <option key={short} value={short}>{long}</option>
                                             :
                                                 null
                                         ))}
+                                        {always && <option value="always">always</option>}
                                     </select>
                                 </div>
                                 {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}

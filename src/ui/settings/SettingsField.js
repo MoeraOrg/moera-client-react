@@ -82,7 +82,8 @@ const SettingsField = ({name, fieldName, meta, initialValue}) => {
 
         case "Duration":
             return <DurationField name={fieldName} title={title} disabled={disabled} min={modifiers.min}
-                                  max={modifiers.max} initialValue={initialValue} defaultValue={defaultValue}/>;
+                                  max={modifiers.max} never={modifiers.never} always={modifiers.always}
+                                  initialValue={initialValue} defaultValue={defaultValue}/>;
 
         default:
             return <InputField name={fieldName} title={title} disabled={disabled}

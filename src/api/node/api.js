@@ -805,6 +805,12 @@ export const SettingMetaInfoArray = schema({
                             },
                             "multiline": {
                                 type: "boolean"
+                            },
+                            "never": {
+                                type: "boolean"
+                            },
+                            "always": {
+                                type: "boolean"
                             }
                         },
                         additionalProperties: false
