@@ -13,7 +13,7 @@ import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDial
 import { getNodeRootPage } from "state/node/selectors";
 import { htmlEntities } from "util/html";
 import { mentionName } from "util/misc";
-import { redirectUrl, urlWithParameters } from "util/url";
+import { redirectUrl } from "util/url";
 import { NodeName } from "api";
 import "./RichTextEditorPanel.css";
 
