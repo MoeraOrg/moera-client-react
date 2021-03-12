@@ -11,6 +11,7 @@ import { getSetting } from "state/settings/selectors";
 import { PREFIX } from "api/settings";
 import Jump from "ui/navigation/Jump";
 import "./QuickTips.css";
+import { Browser } from "ui/browser";
 
 class QuickTips extends React.PureComponent {
 
@@ -42,12 +43,13 @@ class QuickTips extends React.PureComponent {
                             <Button variant="success" size="sm">
                                 <FontAwesomeIcon icon="pen-alt"/>&nbsp;&nbsp;New post
                             </Button>
-                            button in the top-right corner.
+                            button in the {Browser.isTinyScreen()? "bottom panel" : "top-right corner"}.
                         </li>
                         {ownerName &&
                             <li className="visit">
                                 To visit someone's blog, click <NodeName name={ownerName} linked={false} popup={false}/>
-                                {" "}in the top-left corner and type the blog name.
+                                {" "}in the {Browser.isTinyScreen()? "top panel" : "top-left corner"} and type the blog
+                                name.
                             </li>
                         }
                         <li className="subscribe">
@@ -56,7 +58,8 @@ class QuickTips extends React.PureComponent {
                             button.
                         </li>
                         <li className="blog">
-                            To quickly access your blog, use buttons in the top-right corner:
+                            To quickly access your blog, use buttons in the
+                            {Browser.isTinyScreen()? " bottom panel" : " top-right corner"}:
                             <p>
                                 <button><FontAwesomeIcon icon="newspaper"/></button> &mdash; your News feed;<br/>
                                 <button><FontAwesomeIcon icon="bell"/></button> &mdash; your Notifications;<br/>
