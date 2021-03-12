@@ -132,6 +132,17 @@ export default class RichTextArea extends React.PureComponent {
         return true;
     }
 
+    _shouldPastePlainText(text, html) {
+        if (text.search(/<[a-zA-z][^\n]*>/) >= 0) {
+            return true;
+        }
+        const clean = html.replace(/<\/?(p|div|br)(\s[^>]*)?>/gi, "");
+        if (clean.search(/<[a-zA-z][^\n]*>/) < 0) {
+            return true;
+        }
+        return false;
+    }
+
     onPaste = event => {
         const {format} = this.props;
         const {textArea} = this.state;
@@ -141,6 +152,10 @@ export default class RichTextArea extends React.PureComponent {
         }
         let html = event.clipboardData.getData("text/html");
         if (!html) {
+            return;
+        }
+        const text = event.clipboardData.getData("text/plain");
+        if (this._shouldPastePlainText(text, html)) {
             return;
         }
         event.preventDefault();
