@@ -73,7 +73,7 @@ const SAFE_IMPORT_HTML_SETTINGS = {
     ...BASE_SAFE_HTML_SETTINGS,
     allowedTags: BASE_SAFE_HTML_SETTINGS.allowedTags
         .filter(tag => ![
-            "div", "span"
+            "span"
         ].includes(tag)),
     transformTags: null
 };
@@ -117,7 +117,12 @@ export function safeImportHtml(html) {
     if (!html) {
         return "";
     }
-    return sanitizeHtml(html.replace(/([^>\s])\s*\n\s*([^<\s])/g, "$1 $2"), SAFE_IMPORT_HTML_SETTINGS);
+    return sanitizeHtml(html, SAFE_IMPORT_HTML_SETTINGS)
+        .replace(/([^>\s])\s*\n\s*([^<\s])/g, "$1 $2")
+        .replace(/<div(\s[^>]*)?>/gi, "\n")
+        .replace(/<\/div>/gi, "")
+        .replace(/\n\s*\n\s*\n/g, "\n\n")
+        .trim();
 }
 
 export function quoteHtml(html) {
@@ -131,6 +136,8 @@ export function quoteHtml(html) {
         .replace(/\n*<br\s*\/?>\n*/gi, "\n")
         .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
         .replace(/<img\s+src="https:\/\/twemoji\.[^"]*\/([0-9a-f]+).svg"[^>]*>/gi,
+            (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
+        .replace(/<img\s[^>]*src="https:\/\/static.[a-z]+.fbcdn.net\/images\/emoji.php\/[^"]*\/([0-9a-f]+).png"[^>]*>/gi,
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
         .trim()
 }
