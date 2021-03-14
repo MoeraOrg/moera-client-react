@@ -4,10 +4,17 @@ import {
     EVENT_NODE_POSTING_REACTIONS_CHANGED,
     EVENT_NODE_POSTING_UPDATED
 } from "api/events/actions";
-import { postingCommentsSet, postingLoad, postingReactionLoad } from "state/postings/actions";
+import {
+    POSTING_COMMENTS_SUBSCRIBED,
+    POSTING_COMMENTS_UNSUBSCRIBED,
+    postingCommentsSet,
+    postingLoad,
+    postingReactionLoad
+} from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
 import { STORY_ADDED, STORY_UPDATED } from "state/stories/actions";
 import { isCurrentNodeStory } from "state/stories/selectors";
+import { flashBox } from "state/flashbox/actions";
 
 export default [
     trigger(
@@ -17,6 +24,8 @@ export default [
             && !isPostingCached(state, signal.payload.story.posting.id),
         signal => postingLoad(signal.payload.story.posting.id)
     ),
+    trigger(POSTING_COMMENTS_SUBSCRIBED, true, flashBox("Following comments")),
+    trigger(POSTING_COMMENTS_UNSUBSCRIBED, true, flashBox("Not following comments")),
     trigger(
         EVENT_NODE_POSTING_UPDATED,
         (state, signal) => isPostingCached(state, signal.payload.id),
