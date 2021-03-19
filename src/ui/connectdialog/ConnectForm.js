@@ -19,12 +19,20 @@ class ConnectForm extends React.PureComponent {
         }
     }
 
-    onSetPassword = event => {
+    setForm(form) {
         const {location, login} = this.props.values;
         const {connectDialogSetForm} = this.props;
 
-        connectDialogSetForm(location, login, "assign");
+        connectDialogSetForm(location, login, form);
+    }
 
+    onSetPassword = event => {
+        this.setForm("assign");
+        event.preventDefault();
+    }
+
+    onForgotPassword = event => {
+        this.setForm("forgot");
         event.preventDefault();
     }
 
@@ -33,7 +41,10 @@ class ConnectForm extends React.PureComponent {
             <ConnectDialogModal title="Connect to Home" buttonCaption="Connect">
                 <InputField name="location" title="Name or node URL" autoFocus/>
                 <InputField name="password" title="Password"/>
-                <button className="btn btn-link" onClick={this.onSetPassword}>Password not set yet</button>
+                <div className="links">
+                    <button className="btn btn-link" onClick={this.onSetPassword}>Password not set yet</button>
+                    <button className="btn btn-link" onClick={this.onForgotPassword}>Forgot password</button>
+                </div>
             </ConnectDialogModal>
         );
     }
@@ -45,8 +56,7 @@ const connectFormLogic = {
     mapPropsToValues(props) {
         return {
             location: props.location || props.nodeRoot || "",
-            password: "",
-            confirmPassword: ""
+            password: ""
         }
     },
 

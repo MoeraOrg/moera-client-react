@@ -1,0 +1,12 @@
+.connect-dialog .links {
+    margin-left: -.5em;
+    margin-top: -1em;
+}
+
+.connect-dialog .instructions {
+    border: solid 1px var(--gray-ultralight);
+    border-left: solid 5px var(--primary);
+    border-radius: .25em;
+    margin-bottom: 1em;
+    padding: .5em;
+}

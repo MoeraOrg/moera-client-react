@@ -44,6 +44,7 @@ import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";
 import ownerExecutors from "state/owner/sagas";
 import connectExecutors from "state/home/connect";
+import connectDialogExecutors from "state/connectdialog/sagas";
 import homeExecutors from "state/home/sagas";
 import cartesExecutors from "state/cartes/sagas";
 import nodeNameExecutors from "state/nodename/sagas";
@@ -156,6 +157,7 @@ const executors = collectExecutors(
     errorExecutors,
     ownerExecutors,
     connectExecutors,
+    connectDialogExecutors,
     homeExecutors,
     nodeNameExecutors,
     cartesExecutors,

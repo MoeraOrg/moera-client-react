@@ -19,3 +19,14 @@ export const connectDialogSetForm = (location, login, form) => ({
     type: CONNECT_DIALOG_SET_FORM,
     payload: {location, login, form}
 });
+
+export const CONNECT_DIALOG_RESET_PASSWORD = "CONNECT_DIALOG_RESET_PASSWORD";
+export const connectDialogResetPassword = (location) => ({
+    type: CONNECT_DIALOG_RESET_PASSWORD,
+    payload: {location}
+});
+
+export const CONNECT_DIALOG_RESET_PASSWORD_FAILED = "CONNECT_DIALOG_RESET_PASSWORD_FAILED";
+export const connectDialogResetPasswordFailed = () => ({
+    type: CONNECT_DIALOG_RESET_PASSWORD_FAILED
+});

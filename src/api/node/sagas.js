@@ -24,31 +24,18 @@ export function* getDomainAvailable(nodeName, name) {
 }
 
 export function* createCredentials(nodeName, login, password) {
-    yield call(callApi, {
-        nodeName,
-        location: "/credentials",
-        method: "POST",
-        body: {
-            login,
-            password
-        },
-        schema: NodeApi.Result,
-        errorFilter: ["credentials.already-created"]
-    });
+    yield call(callApi, {nodeName, location: "/credentials", method: "POST", body: {login, password},
+        schema: NodeApi.Result, errorFilter: ["credentials.already-created"]});
+}
+
+export function* postCredentialsReset(nodeName) {
+    yield call(callApi, {nodeName, location: "/credentials/reset", method: "POST", schema: NodeApi.Result,
+        errorFilter: ["credentials.email-not-set"]});
 }
 
 export function* createToken(nodeName, login, password) {
-    return yield call(callApi, {
-        nodeName,
-        location: "/tokens",
-        method: "POST",
-        body: {
-            login,
-            password
-        },
-        schema: NodeApi.TokenCreated,
-        errorFilter: ["credentials.login-incorrect", "credentials.not-created"]
-    });
+    return yield call(callApi, {nodeName, location: "/tokens", method: "POST", body: {login, password},
+        schema: NodeApi.TokenCreated, errorFilter: ["credentials.login-incorrect", "credentials.not-created"]});
 }
 
 export function* getCartes(nodeName, auth = true) {
