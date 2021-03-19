@@ -1,15 +1,16 @@
 import {
     CANCEL_CONNECT_DIALOG,
+    CONNECT_DIALOG_SET_FORM,
     OPEN_CONNECT_DIALOG,
     RESTORE_CONNECT_DIALOG
 } from "state/connectdialog/actions";
-import { CONNECT_TO_HOME, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { CONNECT_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 
 const initialState = {
     show: false,
     location: "",
     login: "admin",
-    assign: false
+    form: "connect"
 };
 
 export default (state = initialState, action) => {
@@ -17,7 +18,8 @@ export default (state = initialState, action) => {
         case OPEN_CONNECT_DIALOG:
             return {
                 ...state,
-                show: true
+                show: true,
+                form: "connect"
             };
 
         case CANCEL_CONNECT_DIALOG:
@@ -31,14 +33,7 @@ export default (state = initialState, action) => {
                 ...state,
                 location: action.payload.location,
                 login: action.payload.login,
-                assign: action.payload.assign,
                 show: false
-            };
-
-        case CONNECTED_TO_HOME:
-            return {
-                ...state,
-                assign: false
             };
 
         case DISCONNECTED_FROM_HOME:
@@ -53,6 +48,14 @@ export default (state = initialState, action) => {
                 ...state,
                 location: action.payload.location,
                 login: action.payload.login
+            };
+
+        case CONNECT_DIALOG_SET_FORM:
+            return {
+                ...state,
+                location: action.payload.location,
+                login: action.payload.login,
+                form: action.payload.form
             };
 
         default:

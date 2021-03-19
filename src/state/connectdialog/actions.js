@@ -13,3 +13,9 @@ export const restoreConnectDialog = (location, login) => ({
     type: RESTORE_CONNECT_DIALOG,
     payload: {location, login}
 });
+
+export const CONNECT_DIALOG_SET_FORM = "CONNECT_DIALOG_SET_FORM";
+export const connectDialogSetForm = (location, login, form) => ({
+    type: CONNECT_DIALOG_SET_FORM,
+    payload: {location, login, form}
+});
