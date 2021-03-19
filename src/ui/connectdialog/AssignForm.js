@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { withFormik } from 'formik';
 import * as yup from 'yup';
 
-import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
-import { cancelConnectDialog } from "state/connectdialog/actions";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
+import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 
 class AssignForm extends React.PureComponent {
 
@@ -20,22 +19,12 @@ class AssignForm extends React.PureComponent {
     }
 
     render() {
-        const {cancelConnectDialog} = this.props;
-
         return (
-            <ModalDialog title="Set Home Password" onClose={cancelConnectDialog}>
-                <Form>
-                    <div className="modal-body">
-                        <InputField name="location" title="Name or node URL" autoFocus/>
-                        <InputField name="password" title="New password"/>
-                        <InputField name="confirmPassword" title="Confirm password"/>
-                    </div>
-                    <div className="modal-footer">
-                        <Button variant="secondary" onClick={cancelConnectDialog}>Cancel</Button>
-                        <Button variant="primary" type="submit">Set Password & Connect</Button>
-                    </div>
-                </Form>
-            </ModalDialog>
+            <ConnectDialogModal title="Set Home Password" buttonCaption="Set Password & Connect">
+                <InputField name="location" title="Name or node URL" autoFocus/>
+                <InputField name="password" title="New password"/>
+                <InputField name="confirmPassword" title="Confirm password"/>
+            </ConnectDialogModal>
         );
     }
 
@@ -72,5 +61,5 @@ export default connect(
         location: state.connectDialog.location,
         nodeRoot: getNodeRootLocation(state)
     }),
-    { cancelConnectDialog, connectToHome }
+    { connectToHome }
 )(withFormik(assignFormLogic)(AssignForm));

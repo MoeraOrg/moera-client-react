@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { withFormik } from 'formik';
 import * as yup from 'yup';
 
-import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 import { cancelConnectDialog, connectDialogSetForm } from "state/connectdialog/actions";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
+import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 
 class ConnectForm extends React.PureComponent {
 
@@ -29,22 +29,12 @@ class ConnectForm extends React.PureComponent {
     }
 
     render() {
-        const {cancelConnectDialog} = this.props;
-
         return (
-            <ModalDialog title="Connect to Home" onClose={cancelConnectDialog}>
-                <Form>
-                    <div className="modal-body">
-                        <InputField name="location" title="Name or node URL" autoFocus/>
-                        <InputField name="password" title="Password"/>
-                        <button className="btn btn-link" onClick={this.onSetPassword}>Password not set yet</button>
-                    </div>
-                    <div className="modal-footer">
-                        <Button variant="secondary" onClick={cancelConnectDialog}>Cancel</Button>
-                        <Button variant="primary" type="submit">Connect</Button>
-                    </div>
-                </Form>
-            </ModalDialog>
+            <ConnectDialogModal title="Connect to Home" buttonCaption="Connect">
+                <InputField name="location" title="Name or node URL" autoFocus/>
+                <InputField name="password" title="Password"/>
+                <button className="btn btn-link" onClick={this.onSetPassword}>Password not set yet</button>
+            </ConnectDialogModal>
         );
     }
 
