@@ -2,6 +2,7 @@ import {
     CANCEL_CONNECT_DIALOG,
     CONNECT_DIALOG_RESET_PASSWORD,
     CONNECT_DIALOG_RESET_PASSWORD_FAILED,
+    CONNECT_DIALOG_SET_EMAIL_HINT,
     CONNECT_DIALOG_SET_FORM,
     OPEN_CONNECT_DIALOG,
     RESTORE_CONNECT_DIALOG
@@ -13,7 +14,8 @@ const initialState = {
     location: "",
     login: "admin",
     form: "connect",
-    resettingPassword: false
+    resettingPassword: false,
+    emailHint: ""
 };
 
 export default (state = initialState, action) => {
@@ -23,7 +25,8 @@ export default (state = initialState, action) => {
                 ...state,
                 show: true,
                 form: "connect",
-                resettingPassword: false
+                resettingPassword: false,
+                emailHint: ""
             };
 
         case CANCEL_CONNECT_DIALOG:
@@ -73,6 +76,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 resettingPassword: false
+            };
+
+        case CONNECT_DIALOG_SET_EMAIL_HINT:
+            return {
+                ...state,
+                emailHint: action.payload.emailHint
             };
 
         default:

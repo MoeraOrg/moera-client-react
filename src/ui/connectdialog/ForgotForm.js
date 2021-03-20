@@ -22,7 +22,7 @@ class ForgotForm extends React.PureComponent {
         const {location, login} = this.props.values;
         const {connectDialogSetForm} = this.props;
 
-        connectDialogSetForm(location, login, "mail");
+        connectDialogSetForm(location, login, "reset");
 
         event.preventDefault();
     }

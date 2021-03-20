@@ -1187,3 +1187,13 @@ export const ContactInfoArray = schema({
     type: "array",
     items: ContactInfoType
 });
+
+export const EmailHint = schema({
+    type: "object",
+    properties: {
+        "emailHint": {
+            type: "string"
+        }
+    },
+    additionalProperties: false
+});

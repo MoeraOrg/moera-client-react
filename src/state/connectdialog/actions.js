@@ -30,3 +30,9 @@ export const CONNECT_DIALOG_RESET_PASSWORD_FAILED = "CONNECT_DIALOG_RESET_PASSWO
 export const connectDialogResetPasswordFailed = () => ({
     type: CONNECT_DIALOG_RESET_PASSWORD_FAILED
 });
+
+export const CONNECT_DIALOG_SET_EMAIL_HINT = "CONNECT_DIALOG_SET_EMAIL_HINT";
+export const connectDialogSetEmailHint = (emailHint) => ({
+    type: CONNECT_DIALOG_SET_EMAIL_HINT,
+    payload: {emailHint}
+});

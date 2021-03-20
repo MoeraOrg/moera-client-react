@@ -29,7 +29,7 @@ export function* createCredentials(nodeName, login, password) {
 }
 
 export function* postCredentialsReset(nodeName) {
-    yield call(callApi, {nodeName, location: "/credentials/reset", method: "POST", schema: NodeApi.Result,
+    return yield call(callApi, {nodeName, location: "/credentials/reset", method: "POST", schema: NodeApi.EmailHint,
         errorFilter: ["credentials.email-not-set"]});
 }
 

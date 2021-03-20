@@ -6,6 +6,7 @@ import { errorThrown } from "state/error/actions";
 import {
     CONNECT_DIALOG_RESET_PASSWORD,
     connectDialogResetPasswordFailed,
+    connectDialogSetEmailHint,
     connectDialogSetForm
 } from "state/connectdialog/actions";
 import { messageBox } from "state/messagebox/actions";
@@ -17,7 +18,8 @@ export default [
 function* connectDialogResetPasswordSaga(action) {
     const {location} = action.payload;
     try {
-        yield call(Node.postCredentialsReset, location);
+        const data = yield call(Node.postCredentialsReset, location);
+        yield put(connectDialogSetEmailHint(data.emailHint));
         yield put(connectDialogSetForm(location, "admin", "reset"));
     } catch (e) {
         yield put(connectDialogResetPasswordFailed());
