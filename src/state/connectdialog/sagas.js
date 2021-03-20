@@ -23,9 +23,9 @@ function* connectDialogResetPasswordSaga(action) {
         yield put(connectDialogResetPasswordFailed());
         if (e instanceof NodeApiError) {
             yield put(messageBox(
-                `Unfortunately, E-mail address for node '${location}' is not set, so automatic password reset`
-                + " is impossible. Please, contact your Moera provider or server owner to find alternative ways to"
-                + " reset the password."));
+                `Unfortunately, E-mail address for node <b>${location}</b> is not set, so automatic password`
+                + " reset is impossible. Please, contact your Moera provider or server owner to find alternative ways"
+                + " to reset the password."));
         } else {
             yield put(errorThrown(e));
         }
