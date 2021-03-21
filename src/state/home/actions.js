@@ -1,7 +1,7 @@
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
-export const connectToHome = (location, assign, login, password) => ({
+export const connectToHome = (location, assign, login, password, oldPassword, resetToken) => ({
     type: CONNECT_TO_HOME,
-    payload: {location, assign, login, password}
+    payload: {location, assign, login, password, oldPassword, resetToken}
 });
 
 export const CONNECTION_TO_HOME_FAILED = "CONNECTION_TO_HOME_FAILED";

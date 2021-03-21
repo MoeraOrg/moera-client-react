@@ -10,39 +10,55 @@ import {
     homeOwnerSet,
     homeOwnerVerified
 } from "state/home/actions";
-import { openConnectDialog } from "state/connectdialog/actions";
-import { NameResolvingError, Naming, Node, NodeApiError, NodeName } from "api";
+import { Naming, Node, NodeApiError, NodeName } from "api";
 import { selectApi } from "api/node/call";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
 import { Browser } from "ui/browser";
 import { askNaming } from "api/node/ask-naming";
 import { executor } from "state/executor";
+import { connectDialogSetForm } from "state/connectdialog/actions";
 
 export default [
     executor(CONNECT_TO_HOME, null, connectToHomeSaga),
     executor(HOME_OWNER_VERIFY, null, askNaming(verifyHomeOwnerSaga))
 ];
 
-function* connectToHomeFailure(error, onClose = null) {
+function* connectToHomeFailure(action, error) {
+    const {location, login} = action.payload;
+
     yield put(connectionToHomeFailed());
-    yield put(messageBox("Connection to home failed: " + error.message, onClose));
+    let message = error.message;
+    if (error instanceof NodeApiError) {
+        switch (error.errorCode) {
+            case "credentials.wrong-reset-token":
+                message = "Wrong secret code";
+                console.log(message);
+                break;
+            case "credentials.reset-token-expired":
+                message = "Secret code is expired";
+                yield put(connectDialogSetForm(location, login, "forgot"));
+                break;
+            default:
+                break;
+        }
+    }
+    yield put(messageBox(message));
 }
 
 function* connectToHomeSaga(action) {
-    const {location, assign, login, password} = action.payload;
+    const {location, assign, login, password, oldPassword, resetToken} = action.payload;
+
     let data;
     try {
         if (assign) {
             yield call(Node.createCredentials, location, login, password);
+        } else if (oldPassword || resetToken) {
+            yield call(Node.putCredentials, location, resetToken, oldPassword, login, password);
         }
         data = yield call(Node.createToken, location, login, password);
     } catch (e) {
-        if (e instanceof NodeApiError || e instanceof NameResolvingError) {
-            yield call(connectToHomeFailure, e, openConnectDialog());
-        } else {
-            yield call(connectToHomeFailure, e);
-        }
+        yield call(connectToHomeFailure, action, e);
         return;
     }
 

@@ -28,6 +28,13 @@ export function* createCredentials(nodeName, login, password) {
         schema: NodeApi.Result, errorFilter: ["credentials.already-created"]});
 }
 
+export function* putCredentials(nodeName, token, oldPassword, login, password) {
+    yield call(callApi, {nodeName, location: "/credentials", method: "PUT", body: {token, oldPassword, login, password},
+        schema: NodeApi.Result,
+        errorFilter: ["credentials.wrong-reset-token", "credentials.reset-token-expired",
+            "credentials.login-incorrect"]});
+}
+
 export function* postCredentialsReset(nodeName) {
     return yield call(callApi, {nodeName, location: "/credentials/reset", method: "POST", schema: NodeApi.EmailHint,
         errorFilter: ["credentials.email-not-set"]});

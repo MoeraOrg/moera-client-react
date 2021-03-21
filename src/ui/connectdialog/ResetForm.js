@@ -7,6 +7,7 @@ import { InputField } from "ui/control/field";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import { connectDialogSetForm } from "state/connectdialog/actions";
 
 class ResetForm extends React.PureComponent {
 
@@ -16,6 +17,15 @@ class ResetForm extends React.PureComponent {
                 values: resetFormLogic.mapPropsToValues(this.props),
             });
         }
+    }
+
+    onResend = event => {
+        const {location, login} = this.props.values;
+        const {connectDialogSetForm} = this.props;
+
+        connectDialogSetForm(location, login, "forgot");
+
+        event.preventDefault();
     }
 
     render() {
@@ -29,10 +39,13 @@ class ResetForm extends React.PureComponent {
                         the password. Please enter it in the field below.
                     </div>
                 }
-                <InputField name="token" title="Secret code" autoFocus/>
+                <InputField name="resetToken" title="Secret code" autoFocus/>
                 <InputField name="location" title="Name or node URL"/>
                 <InputField name="password" title="New password"/>
                 <InputField name="confirmPassword" title="Confirm password"/>
+                <div className="links">
+                    <button className="btn btn-link" onClick={this.onResend}>Send mail again</button>
+                </div>
             </ConnectDialogModal>
         );
     }
@@ -43,7 +56,7 @@ const resetFormLogic = {
 
     mapPropsToValues(props) {
         return {
-            token: "",
+            resetToken: "",
             location: props.location || props.nodeRoot || "",
             password: "",
             confirmPassword: ""
@@ -51,7 +64,7 @@ const resetFormLogic = {
     },
 
     validationSchema: yup.object().shape({
-        token: yup.string().trim().required("Must not be empty"),
+        resetToken: yup.string().trim().required("Must not be empty"),
         location: yup.string().trim().required("Must not be empty"),
         password: yup.string().required("Must not be empty"),
         confirmPassword: yup.string().when(["password"], (password, schema) =>
@@ -60,7 +73,8 @@ const resetFormLogic = {
     }),
 
     handleSubmit(values, formik) {
-        // formik.props.connectToHome(values.location.trim(), true, "admin", values.password);
+        formik.props.connectToHome(values.location.trim(), false, "admin", values.password, null,
+            values.resetToken.trim());
         formik.setSubmitting(false);
     }
 
@@ -73,5 +87,5 @@ export default connect(
         location: state.connectDialog.location,
         nodeRoot: getNodeRootLocation(state)
     }),
-    { connectToHome }
+    { connectToHome, connectDialogSetForm }
 )(withFormik(resetFormLogic)(ResetForm));

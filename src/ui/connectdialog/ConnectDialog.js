@@ -6,8 +6,8 @@ import AssignForm from "ui/connectdialog/AssignForm";
 import ForgotForm from "ui/connectdialog/ForgotForm";
 import ResetForm from "ui/connectdialog/ResetForm";
 
-const ConnectDialog = ({show, form, messageBoxShow}) => (
-    show && !messageBoxShow &&
+const ConnectDialog = ({show, form}) => (
+    show &&
         <>
             {form === "connect" && <ConnectForm/>}
             {form === "assign" && <AssignForm/>}
@@ -18,8 +18,7 @@ const ConnectDialog = ({show, form, messageBoxShow}) => (
 
 export default connect(
     state => ({
-        show: state.connectDialog.show,
-        form: state.connectDialog.form,
-        messageBoxShow: state.messageBox.show
+        show: state.connectDialog.show && !state.messageBox.show && !state.home.connecting,
+        form: state.connectDialog.form
     })
 )(ConnectDialog);

@@ -7,7 +7,7 @@ import {
     OPEN_CONNECT_DIALOG,
     RESTORE_CONNECT_DIALOG
 } from "state/connectdialog/actions";
-import { CONNECT_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { CONNECT_TO_HOME, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 
 const initialState = {
     show: false,
@@ -39,9 +39,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 location: action.payload.location,
-                login: action.payload.login,
-                show: false
+                login: action.payload.login
             };
+
+        case CONNECTED_TO_HOME:
+            return {
+                ...state,
+                show: false
+            }
 
         case DISCONNECTED_FROM_HOME:
             return {
