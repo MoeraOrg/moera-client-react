@@ -121,7 +121,7 @@ export function safeImportHtml(html) {
         .replace(/([^>\s])\s*\n\s*([^<\s])/g, "$1 $2")
         .replace(/<div(\s[^>]*)?>/gi, "\n")
         .replace(/<\/div>/gi, "")
-        .replace(/\n\s*\n\s*\n/g, "\n\n")
+        .replace(/\n\s*\n/g, "\n\n")
         .trim();
 }
 
@@ -139,6 +139,7 @@ export function quoteHtml(html) {
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
         .replace(/<img\s[^>]*src="https:\/\/static.[a-z]+.fbcdn.net\/images\/emoji.php\/[^"]*\/([0-9a-f]+).png"[^>]*>/gi,
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
+        .replace(/\n\s*\n/g, "\n\n")
         .trim()
 }
 
