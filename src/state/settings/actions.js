@@ -104,3 +104,29 @@ export const SETTINGS_UPDATE_FAILED = "SETTINGS_UPDATE_FAILED";
 export const settingsUpdateFailed = () => ({
     type: SETTINGS_UPDATE_FAILED
 });
+
+export const SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN = "SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN";
+export const settingsChangePasswordDialogOpen = () => ({
+    type: SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN
+});
+
+export const SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE = "SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE";
+export const settingsChangePasswordDialogClose = () => ({
+    type: SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE
+});
+
+export const SETTINGS_CHANGE_PASSWORD = "SETTINGS_CHANGE_PASSWORD";
+export const settingsChangePassword = (oldPassword, password, onLoginIncorrect) => ({
+    type: SETTINGS_CHANGE_PASSWORD,
+    payload: {oldPassword, password, onLoginIncorrect}
+});
+
+export const SETTINGS_CHANGED_PASSWORD = "SETTINGS_CHANGED_PASSWORD";
+export const settingsChangedPassword = () => ({
+    type: SETTINGS_CHANGED_PASSWORD
+});
+
+export const SETTINGS_CHANGE_PASSWORD_FAILED = "SETTINGS_CHANGE_PASSWORD_FAILED";
+export const settingsChangePasswordFailed = () => ({
+    type: SETTINGS_CHANGE_PASSWORD_FAILED
+});

@@ -2,20 +2,28 @@ import * as immutable from 'object-path-immutable';
 
 import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
+    SETTINGS_CHANGE_PASSWORD,
+    SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE,
+    SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN,
+    SETTINGS_CHANGE_PASSWORD_FAILED,
+    SETTINGS_CHANGED_PASSWORD,
     SETTINGS_CLIENT_CONFLICT,
     SETTINGS_CLIENT_CONFLICT_CLOSE,
     SETTINGS_CLIENT_VALUES_LOAD,
     SETTINGS_CLIENT_VALUES_LOAD_FAILED,
-    SETTINGS_CLIENT_VALUES_LOADED, SETTINGS_GO_TO_SHEET,
+    SETTINGS_CLIENT_VALUES_LOADED,
+    SETTINGS_GO_TO_SHEET,
     SETTINGS_GO_TO_TAB,
     SETTINGS_NODE_CONFLICT,
     SETTINGS_NODE_CONFLICT_CLOSE,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_META_LOAD_FAILED,
-    SETTINGS_NODE_META_LOADED, SETTINGS_NODE_META_UNSET,
+    SETTINGS_NODE_META_LOADED,
+    SETTINGS_NODE_META_UNSET,
     SETTINGS_NODE_VALUES_LOAD,
     SETTINGS_NODE_VALUES_LOAD_FAILED,
-    SETTINGS_NODE_VALUES_LOADED, SETTINGS_NODE_VALUES_UNSET,
+    SETTINGS_NODE_VALUES_LOADED,
+    SETTINGS_NODE_VALUES_UNSET,
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_FAILED,
     SETTINGS_UPDATE_SUCCEEDED
@@ -39,7 +47,9 @@ const emptySettings = {
         values: new Map(),
         meta: ClientSettings.buildMetaMap()
     },
-    updating: false
+    updating: false,
+    changePasswordDialogShow: false,
+    changingPassword: false
 };
 
 const initialState = {
@@ -175,6 +185,37 @@ export default (state = initialState, action) => {
                 ...state,
                 updating: false
             };
+
+        case SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN:
+            return {
+                ...state,
+                changePasswordDialogShow: true
+            };
+
+        case SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE:
+            return {
+                ...state,
+                changePasswordDialogShow: false
+            };
+
+        case SETTINGS_CHANGE_PASSWORD:
+            return {
+                ...state,
+                changingPassword: true
+            }
+
+        case SETTINGS_CHANGED_PASSWORD:
+            return {
+                ...state,
+                changingPassword: false,
+                changePasswordDialogShow: false
+            }
+
+        case SETTINGS_CHANGE_PASSWORD_FAILED:
+            return {
+                ...state,
+                changingPassword: false
+            }
 
         default:
             return state;

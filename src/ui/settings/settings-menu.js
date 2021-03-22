@@ -1,6 +1,7 @@
 const MENU_ITEMS = {
     "node": {
         "posting": "Post",
+        "security": "Security",
         "other": "Other"
     },
     "client": {

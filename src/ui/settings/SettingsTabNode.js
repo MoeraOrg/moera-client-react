@@ -2,13 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { getActualSheet } from "ui/settings/settings-menu";
-import SettingsSheetNodeOther from "ui/settings/SettingsSheetNodeOther";
 import SettingsSheetNodePosting from "ui/settings/SettingsSheetNodePosting";
+import SettingsSheetNodeSecurity from "ui/settings/SettingsSheetNodeSecurity";
+import SettingsSheetNodeOther from "ui/settings/SettingsSheetNodeOther";
 
 const SettingsTabNode = ({sheet}) => {
     switch (sheet) {
         case "posting":
             return <SettingsSheetNodePosting/>;
+        case "security":
+            return <SettingsSheetNodeSecurity/>;
         default:
             return <SettingsSheetNodeOther/>;
     }

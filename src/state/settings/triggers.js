@@ -7,6 +7,7 @@ import {
     isSettingsNodeValuesToBeLoaded
 } from "state/settings/selectors";
 import {
+    SETTINGS_CHANGED_PASSWORD,
     SETTINGS_GO_TO_SHEET,
     SETTINGS_GO_TO_TAB,
     settingsClientConflict,
@@ -20,6 +21,7 @@ import {
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { newLocation, updateLocation, WAKE_UP } from "state/navigation/actions";
 import { EVENT_HOME_CLIENT_SETTINGS_CHANGED, EVENT_HOME_NODE_SETTINGS_CHANGED } from "api/events/actions";
+import { flashBox } from "state/flashbox/actions";
 
 export default [
     trigger(
@@ -72,5 +74,6 @@ export default [
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeValuesLoad),
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, true, settingsClientValuesLoad),
-    trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsClientTab), settingsClientConflict)
+    trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsClientTab), settingsClientConflict),
+    trigger(SETTINGS_CHANGED_PASSWORD, true, flashBox("Password changed"))
 ];
