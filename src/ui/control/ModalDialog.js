@@ -15,6 +15,14 @@ export class ModalDialog extends React.PureComponent {
         onClose: PropType.func
     };
 
+    componentDidMount() {
+        document.body.addEventListener("keydown", this.onModalKeyDown);
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener("keydown", this.onModalKeyDown);
+    }
+
     onModalKeyDown = e => {
         const {onClose} = this.props;
 
@@ -31,7 +39,7 @@ export class ModalDialog extends React.PureComponent {
         return ReactDOM.createPortal(
             <>
                 <div className="modal-backdrop show"/>
-                <div className="modal show" onClick={onClose} onKeyDown={this.onModalKeyDown}>
+                <div className="modal show" onClick={onClose}>
                     <div className={cx(
                         "modal-dialog",
                         "modal-dialog-centered",
