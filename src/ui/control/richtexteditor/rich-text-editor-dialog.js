@@ -36,7 +36,7 @@ export function richTextEditorDialog(title, mapPropsToValues, DialogBody) {
             return (
                 <ModalDialog title={title} onClose={this.onClose}>
                     <Form>
-                        <div className="modal-body sign-up-dialog">
+                        <div className="modal-body">
                             <DialogBody/>
                         </div>
                         <div className="modal-footer">

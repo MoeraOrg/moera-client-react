@@ -6,6 +6,7 @@ import * as textFieldEdit from 'text-field-edit';
 import { Browser } from "ui/browser";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
+import RichTextPasteDialog from "ui/control/richtexteditor/RichTextPasteDialog";
 
 const MENTION_START = RegExp(/(^|\s)@$/);
 
@@ -41,7 +42,10 @@ export default class RichTextArea extends React.PureComponent {
         super(props, context);
 
         this.state = {
-            textArea: props.textArea ?? React.createRef()
+            textArea: props.textArea ?? React.createRef(),
+            pasteDialogShow: false,
+            pasteText: null,
+            pasteHtml: null
         }
     }
 
@@ -160,38 +164,61 @@ export default class RichTextArea extends React.PureComponent {
         }
         event.preventDefault();
 
-        html = safeImportHtml(html);
-        if (format === "markdown") {
-            html = quoteHtml(html);
+        this.setState({pasteDialogShow: true, pasteText: text, pasteHtml: html});
+    }
+
+    onPasteDialogSubmit = result => {
+        const {format} = this.props;
+        const {textArea, pasteText, pasteHtml} = this.state;
+
+        this.setState({pasteDialogShow: false});
+
+        if (result === "none") {
+            return;
         }
-        textFieldEdit.insert(textArea.current, html);
+
+        let content;
+        if (result === "html") {
+            content = safeImportHtml(pasteHtml);
+            if (format === "markdown") {
+                content = quoteHtml(content);
+            }
+        } else {
+            content = pasteText;
+        }
+
+        textFieldEdit.insert(textArea.current, content);
         textArea.current.dispatchEvent(new InputEvent("input", {
-            data: html,
+            data: content,
             inputType: "insertText",
             bubbles: true
         }));
+        textArea.current.focus();
     }
 
     render() {
         const {name, value, className, autoComplete, placeholder, rows, disabled, onBlur} = this.props;
-        const {textArea} = this.state;
+        const {textArea, pasteDialogShow} = this.state;
 
         return (
-            <TextareaAutosize
-                name={name}
-                value={value}
-                id={name}
-                className={className}
-                autoComplete={autoComplete}
-                placeholder={placeholder}
-                rows={rows}
-                maxRows={Browser.isTinyScreen() ? 15 : 20}
-                disabled={disabled}
-                onKeyDown={this.onKeyDown}
-                onBlur={onBlur}
-                onChange={this.onChange}
-                ref={textArea} // impossible to pass lambda here
-            />
+            <>
+                <TextareaAutosize
+                    name={name}
+                    value={value}
+                    id={name}
+                    className={className}
+                    autoComplete={autoComplete}
+                    placeholder={placeholder}
+                    rows={rows}
+                    maxRows={Browser.isTinyScreen() ? 15 : 20}
+                    disabled={disabled}
+                    onKeyDown={this.onKeyDown}
+                    onBlur={onBlur}
+                    onChange={this.onChange}
+                    ref={textArea} // impossible to pass lambda here
+                />
+                <RichTextPasteDialog show={pasteDialogShow} onSubmit={this.onPasteDialogSubmit}/>
+            </>
         );
     }
 
