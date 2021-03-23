@@ -16,3 +16,13 @@
 .share-dialog .link BUTTON {
     flex: none;
 }
+
+.share-dialog .social {
+    margin-top: 1em;
+    line-height: 3.3;
+}
+
+.share-dialog .social BUTTON {
+    display: inline-block;
+    margin-right: .25em;
+}
