@@ -38,6 +38,7 @@ import {
     faRemoveFormat,
     faReply,
     faRetweet,
+    faShareAlt,
     faShareSquare,
     faSignOutAlt,
     faStar,
@@ -107,6 +108,7 @@ export default function initIconLibrary() {
     library.add(faRemoveFormat);
     library.add(faReply);
     library.add(faRetweet);
+    library.add(faShareAlt);
     library.add(faShareSquare);
     library.add(faSignOutAlt);
     library.add(faStar);

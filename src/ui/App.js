@@ -15,6 +15,7 @@ import WelcomePage from "ui/welcome/WelcomePage";
 import BottomMenu from "ui/bottommenu/BottomMenu";
 import ReactionsDialog from "ui/reactionsdialog/ReactionsDialog";
 import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
+import ShareDialog from "ui/sharedialog/ShareDialog";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
@@ -44,6 +45,7 @@ const App = ({atNode, feedWidth}) => (
             <WelcomePage/>
         }
         <BottomMenu/>
+        <ShareDialog/>
         <SignUpDialog/>
         <MnemonicDialog/>
         <QuickTips/>

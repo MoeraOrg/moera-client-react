@@ -2,6 +2,7 @@ import React from 'react';
 
 import PostingReactionButton from "ui/posting/PostingReactionButton";
 import PostingCommentButton from "ui/posting/PostingCommentButton";
+import PostingShareButton from "ui/posting/PostingShareButton";
 import "./PostingButtons.css";
 
 const PostingButtons = ({posting}) => {
@@ -15,6 +16,7 @@ const PostingButtons = ({posting}) => {
                                    id={posting.id} negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions.negative}/>
             <PostingCommentButton posting={posting}/>
+            <PostingShareButton posting={posting}/>
         </div>
     );
 };

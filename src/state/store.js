@@ -27,6 +27,7 @@ import changeDateDialog from "state/changedatedialog/reducer";
 import people from "state/people/reducer";
 import nodeCards from "state/nodecards/reducer";
 import contacts from "state/contacts/reducer";
+import shareDialog from "state/sharedialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -62,6 +63,7 @@ import changeDateDialogExecutors from "state/changedatedialog/sagas";
 import peopleExecutors from "state/people/sagas";
 import nodeCardsExecutors from "state/nodecards/sagas";
 import contactsExecutors from "state/contacts/sagas";
+import shareDialogExecutors from "state/sharedialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -115,13 +117,14 @@ const reducers = combineReducers({
     people,
     nodeCards,
     contacts,
+    shareDialog,
     messageBox,
     confirmBox,
     flashBox,
     signUpDialog,
     quickTips,
     refresh,
-    webPush,
+    webPush
 });
 
 function combinedReducer(state, action) {
@@ -175,6 +178,7 @@ const executors = collectExecutors(
     peopleExecutors,
     nodeCardsExecutors,
     contactsExecutors,
+    shareDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors,

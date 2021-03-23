@@ -1,0 +1,18 @@
+.share-dialog .title {
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+.share-dialog .link {
+    display: flex;
+}
+
+.share-dialog .link INPUT {
+    flex: auto;
+    min-width: 0;
+    margin-right: .5em;
+}
+
+.share-dialog .link BUTTON {
+    flex: none;
+}
