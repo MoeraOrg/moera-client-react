@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { connect } from 'react-redux';
 
 import { isAtNode } from "state/node/selectors";
@@ -15,7 +15,6 @@ import WelcomePage from "ui/welcome/WelcomePage";
 import BottomMenu from "ui/bottommenu/BottomMenu";
 import ReactionsDialog from "ui/reactionsdialog/ReactionsDialog";
 import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
-import ShareDialog from "ui/sharedialog/ShareDialog";
 import MessageBox from "ui/messagebox/MessageBox";
 import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
@@ -25,6 +24,7 @@ import QuickTips from "ui/quicktips/QuickTips";
 import "./colors.css";
 import "./App.css";
 
+const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 
 const App = ({atNode, feedWidth}) => (
     <div style={{"--feed-width": feedWidth + "px"}}>
@@ -45,7 +45,9 @@ const App = ({atNode, feedWidth}) => (
             <WelcomePage/>
         }
         <BottomMenu/>
-        <ShareDialog/>
+        <Suspense fallback={null}>
+            <ShareDialog/>
+        </Suspense>
         <SignUpDialog/>
         <MnemonicDialog/>
         <QuickTips/>
