@@ -256,6 +256,12 @@ export const META = [
         modifiers: {
             format: "emoji-list-negative-advanced"
         }
+    },
+    {
+        name: "share.social-buttons.usage",
+        type: "json",
+        defaultValue: "{}",
+        internal: true
     }
 ];
 

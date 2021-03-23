@@ -14,6 +14,9 @@ export function toValue(type, valueString) {
         case "timestamp":
             return fromUnixTime(parseInt(valueString) || 0);
 
+        case "json":
+            return JSON.parse(valueString);
+
         default:
             return valueString || "";
     }
