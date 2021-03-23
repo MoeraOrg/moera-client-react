@@ -27,7 +27,12 @@ function* shareDialogPrepareSaga(action) {
         yield messageBox(`Cannot resolve name: ${nodeName}`);
         return;
     }
-    yield put(openShareDialog(title, normalizeUrl(nodeUri) + href));
+    const url = normalizeUrl(nodeUri) + href;
+    if (navigator.share) {
+        navigator.share({title, url});
+    } else {
+        yield put(openShareDialog(title, url));
+    }
 }
 
 function* shareDialogCopyLinkSaga(action) {
