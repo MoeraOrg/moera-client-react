@@ -87,7 +87,8 @@ const Comment = ({
                 <Content className="content" comment={comment}/>
                 <div className="reactions-line">
                     {connectedToHome && comment.signature != null &&
-                        <CommentButtons comment={comment}/>
+                        <CommentButtons nodeName={postingReceiverName ?? postingOwnerName}
+                                        postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
                     }
                     <CommentReactions postingId={postingId} comment={comment}/>
                 </div>

@@ -2,9 +2,10 @@ import React from 'react';
 
 import CommentReactionButton from "ui/comment/CommentReactionButton";
 import CommentReplyButton from "ui/comment/CommentReplyButton";
+import CommentShareButton from "ui/comment/CommentShareButton";
 import "./CommentButtons.css";
 
-const CommentButtons = ({comment}) => {
+const CommentButtons = ({nodeName, postingId, comment}) => {
     const cr = comment.clientReaction || {};
     return (
         <div className="comment-buttons">
@@ -15,6 +16,7 @@ const CommentButtons = ({comment}) => {
                                    id={comment.id} negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions.negative}/>
             <CommentReplyButton comment={comment}/>
+            <CommentShareButton nodeName={nodeName} postingId={postingId} comment={comment}/>
         </div>
     );
 };
