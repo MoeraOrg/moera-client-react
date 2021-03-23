@@ -4,8 +4,8 @@
     text-align: center;
     text-decoration: none;
     color: var(--gray-dark);
-    padding: 0.3rem;
-    margin-right: 0.3rem;
+    padding: .3rem;
+    margin-right: .3rem;
     cursor: pointer;
     font-size: 1.3rem;
     background-color: transparent;
@@ -17,10 +17,8 @@
 }
 
 .posting-button .caption {
-    margin-left: 0.4rem;
+    margin-left: .4rem;
     font-weight: 600;
     font-size: 1rem;
     user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
 }
