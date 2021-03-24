@@ -27,7 +27,7 @@
 
 @media only screen and (max-width: 575px) {
     .posting.preview > .content {
-        max-height: 150vh;
+        max-height: 170vh;
     }
 }
 
