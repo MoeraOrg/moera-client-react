@@ -1,3 +1,12 @@
 .rich-text-paste-dialog .modal-footer BUTTON {
     min-width: 11em;
 }
+
+.rich-text-paste-dialog .check {
+    margin-top: 1em;
+}
+
+.rich-text-paste-dialog .check INPUT {
+    margin-right: .5em;
+    vertical-align: sub;
+}

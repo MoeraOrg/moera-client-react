@@ -1,5 +1,6 @@
 import React from 'react';
 import PropType from 'prop-types';
+import { connect } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
 import * as textFieldEdit from 'text-field-edit';
 
@@ -7,10 +8,13 @@ import { Browser } from "ui/browser";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 import RichTextPasteDialog from "ui/control/richtexteditor/RichTextPasteDialog";
+import { getSetting } from "state/settings/selectors";
+import { PREFIX } from "api/settings";
+import { settingsUpdate } from "state/settings/actions";
 
 const MENTION_START = RegExp(/(^|\s)@$/);
 
-export default class RichTextArea extends React.PureComponent {
+class RichTextArea extends React.PureComponent {
 
     static propTypes = {
         name: PropType.string,
@@ -148,10 +152,10 @@ export default class RichTextArea extends React.PureComponent {
     }
 
     onPaste = event => {
-        const {format} = this.props;
+        const {format, pasteRich} = this.props;
         const {textArea} = this.state;
 
-        if (!textArea.current || format === "plain-text") {
+        if (!textArea.current || format === "plain-text" || pasteRich === "text") {
             return;
         }
         let html = event.clipboardData.getData("text/html");
@@ -164,27 +168,44 @@ export default class RichTextArea extends React.PureComponent {
         }
         event.preventDefault();
 
-        this.setState({pasteDialogShow: true, pasteText: text, pasteHtml: html});
+        if (pasteRich === "html") {
+            this.pasteRichText("html", text, html);
+        } else {
+            this.setState({pasteDialogShow: true, pasteText: text, pasteHtml: html});
+        }
     }
 
-    onPasteDialogSubmit = result => {
-        const {format} = this.props;
-        const {textArea, pasteText, pasteHtml} = this.state;
+    onPasteDialogSubmit = (mode, persist) => {
+        const {settingsUpdate} = this.props;
+        const {pasteText, pasteHtml} = this.state;
 
         this.setState({pasteDialogShow: false});
+        if (persist) {
+            settingsUpdate([{
+                name: PREFIX + "rich-text-editor.paste-rich",
+                value: mode
+            }])
+        }
+        this.pasteRichText(mode, pasteText, pasteHtml)
+    }
 
-        if (result === "none") {
+    pasteRichText(mode, text, html) {
+        const {format} = this.props;
+        const {textArea} = this.state;
+
+        if (mode === "none") {
+            textArea.current.focus();
             return;
         }
 
         let content;
-        if (result === "html") {
-            content = safeImportHtml(pasteHtml);
+        if (mode === "html") {
+            content = safeImportHtml(html);
             if (format === "markdown") {
                 content = quoteHtml(content);
             }
         } else {
-            content = pasteText;
+            content = text;
         }
 
         textFieldEdit.insert(textArea.current, content);
@@ -223,3 +244,10 @@ export default class RichTextArea extends React.PureComponent {
     }
 
 }
+
+export default connect(
+    state => ({
+        pasteRich: getSetting(state, "rich-text-editor.paste-rich")
+    }),
+    { settingsUpdate }
+)(RichTextArea);

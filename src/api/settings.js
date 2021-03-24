@@ -262,6 +262,29 @@ export const META = [
         type: "json",
         defaultValue: "{}",
         internal: true
+    },
+    {
+        name: "rich-text-editor.paste-rich",
+        type: "string",
+        defaultValue: "ask",
+        title: "When pasting text with formatting tags",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Ask",
+                    value: "ask"
+                },
+                {
+                    title: "Paste text only",
+                    value: "text"
+                },
+                {
+                    title: "Paste with tags",
+                    value: "html"
+                }
+            ]
+        }
     }
 ];
 
