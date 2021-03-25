@@ -1,5 +1,6 @@
 import sanitizeHtml from 'sanitize-html';
 import { parse as parseEmojis } from 'twemoji-parser';
+import * as HtmlEntities from 'html-entities';
 
 function addDirAuto(tagName, attribs) {
     return attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}};
@@ -147,19 +148,15 @@ export function htmlToText(html) {
     if (html == null) {
         return null;
     }
-    return sanitizeHtml(replaceEmojis(html), {
+    return HtmlEntities.decode(sanitizeHtml(replaceEmojis(html), {
         allowedTags: [],
         allowedAttributes: {},
         transformTags: {
             "span": (tagName, attribs) => attribs["class"] === "generation" ? {text: ""} : {}
         }
-    });
+    }));
 }
 
 export function htmlEntities(s) {
-    return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+    return HtmlEntities.encode(s);
 }
