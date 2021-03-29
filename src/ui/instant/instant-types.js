@@ -63,6 +63,11 @@ const INSTANT_TYPES = {
         title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
+    },
+    "posting-updated": {
+        title: "Post updated",
+        color: "var(--green)",
+        icon: "pen-alt"
     }
 };
 
@@ -79,6 +84,7 @@ export function getInstantTarget(story) {
             return {nodeName: ":", href: `/post/${postingId}`}
         case "mention-posting":
         case "posting-task-failed":
+        case "posting-updated":
             return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
         case "subscriber-added":
         case "subscriber-deleted":
