@@ -402,6 +402,14 @@ export const EVENT_SCHEMES = {
         "fullName": {
             type: "string"
         }
+    }),
+    "PEOPLE_CHANGED": baseEvent({
+        "feedSubscribersTotal": {
+            type: "integer"
+        },
+        "feedSubscriptionsTotal": {
+            type: "integer"
+        }
     })
 };
 
@@ -410,5 +418,6 @@ export const ALLOWED_SELF_EVENTS = new Set([
     "STORY_DELETED",
     "STORY_UPDATED",
     "FEED_STATUS_UPDATED",
-    "NODE_NAME_CHANGED"
+    "NODE_NAME_CHANGED",
+    "PEOPLE_CHANGED"
 ]);

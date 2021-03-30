@@ -18,7 +18,11 @@ import {
     FEED_UNSUBSCRIBE_FAILED,
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
-import { EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events/actions";
+import {
+    EVENT_HOME_PEOPLE_CHANGED,
+    EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
+    EVENT_NODE_PEOPLE_CHANGED
+} from "api/events/actions";
 
 const initialState = {
 };
@@ -105,18 +109,17 @@ export default (state = initialState, action) => {
 
         case FEED_SUBSCRIBED: {
             const {nodeName, subscriber} = action.payload;
-            const {homeOwnerName} = action.context;
+            const {ownerName} = action.context;
             const istate = immutable.wrap(state);
             if (state[nodeName]) {
                 istate.assign([nodeName], {
                     subscribing: false,
                     subscribed: true,
                     subscriberId: subscriber.id
-                })
-                .update([nodeName, "subscribersTotal"], total => total + 1);
-            }
-            if (state[homeOwnerName]) {
-                istate.update([homeOwnerName, "subscriptionsTotal"], total => total + 1);
+                });
+                if (nodeName !== ownerName) {
+                    istate.update([nodeName, "subscribersTotal"], total => total + 1);
+                }
             }
             return istate.value();
         }
@@ -139,18 +142,17 @@ export default (state = initialState, action) => {
 
         case FEED_UNSUBSCRIBED: {
             const {nodeName} = action.payload;
-            const {homeOwnerName} = action.context;
+            const {ownerName} = action.context;
             const istate = immutable.wrap(state);
             if (state[nodeName]) {
                 istate.assign([nodeName], {
                     unsubscribing: false,
                     subscribed: false,
                     subscriberId: null
-                })
-                .update([nodeName, "subscribersTotal"], total => total > 0 ? total - 1 : 0);
-            }
-            if (state[homeOwnerName]) {
-                istate.update([homeOwnerName, "subscriptionsTotal"], total => total > 0 ? total - 1 : 0);
+                });
+                if (nodeName !== ownerName) {
+                    istate.update([nodeName, "subscribersTotal"], total => total > 0 ? total - 1 : 0);
+                }
             }
             return istate.value();
         }
@@ -170,6 +172,30 @@ export default (state = initialState, action) => {
             const {name, fullName} = action.payload;
             if (state[name]) {
                 return immutable.set(state, [name], fullName);
+            }
+            return state;
+        }
+
+        case EVENT_NODE_PEOPLE_CHANGED: {
+            const {feedSubscribersTotal, feedSubscriptionsTotal} = action.payload;
+            const {ownerName} = action.context;
+            if (state[ownerName]) {
+                return immutable.assign(state, [ownerName], {
+                    subscribersTotal: feedSubscribersTotal,
+                    subscriptionsTotal: feedSubscriptionsTotal,
+                })
+            }
+            return state;
+        }
+
+        case EVENT_HOME_PEOPLE_CHANGED: {
+            const {feedSubscribersTotal, feedSubscriptionsTotal} = action.payload;
+            const {homeOwnerName} = action.context;
+            if (state[homeOwnerName]) {
+                return immutable.assign(state, [homeOwnerName], {
+                    subscribersTotal: feedSubscribersTotal,
+                    subscriptionsTotal: feedSubscriptionsTotal,
+                })
             }
             return state;
         }
