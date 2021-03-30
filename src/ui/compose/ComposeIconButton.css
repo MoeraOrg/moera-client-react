@@ -20,13 +20,9 @@
 }
 
 .composer-icon.composer-icon-changed {
-    color: mediumturquoise;
-    border-bottom: solid 3px mediumturquoise;
-}
-
-.composer-icon.composer-icon-changed:hover {
-    color: var(--cyan);
-    border-bottom-color: var(--cyan);
+    color: var(--gray);
+    border-bottom: solid 3px var(--gray);
+    border-radius: 0;
 }
 
 .composer-icon.composer-icon-changed.composer-icon-active {

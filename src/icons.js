@@ -22,7 +22,6 @@ import {
     faFastForward,
     faFileAlt,
     faFrown,
-    faHistory,
     faHome,
     faImage,
     faItalic,
@@ -91,7 +90,6 @@ export default function initIconLibrary() {
     library.add(faFastForward);
     library.add(faFileAlt);
     library.add(faFrown);
-    library.add(faHistory);
     library.add(faHome);
     library.add(faImage);
     library.add(faItalic);
