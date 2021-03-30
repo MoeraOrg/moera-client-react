@@ -51,12 +51,12 @@ export function collectTriggers(...lists) {
 }
 
 function* triggersSaga(triggers, action) {
-    action.context = yield select(getContext);
     const signal = action.type;
     const list = triggers.get(signal);
     if (list === undefined) {
         return;
     }
+    action.context = yield select(getContext);
     for (const trigger of list) {
         let enabled;
         if (typeof(trigger.filter) === "function") {

@@ -1,4 +1,4 @@
-import { all, call, put, select } from 'redux-saga/effects';
+import { all, call, put } from 'redux-saga/effects';
 
 import { executor } from "state/executor";
 import { NameResolvingError, Node } from "api";
@@ -11,7 +11,6 @@ import {
     nodeCardSubscriptionSet
 } from "state/nodecards/actions";
 import { errorThrown } from "state/error/actions";
-import { getHomeOwnerName } from "state/home/selectors";
 
 export default [
     executor(NODE_CARD_LOAD, payload => payload.nodeName, nodeCardLoadSaga)
@@ -19,11 +18,12 @@ export default [
 
 function* nodeCardLoadSaga(action) {
     const {nodeName} = action.payload;
+    const {homeOwnerName} = action.context;
     try {
         yield all([
             call(loadDetails, nodeName),
             call(loadPeople, nodeName),
-            call(loadSubscription, nodeName)
+            call(loadSubscription, nodeName, homeOwnerName)
         ]);
         yield put(nodeCardLoaded(nodeName));
     } catch (e) {
@@ -44,8 +44,7 @@ function* loadPeople(nodeName) {
     yield put(nodeCardPeopleSet(nodeName, data.feedSubscribersTotal, data.feedSubscriptionsTotal));
 }
 
-function* loadSubscription(nodeName) {
-    const homeOwnerName = yield select(getHomeOwnerName);
+function* loadSubscription(nodeName, homeOwnerName) {
     if (nodeName === homeOwnerName) {
         return;
     }

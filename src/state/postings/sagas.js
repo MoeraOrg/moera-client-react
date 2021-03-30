@@ -73,9 +73,8 @@ function* postingLoadSaga(action) {
 }
 
 function* postingVerifySaga(action) {
-    const ownerName = yield select(getOwnerName);
     try {
-        yield call(Node.remotePostingVerify, ":", ownerName, action.payload.id);
+        yield call(Node.remotePostingVerify, ":", action.context.ownerName, action.payload.id);
     } catch (e) {
         yield put(postingVerifyFailed());
         yield put(errorThrown(e));

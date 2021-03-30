@@ -68,7 +68,7 @@ function* reactionsDialogTotalsLoadSaga() {
 
 function* reactionVerifySaga(action) {
     const {postingId, commentId, ownerName} = action.payload;
-    const nodeName = yield select(getOwnerName);
+    const nodeName = action.context.ownerName;
     try {
         if (commentId == null) {
             yield call(Node.remotePostingReactionVerify, ":", nodeName, postingId, ownerName);

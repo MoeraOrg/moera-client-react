@@ -32,7 +32,6 @@ import { fillActivityReactions } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
-import { getHomeOwnerFullName } from "state/home/selectors";
 
 export default [
     executor(FEED_GENERAL_LOAD, payload => payload.feedName, introduce(feedGeneralLoadSaga)),
@@ -58,9 +57,9 @@ function* feedGeneralLoadSaga(action) {
 
 function* feedSubscribeSaga(action) {
     const {nodeName, feedName} = action.payload;
+    const {homeOwnerFullName} = action.context;
     try {
         const whoAmI = yield call(Node.getWhoAmI, nodeName);
-        const homeOwnerFullName = yield select(getHomeOwnerFullName);
         const subscriber = yield call(Node.postFeedSubscriber, nodeName, feedName, homeOwnerFullName);
         yield call(Node.postFeedSubscription, ":", subscriber.id, nodeName, whoAmI.fullName, feedName);
         yield put(feedSubscribed(nodeName, whoAmI.fullName, feedName, subscriber));

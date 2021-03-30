@@ -1,4 +1,5 @@
-import { call, takeEvery } from "redux-saga/effects";
+import { call, select, takeEvery } from "redux-saga/effects";
+import getContext from "state/context";
 
 export function executor(action, payloadToKey, saga) {
     return {action, payloadToKey, saga};
@@ -47,6 +48,7 @@ function* executorsSaga(executors, action) {
         }
         executor.running.add(key);
     }
+    action.context = yield select(getContext);
     try {
         yield call(executor.saga, action);
     } catch (e) {
