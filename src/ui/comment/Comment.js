@@ -4,65 +4,17 @@ import cx from 'classnames';
 
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
-import EntryHtml from "ui/posting/EntryHtml";
 import CommentMenu from "ui/comment/CommentMenu";
 import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentDeleting from "ui/comment/CommentDeleting";
+import CommentContent from "ui/comment/CommentContent";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
-import CommentRepliedTo from "ui/comment/CommentRepliedTo";
 import { getCommentsReceiverPostingId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
-import { hasWindowSelection } from "util/misc";
 import "./Comment.css";
 
-class Content extends React.PureComponent {
-
-    state = {
-        preview: true
-    };
-
-    onClick = () => {
-        if (!hasWindowSelection()) {
-            this.setState({preview: !this.state.preview});
-        }
-    }
-
-    render() {
-        const {comment, previousId} = this.props;
-        const {preview} = this.state;
-
-        return (
-            <div className={cx("content", {"preview": preview})} onClick={this.onClick}>
-                <CommentRepliedTo comment={comment} previousId={previousId}/>
-                {this.renderText()}
-            </div>
-        );
-    }
-
-    renderText() {
-        const {comment} = this.props;
-
-        if (this.state.preview) {
-            if (comment.bodyPreview.text) {
-                return (
-                    <>
-                        <EntryHtml html={comment.bodyPreview.text}/>
-                        <p>
-                            <button className="btn btn-link read-more" onClick={this.onClick}>Read more...</button>
-                        </p>
-                    </>
-                );
-            } else {
-                return <EntryHtml html={comment.body.previewText}/>;
-            }
-        } else {
-            return <EntryHtml html={comment.body.text}/>;
-        }
-    }
-
-}
 
 const Comment = ({
      postingId, comment, previousId, focused, connectedToHome, postingOwnerName, postingReceiverName,
@@ -84,7 +36,7 @@ const Comment = ({
                                  postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
                     <CommentUpdated comment={comment}/>
                 </div>
-                <Content className="content" comment={comment} previousId={previousId}/>
+                <CommentContent className="content" comment={comment} previousId={previousId}/>
                 <div className="reactions-line">
                     {connectedToHome && comment.signature != null &&
                         <CommentButtons nodeName={postingReceiverName ?? postingOwnerName}
