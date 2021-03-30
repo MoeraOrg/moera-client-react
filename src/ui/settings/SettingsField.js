@@ -35,7 +35,7 @@ const SettingsField = ({name, fieldName, meta, initialValue}) => {
     const modifiers = meta && meta.modifiers ? meta.modifiers : {};
     switch (type) {
         case "bool":
-            return <CheckboxField name={fieldName} title={title} disabled={disabled} single={true}
+            return <CheckboxField name={fieldName} title={title} disabled={disabled}
                                   initialValue={deserializeBool(initialValue)}
                                   defaultValue={deserializeBool(defaultValue)}/>;
 

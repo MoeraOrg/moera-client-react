@@ -21,7 +21,8 @@ export const FormGroup = ({title, name, horizontal = false, checkbox = false, gr
         {checkbox &&
             <div className="form-check">
                 {children}
-                <Label title={title} name={name} className={labelClassName} horizontal={horizontal} checkbox={true}/>
+                <Label title={title} name={name} className={labelClassName} horizontal={horizontal} checkbox={true}
+                       undo={undo} reset={reset} onUndo={onUndo} onReset={onReset}/>
             </div>
         }
     </div>
