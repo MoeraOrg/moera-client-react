@@ -24,7 +24,7 @@ function* shareDialogPrepareSaga(action) {
 
     const nodeUri = yield call(getNodeUri, nodeName);
     if (nodeUri == null) {
-        yield messageBox(`Cannot resolve name: ${nodeName}`);
+        yield put(messageBox(`Cannot resolve name: ${nodeName}`));
         return;
     }
     const url = normalizeUrl(nodeUri) + href;
