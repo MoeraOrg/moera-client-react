@@ -30,12 +30,12 @@ class Content extends React.PureComponent {
     }
 
     render() {
-        const {comment} = this.props;
+        const {comment, previousId} = this.props;
         const {preview} = this.state;
 
         return (
             <div className={cx("content", {"preview": preview})} onClick={this.onClick}>
-                <CommentRepliedTo comment={comment}/>
+                <CommentRepliedTo comment={comment} previousId={previousId}/>
                 {this.renderText()}
             </div>
         );
@@ -65,8 +65,8 @@ class Content extends React.PureComponent {
 }
 
 const Comment = ({
-     postingId, comment, focused, connectedToHome, postingOwnerName, postingReceiverName, postingReceiverPostingId,
-     isPermitted
+     postingId, comment, previousId, focused, connectedToHome, postingOwnerName, postingReceiverName,
+     postingReceiverPostingId, isPermitted
 }) => (
     <div className={cx("comment", "entry", {
         "focused": focused,
@@ -84,7 +84,7 @@ const Comment = ({
                                  postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
                     <CommentUpdated comment={comment}/>
                 </div>
-                <Content className="content" comment={comment}/>
+                <Content className="content" comment={comment} previousId={previousId}/>
                 <div className="reactions-line">
                     {connectedToHome && comment.signature != null &&
                         <CommentButtons nodeName={postingReceiverName ?? postingOwnerName}

@@ -177,8 +177,9 @@ class Comments extends React.PureComponent {
                                                       visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
                                                       onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                             }
-                            {comments.map(comment =>
+                            {comments.map((comment, index) =>
                                 <Comment key={comment.moment} postingId={postingId} comment={comment}
+                                         previousId={index > 0 ? comments[index - 1].id : null}
                                          focused={comment.id === focusedCommentId} deleting={comment.deleting}/>
                             )}
                             <CommentsSentinelLine end={true} loading={loadingFuture}
