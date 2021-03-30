@@ -191,7 +191,9 @@ const signUpDialogLogic = {
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
             .test("is-allowed", "Not allowed", Rules.isRegisteredNameValid)
-            .when("nameTaken", (nameTaken, schema) => schema.notOneOf([nameTaken], "Name is already taken")),
+            .when("nameTaken",
+                (nameTaken, schema) => schema.notOneOf([nameTaken],
+                    "Name is already taken. Note that you can add any number to the name (like 'Arthur_42')")),
         domain: yup.string()
             .when("autoDomain", {
                 is: true,
