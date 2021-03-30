@@ -205,6 +205,19 @@ const ReactionTotalsInfoType = {
 
 export const ReactionTotalsInfo = schema(ReactionTotalsInfoType);
 
+const UpdateInfoType = {
+    type: "object",
+    properties: {
+        "important": {
+            type: "boolean"
+        },
+        "description": {
+            type: "string"
+        },
+    },
+    additionalProperties: false
+};
+
 const PostingInfoType = {
     type: "object",
     properties: {
@@ -253,6 +266,7 @@ const PostingInfoType = {
         "heading": {
             type: "string"
         },
+        "updateInfo": UpdateInfoType,
         "createdAt": {
             type: "integer"
         },

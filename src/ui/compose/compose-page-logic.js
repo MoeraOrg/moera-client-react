@@ -21,6 +21,10 @@ const composePageLogic = {
             props.posting != null ? props.posting.reactionsVisible : props.reactionsVisibleDefault;
         const reactionTotalsVisible =
             props.posting != null ? props.posting.reactionTotalsVisible : props.reactionTotalsVisibleDefault;
+        const updateImportant = props.posting != null && props.posting.draftPending && props.posting.updateInfo != null
+            ? (props.posting.updateInfo.important ?? false): false;
+        const updateDescription = props.posting != null && props.posting.draftPending && props.posting.updateInfo != null
+            ? (props.posting.updateInfo.description ?? ""): "";
 
         return {
             subject,
@@ -39,7 +43,10 @@ const composePageLogic = {
             reactionsVisibleDefault: reactionsVisible,
             reactionsVisible,
             reactionTotalsVisibleDefault: reactionTotalsVisible,
-            reactionTotalsVisible
+            reactionTotalsVisible,
+            updateInfoVisible: false,
+            updateImportant,
+            updateDescription
         };
     },
 
@@ -64,7 +71,11 @@ const composePageLogic = {
             publications: props.postingId != null ? null : [{
                 feedName: "timeline",
                 publishAt: isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null,
-            }]
+            }],
+            updateInfo: {
+                important: values.updateImportant,
+                description: values.updateDescription
+            }
         };
     },
 

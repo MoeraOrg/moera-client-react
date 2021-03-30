@@ -15,7 +15,9 @@ import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
 import ComposePublishAtButton from "ui/compose/ComposePublishAtButton";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeReactions from "ui/compose/ComposeReactions";
+import ComposeUpdateInfo from "ui/compose/ComposeUpdateInfo";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
+import ComposeUpdateInfoButton from "ui/compose/ComposeUpdateInfoButton";
 import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
 import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 import ComposeResetButton from "ui/compose/ComposeResetButton";
@@ -57,9 +59,9 @@ class ComposePage extends React.PureComponent {
                     <h2>
                         {title}
                         {postingId != null &&
-                        <Jump className="btn btn-sm btn-outline-secondary ml-3" href={`/post/${postingId}`}>
-                            &larr; Post
-                        </Jump>
+                            <Jump className="btn btn-sm btn-outline-secondary ml-3" href={`/post/${postingId}`}>
+                                &larr; Post
+                            </Jump>
                         }
                         <Loading active={loadingFeatures || loadingContent}/>
                     </h2>
@@ -80,6 +82,7 @@ class ComposePage extends React.PureComponent {
                             <ComposeBodyFormat sourceFormats={sourceFormats}/>
                             <ComposePublishAt/>
                             <ComposeReactions/>
+                            <ComposeUpdateInfo/>
 
                             <div className="features">
                                 <div className="feature-buttons">
@@ -88,6 +91,9 @@ class ComposePage extends React.PureComponent {
                                         <ComposePublishAtButton/>
                                     }
                                     <ComposeReactionsButton/>
+                                    {postingId != null &&
+                                        <ComposeUpdateInfoButton/>
+                                    }
                                 </div>
                                 <div className="drafts">
                                     <ComposeDraftSaver initialPostingText={this.state.initialPostingText}/>
