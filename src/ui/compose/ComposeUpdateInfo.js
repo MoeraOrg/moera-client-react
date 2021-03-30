@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect as connectFormik } from 'formik';
 
-import { CheckboxField, InputField, TextField } from "ui/control/field";
+import { CheckboxField, InputField } from "ui/control/field";
 
 const ComposeUpdateInfo = ({formik}) => (
     formik.values.updateInfoVisible &&

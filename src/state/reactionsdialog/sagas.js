@@ -12,7 +12,6 @@ import {
     reactionVerifyFailed
 } from "state/reactionsdialog/actions";
 import { errorThrown } from "state/error/actions";
-import { getOwnerName } from "state/owner/selectors";
 import { getPosting } from "state/postings/selectors";
 import { executor } from "state/executor";
 
