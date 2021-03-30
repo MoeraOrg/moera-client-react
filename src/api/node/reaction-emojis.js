@@ -82,9 +82,9 @@ export const REACTION_EMOJIS = {
             title: "Keep calm",
             color: "#ffcc4d"
         },
-        0x1f917: {
+        0x1fac2: {
             title: "Hug",
-            color: "#f4900c"
+            color: "#55acee"
         },
         0x1f525: {
             title: "Hot",

@@ -38,6 +38,7 @@ import { ReactComponent as Twemoji1f926 } from "./1f926.svg";
 import { ReactComponent as Twemoji1f92e } from "./1f92e.svg";
 import { ReactComponent as Twemoji1f970 } from "./1f970.svg";
 import { ReactComponent as Twemoji1f9f8 } from "./1f9f8.svg";
+import { ReactComponent as Twemoji1fac2 } from "./1fac2.svg";
 
 import "./Twemoji.css";
 
@@ -77,7 +78,8 @@ const CACHED = new Map([
     ["1f926", Twemoji1f926],
     ["1f92e", Twemoji1f92e],
     ["1f970", Twemoji1f970],
-    ["1f9f8", Twemoji1f9f8]
+    ["1f9f8", Twemoji1f9f8],
+    ["1fac2", Twemoji1fac2]
 ]);
 
 const Twemoji = ({code, title = ""}) => {
