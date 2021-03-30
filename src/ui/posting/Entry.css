@@ -12,10 +12,6 @@
     color: var(--cyan);
     position: absolute;
     left: 0.5rem;
-    top: -1rem;
-}
-
-.entry BLOCKQUOTE BLOCKQUOTE::before {
     top: -1.5rem;
 }
 
