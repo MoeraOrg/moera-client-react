@@ -11,7 +11,7 @@ const NodeNameText = ({name, fullName, mode}) => {
         namePart = fullName;
     }
     const parts = NodeNameParser.parse(name);
-    if (namePart == null) {
+    if (!namePart) {
         namePart = parts.name;
         generationPart = parts.generation;
     }
