@@ -58,6 +58,18 @@ const composePageLogic = {
         return props.smileysEnabled ? replaceSmileys(text) : text;
     },
 
+    _buildPublications(values, props) {
+        if (props.postingId != null) {
+            return null;
+        }
+        const publishAt = isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null;
+        const publications = [{feedName: "timeline", publishAt}];
+        if (props.newsFeedEnabled) {
+            publications.push({feedName: "news", publishAt});
+        }
+        return publications;
+    },
+
     mapValuesToPostingText(values, props) {
         return {
             bodySrc: JSON.stringify({
@@ -68,10 +80,7 @@ const composePageLogic = {
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,
-            publications: props.postingId != null ? null : [{
-                feedName: "timeline",
-                publishAt: isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null,
-            }],
+            publications: this._buildPublications(values, props),
             updateInfo: {
                 important: values.updateImportant,
                 description: values.updateDescription

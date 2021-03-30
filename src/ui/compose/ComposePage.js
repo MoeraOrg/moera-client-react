@@ -134,7 +134,8 @@ export default connect(
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
         reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default"),
         sourceFormatDefault: getSetting(state, "posting.body-src-format.default"),
-        smileysEnabled: parseBool(getSetting(state, "posting.smileys.enabled"))
+        smileysEnabled: parseBool(getSetting(state, "posting.smileys.enabled")),
+        newsFeedEnabled: parseBool(getSetting(state, "posting.feed.news.enabled"))
     }),
     { composePost, composeConflictClose, settingsUpdate }
 )(withFormik(composePageLogic)(ComposePage));

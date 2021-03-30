@@ -15,7 +15,8 @@ const INCLUDE = new Set([
     PREFIX + "posting.reactions.positive.default",
     PREFIX + "posting.reactions.negative.default",
     PREFIX + "posting.reactions.visible.default",
-    PREFIX + "posting.reactions.totals-visible.default"
+    PREFIX + "posting.reactions.totals-visible.default",
+    PREFIX + "posting.feed.news.enabled"
 ]);
 
 const SettingsSheetClientPosting = ({clientValues, clientMeta}) => (
