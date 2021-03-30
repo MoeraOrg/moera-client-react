@@ -3,51 +3,60 @@ import { call, select } from 'redux-saga/effects';
 import { ClientSettings, NodeApi } from "api";
 import { callApi } from "api/node/call";
 import { getHomeOwnerName } from "state/home/selectors";
-import { urlWithParameters } from "util/url";
+import { urlWithParameters, ut } from "util/url";
 
 export function* createDomain(nodeName, name) {
-    yield call(callApi, {nodeName, location: "/domains", method: "POST", body: {name}, schema: NodeApi.DomainInfo,
-        errorFilter: ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]});
+    yield call(callApi, {
+        nodeName, location: "/domains", method: "POST", body: {name}, schema: NodeApi.DomainInfo,
+        errorFilter: ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]
+    });
 }
 
 export function* getDomain(nodeName, name) {
-    name = encodeURIComponent(name);
-    return yield call(callApi, {nodeName, location: `/domains/${name}`, schema: NodeApi.DomainInfo,
-        errorFilter: ["domain.not-found"]});
+    return yield call(callApi, {
+        nodeName, location: ut`/domains/${name}`, schema: NodeApi.DomainInfo, errorFilter: ["domain.not-found"]
+    });
 }
 
 export function* getDomainAvailable(nodeName, name) {
-    name = encodeURIComponent(name);
     return yield call(callApi, {
-        nodeName, location: `/domains/available?nodeName=${name}`, schema: NodeApi.DomainAvailable
+        nodeName, location: ut`/domains/available?nodeName=${name}`, schema: NodeApi.DomainAvailable
     });
 }
 
 export function* createCredentials(nodeName, login, password) {
-    yield call(callApi, {nodeName, location: "/credentials", method: "POST", body: {login, password},
-        schema: NodeApi.Result, errorFilter: ["credentials.already-created"]});
+    yield call(callApi, {
+        nodeName, location: "/credentials", method: "POST", body: {login, password}, schema: NodeApi.Result,
+        errorFilter: ["credentials.already-created"]
+    });
 }
 
 export function* putCredentials(nodeName, token, oldPassword, login, password) {
-    yield call(callApi, {nodeName, location: "/credentials", method: "PUT", body: {token, oldPassword, login, password},
+    yield call(callApi, {
+        nodeName, location: "/credentials", method: "PUT", body: {token, oldPassword, login, password},
         schema: NodeApi.Result,
-        errorFilter: ["credentials.wrong-reset-token", "credentials.reset-token-expired",
-            "credentials.login-incorrect"]});
+        errorFilter: ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]
+    });
 }
 
 export function* postCredentialsReset(nodeName) {
-    return yield call(callApi, {nodeName, location: "/credentials/reset", method: "POST", schema: NodeApi.EmailHint,
-        errorFilter: ["credentials.email-not-set"]});
+    return yield call(callApi, {
+        nodeName, location: "/credentials/reset", method: "POST", schema: NodeApi.EmailHint,
+        errorFilter: ["credentials.email-not-set"]
+    });
 }
 
 export function* createToken(nodeName, login, password) {
-    return yield call(callApi, {nodeName, location: "/tokens", method: "POST", body: {login, password},
-        schema: NodeApi.TokenCreated, errorFilter: ["credentials.login-incorrect", "credentials.not-created"]});
+    return yield call(callApi, {
+        nodeName, location: "/tokens", method: "POST", body: {login, password}, schema: NodeApi.TokenCreated,
+        errorFilter: ["credentials.login-incorrect", "credentials.not-created"]
+    });
 }
 
 export function* getCartes(nodeName, auth = true) {
-    return yield call(callApi, {nodeName, location: "/cartes", auth, schema: NodeApi.CarteSet,
-        errorFilter: ["node-name-not-set"]});
+    return yield call(callApi, {
+        nodeName, location: "/cartes", auth, schema: NodeApi.CarteSet, errorFilter: ["node-name-not-set"]
+    });
 }
 
 export function* getWhoAmI(nodeName) {
@@ -107,35 +116,30 @@ export function* updateNodeName(nodeName, name, mnemonic) {
 }
 
 export function* getFeedGeneral(nodeName, feedName) {
-    feedName = encodeURIComponent(feedName);
-    return yield call(callApi, {nodeName, location: `/feeds/${feedName}`, auth: true, schema: NodeApi.FeedInfo});
+    return yield call(callApi, {nodeName, location: ut`/feeds/${feedName}`, auth: true, schema: NodeApi.FeedInfo});
 }
 
 export function* getFeedSlice(nodeName, feedName, after, before, limit) {
-    feedName = encodeURIComponent(feedName);
-    const location = urlWithParameters(`/feeds/${feedName}/stories`, {after, before, limit});
+    const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {after, before, limit});
     return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.FeedSliceInfo, withBodies: true});
 }
 
 export function* getFeedStatus(nodeName, feedName) {
-    feedName = encodeURIComponent(feedName);
     return yield call(callApi, {
-        nodeName, location: `/feeds/${feedName}/status`, auth: true, schema: NodeApi.FeedStatus
+        nodeName, location: ut`/feeds/${feedName}/status`, auth: true, schema: NodeApi.FeedStatus
     });
 }
 
 export function* putFeedStatus(nodeName, feedName, viewed, read, before) {
-    feedName = encodeURIComponent(feedName);
     return yield call(callApi, {
-        nodeName, location: `/feeds/${feedName}/status`, method: "PUT", auth: true, body: {viewed, read, before},
+        nodeName, location: ut`/feeds/${feedName}/status`, method: "PUT", auth: true, body: {viewed, read, before},
         schema: NodeApi.FeedStatus
     });
 }
 
 export function* putStory(nodeName, id, storyAttributes) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/stories/${id}`, method: "PUT", auth: true, body: storyAttributes,
+        nodeName, location: ut`/stories/${id}`, method: "PUT", auth: true, body: storyAttributes,
         schema: NodeApi.StoryInfo, withBodies: true
     });
 }
@@ -145,9 +149,8 @@ export function* getPeopleGeneral(nodeName) {
 }
 
 export function* getSubscribers(nodeName, type) {
-    type = encodeURIComponent(type);
     return yield call(callApi, {
-        nodeName, location: `/people/subscribers?type=${type}`, schema: NodeApi.SubscriberInfoArray
+        nodeName, location: ut`/people/subscribers?type=${type}`, schema: NodeApi.SubscriberInfoArray
     });
 }
 
@@ -166,16 +169,15 @@ export function* postPostingCommentsSubscriber(nodeName, postingId, ownerFullNam
 }
 
 export function* deleteSubscriber(nodeName, subscriberId) {
-    subscriberId = encodeURIComponent(subscriberId);
     return yield call(callApi, {
-        nodeName, location: `/people/subscribers/${subscriberId}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/people/subscribers/${subscriberId}`, method: "DELETE", auth: true,
+        schema: NodeApi.Result
     });
 }
 
 export function* getSubscriptions(nodeName, type) {
-    type = encodeURIComponent(type);
     return yield call(callApi, {
-        nodeName, location: `/people/subscriptions?type=${type}`, schema: NodeApi.SubscriptionInfoArray
+        nodeName, location: ut`/people/subscriptions?type=${type}`, schema: NodeApi.SubscriptionInfoArray
     });
 }
 
@@ -215,8 +217,7 @@ export function* getPostingFeatures(nodeName) {
 
 export function* getPosting(nodeName, id, withSource = false) {
     const include = withSource ? "source" : null;
-    id = encodeURIComponent(id);
-    const location = urlWithParameters(`/postings/${id}`, {include});
+    const location = urlWithParameters(ut`/postings/${id}`, {include});
     return yield call(callApi, {
         nodeName, location, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
         errorFilter: ["posting.not-found"]
@@ -231,25 +232,21 @@ export function* postPosting(nodeName, postingText) {
 }
 
 export function* putPosting(nodeName, id, postingText) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/postings/${id}`, method: "PUT", auth: true, body: postingText,
+        nodeName, location: ut`/postings/${id}`, method: "PUT", auth: true, body: postingText,
         schema: NodeApi.PostingInfo, withBodies: true
     });
 }
 
 export function* deletePosting(nodeName, id) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 
 export function* remotePostingVerify(nodeName, remoteNodeName, id) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName: ":", location: `/nodes/${remoteNodeName}/postings/${id}/verify`, method: "POST", auth: true,
+        nodeName: ":", location: ut`/nodes/${remoteNodeName}/postings/${id}/verify`, method: "POST", auth: true,
         schema: NodeApi.AsyncOperationCreated
     });
 }
@@ -257,68 +254,56 @@ export function* remotePostingVerify(nodeName, remoteNodeName, id) {
 export function* postPostingReaction(nodeName, postingId, negative, emoji) {
     const ownerName = yield select(getHomeOwnerName);
     const body = {ownerName, negative, emoji};
-    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/reactions`, method: "POST", auth: true, body,
+        nodeName, location: ut`/postings/${postingId}/reactions`, method: "POST", auth: true, body,
         schema: NodeApi.ReactionCreated
     });
 }
 
 export function* getPostingReaction(nodeName, postingId) {
-    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
-    postingId = encodeURIComponent(postingId);
+    const ownerName = yield select(getHomeOwnerName);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/reactions/${ownerName}`, auth: true, schema: NodeApi.ReactionInfo
+        nodeName, location: ut`/postings/${postingId}/reactions/${ownerName}`, auth: true, schema: NodeApi.ReactionInfo
     });
 }
 
 export function* deletePostingReaction(nodeName, postingId) {
-    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
-    postingId = encodeURIComponent(postingId);
+    const ownerName = yield select(getHomeOwnerName);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/reactions/${ownerName}`, method: "DELETE", auth: true,
+        nodeName, location: ut`/postings/${postingId}/reactions/${ownerName}`, method: "DELETE", auth: true,
         schema: NodeApi.ReactionTotalsInfo
     });
 }
 
 export function* getPostingReactionTotals(nodeName, postingId) {
-    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/reaction-totals`, auth: true, schema: NodeApi.ReactionTotalsInfo
+        nodeName, location: ut`/postings/${postingId}/reaction-totals`, auth: true, schema: NodeApi.ReactionTotalsInfo
     });
 }
 
 export function* getPostingReactions(nodeName, postingId, negative, emoji, before, limit) {
-    postingId = encodeURIComponent(postingId);
-    const location = urlWithParameters(`/postings/${postingId}/reactions`,
+    const location = urlWithParameters(ut`/postings/${postingId}/reactions`,
         {negative, emoji, before, limit});
     return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ReactionsSliceInfo});
 }
 
 export function* postRemotePostingReaction(nodeName, remoteNodeName, postingId, negative, emoji) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
-        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "POST", auth: true,
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "POST", auth: true,
         body: {negative, emoji}, schema: NodeApi.Result
     });
 }
 
 export function* deleteRemotePostingReaction(nodeName, remoteNodeName, postingId) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
-        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "DELETE", auth: true,
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`, method: "DELETE", auth: true,
         schema: NodeApi.Result
     });
 }
 
 export function* remotePostingReactionVerify(nodeName, remoteNodeName, postingId, ownerName) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
-    ownerName = encodeURIComponent(ownerName);
     return yield call(callApi, {
-        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`,
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`,
         method: "POST", auth: true, schema: NodeApi.AsyncOperationCreated
     });
 }
@@ -330,9 +315,8 @@ export function* getDraftPostings(nodeName) {
 }
 
 export function* getDraftPosting(nodeName, id) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/draft-postings/${id}`, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
+        nodeName, location: ut`/draft-postings/${id}`, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
         errorFilter: ["posting.not-found"]
     });
 }
@@ -345,40 +329,35 @@ export function* postDraftPosting(nodeName, postingText) {
 }
 
 export function* putDraftPosting(nodeName, id, postingText) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/draft-postings/${id}`, method: "PUT", auth: true, body: postingText,
+        nodeName, location: ut`/draft-postings/${id}`, method: "PUT", auth: true, body: postingText,
         schema: NodeApi.PostingInfo, withBodies: true
     });
 }
 
 export function* deleteDraftPosting(nodeName, id) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/draft-postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/draft-postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 
 export function* getPostingDraftRevision(nodeName, id) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/postings/${id}/revisions/draft`, auth: true, schema: NodeApi.PostingInfo,
+        nodeName, location: ut`/postings/${id}/revisions/draft`, auth: true, schema: NodeApi.PostingInfo,
         withBodies: true, errorFilter: ["posting.not-found"]
     });
 }
 
 export function* putPostingDraftRevision(nodeName, id, postingText) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/postings/${id}/revisions/draft`, method: "PUT", auth: true, body: postingText,
+        nodeName, location: ut`/postings/${id}/revisions/draft`, method: "PUT", auth: true, body: postingText,
         schema: NodeApi.PostingInfo, withBodies: true
     });
 }
 
 export function* deletePostingDraftRevision(nodeName, id) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/postings/${id}/revisions/draft`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/postings/${id}/revisions/draft`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 
@@ -390,8 +369,7 @@ export function* postActivityReactionsSearch(nodeName, remotePostings) {
 }
 
 export function* getCommentsSlice(nodeName, postingId, after, before, limit) {
-    postingId = encodeURIComponent(postingId);
-    const location = urlWithParameters(`/postings/${postingId}/comments`, {after, before, limit});
+    const location = urlWithParameters(ut`/postings/${postingId}/comments`, {after, before, limit});
     return yield call(callApi, {
         nodeName, location, auth: true, schema: NodeApi.CommentsSliceInfo, withBodies: true
     });
@@ -399,9 +377,7 @@ export function* getCommentsSlice(nodeName, postingId, after, before, limit) {
 
 export function* getComment(nodeName, postingId, id, withSource = false) {
     const include = withSource ? "source" : null;
-    postingId = encodeURIComponent(postingId);
-    id = encodeURIComponent(id);
-    const location = urlWithParameters(`/postings/${postingId}/comments/${id}`, {include});
+    const location = urlWithParameters(ut`/postings/${postingId}/comments/${id}`, {include});
     return yield call(callApi, {
         nodeName, location, auth: true, schema: NodeApi.CommentInfo, withBodies: true,
         errorFilter: ["comment.not-found"]
@@ -409,134 +385,101 @@ export function* getComment(nodeName, postingId, id, withSource = false) {
 }
 
 export function* postComment(nodeName, postingId, commentText) {
-    postingId = encodeURIComponent(postingId);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments`, method: "POST", auth: true, body: commentText,
+        nodeName, location: ut`/postings/${postingId}/comments`, method: "POST", auth: true, body: commentText,
         schema: NodeApi.CommentCreated, withBodies: true
     });
 }
 
 export function* putComment(nodeName, postingId, id, commentText) {
-    postingId = encodeURIComponent(postingId);
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments/${id}`, method: "PUT", auth: true, body: commentText,
+        nodeName, location: ut`/postings/${postingId}/comments/${id}`, method: "PUT", auth: true, body: commentText,
         schema: NodeApi.CommentInfo, withBodies: true
     });
 }
 
 export function* putRemoteComment(nodeName, remoteNodeName, postingId, id, commentText) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "PUT", auth: true,
-        body: commentText, schema: NodeApi.Result
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "PUT",
+        auth: true, body: commentText, schema: NodeApi.Result
     });
 }
 
 export function* deleteComment(nodeName, postingId, id) {
-    postingId = encodeURIComponent(postingId);
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments/${id}`, method: "DELETE", auth: true,
+        nodeName, location: ut`/postings/${postingId}/comments/${id}`, method: "DELETE", auth: true,
         schema: NodeApi.CommentTotalInfo
     });
 }
 
 export function* deleteRemoteComment(nodeName, remoteNodeName, postingId, id) {
-    postingId = encodeURIComponent(postingId);
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "DELETE",
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "DELETE",
         auth: true, schema: NodeApi.Result
     });
 }
 
 export function* remoteCommentVerify(nodeName, remoteNodeName, postingId, id) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName: ":", location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}/verify`, method: "POST",
-        auth: true, schema: NodeApi.AsyncOperationCreated
+        nodeName: ":", location: ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}/verify`,
+        method: "POST", auth: true, schema: NodeApi.AsyncOperationCreated
     });
 }
 
 export function* postCommentReaction(nodeName, postingId, commentId, negative, emoji) {
     const ownerName = yield select(getHomeOwnerName);
     const body = {ownerName, negative, emoji};
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments/${commentId}/reactions`, method: "POST", auth: true, body,
-        schema: NodeApi.ReactionCreated
+        nodeName, location: ut`/postings/${postingId}/comments/${commentId}/reactions`, method: "POST", auth: true,
+        body, schema: NodeApi.ReactionCreated
     });
 }
 
 export function* getCommentReaction(nodeName, postingId, commentId) {
-    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
+    const ownerName = yield select(getHomeOwnerName);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`, auth: true,
+        nodeName, location: ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`, auth: true,
         schema: NodeApi.ReactionInfo
     });
 }
 
 export function* deleteCommentReaction(nodeName, postingId, commentId) {
-    const ownerName = encodeURIComponent(yield select(getHomeOwnerName));
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
+    const ownerName = yield select(getHomeOwnerName);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`, method: "DELETE",
+        nodeName, location: ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`, method: "DELETE",
         auth: true, schema: NodeApi.ReactionTotalsInfo
     });
 }
 
 export function* getCommentReactionTotals(nodeName, postingId, commentId) {
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
     return yield call(callApi, {
-        nodeName, location: `/postings/${postingId}/comments/${commentId}/reaction-totals`, auth: true,
+        nodeName, location: ut`/postings/${postingId}/comments/${commentId}/reaction-totals`, auth: true,
         schema: NodeApi.ReactionTotalsInfo
     });
 }
 
 export function* getCommentReactions(nodeName, postingId, commentId, negative, emoji, before, limit) {
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
-    const location = urlWithParameters(`/postings/${postingId}/comments/${commentId}/reactions`,
+    const location = urlWithParameters(ut`/postings/${postingId}/comments/${commentId}/reactions`,
         {negative, emoji, before, limit});
     return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ReactionsSliceInfo});
 }
 
 export function* postRemoteCommentReaction(nodeName, remoteNodeName, postingId, commentId, negative, emoji) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
     return yield call(callApi, {
-        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`,
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`,
         method: "POST", auth: true, body: {negative, emoji}, schema: NodeApi.Result
     });
 }
 
 export function* deleteRemoteCommentReaction(nodeName, remoteNodeName, postingId, commentId) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
     return yield call(callApi, {
-        nodeName, location: `/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`,
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`,
         method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 
 export function* remoteCommentReactionVerify(nodeName, remoteNodeName, postingId, commentId, ownerName) {
-    remoteNodeName = encodeURIComponent(remoteNodeName);
-    postingId = encodeURIComponent(postingId);
-    commentId = encodeURIComponent(commentId);
-    ownerName = encodeURIComponent(ownerName);
-    const location = `/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions/${ownerName}/verify`;
+    const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions/${ownerName}/verify`;
     return yield call(callApi, {
         nodeName, location, method: "POST", auth: true, schema: NodeApi.AsyncOperationCreated
     });
@@ -554,9 +497,8 @@ export function* postWebPushSubscription(nodeName, endpoint, publicKey, authKey)
 }
 
 export function* deleteWebPushSubscription(nodeName, id) {
-    id = encodeURIComponent(id);
     return yield call(callApi, {
-        nodeName, location: `/web-push/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result,
+        nodeName, location: ut`/web-push/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result,
         errorFilter: ["web-push-subscription.not-found"]
     });
 }

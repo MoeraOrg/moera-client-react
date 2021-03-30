@@ -32,6 +32,21 @@ export function rootUrl(scheme, host, port) {
     return rootLocation;
 }
 
+export function ut(strings, ...args) {
+    const all = [];
+    let i = 0;
+    while (i < strings.length || i < args.length) {
+        if (i < strings.length) {
+            all.push(strings[i]);
+        }
+        if (i < args.length) {
+            all.push(encodeURIComponent(args[i]));
+        }
+        i++;
+    }
+    return all.join("");
+}
+
 export function toWsUrl(url) {
     const components = URI.parse(url);
     components.scheme = components.scheme.toLowerCase() === "https" ? "wss" : "ws";
