@@ -35,7 +35,7 @@ export default class RichTextMentionDialog extends React.PureComponent {
         }
 
         return (
-            <ModalDialog title="Insert a mention" onClose={this.onClose}>
+            <ModalDialog title="Insert a mention" centered={false} onClose={this.onClose}>
                 <div className="modal-body">
                     <NameSelector onSubmit={this.onSubmit} onChange={this.onChange}/>
                 </div>

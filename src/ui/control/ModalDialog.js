@@ -12,7 +12,12 @@ export class ModalDialog extends React.PureComponent {
         size: PropType.string,
         className: PropType.string,
         style: PropType.object,
+        centered: PropType.bool,
         onClose: PropType.func
+    };
+
+    static defaultProps = {
+        centered: true
     };
 
     componentDidMount() {
@@ -34,7 +39,7 @@ export class ModalDialog extends React.PureComponent {
     onModalDialogClick = e => e.stopPropagation();
 
     render() {
-        const {title, size, className, style, children, onClose} = this.props;
+        const {title, size, className, style, centered, children, onClose} = this.props;
 
         return ReactDOM.createPortal(
             <>
@@ -42,9 +47,9 @@ export class ModalDialog extends React.PureComponent {
                 <div className="modal show" onClick={onClose}>
                     <div className={cx(
                         "modal-dialog",
-                        "modal-dialog-centered",
                         className,
                         {
+                            "modal-dialog-centered": centered,
                             [`modal-${size}`]: !!size
                         }
                     )} style={style} onClick={this.onModalDialogClick}>
