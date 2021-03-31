@@ -4,12 +4,17 @@ export const cartesLoad = () => ({
 });
 
 export const CARTES_SET = "CARTES_SET";
-export const cartesSet = (cartesIp, cartes) => ({
+export const cartesSet = (cartesIp, cartes, clockOffset) => ({
     type: CARTES_SET,
-    payload: {cartesIp, cartes}
+    payload: {cartesIp, cartes, clockOffset}
 });
 
 export const CARTES_PURGE_EXPIRED = "CARTES_PURGE_EXPIRED";
 export const cartesPurgeExpired = () => ({
     type: CARTES_PURGE_EXPIRED
+});
+
+export const CLOCK_OFFSET_WARN = "CLOCK_OFFSET_WARN";
+export const clockOffsetWarn = () => ({
+    type: CLOCK_OFFSET_WARN
 });

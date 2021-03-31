@@ -83,7 +83,7 @@ class Storage extends React.PureComponent {
                 homeOwnerSet(nodeName, null, fullName);
             }
         } else {
-            cartesSet(data.cartesIp, data.cartes);
+            cartesSet(data.cartesIp, data.cartes, null);
             if (token == null) {
                 disconnectedFromHome(location, login);
             }

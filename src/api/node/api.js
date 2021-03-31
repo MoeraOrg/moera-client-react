@@ -873,6 +873,9 @@ export const CarteSet = schema({
                 additionalProperties: false
             },
             default: []
+        },
+        "createdAt": {
+            type: "integer"
         }
     },
     additionalProperties: false

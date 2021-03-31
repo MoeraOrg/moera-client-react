@@ -21,6 +21,7 @@ import {
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
 import { executor } from "state/executor";
+import { now } from "util/misc";
 
 export default [
     executor(SIGN_UP, "", signUpSaga),
@@ -99,7 +100,9 @@ function* signUpSaga(action) {
         }
 
         let cartesData = {
-            cartes: []
+            cartesIp: null,
+            cartes: [],
+            createdAt: 0
         };
         try {
             cartesData = yield call(Node.getCartes, rootLocation, data.token);
@@ -110,7 +113,7 @@ function* signUpSaga(action) {
         Browser.storeConnectionData(rootLocation, null, null, login, data.token, data.permissions);
         Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
         yield put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp,
-            cartesData.cartes));
+            cartesData.cartes, null, cartesData.createdAt - now()));
     }
 
     if (stage <= SIGN_UP_STAGE_PROFILE && email) {

@@ -1,5 +1,7 @@
 import { now } from "util/misc";
 
+const CLOCK_OFFSET_THRESHOLD = 10 * 60; // seconds
+
 export function getCartesListTtl(cartes) {
     if (!cartes) {
         return -now();
@@ -37,4 +39,9 @@ export function isCartesInitialized(state) {
 export function isCartesIpChanged(state) {
     return state.cartes.clientIp != null && state.cartes.cartesIp != null
         && state.cartes.clientIp !== state.cartes.cartesIp;
+}
+
+export function isClockOffsetToBeWarned(state) {
+    return isCartesInitialized(state) && Math.abs(state.cartes.clockOffset) > CLOCK_OFFSET_THRESHOLD
+        && !state.cartes.clockOffsetWarned;
 }

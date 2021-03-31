@@ -18,6 +18,7 @@ import { Browser } from "ui/browser";
 import { askNaming } from "api/node/ask-naming";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
+import { now } from "util/misc";
 
 export default [
     executor(CONNECT_TO_HOME, null, connectToHomeSaga),
@@ -64,7 +65,8 @@ function* connectToHomeSaga(action) {
 
     let cartesData = {
         cartesIp: null,
-        cartes: []
+        cartes: [],
+        createdAt: 0
     };
     try {
         cartesData = yield call(Node.getCartes, location, data.token);
@@ -76,7 +78,7 @@ function* connectToHomeSaga(action) {
     Browser.storeConnectionData(nodeUrl, null, null, login, data.token, data.permissions);
     Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
     yield put(connectedToHome(nodeUrl, login, data.token, data.permissions, cartesData.cartesIp,
-        cartesData.cartes));
+        cartesData.cartes, null, cartesData.createdAt - now()));
 }
 
 function* verifyHomeOwnerSaga() {
