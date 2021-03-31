@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { DropdownMenu } from "ui/control";
 import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
+import { openSourceDialog } from "state/sourcedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 
@@ -27,6 +28,12 @@ class CommentMenu extends React.PureComponent {
             commentDelete(comment.id), null, "danger");
     };
 
+    onViewSource = () => {
+        const {postingId, comment, openSourceDialog} = this.props;
+
+        openSourceDialog(postingId, comment.id);
+    };
+
     render() {
         const {postingId, comment, isPermitted, rootLocation} = this.props;
 
@@ -48,6 +55,12 @@ class CommentMenu extends React.PureComponent {
                     divider: true
                 },
                 {
+                    title: "View source",
+                    href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
+                    onClick: this.onViewSource,
+                    show: true
+                },
+                {
                     title: "Delete",
                     href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
                     onClick: this.onDelete,
@@ -63,5 +76,5 @@ export default connect(
     state => ({
         rootLocation: getNodeRootLocation(state),
     }),
-    { commentCopyLink, openCommentDialog, confirmBox }
+    { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox }
 )(CommentMenu);

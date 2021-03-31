@@ -13,9 +13,10 @@ import {
 import { postingReply } from "state/postingreply/actions";
 import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
-import "./EntryMenu.css";
+import { openSourceDialog } from "state/sourcedialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootLocation } from "state/node/selectors";
+import "./EntryMenu.css";
 
 class PostingMenu extends React.PureComponent {
 
@@ -66,6 +67,12 @@ class PostingMenu extends React.PureComponent {
         const {story, openChangeDateDialog} = this.props;
 
         openChangeDateDialog(story.id, story.publishedAt);
+    };
+
+    onViewSource = () => {
+        const {posting, openSourceDialog} = this.props;
+
+        openSourceDialog(posting.id);
     };
 
     render() {
@@ -122,6 +129,12 @@ class PostingMenu extends React.PureComponent {
                     divider: true
                 },
                 {
+                    title: "View source",
+                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    onClick: this.onViewSource,
+                    show: true
+                },
+                {
                     title: "Delete",
                     href: `${rootLocation}/moera/post/${posting.id}`,
                     onClick: this.onDelete,
@@ -140,6 +153,6 @@ export default connect(
     }),
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
-        postingCommentsSubscribe, postingCommentsUnsubscribe
+        postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog
     }
 )(PostingMenu);

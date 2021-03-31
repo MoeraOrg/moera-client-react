@@ -20,6 +20,7 @@ import ConfirmBox from "ui/confirmbox/ConfirmBox";
 import FlashBox from "ui/flashbox/FlashBox";
 import SignUpDialog from "ui/signupdialog/SignUpDialog";
 import MnemonicDialog from "ui/profile/manage/MnemonicDialog";
+import SourceDialog from "ui/sourcedialog/SourceDialog";
 import QuickTips from "ui/quicktips/QuickTips";
 import "./colors.css";
 import "./App.css";
@@ -50,6 +51,7 @@ const App = ({atNode, feedWidth}) => (
         </Suspense>
         <SignUpDialog/>
         <MnemonicDialog/>
+        <SourceDialog/>
         <QuickTips/>
         <MessageBox/>
         <ConfirmBox/>
