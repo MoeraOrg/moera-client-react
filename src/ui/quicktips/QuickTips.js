@@ -27,6 +27,11 @@ class QuickTips extends React.PureComponent {
         }
     };
 
+    onJump = (href, performJump) => {
+        this.onClose();
+        performJump();
+    }
+
     render() {
         const {show, ownerName} = this.props;
 
@@ -69,7 +74,8 @@ class QuickTips extends React.PureComponent {
                         </li>
                         <li>
                             Discover new blogs in the{" "}
-                            <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74">
+                            <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74"
+                                  onNear={this.onJump} onFar={this.onJump}>
                                 <b>list of blogs</b>
                             </Jump>.
                         </li>
