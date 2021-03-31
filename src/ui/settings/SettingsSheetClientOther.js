@@ -23,7 +23,9 @@ const EXCLUDE = new Set([
     PREFIX + "posting.smileys.enabled",
     PREFIX + "reactions.positive.available",
     PREFIX + "reactions.negative.available",
-    PREFIX + "posting.feed.news.enabled"
+    PREFIX + "posting.feed.news.enabled",
+    PREFIX + "posting.reactions.self.enabled",
+    PREFIX + "comment.reactions.self.enabled"
 ]);
 
 const SettingsSheetClientOther = ({clientValues, clientMeta}) => (

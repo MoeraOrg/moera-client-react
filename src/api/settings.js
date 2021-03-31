@@ -51,6 +51,13 @@ export const META = [
         }
     },
     {
+        name: "comment.reactions.self.enabled",
+        type: "bool",
+        defaultValue: "false",
+        title: "Allow to add reactions to your own comments",
+        modifiers: {}
+    },
+    {
         name: "comment.body-src-format.default",
         type: "string",
         defaultValue: "markdown",
@@ -183,6 +190,13 @@ export const META = [
         type: "bool",
         defaultValue: "true",
         title: "Show the number of reactions to my post by default",
+        modifiers: {}
+    },
+    {
+        name: "posting.reactions.self.enabled",
+        type: "bool",
+        defaultValue: "false",
+        title: "Allow to add reactions to your own posts",
         modifiers: {}
     },
     {
