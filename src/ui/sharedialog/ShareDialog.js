@@ -15,7 +15,7 @@ const ShareDialog = ({show, title, url, socialButtons, closeShareDialog, shareDi
             <div className="modal-body">
                 <div className="title">"{title}"</div>
                 <div className="link">
-                    <input type="text" className="form-control" value={url} readOnly={true}/>
+                    <input type="text" className="form-control" value={url} onChange={() => {}}/>
                     <Button variant="secondary" onClick={() => shareDialogCopyLink(url)}>Copy</Button>
                 </div>
                 <div className="social">
