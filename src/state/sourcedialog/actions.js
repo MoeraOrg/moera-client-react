@@ -1,7 +1,7 @@
 export const OPEN_SOURCE_DIALOG = "OPEN_SOURCE_DIALOG";
-export const openSourceDialog = (postingId, commentId) => ({
+export const openSourceDialog = (nodeName, postingId, commentId) => ({
     type: OPEN_SOURCE_DIALOG,
-    payload: {postingId, commentId}
+    payload: {nodeName, postingId, commentId}
 });
 
 export const CLOSE_SOURCE_DIALOG = "CLOSE_SOURCE_DIALOG";

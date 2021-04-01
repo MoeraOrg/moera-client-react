@@ -6,6 +6,7 @@ import { commentCopyLink, commentDelete, openCommentDialog } from "state/detaile
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { getNodeRootLocation } from "state/node/selectors";
+import { getCommentsReceiverName, getCommentsReceiverPostingId } from "state/detailedposting/selectors";
 
 class CommentMenu extends React.PureComponent {
 
@@ -29,9 +30,9 @@ class CommentMenu extends React.PureComponent {
     };
 
     onViewSource = () => {
-        const {postingId, comment, openSourceDialog} = this.props;
+        const {receiverName, receiverPostingId, comment, openSourceDialog} = this.props;
 
-        openSourceDialog(postingId, comment.id);
+        openSourceDialog(receiverName, receiverPostingId, comment.id);
     };
 
     render() {
@@ -75,6 +76,8 @@ class CommentMenu extends React.PureComponent {
 export default connect(
     state => ({
         rootLocation: getNodeRootLocation(state),
+        receiverName: getCommentsReceiverName(state),
+        receiverPostingId: getCommentsReceiverPostingId(state)
     }),
     { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox }
 )(CommentMenu);

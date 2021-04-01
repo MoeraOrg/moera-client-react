@@ -10,16 +10,16 @@ export default [
 ];
 
 function* openSourceDialogSaga(action) {
-    const {postingId, commentId} = action.payload;
+    const {nodeName, postingId, commentId} = action.payload;
 
     try {
         let entry;
         if (commentId == null) {
-            entry = yield call(Node.getPosting, "", postingId, true);
+            entry = yield call(Node.getPosting, nodeName, postingId, true);
         } else {
-            entry = yield call(Node.getComment, "", postingId, commentId, true);
+            entry = yield call(Node.getComment, nodeName, postingId, commentId, true);
         }
-        yield put(sourceDialogLoaded(entry.bodySrc.text));
+        yield put(sourceDialogLoaded(entry.bodySrc ? entry.bodySrc.text : ""));
     } catch (e) {
         yield put(sourceDialogLoadFailed());
         yield put(errorThrown(e));

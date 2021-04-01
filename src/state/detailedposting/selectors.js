@@ -39,6 +39,10 @@ export function getCommentsState(state) {
     return state.detailedPosting.comments;
 }
 
+export function getCommentsReceiverName(state) {
+    return getCommentsState(state).receiverName;
+}
+
 export function getCommentsReceiverPostingId(state) {
     return getCommentsState(state).receiverPostingId;
 }

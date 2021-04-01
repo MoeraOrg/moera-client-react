@@ -72,7 +72,11 @@ class PostingMenu extends React.PureComponent {
     onViewSource = () => {
         const {posting, openSourceDialog} = this.props;
 
-        openSourceDialog(posting.id);
+        if (posting.receiverName == null) {
+            openSourceDialog("", posting.id);
+        } else {
+            openSourceDialog(posting.receiverName, posting.receiverPostingId);
+        }
     };
 
     render() {
