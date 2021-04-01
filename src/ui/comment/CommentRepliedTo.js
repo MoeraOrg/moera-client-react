@@ -11,7 +11,7 @@ const CommentRepliedTo = ({comment, postingId, previousId}) => {
         return null;
     }
     if (comment.repliedTo.id === previousId) {
-        return <div className="replied-to-previous"><FontAwesomeIcon icon="reply"/></div>;
+        return <div className="replied-to-previous" title="Reply to previous comment"><FontAwesomeIcon icon="reply"/></div>;
     }
     return (
         <RepliedTo postingId={postingId} commentId={comment.repliedTo.id} ownerName={comment.repliedTo.name}
