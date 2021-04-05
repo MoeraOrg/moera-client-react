@@ -17,7 +17,7 @@ const BASE_SAFE_HTML_SETTINGS = {
         a: ["href", "title", "data-nodename", "data-href"],
         b: ["style"],
         p: ["style"],
-        ol: ["start"],
+        ol: ["start", "type"],
         iframe: [
             "src", "width", "height", "frameborder", "allow", "allowfullscreen", "sandbox", "scrolling",
             "allowtransparency", "style"
