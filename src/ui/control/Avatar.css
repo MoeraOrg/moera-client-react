@@ -1,0 +1,4 @@
+.avatar {
+    border: 1px solid var(--white-dark);
+    border-radius: 50%;
+}

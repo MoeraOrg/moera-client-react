@@ -3,7 +3,7 @@ import PropType from 'prop-types';
 import { connect } from 'react-redux';
 
 import { NodeName } from "api";
-import { Button, Loading } from "ui/control";
+import { Avatar, Button, Loading } from "ui/control";
 import PageHeader from "ui/page/PageHeader";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { Page } from "ui/page/Page";
@@ -36,6 +36,7 @@ const ProfileView = ({loading, fullName, gender, email, title, bioHtml, ownerNam
         </PageHeader>
         <Page>
             <div className="profile-view">
+                <Avatar/>
                 <Loading active={loading}/>
                 <div className="full-name">
                     {fullName ? fullName : NodeName.shorten(ownerName)}

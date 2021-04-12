@@ -1,4 +1,5 @@
 .profile-view {
+    display: flow-root;
     background-color: white;
     border: var(--gray-light) 1px solid;
     border-radius: 5px;
@@ -11,6 +12,17 @@
         border-left-width: 0;
         border-right-width: 0;
         border-radius: 0;
+    }
+}
+
+.profile-view .avatar {
+    margin-bottom: .5rem;
+}
+
+@media only screen and (min-width: 576px) {
+    .profile-view .avatar {
+        float: left;
+        margin-right: .7rem;
     }
 }
 
