@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as yup from 'yup';
 
-import { Avatar, Button, ConflictWarning, Loading } from "ui/control";
+import { Button, ConflictWarning, Loading } from "ui/control";
 import { ComboboxField, InputField, RichTextField } from "ui/control/field";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import { getNodeRootPage } from "state/node/selectors";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
+import AvatarEditor from "ui/profile/edit/AvatarEditor";
 import "./ProfileEditor.css";
 
 class ProfileEditor extends React.PureComponent {
@@ -44,7 +45,7 @@ class ProfileEditor extends React.PureComponent {
                         <Form>
                             <ConflictWarning text="Profile was edited by somebody." show={conflict}
                                              onClose={profileEditConflictClose}/>
-                            <Avatar avatar={avatar} rootPage={rootPage}/>
+                            <AvatarEditor avatar={avatar} rootPage={rootPage}/>
                             <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
                             <InputField title="Title" name="title" maxLength={120}/>
                             <ComboboxField title="Gender" name="gender" data={["Male", "Female"]}
