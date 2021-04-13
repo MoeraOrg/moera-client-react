@@ -20,6 +20,7 @@ const emptyProfile = {
     title: null,
     bioSrc: null,
     bioHtml: null,
+    avatar: null,
     operations: {
         edit: []
     }

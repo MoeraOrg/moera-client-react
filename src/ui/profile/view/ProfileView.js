@@ -9,6 +9,7 @@ import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { Page } from "ui/page/Page";
 import NodeNameView from "ui/profile/view/NodeNameView";
 import { profileEdit } from "state/profile/actions";
+import { getNodeRootPage } from "state/node/selectors";
 import { isProfileEditable } from "state/profile/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { shortGender } from "util/misc";
@@ -25,7 +26,7 @@ const EditButton = connect(
     {profileEdit}
 )(EditButtonImpl);
 
-const ProfileView = ({loading, fullName, gender, email, title, bioHtml, ownerName, editable}) => (
+const ProfileView = ({loading, fullName, gender, email, title, bioHtml, avatar, ownerName, rootPage, editable}) => (
     <>
         <PageHeader>
             <h2>
@@ -36,7 +37,7 @@ const ProfileView = ({loading, fullName, gender, email, title, bioHtml, ownerNam
         </PageHeader>
         <Page>
             <div className="profile-view">
-                <Avatar/>
+                <Avatar avatar={avatar} rootPage={rootPage}/>
                 <Loading active={loading}/>
                 <div className="full-name">
                     {fullName ? fullName : NodeName.shorten(ownerName)}
@@ -62,6 +63,7 @@ ProfileView.propTypes = {
     email: PropType.string,
     title: PropType.string,
     bioHtml: PropType.string,
+    avatar: PropType.object,
     ownerName: PropType.string,
     editable: PropType.bool
 };
@@ -70,6 +72,7 @@ export default connect(
     state => ({
         ...state.profile,
         ownerName: getOwnerName(state),
+        rootPage: getNodeRootPage(state),
         editable: isProfileEditable(state)
     })
 )(ProfileView);

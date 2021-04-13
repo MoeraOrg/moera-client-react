@@ -15,6 +15,26 @@ export const Result = schema({
     required: ["errorCode", "message"]
 });
 
+const AvatarImageType = {
+    type: "object",
+    properties: {
+        "path": {
+            type: "string"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "shape": {
+            type: "string",
+            default: "circle"
+        },
+    },
+    additionalProperties: false
+};
+
 export const WhoAmI = schema({
     type: "object",
     properties: {
@@ -66,6 +86,7 @@ export const ProfileInfo = schema({
         "bioHtml": {
             type: "string"
         },
+        "avatar": AvatarImageType,
         "operations": {
             type: "object",
             properties: {
