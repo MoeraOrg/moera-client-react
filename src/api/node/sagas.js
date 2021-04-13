@@ -507,3 +507,9 @@ export function* getContacts(nodeName, query, limit) {
     const location = urlWithParameters("/people/contacts", {query, limit});
     return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ContactInfoArray});
 }
+
+export function* postMediaPublic(nodeName, file) {
+    return yield call(callApi, {
+        nodeName, location: "/media/public", method: "POST", auth: true, body: file, schema: NodeApi.MediaFileInfo
+    });
+}

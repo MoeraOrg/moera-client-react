@@ -55,3 +55,30 @@ export const PROFILE_UPDATE_FAILED = "PROFILE_UPDATE_FAILED";
 export const profileUpdateFailed = () => ({
     type: PROFILE_UPDATE_FAILED
 });
+
+export const PROFILE_OPEN_AVATAR_EDIT_DIALOG = "PROFILE_OPEN_AVATAR_EDIT_DIALOG";
+export const profileOpenAvatarEditDialog = () => ({
+    type: PROFILE_OPEN_AVATAR_EDIT_DIALOG
+});
+
+export const PROFILE_CLOSE_AVATAR_EDIT_DIALOG = "PROFILE_CLOSE_AVATAR_EDIT_DIALOG";
+export const profileCloseAvatarEditDialog = () => ({
+    type: PROFILE_CLOSE_AVATAR_EDIT_DIALOG
+});
+
+export const PROFILE_IMAGE_UPLOAD = "PROFILE_IMAGE_UPLOAD";
+export const profileImageUpload = (file) => ({
+    type: PROFILE_IMAGE_UPLOAD,
+    payload: {file}
+});
+
+export const PROFILE_IMAGE_UPLOADED = "PROFILE_IMAGE_UPLOADED";
+export const profileImageUploaded = (path, width, height) => ({
+    type: PROFILE_IMAGE_UPLOADED,
+    payload: {path, width, height}
+});
+
+export const PROFILE_IMAGE_UPLOAD_FAILED = "PROFILE_IMAGE_UPLOAD_FAILED";
+export const profileImageUploadFailed = () => ({
+    type: PROFILE_IMAGE_UPLOAD_FAILED
+});

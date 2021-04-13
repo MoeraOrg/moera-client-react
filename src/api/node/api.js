@@ -1235,3 +1235,25 @@ export const EmailHint = schema({
     },
     additionalProperties: false
 });
+
+export const MediaFileInfo = schema({
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "path": {
+            type: "string"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "size": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false
+});

@@ -25,9 +25,11 @@ export function* callApi({
         throw new NameResolvingError(nodeName);
     }
     const exception = (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
+    console.log(body);
+    console.log(body instanceof File);
     const headers = {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": body instanceof File ? body.type : "application/json"
     };
     yield call(authorize, headers, rootLocation, auth);
     let response;
@@ -35,7 +37,7 @@ export function* callApi({
         response = yield call(retryFetch, apiUrl(rootApi, location, method), {
             method,
             headers,
-            body: body != null ? JSON.stringify(body) : null
+            body: encodeBody(body)
         });
     } catch (e) {
         throw exception(e);
@@ -151,6 +153,16 @@ function apiUrl(rootApi, location, method) {
     } else {
         return rootApi + location;
     }
+}
+
+function encodeBody(body) {
+    if (body == null) {
+        return null;
+    }
+    if (body instanceof File) {
+        return body;
+    }
+    return JSON.stringify(body);
 }
 
 function isErrorCodeAllowed(errorCode, filter) {

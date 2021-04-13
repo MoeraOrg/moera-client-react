@@ -1,0 +1,12 @@
+.avatar-edit-dialog .modal-body {
+    text-align: center;
+}
+
+.avatar-edit-dialog .editor {
+    display: inline-block;
+    border: dotted 1px var(--gray-light);
+}
+
+.avatar-edit-dialog INPUT[type=file] {
+    display: none;
+}
