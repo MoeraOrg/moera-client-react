@@ -16,6 +16,16 @@ class AvatarEditDialog extends React.Component {
         scale: 1
     };
 
+    getScaleMax() {
+        const {width, height} = this.props;
+
+        return width != null && height != null ? Math.min(width, height) / 100 : 2;
+    }
+
+    setScale(value) {
+        this.setState({scale: Math.max(Math.min(value, this.getScaleMax()), 1)})
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show) {
             const editor = document.querySelector(".avatar-edit-dialog .editor");
@@ -29,14 +39,8 @@ class AvatarEditDialog extends React.Component {
         }
 
         if (this.props.show && this.props.path !== prevProps.path) {
-            this.setState({scale: 1});
+            this.setScale(1);
         }
-    }
-
-    getScaleMax() {
-        const {width, height} = this.props;
-
-        return width != null && height != null ? Math.min(width, height) / 100 : 2;
     }
 
     onUploadClick = () => {
@@ -50,13 +54,12 @@ class AvatarEditDialog extends React.Component {
     }
 
     onEditorWheel = event => {
-        const scale = this.state.scale + event.deltaY * this.getScaleMax() / 400;
-        this.setState({scale: Math.max(Math.min(scale, this.getScaleMax()), 1)})
+        this.setScale(this.state.scale + event.deltaY * this.getScaleMax() / 400);
         event.preventDefault();
     }
 
     onScaleChange = event => {
-        this.setState({scale: Math.min(event.target.value, this.getScaleMax())});
+        this.setScale(event.target.value);
     }
 
     render() {
