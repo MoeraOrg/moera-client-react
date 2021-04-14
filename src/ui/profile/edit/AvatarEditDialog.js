@@ -78,7 +78,7 @@ class AvatarEditDialog extends React.Component {
                                        borderRadius={100} scale={scale}/>
                     <Button variant="outline-secondary" size="sm" className="upload" loading={imageUploading}
                             onClick={this.onUploadClick}>Upload image</Button>
-                    <input type="range" className="custom-range" min={1} max={this.getScaleMax()} step="any"
+                    <input type="range" className="form-control-range" min={1} max={this.getScaleMax()} step="any"
                            value={scale} onChange={this.onScaleChange}/>
                     <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                 </div>
