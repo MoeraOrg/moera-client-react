@@ -12,6 +12,31 @@ class AvatarEditDialog extends React.Component {
 
     #domFile;
 
+    state = {
+        scale: 1
+    };
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.show !== prevProps.show) {
+            const editor = document.querySelector(".avatar-edit-dialog .editor");
+            if (this.props.show) {
+                editor.addEventListener("wheel", this.onEditorWheel);
+            } else {
+                editor.removeEventListener("wheel", this.onEditorWheel);
+            }
+        }
+
+        if (this.props.show && this.props.path !== prevProps.path) {
+            this.setState({scale: 1});
+        }
+    }
+
+    getScaleMax() {
+        const {width, height} = this.props;
+
+        return Math.min(width, height) / 100;
+    }
+
     onUploadClick = () => {
         this.#domFile.click();
     }
@@ -22,8 +47,19 @@ class AvatarEditDialog extends React.Component {
         }
     }
 
+    onEditorWheel = event => {
+        const scale = this.state.scale + event.deltaY * this.getScaleMax() / 400;
+        this.setState({scale: Math.max(Math.min(scale, this.getScaleMax()), 1)})
+        event.preventDefault();
+    }
+
+    onScaleChange = event => {
+        this.setState({scale: Math.min(event.target.value, this.getScaleMax())});
+    }
+
     render() {
         const {show, imageUploading, path, rootPage, profileCloseAvatarEditDialog} = this.props;
+        const {scale} = this.state;
 
         if (!show) {
             return null;
@@ -33,14 +69,15 @@ class AvatarEditDialog extends React.Component {
             <ModalDialog title="Create Avatar" className="avatar-edit-dialog" onClose={profileCloseAvatarEditDialog}>
                 <div className="modal-body">
                     <ReactAvatarEditor className="editor" image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
-                                       width={200} height={200} border={50} color={[255, 255, 255, 0.6]}
-                                       borderRadius={100}/>
+                                       width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
+                                       borderRadius={100} scale={scale}/>
                     <br/>
                     <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                     <Button variant="outline-secondary" size="sm" loading={imageUploading}
                             onClick={this.onUploadClick}>Upload image</Button>
                     <br/>
-                    <input type="range" className="custom-range"/>
+                    <input type="range" className="custom-range" min={1} max={this.getScaleMax()} step="any"
+                           value={scale} onChange={this.onScaleChange}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>Cancel</Button>
@@ -57,6 +94,8 @@ export default connect(
         show: state.profile.avatarEditDialog.show,
         imageUploading: state.profile.avatarEditDialog.imageUploading,
         path: state.profile.avatarEditDialog.path,
+        width: state.profile.avatarEditDialog.width,
+        height: state.profile.avatarEditDialog.height,
         rootPage: getNodeRootPage(state)
     }),
     { profileCloseAvatarEditDialog, profileImageUpload }
