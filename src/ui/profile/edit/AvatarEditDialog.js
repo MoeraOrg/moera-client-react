@@ -19,10 +19,12 @@ class AvatarEditDialog extends React.Component {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.props.show !== prevProps.show) {
             const editor = document.querySelector(".avatar-edit-dialog .editor");
-            if (this.props.show) {
-                editor.addEventListener("wheel", this.onEditorWheel);
-            } else {
-                editor.removeEventListener("wheel", this.onEditorWheel);
+            if (editor) {
+                if (this.props.show) {
+                    editor.addEventListener("wheel", this.onEditorWheel);
+                } else {
+                    editor.removeEventListener("wheel", this.onEditorWheel);
+                }
             }
         }
 
@@ -34,7 +36,7 @@ class AvatarEditDialog extends React.Component {
     getScaleMax() {
         const {width, height} = this.props;
 
-        return Math.min(width, height) / 100;
+        return width != null && height != null ? Math.min(width, height) / 100 : 2;
     }
 
     onUploadClick = () => {
@@ -71,13 +73,11 @@ class AvatarEditDialog extends React.Component {
                     <ReactAvatarEditor className="editor" image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
                                        width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
                                        borderRadius={100} scale={scale}/>
-                    <br/>
-                    <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
-                    <Button variant="outline-secondary" size="sm" loading={imageUploading}
+                    <Button variant="outline-secondary" size="sm" className="upload" loading={imageUploading}
                             onClick={this.onUploadClick}>Upload image</Button>
-                    <br/>
                     <input type="range" className="custom-range" min={1} max={this.getScaleMax()} step="any"
                            value={scale} onChange={this.onScaleChange}/>
+                    <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>Cancel</Button>

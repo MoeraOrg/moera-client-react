@@ -1,10 +1,19 @@
 .avatar-edit-dialog .modal-body {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .avatar-edit-dialog .editor {
-    display: inline-block;
     border: dotted 1px var(--gray-light);
+}
+
+.avatar-edit-dialog .upload {
+    margin-top: .25rem;
+}
+
+.avatar-edit-dialog .custom-range {
+    margin-top: 1rem;
 }
 
 .avatar-edit-dialog INPUT[type=file] {
