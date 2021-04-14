@@ -25,8 +25,6 @@ export function* callApi({
         throw new NameResolvingError(nodeName);
     }
     const exception = (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
-    console.log(body);
-    console.log(body instanceof File);
     const headers = {
         "Accept": "application/json",
         "Content-Type": body instanceof File ? body.type : "application/json"
