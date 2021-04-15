@@ -8,11 +8,13 @@ import { profileOpenAvatarEditDialog } from "state/profile/actions";
 import "./AvatarEditor.css";
 
 const AvatarEditor = ({avatar, rootPage, profileOpenAvatarEditDialog}) => (
-    <div className="avatar-editor" onClick={profileOpenAvatarEditDialog}>
-        <div className="icon"><FontAwesomeIcon icon="pen"/></div>
-        <Avatar avatar={avatar} rootPage={rootPage}/>
+    <>
+        <div className="avatar-editor" onClick={profileOpenAvatarEditDialog}>
+            <div className="icon"><FontAwesomeIcon icon="pen"/></div>
+            <Avatar avatar={avatar} rootPage={rootPage}/>
+        </div>
         <AvatarEditDialog/>
-    </div>
+    </>
 );
 
 export default connect(
