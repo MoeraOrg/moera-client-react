@@ -6,9 +6,10 @@ import { Button, ModalDialog } from "ui/control";
 import avatarPlaceholder from "ui/control/avatar.png";
 import { profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
 import { getNodeRootPage } from "state/node/selectors";
+import Scale from "ui/profile/edit/Scale";
 import "./AvatarEditDialog.css";
 
-class AvatarEditDialog extends React.Component {
+class AvatarEditDialog extends React.PureComponent {
 
     #domFile;
 
@@ -58,8 +59,8 @@ class AvatarEditDialog extends React.Component {
         event.preventDefault();
     }
 
-    onScaleChange = event => {
-        this.setScale(event.target.value);
+    onScaleChange = value => {
+        this.setScale(value);
     }
 
     render() {
@@ -78,8 +79,7 @@ class AvatarEditDialog extends React.Component {
                                        borderRadius={100} scale={scale}/>
                     <Button variant="outline-secondary" size="sm" className="upload" loading={imageUploading}
                             onClick={this.onUploadClick}>Upload image</Button>
-                    <input type="range" className="form-control-range" min={1} max={this.getScaleMax()} step="any"
-                           value={scale} onChange={this.onScaleChange}/>
+                    <Scale max={this.getScaleMax()} value={scale} onChange={this.onScaleChange}/>
                     <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                 </div>
                 <div className="modal-footer">
