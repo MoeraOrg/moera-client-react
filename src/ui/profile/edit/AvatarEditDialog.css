@@ -7,6 +7,7 @@
 .avatar-edit-dialog .tools {
     display: flex;
     justify-content: space-between;
+    width: 300px;
 }
 
 .avatar-edit-dialog .editor {

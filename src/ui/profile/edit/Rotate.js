@@ -1,8 +1,8 @@
 import React from 'react';
+import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from "ui/control";
-import PropType from "prop-types";
 
 export default class Rotate extends React.PureComponent {
 

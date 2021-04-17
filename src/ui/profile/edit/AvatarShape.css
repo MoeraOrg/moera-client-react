@@ -1,0 +1,17 @@
+.avatar-shape {
+    border-radius: 1em;
+    padding-top: .25em;
+}
+
+.avatar-shape BUTTON {
+    padding: .1em .4em;
+    border: 0;
+    border-radius: 50%;
+    display: inline-block;
+    transition: .15s background-color ease-in-out, .15s color ease-in-out;
+}
+
+.avatar-shape BUTTON.active {
+    background-color: var(--info);
+    color: white;
+}

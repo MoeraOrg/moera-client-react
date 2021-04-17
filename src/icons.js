@@ -56,10 +56,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
 import {
+    faCircle,
     faClock,
     faComment as faCommentRegular,
     faEnvelope,
     faEnvelopeOpen,
+    faSquare,
     faThumbsDown as faThumbsDownRegular,
     faThumbsUp as faThumbsUpRegular,
     faUser
@@ -76,6 +78,7 @@ export default function initIconLibrary() {
     library.add(faCertificate);
     library.add(faChartBar);
     library.add(faChevronDown);
+    library.add(faCircle);
     library.add(faClock);
     library.add(faCode);
     library.add(faCog);
@@ -113,6 +116,7 @@ export default function initIconLibrary() {
     library.add(faShareAlt);
     library.add(faShareSquare);
     library.add(faSignOutAlt);
+    library.add(faSquare);
     library.add(faStar);
     library.add(faStrikethrough);
     library.add(faSyncAlt);

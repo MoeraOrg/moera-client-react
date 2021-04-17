@@ -6,9 +6,10 @@ import { Button, ModalDialog } from "ui/control";
 import avatarPlaceholder from "ui/control/avatar.png";
 import { profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
 import { getNodeRootPage } from "state/node/selectors";
+import Rotate from "ui/profile/edit/Rotate";
+import AvatarShape from "ui/profile/edit/AvatarShape";
 import Scale from "ui/profile/edit/Scale";
 import "./AvatarEditDialog.css";
-import Rotate from "ui/profile/edit/Rotate";
 
 class AvatarEditDialog extends React.PureComponent {
 
@@ -16,7 +17,8 @@ class AvatarEditDialog extends React.PureComponent {
 
     state = {
         scale: 1,
-        rotate: 0
+        rotate: 0,
+        shape: "circle"
     };
 
     getScaleMax() {
@@ -65,13 +67,17 @@ class AvatarEditDialog extends React.PureComponent {
         this.setState({rotate: value});
     }
 
+    onShapeChange = value => {
+        this.setState({shape: value});
+    }
+
     onScaleChange = value => {
         this.setScale(value);
     }
 
     render() {
         const {show, imageUploading, path, rootPage, profileCloseAvatarEditDialog} = this.props;
-        const {scale, rotate} = this.state;
+        const {scale, rotate, shape} = this.state;
 
         if (!show) {
             return null;
@@ -82,18 +88,19 @@ class AvatarEditDialog extends React.PureComponent {
                 <div className="modal-body">
                     <div className="tools">
                         <Rotate value={rotate} onChange={this.onRotateChange}/>
+                        <AvatarShape value={shape} onChange={this.onShapeChange}/>
                     </div>
                     <ReactAvatarEditor className="editor" image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
                                        width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
-                                       borderRadius={100} scale={scale} rotate={rotate}/>
-                    <Button variant="outline-secondary" size="sm" className="upload" loading={imageUploading}
-                            onClick={this.onUploadClick}>Upload image</Button>
+                                       borderRadius={shape === "circle" ? 100 : 10} scale={scale} rotate={rotate}/>
+                    <Button variant={path ? "outline-secondary" : "primary"} size="sm" className="upload"
+                            loading={imageUploading} onClick={this.onUploadClick}>Upload image</Button>
                     <Scale max={this.getScaleMax()} value={scale} onChange={this.onScaleChange}/>
                     <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={false}>Create</Button>
+                    <Button variant="primary" type="submit" loading={false} disabled={!path}>Create</Button>
                 </div>
             </ModalDialog>
         );
