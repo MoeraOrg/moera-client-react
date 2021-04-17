@@ -15,6 +15,7 @@ import {
 import { Node } from "api/node";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
+import { messageBox } from "state/messagebox/actions";
 
 export default [
     executor(PROFILE_LOAD, "", introduce(profileLoadSaga)),
@@ -45,8 +46,13 @@ function* profileUpdateSaga(action) {
 
 function* profileImageUploadSaga(action) {
     try {
-        const data = yield call(Node.postMediaPublic, "", action.payload.file);
-        yield put(profileImageUploaded(data.path, data.width, data.height));
+        const {path, width, height} = yield call(Node.postMediaPublic, "", action.payload.file);
+        if (width < 200 || height < 200) {
+            yield put(messageBox("Avatar image size should be at least 200x200 pixels."));
+            yield put(profileImageUploadFailed());
+        } else {
+            yield put(profileImageUploaded(path, width, height));
+        }
     } catch (e) {
         yield put(profileImageUploadFailed());
         yield put(errorThrown(e));
