@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./Scale.css";
 
-class Scale extends React.PureComponent {
+export default class Scale extends React.PureComponent {
 
     static propTypes = {
         max: PropType.number,
@@ -50,5 +50,3 @@ class Scale extends React.PureComponent {
     }
 
 }
-
-export default Scale;

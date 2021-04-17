@@ -8,13 +8,15 @@ import { profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/
 import { getNodeRootPage } from "state/node/selectors";
 import Scale from "ui/profile/edit/Scale";
 import "./AvatarEditDialog.css";
+import Rotate from "ui/profile/edit/Rotate";
 
 class AvatarEditDialog extends React.PureComponent {
 
     #domFile;
 
     state = {
-        scale: 1
+        scale: 1,
+        rotate: 0
     };
 
     getScaleMax() {
@@ -40,7 +42,7 @@ class AvatarEditDialog extends React.PureComponent {
         }
 
         if (this.props.show && this.props.path !== prevProps.path) {
-            this.setScale(1);
+            this.setState({scale: 1, rotate: 0});
         }
     }
 
@@ -59,13 +61,17 @@ class AvatarEditDialog extends React.PureComponent {
         event.preventDefault();
     }
 
+    onRotateChange = value => {
+        this.setState({rotate: value});
+    }
+
     onScaleChange = value => {
         this.setScale(value);
     }
 
     render() {
         const {show, imageUploading, path, rootPage, profileCloseAvatarEditDialog} = this.props;
-        const {scale} = this.state;
+        const {scale, rotate} = this.state;
 
         if (!show) {
             return null;
@@ -74,9 +80,12 @@ class AvatarEditDialog extends React.PureComponent {
         return (
             <ModalDialog title="Create Avatar" className="avatar-edit-dialog" onClose={profileCloseAvatarEditDialog}>
                 <div className="modal-body">
+                    <div className="tools">
+                        <Rotate value={rotate} onChange={this.onRotateChange}/>
+                    </div>
                     <ReactAvatarEditor className="editor" image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
                                        width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
-                                       borderRadius={100} scale={scale}/>
+                                       borderRadius={100} scale={scale} rotate={rotate}/>
                     <Button variant="outline-secondary" size="sm" className="upload" loading={imageUploading}
                             onClick={this.onUploadClick}>Upload image</Button>
                     <Scale max={this.getScaleMax()} value={scale} onChange={this.onScaleChange}/>

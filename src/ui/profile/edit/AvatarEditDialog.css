@@ -4,6 +4,11 @@
     align-items: center;
 }
 
+.avatar-edit-dialog .tools {
+    display: flex;
+    justify-content: space-between;
+}
+
 .avatar-edit-dialog .editor {
     border: dotted 1px var(--gray-light);
 }

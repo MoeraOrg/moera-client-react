@@ -35,6 +35,7 @@ import {
     faPlus,
     faQuestionCircle,
     faQuoteLeft,
+    faRedoAlt,
     faRemoveFormat,
     faReply,
     faRetweet,
@@ -105,6 +106,7 @@ export default function initIconLibrary() {
     library.add(faPlus);
     library.add(faQuestionCircle);
     library.add(faQuoteLeft);
+    library.add(faRedoAlt);
     library.add(faRemoveFormat);
     library.add(faReply);
     library.add(faRetweet);
