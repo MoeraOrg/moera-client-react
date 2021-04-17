@@ -4,7 +4,7 @@ import ReactAvatarEditor from 'react-avatar-editor';
 
 import { Button, ModalDialog } from "ui/control";
 import avatarPlaceholder from "ui/control/avatar.png";
-import { profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
+import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
 import { getNodeRootPage } from "state/node/selectors";
 import Rotate from "ui/profile/edit/Rotate";
 import AvatarShape from "ui/profile/edit/AvatarShape";
@@ -14,6 +14,7 @@ import "./AvatarEditDialog.css";
 class AvatarEditDialog extends React.PureComponent {
 
     #domFile;
+    #refEditor;
 
     state = {
         scale: 1,
@@ -43,7 +44,7 @@ class AvatarEditDialog extends React.PureComponent {
             }
         }
 
-        if (this.props.show && this.props.path !== prevProps.path) {
+        if (this.props.show && this.props.imageId !== prevProps.imageId) {
             this.setState({scale: 1, rotate: 0});
         }
     }
@@ -75,8 +76,24 @@ class AvatarEditDialog extends React.PureComponent {
         this.setScale(value);
     }
 
+    onCreateClick = () => {
+        const {imageId, width, height, profileAvatarCreate} = this.props;
+        const {rotate, shape} = this.state;
+
+        const clip = this.#refEditor.getCroppingRect();
+        profileAvatarCreate({
+            mediaId: imageId,
+            clipX: Math.round(clip.x * width),
+            clipY: Math.round(clip.y * height),
+            clipSize: Math.round(clip.width * width),
+            avatarSize: 200,
+            rotate,
+            shape
+        });
+    }
+
     render() {
-        const {show, imageUploading, path, rootPage, profileCloseAvatarEditDialog} = this.props;
+        const {show, imageUploading, imageId, path, rootPage, profileCloseAvatarEditDialog} = this.props;
         const {scale, rotate, shape} = this.state;
 
         if (!show) {
@@ -92,15 +109,17 @@ class AvatarEditDialog extends React.PureComponent {
                     </div>
                     <ReactAvatarEditor className="editor" image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
                                        width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
-                                       borderRadius={shape === "circle" ? 100 : 10} scale={scale} rotate={rotate}/>
-                    <Button variant={path ? "outline-secondary" : "primary"} size="sm" className="upload"
+                                       borderRadius={shape === "circle" ? 100 : 10} scale={scale} rotate={rotate}
+                                       ref={ref => this.#refEditor = ref}/>
+                    <Button variant={imageId ? "outline-secondary" : "primary"} size="sm" className="upload"
                             loading={imageUploading} onClick={this.onUploadClick}>Upload image</Button>
                     <Scale max={this.getScaleMax()} value={scale} onChange={this.onScaleChange}/>
                     <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={false} disabled={!path}>Create</Button>
+                    <Button variant="primary" type="submit" loading={false} disabled={!imageId}
+                            onClick={this.onCreateClick}>Create</Button>
                 </div>
             </ModalDialog>
         );
@@ -112,10 +131,11 @@ export default connect(
     state => ({
         show: state.profile.avatarEditDialog.show,
         imageUploading: state.profile.avatarEditDialog.imageUploading,
+        imageId: state.profile.avatarEditDialog.imageId,
         path: state.profile.avatarEditDialog.path,
         width: state.profile.avatarEditDialog.width,
         height: state.profile.avatarEditDialog.height,
         rootPage: getNodeRootPage(state)
     }),
-    { profileCloseAvatarEditDialog, profileImageUpload }
+    { profileCloseAvatarEditDialog, profileImageUpload, profileAvatarCreate }
 )(AvatarEditDialog);

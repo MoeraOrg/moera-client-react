@@ -1,6 +1,9 @@
 import * as immutable from 'object-path-immutable';
 
 import {
+    PROFILE_AVATAR_CREATE,
+    PROFILE_AVATAR_CREATE_FAILED,
+    PROFILE_AVATAR_CREATED,
     PROFILE_CLOSE_AVATAR_EDIT_DIALOG,
     PROFILE_EDIT,
     PROFILE_EDIT_CANCEL,
@@ -36,9 +39,11 @@ const emptyProfile = {
 const emptyAvatarEditDialog = {
     show: false,
     imageUploading: false,
+    imageId: null,
     path: null,
     width: null,
-    height: null
+    height: null,
+    avatarCreating: false
 };
 
 const initialState = {
@@ -139,6 +144,7 @@ export default (state = initialState, action) => {
         case PROFILE_IMAGE_UPLOADED:
             return immutable.assign(state, "avatarEditDialog", {
                 imageUploading: false,
+                imageId: action.payload.id,
                 path: action.payload.path,
                 width: action.payload.width,
                 height: action.payload.height
@@ -146,6 +152,18 @@ export default (state = initialState, action) => {
 
         case PROFILE_IMAGE_UPLOAD_FAILED:
             return immutable.set(state, "avatarEditDialog.imageUploading", false);
+
+        case PROFILE_AVATAR_CREATE:
+            return immutable.set(state, "avatarEditDialog.avatarCreating", true);
+
+        case PROFILE_AVATAR_CREATED:
+            return immutable.assign(state, "avatarEditDialog", {
+                show: false,
+                avatarCreating: false
+            });
+
+        case PROFILE_AVATAR_CREATE_FAILED:
+            return immutable.set(state, "avatarEditDialog.avatarCreating", false);
 
         default:
             return state;

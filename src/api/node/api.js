@@ -1257,3 +1257,25 @@ export const MediaFileInfo = schema({
     },
     additionalProperties: false
 });
+
+export const AvatarInfo = schema({
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "path": {
+            type: "string"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "shape": {
+            type: "string"
+        }
+    },
+    additionalProperties: false
+});

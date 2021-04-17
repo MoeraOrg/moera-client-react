@@ -73,12 +73,29 @@ export const profileImageUpload = (file) => ({
 });
 
 export const PROFILE_IMAGE_UPLOADED = "PROFILE_IMAGE_UPLOADED";
-export const profileImageUploaded = (path, width, height) => ({
+export const profileImageUploaded = (id, path, width, height) => ({
     type: PROFILE_IMAGE_UPLOADED,
-    payload: {path, width, height}
+    payload: {id, path, width, height}
 });
 
 export const PROFILE_IMAGE_UPLOAD_FAILED = "PROFILE_IMAGE_UPLOAD_FAILED";
 export const profileImageUploadFailed = () => ({
     type: PROFILE_IMAGE_UPLOAD_FAILED
+});
+
+export const PROFILE_AVATAR_CREATE = "PROFILE_AVATAR_CREATE";
+export const profileAvatarCreate = (avatar) => ({
+    type: PROFILE_AVATAR_CREATE,
+    payload: {avatar}
+});
+
+export const PROFILE_AVATAR_CREATED = "PROFILE_AVATAR_CREATED";
+export const profileAvatarCreated = (avatar) => ({
+    type: PROFILE_AVATAR_CREATED,
+    payload: {avatar}
+});
+
+export const PROFILE_AVATAR_CREATE_FAILED = "PROFILE_AVATAR_CREATE_FAILED";
+export const profileAvatarCreateFailed = () => ({
+    type: PROFILE_AVATAR_CREATE_FAILED
 });

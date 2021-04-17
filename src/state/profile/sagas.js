@@ -2,9 +2,12 @@ import { call, put } from 'redux-saga/effects';
 
 import { errorThrown } from "state/error/actions";
 import {
+    PROFILE_AVATAR_CREATE,
     PROFILE_IMAGE_UPLOAD,
     PROFILE_LOAD,
     PROFILE_UPDATE,
+    profileAvatarCreated,
+    profileAvatarCreateFailed,
     profileImageUploaded,
     profileImageUploadFailed,
     profileLoadFailed,
@@ -20,7 +23,8 @@ import { messageBox } from "state/messagebox/actions";
 export default [
     executor(PROFILE_LOAD, "", introduce(profileLoadSaga)),
     executor(PROFILE_UPDATE, null, profileUpdateSaga),
-    executor(PROFILE_IMAGE_UPLOAD, null, profileImageUploadSaga)
+    executor(PROFILE_IMAGE_UPLOAD, null, profileImageUploadSaga),
+    executor(PROFILE_AVATAR_CREATE, "", profileAvatarCreateSaga)
 ];
 
 function* profileLoadSaga(action) {
@@ -46,15 +50,25 @@ function* profileUpdateSaga(action) {
 
 function* profileImageUploadSaga(action) {
     try {
-        const {path, width, height} = yield call(Node.postMediaPublic, "", action.payload.file);
+        const {id, path, width, height} = yield call(Node.postMediaPublic, "", action.payload.file);
         if (width < 200 || height < 200) {
             yield put(messageBox("Avatar image size should be at least 200x200 pixels."));
             yield put(profileImageUploadFailed());
         } else {
-            yield put(profileImageUploaded(path, width, height));
+            yield put(profileImageUploaded(id, path, width, height));
         }
     } catch (e) {
         yield put(profileImageUploadFailed());
+        yield put(errorThrown(e));
+    }
+}
+
+function* profileAvatarCreateSaga(action) {
+    try {
+        const data = yield call(Node.postAvatar, "", action.payload.avatar);
+        yield put(profileAvatarCreated(data));
+    } catch (e) {
+        yield put(profileAvatarCreateFailed());
         yield put(errorThrown(e));
     }
 }
