@@ -1,4 +1,4 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
 import { errorThrown } from "state/error/actions";
 import {
@@ -67,6 +67,10 @@ function* profileAvatarCreateSaga(action) {
     try {
         const data = yield call(Node.postAvatar, "", action.payload.avatar);
         yield put(profileAvatarCreated(data));
+        const onCreate = yield select(state => state.profile.avatarEditDialog.onCreate);
+        if (onCreate) {
+            onCreate(data);
+        }
     } catch (e) {
         yield put(profileAvatarCreateFailed());
         yield put(errorThrown(e));

@@ -35,6 +35,30 @@ const AvatarImageType = {
     additionalProperties: false
 };
 
+export const AvatarInfoType = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "path": {
+            type: "string"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "shape": {
+            type: "string"
+        }
+    },
+    additionalProperties: false
+};
+
+export const AvatarInfo = schema(AvatarInfoType);
+
 export const WhoAmI = schema({
     type: "object",
     properties: {
@@ -86,7 +110,7 @@ export const ProfileInfo = schema({
         "bioHtml": {
             type: "string"
         },
-        "avatar": AvatarImageType,
+        "avatar": AvatarInfoType,
         "operations": {
             type: "object",
             properties: {
@@ -1253,28 +1277,6 @@ export const MediaFileInfo = schema({
         },
         "size": {
             type: "integer"
-        }
-    },
-    additionalProperties: false
-});
-
-export const AvatarInfo = schema({
-    type: "object",
-    properties: {
-        "id": {
-            type: "string"
-        },
-        "path": {
-            type: "string"
-        },
-        "width": {
-            type: "integer"
-        },
-        "height": {
-            type: "integer"
-        },
-        "shape": {
-            type: "string"
         }
     },
     additionalProperties: false

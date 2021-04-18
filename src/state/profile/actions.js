@@ -57,8 +57,9 @@ export const profileUpdateFailed = () => ({
 });
 
 export const PROFILE_OPEN_AVATAR_EDIT_DIALOG = "PROFILE_OPEN_AVATAR_EDIT_DIALOG";
-export const profileOpenAvatarEditDialog = () => ({
-    type: PROFILE_OPEN_AVATAR_EDIT_DIALOG
+export const profileOpenAvatarEditDialog = (onCreate) => ({
+    type: PROFILE_OPEN_AVATAR_EDIT_DIALOG,
+    payload: {onCreate}
 });
 
 export const PROFILE_CLOSE_AVATAR_EDIT_DIALOG = "PROFILE_CLOSE_AVATAR_EDIT_DIALOG";

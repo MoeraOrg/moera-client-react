@@ -18,10 +18,14 @@ class ProfileEditor extends React.PureComponent {
     static propTypes = {
         loading: PropType.bool,
         loaded: PropType.bool,
+        conflict: PropType.bool,
         updating: PropType.bool,
         fullName: PropType.string,
         gender: PropType.string,
-        email: PropType.string
+        title: PropType.string,
+        bioSrc: PropType.string,
+        avatar: PropType.object,
+        rootPage: PropType.string
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -33,7 +37,7 @@ class ProfileEditor extends React.PureComponent {
     }
 
     render() {
-        const {loading, updating, conflict, avatar, rootPage, profileEditCancel, profileEditConflictClose} = this.props;
+        const {loading, updating, conflict, rootPage, profileEditCancel, profileEditConflictClose} = this.props;
 
         return (
             <>
@@ -45,7 +49,7 @@ class ProfileEditor extends React.PureComponent {
                         <Form>
                             <ConflictWarning text="Profile was edited by somebody." show={conflict}
                                              onClose={profileEditConflictClose}/>
-                            <AvatarEditor avatar={avatar} rootPage={rootPage}/>
+                            <AvatarEditor name="avatar" rootPage={rootPage}/>
                             <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
                             <InputField title="Title" name="title" maxLength={120}/>
                             <ComboboxField title="Gender" name="gender" data={["Male", "Female"]}
@@ -75,7 +79,8 @@ const profileEditorLogic = {
             title: props.title || "",
             gender: props.gender || "",
             email: props.email || "",
-            bioSrc: props.bioSrc || ""
+            bioSrc: props.bioSrc || "",
+            avatar: props.avatar
         }
     },
 
@@ -94,7 +99,8 @@ const profileEditorLogic = {
             gender: values.gender.trim(),
             email: values.email.trim(),
             bioSrc: values.bioSrc.trim(),
-            bioSrcFormat: "markdown"
+            bioSrcFormat: "markdown",
+            avatarId: values.avatar ? values.avatar.id : null
         });
         formik.setSubmitting(false);
     }

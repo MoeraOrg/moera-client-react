@@ -43,7 +43,8 @@ const emptyAvatarEditDialog = {
     path: null,
     width: null,
     height: null,
-    avatarCreating: false
+    avatarCreating: false,
+    onCreate: null
 };
 
 const initialState = {
@@ -131,8 +132,11 @@ export default (state = initialState, action) => {
 
         case PROFILE_OPEN_AVATAR_EDIT_DIALOG:
             return immutable.wrap(state)
-                .assign("avatarEditDialog", emptyAvatarEditDialog)
-                .set("avatarEditDialog.show", true)
+                .assign("avatarEditDialog", {
+                    ...emptyAvatarEditDialog,
+                    show: true,
+                    onCreate: action.payload.onCreate
+                })
                 .value();
 
         case PROFILE_CLOSE_AVATAR_EDIT_DIALOG:
