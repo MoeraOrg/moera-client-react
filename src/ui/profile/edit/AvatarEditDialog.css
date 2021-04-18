@@ -14,6 +14,14 @@
     border: dotted 1px var(--gray-light);
 }
 
+.avatar-edit-dialog .editor.drag-accept {
+    border: solid 2px var(--primary);
+}
+
+.avatar-edit-dialog .editor.drag-reject {
+    border: solid 2px var(--danger);
+}
+
 .avatar-edit-dialog .upload {
     margin-top: .25rem;
 }

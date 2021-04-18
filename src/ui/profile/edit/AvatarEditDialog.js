@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ReactAvatarEditor from 'react-avatar-editor';
+import Dropzone from 'react-dropzone';
+import cx from 'classnames';
 
 import { Button, ModalDialog } from "ui/control";
 import avatarPlaceholder from "ui/control/avatar.png";
@@ -10,6 +12,14 @@ import Rotate from "ui/profile/edit/Rotate";
 import AvatarShape from "ui/profile/edit/AvatarShape";
 import Scale from "ui/profile/edit/Scale";
 import "./AvatarEditDialog.css";
+
+const ACCEPTED_MIME_TYPES = [
+    "image/avif",
+    "image/gif",
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+];
 
 class AvatarEditDialog extends React.PureComponent {
 
@@ -53,10 +63,18 @@ class AvatarEditDialog extends React.PureComponent {
         this.#domFile.click();
     }
 
-    onFileChange = () => {
-        if (this.#domFile.files.length > 0) {
-            this.props.profileImageUpload(this.#domFile.files[0]);
+    imageUpload(files) {
+        if (files.length > 0) {
+            this.props.profileImageUpload(files[0]);
         }
+    }
+
+    onFileChange = () => {
+        this.imageUpload(this.#domFile.files);
+    }
+
+    onDrop = files => {
+        this.imageUpload(files);
     }
 
     onEditorWheel = event => {
@@ -107,10 +125,19 @@ class AvatarEditDialog extends React.PureComponent {
                         <Rotate value={rotate} onChange={this.onRotateChange}/>
                         <AvatarShape value={shape} onChange={this.onShapeChange}/>
                     </div>
-                    <ReactAvatarEditor className="editor" image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
-                                       width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
-                                       borderRadius={shape === "circle" ? 100 : 10} scale={scale} rotate={rotate}
-                                       ref={ref => this.#refEditor = ref}/>
+                    <Dropzone onDrop={this.onDrop} noClick noKeyboard accept={ACCEPTED_MIME_TYPES}>
+                        {({getRootProps, getInputProps, isDragAccept, isDragReject}) => (
+                            <div {...getRootProps()}>
+                                <ReactAvatarEditor
+                                    className={cx("editor", {"drag-accept": isDragAccept, "drag-reject": isDragReject})}
+                                    image={path ? `${rootPage}/media/${path}` : avatarPlaceholder}
+                                    width={200} height={200} border={50} color={[255, 255, 224, 0.6]}
+                                    borderRadius={shape === "circle" ? 100 : 10} scale={scale} rotate={rotate}
+                                    ref={ref => this.#refEditor = ref}/>
+                                <input {...getInputProps()}/>
+                            </div>
+                        )}
+                    </Dropzone>
                     <Button variant={imageId ? "outline-secondary" : "primary"} size="sm" className="upload"
                             loading={imageUploading} onClick={this.onUploadClick}>Upload image</Button>
                     <Scale max={this.getScaleMax()} value={scale} onChange={this.onScaleChange}/>
