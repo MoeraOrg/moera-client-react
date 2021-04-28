@@ -1,10 +1,16 @@
 HTML {
     font-size: 90%;
+    height: 100%;
 }
 
 BODY {
     background-color: var(--body-background);
     padding-bottom: 2rem;
+    height: 100%;
+}
+
+#app-root {
+    height: 100%;
 }
 
 ABBR[title] {

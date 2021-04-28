@@ -1,27 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 import { connect } from 'react-redux';
-import { usePopper } from 'react-popper';
 
 import { Button, Loading, LoadingInline } from "ui/control";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
+import { useButtonPopper } from "ui/hook";
 import ComposeDraftItem from "ui/compose/ComposeDraftItem";
 import ComposeNewPost from "ui/compose/ComposeNewPost";
 import "./ComposeDraftSelector.css";
 
 function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, loadedDraftList, composeDraftSelect,
                                composeDraftListItemDelete}) {
-    const [visible, setVisible] = useState(false);
-
-    const onToggle = useCallback(() => setVisible(visible => !visible), [setVisible]);
-    const onHide = useCallback(() => setVisible(false), [setVisible]);
-    useEffect(() => {
-        if (visible) {
-            document.getElementById("app-root").addEventListener("click", onHide);
-            return () => {
-                document.getElementById("app-root").removeEventListener("click", onHide);
-            }
-        }
-    }, [visible, onHide])
+    const {visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes} = useButtonPopper();
 
     const onSelect = useCallback(id => {
         if (id !== draftId) {
@@ -32,11 +21,6 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
     const onDelete = useCallback(id => {
         composeDraftListItemDelete(id);
     }, [composeDraftListItemDelete]);
-
-    const [buttonRef, setButtonRef] = useState(null);
-    const [popperRef, setPopperRef] = useState(null);
-    const {styles: popperStyles, attributes: popperAttributes} =
-        usePopper(buttonRef, popperRef, {placement: "bottom-start"});
 
     if (postingId != null) {
         return null;
@@ -59,7 +43,7 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
                 }
             </Button>
             {visible &&
-                <div ref={setPopperRef} style={popperStyles.popper} {...popperAttributes.popper}
+                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
                     <ComposeNewPost/>
                     {draftList.map(draft =>
