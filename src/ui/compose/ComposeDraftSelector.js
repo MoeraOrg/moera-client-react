@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Manager, Popper, Reference } from 'react-popper';
-import cx from 'classnames';
+import { usePopper } from 'react-popper';
 
 import { Button, Loading, LoadingInline } from "ui/control";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
@@ -9,90 +8,68 @@ import ComposeDraftItem from "ui/compose/ComposeDraftItem";
 import ComposeNewPost from "ui/compose/ComposeNewPost";
 import "./ComposeDraftSelector.css";
 
-class ComposeDraftSelector extends React.PureComponent {
+function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, loadedDraftList, composeDraftSelect,
+                               composeDraftListItemDelete}) {
+    const [visible, setVisible] = useState(false);
 
-    constructor(props, context) {
-        super(props, context);
+    const onToggle = useCallback(() => setVisible(visible => !visible), [setVisible]);
+    const onHide = useCallback(() => setVisible(false), [setVisible]);
+    useEffect(() => {
+        if (visible) {
+            document.getElementById("app-root").addEventListener("click", onHide);
+            return () => {
+                document.getElementById("app-root").removeEventListener("click", onHide);
+            }
+        }
+    }, [visible, onHide])
 
-        this.state = {visible: false};
+    const onSelect = useCallback(id => {
+        if (id !== draftId) {
+            composeDraftSelect(id);
+        }
+   }, [draftId, composeDraftSelect]);
+
+    const onDelete = useCallback(id => {
+        composeDraftListItemDelete(id);
+    }, [composeDraftListItemDelete]);
+
+    const [buttonRef, setButtonRef] = useState(null);
+    const [popperRef, setPopperRef] = useState(null);
+    const {styles: popperStyles, attributes: popperAttributes} =
+        usePopper(buttonRef, popperRef, {placement: "bottom-start"});
+
+    if (postingId != null) {
+        return null;
+    }
+    if (!loadedDraftList) {
+        return <Loading active={loadingDraftList}/>;
+    }
+    if (draftList.length === 0) {
+        return null;
     }
 
-    onToggle = () => {
-        if (!this.state.visible) {
-            this.onShow();
-        } else {
-            this.onHide();
-        }
-    };
-
-    onShow = () => {
-        this.setState({visible: true});
-        document.getElementById("app-root").addEventListener("click", this.onHide);
-    };
-
-    onHide = () => {
-        this.setState({visible: false});
-        document.getElementById("app-root").removeEventListener("click", this.onHide);
-    };
-
-    onSelect = id => {
-        if (id === this.props.draftId) {
-            return;
-        }
-        this.props.composeDraftSelect(id);
-    };
-
-    onDelete = id => {
-        this.props.composeDraftListItemDelete(id);
-    };
-
-    render() {
-        const {postingId, draftId, draftList, loadingDraftList, loadedDraftList} = this.props;
-        const {visible} = this.state;
-
-        if (postingId != null) {
-            return null;
-        }
-        if (loadedDraftList && draftList.length > 0) {
-            return (
-                <Manager>
-                    <Reference>
-                        {({ref}) => (
-                            <div ref={ref} className={cx("draft-selector", "btn-group", "dropdown", {"show": visible})}>
-                                <Button variant="info" className="dropdown-toggle" onClick={this.onToggle}>
-                                    Drafts{" "}
-                                    {loadingDraftList ?
-                                        <LoadingInline active={loadingDraftList}/>
-                                    :
-                                        <span className="badge badge-light">{draftList.length}</span>
-                                    }
-                                </Button>
-                                {visible &&
-                                    <Popper placement="bottom-start">
-                                        {({ref, style, placement}) => (
-                                            <div ref={ref} style={style}
-                                                 className={`bs-popover-${placement} fade dropdown-menu shadow-sm show`}>
-                                                <ComposeNewPost/>
-                                                {draftList.map(draft =>
-                                                    <ComposeDraftItem key={draft.id} draft={draft}
-                                                                      current={draftId === draft.id}
-                                                                      onSelect={this.onSelect}
-                                                                      onDelete={this.onDelete}/>
-                                                )}
-                                            </div>
-                                        )}
-                                    </Popper>
-                                }
-                            </div>
-                        )}
-                    </Reference>
-                </Manager>
-            );
-        } else {
-            return <Loading active={loadingDraftList}/>;
-        }
-    }
-
+    return (
+        <div ref={setButtonRef} className="draft-selector btn-group dropdown">
+            <Button variant="info" className="dropdown-toggle" onClick={onToggle}>
+                Drafts{" "}
+                {loadingDraftList ?
+                    <LoadingInline active={loadingDraftList}/>
+                :
+                    <span className="badge badge-light">{draftList.length}</span>
+                }
+            </Button>
+            {visible &&
+                <div ref={setPopperRef} style={popperStyles.popper} {...popperAttributes.popper}
+                     className="fade dropdown-menu shadow-sm show">
+                    <ComposeNewPost/>
+                    {draftList.map(draft =>
+                        <ComposeDraftItem key={draft.id} draft={draft} current={draftId === draft.id}
+                                          onSelect={onSelect} onDelete={onDelete}/>
+                    )}
+                </div>
+            }
+        </div>
+    );
 }
 
 export default connect(
