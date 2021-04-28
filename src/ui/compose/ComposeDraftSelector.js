@@ -10,7 +10,9 @@ import "./ComposeDraftSelector.css";
 
 function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, loadedDraftList, composeDraftSelect,
                                composeDraftListItemDelete}) {
-    const {visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes} = useButtonPopper();
+    const {
+        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
+    } = useButtonPopper("bottom-start");
 
     const onSelect = useCallback(id => {
         if (id !== draftId) {

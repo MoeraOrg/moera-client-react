@@ -1,11 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 import { usePopper } from 'react-popper';
 
-export function useButtonPopper() {
+export function useButtonPopper(placement) {
     const [visible, setVisible] = useState(false);
 
-    const onToggle = useCallback(() => setVisible(visible => !visible), [setVisible]);
-    const onHide = useCallback(() => setVisible(false), [setVisible]);
+    const onToggle = useCallback(event => {
+        setVisible(visible => !visible);
+        event.preventDefault();
+    }, [setVisible]);
+
+    const onHide = useCallback(event => {
+        setVisible(false)
+        event.preventDefault();
+    }, [setVisible]);
+
     useEffect(() => {
         if (visible) {
             document.getElementById("app-root").addEventListener("click", onHide);
@@ -14,9 +22,10 @@ export function useButtonPopper() {
             }
         }
     }, [visible, onHide])
+
     const [buttonRef, setButtonRef] = useState(null);
     const [popperRef, setPopperRef] = useState(null);
-    const {styles, attributes} = usePopper(buttonRef, popperRef, {placement: "bottom-start"});
+    const {styles, attributes} = usePopper(buttonRef, popperRef, {placement});
 
     return {
         visible, onToggle, setButtonRef, setPopperRef,
