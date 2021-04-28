@@ -70,8 +70,8 @@ class ComposeDraftSelector extends React.PureComponent {
                                 {visible &&
                                     <Popper placement="bottom-start">
                                         {({ref, style, placement}) => (
-                                            <div ref={ref} style={style} x-placement={placement}
-                                                 className="fade dropdown-menu shadow-sm show">
+                                            <div ref={ref} style={style}
+                                                 className={`bs-popover-${placement} fade dropdown-menu shadow-sm show`}>
                                                 <ComposeNewPost/>
                                                 {draftList.map(draft =>
                                                     <ComposeDraftItem key={draft.id} draft={draft}
