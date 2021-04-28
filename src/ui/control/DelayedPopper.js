@@ -207,10 +207,9 @@ const DelayedPopper = ({placement, arrow, className, children}) => (
         {context => (
             (context.popup || context.locus !== "out") &&
                 <Popper placement={placement}>
-                    {({ref, style, placement, arrowProps}) => (
+                    {({ref, style, arrowProps}) => (
                         <div ref={ref} style={style} className={cx(
                             "popover",
-                            `bs-popover-${placement}`,
                             "shadow",
                             "fade",
                             {"show": context.popup},
