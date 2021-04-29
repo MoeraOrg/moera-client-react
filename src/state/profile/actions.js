@@ -56,6 +56,22 @@ export const profileUpdateFailed = () => ({
     type: PROFILE_UPDATE_FAILED
 });
 
+export const PROFILE_AVATARS_LOAD = "PROFILE_AVATARS_LOAD";
+export const profileAvatarsLoad = () => ({
+    type: PROFILE_AVATARS_LOAD
+});
+
+export const PROFILE_AVATARS_LOADED = "PROFILE_AVATARS_LOADED";
+export const profileAvatarsLoaded = (avatars) => ({
+    type: PROFILE_AVATARS_LOADED,
+    payload: {avatars}
+});
+
+export const PROFILE_AVATARS_LOAD_FAILED = "PROFILE_AVATARS_LOAD_FAILED";
+export const profileAvatarsLoadFailed = () => ({
+    type: PROFILE_AVATARS_LOAD_FAILED
+});
+
 export const PROFILE_OPEN_AVATAR_EDIT_DIALOG = "PROFILE_OPEN_AVATAR_EDIT_DIALOG";
 export const profileOpenAvatarEditDialog = (onCreate) => ({
     type: PROFILE_OPEN_AVATAR_EDIT_DIALOG,

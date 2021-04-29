@@ -3,25 +3,54 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 
+import { useButtonPopper } from "ui/hook";
+import { profileAvatarsLoad, profileOpenAvatarEditDialog } from "state/profile/actions";
+import { getNodeRootPage } from "state/node/selectors";
 import { Avatar } from "ui/control";
+import AvatarSelector from "ui/profile/edit/AvatarSelector";
 import AvatarEditDialog from "ui/profile/edit/AvatarEditDialog";
-import { profileOpenAvatarEditDialog } from "state/profile/actions";
 import "./AvatarEditor.css";
 
-const AvatarEditor = ({name, rootPage, profileOpenAvatarEditDialog}) => {
+const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, profileAvatarsLoad,
+                       profileOpenAvatarEditDialog}) => {
     const [, {value}, {setValue}] = useField(name);
 
-    const onCreate = useCallback(
+    const {
+        visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles
+    } = useButtonPopper("bottom-start");
+
+    const onSelect = useCallback(
         avatar => setValue(avatar),
         [setValue]);
     const onClick = useCallback(
-        () => profileOpenAvatarEditDialog(onCreate),
-        [profileOpenAvatarEditDialog, onCreate])
+        event => {
+            if (!avatarsLoaded && !avatarsLoading) {
+                profileAvatarsLoad();
+            }
+            if (value) {
+                onToggle(event);
+            } else {
+                profileOpenAvatarEditDialog(onSelect);
+            }
+        },
+        [value, avatarsLoading, avatarsLoaded, profileAvatarsLoad, profileOpenAvatarEditDialog, onSelect, onToggle])
+    const onNew = useCallback(
+        () => profileOpenAvatarEditDialog(onSelect),
+        [onSelect, profileOpenAvatarEditDialog]
+    );
     return (
         <>
-            <div className="avatar-editor" onClick={onClick}>
+            <div className="avatar-editor" ref={setButtonRef} onClick={onClick}>
                 <div className="icon"><FontAwesomeIcon icon="pen"/></div>
-                <Avatar avatar={value} rootPage={rootPage}/>
+                <Avatar avatar={value} size={200} rootPage={rootPage}/>
+                {visible &&
+                    <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                         className="fade dropdown-menu shadow-sm show">
+                        <AvatarSelector loading={avatarsLoading} loaded={avatarsLoaded} avatars={avatars} active={value}
+                                        rootPage={rootPage} onSelect={onSelect} onNew={onNew}/>
+                        <div ref={setArrowRef} style={arrowStyles} className="arrow"/>
+                    </div>
+                }
             </div>
             <AvatarEditDialog/>
         </>
@@ -29,6 +58,11 @@ const AvatarEditor = ({name, rootPage, profileOpenAvatarEditDialog}) => {
 };
 
 export default connect(
-    null,
-    { profileOpenAvatarEditDialog }
+    state => ({
+        rootPage: getNodeRootPage(state),
+        avatarsLoading: state.profile.avatars.loading,
+        avatarsLoaded: state.profile.avatars.loaded,
+        avatars: state.profile.avatars.avatars
+    }),
+    { profileAvatarsLoad, profileOpenAvatarEditDialog }
 )(AvatarEditor);

@@ -1,9 +1,13 @@
 import * as immutable from 'object-path-immutable';
+import cloneDeep from 'lodash.clonedeep';
 
 import {
     PROFILE_AVATAR_CREATE,
     PROFILE_AVATAR_CREATE_FAILED,
     PROFILE_AVATAR_CREATED,
+    PROFILE_AVATARS_LOAD,
+    PROFILE_AVATARS_LOAD_FAILED,
+    PROFILE_AVATARS_LOADED,
     PROFILE_CLOSE_AVATAR_EDIT_DIALOG,
     PROFILE_EDIT,
     PROFILE_EDIT_CANCEL,
@@ -22,7 +26,7 @@ import {
     PROFILE_UPDATE_SUCCEEDED
 } from "state/profile/actions";
 
-const emptyProfile = {
+const emptyProfileInfo = {
     nodeName: null,
     fullName: null,
     gender: null,
@@ -36,6 +40,17 @@ const emptyProfile = {
     }
 };
 
+const emptyProfile = {
+    loaded: false,
+    loading: false,
+    ...cloneDeep(emptyProfileInfo),
+    avatars: {
+        loading: false,
+        loaded: false,
+        avatars: []
+    }
+}
+
 const emptyAvatarEditDialog = {
     show: false,
     imageUploading: false,
@@ -48,9 +63,7 @@ const emptyAvatarEditDialog = {
 };
 
 const initialState = {
-    loaded: false,
-    loading: false,
-    ...emptyProfile,
+    ...cloneDeep(emptyProfile),
     editing: false,
     avatarEditDialog: {
         ...emptyAvatarEditDialog
@@ -76,7 +89,7 @@ export default (state = initialState, action) => {
         case PROFILE_SET:
             return {
                 ...state,
-                ...emptyProfile,
+                ...cloneDeep(emptyProfileInfo),
                 ...action.payload.profile,
                 loading: false,
                 loaded: true
@@ -85,9 +98,7 @@ export default (state = initialState, action) => {
         case PROFILE_UNSET:
             return {
                 ...state,
-                ...emptyProfile,
-                loading: false,
-                loaded: false
+                ...cloneDeep(emptyProfile)
             };
 
         case PROFILE_EDIT:
@@ -130,6 +141,19 @@ export default (state = initialState, action) => {
                 updating: false
             };
 
+        case PROFILE_AVATARS_LOAD:
+            return immutable.set(state, "avatars.loading", true);
+
+        case PROFILE_AVATARS_LOADED:
+            return immutable.assign(state, "avatars", {
+                loading: false,
+                loaded: true,
+                avatars: action.payload.avatars
+            });
+
+        case PROFILE_AVATARS_LOAD_FAILED:
+            return immutable.set(state, "avatars.loading", false);
+
         case PROFILE_OPEN_AVATAR_EDIT_DIALOG:
             return immutable.wrap(state)
                 .assign("avatarEditDialog", {
@@ -160,11 +184,17 @@ export default (state = initialState, action) => {
         case PROFILE_AVATAR_CREATE:
             return immutable.set(state, "avatarEditDialog.avatarCreating", true);
 
-        case PROFILE_AVATAR_CREATED:
-            return immutable.assign(state, "avatarEditDialog", {
+        case PROFILE_AVATAR_CREATED: {
+            const istate = immutable.wrap(state);
+            istate.assign("avatarEditDialog", {
                 show: false,
                 avatarCreating: false
             });
+            if (state.avatars.loaded) {
+                istate.insert("avatars.avatars", action.payload.avatar, 0);
+            }
+            return istate.value();
+        }
 
         case PROFILE_AVATAR_CREATE_FAILED:
             return immutable.set(state, "avatarEditDialog.avatarCreating", false);

@@ -1,0 +1,54 @@
+.avatar-selector {
+    margin-right: .25rem;
+    margin-left: .15rem;
+    display: flex;
+    flex-wrap: wrap;
+    cursor: auto;
+    width: max-content;
+    max-height: calc(312px + .75rem);
+    overflow-y: auto;
+}
+
+@media only screen and (max-width: 575px) {
+    .avatar-selector {
+        max-width: calc(312px + 1rem);
+    }
+}
+
+@media only screen and (min-width: 576px) {
+    .avatar-selector {
+        max-width: calc(614px + 2.75rem);
+    }
+}
+
+.avatar-selector .item {
+    margin-left: .1rem;
+    padding: .25rem;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.avatar-selector .item.active, .avatar-selector .item.active:hover {
+    background-color: var(--cyan);
+    cursor: auto;
+}
+
+.avatar-selector .item:hover {
+    background-color: var(--highlight);
+}
+
+.avatar-selector .create {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    border: 2px solid var(--input-focus-border);
+    border-radius: 10px;
+    color: var(--input-focus-border);
+    font-weight: bold;
+    font-size: 1.5rem;
+    padding-top: 1rem;
+}
+
+.avatar-selector .create .fa-plus {
+    font-size: 2rem;
+}

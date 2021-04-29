@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { usePopper } from 'react-popper';
 
-export function useButtonPopper(placement, modifiers = null) {
+export function useButtonPopper(placement, options = {}) {
     const [visible, setVisible] = useState(false);
 
     const onToggle = useCallback(event => {
@@ -27,11 +27,19 @@ export function useButtonPopper(placement, modifiers = null) {
 
     const [buttonRef, setButtonRef] = useState(null);
     const [popperRef, setPopperRef] = useState(null);
-    const {styles, attributes} = usePopper(buttonRef, popperRef, {placement, modifiers});
+    const [arrowRef, setArrowRef] = useState(null);
+    const {styles, attributes} = usePopper(buttonRef, popperRef,
+        {placement, ...options, modifiers: [{name: "arrow", options: {element: arrowRef}}]});
+
+    const arrowStyles = styles && styles.arrow ? {
+        ...styles.arrow,
+        transform: styles.arrow.transform + " rotate(45deg)"
+    } : {};
 
     return {
-        visible, onToggle, setButtonRef, setPopperRef,
+        visible, onToggle, setButtonRef, setPopperRef, setArrowRef,
         popperStyles: styles ? styles.popper : {},
-        popperAttributes: attributes ? attributes.popper : {}
+        popperAttributes: attributes ? attributes.popper : {},
+        arrowStyles,
     };
 }

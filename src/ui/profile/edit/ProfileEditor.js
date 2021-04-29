@@ -24,8 +24,7 @@ class ProfileEditor extends React.PureComponent {
         gender: PropType.string,
         title: PropType.string,
         bioSrc: PropType.string,
-        avatar: PropType.object,
-        rootPage: PropType.string
+        avatar: PropType.object
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -37,7 +36,7 @@ class ProfileEditor extends React.PureComponent {
     }
 
     render() {
-        const {loading, updating, conflict, rootPage, profileEditCancel, profileEditConflictClose} = this.props;
+        const {loading, updating, conflict, profileEditCancel, profileEditConflictClose} = this.props;
 
         return (
             <>
@@ -49,7 +48,7 @@ class ProfileEditor extends React.PureComponent {
                         <Form>
                             <ConflictWarning text="Profile was edited by somebody." show={conflict}
                                              onClose={profileEditConflictClose}/>
-                            <AvatarEditor name="avatar" rootPage={rootPage}/>
+                            <AvatarEditor name="avatar"/>
                             <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
                             <InputField title="Title" name="title" maxLength={120}/>
                             <ComboboxField title="Gender" name="gender" data={["Male", "Female"]}
@@ -118,8 +117,7 @@ export default connect(
         email: state.profile.email,
         title: state.profile.title,
         bioSrc: state.profile.bioSrc,
-        avatar: state.profile.avatar,
-        rootPage: getNodeRootPage(state)
+        avatar: state.profile.avatar
     }),
     {profileEditCancel, profileEditConflictClose, profileUpdate}
 )(withFormik(profileEditorLogic)(ProfileEditor));

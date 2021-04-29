@@ -514,6 +514,10 @@ export function* postMediaPublic(nodeName, file) {
     });
 }
 
+export function* getAvatars(nodeName) {
+    return yield call(callApi, {nodeName, location: "/avatars", schema: NodeApi.AvatarInfoArray});
+}
+
 export function* postAvatar(nodeName, avatar) {
     return yield call(callApi, {
         nodeName, location: "/avatars", method: "POST", auth: true, body: avatar, schema: NodeApi.AvatarInfo

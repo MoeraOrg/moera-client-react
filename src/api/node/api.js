@@ -59,6 +59,11 @@ export const AvatarInfoType = {
 
 export const AvatarInfo = schema(AvatarInfoType);
 
+export const AvatarInfoArray = schema({
+    type: "array",
+    items: AvatarInfoType
+});
+
 export const WhoAmI = schema({
     type: "object",
     properties: {
