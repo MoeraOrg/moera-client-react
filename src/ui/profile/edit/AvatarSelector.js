@@ -16,6 +16,7 @@ const AvatarSelector = ({loaded, loading, avatars, active, rootPage, onSelect, o
                 </div>
                 {avatars.map(avatar =>
                     <div key={avatar.id} className={cx("item", {"active": active && avatar.id === active.id})}>
+                        <div className="delete" title="Delete"><FontAwesomeIcon icon="times-circle"/></div>
                         <Avatar avatar={avatar} size={100} rootPage={rootPage} onClick={() => onSelect(avatar)}/>
                     </div>
                 )}
