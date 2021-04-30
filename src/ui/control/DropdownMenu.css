@@ -1,5 +1,6 @@
 .dropdown-menu {
     pointer-events: none;
+    margin: unset;
 }
 
 .dropdown-menu.show {
