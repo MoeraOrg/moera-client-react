@@ -16,8 +16,8 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
     const [, {value}, {setValue}] = useField(name);
 
     const {
-        visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles
-    } = useButtonPopper("bottom-start");
+        visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles
+    } = useButtonPopper("bottom-start", {hideAlways: false});
 
     const onSelect = useCallback(
         avatar => setValue(avatar),
@@ -35,14 +35,19 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
         },
         [value, avatarsLoading, avatarsLoaded, profileAvatarsLoad, profileOpenAvatarEditDialog, onSelect, onToggle])
     const onNew = useCallback(
-        () => profileOpenAvatarEditDialog(onSelect),
-        [onSelect, profileOpenAvatarEditDialog]
+        () => {
+            profileOpenAvatarEditDialog(onSelect);
+            hide();
+        },
+        [onSelect, profileOpenAvatarEditDialog, hide]
     );
     return (
         <>
-            <div className="avatar-editor" ref={setButtonRef} onClick={onClick}>
-                <div className="icon"><FontAwesomeIcon icon="pen"/></div>
-                <Avatar avatar={value} size={200} rootPage={rootPage}/>
+            <div className="avatar-editor">
+                <div ref={setButtonRef} onClick={onClick}>
+                    <div className="icon"><FontAwesomeIcon icon="pen"/></div>
+                    <Avatar avatar={value} size={200} rootPage={rootPage}/>
+                </div>
                 {visible &&
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                          className="fade dropdown-menu shadow-sm show">

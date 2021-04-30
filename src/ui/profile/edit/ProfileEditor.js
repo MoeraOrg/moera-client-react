@@ -7,7 +7,6 @@ import * as yup from 'yup';
 import { Button, ConflictWarning, Loading } from "ui/control";
 import { ComboboxField, InputField, RichTextField } from "ui/control/field";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
-import { getNodeRootPage } from "state/node/selectors";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import AvatarEditor from "ui/profile/edit/AvatarEditor";
