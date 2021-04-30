@@ -37,14 +37,6 @@ ABBR[title] {
     }
 }
 
-.popover {
-    pointer-events: none;
-}
-
-.popover.show {
-    pointer-events: auto;
-}
-
 .dialog-help {
     border: solid 1px cornsilk;
     border-radius: 5px;

@@ -46,7 +46,7 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
             </Button>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
-                     className="fade dropdown-menu shadow-sm show">
+                     className="fade popover shadow-sm show">
                     <ComposeNewPost/>
                     {draftList.map(draft =>
                         <ComposeDraftItem key={draft.id} draft={draft} current={draftId === draft.id}

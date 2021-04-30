@@ -1,6 +1,5 @@
 .avatar-selector {
-    margin-right: .25rem;
-    margin-left: .15rem;
+    margin: .15rem;
     display: flex;
     flex-wrap: wrap;
     cursor: auto;

@@ -6,6 +6,8 @@ import { Manager, Popper, Reference } from 'react-popper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import isFunction from 'lodash.isfunction';
 
+import "./Popover.css";
+
 export class Popover extends React.PureComponent {
 
     static propTypes = {

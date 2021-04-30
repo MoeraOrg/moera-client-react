@@ -50,7 +50,7 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
                 </div>
                 {visible &&
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
-                         className="fade dropdown-menu shadow-sm show">
+                         className="fade popover shadow-sm show">
                         <AvatarSelector loading={avatarsLoading} loaded={avatarsLoaded} avatars={avatars} active={value}
                                         rootPage={rootPage} onSelect={onSelect} onNew={onNew}/>
                         <div ref={setArrowRef} style={arrowStyles} className="arrow"/>
