@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { usePopper } from 'react-popper';
 
 export function useButtonPopper(placement, options = {}) {
@@ -20,8 +21,12 @@ export function useButtonPopper(placement, options = {}) {
         event.preventDefault();
     }, [setVisible]);
 
+    const boxShown = useSelector(state => state.confirmBox.show || state.messageBox.show);
     const hideAlways = options.hideAlways ?? true;
     const onHide = useCallback(event => {
+        if (boxShown) {
+            return;
+        }
         if (!hideAlways && popperRef) {
             const r = popperRef.getBoundingClientRect();
             if (r.left <= event.clientX && r.right >= event.clientX
@@ -31,7 +36,7 @@ export function useButtonPopper(placement, options = {}) {
         }
         setVisible(false);
         event.preventDefault();
-    }, [setVisible, hideAlways, popperRef]);
+    }, [setVisible, hideAlways, popperRef, boxShown]);
 
     useEffect(() => {
         if (visible) {

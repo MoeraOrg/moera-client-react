@@ -33,7 +33,7 @@ class MessageBox extends React.PureComponent {
 
         return (
             show &&
-                <ModalDialog onClose={this.onClose}>
+                <ModalDialog risen={true} onClose={this.onClose}>
                     <div className="modal-body" dangerouslySetInnerHTML={{__html: this.getMessage()}}/>
                     <div className="modal-footer">
                         <Button variant="primary" onClick={this.onClose} autoFocus>OK</Button>

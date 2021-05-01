@@ -1,77 +1,68 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import PropType from 'prop-types';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
 import "./ModalDialog.css";
 
-export class ModalDialog extends React.PureComponent {
-
-    static propTypes = {
-        title: PropType.string,
-        size: PropType.string,
-        className: PropType.string,
-        style: PropType.object,
-        centered: PropType.bool,
-        onClose: PropType.func
-    };
-
-    static defaultProps = {
-        centered: true
-    };
-
-    componentDidMount() {
-        document.body.addEventListener("keydown", this.onModalKeyDown);
-    }
-
-    componentWillUnmount() {
-        document.body.removeEventListener("keydown", this.onModalKeyDown);
-    }
-
-    onModalKeyDown = e => {
-        const {onClose} = this.props;
-
-        if (e.key === "Escape" && onClose) {
+export function ModalDialog({title, size, className, style, centered, risen, children, onClose}) {
+    const onModalKeyDown = useCallback(event => {
+        if (event.key === "Escape" && onClose) {
             onClose();
         }
-    }
+    }, [onClose]);
 
-    onModalDialogClick = e => e.stopPropagation();
+    const onModalDialogClick = e => e.stopPropagation();
 
-    render() {
-        const {title, size, className, style, centered, children, onClose} = this.props;
+    useEffect(() => {
+        document.body.addEventListener("keydown", onModalKeyDown);
+        return () => {
+            document.body.removeEventListener("keydown", onModalKeyDown);
+        }
+    }, [onModalKeyDown]);
 
-        return ReactDOM.createPortal(
-            <>
-                <div className="modal-backdrop show"/>
-                <div className="modal show" onClick={onClose}>
-                    <div className={cx(
-                        "modal-dialog",
-                        className,
-                        {
-                            "modal-dialog-centered": centered,
-                            [`modal-${size}`]: !!size
-                        }
-                    )} style={style} onClick={this.onModalDialogClick}>
-                        <div className="modal-content">
-                            {title &&
-                                <div className="modal-header">
-                                    <h4 className="modal-title">{title}</h4>
-                                    {onClose &&
-                                        <button type="button" className="close" onClick={onClose}>&times;</button>
-                                    }
-                                </div>
-                            }
-                            <div className="modal-children">
-                                {children}
+    return ReactDOM.createPortal(
+        <>
+            <div className={cx("modal-backdrop", "show", {"risen": risen})}/>
+            <div className={cx("modal", "show", {"risen": risen})} onClick={onClose}>
+                <div className={cx(
+                    "modal-dialog",
+                    className,
+                    {
+                        "modal-dialog-centered": centered,
+                        [`modal-${size}`]: !!size
+                    }
+                )} style={style} onClick={onModalDialogClick}>
+                    <div className="modal-content">
+                        {title &&
+                            <div className="modal-header">
+                                <h4 className="modal-title">{title}</h4>
+                                {onClose &&
+                                    <button type="button" className="close" onClick={onClose}>&times;</button>
+                                }
                             </div>
+                        }
+                        <div className="modal-children">
+                            {children}
                         </div>
                     </div>
                 </div>
-            </>,
-            document.getElementById("modal-root")
-        );
-    }
-
+            </div>
+        </>,
+        document.getElementById("modal-root")
+    );
 }
 
+ModalDialog.propTypes = {
+    title: PropType.string,
+    size: PropType.string,
+    className: PropType.string,
+    style: PropType.object,
+    centered: PropType.bool,
+    risen: PropType.bool,
+    onClose: PropType.func
+};
+
+ModalDialog.defaultProps = {
+    centered: true
+};

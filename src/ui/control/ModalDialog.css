@@ -1,5 +1,13 @@
+.modal-backdrop.risen {
+    z-index: 1080;
+}
+
 .modal {
     display: block;
+}
+
+.modal.risen {
+    z-index: 1090;
 }
 
 .modal-children {

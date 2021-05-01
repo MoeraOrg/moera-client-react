@@ -37,9 +37,12 @@ class ConfirmBox extends React.PureComponent {
     render() {
         const {show, message, yes, no, variant} = this.props;
 
+        if (!show) {
+            return null;
+        }
+
         return (
-            show &&
-            <ModalDialog onClose={this.onNo}>
+            <ModalDialog risen={true} onClose={this.onNo}>
                 <div className="modal-body">
                     {message}
                 </div>
