@@ -523,3 +523,9 @@ export function* postAvatar(nodeName, avatar) {
         nodeName, location: "/avatars", method: "POST", auth: true, body: avatar, schema: NodeApi.AvatarInfo
     });
 }
+
+export function* deleteAvatar(nodeName, id) {
+    return yield call(callApi, {
+        nodeName, location: ut`/avatars/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}

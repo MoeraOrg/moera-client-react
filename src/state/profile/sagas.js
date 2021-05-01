@@ -3,12 +3,14 @@ import { call, put, select } from 'redux-saga/effects';
 import { errorThrown } from "state/error/actions";
 import {
     PROFILE_AVATAR_CREATE,
+    PROFILE_AVATAR_DELETE,
     PROFILE_AVATARS_LOAD,
     PROFILE_IMAGE_UPLOAD,
     PROFILE_LOAD,
     PROFILE_UPDATE,
     profileAvatarCreated,
     profileAvatarCreateFailed,
+    profileAvatarDeleted,
     profileAvatarsLoaded,
     profileAvatarsLoadFailed,
     profileImageUploaded,
@@ -28,7 +30,8 @@ export default [
     executor(PROFILE_UPDATE, null, profileUpdateSaga),
     executor(PROFILE_IMAGE_UPLOAD, null, profileImageUploadSaga),
     executor(PROFILE_AVATARS_LOAD, "", profileAvatarsLoadSaga),
-    executor(PROFILE_AVATAR_CREATE, "", profileAvatarCreateSaga)
+    executor(PROFILE_AVATAR_CREATE, "", profileAvatarCreateSaga),
+    executor(PROFILE_AVATAR_DELETE, payload => payload.id, profileAvatarDeleteSaga)
 ];
 
 function* profileLoadSaga(action) {
@@ -87,6 +90,20 @@ function* profileAvatarCreateSaga(action) {
         }
     } catch (e) {
         yield put(profileAvatarCreateFailed());
+        yield put(errorThrown(e));
+    }
+}
+
+function* profileAvatarDeleteSaga(action) {
+    const {id, onDeleted} = action.payload;
+
+    try {
+        yield call(Node.deleteAvatar, "", id);
+        yield put(profileAvatarDeleted(id));
+        if (onDeleted) {
+            onDeleted(id);
+        }
+    } catch (e) {
         yield put(errorThrown(e));
     }
 }

@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { Avatar, Loading } from "ui/control";
 import "./AvatarSelector.css";
 
-const AvatarSelector = ({loaded, loading, avatars, active, rootPage, onSelect, onNew}) => (
+const AvatarSelector = ({loaded, loading, avatars, active, rootPage, onSelect, onNew, onDelete}) => (
     <div className="avatar-selector">
         {loaded ?
             <>
@@ -16,7 +16,9 @@ const AvatarSelector = ({loaded, loading, avatars, active, rootPage, onSelect, o
                 </div>
                 {avatars.map(avatar =>
                     <div key={avatar.id} className={cx("item", {"active": active && avatar.id === active.id})}>
-                        <div className="delete" title="Delete"><FontAwesomeIcon icon="times-circle"/></div>
+                        <div className="delete" title="Delete" onClick={() => onDelete(avatar.id)}>
+                            <FontAwesomeIcon icon="times-circle"/>
+                        </div>
                         <Avatar avatar={avatar} size={100} rootPage={rootPage} onClick={() => onSelect(avatar)}/>
                     </div>
                 )}

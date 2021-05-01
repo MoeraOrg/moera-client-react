@@ -116,3 +116,21 @@ export const PROFILE_AVATAR_CREATE_FAILED = "PROFILE_AVATAR_CREATE_FAILED";
 export const profileAvatarCreateFailed = () => ({
     type: PROFILE_AVATAR_CREATE_FAILED
 });
+
+export const PROFILE_AVATAR_CONFIRM_DELETE = "PROFILE_AVATAR_CONFIRM_DELETE";
+export const profileAvatarConfirmDelete = (id, onDeleted) => ({
+    type: PROFILE_AVATAR_CONFIRM_DELETE,
+    payload: {id, onDeleted}
+});
+
+export const PROFILE_AVATAR_DELETE = "PROFILE_AVATAR_DELETE";
+export const profileAvatarDelete = (id, onDeleted) => ({
+    type: PROFILE_AVATAR_DELETE,
+    payload: {id, onDeleted}
+});
+
+export const PROFILE_AVATAR_DELETED = "PROFILE_AVATAR_DELETED";
+export const profileAvatarDeleted = (id) => ({
+    type: PROFILE_AVATAR_DELETED,
+    payload: {id}
+});

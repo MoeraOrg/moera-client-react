@@ -5,6 +5,7 @@ import {
     PROFILE_AVATAR_CREATE,
     PROFILE_AVATAR_CREATE_FAILED,
     PROFILE_AVATAR_CREATED,
+    PROFILE_AVATAR_DELETED,
     PROFILE_AVATARS_LOAD,
     PROFILE_AVATARS_LOAD_FAILED,
     PROFILE_AVATARS_LOADED,
@@ -198,6 +199,13 @@ export default (state = initialState, action) => {
 
         case PROFILE_AVATAR_CREATE_FAILED:
             return immutable.set(state, "avatarEditDialog.avatarCreating", false);
+
+        case PROFILE_AVATAR_DELETED:
+            if (state.avatars.loaded) {
+                const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
 
         default:
             return state;

@@ -1,9 +1,11 @@
 import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
+    PROFILE_AVATAR_CONFIRM_DELETE,
     PROFILE_EDIT,
     PROFILE_EDIT_CANCEL,
     PROFILE_UPDATE_SUCCEEDED,
+    profileAvatarDelete,
     profileEditConflict,
     profileLoad,
     profileUnset
@@ -19,6 +21,7 @@ import {
 } from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
 import { EVENT_NODE_PROFILE_UPDATED } from "api/events/actions";
+import { confirmBox } from "state/confirmbox/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtProfilePage, inv(isProfileEditing), isProfileToBeLoaded), profileLoad),
@@ -38,6 +41,9 @@ export default [
     trigger([PROFILE_EDIT, PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, newLocation),
     trigger(PROFILE_EDIT, isAtProfilePage, bottomMenuHide),
     trigger([PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, bottomMenuShow),
+    trigger(PROFILE_AVATAR_CONFIRM_DELETE, true,
+            signal => confirmBox("Delete the avatar?", "Delete", "Cancel",
+                profileAvatarDelete(signal.payload.id, signal.payload.onDeleted))),
     trigger(EVENT_NODE_PROFILE_UPDATED, isAtProfilePage, profileLoad),
     trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict),
     trigger(EVENT_NODE_PROFILE_UPDATED, inv(isAtProfilePage), profileUnset)
