@@ -23,7 +23,8 @@ export default function AvatarSelectorItem({avatar, rootPage, onSelect, onDelete
                 </div>
             }
             <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
-                <Avatar avatar={avatar} size={100} draggable={false} rootPage={rootPage} onClick={onClick}/>
+                <Avatar avatar={avatar} size={100} shape="design" draggable={false} rootPage={rootPage}
+                        onClick={onClick}/>
             </div>
         </>
     );

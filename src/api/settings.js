@@ -312,6 +312,29 @@ export const META = [
         type: "string",
         defaultValue: "circle",
         internal: true
+    },
+    {
+        name: "avatar.shape",
+        type: "string",
+        defaultValue: "design",
+        title: "Avatars shape",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "As designed",
+                    value: "design"
+                },
+                {
+                    title: "Round",
+                    value: "circle"
+                },
+                {
+                    title: "Square",
+                    value: "square"
+                }
+            ]
+        }
     }
 ];
 

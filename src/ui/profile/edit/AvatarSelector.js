@@ -80,7 +80,9 @@ export default function AvatarSelector({loaded, loading, avatars, active, rootPa
             {ReactDOM.createPortal(
                 <DragOverlay zIndex={1080} dropAnimation={null}
                              modifiers={[restrictToFirstScrollableAncestor, relateToSelector]}>
-                    {dragged && <Avatar avatar={dragged} size={100} draggable={false} rootPage={rootPage}/>}
+                    {dragged &&
+                        <Avatar avatar={dragged} size={100} shape="design" draggable={false} rootPage={rootPage}/>
+                    }
                 </DragOverlay>,
                 document.querySelector("#modal-root")
             )}
