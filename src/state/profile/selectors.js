@@ -15,3 +15,7 @@ export function isProfileEditing(state) {
 export function isProfileEditable(state) {
     return isProfileReady(state) && isPermitted("edit", state.profile, state);
 }
+
+export function getAvatars(state) {
+    return state.profile.avatars.avatars;
+}

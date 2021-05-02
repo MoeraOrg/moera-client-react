@@ -6,6 +6,7 @@
     width: max-content;
     max-height: calc(312px + .75rem);
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 @media only screen and (max-width: 575px) {
@@ -18,6 +19,36 @@
     .avatar-selector {
         max-width: calc(614px + 2.75rem);
     }
+}
+
+.avatar-selector .item {
+    margin-left: .1rem;
+    padding: .25rem;
+    cursor: pointer;
+    border-radius: 10px;
+    position: relative;
+}
+
+.avatar-selector .item.active, .avatar-selector .item.active:hover {
+    background-color: var(--cyan);
+    cursor: auto;
+}
+
+.avatar-selector .item:hover {
+    background-color: var(--highlight);
+}
+
+.avatar-selector .item .delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: var(--danger);
+    background-color: white;
+    border-radius: 50%;
+    font-size: 1.5em;
+    height: 1em;
+    width: 1em;
+    line-height: 1;
 }
 
 .avatar-selector .create {

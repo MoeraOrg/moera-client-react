@@ -4,7 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 
 import { useButtonPopper } from "ui/hook";
-import { profileAvatarConfirmDelete, profileAvatarsLoad, profileOpenAvatarEditDialog } from "state/profile/actions";
+import {
+    profileAvatarConfirmDelete,
+    profileAvatarsLoad,
+    profileAvatarsReorder,
+    profileOpenAvatarEditDialog
+} from "state/profile/actions";
 import { getNodeRootPage } from "state/node/selectors";
 import { Avatar } from "ui/control";
 import AvatarSelector from "ui/profile/edit/AvatarSelector";
@@ -12,7 +17,7 @@ import AvatarEditDialog from "ui/profile/edit/AvatarEditDialog";
 import "./AvatarEditor.css";
 
 const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, profileAvatarsLoad,
-                       profileOpenAvatarEditDialog, profileAvatarConfirmDelete}) => {
+                       profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder}) => {
     const [, {value}, {setValue}] = useField(name);
 
     const {
@@ -55,6 +60,11 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
         id => profileAvatarConfirmDelete(id, onDeleted),
         [profileAvatarConfirmDelete, onDeleted]
     );
+    const onReorder = useCallback(
+        (activeId, overId) => profileAvatarsReorder(activeId, overId),
+        [profileAvatarsReorder]
+    );
+
     return (
         <>
             <div className="avatar-editor">
@@ -66,7 +76,8 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                          className="fade popover shadow-sm show">
                         <AvatarSelector loading={avatarsLoading} loaded={avatarsLoaded} avatars={avatars} active={value}
-                                        rootPage={rootPage} onSelect={onSelect} onNew={onNew} onDelete={onDelete}/>
+                                        rootPage={rootPage} onSelect={onSelect} onNew={onNew} onDelete={onDelete}
+                                        onReorder={onReorder}/>
                         <div ref={setArrowRef} style={arrowStyles} className="arrow"/>
                     </div>
                 }
@@ -83,5 +94,5 @@ export default connect(
         avatarsLoaded: state.profile.avatars.loaded,
         avatars: state.profile.avatars.avatars
     }),
-    { profileAvatarsLoad, profileOpenAvatarEditDialog, profileAvatarConfirmDelete }
+    { profileAvatarsLoad, profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder }
 )(AvatarEditor);

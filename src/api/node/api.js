@@ -52,6 +52,9 @@ export const AvatarInfoType = {
         },
         "shape": {
             type: "string"
+        },
+        "ordinal": {
+            type: "integer"
         }
     },
     additionalProperties: false
@@ -1285,4 +1288,20 @@ export const MediaFileInfo = schema({
         }
     },
     additionalProperties: false
+});
+
+export const AvatarOrdinalArray = schema({
+    type: "array",
+    items: {
+        type: "object",
+        properties: {
+            "id": {
+                type: "string"
+            },
+            "ordinal": {
+                type: "integer"
+            }
+        },
+        additionalProperties: false
+    }
 });

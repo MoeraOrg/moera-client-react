@@ -5,6 +5,7 @@ import {
     PROFILE_AVATAR_CREATE,
     PROFILE_AVATAR_DELETE,
     PROFILE_AVATARS_LOAD,
+    PROFILE_AVATARS_REORDER,
     PROFILE_IMAGE_UPLOAD,
     PROFILE_LOAD,
     PROFILE_UPDATE,
@@ -24,6 +25,7 @@ import { Node } from "api/node";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
+import { getAvatars } from "state/profile/selectors";
 
 export default [
     executor(PROFILE_LOAD, "", introduce(profileLoadSaga)),
@@ -31,7 +33,8 @@ export default [
     executor(PROFILE_IMAGE_UPLOAD, null, profileImageUploadSaga),
     executor(PROFILE_AVATARS_LOAD, "", profileAvatarsLoadSaga),
     executor(PROFILE_AVATAR_CREATE, "", profileAvatarCreateSaga),
-    executor(PROFILE_AVATAR_DELETE, payload => payload.id, profileAvatarDeleteSaga)
+    executor(PROFILE_AVATAR_DELETE, payload => payload.id, profileAvatarDeleteSaga),
+    executor(PROFILE_AVATARS_REORDER, "", profileAvatarsReorderSaga)
 ];
 
 function* profileLoadSaga(action) {
@@ -103,6 +106,16 @@ function* profileAvatarDeleteSaga(action) {
         if (onDeleted) {
             onDeleted(id);
         }
+    } catch (e) {
+        yield put(errorThrown(e));
+    }
+}
+
+function* profileAvatarsReorderSaga() {
+    const ids = yield select(state => getAvatars(state).map(av => av.id));
+    ids.reverse();
+    try {
+        yield call(Node.reorderAvatars, "", ids);
     } catch (e) {
         yield put(errorThrown(e));
     }

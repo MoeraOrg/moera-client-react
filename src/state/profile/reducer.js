@@ -1,5 +1,6 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
+import { arrayMove } from '@dnd-kit/sortable';
 
 import {
     PROFILE_AVATAR_CREATE,
@@ -9,6 +10,7 @@ import {
     PROFILE_AVATARS_LOAD,
     PROFILE_AVATARS_LOAD_FAILED,
     PROFILE_AVATARS_LOADED,
+    PROFILE_AVATARS_REORDER,
     PROFILE_CLOSE_AVATAR_EDIT_DIALOG,
     PROFILE_EDIT,
     PROFILE_EDIT_CANCEL,
@@ -206,6 +208,19 @@ export default (state = initialState, action) => {
                 return immutable.set(state, "avatars.avatars", avatars);
             }
             return state;
+
+        case PROFILE_AVATARS_REORDER: {
+            const {avatarId, overAvatarId} = action.payload;
+            if (state.avatars.loaded && avatarId !== overAvatarId) {
+                const index = state.avatars.avatars.findIndex(av => av.id === avatarId);
+                const overIndex = state.avatars.avatars.findIndex(av => av.id === overAvatarId);
+                if (index == null || overIndex == null) {
+                    return state;
+                }
+                return immutable.set(state, "avatars.avatars", arrayMove(state.avatars.avatars, index, overIndex));
+            }
+            return state;
+        }
 
         default:
             return state;

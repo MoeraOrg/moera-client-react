@@ -529,3 +529,10 @@ export function* deleteAvatar(nodeName, id) {
         nodeName, location: ut`/avatars/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
+
+export function* reorderAvatars(nodeName, ids) {
+    return yield call(callApi, {
+        nodeName, location: "/avatars/reorder", method: "POST", auth: true, body: {ids},
+        schema: NodeApi.AvatarOrdinalArray
+    });
+}

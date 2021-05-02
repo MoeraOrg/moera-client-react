@@ -134,3 +134,9 @@ export const profileAvatarDeleted = (id) => ({
     type: PROFILE_AVATAR_DELETED,
     payload: {id}
 });
+
+export const PROFILE_AVATARS_REORDER = "PROFILE_AVATARS_REORDER";
+export const profileAvatarsReorder = (avatarId, overAvatarId) => ({
+    type: PROFILE_AVATARS_REORDER,
+    payload: {avatarId, overAvatarId}
+});
