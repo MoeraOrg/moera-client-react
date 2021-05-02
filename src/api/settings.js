@@ -306,6 +306,12 @@ export const META = [
                 }
             ]
         }
+    },
+    {
+        name: "avatar.shape.default",
+        type: "string",
+        defaultValue: "circle",
+        internal: true
     }
 ];
 

@@ -12,6 +12,7 @@ import Rotate from "ui/profile/edit/Rotate";
 import AvatarShape from "ui/profile/edit/AvatarShape";
 import Scale from "ui/profile/edit/Scale";
 import "./AvatarEditDialog.css";
+import { getSetting } from "state/settings/selectors";
 
 const ACCEPTED_MIME_TYPES = [
     "image/avif",
@@ -51,6 +52,9 @@ class AvatarEditDialog extends React.PureComponent {
                 } else {
                     editor.removeEventListener("wheel", this.onEditorWheel);
                 }
+            }
+            if (this.props.show) {
+                this.setState({shape: this.props.shapeDefault});
             }
         }
 
@@ -162,7 +166,8 @@ export default connect(
         path: state.profile.avatarEditDialog.path,
         width: state.profile.avatarEditDialog.width,
         height: state.profile.avatarEditDialog.height,
-        rootPage: getNodeRootPage(state)
+        rootPage: getNodeRootPage(state),
+        shapeDefault: getSetting(state, "avatar.shape.default")
     }),
     { profileCloseAvatarEditDialog, profileImageUpload, profileAvatarCreate }
 )(AvatarEditDialog);

@@ -23,9 +23,11 @@ import {
 } from "state/profile/actions";
 import { Node } from "api/node";
 import { introduce } from "api/node/introduce";
+import { PREFIX } from "api/settings";
 import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
+import { settingsUpdate } from "state/settings/actions";
 
 export default [
     executor(PROFILE_LOAD, "", introduce(profileLoadSaga)),
@@ -91,6 +93,10 @@ function* profileAvatarCreateSaga(action) {
         if (onCreate) {
             onCreate(data);
         }
+        yield put(settingsUpdate([{
+            name: PREFIX + "avatar.shape.default",
+            value: data.shape
+        }]));
     } catch (e) {
         yield put(profileAvatarCreateFailed());
         yield put(errorThrown(e));
