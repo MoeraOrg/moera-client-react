@@ -1,8 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import cx from 'classnames';
 
-import { Avatar, Loading } from "ui/control";
+import { Loading } from "ui/control";
+import AvatarSelectorItem from "ui/profile/edit/AvatarSelectorItem";
 import "./AvatarSelector.css";
 
 const AvatarSelector = ({loaded, loading, avatars, active, rootPage, onSelect, onNew, onDelete}) => (
@@ -15,12 +15,8 @@ const AvatarSelector = ({loaded, loading, avatars, active, rootPage, onSelect, o
                     </div>
                 </div>
                 {avatars.map(avatar =>
-                    <div key={avatar.id} className={cx("item", {"active": active && avatar.id === active.id})}>
-                        <div className="delete" title="Delete" onClick={() => onDelete(avatar.id)}>
-                            <FontAwesomeIcon icon="times-circle"/>
-                        </div>
-                        <Avatar avatar={avatar} size={100} rootPage={rootPage} onClick={() => onSelect(avatar)}/>
-                    </div>
+                    <AvatarSelectorItem key={avatar.id} avatar={avatar} active={active} rootPage={rootPage}
+                                        onSelect={onSelect} onDelete={onDelete}/>
                 )}
             </>
         :
