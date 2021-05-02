@@ -16,13 +16,15 @@ export default function AvatarSelectorItem({avatar, rootPage, onSelect, onDelete
     const onDeleteClick = useCallback(() => onDelete(avatar.id), [onDelete, avatar]);
 
     return (
-        <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
+        <>
             {onDelete &&
                 <div className="delete" title="Delete" onClick={onDeleteClick}>
                     <FontAwesomeIcon icon="times-circle"/>
                 </div>
             }
-            <Avatar avatar={avatar} size={100} draggable={false} rootPage={rootPage} onClick={onClick}/>
-        </div>
+            <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
+                <Avatar avatar={avatar} size={100} draggable={false} rootPage={rootPage} onClick={onClick}/>
+            </div>
+        </>
     );
 }
