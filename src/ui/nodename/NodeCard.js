@@ -20,7 +20,7 @@ const NodeCard = ({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) => {
         );
     }
 
-    const realFullName = card.fullName != null ? card.fullName : (fullName ?? NodeName.shorten(nodeName));
+    const realFullName = card.fullName != null ? card.fullName : (fullName || NodeName.shorten(nodeName));
     const gender = shortGender(card.gender);
     const subscribersTotal = card.subscribersTotal != null ? card.subscribersTotal : "?";
     const subscriptionsTotal = card.subscriptionsTotal != null ? card.subscriptionsTotal : "?";

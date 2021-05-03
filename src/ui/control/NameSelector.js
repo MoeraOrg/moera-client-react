@@ -126,7 +126,7 @@ class NameSelectorImpl extends React.PureComponent {
                         <div key={index} data-index={index}
                              className={cx("item", {"selected": index === selectedIndex})}
                              onClick={this.onClick(index)}>
-                            <div className="full-name">{item.fullName ?? NodeName.shorten(item.nodeName)}</div>
+                            <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
                             <div className="name">{mentionName(item.nodeName)}</div>
                         </div>
                     )}

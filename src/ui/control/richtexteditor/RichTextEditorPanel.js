@@ -163,7 +163,7 @@ class RichTextEditorPanel extends React.PureComponent {
             if (this.isMarkdown()) {
                 textFieldEdit.insert(textArea.current, mentionName(nodeName, fullName))
             } else {
-                const text = fullName ?? NodeName.shorten(nodeName);
+                const text = fullName || NodeName.shorten(nodeName);
                 const href =
                     redirectUrl(false, nodeRootPage, nodeName, null, "/", null);
                 textFieldEdit.insert(textArea.current,

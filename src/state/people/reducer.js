@@ -41,8 +41,8 @@ const initialState = {
 function sortSubscribers(list) {
     if (list) {
         list.sort((sr1, sr2) => {
-            const sr1name = sr1.fullName ?? sr1.nodeName;
-            const sr2name = sr2.fullName ?? sr2.nodeName;
+            const sr1name = sr1.fullName || sr1.nodeName;
+            const sr2name = sr2.fullName || sr2.nodeName;
             return sr1name.localeCompare(sr2name);
         });
     }
@@ -52,8 +52,8 @@ function sortSubscribers(list) {
 function sortSubscriptions(list) {
     if (list) {
         list.sort((sr1, sr2) => {
-            const sr1name = sr1.remoteFullName ?? sr1.remoteNodeName;
-            const sr2name = sr2.remoteFullName ?? sr2.remoteNodeName;
+            const sr1name = sr1.remoteFullName || sr1.remoteNodeName;
+            const sr2name = sr2.remoteFullName || sr2.remoteNodeName;
             return sr1name.localeCompare(sr2name);
         });
     }
