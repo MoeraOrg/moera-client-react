@@ -82,7 +82,7 @@ class AvatarEditDialog extends React.PureComponent {
     }
 
     onEditorWheel = event => {
-        this.setScale(this.state.scale + event.deltaY * this.getScaleMax() / 400);
+        this.setScale(this.state.scale - event.deltaY * this.getScaleMax() / 400);
         event.preventDefault();
     }
 

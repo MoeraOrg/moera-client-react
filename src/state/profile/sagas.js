@@ -63,8 +63,8 @@ function* profileUpdateSaga(action) {
 function* profileImageUploadSaga(action) {
     try {
         const {id, path, width, height} = yield call(Node.postMediaPublic, "", action.payload.file);
-        if (width < 200 || height < 200) {
-            yield put(messageBox("Avatar image size should be at least 200x200 pixels."));
+        if (width < 100 || height < 100) {
+            yield put(messageBox("Avatar image size should be at least 100x100 pixels."));
             yield put(profileImageUploadFailed());
         } else {
             yield put(profileImageUploaded(id, path, width, height));
