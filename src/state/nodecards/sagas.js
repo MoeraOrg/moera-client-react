@@ -36,7 +36,7 @@ function* nodeCardLoadSaga(action) {
 
 function* loadDetails(nodeName) {
     const data = yield call(Node.getWhoAmI, nodeName);
-    yield put(nodeCardDetailsSet(nodeName, data.fullName, data.gender, data.title));
+    yield put(nodeCardDetailsSet(nodeName, data.fullName, data.gender, data.title, data.avatar));
 }
 
 function* loadPeople(nodeName) {

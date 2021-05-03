@@ -23,9 +23,9 @@ export const nodeCardLoadFailed = (nodeName) => ({
 });
 
 export const NODE_CARD_DETAILS_SET = "NODE_CARD_DETAILS_SET";
-export const nodeCardDetailsSet = (nodeName, fullName, gender, title) => ({
+export const nodeCardDetailsSet = (nodeName, fullName, gender, title, avatar) => ({
     type: NODE_CARD_DETAILS_SET,
-    payload: {nodeName, fullName, gender, title}
+    payload: {nodeName, fullName, gender, title, avatar}
 });
 
 export const NODE_CARD_PEOPLE_SET = "NODE_CARD_PEOPLE_SET";

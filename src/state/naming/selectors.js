@@ -24,3 +24,8 @@ export function getNamingNameDetails(state, name) {
         nodeUri: null
     }
 }
+
+export function getNamingNameNodeUri(state, name) {
+    const details = getNamingNameDetails(state, name);
+    return details.loaded && details.nodeUri != null ? details.nodeUri : null;
+}

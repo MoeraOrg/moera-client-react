@@ -4,14 +4,16 @@ import { connect } from 'react-redux';
 
 import { NodeName } from "api";
 import { getNodeCard, isNodeCardToBeLoaded } from "state/nodecards/selectors";
+import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import SubscribeButton from "ui/control/SubscribeButton";
-import { Loading } from "ui/control";
+import { Avatar, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/misc";
+import { Browser } from "ui/browser";
 import "./NodeCard.css";
 
-const NodeCard = ({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) => {
+function NodeCard({nodeName, fullName, card, cardNotLoaded, rootPage, homeOwnerName}) {
     if (cardNotLoaded) {
         return (
             <div className="node-card">
@@ -28,16 +30,21 @@ const NodeCard = ({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) => {
     const {title, subscribing, unsubscribing, subscriberId} = card;
     return (
         <div className="node-card">
-            {realFullName &&
-                <div>
-                    <Jump className="full-name" nodeName={nodeName} href="/">{realFullName}</Jump>
-                    {gender && <span className="gender">{gender}</span>}
+            <div className="main">
+                <Avatar avatar={card.avatar} size={Browser.isTinyScreen() ? 64 : 100} rootPage={rootPage}/>
+                <div className="body">
+                    {realFullName &&
+                        <div>
+                            <Jump className="full-name" nodeName={nodeName} href="/">{realFullName}</Jump>
+                            {gender && <span className="gender">{gender}</span>}
+                        </div>
+                    }
+                    <div>
+                        <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
+                    </div>
+                    {title && <div className="title">{title}</div>}
                 </div>
-            }
-            <div>
-                <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
             </div>
-            {title && <div className="title">{title}</div>}
             <div className="people">
                 <Jump className="counter" nodeName={nodeName} href="/people/subscribers">
                     <em>{subscribersTotal}</em> {subscribersTotal === 1 ? "subscriber" : "subscribers"}
@@ -54,7 +61,7 @@ const NodeCard = ({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) => {
             <Loading active={card.loading}/>
         </div>
     );
-};
+}
 
 NodeCard.propTypes = {
     nodeName: PropType.string,
@@ -65,6 +72,7 @@ export default connect(
     (state, ownProps) => ({
         card: getNodeCard(state, ownProps.nodeName),
         cardNotLoaded: isNodeCardToBeLoaded(state, ownProps.nodeName),
+        rootPage: getNamingNameNodeUri(state, ownProps.nodeName),
         homeOwnerName: getHomeOwnerName(state)
     })
 )(NodeCard);

@@ -1,6 +1,36 @@
+.node-card {
+    padding-top: .5em;
+}
+
+@media only screen and (max-width: 575px) {
+    .node-card {
+        width: 300px;
+    }
+}
+
+@media only screen and (min-width: 576px) {
+    .node-card {
+        width: 400px;
+    }
+}
+
 .node-card .unknown {
     font-style: italic;
     color: var(--gray);
+    text-align: center;
+}
+
+.node-card .main {
+    display: flex;
+}
+
+.node-card .avatar {
+    flex: none;
+    margin-right: .5em;
+}
+
+.node-card .body {
+    flex: auto;
 }
 
 .node-card .full-name {
@@ -24,7 +54,7 @@
 }
 
 .node-card .people {
-    margin-top: 1em;
+    margin-top: .5em;
 }
 
 .node-card .counter {

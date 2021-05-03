@@ -73,9 +73,9 @@ export default (state = initialState, action) => {
         }
 
         case NODE_CARD_DETAILS_SET: {
-            const {nodeName, fullName, gender, title} = action.payload;
+            const {nodeName, fullName, gender, title, avatar} = action.payload;
             if (state[nodeName]) {
-                return immutable.assign(state, [nodeName], {fullName, gender, title});
+                return immutable.assign(state, [nodeName], {fullName, gender, title, avatar});
             }
             return state;
         }
