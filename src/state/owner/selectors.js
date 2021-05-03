@@ -16,6 +16,10 @@ export function getOwnerTitle(state) {
     return state.owner.title;
 }
 
+export function getOwnerAvatar(state) {
+    return state.owner.avatar;
+}
+
 export function isOwnerNameSet(state) {
     return getOwnerName(state) != null;
 }

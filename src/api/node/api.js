@@ -84,7 +84,8 @@ export const WhoAmI = schema({
         },
         "title": {
             type: "string"
-        }
+        },
+        "avatar": AvatarImageType
     },
     additionalProperties: false
 });

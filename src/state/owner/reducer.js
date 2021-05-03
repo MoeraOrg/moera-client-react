@@ -17,6 +17,7 @@ const initialState = {
     fullName: null,
     gender: null,
     title: null,
+    avatar: null,
     correct: false,
     verified: false,
     verifiedAt: 0,
@@ -46,6 +47,9 @@ export default (state = initialState, action) => {
             }
             if (action.payload.title !== false) {
                 istate.set("title", action.payload.title);
+            }
+            if (action.payload.avatar !== false) {
+                istate.set("avatar", action.payload.avatar);
             }
             return istate.value();
         }

@@ -1,26 +1,38 @@
 #feed-title {
     background-color: var(--white-dark);
-    padding: 1rem;
+    padding: .5rem 1rem;
 }
 
 #feed-title .panel {
     width: min(var(--feed-width), 100%);
     margin-left: auto;
     margin-right: auto;
+    display: flex;
+}
+
+#feed-title .panel .avatar {
+    flex: none;
+    margin-right: .5rem;
+}
+
+#feed-title .panel .body {
+    flex: auto;
+    padding: .5rem 0;
     line-height: 1.2;
 }
 
 #feed-title .full-name {
     font-size: 1.9rem;
     font-weight: bold;
+    overflow-wrap: break-word;
 }
 
 #feed-title .mention {
     color: var(--gray-medium);
-    margin-left: .5em;
     white-space: nowrap;
 }
 
 #feed-title .title {
     font-size: larger;
+    margin-top: .5em;
 }
