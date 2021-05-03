@@ -8,11 +8,11 @@ import { Button, ModalDialog } from "ui/control";
 import avatarPlaceholder from "ui/control/avatar.png";
 import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
 import { getNodeRootPage } from "state/node/selectors";
+import { getSetting } from "state/settings/selectors";
 import Rotate from "ui/profile/edit/Rotate";
 import AvatarShape from "ui/profile/edit/AvatarShape";
 import Scale from "ui/profile/edit/Scale";
 import "./AvatarEditDialog.css";
-import { getSetting } from "state/settings/selectors";
 
 const ACCEPTED_MIME_TYPES = [
     "image/avif",

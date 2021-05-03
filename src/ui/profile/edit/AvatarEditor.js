@@ -28,6 +28,7 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
         avatar => setValue(avatar),
         [setValue]
     );
+
     const onEdit = useCallback(
         event => {
             if (!avatarsLoaded && !avatarsLoading) {
@@ -40,7 +41,8 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
             }
         },
         [value, avatarsLoading, avatarsLoaded, profileAvatarsLoad, profileOpenAvatarEditDialog, onSelect, onToggle]
-    )
+    );
+
     const onNew = useCallback(
         () => {
             profileOpenAvatarEditDialog(onSelect);
@@ -48,6 +50,7 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
         },
         [onSelect, profileOpenAvatarEditDialog, hide]
     );
+
     const onDeleted = useCallback(
         id => {
             if (value.id === id) {
@@ -56,10 +59,12 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
         },
         [value, setValue, avatars]
     );
+
     const onDelete = useCallback(
         id => profileAvatarConfirmDelete(id, onDeleted),
         [profileAvatarConfirmDelete, onDeleted]
     );
+
     const onReorder = useCallback(
         (activeId, overId) => profileAvatarsReorder(activeId, overId),
         [profileAvatarsReorder]
