@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import * as PropTypes from 'prop-types';
 import cx from 'classnames';
 
@@ -8,52 +8,42 @@ import "./PageHeader.css";
 
 const HIDING_DISTANCE = 16;
 
-class PageHeader extends React.Component {
+function PageHeader({children}) {
+    const [state, setState] = useState({invisible: false, scroll: null});
 
-    state = {
-        invisible: false
-    };
-
-    #scroll = null;
-
-    componentDidMount() {
-        window.addEventListener("scroll", this.onScroll);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("scroll", this.onScroll);
-    }
-
-    onScroll = () => {
+    const onScroll = useCallback(() => {
         if (!Browser.isTinyScreen()) {
             return;
         }
-        if (this.#scroll == null) {
-            this.#scroll = window.scrollY;
-            return;
-        }
-        if (window.scrollY <= getFeedHeaderHeight()) {
-            this.setState({invisible: false});
-            this.#scroll = window.scrollY;
-            return;
-        }
-        const invisible = window.scrollY > this.#scroll;
-        if (this.state.invisible === invisible || Math.abs(window.scrollY - this.#scroll) > HIDING_DISTANCE) {
-            this.setState({invisible});
-            this.#scroll = window.scrollY;
-        }
-    }
+        setState(state => {
+            if (state.scroll == null) {
+                return {invisible: state.invisible, scroll: window.scrollY};
+            }
+            if (window.scrollY <= getFeedHeaderHeight()) {
+                return {invisible: false, scroll: window.scrollY};
+            }
+            const invisible = window.scrollY > state.scroll;
+            if (state.invisible === invisible || Math.abs(window.scrollY - state.scroll) > HIDING_DISTANCE) {
+                return {invisible, scroll: window.scrollY};
+            }
+            return state;
+        });
+    }, [setState]);
 
-    render() {
-        return (
-            <div id="page-header" className={cx({"invisible": this.state.invisible})}>
-                <div className="panel">
-                    {this.props.children}
-                </div>
+    useEffect(() => {
+        window.addEventListener("scroll", onScroll);
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+        }
+    }, [onScroll]);
+
+    return (
+        <div id="page-header" className={cx({"invisible": state.invisible})}>
+            <div className="panel">
+                {children}
             </div>
-        );
-    }
-
+        </div>
+    );
 }
 
 PageHeader.propTypes = {children: PropTypes.any}
