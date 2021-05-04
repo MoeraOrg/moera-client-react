@@ -8,7 +8,7 @@ const ComposeReactionsButton = ({formik}) => {
         || formik.values.reactionsNegative !== formik.values.reactionsNegativeDefault
         || formik.values.reactionsVisible !== formik.values.reactionsVisibleDefault
         || formik.values.reactionTotalsVisible !== formik.values.reactionTotalsVisibleDefault;
-    return <ComposeIconButton icon="thumbs-up" name="reactionVisible" changed={changed}/>;
+    return <ComposeIconButton icon="thumbs-up" name="reactionVisible" tooltip="Reactions" changed={changed}/>;
 };
 
 export default connectFormik(ComposeReactionsButton);
