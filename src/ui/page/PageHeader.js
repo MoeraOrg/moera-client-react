@@ -3,17 +3,10 @@ import * as PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import { Browser } from "ui/browser";
-import { getPageHeaderHeight } from "util/misc";
+import { getFeedHeaderHeight } from "util/misc";
 import "./PageHeader.css";
 
 const HIDING_DISTANCE = 16;
-
-function getHideThreshold() {
-    const headerHeight = getPageHeaderHeight();
-    const feedTitle = document.getElementById("feed-title");
-    const feedTitleHeight = feedTitle != null ? feedTitle.getBoundingClientRect().height : 0;
-    return headerHeight + feedTitleHeight;
-}
 
 class PageHeader extends React.Component {
 
@@ -39,7 +32,7 @@ class PageHeader extends React.Component {
             this.#scroll = window.scrollY;
             return;
         }
-        if (window.scrollY <= getHideThreshold()) {
+        if (window.scrollY <= getFeedHeaderHeight()) {
             this.setState({invisible: false});
             this.#scroll = window.scrollY;
             return;

@@ -24,6 +24,10 @@
     margin-left: .3em;
 }
 
+#page-header H2 .avatar {
+    margin-right: .25em;
+}
+
 #page-header H2 .btn {
     margin-bottom: 0;
 }

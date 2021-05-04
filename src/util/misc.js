@@ -82,3 +82,10 @@ export function getPageHeaderHeight() {
     const headerHeight = header != null ? header.getBoundingClientRect().height : 0;
     return mainMenuHeight + headerHeight;
 }
+
+export function getFeedHeaderHeight() {
+    const headerHeight = getPageHeaderHeight();
+    const feedTitle = document.getElementById("feed-title");
+    const feedTitleHeight = feedTitle != null ? feedTitle.getBoundingClientRect().height : 0;
+    return headerHeight + feedTitleHeight;
+}
