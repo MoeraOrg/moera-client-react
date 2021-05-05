@@ -7,17 +7,25 @@
     cursor: pointer;
 }
 
-.connection-status .home-name .generation {
+.connection-status .home-name:hover .avatar {
+    border: 1px solid rgba(255, 255, 255, .7);
+}
+
+.home-name .name {
+    margin-left: .25rem;
+}
+
+.home-name .name .generation {
     font-size: 60%;
     position: relative;
     bottom: -0.25em;
 }
 
-.connection-status .active .home-name {
+.connection-status .active .home-name .name {
     color: white;
 }
 
-.connection-status .home-name::after {
+.connection-status .home-name .name::after {
     display: inline-block;
     margin-left: .255em;
     vertical-align: .255em;
@@ -30,7 +38,7 @@
     top: 0.1em;
 }
 
-.connection-status .home-name:hover {
+.connection-status .home-name:hover .name {
     color: var(--status-icon-highlight);
 }
 

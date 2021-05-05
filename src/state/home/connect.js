@@ -75,7 +75,7 @@ function* connectToHomeSaga(action) {
     }
 
     const nodeUrl = normalizeUrl((yield call(selectApi, location)).rootLocation);
-    Browser.storeConnectionData(nodeUrl, null, null, login, data.token, data.permissions);
+    Browser.storeConnectionData(nodeUrl, null, null, null, login, data.token, data.permissions);
     Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
     yield put(connectedToHome(nodeUrl, login, data.token, data.permissions, cartesData.cartesIp,
         cartesData.cartes, null, cartesData.createdAt - now()));
@@ -83,11 +83,11 @@ function* connectToHomeSaga(action) {
 
 function* verifyHomeOwnerSaga() {
     try {
-        const {nodeName, nodeNameChanging, fullName} = yield call(Node.getWhoAmI, ":");
-        yield put(homeOwnerSet(nodeName, nodeNameChanging, fullName));
+        const {nodeName, nodeNameChanging, fullName, avatar} = yield call(Node.getWhoAmI, ":");
+        yield put(homeOwnerSet(nodeName, nodeNameChanging, fullName, avatar));
 
         const {location, login, token, permissions} = yield select(getHomeConnectionData);
-        Browser.storeConnectionData(location, nodeName, fullName, login, token, permissions);
+        Browser.storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions);
 
         const {name, generation} = NodeName.parse(nodeName);
         if (name == null) {

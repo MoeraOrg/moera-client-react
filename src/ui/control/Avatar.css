@@ -2,6 +2,10 @@
     border: 1px solid rgba(0, 0, 0, .1);
 }
 
+.bg-dark .avatar {
+    border: 1px solid rgba(255, 255, 255, .4);
+}
+
 .avatar-circle {
     border-radius: 50%;
 }

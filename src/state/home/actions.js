@@ -39,9 +39,9 @@ export const homeOwnerVerify = () => ({
 });
 
 export const HOME_OWNER_SET = "HOME_OWNER_SET";
-export const homeOwnerSet = (name, changing, fullName) => ({
+export const homeOwnerSet = (name, changing, fullName, avatar) => ({
     type: HOME_OWNER_SET,
-    payload: {name, changing, fullName}
+    payload: {name, changing, fullName, avatar}
 });
 
 export const HOME_OWNER_VERIFIED = "HOME_OWNER_VERIFIED";
