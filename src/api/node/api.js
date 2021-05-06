@@ -302,6 +302,7 @@ const PostingInfoType = {
         "ownerFullName": {
             type: "string"
         },
+        "ownerAvatar": AvatarImageType,
         "bodyPreview": {
             type: "string"
         },

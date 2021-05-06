@@ -1,10 +1,19 @@
 .posting > .owner-line {
-    margin-bottom: 0.3rem;
+    margin-bottom: .3rem;
+    margin-top: -.1rem;
+    display: flex;
+}
+
+.posting > .owner-line .owner-info {
+    flex: auto;
+    margin-left: .5rem;
+    margin-top: .25rem;
+    line-height: 1.2;
 }
 
 .posting > .owner-line .owner {
     font-weight: bold;
-    margin-right: 0.5em;
+    margin-right: .5em;
 }
 
 .posting > .owner-line .owner .arrow {

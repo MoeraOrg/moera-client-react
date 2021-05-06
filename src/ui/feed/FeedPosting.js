@@ -18,6 +18,7 @@ import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/posting/Entry.css";
+import { Avatar } from "ui/control";
 
 const Content = ({posting}) => {
     if (posting.bodyPreview.text) {
@@ -34,7 +35,7 @@ const Content = ({posting}) => {
     }
 };
 
-const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) => (
+const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome, rootPage}) => (
     <div className="posting entry preview" data-moment={story.moment} data-viewed={story.viewed}>
         {deleting ?
             <PostingDeleting/>
@@ -43,10 +44,14 @@ const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) =
                 <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
                 <PostingPin pinned={story.pinned}/>
                 <div className="owner-line">
-                    <PostingSource posting={posting}/>
-                    <PostingOwner posting={posting}/>
-                    <PostingDate posting={posting} story={story}/>
-                    <PostingUpdated posting={posting} story={story}/>
+                    <Avatar avatar={posting.ownerAvatar} size={48} rootPage={rootPage}/>
+                    <div className="owner-info">
+                        <PostingSource posting={posting}/>
+                        <PostingOwner posting={posting}/>
+                        <br/>
+                        <PostingDate posting={posting} story={story}/>
+                        <PostingUpdated posting={posting} story={story}/>
+                    </div>
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>
