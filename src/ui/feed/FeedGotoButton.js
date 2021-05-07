@@ -1,7 +1,7 @@
 import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
-import { DateTimePicker } from 'react-widgets';
+import { DatePicker } from 'react-widgets';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 
@@ -51,8 +51,8 @@ class FeedGotoButton extends React.PureComponent {
                     <Button variant="outline-info" size="sm" onClick={this.activate}>Go to...</Button>
                 :
                     <>
-                        <DateTimePicker format="dd-MM-yyyy" value={fromUnixTime(timestamp)} time={false}
-                                        onChange={this.goToTimestamp}/>
+                        <DatePicker valueFormat={{dateStyle: "short"}} value={fromUnixTime(timestamp)} time={false}
+                                    onChange={this.goToTimestamp}/>
                         <Button variant="outline-info" size="sm" className="ml-2" invisible={atBottom}
                                 onClick={this.toBottom}>
                             <FontAwesomeIcon icon="arrow-down"/>&nbsp;Bottom

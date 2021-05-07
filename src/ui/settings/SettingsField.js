@@ -21,7 +21,7 @@ function deserializeInt(value) {
 function convertFormat(format) {
     switch (format) {
         case "percentage":
-            return "###%";
+            return {style: "unit", unit: "percent", minimumFractionDigits: 0};
         default:
             return null;
     }

@@ -2,9 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-widgets/dist/css/react-widgets.css';
-import simpleNumberLocalizer from 'react-widgets-simple-number';
-import dateFnsLocalizer from 'react-widgets-date-fns';
+import 'react-widgets/styles.css';
 
 import store from "state/store";
 import { initFromLocation, initStorage } from "state/navigation/actions";
@@ -30,8 +28,6 @@ if (standalone || document.contentType === "text/plain") {
 
     Browser.init();
     initIconLibrary();
-    simpleNumberLocalizer();
-    dateFnsLocalizer();
     registerSpoilerElement();
     ReactDOM.render(
         <Provider store={store}>

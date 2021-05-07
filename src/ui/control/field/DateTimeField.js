@@ -21,8 +21,8 @@ export const DateTimeField = ({name, title, horizontal = false, groupClassName, 
                             onChange={v => form.setFieldValue(field.name, v)}
                             onBlur={field.onBlur}
                             autoFocus={autoFocus}
-                            format="dd-MM-yyyy HH:mm"
-                            timeFormat="HH:mm"
+                            valueFormat={{dateStyle: "short", timeStyle: "short"}}
+                            includeTime={true}
                         />
                         {touched && error && <div className="invalid-feedback">{error}</div>}
                     </Wrapper>

@@ -26,5 +26,5 @@ export function getSetting(state, name) {
         return null;
     }
     const value = state.settings.client.values.get(ClientSettings.PREFIX + name);
-    return SettingTypes.toValue(meta.type, value != null ? value : meta.defaultValue);
+    return SettingTypes.toValue(meta.type, value != null ? value : meta.defaultValue, meta.modifiers);
 }
