@@ -24,7 +24,7 @@
     display: flex;
 }
 
-.node-card .avatar {
+.node-card .avatar-link {
     flex: none;
     margin-right: .5em;
 }

@@ -8,6 +8,7 @@ import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
 import FeedTopButton from "ui/feed/FeedTopButton";
 import { Avatar } from "ui/control";
+import Jump from "ui/navigation/Jump";
 import { getPageHeaderHeight } from "util/misc";
 
 function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar}) {
@@ -29,7 +30,9 @@ function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar}) {
         <PageHeader>
             <h2>
                 {avatarVisible &&
-                    <Avatar avatar={avatar} size={40}/>
+                    <Jump href="/profile" title="Profile" className="avatar-link">
+                        <Avatar avatar={avatar} size={40}/>
+                    </Jump>
                 }
                 {title}
                 <FeedSubscribeButton feedName={feedName}/>

@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
-import { Avatar } from "ui/control";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
 import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingDate from "ui/posting/PostingDate";
+import PostingAvatar from "ui/posting/PostingAvatar";
 import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
@@ -28,7 +28,7 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
                     <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
                     <PostingPin pinned={story != null && story.pinned}/>
                     <div className="owner-line">
-                        <Avatar avatar={posting.ownerAvatar} size={48}/>
+                        <PostingAvatar posting={posting}/>
                         <div className="owner-info">
                             <PostingSource posting={posting}/>
                             <PostingOwner posting={posting}/>

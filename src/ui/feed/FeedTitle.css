@@ -10,7 +10,7 @@
     display: flex;
 }
 
-#feed-title .panel .avatar {
+#feed-title .panel .avatar-link {
     flex: none;
     margin-right: .5rem;
 }

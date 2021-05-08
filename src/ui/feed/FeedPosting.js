@@ -8,6 +8,7 @@ import PostingPin from "ui/posting/PostingPin";
 import PostingDate from "ui/posting/PostingDate";
 import PostingUpdated from "ui/posting/PostingUpdated";
 import PostingDeleting from "ui/posting/PostingDeleting";
+import PostingAvatar from "ui/posting/PostingAvatar";
 import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
@@ -18,7 +19,6 @@ import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/posting/Entry.css";
-import { Avatar } from "ui/control";
 
 const Content = ({posting}) => {
     if (posting.bodyPreview.text) {
@@ -44,7 +44,7 @@ const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) =
                 <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
                 <PostingPin pinned={story.pinned}/>
                 <div className="owner-line">
-                    <Avatar avatar={posting.ownerAvatar} size={48}/>
+                    <PostingAvatar posting={posting}/>
                     <div className="owner-info">
                         <PostingSource posting={posting}/>
                         <PostingOwner posting={posting}/>

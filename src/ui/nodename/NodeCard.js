@@ -30,7 +30,9 @@ function NodeCard({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) {
     return (
         <div className="node-card">
             <div className="main">
-                <Avatar avatar={card.avatar} size={Browser.isTinyScreen() ? 64 : 100} nodeName={nodeName}/>
+                <Jump nodeName={nodeName} href="/profile" title="Profile" className="avatar-link">
+                    <Avatar avatar={card.avatar} size={Browser.isTinyScreen() ? 64 : 100} nodeName={nodeName}/>
+                </Jump>
                 <div className="body">
                     {realFullName &&
                         <div>
