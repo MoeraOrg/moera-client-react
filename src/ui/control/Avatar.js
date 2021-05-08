@@ -5,6 +5,9 @@ import cx from 'classnames';
 
 import avatarPlaceholder from "./avatar.png";
 import { getSetting } from "state/settings/selectors";
+import { getHomeRootPage } from "state/home/selectors";
+import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getNodeRootPage } from "state/node/selectors";
 import "./Avatar.css";
 
 function effectiveShape(shape, shapeLocal, shapeGlobal) {
@@ -12,7 +15,13 @@ function effectiveShape(shape, shapeLocal, shapeGlobal) {
     return shapeSetting === "circle" || shapeSetting === "square" ? shapeSetting : shape;
 }
 
-export function AvatarImpl({avatar, size, shape: shapeLocal, className, draggable, rootPage, onClick, shapeGlobal}) {
+function getRootPage(state, nodeName) {
+    return nodeName
+        ? (nodeName === ":" ? getHomeRootPage(state) : getNamingNameNodeUri(state, nodeName))
+        : getNodeRootPage(state);
+}
+
+export function AvatarImpl({avatar, size, shape: shapeLocal, className, draggable, onClick, rootPage, shapeGlobal}) {
     const {src, alt, shape} = avatar ? {
         src: `${rootPage}/media/${avatar.path}`,
         alt: "Avatar",
@@ -30,7 +39,8 @@ export function AvatarImpl({avatar, size, shape: shapeLocal, className, draggabl
 }
 
 export const Avatar = connect(
-    state => ({
+    (state, ownProps) => ({
+        rootPage: getRootPage(state, ownProps.nodeName),
         shapeGlobal: getSetting(state, "avatar.shape")
     })
 )(AvatarImpl);
@@ -44,7 +54,7 @@ Avatar.propTypes = {
     shape: PropType.string,
     className: PropType.string,
     draggable: PropType.bool,
-    rootPage: PropType.string,
+    nodeName: PropType.string,
     onClick: PropType.func
 }
 Avatar.defaultProps = {

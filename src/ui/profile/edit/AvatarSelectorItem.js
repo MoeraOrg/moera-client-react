@@ -5,7 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 import { Avatar } from "ui/control";
 
-export default function AvatarSelectorItem({avatar, rootPage, onSelect, onDelete}) {
+export default function AvatarSelectorItem({avatar, onSelect, onDelete}) {
     const sortable = useSortable({id: avatar.id});
     const sortableStyle = {
         transform: CSS.Transform.toString(sortable.transform),
@@ -23,8 +23,7 @@ export default function AvatarSelectorItem({avatar, rootPage, onSelect, onDelete
                 </div>
             }
             <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
-                <Avatar avatar={avatar} size={100} shape="design" draggable={false} rootPage={rootPage}
-                        onClick={onClick}/>
+                <Avatar avatar={avatar} size={100} shape="design" draggable={false} onClick={onClick}/>
             </div>
         </>
     );

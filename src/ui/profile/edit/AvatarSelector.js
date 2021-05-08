@@ -10,8 +10,7 @@ import { Avatar, Loading } from "ui/control";
 import AvatarSelectorItem from "ui/profile/edit/AvatarSelectorItem";
 import "./AvatarSelector.css";
 
-export default function AvatarSelector({loaded, loading, avatars, active, rootPage, onSelect, onNew, onDelete,
-                                        onReorder}) {
+export default function AvatarSelector({loaded, loading, avatars, active, onSelect, onNew, onDelete, onReorder}) {
     const mouseSensor = useSensor(PointerSensor);
     const keyboardSensor = useSensor(KeyboardSensor);
 
@@ -66,7 +65,7 @@ export default function AvatarSelector({loaded, loading, avatars, active, rootPa
                             {avatars.map(avatar =>
                                 <div key={avatar.id}
                                      className={cx("item", {"active": active && !dragged && avatar.id === active.id})}>
-                                    <AvatarSelectorItem avatar={avatar} rootPage={rootPage}
+                                    <AvatarSelectorItem avatar={avatar}
                                                         onSelect={!dragged ? onSelect: null}
                                                         onDelete={!dragged ? onDelete: null}/>
                                 </div>
@@ -81,7 +80,7 @@ export default function AvatarSelector({loaded, loading, avatars, active, rootPa
                 <DragOverlay zIndex={1080} dropAnimation={null}
                              modifiers={[restrictToFirstScrollableAncestor, relateToSelector]}>
                     {dragged &&
-                        <Avatar avatar={dragged} size={100} shape="design" draggable={false} rootPage={rootPage}/>
+                        <Avatar avatar={dragged} size={100} shape="design" draggable={false}/>
                     }
                 </DragOverlay>,
                 document.querySelector("#modal-root")

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { isConnectedToHome } from "state/home/selectors";
-import { getNodeRootPage, isPermitted } from "state/node/selectors";
+import { isPermitted } from "state/node/selectors";
 import { Avatar } from "ui/control";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
@@ -18,7 +18,7 @@ import EntryHtml from "ui/posting/EntryHtml";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 
-const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted, rootPage}) => (
+const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted}) => (
     <>
         <div className="posting entry mt-2">
             {deleting ?
@@ -28,7 +28,7 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
                     <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
                     <PostingPin pinned={story != null && story.pinned}/>
                     <div className="owner-line">
-                        <Avatar avatar={posting.ownerAvatar} size={48} rootPage={rootPage}/>
+                        <Avatar avatar={posting.ownerAvatar} size={48}/>
                         <div className="owner-info">
                             <PostingSource posting={posting}/>
                             <PostingOwner posting={posting}/>
@@ -55,6 +55,5 @@ export default connect(
     state => ({
         connectedToHome: isConnectedToHome(state),
         isPermitted: (operation, posting) => isPermitted(operation, posting, state),
-        rootPage: getNodeRootPage(state)
     })
 )(DetailedPosting);

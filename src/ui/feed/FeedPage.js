@@ -15,7 +15,7 @@ import {
     feedScrolledToAnchor,
     feedStatusUpdate
 } from "state/feeds/actions";
-import { getNodeRootPage, isAtHomeNode } from "state/node/selectors";
+import { isAtHomeNode } from "state/node/selectors";
 import { getPageHeaderHeight } from "util/misc";
 import "./FeedPage.css";
 
@@ -221,7 +221,7 @@ class FeedPage extends React.PureComponent {
     };
 
     render() {
-        const {feedName, title, loadingFuture, loadingPast, stories, postings, before, after, rootPage} = this.props;
+        const {feedName, title, loadingFuture, loadingPast, stories, postings, before, after} = this.props;
         const {atTop, atBottom} = this.state;
 
         if (stories.length === 0 && !loadingFuture && !loadingPast
@@ -249,8 +249,7 @@ class FeedPage extends React.PureComponent {
                         .filter(t => postings[t.postingId])
                         .map(t => ({story: t, ...postings[t.postingId]}))
                         .map(({story, posting, deleting}) =>
-                            <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}
-                                         rootPage={rootPage}/>)}
+                            <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
                     <FeedSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"
                                   visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
                                   onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
@@ -271,8 +270,7 @@ export default connect(
         stories: getFeedState(state, ownProps.feedName).stories,
         postings: state.postings,
         anchor: getFeedState(state, ownProps.feedName).anchor,
-        atHomeNode: isAtHomeNode(state),
-        rootPage: getNodeRootPage(state)
+        atHomeNode: isAtHomeNode(state)
     }),
     { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor, feedStatusUpdate }
 )(FeedPage);

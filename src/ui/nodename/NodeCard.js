@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import { NodeName } from "api";
 import { getNodeCard, isNodeCardToBeLoaded } from "state/nodecards/selectors";
-import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import SubscribeButton from "ui/control/SubscribeButton";
 import { Avatar, Loading } from "ui/control";
@@ -13,7 +12,7 @@ import { mentionName, shortGender } from "util/misc";
 import { Browser } from "ui/browser";
 import "./NodeCard.css";
 
-function NodeCard({nodeName, fullName, card, cardNotLoaded, rootPage, homeOwnerName}) {
+function NodeCard({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) {
     if (cardNotLoaded) {
         return (
             <div className="node-card">
@@ -31,7 +30,7 @@ function NodeCard({nodeName, fullName, card, cardNotLoaded, rootPage, homeOwnerN
     return (
         <div className="node-card">
             <div className="main">
-                <Avatar avatar={card.avatar} size={Browser.isTinyScreen() ? 64 : 100} rootPage={rootPage}/>
+                <Avatar avatar={card.avatar} size={Browser.isTinyScreen() ? 64 : 100} nodeName={nodeName}/>
                 <div className="body">
                     {realFullName &&
                         <div>
@@ -72,7 +71,6 @@ export default connect(
     (state, ownProps) => ({
         card: getNodeCard(state, ownProps.nodeName),
         cardNotLoaded: isNodeCardToBeLoaded(state, ownProps.nodeName),
-        rootPage: getNamingNameNodeUri(state, ownProps.nodeName),
         homeOwnerName: getHomeOwnerName(state)
     })
 )(NodeCard);

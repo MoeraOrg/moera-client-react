@@ -10,14 +10,13 @@ import {
     profileAvatarsReorder,
     profileOpenAvatarEditDialog
 } from "state/profile/actions";
-import { getNodeRootPage } from "state/node/selectors";
 import { Avatar } from "ui/control";
 import AvatarSelector from "ui/profile/edit/AvatarSelector";
 import AvatarEditDialog from "ui/profile/edit/AvatarEditDialog";
 import "./AvatarEditor.css";
 
-const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, profileAvatarsLoad,
-                       profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder}) => {
+function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, profileAvatarsLoad, profileOpenAvatarEditDialog,
+                       profileAvatarConfirmDelete, profileAvatarsReorder}) {
     const [, {value}, {setValue}] = useField(name);
 
     const {
@@ -75,14 +74,13 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
             <div className="avatar-editor">
                 <div ref={setButtonRef} onClick={onEdit}>
                     <div className="icon"><FontAwesomeIcon icon="pen"/></div>
-                    <Avatar avatar={value} size={200} rootPage={rootPage}/>
+                    <Avatar avatar={value} size={200}/>
                 </div>
                 {visible &&
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                          className="fade popover shadow-sm show">
                         <AvatarSelector loading={avatarsLoading} loaded={avatarsLoaded} avatars={avatars} active={value}
-                                        rootPage={rootPage} onSelect={onSelect} onNew={onNew} onDelete={onDelete}
-                                        onReorder={onReorder}/>
+                                        onSelect={onSelect} onNew={onNew} onDelete={onDelete} onReorder={onReorder}/>
                         <div ref={setArrowRef} style={arrowStyles} className="arrow"/>
                     </div>
                 }
@@ -90,11 +88,10 @@ const AvatarEditor = ({name, rootPage, avatarsLoading, avatarsLoaded, avatars, p
             <AvatarEditDialog/>
         </>
     );
-};
+}
 
 export default connect(
     state => ({
-        rootPage: getNodeRootPage(state),
         avatarsLoading: state.profile.avatars.loading,
         avatarsLoaded: state.profile.avatars.loaded,
         avatars: state.profile.avatars.avatars

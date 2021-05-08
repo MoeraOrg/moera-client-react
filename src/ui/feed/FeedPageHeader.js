@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropType from 'prop-types';
 
 import { getOwnerAvatar } from "state/owner/selectors";
-import { getNodeRootPage } from "state/node/selectors";
 import PageHeader from "ui/page/PageHeader";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
@@ -11,7 +10,7 @@ import FeedTopButton from "ui/feed/FeedTopButton";
 import { Avatar } from "ui/control";
 import { getPageHeaderHeight } from "util/misc";
 
-function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar, rootPage}) {
+function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar}) {
     const [avatarVisible, setAvatarVisible] = useState(false);
 
     const onScroll = useCallback(
@@ -30,7 +29,7 @@ function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar, rootPa
         <PageHeader>
             <h2>
                 {avatarVisible &&
-                    <Avatar avatar={avatar} size={40} rootPage={rootPage}/>
+                    <Avatar avatar={avatar} size={40}/>
                 }
                 {title}
                 <FeedSubscribeButton feedName={feedName}/>
@@ -53,7 +52,6 @@ FeedPageHeader.propTypes = {
 
 export default connect(
     state => ({
-        avatar: getOwnerAvatar(state),
-        rootPage: getNodeRootPage(state)
+        avatar: getOwnerAvatar(state)
     })
 )(FeedPageHeader);

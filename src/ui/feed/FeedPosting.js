@@ -35,7 +35,7 @@ const Content = ({posting}) => {
     }
 };
 
-const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome, rootPage}) => (
+const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) => (
     <div className="posting entry preview" data-moment={story.moment} data-viewed={story.viewed}>
         {deleting ?
             <PostingDeleting/>
@@ -44,7 +44,7 @@ const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome, ro
                 <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
                 <PostingPin pinned={story.pinned}/>
                 <div className="owner-line">
-                    <Avatar avatar={posting.ownerAvatar} size={48} rootPage={rootPage}/>
+                    <Avatar avatar={posting.ownerAvatar} size={48}/>
                     <div className="owner-info">
                         <PostingSource posting={posting}/>
                         <PostingOwner posting={posting}/>

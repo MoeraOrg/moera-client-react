@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 
 import { NodeName } from "api";
 import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/owner/selectors";
+import { Avatar } from "ui/control";
 import { mentionName } from "util/misc";
 import "./FeedTitle.css";
-import { Avatar } from "ui/control";
-import { getNodeRootPage } from "state/node/selectors";
 
-const FeedTitle = ({nodeName, fullName, title, avatar, rootPage}) => (
+const FeedTitle = ({nodeName, fullName, title, avatar}) => (
     <div id="feed-title">
         <div className="panel">
-            <Avatar avatar={avatar} size={100} rootPage={rootPage}/>
+            <Avatar avatar={avatar} size={100}/>
             <div className="body">
                 <div className="full-name">{fullName || NodeName.shorten(nodeName)}</div>
                 <div className="mention">{mentionName(nodeName)}</div>
@@ -26,7 +25,6 @@ export default connect(
         nodeName: getOwnerName(state),
         fullName: getOwnerFullName(state),
         title: getOwnerTitle(state),
-        avatar: getOwnerAvatar(state),
-        rootPage: getNodeRootPage(state)
+        avatar: getOwnerAvatar(state)
     })
 )(FeedTitle);
