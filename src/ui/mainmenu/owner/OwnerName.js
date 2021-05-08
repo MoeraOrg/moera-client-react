@@ -12,13 +12,11 @@ const OwnerName = ({name, changing, atHome, ...props}) => (
         {atHome &&
             <span className="home navbar-text" title="You are at your home node"><FontAwesomeIcon icon="home"/></span>
         }
-        <span id="owner-name">
-            {name ?
-                <NodeName name={name} linked={false} popup={false} {...props}/>
-            :
-                (changing ? "\u22ef" : "no name set")
-            }
-        </span>
+        {name ?
+            <span id="owner-name"><NodeName name={name} linked={false} popup={false} {...props}/></span>
+        :
+            <span id="owner-name" className="navbar-text">{changing ? "\u22ef" : "no name set"}</span>
+        }
     </>
 );
 

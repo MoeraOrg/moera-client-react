@@ -41,5 +41,4 @@ function* shareDialogCopyLinkSaga(action) {
     if (Browser.userAgentOs !== "android") {
         yield put(flashBox("Link copied to the clipboard"));
     }
-
 }

@@ -69,7 +69,8 @@
 }
 
 .node-card .buttons {
-    margin-top: .5em;
-    text-align: right;
+    margin-top: .75em;
+    display: flex;
+    justify-content: space-between;
     width: 100%;
 }

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { NodeName } from "api";
 import { getNodeCard, isNodeCardToBeLoaded } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
+import CopyMentionButton from "ui/nodename/CopyMentionButton";
 import SubscribeButton from "ui/control/SubscribeButton";
 import { Avatar, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
@@ -55,6 +56,7 @@ function NodeCard({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) {
                 </Jump>
             </div>
             <div className="buttons">
+                <CopyMentionButton nodeName={nodeName} fullName={card.fullName ?? fullName}/>
                 <SubscribeButton show={nodeName !== homeOwnerName} ready={card.subscribed != null}
                                  subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
                                  nodeName={nodeName} feedName="timeline" subscriberId={subscriberId}/>

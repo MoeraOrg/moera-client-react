@@ -44,3 +44,9 @@ export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
 export const nodeCardsUnset = () => ({
     type: NODE_CARDS_UNSET
 });
+
+export const NODE_CARD_COPY_MENTION = "NODE_CARD_COPY_MENTION";
+export const nodeCardCopyMention = (nodeName, fullName) => ({
+    type: NODE_CARD_COPY_MENTION,
+    payload: {nodeName, fullName}
+});
