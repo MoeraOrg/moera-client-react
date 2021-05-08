@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -7,54 +7,49 @@ import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import "./SubscribeButton.css";
 
-class SubscribeButton extends React.PureComponent {
+function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, homeSet, nodeName, feedName,
+                          subscriberId, feedSubscribe, feedUnsubscribe}) {
+    const onSubscribe = useCallback(
+        () => feedSubscribe(nodeName, feedName),
+        [feedSubscribe, nodeName, feedName]
+    );
 
-    static propTypes = {
-        show: PropType.bool,
-        ready: PropType.bool,
-        subscribed: PropType.bool,
-        subscribing: PropType.bool,
-        unsubscribing: PropType.bool,
-        nodeName: PropType.string,
-        feedName: PropType.string,
-        subscriberId: PropType.string
-    };
+    const onUnsubscribe = useCallback(
+        () => feedUnsubscribe(nodeName, feedName, subscriberId),
+        [feedUnsubscribe, nodeName, feedName, subscriberId]
+    );
 
-    onSubscribe = () => {
-        const {nodeName, feedName, feedSubscribe} = this.props;
-        feedSubscribe(nodeName, feedName);
+    if (!homeSet || !show || !ready) {
+        return null;
     }
 
-    onUnsubscribe = () => {
-        const {nodeName, feedName, subscriberId, feedUnsubscribe} = this.props;
-        feedUnsubscribe(nodeName, feedName, subscriberId);
+    if (!subscribed) {
+        return (
+            <Button variant="outline-primary" size="sm" className="subscribe-button" loading={subscribing}
+                    onClick={onSubscribe}>
+                Subscribe
+            </Button>
+        );
+    } else {
+        return (
+            <Button variant="outline-secondary" size="sm" className="subscribe-button" loading={unsubscribing}
+                    onClick={onUnsubscribe}>
+                Unsubscribe
+            </Button>
+        );
     }
-
-    render() {
-        const {show, ready, subscribed, subscribing, unsubscribing, homeSet} = this.props;
-
-        if (!homeSet || !show || !ready) {
-            return null;
-        }
-
-        if (!subscribed) {
-            return (
-                <Button variant="outline-primary" size="sm" className="subscribe-button"
-                        loading={subscribing} onClick={this.onSubscribe}>
-                    Subscribe
-                </Button>
-            );
-        } else {
-            return (
-                <Button variant="outline-secondary" size="sm" className="subscribe-button"
-                        loading={unsubscribing} onClick={this.onUnsubscribe}>
-                    Unsubscribe
-                </Button>
-            );
-        }
-    }
-
 }
+
+SubscribeButton.propTypes = {
+    show: PropType.bool,
+    ready: PropType.bool,
+    subscribed: PropType.bool,
+    subscribing: PropType.bool,
+    unsubscribing: PropType.bool,
+    nodeName: PropType.string,
+    feedName: PropType.string,
+    subscriberId: PropType.string
+};
 
 export default connect(
     state => ({
