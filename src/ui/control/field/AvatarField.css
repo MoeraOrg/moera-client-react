@@ -1,0 +1,65 @@
+.avatar-field {
+    cursor: pointer;
+    position: relative;
+    width: min-content;
+    padding: .25rem;
+}
+
+.avatar-field.disabled {
+    cursor: auto;
+}
+
+.avatar-field .icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, .8);
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: .25rem;
+    padding: .1rem .25rem 0 .25rem;
+    font-size: .6rem;
+}
+
+.avatar-field.disabled .icon {
+    display: none;
+}
+
+.avatar-field .selector {
+    margin: .15rem;
+    display: flex;
+    flex-wrap: wrap;
+    cursor: auto;
+    width: max-content;
+    max-height: calc(312px + .75rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@media only screen and (max-width: 575px) {
+    .avatar-field .selector {
+        max-width: calc(312px + 1rem);
+    }
+}
+
+@media only screen and (min-width: 576px) {
+    .avatar-field .selector {
+        max-width: calc(614px + 2.75rem);
+    }
+}
+
+.avatar-field .selector .item {
+    margin-left: .1rem;
+    padding: .25rem;
+    cursor: pointer;
+    border-radius: 10px;
+    position: relative;
+}
+
+.avatar-field .selector .item.active, .avatar-field .selector .item.active:hover {
+    background-color: var(--cyan);
+    cursor: auto;
+}
+
+.avatar-field .selector .item:hover {
+    background-color: var(--highlight);
+}

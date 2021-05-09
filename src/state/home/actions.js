@@ -61,3 +61,19 @@ export const connectionsSet = (roots) => ({
     type: CONNECTIONS_SET,
     payload: {roots}
 });
+
+export const HOME_AVATARS_LOAD = "HOME_AVATARS_LOAD";
+export const homeAvatarsLoad = () => ({
+    type: HOME_AVATARS_LOAD
+});
+
+export const HOME_AVATARS_LOADED = "HOME_AVATARS_LOADED";
+export const homeAvatarsLoaded = (avatars) => ({
+    type: HOME_AVATARS_LOADED,
+    payload: {avatars}
+});
+
+export const HOME_AVATARS_LOAD_FAILED = "HOME_AVATARS_LOAD_FAILED";
+export const homeAvatarsLoadFailed = () => ({
+    type: HOME_AVATARS_LOAD_FAILED
+});

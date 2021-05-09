@@ -30,6 +30,10 @@ export function getHomeOwnerFullName(state) {
     return state.home.owner.fullName;
 }
 
+export function getHomeOwnerAvatar(state) {
+    return state.home.owner.avatar;
+}
+
 export function isHomeOwnerNameSet(state) {
     return !!getHomeOwnerName(state);
 }

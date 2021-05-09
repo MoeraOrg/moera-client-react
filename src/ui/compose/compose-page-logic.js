@@ -7,6 +7,7 @@ import { replaceSmileys } from "util/text";
 const composePageLogic = {
 
     mapPropsToValues(props) {
+        const avatar = props.posting != null ? props.posting.ownerAvatar : props.avatarDefault;
         const subject = props.posting != null && props.posting.bodySrc.subject != null
             ? props.posting.bodySrc.subject : "";
         const body = props.posting != null ? props.posting.bodySrc.text : "";
@@ -27,6 +28,7 @@ const composePageLogic = {
             ? (props.posting.updateInfo.description ?? ""): "";
 
         return {
+            avatar,
             subject,
             body,
             bodyFormatVisible: false,
@@ -72,6 +74,10 @@ const composePageLogic = {
 
     mapValuesToPostingText(values, props) {
         return {
+            ownerAvatar: values.avatar ? {
+                mediaId: values.avatar.mediaId,
+                shape: values.avatar.shape
+            } : null,
             bodySrc: JSON.stringify({
                 subject: props.subjectPresent ? this._replaceSmileys(props, values.subject.trim()) : null,
                 text: this._replaceSmileys(props, values.body.trim())

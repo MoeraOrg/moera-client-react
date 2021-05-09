@@ -1,3 +1,6 @@
+import cloneDeep from 'lodash.clonedeep';
+import * as immutable from 'object-path-immutable';
+
 import {
     BROWSER_API_SET,
     CONNECT_TO_HOME,
@@ -5,6 +8,9 @@ import {
     CONNECTION_TO_HOME_FAILED,
     CONNECTIONS_SET,
     DISCONNECTED_FROM_HOME,
+    HOME_AVATARS_LOAD,
+    HOME_AVATARS_LOAD_FAILED,
+    HOME_AVATARS_LOADED,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
@@ -26,11 +32,16 @@ const emptyConnection = {
         verified: false,
         correct: false,
         changing: false
+    },
+    avatars: {
+        loading: false,
+        loaded: false,
+        avatars: []
     }
 };
 
 const initialState = {
-    ...emptyConnection,
+    ...cloneDeep(emptyConnection),
     addonApiVersion: 1,
     roots: []
 };
@@ -66,7 +77,7 @@ export default (state = initialState, action) => {
         case DISCONNECTED_FROM_HOME:
             return {
                 ...state,
-                ...emptyConnection
+                ...cloneDeep(emptyConnection)
             };
 
         case HOME_OWNER_SET:
@@ -108,6 +119,19 @@ export default (state = initialState, action) => {
                 ...state,
                 roots: action.payload.roots
             };
+
+        case HOME_AVATARS_LOAD:
+            return immutable.set(state, "avatars.loading", true);
+
+        case HOME_AVATARS_LOADED:
+            return immutable.assign(state, "avatars", {
+                loading: false,
+                loaded: true,
+                avatars: action.payload.avatars
+            });
+
+        case HOME_AVATARS_LOAD_FAILED:
+            return immutable.set(state, "avatars.loading", false);
 
         default:
             return state;

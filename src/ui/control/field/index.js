@@ -1,3 +1,4 @@
+export { AvatarField } from "ui/control/field/AvatarField";
 export { CheckboxField } from "ui/control/field/CheckboxField";
 export { ComboboxField } from "ui/control/field/ComboboxField";
 export { DateTimeField } from "ui/control/field/DateTimeField";

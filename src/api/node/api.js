@@ -18,6 +18,9 @@ export const Result = schema({
 const AvatarImageType = {
     type: "object",
     properties: {
+        "mediaId": {
+            type: "string"
+        },
         "path": {
             type: "string"
         },
@@ -39,6 +42,9 @@ export const AvatarInfoType = {
     type: "object",
     properties: {
         "id": {
+            type: "string"
+        },
+        "mediaId": {
             type: "string"
         },
         "path": {

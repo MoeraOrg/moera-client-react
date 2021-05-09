@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 
+import { getHomeOwnerAvatar } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
 import { ConflictWarning, Loading } from "ui/control";
-import { InputField, RichTextField } from "ui/control/field";
+import { AvatarField, InputField, RichTextField } from "ui/control/field";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
@@ -40,6 +41,7 @@ class ComposePage extends React.PureComponent {
     componentDidUpdate(prevProps, prevState, snapshot) {
         if ((this.props.posting != null && prevProps.posting == null)
             || (this.props.posting == null && prevProps.posting != null)
+            || (this.props.avatarDefault != null && prevProps.avatarDefault == null)
             || (this.props.draftId == null && prevProps.draftId != null)) {
             const values = composePageLogic.mapPropsToValues(this.props);
             this.setState({initialPostingText: composePageLogic.mapValuesToPostingText(values, this.props)});
@@ -71,6 +73,7 @@ class ComposePage extends React.PureComponent {
                         <Form>
                             <ConflictWarning text="The post was edited by somebody." show={conflict}
                                              onClose={composeConflictClose}/>
+                            <AvatarField name="avatar"/>
                             {subjectPresent &&
                                 <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                             }
@@ -120,6 +123,7 @@ class ComposePage extends React.PureComponent {
 export default connect(
     state => ({
         loadingFeatures: state.compose.loadingFeatures,
+        avatarDefault: getHomeOwnerAvatar(state),
         subjectPresent: state.compose.subjectPresent,
         sourceFormats: state.compose.sourceFormats,
         loadingPosting: state.compose.loadingPosting,

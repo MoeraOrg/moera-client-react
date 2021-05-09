@@ -2,7 +2,15 @@ import { call, put } from 'redux-saga/effects';
 
 import { Node } from "api";
 import { restoreConnectDialog } from "state/connectdialog/actions";
-import { browserApiSet, connectedToHome, disconnectFromHome, HOME_RESTORE } from "state/home/actions";
+import {
+    browserApiSet,
+    connectedToHome,
+    disconnectFromHome,
+    HOME_AVATARS_LOAD,
+    HOME_RESTORE,
+    homeAvatarsLoaded,
+    homeAvatarsLoadFailed
+} from "state/home/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import { errorThrown } from "state/error/actions";
 import { Browser } from "ui/browser";
@@ -11,7 +19,8 @@ import { executor } from "state/executor";
 import { now } from "util/misc";
 
 export default [
-    executor(HOME_RESTORE, null, homeRestoreSaga)
+    executor(HOME_RESTORE, null, homeRestoreSaga),
+    executor(HOME_AVATARS_LOAD, "", homeAvatarsLoadSaga),
 ];
 
 function* homeRestoreSaga(action) {
@@ -37,5 +46,15 @@ function* homeRestoreSaga(action) {
         yield put(connectedToHome(location, login, token, permissions, cartesIp, cartes, roots, createdAt - now()));
     } else {
         yield put(disconnectFromHome(location, login));
+    }
+}
+
+function* homeAvatarsLoadSaga() {
+    try {
+        const data = yield call(Node.getAvatars, ":");
+        yield put(homeAvatarsLoaded(data));
+    } catch (e) {
+        yield put(homeAvatarsLoadFailed());
+        yield put(errorThrown(e));
     }
 }
