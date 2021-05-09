@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
+import { format } from 'date-fns';
 
 import { getHomeOwnerAvatar } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -10,6 +11,7 @@ import { ConflictWarning, Loading } from "ui/control";
 import { AvatarField, InputField, RichTextField } from "ui/control/field";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
+import ComposeFullName from "ui/compose/ComposeFullName";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
@@ -73,7 +75,13 @@ class ComposePage extends React.PureComponent {
                         <Form>
                             <ConflictWarning text="The post was edited by somebody." show={conflict}
                                              onClose={composeConflictClose}/>
-                            <AvatarField name="avatar"/>
+                            <div className="info">
+                                <AvatarField name="avatar"/>
+                                <div className="body">
+                                    <ComposeFullName/>
+                                    <div className="publish-at">{format(new Date(), "dd-MM-yyyy HH:mm")}</div>
+                                </div>
+                            </div>
                             {subjectPresent &&
                                 <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                             }

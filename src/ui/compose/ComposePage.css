@@ -7,6 +7,51 @@
     padding: 1rem;
 }
 
+.composer .info {
+    display: flex;
+    margin-bottom: .5rem;
+}
+
+.composer .info .avatar-field {
+    margin-top: -.25rem;
+}
+
+.composer .input-resettable INPUT, .composer .input-resettable BUTTON {
+    display: inline-block;
+}
+
+.composer .input-resettable BUTTON {
+    border: 0;
+    background: transparent;
+    color: var(--gray-medium);
+}
+
+.composer .input-resettable BUTTON:hover {
+    color: var(--red);
+}
+
+.composer .text-editable {
+    border: transparent .1rem solid;
+    border-radius: .25rem;
+    padding: .25rem .5rem;
+    width: max-content;
+    cursor: text;
+}
+
+.composer .text-editable:hover {
+    border-color: var(--gray-light);
+}
+
+.composer .body {
+    flex: auto;
+    margin-left: .5rem;
+}
+
+.composer .body .publish-at {
+    font-size: 0.8rem;
+    color: var(--gray-medium);
+}
+
 .features {
     display: flex;
 }

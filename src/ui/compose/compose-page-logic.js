@@ -8,6 +8,7 @@ const composePageLogic = {
 
     mapPropsToValues(props) {
         const avatar = props.posting != null ? props.posting.ownerAvatar : props.avatarDefault;
+        const fullName = props.posting != null ? props.posting.ownerFullName : props.fullNameDefault;
         const subject = props.posting != null && props.posting.bodySrc.subject != null
             ? props.posting.bodySrc.subject : "";
         const body = props.posting != null ? props.posting.bodySrc.text : "";
@@ -29,6 +30,7 @@ const composePageLogic = {
 
         return {
             avatar,
+            fullName,
             subject,
             body,
             bodyFormatVisible: false,
@@ -74,6 +76,7 @@ const composePageLogic = {
 
     mapValuesToPostingText(values, props) {
         return {
+            ownerFullName: values.fullName,
             ownerAvatar: values.avatar ? {
                 mediaId: values.avatar.mediaId,
                 shape: values.avatar.shape
