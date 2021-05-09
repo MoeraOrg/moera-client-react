@@ -1,25 +1,19 @@
-import React from 'react';
-import { Field } from 'formik';
+import React, { useCallback } from 'react';
+import { useField } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
 import "./ComposeIconButton.css";
 
-const ComposeIconButton = ({ icon, name, changed = false, tooltip = null }) => (
-    <Field name={name}>
-        {({field, form}) => (
-            <div className={cx(
-                "composer-icon",
-                {
-                    "composer-icon-active": field.value,
-                    "composer-icon-changed": changed
-                })}
-                 title={tooltip}
-                 onClick={e => form.setFieldValue(field.name, !field.value)} onBlur={field.onBlur}>
-                <FontAwesomeIcon icon={icon} />
-            </div>
-        )}
-    </Field>
-);
+export default function ComposeIconButton({icon, name, changed = false, tooltip = null}) {
+    const [{onBlur}, {value}, {setValue}] = useField(name);
 
-export default ComposeIconButton;
+    const onClick = useCallback(() => setValue(!value), [setValue, value]);
+
+    return (
+        <div className={cx("composer-icon", {"composer-icon-active": value, "composer-icon-changed": changed})}
+             title={tooltip} onClick={onClick} onBlur={onBlur}>
+            <FontAwesomeIcon icon={icon}/>
+        </div>
+    );
+}
