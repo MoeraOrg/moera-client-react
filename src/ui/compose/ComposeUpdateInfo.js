@@ -1,17 +1,22 @@
 import React from 'react';
-import { connect as connectFormik } from 'formik';
+import { useField } from 'formik';
 
 import { CheckboxField, InputField } from "ui/control/field";
 
-const ComposeUpdateInfo = ({formik}) => (
-    formik.values.updateInfoVisible &&
+export default function ComposeUpdateInfo() {
+    const [, {value: updateInfoVisible}] = useField("updateInfoVisible");
+    const [, {value: updateImportant}] = useField("updateImportant");
+
+    if (!updateInfoVisible) {
+        return null;
+    }
+
+    return (
         <>
             <CheckboxField title="Notify followers about the update" name="updateImportant" groupClassName="pl-2"/>
-            {
-                formik.values.updateImportant &&
-                    <InputField title="Update description" name="updateDescription" maxLength={128} anyValue/>
+            {updateImportant &&
+                <InputField title="Update description" name="updateDescription" maxLength={128} anyValue/>
             }
         </>
-);
-
-export default connectFormik(ComposeUpdateInfo);
+    );
+}

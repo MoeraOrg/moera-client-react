@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
-import { format } from 'date-fns';
 
 import { getHomeOwnerAvatar } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";

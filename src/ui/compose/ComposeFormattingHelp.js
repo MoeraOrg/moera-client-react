@@ -1,72 +1,54 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { connect as connectFormik } from 'formik';
+import { useField } from 'formik';
 
 import { ClientSettings } from "api";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import "./ComposeFormattingHelp.css";
 
-class ComposeFormattingHelp extends React.PureComponent {
+function ComposeFormattingHelp({show, settingsUpdate}) {
+    const [visible, setVisible] = useState(show);
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.state = {
-            show: this.props.show
-        };
-    }
-
-    toggleHelp(show) {
-        this.setState({show});
-        this.props.settingsUpdate([{
+    const toggleHelp = useCallback(show => {
+        setVisible(show);
+        settingsUpdate([{
             name: ClientSettings.PREFIX + "posting.body-src-format.show-help",
             value: show.toString()
         }]);
+    }, [setVisible, settingsUpdate]);
+
+    const showHelp = useCallback(() => toggleHelp(true), [toggleHelp]);
+
+    const hideHelp = useCallback(() => toggleHelp(false), [toggleHelp]);
+
+    useEffect(() => setVisible(show), [show]);
+
+    const [, {value: bodyFormat}] = useField("bodyFormat");
+    if (bodyFormat !== "markdown") {
+        return null;
     }
 
-    showHelp = () => {
-        this.toggleHelp(true);
-    };
-
-    hideHelp = () => {
-        this.toggleHelp(false);
-    };
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.show !== prevProps.show) {
-            this.setState({show: this.props.show});
-        }
+    if (visible) {
+        return (
+            <div className="dialog-help">
+                <button type="button" className="close" onClick={hideHelp}>&times;</button>
+                <b>Markdown:</b> see{" "}
+                <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">cheatsheet</a>
+                {" or "}<a href="https://www.markdowntutorial.com/">tutorial</a> to see how to do more.
+                See also <a href="https://www.webfx.com/tools/emoji-cheat-sheet/">emoji cheatsheet</a>.
+            </div>
+        );
+    } else {
+        return (
+            <div className="formatting-help-show" onClick={showHelp}>Show formatting hint</div>
+        );
     }
-
-    render() {
-        if (this.props.formik.values.bodyFormat !== "markdown") {
-            return null;
-        }
-        if (this.state.show) {
-            return (
-                <div className="dialog-help">
-                    <button type="button" className="close" onClick={this.hideHelp}>&times;</button>
-                    <b>Markdown:</b> see{" "}
-                    <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">cheatsheet</a>
-                    {" or "}<a href="https://www.markdowntutorial.com/">tutorial</a> to see how to do more.
-                    See also <a href="https://www.webfx.com/tools/emoji-cheat-sheet/">emoji cheatsheet</a>.
-                </div>
-            );
-        } else {
-            return (
-                <div className="formatting-help-show" onClick={this.showHelp}>Show formatting hint</div>
-            );
-        }
-    }
-
 }
 
-export default connectFormik(
-    connect(
-        state => ({
-            show: getSetting(state, "posting.body-src-format.show-help")
-        }),
-        { settingsUpdate }
-    )(ComposeFormattingHelp)
-);
+export default connect(
+    state => ({
+        show: getSetting(state, "posting.body-src-format.show-help")
+    }),
+    { settingsUpdate }
+)(ComposeFormattingHelp);

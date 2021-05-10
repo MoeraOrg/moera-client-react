@@ -32,7 +32,7 @@ function ComposeResetButton({postingId, draftId, posting, confirmBox}) {
             return null;
         }
         return (
-            <Button variant="info" className="reset-button" onClick={this.onClick}>
+            <Button variant="info" className="reset-button" onClick={onClick}>
                 <FontAwesomeIcon icon="undo-alt"/>
                 {" "}Undo
             </Button>

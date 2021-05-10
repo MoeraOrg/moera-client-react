@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { connect as connectFormik } from 'formik';
+import { useFormikContext } from 'formik';
 
 import { Button } from "ui/control";
 import "./SettingsButtons.css";
 
-const SettingsButtons = ({updating, formik}) => {
-    const {dirty, handleReset} = formik;
+function SettingsButtons({updating}) {
+    const {dirty, handleReset} = useFormikContext();
 
     return (
         <div className="settings-buttons">
@@ -18,12 +18,10 @@ const SettingsButtons = ({updating, formik}) => {
             </Button>
         </div>
     );
-};
+}
 
-export default connectFormik(
-    connect(
-        state => ({
-            updating: state.settings.updating
-        })
-    )(SettingsButtons)
-);
+export default connect(
+    state => ({
+        updating: state.settings.updating
+    })
+)(SettingsButtons);

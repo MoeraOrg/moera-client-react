@@ -1,10 +1,16 @@
 import React from 'react';
-import { connect as connectFormik } from 'formik';
+import { useField } from 'formik';
 
 import { CheckboxField, EmojiListInputField } from "ui/control/field";
 
-const ComposeReactions = ({formik}) => (
-    formik.values.reactionVisible &&
+export default function ComposeReactions() {
+    const [, {value}] = useField("reactionVisible");
+
+    if (!value) {
+        return null;
+    }
+
+    return (
         <>
             <EmojiListInputField title={"Allowed \"Support\" reactions"} name="reactionsPositive" horizontal={true}
                                  groupClassName="pl-2" labelClassName="col-md-3" col="col-md-8" negative={false}
@@ -15,6 +21,5 @@ const ComposeReactions = ({formik}) => (
             <CheckboxField title="Show the detailed list of reactions" name="reactionsVisible" groupClassName="pl-2"/>
             <CheckboxField title="Show the number of reactions" name="reactionTotalsVisible" groupClassName="pl-2"/>
         </>
-);
-
-export default connectFormik(ComposeReactions);
+    );
+}

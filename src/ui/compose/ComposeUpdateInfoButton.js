@@ -1,11 +1,14 @@
 import React from 'react';
-import { connect as connectFormik } from 'formik';
+import { useField } from 'formik';
 
 import ComposeIconButton from "ui/compose/ComposeIconButton";
 
-const ComposeUpdateInfoButton = ({formik}) => {
-    const changed = formik.values.updateImportant || formik.values.updateDescription;
-    return <ComposeIconButton icon="bell" name="updateInfoVisible" changed={changed} tooltip="Notify followers"/>
-};
+export default function ComposeUpdateInfoButton() {
+    const [, {value: updateImportant}] = useField("updateImportant");
+    const [, {value: updateDescription}] = useField("updateDescription");
 
-export default connectFormik(ComposeUpdateInfoButton);
+    return (
+        <ComposeIconButton icon="bell" name="updateInfoVisible" changed={updateImportant || updateDescription}
+                           tooltip="Notify followers"/>
+    );
+};

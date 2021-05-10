@@ -34,7 +34,6 @@ const composePageLogic = {
             subject,
             body,
             bodyFormatVisible: false,
-            bodyFormatDefault: bodyFormat,
             bodyFormat,
             publishAtDefault: publishAt,
             publishAt,

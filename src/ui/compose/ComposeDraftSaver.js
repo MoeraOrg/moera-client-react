@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { connect as connectFormik } from 'formik';
+import { useFormikContext } from 'formik';
 import debounce from 'lodash.debounce';
 import deepEqual from 'react-fast-compare';
 
@@ -8,76 +8,67 @@ import composePageLogic from "ui/compose/compose-page-logic";
 import { composeDraftSave } from "state/compose/actions";
 import "./ComposeDraftSaver.css";
 
-function postingText(props) {
-    return composePageLogic.mapValuesToPostingText(props.formik.values, props);
+function postingText(values, props) {
+    return composePageLogic.mapValuesToPostingText(values, props);
 }
 
 function isEmpty(postingText) {
     return composePageLogic.isPostingTextEmpty(postingText);
 }
 
-class ComposeDraftSaver extends React.PureComponent {
+function ComposeDraftSaver(props) {
+    const {initialPostingText, postingId, draftId, savingDraft, savedDraft, composeDraftSave} = props;
+    const [, setPrevText] = useState(initialPostingText);
+    const [unsavedChanges, setUnsavedChanges] = useState(false);
+    const {status, values} = useFormikContext();
 
-    constructor(props, context) {
-        super(props, context);
-
-        this.state = {
-            unsavedChanges: false
-        };
-    }
-
-    onSave = debounce(() => {
-        const {formik, postingId, draftId, savingDraft, composeDraftSave} = this.props;
-
-        if (formik.status === "submitted") {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onSave = useCallback(debounce(() => {
+        if (status === "submitted") {
             return;
         }
-        const thisText = postingText(this.props);
+        const thisText = postingText(values, props);
         if (isEmpty(thisText) || savingDraft) {
             return;
         }
-        composeDraftSave(postingId, draftId, postingText(this.props));
-        this.setState({unsavedChanges: false});
-    }, 1500);
+        composeDraftSave(postingId, draftId, thisText);
+        setUnsavedChanges(false);
+    }, 1500), [status, values, props, setUnsavedChanges]);
 
-    componentWillUnmount() {
-        this.onSave.cancel();
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const prevText = postingText(prevProps);
-        const thisText = postingText(this.props);
-        if (!deepEqual(prevText, thisText) && !deepEqual(this.props.initialPostingText, thisText)) {
-            this.setState({unsavedChanges: true});
-            if (!isEmpty(thisText)) {
-                this.onSave();
-            }
+    useEffect(() => {
+        return () => {
+            onSave.cancel();
         }
-    }
+    }, [onSave]);
 
-    render() {
-        const {savingDraft, savedDraft} = this.props;
-        const {unsavedChanges} = this.state;
+    useEffect(() => {
+        setPrevText(prevText => {
+            const thisText = postingText(values, props);
+            if (!deepEqual(prevText, thisText) && !deepEqual(initialPostingText, thisText)) {
+                setUnsavedChanges(true);
+                if (!isEmpty(thisText)) {
+                    onSave();
+                }
+            }
+            return thisText;
+        });
+    }, [values, props, setPrevText, initialPostingText, setUnsavedChanges, onSave]);
 
-        return (
-            <div className="draft-saver">
-                {!unsavedChanges && savingDraft && "Saving..."}
-                {!unsavedChanges && savedDraft && "Draft saved."}
-            </div>
-        );
-    }
-
+    return (
+        <div className="draft-saver">
+            {!unsavedChanges && savingDraft && "Saving..."}
+            {!unsavedChanges && savedDraft && "Draft saved."}
+        </div>
+    );
 }
 
-export default connectFormik(
-    connect(
-        state => ({
-            subjectPresent: state.compose.subjectPresent,
-            postingId: state.compose.postingId,
-            draftId: state.compose.draftId,
-            savingDraft: state.compose.savingDraft,
-            savedDraft: state.compose.savedDraft
-        }),
-        { composeDraftSave }
-    )(ComposeDraftSaver)
-);
+export default connect(
+    state => ({
+        subjectPresent: state.compose.subjectPresent,
+        postingId: state.compose.postingId,
+        draftId: state.compose.draftId,
+        savingDraft: state.compose.savingDraft,
+        savedDraft: state.compose.savedDraft
+    }),
+    { composeDraftSave }
+)(ComposeDraftSaver);

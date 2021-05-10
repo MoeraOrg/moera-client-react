@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect as connectFormik } from 'formik';
+import { useField } from 'formik';
 
 import ComposeIconButton from "ui/compose/ComposeIconButton";
 
@@ -14,13 +14,10 @@ function getTooltip(format, sourceFormats) {
     return info != null ? info.title : null;
 }
 
-const ComposeBodyFormatButton = ({sourceFormats, formik}) => {
-    const format = formik.values.bodyFormat;
-    let icon = BODY_FORMAT_ICONS[format];
-    icon = icon != null ? icon : "file-alt";
-    const changed = formik.values.bodyFormat !== formik.values.bodyFormatDefault;
-    return <ComposeIconButton icon={icon} name="bodyFormatVisible" changed={changed}
-                              tooltip={getTooltip(format, sourceFormats)}/>
-};
+export default function ComposeBodyFormatButton({sourceFormats, formik}) {
+    const [, {value, initialValue}] = useField("bodyFormat");
 
-export default connectFormik(ComposeBodyFormatButton);
+    const icon = BODY_FORMAT_ICONS[value] ?? "file-alt";
+    return <ComposeIconButton icon={icon} name="bodyFormatVisible" changed={value !== initialValue}
+                              tooltip={getTooltip(value, sourceFormats)}/>
+};
