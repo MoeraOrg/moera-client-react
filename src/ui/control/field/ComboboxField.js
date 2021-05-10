@@ -20,7 +20,7 @@ export const ComboboxField = ({name, title, horizontal = false, groupClassName, 
                             name={field.name}
                             value={field.value}
                             onChange={v => form.setFieldValue(field.name, v)}
-                            suggest
+                            suggest="true"
                             autoFocus={autoFocus}
                             data={data}
                         />

@@ -6,7 +6,7 @@
 }
 
 .avatar-field.disabled {
-    cursor: auto;
+    cursor: default;
 }
 
 .avatar-field .icon {
@@ -28,7 +28,7 @@
     margin: .15rem;
     display: flex;
     flex-wrap: wrap;
-    cursor: auto;
+    cursor: default;
     width: max-content;
     max-height: calc(312px + .75rem);
     overflow-y: auto;
@@ -57,7 +57,7 @@
 
 .avatar-field .selector .item.active, .avatar-field .selector .item.active:hover {
     background-color: var(--cyan);
-    cursor: auto;
+    cursor: default;
 }
 
 .avatar-field .selector .item:hover {

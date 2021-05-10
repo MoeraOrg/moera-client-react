@@ -9,7 +9,7 @@
 }
 
 #connections .connection.active {
-    cursor: auto;
+    cursor: default;
     background-color: var(--highlight-cyan);
 }
 

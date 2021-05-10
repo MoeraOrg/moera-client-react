@@ -19,7 +19,10 @@ export default function AvatarSelectorItem({avatar, onSelect, onDelete}) {
         <>
             {onDelete &&
                 <div className="delete" title="Delete" onClick={onDeleteClick}>
-                    <FontAwesomeIcon icon="times-circle"/>
+                    <span className="fa-layers fa-fw">
+                        <FontAwesomeIcon icon="times" color="white"/>
+                        <FontAwesomeIcon icon="times-circle"/>
+                    </span>
                 </div>
             }
             <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>

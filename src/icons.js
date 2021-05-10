@@ -45,6 +45,7 @@ import {
     faStar,
     faStrikethrough,
     faSyncAlt,
+    faTimes,
     faTimesCircle,
     faThumbsDown,
     faThumbsUp,
@@ -121,6 +122,7 @@ export default function initIconLibrary() {
     library.add(faStar);
     library.add(faStrikethrough);
     library.add(faSyncAlt);
+    library.add(faTimes);
     library.add(faTimesCircle);
     library.add(faThumbsDown);
     library.add(faThumbsDownRegular);
