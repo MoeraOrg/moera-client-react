@@ -36,7 +36,6 @@ const composePageLogic = {
             bodyFormatVisible: false,
             bodyFormatDefault: bodyFormat,
             bodyFormat,
-            publishAtVisible: false,
             publishAtDefault: publishAt,
             publishAt,
             reactionVisible: false,
@@ -66,7 +65,7 @@ const composePageLogic = {
         if (props.postingId != null) {
             return null;
         }
-        const publishAt = isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null;
+        const publishAt = !isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null;
         const publications = [{feedName: "timeline", publishAt}];
         if (props.newsFeedEnabled) {
             publications.push({feedName: "news", publishAt});

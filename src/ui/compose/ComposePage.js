@@ -15,7 +15,6 @@ import ComposeFullName from "ui/compose/ComposeFullName";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
-import ComposePublishAtButton from "ui/compose/ComposePublishAtButton";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeReactions from "ui/compose/ComposeReactions";
 import ComposeUpdateInfo from "ui/compose/ComposeUpdateInfo";
@@ -76,10 +75,10 @@ class ComposePage extends React.PureComponent {
                             <ConflictWarning text="The post was edited by somebody." show={conflict}
                                              onClose={composeConflictClose}/>
                             <div className="info">
-                                <AvatarField name="avatar"/>
+                                <AvatarField name="avatar" size={56}/>
                                 <div className="body">
                                     <ComposeFullName/>
-                                    <div className="publish-at">{format(new Date(), "dd-MM-yyyy HH:mm")}</div>
+                                    <ComposePublishAt/>
                                 </div>
                             </div>
                             {subjectPresent &&
@@ -91,16 +90,12 @@ class ComposePage extends React.PureComponent {
                             <ComposeFormattingHelp/>
 
                             <ComposeBodyFormat sourceFormats={sourceFormats}/>
-                            <ComposePublishAt/>
                             <ComposeReactions/>
                             <ComposeUpdateInfo/>
 
                             <div className="features">
                                 <div className="feature-buttons">
                                     <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
-                                    {postingId == null &&
-                                        <ComposePublishAtButton/>
-                                    }
                                     <ComposeReactionsButton/>
                                     {postingId != null &&
                                         <ComposeUpdateInfoButton/>

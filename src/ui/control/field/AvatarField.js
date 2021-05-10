@@ -10,7 +10,7 @@ import { Avatar } from "ui/control/Avatar";
 import { Loading } from "ui/control/Loading";
 import "./AvatarField.css";
 
-function AvatarFieldImpl({name, avatarsLoading, avatarsLoaded, avatars, homeAvatarsLoad}) {
+function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, homeAvatarsLoad}) {
     const [, {value}, {setValue}] = useField(name);
 
     const {
@@ -34,7 +34,7 @@ function AvatarFieldImpl({name, avatarsLoading, avatarsLoaded, avatars, homeAvat
         <div className={cx("avatar-field", {"disabled": disabled})}>
             <div ref={setButtonRef} onClick={onClick}>
                 <div className="icon"><FontAwesomeIcon icon="chevron-down"/></div>
-                <Avatar avatar={value} size={48}/>
+                <Avatar avatar={value} size={size}/>
             </div>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
