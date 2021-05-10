@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -12,8 +12,8 @@ export default function AvatarSelectorItem({avatar, onSelect, onDelete}) {
         transition: sortable.transition,
     };
 
-    const onClick = useCallback(() => onSelect(avatar), [onSelect, avatar]);
-    const onDeleteClick = useCallback(() => onDelete(avatar.id), [onDelete, avatar]);
+    const onClick = () => onSelect(avatar);
+    const onDeleteClick = () => onDelete(avatar.id);
 
     return (
         <>

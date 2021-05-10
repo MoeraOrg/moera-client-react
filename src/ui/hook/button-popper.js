@@ -16,10 +16,10 @@ export function useButtonPopper(placement, options = {}) {
         transform: styles.arrow.transform + " rotate(45deg)"
     } : {};
 
-    const onToggle = useCallback(event => {
+    const onToggle = event => {
         setVisible(visible => !visible);
         event.preventDefault();
-    }, [setVisible]);
+    };
 
     const boxShown = useSelector(state => state.confirmBox.show || state.messageBox.show);
     const hideAlways = options.hideAlways ?? true;
@@ -49,7 +49,7 @@ export function useButtonPopper(placement, options = {}) {
         }
     }, [visible, onHide])
 
-    const hide = useCallback(() => setVisible(false), [setVisible]);
+    const hide = () => setVisible(false);
 
     return {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef,

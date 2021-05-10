@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -8,7 +8,7 @@ import { confirmBox } from "state/confirmbox/actions";
 import "./ComposeResetButton.css";
 
 function ComposeResetButton({postingId, draftId, posting, confirmBox}) {
-    const onClick = useCallback(() => {
+    const onClick = () => {
         if (postingId == null) {
             confirmBox("Do you really want to delete the draft?", "Yes", "No",
                 composeDraftListItemDelete(draftId));
@@ -16,7 +16,7 @@ function ComposeResetButton({postingId, draftId, posting, confirmBox}) {
             confirmBox("Do you really want to forget all changes?", "Yes", "No",
                 composeDraftRevisionDelete());
         }
-    }, [postingId, draftId, confirmBox]);
+    };
 
     if (postingId == null) {
         if (draftId == null) {

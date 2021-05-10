@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useField } from 'formik';
 
@@ -8,11 +8,11 @@ import { confirmBox } from "state/confirmbox/actions";
 import "./CommentComposeButtons.css";
 
 function CommentComposeButtons({loading, confirmBox}) {
-    const onCancel = useCallback(e => {
+    const onCancel = e => {
         confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
             commentComposeUnset(), null, "danger");
         e.preventDefault();
-    }, [confirmBox]);
+    };
 
     const [, {value: body}] = useField("body");
     const invisible = body.trim().length === 0;

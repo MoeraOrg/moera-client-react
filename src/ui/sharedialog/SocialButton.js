@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import {
     EmailIcon,
@@ -38,14 +38,14 @@ import { PREFIX } from "api/settings";
 import { closeShareDialog } from "state/sharedialog/actions";
 
 const SocialButton = ({type, url, title, usage, settingsUpdate, closeShareDialog}) => {
-    const onClick = useCallback(() => {
+    const onClick = () => {
         closeShareDialog();
         const data = immutable.update(usage, [type], n => (n ?? 0) + 1);
         settingsUpdate([{
             name: PREFIX + "share.social-buttons.usage",
             value: JSON.stringify(data)
         }])
-    }, [type, usage, settingsUpdate, closeShareDialog])
+    };
 
     switch (type) {
         case "facebook":

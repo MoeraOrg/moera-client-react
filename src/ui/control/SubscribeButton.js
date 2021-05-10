@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -9,15 +9,9 @@ import "./SubscribeButton.css";
 
 function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, homeSet, nodeName, feedName,
                           subscriberId, feedSubscribe, feedUnsubscribe}) {
-    const onSubscribe = useCallback(
-        () => feedSubscribe(nodeName, feedName),
-        [feedSubscribe, nodeName, feedName]
-    );
+    const onSubscribe = () => feedSubscribe(nodeName, feedName);
 
-    const onUnsubscribe = useCallback(
-        () => feedUnsubscribe(nodeName, feedName, subscriberId),
-        [feedUnsubscribe, nodeName, feedName, subscriberId]
-    );
+    const onUnsubscribe = () => feedUnsubscribe(nodeName, feedName, subscriberId);
 
     if (!homeSet || !show || !ready) {
         return null;

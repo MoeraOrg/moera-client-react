@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useField } from 'formik';
 
@@ -10,19 +10,22 @@ import "./ComposeFormattingHelp.css";
 function ComposeFormattingHelp({show, settingsUpdate}) {
     const [visible, setVisible] = useState(show);
 
-    const toggleHelp = useCallback(show => {
+    const toggleHelp = show => {
         setVisible(show);
         settingsUpdate([{
             name: ClientSettings.PREFIX + "posting.body-src-format.show-help",
             value: show.toString()
         }]);
-    }, [setVisible, settingsUpdate]);
+    };
 
-    const showHelp = useCallback(() => toggleHelp(true), [toggleHelp]);
+    const showHelp = () => toggleHelp(true);
 
-    const hideHelp = useCallback(() => toggleHelp(false), [toggleHelp]);
+    const hideHelp = () => toggleHelp(false);
 
-    useEffect(() => setVisible(show), [show]);
+    useEffect(
+        () => setVisible(show),
+        [show, setVisible]
+    );
 
     const [, {value: bodyFormat}] = useField("bodyFormat");
     if (bodyFormat !== "markdown") {

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +19,7 @@ function ComposeNewPost(props) {
     const {postingId, composeDraftSelect} = props;
     const {values} = useFormikContext();
 
-    const onClick = useCallback(() => composeDraftSelect(null), [composeDraftSelect]);
+    const onClick = () => composeDraftSelect(null);
 
     if (postingId != null || isEmpty(postingText(values, props))) {
         return null;

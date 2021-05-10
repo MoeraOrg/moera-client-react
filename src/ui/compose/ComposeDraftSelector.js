@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Loading, LoadingInline } from "ui/control";
@@ -14,15 +14,13 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-start");
 
-    const onSelect = useCallback(id => {
+    const onSelect = id => {
         if (id !== draftId) {
             composeDraftSelect(id);
         }
-   }, [draftId, composeDraftSelect]);
+   };
 
-    const onDelete = useCallback(id => {
-        composeDraftListItemDelete(id);
-    }, [composeDraftListItemDelete]);
+    const onDelete = id => composeDraftListItemDelete(id);
 
     if (postingId != null) {
         return null;

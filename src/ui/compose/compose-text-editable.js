@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useField } from 'formik';
 
 export default function useComposeTextEditable(name, postingId, draftId) {
     const [field, {value, initialValue}, {setValue}] = useField(name);
     const [edit, setEdit] = useState(false);
 
-    const onEdit = useCallback(() => setEdit(true), [setEdit]);
+    const onEdit = () => setEdit(true);
 
-    const onReset = useCallback(() => {
+    const onReset = () => {
         setValue(initialValue);
         setEdit(false);
-    }, [initialValue, setValue, setEdit]);
+    };
 
-    const onKeyDown = useCallback(event => {
+    const onKeyDown = event => {
         if (event.key === "Escape" && onReset) {
             onReset();
         }
-    }, [onReset]);
+    };
 
     const inputRef = useRef();
     useEffect(() => {

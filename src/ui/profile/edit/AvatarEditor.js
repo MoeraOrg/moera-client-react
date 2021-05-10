@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
@@ -23,51 +23,33 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, profileAvat
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles
     } = useButtonPopper("bottom-start", {hideAlways: false});
 
-    const onSelect = useCallback(
-        avatar => setValue(avatar),
-        [setValue]
-    );
+    const onSelect = avatar => setValue(avatar);
 
-    const onEdit = useCallback(
-        event => {
-            if (!avatarsLoaded && !avatarsLoading) {
-                profileAvatarsLoad();
-            }
-            if (value) {
-                onToggle(event);
-            } else {
-                profileOpenAvatarEditDialog(onSelect);
-            }
-        },
-        [value, avatarsLoading, avatarsLoaded, profileAvatarsLoad, profileOpenAvatarEditDialog, onSelect, onToggle]
-    );
-
-    const onNew = useCallback(
-        () => {
+    const onEdit = event => {
+        if (!avatarsLoaded && !avatarsLoading) {
+            profileAvatarsLoad();
+        }
+        if (value) {
+            onToggle(event);
+        } else {
             profileOpenAvatarEditDialog(onSelect);
-            hide();
-        },
-        [onSelect, profileOpenAvatarEditDialog, hide]
-    );
+        }
+    };
 
-    const onDeleted = useCallback(
-        id => {
-            if (value.id === id) {
-                setValue(avatars.find(av => av.id !== id) ?? null)
-            }
-        },
-        [value, setValue, avatars]
-    );
+    const onNew = () => {
+        profileOpenAvatarEditDialog(onSelect);
+        hide();
+    };
 
-    const onDelete = useCallback(
-        id => profileAvatarConfirmDelete(id, onDeleted),
-        [profileAvatarConfirmDelete, onDeleted]
-    );
+    const onDeleted = id => {
+        if (value.id === id) {
+            setValue(avatars.find(av => av.id !== id) ?? null)
+        }
+    }
 
-    const onReorder = useCallback(
-        (activeId, overId) => profileAvatarsReorder(activeId, overId),
-        [profileAvatarsReorder]
-    );
+    const onDelete = id => profileAvatarConfirmDelete(id, onDeleted);
+
+    const onReorder = (activeId, overId) => profileAvatarsReorder(activeId, overId);
 
     return (
         <>

@@ -20,7 +20,7 @@ class InstantButton extends React.PureComponent {
         this.viewAll();
     }
 
-    onToggle = (visible) => {
+    onToggle = visible => {
         if (visible && this.#visible !== visible) {
             this.setState({instantCount: this.props.instantCount});
             ServiceWorkerService.closeAllNotifications();

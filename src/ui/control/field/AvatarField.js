@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
@@ -17,21 +17,19 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, ho
         visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles
     } = useButtonPopper("bottom-start");
 
-    const disabled = !value;
-    const onClick = useCallback(
-        event => {
-            if (!avatarsLoaded && !avatarsLoading) {
-                homeAvatarsLoad();
-            }
-            if (!disabled) {
-                onToggle(event);
-            }
-        },
-        [disabled, avatarsLoading, avatarsLoaded, homeAvatarsLoad, onToggle]
-    );
+    const onClick = event => {
+        if (!avatarsLoaded && !avatarsLoading) {
+            homeAvatarsLoad();
+        }
+        if (value) {
+            onToggle(event);
+        }
+    };
+
+    const onSelect = avatar => () => setValue(avatar);
 
     return (
-        <div className={cx("avatar-field", {"disabled": disabled})}>
+        <div className={cx("avatar-field", {"disabled": !value})}>
             <div ref={setButtonRef} onClick={onClick}>
                 <div className="icon"><FontAwesomeIcon icon="chevron-down"/></div>
                 <Avatar avatar={value} size={size}/>
@@ -44,7 +42,7 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, ho
                             avatars.map(avatar =>
                                 <div key={avatar.id}
                                      className={cx("item", {"active": value && avatar.mediaId === value.mediaId})}>
-                                    <Avatar avatar={avatar} size={100} shape="design" onClick={() => setValue(avatar)}/>
+                                    <Avatar avatar={avatar} size={100} shape="design" onClick={onSelect(avatar)}/>
                                 </div>
                             )
                         :
