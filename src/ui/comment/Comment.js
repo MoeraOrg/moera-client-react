@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import CommentMenu from "ui/comment/CommentMenu";
+import CommentAvatar from "ui/comment/CommentAvatar";
 import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
@@ -30,19 +31,22 @@ const Comment = ({
         :
             <>
                 <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
-                <div className="owner-line">
-                    <CommentOwner comment={comment}/>
-                    <CommentDate nodeName={postingReceiverName ?? postingOwnerName}
-                                 postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
-                    <CommentUpdated comment={comment}/>
-                </div>
-                <CommentContent className="content" comment={comment} previousId={previousId}/>
-                <div className="reactions-line">
-                    {connectedToHome && comment.signature != null &&
-                        <CommentButtons nodeName={postingReceiverName ?? postingOwnerName}
-                                        postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
-                    }
-                    <CommentReactions postingId={postingId} comment={comment}/>
+                <CommentAvatar comment={comment} nodeName={postingReceiverName ?? postingOwnerName}/>
+                <div className="details">
+                    <div className="owner-line">
+                        <CommentOwner comment={comment}/>
+                        <CommentDate nodeName={postingReceiverName ?? postingOwnerName}
+                                     postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
+                        <CommentUpdated comment={comment}/>
+                    </div>
+                    <CommentContent className="content" comment={comment} previousId={previousId}/>
+                    <div className="reactions-line">
+                        {connectedToHome && comment.signature != null &&
+                            <CommentButtons nodeName={postingReceiverName ?? postingOwnerName}
+                                            postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
+                        }
+                        <CommentReactions postingId={postingId} comment={comment}/>
+                    </div>
                 </div>
             </>
         }

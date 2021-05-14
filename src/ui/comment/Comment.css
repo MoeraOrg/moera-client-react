@@ -1,8 +1,14 @@
 .comment {
     position: relative;
-    margin: 0 1rem .6rem 1rem;
+    margin-bottom: .6rem;
     width: max-content;
     max-width: calc(100% - 2rem);
+    display: flex;
+}
+
+.comment .details {
+    flex: auto;
+    margin-left: .25rem;
 }
 
 .comment .owner-line {
