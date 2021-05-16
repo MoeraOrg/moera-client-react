@@ -8,7 +8,7 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import "./CommentButtons.css";
 
-const CommentButtons = ({nodeName, postingId, comment, homeOwnerName, enableSelf}) => {
+function CommentButtons({nodeName, postingId, comment, homeOwnerName, enableSelf}) {
     const cr = comment.clientReaction || {};
     const hide = comment.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
@@ -23,7 +23,7 @@ const CommentButtons = ({nodeName, postingId, comment, homeOwnerName, enableSelf
             <CommentShareButton nodeName={nodeName} postingId={postingId} comment={comment}/>
         </div>
     );
-};
+}
 
 export default connect(
     state => ({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 import * as textFieldEdit from 'text-field-edit'
@@ -20,38 +20,37 @@ import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { mentionName, parseBool } from "util/misc";
 import "./CommentCompose.css";
 
-class CommentCompose extends React.PureComponent {
+function viewComposer() {
+    const composer = document.getElementById("comment-composer");
+    scrollIntoView(composer, {scrollMode: "if-needed", block: "end"});
+}
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.receiverName !== prevProps.receiverName
-            || this.props.receiverPostingId !== prevProps.receiverPostingId
-            || this.props.formId !== prevProps.formId) {
+function CommentCompose(props) {
+    const {
+        ownerName, beingPosted, receiverName, receiverPostingId, formId, submitKey, bottomMenuHide, bottomMenuShow,
+        receiverFullName, smileysEnabled, sourceFormatDefault, openSignUpDialog, openConnectDialog, values, resetForm,
+        submitForm
+    } = props;
 
-            const values = commentComposeLogic.mapPropsToValues(this.props);
-            this.props.resetForm({values});
+    useEffect(() => {
+        const values = commentComposeLogic.mapPropsToValues(props);
+        resetForm({values});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [receiverName, receiverPostingId, formId, resetForm]); // 'props' are missing on purpose
+
+    const onFocus = () => {
+        viewComposer();
+        bottomMenuHide();
+    }
+
+    const onBlur = () => {
+        if (values["body"].trim().length === 0) {
+            bottomMenuShow();
         }
     }
 
-    view() {
-        const composer = document.getElementById("comment-composer");
-        scrollIntoView(composer, {scrollMode: "if-needed", block: "end"});
-    }
-
-    onFocus = () => {
-        this.view();
-        this.props.bottomMenuHide();
-    }
-
-    onBlur = () => {
-        if (this.props.values["body"].trim().length === 0) {
-            this.props.bottomMenuShow();
-        }
-    }
-
-    onKeyDown = event => {
-        const {submitKey, submitForm} = this.props;
-
-        this.view();
+    const onKeyDown = event => {
+        viewComposer();
         if (event.key === "Enter") {
             const submit = !Browser.isTouchScreen() && !event.shiftKey
                 && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
@@ -64,39 +63,33 @@ class CommentCompose extends React.PureComponent {
         }
     }
 
-    render() {
-        const {ownerName, beingPosted, receiverName, receiverFullName, smileysEnabled, sourceFormatDefault,
-               openSignUpDialog, openConnectDialog, values} = this.props;
-
-        const mention = receiverFullName ? receiverFullName : mentionName(receiverName);
-        if (ownerName) {
-            return (
-                <div id="comment-composer" onFocus={this.onFocus} onBlur={this.onBlur}>
-                    <Form>
-                        <div className="content">
-                            <CommentComposeRepliedTo/>
-                            <RichTextField name="body" rows={1} anyValue
-                                           placeholder={`Write a comment to ${mention} here...`}
-                                           disabled={beingPosted} smileysEnabled={smileysEnabled}
-                                           hidingPanel={values.body.trim() === ""} format={sourceFormatDefault}
-                                           onKeyDown={this.onKeyDown}/>
-                        </div>
-                        <CommentComposeButtons loading={beingPosted}/>
-                    </Form>
-                </div>
-            );
-        } else {
-            return (
-                <div className="alert alert-info">
-                    To add comments, you need to&nbsp;
-                    <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
-                    &nbsp;or&nbsp;
-                    <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
-                </div>
-            );
-        }
+    const mention = receiverFullName ? receiverFullName : mentionName(receiverName);
+    if (ownerName) {
+        return (
+            <div id="comment-composer" onFocus={onFocus} onBlur={onBlur}>
+                <Form>
+                    <div className="content">
+                        <CommentComposeRepliedTo/>
+                        <RichTextField name="body" rows={1} anyValue
+                                       placeholder={`Write a comment to ${mention} here...`}
+                                       disabled={beingPosted} smileysEnabled={smileysEnabled}
+                                       hidingPanel={values.body.trim() === ""} format={sourceFormatDefault}
+                                       onKeyDown={onKeyDown}/>
+                    </div>
+                    <CommentComposeButtons loading={beingPosted}/>
+                </Form>
+            </div>
+        );
+    } else {
+        return (
+            <div className="alert alert-info">
+                To add comments, you need to&nbsp;
+                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
+                &nbsp;or&nbsp;
+                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
+            </div>
+        );
     }
-
 }
 
 export default connect(

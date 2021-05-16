@@ -6,25 +6,17 @@ import { getDetailedPostingId } from "state/detailedposting/selectors";
 import RepliedTo from "ui/comment/RepliedTo";
 import { htmlEntities, replaceEmojis } from "util/html";
 
-class CommentComposeRepliedTo extends React.PureComponent {
+function CommentComposeRepliedTo({postingId, commentId, ownerName, ownerFullName, heading, commentRepliedToUnset}) {
+    const onUnset = () => commentRepliedToUnset();
 
-    onUnset = () => {
-        this.props.commentRepliedToUnset();
+    if (commentId == null) {
+        return null;
     }
 
-    render() {
-        const {postingId, commentId, ownerName, ownerFullName, heading} = this.props;
-
-        if (commentId == null) {
-            return null;
-        }
-
-        return (
-            <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} ownerFullName={ownerFullName}
-                       headingHtml={replaceEmojis(htmlEntities(heading))} unset={true} onUnset={this.onUnset}/>
-        );
-    }
-
+    return (
+        <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} ownerFullName={ownerFullName}
+                   headingHtml={replaceEmojis(htmlEntities(heading))} unset={true} onUnset={onUnset}/>
+    );
 }
 
 export default connect(
