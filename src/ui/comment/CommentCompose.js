@@ -9,11 +9,11 @@ import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
-import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
-import { RichTextField } from "ui/control/field";
+import { AvatarField, RichTextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
@@ -68,6 +68,7 @@ function CommentCompose(props) {
         return (
             <div id="comment-composer" onFocus={onFocus} onBlur={onBlur}>
                 <Form>
+                    <AvatarField name="avatar" size={36}/>
                     <div className="content">
                         <CommentComposeRepliedTo/>
                         <RichTextField name="body" rows={1} anyValue
@@ -96,6 +97,7 @@ export default connect(
     state => ({
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
+        avatarDefault: getHomeOwnerAvatar(state),
         receiverName: state.detailedPosting.comments.receiverName,
         receiverFullName: state.detailedPosting.comments.receiverFullName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,

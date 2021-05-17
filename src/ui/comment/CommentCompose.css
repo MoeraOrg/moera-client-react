@@ -1,8 +1,14 @@
+#comment-composer FORM {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 #comment-composer .content {
     background-color: var(--comments);
     border-radius: 5px;
     padding: .5rem;
     margin-bottom: .5rem;
+    flex: 1 1 0;
 }
 
 #comment-composer .content .form-group {
@@ -15,4 +21,8 @@
 
 #comment-composer TEXTAREA:focus {
     background-color: white;
+}
+
+#comment-composer .buttons {
+    flex: 100%;
 }

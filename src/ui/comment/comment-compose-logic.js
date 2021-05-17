@@ -5,9 +5,11 @@ import { replaceSmileys } from "util/text";
 const commentComposeLogic = {
 
     mapPropsToValues(props) {
+        const avatar = props.comment != null ? props.comment.ownerAvatar : props.avatarDefault;
         const body = props.comment != null ? props.comment.bodySrc.text : "";
 
         return {
+            avatar,
             body
         };
     },
@@ -24,6 +26,11 @@ const commentComposeLogic = {
         return {
             ownerName: props.ownerName,
             ownerFullName: props.ownerFullName,
+            ownerAvatar: values.avatar ? {
+                mediaId: values.avatar.mediaId,
+                shape: values.avatar.shape,
+                optional: true
+            } : null,
             bodySrc: JSON.stringify({
                 text: this._replaceSmileys(props, values.body.trim())
             }),
