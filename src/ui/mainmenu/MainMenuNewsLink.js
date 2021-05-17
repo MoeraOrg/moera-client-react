@@ -5,7 +5,7 @@ import { getFeedState } from "state/feeds/selectors";
 import { PAGE_NEWS } from "state/navigation/pages";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 
-const MainMenuNewsLink = ({anchor}) => {
+function MainMenuNewsLink({anchor}) {
     const href = anchor != null ? `/news?before=${anchor}` :"/news";
     return <MainMenuLink page={PAGE_NEWS} href={href}>NEWS</MainMenuLink>
 }

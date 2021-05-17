@@ -20,7 +20,7 @@ import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/posting/Entry.css";
 
-const Content = ({posting}) => {
+function Content({posting}) {
     if (posting.bodyPreview.text) {
         return (
             <div className="content">
@@ -33,7 +33,7 @@ const Content = ({posting}) => {
             <EntryHtml className="content" html={posting.body.previewText}/>
         );
     }
-};
+}
 
 const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) => (
     <div className="posting entry preview" data-moment={story.moment} data-viewed={story.viewed}>

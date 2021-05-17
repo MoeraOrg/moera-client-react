@@ -5,7 +5,7 @@ import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 import Jump from "ui/navigation/Jump";
 import "./CommentDate.css"
 
-const CommentDate = ({nodeName, postingId, comment}) => {
+function CommentDate({nodeName, postingId, comment}) {
     const date = fromUnixTime(comment.createdAt);
     return (
         <Jump className="date" nodeName={nodeName} title={format(date, "dd-MM-yyyy HH:mm")}
@@ -13,7 +13,7 @@ const CommentDate = ({nodeName, postingId, comment}) => {
             {formatDistanceToNow(date)}
         </Jump>
     );
-};
+}
 
 export default connect(
     state => ({

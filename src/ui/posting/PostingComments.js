@@ -5,7 +5,7 @@ import Jump from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
 import "./PostingComments.css";
 
-const PostingComments = ({posting}) => {
+export default function PostingComments({posting}) {
     if (posting.totalComments <= 0) {
         return null;
     }
@@ -23,5 +23,3 @@ const PostingComments = ({posting}) => {
         </div>
     );
 }
-
-export default PostingComments;

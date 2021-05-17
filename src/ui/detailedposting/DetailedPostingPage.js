@@ -34,7 +34,7 @@ function getFeedAndStory(posting) {
     return {story, href, feedTitle};
 }
 
-const DetailedPostingPage = ({loading, deleting, posting}) => {
+function DetailedPostingPage({loading, deleting, posting}) {
     const {story, href, feedTitle} = getFeedAndStory(posting);
     return (
         <>
@@ -55,7 +55,7 @@ const DetailedPostingPage = ({loading, deleting, posting}) => {
             </Page>
         </>
     );
-};
+}
 
 export default connect(
     state => ({

@@ -7,7 +7,7 @@ import { REACTION_EMOJIS } from "api";
 import Twemoji from "ui/twemoji/Twemoji";
 import "./EmojiSelector.css";
 
-const EmojiChoice = ({negative, emoji, invisible, dimmed, marked, onClick}) => {
+function EmojiChoice({negative, emoji, invisible, dimmed, marked, onClick}) {
     const re = !negative ? REACTION_EMOJIS.positive[emoji] : REACTION_EMOJIS.negative[emoji];
     return (
         <div className={cx("choice", {invisible})} onClick={e => onClick(negative, emoji)}>
@@ -16,7 +16,7 @@ const EmojiChoice = ({negative, emoji, invisible, dimmed, marked, onClick}) => {
             {marked && <div className="marker"><FontAwesomeIcon icon="certificate"/></div> }
         </div>
     );
-};
+}
 
 export class EmojiSelector extends React.PureComponent {
 

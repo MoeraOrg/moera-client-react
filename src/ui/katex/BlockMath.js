@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 
 import createMathComponent from "ui/katex/create-math-component";
 
-const BlockMath = ({ html }) => {
-    return <div dangerouslySetInnerHTML={{__html: html}}/>;
-};
+const BlockMath = ({html}) => (
+    <div dangerouslySetInnerHTML={{__html: html}}/>
+);
 
 BlockMath.propTypes = {
     html: PropTypes.string.isRequired
 };
 
-export default createMathComponent(BlockMath, { displayMode: true });
+export default createMathComponent(BlockMath, {displayMode: true});

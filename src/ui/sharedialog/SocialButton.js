@@ -37,7 +37,7 @@ import { getSetting } from "state/settings/selectors";
 import { PREFIX } from "api/settings";
 import { closeShareDialog } from "state/sharedialog/actions";
 
-const SocialButton = ({type, url, title, usage, settingsUpdate, closeShareDialog}) => {
+function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog}) {
     const onClick = () => {
         closeShareDialog();
         const data = immutable.update(usage, [type], n => (n ?? 0) + 1);

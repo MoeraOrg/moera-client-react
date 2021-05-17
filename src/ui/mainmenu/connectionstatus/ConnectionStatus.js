@@ -18,7 +18,7 @@ import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import "./ConnectionStatus.css";
 
-const ConnectionButtons = ({atNode, connecting,  connected, showNavigator, openConnectDialog, openSignUpDialog}) => {
+function ConnectionButtons({atNode, connecting,  connected, showNavigator, openConnectDialog, openSignUpDialog}) {
     if (showNavigator && Browser.isTinyScreen()) {
         return null;
     }

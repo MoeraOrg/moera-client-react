@@ -8,7 +8,7 @@ import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import "./PostingButtons.css";
 
-const PostingButtons = ({posting, homeOwnerName, enableSelf}) => {
+function PostingButtons({posting, homeOwnerName, enableSelf}) {
     const cr = posting.clientReaction || {};
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
@@ -23,7 +23,7 @@ const PostingButtons = ({posting, homeOwnerName, enableSelf}) => {
             <PostingShareButton posting={posting}/>
         </div>
     );
-};
+}
 
 export default connect(
     state => ({

@@ -16,7 +16,7 @@ import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import "./BottomMenu.css";
 
-const BottomMenu = ({atNode, connecting,  connected, visible, openConnectDialog, openSignUpDialog}) => {
+function BottomMenu({atNode, connecting,  connected, visible, openConnectDialog, openSignUpDialog}) {
     if (connecting) {
         return <>Connecting <Loading/></>;
     }
@@ -44,7 +44,7 @@ const BottomMenu = ({atNode, connecting,  connected, visible, openConnectDialog,
             <NewsButton/>
         </div>
     );
-};
+}
 
 export default connect(
     state => ({

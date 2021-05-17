@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { Popover } from "ui/control";
 import "./OperationStatus.css";
 
-const OperationStatus = ({status, statusUpdated, errorCode, errorMessage}) => {
+function OperationStatus({status, statusUpdated, errorCode, errorMessage}) {
     let text;
     let success = false;
     let failure = false;
@@ -51,7 +51,7 @@ const OperationStatus = ({status, statusUpdated, errorCode, errorMessage}) => {
             {dateTime}
         </span>
     );
-};
+}
 
 export default connect(
     state => ({

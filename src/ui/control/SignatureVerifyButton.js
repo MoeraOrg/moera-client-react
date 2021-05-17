@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./SignatureVerifyButton.css";
 
-export const SignatureVerifyButton = ({status, onVerify}) => {
+export function SignatureVerifyButton({status, onVerify}) {
     switch (status) {
         default:
         case "none":
@@ -32,7 +32,7 @@ export const SignatureVerifyButton = ({status, onVerify}) => {
                 </span>
             );
     }
-};
+}
 
 SignatureVerifyButton.propTypes = {
     status: PropType.string,

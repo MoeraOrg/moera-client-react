@@ -6,7 +6,7 @@ import { getSetting } from "state/settings/selectors";
 import { closeSourceDialog } from "state/sourcedialog/actions";
 import "./SourceDialog.css";
 
-const SourceDialog = ({show, text, loading, feedWidth, closeSourceDialog}) => {
+function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}) {
     if (!show) {
         return null;
     }

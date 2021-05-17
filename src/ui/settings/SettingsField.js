@@ -27,7 +27,7 @@ function convertFormat(format) {
     }
 }
 
-const SettingsField = ({name, fieldName, meta, initialValue}) => {
+export default function SettingsField({name, fieldName, meta, initialValue}) {
     const type = meta ? meta.type : "string";
     const title = meta ? meta.title + (meta.privileged ? " (provider setting)" : "") : name;
     const defaultValue = meta ? meta.defaultValue : null;
@@ -89,6 +89,4 @@ const SettingsField = ({name, fieldName, meta, initialValue}) => {
             return <InputField name={fieldName} title={title} disabled={disabled}
                                initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
     }
-};
-
-export default SettingsField;
+}

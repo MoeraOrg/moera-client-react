@@ -3,7 +3,7 @@ import React from 'react';
 import Jump from "ui/navigation/Jump";
 import "./PostingSubject.css";
 
-const PostingSubject = ({posting, preview}) => {
+export default function PostingSubject({posting, preview}) {
     const subjectHtml = preview && posting.bodyPreview.subjectHtml
         ? posting.bodyPreview.subjectHtml
         : posting.body.subjectHtml;
@@ -15,6 +15,4 @@ const PostingSubject = ({posting, preview}) => {
             <Jump href={`/post/${posting.id}`}><span dangerouslySetInnerHTML={{__html: subjectHtml}}/></Jump>
         </div>
     );
-};
-
-export default PostingSubject;
+}

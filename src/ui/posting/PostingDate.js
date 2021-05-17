@@ -6,7 +6,7 @@ import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
 import "./PostingDate.css"
 
-const PostingDate = ({posting, story, timeRelative}) => {
+function PostingDate({posting, story, timeRelative}) {
     let publishedAt;
     if (posting.receiverName) {
         publishedAt = posting.receiverCreatedAt;
@@ -24,7 +24,7 @@ const PostingDate = ({posting, story, timeRelative}) => {
                 <span title={formatDistanceToNow(date)}>{format(date, "dd-MM-yyyy HH:mm")}</span>
         }</Jump>
     );
-};
+}
 
 export default connect(
     state => ({

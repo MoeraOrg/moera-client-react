@@ -82,7 +82,7 @@ const CACHED = new Map([
     ["1fac2", Twemoji1fac2]
 ]);
 
-const Twemoji = ({code, title = ""}) => {
+export default function Twemoji({code, title = ""}) {
     const emoji = typeof(code) === "string" ? code : Number(code).toString(16);
     switch (emoji) {
         case "1f44d":
@@ -97,10 +97,8 @@ const Twemoji = ({code, title = ""}) => {
                             alt={title} title={title}/>
             }
     }
-};
+}
 
 Twemoji.propTypes = {
     code: PropType.any
 };
-
-export default Twemoji;

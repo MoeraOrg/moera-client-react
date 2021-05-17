@@ -24,7 +24,7 @@ const Emojis = ({className, emojis, total, onClick}) => (
         </span>
 );
 
-export const ReactionTotals = ({reactions, onClick}) => {
+export function ReactionTotals({reactions, onClick}) {
     const positiveTotal = sum(reactions.positive);
     const negativeTotal = sum(reactions.negative);
     const positiveTopEmojis = topEmojis(reactions.positive);
@@ -43,7 +43,7 @@ export const ReactionTotals = ({reactions, onClick}) => {
                     onClick={() => onClick(true)}/>
         </div>
     );
-};
+}
 
 ReactionTotals.propTypes = {
     reactions: PropType.shape({

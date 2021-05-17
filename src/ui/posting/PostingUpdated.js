@@ -4,7 +4,7 @@ import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
 import { getSetting } from "state/settings/selectors";
 
-const PostingUpdated = ({posting, story, timeRelative}) => {
+function PostingUpdated({posting, story, timeRelative}) {
     if (posting.totalRevisions <= 1) {
         return null;
     }
@@ -22,7 +22,7 @@ const PostingUpdated = ({posting, story, timeRelative}) => {
             })
         </span>
     );
-};
+}
 
 export default connect(
     state => ({

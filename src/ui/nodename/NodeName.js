@@ -10,7 +10,7 @@ import NodeNameText from "ui/nodename/NodeNameText";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import "./NodeName.css";
 
-const NodeName = ({name, fullName, verified = false, correct = false, linked = true, popup = true, details, mode}) => {
+function NodeName({name, fullName, verified = false, correct = false, linked = true, popup = true, details, mode}) {
     if (!name) {
         return null;
     }
@@ -40,7 +40,7 @@ const NodeName = ({name, fullName, verified = false, correct = false, linked = t
         </NodeNamePopup>
 
     );
-};
+}
 
 NodeName.propTypes = {
     name: PropType.string,

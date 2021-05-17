@@ -7,7 +7,7 @@ import { settingsGoToSheet } from "state/settings/actions";
 import Jump from "ui/navigation/Jump";
 import "./SettingsMenu.css";
 
-const SettingsMenu = ({tab, sheet, settingsGoToSheet}) => {
+function SettingsMenu({tab, sheet, settingsGoToSheet}) {
     const items = getMenuItems(tab);
     return (
         <ul className="nav nav-pills flex-md-column col-md-2 settings-menu">{
@@ -23,7 +23,7 @@ const SettingsMenu = ({tab, sheet, settingsGoToSheet}) => {
             )
         }</ul>
     );
-};
+}
 
 export default connect(
     state => ({

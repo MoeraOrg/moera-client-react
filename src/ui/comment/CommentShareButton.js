@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
 
-const CommentShareButton = ({nodeName, postingId, comment, shareDialogPrepare}) => {
+function CommentShareButton({nodeName, postingId, comment, shareDialogPrepare}) {
     const href = `/post/${postingId}?comment=${comment.id}`;
     return (
         <button className="comment-button" onClick={() => shareDialogPrepare(comment.heading, nodeName, href)}>
@@ -12,7 +12,7 @@ const CommentShareButton = ({nodeName, postingId, comment, shareDialogPrepare}) 
             <span className="caption">Share</span>
         </button>
     );
-};
+}
 
 export default connect(
     null,

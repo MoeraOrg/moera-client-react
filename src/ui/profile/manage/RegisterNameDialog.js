@@ -8,7 +8,7 @@ import { InputField } from "ui/control/field";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
 import * as Rules from "api/naming/rules";
 
-const RegisterNameDialog = ({show, registering, registerNameDialogCancel}) => {
+function RegisterNameDialog({show, registering, registerNameDialogCancel}) {
     if (!show) {
         return null;
     }
@@ -28,7 +28,7 @@ const RegisterNameDialog = ({show, registering, registerNameDialogCancel}) => {
             </Form>
         </ModalDialog>
     );
-};
+}
 
 const registerNameDialogLogic = {
 

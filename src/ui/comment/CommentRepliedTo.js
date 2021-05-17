@@ -6,7 +6,7 @@ import { getDetailedPostingId } from "state/detailedposting/selectors";
 import RepliedTo from "ui/comment/RepliedTo";
 import "./CommentRepliedTo.css";
 
-const CommentRepliedTo = ({comment, postingId, previousId}) => {
+function CommentRepliedTo({comment, postingId, previousId}) {
     if (!comment.repliedTo) {
         return null;
     }
@@ -18,7 +18,7 @@ const CommentRepliedTo = ({comment, postingId, previousId}) => {
                    ownerFullName={comment.repliedTo.fullName} headingHtml={comment.repliedTo.headingHtml}
                    unset={false}/>
     );
-};
+}
 
 export default connect(
     state => ({

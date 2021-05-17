@@ -7,7 +7,7 @@ import Jump from "ui/navigation/Jump";
 import { getSetting } from "state/settings/selectors";
 import { mentionName } from "util/misc";
 
-const NodeNameMention = ({name, fullName, text, mode}) => {
+function NodeNameMention({name, fullName, text, mode}) {
     if (!name) {
         return null;
     }
@@ -42,7 +42,7 @@ const NodeNameMention = ({name, fullName, text, mode}) => {
             }
         </NodeNamePopup>
     );
-};
+}
 
 NodeNameMention.propTypes = {
     name: PropType.string,

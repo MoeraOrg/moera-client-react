@@ -4,7 +4,7 @@ import PropType from 'prop-types';
 import { NodeName as NodeNameParser } from "api";
 import { mentionName } from "util/misc";
 
-const NodeNameText = ({name, fullName, mode}) => {
+export default function NodeNameText({name, fullName, mode}) {
     let namePart = null;
     let generationPart = null;
     if (mode !== "name") {
@@ -34,5 +34,3 @@ NodeNameText.propTypes = {
     fullName: PropType.string,
     mode: PropType.string
 };
-
-export default NodeNameText;

@@ -4,7 +4,7 @@ import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
 import "./RichTextPasteDialog.css";
 
-const RichTextPasteDialog = ({show, onSubmit}) => {
+export default function RichTextPasteDialog({show, onSubmit}) {
     const [persist, setPersist] = useState(false);
 
     if (!show) {
@@ -30,5 +30,3 @@ const RichTextPasteDialog = ({show, onSubmit}) => {
         </ModalDialog>
     );
 }
-
-export default RichTextPasteDialog;

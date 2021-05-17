@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
 
-const PostingShareButton = ({posting, shareDialogPrepare}) => {
+function PostingShareButton({posting, shareDialogPrepare}) {
     const nodeName = posting.receiverName ?? posting.ownerName;
     const postingId = posting.receiverPostingId ?? posting.id;
     const href = `/post/${postingId}`;
@@ -14,7 +14,7 @@ const PostingShareButton = ({posting, shareDialogPrepare}) => {
             <span className="caption">Share</span>
         </button>
     );
-};
+}
 
 export default connect(
     null,
