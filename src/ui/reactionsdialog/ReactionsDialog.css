@@ -66,6 +66,18 @@
     margin-right: .25rem;
 }
 
+.reactions-dialog .items .item .owner-name {
+    max-width: calc(100% - 1.5em - .35rem - 32px);
+}
+
+.reactions-dialog .items .item .owner-name .node-name {
+    display: inline-block;
+    vertical-align: top;
+    max-width: calc(100% - 2.5em);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .reactions-dialog .items .item .emoji-type {
     flex: none;
     width: 1.7em;
@@ -74,7 +86,7 @@
 
 .reactions-dialog .items .item .emoji-end {
     flex: none;
-    width: 1.7em;
+    width: 1.5em;
     font-size: larger;
     line-height: 32px;
 }
