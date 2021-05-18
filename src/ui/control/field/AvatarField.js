@@ -5,12 +5,13 @@ import { useField } from 'formik';
 import cx from 'classnames';
 
 import { homeAvatarsLoad } from "state/home/actions";
+import { getHomeOwnerAvatar } from "state/home/selectors";
 import { useButtonPopper } from "ui/hook";
 import { Avatar } from "ui/control/Avatar";
 import { Loading } from "ui/control/Loading";
 import "./AvatarField.css";
 
-function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, homeAvatarsLoad}) {
+function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, avatarDefault, homeAvatarsLoad}) {
     const [, {value}, {setValue}] = useField(name);
 
     const {
@@ -21,7 +22,7 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, ho
         if (!avatarsLoaded && !avatarsLoading) {
             homeAvatarsLoad();
         }
-        if (value) {
+        if (value || avatarDefault) {
             onToggle(event);
         }
     };
@@ -29,7 +30,7 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, ho
     const onSelect = avatar => () => setValue(avatar);
 
     return (
-        <div className={cx("avatar-field", {"disabled": !value})}>
+        <div className={cx("avatar-field", {"disabled": !value && !avatarDefault})}>
             <div ref={setButtonRef} onClick={onClick}>
                 <div className="icon"><FontAwesomeIcon icon="chevron-down"/></div>
                 <Avatar avatar={value} size={size}/>
@@ -60,7 +61,8 @@ export const AvatarField = connect(
     state => ({
         avatarsLoading: state.home.avatars.loading,
         avatarsLoaded: state.home.avatars.loaded,
-        avatars: state.home.avatars.avatars
+        avatars: state.home.avatars.avatars,
+        avatarDefault: getHomeOwnerAvatar(state)
     }),
     { homeAvatarsLoad }
 )(AvatarFieldImpl);
