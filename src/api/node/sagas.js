@@ -2,7 +2,7 @@ import { call, select } from 'redux-saga/effects';
 
 import { ClientSettings, NodeApi } from "api";
 import { callApi } from "api/node/call";
-import { getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { urlWithParameters, ut } from "util/url";
 
 export function* createDomain(nodeName, name) {
@@ -252,8 +252,16 @@ export function* remotePostingVerify(nodeName, remoteNodeName, id) {
 }
 
 export function* postPostingReaction(nodeName, postingId, negative, emoji) {
-    const ownerName = yield select(getHomeOwnerName);
-    const body = {ownerName, negative, emoji};
+    const {ownerName, avatar} = {
+        ownerName: yield select(getHomeOwnerName),
+        avatar: yield select(getHomeOwnerAvatar)
+    };
+    const ownerAvatar = avatar && avatar.mediaId ? {
+        mediaId: avatar.mediaId,
+        shape: avatar.shape,
+        optional: true
+    } : null;
+    const body = {ownerName, ownerAvatar, negative, emoji};
     return yield call(callApi, {
         nodeName, location: ut`/postings/${postingId}/reactions`, method: "POST", auth: true, body,
         schema: NodeApi.ReactionCreated
@@ -427,8 +435,16 @@ export function* remoteCommentVerify(nodeName, remoteNodeName, postingId, id) {
 }
 
 export function* postCommentReaction(nodeName, postingId, commentId, negative, emoji) {
-    const ownerName = yield select(getHomeOwnerName);
-    const body = {ownerName, negative, emoji};
+    const {ownerName, avatar} = {
+        ownerName: yield select(getHomeOwnerName),
+        avatar: yield select(getHomeOwnerAvatar)
+    };
+    const ownerAvatar = avatar && avatar.mediaId ? {
+        mediaId: avatar.mediaId,
+        shape: avatar.shape,
+        optional: true
+    } : null;
+    const body = {ownerName, ownerAvatar, negative, emoji};
     return yield call(callApi, {
         nodeName, location: ut`/postings/${postingId}/comments/${commentId}/reactions`, method: "POST", auth: true,
         body, schema: NodeApi.ReactionCreated
