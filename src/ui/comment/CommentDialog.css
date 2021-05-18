@@ -1,0 +1,8 @@
+.comment-dialog .owner-line {
+    margin-bottom: .25rem;
+}
+
+.comment-dialog .owner-line .avatar-field {
+    display: inline-block;
+    margin-right: .25rem;
+}

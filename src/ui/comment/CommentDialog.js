@@ -5,21 +5,23 @@ import * as textFieldEdit from 'text-field-edit';
 
 import { closeCommentDialog, commentDialogConflictClose, commentPost } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerComment, isCommentComposerConflict } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
-import { RichTextField } from "ui/control/field";
+import NodeName from "ui/nodename/NodeName";
+import { AvatarField, RichTextField } from "ui/control/field";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import { parseBool } from "util/misc";
+import "./CommentDialog.css";
 
 function CommentDialog(props) {
     const {
-        comment, show, conflict, beingPosted, smileysEnabled, sourceFormatDefault, closeCommentDialog,
-        commentDialogConflictClose, submitKey, submitForm, resetForm
+        comment, show, ownerName, ownerFullName, conflict, beingPosted, smileysEnabled, sourceFormatDefault,
+        closeCommentDialog, commentDialogConflictClose, submitKey, submitForm, resetForm
     } = props;
-    const commentId = comment != null ? comment.id : null;
 
+    const commentId = comment != null ? comment.id : null;
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
         resetForm({values});
@@ -44,11 +46,15 @@ function CommentDialog(props) {
     }
 
     return (
-        <ModalDialog title="Edit a comment" onClose={closeCommentDialog}>
+        <ModalDialog title="Edit a comment" className="comment-dialog" onClose={closeCommentDialog}>
             <ConflictWarning text="The comment was edited by somebody." show={conflict}
                              onClose={commentDialogConflictClose}/>
             <Form>
                 <div className="modal-body">
+                    <div className="owner-line">
+                        <AvatarField name="avatar" size={36}/>
+                        <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
+                    </div>
                     <RichTextField name="body" rows={5} anyValue autoFocus disabled={beingPosted}
                                    smileysEnabled={smileysEnabled} format={sourceFormatDefault}
                                    onKeyDown={onKeyDown}/>
@@ -67,6 +73,7 @@ export default connect(
         show: state.detailedPosting.compose.showDialog,
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
+        avatarDefault: getHomeOwnerAvatar(state),
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         comment: getCommentComposerComment(state),
         conflict: isCommentComposerConflict(state),
