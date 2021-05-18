@@ -955,6 +955,7 @@ const ReactionInfoType = {
         "ownerFullName": {
             type: "string"
         },
+        "ownerAvatar": AvatarImageType,
         "postingId": {
             type: "string"
         },

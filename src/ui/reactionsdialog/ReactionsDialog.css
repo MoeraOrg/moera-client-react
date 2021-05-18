@@ -55,12 +55,28 @@
 
 .reactions-dialog .items .item {
     display: flex;
+    padding: .15rem;
+}
+
+.reactions-dialog .items .item:hover {
+    background-color: var(--highlight);
+}
+
+.reactions-dialog .items .item .avatar {
+    margin-right: .25rem;
 }
 
 .reactions-dialog .items .item .emoji-type {
     flex: none;
     width: 1.7em;
     padding-right: 0.5rem;
+}
+
+.reactions-dialog .items .item .emoji-end {
+    flex: none;
+    width: 1.7em;
+    font-size: larger;
+    line-height: 32px;
 }
 
 .reactions-dialog .items .item .all {
@@ -85,6 +101,7 @@
 
 .reactions-dialog .items .item .owner-name {
     flex: auto;
+    line-height: 32px;
 }
 
 .reactions-dialog .items .item .bar {
