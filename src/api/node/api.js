@@ -1051,6 +1051,7 @@ const SubscriberInfoType = {
         "fullName": {
             type: "string"
         },
+        "avatar": AvatarImageType,
         "createdAt": {
             type: "integer"
         }
@@ -1086,6 +1087,7 @@ const SubscriptionInfoType = {
         "remoteFullName": {
             type: "string"
         },
+        "remoteAvatar": AvatarImageType,
         "remoteFeedName": {
             type: "string"
         },

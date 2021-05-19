@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 
 import { replaceSmileys } from "util/text";
+import { toAvatarDescription } from "util/avatar";
 
 const commentComposeLogic = {
 
@@ -26,11 +27,7 @@ const commentComposeLogic = {
         return {
             ownerName: props.ownerName,
             ownerFullName: props.ownerFullName,
-            ownerAvatar: values.avatar ? {
-                mediaId: values.avatar.mediaId,
-                shape: values.avatar.shape,
-                optional: true
-            } : null,
+            ownerAvatar: toAvatarDescription(values.avatar),
             bodySrc: JSON.stringify({
                 text: this._replaceSmileys(props, values.body.trim())
             }),

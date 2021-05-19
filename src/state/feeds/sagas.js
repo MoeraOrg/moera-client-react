@@ -32,6 +32,7 @@ import { fillActivityReactions } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
+import { toAvatarDescription } from "util/avatar";
 
 export default [
     executor(FEED_GENERAL_LOAD, payload => payload.feedName, introduce(feedGeneralLoadSaga)),
@@ -57,11 +58,13 @@ function* feedGeneralLoadSaga(action) {
 
 function* feedSubscribeSaga(action) {
     const {nodeName, feedName} = action.payload;
-    const {homeOwnerFullName} = action.context;
+    const {homeOwnerFullName, homeOwnerAvatar} = action.context;
     try {
         const whoAmI = yield call(Node.getWhoAmI, nodeName);
-        const subscriber = yield call(Node.postFeedSubscriber, nodeName, feedName, homeOwnerFullName);
-        yield call(Node.postFeedSubscription, ":", subscriber.id, nodeName, whoAmI.fullName, feedName);
+        const subscriber = yield call(Node.postFeedSubscriber, nodeName, feedName, homeOwnerFullName,
+            toAvatarDescription(homeOwnerAvatar));
+        yield call(Node.postFeedSubscription, ":", subscriber.id, nodeName, whoAmI.fullName,
+            toAvatarDescription(whoAmI.avatar), feedName);
         yield put(feedSubscribed(nodeName, whoAmI.fullName, feedName, subscriber));
     } catch (e) {
         yield put(feedSubscribeFailed(nodeName, feedName));

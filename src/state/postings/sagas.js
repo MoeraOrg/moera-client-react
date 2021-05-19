@@ -34,7 +34,8 @@ import { getNodeRootLocation } from "state/node/selectors";
 import { Browser } from "ui/browser";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
-import { getHomeOwnerFullName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { toAvatarDescription } from "util/avatar";
 
 export default [
     executor(POSTING_DELETE, payload => payload.id, postingDeleteSaga),
@@ -153,17 +154,20 @@ function* postingCopyLinkSaga(action) {
 
 function* postingCommentsSubscribeSaga(action) {
     const {id} = action.payload;
-    const {posting, ownerName, homeOwnerFullName} = yield select(state => ({
+    const {posting, ownerName, homeOwnerFullName, homeOwnerAvatar} = yield select(state => ({
         posting: getPosting(state, id),
         ownerName: getOwnerName(state),
-        homeOwnerFullName: getHomeOwnerFullName(state)
+        homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerAvatar: getHomeOwnerAvatar(state)
     }));
     const nodeName = posting.receiverName ?? ownerName;
     const postingId = posting.receiverPostingId ?? id;
     try {
         const whoAmI = yield call(Node.getWhoAmI, nodeName);
-        const subscriber = yield call(Node.postPostingCommentsSubscriber, nodeName, postingId, homeOwnerFullName);
-        yield call(Node.postPostingCommentsSubscription, ":", subscriber.id, nodeName, whoAmI.fullName, postingId);
+        const subscriber = yield call(Node.postPostingCommentsSubscriber, nodeName, postingId, homeOwnerFullName,
+            toAvatarDescription(homeOwnerAvatar));
+        yield call(Node.postPostingCommentsSubscription, ":", subscriber.id, nodeName, whoAmI.fullName,
+            toAvatarDescription(whoAmI.avatar), postingId);
         yield put(postingCommentsSubscribed(id, subscriber.id));
     } catch (e) {
         yield put(postingCommentsSubscribeFailed(id));

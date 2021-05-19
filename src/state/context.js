@@ -1,5 +1,5 @@
 import { getOwnerFullName, getOwnerName } from "state/owner/selectors";
-import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 
 export default function getContext(state) {
     if (state == null) {
@@ -10,6 +10,7 @@ export default function getContext(state) {
         ownerName: getOwnerName(state),
         ownerFullName: getOwnerFullName(state),
         homeOwnerName: getHomeOwnerName(state),
-        homeOwnerFullName: getHomeOwnerFullName(state)
+        homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerAvatar: getHomeOwnerAvatar(state)
     }
 }
