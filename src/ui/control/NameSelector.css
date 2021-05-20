@@ -8,6 +8,7 @@
 .name-select .item {
     padding: .25em .5em;
     cursor: pointer;
+    display: flex;
 }
 
 .name-select .item.selected, .name-select .item.selected:hover {
@@ -21,6 +22,11 @@
 
 .name-select .item ~ .item {
     border-top: dotted 1px var(--gray-ultralight);
+}
+
+.name-select .item .body {
+    flex: auto;
+    margin-left: .5rem;
 }
 
 .name-select .item .full-name {

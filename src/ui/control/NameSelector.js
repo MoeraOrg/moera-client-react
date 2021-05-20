@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
@@ -12,6 +12,7 @@ import { NodeName } from "api";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
+import { Avatar } from "ui/control/Avatar";
 import { mentionName } from "util/misc";
 import { namesListQuery } from "util/names-list";
 import "./NameSelector.css";
@@ -21,27 +22,28 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, conta
     const [names, setNames] = useState([]);
     const [query, setQuery] = useState(null);
 
-    const [inputDom, setInputDom] = useState(null);
-    const [listDom, setListDom] = useState(null);
+    const inputDom = useRef();
+    const listDom = useRef();
 
     const selectIndex = useCallback(index => {
         setSelectedIndex(index);
-        if (listDom && index >= 0) {
-            const item = listDom.querySelector(`.item[data-index="${index}"]`);
+        if (listDom.current && index >= 0) {
+            const item = listDom.current.querySelector(`.item[data-index="${index}"]`);
             if (item != null) {
                 scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"});
             }
         }
     }, [listDom])
 
-    const loadContacts = debounce(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const loadContacts = useCallback(debounce(() => {
         contactsPrepare(query);
-    }, 500);
+    }, 500), [contactsPrepare]);
 
     useEffect(() => {
-        if (inputDom) {
-            inputDom.focus();
-            inputDom.select();
+        if (inputDom.current) {
+            inputDom.current.focus();
+            inputDom.current.select();
         }
         setQuery(defaultQuery);
     }, [defaultQuery, inputDom, selectIndex]);
@@ -97,15 +99,18 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, conta
 
     return (
         <>
-            <input type="text" className="form-control" value={query ?? defaultQuery} ref={setInputDom}
+            <input type="text" className="form-control" value={query ?? defaultQuery} ref={inputDom}
                    onKeyDown={handleKeyDown} onChange={handleChange}/>
-            <div className={cx("name-select", {"d-none": names.length === 0})} ref={setListDom}>
+            <div className={cx("name-select", {"d-none": names.length === 0})} ref={listDom}>
                 {names.map((item, index) =>
                     <div key={index} data-index={index}
                          className={cx("item", {"selected": index === selectedIndex})}
                          onClick={handleClick(index)}>
-                        <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
-                        <div className="name">{mentionName(item.nodeName)}</div>
+                        <Avatar avatar={item.avatar} size={40}/>
+                        <div className="body">
+                            <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
+                            <div className="name">{mentionName(item.nodeName)}</div>
+                        </div>
                     </div>
                 )}
             </div>
@@ -126,7 +131,7 @@ const getNames = createSelector(
         }
         comments
             .filter(c => !contactNames.has(c.nodeName))
-            .map(({nodeName, fullName, count}) => ({nodeName, fullName, closeness: count * 1000}))
+            .map(({nodeName, fullName, avatar, count}) => ({nodeName, fullName, avatar, closeness: count * 1000}))
             .forEach(c => result.push(c));
         result.sort((c1, c2) => c2.closeness - c1.closeness);
         return result;

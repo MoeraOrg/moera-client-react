@@ -170,11 +170,15 @@ export function isGlanceCommentToBeLoaded(state) {
             && (comments.glanceComment == null || comments.glanceComment.id !== comments.glanceCommentId));
 }
 
-function putName(names, nodeName, fullName) {
+function putName(names, nodeName, fullName, avatar) {
     if (!names.has(nodeName)) {
-        names.set(nodeName, {nodeName, fullName, count: 1});
+        names.set(nodeName, {nodeName, fullName, avatar, count: 1});
     } else {
-        names.get(nodeName).count++;
+        const name = names.get(nodeName);
+        if (!name.avatar || !name.avatar.mediaId) {
+            name.avatar = avatar;
+        }
+        name.count++;
     }
 }
 
@@ -183,9 +187,9 @@ export const getNamesInComments = createSelector(
     comments => {
         const names = new Map();
         for (const comment of comments) {
-            putName(names, comment.ownerName, comment.ownerFullName);
+            putName(names, comment.ownerName, comment.ownerFullName, comment.ownerAvatar);
             if (comment.repliedTo) {
-                putName(names, comment.repliedTo.name, comment.repliedTo.fullName);
+                putName(names, comment.repliedTo.name, comment.repliedTo.fullName, comment.repliedTo.avatar);
             }
         }
         return [...names.values()];
