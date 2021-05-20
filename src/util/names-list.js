@@ -3,6 +3,9 @@ import regexEscape from 'escape-string-regexp';
 const ARRANGEMENT_DEPTH = 5;
 
 export function namesListQuery(list, query) {
+    if (query == null) {
+        return list.slice();
+    }
     const regexes = query.trim().split(/\s+/).map(prefix => RegExp("(?:^|\\s)" + regexEscape(prefix), "ig"));
     return list.filter(item => itemMatch(item, regexes));
 }

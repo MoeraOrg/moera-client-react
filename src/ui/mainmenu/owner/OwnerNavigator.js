@@ -40,7 +40,7 @@ class OwnerNavigator extends React.Component {
 
         return (
             <div id="owner-navigator">
-                <NameSelector id="ownerName" defaultQuery={NodeName.shorten(ownerName)} onChange={this.onChange}
+                <NameSelector defaultQuery={NodeName.shorten(ownerName)} onChange={this.onChange}
                               onSubmit={this.onSubmit}/>
                 <Button variant="secondary" size="sm" loading={switching} onClick={this.onButtonClick}>Go</Button>
             </div>

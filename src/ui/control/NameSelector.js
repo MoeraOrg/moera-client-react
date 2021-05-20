@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropType from 'prop-types';
 import { connect } from 'react-redux';
 import cx from 'classnames';
@@ -16,72 +16,74 @@ import { mentionName } from "util/misc";
 import { namesListQuery } from "util/names-list";
 import "./NameSelector.css";
 
-class NameSelectorImpl extends React.PureComponent {
+function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, contactsPrepare}) {
+    const [selectedIndex, setSelectedIndex] = useState(-1);
+    const [names, setNames] = useState([]);
+    const [query, setQuery] = useState(null);
 
-    state = {
-        selectedIndex: -1,
-        names: [],
-        query: null
-    }
+    const [inputDom, setInputDom] = useState(null);
+    const [listDom, setListDom] = useState(null);
 
-    #inputDom;
-    #listDom;
-
-    componentDidMount() {
-        if (this.#inputDom) {
-            this.#inputDom.focus();
-            this.#inputDom.select();
-        }
-        this.selectIndex(-1);
-        this.refreshNames(this.props.defaultQuery);
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (!deepEqual(this.props.names, prevProps.names)) {
-            this.refreshNames(this.state.query);
-        }
-    }
-
-    refreshNames(query) {
-        const {names, onChange} = this.props;
-
-        this.setState({names: namesListQuery(names, query), query, selectedIndex: -1});
-        if (onChange) {
-            onChange(query);
-        }
-        this.loadContacts();
-    }
-
-    loadContacts = debounce(() => {
-        this.props.contactsPrepare(this.state.query);
-    }, 500)
-
-    selectIndex(index) {
-        this.setState({selectedIndex: index});
-        if (this.#listDom && index >= 0) {
-            const item = this.#listDom.querySelector(`.item[data-index="${index}"]`);
+    const selectIndex = useCallback(index => {
+        setSelectedIndex(index);
+        if (listDom && index >= 0) {
+            const item = listDom.querySelector(`.item[data-index="${index}"]`);
             if (item != null) {
                 scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"});
             }
         }
+    }, [listDom])
+
+    const loadContacts = debounce(() => {
+        contactsPrepare(query);
+    }, 500);
+
+    useEffect(() => {
+        if (inputDom) {
+            inputDom.focus();
+            inputDom.select();
+        }
+        setQuery(defaultQuery);
+    }, [defaultQuery, inputDom, selectIndex]);
+
+    useEffect(() => {
+        selectIndex(-1);
+        setNames(names => {
+            const newNames = namesListQuery(contactNames, query);
+            return deepEqual(names, newNames) ? names : newNames;
+        })
+        if (onChange) {
+            onChange(query);
+        }
+        loadContacts();
+    }, [contactNames, loadContacts, onChange, query, selectIndex]);
+
+    const handleSubmit = (success, index) => {
+        if (onSubmit) {
+            if (index >= 0 && index < names.length) {
+                onSubmit(success, names[index]);
+            } else {
+                onSubmit(success, {nodeName: query});
+            }
+        }
     }
 
-    onKeyDown = event => {
-        const {names, selectedIndex} = this.state;
+    const handleClose = () => handleSubmit(false, -1);
 
+    const handleKeyDown = event => {
         switch (event.key) {
             case "Escape":
             case "Esc":
-                this.onClose();
+                handleClose();
                 break;
             case "ArrowUp":
-                this.selectIndex(Math.max(0, selectedIndex - 1));
+                selectIndex(Math.max(0, selectedIndex - 1));
                 break;
             case "ArrowDown":
-                this.selectIndex(Math.min(selectedIndex + 1, names.length - 1));
+                selectIndex(Math.min(selectedIndex + 1, names.length - 1));
                 break;
             case "Enter":
-                this.onSubmit(true, selectedIndex);
+                handleSubmit(true, selectedIndex);
                 break;
             default:
                 return;
@@ -89,52 +91,26 @@ class NameSelectorImpl extends React.PureComponent {
         event.preventDefault();
     }
 
-    onChange = event => {
-        this.refreshNames(event.target.value);
-    }
+    const handleChange = event => setQuery(event.target.value);
 
-    onClick = index => () => {
-        this.onSubmit(true, index);
-    }
+    const handleClick = index => () => handleSubmit(true, index);
 
-    onSubmit(success, index) {
-        const {names, query} = this.state;
-
-        if (this.props.onSubmit) {
-            if (index >= 0 && index < names.length) {
-                this.props.onSubmit(success, names[index]);
-            } else {
-                this.props.onSubmit(success, {nodeName: query});
-            }
-        }
-    }
-
-    onClose = () => {
-        this.onSubmit(false, -1);
-    }
-
-    render() {
-        const {defaultQuery} = this.props;
-        const {names, selectedIndex, query} = this.state;
-
-        return (
-            <>
-                <input type="text" className="form-control" value={query ?? defaultQuery}
-                       ref={dom => this.#inputDom = dom} onKeyDown={this.onKeyDown} onChange={this.onChange}/>
-                <div className={cx("name-select", {"d-none": names.length === 0})} ref={dom => this.#listDom = dom}>
-                    {names.map((item, index) =>
-                        <div key={index} data-index={index}
-                             className={cx("item", {"selected": index === selectedIndex})}
-                             onClick={this.onClick(index)}>
-                            <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
-                            <div className="name">{mentionName(item.nodeName)}</div>
-                        </div>
-                    )}
-                </div>
-            </>
-        );
-    }
-
+    return (
+        <>
+            <input type="text" className="form-control" value={query ?? defaultQuery} ref={setInputDom}
+                   onKeyDown={handleKeyDown} onChange={handleChange}/>
+            <div className={cx("name-select", {"d-none": names.length === 0})} ref={setListDom}>
+                {names.map((item, index) =>
+                    <div key={index} data-index={index}
+                         className={cx("item", {"selected": index === selectedIndex})}
+                         onClick={handleClick(index)}>
+                        <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
+                        <div className="name">{mentionName(item.nodeName)}</div>
+                    </div>
+                )}
+            </div>
+        </>
+    );
 }
 
 const getNames = createSelector(
@@ -159,7 +135,7 @@ const getNames = createSelector(
 
 export const NameSelector = connect(
     state => ({
-        names: getNames(state)
+        contactNames: getNames(state)
     }),
     { contactsPrepare }
 )(NameSelectorImpl);
