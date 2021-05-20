@@ -17,7 +17,6 @@
 
 .people-tabs .tab:hover {
     color: var(--gray-dark);
-    border-bottom: solid .25rem var(--gray-dark);
 }
 
 .people-tabs .tab.active {

@@ -4,3 +4,13 @@
     padding: 1rem;
     min-height: 25vh;
 }
+
+.people-page .person {
+    margin-bottom: .3rem;
+    margin-right: .5rem;
+}
+
+.people-page .person .avatar {
+    display: inline-block;
+    margin-right: .25rem;
+}
