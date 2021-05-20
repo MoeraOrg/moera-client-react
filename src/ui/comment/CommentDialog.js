@@ -53,7 +53,7 @@ function CommentDialog(props) {
                 <div className="modal-body">
                     <div className="owner-line">
                         <AvatarField name="avatar" size={36}/>
-                        <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
+                        <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
                     <RichTextField name="body" rows={5} anyValue autoFocus disabled={beingPosted}
                                    smileysEnabled={smileysEnabled} format={sourceFormatDefault}
