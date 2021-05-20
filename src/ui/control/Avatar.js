@@ -21,7 +21,8 @@ function getRootPage(state, nodeName) {
         : getNodeRootPage(state);
 }
 
-export function AvatarImpl({avatar, size, shape: shapeLocal, className, draggable, onClick, rootPage, shapeGlobal}) {
+export function AvatarImpl({avatar, size, shape: shapeLocal, className, draggable, onClick, onMouseEnter, onMouseLeave,
+                            onTouchStart, imageRef, rootPage, shapeGlobal}) {
     const {src, alt, shape} = avatar ? {
         src: `${rootPage}/media/${avatar.path}`,
         alt: "Avatar",
@@ -33,7 +34,8 @@ export function AvatarImpl({avatar, size, shape: shapeLocal, className, draggabl
     };
 
     return (
-        <img src={src} alt={alt} width={size} height={size} draggable={draggable} onClick={onClick}
+        <img src={src} alt={alt} width={size} height={size} draggable={draggable} ref={imageRef} onClick={onClick}
+             onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
              className={cx("avatar", `avatar-${shape}`, className)}/>
     );
 }
@@ -55,8 +57,13 @@ Avatar.propTypes = {
     className: PropType.string,
     draggable: PropType.bool,
     nodeName: PropType.string,
-    onClick: PropType.func
+    onClick: PropType.func,
+    onMouseEnter: PropType.func,
+    onMouseLeave: PropType.func,
+    onTouchStart: PropType.func,
+    imageRef: PropType.any
 }
+
 Avatar.defaultProps = {
     draggable: true
 }

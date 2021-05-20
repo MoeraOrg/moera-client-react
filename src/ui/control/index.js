@@ -1,4 +1,5 @@
 export { Avatar } from "ui/control/Avatar";
+export { AvatarWithPopup } from "ui/control/AvatarWithPopup";
 export { Button } from "ui/control/Button";
 export { ConflictWarning } from "ui/control/ConflictWarning";
 export { DropdownMenu } from "ui/control/DropdownMenu";

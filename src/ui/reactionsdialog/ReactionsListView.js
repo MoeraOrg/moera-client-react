@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
-import { Avatar, Loading } from "ui/control";
+import { AvatarWithPopup, Loading } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import Twemoji from "ui/twemoji/Twemoji";
 import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
@@ -29,7 +29,8 @@ const ReactionsListView = ({postingId, commentId, itemsRef, onSwitchView, remain
         <div className="items" tabIndex="-1" ref={itemsRef}>
             {reactions.map(r =>
                 <div className="item" key={r.moment}>
-                    <Avatar avatar={r.ownerAvatar} size={32}/>
+                    <AvatarWithPopup ownerName={r.ownerName} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
+                                     size={32}/>
                     <div className="owner-name">
                         <NodeName name={r.ownerName} fullName={r.ownerFullName}/>
                         {" "}
