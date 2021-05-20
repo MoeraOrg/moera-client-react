@@ -299,6 +299,7 @@ const PostingInfoType = {
         "receiverFullName": {
             type: "string"
         },
+        "receiverAvatar": AvatarImageType,
         "receiverPostingId": {
             type: "string"
         },
@@ -472,6 +473,7 @@ const PostingInfoType = {
                     "fullName": {
                         type: "string"
                     },
+                    "avatar": AvatarImageType,
                     "feedName": {
                         type: "string"
                     },
@@ -568,6 +570,7 @@ const RepliedToType = {
         "fullName": {
             type: "string"
         },
+        "avatar": AvatarImageType,
         "heading": {
             type: "string"
         },
@@ -754,6 +757,7 @@ const StoryInfoType = {
         "remoteFullName": {
             type: "string"
         },
+        "remoteAvatar": AvatarImageType,
         "remotePostingId": {
             type: "string"
         },
@@ -1119,6 +1123,7 @@ export const ActivityReactionInfoArray = schema({
             "remoteFullName": {
                 type: "string"
             },
+            "remoteAvatar": AvatarImageType,
             "remotePostingId": {
                 type: "string"
             },
@@ -1256,6 +1261,7 @@ export const ContactInfoType = {
                 }
             ]
         },
+        "avatar": AvatarImageType,
         "closeness": {
             type: "number"
         }
