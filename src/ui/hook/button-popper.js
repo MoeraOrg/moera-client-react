@@ -8,13 +8,8 @@ export function useButtonPopper(placement, options = {}) {
     const [buttonRef, setButtonRef] = useState(null);
     const [popperRef, setPopperRef] = useState(null);
     const [arrowRef, setArrowRef] = useState(null);
-    const {styles, attributes} = usePopper(buttonRef, popperRef,
+    const {styles, attributes, state} = usePopper(buttonRef, popperRef,
         {placement, ...options, modifiers: [{name: "arrow", options: {element: arrowRef}}]});
-
-    const arrowStyles = styles && styles.arrow ? {
-        ...styles.arrow,
-        transform: styles.arrow.transform + " rotate(45deg)"
-    } : {};
 
     const onToggle = event => {
         setVisible(visible => !visible);
@@ -55,6 +50,7 @@ export function useButtonPopper(placement, options = {}) {
         visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef,
         popperStyles: styles ? styles.popper : {},
         popperAttributes: attributes ? attributes.popper : {},
-        arrowStyles,
+        arrowStyles: styles && styles.arrow ? styles.arrow : {},
+        placement: state ? state.placement.split("-")[0] : ""
     };
 }

@@ -20,7 +20,8 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, profileAvat
     const [, {value}, {setValue}] = useField(name);
 
     const {
-        visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles
+        visible, hide, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
+        placement
     } = useButtonPopper("bottom-start", {hideAlways: false});
 
     const onSelect = avatar => setValue(avatar);
@@ -60,7 +61,7 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, profileAvat
                 </div>
                 {visible &&
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
-                         className="fade popover shadow-sm show">
+                         className={`fade popover bs-popover-${placement} shadow-sm show`}>
                         <AvatarSelector loading={avatarsLoading} loaded={avatarsLoaded} avatars={avatars} active={value}
                                         onSelect={onSelect} onNew={onNew} onDelete={onDelete} onReorder={onReorder}/>
                         <div ref={setArrowRef} style={arrowStyles} className="arrow"/>

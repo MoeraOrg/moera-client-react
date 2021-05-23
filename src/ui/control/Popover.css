@@ -6,33 +6,3 @@
 .popover.show {
     pointer-events: auto;
 }
-
-.popover[data-popper-placement^=top] > .arrow {
-    bottom: -4px;
-    border-right: 1px solid rgba(0, 0, 0, .15);
-    border-bottom: 1px solid rgba(0, 0, 0, .15);
-}
-
-.popover[data-popper-placement^=bottom] > .arrow {
-    top: -4px;
-    border-left: 1px solid rgba(0, 0, 0, .15);
-    border-top: 1px solid rgba(0, 0, 0, .15);
-}
-
-.popover[data-popper-placement^=left] > .arrow {
-    right: -4px;
-    border-left: 1px solid rgba(0, 0, 0, .15);
-    border-bottom: 1px solid rgba(0, 0, 0, .15);
-}
-
-.popover[data-popper-placement^=right] > .arrow {
-    left: -4px;
-    border-right: 1px solid rgba(0, 0, 0, .15);
-    border-top: 1px solid rgba(0, 0, 0, .15);
-}
-
-.popover .arrow {
-    width: 8px;
-    height: 8px;
-    background-color: white;
-}

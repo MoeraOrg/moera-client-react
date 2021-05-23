@@ -15,7 +15,8 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
     const [, {value}, {setValue}] = useField(name);
 
     const {
-        visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles
+        visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,
+        placement
     } = useButtonPopper("bottom-start");
 
     const onClick = event => {
@@ -37,7 +38,7 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
             </div>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
-                     className="fade popover shadow-sm show">
+                     className={`fade popover shadow-sm bs-popover-${placement} show`}>
                     <div className="selector">
                         {avatarsLoaded ?
                             avatars.map(avatar =>

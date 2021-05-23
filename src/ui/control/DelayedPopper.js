@@ -207,11 +207,12 @@ const DelayedPopper = ({placement, arrow, className, children}) => (
         {context => (
             (context.popup || context.locus !== "out") &&
                 <Popper placement={placement}>
-                    {({ref, style, arrowProps}) => (
+                    {({ref, placement, style, arrowProps}) => (
                         <div ref={ref} style={style} className={cx(
                             "popover",
                             "shadow",
                             "fade",
+                            `bs-popover-${placement}`, // activates Bootstrap style for .arrow
                             {"show": context.popup},
                             className
                         )}>

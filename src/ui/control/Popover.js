@@ -93,10 +93,11 @@ export class Popover extends React.PureComponent {
                 {ReactDOM.createPortal(
                     (!detached || this.state.visible) &&
                         <Popper placement="bottom" strategy={strategy}>
-                            {({ref, style, arrowProps, forceUpdate}) => (
+                            {({ref, style, placement, arrowProps, forceUpdate}) => (
                                 <div ref={ref} style={style} className={cx(
                                     "popover",
                                     "fade",
+                                    `bs-popover-${placement}`, // activates Bootstrap style for .arrow
                                     {"show": this.state.visible},
                                     className
                                 )}>
