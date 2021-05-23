@@ -112,6 +112,7 @@ const storyEvent = (properties = {}) => baseEvent({
     "remoteFullName": {
         type: "string"
     },
+    "remoteAvatar": AvatarImageType,
     "remotePostingId": {
         type: "string"
     },
