@@ -16,8 +16,9 @@ import { Avatar } from "ui/control/Avatar";
 import { mentionName } from "util/misc";
 import { namesListQuery } from "util/names-list";
 import "./NameSelector.css";
+import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 
-function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, contactsPrepare}) {
+function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, homeName, homeAvatar, contactsPrepare}) {
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [names, setNames] = useState([]);
     const [query, setQuery] = useState(null);
@@ -106,7 +107,7 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, conta
                     <div key={index} data-index={index}
                          className={cx("item", {"selected": index === selectedIndex})}
                          onClick={handleClick(index)}>
-                        <Avatar avatar={item.avatar} size={40}/>
+                        <Avatar avatar={item.nodeName !== homeName ? item.avatar : homeAvatar} size={40}/>
                         <div className="body">
                             <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
                             <div className="name">{mentionName(item.nodeName)}</div>
@@ -140,7 +141,9 @@ const getNames = createSelector(
 
 export const NameSelector = connect(
     state => ({
-        contactNames: getNames(state)
+        contactNames: getNames(state),
+        homeName: getHomeOwnerName(state),
+        homeAvatar: getHomeOwnerAvatar(state)
     }),
     { contactsPrepare }
 )(NameSelectorImpl);
