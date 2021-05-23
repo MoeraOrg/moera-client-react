@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
 import PropType from 'prop-types';
@@ -7,26 +7,11 @@ import store from "state/store";
 import { getSetting } from "state/settings/selectors";
 import InstantMention from "ui/instant/InstantMention";
 
-class InstantHtml extends React.PureComponent {
+function InstantHtml({html, mode}) {
+    const dom = useRef();
 
-    static propTypes = {
-        html: PropType.string
-    };
-
-    #dom;
-
-    componentDidMount() {
-        this.hydrate();
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        this.hydrate();
-    }
-
-    hydrate() {
-        const {mode} = this.props;
-
-        this.#dom.querySelectorAll("span[data-nodename]").forEach(node => {
+    useEffect(() => {
+        dom.current.querySelectorAll("span[data-nodename]").forEach(node => {
             const name = node.getAttribute("data-nodename");
 
             const span = document.createElement("span");
@@ -39,15 +24,14 @@ class InstantHtml extends React.PureComponent {
                     <InstantMention name={name} fullName={fullName} mode={mode}/>
                 </Provider>, span);
         });
-    }
+    }, [dom, html, mode]);
 
-    render() {
-        const {html} = this.props;
-
-        return <div ref={dom => this.#dom = dom} dangerouslySetInnerHTML={{__html: html}}/>
-    }
-
+    return <div ref={dom} dangerouslySetInnerHTML={{__html: html}}/>
 }
+
+InstantHtml.propTypes = {
+    html: PropType.string
+};
 
 export default connect(
     state => ({
