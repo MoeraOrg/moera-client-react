@@ -6,14 +6,14 @@ import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import { Avatar } from "ui/control/Avatar";
 
 export const AvatarWithPopup = ({ownerName, ownerFullName, avatar, nodeName, size}) => (
-    <Jump nodeName={ownerName} href="/profile">
-        <NodeNamePopup nodeName={ownerName} fullName={ownerFullName}>
-            {(ref, mainEnter, mainLeave, mainTouch) =>
+    <NodeNamePopup nodeName={ownerName} fullName={ownerFullName}>
+        {(ref, mainEnter, mainLeave, mainTouch) =>
+            <Jump nodeName={ownerName} href="/profile">
                 <Avatar avatar={avatar} size={size} nodeName={nodeName} imageRef={ref}
                         onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}/>
-            }
-        </NodeNamePopup>
-    </Jump>
+            </Jump>
+        }
+    </NodeNamePopup>
 );
 
 AvatarWithPopup.propTypes = {
