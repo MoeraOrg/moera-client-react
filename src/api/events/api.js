@@ -159,6 +159,7 @@ const subscriberEvent = (properties = {}) => baseEvent({
     "fullName": {
         type: "string"
     },
+    "avatar": AvatarImageType,
     "createdAt": {
         type: "integer"
     },
@@ -184,6 +185,7 @@ const subscriptionEvent = (properties = {}) => baseEvent({
     "remoteFullName": {
         type: "string"
     },
+    "remoteAvatar": AvatarImageType,
     "remoteFeedName": {
         type: "string"
     },
