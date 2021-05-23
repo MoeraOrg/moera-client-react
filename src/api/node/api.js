@@ -15,7 +15,7 @@ export const Result = schema({
     required: ["errorCode", "message"]
 });
 
-const AvatarImageType = {
+export const AvatarImageType = {
     type: "object",
     properties: {
         "mediaId": {

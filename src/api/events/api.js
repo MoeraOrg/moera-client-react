@@ -1,4 +1,5 @@
 import schema from "api/schema";
+import { AvatarImageType } from "api/node/api";
 
 const baseEvent = (properties = {}) => schema({
     type: "object",
@@ -410,6 +411,12 @@ export const EVENT_SCHEMES = {
         "feedSubscriptionsTotal": {
             type: "integer"
         }
+    }),
+    "REMOTE_NODE_AVATAR_CHANGED": baseEvent({
+        "name": {
+            type: "string"
+        },
+        "avatar": AvatarImageType
     })
 };
 

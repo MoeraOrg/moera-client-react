@@ -20,6 +20,7 @@ import {
 } from "state/feeds/actions";
 import {
     EVENT_HOME_PEOPLE_CHANGED,
+    EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_NODE_PEOPLE_CHANGED
 } from "api/events/actions";
@@ -172,6 +173,14 @@ export default (state = initialState, action) => {
             const {name, fullName} = action.payload;
             if (state[name]) {
                 return immutable.set(state, [name], fullName);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED: {
+            const {name, avatar} = action.payload;
+            if (state[name]) {
+                return immutable.set(state, [name], cloneDeep(avatar));
             }
             return state;
         }
