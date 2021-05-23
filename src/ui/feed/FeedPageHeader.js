@@ -12,7 +12,7 @@ import Jump from "ui/navigation/Jump";
 import { getPageHeaderHeight } from "util/misc";
 
 function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar}) {
-    const [avatarVisible, setAvatarVisible] = useState(false);
+    const [avatarVisible, setAvatarVisible] = useState(window.scrollY >= getPageHeaderHeight());
 
     const onScroll = useCallback(
         () => setAvatarVisible(window.scrollY >= getPageHeaderHeight()),
