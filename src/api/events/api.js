@@ -299,7 +299,8 @@ export const EVENT_SCHEMES = {
         },
         "title": {
             type: "string"
-        }
+        },
+        "avatar": AvatarImageType
     }),
     "REMOTE_POSTING_VERIFIED": remotePostingVerificationEvent({
         "correct": {

@@ -15,6 +15,7 @@ export default [
         [EVENT_HOME_NODE_NAME_CHANGED, EVENT_NODE_NODE_NAME_CHANGED],
         true,
         signal => nodeCardDetailsSet(
-            signal.payload.name, signal.payload.fullName, signal.payload.gender, signal.payload.title)
+            signal.payload.name, signal.payload.fullName, signal.payload.gender, signal.payload.title,
+            signal.payload.avatar)
     )
 ];

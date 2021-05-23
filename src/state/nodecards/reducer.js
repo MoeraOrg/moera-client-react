@@ -76,7 +76,12 @@ export default (state = initialState, action) => {
         case NODE_CARD_DETAILS_SET: {
             const {nodeName, fullName, gender, title, avatar} = action.payload;
             if (state[nodeName]) {
-                return immutable.assign(state, [nodeName], {fullName, gender, title, avatar});
+                const istate = immutable.wrap(state);
+                istate.assign([nodeName], {fullName, gender, title});
+                if (avatar != null) {
+                    istate.set([nodeName, "avatar"], avatar);
+                }
+                return istate.value();
             }
             return state;
         }

@@ -19,6 +19,6 @@ export default [
         EVENT_NODE_NODE_NAME_CHANGED,
         true,
         signal => ownerSet(signal.payload.name, false, signal.payload.fullName, signal.payload.gender,
-            signal.payload.title, false)
+            signal.payload.title, signal.payload.avatar)
     )
 ]

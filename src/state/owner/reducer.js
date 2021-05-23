@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
             if (action.payload.title !== false) {
                 istate.set("title", action.payload.title);
             }
-            if (action.payload.avatar !== false) {
+            if (action.payload.avatar != null) {
                 istate.set("avatar", action.payload.avatar);
             }
             return istate.value();

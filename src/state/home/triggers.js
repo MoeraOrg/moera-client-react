@@ -19,7 +19,7 @@ export default [
     trigger(
         EVENT_HOME_NODE_NAME_CHANGED,
         true,
-        signal => homeOwnerSet(signal.payload.name, false, signal.payload.fullName)
+        signal => homeOwnerSet(signal.payload.name, false, signal.payload.fullName, signal.payload.avatar)
     ),
     trigger(EVENT_HOME_NODE_NAME_CHANGED, true, homeOwnerVerify),
 ];
