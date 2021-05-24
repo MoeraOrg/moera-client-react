@@ -7,7 +7,7 @@ import { getSetting } from "state/settings/selectors";
 
 const MAX_MOMENT = 25337597040000; // January 1, 9999
 
-export function subscriberToSubscription(subscriber, feedName, remoteNodeName, remoteFullName) {
+export function subscriberToSubscription(subscriber, feedName, remoteNodeName, remoteFullName, remoteAvatar) {
     if (subscriber == null) {
         return null;
     }
@@ -17,13 +17,14 @@ export function subscriberToSubscription(subscriber, feedName, remoteNodeName, r
         remoteSubscriberId: subscriber.id,
         remoteNodeName,
         remoteFullName,
+        remoteAvatar,
         remoteFeedName: subscriber.feedName,
         remotePostingId: subscriber.postingId,
         createdAt: subscriber.createdAt
     }
 }
 
-export function subscriptionToSubscriber(subscription, nodeName, fullName) {
+export function subscriptionToSubscriber(subscription, nodeName, fullName, avatar) {
     if (subscription == null) {
         return null;
     }
@@ -34,6 +35,7 @@ export function subscriptionToSubscriber(subscription, nodeName, fullName) {
         postingId: subscription.remotePostingId,
         nodeName,
         fullName,
+        avatar,
         createdAt: subscription.createdAt
     }
 }

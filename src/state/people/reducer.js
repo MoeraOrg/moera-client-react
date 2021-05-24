@@ -129,7 +129,7 @@ export default (state = initialState, action) => {
                     subscriptions = state.subscriptions
                         .filter(sr => sr.remoteNodeName !== action.payload.nodeName);
                     subscriptions.push(subscriberToSubscription(action.payload.subscriber, "news",
-                        action.payload.nodeName, action.payload.fullName));
+                        action.payload.nodeName, action.payload.fullName, action.payload.avatar));
                 }
                 if (subscriptions.length !== state.subscriptions.length) {
                     sortSubscriptions(subscriptions);

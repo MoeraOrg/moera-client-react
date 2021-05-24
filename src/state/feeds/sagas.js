@@ -65,7 +65,7 @@ function* feedSubscribeSaga(action) {
             toAvatarDescription(homeOwnerAvatar));
         yield call(Node.postFeedSubscription, ":", subscriber.id, nodeName, whoAmI.fullName,
             toAvatarDescription(whoAmI.avatar), feedName);
-        yield put(feedSubscribed(nodeName, whoAmI.fullName, feedName, subscriber));
+        yield put(feedSubscribed(nodeName, whoAmI.fullName, whoAmI.avatar, feedName, subscriber));
     } catch (e) {
         yield put(feedSubscribeFailed(nodeName, feedName));
         yield put(errorThrown(e));

@@ -101,8 +101,9 @@ export default [
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal) => getOwnerName(state) === signal.payload.remoteNodeName,
         signal => feedSubscribed(signal.payload.remoteNodeName, signal.payload.remoteFullName,
-            signal.payload.remoteFeedName,
-            subscriptionToSubscriber(signal.payload, signal.context.homeOwnerName, signal.context.homeOwnerFullName))
+            signal.payload.remoteAvatar, signal.payload.remoteFeedName,
+            subscriptionToSubscriber(signal.payload, signal.context.homeOwnerName, signal.context.homeOwnerFullName,
+                signal.context.homeOwnerAvatar))
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
