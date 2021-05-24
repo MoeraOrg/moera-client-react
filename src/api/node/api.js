@@ -745,6 +745,7 @@ const StoryInfoType = {
         },
         "posting": PostingInfoType,
         "comment": CommentInfoType,
+        "summaryAvatar": AvatarImageType,
         "summary": {
             type: "string"
         },
@@ -757,7 +758,6 @@ const StoryInfoType = {
         "remoteFullName": {
             type: "string"
         },
-        "remoteAvatar": AvatarImageType,
         "remotePostingId": {
             type: "string"
         },
