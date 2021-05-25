@@ -4,49 +4,43 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./Scale.css";
 
-export default class Scale extends React.PureComponent {
-
-    static propTypes = {
-        max: PropType.number,
-        value: PropType.number,
-        onChange: PropType.func
-    }
-
-    static defaultProps = {
-        max: 1
-    }
-
-    onClick = sign => () => {
-        if (this.props.onChange) {
-            let value = this.props.value + sign * (this.props.max - 1) / 100;
-            value = Math.max(Math.min(value, this.props.max), 1)
-            if (value !== this.props.value) {
-                this.props.onChange(value);
+export default function Scale({max, value, onChange}) {
+    const onClick = sign => () => {
+        if (onChange) {
+            let v = value + sign * (max - 1) / 100;
+            v = Math.max(Math.min(v, max), 1)
+            if (v !== value) {
+                onChange(v);
             }
         }
     }
 
-    onScaleChange = event => {
-        if (this.props.onChange) {
-            this.props.onChange(event.target.value);
+    const onScaleChange = event => {
+        if (onChange) {
+            onChange(event.target.value);
         }
     }
 
-    render() {
-        const {max, value} = this.props;
+    return (
+        <div className="scale">
+            <button className="btn btn-light btn-sm" onClick={onClick(-1)} disabled={value === 1}>
+                <FontAwesomeIcon icon="minus"/>
+            </button>
+            <input type="range" className="form-control-range" min={1} max={max} step="any" value={value}
+                   onChange={onScaleChange}/>
+            <button className="btn btn-light btn-sm" onClick={onClick(1)} disabled={value === max}>
+                <FontAwesomeIcon icon="plus"/>
+            </button>
+        </div>
+    );
+}
 
-        return (
-            <div className="scale">
-                <button className="btn btn-light btn-sm" onClick={this.onClick(-1)} disabled={value === 1}>
-                    <FontAwesomeIcon icon="minus"/>
-                </button>
-                <input type="range" className="form-control-range" min={1} max={max} step="any" value={value}
-                       onChange={this.onScaleChange}/>
-                <button className="btn btn-light btn-sm" onClick={this.onClick(1)} disabled={value === max}>
-                    <FontAwesomeIcon icon="plus"/>
-                </button>
-            </div>
-        );
-    }
+Scale.propTypes = {
+    max: PropType.number,
+    value: PropType.number,
+    onChange: PropType.func
+}
 
+Scale.defaultProps = {
+    max: 1
 }
