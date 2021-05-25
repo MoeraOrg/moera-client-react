@@ -6,8 +6,8 @@ import ProfileEditor from "ui/profile/edit/ProfileEditor";
 
 const ProfilePage = ({editing}) => (
     <>
-        {!editing && <ProfileView />}
-        {editing && <ProfileEditor />}
+        {!editing && <ProfileView/>}
+        {editing && <ProfileEditor/>}
     </>
 );
 
