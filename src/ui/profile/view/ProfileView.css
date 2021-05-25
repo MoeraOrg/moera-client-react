@@ -16,12 +16,16 @@
 }
 
 .profile-view .avatar {
+    display: block;
     margin-bottom: .5rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @media only screen and (min-width: 576px) {
     .profile-view .avatar {
         float: left;
+        margin-left: unset;
         margin-right: .7rem;
     }
 }
