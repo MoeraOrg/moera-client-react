@@ -5,33 +5,25 @@ import cx from 'classnames';
 
 import "./AvatarShape.css";
 
-export default class AvatarShape extends React.PureComponent {
-
-    static propTypes = {
-        value: PropType.string,
-        onChange: PropType.func
-    }
-
-    onClick = shape => () => {
-        const {onChange} = this.props;
-
+export default function AvatarShape({value, onChange}) {
+    const onClick = shape => () => {
         if (onChange) {
             onChange(shape);
         }
     }
 
-    render() {
-        const {value} = this.props;
+    return (
+        <div className="avatar-shape" title="Avatar shape">
+            {["circle", "square"].map(shape =>
+                <button className={cx({"active" : value === shape})} onClick={onClick(shape)} key={shape}>
+                    <FontAwesomeIcon icon={["far", shape]}/>
+                </button>
+            )}
+        </div>
+    );
+}
 
-        return (
-            <div className="avatar-shape" title="Avatar shape">
-                {["circle", "square"].map(shape =>
-                    <button className={cx({"active" : value === shape})} onClick={this.onClick(shape)} key={shape}>
-                        <FontAwesomeIcon icon={["far", shape]}/>
-                    </button>
-                )}
-            </div>
-        )
-    }
-
+AvatarShape.propTypes = {
+    value: PropType.string,
+    onChange: PropType.func
 }
