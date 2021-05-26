@@ -144,7 +144,15 @@ class RichTextArea extends React.PureComponent {
         if (text.search(/<[a-zA-z][^\n]*>/) >= 0) {
             return true;
         }
-        const clean = html.replace(/<\/?(p|div|br)(\s[^>]*)?>/gi, "");
+        const clean = html.replace(/<\/?(p|br)(\s[^>]*)?>/gi, "");
+        if (clean.search(/<[a-zA-z][^\n]*>/) < 0) {
+            return true;
+        }
+        return false;
+    }
+
+    _shouldPasteHtml(html) {
+        const clean = html.replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
         if (clean.search(/<[a-zA-z][^\n]*>/) < 0) {
             return true;
         }
@@ -168,7 +176,7 @@ class RichTextArea extends React.PureComponent {
         }
         event.preventDefault();
 
-        if (pasteRich === "html") {
+        if (pasteRich === "html" || this._shouldPasteHtml(html)) {
             this.pasteRichText("html", text, html);
         } else {
             this.setState({pasteDialogShow: true, pasteText: text, pasteHtml: html});
