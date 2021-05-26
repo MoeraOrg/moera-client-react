@@ -50,7 +50,7 @@ function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog
     switch (type) {
         case "facebook":
             return (
-                <FacebookShareButton url={url} quote={title} beforeOnClick={onClick}>
+                <FacebookShareButton url={url} beforeOnClick={onClick}>
                     <FacebookIcon size={40} round={true}/>
                 </FacebookShareButton>
             );
