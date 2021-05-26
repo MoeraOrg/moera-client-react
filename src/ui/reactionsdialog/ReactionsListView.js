@@ -10,12 +10,13 @@ import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
 import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
 import {
     getReactionsDialogItems,
+    getReactionsDialogNodeName,
     getReactionsDialogRemainingCount,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
 
-const ReactionsListView = ({postingId, commentId, itemsRef, onSwitchView, remaining, reactionsLoading, reactions,
-                            closeReactionsDialog}) => (
+const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reactionsNodeName, remaining,
+                            reactionsLoading, reactions, closeReactionsDialog}) => (
     <>
         <div className="totals clearfix">
             <TotalsTabs/>
@@ -30,9 +31,10 @@ const ReactionsListView = ({postingId, commentId, itemsRef, onSwitchView, remain
             {reactions.map(r =>
                 <div className="item" key={r.moment}>
                     <AvatarWithPopup ownerName={r.ownerName} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                     size={32}/>
+                                     nodeName={reactionsNodeName} size={32}/>
                     <div className="owner-name">
-                        <NodeName name={r.ownerName} fullName={r.ownerFullName}/>
+                        <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
+                                  avatarNodeName={reactionsNodeName}/>
                         {" "}
                         {r.signature &&
                             <ReactionVerifyButton postingId={postingId} commentId={commentId} ownerName={r.ownerName}/>
@@ -51,6 +53,7 @@ export default connect(
     state => ({
         postingId: state.reactionsDialog.postingId,
         commentId: state.reactionsDialog.commentId,
+        reactionsNodeName: getReactionsDialogNodeName(state),
         remaining: getReactionsDialogRemainingCount(state),
         reactionsLoading: isReactionsDialogReactionsLoading(state),
         reactions: getReactionsDialogItems(state)
