@@ -8,7 +8,8 @@ export function isWebPushSupported(state) {
 }
 
 export function isWebPushRecommended(state) {
-    return isWebPushSupported(state) && Browser.isMobile();
+    // return isWebPushSupported(state) && Browser.isMobile();
+    return false;
 }
 
 export function getWebPushSubscriptionId(state) {
