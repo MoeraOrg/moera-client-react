@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Form, withFormik } from 'formik';
 
-import { getHomeOwnerAvatar } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
@@ -126,6 +126,7 @@ export default connect(
     state => ({
         loadingFeatures: state.compose.loadingFeatures,
         avatarDefault: getHomeOwnerAvatar(state),
+        fullNameDefault: getHomeOwnerFullName(state),
         subjectPresent: state.compose.subjectPresent,
         sourceFormats: state.compose.sourceFormats,
         loadingPosting: state.compose.loadingPosting,
