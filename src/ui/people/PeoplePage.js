@@ -8,15 +8,15 @@ import Jump from "ui/navigation/Jump";
 import PeopleTabs from "ui/people/PeopleTabs";
 import SubscribersSubpage from "ui/people/SubscribersSubpage";
 import SubscriptionsSubpage from "ui/people/SubscriptionsSubpage";
-import { getHomeOwnerAvatar } from "state/home/selectors";
+import { getOwnerAvatar } from "state/owner/selectors";
 import "./PeoplePage.css";
 
-const PeoplePage = ({tab, loadingGeneral, homeOwnerAvatar}) => (
+const PeoplePage = ({tab, loadingGeneral, ownerAvatar}) => (
     <>
         <PageHeader>
             <h2>
                 <Jump href="/profile" title="Profile" className="avatar-link">
-                    <Avatar avatar={homeOwnerAvatar} size={40}/>
+                    <Avatar avatar={ownerAvatar} size={40}/>
                 </Jump>
                 People <Loading active={loadingGeneral}/>
             </h2>
@@ -35,6 +35,6 @@ export default connect(
     state => ({
         tab: state.people.tab,
         loadingGeneral: state.people.loadingGeneral,
-        homeOwnerAvatar: getHomeOwnerAvatar(state)
+        ownerAvatar: getOwnerAvatar(state)
     })
 )(PeoplePage);
