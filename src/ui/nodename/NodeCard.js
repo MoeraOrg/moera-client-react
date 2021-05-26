@@ -13,7 +13,7 @@ import { mentionName, shortGender } from "util/misc";
 import { Browser } from "ui/browser";
 import "./NodeCard.css";
 
-function NodeCard({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) {
+function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoaded, homeOwnerName}) {
     if (cardNotLoaded) {
         return (
             <div className="node-card">
@@ -22,17 +22,19 @@ function NodeCard({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) {
         );
     }
 
-    const realFullName = card.fullName != null ? card.fullName : (fullName || NodeName.shorten(nodeName));
+    const realFullName = card.fullName ?? (fullName || NodeName.shorten(nodeName));
+    const realAvatar =  card.avatar ?? avatar;
+    const realAvatarNodeName = card.avatar != null ? nodeName : avatarNodeName;
     const gender = shortGender(card.gender);
-    const subscribersTotal = card.subscribersTotal != null ? card.subscribersTotal : "?";
-    const subscriptionsTotal = card.subscriptionsTotal != null ? card.subscriptionsTotal : "?";
+    const subscribersTotal = card.subscribersTotal ?? "?";
+    const subscriptionsTotal = card.subscriptionsTotal ?? "?";
     const subscribed = card.subscribed ?? false;
     const {title, subscribing, unsubscribing, subscriberId} = card;
     return (
         <div className="node-card">
             <div className="main">
                 <Jump nodeName={nodeName} href="/profile" title="Profile" className="avatar-link">
-                    <Avatar avatar={card.avatar} size={Browser.isTinyScreen() ? 64 : 100} nodeName={nodeName}/>
+                    <Avatar avatar={realAvatar} size={Browser.isTinyScreen() ? 64 : 100} nodeName={realAvatarNodeName}/>
                 </Jump>
                 <div className="body">
                     {realFullName &&
@@ -68,7 +70,12 @@ function NodeCard({nodeName, fullName, card, cardNotLoaded, homeOwnerName}) {
 
 NodeCard.propTypes = {
     nodeName: PropType.string,
-    fullName: PropType.string
+    fullName: PropType.string,
+    avatar: PropType.shape({
+        path: PropType.string,
+        shape: PropType.string
+    }),
+    avatarNodeName: PropType.string
 };
 
 export default connect(

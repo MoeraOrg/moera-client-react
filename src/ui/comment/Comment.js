@@ -34,7 +34,7 @@ const Comment = ({
                 <CommentAvatar comment={comment} nodeName={postingReceiverName ?? postingOwnerName}/>
                 <div className="details">
                     <div className="owner-line">
-                        <CommentOwner comment={comment}/>
+                        <CommentOwner comment={comment} nodeName={postingReceiverName ?? postingOwnerName}/>
                         <CommentDate nodeName={postingReceiverName ?? postingOwnerName}
                                      postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
                         <CommentUpdated comment={comment}/>

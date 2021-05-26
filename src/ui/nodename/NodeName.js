@@ -10,7 +10,7 @@ import NodeNameText from "ui/nodename/NodeNameText";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import "./NodeName.css";
 
-function NodeName({name, fullName, verified = false, correct = false, linked = true, popup = true, details, mode}) {
+function NodeName({name, fullName, avatar, avatarNodeName, verified, correct, linked, popup, details, mode}) {
     if (!name) {
         return null;
     }
@@ -23,7 +23,8 @@ function NodeName({name, fullName, verified = false, correct = false, linked = t
     );
     linked = linked && (!details.loaded || details.nodeUri);
     return (
-        <NodeNamePopup nodeName={name} fullName={fullName} disabled={!popup}>
+        <NodeNamePopup nodeName={name} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}
+                       disabled={!popup}>
             {(ref, mainEnter, mainLeave, mainTouch) =>
                 linked ? (
                     <Jump className={klass} nodeName={name} href="/" anchorRef={ref} onMouseEnter={mainEnter}
@@ -45,11 +46,23 @@ function NodeName({name, fullName, verified = false, correct = false, linked = t
 NodeName.propTypes = {
     name: PropType.string,
     fullName: PropType.string,
+    avatar: PropType.shape({
+        path: PropType.string,
+        shape: PropType.string
+    }),
+    avatarNodeName: PropType.string,
     verified: PropType.bool,
     correct: PropType.bool,
     linked: PropType.bool,
     popup: PropType.bool
 };
+
+NodeName.defaultProps = {
+    verified: false,
+    correct: false,
+    linked: true,
+    popup: true
+}
 
 export default connect(
     (state, ownProps) => ({

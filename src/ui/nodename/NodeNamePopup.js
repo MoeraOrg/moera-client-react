@@ -6,36 +6,33 @@ import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import NodeCard from "ui/nodename/NodeCard";
 import { nodeCardPrepare } from "state/nodecards/actions";
 
-class NodeNamePopup extends React.PureComponent {
-
-    static propTypes = {
-        nodeName: PropType.string,
-        fullName: PropType.string,
-        disabled: PropType.bool
-    };
-
-    onPreparePopper = () => {
-        const {nodeName, nodeCardPrepare} = this.props;
-
+function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children, nodeCardPrepare}) {
+    const onPreparePopper = () => {
         nodeCardPrepare(nodeName);
     }
 
-    render() {
-        const {nodeName, fullName, disabled, children} = this.props;
-
-        return (
-            <Manager onPreparePopper={this.onPreparePopper} disabled={disabled} clickable={true}>
-                <Reference>
-                    {(ref, mainEnter, mainLeave, mainTouch) => children(ref, mainEnter, mainLeave, mainTouch)}
-                </Reference>
-                <DelayedPopper placement="top" className="node-name-popover">
-                    <NodeCard nodeName={nodeName} fullName={fullName}/>
-                </DelayedPopper>
-            </Manager>
-        );
-    }
-
+    return (
+        <Manager onPreparePopper={onPreparePopper} disabled={disabled} clickable={true}>
+            <Reference>
+                {(ref, mainEnter, mainLeave, mainTouch) => children(ref, mainEnter, mainLeave, mainTouch)}
+            </Reference>
+            <DelayedPopper placement="top" className="node-name-popover">
+                <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>
+            </DelayedPopper>
+        </Manager>
+    );
 }
+
+NodeNamePopup.propTypes = {
+    nodeName: PropType.string,
+    fullName: PropType.string,
+    avatar: PropType.shape({
+        path: PropType.string,
+        shape: PropType.string
+    }),
+    avatarNodeName: PropType.string,
+    disabled: PropType.bool
+};
 
 export default connect(
     null,
