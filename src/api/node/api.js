@@ -16,26 +16,32 @@ export const Result = schema({
 });
 
 export const AvatarImageType = {
-    type: "object",
-    properties: {
-        "mediaId": {
-            type: "string"
+    anyOf: [
+        {
+            type: "null"
         },
-        "path": {
-            type: "string"
-        },
-        "width": {
-            type: "integer"
-        },
-        "height": {
-            type: "integer"
-        },
-        "shape": {
-            type: "string",
-            default: "circle"
-        },
-    },
-    additionalProperties: false
+        {
+            type: "object",
+            properties: {
+                "mediaId": {
+                    type: "string"
+                },
+                "path": {
+                    type: "string"
+                },
+                "width": {
+                    type: "integer"
+                },
+                "height": {
+                    type: "integer"
+                },
+                "shape": {
+                    type: "string"
+                },
+            },
+            additionalProperties: false
+        }
+    ]
 };
 
 export const AvatarInfoType = {
