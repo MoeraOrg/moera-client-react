@@ -100,6 +100,7 @@ const storyEvent = (properties = {}) => baseEvent({
     "read": {
         type: "boolean"
     },
+    "summaryAvatar": AvatarImageType,
     "summary": {
         type: "string"
     },
@@ -112,7 +113,6 @@ const storyEvent = (properties = {}) => baseEvent({
     "remoteFullName": {
         type: "string"
     },
-    "remoteAvatar": AvatarImageType,
     "remotePostingId": {
         type: "string"
     },
