@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { useFormikContext } from 'formik';
 import debounce from 'lodash.debounce';
@@ -22,18 +22,22 @@ function ComposeDraftSaver(props) {
     const [unsavedChanges, setUnsavedChanges] = useState(false);
     const {status, values} = useFormikContext();
 
+    const statusRef = useRef();
+    statusRef.current = status;
+    const valuesRef = useRef();
+    valuesRef.current = values;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onSave = useCallback(debounce(() => {
-        if (status === "submitted") {
+        if (statusRef.current === "submitted") {
             return;
         }
-        const thisText = postingText(values, props);
+        const thisText = postingText(valuesRef.current, props);
         if (isEmpty(thisText) || savingDraft) {
             return;
         }
         composeDraftSave(postingId, draftId, thisText);
         setUnsavedChanges(false);
-    }, 1500), [status, values, props, setUnsavedChanges]);
+    }, 1500), [statusRef, valuesRef, props, setUnsavedChanges]);
 
     useEffect(() => {
         return () => {
