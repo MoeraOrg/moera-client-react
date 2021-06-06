@@ -7,6 +7,12 @@
     padding: 1rem;
 }
 
+@media only screen and (max-width: 991px) {
+    .composer {
+        margin-bottom: 5rem;
+    }
+}
+
 .composer .info {
     display: flex;
     margin-bottom: .5rem;
