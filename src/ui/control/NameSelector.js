@@ -36,10 +36,12 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, homeN
         }
     }, [listDom])
 
+    const queryRef = useRef();
+    queryRef.current = query;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadContacts = useCallback(debounce(() => {
-        contactsPrepare(query);
-    }, 500), [contactsPrepare]);
+        contactsPrepare(queryRef.current);
+    }, 500), [contactsPrepare, queryRef]);
 
     useEffect(() => {
         if (inputDom.current) {
