@@ -1,3 +1,9 @@
+@media only screen and (max-width: 991px) {
+    .compose-page {
+        padding-bottom: 3rem;
+    }
+}
+
 .composer {
     background-color: white;
     border: var(--gray-light) 1px solid;
@@ -5,12 +11,6 @@
     margin-top: 1rem;
     margin-bottom: 1rem;
     padding: 1rem;
-}
-
-@media only screen and (max-width: 991px) {
-    .composer {
-        margin-bottom: 5rem;
-    }
 }
 
 .composer .info {

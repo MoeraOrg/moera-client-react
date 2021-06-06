@@ -68,7 +68,7 @@ class ComposePage extends React.PureComponent {
                         <Loading active={loadingFeatures || loadingContent}/>
                     </h2>
                 </PageHeader>
-                <Page>
+                <Page className="compose-page">
                     <div className="composer">
                         <Form>
                             <ConflictWarning text="The post was edited by somebody." show={conflict}
