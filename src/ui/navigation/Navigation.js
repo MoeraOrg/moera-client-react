@@ -30,6 +30,11 @@ class Navigation extends React.PureComponent {
             } else {
                 window.history.replaceState(data, "", url);
             }
+            // eslint-disable-next-line no-undef
+            if (Android) {
+                // eslint-disable-next-line no-undef
+                Android.locationChanged(url);
+            }
             this.#rootPage = rootPage;
             this.#location = location;
         }
