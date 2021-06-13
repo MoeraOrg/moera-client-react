@@ -162,6 +162,11 @@ export class Browser {
     }
 
     static storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions) {
+        // eslint-disable-next-line no-undef
+        if (Android) {
+            // eslint-disable-next-line no-undef
+            Android.connectedToHome(location);
+        }
         this.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
     }
 
