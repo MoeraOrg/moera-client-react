@@ -165,7 +165,7 @@ export class Browser {
         // eslint-disable-next-line no-undef
         if (Android) {
             // eslint-disable-next-line no-undef
-            Android.connectedToHome(location);
+            Android.connectedToHome(location + "/moera");
         }
         this.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
     }
