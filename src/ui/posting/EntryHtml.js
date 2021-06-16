@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
 import PropType from 'prop-types';
@@ -12,25 +12,11 @@ import Jump from "ui/navigation/Jump";
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
 
-class EntryHtml extends React.PureComponent {
+function EntryHtml({className, html, onClick, fontMagnitude}) {
+    const dom = useRef();
 
-    static propTypes = {
-        className: PropType.string,
-        html: PropType.string
-    };
-
-    #dom;
-
-    componentDidMount() {
-        this.hydrate();
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        this.hydrate();
-    }
-
-    hydrate() {
-        this.#dom.querySelectorAll("a[data-nodename]").forEach(node => {
+    const hydrate = () => {
+        dom.current.querySelectorAll("a[data-nodename]").forEach(node => {
             const name = node.getAttribute("data-nodename");
             const href = node.getAttribute("data-href");
 
@@ -54,13 +40,13 @@ class EntryHtml extends React.PureComponent {
                     </Provider>, span);
             }
         });
-        this.#dom.querySelectorAll("span.katex").forEach(node => {
+        dom.current.querySelectorAll("span.katex").forEach(node => {
             ReactDOM.render(
                 <Suspense fallback={<>Loading math...</>}>
                     <InlineMath math={node.innerText}/>
                 </Suspense>, node);
         });
-        this.#dom.querySelectorAll("div.katex").forEach(node => {
+        dom.current.querySelectorAll("div.katex").forEach(node => {
             ReactDOM.render(
                 <Suspense fallback={<>Loading math...</>}>
                     <BlockMath math={node.innerText}/>
@@ -68,14 +54,19 @@ class EntryHtml extends React.PureComponent {
         });
     }
 
-    render() {
-        const {className, html, fontMagnitude} = this.props;
+    useEffect(() => {
+        hydrate();
+    });
 
-        return <div ref={dom => this.#dom = dom} className={className} style={{fontSize: `${fontMagnitude}%`}}
-                    dangerouslySetInnerHTML={{__html: html}}/>
-    }
-
+    return <div ref={dom} className={className} style={{fontSize: `${fontMagnitude}%`}} onClick={onClick}
+                dangerouslySetInnerHTML={{__html: html}}/>
 }
+
+EntryHtml.propTypes = {
+    className: PropType.string,
+    html: PropType.string,
+    onClick: PropType.func
+};
 
 export default connect(
     state => ({

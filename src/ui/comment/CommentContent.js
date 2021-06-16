@@ -19,7 +19,7 @@ function CommentContent({comment, previousId}) {
             if (comment.bodyPreview.text) {
                 return (
                     <>
-                        <EntryHtml html={comment.bodyPreview.text}/>
+                        <EntryHtml html={comment.bodyPreview.text} onClick={onClick}/>
                         <p>
                             <button className="btn btn-link read-more" onClick={onClick}>Read more...</button>
                         </p>
@@ -29,12 +29,12 @@ function CommentContent({comment, previousId}) {
                 return <EntryHtml html={comment.body.previewText}/>;
             }
         } else {
-            return <EntryHtml html={comment.body.text}/>;
+            return <EntryHtml html={comment.body.text} onClick={onClick}/>;
         }
     }
 
     return (
-        <div className={cx("content", {"preview": preview})} onClick={onClick}>
+        <div className={cx("content", {"preview": preview})}>
             <CommentRepliedTo comment={comment} previousId={previousId}/>
             {renderText()}
         </div>
