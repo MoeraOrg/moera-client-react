@@ -162,11 +162,8 @@ export class Browser {
     }
 
     static storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions) {
-        try {
-            // eslint-disable-next-line no-undef
-            Android.connectedToHome(location + "/moera", token);
-        } catch (e) {
-            // not Android app
+        if (window.Android) {
+            window.Android.connectedToHome(location + "/moera", token, nodeName);
         }
         this.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
     }
