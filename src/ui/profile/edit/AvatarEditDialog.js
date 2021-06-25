@@ -145,7 +145,7 @@ class AvatarEditDialog extends React.PureComponent {
                     <Button variant={imageId ? "outline-secondary" : "primary"} size="sm" className="upload"
                             loading={imageUploading} onClick={this.onUploadClick}>Upload image</Button>
                     <Scale max={this.getScaleMax()} value={scale} onChange={this.onScaleChange}/>
-                    <input type="file" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
+                    <input type="file" accept="image/*" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>Cancel</Button>
