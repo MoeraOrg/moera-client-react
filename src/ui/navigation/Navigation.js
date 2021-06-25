@@ -31,7 +31,7 @@ class Navigation extends React.PureComponent {
                 window.history.replaceState(data, "", url);
             }
             if (window.Android) {
-                window.Android.locationChanged(url);
+                window.Android.locationChanged(url, location);
             }
             this.#rootPage = rootPage;
             this.#location = location;
