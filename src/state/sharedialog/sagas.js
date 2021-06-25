@@ -28,7 +28,9 @@ function* shareDialogPrepareSaga(action) {
         return;
     }
     const url = normalizeUrl(nodeUri) + href;
-    if (navigator.share) {
+    if (window.Android) {
+        window.Android.share(url, title);
+    } else if (navigator.share) {
         navigator.share({title, url});
     } else {
         yield put(openShareDialog(title, url));
