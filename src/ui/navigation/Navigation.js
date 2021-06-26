@@ -13,7 +13,10 @@ class Navigation extends React.PureComponent {
     #location;
 
     componentDidMount() {
-        window.onpopstate = this.popState;
+        window.addEventListener("popstate", this.popState);
+        if (window.Android) {
+            window.addEventListener("message", this.messageReceived);
+        }
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -60,6 +63,28 @@ class Navigation extends React.PureComponent {
             }
         }
         event.preventDefault();
+    };
+
+    messageReceived = event => {
+        let message = event.data;
+        if (message === null || typeof message !== "string") {
+            return;
+        }
+        message = JSON.parse(message);
+
+        // Only accept messages that we know are ours
+        if (message.source !== "moera-android") {
+            return;
+        }
+
+        switch (message.action) {
+            case "back":
+                window.Android.back();
+                return;
+
+            default:
+                return;
+        }
     };
 
     render() {
