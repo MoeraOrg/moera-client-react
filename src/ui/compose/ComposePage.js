@@ -42,7 +42,8 @@ class ComposePage extends React.PureComponent {
         if ((this.props.posting != null && prevProps.posting == null)
             || (this.props.posting == null && prevProps.posting != null)
             || (this.props.avatarDefault != null && prevProps.avatarDefault == null)
-            || (this.props.draftId == null && prevProps.draftId != null)) {
+            || (this.props.draftId == null && prevProps.draftId != null)
+            || (this.props.sharedText != null && prevProps.sharedText == null)) {
             const values = composePageLogic.mapPropsToValues(this.props);
             this.setState({initialPostingText: composePageLogic.mapValuesToPostingText(values, this.props)});
             this.props.resetForm({values});
@@ -136,6 +137,8 @@ export default connect(
         posting: state.compose.posting,
         conflict: state.compose.conflict,
         beingPosted: state.compose.beingPosted,
+        sharedText: state.compose.sharedText,
+        sharedTextType: state.compose.sharedTextType,
         reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default"),
         reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),

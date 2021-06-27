@@ -12,6 +12,7 @@ import {
     COMPOSE_FEATURES_LOAD,
     COMPOSE_POST,
     COMPOSE_POSTING_LOAD,
+    COMPOSE_SHARED_TEXT_LOAD,
     composeDraftListItemDeleted,
     composeDraftListItemSet,
     composeDraftListLoaded,
@@ -27,7 +28,8 @@ import {
     composePostingLoad,
     composePostingLoaded,
     composePostingLoadFailed,
-    composePostSucceeded
+    composePostSucceeded,
+    composeSharedTextSet
 } from "state/compose/actions";
 import { getComposeDraftId, getComposePostingId } from "state/compose/selectors";
 import { introduce } from "api/node/introduce";
@@ -42,7 +44,8 @@ export default [
     executor(COMPOSE_DRAFT_LIST_LOAD, "", introduce(composeDraftListLoadSaga)),
     executor(COMPOSE_DRAFT_LIST_ITEM_RELOAD, payload => payload.id, composeDraftListItemReloadSaga),
     executor(COMPOSE_DRAFT_LIST_ITEM_DELETE, payload => payload.id, composeDraftListItemDeleteSaga),
-    executor(COMPOSE_DRAFT_REVISION_DELETE, "", composeDraftRevisionDeleteSaga)
+    executor(COMPOSE_DRAFT_REVISION_DELETE, "", composeDraftRevisionDeleteSaga),
+    executor(COMPOSE_SHARED_TEXT_LOAD, "", composeSharedTextLoadSaga)
 ];
 
 function* composeFeaturesLoadSaga() {
@@ -160,5 +163,16 @@ function* composeDraftRevisionDeleteSaga() {
         yield put(composePostingLoad());
     } catch (e) {
         yield put(errorThrown(e));
+    }
+}
+
+function* composeSharedTextLoadSaga() {
+    if (!window.Android) {
+        return;
+    }
+    const text = window.Android.getSharedText();
+    const type = window.Android.getSharedTextType();
+    if (text != null) {
+        yield put(composeSharedTextSet(text, type));
     }
 }

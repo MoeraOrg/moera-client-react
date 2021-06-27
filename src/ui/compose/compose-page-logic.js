@@ -3,6 +3,7 @@ import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 
 import { ClientSettings } from "api";
 import { replaceSmileys } from "util/text";
+import { quoteHtml, safeImportHtml } from "util/html";
 
 const composePageLogic = {
 
@@ -11,8 +12,10 @@ const composePageLogic = {
         const fullName = props.posting != null ? props.posting.ownerFullName : props.fullNameDefault;
         const subject = props.posting != null && props.posting.bodySrc.subject != null
             ? props.posting.bodySrc.subject : "";
-        const body = props.posting != null ? props.posting.bodySrc.text : "";
         const bodyFormat = props.posting != null ? props.posting.bodySrcFormat : props.sourceFormatDefault;
+        const body = props.posting != null
+            ? props.posting.bodySrc.text
+            : (props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "");
         const publishAt = props.posting != null && props.posting.publishedAt != null
             ? fromUnixTime(props.posting.publishedAt) : new Date();
         const reactionsPositive = props.posting != null
@@ -50,6 +53,19 @@ const composePageLogic = {
             updateImportant,
             updateDescription
         };
+    },
+
+    _getSharedText(props, format) {
+        let content;
+        if (props.sharedTextType === "html") {
+            content = safeImportHtml(props.sharedText);
+            if (format === "markdown") {
+                content = quoteHtml(content);
+            }
+        } else {
+            content = props.sharedText;
+        }
+        return content;
     },
 
     validationSchema: yup.object().shape({

@@ -11,6 +11,11 @@ export function isComposeDraftToBeLoaded(state) {
         && !state.compose.loadingDraft;
 }
 
+export function isComposeSharedTextToBeLoaded(state) {
+    return state.compose.postingId == null && state.compose.draftId == null && state.compose.sharedText == null
+        && window.Android;
+}
+
 export function getComposePostingId(state) {
     return state.compose.postingId;
 }

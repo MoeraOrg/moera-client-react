@@ -29,7 +29,7 @@ import {
     COMPOSE_POSTING_LOAD_FAILED,
     COMPOSE_POSTING_LOADED,
     COMPOSE_PREVIEW,
-    COMPOSE_PREVIEW_CLOSE
+    COMPOSE_PREVIEW_CLOSE, COMPOSE_SHARED_TEXT_SET
 } from "state/compose/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
@@ -49,7 +49,9 @@ const emptyPosting = {
     draftRevision: null,
     loadingDraft: false,
     savingDraft: false,
-    savedDraft: false
+    savedDraft: false,
+    sharedText: null,
+    sharedTextType: null
 };
 
 const initialState = {
@@ -305,6 +307,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 showPreview: false
+            };
+
+        case COMPOSE_SHARED_TEXT_SET:
+            return {
+                ...state,
+                sharedText: action.payload.text,
+                sharedTextType: action.payload.type
             };
 
         default:

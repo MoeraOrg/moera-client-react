@@ -13,7 +13,8 @@ import {
     composeFeaturesLoad,
     composeFeaturesUnset,
     composePostingLoad,
-    composePreviewClose
+    composePreviewClose,
+    composeSharedTextLoad
 } from "state/compose/actions";
 import { dialogOpened, GO_TO_PAGE, goToPosting, updateLocation } from "state/navigation/actions";
 import { postingSet } from "state/postings/actions";
@@ -25,7 +26,8 @@ import {
     isComposeDraftToBeLoaded,
     isComposeFeaturesToBeLoaded,
     isComposePostingEditing,
-    isComposePostingToBeLoaded
+    isComposePostingToBeLoaded,
+    isComposeSharedTextToBeLoaded
 } from "state/compose/selectors";
 import { SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
 import {
@@ -43,6 +45,7 @@ export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
+    trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => goToPosting(signal.payload.posting.id)),
     trigger(COMPOSE_POST_SUCCEEDED, true, signal => postingSet(signal.payload.posting)),
     trigger(

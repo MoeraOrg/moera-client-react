@@ -161,3 +161,14 @@ export const COMPOSE_PREVIEW_CLOSE = "COMPOSE_PREVIEW_CLOSE";
 export const composePreviewClose = () => ({
     type: COMPOSE_PREVIEW_CLOSE
 });
+
+export const COMPOSE_SHARED_TEXT_LOAD = "COMPOSE_SHARED_TEXT_LOAD";
+export const composeSharedTextLoad = () => ({
+    type: COMPOSE_SHARED_TEXT_LOAD
+});
+
+export const COMPOSE_SHARED_TEXT_SET = "COMPOSE_SHARED_TEXT_SET";
+export const composeSharedTextSet = (text, type) => ({
+    type: COMPOSE_SHARED_TEXT_SET,
+    payload: {text, type}
+});
