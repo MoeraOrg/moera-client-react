@@ -75,6 +75,7 @@ import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
 import cartesTriggers from "state/cartes/triggers";
 import navigationTriggers from "state/navigation/triggers";
+import connectDialogTriggers from "state/connectdialog/triggers";
 import ownerTriggers from "state/owner/triggers";
 import nodeNameTriggers from "state/nodename/triggers";
 import profileTriggers from "state/profile/triggers";
@@ -85,9 +86,11 @@ import postingsTriggers from "state/postings/triggers";
 import settingsTriggers from "state/settings/triggers";
 import namingTriggers from "state/naming/triggers";
 import reactionsDialogTriggers from "state/reactionsdialog/triggers";
+import changeDateDialogTriggers from "state/changedatedialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
+import sourceDialogTriggers from "state/sourcedialog/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
@@ -139,6 +142,7 @@ const triggers = collectTriggers(
     homeTriggers,
     cartesTriggers,
     navigationTriggers,
+    connectDialogTriggers,
     ownerTriggers,
     nodeNameTriggers,
     profileTriggers,
@@ -149,9 +153,11 @@ const triggers = collectTriggers(
     settingsTriggers,
     namingTriggers,
     reactionsDialogTriggers,
+    changeDateDialogTriggers,
     peopleTriggers,
     nodeCardsTriggers,
     contactsTriggers,
+    sourceDialogTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
     refreshTriggers,

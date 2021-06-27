@@ -1,8 +1,16 @@
 import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
-import { bottomMenuShow, GO_TO_PAGE, goToTimeline, updateLocation, WAKE_UP } from "state/navigation/actions";
+import {
+    bottomMenuShow,
+    dialogOpened,
+    GO_TO_PAGE,
+    goToTimeline,
+    updateLocation,
+    WAKE_UP
+} from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
+    closeCommentDialog,
     COMMENT_COMPOSE_UNSET,
     COMMENT_POSTED,
     commentDialogCommentLoad,
@@ -128,6 +136,7 @@ export default [
         signal => commentReactionLoad(signal.payload.id, signal.payload.postingId)
     ),
     trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad),
+    trigger(OPEN_COMMENT_DIALOG, true, dialogOpened(closeCommentDialog())),
     trigger(
         EVENT_RECEIVER_COMMENT_UPDATED,
         (state, signal) => isAtDetailedPostingPage(state) && isCommentDialogShown(state)

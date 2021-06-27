@@ -95,3 +95,14 @@ export const BOTTOM_MENU_SHOW = "BOTTOM_MENU_SHOW";
 export const bottomMenuShow = () => ({
     type: BOTTOM_MENU_SHOW
 });
+
+export const DIALOG_OPENED = "DIALOG_OPENED";
+export const dialogOpened = (closeAction) => ({
+    type: DIALOG_OPENED,
+    payload: {closeAction}
+});
+
+export const DIALOG_CLOSED = "DIALOG_CLOSED";
+export const dialogClosed = () => ({
+    type: DIALOG_CLOSED
+});

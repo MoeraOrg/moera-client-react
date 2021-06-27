@@ -4,6 +4,7 @@ import {
     COMPOSE_DRAFT_SAVED,
     COMPOSE_DRAFT_SELECT,
     COMPOSE_POST_SUCCEEDED,
+    COMPOSE_PREVIEW,
     composeConflict,
     composeDraftListItemDeleted,
     composeDraftListItemReload,
@@ -11,9 +12,10 @@ import {
     composeDraftLoad,
     composeFeaturesLoad,
     composeFeaturesUnset,
-    composePostingLoad
+    composePostingLoad,
+    composePreviewClose
 } from "state/compose/actions";
-import { GO_TO_PAGE, goToPosting, updateLocation } from "state/navigation/actions";
+import { dialogOpened, GO_TO_PAGE, goToPosting, updateLocation } from "state/navigation/actions";
 import { postingSet } from "state/postings/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
@@ -74,6 +76,7 @@ export default [
     trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad),
     trigger(COMPOSE_DRAFT_SELECT, true, updateLocation),
     trigger(COMPOSE_DRAFT_LIST_ITEM_DELETED, true, updateLocation),
+    trigger(COMPOSE_PREVIEW, true, dialogOpened(composePreviewClose())),
     trigger(
         [EVENT_HOME_DRAFT_POSTING_ADDED, EVENT_HOME_DRAFT_POSTING_UPDATED],
         isComposeDraftListLoaded,

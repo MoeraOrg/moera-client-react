@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { goToLocation, initFromLocation } from "state/navigation/actions";
+import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
 import { Browser } from "ui/browser";
+
+const forwardAction = (action) => action;
 
 class Navigation extends React.PureComponent {
 
@@ -79,13 +81,24 @@ class Navigation extends React.PureComponent {
 
         switch (message.action) {
             case "back":
-                window.Android.back();
+                this.back();
                 return;
 
             default:
                 return;
         }
     };
+
+    back() {
+        const {closeDialogAction, forwardAction, dialogClosed} = this.props;
+
+        if (closeDialogAction != null) {
+            forwardAction(closeDialogAction);
+            dialogClosed();
+        } else {
+            window.Android.back();
+        }
+    }
 
     render() {
         return null;
@@ -102,7 +115,8 @@ export default connect(
         title: state.navigation.title,
         update: state.navigation.update,
         locked: state.navigation.locked,
-        count: getInstantCount(state)
+        count: getInstantCount(state),
+        closeDialogAction: state.navigation.closeDialogAction
     }),
-    { initFromLocation, goToLocation }
+    { initFromLocation, goToLocation, forwardAction, dialogClosed }
 )(Navigation);

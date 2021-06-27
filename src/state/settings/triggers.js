@@ -7,9 +7,11 @@ import {
     isSettingsNodeValuesToBeLoaded
 } from "state/settings/selectors";
 import {
+    SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN,
     SETTINGS_CHANGED_PASSWORD,
     SETTINGS_GO_TO_SHEET,
     SETTINGS_GO_TO_TAB,
+    settingsChangePasswordDialogClose,
     settingsClientConflict,
     settingsClientValuesLoad,
     settingsNodeConflict,
@@ -19,7 +21,7 @@ import {
     settingsNodeValuesUnset
 } from "state/settings/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
-import { newLocation, updateLocation, WAKE_UP } from "state/navigation/actions";
+import { dialogOpened, newLocation, updateLocation, WAKE_UP } from "state/navigation/actions";
 import { EVENT_HOME_CLIENT_SETTINGS_CHANGED, EVENT_HOME_NODE_SETTINGS_CHANGED } from "api/events/actions";
 import { flashBox } from "state/flashbox/actions";
 
@@ -66,6 +68,7 @@ export default [
     ),
     trigger(SETTINGS_GO_TO_TAB, true, newLocation),
     trigger(SETTINGS_GO_TO_SHEET, true, updateLocation),
+    trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN, true, dialogOpened(settingsChangePasswordDialogClose())),
     trigger(
         EVENT_HOME_NODE_SETTINGS_CHANGED,
         disj(inv(isAtSettingsPage), conj(isAtSettingsPage, inv(isAtSettingsNodeTab))),

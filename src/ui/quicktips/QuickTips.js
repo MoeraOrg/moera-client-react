@@ -10,8 +10,8 @@ import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { PREFIX } from "api/settings";
 import Jump from "ui/navigation/Jump";
-import "./QuickTips.css";
 import { Browser } from "ui/browser";
+import "./QuickTips.css";
 
 class QuickTips extends React.PureComponent {
 

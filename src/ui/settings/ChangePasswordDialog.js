@@ -17,19 +17,15 @@ class ChangePasswordDialog extends React.Component {
         }
     }
 
-    onClose = () => {
-        this.props.settingsChangePasswordDialogClose();
-    }
-
     render() {
-        const {show, changing} = this.props;
+        const {show, changing, settingsChangePasswordDialogClose} = this.props;
 
         if (!show) {
             return null;
         }
 
         return (
-            <ModalDialog title="Change Home Password" onClose={this.onClose}>
+            <ModalDialog title="Change Home Password" onClose={settingsChangePasswordDialogClose}>
                 <Form>
                     <div className="modal-body">
                         <InputField name="oldPassword" title="Current password" autoFocus/>

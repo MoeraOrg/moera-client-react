@@ -4,8 +4,10 @@ import {
     PROFILE_AVATAR_CONFIRM_DELETE,
     PROFILE_EDIT,
     PROFILE_EDIT_CANCEL,
+    PROFILE_OPEN_AVATAR_EDIT_DIALOG,
     PROFILE_UPDATE_SUCCEEDED,
     profileAvatarDelete,
+    profileCloseAvatarEditDialog,
     profileEditConflict,
     profileLoad,
     profileUnset
@@ -14,6 +16,7 @@ import { isProfileEditing, isProfileToBeLoaded } from "state/profile/selectors";
 import {
     bottomMenuHide,
     bottomMenuShow,
+    dialogOpened,
     GO_TO_PAGE,
     INIT_FROM_LOCATION,
     newLocation,
@@ -44,6 +47,7 @@ export default [
     trigger(PROFILE_AVATAR_CONFIRM_DELETE, true,
             signal => confirmBox("Delete the avatar?", "Delete", "Cancel",
                 profileAvatarDelete(signal.payload.id, signal.payload.onDeleted))),
+    trigger(PROFILE_OPEN_AVATAR_EDIT_DIALOG, true, dialogOpened(profileCloseAvatarEditDialog())),
     trigger(EVENT_NODE_PROFILE_UPDATED, isAtProfilePage, profileLoad),
     trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict),
     trigger(EVENT_NODE_PROFILE_UPDATED, inv(isAtProfilePage), profileUnset)

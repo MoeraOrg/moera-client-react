@@ -1,6 +1,8 @@
 import {
     BOTTOM_MENU_HIDE,
     BOTTOM_MENU_SHOW,
+    DIALOG_CLOSED,
+    DIALOG_OPENED,
     GO_TO_PAGE,
     INIT_FROM_LOCATION,
     INIT_STORAGE,
@@ -17,7 +19,8 @@ const initialState = {
     title: "",
     update: false,
     locked: false,
-    bottomMenuVisible: true
+    bottomMenuVisible: true,
+    closeDialogAction: null
 };
 
 export default (state = initialState, action) => {
@@ -33,7 +36,8 @@ export default (state = initialState, action) => {
             path = path.startsWith("/moera") ? path.substring(6) : path;
             return {
                 ...state,
-                location: path + (query ?? "") + (hash ?? "")
+                location: path + (query ?? "") + (hash ?? ""),
+                closeDialogAction: null
             };
         }
 
@@ -41,7 +45,8 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 page: action.payload.page,
-                bottomMenuVisible: true
+                bottomMenuVisible: true,
+                closeDialogAction: state.page !== action.payload.page ? null : state.closeDialogAction
             };
 
         case LOCATION_SET:
@@ -75,6 +80,18 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 bottomMenuVisible: true
+            }
+
+        case DIALOG_OPENED:
+            return {
+                ...state,
+                closeDialogAction: action.payload.closeAction
+            }
+
+        case DIALOG_CLOSED:
+            return {
+                ...state,
+                closeDialogAction: null
             }
 
         default:
