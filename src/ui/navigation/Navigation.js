@@ -5,6 +5,8 @@ import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/a
 import { getInstantCount } from "state/feeds/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
+import { closeMessageBox } from "state/messagebox/actions";
+import { closeConfirmBox } from "state/confirmbox/actions";
 import { Browser } from "ui/browser";
 
 const forwardAction = (action) => action;
@@ -90,13 +92,34 @@ class Navigation extends React.PureComponent {
     };
 
     back() {
-        const {closeDialogAction, forwardAction, dialogClosed} = this.props;
+        const {
+            closeDialogAction, messageBoxShow, messageBoxOnClose, confirmBoxShow, confirmBoxOnNo, forwardAction,
+            dialogClosed, closeMessageBox, closeConfirmBox
+        } = this.props;
 
-        if (closeDialogAction != null) {
+        if (messageBoxShow) {
+            closeMessageBox();
+            this.executeOnClose(messageBoxOnClose);
+        } else if (confirmBoxShow) {
+            closeConfirmBox();
+            this.executeOnClose(confirmBoxOnNo);
+        } else if (closeDialogAction != null) {
             forwardAction(closeDialogAction);
             dialogClosed();
         } else {
             window.Android.back();
+        }
+    }
+
+    executeOnClose(onClose) {
+        const {forwardAction} = this.props;
+
+        if (onClose) {
+            if (typeof(onClose) === "function") {
+                onClose();
+            } else {
+                forwardAction(onClose);
+            }
         }
     }
 
@@ -116,7 +139,11 @@ export default connect(
         update: state.navigation.update,
         locked: state.navigation.locked,
         count: getInstantCount(state),
-        closeDialogAction: state.navigation.closeDialogAction
+        closeDialogAction: state.navigation.closeDialogAction,
+        messageBoxShow: state.messageBox.show,
+        messageBoxOnClose: state.messageBox.onClose,
+        confirmBoxShow: state.confirmBox.show,
+        confirmBoxOnNo: state.confirmBox.onNo
     }),
-    { initFromLocation, goToLocation, forwardAction, dialogClosed }
+    { initFromLocation, goToLocation, forwardAction, dialogClosed, closeMessageBox, closeConfirmBox }
 )(Navigation);
