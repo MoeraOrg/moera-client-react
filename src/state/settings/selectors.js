@@ -20,6 +20,10 @@ export function isSettingsClientValuesLoaded(state) {
     return state.settings.client.loadedValues;
 }
 
+export function getSettingsClientMeta(state) {
+    return state.settings.client.meta;
+}
+
 export function getSetting(state, name) {
     const meta = state.settings.client.meta.get(ClientSettings.PREFIX + name);
     if (!meta) {

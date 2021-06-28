@@ -1,6 +1,6 @@
 export const PREFIX = "client.mercy.";
 
-export const META = [
+const META = [
     {
         name: "invitation.addon.shown-at",
         type: "timestamp",
@@ -338,8 +338,16 @@ export const META = [
     }
 ];
 
+function collectMetaMap(map, metadata) {
+    metadata.forEach(meta => map.set(PREFIX + meta.name, {name: PREFIX + meta.name, ...meta}));
+}
+
 export function buildMetaMap() {
-    let metadata = new Map();
-    META.forEach(meta => metadata.set(PREFIX + meta.name, {name: PREFIX + meta.name, ...meta}));
-    return metadata;
+    const metaMap = new Map();
+    collectMetaMap(metaMap, META);
+    if (window.Android) {
+        const mobileMeta = JSON.parse(window.Android.loadSettingsMeta()).map(meta => ({...meta, mobile: true}));
+        collectMetaMap(metaMap, mobileMeta);
+    }
+    return metaMap;
 }

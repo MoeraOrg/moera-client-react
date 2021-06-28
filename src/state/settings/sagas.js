@@ -1,4 +1,4 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
 import { errorThrown } from "state/error/actions";
 import { HomeNotConnectedError, Node, NodeApiError } from "api";
@@ -22,6 +22,8 @@ import {
 } from "state/settings/actions";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
+import { getSettingsClientMeta } from "state/settings/selectors";
+import { PREFIX } from "api/settings";
 
 export default [
     executor(SETTINGS_NODE_VALUES_LOAD, "", introduce(settingsNodeValuesLoadSaga)),
@@ -54,7 +56,14 @@ function* settingsNodeMetaLoadSaga() {
 
 function* settingsClientValuesLoadSaga() {
     try {
-        const data = yield call(Node.getClientSettings, ":");
+        let data = yield call(Node.getClientSettings, ":");
+        if (window.Android) {
+            const mobileData = window.Android.loadSettings();
+            if (mobileData != null) {
+                const mobileSettings = JSON.parse(mobileData).map(t => ({name: PREFIX + t.name, value: t.value}));
+                data = data.concat(mobileSettings);
+            }
+        }
         yield put(settingsClientValuesLoaded(data));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
@@ -66,11 +75,23 @@ function* settingsClientValuesLoadSaga() {
     }
 }
 
+function isMobileSetting(meta, name) {
+    return meta.has(name) && meta.get(name).mobile;
+}
+
 function* settingsUpdateSaga(action) {
     const {settings, onSuccess} = action.payload;
 
+    const clientMeta = yield select(getSettingsClientMeta);
+    const toHome = settings.filter(t => !isMobileSetting(clientMeta, t.name));
+    const toMobile = settings
+        .filter(t => isMobileSetting(clientMeta, t.name))
+        .map(t => ({name: t.name.substring(PREFIX.length), value: t.value}));
     try {
-        yield call(Node.putSettings, ":", settings);
+        yield call(Node.putSettings, ":", toHome);
+        if (window.Android && toMobile.length > 0) {
+            window.Android.storeSettings(JSON.stringify(toMobile));
+        }
         yield put(settingsUpdateSucceeded(settings, onSuccess));
     } catch (e) {
         yield put(settingsUpdateFailed());
