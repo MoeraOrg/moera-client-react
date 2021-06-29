@@ -5,12 +5,23 @@
     min-height: 25vh;
 }
 
+@media only screen and (max-width: 575px) {
+    .people-page {
+        padding-bottom: 3rem;
+    }
+}
+
 .people-page .person {
     margin-bottom: .3rem;
-    margin-right: .5rem;
+    padding-right: .5rem;
+    display: flex;
+    align-items: center;
 }
 
 .people-page .person .avatar {
-    display: inline-block;
     margin-right: .5rem;
+}
+
+.people-page .person .node-name {
+    flex: auto;
 }
