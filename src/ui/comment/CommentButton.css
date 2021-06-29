@@ -1,7 +1,6 @@
 .comment-button, A.comment-button {
     text-decoration: none;
     color: var(--link-button);
-    margin-right: .3rem;
     cursor: pointer;
     background-color: transparent;
     border: none;
@@ -9,21 +8,29 @@
 }
 
 @media only screen and (min-width: 576px) {
-    .comment-button .caption, A.comment-button .caption {
-        margin-left: .25rem;
+    .comment-button, A.comment-button {
+        margin-right: .3rem;
     }
 
     .comment-button:hover, A.comment-button:hover {
         text-decoration: underline;
     }
+
+    .comment-button .caption, A.comment-button .caption {
+        margin-left: .25rem;
+    }
 }
 
 @media only screen and (max-width: 575px) {
-    .comment-button .caption, A.comment-button .caption {
-        display: none;
+    .comment-button, A.comment-button {
+        padding: 0 1rem;
     }
 
     .comment-button:hover, A.comment-button:hover {
         background-color: var(--highlight-blue);
+    }
+
+    .comment-button .caption, A.comment-button .caption {
+        display: none;
     }
 }
