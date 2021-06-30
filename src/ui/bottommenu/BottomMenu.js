@@ -17,11 +17,16 @@ import { openSignUpDialog } from "state/signupdialog/actions";
 import "./BottomMenu.css";
 
 function BottomMenu({atNode, connecting,  connected, visible, openConnectDialog, openSignUpDialog}) {
+    const className = cx(["connection-status", "d-lg-none", "navbar-dark", "bg-dark"], {"invisible": !visible});
+
     if (connecting) {
-        return <>Connecting <Loading/></>;
+        return (
+            <div id="bottom-menu" className={className}>
+                Connecting <Loading/>
+            </div>
+        );
     }
 
-    const className = cx(["connection-status", "d-lg-none", "navbar-dark", "bg-dark"], {"invisible": !visible});
     if (!connected) {
         if (!atNode) {
             return null;
