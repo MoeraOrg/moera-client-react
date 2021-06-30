@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withFormik } from 'formik';
 import * as yup from 'yup';
 
+import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import { cancelConnectDialog, connectDialogSetForm } from "state/connectdialog/actions";
 import { connectToHome } from "state/home/actions";
@@ -42,8 +43,8 @@ class ConnectForm extends React.PureComponent {
                 <InputField name="location" title="Name or node URL" autoFocus/>
                 <InputField name="password" title="Password"/>
                 <div className="links">
-                    <button className="btn btn-link" onClick={this.onSetPassword}>Password not set yet</button>
-                    <button className="btn btn-link" onClick={this.onForgotPassword}>Forgot password</button>
+                    <Button variant="link" onClick={this.onSetPassword}>Password not set yet</Button>
+                    <Button variant="link" onClick={this.onForgotPassword}>Forgot password</Button>
                 </div>
             </ConnectDialogModal>
         );
