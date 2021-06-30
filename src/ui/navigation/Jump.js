@@ -15,6 +15,7 @@ class Jump extends React.PureComponent {
 
     static propTypes = {
         nodeName: PropType.string,
+        nodeUri: PropType.string,
         href: PropType.string,
         className: PropType.string,
         title: PropType.string,
@@ -73,24 +74,28 @@ class Jump extends React.PureComponent {
 
     render() {
         const {
-            standalone, nodeName, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage, details,
-            trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
+            standalone, nodeName, nodeUri, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage,
+            details, trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
         } = this.props;
 
+        const redirectPage = homeRootPage ?? rootPage;
         const nodeOwnerName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
         if (nodeOwnerName === ownerName) {
-            const url = redirectUrl(standalone, homeRootPage, ownerName, rootPage, href, trackingId);
+            const nodeLocation = rootPage ?? nodeUri;
+            const url = redirectUrl(standalone, redirectPage, ownerName, nodeLocation, href, trackingId);
             return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
                       ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onNear} suppressHydrationWarning={true}>{children}</a>;
         } else {
-            let nodeLocation = null;
+            let nodeLocation;
             if (nodeOwnerName === homeOwnerName) {
-                nodeLocation = homeRootPage;
+                nodeLocation = homeRootPage ?? nodeUri;
             } else if (details.loaded) {
                 nodeLocation = details.nodeUri;
+            } else {
+                nodeLocation = nodeUri;
             }
-            const url = redirectUrl(standalone, homeRootPage, nodeOwnerName, nodeLocation, href, trackingId);
+            const url = redirectUrl(standalone, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
             return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
                       ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, href)}

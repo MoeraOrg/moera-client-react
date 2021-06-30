@@ -61,11 +61,11 @@ export function nodeUrlToEvents(url) {
     return url != null ? toWsUrl(normalizeUrl(url) + "/api/events") : null;
 }
 
-export function redirectUrl(standalone, homeRootPage, nodeName, nodeRootPage, location, trackingId) {
+export function redirectUrl(standalone, redirectPage, nodeName, nodeRootPage, location, trackingId) {
     if (nodeRootPage && !trackingId) {
         return standalone ? Browser.passedLocation(nodeRootPage + location) : nodeRootPage + location;
     }
     const client = standalone ? Browser.getRootLocation() : null;
-    return urlWithParameters(homeRootPage + "/gotoname",
+    return urlWithParameters(redirectPage + "/gotoname",
         {client, name: nodeName, location: location, trackingId});
 }
