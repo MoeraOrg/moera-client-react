@@ -9,11 +9,9 @@
 
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
+import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
-
-import { buildNotification, notificationClick } from "state/webpush/notification";
 
 clientsClaim();
 
@@ -77,25 +75,3 @@ self.addEventListener("message", event => {
 });
 
 // Any other custom service worker logic can go here.
-
-self.addEventListener("push", event => {
-    const packet = event.data.json();
-    const notification = buildNotification(packet);
-    if (notification != null) {
-        switch (notification.type) {
-            case "add":
-                event.waitUntil(self.registration.showNotification(notification.title, notification.options));
-                break;
-
-            case "delete":
-                self.registration.getNotifications()
-                    .then(nts => nts.filter(nt => nt.tag === notification.id).forEach(nt => nt.close()));
-                break;
-
-            default:
-                // do nothing
-        }
-    }
-});
-
-self.addEventListener("notificationclick", event => event.waitUntil(notificationClick(event)));

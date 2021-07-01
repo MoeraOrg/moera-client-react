@@ -64,10 +64,6 @@ export class Browser {
         }
     }
 
-    static isWebPushSupported() {
-        return !!navigator.serviceWorker;
-    }
-
     static isTouchScreen() {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
     }
@@ -170,10 +166,6 @@ export class Browser {
 
     static storeCartesData(cartesIp, cartes) {
         this.storeData({cartesIp, cartes});
-    }
-
-    static storeWebPushData(subscriptionId, invitationStage, invitationTimestamp) {
-        this.storeData({webPush: {subscriptionId, invitationStage, invitationTimestamp}});
     }
 
     static deleteData(location) {

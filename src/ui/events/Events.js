@@ -8,7 +8,6 @@ import { addMinutes, isBefore } from 'date-fns';
 import { ALLOWED_SELF_EVENTS, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
 import { eventAction } from "api/events/actions";
 import { Browser } from "ui/browser";
-import { ServiceWorkerService } from "ui/service-worker";
 import { now } from "util/misc";
 
 class Events extends React.PureComponent {
@@ -137,7 +136,6 @@ class Events extends React.PureComponent {
     onVisibilityChange = () => {
         if (document.visibilityState === "visible") {
             this._wakeUp();
-            ServiceWorkerService.closeAllNotifications();
         }
     }
 

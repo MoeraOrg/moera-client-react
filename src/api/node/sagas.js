@@ -498,24 +498,6 @@ export function* remoteCommentReactionVerify(nodeName, remoteNodeName, postingId
     });
 }
 
-export function* getWebPushKey(nodeName) {
-    return yield call(callApi, {nodeName, location: "/web-push/key", auth: true, schema: NodeApi.WebPushKey});
-}
-
-export function* postWebPushSubscription(nodeName, endpoint, publicKey, authKey) {
-    return yield call(callApi, {
-        nodeName, location: "/web-push/subscriptions", method: "POST", auth: true, body: {endpoint, publicKey, authKey},
-        schema: NodeApi.WebPushSubscriptionInfo
-    });
-}
-
-export function* deleteWebPushSubscription(nodeName, id) {
-    return yield call(callApi, {
-        nodeName, location: ut`/web-push/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result,
-        errorFilter: ["web-push-subscription.not-found"]
-    });
-}
-
 export function* getContacts(nodeName, query, limit) {
     const location = urlWithParameters("/people/contacts", {query, limit});
     return yield call(callApi, {nodeName, location, auth: true, schema: NodeApi.ContactInfoArray});

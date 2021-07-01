@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
-import { isWebPushEnabled, isWebPushSupported } from "state/webpush/selectors";
 import { confirmBox } from "state/confirmbox/actions";
-import { webPushSubscribe, webPushUnsubscribe } from "state/webpush/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";
@@ -38,24 +36,8 @@ class Instants extends React.PureComponent {
         feedStatusUpdate(":instant", null, true, stories[0].moment);
     }
 
-    onEnablePush = () => {
-        const {hide, confirmBox} = this.props;
-
-        hide();
-        confirmBox("Do you want to receive notifications from Moera when the application is closed?",
-            "Yes", "No", webPushSubscribe());
-    }
-
-    onDisablePush = () => {
-        const {hide, confirmBox} = this.props;
-
-        hide();
-        confirmBox("Do you want to stop receiving notifications from Moera when the application is closed?",
-            "Yes", "No", webPushUnsubscribe());
-    }
-
     render() {
-        const {hide, loadingPast, after, stories, instantCount, webPushSupported, webPushEnabled} = this.props;
+        const {hide, loadingPast, after, stories, instantCount} = this.props;
 
         return (
             <div id="instants">
@@ -72,13 +54,6 @@ class Instants extends React.PureComponent {
                                   onClick={this.loadPast}/>
                 </div>
                 <div className="footer">
-                    {webPushSupported ?
-                        <div className="action" onClick={webPushEnabled ? this.onDisablePush : this.onEnablePush}>
-                            {webPushEnabled ? "Disable Push" : "Enable Push"}
-                        </div>
-                    :
-                        <div className="action"/>
-                    }
                     <div className="build-number">rev {BUILD_NUMBER}</div>
                 </div>
             </div>
@@ -91,9 +66,7 @@ export default connect(
     state => ({
         loadingPast: getFeedState(state, ":instant").loadingPast,
         after: getFeedState(state, ":instant").after,
-        stories: getFeedState(state, ":instant").stories,
-        webPushSupported: isWebPushSupported(state),
-        webPushEnabled: isWebPushEnabled(state)
+        stories: getFeedState(state, ":instant").stories
     }),
     { feedPastSliceLoad, feedStatusUpdate, confirmBox }
 )(Instants);

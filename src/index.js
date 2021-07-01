@@ -24,8 +24,6 @@ function sendInitAction(standalone) {
 
 const standalone = document.body.dataset.comPassword == null && document.body.dataset.comInitialized == null;
 if (standalone || document.contentType === "text/plain") {
-    serviceWorker.register();
-
     Browser.init();
     initIconLibrary();
     registerSpoilerElement();
@@ -36,6 +34,8 @@ if (standalone || document.contentType === "text/plain") {
         document.getElementById("app-root")
     );
     sendInitAction(standalone);
+
+    serviceWorker.unregister();
 } else {
     document.body.innerText = `Pages with content type '${document.contentType}' are not supported anymore
                                for security reasons. Please turn to administrator to upgrade the node software

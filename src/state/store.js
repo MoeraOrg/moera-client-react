@@ -35,7 +35,6 @@ import flashBox from "state/flashbox/reducer";
 import signUpDialog from "state/signupdialog/reducer";
 import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
-import webPush from "state/webpush/reducer";
 
 import createSagaMiddleware from 'redux-saga';
 import { spawn, takeEvery } from 'redux-saga/effects';
@@ -69,7 +68,6 @@ import sourceDialogExecutors from "state/sourcedialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
-import webPushExecutors from "state/webpush/sagas";
 
 import { collectTriggers, invokeTriggers } from "state/trigger";
 import homeTriggers from "state/home/triggers";
@@ -94,7 +92,6 @@ import sourceDialogTriggers from "state/sourcedialog/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
-import webPushTriggers from "state/webpush/triggers";
 
 import { collectExecutors, invokeExecutors } from "state/executor";
 
@@ -129,8 +126,7 @@ const reducers = combineReducers({
     flashBox,
     signUpDialog,
     quickTips,
-    refresh,
-    webPush
+    refresh
 });
 
 function combinedReducer(state, action) {
@@ -160,8 +156,7 @@ const triggers = collectTriggers(
     sourceDialogTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
-    refreshTriggers,
-    webPushTriggers
+    refreshTriggers
 );
 
 const executors = collectExecutors(
@@ -191,8 +186,7 @@ const executors = collectExecutors(
     sourceDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
-    refreshExecutors,
-    webPushExecutors
+    refreshExecutors
 );
 
 function* flushPostponedSaga() {

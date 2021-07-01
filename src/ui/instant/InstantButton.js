@@ -6,7 +6,6 @@ import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedNotViewed, getFeedState, getInstantCount } from "state/feeds/selectors";
-import { ServiceWorkerService } from "ui/service-worker";
 
 class InstantButton extends React.PureComponent {
 
@@ -23,7 +22,6 @@ class InstantButton extends React.PureComponent {
     onToggle = visible => {
         if (visible && this.#visible !== visible) {
             this.setState({instantCount: this.props.instantCount});
-            ServiceWorkerService.closeAllNotifications();
         }
         this.#visible = visible;
         this.viewAll();

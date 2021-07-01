@@ -34,7 +34,7 @@
     margin-bottom: -.25rem;
     border-top: 1px solid var(--gray-light);
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 #instants .action {
