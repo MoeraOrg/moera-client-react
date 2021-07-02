@@ -15,6 +15,7 @@ import {
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
 import { toWsUrl } from "util/url";
+import { PROFILE_AVATAR_CREATED, PROFILE_AVATAR_DELETED } from "state/profile/actions";
 
 const emptyConnection = {
     connecting: false,
@@ -132,6 +133,19 @@ export default (state = initialState, action) => {
 
         case HOME_AVATARS_LOAD_FAILED:
             return immutable.set(state, "avatars.loading", false);
+
+        case PROFILE_AVATAR_CREATED:
+            if (state.avatars.loaded) {
+                return immutable.insert(state, "avatars.avatars", action.payload.avatar, 0);
+            }
+            return state;
+
+        case PROFILE_AVATAR_DELETED:
+            if (state.avatars.loaded) {
+                const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
 
         default:
             return state;
