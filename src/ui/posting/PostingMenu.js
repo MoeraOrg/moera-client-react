@@ -14,6 +14,7 @@ import { postingReply } from "state/postingreply/actions";
 import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
+import { shareDialogPrepare } from "state/sharedialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootLocation } from "state/node/selectors";
 import "./EntryMenu.css";
@@ -24,6 +25,16 @@ class PostingMenu extends React.PureComponent {
         const {posting, postingCopyLink} = this.props;
 
         postingCopyLink(posting.id);
+    };
+
+    onShare = () => {
+        const {posting, shareDialogPrepare} = this.props;
+
+        const nodeName = posting.receiverName ?? posting.ownerName;
+        const postingId = posting.receiverPostingId ?? posting.id;
+        const href = `/post/${postingId}`;
+
+        shareDialogPrepare(posting.heading, nodeName, href);
     };
 
     onReply = () => {
@@ -82,12 +93,19 @@ class PostingMenu extends React.PureComponent {
     render() {
         const {posting, story, isPermitted, rootLocation, homeOwnerName} = this.props;
 
+        const postingHref = `${rootLocation}/moera/post/${posting.id}`;
         return (
             <DropdownMenu items={[
                 {
                     title: "Copy link",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    href: postingHref,
                     onClick: this.onCopyLink,
+                    show: true
+                },
+                {
+                    title: "Share...",
+                    href: postingHref,
+                    onClick: this.onShare,
                     show: true
                 },
                 {
@@ -98,13 +116,13 @@ class PostingMenu extends React.PureComponent {
                 },
                 {
                     title: "Follow comments",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    href: postingHref,
                     onClick: this.onFollowComments,
                     show: posting.ownerName !== homeOwnerName && posting.subscriptions.comments == null
                 },
                 {
                     title: "Unfollow comments",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    href: postingHref,
                     onClick: this.onUnfollowComments,
                     show: posting.ownerName !== homeOwnerName && posting.subscriptions.comments != null
                 },
@@ -119,13 +137,13 @@ class PostingMenu extends React.PureComponent {
                 },
                 {
                     title: story != null && !story.pinned ? "Pin" : "Unpin",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    href: postingHref,
                     onClick: this.onPin,
                     show: story != null && isPermitted("edit", story)
                 },
                 {
                     title: "Change date/time...",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    href: postingHref,
                     onClick: this.onChangeDate,
                     show: posting.receiverName == null && isPermitted("edit", story)
                 },
@@ -134,13 +152,13 @@ class PostingMenu extends React.PureComponent {
                 },
                 {
                     title: "View source",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    href: postingHref,
                     onClick: this.onViewSource,
                     show: true
                 },
                 {
                     title: "Delete",
-                    href: `${rootLocation}/moera/post/${posting.id}`,
+                    href: postingHref,
                     onClick: this.onDelete,
                     show: isPermitted("delete", posting)
                 }
@@ -157,6 +175,6 @@ export default connect(
     }),
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
-        postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog
+        postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare
     }
 )(PostingMenu);

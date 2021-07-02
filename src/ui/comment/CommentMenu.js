@@ -5,6 +5,7 @@ import { DropdownMenu } from "ui/control";
 import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { shareDialogPrepare } from "state/sharedialog/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 import { getCommentsReceiverName, getCommentsReceiverPostingId } from "state/detailedposting/selectors";
 
@@ -14,6 +15,13 @@ class CommentMenu extends React.PureComponent {
         const {postingId, comment, commentCopyLink} = this.props;
 
         commentCopyLink(comment.id, postingId);
+    };
+
+    onShare = () => {
+        const {postingId, nodeName, comment, shareDialogPrepare} = this.props;
+
+        const href = `/post/${postingId}?comment=${comment.id}`;
+        shareDialogPrepare(comment.heading, nodeName, href);
     };
 
     onEdit = () => {
@@ -38,32 +46,39 @@ class CommentMenu extends React.PureComponent {
     render() {
         const {postingId, comment, isPermitted, rootLocation} = this.props;
 
+        const commentHref = `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`;
         return (
             <DropdownMenu items={[
                 {
                     title: "Copy link",
-                    href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
+                    href: commentHref,
                     onClick: this.onCopyLink,
                     show: true
                 },
                 {
-                    title: "Edit...",
-                    href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
-                    onClick: this.onEdit,
-                    show: isPermitted("edit", comment),
+                    title: "Share...",
+                    href: commentHref,
+                    onClick: this.onShare,
+                    show: true
                 },
                 {
                     divider: true
                 },
                 {
+                    title: "Edit...",
+                    href: commentHref,
+                    onClick: this.onEdit,
+                    show: isPermitted("edit", comment),
+                },
+                {
                     title: "View source",
-                    href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
+                    href: commentHref,
                     onClick: this.onViewSource,
                     show: true
                 },
                 {
                     title: "Delete",
-                    href: `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`,
+                    href: commentHref,
                     onClick: this.onDelete,
                     show: isPermitted("delete", comment) // FIXME all permissions work?
                 }
@@ -79,5 +94,5 @@ export default connect(
         receiverName: getCommentsReceiverName(state),
         receiverPostingId: getCommentsReceiverPostingId(state)
     }),
-    { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox }
+    { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare }
 )(CommentMenu);

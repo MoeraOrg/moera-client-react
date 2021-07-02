@@ -30,7 +30,8 @@ const Comment = ({
             <CommentDeleting/>
         :
             <>
-                <CommentMenu comment={comment} postingId={postingId} isPermitted={isPermitted}/>
+                <CommentMenu comment={comment} nodeName={postingReceiverName ?? postingOwnerName} postingId={postingId}
+                             isPermitted={isPermitted}/>
                 <CommentAvatar comment={comment} nodeName={postingReceiverName ?? postingOwnerName}/>
                 <div className="details">
                     <div className="owner-line">
