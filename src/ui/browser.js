@@ -78,10 +78,14 @@ export class Browser {
     }
 
     static getDocumentLocation() {
-        let {pathname: path, search: query, hash} = window.location;
-        let rootLocation = Browser.getRootLocation();
-
+        const {pathname, search, hash} = window.location;
+        const rootLocation = Browser.getRootLocation();
         const header = document.body.dataset.xMoera;
+
+        return this.getLocation(rootLocation, pathname, search, hash, header);
+    }
+
+    static getLocation(rootLocation, path, query, hash, header) {
         if (header) {
             header
                 .split(/\s*;\s*/)
