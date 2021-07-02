@@ -30,7 +30,7 @@ class ComposeDraftItem extends React.PureComponent {
         return (
             <div key={draft.id} className={cx("dropdown-item", {"current": current})}
                  onClick={this.onSelect}>
-                <div className="info">
+                <div className="draft-info">
                     <div className="content">
                         {draft.subject && <b>{draft.subject} </b>}
                         <LinesEllipsis text={draft.text} maxLine="3"/>
@@ -39,7 +39,7 @@ class ComposeDraftItem extends React.PureComponent {
                         {formatDistanceToNow(fromUnixTime(draft.editedAt))}
                     </div>
                 </div>
-                <div className="delete" title="Delete draft" onClick={this.onDelete}>
+                <div className="draft-delete" title="Delete draft" onClick={this.onDelete}>
                     <FontAwesomeIcon icon="trash-alt"/>
                 </div>
             </div>
