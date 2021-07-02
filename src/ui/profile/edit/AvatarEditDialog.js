@@ -115,7 +115,7 @@ class AvatarEditDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, imageUploading, imageId, path, rootPage, profileCloseAvatarEditDialog} = this.props;
+        const {show, imageUploading, imageId, path, creating, rootPage, profileCloseAvatarEditDialog} = this.props;
         const {scale, rotate, shape} = this.state;
 
         if (!show) {
@@ -149,7 +149,7 @@ class AvatarEditDialog extends React.PureComponent {
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={false} disabled={!imageId}
+                    <Button variant="primary" type="submit" loading={creating} disabled={!imageId}
                             onClick={this.onCreateClick}>Create</Button>
                 </div>
             </ModalDialog>
@@ -166,6 +166,7 @@ export default connect(
         path: state.profile.avatarEditDialog.path,
         width: state.profile.avatarEditDialog.width,
         height: state.profile.avatarEditDialog.height,
+        creating: state.profile.avatarEditDialog.avatarCreating,
         rootPage: getNodeRootPage(state),
         shapeDefault: getSetting(state, "avatar.shape.default")
     }),
