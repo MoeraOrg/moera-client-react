@@ -13,17 +13,19 @@ import { getCommentsState, getDetailedPostingId } from "state/detailedposting/se
 const GlanceComment = ({loading, loaded, postingId, comment}) => (
     loaded && !loading && comment != null ?
         <div className={cx("comment", "entry", {"single-emoji": comment.singleEmoji})}>
-            <div className="owner-line">
-                <CommentOwner comment={comment} popup={false}/>
-                <CommentDate postingId={postingId} comment={comment}/>
-                <CommentUpdated comment={comment}/>
-            </div>
-            <div className="content">
-                <EntryHtml html={comment.body.text}/>
-            </div>
-            <div className="reactions-line">
-                <div className="comment-buttons"/>
-                <CommentReactions postingId={postingId} comment={comment}/>
+            <div className="details">
+                <div className="owner-line">
+                    <CommentOwner comment={comment} popup={false}/>
+                    <CommentDate postingId={postingId} comment={comment}/>
+                    <CommentUpdated comment={comment}/>
+                </div>
+                <div className="content">
+                    <EntryHtml html={comment.body.text}/>
+                </div>
+                <div className="reactions-line">
+                    <div className="comment-buttons"/>
+                    <CommentReactions postingId={postingId} comment={comment}/>
+                </div>
             </div>
         </div>
     :
