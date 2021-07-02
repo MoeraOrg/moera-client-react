@@ -83,7 +83,7 @@ const composePageLogic = {
         const publishAt = !isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null;
         const publications = [{feedName: "timeline", publishAt}];
         if (props.newsFeedEnabled) {
-            publications.push({feedName: "news", publishAt});
+            publications.push({feedName: "news", publishAt, viewed: true, read: true});
         }
         return publications;
     },
