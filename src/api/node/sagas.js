@@ -318,36 +318,37 @@ export function* remotePostingReactionVerify(nodeName, remoteNodeName, postingId
     });
 }
 
-export function* getDraftPostings(nodeName) {
+export function* getDraftsNewPosting(nodeName, receiverName) {
     return yield call(callApi, {
-        nodeName, location: "/draft-postings", auth: true, schema: NodeApi.PostingInfoList, withBodies: true
+        nodeName, location: ut`/drafts?draftType=new-posting&nodeName=${receiverName}`, auth: true,
+        schema: NodeApi.DraftInfoList, withBodies: true
     });
 }
 
-export function* getDraftPosting(nodeName, id) {
+export function* getDraft(nodeName, id) {
     return yield call(callApi, {
-        nodeName, location: ut`/draft-postings/${id}`, auth: true, schema: NodeApi.PostingInfo, withBodies: true,
-        errorFilter: ["posting.not-found"]
+        nodeName, location: ut`/drafts/${id}`, auth: true, schema: NodeApi.DraftInfo, withBodies: true,
+        errorFilter: ["draft.not-found"]
     });
 }
 
-export function* postDraftPosting(nodeName, postingText) {
+export function* postDraft(nodeName, draftText) {
     return yield call(callApi, {
-        nodeName, location: "/draft-postings", method: "POST", auth: true, body: postingText,
-        schema: NodeApi.PostingInfo, withBodies: true
+        nodeName, location: "/drafts", method: "POST", auth: true, body: draftText, schema: NodeApi.DraftInfo,
+        withBodies: true
     });
 }
 
-export function* putDraftPosting(nodeName, id, postingText) {
+export function* putDraft(nodeName, id, draftText) {
     return yield call(callApi, {
-        nodeName, location: ut`/draft-postings/${id}`, method: "PUT", auth: true, body: postingText,
-        schema: NodeApi.PostingInfo, withBodies: true
+        nodeName, location: ut`/drafts/${id}`, method: "PUT", auth: true, body: draftText, schema: NodeApi.DraftInfo,
+        withBodies: true
     });
 }
 
-export function* deleteDraftPosting(nodeName, id) {
+export function* deleteDraft(nodeName, id) {
     return yield call(callApi, {
-        nodeName, location: ut`/draft-postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/drafts/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 

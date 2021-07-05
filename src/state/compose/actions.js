@@ -68,9 +68,9 @@ export const composeDraftLoad = () => ({
 });
 
 export const COMPOSE_DRAFT_LOADED = "COMPOSE_DRAFT_LOADED";
-export const composeDraftLoaded = (posting) => ({
+export const composeDraftLoaded = (draft) => ({
     type: COMPOSE_DRAFT_LOADED,
-    payload: {posting}
+    payload: {draft}
 });
 
 export const COMPOSE_DRAFT_LOAD_FAILED = "COMPOSE_DRAFT_LOAD_FAILED";
@@ -79,9 +79,9 @@ export const composeDraftLoadFailed = () => ({
 });
 
 export const COMPOSE_DRAFT_SAVE = "COMPOSE_DRAFT_SAVE";
-export const composeDraftSave = (postingId, draftId, postingText) => ({
+export const composeDraftSave = (draftText) => ({
     type: COMPOSE_DRAFT_SAVE,
-    payload: {postingId, draftId, postingText}
+    payload: {draftText}
 });
 
 export const COMPOSE_DRAFT_SAVED = "COMPOSE_DRAFT_SAVED";
@@ -130,9 +130,9 @@ export const composeDraftListItemReload = (id) => ({
 });
 
 export const COMPOSE_DRAFT_LIST_ITEM_SET = "COMPOSE_DRAFT_LIST_ITEM_SET";
-export const composeDraftListItemSet = (id, posting) => ({
+export const composeDraftListItemSet = (id, draft) => ({
     type: COMPOSE_DRAFT_LIST_ITEM_SET,
-    payload: {id, posting}
+    payload: {id, draft}
 });
 
 export const COMPOSE_DRAFT_LIST_ITEM_DELETE = "COMPOSE_DRAFT_LIST_ITEM_DELETE";

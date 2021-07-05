@@ -1309,3 +1309,79 @@ export const AvatarOrdinalArray = schema({
         additionalProperties: false
     }
 });
+
+const DraftInfoType = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "draftType": {
+            type: "string"
+        },
+        "receiverName": {
+            type: "string"
+        },
+        "receiverPostingId": {
+            type: "string"
+        },
+        "receiverCommentId": {
+            type: "string"
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "editedAt": {
+            type: "integer"
+        },
+        "deadline": {
+            type: "integer"
+        },
+        "ownerFullName": {
+            type: "string"
+        },
+        "ownerAvatar": AvatarImageType,
+        "acceptedReactions": {
+            type: "object",
+            properties: {
+                "positive": {
+                    type: "string"
+                },
+                "negative": {
+                    type: "string"
+                },
+            },
+            additionalProperties: false
+        },
+        "reactionsVisible": {
+            type: "boolean"
+        },
+        "reactionTotalsVisible": {
+            type: "boolean"
+        },
+        "bodySrc": {
+            type: "string"
+        },
+        "bodySrcFormat": {
+            type: "string"
+        },
+        "body": {
+            type: "string"
+        },
+        "bodyFormat": {
+            type: "string"
+        },
+        "heading": {
+            type: "string"
+        },
+        "updateInfo": UpdateInfoType
+    },
+    additionalProperties: false
+};
+
+export const DraftInfo = schema(DraftInfoType);
+
+export const DraftInfoList = schema({
+    type: "array",
+    items: DraftInfoType
+});

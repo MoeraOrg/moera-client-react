@@ -65,12 +65,12 @@ const initialState = {
     showPreview: false
 };
 
-function buildDraftInfo(postingInfo) {
-    const {bodySrc} = postingInfo;
+function buildDraftInfo(draftInfo) {
+    const {bodySrc} = draftInfo;
     const source = typeof bodySrc === "string" ? JSON.parse(bodySrc) : bodySrc;
 
     return {
-        ...postingInfo,
+        ...draftInfo,
         subject: source.subject != null ? source.subject.substring(0, 64) : null,
         text: source.text != null ? source.text.substring(0, 256) : null,
     }
@@ -80,16 +80,26 @@ function sortDraftList(draftList) {
     return draftList.sort((d1, d2) => d2.editedAt - d1.editedAt);
 }
 
-function appendToDraftList(draftList, postingInfo) {
-    const draftInfo = buildDraftInfo(postingInfo);
+function appendToDraftList(draftList, draftInfo) {
+    const extDraftInfo = buildDraftInfo(draftInfo);
     const list = draftList.slice();
-    const i = list.findIndex(d => d.id === draftInfo.id);
+    const i = list.findIndex(d => d.id === extDraftInfo.id);
     if (i >= 0) {
-        list[i] = draftInfo;
+        list[i] = extDraftInfo;
     } else {
-        list.push(draftInfo);
+        list.push(extDraftInfo);
     }
     return sortDraftList(list);
+}
+
+function draftToPosting(draft) {
+    const posting = cloneDeep(draft);
+    posting.id = draft.receiverPostingId;
+    delete posting.draftType;
+    delete posting.receiverName;
+    delete posting.receiverPostingId;
+
+    return posting;
 }
 
 export default (state = initialState, action) => {
@@ -188,7 +198,7 @@ export default (state = initialState, action) => {
         case COMPOSE_DRAFT_LOADED:
             return {
                 ...state,
-                posting: action.payload.posting,
+                posting: draftToPosting(action.payload.draft),
                 loadingDraft: false
             };
 
@@ -263,7 +273,7 @@ export default (state = initialState, action) => {
             if (state.loadedDraftList) {
                 return {
                     ...state,
-                    draftList: appendToDraftList(state.draftList, action.payload.posting)
+                    draftList: appendToDraftList(state.draftList, action.payload.draft)
                 };
             } else {
                 return state;

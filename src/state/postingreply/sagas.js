@@ -57,7 +57,7 @@ function* postingReplySaga() {
             reactionsVisible: reactionsVisibleDefault,
             reactionTotalsVisible: reactionTotalsVisibleDefault
         };
-        const data = yield call(Node.postDraftPosting, ":", postingText);
+        const data = yield call(Node.postDraft, ":", postingText);
         if (rootNodePage !== rootHomePage) {
             window.location = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
         } else {
