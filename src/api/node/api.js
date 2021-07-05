@@ -16,32 +16,26 @@ export const Result = schema({
 });
 
 export const AvatarImageType = {
-    anyOf: [
-        {
-            type: "null"
+    type: "object",
+    properties: {
+        "mediaId": {
+            type: "string"
         },
-        {
-            type: "object",
-            properties: {
-                "mediaId": {
-                    type: "string"
-                },
-                "path": {
-                    type: "string"
-                },
-                "width": {
-                    type: "integer"
-                },
-                "height": {
-                    type: "integer"
-                },
-                "shape": {
-                    type: "string"
-                },
-            },
-            additionalProperties: false
-        }
-    ]
+        "path": {
+            type: "string"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "shape": {
+            type: "string"
+        },
+    },
+    nullable: true,
+    additionalProperties: false
 };
 
 export const AvatarInfoType = {
@@ -500,14 +494,8 @@ const PostingInfoType = {
             type: "object",
             properties: {
                 "comments": {
-                    anyOf: [
-                        {
-                            type: "null"
-                        },
-                        {
-                            type: "string"
-                        }
-                    ]
+                    type: "string",
+                    nullable: true
                 }
             },
             default: {
@@ -876,35 +864,29 @@ export const SettingMetaInfoArray = schema({
                 type: "string"
             },
             "modifiers": {
-                anyOf: [
-                    {
-                        type: "object",
-                        properties: {
-                            "format": {
-                                type: "string"
-                            },
-                            "min": {
-                                type: "string"
-                            },
-                            "max": {
-                                type: "string"
-                            },
-                            "multiline": {
-                                type: "boolean"
-                            },
-                            "never": {
-                                type: "boolean"
-                            },
-                            "always": {
-                                type: "boolean"
-                            }
-                        },
-                        additionalProperties: false
+                type: "object",
+                properties: {
+                    "format": {
+                        type: "string"
                     },
-                    {
-                        type: "null"
+                    "min": {
+                        type: "string"
+                    },
+                    "max": {
+                        type: "string"
+                    },
+                    "multiline": {
+                        type: "boolean"
+                    },
+                    "never": {
+                        type: "boolean"
+                    },
+                    "always": {
+                        type: "boolean"
                     }
-                ]
+                },
+                nullable: true,
+                additionalProperties: false
             }
         },
         additionalProperties: false
@@ -1186,6 +1168,7 @@ export const CommentsSliceInfo = schema({
         },
         "total": {
             type: "integer",
+            nullable: true,
             default: null
         },
         "totalInPast": {
@@ -1238,14 +1221,8 @@ export const ContactInfoType = {
             type: "string"
         },
         "fullName": {
-            anyOf: [
-                {
-                    type: "null"
-                },
-                {
-                    type: "string"
-                }
-            ]
+            type: "string",
+            nullable: true
         },
         "avatar": AvatarImageType,
         "closeness": {
