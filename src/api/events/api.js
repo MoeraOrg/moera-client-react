@@ -20,8 +20,20 @@ const postingEvent = (properties = {}) => baseEvent({
     ...properties
 });
 
-const draftPostingEvent = (properties = {}) => baseEvent({
+const draftEvent = (properties = {}) => baseEvent({
     "id": {
+        type: "string"
+    },
+    "draftType": {
+        type: "string"
+    },
+    "receiverName": {
+        type: "string"
+    },
+    "receiverPostingId": {
+        type: "string"
+    },
+    "receiverCommentId": {
         type: "string"
     },
     ...properties
@@ -343,11 +355,9 @@ export const EVENT_SCHEMES = {
             type: "string"
         },
     }),
-    "DRAFT_POSTING_ADDED": draftPostingEvent(),
-    "DRAFT_POSTING_UPDATED": draftPostingEvent(),
-    "DRAFT_POSTING_DELETED": draftPostingEvent(),
-    "POSTING_DRAFT_REVISION_UPDATED": draftPostingEvent(),
-    "POSTING_DRAFT_REVISION_DELETED": draftPostingEvent(),
+    "DRAFT_ADDED": draftEvent(),
+    "DRAFT_UPDATED": draftEvent(),
+    "DRAFT_DELETED": draftEvent(),
     "STORY_ADDED": storyEvent(),
     "STORY_DELETED": storyEvent(),
     "STORY_UPDATED": storyEvent(),

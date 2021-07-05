@@ -101,6 +101,7 @@ function draftToPosting(draft) {
 }
 
 export default (state = initialState, action) => {
+    console.log(action);
     switch (action.type) {
         case GO_TO_PAGE:
             if (action.payload.page === PAGE_COMPOSE) {

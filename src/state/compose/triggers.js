@@ -31,14 +31,15 @@ import {
 } from "state/compose/selectors";
 import { SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
 import {
-    EVENT_HOME_DRAFT_POSTING_ADDED,
-    EVENT_HOME_DRAFT_POSTING_DELETED,
-    EVENT_HOME_DRAFT_POSTING_UPDATED,
+    EVENT_HOME_DRAFT_ADDED,
+    EVENT_HOME_DRAFT_DELETED,
+    EVENT_HOME_DRAFT_UPDATED,
     EVENT_HOME_NODE_SETTINGS_CHANGED,
     EVENT_NODE_POSTING_UPDATED
 } from "api/events/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
+import { getOwnerName } from "state/owner/selectors";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
@@ -81,13 +82,17 @@ export default [
     trigger(COMPOSE_DRAFT_LIST_ITEM_DELETED, true, updateLocation),
     trigger(COMPOSE_PREVIEW, true, dialogOpened(composePreviewClose())),
     trigger(
-        [EVENT_HOME_DRAFT_POSTING_ADDED, EVENT_HOME_DRAFT_POSTING_UPDATED],
-        isComposeDraftListLoaded,
+        [EVENT_HOME_DRAFT_ADDED, EVENT_HOME_DRAFT_UPDATED],
+        (state, signal) => signal.payload.draftType === "new-posting"
+            && signal.payload.receiverName === getOwnerName(state)
+            && isComposeDraftListLoaded(state),
         signal => composeDraftListItemReload(signal.payload.id)
     ),
     trigger(
-        EVENT_HOME_DRAFT_POSTING_DELETED,
-        isComposeDraftListLoaded,
+        EVENT_HOME_DRAFT_DELETED,
+        (state, signal) => signal.payload.draftType === "new-posting"
+            && signal.payload.receiverName === getOwnerName(state)
+            && isComposeDraftListLoaded(state),
         signal => composeDraftListItemDeleted(signal.payload.id)
     )
 ];
