@@ -325,6 +325,14 @@ export function* getDraftsNewPosting(nodeName, receiverName) {
     });
 }
 
+export function* getPostingDraftRevision(nodeName, receiverName, receiverPostingId) {
+    const list = yield call(callApi, {
+        nodeName, location: ut`/drafts?draftType=posting-update&nodeName=${receiverName}&postingId=${receiverPostingId}`,
+        auth: true, schema: NodeApi.DraftInfoList, withBodies: true
+    });
+    return list.length > 0 ? list[0] : null;
+}
+
 export function* getDraft(nodeName, id) {
     return yield call(callApi, {
         nodeName, location: ut`/drafts/${id}`, auth: true, schema: NodeApi.DraftInfo, withBodies: true,
@@ -349,26 +357,6 @@ export function* putDraft(nodeName, id, draftText) {
 export function* deleteDraft(nodeName, id) {
     return yield call(callApi, {
         nodeName, location: ut`/drafts/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
-    });
-}
-
-export function* getPostingDraftRevision(nodeName, id) {
-    return yield call(callApi, {
-        nodeName, location: ut`/postings/${id}/revisions/draft`, auth: true, schema: NodeApi.PostingInfo,
-        withBodies: true, errorFilter: ["posting.not-found"]
-    });
-}
-
-export function* putPostingDraftRevision(nodeName, id, postingText) {
-    return yield call(callApi, {
-        nodeName, location: ut`/postings/${id}/revisions/draft`, method: "PUT", auth: true, body: postingText,
-        schema: NodeApi.PostingInfo, withBodies: true
-    });
-}
-
-export function* deletePostingDraftRevision(nodeName, id) {
-    return yield call(callApi, {
-        nodeName, location: ut`/postings/${id}/revisions/draft`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
 

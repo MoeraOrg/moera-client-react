@@ -95,10 +95,9 @@ export const composeDraftSaveFailed = () => ({
     type: COMPOSE_DRAFT_SAVE_FAILED
 });
 
-export const COMPOSE_DRAFT_REVISION_SET = "COMPOSE_DRAFT_REVISION_SET";
-export const composeDraftRevisionSet = (draftRevision) => ({
-    type: COMPOSE_DRAFT_REVISION_SET,
-    payload: {draftRevision}
+export const COMPOSE_DRAFT_UNSET = "COMPOSE_DRAFT_UNSET";
+export const composeDraftUnset = () => ({
+    type: COMPOSE_DRAFT_UNSET
 });
 
 export const COMPOSE_DRAFT_LIST_LOAD = "COMPOSE_DRAFT_LIST_LOAD";

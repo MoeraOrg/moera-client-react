@@ -26,9 +26,9 @@ const composePageLogic = {
             props.posting != null ? props.posting.reactionsVisible : props.reactionsVisibleDefault;
         const reactionTotalsVisible =
             props.posting != null ? props.posting.reactionTotalsVisible : props.reactionTotalsVisibleDefault;
-        const updateImportant = props.posting != null && props.posting.draftPending && props.posting.updateInfo != null
+        const updateImportant = props.posting != null && props.posting.updateInfo != null
             ? (props.posting.updateInfo.important ?? false): false;
-        const updateDescription = props.posting != null && props.posting.draftPending && props.posting.updateInfo != null
+        const updateDescription = props.posting != null && props.posting.updateInfo != null
             ? (props.posting.updateInfo.description ?? ""): "";
 
         return {

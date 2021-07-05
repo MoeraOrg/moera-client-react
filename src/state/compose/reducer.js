@@ -1,4 +1,3 @@
-import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import {
@@ -12,12 +11,11 @@ import {
     COMPOSE_DRAFT_LOAD,
     COMPOSE_DRAFT_LOAD_FAILED,
     COMPOSE_DRAFT_LOADED,
-    COMPOSE_DRAFT_REVISION_DELETE,
-    COMPOSE_DRAFT_REVISION_SET,
     COMPOSE_DRAFT_SAVE,
     COMPOSE_DRAFT_SAVE_FAILED,
     COMPOSE_DRAFT_SAVED,
     COMPOSE_DRAFT_SELECT,
+    COMPOSE_DRAFT_UNSET,
     COMPOSE_FEATURES_LOAD,
     COMPOSE_FEATURES_LOAD_FAILED,
     COMPOSE_FEATURES_LOADED,
@@ -29,7 +27,8 @@ import {
     COMPOSE_POSTING_LOAD_FAILED,
     COMPOSE_POSTING_LOADED,
     COMPOSE_PREVIEW,
-    COMPOSE_PREVIEW_CLOSE, COMPOSE_SHARED_TEXT_SET
+    COMPOSE_PREVIEW_CLOSE,
+    COMPOSE_SHARED_TEXT_SET
 } from "state/compose/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
@@ -46,7 +45,6 @@ const emptyPosting = {
     conflict: false,
     beingPosted: false,
     draftId: null,
-    draftRevision: null,
     loadingDraft: false,
     savingDraft: false,
     savedDraft: false,
@@ -154,7 +152,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 posting: action.payload.posting,
-                draftRevision: cloneDeep(action.payload.posting),
                 loadingPosting: false
             };
 
@@ -198,8 +195,10 @@ export default (state = initialState, action) => {
         case COMPOSE_DRAFT_LOADED:
             return {
                 ...state,
+                draftId: action.payload.draft.id,
                 posting: draftToPosting(action.payload.draft),
-                loadingDraft: false
+                loadingDraft: false,
+                loadingPosting: false
             };
 
         case COMPOSE_DRAFT_LOAD_FAILED:
@@ -219,8 +218,6 @@ export default (state = initialState, action) => {
             if (action.payload.postingId === state.postingId) {
                 return {
                     ...state,
-                    posting: state.postingId != null && state.posting != null
-                        ? immutable.set(state.posting, "draftPending", true) : state.posting,
                     draftId: action.payload.draftId,
                     savingDraft: false,
                     savedDraft: true
@@ -234,12 +231,6 @@ export default (state = initialState, action) => {
                 ...state,
                 savingDraft: false,
                 savedDraft: false
-            };
-
-        case COMPOSE_DRAFT_REVISION_SET:
-            return {
-                ...state,
-                draftRevision: action.payload.draftRevision
             };
 
         case COMPOSE_DRAFT_LIST_LOAD:
@@ -300,11 +291,14 @@ export default (state = initialState, action) => {
             return result;
         }
 
-        case COMPOSE_DRAFT_REVISION_DELETE:
+        case COMPOSE_DRAFT_UNSET:
             return {
                 ...state,
-                ...emptyPosting,
-                postingId: state.postingId
+                posting: null,
+                draftId: null,
+                loadingDraft: false,
+                savingDraft: false,
+                savedDraft: false
             };
 
         case COMPOSE_PREVIEW:

@@ -19,9 +19,9 @@ import {
     composeDraftListLoadFailed,
     composeDraftLoaded,
     composeDraftLoadFailed,
-    composeDraftRevisionSet,
     composeDraftSaved,
     composeDraftSaveFailed,
+    composeDraftUnset,
     composeFeaturesLoaded,
     composeFeaturesLoadFailed,
     composePostFailed,
@@ -58,11 +58,16 @@ function* composeFeaturesLoadSaga() {
     }
 }
 
-function* composePostingLoadSaga() {
+function* composePostingLoadSaga(action) {
     try {
         const id = yield select(getComposePostingId);
-        const data = yield call(Node.getPostingDraftRevision, "", id);
-        yield put(composePostingLoaded(data));
+        const draft = yield call(Node.getPostingDraftRevision, ":", action.context.ownerName, id);
+        if (draft != null) {
+            yield put(composeDraftLoaded(draft));
+            return;
+        }
+        const posting = yield call(Node.getPosting, "", id, true);
+        yield put(composePostingLoaded(posting));
     } catch (e) {
         yield put(composePostingLoadFailed());
         yield put(errorThrown(e));
@@ -83,7 +88,7 @@ function* composePostSaga(action) {
         } else {
             data = yield call(Node.putPosting, "", id, postingText);
             if (draftId != null) {
-                yield call(Node.deletePostingDraftRevision, "", draftId);
+                yield call(Node.deleteDraft, ":", draftId);
             }
         }
         yield put(composePostSucceeded(data));
@@ -110,16 +115,13 @@ function* composeDraftSaveSaga(action) {
 
     try {
         let data;
-        if (draftText.receiverPostingId == null) {
-            if (draftText.id == null) {
-                data = yield call(Node.postDraft, ":", draftText);
-            } else {
-                data = yield call(Node.putDraft, ":", draftText.id, draftText);
-            }
-            yield put(composeDraftListItemSet(data.id, data));
+        if (draftText.id == null) {
+            data = yield call(Node.postDraft, ":", draftText);
         } else {
-            data = yield call(Node.putPostingDraftRevision, "", draftText.receiverPostingId, draftText);
-            yield put(composeDraftRevisionSet(data));
+            data = yield call(Node.putDraft, ":", draftText.id, draftText);
+        }
+        if (draftText.receiverPostingId == null) {
+            yield put(composeDraftListItemSet(data.id, data));
         }
         yield put(composeDraftSaved(draftText.receiverPostingId, data.id));
     } catch (e) {
@@ -158,8 +160,9 @@ function* composeDraftListItemDeleteSaga(action) {
 
 function* composeDraftRevisionDeleteSaga() {
     try {
-        const id = yield select(getComposePostingId);
-        yield call(Node.deletePostingDraftRevision, "", id);
+        const id = yield select(getComposeDraftId);
+        yield call(Node.deleteDraft, ":", id);
+        yield put(composeDraftUnset());
         yield put(composePostingLoad());
     } catch (e) {
         yield put(errorThrown(e));

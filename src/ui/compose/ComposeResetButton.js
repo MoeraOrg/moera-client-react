@@ -8,6 +8,10 @@ import { confirmBox } from "state/confirmbox/actions";
 import "./ComposeResetButton.css";
 
 function ComposeResetButton({postingId, draftId, posting, confirmBox}) {
+    if (draftId == null) {
+        return null;
+    }
+
     const onClick = () => {
         if (postingId == null) {
             confirmBox("Do you really want to delete the draft?", "Yes", "No",
@@ -19,16 +23,13 @@ function ComposeResetButton({postingId, draftId, posting, confirmBox}) {
     };
 
     if (postingId == null) {
-        if (draftId == null) {
-            return null;
-        }
         return (
             <Button variant="danger" className="reset-button" title="Delete draft" onClick={onClick}>
                 <FontAwesomeIcon icon="trash-alt"/>
             </Button>
         );
     } else {
-        if (posting == null || !posting.draftPending) {
+        if (posting == null) {
             return null;
         }
         return (
