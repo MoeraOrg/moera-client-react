@@ -25,10 +25,10 @@ const BASE_SAFE_HTML_SETTINGS = {
         "mr-spoiler": ["title"]
     },
     allowedClasses: {
-        img: "emoji",
-        b: "emoji",
-        span: "katex",
-        div: "katex"
+        img: ["emoji"],
+        b: ["emoji"],
+        span: ["katex"],
+        div: ["katex"]
     },
     allowedIframeHostnames: [
         "www.youtube.com", "www.youtube-nocookie.com", "player.vimeo.com", "www.facebook.com", "peer.tube",
