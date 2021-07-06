@@ -1,6 +1,12 @@
 export default class EmojiList {
 
-    constructor(str) {
+    _other: boolean;
+    _included: number[];
+    _includedSet: Set<number>;
+    _recommended: number[];
+    _recommendedSet: Set<number>;
+
+    constructor(str: string) {
         const list = str ? str.split(",").map(s => s.trim()) : [];
         this._other = list.includes("*");
         this._included = list.filter(s => s !== "*").map(v => parseInt(v));
@@ -9,27 +15,27 @@ export default class EmojiList {
         this._recommendedSet = new Set(this._recommended);
     }
 
-    other() {
+    other(): boolean {
         return this._other;
     }
 
-    included() {
+    included(): number[] {
         return this._included;
     }
 
-    includes(emoji) {
+    includes(emoji: number): boolean {
         return this._other || this._includedSet.has(emoji);
     }
 
-    includesExplicitly(emoji) {
+    includesExplicitly(emoji: number): boolean {
         return this._includedSet.has(emoji);
     }
 
-    recommended() {
+    recommended(): number[] {
         return this._recommended;
     }
 
-    recommends(emoji) {
+    recommends(emoji: number): boolean {
         return this._recommendedSet.has(emoji);
     }
 
