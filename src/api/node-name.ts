@@ -1,6 +1,6 @@
 export class NodeName {
 
-    static parse(qName) {
+    static parse(qName: string | null): RegisteredName {
         if (qName == null || qName === "") {
             return new RegisteredName();
         }
@@ -8,7 +8,7 @@ export class NodeName {
         return new RegisteredName(parts[0],parts.length > 1 ? parseInt(parts[1]) : 0)
     }
 
-    static shorten(qName) {
+    static shorten(qName: string): string | null {
         if (!qName) {
             return qName;
         }
@@ -20,12 +20,15 @@ export class NodeName {
 
 export class RegisteredName {
 
-    constructor(name = null, generation = 0) {
+    name: string | null;
+    generation: number;
+
+    constructor(name: string | null = null, generation: number | null = 0) {
         this.name = name;
         this.generation = generation ?? 0;
     }
 
-    format() {
+    format(): string {
         return `${this.name}_${this.generation}`;
     }
 
