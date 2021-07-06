@@ -2,7 +2,12 @@ import regexEscape from 'escape-string-regexp';
 
 const ARRANGEMENT_DEPTH = 5;
 
-export function namesListQuery(list, query) {
+interface NodeNamePair {
+    nodeName: string;
+    fullName: string | null;
+}
+
+export function namesListQuery(list: NodeNamePair[], query: string | null): NodeNamePair[] {
     if (query == null) {
         return list.slice();
     }
@@ -10,7 +15,7 @@ export function namesListQuery(list, query) {
     return list.filter(item => itemMatch(item, regexes));
 }
 
-function itemMatch(item, regexes) {
+function itemMatch(item: NodeNamePair, regexes: RegExp[]): boolean {
     const haystack = item.fullName ? item.fullName + " " + item.nodeName : item.nodeName;
     const allFound = regexes.every(regex => regex.test(haystack));
     if (!allFound) {
@@ -24,7 +29,7 @@ function itemMatch(item, regexes) {
     return hasArrangement(matches);
 }
 
-function hasArrangement(values) {
+function hasArrangement(values: (number | undefined)[][]) {
     const size = Math.min(values.length, ARRANGEMENT_DEPTH);
     const indexes = Array(size).fill(0);
     const used = new Set();
