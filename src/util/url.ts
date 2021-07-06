@@ -35,7 +35,7 @@ export function rootUrl(scheme: string, host: string, port?: string | null): str
     return rootLocation;
 }
 
-export function ut(strings: string[], ...args: any): string {
+export function ut(strings: string[], ...args: any[]): string {
     const all = [];
     let i = 0;
     while (i < strings.length || i < args.length) {
