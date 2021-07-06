@@ -1,6 +1,12 @@
 export const SMILEY_LIKE = /(^|\s)([-+:;'`,.=^cсDEЕoоOОPРpрbЬьÞþxхXХЖ0138<>[\](){}|#@$&%*\\/]{2,})(?=\s|$)/g;
 
-export const SMILEYS = [
+interface Smiley {
+    regex: RegExp,
+    emoji: number,
+    repeatGroup?: number
+}
+
+export const SMILEYS: Smiley[] = [
     {
         // :-) :o) :c) :^)
         regex: /^:[-oоcс^]?(\)+)$/,
