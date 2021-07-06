@@ -1,4 +1,5 @@
-export function mapWithKeysOnly(map, keys) {
+export function mapWithKeysOnly<Key, Value>(map: Map<Key, Value> | null,
+                                            keys: Key[] | Set<Key>): Map<Key, Value> | null {
     if (map == null) {
         return map;
     }
@@ -15,7 +16,8 @@ export function mapWithKeysOnly(map, keys) {
     return result;
 }
 
-export function mapWithoutKeys(map, keys) {
+export function mapWithoutKeys<Key, Value>(map: Map<Key, Value> | null,
+                                           keys: Key[] | Set<Key>): Map<Key, Value> | null {
     if (map == null) {
         return map;
     }
@@ -24,14 +26,17 @@ export function mapWithoutKeys(map, keys) {
     }
     let result = new Map();
     map.forEach((value, key) => {
-        if (!keys.has(key)) {
+        if (!(keys as Set<Key>).has(key)) {
             result.set(key, value)
         }
     });
     return result;
 }
 
-export function mapFilter(map, filter) {
+type MapFilter<Value, Key> = (v: Value, k: Key) => boolean;
+
+export function mapFilter<Key, Value>(map: Map<Key, Value> | null,
+                                      filter: MapFilter<Value, Key>): Map<Key, Value> | null {
     if (map == null) {
         return map;
     }
@@ -44,7 +49,7 @@ export function mapFilter(map, filter) {
     return result;
 }
 
-export function mapEquals(map1, map2) {
+export function mapEquals<Key, Value>(map1: Map<Key, Value> | null, map2: Map<Key, Value> | null): boolean {
     if ((map1 == null || map1.size === 0) && (map2 == null || map2.size === 0)) {
         return true;
     }
@@ -54,6 +59,7 @@ export function mapEquals(map1, map2) {
     if (map1.size !== map2.size) {
         return false;
     }
+    // @ts-ignore
     for (const [key, value] of map1) {
         if (!map2.has(key) || map2.get(key) !== value) {
             return false;
