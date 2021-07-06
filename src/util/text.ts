@@ -1,6 +1,6 @@
 import { SMILEY_LIKE, SMILEYS } from "smileys";
 
-export function replaceSmileys(text, removeEscapes = true) {
+export function replaceSmileys(text: string, removeEscapes = true): string {
     if (text == null) {
         return text;
     }
