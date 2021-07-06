@@ -1,10 +1,6 @@
 type Unit = "never" | "always" | "s" | "m" | "h" | "d";
 
-type UnitFactors = {
-    [index in Unit]: number;
-};
-
-const UNIT_FACTORS: UnitFactors = {
+const UNIT_FACTORS: Record<Unit, number> = {
     "never": 1,
     "always": 1,
     "s": 1,
