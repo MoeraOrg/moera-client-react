@@ -1,4 +1,10 @@
-const UNIT_FACTORS = {
+type Unit = "never" | "always" | "s" | "m" | "h" | "d";
+
+type UnitFactors = {
+    [index in Unit]: number;
+};
+
+const UNIT_FACTORS: UnitFactors = {
     "never": 1,
     "always": 1,
     "s": 1,
@@ -9,7 +15,7 @@ const UNIT_FACTORS = {
 
 export class DurationParsingError extends Error {
 
-    constructor(value) {
+    constructor(value: string) {
         super("Error parsing duration value: " + value);
     }
 
@@ -17,7 +23,7 @@ export class DurationParsingError extends Error {
 
 export class DurationZoneError extends Error {
 
-    constructor(value) {
+    constructor(value: Unit) {
         super("Error converting duration value '" + value + "' to seconds");
     }
 
@@ -28,12 +34,15 @@ export default class Duration {
     static MIN = new Duration(0, "s");
     static MAX = new Duration(Number.MAX_SAFE_INTEGER, "s");
 
-    constructor(amount, unit) {
+    amount: number;
+    unit: Unit;
+
+    constructor(amount: number, unit: Unit) {
         this.amount = amount;
         this.unit = unit;
     }
 
-    static parse(v) {
+    static parse(v: string): Duration {
         if (v == null || v.length === 0) {
             return new Duration(0, "s");
         }
@@ -45,38 +54,38 @@ export default class Duration {
         }
         return new Duration(
             parseInt(v.substring(0, v.length - 1)),
-            v.charAt(v.length - 1).toLowerCase()
+            v.charAt(v.length - 1).toLowerCase() as Unit
         )
     }
 
-    isNever() {
+    isNever(): boolean {
         return this.unit === "never";
     }
 
-    isAlways() {
+    isAlways(): boolean {
         return this.unit === "always";
     }
 
-    isFixed() {
+    isFixed(): boolean {
         return !this.isNever() && !this.isAlways();
     }
 
-    toSeconds() {
+    toSeconds(): number {
         if (!this.isFixed()) {
             throw new DurationZoneError(this.unit);
         }
         return this.amount * UNIT_FACTORS[this.unit];
     }
 
-    toUnitCeil(unit) {
-        return this.isFixed ? Math.ceil(this.toSeconds() / UNIT_FACTORS[unit]) : null;
+    toUnitCeil(unit: Unit): number | null {
+        return this.isFixed() ? Math.ceil(this.toSeconds() / UNIT_FACTORS[unit]) : null;
     }
 
-    toUnitFloor(unit) {
+    toUnitFloor(unit: Unit): number | null {
         return this.isFixed() ? Math.floor(this.toSeconds() / UNIT_FACTORS[unit]) : null;
     }
 
-    toString() {
+    toString(): string {
         return this.isFixed() ? `${this.amount}${this.unit}` : this.unit;
     }
 
