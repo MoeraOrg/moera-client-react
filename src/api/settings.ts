@@ -1,6 +1,29 @@
+import { Choice, SettingType } from "api/node/api-types";
+
 export const PREFIX = "client.mercy.";
 
-const META = [
+export interface ClientSettingTypeModifiers {
+    format?: string;
+    min?: number;
+    max?: number;
+    step?: number;
+    multiline?: boolean;
+    never?: boolean;
+    always?: boolean;
+    items?: Choice[];
+}
+
+interface ClientSettingMetaInfo {
+    name: string;
+    type: SettingType;
+    defaultValue?: string;
+    title?: string;
+    internal?: boolean;
+    modifiers?: ClientSettingTypeModifiers;
+    mobile?: boolean;
+}
+
+const META: ClientSettingMetaInfo[] = [
     {
         name: "invitation.addon.shown-at",
         type: "Timestamp",
@@ -338,15 +361,16 @@ const META = [
     }
 ];
 
-function collectMetaMap(map, metadata) {
-    metadata.forEach(meta => map.set(PREFIX + meta.name, {name: PREFIX + meta.name, ...meta}));
+function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {
+    metadata.forEach(meta => map.set(PREFIX + meta.name, {...meta, name: PREFIX + meta.name}));
 }
 
-export function buildMetaMap() {
+export function buildMetaMap(): Map<string, ClientSettingMetaInfo> {
     const metaMap = new Map();
     collectMetaMap(metaMap, META);
     if (window.Android) {
-        const mobileMeta = JSON.parse(window.Android.loadSettingsMeta()).map(meta => ({...meta, mobile: true}));
+        const settings = JSON.parse(window.Android.loadSettingsMeta()) as ClientSettingMetaInfo[];
+        const mobileMeta = settings.map(meta => ({...meta, mobile: true}));
         collectMetaMap(metaMap, mobileMeta);
     }
     return metaMap;
