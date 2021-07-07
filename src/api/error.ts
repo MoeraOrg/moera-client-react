@@ -1,14 +1,17 @@
-function extractMessage(messageOrError) {
+function extractMessage(messageOrError: Error | string): string {
     return messageOrError instanceof Error ? messageOrError.message : messageOrError;
 }
 
-export function formatSchemaErrors(errors) {
+export function formatSchemaErrors(errors: Error[]): string {
     return errors.map(({message}) => message).join(", ");
 }
 
 export class NodeError extends Error {
 
-    constructor(method, rootApi, location, title, messageOrError, details = null) {
+    messageVerbose: string;
+
+    constructor(method: string, rootApi: string, location: string, title: string | null, messageOrError: Error | string,
+                details: string | null = null) {
         super((title ? `${title}: ` : "") + extractMessage(messageOrError));
         this.messageVerbose = `${method} ${rootApi}${location}: ${this.message}` + (details ? `: ${details}` : "");
     }
@@ -17,7 +20,9 @@ export class NodeError extends Error {
 
 export class NodeApiError extends Error {
 
-    constructor(errorCode, message) {
+    errorCode: string;
+
+    constructor(errorCode: string, message: string) {
         super(message);
         this.errorCode = errorCode;
     }
@@ -34,7 +39,9 @@ export class HomeNotConnectedError extends Error {
 
 export class NameResolvingError extends Error {
 
-    constructor(nodeName) {
+    nodeName: string;
+
+    constructor(nodeName: string) {
         super("Name not found: " + nodeName);
         this.nodeName = nodeName;
     }
@@ -43,7 +50,9 @@ export class NameResolvingError extends Error {
 
 export class NamingError extends Error {
 
-    constructor(method, messageOrError, details = null) {
+    messageVerbose: string;
+
+    constructor(method: string, messageOrError: Error | string, details: string | null = null) {
         super("Naming service access error: " + extractMessage(messageOrError));
         this.messageVerbose = `${method}(): ${this.message}` + (details ? `: ${details}` : "");
     }
