@@ -3,6 +3,12 @@ export interface Result {
     message: string;
 }
 
+export interface AvatarDescription {
+    mediaId: string;
+    shape: string;
+    optional: boolean;
+}
+
 export interface AvatarImage {
     mediaId: string;
     path: string;
