@@ -1,12 +1,12 @@
-import sanitizeHtml from 'sanitize-html';
-import { parse as parseEmojis } from 'twemoji-parser';
+import sanitizeHtml, { Attributes, IOptions, Tag } from 'sanitize-html';
+import { EmojiEntity, parse as parseEmojis } from 'twemoji-parser';
 import * as HtmlEntities from 'html-entities';
 
-function addDirAuto(tagName, attribs) {
+function addDirAuto(tagName: string, attribs: Attributes): Tag {
     return attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}};
 }
 
-const BASE_SAFE_HTML_SETTINGS = {
+const BASE_SAFE_HTML_SETTINGS: IOptions = {
     allowedTags: sanitizeHtml.defaults.allowedTags.concat([
         "img", "del", "ins", "sub", "details", "summary", "mr-spoiler", "iframe", "video", "audio"
     ]),
@@ -54,7 +54,7 @@ const BASE_SAFE_HTML_SETTINGS = {
     }
 };
 
-const SAFE_PREVIEW_HTML_SETTINGS = {
+const SAFE_PREVIEW_HTML_SETTINGS: IOptions = {
     ...BASE_SAFE_HTML_SETTINGS,
     transformTags: {
         ...BASE_SAFE_HTML_SETTINGS.transformTags,
@@ -67,24 +67,24 @@ const SAFE_PREVIEW_HTML_SETTINGS = {
     }
 };
 
-const SAFE_HTML_SETTINGS = {
+const SAFE_HTML_SETTINGS: IOptions = {
     ...BASE_SAFE_HTML_SETTINGS
 };
 
-const SAFE_IMPORT_HTML_SETTINGS = {
+const SAFE_IMPORT_HTML_SETTINGS: IOptions = {
     ...BASE_SAFE_HTML_SETTINGS,
-    allowedTags: BASE_SAFE_HTML_SETTINGS.allowedTags
+    allowedTags: (BASE_SAFE_HTML_SETTINGS.allowedTags || [])
         .filter(tag => ![
             "span"
         ].includes(tag)),
-    transformTags: null
+    transformTags: {}
 };
 
-function createEmojiElement(entity) {
+function createEmojiElement(entity: EmojiEntity): string {
     return `<b style="background-image: url('${entity.url}')" class="emoji">${entity.text}</b>`;
 }
 
-export function replaceEmojis(html) {
+export function replaceEmojis(html: string): string {
     if (!html) {
         return "";
     }
@@ -101,21 +101,21 @@ export function replaceEmojis(html) {
     return current;
 }
 
-export function safePreviewHtml(html) {
+export function safePreviewHtml(html: string): string {
     if (!html) {
         return "";
     }
     return sanitizeHtml(replaceEmojis(html), SAFE_PREVIEW_HTML_SETTINGS);
 }
 
-export function safeHtml(html) {
+export function safeHtml(html: string): string {
     if (!html) {
         return "";
     }
     return sanitizeHtml(replaceEmojis(html), SAFE_HTML_SETTINGS);
 }
 
-export function safeImportHtml(html) {
+export function safeImportHtml(html: string): string {
     if (!html) {
         return "";
     }
@@ -127,7 +127,7 @@ export function safeImportHtml(html) {
         .trim();
 }
 
-export function quoteHtml(html) {
+export function quoteHtml(html: string | null): string | null {
     if (html == null) {
         return null;
     }
@@ -145,19 +145,6 @@ export function quoteHtml(html) {
         .trim()
 }
 
-export function htmlToText(html) {
-    if (html == null) {
-        return null;
-    }
-    return HtmlEntities.decode(sanitizeHtml(replaceEmojis(html), {
-        allowedTags: [],
-        allowedAttributes: {},
-        transformTags: {
-            "span": (tagName, attribs) => attribs["class"] === "generation" ? {text: ""} : {}
-        }
-    }));
-}
-
-export function htmlEntities(s) {
+export function htmlEntities(s: string): string {
     return HtmlEntities.encode(s);
 }
