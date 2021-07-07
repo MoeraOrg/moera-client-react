@@ -1,4 +1,14 @@
-const PROVIDERS = [
+interface Provider {
+    dev?: boolean;
+    name: string;
+    title: string;
+    scheme: string;
+    domain: string;
+    port?: number;
+    controller: string;
+}
+
+const PROVIDERS: Provider[] = [
     {
         name: "moera.blog",
         title: "Moera.Blog",
