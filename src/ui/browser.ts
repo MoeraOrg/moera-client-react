@@ -1,19 +1,30 @@
 import * as URI from 'uri-js';
 
+import { AvatarImage, CarteInfo } from "api/node/api-types";
 import { rootUrl } from "util/url";
 import { randomId } from "util/misc";
 
+type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
+type UserAgentOs = "android" | "ios" | "unknown";
+
+interface DocumentLocation {
+    rootLocation?: string;
+    path?: string | null;
+    query?: string | null;
+    hash?: string | null;
+}
+
 export class Browser {
 
-    static clientId = randomId();
-    static userAgent = "unknown";
-    static userAgentOs = "unknown";
+    static clientId: string = randomId();
+    static userAgent: UserAgent = "unknown";
+    static userAgentOs: UserAgentOs = "unknown";
 
-    static init() {
+    static init(): void {
         this._initUserAgent();
     }
 
-    static _initUserAgent() {
+    static _initUserAgent(): void {
         if (navigator.userAgent.includes("Firefox")) {
             this.userAgent = "firefox";
         } else if (navigator.userAgent.includes("Opera")) {
@@ -39,15 +50,15 @@ export class Browser {
         }
     }
 
-    static isDevMode() {
+    static isDevMode(): boolean {
         return !process.env.NODE_ENV || process.env.NODE_ENV === "development";
     }
 
-    static isTinyScreen() {
+    static isTinyScreen(): boolean {
         return window.screen.width <= 575;
     }
 
-    static isAddonSupported() {
+    static isAddonSupported(): boolean {
         switch (this.userAgent) {
             default:
             case "unknown":
@@ -64,28 +75,29 @@ export class Browser {
         }
     }
 
-    static isTouchScreen() {
+    static isTouchScreen(): boolean {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
     }
 
-    static isMobile() {
+    static isMobile(): boolean {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
     }
 
-    static getRootLocation() {
+    static getRootLocation(): string {
         const {protocol, host} = window.location;
         return rootUrl(protocol, host);
     }
 
-    static getDocumentLocation() {
+    static getDocumentLocation(): DocumentLocation {
         const {pathname, search, hash} = window.location;
         const rootLocation = Browser.getRootLocation();
-        const header = document.body.dataset.xMoera;
+        const header = document.body.dataset.xMoera ?? null;
 
         return this.getLocation(rootLocation, pathname, search, hash, header);
     }
 
-    static getLocation(rootLocation, path, query, hash, header) {
+    static getLocation(rootLocation: string, path: string | null, query: string | null, hash: string | null,
+                       header: string | null): DocumentLocation {
         if (header) {
             header
                 .split(/\s*;\s*/)
@@ -115,7 +127,7 @@ export class Browser {
         return {rootLocation, path, query, hash};
     }
 
-    static getDocumentPassedLocation() {
+    static getDocumentPassedLocation(): DocumentLocation {
         const search = window.location.search;
         if (!search) {
             return {};
@@ -123,7 +135,7 @@ export class Browser {
         return this.getPassedLocation(search.substring(1));
     }
 
-    static getPassedLocation(query) {
+    static getPassedLocation(query: string): DocumentLocation {
         if (!query) {
             return {};
         }
@@ -134,7 +146,7 @@ export class Browser {
             .filter(([name]) => name === "href")
             .forEach(([_, value]) => {
                 let {scheme, host, port, path, query, fragment} = URI.parse(decodeURIComponent(value));
-                const rootLocation = rootUrl(scheme, host, port);
+                const rootLocation = rootUrl(scheme ?? "https", host ?? "", port);
                 if (query) {
                     query = `?${query}`;
                 }
@@ -146,11 +158,11 @@ export class Browser {
         return components;
     }
 
-    static passedLocation(location) {
+    static passedLocation(location: string): string {
         return this.getRootLocation() + "/?href=" + encodeURIComponent(location);
     }
 
-    static storeData(data) {
+    static storeData(data: object): void {
         window.postMessage({
             source: "moera",
             action: "storeData",
@@ -161,18 +173,20 @@ export class Browser {
         }, window.location.href);
     }
 
-    static storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions) {
+    static storeConnectionData(location: string, nodeName: string | null, fullName: string | null,
+                               avatar: AvatarImage | null, login: string | null, token: string | null,
+                               permissions: string[] | null): void {
         if (window.Android) {
             window.Android.connectedToHome(location + "/moera", token, nodeName);
         }
         this.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
     }
 
-    static storeCartesData(cartesIp, cartes) {
+    static storeCartesData(cartesIp: string | null, cartes: CarteInfo[] | null): void {
         this.storeData({cartesIp, cartes});
     }
 
-    static deleteData(location) {
+    static deleteData(location: string): void {
         window.postMessage({
             source: "moera",
             action: "deleteData",
@@ -180,7 +194,7 @@ export class Browser {
         }, window.location.href);
     }
 
-    static switchData(location) {
+    static switchData(location: string): void {
         window.postMessage({
             source: "moera",
             action: "switchData",
@@ -188,7 +202,7 @@ export class Browser {
         }, window.location.href);
     }
 
-    static storeName(name, nodeUri, updated) {
+    static storeName(name: string, nodeUri: string, updated: number) {
         window.postMessage({
             source: "moera",
             action: "storeName",

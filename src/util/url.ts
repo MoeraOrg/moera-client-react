@@ -24,7 +24,7 @@ export function urlWithParameters(url: string, parameters: {[name: string]: stri
     return url + (url.indexOf("?") < 0 ? "?" : "&") + query;
 }
 
-export function rootUrl(scheme: string, host: string, port?: string | null): string {
+export function rootUrl(scheme: string, host: string, port?: number | string | null): string {
     if (!scheme.endsWith(":")) {
         scheme += ":";
     }

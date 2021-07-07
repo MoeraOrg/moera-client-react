@@ -2,7 +2,7 @@
 
 interface AndroidJsInterface {
     locationChanged(url: string, location: string): void;
-    connectedToHome(url: string, token: string, ownerName: string): void;
+    connectedToHome(url: string | null, token: string | null, ownerName: string | null): void;
     loadSettingsMeta(): string;
     loadSettings(): string;
     storeSettings(data: string): void;
