@@ -286,11 +286,14 @@ export interface SettingTypeModifiers {
     always?: boolean | null;
 }
 
+export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
+    | "UUID";
+
 export interface SettingMetaInfo {
     name: string;
-    type: "bool" | "int" | "string" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp" | "UUID";
+    type: SettingType;
     privileged: boolean;
-    defaultValue: string;
+    defaultValue?: string | null;
     title: string;
     modifiers?: SettingTypeModifiers | null;
 }

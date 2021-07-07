@@ -1,9 +1,10 @@
 import { fromUnixTime } from 'date-fns';
 
+import { SettingType, SettingTypeModifiers } from "api/node/api-types";
 import { parseBool } from "util/misc";
 import Duration from "util/duration";
 
-export function toValue(type, valueString) {
+export function toValue(type: SettingType, valueString: string): boolean | number | Date | string {
     switch (type) {
         case "bool":
             return parseBool(valueString);
@@ -11,7 +12,7 @@ export function toValue(type, valueString) {
         case "int":
             return parseInt(valueString) || 0;
 
-        case "timestamp":
+        case "Timestamp":
             return fromUnixTime(parseInt(valueString) || 0);
 
         case "json":
@@ -22,7 +23,7 @@ export function toValue(type, valueString) {
     }
 }
 
-export function validate(value, type, modifiers) {
+export function validate(value: string, type: SettingType, modifiers: SettingTypeModifiers): true | string {
     if (!modifiers) {
         return true;
     }

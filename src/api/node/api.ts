@@ -1049,7 +1049,8 @@ const SettingMetaInfoType: JSONSchemaType<API.SettingMetaInfo> = {
             default: false
         },
         "defaultValue": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "title": {
             type: "string"
@@ -1059,7 +1060,7 @@ const SettingMetaInfoType: JSONSchemaType<API.SettingMetaInfo> = {
             nullable: true
         }
     },
-    required: ["name", "type", "privileged", "defaultValue", "title"],
+    required: ["name", "type", "privileged", "title"],
     additionalProperties: false
 };
 

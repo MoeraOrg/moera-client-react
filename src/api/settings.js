@@ -3,7 +3,7 @@ export const PREFIX = "client.mercy.";
 const META = [
     {
         name: "invitation.addon.shown-at",
-        type: "timestamp",
+        type: "Timestamp",
         defaultValue: "0",
         internal: true
     },
