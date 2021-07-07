@@ -8,4 +8,4 @@ const ajv = new Ajv({
 });
 addFormats(ajv);
 
-export default (schema) => ajv.compile(schema);
+export default (schema: any) => ajv.compile(schema);
