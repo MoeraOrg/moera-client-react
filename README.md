@@ -39,6 +39,8 @@ instructions][3]):
 2. Go to **Settings > Editor > Code Style > JavaScript**, go to
    the **Imports** tab and tick **Use paths relative to the project, resource
    or sources roots**.
+3. Go to **Settings > Editor > Code Style > TypeScript**, go to
+   the **Imports** tab and tick **Use paths relative to tsconfig.json**.
 
 [1]: https://github.com/MoeraOrg/moera-browser-extension
 [2]: https://github.com/MoeraOrg/moera-naming
