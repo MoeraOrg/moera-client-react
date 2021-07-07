@@ -1,4 +1,14 @@
-export const REACTION_EMOJIS = {
+interface ReactionEmoji {
+    title: string;
+    color: string;
+}
+
+interface ReactionEmojis {
+    positive: Record<number, ReactionEmoji>;
+    negative: Record<number, ReactionEmoji>;
+}
+
+export const REACTION_EMOJIS: ReactionEmojis = {
     positive: {
         // Main
         0x1f4a1: {
@@ -143,12 +153,12 @@ export const REACTION_EMOJIS = {
     }
 };
 
-export const MAIN_POSITIVE_REACTIONS = [
+export const MAIN_POSITIVE_REACTIONS: number[] = [
     0x1f4a1, 0x1f44d, 0x1f4af, 0x1f60d, 0x1f600, 0x1f926, 0x1f62e, 0x1f622, 0x1f620, 0x1f92e
 ];
-export const MAIN_POSITIVE_REACTIONS_SET = new Set(MAIN_POSITIVE_REACTIONS);
+export const MAIN_POSITIVE_REACTIONS_SET: Set<number> = new Set(MAIN_POSITIVE_REACTIONS);
 
-export const MAIN_NEGATIVE_REACTIONS = [
+export const MAIN_NEGATIVE_REACTIONS: number[] = [
     0x1f4a4, 0x1f44e, 0x1f4a9, 0x2694, 0x23f3, 0x1f3a9, 0x1f643, 0x1f61c, 0x1f494, 0x1f47f
 ];
-export const MAIN_NEGATIVE_REACTIONS_SET = new Set(MAIN_NEGATIVE_REACTIONS);
+export const MAIN_NEGATIVE_REACTIONS_SET: Set<number> = new Set(MAIN_NEGATIVE_REACTIONS);
