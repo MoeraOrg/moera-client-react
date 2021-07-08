@@ -4,6 +4,7 @@ import { ComposeAnyAction } from "state/compose/actions";
 import { ConfirmBoxAnyAction } from "state/confirmbox/actions";
 import { ConnectDialogAnyAction } from "state/connectdialog/actions";
 import { ContactsAnyAction } from "state/contacts/actions";
+import { DetailedPostingAnyAction } from "state/detailedposting/actions";
 
 export type ClientAction =
     CartesAnyAction
@@ -11,6 +12,7 @@ export type ClientAction =
     | ComposeAnyAction
     | ConfirmBoxAnyAction
     | ConnectDialogAnyAction
-    | ContactsAnyAction;
+    | ContactsAnyAction
+    | DetailedPostingAnyAction;
 
 export type ClientActionType = ClientAction["type"];

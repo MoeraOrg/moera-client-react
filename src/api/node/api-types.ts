@@ -201,6 +201,22 @@ export interface FeedStatus {
     notRead: number;
 }
 
+export interface CommentText {
+    ownerName: string;
+    ownerFullName?: string | null;
+    ownerAvatar?: AvatarDescription | null;
+    bodyPreview?: string | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    body: Body | string;
+    bodyFormat?: BodyFormat | null;
+    createdAt?: number | null;
+    acceptedReactions?: AcceptedReactions | null;
+    repliedToId?: string | null;
+    signature?: string | null;
+    signatureVersion?: number | null;
+}
+
 export interface RepliedTo {
     id: string;
     name: string;
@@ -338,6 +354,11 @@ export interface CarteSet {
     cartesIp: string;
     cartes: CarteInfo[];
     createdAt: number;
+}
+
+export interface ReactionAttributes {
+    negative: boolean;
+    emoji: number;
 }
 
 export interface ReactionInfo {
