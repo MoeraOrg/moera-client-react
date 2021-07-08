@@ -1,5 +1,10 @@
 export class LocationInfo {
 
+    directories: string[];
+    parameters: Record<string, string>;
+    hash: string;
+    title: string | null;
+
     constructor() {
         this.directories = [];
         this.parameters = {};
@@ -7,12 +12,12 @@ export class LocationInfo {
         this.title = "";
     }
 
-    static fromUrl(path, query, hash) {
+    static fromUrl(path: string, query: string, hash: string): LocationInfo {
         return new LocationInfo().withPath(path).withQuery(query).withHash(hash);
     }
 
-    clone() {
-        let info = new LocationInfo();
+    clone(): LocationInfo {
+        const info = new LocationInfo();
         info.directories = [...this.directories];
         info.parameters = {...this.parameters};
         info.hash = this.hash;
@@ -20,28 +25,28 @@ export class LocationInfo {
         return info;
     }
 
-    sub(name) {
-        let info = this.clone();
+    sub(name: string): LocationInfo {
+        const info = this.clone();
         info.directories.push(name);
         return info;
     }
 
-    withPath(path) {
-        let info = this.clone();
+    withPath(path: string | null): LocationInfo {
+        const info = this.clone();
         if (path) {
             info.directories = path.split("/").filter(s => s !== "")
         }
         return info;
     }
 
-    withNoQuery() {
-        let info = this.clone();
+    withNoQuery(): LocationInfo {
+        const info = this.clone();
         info.parameters = {};
         return info;
     }
 
-    withQuery(query) {
-        let info = this.clone();
+    withQuery(query: string | null): LocationInfo {
+        const info = this.clone();
         if (query) {
             if (query.startsWith("?")) {
                 query = query.substring(1);
@@ -54,14 +59,14 @@ export class LocationInfo {
         return info;
     }
 
-    withParameter(name, value) {
-        let info = this.clone();
+    withParameter(name: string, value: string): LocationInfo {
+        const info = this.clone();
         info.parameters[name] = value;
         return info;
     }
 
-    withHash(hash) {
-        let info = this.clone();
+    withHash(hash: string | null): LocationInfo {
+        const info = this.clone();
         if (hash) {
             if (hash.startsWith("#")) {
                 hash = hash.substring(1);
@@ -71,17 +76,17 @@ export class LocationInfo {
         return info;
     }
 
-    withTitle(title) {
-        let info = this.clone();
+    withTitle(title: string | null): LocationInfo {
+        const info = this.clone();
         info.title = title;
         return info;
     }
 
-    hasTitle() {
+    hasTitle(): boolean {
         return this.title != null && this.title !== "";
     }
 
-    toUrl() {
+    toUrl(): string {
         const path = this.directories.map(dir => "/" + dir).join("");
         let query = "";
         for (let name in this.parameters) {
