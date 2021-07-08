@@ -1,3 +1,4 @@
+// @ts-ignore
 import charCategory from 'general-category';
 
 export const NAME_MAX_LENGTH = 127;
@@ -6,7 +7,7 @@ export const NAME_PUNCTUATION_ALLOWED ="!%&*-.?";
 const LATIN_CHARS = /^[A-Za-z]+$/;
 const DIGITS = /^[0-9]+$/;
 
-export function isRegisteredNameValid(qName) {
+export function isRegisteredNameValid(qName: string): boolean {
     if (!qName) {
         return false;
     }
@@ -17,7 +18,7 @@ export function isRegisteredNameValid(qName) {
     return isNameValid(parts[0]) && (parts.length === 1 || isGenerationValid(parts[1]));
 }
 
-function isNameValid(name) {
+function isNameValid(name: string): boolean {
     if (!name) {
         return false;
     }
@@ -32,14 +33,14 @@ function isNameValid(name) {
     return true;
 }
 
-function isGenerationValid(generation) {
+function isGenerationValid(generation: string): boolean {
     if (!generation.match(DIGITS)) {
         return false;
     }
     return parseInt(generation) < 2147483647;
 }
 
-function isNameCharacterValid(c) {
+function isNameCharacterValid(c: string): boolean {
     switch (charCategory(c)) {
         case "Lu":
         case "Ll":
