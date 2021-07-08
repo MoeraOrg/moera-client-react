@@ -133,6 +133,18 @@ export interface PostingSubscriptionsInfo {
     comments: string | null;
 }
 
+export interface PostingText {
+    ownerFullName?: string | null;
+    ownerAvatar?: AvatarDescription | null;
+    acceptedReactions?: AcceptedReactions | null;
+    reactionsVisible?: boolean | null;
+    reactionTotalsVisible?: boolean | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    publications?: StoryAttributes[] | null;
+    updateInfo?: UpdateInfo | null;
+}
+
 export interface PostingInfo {
     id: string;
     revisionId: string;
@@ -236,6 +248,14 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "subscriber-added" | "subscriber-deleted" | "comment-added" | "mention-comment" | "reply-comment"
     | "comment-reaction-added-positive" | "comment-reaction-added-negative" | "remote-comment-added"
     | "posting-task-failed" | "comment-task-failed" | "posting-updated";
+
+export interface StoryAttributes {
+    feedName: string;
+    publishedAt: number;
+    pinned?: boolean | null;
+    viewed?: boolean | null;
+    read?: boolean | null;
+}
 
 export interface StoryInfo {
     id: string;
@@ -444,6 +464,21 @@ export interface AvatarOrdinal {
 }
 
 export type DraftType = "new-posting" | "posting-update" | "new-comment" | "comment-update";
+
+export interface DraftText {
+    draftType: DraftType;
+    receiverName: string;
+    receiverPostingId?: string | null;
+    receiverCommentId?: string | null;
+    ownerFullName?: string | null;
+    ownerAvatar?: AvatarDescription | null;
+    acceptedReactions?: AcceptedReactions | null;
+    reactionsVisible?: boolean | null;
+    reactionTotalsVisible?: boolean | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    updateInfo?: UpdateInfo | null;
+}
 
 export interface DraftInfo {
     id: string;

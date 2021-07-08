@@ -1,6 +1,6 @@
 import { ActionBase } from "state/action-base";
 
-export const OPEN_CHANGE_DATE_DIALOG = "OPEN_CHANGE_DATE_DIALOG";
+export const OPEN_CHANGE_DATE_DIALOG = "OPEN_CHANGE_DATE_DIALOG" as const;
 type OpenChangeDateDialogAction = ActionBase<typeof OPEN_CHANGE_DATE_DIALOG, {
     storyId: string;
     publishedAt: number;
@@ -10,13 +10,13 @@ export const openChangeDateDialog = (storyId: string, publishedAt: number): Open
     payload: {storyId, publishedAt}
 });
 
-export const CLOSE_CHANGE_DATE_DIALOG = "CLOSE_CHANGE_DATE_DIALOG";
+export const CLOSE_CHANGE_DATE_DIALOG = "CLOSE_CHANGE_DATE_DIALOG" as const;
 type CloseChangeDateDialogAction = ActionBase<typeof CLOSE_CHANGE_DATE_DIALOG, never>;
 export const closeChangeDateDialog = (): CloseChangeDateDialogAction => ({
     type: CLOSE_CHANGE_DATE_DIALOG
 });
 
-export const STORY_CHANGE_DATE = "STORY_CHANGE_DATE";
+export const STORY_CHANGE_DATE = "STORY_CHANGE_DATE" as const;
 type StoryChangeDateAction = ActionBase<typeof STORY_CHANGE_DATE, {
     id: string;
     publishedAt: number;
@@ -26,11 +26,14 @@ export const storyChangeDate = (id: string, publishedAt: number): StoryChangeDat
     payload: {id, publishedAt}
 });
 
-export const STORY_CHANGE_DATE_FAILED = "STORY_CHANGE_DATE_FAILED";
+export const STORY_CHANGE_DATE_FAILED = "STORY_CHANGE_DATE_FAILED" as const;
 type StoryChangeDateFailedAction = ActionBase<typeof STORY_CHANGE_DATE_FAILED, never>;
 export const storyChangeDateFailed = (): StoryChangeDateFailedAction => ({
     type: STORY_CHANGE_DATE_FAILED
 });
 
-export type ChangeDateDialogAction = OpenChangeDateDialogAction | CloseChangeDateDialogAction | StoryChangeDateAction
+export type ChangeDateDialogAction =
+    OpenChangeDateDialogAction
+    | CloseChangeDateDialogAction
+    | StoryChangeDateAction
     | StoryChangeDateFailedAction;

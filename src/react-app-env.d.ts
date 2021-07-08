@@ -1,5 +1,7 @@
 /// <reference types="react-scripts" />
 
+type SharedTextType = "html" | "text";
+
 interface AndroidJsInterface {
     locationChanged(url: string, location: string): void;
     connectedToHome(url: string | null, token: string | null, ownerName: string | null): void;
@@ -8,7 +10,7 @@ interface AndroidJsInterface {
     storeSettings(data: string): void;
     share(url: string, title: string): void;
     getSharedText(): string;
-    getSharedTextType(): string;
+    getSharedTextType(): SharedTextType;
     back(): void;
     log(text: string): void;
 }

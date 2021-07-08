@@ -30,4 +30,8 @@ export const clockOffsetWarn = (): ClockOffsetWarnAction => ({
     type: CLOCK_OFFSET_WARN
 });
 
-export type CartesAction = CartesLoadAction | CartesSetAction | CartesPurgeExpiredAction | ClockOffsetWarnAction;
+export type CartesAction =
+    CartesLoadAction
+    | CartesSetAction
+    | CartesPurgeExpiredAction
+    | ClockOffsetWarnAction;
