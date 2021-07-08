@@ -12,3 +12,5 @@ export type ClientAction =
     | ConfirmBoxAnyAction
     | ConnectDialogAnyAction
     | ContactsAnyAction;
+
+export type ClientActionType = ClientAction["type"];
