@@ -51,7 +51,7 @@ function* profileLoadSaga(action) {
 
 function* profileUpdateSaga(action) {
     try {
-        const data = yield call(Node.putProfile, "", action.payload);
+        const data = yield call(Node.putProfile, "", action.payload.profile);
         yield put(profileUpdateSucceeded());
         yield put(profileSet(data));
     } catch (e) {

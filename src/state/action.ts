@@ -15,6 +15,10 @@ import { NavigationAnyAction } from "state/navigation/actions";
 import { NodeCardsAnyAction } from "state/nodecards/actions";
 import { NodeNameAnyAction } from "state/nodename/actions";
 import { OwnerAnyAction } from "state/owner/actions";
+import { PeopleAnyAction } from "state/people/actions";
+import { PostingReplyAnyAction } from "state/postingreply/actions";
+import { PostingsAnyAction } from "state/postings/actions";
+import { ProfileAnyAction } from "state/profile/actions";
 
 export type ClientAction =
     CartesAnyAction
@@ -33,6 +37,10 @@ export type ClientAction =
     | NavigationAnyAction
     | NodeCardsAnyAction
     | NodeNameAnyAction
-    | OwnerAnyAction;
+    | OwnerAnyAction
+    | PeopleAnyAction
+    | PostingReplyAnyAction
+    | PostingsAnyAction
+    | ProfileAnyAction;
 
 export type ClientActionType = ClientAction["type"];

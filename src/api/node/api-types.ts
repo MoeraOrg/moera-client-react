@@ -3,6 +3,17 @@ export interface Result {
     message: string;
 }
 
+export interface AvatarAttributes {
+    mediaId: string;
+    clipX: number;
+    clipY: number;
+    clipSize: number;
+    avatarSize: number;
+    rotate: number;
+    shape?: string | null;
+    ordinal?: number | null;
+}
+
 export interface AvatarDescription {
     mediaId: string;
     shape: string;
@@ -34,6 +45,16 @@ export interface WhoAmI {
     gender?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
+}
+
+export interface ProfileAttributes {
+    fullName?: string | null;
+    gender?: string | null;
+    email?: string | null;
+    title?: string | null;
+    bioSrc?: string | null;
+    bioSrcFormat?: SourceFormat | null;
+    avatarId?: string | null;
 }
 
 export interface ProfileInfo {
