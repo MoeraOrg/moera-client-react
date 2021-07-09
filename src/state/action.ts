@@ -26,6 +26,8 @@ import { RefreshAnyAction } from "state/refresh/actions";
 import { SettingsAnyAction } from "state/settings/actions";
 import { ShareDialogAnyAction } from "state/sharedialog/actions";
 import { SignUpDialogAnyAction } from "state/signupdialog/actions";
+import { SourceDialogAnyAction } from "state/sourcedialog/actions";
+import { StoriesAnyAction } from "state/stories/actions";
 
 export type ClientAction =
     CartesAnyAction
@@ -55,6 +57,8 @@ export type ClientAction =
     | RefreshAnyAction
     | SettingsAnyAction
     | ShareDialogAnyAction
-    | SignUpDialogAnyAction;
+    | SignUpDialogAnyAction
+    | SourceDialogAnyAction
+    | StoriesAnyAction;
 
 export type ClientActionType = ClientAction["type"];
