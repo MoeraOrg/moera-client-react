@@ -19,6 +19,13 @@ import { PeopleAnyAction } from "state/people/actions";
 import { PostingReplyAnyAction } from "state/postingreply/actions";
 import { PostingsAnyAction } from "state/postings/actions";
 import { ProfileAnyAction } from "state/profile/actions";
+import { PulseAnyAction } from "state/pulse/actions";
+import { QuickTipsAnyAction } from "state/quicktips/actions";
+import { ReactionsDialogAnyAction } from "state/reactionsdialog/actions";
+import { RefreshAnyAction } from "state/refresh/actions";
+import { SettingsAnyAction } from "state/settings/actions";
+import { ShareDialogAnyAction } from "state/sharedialog/actions";
+import { SignUpDialogAnyAction } from "state/signupdialog/actions";
 
 export type ClientAction =
     CartesAnyAction
@@ -41,6 +48,13 @@ export type ClientAction =
     | PeopleAnyAction
     | PostingReplyAnyAction
     | PostingsAnyAction
-    | ProfileAnyAction;
+    | ProfileAnyAction
+    | PulseAnyAction
+    | QuickTipsAnyAction
+    | ReactionsDialogAnyAction
+    | RefreshAnyAction
+    | SettingsAnyAction
+    | ShareDialogAnyAction
+    | SignUpDialogAnyAction;
 
 export type ClientActionType = ClientAction["type"];
