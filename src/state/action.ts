@@ -11,6 +11,10 @@ import { FlashBoxAnyAction } from "state/flashbox/actions";
 import { HomeAnyAction } from "state/home/actions";
 import { MessageBoxAnyAction } from "state/messagebox/actions";
 import { NamingAnyAction } from "state/naming/actions";
+import { NavigationAnyAction } from "state/navigation/actions";
+import { NodeCardsAnyAction } from "state/nodecards/actions";
+import { NodeNameAnyAction } from "state/nodename/actions";
+import { OwnerAnyAction } from "state/owner/actions";
 
 export type ClientAction =
     CartesAnyAction
@@ -25,6 +29,10 @@ export type ClientAction =
     | FlashBoxAnyAction
     | HomeAnyAction
     | MessageBoxAnyAction
-    | NamingAnyAction;
+    | NamingAnyAction
+    | NavigationAnyAction
+    | NodeCardsAnyAction
+    | NodeNameAnyAction
+    | OwnerAnyAction;
 
 export type ClientActionType = ClientAction["type"];
