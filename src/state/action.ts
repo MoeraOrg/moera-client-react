@@ -28,9 +28,11 @@ import { ShareDialogAnyAction } from "state/sharedialog/actions";
 import { SignUpDialogAnyAction } from "state/signupdialog/actions";
 import { SourceDialogAnyAction } from "state/sourcedialog/actions";
 import { StoriesAnyAction } from "state/stories/actions";
+import { ClientEventAction } from "api/events/actions";
 
 export type ClientAction =
-    CartesAnyAction
+    ClientEventAction
+    | CartesAnyAction
     | ChangeDateDialogAnyAction
     | ComposeAnyAction
     | ConfirmBoxAnyAction
