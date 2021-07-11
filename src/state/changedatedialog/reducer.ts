@@ -4,6 +4,8 @@ import {
     STORY_CHANGE_DATE,
     STORY_CHANGE_DATE_FAILED
 } from "state/changedatedialog/actions";
+import { ChangeDateDialogState } from "state/changedatedialog/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     show: false,
@@ -12,7 +14,7 @@ const initialState = {
     changing: false
 };
 
-export default (state = initialState, action) => {
+export default (state: ChangeDateDialogState = initialState, action: ClientAction) => {
     switch (action.type) {
         case OPEN_CHANGE_DATE_DIALOG:
             return {
