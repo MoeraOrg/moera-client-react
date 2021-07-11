@@ -1,14 +1,14 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 import { CarteInfo } from "api/node/api-types";
 
 export const CARTES_LOAD = "CARTES_LOAD";
-type CartesLoadAction = ActionBase<typeof CARTES_LOAD, never>;
+type CartesLoadAction = ActionBase<typeof CARTES_LOAD>;
 export const cartesLoad = (): CartesLoadAction => ({
     type: CARTES_LOAD
 });
 
 export const CARTES_SET = "CARTES_SET";
-type CartesSetAction = ActionBase<typeof CARTES_SET, {
+type CartesSetAction = ActionWithPayload<typeof CARTES_SET, {
     cartesIp: string;
     cartes: CarteInfo[];
     clockOffset: number;
@@ -19,13 +19,13 @@ export const cartesSet = (cartesIp: string, cartes: CarteInfo[], clockOffset: nu
 });
 
 export const CARTES_PURGE_EXPIRED = "CARTES_PURGE_EXPIRED";
-type CartesPurgeExpiredAction = ActionBase<typeof CARTES_PURGE_EXPIRED, never>;
+type CartesPurgeExpiredAction = ActionBase<typeof CARTES_PURGE_EXPIRED>;
 export const cartesPurgeExpired = (): CartesPurgeExpiredAction => ({
     type: CARTES_PURGE_EXPIRED
 });
 
 export const CLOCK_OFFSET_WARN = "CLOCK_OFFSET_WARN";
-type ClockOffsetWarnAction = ActionBase<typeof CLOCK_OFFSET_WARN, never>;
+type ClockOffsetWarnAction = ActionBase<typeof CLOCK_OFFSET_WARN>;
 export const clockOffsetWarn = (): ClockOffsetWarnAction => ({
     type: CLOCK_OFFSET_WARN
 });

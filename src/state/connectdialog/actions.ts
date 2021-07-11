@@ -1,21 +1,21 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 
 type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
 
 export const OPEN_CONNECT_DIALOG = "OPEN_CONNECT_DIALOG";
-type OpenConnectDialogAction = ActionBase<typeof OPEN_CONNECT_DIALOG, never>;
+type OpenConnectDialogAction = ActionBase<typeof OPEN_CONNECT_DIALOG>;
 export const openConnectDialog = (): OpenConnectDialogAction => ({
     type: OPEN_CONNECT_DIALOG
 });
 
 export const CANCEL_CONNECT_DIALOG = "CANCEL_CONNECT_DIALOG";
-type CancelConnectDialogAction = ActionBase<typeof CANCEL_CONNECT_DIALOG, never>;
+type CancelConnectDialogAction = ActionBase<typeof CANCEL_CONNECT_DIALOG>;
 export const cancelConnectDialog = (): CancelConnectDialogAction => ({
     type: CANCEL_CONNECT_DIALOG
 });
 
 export const RESTORE_CONNECT_DIALOG = "RESTORE_CONNECT_DIALOG";
-type RestoreConnectDialogAction = ActionBase<typeof RESTORE_CONNECT_DIALOG, {
+type RestoreConnectDialogAction = ActionWithPayload<typeof RESTORE_CONNECT_DIALOG, {
     location: string;
     login: string;
 }>;
@@ -25,7 +25,7 @@ export const restoreConnectDialog = (location: string, login: string): RestoreCo
 });
 
 export const CONNECT_DIALOG_SET_FORM = "CONNECT_DIALOG_SET_FORM";
-type ConnectDialogSetFormAction = ActionBase<typeof CONNECT_DIALOG_SET_FORM, {
+type ConnectDialogSetFormAction = ActionWithPayload<typeof CONNECT_DIALOG_SET_FORM, {
     location: string;
     login: string;
     form: ConnectDialogForm;
@@ -37,7 +37,7 @@ export const connectDialogSetForm = (location: string, login: string,
 });
 
 export const CONNECT_DIALOG_RESET_PASSWORD = "CONNECT_DIALOG_RESET_PASSWORD";
-type ConnectDialogResetPasswordAction = ActionBase<typeof CONNECT_DIALOG_RESET_PASSWORD, {
+type ConnectDialogResetPasswordAction = ActionWithPayload<typeof CONNECT_DIALOG_RESET_PASSWORD, {
     location: string;
 }>;
 export const connectDialogResetPassword = (location: string): ConnectDialogResetPasswordAction => ({
@@ -46,13 +46,13 @@ export const connectDialogResetPassword = (location: string): ConnectDialogReset
 });
 
 export const CONNECT_DIALOG_RESET_PASSWORD_FAILED = "CONNECT_DIALOG_RESET_PASSWORD_FAILED";
-type ConnectDialogResetPasswordFailedAction = ActionBase<typeof CONNECT_DIALOG_RESET_PASSWORD_FAILED, never>;
+type ConnectDialogResetPasswordFailedAction = ActionBase<typeof CONNECT_DIALOG_RESET_PASSWORD_FAILED>;
 export const connectDialogResetPasswordFailed = (): ConnectDialogResetPasswordFailedAction => ({
     type: CONNECT_DIALOG_RESET_PASSWORD_FAILED
 });
 
 export const CONNECT_DIALOG_SET_EMAIL_HINT = "CONNECT_DIALOG_SET_EMAIL_HINT";
-type ConnectDialogSetEmailHintAction = ActionBase<typeof CONNECT_DIALOG_SET_EMAIL_HINT, {
+type ConnectDialogSetEmailHintAction = ActionWithPayload<typeof CONNECT_DIALOG_SET_EMAIL_HINT, {
     emailHint: string;
 }>;
 export const connectDialogSetEmailHint = (emailHint: string): ConnectDialogSetEmailHintAction => ({

@@ -1,7 +1,7 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 
 export const NAMING_NAMES_USED = "NAMING_NAMES_USED";
-type NamingNamesUsedAction = ActionBase<typeof NAMING_NAMES_USED, {
+type NamingNamesUsedAction = ActionWithPayload<typeof NAMING_NAMES_USED, {
     names: string[];
 }>;
 export const namingNamesUsed = (names: string[]): NamingNamesUsedAction => ({
@@ -10,7 +10,7 @@ export const namingNamesUsed = (names: string[]): NamingNamesUsedAction => ({
 });
 
 export const NAMING_NAME_LOAD = "NAMING_NAME_LOAD";
-type NamingNameLoadAction = ActionBase<typeof NAMING_NAME_LOAD, {
+type NamingNameLoadAction = ActionWithPayload<typeof NAMING_NAME_LOAD, {
     name: string;
 }>;
 export const namingNameLoad = (name: string): NamingNameLoadAction => ({
@@ -19,7 +19,7 @@ export const namingNameLoad = (name: string): NamingNameLoadAction => ({
 });
 
 export const NAMING_NAME_LOADED = "NAMING_NAME_LOADED";
-type NamingNameLoadedAction = ActionBase<typeof NAMING_NAME_LOADED, {
+type NamingNameLoadedAction = ActionWithPayload<typeof NAMING_NAME_LOADED, {
     name: string;
     nodeUri: string;
     updated: number;
@@ -30,7 +30,7 @@ export const namingNameLoaded = (name: string, nodeUri: string, updated: number)
 });
 
 export const NAMING_NAME_LOAD_FAILED = "NAMING_NAME_LOAD_FAILED";
-type NamingNameLoadFailedAction = ActionBase<typeof NAMING_NAME_LOAD_FAILED, {
+type NamingNameLoadFailedAction = ActionWithPayload<typeof NAMING_NAME_LOAD_FAILED, {
     name: string;
 }>;
 export const namingNameLoadFailed = (name: string): NamingNameLoadFailedAction => ({
@@ -39,7 +39,7 @@ export const namingNameLoadFailed = (name: string): NamingNameLoadFailedAction =
 });
 
 export const NAMING_NAMES_PURGE = "NAMING_NAMES_PURGE";
-type NamingNamesPurgeAction = ActionBase<typeof NAMING_NAMES_PURGE, {
+type NamingNamesPurgeAction = ActionWithPayload<typeof NAMING_NAMES_PURGE, {
     names: string[];
 }>;
 export const namingNamesPurge = (names: string[]): NamingNamesPurgeAction => ({
@@ -48,13 +48,13 @@ export const namingNamesPurge = (names: string[]): NamingNamesPurgeAction => ({
 });
 
 export const NAMING_NAMES_MAINTENANCE = "NAMING_NAMES_MAINTENANCE";
-type NamingNamesMaintenanceAction = ActionBase<typeof NAMING_NAMES_MAINTENANCE, never>;
+type NamingNamesMaintenanceAction = ActionBase<typeof NAMING_NAMES_MAINTENANCE>;
 export const namingNamesMaintenance = (): NamingNamesMaintenanceAction => ({
     type: NAMING_NAMES_MAINTENANCE
 });
 
 export const NAMING_NAMES_POPULATE = "NAMING_NAMES_POPULATE";
-type NamingNamesPopulateAction = ActionBase<typeof NAMING_NAMES_POPULATE, {
+type NamingNamesPopulateAction = ActionWithPayload<typeof NAMING_NAMES_POPULATE, {
     names: string[];
 }>;
 export const namingNamesPopulate = (names: string[]): NamingNamesPopulateAction => ({

@@ -1,7 +1,7 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 
 export const POSTING_REPLY = "POSTING_REPLY";
-type PostingReplyAction = ActionBase<typeof POSTING_REPLY, {
+type PostingReplyAction = ActionWithPayload<typeof POSTING_REPLY, {
     id: string;
 }>;
 export const postingReply = (id: string): PostingReplyAction => ({
@@ -10,7 +10,7 @@ export const postingReply = (id: string): PostingReplyAction => ({
 });
 
 export const POSTING_REPLY_FAILED = "POSTING_REPLY_FAILED";
-type PostingReplyFailedAction = ActionBase<typeof POSTING_REPLY_FAILED, never>;
+type PostingReplyFailedAction = ActionBase<typeof POSTING_REPLY_FAILED>;
 export const postingReplyFailed = () => ({
     type: POSTING_REPLY_FAILED
 });

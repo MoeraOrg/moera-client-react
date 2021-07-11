@@ -1,8 +1,8 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 import { StoryInfo } from "api/node/api-types";
 
 export const STORY_PINNING_UPDATE = "STORY_PINNING_UPDATE";
-type StoryPinningUpdateAction = ActionBase<typeof STORY_PINNING_UPDATE, {
+type StoryPinningUpdateAction = ActionWithPayload<typeof STORY_PINNING_UPDATE, {
     id: string;
     pinned: boolean;
 }>;
@@ -12,7 +12,7 @@ export const storyPinningUpdate = (id: string, pinned: boolean): StoryPinningUpd
 });
 
 export const STORY_READING_UPDATE = "STORY_READING_UPDATE";
-type StoryReadingUpdateAction = ActionBase<typeof STORY_READING_UPDATE, {
+type StoryReadingUpdateAction = ActionWithPayload<typeof STORY_READING_UPDATE, {
     feedName: string;
     id: string;
     read: boolean;
@@ -23,7 +23,7 @@ export const storyReadingUpdate = (feedName: string, id: string, read: boolean):
 });
 
 export const STORY_ADDED = "STORY_ADDED";
-type StoryAddedAction = ActionBase<typeof STORY_ADDED, {
+type StoryAddedAction = ActionWithPayload<typeof STORY_ADDED, {
     story: StoryInfo;
 }>;
 export const storyAdded = (story: StoryInfo): StoryAddedAction => ({
@@ -32,7 +32,7 @@ export const storyAdded = (story: StoryInfo): StoryAddedAction => ({
 });
 
 export const STORY_DELETED = "STORY_DELETED";
-type StoryDeletedAction = ActionBase<typeof STORY_DELETED, {
+type StoryDeletedAction = ActionWithPayload<typeof STORY_DELETED, {
     story: StoryInfo;
 }>;
 export const storyDeleted = (story: StoryInfo): StoryDeletedAction => ({
@@ -41,7 +41,7 @@ export const storyDeleted = (story: StoryInfo): StoryDeletedAction => ({
 });
 
 export const STORY_UPDATED = "STORY_UPDATED";
-type StoryUpdatedAction = ActionBase<typeof STORY_UPDATED, {
+type StoryUpdatedAction = ActionWithPayload<typeof STORY_UPDATED, {
     story: StoryInfo;
 }>;
 export const storyUpdated = (story: StoryInfo): StoryUpdatedAction => ({

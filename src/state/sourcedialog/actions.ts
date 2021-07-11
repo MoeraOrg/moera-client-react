@@ -1,7 +1,7 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 
 export const OPEN_SOURCE_DIALOG = "OPEN_SOURCE_DIALOG";
-type OpenSourceDialogAction = ActionBase<typeof OPEN_SOURCE_DIALOG, {
+type OpenSourceDialogAction = ActionWithPayload<typeof OPEN_SOURCE_DIALOG, {
     nodeName: string;
     postingId: string;
     commentId: string | null;
@@ -13,13 +13,13 @@ export const openSourceDialog = (nodeName: string, postingId: string,
 });
 
 export const CLOSE_SOURCE_DIALOG = "CLOSE_SOURCE_DIALOG";
-type CloseSourceDialogAction = ActionBase<typeof CLOSE_SOURCE_DIALOG, never>;
+type CloseSourceDialogAction = ActionBase<typeof CLOSE_SOURCE_DIALOG>;
 export const closeSourceDialog = (): CloseSourceDialogAction => ({
     type: CLOSE_SOURCE_DIALOG
 });
 
 export const SOURCE_DIALOG_LOADED = "SOURCE_DIALOG_LOADED";
-type SourceDialogLoadedAction = ActionBase<typeof SOURCE_DIALOG_LOADED, {
+type SourceDialogLoadedAction = ActionWithPayload<typeof SOURCE_DIALOG_LOADED, {
     text: string;
 }>;
 export const sourceDialogLoaded = (text: string): SourceDialogLoadedAction => ({
@@ -28,7 +28,7 @@ export const sourceDialogLoaded = (text: string): SourceDialogLoadedAction => ({
 });
 
 export const SOURCE_DIALOG_LOAD_FAILED = "SOURCE_DIALOG_LOAD_FAILED";
-type SourceDialogLoadFailedAction = ActionBase<typeof SOURCE_DIALOG_LOAD_FAILED, never>;
+type SourceDialogLoadFailedAction = ActionBase<typeof SOURCE_DIALOG_LOAD_FAILED>;
 export const sourceDialogLoadFailed = (): SourceDialogLoadFailedAction => ({
     type: SOURCE_DIALOG_LOAD_FAILED
 });

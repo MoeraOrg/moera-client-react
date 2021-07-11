@@ -1,8 +1,8 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 import { AvatarImage, CarteInfo } from "api/node/api-types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
-type ConnectToHomeAction = ActionBase<typeof CONNECT_TO_HOME, {
+type ConnectToHomeAction = ActionWithPayload<typeof CONNECT_TO_HOME, {
     location: string;
     assign: boolean;
     login: string;
@@ -18,13 +18,13 @@ export const connectToHome = (location: string, assign: boolean, login: string, 
 });
 
 export const CONNECTION_TO_HOME_FAILED = "CONNECTION_TO_HOME_FAILED";
-type ConnectionToHomeFailedAction = ActionBase<typeof CONNECTION_TO_HOME_FAILED, never>;
+type ConnectionToHomeFailedAction = ActionBase<typeof CONNECTION_TO_HOME_FAILED>;
 export const connectionToHomeFailed = (): ConnectionToHomeFailedAction => ({
     type: CONNECTION_TO_HOME_FAILED
 });
 
 export const CONNECTED_TO_HOME = "CONNECTED_TO_HOME";
-type ConnectedToHomeAction = ActionBase<typeof CONNECTED_TO_HOME, {
+type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, {
     location: string;
     login: string;
     token: string;
@@ -42,7 +42,7 @@ export const connectedToHome = (location: string, login: string, token: string, 
 });
 
 export const DISCONNECT_FROM_HOME = "DISCONNECT_FROM_HOME";
-type DisconnectFromHomeAction = ActionBase<typeof DISCONNECT_FROM_HOME, {
+type DisconnectFromHomeAction = ActionWithPayload<typeof DISCONNECT_FROM_HOME, {
     location: string;
     login: string;
 }>;
@@ -52,7 +52,7 @@ export const disconnectFromHome = (location: string, login: string): DisconnectF
 });
 
 export const DISCONNECTED_FROM_HOME = "DISCONNECTED_FROM_HOME";
-type DisconnectedFromHomeAction = ActionBase<typeof DISCONNECTED_FROM_HOME, {
+type DisconnectedFromHomeAction = ActionWithPayload<typeof DISCONNECTED_FROM_HOME, {
     location: string;
     login: string;
 }>;
@@ -62,7 +62,7 @@ export const disconnectedFromHome = (location: string, login: string): Disconnec
 });
 
 export const HOME_RESTORE = "HOME_RESTORE";
-type HomeRestoreAction = ActionBase<typeof HOME_RESTORE, {
+type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
     addonApiVersion: number;
     location: string;
     login: string;
@@ -80,13 +80,13 @@ export const homeRestore = (addonApiVersion: number, location: string, login: st
 });
 
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";
-type HomeOwnerVerifyAction = ActionBase<typeof HOME_OWNER_VERIFY, never>;
+type HomeOwnerVerifyAction = ActionBase<typeof HOME_OWNER_VERIFY>;
 export const homeOwnerVerify = (): HomeOwnerVerifyAction => ({
     type: HOME_OWNER_VERIFY
 });
 
 export const HOME_OWNER_SET = "HOME_OWNER_SET";
-type HomeOwnerSetAction = ActionBase<typeof HOME_OWNER_SET, {
+type HomeOwnerSetAction = ActionWithPayload<typeof HOME_OWNER_SET, {
     name: string;
     changing: boolean;
     fullName: string | null;
@@ -99,7 +99,7 @@ export const homeOwnerSet = (name: string, changing: boolean, fullName: string |
 });
 
 export const HOME_OWNER_VERIFIED = "HOME_OWNER_VERIFIED";
-type HomeOwnerVerifiedAction = ActionBase<typeof HOME_OWNER_VERIFIED, {
+type HomeOwnerVerifiedAction = ActionWithPayload<typeof HOME_OWNER_VERIFIED, {
     name: string;
     correct: boolean;
 }>;
@@ -109,7 +109,7 @@ export const homeOwnerVerified = (name: string, correct: boolean): HomeOwnerVeri
 });
 
 export const BROWSER_API_SET = "BROWSER_API_SET";
-type BrowserApiSetAction = ActionBase<typeof BROWSER_API_SET, {
+type BrowserApiSetAction = ActionWithPayload<typeof BROWSER_API_SET, {
     version: number;
 }>;
 export const browserApiSet = (version: number): BrowserApiSetAction => ({
@@ -118,7 +118,7 @@ export const browserApiSet = (version: number): BrowserApiSetAction => ({
 });
 
 export const CONNECTIONS_SET = "CONNECTIONS_SET";
-type ConnectionsSetAction = ActionBase<typeof CONNECTIONS_SET, {
+type ConnectionsSetAction = ActionWithPayload<typeof CONNECTIONS_SET, {
     roots: string[];
 }>;
 export const connectionsSet = (roots: string[]): ConnectionsSetAction => ({
@@ -127,13 +127,13 @@ export const connectionsSet = (roots: string[]): ConnectionsSetAction => ({
 });
 
 export const HOME_AVATARS_LOAD = "HOME_AVATARS_LOAD";
-type HomeAvatarsLoadAction = ActionBase<typeof HOME_AVATARS_LOAD, never>;
+type HomeAvatarsLoadAction = ActionBase<typeof HOME_AVATARS_LOAD>;
 export const homeAvatarsLoad = (): HomeAvatarsLoadAction => ({
     type: HOME_AVATARS_LOAD
 });
 
 export const HOME_AVATARS_LOADED = "HOME_AVATARS_LOADED";
-type HomeAvatarsLoadedAction = ActionBase<typeof HOME_AVATARS_LOADED, {
+type HomeAvatarsLoadedAction = ActionWithPayload<typeof HOME_AVATARS_LOADED, {
     avatars: AvatarImage[];
 }>;
 export const homeAvatarsLoaded = (avatars: AvatarImage[]): HomeAvatarsLoadedAction => ({
@@ -142,7 +142,7 @@ export const homeAvatarsLoaded = (avatars: AvatarImage[]): HomeAvatarsLoadedActi
 });
 
 export const HOME_AVATARS_LOAD_FAILED = "HOME_AVATARS_LOAD_FAILED";
-type HomeAvatarsLoadFailedAction = ActionBase<typeof HOME_AVATARS_LOAD_FAILED, never>;
+type HomeAvatarsLoadFailedAction = ActionBase<typeof HOME_AVATARS_LOAD_FAILED>;
 export const homeAvatarsLoadFailed = (): HomeAvatarsLoadFailedAction => ({
     type: HOME_AVATARS_LOAD_FAILED
 });

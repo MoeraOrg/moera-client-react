@@ -1,7 +1,7 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 
 export const MESSAGE_BOX = "MESSAGE_BOX";
-type MessageBoxAction = ActionBase<typeof MESSAGE_BOX, {
+type MessageBoxAction = ActionWithPayload<typeof MESSAGE_BOX, {
     message: string;
     onClose: any;
 }>;
@@ -11,7 +11,7 @@ export const messageBox = (message: string, onClose: any = null): MessageBoxActi
 });
 
 export const CLOSE_MESSAGE_BOX = "CLOSE_MESSAGE_BOX";
-type CloseMessageBoxAction = ActionBase<typeof CLOSE_MESSAGE_BOX, never>;
+type CloseMessageBoxAction = ActionBase<typeof CLOSE_MESSAGE_BOX>;
 export const closeMessageBox = (): CloseMessageBoxAction => ({
     type: CLOSE_MESSAGE_BOX
 });

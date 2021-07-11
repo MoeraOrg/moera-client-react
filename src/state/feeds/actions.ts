@@ -1,8 +1,8 @@
-import { ActionBase } from "state/action-base";
+import { ActionBase, ActionWithPayload } from "state/action-base";
 import { AvatarImage, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo } from "api/node/api-types";
 
 export const FEED_GENERAL_LOAD = "FEED_GENERAL_LOAD";
-type FeedGeneralLoadAction = ActionBase<typeof FEED_GENERAL_LOAD, {
+type FeedGeneralLoadAction = ActionWithPayload<typeof FEED_GENERAL_LOAD, {
     feedName: string;
 }>;
 export const feedGeneralLoad = (feedName: string): FeedGeneralLoadAction => ({
@@ -11,7 +11,7 @@ export const feedGeneralLoad = (feedName: string): FeedGeneralLoadAction => ({
 });
 
 export const FEED_GENERAL_LOAD_FAILED = "FEED_GENERAL_LOAD_FAILED";
-type FeedGeneralLoadFailedAction = ActionBase<typeof FEED_GENERAL_LOAD_FAILED, {
+type FeedGeneralLoadFailedAction = ActionWithPayload<typeof FEED_GENERAL_LOAD_FAILED, {
     feedName: string;
 }>;
 export const feedGeneralLoadFailed = (feedName: string): FeedGeneralLoadFailedAction => ({
@@ -20,7 +20,7 @@ export const feedGeneralLoadFailed = (feedName: string): FeedGeneralLoadFailedAc
 });
 
 export const FEED_GENERAL_SET = "FEED_GENERAL_SET";
-type FeedGeneralSetAction = ActionBase<typeof FEED_GENERAL_SET, {
+type FeedGeneralSetAction = ActionWithPayload<typeof FEED_GENERAL_SET, {
     feedName: string;
     info: FeedInfo;
 }>;
@@ -30,7 +30,7 @@ export const feedGeneralSet = (feedName: string, info: FeedInfo): FeedGeneralSet
 });
 
 export const FEED_GENERAL_UNSET = "FEED_GENERAL_UNSET";
-type FeedGeneralUnsetAction = ActionBase<typeof FEED_GENERAL_UNSET, {
+type FeedGeneralUnsetAction = ActionWithPayload<typeof FEED_GENERAL_UNSET, {
     feedName: string;
 }>;
 export const feedGeneralUnset = (feedName: string): FeedGeneralUnsetAction => ({
@@ -39,7 +39,7 @@ export const feedGeneralUnset = (feedName: string): FeedGeneralUnsetAction => ({
 });
 
 export const FEED_SUBSCRIBE = "FEED_SUBSCRIBE";
-type FeedSubscribeAction = ActionBase<typeof FEED_SUBSCRIBE, {
+type FeedSubscribeAction = ActionWithPayload<typeof FEED_SUBSCRIBE, {
     nodeName: string;
     feedName: string;
 }>;
@@ -49,7 +49,7 @@ export const feedSubscribe = (nodeName: string, feedName: string): FeedSubscribe
 });
 
 export const FEED_SUBSCRIBED = "FEED_SUBSCRIBED";
-type FeedSubscribedAction = ActionBase<typeof FEED_SUBSCRIBED, {
+type FeedSubscribedAction = ActionWithPayload<typeof FEED_SUBSCRIBED, {
     nodeName: string;
     fullName: string | null;
     avatar: AvatarImage | null;
@@ -63,7 +63,7 @@ export const feedSubscribed = (nodeName: string, fullName: string | null, avatar
 });
 
 export const FEED_SUBSCRIBE_FAILED = "FEED_SUBSCRIBE_FAILED";
-type FeedSubscribeFailedAction = ActionBase<typeof FEED_SUBSCRIBE_FAILED, {
+type FeedSubscribeFailedAction = ActionWithPayload<typeof FEED_SUBSCRIBE_FAILED, {
     nodeName: string;
     feedName: string;
 }>;
@@ -73,7 +73,7 @@ export const feedSubscribeFailed = (nodeName: string, feedName: string): FeedSub
 });
 
 export const FEED_UNSUBSCRIBE = "FEED_UNSUBSCRIBE";
-type FeedUnsubscribeAction = ActionBase<typeof FEED_UNSUBSCRIBE, {
+type FeedUnsubscribeAction = ActionWithPayload<typeof FEED_UNSUBSCRIBE, {
     nodeName: string;
     feedName: string;
     subscriberId: string;
@@ -84,7 +84,7 @@ export const feedUnsubscribe = (nodeName: string, feedName: string, subscriberId
 });
 
 export const FEED_UNSUBSCRIBED = "FEED_UNSUBSCRIBED";
-type FeedUnsubscribedAction = ActionBase<typeof FEED_UNSUBSCRIBED, {
+type FeedUnsubscribedAction = ActionWithPayload<typeof FEED_UNSUBSCRIBED, {
     nodeName: string;
     feedName: string;
 }>;
@@ -94,7 +94,7 @@ export const feedUnsubscribed = (nodeName: string, feedName: string): FeedUnsubs
 });
 
 export const FEED_UNSUBSCRIBE_FAILED = "FEED_UNSUBSCRIBE_FAILED";
-type FeedUnsubscribeFailedAction = ActionBase<typeof FEED_UNSUBSCRIBE_FAILED, {
+type FeedUnsubscribeFailedAction = ActionWithPayload<typeof FEED_UNSUBSCRIBE_FAILED, {
     nodeName: string;
     feedName: string;
 }>;
@@ -104,7 +104,7 @@ export const feedUnsubscribeFailed = (nodeName: string, feedName: string): FeedU
 });
 
 export const FEED_STATUS_LOAD = "FEED_STATUS_LOAD";
-type FeedStatusLoadAction = ActionBase<typeof FEED_STATUS_LOAD, {
+type FeedStatusLoadAction = ActionWithPayload<typeof FEED_STATUS_LOAD, {
     feedName: string;
 }>;
 export const feedStatusLoad = (feedName: string): FeedStatusLoadAction => ({
@@ -113,7 +113,7 @@ export const feedStatusLoad = (feedName: string): FeedStatusLoadAction => ({
 });
 
 export const FEED_STATUS_LOAD_FAILED = "FEED_STATUS_LOAD_FAILED";
-type FeedStatusLoadFailedAction = ActionBase<typeof FEED_STATUS_LOAD_FAILED, {
+type FeedStatusLoadFailedAction = ActionWithPayload<typeof FEED_STATUS_LOAD_FAILED, {
     feedName: string;
 }>;
 export const feedStatusLoadFailed = (feedName: string): FeedStatusLoadFailedAction => ({
@@ -122,7 +122,7 @@ export const feedStatusLoadFailed = (feedName: string): FeedStatusLoadFailedActi
 });
 
 export const FEED_STATUS_SET = "FEED_STATUS_SET";
-type FeedStatusSetAction = ActionBase<typeof FEED_STATUS_SET, {
+type FeedStatusSetAction = ActionWithPayload<typeof FEED_STATUS_SET, {
     feedName: string;
     status: FeedStatus;
 }>;
@@ -132,7 +132,7 @@ export const feedStatusSet = (feedName: string, status: FeedStatus): FeedStatusS
 });
 
 export const FEED_STATUS_UPDATE = "FEED_STATUS_UPDATE";
-type FeedStatusUpdateAction = ActionBase<typeof FEED_STATUS_UPDATE, {
+type FeedStatusUpdateAction = ActionWithPayload<typeof FEED_STATUS_UPDATE, {
     feedName: string;
     viewed: boolean;
     read: boolean;
@@ -145,7 +145,7 @@ export const feedStatusUpdate = (feedName: string, viewed: boolean, read: boolea
 });
 
 export const FEED_STATUS_UPDATE_FAILED = "FEED_STATUS_UPDATE_FAILED";
-type FeedStatusUpdateFailedAction = ActionBase<typeof FEED_STATUS_UPDATE_FAILED, {
+type FeedStatusUpdateFailedAction = ActionWithPayload<typeof FEED_STATUS_UPDATE_FAILED, {
     feedName: string;
 }>;
 export const feedStatusUpdateFailed = (feedName: string): FeedStatusUpdateFailedAction => ({
@@ -154,7 +154,7 @@ export const feedStatusUpdateFailed = (feedName: string): FeedStatusUpdateFailed
 });
 
 export const FEED_STATUS_UPDATED = "FEED_STATUS_UPDATED";
-type FeedStatusUpdatedAction = ActionBase<typeof FEED_STATUS_UPDATED, {
+type FeedStatusUpdatedAction = ActionWithPayload<typeof FEED_STATUS_UPDATED, {
     feedName: string;
     viewed: boolean;
     read: boolean;
@@ -167,7 +167,7 @@ export const feedStatusUpdated = (feedName: string, viewed: boolean, read: boole
 });
 
 export const FEED_PAST_SLICE_LOAD = "FEED_PAST_SLICE_LOAD";
-type FeedPastSliceLoadAction = ActionBase<typeof FEED_PAST_SLICE_LOAD, {
+type FeedPastSliceLoadAction = ActionWithPayload<typeof FEED_PAST_SLICE_LOAD, {
     feedName: string;
 }>;
 export const feedPastSliceLoad = (feedName: string): FeedPastSliceLoadAction => ({
@@ -176,7 +176,7 @@ export const feedPastSliceLoad = (feedName: string): FeedPastSliceLoadAction => 
 });
 
 export const FEED_PAST_SLICE_LOAD_FAILED = "FEED_PAST_SLICE_LOAD_FAILED";
-type FeedPastSliceLoadFailedAction = ActionBase<typeof FEED_PAST_SLICE_LOAD_FAILED, {
+type FeedPastSliceLoadFailedAction = ActionWithPayload<typeof FEED_PAST_SLICE_LOAD_FAILED, {
     feedName: string;
 }>;
 export const feedPastSliceLoadFailed = (feedName: string): FeedPastSliceLoadFailedAction => ({
@@ -185,7 +185,7 @@ export const feedPastSliceLoadFailed = (feedName: string): FeedPastSliceLoadFail
 });
 
 export const FEED_FUTURE_SLICE_LOAD = "FEED_FUTURE_SLICE_LOAD";
-type FeedFutureSliceLoadAction = ActionBase<typeof FEED_FUTURE_SLICE_LOAD, {
+type FeedFutureSliceLoadAction = ActionWithPayload<typeof FEED_FUTURE_SLICE_LOAD, {
     feedName: string;
 }>;
 export const feedFutureSliceLoad = (feedName: string): FeedFutureSliceLoadAction => ({
@@ -194,7 +194,7 @@ export const feedFutureSliceLoad = (feedName: string): FeedFutureSliceLoadAction
 });
 
 export const FEED_FUTURE_SLICE_LOAD_FAILED = "FEED_FUTURE_SLICE_LOAD_FAILED";
-type FeedFutureSliceLoadFailedAction = ActionBase<typeof FEED_FUTURE_SLICE_LOAD_FAILED, {
+type FeedFutureSliceLoadFailedAction = ActionWithPayload<typeof FEED_FUTURE_SLICE_LOAD_FAILED, {
     feedName: string;
 }>;
 export const feedFutureSliceLoadFailed = (feedName: string): FeedFutureSliceLoadFailedAction => ({
@@ -203,7 +203,7 @@ export const feedFutureSliceLoadFailed = (feedName: string): FeedFutureSliceLoad
 });
 
 export const FEED_PAST_SLICE_SET = "FEED_PAST_SLICE_SET";
-type FeedPastSliceSetAction = ActionBase<typeof FEED_PAST_SLICE_SET, {
+type FeedPastSliceSetAction = ActionWithPayload<typeof FEED_PAST_SLICE_SET, {
     feedName: string;
     stories: StoryInfo[];
     before: number;
@@ -216,7 +216,7 @@ export const feedPastSliceSet = (feedName: string, stories: StoryInfo[],
 });
 
 export const FEED_FUTURE_SLICE_SET = "FEED_FUTURE_SLICE_SET";
-type FeedFutureSliceSetAction = ActionBase<typeof FEED_FUTURE_SLICE_SET, {
+type FeedFutureSliceSetAction = ActionWithPayload<typeof FEED_FUTURE_SLICE_SET, {
     feedName: string;
     stories: StoryInfo[];
     before: number;
@@ -229,7 +229,7 @@ export const feedFutureSliceSet = (feedName: string, stories: StoryInfo[],
 });
 
 export const FEED_SLICE_UPDATE = "FEED_SLICE_UPDATE";
-type FeedSliceUpdateAction = ActionBase<typeof FEED_SLICE_UPDATE, {
+type FeedSliceUpdateAction = ActionWithPayload<typeof FEED_SLICE_UPDATE, {
     feedName: string;
     stories: StoryInfo[];
     before: number;
@@ -242,19 +242,19 @@ export const feedSliceUpdate = (feedName: string, stories: StoryInfo[],
 });
 
 export const FEEDS_UNSET = "FEEDS_UNSET";
-type FeedsUnsetAction = ActionBase<typeof FEEDS_UNSET, never>;
+type FeedsUnsetAction = ActionBase<typeof FEEDS_UNSET>;
 export const feedsUnset = (): FeedsUnsetAction => ({
     type: FEEDS_UNSET
 });
 
 export const FEEDS_UPDATE = "FEEDS_UPDATE";
-type FeedsUpdateAction = ActionBase<typeof FEEDS_UPDATE, never>;
+type FeedsUpdateAction = ActionBase<typeof FEEDS_UPDATE>;
 export const feedsUpdate = (): FeedsUpdateAction => ({
     type: FEEDS_UPDATE
 });
 
 export const FEED_SCROLLED = "FEED_SCROLLED";
-type FeedScrolledAction = ActionBase<typeof FEED_SCROLLED, {
+type FeedScrolledAction = ActionWithPayload<typeof FEED_SCROLLED, {
     feedName: string;
     at: number;
 }>;
@@ -264,7 +264,7 @@ export const feedScrolled = (feedName: string, at: number): FeedScrolledAction =
 });
 
 export const FEED_SCROLL_TO_ANCHOR = "FEED_SCROLL_TO_ANCHOR";
-type FeedScrollToAnchorAction = ActionBase<typeof FEED_SCROLL_TO_ANCHOR, {
+type FeedScrollToAnchorAction = ActionWithPayload<typeof FEED_SCROLL_TO_ANCHOR, {
     feedName: string;
     at: number;
 }>;
@@ -274,7 +274,7 @@ export const feedScrollToAnchor = (feedName: string, at: number): FeedScrollToAn
 });
 
 export const FEED_SCROLLED_TO_ANCHOR = "FEED_SCROLLED_TO_ANCHOR";
-type FeedScrolledToAnchorAction = ActionBase<typeof FEED_SCROLLED_TO_ANCHOR, {
+type FeedScrolledToAnchorAction = ActionWithPayload<typeof FEED_SCROLLED_TO_ANCHOR, {
     feedName: string;
 }>;
 export const feedScrolledToAnchor = (feedName: string): FeedScrolledToAnchorAction => ({
