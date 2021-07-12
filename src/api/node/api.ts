@@ -698,7 +698,7 @@ const RepliedToType: JSONSchemaType<API.RepliedTo> = {
     additionalProperties: false
 };
 
-const CommentInfoType: JSONSchemaType<API.CommentInfo> = {
+const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
     type: "object",
     properties: {
         "id": {

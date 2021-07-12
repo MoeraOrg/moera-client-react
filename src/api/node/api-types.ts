@@ -458,14 +458,14 @@ export interface PeopleGeneralInfo {
 }
 
 export interface CommentCreated {
-    comment: CommentInfo;
+    comment: EncodedCommentInfo;
     total: number;
 }
 
 export interface CommentsSliceInfo {
     before: number;
     after: number;
-    comments: CommentInfo[];
+    comments: EncodedCommentInfo[];
     total: number;
     totalInPast: number;
     totalInFuture: number;
