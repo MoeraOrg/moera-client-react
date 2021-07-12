@@ -47,37 +47,53 @@ export const goToPage = <P extends Page, D>(page: P, details: D): GoToPageAction
     type: GO_TO_PAGE,
     payload: {page, details}
 });
+
 type GoToProfileAction = GoToPageAction<typeof PAGE_PROFILE, {}>;
 export const goToProfile = (): GoToProfileAction =>
     goToPage(PAGE_PROFILE, {});
+
 type GoToTimelineAction = GoToPageAction<typeof PAGE_TIMELINE, {
     at: number | null;
 }>;
 export const goToTimeline = (at: number | null = null): GoToTimelineAction =>
     goToPage(PAGE_TIMELINE, {at});
+
 type GoToPostingAction = GoToPageAction<typeof PAGE_DETAILED_POSTING, {
     id: string;
     commentId: string | null;
 }>;
 export const goToPosting = (id: string, commentId: string | null = null): GoToPostingAction =>
     goToPage(PAGE_DETAILED_POSTING, {id, commentId});
+
 type GoToComposeAction = GoToPageAction<typeof PAGE_COMPOSE, {
     id: string | null;
     draftId: string | null;
 }>;
 export const goToCompose = (id: string | null = null, draftId: string | null = null): GoToComposeAction =>
     goToPage(PAGE_COMPOSE, {id, draftId});
+
 type GoToSettingsAction = GoToPageAction<typeof PAGE_SETTINGS, {}>;
 export const goToSettings = (): GoToSettingsAction =>
     goToPage(PAGE_SETTINGS, {});
+
 type GoToNewsAction = GoToPageAction<typeof PAGE_NEWS, {
     at: number | null;
 }>;
 export const goToNews = (at: number | null = null): GoToNewsAction =>
     goToPage(PAGE_NEWS, {at});
+
 type GoToPeopleAction = GoToPageAction<typeof PAGE_PEOPLE, {}>;
 export const goToPeople = (): GoToPeopleAction =>
     goToPage(PAGE_PEOPLE, {});
+
+type GoToPageAnyAction =
+    GoToProfileAction
+    | GoToTimelineAction
+    | GoToPostingAction
+    | GoToComposeAction
+    | GoToSettingsAction
+    | GoToNewsAction
+    | GoToPeopleAction;
 
 export const GO_TO_PAGE_WITH_DEFAULT_SUBPAGE = "GO_TO_PAGE_WITH_DEFAULT_SUBPAGE";
 type GoToPageWithDefaultSubpageAction = ActionWithPayload<typeof GO_TO_PAGE_WITH_DEFAULT_SUBPAGE, {
@@ -178,13 +194,7 @@ export type NavigationAnyAction =
     InitStorageAction
     | InitFromLocationAction
     | WakeUpAction
-    | GoToProfileAction
-    | GoToTimelineAction
-    | GoToPostingAction
-    | GoToComposeAction
-    | GoToSettingsAction
-    | GoToNewsAction
-    | GoToPeopleAction
+    | GoToPageAnyAction
     | GoToPageWithDefaultSubpageAction
     | NewLocationAction
     | UpdateLocationAction

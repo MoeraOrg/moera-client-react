@@ -60,6 +60,9 @@ import {
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
     EVENT_RECEIVER_COMMENT_DELETED
 } from "api/events/actions";
+import { DetailedPostingState, ExtCommentInfo } from "state/detailedposting/state";
+import { ClientAction } from "state/action";
+import { CommentInfo } from "api/node/api-types";
 
 const emptyComments = {
     receiverName: null,
@@ -120,11 +123,16 @@ const SINGLE_EMOJI_COMMENT_REGEX = new RegExp(
     'gi'
 );
 
-function isSingleEmojiComment(comment) {
+function isSingleEmojiComment(comment: CommentInfo) {
+    if (!comment.body.text) {
+        return false;
+    }
+
     const match = comment.body.text.matchAll(SINGLE_EMOJI_COMMENT_REGEX).next().value;
     if (!match) {
         return false;
     }
+
     const innerText = match[1];
     const emojis = parseEmojis(innerText);
     if (emojis.length !== 1) {
@@ -134,15 +142,19 @@ function isSingleEmojiComment(comment) {
     return indices[0] === 0 && indices[1] === innerText.length;
 }
 
-function extractComment(comment) {
-    if (comment.verificationStatus != null) { // Already extracted
+function isExtracted(comment: CommentInfo | ExtCommentInfo): comment is ExtCommentInfo {
+    return (comment as ExtCommentInfo).verificationStatus != null;
+}
+
+function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
+    if (isExtracted(comment)) { // Already extracted
         return comment;
     }
-    const icomment = immutable.wrap(comment);
-    if (!comment.bodyPreview.text) {
-        icomment.set("body.previewText", safePreviewHtml(comment.body.text));
+    const icomment = immutable.wrap(comment as ExtCommentInfo);
+    if (comment.bodyPreview == null || !comment.bodyPreview.text) {
+        icomment.set("body.previewText", safePreviewHtml(comment.body.text ?? ""));
     }
-    if (comment.repliedTo) {
+    if (comment.repliedTo && comment.repliedTo.heading) {
         icomment.set("repliedTo.headingHtml", replaceEmojis(htmlEntities(comment.repliedTo.heading)));
     }
     return icomment
@@ -154,14 +166,15 @@ function extractComment(comment) {
         .value();
 }
 
-export default (state = initialState, action) => {
+export default (state: DetailedPostingState = initialState, action: ClientAction) => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
 
         case GO_TO_PAGE: {
-            const {page, details: {id, commentId}} = action.payload;
-            if (page === PAGE_DETAILED_POSTING) {
+            if (action.payload.page === PAGE_DETAILED_POSTING) {
+                const {details: {id, commentId}} = action.payload;
+
                 const istate = immutable.wrap(state);
                 if (state.id !== id) {
                     istate.set("id", id)
@@ -451,6 +464,9 @@ export default (state = initialState, action) => {
 
         case FOCUS_COMMENT: {
             const comment = state.comments.comments.find(c => c.id === state.comments.focusedCommentId);
+            if (comment == null) {
+                return state;
+            }
             return immutable.assign(state, "comments", {
                 anchor: comment.moment,
                 loadingFocusedComment: false,

@@ -22,6 +22,7 @@
     "@types/react": "^17.0.13",
     "@types/react-dom": "^17.0.8",
     "@types/sanitize-html": "^2.3.2",
+    "@types/selectn": "^1.1.0",
     "@types/twemoji-parser": "^13.1.1",
     "ajv": "^8.6.1",
     "ajv-formats": "^2.1.0",

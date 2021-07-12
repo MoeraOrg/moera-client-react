@@ -1,6 +1,6 @@
 import { ActionBase, ActionWithPayload } from "state/action-base";
 
-type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
+export type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
 
 export const OPEN_CONNECT_DIALOG = "OPEN_CONNECT_DIALOG";
 type OpenConnectDialogAction = ActionBase<typeof OPEN_CONNECT_DIALOG>;

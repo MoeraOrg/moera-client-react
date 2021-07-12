@@ -3,6 +3,8 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { CONTACTS_LOAD, CONTACTS_LOAD_FAILED, CONTACTS_LOADED, CONTACTS_UNSET } from "state/contacts/actions";
 import { EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED, EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events/actions";
+import { ContactsState } from "state/contacts/state";
+import { ClientAction } from "state/action";
 
 const emptyQuery = {
     loading: false,
@@ -14,7 +16,7 @@ const initialState = {
     contacts: []
 }
 
-export default (state = initialState, action) => {
+export default (state: ContactsState = initialState, action: ClientAction) => {
     switch (action.type) {
         case CONTACTS_LOAD:
             if (state.queries[action.payload.query]) {

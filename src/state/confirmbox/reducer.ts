@@ -1,4 +1,6 @@
 import { CONFIRM_BOX, CLOSE_CONFIRM_BOX } from "state/confirmbox/actions";
+import { ConfirmBoxState } from "state/confirmbox/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     show: false,
@@ -10,7 +12,7 @@ const initialState = {
     variant: "primary"
 };
 
-export default (state = initialState, action) => {
+export default (state: ConfirmBoxState = initialState, action: ClientAction) => {
     switch (action.type) {
         case CONFIRM_BOX:
             return {

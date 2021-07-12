@@ -8,17 +8,19 @@ import {
     RESTORE_CONNECT_DIALOG
 } from "state/connectdialog/actions";
 import { CONNECT_TO_HOME, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { ConnectDialogState } from "state/connectdialog/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     show: false,
     location: "",
     login: "admin",
-    form: "connect",
+    form: "connect" as const,
     resettingPassword: false,
     emailHint: ""
 };
 
-export default (state = initialState, action) => {
+export default (state: ConnectDialogState = initialState, action: ClientAction) => {
     switch (action.type) {
         case OPEN_CONNECT_DIALOG:
             return {

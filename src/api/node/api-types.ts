@@ -246,7 +246,7 @@ export interface RepliedTo {
     heading?: string | null;
 }
 
-export interface CommentInfo {
+interface CommentInfoBase<B> {
     id: string;
     ownerName: string;
     ownerFullName?: string | null;
@@ -255,10 +255,10 @@ export interface CommentInfo {
     postingRevisionId: string;
     revisionId: string;
     totalRevisions: number;
-    bodyPreview?: string | null;
+    bodyPreview?: B;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    body: Body | string;
+    body: B;
     bodyFormat?: BodyFormat | null;
     heading: string;
     repliedTo?: RepliedTo | null;
@@ -280,6 +280,9 @@ export interface CommentInfo {
     clientReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;
 }
+
+export type EncodedCommentInfo = CommentInfoBase<string>;
+export type CommentInfo = CommentInfoBase<Body>;
 
 export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-added-negative" | "mention-posting"
     | "subscriber-added" | "subscriber-deleted" | "comment-added" | "mention-comment" | "reply-comment"
