@@ -17,6 +17,7 @@
     "@popperjs/core": "^2.9.2",
     "@stomp/stompjs": "^6.1.0",
     "@types/jest": "^26.0.23",
+    "@types/lodash.clonedeep": "^4.5.6",
     "@types/node": "^16.0.0",
     "@types/react": "^17.0.13",
     "@types/react-dom": "^17.0.8",

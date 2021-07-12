@@ -32,6 +32,9 @@ import {
 } from "state/compose/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
+import { ComposeState, ExtDraftInfo } from "state/compose/state";
+import { ClientAction } from "state/action";
+import { DraftInfo, PostingInfo } from "api/node/api-types";
 
 const emptyFeatures = {
     subjectPresent: false,
@@ -63,7 +66,7 @@ const initialState = {
     showPreview: false
 };
 
-function buildDraftInfo(draftInfo) {
+function buildDraftInfo(draftInfo: DraftInfo): ExtDraftInfo {
     const {bodySrc} = draftInfo;
     const source = typeof bodySrc === "string" ? JSON.parse(bodySrc) : bodySrc;
 
@@ -74,11 +77,12 @@ function buildDraftInfo(draftInfo) {
     }
 }
 
-function sortDraftList(draftList) {
-    return draftList.sort((d1, d2) => d2.editedAt - d1.editedAt);
+function sortDraftList(draftList: ExtDraftInfo[]): ExtDraftInfo[] {
+    return draftList.sort((d1, d2) =>
+        (d2.editedAt ?? d2.createdAt) - (d1.editedAt ?? d2.createdAt));
 }
 
-function appendToDraftList(draftList, draftInfo) {
+function appendToDraftList(draftList: ExtDraftInfo[], draftInfo: DraftInfo): ExtDraftInfo[] {
     const extDraftInfo = buildDraftInfo(draftInfo);
     const list = draftList.slice();
     const i = list.findIndex(d => d.id === extDraftInfo.id);
@@ -90,8 +94,8 @@ function appendToDraftList(draftList, draftInfo) {
     return sortDraftList(list);
 }
 
-function draftToPosting(draft) {
-    const posting = cloneDeep(draft);
+function draftToPosting(draft: DraftInfo): PostingInfo {
+    const posting = cloneDeep(draft) as any;
     posting.id = draft.receiverPostingId;
     delete posting.draftType;
     delete posting.receiverName;
@@ -100,7 +104,7 @@ function draftToPosting(draft) {
     return posting;
 }
 
-export default (state = initialState, action) => {
+export default (state: ComposeState = initialState, action: ClientAction) => {
     switch (action.type) {
         case GO_TO_PAGE:
             if (action.payload.page === PAGE_COMPOSE) {

@@ -8,7 +8,9 @@ export const composeFeaturesLoad = (): ComposeFeaturesLoadAction => ({
 });
 
 export const COMPOSE_FEATURES_LOADED = "COMPOSE_FEATURES_LOADED";
-type ComposeFeaturesLoadedAction = ActionBase<typeof COMPOSE_FEATURES_LOADED>;
+type ComposeFeaturesLoadedAction = ActionWithPayload<typeof COMPOSE_FEATURES_LOADED, {
+    features: PostingFeatures;
+}>;
 export const composeFeaturesLoaded = (features: PostingFeatures) => ({
     type: COMPOSE_FEATURES_LOADED,
     payload: {features}
