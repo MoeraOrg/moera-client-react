@@ -6,7 +6,7 @@ import { getHomeOwnerName, getHomeToken } from "state/home/selectors";
 import { wakeUp } from "state/navigation/actions";
 
 const HomeEvents = ({homeEvents, token, sourceNode, wakeUp}) => (
-    <Events location={homeEvents} token={token} prefix="EVENT_HOME_" sourceNode={sourceNode}
+    <Events location={homeEvents} token={token} prefix="HOME" sourceNode={sourceNode}
             onWakeUp={() => wakeUp()}/>
 );
 

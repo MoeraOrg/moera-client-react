@@ -14,7 +14,7 @@ export default connect(
     state => ({
         nodeEvents: state.node.root.events,
         token: getNodeToken(state),
-        prefix: getReceiverNodeName(state) == null ? ["EVENT_NODE_", "EVENT_RECEIVER_"] : "EVENT_NODE_",
+        prefix: getReceiverNodeName(state) == null ? ["NODE", "RECEIVER"] : "NODE",
         sourceNode: getOwnerName(state)
     })
 )(NodeEvents);

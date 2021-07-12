@@ -7,7 +7,7 @@ import { getReceiverNodeName, getReceiverNodeUri } from "state/receiver/selector
 import { nodeUrlToEvents, nodeUrlToLocation } from "util/url";
 
 const ReceiverEvents = ({nodeEvents, token, sourceNode}) => (
-    <Events location={nodeEvents} token={token} prefix="EVENT_RECEIVER_" sourceNode={sourceNode}/>
+    <Events location={nodeEvents} token={token} prefix="RECEIVER" sourceNode={sourceNode}/>
 );
 
 export default connect(
