@@ -36,7 +36,7 @@ import { replaceEmojis } from "util/html";
 import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
 import { ClientAction } from "state/action";
 import { StoryInfo } from "api/node/api-types";
-import { WithContext } from "state/action-base";
+import { WithContext } from "state/action-types";
 
 const initialState = {
 };

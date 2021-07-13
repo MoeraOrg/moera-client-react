@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 import { CommentInfo, CommentText, PostingInfo, ReactionAttributes, ReactionTotalsInfo } from "api/node/api-types";
 
 export const DETAILED_POSTING_LOAD = "DETAILED_POSTING_LOAD";

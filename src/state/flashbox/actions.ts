@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const FLASH_BOX = "FLASH_BOX";
 type FlashBoxAction = ActionWithPayload<typeof FLASH_BOX, {

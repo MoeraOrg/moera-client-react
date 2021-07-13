@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const NODE_NAME_LOAD = "NODE_NAME_LOAD";
 type NodeNameLoadAction = Action<typeof NODE_NAME_LOAD>;

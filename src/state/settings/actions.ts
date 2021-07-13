@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 import { SettingInfo, SettingMetaInfo } from "api/node/api-types";
 
 export const SETTINGS_GO_TO_TAB = "SETTINGS_GO_TO_TAB";

@@ -10,7 +10,7 @@ import {
     PAGE_SETTINGS,
     PAGE_TIMELINE
 } from "state/navigation/pages";
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const INIT_STORAGE = "INIT_STORAGE";
 type InitStorageAction = ActionWithPayload<typeof INIT_STORAGE, {

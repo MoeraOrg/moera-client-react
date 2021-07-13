@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 import { AvatarImage, CarteInfo } from "api/node/api-types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";

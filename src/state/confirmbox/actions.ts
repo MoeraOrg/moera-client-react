@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const CONFIRM_BOX = "CONFIRM_BOX";
 type ConfirmBoxAction = ActionWithPayload<typeof CONFIRM_BOX, {

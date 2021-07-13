@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const OPEN_CHANGE_DATE_DIALOG = "OPEN_CHANGE_DATE_DIALOG";
 type OpenChangeDateDialogAction = ActionWithPayload<typeof OPEN_CHANGE_DATE_DIALOG, {

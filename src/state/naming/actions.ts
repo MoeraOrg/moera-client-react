@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const NAMING_NAMES_USED = "NAMING_NAMES_USED";
 type NamingNamesUsedAction = ActionWithPayload<typeof NAMING_NAMES_USED, {

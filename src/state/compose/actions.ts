@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { DraftInfo, DraftText, PostingFeatures, PostingInfo, PostingText } from "api/node/api-types";
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const COMPOSE_FEATURES_LOAD = "COMPOSE_FEATURES_LOAD";
 type ComposeFeaturesLoadAction = Action<typeof COMPOSE_FEATURES_LOAD>;

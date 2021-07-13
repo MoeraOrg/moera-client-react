@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
 

@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 import { AvatarImage } from "api/node/api-types";
 
 export const OWNER_LOAD = "OWNER_LOAD";

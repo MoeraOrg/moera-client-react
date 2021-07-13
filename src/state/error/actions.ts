@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 
 export const ERROR_THROWN = "ERROR_THROWN";
 type ErrorThrownAction = ActionWithPayload<typeof ERROR_THROWN, {

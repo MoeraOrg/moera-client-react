@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-types";
 import { PeopleGeneralInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";
