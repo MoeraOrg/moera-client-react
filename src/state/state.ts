@@ -9,6 +9,8 @@ import { ErrorState } from "state/error/state";
 import { FeedsState } from "state/feeds/state";
 import { HomeState } from "state/home/state";
 import { FlashBoxState } from "state/flashbox/state";
+import { MessageBoxState } from "state/messagebox/state";
+import { NamingState } from "state/naming/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -22,4 +24,6 @@ export interface ClientState {
     feeds: FeedsState;
     flashBox: FlashBoxState;
     home: HomeState;
+    messageBox: MessageBoxState;
+    naming: NamingState;
 }

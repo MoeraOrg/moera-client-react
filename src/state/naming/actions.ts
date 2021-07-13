@@ -2,6 +2,12 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 
+export interface NameDetails {
+    name: string;
+    nodeUri: string;
+    updated: number;
+}
+
 export const NAMING_NAMES_USED = "NAMING_NAMES_USED";
 type NamingNamesUsedAction = ActionWithPayload<typeof NAMING_NAMES_USED, {
     names: string[];
@@ -57,9 +63,9 @@ export const namingNamesMaintenance = (): NamingNamesMaintenanceAction => ({
 
 export const NAMING_NAMES_POPULATE = "NAMING_NAMES_POPULATE";
 type NamingNamesPopulateAction = ActionWithPayload<typeof NAMING_NAMES_POPULATE, {
-    names: string[];
+    names: NameDetails[];
 }>;
-export const namingNamesPopulate = (names: string[]): NamingNamesPopulateAction => ({
+export const namingNamesPopulate = (names: NameDetails[]): NamingNamesPopulateAction => ({
     type: NAMING_NAMES_POPULATE,
     payload: {names}
 });

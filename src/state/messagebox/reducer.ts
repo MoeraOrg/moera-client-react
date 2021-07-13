@@ -1,4 +1,6 @@
 import { MESSAGE_BOX, CLOSE_MESSAGE_BOX } from "state/messagebox/actions";
+import { MessageBoxState } from "state/messagebox/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     show: false,
@@ -6,7 +8,7 @@ const initialState = {
     onClose: null
 };
 
-export default (state = initialState, action) => {
+export default (state: MessageBoxState = initialState, action: ClientAction): MessageBoxState => {
     switch (action.type) {
         case MESSAGE_BOX:
             return {

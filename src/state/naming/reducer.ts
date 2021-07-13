@@ -9,6 +9,8 @@ import {
     NAMING_NAMES_USED
 } from "state/naming/actions";
 import { now } from "util/misc";
+import { NamingState } from "state/naming/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     names: {}
@@ -21,7 +23,7 @@ const emptyDetails = {
     nodeUri: null
 };
 
-export default (state = initialState, action) => {
+export default (state: NamingState = initialState, action: ClientAction) => {
     switch (action.type) {
         case NAMING_NAMES_USED: {
             const {names} = action.payload;
@@ -67,7 +69,7 @@ export default (state = initialState, action) => {
             }
 
             const istate = immutable.wrap(state);
-            names.forEach(name => istate.del(state, ["names", name]));
+            names.forEach(name => istate.del(["names", name]));
             return istate.value();
         }
 
