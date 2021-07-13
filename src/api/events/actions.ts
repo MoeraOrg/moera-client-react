@@ -44,6 +44,7 @@ import {
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent
 } from "api/events/api-types";
+import { ActionBase } from "state/action-base";
 
 export const EVENT_HOME_SUBSCRIBED = "EVENT_HOME_SUBSCRIBED";
 export const EVENT_NODE_PROFILE_UPDATED = "EVENT_NODE_PROFILE_UPDATED";
@@ -94,7 +95,7 @@ export const EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED = "EVENT_HOME_REMOTE_NODE_AVA
 type EventSource = "HOME" | "NODE" | "RECEIVER";
 type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
 
-interface EventAction<E extends {type: string}> {
+interface EventAction<E extends {type: string}> extends ActionBase<E["type"]> {
     type: EventActionType<E["type"]>;
     payload: Omit<E, "type">;
 }
