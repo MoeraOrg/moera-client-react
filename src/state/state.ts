@@ -19,6 +19,7 @@ import { OwnerState } from "state/owner/state";
 import { PeopleState } from "state/people/state";
 import { PostingReplyState } from "state/postingreply/state";
 import { PostingsState } from "state/postings/state";
+import { ProfileState } from "state/profile/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -42,4 +43,5 @@ export interface ClientState {
     people: PeopleState;
     postingReply: PostingReplyState;
     postings: PostingsState;
+    profile: ProfileState;
 }

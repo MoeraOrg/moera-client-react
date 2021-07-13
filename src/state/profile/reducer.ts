@@ -28,8 +28,11 @@ import {
     PROFILE_UPDATE_FAILED,
     PROFILE_UPDATE_SUCCEEDED
 } from "state/profile/actions";
+import { ProfileInfoState, ProfileState } from "state/profile/state";
+import { ClientAction } from "state/action";
+import { cloneOperations } from "util/misc";
 
-const emptyProfileInfo = {
+const emptyProfileInfo: ProfileInfoState = {
     nodeName: null,
     fullName: null,
     gender: null,
@@ -75,7 +78,7 @@ const initialState = {
     updating: false
 };
 
-export default (state = initialState, action) => {
+export default (state: ProfileState = initialState, action: ClientAction): ProfileState => {
     switch (action.type) {
         case PROFILE_LOAD:
             return {
@@ -93,7 +96,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 ...cloneDeep(emptyProfileInfo),
-                ...action.payload.profile,
+                fullName: action.payload.profile.fullName ?? null,
+                gender: action.payload.profile.gender ?? null,
+                email: action.payload.profile.email ?? null,
+                title: action.payload.profile.title ?? null,
+                bioSrc: action.payload.profile.bioSrc ?? null,
+                bioHtml: action.payload.profile.bioHtml ?? null,
+                avatar: cloneDeep(action.payload.profile.avatar) ?? null,
+                operations: cloneOperations(action.payload.profile.operations, emptyProfileInfo.operations),
                 loading: false,
                 loaded: true
             };
