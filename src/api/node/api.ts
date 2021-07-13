@@ -1,6 +1,7 @@
 import schema from "api/schema";
 import { JSONSchemaType } from "ajv";
 import * as API from "./api-types";
+import { SourceFormat } from "./api-types";
 
 const ResultType: JSONSchemaType<API.Result> = {
     type: "object",
@@ -954,7 +955,7 @@ const FeedSliceInfoType: JSONSchemaType<API.FeedSliceInfo> = {
 
 export const FeedSliceInfo = schema(FeedSliceInfoType);
 
-const ChoiceType: JSONSchemaType<API.Choice> = {
+const ChoiceType: JSONSchemaType<API.Choice<SourceFormat>> = {
     type: "object",
     properties: {
         "value": {

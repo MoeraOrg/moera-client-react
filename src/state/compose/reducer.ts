@@ -104,7 +104,7 @@ function draftToPosting(draft: DraftInfo): PostingInfo {
     return posting;
 }
 
-export default (state: ComposeState = initialState, action: ClientAction) => {
+export default (state: ComposeState = initialState, action: ClientAction): ComposeState => {
     switch (action.type) {
         case GO_TO_PAGE:
             if (action.payload.page === PAGE_COMPOSE) {

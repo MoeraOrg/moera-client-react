@@ -10,7 +10,7 @@ export interface ClientSettingTypeModifiers {
     multiline?: boolean;
     never?: boolean;
     always?: boolean;
-    items?: Choice[];
+    items?: Choice<string>[];
 }
 
 interface ClientSettingMetaInfo {

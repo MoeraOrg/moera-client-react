@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage, CarteInfo } from "api/node/api-types";
+import { AvatarImage, AvatarInfo, CarteInfo } from "api/node/api-types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
 type ConnectToHomeAction = ActionWithPayload<typeof CONNECT_TO_HOME, {
@@ -136,9 +136,9 @@ export const homeAvatarsLoad = (): HomeAvatarsLoadAction => ({
 
 export const HOME_AVATARS_LOADED = "HOME_AVATARS_LOADED";
 type HomeAvatarsLoadedAction = ActionWithPayload<typeof HOME_AVATARS_LOADED, {
-    avatars: AvatarImage[];
+    avatars: AvatarInfo[];
 }>;
-export const homeAvatarsLoaded = (avatars: AvatarImage[]): HomeAvatarsLoadedAction => ({
+export const homeAvatarsLoaded = (avatars: AvatarInfo[]): HomeAvatarsLoadedAction => ({
     type: HOME_AVATARS_LOADED,
     payload: {avatars}
 });

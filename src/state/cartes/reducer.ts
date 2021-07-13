@@ -14,7 +14,7 @@ const initialState = {
     clockOffsetWarned: false
 };
 
-export default (state: CartesState = initialState, action: ClientAction) => {
+export default (state: CartesState = initialState, action: ClientAction): CartesState => {
     switch (action.type) {
         case CONNECTED_TO_HOME:
             return {

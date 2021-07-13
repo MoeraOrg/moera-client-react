@@ -166,7 +166,7 @@ function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
         .value();
 }
 
-export default (state: DetailedPostingState = initialState, action: ClientAction) => {
+export default (state: DetailedPostingState = initialState, action: ClientAction): DetailedPostingState => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);

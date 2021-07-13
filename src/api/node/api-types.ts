@@ -328,14 +328,14 @@ export interface FeedSliceInfo {
     stories: StoryInfo[];
 }
 
-export interface Choice {
-    value: string;
+export interface Choice<T> {
+    value: T;
     title: string;
 }
 
 export interface PostingFeatures {
     subjectPresent: boolean;
-    sourceFormats: Choice[];
+    sourceFormats: Choice<SourceFormat>[];
 }
 
 export interface SettingInfo {

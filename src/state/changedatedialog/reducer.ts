@@ -14,7 +14,7 @@ const initialState = {
     changing: false
 };
 
-export default (state: ChangeDateDialogState = initialState, action: ClientAction) => {
+export default (state: ChangeDateDialogState = initialState, action: ClientAction): ChangeDateDialogState => {
     switch (action.type) {
         case OPEN_CHANGE_DATE_DIALOG:
             return {

@@ -12,7 +12,7 @@ const initialState = {
     variant: "primary"
 };
 
-export default (state: ConfirmBoxState = initialState, action: ClientAction) => {
+export default (state: ConfirmBoxState = initialState, action: ClientAction): ConfirmBoxState => {
     switch (action.type) {
         case CONFIRM_BOX:
             return {

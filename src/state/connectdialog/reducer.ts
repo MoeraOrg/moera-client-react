@@ -20,7 +20,7 @@ const initialState = {
     emailHint: ""
 };
 
-export default (state: ConnectDialogState = initialState, action: ClientAction) => {
+export default (state: ConnectDialogState = initialState, action: ClientAction): ConnectDialogState => {
     switch (action.type) {
         case OPEN_CONNECT_DIALOG:
             return {

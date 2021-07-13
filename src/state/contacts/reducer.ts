@@ -16,7 +16,7 @@ const initialState = {
     contacts: []
 }
 
-export default (state: ContactsState = initialState, action: ClientAction) => {
+export default (state: ContactsState = initialState, action: ClientAction): ContactsState => {
     switch (action.type) {
         case CONTACTS_LOAD:
             if (state.queries[action.payload.query]) {
@@ -44,7 +44,7 @@ export default (state: ContactsState = initialState, action: ClientAction) => {
             const index = state.contacts.findIndex(c => c.nodeName === action.payload.name);
             if (index >= 0) {
                 return immutable.update(state, ["contacts", index],
-                        c => ({...c, fullName: action.payload.fullName}));
+                        c => ({...c, fullName: action.payload.fullName})).value();
             }
             return state;
         }
@@ -53,7 +53,7 @@ export default (state: ContactsState = initialState, action: ClientAction) => {
             const index = state.contacts.findIndex(c => c.nodeName === action.payload.name);
             if (index >= 0) {
                 return immutable.update(state, ["contacts", index],
-                    c => ({...c, avatar: cloneDeep(action.payload.avatar)}));
+                    c => ({...c, avatar: cloneDeep(action.payload.avatar)})).value();
             }
             return state;
         }

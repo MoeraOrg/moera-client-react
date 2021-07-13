@@ -16,6 +16,8 @@ import {
 } from "state/home/actions";
 import { toWsUrl } from "util/url";
 import { PROFILE_AVATAR_CREATED, PROFILE_AVATAR_DELETED } from "state/profile/actions";
+import { HomeState } from "state/home/state";
+import { ClientAction } from "state/action";
 
 const emptyConnection = {
     connecting: false,
@@ -47,7 +49,7 @@ const initialState = {
     roots: []
 };
 
-export default (state = initialState, action) => {
+export default (state: HomeState = initialState, action: ClientAction): HomeState => {
     switch (action.type) {
         case CONNECT_TO_HOME:
             return {

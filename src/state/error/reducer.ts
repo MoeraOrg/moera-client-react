@@ -8,7 +8,7 @@ const initialState = {
     visible: false
 };
 
-export default (state: ErrorState = initialState, action: ClientAction) => {
+export default (state: ErrorState = initialState, action: ClientAction): ErrorState => {
     switch (action.type) {
         case ERROR_SHOW:
             const {message, messageVerbose} = action.payload;

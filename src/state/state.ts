@@ -7,6 +7,8 @@ import { ContactsState } from "state/contacts/state";
 import { DetailedPostingState } from "state/detailedposting/state";
 import { ErrorState } from "state/error/state";
 import { FeedsState } from "state/feeds/state";
+import { HomeState } from "state/home/state";
+import { FlashBoxState } from "state/flashbox/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -18,4 +20,6 @@ export interface ClientState {
     detailedPosting: DetailedPostingState;
     error: ErrorState;
     feeds: FeedsState;
+    flashBox: FlashBoxState;
+    home: HomeState;
 }
