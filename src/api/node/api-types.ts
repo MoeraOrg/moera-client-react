@@ -166,7 +166,7 @@ export interface PostingText {
     updateInfo?: UpdateInfo | null;
 }
 
-export interface PostingInfo {
+export interface PostingInfoBase<B> {
     id: string;
     revisionId: string;
     receiverRevisionId?: string | null;
@@ -178,10 +178,10 @@ export interface PostingInfo {
     ownerName: string;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
-    bodyPreview?: string | null;
+    bodyPreview?: B | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    body: Body | string;
+    body: B;
     bodyFormat?: BodyFormat | null;
     heading: string;
     updateInfo?: UpdateInfo | null;
@@ -208,6 +208,10 @@ export interface PostingInfo {
     totalComments?: number | null;
     subscriptions: PostingSubscriptionsInfo | null;
 }
+
+export type PostingInfo = PostingInfoBase<Body>;
+
+export type EncodedPostingInfo = PostingInfoBase<string>;
 
 export interface FeedInfo {
     feedName: string;
@@ -255,7 +259,7 @@ interface CommentInfoBase<B> {
     postingRevisionId: string;
     revisionId: string;
     totalRevisions: number;
-    bodyPreview?: B;
+    bodyPreview?: B | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
     body: B;
@@ -297,7 +301,7 @@ export interface StoryAttributes {
     read?: boolean | null;
 }
 
-export interface StoryInfo {
+export interface StoryInfoBase<B> {
     id: string;
     feedName: string;
     storyType: StoryType;
@@ -307,8 +311,8 @@ export interface StoryInfo {
     moment: number;
     viewed?: boolean | null;
     read?: boolean | null;
-    posting?: PostingInfo | null;
-    comment?: CommentInfo | null;
+    posting?: PostingInfoBase<B> | null;
+    comment?: CommentInfoBase<B> | null;
     summaryAvatar?: AvatarImage | null;
     summary: string;
     trackingId: string;
@@ -322,10 +326,13 @@ export interface StoryInfo {
     } | null;
 }
 
+export type EncodedStoryInfo = StoryInfoBase<string>;
+export type StoryInfo = StoryInfoBase<Body>;
+
 export interface FeedSliceInfo {
     before: number;
     after: number;
-    stories: StoryInfo[];
+    stories: EncodedStoryInfo[];
 }
 
 export interface Choice<T> {

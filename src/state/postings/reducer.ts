@@ -29,16 +29,19 @@ import { immutableSetSubscriptionId } from "state/subscriptions/util";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
+import { PostingsState } from "state/postings/state";
+import { ClientAction } from "state/action";
+import { FeedReference, PostingInfo, StoryInfo } from "api/node/api-types";
 
 const initialState = {
 };
 
-function safeguard(posting) {
+function safeguard(posting: PostingInfo): PostingInfo {
     const iposting = immutable.wrap(posting);
-    if (!posting.bodyPreview.text) {
+    if (posting.bodyPreview == null || !posting.bodyPreview.text) {
         iposting.set("body.previewText", safePreviewHtml(posting.body.text));
     }
-    if (posting.bodyPreview.subject) {
+    if (posting.bodyPreview != null && posting.bodyPreview.subject) {
         iposting.set("bodyPreview.subjectHtml", replaceEmojis(htmlEntities(posting.bodyPreview.subject)));
     }
     if (posting.body.subject) {
@@ -50,15 +53,15 @@ function safeguard(posting) {
         .value();
 }
 
-function toFeedReference(story) {
-    const ref = {...story};
+function toFeedReference(story: StoryInfo): FeedReference {
+    const ref: any = {...story};
     ref.storyId = story.id;
     delete ref.id;
     delete ref.posting;
     return ref;
 }
 
-function outsideIn(story) {
+function outsideIn(story: StoryInfo): PostingInfo | null {
     const posting = story.posting;
     if (posting == null || posting.body == null) {
         return null;
@@ -67,7 +70,7 @@ function outsideIn(story) {
     return posting;
 }
 
-export default (state = initialState, action) => {
+export default (state: PostingsState = initialState, action: ClientAction): PostingsState => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return {};
@@ -81,9 +84,9 @@ export default (state = initialState, action) => {
                 .filter(p => p != null)
                 .forEach(
                     p => istate
-                        .set([p.id, "posting"], safeguard(p))
-                        .set([p.id, "deleting"], false)
-                        .set([p.id, "verificationStatus"], "none")
+                        .set([p!.id, "posting"], safeguard(p!))
+                        .set([p!.id, "deleting"], false)
+                        .set([p!.id, "verificationStatus"], "none")
                 );
             return istate.value();
         }

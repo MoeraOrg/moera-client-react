@@ -451,7 +451,7 @@ const PostingSubscriptionsInfo: JSONSchemaType<API.PostingSubscriptionsInfo> = {
     additionalProperties: false
 };
 
-const PostingInfoType: JSONSchemaType<API.PostingInfo> = {
+const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     type: "object",
     properties: {
         "id": {
@@ -840,7 +840,7 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
 
 export const CommentInfo = schema(CommentInfoType);
 
-const StoryInfoType: JSONSchemaType<API.StoryInfo> = {
+const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
     type: "object",
     properties: {
         "id": {

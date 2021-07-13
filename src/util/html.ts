@@ -101,14 +101,14 @@ export function replaceEmojis(html: string): string {
     return current;
 }
 
-export function safePreviewHtml(html: string): string {
+export function safePreviewHtml(html: string | null | undefined): string {
     if (!html) {
         return "";
     }
     return sanitizeHtml(replaceEmojis(html), SAFE_PREVIEW_HTML_SETTINGS);
 }
 
-export function safeHtml(html: string): string {
+export function safeHtml(html: string | null | undefined): string {
     if (!html) {
         return "";
     }
