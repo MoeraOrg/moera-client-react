@@ -1,4 +1,4 @@
-import { Action } from "redux";
+import { Action } from 'redux';
 
 export const POST_INIT = "POST_INIT";
 type PostInitAction = Action<typeof POST_INIT>;

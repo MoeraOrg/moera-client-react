@@ -1,4 +1,4 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import {
     FeedReference,
     PostingInfo,

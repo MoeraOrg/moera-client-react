@@ -1,6 +1,7 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
 import { ContactInfo } from "api/node/api-types";
-import { Action } from "redux";
 
 export const CONTACTS_PREPARE = "CONTACTS_PREPARE";
 type ContactsPrepareAction = ActionWithPayload<typeof CONTACTS_PREPARE, {

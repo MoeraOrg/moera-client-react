@@ -1,6 +1,7 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
 import { AvatarImage } from "api/node/api-types";
-import { Action } from "redux";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {

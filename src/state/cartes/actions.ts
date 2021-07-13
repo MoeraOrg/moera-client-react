@@ -1,6 +1,7 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
 import { CarteInfo } from "api/node/api-types";
-import { Action } from "redux";
 
 export const CARTES_LOAD = "CARTES_LOAD";
 type CartesLoadAction = Action<typeof CARTES_LOAD>;

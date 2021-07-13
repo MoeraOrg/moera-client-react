@@ -1,6 +1,7 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
 import { AvatarAttributes, AvatarImage, AvatarInfo, ProfileAttributes, ProfileInfo } from "api/node/api-types";
-import { Action } from "redux";
 
 export const PROFILE_LOAD = "PROFILE_LOAD";
 type ProfileLoadAction = ActionWithPayload<typeof PROFILE_LOAD, {

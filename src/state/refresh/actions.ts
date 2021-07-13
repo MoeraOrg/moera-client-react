@@ -1,4 +1,4 @@
-import { Action } from "redux";
+import { Action } from 'redux';
 
 export const REFRESH_SHOW = "REFRESH_SHOW";
 type RefreshShowAction = Action<typeof REFRESH_SHOW>;

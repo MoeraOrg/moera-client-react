@@ -1,4 +1,4 @@
-import { Action } from "redux";
+import { Action } from 'redux';
 
 export const OPEN_QUICK_TIPS = "OPEN_QUICK_TIPS";
 type OpenQuickTipsAction = Action<typeof OPEN_QUICK_TIPS>;

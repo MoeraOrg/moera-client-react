@@ -1,5 +1,6 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
-import { Action } from "redux";
 
 export const SHARE_DIALOG_PREPARE = "SHARE_DIALOG_PREPARE";
 type ShareDialogPrepareAction = ActionWithPayload<typeof SHARE_DIALOG_PREPARE, {

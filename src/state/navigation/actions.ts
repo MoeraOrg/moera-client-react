@@ -1,3 +1,5 @@
+import { Action } from 'redux';
+
 import {
     Page,
     PAGE_COMPOSE,
@@ -9,7 +11,6 @@ import {
     PAGE_TIMELINE
 } from "state/navigation/pages";
 import { ActionWithPayload } from "state/action-base";
-import { Action } from "redux";
 
 export const INIT_STORAGE = "INIT_STORAGE";
 type InitStorageAction = ActionWithPayload<typeof INIT_STORAGE, {

@@ -1,6 +1,7 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
 import { ReactionInfo, ReactionTotalInfo } from "api/node/api-types";
-import { Action } from "redux";
 
 export const OPEN_REACTIONS_DIALOG = "OPEN_REACTIONS_DIALOG";
 type OpenReactionsDialogAction = ActionWithPayload<typeof OPEN_REACTIONS_DIALOG, {

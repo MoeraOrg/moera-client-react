@@ -1,5 +1,6 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
-import { Action } from "redux";
 
 export const MESSAGE_BOX = "MESSAGE_BOX";
 type MessageBoxAction = ActionWithPayload<typeof MESSAGE_BOX, {

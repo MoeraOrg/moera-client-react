@@ -1,5 +1,6 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
-import { Action } from "redux";
 
 export const POSTING_REPLY = "POSTING_REPLY";
 type PostingReplyAction = ActionWithPayload<typeof POSTING_REPLY, {

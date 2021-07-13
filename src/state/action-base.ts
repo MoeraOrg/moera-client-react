@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+
 import { AvatarImage } from "api/node/api-types";
 
 export interface ActionContext {

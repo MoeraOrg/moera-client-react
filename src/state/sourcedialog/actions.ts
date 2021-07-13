@@ -1,5 +1,6 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
-import { Action } from "redux";
 
 export const OPEN_SOURCE_DIALOG = "OPEN_SOURCE_DIALOG";
 type OpenSourceDialogAction = ActionWithPayload<typeof OPEN_SOURCE_DIALOG, {

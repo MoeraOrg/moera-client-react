@@ -1,6 +1,7 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-base";
 import { AvatarImage, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo } from "api/node/api-types";
-import { Action } from "redux";
 
 export const FEED_GENERAL_LOAD = "FEED_GENERAL_LOAD";
 type FeedGeneralLoadAction = ActionWithPayload<typeof FEED_GENERAL_LOAD, {
