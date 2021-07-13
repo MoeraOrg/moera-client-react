@@ -1,5 +1,6 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { PeopleGeneralInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { Action } from "redux";
 
 export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";
 type PeopleGoToTabAction = ActionWithPayload<typeof PEOPLE_GO_TO_TAB, {
@@ -11,7 +12,7 @@ export const peopleGoToTab = (tab: string): PeopleGoToTabAction => ({
 });
 
 export const PEOPLE_GENERAL_LOAD = "PEOPLE_GENERAL_LOAD";
-type PeopleGeneralLoadAction = ActionBase<typeof PEOPLE_GENERAL_LOAD>;
+type PeopleGeneralLoadAction = Action<typeof PEOPLE_GENERAL_LOAD>;
 export const peopleGeneralLoad = (): PeopleGeneralLoadAction => ({
     type: PEOPLE_GENERAL_LOAD
 });
@@ -26,13 +27,13 @@ export const peopleGeneralLoaded = (info: PeopleGeneralInfo): PeopleGeneralLoade
 });
 
 export const PEOPLE_GENERAL_LOAD_FAILED = "PEOPLE_GENERAL_LOAD_FAILED";
-type PeopleGeneralLoadFailedAction = ActionBase<typeof PEOPLE_GENERAL_LOAD_FAILED>;
+type PeopleGeneralLoadFailedAction = Action<typeof PEOPLE_GENERAL_LOAD_FAILED>;
 export const peopleGeneralLoadFailed = (): PeopleGeneralLoadFailedAction => ({
     type: PEOPLE_GENERAL_LOAD_FAILED
 });
 
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
-type SubscribersLoadAction = ActionBase<typeof SUBSCRIBERS_LOAD>;
+type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
     type: SUBSCRIBERS_LOAD
 });
@@ -47,13 +48,13 @@ export const subscribersLoaded = (list: SubscriberInfo[]): SubscribersLoadedActi
 });
 
 export const SUBSCRIBERS_LOAD_FAILED = "SUBSCRIBERS_LOAD_FAILED";
-type SubscribersLoadFailedAction = ActionBase<typeof SUBSCRIBERS_LOAD_FAILED>;
+type SubscribersLoadFailedAction = Action<typeof SUBSCRIBERS_LOAD_FAILED>;
 export const subscribersLoadFailed = (): SubscribersLoadFailedAction => ({
     type: SUBSCRIBERS_LOAD_FAILED
 });
 
 export const SUBSCRIPTIONS_LOAD = "SUBSCRIPTIONS_LOAD";
-type SubscriptionsLoadAction = ActionBase<typeof SUBSCRIPTIONS_LOAD>;
+type SubscriptionsLoadAction = Action<typeof SUBSCRIPTIONS_LOAD>;
 export const subscriptionsLoad = (): SubscriptionsLoadAction => ({
     type: SUBSCRIPTIONS_LOAD
 });
@@ -68,7 +69,7 @@ export const subscriptionsLoaded = (list: SubscriptionInfo[]): SubscriptionsLoad
 });
 
 export const SUBSCRIPTIONS_LOAD_FAILED = "SUBSCRIPTIONS_LOAD_FAILED";
-type SubscriptionsLoadFailedAction = ActionBase<typeof SUBSCRIPTIONS_LOAD_FAILED>;
+type SubscriptionsLoadFailedAction = Action<typeof SUBSCRIPTIONS_LOAD_FAILED>;
 export const subscriptionsLoadFailed = (): SubscriptionsLoadFailedAction => ({
     type: SUBSCRIPTIONS_LOAD_FAILED
 });

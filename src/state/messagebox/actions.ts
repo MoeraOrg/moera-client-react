@@ -1,4 +1,5 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const MESSAGE_BOX = "MESSAGE_BOX";
 type MessageBoxAction = ActionWithPayload<typeof MESSAGE_BOX, {
@@ -11,7 +12,7 @@ export const messageBox = (message: string, onClose: any = null): MessageBoxActi
 });
 
 export const CLOSE_MESSAGE_BOX = "CLOSE_MESSAGE_BOX";
-type CloseMessageBoxAction = ActionBase<typeof CLOSE_MESSAGE_BOX>;
+type CloseMessageBoxAction = Action<typeof CLOSE_MESSAGE_BOX>;
 export const closeMessageBox = (): CloseMessageBoxAction => ({
     type: CLOSE_MESSAGE_BOX
 });

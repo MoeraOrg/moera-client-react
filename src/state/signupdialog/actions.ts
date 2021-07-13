@@ -1,4 +1,5 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export type SignUpStage = 0 | 1 | 2 | 3 | 4;
 
@@ -9,13 +10,13 @@ export const SIGN_UP_STAGE_PROFILE = 3;
 export const SIGN_UP_STAGE_NAME = 4;
 
 export const OPEN_SIGN_UP_DIALOG = "OPEN_SIGN_UP_DIALOG";
-type OpenSignUpDialogAction = ActionBase<typeof OPEN_SIGN_UP_DIALOG>;
+type OpenSignUpDialogAction = Action<typeof OPEN_SIGN_UP_DIALOG>;
 export const openSignUpDialog = (): OpenSignUpDialogAction => ({
     type: OPEN_SIGN_UP_DIALOG
 });
 
 export const CANCEL_SIGN_UP_DIALOG = "CANCEL_SIGN_UP_DIALOG";
-type CancelSignUpDialogAction = ActionBase<typeof CANCEL_SIGN_UP_DIALOG>;
+type CancelSignUpDialogAction = Action<typeof CANCEL_SIGN_UP_DIALOG>;
 export const cancelSignUpDialog = (): CancelSignUpDialogAction => ({
     type: CANCEL_SIGN_UP_DIALOG
 });
@@ -36,7 +37,7 @@ export const signUp = (provider: string, name: string, domain: string, password:
 });
 
 export const SIGNED_UP = "SIGNED_UP";
-type SignedUpAction = ActionBase<typeof SIGNED_UP>;
+type SignedUpAction = Action<typeof SIGNED_UP>;
 export const signedUp = (): SignedUpAction => ({
     type: SIGNED_UP
 });

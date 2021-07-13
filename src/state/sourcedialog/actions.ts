@@ -1,4 +1,5 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const OPEN_SOURCE_DIALOG = "OPEN_SOURCE_DIALOG";
 type OpenSourceDialogAction = ActionWithPayload<typeof OPEN_SOURCE_DIALOG, {
@@ -13,7 +14,7 @@ export const openSourceDialog = (nodeName: string, postingId: string,
 });
 
 export const CLOSE_SOURCE_DIALOG = "CLOSE_SOURCE_DIALOG";
-type CloseSourceDialogAction = ActionBase<typeof CLOSE_SOURCE_DIALOG>;
+type CloseSourceDialogAction = Action<typeof CLOSE_SOURCE_DIALOG>;
 export const closeSourceDialog = (): CloseSourceDialogAction => ({
     type: CLOSE_SOURCE_DIALOG
 });
@@ -28,7 +29,7 @@ export const sourceDialogLoaded = (text: string): SourceDialogLoadedAction => ({
 });
 
 export const SOURCE_DIALOG_LOAD_FAILED = "SOURCE_DIALOG_LOAD_FAILED";
-type SourceDialogLoadFailedAction = ActionBase<typeof SOURCE_DIALOG_LOAD_FAILED>;
+type SourceDialogLoadFailedAction = Action<typeof SOURCE_DIALOG_LOAD_FAILED>;
 export const sourceDialogLoadFailed = (): SourceDialogLoadFailedAction => ({
     type: SOURCE_DIALOG_LOAD_FAILED
 });

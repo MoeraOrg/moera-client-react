@@ -1,4 +1,5 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const CONFIRM_BOX = "CONFIRM_BOX";
 type ConfirmBoxAction = ActionWithPayload<typeof CONFIRM_BOX, {
@@ -16,7 +17,7 @@ export const confirmBox = (message: string, yes: string = "Yes", no: string = "N
 });
 
 export const CLOSE_CONFIRM_BOX = "CLOSE_CONFIRM_BOX";
-type CloseConfirmBoxAction = ActionBase<typeof CLOSE_CONFIRM_BOX>;
+type CloseConfirmBoxAction = Action<typeof CLOSE_CONFIRM_BOX>;
 export const closeConfirmBox = (): CloseConfirmBoxAction => ({
     type: CLOSE_CONFIRM_BOX
 });

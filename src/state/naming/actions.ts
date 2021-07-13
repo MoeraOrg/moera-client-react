@@ -1,4 +1,5 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const NAMING_NAMES_USED = "NAMING_NAMES_USED";
 type NamingNamesUsedAction = ActionWithPayload<typeof NAMING_NAMES_USED, {
@@ -48,7 +49,7 @@ export const namingNamesPurge = (names: string[]): NamingNamesPurgeAction => ({
 });
 
 export const NAMING_NAMES_MAINTENANCE = "NAMING_NAMES_MAINTENANCE";
-type NamingNamesMaintenanceAction = ActionBase<typeof NAMING_NAMES_MAINTENANCE>;
+type NamingNamesMaintenanceAction = Action<typeof NAMING_NAMES_MAINTENANCE>;
 export const namingNamesMaintenance = (): NamingNamesMaintenanceAction => ({
     type: NAMING_NAMES_MAINTENANCE
 });

@@ -1,5 +1,6 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { AvatarImage, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo } from "api/node/api-types";
+import { Action } from "redux";
 
 export const FEED_GENERAL_LOAD = "FEED_GENERAL_LOAD";
 type FeedGeneralLoadAction = ActionWithPayload<typeof FEED_GENERAL_LOAD, {
@@ -242,13 +243,13 @@ export const feedSliceUpdate = (feedName: string, stories: StoryInfo[],
 });
 
 export const FEEDS_UNSET = "FEEDS_UNSET";
-type FeedsUnsetAction = ActionBase<typeof FEEDS_UNSET>;
+type FeedsUnsetAction = Action<typeof FEEDS_UNSET>;
 export const feedsUnset = (): FeedsUnsetAction => ({
     type: FEEDS_UNSET
 });
 
 export const FEEDS_UPDATE = "FEEDS_UPDATE";
-type FeedsUpdateAction = ActionBase<typeof FEEDS_UPDATE>;
+type FeedsUpdateAction = Action<typeof FEEDS_UPDATE>;
 export const feedsUpdate = (): FeedsUpdateAction => ({
     type: FEEDS_UPDATE
 });

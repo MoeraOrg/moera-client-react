@@ -1,5 +1,6 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { AvatarImage } from "api/node/api-types";
+import { Action } from "redux";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
@@ -74,7 +75,7 @@ export const nodeCardSubscriptionSet = (nodeName: string, subscriberId: string):
 });
 
 export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
-type NodeCardsUnsetAction = ActionBase<typeof NODE_CARDS_UNSET>;
+type NodeCardsUnsetAction = Action<typeof NODE_CARDS_UNSET>;
 export const nodeCardsUnset = (): NodeCardsUnsetAction => ({
     type: NODE_CARDS_UNSET
 });

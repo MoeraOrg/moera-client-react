@@ -1,8 +1,9 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { CarteInfo } from "api/node/api-types";
+import { Action } from "redux";
 
 export const CARTES_LOAD = "CARTES_LOAD";
-type CartesLoadAction = ActionBase<typeof CARTES_LOAD>;
+type CartesLoadAction = Action<typeof CARTES_LOAD>;
 export const cartesLoad = (): CartesLoadAction => ({
     type: CARTES_LOAD
 });
@@ -19,13 +20,13 @@ export const cartesSet = (cartesIp: string, cartes: CarteInfo[], clockOffset: nu
 });
 
 export const CARTES_PURGE_EXPIRED = "CARTES_PURGE_EXPIRED";
-type CartesPurgeExpiredAction = ActionBase<typeof CARTES_PURGE_EXPIRED>;
+type CartesPurgeExpiredAction = Action<typeof CARTES_PURGE_EXPIRED>;
 export const cartesPurgeExpired = (): CartesPurgeExpiredAction => ({
     type: CARTES_PURGE_EXPIRED
 });
 
 export const CLOCK_OFFSET_WARN = "CLOCK_OFFSET_WARN";
-type ClockOffsetWarnAction = ActionBase<typeof CLOCK_OFFSET_WARN>;
+type ClockOffsetWarnAction = Action<typeof CLOCK_OFFSET_WARN>;
 export const clockOffsetWarn = (): ClockOffsetWarnAction => ({
     type: CLOCK_OFFSET_WARN
 });

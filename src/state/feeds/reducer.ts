@@ -31,13 +31,17 @@ import {
 import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
-import { PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
+import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { replaceEmojis } from "util/html";
+import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
+import { ClientAction } from "state/action";
+import { StoryInfo } from "api/node/api-types";
+import { WithContext } from "state/action-base";
 
 const initialState = {
 };
 
-function getFeed(state, feedName) {
+function getFeed(state: FeedsState, feedName: string): {istate: WrappedObject<FeedsState>, feed: FeedState} {
     const istate = immutable.wrap(state);
     let feed = state[feedName];
     if (feed == null) {
@@ -47,13 +51,13 @@ function getFeed(state, feedName) {
     return {istate, feed};
 }
 
-const PAGE_FEEDS = new Map([
+const PAGE_FEEDS = new Map<Page, string>([
     [PAGE_TIMELINE, "timeline"],
     [PAGE_NEWS, "news"]
 ]);
 
-function extractStory(story) {
-    const t = {...story};
+function extractStory(story: StoryInfo): ExtStoryInfo {
+    const t: any = {...story};
     delete t.feedName;
     delete t.posting;
     if (story.posting) {
@@ -67,7 +71,8 @@ function extractStory(story) {
     return t;
 }
 
-function updateScrollingOnActive(istate, feedName, feed, anchor) {
+function updateScrollingOnActive(istate: WrappedObject<FeedsState>, feedName: string, feed: FeedState,
+                                 anchor: number | null): void {
     if (anchor != null) {
         if (anchor <= feed.before && anchor > feed.after) {
             istate.assign([feedName], {
@@ -89,7 +94,7 @@ function updateScrollingOnActive(istate, feedName, feed, anchor) {
     }
 }
 
-function updateScrollingOnInactive(istate, feedName, feed) {
+function updateScrollingOnInactive(istate: WrappedObject<FeedsState>, feedName: string, feed: FeedState): void {
     if (feed.scrollingActive) {
         istate.assign([feedName], {
             anchor: feed.at,
@@ -98,7 +103,7 @@ function updateScrollingOnInactive(istate, feedName, feed) {
     }
 }
 
-export default (state = initialState, action) => {
+export default (state: FeedsState = initialState, action: WithContext<ClientAction>) => {
     switch (action.type) {
         case INIT_FROM_LOCATION: {
             const istate = immutable.wrap(state);

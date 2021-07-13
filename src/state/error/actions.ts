@@ -1,4 +1,5 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const ERROR_THROWN = "ERROR_THROWN";
 type ErrorThrownAction = ActionWithPayload<typeof ERROR_THROWN, {
@@ -25,13 +26,13 @@ export const errorShow = (message: string, messageVerbose: string = ""): ErrorSh
 });
 
 export const ERROR_DISMISS = "ERROR_DISMISS";
-type ErrorDismissAction = ActionBase<typeof ERROR_DISMISS>;
+type ErrorDismissAction = Action<typeof ERROR_DISMISS>;
 export const errorDismiss = (): ErrorDismissAction => ({
     type: ERROR_DISMISS
 });
 
 export const ERROR_AUTH_INVALID = "ERROR_AUTH_INVALID";
-type ErrorAuthInvalidAction = ActionBase<typeof ERROR_AUTH_INVALID>;
+type ErrorAuthInvalidAction = Action<typeof ERROR_AUTH_INVALID>;
 export const errorAuthInvalid = (): ErrorAuthInvalidAction => ({
     type: ERROR_AUTH_INVALID
 });

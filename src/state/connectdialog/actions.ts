@@ -1,15 +1,16 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
 
 export const OPEN_CONNECT_DIALOG = "OPEN_CONNECT_DIALOG";
-type OpenConnectDialogAction = ActionBase<typeof OPEN_CONNECT_DIALOG>;
+type OpenConnectDialogAction = Action<typeof OPEN_CONNECT_DIALOG>;
 export const openConnectDialog = (): OpenConnectDialogAction => ({
     type: OPEN_CONNECT_DIALOG
 });
 
 export const CANCEL_CONNECT_DIALOG = "CANCEL_CONNECT_DIALOG";
-type CancelConnectDialogAction = ActionBase<typeof CANCEL_CONNECT_DIALOG>;
+type CancelConnectDialogAction = Action<typeof CANCEL_CONNECT_DIALOG>;
 export const cancelConnectDialog = (): CancelConnectDialogAction => ({
     type: CANCEL_CONNECT_DIALOG
 });
@@ -46,7 +47,7 @@ export const connectDialogResetPassword = (location: string): ConnectDialogReset
 });
 
 export const CONNECT_DIALOG_RESET_PASSWORD_FAILED = "CONNECT_DIALOG_RESET_PASSWORD_FAILED";
-type ConnectDialogResetPasswordFailedAction = ActionBase<typeof CONNECT_DIALOG_RESET_PASSWORD_FAILED>;
+type ConnectDialogResetPasswordFailedAction = Action<typeof CONNECT_DIALOG_RESET_PASSWORD_FAILED>;
 export const connectDialogResetPasswordFailed = (): ConnectDialogResetPasswordFailedAction => ({
     type: CONNECT_DIALOG_RESET_PASSWORD_FAILED
 });

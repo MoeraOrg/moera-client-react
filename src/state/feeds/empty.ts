@@ -1,3 +1,5 @@
+import { FeedState } from "state/feeds/state";
+
 export const emptyInfo = {
     subscriberId: null,
     operations: {
@@ -5,7 +7,7 @@ export const emptyInfo = {
     }
 };
 
-export const emptyFeed = {
+export const emptyFeed: FeedState = {
     loadingGeneral: false,
     loadedGeneral: false,
     subscribing: false,

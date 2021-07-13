@@ -1,5 +1,6 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { ReactionInfo, ReactionTotalInfo } from "api/node/api-types";
+import { Action } from "redux";
 
 export const OPEN_REACTIONS_DIALOG = "OPEN_REACTIONS_DIALOG";
 type OpenReactionsDialogAction = ActionWithPayload<typeof OPEN_REACTIONS_DIALOG, {
@@ -15,19 +16,19 @@ export const openReactionsDialog = (nodeName: string, postingId: string, comment
 });
 
 export const CLOSE_REACTIONS_DIALOG = "CLOSE_REACTIONS_DIALOG";
-type CloseReactionsDialogAction = ActionBase<typeof CLOSE_REACTIONS_DIALOG>;
+type CloseReactionsDialogAction = Action<typeof CLOSE_REACTIONS_DIALOG>;
 export const closeReactionsDialog = (): CloseReactionsDialogAction => ({
     type: CLOSE_REACTIONS_DIALOG
 });
 
 export const REACTIONS_DIALOG_UNSET = "REACTIONS_DIALOG_UNSET";
-type ReactionsDialogUnsetAction = ActionBase<typeof REACTIONS_DIALOG_UNSET>;
+type ReactionsDialogUnsetAction = Action<typeof REACTIONS_DIALOG_UNSET>;
 export const reactionsDialogUnset = (): ReactionsDialogUnsetAction => ({
     type: REACTIONS_DIALOG_UNSET
 });
 
 export const REACTIONS_DIALOG_PAST_REACTIONS_LOAD = "REACTIONS_DIALOG_PAST_REACTIONS_LOAD";
-type ReactionsDialogPastReactionsLoadAction = ActionBase<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD>;
+type ReactionsDialogPastReactionsLoadAction = Action<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD>;
 export const reactionsDialogPastReactionsLoad = (): ReactionsDialogPastReactionsLoadAction => ({
     type: REACTIONS_DIALOG_PAST_REACTIONS_LOAD
 });
@@ -65,7 +66,7 @@ export const reactionsDialogPastReactionsLoadFailed = (postingId: string, commen
 });
 
 export const REACTIONS_DIALOG_TOTALS_LOAD = "REACTIONS_DIALOG_TOTALS_LOAD";
-type ReactionsDialogTotalsLoadAction = ActionBase<typeof REACTIONS_DIALOG_TOTALS_LOAD>;
+type ReactionsDialogTotalsLoadAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD>;
 export const reactionsDialogTotalsLoad = (): ReactionsDialogTotalsLoadAction => ({
     type: REACTIONS_DIALOG_TOTALS_LOAD
 });
@@ -82,7 +83,7 @@ export const reactionsDialogTotalsLoaded = (positive: ReactionTotalInfo[],
 });
 
 export const REACTIONS_DIALOG_TOTALS_LOAD_FAILED = "REACTIONS_DIALOG_TOTALS_LOAD_FAILED";
-type ReactionsDialogTotalsLoadFailedAction = ActionBase<typeof REACTIONS_DIALOG_TOTALS_LOAD_FAILED>;
+type ReactionsDialogTotalsLoadFailedAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD_FAILED>;
 export const reactionsDialogTotalsLoadFailed = (): ReactionsDialogTotalsLoadFailedAction => ({
     type: REACTIONS_DIALOG_TOTALS_LOAD_FAILED
 });

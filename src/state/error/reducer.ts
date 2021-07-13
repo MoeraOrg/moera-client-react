@@ -1,4 +1,6 @@
 import { ERROR_DISMISS, ERROR_SHOW } from "state/error/actions";
+import { ErrorState } from "state/error/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     message: "",
@@ -6,7 +8,7 @@ const initialState = {
     visible: false
 };
 
-export default (state = initialState, action) => {
+export default (state: ErrorState = initialState, action: ClientAction) => {
     switch (action.type) {
         case ERROR_SHOW:
             const {message, messageVerbose} = action.payload;

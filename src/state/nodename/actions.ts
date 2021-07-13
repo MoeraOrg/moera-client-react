@@ -1,13 +1,14 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const NODE_NAME_LOAD = "NODE_NAME_LOAD";
-type NodeNameLoadAction = ActionBase<typeof NODE_NAME_LOAD>;
+type NodeNameLoadAction = Action<typeof NODE_NAME_LOAD>;
 export const nodeNameLoad = (): NodeNameLoadAction => ({
     type: NODE_NAME_LOAD
 });
 
 export const NODE_NAME_LOAD_FAILED = "NODE_NAME_LOAD_FAILED";
-type NodeNameLoadFailedAction = ActionBase<typeof NODE_NAME_LOAD_FAILED>;
+type NodeNameLoadFailedAction = Action<typeof NODE_NAME_LOAD_FAILED>;
 export const nodeNameLoadFailed = (): NodeNameLoadFailedAction => ({
     type: NODE_NAME_LOAD_FAILED
 });
@@ -22,19 +23,19 @@ export const nodeNameSet = (nodeName: string): NodeNameSetAction => ({
 });
 
 export const NODE_NAME_UNSET = "NODE_NAME_UNSET";
-type NodeNameUnsetAction = ActionBase<typeof NODE_NAME_UNSET>;
+type NodeNameUnsetAction = Action<typeof NODE_NAME_UNSET>;
 export const nodeNameUnset = (): NodeNameUnsetAction => ({
     type: NODE_NAME_UNSET
 });
 
 export const REGISTER_NAME_DIALOG = "REGISTER_NAME_DIALOG";
-type RegisterNameDialogAction = ActionBase<typeof REGISTER_NAME_DIALOG>;
+type RegisterNameDialogAction = Action<typeof REGISTER_NAME_DIALOG>;
 export const registerNameDialog = (): RegisterNameDialogAction => ({
     type: REGISTER_NAME_DIALOG
 });
 
 export const REGISTER_NAME_DIALOG_CANCEL = "REGISTER_NAME_DIALOG_CANCEL";
-type RegisterNameDialogCancelAction = ActionBase<typeof REGISTER_NAME_DIALOG_CANCEL>;
+type RegisterNameDialogCancelAction = Action<typeof REGISTER_NAME_DIALOG_CANCEL>;
 export const registerNameDialogCancel = (): RegisterNameDialogCancelAction => ({
     type: REGISTER_NAME_DIALOG_CANCEL
 });
@@ -60,13 +61,13 @@ export const registerNameSucceeded = (name: string, mnemonic: string[]): Registe
 });
 
 export const REGISTER_NAME_FAILED = "REGISTER_NAME_FAILED";
-type RegisterNameFailedAction = ActionBase<typeof REGISTER_NAME_FAILED>;
+type RegisterNameFailedAction = Action<typeof REGISTER_NAME_FAILED>;
 export const registerNameFailed = (): RegisterNameFailedAction => ({
     type: REGISTER_NAME_FAILED
 });
 
 export const MNEMONIC_CLOSE = "MNEMONIC_CLOSE";
-type MnemonicCloseAction = ActionBase<typeof MNEMONIC_CLOSE>;
+type MnemonicCloseAction = Action<typeof MNEMONIC_CLOSE>;
 export const mnemonicClose = (): MnemonicCloseAction => ({
     type: MNEMONIC_CLOSE
 });
@@ -81,7 +82,7 @@ export const nodeNameUpdateDialog = (changeName: boolean): NodeNameUpdateDialogA
 });
 
 export const NODE_NAME_UPDATE_DIALOG_CANCEL = "NODE_NAME_UPDATE_DIALOG_CANCEL";
-type NodeNameUpdateDialogCancelAction = ActionBase<typeof NODE_NAME_UPDATE_DIALOG_CANCEL>;
+type NodeNameUpdateDialogCancelAction = Action<typeof NODE_NAME_UPDATE_DIALOG_CANCEL>;
 export const nodeNameUpdateDialogCancel = (): NodeNameUpdateDialogCancelAction => ({
     type: NODE_NAME_UPDATE_DIALOG_CANCEL
 });
@@ -97,13 +98,13 @@ export const nodeNameUpdate = (name: string, mnemonic: string[]): NodeNameUpdate
 });
 
 export const NODE_NAME_UPDATE_SUCCEEDED = "NODE_NAME_UPDATE_SUCCEEDED";
-type NodeNameUpdateSucceededAction = ActionBase<typeof NODE_NAME_UPDATE_SUCCEEDED>;
+type NodeNameUpdateSucceededAction = Action<typeof NODE_NAME_UPDATE_SUCCEEDED>;
 export const nodeNameUpdateSucceeded = (): NodeNameUpdateSucceededAction => ({
     type: NODE_NAME_UPDATE_SUCCEEDED
 });
 
 export const NODE_NAME_UPDATE_FAILED = "NODE_NAME_UPDATE_FAILED";
-type NodeNameUpdateFailedAction = ActionBase<typeof NODE_NAME_UPDATE_FAILED>;
+type NodeNameUpdateFailedAction = Action<typeof NODE_NAME_UPDATE_FAILED>;
 export const nodeNameUpdateFailed = (): NodeNameUpdateFailedAction => ({
     type: NODE_NAME_UPDATE_FAILED
 });

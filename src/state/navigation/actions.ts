@@ -8,7 +8,8 @@ import {
     PAGE_SETTINGS,
     PAGE_TIMELINE
 } from "state/navigation/pages";
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const INIT_STORAGE = "INIT_STORAGE";
 type InitStorageAction = ActionWithPayload<typeof INIT_STORAGE, {
@@ -33,7 +34,7 @@ export const initFromLocation = (rootLocation: string, path: string | null, quer
 });
 
 export const WAKE_UP = "WAKE_UP";
-type WakeUpAction = ActionBase<typeof WAKE_UP>;
+type WakeUpAction = Action<typeof WAKE_UP>;
 export const wakeUp = (): WakeUpAction => ({
     type: WAKE_UP
 });
@@ -41,11 +42,11 @@ export const wakeUp = (): WakeUpAction => ({
 export const GO_TO_PAGE = "GO_TO_PAGE";
 type GoToPageAction<P extends Page, D> = ActionWithPayload<typeof GO_TO_PAGE, {
     page: P;
-    details: D;
+    details: D & {at: number | null};
 }>;
 export const goToPage = <P extends Page, D>(page: P, details: D): GoToPageAction<P, D> => ({
     type: GO_TO_PAGE,
-    payload: {page, details}
+    payload: {page, details: {at: null, ...details}}
 });
 
 type GoToProfileAction = GoToPageAction<typeof PAGE_PROFILE, {}>;
@@ -106,13 +107,13 @@ export const goToPageWithDefaultSubpage = (page: Page, details: object = {}): Go
 });
 
 export const NEW_LOCATION = "NEW_LOCATION";
-type NewLocationAction = ActionBase<typeof NEW_LOCATION>;
+type NewLocationAction = Action<typeof NEW_LOCATION>;
 export const newLocation = (): NewLocationAction => ({
     type: NEW_LOCATION
 });
 
 export const UPDATE_LOCATION = "UPDATE_LOCATION";
-type UpdateLocationAction = ActionBase<typeof UPDATE_LOCATION>;
+type UpdateLocationAction = Action<typeof UPDATE_LOCATION>;
 export const updateLocation = (): UpdateLocationAction => ({
     type: UPDATE_LOCATION
 });
@@ -129,13 +130,13 @@ export const locationSet = (location: string, title: string, update: boolean): L
 });
 
 export const LOCATION_LOCK = "LOCATION_LOCK";
-type LocationLockAction = ActionBase<typeof LOCATION_LOCK>;
+type LocationLockAction = Action<typeof LOCATION_LOCK>;
 export const locationLock = (): LocationLockAction => ({
     type: LOCATION_LOCK
 });
 
 export const LOCATION_UNLOCK = "LOCATION_UNLOCK";
-type LocationUnlockAction = ActionBase<typeof LOCATION_UNLOCK>;
+type LocationUnlockAction = Action<typeof LOCATION_UNLOCK>;
 export const locationUnlock = (): LocationUnlockAction => ({
     type: LOCATION_UNLOCK
 });
@@ -152,25 +153,25 @@ export const goToLocation = (path: string | null, query: string | null, hash: st
 });
 
 export const GO_HOME = "GO_HOME";
-type GoHomeAction = ActionBase<typeof GO_HOME>;
+type GoHomeAction = Action<typeof GO_HOME>;
 export const goHome = (): GoHomeAction => ({
     type: GO_HOME
 });
 
 export const GO_HOME_NEWS = "GO_HOME_NEWS";
-type GoHomeNewsAction = ActionBase<typeof GO_HOME_NEWS>;
+type GoHomeNewsAction = Action<typeof GO_HOME_NEWS>;
 export const goHomeNews = (): GoHomeNewsAction => ({
     type: GO_HOME_NEWS
 });
 
 export const BOTTOM_MENU_HIDE = "BOTTOM_MENU_HIDE";
-type BottomMenuHideAction = ActionBase<typeof BOTTOM_MENU_HIDE>;
+type BottomMenuHideAction = Action<typeof BOTTOM_MENU_HIDE>;
 export const bottomMenuHide = (): BottomMenuHideAction => ({
     type: BOTTOM_MENU_HIDE
 });
 
 export const BOTTOM_MENU_SHOW = "BOTTOM_MENU_SHOW";
-type BottomMenuShowAction = ActionBase<typeof BOTTOM_MENU_SHOW>;
+type BottomMenuShowAction = Action<typeof BOTTOM_MENU_SHOW>;
 export const bottomMenuShow = (): BottomMenuShowAction => ({
     type: BOTTOM_MENU_SHOW
 });
@@ -185,7 +186,7 @@ export const dialogOpened = (closeAction: any): DialogOpenedAction => ({
 });
 
 export const DIALOG_CLOSED = "DIALOG_CLOSED";
-type DialogClosedAction = ActionBase<typeof DIALOG_CLOSED>;
+type DialogClosedAction = Action<typeof DIALOG_CLOSED>;
 export const dialogClosed = (): DialogClosedAction => ({
     type: DIALOG_CLOSED
 });

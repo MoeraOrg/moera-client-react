@@ -5,6 +5,8 @@ import { ConfirmBoxState } from "state/confirmbox/state";
 import { ConnectDialogState } from "state/connectdialog/state";
 import { ContactsState } from "state/contacts/state";
 import { DetailedPostingState } from "state/detailedposting/state";
+import { ErrorState } from "state/error/state";
+import { FeedsState } from "state/feeds/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -14,4 +16,6 @@ export interface ClientState {
     connectDialog: ConnectDialogState;
     contacts: ContactsState;
     detailedPosting: DetailedPostingState;
+    error: ErrorState;
+    feeds: FeedsState;
 }

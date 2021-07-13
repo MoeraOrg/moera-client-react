@@ -9,10 +9,10 @@ export interface ActionContext {
     homeOwnerAvatar: AvatarImage | null
 }
 
-export interface ActionBase<T> extends Action<T> {
-    context?: ActionContext;
+export type WithContext<T> = T & {
+    context: ActionContext;
 }
 
-export interface ActionWithPayload<T, P> extends ActionBase<T> {
+export interface ActionWithPayload<T, P> extends Action<T> {
     payload: P;
 }

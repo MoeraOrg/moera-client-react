@@ -1,5 +1,6 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { SettingInfo, SettingMetaInfo } from "api/node/api-types";
+import { Action } from "redux";
 
 export const SETTINGS_GO_TO_TAB = "SETTINGS_GO_TO_TAB";
 type SettingsGoToTabAction = ActionWithPayload<typeof SETTINGS_GO_TO_TAB, {
@@ -20,7 +21,7 @@ export const settingsGoToSheet = (sheet: string): SettingsGoToSheetAction => ({
 });
 
 export const SETTINGS_NODE_VALUES_LOAD = "SETTINGS_NODE_VALUES_LOAD";
-type SettingsNodeValuesLoadAction = ActionBase<typeof SETTINGS_NODE_VALUES_LOAD>;
+type SettingsNodeValuesLoadAction = Action<typeof SETTINGS_NODE_VALUES_LOAD>;
 export const settingsNodeValuesLoad = (): SettingsNodeValuesLoadAction => ({
     type: SETTINGS_NODE_VALUES_LOAD
 });
@@ -35,31 +36,31 @@ export const settingsNodeValuesLoaded = (settings: SettingInfo[]): SettingsNodeV
 });
 
 export const SETTINGS_NODE_VALUES_LOAD_FAILED = "SETTINGS_NODE_VALUES_LOAD_FAILED";
-type SettingsNodeValuesLoadFailedAction = ActionBase<typeof SETTINGS_NODE_VALUES_LOAD_FAILED>;
+type SettingsNodeValuesLoadFailedAction = Action<typeof SETTINGS_NODE_VALUES_LOAD_FAILED>;
 export const settingsNodeValuesLoadFailed = (): SettingsNodeValuesLoadFailedAction => ({
     type: SETTINGS_NODE_VALUES_LOAD_FAILED
 });
 
 export const SETTINGS_NODE_VALUES_UNSET = "SETTINGS_NODE_VALUES_UNSET";
-type SettingsNodeValuesUnsetAction = ActionBase<typeof SETTINGS_NODE_VALUES_UNSET>;
+type SettingsNodeValuesUnsetAction = Action<typeof SETTINGS_NODE_VALUES_UNSET>;
 export const settingsNodeValuesUnset = (): SettingsNodeValuesUnsetAction => ({
     type: SETTINGS_NODE_VALUES_UNSET
 });
 
 export const SETTINGS_NODE_CONFLICT = "SETTINGS_NODE_CONFLICT";
-type SettingsNodeConflictAction = ActionBase<typeof SETTINGS_NODE_CONFLICT>;
+type SettingsNodeConflictAction = Action<typeof SETTINGS_NODE_CONFLICT>;
 export const settingsNodeConflict = (): SettingsNodeConflictAction => ({
     type: SETTINGS_NODE_CONFLICT
 });
 
 export const SETTINGS_NODE_CONFLICT_CLOSE = "SETTINGS_NODE_CONFLICT_CLOSE";
-type SettingsNodeConflictCloseAction = ActionBase<typeof SETTINGS_NODE_CONFLICT_CLOSE>;
+type SettingsNodeConflictCloseAction = Action<typeof SETTINGS_NODE_CONFLICT_CLOSE>;
 export const settingsNodeConflictClose = (): SettingsNodeConflictCloseAction => ({
     type: SETTINGS_NODE_CONFLICT_CLOSE
 });
 
 export const SETTINGS_NODE_META_LOAD = "SETTINGS_NODE_META_LOAD";
-type SettingsNodeMetaLoadAction = ActionBase<typeof SETTINGS_NODE_META_LOAD>;
+type SettingsNodeMetaLoadAction = Action<typeof SETTINGS_NODE_META_LOAD>;
 export const settingsNodeMetaLoad = (): SettingsNodeMetaLoadAction => ({
     type: SETTINGS_NODE_META_LOAD
 });
@@ -74,19 +75,19 @@ export const settingsNodeMetaLoaded = (meta: SettingMetaInfo[]): SettingsNodeMet
 });
 
 export const SETTINGS_NODE_META_LOAD_FAILED = "SETTINGS_NODE_META_LOAD_FAILED";
-type SettingsNodeMetaLoadFailedAction = ActionBase<typeof SETTINGS_NODE_META_LOAD_FAILED>;
+type SettingsNodeMetaLoadFailedAction = Action<typeof SETTINGS_NODE_META_LOAD_FAILED>;
 export const settingsNodeMetaLoadFailed = (): SettingsNodeMetaLoadFailedAction => ({
     type: SETTINGS_NODE_META_LOAD_FAILED
 });
 
 export const SETTINGS_NODE_META_UNSET = "SETTINGS_NODE_META_UNSET";
-type SettingsNodeMetaUnsetAction = ActionBase<typeof SETTINGS_NODE_META_UNSET>;
+type SettingsNodeMetaUnsetAction = Action<typeof SETTINGS_NODE_META_UNSET>;
 export const settingsNodeMetaUnset = (): SettingsNodeMetaUnsetAction => ({
     type: SETTINGS_NODE_META_UNSET
 });
 
 export const SETTINGS_CLIENT_VALUES_LOAD = "SETTINGS_CLIENT_VALUES_LOAD";
-type SettingsClientValuesLoadAction = ActionBase<typeof SETTINGS_CLIENT_VALUES_LOAD>;
+type SettingsClientValuesLoadAction = Action<typeof SETTINGS_CLIENT_VALUES_LOAD>;
 export const settingsClientValuesLoad = (): SettingsClientValuesLoadAction => ({
     type: SETTINGS_CLIENT_VALUES_LOAD
 });
@@ -101,19 +102,19 @@ export const settingsClientValuesLoaded = (settings: SettingInfo[]): SettingsCli
 });
 
 export const SETTINGS_CLIENT_VALUES_LOAD_FAILED = "SETTINGS_CLIENT_VALUES_LOAD_FAILED";
-type SettingsClientValuesLoadFailedAction = ActionBase<typeof SETTINGS_CLIENT_VALUES_LOAD_FAILED>;
+type SettingsClientValuesLoadFailedAction = Action<typeof SETTINGS_CLIENT_VALUES_LOAD_FAILED>;
 export const settingsClientValuesLoadFailed = (): SettingsClientValuesLoadFailedAction => ({
     type: SETTINGS_CLIENT_VALUES_LOAD_FAILED
 });
 
 export const SETTINGS_CLIENT_CONFLICT = "SETTINGS_CLIENT_CONFLICT";
-type SettingsClientConflictAction = ActionBase<typeof SETTINGS_CLIENT_CONFLICT>;
+type SettingsClientConflictAction = Action<typeof SETTINGS_CLIENT_CONFLICT>;
 export const settingsClientConflict = (): SettingsClientConflictAction => ({
     type: SETTINGS_CLIENT_CONFLICT
 });
 
 export const SETTINGS_CLIENT_CONFLICT_CLOSE = "SETTINGS_CLIENT_CONFLICT_CLOSE";
-type SettingsClientConflictCloseAction = ActionBase<typeof SETTINGS_CLIENT_CONFLICT_CLOSE>;
+type SettingsClientConflictCloseAction = Action<typeof SETTINGS_CLIENT_CONFLICT_CLOSE>;
 export const settingsClientConflictClose = (): SettingsClientConflictCloseAction => ({
     type: SETTINGS_CLIENT_CONFLICT_CLOSE
 });
@@ -139,19 +140,19 @@ export const settingsUpdateSucceeded = (settings: SettingInfo[], onSuccess: any)
 });
 
 export const SETTINGS_UPDATE_FAILED = "SETTINGS_UPDATE_FAILED";
-type SettingsUpdateFailedAction = ActionBase<typeof SETTINGS_UPDATE_FAILED>;
+type SettingsUpdateFailedAction = Action<typeof SETTINGS_UPDATE_FAILED>;
 export const settingsUpdateFailed = (): SettingsUpdateFailedAction => ({
     type: SETTINGS_UPDATE_FAILED
 });
 
 export const SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN = "SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN";
-type SettingsChangePasswordDialogOpenAction = ActionBase<typeof SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN>;
+type SettingsChangePasswordDialogOpenAction = Action<typeof SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN>;
 export const settingsChangePasswordDialogOpen = (): SettingsChangePasswordDialogOpenAction => ({
     type: SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN
 });
 
 export const SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE = "SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE";
-type SettingsChangePasswordDialogCloseAction = ActionBase<typeof SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE>;
+type SettingsChangePasswordDialogCloseAction = Action<typeof SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE>;
 export const settingsChangePasswordDialogClose = (): SettingsChangePasswordDialogCloseAction => ({
     type: SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE
 });
@@ -169,13 +170,13 @@ export const settingsChangePassword = (oldPassword: string, password: string,
 });
 
 export const SETTINGS_CHANGED_PASSWORD = "SETTINGS_CHANGED_PASSWORD";
-type SettingsChangedPasswordAction = ActionBase<typeof SETTINGS_CHANGED_PASSWORD>;
+type SettingsChangedPasswordAction = Action<typeof SETTINGS_CHANGED_PASSWORD>;
 export const settingsChangedPassword = (): SettingsChangedPasswordAction => ({
     type: SETTINGS_CHANGED_PASSWORD
 });
 
 export const SETTINGS_CHANGE_PASSWORD_FAILED = "SETTINGS_CHANGE_PASSWORD_FAILED";
-type SettingsChangePasswordFailedAction = ActionBase<typeof SETTINGS_CHANGE_PASSWORD_FAILED>;
+type SettingsChangePasswordFailedAction = Action<typeof SETTINGS_CHANGE_PASSWORD_FAILED>;
 export const settingsChangePasswordFailed = (): SettingsChangePasswordFailedAction => ({
     type: SETTINGS_CHANGE_PASSWORD_FAILED
 });

@@ -1,5 +1,6 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { ContactInfo } from "api/node/api-types";
+import { Action } from "redux";
 
 export const CONTACTS_PREPARE = "CONTACTS_PREPARE";
 type ContactsPrepareAction = ActionWithPayload<typeof CONTACTS_PREPARE, {
@@ -39,7 +40,7 @@ export const contactsLoadFailed = (query: string): ContactsLoadFailedAction => (
 });
 
 export const CONTACTS_UNSET = "CONTACTS_UNSET";
-type ContactsUnsetAction = ActionBase<typeof CONTACTS_UNSET>;
+type ContactsUnsetAction = Action<typeof CONTACTS_UNSET>;
 export const contactsUnset = (): ContactsUnsetAction => ({
     type: CONTACTS_UNSET
 });

@@ -1,4 +1,5 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
+import { Action } from "redux";
 
 export const FLASH_BOX = "FLASH_BOX";
 type FlashBoxAction = ActionWithPayload<typeof FLASH_BOX, {
@@ -10,13 +11,13 @@ export const flashBox = (message: string): FlashBoxAction => ({
 });
 
 export const FLASH_BOX_DISMISS = "FLASH_BOX_DISMISS";
-type FlashBoxDismissAction = ActionBase<typeof FLASH_BOX_DISMISS>;
+type FlashBoxDismissAction = Action<typeof FLASH_BOX_DISMISS>;
 export const flashBoxDismiss = (): FlashBoxDismissAction => ({
     type: FLASH_BOX_DISMISS
 });
 
 export const FLASH_BOX_CLOSE = "FLASH_BOX_CLOSE";
-type FlashBoxCloseAction = ActionBase<typeof FLASH_BOX_CLOSE>;
+type FlashBoxCloseAction = Action<typeof FLASH_BOX_CLOSE>;
 export const flashBoxClose = (): FlashBoxCloseAction => ({
     type: FLASH_BOX_CLOSE
 });

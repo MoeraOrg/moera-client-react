@@ -1,8 +1,9 @@
-import { ActionBase, ActionWithPayload } from "state/action-base";
+import { ActionWithPayload } from "state/action-base";
 import { CommentInfo, CommentText, PostingInfo, ReactionAttributes, ReactionTotalsInfo } from "api/node/api-types";
+import { Action } from "redux";
 
 export const DETAILED_POSTING_LOAD = "DETAILED_POSTING_LOAD";
-type DetailedPostingLoadAction = ActionBase<typeof DETAILED_POSTING_LOAD>;
+type DetailedPostingLoadAction = Action<typeof DETAILED_POSTING_LOAD>;
 export const detailedPostingLoad = (): DetailedPostingLoadAction => ({
     type: DETAILED_POSTING_LOAD
 });
@@ -17,13 +18,13 @@ export const detailedPostingLoaded = (posting: PostingInfo): DetailedPostingLoad
 });
 
 export const DETAILED_POSTING_LOAD_FAILED = "DETAILED_POSTING_LOAD_FAILED";
-type DetailedPostingLoadFailedAction = ActionBase<typeof DETAILED_POSTING_LOAD_FAILED>;
+type DetailedPostingLoadFailedAction = Action<typeof DETAILED_POSTING_LOAD_FAILED>;
 export const detailedPostingLoadFailed = (): DetailedPostingLoadFailedAction => ({
     type: DETAILED_POSTING_LOAD_FAILED
 });
 
 export const COMMENTS_RECEIVER_SWITCH = "COMMENTS_RECEIVER_SWITCH";
-type CommentsReceiverSwitchAction = ActionBase<typeof COMMENTS_RECEIVER_SWITCH>;
+type CommentsReceiverSwitchAction = Action<typeof COMMENTS_RECEIVER_SWITCH>;
 export const commentsReceiverSwitch = (): CommentsReceiverSwitchAction => ({
     type: COMMENTS_RECEIVER_SWITCH
 });
@@ -41,13 +42,13 @@ export const commentsReceiverSwitched = (nodeName: string, fullName: string | nu
 });
 
 export const COMMENTS_LOAD_ALL = "COMMENTS_LOAD_ALL";
-type CommentsLoadAllAction = ActionBase<typeof COMMENTS_LOAD_ALL>;
+type CommentsLoadAllAction = Action<typeof COMMENTS_LOAD_ALL>;
 export const commentsLoadAll = (): CommentsLoadAllAction => ({
     type: COMMENTS_LOAD_ALL
 });
 
 export const COMMENTS_PAST_SLICE_LOAD = "COMMENTS_PAST_SLICE_LOAD";
-type CommentsPastSliceLoadAction = ActionBase<typeof COMMENTS_PAST_SLICE_LOAD>;
+type CommentsPastSliceLoadAction = Action<typeof COMMENTS_PAST_SLICE_LOAD>;
 export const commentsPastSliceLoad = (): CommentsPastSliceLoadAction => ({
     type: COMMENTS_PAST_SLICE_LOAD
 });
@@ -64,7 +65,7 @@ export const commentsPastSliceLoadFailed = (nodeName: string,
 });
 
 export const COMMENTS_FUTURE_SLICE_LOAD = "COMMENTS_FUTURE_SLICE_LOAD";
-type CommentsFutureSliceLoadAction = ActionBase<typeof COMMENTS_FUTURE_SLICE_LOAD>;
+type CommentsFutureSliceLoadAction = Action<typeof COMMENTS_FUTURE_SLICE_LOAD>;
 export const commentsFutureSliceLoad = (): CommentsFutureSliceLoadAction => ({
     type: COMMENTS_FUTURE_SLICE_LOAD
 });
@@ -135,13 +136,13 @@ export const commentsSliceUpdate = (nodeName: string, postingId: string, comment
 });
 
 export const COMMENTS_UPDATE = "COMMENTS_UPDATE";
-type CommentsUpdateAction = ActionBase<typeof COMMENTS_UPDATE>;
+type CommentsUpdateAction = Action<typeof COMMENTS_UPDATE>;
 export const commentsUpdate = (): CommentsUpdateAction => ({
     type: COMMENTS_UPDATE
 });
 
 export const COMMENTS_UNSET = "COMMENTS_UNSET";
-type CommentsUnsetAction = ActionBase<typeof COMMENTS_UNSET>;
+type CommentsUnsetAction = Action<typeof COMMENTS_UNSET>;
 export const commentsUnset = (): CommentsUnsetAction => ({
     type: COMMENTS_UNSET
 });
@@ -156,31 +157,31 @@ export const commentsScrollToAnchor = (anchor: number): CommentsScrollToAnchorAc
 });
 
 export const COMMENTS_SCROLL_TO_COMPOSER = "COMMENTS_SCROLL_TO_COMPOSER";
-type CommentsScrollToComposerAction = ActionBase<typeof COMMENTS_SCROLL_TO_COMPOSER>;
+type CommentsScrollToComposerAction = Action<typeof COMMENTS_SCROLL_TO_COMPOSER>;
 export const commentsScrollToComposer = (): CommentsScrollToComposerAction => ({
     type: COMMENTS_SCROLL_TO_COMPOSER
 });
 
 export const COMMENTS_SCROLLED_TO_ANCHOR = "COMMENTS_SCROLLED_TO_ANCHOR";
-type CommentsScrolledToAnchorAction = ActionBase<typeof COMMENTS_SCROLLED_TO_ANCHOR>;
+type CommentsScrolledToAnchorAction = Action<typeof COMMENTS_SCROLLED_TO_ANCHOR>;
 export const commentsScrolledToAnchor = (): CommentsScrolledToAnchorAction => ({
     type: COMMENTS_SCROLLED_TO_ANCHOR
 });
 
 export const COMMENTS_SCROLLED_TO_COMMENTS = "COMMENTS_SCROLLED_TO_COMMENTS";
-type CommentsScrolledToCommentsAction = ActionBase<typeof COMMENTS_SCROLLED_TO_COMMENTS>;
+type CommentsScrolledToCommentsAction = Action<typeof COMMENTS_SCROLLED_TO_COMMENTS>;
 export const commentsScrolledToComments = (): CommentsScrolledToCommentsAction => ({
     type: COMMENTS_SCROLLED_TO_COMMENTS
 });
 
 export const COMMENTS_SCROLLED_TO_COMPOSER = "COMMENTS_SCROLLED_TO_COMPOSER";
-type CommentsScrolledToComposerAction = ActionBase<typeof COMMENTS_SCROLLED_TO_COMPOSER>;
+type CommentsScrolledToComposerAction = Action<typeof COMMENTS_SCROLLED_TO_COMPOSER>;
 export const commentsScrolledToComposer = (): CommentsScrolledToComposerAction => ({
     type: COMMENTS_SCROLLED_TO_COMPOSER
 });
 
 export const COMMENT_COMPOSE_UNSET = "COMMENT_COMPOSE_UNSET";
-type CommentComposeUnsetAction = ActionBase<typeof COMMENT_COMPOSE_UNSET>;
+type CommentComposeUnsetAction = Action<typeof COMMENT_COMPOSE_UNSET>;
 export const commentComposeUnset = (): CommentComposeUnsetAction => ({
     type: COMMENT_COMPOSE_UNSET
 });
@@ -283,13 +284,13 @@ export const commentDeleteFailed = (nodeName: string, postingId: string,
 });
 
 export const FOCUS_COMMENT = "FOCUS_COMMENT";
-type FocusCommentAction = ActionBase<typeof FOCUS_COMMENT>;
+type FocusCommentAction = Action<typeof FOCUS_COMMENT>;
 export const focusComment = (): FocusCommentAction => ({
     type: FOCUS_COMMENT
 });
 
 export const FOCUSED_COMMENT_LOAD = "FOCUSED_COMMENT_LOAD";
-type FocusedCommentLoadAction = ActionBase<typeof FOCUSED_COMMENT_LOAD>;
+type FocusedCommentLoadAction = Action<typeof FOCUSED_COMMENT_LOAD>;
 export const focusedCommentLoad = (): FocusedCommentLoadAction => ({
     type: FOCUSED_COMMENT_LOAD
 });
@@ -334,13 +335,13 @@ export const openCommentDialog = (commentId: string): OpenCommentDialogAction =>
 });
 
 export const CLOSE_COMMENT_DIALOG = "CLOSE_COMMENT_DIALOG";
-type CloseCommentDialogAction = ActionBase<typeof CLOSE_COMMENT_DIALOG>;
+type CloseCommentDialogAction = Action<typeof CLOSE_COMMENT_DIALOG>;
 export const closeCommentDialog = (): CloseCommentDialogAction => ({
     type: CLOSE_COMMENT_DIALOG
 });
 
 export const COMMENT_DIALOG_COMMENT_LOAD = "COMMENT_DIALOG_COMMENT_LOAD";
-type CommentDialogCommentLoadAction = ActionBase<typeof COMMENT_DIALOG_COMMENT_LOAD>;
+type CommentDialogCommentLoadAction = Action<typeof COMMENT_DIALOG_COMMENT_LOAD>;
 export const commentDialogCommentLoad = (): CommentDialogCommentLoadAction => ({
     type: COMMENT_DIALOG_COMMENT_LOAD
 });
@@ -355,19 +356,19 @@ export const commentDialogCommentLoaded = (comment: CommentInfo): CommentDialogC
 });
 
 export const COMMENT_DIALOG_COMMENT_LOAD_FAILED = "COMMENT_DIALOG_COMMENT_LOAD_FAILED";
-type CommentDialogCommentLoadFailedAction = ActionBase<typeof COMMENT_DIALOG_COMMENT_LOAD_FAILED>;
+type CommentDialogCommentLoadFailedAction = Action<typeof COMMENT_DIALOG_COMMENT_LOAD_FAILED>;
 export const commentDialogCommentLoadFailed = (): CommentDialogCommentLoadFailedAction => ({
     type: COMMENT_DIALOG_COMMENT_LOAD_FAILED
 });
 
 export const COMMENT_DIALOG_CONFLICT = "COMMENT_DIALOG_CONFLICT";
-type CommentDialogConflictAction = ActionBase<typeof COMMENT_DIALOG_CONFLICT>;
+type CommentDialogConflictAction = Action<typeof COMMENT_DIALOG_CONFLICT>;
 export const commentDialogConflict = (): CommentDialogConflictAction => ({
     type: COMMENT_DIALOG_CONFLICT
 });
 
 export const COMMENT_DIALOG_CONFLICT_CLOSE = "COMMENT_DIALOG_CONFLICT_CLOSE";
-type CommentDialogConflictCloseAction = ActionBase<typeof COMMENT_DIALOG_CONFLICT_CLOSE>;
+type CommentDialogConflictCloseAction = Action<typeof COMMENT_DIALOG_CONFLICT_CLOSE>;
 export const commentDialogConflictClose = (): CommentDialogConflictCloseAction => ({
     type: COMMENT_DIALOG_CONFLICT_CLOSE
 });
@@ -465,7 +466,7 @@ export const commentRepliedToSet = (commentId: string, ownerName: string, ownerF
 });
 
 export const COMMENT_REPLIED_TO_UNSET = "COMMENT_REPLIED_TO_UNSET";
-type CommentRepliedToUnsetAction = ActionBase<typeof COMMENT_REPLIED_TO_UNSET>;
+type CommentRepliedToUnsetAction = Action<typeof COMMENT_REPLIED_TO_UNSET>;
 export const commentRepliedToUnset = (): CommentRepliedToUnsetAction => ({
     type: COMMENT_REPLIED_TO_UNSET
 });
@@ -480,7 +481,7 @@ export const glanceComment = (commentId: string): GlanceCommentAction => ({
 });
 
 export const GLANCE_COMMENT_LOAD = "GLANCE_COMMENT_LOAD";
-type GlanceCommentLoadAction = ActionBase<typeof GLANCE_COMMENT_LOAD>;
+type GlanceCommentLoadAction = Action<typeof GLANCE_COMMENT_LOAD>;
 export const glanceCommentLoad = (): GlanceCommentLoadAction => ({
     type: GLANCE_COMMENT_LOAD
 });
