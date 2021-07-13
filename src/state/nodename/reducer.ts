@@ -2,11 +2,6 @@ import cloneDeep from 'lodash.clonedeep';
 
 import {
     MNEMONIC_CLOSE,
-    REGISTER_NAME,
-    REGISTER_NAME_DIALOG,
-    REGISTER_NAME_DIALOG_CANCEL,
-    REGISTER_NAME_FAILED,
-    REGISTER_NAME_SUCCEEDED,
     NODE_NAME_LOAD,
     NODE_NAME_LOAD_FAILED,
     NODE_NAME_SET,
@@ -15,9 +10,16 @@ import {
     NODE_NAME_UPDATE_DIALOG,
     NODE_NAME_UPDATE_DIALOG_CANCEL,
     NODE_NAME_UPDATE_FAILED,
-    NODE_NAME_UPDATE_SUCCEEDED
+    NODE_NAME_UPDATE_SUCCEEDED,
+    REGISTER_NAME,
+    REGISTER_NAME_DIALOG,
+    REGISTER_NAME_DIALOG_CANCEL,
+    REGISTER_NAME_FAILED,
+    REGISTER_NAME_SUCCEEDED
 } from "state/nodename/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
+import { NodeNameState } from "state/nodename/state";
+import { ClientAction } from "state/action";
 
 const emptyInfo = {
     name: null,
@@ -43,7 +45,7 @@ const initialState = {
     updating: false
 };
 
-export default (state = initialState, action) => {
+export default (state: NodeNameState = initialState, action: ClientAction): NodeNameState => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
@@ -64,7 +66,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 ...emptyInfo,
-                ...action.payload.nodeName,
+                name: action.payload.nodeName,
                 loading: false,
                 loaded: true
             };

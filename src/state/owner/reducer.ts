@@ -11,6 +11,8 @@ import {
     OWNER_VERIFIED
 } from "state/owner/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
+import { OwnerState } from "state/owner/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     name: null,
@@ -26,7 +28,7 @@ const initialState = {
     switching: false
 };
 
-export default (state = initialState, action) => {
+export default (state: OwnerState = initialState, action: ClientAction): OwnerState => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);

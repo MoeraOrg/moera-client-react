@@ -14,6 +14,8 @@ import { NamingState } from "state/naming/state";
 import { NavigationState } from "state/navigation/state";
 import { NodeState } from "state/node/state";
 import { NodeCardsState } from "state/nodecards/state";
+import { NodeNameState } from "state/nodename/state";
+import { OwnerState } from "state/owner/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -32,4 +34,6 @@ export interface ClientState {
     navigation: NavigationState;
     node: NodeState;
     nodeCards: NodeCardsState;
+    nodeName: NodeNameState;
+    owner: OwnerState;
 }
