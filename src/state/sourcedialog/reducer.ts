@@ -4,6 +4,8 @@ import {
     SOURCE_DIALOG_LOAD_FAILED,
     SOURCE_DIALOG_LOADED
 } from "state/sourcedialog/actions";
+import { SourceDialogState } from "state/sourcedialog/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     show: false,
@@ -11,7 +13,7 @@ const initialState = {
     loading: false
 }
 
-export default (state = initialState, action) => {
+export default (state: SourceDialogState = initialState, action: ClientAction): SourceDialogState => {
     switch (action.type) {
         case OPEN_SOURCE_DIALOG:
             return {

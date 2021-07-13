@@ -1,4 +1,6 @@
 import { CLOSE_SHARE_DIALOG, OPEN_SHARE_DIALOG } from "state/sharedialog/actions";
+import { ShareDialogState } from "state/sharedialog/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     show: false,
@@ -6,7 +8,7 @@ const initialState = {
     url: null
 }
 
-export default (state = initialState, action) => {
+export default (state: ShareDialogState = initialState, action: ClientAction): ShareDialogState => {
     switch (action.type) {
         case OPEN_SHARE_DIALOG:
             return {

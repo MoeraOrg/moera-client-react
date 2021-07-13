@@ -4,11 +4,11 @@ import { ActionWithPayload } from "state/action-types";
 
 export type SignUpStage = 0 | 1 | 2 | 3 | 4;
 
-export const SIGN_UP_STAGE_DOMAIN = 0;
-export const SIGN_UP_STAGE_PASSWORD = 1;
-export const SIGN_UP_STAGE_CONNECT = 2;
-export const SIGN_UP_STAGE_PROFILE = 3;
-export const SIGN_UP_STAGE_NAME = 4;
+export const SIGN_UP_STAGE_DOMAIN = 0 as const;
+export const SIGN_UP_STAGE_PASSWORD = 1 as const;
+export const SIGN_UP_STAGE_CONNECT = 2 as const;
+export const SIGN_UP_STAGE_PROFILE = 3 as const;
+export const SIGN_UP_STAGE_NAME = 4 as const;
 
 export const OPEN_SIGN_UP_DIALOG = "OPEN_SIGN_UP_DIALOG";
 type OpenSignUpDialogAction = Action<typeof OPEN_SIGN_UP_DIALOG>;

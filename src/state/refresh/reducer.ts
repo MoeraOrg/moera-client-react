@@ -1,10 +1,12 @@
 import { REFRESH_HIDE, REFRESH_SHOW } from "state/refresh/actions";
+import { RefreshState } from "state/refresh/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     active: false
 };
 
-export default (state = initialState, action) => {
+export default (state: RefreshState = initialState, action: ClientAction): RefreshState => {
     switch (action.type) {
         case REFRESH_SHOW:
             return {

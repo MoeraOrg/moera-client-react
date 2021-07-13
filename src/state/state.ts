@@ -20,6 +20,15 @@ import { PeopleState } from "state/people/state";
 import { PostingReplyState } from "state/postingreply/state";
 import { PostingsState } from "state/postings/state";
 import { ProfileState } from "state/profile/state";
+import { PulseState } from "state/pulse/state";
+import { QuickTipsState } from "state/quicktips/state";
+import { ReactionsDialogState } from "state/reactionsdialog/state";
+import { RefreshState } from "state/refresh/state";
+import { SettingsState } from "state/settings/state";
+import { ShareDialogState } from "state/sharedialog/state";
+import { SignUpDialogState } from "state/signupdialog/state";
+import { SourceDialogState } from "state/sourcedialog/state";
+import { TokensState } from "state/tokens/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -44,4 +53,13 @@ export interface ClientState {
     postingReply: PostingReplyState;
     postings: PostingsState;
     profile: ProfileState;
+    pulse: PulseState;
+    quickTips: QuickTipsState;
+    reactionsDialog: ReactionsDialogState;
+    refresh: RefreshState;
+    settings: SettingsState;
+    shareDialog: ShareDialogState;
+    signUpDialog: SignUpDialogState;
+    sourceDialog: SourceDialogState;
+    tokens: TokensState;
 }

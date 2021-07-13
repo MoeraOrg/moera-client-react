@@ -18,6 +18,8 @@ import {
     EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_REACTION_VERIFIED
 } from "api/events/actions";
+import { ReactionsDialogState } from "state/reactionsdialog/state";
+import { ClientAction } from "state/action";
 
 const emptyReactions = {
     loading: false,
@@ -43,7 +45,7 @@ const initialState = {
     verificationStatus: {}
 };
 
-export default (state = initialState, action) => {
+export default (state: ReactionsDialogState = initialState, action: ClientAction): ReactionsDialogState => {
     switch (action.type) {
         case OPEN_REACTIONS_DIALOG: {
             const {nodeName, postingId, commentId, negative} = action.payload;
@@ -128,8 +130,11 @@ export default (state = initialState, action) => {
         case REACTIONS_DIALOG_TOTALS_LOADED: {
             let totals = !state.negative ? action.payload.positive : action.payload.negative;
             totals = totals.slice().filter(rt => rt.total == null || rt.total > 0);
-            totals.sort((rt1, rt2) => rt1.total != null ? rt2.total - rt1.total : rt2.share - rt1.share);
-            const total = totals.map(rt => rt.total).filter(v => v != null).reduce((sum, v) => sum + v, 0);
+            totals.sort((rt1, rt2) =>
+                rt1.total != null && rt2.total != null ? rt2.total - rt1.total : (rt2.share ?? 0) - (rt1.share ?? 0));
+            const total = totals.map(rt => rt.total)
+                .filter(v => v != null)
+                .reduce((sum, v) => sum! + v!, 0);
             return immutable.assign(state, "totals", {
                 loading: false,
                 loaded: true,

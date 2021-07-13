@@ -13,7 +13,7 @@ export interface ClientSettingTypeModifiers {
     items?: Choice<string>[];
 }
 
-interface ClientSettingMetaInfo {
+export interface ClientSettingMetaInfo {
     name: string;
     type: SettingType;
     defaultValue?: string;

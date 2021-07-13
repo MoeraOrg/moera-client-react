@@ -6,6 +6,8 @@ import {
     SIGN_UP_STAGE_DOMAIN,
     SIGNED_UP
 } from "state/signupdialog/actions";
+import { SignUpDialogState } from "state/signupdialog/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     show: false,
@@ -17,7 +19,7 @@ const initialState = {
     email: null
 };
 
-export default (state = initialState, action) => {
+export default (state: SignUpDialogState = initialState, action: ClientAction): SignUpDialogState => {
     switch (action.type) {
         case OPEN_SIGN_UP_DIALOG:
             return {

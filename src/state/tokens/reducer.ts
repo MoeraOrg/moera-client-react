@@ -1,9 +1,11 @@
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { TokensState } from "state/tokens/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
 };
 
-export default (state = initialState, action) => {
+export default (state: TokensState = initialState, action: ClientAction): TokensState => {
     switch (action.type) {
         case CONNECTED_TO_HOME:
             return {

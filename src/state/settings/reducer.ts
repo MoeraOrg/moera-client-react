@@ -29,6 +29,8 @@ import {
     SETTINGS_UPDATE_SUCCEEDED
 } from "state/settings/actions";
 import { ClientSettings } from "api";
+import { SettingsState } from "state/settings/state";
+import { ClientAction } from "state/action";
 
 const emptySettings = {
     node: {
@@ -58,7 +60,7 @@ const initialState = {
     ...emptySettings
 };
 
-export default (state = initialState, action) => {
+export default (state: SettingsState = initialState, action: ClientAction): SettingsState => {
     switch (action.type) {
         case SETTINGS_GO_TO_TAB:
             return immutable.wrap(state)
