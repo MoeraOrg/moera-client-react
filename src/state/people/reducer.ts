@@ -24,6 +24,10 @@ import {
 } from "api/events/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { subscriberToSubscription } from "state/feeds/selectors";
+import { PeopleState } from "state/people/state";
+import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
+import { SubscriberInfo, SubscriptionInfo, SubscriptionType } from "api/node/api-types";
 
 const initialState = {
     tab: "subscribers",
@@ -39,7 +43,7 @@ const initialState = {
     subscriptions: []
 };
 
-function sortSubscribers(list) {
+function sortSubscribers(list: SubscriberInfo[]): SubscriberInfo[] {
     if (list) {
         list.sort((sr1, sr2) => {
             const sr1name = sr1.fullName || sr1.nodeName;
@@ -50,7 +54,7 @@ function sortSubscribers(list) {
     return list;
 }
 
-function sortSubscriptions(list) {
+function sortSubscriptions(list: SubscriptionInfo[]): SubscriptionInfo[] {
     if (list) {
         list.sort((sr1, sr2) => {
             const sr1name = sr1.remoteFullName || sr1.remoteNodeName;
@@ -61,7 +65,7 @@ function sortSubscriptions(list) {
     return list;
 }
 
-export default (state = initialState, action) => {
+export default (state: PeopleState = initialState, action: WithContext<ClientAction>): PeopleState => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
@@ -174,7 +178,7 @@ export default (state = initialState, action) => {
         case EVENT_NODE_SUBSCRIBER_ADDED:
             if (state.loadedSubscribers && action.payload.subscriptionType === "feed") {
                 const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.id);
-                const subscriber = {
+                const subscriber: SubscriberInfo & {subscriptionType?: SubscriptionType} = {
                     ...action.payload,
                     type: "feed"
                 }
@@ -203,7 +207,7 @@ export default (state = initialState, action) => {
         case EVENT_NODE_SUBSCRIPTION_ADDED:
             if (state.loadedSubscriptions && action.payload.subscriptionType === "feed") {
                 const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.id);
-                const subscription = {
+                const subscription: SubscriptionInfo & {subscriptionType?: SubscriptionType} = {
                     ...action.payload,
                     type: "feed"
                 }
@@ -240,7 +244,7 @@ export default (state = initialState, action) => {
                     }
                 }
                 if (state.loadedSubscriptions) {
-                    const index = state.subscriptions.findIndex(sr => sr.nodeName === action.payload.name);
+                    const index = state.subscriptions.findIndex(sr => sr.remoteNodeName === action.payload.name);
                     if (index >= 0) {
                         istate.update(["subscriptions", index],
                             sr => ({...sr, fullName: action.payload.fullName}));
@@ -261,7 +265,7 @@ export default (state = initialState, action) => {
                     }
                 }
                 if (state.loadedSubscriptions) {
-                    const index = state.subscriptions.findIndex(sr => sr.nodeName === action.payload.name);
+                    const index = state.subscriptions.findIndex(sr => sr.remoteNodeName === action.payload.name);
                     if (index >= 0) {
                         istate.update(["subscriptions", index],
                             sr => ({...sr, avatar: cloneDeep(action.payload.avatar)}));
