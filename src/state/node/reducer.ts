@@ -1,5 +1,7 @@
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { toWsUrl } from "util/url";
+import { NodeState } from "state/node/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     root: {
@@ -10,7 +12,7 @@ const initialState = {
     }
 };
 
-export default (state = initialState, action) => {
+export default (state: NodeState = initialState, action: ClientAction): NodeState => {
     switch (action.type) {
         case INIT_FROM_LOCATION: {
             if (!action.payload.rootLocation) {

@@ -11,6 +11,8 @@ import {
     LOCATION_UNLOCK
 } from "state/navigation/actions";
 import { PAGE_TIMELINE } from "state/navigation/pages";
+import { NavigationState } from "state/navigation/state";
+import { ClientAction } from "state/action";
 
 const initialState = {
     standalone: true,
@@ -23,7 +25,7 @@ const initialState = {
     closeDialogAction: null
 };
 
-export default (state = initialState, action) => {
+export default (state: NavigationState = initialState, action: ClientAction): NavigationState => {
     switch (action.type) {
         case INIT_STORAGE:
             return {
@@ -33,7 +35,7 @@ export default (state = initialState, action) => {
 
         case INIT_FROM_LOCATION: {
             let {path, query, hash} = action.payload;
-            path = path.startsWith("/moera") ? path.substring(6) : path;
+            path = path != null && path.startsWith("/moera") ? path.substring(6) : path;
             return {
                 ...state,
                 location: path + (query ?? "") + (hash ?? ""),

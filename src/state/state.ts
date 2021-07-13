@@ -11,6 +11,9 @@ import { HomeState } from "state/home/state";
 import { FlashBoxState } from "state/flashbox/state";
 import { MessageBoxState } from "state/messagebox/state";
 import { NamingState } from "state/naming/state";
+import { NavigationState } from "state/navigation/state";
+import { NodeState } from "state/node/state";
+import { NodeCardsState } from "state/nodecards/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -26,4 +29,7 @@ export interface ClientState {
     home: HomeState;
     messageBox: MessageBoxState;
     naming: NamingState;
+    navigation: NavigationState;
+    node: NodeState;
+    nodeCards: NodeCardsState;
 }

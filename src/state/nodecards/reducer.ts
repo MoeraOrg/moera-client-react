@@ -24,6 +24,9 @@ import {
     EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_NODE_PEOPLE_CHANGED
 } from "api/events/actions";
+import { NodeCardsState } from "state/nodecards/state";
+import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 
 const initialState = {
 };
@@ -42,7 +45,7 @@ const emptyCard = {
     loaded: false
 };
 
-export default (state = initialState, action) => {
+export default (state: NodeCardsState = initialState, action: WithContext<ClientAction>): NodeCardsState => {
     switch (action.type) {
         case NODE_CARD_LOAD: {
             const {nodeName} = action.payload;
@@ -193,7 +196,7 @@ export default (state = initialState, action) => {
         case EVENT_NODE_PEOPLE_CHANGED: {
             const {feedSubscribersTotal, feedSubscriptionsTotal} = action.payload;
             const {ownerName} = action.context;
-            if (state[ownerName]) {
+            if (ownerName != null && state[ownerName]) {
                 return immutable.assign(state, [ownerName], {
                     subscribersTotal: feedSubscribersTotal,
                     subscriptionsTotal: feedSubscriptionsTotal,
@@ -205,7 +208,7 @@ export default (state = initialState, action) => {
         case EVENT_HOME_PEOPLE_CHANGED: {
             const {feedSubscribersTotal, feedSubscriptionsTotal} = action.payload;
             const {homeOwnerName} = action.context;
-            if (state[homeOwnerName]) {
+            if (homeOwnerName != null && state[homeOwnerName]) {
                 return immutable.assign(state, [homeOwnerName], {
                     subscribersTotal: feedSubscribersTotal,
                     subscriptionsTotal: feedSubscriptionsTotal,
