@@ -44,7 +44,7 @@ export function trigger(signal: ClientActionType | ClientActionType[],
     return {signal, filter, action};
 }
 
-function addTrigger(triggers: TriggerMap, trigger: Trigger) {
+function addTrigger(triggers: TriggerMap, trigger: Trigger): void {
     const {signal, filter, action} = trigger;
 
     if (filter === false) {
