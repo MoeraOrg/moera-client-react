@@ -4,7 +4,7 @@ import { ActionWithPayload } from "state/action-types";
 import { PeopleGeneralInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";
-type PeopleGoToTabAction = ActionWithPayload<typeof PEOPLE_GO_TO_TAB, {
+export type PeopleGoToTabAction = ActionWithPayload<typeof PEOPLE_GO_TO_TAB, {
     tab: string;
 }>;
 export const peopleGoToTab = (tab: string): PeopleGoToTabAction => ({
@@ -13,13 +13,13 @@ export const peopleGoToTab = (tab: string): PeopleGoToTabAction => ({
 });
 
 export const PEOPLE_GENERAL_LOAD = "PEOPLE_GENERAL_LOAD";
-type PeopleGeneralLoadAction = Action<typeof PEOPLE_GENERAL_LOAD>;
+export type PeopleGeneralLoadAction = Action<typeof PEOPLE_GENERAL_LOAD>;
 export const peopleGeneralLoad = (): PeopleGeneralLoadAction => ({
     type: PEOPLE_GENERAL_LOAD
 });
 
 export const PEOPLE_GENERAL_LOADED = "PEOPLE_GENERAL_LOADED";
-type PeopleGeneralLoadedAction = ActionWithPayload<typeof PEOPLE_GENERAL_LOADED, {
+export type PeopleGeneralLoadedAction = ActionWithPayload<typeof PEOPLE_GENERAL_LOADED, {
     info: PeopleGeneralInfo;
 }>;
 export const peopleGeneralLoaded = (info: PeopleGeneralInfo): PeopleGeneralLoadedAction => ({
@@ -28,19 +28,19 @@ export const peopleGeneralLoaded = (info: PeopleGeneralInfo): PeopleGeneralLoade
 });
 
 export const PEOPLE_GENERAL_LOAD_FAILED = "PEOPLE_GENERAL_LOAD_FAILED";
-type PeopleGeneralLoadFailedAction = Action<typeof PEOPLE_GENERAL_LOAD_FAILED>;
+export type PeopleGeneralLoadFailedAction = Action<typeof PEOPLE_GENERAL_LOAD_FAILED>;
 export const peopleGeneralLoadFailed = (): PeopleGeneralLoadFailedAction => ({
     type: PEOPLE_GENERAL_LOAD_FAILED
 });
 
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
-type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
+export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
     type: SUBSCRIBERS_LOAD
 });
 
 export const SUBSCRIBERS_LOADED = "SUBSCRIBERS_LOADED";
-type SubscribersLoadedAction = ActionWithPayload<typeof SUBSCRIBERS_LOADED, {
+export type SubscribersLoadedAction = ActionWithPayload<typeof SUBSCRIBERS_LOADED, {
     list: SubscriberInfo[];
 }>;
 export const subscribersLoaded = (list: SubscriberInfo[]): SubscribersLoadedAction => ({
@@ -49,19 +49,19 @@ export const subscribersLoaded = (list: SubscriberInfo[]): SubscribersLoadedActi
 });
 
 export const SUBSCRIBERS_LOAD_FAILED = "SUBSCRIBERS_LOAD_FAILED";
-type SubscribersLoadFailedAction = Action<typeof SUBSCRIBERS_LOAD_FAILED>;
+export type SubscribersLoadFailedAction = Action<typeof SUBSCRIBERS_LOAD_FAILED>;
 export const subscribersLoadFailed = (): SubscribersLoadFailedAction => ({
     type: SUBSCRIBERS_LOAD_FAILED
 });
 
 export const SUBSCRIPTIONS_LOAD = "SUBSCRIPTIONS_LOAD";
-type SubscriptionsLoadAction = Action<typeof SUBSCRIPTIONS_LOAD>;
+export type SubscriptionsLoadAction = Action<typeof SUBSCRIPTIONS_LOAD>;
 export const subscriptionsLoad = (): SubscriptionsLoadAction => ({
     type: SUBSCRIPTIONS_LOAD
 });
 
 export const SUBSCRIPTIONS_LOADED = "SUBSCRIPTIONS_LOADED";
-type SubscriptionsLoadedAction = ActionWithPayload<typeof SUBSCRIPTIONS_LOADED, {
+export type SubscriptionsLoadedAction = ActionWithPayload<typeof SUBSCRIPTIONS_LOADED, {
     list: SubscriptionInfo[];
 }>;
 export const subscriptionsLoaded = (list: SubscriptionInfo[]): SubscriptionsLoadedAction => ({
@@ -70,7 +70,7 @@ export const subscriptionsLoaded = (list: SubscriptionInfo[]): SubscriptionsLoad
 });
 
 export const SUBSCRIPTIONS_LOAD_FAILED = "SUBSCRIPTIONS_LOAD_FAILED";
-type SubscriptionsLoadFailedAction = Action<typeof SUBSCRIPTIONS_LOAD_FAILED>;
+export type SubscriptionsLoadFailedAction = Action<typeof SUBSCRIPTIONS_LOAD_FAILED>;
 export const subscriptionsLoadFailed = (): SubscriptionsLoadFailedAction => ({
     type: SUBSCRIPTIONS_LOAD_FAILED
 });

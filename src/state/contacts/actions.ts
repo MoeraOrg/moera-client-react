@@ -4,7 +4,7 @@ import { ActionWithPayload } from "state/action-types";
 import { ContactInfo } from "api/node/api-types";
 
 export const CONTACTS_PREPARE = "CONTACTS_PREPARE";
-type ContactsPrepareAction = ActionWithPayload<typeof CONTACTS_PREPARE, {
+export type ContactsPrepareAction = ActionWithPayload<typeof CONTACTS_PREPARE, {
     query: string;
 }>;
 export const contactsPrepare = (query: string): ContactsPrepareAction => ({
@@ -13,7 +13,7 @@ export const contactsPrepare = (query: string): ContactsPrepareAction => ({
 });
 
 export const CONTACTS_LOAD = "CONTACTS_LOAD";
-type ContactsLoadAction = ActionWithPayload<typeof CONTACTS_LOAD, {
+export type ContactsLoadAction = ActionWithPayload<typeof CONTACTS_LOAD, {
     query: string;
 }>;
 export const contactsLoad = (query: string): ContactsLoadAction => ({
@@ -22,7 +22,7 @@ export const contactsLoad = (query: string): ContactsLoadAction => ({
 });
 
 export const CONTACTS_LOADED = "CONTACTS_LOADED";
-type ContactsLoadedAction = ActionWithPayload<typeof CONTACTS_LOADED, {
+export type ContactsLoadedAction = ActionWithPayload<typeof CONTACTS_LOADED, {
     query: string;
     contacts: ContactInfo[];
 }>;
@@ -32,7 +32,7 @@ export const contactsLoaded = (query: string, contacts: ContactInfo[]): Contacts
 });
 
 export const CONTACTS_LOAD_FAILED = "CONTACTS_LOAD_FAILED";
-type ContactsLoadFailedAction = ActionWithPayload<typeof CONTACTS_LOAD_FAILED, {
+export type ContactsLoadFailedAction = ActionWithPayload<typeof CONTACTS_LOAD_FAILED, {
     query: string;
 }>;
 export const contactsLoadFailed = (query: string): ContactsLoadFailedAction => ({
@@ -41,7 +41,7 @@ export const contactsLoadFailed = (query: string): ContactsLoadFailedAction => (
 });
 
 export const CONTACTS_UNSET = "CONTACTS_UNSET";
-type ContactsUnsetAction = Action<typeof CONTACTS_UNSET>;
+export type ContactsUnsetAction = Action<typeof CONTACTS_UNSET>;
 export const contactsUnset = (): ContactsUnsetAction => ({
     type: CONTACTS_UNSET
 });

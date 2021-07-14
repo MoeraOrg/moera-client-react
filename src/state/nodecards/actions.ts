@@ -4,7 +4,7 @@ import { ActionWithPayload } from "state/action-types";
 import { AvatarImage } from "api/node/api-types";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
-type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
+export type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
     nodeName: string;
 }>;
 export const nodeCardPrepare = (nodeName: string): NodeCardPrepareAction => ({
@@ -13,7 +13,7 @@ export const nodeCardPrepare = (nodeName: string): NodeCardPrepareAction => ({
 });
 
 export const NODE_CARD_LOAD = "NODE_CARD_LOAD";
-type NodeCardLoadAction = ActionWithPayload<typeof NODE_CARD_LOAD, {
+export type NodeCardLoadAction = ActionWithPayload<typeof NODE_CARD_LOAD, {
     nodeName: string;
 }>;
 export const nodeCardLoad = (nodeName: string): NodeCardLoadAction => ({
@@ -22,7 +22,7 @@ export const nodeCardLoad = (nodeName: string): NodeCardLoadAction => ({
 });
 
 export const NODE_CARD_LOADED = "NODE_CARD_LOADED";
-type NodeCardLoadedAction = ActionWithPayload<typeof NODE_CARD_LOADED, {
+export type NodeCardLoadedAction = ActionWithPayload<typeof NODE_CARD_LOADED, {
     nodeName: string;
 }>;
 export const nodeCardLoaded = (nodeName: string): NodeCardLoadedAction => ({
@@ -31,7 +31,7 @@ export const nodeCardLoaded = (nodeName: string): NodeCardLoadedAction => ({
 });
 
 export const NODE_CARD_LOAD_FAILED = "NODE_CARD_LOAD_FAILED";
-type NodeCardLoadFailedAction = ActionWithPayload<typeof NODE_CARD_LOAD_FAILED, {
+export type NodeCardLoadFailedAction = ActionWithPayload<typeof NODE_CARD_LOAD_FAILED, {
     nodeName: string;
 }>;
 export const nodeCardLoadFailed = (nodeName: string): NodeCardLoadFailedAction => ({
@@ -40,7 +40,7 @@ export const nodeCardLoadFailed = (nodeName: string): NodeCardLoadFailedAction =
 });
 
 export const NODE_CARD_DETAILS_SET = "NODE_CARD_DETAILS_SET";
-type NodeCardDetailsSetAction = ActionWithPayload<typeof NODE_CARD_DETAILS_SET, {
+export type NodeCardDetailsSetAction = ActionWithPayload<typeof NODE_CARD_DETAILS_SET, {
     nodeName: string;
     fullName: string | null;
     gender: string | null;
@@ -54,7 +54,7 @@ export const nodeCardDetailsSet = (nodeName: string, fullName: string | null, ge
 });
 
 export const NODE_CARD_PEOPLE_SET = "NODE_CARD_PEOPLE_SET";
-type NodeCardPeopleSetAction = ActionWithPayload<typeof NODE_CARD_PEOPLE_SET, {
+export type NodeCardPeopleSetAction = ActionWithPayload<typeof NODE_CARD_PEOPLE_SET, {
     nodeName: string;
     subscribersTotal: number;
     subscriptionsTotal: number;
@@ -66,7 +66,7 @@ export const nodeCardPeopleSet = (nodeName: string, subscribersTotal: number,
 });
 
 export const NODE_CARD_SUBSCRIPTION_SET = "NODE_CARD_SUBSCRIPTION_SET";
-type NodeCardSubscriptionSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_SET, {
+export type NodeCardSubscriptionSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_SET, {
     nodeName: string;
     subscriberId: string;
 }>;
@@ -76,13 +76,13 @@ export const nodeCardSubscriptionSet = (nodeName: string, subscriberId: string):
 });
 
 export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
-type NodeCardsUnsetAction = Action<typeof NODE_CARDS_UNSET>;
+export type NodeCardsUnsetAction = Action<typeof NODE_CARDS_UNSET>;
 export const nodeCardsUnset = (): NodeCardsUnsetAction => ({
     type: NODE_CARDS_UNSET
 });
 
 export const NODE_CARD_COPY_MENTION = "NODE_CARD_COPY_MENTION";
-type NodeCardCopyMentionAction = ActionWithPayload<typeof NODE_CARD_COPY_MENTION, {
+export type NodeCardCopyMentionAction = ActionWithPayload<typeof NODE_CARD_COPY_MENTION, {
     nodeName: string;
     fullName: string | null;
 }>;

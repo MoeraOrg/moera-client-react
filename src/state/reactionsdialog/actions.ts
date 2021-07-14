@@ -4,7 +4,7 @@ import { ActionWithPayload } from "state/action-types";
 import { ReactionInfo, ReactionTotalInfo } from "api/node/api-types";
 
 export const OPEN_REACTIONS_DIALOG = "OPEN_REACTIONS_DIALOG";
-type OpenReactionsDialogAction = ActionWithPayload<typeof OPEN_REACTIONS_DIALOG, {
+export type OpenReactionsDialogAction = ActionWithPayload<typeof OPEN_REACTIONS_DIALOG, {
     nodeName: string;
     postingId: string;
     commentId: string | null;
@@ -17,25 +17,25 @@ export const openReactionsDialog = (nodeName: string, postingId: string, comment
 });
 
 export const CLOSE_REACTIONS_DIALOG = "CLOSE_REACTIONS_DIALOG";
-type CloseReactionsDialogAction = Action<typeof CLOSE_REACTIONS_DIALOG>;
+export type CloseReactionsDialogAction = Action<typeof CLOSE_REACTIONS_DIALOG>;
 export const closeReactionsDialog = (): CloseReactionsDialogAction => ({
     type: CLOSE_REACTIONS_DIALOG
 });
 
 export const REACTIONS_DIALOG_UNSET = "REACTIONS_DIALOG_UNSET";
-type ReactionsDialogUnsetAction = Action<typeof REACTIONS_DIALOG_UNSET>;
+export type ReactionsDialogUnsetAction = Action<typeof REACTIONS_DIALOG_UNSET>;
 export const reactionsDialogUnset = (): ReactionsDialogUnsetAction => ({
     type: REACTIONS_DIALOG_UNSET
 });
 
 export const REACTIONS_DIALOG_PAST_REACTIONS_LOAD = "REACTIONS_DIALOG_PAST_REACTIONS_LOAD";
-type ReactionsDialogPastReactionsLoadAction = Action<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD>;
+export type ReactionsDialogPastReactionsLoadAction = Action<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD>;
 export const reactionsDialogPastReactionsLoad = (): ReactionsDialogPastReactionsLoadAction => ({
     type: REACTIONS_DIALOG_PAST_REACTIONS_LOAD
 });
 
 export const REACTIONS_DIALOG_PAST_REACTIONS_LOADED = "REACTIONS_DIALOG_PAST_REACTIONS_LOADED";
-type ReactionsDialogPastReactionsLoadedAction = ActionWithPayload<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOADED, {
+export type ReactionsDialogPastReactionsLoadedAction = ActionWithPayload<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOADED, {
     reactions: ReactionInfo[];
     postingId: string;
     commentId: string | null;
@@ -54,7 +54,7 @@ export const reactionsDialogPastReactionsLoaded = (reactions: ReactionInfo[], po
 });
 
 export const REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED = "REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED";
-type ReactionsDialogPastReactionsLoadFailedAction = ActionWithPayload<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED, {
+export type ReactionsDialogPastReactionsLoadFailedAction = ActionWithPayload<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED, {
     postingId: string;
     commentId: string | null;
     negative: boolean;
@@ -67,13 +67,13 @@ export const reactionsDialogPastReactionsLoadFailed = (postingId: string, commen
 });
 
 export const REACTIONS_DIALOG_TOTALS_LOAD = "REACTIONS_DIALOG_TOTALS_LOAD";
-type ReactionsDialogTotalsLoadAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD>;
+export type ReactionsDialogTotalsLoadAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD>;
 export const reactionsDialogTotalsLoad = (): ReactionsDialogTotalsLoadAction => ({
     type: REACTIONS_DIALOG_TOTALS_LOAD
 });
 
 export const REACTIONS_DIALOG_TOTALS_LOADED = "REACTIONS_DIALOG_TOTALS_LOADED";
-type ReactionsDialogTotalsLoaded = ActionWithPayload<typeof REACTIONS_DIALOG_TOTALS_LOADED, {
+export type ReactionsDialogTotalsLoaded = ActionWithPayload<typeof REACTIONS_DIALOG_TOTALS_LOADED, {
     positive: ReactionTotalInfo[];
     negative: ReactionTotalInfo[];
 }>;
@@ -84,13 +84,13 @@ export const reactionsDialogTotalsLoaded = (positive: ReactionTotalInfo[],
 });
 
 export const REACTIONS_DIALOG_TOTALS_LOAD_FAILED = "REACTIONS_DIALOG_TOTALS_LOAD_FAILED";
-type ReactionsDialogTotalsLoadFailedAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD_FAILED>;
+export type ReactionsDialogTotalsLoadFailedAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD_FAILED>;
 export const reactionsDialogTotalsLoadFailed = (): ReactionsDialogTotalsLoadFailedAction => ({
     type: REACTIONS_DIALOG_TOTALS_LOAD_FAILED
 });
 
 export const REACTIONS_DIALOG_SELECT_TAB = "REACTIONS_DIALOG_SELECT_TAB";
-type ReactionsDialogSelectTabAction = ActionWithPayload<typeof REACTIONS_DIALOG_SELECT_TAB, {
+export type ReactionsDialogSelectTabAction = ActionWithPayload<typeof REACTIONS_DIALOG_SELECT_TAB, {
     tab: string;
 }>;
 export const reactionsDialogSelectTab = (tab: string): ReactionsDialogSelectTabAction => ({
@@ -99,7 +99,7 @@ export const reactionsDialogSelectTab = (tab: string): ReactionsDialogSelectTabA
 });
 
 export const REACTION_VERIFY = "REACTION_VERIFY";
-type ReactionVerifyAction = ActionWithPayload<typeof REACTION_VERIFY, {
+export type ReactionVerifyAction = ActionWithPayload<typeof REACTION_VERIFY, {
     postingId: string;
     commentId: string | null;
     ownerName: string;
@@ -111,7 +111,7 @@ export const reactionVerify = (postingId: string, commentId: string | null,
 });
 
 export const REACTION_VERIFY_FAILED = "REACTION_VERIFY_FAILED";
-type ReactionVerifyFailedAction = ActionWithPayload<typeof REACTION_VERIFY_FAILED, {
+export type ReactionVerifyFailedAction = ActionWithPayload<typeof REACTION_VERIFY_FAILED, {
     postingId: string;
     commentId: string | null;
     ownerName: string;

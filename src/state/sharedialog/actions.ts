@@ -3,7 +3,7 @@ import { Action } from 'redux';
 import { ActionWithPayload } from "state/action-types";
 
 export const SHARE_DIALOG_PREPARE = "SHARE_DIALOG_PREPARE";
-type ShareDialogPrepareAction = ActionWithPayload<typeof SHARE_DIALOG_PREPARE, {
+export type ShareDialogPrepareAction = ActionWithPayload<typeof SHARE_DIALOG_PREPARE, {
     title: string;
     nodeName: string;
     href: string;
@@ -14,7 +14,7 @@ export const shareDialogPrepare = (title: string, nodeName: string, href: string
 });
 
 export const OPEN_SHARE_DIALOG = "OPEN_SHARE_DIALOG";
-type OpenShareDialogAction = ActionWithPayload<typeof OPEN_SHARE_DIALOG, {
+export type OpenShareDialogAction = ActionWithPayload<typeof OPEN_SHARE_DIALOG, {
     title: string;
     url: string;
 }>;
@@ -24,13 +24,13 @@ export const openShareDialog = (title: string, url: string): OpenShareDialogActi
 });
 
 export const CLOSE_SHARE_DIALOG = "CLOSE_SHARE_DIALOG";
-type CloseShareDialogAction = Action<typeof CLOSE_SHARE_DIALOG>;
+export type CloseShareDialogAction = Action<typeof CLOSE_SHARE_DIALOG>;
 export const closeShareDialog = (): CloseShareDialogAction => ({
     type: CLOSE_SHARE_DIALOG
 });
 
 export const SHARE_DIALOG_COPY_LINK = "SHARE_DIALOG_COPY_LINK";
-type ShareDialogCopyLinkAction = ActionWithPayload<typeof SHARE_DIALOG_COPY_LINK, {
+export type ShareDialogCopyLinkAction = ActionWithPayload<typeof SHARE_DIALOG_COPY_LINK, {
     url: string;
 }>;
 export const shareDialogCopyLink = (url: string): ShareDialogCopyLinkAction => ({

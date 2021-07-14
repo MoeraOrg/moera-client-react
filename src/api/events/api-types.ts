@@ -144,7 +144,7 @@ export interface RemoteReactionVerificationFailedEvent
     errorMessage: string;
 }
 
-interface StoryEvent<T> extends BaseEvent<T> {
+export interface StoryEvent<T> extends BaseEvent<T> {
     id: string;
     storyType: StoryType;
     feedName: string;

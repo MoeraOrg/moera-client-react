@@ -92,10 +92,10 @@ export const EVENT_HOME_PEOPLE_CHANGED = "EVENT_HOME_PEOPLE_CHANGED";
 export const EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED = "EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED";
 export const EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED = "EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED";
 
-type EventSource = "HOME" | "NODE" | "RECEIVER";
-type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
+export type EventSource = "HOME" | "NODE" | "RECEIVER";
+export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
 
-interface EventAction<E extends {type: string}> extends Action<E["type"]> {
+export interface EventAction<E extends {type: string}> extends Action<E["type"]> {
     type: EventActionType<E["type"]>;
     payload: Omit<E, "type">;
 }

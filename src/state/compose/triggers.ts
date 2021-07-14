@@ -13,6 +13,7 @@ import {
     composeFeaturesLoad,
     composeFeaturesUnset,
     composePostingLoad,
+    ComposePostSucceededAction,
     composePreviewClose,
     composeSharedTextLoad
 } from "state/compose/actions";
@@ -35,11 +36,13 @@ import {
     EVENT_HOME_DRAFT_DELETED,
     EVENT_HOME_DRAFT_UPDATED,
     EVENT_HOME_NODE_SETTINGS_CHANGED,
-    EVENT_NODE_POSTING_UPDATED
+    EVENT_NODE_POSTING_UPDATED,
+    EventAction
 } from "api/events/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
 import { getOwnerName } from "state/owner/selectors";
+import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, PostingUpdatedEvent } from "api/events/api-types";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
@@ -47,23 +50,28 @@ export default [
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
-    trigger(COMPOSE_POST_SUCCEEDED, true, signal => goToPosting(signal.payload.posting.id)),
-    trigger(COMPOSE_POST_SUCCEEDED, true, signal => postingSet(signal.payload.posting)),
     trigger(
         COMPOSE_POST_SUCCEEDED,
-        (state, signal) => !isComposePostingEditing(state)
-            && hasPostingFeedReference(signal.payload.posting, "timeline"),
-        signal => storyAdded(getPostingStory(signal.payload.posting, "timeline"))
+        true,
+        (signal: ComposePostSucceededAction) => goToPosting(signal.payload.posting.id)
+    ),
+    trigger(COMPOSE_POST_SUCCEEDED, true, (signal: ComposePostSucceededAction) => postingSet(signal.payload.posting)),
+    trigger(
+        COMPOSE_POST_SUCCEEDED,
+        (state, signal: ComposePostSucceededAction) =>
+            !isComposePostingEditing(state) && hasPostingFeedReference(signal.payload.posting, "timeline"),
+        signal => storyAdded(getPostingStory(signal.payload.posting, "timeline")!)
     ),
     trigger(
         COMPOSE_POST_SUCCEEDED,
-        (state, signal) => isComposePostingEditing(state)
-            && hasPostingFeedReference(signal.payload.posting, "timeline"),
-        signal => storyUpdated(getPostingStory(signal.payload.posting, "timeline"))
+        (state, signal: ComposePostSucceededAction) =>
+            isComposePostingEditing(state) && hasPostingFeedReference(signal.payload.posting, "timeline"),
+        signal => storyUpdated(getPostingStory(signal.payload.posting, "timeline")!)
     ),
     trigger(
         EVENT_NODE_POSTING_UPDATED,
-        (state, signal) => isAtComposePage(state) && getComposePostingId(state) === signal.payload.id,
+        (state, signal: EventAction<PostingUpdatedEvent>) =>
+            isAtComposePage(state) && getComposePostingId(state) === signal.payload.id,
         composeConflict
     ),
     trigger(
@@ -83,14 +91,16 @@ export default [
     trigger(COMPOSE_PREVIEW, true, dialogOpened(composePreviewClose())),
     trigger(
         [EVENT_HOME_DRAFT_ADDED, EVENT_HOME_DRAFT_UPDATED],
-        (state, signal) => signal.payload.draftType === "new-posting"
+        (state, signal: EventAction<DraftAddedEvent | DraftUpdatedEvent>) =>
+            signal.payload.draftType === "new-posting"
             && signal.payload.receiverName === getOwnerName(state)
             && isComposeDraftListLoaded(state),
         signal => composeDraftListItemReload(signal.payload.id)
     ),
     trigger(
         EVENT_HOME_DRAFT_DELETED,
-        (state, signal) => signal.payload.draftType === "new-posting"
+        (state, signal: EventAction<DraftDeletedEvent>) =>
+            signal.payload.draftType === "new-posting"
             && signal.payload.receiverName === getOwnerName(state)
             && isComposeDraftListLoaded(state),
         signal => composeDraftListItemDeleted(signal.payload.id)

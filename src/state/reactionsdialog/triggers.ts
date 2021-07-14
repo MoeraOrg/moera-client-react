@@ -19,10 +19,16 @@ import {
     EVENT_NODE_POSTING_REACTIONS_CHANGED,
     EVENT_NODE_POSTING_UPDATED,
     EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
-    EVENT_RECEIVER_COMMENT_UPDATED
+    EVENT_RECEIVER_COMMENT_UPDATED, EventAction
 } from "api/events/actions";
 import { isCommentMomentInLoadedRange } from "state/detailedposting/selectors";
 import { dialogOpened, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
+import {
+    CommentReactionsChangedEvent,
+    CommentUpdatedEvent,
+    PostingReactionsChangedEvent,
+    PostingUpdatedEvent
+} from "api/events/api-types";
 
 export default [
     trigger(
@@ -39,26 +45,26 @@ export default [
     ),
     trigger(
         [EVENT_NODE_POSTING_UPDATED, EVENT_NODE_POSTING_REACTIONS_CHANGED],
-        (state, signal) =>
+        (state, signal: EventAction<PostingUpdatedEvent | PostingReactionsChangedEvent>) =>
             isReactionsDialogShown(state) && getReactionsDialogPostingId(state) === signal.payload.id,
         reactionsDialogTotalsLoad
     ),
     trigger(
         [EVENT_NODE_POSTING_UPDATED, EVENT_NODE_POSTING_REACTIONS_CHANGED],
-        (state, signal) =>
+        (state, signal: EventAction<PostingUpdatedEvent | PostingReactionsChangedEvent>) =>
             !isReactionsDialogShown(state) && getReactionsDialogPostingId(state) === signal.payload.id,
         reactionsDialogUnset
     ),
     trigger(
         [EVENT_RECEIVER_COMMENT_UPDATED, EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED],
-        (state, signal) =>
+        (state, signal: EventAction<CommentUpdatedEvent | CommentReactionsChangedEvent>) =>
             isReactionsDialogShown(state) && getReactionsDialogReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         reactionsDialogTotalsLoad
     ),
     trigger(
         [EVENT_RECEIVER_COMMENT_UPDATED, EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED],
-        (state, signal) =>
+        (state, signal: EventAction<CommentUpdatedEvent | CommentReactionsChangedEvent>) =>
             !isReactionsDialogShown(state) && getReactionsDialogReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         reactionsDialogUnset

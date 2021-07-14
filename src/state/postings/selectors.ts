@@ -27,15 +27,16 @@ export function getPostingVerificationStatus(state: ClientState, id: string): Ve
     return selectn(["postings", id, "verificationStatus"], state);
 }
 
-export function getPostingFeedReference(posting: PostingInfo, feedName: string): FeedReference | null {
+export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">,
+                                        feedName: string): FeedReference | null {
     return posting.feedReferences ? (posting.feedReferences.find(r => r.feedName === feedName) ?? null) : null;
 }
 
-export function hasPostingFeedReference(posting: PostingInfo, feedName: string): boolean {
+export function hasPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">, feedName: string): boolean {
     return getPostingFeedReference(posting, feedName) != null;
 }
 
-export function getPostingMoment(posting: PostingInfo, feedName: string): number | null {
+export function getPostingMoment(posting: Pick<PostingInfo, "feedReferences">, feedName: string): number | null {
     const ref = getPostingFeedReference(posting, feedName);
     return ref ? ref.moment : null;
 }
