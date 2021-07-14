@@ -1,5 +1,6 @@
 export interface NameState {
     accessed: number;
+    updated: number;
     loading: boolean;
     loaded: boolean;
     nodeUri: string | null;

@@ -314,8 +314,8 @@ export interface StoryInfoBase<B> {
     posting?: PostingInfoBase<B> | null;
     comment?: CommentInfoBase<B> | null;
     summaryAvatar?: AvatarImage | null;
-    summary: string;
-    trackingId: string;
+    summary?: string | null;
+    trackingId?: string | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
     remotePostingId?: string | null;

@@ -54,8 +54,10 @@ function safeguard(posting: PostingInfo): PostingInfo {
 }
 
 function toFeedReference(story: StoryInfo): FeedReference {
-    const ref: any = {...story};
-    ref.storyId = story.id;
+    const ref: FeedReference & {id?: any, posting?: any} = {
+        ...story,
+        storyId: story.id
+    };
     delete ref.id;
     delete ref.posting;
     return ref;

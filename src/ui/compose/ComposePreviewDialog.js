@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Button, ModalDialog } from "ui/control";
 import { composePreviewClose } from "state/compose/actions";
-import { getComposeDraft, getComposeDraftRevision } from "state/compose/selectors";
+import { getComposeDraft } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
@@ -51,7 +51,7 @@ class ComposePreviewDialog extends React.PureComponent {
 export default connect(
     state => ({
         show: state.compose.showPreview,
-        posting: getComposeDraft(state) ?? getComposeDraftRevision(state),
+        posting: getComposeDraft(state),
         feedWidth: getSetting(state, "feed.width")
     }),
     { composePreviewClose }

@@ -7,7 +7,7 @@ export interface ExtCommentInfo extends CommentInfo {
     singleEmoji: boolean;
 }
 
-export interface DetailedPostingCommentsState {
+export interface CommentsState {
     receiverName: string | null;
     receiverFullName: string | null;
     receiverPostingId: string | null;
@@ -48,7 +48,7 @@ export interface DetailedPostingComposeState {
 export interface DetailedPostingState {
     id: string | null;
     loading: boolean;
-    comments: DetailedPostingCommentsState;
+    comments: CommentsState;
     positioned: boolean;
     compose: DetailedPostingComposeState;
 }

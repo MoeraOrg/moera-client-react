@@ -1,8 +1,10 @@
 import { now } from "util/misc";
+import { ClientState } from "state/state";
+import { NameState } from "state/naming/state";
 
 const USED_NAME_RELOAD_PERIOD = 6 * 60 * 60;
 
-function isNamingNameToBeLoaded(state, name) {
+function isNamingNameToBeLoaded(state: ClientState, name: string | null): boolean {
     if (!name) {
         return false;
     }
@@ -12,20 +14,22 @@ function isNamingNameToBeLoaded(state, name) {
         && !details.loading;
 }
 
-export function getNamingNamesToBeLoaded(state, names) {
+export function getNamingNamesToBeLoaded(state: ClientState, names: string[]): string[] {
     return names.filter(name => isNamingNameToBeLoaded(state, name));
 }
 
-export function getNamingNameDetails(state, name) {
+export function getNamingNameDetails(state: ClientState, name: string): NameState {
     const details = state.naming.names[name];
     return details ? details : {
         loading: false,
         loaded: false,
-        nodeUri: null
+        nodeUri: null,
+        accessed: 0,
+        updated: 0
     }
 }
 
-export function getNamingNameNodeUri(state, name) {
+export function getNamingNameNodeUri(state: ClientState, name: string): string | null {
     const details = getNamingNameDetails(state, name);
     return details.loaded && details.nodeUri != null ? details.nodeUri : null;
 }

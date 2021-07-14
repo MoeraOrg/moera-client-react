@@ -84,7 +84,7 @@ function createEmojiElement(entity: EmojiEntity): string {
     return `<b style="background-image: url('${entity.url}')" class="emoji">${entity.text}</b>`;
 }
 
-export function replaceEmojis(html: string): string {
+export function replaceEmojis(html: string | null | undefined): string {
     if (!html) {
         return "";
     }

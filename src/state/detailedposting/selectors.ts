@@ -2,56 +2,59 @@ import { createSelector } from 'reselect';
 
 import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { ClientState } from "state/state";
+import { AvatarImage, CommentInfo, PostingInfo } from "api/node/api-types";
+import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
 
-export function getDetailedPostingId(state) {
+export function getDetailedPostingId(state: ClientState): string | null {
     return state.detailedPosting.id;
 }
 
-export function isDetailedPostingDefined(state) {
+export function isDetailedPostingDefined(state: ClientState): boolean {
     return !!getDetailedPostingId(state);
 }
 
-export function isDetailedPostingId(state, id) {
+export function isDetailedPostingId(state: ClientState, id: string): boolean {
     return state.detailedPosting.id === id;
 }
 
-export function isDetailedPostingCached(state) {
+export function isDetailedPostingCached(state: ClientState): boolean {
     return isPostingCached(state, getDetailedPostingId(state));
 }
 
-export function getDetailedPosting(state) {
+export function getDetailedPosting(state: ClientState): PostingInfo | null {
     return getPosting(state, getDetailedPostingId(state));
 }
 
-export function isDetailedPostingBeingDeleted(state) {
+export function isDetailedPostingBeingDeleted(state: ClientState): boolean {
     return isPostingBeingDeleted(state, getDetailedPostingId(state));
 }
 
-export function isDetailedPostingToBeLoaded(state) {
+export function isDetailedPostingToBeLoaded(state: ClientState): boolean {
     return !state.detailedPosting.loading && getDetailedPosting(state) == null;
 }
 
-export function isDetailedPostingPositioned(state) {
+export function isDetailedPostingPositioned(state: ClientState): boolean {
     return state.detailedPosting.positioned;
 }
 
-export function getCommentsState(state) {
+export function getCommentsState(state: ClientState): CommentsState {
     return state.detailedPosting.comments;
 }
 
-export function getCommentsReceiverName(state) {
+export function getCommentsReceiverName(state: ClientState): string | null {
     return getCommentsState(state).receiverName;
 }
 
-export function getCommentsReceiverPostingId(state) {
+export function getCommentsReceiverPostingId(state: ClientState): string | null {
     return getCommentsState(state).receiverPostingId;
 }
 
-export function isCommentsReceiverPostingId(state, id) {
+export function isCommentsReceiverPostingId(state: ClientState, id: string): boolean {
     return getCommentsState(state).receiverPostingId === id;
 }
 
-export function isCommentsReceiverToBeSwitched(state) {
+export function isCommentsReceiverToBeSwitched(state: ClientState): boolean {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     if (ownerName == null || posting == null) {
@@ -64,19 +67,19 @@ export function isCommentsReceiverToBeSwitched(state) {
     return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
 }
 
-export function getComments(state) {
+export function getComments(state: ClientState): ExtCommentInfo[] {
     return getCommentsState(state).comments;
 }
 
-export function getComment(state, id) {
-    return getCommentsState(state).comments.find(c => c.id === id);
+export function getComment(state: ClientState, id: string): ExtCommentInfo | null {
+    return getCommentsState(state).comments.find(c => c.id === id) ?? null;
 }
 
-export function getFocusedCommentId(state) {
+export function getFocusedCommentId(state: ClientState): string | null {
     return getCommentsState(state).focusedCommentId;
 }
 
-export function isFocusedCommentToBeLoaded(state) {
+export function isFocusedCommentToBeLoaded(state: ClientState): boolean {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     if (ownerName == null || posting == null || isCommentsReceiverToBeSwitched(state)) {
@@ -86,7 +89,7 @@ export function isFocusedCommentToBeLoaded(state) {
     return comments.focusedCommentId != null && !comments.loadedFocusedComment && !comments.loadingFocusedComment;
 }
 
-export function isFocusedCommentReady(state) {
+export function isFocusedCommentReady(state: ClientState): boolean {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     if (ownerName == null || posting == null || isCommentsReceiverToBeSwitched(state)) {
@@ -96,87 +99,95 @@ export function isFocusedCommentReady(state) {
     return comments.focusedCommentId == null || comments.loadedFocusedComment;
 }
 
-export function isFocusedCommentInList(state) {
+export function isFocusedCommentInList(state: ClientState): boolean {
     const comments = getCommentsState(state);
     return comments.focusedCommentId == null || getComment(state, comments.focusedCommentId) != null;
 }
 
-export function isCommentsReadyToBeLoaded(state) {
+export function isCommentsReadyToBeLoaded(state: ClientState): boolean {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
     return ownerName != null && posting != null && !isCommentsReceiverToBeSwitched(state)
         && isFocusedCommentReady(state);
 }
 
-export function isFutureCommentsToBeLoaded(state) {
+export function isFutureCommentsToBeLoaded(state: ClientState): boolean {
     const comments = getCommentsState(state);
     return isCommentsReadyToBeLoaded(state) && !comments.loadingFuture
         && (comments.before === comments.focusedMoment || comments.before === comments.anchor)
         && comments.before < Number.MAX_SAFE_INTEGER;
 }
 
-export function isPastCommentsToBeLoaded(state) {
+export function isPastCommentsToBeLoaded(state: ClientState): boolean {
     const comments = getCommentsState(state);
     return isCommentsReadyToBeLoaded(state) && !comments.loadingPast
         && (comments.after === comments.focusedMoment - 1 || comments.after === comments.anchor)
         && comments.after > Number.MIN_SAFE_INTEGER;
 }
 
-export function isCommentMomentInLoadedRange(state, moment) {
+export function isCommentMomentInLoadedRange(state: ClientState, moment: number): boolean {
     const comments = getCommentsState(state);
     return moment != null && moment <= comments.before && moment > comments.after;
 }
 
-export function isCommentsFocused(state) {
+export function isCommentsFocused(state: ClientState): boolean {
     return state.detailedPosting.comments.focused;
 }
 
-export function isCommentComposerFocused(state) {
+export function isCommentComposerFocused(state: ClientState): boolean {
     return state.detailedPosting.compose.focused;
 }
 
-export function getCommentComposerCommentId(state) {
+export function getCommentComposerCommentId(state: ClientState): string | null {
     return state.detailedPosting.compose.commentId;
 }
 
-export function getCommentComposerComment(state) {
+export function getCommentComposerComment(state: ClientState): CommentInfo | null {
     return state.detailedPosting.compose.comment;
 }
 
-export function getCommentComposerRepliedToId(state) {
+export function getCommentComposerRepliedToId(state: ClientState): string | null {
     return state.detailedPosting.compose.repliedToId;
 }
 
-export function getCommentComposerRepliedToName(state) {
+export function getCommentComposerRepliedToName(state: ClientState): string | null {
     return state.detailedPosting.compose.repliedToName;
 }
 
-export function isCommentComposerReplied(state) {
+export function isCommentComposerReplied(state: ClientState): boolean {
     return getCommentComposerRepliedToId(state) != null;
 }
 
-export function isCommentDialogShown(state) {
+export function isCommentDialogShown(state: ClientState): boolean {
     return state.detailedPosting.compose.showDialog;
 }
 
-export function isCommentComposerConflict(state) {
+export function isCommentComposerConflict(state: ClientState): boolean {
     return state.detailedPosting.compose.conflict;
 }
 
-export function isGlanceCommentToBeLoaded(state) {
+export function isGlanceCommentToBeLoaded(state: ClientState): boolean {
     const comments = getCommentsState(state);
     return !comments.loadedGlanceComment
         || (comments.glanceCommentId != null
             && (comments.glanceComment == null || comments.glanceComment.id !== comments.glanceCommentId));
 }
 
-function putName(names, nodeName, fullName, avatar) {
+export interface NameUsage {
+    nodeName: string;
+    fullName: string | null;
+    avatar: AvatarImage | null;
+    count: number;
+}
+
+function putName(names: Map<string, NameUsage>, nodeName: string, fullName: string | null | undefined,
+                 avatar: AvatarImage | null | undefined): void {
     if (!names.has(nodeName)) {
-        names.set(nodeName, {nodeName, fullName, avatar, count: 1});
+        names.set(nodeName, {nodeName, fullName: fullName ?? null, avatar: avatar ?? null, count: 1});
     } else {
-        const name = names.get(nodeName);
+        const name = names.get(nodeName)!;
         if (!name.avatar || !name.avatar.mediaId) {
-            name.avatar = avatar;
+            name.avatar = avatar ?? null;
         }
         name.count++;
     }
@@ -185,7 +196,7 @@ function putName(names, nodeName, fullName, avatar) {
 export const getNamesInComments = createSelector(
     getComments,
     comments => {
-        const names = new Map();
+        const names = new Map<string, NameUsage>();
         for (const comment of comments) {
             putName(names, comment.ownerName, comment.ownerFullName, comment.ownerAvatar);
             if (comment.repliedTo) {

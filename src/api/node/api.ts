@@ -886,10 +886,12 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
             nullable: true
         },
         "summary": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "trackingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "remoteNodeName": {
             type: "string",
@@ -929,7 +931,7 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
             additionalProperties: false
         }
     },
-    required: ["id", "feedName", "storyType", "createdAt", "publishedAt", "moment", "summary", "trackingId"],
+    required: ["id", "feedName", "storyType", "createdAt", "publishedAt", "moment"],
     additionalProperties: false
 };
 

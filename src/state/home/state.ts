@@ -22,6 +22,6 @@ export interface HomeState {
         loaded: boolean;
         avatars: AvatarInfo[];
     };
-    addonApiVersion: number;
+    addonApiVersion: number | null;
     roots: string[];
 }

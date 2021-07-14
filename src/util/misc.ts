@@ -31,7 +31,6 @@ export function atOwner(state: ClientState): string {
 }
 
 export function range(length: number): number[] {
-    // @ts-ignore
     return [...Array(length).keys()];
 }
 
