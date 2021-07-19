@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 
 import { PostingInfo, SubscriptionInfo, SubscriptionType } from "api/node/api-types";
-import { ClientState } from "state/state";
+import { PostingsState } from "state/postings/state";
 
 export function fillSubscriptionId(posting: PostingInfo, subscription: SubscriptionInfo): void {
     switch (subscription.type) {
@@ -15,7 +15,7 @@ export function fillSubscriptionId(posting: PostingInfo, subscription: Subscript
     }
 }
 
-export function immutableSetSubscriptionId(state: ClientState, id: string, type: SubscriptionType,
+export function immutableSetSubscriptionId(state: PostingsState, id: string, type: SubscriptionType,
                                            subscriberId: string | null) {
     switch (type) {
         case "posting-comments":

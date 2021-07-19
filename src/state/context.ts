@@ -3,7 +3,7 @@ import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "stat
 import { ClientState } from "state/state";
 import { ActionContext } from "state/action-types";
 
-export default function getContext(state: ClientState | null): ActionContext {
+export default function getContext(state?: ClientState | null): ActionContext {
     if (state == null) {
         return {
             ownerName: null,

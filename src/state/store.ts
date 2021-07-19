@@ -1,3 +1,6 @@
+import { ClientState } from "state/state";
+import { WithContext } from "state/action-types";
+import { ClientAction } from "state/action";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { CARTES_SET } from "state/cartes/actions";
 import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
@@ -129,9 +132,12 @@ const reducers = combineReducers({
     refresh
 });
 
-function combinedReducer(state, action) {
-    action.context = getContext(state);
-    return reducers(state, action);
+function combinedReducer(state: ClientState | undefined, action: ClientAction): ClientState {
+    const actionWithContext: WithContext<ClientAction> = {
+        ...action,
+        context: getContext(state)
+    };
+    return reducers(state, actionWithContext);
 }
 
 const triggers = collectTriggers(

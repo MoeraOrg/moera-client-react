@@ -169,9 +169,23 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
             const clientValues = new Map(state.client.values);
             action.payload.settings.forEach(({name, value}) => {
                 if (name.startsWith(ClientSettings.PREFIX)) {
-                    clientValues.set(name, value);
+                    if (value != null) {
+                        clientValues.set(name, value);
+                    } else {
+                        const meta = state.client.meta.get(name);
+                        if (meta?.defaultValue != null) {
+                            clientValues.set(name, meta.defaultValue);
+                        }
+                    }
                 } else {
-                    nodeValues.set(name, value);
+                    if (value != null) {
+                        nodeValues.set(name, value);
+                    } else {
+                        const meta = state.node.meta.get(name);
+                        if (meta?.defaultValue != null) {
+                            nodeValues.set(name, meta.defaultValue);
+                        }
+                    }
                 }
             });
             return immutable.wrap(state)
