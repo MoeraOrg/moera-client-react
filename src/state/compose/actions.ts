@@ -112,7 +112,7 @@ export const composeDraftLoadFailed = (): ComposeDraftLoadFailedAction => ({
 
 export const COMPOSE_DRAFT_SAVE = "COMPOSE_DRAFT_SAVE";
 export type ComposeDraftSaveAction = ActionWithPayload<typeof COMPOSE_DRAFT_SAVE, {
-    draftText: DraftText;
+    draftText: DraftText & {id?: string | null};
 }>;
 export const composeDraftSave = (draftText: DraftText): ComposeDraftSaveAction => ({
     type: COMPOSE_DRAFT_SAVE,
@@ -121,10 +121,10 @@ export const composeDraftSave = (draftText: DraftText): ComposeDraftSaveAction =
 
 export const COMPOSE_DRAFT_SAVED = "COMPOSE_DRAFT_SAVED";
 export type ComposeDraftSavedAction = ActionWithPayload<typeof COMPOSE_DRAFT_SAVED, {
-    postingId: string;
+    postingId: string | null;
     draftId: string;
 }>;
-export const composeDraftSaved = (postingId: string, draftId: string): ComposeDraftSavedAction => ({
+export const composeDraftSaved = (postingId: string | null, draftId: string): ComposeDraftSavedAction => ({
     type: COMPOSE_DRAFT_SAVED,
     payload: {postingId, draftId}
 });

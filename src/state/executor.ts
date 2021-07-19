@@ -26,8 +26,8 @@ export type ExecutorMap = Map<ClientActionType, ExecutorState>;
 
 export function executor<T extends ClientAction>(
     action: T["type"], payloadToKey: string | null, saga: ExecutorSaga<T>): Executor;
-export function executor<P, T extends ClientAction & {payload: P}>(
-    action: T["type"], payloadToKey: PayloadExtractor<P> | string | null, saga: ExecutorSaga<T>): Executor;
+export function executor<T extends ClientAction & {payload: any}>(
+    action: T["type"], payloadToKey: PayloadExtractor<T["payload"]> | string | null, saga: ExecutorSaga<T>): Executor;
 export function executor(action: ClientActionType, payloadToKey: PayloadToKey,
                          saga: ExecutorSaga<any>): Executor {
     return {action, payloadToKey, saga};
