@@ -125,7 +125,7 @@ export type SettingsUpdateAction = ActionWithPayload<typeof SETTINGS_UPDATE, {
     settings: SettingInfo[];
     onSuccess: any;
 }>;
-export const settingsUpdate = (settings: SettingInfo[], onSuccess: any): SettingsUpdateAction => ({
+export const settingsUpdate = (settings: SettingInfo[], onSuccess?: any): SettingsUpdateAction => ({
     type: SETTINGS_UPDATE,
     payload: {settings, onSuccess}
 });

@@ -1,4 +1,4 @@
-interface Provider {
+export interface Provider {
     dev?: boolean;
     name: string;
     title: string;

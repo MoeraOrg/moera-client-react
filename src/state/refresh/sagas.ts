@@ -1,4 +1,4 @@
-import { delay, put } from 'redux-saga/effects';
+import { delay, put } from 'typed-redux-saga/macro';
 
 import { REFRESH_SHOW, refreshHide } from "state/refresh/actions";
 import { executor } from "state/executor";
@@ -8,6 +8,6 @@ export default [
 ];
 
 function* refreshShowSaga() {
-    yield delay(2000);
-    yield put(refreshHide());
+    yield* delay(2000);
+    yield* put(refreshHide());
 }

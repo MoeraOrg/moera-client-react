@@ -1,10 +1,12 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put } from 'typed-redux-saga/macro';
 
 import {
     closeShareDialog,
     openShareDialog,
     SHARE_DIALOG_COPY_LINK,
-    SHARE_DIALOG_PREPARE
+    SHARE_DIALOG_PREPARE,
+    ShareDialogCopyLinkAction,
+    ShareDialogPrepareAction
 } from "state/sharedialog/actions";
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
@@ -19,12 +21,12 @@ export default [
     executor(SHARE_DIALOG_COPY_LINK, payload => payload.url, shareDialogCopyLinkSaga),
 ];
 
-function* shareDialogPrepareSaga(action) {
+function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
     const {title, nodeName, href} = action.payload;
 
-    const nodeUri = yield call(getNodeUri, nodeName);
+    const nodeUri = yield* call(getNodeUri, nodeName);
     if (nodeUri == null) {
-        yield put(messageBox(`Cannot resolve name: ${nodeName}`));
+        yield* put(messageBox(`Cannot resolve name: ${nodeName}`));
         return;
     }
     const url = normalizeUrl(nodeUri) + href;
@@ -33,14 +35,14 @@ function* shareDialogPrepareSaga(action) {
     } else if (navigator.share) {
         navigator.share({title, url});
     } else {
-        yield put(openShareDialog(title, url));
+        yield* put(openShareDialog(title, url));
     }
 }
 
-function* shareDialogCopyLinkSaga(action) {
-    yield put(closeShareDialog());
-    yield call(clipboardCopy, action.payload.url);
+function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
+    yield* put(closeShareDialog());
+    yield* call(clipboardCopy, action.payload.url);
     if (Browser.userAgentOs !== "android") {
-        yield put(flashBox("Link copied to the clipboard"));
+        yield* put(flashBox("Link copied to the clipboard"));
     }
 }

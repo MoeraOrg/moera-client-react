@@ -259,7 +259,7 @@ interface CommentInfoBase<B> {
     revisionId: string;
     totalRevisions: number;
     bodyPreview?: B | null;
-    bodySrc?: string | null;
+    bodySrc?: B | null;
     bodySrcFormat?: SourceFormat | null;
     body: B;
     bodyFormat?: BodyFormat | null;
@@ -348,7 +348,7 @@ export interface PostingFeatures {
 
 export interface SettingInfo {
     name: string;
-    value: string;
+    value: string | null;
 }
 
 export interface SettingTypeModifiers {

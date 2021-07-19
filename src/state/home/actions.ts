@@ -89,12 +89,12 @@ export const homeOwnerVerify = (): HomeOwnerVerifyAction => ({
 
 export const HOME_OWNER_SET = "HOME_OWNER_SET";
 export type HomeOwnerSetAction = ActionWithPayload<typeof HOME_OWNER_SET, {
-    name: string;
+    name: string | null;
     changing: boolean;
     fullName: string | null;
     avatar: AvatarImage | null;
 }>;
-export const homeOwnerSet = (name: string, changing: boolean, fullName: string | null,
+export const homeOwnerSet = (name: string | null, changing: boolean, fullName: string | null,
                              avatar: AvatarImage | null): HomeOwnerSetAction => ({
     type: HOME_OWNER_SET,
     payload: {name, changing, fullName, avatar}
