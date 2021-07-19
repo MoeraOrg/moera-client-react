@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
-import { ErrorState } from "state/error/state";
 import { errorDismiss } from "state/error/actions";
 import "./ErrorPane.css";
 
-type Props = ErrorState & {
-    errorDismiss: typeof errorDismiss;
-}
+type Props = ConnectedProps<typeof connector>;
 
 function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
     useEffect(() => {
@@ -35,7 +32,9 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
     );
 }
 
-export default connect(
+const connector = connect(
     (state: ClientState) => state.error,
     { errorDismiss }
-)(ErrorPane);
+)
+
+export default connector(ErrorPane);
