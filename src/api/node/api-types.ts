@@ -209,9 +209,8 @@ export interface PostingInfoBase<B> {
     subscriptions: PostingSubscriptionsInfo | null;
 }
 
-export type PostingInfo = PostingInfoBase<Body>;
-
 export type EncodedPostingInfo = PostingInfoBase<string>;
+export type PostingInfo = PostingInfoBase<Body>;
 
 export interface FeedInfo {
     feedName: string;

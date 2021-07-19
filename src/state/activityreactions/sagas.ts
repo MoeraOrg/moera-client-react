@@ -1,23 +1,24 @@
-import { call, select } from 'redux-saga/effects';
+import { call, select } from 'typed-redux-saga/macro';
 
 import { isAtHomeNode } from "state/node/selectors";
 import { Node } from "api/node";
 import { isConnectedToHome } from "state/home/selectors";
+import { PostingInfo, StoryInfo } from "api/node/api-types";
 
-export function* fillActivityReactions(stories) {
-    const postings = stories
+export function* fillActivityReactions(stories: StoryInfo[]) {
+    const postings: PostingInfo[] = stories
         .map(t => t.posting)
-        .filter(p => p != null)
-        .filter(p => p.receiverName != null);
+        .filter((p): p is PostingInfo => p != null)
+        .filter(p => p.receiverName != null && p.receiverPostingId != null);
     if (postings.length === 0) {
         return;
     }
-    const toBeFilled = yield select(state => isConnectedToHome(state) && !isAtHomeNode(state));
+    const toBeFilled = yield* select(state => isConnectedToHome(state) && !isAtHomeNode(state));
     if (!toBeFilled) {
         return;
     }
-    const remotePostings = postings.map(p => ({nodeName: p.receiverName, postingId: p.receiverPostingId}));
-    const reactions = yield call(Node.postActivityReactionsSearch, ":", remotePostings);
+    const remotePostings = postings.map(p => ({nodeName: p.receiverName!, postingId: p.receiverPostingId!}));
+    const reactions = yield* call(Node.postActivityReactionsSearch, ":", remotePostings);
     const reactionMap = new Map(reactions.map(r => [`${r.remoteNodeName} ${r.remotePostingId}`, r]));
     postings.forEach(p => {
         const key = `${p.receiverName} ${p.receiverPostingId}`;
@@ -32,16 +33,16 @@ export function* fillActivityReactions(stories) {
     })
 }
 
-export function* fillActivityReaction(posting) {
-    if (posting.receiverName == null) {
+export function* fillActivityReaction(posting: PostingInfo) {
+    if (posting.receiverName == null || posting.receiverPostingId == null) {
         return;
     }
-    const toBeFilled = yield select(state => isConnectedToHome(state) && !isAtHomeNode(state));
+    const toBeFilled = yield* select(state => isConnectedToHome(state) && !isAtHomeNode(state));
     if (!toBeFilled) {
         return;
     }
     const remotePostings = [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}];
-    const reactions = yield call(Node.postActivityReactionsSearch, ":", remotePostings);
+    const reactions = yield* call(Node.postActivityReactionsSearch, ":", remotePostings);
     if (reactions.length > 0) {
         posting.clientReaction = {
             negative: reactions[0].negative,
