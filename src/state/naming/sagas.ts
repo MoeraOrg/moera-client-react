@@ -1,4 +1,4 @@
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select } from 'typed-redux-saga/macro';
 
 import { Naming, NodeName } from "api";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
@@ -10,10 +10,12 @@ import {
     NAMING_NAMES_MAINTENANCE,
     NAMING_NAMES_USED,
     namingNameLoad,
+    NamingNameLoadAction,
     namingNameLoaded,
     namingNameLoadFailed,
     namingNamesPurge,
-    namingNamesUsed
+    namingNamesUsed,
+    NamingNamesUsedAction
 } from "state/naming/actions";
 import { getNamingNameDetails, getNamingNamesToBeLoaded } from "state/naming/selectors";
 import { getOwnerName } from "state/owner/selectors";
@@ -32,61 +34,63 @@ export default [
     executor(NAMING_NAMES_MAINTENANCE, "", namingNamesMaintenanceSaga)
 ];
 
-function* namingNamesUsedSaga(action) {
+function* namingNamesUsedSaga(action: NamingNamesUsedAction) {
     const {names} = action.payload;
 
     if (!names || names.length === 0) {
         return;
     }
-    const toBeLoaded = yield select(state => getNamingNamesToBeLoaded(state, names));
+    const toBeLoaded = yield* select(state => getNamingNamesToBeLoaded(state, names));
     for (const name of toBeLoaded) {
-        yield put(namingNameLoad(name));
+        yield* put(namingNameLoad(name));
     }
 }
 
-function* namingNameLoadSaga(action) {
-    yield call(fetchName, action.payload.name);
+function* namingNameLoadSaga(action: NamingNameLoadAction) {
+    yield* call(fetchName, action.payload.name);
 }
 
-export function* getNodeUri(nodeName) {
-    return (yield call(getNameDetails, nodeName)).nodeUri;
+export function* getNodeUri(nodeName: string) {
+    return (yield* call(getNameDetails, nodeName)).nodeUri;
 }
 
-export function* getNameDetails(nodeName) {
-    const details = yield select(state => getNamingNameDetails(state, nodeName));
+export function* getNameDetails(nodeName: string) {
+    const details = yield* select(state => getNamingNameDetails(state, nodeName));
     if (details.loaded) {
-        if (now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
+        if (details.nodeUri != null && now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
             Browser.storeName(nodeName, details.nodeUri, details.updated);
-            yield put(namingNamesUsed([nodeName]));
+            yield* put(namingNamesUsed([nodeName]));
         }
         return details;
     }
-    return yield call(fetchName, nodeName);
+    return yield* call(fetchName, nodeName);
 }
 
-function* fetchName(nodeName) {
+function* fetchName(nodeName: string) {
     let nodeUri = null;
     try {
         const {name, generation} = NodeName.parse(nodeName);
-        const data = yield call(Naming.getCurrent, name, generation);
-        nodeUri = data ? data.nodeUri : null;
-        if (data) {
-            Browser.storeName(nodeName, nodeUri, now());
+        if (name != null && generation != null) {
+            const data = yield* call(Naming.getCurrent, name, generation);
+            nodeUri = data ? data.nodeUri : null;
+            if (nodeUri) {
+                Browser.storeName(nodeName, nodeUri, now());
+                yield* put(namingNameLoaded(nodeName, nodeUri, now()));
+            }
         }
-        yield put(namingNameLoaded(nodeName, nodeUri, now()));
     } catch (e) {
-        yield put(namingNameLoadFailed(nodeName));
-        yield put(errorThrown(e));
+        yield* put(namingNameLoadFailed(nodeName));
+        yield* put(errorThrown(e));
     }
-    return {loading: false, loaded: true, nodeUri};
+    return {accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};
 }
 
 function* namingNamesMaintenanceSaga() {
-    const used = yield call(getUsedNames);
+    const used = yield* call(getUsedNames);
     if (used.size > 0) {
-        yield put(namingNamesUsed(Array.from(used)));
+        yield* put(namingNamesUsed(Array.from(used)));
     }
-    const details = yield select(state => state.naming.names);
+    const details = yield* select(state => state.naming.names);
     const names = Object.getOwnPropertyNames(details);
     if (names.length <= MAX_NAMES_SIZE) {
         return;
@@ -97,23 +101,23 @@ function* namingNamesMaintenanceSaga() {
     }
     unused.sort((a, b) => details[a].accessed - details[b].accessed);
     const purgeSize = Math.min(unused.length, names.length - MAX_NAMES_SIZE);
-    yield put(namingNamesPurge(unused.splice(0, purgeSize)));
+    yield* put(namingNamesPurge(unused.splice(0, purgeSize)));
 }
 
 function* getUsedNames() {
-    let used = new Set();
+    let used = new Set<string>();
 
-    const {feedNames, postings} = yield select(state => ({
+    const {feedNames, postings} = yield* select(state => ({
         feedNames: getAllFeeds(state),
         postings: state.postings
     }));
     for (const feedName of feedNames) {
-        const stories = yield select(state => getFeedState(state, feedName).stories)
+        const stories = yield* select(state => getFeedState(state, feedName).stories)
         stories.forEach(story => {
             if (story.remoteNodeName) {
                 used.add(story.remoteNodeName);
             }
-            const posting = postings[story.postingId];
+            const posting = story.postingId != null ? postings[story.postingId] : null;
             if (posting) {
                 used.add(posting.ownerName);
                 if (posting.receiverName) {
@@ -123,7 +127,7 @@ function* getUsedNames() {
         });
     }
 
-    const posting = yield select(getDetailedPosting);
+    const posting = yield* select(getDetailedPosting);
     if (posting != null) {
         used.add(posting.ownerName);
         if (posting.receiverName) {
@@ -131,18 +135,18 @@ function* getUsedNames() {
         }
     }
 
-    const comments = yield select(getComments);
+    const comments = yield* select(getComments);
     comments.forEach(comment => used.add(comment.ownerName));
 
-    const reactions = yield select(getReactionsDialogItems);
+    const reactions = yield* select(getReactionsDialogItems);
     reactions.forEach(reaction => used.add(reaction.ownerName));
 
-    let name = yield select(getHomeOwnerName);
+    let name = yield* select(getHomeOwnerName);
     if (name) {
         used.add(name);
     }
 
-    name = yield select(getOwnerName);
+    name = yield* select(getOwnerName);
     if (name != null) {
         used.add(name);
     }

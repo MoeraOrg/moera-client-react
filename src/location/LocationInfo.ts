@@ -12,7 +12,7 @@ export class LocationInfo {
         this.title = "";
     }
 
-    static fromUrl(path: string, query: string, hash: string): LocationInfo {
+    static fromUrl(path: string | null, query: string | null, hash: string | null): LocationInfo {
         return new LocationInfo().withPath(path).withQuery(query).withHash(hash);
     }
 

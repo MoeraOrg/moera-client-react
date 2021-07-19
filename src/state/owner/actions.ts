@@ -18,8 +18,9 @@ export type OwnerSetAction = ActionWithPayload<typeof OWNER_SET, {
     title: string | null | false;
     avatar: AvatarImage | null;
 }>;
-export const ownerSet = (name: string, changing: boolean, fullName: string | null, gender: string | null,
-                         title: string | null, avatar: AvatarImage | null): OwnerSetAction => ({
+export const ownerSet = (name: string, changing: boolean | null, fullName: string | null | false,
+                         gender: string | null | false, title: string | null | false,
+                         avatar: AvatarImage | null): OwnerSetAction => ({
     type: OWNER_SET,
     payload: {name, changing, fullName, gender, title, avatar}
 });

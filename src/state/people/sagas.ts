@@ -1,4 +1,5 @@
-import { call, put } from "redux-saga/effects";
+import { call, put } from 'typed-redux-saga/macro';
+
 import { Node } from "api/node";
 import { errorThrown } from "state/error/actions";
 import {
@@ -22,30 +23,30 @@ export default [
 
 function* peopleGeneralLoadSaga() {
     try {
-        const data = yield call(Node.getPeopleGeneral, "");
-        yield put(peopleGeneralLoaded(data));
+        const data = yield* call(Node.getPeopleGeneral, "");
+        yield* put(peopleGeneralLoaded(data));
     } catch (e) {
-        yield put(peopleGeneralLoadFailed());
-        yield put(errorThrown(e));
+        yield* put(peopleGeneralLoadFailed());
+        yield* put(errorThrown(e));
     }
 }
 
 function* subscribersLoadSaga() {
     try {
-        const data = yield call(Node.getSubscribers, "", "feed");
-        yield put(subscribersLoaded(data));
+        const data = yield* call(Node.getSubscribers, "", "feed");
+        yield* put(subscribersLoaded(data));
     } catch (e) {
-        yield put(subscribersLoadFailed());
-        yield put(errorThrown(e));
+        yield* put(subscribersLoadFailed());
+        yield* put(errorThrown(e));
     }
 }
 
 function* subscriptionsLoadSaga() {
     try {
-        const data = yield call(Node.getSubscriptions, "", "feed");
-        yield put(subscriptionsLoaded(data));
+        const data = yield* call(Node.getSubscriptions, "", "feed");
+        yield* put(subscriptionsLoaded(data));
     } catch (e) {
-        yield put(subscriptionsLoadFailed());
-        yield put(errorThrown(e));
+        yield* put(subscriptionsLoadFailed());
+        yield* put(errorThrown(e));
     }
 }

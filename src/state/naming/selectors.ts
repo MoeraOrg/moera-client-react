@@ -14,8 +14,8 @@ function isNamingNameToBeLoaded(state: ClientState, name: string | null): boolea
         && !details.loading;
 }
 
-export function getNamingNamesToBeLoaded(state: ClientState, names: string[]): string[] {
-    return names.filter(name => isNamingNameToBeLoaded(state, name));
+export function getNamingNamesToBeLoaded(state: ClientState, names: (string | null)[]): string[] {
+    return names.filter((name): name is string => isNamingNameToBeLoaded(state, name));
 }
 
 export function getNamingNameDetails(state: ClientState, name: string): NameState {

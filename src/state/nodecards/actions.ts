@@ -68,9 +68,10 @@ export const nodeCardPeopleSet = (nodeName: string, subscribersTotal: number,
 export const NODE_CARD_SUBSCRIPTION_SET = "NODE_CARD_SUBSCRIPTION_SET";
 export type NodeCardSubscriptionSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_SET, {
     nodeName: string;
-    subscriberId: string;
+    subscriberId: string | null;
 }>;
-export const nodeCardSubscriptionSet = (nodeName: string, subscriberId: string): NodeCardSubscriptionSetAction => ({
+export const nodeCardSubscriptionSet = (nodeName: string,
+                                        subscriberId: string | null): NodeCardSubscriptionSetAction => ({
     type: NODE_CARD_SUBSCRIPTION_SET,
     payload: {nodeName, subscriberId}
 });

@@ -1,4 +1,4 @@
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select } from 'typed-redux-saga/macro';
 import * as URI from 'uri-js';
 
 import { Naming, Node, NodeName } from "api";
@@ -8,6 +8,7 @@ import {
     OWNER_SWITCH,
     OWNER_VERIFY,
     ownerSet,
+    OwnerSwitchAction,
     ownerSwitchClose,
     ownerSwitchFailed,
     ownerVerified
@@ -29,61 +30,68 @@ export default [
 
 function* ownerLoadSaga() {
     try {
-        const data = yield call(Node.getWhoAmI, "");
-        yield put(ownerSet(data.nodeName, data.nodeNameChanging, data.fullName, data.gender, data.title, data.avatar));
+        const {
+            nodeName, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null
+        } = yield* call(Node.getWhoAmI, "");
+        yield* put(ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar));
     } catch (e) {
-        yield put(errorThrown(e));
+        yield* put(errorThrown(e));
     }
 }
 
 function* ownerVerifySaga() {
-    const {rootPage, ownerName} = yield select(state => ({
+    const {rootPage, ownerName} = yield* select(state => ({
         rootPage: getNodeRootPage(state),
         ownerName: getOwnerName(state)
     }));
+    if (ownerName == null) {
+        return;
+    }
     try {
-        const nodeUri = normalizeUrl(yield call(getNodeUri, ownerName));
+        const nodeUri = normalizeUrl(yield* call(getNodeUri, ownerName));
         const correct = rootPage === nodeUri;
-        yield put(ownerVerified(ownerName, correct));
+        yield* put(ownerVerified(ownerName, correct));
     } catch (e) {
-        yield put(errorThrown(e));
+        yield* put(errorThrown(e));
     }
 }
 
-function* ownerSwitchSaga(action) {
-    const {standalone, ownerName} = yield select(state => ({
+function* ownerSwitchSaga(action: OwnerSwitchAction) {
+    const {standalone, ownerName} = yield* select(state => ({
         standalone: isStandaloneMode(state),
         ownerName: getOwnerName(state)
     }));
 
     if (action.payload.name === ownerName) {
-        yield put(ownerSwitchClose());
+        yield* put(ownerSwitchClose());
         return;
     }
 
     try {
         const {name, generation} = NodeName.parse(action.payload.name);
-        let info = yield Naming.getCurrent(name, generation);
-        if (!info || !info.nodeUri) {
-            info = yield Naming.getSimilar(name);
+        let info = name != null && generation != null ? yield* Naming.getCurrent(name, generation) : null;
+        if ((!info || !info.nodeUri) && name != null) {
+            info = yield* Naming.getSimilar(name);
         }
         if (info && info.nodeUri) {
             if (!standalone) {
                 try {
-                    window.location = info.nodeUri;
+                    window.location.href = info.nodeUri;
                 } catch (e) {
                     throw new Error("Node location is incorrect: " + info.nodeUri);
                 }
             } else {
-                const {scheme, host, port, path} = URI.parse(info.nodeUri);
-                const rootLocation = rootUrl(scheme, host, port);
-                yield put(initFromLocation(rootLocation, path, null, null));
+                const {scheme, host, port, path = null} = URI.parse(info.nodeUri);
+                if (scheme != null && host != null) {
+                    const rootLocation = rootUrl(scheme, host, port);
+                    yield* put(initFromLocation(rootLocation, path, null, null));
+                }
             }
         } else {
-            yield put(ownerSwitchFailed());
+            yield* put(ownerSwitchFailed());
         }
     } catch (e) {
-        yield put(ownerSwitchFailed());
-        yield put(errorThrown(e));
+        yield* put(ownerSwitchFailed());
+        yield* put(errorThrown(e));
     }
 }

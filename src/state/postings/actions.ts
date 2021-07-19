@@ -112,10 +112,10 @@ export const postingReactionDelete = (id: string): PostingReactionDeleteAction =
 export const POSTING_REACTION_SET = "POSTING_REACTION_SET";
 export type PostingReactionSetAction = ActionWithPayload<typeof POSTING_REACTION_SET, {
     id: string;
-    reaction: ReactionAttributes;
+    reaction: ReactionAttributes | null;
     totals: ReactionTotalsInfo;
 }>;
-export const postingReactionSet = (id: string, reaction: ReactionAttributes,
+export const postingReactionSet = (id: string, reaction: ReactionAttributes | null,
                                    totals: ReactionTotalsInfo): PostingReactionSetAction => ({
     type: POSTING_REACTION_SET,
     payload: {id, reaction, totals}

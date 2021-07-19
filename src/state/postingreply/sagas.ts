@@ -1,6 +1,7 @@
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select } from 'typed-redux-saga/macro';
 
 import { Node } from "api";
+import { DraftText, PostingInfo } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import { POSTING_REPLY, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
@@ -10,7 +11,7 @@ import { goToLocation } from "state/navigation/actions";
 import { urlWithParameters } from "util/url";
 import { getWindowSelectionHtml, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
-import { getHomeRootPage } from "state/home/selectors";
+import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { executor } from "state/executor";
 
@@ -19,32 +20,38 @@ export default [
 ];
 
 function* postingReplySaga() {
-    const {posting, rootNodePage, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
+    const {posting, rootNodePage, homeOwnerName, rootHomePage, subjectPrefix, preambleTemplate, quoteAll,
            reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault} =
-        yield select(state => ({
+        yield* select(state => ({
             posting: getPosting(state, state.postingReply.postingId),
             rootNodePage: getNodeRootPage(state),
+            homeOwnerName: getHomeOwnerName(state),
             rootHomePage: getHomeRootPage(state),
-            subjectPrefix: getSetting(state, "posting.reply.subject-prefix"),
-            preambleTemplate: getSetting(state, "posting.reply.preamble"),
-            quoteAll: getSetting(state, "posting.reply.quote-all"),
-            reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default"),
-            reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
-            reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
-            reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default")
+            subjectPrefix: getSetting(state, "posting.reply.subject-prefix") as string,
+            preambleTemplate: getSetting(state, "posting.reply.preamble") as string,
+            quoteAll: getSetting(state, "posting.reply.quote-all") as boolean,
+            reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default") as string,
+            reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default") as string,
+            reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,
+            reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default") as boolean
         }));
+    if (posting == null || homeOwnerName == null || rootNodePage == null) {
+        return;
+    }
     try {
         const subject = replySubject(posting.body.subject, subjectPrefix);
         const preamble = preambleTemplate
-            .replace("%POST%", yield call(postingHref, posting, rootNodePage))
+            .replace("%POST%", yield* call(postingHref, posting, rootNodePage))
             .replace("%USER%", mentionName(posting.ownerName, posting.ownerFullName));
         let text = getWindowSelectionHtml();
         if (text) {
             text = quoteHtml(text);
         } else if (quoteAll) {
-            text = quoteHtml(posting.body.text.trim());
+            text = quoteHtml(posting.body.text?.trim());
         }
-        const postingText = {
+        const draftText: DraftText = {
+            draftType: "new-posting",
+            receiverName: homeOwnerName,
             bodySrc: JSON.stringify({
                 subject,
                 text: text ? `${preamble}\n>>>\n${text}\n>>>\n` : `${preamble}\n`
@@ -57,19 +64,19 @@ function* postingReplySaga() {
             reactionsVisible: reactionsVisibleDefault,
             reactionTotalsVisible: reactionTotalsVisibleDefault
         };
-        const data = yield call(Node.postDraft, ":", postingText);
+        const data = yield* call(Node.postDraft, ":", draftText);
         if (rootNodePage !== rootHomePage) {
-            window.location = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
+            window.location.href = urlWithParameters(rootHomePage + "/compose", {"draft": data.id});
         } else {
-            yield put(goToLocation("/compose", `?draft=${data.id}`, null))
+            yield* put(goToLocation("/compose", `?draft=${data.id}`, null))
         }
     } catch (e) {
-        yield put(postingReplyFailed());
-        yield put(errorThrown(e));
+        yield* put(postingReplyFailed());
+        yield* put(errorThrown(e));
     }
 }
 
-function replySubject(subject, subjectPrefix) {
+function replySubject(subject?: string | null, subjectPrefix?: string | null) {
     if (!subject || !subjectPrefix) {
         return subject;
     }
@@ -84,11 +91,11 @@ function replySubject(subject, subjectPrefix) {
     return subjectPrefix + "[" + (parseInt(m[1]) + 1) + "] " + m[2];
 }
 
-function* postingHref(posting, rootNodePage) {
+function* postingHref(posting: PostingInfo, rootNodePage: string) {
     if (posting.receiverName == null) {
         return `${rootNodePage}/post/${posting.id}`;
     } else {
-        const rootReceiverPage = yield call(getNodeUri, posting.receiverName);
+        const rootReceiverPage = yield* call(getNodeUri, posting.receiverName);
         return `${rootReceiverPage}/post/${posting.receiverPostingId}`;
     }
 }
