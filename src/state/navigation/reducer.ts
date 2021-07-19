@@ -55,7 +55,7 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
             return {
                 ...state,
                 location: action.payload.location,
-                title: action.payload.title,
+                title: action.payload.title ?? "",
                 update: !state.locked ? action.payload.update : state.update && action.payload.update
             };
 

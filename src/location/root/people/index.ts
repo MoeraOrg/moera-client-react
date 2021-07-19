@@ -1,9 +1,12 @@
 import { goToPeople } from "state/navigation/actions";
 import { peopleGoToTab } from "state/people/actions";
 import { atOwner } from "util/misc";
+import { LocationInfo } from "location/LocationInfo";
+import { ClientAction } from "state/action";
+import { ClientState } from "state/state";
 
-export function transform(srcInfo, dstInfo) {
-    let actions = [];
+export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
+    let actions: ClientAction[] = [];
     if (srcInfo.directories[0] !== "people") {
         actions.push(goToPeople());
     }
@@ -18,12 +21,12 @@ export function transform(srcInfo, dstInfo) {
     return actions;
 }
 
-export function build(state, info) {
+export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("people");
     if (state.people.tab === "subscribers") {
         info = info.sub("subscribers").withTitle("Subscribers" + atOwner(state));
     } else if (state.people.tab === "subscriptions") {
-        info = info.sub("subscriptions").withTitle("Subscriptions" + atOwner(state));;
+        info = info.sub("subscriptions").withTitle("Subscriptions" + atOwner(state));
     }
     return info;
 }

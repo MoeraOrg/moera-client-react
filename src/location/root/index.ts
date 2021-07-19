@@ -8,15 +8,18 @@ import {
     isAtSettingsPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
-import { build as composeBuild, transform as composeTransform } from "./compose";
-import { build as newsBuild, transform as newsTransform } from "./news";
-import { build as peopleBuild, transform as peopleTransform } from "./people";
-import { build as postBuild, transform as postTransform } from "./post";
-import { build as profileBuild, transform as profileTransform } from "./profile";
-import { build as settingsBuild, transform as settingsTransform } from "./settings";
+import { build as composeBuild, transform as composeTransform } from "location/root/compose";
+import { build as newsBuild, transform as newsTransform } from "location/root/news";
+import { build as peopleBuild, transform as peopleTransform } from "location/root/people";
+import { build as postBuild, transform as postTransform } from "location/root/post";
+import { build as profileBuild, transform as profileTransform } from "location/root/profile";
+import { build as settingsBuild, transform as settingsTransform } from "location/root/settings";
 import { build as timelineBuild, transform as timelineTransform } from "./timeline";
+import { LocationInfo } from "location/LocationInfo";
+import { ClientAction } from "state/action";
+import { ClientState } from "state/state";
 
-export function transform(srcInfo, dstInfo) {
+export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     if (dstInfo.directories.length === 0) {
         return [goToTimeline()];
     }
@@ -44,7 +47,7 @@ export function transform(srcInfo, dstInfo) {
     return [];
 }
 
-export function build(state, info) {
+export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (isAtTimelinePage(state)) {
         return timelineBuild(state, info);
     }

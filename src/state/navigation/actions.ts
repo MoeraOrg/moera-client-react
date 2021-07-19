@@ -122,10 +122,10 @@ export const updateLocation = (): UpdateLocationAction => ({
 export const LOCATION_SET = "LOCATION_SET";
 export type LocationSetAction = ActionWithPayload<typeof LOCATION_SET, {
     location: string;
-    title: string;
+    title: string | null;
     update: boolean;
 }>;
-export const locationSet = (location: string, title: string, update: boolean): LocationSetAction => ({
+export const locationSet = (location: string, title: string | null, update: boolean): LocationSetAction => ({
     type: LOCATION_SET,
     payload: {location, title, update}
 });
