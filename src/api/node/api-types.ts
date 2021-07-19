@@ -383,7 +383,7 @@ export interface CarteInfo {
 }
 
 export interface CarteSet {
-    cartesIp: string;
+    cartesIp: string | null;
     cartes: CarteInfo[];
     createdAt: number;
 }

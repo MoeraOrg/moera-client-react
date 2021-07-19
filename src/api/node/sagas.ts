@@ -83,7 +83,7 @@ export function* createToken(nodeName: string | null, login: string, password: s
     });
 }
 
-export function* getCartes(nodeName: string | null, auth = true): CallApiResult<CarteSet> {
+export function* getCartes(nodeName: string | null, auth: boolean | string = true): CallApiResult<CarteSet> {
     return yield* callApi({
         nodeName, location: "/cartes", auth, schema: NodeApi.CarteSet, errorFilter: ["node-name-not-set"]
     });

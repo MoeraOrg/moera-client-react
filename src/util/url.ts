@@ -1,7 +1,10 @@
 import * as URI from 'uri-js';
 import { Browser } from "ui/browser";
 
-export function normalizeUrl(url: string): string | null {
+export function normalizeUrl(url: null | undefined): null;
+export function normalizeUrl(url: string): string;
+export function normalizeUrl(url: string | null | undefined): string | null;
+export function normalizeUrl(url: string | null | undefined): string | null {
     if (url == null) {
         return null;
     }

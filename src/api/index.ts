@@ -10,6 +10,7 @@ export {
     NamingError,
     NodeError,
     NodeApiError,
+    VerboseError,
     formatSchemaErrors
 } from "api/error";
 export { NodeName, RegisteredName } from "api/node-name";

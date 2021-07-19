@@ -16,9 +16,9 @@ export const errorThrown = (e: Error): ErrorThrownAction => ({
 export const ERROR_SHOW = "ERROR_SHOW";
 export type ErrorShowAction = ActionWithPayload<typeof ERROR_SHOW, {
     message: string;
-    messageVerbose: string;
+    messageVerbose: string | null;
 }>;
-export const errorShow = (message: string, messageVerbose: string = ""): ErrorShowAction => ({
+export const errorShow = (message: string, messageVerbose: string | null = ""): ErrorShowAction => ({
     type: ERROR_SHOW,
     payload: {
         message,

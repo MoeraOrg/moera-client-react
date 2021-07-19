@@ -6,25 +6,44 @@ export function formatSchemaErrors(errors: {message?: string}[] | null | undefin
     return errors != null ? errors.map(({message}) => message).join(", ") : "";
 }
 
-export class NodeError extends Error {
+export class VerboseError extends Error {
 
     messageVerbose: string;
 
-    constructor(method: string, rootApi: string, location: string, title: string | null, messageOrError: Error | string,
-                details: string | null = null) {
-        super((title ? `${title}: ` : "") + extractMessage(messageOrError));
-        this.messageVerbose = `${method} ${rootApi}${location}: ${this.message}` + (details ? `: ${details}` : "");
+    constructor(message: string, messageVerbose: string) {
+        super(message);
+        this.messageVerbose = messageVerbose;
     }
 
 }
 
-export class BodyError extends Error {
+export class NodeError extends VerboseError {
 
-    messageVerbose: string;
+    constructor(method: string, rootApi: string, location: string, title: string | null, messageOrError: Error | string,
+                details: string | null = null) {
+        const message = (title ? `${title}: ` : "") + extractMessage(messageOrError);
+        const messageVerbose = `${method} ${rootApi}${location}: ${message}` + (details ? `: ${details}` : "");
+        super(message, messageVerbose);
+    }
+
+}
+
+export class BodyError extends VerboseError {
 
     constructor(details: string | null = null) {
-        super("Server returned incorrect Body");
-        this.messageVerbose = `${this.message}` + (details ? `: ${details}` : "");
+        const message = "Server returned incorrect Body";
+        const messageVerbose = `${message}` + (details ? `: ${details}` : "");
+        super(message, messageVerbose);
+    }
+
+}
+
+export class NamingError extends VerboseError {
+
+    constructor(method: string, messageOrError: Error | string, details: string | null = null) {
+        const message = "Naming service access error: " + extractMessage(messageOrError);
+        const messageVerbose = `${method}(): ${message}` + (details ? `: ${details}` : "");
+        super(message, messageVerbose);
     }
 
 }
@@ -55,17 +74,6 @@ export class NameResolvingError extends Error {
     constructor(nodeName: string | null) {
         super("Name not found: " + nodeName);
         this.nodeName = nodeName;
-    }
-
-}
-
-export class NamingError extends Error {
-
-    messageVerbose: string;
-
-    constructor(method: string, messageOrError: Error | string, details: string | null = null) {
-        super("Naming service access error: " + extractMessage(messageOrError));
-        this.messageVerbose = `${method}(): ${this.message}` + (details ? `: ${details}` : "");
     }
 
 }
