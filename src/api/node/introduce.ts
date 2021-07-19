@@ -7,6 +7,8 @@ import { isCartesInitialized, isCartesRunOut } from "state/cartes/selectors";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { cartesLoad } from "state/cartes/actions";
 import { ClientState } from "state/state";
+import { ClientAction } from "state/action";
+import { ExecutorSaga } from "state/executor";
 
 const postponingChannel: Channel<Action<string>> = channel(buffers.expanding(10));
 
@@ -16,8 +18,8 @@ function canRun(state: ClientState) {
             && (!isConnectedToHome(state) || (isConnectedToHome(state) && !isHomeOwnerNameSet(state))));
 }
 
-export function introduce(saga: any) {
-    return function* (action: any) {
+export function introduce<A extends ClientAction>(saga: ExecutorSaga<A>): ExecutorSaga<A> {
+    return function* (action) {
         if (yield* select(canRun)) {
             yield* call(saga, action);
             return;

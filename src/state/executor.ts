@@ -8,7 +8,7 @@ type PayloadExtractor<T> = (payload: T) => string;
 
 type PayloadToKey = PayloadExtractor<any> | string | null;
 
-type ExecutorSaga<T extends ClientAction> = (action: WithContext<T>) => any;
+export type ExecutorSaga<T extends ClientAction> = (action: WithContext<T>) => any;
 
 export interface Executor {
     action: ClientActionType;
