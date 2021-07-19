@@ -18,8 +18,8 @@ const ShareDialog = ({show, title, url, socialButtons, closeShareDialog, shareDi
             <div className="modal-body">
                 <div className="title">"{title}"</div>
                 <div className="link">
-                    <input type="text" className="form-control" value={url ?? ""} onChange={() => {}}/>
-                    <Button variant="secondary" onClick={() => shareDialogCopyLink(url ?? "")}>Copy</Button>
+                    <input type="text" className="form-control" value={url} onChange={() => {}}/>
+                    <Button variant="secondary" onClick={() => shareDialogCopyLink(url)}>Copy</Button>
                 </div>
                 <div className="social">
                     {socialButtons.map(type => <SocialButton key={type} type={type} url={url} title={title}/>)}
@@ -48,7 +48,7 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.shareDialog.show,
         title: state.shareDialog.title,
-        url: state.shareDialog.url,
+        url: state.shareDialog.url ?? "",
         socialButtons: getSocialButtons(state)
     }),
     { closeShareDialog, shareDialogCopyLink }

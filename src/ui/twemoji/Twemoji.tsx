@@ -1,5 +1,4 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ReactComponent as Twemoji23f3 } from "./23f3.svg";
@@ -82,7 +81,12 @@ const CACHED = new Map([
     ["1fac2", Twemoji1fac2]
 ]);
 
-export default function Twemoji({code, title = ""}) {
+interface Props {
+    code: string | number;
+    title?: string;
+}
+
+export default function Twemoji({code, title = ""}: Props) {
     const emoji = typeof(code) === "string" ? code : Number(code).toString(16);
     switch (emoji) {
         case "1f44d":
@@ -91,14 +95,10 @@ export default function Twemoji({code, title = ""}) {
             return <FontAwesomeIcon icon="thumbs-down" color="#2078f4" title={title}/>;
         default:
             if (CACHED.has(emoji)) {
-                return React.createElement(CACHED.get(emoji), {title, className: "twemoji"});
+                return React.createElement(CACHED.get(emoji)!, {title, className: "twemoji"});
             } else {
                 return <img className="twemoji" src={`https://twemoji.maxcdn.com/v/latest/svg/${emoji}.svg`}
                             alt={title} title={title}/>
             }
     }
 }
-
-Twemoji.propTypes = {
-    code: PropType.any
-};

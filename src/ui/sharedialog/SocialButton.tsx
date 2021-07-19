@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import {
     EmailIcon,
     EmailShareButton,
@@ -36,8 +36,15 @@ import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { PREFIX } from "api/settings";
 import { closeShareDialog } from "state/sharedialog/actions";
+import { ClientState } from "state/state";
 
-function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog}) {
+type Props = {
+    type: string;
+    url: string;
+    title?: string;
+} & ConnectedProps<typeof connector>;
+
+function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog}: Props) {
     const onClick = () => {
         closeShareDialog();
         const data = immutable.update(usage, [type], n => (n ?? 0) + 1);
@@ -137,9 +144,11 @@ function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog
     }
 }
 
-export default connect(
-    state => ({
-        usage: getSetting(state, "share.social-buttons.usage")
+const connector = connect(
+    (state: ClientState) => ({
+        usage: getSetting(state, "share.social-buttons.usage") as any as Record<string, number>
     }),
     { settingsUpdate, closeShareDialog }
-)(SocialButton);
+);
+
+export default connector(SocialButton);
