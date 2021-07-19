@@ -11,11 +11,11 @@ export const cartesLoad = (): CartesLoadAction => ({
 
 export const CARTES_SET = "CARTES_SET";
 export type CartesSetAction = ActionWithPayload<typeof CARTES_SET, {
-    cartesIp: string;
+    cartesIp: string | null;
     cartes: CarteInfo[];
     clockOffset: number;
 }>;
-export const cartesSet = (cartesIp: string, cartes: CarteInfo[], clockOffset: number): CartesSetAction => ({
+export const cartesSet = (cartesIp: string | null, cartes: CarteInfo[], clockOffset: number): CartesSetAction => ({
     type: CARTES_SET,
     payload: {cartesIp, cartes, clockOffset}
 });

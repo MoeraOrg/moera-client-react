@@ -1,4 +1,4 @@
-import { call, put } from 'redux-saga/effects';
+import { call, put } from 'typed-redux-saga/macro';
 
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
@@ -15,20 +15,20 @@ export default [
 
 function* cartesLoadSaga() {
     try {
-        const {cartesIp, cartes, createdAt} = yield call(Node.getCartes, ":");
+        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, ":");
         Browser.storeCartesData(cartesIp, cartes);
-        yield put(cartesSet(cartesIp, cartes, createdAt - now()));
+        yield* put(cartesSet(cartesIp, cartes, createdAt - now()));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield put(cartesSet(null, null, null));
+            yield* put(cartesSet(null, [], 0));
         } else {
-            yield put(errorThrown(e));
+            yield* put(errorThrown(e));
         }
     }
 }
 
 function* clockOffsetWarnSaga() {
-    yield put(messageBox(
+    yield* put(messageBox(
         "<b>Warning:</b> Clock in your computer significantly differ from the real time. This may affect"
         + " cryptographic algorithms and cause problems for Moera client. It is recommended to turn clock"
         + " synchronization on in your operation system."));

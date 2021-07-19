@@ -294,8 +294,8 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "posting-task-failed" | "comment-task-failed" | "posting-updated";
 
 export interface StoryAttributes {
-    feedName: string;
-    publishedAt: number;
+    feedName?: string | null;
+    publishAt?: number | null;
     pinned?: boolean | null;
     viewed?: boolean | null;
     read?: boolean | null;
