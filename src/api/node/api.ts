@@ -1,7 +1,7 @@
+import { JSONSchemaType } from 'ajv';
+
 import schema from "api/schema";
-import { JSONSchemaType } from "ajv";
-import * as API from "./api-types";
-import { SourceFormat } from "./api-types";
+import * as API from "api/node/api-types";
 
 const ResultType: JSONSchemaType<API.Result> = {
     type: "object",
@@ -957,7 +957,7 @@ const FeedSliceInfoType: JSONSchemaType<API.EncodedFeedSliceInfo> = {
 
 export const FeedSliceInfo = schema(FeedSliceInfoType);
 
-const ChoiceType: JSONSchemaType<API.Choice<SourceFormat>> = {
+const ChoiceType: JSONSchemaType<API.Choice<API.SourceFormat>> = {
     type: "object",
     properties: {
         "value": {

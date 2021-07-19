@@ -1,20 +1,17 @@
-import schema from "api/schema";
+import { JSONSchemaType } from 'ajv';
 
-const Result = (type) => (schema({
+import schema from "api/schema";
+import * as API from "api/naming/api-types";
+
+const ObjectResultType: JSONSchemaType<API.ObjectResult> = ({
     type: "object",
     properties: {
         "jsonrpc": {
             type: "string"
         },
         "result": {
-            anyOf: [
-                {
-                    type
-                },
-                {
-                    type: "null"
-                }
-            ]
+            type: "object",
+            nullable: true
         },
         "id": {
             type: "integer"
@@ -22,12 +19,29 @@ const Result = (type) => (schema({
     },
     additionalProperties: false,
     required: ["jsonrpc", "result", "id"]
-}));
+});
+export const ObjectResult = schema(ObjectResultType);
 
-export const ObjectResult = Result("object");
-export const BooleanResult = Result("boolean");
+const BooleanResultType: JSONSchemaType<API.BooleanResult> = ({
+    type: "object",
+    properties: {
+        "jsonrpc": {
+            type: "string"
+        },
+        "result": {
+            type: "boolean",
+            nullable: true
+        },
+        "id": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false,
+    required: ["jsonrpc", "result", "id"]
+});
+export const BooleanResult = schema(BooleanResultType);
 
-export const ErrorResult = schema({
+const ErrorResultType: JSONSchemaType<API.ErrorResult> = {
     type: "object",
     properties: {
         "jsonrpc": {
@@ -52,9 +66,10 @@ export const ErrorResult = schema({
     },
     additionalProperties: false,
     required: ["jsonrpc", "error", "id"]
-});
+};
+export const ErrorResult = schema(ErrorResultType);
 
-export const RegisteredNameInfo = schema({
+const RegisteredNameInfoType: JSONSchemaType<API.RegisteredNameInfo> = {
     type: "object",
     properties: {
         "name": {
@@ -68,15 +83,19 @@ export const RegisteredNameInfo = schema({
             type: "string"
         },
         "nodeUri": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "signingKey": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "validFrom": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         }
     },
     additionalProperties: false,
     required: ["name", "generation", "updatingKey"]
-});
+};
+export const RegisteredNameInfo = schema(RegisteredNameInfoType);

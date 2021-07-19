@@ -1,15 +1,9 @@
 import { apply, call, put, select } from 'typed-redux-saga/macro';
+import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
+import { ValidateFunction } from 'ajv';
 
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApi, NodeApiError, NodeError } from "api";
-import { errorAuthInvalid } from "state/error/actions";
-import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
-import { getNodeRootLocation, getToken } from "state/node/selectors";
-import { getCurrentCarte } from "state/cartes/selectors";
-import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
-import { getNodeUri } from "state/naming/sagas";
-import { Browser } from "ui/browser";
 import { retryFetch } from "api/fetch-timeout";
-import { ValidateFunction } from "ajv";
 import {
     Body,
     BodyFormat,
@@ -29,8 +23,15 @@ import {
     SourceFormat,
     StoryInfo
 } from "api/node/api-types";
-import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 import { BodyError } from "api/error";
+import { isSchemaValid } from "api/schema";
+import { errorAuthInvalid } from "state/error/actions";
+import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
+import { getNodeRootLocation, getToken } from "state/node/selectors";
+import { getCurrentCarte } from "state/cartes/selectors";
+import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
+import { getNodeUri } from "state/naming/sagas";
+import { Browser } from "ui/browser";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
 
@@ -91,7 +92,7 @@ export function* callApi<T>({
         }
     }
     if (!response.ok) {
-        if (!isValid(NodeApi.Result, data)) {
+        if (!isSchemaValid(NodeApi.Result, data)) {
             throw exception("Server returned error status");
         }
         if (data.errorCode === "authentication.invalid") {
@@ -104,7 +105,7 @@ export function* callApi<T>({
             throw exception("Server returned error status: " + data.message);
         }
     }
-    if (!isValid(schema, data)) {
+    if (!isSchemaValid(schema, data)) {
         throw exception("Server returned incorrect response", formatSchemaErrors(schema.errors));
     }
     return data;
@@ -199,10 +200,6 @@ function encodeBody(body: any): string | null | File {
     return JSON.stringify(body);
 }
 
-function isValid<T>(schema: ValidateFunction<T>, data: any): data is T {
-    return schema(data);
-}
-
 function isErrorCodeAllowed(errorCode: string, filter: ErrorFilter): boolean {
     if (typeof filter === "boolean") {
         return filter;
@@ -221,7 +218,7 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
         return {text: ""};
     }
     let body = JSON.parse(encoded);
-    if (!isValid(NodeApi.Body, body)) {
+    if (!isSchemaValid(NodeApi.Body, body)) {
         throw new BodyError(formatSchemaErrors(NodeApi.Body.errors));
     }
     return body;
