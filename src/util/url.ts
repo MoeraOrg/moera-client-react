@@ -8,7 +8,8 @@ export function normalizeUrl(url: string): string | null {
     return url.endsWith("/") ? url.substring(0, url.length - 1) : url;
 }
 
-export function urlWithParameters(url: string, parameters: {[name: string]: string | null}): string {
+export function urlWithParameters(url: string,
+                                  parameters: {[name: string]: string | number | boolean |  null}): string {
     let query = "";
     for (let name in parameters) {
         if (parameters.hasOwnProperty(name)) {
@@ -35,7 +36,7 @@ export function rootUrl(scheme: string, host: string, port?: number | string | n
     return rootLocation;
 }
 
-export function ut(strings: string[], ...args: any[]): string {
+export function ut(strings: TemplateStringsArray, ...args: any[]): string {
     const all = [];
     let i = 0;
     while (i < strings.length || i < args.length) {

@@ -1,4 +1,4 @@
-import Ajv from 'ajv';
+import Ajv, { JSONSchemaType } from 'ajv';
 import addFormats from 'ajv-formats';
 
 const ajv = new Ajv({
@@ -8,4 +8,4 @@ const ajv = new Ajv({
 });
 addFormats(ajv);
 
-export default (schema: any) => ajv.compile(schema);
+export default <T>(schema: JSONSchemaType<T>) => ajv.compile(schema);

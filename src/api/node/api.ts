@@ -79,7 +79,7 @@ export const AvatarInfo = schema(AvatarInfoType);
 export const AvatarInfoArray = schema({
     type: "array",
     items: AvatarInfoType
-});
+} as JSONSchemaType<API.AvatarInfo[]>);
 
 const WhoAmIType: JSONSchemaType<API.WhoAmI> = {
     type: "object",
@@ -937,7 +937,7 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
 
 export const StoryInfo = schema(StoryInfoType);
 
-const FeedSliceInfoType: JSONSchemaType<API.FeedSliceInfo> = {
+const FeedSliceInfoType: JSONSchemaType<API.EncodedFeedSliceInfo> = {
     type: "object",
     properties: {
         "before": {
@@ -1005,7 +1005,7 @@ const SettingInfoType: JSONSchemaType<API.SettingInfo> = {
 export const SettingInfoArray = schema({
     type: "array",
     items: SettingInfoType
-});
+} as JSONSchemaType<API.SettingInfo[]>);
 
 const SettingTypeModifiersType: JSONSchemaType<API.SettingTypeModifiers> = {
     type: "object",
@@ -1070,7 +1070,7 @@ const SettingMetaInfoType: JSONSchemaType<API.SettingMetaInfo> = {
 export const SettingMetaInfoArray = schema({
     type: "array",
     items: SettingMetaInfoType
-});
+} as JSONSchemaType<API.SettingMetaInfo[]>);
 
 const AsyncOperationCreatedType: JSONSchemaType<API.AsyncOperationCreated> = {
     type: "object",
@@ -1266,7 +1266,7 @@ export const SubscriberInfo = schema(SubscriberInfoType);
 export const SubscriberInfoArray = schema({
     type: "array",
     items: SubscriberInfoType
-});
+} as JSONSchemaType<API.SubscriberInfo[]>);
 
 const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
     type: "object",
@@ -1315,7 +1315,7 @@ export const SubscriptionInfo = schema(SubscriptionInfoType);
 export const SubscriptionInfoArray = schema({
     type: "array",
     items: SubscriptionInfoType
-});
+} as JSONSchemaType<API.SubscriptionInfo[]>);
 
 const ActivityReactionInfoType: JSONSchemaType<API.ActivityReactionInfo> = {
     type: "object",
@@ -1351,7 +1351,7 @@ const ActivityReactionInfoType: JSONSchemaType<API.ActivityReactionInfo> = {
 export const ActivityReactionInfoArray = schema({
     type: "array",
     items: ActivityReactionInfoType
-});
+} as JSONSchemaType<API.ActivityReactionInfo[]>);
 
 const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
     type: "object",
@@ -1369,7 +1369,7 @@ const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
 
 export const PeopleGeneralInfo = schema(PeopleGeneralInfoType);
 
-const CommentCreatedType: JSONSchemaType<API.CommentCreated> = {
+const CommentCreatedType: JSONSchemaType<API.EncodedCommentCreated> = {
     type: "object",
     properties: {
         "comment": CommentInfoType,
@@ -1383,7 +1383,7 @@ const CommentCreatedType: JSONSchemaType<API.CommentCreated> = {
 
 export const CommentCreated = schema(CommentCreatedType);
 
-const CommentsSliceInfoType: JSONSchemaType<API.CommentsSliceInfo> = {
+const CommentsSliceInfoType: JSONSchemaType<API.EncodedCommentsSliceInfo> = {
     type: "object",
     properties: {
         "before": {
@@ -1479,7 +1479,7 @@ const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
 export const ContactInfoArray = schema({
     type: "array",
     items: ContactInfoType
-});
+} as JSONSchemaType<API.ContactInfo[]>);
 
 const EmailHintType: JSONSchemaType<API.EmailHint> = {
     type: "object",
@@ -1536,9 +1536,9 @@ const AvatarOrdinalType: JSONSchemaType<API.AvatarOrdinal> = {
 export const AvatarOrdinalArray = schema({
     type: "array",
     items: AvatarOrdinalType
-});
+} as JSONSchemaType<API.AvatarOrdinal[]>);
 
-const DraftInfoType: JSONSchemaType<API.DraftInfo> = {
+const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
     type: "object",
     properties: {
         "id": {
@@ -1621,4 +1621,4 @@ export const DraftInfo = schema(DraftInfoType);
 export const DraftInfoList = schema({
     type: "array",
     items: DraftInfoType
-});
+} as JSONSchemaType<API.EncodedDraftInfo[]>);

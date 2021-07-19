@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from 'redux-saga/effects';
+import { put, select, takeEvery } from 'typed-redux-saga/macro';
 
 import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
@@ -84,27 +84,27 @@ function* triggersSaga(triggers: TriggerMap, action: WithContext<ClientAction>) 
     if (list === undefined) {
         return;
     }
-    action.context = yield select(getContext);
+    action.context = yield* select(getContext);
     for (const trigger of list) {
         let enabled;
         if (typeof(trigger.filter) === "function") {
             // @ts-ignore
-            enabled = !!(yield select(trigger.filter, action));
+            enabled = !!(yield* select(trigger.filter, action));
         } else {
             enabled = trigger.filter;
         }
         if (enabled) {
             if (typeof(trigger.action) === "function") {
-                yield put(trigger.action(action));
+                yield* put(trigger.action(action));
             } else {
-                yield put(trigger.action);
+                yield* put(trigger.action);
             }
         }
     }
 }
 
 export function* invokeTriggers(triggers: TriggerMap) {
-    yield takeEvery([...triggers.keys()], triggersSaga, triggers);
+    yield* takeEvery([...triggers.keys()], triggersSaga, triggers);
 }
 
 export function inv<T extends ClientAction>(func: TriggerFilter<T>): TriggerFilter<T> {

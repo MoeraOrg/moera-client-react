@@ -2,8 +2,8 @@ function extractMessage(messageOrError: Error | string): string {
     return messageOrError instanceof Error ? messageOrError.message : messageOrError;
 }
 
-export function formatSchemaErrors(errors: Error[]): string {
-    return errors.map(({message}) => message).join(", ");
+export function formatSchemaErrors(errors: {message?: string}[] | null | undefined): string {
+    return errors != null ? errors.map(({message}) => message).join(", ") : "";
 }
 
 export class NodeError extends Error {
@@ -14,6 +14,17 @@ export class NodeError extends Error {
                 details: string | null = null) {
         super((title ? `${title}: ` : "") + extractMessage(messageOrError));
         this.messageVerbose = `${method} ${rootApi}${location}: ${this.message}` + (details ? `: ${details}` : "");
+    }
+
+}
+
+export class BodyError extends Error {
+
+    messageVerbose: string;
+
+    constructor(details: string | null = null) {
+        super("Server returned incorrect Body");
+        this.messageVerbose = `${this.message}` + (details ? `: ${details}` : "");
     }
 
 }
@@ -39,9 +50,9 @@ export class HomeNotConnectedError extends Error {
 
 export class NameResolvingError extends Error {
 
-    nodeName: string;
+    nodeName: string | null;
 
-    constructor(nodeName: string) {
+    constructor(nodeName: string | null) {
         super("Name not found: " + nodeName);
         this.nodeName = nodeName;
     }

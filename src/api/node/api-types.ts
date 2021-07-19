@@ -179,7 +179,7 @@ export interface PostingInfoBase<B> {
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
     bodyPreview?: B | null;
-    bodySrc?: string | null;
+    bodySrc?: B | null;
     bodySrcFormat?: SourceFormat | null;
     body: B;
     bodyFormat?: BodyFormat | null;
@@ -329,11 +329,13 @@ export interface StoryInfoBase<B> {
 export type EncodedStoryInfo = StoryInfoBase<string>;
 export type StoryInfo = StoryInfoBase<Body>;
 
-export interface FeedSliceInfo {
+export interface FeedSliceInfoBase<B> {
     before: number;
     after: number;
-    stories: EncodedStoryInfo[];
+    stories: StoryInfoBase<B>[];
 }
+export type EncodedFeedSliceInfo = FeedSliceInfoBase<string>;
+export type FeedSliceInfo = FeedSliceInfoBase<Body>;
 
 export interface Choice<T> {
     value: T;
@@ -449,6 +451,11 @@ export interface SubscriptionInfo {
     createdAt: number;
 }
 
+export interface RemotePosting {
+    nodeName: string;
+    postingId: string;
+}
+
 export interface ActivityReactionInfo {
     remoteNodeName: string;
     remoteFullName?: string | null;
@@ -464,19 +471,23 @@ export interface PeopleGeneralInfo {
     feedSubscriptionsTotal: number;
 }
 
-export interface CommentCreated {
-    comment: EncodedCommentInfo;
+export interface CommentCreatedBase<B> {
+    comment: CommentInfoBase<B>;
     total: number;
 }
+export type EncodedCommentCreated = CommentCreatedBase<string>;
+export type CommentCreated = CommentCreatedBase<Body>;
 
-export interface CommentsSliceInfo {
+export interface CommentsSliceInfoBase<B> {
     before: number;
     after: number;
-    comments: EncodedCommentInfo[];
+    comments: CommentInfoBase<B>[];
     total: number;
     totalInPast: number;
     totalInFuture: number;
 }
+export type EncodedCommentsSliceInfo = CommentsSliceInfoBase<string>;
+export type CommentsSliceInfo = CommentsSliceInfoBase<Body>;
 
 export interface CommentTotalInfo {
     total: number;
@@ -532,7 +543,7 @@ export interface DraftText {
     updateInfo?: UpdateInfo | null;
 }
 
-export interface DraftInfo {
+export interface DraftInfoBase<B> {
     id: string;
     draftType: DraftType;
     receiverName: string;
@@ -546,10 +557,13 @@ export interface DraftInfo {
     acceptedReactions?: AcceptedReactions | null;
     reactionsVisible?: boolean | null;
     reactionTotalsVisible?: boolean | null;
-    bodySrc?: string | null;
+    bodySrc?: B | null;
     bodySrcFormat?: SourceFormat | null;
-    body: Body | string;
+    body: B;
     bodyFormat?: BodyFormat | null;
     heading: string;
     updateInfo?: UpdateInfo | null;
 }
+
+export type EncodedDraftInfo = DraftInfoBase<string>;
+export type DraftInfo = DraftInfoBase<Body>;
