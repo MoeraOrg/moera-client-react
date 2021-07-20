@@ -9,9 +9,9 @@ export type OpenSourceDialogAction = ActionWithPayload<typeof OPEN_SOURCE_DIALOG
     commentId: string | null;
 }>;
 export const openSourceDialog = (nodeName: string, postingId: string,
-                                 commentId: string | null): OpenSourceDialogAction => ({
+                                 commentId?: string | null): OpenSourceDialogAction => ({
     type: OPEN_SOURCE_DIALOG,
-    payload: {nodeName, postingId, commentId}
+    payload: {nodeName, postingId, commentId: commentId ?? null}
 });
 
 export const CLOSE_SOURCE_DIALOG = "CLOSE_SOURCE_DIALOG";

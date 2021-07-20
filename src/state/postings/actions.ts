@@ -171,11 +171,10 @@ export const postingCommentsSubscribeFailed = (id: string): PostingCommentsSubsc
 export const POSTING_COMMENTS_UNSUBSCRIBE = "POSTING_COMMENTS_UNSUBSCRIBE";
 export type PostingCommentsUnsubscribeAction = ActionWithPayload<typeof POSTING_COMMENTS_UNSUBSCRIBE, {
     id: string;
-    subscriberId: string;
 }>;
-export const postingCommentsUnsubscribe = (id: string, subscriberId: string): PostingCommentsUnsubscribeAction => ({
+export const postingCommentsUnsubscribe = (id: string): PostingCommentsUnsubscribeAction => ({
     type: POSTING_COMMENTS_UNSUBSCRIBE,
-    payload: {id, subscriberId}
+    payload: {id}
 });
 
 export const POSTING_COMMENTS_UNSUBSCRIBED = "POSTING_COMMENTS_UNSUBSCRIBED";

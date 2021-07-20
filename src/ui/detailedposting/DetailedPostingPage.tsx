@@ -9,10 +9,9 @@ import DetailedPosting from "ui/detailedposting/DetailedPosting";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference } from "state/postings/selectors";
 import { ClientState } from "state/state";
-import { FeedReference, PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api/node/api-types";
+import { MinimalStoryInfo } from "ui/types";
 import "./DetailedPostingPage.css";
-
-type MinimalStoryInfo = FeedReference & { id: string };
 
 function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | null {
     const feedReference = getPostingFeedReference(posting, feedName);
@@ -51,7 +50,7 @@ function DetailedPostingPage({loading, deleting, posting}: Props) {
         <>
             <DetailedPostingPageHeader story={story} href={href} feedTitle={feedTitle}/>
             <Page>
-                {posting && <DetailedPosting posting={posting} story={story} deleting={deleting}/>}
+                {(posting && story) && <DetailedPosting posting={posting} story={story} deleting={deleting}/>}
                 {!posting && loading &&
                     <div className="posting">
                         <Loading active={loading}/>

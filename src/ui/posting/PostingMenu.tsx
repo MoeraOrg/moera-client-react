@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { DropdownMenu } from "ui/control";
 import { goToCompose } from "state/navigation/actions";
@@ -16,10 +16,19 @@ import { openChangeDateDialog } from "state/changedatedialog/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getNodeRootLocation } from "state/node/selectors";
+import { getNodeRootLocation, ProtectedObject } from "state/node/selectors";
+import { ClientState } from "state/state";
+import { PostingInfo } from "api/node/api-types";
+import { MinimalStoryInfo } from "ui/types";
 import "./EntryMenu.css";
 
-class PostingMenu extends React.PureComponent {
+type Props = {
+    posting: PostingInfo;
+    story: MinimalStoryInfo;
+    isPermitted: (operation: string, object: ProtectedObject) => boolean;
+} & ConnectedProps<typeof connector>;
+
+class PostingMenu extends React.PureComponent<Props> {
 
     onCopyLink = () => {
         const {posting, postingCopyLink} = this.props;
@@ -86,7 +95,9 @@ class PostingMenu extends React.PureComponent {
         if (posting.receiverName == null) {
             openSourceDialog("", posting.id);
         } else {
-            openSourceDialog(posting.receiverName, posting.receiverPostingId);
+            if (posting.receiverPostingId != null) {
+                openSourceDialog(posting.receiverName, posting.receiverPostingId);
+            }
         }
     };
 
@@ -118,13 +129,13 @@ class PostingMenu extends React.PureComponent {
                     title: "Follow comments",
                     href: postingHref,
                     onClick: this.onFollowComments,
-                    show: posting.ownerName !== homeOwnerName && posting.subscriptions.comments == null
+                    show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments == null
                 },
                 {
                     title: "Unfollow comments",
                     href: postingHref,
                     onClick: this.onUnfollowComments,
-                    show: posting.ownerName !== homeOwnerName && posting.subscriptions.comments != null
+                    show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments != null
                 },
                 {
                     divider: true
@@ -168,8 +179,8 @@ class PostingMenu extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         rootLocation: getNodeRootLocation(state),
         homeOwnerName: getHomeOwnerName(state)
     }),
@@ -177,4 +188,6 @@ export default connect(
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
         postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare
     }
-)(PostingMenu);
+);
+
+export default connector(PostingMenu);

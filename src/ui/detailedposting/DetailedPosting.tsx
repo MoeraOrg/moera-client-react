@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { isConnectedToHome } from "state/home/selectors";
-import { isPermitted } from "state/node/selectors";
+import { isPermitted, ProtectedObject } from "state/node/selectors";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
 import PostingUpdated from "ui/posting/PostingUpdated";
@@ -18,10 +18,11 @@ import EntryHtml from "ui/posting/EntryHtml";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 import { ClientState } from "state/state";
-import { FeedReference, PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api/node/api-types";
+import { MinimalStoryInfo } from "ui/types";
 
 type Props = {
-    story: FeedReference | null;
+    story: MinimalStoryInfo;
     posting: PostingInfo;
     deleting?: boolean | null;
 } & ConnectedProps<typeof connector>;
@@ -62,7 +63,7 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
 const connector = connect(
     (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
-        isPermitted: (operation: string, posting: PostingInfo) => isPermitted(operation, posting, state),
+        isPermitted: (operation: string, object: ProtectedObject) => isPermitted(operation, object, state),
     })
 );
 

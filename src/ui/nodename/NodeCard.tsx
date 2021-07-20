@@ -68,7 +68,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
                 </Jump>
             </div>
             <div className="buttons">
-                <CopyMentionButton nodeName={nodeName} fullName={card.fullName ?? fullName}/>
+                <CopyMentionButton nodeName={nodeName} fullName={card.fullName ?? fullName ?? null}/>
                 <SubscribeButton show={nodeName !== homeOwnerName} ready={card.subscribed != null}
                                  subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
                                  nodeName={nodeName} feedName="timeline" subscriberId={subscriberId}/>

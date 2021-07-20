@@ -1,18 +1,25 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
+import { NameDisplayMode } from "ui/types";
 import Jump from "ui/navigation/Jump";
 import { getSetting } from "state/settings/selectors";
+import { ClientState } from "state/state";
 import { mentionName } from "util/misc";
 
-function NodeNameMention({name, fullName, text, mode}) {
+type Props = {
+    name: string | null;
+    fullName: string | null;
+    text: string;
+} & ConnectedProps<typeof connector>;
+
+function NodeNameMention({name, fullName, text, mode}: Props) {
     if (!name) {
         return null;
     }
 
-    let content;
+    let content: string;
     const mention = mentionName(name);
     if (text !== mention) {
         switch (mode) {
@@ -44,14 +51,10 @@ function NodeNameMention({name, fullName, text, mode}) {
     );
 }
 
-NodeNameMention.propTypes = {
-    name: PropType.string,
-    fullName: PropType.string,
-    text: PropType.string
-};
-
-export default connect(
-    state => ({
-        mode: getSetting(state, "full-name.display")
+const connector = connect(
+    (state: ClientState) => ({
+        mode: getSetting(state, "full-name.display") as NameDisplayMode
     })
-)(NodeNameMention);
+);
+
+export default connector(NodeNameMention);

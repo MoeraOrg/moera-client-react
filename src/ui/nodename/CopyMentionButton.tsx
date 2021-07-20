@@ -1,11 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from "ui/control";
 import { nodeCardCopyMention } from "state/nodecards/actions";
 
-function CopyMentionButton({nodeName, fullName, nodeCardCopyMention}) {
+type Props = {
+    nodeName: string;
+    fullName: string | null;
+} & ConnectedProps<typeof connector>;
+
+function CopyMentionButton({nodeName, fullName, nodeCardCopyMention}: Props) {
     const onClick = () => nodeCardCopyMention(nodeName, fullName);
 
     return (
@@ -16,7 +21,9 @@ function CopyMentionButton({nodeName, fullName, nodeCardCopyMention}) {
     );
 }
 
-export default connect(
+const connector = connect(
     null,
     { nodeCardCopyMention }
-)(CopyMentionButton);
+);
+
+export default connector(CopyMentionButton);
