@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Page } from "ui/page/Page";
@@ -8,19 +8,28 @@ import DetailedPostingPageHeader from "ui/detailedposting/DetailedPostingPageHea
 import DetailedPosting from "ui/detailedposting/DetailedPosting";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference } from "state/postings/selectors";
+import { ClientState } from "state/state";
+import { FeedReference, PostingInfo } from "api/node/api-types";
 import "./DetailedPostingPage.css";
 
-function getStory(posting, feedName) {
-    const story = getPostingFeedReference(posting, feedName);
-    if (story != null) {
-        story.id = story.storyId;
+type MinimalStoryInfo = FeedReference & { id: string };
+
+function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | null {
+    const feedReference = getPostingFeedReference(posting, feedName);
+    if (feedReference == null) {
+        return null;
     }
-    return story;
+    return {
+        id: feedReference.storyId,
+        ...feedReference
+    }
 }
 
-function getFeedAndStory(posting) {
+function getFeedAndStory(posting: PostingInfo | null): {
+    story: MinimalStoryInfo | null, href: string, feedTitle: string
+} {
     if (posting == null) {
-        return {};
+        return {story: null, href: "", feedTitle: ""};
     }
 
     let story = getStory(posting, "timeline");
@@ -34,8 +43,10 @@ function getFeedAndStory(posting) {
     return {story, href, feedTitle};
 }
 
-function DetailedPostingPage({loading, deleting, posting}) {
-    const {story, href, feedTitle} = getFeedAndStory(posting);
+type Props = ConnectedProps<typeof connector>;
+
+function DetailedPostingPage({loading, deleting, posting}: Props) {
+    const {story = null, href, feedTitle} = getFeedAndStory(posting);
     return (
         <>
             <DetailedPostingPageHeader story={story} href={href} feedTitle={feedTitle}/>
@@ -57,10 +68,12 @@ function DetailedPostingPage({loading, deleting, posting}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loading: state.detailedPosting.loading,
         deleting: isDetailedPostingBeingDeleted(state),
         posting: getDetailedPosting(state)
     })
-)(DetailedPostingPage);
+);
+
+export default connector(DetailedPostingPage);

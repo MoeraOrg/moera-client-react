@@ -58,11 +58,17 @@ export function isReceiverAdmin(state: ClientState, receiverName: string | null)
 
 export interface ProtectedObject {
     ownerName?: string;
-    operations: Record<string, string[]>;
+    operations?: Record<string, string[] | null> | null;
 }
 
-export function isPermitted(operation: string, object: ProtectedObject, state: ClientState,
+export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
                             receiverName: string | null = null): boolean {
+    if (object == null) {
+        return false;
+    }
+    if (object.operations == null) {
+        return true;
+    }
     const requirements = selectn(["operations", operation], object);
     if (requirements == null) {
         return false;

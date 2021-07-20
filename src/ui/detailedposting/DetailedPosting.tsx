@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
@@ -17,8 +17,16 @@ import PostingButtons from "ui/posting/PostingButtons";
 import EntryHtml from "ui/posting/EntryHtml";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
+import { ClientState } from "state/state";
+import { FeedReference, PostingInfo } from "api/node/api-types";
 
-const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted}) => (
+type Props = {
+    story: FeedReference | null;
+    posting: PostingInfo;
+    deleting?: boolean | null;
+} & ConnectedProps<typeof connector>;
+
+const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted}: Props) => (
     <>
         <div className="posting entry mt-2">
             {deleting ?
@@ -51,9 +59,11 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
     </>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
-        isPermitted: (operation, posting) => isPermitted(operation, posting, state),
+        isPermitted: (operation: string, posting: PostingInfo) => isPermitted(operation, posting, state),
     })
-)(DetailedPosting);
+);
+
+export default connector(DetailedPosting);
