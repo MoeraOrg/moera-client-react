@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
@@ -8,13 +8,16 @@ import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
 import { closeConfirmBox } from "state/confirmbox/actions";
 import { Browser } from "ui/browser";
+import { ClientState } from "state/state";
 
-const forwardAction = (action) => action;
+const forwardAction = (action: any) => action;
 
-class Navigation extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
 
-    #rootPage;
-    #location;
+class Navigation extends React.PureComponent<Props> {
+
+    #rootPage: string | null = null;
+    #location: string | null = null;
 
     componentDidMount() {
         window.addEventListener("popstate", this.popState);
@@ -23,7 +26,7 @@ class Navigation extends React.PureComponent {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         const {standalone, rootPage, location, title, update, locked, count} = this.props;
 
         if (!locked
@@ -53,23 +56,25 @@ class Navigation extends React.PureComponent {
         }
     }
 
-    popState = event => {
+    popState = (event: PopStateEvent) => {
         const {standalone, rootLocation, initFromLocation, goToLocation} = this.props;
 
         if (!standalone) {
             goToLocation(window.location.pathname, window.location.search, window.location.hash);
         } else {
-            const {rootLocation: root, path, query, hash} = Browser.getDocumentPassedLocation();
+            const {rootLocation: root, path = null, query = null, hash = null} = Browser.getDocumentPassedLocation();
             if (root === rootLocation) {
                 goToLocation(path, query, hash);
             } else {
-                initFromLocation(root, path, query, hash);
+                if (root != null) {
+                    initFromLocation(root, path, query, hash);
+                }
             }
         }
         event.preventDefault();
     };
 
-    messageReceived = event => {
+    messageReceived = (event: MessageEvent) => {
         let message = event.data;
         if (message === null || typeof message !== "string") {
             return;
@@ -107,11 +112,13 @@ class Navigation extends React.PureComponent {
             forwardAction(closeDialogAction);
             dialogClosed();
         } else {
-            window.Android.back();
+            if (window.Android) {
+                window.Android.back();
+            }
         }
     }
 
-    executeOnClose(onClose) {
+    executeOnClose(onClose: any) {
         const {forwardAction} = this.props;
 
         if (onClose) {
@@ -129,8 +136,8 @@ class Navigation extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         standalone: isStandaloneMode(state),
         rootLocation: getNodeRootLocation(state),
         rootPage: getNodeRootPage(state),
@@ -146,4 +153,6 @@ export default connect(
         confirmBoxOnNo: state.confirmBox.onNo
     }),
     { initFromLocation, goToLocation, forwardAction, dialogClosed, closeMessageBox, closeConfirmBox }
-)(Navigation);
+);
+
+export default connector(Navigation);
