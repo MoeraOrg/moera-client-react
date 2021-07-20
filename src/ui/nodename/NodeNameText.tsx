@@ -2,9 +2,16 @@ import React from 'react';
 import PropType from 'prop-types';
 
 import { NodeName as NodeNameParser } from "api";
+import { NameDisplayMode } from "ui/types";
 import { mentionName } from "util/misc";
 
-export default function NodeNameText({name, fullName, mode}) {
+interface Props {
+    name?: string | null;
+    fullName?: string | null;
+    mode?: NameDisplayMode | null;
+}
+
+export default function NodeNameText({name = null, fullName, mode}: Props) {
     let namePart = null;
     let generationPart = null;
     if (mode !== "name") {

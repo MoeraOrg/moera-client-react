@@ -4,7 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 
-export function mentionName(name: string | null | undefined, fullName: string | null | undefined): string {
+export function mentionName(name: string | null | undefined, fullName?: string | null): string {
     if (!name) {
         return "";
     }
