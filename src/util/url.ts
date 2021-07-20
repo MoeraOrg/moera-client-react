@@ -12,7 +12,7 @@ export function normalizeUrl(url: string | null | undefined): string | null {
 }
 
 export function urlWithParameters(url: string,
-                                  parameters: {[name: string]: string | number | boolean |  null}): string {
+                                  parameters: {[name: string]: string | number | boolean | null | undefined}): string {
     let query = "";
     for (let name in parameters) {
         if (parameters.hasOwnProperty(name)) {
@@ -69,7 +69,7 @@ export function nodeUrlToEvents(url: string | null): string | null {
 }
 
 export function redirectUrl(standalone: boolean, redirectPage: string, nodeName: string | null,
-                            nodeRootPage: string | null, location: string, trackingId: string | null): string {
+                            nodeRootPage: string | null, location: string, trackingId?: string | null): string {
     if (nodeRootPage && !trackingId) {
         return standalone ? Browser.passedLocation(nodeRootPage + location) : nodeRootPage + location;
     }

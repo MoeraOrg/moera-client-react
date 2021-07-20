@@ -18,8 +18,8 @@ export function getNamingNamesToBeLoaded(state: ClientState, names: (string | nu
     return names.filter((name): name is string => isNamingNameToBeLoaded(state, name));
 }
 
-export function getNamingNameDetails(state: ClientState, name: string): NameState {
-    const details = state.naming.names[name];
+export function getNamingNameDetails(state: ClientState, name?: string | null): NameState {
+    const details = name != null ? state.naming.names[name] : null;
     return details ? details : {
         loading: false,
         loaded: false,
@@ -29,7 +29,7 @@ export function getNamingNameDetails(state: ClientState, name: string): NameStat
     }
 }
 
-export function getNamingNameNodeUri(state: ClientState, name: string): string | null {
+export function getNamingNameNodeUri(state: ClientState, name?: string | null): string | null {
     const details = getNamingNameDetails(state, name);
     return details.loaded && details.nodeUri != null ? details.nodeUri : null;
 }
