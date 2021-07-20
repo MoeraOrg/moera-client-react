@@ -1,8 +1,9 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
+import { AvatarImage } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardToBeLoaded } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import CopyMentionButton from "ui/nodename/CopyMentionButton";
@@ -13,7 +14,16 @@ import { mentionName, shortGender } from "util/misc";
 import { Browser } from "ui/browser";
 import "./NodeCard.css";
 
-function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoaded, homeOwnerName}) {
+interface OwnProps {
+    nodeName: string;
+    fullName?: string | null;
+    avatar?: AvatarImage | null;
+    avatarNodeName?: string;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoaded, homeOwnerName}: Props) {
     if (cardNotLoaded) {
         return (
             <div className="node-card">
@@ -23,8 +33,8 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
     }
 
     const realFullName = card.fullName ?? (fullName || NodeName.shorten(nodeName));
-    const realAvatar =  card.avatar ?? avatar;
-    const realAvatarNodeName = card.avatar != null ? nodeName : avatarNodeName;
+    const realAvatar =  card.avatar ?? avatar ?? null;
+    const realAvatarNodeName = card.avatar != null ? nodeName : avatarNodeName ?? null;
     const gender = shortGender(card.gender);
     const subscribersTotal = card.subscribersTotal ?? "?";
     const subscriptionsTotal = card.subscriptionsTotal ?? "?";
@@ -68,20 +78,12 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
     );
 }
 
-NodeCard.propTypes = {
-    nodeName: PropType.string,
-    fullName: PropType.string,
-    avatar: PropType.shape({
-        path: PropType.string,
-        shape: PropType.string
-    }),
-    avatarNodeName: PropType.string
-};
-
-export default connect(
-    (state, ownProps) => ({
+const connector = connect(
+    (state: ClientState, ownProps: OwnProps) => ({
         card: getNodeCard(state, ownProps.nodeName),
         cardNotLoaded: isNodeCardToBeLoaded(state, ownProps.nodeName),
         homeOwnerName: getHomeOwnerName(state)
     })
-)(NodeCard);
+);
+
+export default connector(NodeCard);

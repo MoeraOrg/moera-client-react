@@ -60,7 +60,7 @@ import {
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
     EVENT_RECEIVER_COMMENT_DELETED
 } from "api/events/actions";
-import { DetailedPostingState, ExtCommentInfo } from "state/detailedposting/state";
+import { CommentsState, DetailedPostingState, ExtCommentInfo } from "state/detailedposting/state";
 import { ClientAction } from "state/action";
 import { CommentInfo } from "api/node/api-types";
 
@@ -350,7 +350,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                     ...cloneDeep(emptyComments),
                     focused: commentsFocused,
                     focusedCommentId: commentsFocusedCommentId
-                })
+                } as CommentsState)
                 .assign("compose", {
                     ...emptyCompose,
                     focused: composeFocused

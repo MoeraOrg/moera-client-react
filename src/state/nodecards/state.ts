@@ -1,7 +1,10 @@
+import { AvatarImage } from "api/node/api-types";
+
 export interface NodeCardState {
     fullName: string | null;
     gender: string | null;
     title: string | null;
+    avatar: AvatarImage | null;
     subscribersTotal: number | null;
     subscriptionsTotal: number | null;
     subscribed: boolean | null;

@@ -1,12 +1,21 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
-import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
+import { DelayedPopper, DelayedPopperChildren, Manager, Reference } from "ui/control/DelayedPopper";
 import NodeCard from "ui/nodename/NodeCard";
 import { nodeCardPrepare } from "state/nodecards/actions";
+import { AvatarImage } from "api/node/api-types";
 
-function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children, nodeCardPrepare}) {
+type Props = {
+    nodeName: string;
+    fullName?: string | null;
+    avatar?: AvatarImage | null;
+    avatarNodeName?: string;
+    disabled?: boolean;
+    children: DelayedPopperChildren;
+} & ConnectedProps<typeof connector>;
+
+function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children, nodeCardPrepare}: Props) {
     const onPreparePopper = () => {
         nodeCardPrepare(nodeName);
     }
@@ -23,18 +32,9 @@ function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, ch
     );
 }
 
-NodeNamePopup.propTypes = {
-    nodeName: PropType.string,
-    fullName: PropType.string,
-    avatar: PropType.shape({
-        path: PropType.string,
-        shape: PropType.string
-    }),
-    avatarNodeName: PropType.string,
-    disabled: PropType.bool
-};
-
-export default connect(
+const connector = connect(
     null,
     { nodeCardPrepare }
-)(NodeNamePopup);
+);
+
+export default connector(NodeNamePopup);

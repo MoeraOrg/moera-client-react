@@ -1,21 +1,37 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { Manager as PopperManager, Popper, Reference as PopperReference } from 'react-popper';
+import { Placement } from '@popperjs/core';
 import cx from 'classnames';
 import debounce from 'lodash.debounce';
 
-const DelayedPopperContext = React.createContext({});
+interface ManagerProps {
+    disabled?: boolean;
+    clickable?: boolean;
+    onPreparePopper?: () => void;
+    onShow?: () => boolean;
+}
 
-class Manager extends React.PureComponent {
+type ClickLocus = "out" | "main" | "popup";
 
-    static propTypes = {
-        disabled: PropType.bool,
-        clickable: PropType.bool,
-        onPreparePopper: PropType.func,
-        onShow: PropType.func
-    };
+type TouchLocus = "none" | "touch" | "lock";
 
-    constructor(props, context) {
+interface ManagerState {
+    locus: ClickLocus;
+    touch: TouchLocus;
+    scrollY: number | null;
+    popup: boolean;
+    mainEnter: () => void;
+    mainLeave: () => void;
+    mainTouch: () => void;
+    popupEnter: () => void;
+    popupLeave: () => void;
+}
+
+const DelayedPopperContext = React.createContext({} as ManagerState);
+
+class Manager extends React.PureComponent<ManagerProps, ManagerState> {
+
+    constructor(props: ManagerProps, context: any) {
         super(props, context);
 
         this.state = {
@@ -23,7 +39,6 @@ class Manager extends React.PureComponent {
             touch: "none", // none, touch, lock
             scrollY: null,
             popup: false,
-            reactions: [],
             mainEnter: this.mainEnter,
             mainLeave: this.mainLeave,
             mainTouch: this.mainTouch,
@@ -32,7 +47,7 @@ class Manager extends React.PureComponent {
         };
     }
 
-    isInPopover(event) {
+    isInPopover(event: MouseEvent) {
         for (let element of document.querySelectorAll(".popover-body").values()) {
             const r = element.getBoundingClientRect();
             if (r.left <= event.clientX && r.right >= event.clientX
@@ -43,7 +58,7 @@ class Manager extends React.PureComponent {
         return false;
     }
 
-    documentClickCapture = event => {
+    documentClickCapture = (event: MouseEvent) => {
         if (!this.props.disabled) {
             switch (this.state.touch) {
                 case "touch":
@@ -64,13 +79,13 @@ class Manager extends React.PureComponent {
         }
     };
 
-    documentClick = event => {
+    documentClick = (event: MouseEvent) => {
         if (!this.props.disabled && (!this.props.clickable || !this.isInPopover(event))) {
             this.hide();
         }
     };
 
-    contextMenu = event => {
+    contextMenu = (event: MouseEvent) => {
         if (this.state.touch === "touch") {
             event.preventDefault();
         }
@@ -103,7 +118,7 @@ class Manager extends React.PureComponent {
         }
     };
 
-    setLocus(locus) {
+    setLocus(locus: ClickLocus) {
         if (this.props.disabled) {
             return;
         }
@@ -118,7 +133,7 @@ class Manager extends React.PureComponent {
         }
     }
 
-    setTouch(touch) {
+    setTouch(touch: TouchLocus) {
         if (this.props.disabled) {
             return;
         }
@@ -192,7 +207,14 @@ class Manager extends React.PureComponent {
 
 }
 
-const Reference = ({children}) => (
+export type DelayedPopperChildren = (ref: React.Ref<any>, mainEnter: () => void, mainLeave: () => void,
+                                     mainTouch: () => void) => any;
+
+interface ReferenceProps {
+    children: DelayedPopperChildren;
+}
+
+const Reference = ({children}: ReferenceProps) => (
     <DelayedPopperContext.Consumer>
         {context => (
             <PopperReference>
@@ -202,7 +224,14 @@ const Reference = ({children}) => (
     </DelayedPopperContext.Consumer>
 );
 
-const DelayedPopper = ({placement, arrow, className, children}) => (
+interface DelayedPopperProps {
+    placement: Placement;
+    arrow?: boolean;
+    className?: string;
+    children?: any;
+}
+
+const DelayedPopper = ({placement, arrow, className, children}: DelayedPopperProps) => (
     <DelayedPopperContext.Consumer>
         {context => (
             (context.popup || context.locus !== "out") &&

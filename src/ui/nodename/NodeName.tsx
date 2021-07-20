@@ -1,16 +1,32 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropType from 'prop-types';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
+import { AvatarImage } from "api/node/api-types";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
+import { ClientState } from "state/state";
 import Jump from "ui/navigation/Jump";
 import NodeNameText from "ui/nodename/NodeNameText";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
+import { NameDisplayMode } from "ui/types";
 import "./NodeName.css";
 
-function NodeName({name, fullName, avatar, avatarNodeName, verified, correct, linked, popup, details, mode}) {
+interface OwnProps {
+    name?: string | null;
+    fullName?: string | null;
+    avatar?: AvatarImage | null;
+    avatarNodeName?: string;
+    verified?: boolean;
+    correct?: boolean;
+    linked?: boolean;
+    popup?: boolean;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+function NodeName({name, fullName, avatar, avatarNodeName, verified = false, correct = false, linked = true,
+                   popup = true, details, mode}: Props) {
     if (!name) {
         return null;
     }
@@ -21,7 +37,7 @@ function NodeName({name, fullName, avatar, avatarNodeName, verified, correct, li
             "incorrect": verified && !correct
         }
     );
-    linked = linked && (!details.loaded || details.nodeUri);
+    linked = linked && (!details.loaded || details.nodeUri != null);
     return (
         <NodeNamePopup nodeName={name} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}
                        disabled={!popup}>
@@ -43,30 +59,11 @@ function NodeName({name, fullName, avatar, avatarNodeName, verified, correct, li
     );
 }
 
-NodeName.propTypes = {
-    name: PropType.string,
-    fullName: PropType.string,
-    avatar: PropType.shape({
-        path: PropType.string,
-        shape: PropType.string
-    }),
-    avatarNodeName: PropType.string,
-    verified: PropType.bool,
-    correct: PropType.bool,
-    linked: PropType.bool,
-    popup: PropType.bool
-};
-
-NodeName.defaultProps = {
-    verified: false,
-    correct: false,
-    linked: true,
-    popup: true
-}
-
-export default connect(
-    (state, ownProps) => ({
+const connector = connect(
+    (state: ClientState, ownProps: OwnProps) => ({
         details: getNamingNameDetails(state, ownProps.name),
-        mode: getSetting(state, "full-name.display")
+        mode: getSetting(state, "full-name.display") as NameDisplayMode
     })
-)(NodeName);
+);
+
+export default connector(NodeName);

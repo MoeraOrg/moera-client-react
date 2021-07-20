@@ -35,6 +35,7 @@ const emptyCard = {
     fullName: null,
     gender: null,
     title: null,
+    avatar: null,
     subscribersTotal: null,
     subscriptionsTotal: null,
     subscribed: null,
