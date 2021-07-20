@@ -1,32 +1,37 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
-import PropType from 'prop-types';
 import cx from 'classnames';
 import { Manager, Popper, Reference } from 'react-popper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import isFunction from 'lodash.isfunction';
 
 import "./Popover.css";
+import { PositioningStrategy } from "@popperjs/core";
 
-export class Popover extends React.PureComponent {
+interface Props {
+    className?: string;
+    text: string;
+    textClassName?: string;
+    icon?: IconProp;
+    title?: string;
+    element?: any;
+    detached?: boolean;
+    strategy?: PositioningStrategy;
+    onToggle?: (visible: boolean) => void;
+}
 
-    static propTypes = {
-        className: PropType.string,
-        text: PropType.string,
-        textClassName: PropType.string,
-        icon: PropType.string,
-        title: PropType.string,
-        element: PropType.elementType,
-        detached: PropType.bool,
-        strategy: PropType.string,
-        onToggle: PropType.func
-    };
+interface State {
+    visible: boolean;
+}
+
+export class Popover extends React.PureComponent<Props, State> {
 
     static defaultProps = {
         strategy: "fixed"
     };
 
-    constructor(props, context) {
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.state = {visible: false};
@@ -40,7 +45,7 @@ export class Popover extends React.PureComponent {
         }
     };
 
-    documentClick = event => {
+    documentClick = (event: MouseEvent) => {
         for (let element of document.querySelectorAll(".popover.show").values()) {
             const r = element.getBoundingClientRect();
             if (r.left <= event.clientX && r.right >= event.clientX
@@ -56,7 +61,7 @@ export class Popover extends React.PureComponent {
             return;
         }
         this.setState({visible: true});
-        document.getElementById("app-root").addEventListener("click", this.documentClick);
+        document.getElementById("app-root")!.addEventListener("click", this.documentClick);
         if (this.props.onToggle != null) {
             this.props.onToggle(true);
         }
@@ -67,7 +72,7 @@ export class Popover extends React.PureComponent {
             return;
         }
         this.setState({visible: false});
-        document.getElementById("app-root").removeEventListener("click", this.documentClick);
+        document.getElementById("app-root")!.removeEventListener("click", this.documentClick);
         if (this.props.onToggle != null) {
             this.props.onToggle(false);
         }
@@ -111,7 +116,7 @@ export class Popover extends React.PureComponent {
                                 </div>
                             )}
                         </Popper>,
-                    document.querySelector("#modal-root")
+                    document.querySelector("#modal-root")!
                 )}
             </Manager>
         );

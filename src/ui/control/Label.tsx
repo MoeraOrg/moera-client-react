@@ -1,10 +1,21 @@
 import React from 'react';
-import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { LabelButton } from "ui/control";
 
-export const Label = ({title, name, className, horizontal, checkbox, undo, reset, onUndo, onReset}) => (
+interface Props {
+    title?: string;
+    name?: string;
+    className?: string;
+    horizontal?: boolean;
+    checkbox?: boolean;
+    undo?: boolean;
+    reset?: boolean;
+    onUndo: () => void;
+    onReset: () => void;
+}
+
+export const Label = ({title, name, className, horizontal, checkbox, undo, reset, onUndo, onReset}: Props) => (
     title ?
         <>
             <label htmlFor={name} className={cx(
@@ -24,15 +35,3 @@ export const Label = ({title, name, className, horizontal, checkbox, undo, reset
     :
         null
 );
-
-Label.propTypes = {
-    title: PropType.string,
-    name: PropType.string,
-    className: PropType.string,
-    horizontal: PropType.bool,
-    checkbox: PropType.bool,
-    undo: PropType.bool,
-    reset: PropType.bool,
-    onUndo: PropType.func,
-    onReset: PropType.func
-};

@@ -1,10 +1,14 @@
 import React from 'react';
-import PropType from 'prop-types';
 import cx from 'classnames';
 
 import "./LoadingInline.css";
 
-export const LoadingInline = ({active = true, className = null}) => (
+interface Props {
+    active?: boolean;
+    className?: string | null;
+}
+
+export const LoadingInline = ({active = true, className = null}: Props) => (
     active &&
         <div className={cx("loading-inline", className)}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 10">
@@ -26,8 +30,3 @@ export const LoadingInline = ({active = true, className = null}) => (
             </svg>
         </div>
 );
-
-LoadingInline.propTypes = {
-    active: PropType.bool,
-    className: PropType.string
-};
