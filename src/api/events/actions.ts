@@ -44,7 +44,7 @@ import {
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent
 } from "api/events/api-types";
-import { Action } from "redux";
+import { ActionWithPayload } from "state/action-types";
 
 export const EVENT_HOME_SUBSCRIBED = "EVENT_HOME_SUBSCRIBED";
 export const EVENT_NODE_PROFILE_UPDATED = "EVENT_NODE_PROFILE_UPDATED";
@@ -95,10 +95,7 @@ export const EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED = "EVENT_HOME_REMOTE_NODE_AVA
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
 
-export interface EventAction<E extends {type: string}> extends Action<E["type"]> {
-    type: EventActionType<E["type"]>;
-    payload: Omit<E, "type">;
-}
+export type EventAction<E extends {type: string}> = ActionWithPayload<EventActionType<E["type"]>, Omit<E, "type">>;
 
 export const eventAction = <E extends {type: string}>(event: E, source: EventSource): EventAction<E> => ({
     type: `EVENT_${source}_${event.type}`, // Incorrectly marked as error by TypeScript 4.2.2
