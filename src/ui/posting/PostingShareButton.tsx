@@ -1,10 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { PostingInfo } from "api/node/api-types";
 
-function PostingShareButton({posting, shareDialogPrepare}) {
+type Props = {
+    posting: PostingInfo;
+} & ConnectedProps<typeof connector>;
+
+function PostingShareButton({posting, shareDialogPrepare}: Props) {
     const nodeName = posting.receiverName ?? posting.ownerName;
     const postingId = posting.receiverPostingId ?? posting.id;
     const href = `/post/${postingId}`;
@@ -16,7 +21,9 @@ function PostingShareButton({posting, shareDialogPrepare}) {
     );
 }
 
-export default connect(
+const connector = connect(
     null,
     { shareDialogPrepare }
-)(PostingShareButton);
+);
+
+export default connector(PostingShareButton);

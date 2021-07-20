@@ -3,7 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./PostingPin.css";
 
-const PostingPin = ({pinned}) => (
+interface Props {
+    pinned?: boolean | null;
+}
+
+const PostingPin = ({pinned}: Props) => (
     pinned ?
         <div className="pin-line">
             <span className="badge badge-secondary">

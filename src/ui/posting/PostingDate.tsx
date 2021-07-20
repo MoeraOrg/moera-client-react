@@ -1,15 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
+import { FeedReference, PostingInfo } from "api/node/api-types";
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
+import { ClientState } from "state/state";
 import "./PostingDate.css"
 
-function PostingDate({posting, story, timeRelative}) {
+type Props = {
+    posting: PostingInfo;
+    story: FeedReference | null;
+} & ConnectedProps<typeof connector>;
+
+function PostingDate({posting, story, timeRelative}: Props) {
     let publishedAt;
     if (posting.receiverName) {
-        publishedAt = posting.receiverCreatedAt;
+        publishedAt = posting.receiverCreatedAt ?? posting.createdAt;
     } else {
         publishedAt = story != null ? story.publishedAt : posting.createdAt;
     }
@@ -26,9 +33,11 @@ function PostingDate({posting, story, timeRelative}) {
     );
 }
 
-export default connect(
-    state => ({
-        timeRelative: getSetting(state, "posting.time.relative"),
+const connector = connect(
+    (state: ClientState) => ({
+        timeRelative: getSetting(state, "posting.time.relative") as boolean,
         pulse: getSetting(state, "posting.time.relative") ? state.pulse.pulse : null // To force re-rendering only
     })
-)(PostingDate);
+);
+
+export default connector(PostingDate);

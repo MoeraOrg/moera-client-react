@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import * as PropTypes from 'prop-types';
 import cx from 'classnames';
 
 import { Browser } from "ui/browser";
@@ -8,8 +7,17 @@ import "./PageHeader.css";
 
 const HIDING_DISTANCE = 16;
 
-function PageHeader({children}) {
-    const [state, setState] = useState({invisible: false, scroll: null});
+interface Props {
+    children: any;
+}
+
+interface State {
+    invisible: boolean;
+    scroll: number | null;
+}
+
+function PageHeader({children}: Props) {
+    const [state, setState] = useState({invisible: false, scroll: null} as State);
 
     const onScroll = useCallback(() => {
         if (!Browser.isTinyScreen()) {
@@ -45,7 +53,5 @@ function PageHeader({children}) {
         </div>
     );
 }
-
-PageHeader.propTypes = {children: PropTypes.any}
 
 export default PageHeader;

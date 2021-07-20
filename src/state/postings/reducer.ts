@@ -29,14 +29,14 @@ import { immutableSetSubscriptionId } from "state/subscriptions/util";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
-import { PostingsState } from "state/postings/state";
+import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { ClientAction } from "state/action";
 import { FeedReference, PostingInfo, StoryInfo } from "api/node/api-types";
 
 const initialState = {
 };
 
-function safeguard(posting: PostingInfo): PostingInfo {
+function safeguard(posting: PostingInfo): ExtPostingInfo {
     const iposting = immutable.wrap(posting);
     if (posting.bodyPreview == null || !posting.bodyPreview.text) {
         iposting.set("body.previewText", safePreviewHtml(posting.body.text));
