@@ -101,7 +101,7 @@ export interface EventAction<E extends {type: string}> extends Action<E["type"]>
 }
 
 export const eventAction = <E extends {type: string}>(event: E, source: EventSource): EventAction<E> => ({
-    type: `EVENT_${source}_${event.type}`,
+    type: `EVENT_${source}_${event.type}`, // Incorrectly marked as error by TypeScript 4.2.2
     payload: immutable.del(event, "type")
 });
 

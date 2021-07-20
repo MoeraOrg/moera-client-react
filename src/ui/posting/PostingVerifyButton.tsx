@@ -1,12 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { SignatureVerifyButton } from "ui/control";
 import { getPostingVerificationStatus } from "state/postings/selectors";
 import { postingVerify } from "state/postings/actions";
 import { isConnectedToHome } from "state/home/selectors";
+import { ClientState } from "state/state";
 
-class PostingVerifyButton extends React.PureComponent {
+interface OwnProps {
+    id: string;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+class PostingVerifyButton extends React.PureComponent<Props> {
 
     onVerify = () => {
         const {id, postingVerify} = this.props;
@@ -20,10 +27,12 @@ class PostingVerifyButton extends React.PureComponent {
 
 }
 
-export default connect(
-    (state, ownProps) => ({
+const connector = connect(
+    (state: ClientState, ownProps: OwnProps) => ({
         connectedToHome: isConnectedToHome(state),
         status: getPostingVerificationStatus(state, ownProps.id)
     }),
     { postingVerify }
-)(PostingVerifyButton);
+);
+
+export default connector(PostingVerifyButton);
