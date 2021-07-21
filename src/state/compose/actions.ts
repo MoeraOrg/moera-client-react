@@ -65,11 +65,12 @@ export const composeConflictClose = (): ComposeConflictCloseAction => ({
 
 export const COMPOSE_POST = "COMPOSE_POST";
 export type ComposePostAction = ActionWithPayload<typeof COMPOSE_POST, {
-    id: string;
-    draftId: string;
+    id: string | null;
+    draftId: string | null;
     postingText: PostingText;
 }>;
-export const composePost = (id: string, draftId: string, postingText: PostingText): ComposePostAction => ({
+export const composePost = (id: string | null, draftId: string | null,
+                            postingText: PostingText): ComposePostAction => ({
     type: COMPOSE_POST,
     payload: {id, draftId, postingText}
 });

@@ -1,7 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikProps, withFormik } from 'formik';
 
+import { PostingText, SourceFormat } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
@@ -24,21 +26,27 @@ import ComposeDraftSelector from "ui/compose/ComposeDraftSelector";
 import ComposeResetButton from "ui/compose/ComposeResetButton";
 import ComposePreviewButton from "ui/compose/ComposePreviewButton";
 import ComposeSubmitButton from "ui/compose/ComposeSubmitButton";
-import composePageLogic from "ui/compose/compose-page-logic";
+import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import Jump from "ui/navigation/Jump";
-import { parseBool } from "util/misc";
 import "./ComposePage.css";
 
-class ComposePage extends React.PureComponent {
+export type ComposePageOuterProps = ConnectedProps<typeof connector>;
+type Props = ComposePageOuterProps & FormikProps<ComposePageValues>;
 
-    constructor(props, context) {
+interface State {
+    initialPostingText: PostingText;
+}
+
+class ComposePage extends React.PureComponent<Props, State> {
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.state = {initialPostingText: {}};
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
         if ((this.props.posting != null && prevProps.posting == null)
             || (this.props.posting == null && prevProps.posting != null)
             || (this.props.avatarDefault != null && prevProps.avatarDefault == null)
@@ -123,8 +131,8 @@ class ComposePage extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loadingFeatures: state.compose.loadingFeatures,
         avatarDefault: getHomeOwnerAvatar(state),
         fullNameDefault: getHomeOwnerFullName(state),
@@ -139,13 +147,16 @@ export default connect(
         beingPosted: state.compose.beingPosted,
         sharedText: state.compose.sharedText,
         sharedTextType: state.compose.sharedTextType,
-        reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default"),
-        reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default"),
-        reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default"),
-        reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default"),
-        sourceFormatDefault: getSetting(state, "posting.body-src-format.default"),
-        smileysEnabled: parseBool(getSetting(state, "posting.smileys.enabled")),
-        newsFeedEnabled: parseBool(getSetting(state, "posting.feed.news.enabled"))
+        reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default") as string,
+        reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default") as string,
+        reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,
+        reactionTotalsVisibleDefault: getSetting(state, "posting.reactions.totals-visible.default") as boolean,
+        sourceFormatDefault: getSetting(state, "posting.body-src-format.default") as SourceFormat,
+        smileysEnabled: getSetting(state, "posting.smileys.enabled") as boolean,
+        newsFeedEnabled: getSetting(state, "posting.feed.news.enabled") as boolean,
+        avatarShapeDefault: getSetting(state, "avatar.shape.default") as string
     }),
     { composePost, composeConflictClose, settingsUpdate }
-)(withFormik(composePageLogic)(ComposePage));
+);
+
+export default connector(withFormik(composePageLogic)(ComposePage));

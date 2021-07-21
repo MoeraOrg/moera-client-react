@@ -14,7 +14,7 @@ function getTooltip(format, sourceFormats) {
     return info != null ? info.title : null;
 }
 
-export default function ComposeBodyFormatButton({sourceFormats, formik}) {
+export default function ComposeBodyFormatButton({sourceFormats}) {
     const [, {value, initialValue}] = useField("bodyFormat");
 
     const icon = BODY_FORMAT_ICONS[value] ?? "file-alt";

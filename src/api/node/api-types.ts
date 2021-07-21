@@ -17,7 +17,7 @@ export interface AvatarAttributes {
 export interface AvatarDescription {
     mediaId: string;
     shape: string;
-    optional: boolean;
+    optional?: boolean;
 }
 
 export interface AvatarImage {

@@ -115,7 +115,7 @@ export function safeHtml(html: string | null | undefined): string {
     return sanitizeHtml(replaceEmojis(html), SAFE_HTML_SETTINGS);
 }
 
-export function safeImportHtml(html: string): string {
+export function safeImportHtml(html: string | null | undefined): string {
     if (!html) {
         return "";
     }

@@ -1,35 +1,61 @@
 import * as yup from 'yup';
-import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
+import { getUnixTime, isEqual } from 'date-fns';
+import { FormikBag } from 'formik';
 
 import { ClientSettings } from "api";
+import { AvatarImage, PostingText, SourceFormat, StoryAttributes } from "api/node/api-types";
+import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 
+export interface ComposePageValues {
+    avatar: AvatarImage | null;
+    fullName: string | null;
+    subject: string | null;
+    body: string;
+    bodyFormatVisible: boolean;
+    bodyFormat: SourceFormat;
+    publishAtDefault: Date;
+    publishAt: Date;
+    reactionVisible: boolean;
+    reactionsPositiveDefault: string;
+    reactionsPositive: string;
+    reactionsNegativeDefault: string;
+    reactionsNegative: string;
+    reactionsVisibleDefault: boolean;
+    reactionsVisible: boolean;
+    reactionTotalsVisibleDefault: boolean;
+    reactionTotalsVisible: boolean;
+    updateInfoVisible: boolean;
+    updateImportant: boolean;
+    updateDescription: string;
+}
+
 const composePageLogic = {
 
-    mapPropsToValues(props) {
-        const avatar = props.posting != null ? props.posting.ownerAvatar : props.avatarDefault;
-        const fullName = props.posting != null ? props.posting.ownerFullName : props.fullNameDefault;
-        const subject = props.posting != null && props.posting.bodySrc.subject != null
-            ? props.posting.bodySrc.subject : "";
-        const bodyFormat = props.posting != null ? props.posting.bodySrcFormat : props.sourceFormatDefault;
+    mapPropsToValues(props: ComposePageOuterProps): ComposePageValues {
+        const avatar = props.posting != null ? (props.posting.ownerAvatar ?? null) : props.avatarDefault;
+        const fullName = props.posting != null ? (props.posting.ownerFullName ?? null) : props.fullNameDefault;
+        const subject = props.posting != null ? (props.posting.bodySrc?.subject ?? "") : "";
+        const bodyFormat = props.posting != null
+            ? (props.posting.bodySrcFormat ?? "markdown")
+            : props.sourceFormatDefault;
         const body = props.posting != null
-            ? props.posting.bodySrc.text
+            ? (props.posting.bodySrc?.text ?? "")
             : (props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "");
-        const publishAt = props.posting != null && props.posting.publishedAt != null
-            ? fromUnixTime(props.posting.publishedAt) : new Date();
+        const publishAt = new Date();
         const reactionsPositive = props.posting != null
-            ? props.posting.acceptedReactions.positive : props.reactionsPositiveDefault;
+            ? (props.posting.acceptedReactions?.positive ?? "") : props.reactionsPositiveDefault;
         const reactionsNegative = props.posting != null
-            ? props.posting.acceptedReactions.negative : props.reactionsNegativeDefault;
-        const reactionsVisible =
-            props.posting != null ? props.posting.reactionsVisible : props.reactionsVisibleDefault;
-        const reactionTotalsVisible =
-            props.posting != null ? props.posting.reactionTotalsVisible : props.reactionTotalsVisibleDefault;
-        const updateImportant = props.posting != null && props.posting.updateInfo != null
-            ? (props.posting.updateInfo.important ?? false): false;
-        const updateDescription = props.posting != null && props.posting.updateInfo != null
-            ? (props.posting.updateInfo.description ?? ""): "";
+            ? (props.posting.acceptedReactions?.negative ?? "") : props.reactionsNegativeDefault;
+        const reactionsVisible = props.posting != null
+            ? (props.posting.reactionsVisible ?? true) : props.reactionsVisibleDefault;
+        const reactionTotalsVisible = props.posting != null
+            ? (props.posting.reactionTotalsVisible ?? true) : props.reactionTotalsVisibleDefault;
+        const updateImportant = props.draftId != null
+            ? (props.posting?.updateInfo?.important ?? false): false;
+        const updateDescription = props.draftId != null
+            ? (props.posting?.updateInfo?.description ?? ""): "";
 
         return {
             avatar,
@@ -55,7 +81,7 @@ const composePageLogic = {
         };
     },
 
-    _getSharedText(props, format) {
+    _getSharedText(props: ComposePageOuterProps, format: SourceFormat): string {
         let content;
         if (props.sharedTextType === "html") {
             content = safeImportHtml(props.sharedText);
@@ -65,41 +91,41 @@ const composePageLogic = {
         } else {
             content = props.sharedText;
         }
-        return content;
+        return content ?? "";
     },
 
     validationSchema: yup.object().shape({
         body: yup.string().trim().required("Must not be empty")
     }),
 
-    _replaceSmileys(props, text) {
+    _replaceSmileys(props: ComposePageOuterProps, text: string): string {
         return props.smileysEnabled ? replaceSmileys(text) : text;
     },
 
-    _buildPublications(values, props) {
+    _buildPublications(values: ComposePageValues, props: ComposePageOuterProps): StoryAttributes[] | null {
         if (props.postingId != null) {
             return null;
         }
         const publishAt = !isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null;
-        const publications = [{feedName: "timeline", publishAt}];
+        const publications: StoryAttributes[] = [{feedName: "timeline", publishAt}];
         if (props.newsFeedEnabled) {
             publications.push({feedName: "news", publishAt, viewed: true, read: true});
         }
         return publications;
     },
 
-    mapValuesToPostingText(values, props) {
+    mapValuesToPostingText(values: ComposePageValues, props: ComposePageOuterProps): PostingText {
         return {
             ownerFullName: values.fullName,
             ownerAvatar: values.avatar ? {
                 mediaId: values.avatar.mediaId,
-                shape: values.avatar.shape
+                shape: values.avatar.shape ?? props.avatarShapeDefault
             } : null,
             bodySrc: JSON.stringify({
-                subject: props.subjectPresent ? this._replaceSmileys(props, values.subject.trim()) : null,
+                subject: props.subjectPresent ? this._replaceSmileys(props, values.subject?.trim() ?? "") : null,
                 text: this._replaceSmileys(props, values.body.trim())
             }),
-            bodySrcFormat: values.bodyFormat.trim(),
+            bodySrcFormat: values.bodyFormat,
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,
@@ -111,12 +137,16 @@ const composePageLogic = {
         };
     },
 
-    isPostingTextEmpty(postingText) {
+    isPostingTextEmpty(postingText: PostingText): boolean {
+        if (postingText.bodySrc == null) {
+            return true;
+        }
+
         const {subject, text} = JSON.parse(postingText.bodySrc);
         return !subject && !text;
     },
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: ComposePageValues, formik: FormikBag<ComposePageOuterProps, ComposePageValues>) {
         formik.setStatus("submitted");
         formik.props.composePost(
             formik.props.postingId,
