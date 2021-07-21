@@ -21,7 +21,7 @@ export function askNaming<A extends ClientAction>(saga: ExecutorSaga<A>): Execut
             yield* call(saga, action);
             return;
         }
-        yield put(postponingChannel, action);
+        yield* put(postponingChannel, action);
     }
 }
 

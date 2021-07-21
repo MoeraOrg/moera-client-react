@@ -40,7 +40,7 @@ import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
 
 import createSagaMiddleware from 'redux-saga';
-import { spawn, takeEvery } from 'redux-saga/effects';
+import { spawn, takeEvery } from 'typed-redux-saga/macro';
 import { flushPostponedIntroducedSaga } from "api/node/introduce";
 import { flushPostponedNamingSaga } from "api/node/ask-naming";
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
@@ -196,19 +196,19 @@ const executors = collectExecutors(
 );
 
 function* flushPostponedSaga() {
-    yield flushPostponedIntroducedSaga();
-    yield flushPostponedNamingSaga();
+    yield* flushPostponedIntroducedSaga();
+    yield* flushPostponedNamingSaga();
 }
 
 function* combinedSaga() {
-    yield spawn(signalPostInitSaga);
-    yield spawn(pulseSaga);
+    yield* spawn(signalPostInitSaga);
+    yield* spawn(pulseSaga);
 
-    yield takeEvery(
+    yield* takeEvery(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, CARTES_SET, SETTINGS_CLIENT_VALUES_LOADED],
         flushPostponedSaga
     );
-    yield takeEvery(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
+    yield* takeEvery(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
 
     yield* invokeTriggers(triggers);
     yield* invokeExecutors(executors);
