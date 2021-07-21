@@ -8,7 +8,7 @@ export class NodeName {
         return new RegisteredName(parts[0],parts.length > 1 ? parseInt(parts[1]) : 0)
     }
 
-    static shorten(qName: string): string | null {
+    static shorten(qName: string | null): string | null {
         if (!qName) {
             return qName;
         }

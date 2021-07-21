@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
@@ -8,15 +8,18 @@ import Jump from "ui/navigation/Jump";
 import PeopleTabs from "ui/people/PeopleTabs";
 import SubscribersSubpage from "ui/people/SubscribersSubpage";
 import SubscriptionsSubpage from "ui/people/SubscriptionsSubpage";
-import { getOwnerAvatar } from "state/owner/selectors";
+import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
+import { ClientState } from "state/state";
 import "./PeoplePage.css";
 
-const PeoplePage = ({tab, loadingGeneral, ownerAvatar}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => (
     <>
         <PageHeader>
             <h2>
                 <Jump href="/profile" title="Profile" className="avatar-link">
-                    <Avatar avatar={ownerAvatar} size={40}/>
+                    <Avatar avatar={ownerAvatar} ownerName={ownerName} size={40}/>
                 </Jump>
                 People <Loading active={loadingGeneral}/>
             </h2>
@@ -31,10 +34,13 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar}) => (
     </>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         tab: state.people.tab,
         loadingGeneral: state.people.loadingGeneral,
-        ownerAvatar: getOwnerAvatar(state)
+        ownerAvatar: getOwnerAvatar(state),
+        ownerName: getOwnerName(state)
     })
-)(PeoplePage);
+);
+
+export default connector(PeoplePage);

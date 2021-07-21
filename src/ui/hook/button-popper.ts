@@ -1,22 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { usePopper } from 'react-popper';
+import { Options, Placement } from '@popperjs/core';
+import { ClientState } from "state/state";
 
-export function useButtonPopper(placement, options = {}) {
+type ButtonPopperOptions = Partial<Options> & {
+    hideAlways?: boolean;
+}
+
+export function useButtonPopper(placement: Placement, options: ButtonPopperOptions = {}) {
     const [visible, setVisible] = useState(false);
 
-    const [buttonRef, setButtonRef] = useState(null);
-    const [popperRef, setPopperRef] = useState(null);
-    const [arrowRef, setArrowRef] = useState(null);
+    const [buttonRef, setButtonRef] = useState<Element | null>(null);
+    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
+    const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
     const {styles, attributes, state} = usePopper(buttonRef, popperRef,
         {placement, ...options, modifiers: [{name: "arrow", options: {element: arrowRef}}]});
 
-    const onToggle = event => {
+    const onToggle = (event: {preventDefault: () => void}) => {
         setVisible(visible => !visible);
         event.preventDefault();
     };
 
-    const boxShown = useSelector(state => state.confirmBox.show || state.messageBox.show);
+    const boxShown = useSelector<ClientState>(state => state.confirmBox.show || state.messageBox.show);
     const hideAlways = options.hideAlways ?? true;
     const onHide = useCallback(event => {
         if (boxShown) {
@@ -35,11 +41,11 @@ export function useButtonPopper(placement, options = {}) {
 
     useEffect(() => {
         if (visible) {
-            document.getElementById("app-root").addEventListener("click", onHide);
-            document.getElementById("modal-root").addEventListener("click", onHide);
+            document.getElementById("app-root")!.addEventListener("click", onHide);
+            document.getElementById("modal-root")!.addEventListener("click", onHide);
             return () => {
-                document.getElementById("app-root").removeEventListener("click", onHide);
-                document.getElementById("modal-root").removeEventListener("click", onHide);
+                document.getElementById("app-root")!.removeEventListener("click", onHide);
+                document.getElementById("modal-root")!.removeEventListener("click", onHide);
             }
         }
     }, [visible, onHide])

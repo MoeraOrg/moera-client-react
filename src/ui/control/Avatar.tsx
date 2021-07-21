@@ -17,19 +17,33 @@ function effectiveShape(shape: string | null, shapeLocal: string | null | undefi
     return shapeSetting === "circle" || shapeSetting === "square" ? shapeSetting : shape;
 }
 
-function getRootPage(state: ClientState, nodeName: string | null): string | null {
+function nameAngle(ownerName: string | null | undefined): number {
+    if (ownerName == null) {
+        return 0;
+    }
+
+    let angle = 0;
+    for (let i = 0; i < ownerName.length; i++) {
+        angle = (angle + ownerName.charCodeAt(i)) % 12;
+    }
+
+    return angle * 360 / 12;
+}
+
+function getRootPage(state: ClientState, nodeName: string | null | undefined): string | null {
     return nodeName
         ? (nodeName === ":" ? getHomeRootPage(state) : getNamingNameNodeUri(state, nodeName))
         : getNodeRootPage(state);
 }
 
 interface OwnProps {
-    avatar: AvatarImage | null;
+    avatar: AvatarImage | null | undefined;
+    ownerName: string | null | undefined; // Node that owns the avatar
     size: number;
     shape?: string;
     className?: string;
     draggable?: boolean;
-    nodeName: string | null;
+    nodeName?: string | null; // Node the avatar is loaded from
     onClick?: (event: React.MouseEvent) => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
@@ -39,22 +53,24 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-export function AvatarImpl({avatar, size, shape: shapeLocal, className, draggable = true, onClick, onMouseEnter,
-                            onMouseLeave, onTouchStart, imageRef, rootPage, shapeGlobal}: Props) {
-    const {src, alt, shape} = avatar ? {
+export function AvatarImpl({avatar, ownerName, size, shape: shapeLocal, className, draggable = true, onClick,
+                            onMouseEnter, onMouseLeave, onTouchStart, imageRef, rootPage, shapeGlobal}: Props) {
+    const {src, alt, shape, style} = avatar ? {
         src: `${rootPage}/media/${avatar.path}`,
         alt: "Avatar",
-        shape: effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal)
+        shape: effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal),
+        style: undefined
     } : {
         src: avatarPlaceholder,
         alt: "Avatar placeholder",
-        shape: effectiveShape("circle", shapeLocal, shapeGlobal)
+        shape: effectiveShape("circle", shapeLocal, shapeGlobal),
+        style: {filter: `hue-rotate(${nameAngle(ownerName)}deg)`}
     };
 
     return (
         <img src={src} alt={alt} width={size} height={size} draggable={draggable} ref={imageRef} onClick={onClick}
              onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
-             className={cx("avatar", `avatar-${shape}`, className)}/>
+             className={cx("avatar", `avatar-${shape}`, className)} style={style}/>
     );
 }
 

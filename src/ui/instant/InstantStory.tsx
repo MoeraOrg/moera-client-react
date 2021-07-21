@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,10 +11,18 @@ import { Avatar } from "ui/control";
 import { storyReadingUpdate } from "state/stories/actions";
 import { getInstantTarget } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
+import { ClientState } from "state/state";
+import { StoryInfo } from "api/node/api-types";
 import "./InstantStory.css";
 
-function InstantStory({story, lastNew, hide, storyReadingUpdate}) {
-    const onJump = (href, performJump) => {
+type Props = {
+    story: StoryInfo;
+    lastNew: boolean;
+    hide: () => void;
+} & ConnectedProps<typeof connector>;
+
+function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
+    const onJump = (href: string, performJump: () => void) => {
         hide();
         performJump();
         if (!story.read) {
@@ -31,7 +39,7 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}) {
         <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
             <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="summary-avatar"
                   onNear={onJump} onFar={onJump}>
-                <Avatar avatar={story.summaryAvatar} nodeName=":" size={36}/>
+                <Avatar avatar={story.summaryAvatar} ownerName={story.remoteNodeName} nodeName=":" size={36}/>
             </Jump>
             <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="summary"
                   onNear={onJump} onFar={onJump}>
@@ -51,9 +59,11 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         pulse: state.pulse.pulse // To force re-rendering only
     }),
     { storyReadingUpdate }
-)(InstantStory);
+);
+
+export default connector(InstantStory);

@@ -1,4 +1,16 @@
-const INSTANT_TYPES = {
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { StoryInfo, StoryType } from "api/node/api-types";
+import { ExtStoryInfo } from "state/feeds/state";
+
+type InstantType = Exclude<StoryType, "posting-added">;
+
+interface InstantTypeDetails {
+    title: string;
+    color: string;
+    icon: IconProp;
+}
+
+const INSTANT_TYPES: Record<InstantType, InstantTypeDetails> = {
     "reaction-added-positive": {
         title: "Post supported",
         color: "var(--correct)",
@@ -71,12 +83,21 @@ const INSTANT_TYPES = {
     }
 };
 
-export function getInstantTypeDetails(storyType) {
+export function getInstantTypeDetails(storyType: InstantType): InstantTypeDetails | null {
     return INSTANT_TYPES[storyType] ?? null;
 }
 
-export function getInstantTarget(story) {
-    const postingId = story.posting ? story.posting.id : story.postingId;
+function isStoryInfo(story: StoryInfo | ExtStoryInfo): story is StoryInfo {
+    return "posting" in story;
+}
+
+interface InstantTarget {
+    nodeName: string | null | undefined;
+    href: string;
+}
+
+export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget {
+    const postingId = isStoryInfo(story) ? story.posting?.id : story.postingId;
 
     switch(story.storyType) {
         case "reaction-added-positive":

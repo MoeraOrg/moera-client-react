@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 import { createSelector } from 'reselect';
 import cloneDeep from 'lodash.clonedeep';
@@ -13,22 +12,30 @@ import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
 import { Avatar } from "ui/control/Avatar";
-import { mentionName } from "util/misc";
-import { namesListQuery } from "util/names-list";
-import "./NameSelector.css";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
+import { ClientState } from "state/state";
+import { mentionName } from "util/misc";
+import { NameListItem, namesListQuery } from "util/names-list";
+import "./NameSelector.css";
 
-function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, homeName, homeAvatar, contactsPrepare}) {
+type Props = {
+    defaultQuery?: string;
+    onChange?: (query: string | null) => void;
+    onSubmit: (success: boolean, result: NameListItem) => void;
+} & ConnectedProps<typeof connector>;
+
+function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, homeName, homeAvatar,
+                           contactsPrepare}: Props) {
     const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [names, setNames] = useState([]);
-    const [query, setQuery] = useState(null);
+    const [names, setNames] = useState<NameListItem[]>([]);
+    const [query, setQuery] = useState<string | null>(null);
 
-    const inputDom = useRef();
-    const listDom = useRef();
+    const inputDom = useRef<HTMLInputElement>(null);
+    const listDom = useRef<HTMLDivElement>(null);
 
     const selectIndex = useCallback(index => {
         setSelectedIndex(index);
-        if (listDom.current && index >= 0) {
+        if (listDom.current != null && index >= 0) {
             const item = listDom.current.querySelector(`.item[data-index="${index}"]`);
             if (item != null) {
                 scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"});
@@ -36,11 +43,11 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, homeN
         }
     }, [listDom])
 
-    const queryRef = useRef();
+    const queryRef = useRef<string | null>();
     queryRef.current = query;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadContacts = useCallback(debounce(() => {
-        contactsPrepare(queryRef.current);
+        contactsPrepare(queryRef.current ?? "");
     }, 500), [contactsPrepare, queryRef]);
 
     useEffect(() => {
@@ -63,19 +70,19 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, homeN
         loadContacts();
     }, [contactNames, loadContacts, onChange, query, selectIndex]);
 
-    const handleSubmit = (success, index) => {
+    const handleSubmit = (success: boolean, index: number) => {
         if (onSubmit) {
             if (index >= 0 && index < names.length) {
                 onSubmit(success, names[index]);
             } else {
-                onSubmit(success, {nodeName: query});
+                onSubmit(success, {nodeName: query, fullName: null});
             }
         }
     }
 
     const handleClose = () => handleSubmit(false, -1);
 
-    const handleKeyDown = event => {
+    const handleKeyDown = (event: React.KeyboardEvent) => {
         switch (event.key) {
             case "Escape":
             case "Esc":
@@ -96,9 +103,9 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, homeN
         event.preventDefault();
     }
 
-    const handleChange = event => setQuery(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
 
-    const handleClick = index => () => handleSubmit(true, index);
+    const handleClick = (index: number) => () => handleSubmit(true, index);
 
     return (
         <>
@@ -109,7 +116,8 @@ function NameSelectorImpl({defaultQuery, onChange, onSubmit, contactNames, homeN
                     <div key={index} data-index={index}
                          className={cx("item", {"selected": index === selectedIndex})}
                          onClick={handleClick(index)}>
-                        <Avatar avatar={item.nodeName !== homeName ? item.avatar : homeAvatar} size={40}/>
+                        <Avatar avatar={item.nodeName !== homeName ? item.avatar : homeAvatar} ownerName={item.nodeName}
+                                size={40}/>
                         <div className="body">
                             <div className="full-name">{item.fullName || NodeName.shorten(item.nodeName)}</div>
                             <div className="name">{mentionName(item.nodeName)}</div>
@@ -129,7 +137,7 @@ const getNames = createSelector(
         const result = cloneDeep(contacts);
         for (const c of result) {
             if (commentMap.has(c.nodeName)) {
-                c.closeness += 1000 * commentMap.get(c.nodeName).count;
+                c.closeness += 1000 * commentMap.get(c.nodeName)!.count;
             }
         }
         comments
@@ -141,21 +149,13 @@ const getNames = createSelector(
     }
 );
 
-export const NameSelector = connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         contactNames: getNames(state),
         homeName: getHomeOwnerName(state),
         homeAvatar: getHomeOwnerAvatar(state)
     }),
     { contactsPrepare }
-)(NameSelectorImpl);
+);
 
-NameSelector.propTypes = {
-    defaultQuery: PropType.string,
-    onChange: PropType.func,
-    onSubmit: PropType.func
-}
-
-NameSelector.defaultProps = {
-    defaultQuery: ""
-}
+export const NameSelector = connector(NameSelectorImpl);

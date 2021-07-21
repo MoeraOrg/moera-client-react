@@ -1,13 +1,15 @@
 import regexEscape from 'escape-string-regexp';
+import { AvatarImage } from "api/node/api-types";
 
 const ARRANGEMENT_DEPTH = 5;
 
-interface NodeNamePair {
-    nodeName: string;
-    fullName: string | null;
+export interface NameListItem {
+    nodeName: string | null;
+    fullName?: string | null | undefined;
+    avatar?: AvatarImage | null;
 }
 
-export function namesListQuery(list: NodeNamePair[], query: string | null): NodeNamePair[] {
+export function namesListQuery(list: NameListItem[], query: string | null): NameListItem[] {
     if (query == null) {
         return list.slice();
     }
@@ -15,8 +17,9 @@ export function namesListQuery(list: NodeNamePair[], query: string | null): Node
     return list.filter(item => itemMatch(item, regexes));
 }
 
-function itemMatch(item: NodeNamePair, regexes: RegExp[]): boolean {
-    const haystack = item.fullName ? item.fullName + " " + item.nodeName : item.nodeName;
+function itemMatch(item: NameListItem, regexes: RegExp[]): boolean {
+    const nodeName = item.nodeName ?? "";
+    const haystack = item.fullName ? item.fullName + " " + nodeName: nodeName;
     const allFound = regexes.every(regex => regex.test(haystack));
     if (!allFound) {
         return false;

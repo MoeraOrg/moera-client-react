@@ -17,7 +17,7 @@ export const AvatarWithPopup = ({ownerName, ownerFullName, avatar = null, nodeNa
     <NodeNamePopup nodeName={ownerName} fullName={ownerFullName} avatar={avatar} avatarNodeName={nodeName}>
         {(ref, mainEnter, mainLeave, mainTouch) =>
             <Jump nodeName={ownerName} href="/profile">
-                <Avatar avatar={avatar} size={size} nodeName={nodeName ?? null} imageRef={ref}
+                <Avatar avatar={avatar} ownerName={ownerName} size={size} nodeName={nodeName} imageRef={ref}
                         onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}/>
             </Jump>
         }

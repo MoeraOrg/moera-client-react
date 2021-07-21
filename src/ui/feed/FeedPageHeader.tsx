@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import PropType from 'prop-types';
+import { connect, ConnectedProps } from 'react-redux';
 
-import { getOwnerAvatar } from "state/owner/selectors";
+import { ClientState } from "state/state";
+import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
 import PageHeader from "ui/page/PageHeader";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
@@ -11,7 +11,15 @@ import { Avatar } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { getPageHeaderHeight } from "util/misc";
 
-function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar}) {
+type Props = {
+    feedName: string;
+    title: string;
+    empty?: boolean;
+    atTop: boolean;
+    atBottom: boolean;
+} & ConnectedProps<typeof connector>;
+
+function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar, ownerName}: Props) {
     const [avatarVisible, setAvatarVisible] = useState(window.scrollY >= getPageHeaderHeight());
 
     const onScroll = useCallback(
@@ -31,7 +39,7 @@ function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar}) {
             <h2>
                 {avatarVisible &&
                     <Jump href="/profile" title="Profile" className="avatar-link">
-                        <Avatar avatar={avatar} size={40}/>
+                        <Avatar avatar={avatar} ownerName={ownerName} size={40}/>
                     </Jump>
                 }
                 {title}
@@ -45,16 +53,11 @@ function FeedPageHeader({feedName, title, empty, atTop, atBottom, avatar}) {
     );
 }
 
-FeedPageHeader.propTypes = {
-    feedName: PropType.string,
-    title: PropType.string,
-    empty: PropType.bool,
-    atTop: PropType.bool,
-    atBottom: PropType.bool
-};
-
-export default connect(
-    state => ({
-        avatar: getOwnerAvatar(state)
+const connector = connect(
+    (state: ClientState) => ({
+        avatar: getOwnerAvatar(state),
+        ownerName: getOwnerName(state)
     })
-)(FeedPageHeader);
+);
+
+export default connector(FeedPageHeader);

@@ -1,13 +1,17 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
 import "./FeedTopButton.css";
 
-const FeedTopButton = ({feedName, atTop, feedScrollToAnchor}) => (
-    !atTop &&
+type Props = {
+    feedName: string;
+    atTop: boolean;
+} & ConnectedProps<typeof connector>;
+
+const FeedTopButton = ({feedName, atTop, feedScrollToAnchor}: Props) => (
+    !atTop ?
         <div className="feed-top-box">
             <div className="feed-top-button" onClick={e => {
                 feedScrollToAnchor(feedName, Number.MAX_SAFE_INTEGER);
@@ -16,14 +20,13 @@ const FeedTopButton = ({feedName, atTop, feedScrollToAnchor}) => (
                 <FontAwesomeIcon icon="arrow-up"/>&nbsp;Top
             </div>
         </div>
+    :
+        null
 );
 
-FeedTopButton.propTypes = {
-    feedName: PropType.string,
-    atTop: PropType.bool
-}
-
-export default connect(
+const connector = connect(
     null,
     { feedScrollToAnchor }
-)(FeedTopButton);
+);
+
+export default connector(FeedTopButton);

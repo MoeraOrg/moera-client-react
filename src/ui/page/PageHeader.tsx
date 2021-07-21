@@ -17,7 +17,7 @@ interface State {
 }
 
 function PageHeader({children}: Props) {
-    const [state, setState] = useState({invisible: false, scroll: null} as State);
+    const [state, setState] = useState<State>({invisible: false, scroll: null});
 
     const onScroll = useCallback(() => {
         if (!Browser.isTinyScreen()) {

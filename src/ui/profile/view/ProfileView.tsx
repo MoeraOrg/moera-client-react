@@ -1,6 +1,5 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
 import { Avatar, Button, Loading } from "ui/control";
@@ -11,21 +10,29 @@ import NodeNameView from "ui/profile/view/NodeNameView";
 import { profileEdit } from "state/profile/actions";
 import { isProfileEditable } from "state/profile/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { ClientState } from "state/state";
 import { shortGender } from "util/misc";
 import "./ProfileView.css";
 
-const EditButtonImpl = ({profileEdit}) => (
+type EditButtonProps = ConnectedProps<typeof editButtonConnector>;
+
+const EditButtonImpl = ({profileEdit}: EditButtonProps) => (
     <Button variant="outline-primary" size="sm" style={{marginLeft: "1rem"}} onClick={profileEdit}>
         Edit
     </Button>
 );
 
-const EditButton = connect(
+const editButtonConnector = connect(
     null,
     {profileEdit}
-)(EditButtonImpl);
+);
 
-const ProfileView = ({loading, fullName, gender, email, title, bioHtml, avatar, ownerName, editable}) => (
+const EditButton = editButtonConnector(EditButtonImpl);
+
+type ProfileViewProps = ConnectedProps<typeof profileViewConnector>;
+
+const ProfileView = ({loading, fullName, gender, email, title, bioHtml, avatar, ownerName,
+                      editable}: ProfileViewProps) => (
     <>
         <PageHeader>
             <h2>
@@ -36,7 +43,7 @@ const ProfileView = ({loading, fullName, gender, email, title, bioHtml, avatar, 
         </PageHeader>
         <Page>
             <div className="profile-view">
-                <Avatar avatar={avatar} size={200}/>
+                <Avatar avatar={avatar} ownerName={ownerName} size={200}/>
                 <Loading active={loading}/>
                 <div className="full-name">
                     {fullName ? fullName : NodeName.shorten(ownerName)}
@@ -55,22 +62,12 @@ const ProfileView = ({loading, fullName, gender, email, title, bioHtml, avatar, 
     </>
 );
 
-ProfileView.propTypes = {
-    loading: PropType.bool,
-    fullName: PropType.string,
-    gender: PropType.string,
-    email: PropType.string,
-    title: PropType.string,
-    bioHtml: PropType.string,
-    avatar: PropType.object,
-    ownerName: PropType.string,
-    editable: PropType.bool
-};
-
-export default connect(
-    state => ({
+const profileViewConnector = connect(
+    (state: ClientState) => ({
         ...state.profile,
         ownerName: getOwnerName(state),
         editable: isProfileEditable(state)
     })
-)(ProfileView);
+);
+
+export default profileViewConnector(ProfileView);

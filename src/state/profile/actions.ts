@@ -2,6 +2,7 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { AvatarAttributes, AvatarImage, AvatarInfo, ProfileAttributes, ProfileInfo } from "api/node/api-types";
+import { AvatarOnCreate } from "state/profile/state";
 
 export const PROFILE_LOAD = "PROFILE_LOAD";
 export type ProfileLoadAction = ActionWithPayload<typeof PROFILE_LOAD, {
@@ -101,9 +102,9 @@ export const profileAvatarsLoadFailed = (): ProfileAvatarsLoadFailedAction => ({
 
 export const PROFILE_OPEN_AVATAR_EDIT_DIALOG = "PROFILE_OPEN_AVATAR_EDIT_DIALOG";
 export type ProfileOpenAvatarEditDialogAction = ActionWithPayload<typeof PROFILE_OPEN_AVATAR_EDIT_DIALOG, {
-    onCreate: any;
+    onCreate: AvatarOnCreate;
 }>;
-export const profileOpenAvatarEditDialog = (onCreate: any): ProfileOpenAvatarEditDialogAction => ({
+export const profileOpenAvatarEditDialog = (onCreate: AvatarOnCreate): ProfileOpenAvatarEditDialogAction => ({
     type: PROFILE_OPEN_AVATAR_EDIT_DIALOG,
     payload: {onCreate}
 });

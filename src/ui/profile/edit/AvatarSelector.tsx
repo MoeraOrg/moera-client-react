@@ -1,7 +1,17 @@
 import React, { useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { DndContext, DragOverlay, KeyboardSensor, PointerSensor, useSensor, useSensors, } from '@dnd-kit/core';
+import {
+    DndContext,
+    DragEndEvent,
+    DragOverlay,
+    DragStartEvent,
+    KeyboardSensor,
+    Modifier,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core';
 import { SortableContext, } from '@dnd-kit/sortable';
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 import cx from 'classnames';
@@ -9,8 +19,22 @@ import cx from 'classnames';
 import { Avatar, Loading } from "ui/control";
 import AvatarSelectorItem from "ui/profile/edit/AvatarSelectorItem";
 import "./AvatarSelector.css";
+import { AvatarInfo } from "api/node/api-types";
 
-export default function AvatarSelector({loaded, loading, avatars, active, onSelect, onNew, onDelete, onReorder}) {
+interface Props {
+    nodeName: string | null;
+    loaded: boolean;
+    loading: boolean;
+    avatars: AvatarInfo[];
+    active: AvatarInfo | null;
+    onSelect: (avatar: AvatarInfo) => void;
+    onNew: () => void;
+    onDelete: (id: string) => void;
+    onReorder: (activeId: string, overId: string) => void;
+}
+
+export default function AvatarSelector({nodeName, loaded, loading, avatars, active, onSelect, onNew, onDelete,
+                                        onReorder}: Props) {
     const mouseSensor = useSensor(PointerSensor);
     const keyboardSensor = useSensor(KeyboardSensor);
 
@@ -19,10 +43,11 @@ export default function AvatarSelector({loaded, loading, avatars, active, onSele
         keyboardSensor,
     );
 
-    const [dragged, setDragged] = useState(null);
-    const onDragStart = ({active}) => setDragged(avatars.find(avatar => avatar.id === active.id));
-    const onDragEnd = ({active, over}) => {
-        if (active.id !== over.id) {
+    const [dragged, setDragged] = useState<AvatarInfo | null>(null);
+    const onDragStart = ({active}: DragStartEvent) =>
+        setDragged(avatars.find(avatar => avatar.id === active.id) ?? null);
+    const onDragEnd = ({active, over}: DragEndEvent) => {
+        if (over != null && active.id !== over.id) {
             onReorder(active.id, over.id);
         }
         setDragged(null);
@@ -31,14 +56,16 @@ export default function AvatarSelector({loaded, loading, avatars, active, onSele
 
     const avatarIds = avatars.map(avatar => avatar.id);
 
-    const selectorRef = useRef();
-    const relateToSelector = ({transform}) => {
+    const selectorRef = useRef<HTMLDivElement>(null);
+    const relateToSelector: Modifier = ({transform}) => {
         if (selectorRef.current) {
             const r = selectorRef.current.getBoundingClientRect();
             return {
                 ...transform,
                 y: transform.y + r.y + window.scrollY - 120
             };
+        } else {
+            return transform;
         }
     };
 
@@ -56,7 +83,7 @@ export default function AvatarSelector({loaded, loading, avatars, active, onSele
                             {avatars.map(avatar =>
                                 <div key={avatar.id}
                                      className={cx("item", {"active": active && !dragged && avatar.id === active.id})}>
-                                    <AvatarSelectorItem avatar={avatar}
+                                    <AvatarSelectorItem nodeName={nodeName} avatar={avatar}
                                                         onSelect={!dragged ? onSelect: null}
                                                         onDelete={!dragged ? onDelete: null}/>
                                 </div>
@@ -71,10 +98,10 @@ export default function AvatarSelector({loaded, loading, avatars, active, onSele
                 <DragOverlay zIndex={1080} dropAnimation={null}
                              modifiers={[restrictToFirstScrollableAncestor, relateToSelector]}>
                     {dragged &&
-                        <Avatar avatar={dragged} size={100} shape="design" draggable={false}/>
+                        <Avatar avatar={dragged} ownerName={nodeName} size={100} shape="design" draggable={false}/>
                     }
                 </DragOverlay>,
-                document.querySelector("#modal-root")
+                document.querySelector("#modal-root")!
             )}
         </DndContext>
     );

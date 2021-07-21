@@ -1,5 +1,7 @@
 import { AvatarInfo } from "api/node/api-types";
 
+export type AvatarOnCreate = (avatar: AvatarInfo) => void;
+
 export interface AvatarEditDialogState {
     show: boolean;
     imageUploading: boolean;
@@ -8,7 +10,7 @@ export interface AvatarEditDialogState {
     width: number | null;
     height: number | null;
     avatarCreating: boolean;
-    onCreate: any;
+    onCreate: AvatarOnCreate | null;
 }
 
 export interface ProfileInfoState {

@@ -1,18 +1,21 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
+import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/owner/selectors";
 import { Avatar } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName } from "util/misc";
 import "./FeedTitle.css";
 
-const FeedTitle = ({nodeName, fullName, title, avatar}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const FeedTitle = ({nodeName, fullName, title, avatar}: Props) => (
     <div id="feed-title">
         <div className="panel">
             <Jump href="/profile" title="Profile" className="avatar-link">
-                <Avatar avatar={avatar} size={100}/>
+                <Avatar avatar={avatar} ownerName={nodeName} size={100}/>
             </Jump>
             <div className="body">
                 <div className="full-name">{fullName || NodeName.shorten(nodeName)}</div>
@@ -23,11 +26,13 @@ const FeedTitle = ({nodeName, fullName, title, avatar}) => (
     </div>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         nodeName: getOwnerName(state),
         fullName: getOwnerFullName(state),
         title: getOwnerTitle(state),
         avatar: getOwnerAvatar(state)
     })
-)(FeedTitle);
+);
+
+export default connector(FeedTitle);

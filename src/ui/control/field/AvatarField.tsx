@@ -1,17 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 import cx from 'classnames';
 
 import { homeAvatarsLoad } from "state/home/actions";
-import { getHomeOwnerAvatar } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { useButtonPopper } from "ui/hook";
 import { Avatar } from "ui/control/Avatar";
 import { Loading } from "ui/control/Loading";
+import { ClientState } from "state/state";
+import { AvatarInfo } from "api/node/api-types";
 import "./AvatarField.css";
 
-function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, avatarDefault, homeAvatarsLoad}) {
+type Props = {
+    name: string;
+    size: number;
+} & ConnectedProps<typeof connector>;
+
+function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, avatarDefault, homeOwnerName,
+                          homeAvatarsLoad}: Props) {
     const [, {value}, {setValue}] = useField(name);
 
     const {
@@ -19,7 +27,7 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
         placement
     } = useButtonPopper("bottom-start");
 
-    const onClick = event => {
+    const onClick = (event: React.MouseEvent) => {
         if (!avatarsLoaded && !avatarsLoading) {
             homeAvatarsLoad();
         }
@@ -28,13 +36,13 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
         }
     };
 
-    const onSelect = avatar => () => setValue(avatar);
+    const onSelect = (avatar: AvatarInfo) => () => setValue(avatar);
 
     return (
         <div className={cx("avatar-field", {"disabled": !value && !avatarDefault})}>
             <div ref={setButtonRef} onClick={onClick}>
                 <div className="icon"><FontAwesomeIcon icon="chevron-down"/></div>
-                <Avatar avatar={value} size={size}/>
+                <Avatar avatar={value} ownerName={homeOwnerName} size={size}/>
             </div>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
@@ -44,7 +52,8 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
                             avatars.map(avatar =>
                                 <div key={avatar.id}
                                      className={cx("item", {"active": value && avatar.mediaId === value.mediaId})}>
-                                    <Avatar avatar={avatar} size={100} shape="design" onClick={onSelect(avatar)}/>
+                                    <Avatar avatar={avatar} ownerName={homeOwnerName} size={100} shape="design"
+                                            onClick={onSelect(avatar)}/>
                                 </div>
                             )
                         :
@@ -58,12 +67,15 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
     );
 }
 
-export const AvatarField = connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         avatarsLoading: state.home.avatars.loading,
         avatarsLoaded: state.home.avatars.loaded,
         avatars: state.home.avatars.avatars,
-        avatarDefault: getHomeOwnerAvatar(state)
+        avatarDefault: getHomeOwnerAvatar(state),
+        homeOwnerName: getHomeOwnerName(state)
     }),
     { homeAvatarsLoad }
-)(AvatarFieldImpl);
+);
+
+export const AvatarField = connector(AvatarFieldImpl);

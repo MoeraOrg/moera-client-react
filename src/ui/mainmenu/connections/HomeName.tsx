@@ -1,15 +1,18 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
+import { ClientState } from "state/state";
 import { Avatar } from "ui/control";
 import "./HomeName.css";
 
-function HomeName({ownerName, changing, avatar}) {
+type Props = ConnectedProps<typeof connector>;
+
+function HomeName({ownerName, changing, avatar}: Props) {
     const {name, generation} = NodeName.parse(ownerName);
     return (
         <span className="home-name">
-            <Avatar avatar={avatar} size={32} nodeName=":"/>
+            <Avatar avatar={avatar} ownerName={ownerName} size={32} nodeName=":"/>
             {name ?
                 <span className="navbar-text name">
                     {name}{generation ? <span className="generation">{generation}</span> : ""}
@@ -21,10 +24,12 @@ function HomeName({ownerName, changing, avatar}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         ownerName: state.home.owner.name,
         changing: state.home.owner.changing,
         avatar: state.home.owner.avatar
     })
-)(HomeName);
+);
+
+export default connector(HomeName);
