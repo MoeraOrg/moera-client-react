@@ -96,8 +96,8 @@ export class Browser {
         return this.getLocation(rootLocation, pathname, search, hash, header);
     }
 
-    static getLocation(rootLocation: string, path: string | null, query: string | null, hash: string | null,
-                       header: string | null): DocumentLocation {
+    static getLocation(rootLocation: string, path: string | null | undefined, query: string | null | undefined,
+                       hash: string | null | undefined, header: string | null): DocumentLocation {
         if (header) {
             header
                 .split(/\s*;\s*/)

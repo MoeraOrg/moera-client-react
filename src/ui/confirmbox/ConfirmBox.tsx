@@ -1,12 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button, ModalDialog } from "ui/control";
 import { closeConfirmBox } from "state/confirmbox/actions";
+import { ClientState } from "state/state";
 
-const forwardAction = (action) => action;
+const forwardAction = (action: any) => action;
 
-class ConfirmBox extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
+
+class ConfirmBox extends React.PureComponent<Props> {
 
     onYes = () => {
         const {closeConfirmBox, onYes, forwardAction} = this.props;
@@ -56,7 +59,9 @@ class ConfirmBox extends React.PureComponent {
 
 }
 
-export default connect(
-    state => state.confirmBox,
+const connector = connect(
+    (state: ClientState) => state.confirmBox,
     { closeConfirmBox, forwardAction }
-)(ConfirmBox);
+);
+
+export default connector(ConfirmBox);
