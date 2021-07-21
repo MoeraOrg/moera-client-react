@@ -1,20 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
+import { ClientState } from "state/state";
 import "./FlashBox.css";
 
-const FlashBox = ({show, dismissing, message}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const FlashBox = ({show, dismissing, message}: Props) => (
     show ?
         <div className={cx("flash-box", {"dismissing": dismissing})}>{message}</div>
     :
         null
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.flashBox.show,
         dismissing: state.flashBox.dismissing,
         message: state.flashBox.message,
     })
-)(FlashBox);
+);
+
+export default connector(FlashBox);
