@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const LoadingInline = ({active = true, className = null}: Props) => (
-    active &&
+    active ?
         <div className={cx("loading-inline", className)}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 10">
                 <circle transform="translate(8 0)" cx="0" r="0" cy="5">
@@ -29,4 +29,6 @@ export const LoadingInline = ({active = true, className = null}: Props) => (
                 </circle>
             </svg>
         </div>
+    :
+        null
 );

@@ -1,16 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button, ModalDialog } from "ui/control";
+import { ClientState } from "state/state";
 import { composePreviewClose } from "state/compose/actions";
 import { getComposeDraft } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
-import PostingOwner from "ui/posting/PostingOwner";
-import PostingSubject from "ui/posting/PostingSubject";
+import DraftOwner from "ui/draft/DraftOwner";
+import DraftSubject from "ui/draft/DraftSubject";
 import EntryHtml from "ui/posting/EntryHtml";
 import "./ComposePreviewDialog.css";
 
-class ComposePreviewDialog extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
+
+class ComposePreviewDialog extends React.PureComponent<Props> {
 
     onClose = () => {
         const {composePreviewClose} = this.props;
@@ -19,7 +22,7 @@ class ComposePreviewDialog extends React.PureComponent {
     }
 
     render() {
-        const {show, posting, feedWidth} = this.props;
+        const {show, draft, feedWidth} = this.props;
 
         if (!show) {
             return null;
@@ -29,13 +32,13 @@ class ComposePreviewDialog extends React.PureComponent {
             <ModalDialog className="compose-preview-dialog" style={{"--feed-width": feedWidth + "px"}}
                          title="Post Preview" onClose={this.onClose}>
                 <div className="modal-body">
-                    {posting &&
+                    {draft &&
                         <div className="posting entry">
                             <div className="owner-line">
-                                <PostingOwner posting={posting}/>
+                                <DraftOwner draft={draft}/>
                             </div>
-                            <PostingSubject posting={posting} preview={false}/>
-                            <EntryHtml className="content" html={posting.body.text}/>
+                            <DraftSubject draft={draft}/>
+                            <EntryHtml className="content" html={draft.body.text}/>
                         </div>
                     }
                 </div>
@@ -48,11 +51,13 @@ class ComposePreviewDialog extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.compose.showPreview,
-        posting: getComposeDraft(state),
-        feedWidth: getSetting(state, "feed.width")
+        draft: getComposeDraft(state),
+        feedWidth: getSetting(state, "feed.width") as number
     }),
     { composePreviewClose }
-)(ComposePreviewDialog);
+);
+
+export default connector(ComposePreviewDialog);

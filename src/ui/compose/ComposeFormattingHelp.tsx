@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 
 import { ClientSettings } from "api";
+import { SourceFormat } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import "./ComposeFormattingHelp.css";
 
-function ComposeFormattingHelp({show, settingsUpdate}) {
-    const [visible, setVisible] = useState(show);
+type Props = ConnectedProps<typeof connector>;
 
-    const toggleHelp = show => {
+function ComposeFormattingHelp({show, settingsUpdate}: Props) {
+    const [visible, setVisible] = useState<boolean>(show);
+
+    const toggleHelp = (show: boolean) => {
         setVisible(show);
         settingsUpdate([{
             name: ClientSettings.PREFIX + "posting.body-src-format.show-help",
@@ -27,7 +31,7 @@ function ComposeFormattingHelp({show, settingsUpdate}) {
         [show, setVisible]
     );
 
-    const [, {value: bodyFormat}] = useField("bodyFormat");
+    const [, {value: bodyFormat}] = useField<SourceFormat>("bodyFormat");
     if (bodyFormat !== "markdown") {
         return null;
     }
@@ -49,9 +53,11 @@ function ComposeFormattingHelp({show, settingsUpdate}) {
     }
 }
 
-export default connect(
-    state => ({
-        show: getSetting(state, "posting.body-src-format.show-help")
+const connector = connect(
+    (state: ClientState) => ({
+        show: getSetting(state, "posting.body-src-format.show-help") as boolean
     }),
     { settingsUpdate }
-)(ComposeFormattingHelp);
+);
+
+export default connector(ComposeFormattingHelp);

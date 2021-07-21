@@ -1,13 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from "ui/control";
+import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftRevisionDelete } from "state/compose/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import "./ComposeResetButton.css";
 
-function ComposeResetButton({postingId, draftId, posting, confirmBox}) {
+type Props = ConnectedProps<typeof connector>;
+
+function ComposeResetButton({postingId, draftId, posting, confirmBox}: Props) {
     if (draftId == null) {
         return null;
     }
@@ -41,11 +44,13 @@ function ComposeResetButton({postingId, draftId, posting, confirmBox}) {
     }
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         postingId: state.compose.postingId,
         draftId: state.compose.draftId,
         posting: state.compose.posting
     }),
     { confirmBox }
-)(ComposeResetButton);
+);
+
+export default connector(ComposeResetButton);

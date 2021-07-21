@@ -20,7 +20,7 @@ type Props = {
 
 function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, avatarDefault, homeOwnerName,
                           homeAvatarsLoad}: Props) {
-    const [, {value}, {setValue}] = useField(name);
+    const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
     const {
         visible, onToggle, setButtonRef, setPopperRef, setArrowRef, popperStyles, popperAttributes, arrowStyles,

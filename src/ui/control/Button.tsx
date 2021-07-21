@@ -1,22 +1,20 @@
 import React from 'react';
-import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { Browser } from "ui/browser";
 import { LoadingInline } from "ui/control";
 
-export class Button extends React.PureComponent {
+type Props = {
+    variant: string;
+    size?: "sm" | "lg";
+    block?: boolean;
+    invisible?: boolean;
+    loading?: boolean;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-    static propTypes = {
-        variant: PropType.string,
-        size: PropType.oneOf(["sm", "lg"]),
-        block: PropType.bool,
-        invisible: PropType.bool,
-        loading: PropType.bool,
-        disabled: PropType.bool,
-        className: PropType.string,
-        type: PropType.string
-    }
+export class Button extends React.PureComponent<Props> {
+
+    domNode: HTMLButtonElement | null = null;
 
     componentDidMount() {
         if (this.props.autoFocus && this.domNode) {

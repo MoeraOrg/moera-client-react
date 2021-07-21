@@ -128,14 +128,14 @@ function* composeDraftLoadSaga() {
 }
 
 function* composeDraftSaveSaga(action: ComposeDraftSaveAction) {
-    const {draftText} = action.payload;
+    const {draftId, draftText} = action.payload;
 
     try {
         let data;
-        if (draftText.id == null) {
+        if (draftId == null) {
             data = yield* call(Node.postDraft, ":", draftText);
         } else {
-            data = yield* call(Node.putDraft, ":", draftText.id, draftText);
+            data = yield* call(Node.putDraft, ":", draftId, draftText);
         }
         if (draftText.receiverPostingId == null) {
             yield* put(composeDraftListItemSet(data.id, data));

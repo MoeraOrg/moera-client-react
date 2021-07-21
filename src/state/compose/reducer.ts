@@ -35,6 +35,7 @@ import { PAGE_COMPOSE } from "state/navigation/pages";
 import { ComposeState, ExtDraftInfo } from "state/compose/state";
 import { ClientAction } from "state/action";
 import { DraftInfo, PostingInfo } from "api/node/api-types";
+import { htmlEntities, replaceEmojis } from "util/html";
 
 const emptyFeatures = {
     subjectPresent: false,
@@ -67,13 +68,13 @@ const initialState = {
 };
 
 function buildDraftInfo(draftInfo: DraftInfo): ExtDraftInfo {
-    const {bodySrc} = draftInfo;
-    const source = typeof bodySrc === "string" ? JSON.parse(bodySrc) : bodySrc;
+    const {bodySrc, body} = draftInfo;
 
     return {
         ...draftInfo,
-        subject: source.subject != null ? source.subject.substring(0, 64) : null,
-        text: source.text != null ? source.text.substring(0, 256) : null,
+        subject: bodySrc?.subject != null ? bodySrc.subject.substring(0, 64) : null,
+        text: bodySrc?.text != null ? bodySrc.text.substring(0, 256) : null,
+        subjectHtml: body.subject != null ? replaceEmojis(htmlEntities(body.subject)) : null
     }
 }
 

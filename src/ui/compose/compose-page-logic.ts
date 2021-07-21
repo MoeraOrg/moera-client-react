@@ -31,6 +31,14 @@ export interface ComposePageValues {
     updateDescription: string;
 }
 
+export interface MapToPostingTextProps {
+    postingId: string | null;
+    subjectPresent: boolean;
+    smileysEnabled: boolean;
+    newsFeedEnabled: boolean;
+    avatarShapeDefault: string;
+}
+
 const composePageLogic = {
 
     mapPropsToValues(props: ComposePageOuterProps): ComposePageValues {
@@ -98,11 +106,11 @@ const composePageLogic = {
         body: yup.string().trim().required("Must not be empty")
     }),
 
-    _replaceSmileys(props: ComposePageOuterProps, text: string): string {
+    _replaceSmileys(props: MapToPostingTextProps, text: string): string {
         return props.smileysEnabled ? replaceSmileys(text) : text;
     },
 
-    _buildPublications(values: ComposePageValues, props: ComposePageOuterProps): StoryAttributes[] | null {
+    _buildPublications(values: ComposePageValues, props: MapToPostingTextProps): StoryAttributes[] | null {
         if (props.postingId != null) {
             return null;
         }
@@ -114,7 +122,7 @@ const composePageLogic = {
         return publications;
     },
 
-    mapValuesToPostingText(values: ComposePageValues, props: ComposePageOuterProps): PostingText {
+    mapValuesToPostingText(values: ComposePageValues, props: MapToPostingTextProps): PostingText {
         return {
             ownerFullName: values.fullName,
             ownerAvatar: values.avatar ? {

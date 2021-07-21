@@ -113,11 +113,12 @@ export const composeDraftLoadFailed = (): ComposeDraftLoadFailedAction => ({
 
 export const COMPOSE_DRAFT_SAVE = "COMPOSE_DRAFT_SAVE";
 export type ComposeDraftSaveAction = ActionWithPayload<typeof COMPOSE_DRAFT_SAVE, {
-    draftText: DraftText & {id?: string | null};
+    draftId: string | null;
+    draftText: DraftText;
 }>;
-export const composeDraftSave = (draftText: DraftText): ComposeDraftSaveAction => ({
+export const composeDraftSave = (draftId: string | null, draftText: DraftText): ComposeDraftSaveAction => ({
     type: COMPOSE_DRAFT_SAVE,
-    payload: {draftText}
+    payload: {draftId, draftText}
 });
 
 export const COMPOSE_DRAFT_SAVED = "COMPOSE_DRAFT_SAVED";
@@ -165,9 +166,9 @@ export const composeDraftListLoadFailed = (): ComposeDraftListLoadFailedAction =
 
 export const COMPOSE_DRAFT_SELECT = "COMPOSE_DRAFT_SELECT";
 export type ComposeDraftSelectAction = ActionWithPayload<typeof COMPOSE_DRAFT_SELECT, {
-    id: string;
+    id: string | null;
 }>;
-export const composeDraftSelect = (id: string): ComposeDraftSelectAction => ({
+export const composeDraftSelect = (id: string | null): ComposeDraftSelectAction => ({
     type: COMPOSE_DRAFT_SELECT,
     payload: {id}
 });

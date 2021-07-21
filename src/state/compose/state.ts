@@ -3,6 +3,7 @@ import { Choice, DraftInfo, PostingInfo, SourceFormat } from "api/node/api-types
 export interface ExtDraftInfo extends DraftInfo {
     subject: string | null;
     text: string | null;
+    subjectHtml: string | null;
 }
 
 export interface ComposeState {

@@ -1,13 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button } from "ui/control";
 import { composePreview } from "state/compose/actions";
 import "./ComposePreviewButton.css";
 
-class ComposePreviewButton extends React.PureComponent {
+type Props = {
+    disabled: boolean;
+} & ConnectedProps<typeof connector>;
 
-    onClick = event => {
+class ComposePreviewButton extends React.PureComponent<Props> {
+
+    onClick = (event: React.MouseEvent) => {
         const {composePreview} = this.props;
 
         composePreview();
@@ -26,7 +30,9 @@ class ComposePreviewButton extends React.PureComponent {
 
 }
 
-export default connect(
+const connector = connect(
     null,
     { composePreview }
-)(ComposePreviewButton);
+);
+
+export default connector(ComposePreviewButton);

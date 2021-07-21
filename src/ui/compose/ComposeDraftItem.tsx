@@ -1,23 +1,32 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
+// @ts-ignore
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatDistanceToNow, fromUnixTime } from 'date-fns';
 
+import { ExtDraftInfo } from "state/compose/state";
 import "./ComposeDraftItem.css";
 
-class ComposeDraftItem extends React.PureComponent {
+interface Props {
+    draft: ExtDraftInfo;
+    current: boolean;
+    onSelect: (id: string) => void;
+    onDelete: (id: string) => void;
+}
 
-    onSelect = e => {
+class ComposeDraftItem extends React.PureComponent<Props> {
+
+    onSelect = (e: React.MouseEvent) => {
         const {draft} = this.props;
 
-        if (e.target.closest(".delete") != null) {
+        if ((e.target as HTMLDivElement).closest(".delete") != null) {
             return;
         }
         this.props.onSelect(draft.id);
     };
 
-    onDelete = e => {
+    onDelete = (e: React.MouseEvent) => {
         const {draft} = this.props;
 
         this.props.onDelete(draft.id);
@@ -36,7 +45,7 @@ class ComposeDraftItem extends React.PureComponent {
                         <LinesEllipsis text={draft.text} maxLine="3"/>
                     </div>
                     <div className="edited">
-                        {formatDistanceToNow(fromUnixTime(draft.editedAt))}
+                        {formatDistanceToNow(fromUnixTime(draft.editedAt ?? draft.createdAt))}
                     </div>
                 </div>
                 <div className="draft-delete" title="Delete draft" onClick={this.onDelete}>

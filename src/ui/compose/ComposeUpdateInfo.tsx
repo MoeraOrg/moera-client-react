@@ -4,8 +4,8 @@ import { useField } from 'formik';
 import { CheckboxField, InputField } from "ui/control/field";
 
 export default function ComposeUpdateInfo() {
-    const [, {value: updateInfoVisible}] = useField("updateInfoVisible");
-    const [, {value: updateImportant}] = useField("updateImportant");
+    const [, {value: updateInfoVisible}] = useField<boolean>("updateInfoVisible");
+    const [, {value: updateImportant}] = useField<boolean>("updateImportant");
 
     if (!updateInfoVisible) {
         return null;
