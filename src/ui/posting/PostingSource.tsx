@@ -1,12 +1,17 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { PostingInfo } from "api/node/api-types";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import PostingSources from "ui/posting/PostingSources";
 import "./PostingSource.css";
 
-const PostingSource = ({posting}) => (
+interface Props {
+    posting: PostingInfo;
+}
+
+const PostingSource = ({posting}: Props) => (
     posting.receiverName != null ?
         <Manager>
             <Reference>

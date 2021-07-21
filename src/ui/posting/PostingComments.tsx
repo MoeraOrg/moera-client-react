@@ -1,12 +1,17 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { PostingInfo } from "api/node/api-types";
 import Jump from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
 import "./PostingComments.css";
 
-export default function PostingComments({posting}) {
-    if (posting.totalComments <= 0) {
+interface Props {
+    posting: PostingInfo;
+}
+
+export default function PostingComments({posting}: Props) {
+    if (posting.totalComments == null || posting.totalComments <= 0) {
         return null;
     }
 
