@@ -1,5 +1,5 @@
 import { retry } from 'typed-redux-saga/macro';
-import { CallEffect } from "redux-saga/effects";
+import { CallEffect } from 'redux-saga/effects';
 
 const FETCH_TIMEOUT = 10000; // ms
 const UPDATE_TIMEOUT = 300000; // ms
@@ -27,5 +27,5 @@ export function* retryFetch(url: string, options: RequestInit): Generator<CallEf
         limit = RETRY_LIMIT;
         timeout = FETCH_TIMEOUT;
     }
-    return yield *retry(limit, RETRY_DELAY, fetchTimeout, url, timeout, options);
+    return yield* retry(limit, RETRY_DELAY, fetchTimeout, url, timeout, options);
 }
