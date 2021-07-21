@@ -1,8 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
 import { isConnectedToHome } from "state/home/selectors";
+import { ClientState } from "state/state";
+import { CommentInfo } from "api/node/api-types";
+import { ExtCommentInfo } from "state/detailedposting/state";
 import { isPermitted } from "state/node/selectors";
 import CommentMenu from "ui/comment/CommentMenu";
 import CommentAvatar from "ui/comment/CommentAvatar";
@@ -16,11 +19,17 @@ import CommentReactions from "ui/comment/CommentReactions";
 import { getCommentsReceiverPostingId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
 import "./Comment.css";
 
+type Props = {
+    postingId: string;
+    comment: ExtCommentInfo;
+    previousId: string | null;
+    focused: boolean;
+} & ConnectedProps<typeof connector>;
 
 const Comment = ({
      postingId, comment, previousId, focused, connectedToHome, postingOwnerName, postingReceiverName,
      postingReceiverPostingId, isPermitted
-}) => (
+}: Props) => (
     <div className={cx("comment", "entry", {
         "focused": focused,
         "single-emoji": comment.singleEmoji,
@@ -40,7 +49,7 @@ const Comment = ({
                                      postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
                         <CommentUpdated comment={comment}/>
                     </div>
-                    <CommentContent className="content" comment={comment} previousId={previousId}/>
+                    <CommentContent comment={comment} previousId={previousId}/>
                     <div className="reactions-line">
                         {connectedToHome && comment.signature != null &&
                             <CommentButtons nodeName={postingReceiverName ?? postingOwnerName}
@@ -54,13 +63,15 @@ const Comment = ({
     </div>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
-        postingOwnerName: getDetailedPosting(state).ownerName,
+        postingOwnerName: getDetailedPosting(state)?.ownerName,
         postingReceiverName: getCommentsState(state).receiverName,
         postingReceiverPostingId: getCommentsReceiverPostingId(state),
-        isPermitted: (operation, comment) =>
+        isPermitted: (operation: string, comment: CommentInfo) =>
             isPermitted(operation, comment, state, getCommentsState(state).receiverName)
     })
-)(Comment);
+);
+
+export default connector(Comment);

@@ -1,26 +1,30 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { commentRepliedToUnset } from "state/detailedposting/actions";
 import { getDetailedPostingId } from "state/detailedposting/selectors";
 import RepliedTo from "ui/comment/RepliedTo";
 import { htmlEntities, replaceEmojis } from "util/html";
 
-function CommentComposeRepliedTo({postingId, commentId, ownerName, ownerFullName, heading, commentRepliedToUnset}) {
-    const onUnset = () => commentRepliedToUnset();
+type Props = ConnectedProps<typeof connector>;
 
-    if (commentId == null) {
+function CommentComposeRepliedTo({postingId, commentId, ownerName, ownerFullName, heading,
+                                  commentRepliedToUnset}: Props) {
+    const onUnset = () => {commentRepliedToUnset();};
+
+    if (postingId == null || commentId == null || ownerName == null) {
         return null;
     }
 
     return (
         <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} ownerFullName={ownerFullName}
-                   headingHtml={replaceEmojis(htmlEntities(heading))} unset={true} onUnset={onUnset}/>
+                   headingHtml={replaceEmojis(htmlEntities(heading ?? ""))} unset={true} onUnset={onUnset}/>
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         postingId: getDetailedPostingId(state),
         commentId: state.detailedPosting.compose.repliedToId,
         ownerName: state.detailedPosting.compose.repliedToName,
@@ -28,4 +32,6 @@ export default connect(
         heading: state.detailedPosting.compose.repliedToHeading,
     }),
     { commentRepliedToUnset }
-)(CommentComposeRepliedTo);
+);
+
+export default connector(CommentComposeRepliedTo);

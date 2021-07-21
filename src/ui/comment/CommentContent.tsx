@@ -4,8 +4,14 @@ import cx from 'classnames';
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
 import EntryHtml from "ui/posting/EntryHtml";
 import { hasWindowSelection } from "util/misc";
+import { ExtCommentInfo } from "state/detailedposting/state";
 
-function CommentContent({comment, previousId}) {
+interface Props {
+    comment: ExtCommentInfo;
+    previousId: string | null;
+}
+
+function CommentContent({comment, previousId}: Props) {
     const [preview, setPreview] = useState(true);
 
     const onClick = () => {
@@ -16,7 +22,7 @@ function CommentContent({comment, previousId}) {
 
     const renderText = () => {
         if (preview) {
-            if (comment.bodyPreview.text) {
+            if (comment.bodyPreview?.text) {
                 return (
                     <>
                         <EntryHtml html={comment.bodyPreview.text} onClick={onClick}/>

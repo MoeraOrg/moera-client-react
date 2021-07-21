@@ -1,10 +1,20 @@
-import { CommentInfo } from "api/node/api-types";
+import { Body, CommentInfo, RepliedTo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
+
+export interface ExtBody extends Body {
+    previewText?: string;
+}
+
+export interface ExtRepliedTo extends RepliedTo {
+    headingHtml?: string;
+}
 
 export interface ExtCommentInfo extends CommentInfo {
     deleting: boolean;
     verificationStatus: VerificationStatus;
     singleEmoji: boolean;
+    body: ExtBody;
+    repliedTo?: ExtRepliedTo | null;
 }
 
 export interface CommentsState {

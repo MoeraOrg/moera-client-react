@@ -1,13 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ClientState } from "state/state";
+import { ExtCommentInfo } from "state/detailedposting/state";
 import { getDetailedPostingId } from "state/detailedposting/selectors";
 import RepliedTo from "ui/comment/RepliedTo";
 import "./CommentRepliedTo.css";
 
-function CommentRepliedTo({comment, postingId, previousId}) {
-    if (!comment.repliedTo) {
+type Props = {
+    comment: ExtCommentInfo;
+    previousId: string | null
+} & ConnectedProps<typeof connector>;
+
+function CommentRepliedTo({comment, postingId, previousId}: Props) {
+    if (postingId == null || !comment.repliedTo) {
         return null;
     }
     if (comment.repliedTo.id === previousId) {
@@ -15,13 +22,15 @@ function CommentRepliedTo({comment, postingId, previousId}) {
     }
     return (
         <RepliedTo postingId={postingId} commentId={comment.repliedTo.id} ownerName={comment.repliedTo.name}
-                   ownerFullName={comment.repliedTo.fullName} headingHtml={comment.repliedTo.headingHtml}
+                   ownerFullName={comment.repliedTo.fullName ?? null} headingHtml={comment.repliedTo.headingHtml ?? ""}
                    unset={false}/>
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         postingId: getDetailedPostingId(state)
     })
-)(CommentRepliedTo);
+);
+
+export default connector(CommentRepliedTo);

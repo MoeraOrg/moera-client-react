@@ -1,8 +1,8 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ClientState } from "state/state";
 import { glanceComment } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
 import { Browser } from "ui/browser";
@@ -12,21 +12,22 @@ import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import GlanceComment from "ui/comment/GlanceComment";
 import "./RepliedTo.css";
 
-class RepliedTo extends React.PureComponent {
+type Props = {
+    postingId: string;
+    commentId: string | null;
+    ownerName: string;
+    ownerFullName: string | null;
+    headingHtml: string;
+    unset: boolean;
+    onUnset?: () => void | null;
+} & ConnectedProps<typeof connector>;
 
-    static propTypes = {
-        postingId: PropType.string,
-        commentId: PropType.string,
-        ownerName: PropType.string,
-        ownerFullName: PropType.string,
-        headingHtml: PropType.string,
-        unset: PropType.bool,
-        onUnset: PropType.func,
-        glanceComment: PropType.func
-    };
+class RepliedTo extends React.PureComponent<Props> {
 
     onPreparePopper = () => {
-        this.props.glanceComment(this.props.commentId);
+        if (this.props.commentId != null) {
+            this.props.glanceComment(this.props.commentId);
+        }
     }
 
     onUnset = () => {
@@ -66,9 +67,11 @@ class RepliedTo extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
-        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled") && !Browser.isTouchScreen()
+const connector = connect(
+    (state: ClientState) => ({
+        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled") as boolean && !Browser.isTouchScreen()
     }),
     { glanceComment }
-)(RepliedTo);
+);
+
+export default connector(RepliedTo);

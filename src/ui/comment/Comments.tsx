@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import {
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
@@ -23,9 +24,19 @@ import CommentDialog from "ui/comment/CommentDialog";
 import { getPageHeaderHeight } from "util/misc";
 import "./Comments.css";
 
-class Comments extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
 
-    constructor(props, context) {
+interface State {
+    atTop: boolean;
+    atBottom: boolean;
+}
+
+class Comments extends React.PureComponent<Props, State> {
+
+    newAnchor: number | null = null;
+    topmostBeforeUpdate: number | null = null;
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.newAnchor = null;
@@ -42,12 +53,12 @@ class Comments extends React.PureComponent {
         this.scrollToAnchor();
     }
 
-    getSnapshotBeforeUpdate(prevProps, prevState) {
+    getSnapshotBeforeUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
         this.topmostBeforeUpdate = Comments.getTopmostMoment();
         return null;
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
         if (this.props.anchor !== prevProps.anchor) {
             this.newAnchor = this.props.anchor;
         }
@@ -63,12 +74,12 @@ class Comments extends React.PureComponent {
 
     scrollToAnchor() {
         if (this.props.focused) {
-            Comments.scrollToElement(document.getElementById("comments"));
+            Comments.scrollToElement(document.getElementById("comments")!);
             this.props.commentsScrolledToComments();
             return;
         }
         if (this.props.composerFocused) {
-            Comments.scrollToElement(document.getElementById("comment-composer"));
+            Comments.scrollToElement(document.getElementById("comment-composer")!);
             const body = document.getElementById("body");
             if (body != null) {
                 body.focus();
@@ -91,28 +102,36 @@ class Comments extends React.PureComponent {
 
     static getTopmostMoment() {
         const comments = document.getElementsByClassName("comment");
-        if (comments.length === 0) {
+        if (comments == null || comments.length === 0) {
             return null;
         }
         for (let i = 0; i < comments.length; i++) {
-            if (comments.item(i).getBoundingClientRect().top >= 0) {
-                return parseInt(comments.item(i).dataset.moment);
+            const comment = comments.item(i) as HTMLElement;
+            if (comment == null) {
+                continue;
+            }
+            if (comment.getBoundingClientRect().top >= 0 && comment.dataset.moment) {
+                return parseInt(comment.dataset.moment);
             }
         }
         return Number.MAX_SAFE_INTEGER;
     }
 
-    static getCommentAt(moment) {
+    static getCommentAt(moment: number): HTMLElement | null {
         const comments = document.getElementsByClassName("comment");
         for (let i = 0; i < comments.length; i++) {
-            if (comments.item(i).dataset.moment >= moment) {
-                return comments.item(i);
+            const comment = comments.item(i) as HTMLElement;
+            if (comment == null) {
+                continue;
+            }
+            if (comment.dataset.moment != null && parseInt(comment.dataset.moment) >= moment) {
+                return comment;
             }
         }
         return null;
     }
 
-    static scrollTo(moment) {
+    static scrollTo(moment: number): boolean {
         if (moment === Number.MAX_SAFE_INTEGER) {
             Comments.scrollToEnd();
             return true;
@@ -125,12 +144,12 @@ class Comments extends React.PureComponent {
         }
     }
 
-    static scrollToEnd() {
-        const y = document.getElementById("comments").getBoundingClientRect().bottom;
+    static scrollToEnd(): void {
+        const y = document.getElementById("comments")!.getBoundingClientRect().bottom;
         window.scrollBy(0, y - getPageHeaderHeight());
     }
 
-    static scrollToElement(element) {
+    static scrollToElement(element: Element): void {
         const y = element.getBoundingClientRect().top;
         window.scrollBy(0, y - getPageHeaderHeight());
     }
@@ -149,11 +168,11 @@ class Comments extends React.PureComponent {
         this.props.commentsPastSliceLoad();
     }
 
-    onBoundaryFuture = intersecting => {
+    onBoundaryFuture = (intersecting: boolean) => {
         this.setState({atTop: intersecting});
     };
 
-    onBoundaryPast = intersecting => {
+    onBoundaryPast = (intersecting: boolean) => {
         this.setState({atBottom: intersecting});
     };
 
@@ -162,6 +181,10 @@ class Comments extends React.PureComponent {
             postingId, total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture,
             focusedCommentId
         } = this.props;
+
+        if (postingId == null) {
+            return null;
+        }
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
@@ -180,7 +203,7 @@ class Comments extends React.PureComponent {
                             {comments.map((comment, index) =>
                                 <Comment key={comment.moment} postingId={postingId} comment={comment}
                                          previousId={index > 0 ? comments[index - 1].id : null}
-                                         focused={comment.id === focusedCommentId} deleting={comment.deleting}/>
+                                         focused={comment.id === focusedCommentId}/>
                             )}
                             <CommentsSentinelLine end={true} loading={loadingFuture}
                                                   title={comments.length !== 0 ? "View later comments" : "View comments"}
@@ -197,11 +220,11 @@ class Comments extends React.PureComponent {
     }
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         visible: isAtDetailedPostingPage(state),
         postingId: getDetailedPostingId(state),
-        total: isDetailedPostingCached(state) ? getDetailedPosting(state).totalComments : 0,
+        total: isDetailedPostingCached(state) ? (getDetailedPosting(state)!.totalComments ?? 0) : 0,
         loadingFuture: getCommentsState(state).loadingFuture,
         loadingPast: getCommentsState(state).loadingPast,
         before: getCommentsState(state).before,
@@ -218,4 +241,6 @@ export default connect(
         commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor, commentsScrolledToComments,
         commentsScrolledToComposer
     }
-)(Comments);
+);
+
+export default connector(Comments);

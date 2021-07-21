@@ -53,7 +53,7 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
                         <PostingComments posting={posting}/>
                     </div>
                     {connectedToHome && <PostingButtons posting={posting}/>}
-                    <Comments postingId={posting.id}/>
+                    <Comments/>
                 </>
             }
         </div>
