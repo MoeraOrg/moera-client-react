@@ -1,16 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { fromUnixTime, getUnixTime } from 'date-fns';
 
+import { ClientState } from "state/state";
 import { closeChangeDateDialog, storyChangeDate } from "state/changedatedialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { DateTimeField } from "ui/control/field";
 
-class ChangeDateDialog extends React.PureComponent {
+type OuterProps = ConnectedProps<typeof connector>;
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+interface Values {
+    publishedAt: Date;
+}
+
+type Props = OuterProps & FormikProps<Values>;
+
+class ChangeDateDialog extends React.PureComponent<Props> {
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.publishedAt !== prevProps.publishedAt) {
             const values = changeDateDialogLogic.mapPropsToValues(this.props);
             this.props.resetForm({values});
@@ -43,7 +52,7 @@ class ChangeDateDialog extends React.PureComponent {
 
 const changeDateDialogLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
             publishedAt: fromUnixTime(props.publishedAt)
         }
@@ -53,19 +62,24 @@ const changeDateDialogLogic = {
         publishedAt: yup.date()
     }),
 
-    handleSubmit(values, formik) {
-        formik.props.storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt));
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>) {
+        console.log(formik.props.storyId, values.publishedAt);
+        if (formik.props.storyId != null) {
+            formik.props.storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt));
+        }
         formik.setSubmitting(false);
     }
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.changeDateDialog.show,
         storyId: state.changeDateDialog.storyId,
         publishedAt: state.changeDateDialog.publishedAt,
         changing: state.changeDateDialog.changing
     }),
     { closeChangeDateDialog, storyChangeDate }
-)(withFormik(changeDateDialogLogic)(ChangeDateDialog));
+);
+
+export default connector(withFormik(changeDateDialogLogic)(ChangeDateDialog));
