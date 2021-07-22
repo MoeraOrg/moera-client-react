@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { DateTimePicker } from 'react-widgets';
+import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format } from 'date-fns';
 import cx from 'classnames';
@@ -9,6 +9,7 @@ import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import useComposeTextEditable from "ui/compose/compose-text-editable";
 import ComposeTextEditableIcon from "ui/compose/ComposeTextEditableIcon";
+import { Browser } from "ui/browser";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -20,9 +21,21 @@ function ComposePublishAt({postingId, draftId}: Props) {
     return (
         edit ?
             <div className="input-resettable">
-                <DateTimePicker name={field.name} value={value} valueFormat={{dateStyle: "short", timeStyle: "short"}}
-                                includeTime={true} onChange={v => setValue(v)} onBlur={() => field.onBlur(null)}
-                                onKeyDown={onKeyDown} autoFocus={true}/>
+                <DatePicker name={field.name}
+                            selected={value}
+                            onChange={v => {
+                                if (v instanceof Date) {
+                                    setValue(v);
+                                }
+                            }}
+                            onBlur={field.onBlur}
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={15}
+                            dateFormat="dd-MM-yyyy, HH:mm"
+                            withPortal={Browser.isTinyScreen()}
+                            onKeyDown={onKeyDown}
+                            autoFocus={true}/>
                 <button title="Reset to default" onClick={onReset}>
                     <FontAwesomeIcon icon="backspace"/>
                 </button>

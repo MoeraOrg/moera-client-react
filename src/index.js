@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-widgets/styles.css';
+import 'react-datepicker/dist/react-datepicker.min.css';
 
 import store from "state/store";
 import { initFromLocation, initStorage } from "state/navigation/actions";

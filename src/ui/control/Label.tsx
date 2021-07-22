@@ -11,8 +11,8 @@ interface Props {
     checkbox?: boolean;
     undo?: boolean;
     reset?: boolean;
-    onUndo: () => void;
-    onReset: () => void;
+    onUndo?: () => void;
+    onReset?: () => void;
 }
 
 export const Label = ({title, name, className, horizontal, checkbox, undo, reset, onUndo, onReset}: Props) => (

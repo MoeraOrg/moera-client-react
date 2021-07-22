@@ -32,6 +32,7 @@ import Jump from "ui/navigation/Jump";
 import "./ComposePage.css";
 
 export type ComposePageOuterProps = ConnectedProps<typeof connector>;
+
 type Props = ComposePageOuterProps & FormikProps<ComposePageValues>;
 
 interface State {

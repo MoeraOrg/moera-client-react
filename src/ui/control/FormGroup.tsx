@@ -1,11 +1,24 @@
 import React from 'react';
-import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { Label } from "ui/control";
 
+interface Props {
+    title?: string;
+    name?: string;
+    horizontal?: boolean;
+    checkbox?: boolean;
+    groupClassName?: string;
+    labelClassName?: string;
+    undo?: boolean;
+    reset?: boolean;
+    onUndo?: () => void;
+    onReset?: () => void;
+    children: any;
+}
+
 export const FormGroup = ({title, name, horizontal = false, checkbox = false, groupClassName, labelClassName,
-                           undo = false, reset = false, onUndo, onReset, children}) => (
+                           undo = false, reset = false, onUndo, onReset, children}: Props) => (
     <div className={cx(
             "form-group",
             groupClassName, {
@@ -27,16 +40,3 @@ export const FormGroup = ({title, name, horizontal = false, checkbox = false, gr
         }
     </div>
 );
-
-FormGroup.propTypes = {
-    title: PropType.string,
-    name: PropType.string,
-    horizontal: PropType.bool,
-    groupClassName: PropType.string,
-    labelClassName: PropType.string,
-    children: PropType.element,
-    undo: PropType.bool,
-    reset: PropType.bool,
-    onUndo: PropType.func,
-    onReset: PropType.func
-};
