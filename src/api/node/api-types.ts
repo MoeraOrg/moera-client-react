@@ -310,8 +310,8 @@ export interface StoryInfoBase<B> {
     moment: number;
     viewed?: boolean | null;
     read?: boolean | null;
-    posting?: PostingInfoBase<B> | null;
-    comment?: CommentInfoBase<B> | null;
+    posting?: Partial<PostingInfoBase<B>> | null;
+    comment?: Partial<CommentInfoBase<B>> | null;
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
     trackingId?: string | null;

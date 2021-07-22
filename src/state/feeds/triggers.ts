@@ -58,15 +58,8 @@ function toStory(eventPayload: Omit<StoryEvent<any>, "type">, isHome: boolean): 
         story.feedName = ":" + story.feedName;
     }
     if (eventPayload.postingId) {
-        story.posting = { // TODO this breaks contract
+        story.posting = {
             id: eventPayload.postingId,
-            revisionId: "",
-            totalRevisions: 1,
-            ownerName: "",
-            body: {},
-            heading: "",
-            createdAt: now(),
-            subscriptions: null
         };
     }
     delete story.postingId;

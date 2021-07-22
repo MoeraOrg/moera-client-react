@@ -224,9 +224,10 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
     return body;
 }
 
-type Entities = PostingInfo | CommentInfo | StoryInfo | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo;
-type EncodedEntities = EncodedPostingInfo | EncodedCommentInfo | EncodedStoryInfo | EncodedCommentCreated
-    | EncodedDraftInfo | EncodedFeedSliceInfo | EncodedCommentsSliceInfo;
+type Entities = Partial<PostingInfo | CommentInfo | StoryInfo | CommentCreated | DraftInfo | FeedSliceInfo
+    | CommentsSliceInfo>;
+type EncodedEntities = Partial<EncodedPostingInfo | EncodedCommentInfo | EncodedStoryInfo | EncodedCommentCreated
+    | EncodedDraftInfo | EncodedFeedSliceInfo | EncodedCommentsSliceInfo>;
 
 export function decodeBodies(data: EncodedPostingInfo): PostingInfo;
 export function decodeBodies(data: EncodedCommentInfo): CommentInfo;

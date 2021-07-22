@@ -624,6 +624,11 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     additionalProperties: false
 };
 
+const PartialPostingInfoType = {
+    ...PostingInfoType,
+    required: []
+}
+
 export const PostingInfo = schema(PostingInfoType);
 
 const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
@@ -838,6 +843,11 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
     additionalProperties: false
 };
 
+const PartialCommentInfoType = {
+    ...CommentInfoType,
+    required: []
+}
+
 export const CommentInfo = schema(CommentInfoType);
 
 const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
@@ -874,11 +884,11 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
             nullable: true
         },
         "posting": {
-            ...PostingInfoType,
+            ...PartialPostingInfoType,
             nullable: true
         },
         "comment": {
-            ...CommentInfoType,
+            ...PartialCommentInfoType,
             nullable: true
         },
         "summaryAvatar": {
