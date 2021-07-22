@@ -212,6 +212,8 @@ export interface PostingInfoBase<B> {
 export type EncodedPostingInfo = PostingInfoBase<string>;
 export type PostingInfo = PostingInfoBase<Body>;
 
+type PartialPostingInfoBase<B> = Partial<PostingInfoBase<B>> & {id: string};
+
 export interface FeedInfo {
     feedName: string;
     subscriberId?: string | null;
@@ -287,6 +289,8 @@ interface CommentInfoBase<B> {
 export type EncodedCommentInfo = CommentInfoBase<string>;
 export type CommentInfo = CommentInfoBase<Body>;
 
+type PartialCommentInfoBase<B> = Partial<CommentInfoBase<B>> & {id: string};
+
 export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-added-negative" | "mention-posting"
     | "subscriber-added" | "subscriber-deleted" | "comment-added" | "mention-comment" | "reply-comment"
     | "comment-reaction-added-positive" | "comment-reaction-added-negative" | "remote-comment-added"
@@ -310,8 +314,8 @@ export interface StoryInfoBase<B> {
     moment: number;
     viewed?: boolean | null;
     read?: boolean | null;
-    posting?: Partial<PostingInfoBase<B>> | null;
-    comment?: Partial<CommentInfoBase<B>> | null;
+    posting?: PartialPostingInfoBase<B> | null;
+    comment?: PartialCommentInfoBase<B> | null;
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
     trackingId?: string | null;

@@ -626,7 +626,7 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
 
 const PartialPostingInfoType = {
     ...PostingInfoType,
-    required: []
+    required: ["id"]
 }
 
 export const PostingInfo = schema(PostingInfoType);
@@ -845,7 +845,7 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
 
 const PartialCommentInfoType = {
     ...CommentInfoType,
-    required: []
+    required: ["id"]
 }
 
 export const CommentInfo = schema(CommentInfoType);
