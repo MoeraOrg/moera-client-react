@@ -1,13 +1,16 @@
-type Unit = "never" | "always" | "s" | "m" | "h" | "d";
+export type FixedUnit = "s" | "m" | "h" | "d";
+export type DurationUnit = "never" | "always" | FixedUnit;
 
-const UNIT_FACTORS: Record<Unit, number> = {
-    "never": 1,
-    "always": 1,
+const UNIT_FACTORS: Record<FixedUnit, number> = {
     "s": 1,
     "m": 60,
     "h": 60 * 60,
     "d": 24 * 60 * 60
 };
+
+export function isFixedUnit(unit: DurationUnit): unit is FixedUnit {
+    return unit !== "never" && unit !== "always";
+}
 
 export class DurationParsingError extends Error {
 
@@ -19,21 +22,21 @@ export class DurationParsingError extends Error {
 
 export class DurationZoneError extends Error {
 
-    constructor(value: Unit) {
+    constructor(value: DurationUnit) {
         super("Error converting duration value '" + value + "' to seconds");
     }
 
 }
 
-export default class Duration {
+export class Duration {
 
     static MIN = new Duration(0, "s");
     static MAX = new Duration(Number.MAX_SAFE_INTEGER, "s");
 
     amount: number;
-    unit: Unit;
+    unit: DurationUnit;
 
-    constructor(amount: number, unit: Unit) {
+    constructor(amount: number, unit: DurationUnit) {
         this.amount = amount;
         this.unit = unit;
     }
@@ -50,7 +53,7 @@ export default class Duration {
         }
         return new Duration(
             parseInt(v.substring(0, v.length - 1)),
-            v.charAt(v.length - 1).toLowerCase() as Unit
+            v.charAt(v.length - 1).toLowerCase() as DurationUnit
         )
     }
 
@@ -63,21 +66,21 @@ export default class Duration {
     }
 
     isFixed(): boolean {
-        return !this.isNever() && !this.isAlways();
+        return isFixedUnit(this.unit);
     }
 
     toSeconds(): number {
-        if (!this.isFixed()) {
+        if (!isFixedUnit(this.unit)) {
             throw new DurationZoneError(this.unit);
         }
         return this.amount * UNIT_FACTORS[this.unit];
     }
 
-    toUnitCeil(unit: Unit): number | null {
+    toUnitCeil(unit: FixedUnit): number | null {
         return this.isFixed() ? Math.ceil(this.toSeconds() / UNIT_FACTORS[unit]) : null;
     }
 
-    toUnitFloor(unit: Unit): number | null {
+    toUnitFloor(unit: FixedUnit): number | null {
         return this.isFixed() ? Math.floor(this.toSeconds() / UNIT_FACTORS[unit]) : null;
     }
 

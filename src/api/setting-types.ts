@@ -2,7 +2,7 @@ import { fromUnixTime } from 'date-fns';
 
 import { SettingType, SettingTypeModifiers } from "api/node/api-types";
 import { parseBool } from "util/misc";
-import Duration from "util/duration";
+import { Duration } from "util/duration";
 
 export function toValue(type: SettingType, valueString: string): boolean | number | Date | string {
     switch (type) {
