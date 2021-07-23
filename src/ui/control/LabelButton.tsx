@@ -1,18 +1,19 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
 
 import "./LabelButton.css";
 
-export const LabelButton = ({icon, className, title, onClick}) => (
+interface Props {
+    icon: IconProp;
+    className?: string;
+    title: string;
+    onClick?: () => void;
+}
+
+export const LabelButton = ({icon, className, title, onClick}: Props) => (
     <span className={cx("form-label-button", className)} title={title} onClick={onClick}>
         <FontAwesomeIcon icon={icon} size="sm"/>
     </span>
 );
-
-LabelButton.propTypes = {
-    icon: PropType.string,
-    title: PropType.string,
-    onClick: PropType.func
-};

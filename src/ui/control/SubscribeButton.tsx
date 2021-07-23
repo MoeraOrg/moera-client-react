@@ -1,17 +1,28 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button } from "ui/control";
+import { ClientState } from "state/state";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import "./SubscribeButton.css";
 
+type Props = {
+    show: boolean;
+    ready: boolean;
+    subscribed: boolean;
+    subscribing: boolean;
+    unsubscribing: boolean;
+    nodeName: string;
+    feedName: string;
+    subscriberId: string | null;
+} & ConnectedProps<typeof connector>;
+
 function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, homeSet, nodeName, feedName,
-                          subscriberId, feedSubscribe, feedUnsubscribe}) {
+                          subscriberId, feedSubscribe, feedUnsubscribe}: Props) {
     const onSubscribe = () => feedSubscribe(nodeName, feedName);
 
-    const onUnsubscribe = () => feedUnsubscribe(nodeName, feedName, subscriberId);
+    const onUnsubscribe = () => subscriberId != null && feedUnsubscribe(nodeName, feedName, subscriberId);
 
     if (!homeSet || !show || !ready) {
         return null;
@@ -34,20 +45,11 @@ function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, h
     }
 }
 
-SubscribeButton.propTypes = {
-    show: PropType.bool,
-    ready: PropType.bool,
-    subscribed: PropType.bool,
-    subscribing: PropType.bool,
-    unsubscribing: PropType.bool,
-    nodeName: PropType.string,
-    feedName: PropType.string,
-    subscriberId: PropType.string
-};
-
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         homeSet: isConnectedToHome(state) && isHomeOwnerNameSet(state)
     }),
     { feedSubscribe, feedUnsubscribe }
-)(SubscribeButton);
+);
+
+export default connector(SubscribeButton);

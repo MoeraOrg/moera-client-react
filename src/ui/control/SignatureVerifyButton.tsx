@@ -1,10 +1,15 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { VerificationStatus } from "state/state-types";
 import "./SignatureVerifyButton.css";
 
-export function SignatureVerifyButton({status, onVerify}) {
+interface Props {
+    status: VerificationStatus | null;
+    onVerify: () => void;
+}
+
+export function SignatureVerifyButton({status, onVerify}: Props) {
     switch (status) {
         default:
         case "none":
@@ -33,8 +38,3 @@ export function SignatureVerifyButton({status, onVerify}) {
             );
     }
 }
-
-SignatureVerifyButton.propTypes = {
-    status: PropType.string,
-    onVerify: PropType.func
-};
