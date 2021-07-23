@@ -154,7 +154,7 @@ const composePageLogic = {
         return !subject && !text;
     },
 
-    handleSubmit(values: ComposePageValues, formik: FormikBag<ComposePageOuterProps, ComposePageValues>) {
+    handleSubmit(values: ComposePageValues, formik: FormikBag<ComposePageOuterProps, ComposePageValues>): void {
         formik.setStatus("submitted");
         formik.props.composePost(
             formik.props.postingId,

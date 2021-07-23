@@ -1,15 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { StringSchema } from 'yup';
 import debounce from 'lodash.debounce';
 
 import * as Rules from "api/naming/rules";
+import PROVIDERS from "providers";
+import { ClientState } from "state/state";
 import {
     cancelSignUpDialog,
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
-    SIGN_UP_STAGE_PASSWORD, SIGN_UP_STAGE_PROFILE,
+    SIGN_UP_STAGE_PASSWORD,
+    SIGN_UP_STAGE_PROFILE,
     signUp,
     signUpDomainVerify,
     signUpFindDomain,
@@ -19,23 +23,38 @@ import { Browser } from "ui/browser";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField, SelectField } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
-import PROVIDERS from "providers";
 
-class SignUpDialog extends React.PureComponent {
+type OuterProps = ConnectedProps<typeof connector>;
 
-    #providerSelectDom;
-    #nameInputDom;
-    #lastVerifiedName = null;
-    #lastVerifiedDomain = null;
+interface Values {
+    provider: string;
+    name: string;
+    nameTaken: string | null;
+    domain: string;
+    domainTaken: string | null;
+    autoDomain: boolean;
+    password: string;
+    confirmPassword: string;
+    email: string;
+}
 
-    setProviderSelectRef = dom => {
+type Props = OuterProps  & FormikProps<Values>;
+
+class SignUpDialog extends React.PureComponent<Props> {
+
+    #providerSelectDom: HTMLSelectElement | null = null;
+    #nameInputDom: HTMLInputElement | null = null;
+    #lastVerifiedName: string | null = null;
+    #lastVerifiedDomain: string | null = null;
+
+    setProviderSelectRef = (dom: HTMLSelectElement | null) => {
         this.#providerSelectDom = dom;
         if (this.#providerSelectDom) {
             this.#providerSelectDom.addEventListener("click", this.onProviderChange);
         }
     }
 
-    setNameInputRef = dom => {
+    setNameInputRef = (dom: HTMLInputElement | null) => {
         this.#nameInputDom = dom;
         if (this.#nameInputDom) {
             this.#nameInputDom.addEventListener("input", this.onNameInput);
@@ -53,7 +72,7 @@ class SignUpDialog extends React.PureComponent {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.show !== prevProps.show && this.props.show) {
             this.props.resetForm({
                 values: signUpDialogLogic.mapPropsToValues(this.props),
@@ -66,25 +85,25 @@ class SignUpDialog extends React.PureComponent {
         this.verifyName.flush();
     }
 
-    onNameInput = event => {
-        this.verifyName(event.target.value);
+    onNameInput = (event: Event) => {
+        this.verifyName((event.target as HTMLInputElement).value);
     };
 
-    onNameBlur = event => {
-        this.verifyName(event.target.value);
+    onNameBlur = (event: Event) => {
+        this.verifyName((event.target as HTMLInputElement).value);
         this.verifyName.flush();
     };
 
-    onDomainInput = domain => {
+    onDomainInput = (domain: string) => {
         this.verifyDomain(domain);
     };
 
-    onDomainBlur = domain => {
+    onDomainBlur = (domain: string) => {
         this.verifyDomain(domain);
         this.verifyDomain.flush();
     };
 
-    onAutoDomainChange = auto => {
+    onAutoDomainChange = () => {
         this.verifyName(this.props.values.name);
     }
 
@@ -174,9 +193,9 @@ class SignUpDialog extends React.PureComponent {
 
 const signUpDialogLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
-            provider: props.provider ?? (Browser.isDevMode() ? "local" : "moera.blog"),
+            provider: Browser.isDevMode() ? "local" : "moera.blog",
             name: props.name ?? "",
             nameTaken: null,
             domain: props.domain ?? "",
@@ -192,7 +211,7 @@ const signUpDialogLogic = {
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
             .test("is-allowed", "Not allowed", Rules.isRegisteredNameValid)
             .when("nameTaken",
-                (nameTaken, schema) => schema.notOneOf([nameTaken],
+                (nameTaken: string, schema: StringSchema) => schema.notOneOf([nameTaken],
                     "Name is already taken. Note that you can add any number to the name (like 'Arthur_42')")),
         domain: yup.string()
             .when("autoDomain", {
@@ -203,17 +222,18 @@ const signUpDialogLogic = {
                     .min(4, "Too short, should be 4 characters at least")
                     .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "Not allowed")
                     .when("domainTaken",
-                        (domainTaken, schema) => schema.notOneOf([domainTaken], "Domain is already taken")),
+                        (domainTaken: string, schema: StringSchema) =>
+                            schema.notOneOf([domainTaken], "Domain is already taken")),
             }),
         password: yup.string().required("Must not be empty"),
         confirmPassword: yup.string().when("password",
-            (password, schema) =>
+            (password: string, schema: StringSchema) =>
                 schema.required("Please type the password again").oneOf([password], "Passwords are different")
         ),
         email: yup.string().email("Not a valid e-mail address")
     }),
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.signUp(values.provider, values.name.trim(),
             values.autoDomain && formik.props.stage <= SIGN_UP_STAGE_DOMAIN ? null : values.domain.trim(),
             values.password, values.email, (fieldName, message) => formik.setFieldError(fieldName, message));
@@ -222,9 +242,11 @@ const signUpDialogLogic = {
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         ...state.signUpDialog
     }),
     { cancelSignUpDialog, signUp, signUpNameVerify, signUpFindDomain, signUpDomainVerify }
-)(withFormik(signUpDialogLogic)(SignUpDialog));
+);
+
+export default connector(withFormik(signUpDialogLogic)(SignUpDialog));

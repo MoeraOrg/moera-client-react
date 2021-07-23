@@ -62,7 +62,7 @@ const changeDateDialogLogic = {
         publishedAt: yup.date()
     }),
 
-    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         console.log(formik.props.storyId, values.publishedAt);
         if (formik.props.storyId != null) {
             formik.props.storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt));

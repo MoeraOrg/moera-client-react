@@ -23,16 +23,17 @@ export const cancelSignUpDialog = (): CancelSignUpDialogAction => ({
 });
 
 export const SIGN_UP = "SIGN_UP";
+type SignUpOnError = (fieldName: string, message: string) => void;
 export type SignUpAction = ActionWithPayload<typeof SIGN_UP, {
     provider: string;
     name: string;
-    domain: string;
+    domain: string | null;
     password: string;
     email: string | null;
-    onError: any;
+    onError: SignUpOnError;
 }>;
-export const signUp = (provider: string, name: string, domain: string, password: string, email: string | null,
-                       onError: any): SignUpAction => ({
+export const signUp = (provider: string, name: string, domain: string | null, password: string, email: string | null,
+                       onError: SignUpOnError): SignUpAction => ({
     type: SIGN_UP,
     payload: {provider, name, domain, password, email, onError}
 });
@@ -53,33 +54,38 @@ export const signUpFailed = (stage: SignUpStage): SignUpFailedAction => ({
 });
 
 export const SIGN_UP_NAME_VERIFY = "SIGN_UP_NAME_VERIFY";
+type SignUpOnNameVerify = (name: string, free: boolean) => void;
 export type SignUpNameVerifyAction = ActionWithPayload<typeof SIGN_UP_NAME_VERIFY, {
     name: string;
-    onVerify: any;
+    onVerify: SignUpOnNameVerify;
 }>;
-export const signUpNameVerify = (name: string, onVerify: any): SignUpNameVerifyAction => ({
+export const signUpNameVerify = (name: string, onVerify: SignUpOnNameVerify): SignUpNameVerifyAction => ({
     type: SIGN_UP_NAME_VERIFY,
     payload: {name, onVerify}
 });
 
 export const SIGN_UP_FIND_DOMAIN = "SIGN_UP_FIND_DOMAIN";
+type SignUpOnFoundDomain = (provide: string, name: string, domainName: string) => void;
 export type SignUpFindDomainAction = ActionWithPayload<typeof SIGN_UP_FIND_DOMAIN, {
     provider: string;
     name: string;
-    onFound: any;
+    onFound: SignUpOnFoundDomain;
 }>;
-export const signUpFindDomain = (provider: string, name: string, onFound: any): SignUpFindDomainAction => ({
+export const signUpFindDomain = (provider: string, name: string,
+                                 onFound: SignUpOnFoundDomain): SignUpFindDomainAction => ({
     type: SIGN_UP_FIND_DOMAIN,
     payload: {provider, name, onFound}
 });
 
 export const SIGN_UP_DOMAIN_VERIFY = "SIGN_UP_DOMAIN_VERIFY";
+type SignUpOnDomainVerify = (name: string, free: boolean) => void;
 export type SignUpDomainVerifyAction = ActionWithPayload<typeof SIGN_UP_DOMAIN_VERIFY, {
     provider: string;
     name: string;
-    onVerify: any;
+    onVerify: SignUpOnDomainVerify;
 }>;
-export const signUpDomainVerify = (provider: string, name: string, onVerify: any): SignUpDomainVerifyAction => ({
+export const signUpDomainVerify = (provider: string, name: string,
+                                   onVerify: SignUpOnDomainVerify): SignUpDomainVerifyAction => ({
     type: SIGN_UP_DOMAIN_VERIFY,
     payload: {provider, name, onVerify}
 });

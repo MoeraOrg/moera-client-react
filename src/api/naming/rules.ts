@@ -7,7 +7,7 @@ export const NAME_PUNCTUATION_ALLOWED ="!%&*-.?";
 const LATIN_CHARS = /^[A-Za-z]+$/;
 const DIGITS = /^[0-9]+$/;
 
-export function isRegisteredNameValid(qName: string): boolean {
+export function isRegisteredNameValid(qName: string | null | undefined): boolean {
     if (!qName) {
         return false;
     }
