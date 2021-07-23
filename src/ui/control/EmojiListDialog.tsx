@@ -1,5 +1,4 @@
 import React from 'react';
-import PropType from 'prop-types';
 import * as immutable from 'object-path-immutable';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,30 +10,41 @@ import {
     MAIN_POSITIVE_REACTIONS_SET,
     REACTION_EMOJIS
 } from "api/node/reaction-emojis";
-import { Button, ModalDialog, EmojiSelector } from "ui/control";
+import { Button, EmojiSelector, ModalDialog } from "ui/control";
+import { EmojiProps } from "ui/control/EmojiChoice";
 import EmojiList from "util/emoji-list";
 import "./EmojiListDialog.css";
 
-export class EmojiListDialog extends React.PureComponent {
+interface Props {
+    negative: boolean;
+    value: string;
+    advanced?: boolean;
+    onConfirm: (emojis: string) => void;
+    onCancel: () => void;
+}
 
-    static propTypes = {
-        negative: PropType.bool,
-        value: PropType.string,
-        advanced: PropType.bool,
-        onConfirm: PropType.func,
-        onCancel: PropType.func
-    };
+interface Marks {
+    dimmed: boolean;
+    marked: boolean;
+}
 
-    constructor(props, context) {
+interface State {
+    choice: Record<number, Marks>;
+    other: boolean;
+}
+
+export class EmojiListDialog extends React.PureComponent<Props, State> {
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         const list = new EmojiList(props.value);
         const choice = this.getAllEmojis()
-            .reduce(
+            .reduce<Record<number, Marks>>(
                 (m, emoji) => {
                     m[emoji] = {
                         dimmed: !list.includesExplicitly(emoji),
-                        marked: props.advanced && list.recommends(emoji)
+                        marked: props.advanced === true && list.recommends(emoji)
                     };
                     return m;
                 },
@@ -43,26 +53,26 @@ export class EmojiListDialog extends React.PureComponent {
         this.state = {choice, other: list.other()};
     }
 
-    getAllEmojis() {
+    getAllEmojis(): number[] {
         return Object.keys(!this.props.negative ? REACTION_EMOJIS.positive : REACTION_EMOJIS.negative)
             .map(emoji => parseInt(emoji));
     }
 
-    getMainEmojis() {
+    getMainEmojis(): number[] {
         return !this.props.negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS;
     }
 
-    getOtherEmojis() {
+    getOtherEmojis(): number[] {
         const mainReactionsSet = !this.props.negative ? MAIN_POSITIVE_REACTIONS_SET : MAIN_NEGATIVE_REACTIONS_SET;
         return this.getAllEmojis()
             .filter(emoji => !mainReactionsSet.has(emoji))
     }
 
-    getMainReactions() {
+    getMainReactions(): EmojiProps[] {
         return this.getMainEmojis().map(emoji => ({emoji, ...this.state.choice[emoji]}));
     }
 
-    getAdditionalReactions() {
+    getAdditionalReactions(): EmojiProps[] {
         return this.getOtherEmojis().map(emoji => ({emoji, ...this.state.choice[emoji]}));
     }
 
@@ -70,7 +80,7 @@ export class EmojiListDialog extends React.PureComponent {
         this.setState(state => ({...state, other: !state.other}));
     };
 
-    switchAll(dimmed) {
+    switchAll(dimmed: boolean): void {
         this.setState(state => {
             let im = immutable.wrap(state);
             for (let emoji of this.getMainEmojis()) {
@@ -88,11 +98,11 @@ export class EmojiListDialog extends React.PureComponent {
         this.switchAll(true);
     };
 
-    onClick = (negative, emoji) => {
-        this.setState(state => immutable.update(state, ["choice", emoji], this.toggle));
+    onClick = (negative: boolean, emoji: number) => {
+        this.setState(state => immutable.update(state, ["choice", emoji], this.toggle) as any);
     };
 
-    toggle = choice => {
+    toggle = (choice: Marks): Marks => {
         if (choice == null) {
             return {
                 dimmed: true,
@@ -118,18 +128,20 @@ export class EmojiListDialog extends React.PureComponent {
             }
         }
         return {
-            dimmed: !choice.dimmed
+            dimmed: !choice.dimmed,
+            marked: choice.marked
         }
     };
 
     onConfirm = () => {
         const {choice, other} = this.state;
 
-        let value = this.getAllEmojis().filter(emoji => !choice[emoji].dimmed);
+        const emojis = this.getAllEmojis().filter(emoji => !choice[emoji].dimmed);
+        let value: string[];
         if (this.props.advanced) {
-            value = value.map(emoji => (choice[emoji].marked ? "+0x" : "0x") + Number(emoji).toString(16))
+            value = emojis.map(emoji => (choice[emoji].marked ? "+0x" : "0x") + Number(emoji).toString(16))
         } else {
-            value = value.map(emoji => "+0x" + Number(emoji).toString(16));
+            value = emojis.map(emoji => "+0x" + Number(emoji).toString(16));
             if (other) {
                 value.push("*");
             }

@@ -1,18 +1,28 @@
 import React, { useCallback, useEffect } from 'react';
-import PropType from 'prop-types';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
 import "./ModalDialog.css";
 
-export function ModalDialog({title, size, className, style, centered, risen, children, onClose}) {
+interface Props {
+    title?: string;
+    size?: string;
+    className?: string;
+    style?: Record<string, string>;
+    centered?: boolean;
+    risen?: boolean;
+    onClose?: () => void;
+    children: any;
+}
+
+export function ModalDialog({title, size, className, style, centered, risen, children, onClose}: Props) {
     const onModalKeyDown = useCallback(event => {
         if (event.key === "Escape" && onClose) {
             onClose();
         }
     }, [onClose]);
 
-    const onModalDialogClick = e => e.stopPropagation();
+    const onModalDialogClick = (e: React.MouseEvent) => e.stopPropagation();
 
     useEffect(() => {
         document.body.addEventListener("keydown", onModalKeyDown);
@@ -49,19 +59,9 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
                 </div>
             </div>
         </>,
-        document.getElementById("modal-root")
+        document.getElementById("modal-root")!
     );
 }
-
-ModalDialog.propTypes = {
-    title: PropType.string,
-    size: PropType.string,
-    className: PropType.string,
-    style: PropType.object,
-    centered: PropType.bool,
-    risen: PropType.bool,
-    onClose: PropType.func
-};
 
 ModalDialog.defaultProps = {
     centered: true
