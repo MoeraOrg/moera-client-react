@@ -1,9 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
+import { ClientState } from "state/state";
 import { getOwnerName } from "state/owner/selectors";
 import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";
@@ -13,7 +14,9 @@ import Jump from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
 import "./QuickTips.css";
 
-class QuickTips extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
+
+class QuickTips extends React.PureComponent<Props> {
 
     onClose = () => {
         const {shown, closeQuickTips, settingsUpdate} = this.props;
@@ -27,7 +30,7 @@ class QuickTips extends React.PureComponent {
         }
     };
 
-    onJump = (href, performJump) => {
+    onJump = (href: string, performJump: () => void) => {
         this.onClose();
         performJump();
     }
@@ -90,11 +93,13 @@ class QuickTips extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.quickTips.show,
         ownerName: getOwnerName(state),
         shown: getSetting(state, "invitation.quick-tips.shown")
     }),
     { closeQuickTips, settingsUpdate }
-)(QuickTips);
+);
+
+export default connector(QuickTips);
