@@ -1,20 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import Events from "ui/events/Events";
 import { getNodeToken } from "state/node/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { getReceiverNodeName } from "state/receiver/selectors";
+import { ClientState } from "state/state";
 
-const NodeEvents = ({nodeEvents, token, prefix, sourceNode}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const NodeEvents = ({nodeEvents, token, prefix, sourceNode}: Props) => (
     <Events location={nodeEvents} token={token} prefix={prefix} sourceNode={sourceNode}/>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         nodeEvents: state.node.root.events,
         token: getNodeToken(state),
-        prefix: getReceiverNodeName(state) == null ? ["NODE", "RECEIVER"] : "NODE",
+        prefix: getReceiverNodeName(state) == null ? ["NODE" as const, "RECEIVER" as const] : "NODE" as const,
         sourceNode: getOwnerName(state)
     })
-)(NodeEvents);
+);
+
+export default connector(NodeEvents);

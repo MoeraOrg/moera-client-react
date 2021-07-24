@@ -1,5 +1,6 @@
 import * as immutable from 'object-path-immutable';
 import {
+    BaseEvent,
     ClientSettingsChangedEvent,
     CommentAddedEvent,
     CommentDeletedEvent,
@@ -95,9 +96,11 @@ export const EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED = "EVENT_HOME_REMOTE_NODE_AVA
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
 
-export type EventAction<E extends {type: string}> = ActionWithPayload<EventActionType<E["type"]>, Omit<E, "type">>;
+export type EventAction<E extends BaseEvent<string>> =
+    ActionWithPayload<EventActionType<E["type"]>, Omit<E, "type"> & {sourceNode: string | null}>;
 
-export const eventAction = <E extends {type: string}>(event: E, source: EventSource): EventAction<E> => ({
+export const eventAction = <E extends BaseEvent<string>>(event: E & {sourceNode: string | null},
+                                                         source: EventSource): EventAction<E> => ({
     type: `EVENT_${source}_${event.type}`, // Incorrectly marked as error by TypeScript 4.2.2
     payload: immutable.del(event, "type")
 });

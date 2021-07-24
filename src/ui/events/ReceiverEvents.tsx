@@ -1,17 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import Events from "ui/events/Events";
 import { getToken } from "state/node/selectors";
 import { getReceiverNodeName, getReceiverNodeUri } from "state/receiver/selectors";
 import { nodeUrlToEvents, nodeUrlToLocation } from "util/url";
+import { ClientState } from "state/state";
 
-const ReceiverEvents = ({nodeEvents, token, sourceNode}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const ReceiverEvents = ({nodeEvents, token, sourceNode}: Props) => (
     <Events location={nodeEvents} token={token} prefix="RECEIVER" sourceNode={sourceNode}/>
 );
 
-export default connect(
-    state => {
+const connector = connect(
+    (state: ClientState) => {
         const receiverNodeUri = getReceiverNodeUri(state);
         return ({
             nodeEvents: nodeUrlToEvents(receiverNodeUri),
@@ -19,4 +22,6 @@ export default connect(
             sourceNode: getReceiverNodeName(state)
         });
     }
-)(ReceiverEvents);
+);
+
+export default connector(ReceiverEvents);

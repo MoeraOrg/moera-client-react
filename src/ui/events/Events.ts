@@ -1,38 +1,37 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
-import { Client } from '@stomp/stompjs';
+import { connect, ConnectedProps } from 'react-redux';
+import { Client, IMessage } from '@stomp/stompjs';
 import * as URI from 'uri-js';
 import { addMinutes, isBefore } from 'date-fns';
 
 import { ALLOWED_SELF_EVENTS, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
-import { eventAction } from "api/events/actions";
+import { eventAction, EventSource } from "api/events/actions";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
 
-class Events extends React.PureComponent {
+type Props = {
+    location: string | null;
+    token: string | null;
+    prefix: EventSource[] | EventSource;
+    sourceNode: string | null;
+    onWakeUp?: () => void;
+} & ConnectedProps<typeof connector>;
 
-    static propTypes = {
-        location: PropType.string,
-        token: PropType.string,
-        prefix: PropType.oneOfType([PropType.arrayOf(PropType.string), PropType.string]),
-        sourceNode: PropType.string,
-        onWakeUp: PropType.func
-    }
+class Events extends React.PureComponent<Props> {
 
-    #stomp = null;
-    #location = null;
-    #queueStartedAt = null;
-    #lastEvent = null;
-    #lastEventSentAt = null;
-    #lastWakeUp = new Date();
+    #stomp: Client | null = null;
+    #location: string | null = null;
+    #queueStartedAt: number | null = null;
+    #lastEvent: number | null = null;
+    #lastEventSentAt: number | null = null;
+    #lastWakeUp: Date = new Date();
 
     componentDidMount() {
         this._connect();
         document.addEventListener("visibilitychange", this.onVisibilityChange);
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (prevProps.location !== this.props.location || prevProps.token !== this.props.token) {
             this._disconnect();
             this._connect();
@@ -49,6 +48,10 @@ class Events extends React.PureComponent {
         if (location == null) {
             return;
         }
+        const {host} = URI.parse(location);
+        if (host == null) {
+            return;
+        }
         if (location !== this.#location) {
             this.#location = location;
             this.#queueStartedAt = null;
@@ -56,8 +59,8 @@ class Events extends React.PureComponent {
             this.#lastEventSentAt = null;
         }
 
-        const connectHeaders = {
-            "host": URI.parse(location).host
+        const connectHeaders: Record<string, string> = {
+            host
         };
         if (token != null) {
             connectHeaders["token"] = token;
@@ -94,16 +97,20 @@ class Events extends React.PureComponent {
     }
 
     onConnect = () => {
+        if (this.#stomp == null) {
+            return;
+        }
+
         this._wakeUp();
 
-        const headers = {};
+        const headers: Record<string, string> = {};
         if (this.#queueStartedAt != null) {
             headers.seen = `${this.#queueStartedAt},${this.#lastEvent}`;
         }
         this.#stomp.subscribe("/user/queue", this.onMessage, headers);
     };
 
-    onMessage = message => {
+    onMessage = (message: IMessage) => {
         const {prefix, eventAction, sourceNode} = this.props;
 
         const packet = JSON.parse(message.body);
@@ -121,15 +128,18 @@ class Events extends React.PureComponent {
             return;
         }
         if (ALLOWED_SELF_EVENTS.has(packet.event.type) || packet.cid !== Browser.clientId) {
-            packet.event.sourceNode = sourceNode;
+            const event = {
+                ...packet.event,
+                sourceNode
+            }
             if (Array.isArray(prefix)) {
-                prefix.forEach(px => eventAction(packet.event, px));
+                prefix.forEach(px => eventAction(event, px));
             } else {
-                eventAction(packet.event, prefix);
+                eventAction(event, prefix);
             }
             this.#queueStartedAt = packet.queueStartedAt;
             this.#lastEvent = packet.ordinal;
-            this.#lastEventSentAt = packet.sentAt;
+            this.#lastEventSentAt = packet.sentAt ?? null;
         }
     };
 
@@ -145,7 +155,9 @@ class Events extends React.PureComponent {
 
 }
 
-export default connect(
+const connector = connect(
     null,
     { eventAction }
-)(Events);
+);
+
+export default connector(Events);

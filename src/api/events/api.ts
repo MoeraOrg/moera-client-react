@@ -46,7 +46,7 @@ import {
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent
 } from "api/events/api-types";
-import { JSONSchemaType } from "ajv";
+import { JSONSchemaType, ValidateFunction } from "ajv";
 
 const EventPacketType: JSONSchemaType<APIEventPacket> = {
     type: "object",
@@ -1229,7 +1229,7 @@ const RemoteNodeAvatarChangedEventType: JSONSchemaType<RemoteNodeAvatarChangedEv
     required: ["type", "name"]
 };
 
-export const EVENT_SCHEMES = {
+export const EVENT_SCHEMES: Record<string, ValidateFunction<any>> = {
     "SUBSCRIBED": schema(SubscribedEventType),
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
