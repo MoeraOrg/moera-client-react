@@ -1,28 +1,29 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Loading } from "ui/control";
 import "./CommentsSentinel.css";
 
-export default class CommentsSentinel extends React.PureComponent {
+interface Props {
+    visible: boolean;
+    loading: boolean;
+    title: string;
+    total: number;
+    onBoundary: (intersecting: boolean) => void;
+    onClick: () => void;
+}
 
-    static propTypes = {
-        visible: PropType.bool,
-        loading: PropType.bool,
-        title: PropType.string,
-        total: PropType.number,
-        onBoundary: PropType.func,
-        onClick: PropType.func
-    };
+export default class CommentsSentinel extends React.PureComponent<Props> {
 
-    constructor(props, context) {
+    boundaryObserver: IntersectionObserver;
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.boundaryObserver = new IntersectionObserver(this.onBoundary);
     }
 
-    observeSentinel = sentinel => {
+    observeSentinel = (sentinel: Element | null) => {
         if (sentinel == null) {
             this.boundaryObserver.disconnect();
         } else {
@@ -30,8 +31,8 @@ export default class CommentsSentinel extends React.PureComponent {
         }
     };
 
-    onBoundary = entry => {
-        this.props.onBoundary(entry[0].isIntersecting);
+    onBoundary = (entries: IntersectionObserverEntry[]) => {
+        this.props.onBoundary(entries[0].isIntersecting);
     }
 
     render() {

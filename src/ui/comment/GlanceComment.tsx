@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
 import { Loading } from "ui/control";
@@ -9,9 +9,12 @@ import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentReactions from "ui/comment/CommentReactions";
 import EntryHtml from "ui/posting/EntryHtml";
 import { getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
+import { ClientState } from "state/state";
 
-const GlanceComment = ({loading, loaded, postingId, comment}) => (
-    loaded && !loading && comment != null ?
+type Props = ConnectedProps<typeof connector>;
+
+const GlanceComment = ({loading, loaded, postingId, comment}: Props) => (
+    loaded && !loading && postingId != null && comment != null ?
         <div className={cx("comment", "entry", {"single-emoji": comment.singleEmoji})}>
             <div className="details">
                 <div className="owner-line">
@@ -32,11 +35,13 @@ const GlanceComment = ({loading, loaded, postingId, comment}) => (
         <Loading active={loading}/>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loading: getCommentsState(state).loadingGlanceComment,
         loaded: getCommentsState(state).loadedGlanceComment,
         postingId: getDetailedPostingId(state),
         comment: getCommentsState(state).glanceComment
     })
-)(GlanceComment);
+);
+
+export default connector(GlanceComment);

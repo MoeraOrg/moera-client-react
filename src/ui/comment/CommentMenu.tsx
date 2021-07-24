@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { DropdownMenu } from "ui/control";
 import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
@@ -8,8 +8,17 @@ import { confirmBox } from "state/confirmbox/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 import { getCommentsReceiverName, getCommentsReceiverPostingId } from "state/detailedposting/selectors";
+import { ClientState } from "state/state";
+import { CommentInfo } from "api/node/api-types";
 
-class CommentMenu extends React.PureComponent {
+type Props = {
+    nodeName: string;
+    postingId: string;
+    comment: CommentInfo;
+    isPermitted: (operation: string, object: CommentInfo) => boolean;
+} & ConnectedProps<typeof connector>;
+
+class CommentMenu extends React.PureComponent<Props> {
 
     onCopyLink = () => {
         const {postingId, comment, commentCopyLink} = this.props;
@@ -40,7 +49,9 @@ class CommentMenu extends React.PureComponent {
     onViewSource = () => {
         const {receiverName, receiverPostingId, comment, openSourceDialog} = this.props;
 
-        openSourceDialog(receiverName, receiverPostingId, comment.id);
+        if (receiverName != null && receiverPostingId != null) {
+            openSourceDialog(receiverName, receiverPostingId, comment.id);
+        }
     };
 
     render() {
@@ -88,11 +99,13 @@ class CommentMenu extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         rootLocation: getNodeRootLocation(state),
         receiverName: getCommentsReceiverName(state),
         receiverPostingId: getCommentsReceiverPostingId(state)
     }),
     { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare }
-)(CommentMenu);
+);
+
+export default connector(CommentMenu);

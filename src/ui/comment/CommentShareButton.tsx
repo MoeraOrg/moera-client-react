@@ -1,10 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { CommentInfo } from "api/node/api-types";
 
-function CommentShareButton({nodeName, postingId, comment, shareDialogPrepare}) {
+type Props = {
+    nodeName: string;
+    postingId: string;
+    comment: CommentInfo;
+} & ConnectedProps<typeof connector>;
+
+function CommentShareButton({nodeName, postingId, comment, shareDialogPrepare}: Props) {
     const href = `/post/${postingId}?comment=${comment.id}`;
     return (
         <button className="comment-button" onClick={() => shareDialogPrepare(comment.heading, nodeName, href)}>
@@ -14,7 +21,9 @@ function CommentShareButton({nodeName, postingId, comment, shareDialogPrepare}) 
     );
 }
 
-export default connect(
+const connector = connect(
     null,
     { shareDialogPrepare }
-)(CommentShareButton);
+);
+
+export default connector(CommentShareButton);

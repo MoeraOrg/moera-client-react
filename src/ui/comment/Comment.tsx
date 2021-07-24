@@ -29,39 +29,45 @@ type Props = {
 const Comment = ({
      postingId, comment, previousId, focused, connectedToHome, postingOwnerName, postingReceiverName,
      postingReceiverPostingId, isPermitted
-}: Props) => (
-    <div className={cx("comment", "entry", {
-        "focused": focused,
-        "single-emoji": comment.singleEmoji,
-        "topic-starter": comment.ownerName === postingReceiverName
-    })} data-moment={comment.moment}>
-        {comment.deleting ?
-            <CommentDeleting/>
-        :
-            <>
-                <CommentMenu comment={comment} nodeName={postingReceiverName ?? postingOwnerName} postingId={postingId}
-                             isPermitted={isPermitted}/>
-                <CommentAvatar comment={comment} nodeName={postingReceiverName ?? postingOwnerName}/>
-                <div className="details">
-                    <div className="owner-line">
-                        <CommentOwner comment={comment} nodeName={postingReceiverName ?? postingOwnerName}/>
-                        <CommentDate nodeName={postingReceiverName ?? postingOwnerName}
-                                     postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
-                        <CommentUpdated comment={comment}/>
+}: Props) => {
+    const realOwnerName = postingReceiverName ?? postingOwnerName;
+    if (realOwnerName == null) {
+        return null;
+    }
+    const realPostingId = postingReceiverPostingId ?? postingId;
+
+    return (
+        <div className={cx("comment", "entry", {
+            "focused": focused,
+            "single-emoji": comment.singleEmoji,
+            "topic-starter": comment.ownerName === postingReceiverName
+        })} data-moment={comment.moment}>
+            {comment.deleting ?
+                <CommentDeleting/>
+            :
+                <>
+                    <CommentMenu comment={comment} nodeName={realOwnerName} postingId={postingId}
+                                 isPermitted={isPermitted}/>
+                    <CommentAvatar comment={comment} nodeName={realOwnerName}/>
+                    <div className="details">
+                        <div className="owner-line">
+                            <CommentOwner comment={comment} nodeName={realOwnerName}/>
+                            <CommentDate nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
+                            <CommentUpdated comment={comment}/>
+                        </div>
+                        <CommentContent comment={comment} previousId={previousId}/>
+                        <div className="reactions-line">
+                            {connectedToHome && comment.signature != null &&
+                                <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
+                            }
+                            <CommentReactions postingId={postingId} comment={comment}/>
+                        </div>
                     </div>
-                    <CommentContent comment={comment} previousId={previousId}/>
-                    <div className="reactions-line">
-                        {connectedToHome && comment.signature != null &&
-                            <CommentButtons nodeName={postingReceiverName ?? postingOwnerName}
-                                            postingId={postingReceiverPostingId ?? postingId} comment={comment}/>
-                        }
-                        <CommentReactions postingId={postingId} comment={comment}/>
-                    </div>
-                </div>
-            </>
-        }
-    </div>
-);
+                </>
+            }
+        </div>
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({
