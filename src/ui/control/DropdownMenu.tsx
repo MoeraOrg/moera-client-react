@@ -1,17 +1,35 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ClientState } from "state/state";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
 import { useButtonPopper } from "ui/hook";
 import "./DropdownMenu.css";
 
-function buildItems(items, standalone) {
+type TextMenuItem = {
+    show: boolean;
+    title: string;
+    href: string;
+    onClick: () => void;
+};
+
+type DividerMenuItem = {
+    divider: boolean;
+};
+
+type MenuItem = TextMenuItem | DividerMenuItem;
+
+function isDivider(item: MenuItem): item is DividerMenuItem {
+    return "divider" in item && item.divider;
+}
+
+function buildItems(items: MenuItem[], standalone: boolean) {
     const itemList = [];
     let divider = false;
     for (const item of items) {
-        if (item.divider) {
+        if (isDivider(item)) {
             divider = true;
             continue;
         }
@@ -21,7 +39,7 @@ function buildItems(items, standalone) {
         itemList.push({
             title: item.title,
             href: !standalone ? item.href : Browser.passedLocation(item.href),
-            onClick: event => {
+            onClick: (event: React.MouseEvent) => {
                 item.onClick();
                 event.preventDefault();
             },
@@ -32,7 +50,11 @@ function buildItems(items, standalone) {
     return itemList;
 }
 
-function DropdownMenuImpl({items, standalone}) {
+type Props = {
+    items: MenuItem[];
+} & ConnectedProps<typeof connector>;
+
+function DropdownMenuImpl({items, standalone}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -63,8 +85,10 @@ function DropdownMenuImpl({items, standalone}) {
 
 }
 
-export const DropdownMenu = connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         standalone: isStandaloneMode(state)
     })
-)(DropdownMenuImpl);
+);
+
+export const DropdownMenu = connector(DropdownMenuImpl);
