@@ -1,49 +1,57 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import * as textFieldEdit from 'text-field-edit';
 import cx from 'classnames';
 
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
-import RichTextSpoilerDialog from "ui/control/richtexteditor/RichTextSpoilerDialog";
-import RichTextFoldDialog from "ui/control/richtexteditor/RichTextFoldDialog";
-import RichTextLinkDialog from "ui/control/richtexteditor/RichTextLinkDialog";
-import RichTextImageDialog from "ui/control/richtexteditor/RichTextImageDialog";
+import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
+import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
+import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
+import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
+import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { htmlEntities } from "util/html";
 import { mentionName } from "util/misc";
 import { redirectUrl } from "util/url";
+import { NameListItem } from "util/names-list";
 import { NodeName } from "api";
 import "./RichTextEditorPanel.css";
 
-class RichTextEditorPanel extends React.PureComponent {
+type Props = {
+    textArea: React.RefObject<HTMLTextAreaElement>,
+    panel: React.MutableRefObject<HTMLDivElement>,
+    hiding: boolean;
+    format: string;
+} & ConnectedProps<typeof connector>;
 
-    static propTypes = {
-        textArea: PropType.object,
-        panel: PropType.object,
-        hiding: PropType.bool,
-        format: PropType.string
-    };
+interface State {
+    panel: React.MutableRefObject<HTMLDivElement>;
+    spoilerDialog: boolean;
+    foldDialog: boolean;
+    linkDialog: boolean;
+    imageDialog: boolean;
+    mentionDialog: boolean;
+    dialogText: string;
+}
 
-    state = {
-        spoilerDialog: false,
-        foldDialog: false,
-        linkDialog: false,
-        imageDialog: false,
-        mentionDialog: false,
-        dialogText: ""
-    };
+class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
-    constructor(props, context) {
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.state = {
-            panel: props.panel ?? React.createRef()
+            panel: props.panel ?? React.createRef(),
+            spoilerDialog: false,
+            foldDialog: false,
+            linkDialog: false,
+            imageDialog: false,
+            mentionDialog: false,
+            dialogText: ""
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.panel !== prevProps.panel) {
             this.props.panel.current = this.state.panel.current;
             this.setState({panel: this.props.panel});
@@ -54,8 +62,12 @@ class RichTextEditorPanel extends React.PureComponent {
         return this.props.format === "markdown";
     }
 
-    onBold = event => {
+    onBold = (event: React.MouseEvent) => {
         const {textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         if (this.isMarkdown()) {
             textFieldEdit.wrapSelection(textArea.current, "**");
@@ -66,8 +78,12 @@ class RichTextEditorPanel extends React.PureComponent {
         event.preventDefault();
     }
 
-    onItalic = event => {
+    onItalic = (event: React.MouseEvent) => {
         const {textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         if (this.isMarkdown()) {
             textFieldEdit.wrapSelection(textArea.current, "_");
@@ -78,8 +94,12 @@ class RichTextEditorPanel extends React.PureComponent {
         event.preventDefault();
     }
 
-    onStrike = event => {
+    onStrike = (event: React.MouseEvent) => {
         const {textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         if (this.isMarkdown()) {
             textFieldEdit.wrapSelection(textArea.current, "~~");
@@ -90,13 +110,17 @@ class RichTextEditorPanel extends React.PureComponent {
         event.preventDefault();
     }
 
-    onSpoiler = event => {
+    onSpoiler = (event: React.MouseEvent) => {
         this.setState({spoilerDialog: true});
         event.preventDefault();
     }
 
-    onSpoilerSubmit = (ok, {title}) => {
+    onSpoilerSubmit = (ok: boolean, {title}: RichTextSpoilerValues) => {
         const {textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         this.setState({spoilerDialog: false});
         if (ok) {
@@ -114,13 +138,17 @@ class RichTextEditorPanel extends React.PureComponent {
         textArea.current.focus();
     }
 
-    onFold = event => {
+    onFold = (event: React.MouseEvent) => {
         this.setState({foldDialog: true});
         event.preventDefault();
     }
 
-    onFoldSubmit = (ok, {summary}) => {
+    onFoldSubmit = (ok: boolean, {summary}: RichTextFoldValues) => {
         const {textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         this.setState({foldDialog: false});
         if (ok) {
@@ -143,15 +171,19 @@ class RichTextEditorPanel extends React.PureComponent {
         textArea.current.focus();
     }
 
-    onMention = event => {
+    onMention = (event: React.MouseEvent) => {
         this.setState({mentionDialog: true});
         event.preventDefault();
     }
 
-    onMentionSubmit = (ok, {nodeName, fullName}) => {
+    onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
         const {textArea, nodeRootPage} = this.props;
 
         this.setState({mentionDialog: false});
+
+        if (textArea.current == null) {
+            return;
+        }
 
         const value = textArea.current.value;
         const start = textArea.current.selectionStart;
@@ -160,14 +192,13 @@ class RichTextEditorPanel extends React.PureComponent {
         }
 
         if (ok) {
-            if (this.isMarkdown()) {
+            if (this.isMarkdown() || nodeRootPage == null) {
                 textFieldEdit.insert(textArea.current, mentionName(nodeName, fullName))
             } else {
-                const text = fullName || NodeName.shorten(nodeName);
-                const href =
-                    redirectUrl(false, nodeRootPage, nodeName, null, "/", null);
+                const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
+                const href = redirectUrl(false, nodeRootPage, nodeName, null, "/", null);
                 textFieldEdit.insert(textArea.current,
-                    `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName)}" data-href="/">`
+                    `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
                     + `${htmlEntities(text)}</a>`);
             }
         } else {
@@ -176,8 +207,12 @@ class RichTextEditorPanel extends React.PureComponent {
         textArea.current.focus();
     }
 
-    onQuote = event => {
+    onQuote = (event: React.MouseEvent) => {
         const {textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         let wrapBegin = this.isMarkdown() ? ">>>" : "<blockquote>";
         let wrapEnd = this.isMarkdown() ? ">>>\n" : "</blockquote>\n";
@@ -200,8 +235,12 @@ class RichTextEditorPanel extends React.PureComponent {
         event.preventDefault();
     }
 
-    onLink = event => {
+    onLink = (event: React.MouseEvent) => {
         const {textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         this.setState({
             linkDialog: true,
@@ -210,10 +249,15 @@ class RichTextEditorPanel extends React.PureComponent {
         event.preventDefault();
     }
 
-    onLinkSubmit = (ok, {href, text}) => {
+    onLinkSubmit = (ok: boolean, {href, text}: RichTextLinkValues) => {
         const {textArea} = this.props;
 
         this.setState({linkDialog: false});
+
+        if (textArea.current == null) {
+            return;
+        }
+
         if (ok) {
             if (this.isMarkdown()) {
                 if (text) {
@@ -253,15 +297,20 @@ class RichTextEditorPanel extends React.PureComponent {
         textArea.current.focus();
     }
 
-    onImage = event => {
+    onImage = (event: React.MouseEvent) => {
         this.setState({imageDialog: true});
         event.preventDefault();
     }
 
-    onImageSubmit = (ok, {href, title, alt}) => {
+    onImageSubmit = (ok: boolean, {href, title, alt}: RichTextImageValues) => {
         const {textArea} = this.props;
 
         this.setState({imageDialog: false});
+
+        if (textArea.current == null) {
+            return;
+        }
+
         if (ok) {
             if (this.isMarkdown()) {
                 const titleAttr = title ? ` "${title}"`: "";
@@ -324,8 +373,10 @@ class RichTextEditorPanel extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         nodeRootPage: getNodeRootPage(state)
     })
-)(RichTextEditorPanel);
+);
+
+export default connector(RichTextEditorPanel);

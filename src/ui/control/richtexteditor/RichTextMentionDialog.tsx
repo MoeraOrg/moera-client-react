@@ -3,8 +3,18 @@ import PropType from 'prop-types';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { NameSelector } from "ui/control/NameSelector";
+import { NameListItem } from "util/names-list";
 
-export default class RichTextMentionDialog extends React.PureComponent {
+type Props = {
+    show: boolean;
+    onSubmit: (ok: boolean, values: NameListItem) => void;
+};
+
+type State = {
+    query: string;
+};
+
+export default class RichTextMentionDialog extends React.PureComponent<Props, State> {
 
     static propTypes = {
         show: PropType.bool,
@@ -15,11 +25,11 @@ export default class RichTextMentionDialog extends React.PureComponent {
         query: ""
     }
 
-    onChange = query => {
-        this.setState({query});
+    onChange = (query: string | null) => {
+        this.setState({query: query ?? ""});
     }
 
-    onSubmit = (success, data) => {
+    onSubmit = (success: boolean, data: NameListItem) => {
         this.props.onSubmit(success, data);
     }
 

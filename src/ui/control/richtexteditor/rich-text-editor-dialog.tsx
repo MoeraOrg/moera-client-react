@@ -1,20 +1,29 @@
 import React from 'react';
-import { Form, withFormik } from 'formik';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
 
-export function richTextEditorDialog(title, mapPropsToValues, DialogBody) {
+export interface RichTextEditorDialogProps<V> {
+    show: boolean;
+    onSubmit: (ok: boolean, values: Partial<V>) => void;
+}
+
+export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
+    title: string, mapPropsToValues: (props: P) => V, DialogBody: React.ComponentType) {
+
     const logic = {
         mapPropsToValues,
-        handleSubmit(values, formik) {
+        handleSubmit(values: V, formik: FormikBag<RichTextEditorDialogProps<V>, V>) {
             formik.props.onSubmit(true, values);
         }
     };
 
-    const dialog = class extends React.PureComponent {
+    type Props = P & FormikProps<V>;
 
-        componentDidUpdate(prevProps, prevState, snapshot) {
+    const dialog = class extends React.PureComponent<Props> {
+
+        componentDidUpdate(prevProps: Readonly<Props>) {
             if (this.props.show !== prevProps.show && this.props.show) {
                 this.props.resetForm({
                     values: logic.mapPropsToValues(this.props),
