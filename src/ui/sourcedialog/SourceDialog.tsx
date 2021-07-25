@@ -1,12 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button, Loading, ModalDialog } from "ui/control";
 import { getSetting } from "state/settings/selectors";
 import { closeSourceDialog } from "state/sourcedialog/actions";
+import { ClientState } from "state/state";
 import "./SourceDialog.css";
 
-function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}) {
+type Props = ConnectedProps<typeof connector>;
+
+function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}: Props) {
     if (!show) {
         return null;
     }
@@ -28,12 +31,14 @@ function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.sourceDialog.show,
         text: state.sourceDialog.text,
         loading: state.sourceDialog.loading,
         feedWidth: getSetting(state, "feed.width")
     }),
     { closeSourceDialog }
-)(SourceDialog);
+);
+
+export default connector(SourceDialog);

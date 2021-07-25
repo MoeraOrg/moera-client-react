@@ -1,14 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button } from "ui/control";
 import { isConnectedToHome } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import "./Invitation.css";
+import { ClientState } from "state/state";
 
-const Invitation = ({connected, openConnectDialog, openSignUpDialog}) => (
-    !connected &&
+type Props = ConnectedProps<typeof connector>;
+
+const Invitation = ({connected, openConnectDialog, openSignUpDialog}: Props) => (
+    !connected ?
         <div id="invitation">
             <h1>Do you have a Moera blog?</h1>
             <div className="buttons">
@@ -17,11 +20,15 @@ const Invitation = ({connected, openConnectDialog, openSignUpDialog}) => (
                 <Button variant="success" size="lg" onClick={() => openConnectDialog()}>Connect to your blog</Button>
             </div>
         </div>
+    :
+        null
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         connected: state.home.connecting || isConnectedToHome(state)
     }),
     { openConnectDialog, openSignUpDialog }
-)(Invitation);
+);
+
+export default connector(Invitation);
