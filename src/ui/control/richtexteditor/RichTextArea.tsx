@@ -1,38 +1,47 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
 import * as textFieldEdit from 'text-field-edit';
 
 import { Browser } from "ui/browser";
+import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
+import { getSetting } from "state/settings/selectors";
+import { settingsUpdate } from "state/settings/actions";
+import { ClientState } from "state/state";
+import { SourceFormat } from "api/node/api-types";
+import { PREFIX } from "api/settings";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
-import RichTextPasteDialog from "ui/control/richtexteditor/RichTextPasteDialog";
-import { getSetting } from "state/settings/selectors";
-import { PREFIX } from "api/settings";
-import { settingsUpdate } from "state/settings/actions";
 
 const MENTION_START = RegExp(/(^|\s)@$/);
 
-class RichTextArea extends React.PureComponent {
+export interface RichTextAreaProps {
+    name: string;
+    value?: string;
+    format: SourceFormat;
+    rows?: number;
+    placeholder?: string;
+    className?: string;
+    autoFocus?: boolean;
+    autoComplete?: string;
+    disabled?: boolean;
+    smileysEnabled?: boolean;
+    onKeyDown?: (event: React.KeyboardEvent) => void;
+    onChange?: (event: React.FormEvent) => void;
+    onBlur?: (event: React.FocusEvent) => void;
+    textArea: React.RefObject<HTMLTextAreaElement>;
+    panel: React.RefObject<HTMLDivElement>;
+}
 
-    static propTypes = {
-        name: PropType.string,
-        value: PropType.string,
-        format: PropType.string,
-        rows: PropType.number,
-        placeholder: PropType.string,
-        className: PropType.string,
-        autoFocus: PropType.bool,
-        autoComplete: PropType.string,
-        disabled: PropType.bool,
-        smileysEnabled: PropType.bool,
-        onKeyDown: PropType.func,
-        onChange: PropType.func,
-        onBlur: PropType.func,
-        textArea: PropType.object,
-        panel: PropType.object
-    };
+type Props = RichTextAreaProps & ConnectedProps<typeof connector>;
+
+interface State {
+    pasteDialogShow: boolean;
+    pasteText: string | null;
+    pasteHtml: string | null;
+}
+
+class RichTextArea extends React.PureComponent<Props, State> {
 
     static defaultProps = {
         rows: 3,
@@ -42,11 +51,10 @@ class RichTextArea extends React.PureComponent {
     #spaceInput = false;
     #anyInput = false;
 
-    constructor(props, context) {
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.state = {
-            textArea: props.textArea ?? React.createRef(),
             pasteDialogShow: false,
             pasteText: null,
             pasteHtml: null
@@ -54,8 +62,7 @@ class RichTextArea extends React.PureComponent {
     }
 
     componentDidMount() {
-        const {autoFocus} = this.props;
-        const {textArea} = this.state;
+        const {autoFocus, textArea} = this.props;
 
         if (textArea.current) {
             textArea.current.addEventListener("input", this.onInput);
@@ -67,7 +74,7 @@ class RichTextArea extends React.PureComponent {
     }
 
     componentWillUnmount() {
-        const {textArea} = this.state;
+        const {textArea} = this.props;
 
         if (textArea.current) {
             textArea.current.removeEventListener("input", this.onInput);
@@ -75,28 +82,27 @@ class RichTextArea extends React.PureComponent {
         }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        const {disabled, autoFocus} = this.props;
+    componentDidUpdate(prevProps: Readonly<Props>) {
+        const {disabled, autoFocus, textArea} = this.props;
 
-        if (!disabled && prevProps.disabled && autoFocus && this.state.textArea.current) {
-            this.state.textArea.current.focus();
-        }
-        if (this.props.textArea !== prevProps.textArea) {
-            this.props.textArea.current = this.state.textArea.current;
-            this.setState({textArea: this.props.textArea});
+        if (!disabled && prevProps.disabled && autoFocus && textArea.current) {
+            textArea.current.focus();
         }
     }
 
-    onChange = event => {
+    onChange = (event: React.FormEvent) => {
         const {panel, smileysEnabled, onChange} = this.props;
 
-        const value = event.target.value;
-        const start = event.target.selectionStart;
+        const textArea = event.target as HTMLTextAreaElement;
+        const value = textArea.value;
+        const start = textArea.selectionStart;
         if (smileysEnabled && this.#spaceInput) {
-            event.target.value = replaceSmileys(value, false);
+            textArea.value = replaceSmileys(value, false);
         }
-        if (this.#anyInput && value.length >= start && MENTION_START.test(value.substring(0, start))) {
-            const button = panel.current.querySelector("button.mention");
+        if (panel.current != null && this.#anyInput && value.length >= start
+            && MENTION_START.test(value.substring(0, start))) {
+
+            const button = panel.current.querySelector("button.mention") as HTMLButtonElement;
             if (!button) {
                 return false;
             }
@@ -107,13 +113,14 @@ class RichTextArea extends React.PureComponent {
         }
     }
 
-    onInput = event => {
-        this.#anyInput = event.inputType.startsWith("insert");
-        this.#spaceInput = event.inputType === "insertLineBreak"
-            || (this.#anyInput && event.data != null && event.data.match(/\s/));
+    onInput = (event: Event) => {
+        const inputEvent = event as InputEvent; // FIXME should be in GlobalEventHandlersEventMap["input"]
+        this.#anyInput = inputEvent.inputType.startsWith("insert");
+        this.#spaceInput = inputEvent.inputType === "insertLineBreak"
+            || (this.#anyInput && inputEvent.data != null && inputEvent.data.match(/\s/) != null);
     }
 
-    onKeyDown = event => {
+    onKeyDown = (event: React.KeyboardEvent) => {
         const {onKeyDown} = this.props;
 
         if (this.onControlKey(event)) {
@@ -125,14 +132,14 @@ class RichTextArea extends React.PureComponent {
         }
     }
 
-    onControlKey = event => {
+    onControlKey = (event: React.KeyboardEvent) => {
         const {panel} = this.props;
 
         if (!panel.current || !event.ctrlKey || event.shiftKey || event.altKey || event.metaKey || !event.code
             || !event.code.startsWith("Key")) {
             return false;
         }
-        const button = panel.current.querySelector(`button[data-letter=${event.code.substring(3)}]`);
+        const button = panel.current.querySelector(`button[data-letter=${event.code.substring(3)}]`) as HTMLButtonElement;
         if (!button) {
             return false;
         }
@@ -140,7 +147,7 @@ class RichTextArea extends React.PureComponent {
         return true;
     }
 
-    _shouldPastePlainText(text, html) {
+    _shouldPastePlainText(text: string, html: string): boolean {
         if (text.search(/<[a-zA-z][^\n]*>/) >= 0) {
             return true;
         }
@@ -151,7 +158,7 @@ class RichTextArea extends React.PureComponent {
         return false;
     }
 
-    _shouldPasteHtml(html) {
+    _shouldPasteHtml(html: string): boolean {
         const clean = html.replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
         if (clean.search(/<[a-zA-z][^\n]*>/) < 0) {
             return true;
@@ -159,11 +166,10 @@ class RichTextArea extends React.PureComponent {
         return false;
     }
 
-    onPaste = event => {
-        const {format, pasteRich} = this.props;
-        const {textArea} = this.state;
+    onPaste = (event: ClipboardEvent) => {
+        const {format, pasteRich, textArea} = this.props;
 
-        if (!textArea.current || format === "plain-text" || pasteRich === "text") {
+        if (!textArea.current || event.clipboardData == null || format === "plain-text" || pasteRich === "text") {
             return;
         }
         let html = event.clipboardData.getData("text/html");
@@ -183,7 +189,7 @@ class RichTextArea extends React.PureComponent {
         }
     }
 
-    onPasteDialogSubmit = (mode, persist) => {
+    onPasteDialogSubmit = (mode: RichTextPasteMode, persist: boolean) => {
         const {settingsUpdate} = this.props;
         const {pasteText, pasteHtml} = this.state;
 
@@ -197,9 +203,12 @@ class RichTextArea extends React.PureComponent {
         this.pasteRichText(mode, pasteText, pasteHtml)
     }
 
-    pasteRichText(mode, text, html) {
-        const {format} = this.props;
-        const {textArea} = this.state;
+    pasteRichText(mode: RichTextPasteMode, text: string | null, html: string | null) {
+        const {format, textArea} = this.props;
+
+        if (textArea.current == null) {
+            return;
+        }
 
         if (mode === "none") {
             textArea.current.focus();
@@ -216,18 +225,20 @@ class RichTextArea extends React.PureComponent {
             content = text;
         }
 
-        textFieldEdit.insert(textArea.current, content);
-        textArea.current.dispatchEvent(new InputEvent("input", {
-            data: content,
-            inputType: "insertText",
-            bubbles: true
-        }));
+        if (content != null) {
+            textFieldEdit.insert(textArea.current, content);
+            textArea.current.dispatchEvent(new InputEvent("input", {
+                data: content,
+                inputType: "insertText",
+                bubbles: true
+            }));
+        }
         textArea.current.focus();
     }
 
     render() {
-        const {name, value, className, autoComplete, placeholder, rows, disabled, onBlur} = this.props;
-        const {textArea, pasteDialogShow} = this.state;
+        const {name, value, className, autoComplete, placeholder, rows, disabled, onBlur, textArea} = this.props;
+        const {pasteDialogShow} = this.state;
 
         return (
             <>
@@ -253,9 +264,11 @@ class RichTextArea extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
-        pasteRich: getSetting(state, "rich-text-editor.paste-rich")
+const connector = connect(
+    (state: ClientState) => ({
+        pasteRich: getSetting(state, "rich-text-editor.paste-rich") as string
     }),
     { settingsUpdate }
-)(RichTextArea);
+);
+
+export default connector(RichTextArea);

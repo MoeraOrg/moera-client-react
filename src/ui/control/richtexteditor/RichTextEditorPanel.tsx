@@ -20,13 +20,12 @@ import "./RichTextEditorPanel.css";
 
 type Props = {
     textArea: React.RefObject<HTMLTextAreaElement>,
-    panel: React.MutableRefObject<HTMLDivElement>,
-    hiding: boolean;
+    panel: React.RefObject<HTMLDivElement>,
+    hiding?: boolean;
     format: string;
 } & ConnectedProps<typeof connector>;
 
 interface State {
-    panel: React.MutableRefObject<HTMLDivElement>;
     spoilerDialog: boolean;
     foldDialog: boolean;
     linkDialog: boolean;
@@ -41,20 +40,12 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         super(props, context);
 
         this.state = {
-            panel: props.panel ?? React.createRef(),
             spoilerDialog: false,
             foldDialog: false,
             linkDialog: false,
             imageDialog: false,
             mentionDialog: false,
             dialogText: ""
-        }
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.panel !== prevProps.panel) {
-            this.props.panel.current = this.state.panel.current;
-            this.setState({panel: this.props.panel});
         }
     }
 
@@ -336,8 +327,8 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {hiding, format} = this.props;
-        const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText, panel} = this.state;
+        const {hiding, format, panel} = this.props;
+        const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText} = this.state;
 
         if (format === "plain-text") {
             return null;

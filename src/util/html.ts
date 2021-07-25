@@ -127,6 +127,9 @@ export function safeImportHtml(html: string | null | undefined): string {
         .trim();
 }
 
+export function quoteHtml(html: string): string;
+export function quoteHtml(html?: null): null;
+export function quoteHtml(html?: string | null): string | null;
 export function quoteHtml(html?: string | null): string | null {
     if (html == null) {
         return null;

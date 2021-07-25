@@ -4,6 +4,6 @@ import { ClientState } from "state/state";
 
 export function isQuickTipsToBeShown(state: ClientState): boolean {
     return isConnectedToHome(state) && isSettingsClientValuesLoaded(state)
-        && !getSetting(state, "invitation.quick-tips.shown")
+        && !(getSetting(state, "invitation.quick-tips.shown") as boolean)
         && !state.nodeName.mnemonic;
 }

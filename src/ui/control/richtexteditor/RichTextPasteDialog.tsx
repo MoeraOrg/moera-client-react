@@ -4,11 +4,11 @@ import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
 import "./RichTextPasteDialog.css";
 
-type PasteMode = "none" | "text" | "html";
+export type RichTextPasteMode = "none" | "text" | "html";
 
 type Props = {
     show: boolean;
-    onSubmit: (mode: PasteMode, persist: boolean) => void;
+    onSubmit: (mode: RichTextPasteMode, persist: boolean) => void;
 };
 
 export default function RichTextPasteDialog({show, onSubmit}: Props) {

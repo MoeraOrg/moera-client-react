@@ -116,7 +116,7 @@ export function getFeedAtTimestamp(state: ClientState, feedName: string): number
 
 export function getInstantCount(state: ClientState): number {
     const feed = getFeedState(state, ":instant");
-    const mode = getSetting(state, "instants.number.mode")
+    const mode = getSetting(state, "instants.number.mode") as string;
     return mode === "not-viewed" ? feed.notViewed : feed.notRead;
 }
 

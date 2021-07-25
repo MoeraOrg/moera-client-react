@@ -147,7 +147,7 @@ EntryHtml.propTypes = {
 const connector = connect(
     (state: ClientState) => ({
         standalone: isStandaloneMode(state),
-        fontMagnitude: getSetting(state, "posting.body.font-magnitude")
+        fontMagnitude: getSetting(state, "posting.body.font-magnitude") as number
     }),
     { initFromLocation, goToLocation }
 );

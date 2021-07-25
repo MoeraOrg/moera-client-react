@@ -4,7 +4,6 @@ export { ComboboxField } from "ui/control/field/ComboboxField";
 export { DateTimeField } from "ui/control/field/DateTimeField";
 export { DurationField } from "ui/control/field/DurationField";
 export { EmojiListInputField } from "ui/control/field/EmojiListInputField";
-export { FormFieldGroup } from "ui/control/field/FormFieldGroup";
 export { InputField } from "ui/control/field/InputField";
 export { NumberField } from "ui/control/field/NumberField";
 export { RichTextField } from "ui/control/field/RichTextField";
