@@ -398,12 +398,13 @@ export interface ReactionAttributes {
 }
 
 export interface ReactionInfo {
-    id: string;
     ownerName: string;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
-    postingId: string;
-    postingRevisionId: string;
+    postingId?: string | null;
+    postingRevisionId?: string | null;
+    commentId?: string | null;
+    commentRevisionId?: string | null;
     negative: boolean;
     emoji: number;
     moment: number;

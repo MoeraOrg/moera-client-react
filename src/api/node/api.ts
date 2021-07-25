@@ -1135,9 +1135,6 @@ export const CarteSet = schema(CarteSetType);
 const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
     type: "object",
     properties: {
-        "id": {
-            type: "string"
-        },
         "ownerName": {
             type: "string"
         },
@@ -1150,10 +1147,20 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
             nullable: true
         },
         "postingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "postingRevisionId": {
-            type: "string"
+            type: "string",
+            nullable: true
+        },
+        "commentId": {
+            type: "string",
+            nullable: true
+        },
+        "commentRevisionId": {
+            type: "string",
+            nullable: true
         },
         "negative": {
             type: "boolean"
@@ -1194,7 +1201,7 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
             additionalProperties: false
         }
     },
-    required: ["id", "ownerName", "postingId", "postingRevisionId", "negative", "emoji", "moment", "createdAt"],
+    required: ["ownerName", "negative", "emoji", "moment", "createdAt"],
     additionalProperties: false
 };
 
