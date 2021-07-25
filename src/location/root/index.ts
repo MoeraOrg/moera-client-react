@@ -14,7 +14,7 @@ import { build as peopleBuild, transform as peopleTransform } from "location/roo
 import { build as postBuild, transform as postTransform } from "location/root/post";
 import { build as profileBuild, transform as profileTransform } from "location/root/profile";
 import { build as settingsBuild, transform as settingsTransform } from "location/root/settings";
-import { build as timelineBuild, transform as timelineTransform } from "./timeline";
+import { build as timelineBuild, transform as timelineTransform } from "location/root/timeline";
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
