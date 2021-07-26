@@ -35,15 +35,15 @@ const Emojis = ({className, emojis, total, onClick}: EmojisProps) => (
 );
 
 interface ReactionTotalsProps {
-    reactions: ReactionTotalsInfo;
+    reactions: ReactionTotalsInfo | null;
     onClick: (negative: boolean) => void;
 }
 
 export function ReactionTotals({reactions, onClick}: ReactionTotalsProps) {
-    const positiveTotal = sum(reactions.positive);
-    const negativeTotal = sum(reactions.negative);
-    const positiveTopEmojis = topEmojis(reactions.positive);
-    const negativeTopEmojis = topEmojis(reactions.negative);
+    const positiveTotal = reactions != null ? sum(reactions.positive) : 0;
+    const negativeTotal = reactions != null ? sum(reactions.negative) : 0;
+    const positiveTopEmojis = reactions != null ? topEmojis(reactions.positive) : [];
+    const negativeTopEmojis = reactions != null ? topEmojis(reactions.negative) : [];
     if (positiveTotal === 0 && negativeTotal === 0
         && positiveTopEmojis.length === 0 && negativeTopEmojis.length === 0) {
 

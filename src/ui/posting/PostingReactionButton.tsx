@@ -12,7 +12,7 @@ type Props = {
     invisible: boolean;
     id: string;
     negative: boolean;
-    emoji: number;
+    emoji: number | null;
     accepted: string;
 } & ConnectedProps<typeof connector>;
 

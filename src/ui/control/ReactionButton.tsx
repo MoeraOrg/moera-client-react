@@ -17,7 +17,7 @@ import EmojiList from "util/emoji-list";
 
 interface OwnProps {
     icon: IconName,
-    emoji: number;
+    emoji: number | null;
     caption: string;
     className?: string;
     negative: boolean;
@@ -35,7 +35,7 @@ interface State {
 
 class ReactionButtonImpl extends React.PureComponent<Props, State> {
 
-    #pastEmoji: number = 0;
+    #pastEmoji: number | null = null;
 
     constructor(props: Props, context: any) {
         super(props, context);

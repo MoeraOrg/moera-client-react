@@ -6,7 +6,7 @@ import { IconName } from "@fortawesome/free-regular-svg-icons";
 
 interface Props {
     icon?: IconName;
-    emoji?: number;
+    emoji?: number | null;
     negative?: boolean;
     caption?: string;
     className?: string;
