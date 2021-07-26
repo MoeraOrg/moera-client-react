@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import * as textFieldEdit from 'text-field-edit'
 import scrollIntoView from 'scroll-into-view-if-needed';
 
+import { SourceFormat } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
@@ -15,17 +17,21 @@ import { Browser } from "ui/browser";
 import { Button } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
-import commentComposeLogic from "ui/comment/comment-compose-logic";
+import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { mentionName, parseBool } from "util/misc";
 import "./CommentCompose.css";
 
 function viewComposer() {
-    const composer = document.getElementById("comment-composer");
+    const composer = document.getElementById("comment-composer")!;
     scrollIntoView(composer, {scrollMode: "if-needed", block: "end"});
 }
 
-function CommentCompose(props) {
+type OuterProps = ConnectedProps<typeof connector>;
+
+type Props = OuterProps & FormikProps<CommentComposeValues>;
+
+function CommentCompose(props: Props) {
     const {
         ownerName, beingPosted, receiverName, receiverPostingId, formId, submitKey, bottomMenuHide, bottomMenuShow,
         receiverFullName, smileysEnabled, sourceFormatDefault, openSignUpDialog, openConnectDialog, values, resetForm,
@@ -49,7 +55,7 @@ function CommentCompose(props) {
         }
     }
 
-    const onKeyDown = event => {
+    const onKeyDown = (event: React.KeyboardEvent) => {
         viewComposer();
         if (event.key === "Enter") {
             const submit = !Browser.isTouchScreen() && !event.shiftKey
@@ -57,7 +63,7 @@ function CommentCompose(props) {
             if (submit) {
                 submitForm();
             } else {
-                textFieldEdit.insert(event.target, "\n");
+                textFieldEdit.insert(event.target as HTMLTextAreaElement, "\n");
             }
             event.preventDefault();
         }
@@ -93,22 +99,27 @@ function CommentCompose(props) {
     }
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         avatarDefault: getHomeOwnerAvatar(state),
         receiverName: state.detailedPosting.comments.receiverName,
         receiverFullName: state.detailedPosting.comments.receiverFullName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
+        comment: null,
         formId: state.detailedPosting.compose.formId,
         repliedToId: getCommentComposerRepliedToId(state),
         beingPosted: state.detailedPosting.compose.beingPosted,
-        reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default"),
-        reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default"),
-        sourceFormatDefault: getSetting(state, "comment.body-src-format.default"),
-        submitKey: getSetting(state, "comment.submit-key"),
-        smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled"))
+        reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
+        reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
+        sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
+        submitKey: getSetting(state, "comment.submit-key") as string,
+        smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled") as boolean)
     }),
     { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
-)(withFormik(commentComposeLogic)(CommentCompose));
+);
+
+export default connector(
+    withFormik(commentComposeLogic as WithFormikConfig<OuterProps, CommentComposeValues>)(CommentCompose)
+);

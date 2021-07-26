@@ -101,7 +101,7 @@ export type EventAction<E extends BaseEvent<string>> =
 
 export const eventAction = <E extends BaseEvent<string>>(event: E & {sourceNode: string | null},
                                                          source: EventSource): EventAction<E> => ({
-    type: `EVENT_${source}_${event.type}`, // Incorrectly marked as error by TypeScript 4.2.2
+    type: `EVENT_${source}_${event.type}`,
     payload: immutable.del(event, "type")
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 
 import { Button } from "ui/control";
@@ -7,8 +7,12 @@ import { commentComposeUnset } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import "./CommentComposeButtons.css";
 
-function CommentComposeButtons({loading, confirmBox}) {
-    const onCancel = e => {
+type Props = {
+    loading: boolean;
+} & ConnectedProps<typeof connector>;
+
+function CommentComposeButtons({loading, confirmBox}: Props) {
+    const onCancel = (e: React.MouseEvent) => {
         confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
             commentComposeUnset(), null, "danger");
         e.preventDefault();
@@ -29,7 +33,9 @@ function CommentComposeButtons({loading, confirmBox}) {
     );
 }
 
-export default connect(
+const connector = connect(
     null,
     { confirmBox }
-)(CommentComposeButtons);
+);
+
+export default connector(CommentComposeButtons);

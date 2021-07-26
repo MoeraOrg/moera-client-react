@@ -234,7 +234,7 @@ export interface CommentText {
     bodyPreview?: string | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    body: Body | string;
+    body?: Body | string | null;
     bodyFormat?: BodyFormat | null;
     createdAt?: number | null;
     acceptedReactions?: AcceptedReactions | null;
