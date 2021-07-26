@@ -1,10 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { AvatarWithPopup, Loading } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 
-const SubscribersSubpage = ({loading, subscribers}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const SubscribersSubpage = ({loading, subscribers}: Props) => (
     <div className="row">
         <Loading active={loading}/>
         {subscribers.map(sr =>
@@ -16,9 +19,11 @@ const SubscribersSubpage = ({loading, subscribers}) => (
     </div>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loading: state.people.loadingSubscribers,
         subscribers: state.people.subscribers
     })
-)(SubscribersSubpage);
+);
+
+export default connector(SubscribersSubpage);

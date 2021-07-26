@@ -1,17 +1,31 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
+import { ClientState } from "state/state";
 import { peopleGoToTab } from "state/people/actions";
 import "./PeopleTabs.css";
 
-const Tab = ({name, title, total, loaded, active, peopleGoToTab}) => (
+interface TabProps {
+    name: string;
+    title: string;
+    total: number;
+    loaded: boolean;
+    active: string;
+    peopleGoToTab: (tab: string) => void;
+}
+
+const Tab = ({name, title, total, loaded, active, peopleGoToTab}: TabProps) => (
     <div className={cx("tab", {"active": name === active})} onClick={() => peopleGoToTab(name)}>
         {title}{loaded ? ` (${total})` : ""}
     </div>
 );
 
-const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal, peopleGoToTab}) => (
+type PeopleTabsProps = {
+    active: string;
+} & ConnectedProps<typeof connector>;
+
+const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal, peopleGoToTab}: PeopleTabsProps) => (
     <div className="people-tabs">
         <Tab name="subscribers" title="Subscribers" total={subscribersTotal} loaded={loadedGeneral} active={active}
              peopleGoToTab={peopleGoToTab}/>
@@ -21,11 +35,13 @@ const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal
     </div>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loadedGeneral: state.people.loadedGeneral,
         subscribersTotal: state.people.subscribersTotal,
         subscriptionsTotal: state.people.subscriptionsTotal
     }),
     { peopleGoToTab }
-)(PeopleTabs);
+);
+
+export default connector(PeopleTabs);
