@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { RichTextEditor } from "ui/control";
+import { RichTextEditor } from "ui/control/index";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import { FormGroup } from "ui/control/FormGroup";
 import { SourceFormat } from "api/node/api-types";

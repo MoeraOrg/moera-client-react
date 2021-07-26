@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { Label } from "ui/control";
+import { Label } from "ui/control/index";
 
 interface Props {
     title?: string;

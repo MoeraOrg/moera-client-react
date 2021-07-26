@@ -2,7 +2,7 @@ import React from 'react';
 import { NumberPicker } from 'react-widgets';
 import cx from 'classnames';
 
-import { Wrapper } from "ui/control";
+import { Wrapper } from "ui/control/index";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import { FormGroup } from "ui/control/FormGroup";
 import { Duration, DurationUnit, FixedUnit, isFixedUnit } from "util/duration";

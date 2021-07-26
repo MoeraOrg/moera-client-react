@@ -2,7 +2,7 @@ import React from 'react';
 import { useField } from 'formik';
 import DatePicker from 'react-datepicker';
 
-import { FormGroup, Wrapper } from "ui/control";
+import { FormGroup, Wrapper } from "ui/control/index";
 import { Browser } from "ui/browser";
 import "./DateTimeField.css";
 

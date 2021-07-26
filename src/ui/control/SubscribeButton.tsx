@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { Button } from "ui/control";
+import { Button } from "ui/control/index";
 import { ClientState } from "state/state";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";

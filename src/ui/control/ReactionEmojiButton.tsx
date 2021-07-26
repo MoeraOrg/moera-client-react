@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, TouchEventHandler } from 'react';
 
 import { REACTION_EMOJIS } from "api";
-import { EmojiButton } from "ui/control";
+import { EmojiButton } from "ui/control/index";
 import { IconName } from "@fortawesome/free-regular-svg-icons";
 
 interface Props {

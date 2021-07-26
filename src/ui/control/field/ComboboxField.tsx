@@ -2,7 +2,7 @@ import React from 'react';
 import { useField } from 'formik';
 import { Combobox } from 'react-widgets';
 
-import { FormGroup, Wrapper } from "ui/control";
+import { FormGroup, Wrapper } from "ui/control/index";
 
 interface Props<T> {
     name: string;

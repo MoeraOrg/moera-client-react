@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import { Browser } from "ui/browser";
-import { LoadingInline } from "ui/control";
+import { LoadingInline } from "ui/control/index";
 
 type Props = {
     variant: string;

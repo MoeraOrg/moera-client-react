@@ -1,9 +1,11 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
+import { IconName } from '@fortawesome/free-regular-svg-icons';
 
+import { ClientState } from "state/state";
+import { EmojiProps } from "ui/control/EmojiChoice";
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
-import { EmojiSelector, ReactionEmojiButton } from "ui/control";
+import { EmojiSelector, ReactionEmojiButton } from "ui/control/index";
 import { getSetting } from "state/settings/selectors";
 import {
     MAIN_NEGATIVE_REACTIONS,
@@ -13,38 +15,47 @@ import {
 } from "api/node/reaction-emojis";
 import EmojiList from "util/emoji-list";
 
-class ReactionButtonImpl extends React.PureComponent {
+interface OwnProps {
+    icon: IconName,
+    emoji: number;
+    caption: string;
+    className?: string;
+    negative: boolean;
+    accepted: string;
+    invisible: boolean;
+    onReactionAdd: (negative: boolean, emoji: number) => void;
+    onReactionDelete: () => void;
+}
 
-    static propTypes = {
-        icon: PropType.oneOfType([PropType.arrayOf(PropType.string), PropType.string]),
-        emoji: PropType.number,
-        caption: PropType.string,
-        className: PropType.string,
-        negative: PropType.bool,
-        available: PropType.instanceOf(EmojiList),
-        accepted: PropType.string,
-        invisible: PropType.bool,
-        onReactionAdd: PropType.func,
-        onReactionDelete: PropType.func
-    };
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
-    state = {
-        reactions: []
-    };
+interface State {
+    reactions: EmojiProps[];
+}
 
-    #pastEmoji;
+class ReactionButtonImpl extends React.PureComponent<Props, State> {
+
+    #pastEmoji: number = 0;
+
+    constructor(props: Props, context: any) {
+        super(props, context);
+
+        this.state = {
+            reactions: []
+        };
+    }
 
     componentDidMount() {
         this.updateReactions();
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.available !== prevProps.available) {
             this.updateReactions();
         }
     }
 
-    updateReactions() {
+    updateReactions(): void {
         const {negative, available} = this.props;
         const accepted = new EmojiList(this.props.accepted);
 
@@ -56,24 +67,24 @@ class ReactionButtonImpl extends React.PureComponent {
                 invisible: (!accepted.recommends(r) && !available.recommends(r))
                     || !accepted.includes(r) || !available.includes(r),
                 dimmed: !accepted.recommends(r)
-            })
+            } as EmojiProps)
         );
         const additionalNode = accepted.recommended()
             .filter(r => !mainReactionsSet.has(r))
             .filter(r => available.includes(r))
-            .map(r => ({emoji: r}));
+            .map(r => ({emoji: r} as EmojiProps));
         const additionalClient = available.recommended()
             .filter(r => !mainReactionsSet.has(r))
             .filter(r => accepted.includes(r) && !accepted.recommends(r))
-            .map(r => ({emoji: r, dimmed: true}));
+            .map(r => ({emoji: r, dimmed: true} as EmojiProps));
         this.setState({reactions: main.concat(additionalNode, additionalClient)});
     }
 
-    isInvisible() {
+    isInvisible(): boolean {
         return this.props.invisible || this.state.reactions.every(r => r.invisible);
     }
 
-    getDefaultEmoji() {
+    getDefaultEmoji(): number | null {
         const {negative} = this.props;
         const {reactions} = this.state;
 
@@ -98,10 +109,13 @@ class ReactionButtonImpl extends React.PureComponent {
     defaultReactionAdd = () => {
         const {negative, onReactionAdd} = this.props;
 
-        onReactionAdd(negative, this.getDefaultEmoji());
+        const emoji = this.getDefaultEmoji();
+        if (emoji != null) {
+            onReactionAdd(negative, emoji);
+        }
     }
 
-    reactionAdd = (negative, emoji) => {
+    reactionAdd = (negative: boolean, emoji: number) => {
         this.props.onReactionAdd(negative, emoji);
     }
 
@@ -150,9 +164,11 @@ class ReactionButtonImpl extends React.PureComponent {
 
 }
 
-export const ReactionButton = connect(
-    (state, ownProps) => ({
+const connector = connect(
+    (state: ClientState, ownProps: OwnProps) => ({
         available: new EmojiList(getSetting(state,
-            !ownProps.negative ? "reactions.positive.available" : "reactions.negative.available"))
+            !ownProps.negative ? "reactions.positive.available" : "reactions.negative.available") as string)
     }),
-)(ReactionButtonImpl);
+);
+
+export const ReactionButton = connector(ReactionButtonImpl);

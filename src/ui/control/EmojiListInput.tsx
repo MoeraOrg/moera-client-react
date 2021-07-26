@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
-import { EmojiListDialog } from "ui/control";
+import { EmojiListDialog } from "ui/control/index";
 import Twemoji from "ui/twemoji/Twemoji";
 import EmojiList from "util/emoji-list";
 import "./EmojiListInput.css"
