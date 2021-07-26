@@ -1,20 +1,30 @@
 import React from 'react';
-import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { Loading } from "ui/control";
 
 import "./InstantsSentinel.css";
 
-export default class InstantsSentinel extends React.PureComponent {
+interface Props {
+    visible: boolean;
+    loading: boolean;
+    title: string;
+    margin: string;
+    onSentinel: (intersecting: boolean) => void;
+    onClick: (event: React.MouseEvent) => void;
+}
 
-    constructor(props, context) {
+export default class InstantsSentinel extends React.PureComponent<Props> {
+
+    sentinelObserver: IntersectionObserver;
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.sentinelObserver = new IntersectionObserver(this.onSentinel, {rootMargin: this.props.margin});
     }
 
-    observeSentinel = sentinel => {
+    observeSentinel = (sentinel: HTMLDivElement) => {
         if (sentinel == null) {
             this.sentinelObserver.disconnect();
         } else {
@@ -22,8 +32,8 @@ export default class InstantsSentinel extends React.PureComponent {
         }
     };
 
-    onSentinel = entry => {
-        this.props.onSentinel(entry[0].isIntersecting);
+    onSentinel = (entries: IntersectionObserverEntry[]) => {
+        this.props.onSentinel(entries[0].isIntersecting);
     }
 
     render() {
@@ -38,12 +48,3 @@ export default class InstantsSentinel extends React.PureComponent {
     }
 
 }
-
-InstantsSentinel.propTypes = {
-    visible: PropType.bool,
-    loading: PropType.bool,
-    title: PropType.string,
-    margin: PropType.string,
-    onSentinel: PropType.func,
-    onClick: PropType.func
-};

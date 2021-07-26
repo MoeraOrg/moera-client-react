@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import { confirmBox } from "state/confirmbox/actions";
@@ -9,11 +10,16 @@ import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";
 import "./Instants.css";
 
-class Instants extends React.PureComponent {
+type Props = {
+    hide: () => void;
+    instantCount: number;
+} & ConnectedProps<typeof connector>;
+
+class Instants extends React.PureComponent<Props> {
 
     #pastIntersecting = true;
 
-    onSentinelPast = intersecting => {
+    onSentinelPast = (intersecting: boolean) => {
         this.#pastIntersecting = intersecting;
         if (this.#pastIntersecting) {
             this.loadPast();
@@ -62,11 +68,13 @@ class Instants extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loadingPast: getFeedState(state, ":instant").loadingPast,
         after: getFeedState(state, ":instant").after,
         stories: getFeedState(state, ":instant").stories
     }),
     { feedPastSliceLoad, feedStatusUpdate, confirmBox }
-)(Instants);
+);
+
+export default connector(Instants);

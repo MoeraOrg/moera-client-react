@@ -1,5 +1,4 @@
 import React from 'react';
-import PropType from 'prop-types';
 
 import { NodeName as NodeNameParser } from "api";
 import { NameDisplayMode } from "ui/types";
@@ -35,9 +34,3 @@ export default function NodeNameText({name = null, fullName, mode}: Props) {
         </>
     );
 }
-
-NodeNameText.propTypes = {
-    name: PropType.string,
-    fullName: PropType.string,
-    mode: PropType.string
-};

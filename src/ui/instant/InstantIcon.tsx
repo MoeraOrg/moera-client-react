@@ -2,8 +2,13 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getInstantTypeDetails } from "ui/instant/instant-types";
+import { ExtStoryInfo } from "state/feeds/state";
 
-export default function InstantIcon({story}) {
+interface Props {
+    story: ExtStoryInfo;
+}
+
+export default function InstantIcon({story}: Props) {
     const details = getInstantTypeDetails(story.storyType);
     if (details == null) {
         return null;

@@ -9,9 +9,14 @@ import isFunction from 'lodash.isfunction';
 import "./Popover.css";
 import { PositioningStrategy } from "@popperjs/core";
 
+interface ChildrenProps {
+    hide: () => void;
+    update: () => void;
+}
+
 interface Props {
     className?: string;
-    text: string;
+    text?: string;
     textClassName?: string;
     icon?: IconProp;
     title?: string;
@@ -19,6 +24,7 @@ interface Props {
     detached?: boolean;
     strategy?: PositioningStrategy;
     onToggle?: (visible: boolean) => void;
+    children: ((props: ChildrenProps) => React.ReactNode) | React.ReactNode;
 }
 
 interface State {

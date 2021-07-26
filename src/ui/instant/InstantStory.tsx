@@ -11,12 +11,12 @@ import { Avatar } from "ui/control";
 import { storyReadingUpdate } from "state/stories/actions";
 import { getInstantTarget } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
+import { ExtStoryInfo } from "state/feeds/state";
 import { ClientState } from "state/state";
-import { StoryInfo } from "api/node/api-types";
 import "./InstantStory.css";
 
 type Props = {
-    story: StoryInfo;
+    story: ExtStoryInfo;
     lastNew: boolean;
     hide: () => void;
 } & ConnectedProps<typeof connector>;
@@ -43,7 +43,7 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
             </Jump>
             <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="summary"
                   onNear={onJump} onFar={onJump}>
-                <InstantHtml html={story.summary}/>
+                <InstantHtml html={story.summary ?? ""}/>
             </Jump>
             <div className="footer">
                 <InstantIcon story={story}/>

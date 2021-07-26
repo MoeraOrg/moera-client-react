@@ -1,19 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ClientState } from "state/state";
 import { getInstantCount } from "state/feeds/selectors";
 import "./InstantBell.css";
 
-const Bell = ({count}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const Bell = ({count}: Props) => (
     <span className="connection-button bell-button" title="Notifications">
         <FontAwesomeIcon icon="bell"/>
         {count > 0 && <div className="count">{count}</div>}
     </span>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         count: getInstantCount(state)
     })
-)(Bell);
+);
+
+export default connector(Bell);

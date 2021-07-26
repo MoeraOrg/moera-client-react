@@ -1,25 +1,37 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedNotViewed, getFeedState, getInstantCount } from "state/feeds/selectors";
+import { ClientState } from "state/state";
 
-class InstantButton extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
 
-    state = {
-        instantCount: 0
-    };
-    #visible = false;
-    #topMoment = Number.MIN_SAFE_INTEGER;
+interface State {
+    instantCount: number;
+}
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+class InstantButton extends React.PureComponent<Props, State> {
+
+    #visible: boolean = false;
+    #topMoment: number = Number.MIN_SAFE_INTEGER;
+
+    constructor(props: Props, context: any) {
+        super(props, context);
+
+        this.state = {
+            instantCount: 0
+        };
+    }
+
+    componentDidUpdate() {
         this.viewAll();
     }
 
-    onToggle = visible => {
+    onToggle = (visible: boolean) => {
         if (visible && this.#visible !== visible) {
             this.setState({instantCount: this.props.instantCount});
         }
@@ -51,11 +63,13 @@ class InstantButton extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         stories: getFeedState(state, ":instant").stories,
         notViewedCount: getFeedNotViewed(state, ":instant"),
         instantCount: getInstantCount(state)
     }),
     { feedStatusUpdate }
-)(InstantButton);
+);
+
+export default connector(InstantButton);

@@ -136,11 +136,11 @@ export const feedStatusSet = (feedName: string, status: FeedStatus): FeedStatusS
 export const FEED_STATUS_UPDATE = "FEED_STATUS_UPDATE";
 export type FeedStatusUpdateAction = ActionWithPayload<typeof FEED_STATUS_UPDATE, {
     feedName: string;
-    viewed: boolean;
-    read: boolean;
+    viewed: boolean | null;
+    read: boolean | null;
     before: number;
 }>;
-export const feedStatusUpdate = (feedName: string, viewed: boolean, read: boolean,
+export const feedStatusUpdate = (feedName: string, viewed: boolean | null, read: boolean | null,
                                  before: number): FeedStatusUpdateAction => ({
     type: FEED_STATUS_UPDATE,
     payload: {feedName, viewed, read, before}
@@ -158,11 +158,11 @@ export const feedStatusUpdateFailed = (feedName: string): FeedStatusUpdateFailed
 export const FEED_STATUS_UPDATED = "FEED_STATUS_UPDATED";
 export type FeedStatusUpdatedAction = ActionWithPayload<typeof FEED_STATUS_UPDATED, {
     feedName: string;
-    viewed: boolean;
-    read: boolean;
+    viewed: boolean | null;
+    read: boolean | null;
     before: number;
 }>;
-export const feedStatusUpdated = (feedName: string, viewed: boolean, read: boolean,
+export const feedStatusUpdated = (feedName: string, viewed: boolean | null, read: boolean | null,
                                   before: number): FeedStatusUpdatedAction => ({
     type: FEED_STATUS_UPDATED,
     payload: {feedName, viewed, read, before}

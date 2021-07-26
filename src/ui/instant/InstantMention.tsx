@@ -1,18 +1,18 @@
 import React from 'react';
-import PropType from 'prop-types';
 
 import NodeNameText from "ui/nodename/NodeNameText";
+import { NameDisplayMode } from "ui/types";
 
-const InstantMention = ({name, fullName, mode}) => (
+interface Props {
+    name?: string | null;
+    fullName?: string | null;
+    mode?: NameDisplayMode | null;
+}
+
+const InstantMention = ({name, fullName, mode}: Props) => (
     <span className="node-name">
         <NodeNameText name={name || fullName} fullName={fullName} mode={mode}/>
     </span>
 );
-
-InstantMention.propTypes = {
-    name: PropType.string,
-    fullName: PropType.string,
-    mode: PropType.string
-};
 
 export default InstantMention;

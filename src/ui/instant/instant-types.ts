@@ -2,15 +2,18 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { StoryInfo, StoryType } from "api/node/api-types";
 import { ExtStoryInfo } from "state/feeds/state";
 
-type InstantType = Exclude<StoryType, "posting-added">;
-
 interface InstantTypeDetails {
     title: string;
     color: string;
     icon: IconProp;
 }
 
-const INSTANT_TYPES: Record<InstantType, InstantTypeDetails> = {
+const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
+    "posting-added": {
+        title: "Post added",
+        color: "var(--green)",
+        icon: "pen-alt"
+    },
     "reaction-added-positive": {
         title: "Post supported",
         color: "var(--correct)",
@@ -83,7 +86,7 @@ const INSTANT_TYPES: Record<InstantType, InstantTypeDetails> = {
     }
 };
 
-export function getInstantTypeDetails(storyType: InstantType): InstantTypeDetails | null {
+export function getInstantTypeDetails(storyType: StoryType): InstantTypeDetails | null {
     return INSTANT_TYPES[storyType] ?? null;
 }
 
