@@ -1,16 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import NodeName from "ui/nodename/NodeName";
+import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
+import NodeName from "ui/nodename/NodeName";
 import useComposeTextEditable from "ui/compose/compose-text-editable";
 import ComposeTextEditableIcon from "ui/compose/ComposeTextEditableIcon";
 
-function ComposeFullName({ownerName, postingId, draftId}) {
+type Props = ConnectedProps<typeof connector>;
+
+function ComposeFullName({ownerName, postingId, draftId}: Props) {
     const {
         edit, field, value, inputRef, onEdit, onReset, onKeyDown
-    } = useComposeTextEditable("fullName", postingId, draftId);
+    } = useComposeTextEditable<string>("fullName", postingId, draftId);
 
     return (
         edit ?
@@ -29,10 +32,12 @@ function ComposeFullName({ownerName, postingId, draftId}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         ownerName: getHomeOwnerName(state),
         postingId: state.compose.postingId,
         draftId: state.compose.draftId
     })
-)(ComposeFullName);
+);
+
+export default connector(ComposeFullName);

@@ -16,7 +16,7 @@ type Props = ConnectedProps<typeof connector>;
 function ComposePublishAt({postingId, draftId}: Props) {
     const {
         edit, field, value, setValue, onEdit, onReset, onKeyDown
-    } = useComposeTextEditable("publishAt", postingId, draftId);
+    } = useComposeTextEditable<Date>("publishAt", postingId, draftId);
 
     return (
         edit ?
