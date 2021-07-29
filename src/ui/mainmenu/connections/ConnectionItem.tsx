@@ -1,12 +1,20 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
+import { ClientState } from "state/state";
 
-const ConnectionItem = ({name, url, onClick, onDisconnect, standalone}) => (
+type Props = {
+    name?: string | null;
+    url: string;
+    onClick: () => void;
+    onDisconnect: () => void;
+} & ConnectedProps<typeof connector>;
+
+const ConnectionItem = ({name, url, onClick, onDisconnect, standalone}: Props) => (
     <div className="connection-item">
         <div className="connection" onClick={onClick}>
             {name ?
@@ -27,8 +35,10 @@ const ConnectionItem = ({name, url, onClick, onDisconnect, standalone}) => (
     </div>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         standalone: isStandaloneMode(state)
     })
-)(ConnectionItem);
+);
+
+export default connector(ConnectionItem);

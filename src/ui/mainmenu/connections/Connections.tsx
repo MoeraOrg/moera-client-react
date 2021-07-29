@@ -1,8 +1,10 @@
 import React from 'react';
 import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ClientState } from "state/state";
+import { getHomeRootLocation } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Browser } from "ui/browser";
@@ -10,30 +12,33 @@ import { Button } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";
-import { getHomeRootLocation } from "state/home/selectors";
 
-class Connections extends React.PureComponent {
+type Props = {
+    hide: () => void;
+} & ConnectedProps<typeof connector>;
+
+class Connections extends React.PureComponent<Props> {
 
     static propTypes = {
         hide: PropType.func.isRequired
     };
 
-    onAddClick = hide => () => {
+    onAddClick = (hide: () => void) => () => {
         this.props.openConnectDialog();
         hide();
     };
 
-    onSignUpClick = hide => () => {
+    onSignUpClick = (hide: () => void) => () => {
         this.props.openSignUpDialog();
         hide();
     };
 
-    onItemClick = (location, hide) => () => {
+    onItemClick = (location: string, hide: () => void) => () => {
         Browser.switchData(location);
         hide();
     };
 
-    onDisconnect = location => () => {
+    onDisconnect = (location: string) => () => {
         Browser.deleteData(location);
     };
 
@@ -67,11 +72,13 @@ class Connections extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         location: getHomeRootLocation(state),
         owner: state.home.owner,
         roots: state.home.roots
     }),
     { openConnectDialog, openSignUpDialog }
-)(Connections);
+);
+
+export default connector(Connections);

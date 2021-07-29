@@ -1,5 +1,10 @@
 import { AvatarImage, AvatarInfo } from "api/node/api-types";
 
+export interface RootInfo {
+    name: string | null;
+    url: string;
+}
+
 export interface HomeState {
     connecting: boolean;
     root: {
@@ -23,5 +28,5 @@ export interface HomeState {
         avatars: AvatarInfo[];
     };
     addonApiVersion: number | null;
-    roots: string[];
+    roots: RootInfo[];
 }

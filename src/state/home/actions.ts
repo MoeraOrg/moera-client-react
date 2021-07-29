@@ -2,6 +2,7 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { AvatarImage, AvatarInfo, CarteInfo } from "api/node/api-types";
+import { RootInfo } from "state/home/state";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
 export type ConnectToHomeAction = ActionWithPayload<typeof CONNECT_TO_HOME, {
@@ -33,11 +34,11 @@ export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, 
     permissions: string[];
     cartesIp: string | null;
     cartes: CarteInfo[];
-    roots: string[] | null;
+    roots: RootInfo[] | null;
     clockOffset: number;
 }>;
 export const connectedToHome = (location: string, login: string, token: string, permissions: string[],
-                                cartesIp: string | null, cartes: CarteInfo[], roots: string[] | null,
+                                cartesIp: string | null, cartes: CarteInfo[], roots: RootInfo[] | null,
                                 clockOffset: number): ConnectedToHomeAction => ({
     type: CONNECTED_TO_HOME,
     payload: {location, login, token, permissions, cartesIp, cartes, roots, clockOffset}
@@ -72,11 +73,11 @@ export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
     permissions: string[];
     cartesIp: string | null;
     cartes: CarteInfo[];
-    roots: string[] | null;
+    roots: RootInfo[] | null;
 }>;
 export const homeRestore = (addonApiVersion: number, location: string, login: string, token: string,
                             permissions: string[], cartesIp: string | null, cartes: CarteInfo[],
-                            roots: string[] | null): HomeRestoreAction => ({
+                            roots: RootInfo[] | null): HomeRestoreAction => ({
     type: HOME_RESTORE,
     payload: {addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots}
 });
@@ -121,9 +122,9 @@ export const browserApiSet = (version: number): BrowserApiSetAction => ({
 
 export const CONNECTIONS_SET = "CONNECTIONS_SET";
 export type ConnectionsSetAction = ActionWithPayload<typeof CONNECTIONS_SET, {
-    roots: string[];
+    roots: RootInfo[];
 }>;
-export const connectionsSet = (roots: string[]): ConnectionsSetAction => ({
+export const connectionsSet = (roots: RootInfo[]): ConnectionsSetAction => ({
     type: CONNECTIONS_SET,
     payload: {roots}
 });
