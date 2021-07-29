@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Browser } from "ui/browser";
 import { Button, Loading } from "ui/control";
@@ -17,8 +17,12 @@ import { openSignUpDialog } from "state/signupdialog/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtNode } from "state/node/selectors";
 import "./ConnectionStatus.css";
+import { ClientState } from "state/state";
 
-function ConnectionButtons({atNode, connecting,  connected, showNavigator, openConnectDialog, openSignUpDialog}) {
+type Props = ConnectedProps<typeof connector>;
+
+function ConnectionButtons({atNode, connecting,  connected, showNavigator, openConnectDialog,
+                            openSignUpDialog}: Props) {
     if (showNavigator && Browser.isTinyScreen()) {
         return null;
     }
@@ -51,7 +55,7 @@ function ConnectionButtons({atNode, connecting,  connected, showNavigator, openC
     );
 }
 
-const ConnectionStatus = (props) => (
+const ConnectionStatus = (props: Props) => (
     <>
         <div className="connection-status">
             <ConnectionButtons {...props}/>
@@ -60,12 +64,14 @@ const ConnectionStatus = (props) => (
     </>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         atNode: isAtNode(state),
         connecting: state.home.connecting,
         connected: isConnectedToHome(state),
         showNavigator: state.owner.showNavigator
     }),
     { openConnectDialog, openSignUpDialog }
-)(ConnectionStatus);
+);
+
+export default connector(ConnectionStatus);

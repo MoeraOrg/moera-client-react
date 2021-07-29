@@ -20,7 +20,7 @@ export default function VerticalMenuToggler() {
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes} className="vertical-menu-popper">
                         <VerticalMenu/>
                     </div>,
-                    document.querySelector("#modal-root")
+                    document.querySelector("#modal-root")!
                 )
             }
         </>

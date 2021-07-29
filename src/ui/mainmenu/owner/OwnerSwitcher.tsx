@@ -1,16 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import OwnerName from "ui/mainmenu/owner/OwnerName";
 import OwnerNavigator from "ui/mainmenu/owner/OwnerNavigator";
 import { ownerSwitchClose, ownerSwitchOpen } from "state/owner/actions";
+import { ClientState } from "state/state";
 import "./OwnerSwitcher.css";
 
-class OwnerSwitcher extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
 
-    #startedInner;
+class OwnerSwitcher extends React.PureComponent<Props> {
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    #startedInner: boolean = false;
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (!prevProps.showNavigator && this.props.showNavigator) {
             document.addEventListener("click", this.outerClick);
             document.addEventListener("mousedown", this.mouseDown);
@@ -29,11 +32,11 @@ class OwnerSwitcher extends React.PureComponent {
         }
     }
 
-    mouseDown = e => {
+    mouseDown = (e: MouseEvent) => {
         this.#startedInner = this.isInner(e);
     }
 
-    outerClick = e => {
+    outerClick = (e: MouseEvent) => {
         if (this.#startedInner) {
             return;
         }
@@ -43,8 +46,8 @@ class OwnerSwitcher extends React.PureComponent {
         }
     };
 
-    isInner(e) {
-        const ownerArea = document.getElementById("owner-switcher").getBoundingClientRect();
+    isInner(e: MouseEvent) {
+        const ownerArea = document.getElementById("owner-switcher")!.getBoundingClientRect();
         return e.clientY >= ownerArea.top && e.clientY < ownerArea.bottom
             && e.clientX >= ownerArea.left && e.clientX < ownerArea.right;
     }
@@ -65,9 +68,11 @@ class OwnerSwitcher extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         showNavigator: state.owner.showNavigator
     }),
     { ownerSwitchOpen, ownerSwitchClose }
-)(OwnerSwitcher);
+);
+
+export default connector(OwnerSwitcher);
