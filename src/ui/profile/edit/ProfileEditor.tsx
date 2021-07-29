@@ -1,9 +1,10 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
+import { AvatarInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { Button, ConflictWarning, Loading } from "ui/control";
 import { ComboboxField, InputField, RichTextField } from "ui/control/field";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
@@ -12,21 +13,22 @@ import { Page } from "ui/page/Page";
 import AvatarEditor from "ui/profile/edit/AvatarEditor";
 import "./ProfileEditor.css";
 
-class ProfileEditor extends React.PureComponent {
+type OuterProps = ConnectedProps<typeof connector>;
 
-    static propTypes = {
-        loading: PropType.bool,
-        loaded: PropType.bool,
-        conflict: PropType.bool,
-        updating: PropType.bool,
-        fullName: PropType.string,
-        gender: PropType.string,
-        title: PropType.string,
-        bioSrc: PropType.string,
-        avatar: PropType.object
-    };
+interface Values {
+    fullName: string;
+    title: string;
+    gender: string;
+    email: string;
+    bioSrc: string;
+    avatar: AvatarInfo | null;
+}
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+type Props = OuterProps & FormikProps<Values>;
+
+class ProfileEditor extends React.PureComponent<Props> {
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.loaded && !prevProps.loaded) {
             this.props.resetForm({
                 values: profileEditorLogic.mapPropsToValues(this.props),
@@ -71,7 +73,7 @@ class ProfileEditor extends React.PureComponent {
 
 const profileEditorLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
             fullName: props.fullName || "",
             title: props.title || "",
@@ -90,7 +92,7 @@ const profileEditorLogic = {
         bioSrc: yup.string().trim().max(4096, "Too long")
     }),
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.profileUpdate({
             fullName: values.fullName.trim(),
             title: values.title.trim(),
@@ -105,8 +107,8 @@ const profileEditorLogic = {
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loading: state.profile.loading,
         loaded: state.profile.loaded,
         conflict: state.profile.conflict,
@@ -119,4 +121,6 @@ export default connect(
         avatar: state.profile.avatar
     }),
     {profileEditCancel, profileEditConflictClose, profileUpdate}
-)(withFormik(profileEditorLogic)(ProfileEditor));
+);
+
+export default connector(withFormik(profileEditorLogic)(ProfileEditor));

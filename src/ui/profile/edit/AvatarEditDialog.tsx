@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import ReactAvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
 import cx from 'classnames';
@@ -9,6 +9,7 @@ import avatarPlaceholder from "ui/control/avatar.png";
 import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
+import { ClientState } from "state/state";
 import Rotate from "ui/profile/edit/Rotate";
 import AvatarShape from "ui/profile/edit/AvatarShape";
 import Scale from "ui/profile/edit/Scale";
@@ -22,16 +23,28 @@ const ACCEPTED_MIME_TYPES = [
     "image/webp"
 ];
 
-class AvatarEditDialog extends React.PureComponent {
+type Props = ConnectedProps<typeof connector>;
 
-    #domFile;
-    #refEditor;
+interface State {
+    scale: number;
+    rotate: number;
+    shape: string;
+}
 
-    state = {
-        scale: 1,
-        rotate: 0,
-        shape: "circle"
-    };
+class AvatarEditDialog extends React.PureComponent<Props, State> {
+
+    #domFile: HTMLInputElement | null = null;
+    #refEditor: ReactAvatarEditor | null = null;
+
+    constructor(props: Props, context: any) {
+        super(props, context);
+
+        this.state = {
+            scale: 1,
+            rotate: 0,
+            shape: "circle"
+        };
+    }
 
     getScaleMax() {
         const {width, height} = this.props;
@@ -39,13 +52,13 @@ class AvatarEditDialog extends React.PureComponent {
         return width != null && height != null ? Math.min(width, height) / 100 : 2;
     }
 
-    setScale(value) {
+    setScale(value: number) {
         this.setState({scale: Math.max(Math.min(value, this.getScaleMax()), 1)})
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.show !== prevProps.show) {
-            const editor = document.querySelector(".avatar-edit-dialog .editor");
+            const editor = document.querySelector(".avatar-edit-dialog .editor") as HTMLElement;
             if (editor) {
                 if (this.props.show) {
                     editor.addEventListener("wheel", this.onEditorWheel);
@@ -64,43 +77,51 @@ class AvatarEditDialog extends React.PureComponent {
     }
 
     onUploadClick = () => {
-        this.#domFile.click();
+        if (this.#domFile != null) {
+            this.#domFile.click();
+        }
     }
 
-    imageUpload(files) {
+    imageUpload(files: {[index: number]: File, length: number}) {
         if (files.length > 0) {
             this.props.profileImageUpload(files[0]);
         }
     }
 
     onFileChange = () => {
-        this.imageUpload(this.#domFile.files);
+        if (this.#domFile?.files != null) {
+            this.imageUpload(this.#domFile.files);
+        }
     }
 
-    onDrop = files => {
+    onDrop = (files: File[]) => {
         this.imageUpload(files);
     }
 
-    onEditorWheel = event => {
+    onEditorWheel = (event: WheelEvent) => {
         this.setScale(this.state.scale - event.deltaY * this.getScaleMax() / 400);
         event.preventDefault();
     }
 
-    onRotateChange = value => {
+    onRotateChange = (value: number) => {
         this.setState({rotate: value});
     }
 
-    onShapeChange = value => {
+    onShapeChange = (value: string) => {
         this.setState({shape: value});
     }
 
-    onScaleChange = value => {
+    onScaleChange = (value: number) => {
         this.setScale(value);
     }
 
     onCreateClick = () => {
         const {imageId, width, height, profileAvatarCreate} = this.props;
         const {rotate, shape} = this.state;
+
+        if (this.#refEditor == null || width == null || height == null || imageId == null) {
+            return;
+        }
 
         const clip = this.#refEditor.getCroppingRect();
         profileAvatarCreate({
@@ -158,8 +179,8 @@ class AvatarEditDialog extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.profile.avatarEditDialog.show,
         imageUploading: state.profile.avatarEditDialog.imageUploading,
         imageId: state.profile.avatarEditDialog.imageId,
@@ -168,7 +189,9 @@ export default connect(
         height: state.profile.avatarEditDialog.height,
         creating: state.profile.avatarEditDialog.avatarCreating,
         rootPage: getNodeRootPage(state),
-        shapeDefault: getSetting(state, "avatar.shape.default")
+        shapeDefault: getSetting(state, "avatar.shape.default") as string
     }),
     { profileCloseAvatarEditDialog, profileImageUpload, profileAvatarCreate }
-)(AvatarEditDialog);
+);
+
+export default connector(AvatarEditDialog);

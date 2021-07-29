@@ -1,12 +1,16 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
 import "./AvatarShape.css";
 
-export default function AvatarShape({value, onChange}) {
-    const onClick = shape => () => {
+interface Props {
+    value: string;
+    onChange?: (shape: string) => void;
+}
+
+export default function AvatarShape({value, onChange}: Props) {
+    const onClick = (shape: string) => () => {
         if (onChange) {
             onChange(shape);
         }
@@ -16,14 +20,9 @@ export default function AvatarShape({value, onChange}) {
         <div className="avatar-shape" title="Avatar shape">
             {["circle", "square"].map(shape =>
                 <button className={cx({"active" : value === shape})} onClick={onClick(shape)} key={shape}>
-                    <FontAwesomeIcon icon={["far", shape]}/>
+                    <FontAwesomeIcon icon={["far", shape as any]}/>
                 </button>
             )}
         </div>
     );
-}
-
-AvatarShape.propTypes = {
-    value: PropType.string,
-    onChange: PropType.func
 }

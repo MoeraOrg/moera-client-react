@@ -1,11 +1,16 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import "./Scale.css";
 
-export default function Scale({max, value, onChange}) {
-    const onClick = sign => () => {
+interface Props {
+    max?: number;
+    value: number;
+    onChange: (scale: number) => void;
+}
+
+export default function Scale({max = 1, value, onChange}: Props) {
+    const onClick = (sign: 1 | -1) => () => {
         if (onChange) {
             let v = value + sign * (max - 1) / 100;
             v = Math.max(Math.min(v, max), 1)
@@ -15,9 +20,9 @@ export default function Scale({max, value, onChange}) {
         }
     }
 
-    const onScaleChange = event => {
+    const onScaleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            onChange(event.target.value);
+            onChange(parseFloat(event.target.value));
         }
     }
 
@@ -33,14 +38,4 @@ export default function Scale({max, value, onChange}) {
             </button>
         </div>
     );
-}
-
-Scale.propTypes = {
-    max: PropType.number,
-    value: PropType.number,
-    onChange: PropType.func
-}
-
-Scale.defaultProps = {
-    max: 1
 }

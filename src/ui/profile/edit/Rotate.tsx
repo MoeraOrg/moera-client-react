@@ -1,11 +1,15 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from "ui/control";
 
-export default function Rotate({value, onChange}) {
-    const onClick = sign => () => {
+interface Props {
+    value: number;
+    onChange?: (angle: number) => void;
+}
+
+export default function Rotate({value, onChange}: Props) {
+    const onClick = (sign: 1 | -1) => () => {
         if (onChange) {
             onChange((value + sign * 90) % 360);
         }
@@ -21,9 +25,4 @@ export default function Rotate({value, onChange}) {
             </Button>
         </div>
     );
-}
-
-Rotate.propTypes = {
-    value: PropType.number,
-    onChange: PropType.func
 }
