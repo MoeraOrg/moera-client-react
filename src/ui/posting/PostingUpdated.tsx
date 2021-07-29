@@ -2,13 +2,14 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
-import { FeedReference, PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api/node/api-types";
 import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";
+import { MinimalStoryInfo } from "ui/types";
 
 type Props = {
     posting: PostingInfo;
-    story: FeedReference | null;
+    story: MinimalStoryInfo | null;
 } & ConnectedProps<typeof connector>;
 
 function PostingUpdated({posting, story, timeRelative}: Props) {

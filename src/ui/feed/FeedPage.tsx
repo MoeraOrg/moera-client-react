@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import debounce from 'lodash.debounce';
 
 import FeedTitle from "ui/feed/FeedTitle";
@@ -7,6 +7,7 @@ import FeedPageHeader from "ui/feed/FeedPageHeader";
 import { Page } from "ui/page/Page";
 import FeedPosting from "ui/feed/FeedPosting";
 import FeedSentinel from "ui/feed/FeedSentinel";
+import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import {
     feedFutureSliceLoad,
@@ -19,9 +20,34 @@ import { isAtHomeNode } from "state/node/selectors";
 import { getPageHeaderHeight } from "util/misc";
 import "./FeedPage.css";
 
-class FeedPage extends React.PureComponent {
+function postingMoment(posting: HTMLElement): number {
+    return posting.dataset.moment != null ? parseInt(posting.dataset.moment) : 0;
+}
 
-    constructor(props, context) {
+interface OwnProps {
+    feedName: string;
+    visible: boolean;
+    title: string;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+interface State {
+    atTop: boolean;
+    atBottom: boolean;
+    scrolled: boolean;
+}
+
+class FeedPage extends React.PureComponent<Props, State> {
+
+    mounted: boolean;
+    prevAt: number;
+    newAnchor: number | null;
+    topmostBeforeUpdate: number | null;
+    futureIntersecting: boolean;
+    pastIntersecting: boolean;
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.mounted = false;
@@ -52,12 +78,12 @@ class FeedPage extends React.PureComponent {
         this.updateOnScrollHandler();
     }
 
-    getSnapshotBeforeUpdate(prevProps, prevState) {
+    getSnapshotBeforeUpdate() {
         this.topmostBeforeUpdate = FeedPage.getTopmostMoment();
         return null;
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.anchor !== prevProps.anchor) {
             this.newAnchor = this.props.anchor;
         }
@@ -130,18 +156,26 @@ class FeedPage extends React.PureComponent {
         const top = getPageHeaderHeight();
         const postings = document.getElementsByClassName("posting");
         for (let i = 0; i < postings.length; i++) {
-            if (postings.item(i).getBoundingClientRect().top >= top) {
-                return parseInt(postings.item(i).dataset.moment);
+            const posting = postings.item(i) as HTMLElement;
+            if (posting == null) {
+                continue;
+            }
+            if (posting.getBoundingClientRect().top >= top) {
+                return postingMoment(posting);
             }
         }
         return Number.MAX_SAFE_INTEGER;
     }
 
-    static getPostingAt(moment) {
+    static getPostingAt(moment: number) {
         const postings = document.getElementsByClassName("posting");
         for (let i = 0; i < postings.length; i++) {
-            if (postings.item(i).dataset.moment <= moment) {
-                return postings.item(i);
+            const posting = postings.item(i) as HTMLElement;
+            if (posting == null) {
+                continue;
+            }
+            if (postingMoment(posting) <= moment) {
+                return posting;
             }
         }
         return null;
@@ -156,8 +190,12 @@ class FeedPage extends React.PureComponent {
         const top = getPageHeaderHeight();
         const postings = document.getElementsByClassName("posting");
         for (let i = 0; i < postings.length; i++) {
-            if (postings.item(i).getBoundingClientRect().top >= top && postings.item(i).dataset.viewed === "false") {
-                return parseInt(postings.item(i).dataset.moment);
+            const posting = postings.item(i) as HTMLElement;
+            if (posting == null) {
+                continue;
+            }
+            if (posting.getBoundingClientRect().top >= top && posting.dataset.viewed === "false") {
+                return postingMoment(posting);
             }
         }
         return null;
@@ -167,13 +205,17 @@ class FeedPage extends React.PureComponent {
         const top = getPageHeaderHeight();
         const postings = document.getElementsByClassName("posting");
         for (let i = 0; i < postings.length; i++) {
-            if (postings.item(i).getBoundingClientRect().top >= top) {
-                postings.item(i).dataset.viewed = "true";
+            const posting = postings.item(i) as HTMLElement;
+            if (posting == null) {
+                continue;
+            }
+            if (posting.getBoundingClientRect().top >= top) {
+                posting.dataset.viewed = "true";
             }
         }
     }
 
-    static scrollTo(moment) {
+    static scrollTo(moment: number) {
         const posting = moment > Number.MIN_SAFE_INTEGER ?
             FeedPage.getPostingAt(moment) : FeedPage.getEarliestPosting();
         if (posting != null) {
@@ -184,7 +226,7 @@ class FeedPage extends React.PureComponent {
         return posting != null;
     }
 
-    onSentinelFuture = intersecting => {
+    onSentinelFuture = (intersecting: boolean) => {
         this.futureIntersecting = intersecting;
         if (this.futureIntersecting) {
             this.loadFuture();
@@ -198,7 +240,7 @@ class FeedPage extends React.PureComponent {
         this.props.feedFutureSliceLoad(this.props.feedName);
     }
 
-    onSentinelPast = intersecting => {
+    onSentinelPast = (intersecting: boolean) => {
         this.pastIntersecting = intersecting;
         if (this.pastIntersecting) {
             this.loadPast();
@@ -212,11 +254,11 @@ class FeedPage extends React.PureComponent {
         this.props.feedPastSliceLoad(this.props.feedName);
     }
 
-    onBoundaryFuture = intersecting => {
+    onBoundaryFuture = (intersecting: boolean) => {
         this.setState({atTop: intersecting});
     };
 
-    onBoundaryPast = intersecting => {
+    onBoundaryPast = (intersecting: boolean) => {
         this.setState({atBottom: intersecting});
     };
 
@@ -246,8 +288,9 @@ class FeedPage extends React.PureComponent {
                                   visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
                                   onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
                     {stories
-                        .filter(t => postings[t.postingId])
-                        .map(t => ({story: t, ...postings[t.postingId]}))
+                        .filter(t => t.postingId != null)
+                        .filter(t => postings[t.postingId!])
+                        .map(t => ({story: t, ...postings[t.postingId!]}))
                         .map(({story, posting, deleting}) =>
                             <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
                     <FeedSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"
@@ -261,8 +304,8 @@ class FeedPage extends React.PureComponent {
     }
 }
 
-export default connect(
-    (state, ownProps) => ({
+const connector = connect(
+    (state: ClientState, ownProps: OwnProps) => ({
         loadingFuture: getFeedState(state, ownProps.feedName).loadingFuture,
         loadingPast: getFeedState(state, ownProps.feedName).loadingPast,
         before: getFeedState(state, ownProps.feedName).before,
@@ -273,4 +316,6 @@ export default connect(
         atHomeNode: isAtHomeNode(state)
     }),
     { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor, feedStatusUpdate }
-)(FeedPage);
+);
+
+export default connector(FeedPage);

@@ -2,15 +2,16 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
-import { FeedReference, PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
-import { ClientState } from "state/state";
+import { MinimalStoryInfo } from "ui/types";
 import "./PostingDate.css"
 
 type Props = {
     posting: PostingInfo;
-    story: FeedReference | null;
+    story: MinimalStoryInfo | null;
 } & ConnectedProps<typeof connector>;
 
 function PostingDate({posting, story, timeRelative}: Props) {

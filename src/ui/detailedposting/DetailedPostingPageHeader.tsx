@@ -2,10 +2,10 @@ import React from 'react';
 
 import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";
-import { FeedReference } from "api/node/api-types";
+import { MinimalStoryInfo } from "ui/types";
 
 interface Props {
-    story: FeedReference | null;
+    story: MinimalStoryInfo | null;
     href: string;
     feedTitle: string;
 }

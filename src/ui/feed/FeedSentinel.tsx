@@ -1,21 +1,33 @@
 import React from 'react';
-import PropType from 'prop-types';
 import cx from 'classnames';
 
 import { Loading } from "ui/control";
 
 import "./FeedSentinel.css";
 
-export default class FeedSentinel extends React.PureComponent {
+interface Props {
+    visible: boolean;
+    loading: boolean;
+    title: string;
+    margin: string;
+    onSentinel: (intersecting: boolean) => void;
+    onBoundary: (intersecting: boolean) => void;
+    onClick: () => void;
+}
 
-    constructor(props, context) {
+export default class FeedSentinel extends React.PureComponent<Props> {
+
+    sentinelObserver: IntersectionObserver;
+    boundaryObserver: IntersectionObserver;
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.sentinelObserver = new IntersectionObserver(this.onSentinel, {rootMargin: this.props.margin});
         this.boundaryObserver = new IntersectionObserver(this.onBoundary);
     }
 
-    observeSentinel = sentinel => {
+    observeSentinel = (sentinel: HTMLDivElement) => {
         if (sentinel == null) {
             this.sentinelObserver.disconnect();
             this.boundaryObserver.disconnect();
@@ -25,12 +37,12 @@ export default class FeedSentinel extends React.PureComponent {
         }
     };
 
-    onSentinel = entry => {
-        this.props.onSentinel(entry[0].isIntersecting);
+    onSentinel = (entries: IntersectionObserverEntry[]) => {
+        this.props.onSentinel(entries[0].isIntersecting);
     }
 
-    onBoundary = entry => {
-        this.props.onBoundary(entry[0].isIntersecting);
+    onBoundary = (entries: IntersectionObserverEntry[]) => {
+        this.props.onBoundary(entries[0].isIntersecting);
     }
 
     render() {
@@ -46,13 +58,3 @@ export default class FeedSentinel extends React.PureComponent {
     }
 
 }
-
-FeedSentinel.propTypes = {
-    visible: PropType.bool,
-    loading: PropType.bool,
-    title: PropType.string,
-    margin: PropType.string,
-    onSentinel: PropType.func,
-    onBoundary: PropType.func,
-    onClick: PropType.func
-};

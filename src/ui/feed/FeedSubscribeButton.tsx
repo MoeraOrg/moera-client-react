@@ -1,8 +1,8 @@
 import React from 'react';
-import PropType from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Loading } from "ui/control";
+import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import {
     getFeedSubscriberId,
@@ -15,22 +15,27 @@ import {
 import { getOwnerName, isOwnerNameSet } from "state/owner/selectors";
 import SubscribeButton from "ui/control/SubscribeButton";
 
-const FeedSubscribeButton = ({feedName, show, ownerName, generalReady, generalLoading, subscribed, subscribing,
-                              unsubscribing, subscriberId}) => (
-    <>
-        <SubscribeButton nodeName={ownerName} feedName={feedName} show={show} ready={generalReady}
-                         subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
-                         subscriberId={subscriberId}/>
-        <Loading active={generalLoading}/>
-    </>
-);
-
-FeedSubscribeButton.propTypes = {
-    feedName: PropType.string
+interface OwnProps {
+    feedName: string;
 }
 
-export default connect(
-    (state, ownProps) => ({
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+const FeedSubscribeButton = ({feedName, show, ownerName, generalReady, generalLoading, subscribed, subscribing,
+                              unsubscribing, subscriberId}: Props) => (
+    ownerName != null ?
+        <>
+            <SubscribeButton nodeName={ownerName} feedName={feedName} show={show} ready={generalReady}
+                             subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
+                             subscriberId={subscriberId}/>
+            <Loading active={generalLoading}/>
+        </>
+    :
+        null
+);
+
+const connector = connect(
+    (state: ClientState, ownProps: OwnProps) => ({
         show: isOwnerNameSet(state) && !isAtHomeNode(state),
         ownerName: getOwnerName(state),
         generalReady: isFeedGeneralReady(state, ownProps.feedName),
@@ -40,4 +45,6 @@ export default connect(
         unsubscribing: isUnsubscribingFromFeed(state, ownProps.feedName),
         subscriberId: getFeedSubscriberId(state, ownProps.feedName)
     })
-)(FeedSubscribeButton);
+);
+
+export default connector(FeedSubscribeButton);

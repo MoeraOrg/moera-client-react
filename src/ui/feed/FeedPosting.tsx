@@ -1,8 +1,11 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
-import { isPermitted } from "state/node/selectors";
+import { ClientState } from "state/state";
+import { ExtPostingInfo } from "state/postings/state";
+import { isPermitted, ProtectedObject } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
+import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
 import PostingDate from "ui/posting/PostingDate";
@@ -20,8 +23,12 @@ import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/posting/Entry.css";
 
-function Content({posting}) {
-    if (posting.bodyPreview.text) {
+interface ContentProps {
+    posting: ExtPostingInfo;
+}
+
+function Content({posting}: ContentProps) {
+    if (posting.bodyPreview != null && posting.bodyPreview.text) {
         return (
             <div className="content">
                 <EntryHtml html={posting.bodyPreview.text}/>
@@ -35,7 +42,13 @@ function Content({posting}) {
     }
 }
 
-const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) => (
+type FeedPostingProps = {
+    posting: ExtPostingInfo;
+    story: MinimalStoryInfo;
+    deleting: boolean;
+} & ConnectedProps<typeof connector>;
+
+const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}: FeedPostingProps) => (
     <div className="posting entry preview" data-moment={story.moment} data-viewed={story.viewed}>
         {deleting ?
             <PostingDeleting/>
@@ -65,9 +78,11 @@ const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}) =
     </div>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
-        isPermitted: (operation, posting) => isPermitted(operation, posting, state)
+        isPermitted: (operation: string, posting: ProtectedObject) => isPermitted(operation, posting, state)
     })
-)(FeedPosting);
+);
+
+export default connector(FeedPosting);
