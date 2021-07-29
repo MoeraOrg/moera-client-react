@@ -1,13 +1,19 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Loading } from "ui/control";
 import Twemoji from "ui/twemoji/Twemoji";
 
-const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis, closeReactionsDialog}) => (
-    loaded &&
+type Props = {
+    itemsRef?: React.LegacyRef<HTMLDivElement>;
+    onSwitchView?: () => void;
+} & ConnectedProps<typeof connector>;
+
+const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis, closeReactionsDialog}: Props) => (
+    loaded ?
         <>
             <div className="totals clearfix">
                 <div className="topright">
@@ -19,7 +25,7 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
                     <button type="button" className="close" onClick={closeReactionsDialog}>&times;</button>
                 </div>
             </div>
-            <div className="items" tabIndex="-1" ref={itemsRef}>
+            <div className="items" tabIndex={-1} ref={itemsRef}>
                 {total !== 0 &&
                     <div className="item">
                         <div className="all">All</div>
@@ -30,7 +36,7 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
                 {emojis
                     .map(t => ({
                         ...t,
-                        percent: t.share != null ? t.share * 100 : t.total * 100 / total
+                        percent: t.share != null ? t.share * 100 : (t.total != null ? t.total * 100 / total : 0)
                     }))
                     .map(t =>
                         <div className="item" key={t.emoji}>
@@ -47,11 +53,15 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
             </div>
             <Loading active={loading}/>
         </>
+    :
+        null
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         ...state.reactionsDialog.totals,
     }),
     { closeReactionsDialog }
-)(ReactionsChartView);
+);
+
+export default connector(ReactionsChartView);

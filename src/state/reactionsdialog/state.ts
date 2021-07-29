@@ -1,4 +1,4 @@
-import { ReactionInfo } from "api/node/api-types";
+import { ReactionInfo, ReactionTotalInfo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
 
 export interface ReactionsDialogTabsState {
@@ -14,13 +14,13 @@ export interface ReactionsDialogState {
     postingId: string | null;
     commentId: string | null;
     negative: boolean;
-    activeTab: string | null;
+    activeTab: number | null;
     reactions: Record<string, ReactionsDialogTabsState>;
     totals: {
         loading: boolean;
         loaded: boolean;
         total: number;
-        emojis: number[];
+        emojis: ReactionTotalInfo[];
     },
     verificationStatus: Record<string, VerificationStatus>;
 }

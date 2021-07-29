@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
@@ -14,9 +14,15 @@ import {
     getReactionsDialogRemainingCount,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
+import { ClientState } from "state/state";
+
+type Props = {
+    itemsRef?: React.LegacyRef<HTMLDivElement>;
+    onSwitchView?: () => void;
+} & ConnectedProps<typeof connector>;
 
 const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reactionsNodeName, remaining,
-                            reactionsLoading, reactions, closeReactionsDialog}) => (
+                            reactionsLoading, reactions, closeReactionsDialog}: Props) => (
     <>
         <div className="totals clearfix">
             <TotalsTabs/>
@@ -27,16 +33,16 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
                 <button type="button" className="close" onClick={closeReactionsDialog}>&times;</button>
             </div>
         </div>
-        <div className="items" tabIndex="-1" ref={itemsRef}>
+        <div className="items" tabIndex={-1} ref={itemsRef}>
             {reactions.map(r =>
                 <div className="item" key={r.moment}>
                     <AvatarWithPopup ownerName={r.ownerName} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                     nodeName={reactionsNodeName} size={32}/>
+                                     nodeName={reactionsNodeName ?? undefined} size={32}/>
                     <div className="owner-name">
                         <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
-                                  avatarNodeName={reactionsNodeName}/>
+                                  avatarNodeName={reactionsNodeName ?? undefined}/>
                         {" "}
-                        {r.signature &&
+                        {r.signature && postingId != null &&
                             <ReactionVerifyButton postingId={postingId} commentId={commentId} ownerName={r.ownerName}/>
                         }
                     </div>
@@ -49,8 +55,8 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
     </>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         postingId: state.reactionsDialog.postingId,
         commentId: state.reactionsDialog.commentId,
         reactionsNodeName: getReactionsDialogNodeName(state),
@@ -59,4 +65,6 @@ export default connect(
         reactions: getReactionsDialogItems(state)
     }),
     { closeReactionsDialog }
-)(ReactionsListView);
+);
+
+export default connector(ReactionsListView);

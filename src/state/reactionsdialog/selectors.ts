@@ -2,6 +2,7 @@ import { getPosting } from "state/postings/selectors";
 import { ClientState } from "state/state";
 import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
 import { ReactionInfo } from "api/node/api-types";
+import { VerificationStatus } from "state/state-types";
 
 export function getReactionsDialogNodeName(state: ClientState): string | null {
     return state.reactionsDialog.nodeName;
@@ -47,6 +48,6 @@ export function isReactionsDialogTotalsToBeLoaded(state: ClientState): boolean {
     return !state.reactionsDialog.totals.loaded && !state.reactionsDialog.totals.loading;
 }
 
-export function getReactionVerificationStatus(state: ClientState, ownerName: string): string {
+export function getReactionVerificationStatus(state: ClientState, ownerName: string): VerificationStatus | null {
     return state.reactionsDialog.verificationStatus[ownerName] ?? "none";
 }

@@ -91,9 +91,9 @@ export const reactionsDialogTotalsLoadFailed = (): ReactionsDialogTotalsLoadFail
 
 export const REACTIONS_DIALOG_SELECT_TAB = "REACTIONS_DIALOG_SELECT_TAB";
 export type ReactionsDialogSelectTabAction = ActionWithPayload<typeof REACTIONS_DIALOG_SELECT_TAB, {
-    tab: string;
+    tab: number | null;
 }>;
-export const reactionsDialogSelectTab = (tab: string): ReactionsDialogSelectTabAction => ({
+export const reactionsDialogSelectTab = (tab: number | null): ReactionsDialogSelectTabAction => ({
     type: REACTIONS_DIALOG_SELECT_TAB,
     payload: {tab}
 });

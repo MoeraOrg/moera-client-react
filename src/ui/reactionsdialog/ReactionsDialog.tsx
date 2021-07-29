@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { isPermitted } from "state/node/selectors";
@@ -8,19 +8,26 @@ import { ModalDialog } from "ui/control";
 import ReactionsListView from "ui/reactionsdialog/ReactionsListView";
 import ReactionsChartView from "ui/reactionsdialog/ReactionsChartView";
 import "./ReactionsDialog.css";
+import { ClientState } from "state/state";
 
-class ReactionsDialog extends React.PureComponent {
-    #itemsDom;
+type Props = ConnectedProps<typeof connector>;
 
-    constructor(props, context) {
+interface State {
+    chartView: boolean;
+}
+
+class ReactionsDialog extends React.PureComponent<Props, State> {
+
+    #itemsDom: HTMLDivElement | null = null;
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.state = {chartView: false};
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
         if (((!prevProps.show && this.props.show)
-            || prevProps.activeTab !== this.props.activeTab
             || prevState.chartView !== this.state.chartView)
             && this.#itemsDom) {
 
@@ -39,13 +46,13 @@ class ReactionsDialog extends React.PureComponent {
             return null;
         }
         const chartView = this.state.chartView || !reactionsVisible
-            || (!posting.reactionsVisible && posting.receiverName != null);
+            || (posting != null && !posting.reactionsVisible && posting.receiverName != null);
         return (
             <ModalDialog onClose={closeReactionsDialog}>
                 <div className="reactions-dialog modal-body">
                     {chartView ?
                         <ReactionsChartView itemsRef={dom => {this.#itemsDom = dom}}
-                                            onSwitchView={reactionsVisible ? this.onSwitchView : null}/>
+                                            onSwitchView={reactionsVisible ? this.onSwitchView : undefined}/>
                     :
                         <ReactionsListView itemsRef={dom => {this.#itemsDom = dom}}
                                            onSwitchView={this.onSwitchView}/>
@@ -57,11 +64,13 @@ class ReactionsDialog extends React.PureComponent {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.reactionsDialog.show,
         posting: getPosting(state, state.reactionsDialog.postingId),
         reactionsVisible: isPermitted("reactions", getPosting(state, state.reactionsDialog.postingId), state)
     }),
     { closeReactionsDialog }
-)(ReactionsDialog);
+);
+
+export default connector(ReactionsDialog);
