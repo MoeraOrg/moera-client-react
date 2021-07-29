@@ -1,8 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { addDays, isBefore } from 'date-fns';
 
 import { PREFIX } from "api/settings";
+import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getSetting, isSettingsClientValuesLoaded } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
@@ -10,10 +11,20 @@ import { isStandaloneMode } from "state/navigation/selectors";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
 
-class AddonInvitation extends React.Component {
+type Props = ConnectedProps<typeof connector>;
 
-    state = {
-        hidden: false
+interface State {
+    hidden: boolean;
+}
+
+class AddonInvitation extends React.Component<Props, State> {
+
+    constructor(props: Props, context: any) {
+        super(props, context);
+
+        this.state = {
+            hidden: false
+        }
     }
 
     onClick = () => {
@@ -60,11 +71,13 @@ class AddonInvitation extends React.Component {
 
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         standalone: isStandaloneMode(state),
         settingsLoaded: isConnectedToHome(state) && isSettingsClientValuesLoaded(state),
-        shownAt: getSetting(state, "invitation.addon.shown-at")
+        shownAt: getSetting(state, "invitation.addon.shown-at") as number
     }),
     { settingsUpdate }
-)(AddonInvitation);
+);
+
+export default connector(AddonInvitation);

@@ -1,17 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { PAGE_NEWS } from "state/navigation/pages";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 
-function MainMenuNewsLink({anchor}) {
+type Props = ConnectedProps<typeof connector>;
+
+function MainMenuNewsLink({anchor}: Props) {
     const href = anchor != null ? `/news?before=${anchor}` :"/news";
     return <MainMenuLink page={PAGE_NEWS} href={href}>NEWS</MainMenuLink>
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         anchor: getFeedState(state, "news").anchor
     })
-)(MainMenuNewsLink);
+);
+
+export default connector(MainMenuNewsLink);
