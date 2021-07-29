@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropType from 'prop-types';
+import { connect, ConnectedProps } from 'react-redux';
 
 import { Button, Loading } from "ui/control";
 import { isNodeNameDefined, isNodeNameManageable, isNodeNameOperationPending } from "state/nodename/selectors";
 import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions";
+import { ClientState } from "state/state";
 import ManagementMenu from "ui/profile/view/ManagementMenu";
 import OperationStatus from "ui/profile/view/OperationStatus";
 import RegisterNameDialog from "ui/profile/manage/RegisterNameDialog";
@@ -13,8 +13,10 @@ import NodeNameUpdateDialog from "ui/profile/manage/NodeNameUpdateDialog";
 import { mentionName } from "util/misc";
 import "./NodeNameView.css";
 
+type Props = ConnectedProps<typeof connector>;
+
 const NodeNameView = ({loading, name, nameDefined, manageable, operationPending, registerNameDialog,
-                       nodeNameUpdateDialog}) => (
+                       nodeNameUpdateDialog}: Props) => (
     <>
         <div className="node-name-view">
             {nameDefined ?
@@ -44,16 +46,8 @@ const NodeNameView = ({loading, name, nameDefined, manageable, operationPending,
     </>
 );
 
-NodeNameView.propTypes = {
-    loading: PropType.bool,
-    name: PropType.string,
-    nameDefined: PropType.bool,
-    manageable: PropType.bool,
-    operationPending: PropType.bool
-};
-
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         loading: state.nodeName.loading,
         name: state.nodeName.name,
         nameDefined: isNodeNameDefined(state),
@@ -61,4 +55,6 @@ export default connect(
         operationPending: isNodeNameOperationPending(state)
     }),
     { registerNameDialog, nodeNameUpdateDialog }
-)(NodeNameView);
+);
+
+export default connector(NodeNameView);

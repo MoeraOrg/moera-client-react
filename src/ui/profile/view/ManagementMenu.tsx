@@ -1,10 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions";
 import { DropdownMenu } from "ui/control";
 import { getNodeRootLocation } from "state/node/selectors";
+import { ClientState } from "state/state";
 
-const ManagementMenu = ({rootLocation, registerNameDialog, nodeNameUpdateDialog}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const ManagementMenu = ({rootLocation, registerNameDialog, nodeNameUpdateDialog}: Props) => (
     <DropdownMenu items={[
         {
             title: "Update the current name",
@@ -27,9 +30,11 @@ const ManagementMenu = ({rootLocation, registerNameDialog, nodeNameUpdateDialog}
     ]}/>
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         rootLocation: getNodeRootLocation(state)
     }),
     { registerNameDialog, nodeNameUpdateDialog }
-)(ManagementMenu);
+);
+
+export default connector(ManagementMenu);

@@ -1,17 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
+import { ClientState } from "state/state";
 import * as Rules from "api/naming/rules";
 import { NodeName } from "api";
 import { range } from "util/misc";
 import "./NodeNameUpdateDialog.css";
 
-const Column = ({start, end, autoFocus = false}) => (
+interface ColumnProps {
+    start: number;
+    end: number;
+    autoFocus?: boolean;
+}
+
+const Column = ({start, end, autoFocus = false}: ColumnProps) => (
     <div className="col-sm-4">
         <ol start={start + 1}>
             {range(end - start).map(index => (
@@ -24,9 +31,18 @@ const Column = ({start, end, autoFocus = false}) => (
     </div>
 );
 
-class NodeNameUpdateDialog extends React.PureComponent {
+type OuterProps = ConnectedProps<typeof connector>;
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+interface Values {
+    name: string;
+    mnemonic: string[];
+}
+
+type Props = OuterProps & FormikProps<Values>;
+
+class NodeNameUpdateDialog extends React.PureComponent<Props> {
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.show !== prevProps.show) { // Mnemonic must be cleared immediately after hiding the dialog
             this.props.resetForm({
                 values: nodeNameUpdateDialogLogic.mapPropsToValues(this.props),
@@ -76,14 +92,14 @@ class NodeNameUpdateDialog extends React.PureComponent {
 
 const nodeNameUpdateDialogLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
             name: NodeName.shorten(props.name) ?? "",
             mnemonic: Array(24).fill("")
         }
     },
 
-    validationSchema(props) {
+    validationSchema(props: OuterProps) {
         const mnemonic = yup.array().transform(value =>
                 Array(24).fill("").map((v, i) => value[i] ?? v)
             ).of(yup.string().trim()
@@ -103,7 +119,7 @@ const nodeNameUpdateDialogLogic = {
             })
     },
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.nodeNameUpdate(
             NodeName.parse(values.name.trim()).format(),
             values.mnemonic.map(v => v.trim().toLowerCase()));
@@ -112,12 +128,14 @@ const nodeNameUpdateDialogLogic = {
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.nodeName.showingUpdateDialog,
         showChangeName: state.nodeName.showingChangeName,
         updating: state.nodeName.updating,
         name: state.nodeName.name
     }),
     { nodeNameUpdateDialogCancel, nodeNameUpdate }
-)(withFormik(nodeNameUpdateDialogLogic)(NodeNameUpdateDialog));
+);
+
+export default connector(withFormik(nodeNameUpdateDialogLogic)(NodeNameUpdateDialog));

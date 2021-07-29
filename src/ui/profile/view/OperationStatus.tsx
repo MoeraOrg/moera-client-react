@@ -1,12 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { format, fromUnixTime } from 'date-fns';
 import cx from 'classnames';
 
+import { ClientState } from "state/state";
 import { Popover } from "ui/control";
 import "./OperationStatus.css";
 
-function OperationStatus({status, statusUpdated, errorCode, errorMessage}) {
+type Props = ConnectedProps<typeof connector>;
+
+function OperationStatus({status, statusUpdated, errorCode, errorMessage}: Props) {
     let text;
     let success = false;
     let failure = false;
@@ -53,11 +56,13 @@ function OperationStatus({status, statusUpdated, errorCode, errorMessage}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         status: state.nodeName.operationStatus,
         statusUpdated: state.nodeName.operationStatusUpdated,
         errorCode: state.nodeName.operationErrorCode,
         errorMessage: state.nodeName.operationErrorMessage,
     })
-)(OperationStatus);
+);
+
+export default connector(OperationStatus);

@@ -1,14 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
+import { ClientState } from "state/state";
 import * as Rules from "api/naming/rules";
 
-function RegisterNameDialog({show, registering, registerNameDialogCancel}) {
+type OuterProps = ConnectedProps<typeof connector>;
+
+interface Values {
+    name: string;
+}
+
+type Props = OuterProps & FormikProps<Values>;
+
+function RegisterNameDialog({show, registering, registerNameDialogCancel}: Props) {
     if (!show) {
         return null;
     }
@@ -32,7 +41,7 @@ function RegisterNameDialog({show, registering, registerNameDialogCancel}) {
 
 const registerNameDialogLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
             name: ""
         }
@@ -46,7 +55,7 @@ const registerNameDialogLogic = {
     validateOnBlur: false,
     validateOnChange: false,
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.registerName(
             values.name.trim(),
             () => formik.setFieldError("name", "Name is already taken"));
@@ -55,10 +64,12 @@ const registerNameDialogLogic = {
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.nodeName.showingRegisterDialog,
         registering: state.nodeName.registering
     }),
     { registerNameDialogCancel, registerName }
-)(withFormik(registerNameDialogLogic)(RegisterNameDialog));
+);
+
+export default connector(withFormik(registerNameDialogLogic)(RegisterNameDialog));
