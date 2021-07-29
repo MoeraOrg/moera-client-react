@@ -1,17 +1,29 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import { InputField } from "ui/control/field";
+import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
-import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 import { connectDialogSetForm } from "state/connectdialog/actions";
+import { ClientState } from "state/state";
 
-class ResetForm extends React.PureComponent {
+type OuterProps = ConnectedProps<typeof connector>;
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+interface Values {
+    resetToken: string;
+    location: string;
+    password: string;
+    confirmPassword: string;
+}
+
+type Props = OuterProps & FormikProps<Values>;
+
+class ResetForm extends React.PureComponent<Props> {
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.show !== prevProps.show && this.props.show) {
             this.props.resetForm({
                 values: resetFormLogic.mapPropsToValues(this.props),
@@ -19,11 +31,11 @@ class ResetForm extends React.PureComponent {
         }
     }
 
-    onResend = event => {
-        const {location, login} = this.props.values;
+    onResend = (event: React.MouseEvent) => {
+        const {location} = this.props.values;
         const {connectDialogSetForm} = this.props;
 
-        connectDialogSetForm(location, login, "forgot");
+        connectDialogSetForm(location, "admin", "forgot");
 
         event.preventDefault();
     }
@@ -54,7 +66,7 @@ class ResetForm extends React.PureComponent {
 
 const resetFormLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
             resetToken: "",
             location: props.location || props.nodeRoot || "",
@@ -72,7 +84,7 @@ const resetFormLogic = {
         )
     }),
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.connectToHome(values.location.trim(), false, "admin", values.password, null,
             values.resetToken.trim());
         formik.setSubmitting(false);
@@ -80,12 +92,14 @@ const resetFormLogic = {
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.connectDialog.show,
         emailHint: state.connectDialog.emailHint,
         location: state.connectDialog.location,
         nodeRoot: getNodeRootLocation(state)
     }),
     { connectToHome, connectDialogSetForm }
-)(withFormik(resetFormLogic)(ResetForm));
+);
+
+export default connector(withFormik(resetFormLogic)(ResetForm));

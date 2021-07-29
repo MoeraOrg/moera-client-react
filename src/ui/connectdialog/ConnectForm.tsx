@@ -1,18 +1,28 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
-import { cancelConnectDialog, connectDialogSetForm } from "state/connectdialog/actions";
+import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import { cancelConnectDialog, ConnectDialogForm, connectDialogSetForm } from "state/connectdialog/actions";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
-import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import { ClientState } from "state/state";
 
-class ConnectForm extends React.PureComponent {
+type OuterProps = ConnectedProps<typeof connector>;
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+interface Values {
+    location: string;
+    password: string;
+}
+
+type Props = OuterProps & FormikProps<Values>;
+
+class ConnectForm extends React.PureComponent<Props> {
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.show !== prevProps.show && this.props.show) {
             this.props.resetForm({
                 values: connectFormLogic.mapPropsToValues(this.props),
@@ -20,19 +30,19 @@ class ConnectForm extends React.PureComponent {
         }
     }
 
-    setForm(form) {
-        const {location, login} = this.props.values;
+    setForm(form: ConnectDialogForm) {
+        const {location} = this.props.values;
         const {connectDialogSetForm} = this.props;
 
-        connectDialogSetForm(location, login, form);
+        connectDialogSetForm(location, "admin", form);
     }
 
-    onSetPassword = event => {
+    onSetPassword = (event: React.MouseEvent) => {
         this.setForm("assign");
         event.preventDefault();
     }
 
-    onForgotPassword = event => {
+    onForgotPassword = (event: React.MouseEvent) => {
         this.setForm("forgot");
         event.preventDefault();
     }
@@ -54,7 +64,7 @@ class ConnectForm extends React.PureComponent {
 
 const connectFormLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
             location: props.location || props.nodeRoot || "",
             password: ""
@@ -66,18 +76,20 @@ const connectFormLogic = {
         password: yup.string().required("Must not be empty")
     }),
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.connectToHome(values.location.trim(), false, "admin", values.password);
         formik.setSubmitting(false);
     }
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.connectDialog.show,
         location: state.connectDialog.location,
         nodeRoot: getNodeRootLocation(state)
     }),
     { cancelConnectDialog, connectToHome, connectDialogSetForm }
-)(withFormik(connectFormLogic)(ConnectForm));
+);
+
+export default connector(withFormik(connectFormLogic)(ConnectForm));

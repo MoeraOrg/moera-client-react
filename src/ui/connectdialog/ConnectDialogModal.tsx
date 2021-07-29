@@ -1,12 +1,19 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { ReactNode } from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import { Form } from 'formik';
 
 import { cancelConnectDialog } from "state/connectdialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import "./ConnectDialogModal.css";
 
-const ConnectDialogModal = ({title, buttonCaption, loading, children, cancelConnectDialog}) => (
+type Props = {
+    title?: string;
+    buttonCaption: string;
+    loading?: boolean;
+    children: ReactNode;
+} & ConnectedProps<typeof connector>;
+
+const ConnectDialogModal = ({title, buttonCaption, loading, children, cancelConnectDialog}: Props) => (
     <ModalDialog title={title} className="connect-dialog" onClose={cancelConnectDialog}>
         <Form>
             <div className="modal-body">
@@ -20,7 +27,9 @@ const ConnectDialogModal = ({title, buttonCaption, loading, children, cancelConn
     </ModalDialog>
 );
 
-export default connect(
+const connector = connect(
     null,
     { cancelConnectDialog }
-)(ConnectDialogModal);
+);
+
+export default connector(ConnectDialogModal);

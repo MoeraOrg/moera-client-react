@@ -1,16 +1,27 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import { InputField } from "ui/control/field";
+import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
-import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import { ClientState } from "state/state";
 
-class AssignForm extends React.PureComponent {
+type OuterProps = ConnectedProps<typeof connector>;
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+interface Values {
+    location: string;
+    password: string;
+    confirmPassword: string;
+}
+
+type Props = OuterProps & FormikProps<Values>;
+
+class AssignForm extends React.PureComponent<Props> {
+
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (this.props.show !== prevProps.show && this.props.show) {
             this.props.resetForm({
                 values: assignFormLogic.mapPropsToValues(this.props),
@@ -32,7 +43,7 @@ class AssignForm extends React.PureComponent {
 
 const assignFormLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         return {
             location: props.location || props.nodeRoot || "",
             password: "",
@@ -48,18 +59,20 @@ const assignFormLogic = {
         )
     }),
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.connectToHome(values.location.trim(), true, "admin", values.password);
         formik.setSubmitting(false);
     }
 
 };
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         show: state.connectDialog.show,
         location: state.connectDialog.location,
         nodeRoot: getNodeRootLocation(state)
     }),
     { connectToHome }
-)(withFormik(assignFormLogic)(AssignForm));
+);
+
+export default connector(withFormik(assignFormLogic)(AssignForm));
