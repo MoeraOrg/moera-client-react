@@ -55,7 +55,7 @@ const emptySettings = {
 };
 
 const initialState = {
-    tab: "node",
+    tab: "node" as const,
     sheet: "posting",
     ...emptySettings
 };

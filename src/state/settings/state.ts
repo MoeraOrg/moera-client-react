@@ -1,8 +1,10 @@
 import { SettingMetaInfo } from "api/node/api-types";
 import { ClientSettingMetaInfo } from "api/settings";
 
+export type SettingsTabId = "node" | "client";
+
 export interface SettingsState {
-    tab: string;
+    tab: SettingsTabId;
     sheet: string;
     node: {
         loadingValues: boolean;

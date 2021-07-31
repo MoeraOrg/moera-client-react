@@ -1,4 +1,4 @@
-import { SignUpStage } from "state/signupdialog/actions";
+export type SignUpStage = 0 | 1 | 2 | 3 | 4;
 
 export interface SignUpDialogState {
     show: boolean;

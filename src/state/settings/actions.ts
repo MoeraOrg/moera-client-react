@@ -2,12 +2,13 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { SettingInfo, SettingMetaInfo } from "api/node/api-types";
+import { SettingsTabId } from "state/settings/state";
 
 export const SETTINGS_GO_TO_TAB = "SETTINGS_GO_TO_TAB";
 export type SettingsGoToTabAction = ActionWithPayload<typeof SETTINGS_GO_TO_TAB, {
-    tab: string;
+    tab: SettingsTabId;
 }>;
-export const settingsGoToTab = (tab: string): SettingsGoToTabAction => ({
+export const settingsGoToTab = (tab: SettingsTabId): SettingsGoToTabAction => ({
     type: SETTINGS_GO_TO_TAB,
     payload: {tab}
 });

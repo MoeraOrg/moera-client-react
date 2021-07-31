@@ -6,10 +6,11 @@ import * as yup from 'yup';
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
-import { cancelConnectDialog, ConnectDialogForm, connectDialogSetForm } from "state/connectdialog/actions";
+import { cancelConnectDialog, connectDialogSetForm } from "state/connectdialog/actions";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 import { ClientState } from "state/state";
+import { ConnectDialogForm } from "state/connectdialog/state";
 
 type OuterProps = ConnectedProps<typeof connector>;
 

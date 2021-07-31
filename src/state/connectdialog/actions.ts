@@ -1,8 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-
-export type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
+import { ConnectDialogForm } from "state/connectdialog/state";
 
 export const OPEN_CONNECT_DIALOG = "OPEN_CONNECT_DIALOG";
 export type OpenConnectDialogAction = Action<typeof OPEN_CONNECT_DIALOG>;

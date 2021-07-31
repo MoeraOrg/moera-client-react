@@ -1,13 +1,16 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
-import { getActualSheet, getActualTab, getMenuItems } from "ui/settings/settings-menu";
+import { ClientState } from "state/state";
 import { settingsGoToSheet } from "state/settings/actions";
+import { getActualSheet, getActualTab, getMenuItems } from "ui/settings/settings-menu";
 import Jump from "ui/navigation/Jump";
 import "./SettingsMenu.css";
 
-function SettingsMenu({tab, sheet, settingsGoToSheet}) {
+type Props = ConnectedProps<typeof connector>;
+
+function SettingsMenu({tab, sheet, settingsGoToSheet}: Props) {
     const items = getMenuItems(tab);
     return (
         <ul className="nav nav-pills flex-md-column col-md-2 settings-menu">{
@@ -25,10 +28,12 @@ function SettingsMenu({tab, sheet, settingsGoToSheet}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         tab: getActualTab(state.settings.tab),
         sheet: getActualSheet(state.settings.tab, state.settings.sheet)
     }),
     { settingsGoToSheet }
-)(SettingsMenu);
+);
+
+export default connector(SettingsMenu);

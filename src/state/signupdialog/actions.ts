@@ -1,8 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-
-export type SignUpStage = 0 | 1 | 2 | 3 | 4;
+import { SignUpStage } from "state/signupdialog/state";
 
 export const SIGN_UP_STAGE_DOMAIN = 0 as const;
 export const SIGN_UP_STAGE_PASSWORD = 1 as const;

@@ -1,4 +1,6 @@
-const MENU_ITEMS = {
+import { SettingsTabId } from "state/settings/state";
+
+const MENU_ITEMS: Record<SettingsTabId, Record<string, string>> = {
     "node": {
         "posting": "Post",
         "security": "Security",
@@ -12,15 +14,15 @@ const MENU_ITEMS = {
     }
 };
 
-export function getMenuItems(tab) {
+export function getMenuItems(tab: SettingsTabId): Record<string, string> {
     return MENU_ITEMS[tab];
 }
 
-export function getActualTab(tab) {
+export function getActualTab(tab: SettingsTabId): SettingsTabId {
     return MENU_ITEMS[tab] ? tab : "node";
 }
 
-export function getActualSheet(tab, sheet) {
+export function getActualSheet(tab: SettingsTabId, sheet: string): string {
     const items = getMenuItems(getActualTab(tab));
     return items[sheet] ? sheet : Object.keys(items)[0];
 }

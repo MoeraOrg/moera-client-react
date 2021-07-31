@@ -1,6 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
@@ -10,7 +11,9 @@ import SettingsTabNode from "ui/settings/SettingsTabNode";
 import SettingsTabClient from "ui/settings/SettingsTabClient";
 import "./SettingsPage.css";
 
-const SettingsPage = ({tab}) => (
+type Props = ConnectedProps<typeof connector>;
+
+const SettingsPage = ({tab}: Props) => (
     <>
         <PageHeader>
             <h2>Your Settings</h2>
@@ -29,10 +32,10 @@ const SettingsPage = ({tab}) => (
     </>
 );
 
-export default connect(
-    state => ({
-        tab: state.settings.tab,
-        nodeConflict: state.settings.node.conflict,
-        clientConflict: state.settings.client.conflict
+const connector = connect(
+    (state: ClientState) => ({
+        tab: state.settings.tab
     })
-)(SettingsPage);
+);
+
+export default connector(SettingsPage);

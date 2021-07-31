@@ -1,4 +1,4 @@
-import { ConnectDialogForm } from "state/connectdialog/actions";
+export type ConnectDialogForm = "connect" | "assign" | "forgot" | "reset";
 
 export interface ConnectDialogState {
     show: boolean;
