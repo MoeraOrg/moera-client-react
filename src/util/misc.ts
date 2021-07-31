@@ -48,6 +48,10 @@ export function parseBool(val: boolean | string): boolean {
     return ival === "yes" || ival === "true" || ival === "1";
 }
 
+export function isNumber(value: unknown): value is number {
+    return typeof value === 'number' && isFinite(value);
+}
+
 export function now(): number {
     return Math.floor(Date.now() / 1000);
 }

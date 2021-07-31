@@ -16,8 +16,8 @@ interface Props {
     autoComplete?: string;
     noFeedback?: boolean;
     disabled?: boolean;
-    initialValue?: string;
-    defaultValue?: string;
+    initialValue?: string | null;
+    defaultValue?: string | null;
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 

@@ -25,8 +25,8 @@ interface Props {
     className?: string;
     autoComplete?: string;
     noFeedback?: boolean;
-    initialValue?: string;
-    defaultValue?: string;
+    initialValue?: string | null;
+    defaultValue?: string | null;
     disabled?: boolean;
     selectRef?: (dom: HTMLSelectElement | null) => void;
 }

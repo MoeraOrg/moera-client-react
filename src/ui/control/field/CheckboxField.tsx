@@ -13,8 +13,8 @@ interface Props {
     labelClassName?: string;
     autoFocus?: boolean;
     single?: boolean;
-    initialValue?: boolean;
-    defaultValue?: boolean;
+    initialValue?: boolean | null;
+    defaultValue?: boolean | null;
 }
 
 export function CheckboxField({name, title, disabled, groupClassName, labelClassName, autoFocus, single, initialValue,

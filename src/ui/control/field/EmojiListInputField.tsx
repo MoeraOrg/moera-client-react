@@ -13,8 +13,8 @@ interface Props {
     labelClassName?: string;
     col?: string;
     noFeedback?: boolean;
-    initialValue?: string;
-    defaultValue?: string;
+    initialValue?: string | null;
+    defaultValue?: string | null;
     negative: boolean;
     advanced?: boolean;
 }

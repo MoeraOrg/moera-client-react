@@ -30,12 +30,12 @@ interface Props {
     autoFocus?: boolean;
     disabled?: boolean;
     noFeedback?: boolean;
-    min?: string;
-    max?: string;
-    never?: boolean;
-    always?: boolean;
-    initialValue?: string;
-    defaultValue?: string;
+    min?: string | number | null;
+    max?: string | number | null;
+    never?: boolean | null;
+    always?: boolean | null;
+    initialValue?: string | null;
+    defaultValue?: string | null;
 }
 
 export function DurationField({name, title, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,

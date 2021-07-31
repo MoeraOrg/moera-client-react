@@ -20,8 +20,8 @@ interface Props {
     className?: string;
     autoComplete?: string;
     noFeedback?: boolean;
-    initialValue?: string;
-    defaultValue?: string;
+    initialValue?: string | null;
+    defaultValue?: string | null;
     onEscape?: () => void;
     inputRef?: (dom: HTMLInputElement | null) => void;
 }

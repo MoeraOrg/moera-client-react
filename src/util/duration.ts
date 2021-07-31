@@ -1,3 +1,5 @@
+import { isNumber } from "util/misc";
+
 export type FixedUnit = "s" | "m" | "h" | "d";
 export type DurationUnit = "never" | "always" | FixedUnit;
 
@@ -41,8 +43,14 @@ export class Duration {
         this.unit = unit;
     }
 
-    static parse(v: string): Duration {
-        if (v == null || v.length === 0) {
+    static parse(v: string | number | null | undefined): Duration {
+        if (v == null) {
+            return new Duration(0, "s");
+        }
+        if (isNumber(v)) {
+            return new Duration(v, "s");
+        }
+        if (v.length === 0) {
             return new Duration(0, "s");
         }
         if (v === "never" || v === "always") {

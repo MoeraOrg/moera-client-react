@@ -9636,23 +9636,23 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-widgets-date-fns@^5.0.6:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/react-widgets-date-fns/-/react-widgets-date-fns-5.0.6.tgz#236ed2427c3b9977b8edac5ed46098ae73b2083b"
-  integrity sha512-3iagUUlT8b6IkmzMEG/Fx1C4iq9VMZ6lo1jaz+iTTmau4Ncl8CfV3CQ5TJCAQFoZHdojE8PUErtL0LQlSSUKfQ==
+react-widgets-date-fns@^5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/react-widgets-date-fns/-/react-widgets-date-fns-5.0.7.tgz#5072956e10e41241afac811a87d35be4f5f72e9f"
+  integrity sha512-vi5+qcCQ87CWc/wITIayU+BJh/GzR0MPma7c5GodLP/1+Zf/TnBLOBdNxVlp8Fuqve9eGqfMSnL5v8VQxQeZLQ==
 
-react-widgets-simple-number@^5.0.6:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/react-widgets-simple-number/-/react-widgets-simple-number-5.0.6.tgz#dec738afa9e896eae4f8447e14fa7459f4b5f983"
-  integrity sha512-k1UmqX3G5M8eAVGrw78yHve9SGmg/az6D2PABgYV18cgB2JQy3mGZE0wGRUl4xvunFHTQOBjGm7NDgRbXd8aGg==
+react-widgets-simple-number@^5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/react-widgets-simple-number/-/react-widgets-simple-number-5.0.7.tgz#8631c5e84e637888a397b3f824489b89a5d4ff8f"
+  integrity sha512-nwy5uPPNOXD3/AMxda1TaIf1GYyeub1sdlaDc/dCMtCfcV1E2V/3GGlQOEnoMnDJjNOeUSwZxCITQm1DiagxOA==
   dependencies:
     deconstruct-number-format "^0.0.1"
     format-number-with-string "^0.0.2"
 
-react-widgets@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/react-widgets/-/react-widgets-5.1.1.tgz#a0d0f15534ad62964ea011cabbe372bea7ae5882"
-  integrity sha512-ON4PnsmBXnGJkLDmrDxQGwVSKfoCnmzm2NdiVjUlo8LcGeyw1SPjmhN0fAUc5rAdOJNgEYLkie+gA7OkW1czQg==
+react-widgets@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-widgets/-/react-widgets-5.2.0.tgz#5fc7a65e1bb4caebdf23572ab08d1eb1f22fa3eb"
+  integrity sha512-XufqYfDlsKf9MVn1Zdp2U88ju9ApihKn6r4+lbMMYv8+d+VXy3JiHfj5AlHzPhcj5uA2XK/IG8UJyaSHqL2+Qg==
   dependencies:
     "@restart/hooks" "^0.3.26"
     "@types/classnames" "^2.2.11"

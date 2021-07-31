@@ -1,11 +1,14 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { useFormikContext } from 'formik';
 
 import { Button } from "ui/control";
 import "./SettingsButtons.css";
+import { ClientState } from "state/state";
 
-function SettingsButtons({updating}) {
+type Props = ConnectedProps<typeof connector>;
+
+function SettingsButtons({updating}: Props) {
     const {dirty, handleReset} = useFormikContext();
 
     return (
@@ -20,8 +23,10 @@ function SettingsButtons({updating}) {
     );
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         updating: state.settings.updating
     })
-)(SettingsButtons);
+);
+
+export default connector(SettingsButtons);

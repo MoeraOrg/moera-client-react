@@ -10,12 +10,12 @@ interface Props {
     title?: string;
     autoFocus?: boolean;
     disabled?: boolean;
-    format?: string;
-    min?: number;
-    max?: number;
-    step?: number;
-    initialValue?: number;
-    defaultValue?: number;
+    format?: any; // FIXME hack due to bug in react-widgets type definition
+    min?: number | null;
+    max?: number | null;
+    step?: number | null;
+    initialValue?: number | null;
+    defaultValue?: number | null;
 }
 
 export const NumberField = ({name, title, autoFocus, disabled, format, min, max, step, initialValue,
@@ -42,8 +42,8 @@ export const NumberField = ({name, title, autoFocus, disabled, format, min, max,
                         autoFocus={autoFocus}
                         disabled={disabled}
                         format={format}
-                        min={min}
-                        max={max}
+                        min={min ?? undefined}
+                        max={max ?? undefined}
                         step={step ?? 1}
                     />
                 </div>
