@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import Storage from "ui/storage/Storage";
@@ -27,8 +28,11 @@ import "./App.css";
 
 const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 
-const App = ({atNode, feedWidth}) => (
-    <div style={{"--feed-width": feedWidth + "px"}}>
+type Props = ConnectedProps<typeof connector>;
+
+const App = ({atNode, feedWidth}: Props) => (
+    // FIXME React.CSSProperties does not include CSS variables
+    <div style={{"--feed-width": feedWidth + "px"} as any}>
         <Storage/>
         <HomeEvents/>
         <NodeEvents/>
@@ -59,9 +63,11 @@ const App = ({atNode, feedWidth}) => (
     </div>
 );
 
-export default connect(
-    state => ({
-        atNode: isAtNode(state),
-        feedWidth: getSetting(state, "feed.width")
+const connector = connect(
+    (state: ClientState) => ({
+            atNode: isAtNode(state),
+            feedWidth: getSetting(state, "feed.width")
     })
-)(App);
+);
+
+export default connector(App);
