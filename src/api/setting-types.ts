@@ -1,10 +1,20 @@
 import { fromUnixTime } from 'date-fns';
 
 import { SettingType, SettingTypeModifiers } from "api/node/api-types";
-import { parseBool } from "util/misc";
+import { isNumber, parseBool } from "util/misc";
 import { Duration } from "util/duration";
+import { isString } from "formik";
+import { ClientSettingTypeModifiers } from "api/settings";
 
-export function toValue(type: SettingType, valueString: string): boolean | number | Date | string {
+export type SettingValue = boolean | number | Date | string;
+
+export function toValue(type: SettingType, valueString: string): SettingValue;
+export function toValue(type: SettingType, valueString: null | undefined): null;
+export function toValue(type: SettingType, valueString: string | null | undefined): SettingValue | null;
+export function toValue(type: SettingType, valueString: string | null | undefined): SettingValue | null {
+    if (valueString == null) {
+        return null;
+    }
     switch (type) {
         case "bool":
             return parseBool(valueString);
@@ -23,22 +33,33 @@ export function toValue(type: SettingType, valueString: string): boolean | numbe
     }
 }
 
-export function validate(value: string, type: SettingType, modifiers: SettingTypeModifiers): true | string {
+function deserializeInt(value: string | number): number {
+    return isNumber(value) ? value : parseInt(value);
+}
+
+export function validate(value: SettingValue, type: SettingType,
+                         modifiers: SettingTypeModifiers | ClientSettingTypeModifiers | null | undefined): true | string {
     if (!modifiers) {
         return true;
     }
 
     switch (type) {
         case "int":
-            if (modifiers.min && value < modifiers.min) {
+            if (!isNumber(value)) {
+                return "The value must be number";
+            }
+            if (modifiers.min && value < deserializeInt(modifiers.min)) {
                 return "The value must be not less than " + modifiers.min;
             }
-            if (modifiers.max && value > modifiers.max) {
+            if (modifiers.max && value > deserializeInt(modifiers.max)) {
                 return "The value must be not more than " + modifiers.max;
             }
             return true;
 
         case "Duration": {
+            if (!isString(value)) {
+                return "The value must be string";
+            }
             const duration = Duration.parse(value);
             if (modifiers.min && duration.isFixed()
                     && duration.toSeconds() < Duration.parse(modifiers.min).toSeconds()) {

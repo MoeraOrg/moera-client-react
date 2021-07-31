@@ -1,9 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { PREFIX } from "api/settings";
+import { ClientState } from "state/state";
 import SettingsSheetAutomatic from "ui/settings/SettingsSheetAutomatic";
 import { mapFilter, mapWithoutKeys } from "util/map";
-import { PREFIX } from "api/settings";
 
 const EXCLUDE = new Set([
     PREFIX + "comment.reactions.positive.default",
@@ -28,13 +29,17 @@ const EXCLUDE = new Set([
     PREFIX + "comment.reactions.self.enabled"
 ]);
 
-const SettingsSheetClientOther = ({clientValues, clientMeta}) => (
-    <SettingsSheetAutomatic valuesMap={clientValues} metaMap={clientMeta}/>
+type Props = ConnectedProps<typeof connector>;
+
+const SettingsSheetClientOther = ({clientValues, clientMeta}: Props) => (
+    clientMeta != null ? <SettingsSheetAutomatic valuesMap={clientValues} metaMap={clientMeta}/> : null
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         clientValues: state.settings.client.values,
         clientMeta: mapWithoutKeys(mapFilter(state.settings.client.meta, v => !v.internal), EXCLUDE)
     })
-)(SettingsSheetClientOther);
+);
+
+export default connector(SettingsSheetClientOther);

@@ -1,22 +1,39 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Form, withFormik } from 'formik';
+import { connect, ConnectedProps } from 'react-redux';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { Property } from 'csstype';
 
 import { SettingTypes } from "api";
-import SettingsField from "ui/settings/SettingsField";
-import SettingsButtons from "ui/settings/SettingsButtons";
+import { ClientSettingMetaInfo } from "api/settings";
+import { SettingValue } from "api/setting-types";
+import { SettingInfo, SettingMetaInfo } from "api/node/api-types";
 import { messageBox } from "state/messagebox/actions";
 import { settingsUpdate } from "state/settings/actions";
+import SettingsField from "ui/settings/SettingsField";
+import SettingsButtons from "ui/settings/SettingsButtons";
 import { mapEquals } from "util/map";
 import "./SettingsSheetAutomatic.css";
 
-function toFieldName(name) {
+function toFieldName(name: string): string {
     return name.replace(/\./g, "_");
 }
 
-class SettingsSheetAutomatic extends React.PureComponent {
+type OuterProps = {
+    valuesMap: Map<string, string>;
+    metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
+} & ConnectedProps<typeof connector>;
 
-    constructor(props, context) {
+type Values = Record<string, SettingValue>;
+
+type Props = OuterProps & FormikProps<Values>;
+
+interface State {
+    sheetMaxHeight: Property.MaxHeight;
+}
+
+class SettingsSheetAutomatic extends React.PureComponent<Props, State> {
+
+    constructor(props: Props, context: any) {
         super(props, context);
 
         this.state = { sheetMaxHeight: "none" };
@@ -50,7 +67,7 @@ class SettingsSheetAutomatic extends React.PureComponent {
         return `${maxHeight}px`;
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps: Readonly<Props>) {
         if (!mapEquals(this.props.valuesMap, prevProps.valuesMap)
             || ((this.props.metaMap.size > 0) !== (prevProps.metaMap.size > 0))) {
 
@@ -68,6 +85,9 @@ class SettingsSheetAutomatic extends React.PureComponent {
                 <div className="settings-sheet" style={{maxHeight: this.state.sheetMaxHeight}}>
                     {[...metaMap.keys()].sort().map(name => {
                         const meta = metaMap.get(name);
+                        if (meta == null) {
+                            return null;
+                        }
                         const initialValue = valuesMap.get(name) ?? meta.defaultValue;
                         return <SettingsField key={name} name={name} fieldName={toFieldName(name)} meta={meta}
                                               initialValue={initialValue}/>
@@ -82,22 +102,25 @@ class SettingsSheetAutomatic extends React.PureComponent {
 
 const settingsSheetOtherLogic = {
 
-    mapPropsToValues(props) {
+    mapPropsToValues(props: OuterProps): Values {
         const {valuesMap, metaMap} = props;
 
         if (metaMap.size === 0) {
             return {};
         }
 
-        let values = {};
+        let values: Values = {};
         metaMap.forEach((meta, name) => {
             const value = valuesMap.get(name) ?? meta.defaultValue;
+            if (value == null) {
+                return;
+            }
             values[toFieldName(name)] = SettingTypes.toValue(meta.type, value);
         });
         return values;
     },
 
-    handleSubmit(values, formik) {
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const {valuesMap, metaMap, messageBox, settingsUpdate} = formik.props;
 
         if (metaMap.size === 0) {
@@ -106,7 +129,7 @@ const settingsSheetOtherLogic = {
         }
 
         let hasErrors = false;
-        let settingsToUpdate = [];
+        let settingsToUpdate: SettingInfo[] = [];
         metaMap.forEach((meta, name) => {
             const fieldName = toFieldName(name);
             let value = values[fieldName];
@@ -115,7 +138,7 @@ const settingsSheetOtherLogic = {
                 formik.setFieldError(fieldName, valid);
                 hasErrors = true;
             } else {
-                formik.setFieldError(fieldName, null);
+                formik.setFieldError(fieldName, undefined);
                 value = value.toString(); // FIXME SettingTypes.toString(value) may be needed
                 if (valuesMap.get(name) !== value) {
                     settingsToUpdate.push({name, value});
@@ -134,7 +157,9 @@ const settingsSheetOtherLogic = {
 
 };
 
-export default connect(
+const connector = connect(
     null,
     { messageBox, settingsUpdate }
-)(withFormik(settingsSheetOtherLogic)(SettingsSheetAutomatic));
+);
+
+export default connector(withFormik(settingsSheetOtherLogic)(SettingsSheetAutomatic));

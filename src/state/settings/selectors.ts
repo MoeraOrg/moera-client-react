@@ -1,6 +1,7 @@
 import { ClientSettings, SettingTypes } from "api";
-import { ClientState } from "state/state";
 import { ClientSettingMetaInfo } from "api/settings";
+import { SettingValue } from "api/setting-types";
+import { ClientState } from "state/state";
 
 export function isAtSettingsNodeTab(state: ClientState): boolean {
     return state.settings.tab === "node";
@@ -26,7 +27,7 @@ export function getSettingsClientMeta(state: ClientState): Map<string, ClientSet
     return state.settings.client.meta;
 }
 
-export function getSetting(state: ClientState, name: string): string | number | boolean | Date | null {
+export function getSetting(state: ClientState, name: string): SettingValue | null {
     const meta = state.settings.client.meta.get(ClientSettings.PREFIX + name);
     if (!meta) {
         return null;

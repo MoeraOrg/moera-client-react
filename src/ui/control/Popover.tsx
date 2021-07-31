@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { Manager, Popper, Reference } from 'react-popper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import isFunction from 'lodash.isfunction';
+import { isFunction } from 'formik';
 
 import "./Popover.css";
 import { PositioningStrategy } from "@popperjs/core";

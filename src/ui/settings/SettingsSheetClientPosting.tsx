@@ -1,9 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { PREFIX } from "api/settings";
+import { ClientState } from "state/state";
 import SettingsSheetAutomatic from "ui/settings/SettingsSheetAutomatic";
 import { mapWithKeysOnly } from "util/map";
-import { PREFIX } from "api/settings";
 
 const INCLUDE = new Set([
     PREFIX + "posting.time.relative",
@@ -20,13 +21,17 @@ const INCLUDE = new Set([
     PREFIX + "posting.reactions.self.enabled"
 ]);
 
-const SettingsSheetClientPosting = ({clientValues, clientMeta}) => (
-    <SettingsSheetAutomatic valuesMap={clientValues} metaMap={clientMeta}/>
+type Props = ConnectedProps<typeof connector>;
+
+const SettingsSheetClientPosting = ({clientValues, clientMeta}: Props) => (
+    clientMeta != null ? <SettingsSheetAutomatic valuesMap={clientValues} metaMap={clientMeta}/> : null
 );
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         clientValues: state.settings.client.values,
         clientMeta: mapWithKeysOnly(state.settings.client.meta, INCLUDE)
     })
-)(SettingsSheetClientPosting);
+);
+
+export default connector(SettingsSheetClientPosting);

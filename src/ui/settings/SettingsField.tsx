@@ -37,7 +37,7 @@ interface Props {
     name: string;
     fieldName: string;
     meta?: SettingMetaInfo | ClientSettingMetaInfo | null;
-    initialValue: string | null;
+    initialValue?: string | null;
 }
 
 export default function SettingsField({name, fieldName, meta, initialValue}: Props) {

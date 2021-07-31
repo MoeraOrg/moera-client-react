@@ -1,12 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { getActualSheet } from "ui/settings/settings-menu";
 import SettingsSheetNodePosting from "ui/settings/SettingsSheetNodePosting";
 import SettingsSheetNodeSecurity from "ui/settings/SettingsSheetNodeSecurity";
 import SettingsSheetNodeOther from "ui/settings/SettingsSheetNodeOther";
 
-function SettingsTabNode({sheet}) {
+type Props = ConnectedProps<typeof connector>;
+
+function SettingsTabNode({sheet}: Props) {
     switch (sheet) {
         case "posting":
             return <SettingsSheetNodePosting/>;
@@ -17,8 +20,10 @@ function SettingsTabNode({sheet}) {
     }
 }
 
-export default connect(
-    state => ({
+const connector = connect(
+    (state: ClientState) => ({
         sheet: getActualSheet("node", state.settings.sheet)
     })
-)(SettingsTabNode);
+);
+
+export default connector(SettingsTabNode);
