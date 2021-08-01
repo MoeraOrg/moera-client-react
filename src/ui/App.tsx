@@ -65,8 +65,8 @@ const App = ({atNode, feedWidth}: Props) => (
 
 const connector = connect(
     (state: ClientState) => ({
-            atNode: isAtNode(state),
-            feedWidth: getSetting(state, "feed.width")
+        atNode: isAtNode(state),
+        feedWidth: getSetting(state, "feed.width") as number
     })
 );
 

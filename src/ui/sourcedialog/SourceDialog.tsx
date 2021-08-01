@@ -36,7 +36,7 @@ const connector = connect(
         show: state.sourceDialog.show,
         text: state.sourceDialog.text,
         loading: state.sourceDialog.loading,
-        feedWidth: getSetting(state, "feed.width")
+        feedWidth: getSetting(state, "feed.width") as number
     }),
     { closeSourceDialog }
 );

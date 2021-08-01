@@ -75,7 +75,7 @@ const connector = connect(
     (state: ClientState) => ({
         standalone: isStandaloneMode(state),
         settingsLoaded: isConnectedToHome(state) && isSettingsClientValuesLoaded(state),
-        shownAt: getSetting(state, "invitation.addon.shown-at") as number
+        shownAt: getSetting(state, "invitation.addon.shown-at") as Date
     }),
     { settingsUpdate }
 );

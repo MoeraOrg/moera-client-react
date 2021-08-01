@@ -36,7 +36,7 @@ function PostingButtons({posting, homeOwnerName, enableSelf}: Props) {
 const connector = connect(
     (state: ClientState) => ({
         homeOwnerName: getHomeOwnerName(state),
-        enableSelf: getSetting(state, "posting.reactions.self.enabled")
+        enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean
     })
 );
 

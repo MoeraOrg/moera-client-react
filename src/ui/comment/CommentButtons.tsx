@@ -38,7 +38,7 @@ function CommentButtons({nodeName, postingId, comment, homeOwnerName, enableSelf
 const connector = connect(
     (state: ClientState) => ({
         homeOwnerName: getHomeOwnerName(state),
-        enableSelf: getSetting(state, "comment.reactions.self.enabled")
+        enableSelf: getSetting(state, "comment.reactions.self.enabled") as boolean
     })
 );
 
