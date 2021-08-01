@@ -62,7 +62,7 @@ export function getAllFeeds(state: ClientState): string[] {
 }
 
 export function getFeedState(state: ClientState, feedName: string): FeedState {
-    return state.feeds[feedName] != null ? state.feeds[feedName] : emptyFeed;
+    return state.feeds[feedName] ?? emptyFeed;
 }
 
 export function isFeedGeneralToBeLoaded(state: ClientState, feedName: string): boolean {

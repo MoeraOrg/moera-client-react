@@ -7,5 +7,5 @@ export interface NameState {
 }
 
 export interface NamingState {
-    names: Record<string, NameState>;
+    names: Partial<Record<string, NameState>>;
 }

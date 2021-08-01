@@ -1,4 +1,3 @@
-import selectn from 'selectn';
 import { ClientState } from "state/state";
 import { FeedReference, PostingInfo, StoryInfo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
@@ -9,7 +8,7 @@ export function getPosting(state: ClientState, id: string | null): PostingInfo |
     if (id == null) {
         return null;
     }
-    return selectn(["postings", id, "posting"], state);
+    return state.postings[id]?.posting ?? null;
 }
 
 export function isPostingCached(state: ClientState, id: string | null): boolean {
@@ -20,11 +19,11 @@ export function isPostingBeingDeleted(state: ClientState, id: string | null): bo
     if (id == null) {
         return false;
     }
-    return selectn(["postings", id, "deleting"], state) ?? false;
+    return state.postings[id]?.deleting ?? false;
 }
 
 export function getPostingVerificationStatus(state: ClientState, id: string): VerificationStatus | null {
-    return selectn(["postings", id, "verificationStatus"], state);
+    return state.postings[id]?.verificationStatus ?? null;
 }
 
 export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">,
@@ -59,8 +58,8 @@ export function getPostingStory(posting: PostingInfo, feedName: string): StoryIn
 
 export function findPostingIdByRemote(postings: PostingsState, remoteNodeName: string | null,
                                       remotePostingId: string | null): string | null {
-    for (let [id, {posting}] of Object.entries(postings)) {
-        if (posting.receiverName === remoteNodeName && posting.receiverPostingId === remotePostingId) {
+    for (let [id, entry] of Object.entries(postings)) {
+        if (entry?.posting.receiverName === remoteNodeName && entry.posting.receiverPostingId === remotePostingId) {
             return id;
         }
     }

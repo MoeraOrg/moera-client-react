@@ -15,4 +15,4 @@ export interface NodeCardState {
     loaded: boolean;
 }
 
-export type NodeCardsState = Record<string, NodeCardState>;
+export type NodeCardsState = Partial<Record<string, NodeCardState>>;

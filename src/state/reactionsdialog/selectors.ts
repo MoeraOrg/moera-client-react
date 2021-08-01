@@ -21,8 +21,8 @@ export function isReactionsDialogShown(state: ClientState): boolean {
     return state.reactionsDialog.show;
 }
 
-function getReactions(state: ClientState): ReactionsDialogTabsState {
-    return state.reactionsDialog.reactions[state.reactionsDialog.activeTab ?? 0];
+function getReactions(state: ClientState): ReactionsDialogTabsState | null {
+    return state.reactionsDialog.reactions[state.reactionsDialog.activeTab ?? 0] ?? null;
 }
 
 export function isReactionsDialogReactionsToBeLoaded(state: ClientState): boolean {

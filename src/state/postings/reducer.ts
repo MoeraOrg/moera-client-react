@@ -1,5 +1,4 @@
 import * as immutable from 'object-path-immutable';
-import selectn from 'selectn';
 
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
 import {
@@ -96,19 +95,25 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
         case STORY_ADDED:
         case STORY_UPDATED: {
             const {id, posting} = action.payload.story;
-            if (posting && state[posting.id]) {
-                const refs = (state[posting.id].posting.feedReferences ?? []).filter(r => r.storyId !== id);
-                refs.push(toFeedReference(action.payload.story));
-                return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
+            if (posting) {
+                const postingState = state[posting.id];
+                if (postingState != null) {
+                    const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
+                    refs.push(toFeedReference(action.payload.story));
+                    return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
+                }
             }
             return state;
         }
 
         case STORY_DELETED: {
             const {id, posting} = action.payload.story;
-            if (posting && state[posting.id]) {
-                const refs = (state[posting.id].posting.feedReferences ?? []).filter(r => r.storyId !== id);
-                return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
+            if (posting) {
+                const postingState = state[posting.id];
+                if (postingState != null) {
+                    const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
+                    return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
+                }
             }
             return state;
         }
@@ -134,7 +139,7 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
             return immutable.set(state, [action.payload.id, "verificationStatus"], "none");
 
         case EVENT_HOME_REMOTE_POSTING_VERIFIED: {
-            const posting = selectn([action.payload.postingId, "posting"], state);
+            const posting = state[action.payload.postingId]?.posting;
             if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
                 const status = action.payload.correct ? "correct" : "incorrect";
                 return immutable.set(state, [action.payload.postingId, "verificationStatus"], status);
@@ -143,7 +148,7 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
         }
 
         case EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED: {
-            const posting = selectn([action.payload.postingId, "posting"], state);
+            const posting = state[action.payload.postingId]?.posting;
             if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
                 return immutable.set(state, [action.payload.postingId, "verificationStatus"], "none");
             }
@@ -166,9 +171,10 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
 
         case POSTING_REACTION_SET: {
             const {id, reaction, totals} = action.payload;
-            if (state[id]) {
+            const postingState = state[id];
+            if (postingState) {
                 const istate = immutable.wrap(state).set([id, "posting", "reactions"], totals);
-                if (state[id].posting.receiverName == null) {
+                if (postingState.posting.receiverName == null) {
                     istate.set([id, "posting", "clientReaction"], reaction);
                 }
                 return istate.value();
@@ -241,7 +247,8 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
             if (total == null) {
                 return state;
             }
-            const id = state[postingId] && state[postingId].posting.ownerName === nodeName
+            const postingState = state[postingId];
+            const id = postingState && postingState.posting.ownerName === nodeName
                 ? postingId
                 : findPostingIdByRemote(state, nodeName, postingId);
             if (id != null) {

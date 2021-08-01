@@ -28,4 +28,4 @@ export interface FeedState {
     at: number;
 }
 
-export type FeedsState = Record<string, FeedState>;
+export type FeedsState = Partial<Record<string, FeedState>>;

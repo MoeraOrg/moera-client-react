@@ -1,4 +1,5 @@
 import { Body, PostingInfo } from "api/node/api-types";
+import { VerificationStatus } from "state/state-types";
 
 export interface ExtBody extends Body {
     previewText?: string;
@@ -13,7 +14,7 @@ export interface ExtPostingInfo extends PostingInfo {
 export interface PostingState {
     posting: PostingInfo;
     deleting: boolean;
-    verificationStatus: string;
+    verificationStatus: VerificationStatus;
 }
 
-export type PostingsState = Record<string, PostingState>;
+export type PostingsState = Partial<Record<string, PostingState>>;

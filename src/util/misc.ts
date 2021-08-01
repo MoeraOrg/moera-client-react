@@ -92,13 +92,13 @@ export function getFeedHeaderHeight(): number {
     return headerHeight + feedTitleHeight;
 }
 
-export function cloneOperations<T extends Record<string, string[]>>
+export function cloneOperations<T extends Partial<Record<string, string[]>>>
                 (operations: Record<string, string[] | null | undefined> | null | undefined, defaults: T): T {
     if (operations == null) {
         return cloneDeep(defaults);
     }
 
-    const result: Record<string, string[]> = {};
+    const result: Partial<Record<string, string[]>> = {};
     Object.getOwnPropertyNames(defaults).forEach(key => result[key] = operations[key] ?? defaults[key]);
     return result as T;
 }

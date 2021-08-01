@@ -15,12 +15,12 @@ export interface ReactionsDialogState {
     commentId: string | null;
     negative: boolean;
     activeTab: number | null;
-    reactions: Record<string, ReactionsDialogTabsState>;
+    reactions: Partial<Record<number, ReactionsDialogTabsState>>;
     totals: {
         loading: boolean;
         loaded: boolean;
         total: number;
         emojis: ReactionTotalInfo[];
     },
-    verificationStatus: Record<string, VerificationStatus>;
+    verificationStatus: Partial<Record<string, VerificationStatus>>;
 }

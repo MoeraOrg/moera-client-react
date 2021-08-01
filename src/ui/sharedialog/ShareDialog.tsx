@@ -34,7 +34,7 @@ const ShareDialog = ({show, title, url, socialButtons, closeShareDialog, shareDi
 );
 
 const getSocialButtons = createSelector(
-    (state: ClientState) => getSetting(state, "share.social-buttons.usage") as any as Record<string, number>,
+    (state: ClientState) => getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>,
     usage => (
         [...SOCIAL_BUTTONS].sort((a, b) => {
             const ua = usage[a] ?? 0;

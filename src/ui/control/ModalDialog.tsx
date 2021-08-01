@@ -8,7 +8,7 @@ interface Props {
     title?: string;
     size?: string;
     className?: string;
-    style?: Record<string, string>;
+    style?: Partial<Record<string, string>>;
     centered?: boolean;
     risen?: boolean;
     onClose?: () => void;

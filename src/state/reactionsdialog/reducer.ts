@@ -93,13 +93,14 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
                 return state;
             }
             const tab = emoji ?? 0;
-            if (state.reactions[tab] == null) {
+            const tabReactions = state.reactions[tab];
+            if (tabReactions == null) {
                 return state;
             }
-            if (before >= state.reactions[tab].after && after < state.reactions[tab].after) {
-                let reactions = state.reactions[tab].items.slice();
+            if (before >= tabReactions.after && after < tabReactions.after) {
+                let reactions = tabReactions.items.slice();
                 action.payload.reactions
-                    .filter(p => p.moment <= state.reactions[tab].after)
+                    .filter(p => p.moment <= tabReactions.after)
                     .forEach(p => reactions.push(p));
                 reactions.sort((a, b) => b.moment - a.moment);
                 return immutable.assign(state, ["reactions", tab], {

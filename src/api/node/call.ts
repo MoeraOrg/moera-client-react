@@ -164,7 +164,7 @@ export function* selectApi(nodeName: string | null | undefined) {
     return {rootLocation: root.location, rootApi: root.api, errorTitle};
 }
 
-function* authorize(headers: Record<string, string>, rootLocation: string | null, auth: boolean | string) {
+function* authorize(headers: Partial<Record<string, string>>, rootLocation: string | null, auth: boolean | string) {
     if (auth === false) {
         return;
     }

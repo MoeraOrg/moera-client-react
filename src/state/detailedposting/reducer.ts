@@ -1,7 +1,6 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
-import selectn from 'selectn';
 
 import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
@@ -342,9 +341,9 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         }
 
         case COMMENTS_UNSET: {
-            const commentsFocused = selectn("comments.focused", state);
-            const commentsFocusedCommentId = selectn("comments.focusedCommentId", state);
-            const composeFocused = selectn("compose.focused", state);
+            const commentsFocused = state.comments.focused;
+            const commentsFocusedCommentId = state.comments.focusedCommentId;
+            const composeFocused = state.compose.focused;
             return immutable.wrap(state)
                 .assign("comments", {
                     ...cloneDeep(emptyComments),

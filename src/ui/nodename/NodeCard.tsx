@@ -24,7 +24,7 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoaded, homeOwnerName}: Props) {
-    if (cardNotLoaded) {
+    if (cardNotLoaded || card == null) {
         return (
             <div className="node-card">
                 <div className="unknown">Unknown name</div>

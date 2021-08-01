@@ -290,7 +290,7 @@ class FeedPage extends React.PureComponent<Props, State> {
                     {stories
                         .filter(t => t.postingId != null)
                         .filter(t => postings[t.postingId!])
-                        .map(t => ({story: t, ...postings[t.postingId!]}))
+                        .map(t => ({story: t, ...postings[t.postingId!]!}))
                         .map(({story, posting, deleting}) =>
                             <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
                     <FeedSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"

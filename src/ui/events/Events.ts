@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { Client, IMessage } from '@stomp/stompjs';
+import { Client, IMessage, StompHeaders } from '@stomp/stompjs';
 import * as URI from 'uri-js';
 import { addMinutes, isBefore } from 'date-fns';
 
@@ -59,7 +59,7 @@ class Events extends React.PureComponent<Props> {
             this.#lastEventSentAt = null;
         }
 
-        const connectHeaders: Record<string, string> = {
+        const connectHeaders: StompHeaders = {
             host
         };
         if (token != null) {
@@ -103,7 +103,7 @@ class Events extends React.PureComponent<Props> {
 
         this._wakeUp();
 
-        const headers: Record<string, string> = {};
+        const headers: StompHeaders = {};
         if (this.#queueStartedAt != null) {
             headers.seen = `${this.#queueStartedAt},${this.#lastEvent}`;
         }

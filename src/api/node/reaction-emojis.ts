@@ -4,8 +4,8 @@ interface ReactionEmoji {
 }
 
 interface ReactionEmojis {
-    positive: Record<number, ReactionEmoji>;
-    negative: Record<number, ReactionEmoji>;
+    positive: Partial<Record<number, ReactionEmoji>>;
+    negative: Partial<Record<number, ReactionEmoji>>;
 }
 
 export const REACTION_EMOJIS: ReactionEmojis = {

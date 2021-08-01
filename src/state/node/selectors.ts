@@ -1,6 +1,4 @@
-import selectn from 'selectn';
-
-import { getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
 import { ClientState } from "state/state";
 
 export function isAtNode(state: ClientState): boolean {
@@ -23,7 +21,7 @@ export function getToken(state: ClientState, rootLocation: string | null): strin
     if (rootLocation == null) {
         return null;
     }
-    return selectn(["tokens", rootLocation, "token"], state);
+    return state.tokens[rootLocation]?.token ?? null;
 }
 
 export function getNodeToken(state: ClientState): string | null {
@@ -35,15 +33,15 @@ export function getNodePermissions(state: ClientState): string[] {
     if (rootLocation == null) {
         return [];
     }
-    return selectn(["tokens", rootLocation, "permissions"], state) ?? [];
+    return state.tokens[rootLocation]?.permissions ?? [];
 }
 
 export function getHomePermissions(state: ClientState): string[] {
-    const rootLocation = getNodeRootLocation(state);
+    const rootLocation = getHomeRootLocation(state);
     if (rootLocation == null) {
         return [];
     }
-    return selectn(["tokens", rootLocation, "permissions"], state) ?? [];
+    return state.tokens[rootLocation]?.permissions ?? [];
 }
 
 export function isNodeAdmin(state: ClientState): boolean {
@@ -69,7 +67,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
     if (object.operations == null) {
         return true;
     }
-    const requirements = selectn(["operations", operation], object);
+    const requirements = object.operations[operation];
     if (requirements == null) {
         return false;
     }

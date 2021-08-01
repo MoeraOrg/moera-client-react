@@ -3,4 +3,4 @@ export interface TokenState {
     permissions: string[];
 }
 
-export type TokensState = Record<string, TokenState>;
+export type TokensState = Partial<Record<string, TokenState>>;

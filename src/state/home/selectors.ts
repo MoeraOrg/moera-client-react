@@ -1,5 +1,3 @@
-import selectn from 'selectn';
-
 import { getToken } from "state/node/selectors";
 import { ClientState } from "state/state";
 import { AvatarImage } from "api/node/api-types";
@@ -22,7 +20,7 @@ export function isConnectedToHome(state: ClientState): boolean {
 
 export function getHomePermissions(state: ClientState): string[] {
     const location = getHomeRootLocation(state);
-    return location != null ? selectn(["tokens", location, "permissions"], state) : [];
+    return location != null ? (state.tokens[location]?.permissions ?? []) : [];
 }
 
 export function getHomeOwnerName(state: ClientState): string | null {

@@ -6,6 +6,6 @@ interface ContactsQueryState {
 }
 
 export interface ContactsState {
-    queries: Record<string, ContactsQueryState>;
+    queries: Partial<Record<string, ContactsQueryState>>;
     contacts: ContactInfo[];
 }

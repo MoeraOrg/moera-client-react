@@ -121,10 +121,12 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 updateScrollingOnActive(istate, feedName, emptyFeed, action.payload.details.at);
             }
             for (let [fn, feed] of Object.entries(state)) {
-                if (fn === feedName) {
-                    updateScrollingOnActive(istate, fn, feed, action.payload.details.at);
-                } else {
-                    updateScrollingOnInactive(istate, fn, feed);
+                if (feed != null) {
+                    if (fn === feedName) {
+                        updateScrollingOnActive(istate, fn, feed, action.payload.details.at);
+                    } else {
+                        updateScrollingOnInactive(istate, fn, feed);
+                    }
                 }
             }
             return istate.value();
@@ -355,12 +357,14 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         case FEEDS_UNSET: {
             const istate = immutable.wrap(state);
             for (let [feedName, feed] of Object.entries(state)) {
-                istate.assign([feedName], {
-                    before: feed.at,
-                    after: feed.at,
-                    stories: [],
-                    anchor: feed.at
-                })
+                if (feed != null) {
+                    istate.assign([feedName], {
+                        before: feed.at,
+                        after: feed.at,
+                        stories: [],
+                        anchor: feed.at
+                    })
+                }
             }
             return istate.value();
         }

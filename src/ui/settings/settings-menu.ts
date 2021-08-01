@@ -14,7 +14,7 @@ const MENU_ITEMS: Record<SettingsTabId, Record<string, string>> = {
     }
 };
 
-export function getMenuItems(tab: SettingsTabId): Record<string, string> {
+export function getMenuItems(tab: SettingsTabId): Partial<Record<string, string>> {
     return MENU_ITEMS[tab];
 }
 

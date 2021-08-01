@@ -23,7 +23,7 @@ type OuterProps = {
     metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
 } & ConnectedProps<typeof connector>;
 
-type Values = Record<string, SettingValue>;
+type Values = Partial<Record<string, SettingValue>>;
 
 type Props = OuterProps & FormikProps<Values>;
 
@@ -133,6 +133,9 @@ const settingsSheetOtherLogic = {
         metaMap.forEach((meta, name) => {
             const fieldName = toFieldName(name);
             let value = values[fieldName];
+            if (value == null) {
+                return;
+            }
             const valid = SettingTypes.validate(value, meta.type, meta.modifiers);
             if (valid !== true) {
                 formik.setFieldError(fieldName, valid);

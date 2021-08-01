@@ -29,7 +29,7 @@ interface Marks {
 }
 
 interface State {
-    choice: Record<number, Marks>;
+    choice: Partial<Record<number, Marks>>;
     other: boolean;
 }
 
@@ -40,7 +40,7 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
 
         const list = new EmojiList(props.value);
         const choice = this.getAllEmojis()
-            .reduce<Record<number, Marks>>(
+            .reduce<Partial<Record<number, Marks>>>(
                 (m, emoji) => {
                     m[emoji] = {
                         dimmed: !list.includesExplicitly(emoji),
@@ -136,10 +136,10 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
     onConfirm = () => {
         const {choice, other} = this.state;
 
-        const emojis = this.getAllEmojis().filter(emoji => !choice[emoji].dimmed);
+        const emojis = this.getAllEmojis().filter(emoji => !choice[emoji]?.dimmed);
         let value: string[];
         if (this.props.advanced) {
-            value = emojis.map(emoji => (choice[emoji].marked ? "+0x" : "0x") + Number(emoji).toString(16))
+            value = emojis.map(emoji => (choice[emoji]?.marked ? "+0x" : "0x") + Number(emoji).toString(16))
         } else {
             value = emojis.map(emoji => "+0x" + Number(emoji).toString(16));
             if (other) {

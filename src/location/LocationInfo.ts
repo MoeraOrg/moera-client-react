@@ -1,7 +1,7 @@
 export class LocationInfo {
 
     directories: string[];
-    parameters: Record<string, string>;
+    parameters: Partial<Record<string, string>>;
     hash: string;
     title: string | null;
 
@@ -91,7 +91,7 @@ export class LocationInfo {
         let query = "";
         for (let name in this.parameters) {
             if (this.parameters.hasOwnProperty(name)) {
-                query += (query === "" ? "?" : "&") + name + "=" + encodeURIComponent(this.parameters[name]);
+                query += (query === "" ? "?" : "&") + name + "=" + encodeURIComponent(this.parameters[name]!);
             }
         }
         const hash = this.hash ? "#" + this.hash : "";

@@ -146,7 +146,7 @@ function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog
 
 const connector = connect(
     (state: ClientState) => ({
-        usage: getSetting(state, "share.social-buttons.usage") as any as Record<string, number>
+        usage: getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>
     }),
     { settingsUpdate, closeShareDialog }
 );
