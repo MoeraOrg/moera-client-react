@@ -10,7 +10,7 @@ import {
     StoredData,
     storeNameMessage,
     switchDataMessage
-} from "ui/storage/types";
+} from "api/addon/api-types";
 
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
 type UserAgentOs = "android" | "ios" | "unknown";

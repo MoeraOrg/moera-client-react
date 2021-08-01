@@ -9,7 +9,7 @@ import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
 import LocalStorageBackend from "ui/storage/LocalStorageBackend";
 import { Browser } from "ui/browser";
-import { isAddonMessage, loadDataMessage, LoadedData, StoredName } from "ui/storage/types";
+import { isAddonMessage, loadDataMessage, LoadedData, StoredName } from "api/addon/api-types";
 import { now } from "util/misc";
 
 type Props = ConnectedProps<typeof connector>;

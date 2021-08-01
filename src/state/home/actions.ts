@@ -2,7 +2,7 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { AvatarImage, AvatarInfo, CarteInfo } from "api/node/api-types";
-import { RootInfo } from "ui/storage/types";
+import { RootInfo } from "api/addon/api-types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
 export type ConnectToHomeAction = ActionWithPayload<typeof CONNECT_TO_HOME, {

@@ -3,7 +3,7 @@ import ObjectPath from 'object-path';
 
 import { NameDetails } from "state/naming/actions";
 import { Browser } from "ui/browser";
-import { isAddonMessage, loadedDataMessage, RootInfo, StoredData, transferredDataMessage } from "ui/storage/types";
+import { isAddonMessage, loadedDataMessage, RootInfo, StoredData, transferredDataMessage } from "api/addon/api-types";
 import { now } from "util/misc";
 
 const MAX_NAMES_SIZE = 500;
