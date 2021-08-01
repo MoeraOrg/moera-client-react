@@ -160,7 +160,7 @@ export interface PostingText {
     acceptedReactions?: AcceptedReactions | null;
     reactionsVisible?: boolean | null;
     reactionTotalsVisible?: boolean | null;
-    bodySrc?: string | null;
+    bodySrc: string;
     bodySrcFormat?: SourceFormat | null;
     publications?: StoryAttributes[] | null;
     updateInfo?: UpdateInfo | null;

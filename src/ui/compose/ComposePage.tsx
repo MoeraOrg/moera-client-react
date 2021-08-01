@@ -44,7 +44,7 @@ class ComposePage extends React.PureComponent<Props, State> {
     constructor(props: Props, context: any) {
         super(props, context);
 
-        this.state = {initialPostingText: {}};
+        this.state = {initialPostingText: {bodySrc: ""}};
     }
 
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
