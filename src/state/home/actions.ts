@@ -2,7 +2,7 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { AvatarImage, AvatarInfo, CarteInfo } from "api/node/api-types";
-import { RootInfo } from "state/home/state";
+import { RootInfo } from "ui/storage/types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
 export type ConnectToHomeAction = ActionWithPayload<typeof CONNECT_TO_HOME, {
@@ -29,7 +29,7 @@ export const connectionToHomeFailed = (): ConnectionToHomeFailedAction => ({
 export const CONNECTED_TO_HOME = "CONNECTED_TO_HOME";
 export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, {
     location: string;
-    login: string;
+    login: string | null;
     token: string;
     permissions: string[];
     cartesIp: string | null;
@@ -37,7 +37,7 @@ export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, 
     roots: RootInfo[] | null;
     clockOffset: number;
 }>;
-export const connectedToHome = (location: string, login: string, token: string, permissions: string[],
+export const connectedToHome = (location: string, login: string | null, token: string, permissions: string[],
                                 cartesIp: string | null, cartes: CarteInfo[], roots: RootInfo[] | null,
                                 clockOffset: number): ConnectedToHomeAction => ({
     type: CONNECTED_TO_HOME,
@@ -47,9 +47,9 @@ export const connectedToHome = (location: string, login: string, token: string, 
 export const DISCONNECT_FROM_HOME = "DISCONNECT_FROM_HOME";
 export type DisconnectFromHomeAction = ActionWithPayload<typeof DISCONNECT_FROM_HOME, {
     location: string;
-    login: string;
+    login: string | null;
 }>;
-export const disconnectFromHome = (location: string, login: string): DisconnectFromHomeAction => ({
+export const disconnectFromHome = (location: string, login: string | null): DisconnectFromHomeAction => ({
     type: DISCONNECT_FROM_HOME,
     payload: {location, login}
 });
@@ -57,9 +57,9 @@ export const disconnectFromHome = (location: string, login: string): DisconnectF
 export const DISCONNECTED_FROM_HOME = "DISCONNECTED_FROM_HOME";
 export type DisconnectedFromHomeAction = ActionWithPayload<typeof DISCONNECTED_FROM_HOME, {
     location: string;
-    login: string;
+    login: string | null;
 }>;
-export const disconnectedFromHome = (location: string, login: string): DisconnectedFromHomeAction => ({
+export const disconnectedFromHome = (location: string, login: string | null): DisconnectedFromHomeAction => ({
     type: DISCONNECTED_FROM_HOME,
     payload: {location, login}
 });
@@ -68,14 +68,14 @@ export const HOME_RESTORE = "HOME_RESTORE";
 export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
     addonApiVersion: number;
     location: string;
-    login: string;
-    token: string;
+    login: string | null;
+    token: string | null;
     permissions: string[];
     cartesIp: string | null;
     cartes: CarteInfo[];
     roots: RootInfo[] | null;
 }>;
-export const homeRestore = (addonApiVersion: number, location: string, login: string, token: string,
+export const homeRestore = (addonApiVersion: number, location: string, login: string | null, token: string | null,
                             permissions: string[], cartesIp: string | null, cartes: CarteInfo[],
                             roots: RootInfo[] | null): HomeRestoreAction => ({
     type: HOME_RESTORE,
@@ -91,11 +91,11 @@ export const homeOwnerVerify = (): HomeOwnerVerifyAction => ({
 export const HOME_OWNER_SET = "HOME_OWNER_SET";
 export type HomeOwnerSetAction = ActionWithPayload<typeof HOME_OWNER_SET, {
     name: string | null;
-    changing: boolean;
+    changing: boolean | null;
     fullName: string | null;
     avatar: AvatarImage | null;
 }>;
-export const homeOwnerSet = (name: string | null, changing: boolean, fullName: string | null,
+export const homeOwnerSet = (name: string | null, changing: boolean | null, fullName: string | null,
                              avatar: AvatarImage | null): HomeOwnerSetAction => ({
     type: HOME_OWNER_SET,
     payload: {name, changing, fullName, avatar}

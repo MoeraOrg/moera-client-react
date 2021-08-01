@@ -1,9 +1,5 @@
 import { AvatarImage, AvatarInfo } from "api/node/api-types";
-
-export interface RootInfo {
-    name: string | null;
-    url: string;
-}
+import { RootInfo } from "ui/storage/types";
 
 export interface HomeState {
     connecting: boolean;

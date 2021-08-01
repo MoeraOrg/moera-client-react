@@ -3,6 +3,14 @@ import * as URI from 'uri-js';
 import { AvatarImage, CarteInfo } from "api/node/api-types";
 import { rootUrl } from "util/url";
 import { randomId } from "util/misc";
+import {
+    AddonMessage,
+    deleteDataMessage,
+    storeDataMessage,
+    StoredData,
+    storeNameMessage,
+    switchDataMessage
+} from "ui/storage/types";
 
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
 type UserAgentOs = "android" | "ios" | "unknown";
@@ -162,15 +170,15 @@ export class Browser {
         return this.getRootLocation() + "/?href=" + encodeURIComponent(location);
     }
 
-    static storeData(data: object): void {
-        window.postMessage({
-            source: "moera",
-            action: "storeData",
-            payload: {
-                ...data,
-                clientId: this.clientId
-            }
-        }, window.location.href);
+    static postMessage(message: AddonMessage): void {
+        window.postMessage(message, window.location.href);
+    }
+
+    static storeData(data: StoredData): void {
+        this.postMessage(storeDataMessage({
+            ...data,
+            clientId: this.clientId
+        }));
     }
 
     static storeConnectionData(location: string, nodeName: string | null, fullName: string | null,
@@ -187,27 +195,15 @@ export class Browser {
     }
 
     static deleteData(location: string): void {
-        window.postMessage({
-            source: "moera",
-            action: "deleteData",
-            payload: location
-        }, window.location.href);
+        this.postMessage(deleteDataMessage(location));
     }
 
     static switchData(location: string): void {
-        window.postMessage({
-            source: "moera",
-            action: "switchData",
-            payload: location
-        }, window.location.href);
+        this.postMessage(switchDataMessage(location));
     }
 
     static storeName(name: string, nodeUri: string, updated: number) {
-        window.postMessage({
-            source: "moera",
-            action: "storeName",
-            payload: {name, nodeUri, updated}
-        }, window.location.href);
+        this.postMessage(storeNameMessage(name, nodeUri, updated));
     }
 
 }

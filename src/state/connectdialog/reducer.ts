@@ -61,7 +61,7 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
             return {
                 ...state,
                 location: action.payload.location,
-                login: action.payload.login
+                login: action.payload.login ?? ""
             };
 
         case CONNECT_DIALOG_SET_FORM:

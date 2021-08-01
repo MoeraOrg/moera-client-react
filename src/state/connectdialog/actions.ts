@@ -18,9 +18,9 @@ export const cancelConnectDialog = (): CancelConnectDialogAction => ({
 export const RESTORE_CONNECT_DIALOG = "RESTORE_CONNECT_DIALOG";
 export type RestoreConnectDialogAction = ActionWithPayload<typeof RESTORE_CONNECT_DIALOG, {
     location: string;
-    login: string;
+    login: string | null;
 }>;
-export const restoreConnectDialog = (location: string, login: string): RestoreConnectDialogAction => ({
+export const restoreConnectDialog = (location: string, login: string | null): RestoreConnectDialogAction => ({
     type: RESTORE_CONNECT_DIALOG,
     payload: {location, login}
 });

@@ -1,10 +1,14 @@
 import React from 'react';
 import ObjectPath from 'object-path';
 
+import { NameDetails } from "state/naming/actions";
 import { Browser } from "ui/browser";
+import { isAddonMessage, loadedDataMessage, RootInfo, StoredData, transferredDataMessage } from "ui/storage/types";
 import { now } from "util/misc";
 
 const MAX_NAMES_SIZE = 500;
+
+type Sender = (homeRoot?: string, clientData?: StoredData, roots?: RootInfo[], names?: NameDetails[]) => void;
 
 class LocalStorageBackend extends React.PureComponent {
 
@@ -16,7 +20,7 @@ class LocalStorageBackend extends React.PureComponent {
         window.removeEventListener("message", this.messageReceived);
     }
 
-    messageReceived = event => {
+    messageReceived = (event: MessageEvent) => {
         // Only accept messages from the same frame
         if (event.source !== window) {
             return;
@@ -25,7 +29,7 @@ class LocalStorageBackend extends React.PureComponent {
         const message = event.data;
 
         // Only accept messages that we know are ours
-        if (message === null || typeof message !== "object" || message.source !== "moera") {
+        if (!isAddonMessage(message)) {
             return;
         }
 
@@ -56,8 +60,13 @@ class LocalStorageBackend extends React.PureComponent {
         }
     };
 
-    getStorageItem(key) {
-        const value = window.localStorage.getItem(key);
+    getStorageItem(key: "currentRoot"): string | null;
+    getStorageItem(key: "roots"): RootInfo[] | null;
+    getStorageItem(key: "clientData", index: string): StoredData | null;
+    getStorageItem(key: "names"): NameDetails[] | null;
+    getStorageItem(key: string, index?: string): any {
+        const fullKey = index != null ? `${key};${index}` : key;
+        const value = window.localStorage.getItem(fullKey);
         try {
             return value != null ? JSON.parse(value) : null;
         } catch (e) {
@@ -65,20 +74,30 @@ class LocalStorageBackend extends React.PureComponent {
         }
     }
 
-    setStorageItem(key, value) {
-        window.localStorage.setItem(key, value != null ? JSON.stringify(value) : null);
+    setStorageItem(key: "currentRoot", index: null, value: string): void;
+    setStorageItem(key: "roots", index: null, value: RootInfo[]): void;
+    setStorageItem(key: "clientData", index: string, value: StoredData): void;
+    setStorageItem(key: "names", index: null, value: NameDetails[]): void;
+    setStorageItem(key: string, index: string | null, value: null): void;
+    setStorageItem(key: string, index: string | null, value: any): void {
+        const fullKey = index != null ? `${key};${index}` : key;
+        if (value != null) {
+            window.localStorage.setItem(fullKey, JSON.stringify(value));
+        } else {
+            window.localStorage.removeItem(fullKey);
+        }
     }
 
-    removeStorageItem(key) {
-        window.localStorage.removeItem(key)
+    removeStorageItem(key: string, index?: string | null): void {
+        this.setStorageItem(key, index ?? null, null);
     }
 
-    getRootName(roots, location) {
+    getRootName(roots: RootInfo[], location: string): string | null {
         const root = roots.find(r => r.url === location);
         return root ? root.name : null;
     }
 
-    setRoot(roots, location, nodeName) {
+    setRoot(roots: RootInfo[], location: string, nodeName: string | null): RootInfo[] {
         if (roots.find(r => r.url === location) == null) {
             roots.push({url: location, name: nodeName});
         } else {
@@ -87,11 +106,12 @@ class LocalStorageBackend extends React.PureComponent {
         return roots;
     }
 
-    getNames() {
+    getNames(): NameDetails[] {
         return this.getStorageItem("names") ?? [];
     }
 
-    buildData(homeRoot, clientData, roots, names) {
+    buildData(homeRoot?: string | null, clientData?: StoredData, roots?: RootInfo[],
+              names?: NameDetails[]): StoredData {
         let data = {};
         if (homeRoot) {
             data = {...clientData};
@@ -106,26 +126,15 @@ class LocalStorageBackend extends React.PureComponent {
         return data;
     }
 
-    loadedData = (homeRoot, clientData, roots, names) => {
-        window.postMessage({
-            source: "moera",
-            action: "loadedData",
-            payload: {
-                version: 2,
-                ...this.buildData(homeRoot, clientData, roots, names)
-            }
-        }, window.location.href);
+    loadedData = (homeRoot?: string | null, clientData?: StoredData, roots?: RootInfo[], names?: NameDetails[]) => {
+        Browser.postMessage(loadedDataMessage(2, this.buildData(homeRoot, clientData, roots, names)));
     }
 
-    transferredData = (homeRoot, clientData, roots, names) => {
-        window.postMessage({
-            source: "moera",
-            action: "transferredData",
-            payload: this.buildData(homeRoot, clientData, roots, names)
-        }, window.location.href);
+    transferredData = (homeRoot?: string, clientData?: StoredData, roots?: RootInfo[], names?: NameDetails[]) => {
+        Browser.postMessage(transferredDataMessage(this.buildData(homeRoot, clientData, roots, names)));
     }
 
-    redirect = (homeRoot) => {
+    redirect = (homeRoot?: string): void => {
         const {rootLocation: location, path, query, hash} = Browser.getDocumentPassedLocation();
         if (location) {
             window.location.href = location + (path ?? "") + (query ?? "") + (hash ?? "");
@@ -134,41 +143,40 @@ class LocalStorageBackend extends React.PureComponent {
         }
     }
 
-    loadData(sender) {
+    loadData(sender: Sender): void {
         const homeRoot = this.getStorageItem("currentRoot");
-        const roots = this.getStorageItem("roots");
+        const roots = this.getStorageItem("roots") ?? [];
         if (!homeRoot) {
             sender();
             return;
         }
-        const clientData = this.getStorageItem(`clientData;${homeRoot}`);
+        const clientData = this.getStorageItem("clientData", homeRoot) ?? {};
         ObjectPath.set(clientData, "home.nodeName", this.getRootName(roots, homeRoot));
         sender(homeRoot, clientData, roots, this.getNames());
     }
 
-    storeData(data) {
+    storeData(data: StoredData): void {
         let homeRoot = this.getStorageItem("currentRoot");
         let roots = this.getStorageItem("roots");
         if (roots == null) {
             roots = [];
         }
-        const location = ObjectPath.get(data, "home.location");
-        const nodeName = ObjectPath.get(data, "home.nodeName");
+        const location = ObjectPath.get<string | null>(data, "home.location", null);
+        const nodeName = ObjectPath.get<string | null>(data, "home.nodeName", null);
         if (location) {
             if (homeRoot !== location) {
-                this.setStorageItem("currentRoot", location);
+                this.setStorageItem("currentRoot", null, location);
                 homeRoot = location;
             }
             roots = this.setRoot(roots, homeRoot, nodeName);
-            this.setStorageItem("roots", roots);
+            this.setStorageItem("roots", null, roots);
         }
         if (!homeRoot) {
             this.loadedData();
             return;
         }
 
-        const dataKey = `clientData;${homeRoot}`;
-        let clientData = this.getStorageItem(dataKey);
+        let clientData = this.getStorageItem("clientData", homeRoot);
         clientData = {
             ...clientData,
             ...data
@@ -178,26 +186,26 @@ class LocalStorageBackend extends React.PureComponent {
         const storedClientData = {...clientData};
         ObjectPath.del(storedClientData, "clientId");
         ObjectPath.del(storedClientData, "home.nodeName");
-        this.setStorageItem(dataKey, storedClientData);
+        this.setStorageItem("clientData", homeRoot, storedClientData);
 
         this.loadedData(homeRoot, clientData, roots);
     }
 
-    deleteData(location) {
+    deleteData(location: string | null): void {
         let homeRoot = this.getStorageItem("currentRoot");
-        let roots = this.getStorageItem("roots");
+        let roots = this.getStorageItem("roots") ?? [];
         if (!location) {
             location = homeRoot;
         }
-        if (roots.find(r => r.url === homeRoot) == null && location !== homeRoot) {
-            return null;
+        if (roots.find(r => r.url === location) == null && location !== homeRoot) {
+            return;
         }
         roots = roots.filter(r => r.url !== location);
-        this.setStorageItem("roots", roots);
-        this.removeStorageItem(`clientData;${location}`);
+        this.setStorageItem("roots", null, roots);
+        this.removeStorageItem("clientData", location);
 
         let nodeName;
-        if (location === homeRoot) {
+        if (location === homeRoot || homeRoot == null) {
             this.clearNames();
             if (roots.length === 0) {
                 this.removeStorageItem("currentRoot");
@@ -206,17 +214,16 @@ class LocalStorageBackend extends React.PureComponent {
             }
             homeRoot = roots[roots.length - 1].url;
             nodeName = roots[roots.length - 1].name;
-            this.setStorageItem("currentRoot", homeRoot);
+            this.setStorageItem("currentRoot", null, homeRoot);
         } else {
             nodeName = this.getRootName(roots, homeRoot);
         }
-        const dataKey = `clientData;${homeRoot}`;
-        const clientData = this.getStorageItem(dataKey);
+        const clientData = this.getStorageItem("clientData", homeRoot) ?? {};
         ObjectPath.set(clientData, "home.nodeName", nodeName);
         this.loadedData(homeRoot, clientData, roots);
     }
 
-    switchData(location) {
+    switchData(location: string): void {
         let homeRoot = this.getStorageItem("currentRoot");
         let roots = this.getStorageItem("roots");
         if (roots == null) {
@@ -228,20 +235,19 @@ class LocalStorageBackend extends React.PureComponent {
             this.loadedData();
             return;
         }
-        this.setStorageItem("currentRoot", location);
+        this.setStorageItem("currentRoot", null, location);
         this.clearNames();
 
-        const dataKey = `clientData;${location}`;
-        const clientData = this.getStorageItem(dataKey);
+        const clientData = this.getStorageItem("clientData", location) ?? {};
         ObjectPath.set(clientData, "home.nodeName", root.name);
         this.loadedData(location, clientData, roots);
     }
 
-    clearNames() {
+    clearNames(): void {
         this.removeStorageItem("names");
     }
 
-    storeName(details) {
+    storeName(details: NameDetails): void {
         let names = this.getStorageItem("names");
         if (names == null) {
             names = [];
@@ -253,7 +259,7 @@ class LocalStorageBackend extends React.PureComponent {
         if (names.length > MAX_NAMES_SIZE) {
             names.splice(0, names.length - MAX_NAMES_SIZE);
         }
-        this.setStorageItem("names", names);
+        this.setStorageItem("names", null, names);
     }
 
     render() {
