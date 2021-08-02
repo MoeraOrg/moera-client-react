@@ -1,0 +1,72 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useFormikContext } from 'formik';
+import debounce from 'lodash.debounce';
+import deepEqual from 'react-fast-compare';
+import "./DraftSaver.css";
+
+interface Logic<Text, Values, OuterProps> {
+    toText: (values: Values, props: OuterProps) => Text;
+    isEmpty: (text: Text) => boolean;
+    save: (text: Text, props: OuterProps) => void;
+}
+
+interface LogicProp<Text, Values, OuterProps> {
+    logic: Logic<Text, Values, OuterProps>;
+}
+
+interface DraftSaverProps<Text> {
+    initialText: Text;
+    savingDraft: boolean;
+    savedDraft: boolean;
+}
+
+export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text>>
+                          (props: OuterProps & LogicProp<Text, Values, OuterProps>) {
+    const {logic, initialText, savingDraft, savedDraft} = props;
+    const [, setPrevText] = useState<Text>(initialText);
+    const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
+    const {status, values} = useFormikContext<Values>();
+
+    const statusRef = useRef<string>();
+    statusRef.current = status;
+    const valuesRef = useRef<Values>();
+    valuesRef.current = values;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onSave = useCallback(debounce(() => {
+        if (statusRef.current === "submitted" || valuesRef.current == null) {
+            return;
+        }
+        const thisText = logic.toText(valuesRef.current, props);
+        if (logic.isEmpty(thisText) || savingDraft) {
+            return;
+        }
+        logic.save(thisText, props);
+        setUnsavedChanges(false);
+    }, 1500), [statusRef, valuesRef, props, setUnsavedChanges]);
+
+    useEffect(() => {
+        return () => {
+            onSave.cancel();
+        }
+    }, [onSave]);
+
+    useEffect(() => {
+        setPrevText(prevText => {
+            const thisText = logic.toText(values, props);
+            if (!deepEqual(prevText, thisText) && !deepEqual(initialText, thisText)) {
+                setUnsavedChanges(true);
+                if (!logic.isEmpty(thisText)) {
+                    onSave();
+                }
+            }
+            return thisText;
+        });
+    }, [values, props, setPrevText, initialText, setUnsavedChanges, onSave, logic]);
+
+    return (
+        <div className="draft-saver">
+            {!unsavedChanges && savingDraft && "Saving..."}
+            {!unsavedChanges && savedDraft && "Draft saved."}
+        </div>
+    );
+}

@@ -111,7 +111,7 @@ class ComposePage extends React.PureComponent<Props, State> {
                                     }
                                 </div>
                                 <div className="drafts">
-                                    <ComposeDraftSaver initialPostingText={this.state.initialPostingText}/>
+                                    <ComposeDraftSaver initialText={this.state.initialPostingText}/>
                                     <ComposeResetButton/>
                                     <ComposeDraftSelector/>
                                 </div>

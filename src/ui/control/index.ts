@@ -2,6 +2,7 @@ export { Avatar } from "ui/control/Avatar";
 export { AvatarWithPopup } from "ui/control/AvatarWithPopup";
 export { Button } from "ui/control/Button";
 export { ConflictWarning } from "ui/control/ConflictWarning";
+export { DraftSaver } from "ui/control/draft/DraftSaver";
 export { DropdownMenu } from "ui/control/DropdownMenu";
 export { EmojiButton } from "ui/control/EmojiButton";
 export { EmojiListDialog } from "ui/control/EmojiListDialog";
