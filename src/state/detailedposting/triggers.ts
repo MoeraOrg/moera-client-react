@@ -13,7 +13,7 @@ import {
     closeCommentDialog,
     COMMENT_COMPOSE_UNSET,
     COMMENT_POSTED,
-    commentComposeDraftLoad,
+    commentDraftLoad,
     commentDialogCommentLoad,
     commentDialogConflict,
     commentLoad,
@@ -93,7 +93,7 @@ export default [
     trigger(
         [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, CONNECTED_TO_HOME],
         conj(isAtDetailedPostingPage, isCommentComposeDraftToBeLoaded),
-        commentComposeDraftLoad(false)
+        commentDraftLoad(false)
     ),
     trigger(
         [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENTS_UNSET],

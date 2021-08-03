@@ -5,6 +5,12 @@ import { toAvatarDescription } from "util/avatar";
 import { AvatarImage, CommentInfo, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
 import { FormikBag } from "formik";
 
+interface MapToValuesProps {
+    comment: CommentInfo | null;
+    draft: DraftInfo | null;
+    avatarDefault: AvatarImage | null;
+}
+
 interface MapToCommentTextProps {
     ownerName: string | null;
     ownerFullName: string | null;
@@ -15,10 +21,7 @@ interface MapToCommentTextProps {
     repliedToId: string | null;
 }
 
-interface CommentComposeProps extends MapToCommentTextProps {
-    comment: CommentInfo | null;
-    draft: DraftInfo | null;
-    avatarDefault: AvatarImage | null;
+interface CommentComposeProps extends MapToValuesProps, MapToCommentTextProps {
     receiverPostingId: string | null;
     commentPost: (postingId: string, commentId: string | null, commentText: CommentText) => void;
 }
@@ -30,7 +33,7 @@ export interface CommentComposeValues {
 
 const commentComposeLogic = {
 
-    mapPropsToValues(props: CommentComposeProps): CommentComposeValues {
+    mapPropsToValues(props: MapToValuesProps): CommentComposeValues {
         const avatar = props.draft != null
             ? (props.draft.ownerAvatar ?? null)
             : (props.comment != null ? (props.comment.ownerAvatar ?? null) : props.avatarDefault);

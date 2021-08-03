@@ -195,69 +195,68 @@ export const commentComposeUnset = (): CommentComposeUnsetAction => ({
     type: COMMENT_COMPOSE_UNSET
 });
 
-export const COMMENT_COMPOSE_DRAFT_LOAD = "COMMENT_COMPOSE_DRAFT_LOAD";
-export type CommentComposeDraftLoadAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_LOAD, {
+export const COMMENT_DRAFT_LOAD = "COMMENT_DRAFT_LOAD";
+export type CommentDraftLoadAction = ActionWithPayload<typeof COMMENT_DRAFT_LOAD, {
     isDialog: boolean;
 }>;
-export const commentComposeDraftLoad = (isDialog: boolean): CommentComposeDraftLoadAction => ({
-    type: COMMENT_COMPOSE_DRAFT_LOAD,
+export const commentDraftLoad = (isDialog: boolean): CommentDraftLoadAction => ({
+    type: COMMENT_DRAFT_LOAD,
     payload: {isDialog}
 });
 
-export const COMMENT_COMPOSE_DRAFT_LOADED = "COMMENT_COMPOSE_DRAFT_LOADED";
-export type CommentComposeDraftLoadedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_LOADED, {
+export const COMMENT_DRAFT_LOADED = "COMMENT_DRAFT_LOADED";
+export type CommentDraftLoadedAction = ActionWithPayload<typeof COMMENT_DRAFT_LOADED, {
     draft: DraftInfo;
 }>;
-export const commentComposeDraftLoaded = (draft: DraftInfo): CommentComposeDraftLoadedAction => ({
-    type: COMMENT_COMPOSE_DRAFT_LOADED,
+export const commentDraftLoaded = (draft: DraftInfo): CommentDraftLoadedAction => ({
+    type: COMMENT_DRAFT_LOADED,
     payload: {draft}
 });
 
-export const COMMENT_COMPOSE_DRAFT_LOAD_FAILED = "COMMENT_COMPOSE_DRAFT_LOAD_FAILED";
-export type CommentComposeDraftLoadFailedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_LOAD_FAILED, {
+export const COMMENT_DRAFT_LOAD_FAILED = "COMMENT_DRAFT_LOAD_FAILED";
+export type CommentDraftLoadFailedAction = ActionWithPayload<typeof COMMENT_DRAFT_LOAD_FAILED, {
     nodeName: string;
     postingId: string;
     commentId: string | null;
 }>;
-export const commentComposeDraftLoadFailed = (nodeName: string, postingId: string,
-                                              commentId: string | null): CommentComposeDraftLoadFailedAction => ({
-    type: COMMENT_COMPOSE_DRAFT_LOAD_FAILED,
+export const commentDraftLoadFailed = (nodeName: string, postingId: string,
+                                       commentId: string | null): CommentDraftLoadFailedAction => ({
+    type: COMMENT_DRAFT_LOAD_FAILED,
     payload: {nodeName, postingId, commentId}
 });
 
-export const COMMENT_COMPOSE_DRAFT_SAVE = "COMMENT_COMPOSE_DRAFT_SAVE";
-export type CommentComposeDraftSaveAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_SAVE, {
+export const COMMENT_DRAFT_SAVE = "COMMENT_DRAFT_SAVE";
+export type CommentDraftSaveAction = ActionWithPayload<typeof COMMENT_DRAFT_SAVE, {
     draftId: string | null;
     draftText: DraftText;
 }>;
-export const commentComposeDraftSave = (draftId: string | null,
-                                        draftText: DraftText): CommentComposeDraftSaveAction => ({
-    type: COMMENT_COMPOSE_DRAFT_SAVE,
+export const commentDraftSave = (draftId: string | null, draftText: DraftText): CommentDraftSaveAction => ({
+    type: COMMENT_DRAFT_SAVE,
     payload: {draftId, draftText}
 });
 
-export const COMMENT_COMPOSE_DRAFT_SAVED = "COMMENT_COMPOSE_DRAFT_SAVED";
-export type CommentComposeDraftSavedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_SAVED, {
+export const COMMENT_DRAFT_SAVED = "COMMENT_DRAFT_SAVED";
+export type CommentDraftSavedAction = ActionWithPayload<typeof COMMENT_DRAFT_SAVED, {
     nodeName: string;
     postingId: string;
     commentId: string | null;
     draftId: string;
 }>;
-export const commentComposeDraftSaved = (nodeName: string, postingId: string, commentId: string | null,
-                                         draftId: string): CommentComposeDraftSavedAction => ({
-    type: COMMENT_COMPOSE_DRAFT_SAVED,
+export const commentDraftSaved = (nodeName: string, postingId: string, commentId: string | null,
+                                  draftId: string): CommentDraftSavedAction => ({
+    type: COMMENT_DRAFT_SAVED,
     payload: {nodeName, postingId, commentId, draftId}
 });
 
-export const COMMENT_COMPOSE_DRAFT_SAVE_FAILED = "COMMENT_COMPOSE_DRAFT_SAVE_FAILED";
-export type CommentComposeDraftSaveFailedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_SAVE_FAILED, {
+export const COMMENT_DRAFT_SAVE_FAILED = "COMMENT_DRAFT_SAVE_FAILED";
+export type CommentDraftSaveFailedAction = ActionWithPayload<typeof COMMENT_DRAFT_SAVE_FAILED, {
     nodeName: string;
     postingId: string;
     commentId: string | null;
 }>;
-export const commentComposeDraftSaveFailed = (nodeName: string, postingId: string,
-                                              commentId: string | null): CommentComposeDraftSaveFailedAction => ({
-    type: COMMENT_COMPOSE_DRAFT_SAVE_FAILED,
+export const commentDraftSaveFailed = (nodeName: string, postingId: string,
+                                       commentId: string | null): CommentDraftSaveFailedAction => ({
+    type: COMMENT_DRAFT_SAVE_FAILED,
     payload: {nodeName, postingId, commentId}
 });
 
@@ -602,12 +601,12 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentsScrolledToCommentsAction
     | CommentsScrolledToComposerAction
     | CommentComposeUnsetAction
-    | CommentComposeDraftLoadAction
-    | CommentComposeDraftLoadedAction
-    | CommentComposeDraftLoadFailedAction
-    | CommentComposeDraftSaveAction
-    | CommentComposeDraftSavedAction
-    | CommentComposeDraftSaveFailedAction
+    | CommentDraftLoadAction
+    | CommentDraftLoadedAction
+    | CommentDraftLoadFailedAction
+    | CommentDraftSaveAction
+    | CommentDraftSavedAction
+    | CommentDraftSaveFailedAction
     | CommentPostAction
     | CommentPostedAction
     | CommentPostFailedAction

@@ -6,12 +6,12 @@ import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CLOSE_COMMENT_DIALOG,
-    COMMENT_COMPOSE_DRAFT_LOAD,
-    COMMENT_COMPOSE_DRAFT_LOAD_FAILED,
-    COMMENT_COMPOSE_DRAFT_LOADED,
-    COMMENT_COMPOSE_DRAFT_SAVE,
-    COMMENT_COMPOSE_DRAFT_SAVE_FAILED,
-    COMMENT_COMPOSE_DRAFT_SAVED,
+    COMMENT_DRAFT_LOAD,
+    COMMENT_DRAFT_LOAD_FAILED,
+    COMMENT_DRAFT_LOADED,
+    COMMENT_DRAFT_SAVE,
+    COMMENT_DRAFT_SAVE_FAILED,
+    COMMENT_DRAFT_SAVED,
     COMMENT_COMPOSE_UNSET,
     COMMENT_DELETE,
     COMMENT_DELETE_FAILED,
@@ -441,14 +441,14 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                     .set("compose.beingPosted", false)
                     .value()
 
-        case COMMENT_COMPOSE_DRAFT_LOAD: {
+        case COMMENT_DRAFT_LOAD: {
             const property = action.payload.isDialog != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
                 loading: true
             });
         }
 
-        case COMMENT_COMPOSE_DRAFT_LOADED: {
+        case COMMENT_DRAFT_LOADED: {
             if (action.payload.draft.receiverName !== state.comments.receiverName
                 || action.payload.draft.receiverPostingId !== state.comments.receiverPostingId) {
                 return state;
@@ -463,7 +463,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             });
         }
 
-        case COMMENT_COMPOSE_DRAFT_LOAD_FAILED: {
+        case COMMENT_DRAFT_LOAD_FAILED: {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -475,7 +475,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             });
         }
 
-        case COMMENT_COMPOSE_DRAFT_SAVE: {
+        case COMMENT_DRAFT_SAVE: {
             if (action.payload.draftText.receiverName !== state.comments.receiverName
                 || action.payload.draftText.receiverPostingId !== state.comments.receiverPostingId) {
                 return state;
@@ -488,7 +488,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             });
         }
 
-        case COMMENT_COMPOSE_DRAFT_SAVED: {
+        case COMMENT_DRAFT_SAVED: {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -502,7 +502,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             });
         }
 
-        case COMMENT_COMPOSE_DRAFT_SAVE_FAILED: {
+        case COMMENT_DRAFT_SAVE_FAILED: {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;

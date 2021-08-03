@@ -5,8 +5,8 @@ import * as textFieldEdit from 'text-field-edit';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
-    COMMENT_COMPOSE_DRAFT_LOAD,
-    COMMENT_COMPOSE_DRAFT_SAVE,
+    COMMENT_DRAFT_LOAD,
+    COMMENT_DRAFT_SAVE,
     COMMENT_COPY_LINK,
     COMMENT_DELETE,
     COMMENT_DIALOG_COMMENT_LOAD,
@@ -17,12 +17,12 @@ import {
     COMMENT_REACTION_LOAD,
     COMMENT_REPLY,
     COMMENT_VERIFY,
-    CommentComposeDraftLoadAction,
-    commentComposeDraftLoaded,
-    commentComposeDraftLoadFailed,
-    CommentComposeDraftSaveAction,
-    commentComposeDraftSaved,
-    commentComposeDraftSaveFailed,
+    CommentDraftLoadAction,
+    commentDraftLoaded,
+    commentDraftLoadFailed,
+    CommentDraftSaveAction,
+    commentDraftSaved,
+    commentDraftSaveFailed,
     CommentCopyLinkAction,
     CommentDeleteAction,
     commentDeleted,
@@ -96,8 +96,8 @@ export default [
     executor(COMMENTS_UPDATE, "", introduce(commentsUpdateSaga)),
     executor(COMMENT_LOAD, payload => payload.commentId, introduce(commentLoadSaga)),
     executor(COMMENT_POST, null, commentPostSaga),
-    executor(COMMENT_COMPOSE_DRAFT_LOAD, "", commentComposeDraftLoadSaga),
-    executor(COMMENT_COMPOSE_DRAFT_SAVE, "", commentComposeDraftSaveSaga),
+    executor(COMMENT_DRAFT_LOAD, "", commentDraftLoadSaga),
+    executor(COMMENT_DRAFT_SAVE, "", commentDraftSaveSaga),
     executor(COMMENT_DELETE, payload => payload.commentId, commentDeleteSaga),
     executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
     executor(COMMENT_COPY_LINK, null, commentCopyLinkSaga),
@@ -265,7 +265,7 @@ function* commentPostSaga(action: CommentPostAction) {
     }
 }
 
-function* commentComposeDraftLoadSaga(action: CommentComposeDraftLoadAction) {
+function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
     const {isDialog} = action.payload;
 
     const {nodeName, postingId, commentId} = yield* select((state: ClientState) => ({
@@ -283,17 +283,17 @@ function* commentComposeDraftLoadSaga(action: CommentComposeDraftLoadAction) {
             ? yield* call(Node.getDraftCommentUpdate, ":", nodeName, postingId, commentId)
             : yield* call(Node.getDraftNewComment, ":", nodeName, postingId);
         if (data != null) {
-            yield* put(commentComposeDraftLoaded(data));
+            yield* put(commentDraftLoaded(data));
         } else {
-            yield* put(commentComposeDraftLoadFailed(nodeName, postingId, commentId));
+            yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));
         }
     } catch (e) {
-        yield* put(commentComposeDraftLoadFailed(nodeName, postingId, commentId));
+        yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));
         yield* put(errorThrown(e));
     }
 }
 
-function* commentComposeDraftSaveSaga(action: CommentComposeDraftSaveAction) {
+function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     const {draftId, draftText} = action.payload;
 
     if (draftText.receiverPostingId == null) {
@@ -307,10 +307,10 @@ function* commentComposeDraftSaveSaga(action: CommentComposeDraftSaveAction) {
         } else {
             data = yield* call(Node.putDraft, ":", draftId, draftText);
         }
-        yield* put(commentComposeDraftSaved(draftText.receiverName, draftText.receiverPostingId,
+        yield* put(commentDraftSaved(draftText.receiverName, draftText.receiverPostingId,
             draftText.receiverCommentId ?? null, data.id));
     } catch (e) {
-        yield* put(commentComposeDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
+        yield* put(commentDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
             draftText.receiverCommentId ?? null));
         yield* put(errorThrown(e));
     }

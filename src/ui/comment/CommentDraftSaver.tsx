@@ -8,7 +8,7 @@ import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerFullName } from "state/home/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
-import { commentComposeDraftSave } from "state/detailedposting/actions";
+import { commentDraftSave } from "state/detailedposting/actions";
 import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 
@@ -36,7 +36,7 @@ const commentDraftSaverLogic = {
 
     save: (text: CommentText, props: Props): void => {
         if (props.ownerName != null && props.receiverPostingId != null) {
-            props.commentComposeDraftSave(props.draftId,
+            props.commentDraftSave(props.draftId,
                 commentDraftSaverLogic.toDraftText(props.ownerName, props.receiverPostingId, props.commentId, text));
         }
     }
@@ -61,7 +61,7 @@ const connector = connect(
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat
     }),
-    { commentComposeDraftSave }
+    { commentDraftSave }
 );
 
 export default connector(ComposeDraftSaver);

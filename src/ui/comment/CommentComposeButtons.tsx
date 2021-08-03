@@ -2,25 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 
-import { CommentText } from "api/node/api-types";
+import { CommentText, SourceFormat } from "api/node/api-types";
 import { commentComposeUnset } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { getOwnerName } from "state/owner/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { getSetting } from "state/settings/selectors";
+import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
 import { Button } from "ui/control";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
+import commentComposeLogic from "ui/comment/comment-compose-logic";
 import "./CommentComposeButtons.css";
 
 type Props = {
     loading: boolean;
 } & ConnectedProps<typeof connector>;
 
-function CommentComposeButtons({loading, ownerName, draft, confirmBox}: Props) {
+function CommentComposeButtons(props: Props) {
+    const {loading, ownerName, draft, confirmBox} = props;
+
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
 
     useEffect(() => {
-        setInitialText({ownerName: ownerName ?? "", bodySrc: draft?.bodySrc?.text ?? ""});
-    }, [ownerName, draft, setInitialText]);
+        const values = commentComposeLogic.mapPropsToValues(props);
+        const commentText = commentComposeLogic.mapValuesToCommentText(values, props);
+        if (commentText != null) {
+            setInitialText(commentText);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ownerName, draft, setInitialText]); // 'props' are missing on purpose
 
     const onCancel = (e: React.MouseEvent) => {
         confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
@@ -29,7 +40,7 @@ function CommentComposeButtons({loading, ownerName, draft, confirmBox}: Props) {
     };
 
     const [, {value: body}] = useField("body");
-    const invisible = body.trim().length === 0;
+    const invisible = draft == null && body.trim().length === 0;
 
     return (
         <div className="buttons">
@@ -47,7 +58,15 @@ function CommentComposeButtons({loading, ownerName, draft, confirmBox}: Props) {
 const connector = connect(
     (state: ClientState) => ({
         ownerName: getOwnerName(state),
-        draft: state.detailedPosting.compose.draft
+        ownerFullName: getHomeOwnerFullName(state),
+        avatarDefault: getHomeOwnerAvatar(state),
+        draft: state.detailedPosting.compose.draft,
+        comment: null,
+        repliedToId: getCommentComposerRepliedToId(state),
+        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
+        reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
+        reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
+        sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat
     }),
     { confirmBox }
 );
