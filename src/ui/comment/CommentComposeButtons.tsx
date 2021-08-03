@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 
 import { CommentText, SourceFormat } from "api/node/api-types";
-import { commentComposeUnset } from "state/detailedposting/actions";
+import { commentComposeCancel } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
@@ -20,7 +20,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentComposeButtons(props: Props) {
-    const {loading, ownerName, draft, confirmBox} = props;
+    const {loading, ownerName, draftId, draft, confirmBox} = props;
 
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
 
@@ -35,7 +35,7 @@ function CommentComposeButtons(props: Props) {
 
     const onCancel = (e: React.MouseEvent) => {
         confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
-            commentComposeUnset(), null, "danger");
+            commentComposeCancel(draftId), null, "danger");
         e.preventDefault();
     };
 
@@ -60,6 +60,7 @@ const connector = connect(
         ownerName: getOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         avatarDefault: getHomeOwnerAvatar(state),
+        draftId: state.detailedPosting.compose.draftId,
         draft: state.detailedPosting.compose.draft,
         comment: null,
         repliedToId: getCommentComposerRepliedToId(state),

@@ -12,7 +12,7 @@ import {
     COMMENT_DRAFT_SAVE,
     COMMENT_DRAFT_SAVE_FAILED,
     COMMENT_DRAFT_SAVED,
-    COMMENT_COMPOSE_UNSET,
+    COMMENT_COMPOSE_CANCEL,
     COMMENT_DELETE,
     COMMENT_DELETE_FAILED,
     COMMENT_DELETED,
@@ -396,7 +396,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         case COMMENTS_SCROLLED_TO_COMPOSER:
             return immutable.set(state, "compose.focused", false);
 
-        case COMMENT_COMPOSE_UNSET:
+        case COMMENT_COMPOSE_CANCEL:
             return immutable.assign(state, "compose", {
                 formId: state.compose.formId + 1,
                 ...emptyCompose

@@ -189,10 +189,13 @@ export const commentsScrolledToComposer = (): CommentsScrolledToComposerAction =
     type: COMMENTS_SCROLLED_TO_COMPOSER
 });
 
-export const COMMENT_COMPOSE_UNSET = "COMMENT_COMPOSE_UNSET";
-export type CommentComposeUnsetAction = Action<typeof COMMENT_COMPOSE_UNSET>;
-export const commentComposeUnset = (): CommentComposeUnsetAction => ({
-    type: COMMENT_COMPOSE_UNSET
+export const COMMENT_COMPOSE_CANCEL = "COMMENT_COMPOSE_CANCEL";
+export type CommentComposeCancelAction = ActionWithPayload<typeof COMMENT_COMPOSE_CANCEL, {
+    draftId: string | null
+}>;
+export const commentComposeCancel = (draftId: string | null): CommentComposeCancelAction => ({
+    type: COMMENT_COMPOSE_CANCEL,
+    payload: {draftId}
 });
 
 export const COMMENT_DRAFT_LOAD = "COMMENT_DRAFT_LOAD";
@@ -264,12 +267,13 @@ export const COMMENT_POST = "COMMENT_POST";
 export type CommentPostAction = ActionWithPayload<typeof COMMENT_POST, {
     postingId: string;
     commentId: string | null;
+    draftId: string | null;
     commentText: CommentText;
 }>;
-export const commentPost = (postingId: string, commentId: string | null,
+export const commentPost = (postingId: string, commentId: string | null, draftId: string | null,
                             commentText: CommentText): CommentPostAction => ({
     type: COMMENT_POST,
-    payload: {postingId, commentId, commentText}
+    payload: {postingId, commentId, draftId, commentText}
 });
 
 export const COMMENT_POSTED = "COMMENT_POSTED";
@@ -600,7 +604,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentsScrolledToAnchorAction
     | CommentsScrolledToCommentsAction
     | CommentsScrolledToComposerAction
-    | CommentComposeUnsetAction
+    | CommentComposeCancelAction
     | CommentDraftLoadAction
     | CommentDraftLoadedAction
     | CommentDraftLoadFailedAction

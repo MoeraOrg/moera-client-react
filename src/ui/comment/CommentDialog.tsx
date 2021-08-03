@@ -81,6 +81,7 @@ const connector = connect(
         avatarDefault: getHomeOwnerAvatar(state),
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         comment: getCommentDialogComment(state),
+        draftId: state.detailedPosting.commentDialog.draftId,
         draft: state.detailedPosting.commentDialog.draft,
         repliedToId: getCommentDialogComment(state)?.repliedTo?.id ?? null,
         conflict: isCommentDialogConflict(state),

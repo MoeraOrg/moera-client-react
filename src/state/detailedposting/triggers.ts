@@ -11,7 +11,7 @@ import {
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
     closeCommentDialog,
-    COMMENT_COMPOSE_UNSET,
+    COMMENT_COMPOSE_CANCEL,
     COMMENT_POSTED,
     commentDraftLoad,
     commentDialogCommentLoad,
@@ -139,7 +139,7 @@ export default [
             isAtDetailedPostingPage(state) && isCommentsReceiverPostingId(state, signal.payload.postingId),
         signal => commentsScrollToAnchor(signal.payload.moment)
     ),
-    trigger([COMMENT_POSTED, COMMENT_COMPOSE_UNSET], true, bottomMenuShow),
+    trigger([COMMENT_POSTED, COMMENT_COMPOSE_CANCEL], true, bottomMenuShow),
     trigger(
         [EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED],
         (state, signal: EventAction<CommentAddedEvent | CommentUpdatedEvent>) =>
