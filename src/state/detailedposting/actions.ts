@@ -1,7 +1,14 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { CommentInfo, CommentText, PostingInfo, ReactionAttributes, ReactionTotalsInfo } from "api/node/api-types";
+import {
+    CommentInfo,
+    CommentText,
+    DraftText,
+    PostingInfo,
+    ReactionAttributes,
+    ReactionTotalsInfo
+} from "api/node/api-types";
 
 export const DETAILED_POSTING_LOAD = "DETAILED_POSTING_LOAD";
 export type DetailedPostingLoadAction = Action<typeof DETAILED_POSTING_LOAD>;
@@ -185,6 +192,42 @@ export const COMMENT_COMPOSE_UNSET = "COMMENT_COMPOSE_UNSET";
 export type CommentComposeUnsetAction = Action<typeof COMMENT_COMPOSE_UNSET>;
 export const commentComposeUnset = (): CommentComposeUnsetAction => ({
     type: COMMENT_COMPOSE_UNSET
+});
+
+export const COMMENT_COMPOSE_DRAFT_SAVE = "COMMENT_COMPOSE_DRAFT_SAVE";
+export type CommentComposeDraftSaveAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_SAVE, {
+    draftId: string | null;
+    draftText: DraftText;
+}>;
+export const commentComposeDraftSave = (draftId: string | null,
+                                        draftText: DraftText): CommentComposeDraftSaveAction => ({
+    type: COMMENT_COMPOSE_DRAFT_SAVE,
+    payload: {draftId, draftText}
+});
+
+export const COMMENT_COMPOSE_DRAFT_SAVED = "COMMENT_COMPOSE_DRAFT_SAVED";
+export type CommentComposeDraftSavedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_SAVED, {
+    nodeName: string;
+    postingId: string;
+    commentId: string | null;
+    draftId: string;
+}>;
+export const commentComposeDraftSaved = (nodeName: string, postingId: string, commentId: string | null,
+                                         draftId: string): CommentComposeDraftSavedAction => ({
+    type: COMMENT_COMPOSE_DRAFT_SAVED,
+    payload: {nodeName, postingId, commentId, draftId}
+});
+
+export const COMMENT_COMPOSE_DRAFT_SAVE_FAILED = "COMMENT_COMPOSE_DRAFT_SAVE_FAILED";
+export type CommentComposeDraftSaveFailedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_SAVE_FAILED, {
+    nodeName: string;
+    postingId: string;
+    commentId: string | null;
+}>;
+export const commentComposeDraftSaveFailed = (nodeName: string, postingId: string,
+                                              commentId: string | null): CommentComposeDraftSaveFailedAction => ({
+    type: COMMENT_COMPOSE_DRAFT_SAVE_FAILED,
+    payload: {nodeName, postingId, commentId}
 });
 
 export const COMMENT_POST = "COMMENT_POST";
@@ -528,6 +571,9 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentsScrolledToCommentsAction
     | CommentsScrolledToComposerAction
     | CommentComposeUnsetAction
+    | CommentComposeDraftSaveAction
+    | CommentComposeDraftSavedAction
+    | CommentComposeDraftSaveFailedAction
     | CommentPostAction
     | CommentPostedAction
     | CommentPostFailedAction

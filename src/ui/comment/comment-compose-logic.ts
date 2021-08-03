@@ -5,16 +5,19 @@ import { toAvatarDescription } from "util/avatar";
 import { AvatarImage, CommentInfo, CommentText, SourceFormat } from "api/node/api-types";
 import { FormikBag } from "formik";
 
-interface CommentComposeProps {
-    comment: CommentInfo | null;
+interface MapToCommentTextProps {
     ownerName: string | null;
     ownerFullName: string | null;
-    avatarDefault: AvatarImage | null;
     smileysEnabled: boolean;
     sourceFormatDefault: SourceFormat;
     reactionsPositiveDefault: string;
     reactionsNegativeDefault: string;
     repliedToId: string | null;
+}
+
+interface CommentComposeProps extends MapToCommentTextProps {
+    comment: CommentInfo | null;
+    avatarDefault: AvatarImage | null;
     receiverPostingId: string | null;
     commentPost: (postingId: string, commentId: string | null, commentText: CommentText) => void;
 }
@@ -44,7 +47,7 @@ const commentComposeLogic = {
         return smileysEnabled ? replaceSmileys(text) : text;
     },
 
-    mapValuesToCommentText(values: CommentComposeValues, props: CommentComposeProps): CommentText | null {
+    mapValuesToCommentText(values: CommentComposeValues, props: MapToCommentTextProps): CommentText | null {
         if (props.ownerName == null) {
             return null;
         }
@@ -60,6 +63,15 @@ const commentComposeLogic = {
             acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
             repliedToId: props.repliedToId
         };
+    },
+
+    isCommentTextEmpty(commentText: CommentText): boolean {
+        if (commentText.bodySrc == null) {
+            return true;
+        }
+
+        const {text} = JSON.parse(commentText.bodySrc);
+        return !text;
     },
 
     handleSubmit(values: CommentComposeValues, formik: FormikBag<CommentComposeProps, CommentComposeValues>): void {

@@ -5,6 +5,7 @@ import * as textFieldEdit from 'text-field-edit';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    COMMENT_COMPOSE_DRAFT_SAVE,
     COMMENT_COPY_LINK,
     COMMENT_DELETE,
     COMMENT_DIALOG_COMMENT_LOAD,
@@ -15,6 +16,9 @@ import {
     COMMENT_REACTION_LOAD,
     COMMENT_REPLY,
     COMMENT_VERIFY,
+    CommentComposeDraftSaveAction,
+    commentComposeDraftSaved,
+    commentComposeDraftSaveFailed,
     CommentCopyLinkAction,
     CommentDeleteAction,
     commentDeleted,
@@ -59,8 +63,8 @@ import {
 } from "state/detailedposting/actions";
 import {
     getComment,
-    getCommentDialogCommentId,
     getCommentComposerRepliedToName,
+    getCommentDialogCommentId,
     getCommentsState,
     getDetailedPosting,
     getDetailedPostingId,
@@ -87,6 +91,7 @@ export default [
     executor(COMMENTS_UPDATE, "", introduce(commentsUpdateSaga)),
     executor(COMMENT_LOAD, payload => payload.commentId, introduce(commentLoadSaga)),
     executor(COMMENT_POST, null, commentPostSaga),
+    executor(COMMENT_COMPOSE_DRAFT_SAVE, "", commentComposeDraftSaveSaga),
     executor(COMMENT_DELETE, payload => payload.commentId, commentDeleteSaga),
     executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
     executor(COMMENT_COPY_LINK, null, commentCopyLinkSaga),
@@ -250,6 +255,29 @@ function* commentPostSaga(action: CommentPostAction) {
         yield* call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentText);
     } catch (e) {
         yield* put(commentPostFailed(receiverName, receiverPostingId));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* commentComposeDraftSaveSaga(action: CommentComposeDraftSaveAction) {
+    const {draftId, draftText} = action.payload;
+
+    if (draftText.receiverPostingId == null) {
+        return;
+    }
+
+    try {
+        let data;
+        if (draftId == null) {
+            data = yield* call(Node.postDraft, ":", draftText);
+        } else {
+            data = yield* call(Node.putDraft, ":", draftId, draftText);
+        }
+        yield* put(commentComposeDraftSaved(draftText.receiverName, draftText.receiverPostingId,
+            draftText.receiverCommentId ?? null, data.id));
+    } catch (e) {
+        yield* put(commentComposeDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
+            draftText.receiverCommentId ?? null));
         yield* put(errorThrown(e));
     }
 }

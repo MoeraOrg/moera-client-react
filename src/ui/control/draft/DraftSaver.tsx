@@ -5,7 +5,7 @@ import deepEqual from 'react-fast-compare';
 import "./DraftSaver.css";
 
 interface Logic<Text, Values, OuterProps> {
-    toText: (values: Values, props: OuterProps) => Text;
+    toText: (values: Values, props: OuterProps) => Text | null;
     isEmpty: (text: Text) => boolean;
     save: (text: Text, props: OuterProps) => void;
 }
@@ -37,7 +37,7 @@ export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text
             return;
         }
         const thisText = logic.toText(valuesRef.current, props);
-        if (logic.isEmpty(thisText) || savingDraft) {
+        if (thisText == null || logic.isEmpty(thisText) || savingDraft) {
             return;
         }
         logic.save(thisText, props);
@@ -53,6 +53,9 @@ export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text
     useEffect(() => {
         setPrevText(prevText => {
             const thisText = logic.toText(values, props);
+            if (thisText == null) {
+                return prevText;
+            }
             if (!deepEqual(prevText, thisText) && !deepEqual(initialText, thisText)) {
                 setUnsavedChanges(true);
                 if (!logic.isEmpty(thisText)) {

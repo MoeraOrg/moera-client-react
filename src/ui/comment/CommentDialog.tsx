@@ -14,7 +14,6 @@ import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import { AvatarField, RichTextField } from "ui/control/field";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
-import { parseBool } from "util/misc";
 import "./CommentDialog.css";
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -90,7 +89,7 @@ const connector = connect(
         loading: state.detailedPosting.commentDialog.loading,
         beingPosted: state.detailedPosting.commentDialog.beingPosted,
         submitKey: getSetting(state, "comment.submit-key") as string,
-        smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled") as boolean)
+        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean
     }),
     { commentPost, closeCommentDialog, commentDialogConflictClose }
 );

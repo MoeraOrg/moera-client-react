@@ -106,8 +106,8 @@ const composePageLogic = {
         body: yup.string().trim().required("Must not be empty")
     }),
 
-    _replaceSmileys(props: MapToPostingTextProps, text: string): string {
-        return props.smileysEnabled ? replaceSmileys(text) : text;
+    _replaceSmileys(enabled: boolean, text: string): string {
+        return enabled ? replaceSmileys(text) : text;
     },
 
     _buildPublications(values: ComposePageValues, props: MapToPostingTextProps): StoryAttributes[] | null {
@@ -130,8 +130,10 @@ const composePageLogic = {
                 shape: values.avatar.shape ?? props.avatarShapeDefault
             } : null,
             bodySrc: JSON.stringify({
-                subject: props.subjectPresent ? this._replaceSmileys(props, values.subject?.trim() ?? "") : null,
-                text: this._replaceSmileys(props, values.body.trim())
+                subject: props.subjectPresent
+                    ? this._replaceSmileys(props.smileysEnabled, values.subject?.trim() ?? "")
+                    : null,
+                text: this._replaceSmileys(props.smileysEnabled, values.body.trim())
             }),
             bodySrcFormat: values.bodyFormat,
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},

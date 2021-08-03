@@ -19,7 +19,7 @@ import { AvatarField, RichTextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
-import { mentionName, parseBool } from "util/misc";
+import { mentionName } from "util/misc";
 import "./CommentCompose.css";
 
 function viewComposer() {
@@ -115,7 +115,7 @@ const connector = connect(
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
         submitKey: getSetting(state, "comment.submit-key") as string,
-        smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled") as boolean)
+        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean
     }),
     { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
 );

@@ -49,6 +49,9 @@ export interface CommentComposeState {
     repliedToName: string | null;
     repliedToFullName: string | null;
     repliedToHeading: string | null;
+    draftId: string | null;
+    savingDraft: boolean;
+    savedDraft: boolean;
 }
 
 export interface CommentDialogState {
@@ -58,6 +61,9 @@ export interface CommentDialogState {
     comment: CommentInfo | null;
     beingPosted: boolean;
     conflict: boolean;
+    draftId: string | null;
+    savingDraft: boolean;
+    savedDraft: boolean;
 }
 
 export interface DetailedPostingState {

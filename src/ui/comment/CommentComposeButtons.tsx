@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 
-import { Button } from "ui/control";
+import { CommentText } from "api/node/api-types";
 import { commentComposeUnset } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { getOwnerName } from "state/owner/selectors";
+import { ClientState } from "state/state";
+import { Button } from "ui/control";
+import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import "./CommentComposeButtons.css";
 
 type Props = {
@@ -12,6 +16,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentComposeButtons({loading, confirmBox}: Props) {
+    const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
+
     const onCancel = (e: React.MouseEvent) => {
         confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
             commentComposeUnset(), null, "danger");
@@ -23,6 +29,7 @@ function CommentComposeButtons({loading, confirmBox}: Props) {
 
     return (
         <div className="buttons">
+            <CommentDraftSaver initialText={initialText} commentId={null}/>
             <Button variant="secondary" invisible={invisible} onClick={onCancel}>
                 CANCEL
             </Button>
@@ -34,7 +41,9 @@ function CommentComposeButtons({loading, confirmBox}: Props) {
 }
 
 const connector = connect(
-    null,
+    (state: ClientState) => ({
+        ownerName: getOwnerName(state)
+    }),
     { confirmBox }
 );
 
