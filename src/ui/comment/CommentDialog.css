@@ -10,3 +10,7 @@
     display: inline-block;
     margin-right: .25rem;
 }
+
+.comment-dialog .modal-footer .draft-saver {
+    color: var(--gray-medium);
+}

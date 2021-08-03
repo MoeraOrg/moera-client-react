@@ -7,15 +7,17 @@ import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerFullName } from "state/home/selectors";
-import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
+import { getCommentComposerRepliedToId, getCommentDialogComment } from "state/detailedposting/selectors";
 import { commentDraftSave } from "state/detailedposting/actions";
 import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 
-type Props = {
+interface OwnProps {
     initialText: CommentText;
     commentId: string | null;
-} & ConnectedProps<typeof connector>;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
 const commentDraftSaverLogic = {
 
@@ -31,7 +33,7 @@ const commentDraftSaverLogic = {
         receiverName: ownerName,
         draftType: commentId == null ? "new-comment" : "comment-update",
         receiverPostingId: postingId,
-        receiverCommentId: commentId == null ? null /* important, should not be undefined */ : commentId
+        receiverCommentId: commentId ?? null /* important, should not be undefined */
     } as DraftText),
 
     save: (text: CommentText, props: Props): void => {
@@ -48,14 +50,22 @@ const ComposeDraftSaver = (props: Props) => (
 );
 
 const connector = connect(
-    (state: ClientState) => ({
+    (state: ClientState, ownProps: OwnProps) => ({
         ownerName: getOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
-        repliedToId: getCommentComposerRepliedToId(state),
-        draftId: state.detailedPosting.compose.draftId,
-        savingDraft: state.detailedPosting.compose.savingDraft,
-        savedDraft: state.detailedPosting.compose.savedDraft,
+        repliedToId: ownProps.commentId == null
+            ? getCommentComposerRepliedToId(state)
+            : getCommentDialogComment(state)?.repliedTo?.id ?? null,
+        draftId: ownProps.commentId == null
+            ? state.detailedPosting.compose.draftId
+            : state.detailedPosting.commentDialog.draftId,
+        savingDraft: ownProps.commentId == null
+            ? state.detailedPosting.compose.savingDraft
+            : state.detailedPosting.commentDialog.savingDraft,
+        savedDraft: ownProps.commentId == null
+            ? state.detailedPosting.compose.savedDraft
+            : state.detailedPosting.commentDialog.savedDraft,
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,

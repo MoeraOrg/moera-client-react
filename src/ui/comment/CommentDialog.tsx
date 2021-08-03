@@ -1,19 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import * as textFieldEdit from 'text-field-edit';
 
-import { SourceFormat } from "api/node/api-types";
+import { CommentText, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { closeCommentDialog, commentDialogConflictClose, commentPost } from "state/detailedposting/actions";
+import {
+    cancelCommentDialog,
+    closeCommentDialog,
+    commentDialogConflictClose,
+    commentPost
+} from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentDialogComment, isCommentDialogConflict } from "state/detailedposting/selectors";
+import { confirmBox } from "state/confirmbox/actions";
 import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import { AvatarField, RichTextField } from "ui/control/field";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
+import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import "./CommentDialog.css";
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -22,16 +29,28 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentDialog(props: Props) {
     const {
-        comment, show, ownerName, ownerFullName, conflict, loading, beingPosted, smileysEnabled, sourceFormatDefault,
-        closeCommentDialog, commentDialogConflictClose, submitKey, submitForm, resetForm
+        show, ownerName, ownerFullName, comment, draftId, draft, conflict, loading, beingPosted, smileysEnabled,
+        sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey, submitForm,
+        resetForm
     } = props;
 
     const commentId = comment != null ? comment.id : null;
+
+    const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
+
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
+        const commentText = commentComposeLogic.mapValuesToCommentText(values, props);
+        if (commentText != null) {
+            setInitialText(commentText);
+        }
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, commentId]); // 'props' are missing on purpose
+    }, [show, commentId, draft, setInitialText]); // 'props' are missing on purpose
+
+    if (!show) {
+        return null;
+    }
 
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter") {
@@ -46,9 +65,15 @@ function CommentDialog(props: Props) {
         }
     }
 
-    if (!show) {
-        return null;
-    }
+    const onCancel = (event: React.MouseEvent) => {
+        if (draftId == null) {
+            closeCommentDialog();
+        } else {
+            confirmBox("Do you really want to forget the changes?", "Forget", "Cancel",
+                cancelCommentDialog(draftId), null, "danger");
+        }
+        event.preventDefault();
+    };
 
     return (
         <ModalDialog title="Edit a comment" className="comment-dialog" onClose={closeCommentDialog}>
@@ -65,7 +90,8 @@ function CommentDialog(props: Props) {
                                    onKeyDown={onKeyDown}/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeCommentDialog}>Cancel</Button>
+                    <CommentDraftSaver initialText={initialText} commentId={commentId}/>
+                    <Button variant="secondary" onClick={onCancel}>Cancel</Button>
                     <Button variant="primary" type="submit" loading={beingPosted}>Update</Button>
                 </div>
             </Form>
@@ -93,7 +119,7 @@ const connector = connect(
         submitKey: getSetting(state, "comment.submit-key") as string,
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean
     }),
-    { commentPost, closeCommentDialog, commentDialogConflictClose }
+    { commentPost, closeCommentDialog, commentDialogConflictClose, confirmBox }
 );
 
 export default connector(

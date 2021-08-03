@@ -88,6 +88,10 @@
     margin-bottom: .5rem;
 }
 
+.features .drafts .draft-saver {
+    order: 2;
+}
+
 .form-buttons {
     display: flex;
 }

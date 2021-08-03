@@ -453,6 +453,10 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                 || action.payload.draft.receiverPostingId !== state.comments.receiverPostingId) {
                 return state;
             }
+            if (action.payload.draft.receiverCommentId != null
+                && action.payload.draft.receiverCommentId !== state.commentDialog.commentId) {
+                return state;
+            }
 
             const property = action.payload.draft.receiverCommentId != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
@@ -466,6 +470,9 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         case COMMENT_DRAFT_LOAD_FAILED: {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            if (action.payload.commentId != null && action.payload.commentId !== state.commentDialog.commentId) {
                 return state;
             }
 

@@ -5,6 +5,9 @@ import * as textFieldEdit from 'text-field-edit';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    CANCEL_COMMENT_DIALOG,
+    CancelCommentDialogAction,
+    closeCommentDialog,
     COMMENT_COMPOSE_CANCEL,
     COMMENT_COPY_LINK,
     COMMENT_DELETE,
@@ -105,6 +108,7 @@ export default [
     executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
     executor(COMMENT_COPY_LINK, null, commentCopyLinkSaga),
     executor(COMMENT_DIALOG_COMMENT_LOAD, "", commentDialogCommentLoadSaga),
+    executor(CANCEL_COMMENT_DIALOG, "", cancelCommentDialogSaga),
     executor(COMMENT_VERIFY, payload => payload.commentId, commentVerifySaga),
     executor(COMMENT_REACT, null, introduce(commentReactSaga)),
     executor(
@@ -393,11 +397,25 @@ function* commentDialogCommentLoadSaga() {
         return;
     }
     try {
-        const data = yield* call(Node.getComment, receiverName, receiverPostingId, commentId, true);
-        yield* put(commentDialogCommentLoaded(data));
+        const draft = yield* call(Node.getDraftCommentUpdate, ":", receiverName, receiverPostingId, commentId);
+        if (draft != null) {
+            yield* put(commentDraftLoaded(draft));
+            //...but load the original comment also
+        }
+        const comment = yield* call(Node.getComment, receiverName, receiverPostingId, commentId, true);
+        yield* put(commentDialogCommentLoaded(comment));
     } catch (e) {
         yield* put(commentDialogCommentLoadFailed());
         yield* put(errorThrown(e));
+    }
+}
+
+function* cancelCommentDialogSaga(action: CancelCommentDialogAction) {
+    const {draftId} = action.payload;
+
+    yield* put(closeCommentDialog());
+    if (draftId != null) {
+        yield* call(Node.deleteDraft, ":", draftId);
     }
 }
 

@@ -418,6 +418,15 @@ export const closeCommentDialog = (): CloseCommentDialogAction => ({
     type: CLOSE_COMMENT_DIALOG
 });
 
+export const CANCEL_COMMENT_DIALOG = "CANCEL_COMMENT_DIALOG";
+export type CancelCommentDialogAction = ActionWithPayload<typeof CANCEL_COMMENT_DIALOG, {
+    draftId: string | null;
+}>;
+export const cancelCommentDialog = (draftId: string | null): CancelCommentDialogAction => ({
+    type: CANCEL_COMMENT_DIALOG,
+    payload: {draftId}
+});
+
 export const COMMENT_DIALOG_COMMENT_LOAD = "COMMENT_DIALOG_COMMENT_LOAD";
 export type CommentDialogCommentLoadAction = Action<typeof COMMENT_DIALOG_COMMENT_LOAD>;
 export const commentDialogCommentLoad = (): CommentDialogCommentLoadAction => ({
@@ -627,6 +636,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentCopyLinkAction
     | OpenCommentDialogAction
     | CloseCommentDialogAction
+    | CancelCommentDialogAction
     | CommentDialogCommentLoadAction
     | CommentDialogCommentLoadedAction
     | CommentDialogCommentLoadFailedAction
