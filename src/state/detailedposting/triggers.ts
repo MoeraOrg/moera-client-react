@@ -39,7 +39,7 @@ import {
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import {
-    getCommentComposerCommentId,
+    getCommentDialogCommentId,
     getCommentsReceiverPostingId,
     isCommentDialogShown,
     isCommentMomentInLoadedRange,
@@ -156,7 +156,7 @@ export default [
         (state, signal: EventAction<CommentUpdatedEvent>) =>
             isAtDetailedPostingPage(state) && isCommentDialogShown(state)
             && getCommentsReceiverPostingId(state) === signal.payload.postingId
-            && getCommentComposerCommentId(state) === signal.payload.id,
+            && getCommentDialogCommentId(state) === signal.payload.id,
         commentDialogConflict
     ),
     trigger(GLANCE_COMMENT, isGlanceCommentToBeLoaded, glanceCommentLoad)

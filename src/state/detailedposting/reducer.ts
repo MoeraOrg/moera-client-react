@@ -89,14 +89,19 @@ const emptyComments = {
 const emptyCompose = {
     beingPosted: false,
     focused: false,
-    showDialog: false,
     loading: false,
-    commentId: null,
-    comment: null,
     repliedToId: null,
     repliedToName: null,
     repliedToFullName: null,
     repliedToHeading: null,
+};
+
+const emptyComposeDialog = {
+    show: false,
+    loading: false,
+    commentId: null,
+    comment: null,
+    beingPosted: false,
     conflict: false
 };
 
@@ -108,7 +113,8 @@ const initialState = {
     compose: {
         formId: 0,
         ...emptyCompose
-    }
+    },
+    commentDialog: cloneDeep(emptyComposeDialog)
 };
 
 const SINGLE_EMOJI_COMMENT_ALLOWED_TAGS = ["mr-spoiler", "a", "del", "strike"];
@@ -180,6 +186,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                         .set("loading", false)
                         .assign("comments", cloneDeep(emptyComments))
                         .assign("compose", cloneDeep(emptyCompose))
+                        .assign("commentDialog", cloneDeep(emptyComposeDialog))
                 } else {
                     istate.set("compose.focused", false)
                         .assign("comments", {
@@ -354,6 +361,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                     ...emptyCompose,
                     focused: composeFocused
                 })
+                .assign("commentDialog", cloneDeep(emptyComposeDialog))
                 .value()
         }
 
@@ -376,28 +384,43 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             });
 
         case COMMENT_POST:
-            return immutable.set(state, "compose.beingPosted", true);
+            if (action.payload.commentId != null) {
+                return immutable.set(state, "commentDialog.beingPosted", true);
+            } else {
+                return immutable.set(state, "compose.beingPosted", true);
+            }
 
-        case COMMENT_POSTED:
+        case COMMENT_POSTED: {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
-            return immutable.wrap(state)
-                .assign("compose", {
+
+            const istate = immutable.wrap(state);
+            istate.assign("comments", {
+                focused: false,
+                loadingFocusedComment: false,
+                loadedFocusedComment: false,
+                focusedCommentId: null,
+                focusedMoment: Number.MIN_SAFE_INTEGER
+            });
+
+            if (action.payload.commentId === state.commentDialog.commentId) {
+                istate.set("commentDialog", cloneDeep(emptyComposeDialog));
+            } else {
+                istate.assign("compose", {
                     formId: state.compose.formId + 1,
                     ...emptyCompose
-                })
-                .assign("comments", {
-                    focused: false,
-                    loadingFocusedComment: false,
-                    loadedFocusedComment: false,
-                    focusedCommentId: null,
-                    focusedMoment: Number.MIN_SAFE_INTEGER
-                }).value();
+                });
+            }
+            return istate.value();
+        }
 
         case COMMENT_POST_FAILED:
-            return immutable.set(state, "compose.beingPosted", false);
+                return immutable.wrap(state)
+                    .set("commentDialog.beingPosted", false)
+                    .set("compose.beingPosted", false)
+                    .value()
 
         case COMMENT_SET: {
             const {nodeName, comment} = action.payload;
@@ -506,32 +529,32 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         }
 
         case OPEN_COMMENT_DIALOG:
-            return immutable.assign(state, "compose", {
-                ...emptyCompose,
-                showDialog: true,
+            return immutable.assign(state, "commentDialog", {
+                ...emptyComposeDialog,
+                show: true,
                 commentId: action.payload.commentId
             });
 
         case CLOSE_COMMENT_DIALOG:
-            return immutable.set(state, "compose.showDialog", false);
+            return immutable.set(state, "commentDialog.show", false);
 
         case COMMENT_DIALOG_COMMENT_LOAD:
-            return immutable.set(state, "compose.loading", true);
+            return immutable.set(state, "commentDialog.loading", true);
 
         case COMMENT_DIALOG_COMMENT_LOADED:
-            return immutable.assign(state, "compose", {
-                loading: true,
+            return immutable.assign(state, "commentDialog", {
+                loading: false,
                 comment: action.payload.comment
             });
 
         case COMMENT_DIALOG_COMMENT_LOAD_FAILED:
-            return immutable.set(state, "compose.loading", false);
+            return immutable.set(state, "commentDialog.loading", false);
 
         case COMMENT_DIALOG_CONFLICT:
-            return immutable.set(state, "compose.conflict", true);
+            return immutable.set(state, "commentDialog.conflict", true);
 
         case COMMENT_DIALOG_CONFLICT_CLOSE:
-            return immutable.set(state, "compose.conflict", false);
+            return immutable.set(state, "commentDialog.conflict", false);
 
         case COMMENT_VERIFY: {
             const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);

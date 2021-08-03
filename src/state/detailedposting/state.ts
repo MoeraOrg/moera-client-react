@@ -40,18 +40,23 @@ export interface CommentsState {
     glanceComment: ExtCommentInfo | null;
 }
 
-export interface DetailedPostingComposeState {
+export interface CommentComposeState {
     formId: number;
     beingPosted: boolean;
     focused: boolean;
-    showDialog: boolean;
     loading: boolean;
-    commentId: string | null;
-    comment: CommentInfo | null;
     repliedToId: string | null;
     repliedToName: string | null;
     repliedToFullName: string | null;
     repliedToHeading: string | null;
+}
+
+export interface CommentDialogState {
+    show: boolean;
+    loading: boolean;
+    commentId: string | null;
+    comment: CommentInfo | null;
+    beingPosted: boolean;
     conflict: boolean;
 }
 
@@ -60,5 +65,6 @@ export interface DetailedPostingState {
     loading: boolean;
     comments: CommentsState;
     positioned: boolean;
-    compose: DetailedPostingComposeState;
+    compose: CommentComposeState;
+    commentDialog: CommentDialogState;
 }

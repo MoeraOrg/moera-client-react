@@ -138,12 +138,12 @@ export function isCommentComposerFocused(state: ClientState): boolean {
     return state.detailedPosting.compose.focused;
 }
 
-export function getCommentComposerCommentId(state: ClientState): string | null {
-    return state.detailedPosting.compose.commentId;
+export function getCommentDialogCommentId(state: ClientState): string | null {
+    return state.detailedPosting.commentDialog.commentId;
 }
 
-export function getCommentComposerComment(state: ClientState): CommentInfo | null {
-    return state.detailedPosting.compose.comment;
+export function getCommentDialogComment(state: ClientState): CommentInfo | null {
+    return state.detailedPosting.commentDialog.comment;
 }
 
 export function getCommentComposerRepliedToId(state: ClientState): string | null {
@@ -159,11 +159,11 @@ export function isCommentComposerReplied(state: ClientState): boolean {
 }
 
 export function isCommentDialogShown(state: ClientState): boolean {
-    return state.detailedPosting.compose.showDialog;
+    return state.detailedPosting.commentDialog.show;
 }
 
-export function isCommentComposerConflict(state: ClientState): boolean {
-    return state.detailedPosting.compose.conflict;
+export function isCommentDialogConflict(state: ClientState): boolean {
+    return state.detailedPosting.commentDialog.conflict;
 }
 
 export function isGlanceCommentToBeLoaded(state: ClientState): boolean {

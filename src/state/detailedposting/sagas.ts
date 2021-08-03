@@ -59,7 +59,7 @@ import {
 } from "state/detailedposting/actions";
 import {
     getComment,
-    getCommentComposerCommentId,
+    getCommentDialogCommentId,
     getCommentComposerRepliedToName,
     getCommentsState,
     getDetailedPosting,
@@ -311,7 +311,7 @@ function* commentDialogCommentLoadSaga() {
     const {receiverName, receiverPostingId, commentId} = yield* select(state => ({
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
-        commentId: getCommentComposerCommentId(state)
+        commentId: getCommentDialogCommentId(state)
     }));
     if (receiverName == null || receiverPostingId == null || commentId == null) {
         return;

@@ -8,7 +8,7 @@ import { ClientState } from "state/state";
 import { closeCommentDialog, commentDialogConflictClose, commentPost } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
-import { getCommentComposerComment, isCommentComposerConflict } from "state/detailedposting/selectors";
+import { getCommentDialogComment, isCommentDialogConflict } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
@@ -23,7 +23,7 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentDialog(props: Props) {
     const {
-        comment, show, ownerName, ownerFullName, conflict, beingPosted, smileysEnabled, sourceFormatDefault,
+        comment, show, ownerName, ownerFullName, conflict, loading, beingPosted, smileysEnabled, sourceFormatDefault,
         closeCommentDialog, commentDialogConflictClose, submitKey, submitForm, resetForm
     } = props;
 
@@ -61,7 +61,7 @@ function CommentDialog(props: Props) {
                         <AvatarField name="avatar" size={36}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
-                    <RichTextField name="body" rows={5} anyValue autoFocus disabled={beingPosted}
+                    <RichTextField name="body" rows={5} anyValue autoFocus disabled={loading || beingPosted}
                                    smileysEnabled={smileysEnabled} format={sourceFormatDefault}
                                    onKeyDown={onKeyDown}/>
                 </div>
@@ -76,18 +76,19 @@ function CommentDialog(props: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.detailedPosting.compose.showDialog,
+        show: state.detailedPosting.commentDialog.show,
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         avatarDefault: getHomeOwnerAvatar(state),
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
-        comment: getCommentComposerComment(state),
-        repliedToId: getCommentComposerComment(state)?.repliedTo?.id ?? null,
-        conflict: isCommentComposerConflict(state),
+        comment: getCommentDialogComment(state),
+        repliedToId: getCommentDialogComment(state)?.repliedTo?.id ?? null,
+        conflict: isCommentDialogConflict(state),
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
-        beingPosted: state.detailedPosting.compose.beingPosted,
+        loading: state.detailedPosting.commentDialog.loading,
+        beingPosted: state.detailedPosting.commentDialog.beingPosted,
         submitKey: getSetting(state, "comment.submit-key") as string,
         smileysEnabled: parseBool(getSetting(state, "comment.smileys.enabled") as boolean)
     }),
