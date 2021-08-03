@@ -146,6 +146,11 @@ export function getCommentDialogComment(state: ClientState): CommentInfo | null 
     return state.detailedPosting.commentDialog.comment;
 }
 
+export function isCommentComposeDraftToBeLoaded(state: ClientState): boolean {
+    const posting = getDetailedPosting(state);
+    return posting != null && !state.detailedPosting.compose.loaded && !state.detailedPosting.compose.loading;
+}
+
 export function getCommentComposerRepliedToId(state: ClientState): string | null {
     return state.detailedPosting.compose.repliedToId;
 }

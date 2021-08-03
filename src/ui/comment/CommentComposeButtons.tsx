@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 
@@ -15,8 +15,12 @@ type Props = {
     loading: boolean;
 } & ConnectedProps<typeof connector>;
 
-function CommentComposeButtons({loading, confirmBox}: Props) {
+function CommentComposeButtons({loading, ownerName, draft, confirmBox}: Props) {
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
+
+    useEffect(() => {
+        setInitialText({ownerName: ownerName ?? "", bodySrc: draft?.bodySrc?.text ?? ""});
+    }, [ownerName, draft, setInitialText]);
 
     const onCancel = (e: React.MouseEvent) => {
         confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
@@ -42,7 +46,8 @@ function CommentComposeButtons({loading, confirmBox}: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        ownerName: getOwnerName(state)
+        ownerName: getOwnerName(state),
+        draft: state.detailedPosting.compose.draft
     }),
     { confirmBox }
 );

@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
-import { AvatarImage, CommentInfo, CommentText, SourceFormat } from "api/node/api-types";
+import { AvatarImage, CommentInfo, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
 import { FormikBag } from "formik";
 
 interface MapToCommentTextProps {
@@ -17,6 +17,7 @@ interface MapToCommentTextProps {
 
 interface CommentComposeProps extends MapToCommentTextProps {
     comment: CommentInfo | null;
+    draft: DraftInfo | null;
     avatarDefault: AvatarImage | null;
     receiverPostingId: string | null;
     commentPost: (postingId: string, commentId: string | null, commentText: CommentText) => void;
@@ -30,8 +31,12 @@ export interface CommentComposeValues {
 const commentComposeLogic = {
 
     mapPropsToValues(props: CommentComposeProps): CommentComposeValues {
-        const avatar = props.comment != null ? (props.comment.ownerAvatar ?? null) : props.avatarDefault;
-        const body = props.comment != null ? (props.comment.bodySrc?.text ?? "") : "";
+        const avatar = props.draft != null
+            ? (props.draft.ownerAvatar ?? null)
+            : (props.comment != null ? (props.comment.ownerAvatar ?? null) : props.avatarDefault);
+        const body = props.draft != null
+            ? (props.draft.bodySrc?.text ?? "")
+            : (props.comment != null ? (props.comment.bodySrc?.text ?? "") : "");
 
         return {
             avatar,

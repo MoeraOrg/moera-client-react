@@ -6,6 +6,9 @@ import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CLOSE_COMMENT_DIALOG,
+    COMMENT_COMPOSE_DRAFT_LOAD,
+    COMMENT_COMPOSE_DRAFT_LOAD_FAILED,
+    COMMENT_COMPOSE_DRAFT_LOADED,
     COMMENT_COMPOSE_DRAFT_SAVE,
     COMMENT_COMPOSE_DRAFT_SAVE_FAILED,
     COMMENT_COMPOSE_DRAFT_SAVED,
@@ -57,14 +60,14 @@ import {
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
+import { CommentsState, DetailedPostingState, ExtCommentInfo } from "state/detailedposting/state";
+import { ClientAction } from "state/action";
+import { CommentInfo } from "api/node/api-types";
 import {
     EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
     EVENT_RECEIVER_COMMENT_DELETED
 } from "api/events/actions";
-import { CommentsState, DetailedPostingState, ExtCommentInfo } from "state/detailedposting/state";
-import { ClientAction } from "state/action";
-import { CommentInfo } from "api/node/api-types";
 
 const emptyComments = {
     receiverName: null,
@@ -93,13 +96,15 @@ const emptyCompose = {
     beingPosted: false,
     focused: false,
     loading: false,
+    loaded: false,
     repliedToId: null,
     repliedToName: null,
     repliedToFullName: null,
     repliedToHeading: null,
     draftId: null,
     savingDraft: false,
-    savedDraft: false
+    savedDraft: false,
+    draft: null
 };
 
 const emptyComposeDialog = {
@@ -111,7 +116,8 @@ const emptyComposeDialog = {
     conflict: false,
     draftId: null,
     savingDraft: false,
-    savedDraft: false
+    savedDraft: false,
+    draft: null
 };
 
 const initialState = {
@@ -239,14 +245,18 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             };
 
         case COMMENTS_RECEIVER_SWITCHED:
-            return immutable.assign(state, "comments", {
-                ...cloneDeep(emptyComments),
-                receiverName: action.payload.nodeName,
-                receiverFullName: action.payload.fullName,
-                receiverPostingId: action.payload.postingId,
-                focused: state.comments.focused,
-                focusedCommentId: state.comments.focusedCommentId
-            });
+            return immutable.wrap(state)
+                .assign("comments", {
+                    ...cloneDeep(emptyComments),
+                    receiverName: action.payload.nodeName,
+                    receiverFullName: action.payload.fullName,
+                    receiverPostingId: action.payload.postingId,
+                    focused: state.comments.focused,
+                    focusedCommentId: state.comments.focusedCommentId
+                })
+                .set("compose", cloneDeep(emptyCompose))
+                .set("commentDialog", cloneDeep(emptyComposeDialog))
+                .value()
 
         case COMMENTS_PAST_SLICE_LOAD:
             return immutable.set(state, "comments.loadingPast", true);
@@ -370,7 +380,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                     ...emptyCompose,
                     focused: composeFocused
                 })
-                .assign("commentDialog", cloneDeep(emptyComposeDialog))
+                .set("commentDialog", cloneDeep(emptyComposeDialog))
                 .value()
         }
 
@@ -430,6 +440,40 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                     .set("commentDialog.beingPosted", false)
                     .set("compose.beingPosted", false)
                     .value()
+
+        case COMMENT_COMPOSE_DRAFT_LOAD: {
+            const property = action.payload.isDialog != null ? "commentDialog" : "compose";
+            return immutable.assign(state, property, {
+                loading: true
+            });
+        }
+
+        case COMMENT_COMPOSE_DRAFT_LOADED: {
+            if (action.payload.draft.receiverName !== state.comments.receiverName
+                || action.payload.draft.receiverPostingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+
+            const property = action.payload.draft.receiverCommentId != null ? "commentDialog" : "compose";
+            return immutable.assign(state, property, {
+                draftId: action.payload.draft.id,
+                draft: action.payload.draft,
+                loading: false,
+                loaded: true
+            });
+        }
+
+        case COMMENT_COMPOSE_DRAFT_LOAD_FAILED: {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+
+            const property = action.payload.commentId != null ? "commentDialog" : "compose";
+            return immutable.assign(state, property, {
+                loading: false
+            });
+        }
 
         case COMMENT_COMPOSE_DRAFT_SAVE: {
             if (action.payload.draftText.receiverName !== state.comments.receiverName

@@ -33,16 +33,16 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentCompose(props: Props) {
     const {
-        ownerName, beingPosted, receiverName, receiverPostingId, formId, submitKey, bottomMenuHide, bottomMenuShow,
-        receiverFullName, smileysEnabled, sourceFormatDefault, openSignUpDialog, openConnectDialog, values, resetForm,
-        submitForm
+        ownerName, beingPosted, receiverName, receiverPostingId, draft, formId, submitKey, bottomMenuHide,
+        bottomMenuShow, receiverFullName, smileysEnabled, sourceFormatDefault, openSignUpDialog, openConnectDialog,
+        values, resetForm, submitForm
     } = props;
 
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [receiverName, receiverPostingId, formId, resetForm]); // 'props' are missing on purpose
+    }, [receiverName, receiverPostingId, draft?.id, formId, resetForm]); // 'props' are missing on purpose
 
     const onFocus = () => {
         viewComposer();
@@ -108,6 +108,7 @@ const connector = connect(
         receiverFullName: state.detailedPosting.comments.receiverFullName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         comment: null,
+        draft: state.detailedPosting.compose.draft,
         formId: state.detailedPosting.compose.formId,
         repliedToId: getCommentComposerRepliedToId(state),
         beingPosted: state.detailedPosting.compose.beingPosted,

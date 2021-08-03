@@ -5,6 +5,7 @@ import * as textFieldEdit from 'text-field-edit';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    COMMENT_COMPOSE_DRAFT_LOAD,
     COMMENT_COMPOSE_DRAFT_SAVE,
     COMMENT_COPY_LINK,
     COMMENT_DELETE,
@@ -16,6 +17,9 @@ import {
     COMMENT_REACTION_LOAD,
     COMMENT_REPLY,
     COMMENT_VERIFY,
+    CommentComposeDraftLoadAction,
+    commentComposeDraftLoaded,
+    commentComposeDraftLoadFailed,
     CommentComposeDraftSaveAction,
     commentComposeDraftSaved,
     commentComposeDraftSaveFailed,
@@ -81,6 +85,7 @@ import { quoteHtml } from "util/html";
 import { Browser } from "ui/browser";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
+import { ClientState } from "state/state";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", introduce(detailedPostingLoadSaga)),
@@ -91,6 +96,7 @@ export default [
     executor(COMMENTS_UPDATE, "", introduce(commentsUpdateSaga)),
     executor(COMMENT_LOAD, payload => payload.commentId, introduce(commentLoadSaga)),
     executor(COMMENT_POST, null, commentPostSaga),
+    executor(COMMENT_COMPOSE_DRAFT_LOAD, "", commentComposeDraftLoadSaga),
     executor(COMMENT_COMPOSE_DRAFT_SAVE, "", commentComposeDraftSaveSaga),
     executor(COMMENT_DELETE, payload => payload.commentId, commentDeleteSaga),
     executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
@@ -255,6 +261,34 @@ function* commentPostSaga(action: CommentPostAction) {
         yield* call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentText);
     } catch (e) {
         yield* put(commentPostFailed(receiverName, receiverPostingId));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* commentComposeDraftLoadSaga(action: CommentComposeDraftLoadAction) {
+    const {isDialog} = action.payload;
+
+    const {nodeName, postingId, commentId} = yield* select((state: ClientState) => ({
+        nodeName: state.detailedPosting.comments.receiverName,
+        postingId: state.detailedPosting.comments.receiverPostingId,
+        commentId: isDialog ? state.detailedPosting.commentDialog.commentId : null
+    }));
+
+    if (nodeName == null || postingId == null) {
+        return;
+    }
+
+    try {
+        const data = commentId != null
+            ? yield* call(Node.getDraftCommentUpdate, ":", nodeName, postingId, commentId)
+            : yield* call(Node.getDraftNewComment, ":", nodeName, postingId);
+        if (data != null) {
+            yield* put(commentComposeDraftLoaded(data));
+        } else {
+            yield* put(commentComposeDraftLoadFailed(nodeName, postingId, commentId));
+        }
+    } catch (e) {
+        yield* put(commentComposeDraftLoadFailed(nodeName, postingId, commentId));
         yield* put(errorThrown(e));
     }
 }

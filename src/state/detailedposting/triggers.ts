@@ -13,6 +13,7 @@ import {
     closeCommentDialog,
     COMMENT_COMPOSE_UNSET,
     COMMENT_POSTED,
+    commentComposeDraftLoad,
     commentDialogCommentLoad,
     commentDialogConflict,
     commentLoad,
@@ -41,6 +42,7 @@ import {
 import {
     getCommentDialogCommentId,
     getCommentsReceiverPostingId,
+    isCommentComposeDraftToBeLoaded,
     isCommentDialogShown,
     isCommentMomentInLoadedRange,
     isCommentsReceiverPostingId,
@@ -87,6 +89,11 @@ export default [
         [GO_TO_PAGE, POSTING_SET],
         conj(isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
         commentsReceiverSwitch
+    ),
+    trigger(
+        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, CONNECTED_TO_HOME],
+        conj(isAtDetailedPostingPage, isCommentComposeDraftToBeLoaded),
+        commentComposeDraftLoad(false)
     ),
     trigger(
         [GO_TO_PAGE, POSTING_SET, COMMENTS_RECEIVER_SWITCHED, COMMENTS_UNSET],

@@ -372,12 +372,29 @@ export function* getDraftsNewPosting(nodeName: string | null, receiverName: stri
     }));
 }
 
-export function* getPostingDraftRevision(nodeName: string | null, receiverName: string,
-                                         receiverPostingId: string): CallApiResult<DraftInfo | null> {
+export function* getDraftPostingUpdate(nodeName: string | null, receiverName: string,
+                                       receiverPostingId: string): CallApiResult<DraftInfo | null> {
     const list = decodeBodies(yield* callApi({
         nodeName, location: ut`/drafts?draftType=posting-update&nodeName=${receiverName}&postingId=${receiverPostingId}`,
         auth: true, schema: NodeApi.DraftInfoList
     }));
+    return list.length > 0 ? list[0] : null;
+}
+
+export function* getDraftNewComment(nodeName: string | null, receiverName: string,
+                                    receiverPostingId: string): CallApiResult<DraftInfo | null> {
+    const list = decodeBodies(yield* callApi({
+        nodeName, location: ut`/drafts?draftType=new-comment&nodeName=${receiverName}&postingId=${receiverPostingId}`,
+        auth: true, schema: NodeApi.DraftInfoList
+    }));
+    return list.length > 0 ? list[0] : null;
+}
+
+export function* getDraftCommentUpdate(nodeName: string | null, receiverName: string, receiverPostingId: string,
+                                       receiverCommentId: string): CallApiResult<DraftInfo | null> {
+    const location = ut`/drafts?draftType=comment-update&nodeName=${receiverName}&postingId=${receiverPostingId}`
+        + ut`&commentId=${receiverCommentId}`;
+    const list = decodeBodies(yield* callApi({nodeName, location, auth: true, schema: NodeApi.DraftInfoList}));
     return list.length > 0 ? list[0] : null;
 }
 

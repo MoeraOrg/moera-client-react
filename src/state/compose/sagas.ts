@@ -73,7 +73,7 @@ function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) 
     }
 
     try {
-        const draft = yield* call(Node.getPostingDraftRevision, ":", action.context.ownerName, id);
+        const draft = yield* call(Node.getDraftPostingUpdate, ":", action.context.ownerName, id);
         if (draft != null) {
             yield* put(composeDraftLoaded(draft));
             return;

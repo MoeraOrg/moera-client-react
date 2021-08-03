@@ -4,6 +4,7 @@ import { ActionWithPayload } from "state/action-types";
 import {
     CommentInfo,
     CommentText,
+    DraftInfo,
     DraftText,
     PostingInfo,
     ReactionAttributes,
@@ -192,6 +193,36 @@ export const COMMENT_COMPOSE_UNSET = "COMMENT_COMPOSE_UNSET";
 export type CommentComposeUnsetAction = Action<typeof COMMENT_COMPOSE_UNSET>;
 export const commentComposeUnset = (): CommentComposeUnsetAction => ({
     type: COMMENT_COMPOSE_UNSET
+});
+
+export const COMMENT_COMPOSE_DRAFT_LOAD = "COMMENT_COMPOSE_DRAFT_LOAD";
+export type CommentComposeDraftLoadAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_LOAD, {
+    isDialog: boolean;
+}>;
+export const commentComposeDraftLoad = (isDialog: boolean): CommentComposeDraftLoadAction => ({
+    type: COMMENT_COMPOSE_DRAFT_LOAD,
+    payload: {isDialog}
+});
+
+export const COMMENT_COMPOSE_DRAFT_LOADED = "COMMENT_COMPOSE_DRAFT_LOADED";
+export type CommentComposeDraftLoadedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_LOADED, {
+    draft: DraftInfo;
+}>;
+export const commentComposeDraftLoaded = (draft: DraftInfo): CommentComposeDraftLoadedAction => ({
+    type: COMMENT_COMPOSE_DRAFT_LOADED,
+    payload: {draft}
+});
+
+export const COMMENT_COMPOSE_DRAFT_LOAD_FAILED = "COMMENT_COMPOSE_DRAFT_LOAD_FAILED";
+export type CommentComposeDraftLoadFailedAction = ActionWithPayload<typeof COMMENT_COMPOSE_DRAFT_LOAD_FAILED, {
+    nodeName: string;
+    postingId: string;
+    commentId: string | null;
+}>;
+export const commentComposeDraftLoadFailed = (nodeName: string, postingId: string,
+                                              commentId: string | null): CommentComposeDraftLoadFailedAction => ({
+    type: COMMENT_COMPOSE_DRAFT_LOAD_FAILED,
+    payload: {nodeName, postingId, commentId}
 });
 
 export const COMMENT_COMPOSE_DRAFT_SAVE = "COMMENT_COMPOSE_DRAFT_SAVE";
@@ -571,6 +602,9 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentsScrolledToCommentsAction
     | CommentsScrolledToComposerAction
     | CommentComposeUnsetAction
+    | CommentComposeDraftLoadAction
+    | CommentComposeDraftLoadedAction
+    | CommentComposeDraftLoadFailedAction
     | CommentComposeDraftSaveAction
     | CommentComposeDraftSavedAction
     | CommentComposeDraftSaveFailedAction

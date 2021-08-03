@@ -1,4 +1,4 @@
-import { Body, CommentInfo, RepliedTo } from "api/node/api-types";
+import { Body, CommentInfo, DraftInfo, RepliedTo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
 
 export interface ExtBody extends Body {
@@ -45,6 +45,7 @@ export interface CommentComposeState {
     beingPosted: boolean;
     focused: boolean;
     loading: boolean;
+    loaded: boolean;
     repliedToId: string | null;
     repliedToName: string | null;
     repliedToFullName: string | null;
@@ -52,6 +53,7 @@ export interface CommentComposeState {
     draftId: string | null;
     savingDraft: boolean;
     savedDraft: boolean;
+    draft: DraftInfo | null;
 }
 
 export interface CommentDialogState {
@@ -64,6 +66,7 @@ export interface CommentDialogState {
     draftId: string | null;
     savingDraft: boolean;
     savedDraft: boolean;
+    draft: DraftInfo | null;
 }
 
 export interface DetailedPostingState {
