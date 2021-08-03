@@ -16,22 +16,22 @@ type Props = {
 
 const composeDraftSaverLogic = {
 
-    toText: (values: ComposePageValues, props: Props) =>
+    toText: (values: ComposePageValues, props: Props): PostingText =>
         composePageLogic.mapValuesToPostingText(values, props),
 
-    isEmpty: (postingText: PostingText) =>
+    isEmpty: (postingText: PostingText): boolean =>
         composePageLogic.isPostingTextEmpty(postingText),
 
-    toDraftText: (ownerName: string, postingId: string | null, postingText: PostingText) => ({
+    toDraftText: (ownerName: string, postingId: string | null, postingText: PostingText): DraftText => ({
         ...cloneDeep(postingText),
         receiverName: ownerName,
         draftType: postingId == null ? "new-posting" : "posting-update",
         receiverPostingId: postingId == null ? null /* important, should not be undefined */ : postingId
     } as DraftText),
 
-    save: (text: PostingText, props: Props) => {
+    save: (text: PostingText, props: Props): void => {
         if (props.ownerName != null) {
-            return props.composeDraftSave(props.draftId,
+            props.composeDraftSave(props.draftId,
                 composeDraftSaverLogic.toDraftText(props.ownerName, props.postingId, text));
         }
     }
