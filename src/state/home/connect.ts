@@ -21,6 +21,7 @@ import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { now } from "util/misc";
 import { CarteSet } from "api/node/api-types";
+import { getCartes } from "api/node/cartes";
 
 export default [
     executor(CONNECT_TO_HOME, null, connectToHomeSaga),
@@ -71,7 +72,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         createdAt: 0
     };
     try {
-        cartesData = yield* call(Node.getCartes, location, data.token);
+        cartesData = yield* call(getCartes, location, data.token);
     } catch (e) {
         yield* put(errorThrown(e));
     }

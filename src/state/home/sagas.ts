@@ -18,6 +18,7 @@ import { Browser } from "ui/browser";
 import { normalizeUrl } from "util/url";
 import { executor } from "state/executor";
 import { now } from "util/misc";
+import { getCartes } from "api/node/cartes";
 
 export default [
     executor(HOME_RESTORE, null, homeRestoreSaga),
@@ -35,7 +36,7 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
         yield* put(restoreConnectDialog(location, login));
         if (getCartesListTtl(cartes) < 5 * 60) {
             try {
-                const data = yield* call(Node.getCartes, normalizeUrl(location), token);
+                const data = yield* call(getCartes, normalizeUrl(location), token);
                 cartesIp = data.cartesIp;
                 cartes = data.cartes;
                 createdAt = data.createdAt;

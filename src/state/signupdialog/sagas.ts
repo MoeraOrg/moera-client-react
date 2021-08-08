@@ -27,6 +27,7 @@ import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
 import { executor } from "state/executor";
 import { now } from "util/misc";
+import { getCartes } from "api/node/cartes";
 
 export default [
     executor(SIGN_UP, "", signUpSaga),
@@ -114,7 +115,7 @@ function* signUpSaga(action: SignUpAction) {
             createdAt: 0
         };
         try {
-            cartesData = yield* call(Node.getCartes, rootLocation, data.token);
+            cartesData = yield* call(getCartes, rootLocation, data.token);
         } catch (e) {
             yield* put(errorThrown(e));
         }

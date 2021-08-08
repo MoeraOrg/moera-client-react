@@ -1,12 +1,13 @@
 import { call, put } from 'typed-redux-saga/macro';
 
-import { Node, NodeApiError } from "api";
+import { NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import { CARTES_LOAD, cartesSet, CLOCK_OFFSET_WARN } from "state/cartes/actions";
 import { Browser } from "ui/browser";
 import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
 import { now } from "util/misc";
+import { getCartes } from "api/node/cartes";
 
 export default [
     executor(CARTES_LOAD, "", cartesLoadSaga),
@@ -15,7 +16,7 @@ export default [
 
 function* cartesLoadSaga() {
     try {
-        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, ":");
+        const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":");
         Browser.storeCartesData(cartesIp, cartes);
         yield* put(cartesSet(cartesIp, cartes, createdAt - now()));
     } catch (e) {

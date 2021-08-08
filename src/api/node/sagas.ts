@@ -4,21 +4,39 @@ import { ClientSettings, NodeApi } from "api";
 import { callApi, CallApiResult, decodeBodies } from "api/node/call";
 import {
     ActivityReactionInfo,
-    AsyncOperationCreated, AvatarAttributes,
-    AvatarDescription, AvatarInfo, AvatarOrdinal,
-    CarteSet, CommentCreated, CommentInfo, CommentsSliceInfo,
-    CommentText, CommentTotalInfo, ContactInfo,
+    AsyncOperationCreated,
+    AvatarAttributes,
+    AvatarDescription,
+    AvatarInfo,
+    AvatarOrdinal,
+    CommentCreated,
+    CommentInfo,
+    CommentsSliceInfo,
+    CommentText,
+    CommentTotalInfo,
+    ContactInfo,
     DomainAvailable,
-    DomainInfo, DraftInfo, DraftText,
+    DomainInfo,
+    DraftInfo,
+    DraftText,
     EmailHint,
     FeedInfo,
     FeedSliceInfo,
-    FeedStatus, MediaFileInfo,
+    FeedStatus,
+    MediaFileInfo,
     NodeNameInfo,
-    PeopleGeneralInfo, PostingFeatures, PostingInfo, PostingText,
+    PeopleGeneralInfo,
+    PostingFeatures,
+    PostingInfo,
+    PostingText,
     ProfileAttributes,
-    ProfileInfo, ReactionCreated, ReactionInfo, ReactionsSliceInfo, ReactionTotalsInfo,
-    RegisteredNameSecret, RemotePosting,
+    ProfileInfo,
+    ReactionCreated,
+    ReactionInfo,
+    ReactionsSliceInfo,
+    ReactionTotalsInfo,
+    RegisteredNameSecret,
+    RemotePosting,
     Result,
     SettingInfo,
     SettingMetaInfo,
@@ -80,12 +98,6 @@ export function* createToken(nodeName: string | null, login: string, password: s
     return yield* callApi({
         nodeName, location: "/tokens", method: "POST", body: {login, password}, schema: NodeApi.TokenCreated,
         errorFilter: ["credentials.login-incorrect", "credentials.not-created"]
-    });
-}
-
-export function* getCartes(nodeName: string | null, auth: boolean | string = true): CallApiResult<CarteSet> {
-    return yield* callApi({
-        nodeName, location: "/cartes", auth, schema: NodeApi.CarteSet, errorFilter: ["node-name-not-set"]
     });
 }
 
