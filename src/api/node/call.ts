@@ -23,14 +23,17 @@ import {
     SourceFormat,
     StoryInfo
 } from "api/node/api-types";
+import { getCartes } from "api/node/cartes";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
 import { errorAuthInvalid } from "state/error/actions";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
+import { now } from "util/misc";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
+import { cartesSet } from "state/cartes/actions";
 import { Browser } from "ui/browser";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
@@ -70,45 +73,57 @@ export function* callApi<T>({
         "Accept": "application/json",
         "Content-Type": body instanceof File ? body.type : "application/json"
     };
-    yield* call(authorize, headers, rootLocation, auth);
-    let response;
-    try {
-        response = yield* call(retryFetch, apiUrl(rootApi, location, method), {
-            method,
-            headers,
-            body: encodeBody(body)
-        });
-    } catch (e) {
-        throw exception(e);
-    }
-    let data: any;
-    try {
-        data = yield* apply(response, "json", []);
-    } catch (e) {
+
+    let cartesRenewed = false;
+    while (true) {
+        yield* call(authorize, headers, rootLocation, auth);
+        let response;
+        try {
+            response = yield* call(retryFetch, apiUrl(rootApi, location, method), {
+                method,
+                headers,
+                body: encodeBody(body)
+            });
+        } catch (e) {
+            throw exception(e);
+        }
+        let data: any;
+        try {
+            data = yield* apply(response, "json", []);
+        } catch (e) {
+            if (!response.ok) {
+                throw exception("Server returned error status");
+            } else {
+                throw exception("Server returned empty result");
+            }
+        }
         if (!response.ok) {
-            throw exception("Server returned error status");
-        } else {
-            throw exception("Server returned empty result");
+            if (isSchemaValid(NodeApi.Result, data)) {
+                throw exception("Server returned error status");
+            }
+            if (data.errorCode === "authentication.invalid") {
+                yield* put(errorAuthInvalid());
+                throw new NodeApiError(data.errorCode, data.message);
+            }
+            if (data.errorCode.startsWith("carte.") && !cartesRenewed) {
+                const error = yield* call(cartesRenew);
+                if (error != null) {
+                    throw exception(error);
+                }
+                cartesRenewed = true;
+                continue;
+            }
+            if (isErrorCodeAllowed(data.errorCode, errorFilter)) {
+                throw new NodeApiError(data.errorCode, data.message);
+            } else {
+                throw exception("Server returned error status: " + data.message);
+            }
         }
+        if (!isSchemaValid(schema, data)) {
+            throw exception("Server returned incorrect response", formatSchemaErrors(schema.errors));
+        }
+        return data;
     }
-    if (!response.ok) {
-        if (!isSchemaValid(NodeApi.Result, data)) {
-            throw exception("Server returned error status");
-        }
-        if (data.errorCode === "authentication.invalid") {
-            yield* put(errorAuthInvalid());
-            throw new NodeApiError(data.errorCode, data.message);
-        }
-        if (isErrorCodeAllowed(data.errorCode, errorFilter)) {
-            throw new NodeApiError(data.errorCode, data.message);
-        } else {
-            throw exception("Server returned error status: " + data.message);
-        }
-    }
-    if (!isSchemaValid(schema, data)) {
-        throw exception("Server returned incorrect response", formatSchemaErrors(schema.errors));
-    }
-    return data;
 }
 
 export function* selectApi(nodeName: string | null | undefined) {
@@ -185,6 +200,21 @@ function apiUrl(rootApi: string, location: string, method: HttpMethod): string {
     } else {
         return rootApi + location;
     }
+}
+
+function* cartesRenew() {
+    try {
+        const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":");
+        Browser.storeCartesData(cartesIp, cartes);
+        yield* put(cartesSet(cartesIp, cartes, createdAt - now()));
+    } catch (e) {
+        if (e instanceof NodeApiError) {
+            yield* put(cartesSet(null, [], 0));
+        } else {
+            return e;
+        }
+    }
+    return null;
 }
 
 function encodeBody(body: null): null;

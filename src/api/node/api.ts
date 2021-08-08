@@ -1,4 +1,4 @@
-import { JSONSchemaType } from 'ajv';
+import { JSONSchemaType, ValidateFunction } from 'ajv';
 
 import schema from "api/schema";
 import * as API from "api/node/api-types";
@@ -18,7 +18,7 @@ const ResultType: JSONSchemaType<API.Result> = {
     required: ["errorCode", "message"]
 };
 
-export const Result = schema(ResultType);
+export const Result: ValidateFunction<API.Result> = schema(ResultType);
 
 export const AvatarImageType: JSONSchemaType<API.AvatarImage> = {
     type: "object",
