@@ -1624,6 +1624,10 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
         "heading": {
             type: "string"
         },
+        "publishAt": {
+            type: "integer",
+            nullable: true
+        },
         "updateInfo": {
             ...UpdateInfoType,
             nullable: true

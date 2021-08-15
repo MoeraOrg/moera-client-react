@@ -544,6 +544,7 @@ export interface DraftText {
     reactionTotalsVisible?: boolean | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
+    publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
 }
 
@@ -566,6 +567,7 @@ export interface DraftInfoBase<B> {
     body: B;
     bodyFormat?: BodyFormat | null;
     heading: string;
+    publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
 }
 

@@ -1,5 +1,5 @@
 import * as yup from 'yup';
-import { getUnixTime, isEqual } from 'date-fns';
+import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
 
 import { ClientSettings } from "api";
@@ -51,7 +51,9 @@ const composePageLogic = {
         const body = props.posting != null
             ? (props.posting.bodySrc?.text ?? "")
             : (props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "");
-        const publishAt = new Date();
+        const publishAtDefault = new Date();
+        const publishAt = props.draftId != null && props.posting?.publishAt != null
+            ? fromUnixTime(props.posting?.publishAt) : publishAtDefault;
         const reactionsPositive = props.posting != null
             ? (props.posting.acceptedReactions?.positive ?? "") : props.reactionsPositiveDefault;
         const reactionsNegative = props.posting != null
@@ -72,7 +74,7 @@ const composePageLogic = {
             body,
             bodyFormatVisible: false,
             bodyFormat,
-            publishAtDefault: publishAt,
+            publishAtDefault,
             publishAt,
             reactionVisible: false,
             reactionsPositiveDefault: reactionsPositive,
@@ -88,6 +90,9 @@ const composePageLogic = {
             updateDescription
         };
     },
+
+    getPublishAt: (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
+        publications != null && publications.length > 0 ? publications[0].publishAt : null,
 
     _getSharedText(props: ComposePageOuterProps, format: SourceFormat): string {
         let content;

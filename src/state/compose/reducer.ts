@@ -32,9 +32,9 @@ import {
 } from "state/compose/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
-import { ComposeState, ExtDraftInfo } from "state/compose/state";
+import { ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { ClientAction } from "state/action";
-import { DraftInfo, PostingInfo } from "api/node/api-types";
+import { DraftInfo } from "api/node/api-types";
 import { htmlEntities, replaceEmojis } from "util/html";
 
 const emptyFeatures = {
@@ -95,9 +95,9 @@ function appendToDraftList(draftList: ExtDraftInfo[], draftInfo: DraftInfo): Ext
     return sortDraftList(list);
 }
 
-function draftToPosting(draft: DraftInfo): PostingInfo {
-    const posting = cloneDeep(draft) as any;
-    posting.id = draft.receiverPostingId;
+function draftToPosting(draft: DraftInfo): DraftPostingInfo {
+    const posting = cloneDeep(draft) as (DraftPostingInfo & Partial<DraftInfo>);
+    posting.id = draft.receiverPostingId ?? undefined;
     delete posting.draftType;
     delete posting.receiverName;
     delete posting.receiverPostingId;

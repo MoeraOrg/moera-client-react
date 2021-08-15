@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { DraftText, PostingText } from "api/node/api-types";
+import { DraftText, PostingText, StoryAttributes } from "api/node/api-types";
 import { composeDraftSave } from "state/compose/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
@@ -24,10 +24,15 @@ const composeDraftSaverLogic = {
 
     toDraftText: (ownerName: string, postingId: string | null, postingText: PostingText): DraftText => ({
         ...cloneDeep(postingText),
+        publications: undefined,
         receiverName: ownerName,
         draftType: postingId == null ? "new-posting" : "posting-update",
-        receiverPostingId: postingId == null ? null /* important, should not be undefined */ : postingId
+        receiverPostingId: postingId == null ? null /* important, should not be undefined */ : postingId,
+        publishAt: composeDraftSaverLogic.getPublishAt(postingText.publications)
     } as DraftText),
+
+    getPublishAt: (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
+        publications != null && publications.length > 0 ? publications[0].publishAt : null,
 
     save: (text: PostingText, props: Props): void => {
         if (props.ownerName != null) {

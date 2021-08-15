@@ -6,13 +6,18 @@ export interface ExtDraftInfo extends DraftInfo {
     subjectHtml: string | null;
 }
 
+export type DraftPostingInfo = Omit<PostingInfo, "id"> & {
+    id?: string | null;
+    publishAt?: number | null;
+}
+
 export interface ComposeState {
     loadingFeatures: boolean;
     loadedFeatures: boolean;
     subjectPresent: boolean;
     sourceFormats: Choice<SourceFormat>[];
     postingId: string | null;
-    posting: PostingInfo | null;
+    posting: DraftPostingInfo | null;
     loadingPosting: boolean;
     conflict: boolean;
     beingPosted: boolean;
