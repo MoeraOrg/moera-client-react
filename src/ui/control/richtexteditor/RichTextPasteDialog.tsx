@@ -18,8 +18,19 @@ export default function RichTextPasteDialog({show, onSubmit}: Props) {
         return null;
     }
 
+    const onKeyDown = (event: KeyboardEvent) => {
+        if (event.key === "t") {
+            onSubmit("text", persist);
+            event.preventDefault();
+        }
+        if (event.key === "p") {
+            onSubmit("html", persist);
+            event.preventDefault();
+        }
+    }
+
     return (
-        <ModalDialog title="Paste text with formatting" className="rich-text-paste-dialog"
+        <ModalDialog title="Paste text with formatting" className="rich-text-paste-dialog" onKeyDown={onKeyDown}
                      onClose={() => onSubmit("none", false)}>
             <div className="modal-body">
                 The clipboard contains text with formatting. Do you want to paste the text with formatting tags?
@@ -31,8 +42,8 @@ export default function RichTextPasteDialog({show, onSubmit}: Props) {
                 </div>
             </div>
             <div className="modal-footer">
-                <Button variant="warning" onClick={() => onSubmit("text", persist)}>Text only</Button>
-                <Button variant="primary" onClick={() => onSubmit("html", persist)}>Preserve formatting</Button>
+                <Button variant="warning" onClick={() => onSubmit("text", persist)}>Text only (t)</Button>
+                <Button variant="primary" onClick={() => onSubmit("html", persist)}>Preserve formatting (p)</Button>
             </div>
         </ModalDialog>
     );

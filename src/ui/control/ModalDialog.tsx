@@ -12,15 +12,19 @@ interface Props {
     centered?: boolean;
     risen?: boolean;
     onClose?: () => void;
+    onKeyDown?: (event: KeyboardEvent) => void;
     children: any;
 }
 
-export function ModalDialog({title, size, className, style, centered, risen, children, onClose}: Props) {
+export function ModalDialog({title, size, className, style, centered, risen, children, onClose, onKeyDown}: Props) {
     const onModalKeyDown = useCallback(event => {
         if (event.key === "Escape" && onClose) {
             onClose();
         }
-    }, [onClose]);
+        if (onKeyDown) {
+            onKeyDown(event);
+        }
+    }, [onClose, onKeyDown]);
 
     const onModalDialogClick = (e: React.MouseEvent) => e.stopPropagation();
 
