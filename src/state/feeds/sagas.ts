@@ -125,7 +125,7 @@ function* feedPastSliceLoadSaga(action: FeedPastSliceLoadAction) {
             : yield* call(Node.getFeedSlice, "", feedName, null, before, 20);
         yield* call(fillActivityReactions, data.stories);
         yield* call(fillSubscriptions, data.stories);
-        yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after));
+        yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after, data.total, data.totalInPast));
     } catch (e) {
         yield* put(feedPastSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -141,7 +141,7 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
             : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
         yield* call(fillActivityReactions, data.stories);
         yield* call(fillSubscriptions, data.stories);
-        yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after));
+        yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after, data.total, data.totalInFuture));
     } catch (e) {
         yield* put(feedFutureSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -167,7 +167,7 @@ function* feedsUpdateSaga() {
                     : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
                 yield* call(fillActivityReactions, data.stories);
                 yield* call(fillSubscriptions, data.stories);
-                yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
+                yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after, data.total));
                 if (after === data.before) {
                     break;
                 }

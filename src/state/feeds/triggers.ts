@@ -24,6 +24,7 @@ import {
     EVENT_HOME_STORY_UPDATED,
     EVENT_HOME_SUBSCRIPTION_ADDED,
     EVENT_HOME_SUBSCRIPTION_DELETED,
+    EVENT_NODE_FEED_STATUS_UPDATED,
     EVENT_NODE_STORY_ADDED,
     EVENT_NODE_STORY_DELETED,
     EVENT_NODE_STORY_UPDATED,
@@ -128,6 +129,12 @@ export default [
         EVENT_HOME_STORY_UPDATED,
         true,
         (signal: EventAction<StoryUpdatedEvent>) => storyUpdated(toStory(signal.payload, true))
+    ),
+    trigger(
+        EVENT_NODE_FEED_STATUS_UPDATED,
+        true,
+        (signal: EventAction<FeedStatusUpdatedEvent>) =>
+            feedStatusSet(signal.payload.feedName, toStatus(signal.payload))
     ),
     trigger(
         EVENT_HOME_FEED_STATUS_UPDATED,

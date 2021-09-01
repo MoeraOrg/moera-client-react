@@ -223,6 +223,7 @@ export interface FeedInfo {
 }
 
 export interface FeedStatus {
+    total: number;
     notViewed: number;
     notRead: number;
 }
@@ -336,6 +337,11 @@ export interface FeedSliceInfoBase<B> {
     before: number;
     after: number;
     stories: StoryInfoBase<B>[];
+    total: number;
+    totalInPast: number;
+    totalInFuture: number;
+    notViewed: number;
+    notRead: number;
 }
 export type EncodedFeedSliceInfo = FeedSliceInfoBase<string>;
 export type FeedSliceInfo = FeedSliceInfoBase<Body>;

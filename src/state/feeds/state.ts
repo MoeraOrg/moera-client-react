@@ -23,6 +23,9 @@ export interface FeedState {
     before: number;
     after: number;
     stories: ExtStoryInfo[];
+    total: number;
+    totalInPast: number;
+    totalInFuture: number;
     anchor: number | null;
     scrollingActive: boolean;
     at: number;

@@ -8,21 +8,39 @@ import "./FeedTopButton.css";
 type Props = {
     feedName: string;
     atTop: boolean;
+    totalAfterTop: number;
+    notViewed: number;
 } & ConnectedProps<typeof connector>;
 
-const FeedTopButton = ({feedName, atTop, feedScrollToAnchor}: Props) => (
-    !atTop ?
+const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, feedScrollToAnchor}: Props) => {
+    if (atTop) {
+        return null;
+    }
+
+    let title = " Top";
+    if (totalAfterTop > 0) {
+        if (notViewed > 0) {
+            if (totalAfterTop > notViewed) {
+                title += ` (${totalAfterTop - notViewed} + ${notViewed} new)`;
+            } else {
+                title += ` (${totalAfterTop} new)`;
+            }
+        } else {
+            title += ` (${totalAfterTop})`;
+        }
+    }
+
+    return (
         <div className="feed-top-box">
             <div className="feed-top-button" onClick={e => {
                 feedScrollToAnchor(feedName, Number.MAX_SAFE_INTEGER);
                 e.preventDefault();
             }}>
-                <FontAwesomeIcon icon="arrow-up"/>&nbsp;Top
+                <FontAwesomeIcon icon="arrow-up"/>{title}
             </div>
         </div>
-    :
-        null
-);
+    );
+};
 
 const connector = connect(
     null,

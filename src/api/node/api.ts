@@ -665,6 +665,9 @@ export const FeedInfo = schema(FeedInfoType);
 const FeedStatusType: JSONSchemaType<API.FeedStatus> = {
     type: "object",
     properties: {
+        "total": {
+            type: "integer"
+        },
         "notViewed": {
             type: "integer"
         },
@@ -672,7 +675,7 @@ const FeedStatusType: JSONSchemaType<API.FeedStatus> = {
             type: "integer"
         }
     },
-    required: ["notViewed", "notRead"],
+    required: ["total", "notViewed", "notRead"],
     additionalProperties: false
 };
 
@@ -959,9 +962,24 @@ const FeedSliceInfoType: JSONSchemaType<API.EncodedFeedSliceInfo> = {
         "stories": {
             type: "array",
             items: StoryInfoType
+        },
+        "total": {
+            type: "integer"
+        },
+        "totalInPast": {
+            type: "integer"
+        },
+        "totalInFuture": {
+            type: "integer"
+        },
+        "notViewed": {
+            type: "integer"
+        },
+        "notRead": {
+            type: "integer"
         }
     },
-    required: ["before", "after", "stories"],
+    required: ["before", "after", "stories", "total", "totalInPast", "totalInFuture", "notViewed", "notRead"],
     additionalProperties: false
 };
 

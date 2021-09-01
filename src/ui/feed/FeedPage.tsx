@@ -36,6 +36,7 @@ interface State {
     atTop: boolean;
     atBottom: boolean;
     scrolled: boolean;
+    topmostMoment: number;
 }
 
 class FeedPage extends React.PureComponent<Props, State> {
@@ -62,7 +63,8 @@ class FeedPage extends React.PureComponent<Props, State> {
         this.state = {
             atTop: true,
             atBottom: false,
-            scrolled: false
+            scrolled: false,
+            topmostMoment: Number.MAX_SAFE_INTEGER
         };
     }
 
@@ -127,7 +129,7 @@ class FeedPage extends React.PureComponent<Props, State> {
 
     onScroll = () => {
         this.updateAtMoment();
-        this.setState({scrolled: window.scrollY > 5});
+        this.setState({scrolled: window.scrollY > 5, topmostMoment: FeedPage.getTopmostMoment()});
         this.onView();
     };
 
@@ -262,8 +264,20 @@ class FeedPage extends React.PureComponent<Props, State> {
         this.setState({atBottom: intersecting});
     };
 
+    getTotalAfterTop(): number {
+        const {stories, totalInFuture} = this.props;
+        const {topmostMoment} = this.state;
+
+        if (topmostMoment >= Number.MAX_SAFE_INTEGER) {
+            return 0;
+        }
+        const afterTop = stories.filter(story => story.moment > topmostMoment).length;
+
+        return afterTop + totalInFuture;
+    }
+
     render() {
-        const {feedName, title, loadingFuture, loadingPast, stories, postings, before, after} = this.props;
+        const {feedName, title, loadingFuture, loadingPast, stories, notViewed, postings, before, after} = this.props;
         const {atTop, atBottom} = this.state;
 
         if (stories.length === 0 && !loadingFuture && !loadingPast
@@ -271,7 +285,8 @@ class FeedPage extends React.PureComponent<Props, State> {
 
             return (
                 <>
-                    <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}/>
+                    <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}
+                                    totalAfterTop={0} notViewed={0}/>
                     <div className="no-postings">Nothing yet.</div>
                 </>
             );
@@ -282,7 +297,9 @@ class FeedPage extends React.PureComponent<Props, State> {
                 <FeedTitle/>
                 <FeedPageHeader feedName={feedName} title={title}
                                 atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
-                                atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}/>
+                                atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
+                                totalAfterTop={this.getTotalAfterTop()}
+                                notViewed={notViewed}/>
                 <Page>
                     <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"
                                   visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
@@ -311,6 +328,8 @@ const connector = connect(
         before: getFeedState(state, ownProps.feedName).before,
         after: getFeedState(state, ownProps.feedName).after,
         stories: getFeedState(state, ownProps.feedName).stories,
+        totalInFuture: getFeedState(state, ownProps.feedName).totalInFuture,
+        notViewed: getFeedState(state, ownProps.feedName).notViewed,
         postings: state.postings,
         anchor: getFeedState(state, ownProps.feedName).anchor,
         atHomeNode: isAtHomeNode(state)
