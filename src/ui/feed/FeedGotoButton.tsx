@@ -63,7 +63,7 @@ class FeedGotoButton extends React.PureComponent<Props, State> {
                     <Button variant="outline-info" size="sm" onClick={this.activate}>Go to...</Button>
                 :
                     <>
-                        <DatePicker selected={fromUnixTime(timestamp)}
+                        <DatePicker selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
                                     onChange={v => {
                                         if (v instanceof Date) {
                                             this.goToTimestamp(v);
