@@ -34,4 +34,9 @@
 
 #page-header .btn {
     margin-left: .5rem;
+    margin-bottom: .5rem;
+}
+
+#page-header .react-datepicker-wrapper {
+    margin-bottom: .5rem;
 }
