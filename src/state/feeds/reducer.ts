@@ -318,7 +318,8 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     after: action.payload.after,
                     stories,
                     total: action.payload.total,
-                    totalInPast: action.payload.totalInPast
+                    totalInPast: action.payload.totalInPast,
+                    totalPinned: action.payload.totalPinned
                 }).value();
             } else {
                 return istate.set([feedName, "loadingPast"], false).value();
@@ -339,7 +340,8 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     before: action.payload.before,
                     stories,
                     total: action.payload.total,
-                    totalInFuture: action.payload.totalInFuture
+                    totalInFuture: action.payload.totalInFuture,
+                    totalPinned: action.payload.totalPinned
                 }).value();
             } else {
                 return istate.set([feedName, "loadingFuture"], false).value();

@@ -265,15 +265,17 @@ class FeedPage extends React.PureComponent<Props, State> {
     };
 
     getTotalAfterTop(): number {
-        const {stories, totalInFuture} = this.props;
+        const {stories, totalInFuture, totalPinned} = this.props;
         const {topmostMoment} = this.state;
 
         if (topmostMoment >= Number.MAX_SAFE_INTEGER) {
             return 0;
         }
         const afterTop = stories.filter(story => story.moment > topmostMoment).length;
+        console.log(totalPinned);
+        const total = afterTop + totalInFuture - totalPinned;
 
-        return afterTop + totalInFuture;
+        return total > 0 ? total : 0;
     }
 
     render() {
@@ -329,6 +331,7 @@ const connector = connect(
         after: getFeedState(state, ownProps.feedName).after,
         stories: getFeedState(state, ownProps.feedName).stories,
         totalInFuture: getFeedState(state, ownProps.feedName).totalInFuture,
+        totalPinned: getFeedState(state, ownProps.feedName).totalPinned,
         notViewed: getFeedState(state, ownProps.feedName).notViewed,
         postings: state.postings,
         anchor: getFeedState(state, ownProps.feedName).anchor,

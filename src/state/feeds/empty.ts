@@ -23,6 +23,7 @@ export const emptyFeed: FeedState = {
     after: Number.MAX_SAFE_INTEGER,
     stories: [],
     total: 0,
+    totalPinned: 0,
     totalInPast: 0,
     totalInFuture: 0,
     anchor: null,

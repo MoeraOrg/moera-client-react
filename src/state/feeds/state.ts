@@ -24,6 +24,7 @@ export interface FeedState {
     after: number;
     stories: ExtStoryInfo[];
     total: number;
+    totalPinned: number;
     totalInPast: number;
     totalInFuture: number;
     anchor: number | null;

@@ -224,6 +224,7 @@ export interface FeedInfo {
 
 export interface FeedStatus {
     total: number;
+    totalPinned: number;
     notViewed: number;
     notRead: number;
 }
@@ -340,6 +341,7 @@ export interface FeedSliceInfoBase<B> {
     total: number;
     totalInPast: number;
     totalInFuture: number;
+    totalPinned: number;
     notViewed: number;
     notRead: number;
 }

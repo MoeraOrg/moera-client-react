@@ -668,6 +668,9 @@ const FeedStatusType: JSONSchemaType<API.FeedStatus> = {
         "total": {
             type: "integer"
         },
+        "totalPinned": {
+            type: "integer"
+        },
         "notViewed": {
             type: "integer"
         },
@@ -675,7 +678,7 @@ const FeedStatusType: JSONSchemaType<API.FeedStatus> = {
             type: "integer"
         }
     },
-    required: ["total", "notViewed", "notRead"],
+    required: ["total", "totalPinned", "notViewed", "notRead"],
     additionalProperties: false
 };
 
@@ -972,6 +975,9 @@ const FeedSliceInfoType: JSONSchemaType<API.EncodedFeedSliceInfo> = {
         "totalInFuture": {
             type: "integer"
         },
+        "totalPinned": {
+            type: "integer"
+        },
         "notViewed": {
             type: "integer"
         },
@@ -979,7 +985,9 @@ const FeedSliceInfoType: JSONSchemaType<API.EncodedFeedSliceInfo> = {
             type: "integer"
         }
     },
-    required: ["before", "after", "stories", "total", "totalInPast", "totalInFuture", "notViewed", "notRead"],
+    required: [
+        "before", "after", "stories", "total", "totalInPast", "totalInFuture", "totalPinned", "notViewed", "notRead"
+    ],
     additionalProperties: false
 };
 

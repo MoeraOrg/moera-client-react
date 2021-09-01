@@ -780,6 +780,9 @@ const FeedStatusUpdatedEventType: JSONSchemaType<FeedStatusUpdatedEvent> = {
         "total": {
             type: "integer"
         },
+        "totalPinned": {
+            type: "integer"
+        },
         "notViewed": {
             type: "integer"
         },
@@ -788,7 +791,7 @@ const FeedStatusUpdatedEventType: JSONSchemaType<FeedStatusUpdatedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "feedName", "total", "notViewed", "notRead"]
+    required: ["type", "feedName", "total", "totalPinned", "notViewed", "notRead"]
 };
 
 const StoriesStatusUpdatedEventType: JSONSchemaType<StoriesStatusUpdatedEvent> = {

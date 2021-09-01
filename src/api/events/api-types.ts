@@ -43,6 +43,7 @@ export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
 export interface FeedStatusUpdatedEvent extends BaseEvent<"FEED_STATUS_UPDATED"> {
     feedName: string;
     total: number;
+    totalPinned: number;
     notViewed: number;
     notRead: number;
 }

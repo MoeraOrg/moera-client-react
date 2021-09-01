@@ -212,12 +212,13 @@ export type FeedPastSliceSetAction = ActionWithPayload<typeof FEED_PAST_SLICE_SE
     after: number;
     total: number;
     totalInPast: number;
+    totalPinned: number;
 }>;
 export const feedPastSliceSet = (feedName: string, stories: StoryInfo[],
                                  before: number, after: number, total: number,
-                                 totalInPast: number): FeedPastSliceSetAction => ({
+                                 totalInPast: number, totalPinned: number): FeedPastSliceSetAction => ({
     type: FEED_PAST_SLICE_SET,
-    payload: {feedName, stories, before, after, total, totalInPast}
+    payload: {feedName, stories, before, after, total, totalInPast, totalPinned}
 });
 
 export const FEED_FUTURE_SLICE_SET = "FEED_FUTURE_SLICE_SET";
@@ -228,12 +229,13 @@ export type FeedFutureSliceSetAction = ActionWithPayload<typeof FEED_FUTURE_SLIC
     after: number;
     total: number;
     totalInFuture: number;
+    totalPinned: number;
 }>;
 export const feedFutureSliceSet = (feedName: string, stories: StoryInfo[],
                                    before: number, after: number, total: number,
-                                   totalInFuture: number): FeedFutureSliceSetAction => ({
+                                   totalInFuture: number, totalPinned: number): FeedFutureSliceSetAction => ({
     type: FEED_FUTURE_SLICE_SET,
-    payload: {feedName, stories, before, after, total, totalInFuture}
+    payload: {feedName, stories, before, after, total, totalInFuture, totalPinned}
 });
 
 export const FEED_SLICE_UPDATE = "FEED_SLICE_UPDATE";
