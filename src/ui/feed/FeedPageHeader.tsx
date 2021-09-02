@@ -19,9 +19,12 @@ type Props = {
     atBottom: boolean;
     totalAfterTop: number;
     notViewed: number;
+    notViewedMoment: number | null;
 } & ConnectedProps<typeof connector>;
 
-function FeedPageHeader({feedName, title, empty, atTop, atBottom, totalAfterTop, notViewed, avatar, ownerName}: Props) {
+function FeedPageHeader({
+    feedName, title, empty, atTop, atBottom, totalAfterTop, notViewed, notViewedMoment, avatar, ownerName
+}: Props) {
     const [avatarVisible, setAvatarVisible] = useState(window.scrollY >= getPageHeaderHeight());
 
     const onScroll = useCallback(
@@ -50,7 +53,8 @@ function FeedPageHeader({feedName, title, empty, atTop, atBottom, totalAfterTop,
             {!empty &&
                 <FeedGotoButton feedName={feedName} atBottom={atBottom}/>
             }
-            <FeedTopButton feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop} notViewed={notViewed}/>
+            <FeedTopButton feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop} notViewed={notViewed}
+                           notViewedMoment={notViewedMoment}/>
         </PageHeader>
     );
 }

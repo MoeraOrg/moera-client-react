@@ -1,5 +1,5 @@
 import schema from "api/schema";
-import { AvatarImageType } from "api/node/api";
+import { AvatarImageType, FeedStatusType } from "api/node/api";
 import {
     ClientSettingsChangedEvent,
     CommentAddedEvent,
@@ -777,21 +777,10 @@ const FeedStatusUpdatedEventType: JSONSchemaType<FeedStatusUpdatedEvent> = {
         "feedName": {
             type: "string"
         },
-        "total": {
-            type: "integer"
-        },
-        "totalPinned": {
-            type: "integer"
-        },
-        "notViewed": {
-            type: "integer"
-        },
-        "notRead": {
-            type: "integer"
-        }
+        "status": FeedStatusType
     },
     additionalProperties: false,
-    required: ["type", "feedName", "total", "totalPinned", "notViewed", "notRead"]
+    required: ["type", "feedName", "status"]
 };
 
 const StoriesStatusUpdatedEventType: JSONSchemaType<StoriesStatusUpdatedEvent> = {

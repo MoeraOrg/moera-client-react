@@ -1,4 +1,4 @@
-import { AvatarImage, DraftType, StoryType, SubscriptionType } from "api/node/api-types";
+import { AvatarImage, DraftType, FeedStatus, StoryType, SubscriptionType } from "api/node/api-types";
 
 export interface EventPacket {
     queueStartedAt: number;
@@ -42,10 +42,7 @@ export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
 
 export interface FeedStatusUpdatedEvent extends BaseEvent<"FEED_STATUS_UPDATED"> {
     feedName: string;
-    total: number;
-    totalPinned: number;
-    notViewed: number;
-    notRead: number;
+    status: FeedStatus;
 }
 
 export interface StoriesStatusUpdatedEvent extends BaseEvent<"STORIES_STATUS_UPDATED"> {

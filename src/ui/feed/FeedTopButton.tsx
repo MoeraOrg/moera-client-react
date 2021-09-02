@@ -10,9 +10,10 @@ type Props = {
     atTop: boolean;
     totalAfterTop: number;
     notViewed: number;
+    notViewedMoment: number | null;
 } & ConnectedProps<typeof connector>;
 
-const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, feedScrollToAnchor}: Props) => {
+const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, notViewedMoment, feedScrollToAnchor}: Props) => {
     if (atTop) {
         return null;
     }
@@ -33,7 +34,10 @@ const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, feedScrollToA
     return (
         <div className="feed-top-box">
             <div className="feed-top-button" onClick={e => {
-                feedScrollToAnchor(feedName, Number.MAX_SAFE_INTEGER);
+                const moment = notViewedMoment != null && notViewed < totalAfterTop
+                    ? notViewedMoment
+                    : Number.MAX_SAFE_INTEGER;
+                feedScrollToAnchor(feedName, moment);
                 e.preventDefault();
             }}>
                 <FontAwesomeIcon icon="arrow-up"/>{title}

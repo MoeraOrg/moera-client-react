@@ -1,4 +1,4 @@
-import { StoryInfo } from "api/node/api-types";
+import { FeedStatus, StoryInfo } from "api/node/api-types";
 
 export interface ExtStoryInfo extends Omit<StoryInfo, "feedName" | "posting" | "comment"> {
     postingId?: string;
@@ -16,15 +16,12 @@ export interface FeedState {
     }
     loadingStatus: boolean;
     loadedStatus: boolean;
-    notViewed: number;
-    notRead: number;
+    status: FeedStatus;
     loadingFuture: boolean;
     loadingPast: boolean;
     before: number;
     after: number;
     stories: ExtStoryInfo[];
-    total: number;
-    totalPinned: number;
     totalInPast: number;
     totalInFuture: number;
     anchor: number | null;

@@ -1,4 +1,5 @@
 import { FeedState } from "state/feeds/state";
+import { FeedStatus } from "api/node/api-types";
 
 export const emptyInfo = {
     subscriberId: null,
@@ -6,6 +7,14 @@ export const emptyInfo = {
         add: []
     }
 };
+
+const emptyStatus: FeedStatus = {
+    total: 0,
+    totalPinned: 0,
+    notViewed: 0,
+    notRead: 0,
+    notViewedMoment: null
+}
 
 export const emptyFeed: FeedState = {
     loadingGeneral: false,
@@ -15,15 +24,12 @@ export const emptyFeed: FeedState = {
     ...emptyInfo,
     loadingStatus: false,
     loadedStatus: false,
-    notViewed: 0,
-    notRead: 0,
+    status: emptyStatus,
     loadingFuture: false,
     loadingPast: false,
     before: Number.MAX_SAFE_INTEGER,
     after: Number.MAX_SAFE_INTEGER,
     stories: [],
-    total: 0,
-    totalPinned: 0,
     totalInPast: 0,
     totalInFuture: 0,
     anchor: null,

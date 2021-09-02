@@ -47,7 +47,7 @@ import {
     SubscriptionDeletedEvent
 } from "api/events/api-types";
 import { WithContext } from "state/action-types";
-import { FeedStatus, StoryInfo } from "api/node/api-types";
+import { StoryInfo } from "api/node/api-types";
 import { now } from "util/misc";
 
 function toStory(eventPayload: Omit<StoryEvent<any>, "type">, isHome: boolean): StoryInfo {
@@ -65,12 +65,6 @@ function toStory(eventPayload: Omit<StoryEvent<any>, "type">, isHome: boolean): 
     }
     delete story.postingId;
     return story;
-}
-
-function toStatus(eventPayload: Omit<FeedStatusUpdatedEvent, "type">): FeedStatus {
-    const status: FeedStatus & {feedName?: string} = {...eventPayload};
-    delete status.feedName;
-    return status;
 }
 
 export default [
@@ -134,13 +128,13 @@ export default [
         EVENT_NODE_FEED_STATUS_UPDATED,
         true,
         (signal: EventAction<FeedStatusUpdatedEvent>) =>
-            feedStatusSet(signal.payload.feedName, toStatus(signal.payload))
+            feedStatusSet(signal.payload.feedName, signal.payload.status)
     ),
     trigger(
         EVENT_HOME_FEED_STATUS_UPDATED,
         true,
         (signal: EventAction<FeedStatusUpdatedEvent>) =>
-            feedStatusSet(":" + signal.payload.feedName, toStatus(signal.payload))
+            feedStatusSet(":" + signal.payload.feedName, signal.payload.status)
     ),
     trigger(
         EVENT_HOME_STORIES_STATUS_UPDATED,

@@ -210,15 +210,13 @@ export type FeedPastSliceSetAction = ActionWithPayload<typeof FEED_PAST_SLICE_SE
     stories: StoryInfo[];
     before: number;
     after: number;
-    total: number;
     totalInPast: number;
-    totalPinned: number;
+    status: FeedStatus;
 }>;
-export const feedPastSliceSet = (feedName: string, stories: StoryInfo[],
-                                 before: number, after: number, total: number,
-                                 totalInPast: number, totalPinned: number): FeedPastSliceSetAction => ({
+export const feedPastSliceSet = (feedName: string, stories: StoryInfo[], before: number, after: number,
+                                 totalInPast: number, status: FeedStatus): FeedPastSliceSetAction => ({
     type: FEED_PAST_SLICE_SET,
-    payload: {feedName, stories, before, after, total, totalInPast, totalPinned}
+    payload: {feedName, stories, before, after, totalInPast, status}
 });
 
 export const FEED_FUTURE_SLICE_SET = "FEED_FUTURE_SLICE_SET";
@@ -227,15 +225,13 @@ export type FeedFutureSliceSetAction = ActionWithPayload<typeof FEED_FUTURE_SLIC
     stories: StoryInfo[];
     before: number;
     after: number;
-    total: number;
     totalInFuture: number;
-    totalPinned: number;
+    status: FeedStatus;
 }>;
-export const feedFutureSliceSet = (feedName: string, stories: StoryInfo[],
-                                   before: number, after: number, total: number,
-                                   totalInFuture: number, totalPinned: number): FeedFutureSliceSetAction => ({
+export const feedFutureSliceSet = (feedName: string, stories: StoryInfo[], before: number, after: number,
+                                   totalInFuture: number, status: FeedStatus): FeedFutureSliceSetAction => ({
     type: FEED_FUTURE_SLICE_SET,
-    payload: {feedName, stories, before, after, total, totalInFuture, totalPinned}
+    payload: {feedName, stories, before, after, totalInFuture, status}
 });
 
 export const FEED_SLICE_UPDATE = "FEED_SLICE_UPDATE";
@@ -244,12 +240,12 @@ export type FeedSliceUpdateAction = ActionWithPayload<typeof FEED_SLICE_UPDATE, 
     stories: StoryInfo[];
     before: number;
     after: number;
-    total: number;
+    status: FeedStatus;
 }>;
 export const feedSliceUpdate = (feedName: string, stories: StoryInfo[],
-                                before: number, after: number, total: number): FeedSliceUpdateAction => ({
+                                before: number, after: number, status: FeedStatus): FeedSliceUpdateAction => ({
     type: FEED_SLICE_UPDATE,
-    payload: {feedName, stories, before, after, total}
+    payload: {feedName, stories, before, after, status}
 });
 
 export const FEEDS_UNSET = "FEEDS_UNSET";

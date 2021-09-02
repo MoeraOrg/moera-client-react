@@ -272,14 +272,15 @@ class FeedPage extends React.PureComponent<Props, State> {
             return 0;
         }
         const afterTop = stories.filter(story => story.moment > topmostMoment).length;
-        console.log(totalPinned);
         const total = afterTop + totalInFuture - totalPinned;
 
         return total > 0 ? total : 0;
     }
 
     render() {
-        const {feedName, title, loadingFuture, loadingPast, stories, notViewed, postings, before, after} = this.props;
+        const {
+            feedName, title, loadingFuture, loadingPast, stories, notViewed, notViewedMoment, postings, before, after
+        } = this.props;
         const {atTop, atBottom} = this.state;
 
         if (stories.length === 0 && !loadingFuture && !loadingPast
@@ -288,7 +289,7 @@ class FeedPage extends React.PureComponent<Props, State> {
             return (
                 <>
                     <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}
-                                    totalAfterTop={0} notViewed={0}/>
+                                    totalAfterTop={0} notViewed={0} notViewedMoment={null}/>
                     <div className="no-postings">Nothing yet.</div>
                 </>
             );
@@ -301,7 +302,7 @@ class FeedPage extends React.PureComponent<Props, State> {
                                 atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
                                 atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
                                 totalAfterTop={this.getTotalAfterTop()}
-                                notViewed={notViewed}/>
+                                notViewed={notViewed} notViewedMoment={notViewedMoment}/>
                 <Page>
                     <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"
                                   visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
@@ -331,8 +332,9 @@ const connector = connect(
         after: getFeedState(state, ownProps.feedName).after,
         stories: getFeedState(state, ownProps.feedName).stories,
         totalInFuture: getFeedState(state, ownProps.feedName).totalInFuture,
-        totalPinned: getFeedState(state, ownProps.feedName).totalPinned,
-        notViewed: getFeedState(state, ownProps.feedName).notViewed,
+        totalPinned: getFeedState(state, ownProps.feedName).status.totalPinned,
+        notViewed: getFeedState(state, ownProps.feedName).status.notViewed,
+        notViewedMoment: getFeedState(state, ownProps.feedName).status.notViewedMoment,
         postings: state.postings,
         anchor: getFeedState(state, ownProps.feedName).anchor,
         atHomeNode: isAtHomeNode(state)

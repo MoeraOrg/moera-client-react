@@ -84,7 +84,11 @@ export function getFeedSubscriberId(state: ClientState, feedName: string): strin
 }
 
 export function getFeedNotViewed(state: ClientState, feedName: string): number {
-    return getFeedState(state, feedName).notViewed;
+    return getFeedState(state, feedName).status.notViewed;
+}
+
+export function getFeedNotViewedMoment(state: ClientState, feedName: string): number | null {
+    return getFeedState(state, feedName).status.notViewedMoment;
 }
 
 export function isSubscribedToFeed(state: ClientState, feedName: string): boolean {
@@ -114,10 +118,14 @@ export function getFeedAtTimestamp(state: ClientState, feedName: string): number
     return at < MAX_MOMENT ? Math.floor(at / 1000) : getUnixTime(new Date());
 }
 
+export function isFeedAtBeginning(state: ClientState, feedName: string): boolean {
+    return getFeedAt(state, feedName) >= MAX_MOMENT;
+}
+
 export function getInstantCount(state: ClientState): number {
     const feed = getFeedState(state, ":instant");
     const mode = getSetting(state, "instants.number.mode") as string;
-    return mode === "not-viewed" ? feed.notViewed : feed.notRead;
+    return mode === "not-viewed" ? feed.status.notViewed : feed.status.notRead;
 }
 
 export function isFeedToBeLoaded(state: ClientState, feedName: string): boolean {
