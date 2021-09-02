@@ -25,6 +25,7 @@ import {
     EVENT_HOME_SUBSCRIPTION_ADDED,
     EVENT_HOME_SUBSCRIPTION_DELETED,
     EVENT_NODE_FEED_STATUS_UPDATED,
+    EVENT_NODE_STORIES_STATUS_UPDATED,
     EVENT_NODE_STORY_ADDED,
     EVENT_NODE_STORY_DELETED,
     EVENT_NODE_STORY_UPDATED,
@@ -137,10 +138,18 @@ export default [
             feedStatusSet(":" + signal.payload.feedName, signal.payload.status)
     ),
     trigger(
+        EVENT_NODE_STORIES_STATUS_UPDATED,
+        true,
+        (signal: EventAction<StoriesStatusUpdatedEvent>) => feedStatusUpdated(
+            signal.payload.feedName, signal.payload.viewed ?? null, signal.payload.read ?? null,
+            signal.payload.before)
+    ),
+    trigger(
         EVENT_HOME_STORIES_STATUS_UPDATED,
         true,
         (signal: EventAction<StoriesStatusUpdatedEvent>) => feedStatusUpdated(
-            ":" + signal.payload.feedName, signal.payload.viewed, signal.payload.read, signal.payload.before)
+            ":" + signal.payload.feedName, signal.payload.viewed ?? null, signal.payload.read ?? null,
+            signal.payload.before)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,

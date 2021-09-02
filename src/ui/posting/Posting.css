@@ -1,10 +1,18 @@
 .posting {
     position: relative;
-    background-color: white;
     border: var(--gray-light) 1px solid;
     border-radius: 5px;
     margin-bottom: 1rem;
     padding: .5rem;
+}
+
+.posting:not(.not-viewed) {
+    background-color: white;
+    transition: background-color 4s ease;
+}
+
+.posting.not-viewed {
+    background-color: #fffee4;
 }
 
 @media only screen and (max-width: 575px) {

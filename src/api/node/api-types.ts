@@ -451,7 +451,7 @@ export interface SubscriberInfo {
 export interface SubscriptionInfo {
     id: string;
     type: SubscriptionType;
-    feedName: string;
+    feedName?: string | null;
     remoteSubscriberId: string;
     remoteNodeName: string;
     remoteFullName?: string | null;

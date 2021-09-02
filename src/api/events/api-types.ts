@@ -47,8 +47,8 @@ export interface FeedStatusUpdatedEvent extends BaseEvent<"FEED_STATUS_UPDATED">
 
 export interface StoriesStatusUpdatedEvent extends BaseEvent<"STORIES_STATUS_UPDATED"> {
     feedName: string;
-    viewed: boolean;
-    read: boolean;
+    viewed?: boolean | null;
+    read?: boolean | null;
     before: number;
 }
 
@@ -190,7 +190,7 @@ export type SubscriberDeletedEvent = SubscriberEvent<"SUBSCRIBER_DELETED">;
 interface SubscriptionEvent<T> extends BaseEvent<T> {
     id: string;
     subscriptionType: SubscriptionType;
-    feedName: string;
+    feedName?: string | null;
     remoteSubscriberId: string;
     remoteNodeName: string;
     remoteFullName?: string | null;

@@ -793,17 +793,19 @@ const StoriesStatusUpdatedEventType: JSONSchemaType<StoriesStatusUpdatedEvent> =
             type: "string"
         },
         "viewed": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "read": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "before": {
             type: "integer"
         }
     },
     additionalProperties: false,
-    required: ["type", "feedName", "viewed", "read", "before"]
+    required: ["type", "feedName", "before"]
 };
 
 const SubscriberAddedEventType: JSONSchemaType<SubscriberAddedEvent> = {
@@ -927,7 +929,7 @@ const SubscriptionAddedEventType: JSONSchemaType<SubscriptionAddedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "subscriptionType", "feedName", "remoteSubscriberId", "remoteNodeName", "createdAt"]
+    required: ["type", "id", "subscriptionType", "remoteSubscriberId", "remoteNodeName", "createdAt"]
 };
 
 const SubscriptionDeletedEventType: JSONSchemaType<SubscriptionDeletedEvent> = {
@@ -973,7 +975,7 @@ const SubscriptionDeletedEventType: JSONSchemaType<SubscriptionDeletedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "subscriptionType", "feedName", "remoteSubscriberId", "remoteNodeName", "createdAt"]
+    required: ["type", "id", "subscriptionType", "remoteSubscriberId", "remoteNodeName", "createdAt"]
 };
 
 const CommentAddedEventType: JSONSchemaType<CommentAddedEvent> = {

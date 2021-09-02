@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { ExtPostingInfo } from "state/postings/state";
-import { isPermitted, ProtectedObject } from "state/node/selectors";
+import { isAtHomeNode, isPermitted, ProtectedObject } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
@@ -48,8 +49,9 @@ type FeedPostingProps = {
     deleting: boolean;
 } & ConnectedProps<typeof connector>;
 
-const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}: FeedPostingProps) => (
-    <div className="posting entry preview" data-moment={story.moment} data-viewed={story.viewed}>
+const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermitted}: FeedPostingProps) => (
+    <div className={cx("posting entry preview", {"not-viewed": atHome && !story.viewed})} data-moment={story.moment}
+         data-viewed={story.viewed}>
         {deleting ?
             <PostingDeleting/>
         :
@@ -81,6 +83,7 @@ const FeedPosting = ({posting, story, deleting, isPermitted, connectedToHome}: F
 const connector = connect(
     (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
+        atHome: isAtHomeNode(state),
         isPermitted: (operation: string, posting: ProtectedObject) => isPermitted(operation, posting, state)
     })
 );

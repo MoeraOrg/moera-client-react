@@ -103,13 +103,19 @@ function* feedStatusLoadSaga(action: FeedStatusLoadAction) {
     }
 }
 
-function* feedStatusUpdateSaga(action: FeedStatusUpdateAction) {
+function* feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>) {
     const {feedName, viewed, read, before} = action.payload;
     try {
         yield* put(feedStatusUpdated(feedName, viewed, read, before));
         // feedName must start with ":"
+        if (action.context.ownerName === action.context.homeOwnerName) {
+            yield* put(feedStatusUpdated(feedName.substring(1), viewed, read, before));
+        }
         const data = yield* call(Node.putFeedStatus, ":", feedName.substring(1), viewed, read, before);
         yield* put(feedStatusSet(feedName, data));
+        if (action.context.ownerName === action.context.homeOwnerName) {
+            yield* put(feedStatusSet(feedName.substring(1), data));
+        }
     } catch (e) {
         yield* put(feedStatusUpdateFailed(feedName));
         yield* put(errorThrown(e));

@@ -124,7 +124,7 @@ class Events extends React.PureComponent<Props> {
             return;
         }
         if (!eventScheme(packet.event)) {
-            console.error("Incorrect event received", formatSchemaErrors(eventScheme.errors));
+            console.error("Incorrect event received", formatSchemaErrors(eventScheme.errors), message.body);
             return;
         }
         if (ALLOWED_SELF_EVENTS.has(packet.event.type) || packet.cid !== Browser.clientId) {

@@ -1312,7 +1312,8 @@ const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
             type: "string"
         },
         "feedName": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "remoteSubscriberId": {
             type: "string"
@@ -1340,7 +1341,7 @@ const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
             type: "integer"
         }
     },
-    required: ["id", "type", "feedName", "remoteSubscriberId", "remoteNodeName", "createdAt"],
+    required: ["id", "type", "remoteSubscriberId", "remoteNodeName", "createdAt"],
     additionalProperties: false
 };
 
