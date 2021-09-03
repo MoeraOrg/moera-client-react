@@ -26,7 +26,7 @@ const NewsButton = ({atHome, atHomeNews, count, moment, atBeginning}: Props) => 
         <Jump nodeName=":" href={href} className={cx("connection-button", "news-button", {"active": atHomeNews})}
               title="Your news">
             <FontAwesomeIcon icon="newspaper"/>
-            {count > 0 && <div className="count">{count}</div>}
+            {count != null && count > 0 && <div className="count">{count}</div>}
         </Jump>
     );
 };

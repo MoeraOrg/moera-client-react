@@ -1,6 +1,6 @@
 import { disj, inv, trigger } from "state/trigger";
 import { GO_TO_PAGE, updateLocation, WAKE_UP } from "state/navigation/actions";
-import { isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
+import { isAtNewsPage, isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
 import {
     FEED_SCROLLED,
     feedGeneralLoad,
@@ -15,7 +15,12 @@ import {
     feedsUpdate,
     feedUnsubscribed
 } from "state/feeds/actions";
-import { isFeedGeneralToBeLoaded, isFeedToBeLoaded, subscriptionToSubscriber } from "state/feeds/selectors";
+import {
+    isFeedGeneralToBeLoaded,
+    isFeedStatusToBeLoaded,
+    isFeedToBeLoaded,
+    subscriptionToSubscriber
+} from "state/feeds/selectors";
 import {
     EVENT_HOME_FEED_STATUS_UPDATED,
     EVENT_HOME_STORIES_STATUS_UPDATED,
@@ -74,6 +79,16 @@ export default [
         state => (isAtTimelinePage(state) || isAtProfilePage(state))
             && isFeedGeneralToBeLoaded(state, "timeline"),
         feedGeneralLoad("timeline")
+    ),
+    trigger(
+        GO_TO_PAGE,
+        state => isAtTimelinePage(state) && isFeedStatusToBeLoaded(state, "timeline"),
+        feedStatusLoad("timeline")
+    ),
+    trigger(
+        GO_TO_PAGE,
+        state => isAtNewsPage(state) && isFeedStatusToBeLoaded(state, "news"),
+        feedStatusLoad("news")
     ),
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger(

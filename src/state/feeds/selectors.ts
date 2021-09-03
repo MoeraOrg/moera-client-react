@@ -79,16 +79,21 @@ export function isFeedGeneralLoading(state: ClientState, feedName: string): bool
     return getFeedState(state, feedName).loadingGeneral;
 }
 
+export function isFeedStatusToBeLoaded(state: ClientState, feedName: string): boolean {
+    const feed = getFeedState(state, feedName);
+    return !feed.loadedStatus && !feed.loadingStatus;
+}
+
 export function getFeedSubscriberId(state: ClientState, feedName: string): string | null {
     return getFeedState(state, feedName).subscriberId;
 }
 
-export function getFeedNotViewed(state: ClientState, feedName: string): number {
-    return getFeedState(state, feedName).status.notViewed;
+export function getFeedNotViewed(state: ClientState, feedName: string): number | null {
+    return getFeedState(state, feedName).status.notViewed ?? null;
 }
 
 export function getFeedNotViewedMoment(state: ClientState, feedName: string): number | null {
-    return getFeedState(state, feedName).status.notViewedMoment;
+    return getFeedState(state, feedName).status.notViewedMoment ?? null;
 }
 
 export function isSubscribedToFeed(state: ClientState, feedName: string): boolean {
@@ -125,7 +130,7 @@ export function isFeedAtBeginning(state: ClientState, feedName: string): boolean
 export function getInstantCount(state: ClientState): number {
     const feed = getFeedState(state, ":instant");
     const mode = getSetting(state, "instants.number.mode") as string;
-    return mode === "not-viewed" ? feed.status.notViewed : feed.status.notRead;
+    return (mode === "not-viewed" ? feed.status.notViewed : feed.status.notRead) ?? 0;
 }
 
 export function isFeedToBeLoaded(state: ClientState, feedName: string): boolean {

@@ -672,17 +672,19 @@ export const FeedStatusType: JSONSchemaType<API.FeedStatus> = {
             type: "integer"
         },
         "notViewed": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         },
         "notRead": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         },
         "notViewedMoment": {
             type: "integer",
             nullable: true
         }
     },
-    required: ["total", "totalPinned", "notViewed", "notRead"],
+    required: ["total", "totalPinned"],
     additionalProperties: false
 };
 
@@ -975,10 +977,9 @@ const FeedSliceInfoType: JSONSchemaType<API.EncodedFeedSliceInfo> = {
         },
         "totalInFuture": {
             type: "integer"
-        },
-        "status": FeedStatusType
+        }
     },
-    required: ["before", "after", "stories", "totalInPast", "totalInFuture", "status"],
+    required: ["before", "after", "stories", "totalInPast", "totalInFuture"],
     additionalProperties: false
 };
 

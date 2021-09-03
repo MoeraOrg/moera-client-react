@@ -95,7 +95,9 @@ function* feedUnsubscribeSaga(action: FeedUnsubscribeAction) {
 function* feedStatusLoadSaga(action: FeedStatusLoadAction) {
     const {feedName} = action.payload;
     try {
-        const data = yield* call(Node.getFeedStatus, ":", feedName.substring(1)); // feedName must start with ":"
+        const data = feedName.startsWith(":")
+            ? yield* call(Node.getFeedStatus, ":", feedName.substring(1))
+            : yield* call(Node.getFeedStatus, "", feedName);
         yield* put(feedStatusSet(feedName, data));
     } catch (e) {
         yield* put(feedStatusLoadFailed(feedName));
@@ -131,7 +133,8 @@ function* feedPastSliceLoadSaga(action: FeedPastSliceLoadAction) {
             : yield* call(Node.getFeedSlice, "", feedName, null, before, 20);
         yield* call(fillActivityReactions, data.stories);
         yield* call(fillSubscriptions, data.stories);
-        yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after, data.totalInPast, data.status));
+        yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after,
+            data.totalInPast, data.totalInFuture));
     } catch (e) {
         yield* put(feedPastSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -147,7 +150,8 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
             : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
         yield* call(fillActivityReactions, data.stories);
         yield* call(fillSubscriptions, data.stories);
-        yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after, data.totalInFuture, data.status));
+        yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after,
+            data.totalInPast, data.totalInFuture));
     } catch (e) {
         yield* put(feedFutureSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -173,7 +177,7 @@ function* feedsUpdateSaga() {
                     : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
                 yield* call(fillActivityReactions, data.stories);
                 yield* call(fillSubscriptions, data.stories);
-                yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after, data.status));
+                yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
                 if (after === data.before) {
                     break;
                 }

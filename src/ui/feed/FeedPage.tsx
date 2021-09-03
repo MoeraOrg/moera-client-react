@@ -302,7 +302,7 @@ class FeedPage extends React.PureComponent<Props, State> {
                                 atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
                                 atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
                                 totalAfterTop={this.getTotalAfterTop()}
-                                notViewed={notViewed} notViewedMoment={notViewedMoment}/>
+                                notViewed={notViewed ?? 0} notViewedMoment={notViewedMoment ?? null}/>
                 <Page>
                     <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"
                                   visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}

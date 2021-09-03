@@ -313,16 +313,21 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     .filter(t => t.moment <= feed.after)
                     .forEach(t => stories.push(extractStory(t)));
                 stories.sort((a, b) => b.moment - a.moment);
-                return istate.assign([feedName], {
+                istate.assign([feedName], {
                     loadingPast: false,
                     after: action.payload.after,
-                    stories,
-                    totalInPast: action.payload.totalInPast,
-                    status: cloneDeep(action.payload.status)
-                }).value();
+                    stories
+                });
             } else {
-                return istate.set([feedName, "loadingPast"], false).value();
+                istate.set([feedName, "loadingPast"], false);
             }
+            if (action.payload.after <= feed.after) {
+                istate.set([feedName, "totalInPast"], action.payload.totalInPast);
+            }
+            if (action.payload.before >= feed.before) {
+                istate.set([feedName, "totalInFuture"], action.payload.totalInFuture);
+            }
+            return istate.value();
         }
 
         case FEED_FUTURE_SLICE_SET: {
@@ -334,20 +339,26 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     .filter(t => t.moment > feed.before)
                     .forEach(t => stories.push(extractStory(t)));
                 stories.sort((a, b) => b.moment - a.moment);
-                return istate.assign([feedName], {
+                istate.assign([feedName], {
                     loadingFuture: false,
                     before: action.payload.before,
                     stories,
-                    totalInFuture: action.payload.totalInFuture,
-                    status: cloneDeep(action.payload.status)
-                }).value();
+                    totalInFuture: action.payload.totalInFuture
+                });
             } else {
-                return istate.set([feedName, "loadingFuture"], false).value();
+                istate.set([feedName, "loadingFuture"], false);
             }
+            if (action.payload.after <= feed.after) {
+                istate.set([feedName, "totalInPast"], action.payload.totalInPast);
+            }
+            if (action.payload.before >= feed.before) {
+                istate.set([feedName, "totalInFuture"], action.payload.totalInFuture);
+            }
+            return istate.value();
         }
 
         case FEED_SLICE_UPDATE: {
-            const {feedName, status} = action.payload;
+            const {feedName} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             const stories = feed.stories.slice()
                 .filter(t => t.moment > action.payload.before || t.moment <= action.payload.after);
@@ -355,10 +366,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .filter(t => t.moment <= feed.before && t.moment > feed.after)
                 .forEach(t => stories.push(extractStory(t)));
             stories.sort((a, b) => b.moment - a.moment);
-            return istate.assign([feedName], {
-                stories,
-                status: cloneDeep(status)
-            }).value();
+            return istate.set([feedName, "stories"], stories).value();
         }
 
         case FEEDS_UNSET: {
