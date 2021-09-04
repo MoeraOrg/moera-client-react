@@ -532,10 +532,12 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             type: "string"
         },
         "viewed": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "read": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "summaryAvatar": {
             ...AvatarImageType,
@@ -545,7 +547,8 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             type: "string"
         },
         "trackingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "remoteNodeName": {
             type: "string",
@@ -586,10 +589,7 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
         }
     },
     additionalProperties: false,
-    required: [
-        "type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "viewed", "read",
-        "summary", "trackingId"
-    ]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "summary"]
 };
 
 const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
@@ -620,10 +620,12 @@ const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
             type: "string"
         },
         "viewed": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "read": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "summaryAvatar": {
             ...AvatarImageType,
@@ -633,7 +635,8 @@ const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
             type: "string"
         },
         "trackingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "remoteNodeName": {
             type: "string",
@@ -674,10 +677,7 @@ const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
         }
     },
     additionalProperties: false,
-    required: [
-        "type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "viewed", "read",
-        "summary", "trackingId"
-    ]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "summary"]
 };
 
 const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
@@ -708,10 +708,12 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             type: "string"
         },
         "viewed": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "read": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "summaryAvatar": {
             ...AvatarImageType,
@@ -721,7 +723,8 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             type: "string"
         },
         "trackingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "remoteNodeName": {
             type: "string",
@@ -762,10 +765,7 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
         }
     },
     additionalProperties: false,
-    required: [
-        "type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "viewed", "read",
-        "summary", "trackingId"
-    ]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "summary"]
 };
 
 const FeedStatusUpdatedEventType: JSONSchemaType<FeedStatusUpdatedEvent> = {

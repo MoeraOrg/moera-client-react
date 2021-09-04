@@ -50,8 +50,8 @@ type FeedPostingProps = {
 } & ConnectedProps<typeof connector>;
 
 const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermitted}: FeedPostingProps) => (
-    <div className={cx("posting entry preview", {"not-viewed": atHome && !story.viewed})} data-moment={story.moment}
-         data-viewed={story.viewed}>
+    <div className={cx("posting entry preview", {"not-viewed": atHome && story.viewed === false})}
+         data-moment={story.moment} data-viewed={story.viewed !== false}>
         {deleting ?
             <PostingDeleting/>
         :

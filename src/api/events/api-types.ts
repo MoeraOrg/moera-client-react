@@ -151,11 +151,11 @@ export interface StoryEvent<T> extends BaseEvent<T> {
     pinned: boolean;
     moment: number;
     postingId: string;
-    viewed: boolean;
-    read: boolean;
+    viewed?: boolean | null;
+    read?: boolean | null;
     summaryAvatar?: AvatarImage | null,
     summary: string;
-    trackingId: string;
+    trackingId?: string | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
     remotePostingId?: string | null;

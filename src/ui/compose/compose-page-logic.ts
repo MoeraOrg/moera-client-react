@@ -120,7 +120,7 @@ const composePageLogic = {
             return null;
         }
         const publishAt = !isEqual(values.publishAt, values.publishAtDefault) ? getUnixTime(values.publishAt) : null;
-        const publications: StoryAttributes[] = [{feedName: "timeline", publishAt}];
+        const publications: StoryAttributes[] = [{feedName: "timeline", publishAt, viewed: true, read: true}];
         if (props.newsFeedEnabled) {
             publications.push({feedName: "news", publishAt, viewed: true, read: true});
         }

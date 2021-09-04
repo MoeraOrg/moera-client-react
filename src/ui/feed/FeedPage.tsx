@@ -213,6 +213,7 @@ class FeedPage extends React.PureComponent<Props, State> {
             }
             if (posting.getBoundingClientRect().top >= top) {
                 posting.dataset.viewed = "true";
+                posting.classList.remove("not-viewed");
             }
         }
     }
