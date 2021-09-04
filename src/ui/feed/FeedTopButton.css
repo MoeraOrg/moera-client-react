@@ -23,7 +23,7 @@
     background-color: var(--white-dark);
     color: var(--info);
     display: inline-block;
-    padding: 0.2rem 0.7rem;
+    padding: .2rem .7rem;
     border-radius: 1em;
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14),
                 0 1px 10px 0 rgba(0, 0, 0, .12),
@@ -37,4 +37,13 @@
     background-color: var(--info);
     border-color: var(--info);
     color: white;
+}
+
+.feed-top-button .new {
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    padding: .15em .35em .15em .3em;
+    border-radius: .3em;
+    margin-left: .5em;
 }

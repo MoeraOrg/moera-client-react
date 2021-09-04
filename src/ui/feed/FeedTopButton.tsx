@@ -19,15 +19,18 @@ const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, notViewedMome
     }
 
     let title = " Top";
+    let news = 0;
     if (totalAfterTop > 0) {
         if (notViewed > 0) {
             if (totalAfterTop > notViewed) {
-                title += ` (${totalAfterTop - notViewed} + ${notViewed} new)`;
+                title = ` ${totalAfterTop} more`;
+                news = notViewed;
             } else {
-                title += ` (${totalAfterTop} new)`;
+                title = "";
+                news = totalAfterTop;
             }
         } else {
-            title += ` (${totalAfterTop})`;
+            title = ` ${totalAfterTop} more`;
         }
     }
 
@@ -41,6 +44,7 @@ const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, notViewedMome
                 e.preventDefault();
             }}>
                 <FontAwesomeIcon icon="arrow-up"/>{title}
+                {news > 0 && <span className="new">{news} new</span>}
             </div>
         </div>
     );
