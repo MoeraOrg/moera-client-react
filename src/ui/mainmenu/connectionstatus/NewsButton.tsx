@@ -8,18 +8,21 @@ import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { isAtNewsPage } from "state/navigation/selectors";
 import { getFeedNotViewed, getFeedNotViewedMoment, isFeedAtBeginning } from "state/feeds/selectors";
+import { getSetting } from "state/settings/selectors";
 import "./NewsButton.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const NewsButton = ({atHome, atHomeNews, count, moment, atBeginning}: Props) => {
+const NewsButton = ({atHome, atHomeNews, count, moment, atBeginning, targetStory}: Props) => {
     let href = "/news";
-    if (atHome) {
-        if ((atBeginning || atHomeNews) && moment != null) {
+    if (targetStory === "earliest-new") {
+        if (atHome) {
+            if ((atBeginning || atHomeNews) && moment != null) {
+                href += `?before=${moment}`;
+            }
+        } else if (moment) {
             href += `?before=${moment}`;
         }
-    } else if (moment) {
-        href += `?before=${moment}`;
     }
 
     return (
@@ -37,7 +40,8 @@ const connector = connect(
         atHomeNews: isAtHomeNode(state) && isAtNewsPage(state),
         count: getFeedNotViewed(state, ":news"),
         moment: getFeedNotViewedMoment(state, ":news"),
-        atBeginning: isFeedAtBeginning(state, "news") // not ":news"!
+        atBeginning: isFeedAtBeginning(state, "news"), // not ":news"!
+        targetStory: getSetting(state, "news-button.target-story") as string
     })
 );
 

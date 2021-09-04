@@ -358,6 +358,25 @@ const META: ClientSettingMetaInfo[] = [
                 }
             ]
         }
+    },
+    {
+        name: "news-button.target-story",
+        type: "string",
+        defaultValue: "earliest-new",
+        title: "\"Your news\" button opens",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "The earliest new post",
+                    value: "earliest-new"
+                },
+                {
+                    title: "The latest post",
+                    value: "latest"
+                }
+            ]
+        }
     }
 ];
 

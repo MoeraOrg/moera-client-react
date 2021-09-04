@@ -8,7 +8,7 @@
 
 .posting:not(.not-viewed) {
     background-color: white;
-    transition: background-color 4s ease;
+    transition: background-color 3s ease;
 }
 
 .posting.not-viewed {
