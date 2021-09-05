@@ -14,6 +14,7 @@ import {
     MAIN_POSITIVE_REACTIONS_SET
 } from "api/node/reaction-emojis";
 import EmojiList from "util/emoji-list";
+import { createSelector } from "reselect";
 
 interface OwnProps {
     icon: IconName,
@@ -164,10 +165,15 @@ class ReactionButtonImpl extends React.PureComponent<Props, State> {
 
 }
 
+const getAvailableReactions = createSelector(
+    (state: ClientState, ownProps: OwnProps) => getSetting(state,
+        !ownProps.negative ? "reactions.positive.available" : "reactions.negative.available") as string,
+    available => new EmojiList(available)
+);
+
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
-        available: new EmojiList(getSetting(state,
-            !ownProps.negative ? "reactions.positive.available" : "reactions.negative.available") as string)
+        available: getAvailableReactions(state, ownProps)
     }),
 );
 
