@@ -30,9 +30,11 @@ function* errorSaga(action: ErrorThrownAction) {
     if (stack) {
         console.error(stack);
     }
-    yield* put(errorShow(message, messageVerbose));
-    yield* delay(10000);
-    yield* put(errorDismiss());
+    if (document.visibilityState === "visible") {
+        yield* put(errorShow(message, messageVerbose));
+        yield* delay(10000);
+        yield* put(errorDismiss());
+    }
 }
 
 function* errorAuthInvalidSaga() {
