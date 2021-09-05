@@ -12,6 +12,7 @@ import {
     FeedStatusUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
+    NodeSettingsMetaChangedEvent,
     PeopleChangedEvent,
     PingEvent,
     PostingAddedEvent,
@@ -49,6 +50,7 @@ import { ActionWithPayload } from "state/action-types";
 
 export const EVENT_HOME_SUBSCRIBED = "EVENT_HOME_SUBSCRIBED";
 export const EVENT_NODE_PROFILE_UPDATED = "EVENT_NODE_PROFILE_UPDATED";
+export const EVENT_HOME_NODE_SETTINGS_META_CHANGED = "EVENT_HOME_NODE_SETTINGS_META_CHANGED";
 export const EVENT_HOME_NODE_SETTINGS_CHANGED = "EVENT_HOME_NODE_SETTINGS_CHANGED";
 export const EVENT_HOME_CLIENT_SETTINGS_CHANGED = "EVENT_HOME_CLIENT_SETTINGS_CHANGED";
 export const EVENT_NODE_POSTING_UPDATED = "EVENT_NODE_POSTING_UPDATED";
@@ -111,6 +113,7 @@ export type ClientEventAction =
     EventAction<SubscribedEvent>
     | EventAction<PingEvent>
     | EventAction<ProfileUpdatedEvent>
+    | EventAction<NodeSettingsMetaChangedEvent>
     | EventAction<NodeSettingsChangedEvent>
     | EventAction<ClientSettingsChangedEvent>
     | EventAction<RegisteredNameOperationStatusEvent>

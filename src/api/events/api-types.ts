@@ -22,6 +22,8 @@ export type PingEvent = BaseEvent<"PING">;
 
 export type ProfileUpdatedEvent = BaseEvent<"PROFILE_UPDATED">;
 
+export type NodeSettingsMetaChangedEvent = BaseEvent<"NODE_SETTINGS_META_CHANGED">;
+
 export type NodeSettingsChangedEvent = BaseEvent<"NODE_SETTINGS_CHANGED">;
 
 export type ClientSettingsChangedEvent = BaseEvent<"CLIENT_SETTINGS_CHANGED">;

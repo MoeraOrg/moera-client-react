@@ -22,7 +22,11 @@ import {
 } from "state/settings/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { dialogOpened, newLocation, updateLocation, WAKE_UP } from "state/navigation/actions";
-import { EVENT_HOME_CLIENT_SETTINGS_CHANGED, EVENT_HOME_NODE_SETTINGS_CHANGED } from "api/events/actions";
+import {
+    EVENT_HOME_CLIENT_SETTINGS_CHANGED,
+    EVENT_HOME_NODE_SETTINGS_CHANGED,
+    EVENT_HOME_NODE_SETTINGS_META_CHANGED
+} from "api/events/actions";
 import { flashBox } from "state/flashbox/actions";
 
 export default [
@@ -42,7 +46,7 @@ export default [
         settingsNodeValuesLoad
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, EVENT_HOME_NODE_SETTINGS_META_CHANGED],
         conj(isAtSettingsPage, isAtSettingsNodeTab),
         settingsNodeMetaLoad
     ),
@@ -52,7 +56,7 @@ export default [
         settingsNodeValuesUnset
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, EVENT_HOME_NODE_SETTINGS_META_CHANGED],
         disj(inv(isAtSettingsPage), conj(isAtSettingsPage, inv(isAtSettingsNodeTab))),
         settingsNodeMetaUnset
     ),

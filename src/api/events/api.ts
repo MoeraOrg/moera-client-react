@@ -13,6 +13,7 @@ import {
     FeedStatusUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
+    NodeSettingsMetaChangedEvent,
     PeopleChangedEvent,
     PingEvent,
     PostingAddedEvent,
@@ -107,6 +108,17 @@ const PingEventType: JSONSchemaType<PingEvent> = {
 };
 
 const ProfileUpdatedEventType: JSONSchemaType<ProfileUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        }
+    },
+    additionalProperties: false,
+    required: ["type"]
+};
+
+const NodeSettingsMetaChangedEventType: JSONSchemaType<NodeSettingsMetaChangedEvent> = {
     type: "object",
     properties: {
         "type": {
@@ -1230,6 +1242,7 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "SUBSCRIBED": schema(SubscribedEventType),
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
+    "NODE_SETTINGS_META_CHANGED": schema(NodeSettingsMetaChangedEventType),
     "NODE_SETTINGS_CHANGED": schema(NodeSettingsChangedEventType),
     "CLIENT_SETTINGS_CHANGED": schema(ClientSettingsChangedEventType),
     "POSTING_ADDED": schema(PostingAddedEventType),
