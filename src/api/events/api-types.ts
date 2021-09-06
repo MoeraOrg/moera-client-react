@@ -14,10 +14,6 @@ export interface BaseEvent<T> {
     type: T;
 }
 
-export interface SubscribedEvent extends BaseEvent<"SUBSCRIBED"> {
-    clientIp: string;
-}
-
 export type PingEvent = BaseEvent<"PING">;
 
 export type ProfileUpdatedEvent = BaseEvent<"PROFILE_UPDATED">;

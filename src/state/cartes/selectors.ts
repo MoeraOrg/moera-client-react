@@ -40,11 +40,6 @@ export function isCartesInitialized(state: ClientState): boolean {
     return state.cartes.initialized;
 }
 
-export function isCartesIpChanged(state: ClientState): boolean {
-    return state.cartes.clientIp != null && state.cartes.cartesIp != null
-        && state.cartes.clientIp !== state.cartes.cartesIp;
-}
-
 export function isClockOffsetToBeWarned(state: ClientState): boolean {
     return isCartesInitialized(state) && Math.abs(state.cartes.clockOffset) > CLOCK_OFFSET_THRESHOLD
         && !state.cartes.clockOffsetWarned;

@@ -41,7 +41,6 @@ import {
     StoryAddedEvent,
     StoryDeletedEvent,
     StoryUpdatedEvent,
-    SubscribedEvent,
     SubscriberAddedEvent,
     SubscriberDeletedEvent,
     SubscriptionAddedEvent,
@@ -81,20 +80,6 @@ const EventPacketType: JSONSchemaType<APIEventPacket> = {
 };
 
 export const EventPacket = schema(EventPacketType);
-
-const SubscribedEventType: JSONSchemaType<SubscribedEvent> = {
-    type: "object",
-    properties: {
-        "type": {
-            type: "string"
-        },
-        "clientIp": {
-            type: "string"
-        }
-    },
-    additionalProperties: false,
-    required: ["type", "clientIp"]
-};
 
 const PingEventType: JSONSchemaType<PingEvent> = {
     type: "object",
@@ -1239,7 +1224,6 @@ const RemoteNodeAvatarChangedEventType: JSONSchemaType<RemoteNodeAvatarChangedEv
 };
 
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
-    "SUBSCRIBED": schema(SubscribedEventType),
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
     "NODE_SETTINGS_META_CHANGED": schema(NodeSettingsMetaChangedEventType),
