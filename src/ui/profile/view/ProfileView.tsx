@@ -31,7 +31,7 @@ const EditButton = editButtonConnector(EditButtonImpl);
 
 type ProfileViewProps = ConnectedProps<typeof profileViewConnector>;
 
-const ProfileView = ({loading, fullName, gender, email, title, bioHtml, avatar, ownerName,
+const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml, avatar}, ownerName,
                       editable}: ProfileViewProps) => (
     <>
         <PageHeader>
@@ -64,7 +64,8 @@ const ProfileView = ({loading, fullName, gender, email, title, bioHtml, avatar, 
 
 const profileViewConnector = connect(
     (state: ClientState) => ({
-        ...state.profile,
+        loading: state.profile.loading,
+        profile: state.profile.profile,
         ownerName: getOwnerName(state),
         editable: isProfileEditable(state)
     })

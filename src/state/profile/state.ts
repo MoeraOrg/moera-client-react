@@ -1,4 +1,4 @@
-import { AvatarInfo } from "api/node/api-types";
+import { AvatarInfo, ProfileInfo } from "api/node/api-types";
 
 export type AvatarOnCreate = (avatar: AvatarInfo) => void;
 
@@ -13,23 +13,11 @@ export interface AvatarEditDialogState {
     onCreate: AvatarOnCreate | null;
 }
 
-export interface ProfileInfoState {
-    nodeName: string | null;
-    fullName: string | null;
-    gender: string | null;
-    email: string | null;
-    title: string | null;
-    bioSrc: string | null;
-    bioHtml: string | null;
-    avatar: AvatarInfo | null;
-    operations: {
-        edit: string[];
-    };
-}
-
-export interface ProfileState extends ProfileInfoState {
+export interface ProfileState {
     loaded: boolean;
     loading: boolean;
+    nodeName: string | null;
+    profile: ProfileInfo;
     avatars: {
         loading: boolean;
         loaded: boolean;

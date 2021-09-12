@@ -28,12 +28,11 @@ import {
     PROFILE_UPDATE_FAILED,
     PROFILE_UPDATE_SUCCEEDED
 } from "state/profile/actions";
-import { ProfileInfoState, ProfileState } from "state/profile/state";
+import { ProfileState } from "state/profile/state";
 import { ClientAction } from "state/action";
 import { cloneOperations } from "util/misc";
 
-const emptyProfileInfo: ProfileInfoState = {
-    nodeName: null,
+const emptyProfileInfo = {
     fullName: null,
     gender: null,
     email: null,
@@ -49,7 +48,8 @@ const emptyProfileInfo: ProfileInfoState = {
 const emptyProfile = {
     loaded: false,
     loading: false,
-    ...cloneDeep(emptyProfileInfo),
+    nodeName: null,
+    profile: cloneDeep(emptyProfileInfo),
     avatars: {
         loading: false,
         loaded: false,
@@ -95,15 +95,17 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
         case PROFILE_SET:
             return {
                 ...state,
-                ...cloneDeep(emptyProfileInfo),
-                fullName: action.payload.profile.fullName ?? null,
-                gender: action.payload.profile.gender ?? null,
-                email: action.payload.profile.email ?? null,
-                title: action.payload.profile.title ?? null,
-                bioSrc: action.payload.profile.bioSrc ?? null,
-                bioHtml: action.payload.profile.bioHtml ?? null,
-                avatar: cloneDeep(action.payload.profile.avatar) ?? null,
-                operations: cloneOperations(action.payload.profile.operations, emptyProfileInfo.operations),
+                profile: {
+                    ...cloneDeep(emptyProfileInfo),
+                    fullName: action.payload.profile.fullName ?? null,
+                    gender: action.payload.profile.gender ?? null,
+                    email: action.payload.profile.email ?? null,
+                    title: action.payload.profile.title ?? null,
+                    bioSrc: action.payload.profile.bioSrc ?? null,
+                    bioHtml: action.payload.profile.bioHtml ?? null,
+                    avatar: cloneDeep(action.payload.profile.avatar) ?? null,
+                    operations: cloneOperations(action.payload.profile.operations, emptyProfileInfo.operations),
+                },
                 loading: false,
                 loaded: true
             };

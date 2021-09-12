@@ -75,12 +75,12 @@ const profileEditorLogic = {
 
     mapPropsToValues(props: OuterProps): Values {
         return {
-            fullName: props.fullName || "",
-            title: props.title || "",
-            gender: props.gender || "",
-            email: props.email || "",
-            bioSrc: props.bioSrc || "",
-            avatar: props.avatar
+            fullName: props.profile.fullName || "",
+            title: props.profile.title || "",
+            gender: props.profile.gender || "",
+            email: props.profile.email || "",
+            bioSrc: props.profile.bioSrc || "",
+            avatar: props.profile.avatar ?? null
         }
     },
 
@@ -113,12 +113,7 @@ const connector = connect(
         loaded: state.profile.loaded,
         conflict: state.profile.conflict,
         updating: state.profile.updating,
-        fullName: state.profile.fullName,
-        gender: state.profile.gender,
-        email: state.profile.email,
-        title: state.profile.title,
-        bioSrc: state.profile.bioSrc,
-        avatar: state.profile.avatar
+        profile: state.profile.profile
     }),
     {profileEditCancel, profileEditConflictClose, profileUpdate}
 );
