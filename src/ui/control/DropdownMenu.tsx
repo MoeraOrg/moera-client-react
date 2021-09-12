@@ -61,7 +61,7 @@ function DropdownMenuImpl({items, standalone}: Props) {
 
     const itemList = buildItems(items, standalone);
     return (
-        <div className="menu" ref={setButtonRef} onClick={onToggle}>
+        <button className="menu" ref={setButtonRef} onClick={onToggle}>
             <FontAwesomeIcon icon="chevron-down" className="chevron"/>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
@@ -80,7 +80,7 @@ function DropdownMenuImpl({items, standalone}: Props) {
                     }
                 </div>
             }
-        </div>
+        </button>
     );
 
 }
