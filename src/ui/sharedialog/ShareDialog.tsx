@@ -1,37 +1,122 @@
-import React from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { createSelector } from 'reselect';
+import { Field, Form, FormikBag, FormikProps, withFormik } from 'formik';
+import cx from 'classnames';
 
 import { Button, ModalDialog } from "ui/control";
-import { closeShareDialog, shareDialogCopyLink } from "state/sharedialog/actions";
 import { SOCIAL_BUTTONS, SOCIAL_BUTTONS_ORDER } from "ui/sharedialog/social-buttons";
 import SocialButton from "ui/sharedialog/SocialButton";
+import { closeShareDialog, shareDialogCopyLink } from "state/sharedialog/actions";
 import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";
+import { clearHtml } from "util/html";
 import "./ShareDialog.css";
 
-type Props = ConnectedProps<typeof connector>;
+type Mode = "text" | "html";
 
-const ShareDialog = ({show, title, url, socialButtons, closeShareDialog, shareDialogCopyLink}: Props) => (
-    show ?
+interface ModeTab {
+    mode: Mode;
+    title: string;
+}
+
+const MODE_TABS: ModeTab[] = [
+    {
+        mode: "text",
+        title: "Text"
+    },
+    {
+        mode: "html",
+        title: "HTML"
+    }
+];
+
+interface MapToValuesProps {
+    title: string;
+    url: string;
+}
+
+type OuterProps = MapToValuesProps & ConnectedProps<typeof connector>;
+
+interface Values {
+    title: string;
+    url: string;
+}
+
+type Props = OuterProps & FormikProps<Values>
+
+const ShareDialog = ({
+    show, title, url, socialButtons, closeShareDialog, shareDialogCopyLink, values, resetForm
+}: Props) => {
+    const [mode, setMode] = useState("text" as Mode);
+
+    useEffect(() => {
+        if (show) {
+            resetForm({
+                values: shareDialogLogic.mapPropsToValues({
+                    title: mode === "text" ? clearHtml(title) : title,
+                    url
+                })
+            });
+        }
+    }, [show, mode, title, url, resetForm]);
+
+    if (!show) {
+        return null;
+    }
+
+    const onModeClick = (mode: Mode) => (event: MouseEvent) => {
+        setMode(mode);
+        event.preventDefault();
+    }
+
+    return (
         <ModalDialog title="Share" className="share-dialog" onClose={closeShareDialog}>
             <div className="modal-body">
-                <div className="title">"{title}"</div>
-                <div className="link">
-                    <input type="text" className="form-control" value={url} onChange={() => {}}/>
-                    <Button variant="secondary" onClick={() => shareDialogCopyLink(url)}>Copy</Button>
-                </div>
+                <ul className="nav nav-pills">
+                    {MODE_TABS.map(({mode: mod, title}) => (
+                        <li className="nav-item">
+                            {/* FIXME Bootstrap requires <a> here */}
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <a key={mod} className={cx("nav-link", {"active": mod === mode})} href="#"
+                               onClick={onModeClick(mod)}>{title}</a>
+                        </li>
+                    ))}
+                </ul>
+                <Form>
+                    <Field component="textarea" name="title" className="form-control title" rows={4}/>
+                    <div className="link">
+                        <Field type="text" name="url" className="form-control"/>
+                        <Button variant="secondary" onClick={() => shareDialogCopyLink(values.url)}>Copy</Button>
+                    </div>
+                </Form>
                 <div className="social">
-                    {socialButtons.map(type => <SocialButton key={type} type={type} url={url} title={title}/>)}
+                    {socialButtons.map(type =>
+                        <SocialButton key={type} type={type} url={values.url} title={values.title}/>
+                    )}
                 </div>
             </div>
             <div className="modal-footer">
                 <Button variant="primary" onClick={closeShareDialog}>Close</Button>
             </div>
         </ModalDialog>
-    :
-        null
-);
+    );
+};
+
+const shareDialogLogic = {
+
+    mapPropsToValues(props: MapToValuesProps): Values {
+        return {
+            title: props.title,
+            url: props.url
+        }
+    },
+
+    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
+        formik.setSubmitting(false);
+    }
+
+}
 
 const getSocialButtons = createSelector(
     (state: ClientState) => getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>,
@@ -54,4 +139,4 @@ const connector = connect(
     { closeShareDialog, shareDialogCopyLink }
 );
 
-export default connector(ShareDialog);
+export default connector(withFormik(shareDialogLogic)(ShareDialog));

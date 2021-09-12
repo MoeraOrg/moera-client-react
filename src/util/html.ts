@@ -134,6 +134,7 @@ export function quoteHtml(html?: string | null): string | null {
     if (html == null) {
         return null;
     }
+    console.log(html);
     return html
         .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
         .replace(/<blockquote>\n+/gi, "<blockquote>\n")
@@ -148,6 +149,14 @@ export function quoteHtml(html?: string | null): string | null {
         .trim()
 }
 
-export function htmlEntities(s: string): string {
+export function clearHtml(html: string | null | undefined): string {
+    return unhtmlEntities(html).replace(/<\/?[a-z][^>]*>/gi, "").trim();
+}
+
+export function htmlEntities(s: string | null | undefined): string {
     return HtmlEntities.encode(s);
+}
+
+export function unhtmlEntities(s: string | null | undefined): string {
+    return HtmlEntities.decode(s);
 }

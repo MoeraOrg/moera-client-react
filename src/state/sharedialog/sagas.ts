@@ -1,4 +1,5 @@
 import { call, put } from 'typed-redux-saga/macro';
+import clipboardCopy from 'clipboard-copy';
 
 import {
     closeShareDialog,
@@ -11,10 +12,11 @@ import {
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
 import { messageBox } from "state/messagebox/actions";
-import { normalizeUrl } from "util/url";
-import clipboardCopy from "clipboard-copy";
-import { Browser } from "ui/browser";
 import { flashBox } from "state/flashbox/actions";
+import { Browser } from "ui/browser";
+import { normalizeUrl } from "util/url";
+import { getWindowSelectionHtml, hasWindowSelection } from "util/misc";
+import { quoteHtml } from "util/html";
 
 export default [
     executor(SHARE_DIALOG_PREPARE, "", shareDialogPrepareSaga),
@@ -24,6 +26,8 @@ export default [
 function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
     const {title, nodeName, href} = action.payload;
 
+    const text = hasWindowSelection() ? (quoteHtml(getWindowSelectionHtml()) ?? title) : title;
+
     const nodeUri = yield* call(getNodeUri, nodeName);
     if (nodeUri == null) {
         yield* put(messageBox(`Cannot resolve name: ${nodeName}`));
@@ -31,11 +35,11 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
     }
     const url = normalizeUrl(nodeUri) + href;
     if (window.Android) {
-        window.Android.share(url, title);
+        window.Android.share(url, text);
     } else if (navigator.share) {
-        navigator.share({title, url});
+        navigator.share({title: text, url});
     } else {
-        yield* put(openShareDialog(title, url));
+        yield* put(openShareDialog(text, url));
     }
 }
 
