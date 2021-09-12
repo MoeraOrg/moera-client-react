@@ -254,7 +254,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                     focused: state.comments.focused,
                     focusedCommentId: state.comments.focusedCommentId
                 })
-                .set("compose", cloneDeep(emptyCompose))
+                .assign("compose", cloneDeep(emptyCompose)) // assign, not set!
                 .set("commentDialog", cloneDeep(emptyComposeDialog))
                 .value()
 
