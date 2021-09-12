@@ -15,7 +15,7 @@
     margin-bottom: 0;
 }
 
-#comment-composer TEXTAREA {
+#comment-composer TEXTAREA:empty {
     background-color: var(--comment-compose);
 }
 
