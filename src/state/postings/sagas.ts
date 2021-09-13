@@ -168,7 +168,7 @@ function* postingCopyLinkSaga(action: PostingCopyLinkAction) {
     try {
         const href = yield* call(postingGetLink, id);
         yield* call(clipboardCopy, href);
-        if (Browser.userAgentOs !== "android") {
+        if (Browser.userAgentOs !== "android" || window.Android) {
             yield* put(flashBox("Link copied to the clipboard"));
         }
     } catch (e) {

@@ -63,7 +63,7 @@ function* loadSubscription(nodeName: string, homeOwnerName: string | null) {
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
     yield* call(clipboardCopy, mentionName(action.payload.nodeName, action.payload.fullName));
-    if (Browser.userAgentOs !== "android") {
+    if (Browser.userAgentOs !== "android" || window.Android) {
         yield* put(flashBox("Mention copied to the clipboard"));
     }
 }

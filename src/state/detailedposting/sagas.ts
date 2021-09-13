@@ -379,7 +379,7 @@ function* commentCopyLinkSaga(action: CommentCopyLinkAction) {
     try {
         const href = yield* call(postingGetLink, postingId);
         yield* call(clipboardCopy, `${href}?comment=${id}`);
-        if (Browser.userAgentOs !== "android") {
+        if (Browser.userAgentOs !== "android" || window.Android) {
             yield* put(flashBox("Link copied to the clipboard"));
         }
     } catch (e) {

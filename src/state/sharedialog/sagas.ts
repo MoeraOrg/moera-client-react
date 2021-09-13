@@ -46,7 +46,7 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
 function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
     yield* put(closeShareDialog());
     yield* call(clipboardCopy, action.payload.url);
-    if (Browser.userAgentOs !== "android") {
+    if (Browser.userAgentOs !== "android" || window.Android) {
         yield* put(flashBox("Link copied to the clipboard"));
     }
 }
