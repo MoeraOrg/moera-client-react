@@ -250,7 +250,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     rows={rows}
-                    maxRows={Browser.isTinyScreen() ? 15 : 20}
+                    maxRows={Browser.isTinyScreen() ? 12 : 20}
                     disabled={disabled}
                     onKeyDown={this.onKeyDown}
                     onBlur={onBlur}
