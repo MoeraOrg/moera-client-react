@@ -24,7 +24,7 @@ import "./CommentCompose.css";
 
 function viewComposer() {
     const composer = document.getElementById("comment-composer")!;
-    scrollIntoView(composer, {scrollMode: "if-needed", block: "end"});
+    scrollIntoView(composer, {scrollMode: "if-needed", block: "nearest"});
 }
 
 type OuterProps = ConnectedProps<typeof connector>;
