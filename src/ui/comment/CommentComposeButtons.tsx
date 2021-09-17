@@ -40,7 +40,7 @@ function CommentComposeButtons(props: Props) {
     };
 
     const [, {value: body}] = useField("body");
-    const invisible = draft == null && body.trim().length === 0;
+    const invisible = draftId == null && body.trim().length === 0;
 
     return (
         <div className="buttons">
