@@ -1,5 +1,8 @@
 import * as immutable from 'object-path-immutable';
 import {
+    AvatarAddedEvent,
+    AvatarDeletedEvent,
+    AvatarOrderedEvent,
     BaseEvent,
     ClientSettingsChangedEvent,
     CommentAddedEvent,
@@ -94,6 +97,12 @@ export const EVENT_NODE_PEOPLE_CHANGED = "EVENT_NODE_PEOPLE_CHANGED";
 export const EVENT_HOME_PEOPLE_CHANGED = "EVENT_HOME_PEOPLE_CHANGED";
 export const EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED = "EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED";
 export const EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED = "EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED";
+export const EVENT_NODE_AVATAR_ADDED = "EVENT_NODE_AVATAR_ADDED";
+export const EVENT_HOME_AVATAR_ADDED = "EVENT_HOME_AVATAR_ADDED";
+export const EVENT_NODE_AVATAR_DELETED = "EVENT_NODE_AVATAR_DELETED";
+export const EVENT_HOME_AVATAR_DELETED = "EVENT_HOME_AVATAR_DELETED";
+export const EVENT_NODE_AVATAR_ORDERED = "EVENT_NODE_AVATAR_ORDERED";
+export const EVENT_HOME_AVATAR_ORDERED = "EVENT_HOME_AVATAR_ORDERED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -150,4 +159,7 @@ export type ClientEventAction =
     | EventAction<RemoteCommentUpdatedEvent>
     | EventAction<RemoteCommentDeletedEvent>
     | EventAction<RemoteCommentVerifiedEvent>
-    | EventAction<RemoteCommentVerificationFailedEvent>;
+    | EventAction<RemoteCommentVerificationFailedEvent>
+    | EventAction<AvatarAddedEvent>
+    | EventAction<AvatarDeletedEvent>
+    | EventAction<AvatarOrderedEvent>;

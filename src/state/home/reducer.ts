@@ -1,6 +1,8 @@
 import cloneDeep from 'lodash.clonedeep';
 import * as immutable from 'object-path-immutable';
 
+import { EVENT_HOME_AVATAR_ADDED, EVENT_HOME_AVATAR_DELETED, EVENT_HOME_AVATAR_ORDERED } from "api/events/actions";
+import { AvatarInfo } from "api/node/api-types";
 import {
     BROWSER_API_SET,
     CONNECT_TO_HOME,
@@ -145,6 +147,37 @@ export default (state: HomeState = initialState, action: ClientAction): HomeStat
         case PROFILE_AVATAR_DELETED:
             if (state.avatars.loaded) {
                 const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
+
+        case EVENT_HOME_AVATAR_ADDED:
+            if (state.avatars.loaded) {
+                const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.avatar.id);
+                avatars.push(action.payload.avatar);
+                avatars.sort((a, b) => b.ordinal - a.ordinal);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
+
+        case EVENT_HOME_AVATAR_DELETED:
+            if (state.avatars.loaded) {
+                const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
+
+        case EVENT_HOME_AVATAR_ORDERED:
+            if (state.avatars.loaded) {
+                const avatars: AvatarInfo[] = [];
+                state.avatars.avatars.forEach(av => {
+                    if (av.id !== action.payload.id) {
+                        avatars.push(av);
+                    } else {
+                        avatars.push({...av, ordinal: action.payload.ordinal});
+                    }
+                });
+                avatars.sort((a, b) => b.ordinal - a.ordinal);
                 return immutable.set(state, "avatars.avatars", avatars);
             }
             return state;

@@ -44,7 +44,7 @@ export const AvatarImageType: JSONSchemaType<API.AvatarImage> = {
     additionalProperties: false
 };
 
-const AvatarInfoType: JSONSchemaType<API.AvatarInfo> = {
+export const AvatarInfoType: JSONSchemaType<API.AvatarInfo> = {
     type: "object",
     properties: {
         "id": {

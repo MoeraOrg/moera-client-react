@@ -1,4 +1,4 @@
-import { AvatarImage, DraftType, FeedStatus, StoryType, SubscriptionType } from "api/node/api-types";
+import { AvatarImage, AvatarInfo, DraftType, FeedStatus, StoryType, SubscriptionType } from "api/node/api-types";
 
 export interface EventPacket {
     queueStartedAt: number;
@@ -243,4 +243,19 @@ export interface RemoteCommentVerificationFailedEvent
                     extends RemoteCommentVerificationEvent<"REMOTE_COMMENT_VERIFICATION_FAILED"> {
     errorCode: string;
     errorMessage: string;
+}
+
+export interface AvatarAddedEvent extends BaseEvent<"AVATAR_ADDED"> {
+    avatar: AvatarInfo;
+}
+
+export interface AvatarDeletedEvent extends BaseEvent<"AVATAR_DELETED"> {
+    id: string;
+    mediaId: string;
+}
+
+export interface AvatarOrderedEvent extends BaseEvent<"AVATAR_ORDERED"> {
+    id: string;
+    mediaId: string;
+    ordinal: number;
 }

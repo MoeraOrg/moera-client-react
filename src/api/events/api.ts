@@ -1,6 +1,9 @@
 import schema from "api/schema";
-import { AvatarImageType, FeedStatusType } from "api/node/api";
+import { AvatarImageType, AvatarInfoType, FeedStatusType } from "api/node/api";
 import {
+    AvatarAddedEvent,
+    AvatarDeletedEvent,
+    AvatarOrderedEvent,
     ClientSettingsChangedEvent,
     CommentAddedEvent,
     CommentDeletedEvent,
@@ -1223,6 +1226,55 @@ const RemoteNodeAvatarChangedEventType: JSONSchemaType<RemoteNodeAvatarChangedEv
     required: ["type", "name"]
 };
 
+const AvatarAddedEventType: JSONSchemaType<AvatarAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "avatar": AvatarInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "avatar"]
+}
+
+const AvatarDeletedEventType: JSONSchemaType<AvatarDeletedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "id": {
+            type: "string"
+        },
+        "mediaId": {
+            type: "string"
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "id", "mediaId"]
+}
+
+const AvatarOrderedEventType: JSONSchemaType<AvatarOrderedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "id": {
+            type: "string"
+        },
+        "mediaId": {
+            type: "string"
+        },
+        "ordinal": {
+            type: "integer"
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "id", "mediaId", "ordinal"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1266,7 +1318,10 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "REMOTE_COMMENT_VERIFICATION_FAILED": schema(RemoteCommentVerificationFailedEventType),
     "REMOTE_NODE_FULL_NAME_CHANGED": schema(RemoteNodeFullNameChangedEventType),
     "PEOPLE_CHANGED": schema(PeopleChangedEventType),
-    "REMOTE_NODE_AVATAR_CHANGED": schema(RemoteNodeAvatarChangedEventType)
+    "REMOTE_NODE_AVATAR_CHANGED": schema(RemoteNodeAvatarChangedEventType),
+    "AVATAR_ADDED": schema(AvatarAddedEventType),
+    "AVATAR_DELETED": schema(AvatarDeletedEventType),
+    "AVATAR_ORDERED": schema(AvatarOrderedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

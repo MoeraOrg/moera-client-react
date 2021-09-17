@@ -2,6 +2,8 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 import { arrayMove } from '@dnd-kit/sortable';
 
+import { EVENT_NODE_AVATAR_ADDED, EVENT_NODE_AVATAR_DELETED, EVENT_NODE_AVATAR_ORDERED } from 'api/events/actions';
+import { AvatarInfo } from "api/node/api-types";
 import {
     PROFILE_AVATAR_CREATE,
     PROFILE_AVATAR_CREATE_FAILED,
@@ -233,6 +235,37 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
             }
             return state;
         }
+
+        case EVENT_NODE_AVATAR_ADDED:
+            if (state.avatars.loaded) {
+                const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.avatar.id);
+                avatars.push(action.payload.avatar);
+                avatars.sort((a, b) => b.ordinal - a.ordinal);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
+
+        case EVENT_NODE_AVATAR_DELETED:
+            if (state.avatars.loaded) {
+                const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
+
+        case EVENT_NODE_AVATAR_ORDERED:
+            if (state.avatars.loaded) {
+                const avatars: AvatarInfo[] = [];
+                state.avatars.avatars.forEach(av => {
+                    if (av.id !== action.payload.id) {
+                        avatars.push(av);
+                    } else {
+                        avatars.push({...av, ordinal: action.payload.ordinal});
+                    }
+                });
+                avatars.sort((a, b) => b.ordinal - a.ordinal);
+                return immutable.set(state, "avatars.avatars", avatars);
+            }
+            return state;
 
         default:
             return state;
