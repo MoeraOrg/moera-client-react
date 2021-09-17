@@ -32,7 +32,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
     },
     allowedIframeHostnames: [
         "www.youtube.com", "www.youtube-nocookie.com", "player.vimeo.com", "www.facebook.com", "peer.tube",
-        "rumble.com", "open.spotify.com", "c.simmer.io", "itch.io"
+        "rumble.com", "open.spotify.com", "c.simmer.io", "itch.io", "odysee.com"
     ],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
