@@ -101,10 +101,9 @@ const emptyCompose = {
     repliedToName: null,
     repliedToFullName: null,
     repliedToHeading: null,
-    draftId: null,
+    draft: null,
     savingDraft: false,
-    savedDraft: false,
-    draft: null
+    savedDraft: false
 };
 
 const emptyComposeDialog = {
@@ -114,10 +113,9 @@ const emptyComposeDialog = {
     comment: null,
     beingPosted: false,
     conflict: false,
-    draftId: null,
+    draft: null,
     savingDraft: false,
-    savedDraft: false,
-    draft: null
+    savedDraft: false
 };
 
 const initialState = {
@@ -460,7 +458,6 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
 
             const property = action.payload.draft.receiverCommentId != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
-                draftId: action.payload.draft.id,
                 draft: action.payload.draft,
                 loading: false,
                 loaded: true
@@ -503,7 +500,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
 
             const property = action.payload.commentId != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
-                draftId: action.payload.draftId,
+                draft: action.payload.draft,
                 savingDraft: false,
                 savedDraft: true
             });

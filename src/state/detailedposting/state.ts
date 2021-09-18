@@ -50,10 +50,9 @@ export interface CommentComposeState {
     repliedToName: string | null;
     repliedToFullName: string | null;
     repliedToHeading: string | null;
-    draftId: string | null;
+    draft: DraftInfo | null;
     savingDraft: boolean;
     savedDraft: boolean;
-    draft: DraftInfo | null;
 }
 
 export interface CommentDialogState {
@@ -63,10 +62,9 @@ export interface CommentDialogState {
     comment: CommentInfo | null;
     beingPosted: boolean;
     conflict: boolean;
-    draftId: string | null;
+    draft: DraftInfo | null;
     savingDraft: boolean;
     savedDraft: boolean;
-    draft: DraftInfo | null;
 }
 
 export interface DetailedPostingState {

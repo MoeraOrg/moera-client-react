@@ -29,7 +29,7 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentDialog(props: Props) {
     const {
-        show, ownerName, ownerFullName, comment, draftId, draft, conflict, loading, beingPosted, smileysEnabled,
+        show, ownerName, ownerFullName, comment, draft, conflict, loading, beingPosted, smileysEnabled,
         sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey, submitForm,
         resetForm
     } = props;
@@ -66,11 +66,11 @@ function CommentDialog(props: Props) {
     }
 
     const onCancel = (event: React.MouseEvent) => {
-        if (draftId == null) {
+        if (draft == null) {
             closeCommentDialog();
         } else {
             confirmBox("Do you really want to forget the changes?", "Forget", "Cancel",
-                cancelCommentDialog(draftId), null, "danger");
+                cancelCommentDialog(draft.id), null, "danger");
         }
         event.preventDefault();
     };
@@ -107,7 +107,6 @@ const connector = connect(
         avatarDefault: getHomeOwnerAvatar(state),
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         comment: getCommentDialogComment(state),
-        draftId: state.detailedPosting.commentDialog.draftId,
         draft: state.detailedPosting.commentDialog.draft,
         repliedToId: getCommentDialogComment(state)?.repliedTo?.id ?? null,
         conflict: isCommentDialogConflict(state),

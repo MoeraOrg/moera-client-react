@@ -38,7 +38,7 @@ const commentDraftSaverLogic = {
 
     save: (text: CommentText, props: Props): void => {
         if (props.ownerName != null && props.receiverPostingId != null) {
-            props.commentDraftSave(props.draftId,
+            props.commentDraftSave(props.draft?.id ?? null,
                 commentDraftSaverLogic.toDraftText(props.ownerName, props.receiverPostingId, props.commentId, text));
         }
     }
@@ -57,9 +57,9 @@ const connector = connect(
         repliedToId: ownProps.commentId == null
             ? getCommentComposerRepliedToId(state)
             : getCommentDialogComment(state)?.repliedTo?.id ?? null,
-        draftId: ownProps.commentId == null
-            ? state.detailedPosting.compose.draftId
-            : state.detailedPosting.commentDialog.draftId,
+        draft: ownProps.commentId == null
+            ? state.detailedPosting.compose.draft
+            : state.detailedPosting.commentDialog.draft,
         savingDraft: ownProps.commentId == null
             ? state.detailedPosting.compose.savingDraft
             : state.detailedPosting.commentDialog.savingDraft,

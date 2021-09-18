@@ -20,7 +20,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentComposeButtons(props: Props) {
-    const {loading, ownerName, draftId, draft, confirmBox} = props;
+    const {loading, ownerName, draft, confirmBox} = props;
 
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
 
@@ -34,13 +34,15 @@ function CommentComposeButtons(props: Props) {
     }, [ownerName, draft, setInitialText]); // 'props' are missing on purpose
 
     const onCancel = (e: React.MouseEvent) => {
-        confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
-            commentComposeCancel(draftId), null, "danger");
+        if (draft != null) {
+            confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
+                commentComposeCancel(draft.id), null, "danger");
+        }
         e.preventDefault();
     };
 
     const [, {value: body}] = useField("body");
-    const invisible = draftId == null && body.trim().length === 0;
+    const invisible = draft == null && body.trim().length === 0;
 
     return (
         <div className="buttons">
@@ -60,7 +62,6 @@ const connector = connect(
         ownerName: getOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         avatarDefault: getHomeOwnerAvatar(state),
-        draftId: state.detailedPosting.compose.draftId,
         draft: state.detailedPosting.compose.draft,
         comment: null,
         repliedToId: getCommentComposerRepliedToId(state),

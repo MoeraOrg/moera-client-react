@@ -243,12 +243,12 @@ export type CommentDraftSavedAction = ActionWithPayload<typeof COMMENT_DRAFT_SAV
     nodeName: string;
     postingId: string;
     commentId: string | null;
-    draftId: string;
+    draft: DraftInfo;
 }>;
 export const commentDraftSaved = (nodeName: string, postingId: string, commentId: string | null,
-                                  draftId: string): CommentDraftSavedAction => ({
+                                  draft: DraftInfo): CommentDraftSavedAction => ({
     type: COMMENT_DRAFT_SAVED,
-    payload: {nodeName, postingId, commentId, draftId}
+    payload: {nodeName, postingId, commentId, draft}
 });
 
 export const COMMENT_DRAFT_SAVE_FAILED = "COMMENT_DRAFT_SAVE_FAILED";

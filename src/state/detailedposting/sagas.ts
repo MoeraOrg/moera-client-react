@@ -91,6 +91,7 @@ import { Browser } from "ui/browser";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";
+import { DraftInfo } from "api/node/api-types";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", introduce(detailedPostingLoadSaga)),
@@ -311,14 +312,14 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     }
 
     try {
-        let data;
+        let data: DraftInfo;
         if (draftId == null) {
             data = yield* call(Node.postDraft, ":", draftText);
         } else {
             data = yield* call(Node.putDraft, ":", draftId, draftText);
         }
         yield* put(commentDraftSaved(draftText.receiverName, draftText.receiverPostingId,
-            draftText.receiverCommentId ?? null, data.id));
+            draftText.receiverCommentId ?? null, data));
     } catch (e) {
         yield* put(commentDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
             draftText.receiverCommentId ?? null));

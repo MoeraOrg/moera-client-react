@@ -108,7 +108,6 @@ const connector = connect(
         receiverFullName: state.detailedPosting.comments.receiverFullName,
         receiverPostingId: state.detailedPosting.comments.receiverPostingId,
         comment: null,
-        draftId: state.detailedPosting.compose.draftId,
         draft: state.detailedPosting.compose.draft,
         formId: state.detailedPosting.compose.formId,
         repliedToId: getCommentComposerRepliedToId(state),
