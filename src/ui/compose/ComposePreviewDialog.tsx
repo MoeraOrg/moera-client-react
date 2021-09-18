@@ -4,7 +4,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Button, ModalDialog } from "ui/control";
 import { ClientState } from "state/state";
 import { composePreviewClose } from "state/compose/actions";
-import { getComposeDraft } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import DraftOwner from "ui/draft/DraftOwner";
 import DraftSubject from "ui/draft/DraftSubject";
@@ -54,7 +53,7 @@ class ComposePreviewDialog extends React.PureComponent<Props> {
 const connector = connect(
     (state: ClientState) => ({
         show: state.compose.showPreview,
-        draft: getComposeDraft(state),
+        draft: state.compose.draft ?? state.compose.posting,
         feedWidth: getSetting(state, "feed.width") as number
     }),
     { composePreviewClose }

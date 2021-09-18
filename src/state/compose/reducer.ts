@@ -49,6 +49,7 @@ const emptyPosting = {
     conflict: false,
     beingPosted: false,
     draftId: null,
+    draft: null,
     loadingDraft: false,
     savingDraft: false,
     savedDraft: false,
@@ -201,6 +202,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             return {
                 ...state,
                 draftId: action.payload.draft.id,
+                draft: buildDraftInfo(action.payload.draft),
                 posting: draftToPosting(action.payload.draft),
                 loadingDraft: false,
                 loadingPosting: false
@@ -223,7 +225,8 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             if (action.payload.postingId === state.postingId) {
                 return {
                     ...state,
-                    draftId: action.payload.draftId,
+                    draftId: action.payload.draft.id,
+                    draft: buildDraftInfo(action.payload.draft),
                     savingDraft: false,
                     savedDraft: true
                 };
@@ -301,6 +304,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 ...state,
                 posting: null,
                 draftId: null,
+                draft: null,
                 loadingDraft: false,
                 savingDraft: false,
                 savedDraft: false

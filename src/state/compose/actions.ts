@@ -124,11 +124,11 @@ export const composeDraftSave = (draftId: string | null, draftText: DraftText): 
 export const COMPOSE_DRAFT_SAVED = "COMPOSE_DRAFT_SAVED";
 export type ComposeDraftSavedAction = ActionWithPayload<typeof COMPOSE_DRAFT_SAVED, {
     postingId: string | null;
-    draftId: string;
+    draft: DraftInfo;
 }>;
-export const composeDraftSaved = (postingId: string | null, draftId: string): ComposeDraftSavedAction => ({
+export const composeDraftSaved = (postingId: string | null, draft: DraftInfo): ComposeDraftSavedAction => ({
     type: COMPOSE_DRAFT_SAVED,
-    payload: {postingId, draftId}
+    payload: {postingId, draft}
 });
 
 export const COMPOSE_DRAFT_SAVE_FAILED = "COMPOSE_DRAFT_SAVE_FAILED";

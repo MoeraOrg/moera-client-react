@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { ExtDraftInfo } from "state/compose/state";
+import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import Jump from "ui/navigation/Jump";
 
 interface Props {
-    draft: ExtDraftInfo;
+    draft: ExtDraftInfo | DraftPostingInfo;
 }
 
 export default function DraftSubject({draft}: Props) {

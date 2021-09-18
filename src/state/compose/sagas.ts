@@ -140,7 +140,7 @@ function* composeDraftSaveSaga(action: ComposeDraftSaveAction) {
         if (draftText.receiverPostingId == null) {
             yield* put(composeDraftListItemSet(data.id, data));
         }
-        yield* put(composeDraftSaved(draftText.receiverPostingId ?? null, data.id));
+        yield* put(composeDraftSaved(draftText.receiverPostingId ?? null, data));
     } catch (e) {
         yield* put(composeDraftSaveFailed());
         yield* put(errorThrown(e));
