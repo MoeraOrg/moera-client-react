@@ -1,5 +1,6 @@
-import cloneDeep from 'lodash.clonedeep';
+import * as immutable from 'object-path-immutable';
 
+import { DraftInfo, PostingInfo } from "api/node/api-types";
 import {
     COMPOSE_CONFLICT,
     COMPOSE_CONFLICT_CLOSE,
@@ -34,8 +35,7 @@ import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
 import { ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { ClientAction } from "state/action";
-import { DraftInfo } from "api/node/api-types";
-import { htmlEntities, replaceEmojis } from "util/html";
+import { htmlEntities, replaceEmojis, safeHtml } from "util/html";
 
 const emptyFeatures = {
     subjectPresent: false,
@@ -68,15 +68,19 @@ const initialState = {
     showPreview: false
 };
 
+function subjectHtml(subject: string | null | undefined): string | null {
+    return subject != null ? replaceEmojis(htmlEntities(subject)) : null;
+}
+
 function buildDraftInfo(draftInfo: DraftInfo): ExtDraftInfo {
     const {bodySrc, body} = draftInfo;
 
-    return {
-        ...draftInfo,
-        subject: bodySrc?.subject != null ? bodySrc.subject.substring(0, 64) : null,
-        text: bodySrc?.text != null ? bodySrc.text.substring(0, 256) : null,
-        subjectHtml: body.subject != null ? replaceEmojis(htmlEntities(body.subject)) : null
-    }
+    return immutable.wrap(draftInfo)
+        .set("subject", bodySrc?.subject != null ? bodySrc.subject.substring(0, 64) : null)
+        .set("text", bodySrc?.text != null ? bodySrc.text.substring(0, 256) : null)
+        .set("subjectHtml", subjectHtml(body.subject))
+        .update("body.text", text => safeHtml(text))
+        .value() as ExtDraftInfo;
 }
 
 function sortDraftList(draftList: ExtDraftInfo[]): ExtDraftInfo[] {
@@ -96,14 +100,22 @@ function appendToDraftList(draftList: ExtDraftInfo[], draftInfo: DraftInfo): Ext
     return sortDraftList(list);
 }
 
-function draftToPosting(draft: DraftInfo): DraftPostingInfo {
-    const posting = cloneDeep(draft) as (DraftPostingInfo & Partial<DraftInfo>);
-    posting.id = draft.receiverPostingId ?? undefined;
-    delete posting.draftType;
-    delete posting.receiverName;
-    delete posting.receiverPostingId;
+function draftToDraftPosting(draft: DraftInfo): DraftPostingInfo {
+    return immutable.wrap(draft)
+        .set("id", draft.receiverPostingId ?? undefined)
+        .set("subjectHtml", subjectHtml(draft.body.subject))
+        .update("body.text", text => safeHtml(text))
+        .del("draftType")
+        .del("receiverName")
+        .del("receiverPostingId")
+        .value() as any as DraftPostingInfo;
+}
 
-    return posting;
+function postingToDraftPosting(posting: PostingInfo): DraftPostingInfo {
+    return immutable.wrap(posting)
+        .set("subjectHtml", subjectHtml(posting.body.subject))
+        .update("body.text", text => safeHtml(text))
+        .value() as DraftPostingInfo;
 }
 
 export default (state: ComposeState = initialState, action: ClientAction): ComposeState => {
@@ -157,7 +169,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
         case COMPOSE_POSTING_LOADED:
             return {
                 ...state,
-                posting: action.payload.posting,
+                posting: postingToDraftPosting(action.payload.posting),
                 loadingPosting: false
             };
 
@@ -203,7 +215,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 ...state,
                 draftId: action.payload.draft.id,
                 draft: buildDraftInfo(action.payload.draft),
-                posting: draftToPosting(action.payload.draft),
+                posting: draftToDraftPosting(action.payload.draft),
                 loadingDraft: false,
                 loadingPosting: false
             };

@@ -9,7 +9,7 @@ export interface ExtDraftInfo extends DraftInfo {
 export type DraftPostingInfo = Omit<PostingInfo, "id"> & {
     id?: string | null;
     publishAt?: number | null;
-    subjectHtml?: string | null;
+    subjectHtml: string | null;
 }
 
 export interface ComposeState {
