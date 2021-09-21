@@ -1,0 +1,11 @@
+.copy-quote {
+    background-color: var(--gray-ultralight);
+    border: 0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    position: relative;
+    top: 1px;
+    line-height: 1;
+}

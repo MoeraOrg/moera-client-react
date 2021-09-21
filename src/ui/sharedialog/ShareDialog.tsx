@@ -5,6 +5,8 @@ import { Field, Form, FormikBag, FormikProps, withFormik } from 'formik';
 import cx from 'classnames';
 
 import { Button, ModalDialog } from "ui/control";
+import { ShareTextMode } from "ui/sharedialog/share-text-mode";
+import CopyQuoteButton from "ui/sharedialog/CopyQuoteButton";
 import { SOCIAL_BUTTONS, SOCIAL_BUTTONS_ORDER } from "ui/sharedialog/social-buttons";
 import SocialButton from "ui/sharedialog/SocialButton";
 import { closeShareDialog, shareDialogCopyLink } from "state/sharedialog/actions";
@@ -13,10 +15,8 @@ import { ClientState } from "state/state";
 import { clearHtml } from "util/html";
 import "./ShareDialog.css";
 
-type Mode = "text" | "html";
-
 interface ModeTab {
-    mode: Mode;
+    mode: ShareTextMode;
     title: string;
 }
 
@@ -48,7 +48,7 @@ type Props = OuterProps & FormikProps<Values>
 const ShareDialog = ({
     show, title, url, socialButtons, closeShareDialog, shareDialogCopyLink, values, resetForm
 }: Props) => {
-    const [mode, setMode] = useState("text" as Mode);
+    const [mode, setMode] = useState("text" as ShareTextMode);
 
     useEffect(() => {
         if (show) {
@@ -65,7 +65,7 @@ const ShareDialog = ({
         return null;
     }
 
-    const onModeClick = (mode: Mode) => (event: MouseEvent) => {
+    const onModeClick = (mode: ShareTextMode) => (event: MouseEvent) => {
         setMode(mode);
         event.preventDefault();
     }
@@ -91,6 +91,7 @@ const ShareDialog = ({
                     </div>
                 </Form>
                 <div className="social">
+                    <CopyQuoteButton url={values.url} title={values.title} mode={mode}/>
                     {socialButtons.map(type =>
                         <SocialButton key={type} type={type} url={values.url} title={values.title}/>
                     )}
