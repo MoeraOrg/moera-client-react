@@ -23,26 +23,36 @@ interface DraftSaverProps<Text> {
 export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text>>
                           (props: OuterProps & LogicProp<Text, Values, OuterProps>) {
     const {logic, initialText, savingDraft, savedDraft} = props;
+
     const [, setPrevText] = useState<Text>(initialText);
+    const [dirty, setDirty] = useState<boolean>(false);
     const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
     const {status, values} = useFormikContext<Values>();
+
+    useEffect(
+        () => setDirty(false),
+        [initialText]
+    );
 
     const statusRef = useRef<string>();
     statusRef.current = status;
     const valuesRef = useRef<Values>();
     valuesRef.current = values;
+    const dirtyRef = useRef<boolean>();
+    dirtyRef.current = dirty;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onSave = useCallback(debounce(() => {
         if (statusRef.current === "submitted" || valuesRef.current == null) {
             return;
         }
         const thisText = logic.toText(valuesRef.current, props);
-        if (thisText == null || logic.isEmpty(thisText) || savingDraft) {
+        if (thisText == null || (logic.isEmpty(thisText) && !dirtyRef.current) || savingDraft) {
             return;
         }
+        setDirty(true);
         logic.save(thisText, props);
         setUnsavedChanges(false);
-    }, 1500), [statusRef, valuesRef, props, setUnsavedChanges]);
+    }, 1500), [statusRef, valuesRef, dirtyRef, props, setUnsavedChanges]);
 
     useEffect(() => {
         return () => {
@@ -56,15 +66,15 @@ export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text
             if (thisText == null) {
                 return prevText;
             }
-            if (!deepEqual(prevText, thisText) && !deepEqual(initialText, thisText)) {
+            if (!deepEqual(prevText, thisText) && (!deepEqual(initialText, thisText) || dirty)) {
                 setUnsavedChanges(true);
-                if (!logic.isEmpty(thisText)) {
+                if (!logic.isEmpty(thisText) || dirty) {
                     onSave();
                 }
             }
             return thisText;
         });
-    }, [values, props, setPrevText, initialText, setUnsavedChanges, onSave, logic]);
+    }, [values, dirty, props, setPrevText, initialText, setUnsavedChanges, onSave, logic]);
 
     return (
         <div className="draft-saver">
