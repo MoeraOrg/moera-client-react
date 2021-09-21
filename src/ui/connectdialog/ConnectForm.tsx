@@ -11,6 +11,7 @@ import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 import { ClientState } from "state/state";
 import { ConnectDialogForm } from "state/connectdialog/state";
+import * as Rules from "api/naming/rules";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -73,7 +74,21 @@ const connectFormLogic = {
     },
 
     validationSchema: yup.object().shape({
-        location: yup.string().trim().required("Must not be empty"),
+        location: yup.string().trim()
+            .required("Must not be empty")
+            .test(
+                "is-allowed",
+                "Name or node URL is not valid",
+                (name: string | undefined) => {
+                    if (!name) {
+                        return false;
+                    }
+                    if (/^http[s]?:/.test(name)) {
+                        return true;
+                    }
+                    return Rules.isRegisteredNameValid(name)
+                }
+            ),
         password: yup.string().required("Must not be empty")
     }),
 
