@@ -17,4 +17,5 @@ interface AndroidJsInterface {
 
 interface Window {
     Android?: AndroidJsInterface;
+    closeLightDialog?: (() => void) | null;
 }

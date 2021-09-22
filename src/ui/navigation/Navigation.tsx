@@ -102,7 +102,9 @@ class Navigation extends React.PureComponent<Props> {
             dialogClosed, closeMessageBox, closeConfirmBox
         } = this.props;
 
-        if (messageBoxShow) {
+        if (window.closeLightDialog) {
+            window.closeLightDialog();
+        } else if (messageBoxShow) {
             closeMessageBox();
             this.executeOnClose(messageBoxOnClose);
         } else if (confirmBoxShow) {

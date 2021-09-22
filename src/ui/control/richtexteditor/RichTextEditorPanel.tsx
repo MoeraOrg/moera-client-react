@@ -49,6 +49,10 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
     }
 
+    componentWillUnmount() {
+        window.closeLightDialog = null;
+    }
+
     isMarkdown() {
         return this.props.format === "markdown";
     }
@@ -103,7 +107,13 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
     onSpoiler = (event: React.MouseEvent) => {
         this.setState({spoilerDialog: true});
+        window.closeLightDialog = this.onSpoilerClose;
         event.preventDefault();
+    }
+
+    onSpoilerClose = () => {
+        this.setState({spoilerDialog: false});
+        window.closeLightDialog = null;
     }
 
     onSpoilerSubmit = (ok: boolean, {title}: RichTextSpoilerValues) => {
@@ -113,7 +123,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             return;
         }
 
-        this.setState({spoilerDialog: false});
+        this.onSpoilerClose();
         if (ok) {
             if (title) {
                 textFieldEdit.wrapSelection(textArea.current,
@@ -131,7 +141,13 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
     onFold = (event: React.MouseEvent) => {
         this.setState({foldDialog: true});
+        window.closeLightDialog = this.onFoldClose;
         event.preventDefault();
+    }
+
+    onFoldClose = () => {
+        this.setState({foldDialog: false});
+        window.closeLightDialog = null;
     }
 
     onFoldSubmit = (ok: boolean, {summary}: RichTextFoldValues) => {
@@ -141,7 +157,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             return;
         }
 
-        this.setState({foldDialog: false});
+        this.onFoldClose();
         if (ok) {
             let wrapBegin = "<details>";
             let wrapEnd = "</details>";
@@ -164,13 +180,19 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
     onMention = (event: React.MouseEvent) => {
         this.setState({mentionDialog: true});
+        window.closeLightDialog = this.onMentionClose;
         event.preventDefault();
+    }
+
+    onMentionClose = () => {
+        this.setState({mentionDialog: false});
+        window.closeLightDialog = null;
     }
 
     onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
         const {textArea, nodeRootPage} = this.props;
 
-        this.setState({mentionDialog: false});
+        this.onMentionClose();
 
         if (textArea.current == null) {
             return;
@@ -237,13 +259,19 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             linkDialog: true,
             dialogText: textFieldEdit.getSelection(textArea.current)
         });
+        window.closeLightDialog = this.onLinkClose;
         event.preventDefault();
+    }
+
+    onLinkClose = () => {
+        this.setState({linkDialog: false});
+        window.closeLightDialog = null;
     }
 
     onLinkSubmit = (ok: boolean, {href, text}: RichTextLinkValues) => {
         const {textArea} = this.props;
 
-        this.setState({linkDialog: false});
+        this.onLinkClose();
 
         if (textArea.current == null) {
             return;
@@ -290,13 +318,19 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
     onImage = (event: React.MouseEvent) => {
         this.setState({imageDialog: true});
+        window.closeLightDialog = this.onImageClose;
         event.preventDefault();
+    }
+
+    onImageClose = () => {
+        this.setState({imageDialog: false});
+        window.closeLightDialog = null;
     }
 
     onImageSubmit = (ok: boolean, {href, title, alt}: RichTextImageValues) => {
         const {textArea} = this.props;
 
-        this.setState({imageDialog: false});
+        this.onImageClose();
 
         if (textArea.current == null) {
             return;
