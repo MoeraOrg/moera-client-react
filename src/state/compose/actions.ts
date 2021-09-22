@@ -210,10 +210,10 @@ export const composeDraftListItemDeleted = (id: string): ComposeDraftListItemDel
     payload: {id}
 });
 
-export const COMPOSE_DRAFT_REVISION_DELETE = "COMPOSE_DRAFT_REVISION_DELETE";
-export type ComposeDraftRevisionDeleteAction = Action<typeof COMPOSE_DRAFT_REVISION_DELETE>;
-export const composeDraftRevisionDelete = (): ComposeDraftRevisionDeleteAction => ({
-    type: COMPOSE_DRAFT_REVISION_DELETE
+export const COMPOSE_UPDATE_DRAFT_DELETE = "COMPOSE_UPDATE_DRAFT_DELETE";
+export type ComposeUpdateDraftDeleteAction = Action<typeof COMPOSE_UPDATE_DRAFT_DELETE>;
+export const composeUpdateDraftDelete = (): ComposeUpdateDraftDeleteAction => ({
+    type: COMPOSE_UPDATE_DRAFT_DELETE
 });
 
 export const COMPOSE_PREVIEW = "COMPOSE_PREVIEW";
@@ -272,7 +272,7 @@ export type ComposeAnyAction =
     | ComposeDraftListItemSetAction
     | ComposeDraftListItemDeleteAction
     | ComposeDraftListItemDeletedAction
-    | ComposeDraftRevisionDeleteAction
+    | ComposeUpdateDraftDeleteAction
     | ComposePreviewAction
     | ComposePreviewCloseAction
     | ComposeSharedTextLoadAction

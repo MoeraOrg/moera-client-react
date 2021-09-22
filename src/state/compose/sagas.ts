@@ -7,12 +7,12 @@ import {
     COMPOSE_DRAFT_LIST_ITEM_RELOAD,
     COMPOSE_DRAFT_LIST_LOAD,
     COMPOSE_DRAFT_LOAD,
-    COMPOSE_DRAFT_REVISION_DELETE,
     COMPOSE_DRAFT_SAVE,
     COMPOSE_FEATURES_LOAD,
     COMPOSE_POST,
     COMPOSE_POSTING_LOAD,
     COMPOSE_SHARED_TEXT_LOAD,
+    COMPOSE_UPDATE_DRAFT_DELETE,
     ComposeDraftListItemDeleteAction,
     composeDraftListItemDeleted,
     ComposeDraftListItemReloadAction,
@@ -52,7 +52,7 @@ export default [
     executor(COMPOSE_DRAFT_LIST_LOAD, "", introduce(composeDraftListLoadSaga)),
     executor(COMPOSE_DRAFT_LIST_ITEM_RELOAD, payload => payload.id, composeDraftListItemReloadSaga),
     executor(COMPOSE_DRAFT_LIST_ITEM_DELETE, payload => payload.id, composeDraftListItemDeleteSaga),
-    executor(COMPOSE_DRAFT_REVISION_DELETE, "", composeDraftRevisionDeleteSaga),
+    executor(COMPOSE_UPDATE_DRAFT_DELETE, "", composeUpdateDraftDeleteSaga),
     executor(COMPOSE_SHARED_TEXT_LOAD, "", composeSharedTextLoadSaga)
 ];
 
@@ -189,7 +189,7 @@ function* composeDraftListItemDeleteSaga(action: ComposeDraftListItemDeleteActio
     }
 }
 
-function* composeDraftRevisionDeleteSaga() {
+function* composeUpdateDraftDeleteSaga() {
     const id = yield* select(getComposeDraftId);
     if (id == null) {
         return;

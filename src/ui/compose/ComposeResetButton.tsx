@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Button } from "ui/control";
 import { ClientState } from "state/state";
-import { composeDraftListItemDelete, composeDraftRevisionDelete } from "state/compose/actions";
+import { composeDraftListItemDelete, composeUpdateDraftDelete } from "state/compose/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import "./ComposeResetButton.css";
 
@@ -21,7 +21,7 @@ function ComposeResetButton({postingId, draftId, posting, confirmBox}: Props) {
                 composeDraftListItemDelete(draftId));
         } else {
             confirmBox("Do you really want to forget all changes?", "Yes", "No",
-                composeDraftRevisionDelete());
+                composeUpdateDraftDelete());
         }
     };
 
