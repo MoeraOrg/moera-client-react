@@ -1,7 +1,7 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 
 import { errorThrown } from "state/error/actions";
-import { Node } from "api";
+import { Node, NodeApiError } from "api";
 import {
     COMPOSE_DRAFT_LIST_ITEM_DELETE,
     COMPOSE_DRAFT_LIST_ITEM_RELOAD,
@@ -41,6 +41,7 @@ import { getComposeDraftId, getComposePostingId } from "state/compose/selectors"
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { WithContext } from "state/action-types";
+import { flashBox } from "state/flashbox/actions";
 
 export default [
     executor(COMPOSE_FEATURES_LOAD, "", composeFeaturesLoadSaga),
@@ -123,7 +124,11 @@ function* composeDraftLoadSaga() {
         yield* put(composeDraftListItemSet(id, data));
     } catch (e) {
         yield* put(composeDraftLoadFailed());
-        yield* put(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            yield* put(flashBox("Draft not found"));
+        } else {
+            yield* put(errorThrown(e));
+        }
     }
 }
 
@@ -176,7 +181,11 @@ function* composeDraftListItemDeleteSaga(action: ComposeDraftListItemDeleteActio
         yield* call(Node.deleteDraft, ":", action.payload.id);
         yield* put(composeDraftListItemDeleted(action.payload.id));
     } catch (e) {
-        yield* put(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            yield* put(composeDraftListItemDeleted(action.payload.id));
+        } else {
+            yield* put(errorThrown(e));
+        }
     }
 }
 

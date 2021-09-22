@@ -430,7 +430,8 @@ export function* putDraft(nodeName: string | null, id: string, draftText: DraftT
 
 export function* deleteDraft(nodeName: string | null, id: string): CallApiResult<Result> {
     return yield* callApi({
-        nodeName, location: ut`/drafts/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/drafts/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result,
+        errorFilter: ["draft.not-found"]
     });
 }
 

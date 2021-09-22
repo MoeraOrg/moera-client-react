@@ -98,7 +98,7 @@ export function* callApi<T>({
             }
         }
         if (!response.ok) {
-            if (isSchemaValid(NodeApi.Result, data)) {
+            if (!isSchemaValid(NodeApi.Result, data)) {
                 throw exception("Server returned error status");
             }
             if (data.errorCode === "authentication.invalid") {
