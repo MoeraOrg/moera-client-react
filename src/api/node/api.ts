@@ -1228,10 +1228,13 @@ export const ReactionInfo = schema(ReactionInfoType);
 const ReactionCreatedType: JSONSchemaType<API.ReactionCreated> = {
     type: "object",
     properties: {
-        "reaction": ReactionInfoType,
+        "reaction": {
+            ...ReactionInfoType,
+            nullable: true
+        },
         "totals": ReactionTotalsInfoType
     },
-    required: ["reaction", "totals"],
+    required: ["totals"],
     additionalProperties: false
 };
 

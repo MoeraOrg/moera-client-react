@@ -423,7 +423,7 @@ export interface ReactionInfo {
 }
 
 export interface ReactionCreated {
-    reaction: ReactionInfo;
+    reaction?: ReactionInfo | null;
     totals: ReactionTotalsInfo;
 }
 
