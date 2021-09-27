@@ -37,7 +37,6 @@ function* connectToHomeFailure(action: ConnectToHomeAction, error: string | Erro
         switch (error.errorCode) {
             case "credentials.wrong-reset-token":
                 message = "Wrong secret code";
-                console.log(message);
                 break;
             case "credentials.reset-token-expired":
                 message = "Secret code is expired";

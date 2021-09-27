@@ -134,7 +134,6 @@ export function quoteHtml(html?: string | null): string | null {
     if (html == null) {
         return null;
     }
-    console.log(html);
     return html
         .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
         .replace(/<blockquote>\n+/gi, "<blockquote>\n")
