@@ -8,8 +8,10 @@ import { isSettingsClientValuesLoaded } from "state/settings/selectors";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { ExecutorSaga } from "state/executor";
+import { WithContext } from "state/action-types";
+import getContext from "state/context";
 
-const postponingChannel: Channel<Action<string>> = channel(buffers.expanding(10));
+const postponingChannel: Channel<WithContext<Action<string>>> = channel(buffers.expanding(10));
 
 function canRun(state: ClientState) {
     return isSettingsClientValuesLoaded(state) || (isCartesInitialized(state) && !isConnectedToHome(state));
@@ -27,8 +29,10 @@ export function askNaming<A extends ClientAction>(saga: ExecutorSaga<A>): Execut
 
 export function* flushPostponedNamingSaga() {
     if (yield* select(canRun)) {
-        const actions = yield* flush<Action<string>>(postponingChannel);
+        const context = yield* select(getContext);
+        const actions = yield* flush(postponingChannel);
         for (let action of actions) {
+            action.context = context;
             yield* put(action);
         }
     }

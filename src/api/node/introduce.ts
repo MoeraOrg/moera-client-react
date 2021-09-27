@@ -9,8 +9,10 @@ import { cartesLoad } from "state/cartes/actions";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { ExecutorSaga } from "state/executor";
+import { WithContext } from "state/action-types";
+import getContext from "state/context";
 
-const postponingChannel: Channel<Action<string>> = channel(buffers.expanding(10));
+const postponingChannel: Channel<WithContext<Action<string>>> = channel(buffers.expanding(10));
 
 function canRun(state: ClientState) {
     return isAtHomeNode(state) || !isCartesRunOut(state)
@@ -33,8 +35,10 @@ export function introduce<A extends ClientAction>(saga: ExecutorSaga<A>): Execut
 
 export function* flushPostponedIntroducedSaga() {
     if (yield* select(canRun)) {
+        const context = yield* select(getContext);
         const actions = yield* flush(postponingChannel);
         for (let action of actions) {
+            action.context = context;
             yield* put(action);
         }
     }
