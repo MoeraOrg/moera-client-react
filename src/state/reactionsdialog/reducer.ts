@@ -100,9 +100,9 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             if (before >= tabReactions.after && after < tabReactions.after) {
                 let reactions = tabReactions.items.slice();
                 action.payload.reactions
-                    .filter(p => p.moment <= tabReactions.after)
+                    .filter(p => p.moment != null && p.moment <= tabReactions.after)
                     .forEach(p => reactions.push(p));
-                reactions.sort((a, b) => b.moment - a.moment);
+                reactions.sort((a, b) => b.moment! - a.moment!);
                 return immutable.assign(state, ["reactions", tab], {
                     loading: false,
                     total,

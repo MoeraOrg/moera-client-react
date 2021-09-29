@@ -403,17 +403,17 @@ export interface ReactionAttributes {
 }
 
 export interface ReactionInfo {
-    ownerName: string;
+    ownerName?: string | null;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
     postingId?: string | null;
     postingRevisionId?: string | null;
     commentId?: string | null;
     commentRevisionId?: string | null;
-    negative: boolean;
-    emoji: number;
-    moment: number;
-    createdAt: number;
+    negative?: boolean | null;
+    emoji?: number | null;
+    moment?: number | null;
+    createdAt? : number | null;
     deadline?: number | null;
     signature?: string | null;
     signatureVersion?: number | null;

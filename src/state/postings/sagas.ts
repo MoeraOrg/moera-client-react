@@ -123,8 +123,9 @@ function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
     const {id} = action.payload;
     try {
         const {negative, emoji} = yield* call(Node.getPostingReaction, "", id);
+        const reaction = negative != null && emoji != null ? {negative, emoji} : null;
         const totals = yield* call(Node.getPostingReactionTotals, "", id);
-        yield* put(postingReactionSet(id, {negative, emoji}, totals));
+        yield* put(postingReactionSet(id, reaction, totals));
     } catch (e) {
         yield* put(errorThrown(e));
     }

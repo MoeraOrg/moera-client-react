@@ -139,7 +139,7 @@ function* getUsedNames() {
     comments.forEach(comment => used.add(comment.ownerName));
 
     const reactions = yield* select(getReactionsDialogItems);
-    reactions.forEach(reaction => used.add(reaction.ownerName));
+    reactions.forEach(reaction => used.add(reaction.ownerName!));
 
     let name = yield* select(getHomeOwnerName);
     if (name) {

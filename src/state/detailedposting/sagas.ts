@@ -458,8 +458,9 @@ function* commentReactionLoadSaga(action: CommentReactionLoadAction) {
     }
     try {
         const {negative, emoji} = yield* call(Node.getCommentReaction, receiverName, receiverPostingId, id);
+        const reaction = negative != null && emoji != null ? {negative, emoji} : null;
         const totals = yield* call(Node.getCommentReactionTotals, receiverName, receiverPostingId, id);
-        yield* put(commentReactionSet(receiverName, id, receiverPostingId, {negative, emoji}, totals));
+        yield* put(commentReactionSet(receiverName, id, receiverPostingId, reaction, totals));
     } catch (e) {
         yield* put(errorThrown(e));
     }

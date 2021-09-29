@@ -1154,7 +1154,8 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
     type: "object",
     properties: {
         "ownerName": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "ownerFullName": {
             type: "string",
@@ -1181,16 +1182,20 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
             nullable: true
         },
         "negative": {
-            type: "boolean"
+            type: "boolean",
+            nullable: true
         },
         "emoji": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         },
         "moment": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         },
         "createdAt": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         },
         "deadline": {
             type: "integer",
@@ -1219,7 +1224,6 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
             additionalProperties: false
         }
     },
-    required: ["ownerName", "negative", "emoji", "moment", "createdAt"],
     additionalProperties: false
 };
 

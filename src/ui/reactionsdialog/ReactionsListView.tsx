@@ -36,17 +36,17 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
         <div className="items" tabIndex={-1} ref={itemsRef}>
             {reactions.map(r =>
                 <div className="item" key={r.moment}>
-                    <AvatarWithPopup ownerName={r.ownerName} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
+                    <AvatarWithPopup ownerName={r.ownerName!} ownerFullName={r.ownerFullName} avatar={r.ownerAvatar}
                                      nodeName={reactionsNodeName ?? undefined} size={32}/>
                     <div className="owner-name">
                         <NodeName name={r.ownerName} fullName={r.ownerFullName} avatar={r.ownerAvatar}
                                   avatarNodeName={reactionsNodeName ?? undefined}/>
                         {" "}
-                        {r.signature && postingId != null &&
+                        {r.ownerName != null && r.signature != null && postingId != null &&
                             <ReactionVerifyButton postingId={postingId} commentId={commentId} ownerName={r.ownerName}/>
                         }
                     </div>
-                    <div className="emoji-end"><Twemoji code={r.emoji}/></div>
+                    <div className="emoji-end">{r.emoji != null && <Twemoji code={r.emoji}/>}</div>
                 </div>
             )}
         </div>
