@@ -1,4 +1,5 @@
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
 
 export function isComposeFeaturesToBeLoaded(state: ClientState): boolean {
     return !state.compose.loadedFeatures && !state.compose.loadingFeatures;
@@ -9,8 +10,8 @@ export function isComposePostingToBeLoaded(state: ClientState): boolean {
 }
 
 export function isComposeDraftToBeLoaded(state: ClientState): boolean {
-    return state.compose.postingId == null && state.compose.draftId != null && state.compose.draft == null
-        && !state.compose.loadingDraft;
+    return isConnectedToHome(state) && state.compose.postingId == null && state.compose.draftId != null
+        && state.compose.draft == null && !state.compose.loadingDraft;
 }
 
 export function isComposeSharedTextToBeLoaded(state: ClientState): boolean {
@@ -31,7 +32,8 @@ export function getComposeDraftId(state: ClientState): string | null {
 }
 
 export function isComposeDraftListToBeLoaded(state: ClientState): boolean {
-    return state.compose.postingId == null && !state.compose.loadedDraftList && !state.compose.loadingDraftList;
+    return isConnectedToHome(state) && state.compose.postingId == null && !state.compose.loadedDraftList
+        && !state.compose.loadingDraftList;
 }
 
 export function isComposeDraftListLoaded(state: ClientState): boolean {

@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 
 import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 import { ClientState } from "state/state";
 import { AvatarImage, CommentInfo, PostingInfo } from "api/node/api-types";
 import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
@@ -148,7 +149,8 @@ export function getCommentDialogComment(state: ClientState): CommentInfo | null 
 
 export function isCommentComposeDraftToBeLoaded(state: ClientState): boolean {
     const posting = getDetailedPosting(state);
-    return posting != null && !state.detailedPosting.compose.loaded && !state.detailedPosting.compose.loading;
+    return posting != null && isConnectedToHome(state) && !state.detailedPosting.compose.loaded
+        && !state.detailedPosting.compose.loading;
 }
 
 export function getCommentComposerRepliedToId(state: ClientState): string | null {
