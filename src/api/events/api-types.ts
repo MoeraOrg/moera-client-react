@@ -148,7 +148,7 @@ export interface StoryEvent<T> extends BaseEvent<T> {
     publishedAt: number;
     pinned: boolean;
     moment: number;
-    postingId: string;
+    postingId?: string | null;
     viewed?: boolean | null;
     read?: boolean | null;
     summaryAvatar?: AvatarImage | null,

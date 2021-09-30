@@ -529,7 +529,8 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             type: "integer"
         },
         "postingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "viewed": {
             type: "boolean",
@@ -589,7 +590,7 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "summary"]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "summary"]
 };
 
 const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
@@ -617,7 +618,8 @@ const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
             type: "integer"
         },
         "postingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "viewed": {
             type: "boolean",
@@ -677,7 +679,7 @@ const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "summary"]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "summary"]
 };
 
 const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
@@ -705,7 +707,8 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             type: "integer"
         },
         "postingId": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "viewed": {
             type: "boolean",
@@ -765,7 +768,7 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "postingId", "summary"]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "summary"]
 };
 
 const FeedStatusUpdatedEventType: JSONSchemaType<FeedStatusUpdatedEvent> = {

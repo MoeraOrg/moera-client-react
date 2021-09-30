@@ -57,7 +57,7 @@ import { StoryInfo } from "api/node/api-types";
 import { now } from "util/misc";
 
 function toStory(eventPayload: Omit<StoryEvent<any>, "type">, isHome: boolean): StoryInfo {
-    const story: StoryInfo & {postingId?: string} = {
+    const story: StoryInfo & {postingId?: string | null} = {
         ...eventPayload,
         createdAt: now()
     };
