@@ -1,6 +1,6 @@
 .entry BLOCKQUOTE {
     border-left: 3px solid var(--cyan);
-    padding: 0.2rem 0.2rem 0.2rem 3rem;
+    padding: 0.2rem 0.2rem 0.2rem 2.7rem;
     position: relative;
     overflow: hidden;
 }
