@@ -108,7 +108,7 @@ function EntryHtml({className, html, onClick, standalone, fontMagnitude, initFro
         event.preventDefault();
     }
 
-    useEffect(() => hydrate());
+    useEffect(() => hydrate(), [html]);
 
     useEffect(() => {
         const root = dom.current;
