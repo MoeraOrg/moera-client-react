@@ -162,6 +162,7 @@ export interface PostingText {
     reactionTotalsVisible?: boolean | null;
     bodySrc: string;
     bodySrcFormat?: SourceFormat | null;
+    media?: string[] | null;
     publications?: StoryAttributes[] | null;
     updateInfo?: UpdateInfo | null;
 }
@@ -183,6 +184,7 @@ export interface PostingInfoBase<B> {
     bodySrcFormat?: SourceFormat | null;
     body: B;
     bodyFormat?: BodyFormat | null;
+    media?: PrivateMediaFileInfo[] | null;
     heading: string;
     updateInfo?: UpdateInfo | null;
     createdAt: number;
@@ -522,12 +524,29 @@ export interface EmailHint {
     emailHint: string;
 }
 
-export interface MediaFileInfo {
+export interface PublicMediaFileInfo {
     id: string;
     path: string;
     width: number;
     height: number;
     size: number;
+}
+
+export interface MediaFilePreviewInfo {
+    targetWidth: number;
+    width: number;
+    height: number;
+    original?: boolean | null;
+}
+
+export interface PrivateMediaFileInfo {
+    id: string;
+    hash: string;
+    path: string;
+    width: number;
+    height: number;
+    size: number;
+    previews?: MediaFilePreviewInfo[] | null;
 }
 
 export interface AvatarOrdinal {

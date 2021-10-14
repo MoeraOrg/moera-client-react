@@ -451,6 +451,85 @@ const PostingSubscriptionsInfo: JSONSchemaType<API.PostingSubscriptionsInfo> = {
     additionalProperties: false
 };
 
+const PublicMediaFileInfoType: JSONSchemaType<API.PublicMediaFileInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "path": {
+            type: "string"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "size": {
+            type: "integer"
+        }
+    },
+    required: ["id", "path", "width", "height", "size"],
+    additionalProperties: false
+};
+
+export const PublicMediaFileInfo = schema(PublicMediaFileInfoType);
+
+const MediaFilePreviewInfoType: JSONSchemaType<API.MediaFilePreviewInfo> = {
+    type: "object",
+    properties: {
+        "targetWidth": {
+            type: "integer"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "original": {
+            type: "boolean",
+            nullable: true
+        }
+    },
+    required: ["targetWidth", "width", "height"],
+    additionalProperties: false
+};
+
+const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "hash": {
+            type: "string"
+        },
+        "path": {
+            type: "string"
+        },
+        "width": {
+            type: "integer"
+        },
+        "height": {
+            type: "integer"
+        },
+        "size": {
+            type: "integer"
+        },
+        "previews": {
+            type: "array",
+            items: MediaFilePreviewInfoType,
+            nullable: true
+        }
+    },
+    required: ["id", "hash", "path", "width", "height", "size"],
+    additionalProperties: false
+};
+
+export const PrivateMediaFileInfo = schema(PrivateMediaFileInfoType);
+
 const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     type: "object",
     properties: {
@@ -511,6 +590,11 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         },
         "bodyFormat": {
             type: "string",
+            nullable: true
+        },
+        "media": {
+            type: "array",
+            items: PrivateMediaFileInfoType,
             nullable: true
         },
         "heading": {
@@ -1536,31 +1620,6 @@ const EmailHintType: JSONSchemaType<API.EmailHint> = {
 };
 
 export const EmailHint = schema(EmailHintType);
-
-const MediaFileInfoType: JSONSchemaType<API.MediaFileInfo> = {
-    type: "object",
-    properties: {
-        "id": {
-            type: "string"
-        },
-        "path": {
-            type: "string"
-        },
-        "width": {
-            type: "integer"
-        },
-        "height": {
-            type: "integer"
-        },
-        "size": {
-            type: "integer"
-        }
-    },
-    required: ["id", "path", "width", "height", "size"],
-    additionalProperties: false
-};
-
-export const MediaFileInfo = schema(MediaFileInfoType);
 
 const AvatarOrdinalType: JSONSchemaType<API.AvatarOrdinal> = {
     type: "object",
