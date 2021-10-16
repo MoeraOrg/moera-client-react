@@ -4,11 +4,13 @@ import { connect, ConnectedProps, Provider } from 'react-redux';
 import * as URI from 'uri-js';
 import 'katex/dist/katex.min.css';
 
+import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import store from "state/store";
 import { getSetting } from "state/settings/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
+import EntryImage from "ui/posting/EntryImage";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { Browser } from "ui/browser";
@@ -20,11 +22,14 @@ const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
 type Props = {
     className?: string;
     html: string | null | undefined;
+    media?: PrivateMediaFileInfo[] | null;
     onClick?: (event: React.MouseEvent) => void;
 } & ConnectedProps<typeof connector>;
 
-function EntryHtml({className, html, onClick, standalone, fontMagnitude, initFromLocation, goToLocation}: Props) {
+function EntryHtml({className, html, media, onClick, standalone, fontMagnitude,
+                    initFromLocation, goToLocation}: Props) {
     const dom = useRef<HTMLDivElement>(null);
+    const mediaMap: Map<string, PrivateMediaFileInfo> = new Map((media ?? []).map(mf => [mf.hash, mf]));
 
     const hydrate = () => {
         if (dom.current == null) {
@@ -52,6 +57,24 @@ function EntryHtml({className, html, onClick, standalone, fontMagnitude, initFro
                 ReactDOM.render(
                     <Provider store={store}>
                         <Jump nodeName={name} href={href}><span dangerouslySetInnerHTML={{__html: html}}/></Jump>
+                    </Provider>, span);
+            }
+        });
+        dom.current.querySelectorAll("img").forEach(node => {
+            const src = node.getAttribute("src");
+            const mediaFile = src != null ? mediaMap.get(src) : null;
+            if (mediaFile != null) {
+                const width = node.getAttribute("width");
+                const height = node.getAttribute("height");
+                const alt = node.getAttribute("alt");
+                const title = node.getAttribute("title");
+
+                const span = document.createElement("span");
+                node.replaceWith(span);
+
+                ReactDOM.render(
+                    <Provider store={store}>
+                        <EntryImage mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
                     </Provider>, span);
             }
         });
@@ -107,6 +130,7 @@ function EntryHtml({className, html, onClick, standalone, fontMagnitude, initFro
         event.preventDefault();
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => hydrate(), [html]);
 
     useEffect(() => {

@@ -32,7 +32,7 @@ function Content({posting}: ContentProps) {
     if (posting.bodyPreview != null && posting.bodyPreview.text) {
         return (
             <div className="content">
-                <EntryHtml html={posting.bodyPreview.text}/>
+                <EntryHtml html={posting.bodyPreview.text} media={posting.media}/>
                 <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">Continue Reading &rarr;</Jump>
             </div>
         );

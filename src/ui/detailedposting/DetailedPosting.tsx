@@ -47,7 +47,7 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
                         </div>
                     </div>
                     <PostingSubject posting={posting} preview={false}/>
-                    <EntryHtml className="content" html={posting.body.text}/>
+                    <EntryHtml className="content" html={posting.body.text} media={posting.media}/>
                     <div className="reactions-line">
                         <PostingReactions posting={posting}/>
                         <PostingComments posting={posting}/>
