@@ -1,7 +1,6 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect, ConnectedProps, Provider } from 'react-redux';
-import PropType from 'prop-types';
 import * as URI from 'uri-js';
 import 'katex/dist/katex.min.css';
 
@@ -137,12 +136,6 @@ function EntryHtml({className, html, onClick, standalone, fontMagnitude, initFro
     return <div ref={dom} className={className} style={{fontSize: `${fontMagnitude}%`}} onClick={onClick}
                 dangerouslySetInnerHTML={{__html: html ?? ""}}/>
 }
-
-EntryHtml.propTypes = {
-    className: PropType.string,
-    html: PropType.string,
-    onClick: PropType.func
-};
 
 const connector = connect(
     (state: ClientState) => ({

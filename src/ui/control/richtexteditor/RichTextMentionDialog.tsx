@@ -1,5 +1,4 @@
 import React from 'react';
-import PropType from 'prop-types';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { NameSelector } from "ui/control/NameSelector";
@@ -15,11 +14,6 @@ type State = {
 };
 
 export default class RichTextMentionDialog extends React.PureComponent<Props, State> {
-
-    static propTypes = {
-        show: PropType.bool,
-        onSubmit: PropType.func
-    }
 
     state = {
         query: ""

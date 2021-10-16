@@ -1,5 +1,4 @@
 import React from 'react';
-import PropType from 'prop-types';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -18,10 +17,6 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 class Connections extends React.PureComponent<Props> {
-
-    static propTypes = {
-        hide: PropType.func.isRequired
-    };
 
     onAddClick = (hide: () => void) => () => {
         this.props.openConnectDialog();
