@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
+import { openLightBox } from "state/lightbox/actions";
 
 function toInt(s: string | null | undefined): number {
     if (s == null) {
@@ -65,7 +66,7 @@ function imageSize(width: string | null | undefined, height: string | null | und
 }
 
 type Props = {
-    rootPage: string | null;
+    postingId?: string | null;
     mediaFile: PrivateMediaFileInfo;
     width?: string | null;
     height?: string | null;
@@ -73,14 +74,22 @@ type Props = {
     title?: string | null;
 } & ConnectedProps<typeof connector>;
 
-function EntryImage({mediaFile, width, height, alt, title, rootPage}: Props) {
+function EntryImage({postingId, mediaFile, width, height, alt, title, rootPage, openLightBox}: Props) {
     const mediaLocation = rootPage + "/media/" + mediaFile.path;
     const src = mediaPreview(mediaLocation, 900);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = imageSize(width, height, mediaFile);
+
+    const onClick = (event: MouseEvent) => {
+        if (postingId != null) {
+            openLightBox(postingId, mediaFile.id);
+            event.preventDefault();
+        }
+    }
+
     return (
-        <a href={mediaLocation}>
+        <a href={mediaLocation} onClick={onClick}>
             <img src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
                  alt={alt ?? undefined} title={title ?? undefined} />
         </a>
@@ -90,7 +99,8 @@ function EntryImage({mediaFile, width, height, alt, title, rootPage}: Props) {
 const connector = connect(
     (state: ClientState) => ({
         rootPage: getNodeRootPage(state)
-    })
+    }),
+    { openLightBox }
 );
 
 export default connector(EntryImage);

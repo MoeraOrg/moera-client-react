@@ -23,7 +23,7 @@ const GlanceComment = ({loading, loaded, postingId, comment}: Props) => (
                     <CommentUpdated comment={comment}/>
                 </div>
                 <div className="content">
-                    <EntryHtml html={comment.body.text}/>
+                    <EntryHtml postingId={comment.postingId} html={comment.body.text}/>
                 </div>
                 <div className="reactions-line">
                     <div className="comment-buttons"/>

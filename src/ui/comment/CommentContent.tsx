@@ -25,17 +25,17 @@ function CommentContent({comment, previousId}: Props) {
             if (comment.bodyPreview?.text) {
                 return (
                     <>
-                        <EntryHtml html={comment.bodyPreview.text} onClick={onClick}/>
+                        <EntryHtml postingId={comment.postingId} html={comment.bodyPreview.text} onClick={onClick}/>
                         <p>
                             <button className="btn btn-link read-more" onClick={onClick}>Read more...</button>
                         </p>
                     </>
                 );
             } else {
-                return <EntryHtml html={comment.body.previewText}/>;
+                return <EntryHtml postingId={comment.postingId} html={comment.body.previewText}/>;
             }
         } else {
-            return <EntryHtml html={comment.body.text} onClick={onClick}/>;
+            return <EntryHtml postingId={comment.postingId} html={comment.body.text} onClick={onClick}/>;
         }
     }
 

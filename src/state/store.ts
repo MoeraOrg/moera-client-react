@@ -32,6 +32,7 @@ import nodeCards from "state/nodecards/reducer";
 import contacts from "state/contacts/reducer";
 import shareDialog from "state/sharedialog/reducer";
 import sourceDialog from "state/sourcedialog/reducer";
+import lightBox from "state/lightbox/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -92,6 +93,7 @@ import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
 import sourceDialogTriggers from "state/sourcedialog/triggers";
+import lightBoxTriggers from "state/lightbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
@@ -124,6 +126,7 @@ const reducers = combineReducers({
     contacts,
     shareDialog,
     sourceDialog,
+    lightBox,
     messageBox,
     confirmBox,
     flashBox,
@@ -160,6 +163,7 @@ const triggers = collectTriggers(
     nodeCardsTriggers,
     contactsTriggers,
     sourceDialogTriggers,
+    lightBoxTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
     refreshTriggers

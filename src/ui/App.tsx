@@ -23,6 +23,7 @@ import SignUpDialog from "ui/signupdialog/SignUpDialog";
 import MnemonicDialog from "ui/profile/manage/MnemonicDialog";
 import SourceDialog from "ui/sourcedialog/SourceDialog";
 import QuickTips from "ui/quicktips/QuickTips";
+import LightBox from "ui/lightbox/LightBox";
 import "./colors.css";
 import "./App.css";
 
@@ -56,6 +57,7 @@ const App = ({atNode, feedWidth}: Props) => (
         <SignUpDialog/>
         <MnemonicDialog/>
         <SourceDialog/>
+        <LightBox/>
         <QuickTips/>
         <MessageBox/>
         <ConfirmBox/>

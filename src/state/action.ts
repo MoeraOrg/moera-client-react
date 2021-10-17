@@ -9,6 +9,7 @@ import { ErrorAnyAction } from "state/error/actions";
 import { FeedsAnyAction } from "state/feeds/actions";
 import { FlashBoxAnyAction } from "state/flashbox/actions";
 import { HomeAnyAction } from "state/home/actions";
+import { LightBoxAnyAction } from "state/lightbox/actions";
 import { MessageBoxAnyAction } from "state/messagebox/actions";
 import { NamingAnyAction } from "state/naming/actions";
 import { NavigationAnyAction } from "state/navigation/actions";
@@ -61,6 +62,7 @@ export type ClientAction =
     | ShareDialogAnyAction
     | SignUpDialogAnyAction
     | SourceDialogAnyAction
+    | LightBoxAnyAction
     | StoriesAnyAction;
 
 export type ClientActionType = ClientAction["type"];

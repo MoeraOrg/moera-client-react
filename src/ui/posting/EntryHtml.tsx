@@ -21,12 +21,13 @@ const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
 
 type Props = {
     className?: string;
+    postingId?: string | null;
     html: string | null | undefined;
     media?: PrivateMediaFileInfo[] | null;
     onClick?: (event: React.MouseEvent) => void;
 } & ConnectedProps<typeof connector>;
 
-function EntryHtml({className, html, media, onClick, standalone, fontMagnitude,
+function EntryHtml({className, postingId, html, media, onClick, standalone, fontMagnitude,
                     initFromLocation, goToLocation}: Props) {
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map((media ?? []).map(mf => [mf.hash, mf]));
@@ -74,7 +75,8 @@ function EntryHtml({className, html, media, onClick, standalone, fontMagnitude,
 
                 ReactDOM.render(
                     <Provider store={store}>
-                        <EntryImage mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
+                        <EntryImage postingId={postingId} mediaFile={mediaFile} width={width} height={height}
+                                    alt={alt} title={title}/>
                     </Provider>, span);
             }
         });
