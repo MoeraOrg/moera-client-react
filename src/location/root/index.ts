@@ -15,9 +15,11 @@ import { build as postBuild, transform as postTransform } from "location/root/po
 import { build as profileBuild, transform as profileTransform } from "location/root/profile";
 import { build as settingsBuild, transform as settingsTransform } from "location/root/settings";
 import { build as timelineBuild, transform as timelineTransform } from "location/root/timeline";
+import { build as mediaBuild } from "location/root/media";
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
+import { isLightBoxShown } from "state/lightbox/selectors";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     if (dstInfo.directories.length === 0) {
@@ -48,6 +50,9 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
+    if (isLightBoxShown(state)) {
+        return mediaBuild(state, info);
+    }
     if (isAtTimelinePage(state)) {
         return timelineBuild(state, info);
     }

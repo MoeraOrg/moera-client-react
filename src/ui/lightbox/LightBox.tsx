@@ -6,6 +6,7 @@ import 'react-image-lightbox/style.css';
 
 import { ClientState } from "state/state";
 import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
+import { getLightBoxMediaId, isLightBoxShown } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import "./LightBox.css";
@@ -56,9 +57,9 @@ function LightBox({show, posting, mediaId, rootPage, closeLightBox, lightBoxMedi
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.lightBox.show,
+        show: isLightBoxShown(state),
         posting: getPosting(state, state.lightBox.postingId),
-        mediaId: state.lightBox.mediaId,
+        mediaId: getLightBoxMediaId(state),
         rootPage: getNodeRootPage(state)
     }),
     { closeLightBox, lightBoxMediaSet }
