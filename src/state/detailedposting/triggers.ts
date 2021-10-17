@@ -2,6 +2,7 @@ import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
     bottomMenuShow,
+    dialogClosed,
     dialogOpened,
     GO_TO_PAGE,
     goToTimeline,
@@ -10,12 +11,13 @@ import {
 } from "state/navigation/actions";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import {
+    CLOSE_COMMENT_DIALOG,
     closeCommentDialog,
     COMMENT_COMPOSE_CANCEL,
     COMMENT_POSTED,
-    commentDraftLoad,
     commentDialogCommentLoad,
     commentDialogConflict,
+    commentDraftLoad,
     commentLoad,
     CommentPostedAction,
     commentReactionLoad,
@@ -158,6 +160,7 @@ export default [
     ),
     trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad),
     trigger(OPEN_COMMENT_DIALOG, true, dialogOpened(closeCommentDialog())),
+    trigger(CLOSE_COMMENT_DIALOG, true, dialogClosed()),
     trigger(
         EVENT_RECEIVER_COMMENT_UPDATED,
         (state, signal: EventAction<CommentUpdatedEvent>) =>

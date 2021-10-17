@@ -7,6 +7,7 @@ import {
     isReactionsDialogTotalsToBeLoaded
 } from "state/reactionsdialog/selectors";
 import {
+    CLOSE_REACTIONS_DIALOG,
     closeReactionsDialog,
     OPEN_REACTIONS_DIALOG,
     REACTIONS_DIALOG_SELECT_TAB,
@@ -19,10 +20,11 @@ import {
     EVENT_NODE_POSTING_REACTIONS_CHANGED,
     EVENT_NODE_POSTING_UPDATED,
     EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
-    EVENT_RECEIVER_COMMENT_UPDATED, EventAction
+    EVENT_RECEIVER_COMMENT_UPDATED,
+    EventAction
 } from "api/events/actions";
 import { isCommentMomentInLoadedRange } from "state/detailedposting/selectors";
-import { dialogOpened, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
+import { dialogClosed, dialogOpened, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
 import {
     CommentReactionsChangedEvent,
     CommentUpdatedEvent,
@@ -38,6 +40,7 @@ export default [
     ),
     trigger(OPEN_REACTIONS_DIALOG, isReactionsDialogTotalsToBeLoaded, reactionsDialogTotalsLoad),
     trigger(OPEN_REACTIONS_DIALOG, true, dialogOpened(closeReactionsDialog())),
+    trigger(CLOSE_REACTIONS_DIALOG, true, dialogClosed()),
     trigger(
         [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
         true,
