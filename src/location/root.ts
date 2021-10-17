@@ -8,14 +8,14 @@ import {
     isAtSettingsPage,
     isAtTimelinePage
 } from "state/navigation/selectors";
-import { build as composeBuild, transform as composeTransform } from "location/root/compose";
-import { build as newsBuild, transform as newsTransform } from "location/root/news";
-import { build as peopleBuild, transform as peopleTransform } from "location/root/people";
-import { build as postBuild, transform as postTransform } from "location/root/post";
-import { build as profileBuild, transform as profileTransform } from "location/root/profile";
-import { build as settingsBuild, transform as settingsTransform } from "location/root/settings";
-import { build as timelineBuild, transform as timelineTransform } from "location/root/timeline";
-import { build as mediaBuild } from "location/root/media";
+import { build as composeBuild, transform as composeTransform } from "location/compose";
+import { build as newsBuild, transform as newsTransform } from "location/news";
+import { build as peopleBuild, transform as peopleTransform } from "location/people";
+import { build as postBuild, transform as postTransform } from "location/post";
+import { build as profileBuild, transform as profileTransform } from "location/profile";
+import { build as settingsBuild, transform as settingsTransform } from "location/settings";
+import { build as timelineBuild, transform as timelineTransform } from "location/timeline";
+import { build as mediaBuild } from "location/media";
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
