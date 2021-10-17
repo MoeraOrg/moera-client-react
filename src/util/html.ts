@@ -24,6 +24,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         ],
         "mr-spoiler": ["title"]
     },
+    allowedSchemes: [...sanitizeHtml.defaults.allowedSchemes, "hash"],
     allowedClasses: {
         img: ["emoji"],
         b: ["emoji"],

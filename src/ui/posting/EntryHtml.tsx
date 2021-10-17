@@ -63,7 +63,7 @@ function EntryHtml({className, postingId, html, media, onClick, standalone, font
         });
         dom.current.querySelectorAll("img").forEach(node => {
             const src = node.getAttribute("src");
-            const mediaFile = src != null ? mediaMap.get(src) : null;
+            const mediaFile = src != null && src.startsWith("hash:") ? mediaMap.get(src.substring(5)) : null;
             if (mediaFile != null) {
                 const width = node.getAttribute("width");
                 const height = node.getAttribute("height");
