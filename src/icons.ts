@@ -21,6 +21,7 @@ import {
     faFastBackward,
     faFastForward,
     faFileAlt,
+    faFileDownload,
     faFrown,
     faHome,
     faImage,
@@ -45,11 +46,11 @@ import {
     faStar,
     faStrikethrough,
     faSyncAlt,
-    faTimes,
-    faTimesCircle,
     faThumbsDown,
     faThumbsUp,
     faThumbtack,
+    faTimes,
+    faTimesCircle,
     faTrashAlt,
     faUndoAlt,
     faUserCheck,
@@ -96,6 +97,7 @@ export default function initIconLibrary() {
     library.add(faFastBackward);
     library.add(faFastForward);
     library.add(faFileAlt);
+    library.add(faFileDownload);
     library.add(faFrown);
     library.add(faHome);
     library.add(faImage);

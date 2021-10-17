@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 
@@ -7,6 +8,7 @@ import { ClientState } from "state/state";
 import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
 import { getPosting } from "state/postings/selectors";
 import { getNodeRootPage } from "state/node/selectors";
+import "./LightBox.css";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -43,7 +45,12 @@ function LightBox({show, posting, mediaId, rootPage, closeLightBox, lightBoxMedi
                   onCloseRequest={() => closeLightBox()}
                   onMovePrevRequest={() => prevMediaId != null ? lightBoxMediaSet(prevMediaId) : null}
                   onMoveNextRequest={() => nextMediaId != null ? lightBoxMediaSet(nextMediaId) : null}
-                  reactModalStyle={{overlay: {zIndex: 1040}}}/>
+                  reactModalStyle={{overlay: {zIndex: 1040}}}
+                  toolbarButtons={[
+                      <a className="lightbox-download" href={mainSrc} download>
+                          <FontAwesomeIcon icon="file-download"/>
+                      </a>
+                  ]}/>
     );
 }
 
