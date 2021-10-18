@@ -20,6 +20,7 @@ import {
     PROFILE_EDIT_CONFLICT_CLOSE,
     PROFILE_IMAGE_UPLOAD,
     PROFILE_IMAGE_UPLOAD_FAILED,
+    PROFILE_IMAGE_UPLOAD_PROGRESS,
     PROFILE_IMAGE_UPLOADED,
     PROFILE_LOAD,
     PROFILE_LOAD_FAILED,
@@ -62,6 +63,7 @@ const emptyProfile = {
 const emptyAvatarEditDialog = {
     show: false,
     imageUploading: false,
+    imageUploadProgress: null,
     imageId: null,
     path: null,
     width: null,
@@ -184,11 +186,19 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
             return immutable.set(state, "avatarEditDialog.show", false);
 
         case PROFILE_IMAGE_UPLOAD:
-            return immutable.set(state, "avatarEditDialog.imageUploading", true);
+            return immutable.assign(state, "avatarEditDialog", {
+                imageUploading: true,
+                imageUploadProgress: null
+            });
+
+        case PROFILE_IMAGE_UPLOAD_PROGRESS:
+            return immutable.set(state, "avatarEditDialog.imageUploadProgress",
+                Math.round(action.payload.loaded * 100 / action.payload.total));
 
         case PROFILE_IMAGE_UPLOADED:
             return immutable.assign(state, "avatarEditDialog", {
                 imageUploading: false,
+                imageUploadProgress: null,
                 imageId: action.payload.id,
                 path: action.payload.path,
                 width: action.payload.width,
@@ -196,7 +206,10 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
             })
 
         case PROFILE_IMAGE_UPLOAD_FAILED:
-            return immutable.set(state, "avatarEditDialog.imageUploading", false);
+            return immutable.assign(state, "avatarEditDialog", {
+                imageUploading: false,
+                imageUploadProgress: null
+            });
 
         case PROFILE_AVATAR_CREATE:
             return immutable.set(state, "avatarEditDialog.avatarCreating", true);

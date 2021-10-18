@@ -51,6 +51,7 @@ import {
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { urlWithParameters, ut } from "util/url";
 import { toAvatarDescription } from "util/avatar";
+import { ProgressHandler } from "api/node/xhr";
 
 export function* createDomain(nodeName: string | null, name: string): CallApiResult<DomainInfo> {
     return yield* callApi({
@@ -584,9 +585,11 @@ export function* getContacts(nodeName: string | null, query: string | null,
     return yield* callApi({nodeName, location, auth: true, schema: NodeApi.ContactInfoArray});
 }
 
-export function* postMediaPublic(nodeName: string | null, file: File): CallApiResult<PublicMediaFileInfo> {
+export function* postMediaPublic(nodeName: string | null, file: File,
+                                 onProgress: ProgressHandler): CallApiResult<PublicMediaFileInfo> {
     return yield* callApi({
-        nodeName, location: "/media/public", method: "POST", auth: true, body: file, schema: NodeApi.PublicMediaFileInfo
+        nodeName, location: "/media/public", method: "POST", auth: true, body: file, onProgress,
+        schema: NodeApi.PublicMediaFileInfo
     });
 }
 

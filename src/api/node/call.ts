@@ -23,6 +23,7 @@ import {
     SourceFormat,
     StoryInfo
 } from "api/node/api-types";
+import { ProgressHandler, xhrFetch } from "api/node/xhr";
 import { getCartes } from "api/node/cartes";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
@@ -50,6 +51,7 @@ export type CallApiParams<T> = {
     body?: any;
     schema: ValidateFunction<T>;
     errorFilter?: ErrorFilter;
+    onProgress?: ProgressHandler;
 };
 
 export type CallApiResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect, T>;
@@ -61,7 +63,8 @@ export function* callApi<T>({
     auth = false,
     body = null,
     schema,
-    errorFilter = false
+    errorFilter = false,
+    onProgress
 }: CallApiParams<T>):  CallApiResult<T> {
     const {rootLocation, rootApi, errorTitle} = yield* call(selectApi, nodeName);
     if (!rootLocation) {
@@ -75,14 +78,16 @@ export function* callApi<T>({
     };
 
     let cartesRenewed = false;
+    const fetcher = onProgress != null ? xhrFetch : retryFetch;
     while (true) {
         yield* call(authorize, headers, rootLocation, auth);
         let response;
         try {
-            response = yield* call(retryFetch, apiUrl(rootApi, location, method), {
+            response = yield* call(fetcher, apiUrl(rootApi, location, method), {
                 method,
                 headers,
-                body: encodeBody(body)
+                body: encodeBody(body),
+                onProgress
             });
         } catch (e) {
             throw exception(e);
@@ -218,8 +223,6 @@ function* cartesRenew() {
 }
 
 function encodeBody(body: null): null;
-function encodeBody(body: File): File;
-function encodeBody(body: any): string;
 function encodeBody(body: any): string | null | File {
     if (body == null) {
         return null;

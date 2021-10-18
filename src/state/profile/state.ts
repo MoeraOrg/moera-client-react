@@ -5,6 +5,7 @@ export type AvatarOnCreate = (avatar: AvatarInfo) => void;
 export interface AvatarEditDialogState {
     show: boolean;
     imageUploading: boolean;
+    imageUploadProgress: number | null;
     imageId: string | null;
     path: string | null;
     width: number | null;

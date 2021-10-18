@@ -124,6 +124,16 @@ export const profileImageUpload = (file: File): ProfileImageUploadAction => ({
     payload: {file}
 });
 
+export const PROFILE_IMAGE_UPLOAD_PROGRESS = "PROFILE_IMAGE_UPLOAD_PROGRESS";
+export type ProfileImageUploadProgressAction = ActionWithPayload<typeof PROFILE_IMAGE_UPLOAD_PROGRESS, {
+    loaded: number;
+    total: number;
+}>;
+export const profileImageUploadProgress = (loaded: number, total: number): ProfileImageUploadProgressAction => ({
+    type: PROFILE_IMAGE_UPLOAD_PROGRESS,
+    payload: {loaded, total}
+});
+
 export const PROFILE_IMAGE_UPLOADED = "PROFILE_IMAGE_UPLOADED";
 export type ProfileImageUploadedAction = ActionWithPayload<typeof PROFILE_IMAGE_UPLOADED, {
     id: string;
@@ -224,6 +234,7 @@ export type ProfileAnyAction =
     | ProfileOpenAvatarEditDialogAction
     | ProfileCloseAvatarEditDialogAction
     | ProfileImageUploadAction
+    | ProfileImageUploadProgressAction
     | ProfileImageUploadedAction
     | ProfileImageUploadFailedAction
     | ProfileAvatarCreateAction

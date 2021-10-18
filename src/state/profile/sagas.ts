@@ -18,7 +18,7 @@ import {
     profileAvatarsLoadFailed,
     ProfileImageUploadAction,
     profileImageUploaded,
-    profileImageUploadFailed,
+    profileImageUploadFailed, profileImageUploadProgress,
     ProfileLoadAction,
     profileLoadFailed,
     profileSet,
@@ -33,6 +33,7 @@ import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
 import { settingsUpdate } from "state/settings/actions";
+import store from "state/store";
 
 export default [
     executor(PROFILE_LOAD, "", introduce(profileLoadSaga)),
@@ -67,7 +68,10 @@ function* profileUpdateSaga(action: ProfileUpdateAction) {
 
 function* profileImageUploadSaga(action: ProfileImageUploadAction) {
     try {
-        const {id, path, width, height} = yield* call(Node.postMediaPublic, "", action.payload.file);
+        const {id, path, width, height} = yield* call(Node.postMediaPublic, "", action.payload.file,
+            (loaded: number, total: number) => {
+            store.dispatch(profileImageUploadProgress(loaded, total));
+            });
         if (width < 100 || height < 100) {
             yield* put(messageBox("Avatar image size should be at least 100x100 pixels."));
             yield* put(profileImageUploadFailed());

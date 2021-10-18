@@ -136,7 +136,8 @@ class AvatarEditDialog extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {show, imageUploading, imageId, path, creating, rootPage, profileCloseAvatarEditDialog} = this.props;
+        const {show, imageUploading, imageUploadProgress, imageId, path, creating, rootPage,
+               profileCloseAvatarEditDialog} = this.props;
         const {scale, rotate, shape} = this.state;
 
         if (!show) {
@@ -150,7 +151,7 @@ class AvatarEditDialog extends React.PureComponent<Props, State> {
                         <Rotate value={rotate} onChange={this.onRotateChange}/>
                         <AvatarShape value={shape} onChange={this.onShapeChange}/>
                     </div>
-                    <Dropzone onDrop={this.onDrop} noClick noKeyboard accept={ACCEPTED_MIME_TYPES}>
+                    <Dropzone onDrop={this.onDrop} noClick noKeyboard accept={ACCEPTED_MIME_TYPES} maxFiles={1}>
                         {({getRootProps, getInputProps, isDragAccept, isDragReject}) => (
                             <div {...getRootProps()}>
                                 <ReactAvatarEditor
@@ -164,7 +165,9 @@ class AvatarEditDialog extends React.PureComponent<Props, State> {
                         )}
                     </Dropzone>
                     <Button variant={imageId ? "outline-secondary" : "primary"} size="sm" className="upload"
-                            loading={imageUploading} onClick={this.onUploadClick}>Upload image</Button>
+                            loading={imageUploading} onClick={this.onUploadClick}>
+                        Upload image {imageUploadProgress != null ? `(${imageUploadProgress}%)` : ""}
+                    </Button>
                     <Scale max={this.getScaleMax()} value={scale} onChange={this.onScaleChange}/>
                     <input type="file" accept="image/*" ref={dom => this.#domFile = dom} onChange={this.onFileChange}/>
                 </div>
@@ -183,6 +186,7 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.profile.avatarEditDialog.show,
         imageUploading: state.profile.avatarEditDialog.imageUploading,
+        imageUploadProgress: state.profile.avatarEditDialog.imageUploadProgress,
         imageId: state.profile.avatarEditDialog.imageId,
         path: state.profile.avatarEditDialog.path,
         width: state.profile.avatarEditDialog.width,
