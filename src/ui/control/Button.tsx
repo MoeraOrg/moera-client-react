@@ -30,7 +30,7 @@ export class Button extends React.PureComponent<Props> {
             `btn-${variant}`, {
                 "btn-sm": size === "sm",
                 "btn-lg": size === "lg",
-                "btn-block": block,
+                "flex-fill": block,
                 "invisible": invisible
             },
             className

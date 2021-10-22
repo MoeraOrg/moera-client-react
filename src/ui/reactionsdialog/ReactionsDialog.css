@@ -2,8 +2,9 @@
     float: right;
 }
 
-.reactions-dialog .topright .close {
-    float: none;
+.reactions-dialog .topright .btn-close {
+    position: relative;
+    top: -.5em;
 }
 
 .reactions-dialog .switch-view {
@@ -12,12 +13,12 @@
     font-size: 130%;
     cursor: pointer;
     padding: 0.3rem 0.5rem;
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 .reactions-dialog .switch-view:hover {
     background-color: var(--highlight);
-    color: var(--gray-dark);
+    color: var(--bs-gray-dark);
 }
 
 .reactions-dialog .totals {
@@ -36,11 +37,11 @@
     position: relative;
     top: 5px;
     cursor: pointer;
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 .reactions-dialog .total-tabs .total.active {
-    border-bottom: 3px var(--primary) solid;
+    border-bottom: 3px var(--bs-primary) solid;
     cursor: default;
     color: black;
 }
@@ -134,7 +135,7 @@
 
 .reactions-dialog .more {
     text-align: center;
-    color: var(--primary);
+    color: var(--bs-primary);
     border: solid 1px var(--gray-medium);
     padding: 0.3rem;
     cursor: pointer;

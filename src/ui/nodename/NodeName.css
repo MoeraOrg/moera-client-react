@@ -2,6 +2,10 @@
     font-weight: bold;
 }
 
+.node-name:hover {
+    text-decoration: underline;
+}
+
 .node-name.correct {
     color: var(--correct);
 }
@@ -18,6 +22,6 @@
 }
 
 .node-name .mention {
-    color: var(--gray);
+    color: var(--bs-gray);
     font-weight: normal;
 }

@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { errorDismiss } from "state/error/actions";
+import { CloseButton } from "ui/control";
 import "./ErrorPane.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -27,7 +28,7 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
             )
         }>
             {message}
-            <button type="button" className="close" onClick={() => errorDismiss()}>&times;</button>
+            <CloseButton onClick={() => errorDismiss()}/>
         </div>
     );
 }

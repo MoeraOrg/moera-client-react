@@ -5,7 +5,7 @@
 }
 
 .settings-menu .nav-link.active:hover {
-    background-color: var(--primary);
+    background-color: var(--bs-primary);
 }
 
 .settings-menu .nav-link:hover {
@@ -15,5 +15,5 @@
 
 .settings-menu .nav-link A:hover {
     text-decoration: none;
-    color: var(--primary);
+    color: var(--bs-primary);
 }

@@ -37,7 +37,7 @@ class ChangeDateDialog extends React.PureComponent<Props> {
             <ModalDialog title="Change Date/Time" onClose={closeChangeDateDialog}>
                 <Form>
                     <div className="modal-body">
-                        <DateTimeField name="publishedAt" horizontal={true} groupClassName="pl-4"/>
+                        <DateTimeField name="publishedAt"/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={closeChangeDateDialog}>Cancel</Button>

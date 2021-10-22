@@ -38,7 +38,7 @@
 }
 
 #instants .action {
-    color: var(--blue);
+    color: var(--bs-blue);
     cursor: pointer;
 }
 

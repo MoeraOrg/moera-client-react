@@ -39,7 +39,7 @@
 }
 
 .draft-selector .dropdown-item:hover .draft-delete:hover {
-    background-color: var(--red);
+    background-color: var(--bs-red);
     color: white;
 }
 

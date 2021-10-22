@@ -1,5 +1,5 @@
 .quick-tips .modal-title {
-    color: var(--info);
+    color: var(--bs-info);
     font-size: 200%;
     font-weight: bold;
 }
@@ -21,7 +21,7 @@
 }
 
 .quick-tips .visit .node-name {
-    color: var(--success);
+    color: var(--bs-success);
 }
 
 .quick-tips .subscribe button {
@@ -35,7 +35,7 @@
 
 .quick-tips .blog BUTTON {
     color: white;
-    background-color: var(--gray-dark);
+    background-color: var(--bs-gray-dark);
     font-size: 1.5em;
     width: 1.8em;
     border: 0;

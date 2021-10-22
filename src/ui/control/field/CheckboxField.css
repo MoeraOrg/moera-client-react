@@ -1,8 +1,6 @@
 .checkbox-field-label {
-    margin-left: 0.3rem;
     margin-right: 0.3rem;
     position: relative;
-    top: 0.1rem;
 }
 
 .form-control.checkbox-control-single {

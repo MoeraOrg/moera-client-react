@@ -2,6 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
+import { CloseButton } from "ui/control/CloseButton";
 import "./ModalDialog.css";
 
 interface Props {
@@ -52,7 +53,7 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
                             <div className="modal-header">
                                 <h4 className="modal-title">{title}</h4>
                                 {onClose &&
-                                    <button type="button" className="close" onClick={onClose}>&times;</button>
+                                    <CloseButton onClick={onClose}/>
                                 }
                             </div>
                         }

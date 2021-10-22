@@ -21,7 +21,7 @@
 
 .feed-top-button {
     background-color: var(--white-dark);
-    color: var(--info);
+    color: var(--bs-info);
     display: inline-block;
     padding: .2rem .7rem;
     border-radius: 1em;
@@ -34,13 +34,13 @@
 }
 
 .feed-top-button:hover {
-    background-color: var(--info);
-    border-color: var(--info);
+    background-color: var(--bs-info);
+    border-color: var(--bs-info);
     color: white;
 }
 
 .feed-top-button .new {
-    background-color: var(--primary);
+    background-color: var(--bs-primary);
     color: white;
     font-weight: bold;
     padding: .15em .35em .15em .3em;

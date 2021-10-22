@@ -42,7 +42,7 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
                 {loadingDraftList ?
                     <LoadingInline active={loadingDraftList}/>
                 :
-                    <span className="badge badge-light">{draftList.length}</span>
+                    <span className="badge bg-light text-dark">{draftList.length}</span>
                 }
             </Button>
             {visible &&

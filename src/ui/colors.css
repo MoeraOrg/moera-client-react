@@ -4,8 +4,8 @@
     --highlight-blue: rgba(0, 123, 255, .1);
     --highlight-cyan: #f0fafa;
     --cyan-light: #96d6e0;
-    /* --gray-dark: #343a40; (Bootstrap) */
-    /* --gray: #6c757d; (Bootstrap) */
+    /* --bs-gray-dark: #343a40; (Bootstrap) */
+    /* --bs-gray: #6c757d; (Bootstrap) */
     --gray-medium: #a9a9a9;
     --gray-light: #ced4da;
     --gray-ultralight: #e8e8e8;
@@ -13,9 +13,9 @@
     --green-light: #42d042; /* forest green + 20% lighter */
     --red-light: #df5a5a; /* fire brick + 20% lighter */
 
-    --verifying: var(--cyan);
+    --verifying: var(--bs-cyan);
     --correct: forestgreen;
-    --incorrect: var(--red);
+    --incorrect: var(--bs-red);
     --correct-light: var(--green-light);
     --incorrect-light: var(--red-light);
     --node-name: #385898;
@@ -31,7 +31,7 @@
     --comments: #f8faff;
     --comment-compose: #e0faff;
 
-    --link: var(--blue);
+    --link: var(--bs-blue);
     --link-hover: #0056b3;
     --link-button: #385898;
 

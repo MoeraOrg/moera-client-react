@@ -108,11 +108,11 @@ export class Popover extends React.PureComponent<Props, State> {
                                 <div ref={ref} style={style} className={cx(
                                     "popover",
                                     "fade",
-                                    `bs-popover-${placement}`, // activates Bootstrap style for .arrow
+                                    `bs-popover-${placement}`, // activates Bootstrap style for .popover-arrow
                                     {"show": this.state.visible},
                                     className
                                 )}>
-                                    <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>
+                                    <div ref={arrowProps.ref} style={arrowProps.style} className="popover-arrow"/>
                                     <div className="popover-body">{
                                         isFunction(children) ?
                                             children({hide: this.hide, update: forceUpdate})

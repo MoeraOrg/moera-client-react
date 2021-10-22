@@ -71,7 +71,7 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, p
                         <AvatarSelector nodeName={nodeName} loading={avatarsLoading} loaded={avatarsLoaded}
                                         avatars={avatars} active={value} onSelect={onSelect} onNew={onNew}
                                         onDelete={onDelete} onReorder={onReorder}/>
-                        <div ref={setArrowRef} style={arrowStyles} className="arrow"/>
+                        <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>
                     </div>
                 }
             </div>

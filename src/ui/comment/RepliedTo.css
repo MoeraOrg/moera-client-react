@@ -15,13 +15,13 @@
 }
 
 .replied-to .node-name {
-    color: var(--gray);
+    color: var(--bs-gray);
     position: relative;
     top: -.1em;
 }
 
 .replied-to .heading {
-    color: var(--gray);
+    color: var(--bs-gray);
     position: relative;
     top: -.1em;
     margin-left: .5em;

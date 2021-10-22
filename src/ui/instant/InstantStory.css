@@ -16,7 +16,7 @@
 }
 
 #instants .instant.last-new {
-    border-bottom: 1px solid var(--green);
+    border-bottom: 1px solid var(--bs-green);
 }
 
 #instants .instant A {
@@ -51,7 +51,7 @@
     grid-column: 3 / 4;
     place-self: center;
     padding: .5em;
-    color: var(--cyan);
+    color: var(--bs-cyan);
     visibility: hidden;
 }
 

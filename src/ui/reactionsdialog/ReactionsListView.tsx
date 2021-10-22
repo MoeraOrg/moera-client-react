@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
-import { AvatarWithPopup, Loading } from "ui/control";
+import { AvatarWithPopup, CloseButton, Loading } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import Twemoji from "ui/twemoji/Twemoji";
 import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
@@ -30,7 +30,7 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
                 <div className="switch-view" title="View as chart" onClick={onSwitchView}>
                     <FontAwesomeIcon icon="chart-bar"/>
                 </div>
-                <button type="button" className="close" onClick={closeReactionsDialog}>&times;</button>
+                <CloseButton onClick={closeReactionsDialog}/>
             </div>
         </div>
         <div className="items" tabIndex={-1} ref={itemsRef}>

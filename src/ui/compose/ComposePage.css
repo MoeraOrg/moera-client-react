@@ -33,7 +33,7 @@
 }
 
 .composer .input-resettable BUTTON:hover {
-    color: var(--red);
+    color: var(--bs-red);
 }
 
 .composer .text-editable {

@@ -241,11 +241,11 @@ const DelayedPopper = ({placement, arrow, className, children}: DelayedPopperPro
                             "popover",
                             "shadow",
                             "fade",
-                            `bs-popover-${placement}`, // activates Bootstrap style for .arrow
+                            `bs-popover-${placement}`, // activates Bootstrap style for .popover-arrow
                             {"show": context.popup},
                             className
                         )}>
-                            {arrow && <div ref={arrowProps.ref} style={arrowProps.style} className="arrow"/>}
+                            {arrow && <div ref={arrowProps.ref} style={arrowProps.style} className="popover-arrow"/>}
                             <div className="popover-body" onMouseEnter={context.popupEnter}
                                  onMouseLeave={context.popupLeave}>
                                 {children}

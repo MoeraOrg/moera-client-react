@@ -20,7 +20,7 @@ type Props = OuterProps & FormikProps<Values>;
 const WelcomeNavigator = ({switching}: Props) => (
     <div id="welcome-navigator">
         <h1>Where do you want to go?</h1>
-        <Form className="form-inline">
+        <Form className="d-flex">
             <InputField name="ownerName" horizontal={true} autoFocus={true} anyValue placeholder="Enter name..."/>
             <Button variant="primary" type="submit" loading={switching}>Go</Button>
         </Form>

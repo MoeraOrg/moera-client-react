@@ -10,7 +10,7 @@ interface Props {
 const PostingPin = ({pinned}: Props) => (
     pinned ?
         <div className="pin-line">
-            <span className="badge badge-secondary">
+            <span className="badge bg-secondary">
                 <FontAwesomeIcon icon="thumbtack" size="sm"/>
                 {" "}Pinned post
             </span>

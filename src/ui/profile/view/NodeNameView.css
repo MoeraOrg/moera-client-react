@@ -3,7 +3,7 @@
 }
 
 .node-name-view .name {
-    color: var(--gray);
+    color: var(--bs-gray);
     margin-right: .5em;
 }
 
@@ -17,5 +17,5 @@
 }
 
 .node-name-view .menu .chevron:hover {
-    color: var(--gray-dark);
+    color: var(--bs-gray-dark);
 }

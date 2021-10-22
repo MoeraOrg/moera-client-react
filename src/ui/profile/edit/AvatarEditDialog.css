@@ -15,11 +15,11 @@
 }
 
 .avatar-edit-dialog .editor.drag-accept {
-    border: solid 2px var(--primary);
+    border: solid 2px var(--bs-primary);
 }
 
 .avatar-edit-dialog .editor.drag-reject {
-    border: solid 2px var(--danger);
+    border: solid 2px var(--bs-danger);
 }
 
 .avatar-edit-dialog .upload {

@@ -1,5 +1,5 @@
 .entry BLOCKQUOTE {
-    border-left: 3px solid var(--cyan);
+    border-left: 3px solid var(--bs-cyan);
     padding: 0.2rem 0.2rem 0.2rem 2.7rem;
     position: relative;
     overflow: hidden;
@@ -9,10 +9,19 @@
     content: "\201C";
     font-family: serif;
     font-size: 4rem;
-    color: var(--cyan);
+    color: var(--bs-cyan);
     position: absolute;
     left: 0.5rem;
     top: -1.5rem;
+}
+
+.entry A:hover {
+    text-decoration: underline;
+}
+
+.entry > .content IMG {
+    width: auto;
+    height: auto;
 }
 
 .entry.single-emoji .content .emoji {

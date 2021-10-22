@@ -8,13 +8,13 @@
 
 .form-label-button:hover {
     background-color: var(--highlight);
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 .form-label-button:hover.form-label-button-undo {
-    color: var(--cyan);
+    color: var(--bs-cyan);
 }
 
 .form-label-button:hover.form-label-button-reset {
-    color: var(--red);
+    color: var(--bs-red);
 }

@@ -1,14 +1,14 @@
 @media only screen and (min-width: 576px) {
     #logo {
-        margin-right: 1rem;
+        margin-left: .5rem;
+        margin-right: .5rem;
         padding-right: 1rem;
     }
 }
 
 @media only screen and (max-width: 575px) {
     #logo {
-        margin-left: -.5rem;
-        margin-right: .5rem;
+        margin-left: .5rem;
         padding-right: .5rem;
     }
 }

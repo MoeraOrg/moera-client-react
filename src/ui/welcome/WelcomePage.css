@@ -1,7 +1,7 @@
 .welcome .title {
     font-size: 400%;
     font-weight: bold;
-    color: var(--info);
+    color: var(--bs-info);
     text-align: center;
     margin-top: 4rem;
 }

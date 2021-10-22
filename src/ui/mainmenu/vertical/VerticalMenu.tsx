@@ -17,7 +17,7 @@ const VerticalMenu = ({atNode, connected}: Props) => (
         {connected &&
             <>
                 <HomeName/>
-                <div className="text-right">
+                <div className="text-end">
                     <DisconnectButton/>
                 </div>
             </>

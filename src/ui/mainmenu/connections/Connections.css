@@ -28,15 +28,15 @@
 #connections .connection .no-name {
     font-size: 120%;
     font-style: italic;
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 #connections .connection .connected {
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 #connections .connection-add {
-    color: var(--primary);
+    color: var(--bs-primary);
     cursor: pointer;
     font-size: 120%;
     padding: 0.5em;
@@ -66,7 +66,7 @@
 }
 
 #connections .connection-buttons .link:hover {
-    color: var(--primary);
+    color: var(--bs-primary);
 }
 
 #connections .connection-buttons .disconnect {
@@ -78,5 +78,5 @@
 }
 
 #connections .connection-buttons .disconnect:hover {
-    color: var(--red);
+    color: var(--bs-red);
 }

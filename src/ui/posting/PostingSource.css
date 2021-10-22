@@ -1,4 +1,8 @@
 A.posting-source {
-    color: var(--info);
+    color: var(--bs-info);
     margin-right: .3em;
+}
+
+A.posting-source:hover {
+    text-decoration: underline;
 }

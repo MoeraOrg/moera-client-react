@@ -2,6 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import { Label } from "ui/control/index";
+import "./FormGroup.css";
 
 interface Props {
     title?: string;
@@ -22,7 +23,7 @@ export const FormGroup = ({title, name, horizontal = false, checkbox = false, gr
     <div className={cx(
             "form-group",
             groupClassName, {
-                "row": horizontal
+                "d-flex": horizontal
             })}>
         {!checkbox &&
             <>

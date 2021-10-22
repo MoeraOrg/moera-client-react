@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
-import { Loading } from "ui/control";
+import { CloseButton, Loading } from "ui/control";
 import Twemoji from "ui/twemoji/Twemoji";
 
 type Props = {
@@ -22,7 +22,7 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
                             <FontAwesomeIcon icon="list"/>
                         </div>
                     }
-                    <button type="button" className="close" onClick={closeReactionsDialog}>&times;</button>
+                    <CloseButton onClick={closeReactionsDialog}/>
                 </div>
             </div>
             <div className="items" tabIndex={-1} ref={itemsRef}>

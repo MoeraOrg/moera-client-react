@@ -1,5 +1,5 @@
 .draft-selector .dropdown-item.new-post {
-    color: var(--info);
+    color: var(--bs-info);
     padding-top: .8em;
     padding-bottom: .8em;
     font-size: 100%;

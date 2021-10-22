@@ -1,6 +1,6 @@
 .formatting-help-show {
     font-size: 0.8rem;
-    color: var(--primary);
+    color: var(--bs-primary);
     cursor: pointer;
     width: max-content;
     margin-bottom: 0.5rem;

@@ -16,8 +16,7 @@ export default function ComposeBodyFormat({sourceFormats}: Props) {
     }
 
     return (
-        <SelectField title="Text formatting" name="bodyFormat" horizontal={true} groupClassName="pl-4"
-                     col="ml-n3 ml-md-0 col-md-2" choices={sourceFormats.filter(c => c.value !== "application")}
-                     anyValue/>
+        <SelectField title="Text formatting" name="bodyFormat" horizontal={true} groupClassName="ps-2" col="col-md-2"
+                     choices={sourceFormats.filter(c => c.value !== "application")} anyValue/>
     );
 }

@@ -13,6 +13,10 @@ BODY {
     height: 100%;
 }
 
+A, .btn-link {
+    text-decoration: none;
+}
+
 ABBR[title] {
     cursor: pointer !important;
 }
@@ -44,4 +48,8 @@ ABBR[title] {
     margin-bottom: 0.5rem;
     margin-top: -0.5rem;
     background-color: floralwhite;
+}
+
+.dialog-help .btn-close {
+    float: right;
 }

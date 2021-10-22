@@ -53,8 +53,8 @@ class ProfileEditor extends React.PureComponent<Props> {
                             <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
                             <InputField title="Title" name="title" maxLength={120}/>
                             <ComboboxField title="Gender" name="gender" data={["Male", "Female"]}
-                                           col="col-sm-6 pl-0 pr-0"/>
-                            <InputField title="E-Mail" name="email" maxLength={63} col="col-sm-6 pl-0 pr-0"/>
+                                           col="col-sm-6"/>
+                            <InputField title="E-Mail" name="email" maxLength={63} col="col-sm-6"/>
                             <RichTextField title="Bio" name="bioSrc" placeholder="Write anything..." format="markdown"
                                            smileysEnabled={true} anyValue/>
                             <div className="profile-editor-footer">

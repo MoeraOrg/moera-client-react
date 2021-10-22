@@ -63,9 +63,9 @@ export function SelectField({name, title, horizontal = false, groupClassName, la
                     {...inputProps}
                     id={name}
                     className={cx(
-                        "form-control", {
-                            "form-control-sm": size === "sm",
-                            "form-control-lg": size === "lg",
+                        "form-select", {
+                            "form-select-sm": size === "sm",
+                            "form-select-lg": size === "lg",
                             "is-valid": !anyValue && touched && !error,
                             "is-invalid": !anyValue && touched && error,
                             [className!]: !!className

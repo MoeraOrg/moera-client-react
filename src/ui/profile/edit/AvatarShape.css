@@ -12,6 +12,6 @@
 }
 
 .avatar-shape BUTTON.active {
-    background-color: var(--info);
+    background-color: var(--bs-info);
     color: white;
 }

@@ -7,6 +7,7 @@ import { SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
+import { CloseButton } from "ui/control";
 import "./ComposeFormattingHelp.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -39,11 +40,11 @@ function ComposeFormattingHelp({show, settingsUpdate}: Props) {
     if (visible) {
         return (
             <div className="dialog-help">
-                <button type="button" className="close" onClick={hideHelp}>&times;</button>
                 <b>Markdown:</b> see{" "}
                 <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">cheatsheet</a>
                 {" or "}<a href="https://www.markdowntutorial.com/">tutorial</a> to see how to do more.
                 See also <a href="https://www.webfx.com/tools/emoji-cheat-sheet/">emoji cheatsheet</a>.
+                <CloseButton onClick={hideHelp}/>
             </div>
         );
     } else {

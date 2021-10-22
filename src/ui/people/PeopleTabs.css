@@ -12,21 +12,21 @@
     font-size: larger;
     margin-right: 1rem;
     white-space: nowrap;
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 .people-tabs .tab:hover {
-    color: var(--gray-dark);
+    color: var(--bs-gray-dark);
 }
 
 .people-tabs .tab.active {
-    color: var(--primary);
+    color: var(--bs-primary);
     cursor: default;
-    border-bottom: solid .25rem var(--primary);
+    border-bottom: solid .25rem var(--bs-primary);
 }
 
 .people-tabs .tab.active:hover {
-    color: var(--primary);
+    color: var(--bs-primary);
 }
 
 .people-tabs .rest {

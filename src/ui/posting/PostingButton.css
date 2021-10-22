@@ -3,7 +3,7 @@
     max-width: 225px;
     text-align: center;
     text-decoration: none;
-    color: var(--gray-dark);
+    color: var(--bs-gray-dark);
     padding: .3rem;
     margin-right: .3rem;
     cursor: pointer;

@@ -1,6 +1,6 @@
 #owner-name {
     display: inline-block;
-    border: var(--dark) .1rem solid;
+    border: var(--bs-dark) .1rem solid;
     border-radius: .25rem;
     text-decoration: none;
     padding: .5rem;

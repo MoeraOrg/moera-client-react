@@ -16,7 +16,7 @@
 
 .node-card .unknown {
     font-style: italic;
-    color: var(--gray);
+    color: var(--bs-gray);
     text-align: center;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .node-card .name {
-    color: var(--gray);
+    color: var(--bs-gray);
     margin-top: -.2em;
 }
 

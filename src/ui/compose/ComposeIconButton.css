@@ -12,20 +12,20 @@
 
 .composer-icon:hover {
     background-color: var(--highlight);
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 .composer-icon.composer-icon-active {
-    color: var(--primary);
+    color: var(--bs-primary);
 }
 
 .composer-icon.composer-icon-changed {
-    color: var(--gray);
-    border-bottom: solid 3px var(--gray);
+    color: var(--bs-gray);
+    border-bottom: solid 3px var(--bs-gray);
     border-radius: 0;
 }
 
 .composer-icon.composer-icon-changed.composer-icon-active {
-    color: var(--primary);
-    border-bottom: solid 3px var(--primary);
+    color: var(--bs-primary);
+    border-bottom: solid 3px var(--bs-primary);
 }

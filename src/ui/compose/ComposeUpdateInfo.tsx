@@ -13,7 +13,7 @@ export default function ComposeUpdateInfo() {
 
     return (
         <>
-            <CheckboxField title="Notify followers about the update" name="updateImportant" groupClassName="pl-2"/>
+            <CheckboxField title="Notify followers about the update" name="updateImportant" groupClassName="ps-2"/>
             {updateImportant &&
                 <InputField title="Update description" name="updateDescription" maxLength={128} anyValue/>
             }

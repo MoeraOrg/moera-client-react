@@ -1,7 +1,7 @@
 .emoji-list-dialog .help {
-    color: var(--gray);
+    color: var(--bs-gray);
 }
 
 .emoji-list-dialog .help .marker {
-    color: var(--primary);
+    color: var(--bs-primary);
 }

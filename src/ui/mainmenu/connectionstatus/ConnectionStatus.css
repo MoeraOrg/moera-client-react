@@ -15,6 +15,7 @@
     font-size: 150%;
     position: relative;
     top: 0.15rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
 }
 
 .connection-status .connection-button:hover {

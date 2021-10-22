@@ -2,8 +2,8 @@
     text-align: center;
     font-size: large;
     font-weight: bold;
-    color: var(--cyan);
-    border: 1px var(--cyan) solid;
+    color: var(--bs-cyan);
+    border: 1px var(--bs-cyan) solid;
     cursor: pointer;
 }
 

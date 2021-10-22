@@ -71,7 +71,7 @@ class ComposePage extends React.PureComponent<Props, State> {
                     <h2>
                         {title}
                         {postingId != null &&
-                            <Jump className="btn btn-sm btn-outline-secondary ml-3" href={`/post/${postingId}`}>
+                            <Jump className="btn btn-sm btn-outline-secondary ms-3" href={`/post/${postingId}`}>
                                 &larr; Post
                             </Jump>
                         }

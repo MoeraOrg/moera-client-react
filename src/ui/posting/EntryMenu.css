@@ -12,7 +12,7 @@
 }
 
 .entry .menu .chevron:hover {
-    color: var(--gray-dark);
+    color: var(--bs-gray-dark);
 }
 
 .entry .menu .no-actions {

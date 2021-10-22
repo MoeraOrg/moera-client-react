@@ -163,7 +163,7 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
                             {" "}are preferred
                         </div>
                     :
-                        <div className="text-right">
+                        <div className="text-end">
                             <button type="button"
                                     className={cx(
                                         "btn",
@@ -181,7 +181,7 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
                     <h5 className="mt-3">
                         {additionalReactions.length > 0 && "Main"}
                         {advanced ||
-                            <div className="btn-group ml-3">
+                            <div className={cx("btn-group", {"ms-3": additionalReactions.length > 0})}>
                                 <button type="button" className="btn btn-sm btn-outline-secondary"
                                         onClick={this.onSelectAll}>Select all</button>
                                 <button type="button" className="btn btn-sm btn-outline-secondary"

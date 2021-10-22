@@ -15,5 +15,5 @@
 
 .posting-not-found .message {
     font-size: large;
-    color: var(--gray);
+    color: var(--bs-gray);
 }

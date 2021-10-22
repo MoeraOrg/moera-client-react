@@ -71,7 +71,7 @@ class FeedGotoButton extends React.PureComponent<Props, State> {
                                     }}
                                     dateFormat="dd-MM-yyyy"
                                     withPortal={Browser.isTinyScreen()}/>
-                        <Button variant="outline-info" size="sm" className="ml-2" invisible={atBottom}
+                        <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom}
                                 onClick={this.toBottom}>
                             <FontAwesomeIcon icon="arrow-down"/>&nbsp;Bottom
                         </Button>

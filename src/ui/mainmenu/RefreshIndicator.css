@@ -15,11 +15,11 @@
 
 .refresh-indicator .body {
     flex: auto;
-    background-color: var(--orange);
+    background-color: var(--bs-orange);
 }
 
 .refresh-indicator .tail {
     flex: none;
     width: 1rem;
-    background-image: linear-gradient(to right, var(--orange), transparent);
+    background-image: linear-gradient(to right, var(--bs-orange), transparent);
 }

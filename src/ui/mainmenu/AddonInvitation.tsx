@@ -8,6 +8,7 @@ import { isConnectedToHome } from "state/home/selectors";
 import { getSetting, isSettingsClientValuesLoaded } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
+import { CloseButton } from "ui/control";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
 
@@ -62,9 +63,7 @@ class AddonInvitation extends React.Component<Props, State> {
         return (
             <div className="alert alert-primary alert-dismissible mb-0 fade show" role="alert">
                 <span dangerouslySetInnerHTML={{__html: this.getHtml()}}/>
-                <button type="button" className="close" aria-label="Close" onClick={this.onClick}>
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <CloseButton onClick={this.onClick}/>
             </div>
         );
     }

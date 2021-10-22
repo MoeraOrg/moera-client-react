@@ -12,11 +12,11 @@
     flex: none;
     display: block;
     margin-left: .2em;
-    font-family: var(--font-family-monospace);
+    font-family: var(--bs-font-monospace);
 }
 
 .domain-field .domain-name {
-    font-family: var(--font-family-monospace);
+    font-family: var(--bs-font-monospace);
 }
 
 .domain-field .domain-auto {
@@ -24,7 +24,7 @@
 }
 
 .domain-field .domain-name .hostname {
-    color: var(--pink);
+    color: var(--bs-pink);
 }
 
 .domain-field BUTTON {

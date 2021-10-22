@@ -29,7 +29,7 @@
 }
 
 .comment.focused .content {
-    border: dashed 1px var(--primary);
+    border: dashed 1px var(--bs-primary);
 }
 
 .comment .content.preview {
@@ -46,11 +46,6 @@
     .comment .content.preview {
         max-height: 100vh;
     }
-}
-
-.comment > .content IMG {
-    width: auto;
-    height: auto;
 }
 
 .comment .content IMG, .comment .content IFRAME {

@@ -20,10 +20,12 @@ export const Label = ({title, name, className, horizontal, checkbox, undo, reset
         <>
             <label htmlFor={name} className={cx(
                 className, {
+                    "form-label": !horizontal,
                     "col-form-label": horizontal,
                     "form-check-label": checkbox,
                     "checkbox-field-label": checkbox,
-                    "mr-2": undo || reset
+                    "me-2": (undo || reset) && !horizontal,
+                    "me-3": horizontal
                 })}>
                 {title}
             </label>

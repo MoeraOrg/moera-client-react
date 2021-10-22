@@ -4,6 +4,6 @@
 
 .subscribe-button.btn-outline-secondary:hover {
     color: white;
-    background-color: var(--danger);
-    border-color: var(--danger);
+    background-color: var(--bs-danger);
+    border-color: var(--bs-danger);
 }
