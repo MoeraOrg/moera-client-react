@@ -1,0 +1,15 @@
+.rich-text-image-dialog-dropzone {
+    color: var(--bs-gray);
+    text-align: center;
+    border: 2px dashed var(--bs-info);
+    padding: 1em;
+    margin-bottom: 1rem;
+}
+
+.rich-text-image-dialog-dropzone.drag-accept {
+    border: 2px solid var(--bs-primary);
+}
+
+.rich-text-image-dialog-dropzone.drag-reject {
+    border: 2px solid var(--bs-danger);
+}

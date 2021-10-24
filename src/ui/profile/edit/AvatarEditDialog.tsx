@@ -4,6 +4,7 @@ import ReactAvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
 import cx from 'classnames';
 
+import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
 import { Button, ModalDialog } from "ui/control";
 import avatarPlaceholder from "ui/control/avatar.png";
 import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload } from "state/profile/actions";
@@ -14,14 +15,6 @@ import Rotate from "ui/profile/edit/Rotate";
 import AvatarShape from "ui/profile/edit/AvatarShape";
 import Scale from "ui/profile/edit/Scale";
 import "./AvatarEditDialog.css";
-
-const ACCEPTED_MIME_TYPES = [
-    "image/avif",
-    "image/gif",
-    "image/jpeg",
-    "image/png",
-    "image/webp"
-];
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -151,7 +144,7 @@ class AvatarEditDialog extends React.PureComponent<Props, State> {
                         <Rotate value={rotate} onChange={this.onRotateChange}/>
                         <AvatarShape value={shape} onChange={this.onShapeChange}/>
                     </div>
-                    <Dropzone onDrop={this.onDrop} noClick noKeyboard accept={ACCEPTED_MIME_TYPES} maxFiles={1}>
+                    <Dropzone onDrop={this.onDrop} noClick noKeyboard accept={ACCEPTED_IMAGE_TYPES} maxFiles={1}>
                         {({getRootProps, getInputProps, isDragAccept, isDragReject}) => (
                             <div {...getRootProps()}>
                                 <ReactAvatarEditor

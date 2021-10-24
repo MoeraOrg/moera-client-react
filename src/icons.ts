@@ -13,6 +13,7 @@ import {
     faCode,
     faCog,
     faComment,
+    faDesktop,
     faExclamationCircle,
     faExclamationTriangle,
     faExternalLinkAlt,
@@ -23,6 +24,7 @@ import {
     faFileAlt,
     faFileDownload,
     faFrown,
+    faGlobeEurope,
     faHome,
     faImage,
     faItalic,
@@ -87,6 +89,7 @@ export default function initIconLibrary() {
     library.add(faCog);
     library.add(faComment);
     library.add(faCommentRegular);
+    library.add(faDesktop);
     library.add(faEnvelope);
     library.add(faEnvelopeOpen);
     library.add(faExclamationCircle);
@@ -99,6 +102,7 @@ export default function initIconLibrary() {
     library.add(faFileAlt);
     library.add(faFileDownload);
     library.add(faFrown);
+    library.add(faGlobeEurope);
     library.add(faHome);
     library.add(faImage);
     library.add(faItalic);

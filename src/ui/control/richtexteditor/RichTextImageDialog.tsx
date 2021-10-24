@@ -1,9 +1,13 @@
 import React from 'react';
+import { useField } from 'formik';
 
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
+import RichTextImageDialogTabs from "ui/control/richtexteditor/RichTextImageDialogTabs";
+import RichTextImageDialogDropzone from "ui/control/richtexteditor/RichTextImageDialogDropzone";
 
 export interface RichTextImageValues {
+    source?: string;
     href?: string;
     title?: string;
     alt?: string;
@@ -12,17 +16,27 @@ export interface RichTextImageValues {
 type Props = RichTextEditorDialogProps<RichTextImageValues>;
 
 const mapPropsToValues = (): RichTextImageValues => ({
+    source: "device",
     href: "",
     title: "",
     alt: ""
 });
 
-const RichTextImageDialog = () => (
-    <>
-        <InputField name="href" title="URL" autoFocus/>
-        <InputField name="title" title="Title"/>
-        <InputField name="alt" title="Alternative text"/>
-    </>
-);
+function RichTextImageDialog() {
+    const [, {value: source}] = useField<string>("source");
+
+    return (
+        <>
+            <RichTextImageDialogTabs/>
+            {source === "device" ?
+                <RichTextImageDialogDropzone/>
+            :
+                <InputField name="href" title="URL" autoFocus/>
+            }
+            <InputField name="title" title="Title"/>
+            <InputField name="alt" title="Alternative text"/>
+        </>
+    );
+}
 
 export default richTextEditorDialog<Props, RichTextImageValues>("Insert an image", mapPropsToValues, RichTextImageDialog);
