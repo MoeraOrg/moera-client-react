@@ -5,9 +5,11 @@ import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import RichTextImageDialogTabs from "ui/control/richtexteditor/RichTextImageDialogTabs";
 import RichTextImageDialogDropzone from "ui/control/richtexteditor/RichTextImageDialogDropzone";
+import { PrivateMediaFileInfo } from "api/node/api-types";
 
 export interface RichTextImageValues {
     source?: string;
+    mediaFile?: PrivateMediaFileInfo | null;
     href?: string;
     title?: string;
     alt?: string;
@@ -17,6 +19,7 @@ type Props = RichTextEditorDialogProps<RichTextImageValues>;
 
 const mapPropsToValues = (): RichTextImageValues => ({
     source: "device",
+    mediaFile: null,
     href: "",
     title: "",
     alt: ""
