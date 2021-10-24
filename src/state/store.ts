@@ -69,6 +69,7 @@ import nodeCardsExecutors from "state/nodecards/sagas";
 import contactsExecutors from "state/contacts/sagas";
 import shareDialogExecutors from "state/sharedialog/sagas";
 import sourceDialogExecutors from "state/sourcedialog/sagas";
+import richTextEditorExecutors from "state/richtexteditor/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -194,6 +195,7 @@ const executors = collectExecutors(
     contactsExecutors,
     shareDialogExecutors,
     sourceDialogExecutors,
+    richTextEditorExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

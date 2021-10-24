@@ -24,6 +24,7 @@ import { PulseAnyAction } from "state/pulse/actions";
 import { QuickTipsAnyAction } from "state/quicktips/actions";
 import { ReactionsDialogAnyAction } from "state/reactionsdialog/actions";
 import { RefreshAnyAction } from "state/refresh/actions";
+import { RichTextEditorAnyAction } from "state/richtexteditor/actions";
 import { SettingsAnyAction } from "state/settings/actions";
 import { ShareDialogAnyAction } from "state/sharedialog/actions";
 import { SignUpDialogAnyAction } from "state/signupdialog/actions";
@@ -58,6 +59,7 @@ export type ClientAction =
     | QuickTipsAnyAction
     | ReactionsDialogAnyAction
     | RefreshAnyAction
+    | RichTextEditorAnyAction
     | SettingsAnyAction
     | ShareDialogAnyAction
     | SignUpDialogAnyAction

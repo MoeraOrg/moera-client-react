@@ -46,7 +46,7 @@ import {
     SubscriptionInfo,
     SubscriptionType,
     TokenCreated,
-    WhoAmI
+    WhoAmI, PrivateMediaFileInfo
 } from "api/node/api-types";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { urlWithParameters, ut } from "util/url";
@@ -590,6 +590,14 @@ export function* postMediaPublic(nodeName: string | null, file: File,
     return yield* callApi({
         nodeName, location: "/media/public", method: "POST", auth: true, body: file, onProgress,
         schema: NodeApi.PublicMediaFileInfo
+    });
+}
+
+export function* postMediaPrivate(nodeName: string | null, file: File,
+                                  onProgress: ProgressHandler): CallApiResult<PrivateMediaFileInfo> {
+    return yield* callApi({
+        nodeName, location: "/media/private", method: "POST", auth: true, body: file, onProgress,
+        schema: NodeApi.PrivateMediaFileInfo
     });
 }
 
