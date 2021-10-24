@@ -1,9 +1,8 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { Avatar } from "ui/control";
+import { Avatar, DeleteButton } from "ui/control";
 import { AvatarInfo } from "api/node/api-types";
 
 interface Props {
@@ -25,14 +24,7 @@ export default function AvatarSelectorItem({nodeName, avatar, onSelect, onDelete
 
     return (
         <>
-            {onDelete &&
-                <div className="delete" title="Delete" onClick={onDeleteClick}>
-                    <span className="fa-layers fa-fw">
-                        <FontAwesomeIcon icon="times" color="white"/>
-                        <FontAwesomeIcon icon="times-circle"/>
-                    </span>
-                </div>
-            }
+            {onDelete && <DeleteButton onClick={onDeleteClick}/>}
             <div ref={sortable.setNodeRef} style={sortableStyle} {...sortable.attributes} {...sortable.listeners}>
                 <Avatar avatar={avatar} ownerName={nodeName} size={100} shape="design" draggable={false}
                         onClick={onClick}/>

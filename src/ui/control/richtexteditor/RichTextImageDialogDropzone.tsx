@@ -9,7 +9,7 @@ import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImageUpload } from "state/richtexteditor/actions";
 import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
-import { Button } from "ui/control/Button";
+import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
 
@@ -41,6 +41,10 @@ function RichTextImageDialogDropzone({rootPage, richTextEditorImageUpload}: Prop
         }
     }
 
+    const onDelete = () => {
+        setValue(null);
+    }
+
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
         useDropzone({noClick: true, noKeyboard: true, accept: ACCEPTED_IMAGE_TYPES, maxFiles: 1, onDrop});
 
@@ -57,7 +61,10 @@ function RichTextImageDialogDropzone({rootPage, richTextEditorImageUpload}: Prop
                 `Uploading ${uploadProgress}% ...`
             :
                 (src != null ?
-                    <img alt="" src={src} width={imageWidth} height={imageHeight}/>
+                    <div className="uploaded-image">
+                        <DeleteButton onClick={onDelete}/>
+                        <img alt="" src={src} width={imageWidth} height={imageHeight}/>
+                    </div>
                 :
                     <>
                         <Button variant="primary" size="sm" onClick={open}>Upload image</Button> or drop it here

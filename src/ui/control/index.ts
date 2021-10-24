@@ -3,6 +3,7 @@ export { AvatarWithPopup } from "ui/control/AvatarWithPopup";
 export { Button } from "ui/control/Button";
 export { CloseButton } from "ui/control/CloseButton";
 export { ConflictWarning } from "ui/control/ConflictWarning";
+export { DeleteButton } from "ui/control/DeleteButton";
 export { DraftSaver } from "ui/control/draft/DraftSaver";
 export { DropdownMenu } from "ui/control/DropdownMenu";
 export { EmojiButton } from "ui/control/EmojiButton";

@@ -13,3 +13,9 @@
 .rich-text-image-dialog-dropzone.drag-reject {
     border: 2px solid var(--bs-danger);
 }
+
+.rich-text-image-dialog-dropzone .uploaded-image {
+    display: inline-block;
+    padding: .25rem;
+    position: relative;
+}
