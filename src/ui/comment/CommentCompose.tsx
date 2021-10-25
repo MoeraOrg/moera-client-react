@@ -81,7 +81,7 @@ function CommentCompose(props: Props) {
                                        placeholder={`Write a comment to ${mention} here...`}
                                        disabled={beingPosted} smileysEnabled={smileysEnabled}
                                        hidingPanel={values.body.text.trim() === ""} format={sourceFormatDefault}
-                                       onKeyDown={onKeyDown}/>
+                                       onKeyDown={onKeyDown} noMedia/>
                     </div>
                     <CommentComposeButtons loading={beingPosted}/>
                 </Form>

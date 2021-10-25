@@ -10,6 +10,7 @@ interface Props {
     name: string;
     title?: string;
     rows?: number;
+    noMedia?: boolean;
     placeholder?: string;
     autoFocus?: boolean;
     anyValue?: boolean;
@@ -25,7 +26,7 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function RichTextField({name, title, rows = 3, placeholder = "Enter text here...", autoFocus, anyValue,
+export function RichTextField({name, title, rows = 3, noMedia, placeholder = "Enter text here...", autoFocus, anyValue,
                                className, autoComplete, noFeedback = false, disabled = false, initialValue,
                                defaultValue, smileysEnabled, hidingPanel, format, onKeyDown}: Props) {
     const [{value, onBlur}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
@@ -61,6 +62,7 @@ export function RichTextField({name, title, rows = 3, placeholder = "Enter text 
                     hidingPanel={hidingPanel}
                     format={format}
                     onKeyDown={onKeyDown}
+                    noMedia={noMedia}
                 />
                 {!noFeedback && touched && error && <div className="invalid-feedback">{(error as any).text}</div>}
             </>

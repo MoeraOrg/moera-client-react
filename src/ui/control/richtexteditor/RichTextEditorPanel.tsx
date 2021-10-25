@@ -23,6 +23,7 @@ type Props = {
     panel: React.RefObject<HTMLDivElement>,
     hiding?: boolean;
     format: string;
+    noMedia?: boolean;
     onImageAdded?: (id: string) => void;
     onImageDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
@@ -364,7 +365,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {hiding, format, panel, onImageAdded, onImageDeleted} = this.props;
+        const {hiding, format, panel, noMedia, onImageAdded, onImageDeleted} = this.props;
         const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText} = this.state;
 
         if (format === "plain-text") {
@@ -393,7 +394,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
                 <RichTextLinkDialog show={linkDialog} text={dialogText} onSubmit={this.onLinkSubmit}/>
-                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit}
+                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit} noMedia={noMedia}
                                      onAdded={onImageAdded} onDeleted={onImageDeleted}/>
                 <RichTextMentionDialog show={mentionDialog} onSubmit={this.onMentionSubmit}/>
             </div>

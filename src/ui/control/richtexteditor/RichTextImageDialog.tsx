@@ -16,24 +16,25 @@ export interface RichTextImageValues {
 }
 
 type Props = {
+    noMedia?: boolean;
     onAdded?: (id: string) => void;
     onDeleted?: (id: string) => void;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 
-const mapPropsToValues = (): RichTextImageValues => ({
-    source: "device",
+const mapPropsToValues = (props: Props): RichTextImageValues => ({
+    source: props.noMedia === true ? "internet" : "device",
     mediaFile: null,
     href: "",
     title: "",
     alt: ""
 });
 
-function RichTextImageDialog({onAdded, onDeleted}: Props) {
+function RichTextImageDialog({noMedia = false, onAdded, onDeleted}: Props) {
     const [, {value: source}] = useField<string>("source");
 
     return (
         <>
-            <RichTextImageDialogTabs/>
+            {!noMedia && <RichTextImageDialogTabs/>}
             {source === "device" ?
                 <RichTextImageDialogDropzone onAdded={onAdded} onDeleted={onDeleted}/>
             :

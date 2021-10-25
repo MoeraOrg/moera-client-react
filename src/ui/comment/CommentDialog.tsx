@@ -87,7 +87,7 @@ function CommentDialog(props: Props) {
                     </div>
                     <RichTextField name="body" rows={5} anyValue autoFocus disabled={loading || beingPosted}
                                    smileysEnabled={smileysEnabled} format={sourceFormatDefault}
-                                   onKeyDown={onKeyDown}/>
+                                   onKeyDown={onKeyDown} noMedia/>
                 </div>
                 <div className="modal-footer">
                     <CommentDraftSaver initialText={initialText} commentId={commentId}/>
