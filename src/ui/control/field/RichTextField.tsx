@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import cx from 'classnames';
 
 import { RichTextEditor, RichTextValue } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import { FormGroup } from "ui/control/FormGroup";
 import { SourceFormat } from "api/node/api-types";
+import { useFormikContext } from "formik";
 
 interface Props {
     name: string;
@@ -29,8 +30,12 @@ interface Props {
 export function RichTextField({name, title, rows = 3, noMedia, placeholder = "Enter text here...", autoFocus, anyValue,
                                className, autoComplete, noFeedback = false, disabled = false, initialValue,
                                defaultValue, smileysEnabled, hidingPanel, format, onKeyDown}: Props) {
-    const [{value, onBlur}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
+    const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
+    const {setFieldValue} = useFormikContext();
+
+    // useCallback() and setFieldValue() (not setValue()) is mandatory here
+    const onChange = useCallback(v => setFieldValue(name, v), [name, setFieldValue]);
 
     return (
         <FormGroup
@@ -45,7 +50,7 @@ export function RichTextField({name, title, rows = 3, noMedia, placeholder = "En
                 <RichTextEditor
                     name={name}
                     value={value}
-                    onChange={v => setValue(v)}
+                    onChange={onChange}
                     onBlur={onBlur}
                     className={cx(
                         "form-control", {

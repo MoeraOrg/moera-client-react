@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import cx from 'classnames';
 
 import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichTextArea";
@@ -45,11 +45,12 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
         }
     }
 
-    const onTextChange = () => {
+    // useCallback() is mandatory here
+    const onTextChange = useCallback(() => {
         if (onChange != null && textArea.current != null) {
             onChange(new RichTextValue(textArea.current.value, value.media));
         }
-    }
+    }, [onChange, value.media]);
 
     return (
         <div className={cx("rich-text-editor", className)}>
