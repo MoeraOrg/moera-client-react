@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
@@ -26,49 +26,43 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-class ProfileEditor extends React.PureComponent<Props> {
+function ProfileEditor(props: Props) {
+    const {loading, loaded, updating, conflict, profile, profileEditCancel, profileEditConflictClose, resetForm} = props;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.loaded && !prevProps.loaded) {
-            this.props.resetForm({
-                values: profileEditorLogic.mapPropsToValues(this.props),
-            });
-        }
-    }
+    useEffect(() => {
+        const values = profileEditorLogic.mapPropsToValues(props);
+        resetForm({values});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loaded, profile.bioSrc, resetForm]); // 'props' are missing on purpose
 
-    render() {
-        const {loading, updating, conflict, profileEditCancel, profileEditConflictClose} = this.props;
-
-        return (
-            <>
-                <PageHeader>
-                    <h2>Edit Profile <Loading active={loading} /></h2>
-                </PageHeader>
-                <Page>
-                    <div className="profile-editor">
-                        <Form>
-                            <ConflictWarning text="Profile was edited by somebody." show={conflict}
-                                             onClose={profileEditConflictClose}/>
-                            <AvatarEditor name="avatar"/>
-                            <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
-                            <InputField title="Title" name="title" maxLength={120}/>
-                            <ComboboxField title="Gender" name="gender" data={["Male", "Female"]}
-                                           col="col-sm-6"/>
-                            <InputField title="E-Mail" name="email" maxLength={63} col="col-sm-6"/>
-                            <RichTextField title="Bio" name="bioSrc" placeholder="Write anything..." format="markdown"
-                                           smileysEnabled anyValue noMedia/>
-                            <div className="profile-editor-footer">
-                                <Button variant="secondary" onClick={profileEditCancel}
-                                        disabled={updating}>Cancel</Button>
-                                <Button variant="primary" type="submit" loading={updating}>Update</Button>
-                            </div>
-                        </Form>
-                    </div>
-                </Page>
-            </>
-        );
-    }
-
+    return (
+        <>
+            <PageHeader>
+                <h2>Edit Profile <Loading active={loading} /></h2>
+            </PageHeader>
+            <Page>
+                <div className="profile-editor">
+                    <Form>
+                        <ConflictWarning text="Profile was edited by somebody." show={conflict}
+                                         onClose={profileEditConflictClose}/>
+                        <AvatarEditor name="avatar"/>
+                        <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
+                        <InputField title="Title" name="title" maxLength={120}/>
+                        <ComboboxField title="Gender" name="gender" data={["Male", "Female"]}
+                                       col="col-sm-6"/>
+                        <InputField title="E-Mail" name="email" maxLength={63} col="col-sm-6"/>
+                        <RichTextField title="Bio" name="bioSrc" placeholder="Write anything..." format="markdown"
+                                       smileysEnabled anyValue noMedia/>
+                        <div className="profile-editor-footer">
+                            <Button variant="secondary" onClick={profileEditCancel}
+                                    disabled={updating}>Cancel</Button>
+                            <Button variant="primary" type="submit" loading={updating}>Update</Button>
+                        </div>
+                    </Form>
+                </div>
+            </Page>
+        </>
+    );
 }
 
 const profileEditorLogic = {
