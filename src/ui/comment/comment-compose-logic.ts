@@ -1,9 +1,10 @@
+import { FormikBag } from 'formik';
 import * as yup from 'yup';
 
+import { AvatarImage, CommentInfo, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
+import { RichTextValue } from "ui/control";
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
-import { AvatarImage, CommentInfo, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
-import { FormikBag } from "formik";
 
 interface MapToValuesProps {
     comment: CommentInfo | null;
@@ -29,7 +30,7 @@ interface CommentComposeProps extends MapToValuesProps, MapToCommentTextProps {
 
 export interface CommentComposeValues {
     avatar: AvatarImage | null;
-    body: string;
+    body: RichTextValue;
 }
 
 const commentComposeLogic = {
@@ -44,12 +45,14 @@ const commentComposeLogic = {
 
         return {
             avatar,
-            body
+            body: new RichTextValue(body)
         };
     },
 
     validationSchema: yup.object().shape({
-        body: yup.string().trim().required("Must not be empty")
+        body: yup.object().shape({
+            text: yup.string().trim().required("Must not be empty")
+        })
     }),
 
     _replaceSmileys(smileysEnabled: boolean, text: string): string {
@@ -66,7 +69,7 @@ const commentComposeLogic = {
             ownerFullName: props.ownerFullName,
             ownerAvatar: toAvatarDescription(values.avatar),
             bodySrc: JSON.stringify({
-                text: this._replaceSmileys(props.smileysEnabled, values.body.trim())
+                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
             }),
             bodySrcFormat: props.sourceFormatDefault,
             acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},

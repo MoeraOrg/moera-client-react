@@ -64,7 +64,7 @@ class ComposePage extends React.PureComponent<Props, State> {
                beingPosted, smileysEnabled, composeConflictClose, values} = this.props;
         const title = postingId == null ? "New Post" : "Edit Post";
         const loadingContent = loadingPosting || loadingDraft;
-        const submitDisabled = values["body"].trim().length === 0;
+        const submitDisabled = values.body.text.trim().length === 0;
         return (
             <>
                 <PageHeader>

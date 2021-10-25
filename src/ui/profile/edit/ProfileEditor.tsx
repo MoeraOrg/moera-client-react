@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 import { AvatarInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { Button, ConflictWarning, Loading } from "ui/control";
+import { Button, ConflictWarning, Loading, RichTextValue } from "ui/control";
 import { ComboboxField, InputField, RichTextField } from "ui/control/field";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import PageHeader from "ui/page/PageHeader";
@@ -20,7 +20,7 @@ interface Values {
     title: string;
     gender: string;
     email: string;
-    bioSrc: string;
+    bioSrc: RichTextValue;
     avatar: AvatarInfo | null;
 }
 
@@ -79,7 +79,7 @@ const profileEditorLogic = {
             title: props.profile.title || "",
             gender: props.profile.gender || "",
             email: props.profile.email || "",
-            bioSrc: props.profile.bioSrc || "",
+            bioSrc: new RichTextValue(props.profile.bioSrc || ""),
             avatar: props.profile.avatar ?? null
         }
     },
@@ -89,7 +89,9 @@ const profileEditorLogic = {
         title: yup.string().trim().max(120, "Too long"),
         gender: yup.string().trim().max(31, "Too long"),
         email: yup.string().trim().max(63, "Too long").email("Must be a valid e-mail"),
-        bioSrc: yup.string().trim().max(4096, "Too long")
+        bioSrc: yup.object().shape({
+            text: yup.string().trim().max(4096, "Too long")
+        })
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -98,7 +100,7 @@ const profileEditorLogic = {
             title: values.title.trim(),
             gender: values.gender.trim(),
             email: values.email.trim(),
-            bioSrc: values.bioSrc.trim(),
+            bioSrc: values.bioSrc.text.trim(),
             bioSrcFormat: "markdown",
             avatarId: values.avatar ? values.avatar.id : null
         });

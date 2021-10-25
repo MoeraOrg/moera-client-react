@@ -4,6 +4,7 @@ import { FormikBag } from 'formik';
 
 import { ClientSettings } from "api";
 import { AvatarImage, PostingText, SourceFormat, StoryAttributes } from "api/node/api-types";
+import { RichTextValue } from "ui/control";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
@@ -12,7 +13,7 @@ export interface ComposePageValues {
     avatar: AvatarImage | null;
     fullName: string | null;
     subject: string | null;
-    body: string;
+    body: RichTextValue;
     bodyFormatVisible: boolean;
     bodyFormat: SourceFormat;
     publishAtDefault: Date;
@@ -71,7 +72,7 @@ const composePageLogic = {
             avatar,
             fullName,
             subject,
-            body,
+            body: new RichTextValue(body),
             bodyFormatVisible: false,
             bodyFormat,
             publishAtDefault,
@@ -108,7 +109,9 @@ const composePageLogic = {
     },
 
     validationSchema: yup.object().shape({
-        body: yup.string().trim().required("Must not be empty")
+        body: yup.object().shape({
+            text: yup.string().trim().required("Must not be empty")
+        })
     }),
 
     _replaceSmileys(enabled: boolean, text: string): string {
@@ -138,7 +141,7 @@ const composePageLogic = {
                 subject: props.subjectPresent
                     ? this._replaceSmileys(props.smileysEnabled, values.subject?.trim() ?? "")
                     : null,
-                text: this._replaceSmileys(props.smileysEnabled, values.body.trim())
+                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
             }),
             bodySrcFormat: values.bodyFormat,
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},

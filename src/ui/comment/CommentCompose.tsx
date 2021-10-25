@@ -50,7 +50,7 @@ function CommentCompose(props: Props) {
     }
 
     const onBlur = () => {
-        if (values["body"].trim().length === 0) {
+        if (values.body.text.trim().length === 0) {
             bottomMenuShow();
         }
     }
@@ -80,7 +80,7 @@ function CommentCompose(props: Props) {
                         <RichTextField name="body" rows={1} anyValue
                                        placeholder={`Write a comment to ${mention} here...`}
                                        disabled={beingPosted} smileysEnabled={smileysEnabled}
-                                       hidingPanel={values.body.trim() === ""} format={sourceFormatDefault}
+                                       hidingPanel={values.body.text.trim() === ""} format={sourceFormatDefault}
                                        onKeyDown={onKeyDown}/>
                     </div>
                     <CommentComposeButtons loading={beingPosted}/>

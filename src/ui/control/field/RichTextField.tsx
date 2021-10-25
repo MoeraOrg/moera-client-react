@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { RichTextEditor } from "ui/control/index";
+import { RichTextEditor, RichTextValue } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import { FormGroup } from "ui/control/FormGroup";
 import { SourceFormat } from "api/node/api-types";
@@ -17,8 +17,8 @@ interface Props {
     autoComplete?: string;
     noFeedback?: boolean;
     disabled?: boolean;
-    initialValue?: string;
-    defaultValue?: string;
+    initialValue?: RichTextValue;
+    defaultValue?: RichTextValue;
     smileysEnabled?: boolean;
     hidingPanel?: boolean;
     format: SourceFormat;
@@ -28,8 +28,8 @@ interface Props {
 export function RichTextField({name, title, rows = 3, placeholder = "Enter text here...", autoFocus, anyValue,
                                className, autoComplete, noFeedback = false, disabled = false, initialValue,
                                defaultValue, smileysEnabled, hidingPanel, format, onKeyDown}: Props) {
-    const [inputProps, {touched, error}, , {undo, reset, onUndo, onReset}] =
-        useUndoableField<string>(name, initialValue, defaultValue);
+    const [{value, onBlur}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
+        useUndoableField<RichTextValue>(name, initialValue, defaultValue);
 
     return (
         <FormGroup
@@ -42,7 +42,10 @@ export function RichTextField({name, title, rows = 3, placeholder = "Enter text 
         >
             <>
                 <RichTextEditor
-                    {...inputProps}
+                    name={name}
+                    value={value}
+                    onChange={v => setValue(v)}
+                    onBlur={onBlur}
                     className={cx(
                         "form-control", {
                             "is-valid": !anyValue && touched && !error,
@@ -59,7 +62,7 @@ export function RichTextField({name, title, rows = 3, placeholder = "Enter text 
                     format={format}
                     onKeyDown={onKeyDown}
                 />
-                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                {!noFeedback && touched && error && <div className="invalid-feedback">{(error as any).text}</div>}
             </>
         </FormGroup>
     );

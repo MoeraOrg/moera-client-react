@@ -10,7 +10,7 @@ import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
-import { Button } from "ui/control";
+import { Button, RichTextValue } from "ui/control";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import commentComposeLogic from "ui/comment/comment-compose-logic";
 import "./CommentComposeButtons.css";
@@ -41,8 +41,8 @@ function CommentComposeButtons(props: Props) {
         e.preventDefault();
     };
 
-    const [, {value: body}] = useField("body");
-    const invisible = draft == null && body.trim().length === 0;
+    const [, {value: body}] = useField<RichTextValue>("body");
+    const invisible = draft == null && body.text.trim().length === 0;
 
     return (
         <div className="buttons">

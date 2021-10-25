@@ -327,7 +327,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         window.closeLightDialog = null;
     }
 
-    onImageSubmit = (ok: boolean, {href, title, alt}: RichTextImageValues) => {
+    onImageSubmit = (ok: boolean, {source, mediaFile, href, title, alt}: RichTextImageValues) => {
         const {textArea} = this.props;
 
         this.onImageClose();
@@ -336,21 +336,22 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             return;
         }
 
+        const src = source === "device" ? (mediaFile != null ? "hash:" + mediaFile.hash : null) : href;
         if (ok) {
             if (this.isMarkdown()) {
                 const titleAttr = title ? ` "${title}"`: "";
                 const altAttr = alt ?? "";
-                if (href) {
-                    textFieldEdit.insert(textArea.current, `![${altAttr}](${href}${titleAttr})`);
+                if (src) {
+                    textFieldEdit.insert(textArea.current, `![${altAttr}](${src}${titleAttr})`);
                 } else {
                     textFieldEdit.wrapSelection(textArea.current, `![${altAttr}](`, `${titleAttr})`);
                 }
             } else {
                 const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
                 const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
-                if (href) {
+                if (src) {
                     textFieldEdit.insert(textArea.current,
-                        `<img${altAttr}${titleAttr} src="${htmlEntities(href)}">`);
+                        `<img${altAttr}${titleAttr} src="${htmlEntities(src)}">`);
                 } else {
                     textFieldEdit.wrapSelection(textArea.current,
                         `<img${altAttr}${titleAttr} src="`, "\">");
