@@ -31,6 +31,7 @@ import {
     faLink,
     faList,
     faMinus,
+    faMobileAlt,
     faNetworkWired,
     faNewspaper,
     faPen,
@@ -111,6 +112,7 @@ export default function initIconLibrary() {
     library.add(faLink);
     library.add(faList);
     library.add(faMarkdown);
+    library.add(faMobileAlt);
     library.add(faNewspaper);
     library.add(faPen);
     library.add(faPenAlt);
