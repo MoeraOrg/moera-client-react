@@ -56,7 +56,7 @@ class ProfileEditor extends React.PureComponent<Props> {
                                            col="col-sm-6"/>
                             <InputField title="E-Mail" name="email" maxLength={63} col="col-sm-6"/>
                             <RichTextField title="Bio" name="bioSrc" placeholder="Write anything..." format="markdown"
-                                           smileysEnabled={true} anyValue noMedia/>
+                                           smileysEnabled anyValue noMedia/>
                             <div className="profile-editor-footer">
                                 <Button variant="secondary" onClick={profileEditCancel}
                                         disabled={updating}>Cancel</Button>

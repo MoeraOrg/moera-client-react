@@ -53,7 +53,7 @@ class InstantButton extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <Popover element={InstantBell} className="instant-popover" detached={true} onToggle={this.onToggle}>
+            <Popover element={InstantBell} className="instant-popover" detached onToggle={this.onToggle}>
                 {({hide}) => (
                     <Instants hide={hide} instantCount={this.state.instantCount}/>
                 )}

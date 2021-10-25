@@ -45,7 +45,7 @@ class ConfirmBox extends React.PureComponent<Props> {
         }
 
         return (
-            <ModalDialog risen={true} onClose={this.onNo}>
+            <ModalDialog risen onClose={this.onNo}>
                 <div className="modal-body">
                     {message}
                 </div>

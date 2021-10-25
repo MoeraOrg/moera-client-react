@@ -151,7 +151,7 @@ class ReactionButtonImpl extends React.PureComponent<Props, State> {
                         />
                     }
                 </Reference>
-                <DelayedPopper placement="top" arrow={true}>
+                <DelayedPopper placement="top" arrow>
                     <EmojiSelector
                         negative={negative}
                         reactions={this.state.reactions}

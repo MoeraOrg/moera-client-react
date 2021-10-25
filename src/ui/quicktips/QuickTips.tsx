@@ -85,7 +85,7 @@ class QuickTips extends React.PureComponent<Props> {
                     </ul>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="primary" block={true} onClick={this.onClose} autoFocus>OK</Button>
+                    <Button variant="primary" block onClick={this.onClose} autoFocus>OK</Button>
                 </div>
             </ModalDialog>
         );

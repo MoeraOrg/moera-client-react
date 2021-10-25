@@ -58,85 +58,85 @@ function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog
         case "facebook":
             return (
                 <FacebookShareButton url={url} quote={title} beforeOnClick={onClick}>
-                    <FacebookIcon size={40} round={true}/>
+                    <FacebookIcon size={40} round/>
                 </FacebookShareButton>
             );
         case "telegram":
             return (
                 <TelegramShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <TelegramIcon size={40} round={true}/>
+                    <TelegramIcon size={40} round/>
                 </TelegramShareButton>
             );
         case "twitter":
             return (
                 <TwitterShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <TwitterIcon size={40} round={true}/>
+                    <TwitterIcon size={40} round/>
                 </TwitterShareButton>
             );
         case "reddit":
             return (
                 <RedditShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <RedditIcon size={40} round={true}/>
+                    <RedditIcon size={40} round/>
                 </RedditShareButton>
             );
         case "email":
             return (
                 <EmailShareButton url={url} subject={title} beforeOnClick={onClick}>
-                    <EmailIcon size={40} round={true}/>
+                    <EmailIcon size={40} round/>
                 </EmailShareButton>
             );
         case "vk":
             return (
                 <VKShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <VKIcon size={40} round={true}/>
+                    <VKIcon size={40} round/>
                 </VKShareButton>
             );
         case "livejournal":
             return (
                 <LivejournalShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <LivejournalIcon size={40} round={true}/>
+                    <LivejournalIcon size={40} round/>
                 </LivejournalShareButton>
             );
         case "linkedin":
             return (
                 <LinkedinShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <LinkedinIcon size={40} round={true}/>
+                    <LinkedinIcon size={40} round/>
                 </LinkedinShareButton>
             );
         case "pocket":
             return (
                 <PocketShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <PocketIcon size={40} round={true}/>
+                    <PocketIcon size={40} round/>
                 </PocketShareButton>
             );
         case "tumblr":
             return (
                 <TumblrShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <TumblrIcon size={40} round={true}/>
+                    <TumblrIcon size={40} round/>
                 </TumblrShareButton>
             );
         case "whatsapp":
             return (
                 <WhatsappShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <WhatsappIcon size={40} round={true}/>
+                    <WhatsappIcon size={40} round/>
                 </WhatsappShareButton>
             );
         case "viber":
             return (
                 <ViberShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <ViberIcon size={40} round={true}/>
+                    <ViberIcon size={40} round/>
                 </ViberShareButton>
             );
         case "ok":
             return (
                 <OKShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <OKIcon size={40} round={true}/>
+                    <OKIcon size={40} round/>
                 </OKShareButton>
             );
         case "weibo":
             return (
                 <WeiboShareButton url={url} title={title} beforeOnClick={onClick}>
-                    <WeiboIcon size={40} round={true}/>
+                    <WeiboIcon size={40} round/>
                 </WeiboShareButton>
             );
         default:

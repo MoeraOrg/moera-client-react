@@ -35,7 +35,7 @@ function ComposePublishAt({postingId, draftId}: Props) {
                             dateFormat="dd-MM-yyyy, HH:mm"
                             withPortal={Browser.isTinyScreen()}
                             onKeyDown={onKeyDown}
-                            autoFocus={true}/>
+                            autoFocus/>
                 <button title="Reset to default" onClick={onReset}>
                     <FontAwesomeIcon icon="backspace"/>
                 </button>

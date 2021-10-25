@@ -21,7 +21,7 @@ function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, ch
     }
 
     return (
-        <Manager onPreparePopper={onPreparePopper} disabled={disabled} clickable={true}>
+        <Manager onPreparePopper={onPreparePopper} disabled={disabled} clickable>
             <Reference>
                 {(ref, mainEnter, mainLeave, mainTouch) => children(ref, mainEnter, mainLeave, mainTouch)}
             </Reference>

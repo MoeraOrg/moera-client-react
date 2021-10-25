@@ -23,7 +23,7 @@ const PostingSource = ({posting}: Props) => (
                     </Jump>
                 }
             </Reference>
-            <DelayedPopper placement="bottom-start" arrow={true}>
+            <DelayedPopper placement="bottom-start" arrow>
                 <PostingSources posting={posting}/>
             </DelayedPopper>
         </Manager>

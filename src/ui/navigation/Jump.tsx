@@ -90,7 +90,7 @@ class Jump extends React.PureComponent<Props> {
             const url = redirectUrl(standalone, redirectPage, ownerName, nodeLocation, href, trackingId);
             return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
                       ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                      onTouchStart={onTouchStart} onClick={this.onNear} suppressHydrationWarning={true}>{children}</a>;
+                      onTouchStart={onTouchStart} onClick={this.onNear} suppressHydrationWarning>{children}</a>;
         } else {
             let nodeLocation;
             if (nodeOwnerName === homeOwnerName) {
@@ -105,7 +105,7 @@ class Jump extends React.PureComponent<Props> {
             return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
                       ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, href)}
-                      suppressHydrationWarning={true}>{children}</a>;
+                      suppressHydrationWarning>{children}</a>;
         }
     }
 
