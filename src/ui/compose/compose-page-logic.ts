@@ -52,6 +52,7 @@ const composePageLogic = {
         const body = props.posting != null
             ? (props.posting.bodySrc?.text ?? "")
             : (props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "");
+        const media = props.posting != null && props.posting.media != null ? props.posting.media.map(mf => mf.id) : [];
         const publishAtDefault = new Date();
         const publishAt = props.draftId != null && props.posting?.publishAt != null
             ? fromUnixTime(props.posting?.publishAt) : publishAtDefault;
@@ -72,7 +73,7 @@ const composePageLogic = {
             avatar,
             fullName,
             subject,
-            body: new RichTextValue(body),
+            body: new RichTextValue(body, media),
             bodyFormatVisible: false,
             bodyFormat,
             publishAtDefault,
@@ -144,6 +145,7 @@ const composePageLogic = {
                 text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
             }),
             bodySrcFormat: values.bodyFormat,
+            media: values.body.media,
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,

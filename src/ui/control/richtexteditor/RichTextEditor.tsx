@@ -29,15 +29,31 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
 
+    const onImageAdded = (id: string) => {
+        if (onChange != null && value.media != null) {
+            const media = value.media.filter(v => v !== id);
+            media.push(id);
+            onChange(new RichTextValue(value.text, media));
+        }
+    }
+
+    const onImageDeleted = (id: string) => {
+        if (onChange != null && value.media != null) {
+            const media = value.media.filter(v => v !== id);
+            onChange(new RichTextValue(value.text, media));
+        }
+    }
+
     const onTextChange = () => {
         if (onChange != null && textArea.current != null) {
-            onChange(new RichTextValue(textArea.current.value));
+            onChange(new RichTextValue(textArea.current.value, value.media));
         }
     }
 
     return (
         <div className={cx("rich-text-editor", className)}>
-            <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}/>
+            <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
+                                 onImageAdded={onImageAdded} onImageDeleted={onImageDeleted}/>
             <RichTextArea name={name} value={value.text} format={format} rows={rows} placeholder={placeholder}
                           autoFocus={autoFocus} autoComplete={autoComplete} disabled={disabled}
                           smileysEnabled={smileysEnabled} onKeyDown={onKeyDown} onChange={onTextChange} onBlur={onBlur}

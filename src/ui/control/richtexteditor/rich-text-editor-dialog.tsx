@@ -10,7 +10,7 @@ export interface RichTextEditorDialogProps<V> {
 }
 
 export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
-    title: string, mapPropsToValues: (props: P) => V, DialogBody: React.ComponentType) {
+    title: string, mapPropsToValues: (props: P) => V, DialogBody: React.ComponentType<P>) {
 
     const logic = {
         mapPropsToValues,
@@ -46,7 +46,7 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
                 <ModalDialog title={title} onClose={this.onClose}>
                     <Form>
                         <div className="modal-body">
-                            <DialogBody/>
+                            <DialogBody {...this.props}/>
                         </div>
                         <div className="modal-footer">
                             <Button variant="secondary" onClick={this.onClose}>Cancel</Button>

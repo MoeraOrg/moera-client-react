@@ -1,11 +1,11 @@
 import React from 'react';
 import { useField } from 'formik';
 
+import { PrivateMediaFileInfo } from "api/node/api-types";
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import RichTextImageDialogTabs from "ui/control/richtexteditor/RichTextImageDialogTabs";
 import RichTextImageDialogDropzone from "ui/control/richtexteditor/RichTextImageDialogDropzone";
-import { PrivateMediaFileInfo } from "api/node/api-types";
 
 export interface RichTextImageValues {
     source?: string;
@@ -15,7 +15,10 @@ export interface RichTextImageValues {
     alt?: string;
 }
 
-type Props = RichTextEditorDialogProps<RichTextImageValues>;
+type Props = {
+    onAdded?: (id: string) => void;
+    onDeleted?: (id: string) => void;
+} & RichTextEditorDialogProps<RichTextImageValues>;
 
 const mapPropsToValues = (): RichTextImageValues => ({
     source: "device",
@@ -25,14 +28,14 @@ const mapPropsToValues = (): RichTextImageValues => ({
     alt: ""
 });
 
-function RichTextImageDialog() {
+function RichTextImageDialog({onAdded, onDeleted}: Props) {
     const [, {value: source}] = useField<string>("source");
 
     return (
         <>
             <RichTextImageDialogTabs/>
             {source === "device" ?
-                <RichTextImageDialogDropzone/>
+                <RichTextImageDialogDropzone onAdded={onAdded} onDeleted={onDeleted}/>
             :
                 <InputField name="href" title="URL" autoFocus/>
             }

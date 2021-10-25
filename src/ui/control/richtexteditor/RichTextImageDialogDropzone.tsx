@@ -13,9 +13,12 @@ import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
 
-type Props = ConnectedProps<typeof connector>;
+type Props = {
+    onAdded?: (id: string) => void;
+    onDeleted?: (id: string) => void;
+} & ConnectedProps<typeof connector>;
 
-function RichTextImageDialogDropzone({rootPage, richTextEditorImageUpload}: Props) {
+function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEditorImageUpload}: Props) {
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [, {value}, {setValue}] = useField<PrivateMediaFileInfo | null>("mediaFile");
@@ -23,6 +26,9 @@ function RichTextImageDialogDropzone({rootPage, richTextEditorImageUpload}: Prop
     const onImageUploadSuccess = (mediaFile: PrivateMediaFileInfo) => {
         setUploading(false);
         setValue(mediaFile);
+        if (onAdded) {
+            onAdded(mediaFile.id);
+        }
     }
 
     const onImageUploadFailure = () => {
@@ -42,7 +48,12 @@ function RichTextImageDialogDropzone({rootPage, richTextEditorImageUpload}: Prop
     }
 
     const onDelete = () => {
-        setValue(null);
+        if (value != null) {
+            if (onDeleted) {
+                onDeleted(value.id);
+            }
+            setValue(null);
+        }
     }
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
