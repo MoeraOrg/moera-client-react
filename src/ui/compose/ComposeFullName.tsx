@@ -13,7 +13,7 @@ type Props = ConnectedProps<typeof connector>;
 function ComposeFullName({ownerName, postingId, draftId}: Props) {
     const {
         edit, field, value, inputRef, onEdit, onReset, onKeyDown
-    } = useComposeTextEditable<string>("fullName", postingId, draftId);
+    } = useComposeTextEditable<string, HTMLInputElement>("fullName", postingId, draftId);
 
     return (
         edit ?

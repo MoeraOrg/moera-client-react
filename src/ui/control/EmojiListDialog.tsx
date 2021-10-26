@@ -99,7 +99,7 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
     };
 
     onClick = (negative: boolean, emoji: number) => {
-        this.setState(state => immutable.update(state, ["choice", emoji], this.toggle) as any);
+        this.setState(state => immutable.update(state, ["choice", emoji], this.toggle));
     };
 
     toggle = (choice: Marks): Marks => {

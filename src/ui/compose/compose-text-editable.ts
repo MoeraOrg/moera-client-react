@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FieldInputProps, useField } from 'formik';
 
-interface ComposeTextEditableProps<T> {
+interface ComposeTextEditableProps<T, E> {
     edit: boolean;
     field: FieldInputProps<T>
     value: T;
@@ -9,11 +9,11 @@ interface ComposeTextEditableProps<T> {
     inputRef: React.RefObject<HTMLInputElement>;
     onEdit: () => void;
     onReset: () => void;
-    onKeyDown: (event: React.KeyboardEvent) => void;
+    onKeyDown: (event: React.KeyboardEvent<E>) => void;
 }
 
-export default function useComposeTextEditable<T>(name: string, postingId: string | null,
-                                                  draftId: string | null): ComposeTextEditableProps<T> {
+export default function useComposeTextEditable<T, E>(name: string, postingId: string | null,
+                                                     draftId: string | null): ComposeTextEditableProps<T, E> {
     const [field, {value, initialValue}, {setValue}] = useField<T>(name);
     const [edit, setEdit] = useState(false);
 
@@ -26,7 +26,7 @@ export default function useComposeTextEditable<T>(name: string, postingId: strin
         setEdit(false);
     };
 
-    const onKeyDown = (event: React.KeyboardEvent) => {
+    const onKeyDown = (event: React.KeyboardEvent<E>) => {
         if (event.key === "Escape" && onReset) {
             onReset();
         }

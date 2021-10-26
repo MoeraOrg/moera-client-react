@@ -160,7 +160,8 @@ const ProfileInfoType: JSONSchemaType<API.ProfileInfo> = {
                     type: "array",
                     items: {
                         type: "string"
-                    }
+                    },
+                    nullable: true
                 }
             },
             nullable: true,
@@ -221,7 +222,8 @@ const NodeNameInfoType: JSONSchemaType<API.NodeNameInfo> = {
                     type: "array",
                     items: {
                         type: "string"
-                    }
+                    },
+                    nullable: true
                 }
             },
             nullable: true,
@@ -708,12 +710,192 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     additionalProperties: false
 };
 
-const PartialPostingInfoType = {
-    ...PostingInfoType,
-    required: ["id"]
-}
-
 export const PostingInfo = schema(PostingInfoType);
+
+const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "revisionId": {
+            type: "string",
+            nullable: true
+        },
+        "receiverRevisionId": {
+            type: "string",
+            nullable: true
+        },
+        "totalRevisions": {
+            type: "integer",
+            nullable: true
+        },
+        "receiverName": {
+            type: "string",
+            nullable: true
+        },
+        "receiverFullName": {
+            type: "string",
+            nullable: true
+        },
+        "receiverAvatar": {
+            ...AvatarImageType,
+            nullable: true
+        },
+        "receiverPostingId": {
+            type: "string",
+            nullable: true
+        },
+        "ownerName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerAvatar": {
+            ...AvatarImageType,
+            nullable: true
+        },
+        "bodyPreview": {
+            type: "string",
+            nullable: true
+        },
+        "bodySrc": {
+            type: "string",
+            nullable: true
+        },
+        "bodySrcFormat": {
+            type: "string",
+            nullable: true
+        },
+        "body": {
+            type: "string",
+            nullable: true
+        },
+        "bodyFormat": {
+            type: "string",
+            nullable: true
+        },
+        "media": {
+            type: "array",
+            items: PrivateMediaFileInfoType,
+            nullable: true
+        },
+        "heading": {
+            type: "string",
+            nullable: true
+        },
+        "updateInfo": {
+            ...UpdateInfoType,
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer",
+            nullable: true
+        },
+        "editedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "deletedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "receiverCreatedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "receiverEditedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "receiverDeletedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "signature": {
+            type: "string",
+            nullable: true
+        },
+        "signatureVersion": {
+            type: "integer",
+            nullable: true
+        },
+        "feedReferences": {
+            type: "array",
+            items: FeedReferenceType,
+            nullable: true
+        },
+        "clientReaction": {
+            ...ClientReactionInfoType,
+            nullable: true
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "edit": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
+                "delete": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
+                "reactions": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
+        },
+        "acceptedReactions": {
+            ...AcceptedReactionsType,
+            nullable: true
+        },
+        "reactions": {
+            ...ReactionTotalsInfoType,
+            nullable: true
+        },
+        "reactionsVisible": {
+            type: "boolean",
+            nullable: true
+        },
+        "reactionTotalsVisible": {
+            type: "boolean",
+            nullable: true
+        },
+        "sources": {
+            type: "array",
+            items: PostingSourceInfo,
+            nullable: true
+        },
+        "totalComments": {
+            type: "integer",
+            nullable: true
+        },
+        "subscriptions": {
+            ...PostingSubscriptionsInfo,
+            nullable: true,
+            default: {
+                comments: null
+            }
+        }
+    },
+    required: ["id"],
+    additionalProperties: false
+}
 
 const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
     type: "object",
@@ -732,9 +914,9 @@ const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
                     type: "array",
                     items: {
                         type: "string"
-                    }
-                },
-                nullable: true
+                    },
+                    nullable: true
+                }
             },
             nullable: true,
             additionalProperties: false
@@ -939,9 +1121,150 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
     additionalProperties: false
 };
 
-const PartialCommentInfoType = {
-    ...CommentInfoType,
-    required: ["id"]
+const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "ownerName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerAvatar": {
+            ...AvatarImageType,
+            nullable: true
+        },
+        "postingId": {
+            type: "string",
+            nullable: true
+        },
+        "postingRevisionId": {
+            type: "string",
+            nullable: true
+        },
+        "revisionId": {
+            type: "string",
+            nullable: true
+        },
+        "totalRevisions": {
+            type: "integer",
+            nullable: true
+        },
+        "bodyPreview": {
+            type: "string",
+            nullable: true
+        },
+        "bodySrc": {
+            type: "string",
+            nullable: true
+        },
+        "bodySrcFormat": {
+            type: "string",
+            nullable: true
+        },
+        "body": {
+            type: "string",
+            nullable: true
+        },
+        "bodyFormat": {
+            type: "string",
+            nullable: true
+        },
+        "heading": {
+            type: "string",
+            nullable: true
+        },
+        "repliedTo": {
+            ...RepliedToType,
+            nullable: true
+        },
+        "moment": {
+            type: "integer",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer",
+            nullable: true
+        },
+        "editedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "deletedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "revisionCreatedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "deadline": {
+            type: "integer",
+            nullable: true
+        },
+        "signature": {
+            type: "string",
+            nullable: true
+        },
+        "signatureVersion": {
+            type: "integer",
+            nullable: true
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "edit": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
+                "delete": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
+                "revisions": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                },
+                "reactions": {
+                    type: "array",
+                    items: {
+                        type: "string"
+                    },
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
+        },
+        "acceptedReactions": {
+            ...AcceptedReactionsType,
+            nullable: true
+        },
+        "clientReaction": {
+            ...ClientReactionInfoType,
+            nullable: true
+        },
+        "reactions": {
+            ...ReactionTotalsInfoType,
+            nullable: true
+        }
+    },
+    required: ["id"],
+    additionalProperties: false
 }
 
 export const CommentInfo = schema(CommentInfoType);

@@ -214,7 +214,8 @@ export interface PostingInfoBase<B> {
 export type EncodedPostingInfo = PostingInfoBase<string>;
 export type PostingInfo = PostingInfoBase<Body>;
 
-type PartialPostingInfoBase<B> = Partial<PostingInfoBase<B>> & {id: string};
+type PartialPostingInfoBase<B> = Omit<Partial<PostingInfoBase<B>>, "id"> & { id: string };
+export type EncodedPartialPostingInfo = PartialPostingInfoBase<string>;
 
 export interface FeedInfo {
     feedName: string;
@@ -294,7 +295,8 @@ interface CommentInfoBase<B> {
 export type EncodedCommentInfo = CommentInfoBase<string>;
 export type CommentInfo = CommentInfoBase<Body>;
 
-type PartialCommentInfoBase<B> = Partial<CommentInfoBase<B>> & {id: string};
+type PartialCommentInfoBase<B> = Omit<Partial<CommentInfoBase<B>>, "id"> & { id: string };
+export type EncodedPartialCommentInfo = PartialCommentInfoBase<string>;
 
 export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-added-negative" | "mention-posting"
     | "subscriber-added" | "subscriber-deleted" | "comment-added" | "mention-comment" | "reply-comment"
