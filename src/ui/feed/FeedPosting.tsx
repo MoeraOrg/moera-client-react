@@ -38,7 +38,8 @@ function Content({posting}: ContentProps) {
         );
     } else {
         return (
-            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText}/>
+            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText}
+                       media={posting.media}/>
         );
     }
 }
