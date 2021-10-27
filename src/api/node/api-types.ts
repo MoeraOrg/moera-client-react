@@ -570,6 +570,7 @@ export interface DraftText {
     reactionTotalsVisible?: boolean | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
+    media?: string[] | null;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
 }
@@ -592,6 +593,7 @@ export interface DraftInfoBase<B> {
     bodySrcFormat?: SourceFormat | null;
     body: B;
     bodyFormat?: BodyFormat | null;
+    media?: PrivateMediaFileInfo[] | null;
     heading: string;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;

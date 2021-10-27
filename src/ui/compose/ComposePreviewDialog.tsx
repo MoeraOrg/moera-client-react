@@ -37,7 +37,7 @@ class ComposePreviewDialog extends React.PureComponent<Props> {
                                 <DraftOwner draft={draft}/>
                             </div>
                             <DraftSubject draft={draft}/>
-                            <EntryHtml className="content" html={draft.body.text}/>
+                            <EntryHtml className="content" html={draft.body.text} media={draft.media}/>
                         </div>
                     }
                 </div>

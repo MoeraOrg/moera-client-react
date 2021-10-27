@@ -2029,6 +2029,11 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
             type: "string",
             nullable: true
         },
+        "media": {
+            type: "array",
+            items: PrivateMediaFileInfoType,
+            nullable: true
+        },
         "heading": {
             type: "string"
         },
