@@ -4,7 +4,7 @@ import { connect, ConnectedProps, Provider } from 'react-redux';
 import * as URI from 'uri-js';
 import 'katex/dist/katex.min.css';
 
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import store from "state/store";
 import { getSetting } from "state/settings/selectors";
@@ -23,14 +23,14 @@ type Props = {
     className?: string;
     postingId?: string | null;
     html: string | null | undefined;
-    media?: PrivateMediaFileInfo[] | null;
+    media?: MediaAttachment[] | null;
     onClick?: (event: React.MouseEvent) => void;
 } & ConnectedProps<typeof connector>;
 
 function EntryHtml({className, postingId, html, media, onClick, standalone, fontMagnitude,
                     initFromLocation, goToLocation}: Props) {
     const dom = useRef<HTMLDivElement>(null);
-    const mediaMap: Map<string, PrivateMediaFileInfo> = new Map((media ?? []).map(mf => [mf.hash, mf]));
+    const mediaMap: Map<string, PrivateMediaFileInfo> = new Map((media ?? []).map(mf => [mf.media.hash, mf.media]));
 
     const hydrate = () => {
         if (dom.current == null) {

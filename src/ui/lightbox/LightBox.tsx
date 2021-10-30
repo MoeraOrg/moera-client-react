@@ -25,18 +25,18 @@ function LightBox({show, posting, mediaId, rootPage, closeLightBox, lightBoxMedi
     let nextMediaId: string | undefined = undefined;
     let title = "";
     if (posting?.media != null && posting.media.length > 0) {
-        let index = posting.media.findIndex(mediaFile => mediaFile.id === mediaId);
+        let index = posting.media.findIndex(mediaFile => mediaFile.media.id === mediaId);
         if (index < 0) {
             index = 0;
         }
-        mainSrc = rootPage + "/media/" + posting.media[index].path;
+        mainSrc = rootPage + "/media/" + posting.media[index].media.path;
         if (index > 0) {
-            prevSrc = rootPage + "/media/" + posting.media[index - 1].path;
-            prevMediaId = posting.media[index - 1].id;
+            prevSrc = rootPage + "/media/" + posting.media[index - 1].media.path;
+            prevMediaId = posting.media[index - 1].media.id;
         }
         if (index < posting.media.length - 1) {
-            nextSrc = rootPage + "/media/" + posting.media[index + 1].path;
-            nextMediaId = posting.media[index + 1].id;
+            nextSrc = rootPage + "/media/" + posting.media[index + 1].media.path;
+            nextMediaId = posting.media[index + 1].media.id;
         }
         title = `${index + 1} / ${posting.media.length}`;
     }

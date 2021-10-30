@@ -184,7 +184,7 @@ export interface PostingInfoBase<B> {
     bodySrcFormat?: SourceFormat | null;
     body: B;
     bodyFormat?: BodyFormat | null;
-    media?: PrivateMediaFileInfo[] | null;
+    media?: MediaAttachment[] | null;
     heading: string;
     updateInfo?: UpdateInfo | null;
     createdAt: number;
@@ -551,6 +551,11 @@ export interface PrivateMediaFileInfo {
     previews?: MediaFilePreviewInfo[] | null;
 }
 
+export interface MediaAttachment {
+    media: PrivateMediaFileInfo;
+    embedded: boolean;
+}
+
 export interface AvatarOrdinal {
     id: string;
     ordinal: number;
@@ -593,7 +598,7 @@ export interface DraftInfoBase<B> {
     bodySrcFormat?: SourceFormat | null;
     body: B;
     bodyFormat?: BodyFormat | null;
-    media?: PrivateMediaFileInfo[] | null;
+    media?: MediaAttachment[] | null;
     heading: string;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;

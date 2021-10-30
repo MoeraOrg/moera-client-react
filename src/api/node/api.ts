@@ -532,6 +532,20 @@ const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
 
 export const PrivateMediaFileInfo = schema(PrivateMediaFileInfoType);
 
+const MediaAttachmentType: JSONSchemaType<API.MediaAttachment> = {
+    type: "object",
+    properties: {
+        "media": PrivateMediaFileInfoType,
+        "embedded": {
+            type: "boolean"
+        }
+    },
+    required: ["media", "embedded"],
+    additionalProperties: false
+};
+
+export const MediaAttachment = schema(MediaAttachmentType);
+
 const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     type: "object",
     properties: {
@@ -596,7 +610,7 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         },
         "media": {
             type: "array",
-            items: PrivateMediaFileInfoType,
+            items: MediaAttachmentType,
             nullable: true
         },
         "heading": {
@@ -780,7 +794,7 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
         },
         "media": {
             type: "array",
-            items: PrivateMediaFileInfoType,
+            items: MediaAttachmentType,
             nullable: true
         },
         "heading": {
@@ -2031,7 +2045,7 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
         },
         "media": {
             type: "array",
-            items: PrivateMediaFileInfoType,
+            items: MediaAttachmentType,
             nullable: true
         },
         "heading": {
