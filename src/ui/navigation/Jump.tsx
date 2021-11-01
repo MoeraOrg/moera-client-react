@@ -100,7 +100,7 @@ class Jump extends React.PureComponent<Props> {
             } else {
                 nodeLocation = nodeUri;
             }
-            nodeLocation ??= "unknown";
+            nodeLocation ??= null;
             const url = redirectUrl(standalone, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
             return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
                       ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
