@@ -22,3 +22,10 @@
     padding: .25rem;
     position: relative;
 }
+
+.rich-text-editor-dropzone .uploaded-image IMG {
+    width: 99px;
+    height: 99px;
+    object-fit: cover;
+    object-position: center;
+}
