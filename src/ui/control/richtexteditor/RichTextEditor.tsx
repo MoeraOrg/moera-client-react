@@ -10,9 +10,9 @@ import "./RichTextEditor.css";
 export class RichTextValue {
 
     text: string;
-    media?: PrivateMediaFileInfo[] | null;
+    media?: (PrivateMediaFileInfo | null)[] | null;
 
-    constructor(text: string, media?: PrivateMediaFileInfo[] | null) {
+    constructor(text: string, media?: (PrivateMediaFileInfo | null)[] | null) {
         this.text = text;
         this.media = media;
     }
@@ -32,9 +32,27 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
 
+    const onImageLoadStarted = (count: number) => {
+        if (onChange != null && count > 0) {
+            const media = value.media != null ? [...value.media] : [];
+            for (let i = 0; i < count; i++) {
+                media.push(null);
+            }
+            onChange(new RichTextValue(value.text, media));
+        }
+    }
+
+    const onImageLoaded = (index: number, image: PrivateMediaFileInfo) => {
+        if (onChange != null && value.media != null && index < value.media.length) {
+            const media = [...value.media];
+            media[index] = image;
+            onChange(new RichTextValue(value.text, media));
+        }
+    }
+
     const onImageAdded = (image: PrivateMediaFileInfo) => {
-        if (onChange != null && value.media != null) {
-            const media = value.media.filter(v => v.id !== image.id);
+        if (onChange != null) {
+            const media = value.media != null ? value.media.filter(v => v == null || v.id !== image.id) : [];
             media.push(image);
             onChange(new RichTextValue(value.text, media));
         }
@@ -42,7 +60,7 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
 
     const onImageDeleted = (id: string) => {
         if (onChange != null && value.media != null) {
-            const media = value.media.filter(v => v.id !== id);
+            const media = value.media.filter(v => v == null || v.id !== id);
             onChange(new RichTextValue(value.text, media));
         }
     }
@@ -63,7 +81,8 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
                           smileysEnabled={smileysEnabled} onKeyDown={onKeyDown} onChange={onTextChange} onBlur={onBlur}
                           textArea={textArea} panel={panel}/>
             {!noMedia &&
-                <RichTextEditorDropzone value={value}/>
+                <RichTextEditorDropzone value={value} onLoadStarted={onImageLoadStarted} onLoaded={onImageLoaded}
+                                        onDeleted={onImageDeleted}/>
             }
         </div>
     );

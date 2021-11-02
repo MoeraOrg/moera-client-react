@@ -3,7 +3,7 @@ import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
 
 import { ClientSettings } from "api";
-import { AvatarImage, PostingText, SourceFormat, StoryAttributes } from "api/node/api-types";
+import { AvatarImage, PostingText, PrivateMediaFileInfo, SourceFormat, StoryAttributes } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
@@ -147,7 +147,9 @@ const composePageLogic = {
                 text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
             }),
             bodySrcFormat: values.bodyFormat,
-            media: values.body.media != null ? values.body.media.map(mf => mf.id) : null,
+            media: values.body.media != null
+                ? values.body.media.filter((mf): mf is PrivateMediaFileInfo => mf != null).map(mf => mf.id)
+                : null,
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,

@@ -82,12 +82,12 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
             const istate = immutable.wrap(state);
             action.payload.stories
                 .map(s => outsideIn(s))
-                .filter(p => p != null)
+                .filter((p): p is PostingInfo => p != null)
                 .forEach(
                     p => istate
-                        .set([p!.id, "posting"], safeguard(p!))
-                        .set([p!.id, "deleting"], false)
-                        .set([p!.id, "verificationStatus"], "none")
+                        .set([p.id, "posting"], safeguard(p))
+                        .set([p.id, "deleting"], false)
+                        .set([p.id, "verificationStatus"], "none")
                 );
             return istate.value();
         }

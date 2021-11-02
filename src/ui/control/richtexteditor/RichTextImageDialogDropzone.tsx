@@ -7,7 +7,7 @@ import { useField } from 'formik';
 import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
-import { richTextEditorImageUpload } from "state/richtexteditor/actions";
+import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
 import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
@@ -18,12 +18,12 @@ type Props = {
     onDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEditorImageUpload}: Props) {
+function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEditorImagesUpload}: Props) {
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [, {value}, {setValue}] = useField<PrivateMediaFileInfo | null>("mediaFile");
 
-    const onImageUploadSuccess = (mediaFile: PrivateMediaFileInfo) => {
+    const onImageUploadSuccess = (index: number, mediaFile: PrivateMediaFileInfo) => {
         setUploading(false);
         setValue(mediaFile);
         if (onAdded) {
@@ -35,7 +35,7 @@ function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEdit
         setUploading(false);
     }
 
-    const onImageUploadProgress = (loaded: number, total: number) => {
+    const onImageUploadProgress = (index: number, loaded: number, total: number) => {
         setUploadProgress(Math.round(loaded * 100 / total));
     }
 
@@ -43,7 +43,7 @@ function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEdit
         if (files != null && files.length > 0) {
             setUploading(true);
             setUploadProgress(0);
-            richTextEditorImageUpload(files[0], onImageUploadSuccess, onImageUploadFailure, onImageUploadProgress);
+            richTextEditorImagesUpload([files[0]], onImageUploadSuccess, onImageUploadFailure, onImageUploadProgress);
         }
     }
 
@@ -91,7 +91,7 @@ const connector = connect(
     (state: ClientState) => ({
         rootPage: getNodeRootPage(state)
     }),
-    { richTextEditorImageUpload }
+    { richTextEditorImagesUpload }
 );
 
 export default connector(RichTextImageDialogDropzone);
