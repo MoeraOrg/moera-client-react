@@ -1,16 +1,18 @@
 import React, { useCallback, useRef } from 'react';
 import cx from 'classnames';
 
+import { PrivateMediaFileInfo } from "api/node/api-types";
 import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichTextArea";
 import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
+import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
 import "./RichTextEditor.css";
 
 export class RichTextValue {
 
     text: string;
-    media?: string[] | null;
+    media?: PrivateMediaFileInfo[] | null;
 
-    constructor(text: string, media?: string[] | null) {
+    constructor(text: string, media?: PrivateMediaFileInfo[] | null) {
         this.text = text;
         this.media = media;
     }
@@ -30,17 +32,17 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
 
-    const onImageAdded = (id: string) => {
+    const onImageAdded = (image: PrivateMediaFileInfo) => {
         if (onChange != null && value.media != null) {
-            const media = value.media.filter(v => v !== id);
-            media.push(id);
+            const media = value.media.filter(v => v.id !== image.id);
+            media.push(image);
             onChange(new RichTextValue(value.text, media));
         }
     }
 
     const onImageDeleted = (id: string) => {
         if (onChange != null && value.media != null) {
-            const media = value.media.filter(v => v !== id);
+            const media = value.media.filter(v => v.id !== id);
             onChange(new RichTextValue(value.text, media));
         }
     }
@@ -60,6 +62,9 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
                           autoFocus={autoFocus} autoComplete={autoComplete} disabled={disabled}
                           smileysEnabled={smileysEnabled} onKeyDown={onKeyDown} onChange={onTextChange} onBlur={onBlur}
                           textArea={textArea} panel={panel}/>
+            {!noMedia &&
+                <RichTextEditorDropzone value={value}/>
+            }
         </div>
     );
 };

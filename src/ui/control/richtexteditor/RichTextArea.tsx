@@ -13,7 +13,7 @@ import { PREFIX } from "api/settings";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 
-const MENTION_START = RegExp(/(^|\s)@$/);
+const MENTION_START = /(^|\s)@$/;
 
 export interface RichTextAreaProps {
     name: string;

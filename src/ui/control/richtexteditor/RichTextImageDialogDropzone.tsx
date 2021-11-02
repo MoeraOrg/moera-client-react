@@ -14,7 +14,7 @@ import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
 
 type Props = {
-    onAdded?: (id: string) => void;
+    onAdded?: (image: PrivateMediaFileInfo) => void;
     onDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
 
@@ -27,7 +27,7 @@ function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEdit
         setUploading(false);
         setValue(mediaFile);
         if (onAdded) {
-            onAdded(mediaFile.id);
+            onAdded(mediaFile);
         }
     }
 

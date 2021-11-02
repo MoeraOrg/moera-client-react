@@ -3,19 +3,20 @@ import { connect, ConnectedProps } from 'react-redux';
 import * as textFieldEdit from 'text-field-edit';
 import cx from 'classnames';
 
+import { NodeName } from "api";
+import { PrivateMediaFileInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
+import { getNodeRootPage } from "state/node/selectors";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
 import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
-import { ClientState } from "state/state";
-import { getNodeRootPage } from "state/node/selectors";
 import { htmlEntities } from "util/html";
 import { mentionName } from "util/misc";
 import { redirectUrl } from "util/url";
 import { NameListItem } from "util/names-list";
-import { NodeName } from "api";
 import "./RichTextEditorPanel.css";
 
 type Props = {
@@ -24,7 +25,7 @@ type Props = {
     hiding?: boolean;
     format: string;
     noMedia?: boolean;
-    onImageAdded?: (id: string) => void;
+    onImageAdded?: (image: PrivateMediaFileInfo) => void;
     onImageDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
 

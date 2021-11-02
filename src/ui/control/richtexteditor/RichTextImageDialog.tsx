@@ -17,7 +17,7 @@ export interface RichTextImageValues {
 
 type Props = {
     noMedia?: boolean;
-    onAdded?: (id: string) => void;
+    onAdded?: (image: PrivateMediaFileInfo) => void;
     onDeleted?: (id: string) => void;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 
