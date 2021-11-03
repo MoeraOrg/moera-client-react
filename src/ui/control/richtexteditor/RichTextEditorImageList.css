@@ -1,0 +1,13 @@
+.rich-text-editor-uploaded-image {
+    display: inline-block;
+    padding: .25rem;
+    position: relative;
+}
+
+.rich-text-editor-uploaded-image-thumbnail {
+    width: 99px;
+    height: 99px;
+    object-fit: cover;
+    object-position: center;
+    cursor: pointer;
+}

@@ -1,5 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import cx from 'classnames';
+import { arrayMove } from '@dnd-kit/sortable';
 
 import { PrivateMediaFileInfo } from "api/node/api-types";
 import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichTextArea";
@@ -66,6 +67,18 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
         }
     }
 
+    const onImagesReorder = (activeId: string, overId: string) => {
+        if (onChange != null && value.media != null && activeId !== overId) {
+            const index = value.media.findIndex(v => v != null && v.id === activeId);
+            const overIndex = value.media.findIndex(v => v != null && v.id === overId);
+            if (index == null || overIndex == null) {
+                return;
+            }
+            const media = arrayMove(value.media, index, overIndex);
+            onChange(new RichTextValue(value.text, media));
+        }
+    }
+
     // useCallback() is mandatory here
     const onTextChange = useCallback(() => {
         if (onChange != null && textArea.current != null) {
@@ -84,7 +97,8 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
                           textArea={textArea} panel={panel}/>
             {!noMedia &&
                 <RichTextEditorDropzone value={value} selectImage={setSelectedImage} onLoadStarted={onImageLoadStarted}
-                                        onLoaded={onImageLoaded} onDeleted={onImageDeleted}/>
+                                        onLoaded={onImageLoaded} onDeleted={onImageDeleted}
+                                        onReorder={onImagesReorder}/>
             }
         </div>
     );

@@ -59,9 +59,10 @@ type Props = {
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
     onDeleted?: (id: string) => void;
+    onReorder?: (activeId: string, overId: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, onDeleted,
+function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, onDeleted, onReorder,
                                  richTextEditorImagesUpload}: Props) {
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -110,7 +111,8 @@ function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, on
             "rich-text-editor-dropzone",
             {"drag-accept": isDragAccept, "drag-reject": isDragReject}
         )} {...getRootProps()}>
-            <RichTextEditorImageList value={value} selectImage={selectImage} onDeleted={onDeleted}/>
+            <RichTextEditorImageList value={value} selectImage={selectImage} onDeleted={onDeleted}
+                                     onReorder={onReorder}/>
             <div className="upload">
                 {uploadProgress.length > 0 ?
                     `Uploading ${progressSummary.loadedFiles} of ${progressSummary.totalFiles}
