@@ -1,11 +1,13 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { openLightBox } from "state/lightbox/actions";
+import Jump from "ui/navigation/Jump";
 import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
+import { ut } from "util/url";
 
 function mediaSources(location: string, previews: MediaFilePreviewInfo[] | null | undefined): string {
     if (previews == null) {
@@ -39,18 +41,17 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, rootPage, 
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(900, width, height, mediaFile);
 
-    const onClick = (event: MouseEvent) => {
+    const onNear = () => {
         if (postingId != null) {
             openLightBox(postingId, mediaFile.id);
-            event.preventDefault();
         }
     }
 
     return (
-        <a href={mediaLocation} onClick={onClick}>
+        <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear}>
             <img src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
                  alt={alt ?? undefined} title={title ?? undefined} />
-        </a>
+        </Jump>
     );
 }
 
