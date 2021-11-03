@@ -1,28 +1,15 @@
-import React, { useMemo, useRef, useState, MouseEvent } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
 
 import { PrivateMediaFileInfo } from "api/node/api-types";
-import { ClientState } from "state/state";
-import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
-import { Button, DeleteButton, RichTextValue } from "ui/control";
-import { mediaImagePreview, mediaImageSize } from "util/media-images";
+import { Button, RichTextValue } from "ui/control";
+import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
 import "./RichTextEditorDropzone.css";
-
-const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9_-]+={0,2})["' )]/g;
-
-function extractMediaHashes(text: string): Set<string> {
-    const result = new Set<string>();
-    const matches = text.matchAll(HASH_URI_PATTERN);
-    for (const match of matches) {
-        result.add(match[1]);
-    }
-    return result;
-}
 
 type UploadStatus = "loading" | "success" | "failure";
 
@@ -74,7 +61,7 @@ type Props = {
     onDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, onDeleted, rootPage,
+function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, onDeleted,
                                  richTextEditorImagesUpload}: Props) {
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -114,20 +101,8 @@ function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, on
         }
     };
 
-    const onDelete = (id: string) => () => {
-        if (onDeleted) {
-            onDeleted(id);
-        }
-    }
-
-    const onClick = (image: PrivateMediaFileInfo) => (event: MouseEvent) => {
-        selectImage(image);
-        event.preventDefault();
-    }
-
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
         useDropzone({noClick: true, noKeyboard: true, accept: ACCEPTED_IMAGE_TYPES, onDrop});
-    const embedded = extractMediaHashes(value.text);
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
 
     return (
@@ -135,24 +110,7 @@ function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, on
             "rich-text-editor-dropzone",
             {"drag-accept": isDragAccept, "drag-reject": isDragReject}
         )} {...getRootProps()}>
-            {value.media != null && value.media.length > 0 &&
-                <div className="uploaded-image-list">
-                    {value.media
-                        .filter((media): media is PrivateMediaFileInfo => media != null && !embedded.has(media.hash))
-                        .map(media => {
-                            const src = mediaImagePreview(rootPage + "/media/" + media.path, 150);
-                            const [imageWidth, imageHeight] = mediaImageSize(150, 150, 150, media);
-                            return (
-                                <div className="uploaded-image" key={media.id}>
-                                    <DeleteButton onClick={onDelete(media.id)}/>
-                                    <img alt="" src={src} width={imageWidth} height={imageHeight}
-                                         onClick={onClick(media)}/>
-                                </div>
-                            );
-                        })
-                    }
-                </div>
-            }
+            <RichTextEditorImageList value={value} selectImage={selectImage} onDeleted={onDeleted}/>
             <div className="upload">
                 {uploadProgress.length > 0 ?
                     `Uploading ${progressSummary.loadedFiles} of ${progressSummary.totalFiles}
@@ -169,9 +127,7 @@ function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, on
 }
 
 const connector = connect(
-    (state: ClientState) => ({
-        rootPage: getNodeRootPage(state)
-    }),
+    null,
     { richTextEditorImagesUpload }
 );
 
