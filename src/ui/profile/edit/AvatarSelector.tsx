@@ -16,10 +16,10 @@ import { SortableContext, } from '@dnd-kit/sortable';
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 import cx from 'classnames';
 
+import { AvatarInfo } from "api/node/api-types";
 import { Avatar, Loading } from "ui/control";
 import AvatarSelectorItem from "ui/profile/edit/AvatarSelectorItem";
 import "./AvatarSelector.css";
-import { AvatarInfo } from "api/node/api-types";
 
 interface Props {
     nodeName: string | null;
@@ -89,7 +89,7 @@ export default function AvatarSelector({nodeName, loaded, loading, avatars, acti
                                 </div>
                             )}
                         </>
-                        :
+                    :
                         <Loading active={loading}/>
                     }
                 </div>
