@@ -13,7 +13,7 @@ import { Button, DeleteButton, RichTextValue } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextEditorDropzone.css";
 
-const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9+_-]+={0,2})["' )]/g;
+const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9_-]+={0,2})["' )]/g;
 
 function extractMediaHashes(text: string): Set<string> {
     const result = new Set<string>();
