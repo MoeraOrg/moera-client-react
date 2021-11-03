@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import cx from 'classnames';
 
 import { PrivateMediaFileInfo } from "api/node/api-types";
@@ -31,6 +31,7 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
                          hidingPanel, format, onKeyDown, onChange, onBlur, noMedia}: Props) => {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
+    const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
 
     const onImageLoadStarted = (count: number) => {
         if (onChange != null && count > 0) {
@@ -75,14 +76,15 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
     return (
         <div className={cx("rich-text-editor", className)}>
             <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
-                                 noMedia={noMedia} onImageAdded={onImageAdded} onImageDeleted={onImageDeleted}/>
+                                 noMedia={noMedia} selectedImage={selectedImage} selectImage={setSelectedImage}
+                                 onImageAdded={onImageAdded} onImageDeleted={onImageDeleted}/>
             <RichTextArea name={name} value={value.text} format={format} rows={rows} placeholder={placeholder}
                           autoFocus={autoFocus} autoComplete={autoComplete} disabled={disabled}
                           smileysEnabled={smileysEnabled} onKeyDown={onKeyDown} onChange={onTextChange} onBlur={onBlur}
                           textArea={textArea} panel={panel}/>
             {!noMedia &&
-                <RichTextEditorDropzone value={value} onLoadStarted={onImageLoadStarted} onLoaded={onImageLoaded}
-                                        onDeleted={onImageDeleted}/>
+                <RichTextEditorDropzone value={value} selectImage={setSelectedImage} onLoadStarted={onImageLoadStarted}
+                                        onLoaded={onImageLoaded} onDeleted={onImageDeleted}/>
             }
         </div>
     );

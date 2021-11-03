@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState, MouseEvent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
@@ -13,7 +13,7 @@ import { Button, DeleteButton, RichTextValue } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextEditorDropzone.css";
 
-const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9+/-]+={0,2})["' )]/g;
+const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9+_-]+={0,2})["' )]/g;
 
 function extractMediaHashes(text: string): Set<string> {
     const result = new Set<string>();
@@ -68,12 +68,13 @@ type ImageLoadStartedHandler = (count: number) => void;
 type ImageLoadedHandler = (index: number, image: PrivateMediaFileInfo) => void;
 type Props = {
     value: RichTextValue;
+    selectImage: (image: PrivateMediaFileInfo | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
     onDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextEditorDropzone({value, onLoadStarted, onLoaded, onDeleted, rootPage,
+function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, onDeleted, rootPage,
                                  richTextEditorImagesUpload}: Props) {
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -119,6 +120,11 @@ function RichTextEditorDropzone({value, onLoadStarted, onLoaded, onDeleted, root
         }
     }
 
+    const onClick = (image: PrivateMediaFileInfo) => (event: MouseEvent) => {
+        selectImage(image);
+        event.preventDefault();
+    }
+
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
         useDropzone({noClick: true, noKeyboard: true, accept: ACCEPTED_IMAGE_TYPES, onDrop});
     const embedded = extractMediaHashes(value.text);
@@ -139,7 +145,8 @@ function RichTextEditorDropzone({value, onLoadStarted, onLoaded, onDeleted, root
                             return (
                                 <div className="uploaded-image" key={media.id}>
                                     <DeleteButton onClick={onDelete(media.id)}/>
-                                    <img alt="" src={src} width={imageWidth} height={imageHeight}/>
+                                    <img alt="" src={src} width={imageWidth} height={imageHeight}
+                                         onClick={onClick(media)}/>
                                 </div>
                             );
                         })

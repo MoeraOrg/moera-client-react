@@ -17,13 +17,14 @@ export interface RichTextImageValues {
 
 type Props = {
     noMedia?: boolean;
+    selectedImage?: PrivateMediaFileInfo | null;
     onAdded?: (image: PrivateMediaFileInfo) => void;
     onDeleted?: (id: string) => void;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 
 const mapPropsToValues = (props: Props): RichTextImageValues => ({
     source: props.noMedia === true ? "internet" : "device",
-    mediaFile: null,
+    mediaFile: props.selectedImage ?? null,
     href: "",
     title: "",
     alt: ""
