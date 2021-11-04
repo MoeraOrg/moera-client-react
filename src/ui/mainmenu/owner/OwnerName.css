@@ -21,6 +21,10 @@
     color: white;
 }
 
+#owner-name .node-name:hover {
+    text-decoration: none;
+}
+
 #owner-name .node-name.correct {
     color: var(--correct-light);
 }
