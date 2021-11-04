@@ -63,10 +63,11 @@ function UploadedImage({media, rootPage, onDeleteClick, onClick}: UploadedImageP
     };
 
     return (
-        <div className="rich-text-editor-uploaded-image" key={media.id} ref={sortable.setNodeRef} style={sortableStyle}
-             {...sortable.attributes} {...sortable.listeners}>
+        <div className="rich-text-editor-uploaded-image" key={media.id}>
             <DeleteButton onClick={onDeleteClick}/>
-            <AttachedImage media={media} rootPage={rootPage} onClick={onClick}/>
+            <div ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>
+                <AttachedImage media={media} rootPage={rootPage} onClick={onClick}/>
+            </div>
         </div>
     );
 }

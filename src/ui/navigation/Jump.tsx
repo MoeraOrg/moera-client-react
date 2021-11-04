@@ -16,6 +16,7 @@ interface OwnProps {
     nodeUri?: string | null;
     href: string;
     className?: string;
+    style?: React.CSSProperties;
     title?: string;
     trackingId?: string | null;
     onNear?: (href: string, callback: () => void) => void | null;
@@ -79,8 +80,8 @@ class Jump extends React.PureComponent<Props> {
 
     render() {
         const {
-            standalone, nodeName, nodeUri, href, className, title, ownerName, rootPage, homeOwnerName, homeRootPage,
-            details, trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
+            standalone, nodeName, nodeUri, href, className, style, title, ownerName, rootPage, homeOwnerName,
+            homeRootPage, details, trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
         } = this.props;
 
         const redirectPage = homeRootPage ?? rootPage ?? "unknown";
@@ -88,8 +89,8 @@ class Jump extends React.PureComponent<Props> {
         if (nodeOwnerName === ownerName) {
             const nodeLocation = rootPage ?? nodeUri ?? "unknown";
             const url = redirectUrl(standalone, redirectPage, ownerName, nodeLocation, href, trackingId);
-            return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
-                      ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+            return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
+                      data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onNear} suppressHydrationWarning>{children}</a>;
         } else {
             let nodeLocation;
@@ -102,8 +103,8 @@ class Jump extends React.PureComponent<Props> {
             }
             nodeLocation ??= null;
             const url = redirectUrl(standalone, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
-            return <a href={url} className={className} title={title} data-nodename={nodeOwnerName} data-href={href}
-                      ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
+            return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
+                      data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, href)}
                       suppressHydrationWarning>{children}</a>;
         }

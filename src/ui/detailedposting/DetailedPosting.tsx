@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { PostingInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted, ProtectedObject } from "state/node/selectors";
+import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
 import PostingUpdated from "ui/posting/PostingUpdated";
@@ -15,11 +18,9 @@ import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
 import EntryHtml from "ui/posting/EntryHtml";
+import PostingGallery from "ui/posting/PostingGallery";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
-import { ClientState } from "state/state";
-import { PostingInfo } from "api/node/api-types";
-import { MinimalStoryInfo } from "ui/types";
 
 type Props = {
     story: MinimalStoryInfo;
@@ -49,6 +50,7 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
                     <PostingSubject posting={posting} preview={false}/>
                     <EntryHtml className="content" postingId={posting.id} html={posting.body.text}
                                media={posting.media}/>
+                    <PostingGallery postingId={posting.id} media={posting.media ?? null}/>
                     <div className="reactions-line">
                         <PostingReactions posting={posting}/>
                         <PostingComments posting={posting}/>

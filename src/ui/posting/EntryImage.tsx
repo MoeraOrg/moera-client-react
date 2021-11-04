@@ -32,9 +32,11 @@ type Props = {
     height?: string | null;
     alt?: string | null;
     title?: string | null;
+    flex?: "row" | "column";
+    count?: number;
 } & ConnectedProps<typeof connector>;
 
-function EntryImage({postingId, mediaFile, width, height, alt, title, rootPage, openLightBox}: Props) {
+function EntryImage({postingId, mediaFile, width, height, alt, title, flex, count, rootPage, openLightBox}: Props) {
     const mediaLocation = rootPage + "/media/" + mediaFile.path;
     const src = mediaImagePreview(mediaLocation, 900);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
@@ -47,8 +49,19 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, rootPage, 
         }
     }
 
+    let style: React.CSSProperties | undefined = undefined;
+    if (flex === "row") {
+        style = {flex: imageWidth / imageHeight};
+    } else if (flex === "column") {
+        style = {flex: imageHeight / imageWidth};
+    }
+    if (count != null && count > 0) {
+        style = {...style, position: "relative"};
+    }
+
     return (
-        <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear}>
+        <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear} style={style}>
+            {(count != null && count > 0) && <div className="count">+{count}</div>}
             <img src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
                  alt={alt ?? undefined} title={title ?? undefined} />
         </Jump>
