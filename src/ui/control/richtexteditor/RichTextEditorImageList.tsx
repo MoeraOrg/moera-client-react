@@ -125,7 +125,7 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
             <SortableContext items={mediaIds}>
                 <div>
                     {mediaList.map(media =>
-                        <UploadedImage media={media} rootPage={rootPage}
+                        <UploadedImage key={media.id} media={media} rootPage={rootPage}
                                        onDeleteClick={!dragged ? onDelete(media.id) : undefined}
                                        onClick={!dragged ? onClick(media) : undefined}/>
                     )}
