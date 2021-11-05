@@ -7,6 +7,7 @@ import { RichTextValue } from "ui/control";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
+import { mediaHashesExtract } from "util/media-images";
 
 export interface ComposePageValues {
     avatar: AvatarImage | null;
@@ -126,6 +127,19 @@ const composePageLogic = {
         return publications;
     },
 
+    _orderedMediaList(body: RichTextValue): string[] | null {
+        if (body.media == null) {
+            return null;
+        }
+
+        const bodyMedia = body.media.filter((mf): mf is PrivateMediaFileInfo => mf != null);
+        const mediaMap = new Map(bodyMedia.map(mf => [mf.hash, mf.id]));
+        const embeddedHashes = mediaHashesExtract(body.text);
+
+        return [...embeddedHashes].map(hash => mediaMap.get(hash)).filter((id): id is string => id != null)
+            .concat(bodyMedia.filter(mf => !embeddedHashes.has(mf.hash)).map(mf => mf.id));
+    },
+
     mapValuesToPostingText(values: ComposePageValues, props: MapToPostingTextProps): PostingText {
         return {
             ownerFullName: values.fullName,
@@ -140,9 +154,7 @@ const composePageLogic = {
                 text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
             }),
             bodySrcFormat: values.bodyFormat,
-            media: values.body.media != null
-                ? values.body.media.filter((mf): mf is PrivateMediaFileInfo => mf != null).map(mf => mf.id)
-                : null,
+            media: this._orderedMediaList(values.body),
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,

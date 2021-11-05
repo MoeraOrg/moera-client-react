@@ -18,19 +18,8 @@ import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { DeleteButton, RichTextValue } from "ui/control";
-import { mediaImagePreview, mediaImageSize } from "util/media-images";
+import { mediaHashesExtract, mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextEditorImageList.css";
-
-const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9_-]+={0,2})["' )]/g;
-
-function extractMediaHashes(text: string): Set<string> {
-    const result = new Set<string>();
-    const matches = text.matchAll(HASH_URI_PATTERN);
-    for (const match of matches) {
-        result.add(match[1]);
-    }
-    return result;
-}
 
 interface AttachedImageProps {
     media: PrivateMediaFileInfo;
@@ -94,7 +83,7 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
         return null;
     }
 
-    const embedded = extractMediaHashes(value.text);
+    const embedded = mediaHashesExtract(value.text);
     const mediaList = value.media
         .filter((media): media is PrivateMediaFileInfo => media != null && !embedded.has(media.hash));
     const mediaIds = mediaList.map(mf => mf.id);

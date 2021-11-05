@@ -48,3 +48,14 @@ export function mediaImageSize(targetWidth: number,
 
     return [Math.round(scale * sizeX), Math.round(scale * sizeY)];
 }
+
+const HASH_URI_PATTERN = /["' (]hash:([A-Za-z0-9_-]+={0,2})["' )]/g;
+
+export function mediaHashesExtract(text: string): Set<string> {
+    const result = new Set<string>();
+    const matches = text.matchAll(HASH_URI_PATTERN);
+    for (const match of matches) {
+        result.add(match[1]);
+    }
+    return result;
+}
