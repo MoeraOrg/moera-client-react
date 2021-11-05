@@ -20,7 +20,6 @@ export default function PostingGallery({postingId, media}: Props) {
     }
 
     const orientation = images[0].height > images[0].width ? "vertical" : "horizontal";
-    console.log(images[0]);
 
     if (images.length === 1) {
         return (
