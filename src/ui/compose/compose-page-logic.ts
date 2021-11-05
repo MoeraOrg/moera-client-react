@@ -1,4 +1,3 @@
-import * as yup from 'yup';
 import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
 
@@ -111,12 +110,6 @@ const composePageLogic = {
         return content ?? "";
     },
 
-    validationSchema: yup.object().shape({
-        body: yup.object().shape({
-            text: yup.string().trim().required("Must not be empty")
-        })
-    }),
-
     _replaceSmileys(enabled: boolean, text: string): string {
         return enabled ? replaceSmileys(text) : text;
     },
@@ -162,12 +155,13 @@ const composePageLogic = {
     },
 
     isPostingTextEmpty(postingText: PostingText): boolean {
-        if (postingText.bodySrc == null) {
-            return true;
+        let textEmpty = postingText.bodySrc == null;
+        if (!textEmpty) {
+            const {subject, text} = JSON.parse(postingText.bodySrc);
+            textEmpty = !subject && !text;
         }
-
-        const {subject, text} = JSON.parse(postingText.bodySrc);
-        return !subject && !text;
+        const mediaEmpty = postingText.media == null || postingText.media.length === 0;
+        return textEmpty && mediaEmpty;
     },
 
     handleSubmit(values: ComposePageValues, formik: FormikBag<ComposePageOuterProps, ComposePageValues>): void {
