@@ -3,30 +3,24 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { PostingText } from "api/node/api-types";
-import composePageLogic, { ComposePageValues, MapToPostingTextProps } from "ui/compose/compose-page-logic";
 import { ClientState } from "state/state";
 import { composeDraftSelect } from "state/compose/actions";
 import { getSetting } from "state/settings/selectors";
+import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
 import "./ComposeNewPost.css";
 
-function postingText(values: ComposePageValues, props: MapToPostingTextProps): PostingText {
-    return composePageLogic.mapValuesToPostingText(values, props);
-}
-
-function isEmpty(postingText: PostingText): boolean {
-    return composePageLogic.isPostingTextEmpty(postingText);
+function isEmpty(values: ComposePageValues): boolean {
+    return composePageLogic.areValuesEmpty(values);
 }
 
 type Props = ConnectedProps<typeof connector>;
 
-function ComposeNewPost(props: Props) {
-    const {postingId, composeDraftSelect} = props;
+function ComposeNewPost({postingId, composeDraftSelect}: Props) {
     const {values} = useFormikContext<ComposePageValues>();
 
     const onClick = () => composeDraftSelect(null);
 
-    if (postingId != null || isEmpty(postingText(values, props))) {
+    if (postingId != null || isEmpty(values)) {
         return null;
     }
     return (

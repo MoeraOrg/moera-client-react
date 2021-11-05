@@ -154,6 +154,12 @@ const composePageLogic = {
         };
     },
 
+    areValuesEmpty(values: ComposePageValues): boolean {
+        return (values.subject == null || values.subject.trim() === "")
+            && values.body.text.trim() === ""
+            && (values.body.media == null || values.body.media.length === 0);
+    },
+
     isPostingTextEmpty(postingText: PostingText): boolean {
         let textEmpty = postingText.bodySrc == null;
         if (!textEmpty) {
