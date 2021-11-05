@@ -23,6 +23,7 @@ import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/posting/Entry.css";
+import PostingGallery from "ui/posting/PostingGallery";
 
 interface ContentProps {
     posting: ExtPostingInfo;
@@ -71,6 +72,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>
+                <PostingGallery postingId={posting.id} media={posting.media ?? null}/>
                 <div className="reactions-line">
                     <PostingReactions posting={posting}/>
                     <PostingComments posting={posting}/>
