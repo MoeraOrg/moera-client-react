@@ -5,11 +5,12 @@ import EntryImage from "ui/posting/EntryImage";
 import "./PostingGallery.css";
 
 interface Props {
-    postingId: string;
+    postingId?: string;
     media: MediaAttachment[] | null;
 }
 
 export default function PostingGallery({postingId, media}: Props) {
+    console.log(postingId, media);
     if (media == null || media.length === 0) {
         return null;
     }
