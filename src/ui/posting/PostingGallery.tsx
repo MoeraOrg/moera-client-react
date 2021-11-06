@@ -10,7 +10,6 @@ interface Props {
 }
 
 export default function PostingGallery({postingId, media}: Props) {
-    console.log(postingId, media);
     if (media == null || media.length === 0) {
         return null;
     }
