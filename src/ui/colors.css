@@ -23,6 +23,7 @@
 
     --status-icon: rgba(255, 255, 255, .5);
     --status-icon-highlight: rgba(255, 255, 255, .75);
+    --shadow: rgba(0, 0, 0, .75);
 
     --reactions-positive: #e9fce5;
     --reactions-negative: #feeff0;

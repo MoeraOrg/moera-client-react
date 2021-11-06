@@ -70,7 +70,7 @@
     color: white;
     font-weight: bold;
     font-size: 200%;
-    text-shadow: -2px 2px 4px rgba(0, 0, 0, .75);
+    text-shadow: -2px 2px 4px var(--shadow);
 }
 
 .posting .gallery.single {
