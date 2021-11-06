@@ -23,7 +23,8 @@ export default function PostingGallery({postingId, media}: Props) {
 
     if (images.length === 1) {
         return (
-            <div className={`gallery single ${orientation}`}>
+            // FIXME React.CSSProperties does not include CSS variables
+            <div className={`gallery single ${orientation}`} style={{"--image-height": images[0].height + "px"} as any}>
                 <EntryImage postingId={postingId} mediaFile={images[0]}/>
             </div>
         );
