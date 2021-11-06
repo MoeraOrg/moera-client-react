@@ -11,7 +11,7 @@ interface InstantTypeDetails {
 const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     "posting-added": {
         title: "Post added",
-        color: "var(--green)",
+        color: "var(--bs-green)",
         icon: "pen-alt"
     },
     "reaction-added-positive": {
@@ -36,37 +36,37 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     },
     "mention-posting": {
         title: "Mention in post",
-        color: "var(--blue)",
+        color: "var(--bs-blue)",
         icon: "at"
     },
     "mention-comment": {
         title: "Mention in comment",
-        color: "var(--blue)",
+        color: "var(--bs-blue)",
         icon: "at"
     },
     "subscriber-added": {
         title: "Subscribed",
-        color: "var(--blue)",
+        color: "var(--bs-blue)",
         icon: "eye"
     },
     "subscriber-deleted": {
         title: "Unsubscribed",
-        color: "var(--blue)",
+        color: "var(--bs-blue)",
         icon: "eye-slash"
     },
     "comment-added": {
         title: "Commented",
-        color: "var(--green)",
+        color: "var(--bs-green)",
         icon: "comment"
     },
     "remote-comment-added": {
         title: "Commented",
-        color: "var(--green)",
+        color: "var(--bs-green)",
         icon: "comment"
     },
     "reply-comment": {
         title: "Reply to comment",
-        color: "var(--green)",
+        color: "var(--bs-green)",
         icon: "reply"
     },
     "posting-task-failed": {
@@ -81,7 +81,7 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     },
     "posting-updated": {
         title: "Post updated",
-        color: "var(--green)",
+        color: "var(--bs-green)",
         icon: "pen-alt"
     }
 };
