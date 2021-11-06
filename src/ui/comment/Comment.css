@@ -74,4 +74,12 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    min-height: 1.65em;
+}
+
+.comment .reactions-line .unsigned {
+    color: var(--gray-light);
+    font-size: 90%;
+    margin-left: .2em;
+    padding-top: .1em;
 }

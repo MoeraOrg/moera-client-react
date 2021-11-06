@@ -57,6 +57,7 @@ const Comment = ({
                         </div>
                         <CommentContent comment={comment} previousId={previousId}/>
                         <div className="reactions-line">
+                            {comment.signature == null && <div className="unsigned">Unsigned</div>}
                             {connectedToHome && comment.signature != null &&
                                 <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             }
