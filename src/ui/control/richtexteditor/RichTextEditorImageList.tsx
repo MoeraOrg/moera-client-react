@@ -69,7 +69,11 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, rootPage}: Props) {
-    const mouseSensor = useSensor(PointerSensor);
+    const mouseSensor = useSensor(PointerSensor, {
+        activationConstraint: {
+            distance: 10
+        }
+    });
     const keyboardSensor = useSensor(KeyboardSensor);
 
     const sensors = useSensors(
