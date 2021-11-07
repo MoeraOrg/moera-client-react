@@ -377,6 +377,16 @@ const META: ClientSettingMetaInfo[] = [
                 }
             ]
         }
+    },
+    {
+        name: "clock.offset",
+        type: "int",
+        defaultValue: "0",
+        title: "Clock offset from the real time (in hours)",
+        modifiers: {
+            min: -2,
+            max: 2
+        }
     }
 ];
 

@@ -1,6 +1,7 @@
-import { now } from "util/misc";
 import { CarteInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
+import { now } from "util/misc";
 
 const CLOCK_OFFSET_THRESHOLD = 10 * 60; // seconds
 
@@ -27,7 +28,7 @@ export function isCartesToBeUpdated(state: ClientState): boolean {
 }
 
 export function getCurrentCarte(state: ClientState): string | null {
-    const current = now();
+    const current = now() - (getSetting(state, "clock.offset") as number) * 60 * 60;
     const carte = state.cartes.cartes.find(carte => carte.beginning <= current && carte.deadline >= current);
     return carte ? carte.carte : null;
 }
