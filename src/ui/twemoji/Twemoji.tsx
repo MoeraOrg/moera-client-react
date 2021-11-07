@@ -1,6 +1,14 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+/*
+ * Emoji graphics by Twemoji https://twemoji.twitter.com/
+ *
+ * Copyright 2020 Twitter, Inc and other contributors
+ * Code licensed under the MIT License: http://opensource.org/licenses/MIT
+ * Graphics licensed under CC-BY 4.0: https://creativecommons.org/licenses/by/4.0/
+ */
+
 import { ReactComponent as Twemoji23f3 } from "./23f3.svg";
 import { ReactComponent as Twemoji2694 } from "./2694.svg";
 import { ReactComponent as Twemoji2708 } from "./2708.svg";
