@@ -1,3 +1,7 @@
+:root:root {
+    scroll-behavior: auto;
+}
+
 HTML {
     font-size: 90%;
     height: 100%;
