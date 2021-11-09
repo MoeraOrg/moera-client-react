@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import * as textFieldEdit from 'text-field-edit'
@@ -22,11 +22,6 @@ import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { mentionName } from "util/misc";
 import "./CommentCompose.css";
 
-function viewComposer() {
-    const composer = document.getElementById("comment-composer")!;
-    scrollIntoView(composer, {scrollMode: "if-needed", block: "nearest"});
-}
-
 type OuterProps = ConnectedProps<typeof connector>;
 
 type Props = OuterProps & FormikProps<CommentComposeValues>;
@@ -38,11 +33,21 @@ function CommentCompose(props: Props) {
         values, resetForm, submitForm
     } = props;
 
+    const composer = useRef<HTMLDivElement>(null);
+
+    const viewComposer = useCallback(() => {
+        if (composer.current != null && composer.current.contains(document.activeElement)) {
+            scrollIntoView(composer.current, {scrollMode: "if-needed", block: "nearest"});
+        }
+    }, [composer]);
+
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receiverName, receiverPostingId, draft?.id, formId, resetForm]); // 'props' are missing on purpose
+
+    useEffect(viewComposer, [values.body.text, viewComposer]);
 
     const onFocus = () => {
         viewComposer();
@@ -56,7 +61,6 @@ function CommentCompose(props: Props) {
     }
 
     const onKeyDown = (event: React.KeyboardEvent) => {
-        viewComposer();
         if (event.key === "Enter") {
             const submit = !Browser.isTouchScreen() && !event.shiftKey
                 && ((submitKey === "enter" && !event.ctrlKey) || (submitKey === "ctrl-enter" && event.ctrlKey));
@@ -72,7 +76,7 @@ function CommentCompose(props: Props) {
     const mention = receiverFullName ? receiverFullName : mentionName(receiverName);
     if (ownerName) {
         return (
-            <div id="comment-composer" onFocus={onFocus} onBlur={onBlur}>
+            <div id="comment-composer" ref={composer} onFocus={onFocus} onBlur={onBlur}>
                 <Form>
                     <AvatarField name="avatar" size={36}/>
                     <div className="content">
