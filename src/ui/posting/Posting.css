@@ -46,11 +46,12 @@
 }
 
 .posting > .content IMG, .posting > .content IFRAME {
-    max-width: min(100vw - 4rem, var(--feed-width) - 3.5rem);
+    max-width: min(100vw - 4rem, var(--feed-width) - 3.5rem, var(--width, 100vw));
+    max-height: var(--height, 200vh);
 }
 
 .posting.preview > .content IMG, .posting.preview > .content IFRAME {
-    max-height: 35rem;
+    max-height: min(35rem, var(--height, 200vh));
 }
 
 .posting > .content .read-more {

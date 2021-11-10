@@ -78,6 +78,17 @@ function EntryHtml({className, postingId, html, media, onClick, standalone, font
                         <EntryImage postingId={postingId} mediaFile={mediaFile} width={width} height={height}
                                     alt={alt} title={title}/>
                     </Provider>, span);
+            } else {
+                const width = node.getAttribute("width");
+                const height = node.getAttribute("height");
+                let style = node.getAttribute("style") ?? "";
+                if (width != null) {
+                    style += `; --width: ${width}px`;
+                }
+                if (height != null) {
+                    style += `; --height: ${height}px`;
+                }
+                node.setAttribute("style", style);
             }
         });
         dom.current.querySelectorAll("span.katex").forEach(node => {

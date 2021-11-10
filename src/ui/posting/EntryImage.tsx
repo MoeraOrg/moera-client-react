@@ -59,11 +59,16 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, flex, coun
         style = {...style, position: "relative"};
     }
 
+    let imageStyle: React.CSSProperties = {
+        "--width": `${imageWidth}px`,
+        "--height": `${imageHeight}px`
+    } as any;
+
     return (
         <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear} style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
             <img src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
-                 alt={alt ?? undefined} title={title ?? undefined} />
+                 alt={alt ?? undefined} title={title ?? undefined} style={imageStyle}/>
         </Jump>
     );
 }
