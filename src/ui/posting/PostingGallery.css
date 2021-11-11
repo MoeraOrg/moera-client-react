@@ -44,7 +44,7 @@
     flex-direction: row;
 }
 
-.posting .gallery A {
+.posting .gallery .entry-image {
     display: block;
     border: 1px solid white;
     flex: 1;
@@ -52,25 +52,12 @@
     min-height: 0;
 }
 
-.posting .gallery A IMG {
+.posting .gallery .entry-image IMG {
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-}
-
-.posting .gallery A .count {
-    display: block;
-    position: absolute;
-    top: calc(50% - 1ex);
-    left: 0;
-    width: 100%;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-    font-size: 200%;
-    text-shadow: -2px 2px 4px var(--shadow);
 }
 
 .posting .gallery.single {
@@ -96,10 +83,10 @@
     }
 }
 
-.posting .gallery.single A {
+.posting .gallery.single .entry-image {
     border: 0;
 }
 
-.posting .gallery.single A IMG {
+.posting .gallery.single .entry-image IMG {
     object-fit: contain;
 }

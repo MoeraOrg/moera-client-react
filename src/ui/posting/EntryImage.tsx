@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import cx from 'classnames';
 
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -8,6 +9,7 @@ import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
 import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
 import { ut } from "util/url";
+import "./EntryImage.css";
 
 function mediaSources(location: string, previews: MediaFilePreviewInfo[] | null | undefined): string {
     if (previews == null) {
@@ -55,9 +57,6 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, flex, coun
     } else if (flex === "column") {
         style = {flex: imageHeight / imageWidth};
     }
-    if (count != null && count > 0) {
-        style = {...style, position: "relative"};
-    }
 
     let imageStyle: React.CSSProperties = {
         "--width": `${imageWidth}px`,
@@ -65,7 +64,8 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, flex, coun
     } as any;
 
     return (
-        <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear} style={style}>
+        <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear}
+              className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
             <img src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
                  alt={alt ?? undefined} title={title ?? undefined} style={imageStyle}/>
