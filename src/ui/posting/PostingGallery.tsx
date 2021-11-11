@@ -19,13 +19,22 @@ export default function PostingGallery({postingId, media}: Props) {
         return null;
     }
 
-    const orientation = images[0].height > images[0].width ? "vertical" : "horizontal";
+    const orientation = images[0].height < images[0].width ? "vertical" : "horizontal";
 
     if (images.length === 1) {
         return (
             // FIXME React.CSSProperties does not include CSS variables
             <div className={`gallery single ${orientation}`} style={{"--image-height": images[0].height + "px"} as any}>
                 <EntryImage postingId={postingId} mediaFile={images[0]}/>
+            </div>
+        );
+    }
+
+    if (images.length === 2) {
+        return (
+            <div className={`gallery ${orientation}`}>
+                <EntryImage postingId={postingId} mediaFile={images[0]} flex="row"/>
+                <EntryImage postingId={postingId} mediaFile={images[1]} flex="row"/>
             </div>
         );
     }
@@ -40,12 +49,10 @@ export default function PostingGallery({postingId, media}: Props) {
                     <EntryImage postingId={postingId} mediaFile={images[1]} flex="row"/>
                 }
             </div>
-            {images.length > 2 &&
-                <div className="gallery-row">
-                    <EntryImage postingId={postingId} mediaFile={images[2 - base]} flex="row"/>
-                    <EntryImage postingId={postingId} mediaFile={images[3 - base]} flex="row"/>
-                </div>
-            }
+            <div className="gallery-row">
+                <EntryImage postingId={postingId} mediaFile={images[2 - base]} flex="row"/>
+                <EntryImage postingId={postingId} mediaFile={images[3 - base]} flex="row"/>
+            </div>
             {images.length > 4 &&
                 <div className="gallery-row">
                     <EntryImage postingId={postingId} mediaFile={images[4 - base]} flex="row"/>
