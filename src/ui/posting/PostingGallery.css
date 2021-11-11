@@ -80,7 +80,7 @@
 
 @media only screen and (min-width: 576px) {
     .posting .gallery.single {
-        height: min(750px, var(--image-height));
+        height: min(650px, var(--image-height));
     }
 }
 

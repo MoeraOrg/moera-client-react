@@ -1,15 +1,23 @@
 import React from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 
-import { MediaAttachment } from "api/node/api-types";
+import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import EntryImage from "ui/posting/EntryImage";
 import "./PostingGallery.css";
 
-interface Props {
+type Props = {
     postingId?: string;
     media: MediaAttachment[] | null;
+} & ConnectedProps<typeof connector>;
+
+function singleImageHeight(image: PrivateMediaFileInfo, feedWidth: number): number {
+    const maxWidth = feedWidth - 25;
+    return image.width <= maxWidth ? image.height : Math.round(image.height * maxWidth / image.width);
 }
 
-export default function PostingGallery({postingId, media}: Props) {
+function PostingGallery({postingId, media, feedWidth}: Props) {
     if (media == null || media.length === 0) {
         return null;
     }
@@ -24,7 +32,8 @@ export default function PostingGallery({postingId, media}: Props) {
     if (images.length === 1) {
         return (
             // FIXME React.CSSProperties does not include CSS variables
-            <div className={`gallery single ${orientation}`} style={{"--image-height": images[0].height + "px"} as any}>
+            <div className={`gallery single ${orientation}`}
+                 style={{"--image-height": singleImageHeight(images[0], feedWidth) + "px"} as any}>
                 <EntryImage postingId={postingId} mediaFile={images[0]}/>
             </div>
         );
@@ -63,3 +72,11 @@ export default function PostingGallery({postingId, media}: Props) {
         </div>
     );
 }
+
+const connector = connect(
+    (state: ClientState) => ({
+        feedWidth: getSetting(state, "feed.width") as number
+    })
+);
+
+export default connector(PostingGallery);
