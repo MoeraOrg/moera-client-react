@@ -9,11 +9,12 @@ import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
 import { getLightBoxMediaId, isLightBoxShown } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getNodeRootPage } from "state/node/selectors";
+import { getSetting } from "state/settings/selectors";
 import "./LightBox.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function LightBox({show, posting, mediaId, rootPage, closeLightBox, lightBoxMediaSet}: Props) {
+function LightBox({show, posting, mediaId, rootPage, loopGallery, closeLightBox, lightBoxMediaSet}: Props) {
     if (!show) {
         return null;
     }
@@ -25,18 +26,25 @@ function LightBox({show, posting, mediaId, rootPage, closeLightBox, lightBoxMedi
     let nextMediaId: string | undefined = undefined;
     let title = "";
     if (posting?.media != null && posting.media.length > 0) {
+        const loop = loopGallery && posting.media.length > 1;
         let index = posting.media.findIndex(mediaFile => mediaFile.media.id === mediaId);
         if (index < 0) {
             index = 0;
         }
         mainSrc = rootPage + "/media/" + posting.media[index].media.path;
-        if (index > 0) {
-            prevSrc = rootPage + "/media/" + posting.media[index - 1].media.path;
-            prevMediaId = posting.media[index - 1].media.id;
+        const prevIndex = index > 0
+            ? index - 1
+            : (index === 0 && loop ? posting.media.length - 1 : null);
+        const nextIndex = index < posting.media.length - 1
+            ? index + 1
+            : (index === posting.media.length - 1 && loop ? 0 : null);
+        if (prevIndex != null) {
+            prevSrc = rootPage + "/media/" + posting.media[prevIndex].media.path;
+            prevMediaId = posting.media[prevIndex].media.id;
         }
-        if (index < posting.media.length - 1) {
-            nextSrc = rootPage + "/media/" + posting.media[index + 1].media.path;
-            nextMediaId = posting.media[index + 1].media.id;
+        if (nextIndex != null) {
+            nextSrc = rootPage + "/media/" + posting.media[nextIndex].media.path;
+            nextMediaId = posting.media[nextIndex].media.id;
         }
         title = `${index + 1} / ${posting.media.length}`;
     }
@@ -60,7 +68,8 @@ const connector = connect(
         show: isLightBoxShown(state),
         posting: getPosting(state, state.lightBox.postingId),
         mediaId: getLightBoxMediaId(state),
-        rootPage: getNodeRootPage(state)
+        rootPage: getNodeRootPage(state),
+        loopGallery: getSetting(state, "entry.gallery.loop") as boolean
     }),
     { closeLightBox, lightBoxMediaSet }
 );

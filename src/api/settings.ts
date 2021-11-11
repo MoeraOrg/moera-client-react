@@ -177,6 +177,13 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
+        name: "entry.gallery.loop",
+        type: "bool",
+        defaultValue: "true",
+        title: "Loop gallery view",
+        modifiers: {}
+    },
+    {
         name: "posting.time.relative",
         type: "bool",
         defaultValue: "false",
