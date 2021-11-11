@@ -16,6 +16,10 @@
     background-color: var(--highlight);
 }
 
+.entry A.posting-button:hover {
+    text-decoration: none;
+}
+
 .posting-button .caption {
     margin-left: .4rem;
     font-weight: 600;
