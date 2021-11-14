@@ -15,46 +15,31 @@ interface Props {
     onDelete: (id: string) => void;
 }
 
-class ComposeDraftItem extends React.PureComponent<Props> {
-
-    onSelect = (e: React.MouseEvent) => {
-        const {draft} = this.props;
-
-        if ((e.target as HTMLDivElement).closest(".delete") != null) {
-            return;
-        }
-        this.props.onSelect(draft.id);
-    };
-
-    onDelete = (e: React.MouseEvent) => {
-        const {draft} = this.props;
-
-        this.props.onDelete(draft.id);
+export default function ComposeDraftItem({draft, current, onSelect, onDelete}: Props) {
+    const handleSelect = (e: React.MouseEvent) => {
+        onSelect(draft.id);
         e.preventDefault();
     };
 
-    render() {
-        const {draft, current} = this.props;
+    const handleDelete = (e: React.MouseEvent) => {
+        onDelete(draft.id);
+        e.preventDefault();
+    };
 
-        return (
-            <div key={draft.id} className={cx("dropdown-item", {"current": current})}
-                 onClick={this.onSelect}>
-                <div className="draft-info">
-                    <div className="content">
-                        {draft.subject && <b>{draft.subject} </b>}
-                        <LinesEllipsis text={draft.text} maxLine="3"/>
-                    </div>
-                    <div className="edited">
-                        {formatDistanceToNow(fromUnixTime(draft.editedAt ?? draft.createdAt))}
-                    </div>
+    return (
+        <div key={draft.id} className={cx("dropdown-item", {"current": current})}>
+            <div className="draft-info" onClick={handleSelect}>
+                <div className="content">
+                    {draft.subject && <b>{draft.subject} </b>}
+                    <LinesEllipsis text={draft.text ? draft.text : "(no text)"} maxLine="3"/>
                 </div>
-                <div className="draft-delete" title="Delete draft" onClick={this.onDelete}>
-                    <FontAwesomeIcon icon="trash-alt"/>
+                <div className="edited">
+                    {formatDistanceToNow(fromUnixTime(draft.editedAt ?? draft.createdAt))}
                 </div>
             </div>
-        );
-    }
-
+            <div className="draft-delete" title="Delete draft" onClick={handleDelete}>
+                <FontAwesomeIcon icon="trash-alt"/>
+            </div>
+        </div>
+    );
 }
-
-export default ComposeDraftItem;
