@@ -2,12 +2,12 @@ import React from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Manager, Popper, Reference } from 'react-popper';
+import { PositioningStrategy } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { isFunction } from 'formik';
 
 import "./Popover.css";
-import { PositioningStrategy } from "@popperjs/core";
 
 interface ChildrenProps {
     hide: () => void;
@@ -23,6 +23,7 @@ interface Props {
     element?: any;
     detached?: boolean;
     strategy?: PositioningStrategy;
+    offset?: [number, number?];
     onToggle?: (visible: boolean) => void;
     children: ((props: ChildrenProps) => React.ReactNode) | React.ReactNode;
 }
@@ -85,7 +86,9 @@ export class Popover extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {className, text, textClassName, icon, title, element, detached, strategy, children} = this.props;
+        const {className, text, textClassName, icon, title, element, detached, strategy, offset, children} = this.props;
+
+        const modifiers = offset != null ? [{name: "offset", options: {offset}}] : undefined;
 
         return (
             <Manager>
@@ -103,7 +106,7 @@ export class Popover extends React.PureComponent<Props, State> {
                 </Reference>
                 {ReactDOM.createPortal(
                     (!detached || this.state.visible) &&
-                        <Popper placement="bottom" strategy={strategy}>
+                        <Popper placement="bottom" strategy={strategy} modifiers={modifiers}>
                             {({ref, style, placement, arrowProps, forceUpdate}) => (
                                 <div ref={ref} style={style} className={cx(
                                     "popover",
