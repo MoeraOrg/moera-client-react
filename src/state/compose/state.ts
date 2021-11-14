@@ -1,4 +1,4 @@
-import { Choice, DraftInfo, PostingInfo, SourceFormat } from "api/node/api-types";
+import { DraftInfo, PostingFeatures, PostingInfo } from "api/node/api-types";
 
 export interface ExtDraftInfo extends DraftInfo {
     subject: string | null;
@@ -15,8 +15,7 @@ export type DraftPostingInfo = Omit<PostingInfo, "id"> & {
 export interface ComposeState {
     loadingFeatures: boolean;
     loadedFeatures: boolean;
-    subjectPresent: boolean;
-    sourceFormats: Choice<SourceFormat>[];
+    features: PostingFeatures | null;
     postingId: string | null;
     posting: DraftPostingInfo | null;
     loadingPosting: boolean;

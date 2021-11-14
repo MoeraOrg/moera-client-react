@@ -37,11 +37,6 @@ import { ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/stat
 import { ClientAction } from "state/action";
 import { htmlEntities, replaceEmojis, safeHtml } from "util/html";
 
-const emptyFeatures = {
-    subjectPresent: false,
-    sourceFormats: []
-};
-
 const emptyPosting = {
     postingId: null,
     posting: null,
@@ -60,7 +55,7 @@ const emptyPosting = {
 const initialState = {
     loadingFeatures: false,
     loadedFeatures: false,
-    ...emptyFeatures,
+    features: null,
     ...emptyPosting,
     draftList: [],
     loadingDraftList: false,
@@ -142,8 +137,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 ...state,
                 loadingFeatures: false,
                 loadedFeatures: true,
-                ...emptyFeatures,
-                ...action.payload.features
+                features: action.payload.features
             };
 
         case COMPOSE_FEATURES_LOAD_FAILED:
@@ -157,7 +151,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 ...state,
                 loadingFeatures: false,
                 loadedFeatures: false,
-                ...emptyFeatures
+                features: null
             };
 
         case COMPOSE_POSTING_LOAD:

@@ -1,16 +1,16 @@
 import React, { useCallback } from 'react';
 import cx from 'classnames';
+import { useFormikContext } from 'formik';
 
-import { RichTextEditor, RichTextValue } from "ui/control";
+import { PostingFeatures, SourceFormat } from "api/node/api-types";
+import { FormGroup, RichTextEditor, RichTextValue } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup } from "ui/control/FormGroup";
-import { SourceFormat } from "api/node/api-types";
-import { useFormikContext } from "formik";
 
 interface Props {
     name: string;
     title?: string;
     rows?: number;
+    features?: PostingFeatures | null;
     noMedia?: boolean;
     placeholder?: string;
     autoFocus?: boolean;
@@ -27,9 +27,9 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function RichTextField({name, title, rows = 3, noMedia, placeholder = "Enter text here...", autoFocus, anyValue,
-                               className, autoComplete, noFeedback = false, disabled = false, initialValue,
-                               defaultValue, smileysEnabled, hidingPanel, format, onKeyDown}: Props) {
+export function RichTextField({name, title, rows = 3, features, noMedia, placeholder = "Enter text here...",
+                               autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false,
+                               initialValue, defaultValue, smileysEnabled, hidingPanel, format, onKeyDown}: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
     const {setFieldValue} = useFormikContext();
@@ -62,6 +62,7 @@ export function RichTextField({name, title, rows = 3, noMedia, placeholder = "En
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     rows={rows}
+                    features={features ?? null}
                     disabled={disabled}
                     smileysEnabled={smileysEnabled}
                     hidingPanel={hidingPanel}

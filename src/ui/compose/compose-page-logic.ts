@@ -2,7 +2,14 @@ import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
 
 import { ClientSettings } from "api";
-import { AvatarImage, PostingText, PrivateMediaFileInfo, SourceFormat, StoryAttributes } from "api/node/api-types";
+import {
+    AvatarImage,
+    PostingFeatures,
+    PostingText,
+    PrivateMediaFileInfo,
+    SourceFormat,
+    StoryAttributes
+} from "api/node/api-types";
 import { RichTextValue } from "ui/control";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
@@ -34,7 +41,7 @@ export interface ComposePageValues {
 
 export interface MapToPostingTextProps {
     postingId: string | null;
-    subjectPresent: boolean;
+    features: PostingFeatures | null;
     smileysEnabled: boolean;
     newsFeedEnabled: boolean;
     avatarShapeDefault: string;
@@ -148,7 +155,7 @@ const composePageLogic = {
                 shape: values.avatar.shape ?? props.avatarShapeDefault
             } : null,
             bodySrc: JSON.stringify({
-                subject: props.subjectPresent
+                subject: props.features?.subjectPresent
                     ? this._replaceSmileys(props.smileysEnabled, values.subject?.trim() ?? "")
                     : null,
                 text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())

@@ -60,10 +60,11 @@ class ComposePage extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {loadingFeatures, subjectPresent, sourceFormats, loadingPosting, postingId, loadingDraft, conflict,
-               beingPosted, smileysEnabled, composeConflictClose, values} = this.props;
+        const {loadingFeatures, features, loadingPosting, postingId, loadingDraft, conflict, beingPosted,
+            smileysEnabled, composeConflictClose, values} = this.props;
         const title = postingId == null ? "New Post" : "Edit Post";
         const loadingContent = loadingPosting || loadingDraft;
+        const sourceFormats = features?.sourceFormats ?? [];
         const submitDisabled = composePageLogic.areValuesEmpty(values);
         return (
             <>
@@ -90,12 +91,12 @@ class ComposePage extends React.PureComponent<Props, State> {
                                     <ComposePublishAt/>
                                 </div>
                             </div>
-                            {subjectPresent &&
+                            {features?.subjectPresent &&
                                 <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                             }
                             <RichTextField name="body" disabled={loadingContent || beingPosted}
                                            format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
-                                           anyValue autoFocus/>
+                                           features={features} anyValue autoFocus/>
                             <ComposeFormattingHelp/>
 
                             <ComposeBodyFormat sourceFormats={sourceFormats}/>
@@ -137,8 +138,7 @@ const connector = connect(
         loadingFeatures: state.compose.loadingFeatures,
         avatarDefault: getHomeOwnerAvatar(state),
         fullNameDefault: getHomeOwnerFullName(state),
-        subjectPresent: state.compose.subjectPresent,
-        sourceFormats: state.compose.sourceFormats,
+        features: state.compose.features,
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,
         loadingDraft: state.compose.loadingDraft,

@@ -357,6 +357,10 @@ export interface Choice<T> {
 export interface PostingFeatures {
     subjectPresent: boolean;
     sourceFormats: Choice<SourceFormat>[];
+    mediaMaxSize: number;
+    imageRecommendedSize: number;
+    imageRecommendedPixels: number;
+    imageFormats: string[];
 }
 
 export interface SettingInfo {

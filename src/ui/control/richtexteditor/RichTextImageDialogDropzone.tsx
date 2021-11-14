@@ -4,21 +4,22 @@ import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import { useField } from 'formik';
 
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
-import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
 import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
 
 type Props = {
+    features: PostingFeatures | null;
     onAdded?: (image: PrivateMediaFileInfo) => void;
     onDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEditorImagesUpload}: Props) {
+function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage,
+                                      richTextEditorImagesUpload}: Props) {
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [, {value}, {setValue}] = useField<PrivateMediaFileInfo | null>("mediaFile");
@@ -43,7 +44,8 @@ function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEdit
         if (files != null && files.length > 0) {
             setUploading(true);
             setUploadProgress(0);
-            richTextEditorImagesUpload([files[0]], onImageUploadSuccess, onImageUploadFailure, onImageUploadProgress);
+            richTextEditorImagesUpload(
+                [files[0]], features, onImageUploadSuccess, onImageUploadFailure, onImageUploadProgress);
         }
     }
 
@@ -57,7 +59,7 @@ function RichTextImageDialogDropzone({onAdded, onDeleted, rootPage, richTextEdit
     }
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
-        useDropzone({noClick: true, noKeyboard: true, accept: ACCEPTED_IMAGE_TYPES, maxFiles: 1, onDrop});
+        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, maxFiles: 1, onDrop});
 
     const mediaLocation = value != null ? rootPage + "/media/" + value.path : null;
     const src = mediaLocation != null ? mediaImagePreview(mediaLocation, 150) : null;

@@ -33,7 +33,7 @@ function ComposeNewPost({postingId, composeDraftSelect}: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        subjectPresent: state.compose.subjectPresent,
+        features: state.compose.features,
         postingId: state.compose.postingId,
         posting: state.compose.posting,
         smileysEnabled: getSetting(state, "posting.smileys.enabled") as boolean,

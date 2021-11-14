@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import cx from 'classnames';
 import { arrayMove } from '@dnd-kit/sortable';
 
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichTextArea";
 import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
@@ -24,12 +24,14 @@ type Props = {
     className?: string;
     hidingPanel?: boolean;
     value: RichTextValue;
+    features: PostingFeatures | null;
     onChange?: (value: RichTextValue) => void;
     noMedia?: boolean;
 } & Omit<RichTextAreaProps, "textArea" | "panel" | "value" | "onChange">;
 
-const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
-                         hidingPanel, format, onKeyDown, onChange, onBlur, noMedia}: Props) => {
+const RichTextEditor = ({name, value, features, rows, placeholder, className, autoFocus, autoComplete,
+                         disabled, smileysEnabled, hidingPanel, format, onKeyDown, onChange, onBlur,
+                         noMedia}: Props) => {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
@@ -89,16 +91,17 @@ const RichTextEditor = ({name, value, rows, placeholder, className, autoFocus, a
     return (
         <div className={cx("rich-text-editor", className)}>
             <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
-                                 noMedia={noMedia} selectedImage={selectedImage} selectImage={setSelectedImage}
-                                 onImageAdded={onImageAdded} onImageDeleted={onImageDeleted}/>
+                                 features={features} noMedia={noMedia} selectedImage={selectedImage}
+                                 selectImage={setSelectedImage} onImageAdded={onImageAdded}
+                                 onImageDeleted={onImageDeleted}/>
             <RichTextArea name={name} value={value.text} format={format} rows={rows} placeholder={placeholder}
                           autoFocus={autoFocus} autoComplete={autoComplete} disabled={disabled}
                           smileysEnabled={smileysEnabled} onKeyDown={onKeyDown} onChange={onTextChange} onBlur={onBlur}
                           textArea={textArea} panel={panel}/>
             {!noMedia &&
-                <RichTextEditorDropzone value={value} selectImage={setSelectedImage} onLoadStarted={onImageLoadStarted}
-                                        onLoaded={onImageLoaded} onDeleted={onImageDeleted}
-                                        onReorder={onImagesReorder}/>
+                <RichTextEditorDropzone value={value} features={features} selectImage={setSelectedImage}
+                                        onLoadStarted={onImageLoadStarted} onLoaded={onImageLoaded}
+                                        onDeleted={onImageDeleted} onReorder={onImagesReorder}/>
             }
         </div>
     );

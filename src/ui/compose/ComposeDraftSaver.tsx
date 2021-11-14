@@ -50,7 +50,7 @@ const ComposeDraftSaver = (props: Props) => (
 const connector = connect(
     (state: ClientState) => ({
         ownerName: getOwnerName(state),
-        subjectPresent: state.compose.subjectPresent,
+        features: state.compose.features,
         postingId: state.compose.postingId,
         draftId: state.compose.draftId,
         savingDraft: state.compose.savingDraft,

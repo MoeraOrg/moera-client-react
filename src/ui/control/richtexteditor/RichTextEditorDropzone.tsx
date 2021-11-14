@@ -4,9 +4,8 @@ import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
 
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
-import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
 import { Button, RichTextValue } from "ui/control";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
 import "./RichTextEditorDropzone.css";
@@ -55,6 +54,7 @@ type ImageLoadStartedHandler = (count: number) => void;
 type ImageLoadedHandler = (index: number, image: PrivateMediaFileInfo) => void;
 type Props = {
     value: RichTextValue;
+    features: PostingFeatures | null;
     selectImage: (image: PrivateMediaFileInfo | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
@@ -62,7 +62,7 @@ type Props = {
     onReorder?: (activeId: string, overId: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, onDeleted, onReorder,
+function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, onLoaded, onDeleted, onReorder,
                                  richTextEditorImagesUpload}: Props) {
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -97,13 +97,13 @@ function RichTextEditorDropzone({value, selectImage, onLoadStarted, onLoaded, on
             if (onLoadStartedRef.current) {
                 onLoadStartedRef.current(files.length);
             }
-            richTextEditorImagesUpload(files, onImageUploadSuccess(value.media?.length ?? 0), onImageUploadFailure,
-                onImageUploadProgress);
+            richTextEditorImagesUpload(files, features, onImageUploadSuccess(value.media?.length ?? 0),
+                onImageUploadFailure, onImageUploadProgress);
         }
     };
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
-        useDropzone({noClick: true, noKeyboard: true, accept: ACCEPTED_IMAGE_TYPES, onDrop});
+        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, onDrop});
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
 
     return (

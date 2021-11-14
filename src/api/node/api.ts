@@ -1429,9 +1429,27 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
         "sourceFormats": {
             type: "array",
             items: ChoiceType
+        },
+        "mediaMaxSize": {
+            type: "integer"
+        },
+        "imageRecommendedSize": {
+            type: "integer"
+        },
+        "imageRecommendedPixels": {
+            type: "integer"
+        },
+        "imageFormats": {
+            type: "array",
+            items: {
+                type: "string"
+            }
         }
     },
-    required: ["subjectPresent", "sourceFormats"],
+    required: [
+        "subjectPresent", "sourceFormats", "mediaMaxSize", "imageRecommendedSize", "imageRecommendedPixels",
+        "imageFormats"
+    ],
     additionalProperties: false
 };
 

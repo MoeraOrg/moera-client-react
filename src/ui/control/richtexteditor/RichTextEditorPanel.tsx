@@ -4,7 +4,7 @@ import * as textFieldEdit from 'text-field-edit';
 import cx from 'classnames';
 
 import { NodeName } from "api";
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
@@ -24,6 +24,7 @@ type Props = {
     panel: React.RefObject<HTMLDivElement>,
     hiding?: boolean;
     format: string;
+    features: PostingFeatures | null;
     noMedia?: boolean;
     selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: PrivateMediaFileInfo | null) => void;
@@ -376,7 +377,9 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {hiding, format, panel, noMedia, selectedImage, onImageAdded, onImageDeleted} = this.props;
+        const {
+            hiding, format, panel, features, noMedia, selectedImage, onImageAdded, onImageDeleted
+        } = this.props;
         const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText} = this.state;
 
         if (format === "plain-text") {
@@ -405,8 +408,9 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
                 <RichTextLinkDialog show={linkDialog} text={dialogText} onSubmit={this.onLinkSubmit}/>
-                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit} noMedia={noMedia}
-                                     selectedImage={selectedImage} onAdded={onImageAdded} onDeleted={onImageDeleted}/>
+                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit} selectedImage={selectedImage}
+                                     features={features} noMedia={noMedia}
+                                     onAdded={onImageAdded} onDeleted={onImageDeleted}/>
                 <RichTextMentionDialog show={mentionDialog} onSubmit={this.onMentionSubmit}/>
             </div>
         );
