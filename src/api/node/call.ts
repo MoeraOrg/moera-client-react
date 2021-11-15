@@ -74,7 +74,7 @@ export function* callApi<T>({
         (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
     const headers = {
         "Accept": "application/json",
-        "Content-Type": body instanceof File ? body.type : "application/json"
+        "Content-Type": body instanceof Blob ? body.type : "application/json"
     };
 
     let cartesRenewed = false;
@@ -223,11 +223,11 @@ function* cartesRenew() {
 }
 
 function encodeBody(body: null): null;
-function encodeBody(body: any): string | null | File {
+function encodeBody(body: any): string | null | Blob {
     if (body == null) {
         return null;
     }
-    if (body instanceof File) {
+    if (body instanceof Blob) {
         return body;
     }
     return JSON.stringify(body);

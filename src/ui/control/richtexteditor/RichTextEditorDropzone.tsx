@@ -9,6 +9,8 @@ import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { Button, RichTextValue } from "ui/control";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
 import "./RichTextEditorDropzone.css";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 
 type UploadStatus = "loading" | "success" | "failure";
 
@@ -63,7 +65,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, onLoaded, onDeleted, onReorder,
-                                 richTextEditorImagesUpload}: Props) {
+                                 compressImages, richTextEditorImagesUpload}: Props) {
+    const [compress, setCompress] = useState<boolean>(compressImages);
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // onLoadStarted and onLoaded may change
@@ -97,7 +100,7 @@ function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, on
             if (onLoadStartedRef.current) {
                 onLoadStartedRef.current(files.length);
             }
-            richTextEditorImagesUpload(files, features, onImageUploadSuccess(value.media?.length ?? 0),
+            richTextEditorImagesUpload(files, features, compress, onImageUploadSuccess(value.media?.length ?? 0),
                 onImageUploadFailure, onImageUploadProgress);
         }
     };
@@ -119,7 +122,12 @@ function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, on
                      ${progressSummary.progress}% ...`
                 :
                     <>
-                        <Button variant="primary" size="sm" onClick={open}>Upload images</Button> or drop them here
+                        <Button variant="primary" size="sm" onClick={open}>Upload images</Button> or drop them here<br/>
+                        <label className="form-check-label" htmlFor="editorImagesCompress">
+                            Compress images
+                        </label>
+                        <input className="form-check-input" type="checkbox" checked={compress}
+                               onChange={e => setCompress(e.target.checked)} id="editorImagesCompress"/>
                     </>
                 }
             </div>
@@ -129,7 +137,9 @@ function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, on
 }
 
 const connector = connect(
-    null,
+    (state: ClientState) => ({
+        compressImages: getSetting(state, "posting.media.compress.default") as boolean
+    }),
     { richTextEditorImagesUpload }
 );
 

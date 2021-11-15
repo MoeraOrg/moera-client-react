@@ -14,5 +14,16 @@
 .rich-text-editor-dropzone .upload {
     color: var(--bs-gray);
     text-align: center;
+    line-height: 1.2;
     padding: .5em;
+}
+
+.rich-text-editor-dropzone .upload LABEL {
+    font-size: smaller;
+    margin-right: .5em;
+}
+
+.rich-text-editor-dropzone .upload INPUT {
+    font-size: smaller;
+    vertical-align: text-top;
 }

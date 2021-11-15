@@ -289,6 +289,13 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
+        name: "posting.media.compress.default",
+        type: "bool",
+        defaultValue: "true",
+        title: "Compress images in posts by default",
+        modifiers: {}
+    },
+    {
         name: "reactions.positive.available",
         type: "string",
         defaultValue: "+0x1f4a1,+0x1f44d,+0x1f4af,+0x1f60d,+0x1f600,+0x1f926,+0x1f62e,+0x1f622,+0x1f620,+0x1f92e,"

@@ -18,7 +18,8 @@ const INCLUDE = new Set([
     PREFIX + "posting.reactions.visible.default",
     PREFIX + "posting.reactions.totals-visible.default",
     PREFIX + "posting.feed.news.enabled",
-    PREFIX + "posting.reactions.self.enabled"
+    PREFIX + "posting.reactions.self.enabled",
+    PREFIX + "posting.media.compress.default"
 ]);
 
 type Props = ConnectedProps<typeof connector>;

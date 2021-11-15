@@ -19,3 +19,14 @@
     padding: .25rem;
     position: relative;
 }
+
+
+.rich-text-image-dialog-dropzone LABEL {
+    font-size: smaller;
+    margin-right: .5em;
+}
+
+.rich-text-image-dialog-dropzone INPUT {
+    font-size: smaller;
+    vertical-align: text-top;
+}

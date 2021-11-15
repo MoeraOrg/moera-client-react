@@ -11,6 +11,7 @@ import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
+import { getSetting } from "state/settings/selectors";
 
 type Props = {
     features: PostingFeatures | null;
@@ -18,8 +19,9 @@ type Props = {
     onDeleted?: (id: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage,
+function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage, compressImages,
                                       richTextEditorImagesUpload}: Props) {
+    const [compress, setCompress] = useState<boolean>(compressImages);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [, {value}, {setValue}] = useField<PrivateMediaFileInfo | null>("mediaFile");
@@ -44,8 +46,8 @@ function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage,
         if (files != null && files.length > 0) {
             setUploading(true);
             setUploadProgress(0);
-            richTextEditorImagesUpload(
-                [files[0]], features, onImageUploadSuccess, onImageUploadFailure, onImageUploadProgress);
+            richTextEditorImagesUpload([files[0]], features, compress, onImageUploadSuccess, onImageUploadFailure,
+                onImageUploadProgress);
         }
     }
 
@@ -80,7 +82,12 @@ function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage,
                     </div>
                 :
                     <>
-                        <Button variant="primary" size="sm" onClick={open}>Upload image</Button> or drop it here
+                        <Button variant="primary" size="sm" onClick={open}>Upload image</Button> or drop it here<br/>
+                        <label className="form-check-label" htmlFor="dialogImagesCompress">
+                            Compress images
+                        </label>
+                        <input className="form-check-input" type="checkbox" checked={compress}
+                               onChange={e => setCompress(e.target.checked)} id="dialogImagesCompress"/>
                     </>
                 )
             }
@@ -91,7 +98,8 @@ function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage,
 
 const connector = connect(
     (state: ClientState) => ({
-        rootPage: getNodeRootPage(state)
+        rootPage: getNodeRootPage(state),
+        compressImages: getSetting(state, "posting.media.compress.default") as boolean
     }),
     { richTextEditorImagesUpload }
 );
