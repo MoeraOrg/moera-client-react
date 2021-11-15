@@ -24,6 +24,10 @@
     height: auto;
 }
 
+.entry > .content IMG.preload-placeholder {
+    width: var(--width);
+}
+
 .entry > .content FIGCAPTION {
     font-size: smaller;
     line-height: 1.2;

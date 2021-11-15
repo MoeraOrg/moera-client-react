@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
+import PreloadedImage from "ui/posting/PreloadedImage";
 import { mediaImageFindLargerPreview, mediaImagePreview, mediaImageSize } from "util/media-images";
 import { ut } from "util/url";
 import "./EntryImage.css";
@@ -58,17 +59,12 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, flex, coun
         style = {flex: imageHeight / imageWidth};
     }
 
-    let imageStyle: React.CSSProperties = {
-        "--width": `${imageWidth}px`,
-        "--height": `${imageHeight}px`
-    } as any;
-
     return (
         <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear}
               className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
-            <img src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
-                 alt={alt ?? undefined} title={title ?? undefined} style={imageStyle}/>
+            <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
+                 alt={alt ?? undefined} title={title ?? undefined}/>
         </Jump>
     );
 }
