@@ -1,0 +1,13 @@
+.rich-text-image-dialog-size {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.rich-text-image-dialog-size .number-control {
+    width: 7em;
+    margin-right: 1em;
+}
+
+.rich-text-image-dialog-size .number-control INPUT {
+    width: 100%;
+}

@@ -342,7 +342,8 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         this.props.selectImage(null);
     }
 
-    onImageSubmit = (ok: boolean, {source, mediaFile, href, caption, title, alt}: RichTextImageValues) => {
+    onImageSubmit = (ok: boolean,
+                     {source, mediaFile, href, width, height, caption, title, alt}: RichTextImageValues) => {
         const {textArea} = this.props;
 
         this.onImageClose();
@@ -353,7 +354,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
         const src = source === "device" ? (mediaFile != null ? "hash:" + mediaFile.hash : null) : href;
         if (ok) {
-            if (this.isMarkdown() && !caption) {
+            if (this.isMarkdown() && !caption && width == null && height == null) {
                 const titleAttr = title ? ` "${title}"`: "";
                 const altAttr = alt ?? "";
                 if (src) {
@@ -364,14 +365,17 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             } else {
                 const figureBegin = caption ? "<figure>" : "";
                 const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
+                const widthAttr = width != null ? ` width="${width}"` : "";
+                const heightAttr = height != null ? ` height="${height}"` : "";
                 const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
                 const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
+
+                const tagBegin = `${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
+                const tagEnd = `">${figureEnd}`;
                 if (src) {
-                    textFieldEdit.insert(textArea.current,
-                        `${figureBegin}<img${altAttr}${titleAttr} src="${htmlEntities(src)}">${figureEnd}`);
+                    textFieldEdit.insert(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
                 } else {
-                    textFieldEdit.wrapSelection(textArea.current,
-                        `${figureBegin}<img${altAttr}${titleAttr} src="`, `">${figureEnd}`);
+                    textFieldEdit.wrapSelection(textArea.current, tagBegin, tagEnd);
                 }
             }
         }
