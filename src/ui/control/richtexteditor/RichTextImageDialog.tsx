@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useField } from 'formik';
 
 import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
+import { PlusButton } from "ui/control";
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import RichTextImageDialogTabs from "ui/control/richtexteditor/RichTextImageDialogTabs";
@@ -32,6 +33,8 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({features, noMedia = false, onAdded, onDeleted}: Props) {
+    const [showTooltip, setShowTooltip] = useState<boolean>(false);
+    const [showAlt, setShowAlt] = useState<boolean>(false);
     const [, {value: source}] = useField<string>("source");
 
     return (
@@ -42,8 +45,12 @@ function RichTextImageDialog({features, noMedia = false, onAdded, onDeleted}: Pr
             :
                 <InputField name="href" title="URL" autoFocus/>
             }
-            <InputField name="title" title="Title"/>
-            <InputField name="alt" title="Alternative text"/>
+            <div className="mb-3">
+                <PlusButton title="Tooltip" visible={!showTooltip} onClick={() => setShowTooltip(true)}/>
+                <PlusButton title="Alt text" visible={!showAlt} onClick={() => setShowAlt(true)}/>
+            </div>
+            {showTooltip && <InputField name="title" title="Tooltip"/>}
+            {showAlt && <InputField name="alt" title="Alternative text"/>}
         </>
     );
 }

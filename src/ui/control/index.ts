@@ -18,6 +18,7 @@ export { LoadingInline } from "ui/control/LoadingInline";
 export { ModalDialog } from "ui/control/ModalDialog";
 export { NameHelp } from "ui/control/NameHelp";
 export { NameSelector } from "ui/control/NameSelector";
+export { PlusButton } from "ui/control/PlusButton";
 export { Popover } from "ui/control/Popover";
 export { ReactionButton } from "ui/control/ReactionButton";
 export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
