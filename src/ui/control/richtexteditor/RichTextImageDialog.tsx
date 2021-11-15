@@ -12,6 +12,7 @@ export interface RichTextImageValues {
     source?: string;
     mediaFile?: PrivateMediaFileInfo | null;
     href?: string;
+    caption?: string;
     title?: string;
     alt?: string;
 }
@@ -28,11 +29,13 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
     source: props.noMedia === true ? "internet" : "device",
     mediaFile: props.selectedImage ?? null,
     href: "",
+    caption: "",
     title: "",
     alt: ""
 });
 
 function RichTextImageDialog({features, noMedia = false, onAdded, onDeleted}: Props) {
+    const [showCaption, setShowCaption] = useState<boolean>(false);
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [showAlt, setShowAlt] = useState<boolean>(false);
     const [, {value: source}] = useField<string>("source");
@@ -46,9 +49,11 @@ function RichTextImageDialog({features, noMedia = false, onAdded, onDeleted}: Pr
                 <InputField name="href" title="URL" autoFocus/>
             }
             <div className="mb-3">
+                <PlusButton title="Caption" visible={!showCaption} onClick={() => setShowCaption(true)}/>
                 <PlusButton title="Tooltip" visible={!showTooltip} onClick={() => setShowTooltip(true)}/>
                 <PlusButton title="Alt text" visible={!showAlt} onClick={() => setShowAlt(true)}/>
             </div>
+            {showCaption && <InputField name="caption" title="Caption"/>}
             {showTooltip && <InputField name="title" title="Tooltip"/>}
             {showAlt && <InputField name="alt" title="Alternative text"/>}
         </>

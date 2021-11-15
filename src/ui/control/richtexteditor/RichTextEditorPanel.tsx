@@ -342,7 +342,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         this.props.selectImage(null);
     }
 
-    onImageSubmit = (ok: boolean, {source, mediaFile, href, title, alt}: RichTextImageValues) => {
+    onImageSubmit = (ok: boolean, {source, mediaFile, href, caption, title, alt}: RichTextImageValues) => {
         const {textArea} = this.props;
 
         this.onImageClose();
@@ -353,7 +353,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
         const src = source === "device" ? (mediaFile != null ? "hash:" + mediaFile.hash : null) : href;
         if (ok) {
-            if (this.isMarkdown()) {
+            if (this.isMarkdown() && !caption) {
                 const titleAttr = title ? ` "${title}"`: "";
                 const altAttr = alt ?? "";
                 if (src) {
@@ -362,14 +362,16 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                     textFieldEdit.wrapSelection(textArea.current, `![${altAttr}](`, `${titleAttr})`);
                 }
             } else {
+                const figureBegin = caption ? "<figure>" : "";
+                const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
                 const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
                 const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
                 if (src) {
                     textFieldEdit.insert(textArea.current,
-                        `<img${altAttr}${titleAttr} src="${htmlEntities(src)}">`);
+                        `${figureBegin}<img${altAttr}${titleAttr} src="${htmlEntities(src)}">${figureEnd}`);
                 } else {
                     textFieldEdit.wrapSelection(textArea.current,
-                        `<img${altAttr}${titleAttr} src="`, "\">");
+                        `${figureBegin}<img${altAttr}${titleAttr} src="`, `">${figureEnd}`);
                 }
             }
         }
