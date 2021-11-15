@@ -122,7 +122,8 @@ function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, on
                      ${progressSummary.progress}% ...`
                 :
                     <>
-                        <Button variant="primary" size="sm" onClick={open}>Upload images</Button> or drop them here<br/>
+                        <Button variant="outline-info" size="sm" onClick={open}>Upload images</Button>
+                        {" "}or drop them here<br/>
                         <label className="form-check-label" htmlFor="editorImagesCompress">
                             Compress images
                         </label>

@@ -8,10 +8,10 @@ import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
+import { getSetting } from "state/settings/selectors";
 import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
-import { getSetting } from "state/settings/selectors";
 
 type Props = {
     features: PostingFeatures | null;
@@ -82,9 +82,10 @@ function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage, co
                     </div>
                 :
                     <>
-                        <Button variant="primary" size="sm" onClick={open}>Upload image</Button> or drop it here<br/>
+                        <Button variant="outline-info" size="sm" onClick={open}>Upload image</Button>
+                        {" "}or drop it here<br/>
                         <label className="form-check-label" htmlFor="dialogImagesCompress">
-                            Compress images
+                            Compress image
                         </label>
                         <input className="form-check-input" type="checkbox" checked={compress}
                                onChange={e => setCompress(e.target.checked)} id="dialogImagesCompress"/>
