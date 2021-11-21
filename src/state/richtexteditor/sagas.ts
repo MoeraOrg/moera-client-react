@@ -34,7 +34,6 @@ function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
                 }
             }
         }
-        console.log(file, typeof file);
 
         const mediaFile = yield* call(Node.postMediaPrivate, "", file,
             (loaded: number, total: number) => onProgress(index, loaded, total));
