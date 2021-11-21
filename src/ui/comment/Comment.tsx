@@ -55,7 +55,7 @@ const Comment = ({
                             <CommentDate nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             <CommentUpdated comment={comment}/>
                         </div>
-                        <CommentContent comment={comment} previousId={previousId}/>
+                        <CommentContent comment={comment} previousId={previousId} receiverName={postingReceiverName}/>
                         <div className="reactions-line">
                             {comment.signature == null && <div className="unsigned">Unsigned</div>}
                             {connectedToHome && comment.signature != null &&

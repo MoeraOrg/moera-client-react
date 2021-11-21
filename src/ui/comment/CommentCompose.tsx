@@ -12,7 +12,7 @@ import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
-import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
+import { getCommentComposerRepliedToId, getCommentsState } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
@@ -81,11 +81,11 @@ function CommentCompose(props: Props) {
                     <AvatarField name="avatar" size={36}/>
                     <div className="content">
                         <CommentComposeRepliedTo/>
-                        <RichTextField name="body" rows={1} anyValue
+                        <RichTextField name="body" rows={1} nodeName={receiverName} anyValue
                                        placeholder={`Write a comment to ${mention} here...`}
                                        disabled={beingPosted} smileysEnabled={smileysEnabled}
-                                       hidingPanel={values.body.text.trim() === ""} format={sourceFormatDefault}
-                                       onKeyDown={onKeyDown} noMedia/>
+                                       hidingPanel={commentComposeLogic.areValuesEmpty(values)}
+                                       format={sourceFormatDefault} onKeyDown={onKeyDown}/>
                     </div>
                     <CommentComposeButtons loading={beingPosted}/>
                 </Form>
@@ -108,9 +108,9 @@ const connector = connect(
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         avatarDefault: getHomeOwnerAvatar(state),
-        receiverName: state.detailedPosting.comments.receiverName,
-        receiverFullName: state.detailedPosting.comments.receiverFullName,
-        receiverPostingId: state.detailedPosting.comments.receiverPostingId,
+        receiverName: getCommentsState(state).receiverName,
+        receiverFullName: getCommentsState(state).receiverFullName,
+        receiverPostingId: getCommentsState(state).receiverPostingId,
         comment: null,
         draft: state.detailedPosting.compose.draft,
         formId: state.detailedPosting.compose.formId,

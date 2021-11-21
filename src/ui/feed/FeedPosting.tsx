@@ -33,13 +33,13 @@ function Content({posting}: ContentProps) {
     if (posting.bodyPreview != null && posting.bodyPreview.text) {
         return (
             <div className="content">
-                <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} media={posting.media}/>
+                <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName="" media={posting.media}/>
                 <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">Continue Reading &rarr;</Jump>
             </div>
         );
     } else {
         return (
-            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText}
+            <EntryHtml className="content" postingId={posting.id} html={posting.body.previewText} nodeName=""
                        media={posting.media}/>
         );
     }
@@ -72,7 +72,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>
-                <PostingGallery postingId={posting.id} media={posting.media ?? null}/>
+                <PostingGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
                 <div className="reactions-line">
                     <PostingReactions posting={posting}/>
                     <PostingComments posting={posting}/>

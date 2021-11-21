@@ -6,6 +6,7 @@ type ImageUploadSuccessHandler = (index: number, mediaFile: PrivateMediaFileInfo
 type ImageUploadFailureHandler = (index: number) => void;
 type ImageUploadProgressHandler = (index: number, loaded: number, total: number) => void;
 export type RichTextEditorImagesUploadAction = ActionWithPayload<typeof RICH_TEXT_EDITOR_IMAGES_UPLOAD, {
+    nodeName: string | null;
     files: File[];
     features: PostingFeatures | null;
     compress: boolean;
@@ -14,6 +15,7 @@ export type RichTextEditorImagesUploadAction = ActionWithPayload<typeof RICH_TEX
     onProgress: ImageUploadProgressHandler;
 }>;
 export const richTextEditorImagesUpload = (
+    nodeName: string | null,
     files: File[],
     features: PostingFeatures | null,
     compress: boolean,
@@ -22,7 +24,7 @@ export const richTextEditorImagesUpload = (
     onProgress: ImageUploadProgressHandler
 ): RichTextEditorImagesUploadAction => ({
     type: RICH_TEXT_EDITOR_IMAGES_UPLOAD,
-    payload: {files, features, compress, onSuccess, onFailure, onProgress}
+    payload: {nodeName, files, features, compress, onSuccess, onFailure, onProgress}
 });
 
 export type RichTextEditorAnyAction =

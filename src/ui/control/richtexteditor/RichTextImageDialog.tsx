@@ -23,6 +23,7 @@ export interface RichTextImageValues {
 type Props = {
     features: PostingFeatures | null;
     noMedia?: boolean;
+    nodeName?: string | null;
     selectedImage?: PrivateMediaFileInfo | null;
     onAdded?: (image: PrivateMediaFileInfo) => void;
     onDeleted?: (id: string) => void;
@@ -39,7 +40,7 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
     alt: ""
 });
 
-function RichTextImageDialog({features, noMedia = false, onAdded, onDeleted}: Props) {
+function RichTextImageDialog({features, noMedia = false, nodeName, onAdded, onDeleted}: Props) {
     const [showSize, setShowSize] = useState<boolean>(false);
     const [showCaption, setShowCaption] = useState<boolean>(false);
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
@@ -50,7 +51,8 @@ function RichTextImageDialog({features, noMedia = false, onAdded, onDeleted}: Pr
         <>
             {!noMedia && <RichTextImageDialogTabs/>}
             {source === "device" ?
-                <RichTextImageDialogDropzone features={features} onAdded={onAdded} onDeleted={onDeleted}/>
+                <RichTextImageDialogDropzone features={features} nodeName={nodeName ?? null} onAdded={onAdded}
+                                             onDeleted={onDeleted}/>
             :
                 <InputField name="href" title="URL" autoFocus/>
             }

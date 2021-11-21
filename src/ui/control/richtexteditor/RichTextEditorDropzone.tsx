@@ -57,6 +57,8 @@ type ImageLoadedHandler = (index: number, image: PrivateMediaFileInfo) => void;
 type Props = {
     value: RichTextValue;
     features: PostingFeatures | null;
+    hiding?: boolean;
+    nodeName: string | null;
     selectImage: (image: PrivateMediaFileInfo | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
@@ -64,8 +66,8 @@ type Props = {
     onReorder?: (activeId: string, overId: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, onLoaded, onDeleted, onReorder,
-                                 compressImages, richTextEditorImagesUpload}: Props) {
+function RichTextEditorDropzone({value, features, hiding = false, nodeName, selectImage, onLoadStarted, onLoaded,
+                                 onDeleted, onReorder, compressImages, richTextEditorImagesUpload}: Props) {
     const [compress, setCompress] = useState<boolean>(compressImages);
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -100,8 +102,8 @@ function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, on
             if (onLoadStartedRef.current) {
                 onLoadStartedRef.current(files.length);
             }
-            richTextEditorImagesUpload(files, features, compress, onImageUploadSuccess(value.media?.length ?? 0),
-                onImageUploadFailure, onImageUploadProgress);
+            richTextEditorImagesUpload(nodeName, files, features, compress,
+                onImageUploadSuccess(value.media?.length ?? 0), onImageUploadFailure, onImageUploadProgress);
         }
     };
 
@@ -112,9 +114,9 @@ function RichTextEditorDropzone({value, features, selectImage, onLoadStarted, on
     return (
         <div className={cx(
             "rich-text-editor-dropzone",
-            {"drag-accept": isDragAccept, "drag-reject": isDragReject}
+            {"hiding": hiding, "drag-accept": isDragAccept, "drag-reject": isDragReject}
         )} {...getRootProps()}>
-            <RichTextEditorImageList value={value} selectImage={selectImage} onDeleted={onDeleted}
+            <RichTextEditorImageList value={value} nodeName={nodeName} selectImage={selectImage} onDeleted={onDeleted}
                                      onReorder={onReorder}/>
             <div className="upload">
                 {uploadProgress.length > 0 ?

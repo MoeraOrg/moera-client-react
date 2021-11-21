@@ -23,6 +23,7 @@ export { Popover } from "ui/control/Popover";
 export { ReactionButton } from "ui/control/ReactionButton";
 export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
 export { ReactionTotals } from "ui/control/ReactionTotals";
-export { RichTextEditor, RichTextValue } from "ui/control/richtexteditor/RichTextEditor";
+export { RichTextEditor } from "ui/control/richtexteditor/RichTextEditor";
+export { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
 export { Wrapper } from "ui/control/Wrapper";

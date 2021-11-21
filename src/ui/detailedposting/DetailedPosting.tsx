@@ -48,9 +48,9 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
                         </div>
                     </div>
                     <PostingSubject posting={posting} preview={false}/>
-                    <EntryHtml className="content" postingId={posting.id} html={posting.body.text}
+                    <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""
                                media={posting.media}/>
-                    <PostingGallery postingId={posting.id} media={posting.media ?? null}/>
+                    <PostingGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
                     <div className="reactions-line">
                         <PostingReactions posting={posting}/>
                         <PostingComments posting={posting}/>

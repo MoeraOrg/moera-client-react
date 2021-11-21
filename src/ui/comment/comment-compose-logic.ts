@@ -1,5 +1,4 @@
 import { FormikBag } from 'formik';
-import * as yup from 'yup';
 
 import { AvatarImage, CommentInfo, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
@@ -42,18 +41,15 @@ const commentComposeLogic = {
         const body = props.draft != null
             ? (props.draft.bodySrc?.text ?? "")
             : (props.comment != null ? (props.comment.bodySrc?.text ?? "") : "");
+        const media = props.draft != null
+            ? (props.draft.media != null ? props.draft.media.map(mf => mf.media) : [])
+            : (props.comment != null && props.comment.media != null ? props.comment.media.map(mf => mf.media) : []);
 
         return {
             avatar,
-            body: new RichTextValue(body)
+            body: new RichTextValue(body, media)
         };
     },
-
-    validationSchema: yup.object().shape({
-        body: yup.object().shape({
-            text: yup.string().trim().required("Must not be empty")
-        })
-    }),
 
     _replaceSmileys(smileysEnabled: boolean, text: string): string {
         return smileysEnabled ? replaceSmileys(text) : text;
@@ -72,9 +68,15 @@ const commentComposeLogic = {
                 text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
             }),
             bodySrcFormat: props.sourceFormatDefault,
+            media: values.body.orderedMediaList(),
             acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
             repliedToId: props.repliedToId
         };
+    },
+
+    areValuesEmpty(values: CommentComposeValues): boolean {
+        return values.body.text.trim() === ""
+            && (values.body.media == null || values.body.media.length === 0);
     },
 
     isCommentTextEmpty(commentText: CommentText): boolean {

@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
+import { getNamingNameNodeUri } from "state/naming/selectors";
 import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";
@@ -28,8 +29,9 @@ function mediaSizes(previews: MediaFilePreviewInfo[] | null | undefined): string
     return `(max-width: 400px) ${mobile}px, ${regular}px`;
 }
 
-type Props = {
+interface OwnProps {
     postingId?: string | null;
+    nodeName: string | null
     mediaFile: PrivateMediaFileInfo;
     width?: string | null;
     height?: string | null;
@@ -37,7 +39,9 @@ type Props = {
     title?: string | null;
     flex?: "row" | "column";
     count?: number;
-} & ConnectedProps<typeof connector>;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function EntryImage({postingId, mediaFile, width, height, alt, title, flex, count, rootPage, openLightBox}: Props) {
     const mediaLocation = rootPage + "/media/" + mediaFile.path;
@@ -70,8 +74,8 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, flex, coun
 }
 
 const connector = connect(
-    (state: ClientState) => ({
-        rootPage: getNodeRootPage(state)
+    (state: ClientState, props: OwnProps) => ({
+        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state)
     }),
     { openLightBox }
 );

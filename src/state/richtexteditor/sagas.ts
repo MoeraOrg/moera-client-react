@@ -15,7 +15,7 @@ const formatMb = (size: number): string =>
     (size / 1024 / 1024).toLocaleString("en-US", {maximumFractionDigits: 2}) + "Mb";
 
 function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
-    const {features, files, compress, onSuccess, onProgress, onFailure} = action.payload;
+    const {features, nodeName, files, compress, onSuccess, onProgress, onFailure} = action.payload;
     try {
         let file = files[index];
         if (features != null) {
@@ -35,7 +35,7 @@ function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
             }
         }
 
-        const mediaFile = yield* call(Node.postMediaPrivate, "", file,
+        const mediaFile = yield* call(Node.postMediaPrivate, nodeName, file,
             (loaded: number, total: number) => onProgress(index, loaded, total));
         onSuccess(index, mediaFile);
     } catch (e) {

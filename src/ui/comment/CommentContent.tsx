@@ -9,9 +9,10 @@ import { ExtCommentInfo } from "state/detailedposting/state";
 interface Props {
     comment: ExtCommentInfo;
     previousId: string | null;
+    receiverName: string | null;
 }
 
-function CommentContent({comment, previousId}: Props) {
+function CommentContent({comment, previousId, receiverName}: Props) {
     const [preview, setPreview] = useState(true);
 
     const onClick = () => {
@@ -25,17 +26,20 @@ function CommentContent({comment, previousId}: Props) {
             if (comment.bodyPreview?.text) {
                 return (
                     <>
-                        <EntryHtml postingId={comment.postingId} html={comment.bodyPreview.text} onClick={onClick}/>
+                        <EntryHtml postingId={comment.postingId} html={comment.bodyPreview.text} nodeName={receiverName}
+                                   media={comment.media} onClick={onClick}/>
                         <p>
                             <button className="btn btn-link read-more" onClick={onClick}>Read more...</button>
                         </p>
                     </>
                 );
             } else {
-                return <EntryHtml postingId={comment.postingId} html={comment.body.previewText}/>;
+                return <EntryHtml postingId={comment.postingId} html={comment.body.previewText}nodeName={receiverName}
+                                  media={comment.media}/>;
             }
         } else {
-            return <EntryHtml postingId={comment.postingId} html={comment.body.text} onClick={onClick}/>;
+            return <EntryHtml postingId={comment.postingId} html={comment.body.text} nodeName={receiverName}
+                              media={comment.media} onClick={onClick}/>;
         }
     }
 

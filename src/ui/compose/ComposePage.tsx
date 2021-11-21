@@ -96,7 +96,7 @@ class ComposePage extends React.PureComponent<Props, State> {
                             }
                             <RichTextField name="body" disabled={loadingContent || beingPosted}
                                            format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
-                                           features={features} anyValue autoFocus/>
+                                           features={features} nodeName="" anyValue autoFocus/>
                             <ComposeFormattingHelp/>
 
                             <ComposeBodyFormat sourceFormats={sourceFormats}/>

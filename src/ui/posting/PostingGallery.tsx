@@ -9,6 +9,7 @@ import "./PostingGallery.css";
 
 type Props = {
     postingId?: string;
+    nodeName: string | null;
     media: MediaAttachment[] | null;
 } & ConnectedProps<typeof connector>;
 
@@ -17,7 +18,7 @@ function singleImageHeight(image: PrivateMediaFileInfo, feedWidth: number): numb
     return image.width <= maxWidth ? image.height : Math.round(image.height * maxWidth / image.width);
 }
 
-function PostingGallery({postingId, media, feedWidth}: Props) {
+function PostingGallery({postingId, nodeName, media, feedWidth}: Props) {
     if (media == null || media.length === 0) {
         return null;
     }
@@ -34,7 +35,7 @@ function PostingGallery({postingId, media, feedWidth}: Props) {
             // FIXME React.CSSProperties does not include CSS variables
             <div className={`gallery single ${orientation}`}
                  style={{"--image-height": singleImageHeight(images[0], feedWidth) + "px"} as any}>
-                <EntryImage postingId={postingId} mediaFile={images[0]}/>
+                <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[0]}/>
             </div>
         );
     }
@@ -42,8 +43,8 @@ function PostingGallery({postingId, media, feedWidth}: Props) {
     if (images.length === 2) {
         return (
             <div className={`gallery ${orientation}`}>
-                <EntryImage postingId={postingId} mediaFile={images[0]} flex="row"/>
-                <EntryImage postingId={postingId} mediaFile={images[1]} flex="row"/>
+                <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[0]} flex="row"/>
+                <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[1]} flex="row"/>
             </div>
         );
     }
@@ -53,19 +54,20 @@ function PostingGallery({postingId, media, feedWidth}: Props) {
     return (
         <div className={`gallery ${orientation}`}>
             <div className="gallery-row">
-                <EntryImage postingId={postingId} mediaFile={images[0]} flex={base === 0 ? "row" : undefined}/>
+                <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[0]}
+                            flex={base === 0 ? "row" : undefined}/>
                 {base === 0 &&
-                    <EntryImage postingId={postingId} mediaFile={images[1]} flex="row"/>
+                    <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[1]} flex="row"/>
                 }
             </div>
             <div className="gallery-row">
-                <EntryImage postingId={postingId} mediaFile={images[2 - base]} flex="row"/>
-                <EntryImage postingId={postingId} mediaFile={images[3 - base]} flex="row"/>
+                <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[2 - base]} flex="row"/>
+                <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[3 - base]} flex="row"/>
             </div>
             {images.length > 4 &&
                 <div className="gallery-row">
-                    <EntryImage postingId={postingId} mediaFile={images[4 - base]} flex="row"/>
-                    <EntryImage postingId={postingId} mediaFile={images[5 - base]} flex="row"
+                    <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[4 - base]} flex="row"/>
+                    <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={images[5 - base]} flex="row"
                                 count={images.length - 6}/>
                 </div>
             }

@@ -242,6 +242,7 @@ export interface CommentText {
     bodySrcFormat?: SourceFormat | null;
     body?: Body | string | null;
     bodyFormat?: BodyFormat | null;
+    media?: string[] | null;
     createdAt?: number | null;
     acceptedReactions?: AcceptedReactions | null;
     repliedToId?: string | null;
@@ -271,6 +272,7 @@ interface CommentInfoBase<B> {
     bodySrcFormat?: SourceFormat | null;
     body: B;
     bodyFormat?: BodyFormat | null;
+    media?: MediaAttachment[] | null;
     heading: string;
     repliedTo?: RepliedTo | null;
     moment: number;

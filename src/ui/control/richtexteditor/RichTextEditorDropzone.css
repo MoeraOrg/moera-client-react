@@ -3,6 +3,14 @@
     margin-top: .2rem;
 }
 
+.rich-text-editor-dropzone.hiding {
+    display: none;
+}
+
+.rich-text-editor:focus-within .rich-text-editor-dropzone.hiding {
+    display: block;
+}
+
 .rich-text-editor-dropzone.drag-accept {
     border: 2px solid var(--bs-primary);
 }

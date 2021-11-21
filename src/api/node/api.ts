@@ -1044,6 +1044,11 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
             type: "string",
             nullable: true
         },
+        "media": {
+            type: "array",
+            items: MediaAttachmentType,
+            nullable: true
+        },
         "heading": {
             type: "string"
         },
@@ -1187,6 +1192,11 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
         },
         "bodyFormat": {
             type: "string",
+            nullable: true
+        },
+        "media": {
+            type: "array",
+            items: MediaAttachmentType,
             nullable: true
         },
         "heading": {

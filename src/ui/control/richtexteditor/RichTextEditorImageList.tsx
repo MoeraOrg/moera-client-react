@@ -20,6 +20,7 @@ import { getNodeRootPage } from "state/node/selectors";
 import { DeleteButton, RichTextValue } from "ui/control";
 import { mediaHashesExtract, mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextEditorImageList.css";
+import { getNamingNameNodeUri } from "state/naming/selectors";
 
 interface AttachedImageProps {
     media: PrivateMediaFileInfo;
@@ -61,12 +62,15 @@ function UploadedImage({media, rootPage, onDeleteClick, onClick}: UploadedImageP
     );
 }
 
-type Props = {
+interface OwnProps {
     value: RichTextValue;
+    nodeName: string | null;
     selectImage: (image: PrivateMediaFileInfo | null) => void;
     onDeleted?: (id: string) => void;
     onReorder?: (activeId: string, overId: string) => void;
-} & ConnectedProps<typeof connector>;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, rootPage}: Props) {
     const mouseSensor = useSensor(PointerSensor, {
@@ -137,8 +141,8 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
 }
 
 const connector = connect(
-    (state: ClientState) => ({
-        rootPage: getNodeRootPage(state)
+    (state: ClientState, props: OwnProps) => ({
+        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state)
     })
 );
 

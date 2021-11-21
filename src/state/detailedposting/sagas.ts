@@ -280,8 +280,8 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
     const {isDialog} = action.payload;
 
     const {nodeName, postingId, commentId} = yield* select((state: ClientState) => ({
-        nodeName: state.detailedPosting.comments.receiverName,
-        postingId: state.detailedPosting.comments.receiverPostingId,
+        nodeName: getCommentsState(state).receiverName,
+        postingId: getCommentsState(state).receiverPostingId,
         commentId: isDialog ? state.detailedPosting.commentDialog.commentId : null
     }));
 

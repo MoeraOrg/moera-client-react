@@ -26,6 +26,7 @@ type Props = {
     format: string;
     features: PostingFeatures | null;
     noMedia?: boolean;
+    nodeName?: string | null;
     selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: PrivateMediaFileInfo | null) => void;
     onImageAdded?: (image: PrivateMediaFileInfo) => void;
@@ -384,7 +385,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            hiding, format, panel, features, noMedia, selectedImage, onImageAdded, onImageDeleted
+            hiding, format, panel, features, noMedia, nodeName, selectedImage, onImageAdded, onImageDeleted
         } = this.props;
         const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText} = this.state;
 
@@ -414,8 +415,8 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
                 <RichTextLinkDialog show={linkDialog} text={dialogText} onSubmit={this.onLinkSubmit}/>
-                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit} selectedImage={selectedImage}
-                                     features={features} noMedia={noMedia}
+                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit} nodeName={nodeName}
+                                     selectedImage={selectedImage} features={features} noMedia={noMedia}
                                      onAdded={onImageAdded} onDeleted={onImageDeleted}/>
                 <RichTextMentionDialog show={mentionDialog} onSubmit={this.onMentionSubmit}/>
             </div>

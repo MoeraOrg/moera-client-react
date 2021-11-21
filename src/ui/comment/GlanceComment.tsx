@@ -13,7 +13,7 @@ import { ClientState } from "state/state";
 
 type Props = ConnectedProps<typeof connector>;
 
-const GlanceComment = ({loading, loaded, postingId, comment}: Props) => (
+const GlanceComment = ({loading, loaded, postingId, receiverName, comment}: Props) => (
     loaded && !loading && postingId != null && comment != null ?
         <div className={cx("comment", "entry", {"single-emoji": comment.singleEmoji})}>
             <div className="details">
@@ -23,7 +23,8 @@ const GlanceComment = ({loading, loaded, postingId, comment}: Props) => (
                     <CommentUpdated comment={comment}/>
                 </div>
                 <div className="content">
-                    <EntryHtml postingId={comment.postingId} html={comment.body.text}/>
+                    <EntryHtml postingId={comment.postingId} html={comment.body.text} nodeName={receiverName}
+                               media={comment.media}/>
                 </div>
                 <div className="reactions-line">
                     <div className="comment-buttons"/>
@@ -40,6 +41,7 @@ const connector = connect(
         loading: getCommentsState(state).loadingGlanceComment,
         loaded: getCommentsState(state).loadedGlanceComment,
         postingId: getDetailedPostingId(state),
+        receiverName: getCommentsState(state).receiverName,
         comment: getCommentsState(state).glanceComment
     })
 );

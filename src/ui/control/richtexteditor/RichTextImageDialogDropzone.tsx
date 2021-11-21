@@ -9,17 +9,21 @@ import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
+import { getNamingNameNodeUri } from "state/naming/selectors";
 import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
 
-type Props = {
+interface OwnProps {
     features: PostingFeatures | null;
+    nodeName: string | null;
     onAdded?: (image: PrivateMediaFileInfo) => void;
     onDeleted?: (id: string) => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage, compressImages,
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+function RichTextImageDialogDropzone({features, nodeName, onAdded, onDeleted, rootPage, compressImages,
                                       richTextEditorImagesUpload}: Props) {
     const [compress, setCompress] = useState<boolean>(compressImages);
     const [uploading, setUploading] = useState<boolean>(false);
@@ -46,8 +50,8 @@ function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage, co
         if (files != null && files.length > 0) {
             setUploading(true);
             setUploadProgress(0);
-            richTextEditorImagesUpload([files[0]], features, compress, onImageUploadSuccess, onImageUploadFailure,
-                onImageUploadProgress);
+            richTextEditorImagesUpload(nodeName, [files[0]], features, compress, onImageUploadSuccess,
+                onImageUploadFailure, onImageUploadProgress);
         }
     }
 
@@ -98,8 +102,8 @@ function RichTextImageDialogDropzone({features, onAdded, onDeleted, rootPage, co
 }
 
 const connector = connect(
-    (state: ClientState) => ({
-        rootPage: getNodeRootPage(state),
+    (state: ClientState, props: OwnProps) => ({
+        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
         compressImages: getSetting(state, "posting.media.compress.default") as boolean
     }),
     { richTextEditorImagesUpload }

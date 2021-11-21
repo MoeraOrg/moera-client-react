@@ -7,7 +7,11 @@ import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerFullName } from "state/home/selectors";
-import { getCommentComposerRepliedToId, getCommentDialogComment } from "state/detailedposting/selectors";
+import {
+    getCommentComposerRepliedToId,
+    getCommentDialogComment,
+    getCommentsState
+} from "state/detailedposting/selectors";
 import { commentDraftSave } from "state/detailedposting/actions";
 import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
@@ -53,7 +57,7 @@ const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         ownerName: getOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
-        receiverPostingId: state.detailedPosting.comments.receiverPostingId,
+        receiverPostingId: getCommentsState(state).receiverPostingId,
         repliedToId: ownProps.commentId == null
             ? getCommentComposerRepliedToId(state)
             : getCommentDialogComment(state)?.repliedTo?.id ?? null,

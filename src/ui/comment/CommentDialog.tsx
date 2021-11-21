@@ -13,7 +13,7 @@ import {
 } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
-import { getCommentDialogComment, isCommentDialogConflict } from "state/detailedposting/selectors";
+import { getCommentDialogComment, getCommentsState, isCommentDialogConflict } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
@@ -29,7 +29,7 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentDialog(props: Props) {
     const {
-        show, ownerName, ownerFullName, comment, draft, conflict, loading, beingPosted, smileysEnabled,
+        show, ownerName, ownerFullName, receiverName, comment, draft, conflict, loading, beingPosted, smileysEnabled,
         sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey, submitForm,
         resetForm
     } = props;
@@ -85,9 +85,9 @@ function CommentDialog(props: Props) {
                         <AvatarField name="avatar" size={36}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
-                    <RichTextField name="body" rows={5} anyValue autoFocus disabled={loading || beingPosted}
-                                   smileysEnabled={smileysEnabled} format={sourceFormatDefault}
-                                   onKeyDown={onKeyDown} noMedia/>
+                    <RichTextField name="body" rows={5} nodeName={receiverName} anyValue autoFocus
+                                   disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
+                                   format={sourceFormatDefault} onKeyDown={onKeyDown}/>
                 </div>
                 <div className="modal-footer">
                     <CommentDraftSaver initialText={initialText} commentId={commentId}/>
@@ -105,7 +105,8 @@ const connector = connect(
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         avatarDefault: getHomeOwnerAvatar(state),
-        receiverPostingId: state.detailedPosting.comments.receiverPostingId,
+        receiverName: getCommentsState(state).receiverName,
+        receiverPostingId: getCommentsState(state).receiverPostingId,
         comment: getCommentDialogComment(state),
         draft: state.detailedPosting.commentDialog.draft,
         repliedToId: getCommentDialogComment(state)?.repliedTo?.id ?? null,
