@@ -19,21 +19,6 @@
     text-decoration: underline;
 }
 
-.entry > .content IMG {
-    width: auto;
-    height: auto;
-}
-
-.entry > .content IMG.preload-placeholder {
-    width: var(--width);
-}
-
-.entry > .content FIGCAPTION {
-    font-size: smaller;
-    line-height: 1.2;
-    margin-top: .3em;
-}
-
 .entry.single-emoji .content .emoji {
     font-size: 3em;
 }

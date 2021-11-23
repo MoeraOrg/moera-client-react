@@ -48,9 +48,24 @@
     }
 }
 
+.comment .content IMG {
+    width: auto;
+    height: auto;
+}
+
+.comment .content IMG.preload-placeholder {
+    width: var(--width);
+}
+
 .comment .content IMG, .comment .content IFRAME {
     max-width: min(100vw - 7rem, var(--feed-width) - 6.5rem, var(--width, 100vw));
     max-height: min(16rem, var(--height, 200vh));
+}
+
+.comment .content FIGCAPTION {
+    font-size: smaller;
+    line-height: 1.2;
+    margin-top: .3em;
 }
 
 .comment .content .read-more {
