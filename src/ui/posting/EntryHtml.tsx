@@ -22,13 +22,14 @@ const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
 type Props = {
     className?: string;
     postingId?: string | null;
+    commentId?: string | null;
     html: string | null | undefined;
     nodeName: string | null;
     media: MediaAttachment[] | null | undefined;
     onClick?: (event: React.MouseEvent) => void;
 } & ConnectedProps<typeof connector>;
 
-function EntryHtml({className, postingId, html, nodeName, media, onClick, standalone, fontMagnitude,
+function EntryHtml({className, postingId, commentId, html, nodeName, media, onClick, standalone, fontMagnitude,
                     initFromLocation, goToLocation}: Props) {
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map((media ?? []).map(mf => [mf.media.hash, mf.media]));
@@ -76,8 +77,8 @@ function EntryHtml({className, postingId, html, nodeName, media, onClick, standa
 
                 ReactDOM.render(
                     <Provider store={store}>
-                        <EntryImage postingId={postingId} nodeName={nodeName} mediaFile={mediaFile}
-                                    width={width} height={height} alt={alt} title={title}/>
+                        <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName}
+                                    mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
                     </Provider>, span);
             } else {
                 const width = node.getAttribute("width");

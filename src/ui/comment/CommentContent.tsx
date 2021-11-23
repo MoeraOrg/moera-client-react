@@ -26,20 +26,20 @@ function CommentContent({comment, previousId, receiverName}: Props) {
             if (comment.bodyPreview?.text) {
                 return (
                     <>
-                        <EntryHtml postingId={comment.postingId} html={comment.bodyPreview.text} nodeName={receiverName}
-                                   media={comment.media} onClick={onClick}/>
+                        <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.bodyPreview.text}
+                                   nodeName={receiverName} media={comment.media} onClick={onClick}/>
                         <p>
                             <button className="btn btn-link read-more" onClick={onClick}>Read more...</button>
                         </p>
                     </>
                 );
             } else {
-                return <EntryHtml postingId={comment.postingId} html={comment.body.previewText}nodeName={receiverName}
-                                  media={comment.media}/>;
+                return <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.previewText}
+                                  nodeName={receiverName} media={comment.media}/>;
             }
         } else {
-            return <EntryHtml postingId={comment.postingId} html={comment.body.text} nodeName={receiverName}
-                              media={comment.media} onClick={onClick}/>;
+            return <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
+                              nodeName={receiverName} media={comment.media} onClick={onClick}/>;
         }
     }
 

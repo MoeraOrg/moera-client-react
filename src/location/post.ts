@@ -12,7 +12,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     const actions: ClientAction[] = [goToPosting(postingId, commentId)];
     const mediaId = dstInfo.parameters["media"];
     if (mediaId != null) {
-        actions.push(openLightBox(postingId, mediaId));
+        actions.push(openLightBox(postingId, commentId ?? null, mediaId));
     }
     return actions;
 }

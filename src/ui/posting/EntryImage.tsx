@@ -31,6 +31,7 @@ function mediaSizes(previews: MediaFilePreviewInfo[] | null | undefined): string
 
 interface OwnProps {
     postingId?: string | null;
+    commentId?: string | null;
     nodeName: string | null
     mediaFile: PrivateMediaFileInfo;
     width?: string | null;
@@ -43,7 +44,8 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function EntryImage({postingId, mediaFile, width, height, alt, title, flex, count, rootPage, openLightBox}: Props) {
+function EntryImage({postingId, commentId, mediaFile, width, height, alt, title, flex, count, rootPage,
+                     openLightBox}: Props) {
     const mediaLocation = rootPage + "/media/" + mediaFile.path;
     const src = mediaImagePreview(mediaLocation, 900);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
@@ -52,9 +54,11 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, flex, coun
 
     const onNear = () => {
         if (postingId != null) {
-            openLightBox(postingId, mediaFile.id);
+            openLightBox(postingId, commentId ?? null, mediaFile.id);
         }
     }
+
+    const href = ut`/post/${postingId}?${commentId != null ? `commentId=${commentId}&` : ""}media=${mediaFile.id}`;
 
     let style: React.CSSProperties | undefined = undefined;
     if (flex === "row") {
@@ -64,8 +68,8 @@ function EntryImage({postingId, mediaFile, width, height, alt, title, flex, coun
     }
 
     return (
-        <Jump href={ut`/post/${postingId}?media=${mediaFile.id}`} onNear={onNear}
-              className={cx("entry-image", {"counted": count != null && count > 0})} style={style}>
+        <Jump href={href} onNear={onNear} className={cx("entry-image", {"counted": count != null && count > 0})}
+              style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
             <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
                  alt={alt ?? undefined} title={title ?? undefined}/>

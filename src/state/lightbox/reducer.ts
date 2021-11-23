@@ -5,6 +5,7 @@ import { CLOSE_LIGHT_BOX, LIGHT_BOX_MEDIA_SET, OPEN_LIGHT_BOX } from "state/ligh
 const initialState = {
     show: false,
     postingId: null,
+    commentId: null,
     mediaId: null
 }
 
@@ -15,6 +16,7 @@ export default (state: LightBoxState = initialState, action: ClientAction): Ligh
                 ...state,
                 show: true,
                 postingId: action.payload.postingId,
+                commentId: action.payload.commentId,
                 mediaId: action.payload.mediaId
             }
 
