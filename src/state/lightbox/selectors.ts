@@ -13,6 +13,10 @@ export function getLightBoxPostingId(state: ClientState) {
     return state.lightBox.postingId;
 }
 
+export function getLightBoxCommentId(state: ClientState) {
+    return state.lightBox.commentId;
+}
+
 export function getLightBoxMediaId(state: ClientState) {
     return state.lightBox.mediaId;
 }

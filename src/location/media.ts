@@ -1,6 +1,6 @@
 import { ClientState } from "state/state";
 import { LocationInfo } from "location/LocationInfo";
-import { getLightBoxMediaId, getLightBoxPostingId } from "state/lightbox/selectors";
+import { getLightBoxCommentId, getLightBoxMediaId, getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { atOwner } from "util/misc";
 
@@ -9,12 +9,10 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     if (postingId != null) {
         info = info.sub("post").sub(postingId);
     }
-/* TODO
-    const focusedCommentId = getFocusedCommentId(state);
-    if (focusedCommentId != null) {
-        info = info.withParameter("comment", focusedCommentId);
+    const commentId = getLightBoxCommentId(state);
+    if (commentId != null) {
+        info = info.withParameter("comment", commentId);
     }
-*/
     const mediaId = getLightBoxMediaId(state);
     if (mediaId != null) {
         info = info.withParameter("media", mediaId);
