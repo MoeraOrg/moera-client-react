@@ -2,14 +2,15 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
+import { ClientState } from "state/state";
+import { getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
 import { Loading } from "ui/control";
 import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentReactions from "ui/comment/CommentReactions";
 import EntryHtml from "ui/entry/EntryHtml";
-import { getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
-import { ClientState } from "state/state";
+import EntryGallery from "ui/entry/EntryGallery";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -26,6 +27,8 @@ const GlanceComment = ({loading, loaded, postingId, receiverName, comment}: Prop
                     <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
                                nodeName={receiverName} media={comment.media}/>
                 </div>
+                <EntryGallery postingId={comment.postingId} commentId={comment.id} nodeName={receiverName}
+                              media={comment.media ?? null}/>
                 <div className="reactions-line">
                     <div className="comment-buttons"/>
                     <CommentReactions postingId={postingId} comment={comment}/>

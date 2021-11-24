@@ -3,13 +3,22 @@
     width: 100%;
 }
 
+.comment .gallery {
+    display: flex;
+    width: 50%;
+}
+
 @media only screen and (min-width: 576px) {
     .posting .gallery {
-        height: 750px;
+        height: 650px;
+    }
+
+    .comment .gallery {
+        height: 250px;
     }
 }
 
-.posting .gallery.horizontal {
+.entry .gallery.horizontal {
     flex-direction: row;
 }
 
@@ -17,9 +26,13 @@
     .posting .gallery.horizontal {
         height: 75vw;
     }
+
+    .comment .gallery.horizontal {
+        height: 25vw;
+    }
 }
 
-.posting .gallery.vertical {
+.entry .gallery.vertical {
     flex-direction: column;
 }
 
@@ -27,24 +40,28 @@
     .posting .gallery.vertical {
         height: 125vw;
     }
+
+    .comment .gallery.vertical {
+        height: 33vw;
+    }
 }
 
-.posting .gallery .gallery-row {
+.entry .gallery .gallery-row {
     flex: 1 1 0;
     display: flex;
     min-width: 0;
     min-height: 0;
 }
 
-.posting .gallery.horizontal .gallery-row {
+.entry .gallery.horizontal .gallery-row {
     flex-direction: column;
 }
 
-.posting .gallery.vertical .gallery-row {
+.entry .gallery.vertical .gallery-row {
     flex-direction: row;
 }
 
-.posting .gallery .entry-image {
+.entry .gallery .entry-image {
     display: block;
     border: 1px solid white;
     flex: 1;
@@ -52,7 +69,7 @@
     min-height: 0;
 }
 
-.posting .gallery .entry-image IMG {
+.entry .gallery .entry-image IMG {
     display: block;
     width: 100%;
     height: 100%;
@@ -60,7 +77,7 @@
     object-position: center;
 }
 
-.posting .gallery.single {
+.entry .gallery.single {
     border: 1px solid var(--gray-ultralight);
     height: auto;
 }
@@ -69,11 +86,19 @@
     .posting .gallery.single {
         height: min(650px, var(--image-height));
     }
+
+    .comment .gallery.single {
+        height: min(250px, var(--image-height));
+    }
 }
 
 @media only screen and (max-width: 575px) {
     .posting .gallery.single.horizontal {
         height: min(75vw, var(--image-height));
+    }
+
+    .comment .gallery.single.horizontal {
+        height: min(25vw, var(--image-height));
     }
 }
 
@@ -81,12 +106,16 @@
     .posting .gallery.single.vertical {
         height: min(125vw, var(--image-height));
     }
+
+    .comment .gallery.single.vertical {
+        height: min(33vw, var(--image-height));
+    }
 }
 
-.posting .gallery.single .entry-image {
+.entry .gallery.single .entry-image {
     border: 0;
 }
 
-.posting .gallery.single .entry-image IMG {
+.entry .gallery.single .entry-image IMG {
     object-fit: contain;
 }

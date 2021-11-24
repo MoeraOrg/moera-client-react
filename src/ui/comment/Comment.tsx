@@ -2,11 +2,12 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
+import { CommentInfo } from "api/node/api-types";
 import { isConnectedToHome } from "state/home/selectors";
 import { ClientState } from "state/state";
-import { CommentInfo } from "api/node/api-types";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { isPermitted } from "state/node/selectors";
+import { getCommentsReceiverPostingId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
 import CommentMenu from "ui/comment/CommentMenu";
 import CommentAvatar from "ui/comment/CommentAvatar";
 import CommentOwner from "ui/comment/CommentOwner";
@@ -16,7 +17,7 @@ import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentContent from "ui/comment/CommentContent";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
-import { getCommentsReceiverPostingId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
+import EntryGallery from "ui/entry/EntryGallery";
 import "./Comment.css";
 
 type Props = {
@@ -56,6 +57,8 @@ const Comment = ({
                             <CommentUpdated comment={comment}/>
                         </div>
                         <CommentContent comment={comment} previousId={previousId} receiverName={postingReceiverName}/>
+                        <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
+                                      media={comment.media ?? null}/>
                         <div className="reactions-line">
                             {comment.signature == null && <div className="unsigned">Unsigned</div>}
                             {connectedToHome && comment.signature != null &&
