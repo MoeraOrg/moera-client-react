@@ -16,14 +16,14 @@ import PostingAvatar from "ui/posting/PostingAvatar";
 import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
-import EntryHtml from "ui/posting/EntryHtml";
+import EntryHtml from "ui/entry/EntryHtml";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingComments from "ui/posting/PostingComments";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
-import "ui/posting/Entry.css";
-import PostingGallery from "ui/posting/PostingGallery";
+import "ui/entry/Entry.css";
+import EntryGallery from "ui/entry/EntryGallery";
 
 interface ContentProps {
     posting: ExtPostingInfo;
@@ -72,7 +72,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>
-                <PostingGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
+                <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
                 <div className="reactions-line">
                     <PostingReactions posting={posting}/>
                     <PostingComments posting={posting}/>

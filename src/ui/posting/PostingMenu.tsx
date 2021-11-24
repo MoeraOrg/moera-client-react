@@ -20,7 +20,7 @@ import { getNodeRootLocation, ProtectedObject } from "state/node/selectors";
 import { ClientState } from "state/state";
 import { PostingInfo } from "api/node/api-types";
 import { MinimalStoryInfo } from "ui/types";
-import "./EntryMenu.css";
+import "ui/entry/EntryMenu.css";
 
 type Props = {
     posting: PostingInfo;

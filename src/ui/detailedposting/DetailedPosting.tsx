@@ -17,8 +17,8 @@ import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
-import EntryHtml from "ui/posting/EntryHtml";
-import PostingGallery from "ui/posting/PostingGallery";
+import EntryHtml from "ui/entry/EntryHtml";
+import EntryGallery from "ui/entry/EntryGallery";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 
@@ -50,7 +50,7 @@ const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted
                     <PostingSubject posting={posting} preview={false}/>
                     <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""
                                media={posting.media}/>
-                    <PostingGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
+                    <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
                     <div className="reactions-line">
                         <PostingReactions posting={posting}/>
                         <PostingComments posting={posting}/>

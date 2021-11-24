@@ -7,7 +7,7 @@ import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentReactions from "ui/comment/CommentReactions";
-import EntryHtml from "ui/posting/EntryHtml";
+import EntryHtml from "ui/entry/EntryHtml";
 import { getCommentsState, getDetailedPostingId } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
 

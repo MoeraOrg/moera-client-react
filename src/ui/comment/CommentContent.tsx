@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cx from 'classnames';
 
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
-import EntryHtml from "ui/posting/EntryHtml";
+import EntryHtml from "ui/entry/EntryHtml";
 import { hasWindowSelection } from "util/misc";
 import { ExtCommentInfo } from "state/detailedposting/state";
 

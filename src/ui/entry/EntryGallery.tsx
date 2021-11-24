@@ -4,8 +4,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import EntryImage from "ui/posting/EntryImage";
-import "./PostingGallery.css";
+import EntryImage from "ui/entry/EntryImage";
+import "./EntryGallery.css";
 
 type Props = {
     postingId?: string;
@@ -18,7 +18,7 @@ function singleImageHeight(image: PrivateMediaFileInfo, feedWidth: number): numb
     return image.width <= maxWidth ? image.height : Math.round(image.height * maxWidth / image.width);
 }
 
-function PostingGallery({postingId, nodeName, media, feedWidth}: Props) {
+function EntryGallery({postingId, nodeName, media, feedWidth}: Props) {
     if (media == null || media.length === 0) {
         return null;
     }
@@ -81,4 +81,4 @@ const connector = connect(
     })
 );
 
-export default connector(PostingGallery);
+export default connector(EntryGallery);

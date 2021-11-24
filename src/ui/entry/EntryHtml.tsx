@@ -10,7 +10,7 @@ import store from "state/store";
 import { getSetting } from "state/settings/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
-import EntryImage from "ui/posting/EntryImage";
+import EntryImage from "ui/entry/EntryImage";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { Browser } from "ui/browser";

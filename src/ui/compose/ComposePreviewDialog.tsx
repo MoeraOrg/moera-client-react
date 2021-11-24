@@ -7,8 +7,8 @@ import { composePreviewClose } from "state/compose/actions";
 import { getSetting } from "state/settings/selectors";
 import DraftOwner from "ui/draft/DraftOwner";
 import DraftSubject from "ui/draft/DraftSubject";
-import EntryHtml from "ui/posting/EntryHtml";
-import PostingGallery from "ui/posting/PostingGallery";
+import EntryHtml from "ui/entry/EntryHtml";
+import EntryGallery from "ui/entry/EntryGallery";
 import "./ComposePreviewDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -39,7 +39,7 @@ class ComposePreviewDialog extends React.PureComponent<Props> {
                             </div>
                             <DraftSubject draft={draft}/>
                             <EntryHtml className="content" html={draft.body.text} nodeName="" media={draft.media}/>
-                            <PostingGallery nodeName="" media={draft.media ?? null}/>
+                            <EntryGallery nodeName="" media={draft.media ?? null}/>
                         </div>
                     }
                 </div>
