@@ -48,7 +48,7 @@
     }
 }
 
-.comment .content IMG {
+.comment .content IMG:not(.emoji) {
     width: auto;
     height: auto;
 }
