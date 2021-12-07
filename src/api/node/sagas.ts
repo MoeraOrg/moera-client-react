@@ -48,10 +48,10 @@ import {
     TokenCreated,
     WhoAmI, PrivateMediaFileInfo
 } from "api/node/api-types";
+import { ProgressHandler } from 'api/fetcher';
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { urlWithParameters, ut } from "util/url";
 import { toAvatarDescription } from "util/avatar";
-import { ProgressHandler } from "api/node/xhr";
 
 export function* createDomain(nodeName: string | null, name: string): CallApiResult<DomainInfo> {
     return yield* callApi({

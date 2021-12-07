@@ -1,3 +1,5 @@
+import { FetcherOptions } from "api/fetcher";
+
 class XhrResponse implements Response {
 
     readonly body: ReadableStream<Uint8Array> | null = null;
@@ -61,13 +63,7 @@ class XhrResponse implements Response {
 
 }
 
-export type ProgressHandler = (loaded: number, total: number) => void;
-
-export type RequestOptions = RequestInit & {
-    onProgress?: ProgressHandler;
-}
-
-export function xhrFetch(url: string, options: RequestOptions): Promise<Response> {
+export function xhrFetch(url: string, options: FetcherOptions): Promise<Response> {
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest();
         xhr.open(options.method ?? "GET", url, true);

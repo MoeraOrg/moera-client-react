@@ -1,5 +1,5 @@
-function extractMessage(messageOrError: Error | string): string {
-    return messageOrError instanceof Error ? messageOrError.message : messageOrError;
+function extractMessage(messageOrError: any): string {
+    return messageOrError instanceof Error ? messageOrError.message : String(messageOrError);
 }
 
 export function formatSchemaErrors(errors: {message?: string}[] | null | undefined): string {

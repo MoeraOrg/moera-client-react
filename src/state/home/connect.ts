@@ -28,7 +28,7 @@ export default [
     executor(HOME_OWNER_VERIFY, null, askNaming(verifyHomeOwnerSaga))
 ];
 
-function* connectToHomeFailure(action: ConnectToHomeAction, error: string | Error) {
+function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
     const {location, login} = action.payload;
 
     yield* put(connectionToHomeFailed());

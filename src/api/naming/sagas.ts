@@ -10,7 +10,7 @@ import { getSetting } from "state/settings/selectors";
 
 let callId = 1;
 
-type CallException = (e: string | Error, details?: string | null) => NamingError;
+type CallException = (e: any, details?: string | null) => NamingError;
 
 export type CallNamingParams<T> = {
     method: string;

@@ -23,25 +23,26 @@ import {
     SourceFormat,
     StoryInfo
 } from "api/node/api-types";
-import { ProgressHandler, xhrFetch } from "api/node/xhr";
+import { xhrFetch } from "api/node/xhr";
 import { getCartes } from "api/node/cartes";
+import { ProgressHandler } from "api/fetcher";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
 import { errorAuthInvalid } from "state/error/actions";
-import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
-import { now } from "util/misc";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { cartesSet } from "state/cartes/actions";
 import { Browser } from "ui/browser";
+import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
+import { now } from "util/misc";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
 
 type ErrorFilter = boolean | string[] | ((code: string) => boolean);
 
-type CallException = (e: string | Error, details?: string | null) => NodeError;
+type CallException = (e: any, details?: string | null) => NodeError;
 
 export type CallApiParams<T> = {
     location: string;

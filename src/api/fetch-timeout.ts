@@ -1,6 +1,8 @@
 import { retry } from 'typed-redux-saga/macro';
 import { CallEffect } from 'redux-saga/effects';
 
+import { FetcherOptions } from "api/fetcher";
+
 const FETCH_TIMEOUT = 10000; // ms
 const UPDATE_TIMEOUT = 60000; // ms
 const RETRY_DELAY = 1000; // ms
@@ -9,7 +11,7 @@ const LARGE_BODY_MIN = 65536;
 
 // Source: https://stackoverflow.com/a/57888548/5541719
 export function fetchTimeout(url: string, timeoutMs: number | null,
-                             { signal, ...options }: RequestInit = {}): Promise<Response> {
+                             { signal, ...options }: FetcherOptions = {}): Promise<Response> {
     const controller = new AbortController();
     const promise = fetch(url, { signal: controller.signal, ...options });
     if (signal) {
@@ -23,7 +25,7 @@ export function fetchTimeout(url: string, timeoutMs: number | null,
     }
 }
 
-export function* retryFetch(url: string, options: RequestInit): Generator<CallEffect<Response>, Response> {
+export function* retryFetch(url: string, options: FetcherOptions): Generator<CallEffect<Response>, Response> {
     let limit: number;
     let timeoutMs: number | null;
     if (options.method === "POST" || options.method === "PUT") {

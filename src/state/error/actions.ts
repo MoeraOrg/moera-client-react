@@ -4,9 +4,9 @@ import { ActionWithPayload } from "state/action-types";
 
 export const ERROR_THROWN = "ERROR_THROWN";
 export type ErrorThrownAction = ActionWithPayload<typeof ERROR_THROWN, {
-    e: Error
+    e: any
 }>;
-export const errorThrown = (e: Error): ErrorThrownAction => ({
+export const errorThrown = (e: any): ErrorThrownAction => ({
     type: ERROR_THROWN,
     payload: {
         e
