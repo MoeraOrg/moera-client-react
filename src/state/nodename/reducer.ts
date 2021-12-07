@@ -28,7 +28,7 @@ const emptyInfo = {
     operationErrorCode: null,
     operationErrorMessage: null,
     operations: {
-        manage: []
+        manage: ["admin"]
     }
 };
 

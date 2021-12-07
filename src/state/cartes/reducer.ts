@@ -21,7 +21,7 @@ export default (state: CartesState = initialState, action: ClientAction): Cartes
                 initialized: true,
                 cartesIp: action.payload.cartesIp,
                 cartes: action.payload.cartes ?? [],
-                clockOffset: action.payload!.clockOffset ?? state.clockOffset
+                clockOffset: action.payload.clockOffset ?? state.clockOffset
             };
 
         case CARTES_SET:

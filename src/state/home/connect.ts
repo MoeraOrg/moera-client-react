@@ -89,7 +89,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
 
 function* verifyHomeOwnerSaga() {
     try {
-        const {nodeName, nodeNameChanging, fullName = null, avatar = null} = yield* call(Node.getWhoAmI, ":");
+        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} = yield* call(Node.getWhoAmI, ":");
         yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar));
 
         const {location, login, token, permissions} = yield* select(getHomeConnectionData);
@@ -97,6 +97,9 @@ function* verifyHomeOwnerSaga() {
             Browser.storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions);
         }
 
+        if (nodeName == null) {
+            return;
+        }
         const {name, generation} = NodeName.parse(nodeName);
         if (name == null) {
             return;

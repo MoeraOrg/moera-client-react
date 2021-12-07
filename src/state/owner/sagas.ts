@@ -31,7 +31,7 @@ export default [
 function* ownerLoadSaga() {
     try {
         const {
-            nodeName, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null
+            nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null
         } = yield* call(Node.getWhoAmI, "");
         yield* put(ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar));
     } catch (e) {

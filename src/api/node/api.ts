@@ -85,7 +85,8 @@ const WhoAmIType: JSONSchemaType<API.WhoAmI> = {
     type: "object",
     properties: {
         "nodeName": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "nodeNameChanging": {
             type: "boolean",
@@ -108,7 +109,6 @@ const WhoAmIType: JSONSchemaType<API.WhoAmI> = {
             nullable: true
         }
     },
-    required: ["nodeName"],
     additionalProperties: false
 };
 
@@ -197,23 +197,24 @@ const NodeNameInfoType: JSONSchemaType<API.NodeNameInfo> = {
     type: "object",
     properties: {
         "name": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "operationStatus": {
             type: "string",
-            nullable: true,
+            nullable: true
         },
         "operationStatusUpdated": {
             type: "integer",
-            nullable: true,
+            nullable: true
         },
         "operationErrorCode": {
             type: "string",
-            nullable: true,
+            nullable: true
         },
         "operationErrorMessage": {
             type: "string",
-            nullable: true,
+            nullable: true
         },
         "operations": {
             type: "object",
@@ -230,7 +231,6 @@ const NodeNameInfoType: JSONSchemaType<API.NodeNameInfo> = {
             additionalProperties: false
         }
     },
-    required: ["name"],
     additionalProperties: false
 };
 

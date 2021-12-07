@@ -39,7 +39,7 @@ export interface AvatarInfo {
 }
 
 export interface WhoAmI {
-    nodeName: string;
+    nodeName?: string | null;
     nodeNameChanging?: boolean | null;
     fullName?: string | null;
     gender?: string | null;
@@ -76,7 +76,7 @@ export interface TokenCreated {
 }
 
 export interface NodeNameInfo {
-    name: string;
+    name?: string | null;
     operationStatus?: string | null;
     operationStatusUpdated?: number | null;
     operationErrorCode?: string | null;

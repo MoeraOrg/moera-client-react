@@ -16,9 +16,9 @@ export const nodeNameLoadFailed = (): NodeNameLoadFailedAction => ({
 
 export const NODE_NAME_SET = "NODE_NAME_SET";
 export type NodeNameSetAction = ActionWithPayload<typeof NODE_NAME_SET, {
-    nodeName: string;
+    nodeName: string | null;
 }>;
-export const nodeNameSet = (nodeName: string): NodeNameSetAction => ({
+export const nodeNameSet = (nodeName: string | null): NodeNameSetAction => ({
     type: NODE_NAME_SET,
     payload: {nodeName}
 });

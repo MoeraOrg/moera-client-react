@@ -9,6 +9,8 @@
 
 .node-name-view .menu {
     display: inline;
+    border: 0;
+    background: transparent;
 }
 
 .node-name-view .menu .chevron {

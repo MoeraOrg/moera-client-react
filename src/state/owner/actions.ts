@@ -11,14 +11,14 @@ export const ownerLoad = (): OwnerLoadAction => ({
 
 export const OWNER_SET = "OWNER_SET";
 export type OwnerSetAction = ActionWithPayload<typeof OWNER_SET, {
-    name: string;
+    name: string | null;
     changing: boolean | null;
     fullName: string | null | false;
     gender: string | null | false;
     title: string | null | false;
     avatar: AvatarImage | null;
 }>;
-export const ownerSet = (name: string, changing: boolean | null, fullName: string | null | false,
+export const ownerSet = (name: string | null, changing: boolean | null, fullName: string | null | false,
                          gender: string | null | false, title: string | null | false,
                          avatar: AvatarImage | null): OwnerSetAction => ({
     type: OWNER_SET,
