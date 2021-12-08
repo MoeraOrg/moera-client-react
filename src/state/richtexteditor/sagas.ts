@@ -37,9 +37,12 @@ function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
             }
         }
 
-        const fileContent = yield* call(readAsArrayBuffer, file);
-        const digest = Base64js.fromByteArray(new Uint8Array(
-            yield* call([window.crypto.subtle, window.crypto.subtle.digest], "SHA-256", fileContent)));
+        let digest: string | null = null;
+        if (window.crypto.subtle) {
+            const fileContent = yield* call(readAsArrayBuffer, file);
+            digest = Base64js.fromByteArray(new Uint8Array(
+                yield* call([window.crypto.subtle, window.crypto.subtle.digest], "SHA-256", fileContent)));
+        }
 
         const mediaFile = yield* call(Node.postMediaPrivate, nodeName, file,
             (loaded: number, total: number) => onProgress(index, loaded, total));
