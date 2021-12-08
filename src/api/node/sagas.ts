@@ -11,6 +11,7 @@ import {
     AvatarOrdinal,
     CommentCreated,
     CommentInfo,
+    CommentSourceText,
     CommentsSliceInfo,
     CommentText,
     CommentTotalInfo,
@@ -23,14 +24,15 @@ import {
     FeedInfo,
     FeedSliceInfo,
     FeedStatus,
-    PublicMediaFileInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
     PostingFeatures,
     PostingInfo,
     PostingText,
+    PrivateMediaFileInfo,
     ProfileAttributes,
     ProfileInfo,
+    PublicMediaFileInfo,
     ReactionCreated,
     ReactionInfo,
     ReactionsSliceInfo,
@@ -46,7 +48,7 @@ import {
     SubscriptionInfo,
     SubscriptionType,
     TokenCreated,
-    WhoAmI, PrivateMediaFileInfo
+    WhoAmI
 } from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
@@ -476,7 +478,7 @@ export function* putComment(nodeName: string | null, postingId: string, id: stri
 }
 
 export function* putRemoteComment(nodeName: string | null, remoteNodeName: string, postingId: string, id: string,
-                                  commentText: CommentText): CallApiResult<Result> {
+                                  commentText: CommentSourceText): CallApiResult<Result> {
     return yield* callApi({
         nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "PUT",
         auth: true, body: commentText, schema: NodeApi.Result

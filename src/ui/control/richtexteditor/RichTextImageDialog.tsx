@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
 
-import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
+import { PostingFeatures } from "api/node/api-types";
+import { RichTextMedia } from "state/richtexteditor/actions";
 import { PlusButton } from "ui/control";
 import { InputField, NumberField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
@@ -11,7 +12,7 @@ import "./RichTextImageDialog.css";
 
 export interface RichTextImageValues {
     source?: string;
-    mediaFile?: PrivateMediaFileInfo | null;
+    mediaFile?: RichTextMedia | null;
     href?: string;
     width?: number | null;
     height?: number | null;
@@ -24,8 +25,8 @@ type Props = {
     features: PostingFeatures | null;
     noMedia?: boolean;
     nodeName?: string | null;
-    selectedImage?: PrivateMediaFileInfo | null;
-    onAdded?: (image: PrivateMediaFileInfo) => void;
+    selectedImage?: RichTextMedia | null;
+    onAdded?: (image: RichTextMedia) => void;
     onDeleted?: (id: string) => void;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 

@@ -1,6 +1,6 @@
 import { FormikBag } from 'formik';
 
-import { AvatarImage, CommentInfo, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
+import { AvatarImage, CommentInfo, CommentSourceText, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
@@ -24,7 +24,7 @@ interface MapToCommentTextProps {
 interface CommentComposeProps extends MapToValuesProps, MapToCommentTextProps {
     receiverPostingId: string | null;
     commentPost: (postingId: string, commentId: string | null, draftId: string | null,
-                  commentText: CommentText) => void;
+                  commentText: CommentText, commentSourceText: CommentSourceText) => void;
 }
 
 export interface CommentComposeValues {
@@ -74,6 +74,19 @@ const commentComposeLogic = {
         };
     },
 
+    mapValuesToCommentSourceText(values: CommentComposeValues, props: MapToCommentTextProps): CommentSourceText {
+        return {
+            ownerAvatar: toAvatarDescription(values.avatar),
+            bodySrc: JSON.stringify({
+                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
+            }),
+            bodySrcFormat: props.sourceFormatDefault,
+            media: values.body.orderedMediaListWithDigests(),
+            acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
+            repliedToId: props.repliedToId
+        };
+    },
+
     areValuesEmpty(values: CommentComposeValues): boolean {
         return values.body.text.trim() === ""
             && (values.body.media == null || values.body.media.length === 0);
@@ -91,12 +104,14 @@ const commentComposeLogic = {
     handleSubmit(values: CommentComposeValues, formik: FormikBag<CommentComposeProps, CommentComposeValues>): void {
         formik.setStatus("submitted");
         const commentText = commentComposeLogic.mapValuesToCommentText(values, formik.props);
+        const commentSourceText = commentComposeLogic.mapValuesToCommentSourceText(values, formik.props);
         if (formik.props.receiverPostingId != null && commentText != null) {
             formik.props.commentPost(
                 formik.props.receiverPostingId,
                 formik.props.comment != null ? formik.props.comment.id : null,
                 formik.props.draft?.id ?? null,
-                commentText
+                commentText,
+                commentSourceText
             );
         }
         formik.setSubmitting(false);

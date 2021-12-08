@@ -4,13 +4,13 @@ import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
 
-import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
-import { richTextEditorImagesUpload } from "state/richtexteditor/actions";
+import { PostingFeatures } from "api/node/api-types";
+import { ClientState } from "state/state";
+import { richTextEditorImagesUpload, RichTextMedia } from "state/richtexteditor/actions";
+import { getSetting } from "state/settings/selectors";
 import { Button, RichTextValue } from "ui/control";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
 import "./RichTextEditorDropzone.css";
-import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
 
 type UploadStatus = "loading" | "success" | "failure";
 
@@ -53,13 +53,13 @@ function updateStatus(progress: UploadProgress[], index: number, status: UploadS
 }
 
 type ImageLoadStartedHandler = (count: number) => void;
-type ImageLoadedHandler = (index: number, image: PrivateMediaFileInfo) => void;
+type ImageLoadedHandler = (index: number, image: RichTextMedia) => void;
 type Props = {
     value: RichTextValue;
     features: PostingFeatures | null;
     hiding?: boolean;
     nodeName: string | null;
-    selectImage: (image: PrivateMediaFileInfo | null) => void;
+    selectImage: (image: RichTextMedia | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
     onDeleted?: (id: string) => void;
@@ -77,7 +77,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, sele
     const onLoadedRef = useRef<ImageLoadedHandler>();
     onLoadedRef.current = onLoaded;
 
-    const onImageUploadSuccess = (startIndex: number) => (index: number, mediaFile: PrivateMediaFileInfo) => {
+    const onImageUploadSuccess = (startIndex: number) => (index: number, mediaFile: RichTextMedia) => {
         setUploadProgress(progress => updateStatus(progress, index, "success"));
         if (onLoadedRef.current) {
             onLoadedRef.current(startIndex + index, mediaFile);

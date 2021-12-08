@@ -249,7 +249,7 @@ function* commentLoadSaga(action: CommentLoadAction) {
 }
 
 function* commentPostSaga(action: CommentPostAction) {
-    const {commentId, postingId, draftId, commentText} = action.payload;
+    const {commentId, postingId, draftId, commentText, commentSourceText} = action.payload;
 
     const {receiverName, receiverPostingId} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
@@ -269,7 +269,7 @@ function* commentPostSaga(action: CommentPostAction) {
         if (draftId != null) {
             yield* call(Node.deleteDraft, ":", draftId);
         }
-        yield* call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentText);
+        yield* call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentSourceText);
     } catch (e) {
         yield* put(commentPostFailed(receiverName, receiverPostingId));
         yield* put(errorThrown(e));

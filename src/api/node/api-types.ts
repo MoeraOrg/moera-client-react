@@ -250,6 +250,20 @@ export interface CommentText {
     signatureVersion?: number | null;
 }
 
+export interface MediaWithDigest {
+    id: string;
+    digest?: string | null;
+}
+
+export interface CommentSourceText {
+    ownerAvatar?: AvatarDescription | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    media?: MediaWithDigest[] | null;
+    acceptedReactions?: AcceptedReactions | null;
+    repliedToId?: string | null;
+}
+
 export interface RepliedTo {
     id: string;
     name: string;

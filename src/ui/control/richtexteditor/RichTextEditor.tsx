@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { arrayMove } from '@dnd-kit/sortable';
 
 import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
+import { RichTextMedia } from "state/richtexteditor/actions";
 import RichTextArea, { RichTextAreaProps } from "ui/control/richtexteditor/RichTextArea";
 import RichTextEditorPanel from "ui/control/richtexteditor/RichTextEditorPanel";
 import RichTextEditorDropzone from "ui/control/richtexteditor/RichTextEditorDropzone";
@@ -36,7 +37,7 @@ const RichTextEditor = ({name, value, features, rows, placeholder, className, au
         }
     }
 
-    const onImageLoaded = (index: number, image: PrivateMediaFileInfo) => {
+    const onImageLoaded = (index: number, image: RichTextMedia) => {
         if (onChange != null && value.media != null && index < value.media.length) {
             const media = [...value.media];
             media[index] = image;
@@ -44,7 +45,7 @@ const RichTextEditor = ({name, value, features, rows, placeholder, className, au
         }
     }
 
-    const onImageAdded = (image: PrivateMediaFileInfo) => {
+    const onImageAdded = (image: RichTextMedia) => {
         if (onChange != null) {
             const media = value.media != null ? value.media.filter(v => v == null || v.id !== image.id) : [];
             media.push(image);

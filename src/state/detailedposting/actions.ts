@@ -3,6 +3,7 @@ import { Action } from 'redux';
 import { ActionWithPayload } from "state/action-types";
 import {
     CommentInfo,
+    CommentSourceText,
     CommentText,
     DraftInfo,
     DraftText,
@@ -269,11 +270,12 @@ export type CommentPostAction = ActionWithPayload<typeof COMMENT_POST, {
     commentId: string | null;
     draftId: string | null;
     commentText: CommentText;
+    commentSourceText: CommentSourceText;
 }>;
 export const commentPost = (postingId: string, commentId: string | null, draftId: string | null,
-                            commentText: CommentText): CommentPostAction => ({
+                            commentText: CommentText, commentSourceText: CommentSourceText): CommentPostAction => ({
     type: COMMENT_POST,
-    payload: {postingId, commentId, draftId, commentText}
+    payload: {postingId, commentId, draftId, commentText, commentSourceText}
 });
 
 export const COMMENT_POSTED = "COMMENT_POSTED";

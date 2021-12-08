@@ -1,27 +1,40 @@
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { MediaWithDigest } from "api/node/api-types";
+import { RichTextMedia } from "state/richtexteditor/actions";
 import { mediaHashesExtract } from "util/media-images";
+
+function toMediaWithDigest(media: RichTextMedia): MediaWithDigest {
+    return {
+        id: media.id,
+        digest: media.digest
+    }
+}
 
 export class RichTextValue {
 
     text: string;
-    media?: (PrivateMediaFileInfo | null)[] | null;
+    media?: (RichTextMedia | null)[] | null;
 
-    constructor(text: string, media?: (PrivateMediaFileInfo | null)[] | null) {
+    constructor(text: string, media?: (RichTextMedia | null)[] | null) {
         this.text = text;
         this.media = media;
     }
 
-    orderedMediaList(): string[] | null {
+    orderedMediaListWithDigests(): MediaWithDigest[] | null {
         if (this.media == null) {
             return null;
         }
 
-        const bodyMedia = this.media.filter((mf): mf is PrivateMediaFileInfo => mf != null);
-        const mediaMap = new Map(bodyMedia.map(mf => [mf.hash, mf.id]));
+        const bodyMedia = this.media.filter((mf): mf is RichTextMedia => mf != null);
+        const mediaMap = new Map(bodyMedia.map(mf => [mf.hash, mf]));
         const embeddedHashes = mediaHashesExtract(this.text);
 
-        return [...embeddedHashes].map(hash => mediaMap.get(hash)).filter((id): id is string => id != null)
-            .concat(bodyMedia.filter(mf => !embeddedHashes.has(mf.hash)).map(mf => mf.id));
+        return [...embeddedHashes].map(hash => mediaMap.get(hash)).filter((mf): mf is RichTextMedia => mf != null)
+            .concat(bodyMedia.filter(mf => !embeddedHashes.has(mf.hash))).map(toMediaWithDigest);
+    }
+
+    orderedMediaList(): string[] | null {
+        const list = this.orderedMediaListWithDigests();
+        return list != null ? list.map(md => md.id) : null;
     }
 
 }

@@ -14,16 +14,16 @@ import {
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
+import { getNamingNameNodeUri } from "state/naming/selectors";
+import { RichTextMedia } from "state/richtexteditor/actions";
 import { DeleteButton, RichTextValue } from "ui/control";
 import { mediaHashesExtract, mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextEditorImageList.css";
-import { getNamingNameNodeUri } from "state/naming/selectors";
 
 interface AttachedImageProps {
-    media: PrivateMediaFileInfo;
+    media: RichTextMedia;
     rootPage: string | null;
     onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
@@ -39,7 +39,7 @@ function AttachedImage({media, rootPage, onClick}: AttachedImageProps) {
 }
 
 interface UploadedImageProps {
-    media: PrivateMediaFileInfo;
+    media: RichTextMedia;
     rootPage: string | null;
     onDeleteClick?: React.MouseEventHandler;
     onClick?: React.MouseEventHandler<HTMLImageElement>;
@@ -65,7 +65,7 @@ function UploadedImage({media, rootPage, onDeleteClick, onClick}: UploadedImageP
 interface OwnProps {
     value: RichTextValue;
     nodeName: string | null;
-    selectImage: (image: PrivateMediaFileInfo | null) => void;
+    selectImage: (image: RichTextMedia | null) => void;
     onDeleted?: (id: string) => void;
     onReorder?: (activeId: string, overId: string) => void;
 }
@@ -85,7 +85,7 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
         keyboardSensor,
     );
 
-    const [dragged, setDragged] = useState<PrivateMediaFileInfo | null>(null);
+    const [dragged, setDragged] = useState<RichTextMedia | null>(null);
 
     if (value.media == null || value.media.length === 0) {
         return null;
@@ -93,7 +93,7 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
 
     const embedded = mediaHashesExtract(value.text);
     const mediaList = value.media
-        .filter((media): media is PrivateMediaFileInfo => media != null && !embedded.has(media.hash));
+        .filter((media): media is RichTextMedia => media != null && !embedded.has(media.hash));
     const mediaIds = mediaList.map(mf => mf.id);
 
     const onDragStart = ({active}: DragStartEvent) =>
@@ -112,7 +112,7 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
         }
     }
 
-    const onClick = (image: PrivateMediaFileInfo) => (event: MouseEvent) => {
+    const onClick = (image: RichTextMedia) => (event: MouseEvent) => {
         selectImage(image);
         event.preventDefault();
     }
