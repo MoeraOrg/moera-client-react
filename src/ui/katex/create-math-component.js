@@ -55,11 +55,11 @@ const createMathComponent = (Component, { displayMode }) => {
                 return renderError ? (
                     renderError(error)
                 ) : (
-                    <Component html={`${error.message}`} />
+                    <Component html={`${error.message}`}/>
                 );
             }
 
-            return <Component html={html} />;
+            return <Component html={html}/>;
         }
     }
 

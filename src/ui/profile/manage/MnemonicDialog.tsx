@@ -55,11 +55,11 @@ class MnemonicDialog extends React.PureComponent<Props> {
                             and you will completely loose control of your registered name.</b>
                         </p>
                         <div className="row">
-                            <Column mnemonic={mnemonic} start={0} end={8} />
-                            <Column mnemonic={mnemonic} start={8} end={16} />
-                            <Column mnemonic={mnemonic} start={16} end={24} />
+                            <Column mnemonic={mnemonic} start={0} end={8}/>
+                            <Column mnemonic={mnemonic} start={8} end={16}/>
+                            <Column mnemonic={mnemonic} start={16} end={24}/>
                         </div>
-                        <CheckboxField name="confirmed" title="I have written down all these words" />
+                        <CheckboxField name="confirmed" title="I have written down all these words"/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="primary" type="submit" disabled={!confirmed}>Close</Button>

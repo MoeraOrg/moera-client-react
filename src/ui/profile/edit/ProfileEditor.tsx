@@ -38,7 +38,7 @@ function ProfileEditor(props: Props) {
     return (
         <>
             <PageHeader>
-                <h2>Edit Profile <Loading active={loading} /></h2>
+                <h2>Edit Profile <Loading active={loading}/></h2>
             </PageHeader>
             <Page>
                 <div className="profile-editor">

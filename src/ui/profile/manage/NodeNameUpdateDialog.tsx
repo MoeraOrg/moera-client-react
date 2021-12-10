@@ -24,7 +24,7 @@ const Column = ({start, end, autoFocus = false}: ColumnProps) => (
             {range(end - start).map(index => (
                 <li key={index}>
                     <InputField name={`mnemonic[${start + index}]`} className="mnemonic-input"
-                                autoFocus={index === 0 && autoFocus} autoComplete="secret" noFeedback />
+                                autoFocus={index === 0 && autoFocus} autoComplete="secret" noFeedback/>
                 </li>
             ))}
         </ol>
@@ -71,9 +71,9 @@ class NodeNameUpdateDialog extends React.PureComponent<Props> {
                         }
                         <h5 className="mnemonic-title">Secret Words</h5>
                         <div className="row">
-                            <Column start={0} end={8} autoFocus={!showChangeName} />
-                            <Column start={8} end={16} />
-                            <Column start={16} end={24} />
+                            <Column start={0} end={8} autoFocus={!showChangeName}/>
+                            <Column start={8} end={16}/>
+                            <Column start={16} end={24}/>
                         </div>
                     </div>
                     <div className="modal-footer">

@@ -51,7 +51,7 @@ export default class CommentsSentinel extends React.PureComponent<Props> {
                         {fullTitle}
                     </>
                 }
-                <Loading active={loading} />
+                <Loading active={loading}/>
             </button>
         );
     }

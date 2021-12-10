@@ -42,7 +42,7 @@ export default class InstantsSentinel extends React.PureComponent<Props> {
         return (
             <div className={cx({"sentinel": !loading && visible})} ref={this.observeSentinel} onClick={onClick}>
                 {!loading && visible && title}
-                <Loading active={loading} />
+                <Loading active={loading}/>
             </div>
         );
     }
