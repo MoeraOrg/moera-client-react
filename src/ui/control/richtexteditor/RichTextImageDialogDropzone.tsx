@@ -13,6 +13,7 @@ import { getNamingNameNodeUri } from "state/naming/selectors";
 import { Button, DeleteButton } from "ui/control";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
+import { Browser } from "ui/browser";
 
 interface OwnProps {
     features: PostingFeatures | null;
@@ -87,7 +88,7 @@ function RichTextImageDialogDropzone({features, nodeName, onAdded, onDeleted, ro
                 :
                     <>
                         <Button variant="outline-info" size="sm" onClick={open}>Upload image</Button>
-                        {" "}or drop it here<br/>
+                        {!Browser.isTinyScreen() ? " or drop them here" : ""}<br/>
                         <label className="form-check-label" htmlFor="dialogImagesCompress">
                             Compress image
                         </label>

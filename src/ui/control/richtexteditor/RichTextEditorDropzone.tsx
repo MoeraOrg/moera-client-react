@@ -10,6 +10,7 @@ import { richTextEditorImagesUpload, RichTextMedia } from "state/richtexteditor/
 import { getSetting } from "state/settings/selectors";
 import { Button, RichTextValue } from "ui/control";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
+import { Browser } from "ui/browser";
 import "./RichTextEditorDropzone.css";
 
 type UploadStatus = "loading" | "success" | "failure";
@@ -125,7 +126,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, sele
                 :
                     <>
                         <Button variant="outline-info" size="sm" onClick={open}>Upload images</Button>
-                        {" "}or drop them here<br/>
+                        {!Browser.isTinyScreen() ? " or drop them here" : ""}<br/>
                         <label className="form-check-label" htmlFor="editorImagesCompress">
                             Compress images
                         </label>
