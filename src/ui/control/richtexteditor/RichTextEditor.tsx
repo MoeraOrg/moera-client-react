@@ -16,13 +16,14 @@ type Props = {
     value: RichTextValue;
     features: PostingFeatures | null;
     nodeName?: string | null;
+    forceImageCompress?: boolean;
     onChange?: (value: RichTextValue) => void;
     noMedia?: boolean;
 } & Omit<RichTextAreaProps, "textArea" | "panel" | "value" | "onChange">;
 
 const RichTextEditor = ({name, value, features, rows, placeholder, className, autoFocus, autoComplete,
-                         disabled, smileysEnabled, hidingPanel, format, nodeName, onKeyDown, onChange, onBlur,
-                         noMedia}: Props) => {
+                         disabled, smileysEnabled, hidingPanel, format, nodeName, forceImageCompress, onKeyDown,
+                         onChange, onBlur, noMedia}: Props) => {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
@@ -82,7 +83,8 @@ const RichTextEditor = ({name, value, features, rows, placeholder, className, au
     return (
         <div className={cx("rich-text-editor", className)}>
             <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
-                                 features={features} noMedia={noMedia} nodeName={nodeName} selectedImage={selectedImage}
+                                 features={features} noMedia={noMedia} nodeName={nodeName}
+                                 forceImageCompress={forceImageCompress} selectedImage={selectedImage}
                                  selectImage={setSelectedImage} onImageAdded={onImageAdded}
                                  onImageDeleted={onImageDeleted}/>
             <RichTextArea name={name} value={value.text} format={format} rows={rows} placeholder={placeholder}
@@ -91,9 +93,10 @@ const RichTextEditor = ({name, value, features, rows, placeholder, className, au
                           textArea={textArea} panel={panel}/>
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
-                                        nodeName={nodeName ?? null} selectImage={setSelectedImage}
-                                        onLoadStarted={onImageLoadStarted} onLoaded={onImageLoaded}
-                                        onDeleted={onImageDeleted} onReorder={onImagesReorder}/>
+                                        nodeName={nodeName ?? null} forceCompress={forceImageCompress}
+                                        selectImage={setSelectedImage} onLoadStarted={onImageLoadStarted}
+                                        onLoaded={onImageLoaded} onDeleted={onImageDeleted}
+                                        onReorder={onImagesReorder}/>
             }
         </div>
     );

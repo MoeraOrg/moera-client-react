@@ -13,6 +13,7 @@ interface Props {
     features?: PostingFeatures | null;
     noMedia?: boolean;
     nodeName?: string | null;
+    forceImageCompress?: boolean;
     placeholder?: string;
     autoFocus?: boolean;
     anyValue?: boolean;
@@ -28,9 +29,10 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function RichTextField({name, title, rows = 3, features, noMedia, nodeName, placeholder = "Enter text here...",
-                               autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false,
-                               initialValue, defaultValue, smileysEnabled, hidingPanel, format, onKeyDown}: Props) {
+export function RichTextField({name, title, rows = 3, features, noMedia, nodeName, forceImageCompress,
+                               placeholder = "Enter text here...", autoFocus, anyValue, className, autoComplete,
+                               noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled,
+                               hidingPanel, format, onKeyDown}: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
     const {setFieldValue} = useFormikContext();
@@ -71,6 +73,7 @@ export function RichTextField({name, title, rows = 3, features, noMedia, nodeNam
                     onKeyDown={onKeyDown}
                     noMedia={noMedia}
                     nodeName={nodeName}
+                    forceImageCompress={forceImageCompress}
                 />
                 {!noFeedback && touched && error && <div className="invalid-feedback">{(error as any).text}</div>}
             </>

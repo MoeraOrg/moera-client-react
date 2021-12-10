@@ -6,6 +6,7 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
@@ -29,8 +30,8 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 function CommentCompose(props: Props) {
     const {
         ownerName, beingPosted, receiverName, receiverPostingId, draft, formId, submitKey, bottomMenuHide,
-        bottomMenuShow, receiverFullName, smileysEnabled, sourceFormatDefault, openSignUpDialog, openConnectDialog,
-        values, resetForm, submitForm
+        bottomMenuShow, receiverFullName, smileysEnabled, features, sourceFormatDefault, openSignUpDialog,
+        openConnectDialog, values, resetForm, submitForm
     } = props;
 
     const composer = useRef<HTMLDivElement>(null);
@@ -81,8 +82,8 @@ function CommentCompose(props: Props) {
                     <AvatarField name="avatar" size={36}/>
                     <div className="content">
                         <CommentComposeRepliedTo/>
-                        <RichTextField name="body" rows={1} nodeName={receiverName} anyValue
-                                       placeholder={`Write a comment to ${mention} here...`}
+                        <RichTextField name="body" rows={1} features={features} nodeName={receiverName}
+                                       forceImageCompress anyValue placeholder={`Write a comment to ${mention} here...`}
                                        disabled={beingPosted} smileysEnabled={smileysEnabled}
                                        hidingPanel={commentComposeLogic.areValuesEmpty(values)}
                                        format={sourceFormatDefault} onKeyDown={onKeyDown}/>
@@ -120,7 +121,8 @@ const connector = connect(
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
         submitKey: getSetting(state, "comment.submit-key") as string,
-        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean
+        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
+        features: getPostingFeatures(state)
     }),
     { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
 );

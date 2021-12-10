@@ -5,6 +5,7 @@ import { Form, FormikProps, withFormik } from 'formik';
 import { PostingText, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import { composeConflictClose, composePost } from "state/compose/actions";
@@ -138,7 +139,7 @@ const connector = connect(
         loadingFeatures: state.compose.loadingFeatures,
         avatarDefault: getHomeOwnerAvatar(state),
         fullNameDefault: getHomeOwnerFullName(state),
-        features: state.compose.features,
+        features: getPostingFeatures(state),
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,
         loadingDraft: state.compose.loadingDraft,

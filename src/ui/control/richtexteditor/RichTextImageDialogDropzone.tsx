@@ -11,22 +11,23 @@ import { richTextEditorImagesUpload, RichTextMedia } from "state/richtexteditor/
 import { getSetting } from "state/settings/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { Button, DeleteButton } from "ui/control";
+import { Browser } from "ui/browser";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
-import { Browser } from "ui/browser";
 
 interface OwnProps {
     features: PostingFeatures | null;
     nodeName: string | null;
+    forceCompress?: boolean;
     onAdded?: (image: RichTextMedia) => void;
     onDeleted?: (id: string) => void;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function RichTextImageDialogDropzone({features, nodeName, onAdded, onDeleted, rootPage, compressImages,
-                                      richTextEditorImagesUpload}: Props) {
-    const [compress, setCompress] = useState<boolean>(compressImages);
+function RichTextImageDialogDropzone({features, nodeName, forceCompress = false, onAdded, onDeleted, rootPage,
+                                      compressImages, richTextEditorImagesUpload}: Props) {
+    const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [, {value}, {setValue}] = useField<RichTextMedia | null>("mediaFile");
@@ -88,12 +89,17 @@ function RichTextImageDialogDropzone({features, nodeName, onAdded, onDeleted, ro
                 :
                     <>
                         <Button variant="outline-info" size="sm" onClick={open}>Upload image</Button>
-                        {!Browser.isTinyScreen() ? " or drop them here" : ""}<br/>
-                        <label className="form-check-label" htmlFor="dialogImagesCompress">
-                            Compress image
-                        </label>
-                        <input className="form-check-input" type="checkbox" checked={compress}
-                               onChange={e => setCompress(e.target.checked)} id="dialogImagesCompress"/>
+                        {!Browser.isTinyScreen() ? " or drop them here" : ""}
+                        {!forceCompress &&
+                            <>
+                                <br/>
+                                <label className="form-check-label" htmlFor="dialogImagesCompress">
+                                    Compress image
+                                </label>
+                                <input className="form-check-input" type="checkbox" checked={compress}
+                                       onChange={e => setCompress(e.target.checked)} id="dialogImagesCompress"/>
+                            </>
+                        }
                     </>
                 )
             }

@@ -23,6 +23,7 @@ import { postingSet } from "state/postings/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposePostingId,
+    isAtComposeFeaturesPage,
     isComposeDraftListLoaded,
     isComposeDraftListToBeLoaded,
     isComposeDraftToBeLoaded,
@@ -48,7 +49,7 @@ import { CONNECTED_TO_HOME } from "state/home/actions";
 import { OWNER_SET } from "state/owner/actions";
 
 export default [
-    trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
+    trigger(GO_TO_PAGE, conj(isAtComposeFeaturesPage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger(
         [GO_TO_PAGE, CONNECTED_TO_HOME, OWNER_SET],
@@ -87,12 +88,12 @@ export default [
     ),
     trigger(
         [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
-        isAtComposePage,
+        isAtComposeFeaturesPage,
         composeFeaturesLoad
     ),
     trigger(
         [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
-        inv(isAtComposePage),
+        inv(isAtComposeFeaturesPage),
         composeFeaturesUnset
     ),
     trigger(COMPOSE_DRAFT_SAVED, true, updateLocation),

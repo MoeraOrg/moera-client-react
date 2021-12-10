@@ -1,5 +1,11 @@
+import { PostingFeatures } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
+import { isAtComposePage, isAtDetailedPostingPage } from "state/navigation/selectors";
+
+export function isAtComposeFeaturesPage(state: ClientState): boolean {
+    return isAtComposePage(state) || isAtDetailedPostingPage(state);
+}
 
 export function isComposeFeaturesToBeLoaded(state: ClientState): boolean {
     return !state.compose.loadedFeatures && !state.compose.loadingFeatures;
@@ -17,6 +23,10 @@ export function isComposeDraftToBeLoaded(state: ClientState): boolean {
 export function isComposeSharedTextToBeLoaded(state: ClientState): boolean {
     return state.compose.postingId == null && state.compose.draftId == null && state.compose.sharedText == null
         && !!window.Android;
+}
+
+export function getPostingFeatures(state: ClientState): PostingFeatures | null {
+    return state.compose.features;
 }
 
 export function getComposePostingId(state: ClientState): string | null {

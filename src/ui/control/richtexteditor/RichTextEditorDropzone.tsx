@@ -60,6 +60,7 @@ type Props = {
     features: PostingFeatures | null;
     hiding?: boolean;
     nodeName: string | null;
+    forceCompress?: boolean;
     selectImage: (image: RichTextMedia | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
@@ -67,9 +68,10 @@ type Props = {
     onReorder?: (activeId: string, overId: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextEditorDropzone({value, features, hiding = false, nodeName, selectImage, onLoadStarted, onLoaded,
-                                 onDeleted, onReorder, compressImages, richTextEditorImagesUpload}: Props) {
-    const [compress, setCompress] = useState<boolean>(compressImages);
+function RichTextEditorDropzone({value, features, hiding = false, nodeName, forceCompress = false, selectImage,
+                                 onLoadStarted, onLoaded, onDeleted, onReorder, compressImages,
+                                 richTextEditorImagesUpload}: Props) {
+    const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
     // onLoadStarted and onLoaded may change
@@ -126,12 +128,17 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, sele
                 :
                     <>
                         <Button variant="outline-info" size="sm" onClick={open}>Upload images</Button>
-                        {!Browser.isTinyScreen() ? " or drop them here" : ""}<br/>
-                        <label className="form-check-label" htmlFor="editorImagesCompress">
-                            Compress images
-                        </label>
-                        <input className="form-check-input" type="checkbox" checked={compress}
-                               onChange={e => setCompress(e.target.checked)} id="editorImagesCompress"/>
+                        {!Browser.isTinyScreen() ? " or drop them here" : ""}
+                        {!forceCompress &&
+                            <>
+                                <br/>
+                                <label className="form-check-label" htmlFor="editorImagesCompress">
+                                    Compress images
+                                </label>
+                                <input className="form-check-input" type="checkbox" checked={compress}
+                                       onChange={e => setCompress(e.target.checked)} id="editorImagesCompress"/>
+                            </>
+                        }
                     </>
                 }
             </div>

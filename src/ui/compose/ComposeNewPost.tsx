@@ -8,6 +8,7 @@ import { composeDraftSelect } from "state/compose/actions";
 import { getSetting } from "state/settings/selectors";
 import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
 import "./ComposeNewPost.css";
+import { getComposePostingId, getPostingFeatures } from "state/compose/selectors";
 
 function isEmpty(values: ComposePageValues): boolean {
     return composePageLogic.areValuesEmpty(values);
@@ -33,8 +34,8 @@ function ComposeNewPost({postingId, composeDraftSelect}: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        features: state.compose.features,
-        postingId: state.compose.postingId,
+        features: getPostingFeatures(state),
+        postingId: getComposePostingId(state),
         posting: state.compose.posting,
         smileysEnabled: getSetting(state, "posting.smileys.enabled") as boolean,
         newsFeedEnabled: getSetting(state, "posting.feed.news.enabled") as boolean,

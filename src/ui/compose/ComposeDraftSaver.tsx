@@ -3,9 +3,10 @@ import { connect, ConnectedProps } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
 import { DraftText, PostingText, StoryAttributes } from "api/node/api-types";
-import { composeDraftSave } from "state/compose/actions";
-import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
+import { composeDraftSave } from "state/compose/actions";
+import { getPostingFeatures } from "state/compose/selectors";
+import { getOwnerName } from "state/owner/selectors";
 import { getSetting } from "state/settings/selectors";
 import { DraftSaver } from "ui/control";
 import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
@@ -50,7 +51,7 @@ const ComposeDraftSaver = (props: Props) => (
 const connector = connect(
     (state: ClientState) => ({
         ownerName: getOwnerName(state),
-        features: state.compose.features,
+        features: getPostingFeatures(state),
         postingId: state.compose.postingId,
         draftId: state.compose.draftId,
         savingDraft: state.compose.savingDraft,
