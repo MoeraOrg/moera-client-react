@@ -5,7 +5,7 @@
 
 .comment .gallery {
     display: flex;
-    width: 50%;
+    width: calc(min(var(--feed-width), 100vw) * 0.5);
 }
 
 @media only screen and (min-width: 576px) {
@@ -78,38 +78,9 @@
 }
 
 .entry .gallery.single {
+    display: block;
     border: 1px solid var(--gray-ultralight);
-    height: auto;
-}
-
-@media only screen and (min-width: 576px) {
-    .posting .gallery.single {
-        height: min(650px, var(--image-height));
-    }
-
-    .comment .gallery.single {
-        height: min(250px, var(--image-height));
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .posting .gallery.single.horizontal {
-        height: min(75vw, var(--image-height));
-    }
-
-    .comment .gallery.single.horizontal {
-        height: min(25vw, var(--image-height));
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .posting .gallery.single.vertical {
-        height: min(125vw, var(--image-height));
-    }
-
-    .comment .gallery.single.vertical {
-        height: min(33vw, var(--image-height));
-    }
+    height: unset;
 }
 
 .entry .gallery.single .entry-image {
@@ -118,4 +89,38 @@
 
 .entry .gallery.single .entry-image IMG {
     object-fit: contain;
+    width: auto;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media only screen and (min-width: 576px) {
+    .posting .gallery.single .entry-image IMG {
+        max-height: min(650px, var(--image-height));
+    }
+
+    .comment .gallery.single .entry-image IMG {
+        max-height: min(250px, var(--image-height));
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .posting .gallery.single.horizontal .entry-image IMG {
+        max-height: min(75vw, var(--image-height));
+    }
+
+    .comment .gallery.single.horizontal .entry-image IMG {
+        max-height: min(25vw, var(--image-height));
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .posting .gallery.single.vertical .entry-image IMG {
+        max-height: min(125vw, var(--image-height));
+    }
+
+    .comment .gallery.single.vertical .entry-image IMG {
+        max-height: min(33vw, var(--image-height));
+    }
 }
