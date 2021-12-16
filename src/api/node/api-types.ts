@@ -571,8 +571,15 @@ export interface PrivateMediaFileInfo {
     previews?: MediaFilePreviewInfo[] | null;
 }
 
+export interface RemoteMediaInfo {
+    id: string;
+    hash: string;
+    digest?: string | null;
+}
+
 export interface MediaAttachment {
-    media: PrivateMediaFileInfo;
+    media?: PrivateMediaFileInfo | null;
+    remoteMedia?: RemoteMediaInfo | null;
     embedded: boolean;
 }
 
@@ -582,6 +589,12 @@ export interface AvatarOrdinal {
 }
 
 export type DraftType = "new-posting" | "posting-update" | "new-comment" | "comment-update";
+
+export interface RemoteMedia {
+    id: string;
+    hash?: string | null;
+    digest?: string | null;
+}
 
 export interface DraftText {
     draftType: DraftType;
@@ -595,7 +608,7 @@ export interface DraftText {
     reactionTotalsVisible?: boolean | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    media?: string[] | null;
+    media?: RemoteMedia[] | null;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
 }

@@ -58,6 +58,7 @@ export interface CommentComposeState {
 export interface CommentDialogState {
     show: boolean;
     loading: boolean;
+    loaded: boolean;
     commentId: string | null;
     comment: CommentInfo | null;
     beingPosted: boolean;

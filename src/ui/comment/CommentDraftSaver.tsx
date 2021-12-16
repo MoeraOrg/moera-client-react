@@ -13,6 +13,7 @@ import {
     getCommentsState
 } from "state/detailedposting/selectors";
 import { commentDraftSave } from "state/detailedposting/actions";
+import { RichTextMedia } from "state/richtexteditor/actions";
 import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 
@@ -32,18 +33,29 @@ const commentDraftSaverLogic = {
         commentComposeLogic.isCommentTextEmpty(commentText),
 
     toDraftText: (ownerName: string, postingId: string, commentId: string | null,
-                  commentText: CommentText): DraftText => ({
+                  commentText: CommentText, media: Map<string, RichTextMedia>): DraftText => ({
         ...cloneDeep(commentText),
+        media: commentText.media?.map(id => ({
+            id,
+            hash: media.get(id)?.hash,
+            digest: media.get(id)?.digest
+        })),
         receiverName: ownerName,
         draftType: commentId == null ? "new-comment" : "comment-update",
         receiverPostingId: postingId,
         receiverCommentId: commentId ?? null /* important, should not be undefined */
     } as DraftText),
 
-    save: (text: CommentText, props: Props): void => {
+    save: (text: CommentText, values: CommentComposeValues, props: Props): void => {
         if (props.ownerName != null && props.receiverPostingId != null) {
+            const media = new Map(
+                (values.body.media ?? [])
+                    .filter((rm): rm is RichTextMedia => rm != null)
+                    .map(rm => [rm.id, rm])
+            );
             props.commentDraftSave(props.draft?.id ?? null,
-                commentDraftSaverLogic.toDraftText(props.ownerName, props.receiverPostingId, props.commentId, text));
+                commentDraftSaverLogic.toDraftText(props.ownerName, props.receiverPostingId, props.commentId,
+                    text, media));
         }
     }
 

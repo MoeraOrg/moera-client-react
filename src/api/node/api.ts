@@ -532,15 +532,40 @@ const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
 
 export const PrivateMediaFileInfo = schema(PrivateMediaFileInfoType);
 
+const RemoteMediaInfoType: JSONSchemaType<API.RemoteMediaInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "hash": {
+            type: "string"
+        },
+        "digest": {
+            type: "string",
+            nullable: true
+        }
+    },
+    required: ["id", "hash"],
+    additionalProperties: false
+};
+
 const MediaAttachmentType: JSONSchemaType<API.MediaAttachment> = {
     type: "object",
     properties: {
-        "media": PrivateMediaFileInfoType,
+        "media": {
+            ...PrivateMediaFileInfoType,
+            nullable: true
+        },
+        "remoteMedia": {
+            ...RemoteMediaInfoType,
+            nullable: true
+        },
         "embedded": {
             type: "boolean"
         }
     },
-    required: ["media", "embedded"],
+    required: ["embedded"],
     additionalProperties: false
 };
 

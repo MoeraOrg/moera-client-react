@@ -595,6 +595,12 @@ export function* postMediaPublic(nodeName: string | null, file: File,
     });
 }
 
+export function* getMediaPrivateInfo(nodeName: string | null, id: string): CallApiResult<PrivateMediaFileInfo> {
+    return yield* callApi({
+        nodeName, location: ut`/media/private/${id}/info`, auth: true, schema: NodeApi.PrivateMediaFileInfo
+    });
+}
+
 export function* postMediaPrivate(nodeName: string | null, file: File,
                                   onProgress: ProgressHandler): CallApiResult<PrivateMediaFileInfo> {
     return yield* callApi({

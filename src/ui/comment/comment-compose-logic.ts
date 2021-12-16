@@ -4,6 +4,7 @@ import { AvatarImage, CommentInfo, CommentSourceText, CommentText, DraftInfo, So
 import { RichTextValue } from "ui/control";
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
+import { RichTextMedia } from "state/richtexteditor/actions";
 
 interface MapToValuesProps {
     comment: CommentInfo | null;
@@ -41,9 +42,13 @@ const commentComposeLogic = {
         const body = props.draft != null
             ? (props.draft.bodySrc?.text ?? "")
             : (props.comment != null ? (props.comment.bodySrc?.text ?? "") : "");
-        const media = props.draft != null
-            ? (props.draft.media != null ? props.draft.media.map(mf => mf.media) : [])
-            : (props.comment != null && props.comment.media != null ? props.comment.media.map(mf => mf.media) : []);
+        const media: (RichTextMedia | null)[] = props.draft != null
+            ? (props.draft.media != null
+                ? props.draft.media.map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} : null)
+                : [])
+            : (props.comment != null && props.comment.media != null
+                ? props.comment.media.map(mf => mf.media ?? null)
+                : []);
 
         return {
             avatar,
@@ -93,12 +98,13 @@ const commentComposeLogic = {
     },
 
     isCommentTextEmpty(commentText: CommentText): boolean {
-        if (commentText.bodySrc == null) {
-            return true;
+        let textEmpty = commentText.bodySrc == null;
+        if (!textEmpty) {
+            const {text} = JSON.parse(commentText.bodySrc!);
+            textEmpty = !text;
         }
-
-        const {text} = JSON.parse(commentText.bodySrc);
-        return !text;
+        const mediaEmpty = commentText.media == null || commentText.media.length === 0;
+        return textEmpty && mediaEmpty;
     },
 
     handleSubmit(values: CommentComposeValues, formik: FormikBag<CommentComposeProps, CommentComposeValues>): void {

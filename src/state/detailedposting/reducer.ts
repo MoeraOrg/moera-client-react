@@ -109,6 +109,7 @@ const emptyCompose = {
 const emptyComposeDialog = {
     show: false,
     loading: false,
+    loaded: false,
     commentId: null,
     comment: null,
     beingPosted: false,

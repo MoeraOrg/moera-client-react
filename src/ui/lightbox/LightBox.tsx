@@ -29,11 +29,11 @@ function LightBox({show, posting, comment, mediaId, rootPage, loopGallery, close
     let title = "";
     if (media != null && media.length > 0) {
         const loop = loopGallery && media.length > 1;
-        let index = media.findIndex(mediaFile => mediaFile.media.id === mediaId);
+        let index = media.findIndex(attachment => attachment.media?.id === mediaId);
         if (index < 0) {
             index = 0;
         }
-        mainSrc = rootPage + "/media/" + media[index].media.path;
+        mainSrc = rootPage + "/media/" + media[index].media?.path;
         const prevIndex = index > 0
             ? index - 1
             : (index === 0 && loop ? media.length - 1 : null);
@@ -41,12 +41,12 @@ function LightBox({show, posting, comment, mediaId, rootPage, loopGallery, close
             ? index + 1
             : (index === media.length - 1 && loop ? 0 : null);
         if (prevIndex != null) {
-            prevSrc = rootPage + "/media/" + media[prevIndex].media.path;
-            prevMediaId = media[prevIndex].media.id;
+            prevSrc = rootPage + "/media/" + media[prevIndex].media?.path;
+            prevMediaId = media[prevIndex].media?.id;
         }
         if (nextIndex != null) {
-            nextSrc = rootPage + "/media/" + media[nextIndex].media.path;
-            nextMediaId = media[nextIndex].media.id;
+            nextSrc = rootPage + "/media/" + media[nextIndex].media?.path;
+            nextMediaId = media[nextIndex].media?.id;
         }
         title = `${index + 1} / ${media.length}`;
     }

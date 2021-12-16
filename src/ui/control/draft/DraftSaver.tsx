@@ -7,7 +7,7 @@ import "./DraftSaver.css";
 interface Logic<Text, Values, OuterProps> {
     toText: (values: Values, props: OuterProps) => Text | null;
     isEmpty: (text: Text) => boolean;
-    save: (text: Text, props: OuterProps) => void;
+    save: (text: Text, values: Values, props: OuterProps) => void;
 }
 
 interface LogicProp<Text, Values, OuterProps> {
@@ -50,9 +50,9 @@ export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text
             return;
         }
         setDirty(true);
-        logic.save(thisText, props);
+        logic.save(thisText, valuesRef.current, props);
         setUnsavedChanges(false);
-    }, 1500), [statusRef, valuesRef, dirtyRef, props, setUnsavedChanges]);
+    }, 1500, {maxWait: 10000}), [statusRef, valuesRef, dirtyRef, props, setUnsavedChanges]);
 
     useEffect(() => {
         return () => {

@@ -294,6 +294,13 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
             ? yield* call(Node.getDraftCommentUpdate, ":", nodeName, postingId, commentId)
             : yield* call(Node.getDraftNewComment, ":", nodeName, postingId);
         if (data != null) {
+            if (data.media != null) {
+                for (const attachment of data.media) {
+                    if (attachment.media == null && attachment.remoteMedia != null) {
+                        attachment.media = yield* call(Node.getMediaPrivateInfo, nodeName, attachment.remoteMedia.id);
+                    }
+                }
+            }
             yield* put(commentDraftLoaded(data));
         } else {
             yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));

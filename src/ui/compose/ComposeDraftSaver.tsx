@@ -8,6 +8,7 @@ import { composeDraftSave } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { getSetting } from "state/settings/selectors";
+import { RichTextMedia } from "state/richtexteditor/actions";
 import { DraftSaver } from "ui/control";
 import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
 
@@ -23,8 +24,14 @@ const composeDraftSaverLogic = {
     isEmpty: (postingText: PostingText): boolean =>
         composePageLogic.isPostingTextEmpty(postingText),
 
-    toDraftText: (ownerName: string, postingId: string | null, postingText: PostingText): DraftText => ({
+    toDraftText: (ownerName: string, postingId: string | null, postingText: PostingText,
+                  media: Map<string, RichTextMedia>): DraftText => ({
         ...cloneDeep(postingText),
+        media: postingText.media?.map(id => ({
+            id,
+            hash: media.get(id)?.hash,
+            digest: media.get(id)?.digest
+        })),
         publications: undefined,
         receiverName: ownerName,
         draftType: postingId == null ? "new-posting" : "posting-update",
@@ -35,10 +42,15 @@ const composeDraftSaverLogic = {
     getPublishAt: (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
         publications != null && publications.length > 0 ? publications[0].publishAt : null,
 
-    save: (text: PostingText, props: Props): void => {
+    save: (text: PostingText, values: ComposePageValues, props: Props): void => {
         if (props.ownerName != null) {
+            const media = new Map(
+                (values.body.media ?? [])
+                    .filter((rm): rm is RichTextMedia => rm != null)
+                    .map(rm => [rm.id, rm])
+            );
             props.composeDraftSave(props.draftId,
-                composeDraftSaverLogic.toDraftText(props.ownerName, props.postingId, text));
+                composeDraftSaverLogic.toDraftText(props.ownerName, props.postingId, text, media));
         }
     }
 

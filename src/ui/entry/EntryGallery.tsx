@@ -24,7 +24,10 @@ function EntryGallery({postingId, commentId, nodeName, media, feedWidth}: Props)
         return null;
     }
 
-    const images = media.filter(ma => !ma.embedded).map(ma => ma.media);
+    const images = media
+        .filter(ma => !ma.embedded)
+        .map(ma => ma.media)
+        .filter((img): img is PrivateMediaFileInfo => img != null);
     if (images.length === 0) {
         return null;
     }

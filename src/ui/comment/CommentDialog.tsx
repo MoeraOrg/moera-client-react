@@ -29,9 +29,9 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentDialog(props: Props) {
     const {
-        show, ownerName, ownerFullName, receiverName, comment, draft, conflict, loading, beingPosted, smileysEnabled,
-        sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey, submitForm,
-        resetForm
+        show, ownerName, ownerFullName, receiverName, comment, draft, loaded, conflict, loading, beingPosted,
+        smileysEnabled, sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey,
+        submitForm, resetForm
     } = props;
 
     const commentId = comment != null ? comment.id : null;
@@ -46,7 +46,7 @@ function CommentDialog(props: Props) {
         }
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, commentId, draft, setInitialText]); // 'props' are missing on purpose
+    }, [show, commentId, loaded, setInitialText]); // 'props' are missing on purpose
 
     if (!show) {
         return null;
@@ -109,6 +109,7 @@ const connector = connect(
         receiverPostingId: getCommentsState(state).receiverPostingId,
         comment: getCommentDialogComment(state),
         draft: state.detailedPosting.commentDialog.draft,
+        loaded: state.detailedPosting.commentDialog.loaded,
         repliedToId: getCommentDialogComment(state)?.repliedTo?.id ?? null,
         conflict: isCommentDialogConflict(state),
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,

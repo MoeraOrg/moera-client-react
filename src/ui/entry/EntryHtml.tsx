@@ -32,7 +32,12 @@ type Props = {
 function EntryHtml({className, postingId, commentId, html, nodeName, media, onClick, standalone, fontMagnitude,
                     initFromLocation, goToLocation}: Props) {
     const dom = useRef<HTMLDivElement>(null);
-    const mediaMap: Map<string, PrivateMediaFileInfo> = new Map((media ?? []).map(mf => [mf.media.hash, mf.media]));
+    const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
+        (media ?? [])
+            .map(ma => ma.media)
+            .filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            .map(mf => [mf.hash, mf])
+    );
 
     const hydrate = () => {
         if (dom.current == null) {
