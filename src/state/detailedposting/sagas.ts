@@ -91,7 +91,7 @@ import { Browser } from "ui/browser";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";
-import { DraftInfo } from "api/node/api-types";
+import { DraftInfo, MediaAttachment } from "api/node/api-types";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", introduce(detailedPostingLoadSaga)),
@@ -276,6 +276,16 @@ function* commentPostSaga(action: CommentPostAction) {
     }
 }
 
+function* loadRemoteMediaAttachments(nodeName: string | null, attachments: MediaAttachment[] | null) {
+    if (attachments != null) {
+        for (const attachment of attachments) {
+            if (attachment.media == null && attachment.remoteMedia != null) {
+                attachment.media = yield* call(Node.getMediaPrivateInfo, nodeName, attachment.remoteMedia.id);
+            }
+        }
+    }
+}
+
 function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
     const {isDialog} = action.payload;
 
@@ -294,13 +304,7 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
             ? yield* call(Node.getDraftCommentUpdate, ":", nodeName, postingId, commentId)
             : yield* call(Node.getDraftNewComment, ":", nodeName, postingId);
         if (data != null) {
-            if (data.media != null) {
-                for (const attachment of data.media) {
-                    if (attachment.media == null && attachment.remoteMedia != null) {
-                        attachment.media = yield* call(Node.getMediaPrivateInfo, nodeName, attachment.remoteMedia.id);
-                    }
-                }
-            }
+            yield* call(loadRemoteMediaAttachments, nodeName, data.media ?? null);
             yield* put(commentDraftLoaded(data));
         } else {
             yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));
@@ -407,6 +411,7 @@ function* commentDialogCommentLoadSaga() {
     try {
         const draft = yield* call(Node.getDraftCommentUpdate, ":", receiverName, receiverPostingId, commentId);
         if (draft != null) {
+            yield* call(loadRemoteMediaAttachments, receiverName, draft.media ?? null);
             yield* put(commentDraftLoaded(draft));
             //...but load the original comment also
         }

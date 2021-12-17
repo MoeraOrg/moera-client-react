@@ -22,6 +22,7 @@ import { AvatarField, RichTextField } from "ui/control/field";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import "./CommentDialog.css";
+import { getPostingFeatures } from "state/compose/selectors";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -30,8 +31,8 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 function CommentDialog(props: Props) {
     const {
         show, ownerName, ownerFullName, receiverName, comment, draft, loaded, conflict, loading, beingPosted,
-        smileysEnabled, sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey,
-        submitForm, resetForm
+        smileysEnabled, features, sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox,
+        submitKey, submitForm, resetForm
     } = props;
 
     const commentId = comment != null ? comment.id : null;
@@ -85,8 +86,8 @@ function CommentDialog(props: Props) {
                         <AvatarField name="avatar" size={36}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
-                    <RichTextField name="body" rows={5} nodeName={receiverName} anyValue autoFocus
-                                   disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
+                    <RichTextField name="body" rows={5} features={features} nodeName={receiverName} forceImageCompress
+                                   anyValue autoFocus disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
                                    format={sourceFormatDefault} onKeyDown={onKeyDown}/>
                 </div>
                 <div className="modal-footer">
@@ -118,7 +119,8 @@ const connector = connect(
         loading: state.detailedPosting.commentDialog.loading,
         beingPosted: state.detailedPosting.commentDialog.beingPosted,
         submitKey: getSetting(state, "comment.submit-key") as string,
-        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean
+        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
+        features: getPostingFeatures(state)
     }),
     { commentPost, closeCommentDialog, commentDialogConflictClose, confirmBox }
 );
