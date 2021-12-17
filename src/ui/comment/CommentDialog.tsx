@@ -15,6 +15,7 @@ import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentDialogComment, getCommentsState, isCommentDialogConflict } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
+import { getPostingFeatures } from "state/compose/selectors";
 import { Browser } from "ui/browser";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
@@ -22,7 +23,6 @@ import { AvatarField, RichTextField } from "ui/control/field";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import "./CommentDialog.css";
-import { getPostingFeatures } from "state/compose/selectors";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
