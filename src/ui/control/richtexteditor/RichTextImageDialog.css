@@ -3,9 +3,17 @@
     flex-wrap: wrap;
 }
 
+.rich-text-image-dialog-size .col-form-label {
+    padding-top: calc(.25rem + 1px);
+}
+
 .rich-text-image-dialog-size .number-control {
     width: 7em;
     margin-right: 1em;
+}
+
+.rich-text-image-dialog-size .number-control .rw-widget-picker {
+    min-height: unset;
 }
 
 .rich-text-image-dialog-size .number-control INPUT {
