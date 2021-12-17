@@ -34,10 +34,8 @@ function CommentComposeButtons(props: Props) {
     }, [ownerName, draft, setInitialText]); // 'props' are missing on purpose
 
     const onCancel = (e: React.MouseEvent) => {
-        if (draft != null) {
-            confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
-                commentComposeCancel(draft.id), null, "danger");
-        }
+        confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
+            commentComposeCancel(), null, "danger");
         e.preventDefault();
     };
 

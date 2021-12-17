@@ -21,7 +21,7 @@ import {
     COMMENT_REACTION_LOAD,
     COMMENT_REPLY,
     COMMENT_VERIFY,
-    CommentComposeCancelAction,
+    commentComposeCancelled,
     CommentCopyLinkAction,
     CommentDeleteAction,
     commentDeleted,
@@ -338,12 +338,13 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     }
 }
 
-function* commentComposeCancelSaga(action: CommentComposeCancelAction) {
-    const {draftId} = action.payload;
+function* commentComposeCancelSaga() {
+    const draftId = yield* select(state => state.detailedPosting.compose.draft?.id);
 
     if (draftId != null) {
         yield* call(Node.deleteDraft, ":", draftId);
     }
+    yield* put(commentComposeCancelled());
 }
 
 function* commentDeleteSaga(action: CommentDeleteAction) {

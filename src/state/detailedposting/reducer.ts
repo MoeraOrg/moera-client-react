@@ -6,13 +6,7 @@ import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CLOSE_COMMENT_DIALOG,
-    COMMENT_DRAFT_LOAD,
-    COMMENT_DRAFT_LOAD_FAILED,
-    COMMENT_DRAFT_LOADED,
-    COMMENT_DRAFT_SAVE,
-    COMMENT_DRAFT_SAVE_FAILED,
-    COMMENT_DRAFT_SAVED,
-    COMMENT_COMPOSE_CANCEL,
+    COMMENT_COMPOSE_CANCELLED,
     COMMENT_DELETE,
     COMMENT_DELETE_FAILED,
     COMMENT_DELETED,
@@ -21,6 +15,12 @@ import {
     COMMENT_DIALOG_COMMENT_LOADED,
     COMMENT_DIALOG_CONFLICT,
     COMMENT_DIALOG_CONFLICT_CLOSE,
+    COMMENT_DRAFT_LOAD,
+    COMMENT_DRAFT_LOAD_FAILED,
+    COMMENT_DRAFT_LOADED,
+    COMMENT_DRAFT_SAVE,
+    COMMENT_DRAFT_SAVE_FAILED,
+    COMMENT_DRAFT_SAVED,
     COMMENT_POST,
     COMMENT_POST_FAILED,
     COMMENT_POSTED,
@@ -395,7 +395,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         case COMMENTS_SCROLLED_TO_COMPOSER:
             return immutable.set(state, "compose.focused", false);
 
-        case COMMENT_COMPOSE_CANCEL:
+        case COMMENT_COMPOSE_CANCELLED:
             return immutable.assign(state, "compose", {
                 formId: state.compose.formId + 1,
                 ...emptyCompose

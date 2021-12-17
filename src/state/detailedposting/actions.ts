@@ -191,12 +191,15 @@ export const commentsScrolledToComposer = (): CommentsScrolledToComposerAction =
 });
 
 export const COMMENT_COMPOSE_CANCEL = "COMMENT_COMPOSE_CANCEL";
-export type CommentComposeCancelAction = ActionWithPayload<typeof COMMENT_COMPOSE_CANCEL, {
-    draftId: string | null
-}>;
-export const commentComposeCancel = (draftId: string | null): CommentComposeCancelAction => ({
-    type: COMMENT_COMPOSE_CANCEL,
-    payload: {draftId}
+export type CommentComposeCancelAction = Action<typeof COMMENT_COMPOSE_CANCEL>;
+export const commentComposeCancel = (): CommentComposeCancelAction => ({
+    type: COMMENT_COMPOSE_CANCEL
+});
+
+export const COMMENT_COMPOSE_CANCELLED = "COMMENT_COMPOSE_CANCELLED";
+export type CommentComposeCancelledAction = Action<typeof COMMENT_COMPOSE_CANCELLED>;
+export const commentComposeCancelled = (): CommentComposeCancelledAction => ({
+    type: COMMENT_COMPOSE_CANCELLED
 });
 
 export const COMMENT_DRAFT_LOAD = "COMMENT_DRAFT_LOAD";
@@ -616,6 +619,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentsScrolledToCommentsAction
     | CommentsScrolledToComposerAction
     | CommentComposeCancelAction
+    | CommentComposeCancelledAction
     | CommentDraftLoadAction
     | CommentDraftLoadedAction
     | CommentDraftLoadFailedAction
