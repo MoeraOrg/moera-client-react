@@ -21,8 +21,8 @@ function singleImageHeight(image: PrivateMediaFileInfo, feedWidth: number, isCom
 
 function majorOrientation(images: PrivateMediaFileInfo[]) {
     let balance = 0;
-    for (let i = 0; i < 6; i++) {
-        balance += images[0].height < images[0].width ? 1 : -1;
+    for (let i = 0; i < 6 && i < images.length; i++) {
+        balance += images[i].height < images[i].width ? 1 : -1;
     }
     return balance >= 0 ? "vertical" : "horizontal";
 }
