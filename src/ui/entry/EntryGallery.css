@@ -1,49 +1,35 @@
-.posting .gallery {
+.entry .gallery {
     display: flex;
+}
+
+.posting .gallery {
     width: 100%;
 }
 
 .comment .gallery {
-    display: flex;
-    width: calc(min(var(--feed-width), 100vw) * 0.5);
+    width: calc(min(var(--feed-width), 100vw - 55px));
 }
 
 @media only screen and (min-width: 576px) {
-    .posting .gallery {
-        height: 650px;
-    }
-
     .comment .gallery {
-        height: 250px;
+        width: calc(min(var(--feed-width), 100vw) * 0.5);
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .comment .gallery {
+        width: calc(min(var(--feed-width), 100vw - 55px));
     }
 }
 
 .entry .gallery.horizontal {
     flex-direction: row;
-}
-
-@media only screen and (max-width: 575px) {
-    .posting .gallery.horizontal {
-        height: 75vw;
-    }
-
-    .comment .gallery.horizontal {
-        height: 25vw;
-    }
+    aspect-ratio: 9 / 6;
 }
 
 .entry .gallery.vertical {
     flex-direction: column;
-}
-
-@media only screen and (max-width: 575px) {
-    .posting .gallery.vertical {
-        height: 125vw;
-    }
-
-    .comment .gallery.vertical {
-        height: 33vw;
-    }
+    aspect-ratio: 9 / 7;
 }
 
 .entry .gallery .gallery-row {
@@ -80,7 +66,9 @@
 .entry .gallery.single {
     display: block;
     border: 1px solid var(--gray-ultralight);
+    width: unset;
     height: unset;
+    aspect-ratio: unset;
 }
 
 .entry .gallery.single .entry-image {
@@ -95,32 +83,39 @@
     margin-right: auto;
 }
 
+.posting .gallery.single .entry-image IMG {
+    max-width: calc(min(var(--feed-width), 100vw - 10px));
+}
+
 @media only screen and (min-width: 576px) {
     .posting .gallery.single .entry-image IMG {
-        max-height: min(650px, var(--image-height));
+        max-height: min(560px, var(--image-height));
     }
 
     .comment .gallery.single .entry-image IMG {
+        max-width: calc(min(var(--feed-width), 100vw) * 0.5);
         max-height: min(250px, var(--image-height));
     }
 }
 
 @media only screen and (max-width: 575px) {
     .posting .gallery.single.horizontal .entry-image IMG {
-        max-height: min(75vw, var(--image-height));
+        max-height: min(75vh, var(--image-height));
+    }
+
+    .posting .gallery.single.vertical .entry-image IMG {
+        max-height: min(100vh, var(--image-height));
+    }
+
+    .comment .gallery.single .entry-image IMG {
+        max-width: calc(min(var(--feed-width), 100vw - 55px));
     }
 
     .comment .gallery.single.horizontal .entry-image IMG {
-        max-height: min(25vw, var(--image-height));
-    }
-}
-
-@media only screen and (max-width: 575px) {
-    .posting .gallery.single.vertical .entry-image IMG {
-        max-height: min(125vw, var(--image-height));
+        max-height: min(25vh, var(--image-height));
     }
 
     .comment .gallery.single.vertical .entry-image IMG {
-        max-height: min(33vw, var(--image-height));
+        max-height: min(33vh, var(--image-height));
     }
 }
