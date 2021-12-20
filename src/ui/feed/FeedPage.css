@@ -3,12 +3,7 @@
     color: var(--gray-light);
     font-size: 4rem;
     margin-top: 5rem;
-}
-
-@media only screen and (min-width: 576px) {
-    .no-postings {
-        text-align: center;
-    }
+    text-align: center;
 }
 
 .feed-end {
