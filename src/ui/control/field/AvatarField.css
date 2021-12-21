@@ -24,10 +24,6 @@
     display: none;
 }
 
-.avatar-field .popover {
-    z-index: 1100;
-}
-
 .avatar-field .selector {
     margin: .15rem;
     display: flex;

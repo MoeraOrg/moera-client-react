@@ -1,6 +1,6 @@
 .feed-top-box {
     position: absolute;
-    z-index: 1020;
+    z-index: var(--zindex-feed-top-button);
     left: 0;
     width: 100%;
     display: block;

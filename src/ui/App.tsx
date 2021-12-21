@@ -25,6 +25,7 @@ import SourceDialog from "ui/sourcedialog/SourceDialog";
 import QuickTips from "ui/quicktips/QuickTips";
 import LightBox from "ui/lightbox/LightBox";
 import "./colors.css";
+import "./zindex.css";
 import "./App.css";
 
 const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));

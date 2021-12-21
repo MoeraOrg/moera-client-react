@@ -7,7 +7,7 @@
     color: white;
     border-radius: .35rem;
     padding: .5rem .7rem;
-    z-index: 1050;
+    z-index: var(--zindex-tooltip);
 }
 
 .flash-box.dismissing {

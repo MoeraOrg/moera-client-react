@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { DelayedPopper, DelayedPopperChildren, Manager, Reference } from "ui/control/DelayedPopper";
@@ -25,9 +26,12 @@ function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, ch
             <Reference>
                 {(ref, mainEnter, mainLeave, mainTouch) => children(ref, mainEnter, mainLeave, mainTouch)}
             </Reference>
-            <DelayedPopper placement="top" className="node-name-popover">
-                <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>
-            </DelayedPopper>
+            {ReactDOM.createPortal(
+                <DelayedPopper placement="top" className="node-name-popover">
+                    <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>
+                </DelayedPopper>,
+                document.getElementById("hovercard-root")!
+            )}
         </Manager>
     );
 }

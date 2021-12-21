@@ -1,10 +1,11 @@
 #page-header {
     position: sticky;
     top: 2.7rem;
+    height: 3.4rem;
     background-color: white;
     padding-top: .5rem;
     margin-bottom: .5rem;
-    z-index: 1010;
+    z-index: var(--zindex-page-header);
     box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14),
                 0 1px 10px 0 rgba(0, 0, 0, .12),
                 0 2px 4px -1px rgba(0, 0, 0, .2);
