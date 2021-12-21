@@ -4,7 +4,7 @@
 }
 
 .connect-dialog .instructions {
-    border: solid 1px var(--gray-ultralight);
+    border: solid 1px var(--bs-gray-200);
     border-left: solid 5px var(--bs-primary);
     border-radius: .25em;
     margin-bottom: 1em;

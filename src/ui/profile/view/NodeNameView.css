@@ -3,7 +3,7 @@
 }
 
 .node-name-view .name {
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
     margin-right: .5em;
 }
 
@@ -14,10 +14,10 @@
 }
 
 .node-name-view .menu .chevron {
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
     cursor: pointer;
 }
 
 .node-name-view .menu .chevron:hover {
-    color: var(--bs-gray-dark);
+    color: var(--bs-gray-800);
 }

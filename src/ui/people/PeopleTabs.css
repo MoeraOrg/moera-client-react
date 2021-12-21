@@ -12,11 +12,11 @@
     font-size: larger;
     margin-right: 1rem;
     white-space: nowrap;
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
 }
 
 .people-tabs .tab:hover {
-    color: var(--bs-gray-dark);
+    color: var(--bs-gray-800);
 }
 
 .people-tabs .tab.active {

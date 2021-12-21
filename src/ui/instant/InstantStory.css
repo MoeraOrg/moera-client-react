@@ -1,7 +1,7 @@
 #instants .instant {
     display: grid;
     grid-template: auto min-content / calc(40px + .25rem) auto 1.5em;
-    border-bottom: 1px solid var(--gray-ultralight);
+    border-bottom: 1px solid var(--bs-gray-200);
     overflow-wrap: anywhere;
     padding: .2rem .5rem;
     min-height: 5em;
@@ -42,7 +42,7 @@
 }
 
 #instants .instant .footer .date {
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
     margin-left: .5em;
 }
 

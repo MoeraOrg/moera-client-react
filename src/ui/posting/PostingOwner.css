@@ -17,7 +17,7 @@
 }
 
 .posting > .owner-line .owner .arrow {
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }
 
 .posting > .owner-line .owner > A {

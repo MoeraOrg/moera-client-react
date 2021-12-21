@@ -1,7 +1,7 @@
 #instants .sentinel {
     text-align: center;
     color: var(--bs-primary);
-    border-top: 1px solid var(--gray-ultralight);
+    border-top: 1px solid var(--bs-gray-200);
     cursor: pointer;
 }
 

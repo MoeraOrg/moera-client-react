@@ -11,7 +11,7 @@
 }
 
 .avatar-edit-dialog .editor {
-    border: dotted 1px var(--gray-light);
+    border: dotted 1px var(--bs-gray-400);
 }
 
 .avatar-edit-dialog .editor.drag-accept {

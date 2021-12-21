@@ -1,5 +1,5 @@
 .rich-text-editor-panel {
-    background-color: var(--gray-ultralight);
+    background-color: var(--bs-gray-200);
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
 }

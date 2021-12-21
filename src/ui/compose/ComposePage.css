@@ -6,7 +6,7 @@
 
 .composer {
     background-color: white;
-    border: var(--gray-light) 1px solid;
+    border: var(--bs-gray-400) 1px solid;
     border-radius: 5px;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -29,7 +29,7 @@
 .composer .input-resettable BUTTON {
     border: 0;
     background: transparent;
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }
 
 .composer .input-resettable BUTTON:hover {
@@ -46,7 +46,7 @@
 }
 
 .composer .text-editable:hover {
-    border-color: var(--gray-light);
+    border-color: var(--bs-gray-400);
 }
 
 .composer .text-editable.disabled:hover {
@@ -60,7 +60,7 @@
 
 .composer .body .publish-at {
     font-size: 0.8rem;
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }
 
 .features {
@@ -84,7 +84,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
     margin-bottom: .5rem;
 }
 

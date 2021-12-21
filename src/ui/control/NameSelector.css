@@ -1,5 +1,5 @@
 .name-select {
-    border: solid 1px var(--gray-light);
+    border: solid 1px var(--bs-gray-400);
     border-radius: 5px;
     max-height: 18em;
     overflow-y: auto;
@@ -21,7 +21,7 @@
 }
 
 .name-select .item ~ .item {
-    border-top: dotted 1px var(--gray-ultralight);
+    border-top: dotted 1px var(--bs-gray-200);
 }
 
 .name-select .item .body {
@@ -34,9 +34,9 @@
 }
 
 .name-select .item .name {
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }
 
 .name-select .item.selected .name {
-    color: var(--white-dark);
+    color: var(--bs-gray-100);
 }

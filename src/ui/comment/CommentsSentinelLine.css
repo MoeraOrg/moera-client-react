@@ -8,5 +8,5 @@
 
 .comments-counter {
     flex: none;
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }

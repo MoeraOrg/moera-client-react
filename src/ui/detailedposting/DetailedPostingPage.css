@@ -1,6 +1,6 @@
 .posting-not-found {
     background-color: white;
-    border: var(--gray-light) 1px solid;
+    border: var(--bs-gray-400) 1px solid;
     border-radius: 5px;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -15,5 +15,5 @@
 
 .posting-not-found .message {
     font-size: large;
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
 }

@@ -1,6 +1,6 @@
 .rich-text-editor-button {
     background-color: transparent;
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
     font-size: 1.2em;
     border: 0;
     padding: 0;
@@ -10,5 +10,5 @@
 
 .rich-text-editor-button:hover {
     background-color: var(--highlight);
-    color: var(--bs-gray-dark);
+    color: var(--bs-gray-800);
 }

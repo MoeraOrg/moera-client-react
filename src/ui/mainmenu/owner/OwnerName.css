@@ -34,5 +34,5 @@
 }
 
 #owner-name .node-name .mention {
-    color: var(--gray-light);
+    color: var(--bs-gray-400);
 }

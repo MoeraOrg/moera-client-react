@@ -1,8 +1,8 @@
 .posting-sources .title {
     font-size: smaller;
     font-weight: bold;
-    border-bottom: solid 1px var(--bs-gray-dark);
-    color: var(--bs-gray-dark);
+    border-bottom: solid 1px var(--bs-gray-800);
+    color: var(--bs-gray-800);
     margin-bottom: .3em;
 }
 
@@ -22,7 +22,7 @@
 .posting-sources .source .icon {
     display: inline-block;
     width: 1.7em;
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
 }
 
 .posting-sources .source .icon.original {

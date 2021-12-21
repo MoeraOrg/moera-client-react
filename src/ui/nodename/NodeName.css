@@ -22,6 +22,6 @@
 }
 
 .node-name .mention {
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
     font-weight: normal;
 }

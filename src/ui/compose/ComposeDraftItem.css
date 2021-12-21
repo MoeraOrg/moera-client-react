@@ -65,5 +65,5 @@
 
 .draft-selector .dropdown-item .edited {
     font-size: 90%;
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }

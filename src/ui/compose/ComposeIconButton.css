@@ -3,7 +3,7 @@
     margin-bottom: 0.7rem;
     margin-right: 0.5rem;
     font-size: 1.8rem;
-    color: var(--gray-light);
+    color: var(--bs-gray-400);
     border-radius: 3px;
     padding-left: 0.3rem;
     padding-right: 0.3rem;
@@ -12,7 +12,7 @@
 
 .composer-icon:hover {
     background-color: var(--highlight);
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
 }
 
 .composer-icon.composer-icon-active {
@@ -20,8 +20,8 @@
 }
 
 .composer-icon.composer-icon-changed {
-    color: var(--bs-gray);
-    border-bottom: solid 3px var(--bs-gray);
+    color: var(--bs-gray-600);
+    border-bottom: solid 3px var(--bs-gray-600);
     border-radius: 0;
 }
 

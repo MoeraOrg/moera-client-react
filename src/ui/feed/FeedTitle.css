@@ -1,5 +1,5 @@
 #feed-title {
-    background-color: var(--white-dark);
+    background-color: var(--bs-gray-100);
     padding: .5rem 1rem;
 }
 
@@ -28,7 +28,7 @@
 }
 
 #feed-title .mention {
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
     white-space: nowrap;
 }
 

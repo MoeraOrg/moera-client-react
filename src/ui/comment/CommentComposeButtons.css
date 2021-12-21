@@ -9,5 +9,5 @@
 
 #comment-composer .buttons .draft-saver {
     display: inline-block;
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }

@@ -13,16 +13,16 @@
     font-size: 130%;
     cursor: pointer;
     padding: 0.3rem 0.5rem;
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
 }
 
 .reactions-dialog .switch-view:hover {
     background-color: var(--highlight);
-    color: var(--bs-gray-dark);
+    color: var(--bs-gray-800);
 }
 
 .reactions-dialog .totals {
-    border-bottom: 1px var(--gray-light) solid;
+    border-bottom: 1px var(--bs-gray-400) solid;
     margin-bottom: 1rem;
 }
 
@@ -37,7 +37,7 @@
     position: relative;
     top: 5px;
     cursor: pointer;
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
 }
 
 .reactions-dialog .total-tabs .total.active {
@@ -126,7 +126,7 @@
 
 .reactions-dialog .items .item .bar-left {
     flex: none;
-    background-color: var(--gray-light);
+    background-color: var(--bs-gray-400);
 }
 
 .reactions-dialog .items .item .bar-right {
@@ -136,7 +136,7 @@
 .reactions-dialog .more {
     text-align: center;
     color: var(--bs-primary);
-    border: solid 1px var(--gray-medium);
+    border: solid 1px var(--bs-gray-500);
     padding: 0.3rem;
     cursor: pointer;
 }

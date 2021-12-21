@@ -7,12 +7,12 @@
 }
 
 .entry .menu .chevron {
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
     cursor: pointer;
 }
 
 .entry .menu .chevron:hover {
-    color: var(--bs-gray-dark);
+    color: var(--bs-gray-800);
 }
 
 .entry .menu .no-actions {

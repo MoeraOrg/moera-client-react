@@ -65,7 +65,7 @@
 .comment .content FIGCAPTION {
     line-height: 1.2;
     margin-top: .3em;
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
     margin-left: .75em;
 }
 
@@ -94,7 +94,7 @@
 }
 
 .comment .reactions-line .unsigned {
-    color: var(--gray-light);
+    color: var(--bs-gray-400);
     font-size: 90%;
     margin-left: .2em;
     padding-top: .1em;

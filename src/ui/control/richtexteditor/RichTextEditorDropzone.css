@@ -20,7 +20,7 @@
 }
 
 .rich-text-editor-dropzone .upload {
-    color: var(--bs-gray);
+    color: var(--bs-gray-600);
     text-align: center;
     line-height: 1.2;
     padding: .5em;

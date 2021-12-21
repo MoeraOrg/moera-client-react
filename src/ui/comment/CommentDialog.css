@@ -12,5 +12,5 @@
 }
 
 .comment-dialog .modal-footer .draft-saver {
-    color: var(--gray-medium);
+    color: var(--bs-gray-500);
 }

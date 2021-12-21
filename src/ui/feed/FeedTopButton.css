@@ -20,7 +20,7 @@
 }
 
 .feed-top-button {
-    background-color: var(--white-dark);
+    background-color: var(--bs-gray-100);
     color: var(--bs-info);
     display: inline-block;
     padding: .2rem .7rem;
