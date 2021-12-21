@@ -23,9 +23,8 @@ interface Props extends EmojiProps {
 export function EmojiChoice({negative, emoji, invisible, dimmed, marked, onClick}: Props) {
     const re = !negative ? REACTION_EMOJIS.positive[emoji] : REACTION_EMOJIS.negative[emoji];
     return (
-        <div className={cx("choice", {invisible})} onClick={() => onClick(negative, emoji)}>
+        <div className={cx("choice", {invisible, dimmed})} onClick={() => onClick(negative, emoji)}>
             <Twemoji key={emoji} code={emoji} title={re ? re.title : ""}/>
-            {dimmed && <div className="dimmer" title={re ? re.title : ""}/>}
             {marked && <div className="marker"><FontAwesomeIcon icon="certificate"/></div>}
         </div>
     );
