@@ -1,5 +1,11 @@
 function extractMessage(messageOrError: any): string {
-    return messageOrError instanceof Error ? messageOrError.message : String(messageOrError);
+    if (messageOrError instanceof DOMException && messageOrError.name === "AbortError") {
+        return "Request timeout";
+    }
+    if (messageOrError instanceof Error) {
+        return messageOrError.message
+    }
+    return String(messageOrError);
 }
 
 export function formatSchemaErrors(errors: {message?: string}[] | null | undefined): string {

@@ -21,6 +21,7 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
             cx(
                 "alert",
                 "alert-danger",
+                "alert-dismissible",
                 "error-pane", {
                     "error-pane-visible": visible,
                     "error-pane-hidden": !visible
