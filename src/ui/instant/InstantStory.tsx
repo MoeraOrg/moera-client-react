@@ -37,14 +37,14 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
 
     return (
         <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
-            <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="summary-avatar"
-                  onNear={onJump} onFar={onJump}>
+            <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="outer"
+                  onNear={onJump} onFar={onJump}/>
+            <div className="summary-avatar">
                 <Avatar avatar={story.summaryAvatar} ownerName={story.remoteNodeName} nodeName=":" size={36}/>
-            </Jump>
-            <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="summary"
-                  onNear={onJump} onFar={onJump}>
+            </div>
+            <div className="summary">
                 <InstantHtml html={story.summary ?? ""}/>
-            </Jump>
+            </div>
             <div className="footer">
                 <InstantIcon story={story}/>
                 <span className="date">{formatDistanceToNow(fromUnixTime(story.publishedAt))}</span>
