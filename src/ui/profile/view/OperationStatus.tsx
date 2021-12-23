@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { format, fromUnixTime } from 'date-fns';
+import { formatISO, fromUnixTime } from 'date-fns';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
@@ -37,7 +37,7 @@ function OperationStatus({status, statusUpdated, errorCode, errorMessage}: Props
         default:
             return null;
     }
-    const dateTime = statusUpdated ? " at " + format(fromUnixTime(statusUpdated), "dd-MM-yyyy HH:mm:ss") : "";
+    const date = statusUpdated ? fromUnixTime(statusUpdated) : null;
     return (
         <span className={cx(
             "naming-operation-status", {
@@ -51,7 +51,11 @@ function OperationStatus({status, statusUpdated, errorCode, errorMessage}: Props
                     Failure reason: {errorMessage ? errorMessage : errorCode}
                 </Popover>
             }
-            {dateTime}
+            {date &&
+                <>
+                    {" "}at <time dateTime={formatISO(date)}>format(date, "dd-MM-yyyy HH:mm:ss")</time>
+                </>
+            }
         </span>
     );
 }

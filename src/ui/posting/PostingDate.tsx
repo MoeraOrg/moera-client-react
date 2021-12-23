@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
+import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -27,9 +27,13 @@ function PostingDate({posting, story, timeRelative}: Props) {
     return (
         <Jump className="date" nodeName={nodeName} href={`/post/${postingId}`}>{
             timeRelative ?
-                <span title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</span>
+                <time dateTime={formatISO(date)} title={format(date, "dd-MM-yyyy HH:mm")}>
+                    {formatDistanceToNow(date)}
+                </time>
             :
-                <span title={formatDistanceToNow(date)}>{format(date, "dd-MM-yyyy HH:mm")}</span>
+                <time dateTime={formatISO(date)} title={formatDistanceToNow(date)}>
+                    {format(date, "dd-MM-yyyy HH:mm")}
+                </time>
         }</Jump>
     );
 }

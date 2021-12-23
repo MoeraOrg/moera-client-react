@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
+import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
 import { PostingInfo } from "api/node/api-types";
 import { getSetting } from "state/settings/selectors";
@@ -22,14 +22,14 @@ function PostingUpdated({posting, story, timeRelative}: Props) {
     const publishedAt = story != null ? story.publishedAt : posting.createdAt;
     const editedSoon = Math.abs(editedAt - publishedAt) < 24 * 60 * 60;
     return (
-        <span className="date">
+        <time className="date" dateTime={formatISO(date)}>
             {" "}(updated {
                 timeRelative ?
                     <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>
                 :
                     (editedSoon ? format(date, "HH:mm") : format(date, "dd-MM-yyyy HH:mm"))
             })
-        </span>
+        </time>
     );
 }
 

@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { formatDistanceToNow, fromUnixTime } from 'date-fns';
+import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
 import InstantIcon from "ui/instant/InstantIcon";
 import Jump from "ui/navigation/Jump";
@@ -35,6 +35,8 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
     const {nodeName, href} = getInstantTarget(story);
     const trackingId = story.read ? null : story.trackingId;
 
+    const publishDate = fromUnixTime(story.publishedAt);
+
     return (
         <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
             <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="outer"
@@ -47,7 +49,7 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
             </div>
             <div className="footer">
                 <InstantIcon story={story}/>
-                <span className="date">{formatDistanceToNow(fromUnixTime(story.publishedAt))}</span>
+                <time className="date" dateTime={formatISO(publishDate)}>{formatDistanceToNow(publishDate)}</time>
             </div>
             <div className="sidebar">
                 <span className="envelope" title={story.read ? "Mark as Unread" : "Mark as Read"}

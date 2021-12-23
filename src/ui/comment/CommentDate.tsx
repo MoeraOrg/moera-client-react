@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
+import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
 import { ClientState } from "state/state";
 import { CommentInfo } from "api/node/api-types";
@@ -16,9 +16,10 @@ type Props = {
 function CommentDate({nodeName, postingId, comment}: Props) {
     const date = fromUnixTime(comment.createdAt);
     return (
-        <Jump className="date" nodeName={nodeName} title={format(date, "dd-MM-yyyy HH:mm")}
-              href={`/post/${postingId}?comment=${comment.id}`}>
-            {formatDistanceToNow(date)}
+        <Jump nodeName={nodeName} href={`/post/${postingId}?comment=${comment.id}`} className="date">
+            <time dateTime={formatISO(date)} title={format(date, "dd-MM-yyyy HH:mm")}>
+                {formatDistanceToNow(date)}
+            </time>
         </Jump>
     );
 }

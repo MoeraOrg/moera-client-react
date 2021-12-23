@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { format } from 'date-fns';
+import { format, formatISO } from 'date-fns';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
@@ -43,7 +43,7 @@ function ComposePublishAt({postingId, draftId}: Props) {
         :
             <div className={cx("text-editable", {"disabled": postingId != null})}
                  onClick={postingId == null ? onEdit : undefined}>
-                <span className="publish-at">{format(value, "dd-MM-yyyy HH:mm")}</span>
+                <time className="publish-at" dateTime={formatISO(value)}>{format(value, "dd-MM-yyyy HH:mm")}</time>
                 {postingId == null && <ComposeTextEditableIcon/>}
             </div>
     );

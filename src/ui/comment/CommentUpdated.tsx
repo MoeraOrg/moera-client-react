@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
+import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
 import { ClientState } from "state/state";
 import { CommentInfo } from "api/node/api-types";
@@ -16,9 +16,9 @@ function CommentUpdated({comment}: Props) {
 
     const date = fromUnixTime(comment.editedAt ?? comment.createdAt);
     return (
-        <span className="date">
+        <time className="date" dateTime={formatISO(date)}>
             {" "}(updated <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>)
-        </span>
+        </time>
     );
 }
 
