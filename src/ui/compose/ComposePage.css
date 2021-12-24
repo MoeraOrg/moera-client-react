@@ -26,6 +26,14 @@
     display: inline-block;
 }
 
+.composer .react-datepicker-wrapper {
+    width: unset;
+}
+
+.composer .react-datepicker__tab-loop ~ BUTTON {
+    display: none;
+}
+
 .composer .input-resettable BUTTON {
     border: 0;
     background: transparent;
