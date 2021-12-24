@@ -2,7 +2,14 @@ import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
 
 import { ClientSettings } from "api";
-import { AvatarImage, PostingFeatures, PostingText, SourceFormat, StoryAttributes } from "api/node/api-types";
+import {
+    AvatarImage,
+    FeedReference,
+    PostingFeatures,
+    PostingText,
+    SourceFormat,
+    StoryAttributes
+} from "api/node/api-types";
 import { RichTextValue } from "ui/control";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
@@ -41,34 +48,48 @@ export interface MapToPostingTextProps {
 
 const composePageLogic = {
 
+    // Note that this == undefined, when called from Formik
     mapPropsToValues(props: ComposePageOuterProps): ComposePageValues {
-        const avatar = props.posting != null ? (props.posting.ownerAvatar ?? null) : props.avatarDefault;
-        const fullName = props.posting != null ? (props.posting.ownerFullName ?? null) : props.fullNameDefault;
-        const subject = props.posting != null ? (props.posting.bodySrc?.subject ?? "") : "";
-        const bodyFormat = props.posting != null
-            ? (props.posting.bodySrcFormat ?? "markdown")
-            : props.sourceFormatDefault;
-        const body = props.posting != null
-            ? (props.posting.bodySrc?.text ?? "")
-            : (props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "");
-        const media = props.posting != null && props.posting.media != null
-            ? props.posting.media.map(mf => mf.media ?? null)
-            : [];
+        const avatar = props.draft != null
+            ? props.draft.ownerAvatar ?? null
+            : props.posting != null ? props.posting.ownerAvatar ?? null : props.avatarDefault;
+        const fullName = props.draft != null
+            ? props.draft.ownerFullName ?? null
+            : props.posting != null ? props.posting.ownerFullName ?? null : props.fullNameDefault;
+        const subject = props.draft != null
+            ? props.draft.bodySrc?.subject ?? ""
+            : props.posting != null ? props.posting.bodySrc?.subject ?? "" : "";
+        const bodyFormat = props.draft != null
+            ? props.draft.bodySrcFormat ?? "markdown"
+            : props.posting != null ? props.posting.bodySrcFormat ?? "markdown" : props.sourceFormatDefault;
+        const body = props.draft != null
+            ? props.draft.bodySrc?.text ?? ""
+            : props.posting != null
+                ? props.posting.bodySrc?.text ?? ""
+                : props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "";
+        const media = props.draft != null
+            ? (props.draft.media != null ? props.draft.media.map(mf => mf.media ?? null) : [])
+            : props.posting?.media != null ? props.posting?.media.map(mf => mf.media ?? null) : [];
         const publishAtDefault = new Date();
-        const publishAt = props.draftId != null && props.posting?.publishAt != null
-            ? fromUnixTime(props.posting?.publishAt) : publishAtDefault;
-        const reactionsPositive = props.posting != null
-            ? (props.posting.acceptedReactions?.positive ?? "") : props.reactionsPositiveDefault;
-        const reactionsNegative = props.posting != null
-            ? (props.posting.acceptedReactions?.negative ?? "") : props.reactionsNegativeDefault;
-        const reactionsVisible = props.posting != null
-            ? (props.posting.reactionsVisible ?? true) : props.reactionsVisibleDefault;
-        const reactionTotalsVisible = props.posting != null
-            ? (props.posting.reactionTotalsVisible ?? true) : props.reactionTotalsVisibleDefault;
-        const updateImportant = props.draftId != null
-            ? (props.posting?.updateInfo?.important ?? false): false;
-        const updateDescription = props.draftId != null
-            ? (props.posting?.updateInfo?.description ?? ""): "";
+        const publishAt = props.draft != null
+            ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)
+            : props.posting != null
+                ? composePageLogic._getPublishAt(props.posting.feedReferences) ?? publishAtDefault
+                : publishAtDefault;
+        const reactionsPositive = props.draft != null
+            ? props.draft.acceptedReactions?.positive ?? ""
+            : props.posting != null ? props.posting.acceptedReactions?.positive ?? "" : props.reactionsPositiveDefault;
+        const reactionsNegative = props.draft != null
+            ? props.draft.acceptedReactions?.negative ?? ""
+            : props.posting != null ? props.posting.acceptedReactions?.negative ?? "" : props.reactionsNegativeDefault;
+        const reactionsVisible = props.draft != null
+            ? props.draft.reactionsVisible ?? true
+            : props.posting != null ? props.posting.reactionsVisible ?? true : props.reactionsVisibleDefault;
+        const reactionTotalsVisible = props.draft != null
+            ? props.draft.reactionTotalsVisible ?? true
+            : props.posting != null ? props.posting.reactionTotalsVisible ?? true : props.reactionTotalsVisibleDefault;
+        const updateImportant = props.draft != null ? props.draft.updateInfo?.important ?? false : false;
+        const updateDescription = props.draft != null ? props.draft.updateInfo?.description ?? "" : "";
 
         return {
             avatar,
@@ -94,8 +115,8 @@ const composePageLogic = {
         };
     },
 
-    getPublishAt: (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
-        publications != null && publications.length > 0 ? publications[0].publishAt : null,
+    _getPublishAt: (publications: FeedReference[] | null | undefined): Date | null =>
+        publications != null && publications.length > 0 ? fromUnixTime(publications[0].publishedAt) : null,
 
     _getSharedText(props: ComposePageOuterProps, format: SourceFormat): string {
         let content;

@@ -37,11 +37,11 @@ const commentComposeLogic = {
 
     mapPropsToValues(props: MapToValuesProps): CommentComposeValues {
         const avatar = props.draft != null
-            ? (props.draft.ownerAvatar ?? null)
-            : (props.comment != null ? (props.comment.ownerAvatar ?? null) : props.avatarDefault);
+            ? props.draft.ownerAvatar ?? null
+            : props.comment != null ? props.comment.ownerAvatar ?? null : props.avatarDefault;
         const body = props.draft != null
-            ? (props.draft.bodySrc?.text ?? "")
-            : (props.comment != null ? (props.comment.bodySrc?.text ?? "") : "");
+            ? props.draft.bodySrc?.text ?? ""
+            : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
         const media: (RichTextMedia | null)[] = props.draft != null
             ? (props.draft.media != null
                 ? props.draft.media.map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} : null)

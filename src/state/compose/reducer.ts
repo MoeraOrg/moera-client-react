@@ -95,17 +95,6 @@ function appendToDraftList(draftList: ExtDraftInfo[], draftInfo: DraftInfo): Ext
     return sortDraftList(list);
 }
 
-function draftToDraftPosting(draft: DraftInfo): DraftPostingInfo {
-    return immutable.wrap(draft)
-        .set("id", draft.receiverPostingId ?? undefined)
-        .set("subjectHtml", subjectHtml(draft.body.subject))
-        .update("body.text", text => safeHtml(text))
-        .del("draftType")
-        .del("receiverName")
-        .del("receiverPostingId")
-        .value() as any as DraftPostingInfo;
-}
-
 function postingToDraftPosting(posting: PostingInfo): DraftPostingInfo {
     return immutable.wrap(posting)
         .set("subjectHtml", subjectHtml(posting.body.subject))
@@ -209,7 +198,6 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 ...state,
                 draftId: action.payload.draft.id,
                 draft: buildDraftInfo(action.payload.draft),
-                posting: draftToDraftPosting(action.payload.draft),
                 loadingDraft: false,
                 loadingPosting: false
             };

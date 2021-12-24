@@ -6,9 +6,7 @@ export interface ExtDraftInfo extends DraftInfo {
     subjectHtml: string | null;
 }
 
-export type DraftPostingInfo = Omit<PostingInfo, "id"> & {
-    id?: string | null;
-    publishAt?: number | null;
+export interface DraftPostingInfo extends PostingInfo {
     subjectHtml: string | null;
 }
 

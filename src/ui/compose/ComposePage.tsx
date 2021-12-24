@@ -52,7 +52,8 @@ class ComposePage extends React.PureComponent<Props, State> {
         if ((this.props.posting != null && prevProps.posting == null)
             || (this.props.posting == null && prevProps.posting != null)
             || (this.props.avatarDefault != null && prevProps.avatarDefault == null)
-            || (this.props.draftId == null && prevProps.draftId != null)
+            || (this.props.draft != null && prevProps.draft == null)
+            || (this.props.draft == null && prevProps.draft != null)
             || (this.props.sharedText != null && prevProps.sharedText == null)) {
             const values = composePageLogic.mapPropsToValues(this.props);
             this.setState({initialPostingText: composePageLogic.mapValuesToPostingText(values, this.props)});
@@ -142,9 +143,10 @@ const connector = connect(
         features: getPostingFeatures(state),
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,
+        posting: state.compose.posting,
         loadingDraft: state.compose.loadingDraft,
         draftId: state.compose.draftId,
-        posting: state.compose.posting,
+        draft: state.compose.draft,
         conflict: state.compose.conflict,
         beingPosted: state.compose.beingPosted,
         sharedText: state.compose.sharedText,

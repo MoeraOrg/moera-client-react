@@ -10,7 +10,7 @@ import "./ComposeResetButton.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function ComposeResetButton({postingId, draftId, posting, confirmBox}: Props) {
+function ComposeResetButton({postingId, draftId, confirmBox}: Props) {
     if (draftId == null) {
         return null;
     }
@@ -32,9 +32,6 @@ function ComposeResetButton({postingId, draftId, posting, confirmBox}: Props) {
             </Button>
         );
     } else {
-        if (posting == null) {
-            return null;
-        }
         return (
             <Button variant="info" className="reset-button" onClick={onClick}>
                 <FontAwesomeIcon icon="undo-alt"/>
@@ -47,8 +44,7 @@ function ComposeResetButton({postingId, draftId, posting, confirmBox}: Props) {
 const connector = connect(
     (state: ClientState) => ({
         postingId: state.compose.postingId,
-        draftId: state.compose.draftId,
-        posting: state.compose.posting
+        draftId: state.compose.draftId
     }),
     { confirmBox }
 );
