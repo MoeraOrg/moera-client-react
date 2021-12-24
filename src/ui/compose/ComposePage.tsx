@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 
@@ -36,110 +36,94 @@ export type ComposePageOuterProps = ConnectedProps<typeof connector>;
 
 type Props = ComposePageOuterProps & FormikProps<ComposePageValues>;
 
-interface State {
-    initialPostingText: PostingText;
-}
+function ComposePage(props: Props) {
+    const {
+        avatarDefault, loadingFeatures, features, loadingPosting, postingId, posting, loadingDraft, draft, conflict,
+        beingPosted, sharedText, smileysEnabled, composeConflictClose, values, resetForm
+    } = props;
+    const [initialPostingText, setInitialPostingText] = useState<PostingText>({bodySrc: ""});
 
-class ComposePage extends React.PureComponent<Props, State> {
+    useEffect(() => {
+        const values = composePageLogic.mapPropsToValues(props);
+        setInitialPostingText(composePageLogic.mapValuesToPostingText(values, props));
+        resetForm({values});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [posting, avatarDefault, draft, sharedText, setInitialPostingText]); // 'props' are missing on purpose
 
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.state = {initialPostingText: {bodySrc: ""}};
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
-        if ((this.props.posting != null && prevProps.posting == null)
-            || (this.props.posting == null && prevProps.posting != null)
-            || (this.props.avatarDefault != null && prevProps.avatarDefault == null)
-            || (this.props.draft != null && prevProps.draft == null)
-            || (this.props.draft == null && prevProps.draft != null)
-            || (this.props.sharedText != null && prevProps.sharedText == null)) {
-            const values = composePageLogic.mapPropsToValues(this.props);
-            this.setState({initialPostingText: composePageLogic.mapValuesToPostingText(values, this.props)});
-            this.props.resetForm({values});
-        }
-    }
-
-    render() {
-        const {loadingFeatures, features, loadingPosting, postingId, loadingDraft, conflict, beingPosted,
-            smileysEnabled, composeConflictClose, values} = this.props;
-        const title = postingId == null ? "New Post" : "Edit Post";
-        const loadingContent = loadingPosting || loadingDraft;
-        const sourceFormats = features?.sourceFormats ?? [];
-        const submitDisabled = composePageLogic.areValuesEmpty(values);
-        return (
-            <>
-                <PageHeader>
-                    <h2>
-                        {title}
-                        {postingId != null &&
-                            <Jump className="btn btn-sm btn-outline-secondary ms-3" href={`/post/${postingId}`}>
-                                &larr; Post
-                            </Jump>
+    const title = postingId == null ? "New Post" : "Edit Post";
+    const loadingContent = loadingPosting || loadingDraft;
+    const sourceFormats = features?.sourceFormats ?? [];
+    const submitDisabled = composePageLogic.areValuesEmpty(values);
+    return (
+        <>
+            <PageHeader>
+                <h2>
+                    {title}
+                    {postingId != null &&
+                        <Jump className="btn btn-sm btn-outline-secondary ms-3" href={`/post/${postingId}`}>
+                            &larr; Post
+                        </Jump>
+                    }
+                    <Loading active={loadingFeatures || loadingContent}/>
+                </h2>
+            </PageHeader>
+            <Page className="compose-page">
+                <div className="composer">
+                    <Form>
+                        <ConflictWarning text="The post was edited by somebody." show={conflict}
+                                         onClose={composeConflictClose}/>
+                        <div className="info">
+                            <AvatarField name="avatar" size={56}/>
+                            <div className="body">
+                                <ComposeFullName/>
+                                <ComposePublishAt/>
+                            </div>
+                        </div>
+                        {features?.subjectPresent &&
+                            <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
                         }
-                        <Loading active={loadingFeatures || loadingContent}/>
-                    </h2>
-                </PageHeader>
-                <Page className="compose-page">
-                    <div className="composer">
-                        <Form>
-                            <ConflictWarning text="The post was edited by somebody." show={conflict}
-                                             onClose={composeConflictClose}/>
-                            <div className="info">
-                                <AvatarField name="avatar" size={56}/>
-                                <div className="body">
-                                    <ComposeFullName/>
-                                    <ComposePublishAt/>
-                                </div>
+                        <RichTextField name="body" disabled={loadingContent || beingPosted}
+                                       format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
+                                       features={features} nodeName="" anyValue autoFocus/>
+                        <ComposeFormattingHelp/>
+
+                        <ComposeBodyFormat sourceFormats={sourceFormats}/>
+                        <ComposeReactions/>
+                        <ComposeUpdateInfo/>
+
+                        <div className="features">
+                            <div className="feature-buttons">
+                                <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
+                                <ComposeReactionsButton/>
+                                {postingId != null &&
+                                    <ComposeUpdateInfoButton/>
+                                }
                             </div>
-                            {features?.subjectPresent &&
-                                <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
-                            }
-                            <RichTextField name="body" disabled={loadingContent || beingPosted}
-                                           format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
-                                           features={features} nodeName="" anyValue autoFocus/>
-                            <ComposeFormattingHelp/>
-
-                            <ComposeBodyFormat sourceFormats={sourceFormats}/>
-                            <ComposeReactions/>
-                            <ComposeUpdateInfo/>
-
-                            <div className="features">
-                                <div className="feature-buttons">
-                                    <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
-                                    <ComposeReactionsButton/>
-                                    {postingId != null &&
-                                        <ComposeUpdateInfoButton/>
-                                    }
-                                </div>
-                                <div className="drafts">
-                                    <ComposeDraftSaver initialText={this.state.initialPostingText}/>
-                                    <ComposeResetButton/>
-                                    <ComposeDraftSelector/>
-                                </div>
+                            <div className="drafts">
+                                <ComposeDraftSaver initialText={initialPostingText}/>
+                                <ComposeResetButton/>
+                                <ComposeDraftSelector/>
                             </div>
+                        </div>
 
-                            <div className="form-buttons">
-                                <ComposePreviewButton disabled={submitDisabled}/>
-                                <ComposeSubmitButton loading={beingPosted} update={postingId != null}
-                                                     disabled={submitDisabled}/>
-                            </div>
-                        </Form>
-                    </div>
-                    <ComposePreviewDialog/>
-                </Page>
-            </>
-        );
-    }
-
+                        <div className="form-buttons">
+                            <ComposePreviewButton disabled={submitDisabled}/>
+                            <ComposeSubmitButton loading={beingPosted} update={postingId != null}
+                                                 disabled={submitDisabled}/>
+                        </div>
+                    </Form>
+                </div>
+                <ComposePreviewDialog/>
+            </Page>
+        </>
+    );
 }
 
 const connector = connect(
     (state: ClientState) => ({
-        loadingFeatures: state.compose.loadingFeatures,
         avatarDefault: getHomeOwnerAvatar(state),
         fullNameDefault: getHomeOwnerFullName(state),
+        loadingFeatures: state.compose.loadingFeatures,
         features: getPostingFeatures(state),
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,
