@@ -6,6 +6,7 @@ import {
     AvatarImage,
     FeedReference,
     PostingFeatures,
+    PostingInfo,
     PostingText,
     SourceFormat,
     StoryAttributes
@@ -14,6 +15,7 @@ import { RichTextValue } from "ui/control";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
+import deepEqual from "react-fast-compare";
 
 export interface ComposePageValues {
     avatar: AvatarImage | null;
@@ -187,6 +189,23 @@ const composePageLogic = {
         }
         const mediaEmpty = postingText.media == null || postingText.media.length === 0;
         return textEmpty && mediaEmpty;
+    },
+
+    isPostingTextChanged(postingText: PostingText, posting: PostingInfo | null) {
+        if (posting == null) {
+            return !this.isPostingTextEmpty(postingText);
+        }
+        if (postingText.bodySrc == null || posting.bodySrc == null) {
+            return (postingText.bodySrc == null) !== (posting.bodySrc == null);
+        }
+        const {subject, text} = JSON.parse(postingText.bodySrc);
+        const {subject: prevSubject, text: prevText} = posting.bodySrc;
+        if (subject !== prevSubject || text !== prevText) {
+            return true;
+        }
+        const media = postingText.media ?? [];
+        const prevMedia = posting.media != null ? posting.media.map(ma => ma.media?.id ?? ma.remoteMedia?.id) : [];
+        return !deepEqual(media, prevMedia);
     },
 
     handleSubmit(values: ComposePageValues, formik: FormikBag<ComposePageOuterProps, ComposePageValues>): void {

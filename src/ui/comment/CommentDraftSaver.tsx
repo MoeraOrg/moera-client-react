@@ -12,7 +12,7 @@ import {
     getCommentDialogComment,
     getCommentsState
 } from "state/detailedposting/selectors";
-import { commentDraftSave } from "state/detailedposting/actions";
+import { commentComposeCancel, commentDialogCommentReset, commentDraftSave } from "state/detailedposting/actions";
 import { RichTextMedia } from "state/richtexteditor/actions";
 import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
@@ -24,46 +24,58 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-const commentDraftSaverLogic = {
+const toDraftText = (ownerName: string, postingId: string, commentId: string | null,
+                     commentText: CommentText, media: Map<string, RichTextMedia>): DraftText => ({
+    ...cloneDeep(commentText),
+    media: commentText.media?.map(id => ({
+        id,
+        hash: media.get(id)?.hash,
+        digest: media.get(id)?.digest
+    })),
+    receiverName: ownerName,
+    draftType: commentId == null ? "new-comment" : "comment-update",
+    receiverPostingId: postingId,
+    receiverCommentId: commentId ?? null /* important, should not be undefined */
+} as DraftText);
 
-    toText: (values: CommentComposeValues, props: Props): CommentText | null =>
-        commentComposeLogic.mapValuesToCommentText(values, props),
+const ComposeDraftSaver = (props: Props) => {
+    const {
+        initialText, savingDraft, savedDraft, ownerName, receiverPostingId, commentId, comment, draft, commentDraftSave,
+        commentComposeCancel, commentDialogCommentReset
+    } = props;
 
-    isEmpty: (commentText: CommentText): boolean =>
-        commentComposeLogic.isCommentTextEmpty(commentText),
+    const toText = (values: CommentComposeValues): CommentText | null =>
+        commentComposeLogic.mapValuesToCommentText(values, props);
 
-    toDraftText: (ownerName: string, postingId: string, commentId: string | null,
-                  commentText: CommentText, media: Map<string, RichTextMedia>): DraftText => ({
-        ...cloneDeep(commentText),
-        media: commentText.media?.map(id => ({
-            id,
-            hash: media.get(id)?.hash,
-            digest: media.get(id)?.digest
-        })),
-        receiverName: ownerName,
-        draftType: commentId == null ? "new-comment" : "comment-update",
-        receiverPostingId: postingId,
-        receiverCommentId: commentId ?? null /* important, should not be undefined */
-    } as DraftText),
+    const isChanged = (commentText: CommentText): boolean =>
+        commentComposeLogic.isCommentTextChanged(commentText, comment);
 
-    save: (text: CommentText, values: CommentComposeValues, props: Props): void => {
-        if (props.ownerName != null && props.receiverPostingId != null) {
+    const save = (text: CommentText, values: CommentComposeValues): void => {
+        if (ownerName != null && receiverPostingId != null) {
             const media = new Map(
                 (values.body.media ?? [])
                     .filter((rm): rm is RichTextMedia => rm != null)
                     .map(rm => [rm.id, rm])
             );
-            props.commentDraftSave(props.draft?.id ?? null,
-                commentDraftSaverLogic.toDraftText(props.ownerName, props.receiverPostingId, props.commentId,
-                    text, media));
+            commentDraftSave(draft?.id ?? null, toDraftText(ownerName, receiverPostingId, commentId, text, media));
+        }
+    };
+
+    const drop = (): void => {
+        if (commentId != null) {
+            if (draft?.id != null) {
+                commentDialogCommentReset(draft.id, false);
+            }
+        } else {
+            commentComposeCancel();
         }
     }
 
+    return (
+        <DraftSaver initialText={initialText} savingDraft={savingDraft} savedDraft={savedDraft} toText={toText}
+                    isChanged={isChanged} save={save} drop={drop}/>
+    );
 }
-
-const ComposeDraftSaver = (props: Props) => (
-    <DraftSaver logic={commentDraftSaverLogic} {...props}/>
-);
 
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
@@ -73,6 +85,7 @@ const connector = connect(
         repliedToId: ownProps.commentId == null
             ? getCommentComposerRepliedToId(state)
             : getCommentDialogComment(state)?.repliedTo?.id ?? null,
+        comment: ownProps.commentId != null ? state.detailedPosting.commentDialog.comment : null,
         draft: ownProps.commentId == null
             ? state.detailedPosting.compose.draft
             : state.detailedPosting.commentDialog.draft,
@@ -87,7 +100,7 @@ const connector = connect(
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat
     }),
-    { commentDraftSave }
+    { commentDraftSave, commentComposeCancel, commentDialogCommentReset }
 );
 
 export default connector(ComposeDraftSaver);

@@ -26,6 +26,7 @@ export interface ComposeState {
     savedDraft: boolean;
     sharedText: string | null;
     sharedTextType: SharedTextType | null;
+    formId: number;
     draftList: ExtDraftInfo[];
     loadingDraftList: boolean;
     loadedDraftList: boolean;

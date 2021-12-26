@@ -423,15 +423,6 @@ export const closeCommentDialog = (): CloseCommentDialogAction => ({
     type: CLOSE_COMMENT_DIALOG
 });
 
-export const CANCEL_COMMENT_DIALOG = "CANCEL_COMMENT_DIALOG";
-export type CancelCommentDialogAction = ActionWithPayload<typeof CANCEL_COMMENT_DIALOG, {
-    draftId: string | null;
-}>;
-export const cancelCommentDialog = (draftId: string | null): CancelCommentDialogAction => ({
-    type: CANCEL_COMMENT_DIALOG,
-    payload: {draftId}
-});
-
 export const COMMENT_DIALOG_COMMENT_LOAD = "COMMENT_DIALOG_COMMENT_LOAD";
 export type CommentDialogCommentLoadAction = Action<typeof COMMENT_DIALOG_COMMENT_LOAD>;
 export const commentDialogCommentLoad = (): CommentDialogCommentLoadAction => ({
@@ -451,6 +442,17 @@ export const COMMENT_DIALOG_COMMENT_LOAD_FAILED = "COMMENT_DIALOG_COMMENT_LOAD_F
 export type CommentDialogCommentLoadFailedAction = Action<typeof COMMENT_DIALOG_COMMENT_LOAD_FAILED>;
 export const commentDialogCommentLoadFailed = (): CommentDialogCommentLoadFailedAction => ({
     type: COMMENT_DIALOG_COMMENT_LOAD_FAILED
+});
+
+export const COMMENT_DIALOG_COMMENT_RESET = "COMMENT_DIALOG_COMMENT_RESET";
+export type CommentDialogCommentResetAction = ActionWithPayload<typeof COMMENT_DIALOG_COMMENT_RESET, {
+    draftId: string | null;
+    closeDialog: boolean;
+}>;
+export const commentDialogCommentReset = (draftId: string | null,
+                                          closeDialog: boolean): CommentDialogCommentResetAction => ({
+    type: COMMENT_DIALOG_COMMENT_RESET,
+    payload: {draftId, closeDialog}
 });
 
 export const COMMENT_DIALOG_CONFLICT = "COMMENT_DIALOG_CONFLICT";
@@ -642,7 +644,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentCopyLinkAction
     | OpenCommentDialogAction
     | CloseCommentDialogAction
-    | CancelCommentDialogAction
+    | CommentDialogCommentResetAction
     | CommentDialogCommentLoadAction
     | CommentDialogCommentLoadedAction
     | CommentDialogCommentLoadFailedAction

@@ -5,8 +5,8 @@ import * as textFieldEdit from 'text-field-edit';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
-    CANCEL_COMMENT_DIALOG,
-    CancelCommentDialogAction,
+    COMMENT_DIALOG_COMMENT_RESET,
+    CommentDialogCommentResetAction,
     closeCommentDialog,
     COMMENT_COMPOSE_CANCEL,
     COMMENT_COPY_LINK,
@@ -109,7 +109,7 @@ export default [
     executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
     executor(COMMENT_COPY_LINK, null, commentCopyLinkSaga),
     executor(COMMENT_DIALOG_COMMENT_LOAD, "", commentDialogCommentLoadSaga),
-    executor(CANCEL_COMMENT_DIALOG, "", cancelCommentDialogSaga),
+    executor(COMMENT_DIALOG_COMMENT_RESET, "", commentDialogCommentResetSaga),
     executor(COMMENT_VERIFY, payload => payload.commentId, commentVerifySaga),
     executor(COMMENT_REACT, null, introduce(commentReactSaga)),
     executor(
@@ -424,10 +424,12 @@ function* commentDialogCommentLoadSaga() {
     }
 }
 
-function* cancelCommentDialogSaga(action: CancelCommentDialogAction) {
-    const {draftId} = action.payload;
+function* commentDialogCommentResetSaga(action: CommentDialogCommentResetAction) {
+    const {draftId, closeDialog} = action.payload;
 
-    yield* put(closeCommentDialog());
+    if (closeDialog) {
+        yield* put(closeCommentDialog());
+    }
     if (draftId != null) {
         yield* call(Node.deleteDraft, ":", draftId);
     }

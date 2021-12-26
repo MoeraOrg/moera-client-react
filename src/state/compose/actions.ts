@@ -138,9 +138,12 @@ export const composeDraftSaveFailed = (): ComposeDraftSaveFailedAction => ({
 });
 
 export const COMPOSE_DRAFT_UNSET = "COMPOSE_DRAFT_UNSET";
-export type ComposeDraftUnsetAction = Action<typeof COMPOSE_DRAFT_UNSET>;
-export const composeDraftUnset = (): ComposeDraftUnsetAction => ({
-    type: COMPOSE_DRAFT_UNSET
+export type ComposeDraftUnsetAction = ActionWithPayload<typeof COMPOSE_DRAFT_UNSET, {
+    resetForm: boolean;
+}>;
+export const composeDraftUnset = (resetForm: boolean): ComposeDraftUnsetAction => ({
+    type: COMPOSE_DRAFT_UNSET,
+    payload: {resetForm}
 });
 
 export const COMPOSE_DRAFT_LIST_LOAD = "COMPOSE_DRAFT_LIST_LOAD";
@@ -211,9 +214,12 @@ export const composeDraftListItemDeleted = (id: string): ComposeDraftListItemDel
 });
 
 export const COMPOSE_UPDATE_DRAFT_DELETE = "COMPOSE_UPDATE_DRAFT_DELETE";
-export type ComposeUpdateDraftDeleteAction = Action<typeof COMPOSE_UPDATE_DRAFT_DELETE>;
-export const composeUpdateDraftDelete = (): ComposeUpdateDraftDeleteAction => ({
-    type: COMPOSE_UPDATE_DRAFT_DELETE
+export type ComposeUpdateDraftDeleteAction = ActionWithPayload<typeof COMPOSE_UPDATE_DRAFT_DELETE, {
+    resetForm: boolean
+}>;
+export const composeUpdateDraftDelete = (resetForm: boolean): ComposeUpdateDraftDeleteAction => ({
+    type: COMPOSE_UPDATE_DRAFT_DELETE,
+    payload: {resetForm}
 });
 
 export const COMPOSE_PREVIEW = "COMPOSE_PREVIEW";

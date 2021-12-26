@@ -6,7 +6,7 @@ import * as textFieldEdit from 'text-field-edit';
 import { CommentText, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
 import {
-    cancelCommentDialog,
+    commentDialogCommentReset,
     closeCommentDialog,
     commentDialogConflictClose,
     commentPost
@@ -71,7 +71,7 @@ function CommentDialog(props: Props) {
             closeCommentDialog();
         } else {
             confirmBox("Do you really want to forget the changes?", "Forget", "Cancel",
-                cancelCommentDialog(draft.id), null, "danger");
+                commentDialogCommentReset(draft.id, true), null, "danger");
         }
         event.preventDefault();
     };

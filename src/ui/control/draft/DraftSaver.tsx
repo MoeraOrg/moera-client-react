@@ -4,55 +4,47 @@ import debounce from 'lodash.debounce';
 import deepEqual from 'react-fast-compare';
 import "./DraftSaver.css";
 
-interface Logic<Text, Values, OuterProps> {
-    toText: (values: Values, props: OuterProps) => Text | null;
-    isEmpty: (text: Text) => boolean;
-    save: (text: Text, values: Values, props: OuterProps) => void;
-}
-
-interface LogicProp<Text, Values, OuterProps> {
-    logic: Logic<Text, Values, OuterProps>;
-}
-
-interface DraftSaverProps<Text> {
+interface DraftSaverProps<Text, Values> {
     initialText: Text;
     savingDraft: boolean;
     savedDraft: boolean;
+    toText: (values: Values) => Text | null;
+    isChanged: (text: Text) => boolean;
+    save: (text: Text, values: Values) => void;
+    drop: () => void;
 }
 
-export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text>>
-                          (props: OuterProps & LogicProp<Text, Values, OuterProps>) {
-    const {logic, initialText, savingDraft, savedDraft} = props;
+export function DraftSaver<Text, Values>(props: DraftSaverProps<Text, Values>) {
+    const {initialText, savingDraft, savedDraft, toText, isChanged, save, drop} = props;
 
     const [, setPrevText] = useState<Text>(initialText);
-    const [dirty, setDirty] = useState<boolean>(false);
     const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
     const {status, values} = useFormikContext<Values>();
-
-    useEffect(
-        () => setDirty(false),
-        [initialText]
-    );
 
     const statusRef = useRef<string>();
     statusRef.current = status;
     const valuesRef = useRef<Values>();
     valuesRef.current = values;
-    const dirtyRef = useRef<boolean>();
-    dirtyRef.current = dirty;
+    const savingDraftRef = useRef<boolean>();
+    savingDraftRef.current = savingDraft;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onSave = useCallback(debounce(() => {
-        if (statusRef.current === "submitted" || valuesRef.current == null) {
-            return;
-        }
-        const thisText = logic.toText(valuesRef.current, props);
-        if (thisText == null || (logic.isEmpty(thisText) && !dirtyRef.current) || savingDraft) {
-            return;
-        }
-        setDirty(true);
-        logic.save(thisText, valuesRef.current, props);
-        setUnsavedChanges(false);
-    }, 1500, {maxWait: 10000}), [statusRef, valuesRef, dirtyRef, props, setUnsavedChanges]);
+    const onSave = useCallback(
+        debounce(() => {
+            if (statusRef.current === "submitted" || valuesRef.current == null) {
+                return;
+            }
+            const thisText = toText(valuesRef.current);
+            if (thisText == null || savingDraftRef.current) {
+                return;
+            }
+            if (isChanged(thisText)) {
+                save(thisText, valuesRef.current);
+            } else {
+                drop();
+            }
+            setUnsavedChanges(false);
+        }, 1500, {maxWait: 10000}),
+    [statusRef, valuesRef, savingDraftRef, toText, isChanged, save, drop, setUnsavedChanges]);
 
     useEffect(() => {
         return () => {
@@ -62,19 +54,17 @@ export function DraftSaver<Text, Values, OuterProps extends DraftSaverProps<Text
 
     useEffect(() => {
         setPrevText(prevText => {
-            const thisText = logic.toText(values, props);
+            const thisText = toText(values);
             if (thisText == null) {
                 return prevText;
             }
-            if (!deepEqual(prevText, thisText) && (!deepEqual(initialText, thisText) || dirty)) {
+            if (!deepEqual(prevText, thisText)) {
                 setUnsavedChanges(true);
-                if (!logic.isEmpty(thisText) || dirty) {
-                    onSave();
-                }
+                onSave();
             }
             return thisText;
         });
-    }, [values, dirty, props, setPrevText, initialText, setUnsavedChanges, onSave, logic]);
+    }, [values, props, setPrevText, initialText, setUnsavedChanges, onSave, toText]);
 
     return (
         <div className="draft-saver">

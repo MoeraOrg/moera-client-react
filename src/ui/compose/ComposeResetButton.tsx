@@ -21,7 +21,7 @@ function ComposeResetButton({postingId, draftId, confirmBox}: Props) {
                 composeDraftListItemDelete(draftId));
         } else {
             confirmBox("Do you really want to forget all changes?", "Yes", "No",
-                composeUpdateDraftDelete());
+                composeUpdateDraftDelete(true));
         }
     };
 

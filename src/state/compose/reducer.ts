@@ -57,6 +57,7 @@ const initialState = {
     loadedFeatures: false,
     features: null,
     ...emptyPosting,
+    formId: 0,
     draftList: [],
     loadingDraftList: false,
     loadedDraftList: false,
@@ -153,7 +154,8 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             return {
                 ...state,
                 posting: postingToDraftPosting(action.payload.posting),
-                loadingPosting: false
+                loadingPosting: false,
+                formId: state.formId + 1
             };
 
         case COMPOSE_POSTING_LOAD_FAILED:
@@ -199,7 +201,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 draftId: action.payload.draft.id,
                 draft: buildDraftInfo(action.payload.draft),
                 loadingDraft: false,
-                loadingPosting: false
+                formId: state.formId + 1
             };
 
         case COMPOSE_DRAFT_LOAD_FAILED:
@@ -280,7 +282,8 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             if (state.postingId == null && state.draftId === action.payload.id) {
                 result = {
                     ...state,
-                    ...emptyPosting
+                    ...emptyPosting,
+                    formId: state.formId + 1
                 }
             } else {
                 result = {
@@ -296,12 +299,12 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
         case COMPOSE_DRAFT_UNSET:
             return {
                 ...state,
-                posting: null,
                 draftId: null,
                 draft: null,
                 loadingDraft: false,
                 savingDraft: false,
-                savedDraft: false
+                savedDraft: false,
+                formId: action.payload.resetForm ? state.formId + 1 : state.formId
             };
 
         case COMPOSE_PREVIEW:

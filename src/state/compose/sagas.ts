@@ -30,12 +30,12 @@ import {
     composeFeaturesLoadFailed,
     ComposePostAction,
     composePostFailed,
-    composePostingLoad,
     ComposePostingLoadAction,
     composePostingLoaded,
     composePostingLoadFailed,
     composePostSucceeded,
-    composeSharedTextSet
+    composeSharedTextSet,
+    ComposeUpdateDraftDeleteAction
 } from "state/compose/actions";
 import { getComposeDraftId, getComposePostingId } from "state/compose/selectors";
 import { introduce } from "api/node/introduce";
@@ -77,7 +77,6 @@ function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) 
         const draft = yield* call(Node.getDraftPostingUpdate, ":", action.context.ownerName, id);
         if (draft != null) {
             yield* put(composeDraftLoaded(draft));
-            return;
         }
         const posting = yield* call(Node.getPosting, "", id, true);
         yield* put(composePostingLoaded(posting));
@@ -189,7 +188,7 @@ function* composeDraftListItemDeleteSaga(action: ComposeDraftListItemDeleteActio
     }
 }
 
-function* composeUpdateDraftDeleteSaga() {
+function* composeUpdateDraftDeleteSaga(action: ComposeUpdateDraftDeleteAction) {
     const id = yield* select(getComposeDraftId);
     if (id == null) {
         return;
@@ -197,8 +196,7 @@ function* composeUpdateDraftDeleteSaga() {
 
     try {
         yield* call(Node.deleteDraft, ":", id);
-        yield* put(composeDraftUnset());
-        yield* put(composePostingLoad());
+        yield* put(composeDraftUnset(action.payload.resetForm));
     } catch (e) {
         yield* put(errorThrown(e));
     }

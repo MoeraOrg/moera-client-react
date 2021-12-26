@@ -5,6 +5,7 @@ import { RichTextValue } from "ui/control";
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
 import { RichTextMedia } from "state/richtexteditor/actions";
+import deepEqual from "react-fast-compare";
 
 interface MapToValuesProps {
     comment: CommentInfo | null;
@@ -105,6 +106,23 @@ const commentComposeLogic = {
         }
         const mediaEmpty = commentText.media == null || commentText.media.length === 0;
         return textEmpty && mediaEmpty;
+    },
+
+    isCommentTextChanged(commentText: CommentText, comment: CommentInfo | null) {
+        if (comment == null) {
+            return !this.isCommentTextEmpty(commentText);
+        }
+        if (commentText.bodySrc == null || comment.bodySrc == null) {
+            return (commentText.bodySrc == null) !== (comment.bodySrc == null);
+        }
+        const {text} = JSON.parse(commentText.bodySrc);
+        const {text: prevText} = comment.bodySrc;
+        if (text !== prevText) {
+            return true;
+        }
+        const media = commentText.media ?? [];
+        const prevMedia = comment.media != null ? comment.media.map(ma => ma.media?.id ?? ma.remoteMedia?.id) : [];
+        return !deepEqual(media, prevMedia);
     },
 
     handleSubmit(values: CommentComposeValues, formik: FormikBag<CommentComposeProps, CommentComposeValues>): void {

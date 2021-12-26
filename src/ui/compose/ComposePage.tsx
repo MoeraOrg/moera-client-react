@@ -38,7 +38,7 @@ type Props = ComposePageOuterProps & FormikProps<ComposePageValues>;
 
 function ComposePage(props: Props) {
     const {
-        avatarDefault, loadingFeatures, features, loadingPosting, postingId, posting, loadingDraft, draft, conflict,
+        avatarDefault, loadingFeatures, features, loadingPosting, postingId, posting, loadingDraft, formId, conflict,
         beingPosted, sharedText, smileysEnabled, composeConflictClose, values, resetForm
     } = props;
     const [initialPostingText, setInitialPostingText] = useState<PostingText>({bodySrc: ""});
@@ -48,7 +48,7 @@ function ComposePage(props: Props) {
         setInitialPostingText(composePageLogic.mapValuesToPostingText(values, props));
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [posting, avatarDefault, draft, sharedText, setInitialPostingText]); // 'props' are missing on purpose
+    }, [posting, avatarDefault, formId, sharedText, setInitialPostingText]); // 'props' are missing on purpose
 
     const title = postingId == null ? "New Post" : "Edit Post";
     const loadingContent = loadingPosting || loadingDraft;
@@ -131,6 +131,7 @@ const connector = connect(
         loadingDraft: state.compose.loadingDraft,
         draftId: state.compose.draftId,
         draft: state.compose.draft,
+        formId: state.compose.formId,
         conflict: state.compose.conflict,
         beingPosted: state.compose.beingPosted,
         sharedText: state.compose.sharedText,
