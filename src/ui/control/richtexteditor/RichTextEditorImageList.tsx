@@ -21,7 +21,6 @@ import { RichTextValue } from "ui/control";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
-import "./RichTextEditorImageList.css";
 
 interface OwnProps {
     value: RichTextValue;
@@ -84,8 +83,8 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
                 <div>
                     {mediaList.map(media =>
                         <UploadedImage key={media.id} media={media} rootPage={rootPage}
-                                       onDeleteClick={!dragged ? onDelete(media.id) : undefined}
-                                       onClick={!dragged ? onClick(media) : undefined}/>
+                                       dragged={dragged?.id === media.id} showMenu={!dragged}
+                                       onDelete={onDelete(media.id)} onClick={!dragged ? onClick(media) : undefined}/>
                     )}
                 </div>
             </SortableContext>

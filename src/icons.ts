@@ -9,6 +9,7 @@ import {
     faCaretSquareDown,
     faCertificate,
     faChartBar,
+    faChevronCircleDown,
     faChevronDown,
     faCode,
     faCog,
@@ -83,6 +84,7 @@ export default function initIconLibrary() {
     library.add(faCaretSquareDown);
     library.add(faCertificate);
     library.add(faChartBar);
+    library.add(faChevronCircleDown);
     library.add(faChevronDown);
     library.add(faCircle);
     library.add(faClock);

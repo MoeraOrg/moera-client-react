@@ -14,7 +14,7 @@ export default function AttachedImage({media, rootPage, onClick}: Props) {
     const [imageWidth, imageHeight] = mediaImageSize(150, 150, 150, media);
 
     return (
-        <img className="rich-text-editor-uploaded-image-thumbnail" alt="" src={src}
+        <img className="thumbnail" alt="" src={src}
              width={imageWidth} height={imageHeight} draggable={false} onClick={onClick}/>
     );
 }

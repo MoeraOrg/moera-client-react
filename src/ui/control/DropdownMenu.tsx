@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -11,7 +11,7 @@ import "./DropdownMenu.css";
 type TextMenuItem = {
     show: boolean;
     title: string;
-    href: string;
+    href?: string;
     onClick: () => void;
 };
 
@@ -38,7 +38,7 @@ function buildItems(items: MenuItem[], standalone: boolean) {
         }
         itemList.push({
             title: item.title,
-            href: !standalone ? item.href : Browser.passedLocation(item.href),
+            href: !standalone || item.href == null ? item.href : Browser.passedLocation(item.href),
             onClick: (event: React.MouseEvent) => {
                 item.onClick();
                 event.preventDefault();
@@ -52,9 +52,10 @@ function buildItems(items: MenuItem[], standalone: boolean) {
 
 type Props = {
     items: MenuItem[];
+    children?: ReactNode;
 } & ConnectedProps<typeof connector>;
 
-function DropdownMenuImpl({items, standalone}: Props) {
+function DropdownMenuImpl({items, children, standalone}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -62,7 +63,9 @@ function DropdownMenuImpl({items, standalone}: Props) {
     const itemList = buildItems(items, standalone);
     return (
         <button className="menu" ref={setButtonRef} onClick={onToggle}>
-            <FontAwesomeIcon icon="chevron-down" className="chevron"/>
+            {children ??
+                <FontAwesomeIcon icon="chevron-down" className="chevron"/>
+            }
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
