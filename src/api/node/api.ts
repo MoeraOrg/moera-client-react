@@ -520,6 +520,10 @@ const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
         "size": {
             type: "integer"
         },
+        "postingId": {
+            type: "string",
+            nullable: true
+        },
         "previews": {
             type: "array",
             items: MediaFilePreviewInfoType,
@@ -600,6 +604,10 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             nullable: true
         },
         "receiverPostingId": {
+            type: "string",
+            nullable: true
+        },
+        "parentMediaId": {
             type: "string",
             nullable: true
         },
@@ -782,6 +790,10 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
             nullable: true
         },
         "receiverPostingId": {
+            type: "string",
+            nullable: true
+        },
+        "parentMediaId": {
             type: "string",
             nullable: true
         },

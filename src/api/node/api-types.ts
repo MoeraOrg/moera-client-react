@@ -176,6 +176,7 @@ export interface PostingInfoBase<B> {
     receiverFullName?: string | null;
     receiverAvatar?: AvatarImage | null;
     receiverPostingId?: string | null;
+    parentMediaId?: string | null;
     ownerName: string;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
@@ -568,6 +569,7 @@ export interface PrivateMediaFileInfo {
     width: number;
     height: number;
     size: number;
+    postingId?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
 }
 
