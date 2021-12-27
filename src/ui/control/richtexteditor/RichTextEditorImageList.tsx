@@ -11,56 +11,17 @@ import {
     useSensor,
     useSensors
 } from '@dnd-kit/core';
-import { SortableContext, useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { SortableContext } from '@dnd-kit/sortable';
 
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { RichTextMedia } from "state/richtexteditor/actions";
-import { DeleteButton, RichTextValue } from "ui/control";
-import { mediaHashesExtract, mediaImagePreview, mediaImageSize } from "util/media-images";
+import { RichTextValue } from "ui/control";
+import UploadedImage from "ui/control/richtexteditor/UploadedImage";
+import AttachedImage from "ui/control/richtexteditor/AttachedImage";
+import { mediaHashesExtract } from "util/media-images";
 import "./RichTextEditorImageList.css";
-
-interface AttachedImageProps {
-    media: RichTextMedia;
-    rootPage: string | null;
-    onClick?: React.MouseEventHandler<HTMLImageElement>;
-}
-
-function AttachedImage({media, rootPage, onClick}: AttachedImageProps) {
-    const src = mediaImagePreview(rootPage + "/media/" + media.path, 150);
-    const [imageWidth, imageHeight] = mediaImageSize(150, 150, 150, media);
-
-    return (
-        <img className="rich-text-editor-uploaded-image-thumbnail" alt="" src={src}
-             width={imageWidth} height={imageHeight} draggable={false} onClick={onClick}/>
-    );
-}
-
-interface UploadedImageProps {
-    media: RichTextMedia;
-    rootPage: string | null;
-    onDeleteClick?: React.MouseEventHandler;
-    onClick?: React.MouseEventHandler<HTMLImageElement>;
-}
-
-function UploadedImage({media, rootPage, onDeleteClick, onClick}: UploadedImageProps) {
-    const sortable = useSortable({id: media.id});
-    const sortableStyle = {
-        transform: CSS.Transform.toString(sortable.transform),
-        transition: sortable.transition ?? undefined,
-    };
-
-    return (
-        <div className="rich-text-editor-uploaded-image" key={media.id}>
-            <DeleteButton onClick={onDeleteClick}/>
-            <div ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>
-                <AttachedImage media={media} rootPage={rootPage} onClick={onClick}/>
-            </div>
-        </div>
-    );
-}
 
 interface OwnProps {
     value: RichTextValue;
