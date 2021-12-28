@@ -12,7 +12,7 @@ export interface ExtPostingInfo extends PostingInfo {
 }
 
 export interface PostingState {
-    posting: PostingInfo;
+    posting: ExtPostingInfo;
     deleting: boolean;
     verificationStatus: VerificationStatus;
 }

@@ -1,10 +1,10 @@
-import { ClientState } from "state/state";
 import { FeedReference, PostingInfo, StoryInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
+import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { now } from "util/misc";
-import { PostingsState } from "state/postings/state";
 
-export function getPosting(state: ClientState, id: string | null): PostingInfo | null {
+export function getPosting(state: ClientState, id: string | null): ExtPostingInfo | null {
     if (id == null) {
         return null;
     }

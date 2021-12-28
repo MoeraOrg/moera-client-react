@@ -71,6 +71,7 @@ import contactsExecutors from "state/contacts/sagas";
 import shareDialogExecutors from "state/sharedialog/sagas";
 import sourceDialogExecutors from "state/sourcedialog/sagas";
 import imageEditDialogExecutors from "state/imageeditdialog/sagas";
+import lightBoxExecutors from "state/lightbox/sagas";
 import richTextEditorExecutors from "state/richtexteditor/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
@@ -201,6 +202,7 @@ const executors = collectExecutors(
     shareDialogExecutors,
     sourceDialogExecutors,
     imageEditDialogExecutors,
+    lightBoxExecutors,
     richTextEditorExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,

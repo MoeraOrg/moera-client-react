@@ -24,8 +24,8 @@ type Props = {
     postingId?: string | null;
     commentId?: string | null;
     html: string | null | undefined;
-    nodeName: string | null;
-    media: MediaAttachment[] | null | undefined;
+    nodeName?: string | null;
+    media?: MediaAttachment[] | null;
     onClick?: (event: React.MouseEvent) => void;
 } & ConnectedProps<typeof connector>;
 
@@ -82,7 +82,7 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
 
                 ReactDOM.render(
                     <Provider store={store}>
-                        <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName}
+                        <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName ?? null}
                                     mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
                     </Provider>, span);
             } else {

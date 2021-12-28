@@ -29,7 +29,14 @@ export const lightBoxMediaSet = (mediaId: string): LightBoxMediaSetAction => ({
     payload: {mediaId}
 });
 
+export const LIGHT_BOX_MEDIA_POSTING_LOAD = "LIGHT_BOX_MEDIA_POSTING_LOAD";
+export type LightBoxMediaPostingLoadAction = Action<typeof LIGHT_BOX_MEDIA_POSTING_LOAD>;
+export const lightBoxMediaPostingLoad = (): LightBoxMediaPostingLoadAction => ({
+    type: LIGHT_BOX_MEDIA_POSTING_LOAD
+});
+
 export type LightBoxAnyAction =
     OpenLightBoxAction
     | CloseLightBoxAction
-    | LightBoxMediaSetAction;
+    | LightBoxMediaSetAction
+    | LightBoxMediaPostingLoadAction;

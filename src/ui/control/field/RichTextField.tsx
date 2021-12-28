@@ -10,6 +10,7 @@ interface Props {
     name: string;
     title?: string;
     rows?: number;
+    maxRows?: number;
     features?: PostingFeatures | null;
     noMedia?: boolean;
     nodeName?: string | null;
@@ -29,7 +30,7 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function RichTextField({name, title, rows = 3, features, noMedia, nodeName, forceImageCompress,
+export function RichTextField({name, title, rows = 3, maxRows, features, noMedia, nodeName, forceImageCompress,
                                placeholder = "Enter text here...", autoFocus, anyValue, className, autoComplete,
                                noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled,
                                hidingPanel, format, onKeyDown}: Props) {
@@ -65,6 +66,7 @@ export function RichTextField({name, title, rows = 3, features, noMedia, nodeNam
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     rows={rows}
+                    maxRows={maxRows}
                     features={features ?? null}
                     disabled={disabled}
                     smileysEnabled={smileysEnabled}

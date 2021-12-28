@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
 
+import { ExtCommentInfo } from "state/detailedposting/state";
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
 import EntryHtml from "ui/entry/EntryHtml";
 import { hasWindowSelection } from "util/misc";
-import { ExtCommentInfo } from "state/detailedposting/state";
 
 interface Props {
     comment: ExtCommentInfo;

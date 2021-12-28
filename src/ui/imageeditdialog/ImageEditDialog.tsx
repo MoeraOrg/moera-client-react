@@ -48,7 +48,7 @@ function ImageEditDialog(props: Props) {
                     <img className="preview" alt="" src={src} width={imageWidth} height={imageHeight}/>
                     <Loading active={loading}/>
                     <RichTextField title="Caption" name="caption" format={posting?.bodySrcFormat || "markdown"}
-                                   smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
+                                   maxRows={9} smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>Cancel</Button>

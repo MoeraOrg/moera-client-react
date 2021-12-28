@@ -6,16 +6,18 @@ import 'react-image-lightbox/style.css';
 
 import { ClientState } from "state/state";
 import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
-import { getLightBoxMediaId, isLightBoxShown } from "state/lightbox/selectors";
+import { getLightBoxMediaId, getLightBoxMediaPostingId, isLightBoxShown } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
+import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import "./LightBox.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function LightBox({show, posting, comment, mediaId, rootPage, loopGallery, closeLightBox, lightBoxMediaSet}: Props) {
+function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loopGallery, closeLightBox,
+                   lightBoxMediaSet}: Props) {
     if (!show) {
         return null;
     }
@@ -61,7 +63,8 @@ function LightBox({show, posting, comment, mediaId, rootPage, loopGallery, close
                       <a className="lightbox-download" href={mainSrc} download>
                           <FontAwesomeIcon icon="file-download"/>
                       </a>
-                  ]}/>
+                  ]}
+                  imageCaption={<LightBoxCaption posting={mediaPosting}/>}/>
     );
 }
 
@@ -71,6 +74,7 @@ const connector = connect(
         posting: getPosting(state, state.lightBox.postingId),
         comment: state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null,
         mediaId: getLightBoxMediaId(state),
+        mediaPosting: getPosting(state, getLightBoxMediaPostingId(state)),
         rootPage: getNodeRootPage(state),
         loopGallery: getSetting(state, "entry.gallery.loop") as boolean
     }),

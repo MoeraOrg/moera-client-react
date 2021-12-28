@@ -20,6 +20,7 @@ export interface RichTextAreaProps {
     value?: string;
     format: SourceFormat;
     rows?: number;
+    maxRows?: number;
     placeholder?: string;
     className?: string;
     autoFocus?: boolean;
@@ -237,7 +238,9 @@ class RichTextArea extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const {name, value, className, autoComplete, placeholder, rows, disabled, onBlur, textArea} = this.props;
+        const {
+            name, value, className, autoComplete, placeholder, rows, maxRows, disabled, onBlur, textArea
+        } = this.props;
         const {pasteDialogShow} = this.state;
 
         return (
@@ -250,7 +253,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     rows={rows}
-                    maxRows={Browser.isTinyScreen() ? 12 : 20}
+                    maxRows={maxRows ?? (Browser.isTinyScreen() ? 12 : 20)}
                     disabled={disabled}
                     onKeyDown={this.onKeyDown}
                     onBlur={onBlur}

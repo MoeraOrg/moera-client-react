@@ -21,7 +21,7 @@ type Props = {
     noMedia?: boolean;
 } & Omit<RichTextAreaProps, "textArea" | "panel" | "value" | "onChange">;
 
-const RichTextEditor = ({name, value, features, rows, placeholder, className, autoFocus, autoComplete,
+const RichTextEditor = ({name, value, features, rows, maxRows, placeholder, className, autoFocus, autoComplete,
                          disabled, smileysEnabled, hidingPanel, format, nodeName, forceImageCompress, onKeyDown,
                          onChange, onBlur, noMedia}: Props) => {
     const panel = useRef<HTMLDivElement>(null);
@@ -90,10 +90,10 @@ const RichTextEditor = ({name, value, features, rows, placeholder, className, au
                                  forceImageCompress={forceImageCompress} selectedImage={selectedImage}
                                  selectImage={setSelectedImage} onImageAdded={onImageAdded}
                                  onImageDeleted={onImageDeleted}/>
-            <RichTextArea name={name} value={value.text} format={format} rows={rows} placeholder={placeholder}
-                          autoFocus={autoFocus} autoComplete={autoComplete} disabled={disabled}
-                          smileysEnabled={smileysEnabled} onKeyDown={onKeyDown} onChange={onTextChange} onBlur={onBlur}
-                          textArea={textArea} panel={panel}/>
+            <RichTextArea name={name} value={value.text} format={format} rows={rows} maxRows={maxRows}
+                          placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
+                          disabled={disabled} smileysEnabled={smileysEnabled} onKeyDown={onKeyDown}
+                          onChange={onTextChange} onBlur={onBlur} textArea={textArea} panel={panel}/>
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
                                         nodeName={nodeName ?? null} forceCompress={forceImageCompress}
