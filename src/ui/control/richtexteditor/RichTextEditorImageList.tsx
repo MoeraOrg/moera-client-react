@@ -1,6 +1,5 @@
 import React, { MouseEvent, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { connect, ConnectedProps } from 'react-redux';
 import {
     DndContext,
     DragEndEvent,
@@ -13,16 +12,13 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 
-import { ClientState } from "state/state";
-import { getNodeRootPage } from "state/node/selectors";
-import { getNamingNameNodeUri } from "state/naming/selectors";
 import { RichTextMedia } from "state/richtexteditor/actions";
 import { RichTextValue } from "ui/control";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
 
-interface OwnProps {
+interface Props {
     value: RichTextValue;
     nodeName: string | null;
     selectImage: (image: RichTextMedia | null) => void;
@@ -30,9 +26,7 @@ interface OwnProps {
     onReorder?: (activeId: string, overId: string) => void;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, rootPage}: Props) {
+export default function RichTextEditorImageList({value, nodeName, selectImage, onDeleted, onReorder}: Props) {
     const mouseSensor = useSensor(PointerSensor, {
         activationConstraint: {
             distance: 10
@@ -82,7 +76,7 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
             <SortableContext items={mediaIds}>
                 <div>
                     {mediaList.map(media =>
-                        <UploadedImage key={media.id} media={media} rootPage={rootPage}
+                        <UploadedImage key={media.id} media={media} nodeName={nodeName}
                                        dragged={dragged?.id === media.id} showMenu={!dragged}
                                        onDelete={onDelete(media.id)} onClick={!dragged ? onClick(media) : undefined}/>
                     )}
@@ -91,7 +85,7 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
             {ReactDOM.createPortal(
                 <DragOverlay zIndex={1080} dropAnimation={null}>
                     {dragged &&
-                        <AttachedImage media={dragged} rootPage={rootPage}/>
+                        <AttachedImage media={dragged} nodeName={nodeName}/>
                     }
                 </DragOverlay>,
                 document.querySelector("#modal-root")!
@@ -99,11 +93,3 @@ function RichTextEditorImageList({value, selectImage, onDeleted, onReorder, root
         </DndContext>
     );
 }
-
-const connector = connect(
-    (state: ClientState, props: OwnProps) => ({
-        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state)
-    })
-);
-
-export default connector(RichTextEditorImageList);

@@ -32,6 +32,7 @@ import nodeCards from "state/nodecards/reducer";
 import contacts from "state/contacts/reducer";
 import shareDialog from "state/sharedialog/reducer";
 import sourceDialog from "state/sourcedialog/reducer";
+import imageEditDialog from "state/imageeditdialog/reducer";
 import lightBox from "state/lightbox/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
@@ -69,6 +70,7 @@ import nodeCardsExecutors from "state/nodecards/sagas";
 import contactsExecutors from "state/contacts/sagas";
 import shareDialogExecutors from "state/sharedialog/sagas";
 import sourceDialogExecutors from "state/sourcedialog/sagas";
+import imageEditDialogExecutors from "state/imageeditdialog/sagas";
 import richTextEditorExecutors from "state/richtexteditor/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
@@ -94,6 +96,7 @@ import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
 import sourceDialogTriggers from "state/sourcedialog/triggers";
+import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
@@ -127,6 +130,7 @@ const reducers = combineReducers({
     contacts,
     shareDialog,
     sourceDialog,
+    imageEditDialog,
     lightBox,
     messageBox,
     confirmBox,
@@ -164,6 +168,7 @@ const triggers = collectTriggers(
     nodeCardsTriggers,
     contactsTriggers,
     sourceDialogTriggers,
+    imageEditDialogTriggers,
     lightBoxTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
@@ -195,6 +200,7 @@ const executors = collectExecutors(
     contactsExecutors,
     shareDialogExecutors,
     sourceDialogExecutors,
+    imageEditDialogExecutors,
     richTextEditorExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,

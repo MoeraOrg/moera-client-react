@@ -30,6 +30,7 @@ import { ShareDialogState } from "state/sharedialog/state";
 import { SignUpDialogState } from "state/signupdialog/state";
 import { SourceDialogState } from "state/sourcedialog/state";
 import { TokensState } from "state/tokens/state";
+import { ImageEditDialogState } from "state/imageeditdialog/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -43,6 +44,7 @@ export interface ClientState {
     feeds: FeedsState;
     flashBox: FlashBoxState;
     home: HomeState;
+    imageEditDialog: ImageEditDialogState;
     lightBox: LightBoxState;
     messageBox: MessageBoxState;
     naming: NamingState;

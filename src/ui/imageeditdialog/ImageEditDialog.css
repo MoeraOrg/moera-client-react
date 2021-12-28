@@ -1,0 +1,9 @@
+.image-edit-dialog .preview {
+    width: 20rem;
+    height: 20rem;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

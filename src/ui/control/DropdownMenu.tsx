@@ -11,7 +11,7 @@ import "./DropdownMenu.css";
 type TextMenuItem = {
     show: boolean;
     title: string;
-    href?: string;
+    href: string | null;
     onClick: () => void;
 };
 
@@ -73,7 +73,7 @@ function DropdownMenuImpl({items, children, standalone}: Props) {
                         itemList.map((item, index) => (
                             <React.Fragment key={index}>
                                 {item.divider && <div className="dropdown-divider"/>}
-                                <a className="dropdown-item" href={item.href} onClick={item.onClick}>
+                                <a className="dropdown-item" href={item.href ?? undefined} onClick={item.onClick}>
                                     {item.title}
                                 </a>
                             </React.Fragment>

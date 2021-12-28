@@ -9,6 +9,7 @@ import { ErrorAnyAction } from "state/error/actions";
 import { FeedsAnyAction } from "state/feeds/actions";
 import { FlashBoxAnyAction } from "state/flashbox/actions";
 import { HomeAnyAction } from "state/home/actions";
+import { ImageEditDialogAnyAction } from "state/imageeditdialog/actions";
 import { LightBoxAnyAction } from "state/lightbox/actions";
 import { MessageBoxAnyAction } from "state/messagebox/actions";
 import { NamingAnyAction } from "state/naming/actions";
@@ -45,6 +46,7 @@ export type ClientAction =
     | FeedsAnyAction
     | FlashBoxAnyAction
     | HomeAnyAction
+    | ImageEditDialogAnyAction
     | MessageBoxAnyAction
     | NamingAnyAction
     | NavigationAnyAction

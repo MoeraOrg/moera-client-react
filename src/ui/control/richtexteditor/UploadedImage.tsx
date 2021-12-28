@@ -1,24 +1,29 @@
 import React from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
 import { RichTextMedia } from "state/richtexteditor/actions";
+import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { DropdownMenu } from "ui/control";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import "./UploadedImage.css";
 
-interface Props {
+interface OwnProps {
     media: RichTextMedia;
-    rootPage: string | null;
+    nodeName: string | null;
     dragged?: boolean | null;
     showMenu?: boolean | null;
     onDelete?: () => void;
     onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
 
-export default function UploadedImage({media, rootPage, dragged = false, showMenu = true, onDelete, onClick}: Props) {
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDelete, onClick,
+                        openImageEditDialog}: Props) {
     const sortable = useSortable({id: media.id});
     const sortableStyle = {
         transform: CSS.Transform.toString(sortable.transform),
@@ -30,7 +35,17 @@ export default function UploadedImage({media, rootPage, dragged = false, showMen
             {showMenu &&
                 <DropdownMenu items={[
                     {
+                        title: "Edit...",
+                        href: null,
+                        onClick: () => openImageEditDialog(nodeName, media),
+                        show: media.postingId != null
+                    },
+                    {
+                        divider: true
+                    },
+                    {
                         title: "Delete",
+                        href: null,
                         onClick: onDelete!,
                         show: onDelete != null
                     }
@@ -42,9 +57,15 @@ export default function UploadedImage({media, rootPage, dragged = false, showMen
                 </DropdownMenu>
             }
             <div ref={sortable.setNodeRef} style={sortableStyle}{...sortable.attributes} {...sortable.listeners}>
-                <AttachedImage media={media} rootPage={rootPage} onClick={onClick}/>
+                <AttachedImage media={media} nodeName={nodeName} onClick={onClick}/>
             </div>
         </div>
     );
 }
 
+const connector = connect(
+    null,
+    { openImageEditDialog }
+);
+
+export default connector(UploadedImage);
