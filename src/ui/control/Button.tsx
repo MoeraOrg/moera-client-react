@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 
 import { Browser } from "ui/browser";
-import { LoadingInline } from "ui/control/index";
+import { LoadingInline } from "ui/control";
 
 type Props = {
     variant: string;
@@ -12,38 +12,33 @@ type Props = {
     loading?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export class Button extends React.PureComponent<Props> {
+export function Button({variant, size, block = false, invisible = false, loading = false, disabled = false,
+                        className = "", type = "button", autoFocus, ...props}: Props) {
+    const domRef = useRef<HTMLButtonElement>(null);
 
-    domNode: HTMLButtonElement | null = null;
-
-    componentDidMount() {
-        if (this.props.autoFocus && this.domNode) {
-            this.domNode.focus();
+    useEffect(() => {
+        if (autoFocus && domRef.current != null) {
+            domRef.current.focus();
         }
-    }
+    });
 
-    render() {
-        const {variant, size, block = false, invisible = false, loading = false, disabled = false, className = "",
-               type = "button", ...props} = this.props;
-        const klass = cx(
-            "btn",
-            `btn-${variant}`, {
-                "btn-sm": size === "sm",
-                "btn-lg": size === "lg",
-                "flex-fill": block,
-                "invisible": invisible
-            },
-            className
-        );
-        return (
-            <button type={type} className={klass} disabled={loading || disabled} {...props}
-                    ref={dom => {this.domNode = dom}}>
-                <LoadingInline active={loading}/>
-                {!(loading && Browser.isTinyScreen()) &&
-                    <>{props.children}{loading && "…"}</>
-                }
-            </button>
-        );
-    }
+    const klass = cx(
+        "btn",
+        `btn-${variant}`, {
+            "btn-sm": size === "sm",
+            "btn-lg": size === "lg",
+            "flex-fill": block,
+            "invisible": invisible
+        },
+        className
+    );
 
+    return (
+        <button type={type} className={klass} disabled={loading || disabled} {...props} ref={domRef}>
+            <LoadingInline active={loading}/>
+            {!(loading && Browser.isTinyScreen()) &&
+                <>{props.children}{loading && "…"}</>
+            }
+        </button>
+    );
 }
