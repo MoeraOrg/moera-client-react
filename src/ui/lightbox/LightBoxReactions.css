@@ -1,0 +1,22 @@
+.lightbox-reactions {
+    background-color: rgba(0, 0, 0, .5);
+    position: absolute;
+    top: 50px;
+    right: 0;
+}
+
+.lightbox-reaction-button {
+    display: block;
+    color: white;
+    opacity: .7;
+    background-color: transparent;
+    border: 0;
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    line-height: 1;
+}
+
+.lightbox-reaction-button:hover {
+    opacity: 1;
+}

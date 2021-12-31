@@ -19,7 +19,7 @@ import { createSelector } from "reselect";
 interface OwnProps {
     icon: IconName,
     emoji: number | null;
-    caption: string;
+    caption?: string;
     className?: string;
     negative: boolean;
     accepted: string;

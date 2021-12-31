@@ -12,6 +12,7 @@ import { getComment } from "state/detailedposting/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
+import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import "./LightBox.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -62,7 +63,8 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
                   toolbarButtons={[
                       <a className="lightbox-download" href={mainSrc} download>
                           <FontAwesomeIcon icon="file-download"/>
-                      </a>
+                      </a>,
+                      <LightBoxReactions/>
                   ]}
                   imageCaption={<LightBoxCaption posting={mediaPosting}/>}/>
     );
