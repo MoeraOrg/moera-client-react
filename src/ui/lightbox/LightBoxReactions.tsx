@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientReactionInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { postingReact, postingReactionDelete } from "state/postings/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
@@ -12,10 +13,15 @@ import "./LightBoxReactions.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function LightBoxReactions({posting, homeOwnerName, enableSelf}: Props) {
+function LightBoxReactions({posting, homeOwnerName, enableSelf, postingReact, postingReactionDelete}: Props) {
     if (posting == null) {
         return null;
     }
+
+    const onReactionAdd = (negative: boolean, emoji: number) => postingReact(posting.id, negative, emoji);
+
+    const onReactionDelete = () => postingReactionDelete(posting.id);
+
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
@@ -25,14 +31,14 @@ function LightBoxReactions({posting, homeOwnerName, enableSelf}: Props) {
                                 invisible={cr.emoji != null && cr.negative} negative={false}
                                 emoji={!cr.negative ? cr.emoji : null}
                                 accepted={posting.acceptedReactions?.positive ?? ""}
-                                onReactionAdd={() => {}} onReactionDelete={() => {}}/>
+                                onReactionAdd={onReactionAdd} onReactionDelete={onReactionDelete}/>
             }
             {!hide &&
                 <ReactionButton icon="thumbs-down" className="lightbox-reaction-button"
                                 invisible={cr.emoji != null && !cr.negative} negative={true}
                                 emoji={cr.negative ? cr.emoji : null}
                                 accepted={posting.acceptedReactions?.negative ?? ""}
-                                onReactionAdd={() => {}} onReactionDelete={() => {}}/>
+                                onReactionAdd={onReactionAdd} onReactionDelete={onReactionDelete}/>
             }
         </div>
     );
@@ -43,7 +49,8 @@ const connector = connect(
         posting: getPosting(state, getLightBoxPostingId(state)),
         homeOwnerName: getHomeOwnerName(state),
         enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean
-    })
+    }),
+    { postingReact, postingReactionDelete }
 );
 
 export default connector(LightBoxReactions);

@@ -20,3 +20,7 @@
 .lightbox-reaction-button:hover {
     opacity: 1;
 }
+
+.lightbox-reaction-button .caption {
+    display: none;
+}
