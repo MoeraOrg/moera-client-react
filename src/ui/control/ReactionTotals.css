@@ -12,27 +12,23 @@
     margin-right: .55em;
 }
 
-.reactions .positive {
-    margin-right: 1.45em;
-    color: var(--correct);
-    background-color: var(--reactions-positive);
+.reactions .positive, .reactions .negative {
     border-radius: .9em;
     padding: .44em 1.1em;
 }
 
-.reactions .positive:hover {
-    text-decoration: underline;
-    cursor: pointer;
+.reactions .positive {
+    margin-right: 1.45em;
+    color: var(--correct);
+    background-color: var(--reactions-positive);
 }
 
 .reactions .negative {
     color: var(--incorrect);
     background-color: var(--reactions-negative);
-    border-radius: .9em;
-    padding: .44em 1.1em;
 }
 
-.reactions .negative:hover {
+.reactions .positive:hover, .reactions .negative:hover {
     text-decoration: underline;
     cursor: pointer;
 }

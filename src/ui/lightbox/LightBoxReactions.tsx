@@ -9,6 +9,7 @@ import { getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ReactionButton } from "ui/control";
+import PostingReactions from "ui/posting/PostingReactions";
 import "./LightBoxReactions.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -26,15 +27,16 @@ function LightBoxReactions({posting, homeOwnerName, enableSelf, postingReact, po
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
         <div className="lightbox-reactions">
+            <PostingReactions posting={posting}/>
             {!hide &&
-                <ReactionButton icon="thumbs-up" className="lightbox-reaction-button"
+                <ReactionButton icon="thumbs-up" className="lightbox-reaction-button positive"
                                 invisible={cr.emoji != null && cr.negative} negative={false}
                                 emoji={!cr.negative ? cr.emoji : null}
                                 accepted={posting.acceptedReactions?.positive ?? ""}
                                 onReactionAdd={onReactionAdd} onReactionDelete={onReactionDelete}/>
             }
             {!hide &&
-                <ReactionButton icon="thumbs-down" className="lightbox-reaction-button"
+                <ReactionButton icon="thumbs-down" className="lightbox-reaction-button negative"
                                 invisible={cr.emoji != null && !cr.negative} negative={true}
                                 emoji={cr.negative ? cr.emoji : null}
                                 accepted={posting.acceptedReactions?.negative ?? ""}

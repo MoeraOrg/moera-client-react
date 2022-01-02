@@ -1,18 +1,17 @@
 .lightbox-reactions {
-    background-color: rgba(0, 0, 0, .5);
     position: absolute;
     top: 50px;
-    right: 0;
 }
 
 .lightbox-reaction-button {
     display: block;
+    position: absolute;
     color: white;
     opacity: .7;
     background-color: transparent;
     border: 0;
-    width: 2em;
-    height: 2em;
+    width: 2rem;
+    height: 2rem;
     padding: 0;
     line-height: 1;
 }
@@ -23,4 +22,69 @@
 
 .lightbox-reaction-button .caption {
     display: none;
+}
+
+.lightbox-reactions .reactions {
+    line-height: 1;
+}
+
+.lightbox-reactions .reactions .positive, .lightbox-reactions .reactions .negative {
+    position: absolute;
+    top: 0;
+    margin-right: 0;
+    opacity: .7;
+}
+
+@media only screen and (min-width: 576px) {
+    .lightbox-reactions {
+        right: 0;
+    }
+
+    .lightbox-reaction-button {
+        right: 0;
+    }
+
+    .lightbox-reaction-button.positive {
+        top: 1.9rem;
+    }
+
+    .lightbox-reaction-button.negative {
+        top: 3.9rem;
+    }
+
+    .lightbox-reactions .reactions .positive {
+        right: 0;
+    }
+
+    .lightbox-reactions .reactions .negative {
+        top: 5.9rem;
+        right: 0;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .lightbox-reactions {
+        left: 0;
+        width: 100%;
+    }
+
+    .lightbox-reaction-button {
+        top: -.1rem;
+    }
+
+    .lightbox-reaction-button.positive {
+        right: 50vw;
+    }
+
+    .lightbox-reaction-button.negative {
+        left: 50vw;
+    }
+
+    .lightbox-reactions .reactions .positive {
+        right: calc(50vw + 2rem);
+    }
+
+    .lightbox-reactions .reactions .negative {
+        left: calc(50vw + 2rem);
+    }
 }
