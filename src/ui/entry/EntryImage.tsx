@@ -44,7 +44,7 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function EntryImage({postingId, commentId, mediaFile, width, height, alt, title, flex, count, rootPage,
+function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count, rootPage,
                      openLightBox}: Props) {
     const mediaLocation = rootPage + "/media/" + mediaFile.path;
     const src = mediaImagePreview(mediaLocation, 900);
@@ -54,7 +54,7 @@ function EntryImage({postingId, commentId, mediaFile, width, height, alt, title,
 
     const onNear = () => {
         if (postingId != null) {
-            openLightBox(postingId, commentId ?? null, mediaFile.id);
+            openLightBox(nodeName, postingId, commentId ?? null, mediaFile.id);
         }
     }
 

@@ -5,6 +5,7 @@ import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 
 import { ClientState } from "state/state";
+import { getNamingNameNodeUri } from "state/naming/selectors";
 import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
 import { getLightBoxMediaId, getLightBoxMediaPostingId, isLightBoxShown } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
@@ -77,7 +78,9 @@ const connector = connect(
         comment: state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null,
         mediaId: getLightBoxMediaId(state),
         mediaPosting: getPosting(state, getLightBoxMediaPostingId(state)),
-        rootPage: getNodeRootPage(state),
+        rootPage: state.lightBox.nodeName
+            ? getNamingNameNodeUri(state, state.lightBox.nodeName)
+            : getNodeRootPage(state),
         loopGallery: getSetting(state, "entry.gallery.loop") as boolean
     }),
     { closeLightBox, lightBoxMediaSet }
