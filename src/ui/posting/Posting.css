@@ -45,6 +45,10 @@
     }
 }
 
+.posting > .content P {
+    margin-top: 1rem;
+}
+
 .posting > .content IMG:not(.emoji) {
     width: auto;
     height: auto;

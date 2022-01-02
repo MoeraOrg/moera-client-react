@@ -48,6 +48,10 @@
     }
 }
 
+.comment .content P {
+    margin-top: 1rem;
+}
+
 .comment .content IMG:not(.emoji) {
     width: auto;
     height: auto;
