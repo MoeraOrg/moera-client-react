@@ -336,7 +336,7 @@ const connector = connect(
         totalPinned: getFeedState(state, ownProps.feedName).status.totalPinned,
         notViewed: getFeedState(state, ownProps.feedName).status.notViewed,
         notViewedMoment: getFeedState(state, ownProps.feedName).status.notViewedMoment,
-        postings: state.postings,
+        postings: state.postings[""] ?? {},
         anchor: getFeedState(state, ownProps.feedName).anchor,
         atHomeNode: isAtHomeNode(state)
     }),

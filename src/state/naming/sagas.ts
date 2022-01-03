@@ -1,6 +1,7 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 
 import { Naming, NodeName } from "api";
+import { askNaming } from "api/node/ask-naming";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
 import { errorThrown } from "state/error/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
@@ -19,11 +20,11 @@ import {
 } from "state/naming/actions";
 import { getNamingNameDetails, getNamingNamesToBeLoaded } from "state/naming/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
+import { executor } from "state/executor";
+import { ClientState } from "state/state";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
-import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
-import { askNaming } from "api/node/ask-naming";
-import { executor } from "state/executor";
 
 const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
@@ -107,9 +108,9 @@ function* namingNamesMaintenanceSaga() {
 function* getUsedNames() {
     let used = new Set<string>();
 
-    const {feedNames, postings} = yield* select(state => ({
+    const {feedNames, postings} = yield* select((state: ClientState) => ({
         feedNames: getAllFeeds(state),
-        postings: state.postings
+        postings: state.postings[""] ?? {}
     }));
     for (const feedName of feedNames) {
         const stories = yield* select(state => getFeedState(state, feedName).stories)
@@ -119,9 +120,9 @@ function* getUsedNames() {
             }
             const posting = story.postingId != null ? postings[story.postingId] : null;
             if (posting) {
-                used.add(posting.ownerName);
-                if (posting.receiverName) {
-                    used.add(posting.receiverName);
+                used.add(posting.posting.ownerName);
+                if (posting.posting.receiverName) {
+                    used.add(posting.posting.receiverName);
                 }
             }
         });

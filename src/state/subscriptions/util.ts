@@ -19,7 +19,7 @@ export function immutableSetSubscriptionId(state: PostingsState, id: string, typ
                                            subscriberId: string | null) {
     switch (type) {
         case "posting-comments":
-            return immutable.set(state, [id, "posting", "subscriptions", "comments"], subscriberId);
+            return immutable.set(state, ["", id, "posting", "subscriptions", "comments"], subscriberId);
         default:
             return state;
     }

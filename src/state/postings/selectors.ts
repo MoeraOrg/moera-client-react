@@ -8,7 +8,7 @@ export function getPosting(state: ClientState, id: string | null): ExtPostingInf
     if (id == null) {
         return null;
     }
-    return state.postings[id]?.posting ?? null;
+    return state.postings[""]?.[id]?.posting ?? null;
 }
 
 export function isPostingCached(state: ClientState, id: string | null): boolean {
@@ -19,11 +19,11 @@ export function isPostingBeingDeleted(state: ClientState, id: string | null): bo
     if (id == null) {
         return false;
     }
-    return state.postings[id]?.deleting ?? false;
+    return state.postings[""]?.[id]?.deleting ?? false;
 }
 
 export function getPostingVerificationStatus(state: ClientState, id: string): VerificationStatus | null {
-    return state.postings[id]?.verificationStatus ?? null;
+    return state.postings[""]?.[id]?.verificationStatus ?? null;
 }
 
 export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">,
@@ -58,7 +58,11 @@ export function getPostingStory(posting: PostingInfo, feedName: string): StoryIn
 
 export function findPostingIdByRemote(postings: PostingsState, remoteNodeName: string | null,
                                       remotePostingId: string | null): string | null {
-    for (let [id, entry] of Object.entries(postings)) {
+    const nodePostings = postings[""];
+    if (nodePostings == null) {
+        return null;
+    }
+    for (let [id, entry] of Object.entries(nodePostings)) {
         if (entry?.posting.receiverName === remoteNodeName && entry.posting.receiverPostingId === remotePostingId) {
             return id;
         }

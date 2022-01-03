@@ -83,12 +83,11 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
             action.payload.stories
                 .map(s => outsideIn(s))
                 .filter((p): p is PostingInfo => p != null)
-                .forEach(
-                    p => istate
-                        .set([p.id, "posting"], safeguard(p))
-                        .set([p.id, "deleting"], false)
-                        .set([p.id, "verificationStatus"], "none")
-                );
+                .forEach(p => istate.assign(["", p.id], {
+                    posting: safeguard(p),
+                    deleting: false,
+                    verificationStatus: "none"
+                }));
             return istate.value();
         }
 
@@ -96,11 +95,11 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
         case STORY_UPDATED: {
             const {id, posting} = action.payload.story;
             if (posting) {
-                const postingState = state[posting.id];
+                const postingState = state[""]?.[posting.id];
                 if (postingState != null) {
                     const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
                     refs.push(toFeedReference(action.payload.story));
-                    return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
+                    return immutable.set(state, ["", posting.id, "posting", "feedReferences"], refs);
                 }
             }
             return state;
@@ -109,10 +108,10 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
         case STORY_DELETED: {
             const {id, posting} = action.payload.story;
             if (posting) {
-                const postingState = state[posting.id];
+                const postingState = state[""]?.[posting.id];
                 if (postingState != null) {
                     const refs = (postingState.posting.feedReferences ?? []).filter(r => r.storyId !== id);
-                    return immutable.set(state, [posting.id, "posting", "feedReferences"], refs);
+                    return immutable.set(state, ["", posting.id, "posting", "feedReferences"], refs);
                 }
             }
             return state;
@@ -120,62 +119,62 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
 
         case POSTING_SET:
             const posting = action.payload.posting;
-            return immutable.wrap(state)
-                .set([posting.id, "posting"], safeguard(posting))
-                .set([posting.id, "deleting"], false)
-                .set([posting.id, "verificationStatus"], "none")
-                .value();
+            return immutable.wrap(state).assign(["", posting.id], {
+                posting: safeguard(posting),
+                deleting: false,
+                verificationStatus: "none"
+            }).value();
 
         case POSTING_DELETE:
-            return immutable.set(state, [action.payload.id, "deleting"], true);
+            return immutable.set(state, ["", action.payload.id, "deleting"], true);
 
         case POSTING_DELETED:
-            return immutable.del(state, [action.payload.id]);
+            return immutable.del(state, ["", action.payload.id]);
 
         case POSTING_VERIFY:
-            return immutable.set(state, [action.payload.id, "verificationStatus"], "running");
+            return immutable.set(state, ["", action.payload.id, "verificationStatus"], "running");
 
         case POSTING_VERIFY_FAILED:
-            return immutable.set(state, [action.payload.id, "verificationStatus"], "none");
+            return immutable.set(state, ["", action.payload.id, "verificationStatus"], "none");
 
         case EVENT_HOME_REMOTE_POSTING_VERIFIED: {
-            const posting = state[action.payload.postingId]?.posting;
+            const posting = state[""]?.[action.payload.postingId]?.posting;
             if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
                 const status = action.payload.correct ? "correct" : "incorrect";
-                return immutable.set(state, [action.payload.postingId, "verificationStatus"], status);
+                return immutable.set(state, ["", action.payload.postingId, "verificationStatus"], status);
             }
             return state;
         }
 
         case EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED: {
-            const posting = state[action.payload.postingId]?.posting;
+            const posting = state[""]?.[action.payload.postingId]?.posting;
             if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
-                return immutable.set(state, [action.payload.postingId, "verificationStatus"], "none");
+                return immutable.set(state, ["", action.payload.postingId, "verificationStatus"], "none");
             }
             return state;
         }
 
         case POSTING_REACT: {
             const {id, negative, emoji} = action.payload;
-            if (state[id]) {
-                return immutable.set(state, [id, "posting", "clientReaction"], {negative, emoji});
+            if (state[""]?.[id]) {
+                return immutable.set(state, ["", id, "posting", "clientReaction"], {negative, emoji});
             }
             return state;
         }
 
         case POSTING_REACTION_DELETE:
-            if (state[action.payload.id]) {
-                return immutable.del(state, [action.payload.id, "posting", "clientReaction"]);
+            if (state[""]?.[action.payload.id]) {
+                return immutable.del(state, ["", action.payload.id, "posting", "clientReaction"]);
             }
             return state;
 
         case POSTING_REACTION_SET: {
             const {id, reaction, totals} = action.payload;
-            const postingState = state[id];
+            const postingState = state[""]?.[id];
             if (postingState) {
-                const istate = immutable.wrap(state).set([id, "posting", "reactions"], totals);
+                const istate = immutable.wrap(state).set(["", id, "posting", "reactions"], totals);
                 if (postingState.posting.receiverName == null) {
-                    istate.set([id, "posting", "clientReaction"], reaction);
+                    istate.set(["", id, "posting", "clientReaction"], reaction);
                 }
                 return istate.value();
             }
@@ -184,8 +183,8 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
 
         case POSTING_COMMENTS_SET: {
             const {id, total} = action.payload;
-            if (state[id]) {
-                return immutable.set(state, [id, "posting", "totalComments"], total);
+            if (state[""]?.[id]) {
+                return immutable.set(state, ["", id, "posting", "totalComments"], total);
             }
             return state;
         }
@@ -194,7 +193,7 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
             const {remoteNodeName, remotePostingId, negative, emoji} = action.payload;
             const id = findPostingIdByRemote(state, remoteNodeName, remotePostingId);
             if (id != null) {
-                return immutable.set(state, [id, "posting", "clientReaction"], {negative, emoji});
+                return immutable.set(state, ["", id, "posting", "clientReaction"], {negative, emoji});
             }
             return state;
         }
@@ -203,30 +202,30 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
             const {remoteNodeName, remotePostingId} = action.payload;
             const id = findPostingIdByRemote(state, remoteNodeName, remotePostingId);
             if (id != null) {
-                return immutable.del(state, [id, "posting", "clientReaction"]);
+                return immutable.del(state, ["", id, "posting", "clientReaction"]);
             }
             return state;
         }
 
         case POSTING_COMMENTS_SUBSCRIBED: {
             const {id, subscriberId} = action.payload;
-            if (state[id]) {
-                return immutable.set(state, [id, "posting", "subscriptions", "comments"], subscriberId);
+            if (state[""]?.[id]) {
+                return immutable.set(state, ["", id, "posting", "subscriptions", "comments"], subscriberId);
             }
             return state;
         }
 
         case POSTING_COMMENTS_UNSUBSCRIBED: {
             const {id} = action.payload;
-            if (state[id]) {
-                return immutable.set(state, [id, "posting", "subscriptions", "comments"], null);
+            if (state[""]?.[id]) {
+                return immutable.set(state, ["", id, "posting", "subscriptions", "comments"], null);
             }
             return state;
         }
 
         case POSTING_SUBSCRIPTION_SET: {
             const {id, type, subscriberId} = action.payload;
-            if (state[id]) {
+            if (state[""]?.[id]) {
                 return immutableSetSubscriptionId(state, id, type, subscriberId);
             }
             return state;
@@ -247,12 +246,12 @@ export default (state: PostingsState = initialState, action: ClientAction): Post
             if (total == null) {
                 return state;
             }
-            const postingState = state[postingId];
+            const postingState = state[""]?.[postingId];
             const id = postingState && postingState.posting.ownerName === nodeName
                 ? postingId
                 : findPostingIdByRemote(state, nodeName, postingId);
             if (id != null) {
-                return immutable.set(state, [id, "posting", "totalComments"], total);
+                return immutable.set(state, ["", id, "posting", "totalComments"], total);
             }
             return state;
         }
