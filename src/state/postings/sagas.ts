@@ -60,58 +60,59 @@ export default [
 ];
 
 function* postingDeleteSaga(action: PostingDeleteAction) {
-    const {id} = action.payload;
-    const posting = yield* select(getPosting, id);
+    const {id, nodeName} = action.payload;
+    const posting = yield* select(getPosting, id, nodeName);
     if (posting == null) {
         return;
     }
     try {
-        yield* call(Node.deletePosting, "", id);
-        yield* put(postingDeleted(posting.id, posting.feedReferences ?? []));
+        yield* call(Node.deletePosting, nodeName, id);
+        yield* put(postingDeleted(posting.id, posting.feedReferences ?? [], nodeName));
     } catch (e) {
-        yield* put(postingDeleteFailed(id));
+        yield* put(postingDeleteFailed(id, nodeName));
         yield* put(errorThrown(e));
     }
 }
 
 function* postingLoadSaga(action: PostingLoadAction) {
-    const {id} = action.payload;
+    const {id, nodeName} = action.payload;
     try {
-        const data = yield* call(Node.getPosting, "", id);
-        yield* call(fillActivityReaction, data);
-        yield* call(fillSubscription, data);
-        yield* put(postingSet(data));
+        const posting = yield* call(Node.getPosting, nodeName, id);
+        yield* call(fillActivityReaction, posting);
+        yield* call(fillSubscription, posting);
+        yield* put(postingSet(posting, nodeName));
     } catch (e) {
-        yield* put(postingLoadFailed(id));
+        yield* put(postingLoadFailed(id, nodeName));
         yield* put(errorThrown(e));
     }
 }
 
 function* postingVerifySaga(action: WithContext<PostingVerifyAction>) {
-    const {id} = action.payload;
-    if (action.context.ownerName == null) {
-        yield* put(postingVerifyFailed(id));
+    const {id, nodeName} = action.payload;
+    const targetNodeName = nodeName || action.context.ownerName;
+    if (targetNodeName == null) {
+        yield* put(postingVerifyFailed(id, nodeName));
         return;
     }
     try {
-        yield* call(Node.remotePostingVerify, ":", action.context.ownerName, id);
+        yield* call(Node.remotePostingVerify, ":", targetNodeName, id);
     } catch (e) {
-        yield* put(postingVerifyFailed(id));
+        yield* put(postingVerifyFailed(id, nodeName));
         yield* put(errorThrown(e));
     }
 }
 
 function* postingReactSaga(action: PostingReactAction) {
-    const {id, negative, emoji} = action.payload;
+    const {id, negative, emoji, nodeName} = action.payload;
     try {
-        const data = yield* call(Node.postPostingReaction, "", id, negative, emoji);
-        yield* put(postingReactionSet(id, {negative, emoji}, data.totals));
+        const data = yield* call(Node.postPostingReaction, nodeName, id, negative, emoji);
+        yield* put(postingReactionSet(id, {negative, emoji}, data.totals, nodeName));
         const {ownerName, posting} = yield* select(state => ({
             ownerName: getOwnerName(state),
-            posting: getPosting(state, id)
+            posting: getPosting(state, id, nodeName)
         }));
         if (ownerName != null && posting != null) {
-            yield* call(Node.postRemotePostingReaction, ":", posting.receiverName ?? ownerName,
+            yield* call(Node.postRemotePostingReaction, ":", posting.receiverName ?? (nodeName || ownerName),
                 posting.receiverPostingId ?? id, negative, emoji);
         }
     } catch (e) {
@@ -120,21 +121,21 @@ function* postingReactSaga(action: PostingReactAction) {
 }
 
 function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
-    const {id} = action.payload;
+    const {id, nodeName} = action.payload;
     try {
-        const {negative, emoji} = yield* call(Node.getPostingReaction, "", id);
+        const {negative, emoji} = yield* call(Node.getPostingReaction, nodeName, id);
         const reaction = negative != null && emoji != null ? {negative, emoji} : null;
-        const totals = yield* call(Node.getPostingReactionTotals, "", id);
-        yield* put(postingReactionSet(id, reaction, totals));
+        const totals = yield* call(Node.getPostingReactionTotals, nodeName, id);
+        yield* put(postingReactionSet(id, reaction, totals, nodeName));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
 function* postingReactionDeleteSaga(action: PostingReactionDeleteAction) {
-    const {id} = action.payload;
+    const {id, nodeName} = action.payload;
     try {
-        let data = yield* call(Node.deletePostingReaction, "", id);
+        let totals = yield* call(Node.deletePostingReaction, nodeName, id);
         const {ownerName, posting} = yield* select(state => ({
             ownerName: getOwnerName(state),
             posting: getPosting(state, id)
@@ -143,31 +144,32 @@ function* postingReactionDeleteSaga(action: PostingReactionDeleteAction) {
             return;
         }
         if (posting.receiverName != null && posting.receiverPostingId != null) {
-            data = yield* call(Node.deletePostingReaction, posting.receiverName, posting.receiverPostingId);
+            totals = yield* call(Node.deletePostingReaction, posting.receiverName, posting.receiverPostingId);
         }
-        yield* put(postingReactionSet(id, null, data));
-        yield* call(Node.deleteRemotePostingReaction, ":", posting.receiverName ?? ownerName,
+        yield* put(postingReactionSet(id, null, totals, nodeName));
+        yield* call(Node.deleteRemotePostingReaction, ":", posting.receiverName ?? (nodeName || ownerName),
             posting.receiverPostingId ?? id);
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-export function* postingGetLink(id: string) {
-    const posting = yield* select(getPosting, id);
-    if (posting == null || posting.receiverName == null) {
+export function* postingGetLink(id: string, nodeName: string = "") {
+    const posting = yield* select(getPosting, id, nodeName);
+    const targetNode = posting?.receiverName != null ? posting.receiverName : nodeName;
+    if (targetNode) {
+        const nodeUri = yield* call(getNodeUri, targetNode);
+        return `${nodeUri}/post/${posting?.receiverPostingId ?? id}`;
+    } else {
         const rootLocation = yield* select(getNodeRootLocation);
         return `${rootLocation}/moera/post/${id}`;
-    } else {
-        const nodeUri = yield* call(getNodeUri, posting.receiverName);
-        return `${nodeUri}/post/${posting.receiverPostingId}`;
     }
 }
 
 function* postingCopyLinkSaga(action: PostingCopyLinkAction) {
-    const {id} = action.payload;
+    const {id, nodeName} = action.payload;
     try {
-        const href = yield* call(postingGetLink, id);
+        const href = yield* call(postingGetLink, id, nodeName);
         yield* call(clipboardCopy, href);
         if (Browser.userAgentOs !== "android" || window.Android) {
             yield* put(flashBox("Link copied to the clipboard"));
@@ -178,7 +180,7 @@ function* postingCopyLinkSaga(action: PostingCopyLinkAction) {
 }
 
 function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
-    const {id} = action.payload;
+    const {id, nodeName} = action.payload;
     const {posting, ownerName, homeOwnerFullName, homeOwnerAvatar} = yield* select(state => ({
         posting: getPosting(state, id),
         ownerName: getOwnerName(state),
@@ -189,23 +191,23 @@ function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
         yield* put(postingCommentsSubscribeFailed(id));
         return;
     }
-    const nodeName = posting.receiverName ?? ownerName;
+    const targetNode = posting.receiverName ?? (nodeName || ownerName);
     const postingId = posting.receiverPostingId ?? id;
     try {
-        const whoAmI = yield* call(Node.getWhoAmI, nodeName);
-        const subscriber = yield* call(Node.postPostingCommentsSubscriber, nodeName, postingId, homeOwnerFullName,
+        const whoAmI = yield* call(Node.getWhoAmI, targetNode);
+        const subscriber = yield* call(Node.postPostingCommentsSubscriber, targetNode, postingId, homeOwnerFullName,
             toAvatarDescription(homeOwnerAvatar));
-        yield* call(Node.postPostingCommentsSubscription, ":", subscriber.id, nodeName, whoAmI.fullName ?? null,
+        yield* call(Node.postPostingCommentsSubscription, ":", subscriber.id, targetNode, whoAmI.fullName ?? null,
             toAvatarDescription(whoAmI.avatar), postingId);
-        yield* put(postingCommentsSubscribed(id, subscriber.id));
+        yield* put(postingCommentsSubscribed(id, subscriber.id, nodeName));
     } catch (e) {
-        yield* put(postingCommentsSubscribeFailed(id));
+        yield* put(postingCommentsSubscribeFailed(id, nodeName));
         yield* put(errorThrown(e));
     }
 }
 
 function* postingCommentsUnsubscribeSaga(action: PostingCommentsUnsubscribeAction) {
-    const {id} = action.payload;
+    const {id, nodeName} = action.payload;
     const {posting, ownerName} = yield* select(state => ({
         posting: getPosting(state, id),
         ownerName: getOwnerName(state)
@@ -214,15 +216,15 @@ function* postingCommentsUnsubscribeSaga(action: PostingCommentsUnsubscribeActio
         yield* put(postingCommentsUnsubscribeFailed(id));
         return;
     }
-    const nodeName = posting.receiverName ?? ownerName;
+    const targetNode = posting.receiverName ?? (nodeName || ownerName);
     try {
         if (posting.subscriptions?.comments != null) {
-            yield* call(Node.deleteSubscriber, nodeName, posting.subscriptions.comments);
-            yield* call(Node.deleteSubscription, ":", posting.subscriptions.comments, nodeName);
+            yield* call(Node.deleteSubscriber, targetNode, posting.subscriptions.comments);
+            yield* call(Node.deleteSubscription, ":", posting.subscriptions.comments, targetNode);
         }
-        yield* put(postingCommentsUnsubscribed(id));
+        yield* put(postingCommentsUnsubscribed(id, nodeName));
     } catch (e) {
-        yield* put(postingCommentsUnsubscribeFailed(id));
+        yield* put(postingCommentsUnsubscribeFailed(id, nodeName));
         yield* put(errorThrown(e));
     }
 }

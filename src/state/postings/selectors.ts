@@ -4,26 +4,27 @@ import { VerificationStatus } from "state/state-types";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { now } from "util/misc";
 
-export function getPosting(state: ClientState, id: string | null): ExtPostingInfo | null {
+export function getPosting(state: ClientState, id: string | null, nodeName: string = ""): ExtPostingInfo | null {
     if (id == null) {
         return null;
     }
-    return state.postings[""]?.[id]?.posting ?? null;
+    return state.postings[nodeName]?.[id]?.posting ?? null;
 }
 
-export function isPostingCached(state: ClientState, id: string | null): boolean {
-    return id != null && !!getPosting(state, id);
+export function isPostingCached(state: ClientState, id: string | null, nodeName: string = ""): boolean {
+    return id != null && !!getPosting(state, id, nodeName);
 }
 
-export function isPostingBeingDeleted(state: ClientState, id: string | null): boolean {
+export function isPostingBeingDeleted(state: ClientState, id: string | null, nodeName: string = ""): boolean {
     if (id == null) {
         return false;
     }
-    return state.postings[""]?.[id]?.deleting ?? false;
+    return state.postings[nodeName]?.[id]?.deleting ?? false;
 }
 
-export function getPostingVerificationStatus(state: ClientState, id: string): VerificationStatus | null {
-    return state.postings[""]?.[id]?.verificationStatus ?? null;
+export function getPostingVerificationStatus(state: ClientState, id: string,
+                                             nodeName: string = ""): VerificationStatus | null {
+    return state.postings[nodeName]?.[id]?.verificationStatus ?? null;
 }
 
 export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">,
@@ -56,16 +57,27 @@ export function getPostingStory(posting: PostingInfo, feedName: string): StoryIn
     return story;
 }
 
-export function findPostingIdByRemote(postings: PostingsState, remoteNodeName: string | null,
-                                      remotePostingId: string | null): string | null {
-    const nodePostings = postings[""];
-    if (nodePostings == null) {
-        return null;
-    }
-    for (let [id, entry] of Object.entries(nodePostings)) {
-        if (entry?.posting.receiverName === remoteNodeName && entry.posting.receiverPostingId === remotePostingId) {
-            return id;
+interface FullPostingId {
+    nodeName: string;
+    postingId: string;
+}
+
+export function findPostingIdsByRemote(postings: PostingsState, remoteNodeName: string | null,
+                                       remotePostingId: string | null): FullPostingId[] {
+    const ids: FullPostingId[] = [];
+    for (let nodeName of Object.getOwnPropertyNames(postings)) {
+        const nodePostings = postings[nodeName];
+        if (nodePostings == null) {
+            continue;
+        }
+        for (let [id, entry] of Object.entries(nodePostings)) {
+            if (entry?.posting.receiverName === remoteNodeName && entry.posting.receiverPostingId === remotePostingId) {
+                ids.push({nodeName, postingId: id});
+            }
         }
     }
-    return null;
+    if (remoteNodeName != null && remotePostingId != null && postings[remoteNodeName]?.[remotePostingId] != null) {
+        ids.push({nodeName: remoteNodeName, postingId: remotePostingId});
+    }
+    return ids;
 }

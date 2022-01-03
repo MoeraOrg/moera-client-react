@@ -15,11 +15,11 @@ export function fillSubscriptionId(posting: PostingInfo, subscription: Subscript
     }
 }
 
-export function immutableSetSubscriptionId(state: PostingsState, id: string, type: SubscriptionType,
+export function immutableSetSubscriptionId(state: PostingsState, nodeName: string, id: string, type: SubscriptionType,
                                            subscriberId: string | null) {
     switch (type) {
         case "posting-comments":
-            return immutable.set(state, ["", id, "posting", "subscriptions", "comments"], subscriberId);
+            return immutable.set(state, [nodeName, id, "posting", "subscriptions", "comments"], subscriberId);
         default:
             return state;
     }
