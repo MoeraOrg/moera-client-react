@@ -4,7 +4,7 @@ import { CLOSE_LIGHT_BOX, LIGHT_BOX_MEDIA_SET, OPEN_LIGHT_BOX } from "state/ligh
 
 const initialState = {
     show: false,
-    nodeName: null,
+    nodeName: "",
     postingId: null,
     commentId: null,
     mediaId: null

@@ -10,6 +10,10 @@ export function isLightBoxShown(state: ClientState) {
     return state.lightBox.show;
 }
 
+export function getLightBoxNodeName(state: ClientState) {
+    return state.lightBox.nodeName;
+}
+
 export function getLightBoxPostingId(state: ClientState) {
     return state.lightBox.postingId;
 }
@@ -34,6 +38,7 @@ export function getLightBoxMediaPostingId(state: ClientState) {
 }
 
 export function isLightBoxMediaPostingToBeLoaded(state: ClientState) {
+    const nodeName = getLightBoxNodeName(state);
     const postingId = getLightBoxMediaPostingId(state);
-    return postingId != null && !isPostingCached(state, postingId);
+    return postingId != null && !isPostingCached(state, postingId, nodeName);
 }

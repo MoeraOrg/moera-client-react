@@ -4,12 +4,12 @@ import { ActionWithPayload } from "state/action-types";
 
 export const OPEN_LIGHT_BOX = "OPEN_LIGHT_BOX";
 export type OpenLightBoxAction = ActionWithPayload<typeof OPEN_LIGHT_BOX, {
-    nodeName: string | null;
+    nodeName: string;
     postingId: string;
     commentId: string | null;
     mediaId: string | null;
 }>;
-export const openLightBox = (nodeName: string | null, postingId: string, commentId: string | null,
+export const openLightBox = (nodeName: string, postingId: string, commentId: string | null,
                              mediaId: string | null): OpenLightBoxAction => ({
     type: OPEN_LIGHT_BOX,
     payload: {nodeName, postingId, commentId, mediaId}

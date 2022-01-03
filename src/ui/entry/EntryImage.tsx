@@ -54,7 +54,7 @@ function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, a
 
     const onNear = () => {
         if (postingId != null) {
-            openLightBox(nodeName, postingId, commentId ?? null, mediaFile.id);
+            openLightBox(nodeName ?? "", postingId, commentId ?? null, mediaFile.id);
         }
     }
 
