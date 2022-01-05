@@ -7,13 +7,13 @@ import { ClientState } from "state/state";
 import { getPosting } from "state/postings/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
+import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { Button, Loading, ModalDialog, RichTextValue } from "ui/control";
 import { RichTextField } from "ui/control/field";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { replaceSmileys } from "util/text";
 import "./ImageEditDialog.css";
-import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -48,8 +48,8 @@ function ImageEditDialog(props: Props) {
                 <div className="modal-body image-edit-dialog">
                     <img className="preview" alt="" src={src} width={imageWidth} height={imageHeight}/>
                     <Loading active={loading}/>
-                    <RichTextField title="Caption" name="caption" format={posting?.bodySrcFormat || "markdown"}
-                                   maxRows={9} smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
+                    <RichTextField name="caption" format={posting?.bodySrcFormat || "markdown"} maxRows={9}
+                                   smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={onClose}>Cancel</Button>
