@@ -28,6 +28,7 @@ import {
     PeopleGeneralInfo,
     PostingFeatures,
     PostingInfo,
+    PostingSourceText,
     PostingText,
     PrivateMediaFileInfo,
     ProfileAttributes,
@@ -297,6 +298,14 @@ export function* putPosting(nodeName: string | null, id: string, postingText: Po
         nodeName, location: ut`/postings/${id}`, method: "PUT", auth: true, body: postingText,
         schema: NodeApi.PostingInfo
     }));
+}
+
+export function* putRemotePosting(nodeName: string | null, remoteNodeName: string, id: string,
+                                  postingText: PostingSourceText): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/nodes/${remoteNodeName}/postings/${id}`, method: "PUT", auth: true, body: postingText,
+        schema: NodeApi.Result
+    });
 }
 
 export function* deletePosting(nodeName: string | null, id: string): CallApiResult<Result> {

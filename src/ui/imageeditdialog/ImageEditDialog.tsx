@@ -13,6 +13,7 @@ import { RichTextField } from "ui/control/field";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { replaceSmileys } from "util/text";
 import "./ImageEditDialog.css";
+import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -74,6 +75,8 @@ const logic = {
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
         formik.props.imageEditDialogPost({
+            ownerName: formik.props.homeOwnerName,
+            ownerFullName: formik.props.homeOwnerFullName,
             bodySrc: JSON.stringify({
                 text: this._replaceSmileys(formik.props.smileysEnabled, values.caption.text.trim())
             }),
@@ -86,6 +89,8 @@ const logic = {
 
 const connector = connect(
     (state: ClientState) => ({
+        homeOwnerName: getHomeOwnerName(state),
+        homeOwnerFullName: getHomeOwnerFullName(state),
         show: state.imageEditDialog.show,
         media: state.imageEditDialog.media,
         rootPage: state.imageEditDialog.nodeName

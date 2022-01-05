@@ -155,16 +155,31 @@ export interface PostingSubscriptionsInfo {
 }
 
 export interface PostingText {
+    ownerName?: string | null;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
     acceptedReactions?: AcceptedReactions | null;
     reactionsVisible?: boolean | null;
     reactionTotalsVisible?: boolean | null;
+    bodyPreview?: string | null;
     bodySrc: string;
     bodySrcFormat?: SourceFormat | null;
+    body?: Body | string | null;
+    bodyFormat?: BodyFormat | null;
     media?: string[] | null;
+    createdAt?: number | null;
+    signature?: string | null;
+    signatureVersion?: number | null;
     publications?: StoryAttributes[] | null;
     updateInfo?: UpdateInfo | null;
+}
+
+export interface PostingSourceText {
+    ownerAvatar?: AvatarDescription | null;
+    bodySrc?: string | null;
+    bodySrcFormat?: SourceFormat | null;
+    media?: MediaWithDigest[] | null;
+    acceptedReactions?: AcceptedReactions | null;
 }
 
 export interface PostingInfoBase<B> {

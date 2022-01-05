@@ -15,6 +15,7 @@ import { postingSet } from "state/postings/actions";
 import { ClientState } from "state/state";
 import { executor } from "state/executor";
 import { fillActivityReaction } from "state/activityreactions/sagas";
+import { WithContext } from "state/action-types";
 
 export default [
     executor(IMAGE_EDIT_DIALOG_LOAD, "", imageEditDialogLoadSaga),
@@ -43,7 +44,9 @@ function* imageEditDialogLoadSaga() {
     }
 }
 
-function* imageEditDialogPostSaga(action: ImageEditDialogPostAction) {
+function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>) {
+    const {postingText} = action.payload;
+
     const {id, nodeName} = yield* select((state: ClientState) => ({
         id: state.imageEditDialog.media?.postingId,
         nodeName: state.imageEditDialog.nodeName
@@ -55,10 +58,20 @@ function* imageEditDialogPostSaga(action: ImageEditDialogPostAction) {
     }
 
     try {
-        const data = yield* call(Node.putPosting, nodeName, id, action.payload.postingText);
+        const posting = yield* call(Node.putPosting, nodeName, id, postingText);
         yield* put(imageEditDialogPostSucceeded());
-        yield* call(fillActivityReaction, data);
-        yield* put(postingSet(data));
+        yield* call(fillActivityReaction, posting);
+        yield* put(postingSet(posting));
+
+        const remoteNodeName = nodeName || action.context.ownerName;
+        if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {
+            const sourceText = {
+                bodySrc: postingText.bodySrc,
+                bodySrcFormat: postingText.bodySrcFormat,
+                acceptedReactions: postingText.acceptedReactions
+            }
+            yield* call(Node.putRemotePosting, ":", remoteNodeName, id, sourceText);
+        }
     } catch (e) {
         yield* put(imageEditDialogPostFailed());
         yield* put(errorThrown(e));
