@@ -24,7 +24,7 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-const toDraftText = (ownerName: string, postingId: string, commentId: string | null,
+const toDraftText = (receiverName: string, postingId: string, commentId: string | null,
                      commentText: CommentText, media: Map<string, RichTextMedia>): DraftText => ({
     ...cloneDeep(commentText),
     media: commentText.media?.map(id => ({
@@ -32,7 +32,7 @@ const toDraftText = (ownerName: string, postingId: string, commentId: string | n
         hash: media.get(id)?.hash,
         digest: media.get(id)?.digest
     })),
-    receiverName: ownerName,
+    receiverName: receiverName,
     draftType: commentId == null ? "new-comment" : "comment-update",
     receiverPostingId: postingId,
     receiverCommentId: commentId ?? null /* important, should not be undefined */
@@ -40,8 +40,8 @@ const toDraftText = (ownerName: string, postingId: string, commentId: string | n
 
 const ComposeDraftSaver = (props: Props) => {
     const {
-        initialText, savingDraft, savedDraft, ownerName, receiverPostingId, commentId, comment, draft, commentDraftSave,
-        commentComposeCancel, commentDialogCommentReset
+        initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId, comment, draft,
+        commentDraftSave, commentComposeCancel, commentDialogCommentReset
     } = props;
 
     const toText = (values: CommentComposeValues): CommentText | null =>
@@ -57,7 +57,8 @@ const ComposeDraftSaver = (props: Props) => {
                     .filter((rm): rm is RichTextMedia => rm != null)
                     .map(rm => [rm.id, rm])
             );
-            commentDraftSave(draft?.id ?? null, toDraftText(ownerName, receiverPostingId, commentId, text, media));
+            commentDraftSave(draft?.id ?? null,
+                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, text, media));
         }
     };
 
@@ -81,6 +82,7 @@ const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         ownerName: getOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
+        receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
         repliedToId: ownProps.commentId == null
             ? getCommentComposerRepliedToId(state)
