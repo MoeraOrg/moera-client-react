@@ -69,12 +69,12 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         color: "var(--bs-green)",
         icon: "reply"
     },
-    "posting-task-failed": {
+    "comment-post-task-failed": {
         title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
-    "comment-task-failed": {
+    "comment-update-task-failed": {
         title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
@@ -83,6 +83,16 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         title: "Post updated",
         color: "var(--bs-green)",
         icon: "pen-alt"
+    },
+    "posting-post-task-failed": {
+        title: "Operation failed",
+        color: "var(--incorrect)",
+        icon: "exclamation-circle"
+    },
+    "posting-update-task-failed": {
+        title: "Operation failed",
+        color: "var(--incorrect)",
+        icon: "exclamation-circle"
     }
 };
 
@@ -107,11 +117,13 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
         case "reaction-added-negative":
             return {nodeName: ":", href: `/post/${postingId}`}
         case "mention-posting":
-        case "posting-task-failed":
+        case "comment-post-task-failed":
         case "posting-updated":
+        case "posting-update-task-failed":
             return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
         case "subscriber-added":
         case "subscriber-deleted":
+        case "posting-post-task-failed":
             return {nodeName: story.remoteNodeName, href: "/"}
         case "comment-added":
             return {nodeName: ":", href: `/post/${postingId}?comment=${story.remoteCommentId}`}
@@ -120,7 +132,7 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
         case "comment-reaction-added-positive":
         case "comment-reaction-added-negative":
         case "remote-comment-added":
-        case "comment-task-failed":
+        case "comment-update-task-failed":
             return {
                 nodeName: story.remoteNodeName,
                 href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`

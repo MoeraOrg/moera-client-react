@@ -259,3 +259,14 @@ export interface AvatarOrderedEvent extends BaseEvent<"AVATAR_ORDERED"> {
     mediaId: string;
     ordinal: number;
 }
+
+interface RemotePostingEvent<T> extends BaseEvent<T> {
+    remoteNodeName: string;
+    remotePostingId: string;
+}
+
+export type RemotePostingAddedEvent = RemotePostingEvent<"REMOTE_POSTING_ADDED">;
+
+export type RemotePostingUpdatedEvent = RemotePostingEvent<"REMOTE_POSTING_UPDATED">;
+
+export type RemotePostingDeletedEvent = RemotePostingEvent<"REMOTE_POSTING_DELETED">;

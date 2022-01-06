@@ -333,7 +333,8 @@ export type EncodedPartialCommentInfo = PartialCommentInfoBase<string>;
 export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-added-negative" | "mention-posting"
     | "subscriber-added" | "subscriber-deleted" | "comment-added" | "mention-comment" | "reply-comment"
     | "comment-reaction-added-positive" | "comment-reaction-added-negative" | "remote-comment-added"
-    | "posting-task-failed" | "comment-task-failed" | "posting-updated";
+    | "comment-post-task-failed" | "comment-update-task-failed" | "posting-updated" | "posting-post-task-failed"
+    | "posting-update-task-failed";
 
 export interface StoryAttributes {
     feedName?: string | null;
