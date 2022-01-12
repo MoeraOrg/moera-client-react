@@ -1399,6 +1399,10 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
             type: "string",
             nullable: true
         },
+        "remoteMediaId": {
+            type: "string",
+            nullable: true
+        },
         "operations": {
             type: "object",
             properties: {

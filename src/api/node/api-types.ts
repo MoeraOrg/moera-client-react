@@ -334,7 +334,9 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "subscriber-added" | "subscriber-deleted" | "comment-added" | "mention-comment" | "reply-comment"
     | "comment-reaction-added-positive" | "comment-reaction-added-negative" | "remote-comment-added"
     | "comment-post-task-failed" | "comment-update-task-failed" | "posting-updated" | "posting-post-task-failed"
-    | "posting-update-task-failed";
+    | "posting-update-task-failed" | "posting-media-reaction-added-positive" | "posting-media-reaction-added-negative"
+    | "comment-media-reaction-added-positive" | "comment-media-reaction-added-negative"
+    | "posting-media-reaction-failed" | "comment-media-reaction-failed";
 
 export interface StoryAttributes {
     feedName?: string | null;
@@ -363,6 +365,7 @@ export interface StoryInfoBase<B> {
     remoteFullName?: string | null;
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
+    remoteMediaId?: string | null;
     operations?: {
         edit?: string[] | null;
         delete?: string[] | null;

@@ -93,6 +93,36 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
+    },
+    "posting-media-reaction-added-positive": {
+        title: "Media in post supported",
+        color: "var(--correct)",
+        icon: "thumbs-up"
+    },
+    "posting-media-reaction-added-negative": {
+        title: "Media in post opposed",
+        color: "var(--incorrect)",
+        icon: "thumbs-down"
+    },
+    "comment-media-reaction-added-positive": {
+        title: "Media in comment supported",
+        color: "var(--correct)",
+        icon: "thumbs-up"
+    },
+    "comment-media-reaction-added-negative": {
+        title: "Media in comment opposed",
+        color: "var(--incorrect)",
+        icon: "thumbs-down"
+    },
+    "posting-media-reaction-failed": {
+        title: "Operation failed",
+        color: "var(--incorrect)",
+        icon: "exclamation-circle"
+    },
+    "comment-media-reaction-failed": {
+        title: "Operation failed",
+        color: "var(--incorrect)",
+        icon: "exclamation-circle"
     }
 };
 
@@ -136,6 +166,20 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
             return {
                 nodeName: story.remoteNodeName,
                 href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+            }
+        case "posting-media-reaction-added-positive":
+        case "posting-media-reaction-added-negative":
+        case "posting-media-reaction-failed":
+            return {
+                nodeName: story.remoteNodeName,
+                href: `/post/${story.remotePostingId}?media=${story.remoteMediaId}`
+            }
+        case "comment-media-reaction-added-positive":
+        case "comment-media-reaction-added-negative":
+        case "comment-media-reaction-failed":
+            return {
+                nodeName: story.remoteNodeName,
+                href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}&media=${story.remoteMediaId}`
             }
         default:
             return {nodeName: ":", href: "/"}
