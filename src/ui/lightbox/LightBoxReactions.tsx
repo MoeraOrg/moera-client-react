@@ -5,7 +5,7 @@ import { ClientReactionInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { postingReact, postingReactionDelete } from "state/postings/actions";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getLightBoxMediaPostingId } from "state/lightbox/selectors";
+import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ReactionButton } from "ui/control";
@@ -48,7 +48,7 @@ function LightBoxReactions({posting, homeOwnerName, enableSelf, postingReact, po
 
 const connector = connect(
     (state: ClientState) => ({
-        posting: getPosting(state, getLightBoxMediaPostingId(state)),
+        posting: getPosting(state, getLightBoxMediaPostingId(state), getLightBoxNodeName(state)),
         homeOwnerName: getHomeOwnerName(state),
         enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean
     }),
