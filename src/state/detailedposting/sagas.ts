@@ -269,7 +269,9 @@ function* commentPostSaga(action: CommentPostAction) {
         if (draftId != null) {
             yield* call(Node.deleteDraft, ":", draftId);
         }
-        yield* call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentSourceText);
+        if (receiverName !== commentText.ownerName) {
+            yield* call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentSourceText);
+        }
     } catch (e) {
         yield* put(commentPostFailed(receiverName, receiverPostingId));
         yield* put(errorThrown(e));
