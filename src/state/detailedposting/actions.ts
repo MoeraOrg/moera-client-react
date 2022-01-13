@@ -267,6 +267,22 @@ export const commentDraftSaveFailed = (nodeName: string, postingId: string,
     payload: {nodeName, postingId, commentId}
 });
 
+export const COMMENT_DRAFT_DELETE = "COMMENT_DRAFT_DELETE";
+export type CommentDraftDeleteAction = Action<typeof COMMENT_DRAFT_DELETE>;
+export const commentDraftDelete = (): CommentDraftDeleteAction => ({
+    type: COMMENT_DRAFT_DELETE
+});
+
+export const COMMENT_DRAFT_DELETED = "COMMENT_DRAFT_DELETED";
+export type CommentDraftDeletedAction = ActionWithPayload<typeof COMMENT_DRAFT_DELETED, {
+    nodeName: string;
+    postingId: string;
+}>;
+export const commentDraftDeleted = (nodeName: string, postingId: string): CommentDraftDeletedAction => ({
+    type: COMMENT_DRAFT_DELETED,
+    payload: {nodeName, postingId}
+});
+
 export const COMMENT_POST = "COMMENT_POST";
 export type CommentPostAction = ActionWithPayload<typeof COMMENT_POST, {
     postingId: string;
@@ -628,6 +644,8 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentDraftSaveAction
     | CommentDraftSavedAction
     | CommentDraftSaveFailedAction
+    | CommentDraftDeleteAction
+    | CommentDraftDeletedAction
     | CommentPostAction
     | CommentPostedAction
     | CommentPostFailedAction

@@ -5,13 +5,13 @@ import * as textFieldEdit from 'text-field-edit';
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
-    COMMENT_DIALOG_COMMENT_RESET,
-    CommentDialogCommentResetAction,
     closeCommentDialog,
     COMMENT_COMPOSE_CANCEL,
     COMMENT_COPY_LINK,
     COMMENT_DELETE,
     COMMENT_DIALOG_COMMENT_LOAD,
+    COMMENT_DIALOG_COMMENT_RESET,
+    COMMENT_DRAFT_DELETE,
     COMMENT_DRAFT_LOAD,
     COMMENT_DRAFT_SAVE,
     COMMENT_LOAD,
@@ -28,6 +28,8 @@ import {
     commentDeleteFailed,
     commentDialogCommentLoaded,
     commentDialogCommentLoadFailed,
+    CommentDialogCommentResetAction,
+    commentDraftDeleted,
     CommentDraftLoadAction,
     commentDraftLoaded,
     commentDraftLoadFailed,
@@ -104,6 +106,7 @@ export default [
     executor(COMMENT_POST, null, commentPostSaga),
     executor(COMMENT_DRAFT_LOAD, "", commentDraftLoadSaga),
     executor(COMMENT_DRAFT_SAVE, "", commentDraftSaveSaga),
+    executor(COMMENT_DRAFT_DELETE, "", commentDraftDeleteSaga),
     executor(COMMENT_COMPOSE_CANCEL, "", commentComposeCancelSaga),
     executor(COMMENT_DELETE, payload => payload.commentId, commentDeleteSaga),
     executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
@@ -337,6 +340,19 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
         yield* put(commentDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
             draftText.receiverCommentId ?? null));
         yield* put(errorThrown(e));
+    }
+}
+
+function* commentDraftDeleteSaga() {
+    const draft = yield* select((state: ClientState) => state.detailedPosting.compose.draft);
+
+    if (draft?.id == null) {
+        return;
+    }
+
+    yield* call(Node.deleteDraft, ":", draft.id);
+    if (draft.receiverPostingId != null) {
+        yield* put(commentDraftDeleted(draft.receiverName, draft.receiverPostingId));
     }
 }
 

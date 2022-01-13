@@ -15,6 +15,7 @@ import {
     COMMENT_DIALOG_COMMENT_LOADED,
     COMMENT_DIALOG_CONFLICT,
     COMMENT_DIALOG_CONFLICT_CLOSE,
+    COMMENT_DRAFT_DELETED,
     COMMENT_DRAFT_LOAD,
     COMMENT_DRAFT_LOAD_FAILED,
     COMMENT_DRAFT_LOADED,
@@ -186,6 +187,7 @@ function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
 }
 
 export default (state: DetailedPostingState = initialState, action: ClientAction): DetailedPostingState => {
+    console.log(action);
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
@@ -515,6 +517,19 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
 
             const property = action.payload.commentId != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
+                savingDraft: false,
+                savedDraft: false
+            });
+        }
+
+        case COMMENT_DRAFT_DELETED: {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+
+            return immutable.assign(state, "compose", {
+                draft: null,
                 savingDraft: false,
                 savedDraft: false
             });

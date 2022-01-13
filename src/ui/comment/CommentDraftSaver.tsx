@@ -12,7 +12,7 @@ import {
     getCommentDialogComment,
     getCommentsState
 } from "state/detailedposting/selectors";
-import { commentComposeCancel, commentDialogCommentReset, commentDraftSave } from "state/detailedposting/actions";
+import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
 import { RichTextMedia } from "state/richtexteditor/actions";
 import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
@@ -41,7 +41,7 @@ const toDraftText = (receiverName: string, postingId: string, commentId: string 
 const ComposeDraftSaver = (props: Props) => {
     const {
         initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId, comment, draft,
-        commentDraftSave, commentComposeCancel, commentDialogCommentReset
+        commentDraftSave, commentDraftDelete, commentDialogCommentReset
     } = props;
 
     const toText = (values: CommentComposeValues): CommentText | null =>
@@ -68,7 +68,7 @@ const ComposeDraftSaver = (props: Props) => {
                 commentDialogCommentReset(draft.id, false);
             }
         } else {
-            commentComposeCancel();
+            commentDraftDelete();
         }
     }
 
@@ -102,7 +102,7 @@ const connector = connect(
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat
     }),
-    { commentDraftSave, commentComposeCancel, commentDialogCommentReset }
+    { commentDraftSave, commentDraftDelete, commentDialogCommentReset }
 );
 
 export default connector(ComposeDraftSaver);
