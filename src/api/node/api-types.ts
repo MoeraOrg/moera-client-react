@@ -336,7 +336,8 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "comment-post-task-failed" | "comment-update-task-failed" | "posting-updated" | "posting-post-task-failed"
     | "posting-update-task-failed" | "posting-media-reaction-added-positive" | "posting-media-reaction-added-negative"
     | "comment-media-reaction-added-positive" | "comment-media-reaction-added-negative"
-    | "posting-media-reaction-failed" | "comment-media-reaction-failed";
+    | "posting-media-reaction-failed" | "comment-media-reaction-failed" | "posting-subscribe-task-failed"
+    | "posting-reaction-task-failed" | "comment-reaction-task-failed";
 
 export interface StoryAttributes {
     feedName?: string | null;

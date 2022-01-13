@@ -123,6 +123,21 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
+    },
+    "posting-subscribe-task-failed": {
+        title: "Operation failed",
+        color: "var(--incorrect)",
+        icon: "exclamation-circle"
+    },
+    "posting-reaction-task-failed": {
+        title: "Operation failed",
+        color: "var(--incorrect)",
+        icon: "exclamation-circle"
+    },
+    "comment-reaction-task-failed": {
+        title: "Operation failed",
+        color: "var(--incorrect)",
+        icon: "exclamation-circle"
     }
 };
 
@@ -150,6 +165,8 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
         case "comment-post-task-failed":
         case "posting-updated":
         case "posting-update-task-failed":
+        case "posting-subscribe-task-failed":
+        case "posting-reaction-task-failed":
             return {nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}
         case "subscriber-added":
         case "subscriber-deleted":
@@ -161,6 +178,7 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
         case "reply-comment":
         case "comment-reaction-added-positive":
         case "comment-reaction-added-negative":
+        case "comment-reaction-task-failed":
         case "remote-comment-added":
         case "comment-update-task-failed":
             return {
