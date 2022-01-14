@@ -623,6 +623,7 @@ export interface DraftText {
     receiverName: string;
     receiverPostingId?: string | null;
     receiverCommentId?: string | null;
+    repliedToId?: string | null;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
     acceptedReactions?: AcceptedReactions | null;
@@ -641,6 +642,7 @@ export interface DraftInfoBase<B> {
     receiverName: string;
     receiverPostingId?: string | null;
     receiverCommentId?: string | null;
+    repliedToId?: string | null;
     createdAt: number;
     editedAt?: number | null;
     deadline?: number | null;

@@ -24,7 +24,7 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-const toDraftText = (receiverName: string, postingId: string, commentId: string | null,
+const toDraftText = (receiverName: string, postingId: string, commentId: string | null, repliedToId: string | null,
                      commentText: CommentText, media: Map<string, RichTextMedia>): DraftText => ({
     ...cloneDeep(commentText),
     media: commentText.media?.map(id => ({
@@ -32,16 +32,17 @@ const toDraftText = (receiverName: string, postingId: string, commentId: string 
         hash: media.get(id)?.hash,
         digest: media.get(id)?.digest
     })),
-    receiverName: receiverName,
+    receiverName,
     draftType: commentId == null ? "new-comment" : "comment-update",
     receiverPostingId: postingId,
-    receiverCommentId: commentId ?? null /* important, should not be undefined */
+    receiverCommentId: commentId ?? null, /* important, should not be undefined */
+    repliedToId
 } as DraftText);
 
 const ComposeDraftSaver = (props: Props) => {
     const {
-        initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId, comment, draft,
-        commentDraftSave, commentDraftDelete, commentDialogCommentReset
+        initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId, repliedToId,
+        comment, draft, commentDraftSave, commentDraftDelete, commentDialogCommentReset
     } = props;
 
     const toText = (values: CommentComposeValues): CommentText | null =>
@@ -58,7 +59,7 @@ const ComposeDraftSaver = (props: Props) => {
                     .map(rm => [rm.id, rm])
             );
             commentDraftSave(draft?.id ?? null,
-                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, text, media));
+                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media));
         }
     };
 

@@ -2066,6 +2066,10 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
             type: "string",
             nullable: true
         },
+        "repliedToId": {
+            type: "string",
+            nullable: true
+        },
         "createdAt": {
             type: "integer"
         },

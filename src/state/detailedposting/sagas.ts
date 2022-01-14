@@ -46,6 +46,7 @@ import {
     CommentReactionLoadAction,
     commentReactionSet,
     commentRepliedToSet,
+    commentRepliedToUnset,
     CommentReplyAction,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_LOAD_ALL,
@@ -93,7 +94,7 @@ import { Browser } from "ui/browser";
 import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";
-import { DraftInfo, MediaAttachment } from "api/node/api-types";
+import { CommentInfo, DraftInfo, MediaAttachment, RepliedTo } from "api/node/api-types";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", introduce(detailedPostingLoadSaga)),
@@ -291,6 +292,24 @@ function* loadRemoteMediaAttachments(nodeName: string | null, attachments: Media
     }
 }
 
+function* loadRepliedTo(nodeName: string, postingId: string, id: string) {
+    let repliedToComment: CommentInfo | null = yield* select(state => getComment(state, id));
+    if (repliedToComment == null) {
+        repliedToComment = yield* call(Node.getComment, nodeName, postingId, id);
+    }
+    if (repliedToComment != null) {
+        return {
+            id: repliedToComment.id,
+            name: repliedToComment.ownerName,
+            fullName: repliedToComment.ownerFullName,
+            avatar: repliedToComment.ownerAvatar,
+            heading: repliedToComment.heading
+        }
+    } else {
+        return null;
+    }
+}
+
 function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
     const {isDialog} = action.payload;
 
@@ -305,12 +324,23 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
     }
 
     try {
-        const data = commentId != null
+        const draft: DraftInfo | null = commentId != null
             ? yield* call(Node.getDraftCommentUpdate, ":", nodeName, postingId, commentId)
             : yield* call(Node.getDraftNewComment, ":", nodeName, postingId);
-        if (data != null) {
-            yield* call(loadRemoteMediaAttachments, nodeName, data.media ?? null);
-            yield* put(commentDraftLoaded(data));
+        if (draft != null) {
+            yield* call(loadRemoteMediaAttachments, nodeName, draft.media ?? null);
+            yield* put(commentDraftLoaded(draft));
+
+            let repliedTo: RepliedTo | null = null;
+            if (commentId == null && draft.repliedToId != null) {
+                repliedTo = yield* call(loadRepliedTo, nodeName, postingId, draft.repliedToId);
+            }
+            if (repliedTo != null) {
+                yield* put(commentRepliedToSet(repliedTo.id, repliedTo.name, repliedTo.fullName ?? null,
+                    repliedTo.heading ?? ""));
+            } else {
+                yield* put(commentRepliedToUnset());
+            }
         } else {
             yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));
         }
@@ -328,14 +358,14 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     }
 
     try {
-        let data: DraftInfo;
+        let draft: DraftInfo;
         if (draftId == null) {
-            data = yield* call(Node.postDraft, ":", draftText);
+            draft = yield* call(Node.postDraft, ":", draftText);
         } else {
-            data = yield* call(Node.putDraft, ":", draftId, draftText);
+            draft = yield* call(Node.putDraft, ":", draftId, draftText);
         }
         yield* put(commentDraftSaved(draftText.receiverName, draftText.receiverPostingId,
-            draftText.receiverCommentId ?? null, data));
+            draftText.receiverCommentId ?? null, draft));
     } catch (e) {
         yield* put(commentDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
             draftText.receiverCommentId ?? null));

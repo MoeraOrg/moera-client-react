@@ -161,6 +161,14 @@ export function getCommentComposerRepliedToName(state: ClientState): string | nu
     return state.detailedPosting.compose.repliedToName;
 }
 
+export function getCommentComposerRepliedToFullName(state: ClientState): string | null {
+    return state.detailedPosting.compose.repliedToFullName;
+}
+
+export function getCommentComposerRepliedToHeading(state: ClientState): string | null {
+    return state.detailedPosting.compose.repliedToHeading;
+}
+
 export function isCommentComposerReplied(state: ClientState): boolean {
     return getCommentComposerRepliedToId(state) != null;
 }

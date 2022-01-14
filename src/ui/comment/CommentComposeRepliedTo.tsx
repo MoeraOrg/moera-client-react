@@ -3,7 +3,13 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { commentRepliedToUnset } from "state/detailedposting/actions";
-import { getDetailedPostingId } from "state/detailedposting/selectors";
+import {
+    getCommentComposerRepliedToFullName,
+    getCommentComposerRepliedToHeading,
+    getCommentComposerRepliedToId,
+    getCommentComposerRepliedToName,
+    getDetailedPostingId
+} from "state/detailedposting/selectors";
 import RepliedTo from "ui/comment/RepliedTo";
 import { htmlEntities, replaceEmojis } from "util/html";
 
@@ -26,10 +32,10 @@ function CommentComposeRepliedTo({postingId, commentId, ownerName, ownerFullName
 const connector = connect(
     (state: ClientState) => ({
         postingId: getDetailedPostingId(state),
-        commentId: state.detailedPosting.compose.repliedToId,
-        ownerName: state.detailedPosting.compose.repliedToName,
-        ownerFullName: state.detailedPosting.compose.repliedToFullName,
-        heading: state.detailedPosting.compose.repliedToHeading,
+        commentId: getCommentComposerRepliedToId(state),
+        ownerName: getCommentComposerRepliedToName(state),
+        ownerFullName: getCommentComposerRepliedToFullName(state),
+        heading: getCommentComposerRepliedToHeading(state)
     }),
     { commentRepliedToUnset }
 );
