@@ -24,6 +24,14 @@
     text-align: start;
 }
 
+.comment .content P {
+    margin-top: 1rem;
+}
+
+.comment .content P:first-child {
+    margin-top: 0;
+}
+
 .comment .content P:last-child {
     margin-bottom: 0;
 }
@@ -46,10 +54,6 @@
     .comment .content.preview {
         max-height: 100vh;
     }
-}
-
-.comment .content P {
-    margin-top: 1rem;
 }
 
 .comment .content IMG:not(.emoji) {

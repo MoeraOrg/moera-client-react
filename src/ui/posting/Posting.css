@@ -49,6 +49,10 @@
     margin-top: 1rem;
 }
 
+.posting > .content P:first-child {
+    margin-top: 0;
+}
+
 .posting > .content IMG:not(.emoji) {
     width: auto;
     height: auto;
