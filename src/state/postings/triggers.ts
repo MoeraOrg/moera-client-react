@@ -10,10 +10,12 @@ import {
     POSTING_COMMENTS_UNSUBSCRIBED,
     postingCommentsSet,
     postingLoad,
-    postingReactionLoad
+    postingReactionLoad,
+    postingReactionsReload
 } from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
 import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
+import { DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
 import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { PostingCommentsChangedEvent, PostingReactionsChangedEvent, PostingUpdatedEvent } from "api/events/api-types";
@@ -29,6 +31,7 @@ export default [
     ),
     trigger(POSTING_COMMENTS_SUBSCRIBED, true, flashBox("Following comments")),
     trigger(POSTING_COMMENTS_UNSUBSCRIBED, true, flashBox("Not following comments")),
+    trigger([HOME_OWNER_SET, DISCONNECTED_FROM_HOME], true, postingReactionsReload),
     trigger(
         EVENT_NODE_POSTING_UPDATED,
         (state, signal: EventAction<PostingUpdatedEvent>) =>

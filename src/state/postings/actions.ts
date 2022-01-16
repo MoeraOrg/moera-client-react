@@ -1,3 +1,5 @@
+import { Action } from 'redux';
+
 import { ActionWithPayload } from "state/action-types";
 import {
     FeedReference,
@@ -110,6 +112,12 @@ export type PostingReactionLoadAction = ActionWithPayload<typeof POSTING_REACTIO
 export const postingReactionLoad = (id: string, nodeName: string = ""): PostingReactionLoadAction => ({
     type: POSTING_REACTION_LOAD,
     payload: {id, nodeName}
+});
+
+export const POSTING_REACTIONS_RELOAD = "POSTING_REACTIONS_RELOAD";
+export type PostingReactionsReloadAction = Action<typeof POSTING_REACTIONS_RELOAD>;
+export const postingReactionsReload = (): PostingReactionsReloadAction => ({
+    type: POSTING_REACTIONS_RELOAD
 });
 
 export const POSTING_REACTION_DELETE = "POSTING_REACTION_DELETE";
@@ -260,6 +268,7 @@ export type PostingsAnyAction =
     | PostingVerifyFailedAction
     | PostingReactAction
     | PostingReactionLoadAction
+    | PostingReactionsReloadAction
     | PostingReactionDeleteAction
     | PostingReactionSetAction
     | PostingCopyLinkAction

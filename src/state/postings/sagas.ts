@@ -1,4 +1,4 @@
-import { call, put, select } from 'typed-redux-saga/macro';
+import { call, put, select, spawn } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
 
 import { Node } from "api";
@@ -12,6 +12,7 @@ import {
     POSTING_REACT,
     POSTING_REACTION_DELETE,
     POSTING_REACTION_LOAD,
+    POSTING_REACTIONS_RELOAD,
     POSTING_VERIFY,
     PostingCommentsSubscribeAction,
     postingCommentsSubscribed,
@@ -34,6 +35,7 @@ import {
     postingVerifyFailed
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
+import { ClientState } from "state/state";
 import { getPosting } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
@@ -53,6 +55,7 @@ export default [
     executor(POSTING_VERIFY, payload => payload.id, postingVerifySaga),
     executor(POSTING_REACT, null, introduce(postingReactSaga)),
     executor(POSTING_REACTION_LOAD, payload => payload.id, postingReactionLoadSaga),
+    executor(POSTING_REACTIONS_RELOAD, "", postingReactionsReloadSaga),
     executor(POSTING_REACTION_DELETE, payload => payload.id, introduce(postingReactionDeleteSaga)),
     executor(POSTING_COPY_LINK, payload => payload.id, postingCopyLinkSaga),
     executor(POSTING_COMMENTS_SUBSCRIBE, payload => payload.id, introduce(postingCommentsSubscribeSaga)),
@@ -120,8 +123,7 @@ function* postingReactSaga(action: PostingReactAction) {
     }
 }
 
-function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
-    const {id, nodeName} = action.payload;
+function* postingReactionLoad(id: string, nodeName: string) {
     try {
         const {negative, emoji} = yield* call(Node.getPostingReaction, nodeName, id);
         const reaction = negative != null && emoji != null ? {negative, emoji} : null;
@@ -129,6 +131,20 @@ function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
         yield* put(postingReactionSet(id, reaction, totals, nodeName));
     } catch (e) {
         yield* put(errorThrown(e));
+    }
+}
+
+function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
+    const {id, nodeName} = action.payload;
+    yield* call(postingReactionLoad, id, nodeName);
+}
+
+function* postingReactionsReloadSaga() {
+    const postingsState = yield* select((state: ClientState) => state.postings);
+    for (const nodeName of Object.getOwnPropertyNames(postingsState)) {
+        for (const id of Object.getOwnPropertyNames(postingsState[nodeName])) {
+            yield* spawn(postingReactionLoad, id, nodeName);
+        }
     }
 }
 
