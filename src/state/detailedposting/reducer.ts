@@ -187,7 +187,6 @@ function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
 }
 
 export default (state: DetailedPostingState = initialState, action: ClientAction): DetailedPostingState => {
-    console.log(action);
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
