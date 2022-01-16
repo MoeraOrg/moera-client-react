@@ -1,18 +1,16 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
-import InstantIcon from "ui/instant/InstantIcon";
+import { ClientState } from "state/state";
+import { storyReadingUpdate } from "state/stories/actions";
+import { ExtStoryInfo } from "state/feeds/state";
 import Jump from "ui/navigation/Jump";
 import { Avatar } from "ui/control";
-import { storyReadingUpdate } from "state/stories/actions";
 import { getInstantTarget } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
-import { ExtStoryInfo } from "state/feeds/state";
-import { ClientState } from "state/state";
 import "./InstantStory.css";
 
 type Props = {
@@ -45,10 +43,9 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
                 <Avatar avatar={story.summaryAvatar} ownerName={story.remoteNodeName} nodeName=":" size={36}/>
             </div>
             <div className="summary">
-                <InstantHtml html={story.summary ?? ""}/>
+                <InstantHtml story={story}/>
             </div>
             <div className="footer">
-                <InstantIcon story={story}/>
                 <time className="date" dateTime={formatISO(publishDate)}>{formatDistanceToNow(publishDate)}</time>
             </div>
             <div className="sidebar">

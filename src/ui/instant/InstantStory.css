@@ -38,6 +38,11 @@
     grid-column: 2 / 3;
 }
 
+#instants .instant .summary .instant-icon {
+    margin-right: .25em;
+    font-size: 1rem;
+}
+
 #instants .instant .footer {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
@@ -46,7 +51,6 @@
 
 #instants .instant .footer .date {
     color: var(--bs-gray-500);
-    margin-left: .5em;
 }
 
 #instants .instant .sidebar {

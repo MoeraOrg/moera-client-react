@@ -3,9 +3,9 @@ import { StoryInfo, StoryType } from "api/node/api-types";
 import { ExtStoryInfo } from "state/feeds/state";
 
 interface InstantTypeDetails {
-    title: string;
-    color: string;
-    icon: IconProp;
+    title?: string;
+    color?: string;
+    icon?: IconProp;
 }
 
 const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
@@ -15,24 +15,12 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         icon: "pen-alt"
     },
     "reaction-added-positive": {
-        title: "Post supported",
-        color: "var(--correct)",
-        icon: "thumbs-up"
     },
     "reaction-added-negative": {
-        title: "Post opposed",
-        color: "var(--incorrect)",
-        icon: "thumbs-down"
     },
     "comment-reaction-added-positive": {
-        title: "Comment supported",
-        color: "var(--correct)",
-        icon: "thumbs-up"
     },
     "comment-reaction-added-negative": {
-        title: "Comment opposed",
-        color: "var(--incorrect)",
-        icon: "thumbs-down"
     },
     "mention-posting": {
         title: "Mention in post",
@@ -46,27 +34,27 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     },
     "subscriber-added": {
         title: "Subscribed",
-        color: "var(--bs-blue)",
+        color: "var(--bs-indigo)",
         icon: "eye"
     },
     "subscriber-deleted": {
         title: "Unsubscribed",
-        color: "var(--bs-blue)",
+        color: "var(--bs-indigo)",
         icon: "eye-slash"
     },
     "comment-added": {
         title: "Commented",
-        color: "var(--bs-green)",
+        color: "var(--green-light)",
         icon: "comment"
     },
     "remote-comment-added": {
         title: "Commented",
-        color: "var(--bs-green)",
+        color: "var(--green-light)",
         icon: "comment"
     },
     "reply-comment": {
         title: "Reply to comment",
-        color: "var(--bs-green)",
+        color: "var(--green-light)",
         icon: "reply"
     },
     "comment-post-task-failed": {
@@ -95,24 +83,12 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         icon: "exclamation-circle"
     },
     "posting-media-reaction-added-positive": {
-        title: "Media in post supported",
-        color: "var(--correct)",
-        icon: "thumbs-up"
     },
     "posting-media-reaction-added-negative": {
-        title: "Media in post opposed",
-        color: "var(--incorrect)",
-        icon: "thumbs-down"
     },
     "comment-media-reaction-added-positive": {
-        title: "Media in comment supported",
-        color: "var(--correct)",
-        icon: "thumbs-up"
     },
     "comment-media-reaction-added-negative": {
-        title: "Media in comment opposed",
-        color: "var(--incorrect)",
-        icon: "thumbs-down"
     },
     "posting-media-reaction-failed": {
         title: "Operation failed",

@@ -5,15 +5,18 @@ import { connect, ConnectedProps, Provider } from 'react-redux';
 import { ClientState } from "state/state";
 import store from "state/store";
 import { getSetting } from "state/settings/selectors";
+import { ExtStoryInfo } from "state/feeds/state";
 import InstantMention from "ui/instant/InstantMention";
 import { NameDisplayMode } from "ui/types";
+import InstantIcon from "ui/instant/InstantIcon";
 
 type Props = {
-    html: string;
+    story: ExtStoryInfo;
 } & ConnectedProps<typeof connector>;
 
-function InstantHtml({html, mode}: Props) {
+function InstantHtml({story, mode}: Props) {
     const dom = useRef<HTMLDivElement>(null);
+    const html = story.summary ?? "";
 
     useEffect(() => {
         if (dom.current == null) {
@@ -34,7 +37,12 @@ function InstantHtml({html, mode}: Props) {
         });
     }, [dom, html, mode]);
 
-    return <div ref={dom} dangerouslySetInnerHTML={{__html: html}}/>
+    return (
+        <>
+            <InstantIcon story={story}/>
+            <span ref={dom} dangerouslySetInnerHTML={{__html: html}}/>
+        </>
+    );
 }
 
 const connector = connect(
