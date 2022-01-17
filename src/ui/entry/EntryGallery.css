@@ -73,7 +73,6 @@
 
 .entry .gallery.single .entry-image IMG {
     object-fit: contain;
-    width: auto;
     height: auto;
     margin-left: auto;
     margin-right: auto;
