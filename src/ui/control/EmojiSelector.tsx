@@ -18,7 +18,7 @@ export function EmojiSelector({negative, reactions, fixedWidth, autoFocus, onCli
         if (autoFocus && domRef.current) {
             domRef.current.focus();
         }
-    });
+    }, [domRef, autoFocus]);
 
     return (
         <div className="emoji-selector" tabIndex={-1} style={{width: fixedWidth ? "15rem" : "auto"}} ref={domRef}>
