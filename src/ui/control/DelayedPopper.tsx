@@ -7,6 +7,7 @@ import debounce from 'lodash.debounce';
 interface ManagerProps {
     disabled?: boolean;
     clickable?: boolean;
+    sticky?: boolean;
     onPreparePopper?: () => void;
     onShow?: () => boolean;
 }
@@ -20,6 +21,7 @@ interface ManagerState {
     touch: TouchLocus;
     scrollY: number | null;
     popup: boolean;
+    sticky: boolean;
     mainEnter: () => void;
     mainLeave: () => void;
     mainTouch: () => void;
@@ -39,6 +41,7 @@ class Manager extends React.PureComponent<ManagerProps, ManagerState> {
             touch: "none", // none, touch, lock
             scrollY: null,
             popup: false,
+            sticky: props.sticky ?? false,
             mainEnter: this.mainEnter,
             mainLeave: this.mainLeave,
             mainTouch: this.mainTouch,
@@ -207,7 +210,7 @@ class Manager extends React.PureComponent<ManagerProps, ManagerState> {
 
 }
 
-export type DelayedPopperChildren = (ref: React.Ref<any>, mainEnter: () => void, mainLeave: () => void,
+export type DelayedPopperChildren = (ref: React.Ref<any>, mainEnter: () => void, mainLeave: (() => void) | undefined,
                                      mainTouch: () => void) => any;
 
 interface ReferenceProps {
@@ -218,7 +221,8 @@ const Reference = ({children}: ReferenceProps) => (
     <DelayedPopperContext.Consumer>
         {context => (
             <PopperReference>
-                {({ref}) => children(ref, context.mainEnter, context.mainLeave, context.mainTouch)}
+                {({ref}) => children(ref, context.mainEnter, !context.sticky ? context.mainLeave : undefined,
+                                     context.mainTouch)}
             </PopperReference>
         )}
     </DelayedPopperContext.Consumer>
@@ -228,26 +232,31 @@ interface DelayedPopperProps {
     placement: Placement;
     arrow?: boolean;
     className?: string;
+    styles?: "popover" | "menu";
     children?: any;
 }
 
-const DelayedPopper = ({placement, arrow, className, children}: DelayedPopperProps) => (
+const DelayedPopper = ({placement, arrow, className, styles = "popover", children}: DelayedPopperProps) => (
     <DelayedPopperContext.Consumer>
         {context => (
             (context.popup || context.locus !== "out") &&
                 <Popper placement={placement}>
                     {({ref, placement, style, arrowProps}) => (
                         <div ref={ref} style={style} className={cx(
-                            "popover",
                             "shadow",
                             "fade",
                             `bs-popover-${placement}`, // activates Bootstrap style for .popover-arrow
-                            {"show": context.popup},
+                            {
+                                "popover": styles === "popover",
+                                "dropdown-menu": styles === "menu",
+                                "show": context.popup
+                            },
                             className
                         )}>
                             {arrow && <div ref={arrowProps.ref} style={arrowProps.style} className="popover-arrow"/>}
-                            <div className="popover-body" onMouseEnter={context.popupEnter}
-                                 onMouseLeave={context.popupLeave}>
+                            <div className={cx({"popover-body": styles === "popover"})}
+                                 onMouseEnter={context.popupEnter}
+                                 onMouseLeave={!context.sticky ? context.popupLeave : undefined}>
                                 {children}
                             </div>
                         </div>
