@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import composeRefs from '@seznam/compose-react-refs';
 import cx from 'classnames';
 
 import { Browser } from "ui/browser";
@@ -10,17 +11,18 @@ type Props = {
     block?: boolean;
     invisible?: boolean;
     loading?: boolean;
+    innerRef?: React.Ref<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function Button({variant, size, block = false, invisible = false, loading = false, disabled = false,
-                        className = "", type = "button", autoFocus, ...props}: Props) {
+                        className = "", type = "button", autoFocus, innerRef, ...props}: Props) {
     const domRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         if (autoFocus && domRef.current != null) {
             domRef.current.focus();
         }
-    });
+    }, [domRef, autoFocus]);
 
     const klass = cx(
         "btn",
@@ -34,7 +36,8 @@ export function Button({variant, size, block = false, invisible = false, loading
     );
 
     return (
-        <button type={type} className={klass} disabled={loading || disabled} {...props} ref={domRef}>
+        <button type={type} className={klass} disabled={loading || disabled} {...props}
+                ref={composeRefs(domRef, innerRef)}>
             <LoadingInline active={loading}/>
             {!(loading && Browser.isTinyScreen()) &&
                 <>{props.children}{loading && "…"}</>
