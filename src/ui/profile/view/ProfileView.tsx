@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
-import { Avatar, Button, Loading } from "ui/control";
+import { Avatar, Button, DonateButton, Loading } from "ui/control";
 import PageHeader from "ui/page/PageHeader";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { Page } from "ui/page/Page";
@@ -31,7 +31,7 @@ const EditButton = editButtonConnector(EditButtonImpl);
 
 type ProfileViewProps = ConnectedProps<typeof profileViewConnector>;
 
-const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml, avatar}, ownerName,
+const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml, avatar, fundraisers}, ownerName,
                       editable}: ProfileViewProps) => (
     <>
         <PageHeader>
@@ -51,6 +51,11 @@ const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml
                 </div>
                 <NodeNameView/>
                 {title && <div className="title">{title}</div>}
+                {(ownerName != null && fundraisers != null && fundraisers.length > 0) &&
+                    <div className="donate">
+                        <DonateButton name={ownerName} fullName={fullName ?? null} fundraisers={fundraisers}/>
+                    </div>
+                }
                 {email &&
                     <div className="email">
                         <span className="title">E-mail:</span> <a href={`mailto:${email}`}>{email}</a>

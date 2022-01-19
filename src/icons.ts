@@ -26,6 +26,7 @@ import {
     faFileDownload,
     faFrown,
     faGlobeEurope,
+    faHandHoldingHeart,
     faHome,
     faImage,
     faItalic,
@@ -106,6 +107,7 @@ export default function initIconLibrary() {
     library.add(faFileDownload);
     library.add(faFrown);
     library.add(faGlobeEurope);
+    library.add(faHandHoldingHeart);
     library.add(faHome);
     library.add(faImage);
     library.add(faItalic);

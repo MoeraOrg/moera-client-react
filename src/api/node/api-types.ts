@@ -47,6 +47,13 @@ export interface WhoAmI {
     avatar?: AvatarImage | null;
 }
 
+export interface FundraiserInfo {
+    title: string;
+    qrCode?: string | null;
+    text?: string | null;
+    href?: string | null;
+}
+
 export interface ProfileAttributes {
     fullName?: string | null;
     gender?: string | null;
@@ -55,6 +62,7 @@ export interface ProfileAttributes {
     bioSrc?: string | null;
     bioSrcFormat?: SourceFormat | null;
     avatarId?: string | null;
+    fundraisers?: FundraiserInfo[] | null;
 }
 
 export interface ProfileInfo {
@@ -65,6 +73,7 @@ export interface ProfileInfo {
     bioSrc?: string | null;
     bioHtml?: string | null;
     avatar?: AvatarInfo | null;
+    fundraisers?: FundraiserInfo[] | null;
     operations?: {
         edit?: string[] | null;
     } | null;

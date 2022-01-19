@@ -5,10 +5,12 @@ import { ConfirmBoxState } from "state/confirmbox/state";
 import { ConnectDialogState } from "state/connectdialog/state";
 import { ContactsState } from "state/contacts/state";
 import { DetailedPostingState } from "state/detailedposting/state";
+import { DonateDialogState } from "state/donatedialog/state";
 import { ErrorState } from "state/error/state";
 import { FeedsState } from "state/feeds/state";
 import { HomeState } from "state/home/state";
 import { FlashBoxState } from "state/flashbox/state";
+import { ImageEditDialogState } from "state/imageeditdialog/state";
 import { LightBoxState } from "state/lightbox/state";
 import { MessageBoxState } from "state/messagebox/state";
 import { NamingState } from "state/naming/state";
@@ -30,7 +32,6 @@ import { ShareDialogState } from "state/sharedialog/state";
 import { SignUpDialogState } from "state/signupdialog/state";
 import { SourceDialogState } from "state/sourcedialog/state";
 import { TokensState } from "state/tokens/state";
-import { ImageEditDialogState } from "state/imageeditdialog/state";
 
 export interface ClientState {
     cartes: CartesState;
@@ -40,6 +41,7 @@ export interface ClientState {
     connectDialog: ConnectDialogState;
     contacts: ContactsState;
     detailedPosting: DetailedPostingState;
+    donateDialog: DonateDialogState;
     error: ErrorState;
     feeds: FeedsState;
     flashBox: FlashBoxState;

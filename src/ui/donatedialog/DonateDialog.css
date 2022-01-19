@@ -1,0 +1,48 @@
+.donate-dialog .recipient {
+    margin-bottom: 1rem;
+    font-size: larger;
+}
+
+.donate-dialog .recipient .name {
+    font-weight: 600;
+}
+
+.donate-dialog .nav-link.active:hover {
+    background-color: var(--bs-primary);
+}
+
+.donate-dialog .nav-link:hover {
+    background-color: var(--highlight-blue);
+    cursor: pointer;
+}
+
+.donate-dialog .nav-link A:hover {
+    text-decoration: none;
+    color: var(--bs-primary);
+}
+
+.donate-dialog .fundraisers {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.donate-dialog .fundraisers .nav {
+    flex: 1 0 10em;
+}
+
+.donate-dialog .fundraisers .info {
+    flex: 4 1 calc(256px + 2rem);
+    min-height: calc(256px + 4rem);
+    display: grid;
+    place-content: center;
+    padding: 1rem;
+}
+
+.donate-dialog .fundraisers .info .info-qr {
+    text-align: center;
+}
+
+.donate-dialog .fundraisers .info .info-qr A {
+    display: inline-block;
+    margin-bottom: .25rem;
+}

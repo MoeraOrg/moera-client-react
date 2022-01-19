@@ -25,6 +25,7 @@ import SourceDialog from "ui/sourcedialog/SourceDialog";
 import QuickTips from "ui/quicktips/QuickTips";
 import LightBox from "ui/lightbox/LightBox";
 import ImageEditDialog from "ui/imageeditdialog/ImageEditDialog";
+import DonateDialog from "ui/donatedialog/DonateDialog";
 import "./colors.css";
 import "./zindex.css";
 import "./App.css";
@@ -51,6 +52,7 @@ const App = ({atNode, feedWidth}: Props) => (
                 <SourceDialog/>
                 <LightBox/>
                 <ImageEditDialog/>
+                <DonateDialog/>
             </>
         :
             <WelcomePage/>

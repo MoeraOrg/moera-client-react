@@ -43,6 +43,7 @@ const emptyProfileInfo = {
     bioSrc: null,
     bioHtml: null,
     avatar: null,
+    fundraisers: [],
     operations: {
         edit: []
     }
@@ -108,6 +109,7 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                     bioSrc: action.payload.profile.bioSrc ?? null,
                     bioHtml: action.payload.profile.bioHtml ?? null,
                     avatar: cloneDeep(action.payload.profile.avatar) ?? null,
+                    fundraisers: cloneDeep(action.payload.profile.fundraisers) ?? [],
                     operations: cloneOperations(action.payload.profile.operations, emptyProfileInfo.operations),
                 },
                 loading: false,

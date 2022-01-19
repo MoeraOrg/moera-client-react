@@ -114,6 +114,29 @@ const WhoAmIType: JSONSchemaType<API.WhoAmI> = {
 
 export const WhoAmI = schema(WhoAmIType);
 
+export const FundraiserInfoType: JSONSchemaType<API.FundraiserInfo> = {
+    type: "object",
+    properties: {
+        "title": {
+            type: "string"
+        },
+        "qrCode": {
+            type: "string",
+            nullable: true
+        },
+        "text": {
+            type: "string",
+            nullable: true
+        },
+        "href": {
+            type: "string",
+            nullable: true
+        }
+    },
+    required: ["title"],
+    additionalProperties: false
+};
+
 const ProfileInfoType: JSONSchemaType<API.ProfileInfo> = {
     type: "object",
     properties: {
@@ -151,6 +174,11 @@ const ProfileInfoType: JSONSchemaType<API.ProfileInfo> = {
         },
         "avatar": {
             ...AvatarInfoType,
+            nullable: true
+        },
+        "fundraisers": {
+            type: "array",
+            items: FundraiserInfoType,
             nullable: true
         },
         "operations": {

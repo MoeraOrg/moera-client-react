@@ -34,6 +34,7 @@ import shareDialog from "state/sharedialog/reducer";
 import sourceDialog from "state/sourcedialog/reducer";
 import imageEditDialog from "state/imageeditdialog/reducer";
 import lightBox from "state/lightbox/reducer";
+import donateDialog from "state/donatedialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -133,6 +134,7 @@ const reducers = combineReducers({
     sourceDialog,
     imageEditDialog,
     lightBox,
+    donateDialog,
     messageBox,
     confirmBox,
     flashBox,
