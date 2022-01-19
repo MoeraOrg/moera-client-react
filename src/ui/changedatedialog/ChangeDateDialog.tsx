@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
@@ -17,37 +17,32 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-class ChangeDateDialog extends React.PureComponent<Props> {
+function ChangeDateDialog(props: Props) {
+    const {show, changing, publishedAt, closeChangeDateDialog} = props;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.publishedAt !== prevProps.publishedAt) {
-            const values = changeDateDialogLogic.mapPropsToValues(this.props);
-            this.props.resetForm({values});
-        }
+    useEffect(() => {
+        const values = changeDateDialogLogic.mapPropsToValues(props);
+        props.resetForm({values});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [publishedAt]); // 'props' are missing on purpose
+
+    if (!show) {
+        return null;
     }
 
-    render() {
-        const {show, changing, closeChangeDateDialog} = this.props;
-
-        if (!show) {
-            return null;
-        }
-
-        return (
-            <ModalDialog title="Change Date/Time" onClose={closeChangeDateDialog}>
-                <Form>
-                    <div className="modal-body">
-                        <DateTimeField name="publishedAt"/>
-                    </div>
-                    <div className="modal-footer">
-                        <Button variant="secondary" onClick={closeChangeDateDialog}>Cancel</Button>
-                        <Button variant="primary" type="submit" loading={changing}>Change</Button>
-                    </div>
-                </Form>
-            </ModalDialog>
-        );
-    }
-
+    return (
+        <ModalDialog title="Change Date/Time" onClose={closeChangeDateDialog}>
+            <Form>
+                <div className="modal-body">
+                    <DateTimeField name="publishedAt"/>
+                </div>
+                <div className="modal-footer">
+                    <Button variant="secondary" onClick={closeChangeDateDialog}>Cancel</Button>
+                    <Button variant="primary" type="submit" loading={changing}>Change</Button>
+                </div>
+            </Form>
+        </ModalDialog>
+    );
 }
 
 const changeDateDialogLogic = {
