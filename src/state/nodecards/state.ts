@@ -1,10 +1,11 @@
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage, FundraiserInfo } from "api/node/api-types";
 
 export interface NodeCardState {
     fullName: string | null;
     gender: string | null;
     title: string | null;
     avatar: AvatarImage | null;
+    fundraisers: FundraiserInfo[] | null;
     subscribersTotal: number | null;
     subscriptionsTotal: number | null;
     subscribed: boolean | null;

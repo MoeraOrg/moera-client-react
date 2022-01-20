@@ -36,6 +36,7 @@ const emptyCard = {
     gender: null,
     title: null,
     avatar: null,
+    fundraisers: null,
     subscribersTotal: null,
     subscriptionsTotal: null,
     subscribed: null,
@@ -78,10 +79,10 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case NODE_CARD_DETAILS_SET: {
-            const {nodeName, fullName, gender, title, avatar} = action.payload;
+            const {nodeName, fullName, gender, title, avatar, fundraisers} = action.payload;
             if (state[nodeName]) {
                 const istate = immutable.wrap(state);
-                istate.assign([nodeName], {fullName, gender, title});
+                istate.assign([nodeName], {fullName, gender, title, fundraisers});
                 if (avatar != null) {
                     istate.set([nodeName, "avatar"], avatar);
                 }

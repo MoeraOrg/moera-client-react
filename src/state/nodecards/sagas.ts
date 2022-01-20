@@ -44,8 +44,10 @@ function* nodeCardLoadSaga(action: WithContext<NodeCardLoadAction>) {
 }
 
 function* loadDetails(nodeName: string) {
-    const {fullName = null, gender = null, title = null, avatar = null} = yield* call(Node.getWhoAmI, nodeName);
-    yield* put(nodeCardDetailsSet(nodeName, fullName, gender, title, avatar));
+    const {
+        fullName = null, gender = null, title = null, avatar = null, fundraisers = null
+    } = yield* call(Node.getProfile, nodeName);
+    yield* put(nodeCardDetailsSet(nodeName, fullName, gender, title, avatar, fundraisers));
 }
 
 function* loadPeople(nodeName: string) {

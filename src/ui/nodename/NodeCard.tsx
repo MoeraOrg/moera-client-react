@@ -8,7 +8,7 @@ import { getNodeCard, isNodeCardToBeLoaded } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import CopyMentionButton from "ui/nodename/CopyMentionButton";
 import SubscribeButton from "ui/control/SubscribeButton";
-import { Avatar, Loading } from "ui/control";
+import { Avatar, DonateButton, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/misc";
 import { Browser } from "ui/browser";
@@ -58,6 +58,8 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
                         <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
                     </div>
                     {title && <div className="title">{title}</div>}
+                    <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={card.fundraisers}
+                                  styles="small"/>
                 </div>
             </div>
             <div className="people">

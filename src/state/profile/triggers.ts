@@ -11,8 +11,7 @@ import {
     profileAvatarDelete,
     profileCloseAvatarEditDialog,
     profileEditConflict,
-    profileLoad,
-    profileUnset
+    profileLoad
 } from "state/profile/actions";
 import { isProfileEditing, isProfileToBeLoaded } from "state/profile/selectors";
 import {
@@ -32,11 +31,10 @@ import { confirmBox } from "state/confirmbox/actions";
 export default [
     trigger(GO_TO_PAGE, conj(isAtProfilePage, inv(isProfileEditing), isProfileToBeLoaded), () => profileLoad()),
     trigger(GO_TO_PAGE, conj(isAtProfilePage, isProfileEditing), () => profileLoad(true)),
-    trigger(INIT_FROM_LOCATION, isAtProfilePage, () => profileLoad()),
-    trigger(INIT_FROM_LOCATION, inv(isAtProfilePage), profileUnset),
+    trigger(INIT_FROM_LOCATION, true, () => profileLoad()),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
-        conj(isAtProfilePage, inv(isProfileEditing)),
+        inv(conj(isAtProfilePage, isProfileEditing)),
         () => profileLoad()
     ),
     trigger(
@@ -44,7 +42,6 @@ export default [
         conj(isAtProfilePage, isProfileEditing),
         () => profileLoad(true)
     ),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], inv(isAtProfilePage), profileUnset),
     trigger([PROFILE_EDIT, PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, newLocation),
     trigger(PROFILE_EDIT, isAtProfilePage, bottomMenuHide),
     trigger([PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, bottomMenuShow),
@@ -56,7 +53,6 @@ export default [
                 profileAvatarDelete(signal.payload.id, signal.payload.onDeleted))),
     trigger(PROFILE_OPEN_AVATAR_EDIT_DIALOG, true, dialogOpened(profileCloseAvatarEditDialog())),
     trigger(PROFILE_CLOSE_AVATAR_EDIT_DIALOG, true, dialogClosed()),
-    trigger(EVENT_NODE_PROFILE_UPDATED, isAtProfilePage, () => profileLoad()),
-    trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict),
-    trigger(EVENT_NODE_PROFILE_UPDATED, inv(isAtProfilePage), profileUnset)
+    trigger(EVENT_NODE_PROFILE_UPDATED, true, () => profileLoad()),
+    trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict)
 ]

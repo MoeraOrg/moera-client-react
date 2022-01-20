@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage, FundraiserInfo } from "api/node/api-types";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 export type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
@@ -46,11 +46,13 @@ export type NodeCardDetailsSetAction = ActionWithPayload<typeof NODE_CARD_DETAIL
     gender: string | null;
     title: string | null;
     avatar: AvatarImage | null;
+    fundraisers: FundraiserInfo[] | null;
 }>;
 export const nodeCardDetailsSet = (nodeName: string, fullName: string | null, gender: string | null,
-                                   title: string | null, avatar: AvatarImage | null): NodeCardDetailsSetAction => ({
+                                   title: string | null, avatar: AvatarImage | null,
+                                   fundraisers: FundraiserInfo[] | null): NodeCardDetailsSetAction => ({
     type: NODE_CARD_DETAILS_SET,
-    payload: {nodeName, fullName, gender, title, avatar}
+    payload: {nodeName, fullName, gender, title, avatar, fundraisers}
 });
 
 export const NODE_CARD_PEOPLE_SET = "NODE_CARD_PEOPLE_SET";

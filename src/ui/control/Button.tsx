@@ -9,13 +9,14 @@ type Props = {
     variant: string;
     size?: "sm" | "lg";
     block?: boolean;
+    borderless?: boolean;
     invisible?: boolean;
     loading?: boolean;
     innerRef?: React.Ref<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function Button({variant, size, block = false, invisible = false, loading = false, disabled = false,
-                        className = "", type = "button", autoFocus, innerRef, ...props}: Props) {
+export function Button({variant, size, block = false, borderless = false, invisible = false, loading = false,
+                        disabled = false, className = "", type = "button", autoFocus, innerRef, ...props}: Props) {
     const domRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -30,6 +31,7 @@ export function Button({variant, size, block = false, invisible = false, loading
             "btn-sm": size === "sm",
             "btn-lg": size === "lg",
             "flex-fill": block,
+            "border-0": borderless,
             "invisible": invisible
         },
         className

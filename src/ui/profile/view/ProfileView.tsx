@@ -51,11 +51,8 @@ const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml
                 </div>
                 <NodeNameView/>
                 {title && <div className="title">{title}</div>}
-                {(ownerName != null && fundraisers != null && fundraisers.length > 0) &&
-                    <div className="donate">
-                        <DonateButton name={ownerName} fullName={fullName ?? null} fundraisers={fundraisers}/>
-                    </div>
-                }
+                <DonateButton name={ownerName} fullName={fullName ?? null} fundraisers={fundraisers ?? null}
+                              className="donate"/>
                 {email &&
                     <div className="email">
                         <span className="title">E-mail:</span> <a href={`mailto:${email}`}>{email}</a>
