@@ -10,7 +10,7 @@ import { ComboboxField, InputField, RichTextField } from "ui/control/field";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
-import AvatarEditor from "ui/profile/edit/AvatarEditor";
+import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import "./ProfileEditor.css";
 
 type OuterProps = ConnectedProps<typeof connector>;

@@ -11,9 +11,9 @@ import { profileAvatarCreate, profileCloseAvatarEditDialog, profileImageUpload }
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";
-import Rotate from "ui/profile/edit/Rotate";
-import AvatarShape from "ui/profile/edit/AvatarShape";
-import Scale from "ui/profile/edit/Scale";
+import Rotate from "ui/profile/edit/avatar/Rotate";
+import AvatarShape from "ui/profile/edit/avatar/AvatarShape";
+import Scale from "ui/profile/edit/avatar/Scale";
 import "./AvatarEditDialog.css";
 
 type Props = ConnectedProps<typeof connector>;

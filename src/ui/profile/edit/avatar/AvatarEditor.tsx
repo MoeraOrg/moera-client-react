@@ -13,8 +13,8 @@ import {
     profileOpenAvatarEditDialog
 } from "state/profile/actions";
 import { Avatar } from "ui/control";
-import AvatarSelector from "ui/profile/edit/AvatarSelector";
-import AvatarEditDialog from "ui/profile/edit/AvatarEditDialog";
+import AvatarSelector from "ui/profile/edit/avatar/AvatarSelector";
+import AvatarEditDialog from "ui/profile/edit/avatar/AvatarEditDialog";
 import "./AvatarEditor.css";
 
 type Props = {

@@ -18,7 +18,7 @@ import cx from 'classnames';
 
 import { AvatarInfo } from "api/node/api-types";
 import { Avatar, Loading } from "ui/control";
-import AvatarSelectorItem from "ui/profile/edit/AvatarSelectorItem";
+import AvatarSelectorItem from "ui/profile/edit/avatar/AvatarSelectorItem";
 import "./AvatarSelector.css";
 
 interface Props {
