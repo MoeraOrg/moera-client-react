@@ -77,7 +77,7 @@ function CommentDialog(props: Props) {
     };
 
     return (
-        <ModalDialog title="Edit a comment" className="comment-dialog" onClose={closeCommentDialog}>
+        <ModalDialog title="Edit Comment" className="comment-dialog" onClose={closeCommentDialog}>
             <ConflictWarning text="The comment was edited by somebody." show={conflict}
                              onClose={commentDialogConflictClose}/>
             <Form>
