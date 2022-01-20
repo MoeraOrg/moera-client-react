@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
-import { AvatarInfo } from "api/node/api-types";
+import { AvatarInfo, FundraiserInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { Button, ConflictWarning, Loading, RichTextValue } from "ui/control";
 import { ComboboxField, InputField, RichTextField } from "ui/control/field";
@@ -11,6 +11,7 @@ import { profileEditCancel, profileEditConflictClose, profileUpdate } from "stat
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
+import DonateField from "ui/profile/edit/donate/DonateField";
 import "./ProfileEditor.css";
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -22,6 +23,7 @@ interface Values {
     email: string;
     bioSrc: RichTextValue;
     avatar: AvatarInfo | null;
+    fundraisers: FundraiserInfo[];
 }
 
 type Props = OuterProps & FormikProps<Values>;
@@ -53,6 +55,7 @@ function ProfileEditor(props: Props) {
                         <InputField title="E-Mail" name="email" maxLength={63} col="col-sm-6"/>
                         <RichTextField title="Bio" name="bioSrc" placeholder="Write anything..." format="markdown"
                                        smileysEnabled anyValue noMedia/>
+                        <DonateField title="Donate" name="fundraisers"/>
                         <div className="profile-editor-footer">
                             <Button variant="secondary" onClick={profileEditCancel}
                                     disabled={updating}>Cancel</Button>
@@ -74,7 +77,8 @@ const profileEditorLogic = {
             gender: props.profile.gender || "",
             email: props.profile.email || "",
             bioSrc: new RichTextValue(props.profile.bioSrc || ""),
-            avatar: props.profile.avatar ?? null
+            avatar: props.profile.avatar ?? null,
+            fundraisers: props.profile.fundraisers ?? []
         }
     },
 
@@ -96,7 +100,8 @@ const profileEditorLogic = {
             email: values.email.trim(),
             bioSrc: values.bioSrc.text.trim(),
             bioSrcFormat: "markdown",
-            avatarId: values.avatar ? values.avatar.id : null
+            avatarId: values.avatar ? values.avatar.id : null,
+            fundraisers: values.fundraisers
         });
         formik.setSubmitting(false);
     }

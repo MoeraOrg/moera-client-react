@@ -1,0 +1,25 @@
+.donate-editor .fundraiser, .donate-editor .new-fundraiser {
+    border: 0;
+    border-radius: .9em;
+    padding: .25em .9em;
+    margin-right: .5em;
+    transition: background-color .15s ease-in-out;
+}
+
+.donate-editor .new-fundraiser {
+    background-color: var(--bs-blue-100);
+}
+
+.donate-editor .new-fundraiser:hover {
+    background-color: var(--bs-blue-200);
+}
+
+.donate-editor .fundraiser .icon {
+    font-size: .875em;
+    margin-left: .5em;
+}
+
+.donate-editor .new-fundraiser .icon {
+    font-size: .875em;
+    margin-right: .5em;
+}
