@@ -50,7 +50,7 @@ function ProfileEditor(props: Props) {
                         <AvatarEditor name="avatar"/>
                         <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
                         <InputField title="Title" name="title" maxLength={120}/>
-                        <ComboboxField title="Gender" name="gender" data={["Male", "Female"]}
+                        <ComboboxField title="Gender (choose or type anything)" name="gender" data={["Male", "Female"]}
                                        col="col-sm-6"/>
                         <InputField title="E-Mail" name="email" maxLength={63} col="col-sm-6"/>
                         <RichTextField title="Bio" name="bioSrc" placeholder="Write anything..." format="markdown"
