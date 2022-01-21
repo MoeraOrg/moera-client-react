@@ -82,10 +82,30 @@ export function hasSchemeOrDomain(url: string, prefix: string): boolean {
     if (prefix.endsWith(":")) {
         return url.startsWith(prefix);
     }
-    const components = URI.parse(url);
+    const components = URI.parse(url.toLowerCase());
     if ((components.scheme !== "http" && components.scheme !== "https") || components.host == null) {
         return false;
     }
     return components.host === prefix || components.host.endsWith("." + prefix);
 
+}
+
+export function getSchemeOrDomain(url: string | null | undefined): string | null {
+    if (!url) {
+        return null;
+    }
+    if (url.indexOf(":") < 0) {
+        return null;
+    }
+    const components = URI.parse(url.toLowerCase());
+    if (!components.scheme) {
+        return null;
+    }
+    if (components.scheme !== "http" && components.scheme !== "https") {
+        return components.scheme + ":";
+    }
+    if (!components.host) {
+        return null;
+    }
+    return components.host.startsWith("www.") ? components.host.substring(4) : components.host;
 }

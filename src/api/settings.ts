@@ -401,6 +401,20 @@ const META: ClientSettingMetaInfo[] = [
             min: -2,
             max: 2
         }
+    },
+    {
+        name: "fundraiser.preferred.auto",
+        type: "bool",
+        defaultValue: "true",
+        title: "Automatically set preferred donation method",
+        modifiers: {}
+    },
+    {
+        name: "fundraiser.preferred.prefix",
+        type: "string",
+        defaultValue: "",
+        title: "Preferred donation method (scheme or domain)",
+        modifiers: {}
     }
 ];
 
