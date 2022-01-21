@@ -7,10 +7,11 @@ import { useField } from 'formik';
 import { PostingFeatures } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
-import { richTextEditorImagesUpload, RichTextMedia } from "state/richtexteditor/actions";
+import { richTextEditorImageCopy, richTextEditorImagesUpload, RichTextMedia } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { Button, DeleteButton } from "ui/control";
+import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
 import { Browser } from "ui/browser";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import "./RichTextImageDialogDropzone.css";
@@ -26,7 +27,7 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function RichTextImageDialogDropzone({features, nodeName, forceCompress = false, onAdded, onDeleted, rootPage,
-                                      compressImages, richTextEditorImagesUpload}: Props) {
+                                      compressImages, richTextEditorImagesUpload, richTextEditorImageCopy}: Props) {
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -48,7 +49,7 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
         setUploadProgress(Math.round(loaded * 100 / total));
     }
 
-    const onDrop = (files: File[]) => {
+    const uploadImage = (files: File[]) => {
         if (files != null && files.length > 0) {
             setUploading(true);
             setUploadProgress(0);
@@ -66,8 +67,34 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
         }
     }
 
+    const [copyImageShow, setCopyImageShow] = useState<boolean>(false);
+    const [downloading, setDownloading] = useState<boolean>(false);
+
+    const onImageDownloadSuccess = (file: File) => {
+        setDownloading(false);
+        uploadImage([file]);
+    }
+
+    const onImageDownloadFailure = () => {
+        setDownloading(false);
+    }
+
+    const openCopyImage = (e: React.MouseEvent) => {
+        setCopyImageShow(true);
+        e.preventDefault();
+    }
+
+    const submitCopyImage = (ok: boolean, {url}: RichTextCopyImageValues) => {
+        setCopyImageShow(false);
+        if (!ok || !url) {
+            return;
+        }
+        setDownloading(true);
+        richTextEditorImageCopy(url, onImageDownloadSuccess, onImageDownloadFailure);
+    }
+
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
-        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, maxFiles: 1, onDrop});
+        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, maxFiles: 1, onDrop: uploadImage});
 
     const mediaLocation = value != null ? rootPage + "/media/" + value.path : null;
     const src = mediaLocation != null ? mediaImagePreview(mediaLocation, 150) : null;
@@ -80,6 +107,8 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
         )} {...getRootProps()}>
             {uploading ?
                 `Uploading ${uploadProgress}% ...`
+            : downloading ?
+                "Downloading image..."
             :
                 (src != null ?
                     <div className="uploaded-image">
@@ -89,7 +118,9 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
                 :
                     <>
                         <Button variant="outline-info" size="sm" onClick={open}>Upload image</Button>
-                        {!Browser.isTinyScreen() ? " or drop them here" : ""}
+                        {" or "}
+                        <Button variant="outline-secondary" size="sm" onClick={openCopyImage}>Copy image</Button>
+                        {!Browser.isTinyScreen() ? " or drop it here" : ""}
                         {!forceCompress &&
                             <>
                                 <br/>
@@ -104,6 +135,7 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
                 )
             }
             <input {...getInputProps()}/>
+            <RichTextCopyImageDialog show={copyImageShow} onSubmit={submitCopyImage} risen/>
         </div>
     );
 }
@@ -113,7 +145,7 @@ const connector = connect(
         rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
         compressImages: getSetting(state, "posting.media.compress.default") as boolean
     }),
-    { richTextEditorImagesUpload }
+    { richTextEditorImagesUpload, richTextEditorImageCopy }
 );
 
 export default connector(RichTextImageDialogDropzone);

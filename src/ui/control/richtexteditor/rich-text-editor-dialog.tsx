@@ -6,6 +6,7 @@ import { Button } from "ui/control/Button";
 
 export interface RichTextEditorDialogProps<V> {
     show: boolean;
+    risen?: boolean;
     onSubmit: (ok: boolean, values: Partial<V>) => void;
 }
 
@@ -36,14 +37,14 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
         }
 
         render() {
-            const {show} = this.props;
+            const {show, risen} = this.props;
 
             if (!show) {
                 return null;
             }
 
             return (
-                <ModalDialog title={title} onClose={this.onClose}>
+                <ModalDialog title={title} onClose={this.onClose} risen={risen}>
                     <Form>
                         <div className="modal-body">
                             <DialogBody {...this.props}/>
