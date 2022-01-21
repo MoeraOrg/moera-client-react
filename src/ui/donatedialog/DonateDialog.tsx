@@ -7,6 +7,7 @@ import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { closeDonateDialog } from "state/donatedialog/actions";
 import { ModalDialog } from "ui/control";
+import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
 import "./DonateDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -36,6 +37,7 @@ function DonateDialog({show, name, fullName, fundraisers, closeDonateDialog}: Pr
                             <li className="nav-item" key={index}>
                                 <span className={cx("nav-link", {"active": fundraiserIndex === index})}
                                       onClick={onClick(index)}>
+                                    <FundraiserIcon fundraiser={fundraiser}/>
                                     {fundraiser.title}
                                 </span>
                             </li>

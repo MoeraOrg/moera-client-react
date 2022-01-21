@@ -6,6 +6,7 @@ import {
     faBackspace,
     faBell,
     faBold,
+    faBolt,
     faCaretSquareDown,
     faCertificate,
     faChartBar,
@@ -62,7 +63,7 @@ import {
     faUserClock,
     faUserTimes
 } from '@fortawesome/free-solid-svg-icons';
-import { faMarkdown } from '@fortawesome/free-brands-svg-icons';
+import { faBitcoin, faEthereum, faMarkdown, faPatreon, faPaypal } from '@fortawesome/free-brands-svg-icons';
 import {
     faCircle,
     faClock,
@@ -81,7 +82,9 @@ export default function initIconLibrary() {
     library.add(faAt);
     library.add(faBackspace);
     library.add(faBell);
+    library.add(faBitcoin);
     library.add(faBold);
+    library.add(faBolt);
     library.add(faCaretSquareDown);
     library.add(faCertificate);
     library.add(faChartBar);
@@ -96,6 +99,7 @@ export default function initIconLibrary() {
     library.add(faDesktop);
     library.add(faEnvelope);
     library.add(faEnvelopeOpen);
+    library.add(faEthereum);
     library.add(faExclamationCircle);
     library.add(faExclamationTriangle);
     library.add(faExternalLinkAlt);
@@ -118,6 +122,8 @@ export default function initIconLibrary() {
     library.add(faMarkdown);
     library.add(faMobileAlt);
     library.add(faNewspaper);
+    library.add(faPatreon);
+    library.add(faPaypal);
     library.add(faPen);
     library.add(faPenAlt);
     library.add(faPlus);

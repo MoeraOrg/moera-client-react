@@ -77,3 +77,15 @@ export function redirectUrl(standalone: boolean, redirectPage: string, nodeName:
     return urlWithParameters(redirectPage + "/gotoname",
         {client, name: nodeName, location: location, trackingId});
 }
+
+export function hasSchemeOrDomain(url: string, prefix: string): boolean {
+    if (prefix.endsWith(":")) {
+        return url.startsWith(prefix);
+    }
+    const components = URI.parse(url);
+    if ((components.scheme !== "http" && components.scheme !== "https") || components.host == null) {
+        return false;
+    }
+    return components.host === prefix || components.host.endsWith("." + prefix);
+
+}
