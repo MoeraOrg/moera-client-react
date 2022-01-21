@@ -5,10 +5,11 @@ export interface RichTextMedia extends PrivateMediaFileInfo {
     digest?: string | null;
 }
 
-export const RICH_TEXT_EDITOR_IMAGES_UPLOAD = "RICH_TEXT_EDITOR_IMAGES_UPLOAD";
 type ImageUploadSuccessHandler = (index: number, mediaFile: RichTextMedia) => void;
 type ImageUploadFailureHandler = (index: number) => void;
 type ImageUploadProgressHandler = (index: number, loaded: number, total: number) => void;
+
+export const RICH_TEXT_EDITOR_IMAGES_UPLOAD = "RICH_TEXT_EDITOR_IMAGES_UPLOAD";
 export type RichTextEditorImagesUploadAction = ActionWithPayload<typeof RICH_TEXT_EDITOR_IMAGES_UPLOAD, {
     nodeName: string | null;
     files: File[];
@@ -31,5 +32,24 @@ export const richTextEditorImagesUpload = (
     payload: {nodeName, files, features, compress, onSuccess, onFailure, onProgress}
 });
 
+type ImageDownloadSuccessHandler = (file: File) => void;
+type ImageDownloadFailureHandler = () => void;
+
+export const RICH_TEXT_EDITOR_IMAGE_COPY = "RICH_TEXT_EDITOR_IMAGE_COPY";
+export type RichTextEditorImageCopyAction = ActionWithPayload<typeof RICH_TEXT_EDITOR_IMAGE_COPY, {
+    url: string;
+    onSuccess: ImageDownloadSuccessHandler;
+    onFailure: ImageDownloadFailureHandler;
+}>;
+export const richTextEditorImageCopy = (
+    url: string,
+    onSuccess: ImageDownloadSuccessHandler,
+    onFailure: ImageDownloadFailureHandler
+): RichTextEditorImageCopyAction => ({
+    type: RICH_TEXT_EDITOR_IMAGE_COPY,
+    payload: {url, onSuccess, onFailure}
+});
+
 export type RichTextEditorAnyAction =
-    RichTextEditorImagesUploadAction;
+    RichTextEditorImagesUploadAction
+    | RichTextEditorImageCopyAction;

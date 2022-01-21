@@ -6,10 +6,11 @@ import * as immutable from 'object-path-immutable';
 
 import { PostingFeatures } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { richTextEditorImagesUpload, RichTextMedia } from "state/richtexteditor/actions";
+import { richTextEditorImagesUpload, richTextEditorImageCopy, RichTextMedia } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
 import { Button, RichTextValue } from "ui/control";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
+import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
 import { Browser } from "ui/browser";
 import "./RichTextEditorDropzone.css";
 
@@ -70,7 +71,7 @@ type Props = {
 
 function RichTextEditorDropzone({value, features, hiding = false, nodeName, forceCompress = false, selectImage,
                                  onLoadStarted, onLoaded, onDeleted, onReorder, compressImages,
-                                 richTextEditorImagesUpload}: Props) {
+                                 richTextEditorImagesUpload, richTextEditorImageCopy}: Props) {
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -95,7 +96,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
         setUploadProgress(progress => immutable.assign(progress, [index], {loaded, total}));
     }
 
-    const onDrop = (files: File[]) => {
+    const uploadImage = (files: File[]) => {
         if (files != null && files.length > 0) {
             const progress: UploadProgress[] = [];
             for (const file of files) {
@@ -110,8 +111,34 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
         }
     };
 
+    const [copyImageShow, setCopyImageShow] = useState<boolean>(false);
+    const [downloading, setDownloading] = useState<boolean>(false);
+
+    const onImageDownloadSuccess = (file: File) => {
+        setDownloading(false);
+        uploadImage([file]);
+    }
+
+    const onImageDownloadFailure = () => {
+        setDownloading(false);
+    }
+
+    const openCopyImage = (e: React.MouseEvent) => {
+        setCopyImageShow(true);
+        e.preventDefault();
+    }
+
+    const submitCopyImage = (ok: boolean, {url}: RichTextCopyImageValues) => {
+        setCopyImageShow(false);
+        if (!ok || !url) {
+            return;
+        }
+        setDownloading(true);
+        richTextEditorImageCopy(url, onImageDownloadSuccess, onImageDownloadFailure);
+    }
+
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
-        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, onDrop});
+        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, onDrop: uploadImage});
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
 
     return (
@@ -125,9 +152,13 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
                 {uploadProgress.length > 0 ?
                     `Uploading ${progressSummary.loadedFiles} of ${progressSummary.totalFiles}
                      ${progressSummary.progress}% ...`
+                : downloading ?
+                    "Downloading image..."
                 :
                     <>
                         <Button variant="outline-info" size="sm" onClick={open}>Upload images</Button>
+                        {" or "}
+                        <Button variant="outline-secondary" size="sm" onClick={openCopyImage}>Copy image</Button>
                         {!Browser.isTinyScreen() ? " or drop them here" : ""}
                         {!forceCompress &&
                             <>
@@ -143,6 +174,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
                 }
             </div>
             <input {...getInputProps()}/>
+            <RichTextCopyImageDialog show={copyImageShow} onSubmit={submitCopyImage}/>
         </div>
     );
 }
@@ -151,7 +183,7 @@ const connector = connect(
     (state: ClientState) => ({
         compressImages: getSetting(state, "posting.media.compress.default") as boolean
     }),
-    { richTextEditorImagesUpload }
+    { richTextEditorImagesUpload, richTextEditorImageCopy }
 );
 
 export default connector(RichTextEditorDropzone);

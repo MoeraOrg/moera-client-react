@@ -1,16 +1,21 @@
-import { call, put } from 'typed-redux-saga';
+import { apply, call, put } from 'typed-redux-saga';
 import imageCompression from 'browser-image-compression';
 import * as Base64js from 'base64-js';
 
 import { Node } from "api";
-import { RICH_TEXT_EDITOR_IMAGES_UPLOAD, RichTextEditorImagesUploadAction } from "state/richtexteditor/actions";
+import {
+    RICH_TEXT_EDITOR_IMAGE_COPY,
+    RICH_TEXT_EDITOR_IMAGES_UPLOAD, RichTextEditorImageCopyAction,
+    RichTextEditorImagesUploadAction
+} from "state/richtexteditor/actions";
 import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import { readAsArrayBuffer } from "util/read-file";
 
 export default [
-    executor(RICH_TEXT_EDITOR_IMAGES_UPLOAD, null, richTextEditorImagesUploadSaga)
+    executor(RICH_TEXT_EDITOR_IMAGES_UPLOAD, null, richTextEditorImagesUploadSaga),
+    executor(RICH_TEXT_EDITOR_IMAGE_COPY, null, richTextEditorImageCopySaga)
 ];
 
 const formatMb = (size: number): string =>
@@ -56,5 +61,17 @@ function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
 function* richTextEditorImagesUploadSaga(action: RichTextEditorImagesUploadAction) {
     for (let i = 0; i < action.payload.files.length; i++) {
         yield* call(imageUpload, action, i);
+    }
+}
+
+function* richTextEditorImageCopySaga(action: RichTextEditorImageCopyAction) {
+    const {url, onSuccess, onFailure} = action.payload;
+    try {
+        const response = yield* call(fetch, url);
+        const blob = yield* apply(response, "blob", []);
+        onSuccess(new File([blob], "moera-editor.img", {type: blob.type}));
+    } catch (e) {
+        onFailure();
+        yield* put(errorThrown(e));
     }
 }
