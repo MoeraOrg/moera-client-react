@@ -1,13 +1,18 @@
 import { conj, trigger } from "state/trigger";
 import { PULSE_1MIN } from "state/pulse/actions";
-import { cartesLoad, cartesPurgeExpired } from "state/cartes/actions";
-import { isConnectedToHome } from "state/home/selectors";
+import { CARTES_SET, cartesLoad, cartesPurgeExpired } from "state/cartes/actions";
+import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isCartesToBeUpdated } from "state/cartes/selectors";
 import { WAKE_UP } from "state/navigation/actions";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 
 export default [
     trigger(PULSE_1MIN, true, cartesPurgeExpired),
-    trigger([PULSE_1MIN, WAKE_UP], conj(isConnectedToHome, isCartesToBeUpdated), cartesLoad),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, CARTES_SET, PULSE_1MIN, WAKE_UP],
+        conj(isConnectedToHome, isHomeOwnerNameSet, isCartesToBeUpdated),
+        cartesLoad
+    ),
     // TODO Temporarily disabled
     // trigger([CONNECTED_TO_HOME, CARTES_SET], isClockOffsetToBeWarned, clockOffsetWarn)
 ];

@@ -15,17 +15,17 @@ import { Naming, Node, NodeApiError, NodeName } from "api";
 import { selectApi } from "api/node/call";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
-import { Browser } from "ui/browser";
-import { askNaming } from "api/node/ask-naming";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
-import { now } from "util/misc";
 import { CarteSet } from "api/node/api-types";
 import { getCartes } from "api/node/cartes";
+import { namingInitialized } from "state/init-selectors";
+import { Browser } from "ui/browser";
+import { now } from "util/misc";
 
 export default [
     executor(CONNECT_TO_HOME, null, connectToHomeSaga),
-    executor(HOME_OWNER_VERIFY, null, askNaming(verifyHomeOwnerSaga))
+    executor(HOME_OWNER_VERIFY, null, verifyHomeOwnerSaga, namingInitialized)
 ];
 
 function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {

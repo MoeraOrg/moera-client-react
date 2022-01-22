@@ -18,7 +18,8 @@ import {
     profileAvatarsLoadFailed,
     ProfileImageUploadAction,
     profileImageUploaded,
-    profileImageUploadFailed, profileImageUploadProgress,
+    profileImageUploadFailed,
+    profileImageUploadProgress,
     ProfileLoadAction,
     profileLoadFailed,
     profileSet,
@@ -27,16 +28,16 @@ import {
     profileUpdateSucceeded
 } from "state/profile/actions";
 import { Node } from "api/node";
-import { introduce } from "api/node/introduce";
 import { PREFIX } from "api/settings";
 import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import store from "state/store";
+import { introduced } from "state/init-selectors";
 
 export default [
-    executor(PROFILE_LOAD, "", introduce(profileLoadSaga)),
+    executor(PROFILE_LOAD, "", profileLoadSaga, introduced),
     executor(PROFILE_UPDATE, null, profileUpdateSaga),
     executor(PROFILE_IMAGE_UPLOAD, null, profileImageUploadSaga),
     executor(PROFILE_AVATARS_LOAD, "", profileAvatarsLoadSaga),

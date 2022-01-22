@@ -37,20 +37,20 @@ import { errorThrown } from "state/error/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactions } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
-import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { toAvatarDescription } from "util/avatar";
 import { WithContext } from "state/action-types";
+import { introduced } from "state/init-selectors";
 
 export default [
-    executor(FEED_GENERAL_LOAD, payload => payload.feedName, introduce(feedGeneralLoadSaga)),
-    executor(FEED_SUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, introduce(feedSubscribeSaga)),
-    executor(FEED_UNSUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, introduce(feedUnsubscribeSaga)),
-    executor(FEED_STATUS_LOAD, payload => payload.feedName, introduce(feedStatusLoadSaga)),
+    executor(FEED_GENERAL_LOAD, payload => payload.feedName, feedGeneralLoadSaga, introduced),
+    executor(FEED_SUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga, introduced),
+    executor(FEED_UNSUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga, introduced),
+    executor(FEED_STATUS_LOAD, payload => payload.feedName, feedStatusLoadSaga, introduced),
     executor(FEED_STATUS_UPDATE, payload => payload.feedName, feedStatusUpdateSaga),
-    executor(FEED_PAST_SLICE_LOAD, payload => payload.feedName, introduce(feedPastSliceLoadSaga)),
-    executor(FEED_FUTURE_SLICE_LOAD, payload => payload.feedName, introduce(feedFutureSliceLoadSaga)),
-    executor(FEEDS_UPDATE, "", introduce(feedsUpdateSaga))
+    executor(FEED_PAST_SLICE_LOAD, payload => payload.feedName, feedPastSliceLoadSaga, introduced),
+    executor(FEED_FUTURE_SLICE_LOAD, payload => payload.feedName, feedFutureSliceLoadSaga, introduced),
+    executor(FEEDS_UPDATE, "", feedsUpdateSaga, introduced)
 ];
 
 function* feedGeneralLoadSaga(action: FeedGeneralLoadAction) {

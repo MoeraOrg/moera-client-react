@@ -91,19 +91,19 @@ import { fillSubscription } from "state/subscriptions/sagas";
 import { getWindowSelectionHtml, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
 import { Browser } from "ui/browser";
-import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";
 import { CommentInfo, DraftInfo, MediaAttachment, RepliedTo } from "api/node/api-types";
+import { introduced } from "state/init-selectors";
 
 export default [
-    executor(DETAILED_POSTING_LOAD, "", introduce(detailedPostingLoadSaga)),
-    executor(COMMENTS_RECEIVER_SWITCH, "", introduce(commentsReceiverSwitchSaga)),
-    executor(COMMENTS_LOAD_ALL, "", introduce(commentsLoadAllSaga)),
-    executor(COMMENTS_PAST_SLICE_LOAD, "", introduce(commentsPastSliceLoadSaga)),
-    executor(COMMENTS_FUTURE_SLICE_LOAD, "", introduce(commentsFutureSliceLoadSaga)),
-    executor(COMMENTS_UPDATE, "", introduce(commentsUpdateSaga)),
-    executor(COMMENT_LOAD, payload => payload.commentId, introduce(commentLoadSaga)),
+    executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
+    executor(COMMENTS_RECEIVER_SWITCH, "", commentsReceiverSwitchSaga, introduced),
+    executor(COMMENTS_LOAD_ALL, "", commentsLoadAllSaga, introduced),
+    executor(COMMENTS_PAST_SLICE_LOAD, "", commentsPastSliceLoadSaga, introduced),
+    executor(COMMENTS_FUTURE_SLICE_LOAD, "", commentsFutureSliceLoadSaga, introduced),
+    executor(COMMENTS_UPDATE, "", commentsUpdateSaga, introduced),
+    executor(COMMENT_LOAD, payload => payload.commentId, commentLoadSaga, introduced),
     executor(COMMENT_POST, null, commentPostSaga),
     executor(COMMENT_DRAFT_LOAD, "", commentDraftLoadSaga),
     executor(COMMENT_DRAFT_SAVE, "", commentDraftSaveSaga),
@@ -115,16 +115,18 @@ export default [
     executor(COMMENT_DIALOG_COMMENT_LOAD, "", commentDialogCommentLoadSaga),
     executor(COMMENT_DIALOG_COMMENT_RESET, "", commentDialogCommentResetSaga),
     executor(COMMENT_VERIFY, payload => payload.commentId, commentVerifySaga),
-    executor(COMMENT_REACT, null, introduce(commentReactSaga)),
+    executor(COMMENT_REACT, null, commentReactSaga, introduced),
     executor(
         COMMENT_REACTION_LOAD,
         payload => `${payload.id}:${payload.postingId}`,
-        introduce(commentReactionLoadSaga)
+        commentReactionLoadSaga,
+        introduced
     ),
     executor(
         COMMENT_REACTION_DELETE,
         payload => `${payload.id}:${payload.postingId}`,
-        introduce(commentReactionDeleteSaga)
+        commentReactionDeleteSaga,
+        introduced
     ),
     executor(COMMENT_REPLY, "", commentReplySaga),
     executor(GLANCE_COMMENT_LOAD, null, glanceCommentLoadSaga)

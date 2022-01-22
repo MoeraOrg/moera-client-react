@@ -1,7 +1,6 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 
 import { Naming, NodeName } from "api";
-import { askNaming } from "api/node/ask-naming";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
 import { errorThrown } from "state/error/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
@@ -23,6 +22,7 @@ import { getOwnerName } from "state/owner/selectors";
 import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";
+import { namingInitialized } from "state/init-selectors";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
 
@@ -30,8 +30,8 @@ const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
 
 export default [
-    executor(NAMING_NAMES_USED, null, askNaming(namingNamesUsedSaga)),
-    executor(NAMING_NAME_LOAD, payload => payload.name, askNaming(namingNameLoadSaga)),
+    executor(NAMING_NAMES_USED, null, namingNamesUsedSaga, namingInitialized),
+    executor(NAMING_NAME_LOAD, payload => payload.name, namingNameLoadSaga, namingInitialized),
     executor(NAMING_NAMES_MAINTENANCE, "", namingNamesMaintenanceSaga)
 ];
 

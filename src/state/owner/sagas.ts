@@ -19,12 +19,12 @@ import { normalizeUrl, rootUrl } from "util/url";
 import { getNodeUri } from "state/naming/sagas";
 import { getNodeRootPage } from "state/node/selectors";
 import { getOwnerName } from "state/owner/selectors";
-import { askNaming } from "api/node/ask-naming";
+import { namingInitialized } from "state/init-selectors";
 import { executor } from "state/executor";
 
 export default [
     executor(OWNER_LOAD, "", ownerLoadSaga),
-    executor(OWNER_VERIFY, null, askNaming(ownerVerifySaga)),
+    executor(OWNER_VERIFY, null, ownerVerifySaga, namingInitialized),
     executor(OWNER_SWITCH, payload => payload.name, ownerSwitchSaga)
 ];
 

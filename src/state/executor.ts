@@ -1,44 +1,61 @@
-import { call, select, takeEvery } from 'typed-redux-saga/macro';
+import { Action } from 'redux';
+import { call, flush, put, select, takeEvery } from 'typed-redux-saga/macro';
+import { buffers, channel, Channel } from 'redux-saga';
 
 import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
 import { WithContext } from "state/action-types";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { CARTES_SET } from "state/cartes/actions";
+import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
+import { ClientState } from "state/state";
 
 type PayloadExtractor<T> = (payload: T) => string;
 
 type PayloadToKey = PayloadExtractor<any> | string | null;
 
-export type ExecutorSaga<T extends ClientAction> = (action: WithContext<T>) => any;
+type ExecutorSaga<T extends ClientAction> = (action: WithContext<T>) => any;
+
+type ExecuteCondition = (state: ClientState) => boolean;
+
+type ExecuteConditionPayload<T> = (state: ClientState, payload: T) => boolean;
 
 export interface Executor {
     action: ClientActionType;
     payloadToKey: PayloadToKey;
     saga: ExecutorSaga<any>;
+    condition: ExecuteConditionPayload<any> | null;
 }
 
 export interface ExecutorState {
     payloadToKey: PayloadToKey;
     saga: ExecutorSaga<any>;
+    condition: ExecuteConditionPayload<any> | null;
     running: Set<string>;
 }
 
 export type ExecutorMap = Map<ClientActionType, ExecutorState>;
 
+const postponingChannel: Channel<WithContext<Action<string>>> = channel(buffers.expanding(10));
+
 export function executor<T extends ClientAction>(
-    action: T["type"], payloadToKey: string | null, saga: ExecutorSaga<T>): Executor;
+    action: T["type"], payloadToKey: string | null, saga: ExecutorSaga<T>,
+    condition?: ExecuteCondition | null): Executor;
 export function executor<T extends ClientAction & {payload: any}>(
-    action: T["type"], payloadToKey: PayloadExtractor<T["payload"]> | string | null, saga: ExecutorSaga<T>): Executor;
+    action: T["type"], payloadToKey: PayloadExtractor<T["payload"]> | string | null, saga: ExecutorSaga<T>,
+    condition?: ExecuteConditionPayload<T["payload"]> | null): Executor;
 export function executor(action: ClientActionType, payloadToKey: PayloadToKey,
-                         saga: ExecutorSaga<any>): Executor {
-    return {action, payloadToKey, saga};
+                         saga: ExecutorSaga<any>, condition: ExecuteConditionPayload<any> | null = null): Executor {
+    return {action, payloadToKey, saga, condition};
 }
 
 function addExecutor(executors: ExecutorMap, executor: Executor): void {
-    const {action, payloadToKey, saga} = executor;
+    const {action, payloadToKey, saga, condition} = executor;
 
     executors.set(action, {
         payloadToKey,
         saga,
+        condition,
         running: new Set()
     })
 }
@@ -62,6 +79,19 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
     const executor = executors.get(signal);
     if (executor === undefined) {
         return;
+    }
+
+    if (executor.condition != null) {
+        const condition = executor.condition;
+        let payload: any = null;
+        if ("payload" in action) {
+            payload = action.payload;
+        }
+        const ready = yield* select((state: ClientState) => condition(state, payload));
+        if (!ready) {
+            yield* put(postponingChannel, action);
+            return;
+        }
     }
 
     let key = null;
@@ -94,6 +124,19 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
     }
 }
 
+function* flushPostponedSaga() {
+    const context = yield* select(getContext);
+    const actions = yield* flush(postponingChannel);
+    for (const action of actions) {
+        action.context = context;
+        yield* put(action);
+    }
+}
+
 export function* invokeExecutors(executors: ExecutorMap) {
     yield* takeEvery([...executors.keys()], executorsSaga, executors);
+    yield* takeEvery(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, CARTES_SET, SETTINGS_CLIENT_VALUES_LOADED],
+        flushPostponedSaga
+    );
 }

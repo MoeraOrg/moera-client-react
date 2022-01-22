@@ -36,30 +36,30 @@ import {
 } from "state/postings/actions";
 import { WithContext } from "state/action-types";
 import { ClientState } from "state/state";
+import { flashBox } from "state/flashbox/actions";
 import { getPosting } from "state/postings/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
-import { flashBox } from "state/flashbox/actions";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { getNodeRootLocation } from "state/node/selectors";
-import { Browser } from "ui/browser";
-import { introduce } from "api/node/introduce";
-import { executor } from "state/executor";
 import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { introduced } from "state/init-selectors";
+import { executor } from "state/executor";
+import { Browser } from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 
 export default [
     executor(POSTING_DELETE, payload => payload.id, postingDeleteSaga),
-    executor(POSTING_LOAD, payload => payload.id, introduce(postingLoadSaga)),
+    executor(POSTING_LOAD, payload => payload.id, postingLoadSaga, introduced),
     executor(POSTING_VERIFY, payload => payload.id, postingVerifySaga),
-    executor(POSTING_REACT, null, introduce(postingReactSaga)),
+    executor(POSTING_REACT, null, postingReactSaga, introduced),
     executor(POSTING_REACTION_LOAD, payload => payload.id, postingReactionLoadSaga),
     executor(POSTING_REACTIONS_RELOAD, "", postingReactionsReloadSaga),
-    executor(POSTING_REACTION_DELETE, payload => payload.id, introduce(postingReactionDeleteSaga)),
+    executor(POSTING_REACTION_DELETE, payload => payload.id, postingReactionDeleteSaga, introduced),
     executor(POSTING_COPY_LINK, payload => payload.id, postingCopyLinkSaga),
-    executor(POSTING_COMMENTS_SUBSCRIBE, payload => payload.id, introduce(postingCommentsSubscribeSaga)),
-    executor(POSTING_COMMENTS_UNSUBSCRIBE, payload => payload.id, introduce(postingCommentsUnsubscribeSaga))
+    executor(POSTING_COMMENTS_SUBSCRIBE, payload => payload.id, postingCommentsSubscribeSaga, introduced),
+    executor(POSTING_COMMENTS_UNSUBSCRIBE, payload => payload.id, postingCommentsUnsubscribeSaga, introduced)
 ];
 
 function* postingDeleteSaga(action: PostingDeleteAction) {

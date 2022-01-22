@@ -1,9 +1,6 @@
 import { ClientState } from "state/state";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
-import { CARTES_SET } from "state/cartes/actions";
-import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import getContext from "state/context";
@@ -43,9 +40,7 @@ import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
 
 import createSagaMiddleware from 'redux-saga';
-import { spawn, takeEvery } from 'typed-redux-saga/macro';
-import { flushPostponedIntroducedSaga } from "api/node/introduce";
-import { flushPostponedNamingSaga } from "api/node/ask-naming";
+import { spawn } from 'typed-redux-saga/macro';
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";
@@ -211,20 +206,9 @@ const executors = collectExecutors(
     refreshExecutors
 );
 
-function* flushPostponedSaga() {
-    yield* flushPostponedIntroducedSaga();
-    yield* flushPostponedNamingSaga();
-}
-
 function* combinedSaga() {
     yield* spawn(signalPostInitSaga);
     yield* spawn(pulseSaga);
-
-    yield* takeEvery(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, CARTES_SET, SETTINGS_CLIENT_VALUES_LOADED],
-        flushPostponedSaga
-    );
-    yield* takeEvery(SETTINGS_CLIENT_VALUES_LOADED, flushPostponedNamingSaga);
 
     yield* invokeTriggers(triggers);
     yield* invokeExecutors(executors);

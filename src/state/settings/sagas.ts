@@ -2,6 +2,7 @@ import { call, put, select } from 'typed-redux-saga/macro';
 
 import { errorThrown } from "state/error/actions";
 import { HomeNotConnectedError, Node, NodeApiError } from "api";
+import { ClientSettingMetaInfo, PREFIX } from "api/settings";
 import {
     SETTINGS_CHANGE_PASSWORD,
     SETTINGS_CLIENT_VALUES_LOAD,
@@ -23,15 +24,14 @@ import {
     settingsUpdateSucceeded,
     SettingsUpdateSucceededAction
 } from "state/settings/actions";
-import { introduce } from "api/node/introduce";
 import { executor } from "state/executor";
 import { getSettingsClientMeta } from "state/settings/selectors";
-import { ClientSettingMetaInfo, PREFIX } from "api/settings";
+import { introduced } from "state/init-selectors";
 
 export default [
-    executor(SETTINGS_NODE_VALUES_LOAD, "", introduce(settingsNodeValuesLoadSaga)),
-    executor(SETTINGS_NODE_META_LOAD, "", introduce(settingsNodeMetaLoadSaga)),
-    executor(SETTINGS_CLIENT_VALUES_LOAD, "", introduce(settingsClientValuesLoadSaga)),
+    executor(SETTINGS_NODE_VALUES_LOAD, "", settingsNodeValuesLoadSaga, introduced),
+    executor(SETTINGS_NODE_META_LOAD, "", settingsNodeMetaLoadSaga, introduced),
+    executor(SETTINGS_CLIENT_VALUES_LOAD, "", settingsClientValuesLoadSaga, introduced),
     executor(SETTINGS_UPDATE, null, settingsUpdateSaga),
     executor(SETTINGS_UPDATE_SUCCEEDED, null, settingsUpdateSucceededSaga),
     executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga)
