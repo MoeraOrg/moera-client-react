@@ -38,7 +38,7 @@ function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, 
         if (listDom.current != null && index >= 0) {
             const item = listDom.current.querySelector(`.item[data-index="${index}"]`);
             if (item != null) {
-                scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"});
+                setTimeout(() => scrollIntoView(item, {scrollMode: "if-needed", block: "nearest"}));
             }
         }
     }, [listDom])

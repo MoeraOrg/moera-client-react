@@ -25,7 +25,7 @@ type Props = ConnectedProps<typeof connector>;
 function CurrentPage({page, positioned}: Props) {
     useEffect(() => {
         if (page !== PAGE_TIMELINE && page !== PAGE_NEWS && (page !== PAGE_DETAILED_POSTING || !positioned)) {
-            window.scrollTo(0, 0);
+            setTimeout(() => window.scrollTo(0, 0));
         }
     }, [page, positioned]);
 

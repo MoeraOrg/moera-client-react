@@ -221,12 +221,15 @@ class FeedPage extends React.PureComponent<Props, State> {
     static scrollTo(moment: number) {
         const posting = moment > Number.MIN_SAFE_INTEGER ?
             FeedPage.getPostingAt(moment) : FeedPage.getEarliestPosting();
-        if (posting != null) {
+        if (posting == null) {
+            return false;
+        }
+        setTimeout(() => {
             const y = posting.getBoundingClientRect().top;
             const minY = getPageHeaderHeight() + 10;
             window.scrollBy(0, y - minY);
-        }
-        return posting != null;
+        });
+        return true;
     }
 
     onSentinelFuture = (intersecting: boolean) => {

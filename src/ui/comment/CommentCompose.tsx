@@ -38,7 +38,8 @@ function CommentCompose(props: Props) {
 
     const viewComposer = useCallback(() => {
         if (composer.current != null && composer.current.contains(document.activeElement)) {
-            scrollIntoView(composer.current, {scrollMode: "if-needed", block: "nearest"});
+            const composerDom = composer.current;
+            setTimeout(() => scrollIntoView(composerDom, {scrollMode: "if-needed", block: "nearest"}));
         }
     }, [composer]);
 

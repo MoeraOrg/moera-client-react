@@ -15,9 +15,11 @@ function CommentsLeapButton({end, loadedCount}: Props) {
     }
 
     const onClick = () => {
-        const rect = document.getElementById("comments")!.getBoundingClientRect();
-        const y = end ? rect.top : rect.bottom;
-        window.scrollBy(0, y - 50);
+        setTimeout(() => {
+            const rect = document.getElementById("comments")!.getBoundingClientRect();
+            const y = end ? rect.top : rect.bottom;
+            window.scrollBy(0, y - 50);
+        });
     }
 
     return (

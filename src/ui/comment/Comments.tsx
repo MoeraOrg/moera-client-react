@@ -145,13 +145,17 @@ class Comments extends React.PureComponent<Props, State> {
     }
 
     static scrollToEnd(): void {
-        const y = document.getElementById("comments")!.getBoundingClientRect().bottom;
-        window.scrollBy(0, y - getPageHeaderHeight());
+        setTimeout(() => {
+            const y = document.getElementById("comments")!.getBoundingClientRect().bottom;
+            window.scrollBy(0, y - getPageHeaderHeight());
+        });
     }
 
     static scrollToElement(element: Element): void {
-        const y = element.getBoundingClientRect().top;
-        window.scrollBy(0, y - getPageHeaderHeight());
+        setTimeout(() => {
+            const y = element.getBoundingClientRect().top;
+            window.scrollBy(0, y - getPageHeaderHeight());
+        });
     }
 
     loadFuture = () => {
