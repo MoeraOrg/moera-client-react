@@ -17,7 +17,7 @@ import { getCommentDialogComment, getCommentsState, isCommentDialogConflict } fr
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { Browser } from "ui/browser";
-import { Button, ConflictWarning, ModalDialog } from "ui/control";
+import { Button, ConflictWarning, Loading, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import { AvatarField, RichTextField } from "ui/control/field";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
@@ -86,12 +86,13 @@ function CommentDialog(props: Props) {
                         <AvatarField name="avatar" size={36}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
+                    <Loading active={loading}/>
                     <RichTextField name="body" rows={5} features={features} nodeName={receiverName} forceImageCompress
                                    anyValue autoFocus disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
                                    format={sourceFormatDefault} onKeyDown={onKeyDown}/>
                 </div>
                 <div className="modal-footer">
-                    <CommentDraftSaver initialText={initialText} commentId={commentId}/>
+                    <CommentDraftSaver initialized={loaded} initialText={initialText} commentId={commentId}/>
                     <Button variant="secondary" onClick={onCancel}>Cancel</Button>
                     <Button variant="primary" type="submit" loading={beingPosted}>Update</Button>
                 </div>
@@ -110,13 +111,13 @@ const connector = connect(
         receiverPostingId: getCommentsState(state).receiverPostingId,
         comment: getCommentDialogComment(state),
         draft: state.detailedPosting.commentDialog.draft,
-        loaded: state.detailedPosting.commentDialog.loaded,
         repliedToId: getCommentDialogComment(state)?.repliedTo?.id ?? null,
         conflict: isCommentDialogConflict(state),
         reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
         reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
-        loading: state.detailedPosting.commentDialog.loading,
+        loading: state.detailedPosting.commentDialog.loading || state.detailedPosting.commentDialog.loadingDraft,
+        loaded: state.detailedPosting.commentDialog.loaded && state.detailedPosting.commentDialog.loadedDraft,
         beingPosted: state.detailedPosting.commentDialog.beingPosted,
         submitKey: getSetting(state, "comment.submit-key") as string,
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,

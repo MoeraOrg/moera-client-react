@@ -13,8 +13,10 @@ import {
     COMMENT_DIALOG_COMMENT_LOAD,
     COMMENT_DIALOG_COMMENT_LOAD_FAILED,
     COMMENT_DIALOG_COMMENT_LOADED,
+    COMMENT_DIALOG_COMMENT_RESET,
     COMMENT_DIALOG_CONFLICT,
     COMMENT_DIALOG_CONFLICT_CLOSE,
+    COMMENT_DRAFT_ABSENT,
     COMMENT_DRAFT_DELETED,
     COMMENT_DRAFT_LOAD,
     COMMENT_DRAFT_LOAD_FAILED,
@@ -96,12 +98,12 @@ const emptyComments = {
 const emptyCompose = {
     beingPosted: false,
     focused: false,
-    loading: false,
-    loaded: false,
     repliedToId: null,
     repliedToName: null,
     repliedToFullName: null,
     repliedToHeading: null,
+    loadingDraft: false,
+    loadedDraft: false,
     draft: null,
     savingDraft: false,
     savedDraft: false
@@ -115,6 +117,8 @@ const emptyComposeDialog = {
     comment: null,
     beingPosted: false,
     conflict: false,
+    loadingDraft: false,
+    loadedDraft: false,
     draft: null,
     savingDraft: false,
     savedDraft: false
@@ -444,7 +448,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         case COMMENT_DRAFT_LOAD: {
             const property = action.payload.isDialog != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
-                loading: true
+                loadingDraft: true
             });
         }
 
@@ -461,8 +465,8 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             const property = action.payload.draft.receiverCommentId != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
                 draft: action.payload.draft,
-                loading: false,
-                loaded: true
+                loadingDraft: false,
+                loadedDraft: true
             });
         }
 
@@ -477,7 +481,23 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
 
             const property = action.payload.commentId != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
-                loading: false
+                loadingDraft: false
+            });
+        }
+
+        case COMMENT_DRAFT_ABSENT: {
+            if (action.payload.nodeName !== state.comments.receiverName
+                || action.payload.postingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            if (action.payload.commentId != null && action.payload.commentId !== state.commentDialog.commentId) {
+                return state;
+            }
+
+            const property = action.payload.commentId != null ? "commentDialog" : "compose";
+            return immutable.assign(state, property, {
+                loadingDraft: false,
+                loadedDraft: true
             });
         }
 
@@ -656,11 +676,15 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         case COMMENT_DIALOG_COMMENT_LOADED:
             return immutable.assign(state, "commentDialog", {
                 loading: false,
+                loaded: true,
                 comment: action.payload.comment
             });
 
         case COMMENT_DIALOG_COMMENT_LOAD_FAILED:
             return immutable.set(state, "commentDialog.loading", false);
+
+        case COMMENT_DIALOG_COMMENT_RESET:
+            return immutable.set(state, "commentDialog.draft", null);
 
         case COMMENT_DIALOG_CONFLICT:
             return immutable.set(state, "commentDialog.conflict", true);

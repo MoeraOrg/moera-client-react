@@ -44,12 +44,12 @@ export interface CommentComposeState {
     formId: number;
     beingPosted: boolean;
     focused: boolean;
-    loading: boolean;
-    loaded: boolean;
     repliedToId: string | null;
     repliedToName: string | null;
     repliedToFullName: string | null;
     repliedToHeading: string | null;
+    loadingDraft: boolean;
+    loadedDraft: boolean;
     draft: DraftInfo | null;
     savingDraft: boolean;
     savedDraft: boolean;
@@ -63,6 +63,8 @@ export interface CommentDialogState {
     comment: CommentInfo | null;
     beingPosted: boolean;
     conflict: boolean;
+    loadingDraft: boolean;
+    loadedDraft: boolean;
     draft: DraftInfo | null;
     savingDraft: boolean;
     savedDraft: boolean;

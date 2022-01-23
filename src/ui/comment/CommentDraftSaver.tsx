@@ -18,6 +18,7 @@ import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 
 interface OwnProps {
+    initialized: boolean;
     initialText: CommentText;
     commentId: string | null;
 }
@@ -41,8 +42,8 @@ const toDraftText = (receiverName: string, postingId: string, commentId: string 
 
 const ComposeDraftSaver = (props: Props) => {
     const {
-        initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId, repliedToId,
-        comment, draft, commentDraftSave, commentDraftDelete, commentDialogCommentReset
+        initialized, initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId,
+        repliedToId, comment, draft, commentDraftSave, commentDraftDelete, commentDialogCommentReset
     } = props;
 
     const toText = (values: CommentComposeValues): CommentText | null =>
@@ -74,8 +75,8 @@ const ComposeDraftSaver = (props: Props) => {
     }
 
     return (
-        <DraftSaver initialText={initialText} savingDraft={savingDraft} savedDraft={savedDraft} toText={toText}
-                    isChanged={isChanged} save={save} drop={drop}/>
+        <DraftSaver initialized={initialized} initialText={initialText} savingDraft={savingDraft}
+                    savedDraft={savedDraft} toText={toText} isChanged={isChanged} save={save} drop={drop}/>
     );
 }
 

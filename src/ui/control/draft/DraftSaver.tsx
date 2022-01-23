@@ -5,6 +5,7 @@ import deepEqual from 'react-fast-compare';
 import "./DraftSaver.css";
 
 interface DraftSaverProps<Text, Values> {
+    initialized?: boolean;
     initialText: Text;
     savingDraft: boolean;
     savedDraft: boolean;
@@ -15,12 +16,14 @@ interface DraftSaverProps<Text, Values> {
 }
 
 export function DraftSaver<Text, Values>(props: DraftSaverProps<Text, Values>) {
-    const {initialText, savingDraft, savedDraft, toText, isChanged, save, drop} = props;
+    const {initialized = true, initialText, savingDraft, savedDraft, toText, isChanged, save, drop} = props;
 
     const [, setPrevText] = useState<Text>(initialText);
     const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
     const {status, values} = useFormikContext<Values>();
 
+    const initializedRef = useRef<boolean>();
+    initializedRef.current = initialized;
     const statusRef = useRef<string>();
     statusRef.current = status;
     const valuesRef = useRef<Values>();
@@ -30,7 +33,7 @@ export function DraftSaver<Text, Values>(props: DraftSaverProps<Text, Values>) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const onSave = useCallback(
         debounce(() => {
-            if (statusRef.current === "submitted" || valuesRef.current == null) {
+            if (!initializedRef.current || statusRef.current === "submitted" || valuesRef.current == null) {
                 return;
             }
             const thisText = toText(valuesRef.current);

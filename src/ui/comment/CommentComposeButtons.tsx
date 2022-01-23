@@ -44,7 +44,7 @@ function CommentComposeButtons(props: Props) {
 
     return (
         <div className="buttons">
-            <CommentDraftSaver initialText={initialText} commentId={null}/>
+            <CommentDraftSaver initialized={true} initialText={initialText} commentId={null}/>
             <Button variant="secondary" invisible={invisible} onClick={onCancel}>
                 CANCEL
             </Button>

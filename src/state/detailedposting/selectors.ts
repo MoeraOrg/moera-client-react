@@ -149,8 +149,8 @@ export function getCommentDialogComment(state: ClientState): CommentInfo | null 
 
 export function isCommentComposeDraftToBeLoaded(state: ClientState): boolean {
     const posting = getDetailedPosting(state);
-    return posting != null && isConnectedToHome(state) && !state.detailedPosting.compose.loaded
-        && !state.detailedPosting.compose.loading;
+    return posting != null && isConnectedToHome(state) && !state.detailedPosting.compose.loadedDraft
+        && !state.detailedPosting.compose.loadingDraft;
 }
 
 export function getCommentComposerRepliedToId(state: ClientState): string | null {
@@ -179,6 +179,12 @@ export function isCommentDialogShown(state: ClientState): boolean {
 
 export function isCommentDialogConflict(state: ClientState): boolean {
     return state.detailedPosting.commentDialog.conflict;
+}
+
+export function isCommentDialogDraftToBeLoaded(state: ClientState): boolean {
+    const posting = getDetailedPosting(state);
+    return posting != null && isConnectedToHome(state) && !state.detailedPosting.commentDialog.loadedDraft
+        && !state.detailedPosting.commentDialog.loadingDraft;
 }
 
 export function isGlanceCommentToBeLoaded(state: ClientState): boolean {

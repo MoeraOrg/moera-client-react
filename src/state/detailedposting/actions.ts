@@ -232,6 +232,18 @@ export const commentDraftLoadFailed = (nodeName: string, postingId: string,
     payload: {nodeName, postingId, commentId}
 });
 
+export const COMMENT_DRAFT_ABSENT = "COMMENT_DRAFT_ABSENT";
+export type CommentDraftAbsentAction = ActionWithPayload<typeof COMMENT_DRAFT_ABSENT, {
+    nodeName: string;
+    postingId: string;
+    commentId: string | null;
+}>;
+export const commentDraftAbsent = (nodeName: string, postingId: string,
+                                   commentId: string | null): CommentDraftAbsentAction => ({
+    type: COMMENT_DRAFT_ABSENT,
+    payload: {nodeName, postingId, commentId}
+});
+
 export const COMMENT_DRAFT_SAVE = "COMMENT_DRAFT_SAVE";
 export type CommentDraftSaveAction = ActionWithPayload<typeof COMMENT_DRAFT_SAVE, {
     draftId: string | null;
@@ -641,6 +653,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentDraftLoadAction
     | CommentDraftLoadedAction
     | CommentDraftLoadFailedAction
+    | CommentDraftAbsentAction
     | CommentDraftSaveAction
     | CommentDraftSavedAction
     | CommentDraftSaveFailedAction

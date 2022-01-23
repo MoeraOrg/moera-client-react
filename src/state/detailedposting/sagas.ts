@@ -29,6 +29,7 @@ import {
     commentDialogCommentLoaded,
     commentDialogCommentLoadFailed,
     CommentDialogCommentResetAction,
+    commentDraftAbsent,
     commentDraftDeleted,
     CommentDraftLoadAction,
     commentDraftLoaded,
@@ -344,7 +345,7 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
                 yield* put(commentRepliedToUnset());
             }
         } else {
-            yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));
+            yield* put(commentDraftAbsent(nodeName, postingId, commentId));
         }
     } catch (e) {
         yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));
@@ -460,12 +461,6 @@ function* commentDialogCommentLoadSaga() {
         return;
     }
     try {
-        const draft = yield* call(Node.getDraftCommentUpdate, ":", receiverName, receiverPostingId, commentId);
-        if (draft != null) {
-            yield* call(loadRemoteMediaAttachments, receiverName, draft.media ?? null);
-            yield* put(commentDraftLoaded(draft));
-            //...but load the original comment also
-        }
         const comment = yield* call(Node.getComment, receiverName, receiverPostingId, commentId, true);
         yield* put(commentDialogCommentLoaded(comment));
     } catch (e) {
