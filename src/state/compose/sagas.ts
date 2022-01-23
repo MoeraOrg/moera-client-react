@@ -41,15 +41,15 @@ import { getComposeDraftId, getComposePostingId } from "state/compose/selectors"
 import { executor } from "state/executor";
 import { WithContext } from "state/action-types";
 import { flashBox } from "state/flashbox/actions";
-import { introduced } from "state/init-selectors";
+import { introduced, mutuallyIntroduced } from "state/init-selectors";
 
 export default [
     executor(COMPOSE_FEATURES_LOAD, "", composeFeaturesLoadSaga),
     executor(COMPOSE_POSTING_LOAD, "", composePostingLoadSaga, introduced),
     executor(COMPOSE_POST, null, composePostSaga),
-    executor(COMPOSE_DRAFT_LOAD, "", composeDraftLoadSaga, introduced),
+    executor(COMPOSE_DRAFT_LOAD, "", composeDraftLoadSaga, mutuallyIntroduced),
     executor(COMPOSE_DRAFT_SAVE, "", composeDraftSaveSaga),
-    executor(COMPOSE_DRAFT_LIST_LOAD, "", composeDraftListLoadSaga, introduced),
+    executor(COMPOSE_DRAFT_LIST_LOAD, "", composeDraftListLoadSaga, mutuallyIntroduced),
     executor(COMPOSE_DRAFT_LIST_ITEM_RELOAD, payload => payload.id, composeDraftListItemReloadSaga),
     executor(COMPOSE_DRAFT_LIST_ITEM_DELETE, payload => payload.id, composeDraftListItemDeleteSaga),
     executor(COMPOSE_UPDATE_DRAFT_DELETE, "", composeUpdateDraftDeleteSaga),

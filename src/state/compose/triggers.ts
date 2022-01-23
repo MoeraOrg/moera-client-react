@@ -43,24 +43,15 @@ import {
 } from "api/events/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
-import { getOwnerName, isOwnerNameSet } from "state/owner/selectors";
+import { getOwnerName } from "state/owner/selectors";
 import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, PostingUpdatedEvent } from "api/events/api-types";
 import { CONNECTED_TO_HOME } from "state/home/actions";
-import { OWNER_SET } from "state/owner/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtComposeFeaturesPage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
-    trigger(
-        [GO_TO_PAGE, CONNECTED_TO_HOME, OWNER_SET],
-        conj(isAtComposePage, isComposeDraftToBeLoaded, isOwnerNameSet),
-        composeDraftLoad
-    ),
-    trigger(
-        [GO_TO_PAGE, CONNECTED_TO_HOME, OWNER_SET],
-        conj(isAtComposePage, isComposeDraftListToBeLoaded, isOwnerNameSet),
-        composeDraftListLoad
-    ),
+    trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
+    trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
     trigger(
         COMPOSE_POST_SUCCEEDED,
