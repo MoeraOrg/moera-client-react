@@ -56,6 +56,13 @@ const META: ClientSettingMetaInfo[] = [
         }
     },
     {
+        name: "instants.profile-link",
+        type: "bool",
+        defaultValue: "false",
+        title: "Click on avatar in a notification to open the user's profile",
+        modifiers: {}
+    },
+    {
         name: "comment.reactions.positive.default",
         type: "string",
         defaultValue: "+0x1f4a1,+0x1f44d,+0x1f4af,+0x1f60d,+0x1f600,+0x1f926,+0x1f62e,+0x1f622,+0x1f620,+0x1f92e,*",

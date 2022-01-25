@@ -7,6 +7,10 @@
     border-radius: 5px;
 }
 
+.settings-notebook .form-check {
+    padding-left: 1.75em;
+}
+
 @media only screen and (max-width: 575px) {
     .row.settings-notebook {
         margin-left: 0;

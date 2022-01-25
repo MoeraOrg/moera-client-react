@@ -12,6 +12,7 @@ import { Avatar } from "ui/control";
 import { getInstantTarget } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
 import "./InstantStory.css";
+import { getSetting } from "state/settings/selectors";
 
 type Props = {
     story: ExtStoryInfo;
@@ -19,7 +20,7 @@ type Props = {
     hide: () => void;
 } & ConnectedProps<typeof connector>;
 
-function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
+function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: Props) {
     const onJump = (href: string, performJump: () => void) => {
         hide();
         performJump();
@@ -37,8 +38,9 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
 
     return (
         <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
-            <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="outer"
-                  onNear={onJump} onFar={onJump}/>
+            {profileLink && <Jump nodeName={story.summaryNodeName} href="/profile" className="outer cells-avatar"/>}
+            <Jump nodeName={nodeName} href={href} trackingId={trackingId} onNear={onJump} onFar={onJump}
+                  className={cx("outer", {"cells-summary": profileLink, "cells-all": !profileLink})}/>
             <div className="summary-avatar">
                 <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName=":" size={36}/>
             </div>
@@ -60,7 +62,8 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        pulse: state.pulse.pulse // To force re-rendering only
+        pulse: state.pulse.pulse, // To force re-rendering only
+        profileLink: getSetting(state, "instants.profile-link") as boolean
     }),
     { storyReadingUpdate }
 );
