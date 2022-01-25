@@ -368,6 +368,8 @@ export interface StoryInfoBase<B> {
     read?: boolean | null;
     posting?: PartialPostingInfoBase<B> | null;
     comment?: PartialCommentInfoBase<B> | null;
+    summaryNodeName?: string | null;
+    summaryFullName?: string | null;
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
     trackingId?: string | null;

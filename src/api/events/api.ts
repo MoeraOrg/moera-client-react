@@ -543,6 +543,14 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             type: "boolean",
             nullable: true
         },
+        "summaryNodeName": {
+            type: "string",
+            nullable: true
+        },
+        "summaryFullName": {
+            type: "string",
+            nullable: true
+        },
         "summaryAvatar": {
             ...AvatarImageType,
             nullable: true
@@ -632,6 +640,14 @@ const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
             type: "boolean",
             nullable: true
         },
+        "summaryNodeName": {
+            type: "string",
+            nullable: true
+        },
+        "summaryFullName": {
+            type: "string",
+            nullable: true
+        },
         "summaryAvatar": {
             ...AvatarImageType,
             nullable: true
@@ -719,6 +735,14 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
         },
         "read": {
             type: "boolean",
+            nullable: true
+        },
+        "summaryNodeName": {
+            type: "string",
+            nullable: true
+        },
+        "summaryFullName": {
+            type: "string",
             nullable: true
         },
         "summaryAvatar": {

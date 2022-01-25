@@ -1399,6 +1399,14 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
             ...PartialCommentInfoType,
             nullable: true
         },
+        "summaryNodeName": {
+            type: "string",
+            nullable: true
+        },
+        "summaryFullName": {
+            type: "string",
+            nullable: true
+        },
         "summaryAvatar": {
             ...AvatarImageType,
             nullable: true

@@ -292,6 +292,7 @@ class FeedPage extends React.PureComponent<Props, State> {
 
             return (
                 <>
+                    <FeedTitle/>
                     <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}
                                     totalAfterTop={0} notViewed={0} notViewedMoment={null}/>
                     <div className="no-postings">Nothing yet.</div>

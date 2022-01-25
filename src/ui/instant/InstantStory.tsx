@@ -40,7 +40,7 @@ function InstantStory({story, lastNew, hide, storyReadingUpdate}: Props) {
             <Jump nodeName={nodeName} href={href} trackingId={trackingId} className="outer"
                   onNear={onJump} onFar={onJump}/>
             <div className="summary-avatar">
-                <Avatar avatar={story.summaryAvatar} ownerName={story.remoteNodeName} nodeName=":" size={36}/>
+                <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName=":" size={36}/>
             </div>
             <div className="summary">
                 <InstantHtml story={story}/>
