@@ -6,6 +6,7 @@ import { isAtNode } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
 import MainMenuPages from "ui/mainmenu/MainMenuPages";
 import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
+import HomeAvatar from "ui/mainmenu/connections/HomeAvatar";
 import HomeName from "ui/mainmenu/connections/HomeName";
 import "./VerticalMenu.css";
 
@@ -16,7 +17,10 @@ const VerticalMenu = ({atNode, connected}: Props) => (
         {atNode && <MainMenuPages/>}
         {connected &&
             <>
-                <HomeName/>
+                <div className="text-center">
+                    <HomeAvatar/>
+                    <HomeName/>
+                </div>
                 <div className="text-end">
                     <DisconnectButton/>
                 </div>

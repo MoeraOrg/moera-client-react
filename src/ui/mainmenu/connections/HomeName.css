@@ -1,14 +1,9 @@
 .connection-status .home-name {
-    margin-left: 1rem;
     margin-right: 1rem;
     position: relative;
     top: -0.1rem;
     font-weight: bold;
     cursor: pointer;
-}
-
-.connection-status .home-name:hover .avatar {
-    border: 1px solid rgba(255, 255, 255, .7);
 }
 
 .home-name .name {

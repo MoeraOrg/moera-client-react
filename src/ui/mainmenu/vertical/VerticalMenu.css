@@ -19,7 +19,6 @@
     color: var(--status-icon-highlight);
 }
 
-#vertical-menu .home-name {
-    display: block;
-    text-align: center;
+#vertical-menu .home-avatar {
+    margin-left: 0;
 }
