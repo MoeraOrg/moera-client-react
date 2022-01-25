@@ -57,6 +57,10 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
 
 const SAFE_PREVIEW_HTML_SETTINGS: IOptions = {
     ...BASE_SAFE_HTML_SETTINGS,
+    allowedClasses: {
+        ...BASE_SAFE_HTML_SETTINGS.allowedClasses,
+        "*": ["text-start", "text-end", "text-center"]
+    },
     transformTags: {
         ...BASE_SAFE_HTML_SETTINGS.transformTags,
         "h1": "b",
@@ -69,7 +73,11 @@ const SAFE_PREVIEW_HTML_SETTINGS: IOptions = {
 };
 
 const SAFE_HTML_SETTINGS: IOptions = {
-    ...BASE_SAFE_HTML_SETTINGS
+    ...BASE_SAFE_HTML_SETTINGS,
+    allowedClasses: {
+        ...BASE_SAFE_HTML_SETTINGS.allowedClasses,
+        "*": ["bg-*", "border-*", "text-*", "fs-*"]
+    }
 };
 
 const SAFE_IMPORT_HTML_SETTINGS: IOptions = {
