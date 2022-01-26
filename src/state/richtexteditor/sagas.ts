@@ -28,10 +28,12 @@ function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
         let file = files[index];
         if (features != null) {
             if (compress) {
-                file = yield* call(imageCompression, file, {
-                    maxSizeMB: features.imageRecommendedSize / 1024 / 1024,
-                    maxWidthOrHeight: features.imageRecommendedPixels
-                });
+                if (file.size > features.imageRecommendedSize) {
+                    file = yield* call(imageCompression, file, {
+                        maxSizeMB: features.imageRecommendedSize / 1024 / 1024,
+                        maxWidthOrHeight: features.imageRecommendedPixels
+                    });
+                }
             } else {
                 if (file.size > features.mediaMaxSize) {
                     yield* put(messageBox(`File "${file.name}" cannot be uploaded because its size`
