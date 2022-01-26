@@ -15,8 +15,11 @@ interface Props {
 function CommentContent({comment, previousId, receiverName}: Props) {
     const [preview, setPreview] = useState(true);
 
-    const onClick = () => {
-        if (!hasWindowSelection()) {
+    const onClick = (e: React.MouseEvent) => {
+        if (!hasWindowSelection()
+            && !(e.target instanceof HTMLImageElement)
+            && !(e.target instanceof HTMLAnchorElement)) {
+
             setPreview(preview => !preview);
         }
     }
