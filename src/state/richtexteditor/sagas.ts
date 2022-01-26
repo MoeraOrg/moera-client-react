@@ -1,4 +1,4 @@
-import { apply, call, put, spawn } from 'typed-redux-saga';
+import { call, put, spawn } from 'typed-redux-saga';
 import imageCompression from 'browser-image-compression';
 import * as Base64js from 'base64-js';
 
@@ -70,8 +70,7 @@ function* richTextEditorImagesUploadSaga(action: RichTextEditorImagesUploadActio
 function* richTextEditorImageCopySaga(action: RichTextEditorImageCopyAction) {
     const {url, onSuccess, onFailure} = action.payload;
     try {
-        const response = yield* call(fetch, url);
-        const blob = yield* apply(response, "blob", []);
+        const blob = yield* call(Node.proxyMedia, ":", url);
         onSuccess(new File([blob], "moera-editor.img", {type: blob.type}));
     } catch (e) {
         onFailure();

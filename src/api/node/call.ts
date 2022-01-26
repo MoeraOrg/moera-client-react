@@ -50,7 +50,7 @@ export type CallApiParams<T> = {
     method?: HttpMethod;
     auth?: boolean | string;
     body?: any;
-    schema: ValidateFunction<T>;
+    schema: ValidateFunction<T> | "blob";
     errorFilter?: ErrorFilter;
     onProgress?: ProgressHandler;
 };
@@ -82,7 +82,7 @@ export function* callApi<T>({
     const fetcher = onProgress != null ? xhrFetch : retryFetch;
     while (true) {
         yield* call(authorize, headers, rootLocation, auth);
-        let response;
+        let response: Response;
         try {
             response = yield* call(fetcher, apiUrl(rootApi, location, method), {
                 method,
@@ -95,7 +95,11 @@ export function* callApi<T>({
         }
         let data: any;
         try {
-            data = yield* apply(response, "json", []);
+            if (schema === "blob" && response.ok) {
+                data = yield* apply(response, "blob", []);
+            } else {
+                data = yield* apply(response, "json", []);
+            }
         } catch (e) {
             if (!response.ok) {
                 throw exception("Server returned error status");
@@ -125,7 +129,7 @@ export function* callApi<T>({
                 throw exception("Server returned error status: " + data.message);
             }
         }
-        if (!isSchemaValid(schema, data)) {
+        if (schema !== "blob" && !isSchemaValid(schema, data)) {
             throw exception("Server returned incorrect response", formatSchemaErrors(schema.errors));
         }
         return data;

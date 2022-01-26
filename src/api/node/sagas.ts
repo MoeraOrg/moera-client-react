@@ -640,3 +640,7 @@ export function* reorderAvatars(nodeName: string | null, ids: string[]): CallApi
         schema: NodeApi.AvatarOrdinalArray
     });
 }
+
+export function* proxyMedia(nodeName: string | null, url: string): CallApiResult<Blob> {
+    return yield* callApi({nodeName, location: ut`/proxy/media?url=${url}`, auth: true, schema: "blob"});
+}
