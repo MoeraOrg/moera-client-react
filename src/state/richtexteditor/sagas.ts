@@ -1,11 +1,12 @@
-import { apply, call, put } from 'typed-redux-saga';
+import { apply, call, put, spawn } from 'typed-redux-saga';
 import imageCompression from 'browser-image-compression';
 import * as Base64js from 'base64-js';
 
 import { Node } from "api";
 import {
     RICH_TEXT_EDITOR_IMAGE_COPY,
-    RICH_TEXT_EDITOR_IMAGES_UPLOAD, RichTextEditorImageCopyAction,
+    RICH_TEXT_EDITOR_IMAGES_UPLOAD,
+    RichTextEditorImageCopyAction,
     RichTextEditorImagesUploadAction
 } from "state/richtexteditor/actions";
 import { messageBox } from "state/messagebox/actions";
@@ -60,7 +61,7 @@ function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
 
 function* richTextEditorImagesUploadSaga(action: RichTextEditorImagesUploadAction) {
     for (let i = 0; i < action.payload.files.length; i++) {
-        yield* call(imageUpload, action, i);
+        yield* spawn(imageUpload, action, i);
     }
 }
 
