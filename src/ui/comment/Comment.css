@@ -70,11 +70,15 @@
     max-height: min(16rem, var(--height, 200vh));
 }
 
+.comment .content FIGURE {
+    display: inline-block;
+}
+
 .comment .content FIGCAPTION {
-    line-height: 1.2;
-    margin-top: .3em;
+    font-size: .875em;
+    line-height: 1.5;
+    margin-top: .5em;
     color: var(--bs-gray-600);
-    margin-left: .75em;
 }
 
 .comment .content .read-more {
