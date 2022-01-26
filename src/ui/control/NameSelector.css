@@ -3,6 +3,7 @@
     border-radius: 5px;
     max-height: 18em;
     overflow-y: auto;
+    overscroll-behavior-y: none;
 }
 
 .name-select .item {

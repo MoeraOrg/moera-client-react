@@ -58,4 +58,5 @@
     max-width: 800px;
     max-height: 70vh;
     overflow-y: auto;
+    overscroll-behavior-y: none;
 }

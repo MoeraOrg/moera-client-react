@@ -33,6 +33,7 @@
     max-height: calc(312px + .75rem);
     overflow-y: auto;
     overflow-x: hidden;
+    overscroll-behavior-y: none;
 }
 
 @media only screen and (max-width: 575px) {
