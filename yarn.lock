@@ -1418,7 +1418,7 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@popperjs/core@^2.11.0", "@popperjs/core@^2.9.2":
+"@popperjs/core@^2.11.2", "@popperjs/core@^2.9.2":
   version "2.11.2"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.2.tgz#830beaec4b4091a9e9398ac50f865ddea52186b9"
   integrity sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==
@@ -1852,7 +1852,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^27.0.3":
+"@types/jest@^27.4.0":
   version "27.4.0"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-27.4.0.tgz#037ab8b872067cae842a320841693080f9cb84ed"
   integrity sha512-gHl8XuC1RZ8H2j5sHv/JqsaxXkDDM9iDOgu0Wp8sjs4u/snb2PVehyWXJPr+ORA0RPpgw231mnutWI1+0hgjIQ==
@@ -1941,7 +1941,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-datepicker@^4.3.2":
+"@types/react-datepicker@^4.3.4":
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/@types/react-datepicker/-/react-datepicker-4.3.4.tgz#1cccf5acfb8672fce08940d1cf69e664500ea63d"
   integrity sha512-5nTTz37KdTUgMZ1AAxztMWNtEnIMVRo8oCAEhIv0a6uUqDjvSKaMyPRpBV+8chi6f/A8wlTKJIpojpXca2dx3A==
@@ -1975,7 +1975,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=16.9.11", "@types/react@^17.0.37":
+"@types/react@*", "@types/react@>=16.9.11", "@types/react@^17.0.38":
   version "17.0.38"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.38.tgz#f24249fefd89357d5fa71f739a686b8d7c7202bd"
   integrity sha512-SI92X1IA+FMnP3qM5m4QReluXzhcmovhZnLNm3pyeQlooi02qI7sLiepEYqT678uNiyc25XfCqxREFpy3W7YhQ==
@@ -1996,7 +1996,7 @@
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.1.tgz#d8f1c0d0dc23afad6dc16a9e993a0865774b4065"
   integrity sha512-xoDlM2S4ortawSWORYqsdU+2rxdh4LRW9ytc3zmT37RIKQh6IHyKwwtKhKis9ah8ol07DCkZxPt8BBvPjC6v4g==
 
-"@types/sanitize-html@^2.6.0":
+"@types/sanitize-html@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@types/sanitize-html/-/sanitize-html-2.6.2.tgz#9c47960841b9def1e4c9dfebaaab010a3f6e97b9"
   integrity sha512-7Lu2zMQnmHHQGKXVvCOhSziQMpa+R2hMHFefzbYoYMHeaXR0uXqNeOc3JeQQQ8/6Xa2Br/P1IQTLzV09xxAiUQ==
@@ -2399,7 +2399,7 @@ ajv@^6.10.0, ajv@^6.12.2, ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.6.0, ajv@^8.8.0, ajv@^8.8.2:
+ajv@^8.0.0, ajv@^8.6.0, ajv@^8.8.0, ajv@^8.9.0:
   version "8.9.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.9.0.tgz#738019146638824dea25edcf299dcba1b0e7eb18"
   integrity sha512-qOKJyNj/h+OWx7s5DePL6Zu1KeM9jPZhwBqs+7DzP6bGOvqzVCSf0xueYmVuaC/oQ/VtS2zLMLHdQFbkka+XDQ==
@@ -3526,7 +3526,7 @@ date-arithmetic@^4.0.1:
   resolved "https://registry.yarnpkg.com/date-arithmetic/-/date-arithmetic-4.1.0.tgz#e5d6434e9deb71f79760a37b729e4a515e730ddf"
   integrity sha512-QWxYLR5P/6GStZcdem+V1xoto6DMadYWpMXU82ES3/RfR3Wdwr3D0+be7mgOJ+Ov0G9D5Dmb9T17sNLQYj9XOg==
 
-date-fns@^2.0.1, date-fns@^2.24.0, date-fns@^2.27.0:
+date-fns@^2.0.1, date-fns@^2.24.0, date-fns@^2.28.0:
   version "2.28.0"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.28.0.tgz#9570d656f5fc13143e50c975a3b6bbeb46cd08b2"
   integrity sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw==
@@ -5910,7 +5910,7 @@ jsonpointer@^5.0.0:
     array-includes "^3.1.3"
     object.assign "^4.1.2"
 
-katex@^0.15.1:
+katex@^0.15.2:
   version "0.15.2"
   resolved "https://registry.yarnpkg.com/katex/-/katex-0.15.2.tgz#c05ece41ab497597b17abca2cecde3e4c0127f9d"
   integrity sha512-FfZ/f6f8bQdLmJ3McXDNTkKenQkoXkItpW0I9bsG2wgb+8JAY5bwpXFtI8ZVrg5hc1wo1X/UIhdkVMpok46tEQ==
@@ -7416,7 +7416,7 @@ react-avatar-editor@^12.0.0:
     "@babel/runtime" "^7.12.5"
     prop-types "^15.7.2"
 
-react-datepicker@^4.5.0:
+react-datepicker@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/react-datepicker/-/react-datepicker-4.6.0.tgz#10fc7c5b9c72df5c3e29712d559cb3fe73fd9f62"
   integrity sha512-JGSQnQSQYUkS7zvSaZuyHv5lxp3wMrN7GXV0VA0E9Ax9fL3Bb6E1pSXjL6C3WoeuV8dt/mItQfRkPpRGCrl/OA==
@@ -7467,7 +7467,7 @@ react-dom@^17.0.2:
     object-assign "^4.1.1"
     scheduler "^0.20.2"
 
-react-dropzone@^11.4.2:
+react-dropzone@^11.5.1:
   version "11.5.1"
   resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-11.5.1.tgz#f4d664437bf8af6acfccbf5040a9890c6780a49f"
   integrity sha512-eNhttdq4ZDe3eKbXAe54Opt+sbtqmNK5NWTHf/l5d+1TdZqShJ8gMjBrya00qx5zkI//TYxRhu1d9pemTgaWwg==
@@ -7645,12 +7645,12 @@ react-transition-group@^4.4.1:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react-widgets-date-fns@^5.0.11:
+react-widgets-date-fns@^5.0.13:
   version "5.0.13"
   resolved "https://registry.yarnpkg.com/react-widgets-date-fns/-/react-widgets-date-fns-5.0.13.tgz#75e56e7efe09d1730e909e479777db22fd04c734"
   integrity sha512-epWpocVjV85H0mpAxp1nJwtLhHqnaJ6TWE1rS1A8Xx7ZIwcr1bZVk4zTBWi57C3W4f2uDUj+GiUxbeRhou/M0Q==
 
-react-widgets-simple-number@^5.0.11:
+react-widgets-simple-number@^5.0.13:
   version "5.0.13"
   resolved "https://registry.yarnpkg.com/react-widgets-simple-number/-/react-widgets-simple-number-5.0.13.tgz#3990f87f48e373f9c31f9535b2bcef274851c204"
   integrity sha512-OMaTEEGh0ALrS4113epUzgdg0DSZR6MnuDBdyd09y6fIV1Os4nux5Wd7Vr5KLGTEJ8fmOhZHpzQU7vrSVPc4SQ==
@@ -7658,7 +7658,7 @@ react-widgets-simple-number@^5.0.11:
     deconstruct-number-format "^0.0.1"
     format-number-with-string "^0.0.2"
 
-react-widgets@^5.5.1:
+react-widgets@^5.6.1:
   version "5.6.1"
   resolved "https://registry.yarnpkg.com/react-widgets/-/react-widgets-5.6.1.tgz#9d5acdf45986eae052f5f1f4de136e6e2cdf20ae"
   integrity sha512-hmgQP6uh5YVVMl14RP63Pqo1b288D7mU7GvQjMYHP1rfo/qzZPq4zRWjeQih/H7VZidt9TcrDTnSjKLsG+gCsA==
@@ -8620,7 +8620,7 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-text-field-edit@^3.1.1:
+text-field-edit@^3.1.2022:
   version "3.1.2022"
   resolved "https://registry.yarnpkg.com/text-field-edit/-/text-field-edit-3.1.2022.tgz#d23e109879ca410adcf85f861f89fb7db480a377"
   integrity sha512-F1S4Uwwq3VBANpGPDiovTrVM8aLBndh1kx3nXeV6jcAA033Xo3OzI9BgBsbsbwuJ2A/GtMNuN1R0Sr/e1Q8zDw==
@@ -8831,7 +8831,7 @@ typescript-tuple@^2.2.1:
   dependencies:
     typescript-compare "^0.0.2"
 
-typescript@^4.4.4:
+typescript@^4.5.5:
   version "4.5.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.5.tgz#d8c953832d28924a9e3d37c73d729c846c5896f3"
   integrity sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==
