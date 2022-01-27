@@ -78,9 +78,6 @@
     "uri-js": "^4.4.1",
     "yup": "^0.32.11"
   },
-  "resolutions": {
-    "react-scripts/postcss-preset-env/postcss-custom-properties": "^11.0.0"
-  },
   "scripts": {
     "start": "craco start",
     "build": "./release",
