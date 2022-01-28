@@ -77,6 +77,46 @@ export function getWindowSelectionHtml(): string | null {
     return null;
 }
 
+function insertTextFirefox(field: HTMLTextAreaElement | HTMLInputElement, text: string): void {
+    // Found on https://www.everythingfrontend.com/posts/insert-text-into-textarea-at-cursor-position.html
+    field.setRangeText(text, field.selectionStart || 0, field.selectionEnd || 0, "end");
+    field.dispatchEvent(new InputEvent("input", {
+        data: text,
+        inputType: 'insertText',
+    }));
+}
+
+export function insertText(field: HTMLTextAreaElement | HTMLInputElement, text: string): void {
+    const document = field.ownerDocument;
+    const initialFocus = document.activeElement;
+    if (initialFocus !== field) {
+        field.focus();
+    }
+    if (!document.execCommand("insertText", false, text)) {
+        insertTextFirefox(field, text);
+    }
+    if (initialFocus === document.body) {
+        field.blur();
+    }
+    else if (initialFocus instanceof HTMLElement && initialFocus !== field) {
+        initialFocus.focus();
+    }
+}
+
+export function getTextSelection(field: HTMLTextAreaElement | HTMLInputElement): string {
+    return field.value.slice(field.selectionStart ?? undefined, field.selectionEnd ?? undefined);
+}
+
+export function wrapSelection(field: HTMLTextAreaElement | HTMLInputElement, wrap: string, wrapEnd?: string): void {
+    const selectionStart = field.selectionStart;
+    const selectionEnd = field.selectionEnd;
+    const selection = getTextSelection(field);
+    insertText(field, wrap + selection + (wrapEnd ?? wrap));
+    // Restore the selection around the previously-selected text
+    field.selectionStart = (selectionStart ?? 0) + wrap.length;
+    field.selectionEnd = (selectionEnd ?? selectionStart ?? 0)+ wrap.length;
+}
+
 export function getPageHeaderHeight(): number {
     const mainMenu = document.getElementById("main-menu");
     const header = document.getElementById("page-header");

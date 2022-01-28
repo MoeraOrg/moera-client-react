@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
-import * as textFieldEdit from 'text-field-edit'
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { SourceFormat } from "api/node/api-types";
@@ -20,7 +19,7 @@ import { AvatarField, RichTextField } from "ui/control/field";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
-import { mentionName } from "util/misc";
+import { insertText, mentionName } from "util/misc";
 import "./CommentCompose.css";
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -69,7 +68,7 @@ function CommentCompose(props: Props) {
             if (submit) {
                 submitForm();
             } else {
-                textFieldEdit.insert(event.target as HTMLTextAreaElement, "\n");
+                insertText(event.target as HTMLTextAreaElement, "\n");
             }
             event.preventDefault();
         }

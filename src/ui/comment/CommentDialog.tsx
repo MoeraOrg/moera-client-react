@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
-import * as textFieldEdit from 'text-field-edit';
 
 import { CommentText, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -22,6 +21,7 @@ import NodeName from "ui/nodename/NodeName";
 import { AvatarField, RichTextField } from "ui/control/field";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
+import { insertText } from "util/misc";
 import "./CommentDialog.css";
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -60,7 +60,7 @@ function CommentDialog(props: Props) {
             if (submit) {
                 submitForm();
             } else {
-                textFieldEdit.insert(event.target as HTMLTextAreaElement, "\n");
+                insertText(event.target as HTMLTextAreaElement, "\n");
             }
             event.preventDefault();
         }

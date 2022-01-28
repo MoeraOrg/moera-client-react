@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import * as textFieldEdit from 'text-field-edit';
 import cx from 'classnames';
 
 import { NodeName } from "api";
@@ -14,7 +13,7 @@ import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtextedito
 import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
 import { htmlEntities } from "util/html";
-import { mentionName } from "util/misc";
+import { getTextSelection, insertText, mentionName, wrapSelection } from "util/misc";
 import { redirectUrl } from "util/url";
 import { NameListItem } from "util/names-list";
 import "./RichTextEditorPanel.css";
@@ -81,9 +80,9 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
 
         if (this.isMarkdown()) {
-            textFieldEdit.wrapSelection(textArea.current, "**");
+            wrapSelection(textArea.current, "**");
         } else {
-            textFieldEdit.wrapSelection(textArea.current, "<b>", "</b>");
+            wrapSelection(textArea.current, "<b>", "</b>");
         }
         textArea.current.focus();
         event.preventDefault();
@@ -97,9 +96,9 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
 
         if (this.isMarkdown()) {
-            textFieldEdit.wrapSelection(textArea.current, "_");
+            wrapSelection(textArea.current, "_");
         } else {
-            textFieldEdit.wrapSelection(textArea.current, "<i>", "</i>");
+            wrapSelection(textArea.current, "<i>", "</i>");
         }
         textArea.current.focus();
         event.preventDefault();
@@ -113,9 +112,9 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
 
         if (this.isMarkdown()) {
-            textFieldEdit.wrapSelection(textArea.current, "~~");
+            wrapSelection(textArea.current, "~~");
         } else {
-            textFieldEdit.wrapSelection(textArea.current, "<strike>", "</strike>");
+            wrapSelection(textArea.current, "<strike>", "</strike>");
         }
         textArea.current.focus();
         event.preventDefault();
@@ -142,13 +141,12 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         this.onSpoilerClose();
         if (ok) {
             if (title) {
-                textFieldEdit.wrapSelection(textArea.current,
-                    `<mr-spoiler title="${htmlEntities(title)}">`, "</mr-spoiler>");
+                wrapSelection(textArea.current, `<mr-spoiler title="${htmlEntities(title)}">`, "</mr-spoiler>");
             } else {
                 if (this.isMarkdown()) {
-                    textFieldEdit.wrapSelection(textArea.current, "||");
+                    wrapSelection(textArea.current, "||");
                 } else {
-                    textFieldEdit.wrapSelection(textArea.current, "<mr-spoiler>", "</mr-spoiler>");
+                    wrapSelection(textArea.current, "<mr-spoiler>", "</mr-spoiler>");
                 }
             }
         }
@@ -180,7 +178,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             if (summary) {
                 wrapBegin += `<summary>${htmlEntities(summary)}</summary>`;
             }
-            const selection = textFieldEdit.getSelection(textArea.current);
+            const selection = getTextSelection(textArea.current);
             if (!selection || !selection.startsWith("\n")) {
                 wrapBegin += "\n";
             }
@@ -189,7 +187,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             } else {
                 wrapEnd += "\n";
             }
-            textFieldEdit.wrapSelection(textArea.current, wrapBegin, wrapEnd);
+            wrapSelection(textArea.current, wrapBegin, wrapEnd);
         }
         textArea.current.focus();
     }
@@ -222,16 +220,16 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
         if (ok) {
             if (this.isMarkdown() || nodeRootPage == null) {
-                textFieldEdit.insert(textArea.current, mentionName(nodeName, fullName))
+                insertText(textArea.current, mentionName(nodeName, fullName))
             } else {
                 const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
                 const href = redirectUrl(false, nodeRootPage, nodeName, null, "/", null);
-                textFieldEdit.insert(textArea.current,
+                insertText(textArea.current,
                     `<a href="${htmlEntities(href)}" data-nodename="${htmlEntities(nodeName ?? "")}" data-href="/">`
                     + `${htmlEntities(text)}</a>`);
             }
         } else {
-            textFieldEdit.insert(textArea.current, nodeName ? mentionName(nodeName) : "@")
+            insertText(textArea.current, nodeName ? mentionName(nodeName) : "@")
         }
         textArea.current.focus();
     }
@@ -248,7 +246,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
         const value = textArea.current.value;
         const start = textArea.current.selectionStart;
-        const selection = textFieldEdit.getSelection(textArea.current);
+        const selection = getTextSelection(textArea.current);
 
         if (start > 0 && value[start - 1] !== "\n") {
             wrapBegin = "\n" + wrapBegin;
@@ -259,7 +257,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         if (!selection || !selection.endsWith("\n")) {
             wrapEnd = "\n" + wrapEnd;
         }
-        textFieldEdit.wrapSelection(textArea.current, wrapBegin, wrapEnd);
+        wrapSelection(textArea.current, wrapBegin, wrapEnd);
         textArea.current.focus();
         event.preventDefault();
     }
@@ -273,7 +271,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
         this.setState({
             linkDialog: true,
-            dialogText: textFieldEdit.getSelection(textArea.current)
+            dialogText: getTextSelection(textArea.current)
         });
         window.closeLightDialog = this.onLinkClose;
         event.preventDefault();
@@ -297,34 +295,31 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
             if (this.isMarkdown()) {
                 if (text) {
                     if (href) {
-                        textFieldEdit.insert(textArea.current, `[${text}](${href})`);
+                        insertText(textArea.current, `[${text}](${href})`);
                     } else {
-                        textFieldEdit.insert(textArea.current, `[${text}]`);
-                        textFieldEdit.wrapSelection(textArea.current, "(", ")");
+                        insertText(textArea.current, `[${text}]`);
+                        wrapSelection(textArea.current, "(", ")");
                     }
                 } else {
                     if (href) {
-                        textFieldEdit.insert(textArea.current, href);
+                        insertText(textArea.current, href);
                     } else {
-                        textFieldEdit.wrapSelection(textArea.current, "[](", ")");
+                        wrapSelection(textArea.current, "[](", ")");
                     }
                 }
             } else {
                 if (text) {
                     if (href) {
-                        textFieldEdit.insert(textArea.current,
-                            `<a href="${htmlEntities(href)}">${htmlEntities(text)}</a>`);
+                        insertText(textArea.current, `<a href="${htmlEntities(href)}">${htmlEntities(text)}</a>`);
                     } else {
-                        textFieldEdit.insert(textArea.current, "");
-                        textFieldEdit.wrapSelection(textArea.current,
-                            "<a href=\"", `">${htmlEntities(text)}</a>`);
+                        insertText(textArea.current, "");
+                        wrapSelection(textArea.current, "<a href=\"", `">${htmlEntities(text)}</a>`);
                     }
                 } else {
                     if (href) {
-                        textFieldEdit.insert(textArea.current,
-                            `<a href="${htmlEntities(href)}">${htmlEntities(href)}</a>`);
+                        insertText(textArea.current, `<a href="${htmlEntities(href)}">${htmlEntities(href)}</a>`);
                     } else {
-                        textFieldEdit.wrapSelection(textArea.current, "<a href=\"", "\"></a>");
+                        wrapSelection(textArea.current, "<a href=\"", "\"></a>");
                     }
                 }
             }
@@ -360,9 +355,9 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                 const titleAttr = title ? ` "${title}"`: "";
                 const altAttr = alt ?? "";
                 if (src) {
-                    textFieldEdit.insert(textArea.current, `![${altAttr}](${src}${titleAttr})`);
+                    insertText(textArea.current, `![${altAttr}](${src}${titleAttr})`);
                 } else {
-                    textFieldEdit.wrapSelection(textArea.current, `![${altAttr}](`, `${titleAttr})`);
+                    wrapSelection(textArea.current, `![${altAttr}](`, `${titleAttr})`);
                 }
             } else {
                 const figureBegin = caption ? "<figure>" : "";
@@ -375,9 +370,9 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                 const tagBegin = `${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
                 const tagEnd = `">${figureEnd}`;
                 if (src) {
-                    textFieldEdit.insert(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
+                    insertText(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
                 } else {
-                    textFieldEdit.wrapSelection(textArea.current, tagBegin, tagEnd);
+                    wrapSelection(textArea.current, tagBegin, tagEnd);
                 }
             }
         }

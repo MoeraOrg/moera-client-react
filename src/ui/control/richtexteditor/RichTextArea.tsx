@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
-import * as textFieldEdit from 'text-field-edit';
 
 import { Browser } from "ui/browser";
 import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
@@ -12,6 +11,7 @@ import { SourceFormat } from "api/node/api-types";
 import { PREFIX } from "api/settings";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
+import { insertText } from "util/misc";
 
 const MENTION_START = /(^|\s)@$/;
 
@@ -227,7 +227,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
         }
 
         if (content != null) {
-            textFieldEdit.insert(textArea.current, content);
+            insertText(textArea.current, content);
             textArea.current.dispatchEvent(new InputEvent("input", {
                 data: content,
                 inputType: "insertText",

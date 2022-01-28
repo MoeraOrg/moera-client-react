@@ -1,8 +1,8 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
-import * as textFieldEdit from 'text-field-edit';
 
 import { Node, NodeApiError } from "api";
+import { CommentInfo, DraftInfo, MediaAttachment, RepliedTo } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
     closeCommentDialog,
@@ -89,13 +89,12 @@ import { getOwnerFullName, getOwnerName } from "state/owner/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { getWindowSelectionHtml, mentionName } from "util/misc";
-import { quoteHtml } from "util/html";
-import { Browser } from "ui/browser";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";
-import { CommentInfo, DraftInfo, MediaAttachment, RepliedTo } from "api/node/api-types";
 import { introduced } from "state/init-selectors";
+import { Browser } from "ui/browser";
+import { getWindowSelectionHtml, insertText, mentionName } from "util/misc";
+import { quoteHtml } from "util/html";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
@@ -557,18 +556,18 @@ function* commentReplySaga(action: CommentReplyAction) {
     if (body.textLength === 0 && !replied) {
         yield* put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading));
         if (text) {
-            textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
+            insertText(body, `>>>\n${text}\n>>>\n`);
         }
     } else {
         const mention = mentionName(ownerName, ownerFullName);
         if (text) {
             if (ownerName !== repliedToName) {
-                textFieldEdit.insert(body, `${mention}:\n>>>\n${text}\n>>>\n`);
+                insertText(body, `${mention}:\n>>>\n${text}\n>>>\n`);
             } else {
-                textFieldEdit.insert(body, `>>>\n${text}\n>>>\n`);
+                insertText(body, `>>>\n${text}\n>>>\n`);
             }
         } else {
-            textFieldEdit.insert(body, `${mention} `);
+            insertText(body, `${mention} `);
         }
     }
     yield* put(commentsScrollToComposer());

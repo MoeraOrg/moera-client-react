@@ -8606,11 +8606,6 @@ test-exclude@^6.0.0:
     glob "^7.1.4"
     minimatch "^3.0.4"
 
-text-field-edit@^3.1.2022:
-  version "3.1.2022"
-  resolved "https://registry.yarnpkg.com/text-field-edit/-/text-field-edit-3.1.2022.tgz#d23e109879ca410adcf85f861f89fb7db480a377"
-  integrity sha512-F1S4Uwwq3VBANpGPDiovTrVM8aLBndh1kx3nXeV6jcAA033Xo3OzI9BgBsbsbwuJ2A/GtMNuN1R0Sr/e1Q8zDw==
-
 text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
