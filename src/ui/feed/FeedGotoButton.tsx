@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 
-import { Button } from "ui/control";
+import { ClientState } from "state/state";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
-import "./FeedGotoButton.css";
-import { ClientState } from "state/state";
 import { Browser } from "ui/browser";
+import { Button } from "ui/control";
+import "./FeedGotoButton.css";
 
 interface OwnProps {
     feedName: string;
@@ -18,69 +18,47 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-interface State {
-    active: boolean;
-}
+function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Props) {
+    const [active, setActive] = useState<boolean>(false);
 
-class FeedGotoButton extends React.PureComponent<Props, State> {
+    useEffect(() => setActive(false), [timestamp]);
 
-    constructor(props: Props, context: any) {
-        super(props, context);
+    const activate = () => setActive(true);
 
-        this.state = {active: false};
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.timestamp !== prevProps.timestamp) {
-            this.setState({active: false});
-        }
-    }
-
-    activate = () => {
-        this.setState({active: true});
-    };
-
-    goToTimestamp = (date: Date) => {
+    const goToTimestamp = (date: Date) => {
         const moment = getUnixTime(endOfDay(date)) * 1000;
         if (isNaN(moment)) {
             return;
         }
-        this.props.feedScrollToAnchor(this.props.feedName, moment);
+        feedScrollToAnchor(feedName, moment);
     };
 
-    toBottom = (e: React.MouseEvent) => {
-        this.props.feedScrollToAnchor(this.props.feedName, Number.MIN_SAFE_INTEGER);
+    const toBottom = (e: React.MouseEvent) => {
+        feedScrollToAnchor(feedName, Number.MIN_SAFE_INTEGER);
         e.preventDefault();
     };
 
-    render() {
-        const {timestamp, atBottom} = this.props;
-        const {active} = this.state;
-
-        return (
-            <div className="feed-buttons">
-                {!active ?
-                    <Button variant="outline-info" size="sm" onClick={this.activate}>Go to...</Button>
-                :
-                    <>
-                        <DatePicker selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
-                                    onChange={v => {
-                                        if (v instanceof Date) {
-                                            this.goToTimestamp(v);
-                                        }
-                                    }}
-                                    dateFormat="dd-MM-yyyy"
-                                    withPortal={Browser.isTinyScreen()}/>
-                        <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom}
-                                onClick={this.toBottom}>
-                            <FontAwesomeIcon icon="arrow-down"/>&nbsp;Bottom
-                        </Button>
-                    </>
-                }
-            </div>
-        );
-    }
-
+    return (
+        <div className="feed-buttons">
+            {!active ?
+                <Button variant="outline-info" size="sm" onClick={activate}>Go to...</Button>
+            :
+                <>
+                    <DatePicker selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
+                                onChange={v => {
+                                    if (v instanceof Date) {
+                                        goToTimestamp(v);
+                                    }
+                                }}
+                                dateFormat="dd-MM-yyyy"
+                                withPortal={Browser.isTinyScreen()}/>
+                    <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom} onClick={toBottom}>
+                        <FontAwesomeIcon icon="arrow-down"/>&nbsp;Bottom
+                    </Button>
+                </>
+            }
+        </div>
+    );
 }
 
 const connector = connect(
