@@ -1,3 +1,9 @@
+@media only screen and (min-width: 576px) {
+    .modal-dialog.donate-dialog {
+        max-width: 550px;
+    }
+}
+
 .donate-dialog .recipient {
     margin-bottom: 1rem;
     font-size: larger;
@@ -40,6 +46,10 @@
 
 .donate-dialog .fundraisers .info .info-qr {
     text-align: center;
+}
+
+.donate-dialog .fundraisers .info .info-qr .description {
+    overflow-wrap: anywhere;
 }
 
 .donate-dialog .fundraisers .info .info-qr A {

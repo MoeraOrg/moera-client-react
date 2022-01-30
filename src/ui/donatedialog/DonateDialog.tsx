@@ -76,7 +76,7 @@ function DonateDialog({show, name, fullName, fundraisers, autoPreferred, preferr
                                 <a href={fundraiser.href ?? undefined} target="_blank" rel="noreferrer">
                                     <QRCode value={fundraiser.qrCode} size={256} level={"Q"}/>
                                 </a>
-                                {fundraiser.text && <><br/>{fundraiser.text}</>}
+                                {fundraiser.text && <span className="description"><br/>{fundraiser.text}</span>}
                             </div>
                         :
                             <div className="info-text">
