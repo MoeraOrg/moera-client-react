@@ -14,6 +14,7 @@ import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
+import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import "./LightBox.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -62,7 +63,8 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
                   onMoveNextRequest={() => nextMediaId != null ? lightBoxMediaSet(nextMediaId) : null}
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
-                      <a className="lightbox-download" href={mainSrc} download>
+                      <LightBoxShareButton/>,
+                      <a className="lightbox-button lightbox-download" href={mainSrc} download>
                           <FontAwesomeIcon icon="file-download"/>
                       </a>,
                       <LightBoxReactions/>
