@@ -187,15 +187,17 @@ class Manager extends React.PureComponent<ManagerProps, ManagerState> {
             this.setTouch("lock");
         }
         document.addEventListener("click", this.documentClick);
+        document.addEventListener("hidepopper", this.hide);
     }
 
-    hide() {
+    hide = () => {
         this.setState({popup: false});
         if (this.state.touch !== "none") {
             this.setLocus("out");
             this.setTouch("none");
         }
         document.removeEventListener("click", this.documentClick);
+        document.removeEventListener("hidepopper", this.hide);
     }
 
     render() {

@@ -20,12 +20,17 @@ const DonateButtonImpl = ({name, fullName, fundraisers, styles = "large", classN
         return null;
     }
 
+    const onClick = () => {
+        document.dispatchEvent(new Event("hidepopper"));
+        openDonateDialog(name, fullName, fundraisers);
+    };
+
     return (
         <Button variant="outline-success"
                 size={styles === "small" ? "sm" : undefined}
                 title={styles === "icon" ? "Donate" : undefined}
                 className={cx(className, {"border-0": styles === "icon"})}
-                onClick={() => openDonateDialog(name, fullName, fundraisers)}>
+                onClick={onClick}>
             <FontAwesomeIcon icon="hand-holding-heart"/>
             {styles !== "icon" ? " Donate" : ""}
         </Button>
