@@ -17,6 +17,7 @@
 }
 
 #page-header .panel {
+    position: relative;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;

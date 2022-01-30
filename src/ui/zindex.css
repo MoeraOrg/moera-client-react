@@ -1,6 +1,7 @@
 :root {
     --zindex-text-overlay: 1;
     --zindex-page-header: 900;
+    --zindex-feed-buttons: 940;
     --zindex-feed-top-button: 950;
     --zindex-dropdown: 1000; /* Bootstrap */
     --zindex-sticky: 1020; /* Bootstrap */
