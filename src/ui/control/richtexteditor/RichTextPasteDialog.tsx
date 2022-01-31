@@ -19,11 +19,11 @@ export default function RichTextPasteDialog({show, onSubmit}: Props) {
     }
 
     const onKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "t") {
+        if (event.key === "t" || event.key === "\u0435" || event.key === "\u05d0") {
             onSubmit("text", persist);
             event.preventDefault();
         }
-        if (event.key === "p") {
+        if (event.key === "p" || event.key === "\u0437" || event.key === "\u05e4") {
             onSubmit("html", persist);
             event.preventDefault();
         }
