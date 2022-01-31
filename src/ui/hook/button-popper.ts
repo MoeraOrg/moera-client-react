@@ -43,9 +43,11 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
         if (visible) {
             document.getElementById("app-root")!.addEventListener("click", onHide);
             document.getElementById("modal-root")!.addEventListener("click", onHide);
+            document.getElementsByClassName("ReactModalPortal").item(0)?.addEventListener("click", onHide); // lightbox
             return () => {
                 document.getElementById("app-root")!.removeEventListener("click", onHide);
                 document.getElementById("modal-root")!.removeEventListener("click", onHide);
+                document.getElementsByClassName("ReactModalPortal").item(0)?.removeEventListener("click", onHide);
             }
         }
     }, [visible, onHide])

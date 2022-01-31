@@ -1,10 +1,15 @@
 .dropdown-menu {
     pointer-events: none;
     margin: unset;
+    line-height: var(--bs-body-line-height);
 }
 
 .dropdown-menu.show {
     pointer-events: auto;
+}
+
+.dropdown-menu .dropdown-item {
+    cursor: pointer;
 }
 
 .dropdown-menu A.dropdown-item:hover {

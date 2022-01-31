@@ -63,7 +63,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
                   onMoveNextRequest={() => nextMediaId != null ? lightBoxMediaSet(nextMediaId) : null}
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
-                      <LightBoxShareButton/>,
+                      <LightBoxShareButton mediaUrl={mainSrc}/>,
                       <a className="lightbox-button lightbox-download" href={mainSrc} download>
                           <FontAwesomeIcon icon="file-download"/>
                       </a>,

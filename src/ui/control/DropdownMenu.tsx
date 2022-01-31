@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { isStandaloneMode } from "state/navigation/selectors";
@@ -52,20 +53,23 @@ function buildItems(items: MenuItem[], standalone: boolean) {
 
 type Props = {
     items: MenuItem[];
+    className?: string | null;
     children?: ReactNode;
 } & ConnectedProps<typeof connector>;
 
-function DropdownMenuImpl({items, children, standalone}: Props) {
+function DropdownMenuImpl({items, className, children, standalone}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
 
     const itemList = buildItems(items, standalone);
     return (
-        <button className="menu" ref={setButtonRef} onClick={onToggle}>
-            {children ??
-                <FontAwesomeIcon icon="chevron-down" className="chevron"/>
-            }
+        <>
+            <button className={cx("menu", className)} ref={setButtonRef} onClick={onToggle}>
+                {children ??
+                    <FontAwesomeIcon icon="chevron-down" className="chevron"/>
+                }
+            </button>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
@@ -78,12 +82,12 @@ function DropdownMenuImpl({items, children, standalone}: Props) {
                                 </a>
                             </React.Fragment>
                         ))
-                    :
+                        :
                         <span className="dropdown-item disabled no-actions">No actions</span>
                     }
                 </div>
             }
-        </button>
+        </>
     );
 
 }

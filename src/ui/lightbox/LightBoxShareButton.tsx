@@ -4,6 +4,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { lightBoxCopyLink, lightBoxCopyMediaLink } from "state/lightbox/actions";
 import {
     getLightBoxMediaId,
     getLightBoxMediaPostingId,
@@ -13,13 +14,17 @@ import {
 import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/owner/selectors";
+import { DropdownMenu } from "ui/control";
 import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
 
-type Props = ConnectedProps<typeof connector>;
+type Props = {
+    mediaUrl: string;
+} & ConnectedProps<typeof connector>;
 
-function LightBoxShareButton({sourceNodeName, posting, comment, mediaId, mediaPosting, shareDialogPrepare}: Props) {
-    const onClick = () => {
+function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaId, mediaPosting, shareDialogPrepare,
+                              lightBoxCopyLink, lightBoxCopyMediaLink}: Props) {
+    const onShare = () => {
         if (sourceNodeName == null) {
             return;
         }
@@ -41,9 +46,31 @@ function LightBoxShareButton({sourceNodeName, posting, comment, mediaId, mediaPo
     }
 
     return (
-        <button className="lightbox-button lightbox-share" onClick={onClick}>
+        <DropdownMenu className="lightbox-button lightbox-share" items={[
+            {
+                title: "Share to...",
+                href: null,
+                onClick: onShare,
+                show: true
+            },
+            {
+                divider: true
+            },
+            {
+                title: "Copy link",
+                href: null,
+                onClick: () => lightBoxCopyLink(),
+                show: true
+            },
+            {
+                title: "Copy image link",
+                href: mediaUrl,
+                onClick: () => lightBoxCopyMediaLink(mediaUrl),
+                show: true
+            },
+        ]}>
             <FontAwesomeIcon icon="share-alt"/>
-        </button>
+        </DropdownMenu>
     );
 }
 
@@ -55,7 +82,7 @@ const connector = connect(
         mediaId: getLightBoxMediaId(state),
         mediaPosting: getPosting(state, getLightBoxMediaPostingId(state))
     }),
-    { shareDialogPrepare }
+    { shareDialogPrepare, lightBoxCopyLink, lightBoxCopyMediaLink }
 );
 
 export default connector(LightBoxShareButton);
