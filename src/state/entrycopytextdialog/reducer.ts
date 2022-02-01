@@ -4,7 +4,9 @@ import { CLOSE_ENTRY_COPY_TEXT_DIALOG, OPEN_ENTRY_COPY_TEXT_DIALOG } from "state
 
 const initialState = {
     show: false,
-    body: null
+    body: null,
+    nodeName: "",
+    media: null
 }
 
 export default (state: EntryCopyTextDialogState = initialState, action: ClientAction): EntryCopyTextDialogState => {
@@ -13,7 +15,9 @@ export default (state: EntryCopyTextDialogState = initialState, action: ClientAc
             return {
                 ...state,
                 show: true,
-                body: action.payload.body
+                body: action.payload.body,
+                nodeName: action.payload.nodeName,
+                media: action.payload.media
             }
 
         case CLOSE_ENTRY_COPY_TEXT_DIALOG:

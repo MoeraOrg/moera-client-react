@@ -40,7 +40,7 @@ class PostingMenu extends React.PureComponent<Props> {
     onCopyText = () => {
         const {posting, entryCopyText} = this.props;
 
-        entryCopyText(posting.body, "ask");
+        entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null);
     };
 
     onShare = () => {

@@ -28,9 +28,9 @@ class CommentMenu extends React.PureComponent<Props> {
     };
 
     onCopyText = () => {
-        const {comment, entryCopyText} = this.props;
+        const {comment, entryCopyText, receiverName} = this.props;
 
-        entryCopyText(comment.body, "ask");
+        entryCopyText(comment.body, "ask", receiverName ?? "", comment.media ?? null);
     };
 
     onShare = () => {
