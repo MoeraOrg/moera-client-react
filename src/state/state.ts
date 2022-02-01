@@ -6,6 +6,7 @@ import { ConnectDialogState } from "state/connectdialog/state";
 import { ContactsState } from "state/contacts/state";
 import { DetailedPostingState } from "state/detailedposting/state";
 import { DonateDialogState } from "state/donatedialog/state";
+import { EntryCopyTextDialogState } from "state/entrycopytextdialog/state";
 import { ErrorState } from "state/error/state";
 import { FeedsState } from "state/feeds/state";
 import { HomeState } from "state/home/state";
@@ -42,6 +43,7 @@ export interface ClientState {
     contacts: ContactsState;
     detailedPosting: DetailedPostingState;
     donateDialog: DonateDialogState;
+    entryCopyTextDialog: EntryCopyTextDialogState;
     error: ErrorState;
     feeds: FeedsState;
     flashBox: FlashBoxState;

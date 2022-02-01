@@ -143,18 +143,27 @@ export function quoteHtml(html?: string | null): string | null {
     if (html == null) {
         return null;
     }
-    return html
+    return htmlToEmoji(html)
         .replace(/\n*<p(\s[^>]*)?>\n*/gi, "\n\n")
         .replace(/<blockquote>\n+/gi, "<blockquote>\n")
         .replace(/<\/p>/gi, "")
         .replace(/\n*<br\s*\/?>\n*/gi, "\n")
         .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
+        .replace(/\n\s*\n/g, "\n\n")
+        .trim()
+}
+
+export function htmlToEmoji(html: string): string {
+    return html
+        .replace(/<b\s[^>]*class="emoji"[^>]*>(..?)<\/b>/gi, "$1")
         .replace(/<img\s+src="https:\/\/twemoji\.[^"]*\/([0-9a-f]+).svg"[^>]*>/gi,
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
         .replace(/<img\s[^>]*src="https:\/\/static.[a-z]+.fbcdn.net\/images\/emoji.php\/[^"]*\/([0-9a-f]+).png"[^>]*>/gi,
-            (g0, g1) => String.fromCodePoint(parseInt(g1, 16)))
-        .replace(/\n\s*\n/g, "\n\n")
-        .trim()
+            (g0, g1) => String.fromCodePoint(parseInt(g1, 16)));
+}
+
+export function containsTags(html: string): boolean {
+    return html.search(/<[a-zA-z][^\n]*>/) >= 0;
 }
 
 export function clearHtml(html: string | null | undefined): string {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { DropdownMenu } from "ui/control";
+import { CommentInfo } from "api/node/api-types";
+import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
@@ -9,7 +10,7 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 import { getCommentsReceiverName, getCommentsReceiverPostingId } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
-import { CommentInfo } from "api/node/api-types";
+import { DropdownMenu } from "ui/control";
 
 type Props = {
     nodeName: string;
@@ -24,6 +25,12 @@ class CommentMenu extends React.PureComponent<Props> {
         const {postingId, comment, commentCopyLink} = this.props;
 
         commentCopyLink(comment.id, postingId);
+    };
+
+    onCopyText = () => {
+        const {comment, entryCopyText} = this.props;
+
+        entryCopyText(comment.body, "ask");
     };
 
     onShare = () => {
@@ -67,6 +74,12 @@ class CommentMenu extends React.PureComponent<Props> {
                     show: true
                 },
                 {
+                    title: "Copy text",
+                    href: commentHref,
+                    onClick: this.onCopyText,
+                    show: true
+                },
+                {
                     title: "Share...",
                     href: commentHref,
                     onClick: this.onShare,
@@ -105,7 +118,7 @@ const connector = connect(
         receiverName: getCommentsReceiverName(state),
         receiverPostingId: getCommentsReceiverPostingId(state)
     }),
-    { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare }
+    { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText }
 );
 
 export default connector(CommentMenu);

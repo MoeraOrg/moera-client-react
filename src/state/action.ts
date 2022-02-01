@@ -6,6 +6,7 @@ import { ConnectDialogAnyAction } from "state/connectdialog/actions";
 import { ContactsAnyAction } from "state/contacts/actions";
 import { DetailedPostingAnyAction } from "state/detailedposting/actions";
 import { DonateDialogAnyAction } from "state/donatedialog/actions";
+import { EntryCopyTextDialogAnyAction } from "state/entrycopytextdialog/actions";
 import { ErrorAnyAction } from "state/error/actions";
 import { FeedsAnyAction } from "state/feeds/actions";
 import { FlashBoxAnyAction } from "state/flashbox/actions";
@@ -44,6 +45,7 @@ export type ClientAction =
     | ContactsAnyAction
     | DonateDialogAnyAction
     | DetailedPostingAnyAction
+    | EntryCopyTextDialogAnyAction
     | ErrorAnyAction
     | FeedsAnyAction
     | FlashBoxAnyAction

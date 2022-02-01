@@ -15,6 +15,7 @@ import { storyPinningUpdate } from "state/stories/actions";
 import { openChangeDateDialog } from "state/changedatedialog/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
+import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootLocation, ProtectedObject } from "state/node/selectors";
 import { ClientState } from "state/state";
@@ -34,6 +35,12 @@ class PostingMenu extends React.PureComponent<Props> {
         const {posting, postingCopyLink} = this.props;
 
         postingCopyLink(posting.id);
+    };
+
+    onCopyText = () => {
+        const {posting, entryCopyText} = this.props;
+
+        entryCopyText(posting.body, "ask");
     };
 
     onShare = () => {
@@ -114,6 +121,12 @@ class PostingMenu extends React.PureComponent<Props> {
                     show: true
                 },
                 {
+                    title: "Copy text",
+                    href: postingHref,
+                    onClick: this.onCopyText,
+                    show: true
+                },
+                {
                     title: "Share...",
                     href: postingHref,
                     onClick: this.onShare,
@@ -186,7 +199,7 @@ const connector = connect(
     }),
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
-        postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare
+        postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare, entryCopyText
     }
 );
 

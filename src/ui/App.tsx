@@ -29,6 +29,7 @@ import DonateDialog from "ui/donatedialog/DonateDialog";
 import "./colors.css";
 import "./zindex.css";
 import "./App.css";
+import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 
 const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 
@@ -53,6 +54,7 @@ const App = ({atNode, feedWidth}: Props) => (
                 <LightBox/>
                 <ImageEditDialog/>
                 <DonateDialog/>
+                <EntryCopyTextDialog/>
             </>
         :
             <WelcomePage/>

@@ -10,7 +10,7 @@ import { ClientState } from "state/state";
 import { SourceFormat } from "api/node/api-types";
 import { PREFIX } from "api/settings";
 import { replaceSmileys } from "util/text";
-import { quoteHtml, safeImportHtml } from "util/html";
+import { containsTags, htmlToEmoji, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/misc";
 
 const MENTION_START = /(^|\s)@$/;
@@ -149,11 +149,11 @@ class RichTextArea extends React.PureComponent<Props, State> {
     }
 
     _shouldPastePlainText(text: string, html: string): boolean {
-        if (text.search(/<[a-zA-z][^\n]*>/) >= 0) {
+        if (containsTags(text)) { // Plain text contains tags
             return true;
         }
         const clean = html.replace(/<\/?(p|br)(\s[^>]*)?>/gi, "");
-        if (clean.search(/<[a-zA-z][^\n]*>/) < 0) {
+        if (!containsTags(clean)) {
             return true;
         }
         return false;
@@ -161,7 +161,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
 
     _shouldPasteHtml(html: string): boolean {
         const clean = html.replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
-        if (clean.search(/<[a-zA-z][^\n]*>/) < 0) {
+        if (!containsTags(htmlToEmoji(clean))) {
             return true;
         }
         return false;
