@@ -1,20 +1,16 @@
 import { fromUnixTime } from 'date-fns';
+import { isString } from 'formik';
 
 import { SettingType, SettingTypeModifiers } from "api/node/api-types";
-import { isNumber, parseBool } from "util/misc";
-import { Duration } from "util/duration";
-import { isString } from "formik";
 import { ClientSettingTypeModifiers } from "api/settings";
+import { Duration } from "util/duration";
+import { InfoQuantity } from "util/info-quantity";
+import { isNumber, parseBool } from "util/misc";
 
 export type SettingValue = boolean | number | Date | string;
+type SettingModifiers = SettingTypeModifiers | ClientSettingTypeModifiers;
 
-export function toValue(type: SettingType, valueString: string): SettingValue;
-export function toValue(type: SettingType, valueString: null | undefined): null;
-export function toValue(type: SettingType, valueString: string | null | undefined): SettingValue | null;
-export function toValue(type: SettingType, valueString: string | null | undefined): SettingValue | null {
-    if (valueString == null) {
-        return null;
-    }
+export function toValue(type: SettingType, valueString: string): SettingValue {
     switch (type) {
         case "bool":
             return parseBool(valueString);
@@ -33,32 +29,55 @@ export function toValue(type: SettingType, valueString: string | null | undefine
     }
 }
 
+export function toFieldValue(type: SettingType, valueString: string,
+                             modifiers: SettingModifiers | null | undefined): SettingValue {
+    if (!modifiers) {
+        return toValue(type, valueString);
+    }
+
+    switch (type) {
+        case "int":
+            if (modifiers.format === "size") {
+                return InfoQuantity.ofBytes(parseInt(valueString) || 0).toString();
+            }
+            return toValue(type, valueString);
+
+        default:
+            return toValue(type, valueString);
+    }
+}
+
 function deserializeInt(value: string | number): number {
     return isNumber(value) ? value : parseInt(value);
 }
 
 export function validate(value: SettingValue, type: SettingType,
-                         modifiers: SettingTypeModifiers | ClientSettingTypeModifiers | null | undefined): true | string {
+                         modifiers: SettingModifiers | null | undefined): true | string {
     if (!modifiers) {
         return true;
     }
 
     switch (type) {
-        case "int":
-            if (!isNumber(value)) {
-                return "The value must be number";
+        case "int": {
+            if (!isNumber(value) && !isString(value)) {
+                return "The value must be a number";
             }
-            if (modifiers.min && value < deserializeInt(modifiers.min)) {
+            const v = modifiers.format === "size" ? InfoQuantity.parse(value).toBytes() : value;
+            if (!isNumber(v)) {
+                return "The value must be a number";
+            }
+            if (modifiers.min && v < deserializeInt(modifiers.min)) {
                 return "The value must be not less than " + modifiers.min;
             }
-            if (modifiers.max && value > deserializeInt(modifiers.max)) {
+            if (modifiers.max && v > deserializeInt(modifiers.max)) {
                 return "The value must be not more than " + modifiers.max;
             }
             return true;
+        }
 
         case "Duration": {
             if (!isString(value)) {
-                return "The value must be string";
+                return "The value must be a string";
             }
             const duration = Duration.parse(value);
             if (modifiers.min && duration.isFixed()
@@ -80,5 +99,23 @@ export function validate(value: SettingValue, type: SettingType,
 
         default:
             return true;
+    }
+}
+
+export function toString(value: SettingValue, type: SettingType,
+                         modifiers: SettingModifiers | null | undefined): string {
+    if (!modifiers) {
+        return value.toString();
+    }
+
+    switch (type) {
+        case "int":
+            if (modifiers.format === "size") {
+                return InfoQuantity.parse(value.toString()).toBytes().toString();
+            }
+            return value.toString();
+
+        default:
+            return value.toString();
     }
 }

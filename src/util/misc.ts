@@ -49,7 +49,11 @@ export function parseBool(val: boolean | string): boolean {
 }
 
 export function isNumber(value: unknown): value is number {
-    return typeof value === 'number' && isFinite(value);
+    return typeof value === "number" && isFinite(value);
+}
+
+export function isBoolean(value: unknown): value is boolean {
+    return typeof value === "boolean";
 }
 
 export function now(): number {

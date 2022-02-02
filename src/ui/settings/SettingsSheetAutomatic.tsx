@@ -115,7 +115,7 @@ const settingsSheetOtherLogic = {
             if (value == null) {
                 return;
             }
-            values[toFieldName(name)] = SettingTypes.toValue(meta.type, value);
+            values[toFieldName(name)] = SettingTypes.toFieldValue(meta.type, value, meta.modifiers);
         });
         return values;
     },
@@ -142,7 +142,7 @@ const settingsSheetOtherLogic = {
                 hasErrors = true;
             } else {
                 formik.setFieldError(fieldName, undefined);
-                value = value.toString(); // FIXME SettingTypes.toString(value) may be needed
+                value = SettingTypes.toString(value, meta.type, meta.modifiers);
                 if (valuesMap.get(name) !== value) {
                     settingsToUpdate.push({name, value});
                 }

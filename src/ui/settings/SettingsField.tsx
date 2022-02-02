@@ -6,6 +6,7 @@ import {
     CheckboxField,
     DurationField,
     EmojiListInputField,
+    InfoQuantityField,
     InputField,
     NumberField,
     SelectField,
@@ -54,6 +55,18 @@ export default function SettingsField({name, fieldName, meta, initialValue}: Pro
                                   defaultValue={deserializeBool(defaultValue)}/>;
 
         case "int":
+            if (modifiers.format) {
+                switch (modifiers.format) {
+                    case "size":
+                        return <InfoQuantityField name={fieldName} title={title} disabled={disabled}
+                                                  min={deserializeInt(modifiers.min)}
+                                                  max={deserializeInt(modifiers.max)}
+                                                  initialValue={deserializeInt(initialValue)}
+                                                  defaultValue={deserializeInt(defaultValue)}/>;
+                    default:
+                        // continue
+                }
+            }
             return <NumberField name={fieldName} title={title} disabled={disabled}
                                 min={deserializeInt(modifiers.min)}
                                 max={deserializeInt(modifiers.max)}

@@ -1,0 +1,7 @@
+.info-quantity-control {
+    display: flex;
+}
+
+.info-quantity-control ~ .invalid-feedback {
+    display: block;
+}
