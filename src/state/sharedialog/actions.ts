@@ -38,8 +38,19 @@ export const shareDialogCopyLink = (url: string): ShareDialogCopyLinkAction => (
     payload: {url}
 });
 
+export const SHARE_PAGE_COPY_LINK = "SHARE_PAGE_COPY_LINK";
+export type SharePageCopyLinkAction = ActionWithPayload<typeof SHARE_PAGE_COPY_LINK, {
+    nodeName: string;
+    href: string;
+}>;
+export const sharePageCopyLink = (nodeName: string, href: string): SharePageCopyLinkAction => ({
+    type: SHARE_PAGE_COPY_LINK,
+    payload: {nodeName, href}
+});
+
 export type ShareDialogAnyAction =
     ShareDialogPrepareAction
     | OpenShareDialogAction
     | CloseShareDialogAction
-    | ShareDialogCopyLinkAction;
+    | ShareDialogCopyLinkAction
+    | SharePageCopyLinkAction;

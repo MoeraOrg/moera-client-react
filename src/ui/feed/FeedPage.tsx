@@ -28,6 +28,7 @@ interface OwnProps {
     feedName: string;
     visible: boolean;
     title: string;
+    shareable?: boolean;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
@@ -283,7 +284,8 @@ class FeedPage extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            feedName, title, loadingFuture, loadingPast, stories, notViewed, notViewedMoment, postings, before, after
+            feedName, title, shareable, loadingFuture, loadingPast, stories, notViewed, notViewedMoment, postings,
+            before, after
         } = this.props;
         const {atTop, atBottom} = this.state;
 
@@ -303,7 +305,7 @@ class FeedPage extends React.PureComponent<Props, State> {
         return (
             <>
                 <FeedTitle/>
-                <FeedPageHeader feedName={feedName} title={title}
+                <FeedPageHeader feedName={feedName} title={title} shareable={shareable}
                                 atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
                                 atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
                                 totalAfterTop={this.getTotalAfterTop()}

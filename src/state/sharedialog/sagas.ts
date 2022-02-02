@@ -6,8 +6,10 @@ import {
     openShareDialog,
     SHARE_DIALOG_COPY_LINK,
     SHARE_DIALOG_PREPARE,
+    SHARE_PAGE_COPY_LINK,
     ShareDialogCopyLinkAction,
-    ShareDialogPrepareAction
+    ShareDialogPrepareAction,
+    SharePageCopyLinkAction
 } from "state/sharedialog/actions";
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
@@ -21,6 +23,7 @@ import { quoteHtml } from "util/html";
 export default [
     executor(SHARE_DIALOG_PREPARE, "", shareDialogPrepareSaga),
     executor(SHARE_DIALOG_COPY_LINK, payload => payload.url, shareDialogCopyLinkSaga),
+    executor(SHARE_PAGE_COPY_LINK, null, sharePageCopyLink)
 ];
 
 function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
@@ -46,6 +49,20 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
 function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
     yield* put(closeShareDialog());
     yield* call(clipboardCopy, action.payload.url);
+    if (Browser.userAgentOs !== "android" || window.Android) {
+        yield* put(flashBox("Link copied to the clipboard"));
+    }
+}
+
+function* sharePageCopyLink(action: SharePageCopyLinkAction) {
+    const {nodeName, href} = action.payload;
+
+    const nodeUri = yield* call(getNodeUri, nodeName);
+    if (nodeUri == null) {
+        yield* put(messageBox(`Cannot resolve name: ${nodeName}`));
+        return;
+    }
+    yield* call(clipboardCopy, normalizeUrl(nodeUri) + href);
     if (Browser.userAgentOs !== "android" || window.Android) {
         yield* put(flashBox("Link copied to the clipboard"));
     }

@@ -42,11 +42,30 @@
 
 #page-header .btn {
     margin-left: .5rem;
-    margin-top: .2rem;
-    margin-bottom: .5rem;
+}
+
+#page-header .page-header-buttons {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    z-index: var(--zindex-page-header-buttons);
+    top: .5rem;
+    right: .25rem;
+    background: white;
+    padding-left: .25rem;
+    line-height: 2;
+}
+
+@media only screen and (max-width: 575px) {
+    #page-header .page-header-buttons {
+        top: .3rem;
+    }
+}
+
+#page-header .page-header-buttons BUTTON {
+    white-space: nowrap;
 }
 
 #page-header .react-datepicker-wrapper {
     margin-bottom: .5rem;
-
 }

@@ -1,0 +1,14 @@
+.page-share {
+    display: inline-block;
+    font-size: 1.2em;
+    margin-right: .25em;
+    background-color: transparent;
+    color: var(--bs-gray-400);
+    border-width: 0;
+    border-radius: 3px;
+}
+
+.page-share:hover {
+    background-color: var(--highlight);
+    color: var(--bs-gray-600);
+}

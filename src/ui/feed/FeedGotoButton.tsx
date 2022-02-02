@@ -9,7 +9,6 @@ import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
-import "./FeedGotoButton.css";
 
 interface OwnProps {
     feedName: string;
@@ -39,7 +38,7 @@ function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Pro
     };
 
     return (
-        <div className="feed-buttons">
+        <>
             {!active ?
                 <Button variant="outline-info" size="sm" onClick={activate}>Go to...</Button>
             :
@@ -57,7 +56,7 @@ function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Pro
                     </Button>
                 </>
             }
-        </div>
+        </>
     );
 }
 

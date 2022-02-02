@@ -8,7 +8,7 @@ import FeedPage from "ui/feed/FeedPage";
 type Props = ConnectedProps<typeof connector>;
 
 const TimelinePage = ({visible}: Props) => (
-    <FeedPage feedName="timeline" title="Timeline" visible={visible}/>
+    <FeedPage feedName="timeline" title="Timeline" shareable visible={visible}/>
 );
 
 const connector = connect(

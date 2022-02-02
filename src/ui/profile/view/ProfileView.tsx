@@ -2,15 +2,16 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
-import { Avatar, Button, DonateButton, Loading } from "ui/control";
-import PageHeader from "ui/page/PageHeader";
-import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
-import { Page } from "ui/page/Page";
-import NodeNameView from "ui/profile/view/NodeNameView";
 import { profileEdit } from "state/profile/actions";
 import { isProfileEditable } from "state/profile/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
+import { Avatar, Button, DonateButton, Loading } from "ui/control";
+import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
+import { Page } from "ui/page/Page";
+import PageHeader from "ui/page/PageHeader";
+import PageShareButton from "ui/page/PageShareButton";
+import NodeNameView from "ui/profile/view/NodeNameView";
 import { shortGender } from "util/misc";
 import "./ProfileView.css";
 
@@ -40,6 +41,9 @@ const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml
                 {" "}<FeedSubscribeButton feedName="timeline"/>
                 {" "}{editable && <EditButton/>}
             </h2>
+            <div className="page-header-buttons">
+                <PageShareButton title={fullName || (ownerName ?? "")} href="/profile"/>
+            </div>
         </PageHeader>
         <Page>
             <div className="profile-view">
