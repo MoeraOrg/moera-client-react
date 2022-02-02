@@ -16,12 +16,15 @@ interface Props {
 export default function ComposeIconButton({icon, name, changed = false, tooltip = null}: Props) {
     const [{onBlur}, {value}, {setValue}] = useField<boolean>(name);
 
-    const onClick = () => setValue(!value);
+    const onClick = (e: React.MouseEvent) => {
+        setValue(!value);
+        e.preventDefault();
+    }
 
     return (
-        <div className={cx("composer-icon", {"composer-icon-active": value, "composer-icon-changed": changed})}
+        <button className={cx("composer-icon", {"composer-icon-active": value, "composer-icon-changed": changed})}
              title={tooltip ?? undefined} onClick={onClick} onBlur={onBlur}>
             <FontAwesomeIcon icon={icon}/>
-        </div>
+        </button>
     );
 }
