@@ -41,6 +41,16 @@ export function getImageDimensions(standardSize: RichTextImageStandardSize,
     }
 }
 
+type RichTextImageAlign = "text-start" | "text-center" | "text-end" | "float-start" | "float-end";
+
+const ALIGNMENTS: Choice<RichTextImageAlign>[] = [
+    {title: "Left", value: "text-start"},
+    {title: "Center", value: "text-center"},
+    {title: "Right", value: "text-end"},
+    {title: "Left, wrapping text", value: "float-start"},
+    {title: "Right, wrapping text", value: "float-end"}
+];
+
 export interface RichTextImageValues {
     source?: string;
     mediaFile?: RichTextMedia | null;
@@ -48,6 +58,7 @@ export interface RichTextImageValues {
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
     customHeight?: number | null;
+    align?: RichTextImageAlign;
     caption?: string;
     title?: string;
     alt?: string;
@@ -70,12 +81,14 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
     standardSize: "large",
     customWidth: null,
     customHeight: null,
+    align: "text-start",
     caption: "",
     title: "",
     alt: ""
 });
 
 function RichTextImageDialog({features, noMedia = false, nodeName, forceCompress, onAdded, onDeleted}: Props) {
+    const [showAlign, setShowAlign] = useState<boolean>(false);
     const [showCaption, setShowCaption] = useState<boolean>(false);
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [showAlt, setShowAlt] = useState<boolean>(false);
@@ -98,14 +111,16 @@ function RichTextImageDialog({features, noMedia = false, nodeName, forceCompress
                     <NumberField name="customHeight" title="Height" horizontal min={0} format={{useGrouping: false}}/>
                 </div>
             }
+            {showAlign && <SelectField name="align" title="Align" choices={ALIGNMENTS} horizontal anyValue/>}
+            {showCaption && <InputField name="caption" title="Caption"/>}
+            {showTooltip && <InputField name="title" title="Tooltip"/>}
+            {showAlt && <InputField name="alt" title="Alternative text"/>}
             <div className="mb-3">
+                <PlusButton title="Align" visible={!showAlign} onClick={() => setShowAlign(true)}/>
                 <PlusButton title="Caption" visible={!showCaption} onClick={() => setShowCaption(true)}/>
                 <PlusButton title="Tooltip" visible={!showTooltip} onClick={() => setShowTooltip(true)}/>
                 <PlusButton title="Alt text" visible={!showAlt} onClick={() => setShowAlt(true)}/>
             </div>
-            {showCaption && <InputField name="caption" title="Caption"/>}
-            {showTooltip && <InputField name="title" title="Tooltip"/>}
-            {showAlt && <InputField name="alt" title="Alternative text"/>}
         </>
     );
 }

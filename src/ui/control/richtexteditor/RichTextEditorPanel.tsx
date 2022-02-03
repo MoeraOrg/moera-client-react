@@ -343,7 +343,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
     }
 
     onImageSubmit = (ok: boolean, {source, mediaFile, href, standardSize = "large", customWidth, customHeight,
-                                   caption, title, alt}: RichTextImageValues) => {
+                                   align, caption, title, alt}: RichTextImageValues) => {
         const {textArea} = this.props;
 
         this.onImageClose();
@@ -356,14 +356,16 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         if (ok) {
             const figureBegin = caption ? "<figure>" : "";
             const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
+            const divBegin = align != null && align !== "text-start" ? `<div class="${align}">` : "";
+            const divEnd = align != null && align !== "text-start" ? "</div>" : "";
             const {width, height} = getImageDimensions(standardSize, customWidth, customHeight);
             const widthAttr = width != null ? ` width="${width}"` : "";
             const heightAttr = height != null ? ` height="${height}"` : "";
             const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
             const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
 
-            const tagBegin = `${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
-            const tagEnd = `">${figureEnd}`;
+            const tagBegin = `${divBegin}${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
+            const tagEnd = `">${figureEnd}${divEnd}`;
             if (src) {
                 insertText(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
             } else {
