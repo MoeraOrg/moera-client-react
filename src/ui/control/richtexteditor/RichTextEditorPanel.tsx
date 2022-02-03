@@ -10,7 +10,10 @@ import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton
 import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
 import RichTextFoldDialog, { RichTextFoldValues } from "ui/control/richtexteditor/RichTextFoldDialog";
 import RichTextLinkDialog, { RichTextLinkValues } from "ui/control/richtexteditor/RichTextLinkDialog";
-import RichTextImageDialog, { RichTextImageValues } from "ui/control/richtexteditor/RichTextImageDialog";
+import RichTextImageDialog, {
+    getImageDimensions,
+    RichTextImageValues
+} from "ui/control/richtexteditor/RichTextImageDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
 import { htmlEntities } from "util/html";
 import { getTextSelection, insertText, mentionName, wrapSelection } from "util/misc";
@@ -339,8 +342,8 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         this.props.selectImage(null);
     }
 
-    onImageSubmit = (ok: boolean,
-                     {source, mediaFile, href, width, height, caption, title, alt}: RichTextImageValues) => {
+    onImageSubmit = (ok: boolean, {source, mediaFile, href, standardSize = "large", customWidth, customHeight,
+                                   caption, title, alt}: RichTextImageValues) => {
         const {textArea} = this.props;
 
         this.onImageClose();
@@ -353,6 +356,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         if (ok) {
             const figureBegin = caption ? "<figure>" : "";
             const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
+            const {width, height} = getImageDimensions(standardSize, customWidth, customHeight);
             const widthAttr = width != null ? ` width="${width}"` : "";
             const heightAttr = height != null ? ` height="${height}"` : "";
             const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
