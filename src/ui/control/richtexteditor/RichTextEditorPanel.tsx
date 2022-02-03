@@ -351,29 +351,19 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
 
         const src = source === "device" ? (mediaFile != null ? "hash:" + mediaFile.hash : null) : href;
         if (ok) {
-            if (this.isMarkdown() && !caption && width == null && height == null) {
-                const titleAttr = title ? ` "${title}"`: "";
-                const altAttr = alt ?? "";
-                if (src) {
-                    insertText(textArea.current, `![${altAttr}](${src}${titleAttr})`);
-                } else {
-                    wrapSelection(textArea.current, `![${altAttr}](`, `${titleAttr})`);
-                }
-            } else {
-                const figureBegin = caption ? "<figure>" : "";
-                const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
-                const widthAttr = width != null ? ` width="${width}"` : "";
-                const heightAttr = height != null ? ` height="${height}"` : "";
-                const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
-                const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
+            const figureBegin = caption ? "<figure>" : "";
+            const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
+            const widthAttr = width != null ? ` width="${width}"` : "";
+            const heightAttr = height != null ? ` height="${height}"` : "";
+            const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
+            const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
 
-                const tagBegin = `${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
-                const tagEnd = `">${figureEnd}`;
-                if (src) {
-                    insertText(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
-                } else {
-                    wrapSelection(textArea.current, tagBegin, tagEnd);
-                }
+            const tagBegin = `${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
+            const tagEnd = `">${figureEnd}`;
+            if (src) {
+                insertText(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
+            } else {
+                wrapSelection(textArea.current, tagBegin, tagEnd);
             }
         }
         textArea.current.focus();
