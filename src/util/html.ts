@@ -43,7 +43,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         b: {
             "background-image": [/^url\('https:\/\/twemoji.maxcdn.com\//]
         },
-        "iframe": {
+        iframe: {
             "width": [/^\d+px$/],
             "height": [/^\d+px$/]
         }
@@ -59,16 +59,20 @@ const SAFE_PREVIEW_HTML_SETTINGS: IOptions = {
     ...BASE_SAFE_HTML_SETTINGS,
     allowedClasses: {
         ...BASE_SAFE_HTML_SETTINGS.allowedClasses,
-        "*": ["text-start", "text-end", "text-center"]
+        table: ["table", "table-*"],
+        th: ["table-*"],
+        tr: ["table-*"],
+        td: ["table-*"],
+        "*": ["text-start", "text-end", "text-center", "float-*"]
     },
     transformTags: {
         ...BASE_SAFE_HTML_SETTINGS.transformTags,
-        "h1": "b",
-        "h2": "b",
-        "h3": "b",
-        "h4": "b",
-        "h5": "b",
-        "h6": "b"
+        h1: "b",
+        h2: "b",
+        h3: "b",
+        h4: "b",
+        h5: "b",
+        h6: "b"
     }
 };
 
@@ -76,7 +80,11 @@ const SAFE_HTML_SETTINGS: IOptions = {
     ...BASE_SAFE_HTML_SETTINGS,
     allowedClasses: {
         ...BASE_SAFE_HTML_SETTINGS.allowedClasses,
-        "*": ["bg-*", "border-*", "text-*", "fs-*"]
+        table: ["table", "table-*"],
+        th: ["table-*"],
+        tr: ["table-*"],
+        td: ["table-*"],
+        "*": ["bg-*", "border", "border-*", "text-*", "fs-*", "float-*"]
     }
 };
 
