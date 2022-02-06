@@ -38,19 +38,18 @@ export default class FeedSentinel extends React.PureComponent<Props> {
     };
 
     onSentinel = (entries: IntersectionObserverEntry[]) => {
-        this.props.onSentinel(entries[0].isIntersecting);
+        entries.forEach(entry => this.props.onSentinel(entry.isIntersecting));
     }
 
     onBoundary = (entries: IntersectionObserverEntry[]) => {
-        this.props.onBoundary(entries[0].isIntersecting);
+        entries.forEach(entry => this.props.onBoundary(entry.isIntersecting));
     }
 
     render() {
-        const { visible, loading, title, onClick } = this.props;
+        const {visible, loading, title, onClick} = this.props;
 
         return (
-            <div className={cx({"feed-sentinel": !loading && visible})} ref={this.observeSentinel}
-                 onClick={onClick}>
+            <div className={cx({"feed-sentinel": !loading && visible})} ref={this.observeSentinel} onClick={onClick}>
                 {!loading && visible && title}
                 <Loading active={loading}/>
             </div>

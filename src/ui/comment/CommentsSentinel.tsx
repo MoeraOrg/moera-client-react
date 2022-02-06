@@ -32,7 +32,7 @@ export default class CommentsSentinel extends React.PureComponent<Props> {
     };
 
     onBoundary = (entries: IntersectionObserverEntry[]) => {
-        this.props.onBoundary(entries[0].isIntersecting);
+        entries.forEach(entry => this.props.onBoundary(entry.isIntersecting));
     }
 
     render() {

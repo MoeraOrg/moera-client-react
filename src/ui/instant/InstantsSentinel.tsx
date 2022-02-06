@@ -33,11 +33,11 @@ export default class InstantsSentinel extends React.PureComponent<Props> {
     };
 
     onSentinel = (entries: IntersectionObserverEntry[]) => {
-        this.props.onSentinel(entries[0].isIntersecting);
+        entries.forEach(entry => this.props.onSentinel(entry.isIntersecting));
     }
 
     render() {
-        const { visible, loading, title, onClick } = this.props;
+        const {visible, loading, title, onClick} = this.props;
 
         return (
             <div className={cx({"sentinel": !loading && visible})} ref={this.observeSentinel} onClick={onClick}>
