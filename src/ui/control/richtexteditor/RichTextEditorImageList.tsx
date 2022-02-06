@@ -17,16 +17,19 @@ import { RichTextValue } from "ui/control";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
+import { PrivateMediaFileInfo } from "api/node/api-types";
 
 interface Props {
     value: RichTextValue;
     nodeName: string | null;
+    selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: RichTextMedia | null) => void;
     onDeleted?: (id: string) => void;
     onReorder?: (activeId: string, overId: string) => void;
 }
 
-export default function RichTextEditorImageList({value, nodeName, selectImage, onDeleted, onReorder}: Props) {
+export default function RichTextEditorImageList({value, nodeName, selectedImage, selectImage, onDeleted,
+                                                 onReorder}: Props) {
     const mouseSensor = useSensor(PointerSensor, {
         activationConstraint: {
             distance: 10
@@ -75,7 +78,7 @@ export default function RichTextEditorImageList({value, nodeName, selectImage, o
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
             <SortableContext items={mediaIds}>
                 <div>
-                    {mediaList.map(media =>
+                    {mediaList.filter(media => media.id !== selectedImage?.id).map(media =>
                         <UploadedImage key={media.id} media={media} nodeName={nodeName}
                                        dragged={dragged?.id === media.id} showMenu={!dragged}
                                        onDelete={onDelete(media.id)} onClick={!dragged ? onClick(media) : undefined}/>

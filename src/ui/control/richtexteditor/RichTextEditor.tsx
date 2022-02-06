@@ -97,9 +97,9 @@ const RichTextEditor = ({name, value, features, rows, maxRows, placeholder, clas
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
                                         nodeName={nodeName ?? null} forceCompress={forceImageCompress}
-                                        selectImage={setSelectedImage} onLoadStarted={onImageLoadStarted}
-                                        onLoaded={onImageLoaded} onDeleted={onImageDeleted}
-                                        onReorder={onImagesReorder}/>
+                                        selectedImage={selectedImage} selectImage={setSelectedImage}
+                                        onLoadStarted={onImageLoadStarted} onLoaded={onImageLoaded}
+                                        onDeleted={onImageDeleted} onReorder={onImagesReorder}/>
             }
         </div>
     );

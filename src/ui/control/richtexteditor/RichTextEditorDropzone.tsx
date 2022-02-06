@@ -4,7 +4,7 @@ import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
 
-import { PostingFeatures } from "api/node/api-types";
+import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { richTextEditorImagesUpload, richTextEditorImageCopy, RichTextMedia } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
@@ -62,6 +62,7 @@ type Props = {
     hiding?: boolean;
     nodeName: string | null;
     forceCompress?: boolean;
+    selectedImage: PrivateMediaFileInfo | null;
     selectImage: (image: RichTextMedia | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
@@ -69,8 +70,8 @@ type Props = {
     onReorder?: (activeId: string, overId: string) => void;
 } & ConnectedProps<typeof connector>;
 
-function RichTextEditorDropzone({value, features, hiding = false, nodeName, forceCompress = false, selectImage,
-                                 onLoadStarted, onLoaded, onDeleted, onReorder, compressImages,
+function RichTextEditorDropzone({value, features, hiding = false, nodeName, forceCompress = false, selectedImage,
+                                 selectImage, onLoadStarted, onLoaded, onDeleted, onReorder, compressImages,
                                  richTextEditorImagesUpload, richTextEditorImageCopy}: Props) {
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
@@ -146,8 +147,8 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
             "rich-text-editor-dropzone",
             {"hiding": hiding, "drag-accept": isDragAccept, "drag-reject": isDragReject}
         )} {...getRootProps()}>
-            <RichTextEditorImageList value={value} nodeName={nodeName} selectImage={selectImage} onDeleted={onDeleted}
-                                     onReorder={onReorder}/>
+            <RichTextEditorImageList value={value} nodeName={nodeName} selectedImage={selectedImage}
+                                     selectImage={selectImage} onDeleted={onDeleted} onReorder={onReorder}/>
             <div className="upload">
                 {uploadProgress.length > 0 ?
                     `Uploading ${progressSummary.loadedFiles} of ${progressSummary.totalFiles}
