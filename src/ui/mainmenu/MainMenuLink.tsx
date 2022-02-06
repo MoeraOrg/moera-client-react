@@ -14,12 +14,10 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 const MainMenuLink = ({currentPage, page, otherPages, href, children}: Props) => (
-    <li className={cx(
-        "nav-item", {
+    <li className="nav-item">
+        <Jump className={cx("nav-link", {
             "active": currentPage === page || (otherPages && otherPages.includes(currentPage))
-        }
-    )}>
-        <Jump className="nav-link" href={href}>
+        })} href={href}>
             {children}
         </Jump>
     </li>
