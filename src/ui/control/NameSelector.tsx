@@ -109,7 +109,7 @@ function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, 
 
     return (
         <>
-            <input type="text" className="form-control" value={query ?? defaultQuery} ref={inputDom}
+            <input type="search" className="form-control" value={query ?? defaultQuery} ref={inputDom}
                    onKeyDown={handleKeyDown} onChange={handleChange}/>
             <div className={cx("name-select", {"d-none": names.length === 0})} ref={listDom}>
                 {names.map((item, index) =>
