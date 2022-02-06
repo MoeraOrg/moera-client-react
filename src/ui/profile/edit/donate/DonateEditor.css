@@ -1,9 +1,17 @@
-.donate-editor .fundraiser, .donate-editor .new-fundraiser {
+.donate-editor .fundraiser, .donate-editor .new-fundraiser, .fundraiser-overlay {
     border: 0;
     border-radius: .9em;
     padding: .25em .9em;
     margin-right: .5em;
     transition: background-color .15s ease-in-out;
+}
+
+.fundraiser-overlay {
+    background-color: var(--bs-gray-400);
+}
+
+.donate-editor .fundraiser.dragged {
+    visibility: hidden;
 }
 
 .donate-editor .new-fundraiser {

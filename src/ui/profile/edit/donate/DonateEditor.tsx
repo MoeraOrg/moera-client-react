@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as immutable from 'object-path-immutable';
+import {
+    DndContext, DragEndEvent,
+    DragOverlay,
+    DragStartEvent,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors
+} from '@dnd-kit/core';
+import { SortableContext } from '@dnd-kit/sortable';
 
 import { FundraiserInfo } from "api/node/api-types";
+import FundraiserButton from "ui/profile/edit/donate/FundraiserButton";
 import FundraiserDialog from "ui/profile/edit/donate/FundraiserDialog";
 import "./DonateEditor.css";
 
@@ -11,7 +23,30 @@ interface Props {
     setValue: (value: FundraiserInfo[]) => void;
 }
 
+function idSequence(n: number): {id: string}[] {
+    const ids:{id: string}[] = [];
+
+    for (let i = 0; i < n; i++) {
+        ids.push({id: i.toString()});
+    }
+
+    return ids;
+}
+
 export default function DonateEditor({value, setValue}: Props) {
+    const mouseSensor = useSensor(PointerSensor, {
+        activationConstraint: {
+            distance: 10
+        }
+    });
+    const keyboardSensor = useSensor(KeyboardSensor);
+
+    const sensors = useSensors(
+        mouseSensor,
+        keyboardSensor,
+    );
+
+    const [dragged, setDragged] = useState<number | null>(null);
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [selected, setSelected] = useState<number | null>(null);
 
@@ -41,14 +76,43 @@ export default function DonateEditor({value, setValue}: Props) {
         setShowDialog(false);
     }
 
+    const fundraiserIds = idSequence(value.length);
+
+    const onDragStart = ({active}: DragStartEvent) =>
+        setDragged(parseInt(active.id));
+    const onDragEnd = ({active, over}: DragEndEvent) => {
+        if (over != null && active.id !== over.id) {
+            const newValue = [...value];
+            const activeId = parseInt(active.id);
+            const overId = parseInt(over.id);
+            newValue[activeId] = value[overId];
+            newValue[overId] = value[activeId];
+            setValue(newValue);
+        }
+        setDragged(null);
+    };
+    const onDragCancel = () => setDragged(null);
+
     return (
         <div className="donate-editor">
-            {value.map((fundraiser, index) =>
-                <button key={index} className="fundraiser" onClick={onClick(index)}>
-                    {fundraiser.title}
-                    <FontAwesomeIcon className="icon" icon="pen"/>
-                </button>
-            )}
+            <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
+                <SortableContext items={fundraiserIds}>
+                    {value.map((fundraiser, index) =>
+                        <FundraiserButton index={index} fundraiser={fundraiser} dragged={index === dragged}
+                                          onClick={onClick(index)}/>
+                    )}
+                </SortableContext>
+                {ReactDOM.createPortal(
+                    <DragOverlay zIndex={1080} dropAnimation={null}>
+                        {dragged != null &&
+                            <span className="fundraiser-overlay">
+                                {value[dragged].title}
+                            </span>
+                        }
+                    </DragOverlay>,
+                    document.querySelector("#modal-root")!
+                )}
+            </DndContext>
             <button className="new-fundraiser" onClick={onClick(null)}>
                 <FontAwesomeIcon className="icon" icon="plus"/>
                 Add donation

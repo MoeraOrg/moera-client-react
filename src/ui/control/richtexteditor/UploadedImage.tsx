@@ -31,7 +31,7 @@ function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDel
     };
 
     return (
-        <div className={cx("rich-text-editor-uploaded-image", {"dragged": dragged})} key={media.id}>
+        <div className={cx("rich-text-editor-uploaded-image", {"dragged": dragged})}>
             {showMenu &&
                 <DropdownMenu items={[
                     {
