@@ -1,4 +1,5 @@
 import { call, put, spawn } from 'typed-redux-saga';
+import imageCompression from 'browser-image-compression';
 import * as Base64js from 'base64-js';
 
 import { Node } from "api";
@@ -18,8 +19,6 @@ export default [
     executor(RICH_TEXT_EDITOR_IMAGE_COPY, null, richTextEditorImageCopySaga)
 ];
 
-type ImageCompressor = (file: File, options: {maxSizeMB?: number, maxWidthOrHeight?: number}) => File;
-
 const formatMb = (size: number): string =>
     (size / 1024 / 1024).toLocaleString("en-US", {maximumFractionDigits: 2}) + "Mb";
 
@@ -30,8 +29,6 @@ function* imageUpload(action: RichTextEditorImagesUploadAction, index: number) {
         if (features != null) {
             if (compress) {
                 if (file.size > features.imageRecommendedSize) {
-                    const imageCompression = yield* call(
-                        () => import('browser-image-compression') as any as ImageCompressor);
                     file = yield* call(imageCompression, file, {
                         maxSizeMB: features.imageRecommendedSize / 1024 / 1024,
                         maxWidthOrHeight: features.imageRecommendedPixels
