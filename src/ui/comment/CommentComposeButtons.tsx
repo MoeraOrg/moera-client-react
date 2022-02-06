@@ -40,7 +40,8 @@ function CommentComposeButtons(props: Props) {
     };
 
     const {values} = useFormikContext<CommentComposeValues>();
-    const invisible = draft == null && commentComposeLogic.areValuesEmpty(values);
+    const invisible = (draft == null && commentComposeLogic.areValuesEmpty(values))
+        || !commentComposeLogic.areImagesUploaded(values);
 
     return (
         <div className="buttons">

@@ -53,7 +53,7 @@ function ComposePage(props: Props) {
     const title = postingId == null ? "New Post" : "Edit Post";
     const loadingContent = loadingPosting || loadingDraft;
     const sourceFormats = features?.sourceFormats ?? [];
-    const submitDisabled = composePageLogic.areValuesEmpty(values);
+    const submitDisabled = composePageLogic.areValuesEmpty(values) || !composePageLogic.areImagesUploaded(values);
     return (
         <>
             <PageHeader>

@@ -40,7 +40,7 @@ const RichTextEditor = ({name, value, features, rows, maxRows, placeholder, clas
 
     const onImageLoaded = (index: number, image: RichTextMedia) => {
         if (onChange != null && value.media != null && index < value.media.length) {
-            if (value.media.find(v => v != null && v.id === image.id) != null) {
+            if (value.media.some(v => v != null && v.id === image.id)) {
                 return;
             }
             const media = [...value.media];

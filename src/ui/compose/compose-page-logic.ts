@@ -181,6 +181,10 @@ const composePageLogic = {
             && (values.body.media == null || values.body.media.length === 0);
     },
 
+    areImagesUploaded(values: ComposePageValues): boolean {
+        return values.body.media == null || values.body.media.every(media => media != null);
+    },
+
     isPostingTextEmpty(postingText: PostingText): boolean {
         let textEmpty = postingText.bodySrc == null;
         if (!textEmpty) {

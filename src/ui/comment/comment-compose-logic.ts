@@ -98,6 +98,10 @@ const commentComposeLogic = {
             && (values.body.media == null || values.body.media.length === 0);
     },
 
+    areImagesUploaded(values: CommentComposeValues): boolean {
+        return values.body.media == null || values.body.media.every(media => media != null);
+    },
+
     isCommentTextEmpty(commentText: CommentText): boolean {
         let textEmpty = commentText.bodySrc == null;
         if (!textEmpty) {
