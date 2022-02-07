@@ -1,6 +1,6 @@
 .posting-buttons {
     display: flex;
     border-top: 1px solid var(--bs-gray-400);
-    padding-top: 0.5rem;
-    margin-top: 0.7rem;
+    padding-top: .5rem;
+    margin-top: .7rem;
 }

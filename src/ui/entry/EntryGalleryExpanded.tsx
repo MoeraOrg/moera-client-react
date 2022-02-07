@@ -6,10 +6,10 @@ import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getPosting } from "state/postings/selectors";
 import EntryGallery from "ui/entry/EntryGallery";
-import PostingReactions from "ui/posting/PostingReactions";
-import PostingButtons from "ui/posting/PostingButtons";
-import "./EntryGalleryExpanded.css";
 import EntryHtml from "ui/entry/EntryHtml";
+import PostingReactions from "ui/posting/PostingReactions";
+import EntryGalleryButtons from "ui/entry/EntryGalleryButtons";
+import "./EntryGalleryExpanded.css";
 
 interface OwnProps {
     nodeName: string | null;
@@ -28,7 +28,7 @@ const EntryGalleryExpanded = ({nodeName, postingId, media, connectedToHome, medi
             }
             const posting = mediaPostings.get(mediaFile.id);
             return (
-                <div key={mediaFile.id} className="mt-2 mb-2">
+                <div key={mediaFile.id} className="mt-4 mb-4">
                     <EntryGallery postingId={postingId} nodeName={nodeName} media={[media]}/>
                     {posting &&
                         <>
@@ -36,7 +36,7 @@ const EntryGalleryExpanded = ({nodeName, postingId, media, connectedToHome, medi
                             <div className="reactions-line">
                                 <PostingReactions posting={posting}/>
                             </div>
-                            {connectedToHome && <PostingButtons posting={posting}/>}
+                            {connectedToHome && <EntryGalleryButtons posting={posting}/>}
                         </>
                     }
                 </div>
