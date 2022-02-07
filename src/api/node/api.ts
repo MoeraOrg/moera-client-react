@@ -787,6 +787,11 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
 
 export const PostingInfo = schema(PostingInfoType);
 
+export const PostingInfoArray = schema({
+    type: "array",
+    items: PostingInfoType
+} as JSONSchemaType<API.EncodedPostingInfo[]>);
+
 const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
     type: "object",
     properties: {

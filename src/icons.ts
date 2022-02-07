@@ -4,6 +4,7 @@ import {
     faArrowUp,
     faAt,
     faBackspace,
+    faBars,
     faBell,
     faBold,
     faBolt,
@@ -81,6 +82,7 @@ export default function initIconLibrary() {
     library.add(faArrowUp);
     library.add(faAt);
     library.add(faBackspace);
+    library.add(faBars);
     library.add(faBell);
     library.add(faBitcoin);
     library.add(faBold);

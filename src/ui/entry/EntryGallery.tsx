@@ -5,6 +5,7 @@ import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import EntryImage from "ui/entry/EntryImage";
+import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
 import "./EntryGallery.css";
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
     commentId?: string | null;
     nodeName: string | null;
     media: MediaAttachment[] | null;
+    onExpand?: () => void;
 } & ConnectedProps<typeof connector>;
 
 function singleImageHeight(image: PrivateMediaFileInfo, feedWidth: number, isComment: boolean): number {
@@ -27,7 +29,7 @@ function majorOrientation(images: PrivateMediaFileInfo[]) {
     return balance >= 0 ? "vertical" : "horizontal";
 }
 
-function EntryGallery({postingId, commentId, nodeName, media, feedWidth}: Props) {
+function EntryGallery({postingId, commentId, nodeName, media, onExpand, feedWidth}: Props) {
     if (media == null || media.length === 0) {
         return null;
     }
@@ -66,6 +68,7 @@ function EntryGallery({postingId, commentId, nodeName, media, feedWidth}: Props)
         case 2:
             return (
                 <div className={`gallery ${orientation}`}>
+                    {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <Image mediaFile={images[0]} flex="row"/>
                     <Image mediaFile={images[1]} flex="row"/>
                 </div>
@@ -74,6 +77,7 @@ function EntryGallery({postingId, commentId, nodeName, media, feedWidth}: Props)
         case 3:
             return (
                 <div className={`gallery ${orientation}`}>
+                    {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
                         <Image mediaFile={images[0]}/>
                     </div>
@@ -87,6 +91,7 @@ function EntryGallery({postingId, commentId, nodeName, media, feedWidth}: Props)
         case 4:
             return (
                 <div className={`gallery ${orientation}`}>
+                    {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
                         <Image mediaFile={images[0]} flex="row"/>
                         <Image mediaFile={images[1]} flex="row"/>
@@ -101,6 +106,7 @@ function EntryGallery({postingId, commentId, nodeName, media, feedWidth}: Props)
         case 5:
             return (
                 <div className={`gallery ${orientation}`}>
+                    {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
                         <Image mediaFile={images[0]} flex="row"/>
                         <Image mediaFile={images[1]} flex="row"/>
@@ -116,6 +122,7 @@ function EntryGallery({postingId, commentId, nodeName, media, feedWidth}: Props)
         default:
             return (
                 <div className={`gallery ${orientation}`}>
+                    {onExpand && <EntryGalleryExpandButton onClick={onExpand}/>}
                     <div className="gallery-row">
                         <Image mediaFile={images[0]} flex="row"/>
                         <Image mediaFile={images[1]} flex="row"/>

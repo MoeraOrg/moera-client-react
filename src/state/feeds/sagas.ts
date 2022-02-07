@@ -35,7 +35,7 @@ import {
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
-import { fillActivityReactions } from "state/activityreactions/sagas";
+import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { executor } from "state/executor";
 import { toAvatarDescription } from "util/avatar";
@@ -131,7 +131,7 @@ function* feedPastSliceLoadSaga(action: FeedPastSliceLoadAction) {
         const data = feedName.startsWith(":")
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), null, before, 20)
             : yield* call(Node.getFeedSlice, "", feedName, null, before, 20);
-        yield* call(fillActivityReactions, data.stories);
+        yield* call(fillActivityReactionsInStories, data.stories);
         yield* call(fillSubscriptions, data.stories);
         yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after,
             data.totalInPast, data.totalInFuture));
@@ -148,7 +148,7 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
         const data = feedName.startsWith(":")
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
             : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-        yield* call(fillActivityReactions, data.stories);
+        yield* call(fillActivityReactionsInStories, data.stories);
         yield* call(fillSubscriptions, data.stories);
         yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after,
             data.totalInPast, data.totalInFuture));
@@ -175,7 +175,7 @@ function* feedsUpdateSaga() {
                 const data = feedName.startsWith(":")
                     ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
                     : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-                yield* call(fillActivityReactions, data.stories);
+                yield* call(fillActivityReactionsInStories, data.stories);
                 yield* call(fillSubscriptions, data.stories);
                 yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
                 if (after === data.before) {

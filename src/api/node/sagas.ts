@@ -314,6 +314,12 @@ export function* deletePosting(nodeName: string | null, id: string): CallApiResu
     });
 }
 
+export function* getPostingAttached(nodeName: string | null, id: string): CallApiResult<PostingInfo[]> {
+    return decodeBodies(yield* callApi({
+        nodeName, location: ut`/postings/${id}/attached`, auth: true, schema: NodeApi.PostingInfoArray
+    }));
+}
+
 export function* remotePostingVerify(nodeName: string | null, remoteNodeName: string,
                                      id: string): CallApiResult<AsyncOperationCreated> {
     return yield* callApi({

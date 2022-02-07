@@ -17,6 +17,7 @@ import {
     POSTING_SUBSCRIPTION_SET,
     POSTING_VERIFY,
     POSTING_VERIFY_FAILED,
+    POSTINGS_SET,
     REMOTE_POSTING_SUBSCRIPTION_SET
 } from "state/postings/actions";
 import {
@@ -84,6 +85,17 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             action.payload.stories
                 .map(s => outsideIn(s))
                 .filter((p): p is PostingInfo => p != null)
+                .forEach(p => istate.assign(["", p.id], {
+                    posting: safeguard(p),
+                    deleting: false,
+                    verificationStatus: "none"
+                }));
+            return istate.value();
+        }
+
+        case POSTINGS_SET: {
+            const istate = immutable.wrap(state);
+            action.payload.postings
                 .forEach(p => istate.assign(["", p.id], {
                     posting: safeguard(p),
                     deleting: false,

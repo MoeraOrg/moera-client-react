@@ -52,6 +52,7 @@ import {
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_FAILED,
     DETAILED_POSTING_LOADED,
+    DETAILED_POSTING_LOADED_ATTACHED,
     FOCUS_COMMENT,
     FOCUSED_COMMENT_LOAD,
     FOCUSED_COMMENT_LOAD_FAILED,
@@ -127,6 +128,7 @@ const emptyComposeDialog = {
 const initialState = {
     id: null,
     loading: false,
+    loadedAttached: false,
     comments: cloneDeep(emptyComments),
     positioned: false,
     compose: {
@@ -246,6 +248,12 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             return {
                 ...state,
                 loading: false
+            };
+
+        case DETAILED_POSTING_LOADED_ATTACHED:
+            return {
+                ...state,
+                loadedAttached: true
             };
 
         case COMMENTS_RECEIVER_SWITCHED:

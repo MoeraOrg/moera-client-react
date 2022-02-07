@@ -268,6 +268,7 @@ type EncodedEntities = Partial<EncodedPostingInfo | EncodedCommentInfo | Encoded
     | EncodedDraftInfo | EncodedFeedSliceInfo | EncodedCommentsSliceInfo>;
 
 export function decodeBodies(data: EncodedPostingInfo): PostingInfo;
+export function decodeBodies(data: EncodedPostingInfo[]): PostingInfo[];
 export function decodeBodies(data: EncodedCommentInfo): CommentInfo;
 export function decodeBodies(data: EncodedStoryInfo): StoryInfo;
 export function decodeBodies(data: EncodedCommentCreated): CommentCreated;

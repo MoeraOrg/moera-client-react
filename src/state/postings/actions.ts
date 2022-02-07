@@ -19,6 +19,16 @@ export const postingSet = (posting: PostingInfo, nodeName: string = ""): Posting
     payload: {posting, nodeName}
 });
 
+export const POSTINGS_SET = "POSTINGS_SET";
+export type PostingsSetAction = ActionWithPayload<typeof POSTINGS_SET, {
+    postings: PostingInfo[];
+    nodeName: string;
+}>;
+export const postingsSet = (postings: PostingInfo[], nodeName: string): PostingsSetAction => ({
+    type: POSTINGS_SET,
+    payload: {postings, nodeName}
+});
+
 export const POSTING_DELETE = "POSTING_DELETE";
 export type PostingDeleteAction = ActionWithPayload<typeof POSTING_DELETE, {
     id: string;
@@ -259,6 +269,7 @@ export const remotePostingSubscriptionSet = (remoteNodeName: string, remotePosti
 
 export type PostingsAnyAction =
     PostingSetAction
+    | PostingsSetAction
     | PostingDeleteAction
     | PostingDeletedAction
     | PostingDeleteFailedAction

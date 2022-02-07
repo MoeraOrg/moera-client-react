@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { detailedPostingLoadAttached } from "state/detailedposting/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isPermitted, ProtectedObject } from "state/node/selectors";
 import { MinimalStoryInfo } from "ui/types";
@@ -19,6 +20,7 @@ import PostingReactions from "ui/posting/PostingReactions";
 import PostingButtons from "ui/posting/PostingButtons";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
+import EntryGalleryExpanded from "ui/entry/EntryGalleryExpanded";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 
@@ -28,46 +30,63 @@ type Props = {
     deleting?: boolean | null;
 } & ConnectedProps<typeof connector>;
 
-const DetailedPosting = ({story, posting, deleting, connectedToHome, isPermitted}: Props) => (
-    <>
-        <div className="posting entry mt-2">
-            {deleting ?
+function DetailedPosting({story, posting, deleting, loadedAttached, connectedToHome, isPermitted,
+                          detailedPostingLoadAttached}: Props) {
+    const [expanded, setExpanded] = useState<boolean>(false);
+
+    if (deleting) {
+        return (
+            <div className="posting entry mt-2">
                 <PostingDeleting/>
-            :
-                <>
-                    <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
-                    <PostingPin pinned={story != null && story.pinned}/>
-                    <div className="owner-line">
-                        <PostingAvatar posting={posting}/>
-                        <div className="owner-info">
-                            <PostingSource posting={posting}/>
-                            <PostingOwner posting={posting}/>
-                            <br/>
-                            <PostingDate posting={posting} story={story}/>
-                            <PostingUpdated posting={posting} story={story}/>
-                        </div>
-                    </div>
-                    <PostingSubject posting={posting} preview={false}/>
-                    <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""
-                               media={posting.media}/>
-                    <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
-                    <div className="reactions-line">
-                        <PostingReactions posting={posting}/>
-                        <PostingComments posting={posting}/>
-                    </div>
-                    {connectedToHome && <PostingButtons posting={posting}/>}
-                    <Comments/>
-                </>
+            </div>
+        );
+    }
+
+    const onExpand = () => {
+        setExpanded(true);
+        if (!loadedAttached) {
+            detailedPostingLoadAttached();
+        }
+    }
+
+    return (
+        <div className="posting entry mt-2">
+            <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
+            <PostingPin pinned={story != null && story.pinned}/>
+            <div className="owner-line">
+                <PostingAvatar posting={posting}/>
+                <div className="owner-info">
+                    <PostingSource posting={posting}/>
+                    <PostingOwner posting={posting}/>
+                    <br/>
+                    <PostingDate posting={posting} story={story}/>
+                    <PostingUpdated posting={posting} story={story}/>
+                </div>
+            </div>
+            <PostingSubject posting={posting} preview={false}/>
+            <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""
+                       media={posting.media}/>
+            {!expanded &&
+                <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null} onExpand={onExpand}/>
             }
+            <div className="reactions-line">
+                <PostingReactions posting={posting}/>
+                <PostingComments posting={posting}/>
+            </div>
+            {connectedToHome && <PostingButtons posting={posting}/>}
+            {expanded && <EntryGalleryExpanded postingId={posting.id} nodeName="" media={posting.media ?? null}/>}
+            <Comments/>
         </div>
-    </>
-);
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({
+        loadedAttached: state.detailedPosting.loadedAttached,
         connectedToHome: isConnectedToHome(state),
         isPermitted: (operation: string, object: ProtectedObject) => isPermitted(operation, object, state),
-    })
+    }),
+    { detailedPostingLoadAttached }
 );
 
 export default connector(DetailedPosting);

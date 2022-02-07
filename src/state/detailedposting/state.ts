@@ -73,6 +73,7 @@ export interface CommentDialogState {
 export interface DetailedPostingState {
     id: string | null;
     loading: boolean;
+    loadedAttached: boolean;
     comments: CommentsState;
     positioned: boolean;
     compose: CommentComposeState;

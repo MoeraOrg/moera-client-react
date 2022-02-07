@@ -1,3 +1,7 @@
+.entry .entry-image IMG {
+    transition: filter .15s ease-in-out;
+}
+
 .entry .entry-image:hover IMG {
     filter: brightness(90%);
 }

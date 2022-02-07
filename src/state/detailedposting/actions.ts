@@ -33,6 +33,18 @@ export const detailedPostingLoadFailed = (): DetailedPostingLoadFailedAction => 
     type: DETAILED_POSTING_LOAD_FAILED
 });
 
+export const DETAILED_POSTING_LOAD_ATTACHED = "DETAILED_POSTING_LOAD_ATTACHED";
+export type DetailedPostingLoadAttachedAction = Action<typeof DETAILED_POSTING_LOAD_ATTACHED>;
+export const detailedPostingLoadAttached = (): DetailedPostingLoadAttachedAction => ({
+    type: DETAILED_POSTING_LOAD_ATTACHED
+});
+
+export const DETAILED_POSTING_LOADED_ATTACHED = "DETAILED_POSTING_LOADED_ATTACHED";
+export type DetailedPostingLoadedAttachedAction = Action<typeof DETAILED_POSTING_LOADED_ATTACHED>;
+export const detailedPostingLoadedAttached = (): DetailedPostingLoadedAttachedAction => ({
+    type: DETAILED_POSTING_LOADED_ATTACHED
+});
+
 export const COMMENTS_RECEIVER_SWITCH = "COMMENTS_RECEIVER_SWITCH";
 export type CommentsReceiverSwitchAction = Action<typeof COMMENTS_RECEIVER_SWITCH>;
 export const commentsReceiverSwitch = (): CommentsReceiverSwitchAction => ({
@@ -631,6 +643,8 @@ export const glanceCommentLoadFailed = (nodeName: string, postingId: string): Gl
 export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | DetailedPostingLoadedAction
     | DetailedPostingLoadFailedAction
+    | DetailedPostingLoadAttachedAction
+    | DetailedPostingLoadedAttachedAction
     | CommentsReceiverSwitchAction
     | CommentsReceiverSwitchedAction
     | CommentsLoadAllAction

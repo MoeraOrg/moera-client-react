@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
 
 import { Node, NodeApiError } from "api";
-import { CommentInfo, DraftInfo, MediaAttachment, RepliedTo } from "api/node/api-types";
+import { CommentInfo, DraftInfo, MediaAttachment, PrivateMediaFileInfo, RepliedTo } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
     closeCommentDialog,
@@ -65,7 +65,9 @@ import {
     CommentVerifyAction,
     commentVerifyFailed,
     DETAILED_POSTING_LOAD,
+    DETAILED_POSTING_LOAD_ATTACHED,
     detailedPostingLoaded,
+    detailedPostingLoadedAttached,
     detailedPostingLoadFailed,
     FOCUSED_COMMENT_LOAD,
     focusedCommentLoaded,
@@ -83,9 +85,10 @@ import {
     getDetailedPostingId,
     isCommentComposerReplied
 } from "state/detailedposting/selectors";
-import { fillActivityReaction } from "state/activityreactions/sagas";
-import { postingCommentsSet } from "state/postings/actions";
+import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
+import { postingCommentsSet, postingsSet } from "state/postings/actions";
 import { getOwnerFullName, getOwnerName } from "state/owner/selectors";
+import { getPosting, isPostingCached } from "state/postings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
@@ -98,6 +101,7 @@ import { quoteHtml } from "util/html";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
+    executor(DETAILED_POSTING_LOAD_ATTACHED, "", detailedPostingLoadAttachedSaga, introduced),
     executor(COMMENTS_RECEIVER_SWITCH, "", commentsReceiverSwitchSaga, introduced),
     executor(COMMENTS_LOAD_ALL, "", commentsLoadAllSaga, introduced),
     executor(COMMENTS_PAST_SLICE_LOAD, "", commentsPastSliceLoadSaga, introduced),
@@ -140,12 +144,44 @@ function* detailedPostingLoadSaga() {
     }
 
     try {
-        const data = yield* call(Node.getPosting, "", id);
-        yield* call(fillActivityReaction, data)
-        yield* call(fillSubscription, data)
-        yield* put(detailedPostingLoaded(data));
+        const posting = yield* call(Node.getPosting, "", id);
+        yield* call(fillActivityReaction, posting)
+        yield* call(fillSubscription, posting)
+        yield* put(detailedPostingLoaded(posting));
     } catch (e) {
         yield* put(detailedPostingLoadFailed());
+        yield* put(errorThrown(e));
+    }
+}
+
+function* detailedPostingLoadAttachedSaga() {
+    const id = yield* select(getDetailedPostingId);
+    if (id == null) {
+        return;
+    }
+    const loaded = yield* select(state => {
+        const media = getPosting(state, id)?.media;
+        if (media == null) {
+            return true;
+        }
+        return media
+            .map(ma => ma.media)
+            .filter((m): m is PrivateMediaFileInfo => m != null)
+            .map(m => m.postingId)
+            .filter((p): p is string => p != null)
+            .every(p => isPostingCached(state, p));
+    });
+    if (loaded) {
+        yield* put(detailedPostingLoadedAttached());
+        return;
+    }
+
+    try {
+        const postings = yield* call(Node.getPostingAttached, "", id);
+        yield* call(fillActivityReactionsInPostings, postings);
+        yield* put(postingsSet(postings, ""));
+        yield* put(detailedPostingLoadedAttached());
+    } catch (e) {
         yield* put(errorThrown(e));
     }
 }

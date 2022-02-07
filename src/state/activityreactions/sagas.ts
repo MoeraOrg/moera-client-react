@@ -5,11 +5,15 @@ import { Node } from "api/node";
 import { isConnectedToHome } from "state/home/selectors";
 import { PostingInfo, StoryInfo } from "api/node/api-types";
 
-export function* fillActivityReactions(stories: StoryInfo[]) {
+export function* fillActivityReactionsInStories(stories: StoryInfo[]) {
     const postings: PostingInfo[] = stories
         .map(t => t.posting)
         .filter((p): p is PostingInfo => p != null)
         .filter(p => p.receiverName != null && p.receiverPostingId != null);
+    yield* call(fillActivityReactionsInPostings, postings);
+}
+
+export function* fillActivityReactionsInPostings(postings: PostingInfo[]) {
     if (postings.length === 0) {
         return;
     }
