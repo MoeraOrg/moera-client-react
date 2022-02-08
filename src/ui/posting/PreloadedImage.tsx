@@ -11,9 +11,16 @@ interface Props {
 }
 
 export default function PreloadedImage({src, srcSet, sizes, width, height, alt, title}: Props) {
-    const [loaded, setLoaded] = useState(false);
+    if (window.loadedImages == null) {
+        window.loadedImages = new Set();
+    }
 
-    const onLoad = () => setLoaded(true);
+    const [loaded, setLoaded] = useState(window.loadedImages.has(src));
+
+    const onLoad = () => {
+        setLoaded(true);
+        window.loadedImages?.add(src);
+    }
 
     const style: React.CSSProperties = {
         "--width": `${width}px`,
