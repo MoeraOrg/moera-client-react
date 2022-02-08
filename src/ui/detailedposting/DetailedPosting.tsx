@@ -31,9 +31,9 @@ type Props = {
     deleting?: boolean | null;
 } & ConnectedProps<typeof connector>;
 
-function DetailedPosting({story, posting, deleting, loadedAttached, connectedToHome, isPermitted,
+function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpanded, connectedToHome, isPermitted,
                           detailedPostingLoadAttached}: Props) {
-    const [expanded, setExpanded] = useState<boolean>(false);
+    const [expanded, setExpanded] = useState<boolean>(galleryExpanded);
 
     if (deleting) {
         return (
@@ -102,6 +102,7 @@ function scrollToPostingGallery() {
 const connector = connect(
     (state: ClientState) => ({
         loadedAttached: state.detailedPosting.loadedAttached,
+        galleryExpanded: state.detailedPosting.galleryExpanded,
         connectedToHome: isConnectedToHome(state),
         isPermitted: (operation: string, object: ProtectedObject) => isPermitted(operation, object, state),
     }),

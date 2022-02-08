@@ -45,6 +45,12 @@ export const detailedPostingLoadedAttached = (): DetailedPostingLoadedAttachedAc
     type: DETAILED_POSTING_LOADED_ATTACHED
 });
 
+export const DETAILED_POSTING_SCROLLED_TO_GALLERY = "DETAILED_POSTING_SCROLLED_TO_GALLERY";
+export type DetailedPostingScrolledToGalleryAction = Action<typeof DETAILED_POSTING_SCROLLED_TO_GALLERY>;
+export const detailedPostingScrolledToGallery = (): DetailedPostingScrolledToGalleryAction => ({
+    type: DETAILED_POSTING_SCROLLED_TO_GALLERY
+});
+
 export const COMMENTS_RECEIVER_SWITCH = "COMMENTS_RECEIVER_SWITCH";
 export type CommentsReceiverSwitchAction = Action<typeof COMMENTS_RECEIVER_SWITCH>;
 export const commentsReceiverSwitch = (): CommentsReceiverSwitchAction => ({
@@ -645,6 +651,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | DetailedPostingLoadFailedAction
     | DetailedPostingLoadAttachedAction
     | DetailedPostingLoadedAttachedAction
+    | DetailedPostingScrolledToGalleryAction
     | CommentsReceiverSwitchAction
     | CommentsReceiverSwitchedAction
     | CommentsLoadAllAction

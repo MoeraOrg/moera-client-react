@@ -7,14 +7,16 @@ import {
     commentsPastSliceLoad,
     commentsScrolledToAnchor,
     commentsScrolledToComments,
-    commentsScrolledToComposer
+    commentsScrolledToComposer,
+    detailedPostingScrolledToGallery
 } from "state/detailedposting/actions";
 import {
     getCommentsState,
     getDetailedPosting,
     getDetailedPostingId,
     isCommentComposerFocused,
-    isCommentsFocused, isDetailedPostingCached
+    isCommentsFocused,
+    isDetailedPostingCached, isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
@@ -73,6 +75,11 @@ class Comments extends React.PureComponent<Props, State> {
     }
 
     scrollToAnchor() {
+        if (this.props.galleryFocused) {
+            Comments.scrollToElement(document.getElementById("posting-gallery")!);
+            this.props.detailedPostingScrolledToGallery();
+            return;
+        }
         if (this.props.focused) {
             Comments.scrollToElement(document.getElementById("comments")!);
             this.props.commentsScrolledToComments();
@@ -228,6 +235,7 @@ const connector = connect(
     (state: ClientState) => ({
         visible: isAtDetailedPostingPage(state),
         postingId: getDetailedPostingId(state),
+        galleryFocused: isDetailedPostingGalleryFocused(state),
         total: isDetailedPostingCached(state) ? (getDetailedPosting(state)!.totalComments ?? 0) : 0,
         loadingFuture: getCommentsState(state).loadingFuture,
         loadingPast: getCommentsState(state).loadingPast,
@@ -242,8 +250,8 @@ const connector = connect(
         composerFocused: isCommentComposerFocused(state)
     }),
     {
-        commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor, commentsScrolledToComments,
-        commentsScrolledToComposer
+        detailedPostingScrolledToGallery, commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor,
+        commentsScrolledToComments, commentsScrolledToComposer
     }
 );
 

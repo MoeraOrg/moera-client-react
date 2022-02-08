@@ -35,6 +35,10 @@ export function isDetailedPostingToBeLoaded(state: ClientState): boolean {
     return !state.detailedPosting.loading && getDetailedPosting(state) == null;
 }
 
+export function isDetailedPostingGalleryFocused(state: ClientState): boolean {
+    return state.detailedPosting.galleryFocused;
+}
+
 export function isDetailedPostingPositioned(state: ClientState): boolean {
     return state.detailedPosting.positioned;
 }

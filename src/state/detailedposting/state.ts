@@ -74,6 +74,8 @@ export interface DetailedPostingState {
     id: string | null;
     loading: boolean;
     loadedAttached: boolean;
+    galleryExpanded: boolean;
+    galleryFocused: boolean;
     comments: CommentsState;
     positioned: boolean;
     compose: CommentComposeState;

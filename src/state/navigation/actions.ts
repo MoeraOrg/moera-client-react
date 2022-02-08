@@ -63,9 +63,11 @@ export const goToTimeline = (at: number | null = null): GoToTimelineAction =>
 export type GoToPostingAction = GoToPageAction<typeof PAGE_DETAILED_POSTING, {
     id: string;
     commentId: string | null;
+    galleryExpanded: boolean;
 }>;
-export const goToPosting = (id: string, commentId: string | null = null): GoToPostingAction =>
-    goToPage(PAGE_DETAILED_POSTING, {id, commentId});
+export const goToPosting = (id: string, commentId: string | null = null,
+                            galleryExpanded: boolean = false): GoToPostingAction =>
+    goToPage(PAGE_DETAILED_POSTING, {id, commentId, galleryExpanded});
 
 export type GoToComposeAction = GoToPageAction<typeof PAGE_COMPOSE, {
     id: string | null;

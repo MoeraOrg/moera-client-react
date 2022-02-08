@@ -129,6 +129,8 @@ const initialState = {
     id: null,
     loading: false,
     loadedAttached: false,
+    galleryExpanded: false,
+    galleryFocused: false,
     comments: cloneDeep(emptyComments),
     positioned: false,
     compose: {
@@ -199,9 +201,11 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
 
         case GO_TO_PAGE: {
             if (action.payload.page === PAGE_DETAILED_POSTING) {
-                const {details: {id, commentId}} = action.payload;
+                const {details: {id, commentId, galleryExpanded}} = action.payload;
 
                 const istate = immutable.wrap(state);
+                istate.set("galleryExpanded", galleryExpanded)
+                    .set("galleryFocused", galleryExpanded);
                 if (state.id !== id) {
                     istate.set("id", id)
                         .set("loading", false)

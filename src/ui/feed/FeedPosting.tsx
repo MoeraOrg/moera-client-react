@@ -24,6 +24,7 @@ import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
 import EntryGallery from "ui/entry/EntryGallery";
+import { goToPosting } from "state/navigation/actions";
 
 interface ContentProps {
     posting: ExtPostingInfo;
@@ -51,7 +52,8 @@ type FeedPostingProps = {
     deleting: boolean;
 } & ConnectedProps<typeof connector>;
 
-const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermitted}: FeedPostingProps) => (
+const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermitted,
+                      goToPosting}: FeedPostingProps) => (
     <div className={cx("posting entry preview", {"not-viewed": atHome && story.viewed === false})}
          data-moment={story.moment} data-viewed={story.viewed !== false}>
         {deleting ?
@@ -72,7 +74,8 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>
-                <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}/>
+                <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}
+                              onExpand={() => goToPosting(posting.id, null, true)}/>
                 <div className="reactions-line">
                     <PostingReactions posting={posting}/>
                     <PostingComments posting={posting}/>
@@ -88,7 +91,8 @@ const connector = connect(
         connectedToHome: isConnectedToHome(state),
         atHome: isAtHomeNode(state),
         isPermitted: (operation: string, posting: ProtectedObject) => isPermitted(operation, posting, state)
-    })
+    }),
+    { goToPosting }
 );
 
 export default connector(FeedPosting);
