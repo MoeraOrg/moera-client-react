@@ -5,12 +5,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { lightBoxCopyLink, lightBoxCopyMediaLink } from "state/lightbox/actions";
-import {
-    getLightBoxMediaId,
-    getLightBoxMediaPostingId,
-    getLightBoxNodeName,
-    getLightBoxPostingId
-} from "state/lightbox/selectors";
+import { getLightBoxMediaId, getLightBoxNodeName, getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/owner/selectors";
@@ -22,7 +17,7 @@ type Props = {
     mediaUrl: string;
 } & ConnectedProps<typeof connector>;
 
-function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaId, mediaPosting, shareDialogPrepare,
+function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaId, shareDialogPrepare,
                               lightBoxCopyLink, lightBoxCopyMediaLink}: Props) {
     const onShare = () => {
         if (sourceNodeName == null) {
@@ -42,7 +37,7 @@ function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaI
             nodeName = sourceNodeName;
             href = urlWithParameters(ut`/post/${comment.postingId}`, {"comment": comment.id, "media": mediaId});
         }
-        shareDialogPrepare(mediaPosting?.heading ?? "", nodeName, href);
+        shareDialogPrepare(nodeName, href);
     }
 
     return (
@@ -79,8 +74,7 @@ const connector = connect(
         sourceNodeName: getLightBoxNodeName(state) || getOwnerName(state),
         posting: getPosting(state, getLightBoxPostingId(state)),
         comment: state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null,
-        mediaId: getLightBoxMediaId(state),
-        mediaPosting: getPosting(state, getLightBoxMediaPostingId(state))
+        mediaId: getLightBoxMediaId(state)
     }),
     { shareDialogPrepare, lightBoxCopyLink, lightBoxCopyMediaLink }
 );

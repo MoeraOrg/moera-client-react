@@ -42,7 +42,7 @@ const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml
                 {" "}{editable && <EditButton/>}
             </h2>
             <div className="page-header-buttons">
-                <PageShareButton title={fullName || (ownerName ?? "")} href="/profile"/>
+                <PageShareButton href="/profile"/>
             </div>
         </PageHeader>
         <Page>

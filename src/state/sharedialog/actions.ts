@@ -4,13 +4,12 @@ import { ActionWithPayload } from "state/action-types";
 
 export const SHARE_DIALOG_PREPARE = "SHARE_DIALOG_PREPARE";
 export type ShareDialogPrepareAction = ActionWithPayload<typeof SHARE_DIALOG_PREPARE, {
-    title: string;
     nodeName: string;
     href: string;
 }>;
-export const shareDialogPrepare = (title: string, nodeName: string, href: string): ShareDialogPrepareAction => ({
+export const shareDialogPrepare = (nodeName: string, href: string): ShareDialogPrepareAction => ({
     type: SHARE_DIALOG_PREPARE,
-    payload: {title, nodeName, href}
+    payload: {nodeName, href}
 });
 
 export const OPEN_SHARE_DIALOG = "OPEN_SHARE_DIALOG";

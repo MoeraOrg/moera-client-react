@@ -9,12 +9,11 @@ import { DropdownMenu } from "ui/control";
 import "./PageShareButton.css";
 
 type Props = {
-    title: string;
     href: string;
 } & ConnectedProps<typeof connector>;
 
-function PageShareButton({title, href, ownerName, shareDialogPrepare, sharePageCopyLink}: Props) {
-    const onShare = () => shareDialogPrepare(title, ownerName ?? "", href);
+function PageShareButton({href, ownerName, shareDialogPrepare, sharePageCopyLink}: Props) {
+    const onShare = () => shareDialogPrepare(ownerName ?? "", href);
     const onCopyLink = () => sharePageCopyLink(ownerName ?? "", href);
 
     if (window.Android || navigator.share) {

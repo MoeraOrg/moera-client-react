@@ -50,7 +50,7 @@ class PostingMenu extends React.PureComponent<Props> {
         const postingId = posting.receiverPostingId ?? posting.id;
         const href = `/post/${postingId}`;
 
-        shareDialogPrepare(posting.heading, nodeName, href);
+        shareDialogPrepare(nodeName, href);
     };
 
     onReply = () => {

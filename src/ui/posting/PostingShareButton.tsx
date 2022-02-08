@@ -17,7 +17,7 @@ function PostingShareButton({posting, ownerName, shareDialogPrepare}: Props) {
     const postingId = posting.receiverPostingId ?? posting.id;
     const href = ut`/post/${postingId}`;
     return (
-        <button className="posting-button" onClick={() => shareDialogPrepare(posting.heading, nodeName, href)}>
+        <button className="posting-button" onClick={() => shareDialogPrepare(nodeName, href)}>
             <FontAwesomeIcon icon="share-alt"/>
             <span className="caption">Share</span>
         </button>

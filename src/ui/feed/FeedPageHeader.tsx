@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerFullName, getOwnerName } from "state/owner/selectors";
+import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
 import PageHeader from "ui/page/PageHeader";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
@@ -25,7 +25,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function FeedPageHeader({feedName, title, empty = false, shareable = false, atTop, atBottom, totalAfterTop, notViewed,
-                         notViewedMoment, avatar, ownerName, ownerFullName}: Props) {
+                         notViewedMoment, avatar, ownerName}: Props) {
     const [avatarVisible, setAvatarVisible] = useState(window.scrollY >= getPageHeaderHeight());
 
     const onScroll = useCallback(
@@ -52,7 +52,7 @@ function FeedPageHeader({feedName, title, empty = false, shareable = false, atTo
                 <FeedSubscribeButton feedName={feedName}/>
             </h2>
             <div className="page-header-buttons">
-                {shareable && <PageShareButton title={ownerFullName || (ownerName ?? "")} href="/"/>}
+                {shareable && <PageShareButton href="/"/>}
                 {!empty && <FeedGotoButton feedName={feedName} atBottom={atBottom}/>}
             </div>
             <FeedTopButton feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop} notViewed={notViewed}
@@ -64,8 +64,7 @@ function FeedPageHeader({feedName, title, empty = false, shareable = false, atTo
 const connector = connect(
     (state: ClientState) => ({
         avatar: getOwnerAvatar(state),
-        ownerName: getOwnerName(state),
-        ownerFullName: getOwnerFullName(state)
+        ownerName: getOwnerName(state)
     })
 );
 

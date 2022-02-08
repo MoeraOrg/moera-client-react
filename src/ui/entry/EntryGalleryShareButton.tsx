@@ -18,7 +18,7 @@ function EntryGalleryShareButton({posting, mediaId, ownerName, shareDialogPrepar
     const postingId = posting.receiverPostingId ?? posting.id;
     const href = urlWithParameters(ut`/post/${postingId}`, {"media": mediaId});
     return (
-        <button className="posting-button" onClick={() => shareDialogPrepare("", nodeName, href)}>
+        <button className="posting-button" onClick={() => shareDialogPrepare(nodeName, href)}>
             <FontAwesomeIcon icon="share-alt"/>
             <span className="caption">Share</span>
         </button>

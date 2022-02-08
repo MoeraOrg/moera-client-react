@@ -30,7 +30,7 @@ function CommentButtons({nodeName, postingId, comment, homeOwnerName, enableSelf
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions?.negative ?? ""}/>
             <CommentReplyButton comment={comment}/>
-            <CommentShareButton nodeName={nodeName} postingId={postingId} comment={comment}/>
+            <CommentShareButton nodeName={nodeName} postingId={postingId} commentId={comment.id}/>
         </div>
     );
 }

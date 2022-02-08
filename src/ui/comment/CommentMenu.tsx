@@ -37,7 +37,7 @@ class CommentMenu extends React.PureComponent<Props> {
         const {postingId, nodeName, comment, shareDialogPrepare} = this.props;
 
         const href = `/post/${postingId}?comment=${comment.id}`;
-        shareDialogPrepare(comment.heading, nodeName, href);
+        shareDialogPrepare(nodeName, href);
     };
 
     onEdit = () => {

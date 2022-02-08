@@ -27,9 +27,9 @@ export default [
 ];
 
 function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
-    const {title, nodeName, href} = action.payload;
+    const {nodeName, href} = action.payload;
 
-    const text = hasWindowSelection() ? (quoteHtml(getWindowSelectionHtml()) ?? title) : title;
+    const text = hasWindowSelection() ? (quoteHtml(getWindowSelectionHtml()) ?? "") : "";
 
     const nodeUri = yield* call(getNodeUri, nodeName);
     if (nodeUri == null) {
