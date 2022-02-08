@@ -23,6 +23,7 @@ import EntryGallery from "ui/entry/EntryGallery";
 import EntryGalleryExpanded from "ui/entry/EntryGalleryExpanded";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
+import { getPageHeaderHeight } from "util/misc";
 
 type Props = {
     story: MinimalStoryInfo;
@@ -47,6 +48,12 @@ function DetailedPosting({story, posting, deleting, loadedAttached, connectedToH
         if (!loadedAttached) {
             detailedPostingLoadAttached();
         }
+        scrollToPostingGallery();
+    }
+
+    const onCollapse = () => {
+        setExpanded(false);
+        scrollToPostingGallery();
     }
 
     return (
@@ -67,17 +74,29 @@ function DetailedPosting({story, posting, deleting, loadedAttached, connectedToH
             <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""
                        media={posting.media}/>
             {!expanded &&
-                <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null} onExpand={onExpand}/>
+                <div id="posting-gallery" className="gallery-collapsed">
+                    <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null} onExpand={onExpand}/>
+                </div>
             }
             <div className="reactions-line">
                 <PostingReactions posting={posting}/>
                 <PostingComments posting={posting}/>
             </div>
             {connectedToHome && <PostingButtons posting={posting}/>}
-            {expanded && <EntryGalleryExpanded postingId={posting.id} nodeName="" media={posting.media ?? null}/>}
+            {expanded &&
+                <EntryGalleryExpanded postingId={posting.id} nodeName="" media={posting.media ?? null}
+                                      onCollapse={onCollapse}/>
+            }
             <Comments/>
         </div>
     );
+}
+
+function scrollToPostingGallery() {
+    setTimeout(() => {
+        const y = document.getElementById("posting-gallery")!.getBoundingClientRect().top;
+        window.scrollBy(0, y - getPageHeaderHeight());
+    });
 }
 
 const connector = connect(

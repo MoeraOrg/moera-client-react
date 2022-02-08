@@ -15,12 +15,13 @@ interface OwnProps {
     nodeName: string | null;
     postingId: string;
     media: MediaAttachment[] | null;
+    onCollapse: () => void;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-const EntryGalleryExpanded = ({nodeName, postingId, media, connectedToHome, mediaPostings}: Props) => (
-    <div className="gallery-expanded">
+const EntryGalleryExpanded = ({nodeName, postingId, media, onCollapse, connectedToHome, mediaPostings}: Props) => (
+    <div id="posting-gallery" className="gallery-expanded">
         {media?.map(media => {
             const mediaFile = media.media;
             if (mediaFile == null) {
@@ -29,7 +30,7 @@ const EntryGalleryExpanded = ({nodeName, postingId, media, connectedToHome, medi
             const posting = mediaPostings.get(mediaFile.id);
             return (
                 <div key={mediaFile.id} className="mt-4 mb-4">
-                    <EntryGallery postingId={postingId} nodeName={nodeName} media={[media]}/>
+                    <EntryGallery postingId={postingId} nodeName={nodeName} media={[media]} onCollapse={onCollapse}/>
                     {posting &&
                         <>
                             <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""/>

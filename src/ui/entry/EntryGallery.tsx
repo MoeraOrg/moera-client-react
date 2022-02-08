@@ -13,6 +13,7 @@ type Props = {
     commentId?: string | null;
     nodeName: string | null;
     media: MediaAttachment[] | null;
+    onCollapse?: () => void;
     onExpand?: () => void;
 } & ConnectedProps<typeof connector>;
 
@@ -29,7 +30,7 @@ function majorOrientation(images: PrivateMediaFileInfo[]) {
     return balance >= 0 ? "vertical" : "horizontal";
 }
 
-function EntryGallery({postingId, commentId, nodeName, media, onExpand, feedWidth}: Props) {
+function EntryGallery({postingId, commentId, nodeName, media, onCollapse, onExpand, feedWidth}: Props) {
     if (media == null || media.length === 0) {
         return null;
     }
@@ -61,6 +62,7 @@ function EntryGallery({postingId, commentId, nodeName, media, onExpand, feedWidt
                 // FIXME React.CSSProperties does not include CSS variables
                 <div className={`gallery single ${orientation}`}
                      style={{"--image-height": singleImageHeight(images[0], feedWidth, commentId != null) + "px"} as any}>
+                    {onCollapse && <EntryGalleryExpandButton onClick={onCollapse} collapse/>}
                     <Image mediaFile={images[0]}/>
                 </div>
             );
