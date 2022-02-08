@@ -8,7 +8,6 @@ import { ClientState } from "state/state";
 import ManagementMenu from "ui/profile/view/ManagementMenu";
 import OperationStatus from "ui/profile/view/OperationStatus";
 import RegisterNameDialog from "ui/profile/manage/RegisterNameDialog";
-import MnemonicDialog from "ui/profile/manage/MnemonicDialog";
 import NodeNameUpdateDialog from "ui/profile/manage/NodeNameUpdateDialog";
 import { mentionName } from "util/misc";
 import "./NodeNameView.css";
@@ -41,7 +40,6 @@ const NodeNameView = ({loading, name, nameDefined, manageable, operationPending,
             <Loading active={loading}/>
         </div>
         <RegisterNameDialog/>
-        <MnemonicDialog/>
         <NodeNameUpdateDialog/>
     </>
 );
