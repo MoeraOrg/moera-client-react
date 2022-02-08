@@ -4,20 +4,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getOwnerName } from "state/owner/selectors";
 import { shareDialogPrepare } from "state/sharedialog/actions";
-import { ut } from "util/url";
+import { getOwnerName } from "state/owner/selectors";
+import { urlWithParameters, ut } from "util/url";
 
 type Props = {
     posting: PostingInfo;
+    mediaId: string;
 } & ConnectedProps<typeof connector>;
 
-function PostingShareButton({posting, ownerName, shareDialogPrepare}: Props) {
+function EntryGalleryShareButton({posting, mediaId, ownerName, shareDialogPrepare}: Props) {
     const nodeName = posting.receiverName ?? ownerName ?? "";
     const postingId = posting.receiverPostingId ?? posting.id;
-    const href = ut`/post/${postingId}`;
+    const href = urlWithParameters(ut`/post/${postingId}`, {"media": mediaId});
     return (
-        <button className="posting-button" onClick={() => shareDialogPrepare(posting.heading, nodeName, href)}>
+        <button className="posting-button" onClick={() => shareDialogPrepare("", nodeName, href)}>
             <FontAwesomeIcon icon="share-alt"/>
             <span className="caption">Share</span>
         </button>
@@ -31,4 +32,4 @@ const connector = connect(
     { shareDialogPrepare }
 );
 
-export default connector(PostingShareButton);
+export default connector(EntryGalleryShareButton);

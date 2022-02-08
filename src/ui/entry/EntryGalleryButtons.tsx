@@ -6,13 +6,14 @@ import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import PostingReactionButton from "ui/posting/PostingReactionButton";
-import PostingShareButton from "ui/posting/PostingShareButton";
+import EntryGalleryShareButton from "ui/entry/EntryGalleryShareButton";
 
 type Props = {
     posting: PostingInfo;
+    mediaId: string;
 } & ConnectedProps<typeof connector>;
 
-function EntryGalleryButtons({posting, homeOwnerName, enableSelf}: Props) {
+function EntryGalleryButtons({posting, mediaId, homeOwnerName, enableSelf}: Props) {
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
@@ -25,7 +26,7 @@ function EntryGalleryButtons({posting, homeOwnerName, enableSelf}: Props) {
                                    invisible={hide || (cr.emoji != null && !cr.negative)} id={posting.id}
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.negative ?? ""}/>
-            <PostingShareButton posting={posting}/>
+            <EntryGalleryShareButton posting={posting} mediaId={mediaId}/>
         </div>
     );
 }

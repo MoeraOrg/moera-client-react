@@ -36,7 +36,7 @@ const EntryGalleryExpanded = ({nodeName, postingId, media, connectedToHome, medi
                             <div className="reactions-line">
                                 <PostingReactions posting={posting}/>
                             </div>
-                            {connectedToHome && <EntryGalleryButtons posting={posting}/>}
+                            {connectedToHome && <EntryGalleryButtons posting={posting} mediaId={mediaFile.id}/>}
                         </>
                     }
                 </div>
