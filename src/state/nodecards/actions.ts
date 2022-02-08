@@ -55,6 +55,18 @@ export const nodeCardDetailsSet = (nodeName: string, fullName: string | null, ge
     payload: {nodeName, fullName, gender, title, avatar, fundraisers}
 });
 
+export const NODE_CARD_STORIES_SET = "NODE_CARD_STORIESSET";
+export type NodeCardStoriesSetAction = ActionWithPayload<typeof NODE_CARD_STORIES_SET, {
+    nodeName: string;
+    storiesTotal: number;
+    lastStoryCreatedAt: number | null;
+}>;
+export const nodeCardStoriesSet = (nodeName: string, storiesTotal: number,
+                                   lastStoryCreatedAt: number | null): NodeCardStoriesSetAction => ({
+    type: NODE_CARD_STORIES_SET,
+    payload: {nodeName, storiesTotal, lastStoryCreatedAt}
+});
+
 export const NODE_CARD_PEOPLE_SET = "NODE_CARD_PEOPLE_SET";
 export type NodeCardPeopleSetAction = ActionWithPayload<typeof NODE_CARD_PEOPLE_SET, {
     nodeName: string;
@@ -100,6 +112,7 @@ export type NodeCardsAnyAction =
     | NodeCardLoadedAction
     | NodeCardLoadFailedAction
     | NodeCardDetailsSetAction
+    | NodeCardStoriesSetAction
     | NodeCardPeopleSetAction
     | NodeCardSubscriptionSetAction
     | NodeCardsUnsetAction

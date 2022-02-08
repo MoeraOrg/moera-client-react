@@ -245,6 +245,9 @@ export type EncodedPartialPostingInfo = PartialPostingInfoBase<string>;
 export interface FeedInfo {
     feedName: string;
     subscriberId?: string | null;
+    total: number;
+    firstCreatedAt?: number | null;
+    lastCreatedAt?: number | null;
     operations?: {
         add?: string[] | null;
     } | null;

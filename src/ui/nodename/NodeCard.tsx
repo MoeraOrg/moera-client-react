@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
 import { NodeName } from "api";
 import { AvatarImage } from "api/node/api-types";
@@ -36,6 +37,8 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
     const realAvatar =  card.avatar ?? avatar ?? null;
     const realAvatarNodeName = card.avatar != null ? nodeName : avatarNodeName ?? null;
     const gender = shortGender(card.gender);
+    const storiesTotal = card.storiesTotal ?? "?";
+    const storiesLastDate = card.lastStoryCreatedAt != null ? fromUnixTime(card.lastStoryCreatedAt) : null;
     const subscribersTotal = card.subscribersTotal ?? "?";
     const subscriptionsTotal = card.subscriptionsTotal ?? "?";
     const subscribed = card.subscribed ?? false;
@@ -61,6 +64,20 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
                     <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={card.fundraisers}
                                   styles="small"/>
                 </div>
+            </div>
+            <div className="stories">
+                <span className="counter">
+                    <em>{storiesTotal}</em> {storiesTotal === 1 ? "post" : "posts"}
+                    {storiesLastDate &&
+                        <>
+                            , last{" "}
+                            <time dateTime={formatISO(storiesLastDate)}
+                                  title={format(storiesLastDate, "dd-MM-yyyy HH:mm")}>
+                                {formatDistanceToNow(storiesLastDate, {addSuffix: true})}
+                            </time>
+                        </>
+                    }
+                </span>
             </div>
             <div className="people">
                 <Jump className="counter" nodeName={nodeName} href="/people/subscribers">

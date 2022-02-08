@@ -53,6 +53,14 @@
     margin-top: .2em;
 }
 
+.node-card .stories {
+    margin-top: .5em;
+}
+
+.node-card .stories TIME {
+    text-decoration: underline dotted;
+}
+
 .node-card .people {
     margin-top: .5em;
 }

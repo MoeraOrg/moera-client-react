@@ -11,6 +11,7 @@ import {
     nodeCardLoaded,
     nodeCardLoadFailed,
     nodeCardPeopleSet,
+    nodeCardStoriesSet,
     nodeCardSubscriptionSet
 } from "state/nodecards/actions";
 import { WithContext } from "state/action-types";
@@ -32,7 +33,7 @@ function* nodeCardLoadSaga(action: WithContext<NodeCardLoadAction>) {
         yield* all([
             call(loadDetails, nodeName),
             call(loadPeople, nodeName),
-            call(loadSubscription, nodeName, homeOwnerName)
+            call(loadStoriesAndSubscription, nodeName, homeOwnerName)
         ]);
         yield* put(nodeCardLoaded(nodeName));
     } catch (e) {
@@ -55,12 +56,12 @@ function* loadPeople(nodeName: string) {
     yield* put(nodeCardPeopleSet(nodeName, data.feedSubscribersTotal, data.feedSubscriptionsTotal));
 }
 
-function* loadSubscription(nodeName: string, homeOwnerName: string | null) {
-    if (nodeName === homeOwnerName) {
-        return;
+function* loadStoriesAndSubscription(nodeName: string, homeOwnerName: string | null) {
+    const {total, lastCreatedAt = null, subscriberId = null} = yield* call(Node.getFeedGeneral, nodeName, "timeline");
+    yield* put(nodeCardStoriesSet(nodeName, total, lastCreatedAt));
+    if (nodeName !== homeOwnerName) {
+        yield* put(nodeCardSubscriptionSet(nodeName, subscriberId));
     }
-    const {subscriberId = null} = yield* call(Node.getFeedGeneral, nodeName, "timeline");
-    yield* put(nodeCardSubscriptionSet(nodeName, subscriberId));
 }
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {

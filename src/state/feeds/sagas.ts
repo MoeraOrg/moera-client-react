@@ -56,8 +56,8 @@ export default [
 function* feedGeneralLoadSaga(action: FeedGeneralLoadAction) {
     const {feedName} = action.payload;
     try {
-        const data = yield* call(Node.getFeedGeneral, "", feedName);
-        yield* put(feedGeneralSet(feedName, data));
+        const info = yield* call(Node.getFeedGeneral, "", feedName);
+        yield* put(feedGeneralSet(feedName, info));
     } catch (e) {
         yield* put(feedGeneralLoadFailed(feedName));
         yield* put(errorThrown(e));

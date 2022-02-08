@@ -7,6 +7,7 @@ import {
     NODE_CARD_LOAD_FAILED,
     NODE_CARD_LOADED,
     NODE_CARD_PEOPLE_SET,
+    NODE_CARD_STORIES_SET,
     NODE_CARD_SUBSCRIPTION_SET,
     NODE_CARDS_UNSET
 } from "state/nodecards/actions";
@@ -37,6 +38,8 @@ const emptyCard = {
     title: null,
     avatar: null,
     fundraisers: null,
+    storiesTotal: null,
+    lastStoryCreatedAt: null,
     subscribersTotal: null,
     subscriptionsTotal: null,
     subscribed: null,
@@ -87,6 +90,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                     istate.set([nodeName, "avatar"], avatar);
                 }
                 return istate.value();
+            }
+            return state;
+        }
+
+        case NODE_CARD_STORIES_SET: {
+            const {nodeName, storiesTotal, lastStoryCreatedAt} = action.payload;
+            if (state[nodeName]) {
+                return immutable.assign(state, [nodeName], {storiesTotal, lastStoryCreatedAt});
             }
             return state;
         }

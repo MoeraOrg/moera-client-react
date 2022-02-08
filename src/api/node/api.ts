@@ -987,6 +987,17 @@ const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
         "feedName": {
             type: "string"
         },
+        "total": {
+            type: "integer"
+        },
+        "firstCreatedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "lastCreatedAt": {
+            type: "integer",
+            nullable: true
+        },
         "subscriberId": {
             type: "string",
             nullable: true
@@ -1006,7 +1017,7 @@ const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
             additionalProperties: false
         }
     },
-    required: ["feedName"],
+    required: ["feedName", "total"],
     additionalProperties: false
 };
 
