@@ -102,7 +102,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    min-height: 1.65em;
+    height: 1.65em;
 }
 
 .comment .reactions-line .unsigned {

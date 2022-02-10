@@ -571,12 +571,14 @@ export type CommentReactionSetAction = ActionWithPayload<typeof COMMENT_REACTION
     id: string;
     postingId: string;
     reaction: ReactionAttributes | null;
+    seniorReaction: ReactionAttributes | null;
     totals: ReactionTotalsInfo;
 }>;
 export const commentReactionSet = (nodeName: string, id: string, postingId: string, reaction: ReactionAttributes | null,
+                                   seniorReaction: ReactionAttributes | null,
                                    totals: ReactionTotalsInfo): CommentReactionSetAction => ({
     type: COMMENT_REACTION_SET,
-    payload: {nodeName, id, postingId, reaction, totals}
+    payload: {nodeName, id, postingId, reaction, seniorReaction, totals}
 });
 
 export const COMMENT_REPLY = "COMMENT_REPLY";

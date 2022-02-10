@@ -1209,6 +1209,10 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
             ...ClientReactionInfoType,
             nullable: true
         },
+        "seniorReaction": {
+            ...ClientReactionInfoType,
+            nullable: true
+        },
         "reactions": {
             ...ReactionTotalsInfoType,
             nullable: true
@@ -1360,6 +1364,10 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
             nullable: true
         },
         "clientReaction": {
+            ...ClientReactionInfoType,
+            nullable: true
+        },
+        "seniorReaction": {
             ...ClientReactionInfoType,
             nullable: true
         },

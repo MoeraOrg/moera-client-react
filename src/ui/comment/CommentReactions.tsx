@@ -16,7 +16,7 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 const CommentReactions = ({postingId, comment, nodeName, openReactionsDialog}: Props) => (
-    <ReactionTotals reactions={comment.reactions ?? null}
+    <ReactionTotals reactions={comment.reactions ?? null} seniorReaction={comment.seniorReaction}
                     onClick={negative => openReactionsDialog(nodeName, postingId, comment.id, negative)}/>
 );
 

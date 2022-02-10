@@ -538,8 +538,10 @@ export function* postCommentReaction(nodeName: string | null, postingId: string,
 }
 
 export function* getCommentReaction(nodeName: string | null, postingId: string,
-                                    commentId: string): CallApiResult<ReactionInfo> {
-    const ownerName = yield* select(getHomeOwnerName);
+                                    commentId: string, ownerName?: string | null): CallApiResult<ReactionInfo> {
+    if (ownerName == null) {
+        ownerName = yield* select(getHomeOwnerName);
+    }
     return yield* callApi({
         nodeName, location: ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`, auth: true,
         schema: NodeApi.ReactionInfo

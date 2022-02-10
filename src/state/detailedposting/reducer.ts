@@ -760,7 +760,7 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
         }
 
         case COMMENT_REACTION_SET: {
-            const {nodeName, id, postingId, reaction, totals} = action.payload;
+            const {nodeName, id, postingId, reaction, seniorReaction, totals} = action.payload;
 
             if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -771,7 +771,8 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             }
             return immutable.assign(state, ["comments", "comments", index], {
                 reactions: totals,
-                clientReaction: reaction
+                clientReaction: reaction,
+                seniorReaction
             });
         }
 

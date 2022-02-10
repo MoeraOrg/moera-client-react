@@ -333,6 +333,7 @@ interface CommentInfoBase<B> {
     } | null;
     acceptedReactions?: AcceptedReactions | null;
     clientReaction?: ClientReactionInfo | null;
+    seniorReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;
 }
 

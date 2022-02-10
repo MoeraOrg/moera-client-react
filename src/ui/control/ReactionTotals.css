@@ -32,3 +32,27 @@
     text-decoration: underline;
     cursor: pointer;
 }
+
+.reactions .senior-positive, .reactions .senior-negative {
+    border-radius: 1em;
+    margin-right: .7em;
+    font-size: 1.3em;
+    box-shadow: 2px 2px 3px rgba(0, 0, 0, .12);
+    padding: .3em .5em;
+}
+
+.reactions .senior-positive:hover, .reactions .senior-negative:hover {
+    cursor: pointer;
+}
+
+.reactions .senior-positive {
+    color: var(--correct);
+    background-color: var(--reactions-positive);
+    border: solid 1px var(--reactions-positive-border);
+}
+
+.reactions .senior-negative {
+    color: var(--incorrect);
+    background-color: var(--reactions-negative);
+    border: solid 1px var(--reactions-negative-border);
+}

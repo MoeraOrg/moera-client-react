@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ReactionTotalInfo, ReactionTotalsInfo } from "api/node/api-types";
+import { ClientReactionInfo, ReactionTotalInfo, ReactionTotalsInfo } from "api/node/api-types";
 import Twemoji from "ui/twemoji/Twemoji";
 import "./ReactionTotals.css";
 
@@ -34,24 +34,49 @@ const Emojis = ({className, emojis, total, onClick}: EmojisProps) => (
         null
 );
 
+function filterOutSeniorReaction(reactionTotals: ReactionTotalInfo[],
+                                 seniorReaction: ClientReactionInfo): ReactionTotalInfo[] {
+    return reactionTotals.map(
+        rt => rt.emoji !== seniorReaction.emoji || rt.total == null
+            ? rt
+            : {emoji: rt.emoji, total: rt.total - 1, share: rt.share}
+    );
+}
+
 interface ReactionTotalsProps {
     reactions: ReactionTotalsInfo | null;
+    seniorReaction?: ClientReactionInfo | null;
     onClick: (negative: boolean) => void;
 }
 
-export function ReactionTotals({reactions, onClick}: ReactionTotalsProps) {
-    const positiveTotal = reactions != null ? sum(reactions.positive) : 0;
-    const negativeTotal = reactions != null ? sum(reactions.negative) : 0;
-    const positiveTopEmojis = reactions != null ? topEmojis(reactions.positive) : [];
-    const negativeTopEmojis = reactions != null ? topEmojis(reactions.negative) : [];
+export function ReactionTotals({reactions, seniorReaction, onClick}: ReactionTotalsProps) {
+    let positive = reactions?.positive ?? [];
+    let negative = reactions?.negative ?? [];
+    if (seniorReaction != null) {
+        if (!seniorReaction.negative) {
+            positive = filterOutSeniorReaction(positive, seniorReaction);
+        } else {
+            negative = filterOutSeniorReaction(negative, seniorReaction);
+        }
+    }
+    const positiveTotal = sum(positive);
+    const negativeTotal = sum(negative);
+    const positiveTopEmojis = topEmojis(positive);
+    const negativeTopEmojis = topEmojis(negative);
     if (positiveTotal === 0 && negativeTotal === 0
-        && positiveTopEmojis.length === 0 && negativeTopEmojis.length === 0) {
+        && positiveTopEmojis.length === 0 && negativeTopEmojis.length === 0 && seniorReaction == null) {
 
         return <div className="reactions"/>;
     }
 
     return (
         <div className="reactions">
+            {seniorReaction &&
+                <span className={!seniorReaction.negative ? "senior-positive" : "senior-negative"}
+                      onClick={() => onClick(seniorReaction?.negative ?? false)}>
+                    <Twemoji code={seniorReaction.emoji}/>
+                </span>
+            }
             <Emojis className="positive" emojis={positiveTopEmojis} total={positiveTotal}
                     onClick={() => onClick(false)}/>
             <Emojis className="negative" emojis={negativeTopEmojis} total={negativeTotal}

@@ -2,7 +2,15 @@ import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
 
 import { Node, NodeApiError } from "api";
-import { CommentInfo, DraftInfo, MediaAttachment, PrivateMediaFileInfo, RepliedTo } from "api/node/api-types";
+import {
+    CommentInfo,
+    DraftInfo,
+    MediaAttachment,
+    PrivateMediaFileInfo,
+    ReactionAttributes,
+    ReactionInfo,
+    RepliedTo
+} from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
     closeCommentDialog,
@@ -98,6 +106,7 @@ import { introduced } from "state/init-selectors";
 import { Browser } from "ui/browser";
 import { getWindowSelectionHtml, insertText, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
+import { WithContext } from "state/action-types";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
@@ -528,16 +537,24 @@ function* commentVerifySaga(action: CommentVerifyAction) {
     }
 }
 
-function* commentReactSaga(action: CommentReactAction) {
+function* commentReactSaga(action: WithContext<CommentReactAction>) {
     const {id, negative, emoji} = action.payload;
 
-    const {receiverName, receiverPostingId} = yield* select(getCommentsState);
-    if (receiverName == null || receiverPostingId == null) {
+    const {seniorName, comments: {receiverName, receiverPostingId}, seniorReaction} = yield* select(state => ({
+        seniorName: getDetailedPosting(state)?.ownerName,
+        comments: getCommentsState(state),
+        seniorReaction: getComment(state, id)?.seniorReaction
+    }));
+    if (receiverName == null || receiverPostingId == null || seniorName == null) {
         return;
     }
     try {
         const data = yield* call(Node.postCommentReaction, receiverName, receiverPostingId, id, negative, emoji);
-        yield* put(commentReactionSet(receiverName, id, receiverPostingId, {negative, emoji}, data.totals));
+        const seniorAttributes = seniorName !== action.context.homeOwnerName
+            ? extractAttributes(seniorReaction)
+            : {negative, emoji};
+        yield* put(commentReactionSet(receiverName, id, receiverPostingId, {negative, emoji},
+            seniorAttributes, data.totals));
         yield* call(Node.postRemoteCommentReaction, ":", receiverName, receiverPostingId, id, negative, emoji);
     } catch (e) {
         yield* put(errorThrown(e));
@@ -547,34 +564,53 @@ function* commentReactSaga(action: CommentReactAction) {
 function* commentReactionLoadSaga(action: CommentReactionLoadAction) {
     const {id} = action.payload;
 
-    const {receiverName, receiverPostingId} = yield* select(getCommentsState);
-    if (receiverName == null || receiverPostingId == null) {
+    const {seniorName, comments: {receiverName, receiverPostingId}} = yield* select(state => ({
+        seniorName: getDetailedPosting(state)?.ownerName,
+        comments: getCommentsState(state)
+    }));
+    if (receiverName == null || receiverPostingId == null || seniorName == null) {
         return;
     }
     try {
-        const {negative, emoji} = yield* call(Node.getCommentReaction, receiverName, receiverPostingId, id);
-        const reaction = negative != null && emoji != null ? {negative, emoji} : null;
+        const reaction = extractAttributes(yield* call(Node.getCommentReaction, receiverName, receiverPostingId, id));
+        const seniorReaction = extractAttributes(
+            yield* call(Node.getCommentReaction, receiverName, receiverPostingId, id, seniorName));
         const totals = yield* call(Node.getCommentReactionTotals, receiverName, receiverPostingId, id);
-        yield* put(commentReactionSet(receiverName, id, receiverPostingId, reaction, totals));
+        yield* put(commentReactionSet(receiverName, id, receiverPostingId, reaction, seniorReaction, totals));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* commentReactionDeleteSaga(action: CommentReactionDeleteAction) {
+function* commentReactionDeleteSaga(action: WithContext<CommentReactionDeleteAction>) {
     const {id} = action.payload;
 
-    const {receiverName, receiverPostingId} = yield* select(getCommentsState);
+    const {seniorName, comments: {receiverName, receiverPostingId}, seniorReaction} = yield* select(state => ({
+        seniorName: getDetailedPosting(state)?.ownerName,
+        comments: getCommentsState(state),
+        seniorReaction: getComment(state, id)?.seniorReaction
+    }));
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
-        const data = yield* call(Node.deleteCommentReaction, receiverName, receiverPostingId, id);
-        yield* put(commentReactionSet(receiverName, id, receiverPostingId, null, data));
+        const totals = yield* call(Node.deleteCommentReaction, receiverName, receiverPostingId, id);
+        const seniorAttributes = seniorName !== action.context.homeOwnerName
+            ? extractAttributes(seniorReaction)
+            : null;
+        yield* put(commentReactionSet(receiverName, id, receiverPostingId, null, seniorAttributes, totals));
         yield* call(Node.deleteRemoteCommentReaction, ":", receiverName, receiverPostingId, id);
     } catch (e) {
         yield* put(errorThrown(e));
     }
+}
+
+function extractAttributes(reactionInfo: ReactionInfo | null | undefined): ReactionAttributes | null {
+    if (reactionInfo == null) {
+        return null;
+    }
+    const {negative, emoji} = reactionInfo;
+    return negative != null && emoji != null ? {negative, emoji} : null;
 }
 
 function* commentReplySaga(action: CommentReplyAction) {
