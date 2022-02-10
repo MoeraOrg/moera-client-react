@@ -46,17 +46,18 @@ type Props = ConnectedProps<typeof connector>;
 
 function DetailedPostingPage({loading, deleting, posting}: Props) {
     const {story = null, href, feedTitle} = getFeedAndStory(posting);
+    const postingReady = posting != null && posting.parentMediaId == null;
     return (
         <>
             <DetailedPostingPageHeader story={story} href={href} feedTitle={feedTitle}/>
             <Page>
-                {(posting && story) && <DetailedPosting posting={posting} story={story} deleting={deleting}/>}
-                {!posting && loading &&
+                {(postingReady && story) && <DetailedPosting posting={posting} story={story} deleting={deleting}/>}
+                {!postingReady && loading &&
                     <div className="posting">
                         <Loading active={loading}/>
                     </div>
                 }
-                {!posting && !loading &&
+                {!postingReady && !loading &&
                     <div className="posting-not-found">
                         <FontAwesomeIcon className="icon" icon="frown" size="3x"/>
                         <div className="message">Posting not found or cannot be displayed.</div>
