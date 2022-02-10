@@ -13,10 +13,10 @@ import {
 import {
     getCommentsState,
     getDetailedPosting,
-    getDetailedPostingId,
     isCommentComposerFocused,
     isCommentsFocused,
-    isDetailedPostingCached, isDetailedPostingGalleryFocused
+    isDetailedPostingCached,
+    isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
@@ -189,13 +189,8 @@ class Comments extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            postingId, total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture,
-            focusedCommentId
+            total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture, focusedCommentId
         } = this.props;
-
-        if (postingId == null) {
-            return null;
-        }
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
@@ -212,7 +207,7 @@ class Comments extends React.PureComponent<Props, State> {
                                                       onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                             }
                             {comments.map((comment, index) =>
-                                <Comment key={comment.moment} postingId={postingId} comment={comment}
+                                <Comment key={comment.moment} comment={comment}
                                          previousId={index > 0 ? comments[index - 1].id : null}
                                          focused={comment.id === focusedCommentId}/>
                             )}
@@ -234,7 +229,6 @@ class Comments extends React.PureComponent<Props, State> {
 const connector = connect(
     (state: ClientState) => ({
         visible: isAtDetailedPostingPage(state),
-        postingId: getDetailedPostingId(state),
         galleryFocused: isDetailedPostingGalleryFocused(state),
         total: isDetailedPostingCached(state) ? (getDetailedPosting(state)!.totalComments ?? 0) : 0,
         loadingFuture: getCommentsState(state).loadingFuture,

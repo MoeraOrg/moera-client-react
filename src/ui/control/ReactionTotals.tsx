@@ -46,13 +46,15 @@ function filterOutSeniorReaction(reactionTotals: ReactionTotalInfo[],
 interface ReactionTotalsProps {
     reactions: ReactionTotalsInfo | null;
     seniorReaction?: ClientReactionInfo | null;
+    seniorName?: string;
+    seniorFullName?: string;
     onClick: (negative: boolean) => void;
 }
 
-export function ReactionTotals({reactions, seniorReaction, onClick}: ReactionTotalsProps) {
+export function ReactionTotals({reactions, seniorReaction, seniorName, seniorFullName, onClick}: ReactionTotalsProps) {
     let positive = reactions?.positive ?? [];
     let negative = reactions?.negative ?? [];
-    if (seniorReaction != null) {
+    if (seniorReaction != null && seniorName != null) {
         if (!seniorReaction.negative) {
             positive = filterOutSeniorReaction(positive, seniorReaction);
         } else {
@@ -73,6 +75,7 @@ export function ReactionTotals({reactions, seniorReaction, onClick}: ReactionTot
         <div className="reactions">
             {seniorReaction &&
                 <span className={!seniorReaction.negative ? "senior-positive" : "senior-negative"}
+                      title={`Post author (${seniorFullName || seniorName})`}
                       onClick={() => onClick(seniorReaction?.negative ?? false)}>
                     <Twemoji code={seniorReaction.emoji}/>
                 </span>

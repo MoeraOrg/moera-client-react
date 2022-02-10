@@ -7,7 +7,12 @@ import { isConnectedToHome } from "state/home/selectors";
 import { ClientState } from "state/state";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { isPermitted } from "state/node/selectors";
-import { getCommentsReceiverPostingId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
+import {
+    getCommentsReceiverPostingId,
+    getCommentsState,
+    getDetailedPosting,
+    getDetailedPostingId
+} from "state/detailedposting/selectors";
 import CommentMenu from "ui/comment/CommentMenu";
 import CommentAvatar from "ui/comment/CommentAvatar";
 import CommentOwner from "ui/comment/CommentOwner";
@@ -21,18 +26,17 @@ import EntryGallery from "ui/entry/EntryGallery";
 import "./Comment.css";
 
 type Props = {
-    postingId: string;
     comment: ExtCommentInfo;
     previousId: string | null;
     focused: boolean;
 } & ConnectedProps<typeof connector>;
 
 const Comment = ({
-     postingId, comment, previousId, focused, connectedToHome, postingOwnerName, postingReceiverName,
+     comment, previousId, focused, connectedToHome, postingId, postingOwnerName, postingReceiverName,
      postingReceiverPostingId, isPermitted
 }: Props) => {
     const realOwnerName = postingReceiverName ?? postingOwnerName;
-    if (realOwnerName == null) {
+    if (postingId == null || realOwnerName == null) {
         return null;
     }
     const realPostingId = postingReceiverPostingId ?? postingId;
@@ -76,6 +80,7 @@ const Comment = ({
 const connector = connect(
     (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
+        postingId: getDetailedPostingId(state),
         postingOwnerName: getDetailedPosting(state)?.ownerName,
         postingReceiverName: getCommentsState(state).receiverName,
         postingReceiverPostingId: getCommentsReceiverPostingId(state),

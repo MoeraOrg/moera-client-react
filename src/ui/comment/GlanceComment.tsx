@@ -8,7 +8,6 @@ import { Loading } from "ui/control";
 import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
-import CommentReactions from "ui/comment/CommentReactions";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
 
@@ -31,7 +30,7 @@ const GlanceComment = ({loading, loaded, postingId, receiverName, comment}: Prop
                               media={comment.media ?? null}/>
                 <div className="reactions-line">
                     <div className="comment-buttons"/>
-                    <CommentReactions postingId={postingId} comment={comment}/>
+                    <div className="reactions"/>
                 </div>
             </div>
         </div>
