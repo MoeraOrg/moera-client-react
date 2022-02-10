@@ -2,7 +2,7 @@ import React, { MouseEventHandler, TouchEventHandler } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import * as URI from 'uri-js';
 
-import { goToLocation, initFromLocation } from "state/navigation/actions";
+import { goToLocation, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
 import { getOwnerName } from "state/owner/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
@@ -51,16 +51,19 @@ class Jump extends React.PureComponent<Props> {
         e.preventDefault();
     }
 
-    onFar = (url: string, nodeLocation: string | null, location: string) => (e: React.MouseEvent) => {
-        const {standalone, onFar, initFromLocation} = this.props;
+    onFar = (url: string, nodeLocation: string | null, nodeOwnerName: string | null, location: string) =>
+            (e: React.MouseEvent) => {
+        const {standalone, onFar, initFromNodeLocation, initFromLocation} = this.props;
 
         if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
             return;
         }
 
         const performJump = () => {
-            if (!standalone || nodeLocation == null) {
+            if (!standalone || nodeOwnerName == null) {
                 window.location.href = url;
+            } else if (nodeLocation == null) {
+                initFromNodeLocation(nodeOwnerName, location, url);
             } else {
                 const {scheme, host, port} = URI.parse(nodeLocation);
                 if (scheme != null && host != null) {
@@ -70,6 +73,7 @@ class Jump extends React.PureComponent<Props> {
                 }
             }
         }
+
         if (onFar != null) {
             onFar(url, performJump);
         } else {
@@ -105,7 +109,7 @@ class Jump extends React.PureComponent<Props> {
             const url = redirectUrl(standalone, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
             return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                       data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                      onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, href)}
+                      onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, nodeOwnerName, href)}
                       suppressHydrationWarning>{children}</a>;
         }
     }
@@ -121,7 +125,7 @@ const connector = connect(
         homeRootPage: getHomeRootPage(state),
         details: getNamingNameDetails(state, ownProps.nodeName)
     }),
-    { initFromLocation, goToLocation }
+    { initFromNodeLocation, initFromLocation, goToLocation }
 );
 
 export default connector(Jump);

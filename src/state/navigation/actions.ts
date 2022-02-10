@@ -21,6 +21,18 @@ export const initStorage = (standalone: boolean): InitStorageAction => ({
     payload: {standalone}
 });
 
+export const INIT_FROM_NODE_LOCATION = "INIT_FROM_NODE_LOCATION";
+export type InitFromNodeLocationAction = ActionWithPayload<typeof INIT_FROM_NODE_LOCATION, {
+    nodeName: string;
+    location: string;
+    fallbackUrl: string;
+}>;
+export const initFromNodeLocation = (nodeName: string, location: string,
+                                     fallbackUrl: string): InitFromNodeLocationAction => ({
+    type: INIT_FROM_NODE_LOCATION,
+    payload: {nodeName, location, fallbackUrl}
+});
+
 export const INIT_FROM_LOCATION = "INIT_FROM_LOCATION";
 export type InitFromLocationAction = ActionWithPayload<typeof INIT_FROM_LOCATION, {
     rootLocation: string;
@@ -196,6 +208,7 @@ export const dialogClosed = (): DialogClosedAction => ({
 
 export type NavigationAnyAction =
     InitStorageAction
+    | InitFromNodeLocationAction
     | InitFromLocationAction
     | WakeUpAction
     | GoToPageAnyAction

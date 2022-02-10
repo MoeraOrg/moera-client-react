@@ -12,9 +12,11 @@ import {
     GoToPageWithDefaultSubpageAction,
     goToSettings,
     INIT_FROM_LOCATION,
+    INIT_FROM_NODE_LOCATION,
     INIT_STORAGE,
     initFromLocation,
     InitFromLocationAction,
+    InitFromNodeLocationAction,
     locationLock,
     locationSet,
     locationUnlock,
@@ -29,9 +31,11 @@ import { locationBuild, LocationInfo, locationTransform } from "location";
 import { rootUrl } from "util/url";
 import { getHomeRootPage } from "state/home/selectors";
 import { executor } from "state/executor";
+import { getNodeUri } from "state/naming/sagas";
 
 export default [
     executor(INIT_STORAGE, "", initStorageSaga),
+    executor(INIT_FROM_NODE_LOCATION, "", initFromNodeLocationSaga),
     executor(INIT_FROM_LOCATION, "", initFromLocationSaga),
     executor(NEW_LOCATION, null, newLocationSaga),
     executor(UPDATE_LOCATION, null, updateLocationSaga),
@@ -74,6 +78,24 @@ function initStorageSaga() {
     } catch (e) {
         // The request must fail
     }
+}
+
+function* initFromNodeLocationSaga(action: InitFromNodeLocationAction) {
+    const {nodeName, location, fallbackUrl} = action.payload;
+
+    const nodeLocation = yield* call(getNodeUri, nodeName);
+    if (nodeLocation == null) {
+        window.location.href = fallbackUrl;
+        return;
+    }
+    const {scheme, host, port} = URI.parse(nodeLocation);
+    if (scheme == null || host == null) {
+        window.location.href = fallbackUrl;
+        return;
+    }
+    const rootLocation = rootUrl(scheme, host, port);
+    const {path = null, query = null, fragment = null} = URI.parse(location);
+    yield* put(initFromLocation(rootLocation, path, query, fragment));
 }
 
 function* initFromLocationSaga(action: InitFromLocationAction) {
