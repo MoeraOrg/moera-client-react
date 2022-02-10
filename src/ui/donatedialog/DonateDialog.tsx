@@ -11,6 +11,7 @@ import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { ModalDialog } from "ui/control";
 import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
+import { getFundraiserAutoHref } from "ui/donatedialog/fundraiser-util";
 import { getSchemeOrDomain, hasSchemeOrDomain } from "util/url";
 import "./DonateDialog.css";
 
@@ -73,7 +74,7 @@ function DonateDialog({show, name, fullName, fundraisers, autoPreferred, preferr
                     <div className="info">
                         {fundraiser.qrCode ?
                             <div className="info-qr">
-                                <a href={fundraiser.href ?? undefined} target="_blank" rel="noreferrer">
+                                <a href={getFundraiserAutoHref(fundraiser)} target="_blank" rel="noreferrer">
                                     <QRCode value={fundraiser.qrCode} size={256} level={"Q"}/>
                                 </a>
                                 {fundraiser.text && <span className="description"><br/>{fundraiser.text}</span>}
