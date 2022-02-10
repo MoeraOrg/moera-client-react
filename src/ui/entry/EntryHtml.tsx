@@ -12,7 +12,7 @@ import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { goToLocation, initFromLocation } from "state/navigation/actions";
+import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
 import { isNumericString } from "util/misc";
@@ -31,7 +31,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function EntryHtml({className, postingId, commentId, html, nodeName, media, onClick, standalone, fontMagnitude,
-                    initFromLocation, goToLocation}: Props) {
+                    initFromLocation, goToLocation, newLocation}: Props) {
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
@@ -138,6 +138,7 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
                 const {rootLocation, path = null, query = null, hash = null} =
                     Browser.getLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
                 if (rootLocation != null && rootLocation !== Browser.getRootLocation()) {
+                    newLocation();
                     initFromLocation(rootLocation, path, query, hash);
                 } else {
                     goToLocation(path, query, hash);
@@ -187,7 +188,7 @@ const connector = connect(
         standalone: isStandaloneMode(state),
         fontMagnitude: getSetting(state, "posting.body.font-magnitude") as number
     }),
-    { initFromLocation, goToLocation }
+    { initFromLocation, goToLocation, newLocation }
 );
 
 export default connector(EntryHtml);
