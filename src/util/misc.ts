@@ -4,6 +4,8 @@ import cloneDeep from 'lodash.clonedeep';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 
+const DIGITS = /^[0-9]+$/;
+
 export function mentionName(name: string | null | undefined, fullName?: string | null): string {
     if (!name) {
         return "";
@@ -46,6 +48,10 @@ export function parseBool(val: boolean | string): boolean {
     }
     const ival = val.toLowerCase();
     return ival === "yes" || ival === "true" || ival === "1";
+}
+
+export function isNumericString(value: string | null): boolean {
+    return value != null && value.match(DIGITS) != null;
 }
 
 export function isNumber(value: unknown): value is number {

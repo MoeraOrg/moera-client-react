@@ -15,6 +15,7 @@ import { isStandaloneMode } from "state/navigation/selectors";
 import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
+import { isNumericString } from "util/misc";
 
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
@@ -89,10 +90,10 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
                 const width = node.getAttribute("width");
                 const height = node.getAttribute("height");
                 let style = node.getAttribute("style") ?? "";
-                if (width != null) {
+                if (isNumericString(width)) {
                     style += `; --width: ${width}px`;
                 }
-                if (height != null) {
+                if (isNumericString(height)) {
                     style += `; --height: ${height}px`;
                 }
                 node.setAttribute("style", style);
