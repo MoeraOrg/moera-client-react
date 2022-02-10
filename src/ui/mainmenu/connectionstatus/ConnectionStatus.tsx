@@ -34,7 +34,7 @@ function ConnectionButtons({atNode, connecting,  connected, showNavigator, openC
             return null;
         }
         return (
-            <span className="d-none d-lg-inline">
+            <span className="d-none d-lg-inline me-lg-2">
                 Not connected to home
                 <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
                 <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
