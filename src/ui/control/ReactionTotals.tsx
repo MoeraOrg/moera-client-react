@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { NodeName } from "api";
 import { ClientReactionInfo, ReactionTotalInfo, ReactionTotalsInfo } from "api/node/api-types";
 import Twemoji from "ui/twemoji/Twemoji";
 import "./ReactionTotals.css";
@@ -75,7 +76,7 @@ export function ReactionTotals({reactions, seniorReaction, seniorName, seniorFul
         <div className="reactions">
             {seniorReaction &&
                 <span className={!seniorReaction.negative ? "senior-positive" : "senior-negative"}
-                      title={`Post author (${seniorFullName || seniorName})`}
+                      title={`Post author (${seniorFullName || NodeName.shorten(seniorName ?? null)})`}
                       onClick={() => onClick(seniorReaction?.negative ?? false)}>
                     <Twemoji code={seniorReaction.emoji}/>
                 </span>

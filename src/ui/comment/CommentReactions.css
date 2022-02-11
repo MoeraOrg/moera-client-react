@@ -8,6 +8,7 @@
 
 .comment .reactions .positive {
     margin-right: 0;
+    margin-left: .7em;
     box-shadow: 2px 2px 3px rgba(0, 0, 0, .12);
     border: solid 1px var(--reactions-positive-border);
     padding: .3em .9em;
