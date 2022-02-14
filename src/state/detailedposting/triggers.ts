@@ -32,6 +32,7 @@ import {
     commentsUpdate,
     DETAILED_POSTING_LOADED,
     detailedPostingLoad,
+    detailedPostingLoadAttached,
     DetailedPostingLoadedAction,
     focusComment,
     FOCUSED_COMMENT_LOAD_FAILED,
@@ -51,6 +52,7 @@ import {
     isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
     isDetailedPostingDefined,
+    isDetailedPostingGalleryExpanded,
     isDetailedPostingId,
     isDetailedPostingToBeLoaded,
     isFocusedCommentInList,
@@ -87,6 +89,11 @@ export default [
         (state, signal: PostingSetAction) =>
             isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.posting.id),
         updateLocation
+    ),
+    trigger(
+        GO_TO_PAGE,
+        conj(isAtDetailedPostingPage, isDetailedPostingGalleryExpanded),
+        detailedPostingLoadAttached
     ),
     trigger(
         [GO_TO_PAGE, POSTING_SET],
