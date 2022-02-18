@@ -601,6 +601,7 @@ export interface PrivateMediaFileInfo {
     id: string;
     hash: string;
     path: string;
+    mimeType: string;
     width: number;
     height: number;
     size: number;

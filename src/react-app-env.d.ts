@@ -11,6 +11,7 @@ interface AndroidJsInterface {
     share(url: string, title: string): void;
     getSharedText(): string;
     getSharedTextType(): SharedTextType;
+    saveImage(url: string, mimeType: string): void;
     back(): void;
     log(text: string): void;
 }

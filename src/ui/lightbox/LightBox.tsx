@@ -27,6 +27,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
 
     const media = comment != null ? comment?.media : posting?.media;
     let mainSrc = "";
+    let mainMimeType = "";
     let prevSrc: string | undefined = undefined;
     let prevMediaId: string | undefined = undefined;
     let nextSrc: string | undefined = undefined;
@@ -39,6 +40,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
             index = 0;
         }
         mainSrc = rootPage + "/media/" + media[index].media?.path;
+        mainMimeType = media[index].media?.mimeType ?? "image/jpeg";
         const prevIndex = index > 0
             ? index - 1
             : (index === 0 && loop ? media.length - 1 : null);
@@ -56,6 +58,13 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
         title = `${index + 1} / ${media.length}`;
     }
 
+    const onDownload = window.Android
+        ? (e: React.MouseEvent) => {
+            window.Android?.saveImage(mainSrc, mainMimeType);
+            e.preventDefault();
+        }
+        : undefined;
+
     return (
         <Lightbox mainSrc={mainSrc} prevSrc={prevSrc} nextSrc={nextSrc} imageTitle={title}
                   onCloseRequest={() => closeLightBox()}
@@ -64,7 +73,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
                       <LightBoxShareButton mediaUrl={mainSrc}/>,
-                      <a className="lightbox-button lightbox-download" href={mainSrc} download>
+                      <a className="lightbox-button lightbox-download" href={mainSrc} download onClick={onDownload}>
                           <FontAwesomeIcon icon="file-download"/>
                       </a>,
                       <LightBoxReactions/>

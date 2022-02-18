@@ -539,6 +539,9 @@ const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
         "path": {
             type: "string"
         },
+        "mimeType": {
+            type: "string"
+        },
         "width": {
             type: "integer"
         },
@@ -558,7 +561,7 @@ const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
             nullable: true
         }
     },
-    required: ["id", "hash", "path", "width", "height", "size"],
+    required: ["id", "hash", "path", "mimeType", "width", "height", "size"],
     additionalProperties: false
 };
 
