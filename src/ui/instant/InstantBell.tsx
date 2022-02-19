@@ -8,7 +8,7 @@ import "./InstantBell.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const Bell = ({count}: Props) => (
+const InstantBell = ({count}: Props) => (
     <span className="connection-button bell-button" title="Notifications">
         <FontAwesomeIcon icon="bell"/>
         {count > 0 && <div className="count">{count}</div>}
@@ -21,4 +21,4 @@ const connector = connect(
     })
 );
 
-export default connector(Bell);
+export default connector(InstantBell);
