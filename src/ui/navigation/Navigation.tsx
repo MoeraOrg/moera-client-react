@@ -42,6 +42,9 @@ class Navigation extends React.PureComponent<Props> {
             }
             if (window.Android) {
                 window.Android.locationChanged(url, location);
+                if (!!window.Android.setSwipeRefreshEnabled) {
+                    window.Android.setSwipeRefreshEnabled(this.isSwipeRefreshEnabled());
+                }
             }
             this.#rootPage = rootPage;
             this.#location = location;
@@ -54,6 +57,18 @@ class Navigation extends React.PureComponent<Props> {
                 document.title = counter + "Moera";
             }
         }
+    }
+
+    isSwipeRefreshEnabled() {
+        const {location, messageBoxShow, confirmBoxShow, closeDialogAction, lightBoxShow} = this.props;
+
+        return !location.startsWith("/profile")
+            && !location.startsWith("/settings")
+            && !messageBoxShow
+            && !confirmBoxShow
+            && closeDialogAction == null
+            && !lightBoxShow
+            && !window.closeLightDialog;
     }
 
     popState = (event: PopStateEvent) => {
@@ -152,7 +167,8 @@ const connector = connect(
         messageBoxShow: state.messageBox.show,
         messageBoxOnClose: state.messageBox.onClose,
         confirmBoxShow: state.confirmBox.show,
-        confirmBoxOnNo: state.confirmBox.onNo
+        confirmBoxOnNo: state.confirmBox.onNo,
+        lightBoxShow: state.lightBox.show
     }),
     { initFromLocation, goToLocation, forwardAction, dialogClosed, closeMessageBox, closeConfirmBox }
 );

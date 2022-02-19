@@ -13,6 +13,8 @@ interface AndroidJsInterface {
     getSharedTextType(): SharedTextType;
     saveImage(url: string, mimeType: string): void;
     back(): void;
+    toast(text: string): void;
+    setSwipeRefreshEnabled(enabled: boolean): void;
     log(text: string): void;
 }
 

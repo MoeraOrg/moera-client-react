@@ -19,6 +19,14 @@ class Instants extends React.PureComponent<Props> {
 
     #pastIntersecting = true;
 
+    componentDidMount() {
+        window.closeLightDialog = this.props.hide;
+    }
+
+    componentWillUnmount() {
+        window.closeLightDialog = null;
+    }
+
     onSentinelPast = (intersecting: boolean) => {
         this.#pastIntersecting = intersecting;
         if (this.#pastIntersecting) {

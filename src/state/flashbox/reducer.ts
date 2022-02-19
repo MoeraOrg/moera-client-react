@@ -13,7 +13,7 @@ export default (state: FlashBoxState = initialState, action: ClientAction): Flas
         case FLASH_BOX:
             return {
                 ...state,
-                show: true,
+                show: !window.Android || !window.Android.toast,
                 dismissing: false,
                 message: action.payload.message
             };
