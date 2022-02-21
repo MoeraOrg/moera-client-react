@@ -69,9 +69,8 @@ const composePageLogic = {
             : props.posting != null
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "";
-        const media = props.draft != null
-            ? (props.draft.media != null ? props.draft.media.map(mf => mf.media ?? null) : [])
-            : props.posting?.media != null ? props.posting?.media.map(mf => mf.media ?? null) : [];
+        const attachments = props.draft != null ? props.draft.media : props.posting?.media;
+        const media = attachments != null ? attachments.map(ma => ma.media ?? null).filter(mf => mf != null) : [];
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)

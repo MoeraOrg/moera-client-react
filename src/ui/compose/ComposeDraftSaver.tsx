@@ -22,7 +22,7 @@ const getPublishAt = (publications: StoryAttributes[] | null | undefined): numbe
 const toDraftText = (ownerName: string, postingId: string | null, postingText: PostingText,
                      media: Map<string, RichTextMedia>): DraftText => ({
     ...cloneDeep(postingText),
-    media: postingText.media?.map(id => ({
+    media: postingText.media?.filter(id => id != null).map(id => ({
         id,
         hash: media.get(id)?.hash,
         digest: media.get(id)?.digest

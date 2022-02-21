@@ -1,11 +1,10 @@
 import { FormikBag } from 'formik';
+import deepEqual from 'react-fast-compare';
 
 import { AvatarImage, CommentInfo, CommentSourceText, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
-import { RichTextMedia } from "state/richtexteditor/actions";
-import deepEqual from "react-fast-compare";
 
 interface MapToValuesProps {
     comment: CommentInfo | null;
@@ -43,13 +42,12 @@ const commentComposeLogic = {
         const body = props.draft != null
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
-        const media: (RichTextMedia | null)[] = props.draft != null
-            ? (props.draft.media != null
-                ? props.draft.media.map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} : null)
-                : [])
-            : (props.comment != null && props.comment.media != null
-                ? props.comment.media.map(mf => mf.media ?? null)
-                : []);
+        const attachments = props.draft != null ? props.draft.media : props.comment?.media;
+        const media = attachments != null
+            ? attachments
+                .map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} : null)
+                .filter(mf => mf != null)
+            : [];
 
         return {
             avatar,
