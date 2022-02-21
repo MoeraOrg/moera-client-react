@@ -103,7 +103,7 @@ function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, 
         event.preventDefault();
     }
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(event.target.value);
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setQuery(trimQuery(event.target.value));
 
     const handleClick = (index: number) => () => handleSubmit(true, index);
 
@@ -127,6 +127,13 @@ function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, 
             </div>
         </>
     );
+}
+
+function trimQuery(text: string | null | undefined): string | null {
+    if (text == null) {
+        return null;
+    }
+    return text.startsWith("@") ? text.substring(1) : text;
 }
 
 const getNames = createSelector(
