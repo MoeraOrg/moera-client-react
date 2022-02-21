@@ -41,14 +41,14 @@ export function getImageDimensions(standardSize: RichTextImageStandardSize,
     }
 }
 
-type RichTextImageAlign = "text-start" | "text-center" | "text-end" | "float-md-start" | "float-md-end";
+type RichTextImageAlign = "text-start" | "text-center" | "text-end" | "float-text-start" | "float-text-end";
 
 const ALIGNMENTS: Choice<RichTextImageAlign>[] = [
     {title: "Left", value: "text-start"},
     {title: "Center", value: "text-center"},
     {title: "Right", value: "text-end"},
-    {title: "Left, wrapping text", value: "float-md-start"},
-    {title: "Right, wrapping text", value: "float-md-end"}
+    {title: "Left, wrapping text", value: "float-text-start"},
+    {title: "Right, wrapping text", value: "float-text-end"}
 ];
 
 export interface RichTextImageValues {

@@ -1,3 +1,9 @@
+.entry .content::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
 .entry BLOCKQUOTE {
     border-left: 3px solid var(--bs-cyan);
     padding: 0.2rem 0.2rem 0.2rem 2.7rem;
@@ -21,4 +27,16 @@
 
 .entry.single-emoji .content .emoji {
     font-size: 3em;
+}
+
+@media only screen and (min-width: 576px) {
+    .float-text-start {
+        float: left;
+        margin-inline-end: .5rem;
+    }
+
+    .float-text-end {
+        float: right;
+        margin-inline-start: .5rem;
+    }
 }
