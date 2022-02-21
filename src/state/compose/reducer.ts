@@ -261,7 +261,8 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             return {
                 ...state,
                 ...emptyPosting,
-                draftId: action.payload.id
+                draftId: action.payload.id,
+                formId: action.payload.id == null ? state.formId + 1 : state.formId
             };
 
         case COMPOSE_DRAFT_LIST_ITEM_SET:
