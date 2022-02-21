@@ -97,6 +97,8 @@ import contactsTriggers from "state/contacts/triggers";
 import sourceDialogTriggers from "state/sourcedialog/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
+import messageBoxTriggers from "state/messagebox/triggers";
+import confirmBoxTriggers from "state/confirmbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
 import quickTipsTriggers from "state/quicktips/triggers";
 import refreshTriggers from "state/refresh/triggers";
@@ -171,6 +173,8 @@ const triggers = collectTriggers(
     sourceDialogTriggers,
     imageEditDialogTriggers,
     lightBoxTriggers,
+    messageBoxTriggers,
+    confirmBoxTriggers,
     signUpDialogTriggers,
     quickTipsTriggers,
     refreshTriggers

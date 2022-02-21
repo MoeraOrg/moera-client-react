@@ -5,6 +5,7 @@ import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import { confirmBox } from "state/confirmbox/actions";
+import { swipeRefreshUpdate } from "state/navigation/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";
@@ -21,10 +22,16 @@ class Instants extends React.PureComponent<Props> {
 
     componentDidMount() {
         window.closeLightDialog = this.props.hide;
+        if (window.Android) {
+            this.props.swipeRefreshUpdate();
+        }
     }
 
     componentWillUnmount() {
         window.closeLightDialog = null;
+        if (window.Android) {
+            this.props.swipeRefreshUpdate();
+        }
     }
 
     onSentinelPast = (intersecting: boolean) => {
@@ -82,7 +89,7 @@ const connector = connect(
         after: getFeedState(state, ":instant").after,
         stories: getFeedState(state, ":instant").stories
     }),
-    { feedPastSliceLoad, feedStatusUpdate, confirmBox }
+    { feedPastSliceLoad, feedStatusUpdate, confirmBox, swipeRefreshUpdate }
 );
 
 export default connector(Instants);

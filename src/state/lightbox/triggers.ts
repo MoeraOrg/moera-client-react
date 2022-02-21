@@ -8,7 +8,7 @@ import {
     OpenLightBoxAction
 } from "state/lightbox/actions";
 import { POSTING_SET, postingLoad } from "state/postings/actions";
-import { dialogClosed, dialogOpened, updateLocation } from "state/navigation/actions";
+import { dialogClosed, dialogOpened, swipeRefreshUpdate, updateLocation } from "state/navigation/actions";
 import { isLightBoxMediaPostingToBeLoaded, isLightBoxShown, isLightBoxToBeLoaded } from "state/lightbox/selectors";
 import {
     COMMENT_SET,
@@ -31,5 +31,6 @@ export default [
          COMMENTS_FUTURE_SLICE_SET, FOCUSED_COMMENT_LOADED],
         conj(isLightBoxShown, isLightBoxMediaPostingToBeLoaded),
         lightBoxMediaPostingLoad
-    )
+    ),
+    trigger([OPEN_LIGHT_BOX, CLOSE_LIGHT_BOX], !!window.Android, swipeRefreshUpdate)
 ];

@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { dialogClosed, goToLocation, initFromLocation } from "state/navigation/actions";
+import { ClientState } from "state/state";
+import { dialogClosed, goToLocation, initFromLocation, swipeRefreshUpdate } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
 import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
 import { closeConfirmBox } from "state/confirmbox/actions";
 import { Browser } from "ui/browser";
-import { ClientState } from "state/state";
 
 const forwardAction = (action: any) => action;
 
@@ -27,7 +27,7 @@ class Navigation extends React.PureComponent<Props> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>) {
-        const {standalone, rootPage, location, title, update, locked, count} = this.props;
+        const {standalone, rootPage, location, title, update, locked, count, swipeRefreshUpdate} = this.props;
 
         if (!locked
             && (rootPage !== this.#rootPage || location !== this.#location)
@@ -41,10 +41,7 @@ class Navigation extends React.PureComponent<Props> {
                 window.history.replaceState(data, "", url);
             }
             if (window.Android) {
-                window.Android.locationChanged(url, location);
-                if (!!window.Android.setSwipeRefreshEnabled) {
-                    window.Android.setSwipeRefreshEnabled(this.isSwipeRefreshEnabled());
-                }
+                swipeRefreshUpdate();
             }
             this.#rootPage = rootPage;
             this.#location = location;
@@ -57,18 +54,6 @@ class Navigation extends React.PureComponent<Props> {
                 document.title = counter + "Moera";
             }
         }
-    }
-
-    isSwipeRefreshEnabled() {
-        const {location, messageBoxShow, confirmBoxShow, closeDialogAction, lightBoxShow} = this.props;
-
-        return !location.startsWith("/profile")
-            && !location.startsWith("/settings")
-            && !messageBoxShow
-            && !confirmBoxShow
-            && closeDialogAction == null
-            && !lightBoxShow
-            && !window.closeLightDialog;
     }
 
     popState = (event: PopStateEvent) => {
@@ -167,10 +152,12 @@ const connector = connect(
         messageBoxShow: state.messageBox.show,
         messageBoxOnClose: state.messageBox.onClose,
         confirmBoxShow: state.confirmBox.show,
-        confirmBoxOnNo: state.confirmBox.onNo,
-        lightBoxShow: state.lightBox.show
+        confirmBoxOnNo: state.confirmBox.onNo
     }),
-    { initFromLocation, goToLocation, forwardAction, dialogClosed, closeMessageBox, closeConfirmBox }
+    {
+        initFromLocation, goToLocation, forwardAction, dialogClosed, closeMessageBox, closeConfirmBox,
+        swipeRefreshUpdate
+    }
 );
 
 export default connector(Navigation);

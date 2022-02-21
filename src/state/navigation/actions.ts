@@ -206,6 +206,12 @@ export const dialogClosed = (): DialogClosedAction => ({
     type: DIALOG_CLOSED
 });
 
+export const SWIPE_REFRESH_UPDATE = "SWIPE_REFRESH_UPDATE";
+export type SwipeRefreshUpdateAction = Action<typeof SWIPE_REFRESH_UPDATE>;
+export const swipeRefreshUpdate = (): SwipeRefreshUpdateAction => ({
+    type: SWIPE_REFRESH_UPDATE
+});
+
 export type NavigationAnyAction =
     InitStorageAction
     | InitFromNodeLocationAction
@@ -224,4 +230,5 @@ export type NavigationAnyAction =
     | BottomMenuHideAction
     | BottomMenuShowAction
     | DialogOpenedAction
-    | DialogClosedAction;
+    | DialogClosedAction
+    | SwipeRefreshUpdateAction;

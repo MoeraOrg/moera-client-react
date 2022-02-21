@@ -22,6 +22,7 @@ import {
     locationUnlock,
     NEW_LOCATION,
     NewLocationAction,
+    SWIPE_REFRESH_UPDATE,
     UPDATE_LOCATION,
     UpdateLocationAction
 } from "state/navigation/actions";
@@ -42,7 +43,8 @@ export default [
     executor(GO_TO_LOCATION, payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
     executor(GO_TO_PAGE_WITH_DEFAULT_SUBPAGE, null, goToPageWithDefaultSubpageSaga),
     executor(GO_HOME, "", goHomeSaga),
-    executor(GO_HOME_NEWS, "", goHomeNewsSaga)
+    executor(GO_HOME_NEWS, "", goHomeNewsSaga),
+    executor(SWIPE_REFRESH_UPDATE, "", swipeRefreshUpdateSaga)
 ];
 
 function* goToPageWithDefaultSubpageSaga(action: GoToPageWithDefaultSubpageAction) {
@@ -158,4 +160,28 @@ function* goHomeNewsSaga() {
             yield* put(initFromLocation(rootLocation, path + "/news", null, null));
         }
     }
+}
+
+function* swipeRefreshUpdateSaga() {
+    if (!window.Android || !window.Android.setSwipeRefreshEnabled) {
+        return;
+    }
+
+    const {location, messageBoxShow, confirmBoxShow, lightBoxShow, closeDialogAction} = yield* select(state => ({
+        location: state.navigation.location,
+        messageBoxShow: state.messageBox.show,
+        confirmBoxShow: state.confirmBox.show,
+        lightBoxShow: state.lightBox.show,
+        closeDialogAction: state.navigation.closeDialogAction,
+    }));
+
+    const enabled = !location.startsWith("/profile")
+        && !location.startsWith("/settings")
+        && !messageBoxShow
+        && !confirmBoxShow
+        && closeDialogAction == null
+        && !lightBoxShow
+        && !window.closeLightDialog;
+
+    window.Android.setSwipeRefreshEnabled(enabled);
 }
