@@ -41,6 +41,7 @@ class Navigation extends React.PureComponent<Props> {
                 window.history.replaceState(data, "", url);
             }
             if (window.Android) {
+                window.Android.locationChanged(url, location);
                 swipeRefreshUpdate();
             }
             this.#rootPage = rootPage;
