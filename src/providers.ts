@@ -17,6 +17,13 @@ const PROVIDERS: Provider[] = [
         controller: "https://lamed.moera.blog"
     },
     {
+        name: "moera.club",
+        title: "Moera.Club",
+        scheme: "https",
+        domain: "moera.club",
+        controller: "https://toshick.moera.club"
+    },
+    {
         dev: true,
         name: "local",
         title: "Local",
