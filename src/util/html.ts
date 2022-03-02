@@ -1,9 +1,26 @@
-import sanitizeHtml, { Attributes, IOptions, Tag } from 'sanitize-html';
+import sanitizeHtml, { Attributes, IOptions, Tag, Transformer } from 'sanitize-html';
 import { EmojiEntity, parse as parseEmojis } from 'twemoji-parser';
+import { nanoid } from 'nanoid/non-secure';
 import * as HtmlEntities from 'html-entities';
 
 function addDirAuto(tagName: string, attribs: Attributes): Tag {
     return attribs["dir"] ? {tagName, attribs} : {tagName, attribs: {...attribs, dir: "auto"}};
+}
+
+function createAnchorTransformers(): { [tagName: string]: string | Transformer } {
+    const randomId = nanoid();
+    return {
+        'a': (tagName: string, attribs: Attributes) => {
+            return !(attribs.href && attribs.href.startsWith('#')) ? { tagName, attribs } : {
+                tagName,
+                attribs: {...attribs, href: `#${randomId}${attribs.href.slice(1)}`}
+            };
+        },
+        '*': (tagName: string, attribs: Attributes) => !attribs.id ? { tagName, attribs } : {
+            tagName,
+            attribs: {...attribs, id: randomId + attribs.id}
+        }
+    }
 }
 
 const BASE_SAFE_HTML_SETTINGS: IOptions = {
@@ -12,7 +29,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
     ]),
     allowedAttributes: {
         ...sanitizeHtml.defaults.allowedAttributes,
-        "*": ["dir"],
+        "*": ["dir", "id"],
         img: ["src", "srcset", "width", "height", "alt", "title"],
         a: ["href", "title", "data-nodename", "data-href"],
         b: ["style"],
@@ -138,14 +155,26 @@ export function safePreviewHtml(html: string | null | undefined): string {
     if (!html) {
         return "";
     }
-    return sanitizeHtml(replaceEmojis(html), SAFE_PREVIEW_HTML_SETTINGS);
+    return sanitizeHtml(replaceEmojis(html), {
+        ...SAFE_PREVIEW_HTML_SETTINGS,
+        transformTags: {
+            ...SAFE_PREVIEW_HTML_SETTINGS.transformTags,
+            ...createAnchorTransformers()
+        }
+    });
 }
 
 export function safeHtml(html: string | null | undefined): string {
     if (!html) {
         return "";
     }
-    return sanitizeHtml(replaceEmojis(html), SAFE_HTML_SETTINGS);
+    return sanitizeHtml(replaceEmojis(html), {
+        ...SAFE_HTML_SETTINGS,
+        transformTags: {
+            ...SAFE_HTML_SETTINGS.transformTags,
+            ...createAnchorTransformers()
+        }
+    });
 }
 
 export function safeImportHtml(html: string | null | undefined): string {
