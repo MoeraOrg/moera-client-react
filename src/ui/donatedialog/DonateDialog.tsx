@@ -9,11 +9,12 @@ import { ClientState } from "state/state";
 import { closeDonateDialog } from "state/donatedialog/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
-import { ModalDialog } from "ui/control";
+import { Button, ModalDialog } from "ui/control";
 import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
 import { getFundraiserAutoHref } from "ui/donatedialog/fundraiser-util";
 import { getSchemeOrDomain, hasSchemeOrDomain } from "util/url";
 import "./DonateDialog.css";
+import { isConnectedToHome } from "state/home/selectors";
 
 function getPreferredFundraiserIndex(fundraisers: FundraiserInfo[], prefix: string): number {
     if (!prefix) {
@@ -27,8 +28,8 @@ function getPreferredFundraiserIndex(fundraisers: FundraiserInfo[], prefix: stri
 
 type Props = ConnectedProps<typeof connector>;
 
-function DonateDialog({show, name, fullName, fundraisers, autoPreferred, preferredPrefix, closeDonateDialog,
-                       settingsUpdate}: Props) {
+function DonateDialog({show, name, fullName, fundraisers, connectedToHome, autoPreferred, preferredPrefix,
+                       closeDonateDialog, settingsUpdate}: Props) {
     const [fundraiserIndex, setFundraiserIndex] = useState<number>(0);
 
     useEffect(
@@ -39,6 +40,25 @@ function DonateDialog({show, name, fullName, fundraisers, autoPreferred, preferr
 
     if (!show || fundraisers.length === 0) {
         return null;
+    }
+
+    if (!connectedToHome && window.Android && window.Android.isDonationsEnabled
+        && !window.Android.isDonationsEnabled()) {
+
+        return (
+            <ModalDialog title="Donate" className="donate-dialog" onClose={closeDonateDialog}>
+                <div className="modal-body">
+                    Donations feature is prohibited in Android apps downloaded from Google Play according to{" "}
+                    <a href="https://support.google.com/googleplay/android-developer/answer/9858738/">
+                        Google Play Payments Policy</a>.
+                    <br/><br/>
+                    Please use Moera web client for this.
+                </div>
+                <div className="modal-footer">
+                    <Button variant="danger" onClick={closeDonateDialog}>Close</Button>
+                </div>
+            </ModalDialog>
+        );
     }
 
     const shortName = NodeName.shorten(name);
@@ -100,6 +120,7 @@ const connector = connect(
         name: state.donateDialog.name,
         fullName: state.donateDialog.fullName,
         fundraisers: state.donateDialog.fundraisers,
+        connectedToHome: isConnectedToHome(state),
         autoPreferred: getSetting(state, "fundraiser.preferred.auto") as boolean,
         preferredPrefix: getSetting(state, "fundraiser.preferred.prefix") as string
     }),

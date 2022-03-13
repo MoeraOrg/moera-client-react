@@ -15,6 +15,7 @@ interface AndroidJsInterface {
     back(): void;
     toast(text: string): void;
     setSwipeRefreshEnabled(enabled: boolean): void;
+    isDonationsEnabled(): boolean;
     log(text: string): void;
 }
 
