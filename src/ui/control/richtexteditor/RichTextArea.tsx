@@ -98,7 +98,12 @@ class RichTextArea extends React.PureComponent<Props, State> {
         const value = textArea.value;
         const start = textArea.selectionStart;
         if (smileysEnabled && this.#spaceInput) {
-            textArea.value = replaceSmileys(value, false);
+            const newValue = replaceSmileys(value, false);
+            if (newValue !== value) {
+                textArea.value = newValue;
+                textArea.selectionStart = start;
+                textArea.selectionEnd = start;
+            }
         }
         if (panel.current != null && this.#anyInput && value.length >= start
             && MENTION_START.test(value.substring(0, start))) {
