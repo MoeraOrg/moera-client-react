@@ -15,7 +15,7 @@ const EntryLinkPreviews = ({nodeName, linkPreviews, limit, media}: Props) =>
         <>
             {linkPreviews.map((linkPreview, index) =>
                 (limit == null || index < limit) &&
-                    <EntryLinkPreview nodeName={nodeName} linkPreview={linkPreview} media={media ?? null}/>
+                    <EntryLinkPreview key={index} nodeName={nodeName} linkPreview={linkPreview} media={media ?? null}/>
             )}
         </>
     :

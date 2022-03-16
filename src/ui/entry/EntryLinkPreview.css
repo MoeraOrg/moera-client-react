@@ -1,7 +1,6 @@
 A.link-preview {
     background-color: var(--bs-gray-200);
     color: black;
-    text-decoration: none;
     border: solid 1px var(--bs-gray-400);
 }
 
@@ -21,9 +20,12 @@ A.link-preview {
     }
 }
 
+.entry A.link-preview, .entry A.link-preview:hover {
+    text-decoration: none;
+}
+
 A.link-preview:hover {
     background-color: var(--bs-gray-300);
-    text-decoration: none;
 }
 
 A.link-preview .details {
