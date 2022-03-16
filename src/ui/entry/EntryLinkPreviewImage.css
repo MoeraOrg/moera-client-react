@@ -1,0 +1,18 @@
+A.link-preview IMG {
+    flex: none;
+    object-fit: cover;
+}
+
+@media only screen and (min-width: 576px) {
+    A.link-preview IMG {
+        width: 150px;
+        max-height: 150px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    A.link-preview IMG {
+        width: 30vw;
+        max-height: 30vw;
+    }
+}

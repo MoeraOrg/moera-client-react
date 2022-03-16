@@ -21,6 +21,7 @@ import PostingButtons from "ui/posting/PostingButtons";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryGalleryExpanded from "ui/entry/EntryGalleryExpanded";
+import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 import { getPageHeaderHeight } from "util/misc";
@@ -73,6 +74,7 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
             <PostingSubject posting={posting} preview={false}/>
             <EntryHtml className="content" postingId={posting.id} html={posting.body.text} nodeName=""
                        media={posting.media}/>
+            <EntryLinkPreviews nodeName="" linkPreviews={posting.body.linkPreviews} media={posting.media ?? null}/>
             {!expanded &&
                 <div id="posting-gallery" className="gallery-collapsed">
                     <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null} onExpand={onExpand}/>

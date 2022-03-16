@@ -10,6 +10,7 @@ import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
+import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -26,6 +27,8 @@ const GlanceComment = ({loading, loaded, postingId, receiverName, comment}: Prop
                     <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
                                nodeName={receiverName} media={comment.media}/>
                 </div>
+                <EntryLinkPreviews nodeName={receiverName} linkPreviews={comment.body.linkPreviews}
+                                   media={comment.media ?? null}/>
                 <EntryGallery postingId={comment.postingId} commentId={comment.id} nodeName={receiverName}
                               media={comment.media ?? null}/>
                 <div className="reactions-line">

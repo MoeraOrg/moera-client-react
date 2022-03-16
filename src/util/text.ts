@@ -24,3 +24,13 @@ export function replaceSmileys(text: string, removeEscapes = true): string {
         return match;
     })
 }
+
+export function ellipsize(text: string | null | undefined, len: number): string | null {
+    if (text == null) {
+        return null;
+    }
+    if (text.length <= len) {
+        return text;
+    }
+    return text.substring(0, len) + "\u2026";
+}

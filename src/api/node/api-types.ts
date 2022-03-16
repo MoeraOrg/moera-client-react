@@ -101,9 +101,18 @@ export interface RegisteredNameSecret {
     secret: string;
 }
 
+export interface LinkPreview {
+    siteName?: string | null;
+    url?: string | null;
+    title?: string | null;
+    description?: string | null;
+    imageHash?: string | null;
+}
+
 export interface Body {
     subject?: string | null;
     text?: string | null;
+    linkPreviews?: LinkPreview[] | null;
 }
 
 export interface ReactionTotalInfo {
