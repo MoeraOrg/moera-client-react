@@ -5,14 +5,14 @@ import { CSS } from '@dnd-kit/utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
-import { RichTextMedia } from "state/richtexteditor/actions";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { DropdownMenu } from "ui/control";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import "./UploadedImage.css";
 
 interface OwnProps {
-    media: RichTextMedia;
+    media: VerifiedMediaFile;
     nodeName: string | null;
     dragged?: boolean | null;
     showMenu?: boolean | null;

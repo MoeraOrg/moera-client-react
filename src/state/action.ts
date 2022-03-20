@@ -13,6 +13,7 @@ import { FlashBoxAnyAction } from "state/flashbox/actions";
 import { HomeAnyAction } from "state/home/actions";
 import { ImageEditDialogAnyAction } from "state/imageeditdialog/actions";
 import { LightBoxAnyAction } from "state/lightbox/actions";
+import { LinkPreviewsAnyAction } from "state/linkpreviews/actions";
 import { MessageBoxAnyAction } from "state/messagebox/actions";
 import { NamingAnyAction } from "state/naming/actions";
 import { NavigationAnyAction } from "state/navigation/actions";
@@ -51,6 +52,8 @@ export type ClientAction =
     | FlashBoxAnyAction
     | HomeAnyAction
     | ImageEditDialogAnyAction
+    | LightBoxAnyAction
+    | LinkPreviewsAnyAction
     | MessageBoxAnyAction
     | NamingAnyAction
     | NavigationAnyAction
@@ -70,7 +73,6 @@ export type ClientAction =
     | ShareDialogAnyAction
     | SignUpDialogAnyAction
     | SourceDialogAnyAction
-    | LightBoxAnyAction
     | StoriesAnyAction;
 
 export type ClientActionType = ClientAction["type"];

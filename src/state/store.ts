@@ -33,6 +33,7 @@ import imageEditDialog from "state/imageeditdialog/reducer";
 import lightBox from "state/lightbox/reducer";
 import donateDialog from "state/donatedialog/reducer";
 import entryCopyTextDialog from "state/entrycopytextdialog/reducer";
+import linkPreviews from "state/linkpreviews/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -71,6 +72,7 @@ import imageEditDialogExecutors from "state/imageeditdialog/sagas";
 import lightBoxExecutors from "state/lightbox/sagas";
 import richTextEditorExecutors from "state/richtexteditor/sagas";
 import entryCopyTextDialogExecutors from "state/entrycopytextdialog/sagas";
+import linkPreviewsExecutors from "state/linkpreviews/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -135,6 +137,7 @@ const reducers = combineReducers({
     lightBox,
     donateDialog,
     entryCopyTextDialog,
+    linkPreviews,
     messageBox,
     confirmBox,
     flashBox,
@@ -209,6 +212,7 @@ const executors = collectExecutors(
     lightBoxExecutors,
     richTextEditorExecutors,
     entryCopyTextDialogExecutors,
+    linkPreviewsExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

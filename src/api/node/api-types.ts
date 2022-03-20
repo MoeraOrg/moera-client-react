@@ -101,6 +101,14 @@ export interface RegisteredNameSecret {
     secret: string;
 }
 
+export interface LinkPreviewInfo {
+    siteName?: string | null;
+    url?: string | null;
+    title?: string | null;
+    description?: string | null;
+    imageUrl?: string | null;
+}
+
 export interface LinkPreview {
     siteName?: string | null;
     url?: string | null;

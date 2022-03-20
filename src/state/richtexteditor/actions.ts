@@ -1,13 +1,10 @@
 import { ActionWithPayload } from "state/action-types";
-import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
+import { PostingFeatures } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 
-export interface RichTextMedia extends PrivateMediaFileInfo {
-    digest?: string | null;
-}
-
-type ImageUploadSuccessHandler = (index: number, mediaFile: RichTextMedia) => void;
-type ImageUploadFailureHandler = (index: number) => void;
-type ImageUploadProgressHandler = (index: number, loaded: number, total: number) => void;
+type ImagesUploadSuccessHandler = (index: number, mediaFile: VerifiedMediaFile) => void;
+type ImagesUploadFailureHandler = (index: number) => void;
+type ImagesUploadProgressHandler = (index: number, loaded: number, total: number) => void;
 
 export const RICH_TEXT_EDITOR_IMAGES_UPLOAD = "RICH_TEXT_EDITOR_IMAGES_UPLOAD";
 export type RichTextEditorImagesUploadAction = ActionWithPayload<typeof RICH_TEXT_EDITOR_IMAGES_UPLOAD, {
@@ -15,18 +12,18 @@ export type RichTextEditorImagesUploadAction = ActionWithPayload<typeof RICH_TEX
     files: File[];
     features: PostingFeatures | null;
     compress: boolean;
-    onSuccess: ImageUploadSuccessHandler;
-    onFailure: ImageUploadFailureHandler;
-    onProgress: ImageUploadProgressHandler;
+    onSuccess: ImagesUploadSuccessHandler;
+    onFailure: ImagesUploadFailureHandler;
+    onProgress: ImagesUploadProgressHandler;
 }>;
 export const richTextEditorImagesUpload = (
     nodeName: string | null,
     files: File[],
     features: PostingFeatures | null,
     compress: boolean,
-    onSuccess: ImageUploadSuccessHandler,
-    onFailure: ImageUploadFailureHandler,
-    onProgress: ImageUploadProgressHandler
+    onSuccess: ImagesUploadSuccessHandler,
+    onFailure: ImagesUploadFailureHandler,
+    onProgress: ImagesUploadProgressHandler
 ): RichTextEditorImagesUploadAction => ({
     type: RICH_TEXT_EDITOR_IMAGES_UPLOAD,
     payload: {nodeName, files, features, compress, onSuccess, onFailure, onProgress}

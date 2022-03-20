@@ -5,8 +5,9 @@ import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
 
 import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
-import { richTextEditorImagesUpload, richTextEditorImageCopy, RichTextMedia } from "state/richtexteditor/actions";
+import { richTextEditorImagesUpload, richTextEditorImageCopy } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
 import { Button, RichTextValue } from "ui/control";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
@@ -55,7 +56,7 @@ function updateStatus(progress: UploadProgress[], index: number, status: UploadS
 }
 
 type ImageLoadStartedHandler = (count: number) => void;
-type ImageLoadedHandler = (index: number, image: RichTextMedia) => void;
+type ImageLoadedHandler = (index: number, image: VerifiedMediaFile) => void;
 type Props = {
     value: RichTextValue;
     features: PostingFeatures | null;
@@ -63,7 +64,7 @@ type Props = {
     nodeName: string | null;
     forceCompress?: boolean;
     selectedImage: PrivateMediaFileInfo | null;
-    selectImage: (image: RichTextMedia | null) => void;
+    selectImage: (image: VerifiedMediaFile | null) => void;
     onLoadStarted?: ImageLoadStartedHandler;
     onLoaded?: ImageLoadedHandler;
     onDeleted?: (id: string) => void;
@@ -82,7 +83,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
     const onLoadedRef = useRef<ImageLoadedHandler>();
     onLoadedRef.current = onLoaded;
 
-    const onImageUploadSuccess = (startIndex: number) => (index: number, mediaFile: RichTextMedia) => {
+    const onImageUploadSuccess = (startIndex: number) => (index: number, mediaFile: VerifiedMediaFile) => {
         setUploadProgress(progress => updateStatus(progress, index, "success"));
         if (onLoadedRef.current) {
             onLoadedRef.current(startIndex + index, mediaFile);

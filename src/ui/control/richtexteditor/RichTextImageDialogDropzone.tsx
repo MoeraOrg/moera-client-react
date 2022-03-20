@@ -5,9 +5,10 @@ import cx from 'classnames';
 import { useField } from 'formik';
 
 import { PostingFeatures } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
-import { richTextEditorImageCopy, richTextEditorImagesUpload, RichTextMedia } from "state/richtexteditor/actions";
+import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { Button, DeleteButton } from "ui/control";
@@ -20,7 +21,7 @@ interface OwnProps {
     features: PostingFeatures | null;
     nodeName: string | null;
     forceCompress?: boolean;
-    onAdded?: (image: RichTextMedia) => void;
+    onAdded?: (image: VerifiedMediaFile) => void;
     onDeleted?: (id: string) => void;
 }
 
@@ -31,9 +32,9 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
-    const [, {value}, {setValue}] = useField<RichTextMedia | null>("mediaFile");
+    const [, {value}, {setValue}] = useField<VerifiedMediaFile | null>("mediaFile");
 
-    const onImageUploadSuccess = (index: number, mediaFile: RichTextMedia) => {
+    const onImageUploadSuccess = (index: number, mediaFile: VerifiedMediaFile) => {
         setUploading(false);
         setValue(mediaFile);
         if (onAdded) {
