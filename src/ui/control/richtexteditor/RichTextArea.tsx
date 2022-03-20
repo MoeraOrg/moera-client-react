@@ -158,18 +158,12 @@ class RichTextArea extends React.PureComponent<Props, State> {
             return true;
         }
         const clean = html.replace(/<\/?(p|br)(\s[^>]*)?>/gi, "");
-        if (!containsTags(clean)) {
-            return true;
-        }
-        return false;
+        return !containsTags(clean);
     }
 
     _shouldPasteHtml(html: string): boolean {
         const clean = html.replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
-        if (!containsTags(htmlToEmoji(clean))) {
-            return true;
-        }
-        return false;
+        return !containsTags(htmlToEmoji(clean));
     }
 
     onPaste = (event: ClipboardEvent) => {
