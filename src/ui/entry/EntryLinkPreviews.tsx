@@ -5,7 +5,7 @@ import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 
 interface Props {
     nodeName: string | null;
-    linkPreviews: LinkPreview[] | null | undefined;
+    linkPreviews: (LinkPreview | null | undefined)[] | null | undefined;
     limit?: number;
     media: MediaAttachment[] | null;
 }
@@ -14,8 +14,10 @@ const EntryLinkPreviews = ({nodeName, linkPreviews, limit, media}: Props) =>
     linkPreviews != null ?
         <>
             {linkPreviews.map((linkPreview, index) =>
-                (limit == null || index < limit) &&
-                    <EntryLinkPreview key={index} nodeName={nodeName} linkPreview={linkPreview} media={media ?? null}/>
+                (linkPreview != null && (limit == null || index < limit)) &&
+                    <EntryLinkPreview key={index} nodeName={nodeName} url={linkPreview.url} title={linkPreview.title}
+                                      description={linkPreview.description} imageHash={linkPreview.imageHash}
+                                      siteName={linkPreview.siteName} media={media ?? null}/>
             )}
         </>
     :

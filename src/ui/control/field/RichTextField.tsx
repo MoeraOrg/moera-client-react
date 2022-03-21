@@ -28,18 +28,20 @@ interface Props {
     hidingPanel?: boolean;
     format: SourceFormat;
     onKeyDown?: (event: React.KeyboardEvent) => void;
+    urlsField?: string;
 }
 
 export function RichTextField({name, title, rows = 3, maxRows, features, noMedia, nodeName, forceImageCompress,
                                placeholder = "Enter text here...", autoFocus, anyValue, className, autoComplete,
                                noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled,
-                               hidingPanel, format, onKeyDown}: Props) {
+                               hidingPanel, format, onKeyDown, urlsField}: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
     const {setFieldValue} = useFormikContext();
 
     // useCallback() and setFieldValue() (not setValue()) is mandatory here
     const onChange = useCallback(v => setFieldValue(name, v), [name, setFieldValue]);
+    const onUrls = useCallback(v => urlsField && setFieldValue(urlsField, v), [urlsField, setFieldValue]);
 
     return (
         <FormGroup
@@ -73,6 +75,7 @@ export function RichTextField({name, title, rows = 3, maxRows, features, noMedia
                     hidingPanel={hidingPanel}
                     format={format}
                     onKeyDown={onKeyDown}
+                    onUrls={urlsField != null ? onUrls : undefined}
                     noMedia={noMedia}
                     nodeName={nodeName}
                     forceImageCompress={forceImageCompress}

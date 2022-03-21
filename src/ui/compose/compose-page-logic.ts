@@ -1,5 +1,6 @@
 import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
+import deepEqual from 'react-fast-compare';
 
 import { ClientSettings } from "api";
 import {
@@ -13,15 +14,15 @@ import {
 } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
-import { replaceSmileys } from "util/text";
+import { extractUrls, replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
-import deepEqual from "react-fast-compare";
 
 export interface ComposePageValues {
     avatar: AvatarImage | null;
     fullName: string | null;
     subject: string | null;
     body: RichTextValue;
+    bodyUrls: string[];
     bodyFormatVisible: boolean;
     bodyFormat: SourceFormat;
     publishAtDefault: Date;
@@ -98,6 +99,7 @@ const composePageLogic = {
             subject,
             body: new RichTextValue(body, media),
             bodyFormatVisible: false,
+            bodyUrls: extractUrls(body),
             bodyFormat,
             publishAtDefault,
             publishAt,

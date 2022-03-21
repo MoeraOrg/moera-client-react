@@ -1,5 +1,7 @@
 import { SMILEY_LIKE, SMILEYS } from "smileys";
 
+const URLS = /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b[-a-zA-Z0-9()!@:%_+.~#?&/=]*(?=[.,;!]|\s|$)/ig;
+
 export function replaceSmileys(text: string, removeEscapes = true): string {
     if (text == null) {
         return text;
@@ -33,4 +35,11 @@ export function ellipsize(text: string | null | undefined, len: number): string 
         return text;
     }
     return text.substring(0, len) + "\u2026";
+}
+
+export function extractUrls(text: string | null | undefined): string[] {
+    if (text == null) {
+        return [];
+    }
+    return Array.from(text.matchAll(URLS), m => m[0]);
 }

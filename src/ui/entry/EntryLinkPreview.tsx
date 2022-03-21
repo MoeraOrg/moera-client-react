@@ -1,40 +1,44 @@
 import React from 'react';
 import * as URI from 'uri-js';
 
-import { LinkPreview, MediaAttachment } from "api/node/api-types";
+import { MediaAttachment } from "api/node/api-types";
 import EntryLinkPreviewImage from "ui/entry/EntryLinkPreviewImage";
 import { ellipsize } from "util/text";
 import "./EntryLinkPreview.css";
 
 interface Props {
     nodeName: string | null;
-    linkPreview: LinkPreview | null | undefined;
+    siteName?: string | null;
+    url?: string | null;
+    title?: string | null;
+    description?: string | null;
+    imageHash?: string | null;
     media: MediaAttachment[] | null;
 }
 
-export function EntryLinkPreview({nodeName, linkPreview, media}: Props) {
-    if (linkPreview == null || linkPreview.url == null) {
+export function EntryLinkPreview({nodeName, siteName, url, title, description, imageHash, media}: Props) {
+    if (url == null) {
         return null;
     }
 
-    const {host} = URI.parse(linkPreview.url);
+    const {host} = URI.parse(url);
     if (host == null) {
         return null;
     }
 
     return (
-        <a className="link-preview" href={linkPreview.url}>
-            <EntryLinkPreviewImage nodeName={nodeName} hash={linkPreview.imageHash} media={media}/>
+        <a className="link-preview" href={url}>
+            <EntryLinkPreviewImage nodeName={nodeName} hash={imageHash} media={media}/>
             <div className="details">
-                {linkPreview.title &&
-                    <div className="title">{ellipsize(linkPreview.title, 75)}</div>
+                {title &&
+                    <div className="title">{ellipsize(title, 75)}</div>
                 }
-                {linkPreview.description &&
-                    <div className="description">{ellipsize(linkPreview.description, 170)}</div>
+                {description &&
+                    <div className="description">{ellipsize(description, 120)}</div>
                 }
                 <div className="site">
-                    {linkPreview.siteName &&
-                        <>{ellipsize(linkPreview.siteName, 40)}<span className="bullet">&bull;</span></>
+                    {siteName &&
+                        <>{ellipsize(siteName, 40)}<span className="bullet">&bull;</span></>
                     }
                     {host.toUpperCase()}
                 </div>

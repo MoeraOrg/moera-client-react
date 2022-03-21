@@ -9,7 +9,7 @@ import { settingsUpdate } from "state/settings/actions";
 import { ClientState } from "state/state";
 import { SourceFormat } from "api/node/api-types";
 import { PREFIX } from "api/settings";
-import { replaceSmileys } from "util/text";
+import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, htmlToEmoji, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/misc";
 
@@ -30,6 +30,7 @@ export interface RichTextAreaProps {
     onKeyDown?: (event: React.KeyboardEvent) => void;
     onChange?: (event: React.FormEvent) => void;
     onBlur?: (event: React.FocusEvent) => void;
+    onUrls?: (urls: string[]) => void;
     textArea: React.RefObject<HTMLTextAreaElement>;
     panel: React.RefObject<HTMLDivElement>;
 }
@@ -49,6 +50,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
         placeholder: "Enter text here..."
     }
 
+    #sentenceInput = false;
     #spaceInput = false;
     #anyInput = false;
 
@@ -92,7 +94,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
     }
 
     onChange = (event: React.FormEvent) => {
-        const {panel, smileysEnabled, onChange} = this.props;
+        const {panel, smileysEnabled, onChange, onUrls} = this.props;
 
         const textArea = event.target as HTMLTextAreaElement;
         const value = textArea.value;
@@ -104,6 +106,9 @@ class RichTextArea extends React.PureComponent<Props, State> {
                 textArea.selectionStart = start;
                 textArea.selectionEnd = start;
             }
+        }
+        if (onUrls && this.#sentenceInput) {
+            onUrls(extractUrls(value));
         }
         if (panel.current != null && this.#anyInput && value.length >= start
             && MENTION_START.test(value.substring(0, start))) {
@@ -124,6 +129,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
         this.#anyInput = inputEvent.inputType.startsWith("insert");
         this.#spaceInput = inputEvent.inputType === "insertLineBreak"
             || (this.#anyInput && inputEvent.data != null && inputEvent.data.match(/\s/) != null);
+        this.#sentenceInput = inputEvent.inputType.startsWith("insertFromPaste") || this.#spaceInput;
     }
 
     onKeyDown = (event: React.KeyboardEvent) => {
