@@ -2,6 +2,7 @@ A.link-preview {
     background-color: var(--bs-gray-200);
     color: black;
     border: solid 1px var(--bs-gray-400);
+    vertical-align: top;
 }
 
 @media only screen and (min-width: 576px) {
