@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
+import debounce from 'lodash.debounce';
 
 import { Browser } from "ui/browser";
 import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
@@ -53,6 +54,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
     #sentenceInput = false;
     #spaceInput = false;
     #anyInput = false;
+    #anyDelete = false;
 
     constructor(props: Props, context: any) {
         super(props, context);
@@ -107,8 +109,12 @@ class RichTextArea extends React.PureComponent<Props, State> {
                 textArea.selectionEnd = start;
             }
         }
-        if (onUrls && this.#sentenceInput) {
-            onUrls(extractUrls(value));
+        if (onUrls) {
+            if (this.#sentenceInput) {
+                this.updateUrls(textArea);
+            } else if (this.#anyDelete) {
+                this.delayedUpdateUrls(textArea);
+            }
         }
         if (panel.current != null && this.#anyInput && value.length >= start
             && MENTION_START.test(value.substring(0, start))) {
@@ -124,12 +130,24 @@ class RichTextArea extends React.PureComponent<Props, State> {
         }
     }
 
+    delayedUpdateUrls = debounce((textArea: HTMLTextAreaElement) => this.updateUrls(textArea), 1500);
+
+    updateUrls(textArea: HTMLTextAreaElement) {
+        const {onUrls} = this.props;
+
+        if (onUrls) {
+            onUrls(extractUrls(textArea.value));
+        }
+    }
+
     onInput = (event: Event) => {
         const inputEvent = event as InputEvent; // FIXME should be in GlobalEventHandlersEventMap["input"]
         this.#anyInput = inputEvent.inputType.startsWith("insert");
         this.#spaceInput = inputEvent.inputType === "insertLineBreak"
             || (this.#anyInput && inputEvent.data != null && inputEvent.data.match(/\s/) != null);
-        this.#sentenceInput = inputEvent.inputType.startsWith("insertFromPaste") || this.#spaceInput;
+        this.#sentenceInput = inputEvent.inputType.startsWith("insertFromPaste")
+            || inputEvent.inputType.startsWith("history") || this.#spaceInput;
+        this.#anyDelete = inputEvent.inputType.startsWith("delete");
     }
 
     onKeyDown = (event: React.KeyboardEvent) => {
