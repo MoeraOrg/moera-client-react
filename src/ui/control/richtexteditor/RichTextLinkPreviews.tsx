@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
+import deepEqual from 'react-fast-compare';
 
-import { LinkPreviewInfo, MediaAttachment, PostingFeatures } from "api/node/api-types";
+import { LinkPreview, MediaAttachment, PostingFeatures } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/owner/selectors";
 import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
@@ -10,19 +12,20 @@ import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 
 type Props = {
+    name: string;
     urlsField: string;
     nodeName?: string | null;
     features: PostingFeatures | null;
 } & ConnectedProps<typeof connector>;
 
-interface Preview {
-    loading: boolean;
-    info: LinkPreviewInfo;
-    imageHash?: string | null;
+export interface RichTextLinkPreviewsValue {
+    previews: LinkPreview[];
+    media: VerifiedMediaFile[];
 }
 
-function RichTextLinkPreviews({urlsField, nodeName, features, ownerName, linkPreviewsState, linkPreviewLoad,
+function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, linkPreviewsState, linkPreviewLoad,
                                linkPreviewImageUpload}: Props) {
+    const [, {value}, {setValue}] = useField<RichTextLinkPreviewsValue>(name);
     const [, {value: urls}] = useField<string[]>(urlsField);
 
     const targetNodeName = nodeName || ownerName;
@@ -38,35 +41,24 @@ function RichTextLinkPreviews({urlsField, nodeName, features, ownerName, linkPre
         }
     }, [toBeLoaded, targetNodeName, features, linkPreviewLoad, linkPreviewImageUpload]);
 
-    if (urls.length === 0) {
-        return null;
-    }
+    const newValue = useMemo<RichTextLinkPreviewsValue>(
+        () => buildValue(urls, targetNodeName, linkPreviewsState),
+        [urls, targetNodeName, linkPreviewsState]
+    );
+    useEffect(() => {
+        if (!deepEqual(value, newValue)) {
+            setValue(newValue)
+        }
+    }, [newValue, value, setValue]);
 
-    const urlSet = new Set(urls).values();
-    const previews: Preview[] = [];
-    const media: MediaAttachment[] = [];
-    for (const url of urlSet) {
-        const lpState = linkPreviewsState[url];
-        if (lpState != null && lpState.loaded && lpState.info == null) {
-            continue;
-        }
-        const imageState = targetNodeName != null && lpState != null ? lpState.images?.[targetNodeName] : null;
-        if (imageState?.info != null) {
-            media.push({media: imageState.info, embedded: true});
-        }
-        previews.push({
-            loading: lpState == null || lpState.loading || imageState?.uploading === true,
-            info: lpState?.info ?? {url},
-            imageHash: imageState?.info?.hash
-        });
-    }
+    const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
 
     return (
         <>
-            {previews.map((preview, index) =>
-                <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.info.url}
-                                  title={preview.info.title} description={preview.info.description}
-                                  imageHash={preview.imageHash} siteName={preview.info.siteName} media={media}/>
+            {value.previews.map((preview, index) =>
+                <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url}
+                                  title={preview.title} description={preview.description}
+                                  imageHash={preview.imageHash} siteName={preview.siteName} media={media}/>
             )}
         </>
     );
@@ -95,6 +87,36 @@ function findToBeLoaded(urls: string[], nodeName: string | null, linkPreviewsSta
         }
     }
     return {urls: loadUrls, images: loadImages};
+}
+
+function buildValue(urls: string[], nodeName: string | null,
+                    linkPreviewsState: LinkPreviewsState): RichTextLinkPreviewsValue {
+    if (urls.length === 0) {
+        return {previews: [], media: []};
+    }
+
+    const urlSet = new Set(urls).values();
+    const previews: LinkPreview[] = [];
+    const media: VerifiedMediaFile[] = [];
+    for (const url of urlSet) {
+        const lpState = linkPreviewsState[url];
+        if (lpState != null && lpState.loaded && lpState.info == null) {
+            continue;
+        }
+        const imageState = nodeName != null && lpState != null ? lpState.images?.[nodeName] : null;
+        if (imageState?.info != null) {
+            media.push(imageState.info);
+        }
+        previews.push({
+            siteName: lpState?.info?.siteName,
+            url: lpState?.info?.url,
+            title: lpState?.info?.title,
+            description: lpState?.info?.description,
+            imageHash: imageState?.info?.hash
+        });
+    }
+
+    return {previews, media};
 }
 
 const connector = connect(

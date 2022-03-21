@@ -9,10 +9,12 @@ import {
     PostingFeatures,
     PostingInfo,
     PostingText,
+    PrivateMediaFileInfo,
     SourceFormat,
     StoryAttributes
 } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
+import { RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { extractUrls, replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
@@ -23,6 +25,7 @@ export interface ComposePageValues {
     subject: string | null;
     body: RichTextValue;
     bodyUrls: string[];
+    linkPreviews: RichTextLinkPreviewsValue;
     bodyFormatVisible: boolean;
     bodyFormat: SourceFormat;
     publishAtDefault: Date;
@@ -71,7 +74,20 @@ const composePageLogic = {
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "";
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;
-        const media = attachments != null ? attachments.map(ma => ma.media ?? null).filter(mf => mf != null) : [];
+        let media = attachments != null
+            ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            : [];
+        const linkPreviewsInfo = props.draft != null
+            ? props.draft.bodySrc?.linkPreviews ?? []
+            : props.posting != null ? props.posting.bodySrc?.linkPreviews ?? [] : [];
+        const linkPreviewsImages = new Set(
+            linkPreviewsInfo.map(lp => lp.imageHash).filter((ih): ih is string => ih != null)
+        );
+        const linkPreviews = {
+            previews: linkPreviewsInfo,
+            media: media.filter(mf => linkPreviewsImages.has(mf.hash))
+        };
+        media = media.filter(mf => !linkPreviewsImages.has(mf.hash));
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)
@@ -98,8 +114,9 @@ const composePageLogic = {
             fullName,
             subject,
             body: new RichTextValue(body, media),
-            bodyFormatVisible: false,
             bodyUrls: extractUrls(body),
+            linkPreviews,
+            bodyFormatVisible: false,
             bodyFormat,
             publishAtDefault,
             publishAt,
@@ -161,10 +178,11 @@ const composePageLogic = {
                 subject: props.features?.subjectPresent
                     ? this._replaceSmileys(props.smileysEnabled, values.subject?.trim() ?? "")
                     : null,
-                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
+                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim()),
+                linkPreviews: values.linkPreviews.previews
             }),
             bodySrcFormat: values.bodyFormat,
-            media: values.body.orderedMediaList(),
+            media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,

@@ -87,7 +87,7 @@ function ComposePage(props: Props) {
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
                                        features={features} nodeName="" urlsField="bodyUrls" anyValue autoFocus/>
                         <ComposeFormattingHelp/>
-                        <RichTextLinkPreviews urlsField="bodyUrls" features={features}/>
+                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features}/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>
                         <ComposeReactions/>
