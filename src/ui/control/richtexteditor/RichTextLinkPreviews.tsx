@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 import deepEqual from 'react-fast-compare';
+import * as immutable from 'object-path-immutable';
 
 import { LinkPreview, MediaAttachment, PostingFeatures } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
@@ -18,9 +19,14 @@ type Props = {
     features: PostingFeatures | null;
 } & ConnectedProps<typeof connector>;
 
+type RichTextLinkPreviewStatus = "deleted" | "edited" | null;
+
+export type RichTextLinkPreviewsStatus = Partial<Record<string, RichTextLinkPreviewStatus>>;
+
 export interface RichTextLinkPreviewsValue {
     previews: LinkPreview[];
     media: VerifiedMediaFile[];
+    status: RichTextLinkPreviewsStatus;
 }
 
 function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, linkPreviewsState, linkPreviewLoad,
@@ -42,14 +48,20 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, l
     }, [toBeLoaded, targetNodeName, features, linkPreviewLoad, linkPreviewImageUpload]);
 
     const newValue = useMemo<RichTextLinkPreviewsValue>(
-        () => buildValue(urls, targetNodeName, linkPreviewsState),
-        [urls, targetNodeName, linkPreviewsState]
+        () => buildValue(urls, targetNodeName, linkPreviewsState, value),
+        [urls, targetNodeName, linkPreviewsState, value]
     );
     useEffect(() => {
         if (!deepEqual(value, newValue)) {
             setValue(newValue)
         }
     }, [newValue, value, setValue]);
+
+    const onDelete = (url: string | null | undefined) => () => {
+        if (url != null) {
+            setValue(immutable.set(value, ["status", url], "deleted"));
+        }
+    }
 
     const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
 
@@ -58,7 +70,7 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, l
             {value.previews.map((preview, index) =>
                 <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url} title={preview.title}
                                   description={preview.description} imageHash={preview.imageHash}
-                                  siteName={preview.siteName} media={media} editing/>
+                                  siteName={preview.siteName} media={media} editing onDelete={onDelete(preview.url)}/>
             )}
         </>
     );
@@ -90,15 +102,32 @@ function findToBeLoaded(urls: string[], nodeName: string | null, linkPreviewsSta
 }
 
 function buildValue(urls: string[], nodeName: string | null,
-                    linkPreviewsState: LinkPreviewsState): RichTextLinkPreviewsValue {
+                    linkPreviewsState: LinkPreviewsState,
+                    value: RichTextLinkPreviewsValue): RichTextLinkPreviewsValue {
     if (urls.length === 0) {
-        return {previews: [], media: []};
+        return {previews: [], media: [], status: value.status};
     }
 
     const urlSet = new Set(urls).values();
     const previews: LinkPreview[] = [];
     const media: VerifiedMediaFile[] = [];
     for (const url of urlSet) {
+        if (value.status[url] === "deleted") {
+            continue;
+        }
+
+        if (value.status[url] === "edited") {
+            const preview = value.previews.find(p => p.url === url);
+            if (preview != null) {
+                previews.push(preview);
+                const mediaFile = value.media.find(m => m.hash === preview.imageHash);
+                if (mediaFile != null) {
+                    media.push(mediaFile);
+                }
+            }
+            continue;
+        }
+
         const lpState = linkPreviewsState[url];
         if (lpState != null && lpState.loaded && lpState.info == null) {
             continue;
@@ -116,7 +145,7 @@ function buildValue(urls: string[], nodeName: string | null,
         });
     }
 
-    return {previews, media};
+    return {previews, media, status: value.status};
 }
 
 const connector = connect(

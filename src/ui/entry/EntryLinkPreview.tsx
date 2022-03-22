@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import * as URI from 'uri-js';
 import cx from 'classnames';
 
@@ -17,9 +17,11 @@ interface Props {
     imageHash?: string | null;
     media: MediaAttachment[] | null;
     editing?: boolean;
+    onDelete?: MouseEventHandler;
 }
 
-export function EntryLinkPreview({nodeName, siteName, url, title, description, imageHash, media, editing}: Props) {
+export function EntryLinkPreview({nodeName, siteName, url, title, description, imageHash, media, editing,
+                                  onDelete}: Props) {
     if (url == null) {
         return null;
     }
@@ -37,7 +39,7 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
     }
 
     return (
-        <Frame className={cx("link-preview", {"large": large})} url={url} editing={editing}>
+        <Frame className={cx("link-preview", {"large": large})} url={url} editing={editing} onDelete={onDelete}>
             <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile}/>
             <div className="details">
                 {title &&
@@ -61,14 +63,15 @@ interface FrameProps {
     editing?: boolean;
     className: string;
     url: string;
+    onDelete?: MouseEventHandler;
     children: React.ReactNode;
 }
 
-function Frame({editing, className, url, children}: FrameProps) {
+function Frame({editing, className, url, children, onDelete}: FrameProps) {
     if (editing) {
         return (
             <div className={className}>
-                <DeleteButton/>
+                <DeleteButton onClick={onDelete}/>
                 {children}
             </div>
         );

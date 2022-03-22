@@ -14,7 +14,7 @@ import {
     StoryAttributes
 } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
-import { RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
+import { RichTextLinkPreviewsStatus, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { extractUrls, replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
@@ -77,17 +77,26 @@ const composePageLogic = {
         let media = attachments != null
             ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
             : [];
+
+        const bodyUrls = extractUrls(body);
         const linkPreviewsInfo = props.draft != null
             ? props.draft.bodySrc?.linkPreviews ?? []
             : props.posting != null ? props.posting.bodySrc?.linkPreviews ?? [] : [];
+        const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
         const linkPreviewsImages = new Set(
             linkPreviewsInfo.map(lp => lp.imageHash).filter((ih): ih is string => ih != null)
         );
+        const linkPreviewsStatus: RichTextLinkPreviewsStatus = {};
+        for (const url of bodyUrls) {
+            linkPreviewsStatus[url] = linkPreviewsUrls.has(url) ? "edited" : "deleted";
+        }
         const linkPreviews = {
             previews: linkPreviewsInfo,
-            media: media.filter(mf => linkPreviewsImages.has(mf.hash))
+            media: media.filter(mf => linkPreviewsImages.has(mf.hash)),
+            status: linkPreviewsStatus
         };
         media = media.filter(mf => !linkPreviewsImages.has(mf.hash));
+
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)
@@ -114,7 +123,7 @@ const composePageLogic = {
             fullName,
             subject,
             body: new RichTextValue(body, media),
-            bodyUrls: extractUrls(body),
+            bodyUrls,
             linkPreviews,
             bodyFormatVisible: false,
             bodyFormat,
