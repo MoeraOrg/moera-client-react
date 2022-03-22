@@ -58,7 +58,7 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, l
             {value.previews.map((preview, index) =>
                 <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url}
                                   title={preview.title} description={preview.description}
-                                  imageHash={preview.imageHash} siteName={preview.siteName} media={media}/>
+                                  imageHash={preview.imageHash} siteName={preview.siteName} media={media} editing/>
             )}
         </>
     );
