@@ -1,7 +1,8 @@
 import React from 'react';
 import * as URI from 'uri-js';
+import cx from 'classnames';
 
-import { MediaAttachment } from "api/node/api-types";
+import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import EntryLinkPreviewImage from "ui/entry/EntryLinkPreviewImage";
 import { ellipsize } from "util/text";
 import "./EntryLinkPreview.css";
@@ -26,9 +27,16 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
         return null;
     }
 
+    let large = false;
+    let mediaFile: PrivateMediaFileInfo | null = null;
+    if (imageHash != null && media != null) {
+        mediaFile = media.find(ma => ma.media?.hash === imageHash)?.media ?? null;
+        large = mediaFile != null && mediaFile.width > 450;
+    }
+
     return (
-        <a className="link-preview" href={url}>
-            <EntryLinkPreviewImage nodeName={nodeName} hash={imageHash} media={media}/>
+        <a className={cx("link-preview", {"large": large})} href={url}>
+            <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile}/>
             <div className="details">
                 {title &&
                     <div className="title">{ellipsize(title, 75)}</div>

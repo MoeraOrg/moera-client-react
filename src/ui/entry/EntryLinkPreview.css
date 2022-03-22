@@ -21,6 +21,10 @@ A.link-preview {
     }
 }
 
+A.link-preview.large {
+    flex-direction: column;
+}
+
 .entry A.link-preview, .entry A.link-preview:hover {
     text-decoration: none;
 }

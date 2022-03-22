@@ -77,7 +77,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                 <Content posting={posting}/>
                 <EntryLinkPreviews nodeName=""
                                    linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
-                                   limit={3} media={posting.media ?? null}/>
+                                   limit={2} media={posting.media ?? null}/>
                 <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}
                               onExpand={() => goToPosting(posting.id, null, true)}/>
                 <div className="reactions-line">

@@ -1,18 +1,36 @@
 A.link-preview IMG {
     flex: none;
+    object-fit: contain;
+    object-position: top;
+}
+
+A.link-preview IMG.vertical {
     object-fit: cover;
+    object-position: center;
 }
 
 @media only screen and (min-width: 576px) {
     A.link-preview IMG {
         width: 150px;
+        height: auto;
         max-height: 150px;
+    }
+
+    A.link-preview.large IMG {
+        width: 100%;
+        max-height: 250px;
     }
 }
 
 @media only screen and (max-width: 575px) {
     A.link-preview IMG {
         width: 30vw;
+        height: auto;
         max-height: 30vw;
+    }
+
+    A.link-preview.large IMG {
+        width: 100vw;
+        max-height: 55vw;
     }
 }

@@ -1,27 +1,23 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { MediaAttachment } from "api/node/api-types";
+import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import PreloadedImage from "ui/posting/PreloadedImage";
+import { Browser } from "ui/browser";
 import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
 import "./EntryLinkPreviewImage.css";
 
 interface OwnProps {
     nodeName: string | null;
-    hash: string | null | undefined;
-    media: MediaAttachment[] | null;
+    mediaFile?: PrivateMediaFileInfo | null;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function EntryLinkPreviewImage({hash, media, rootPage}: Props) {
-    if (hash == null || media == null) {
-        return null;
-    }
-    const mediaFile = media.find(ma => ma.media?.hash === hash)?.media;
+function EntryLinkPreviewImage({mediaFile, rootPage}: Props) {
     if (mediaFile == null) {
         return null;
     }
@@ -31,9 +27,11 @@ function EntryLinkPreviewImage({hash, media, rootPage}: Props) {
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, mediaFile);
+    const vertical = Browser.isTinyScreen() ? imageHeight > imageWidth * 0.55 : imageHeight > imageWidth;
 
     return (
-        <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}/>
+        <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
+                        className={vertical ? "vertical" : undefined}/>
     );
 }
 
