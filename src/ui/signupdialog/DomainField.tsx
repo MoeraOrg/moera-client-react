@@ -31,11 +31,13 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
         }
     }
 
-    function setInputRef(dom: HTMLInputElement) {
-        inputDom.current = dom;
-        if (inputDom.current) {
-            inputDom.current.addEventListener("input", onInputInput);
-            inputDom.current.addEventListener("blur", onInputBlur);
+    function setInputRef(dom: HTMLInputElement | null) {
+        if (dom != null) {
+            inputDom.current = dom;
+            if (inputDom.current) {
+                inputDom.current.addEventListener("input", onInputInput);
+                inputDom.current.addEventListener("blur", onInputBlur);
+            }
         }
     }
 
