@@ -21,8 +21,9 @@
 
 .entry-link-selector .item {
     line-height: normal;
+    text-indent: -1.5em;
     cursor: pointer;
-    padding: .25rem .5rem .25rem 1rem;
+    padding: .25em .5em .25em 2em;
     white-space: normal;
     width: 100%;
     max-height: 5em;

@@ -1,6 +1,7 @@
 import React from 'react';
 // @ts-ignore
 import shortenUrl from 'shorten-url';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useButtonPopper } from "ui/hook";
 import { Button } from "ui/control";
@@ -37,7 +38,10 @@ export default function EntryLinkSelector({urls, onSelect}: Props) {
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                          className="fade popover shadow-sm show">
                         {urls.map(url =>
-                            <div key={url} className="item" onClick={onClick(url)}>{shortenUrl(url, 75)}</div>
+                            <div key={url} className="item" onClick={onClick(url)}>
+                                <FontAwesomeIcon icon="link"/>
+                                {" " + shortenUrl(url, 75)}
+                            </div>
                         )}
                     </div>
                 }
