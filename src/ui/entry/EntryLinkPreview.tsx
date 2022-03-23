@@ -1,6 +1,7 @@
 import React, { MouseEventHandler } from 'react';
 import * as URI from 'uri-js';
 import cx from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { DeleteButton } from "ui/control";
@@ -70,8 +71,9 @@ interface FrameProps {
 function Frame({editing, className, url, children, onDelete}: FrameProps) {
     if (editing) {
         return (
-            <div className={className}>
+            <div className={className} title="Edit">
                 <DeleteButton onClick={onDelete}/>
+                <div className="edit-icon"><FontAwesomeIcon icon="pen"/></div>
                 {children}
             </div>
         );

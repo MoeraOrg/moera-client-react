@@ -37,6 +37,24 @@ A.link-preview:hover {
     background-color: var(--bs-gray-300);
 }
 
+DIV.link-preview:hover {
+    filter: brightness(60%);
+    cursor: pointer;
+}
+
+.link-preview .edit-icon {
+    display: none;
+}
+
+DIV.link-preview:hover .edit-icon {
+    display: block;
+    position: absolute;
+    left: calc(50% - .5em);
+    top: calc(50% - 1em);
+    font-size: 2rem;
+    color: white;
+}
+
 .link-preview .details {
     flex: auto;
     padding: .5rem 1rem;
