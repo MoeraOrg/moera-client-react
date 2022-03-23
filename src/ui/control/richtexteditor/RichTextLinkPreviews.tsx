@@ -11,6 +11,7 @@ import { getOwnerName } from "state/owner/selectors";
 import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
+import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 
 type Props = {
     name: string;
@@ -63,10 +64,14 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, l
         }
     }
 
+    const onRestore = (url: string) =>
+        setValue(immutable.del(value, ["status", url]));
+
     const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
 
     return (
         <>
+            <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}/>
             {value.previews.map((preview, index) =>
                 <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url} title={preview.title}
                                   description={preview.description} imageHash={preview.imageHash}

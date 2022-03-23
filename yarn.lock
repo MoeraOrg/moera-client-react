@@ -8345,6 +8345,11 @@ shell-quote@^1.7.3:
   resolved "https://registry.yarnpkg.com/shell-quote/-/shell-quote-1.7.3.tgz#aa40edac170445b9a431e17bb62c0b881b9c4123"
   integrity sha512-Vpfqwm4EnqGdlsBFNmHhxhElJYrdfcxPThu+ryKS5J8L/fhAwLazFZtq+S+TWZ9ANj2piSQLGj6NQg+lKPmxrw==
 
+shorten-url@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/shorten-url/-/shorten-url-1.0.0.tgz#f4cd7afe26a6cb5e1c768b35b3ba423e4f2854a0"
+  integrity sha512-dqMa3Vppygf1xo20oxJv3l1z46fpTXg+TlqnfE+4iN3l8DQ51BTVqmoMmZ+7ra+6lUfYNZeSmTjW27nVf9B3mw==
+
 side-channel@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/side-channel/-/side-channel-1.0.4.tgz#efce5c8fdc104ee751b25c58d4290011fa5ea2cf"
