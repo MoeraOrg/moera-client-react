@@ -73,7 +73,7 @@ function Frame({editing, className, url, children, onDelete}: FrameProps) {
         return (
             <div className={className} title="Edit">
                 <DeleteButton onClick={onDelete}/>
-                <div className="edit-icon"><FontAwesomeIcon icon="pen"/></div>
+                <EditButton onClick={onDelete}/>
                 {children}
             </div>
         );
@@ -83,3 +83,16 @@ function Frame({editing, className, url, children, onDelete}: FrameProps) {
         );
     }
 }
+
+interface EditButtonProps {
+    onClick?: MouseEventHandler;
+}
+
+export const EditButton = ({onClick}: EditButtonProps) => (
+    <div className="edit-button" title="Edit" onClick={onClick}>
+        <span className="fa-layers fa-fw">
+            <FontAwesomeIcon icon="circle"/>
+            <span className="pen"><FontAwesomeIcon icon="pen" color="white"/></span>
+        </span>
+    </div>
+);

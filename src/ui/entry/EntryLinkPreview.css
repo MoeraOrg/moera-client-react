@@ -37,24 +37,6 @@ A.link-preview:hover {
     background-color: var(--bs-gray-300);
 }
 
-DIV.link-preview:hover {
-    filter: brightness(60%);
-    cursor: pointer;
-}
-
-.link-preview .edit-icon {
-    display: none;
-}
-
-DIV.link-preview:hover .edit-icon {
-    display: block;
-    position: absolute;
-    left: calc(50% - .5em);
-    top: calc(50% - 1em);
-    font-size: 2rem;
-    color: white;
-}
-
 .link-preview .details {
     flex: auto;
     padding: .5rem 1rem;
@@ -85,4 +67,20 @@ DIV.link-preview:hover .edit-icon {
 .link-preview .delete-button {
     top: -.25rem;
     right: -.1rem;
+}
+
+.link-preview .edit-button {
+    position: absolute;
+    right: 2rem;
+    top: -.25rem;
+    color: var(--bs-blue);
+    font-size: 1.5em;
+    height: 1em;
+    width: 1em;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.link-preview .edit-button .pen {
+    font-size: .8rem;
 }
