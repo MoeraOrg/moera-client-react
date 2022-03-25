@@ -18,13 +18,14 @@ interface Props {
     description?: string | null;
     imageHash?: string | null;
     media: MediaAttachment[] | null;
+    small?: boolean | null;
     editing?: boolean;
     onUpdate?: (title: string, description: string) => void;
     onDelete?: MouseEventHandler;
 }
 
-export function EntryLinkPreview({nodeName, siteName, url, title, description, imageHash, media, editing,
-                                  onUpdate, onDelete}: Props) {
+export function EntryLinkPreview({nodeName, siteName, url, title, description, imageHash, media, small = false,
+                                  editing, onUpdate, onDelete}: Props) {
     const [edit, setEdit] = useState<boolean>(false);
 
     if (url == null) {
@@ -40,7 +41,7 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
     let mediaFile: PrivateMediaFileInfo | null = null;
     if (imageHash != null && media != null) {
         mediaFile = media.find(ma => ma.media?.hash === imageHash)?.media ?? null;
-        large = mediaFile != null && mediaFile.width > 450;
+        large = !small && mediaFile != null && mediaFile.width > 450;
     }
 
     const onEdit = (e: React.MouseEvent) => {
@@ -56,15 +57,15 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
     }
 
     return (
-        <Frame className={cx("link-preview", {"large": large})} url={url} editing={editing} onEdit={onEdit}
-               onDelete={onDelete}>
+        <Frame className={cx("link-preview", {"large": large}, {"small": small})} url={url} editing={editing}
+               onEdit={onEdit} onDelete={onDelete}>
             <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile}/>
             <div className="details">
                 {title &&
-                    <div className="title">{ellipsize(title, 75)}</div>
+                    <div className="title">{ellipsize(title, small ? 35 : 75)}</div>
                 }
                 {description &&
-                    <div className="description">{ellipsize(description, 120)}</div>
+                    <div className="description">{ellipsize(description, small ? 70 : 120)}</div>
                 }
                 <div className="site">
                     {siteName &&

@@ -12,12 +12,14 @@ import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/acti
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
+import { extractUrls } from "util/text";
 
 type Props = {
     name: string;
     urlsField: string;
     nodeName?: string | null;
     features: PostingFeatures | null;
+    small?: boolean | null;
 } & ConnectedProps<typeof connector>;
 
 type RichTextLinkPreviewStatus = "deleted" | "edited" | null;
@@ -30,8 +32,31 @@ export interface RichTextLinkPreviewsValue {
     status: RichTextLinkPreviewsStatus;
 }
 
-function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, linkPreviewsState, linkPreviewLoad,
-                               linkPreviewImageUpload}: Props) {
+export function bodyToLinkPreviews(body: string,
+                                   linkPreviewsInfo: LinkPreview[],
+                                   media: VerifiedMediaFile[]): [RichTextLinkPreviewsValue,
+                                                                 string[],
+                                                                 VerifiedMediaFile[]] {
+    const bodyUrls = extractUrls(body);
+    const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
+    const linkPreviewsImages = new Set(
+        linkPreviewsInfo.map(lp => lp.imageHash).filter((ih): ih is string => ih != null)
+    );
+    const linkPreviewsStatus: RichTextLinkPreviewsStatus = {};
+    for (const url of bodyUrls) {
+        linkPreviewsStatus[url] = linkPreviewsUrls.has(url) ? "edited" : "deleted";
+    }
+    const linkPreviews = {
+        previews: linkPreviewsInfo,
+        media: media.filter(mf => linkPreviewsImages.has(mf.hash)),
+        status: linkPreviewsStatus
+    };
+    media = media.filter(mf => !linkPreviewsImages.has(mf.hash));
+    return [linkPreviews, bodyUrls, media];
+}
+
+function RichTextLinkPreviews({name, urlsField, nodeName, features, small, ownerName, linkPreviewsState,
+                               linkPreviewLoad, linkPreviewImageUpload}: Props) {
     const [, {value}, {setValue}] = useField<RichTextLinkPreviewsValue>(name);
     const [, {value: urls}] = useField<string[]>(urlsField);
 
@@ -90,8 +115,8 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, l
             {value.previews.map((preview, index) =>
                 <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url} title={preview.title}
                                   description={preview.description} imageHash={preview.imageHash}
-                                  siteName={preview.siteName} media={media} editing onUpdate={onUpdate(preview.url)}
-                                  onDelete={onDelete(preview.url)}/>
+                                  siteName={preview.siteName} media={media} small={small} editing
+                                  onUpdate={onUpdate(preview.url)} onDelete={onDelete(preview.url)}/>
             )}
         </>
     );

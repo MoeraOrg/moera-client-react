@@ -14,7 +14,11 @@ import {
     StoryAttributes
 } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
-import { RichTextLinkPreviewsStatus, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
+import {
+    bodyToLinkPreviews,
+    RichTextLinkPreviewsStatus,
+    RichTextLinkPreviewsValue
+} from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { extractUrls, replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
@@ -78,24 +82,11 @@ const composePageLogic = {
             ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
             : [];
 
-        const bodyUrls = extractUrls(body);
         const linkPreviewsInfo = props.draft != null
             ? props.draft.bodySrc?.linkPreviews ?? []
             : props.posting != null ? props.posting.bodySrc?.linkPreviews ?? [] : [];
-        const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
-        const linkPreviewsImages = new Set(
-            linkPreviewsInfo.map(lp => lp.imageHash).filter((ih): ih is string => ih != null)
-        );
-        const linkPreviewsStatus: RichTextLinkPreviewsStatus = {};
-        for (const url of bodyUrls) {
-            linkPreviewsStatus[url] = linkPreviewsUrls.has(url) ? "edited" : "deleted";
-        }
-        const linkPreviews = {
-            previews: linkPreviewsInfo,
-            media: media.filter(mf => linkPreviewsImages.has(mf.hash)),
-            status: linkPreviewsStatus
-        };
-        media = media.filter(mf => !linkPreviewsImages.has(mf.hash));
+        let linkPreviews, bodyUrls;
+        [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
@@ -232,10 +223,7 @@ const composePageLogic = {
         }
         const {subject, text, linkPreviews} = JSON.parse(postingText.bodySrc);
         const {subject: prevSubject, text: prevText, linkPreviews: prevLinkPreviews} = posting.bodySrc;
-        if (subject !== prevSubject || text !== prevText) {
-            return true;
-        }
-        if (!deepEqual(linkPreviews ?? [], prevLinkPreviews ?? [])) {
+        if (subject !== prevSubject || text !== prevText || !deepEqual(linkPreviews ?? [], prevLinkPreviews ?? [])) {
             return true;
         }
         const media = postingText.media ?? [];

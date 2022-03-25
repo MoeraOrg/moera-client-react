@@ -16,6 +16,7 @@ import { getCommentComposerRepliedToId, getCommentsState } from "state/detailedp
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
+import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
@@ -86,7 +87,8 @@ function CommentCompose(props: Props) {
                                        forceImageCompress anyValue placeholder={`Write a comment to ${mention} here...`}
                                        disabled={beingPosted} smileysEnabled={smileysEnabled}
                                        hidingPanel={commentComposeLogic.areValuesEmpty(values)}
-                                       format={sourceFormatDefault} onKeyDown={onKeyDown}/>
+                                       format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
+                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features} small/>
                     </div>
                     <CommentComposeButtons loading={beingPosted}/>
                 </Form>

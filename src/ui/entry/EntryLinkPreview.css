@@ -29,6 +29,10 @@ A.link-preview.large, DIV.link-preview.large {
     flex-direction: column;
 }
 
+A.link-preview.small, DIV.link-preview.small {
+    font-size: .875rem;
+}
+
 .entry A.link-preview, .entry A.link-preview:hover {
     text-decoration: none;
 }
@@ -46,6 +50,10 @@ A.link-preview:hover {
 .link-preview .title {
     font-weight: bold;
     font-size: 1.05em;
+}
+
+.link-preview.small .title {
+    line-height: 1.1;
 }
 
 .link-preview .site {

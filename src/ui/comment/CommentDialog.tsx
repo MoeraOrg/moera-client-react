@@ -16,9 +16,10 @@ import { getCommentDialogComment, getCommentsState, isCommentDialogConflict } fr
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { Browser } from "ui/browser";
-import { Button, ConflictWarning, Loading, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
+import { Button, ConflictWarning, Loading, ModalDialog } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
+import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import { insertText } from "util/misc";
@@ -89,7 +90,8 @@ function CommentDialog(props: Props) {
                     <Loading active={loading}/>
                     <RichTextField name="body" rows={5} features={features} nodeName={receiverName} forceImageCompress
                                    anyValue autoFocus disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
-                                   format={sourceFormatDefault} onKeyDown={onKeyDown}/>
+                                   format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
+                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features} small/>
                 </div>
                 <div className="modal-footer">
                     <CommentDraftSaver initialized={loaded} initialText={initialText} commentId={commentId}/>

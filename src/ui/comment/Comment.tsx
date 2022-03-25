@@ -65,7 +65,7 @@ const Comment = ({
                         <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
                                       media={comment.media ?? null}/>
                         <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews}
-                                           media={comment.media ?? null}/>
+                                           media={comment.media ?? null} small/>
                         <div className="reactions-line">
                             {comment.signature == null && <div className="unsigned">Unsigned</div>}
                             {connectedToHome && comment.signature != null &&

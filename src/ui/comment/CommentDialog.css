@@ -14,3 +14,15 @@
 .comment-dialog .modal-footer .draft-saver {
     color: var(--bs-gray-500);
 }
+
+@media only screen and (min-width: 576px) {
+    .comment-dialog A.link-preview, .comment-dialog DIV.link-preview {
+        width: 400px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .comment-dialog A.link-preview, .comment-dialog DIV.link-preview {
+        width: calc(100vw - 2rem);
+    }
+}

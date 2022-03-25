@@ -98,6 +98,18 @@
     }
 }
 
+@media only screen and (min-width: 576px) {
+    .comment A.link-preview, .comment DIV.link-preview {
+        width: 400px;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .comment A.link-preview, .comment DIV.link-preview {
+        width: calc(100vw - .5rem - 36px);
+    }
+}
+
 .comment .reactions-line {
     display: flex;
     justify-content: space-between;
