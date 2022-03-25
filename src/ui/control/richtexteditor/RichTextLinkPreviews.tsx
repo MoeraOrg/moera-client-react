@@ -58,6 +58,20 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, l
         }
     }, [newValue, value, setValue]);
 
+    const onUpdate = (url: string | null | undefined) => (title: string, description: string) => {
+        if (url == null) {
+            return;
+        }
+        const index = value.previews.findIndex(lp => lp.url === url);
+        if (index < 0) {
+            return;
+        }
+        setValue(immutable.wrap(value)
+            .set(["status", url], "edited")
+            .assign(["previews", index], {title, description})
+            .value());
+    }
+
     const onDelete = (url: string | null | undefined) => () => {
         if (url != null) {
             setValue(immutable.set(value, ["status", url], "deleted"));
@@ -69,13 +83,15 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, ownerName, l
 
     const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
 
+    console.log(value);
     return (
         <>
             <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}/>
             {value.previews.map((preview, index) =>
                 <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url} title={preview.title}
                                   description={preview.description} imageHash={preview.imageHash}
-                                  siteName={preview.siteName} media={media} editing onDelete={onDelete(preview.url)}/>
+                                  siteName={preview.siteName} media={media} editing onUpdate={onUpdate(preview.url)}
+                                  onDelete={onDelete(preview.url)}/>
             )}
         </>
     );

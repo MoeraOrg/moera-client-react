@@ -230,9 +230,12 @@ const composePageLogic = {
         if (postingText.bodySrc == null || posting.bodySrc == null) {
             return (postingText.bodySrc == null) !== (posting.bodySrc == null);
         }
-        const {subject, text} = JSON.parse(postingText.bodySrc);
-        const {subject: prevSubject, text: prevText} = posting.bodySrc;
+        const {subject, text, linkPreviews} = JSON.parse(postingText.bodySrc);
+        const {subject: prevSubject, text: prevText, linkPreviews: prevLinkPreviews} = posting.bodySrc;
         if (subject !== prevSubject || text !== prevText) {
+            return true;
+        }
+        if (!deepEqual(linkPreviews ?? [], prevLinkPreviews ?? [])) {
             return true;
         }
         const media = postingText.media ?? [];
