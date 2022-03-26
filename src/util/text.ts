@@ -1,6 +1,6 @@
 import { SMILEY_LIKE, SMILEYS } from "smileys";
 
-const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9()!@:%_+.~#?&/=]*[-a-zA-Z0-9@:%_+.~#&/=])?(?=[.,;!)"']|\s|$)/ig;
+const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9()!@:%_+.~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?/ig;
 
 export function replaceSmileys(text: string, removeEscapes = true): string {
     if (text == null) {
