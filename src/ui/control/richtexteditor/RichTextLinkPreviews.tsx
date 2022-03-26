@@ -108,7 +108,6 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, small, owner
 
     const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
 
-    console.log(value);
     return (
         <>
             <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}/>

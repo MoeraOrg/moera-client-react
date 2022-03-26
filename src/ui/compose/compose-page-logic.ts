@@ -14,13 +14,9 @@ import {
     StoryAttributes
 } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
-import {
-    bodyToLinkPreviews,
-    RichTextLinkPreviewsStatus,
-    RichTextLinkPreviewsValue
-} from "ui/control/richtexteditor/RichTextLinkPreviews";
+import { bodyToLinkPreviews, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
-import { extractUrls, replaceSmileys } from "util/text";
+import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 
 export interface ComposePageValues {
