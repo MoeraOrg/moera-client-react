@@ -25,6 +25,7 @@ function* linkPreviewLoadSaga(action: LinkPreviewLoadAction) {
     const {url} = action.payload;
     try {
         const info = yield* call(Node.proxyLinkPreview, ":", url);
+        info.url = url; // canonical URL may differ, so we should force consistency throughout the app
         yield* put(linkPreviewLoaded(url, info));
     } catch (e) {
         yield* put(linkPreviewLoadFailed(url));
