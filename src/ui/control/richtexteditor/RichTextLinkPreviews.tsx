@@ -62,26 +62,20 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, small, owner
 
     const targetNodeName = nodeName || ownerName;
 
-    const toBeLoaded = useMemo<ToBeLoaded>(
-        () => findToBeLoaded(urls, targetNodeName, linkPreviewsState),
-        [urls, targetNodeName, linkPreviewsState]
-    );
-    useEffect(() => {
-        toBeLoaded.urls.forEach(url => linkPreviewLoad(url));
-        if (targetNodeName != null) {
-            toBeLoaded.images.forEach(url => linkPreviewImageUpload(url, targetNodeName, features));
-        }
-    }, [toBeLoaded, targetNodeName, features, linkPreviewLoad, linkPreviewImageUpload]);
-
-    const newValue = useMemo<RichTextLinkPreviewsValue>(
+    const {urlsToLoad, imagesToLoad, value: newValue} = useMemo<ValueChange>(
         () => buildValue(urls, targetNodeName, linkPreviewsState, value),
         [urls, targetNodeName, linkPreviewsState, value]
     );
     useEffect(() => {
+        urlsToLoad.forEach(url => linkPreviewLoad(url));
+        if (targetNodeName != null) {
+            imagesToLoad.forEach(url => linkPreviewImageUpload(url, targetNodeName, features));
+        }
         if (!deepEqual(value, newValue)) {
             setValue(newValue)
         }
-    }, [newValue, value, setValue]);
+    }, [urlsToLoad, imagesToLoad, newValue, value, setValue, targetNodeName, linkPreviewLoad, linkPreviewImageUpload,
+        features]);
 
     const onUpdate = (url: string | null | undefined) => (title: string, description: string) => {
         if (url == null) {
@@ -121,39 +115,22 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, small, owner
     );
 }
 
-interface ToBeLoaded {
-    urls: string[];
-    images: string[];
+interface ValueChange {
+    urlsToLoad: string[];
+    imagesToLoad: string[];
+    value: RichTextLinkPreviewsValue;
 }
 
-function findToBeLoaded(urls: string[], nodeName: string | null, linkPreviewsState: LinkPreviewsState): ToBeLoaded {
+function buildValue(urls: string[], nodeName: string | null,
+                    linkPreviewsState: LinkPreviewsState,
+                    value: RichTextLinkPreviewsValue): ValueChange {
     if (nodeName == null || urls.length === 0) {
-        return {urls: [], images: []};
+        return {urlsToLoad: [], imagesToLoad: [], value: {previews: [], media: [], status: value.status}};
     }
 
     const urlSet = new Set(urls).values();
     const loadUrls: string[] = [];
     const loadImages: string[] = [];
-    for (const url of urlSet) {
-        const lpState = linkPreviewsState[url];
-        if (lpState == null || (!lpState.loading && !lpState.loaded)) {
-            loadUrls.push(url);
-        }
-        if (lpState != null && lpState.loaded && lpState.info?.imageUrl != null && lpState.images?.[nodeName] == null) {
-            loadImages.push(url);
-        }
-    }
-    return {urls: loadUrls, images: loadImages};
-}
-
-function buildValue(urls: string[], nodeName: string | null,
-                    linkPreviewsState: LinkPreviewsState,
-                    value: RichTextLinkPreviewsValue): RichTextLinkPreviewsValue {
-    if (urls.length === 0) {
-        return {previews: [], media: [], status: value.status};
-    }
-
-    const urlSet = new Set(urls).values();
     const previews: LinkPreview[] = [];
     const media: VerifiedMediaFile[] = [];
     for (const url of urlSet) {
@@ -174,10 +151,18 @@ function buildValue(urls: string[], nodeName: string | null,
         }
 
         const lpState = linkPreviewsState[url];
-        if (lpState != null && lpState.loaded && lpState.info == null) {
-            continue;
+        if (lpState == null || (!lpState.loading && !lpState.loaded)) {
+            loadUrls.push(url);
         }
-        const imageState = nodeName != null && lpState != null ? lpState.images?.[nodeName] : null;
+        if (lpState != null && lpState.loaded) {
+            if (lpState.info == null) {
+                continue;
+            }
+            if (lpState.info.imageUrl != null && lpState.images?.[nodeName] == null) {
+                loadImages.push(url);
+            }
+        }
+        const imageState = lpState != null ? lpState.images?.[nodeName] : null;
         if (imageState?.info != null) {
             media.push(imageState.info);
         }
@@ -190,7 +175,7 @@ function buildValue(urls: string[], nodeName: string | null,
         });
     }
 
-    return {previews, media, status: value.status};
+    return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: value.status}};
 }
 
 const connector = connect(
