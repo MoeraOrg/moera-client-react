@@ -11,7 +11,7 @@ interface Props {
 
 export const Loading = ({active = true, className = null}: Props) => (
     active ?
-        <ReactLoading className={cx("loading", className)} type="bubbles" color="black" width={32} height={32}/>
+        <ReactLoading className={cx("loading", className)} type="bubbles" color="black" width={32} height={24}/>
     :
         null
 );
