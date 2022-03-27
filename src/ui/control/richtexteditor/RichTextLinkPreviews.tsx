@@ -22,7 +22,7 @@ type Props = {
     small?: boolean | null;
 } & ConnectedProps<typeof connector>;
 
-type RichTextLinkPreviewStatus = "deleted" | "edited" | null;
+type RichTextLinkPreviewStatus = "deleted" | "edited" | "loaded" | null;
 
 export type RichTextLinkPreviewsStatus = Partial<Record<string, RichTextLinkPreviewStatus>>;
 
@@ -133,49 +133,65 @@ function buildValue(urls: string[], nodeName: string | null,
     const loadImages: string[] = [];
     const previews: LinkPreview[] = [];
     const media: VerifiedMediaFile[] = [];
+    const addedUrls: string[] = [];
+    let totalVisible = 0;
     for (const url of urlSet) {
-        if (value.status[url] === "deleted") {
-            continue;
-        }
+        switch (value.status[url]) {
+            case "deleted":
+                break;
 
-        if (value.status[url] === "edited") {
-            const preview = value.previews.find(p => p.url === url);
-            if (preview != null) {
-                previews.push(preview);
-                const mediaFile = value.media.find(m => m.hash === preview.imageHash);
-                if (mediaFile != null) {
-                    media.push(mediaFile);
+            case "edited": {
+                const preview = value.previews.find(p => p.url === url);
+                if (preview != null) {
+                    previews.push(preview);
+                    const mediaFile = value.media.find(m => m.hash === preview.imageHash);
+                    if (mediaFile != null) {
+                        media.push(mediaFile);
+                    }
+                    totalVisible++;
                 }
+                break;
             }
-            continue;
-        }
 
-        const lpState = linkPreviewsState[url];
-        if (lpState == null || (!lpState.loading && !lpState.loaded)) {
-            loadUrls.push(url);
-        }
-        if (lpState != null && lpState.loaded) {
-            if (lpState.info == null) {
-                continue;
+            case "loaded": {
+                const lpState = linkPreviewsState[url];
+                if (lpState == null || (!lpState.loading && !lpState.loaded)) {
+                    loadUrls.push(url);
+                }
+                if (lpState != null && lpState.loaded) {
+                    if (lpState.info == null) {
+                        break;
+                    }
+                    if (lpState.info.imageUrl != null && lpState.images?.[nodeName] == null) {
+                        loadImages.push(url);
+                    }
+                }
+                const imageState = lpState != null ? lpState.images?.[nodeName] : null;
+                if (imageState?.info != null) {
+                    media.push(imageState.info);
+                }
+                previews.push({
+                    siteName: lpState?.info?.siteName,
+                    url: lpState?.info?.url,
+                    title: lpState?.info?.title,
+                    description: lpState?.info?.description,
+                    imageHash: imageState?.info?.hash
+                });
+                totalVisible++;
+                break;
             }
-            if (lpState.info.imageUrl != null && lpState.images?.[nodeName] == null) {
-                loadImages.push(url);
-            }
+
+            default:
+                addedUrls.push(url);
+                break;
         }
-        const imageState = lpState != null ? lpState.images?.[nodeName] : null;
-        if (imageState?.info != null) {
-            media.push(imageState.info);
-        }
-        previews.push({
-            siteName: lpState?.info?.siteName,
-            url: lpState?.info?.url,
-            title: lpState?.info?.title,
-            description: lpState?.info?.description,
-            imageHash: imageState?.info?.hash
-        });
     }
 
-    return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: value.status}};
+    const istatus = immutable.wrap(value.status);
+    const more = addedUrls.length <= 4 ? 4 - totalVisible : 0;
+    addedUrls.forEach((url, index) => istatus.set([url], index < more ? "loaded" : "deleted"));
+
+    return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: istatus.value()}};
 }
 
 const connector = connect(
