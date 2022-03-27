@@ -8,6 +8,7 @@ import { LinkPreview, MediaAttachment, PostingFeatures } from "api/node/api-type
 import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/owner/selectors";
+import { getSetting } from "state/settings/selectors";
 import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
 import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
@@ -55,7 +56,7 @@ export function bodyToLinkPreviews(body: string,
     return [linkPreviews, bodyUrls, media];
 }
 
-function RichTextLinkPreviews({name, urlsField, nodeName, features, small, ownerName, linkPreviewsState,
+function RichTextLinkPreviews({name, urlsField, nodeName, features, small, ownerName, linkPreviewsState, maxAutomatic,
                                linkPreviewLoad, linkPreviewImageUpload}: Props) {
     const [, {value}, {setValue}] = useField<RichTextLinkPreviewsValue>(name);
     const [, {value: urls}] = useField<string[]>(urlsField);
@@ -63,8 +64,8 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, small, owner
     const targetNodeName = nodeName || ownerName;
 
     const {urlsToLoad, imagesToLoad, value: newValue} = useMemo<ValueChange>(
-        () => buildValue(urls, targetNodeName, linkPreviewsState, value),
-        [urls, targetNodeName, linkPreviewsState, value]
+        () => buildValue(urls, targetNodeName, linkPreviewsState, value, maxAutomatic),
+        [urls, targetNodeName, linkPreviewsState, value, maxAutomatic]
     );
     useEffect(() => {
         urlsToLoad.forEach(url => linkPreviewLoad(url));
@@ -98,7 +99,7 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, small, owner
     }
 
     const onRestore = (url: string) =>
-        setValue(immutable.del(value, ["status", url]));
+        setValue(immutable.set(value, ["status", url], "loaded"));
 
     const media: MediaAttachment[] = value.media.map(media => ({media, embedded: true}));
 
@@ -123,7 +124,8 @@ interface ValueChange {
 
 function buildValue(urls: string[], nodeName: string | null,
                     linkPreviewsState: LinkPreviewsState,
-                    value: RichTextLinkPreviewsValue): ValueChange {
+                    value: RichTextLinkPreviewsValue,
+                    maxAutomatic: number): ValueChange {
     if (nodeName == null || urls.length === 0) {
         return {urlsToLoad: [], imagesToLoad: [], value: {previews: [], media: [], status: value.status}};
     }
@@ -188,7 +190,7 @@ function buildValue(urls: string[], nodeName: string | null,
     }
 
     const istatus = immutable.wrap(value.status);
-    const more = addedUrls.length <= 4 ? 4 - totalVisible : 0;
+    const more = addedUrls.length <= maxAutomatic ? maxAutomatic - totalVisible : 0;
     addedUrls.forEach((url, index) => istatus.set([url], index < more ? "loaded" : "deleted"));
 
     return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: istatus.value()}};
@@ -197,7 +199,8 @@ function buildValue(urls: string[], nodeName: string | null,
 const connector = connect(
     (state: ClientState) => ({
         ownerName: getOwnerName(state),
-        linkPreviewsState: state.linkPreviews
+        linkPreviewsState: state.linkPreviews,
+        maxAutomatic: getSetting(state, "rich-text-editor.link-previews.max-automatic") as number
     }),
     { linkPreviewLoad, linkPreviewImageUpload }
 );
