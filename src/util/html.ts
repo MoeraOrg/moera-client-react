@@ -32,8 +32,18 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         div: ["katex"]
     },
     allowedIframeHostnames: [
-        "www.youtube.com", "www.youtube-nocookie.com", "player.vimeo.com", "www.facebook.com", "peer.tube",
-        "rumble.com", "open.spotify.com", "c.simmer.io", "itch.io", "odysee.com", "docs.google.com"
+        "c.simmer.io",
+        "codepen.io",
+        "docs.google.com",
+        "itch.io",
+        "odysee.com",
+        "open.spotify.com",
+        "peer.tube",
+        "player.vimeo.com",
+        "rumble.com",
+        "www.facebook.com",
+        "www.youtube-nocookie.com",
+        "www.youtube.com"
     ],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
