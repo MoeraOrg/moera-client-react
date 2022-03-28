@@ -28,6 +28,8 @@ export function replaceSmileys(text: string, removeEscapes = true): string {
     })
 }
 
+export function ellipsize(text: null | undefined, len: number): null;
+export function ellipsize(text: string, len: number): string;
 export function ellipsize(text: string | null | undefined, len: number): string | null {
     if (text == null) {
         return null;
