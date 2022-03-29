@@ -59,6 +59,12 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         }
     },
     transformTags: {
+        h1: addDirAuto,
+        h2: addDirAuto,
+        h3: addDirAuto,
+        h4: addDirAuto,
+        h5: addDirAuto,
+        h6: addDirAuto,
         p: addDirAuto,
         ol: addDirAuto,
         ul: addDirAuto

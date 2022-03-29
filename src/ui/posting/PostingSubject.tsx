@@ -23,7 +23,7 @@ export default function PostingSubject({posting, preview}: Props) {
         subjectHtml = ellipsize(subjectHtml, MAX_SHORT_TITLE); // FIXME may break entities
     }
     return (
-        <div className="subject">
+        <div className="subject" dir="auto">
             <Jump href={`/post/${posting.id}`}><span dangerouslySetInnerHTML={{__html: subjectHtml}}/></Jump>
         </div>
     );
