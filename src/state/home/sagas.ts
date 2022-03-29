@@ -1,6 +1,7 @@
-import { call, put } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
+import { getCartes } from "api/node/cartes";
 import { restoreConnectDialog } from "state/connectdialog/actions";
 import {
     browserApiSet,
@@ -12,13 +13,13 @@ import {
     homeAvatarsLoadFailed,
     HomeRestoreAction
 } from "state/home/actions";
-import { getCartesListTtl } from "state/cartes/selectors";
 import { errorThrown } from "state/error/actions";
+import { getCartesListTtl } from "state/cartes/selectors";
+import { getHomeRootLocation } from "state/home/selectors";
+import { executor } from "state/executor";
 import { Browser } from "ui/browser";
 import { normalizeUrl } from "util/url";
-import { executor } from "state/executor";
 import { now } from "util/misc";
-import { getCartes } from "api/node/cartes";
 
 export default [
     executor(HOME_RESTORE, null, homeRestoreSaga),
@@ -45,7 +46,9 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
                 yield* put(errorThrown(e));
             }
         }
-        yield* put(connectedToHome(location, login, token, permissions, cartesIp, cartes, roots, createdAt - now()));
+        const homeLocation = yield* select(getHomeRootLocation);
+        yield* put(connectedToHome(location, login, token, permissions, cartesIp, cartes, roots, createdAt - now(),
+            homeLocation != null && location !== homeLocation));
     } else {
         yield* put(disconnectFromHome(location, login));
     }

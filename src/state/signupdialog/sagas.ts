@@ -1,6 +1,8 @@
-import { call, put, select } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga';
 
 import { Naming, Node, NodeApiError } from "api";
+import { CarteSet } from "api/node/api-types";
+import { getCartes } from "api/node/cartes";
 import PROVIDERS, { Provider } from "providers";
 import { errorThrown } from "state/error/actions";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
@@ -22,12 +24,11 @@ import {
     SignUpFindDomainAction,
     SignUpNameVerifyAction
 } from "state/signupdialog/actions";
-import { CarteSet } from "api/node/api-types";
+import { getHomeRootLocation } from "state/home/selectors";
+import { executor } from "state/executor";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
-import { executor } from "state/executor";
 import { now } from "util/misc";
-import { getCartes } from "api/node/cartes";
 
 export default [
     executor(SIGN_UP, "", signUpSaga),
@@ -123,8 +124,10 @@ function* signUpSaga(action: SignUpAction) {
         Browser.storeConnectionData(
             rootLocation, null, null, null, login, data.token, data.permissions);
         Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
+        const homeLocation = yield* select(getHomeRootLocation);
         yield* put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp,
-            cartesData.cartes, null, cartesData.createdAt - now()));
+            cartesData.cartes, null, cartesData.createdAt - now(),
+            homeLocation != null && homeLocation !== rootLocation));
     }
 
     if (stage <= SIGN_UP_STAGE_PROFILE && email) {
