@@ -56,8 +56,9 @@ import { WithContext } from "state/action-types";
 import { StoryInfo } from "api/node/api-types";
 import { now } from "util/misc";
 
-function toStory(eventPayload: Omit<StoryEvent<any>, "type">, isHome: boolean): StoryInfo {
+function toStory(eventPayload: Omit<StoryEvent<any> | StoryDeletedEvent, "type">, isHome: boolean): StoryInfo {
     const story: StoryInfo & {postingId?: string | null} = {
+        publishedAt: 0,
         ...eventPayload,
         createdAt: now()
     };
