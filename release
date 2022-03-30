@@ -1,6 +1,6 @@
 #!/bin/bash
 
 ./build-number -j > src/build-number.js
-craco build
+react-app-rewired build
 echo
 echo "Build number is `./build-number`"
