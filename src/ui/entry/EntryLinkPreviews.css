@@ -1,0 +1,7 @@
+.entry-link-previews-expand {
+    border: 0;
+    background-color: transparent;
+    font-size: .875rem;
+    font-weight: bold;
+    color: var(--bs-primary);
+}

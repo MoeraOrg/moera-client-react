@@ -1,5 +1,8 @@
 import { SMILEY_LIKE, SMILEYS } from "smileys";
 
+const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9()!@:%_+.~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?/ig;
+const EMBEDDED = /<(?:iframe|img)[^>]+src=['"]([^'"]+)['"][^>]*>/ig;
+
 export function replaceSmileys(text: string, removeEscapes = true): string {
     if (text == null) {
         return text;
@@ -23,4 +26,24 @@ export function replaceSmileys(text: string, removeEscapes = true): string {
         }
         return match;
     })
+}
+
+export function ellipsize(text: null | undefined, len: number): null;
+export function ellipsize(text: string, len: number): string;
+export function ellipsize(text: string | null | undefined, len: number): string | null {
+    if (text == null) {
+        return null;
+    }
+    if (text.length <= len) {
+        return text;
+    }
+    return text.substring(0, len) + "\u2026";
+}
+
+export function extractUrls(text: string | null | undefined): string[] {
+    if (text == null) {
+        return [];
+    }
+    const embedded = new Set(Array.from(text.matchAll(EMBEDDED), m => m[1]));
+    return Array.from(text.matchAll(URLS), m => m[0]).filter(url => !embedded.has(url));
 }

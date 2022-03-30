@@ -23,7 +23,7 @@ import {
     EmailHint,
     FeedInfo,
     FeedSliceInfo,
-    FeedStatus,
+    FeedStatus, LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
     PostingFeatures,
@@ -605,7 +605,7 @@ export function* getContacts(nodeName: string | null, query: string | null,
 }
 
 export function* postMediaPublic(nodeName: string | null, file: File,
-                                 onProgress: ProgressHandler): CallApiResult<PublicMediaFileInfo> {
+                                 onProgress?: ProgressHandler): CallApiResult<PublicMediaFileInfo> {
     return yield* callApi({
         nodeName, location: "/media/public", method: "POST", auth: true, body: file, onProgress,
         schema: NodeApi.PublicMediaFileInfo
@@ -619,7 +619,7 @@ export function* getMediaPrivateInfo(nodeName: string | null, id: string): CallA
 }
 
 export function* postMediaPrivate(nodeName: string | null, file: File,
-                                  onProgress: ProgressHandler): CallApiResult<PrivateMediaFileInfo> {
+                                  onProgress?: ProgressHandler): CallApiResult<PrivateMediaFileInfo> {
     return yield* callApi({
         nodeName, location: "/media/private", method: "POST", auth: true, body: file, onProgress,
         schema: NodeApi.PrivateMediaFileInfo
@@ -651,4 +651,10 @@ export function* reorderAvatars(nodeName: string | null, ids: string[]): CallApi
 
 export function* proxyMedia(nodeName: string | null, url: string): CallApiResult<Blob> {
     return yield* callApi({nodeName, location: ut`/proxy/media?url=${url}`, auth: true, schema: "blob"});
+}
+
+export function* proxyLinkPreview(nodeName: string | null, url: string): CallApiResult<LinkPreviewInfo> {
+    return yield* callApi({
+        nodeName, location: ut`/proxy/link-preview?url=${url}`, auth: true, schema: NodeApi.LinkPreviewInfo
+    });
 }

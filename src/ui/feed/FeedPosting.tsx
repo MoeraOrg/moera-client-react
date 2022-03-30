@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { ExtPostingInfo } from "state/postings/state";
 import { isAtHomeNode, isPermitted, ProtectedObject } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
+import { goToPosting } from "state/navigation/actions";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
@@ -17,14 +18,14 @@ import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
 import PostingSubject from "ui/posting/PostingSubject";
 import EntryHtml from "ui/entry/EntryHtml";
+import EntryGallery from "ui/entry/EntryGallery";
+import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import PostingReactions from "ui/posting/PostingReactions";
 import PostingComments from "ui/posting/PostingComments";
 import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
-import EntryGallery from "ui/entry/EntryGallery";
-import { goToPosting } from "state/navigation/actions";
 
 interface ContentProps {
     posting: ExtPostingInfo;
@@ -74,6 +75,9 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
                 <Content posting={posting}/>
+                <EntryLinkPreviews nodeName=""
+                                   linkPreviews={posting.bodyPreview?.linkPreviews ?? posting.body.linkPreviews}
+                                   limit={2} media={posting.media ?? null}/>
                 <EntryGallery postingId={posting.id} nodeName="" media={posting.media ?? null}
                               onExpand={() => goToPosting(posting.id, null, true)}/>
                 <div className="reactions-line">

@@ -8,9 +8,10 @@ interface Props {
     height: number;
     alt?: string;
     title?: string;
+    className?: string;
 }
 
-export default function PreloadedImage({src, srcSet, sizes, width, height, alt, title}: Props) {
+export default function PreloadedImage({src, srcSet, sizes, width, height, alt, title, className}: Props) {
     if (window.loadedImages == null) {
         window.loadedImages = new Set();
     }
@@ -34,7 +35,7 @@ export default function PreloadedImage({src, srcSet, sizes, width, height, alt, 
                      className="preload-placeholder"/>
             }
             <img src={src} srcSet={srcSet} sizes={sizes} width={width} height={height} alt={alt} title={title}
-                 style={loaded ? style : {display: "none"}} onLoad={onLoad}/>
+                 className={className} style={loaded ? style : {display: "none"}} onLoad={onLoad}/>
         </>
     );
 }

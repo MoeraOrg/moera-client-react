@@ -352,6 +352,16 @@ const META: ClientSettingMetaInfo[] = [
         }
     },
     {
+        name: "rich-text-editor.link-previews.max-automatic",
+        type: "int",
+        defaultValue: "4",
+        title: "Maximal number of link previews created automatically",
+        modifiers: {
+            min: 0,
+            max: 64
+        }
+    },
+    {
         name: "avatar.shape.default",
         type: "string",
         defaultValue: "circle",

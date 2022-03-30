@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
+import debounce from 'lodash.debounce';
 
 import { Browser } from "ui/browser";
 import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
@@ -9,7 +10,7 @@ import { settingsUpdate } from "state/settings/actions";
 import { ClientState } from "state/state";
 import { SourceFormat } from "api/node/api-types";
 import { PREFIX } from "api/settings";
-import { replaceSmileys } from "util/text";
+import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, htmlToEmoji, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/misc";
 
@@ -30,6 +31,7 @@ export interface RichTextAreaProps {
     onKeyDown?: (event: React.KeyboardEvent) => void;
     onChange?: (event: React.FormEvent) => void;
     onBlur?: (event: React.FocusEvent) => void;
+    onUrls?: (urls: string[]) => void;
     textArea: React.RefObject<HTMLTextAreaElement>;
     panel: React.RefObject<HTMLDivElement>;
 }
@@ -49,8 +51,10 @@ class RichTextArea extends React.PureComponent<Props, State> {
         placeholder: "Enter text here..."
     }
 
+    #sentenceInput = false;
     #spaceInput = false;
     #anyInput = false;
+    #anyDelete = false;
 
     constructor(props: Props, context: any) {
         super(props, context);
@@ -92,13 +96,25 @@ class RichTextArea extends React.PureComponent<Props, State> {
     }
 
     onChange = (event: React.FormEvent) => {
-        const {panel, smileysEnabled, onChange} = this.props;
+        const {panel, smileysEnabled, onChange, onUrls} = this.props;
 
         const textArea = event.target as HTMLTextAreaElement;
         const value = textArea.value;
         const start = textArea.selectionStart;
         if (smileysEnabled && this.#spaceInput) {
-            textArea.value = replaceSmileys(value, false);
+            const newValue = replaceSmileys(value, false);
+            if (newValue !== value) {
+                textArea.value = newValue;
+                textArea.selectionStart = start;
+                textArea.selectionEnd = start;
+            }
+        }
+        if (onUrls) {
+            if (this.#sentenceInput) {
+                this.updateUrls(textArea);
+            } else if (this.#anyDelete) {
+                this.delayedUpdateUrls(textArea);
+            }
         }
         if (panel.current != null && this.#anyInput && value.length >= start
             && MENTION_START.test(value.substring(0, start))) {
@@ -114,11 +130,24 @@ class RichTextArea extends React.PureComponent<Props, State> {
         }
     }
 
+    delayedUpdateUrls = debounce((textArea: HTMLTextAreaElement) => this.updateUrls(textArea), 1500);
+
+    updateUrls(textArea: HTMLTextAreaElement) {
+        const {onUrls} = this.props;
+
+        if (onUrls) {
+            onUrls(extractUrls(textArea.value));
+        }
+    }
+
     onInput = (event: Event) => {
         const inputEvent = event as InputEvent; // FIXME should be in GlobalEventHandlersEventMap["input"]
         this.#anyInput = inputEvent.inputType.startsWith("insert");
         this.#spaceInput = inputEvent.inputType === "insertLineBreak"
             || (this.#anyInput && inputEvent.data != null && inputEvent.data.match(/\s/) != null);
+        this.#sentenceInput = inputEvent.inputType.startsWith("insertFromPaste")
+            || inputEvent.inputType.startsWith("history") || this.#spaceInput;
+        this.#anyDelete = inputEvent.inputType.startsWith("delete");
     }
 
     onKeyDown = (event: React.KeyboardEvent) => {
@@ -153,18 +182,12 @@ class RichTextArea extends React.PureComponent<Props, State> {
             return true;
         }
         const clean = html.replace(/<\/?(p|br)(\s[^>]*)?>/gi, "");
-        if (!containsTags(clean)) {
-            return true;
-        }
-        return false;
+        return !containsTags(clean);
     }
 
     _shouldPasteHtml(html: string): boolean {
         const clean = html.replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
-        if (!containsTags(htmlToEmoji(clean))) {
-            return true;
-        }
-        return false;
+        return !containsTags(htmlToEmoji(clean));
     }
 
     onPaste = (event: ClipboardEvent) => {

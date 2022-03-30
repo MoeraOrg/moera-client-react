@@ -619,86 +619,16 @@ const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
         "feedName": {
             type: "string"
         },
-        "publishedAt": {
-            type: "integer"
-        },
-        "pinned": {
-            type: "boolean"
-        },
         "moment": {
             type: "integer"
         },
         "postingId": {
             type: "string",
             nullable: true
-        },
-        "viewed": {
-            type: "boolean",
-            nullable: true
-        },
-        "read": {
-            type: "boolean",
-            nullable: true
-        },
-        "summaryNodeName": {
-            type: "string",
-            nullable: true
-        },
-        "summaryFullName": {
-            type: "string",
-            nullable: true
-        },
-        "summaryAvatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
-        "summary": {
-            type: "string"
-        },
-        "trackingId": {
-            type: "string",
-            nullable: true
-        },
-        "remoteNodeName": {
-            type: "string",
-            nullable: true
-        },
-        "remoteFullName": {
-            type: "string",
-            nullable: true
-        },
-        "remotePostingId": {
-            type: "string",
-            nullable: true
-        },
-        "remoteCommentId": {
-            type: "string",
-            nullable: true
-        },
-        "operations": {
-            type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                }
-            },
-            nullable: true,
-            additionalProperties: false
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "summary"]
+    required: ["type", "id", "storyType", "feedName", "moment"]
 };
 
 const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {

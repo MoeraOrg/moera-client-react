@@ -36,12 +36,13 @@ export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, 
     cartes: CarteInfo[];
     roots: RootInfo[] | null;
     clockOffset: number;
+    connectionSwitch: boolean;
 }>;
 export const connectedToHome = (location: string, login: string | null, token: string, permissions: string[],
                                 cartesIp: string | null, cartes: CarteInfo[], roots: RootInfo[] | null,
-                                clockOffset: number): ConnectedToHomeAction => ({
+                                clockOffset: number, connectionSwitch: boolean): ConnectedToHomeAction => ({
     type: CONNECTED_TO_HOME,
-    payload: {location, login, token, permissions, cartesIp, cartes, roots, clockOffset}
+    payload: {location, login, token, permissions, cartesIp, cartes, roots, clockOffset, connectionSwitch}
 });
 
 export const DISCONNECT_FROM_HOME = "DISCONNECT_FROM_HOME";

@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { RichTextMedia } from "state/richtexteditor/actions";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 
 interface OwnProps {
-    media: RichTextMedia;
+    media: VerifiedMediaFile;
     nodeName: string | null;
     onClick?: React.MouseEventHandler<HTMLImageElement>;
 }

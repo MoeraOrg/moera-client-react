@@ -3,12 +3,12 @@ import { connect, ConnectedProps } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
 import { DraftText, PostingText, StoryAttributes } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getOwnerName } from "state/owner/selectors";
 import { getSetting } from "state/settings/selectors";
-import { RichTextMedia } from "state/richtexteditor/actions";
 import { DraftSaver } from "ui/control";
 import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
 
@@ -20,7 +20,7 @@ const getPublishAt = (publications: StoryAttributes[] | null | undefined): numbe
     publications != null && publications.length > 0 ? publications[0].publishAt : null;
 
 const toDraftText = (ownerName: string, postingId: string | null, postingText: PostingText,
-                     media: Map<string, RichTextMedia>): DraftText => ({
+                     media: Map<string, VerifiedMediaFile>): DraftText => ({
     ...cloneDeep(postingText),
     media: postingText.media?.filter(id => id != null).map(id => ({
         id,
@@ -51,7 +51,7 @@ const ComposeDraftSaver = (props: Props) => {
         if (ownerName != null) {
             const media = new Map(
                 (values.body.media ?? [])
-                    .filter((rm): rm is RichTextMedia => rm != null)
+                    .filter((rm): rm is VerifiedMediaFile => rm != null)
                     .map(rm => [rm.id, rm])
             );
             composeDraftSave(props.draftId, toDraftText(ownerName, postingId, text, media));

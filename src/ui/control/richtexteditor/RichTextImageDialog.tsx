@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useField } from 'formik';
 
 import { Choice, PostingFeatures } from "api/node/api-types";
-import { RichTextMedia } from "state/richtexteditor/actions";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { PlusButton } from "ui/control";
 import { InputField, NumberField, SelectField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
@@ -53,7 +53,7 @@ const ALIGNMENTS: Choice<RichTextImageAlign>[] = [
 
 export interface RichTextImageValues {
     source?: string;
-    mediaFile?: RichTextMedia | null;
+    mediaFile?: VerifiedMediaFile | null;
     href?: string;
     standardSize?: RichTextImageStandardSize;
     customWidth?: number | null;
@@ -69,8 +69,8 @@ type Props = {
     noMedia?: boolean;
     nodeName?: string | null;
     forceCompress?: boolean;
-    selectedImage?: RichTextMedia | null;
-    onAdded?: (image: RichTextMedia) => void;
+    selectedImage?: VerifiedMediaFile | null;
+    onAdded?: (image: VerifiedMediaFile) => void;
     onDeleted?: (id: string) => void;
 } & RichTextEditorDialogProps<RichTextImageValues>;
 

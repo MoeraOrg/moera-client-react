@@ -24,7 +24,7 @@ export default class InstantsSentinel extends React.PureComponent<Props> {
         this.sentinelObserver = new IntersectionObserver(this.onSentinel, {rootMargin: this.props.margin});
     }
 
-    observeSentinel = (sentinel: HTMLDivElement) => {
+    observeSentinel = (sentinel: HTMLDivElement | null) => {
         if (sentinel == null) {
             this.sentinelObserver.disconnect();
         } else {

@@ -13,6 +13,7 @@ import { HomeState } from "state/home/state";
 import { FlashBoxState } from "state/flashbox/state";
 import { ImageEditDialogState } from "state/imageeditdialog/state";
 import { LightBoxState } from "state/lightbox/state";
+import { LinkPreviewsState } from "state/linkpreviews/state";
 import { MessageBoxState } from "state/messagebox/state";
 import { NamingState } from "state/naming/state";
 import { NavigationState } from "state/navigation/state";
@@ -50,6 +51,7 @@ export interface ClientState {
     home: HomeState;
     imageEditDialog: ImageEditDialogState;
     lightBox: LightBoxState;
+    linkPreviews: LinkPreviewsState;
     messageBox: MessageBoxState;
     naming: NamingState;
     navigation: NavigationState;

@@ -28,6 +28,22 @@ export function mediaImageFindLargerPreview(previews: MediaFilePreviewInfo[] | n
     return larger;
 }
 
+export function mediaSources(location: string, previews: MediaFilePreviewInfo[] | null | undefined): string {
+    if (previews == null) {
+        return "";
+    }
+    return previews.map(preview => {
+        const url = preview.original ? location : mediaImagePreview(location, preview.targetWidth);
+        return `${url} ${preview.width}w`;
+    }).join(",");
+}
+
+export function mediaSizes(previews: MediaFilePreviewInfo[] | null | undefined): string {
+    const mobile = Math.min(350, mediaImageFindLargerPreview(previews, 350)?.width ?? 350);
+    const regular = Math.min(900, mediaImageFindLargerPreview(previews, 900)?.width ?? 900);
+    return `(max-width: 400px) ${mobile}px, ${regular}px`;
+}
+
 export function mediaImageSize(targetWidth: number,
                                width: number | string | null | undefined,
                                height: number | string | null | undefined,

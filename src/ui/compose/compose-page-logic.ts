@@ -1,5 +1,6 @@
 import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
+import deepEqual from 'react-fast-compare';
 
 import { ClientSettings } from "api";
 import {
@@ -8,20 +9,23 @@ import {
     PostingFeatures,
     PostingInfo,
     PostingText,
+    PrivateMediaFileInfo,
     SourceFormat,
     StoryAttributes
 } from "api/node/api-types";
 import { RichTextValue } from "ui/control";
+import { bodyToLinkPreviews, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
-import deepEqual from "react-fast-compare";
 
 export interface ComposePageValues {
     avatar: AvatarImage | null;
     fullName: string | null;
     subject: string | null;
     body: RichTextValue;
+    bodyUrls: string[];
+    linkPreviews: RichTextLinkPreviewsValue;
     bodyFormatVisible: boolean;
     bodyFormat: SourceFormat;
     publishAtDefault: Date;
@@ -70,7 +74,16 @@ const composePageLogic = {
                 ? props.posting.bodySrc?.text ?? ""
                 : props.sharedText != null ? composePageLogic._getSharedText(props, bodyFormat) : "";
         const attachments = props.draft != null ? props.draft.media : props.posting?.media;
-        const media = attachments != null ? attachments.map(ma => ma.media ?? null).filter(mf => mf != null) : [];
+        let media = attachments != null
+            ? attachments.map(ma => ma.media ?? null).filter((mf): mf is PrivateMediaFileInfo => mf != null)
+            : [];
+
+        const linkPreviewsInfo = props.draft != null
+            ? props.draft.bodySrc?.linkPreviews ?? []
+            : props.posting != null ? props.posting.bodySrc?.linkPreviews ?? [] : [];
+        let linkPreviews, bodyUrls;
+        [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
+
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)
@@ -97,6 +110,8 @@ const composePageLogic = {
             fullName,
             subject,
             body: new RichTextValue(body, media),
+            bodyUrls,
+            linkPreviews,
             bodyFormatVisible: false,
             bodyFormat,
             publishAtDefault,
@@ -159,10 +174,11 @@ const composePageLogic = {
                 subject: props.features?.subjectPresent
                     ? this._replaceSmileys(props.smileysEnabled, values.subject?.trim() ?? "")
                     : null,
-                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
+                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim()),
+                linkPreviews: values.linkPreviews.previews
             }),
             bodySrcFormat: values.bodyFormat,
-            media: values.body.orderedMediaList(),
+            media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
             reactionsVisible: values.reactionsVisible,
             reactionTotalsVisible: values.reactionTotalsVisible,
@@ -201,9 +217,9 @@ const composePageLogic = {
         if (postingText.bodySrc == null || posting.bodySrc == null) {
             return (postingText.bodySrc == null) !== (posting.bodySrc == null);
         }
-        const {subject, text} = JSON.parse(postingText.bodySrc);
-        const {subject: prevSubject, text: prevText} = posting.bodySrc;
-        if (subject !== prevSubject || text !== prevText) {
+        const {subject, text, linkPreviews} = JSON.parse(postingText.bodySrc);
+        const {subject: prevSubject, text: prevText, linkPreviews: prevLinkPreviews} = posting.bodySrc;
+        if (subject !== prevSubject || text !== prevText || !deepEqual(linkPreviews ?? [], prevLinkPreviews ?? [])) {
             return true;
         }
         const media = postingText.media ?? [];

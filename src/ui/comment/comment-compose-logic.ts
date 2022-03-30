@@ -2,7 +2,9 @@ import { FormikBag } from 'formik';
 import deepEqual from 'react-fast-compare';
 
 import { AvatarImage, CommentInfo, CommentSourceText, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { RichTextValue } from "ui/control";
+import { bodyToLinkPreviews, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { replaceSmileys } from "util/text";
 import { toAvatarDescription } from "util/avatar";
 
@@ -31,6 +33,8 @@ interface CommentComposeProps extends MapToValuesProps, MapToCommentTextProps {
 export interface CommentComposeValues {
     avatar: AvatarImage | null;
     body: RichTextValue;
+    bodyUrls: string[];
+    linkPreviews: RichTextLinkPreviewsValue;
 }
 
 const commentComposeLogic = {
@@ -43,15 +47,23 @@ const commentComposeLogic = {
             ? props.draft.bodySrc?.text ?? ""
             : props.comment != null ? props.comment.bodySrc?.text ?? "" : "";
         const attachments = props.draft != null ? props.draft.media : props.comment?.media;
-        const media = attachments != null
+        let media = attachments != null
             ? attachments
-                .map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} : null)
-                .filter(mf => mf != null)
+                .map(ma => ma.media != null ? {...ma.media, digest: ma.remoteMedia?.digest} as VerifiedMediaFile : null)
+                .filter((mf): mf is VerifiedMediaFile => mf != null)
             : [];
+
+        const linkPreviewsInfo = props.draft != null
+            ? props.draft.bodySrc?.linkPreviews ?? []
+            : props.comment != null ? props.comment.bodySrc?.linkPreviews ?? [] : [];
+        let linkPreviews, bodyUrls;
+        [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 
         return {
             avatar,
-            body: new RichTextValue(body, media)
+            body: new RichTextValue(body, media),
+            bodyUrls,
+            linkPreviews
         };
     },
 
@@ -69,10 +81,11 @@ const commentComposeLogic = {
             ownerFullName: props.ownerFullName,
             ownerAvatar: toAvatarDescription(values.avatar),
             bodySrc: JSON.stringify({
-                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
+                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim()),
+                linkPreviews: values.linkPreviews.previews
             }),
             bodySrcFormat: props.sourceFormatDefault,
-            media: values.body.orderedMediaList(),
+            media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
             acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
             repliedToId: props.repliedToId
         };
@@ -117,9 +130,9 @@ const commentComposeLogic = {
         if (commentText.bodySrc == null || comment.bodySrc == null) {
             return (commentText.bodySrc == null) !== (comment.bodySrc == null);
         }
-        const {text} = JSON.parse(commentText.bodySrc);
-        const {text: prevText} = comment.bodySrc;
-        if (text !== prevText) {
+        const {text, linkPreviews} = JSON.parse(commentText.bodySrc);
+        const {text: prevText, linkPreviews: prevLinkPreviews} = comment.bodySrc;
+        if (text !== prevText || !deepEqual(linkPreviews ?? [], prevLinkPreviews ?? [])) {
             return true;
         }
         const media = commentText.media ?? [];

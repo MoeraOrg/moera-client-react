@@ -12,18 +12,18 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 
-import { RichTextMedia } from "state/richtexteditor/actions";
+import { PrivateMediaFileInfo } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { RichTextValue } from "ui/control";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import { mediaHashesExtract } from "util/media-images";
-import { PrivateMediaFileInfo } from "api/node/api-types";
 
 interface Props {
     value: RichTextValue;
     nodeName: string | null;
     selectedImage: PrivateMediaFileInfo | null;
-    selectImage: (image: RichTextMedia | null) => void;
+    selectImage: (image: VerifiedMediaFile | null) => void;
     onDeleted?: (id: string) => void;
     onReorder?: (activeId: string, overId: string) => void;
 }
@@ -42,7 +42,7 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
         keyboardSensor,
     );
 
-    const [dragged, setDragged] = useState<RichTextMedia | null>(null);
+    const [dragged, setDragged] = useState<VerifiedMediaFile | null>(null);
 
     if (value.media == null || value.media.length === 0) {
         return null;
@@ -50,7 +50,7 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
 
     const embedded = mediaHashesExtract(value.text);
     const mediaList = value.media
-        .filter((media): media is RichTextMedia => media != null && !embedded.has(media.hash));
+        .filter((media): media is VerifiedMediaFile => media != null && !embedded.has(media.hash));
     const mediaIds = mediaList.map(mf => mf.id);
 
     const onDragStart = ({active}: DragStartEvent) =>
@@ -69,7 +69,7 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
         }
     }
 
-    const onClick = (image: RichTextMedia) => (event: MouseEvent) => {
+    const onClick = (image: VerifiedMediaFile) => (event: MouseEvent) => {
         selectImage(image);
         event.preventDefault();
     }

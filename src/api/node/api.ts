@@ -288,6 +288,64 @@ const RegisteredNameSecretType: JSONSchemaType<API.RegisteredNameSecret> = {
 
 export const RegisteredNameSecret = schema(RegisteredNameSecretType);
 
+const LinkPreviewInfoType: JSONSchemaType<API.LinkPreviewInfo> = {
+    type: "object",
+    properties: {
+        "siteName": {
+            type: "string",
+            nullable: true
+        },
+        "url": {
+            type: "string",
+            nullable: true
+        },
+        "title": {
+            type: "string",
+            nullable: true
+        },
+        "description": {
+            type: "string",
+            nullable: true
+        },
+        "imageUrl": {
+            type: "string",
+            nullable: true
+        }
+    },
+    additionalProperties: false
+};
+
+export const LinkPreviewInfo = schema(LinkPreviewInfoType);
+
+const LinkPreviewType: JSONSchemaType<API.LinkPreview> = {
+    type: "object",
+    properties: {
+        "siteName": {
+            type: "string",
+            nullable: true
+        },
+        "url": {
+            type: "string",
+            nullable: true
+        },
+        "title": {
+            type: "string",
+            nullable: true
+        },
+        "description": {
+            type: "string",
+            nullable: true
+        },
+        "imageHash": {
+            type: "string",
+            nullable: true
+        }
+    },
+    additionalProperties: false
+};
+
+export const LinkPreview = schema(LinkPreviewType);
+
 const BodyType: JSONSchemaType<API.Body> = {
     type: "object",
     properties: {
@@ -297,6 +355,11 @@ const BodyType: JSONSchemaType<API.Body> = {
         },
         "text": {
             type: "string",
+            nullable: true
+        },
+        "linkPreviews": {
+            type: "array",
+            items: LinkPreviewType,
             nullable: true
         }
     },

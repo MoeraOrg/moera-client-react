@@ -23,6 +23,7 @@ import CommentContent from "ui/comment/CommentContent";
 import CommentButtons from "ui/comment/CommentButtons";
 import CommentReactions from "ui/comment/CommentReactions";
 import EntryGallery from "ui/entry/EntryGallery";
+import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import "./Comment.css";
 
 type Props = {
@@ -61,6 +62,8 @@ const Comment = ({
                             <CommentUpdated comment={comment}/>
                         </div>
                         <CommentContent comment={comment} previousId={previousId} receiverName={postingReceiverName}/>
+                        <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews} limit={2}
+                                           media={comment.media ?? null} small/>
                         <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
                                       media={comment.media ?? null}/>
                         <div className="reactions-line">

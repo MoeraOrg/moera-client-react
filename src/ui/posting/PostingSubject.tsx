@@ -2,7 +2,10 @@ import React from 'react';
 
 import Jump from "ui/navigation/Jump";
 import { ExtPostingInfo } from "state/postings/state";
+import { ellipsize } from "util/text";
 import "./PostingSubject.css";
+
+const MAX_SHORT_TITLE = 120;
 
 interface Props {
     posting: ExtPostingInfo;
@@ -10,14 +13,17 @@ interface Props {
 }
 
 export default function PostingSubject({posting, preview}: Props) {
-    const subjectHtml = preview && posting.bodyPreview?.subjectHtml
+    let subjectHtml = preview && posting.bodyPreview?.subjectHtml
         ? posting.bodyPreview.subjectHtml
         : posting.body.subjectHtml;
     if (!subjectHtml) {
         return null;
     }
+    if (preview) {
+        subjectHtml = ellipsize(subjectHtml, MAX_SHORT_TITLE); // FIXME may break entities
+    }
     return (
-        <div className="subject">
+        <div className="subject" dir="auto">
             <Jump href={`/post/${posting.id}`}><span dangerouslySetInnerHTML={{__html: subjectHtml}}/></Jump>
         </div>
     );

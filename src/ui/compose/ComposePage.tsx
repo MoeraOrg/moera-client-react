@@ -31,6 +31,7 @@ import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-log
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import Jump from "ui/navigation/Jump";
 import "./ComposePage.css";
+import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 
 export type ComposePageOuterProps = ConnectedProps<typeof connector>;
 
@@ -84,8 +85,9 @@ function ComposePage(props: Props) {
                         }
                         <RichTextField name="body" disabled={loadingContent || beingPosted}
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
-                                       features={features} nodeName="" anyValue autoFocus/>
+                                       features={features} nodeName="" urlsField="bodyUrls" anyValue autoFocus/>
                         <ComposeFormattingHelp/>
+                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features}/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>
                         <ComposeReactions/>

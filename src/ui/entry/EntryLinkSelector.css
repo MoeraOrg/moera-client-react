@@ -1,0 +1,36 @@
+.entry-link-selector {
+    margin-bottom: .25rem;
+}
+
+.entry-link-selector .popover {
+    max-height: 21rem;
+    overflow-y: auto;
+}
+
+@media only screen and (min-width: 576px) {
+    .entry-link-selector .popover {
+        width: 25em;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .entry-link-selector .popover {
+        width: calc(100vw - 4.3rem);
+    }
+}
+
+.entry-link-selector .item {
+    line-height: normal;
+    text-indent: -1.5em;
+    cursor: pointer;
+    padding: .25em .5em .25em 2em;
+    white-space: normal;
+    width: 100%;
+    max-height: 5em;
+    overflow-y: hidden;
+    overflow-wrap: break-word;
+}
+
+.entry-link-selector .item:hover {
+    background-color: var(--highlight);
+}

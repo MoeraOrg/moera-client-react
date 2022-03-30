@@ -168,9 +168,15 @@ export interface StoryEvent<T> extends BaseEvent<T> {
 
 export type StoryAddedEvent = StoryEvent<"STORY_ADDED">;
 
-export type StoryDeletedEvent = StoryEvent<"STORY_DELETED">;
-
 export type StoryUpdatedEvent = StoryEvent<"STORY_UPDATED">;
+
+export interface StoryDeletedEvent extends BaseEvent<"STORY_DELETED"> {
+    id: string;
+    storyType: StoryType;
+    feedName: string;
+    moment: number;
+    postingId?: string | null;
+}
 
 interface SubscriberEvent<T> extends BaseEvent<T> {
     id: string;

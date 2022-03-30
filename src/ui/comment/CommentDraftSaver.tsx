@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
 import { CommentText, DraftText, SourceFormat } from "api/node/api-types";
+import { VerifiedMediaFile } from "api/node/images-upload";
 import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
@@ -13,7 +14,6 @@ import {
     getCommentsState
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
-import { RichTextMedia } from "state/richtexteditor/actions";
 import { DraftSaver } from "ui/control";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
 
@@ -26,7 +26,7 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 const toDraftText = (receiverName: string, postingId: string, commentId: string | null, repliedToId: string | null,
-                     commentText: CommentText, media: Map<string, RichTextMedia>): DraftText => ({
+                     commentText: CommentText, media: Map<string, VerifiedMediaFile>): DraftText => ({
     ...cloneDeep(commentText),
     media: commentText.media?.map(id => ({
         id,
@@ -56,7 +56,7 @@ const ComposeDraftSaver = (props: Props) => {
         if (ownerName != null && receiverPostingId != null) {
             const media = new Map(
                 (values.body.media ?? [])
-                    .filter((rm): rm is RichTextMedia => rm != null)
+                    .filter((rm): rm is VerifiedMediaFile => rm != null)
                     .map(rm => [rm.id, rm])
             );
             commentDraftSave(draft?.id ?? null,

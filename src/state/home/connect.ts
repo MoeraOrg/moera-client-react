@@ -14,7 +14,7 @@ import {
 import { Naming, Node, NodeApiError, NodeName } from "api";
 import { selectApi } from "api/node/call";
 import { errorThrown } from "state/error/actions";
-import { getHomeConnectionData, getHomeRootPage } from "state/home/selectors";
+import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { CarteSet } from "api/node/api-types";
@@ -83,8 +83,9 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
     }
     Browser.storeConnectionData(nodeUrl, null, null, null, login, data.token, data.permissions);
     Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
+    const homeLocation = yield* select(getHomeRootLocation);
     yield* put(connectedToHome(nodeUrl, login, data.token, data.permissions, cartesData.cartesIp,
-        cartesData.cartes, null, cartesData.createdAt - now()));
+        cartesData.cartes, null, cartesData.createdAt - now(), homeLocation != null && nodeUrl !== homeLocation));
 }
 
 function* verifyHomeOwnerSaga() {

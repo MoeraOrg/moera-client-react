@@ -13,6 +13,7 @@ import {
     faChartBar,
     faChevronCircleDown,
     faChevronDown,
+    faCircle as faCircleSolid,
     faCode,
     faCog,
     faComment,
@@ -94,6 +95,7 @@ export default function initIconLibrary() {
     library.add(faChevronCircleDown);
     library.add(faChevronDown);
     library.add(faCircle);
+    library.add(faCircleSolid);
     library.add(faClock);
     library.add(faCode);
     library.add(faCog);

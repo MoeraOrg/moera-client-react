@@ -41,17 +41,17 @@ export default class CommentsSentinel extends React.PureComponent<Props> {
         if (!visible) {
             return <div className="comments-sentinel"/>;
         }
+        if (loading) {
+            return (
+                <div className="comments-sentinel">
+                    <Loading active={loading}/>
+                </div>
+            );
+        }
         const fullTitle = total > 0 ? `${title} (${total})` : title;
         return (
             <button className="btn btn-link comments-sentinel" ref={this.observeSentinel} onClick={onClick}>
-                {!loading &&
-                    <>
-                        <FontAwesomeIcon className="icon" icon="sync-alt"/>
-                        &nbsp;&nbsp;
-                        {fullTitle}
-                    </>
-                }
-                <Loading active={loading}/>
+                <FontAwesomeIcon className="icon" icon="sync-alt"/>&nbsp;&nbsp;{fullTitle}
             </button>
         );
     }

@@ -27,7 +27,7 @@ export default class FeedSentinel extends React.PureComponent<Props> {
         this.boundaryObserver = new IntersectionObserver(this.onBoundary);
     }
 
-    observeSentinel = (sentinel: HTMLDivElement) => {
+    observeSentinel = (sentinel: HTMLDivElement | null) => {
         if (sentinel == null) {
             this.sentinelObserver.disconnect();
             this.boundaryObserver.disconnect();
