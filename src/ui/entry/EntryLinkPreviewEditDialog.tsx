@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
-import { InputField } from "ui/control/field";
+import { InputField, TextField } from "ui/control/field";
 
 export interface EntryLinkPreviewEditValues {
     title: string;
@@ -20,8 +20,8 @@ const mapPropsToValues = (props: Props): EntryLinkPreviewEditValues => ({
 
 const EntryLinkPreviewEditDialog = () => (
     <>
-        <InputField name="title" title="Title" autoFocus/>
-        <InputField name="description" title="Description"/>
+        <InputField name="title" title="Title" maxLength={75} autoFocus/>
+        <TextField name="description" title="Description" maxRows={3} maxLength={120}/>
     </>
 );
 

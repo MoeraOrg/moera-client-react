@@ -9,6 +9,8 @@ interface Props {
     name: string;
     title?: string;
     rows?: number;
+    maxRows?: number;
+    maxLength?: number;
     placeholder?: string;
     autoFocus?: boolean;
     anyValue?: boolean;
@@ -21,9 +23,9 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function TextField({name, title, rows = 3, placeholder = "Enter text here...", autoFocus, anyValue, className,
-                           autoComplete, noFeedback = false, disabled = false, initialValue, defaultValue,
-                           onKeyDown}: Props) {
+export function TextField({name, title, rows = 3, maxRows = 20, maxLength, placeholder = "Enter text here...",
+                           autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false,
+                           initialValue, defaultValue, onKeyDown}: Props) {
 
     const inputDom = useRef<HTMLTextAreaElement>(null);
 
@@ -58,7 +60,8 @@ export function TextField({name, title, rows = 3, placeholder = "Enter text here
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     rows={rows}
-                    maxRows={20}
+                    maxRows={maxRows}
+                    maxLength={maxLength}
                     disabled={disabled}
                     onKeyDown={onKeyDown}
                     ref={inputDom}
