@@ -43,6 +43,7 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
         mediaFile = media.find(ma => ma.media?.hash === imageHash)?.media ?? null;
         large = !small && mediaFile != null && mediaFile.width > 450;
     }
+    const imageLoading = imageHash != null && mediaFile == null;
 
     const onEdit = (e: React.MouseEvent) => {
         setEdit(true);
@@ -59,7 +60,7 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
     return (
         <Frame className={cx("link-preview", {"large": large}, {"small": small})} url={url} editing={editing}
                onEdit={onEdit} onDelete={onDelete}>
-            <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile}/>
+            <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageLoading}/>
             <div className="details">
                 {title &&
                     <div className="title">{ellipsize(title, small ? 35 : 75)}</div>
