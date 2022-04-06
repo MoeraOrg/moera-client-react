@@ -28,6 +28,7 @@ const RichTextEditor = ({name, value, features, rows, maxRows, placeholder, clas
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
+    const [imageFromClipboard, setImageFromClipboard] = useState<File | undefined>(undefined);
 
     const onImageLoadStarted = (count: number) => {
         if (onChange != null && count > 0) {
@@ -90,11 +91,13 @@ const RichTextEditor = ({name, value, features, rows, maxRows, placeholder, clas
                                  features={features} noMedia={noMedia} nodeName={nodeName}
                                  forceImageCompress={forceImageCompress} selectedImage={selectedImage}
                                  selectImage={setSelectedImage} onImageAdded={onImageAdded}
-                                 onImageDeleted={onImageDeleted}/>
+                                 onImageDeleted={onImageDeleted} externalImage={imageFromClipboard}
+                                 uploadingExternalImage={() => setImageFromClipboard(undefined)}/>
             <RichTextArea name={name} value={value.text} format={format} rows={rows} maxRows={maxRows}
                           placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
                           disabled={disabled} smileysEnabled={smileysEnabled} onKeyDown={onKeyDown}
-                          onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} textArea={textArea} panel={panel}/>
+                          onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} textArea={textArea} panel={panel}
+                          uploadImage={setImageFromClipboard}/>
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
                                         nodeName={nodeName ?? null} forceCompress={forceImageCompress}

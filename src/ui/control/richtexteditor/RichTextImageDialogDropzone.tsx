@@ -23,12 +23,15 @@ interface OwnProps {
     forceCompress?: boolean;
     onAdded?: (image: VerifiedMediaFile) => void;
     onDeleted?: (id: string) => void;
+    externalImage?: File;
+    uploadingExternalImage?: () => void;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function RichTextImageDialogDropzone({features, nodeName, forceCompress = false, onAdded, onDeleted, rootPage,
-                                      compressImages, richTextEditorImagesUpload, richTextEditorImageCopy}: Props) {
+                                      compressImages, richTextEditorImagesUpload, richTextEditorImageCopy,
+                                      externalImage, uploadingExternalImage}: Props) {
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -100,6 +103,10 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
     const mediaLocation = value != null ? rootPage + "/media/" + value.path : null;
     const src = mediaLocation != null ? mediaImagePreview(mediaLocation, 150) : null;
     const [imageWidth, imageHeight] = value != null ? mediaImageSize(150, 150, 150, value) : [0, 0];
+    if (!uploading && externalImage) {
+        uploadImage([externalImage]);
+        uploadingExternalImage?.();
+    }
 
     return (
         <div className={cx(

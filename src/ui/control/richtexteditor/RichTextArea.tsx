@@ -34,6 +34,7 @@ export interface RichTextAreaProps {
     onUrls?: (urls: string[]) => void;
     textArea: React.RefObject<HTMLTextAreaElement>;
     panel: React.RefObject<HTMLDivElement>;
+    uploadImage?: (image: File) => void;
 }
 
 type Props = RichTextAreaProps & ConnectedProps<typeof connector>;
@@ -191,12 +192,29 @@ class RichTextArea extends React.PureComponent<Props, State> {
     }
 
     onPaste = (event: ClipboardEvent) => {
-        const {format, pasteRich, textArea} = this.props;
+        const {format, pasteRich, textArea, uploadImage} = this.props;
 
         if (!textArea.current || event.clipboardData == null || format === "plain-text" || pasteRich === "text") {
             return;
         }
-        let html = event.clipboardData.getData("text/html");
+
+        if (uploadImage) {
+            // clipboardData.items is array-like, not a real array, thus weird calling convention
+            const imageItem: DataTransferItem = Array.prototype.find.call(
+                event.clipboardData.items,
+                ({kind, type}: DataTransferItem) => kind === 'file' && type.startsWith('image/')
+            );
+
+            if (imageItem) {
+                const imageFile = imageItem.getAsFile();
+                if (imageFile) {
+                    uploadImage(imageFile);
+                }
+                return;
+            }
+        }
+
+        const html = event.clipboardData.getData("text/html");
         if (!html) {
             return;
         }
