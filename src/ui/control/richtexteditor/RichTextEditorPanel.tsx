@@ -34,6 +34,8 @@ type Props = {
     selectImage: (image: PrivateMediaFileInfo | null) => void;
     onImageAdded?: (image: PrivateMediaFileInfo) => void;
     onImageDeleted?: (id: string) => void;
+    externalImage?: File;
+    uploadingExternalImage?: () => void;
 } & ConnectedProps<typeof connector>;
 
 interface State {
@@ -378,12 +380,16 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
     render() {
         const {
             hiding, format, panel, features, noMedia, nodeName, forceImageCompress, selectedImage, onImageAdded,
-            onImageDeleted
+            onImageDeleted, externalImage, uploadingExternalImage
         } = this.props;
         const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText} = this.state;
 
         if (format === "plain-text") {
             return null;
+        }
+
+        if (externalImage) {
+            this.setState({imageDialog: true});
         }
 
         return (
@@ -411,7 +417,8 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                 <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit} nodeName={nodeName}
                                      forceCompress={forceImageCompress} selectedImage={selectedImage}
                                      features={features} noMedia={noMedia} onAdded={onImageAdded}
-                                     onDeleted={onImageDeleted}/>
+                                     onDeleted={onImageDeleted} externalImage={externalImage}
+                                     uploadingExternalImage={uploadingExternalImage}/>
                 <RichTextMentionDialog show={mentionDialog} onSubmit={this.onMentionSubmit}/>
             </div>
         );
