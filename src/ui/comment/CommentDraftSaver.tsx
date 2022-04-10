@@ -56,6 +56,7 @@ const ComposeDraftSaver = (props: Props) => {
         if (ownerName != null && receiverPostingId != null) {
             const media = new Map(
                 (values.body.media ?? [])
+                    .concat(values.linkPreviews.media)
                     .filter((rm): rm is VerifiedMediaFile => rm != null)
                     .map(rm => [rm.id, rm])
             );
