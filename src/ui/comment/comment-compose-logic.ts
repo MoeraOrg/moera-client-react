@@ -95,10 +95,12 @@ const commentComposeLogic = {
         return {
             ownerAvatar: toAvatarDescription(values.avatar),
             bodySrc: JSON.stringify({
-                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim())
+                text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim()),
+                linkPreviews: values.linkPreviews.previews
             }),
             bodySrcFormat: props.sourceFormatDefault,
-            media: values.body.orderedMediaListWithDigests(),
+            media: (values.body.orderedMediaListWithDigests() ?? [])
+                .concat(values.linkPreviews.media.map(vm => ({id: vm.id, digest: vm.digest}))),
             acceptedReactions: {positive: props.reactionsPositiveDefault, negative: props.reactionsNegativeDefault},
             repliedToId: props.repliedToId
         };
