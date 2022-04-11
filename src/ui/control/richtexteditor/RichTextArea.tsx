@@ -274,6 +274,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
                 inputType: "insertText",
                 bubbles: true
             }));
+            this.updateUrls(textArea.current);
         }
         textArea.current.focus();
     }
