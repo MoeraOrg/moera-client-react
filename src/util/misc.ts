@@ -4,7 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 
-const DIGITS = /^[0-9]+$/;
+const DIGITS = /^\d+$/;
 
 export function mentionName(name: string | null | undefined, fullName?: string | null): string {
     if (!name) {
@@ -142,13 +142,13 @@ export function getFeedHeaderHeight(): number {
     return headerHeight + feedTitleHeight;
 }
 
-export function cloneOperations<T extends Partial<Record<string, string[]>>>
-                (operations: Record<string, string[] | null | undefined> | null | undefined, defaults: T): T {
+export function cloneOperations<T extends Partial<Record<string, string[] | string>>>
+                (operations: Record<string, string[] | string | null | undefined> | null | undefined, defaults: T): T {
     if (operations == null) {
         return cloneDeep(defaults);
     }
 
-    const result: Partial<Record<string, string[]>> = {};
+    const result: Partial<Record<string, string[] | string>> = {};
     Object.getOwnPropertyNames(defaults).forEach(key => result[key] = operations[key] ?? defaults[key]);
     return result as T;
 }

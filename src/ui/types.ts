@@ -7,7 +7,7 @@ export interface MinimalStoryInfo {
     viewed?: boolean | null;
     moment: number;
     operations?: {
-        edit?: string[] | null;
-        delete?: string[] | null;
+        edit?: string[] | string | null;
+        delete?: string[] | string | null;
     } | null;
 }

@@ -75,7 +75,7 @@ export interface ProfileInfo {
     avatar?: AvatarInfo | null;
     fundraisers?: FundraiserInfo[] | null;
     operations?: {
-        edit?: string[] | null;
+        edit?: string[] | string | null;
     } | null;
 }
 
@@ -91,7 +91,7 @@ export interface NodeNameInfo {
     operationErrorCode?: string | null;
     operationErrorMessage?: string | null;
     operations?: {
-        manage?: string[] | null;
+        manage?: string[] | string | null;
     } | null;
 }
 
@@ -150,8 +150,8 @@ export interface FeedReference {
     moment: number;
     storyId: string;
     operations?: {
-        edit?: string[] | null;
-        delete?: string[] | null;
+        edit?: string[] | string | null;
+        delete?: string[] | string | null;
     } | null;
 }
 
@@ -240,9 +240,9 @@ export interface PostingInfoBase<B> {
     feedReferences?: FeedReference[] | null;
     clientReaction?: ClientReactionInfo | null;
     operations?: {
-        edit?: string[] | null;
-        delete?: string[] | null;
-        reactions?: string[] | null;
+        edit?: string[] | string | null;
+        delete?: string[] | string | null;
+        reactions?: string[] | string | null;
     } | null;
     acceptedReactions?: AcceptedReactions | null;
     reactions?: ReactionTotalsInfo | null;
@@ -266,7 +266,7 @@ export interface FeedInfo {
     firstCreatedAt?: number | null;
     lastCreatedAt?: number | null;
     operations?: {
-        add?: string[] | null;
+        add?: string[] | string | null;
     } | null;
 }
 
@@ -343,10 +343,10 @@ interface CommentInfoBase<B> {
     signature?: string | null;
     signatureVersion?: number | null;
     operations?: {
-        edit?: string[] | null;
-        delete?: string[] | null;
-        revisions?: string[] | null;
-        reactions?: string[] | null;
+        edit?: string[] | string | null;
+        delete?: string[] | string | null;
+        revisions?: string[] | string | null;
+        reactions?: string[] | string | null;
     } | null;
     acceptedReactions?: AcceptedReactions | null;
     clientReaction?: ClientReactionInfo | null;
@@ -400,8 +400,8 @@ export interface StoryInfoBase<B> {
     remoteCommentId?: string | null;
     remoteMediaId?: string | null;
     operations?: {
-        edit?: string[] | null;
-        delete?: string[] | null;
+        edit?: string[] | string | null;
+        delete?: string[] | string | null;
     } | null;
 }
 
@@ -495,7 +495,7 @@ export interface ReactionInfo {
     signature?: string | null;
     signatureVersion?: number | null;
     operations?: {
-        delete?: string[] | null;
+        delete?: string[] | string | null;
     } | null;
 }
 

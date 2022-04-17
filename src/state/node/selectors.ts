@@ -1,4 +1,4 @@
-import { getHomeOwnerName, getHomeRootLocation } from "state/home/selectors";
+import { getHomeOwnerName, getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { ClientState } from "state/state";
 
 export function isAtNode(state: ClientState): boolean {
@@ -56,7 +56,7 @@ export function isReceiverAdmin(state: ClientState, receiverName: string | null)
 
 export interface ProtectedObject {
     ownerName?: string;
-    operations?: Record<string, string[] | null> | null;
+    operations?: Record<string, string[] | string | null> | null;
 }
 
 export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
@@ -67,14 +67,32 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
     if (object.operations == null) {
         return true;
     }
-    const requirements = object.operations[operation];
+    let requirements = object.operations[operation];
     if (requirements == null) {
         return false;
     }
+    if (!Array.isArray(requirements)) {
+        requirements = [requirements];
+    }
     for (let r of requirements) {
         switch (r) {
+            case "none":
+                break;
             case "public":
                 return true;
+            case "signed":
+                if (isConnectedToHome(state)) {
+                    return true;
+                }
+                break;
+            case "ruler":
+                if (state.home.owner.name === object.ownerName) {
+                    return true;
+                }
+                if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
+                    return true;
+                }
+                break;
             case "owner":
                 if (state.home.owner.name === object.ownerName) {
                     return true;

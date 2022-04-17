@@ -183,15 +183,27 @@ const ProfileInfoType: JSONSchemaType<API.ProfileInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
+            anyOf: [
+                {
+                    properties: {
+                        "edit": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
+                },
+                {
+                    properties: {
+                        "edit": {
+                            type: "string",
+                            nullable: true
+                        }
                     },
-                    nullable: true
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         }
@@ -246,15 +258,27 @@ const NodeNameInfoType: JSONSchemaType<API.NodeNameInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "manage": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "manage": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                    }
+                },
+                {
+                    properties: {
+                        "manage": {
+                            type: "string",
+                            nullable: true
+                        },
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         }
@@ -445,22 +469,38 @@ const FeedReferenceType: JSONSchemaType<API.FeedReference> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "edit": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
                 },
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+                {
+                    properties: {
+                        "edit": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "string",
+                            nullable: true
+                        }
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         }
@@ -789,29 +829,49 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "edit": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
                 },
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "reactions": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+                {
+                    properties: {
+                        "edit": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "string",
+                            nullable: true
+                        }
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         },
@@ -984,29 +1044,49 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "edit": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
                 },
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "reactions": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+                {
+                    properties: {
+                        "edit": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "string",
+                            nullable: true
+                        }
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         },
@@ -1070,15 +1150,27 @@ const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "add": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "add": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
+                },
+                {
+                    properties: {
+                        "add": {
+                            type: "string",
+                            nullable: true
+                        }
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         }
@@ -1234,36 +1326,60 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "edit": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "revisions": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
                 },
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "revisions": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "reactions": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+                {
+                    properties: {
+                        "edit": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "revisions": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "string",
+                            nullable: true
+                        }
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         },
@@ -1392,36 +1508,60 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
+            anyOf: [
+                {
+                    properties: {
+                        "edit": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "revisions": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
                     },
-                    nullable: true
                 },
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
+                {
+                    properties: {
+                        "edit": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "revisions": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "reactions": {
+                            type: "string",
+                            nullable: true
+                        }
                     },
-                    nullable: true
-                },
-                "revisions": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
-                },
-                "reactions": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         },
@@ -1531,22 +1671,38 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "edit": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
                 },
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+                {
+                    properties: {
+                        "edit": {
+                            type: "string",
+                            nullable: true
+                        },
+                        "delete": {
+                            type: "string",
+                            nullable: true
+                        }
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         }
@@ -1827,15 +1983,27 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
         },
         "operations": {
             type: "object",
-            properties: {
-                "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
-                    nullable: true
+            anyOf: [
+                {
+                    properties: {
+                        "delete": {
+                            type: "array",
+                            items: {
+                                type: "string"
+                            },
+                            nullable: true
+                        }
+                    }
+                },
+                {
+                    properties: {
+                        "delete": {
+                            type: "string",
+                            nullable: true
+                        }
+                    }
                 }
-            },
+            ],
             nullable: true,
             additionalProperties: false
         }
