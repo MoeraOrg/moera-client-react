@@ -12,7 +12,7 @@ export interface FeedState {
     unsubscribing: boolean;
     subscriberId: string | null;
     operations: {
-        add: string[];
+        add: string;
     }
     loadingStatus: boolean;
     loadedStatus: boolean;

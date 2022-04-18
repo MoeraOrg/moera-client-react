@@ -4,7 +4,7 @@ import { FeedStatus } from "api/node/api-types";
 export const emptyInfo = {
     subscriberId: null,
     operations: {
-        add: []
+        add: "none"
     }
 };
 

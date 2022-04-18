@@ -7,7 +7,7 @@ export interface NodeNameState {
     operationErrorCode: string | null;
     operationErrorMessage: string | null;
     operations: {
-        manage: string[];
+        manage: string;
     };
     showingRegisterDialog: boolean;
     registering: boolean;

@@ -56,7 +56,7 @@ export function isReceiverAdmin(state: ClientState, receiverName: string | null)
 
 export interface ProtectedObject {
     ownerName?: string;
-    operations?: Record<string, string[] | string | null> | null;
+    operations?: Record<string, string | null> | null;
 }
 
 export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
@@ -67,48 +67,43 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
     if (object.operations == null) {
         return true;
     }
-    let requirements = object.operations[operation];
-    if (requirements == null) {
+    const principal = object.operations[operation];
+    if (principal == null) {
         return false;
     }
-    if (!Array.isArray(requirements)) {
-        requirements = [requirements];
-    }
-    for (let r of requirements) {
-        switch (r) {
-            case "none":
-                break;
-            case "public":
+    switch (principal) {
+        case "none":
+            break;
+        case "public":
+            return true;
+        case "signed":
+            if (isConnectedToHome(state)) {
                 return true;
-            case "signed":
-                if (isConnectedToHome(state)) {
-                    return true;
-                }
-                break;
-            case "private":
-                if (state.home.owner.name === object.ownerName) {
-                    return true;
-                }
-                if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
-                    return true;
-                }
-                break;
-            case "owner":
-                if (state.home.owner.name === object.ownerName) {
-                    return true;
-                }
-                break;
-            case "admin":
-                if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
-                    return true;
-                }
-                break;
-            default:
-                if (getNodePermissions(state).includes(r)) {
-                    return true;
-                }
-                break;
-        }
+            }
+            break;
+        case "private":
+            if (state.home.owner.name === object.ownerName) {
+                return true;
+            }
+            if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
+                return true;
+            }
+            break;
+        case "owner":
+            if (state.home.owner.name === object.ownerName) {
+                return true;
+            }
+            break;
+        case "admin":
+            if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
+                return true;
+            }
+            break;
+        default:
+            if (getNodePermissions(state).includes(principal)) { // FIXME not exactly
+                return true;
+            }
+            break;
     }
     return false;
 }
