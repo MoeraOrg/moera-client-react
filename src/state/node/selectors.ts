@@ -85,7 +85,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
                     return true;
                 }
                 break;
-            case "ruler":
+            case "private":
                 if (state.home.owner.name === object.ownerName) {
                     return true;
                 }
