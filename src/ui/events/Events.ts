@@ -6,12 +6,15 @@ import { addMinutes, isBefore } from 'date-fns';
 
 import { ALLOWED_SELF_EVENTS, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
 import { eventAction, EventSource } from "api/events/actions";
+import { ClientState } from "state/state";
+import { getHomeRootLocation } from "state/home/selectors";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
 
 type Props = {
     location: string | null;
     token: string | null;
+    carte: string | null;
     prefix: EventSource[] | EventSource;
     sourceNode: string | null;
     onWakeUp?: () => void;
@@ -32,7 +35,11 @@ class Events extends React.PureComponent<Props> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>) {
-        if (prevProps.location !== this.props.location || prevProps.token !== this.props.token) {
+        if (prevProps.location !== this.props.location
+            || prevProps.homeRoot !== this.props.homeRoot
+            || prevProps.token !== this.props.token
+            || (prevProps.carte == null && this.props.carte != null)
+        ) {
             this._disconnect();
             this._connect();
         }
@@ -43,7 +50,7 @@ class Events extends React.PureComponent<Props> {
     }
 
     _connect() {
-        const {location, token} = this.props;
+        const {location, token, carte} = this.props;
 
         if (location == null) {
             return;
@@ -64,6 +71,8 @@ class Events extends React.PureComponent<Props> {
         };
         if (token != null) {
             connectHeaders["token"] = token;
+        } else if (carte != null) {
+            connectHeaders["token"] = "carte:" + carte;
         }
         this.#stomp = new Client({
             brokerURL: location,
@@ -156,7 +165,9 @@ class Events extends React.PureComponent<Props> {
 }
 
 const connector = connect(
-    null,
+    (state: ClientState) => ({
+        homeRoot: getHomeRootLocation(state)
+    }),
     { eventAction }
 );
 
