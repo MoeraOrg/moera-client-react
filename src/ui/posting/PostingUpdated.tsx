@@ -18,9 +18,16 @@ function PostingUpdated({posting, story, timeRelative}: Props) {
     }
 
     const editedAt = posting.editedAt ?? posting.createdAt;
-    const date = fromUnixTime(editedAt);
     const publishedAt = story != null ? story.publishedAt : posting.createdAt;
+    const editedImmediately = Math.abs(editedAt - publishedAt) < 20 * 60;
+
+    if (editedImmediately) {
+        return null;
+    }
+
+    const date = fromUnixTime(editedAt);
     const editedSoon = Math.abs(editedAt - publishedAt) < 24 * 60 * 60;
+
     return (
         <time className="date" dateTime={formatISO(date)}>
             {" "}(updated {
