@@ -240,6 +240,7 @@ export interface PostingInfoBase<B> {
     feedReferences?: FeedReference[] | null;
     clientReaction?: ClientReactionInfo | null;
     operations?: {
+        view?: string | null;
         edit?: string | null;
         delete?: string | null;
         reactions?: string | null;

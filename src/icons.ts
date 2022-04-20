@@ -28,6 +28,7 @@ import {
     faFileAlt,
     faFileDownload,
     faFrown,
+    faGlobe,
     faGlobeEurope,
     faHandHoldingHeart,
     faHome,
@@ -35,6 +36,7 @@ import {
     faItalic,
     faLink,
     faList,
+    faLock,
     faMinus,
     faMobileAlt,
     faNetworkWired,
@@ -50,6 +52,7 @@ import {
     faRetweet,
     faShareAlt,
     faShareSquare,
+    faShieldHalved,
     faSignOutAlt,
     faStar,
     faStrikethrough,
@@ -115,6 +118,7 @@ export default function initIconLibrary() {
     library.add(faFileAlt);
     library.add(faFileDownload);
     library.add(faFrown);
+    library.add(faGlobe);
     library.add(faGlobeEurope);
     library.add(faHandHoldingHeart);
     library.add(faHome);
@@ -124,6 +128,7 @@ export default function initIconLibrary() {
     library.add(faNetworkWired);
     library.add(faLink);
     library.add(faList);
+    library.add(faLock);
     library.add(faMarkdown);
     library.add(faMobileAlt);
     library.add(faNewspaper);
@@ -140,6 +145,7 @@ export default function initIconLibrary() {
     library.add(faRetweet);
     library.add(faShareAlt);
     library.add(faShareSquare);
+    library.add(faShieldHalved);
     library.add(faSignOutAlt);
     library.add(faSquare);
     library.add(faStar);

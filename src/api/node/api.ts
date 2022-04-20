@@ -778,6 +778,10 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         "operations": {
             type: "object",
             properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                },
                 "edit": {
                     type: "string",
                     nullable: true
@@ -964,6 +968,10 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
         "operations": {
             type: "object",
             properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                },
                 "edit": {
                     type: "string",
                     nullable: true

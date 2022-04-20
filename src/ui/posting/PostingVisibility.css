@@ -1,0 +1,9 @@
+.posting > .owner-line .visibility {
+    font-size: 0.8rem;
+    color: var(--bs-gray-500);
+    padding-left: .4em;
+}
+
+.posting > .owner-line .visibility .principal {
+    padding-left: .4em;
+}

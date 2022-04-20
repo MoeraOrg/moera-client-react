@@ -9,9 +9,10 @@ import { isPermitted, ProtectedObject } from "state/node/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
-import PostingUpdated from "ui/posting/PostingUpdated";
-import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingDate from "ui/posting/PostingDate";
+import PostingUpdated from "ui/posting/PostingUpdated";
+import PostingVisibility from "ui/posting/PostingVisibility";
+import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingAvatar from "ui/posting/PostingAvatar";
 import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
@@ -69,6 +70,7 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
                     <br/>
                     <PostingDate posting={posting} story={story}/>
                     <PostingUpdated posting={posting} story={story}/>
+                    <PostingVisibility principal={posting.operations?.view}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>

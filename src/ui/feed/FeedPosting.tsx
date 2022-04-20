@@ -12,6 +12,7 @@ import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
 import PostingDate from "ui/posting/PostingDate";
 import PostingUpdated from "ui/posting/PostingUpdated";
+import PostingVisibility from "ui/posting/PostingVisibility";
 import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingAvatar from "ui/posting/PostingAvatar";
 import PostingSource from "ui/posting/PostingSource";
@@ -71,6 +72,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                         <br/>
                         <PostingDate posting={posting} story={story}/>
                         <PostingUpdated posting={posting} story={story}/>
+                        <PostingVisibility principal={posting.operations?.view}/>
                     </div>
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
