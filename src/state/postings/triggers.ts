@@ -2,6 +2,7 @@ import { trigger } from "state/trigger";
 import {
     EVENT_NODE_POSTING_COMMENTS_CHANGED,
     EVENT_NODE_POSTING_REACTIONS_CHANGED,
+    EVENT_NODE_POSTING_RESTORED,
     EVENT_NODE_POSTING_UPDATED,
     EventAction
 } from "api/events/actions";
@@ -33,7 +34,7 @@ export default [
     trigger(POSTING_COMMENTS_UNSUBSCRIBED, true, flashBox("Not following comments")),
     trigger([HOME_OWNER_SET, DISCONNECTED_FROM_HOME], true, postingReactionsReload),
     trigger(
-        EVENT_NODE_POSTING_UPDATED,
+        [EVENT_NODE_POSTING_UPDATED, EVENT_NODE_POSTING_RESTORED],
         (state, signal: EventAction<PostingUpdatedEvent>) =>
             isPostingCached(state, signal.payload.id),
         signal => postingLoad(signal.payload.id)
