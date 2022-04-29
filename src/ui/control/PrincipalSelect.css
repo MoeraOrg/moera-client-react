@@ -1,0 +1,19 @@
+.principal-select {
+    display: inline-block;
+    font-size: .8rem;
+    background-color: transparent;
+    color: var(--bs-gray-500);
+    cursor: pointer;
+    padding: .1rem .2rem;
+    border: none;
+    border-radius: .4rem;
+}
+
+.principal-select:hover {
+    color: var(--bs-gray-700);
+    background-color: var(--highlight);
+}
+
+.principal-select .principal {
+    margin-right: .25rem;
+}
