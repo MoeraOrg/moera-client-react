@@ -21,6 +21,7 @@ export { NameHelp } from "ui/control/NameHelp";
 export { NameSelector } from "ui/control/NameSelector";
 export { PlusButton } from "ui/control/PlusButton";
 export { Popover } from "ui/control/Popover";
+export { Principal } from "ui/control/Principal";
 export { ReactionButton } from "ui/control/ReactionButton";
 export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
 export { ReactionTotals } from "ui/control/ReactionTotals";
