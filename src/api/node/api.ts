@@ -2199,6 +2199,17 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
         "updateInfo": {
             ...UpdateInfoType,
             nullable: true
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["id", "draftType", "receiverName", "createdAt", "body", "heading"],

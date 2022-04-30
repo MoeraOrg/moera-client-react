@@ -86,7 +86,9 @@ const composePageLogic = {
         [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 
         // TODO storing operations in drafts
-        const viewPrincipal = props.draft != null ? "public" : props.posting?.operations?.view ?? "public";
+        const viewPrincipal = props.draft != null
+            ? props.draft.operations?.view ?? "public"
+            : props.posting?.operations?.view ?? "public";
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)

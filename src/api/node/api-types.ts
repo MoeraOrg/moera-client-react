@@ -671,6 +671,9 @@ export interface DraftText {
     media?: RemoteMedia[] | null;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
+    operations?: {
+        view?: string | null;
+    } | null;
 }
 
 export interface DraftInfoBase<B> {
@@ -696,6 +699,9 @@ export interface DraftInfoBase<B> {
     heading: string;
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
+    operations?: {
+        view?: string | null;
+    } | null;
 }
 
 export type EncodedDraftInfo = DraftInfoBase<string>;
