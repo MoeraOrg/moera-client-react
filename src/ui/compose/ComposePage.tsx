@@ -15,9 +15,11 @@ import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import ComposeFullName from "ui/compose/ComposeFullName";
 import ComposeFormattingHelp from "ui/compose/ComposeFormattingHelp";
+import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
+import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
 import ComposeReactions from "ui/compose/ComposeReactions";
 import ComposeUpdateInfo from "ui/compose/ComposeUpdateInfo";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
@@ -31,7 +33,6 @@ import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-log
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import Jump from "ui/navigation/Jump";
 import "./ComposePage.css";
-import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 
 export type ComposePageOuterProps = ConnectedProps<typeof connector>;
 
@@ -78,6 +79,7 @@ function ComposePage(props: Props) {
                             <div className="body">
                                 <ComposeFullName/>
                                 <ComposePublishAt/>
+                                <ComposeViewPrincipal/>
                             </div>
                         </div>
                         {features?.subjectPresent &&

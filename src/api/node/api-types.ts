@@ -198,6 +198,9 @@ export interface PostingText {
     signatureVersion?: number | null;
     publications?: StoryAttributes[] | null;
     updateInfo?: UpdateInfo | null;
+    operations?: {
+        view?: string | null;
+    } | null;
 }
 
 export interface PostingSourceText {

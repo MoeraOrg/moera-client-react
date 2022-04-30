@@ -19,24 +19,24 @@ export function PrincipalSelect({value, onChange}: Props) {
 
     return (
         <>
-        <button className="principal-select" ref={setButtonRef} onClick={onToggle}>
-            <Principal value={value}/>
-            <FontAwesomeIcon icon="chevron-down" className="chevron"/>
-        </button>
-        {visible &&
-            <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
-                 className="fade dropdown-menu shadow-sm show">
-                <div className="dropdown-item" onClick={onClick("public")}>
-                    <FontAwesomeIcon icon="globe"/>&nbsp;&nbsp;Public
+            <button className="principal-select" ref={setButtonRef} onClick={onToggle}>
+                <Principal value={value}/>
+                <FontAwesomeIcon icon="chevron-down" className="chevron"/>
+            </button>
+            {visible &&
+                <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
+                     className="fade dropdown-menu shadow-sm show">
+                    <div className="dropdown-item" onClick={onClick("public")}>
+                        <FontAwesomeIcon icon="globe"/>&nbsp;&nbsp;Public
+                    </div>
+                    <div className="dropdown-item" onClick={onClick("signed")}>
+                        <FontAwesomeIcon icon="shield-halved"/>&nbsp;&nbsp;Signed
+                    </div>
+                    <div className="dropdown-item" onClick={onClick("private")}>
+                        <FontAwesomeIcon icon="lock"/>&nbsp;&nbsp;Only me
+                    </div>
                 </div>
-                <div className="dropdown-item" onClick={onClick("signed")}>
-                    <FontAwesomeIcon icon="shield-halved"/>&nbsp;&nbsp;Signed
-                </div>
-                <div className="dropdown-item" onClick={onClick("private")}>
-                    <FontAwesomeIcon icon="lock"/>&nbsp;&nbsp;Only me
-                </div>
-            </div>
-        }
+            }
         </>
     );
 }

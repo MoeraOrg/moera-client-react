@@ -28,6 +28,7 @@ export interface ComposePageValues {
     linkPreviews: RichTextLinkPreviewsValue;
     bodyFormatVisible: boolean;
     bodyFormat: SourceFormat;
+    viewPrincipal: string;
     publishAtDefault: Date;
     publishAt: Date;
     reactionVisible: boolean;
@@ -84,6 +85,8 @@ const composePageLogic = {
         let linkPreviews, bodyUrls;
         [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 
+        // TODO storing operations in drafts
+        const viewPrincipal = props.draft != null ? "public" : props.posting?.operations?.view ?? "public";
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)
@@ -114,6 +117,7 @@ const composePageLogic = {
             linkPreviews,
             bodyFormatVisible: false,
             bodyFormat,
+            viewPrincipal,
             publishAtDefault,
             publishAt,
             reactionVisible: false,
@@ -186,6 +190,9 @@ const composePageLogic = {
             updateInfo: {
                 important: values.updateImportant,
                 description: values.updateDescription
+            },
+            operations: {
+                view: values.viewPrincipal
             }
         };
     },
@@ -224,7 +231,13 @@ const composePageLogic = {
         }
         const media = postingText.media ?? [];
         const prevMedia = posting.media != null ? posting.media.map(ma => ma.media?.id ?? ma.remoteMedia?.id) : [];
-        return !deepEqual(media, prevMedia);
+        if (!deepEqual(media, prevMedia)) {
+            return true;
+        }
+        const prevOperations = {
+            view: posting.operations?.view ?? "public"
+        }
+        return !deepEqual(postingText.operations, prevOperations);
     },
 
     handleSubmit(values: ComposePageValues, formik: FormikBag<ComposePageOuterProps, ComposePageValues>): void {
