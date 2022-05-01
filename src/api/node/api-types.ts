@@ -180,6 +180,10 @@ export interface PostingSubscriptionsInfo {
     comments: string | null;
 }
 
+export interface PostingOperations {
+    view?: string | null;
+}
+
 export interface PostingText {
     ownerName?: string | null;
     ownerFullName?: string | null;
@@ -198,9 +202,7 @@ export interface PostingText {
     signatureVersion?: number | null;
     publications?: StoryAttributes[] | null;
     updateInfo?: UpdateInfo | null;
-    operations?: {
-        view?: string | null;
-    } | null;
+    operations?: PostingOperations | null;
 }
 
 export interface PostingSourceText {
@@ -209,6 +211,13 @@ export interface PostingSourceText {
     bodySrcFormat?: SourceFormat | null;
     media?: MediaWithDigest[] | null;
     acceptedReactions?: AcceptedReactions | null;
+}
+
+export interface PostingOperationsInfo {
+    view?: string | null;
+    edit?: string | null;
+    delete?: string | null;
+    reactions?: string | null;
 }
 
 export interface PostingInfoBase<B> {
@@ -242,12 +251,7 @@ export interface PostingInfoBase<B> {
     signatureVersion?: number | null;
     feedReferences?: FeedReference[] | null;
     clientReaction?: ClientReactionInfo | null;
-    operations?: {
-        view?: string | null;
-        edit?: string | null;
-        delete?: string | null;
-        reactions?: string | null;
-    } | null;
+    operations?: PostingOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     reactions?: ReactionTotalsInfo | null;
     reactionsVisible?: boolean | null;

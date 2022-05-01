@@ -9,6 +9,7 @@ import {
     POSTING_COPY_LINK,
     POSTING_DELETE,
     POSTING_LOAD,
+    POSTING_OPERATIONS_UPDATE,
     POSTING_REACT,
     POSTING_REACTION_DELETE,
     POSTING_REACTION_LOAD,
@@ -26,6 +27,8 @@ import {
     postingDeleteFailed,
     PostingLoadAction,
     postingLoadFailed,
+    PostingOperationsUpdateAction,
+    postingOperationsUpdated,
     PostingReactAction,
     PostingReactionDeleteAction,
     PostingReactionLoadAction,
@@ -53,6 +56,7 @@ export default [
     executor(POSTING_DELETE, payload => payload.id, postingDeleteSaga),
     executor(POSTING_LOAD, payload => payload.id, postingLoadSaga, introduced),
     executor(POSTING_VERIFY, payload => payload.id, postingVerifySaga),
+    executor(POSTING_OPERATIONS_UPDATE, payload => payload.id, postingOperationsUpdateSaga),
     executor(POSTING_REACT, null, postingReactSaga, introduced),
     executor(POSTING_REACTION_LOAD, payload => payload.id, postingReactionLoadSaga),
     executor(POSTING_REACTIONS_RELOAD, "", postingReactionsReloadSaga),
@@ -101,6 +105,16 @@ function* postingVerifySaga(action: WithContext<PostingVerifyAction>) {
         yield* call(Node.remotePostingVerify, ":", targetNodeName, id);
     } catch (e) {
         yield* put(postingVerifyFailed(id, nodeName));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* postingOperationsUpdateSaga(action: PostingOperationsUpdateAction) {
+    const {id, nodeName, operations} = action.payload;
+    try {
+        const data = yield* call(Node.putPostingOperations, nodeName, id, operations);
+        yield* put(postingOperationsUpdated(id, nodeName, data));
+    } catch (e) {
         yield* put(errorThrown(e));
     }
 }

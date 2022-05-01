@@ -17,3 +17,8 @@
 .principal-select .principal {
     margin-right: .25rem;
 }
+
+.principal-select .chevron {
+    font-size: .5rem;
+    vertical-align: middle;
+}

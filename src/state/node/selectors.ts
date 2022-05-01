@@ -1,5 +1,6 @@
 import { getHomeOwnerName, getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { ClientState } from "state/state";
+import { PostingOperationsInfo } from "api/node/api-types";
 
 export function isAtNode(state: ClientState): boolean {
     return !!state.node.root.api;
@@ -54,9 +55,11 @@ export function isReceiverAdmin(state: ClientState, receiverName: string | null)
     return getHomeOwnerName(state) === receiverName && permissions != null && permissions.includes("admin");
 }
 
+type AnyOperationsInfo = Partial<Record<string, string | null>>;
+
 export interface ProtectedObject {
     ownerName?: string;
-    operations?: Record<string, string | null> | null;
+    operations?: AnyOperationsInfo | PostingOperationsInfo | null;
 }
 
 export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
@@ -67,7 +70,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
     if (object.operations == null) {
         return true;
     }
-    const principal = object.operations[operation];
+    const principal = (object.operations as AnyOperationsInfo)[operation];
     if (principal == null) {
         return false;
     }

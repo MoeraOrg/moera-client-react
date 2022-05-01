@@ -4,6 +4,8 @@ import { ActionWithPayload } from "state/action-types";
 import {
     FeedReference,
     PostingInfo,
+    PostingOperations,
+    PostingOperationsInfo,
     ReactionAttributes,
     ReactionTotalsInfo,
     SubscriptionType
@@ -99,6 +101,30 @@ export type PostingVerifyFailedAction = ActionWithPayload<typeof POSTING_VERIFY_
 export const postingVerifyFailed = (id: string, nodeName: string = ""): PostingVerifyFailedAction => ({
     type: POSTING_VERIFY_FAILED,
     payload: {id, nodeName}
+});
+
+export const POSTING_OPERATIONS_UPDATE = "POSTING_OPERATIONS_UPDATE";
+export type PostingOperationsUpdateAction = ActionWithPayload<typeof POSTING_OPERATIONS_UPDATE, {
+    id: string;
+    nodeName: string;
+    operations: PostingOperations;
+}>;
+export const postingOperationsUpdate = (id: string, nodeName: string,
+                                        operations: PostingOperations): PostingOperationsUpdateAction => ({
+    type: POSTING_OPERATIONS_UPDATE,
+    payload: {id, nodeName, operations}
+});
+
+export const POSTING_OPERATIONS_UPDATED = "POSTING_OPERATIONS_UPDATED";
+export type PostingOperationsUpdatedAction = ActionWithPayload<typeof POSTING_OPERATIONS_UPDATED, {
+    id: string;
+    nodeName: string;
+    operations: PostingOperationsInfo;
+}>;
+export const postingOperationsUpdated = (id: string, nodeName: string,
+                                         operations: PostingOperationsInfo): PostingOperationsUpdatedAction => ({
+    type: POSTING_OPERATIONS_UPDATED,
+    payload: {id, nodeName, operations}
 });
 
 export const POSTING_REACT = "POSTING_REACT";
@@ -277,6 +303,8 @@ export type PostingsAnyAction =
     | PostingLoadFailedAction
     | PostingVerifyAction
     | PostingVerifyFailedAction
+    | PostingOperationsUpdateAction
+    | PostingOperationsUpdatedAction
     | PostingReactAction
     | PostingReactionLoadAction
     | PostingReactionsReloadAction

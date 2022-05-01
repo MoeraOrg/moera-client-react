@@ -10,6 +10,7 @@ import {
     POSTING_COMMENTS_UNSUBSCRIBED,
     POSTING_DELETE,
     POSTING_DELETED,
+    POSTING_OPERATIONS_UPDATED,
     POSTING_REACT,
     POSTING_REACTION_DELETE,
     POSTING_REACTION_SET,
@@ -150,6 +151,11 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
 
         case POSTING_VERIFY_FAILED:
             return immutable.set(state, [action.payload.nodeName, action.payload.id, "verificationStatus"], "none");
+
+        case POSTING_OPERATIONS_UPDATED: {
+            const {id, nodeName, operations} = action.payload;
+            return immutable.set(state, [nodeName, id, "posting", "operations"], operations);
+        }
 
         case EVENT_HOME_REMOTE_POSTING_VERIFIED: {
             const nodeName = action.payload.nodeName === action.context.ownerName ? "" : action.payload.nodeName;

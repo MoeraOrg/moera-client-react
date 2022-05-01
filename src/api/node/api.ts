@@ -657,6 +657,31 @@ const MediaAttachmentType: JSONSchemaType<API.MediaAttachment> = {
 
 export const MediaAttachment = schema(MediaAttachmentType);
 
+const PostingOperationsInfoType: JSONSchemaType<API.PostingOperationsInfo> = {
+    type: "object",
+    properties: {
+        "view": {
+            type: "string",
+            nullable: true
+        },
+        "edit": {
+            type: "string",
+            nullable: true
+        },
+        "delete": {
+            type: "string",
+            nullable: true
+        },
+        "reactions": {
+            type: "string",
+            nullable: true
+        }
+    },
+    additionalProperties: false
+};
+
+export const PostingOperationsInfo = schema(PostingOperationsInfoType);
+
 const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     type: "object",
     properties: {
@@ -776,27 +801,8 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             nullable: true
         },
         "operations": {
-            type: "object",
-            properties: {
-                "view": {
-                    type: "string",
-                    nullable: true
-                },
-                "edit": {
-                    type: "string",
-                    nullable: true
-                },
-                "delete": {
-                    type: "string",
-                    nullable: true
-                },
-                "reactions": {
-                    type: "string",
-                    nullable: true
-                }
-            },
-            nullable: true,
-            additionalProperties: false
+            ...PostingOperationsInfoType,
+            nullable: true
         },
         "acceptedReactions": {
             ...AcceptedReactionsType,
