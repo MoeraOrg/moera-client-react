@@ -4,7 +4,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ClientState } from "state/state";
 import { getToken } from "state/node/selectors";
 import { getReceiverNodeName, getReceiverNodeUri } from "state/receiver/selectors";
-import { getCurrentCarte } from "state/cartes/selectors";
+import { getCurrentAllCarte } from "state/cartes/selectors";
 import Events from "ui/events/Events";
 import { nodeUrlToEvents, nodeUrlToLocation } from "util/url";
 
@@ -20,7 +20,7 @@ const connector = connect(
         return ({
             nodeEvents: nodeUrlToEvents(receiverNodeUri),
             token: getToken(state, nodeUrlToLocation(receiverNodeUri)),
-            carte: getCurrentCarte(state),
+            carte: getCurrentAllCarte(state),
             sourceNode: getReceiverNodeName(state)
         });
     }

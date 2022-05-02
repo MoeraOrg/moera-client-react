@@ -474,6 +474,7 @@ export interface CarteInfo {
     carte: string;
     beginning: number;
     deadline: number;
+    permissions?: string[];
 }
 
 export interface CarteSet {

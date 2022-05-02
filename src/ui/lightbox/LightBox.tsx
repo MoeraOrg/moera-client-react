@@ -6,6 +6,7 @@ import 'react-image-lightbox/style.css';
 
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
 import { getLightBoxMediaId, getLightBoxMediaPostingId, isLightBoxShown } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
@@ -16,16 +17,18 @@ import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import "./LightBox.css";
+import { urlWithParameters } from "util/url";
 
 type Props = ConnectedProps<typeof connector>;
 
-function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loopGallery, closeLightBox,
+function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, carte, loopGallery, closeLightBox,
                    lightBoxMediaSet}: Props) {
     if (!show) {
         return null;
     }
 
     const media = comment != null ? comment?.media : posting?.media;
+    const auth = carte != null ? "carte:" + carte : null;
     let mainSrc = "";
     let mainMimeType = "";
     let prevSrc: string | undefined = undefined;
@@ -39,7 +42,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
         if (index < 0) {
             index = 0;
         }
-        mainSrc = rootPage + "/media/" + media[index].media?.path;
+        mainSrc = urlWithParameters(rootPage + "/media/" + media[index].media?.path, {auth});
         mainMimeType = media[index].media?.mimeType ?? "image/jpeg";
         const prevIndex = index > 0
             ? index - 1
@@ -48,11 +51,11 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, loop
             ? index + 1
             : (index === media.length - 1 && loop ? 0 : null);
         if (prevIndex != null) {
-            prevSrc = rootPage + "/media/" + media[prevIndex].media?.path;
+            prevSrc = urlWithParameters(rootPage + "/media/" + media[prevIndex].media?.path, {auth});
             prevMediaId = media[prevIndex].media?.id;
         }
         if (nextIndex != null) {
-            nextSrc = rootPage + "/media/" + media[nextIndex].media?.path;
+            nextSrc = urlWithParameters(rootPage + "/media/" + media[nextIndex].media?.path, {auth});
             nextMediaId = media[nextIndex].media?.id;
         }
         title = `${index + 1} / ${media.length}`;
@@ -92,6 +95,7 @@ const connector = connect(
         rootPage: state.lightBox.nodeName
             ? getNamingNameNodeUri(state, state.lightBox.nodeName)
             : getNodeRootPage(state),
+        carte: getCurrentViewMediaCarte(state),
         loopGallery: getSetting(state, "entry.gallery.loop") as boolean
     }),
     { closeLightBox, lightBoxMediaSet }

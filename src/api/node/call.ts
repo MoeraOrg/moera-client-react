@@ -30,7 +30,7 @@ import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
 import { errorAuthInvalid } from "state/error/actions";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
-import { getCurrentCarte } from "state/cartes/selectors";
+import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { cartesSet } from "state/cartes/actions";
@@ -197,7 +197,7 @@ function* authorize(headers: Partial<Record<string, string>>, rootLocation: stri
     if (token != null) {
         headers["Authorization"] = `Bearer token:${token}`;
     } else {
-        const carte = yield* select(getCurrentCarte);
+        const carte = yield* select(getCurrentAllCarte);
         if (carte != null) {
             headers["Authorization"] = `Bearer carte:${carte}`;
         }

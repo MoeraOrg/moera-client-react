@@ -1,4 +1,5 @@
 import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api/node/api-types";
+import { urlWithParameters } from "util/url";
 import { isNumber } from "util/misc";
 
 function toInt(s: number | string | null | undefined): number {
@@ -12,7 +13,7 @@ function toInt(s: number | string | null | undefined): number {
     return isFinite(val) ? val : 0;
 }
 
-export const mediaImagePreview = (location: string, width: number): string => `${location}?width=${width}`;
+export const mediaImagePreview = (location: string, width: number): string => urlWithParameters(location, {width});
 
 export function mediaImageFindLargerPreview(previews: MediaFilePreviewInfo[] | null | undefined,
                                             width: number): MediaFilePreviewInfo | null {

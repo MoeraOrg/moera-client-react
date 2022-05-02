@@ -6,11 +6,12 @@ import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getCurrentAllCarte, getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
-import { ut } from "util/url";
+import { urlWithParameters, ut } from "util/url";
 import "./EntryImage.css";
 
 interface OwnProps {
@@ -29,8 +30,9 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count, rootPage,
-                     openLightBox}: Props) {
-    const mediaLocation = rootPage + "/media/" + mediaFile.path;
+                     carte, openLightBox}: Props) {
+    const auth = carte != null ? "carte:" + carte : null;
+    const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
     const src = mediaImagePreview(mediaLocation, 900);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
@@ -42,7 +44,7 @@ function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, a
         }
     }
 
-    const href = ut`/post/${postingId}?${commentId != null ? `commentId=${commentId}&` : ""}media=${mediaFile.id}`;
+    const href = urlWithParameters(ut`/post/${postingId}`, {commentId, media: mediaFile.id});
 
     let style: React.CSSProperties | undefined = undefined;
     if (flex === "row") {
@@ -56,14 +58,15 @@ function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, a
               style={style}>
             {(count != null && count > 0) && <div className="count">+{count}</div>}
             <PreloadedImage src={src} srcSet={srcSet} sizes={sizes} width={imageWidth} height={imageHeight}
-                 alt={alt ?? undefined} title={title ?? undefined}/>
+                            alt={alt ?? undefined} title={title ?? undefined}/>
         </Jump>
     );
 }
 
 const connector = connect(
     (state: ClientState, props: OwnProps) => ({
-        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state)
+        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
+        carte: getCurrentViewMediaCarte(state)
     }),
     { openLightBox }
 );

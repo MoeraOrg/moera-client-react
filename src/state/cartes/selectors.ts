@@ -27,14 +27,26 @@ export function isCartesToBeUpdated(state: ClientState): boolean {
     return getCartesTtl(state) < 30 * 60;
 }
 
-export function getCurrentCarte(state: ClientState): string | null {
+function getCurrentCarte(state: ClientState, filter: (carte: CarteInfo) => boolean): string | null {
     const current = now() - (getSetting(state, "clock.offset") as number) * 60 * 60;
-    const carte = state.cartes.cartes.find(carte => carte.beginning <= current && carte.deadline >= current);
+    const carte = state.cartes.cartes
+        .find(carte => carte.beginning <= current && carte.deadline >= current && filter(carte));
     return carte ? carte.carte : null;
 }
 
+export function getCurrentAllCarte(state: ClientState): string | null {
+    return getCurrentCarte(state, carte => carte.permissions == null || carte.permissions.includes("other"));
+}
+
+export function getCurrentViewMediaCarte(state: ClientState): string | null {
+    return getCurrentCarte(
+        state,
+        carte => carte.permissions != null && carte.permissions.length === 1 && carte.permissions[0] === "view-media"
+    );
+}
+
 export function isCartesRunOut(state: ClientState): boolean {
-    return getCurrentCarte(state) == null;
+    return getCurrentAllCarte(state) == null;
 }
 
 export function isCartesInitialized(state: ClientState): boolean {

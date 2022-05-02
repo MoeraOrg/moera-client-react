@@ -1691,6 +1691,13 @@ const CarteInfoType: JSONSchemaType<API.CarteInfo> = {
         },
         "deadline": {
             type: "integer"
+        },
+        "permissions": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
         }
     },
     required: ["carte", "beginning", "deadline"],
