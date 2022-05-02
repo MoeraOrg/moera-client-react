@@ -16,8 +16,8 @@ import { getSetting } from "state/settings/selectors";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
-import "./LightBox.css";
 import { urlWithParameters } from "util/url";
+import "./LightBox.css";
 
 type Props = ConnectedProps<typeof connector>;
 

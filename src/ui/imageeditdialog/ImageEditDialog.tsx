@@ -8,11 +8,13 @@ import { getPosting } from "state/postings/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
+import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { getSetting } from "state/settings/selectors";
 import { Button, Loading, ModalDialog, RichTextValue } from "ui/control";
 import { RichTextField } from "ui/control/field";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { replaceSmileys } from "util/text";
+import { urlWithParameters } from "util/url";
 import "./ImageEditDialog.css";
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -24,7 +26,9 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function ImageEditDialog(props: Props) {
-    const {show, media, rootPage, loading, posting, saving, smileysEnabled, closeImageEditDialog, resetForm} = props;
+    const {
+        show, media, rootPage, carte, loading, posting, saving, smileysEnabled, closeImageEditDialog, resetForm
+    } = props;
 
     useEffect(() => {
         if (show) {
@@ -39,7 +43,8 @@ function ImageEditDialog(props: Props) {
 
     const onClose = () => closeImageEditDialog();
 
-    const src = mediaImagePreview(rootPage + "/media/" + media.path, 800);
+    const auth = carte != null ? "carte:" + carte : null;
+    const src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 800);
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, media);
 
     return (
@@ -96,6 +101,7 @@ const connector = connect(
         rootPage: state.imageEditDialog.nodeName
             ? getNamingNameNodeUri(state, state.imageEditDialog.nodeName)
             : getNodeRootPage(state),
+        carte: getCurrentViewMediaCarte(state),
         loading: state.imageEditDialog.loading,
         posting: getPosting(state, state.imageEditDialog.media?.postingId ?? null),
         saving: state.imageEditDialog.saving,

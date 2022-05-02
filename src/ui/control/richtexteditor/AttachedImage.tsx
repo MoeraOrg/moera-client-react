@@ -5,7 +5,9 @@ import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
+import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
+import { urlWithParameters } from "util/url";
 
 interface OwnProps {
     media: VerifiedMediaFile;
@@ -15,8 +17,9 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function AttachedImage({media, rootPage, onClick}: Props) {
-    const src = mediaImagePreview(rootPage + "/media/" + media.path, 150);
+function AttachedImage({media, rootPage, carte, onClick}: Props) {
+    const auth = carte != null ? "carte:" + carte : null;
+    const src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 150);
     const [imageWidth, imageHeight] = mediaImageSize(150, 150, 150, media);
 
     return (
@@ -27,7 +30,8 @@ function AttachedImage({media, rootPage, onClick}: Props) {
 
 const connector = connect(
     (state: ClientState, props: OwnProps) => ({
-        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state)
+        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
+        carte: getCurrentViewMediaCarte(state)
     })
 );
 

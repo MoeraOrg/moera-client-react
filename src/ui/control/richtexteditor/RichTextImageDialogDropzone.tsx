@@ -11,10 +11,12 @@ import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { Button, DeleteButton } from "ui/control";
 import RichTextCopyImageDialog, { RichTextCopyImageValues } from "ui/control/richtexteditor/RichTextCopyImageDialog";
 import { Browser } from "ui/browser";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
+import { urlWithParameters } from "util/url";
 import "./RichTextImageDialogDropzone.css";
 
 interface OwnProps {
@@ -29,7 +31,7 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function RichTextImageDialogDropzone({features, nodeName, forceCompress = false, onAdded, onDeleted, rootPage,
+function RichTextImageDialogDropzone({features, nodeName, forceCompress = false, onAdded, onDeleted, rootPage, carte,
                                       compressImages, richTextEditorImagesUpload, richTextEditorImageCopy,
                                       externalImage, uploadingExternalImage}: Props) {
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
@@ -100,7 +102,8 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
         useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, maxFiles: 1, onDrop: uploadImage});
 
-    const mediaLocation = value != null ? rootPage + "/media/" + value.path : null;
+    const auth = carte != null ? "carte:" + carte : null;
+    const mediaLocation = value != null ? urlWithParameters(rootPage + "/media/" + value.path, {auth}) : null;
     const src = mediaLocation != null ? mediaImagePreview(mediaLocation, 150) : null;
     const [imageWidth, imageHeight] = value != null ? mediaImageSize(150, 150, 150, value) : [0, 0];
     if (!uploading && externalImage) {
@@ -151,6 +154,7 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
 const connector = connect(
     (state: ClientState, props: OwnProps) => ({
         rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
+        carte: getCurrentViewMediaCarte(state),
         compressImages: getSetting(state, "posting.media.compress.default") as boolean
     }),
     { richTextEditorImagesUpload, richTextEditorImageCopy }

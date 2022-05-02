@@ -6,7 +6,7 @@ import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
-import { getCurrentAllCarte, getCurrentViewMediaCarte } from "state/cartes/selectors";
+import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { openLightBox } from "state/lightbox/actions";
 import Jump from "ui/navigation/Jump";
 import PreloadedImage from "ui/posting/PreloadedImage";

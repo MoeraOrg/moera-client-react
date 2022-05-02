@@ -5,10 +5,12 @@ import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
+import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import PreloadedImage from "ui/posting/PreloadedImage";
 import { Browser } from "ui/browser";
 import { Loading } from 'ui/control';
 import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "util/media-images";
+import { urlWithParameters } from "util/url";
 import "./EntryLinkPreviewImage.css";
 
 interface OwnProps {
@@ -19,7 +21,7 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function EntryLinkPreviewImage({mediaFile, loading, rootPage}: Props) {
+function EntryLinkPreviewImage({mediaFile, loading, rootPage, carte}: Props) {
     if (mediaFile == null) {
         if (loading) {
             return <div><Loading active={true}/></div>;
@@ -27,7 +29,8 @@ function EntryLinkPreviewImage({mediaFile, loading, rootPage}: Props) {
         return null;
     }
 
-    const mediaLocation = rootPage + "/media/" + mediaFile.path;
+    const auth = carte != null ? "carte:" + carte : null;
+    const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
     const src = mediaImagePreview(mediaLocation, 800);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
     const sizes = mediaSizes(mediaFile.previews ?? []);
@@ -42,7 +45,8 @@ function EntryLinkPreviewImage({mediaFile, loading, rootPage}: Props) {
 
 const connector = connect(
     (state: ClientState, props: OwnProps) => ({
-        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state)
+        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
+        carte: getCurrentViewMediaCarte(state)
     })
 );
 
