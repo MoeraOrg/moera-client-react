@@ -804,6 +804,10 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             ...PostingOperationsInfoType,
             nullable: true
         },
+        "receiverOperations": {
+            ...PostingOperationsInfoType,
+            nullable: true
+        },
         "acceptedReactions": {
             ...AcceptedReactionsType,
             nullable: true
@@ -972,27 +976,12 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
             nullable: true
         },
         "operations": {
-            type: "object",
-            properties: {
-                "view": {
-                    type: "string",
-                    nullable: true
-                },
-                "edit": {
-                    type: "string",
-                    nullable: true
-                },
-                "delete": {
-                    type: "string",
-                    nullable: true
-                },
-                "reactions": {
-                    type: "string",
-                    nullable: true
-                }
-            },
-            nullable: true,
-            additionalProperties: false
+            ...PostingOperationsInfoType,
+            nullable: true
+        },
+        "receiverOperations": {
+            ...PostingOperationsInfoType,
+            nullable: true
         },
         "acceptedReactions": {
             ...AcceptedReactionsType,

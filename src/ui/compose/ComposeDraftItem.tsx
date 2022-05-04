@@ -38,7 +38,7 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
                 <time className="edited" dateTime={formatISO(editDate)}>{formatDistanceToNow(editDate)}</time>
             </div>
             <div className="draft-delete" title="Delete draft" onClick={handleDelete}>
-                <FontAwesomeIcon icon="trash-alt"/>
+                <FontAwesomeIcon icon="trash-can"/>
             </div>
         </div>
     );

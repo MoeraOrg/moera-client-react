@@ -63,7 +63,7 @@ import {
     faThumbtack,
     faTimes,
     faTimesCircle,
-    faTrashAlt,
+    faTrashCan,
     faUndoAlt,
     faUserCheck,
     faUserClock,
@@ -159,7 +159,7 @@ export default function initIconLibrary() {
     library.add(faThumbsUp);
     library.add(faThumbsUpRegular);
     library.add(faThumbtack);
-    library.add(faTrashAlt);
+    library.add(faTrashCan);
     library.add(faUndoAlt);
     library.add(faUser);
     library.add(faUserCheck);

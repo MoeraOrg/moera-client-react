@@ -252,6 +252,7 @@ export interface PostingInfoBase<B> {
     feedReferences?: FeedReference[] | null;
     clientReaction?: ClientReactionInfo | null;
     operations?: PostingOperationsInfo | null;
+    receiverOperations?: PostingOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     reactions?: ReactionTotalsInfo | null;
     reactionsVisible?: boolean | null;

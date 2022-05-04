@@ -70,8 +70,7 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
                     <br/>
                     <PostingDate posting={posting} story={story}/>
                     <PostingUpdated posting={posting} story={story}/>
-                    <PostingVisibility id={posting.id} principal={posting.operations?.view}
-                                       editable={isPermitted("edit", posting)}/>
+                    <PostingVisibility posting={posting} editable={isPermitted("edit", posting)}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>

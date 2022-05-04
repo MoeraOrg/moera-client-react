@@ -28,7 +28,7 @@ function ComposeResetButton({postingId, draftId, confirmBox}: Props) {
     if (postingId == null) {
         return (
             <Button variant="danger" className="reset-button" title="Delete draft" onClick={onClick}>
-                <FontAwesomeIcon icon="trash-alt"/>
+                <FontAwesomeIcon icon="trash-can"/>
             </Button>
         );
     } else {
