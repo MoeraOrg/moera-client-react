@@ -1213,10 +1213,6 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
                     type: "string",
                     nullable: true
                 },
-                "revisions": {
-                    type: "string",
-                    nullable: true
-                },
                 "reactions": {
                     type: "string",
                     nullable: true
@@ -1356,10 +1352,6 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
                     nullable: true
                 },
                 "delete": {
-                    type: "string",
-                    nullable: true
-                },
-                "revisions": {
                     type: "string",
                     nullable: true
                 },

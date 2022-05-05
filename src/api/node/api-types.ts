@@ -354,7 +354,6 @@ interface CommentInfoBase<B> {
     operations?: {
         edit?: string | null;
         delete?: string | null;
-        revisions?: string | null;
         reactions?: string | null;
     } | null;
     acceptedReactions?: AcceptedReactions | null;
