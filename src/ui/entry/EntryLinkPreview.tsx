@@ -70,7 +70,7 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
                 }
                 <div className="site">
                     {siteName &&
-                        <>{ellipsize(siteName, 40)}<span className="bullet">&bull;</span></>
+                        <>{ellipsize(siteName, 40)}{" "}<span className="bullet">&bull;</span>{" "}</>
                     }
                     {host.toUpperCase()}
                 </div>

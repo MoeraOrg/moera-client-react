@@ -67,8 +67,8 @@ A.link-preview:hover {
 }
 
 .link-preview .site .bullet {
-    margin-left: .5em;
-    margin-right: .5em;
+    margin-left: .25em;
+    margin-right: .25em;
 }
 
 .link-preview .delete-button {
