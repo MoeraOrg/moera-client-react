@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
+import { isPermitted } from "state/node/selectors";
 import {
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
@@ -189,8 +190,17 @@ class Comments extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture, focusedCommentId
+            total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture, focusedCommentId,
+            commentsVisible
         } = this.props;
+
+        if (!commentsVisible) {
+            return (
+                <div id="comments" className="disabled">
+                    Comments are disabled
+                </div>
+            );
+        }
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
             && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
@@ -241,7 +251,8 @@ const connector = connect(
         anchor: getCommentsState(state).anchor,
         focusedCommentId: getCommentsState(state).focusedCommentId,
         focused: isCommentsFocused(state),
-        composerFocused: isCommentComposerFocused(state)
+        composerFocused: isCommentComposerFocused(state),
+        commentsVisible: isPermitted("viewComments", getDetailedPosting(state), state) ?? true
     }),
     {
         detailedPostingScrolledToGallery, commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor,

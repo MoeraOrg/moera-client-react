@@ -5,9 +5,10 @@ import "./Principal.css";
 
 interface Props {
     value: string | null | undefined;
+    long?: boolean | null;
 }
 
-export function Principal({value}: Props) {
+export function Principal({value, long}: Props) {
     let icon: IconProp = "globe";
     let title: string = "Public";
     switch (value) {
@@ -23,7 +24,13 @@ export function Principal({value}: Props) {
             title = "Only me";
             break;
     }
-    return (
-        <span className="principal" title={title}><FontAwesomeIcon icon={icon}/></span>
-    );
+    if (long) {
+        return (
+            <span className="principal">
+                <FontAwesomeIcon icon={icon}/> <span className="caption">{title}</span>
+            </span>
+        );
+    } else {
+        return <span className="principal" title={title}><FontAwesomeIcon icon={icon}/></span>;
+    }
 }

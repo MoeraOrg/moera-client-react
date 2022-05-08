@@ -20,8 +20,10 @@ import ComposeBodyFormatButton from "ui/compose/ComposeBodyFormatButton";
 import ComposeBodyFormat from "ui/compose/ComposeBodyFormat";
 import ComposePublishAt from "ui/compose/ComposePublishAt";
 import ComposeViewPrincipal from "ui/compose/ComposeViewPrincipal";
+import ComposeComments from "ui/compose/ComposeComments";
 import ComposeReactions from "ui/compose/ComposeReactions";
 import ComposeUpdateInfo from "ui/compose/ComposeUpdateInfo";
+import ComposeCommentsButton from "ui/compose/ComposeCommentsButton";
 import ComposeReactionsButton from "ui/compose/ComposeReactionsButton";
 import ComposeUpdateInfoButton from "ui/compose/ComposeUpdateInfoButton";
 import ComposeDraftSaver from "ui/compose/ComposeDraftSaver";
@@ -92,12 +94,14 @@ function ComposePage(props: Props) {
                         <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features}/>
 
                         <ComposeBodyFormat sourceFormats={sourceFormats}/>
+                        <ComposeComments/>
                         <ComposeReactions/>
                         <ComposeUpdateInfo/>
 
                         <div className="features">
                             <div className="feature-buttons">
                                 <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
+                                <ComposeCommentsButton/>
                                 <ComposeReactionsButton/>
                                 {postingId != null &&
                                     <ComposeUpdateInfoButton/>

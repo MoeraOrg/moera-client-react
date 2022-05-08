@@ -182,6 +182,7 @@ export interface PostingSubscriptionsInfo {
 
 export interface PostingOperations {
     view?: string | null;
+    viewComments?: string | null;
 }
 
 export interface PostingText {
@@ -217,6 +218,7 @@ export interface PostingOperationsInfo {
     view?: string | null;
     edit?: string | null;
     delete?: string | null;
+    viewComments?: string | null;
     reactions?: string | null;
 }
 
@@ -678,6 +680,7 @@ export interface DraftText {
     updateInfo?: UpdateInfo | null;
     operations?: {
         view?: string | null;
+        viewComments?: string | null;
     } | null;
 }
 
@@ -706,6 +709,7 @@ export interface DraftInfoBase<B> {
     updateInfo?: UpdateInfo | null;
     operations?: {
         view?: string | null;
+        viewComments?: string | null;
     } | null;
 }
 

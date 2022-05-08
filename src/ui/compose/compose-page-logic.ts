@@ -31,6 +31,8 @@ export interface ComposePageValues {
     viewPrincipal: string;
     publishAtDefault: Date;
     publishAt: Date;
+    commentVisible: boolean;
+    viewCommentsPrincipal: string;
     reactionVisible: boolean;
     reactionsPositiveDefault: string;
     reactionsPositive: string;
@@ -95,6 +97,9 @@ const composePageLogic = {
             : props.posting != null
                 ? composePageLogic._getPublishAt(props.posting.feedReferences) ?? publishAtDefault
                 : publishAtDefault;
+        const viewCommentsPrincipal = props.draft != null
+            ? props.draft.operations?.viewComments ?? "public"
+            : props.posting?.operations?.viewComments ?? "public";
         const reactionsPositive = props.draft != null
             ? props.draft.acceptedReactions?.positive ?? ""
             : props.posting != null ? props.posting.acceptedReactions?.positive ?? "" : props.reactionsPositiveDefault;
@@ -122,6 +127,8 @@ const composePageLogic = {
             viewPrincipal,
             publishAtDefault,
             publishAt,
+            commentVisible: false,
+            viewCommentsPrincipal,
             reactionVisible: false,
             reactionsPositiveDefault: reactionsPositive,
             reactionsPositive,
@@ -194,7 +201,8 @@ const composePageLogic = {
                 description: values.updateDescription
             },
             operations: {
-                view: values.viewPrincipal
+                view: values.viewPrincipal,
+                viewComments: values.viewCommentsPrincipal
             }
         };
     },
@@ -237,7 +245,8 @@ const composePageLogic = {
             return true;
         }
         const prevOperations = {
-            view: posting.operations?.view ?? "public"
+            view: posting.operations?.view ?? "public",
+            viewComments: posting.operations?.viewComments ?? "public"
         }
         return !deepEqual(postingText.operations, prevOperations);
     },

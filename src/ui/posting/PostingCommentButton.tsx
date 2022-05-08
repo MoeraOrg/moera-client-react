@@ -6,13 +6,17 @@ import { PostingInfo } from "api/node/api-types";
 
 interface Props {
     posting: PostingInfo;
+    invisible: boolean;
 }
 
-const PostingCommentButton = ({posting}: Props) => (
-    <Jump className="posting-button" href={`/post/${posting.id}#comment-add`}>
-        <FontAwesomeIcon icon={["far", "comment"]}/>
-        <span className="caption">Comment</span>
-    </Jump>
+const PostingCommentButton = ({posting, invisible}: Props) => (
+    invisible ?
+        <span className="posting-button"/>
+    :
+        <Jump className="posting-button" href={`/post/${posting.id}#comment-add`}>
+            <FontAwesomeIcon icon={["far", "comment"]}/>
+            <span className="caption">Comment</span>
+        </Jump>
 );
 
 export default PostingCommentButton;

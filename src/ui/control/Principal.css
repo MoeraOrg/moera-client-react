@@ -2,3 +2,8 @@
     font-size: .8rem;
     color: var(--bs-gray-500);
 }
+
+.principal .caption {
+    font-size: .9rem;
+    font-weight: bold;
+}

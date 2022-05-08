@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import cx from 'classnames';
 
 import { Principal } from "ui/control/Principal";
 import { useButtonPopper } from "ui/hook";
@@ -7,10 +8,11 @@ import "./PrincipalSelect.css";
 
 interface Props {
     value: string | null | undefined;
+    long?: boolean | null;
     onChange?: (value: string) => void;
 }
 
-export function PrincipalSelect({value, onChange}: Props) {
+export function PrincipalSelect({value, long, onChange}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -19,8 +21,8 @@ export function PrincipalSelect({value, onChange}: Props) {
 
     return (
         <>
-            <button className="principal-select" ref={setButtonRef} onClick={onToggle}>
-                <Principal value={value}/>
+            <button className={cx("principal-select", {"long": long})} ref={setButtonRef} onClick={onToggle}>
+                <Principal value={value} long={long}/>
                 <FontAwesomeIcon icon="chevron-down" className="chevron"/>
             </button>
             {visible &&

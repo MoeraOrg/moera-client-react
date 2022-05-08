@@ -1,20 +1,23 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientReactionInfo, PostingInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
+import { getHomeOwnerName } from "state/home/selectors";
+import { isPermitted } from "state/node/selectors";
+import { getSetting } from "state/settings/selectors";
 import PostingReactionButton from "ui/posting/PostingReactionButton";
 import PostingCommentButton from "ui/posting/PostingCommentButton";
 import PostingShareButton from "ui/posting/PostingShareButton";
-import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerName } from "state/home/selectors";
-import { ClientState } from "state/state";
-import { ClientReactionInfo, PostingInfo } from "api/node/api-types";
 import "./PostingButtons.css";
 
-type Props = {
+interface OwnProps {
     posting: PostingInfo;
-} & ConnectedProps<typeof connector>;
+}
 
-function PostingButtons({posting, homeOwnerName, enableSelf}: Props) {
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+function PostingButtons({posting, homeOwnerName, enableSelf, commentsVisible}: Props) {
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
@@ -27,16 +30,17 @@ function PostingButtons({posting, homeOwnerName, enableSelf}: Props) {
                                    invisible={hide || (cr.emoji != null && !cr.negative)} id={posting.id}
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.negative ?? ""}/>
-            <PostingCommentButton posting={posting}/>
+            <PostingCommentButton posting={posting} invisible={!commentsVisible}/>
             <PostingShareButton posting={posting}/>
         </div>
     );
 }
 
 const connector = connect(
-    (state: ClientState) => ({
+    (state: ClientState, props: OwnProps) => ({
         homeOwnerName: getHomeOwnerName(state),
-        enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean
+        enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean,
+        commentsVisible: isPermitted("viewComments", props.posting, state) ?? true
     })
 );
 

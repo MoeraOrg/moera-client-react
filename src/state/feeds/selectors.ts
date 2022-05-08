@@ -1,12 +1,10 @@
 import { getUnixTime } from 'date-fns';
 
-import { isPermitted } from "state/node/selectors";
-import { isHomeOwnerNameSet } from "state/home/selectors";
-import { emptyFeed } from "state/feeds/empty";
-import { getSetting } from "state/settings/selectors";
+import { AvatarImage, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { FeedState } from "state/feeds/state";
-import { AvatarImage, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { emptyFeed } from "state/feeds/empty";
+import { getSetting } from "state/settings/selectors";
 
 const MAX_MOMENT = 25337597040000; // January 1, 9999
 
@@ -106,12 +104,6 @@ export function isSubscribingToFeed(state: ClientState, feedName: string): boole
 
 export function isUnsubscribingFromFeed(state: ClientState, feedName: string): boolean {
     return getFeedState(state, feedName).unsubscribing;
-}
-
-export function isFeedAddable(state: ClientState, feedName: string): boolean {
-    const feed = getFeedState(state, feedName);
-    return isFeedGeneralReady(state, feedName) && isPermitted("add", feed, state)
-        && isHomeOwnerNameSet(state);
 }
 
 export function getFeedAt(state: ClientState, feedName: string): number {

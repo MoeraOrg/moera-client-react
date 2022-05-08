@@ -672,6 +672,10 @@ const PostingOperationsInfoType: JSONSchemaType<API.PostingOperationsInfo> = {
             type: "string",
             nullable: true
         },
+        "viewComments": {
+            type: "string",
+            nullable: true
+        },
         "reactions": {
             type: "string",
             nullable: true
@@ -2198,6 +2202,10 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
             type: "object",
             properties: {
                 "view": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewComments": {
                     type: "string",
                     nullable: true
                 }

@@ -63,16 +63,16 @@ export interface ProtectedObject {
 }
 
 export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
-                            receiverName: string | null = null): boolean {
+                            receiverName: string | null = null): boolean | null {
     if (object == null) {
         return false;
     }
     if (object.operations == null) {
-        return true;
+        return null;
     }
     const principal = (object.operations as AnyOperationsInfo)[operation];
     if (principal == null) {
-        return false;
+        return null;
     }
     switch (principal) {
         case "none":

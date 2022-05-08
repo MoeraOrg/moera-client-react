@@ -14,7 +14,7 @@ export function isNodeNameDefined(state: ClientState): boolean {
 }
 
 export function isNodeNameManageable(state: ClientState): boolean {
-    return isNodeNameReady(state) && isPermitted("manage", state.nodeName, state);
+    return isNodeNameReady(state) && (isPermitted("manage", state.nodeName, state) ?? false);
 }
 
 export function isNodeNameOperationPending(state: ClientState): boolean {
