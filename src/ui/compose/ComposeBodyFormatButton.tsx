@@ -25,6 +25,6 @@ export default function ComposeBodyFormatButton({sourceFormats}: Props) {
     const [, {value, initialValue}] = useField<SourceFormat>("bodyFormat");
 
     const icon = BODY_FORMAT_ICONS[value] ?? "file-alt";
-    return <ComposeIconButton icon={icon} name="bodyFormatVisible" changed={value !== initialValue}
+    return <ComposeIconButton icon={icon} name="format" changed={value !== initialValue}
                               tooltip={getTooltip(value, sourceFormats)}/>
 };

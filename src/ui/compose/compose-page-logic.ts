@@ -19,6 +19,8 @@ import { ComposePageOuterProps } from "ui/compose/ComposePage";
 import { replaceSmileys } from "util/text";
 import { quoteHtml, safeImportHtml } from "util/html";
 
+export type ComposePageToolsTab = null | "format" | "comments" | "reactions" | "updated";
+
 export interface ComposePageValues {
     avatar: AvatarImage | null;
     fullName: string | null;
@@ -26,14 +28,12 @@ export interface ComposePageValues {
     body: RichTextValue;
     bodyUrls: string[];
     linkPreviews: RichTextLinkPreviewsValue;
-    bodyFormatVisible: boolean;
     bodyFormat: SourceFormat;
     viewPrincipal: string;
     publishAtDefault: Date;
     publishAt: Date;
-    commentVisible: boolean;
+    toolsTab: ComposePageToolsTab;
     viewCommentsPrincipal: string;
-    reactionVisible: boolean;
     reactionsPositiveDefault: string;
     reactionsPositive: string;
     reactionsNegativeDefault: string;
@@ -42,7 +42,6 @@ export interface ComposePageValues {
     reactionsVisible: boolean;
     reactionTotalsVisibleDefault: boolean;
     reactionTotalsVisible: boolean;
-    updateInfoVisible: boolean;
     updateImportant: boolean;
     updateDescription: string;
 }
@@ -122,14 +121,12 @@ const composePageLogic = {
             body: new RichTextValue(body, media),
             bodyUrls,
             linkPreviews,
-            bodyFormatVisible: false,
             bodyFormat,
             viewPrincipal,
             publishAtDefault,
             publishAt,
-            commentVisible: false,
+            toolsTab: null,
             viewCommentsPrincipal,
-            reactionVisible: false,
             reactionsPositiveDefault: reactionsPositive,
             reactionsPositive,
             reactionsNegativeDefault: reactionsNegative,
@@ -138,7 +135,6 @@ const composePageLogic = {
             reactionsVisible,
             reactionTotalsVisibleDefault: reactionTotalsVisible,
             reactionTotalsVisible,
-            updateInfoVisible: false,
             updateImportant,
             updateDescription
         };

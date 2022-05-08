@@ -11,5 +11,5 @@ export default function ComposeReactionsButton() {
         || values.reactionsNegative !== values.reactionsNegativeDefault
         || values.reactionsVisible !== values.reactionsVisibleDefault
         || values.reactionTotalsVisible !== values.reactionTotalsVisibleDefault;
-    return <ComposeIconButton icon="thumbs-up" name="reactionVisible" tooltip="Reactions" changed={changed}/>;
+    return <ComposeIconButton icon="thumbs-up" name="reactions" tooltip="Reactions" changed={changed}/>;
 };

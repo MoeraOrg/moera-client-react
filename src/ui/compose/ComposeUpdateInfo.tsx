@@ -2,12 +2,13 @@ import React from 'react';
 import { useField } from 'formik';
 
 import { CheckboxField, InputField } from "ui/control/field";
+import { ComposePageToolsTab } from "ui/compose/compose-page-logic";
 
 export default function ComposeUpdateInfo() {
-    const [, {value: updateInfoVisible}] = useField<boolean>("updateInfoVisible");
+    const [, {value: toolsTab}] = useField<ComposePageToolsTab>("toolsTab");
     const [, {value: updateImportant}] = useField<boolean>("updateImportant");
 
-    if (!updateInfoVisible) {
+    if (toolsTab !== "updated") {
         return null;
     }
 

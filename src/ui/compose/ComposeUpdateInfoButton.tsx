@@ -8,7 +8,7 @@ export default function ComposeUpdateInfoButton() {
     const [, {value: updateDescription}] = useField<string>("updateDescription");
 
     return (
-        <ComposeIconButton icon="bell" name="updateInfoVisible"
+        <ComposeIconButton icon="bell" name="updated"
                            changed={updateImportant || updateDescription.length > 0} tooltip="Notify followers"/>
     );
 };

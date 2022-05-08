@@ -2,11 +2,12 @@ import React from 'react';
 import { useField } from 'formik';
 
 import { CheckboxField, EmojiListInputField } from "ui/control/field";
+import { ComposePageToolsTab } from "ui/compose/compose-page-logic";
 
 export default function ComposeReactions() {
-    const [, {value}] = useField<boolean>("reactionVisible");
+    const [, {value}] = useField<ComposePageToolsTab>("toolsTab");
 
-    if (!value) {
+    if (value !== "reactions") {
         return null;
     }
 

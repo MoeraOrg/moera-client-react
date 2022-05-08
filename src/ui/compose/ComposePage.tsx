@@ -93,11 +93,6 @@ function ComposePage(props: Props) {
                         <ComposeFormattingHelp/>
                         <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features}/>
 
-                        <ComposeBodyFormat sourceFormats={sourceFormats}/>
-                        <ComposeComments/>
-                        <ComposeReactions/>
-                        <ComposeUpdateInfo/>
-
                         <div className="features">
                             <div className="feature-buttons">
                                 <ComposeBodyFormatButton sourceFormats={sourceFormats}/>
@@ -113,6 +108,11 @@ function ComposePage(props: Props) {
                                 <ComposeDraftSelector/>
                             </div>
                         </div>
+
+                        <ComposeBodyFormat sourceFormats={sourceFormats}/>
+                        <ComposeComments/>
+                        <ComposeReactions/>
+                        <ComposeUpdateInfo/>
 
                         <div className="form-buttons">
                             <ComposePreviewButton disabled={submitDisabled}/>

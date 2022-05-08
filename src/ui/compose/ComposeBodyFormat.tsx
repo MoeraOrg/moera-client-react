@@ -1,17 +1,18 @@
 import React from 'react';
 import { useField } from 'formik';
 
-import { SelectField } from "ui/control/field";
 import { Choice, SourceFormat } from "api/node/api-types";
+import { SelectField } from "ui/control/field";
+import { ComposePageToolsTab } from "ui/compose/compose-page-logic";
 
 interface Props {
     sourceFormats: Choice<SourceFormat>[];
 }
 
 export default function ComposeBodyFormat({sourceFormats}: Props) {
-    const [, {value}] = useField<boolean>("bodyFormatVisible");
+    const [, {value}] = useField<ComposePageToolsTab>("toolsTab");
 
-    if (!value) {
+    if (value !== "format") {
         return null;
     }
 
