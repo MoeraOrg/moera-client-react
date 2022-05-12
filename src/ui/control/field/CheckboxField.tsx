@@ -43,24 +43,22 @@ export function CheckboxField({name, title, disabled, groupClassName, labelClass
             onUndo={onUndo}
             onReset={onReset}
         >
-            <>
-                <input
-                    name={name}
-                    checked={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    id={name}
-                    type="checkbox"
-                    disabled={disabled}
-                    className={cx({
-                        "form-check-input": !single,
-                        "form-control": single,
-                        "checkbox-control-single": single
-                    })}
-                    ref={inputDom}
-                />
-                {touched && error && <div className="invalid-feedback">{error}</div>}
-            </>
+            <input
+                name={name}
+                checked={value}
+                onChange={onChange}
+                onBlur={onBlur}
+                id={name}
+                type="checkbox"
+                disabled={disabled}
+                className={cx({
+                    "form-check-input": !single,
+                    "form-control": single,
+                    "checkbox-control-single": single
+                })}
+                ref={inputDom}
+            />
+            {touched && error && <div className="invalid-feedback">{error}</div>}
         </FormGroup>
     );
 }

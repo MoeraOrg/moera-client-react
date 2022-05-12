@@ -37,3 +37,7 @@
 .principal-select.long .chevron {
     font-size: .6rem;
 }
+
+.form-group .principal-select {
+    align-self: center;
+}
