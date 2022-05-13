@@ -6,7 +6,8 @@ import ComposePageTool from "ui/compose/ComposePageTool";
 const ComposeComments = () => (
     <ComposePageTool name="comments">
         <PrincipalField name="viewCommentsPrincipal" values={["none", "private", "signed", "public"]}
-                        title="Comments visible to" long groupClassName="ps-2 pb-2"/>
+                        title="Comments visible to" long setting="posting.comments.visibility.default"
+                        groupClassName="ps-2 pb-2"/>
     </ComposePageTool>
 );
 

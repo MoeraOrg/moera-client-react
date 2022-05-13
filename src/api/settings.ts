@@ -247,6 +247,15 @@ const META: ClientSettingMetaInfo[] = [
         }
     },
     {
+        name: "posting.comments.visibility.default",
+        type: "Principal",
+        defaultValue: "public",
+        title: "Comments visibility by default",
+        modifiers: {
+            principals: ["none", "private", "signed", "public"]
+        }
+    },
+    {
         name: "posting.body-src-format.default",
         type: "string",
         defaultValue: "markdown",

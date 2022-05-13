@@ -97,8 +97,8 @@ const composePageLogic = {
                 ? composePageLogic._getPublishAt(props.posting.feedReferences) ?? publishAtDefault
                 : publishAtDefault;
         const viewCommentsPrincipal = props.draft != null
-            ? props.draft.operations?.viewComments ?? "public"
-            : props.posting?.operations?.viewComments ?? "public";
+            ? props.draft.operations?.viewComments ?? props.commentsVisibilityDefault
+            : props.posting?.operations?.viewComments ?? props.commentsVisibilityDefault;
         const reactionsPositive = props.draft != null
             ? props.draft.acceptedReactions?.positive ?? ""
             : props.posting != null ? props.posting.acceptedReactions?.positive ?? "" : props.reactionsPositiveDefault;
