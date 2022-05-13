@@ -38,5 +38,5 @@ export const Label = ({title, name, className, horizontal, checkbox, undo, reset
                                    title="Reset to default" onClick={onReset}/>}
         </>
     :
-        null
+        children ?? null
 );
