@@ -6,6 +6,7 @@ import { PrincipalValue } from "api/node/api-types";
 import { Principal } from "ui/control/Principal";
 import { useButtonPopper } from "ui/hook";
 import "./PrincipalSelect.css";
+import { getPrincipalDisplay } from "ui/control/principal-display";
 
 interface Props {
     value: PrincipalValue | null | undefined;
@@ -49,16 +50,6 @@ interface PrincipalSelectItemProps {
 }
 
 function PrincipalSelectItem({value}: PrincipalSelectItemProps) {
-    switch (value) {
-        case "none":
-            return <><FontAwesomeIcon icon="ban"/>&nbsp;&nbsp;Nobody</>;
-        case "private":
-        case "owner":
-        case "admin":
-            return <><FontAwesomeIcon icon="lock"/>&nbsp;&nbsp;Only me</>;
-        case "signed":
-            return <><FontAwesomeIcon icon="shield-halved"/>&nbsp;&nbsp;Signed</>;
-        case "public":
-            return <><FontAwesomeIcon icon="globe"/>&nbsp;&nbsp;Public</>;
-    }
+    const {icon, title} = getPrincipalDisplay(value);
+    return <><FontAwesomeIcon icon={icon}/>&nbsp;&nbsp;{title}</>;
 }

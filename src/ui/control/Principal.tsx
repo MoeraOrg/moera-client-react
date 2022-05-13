@@ -1,7 +1,7 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { PrincipalValue } from "api/node/api-types";
+import { getPrincipalDisplay } from "ui/control/principal-display";
 import "./Principal.css";
 
 interface Props {
@@ -10,25 +10,7 @@ interface Props {
 }
 
 export function Principal({value, long}: Props) {
-    let icon: IconProp = "globe";
-    let title: string = "Public";
-    switch (value) {
-        case "signed":
-            icon = "shield-halved";
-            title = "Signed";
-            break;
-
-        case "private":
-        case "owner":
-        case "admin":
-            icon = "lock";
-            title = "Only me";
-            break;
-
-        case "none":
-            icon = "ban";
-            title = "Nobody";
-    }
+    const {icon, title} = getPrincipalDisplay(value);
     if (long) {
         return (
             <span className="principal">
