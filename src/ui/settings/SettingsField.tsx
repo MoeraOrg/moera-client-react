@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SettingMetaInfo } from "api/node/api-types";
+import { PrincipalValue, SettingMetaInfo } from "api/node/api-types";
 import { ClientSettingMetaInfo } from "api/settings";
 import {
     CheckboxField,
@@ -8,7 +8,7 @@ import {
     EmojiListInputField,
     InfoQuantityField,
     InputField,
-    NumberField,
+    NumberField, PrincipalField,
     SelectField,
     TextField
 } from "ui/control/field";
@@ -23,6 +23,10 @@ function deserializeInt(value: string | number | null | undefined): number | nul
         return value;
     }
     return value != null ? parseInt(value) : null;
+}
+
+function deserializePrincipal(value: string | null | undefined): PrincipalValue | null {
+    return (value ?? null) as PrincipalValue | null;
 }
 
 function convertFormat(format: string | null | undefined) {
@@ -112,6 +116,11 @@ export default function SettingsField({name, fieldName, meta, initialValue}: Pro
             return <DurationField name={fieldName} title={title} disabled={disabled} min={modifiers.min}
                                   max={modifiers.max} never={modifiers.never} always={modifiers.always}
                                   initialValue={initialValue} defaultValue={defaultValue}/>;
+
+        case "Principal":
+            return <PrincipalField name={fieldName} title={title} disabled={disabled} values={modifiers.principals}
+                                   initialValue={deserializePrincipal(initialValue)}
+                                   defaultValue={deserializePrincipal(defaultValue)} long/>;
 
         default:
             return <InputField name={fieldName} title={title} disabled={disabled}

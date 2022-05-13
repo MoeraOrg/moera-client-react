@@ -45,7 +45,7 @@ const emptyProfileInfo = {
     avatar: null,
     fundraisers: [],
     operations: {
-        edit: "none"
+        edit: "none" as const
     }
 };
 

@@ -37,7 +37,7 @@ export function CheckboxField({name, title, disabled, groupClassName, labelClass
             name={name}
             labelClassName={labelClassName}
             groupClassName={groupClassName}
-            checkbox={!single}
+            layout={single ? "follow" : "right"}
             undo={undo}
             reset={reset}
             onUndo={onUndo}

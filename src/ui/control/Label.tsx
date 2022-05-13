@@ -13,9 +13,11 @@ interface Props {
     reset?: boolean;
     onUndo?: () => void;
     onReset?: () => void;
+    children?: any;
 }
 
-export const Label = ({title, name, className, horizontal, checkbox, undo, reset, onUndo, onReset}: Props) => (
+export const Label = ({title, name, className, horizontal, checkbox, undo, reset, onUndo, onReset,
+                       children}: Props) => (
     title ?
         <>
             <label htmlFor={name} className={cx(
@@ -29,6 +31,7 @@ export const Label = ({title, name, className, horizontal, checkbox, undo, reset
                 })}>
                 {title}
             </label>
+            {children}
             {undo && <LabelButton icon="undo-alt" className="form-label-button-undo"
                                   title="Undo" onClick={onUndo}/>}
             {reset && <LabelButton icon="backspace" className="form-label-button-reset"

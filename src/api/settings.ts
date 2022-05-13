@@ -1,4 +1,4 @@
-import { Choice, SettingType } from "api/node/api-types";
+import { Choice, PrincipalValue, SettingType } from "api/node/api-types";
 
 export const PREFIX = "client.mercy.";
 
@@ -11,6 +11,7 @@ export interface ClientSettingTypeModifiers {
     never?: boolean;
     always?: boolean;
     items?: Choice<string>[];
+    principals?: PrincipalValue[];
 }
 
 export interface ClientSettingMetaInfo {
@@ -235,6 +236,15 @@ const META: ClientSettingMetaInfo[] = [
         defaultValue: "false",
         title: "Allow to add reactions to your own posts",
         modifiers: {}
+    },
+    {
+        name: "posting.visibility.default",
+        type: "Principal",
+        defaultValue: "public",
+        title: "Post visibility by default",
+        modifiers: {
+            principals: ["private", "signed", "public"]
+        }
     },
     {
         name: "posting.body-src-format.default",

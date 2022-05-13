@@ -2,6 +2,7 @@ import * as Base64js from 'base64-js';
 import cloneDeep from 'lodash.clonedeep';
 
 import { NodeName } from "api";
+import { PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 
 const DIGITS = /^\d+$/;
@@ -142,8 +143,8 @@ export function getFeedHeaderHeight(): number {
     return headerHeight + feedTitleHeight;
 }
 
-export function cloneOperations<T extends Partial<Record<string, string>>>
-                (operations: Record<string, string | null | undefined> | null | undefined, defaults: T): T {
+export function cloneOperations<T extends Partial<Record<string, PrincipalValue>>>
+                (operations: Record<string, PrincipalValue | null | undefined> | null | undefined, defaults: T): T {
     if (operations == null) {
         return cloneDeep(defaults);
     }

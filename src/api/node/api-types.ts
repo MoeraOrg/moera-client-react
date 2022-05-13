@@ -75,7 +75,7 @@ export interface ProfileInfo {
     avatar?: AvatarInfo | null;
     fundraisers?: FundraiserInfo[] | null;
     operations?: {
-        edit?: string | null;
+        edit?: PrincipalValue | null;
     } | null;
 }
 
@@ -91,7 +91,7 @@ export interface NodeNameInfo {
     operationErrorCode?: string | null;
     operationErrorMessage?: string | null;
     operations?: {
-        manage?: string | null;
+        manage?: PrincipalValue | null;
     } | null;
 }
 
@@ -150,8 +150,8 @@ export interface FeedReference {
     moment: number;
     storyId: string;
     operations?: {
-        edit?: string | null;
-        delete?: string | null;
+        edit?: PrincipalValue | null;
+        delete?: PrincipalValue | null;
     } | null;
 }
 
@@ -215,11 +215,11 @@ export interface PostingSourceText {
 }
 
 export interface PostingOperationsInfo {
-    view?: string | null;
-    edit?: string | null;
-    delete?: string | null;
-    viewComments?: string | null;
-    reactions?: string | null;
+    view?: PrincipalValue | null;
+    edit?: PrincipalValue | null;
+    delete?: PrincipalValue | null;
+    viewComments?: PrincipalValue | null;
+    reactions?: PrincipalValue | null;
 }
 
 export interface PostingInfoBase<B> {
@@ -277,7 +277,7 @@ export interface FeedInfo {
     firstCreatedAt?: number | null;
     lastCreatedAt?: number | null;
     operations?: {
-        add?: string | null;
+        add?: PrincipalValue | null;
     } | null;
 }
 
@@ -354,9 +354,9 @@ interface CommentInfoBase<B> {
     signature?: string | null;
     signatureVersion?: number | null;
     operations?: {
-        edit?: string | null;
-        delete?: string | null;
-        reactions?: string | null;
+        edit?: PrincipalValue | null;
+        delete?: PrincipalValue | null;
+        reactions?: PrincipalValue | null;
     } | null;
     acceptedReactions?: AcceptedReactions | null;
     clientReaction?: ClientReactionInfo | null;
@@ -410,8 +410,8 @@ export interface StoryInfoBase<B> {
     remoteCommentId?: string | null;
     remoteMediaId?: string | null;
     operations?: {
-        edit?: string | null;
-        delete?: string | null;
+        edit?: PrincipalValue | null;
+        delete?: PrincipalValue | null;
     } | null;
 }
 
@@ -442,6 +442,8 @@ export interface PostingFeatures {
     imageFormats: string[];
 }
 
+export type PrincipalValue = "none" | "private" | "admin" | "owner" | "signed" | "public";
+
 export interface SettingInfo {
     name: string;
     value: string | null;
@@ -454,10 +456,11 @@ export interface SettingTypeModifiers {
     multiline?: boolean | null;
     never?: boolean | null;
     always?: boolean | null;
+    principals?: PrincipalValue[] | null;
 }
 
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"
-    | "UUID";
+    | "UUID" | "Principal";
 
 export interface SettingMetaInfo {
     name: string;
@@ -506,7 +509,7 @@ export interface ReactionInfo {
     signature?: string | null;
     signatureVersion?: number | null;
     operations?: {
-        delete?: string | null;
+        delete?: PrincipalValue | null;
     } | null;
 }
 
@@ -679,8 +682,8 @@ export interface DraftText {
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
     operations?: {
-        view?: string | null;
-        viewComments?: string | null;
+        view?: PrincipalValue | null;
+        viewComments?: PrincipalValue | null;
     } | null;
 }
 
@@ -708,8 +711,8 @@ export interface DraftInfoBase<B> {
     publishAt?: number | null;
     updateInfo?: UpdateInfo | null;
     operations?: {
-        view?: string | null;
-        viewComments?: string | null;
+        view?: PrincipalValue | null;
+        viewComments?: PrincipalValue | null;
     } | null;
 }
 

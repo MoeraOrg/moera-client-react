@@ -1613,6 +1613,13 @@ const SettingTypeModifiersType: JSONSchemaType<API.SettingTypeModifiers> = {
         "always": {
             type: "boolean",
             nullable: true
+        },
+        "principals": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
         }
     },
     additionalProperties: false

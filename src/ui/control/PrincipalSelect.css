@@ -20,6 +20,12 @@
     background-color: var(--highlight);
 }
 
+.principal-select:disabled, .principal-select:disabled:hover {
+    cursor: auto;
+    color: var(--bs-gray-600);
+    background-color: var(--bs-gray-400);
+}
+
 .principal-select .principal {
     margin-right: .25rem;
     color: var(--bs-gray-600);
@@ -27,6 +33,10 @@
 
 .principal-select:hover .principal {
     color: var(--bs-gray-800);
+}
+
+.principal-select:disabled:hover .principal {
+    color: var(--bs-gray-600);
 }
 
 .principal-select .chevron {
