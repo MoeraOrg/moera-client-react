@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 
-import { PostingText, SourceFormat } from "api/node/api-types";
+import { PostingText, PrincipalValue, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
 import { getPostingFeatures } from "state/compose/selectors";
@@ -144,6 +144,7 @@ const connector = connect(
         beingPosted: state.compose.beingPosted,
         sharedText: state.compose.sharedText,
         sharedTextType: state.compose.sharedTextType,
+        visibilityDefault: getSetting(state, "posting.visibility.default") as PrincipalValue,
         reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default") as string,
         reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default") as string,
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,

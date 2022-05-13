@@ -8,7 +8,7 @@ import {
     FeedReference,
     PostingFeatures,
     PostingInfo,
-    PostingText,
+    PostingText, PrincipalValue,
     PrivateMediaFileInfo,
     SourceFormat,
     StoryAttributes
@@ -29,11 +29,11 @@ export interface ComposePageValues {
     bodyUrls: string[];
     linkPreviews: RichTextLinkPreviewsValue;
     bodyFormat: SourceFormat;
-    viewPrincipal: string;
+    viewPrincipal: PrincipalValue;
     publishAtDefault: Date;
     publishAt: Date;
     toolsTab: ComposePageToolsTab;
-    viewCommentsPrincipal: string;
+    viewCommentsPrincipal: PrincipalValue;
     reactionsPositiveDefault: string;
     reactionsPositive: string;
     reactionsNegativeDefault: string;
@@ -88,8 +88,8 @@ const composePageLogic = {
 
         // TODO storing operations in drafts
         const viewPrincipal = props.draft != null
-            ? props.draft.operations?.view ?? "public"
-            : props.posting?.operations?.view ?? "public";
+            ? props.draft.operations?.view ?? props.visibilityDefault
+            : props.posting?.operations?.view ?? props.visibilityDefault;
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)
