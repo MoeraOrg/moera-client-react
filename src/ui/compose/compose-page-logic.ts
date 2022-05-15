@@ -34,6 +34,7 @@ export interface ComposePageValues {
     publishAt: Date;
     toolsTab: ComposePageToolsTab;
     viewCommentsPrincipal: PrincipalValue;
+    addCommentPrincipal: PrincipalValue;
     reactionsPositiveDefault: string;
     reactionsPositive: string;
     reactionsNegativeDefault: string;
@@ -99,6 +100,9 @@ const composePageLogic = {
         const viewCommentsPrincipal = props.draft != null
             ? props.draft.operations?.viewComments ?? props.commentsVisibilityDefault
             : props.posting?.operations?.viewComments ?? props.commentsVisibilityDefault;
+        const addCommentPrincipal = props.draft != null
+            ? props.draft.operations?.addComment ?? props.commentAdditionDefault
+            : props.posting?.operations?.addComment ?? props.commentAdditionDefault;
         const reactionsPositive = props.draft != null
             ? props.draft.acceptedReactions?.positive ?? ""
             : props.posting != null ? props.posting.acceptedReactions?.positive ?? "" : props.reactionsPositiveDefault;
@@ -127,6 +131,7 @@ const composePageLogic = {
             publishAt,
             toolsTab: null,
             viewCommentsPrincipal,
+            addCommentPrincipal,
             reactionsPositiveDefault: reactionsPositive,
             reactionsPositive,
             reactionsNegativeDefault: reactionsNegative,
@@ -198,7 +203,8 @@ const composePageLogic = {
             },
             operations: {
                 view: values.viewPrincipal,
-                viewComments: values.viewCommentsPrincipal
+                viewComments: values.viewCommentsPrincipal,
+                addComment: values.addCommentPrincipal
             }
         };
     },
@@ -242,7 +248,8 @@ const composePageLogic = {
         }
         const prevOperations = {
             view: posting.operations?.view ?? "public",
-            viewComments: posting.operations?.viewComments ?? "public"
+            viewComments: posting.operations?.viewComments ?? "public",
+            addComment: posting.operations?.addComment ?? "public"
         }
         return !deepEqual(postingText.operations, prevOperations);
     },

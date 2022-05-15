@@ -1,3 +1,5 @@
+import { PrincipalValue } from "api/node/api-types";
+
 export interface NodeNameState {
     loaded: boolean;
     loading: boolean;
@@ -7,7 +9,7 @@ export interface NodeNameState {
     operationErrorCode: string | null;
     operationErrorMessage: string | null;
     operations: {
-        manage: string;
+        manage: PrincipalValue;
     };
     showingRegisterDialog: boolean;
     registering: boolean;

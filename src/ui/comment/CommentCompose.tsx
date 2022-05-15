@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
@@ -11,8 +11,9 @@ import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
+import { isPermitted, isPrincipalEquals } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
-import { getCommentComposerRepliedToId, getCommentsState } from "state/detailedposting/selectors";
+import { getCommentComposerRepliedToId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
@@ -30,18 +31,9 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 function CommentCompose(props: Props) {
     const {
         ownerName, beingPosted, receiverName, receiverPostingId, loadedDraft, formId, submitKey, bottomMenuHide,
-        bottomMenuShow, receiverFullName, smileysEnabled, features, sourceFormatDefault, openSignUpDialog,
-        openConnectDialog, values, resetForm, submitForm
+        bottomMenuShow, receiverFullName, smileysEnabled, features, commentingAllowed, discussionClosed,
+        sourceFormatDefault, openSignUpDialog, openConnectDialog, values, resetForm, submitForm
     } = props;
-
-    const composer = useRef<HTMLDivElement>(null);
-
-    const viewComposer = useCallback(() => {
-        if (composer.current != null && composer.current.contains(document.activeElement)) {
-            const composerDom = composer.current;
-            setTimeout(() => scrollIntoView(composerDom, {scrollMode: "if-needed", block: "nearest"}));
-        }
-    }, [composer]);
 
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
@@ -49,7 +41,32 @@ function CommentCompose(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receiverName, receiverPostingId, loadedDraft, formId, resetForm]); // 'props' are missing on purpose
 
-    useEffect(viewComposer, [values.body.text, viewComposer]);
+    useEffect(viewComposer, [values.body.text]);
+
+    if (!ownerName) {
+        return (
+            <div id="comment-composer" className="alert alert-info">
+                To add comments, you need to&nbsp;
+                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
+                &nbsp;or&nbsp;
+                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
+            </div>
+        );
+    }
+
+    if (!commentingAllowed) {
+        if (discussionClosed) {
+            return (
+                <div id="comment-composer" className="disabled">
+                    Discussion is closed
+                </div>
+            );
+        } else {
+            return (
+                <div id="comment-composer"/>
+            );
+        }
+    }
 
     const onFocus = () => {
         viewComposer();
@@ -76,33 +93,29 @@ function CommentCompose(props: Props) {
     }
 
     const mention = receiverFullName ? receiverFullName : mentionName(receiverName);
-    if (ownerName) {
-        return (
-            <div id="comment-composer" ref={composer} onFocus={onFocus} onBlur={onBlur}>
-                <Form>
-                    <AvatarField name="avatar" size={36}/>
-                    <div className="content">
-                        <CommentComposeRepliedTo/>
-                        <RichTextField name="body" rows={1} features={features} nodeName={receiverName}
-                                       forceImageCompress anyValue placeholder={`Write a comment to ${mention} here...`}
-                                       disabled={beingPosted} smileysEnabled={smileysEnabled}
-                                       hidingPanel={commentComposeLogic.areValuesEmpty(values)}
-                                       format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
-                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features} small/>
-                    </div>
-                    <CommentComposeButtons loading={beingPosted}/>
-                </Form>
-            </div>
-        );
-    } else {
-        return (
-            <div className="alert alert-info">
-                To add comments, you need to&nbsp;
-                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
-                &nbsp;or&nbsp;
-                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
-            </div>
-        );
+    return (
+        <div id="comment-composer" onFocus={onFocus} onBlur={onBlur}>
+            <Form>
+                <AvatarField name="avatar" size={36}/>
+                <div className="content">
+                    <CommentComposeRepliedTo/>
+                    <RichTextField name="body" rows={1} features={features} nodeName={receiverName}
+                                   forceImageCompress anyValue placeholder={`Write a comment to ${mention} here...`}
+                                   disabled={beingPosted} smileysEnabled={smileysEnabled}
+                                   hidingPanel={commentComposeLogic.areValuesEmpty(values)}
+                                   format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
+                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features} small/>
+                </div>
+                <CommentComposeButtons loading={beingPosted}/>
+            </Form>
+        </div>
+    );
+}
+
+function viewComposer() {
+    const composer = document.getElementById("comment-composer");
+    if (composer != null && composer.contains(document.activeElement)) {
+        setTimeout(() => scrollIntoView(composer, {scrollMode: "if-needed", block: "nearest"}));
     }
 }
 
@@ -125,7 +138,9 @@ const connector = connect(
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
         submitKey: getSetting(state, "comment.submit-key") as string,
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
-        features: getPostingFeatures(state)
+        features: getPostingFeatures(state),
+        commentingAllowed: isPermitted("addComment", getDetailedPosting(state), state) ?? true,
+        discussionClosed: isPrincipalEquals("addComment", getDetailedPosting(state), "none") ?? false
     }),
     { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
 );

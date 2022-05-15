@@ -256,6 +256,15 @@ const META: ClientSettingMetaInfo[] = [
         }
     },
     {
+        name: "posting.comments.addition.default",
+        type: "Principal",
+        defaultValue: "public",
+        title: "Commenting allowed by default",
+        modifiers: {
+            principals: ["none", "private", "signed", "public"]
+        }
+    },
+    {
         name: "posting.body-src-format.default",
         type: "string",
         defaultValue: "markdown",

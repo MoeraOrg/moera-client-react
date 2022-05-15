@@ -146,6 +146,7 @@ const connector = connect(
         sharedTextType: state.compose.sharedTextType,
         visibilityDefault: getSetting(state, "posting.visibility.default") as PrincipalValue,
         commentsVisibilityDefault: getSetting(state, "posting.comments.visibility.default") as PrincipalValue,
+        commentAdditionDefault: getSetting(state, "posting.comments.addition.default") as PrincipalValue,
         reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default") as string,
         reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default") as string,
         reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,

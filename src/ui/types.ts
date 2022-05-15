@@ -1,3 +1,5 @@
+import { PrincipalValue } from "api/node/api-types";
+
 export type NameDisplayMode = "name" | "full-name" | "both";
 
 export interface MinimalStoryInfo {
@@ -7,7 +9,7 @@ export interface MinimalStoryInfo {
     viewed?: boolean | null;
     moment: number;
     operations?: {
-        edit?: string | null;
-        delete?: string | null;
+        edit?: PrincipalValue | null;
+        delete?: PrincipalValue | null;
     } | null;
 }

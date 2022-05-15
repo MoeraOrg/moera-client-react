@@ -182,7 +182,8 @@ export interface PostingSubscriptionsInfo {
 
 export interface PostingOperations {
     view?: string | null;
-    viewComments?: string | null;
+    viewComments?: PrincipalValue | null;
+    addComment?: PrincipalValue | null;
 }
 
 export interface PostingText {
@@ -219,6 +220,7 @@ export interface PostingOperationsInfo {
     edit?: PrincipalValue | null;
     delete?: PrincipalValue | null;
     viewComments?: PrincipalValue | null;
+    addComment?: PrincipalValue | null;
     reactions?: PrincipalValue | null;
 }
 
@@ -684,6 +686,7 @@ export interface DraftText {
     operations?: {
         view?: PrincipalValue | null;
         viewComments?: PrincipalValue | null;
+        addComment?: PrincipalValue | null;
     } | null;
 }
 
@@ -713,6 +716,7 @@ export interface DraftInfoBase<B> {
     operations?: {
         view?: PrincipalValue | null;
         viewComments?: PrincipalValue | null;
+        addComment?: PrincipalValue | null;
     } | null;
 }
 
