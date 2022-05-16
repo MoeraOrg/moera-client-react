@@ -87,7 +87,6 @@ const composePageLogic = {
         let linkPreviews, bodyUrls;
         [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 
-        // TODO storing operations in drafts
         const viewPrincipal = props.draft != null
             ? props.draft.operations?.view ?? props.visibilityDefault
             : props.posting?.operations?.view ?? props.visibilityDefault;
