@@ -139,8 +139,14 @@ const connector = connect(
         submitKey: getSetting(state, "comment.submit-key") as string,
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
         features: getPostingFeatures(state),
-        commentingAllowed: isPermitted("addComment", getDetailedPosting(state), state) ?? true,
-        discussionClosed: isPrincipalEquals("addComment", getDetailedPosting(state), "none") ?? false
+        commentingAllowed: isPermitted("addComment", getDetailedPosting(state), state, {
+            useReceiverOperations: getDetailedPosting(state)?.receiverName != null,
+            ifNoObject: true,
+            ifNoOperation: true
+        }),
+        discussionClosed: isPrincipalEquals("addComment", getDetailedPosting(state), "none", {
+            useReceiverOperations: getDetailedPosting(state)?.receiverName != null
+        })
     }),
     { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
 );

@@ -26,7 +26,7 @@ import "ui/entry/EntryMenu.css";
 type Props = {
     posting: PostingInfo;
     story: MinimalStoryInfo;
-    isPermitted: (operation: string, object: ProtectedObject) => boolean | null;
+    isPermitted: (operation: string, object: ProtectedObject) => boolean;
 } & ConnectedProps<typeof connector>;
 
 class PostingMenu extends React.PureComponent<Props> {
@@ -157,19 +157,19 @@ class PostingMenu extends React.PureComponent<Props> {
                     title: "Edit...",
                     href: `${rootLocation}/moera/compose?id=${posting.id}`,
                     onClick: this.onEdit,
-                    show: isPermitted("edit", posting) ?? false
+                    show: isPermitted("edit", posting)
                 },
                 {
                     title: story != null && !story.pinned ? "Pin" : "Unpin",
                     href: postingHref,
                     onClick: this.onPin,
-                    show: story != null && (isPermitted("edit", story) ?? false)
+                    show: story != null && (isPermitted("edit", story))
                 },
                 {
                     title: "Change date/time...",
                     href: postingHref,
                     onClick: this.onChangeDate,
-                    show: posting.receiverName == null && (isPermitted("edit", story) ?? false)
+                    show: posting.receiverName == null && (isPermitted("edit", story))
                 },
                 {
                     divider: true
@@ -184,7 +184,7 @@ class PostingMenu extends React.PureComponent<Props> {
                     title: "Delete",
                     href: postingHref,
                     onClick: this.onDelete,
-                    show: isPermitted("delete", posting) ?? false
+                    show: isPermitted("delete", posting)
                 }
             ]}/>
         );

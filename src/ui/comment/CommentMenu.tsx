@@ -16,7 +16,7 @@ type Props = {
     nodeName: string;
     postingId: string;
     comment: CommentInfo;
-    isPermitted: (operation: string, object: CommentInfo) => boolean | null;
+    isPermitted: (operation: string, object: CommentInfo) => boolean;
 } & ConnectedProps<typeof connector>;
 
 class CommentMenu extends React.PureComponent<Props> {
@@ -92,7 +92,7 @@ class CommentMenu extends React.PureComponent<Props> {
                     title: "Edit...",
                     href: commentHref,
                     onClick: this.onEdit,
-                    show: isPermitted("edit", comment) ?? false,
+                    show: isPermitted("edit", comment),
                 },
                 {
                     title: "View source",
@@ -104,7 +104,7 @@ class CommentMenu extends React.PureComponent<Props> {
                     title: "Delete",
                     href: commentHref,
                     onClick: this.onDelete,
-                    show: isPermitted("delete", comment) ?? false // FIXME all permissions work?
+                    show: isPermitted("delete", comment) // FIXME all permissions work?
                 }
             ]}/>
         );

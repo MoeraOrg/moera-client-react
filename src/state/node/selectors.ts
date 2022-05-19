@@ -60,19 +60,38 @@ type AnyOperationsInfo = Partial<Record<string, PrincipalValue | null>>;
 export interface ProtectedObject {
     ownerName?: string;
     operations?: AnyOperationsInfo | PostingOperationsInfo | null;
+    receiverOperations?: AnyOperationsInfo | PostingOperationsInfo | null;
 }
 
+interface IsPermittedOptions {
+    objectSourceName: string | null;
+    useReceiverOperations: boolean;
+    ifNoObject: boolean;
+    ifNoOperation: boolean;
+    ifUnknownPrincipal: boolean;
+}
+
+const defaultIsPermittedOptions: IsPermittedOptions = {
+    objectSourceName: null,
+    useReceiverOperations: false,
+    ifNoObject: false,
+    ifNoOperation: false,
+    ifUnknownPrincipal: false
+};
+
 export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
-                            receiverName: string | null = null): boolean | null {
+                            options: Partial<IsPermittedOptions> = {}): boolean {
+    const op: IsPermittedOptions = {...defaultIsPermittedOptions, ...options};
     if (object == null) {
-        return false;
+        return op.ifNoObject;
     }
-    if (object.operations == null) {
-        return null;
+    const operations = op.useReceiverOperations ? object.receiverOperations : object.operations;
+    if (operations == null) {
+        return op.ifNoOperation;
     }
-    const principal = (object.operations as AnyOperationsInfo)[operation];
+    const principal = (operations as AnyOperationsInfo)[operation];
     if (principal == null) {
-        return null;
+        return op.ifNoOperation;
     }
     switch (principal) {
         case "none":
@@ -88,7 +107,10 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
             if (state.home.owner.name === object.ownerName) {
                 return true;
             }
-            if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
+            if (op.objectSourceName != null
+                ? isReceiverAdmin(state, op.objectSourceName)
+                : isNodeAdmin(state)
+            ) {
                 return true;
             }
             break;
@@ -98,7 +120,10 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
             }
             break;
         case "admin":
-            if (receiverName != null ? isReceiverAdmin(state, receiverName) : isNodeAdmin(state)) {
+            if (op.objectSourceName != null
+                ? isReceiverAdmin(state, op.objectSourceName)
+                : isNodeAdmin(state)
+            ) {
                 return true;
             }
             break;
@@ -108,16 +133,30 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
             }
             break;
     }
-    return false;
+    return op.ifUnknownPrincipal;
 }
 
-export function isPrincipalEquals(operation: string, object: ProtectedObject | null,
-                                  value: PrincipalValue): boolean | null {
+interface IsPrincipalEqualsOptions {
+    useReceiverOperations: boolean;
+    ifNoObject: boolean;
+    ifNoOperation: boolean;
+}
+
+const defaultIsPrincipalEqualsOptions: IsPrincipalEqualsOptions = {
+    useReceiverOperations: false,
+    ifNoObject: false,
+    ifNoOperation: false
+};
+
+export function isPrincipalEquals(operation: string, object: ProtectedObject | null, value: PrincipalValue,
+                                  options: Partial<IsPrincipalEqualsOptions> = {}): boolean {
+    const op: IsPrincipalEqualsOptions = {...defaultIsPrincipalEqualsOptions, ...options};
     if (object == null) {
-        return null;
+        return op.ifNoObject;
     }
-    if (object.operations == null) {
-        return null;
+    const operations = op.useReceiverOperations ? object.receiverOperations : object.operations;
+    if (operations == null) {
+        return op.ifNoOperation;
     }
-    return (object.operations as AnyOperationsInfo)[operation] === value;
+    return (operations as AnyOperationsInfo)[operation] === value;
 }

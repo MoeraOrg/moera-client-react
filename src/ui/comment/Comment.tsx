@@ -88,7 +88,7 @@ const connector = connect(
         postingReceiverName: getCommentsState(state).receiverName,
         postingReceiverPostingId: getCommentsReceiverPostingId(state),
         isPermitted: (operation: string, comment: CommentInfo) =>
-            isPermitted(operation, comment, state, getCommentsState(state).receiverName)
+            isPermitted(operation, comment, state, {objectSourceName: getCommentsState(state).receiverName})
     })
 );
 

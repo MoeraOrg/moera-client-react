@@ -68,7 +68,7 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.reactionsDialog.show,
         posting: getPosting(state, state.reactionsDialog.postingId),
-        reactionsVisible: isPermitted("reactions", getPosting(state, state.reactionsDialog.postingId), state) ?? false
+        reactionsVisible: isPermitted("reactions", getPosting(state, state.reactionsDialog.postingId), state)
     }),
     { closeReactionsDialog }
 );

@@ -20,7 +20,7 @@ export default function PostingSubject({posting, preview}: Props) {
         return null;
     }
     if (preview) {
-        subjectHtml = ellipsize(subjectHtml, MAX_SHORT_TITLE); // FIXME may break entities
+        subjectHtml = ellipsize(subjectHtml, MAX_SHORT_TITLE); // FIXME may break HTML entities
     }
     return (
         <div className="subject" dir="auto">

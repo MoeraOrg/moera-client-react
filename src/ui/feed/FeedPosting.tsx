@@ -72,7 +72,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                         <br/>
                         <PostingDate posting={posting} story={story}/>
                         <PostingUpdated posting={posting} story={story}/>
-                        <PostingVisibility posting={posting} editable={isPermitted("edit", posting) ?? false}/>
+                        <PostingVisibility posting={posting} editable={isPermitted("edit", posting)}/>
                     </div>
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
