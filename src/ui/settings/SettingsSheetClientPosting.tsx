@@ -13,6 +13,8 @@ const INCLUDE = new Set([
     PREFIX + "posting.reply.preamble",
     PREFIX + "posting.reply.quote-all",
     PREFIX + "posting.smileys.enabled",
+    PREFIX + "posting.reactions.enabled.default",
+    PREFIX + "posting.reactions.negative.enabled.default",
     PREFIX + "posting.reactions.positive.default",
     PREFIX + "posting.reactions.negative.default",
     PREFIX + "posting.reactions.visible.default",

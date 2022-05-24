@@ -23,7 +23,8 @@ export default [
 function* postingReplySaga() {
     const {standalone, posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix,
            preambleTemplate, quoteAll, visibilityDefault, commentsVisibilityDefault, commentAdditionDefault,
-           reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault} =
+           reactionsEnabledDefault, reactionsNegativeEnabledDefault, reactionsPositiveDefault, reactionsNegativeDefault,
+           reactionsVisibleDefault, reactionTotalsVisibleDefault} =
         yield* select(state => ({
             standalone: isStandaloneMode(state),
             posting: getPosting(state, state.postingReply.postingId),
@@ -37,6 +38,8 @@ function* postingReplySaga() {
             visibilityDefault: getSetting(state, "posting.visibility.default") as PrincipalValue,
             commentsVisibilityDefault: getSetting(state, "posting.comments.visibility.default") as PrincipalValue,
             commentAdditionDefault: getSetting(state, "posting.comments.addition.default") as PrincipalValue,
+            reactionsEnabledDefault: getSetting(state, "posting.reactions.enabled.default") as boolean,
+            reactionsNegativeEnabledDefault: getSetting(state, "posting.reactions.negative.enabled.default") as boolean,
             reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default") as string,
             reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default") as string,
             reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,
@@ -78,8 +81,8 @@ function* postingReplySaga() {
                 viewNegativeReactionTotals: reactionTotalsVisibleDefault ? "public" : "private",
                 viewReactionRatios: "public",
                 viewNegativeReactionRatios: "public",
-                addReaction: "public",
-                addNegativeReaction: "public"
+                addReaction: reactionsEnabledDefault ? "public" : "none",
+                addNegativeReaction: reactionsNegativeEnabledDefault ? "public" : "none"
             }
         };
         const data = yield* call(Node.postDraft, ":", draftText);

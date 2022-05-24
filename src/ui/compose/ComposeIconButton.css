@@ -5,7 +5,8 @@
     font-size: 1.8rem;
     background-color: transparent;
     color: var(--bs-gray-400);
-    border-width: 0;
+    border: none;
+    border-bottom: solid 3px transparent;
     border-radius: 3px;
     padding-left: .3rem;
     padding-right: .3rem;
@@ -22,11 +23,11 @@
 
 .composer-icon.composer-icon-changed {
     color: var(--bs-gray-600);
-    border-bottom: solid 3px var(--bs-gray-600);
+    border-bottom-color: var(--bs-gray-600);
     border-radius: 0;
 }
 
 .composer-icon.composer-icon-changed.composer-icon-active {
     color: var(--bs-primary);
-    border-bottom: solid 3px var(--bs-primary);
+    border-bottom-color: var(--bs-primary);
 }

@@ -69,7 +69,6 @@ interface IsPermittedOptions {
     useReceiverOperations: boolean;
     ifNoObject: boolean;
     ifNoOperation: boolean;
-    ifUnknownPrincipal: boolean;
 }
 
 const defaultIsPermittedOptions: IsPermittedOptions = {
@@ -77,7 +76,6 @@ const defaultIsPermittedOptions: IsPermittedOptions = {
     useReceiverOperations: false,
     ifNoObject: false,
     ifNoOperation: false,
-    ifUnknownPrincipal: false
 };
 
 export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
@@ -139,7 +137,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
             }
             break;
     }
-    return op.ifUnknownPrincipal;
+    return false;
 }
 
 interface IsPrincipalEqualsOptions {

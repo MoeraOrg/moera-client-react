@@ -199,6 +199,20 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
+        name: "posting.reactions.enabled.default",
+        type: "bool",
+        defaultValue: "true",
+        title: "Enable reactions to my post by default",
+        modifiers: {}
+    },
+    {
+        name: "posting.reactions.negative.enabled.default",
+        type: "bool",
+        defaultValue: "true",
+        title: "Enable \"Oppose\" reactions to my post by default",
+        modifiers: {}
+    },
+    {
         name: "posting.reactions.positive.default",
         type: "string",
         defaultValue: "+0x1f4a1,+0x1f44d,+0x1f4af,+0x1f60d,+0x1f600,+0x1f926,+0x1f62e,+0x1f622,+0x1f620,+0x1f92e,*",

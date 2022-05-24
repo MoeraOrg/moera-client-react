@@ -36,7 +36,9 @@ export interface ComposePageValues {
     viewCommentsPrincipal: PrincipalValue;
     addCommentPrincipal: PrincipalValue;
     reactionsEnabled: boolean;
+    reactionsEnabledDefault: boolean;
     reactionsNegativeEnabled: boolean;
+    reactionsNegativeEnabledDefault: boolean;
     reactionsPositiveDefault: string;
     reactionsPositive: string;
     reactionsNegativeDefault: string;
@@ -106,10 +108,14 @@ const composePageLogic = {
             : props.posting?.operations?.addComment ?? props.commentAdditionDefault;
         const reactionsEnabled = props.draft != null
             ? props.draft.operations?.addReaction !== "none"
-            : props.posting != null ? props.posting.operations?.addReaction !== "none" : true;
+            : props.posting != null
+                ? props.posting.operations?.addReaction !== "none"
+                : props.reactionsEnabledDefault;
         const reactionsNegativeEnabled = props.draft != null
             ? props.draft.operations?.addNegativeReaction !== "none"
-            : props.posting != null ? props.posting.operations?.addNegativeReaction !== "none" : true;
+            : props.posting != null
+                ? props.posting.operations?.addNegativeReaction !== "none"
+                : props.reactionsNegativeEnabledDefault;
         const reactionsPositive = props.draft != null
             ? props.draft.acceptedReactions?.positive ?? ""
             : props.posting != null ? props.posting.acceptedReactions?.positive ?? "" : props.reactionsPositiveDefault;
@@ -144,7 +150,9 @@ const composePageLogic = {
             viewCommentsPrincipal,
             addCommentPrincipal,
             reactionsEnabled,
+            reactionsEnabledDefault: reactionsEnabled,
             reactionsNegativeEnabled,
+            reactionsNegativeEnabledDefault: reactionsNegativeEnabled,
             reactionsPositiveDefault: reactionsPositive,
             reactionsPositive,
             reactionsNegativeDefault: reactionsNegative,
