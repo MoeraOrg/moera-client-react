@@ -58,6 +58,8 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
         scrollToPostingGallery();
     }
 
+    console.log(posting);
+    console.log(isPermitted("edit", posting));
     return (
         <div className="posting entry mt-2">
             <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>

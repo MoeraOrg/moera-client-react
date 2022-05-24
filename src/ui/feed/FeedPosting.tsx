@@ -96,7 +96,7 @@ const connector = connect(
     (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
         atHome: isAtHomeNode(state),
-        isPermitted: (operation: string, posting: ProtectedObject) => isPermitted(operation, posting, state)
+        isPermitted: (operation: string, object: ProtectedObject) => isPermitted(operation, object, state)
     }),
     { goToPosting }
 );

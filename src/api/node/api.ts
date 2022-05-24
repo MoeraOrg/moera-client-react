@@ -680,7 +680,35 @@ const PostingOperationsInfoType: JSONSchemaType<API.PostingOperationsInfo> = {
             type: "string",
             nullable: true
         },
-        "reactions": {
+        "viewReactions": {
+            type: "string",
+            nullable: true
+        },
+        "viewNegativeReactions": {
+            type: "string",
+            nullable: true
+        },
+        "viewReactionTotals": {
+            type: "string",
+            nullable: true
+        },
+        "viewNegativeReactionTotals": {
+            type: "string",
+            nullable: true
+        },
+        "viewReactionRatios": {
+            type: "string",
+            nullable: true
+        },
+        "viewNegativeReactionRatios": {
+            type: "string",
+            nullable: true
+        },
+        "addReaction": {
+            type: "string",
+            nullable: true
+        },
+        "addNegativeReaction": {
             type: "string",
             nullable: true
         }
@@ -822,14 +850,6 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         },
         "reactions": {
             ...ReactionTotalsInfoType,
-            nullable: true
-        },
-        "reactionsVisible": {
-            type: "boolean",
-            nullable: true
-        },
-        "reactionTotalsVisible": {
-            type: "boolean",
             nullable: true
         },
         "sources": {
@@ -997,14 +1017,6 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
         },
         "reactions": {
             ...ReactionTotalsInfoType,
-            nullable: true
-        },
-        "reactionsVisible": {
-            type: "boolean",
-            nullable: true
-        },
-        "reactionTotalsVisible": {
-            type: "boolean",
             nullable: true
         },
         "sources": {
@@ -2170,14 +2182,6 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
             ...AcceptedReactionsType,
             nullable: true
         },
-        "reactionsVisible": {
-            type: "boolean",
-            nullable: true
-        },
-        "reactionTotalsVisible": {
-            type: "boolean",
-            nullable: true
-        },
         "bodySrc": {
             type: "string",
             nullable: true
@@ -2221,6 +2225,38 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
                     nullable: true
                 },
                 "addComment": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewReactions": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewNegativeReactions": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewReactionTotals": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewNegativeReactionTotals": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewReactionRatios": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewNegativeReactionRatios": {
+                    type: "string",
+                    nullable: true
+                },
+                "addReaction": {
+                    type: "string",
+                    nullable: true
+                },
+                "addNegativeReaction": {
                     type: "string",
                     nullable: true
                 }

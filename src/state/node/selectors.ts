@@ -59,6 +59,7 @@ type AnyOperationsInfo = Partial<Record<string, PrincipalValue | null>>;
 
 export interface ProtectedObject {
     ownerName?: string;
+    receiverName?: string | null;
     operations?: AnyOperationsInfo | PostingOperationsInfo | null;
     receiverOperations?: AnyOperationsInfo | PostingOperationsInfo | null;
 }
@@ -81,7 +82,11 @@ const defaultIsPermittedOptions: IsPermittedOptions = {
 
 export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
                             options: Partial<IsPermittedOptions> = {}): boolean {
-    const op: IsPermittedOptions = {...defaultIsPermittedOptions, ...options};
+    const op: IsPermittedOptions = {
+        ...defaultIsPermittedOptions,
+        useReceiverOperations: object?.receiverName != null,
+        ...options
+    };
     if (object == null) {
         return op.ifNoObject;
     }
@@ -93,6 +98,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
     if (principal == null) {
         return op.ifNoOperation;
     }
+    const ownerName = op.useReceiverOperations ? object.receiverName : object.ownerName;
     switch (principal) {
         case "none":
             break;
@@ -104,7 +110,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
             }
             break;
         case "private":
-            if (state.home.owner.name === object.ownerName) {
+            if (state.home.owner.name === ownerName) {
                 return true;
             }
             if (op.objectSourceName != null
@@ -115,7 +121,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
             }
             break;
         case "owner":
-            if (state.home.owner.name === object.ownerName) {
+            if (state.home.owner.name === ownerName) {
                 return true;
             }
             break;
@@ -150,7 +156,11 @@ const defaultIsPrincipalEqualsOptions: IsPrincipalEqualsOptions = {
 
 export function isPrincipalEquals(operation: string, object: ProtectedObject | null, value: PrincipalValue,
                                   options: Partial<IsPrincipalEqualsOptions> = {}): boolean {
-    const op: IsPrincipalEqualsOptions = {...defaultIsPrincipalEqualsOptions, ...options};
+    const op: IsPrincipalEqualsOptions = {
+        ...defaultIsPrincipalEqualsOptions,
+        useReceiverOperations: object?.receiverName != null,
+        ...options
+    };
     if (object == null) {
         return op.ifNoObject;
     }

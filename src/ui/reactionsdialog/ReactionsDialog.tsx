@@ -40,19 +40,19 @@ class ReactionsDialog extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {show, posting, reactionsVisible, closeReactionsDialog} = this.props;
+        const {show, viewReactions, closeReactionsDialog} = this.props;
 
         if (!show) {
             return null;
         }
-        const chartView = this.state.chartView || !reactionsVisible
-            || (posting != null && !posting.reactionsVisible && posting.receiverName != null);
+
+        const chartView = this.state.chartView || !viewReactions;
         return (
             <ModalDialog onClose={closeReactionsDialog}>
                 <div className="reactions-dialog modal-body">
                     {chartView ?
                         <ReactionsChartView itemsRef={dom => {this.#itemsDom = dom}}
-                                            onSwitchView={reactionsVisible ? this.onSwitchView : undefined}/>
+                                            onSwitchView={viewReactions ? this.onSwitchView : undefined}/>
                     :
                         <ReactionsListView itemsRef={dom => {this.#itemsDom = dom}}
                                            onSwitchView={this.onSwitchView}/>
@@ -65,11 +65,13 @@ class ReactionsDialog extends React.PureComponent<Props, State> {
 }
 
 const connector = connect(
-    (state: ClientState) => ({
-        show: state.reactionsDialog.show,
-        posting: getPosting(state, state.reactionsDialog.postingId),
-        reactionsVisible: isPermitted("reactions", getPosting(state, state.reactionsDialog.postingId), state)
-    }),
+    (state: ClientState) => {
+        const posting = getPosting(state, state.reactionsDialog.postingId);
+        return {
+            show: state.reactionsDialog.show,
+            viewReactions: isPermitted("viewReactions", posting, state)
+        }
+    },
     { closeReactionsDialog }
 );
 

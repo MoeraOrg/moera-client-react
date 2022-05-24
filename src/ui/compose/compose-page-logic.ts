@@ -35,6 +35,8 @@ export interface ComposePageValues {
     toolsTab: ComposePageToolsTab;
     viewCommentsPrincipal: PrincipalValue;
     addCommentPrincipal: PrincipalValue;
+    reactionsEnabled: boolean;
+    reactionsNegativeEnabled: boolean;
     reactionsPositiveDefault: string;
     reactionsPositive: string;
     reactionsNegativeDefault: string;
@@ -102,6 +104,12 @@ const composePageLogic = {
         const addCommentPrincipal = props.draft != null
             ? props.draft.operations?.addComment ?? props.commentAdditionDefault
             : props.posting?.operations?.addComment ?? props.commentAdditionDefault;
+        const reactionsEnabled = props.draft != null
+            ? props.draft.operations?.addReaction !== "none"
+            : props.posting != null ? props.posting.operations?.addReaction !== "none" : true;
+        const reactionsNegativeEnabled = props.draft != null
+            ? props.draft.operations?.addNegativeReaction !== "none"
+            : props.posting != null ? props.posting.operations?.addNegativeReaction !== "none" : true;
         const reactionsPositive = props.draft != null
             ? props.draft.acceptedReactions?.positive ?? ""
             : props.posting != null ? props.posting.acceptedReactions?.positive ?? "" : props.reactionsPositiveDefault;
@@ -109,11 +117,15 @@ const composePageLogic = {
             ? props.draft.acceptedReactions?.negative ?? ""
             : props.posting != null ? props.posting.acceptedReactions?.negative ?? "" : props.reactionsNegativeDefault;
         const reactionsVisible = props.draft != null
-            ? props.draft.reactionsVisible ?? true
-            : props.posting != null ? props.posting.reactionsVisible ?? true : props.reactionsVisibleDefault;
+            ? props.draft.operations?.viewReactions === "public"
+            : props.posting != null
+                ? props.posting.operations?.viewReactions === "public"
+                : props.reactionsVisibleDefault;
         const reactionTotalsVisible = props.draft != null
-            ? props.draft.reactionTotalsVisible ?? true
-            : props.posting != null ? props.posting.reactionTotalsVisible ?? true : props.reactionTotalsVisibleDefault;
+            ? props.draft.operations?.viewReactionTotals === "public"
+            : props.posting != null
+                ? props.posting.operations?.viewReactionTotals === "public"
+                : props.reactionTotalsVisibleDefault;
         const updateImportant = props.draft != null ? props.draft.updateInfo?.important ?? false : false;
         const updateDescription = props.draft != null ? props.draft.updateInfo?.description ?? "" : "";
 
@@ -131,6 +143,8 @@ const composePageLogic = {
             toolsTab: null,
             viewCommentsPrincipal,
             addCommentPrincipal,
+            reactionsEnabled,
+            reactionsNegativeEnabled,
             reactionsPositiveDefault: reactionsPositive,
             reactionsPositive,
             reactionsNegativeDefault: reactionsNegative,
@@ -193,8 +207,6 @@ const composePageLogic = {
             bodySrcFormat: values.bodyFormat,
             media: (values.body.orderedMediaList() ?? []).concat(values.linkPreviews.media.map(vm => vm.id)),
             acceptedReactions: {positive: values.reactionsPositive, negative: values.reactionsNegative},
-            reactionsVisible: values.reactionsVisible,
-            reactionTotalsVisible: values.reactionTotalsVisible,
             publications: this._buildPublications(values, props),
             updateInfo: {
                 important: values.updateImportant,
@@ -203,7 +215,23 @@ const composePageLogic = {
             operations: {
                 view: values.viewPrincipal,
                 viewComments: values.viewCommentsPrincipal,
-                addComment: values.addCommentPrincipal
+                addComment: values.addCommentPrincipal,
+                viewReactions: values.reactionsEnabled ? (values.reactionsVisible ? "public" : "private") : "none",
+                viewNegativeReactions: values.reactionsEnabled && values.reactionsNegativeEnabled
+                    ? (values.reactionsVisible ? "public" : "private")
+                    : "none",
+                viewReactionTotals: values.reactionsEnabled
+                    ? (values.reactionsVisible || values.reactionTotalsVisible ? "public" : "private")
+                    : "none",
+                viewNegativeReactionTotals: values.reactionsEnabled && values.reactionsNegativeEnabled
+                    ? (values.reactionsVisible || values.reactionTotalsVisible ? "public" : "private")
+                    : "none",
+                viewReactionRatios: values.reactionsEnabled ? "public" : "none",
+                viewNegativeReactionRatios: values.reactionsEnabled && values.reactionsNegativeEnabled
+                    ? "public"
+                    : "none",
+                addReaction: values.reactionsEnabled ? "public" : "none",
+                addNegativeReaction: values.reactionsEnabled && values.reactionsNegativeEnabled ? "public" : "none"
             }
         };
     },
@@ -248,7 +276,15 @@ const composePageLogic = {
         const prevOperations = {
             view: posting.operations?.view ?? "public",
             viewComments: posting.operations?.viewComments ?? "public",
-            addComment: posting.operations?.addComment ?? "public"
+            addComment: posting.operations?.addComment ?? "public",
+            viewReactions: posting.operations?.viewReactions ?? "public",
+            viewNegativeReactions: posting.operations?.viewNegativeReactions ?? "public",
+            viewReactionTotals: posting.operations?.viewReactionTotals ?? "public",
+            viewNegativeReactionTotals: posting.operations?.viewNegativeReactionTotals ?? "public",
+            viewReactionRatios: posting.operations?.viewReactionRatios ?? "public",
+            viewNegativeReactionRatios: posting.operations?.viewNegativeReactionRatios ?? "public",
+            addReaction: posting.operations?.addReaction ?? "public",
+            addNegativeReaction: posting.operations?.addNegativeReaction ?? "public"
         }
         return !deepEqual(postingText.operations, prevOperations);
     },

@@ -1,7 +1,7 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 
 import { Node } from "api";
-import { DraftText, PostingInfo } from "api/node/api-types";
+import { DraftText, PostingInfo, PrincipalValue } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import { POSTING_REPLY, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
@@ -22,8 +22,8 @@ export default [
 
 function* postingReplySaga() {
     const {standalone, posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix,
-           preambleTemplate, quoteAll, reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault,
-           reactionTotalsVisibleDefault} =
+           preambleTemplate, quoteAll, visibilityDefault, commentsVisibilityDefault, commentAdditionDefault,
+           reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault, reactionTotalsVisibleDefault} =
         yield* select(state => ({
             standalone: isStandaloneMode(state),
             posting: getPosting(state, state.postingReply.postingId),
@@ -34,6 +34,9 @@ function* postingReplySaga() {
             subjectPrefix: getSetting(state, "posting.reply.subject-prefix") as string,
             preambleTemplate: getSetting(state, "posting.reply.preamble") as string,
             quoteAll: getSetting(state, "posting.reply.quote-all") as boolean,
+            visibilityDefault: getSetting(state, "posting.visibility.default") as PrincipalValue,
+            commentsVisibilityDefault: getSetting(state, "posting.comments.visibility.default") as PrincipalValue,
+            commentAdditionDefault: getSetting(state, "posting.comments.addition.default") as PrincipalValue,
             reactionsPositiveDefault: getSetting(state, "posting.reactions.positive.default") as string,
             reactionsNegativeDefault: getSetting(state, "posting.reactions.negative.default") as string,
             reactionsVisibleDefault: getSetting(state, "posting.reactions.visible.default") as boolean,
@@ -65,8 +68,19 @@ function* postingReplySaga() {
                 positive: reactionsPositiveDefault,
                 negative: reactionsNegativeDefault
             },
-            reactionsVisible: reactionsVisibleDefault,
-            reactionTotalsVisible: reactionTotalsVisibleDefault
+            operations: {
+                view: visibilityDefault,
+                viewComments: commentsVisibilityDefault,
+                addComment: commentAdditionDefault,
+                viewReactions: reactionsVisibleDefault ? "public" : "private",
+                viewNegativeReactions: reactionsVisibleDefault ? "public" : "private",
+                viewReactionTotals: reactionTotalsVisibleDefault ? "public" : "private",
+                viewNegativeReactionTotals: reactionTotalsVisibleDefault ? "public" : "private",
+                viewReactionRatios: "public",
+                viewNegativeReactionRatios: "public",
+                addReaction: "public",
+                addNegativeReaction: "public"
+            }
         };
         const data = yield* call(Node.postDraft, ":", draftText);
         if (nodeRootPage !== homeRootPage) {

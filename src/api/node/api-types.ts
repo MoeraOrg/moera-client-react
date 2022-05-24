@@ -181,9 +181,17 @@ export interface PostingSubscriptionsInfo {
 }
 
 export interface PostingOperations {
-    view?: string | null;
+    view?: PrincipalValue | null;
     viewComments?: PrincipalValue | null;
     addComment?: PrincipalValue | null;
+    viewReactions?: PrincipalValue | null;
+    viewNegativeReactions?: PrincipalValue | null;
+    viewReactionTotals?: PrincipalValue | null;
+    viewNegativeReactionTotals?: PrincipalValue | null;
+    viewReactionRatios?: PrincipalValue | null;
+    viewNegativeReactionRatios?: PrincipalValue | null;
+    addReaction?: PrincipalValue | null;
+    addNegativeReaction?: PrincipalValue | null;
 }
 
 export interface PostingText {
@@ -191,8 +199,6 @@ export interface PostingText {
     ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
     acceptedReactions?: AcceptedReactions | null;
-    reactionsVisible?: boolean | null;
-    reactionTotalsVisible?: boolean | null;
     bodyPreview?: string | null;
     bodySrc: string;
     bodySrcFormat?: SourceFormat | null;
@@ -221,7 +227,14 @@ export interface PostingOperationsInfo {
     delete?: PrincipalValue | null;
     viewComments?: PrincipalValue | null;
     addComment?: PrincipalValue | null;
-    reactions?: PrincipalValue | null;
+    viewReactions?: PrincipalValue | null;
+    viewNegativeReactions?: PrincipalValue | null;
+    viewReactionTotals?: PrincipalValue | null;
+    viewNegativeReactionTotals?: PrincipalValue | null;
+    viewReactionRatios?: PrincipalValue | null;
+    viewNegativeReactionRatios?: PrincipalValue | null;
+    addReaction?: PrincipalValue | null;
+    addNegativeReaction?: PrincipalValue | null;
 }
 
 export interface PostingInfoBase<B> {
@@ -259,8 +272,6 @@ export interface PostingInfoBase<B> {
     receiverOperations?: PostingOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     reactions?: ReactionTotalsInfo | null;
-    reactionsVisible?: boolean | null;
-    reactionTotalsVisible?: boolean | null;
     sources?: PostingSourceInfo[] | null;
     totalComments?: number | null;
     subscriptions: PostingSubscriptionsInfo | null;
@@ -676,8 +687,6 @@ export interface DraftText {
     ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
     acceptedReactions?: AcceptedReactions | null;
-    reactionsVisible?: boolean | null;
-    reactionTotalsVisible?: boolean | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
     media?: RemoteMedia[] | null;
@@ -687,6 +696,14 @@ export interface DraftText {
         view?: PrincipalValue | null;
         viewComments?: PrincipalValue | null;
         addComment?: PrincipalValue | null;
+        viewReactions?: PrincipalValue | null;
+        viewNegativeReactions?: PrincipalValue | null;
+        viewReactionTotals?: PrincipalValue | null;
+        viewNegativeReactionTotals?: PrincipalValue | null;
+        viewReactionRatios?: PrincipalValue | null;
+        viewNegativeReactionRatios?: PrincipalValue | null;
+        addReaction?: PrincipalValue | null;
+        addNegativeReaction?: PrincipalValue | null;
     } | null;
 }
 
@@ -703,8 +720,6 @@ export interface DraftInfoBase<B> {
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
     acceptedReactions?: AcceptedReactions | null;
-    reactionsVisible?: boolean | null;
-    reactionTotalsVisible?: boolean | null;
     bodySrc?: B | null;
     bodySrcFormat?: SourceFormat | null;
     body: B;
@@ -717,6 +732,14 @@ export interface DraftInfoBase<B> {
         view?: PrincipalValue | null;
         viewComments?: PrincipalValue | null;
         addComment?: PrincipalValue | null;
+        viewReactions?: PrincipalValue | null;
+        viewNegativeReactions?: PrincipalValue | null;
+        viewReactionTotals?: PrincipalValue | null;
+        viewNegativeReactionTotals?: PrincipalValue | null;
+        viewReactionRatios?: PrincipalValue | null;
+        viewNegativeReactionRatios?: PrincipalValue | null;
+        addReaction?: PrincipalValue | null;
+        addNegativeReaction?: PrincipalValue | null;
     } | null;
 }
 

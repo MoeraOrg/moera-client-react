@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { postingOperationsUpdate } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
@@ -16,7 +16,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUpdate}: Props) => {
-    const onChange = (value: string) => postingOperationsUpdate(posting.id, "", {view: value});
+    const onChange = (value: PrincipalValue) => postingOperationsUpdate(posting.id, "", {view: value});
 
     const value = posting.receiverOperations?.view ?? posting.operations?.view;
     let deletionDate = "";
@@ -29,7 +29,7 @@ const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUp
         <span className="visibility">
             &middot;
             {editable ?
-                <PrincipalSelect value={value} values={["private", "signed", "public"]} onChange={onChange}/>
+                <PrincipalSelect value={value} values={["public", "signed", "private"]} onChange={onChange}/>
             :
                 (posting.receiverDeletedAt == null ?
                     <Principal value={value}/>

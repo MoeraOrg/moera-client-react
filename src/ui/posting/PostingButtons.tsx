@@ -41,7 +41,6 @@ const connector = connect(
         homeOwnerName: getHomeOwnerName(state),
         enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean,
         commentsVisible: isPermitted("viewComments", props.posting, state, {
-            useReceiverOperations: props.posting.receiverName != null,
             ifNoObject: true,
             ifNoOperation: true
         })

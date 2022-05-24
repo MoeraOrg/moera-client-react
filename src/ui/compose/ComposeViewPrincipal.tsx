@@ -3,7 +3,7 @@ import { PrincipalField } from "ui/control/field";
 
 const ComposeViewPrincipal = () => (
     <div className="ms-2">
-        <PrincipalField name="viewPrincipal" values={["private", "signed", "public"]} long
+        <PrincipalField name="viewPrincipal" values={["public", "signed", "private"]} long
                         setting="posting.visibility.default"/>
     </div>
 );

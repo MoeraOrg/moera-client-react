@@ -7,7 +7,9 @@ import { ComposePageValues } from "ui/compose/compose-page-logic";
 export default function ComposeReactionsButton() {
     const {values} = useFormikContext<ComposePageValues>();
 
-    const changed = values.reactionsPositive !== values.reactionsPositiveDefault
+    const changed = !values.reactionsEnabled
+        || !values.reactionsNegativeEnabled
+        || values.reactionsPositive !== values.reactionsPositiveDefault
         || values.reactionsNegative !== values.reactionsNegativeDefault
         || values.reactionsVisible !== values.reactionsVisibleDefault
         || values.reactionTotalsVisible !== values.reactionTotalsVisibleDefault;
