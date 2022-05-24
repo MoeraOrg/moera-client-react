@@ -17,18 +17,21 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function PostingButtons({posting, homeOwnerName, enableSelf, commentsVisible}: Props) {
+function PostingButtons({posting, homeOwnerName, enableSelf, commentsVisible, reactionsEnabled,
+                         reactionsNegativeEnabled}: Props) {
     const cr = posting.clientReaction || {} as ClientReactionInfo;
-    const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
+    const hideAll = !reactionsEnabled || (posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji);
+    const hidePositive = hideAll || (cr.emoji != null && cr.negative);
+    const hideNegative = hideAll || !reactionsNegativeEnabled || (cr.emoji != null && !cr.negative);
     return (
         <div className="posting-buttons">
             <PostingReactionButton icon="thumbs-up" caption="Support"
-                                   invisible={hide || (cr.emoji != null && cr.negative)} id={posting.id}
-                                   negative={false} emoji={!cr.negative ? cr.emoji : null}
+                                   invisible={hidePositive} id={posting.id} negative={false}
+                                   emoji={!cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.positive ?? ""}/>
             <PostingReactionButton icon="thumbs-down" caption="Oppose"
-                                   invisible={hide || (cr.emoji != null && !cr.negative)} id={posting.id}
-                                   negative={true} emoji={cr.negative ? cr.emoji : null}
+                                   invisible={hideNegative} id={posting.id} negative={true}
+                                   emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.negative ?? ""}/>
             <PostingCommentButton posting={posting} invisible={!commentsVisible}/>
             <PostingShareButton posting={posting}/>
@@ -43,7 +46,9 @@ const connector = connect(
         commentsVisible: isPermitted("viewComments", props.posting, state, {
             ifNoObject: true,
             ifNoOperation: true
-        })
+        }),
+        reactionsEnabled: isPermitted("addReaction", props.posting, state),
+        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.posting, state)
     })
 );
 
