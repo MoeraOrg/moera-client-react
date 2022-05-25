@@ -15,13 +15,14 @@ interface Props {
     labelClassName?: string;
     undo?: boolean;
     reset?: boolean;
+    setting?: string;
     onUndo?: () => void;
     onReset?: () => void;
     children: any;
 }
 
 export const FormGroup = ({title, name, horizontal = false, layout = "follow", groupClassName, labelClassName,
-                           undo = false, reset = false, onUndo, onReset, children}: Props) => (
+                           undo = false, reset = false, setting, onUndo, onReset, children}: Props) => (
     <div className={cx(
             "form-group",
             groupClassName, {
@@ -30,21 +31,21 @@ export const FormGroup = ({title, name, horizontal = false, layout = "follow", g
         {layout === "follow" &&
             <>
                 <Label title={title} name={name} className={labelClassName} horizontal={horizontal}
-                       undo={undo} reset={reset} onUndo={onUndo} onReset={onReset}/>
+                       undo={undo} reset={reset} setting={setting} onUndo={onUndo} onReset={onReset}/>
                 {children}
             </>
         }
         {layout === "left" &&
             <>
                 <Label title={title} name={name} className={labelClassName} horizontal={horizontal}
-                       undo={undo} reset={reset} onUndo={onUndo} onReset={onReset}>{children}</Label>
+                       undo={undo} reset={reset} setting={setting} onUndo={onUndo} onReset={onReset}>{children}</Label>
             </>
         }
         {layout === "right" &&
             <div className="form-check">
                 {children}
                 <Label title={title} name={name} className={labelClassName} horizontal={horizontal} checkbox
-                       undo={undo} reset={reset} onUndo={onUndo} onReset={onReset}/>
+                       undo={undo} reset={reset} setting={setting} onUndo={onUndo} onReset={onReset}/>
             </div>
         }
     </div>

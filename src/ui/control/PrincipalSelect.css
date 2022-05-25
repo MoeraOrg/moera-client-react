@@ -51,8 +51,3 @@
 .form-group .principal-select {
     align-self: center;
 }
-
-.form-group .principal-select ~ .set-default {
-    font-size: .9rem;
-    padding: 0 .75rem;
-}
