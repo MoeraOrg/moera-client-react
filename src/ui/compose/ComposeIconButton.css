@@ -10,6 +10,7 @@
     border-radius: 3px;
     padding-left: .3rem;
     padding-right: .3rem;
+    position: relative;
 }
 
 .composer-icon:hover {
@@ -19,15 +20,15 @@
 
 .composer-icon.composer-icon-active {
     color: var(--bs-primary);
-}
-
-.composer-icon.composer-icon-changed {
-    color: var(--bs-gray-600);
-    border-bottom-color: var(--bs-gray-600);
+    border-bottom-color: var(--bs-primary);
     border-radius: 0;
 }
 
-.composer-icon.composer-icon-changed.composer-icon-active {
-    color: var(--bs-primary);
-    border-bottom-color: var(--bs-primary);
+.composer-icon .changed {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: .5rem;
+    width: .5rem;
+    font-size: .5rem;
 }

@@ -23,10 +23,10 @@ export default function ComposeIconButton({icon, name, changed = false, tooltip 
     }
 
     return (
-        <button className={
-            cx("composer-icon", {"composer-icon-active": value === name, "composer-icon-changed": changed})
-        } title={tooltip ?? undefined} onClick={onClick} onBlur={onBlur}>
+        <button className={cx("composer-icon", {"composer-icon-active": value === name})} title={tooltip ?? undefined}
+                onClick={onClick} onBlur={onBlur}>
             <FontAwesomeIcon icon={icon}/>
+            {changed && <div className="changed"><FontAwesomeIcon icon="circle"/></div>}
         </button>
     );
 }
