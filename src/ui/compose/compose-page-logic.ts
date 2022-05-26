@@ -34,7 +34,9 @@ export interface ComposePageValues {
     publishAt: Date;
     toolsTab: ComposePageToolsTab;
     viewCommentsPrincipal: PrincipalValue;
+    viewCommentsPrincipalDefault: PrincipalValue;
     addCommentPrincipal: PrincipalValue;
+    addCommentPrincipalDefault: PrincipalValue;
     reactionsEnabled: boolean;
     reactionsEnabledDefault: boolean;
     reactionsNegativeEnabled: boolean;
@@ -148,7 +150,9 @@ const composePageLogic = {
             publishAt,
             toolsTab: null,
             viewCommentsPrincipal,
+            viewCommentsPrincipalDefault: viewCommentsPrincipal,
             addCommentPrincipal,
+            addCommentPrincipalDefault: addCommentPrincipal,
             reactionsEnabled,
             reactionsEnabledDefault: reactionsEnabled,
             reactionsNegativeEnabled,
