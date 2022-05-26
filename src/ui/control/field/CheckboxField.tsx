@@ -15,10 +15,11 @@ interface Props {
     single?: boolean;
     initialValue?: boolean | null;
     defaultValue?: boolean | null;
+    setting?: string;
 }
 
 export function CheckboxField({name, title, disabled, groupClassName, labelClassName, autoFocus, single, initialValue,
-                               defaultValue}: Props) {
+                               defaultValue, setting}: Props) {
 
     const inputDom = useRef<HTMLInputElement>(null);
 
@@ -40,6 +41,7 @@ export function CheckboxField({name, title, disabled, groupClassName, labelClass
             layout={single ? "follow" : "right"}
             undo={undo}
             reset={reset}
+            setting={setting}
             onUndo={onUndo}
             onReset={onReset}
         >

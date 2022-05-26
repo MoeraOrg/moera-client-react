@@ -7,6 +7,7 @@
     padding-right: 0.3rem;
     cursor: pointer;
     align-self: center;
+    line-height: 1.1;
 }
 
 .form-label-button:hover {
@@ -20,4 +21,8 @@
 
 .form-label-button:hover.form-label-button-reset {
     color: var(--bs-red);
+}
+
+.form-label-button:hover.form-label-button-default {
+    color: var(--bs-primary);
 }

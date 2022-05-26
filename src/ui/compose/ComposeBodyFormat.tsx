@@ -10,8 +10,9 @@ interface Props {
 
 const ComposeBodyFormat = ({sourceFormats}: Props) => (
     <ComposePageTool name="format">
-        <SelectField title="Text formatting" name="bodyFormat" horizontal groupClassName="ps-2" col="col-md-2"
-                     choices={sourceFormats.filter(c => c.value !== "application")} anyValue/>
+        <SelectField title="Text formatting" name="bodyFormat" horizontal layout="left" groupClassName="ps-2"
+                     col="col-md-2" choices={sourceFormats.filter(c => c.value !== "application")} anyValue
+                     setting="posting.body-src-format.default"/>
     </ComposePageTool>
 );
 

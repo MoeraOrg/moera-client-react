@@ -27,8 +27,12 @@ export function getSettingsClientMeta(state: ClientState): Map<string, ClientSet
     return state.settings.client.meta;
 }
 
+export function getSettingMeta(state: ClientState, name: string): ClientSettingMetaInfo | null {
+    return state.settings.client.meta.get(ClientSettings.PREFIX + name) ?? null;
+}
+
 export function getSetting(state: ClientState, name: string): SettingValue | null {
-    const meta = state.settings.client.meta.get(ClientSettings.PREFIX + name);
+    const meta = getSettingMeta(state, name);
     if (!meta) {
         return null;
     }

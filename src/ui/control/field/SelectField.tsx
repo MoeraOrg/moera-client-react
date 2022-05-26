@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 
-import { Wrapper } from "ui/control/index";
+import { Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup } from "ui/control/FormGroup";
+import { FormGroup, FormGroupStyle } from "ui/control/FormGroup";
 
 interface Choice {
     title: string;
@@ -14,6 +14,7 @@ interface Props {
     name: string;
     title?: string;
     horizontal?: boolean;
+    layout?: FormGroupStyle;
     groupClassName?: string;
     labelClassName?: string;
     col?: string;
@@ -29,11 +30,12 @@ interface Props {
     defaultValue?: string | null;
     disabled?: boolean;
     selectRef?: (dom: HTMLSelectElement | null) => void;
+    setting?: string;
 }
 
-export function SelectField({name, title, horizontal = false, groupClassName, labelClassName, col, size, choices = [],
-                             multiple, autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue,
-                             defaultValue, disabled, selectRef}: Props) {
+export function SelectField({name, title, horizontal = false, layout, groupClassName, labelClassName, col, size,
+                             choices = [], multiple, autoFocus, anyValue, className, autoComplete, noFeedback = false,
+                             initialValue, defaultValue, disabled, selectRef, setting}: Props) {
 
     const inputDom = useRef<HTMLSelectElement>();
 
@@ -51,10 +53,12 @@ export function SelectField({name, title, horizontal = false, groupClassName, la
             title={title}
             name={name}
             horizontal={horizontal}
+            layout={layout}
             labelClassName={labelClassName}
             groupClassName={groupClassName}
             undo={undo}
             reset={reset}
+            setting={setting}
             onUndo={onUndo}
             onReset={onReset}
         >

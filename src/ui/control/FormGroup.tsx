@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { Label } from "ui/control/index";
 import "./FormGroup.css";
 
-type FormGroupStyle = "follow" | "left" | "right";
+export type FormGroupStyle = "follow" | "left" | "right";
 
 interface Props {
     title?: string;

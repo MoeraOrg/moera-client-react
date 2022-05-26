@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { LabelButton } from "ui/control/index";
+import { LabelButton, Wrapper } from "ui/control/index";
 import SetDefaultButton from "ui/control/field/SetDefaultButton";
 
 interface Props {
@@ -29,7 +29,7 @@ export const Label = ({title, name, className, horizontal, checkbox, undo, reset
                         "col-form-label": horizontal,
                         "form-check-label": checkbox,
                         "checkbox-field-label": checkbox,
-                        "me-2": (undo || reset) && !horizontal,
+                        "me-2": (undo || reset || setting) && !horizontal,
                         "me-3": horizontal
                     })}>
                     {title}
@@ -39,15 +39,17 @@ export const Label = ({title, name, className, horizontal, checkbox, undo, reset
         :
             children ?? null
         }
-        {undo &&
-            <LabelButton icon="undo-alt" className="form-label-button-undo" title="Undo" onClick={onUndo}/>
-        }
-        {reset &&
-            <LabelButton icon="backspace" className="form-label-button-reset" title="Reset to default"
-                               onClick={onReset}/>
-        }
-        {name &&
-            <SetDefaultButton name={name} setting={setting}/>
-        }
+        <Wrapper className={cx({"ms-2 align-self-center": (undo || reset || setting) && horizontal && children})}>
+            {undo &&
+                <LabelButton icon="undo-alt" className="form-label-button-undo" title="Undo" onClick={onUndo}/>
+            }
+            {reset &&
+                <LabelButton icon="backspace" className="form-label-button-reset" title="Reset to default"
+                                   onClick={onReset}/>
+            }
+            {name &&
+                <SetDefaultButton name={name} setting={setting}/>
+            }
+        </Wrapper>
     </>
 );
