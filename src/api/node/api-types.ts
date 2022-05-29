@@ -219,6 +219,7 @@ export interface PostingSourceText {
     bodySrcFormat?: SourceFormat | null;
     media?: MediaWithDigest[] | null;
     acceptedReactions?: AcceptedReactions | null;
+    operations?: PostingOperations | null;
 }
 
 export interface PostingOperationsInfo {
@@ -302,6 +303,18 @@ export interface FeedStatus {
     notViewedMoment?: number | null;
 }
 
+export interface CommentOperations {
+    view?: PrincipalValue | null;
+    viewReactions?: PrincipalValue | null;
+    viewNegativeReactions?: PrincipalValue | null;
+    viewReactionTotals?: PrincipalValue | null;
+    viewNegativeReactionTotals?: PrincipalValue | null;
+    viewReactionRatios?: PrincipalValue | null;
+    viewNegativeReactionRatios?: PrincipalValue | null;
+    addReaction?: PrincipalValue | null;
+    addNegativeReaction?: PrincipalValue | null;
+}
+
 export interface CommentText {
     ownerName: string;
     ownerFullName?: string | null;
@@ -317,6 +330,7 @@ export interface CommentText {
     repliedToId?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
+    operations?: CommentOperations | null;
 }
 
 export interface MediaWithDigest {
@@ -331,6 +345,7 @@ export interface CommentSourceText {
     media?: MediaWithDigest[] | null;
     acceptedReactions?: AcceptedReactions | null;
     repliedToId?: string | null;
+    operations?: CommentOperations | null;
 }
 
 export interface RepliedTo {
@@ -339,6 +354,20 @@ export interface RepliedTo {
     fullName?: string | null;
     avatar?: AvatarImage | null;
     heading?: string | null;
+}
+
+export interface CommentOperationsInfo {
+    view?: PrincipalValue | null;
+    edit?: PrincipalValue | null;
+    delete?: PrincipalValue | null;
+    viewReactions?: PrincipalValue | null;
+    viewNegativeReactions?: PrincipalValue | null;
+    viewReactionTotals?: PrincipalValue | null;
+    viewNegativeReactionTotals?: PrincipalValue | null;
+    viewReactionRatios?: PrincipalValue | null;
+    viewNegativeReactionRatios?: PrincipalValue | null;
+    addReaction?: PrincipalValue | null;
+    addNegativeReaction?: PrincipalValue | null;
 }
 
 interface CommentInfoBase<B> {
@@ -366,11 +395,7 @@ interface CommentInfoBase<B> {
     deadline?: number | null;
     signature?: string | null;
     signatureVersion?: number | null;
-    operations?: {
-        edit?: PrincipalValue | null;
-        delete?: PrincipalValue | null;
-        reactions?: PrincipalValue | null;
-    } | null;
+    operations?: CommentOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     clientReaction?: ClientReactionInfo | null;
     seniorReaction?: ClientReactionInfo | null;

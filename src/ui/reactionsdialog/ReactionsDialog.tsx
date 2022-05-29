@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
-import { isPermitted } from "state/node/selectors";
-import { getPosting } from "state/postings/selectors";
+import { isReactionsDialogPermitted } from "state/reactionsdialog/selectors";
 import { ModalDialog } from "ui/control";
 import ReactionsListView from "ui/reactionsdialog/ReactionsListView";
 import ReactionsChartView from "ui/reactionsdialog/ReactionsChartView";
 import "./ReactionsDialog.css";
-import { ClientState } from "state/state";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -65,13 +64,10 @@ class ReactionsDialog extends React.PureComponent<Props, State> {
 }
 
 const connector = connect(
-    (state: ClientState) => {
-        const posting = getPosting(state, state.reactionsDialog.postingId);
-        return {
-            show: state.reactionsDialog.show,
-            viewReactions: isPermitted("viewReactions", posting, state)
-        }
-    },
+    (state: ClientState) => ({
+        show: state.reactionsDialog.show,
+        viewReactions: isReactionsDialogPermitted("viewReactions", state)
+    }),
     { closeReactionsDialog }
 );
 

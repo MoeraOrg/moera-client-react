@@ -3,6 +3,8 @@ import { ClientState } from "state/state";
 import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
 import { ReactionInfo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
+import { getComment, getCommentsReceiverName } from "state/detailedposting/selectors";
+import { isPermitted } from "state/node/selectors";
 
 export function getReactionsDialogNodeName(state: ClientState): string | null {
     return state.reactionsDialog.nodeName;
@@ -50,4 +52,24 @@ export function isReactionsDialogTotalsToBeLoaded(state: ClientState): boolean {
 
 export function getReactionVerificationStatus(state: ClientState, ownerName: string): VerificationStatus | null {
     return state.reactionsDialog.verificationStatus[ownerName] ?? "none";
+}
+
+export function isReactionsDialogPermitted(operation: string, state: ClientState): boolean {
+    if (state.reactionsDialog.commentId != null) {
+        const comment = getComment(state, state.reactionsDialog.commentId);
+        return isPermitted(operation, comment, state, {
+            objectSourceName: getCommentsReceiverName(state)
+        });
+    } else {
+        const posting = getPosting(state, state.reactionsDialog.postingId);
+        if (posting?.receiverName != null) {
+            const rposting = getPosting(state, posting.receiverPostingId ?? null, posting.receiverName)
+            if (rposting != null) {
+                return isPermitted(operation, rposting, state, {
+                    objectSourceName: posting.receiverName
+                });
+            }
+        }
+        return isPermitted(operation, posting, state);
+    }
 }
