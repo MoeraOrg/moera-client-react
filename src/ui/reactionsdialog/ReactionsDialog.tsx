@@ -66,7 +66,7 @@ class ReactionsDialog extends React.PureComponent<Props, State> {
 const connector = connect(
     (state: ClientState) => ({
         show: state.reactionsDialog.show,
-        viewReactions: isReactionsDialogPermitted("viewReactions", state)
+        viewReactions: isReactionsDialogPermitted("viewReactions", "public", state)
     }),
     { closeReactionsDialog }
 );

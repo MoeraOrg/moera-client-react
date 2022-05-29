@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { CommentInfo } from "api/node/api-types";
+import { CommentInfo, PrincipalValue } from "api/node/api-types";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
 import { openSourceDialog } from "state/sourcedialog/actions";
@@ -16,7 +16,7 @@ type Props = {
     nodeName: string;
     postingId: string;
     comment: CommentInfo;
-    isPermitted: (operation: string, object: CommentInfo) => boolean;
+    isPermitted: (operation: string, object: CommentInfo, defaultValue: PrincipalValue) => boolean;
 } & ConnectedProps<typeof connector>;
 
 class CommentMenu extends React.PureComponent<Props> {
@@ -92,7 +92,7 @@ class CommentMenu extends React.PureComponent<Props> {
                     title: "Edit...",
                     href: commentHref,
                     onClick: this.onEdit,
-                    show: isPermitted("edit", comment),
+                    show: isPermitted("edit", comment, "owner"),
                 },
                 {
                     title: "View source",
@@ -104,7 +104,7 @@ class CommentMenu extends React.PureComponent<Props> {
                     title: "Delete",
                     href: commentHref,
                     onClick: this.onDelete,
-                    show: isPermitted("delete", comment) // FIXME all permissions work?
+                    show: isPermitted("delete", comment, "private")
                 }
             ]}/>
         );

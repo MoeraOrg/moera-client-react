@@ -1,7 +1,7 @@
 import { getPosting } from "state/postings/selectors";
 import { ClientState } from "state/state";
 import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
-import { ReactionInfo } from "api/node/api-types";
+import { PrincipalValue, ReactionInfo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
 import { getComment, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { isPermitted } from "state/node/selectors";
@@ -54,10 +54,11 @@ export function getReactionVerificationStatus(state: ClientState, ownerName: str
     return state.reactionsDialog.verificationStatus[ownerName] ?? "none";
 }
 
-export function isReactionsDialogPermitted(operation: string, state: ClientState): boolean {
+export function isReactionsDialogPermitted(operation: string, defaultValue: PrincipalValue,
+                                           state: ClientState): boolean {
     if (state.reactionsDialog.commentId != null) {
         const comment = getComment(state, state.reactionsDialog.commentId);
-        return isPermitted(operation, comment, state, {
+        return isPermitted(operation, comment, defaultValue, state, {
             objectSourceName: getCommentsReceiverName(state)
         });
     } else {
@@ -65,11 +66,11 @@ export function isReactionsDialogPermitted(operation: string, state: ClientState
         if (posting?.receiverName != null) {
             const rposting = getPosting(state, posting.receiverPostingId ?? null, posting.receiverName)
             if (rposting != null) {
-                return isPermitted(operation, rposting, state, {
+                return isPermitted(operation, rposting, defaultValue, state, {
                     objectSourceName: posting.receiverName
                 });
             }
         }
-        return isPermitted(operation, posting, state);
+        return isPermitted(operation, posting, defaultValue, state);
     }
 }

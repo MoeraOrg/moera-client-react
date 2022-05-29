@@ -252,10 +252,7 @@ const connector = connect(
         focusedCommentId: getCommentsState(state).focusedCommentId,
         focused: isCommentsFocused(state),
         composerFocused: isCommentComposerFocused(state),
-        commentsVisible: isPermitted("viewComments", getDetailedPosting(state), state, {
-            ifNoObject: true,
-            ifNoOperation: true
-        })
+        commentsVisible: isPermitted("viewComments", getDetailedPosting(state), "public", state)
     }),
     {
         detailedPostingScrolledToGallery, commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor,

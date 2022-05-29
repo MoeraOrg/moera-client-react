@@ -43,13 +43,11 @@ const connector = connect(
     (state: ClientState, props: OwnProps) => ({
         homeOwnerName: getHomeOwnerName(state),
         enableSelf: getSetting(state, "comment.reactions.self.enabled") as boolean,
-        reactionsEnabled: isPermitted("addReaction", props.comment, state, {
-            objectSourceName: props.nodeName,
-            ifNoOperation: true
+        reactionsEnabled: isPermitted("addReaction", props.comment, "public", state, {
+            objectSourceName: props.nodeName
         }),
-        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, state, {
+        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, "public", state, {
             objectSourceName: props.nodeName,
-            ifNoOperation: true
         })
     })
 );

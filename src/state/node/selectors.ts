@@ -67,36 +67,30 @@ export interface ProtectedObject {
 interface IsPermittedOptions {
     objectSourceName: string | null;
     useReceiverOperations: boolean;
-    ifNoObject: boolean;
-    ifNoOperation: boolean;
 }
 
 const defaultIsPermittedOptions: IsPermittedOptions = {
     objectSourceName: null,
-    useReceiverOperations: false,
-    ifNoObject: false,
-    ifNoOperation: false,
+    useReceiverOperations: false
 };
 
-export function isPermitted(operation: string, object: ProtectedObject | null, state: ClientState,
-                            options: Partial<IsPermittedOptions> = {}): boolean {
+export function isPermitted(operation: string, object: ProtectedObject | null, defaultValue: PrincipalValue,
+                            state: ClientState, options: Partial<IsPermittedOptions> = {}): boolean {
     const op: IsPermittedOptions = {
         ...defaultIsPermittedOptions,
         useReceiverOperations: object?.receiverName != null,
         ...options
     };
-    if (object == null) {
-        return op.ifNoObject;
+
+    let principal = defaultValue;
+    if (object != null) {
+        const operations = op.useReceiverOperations ? object.receiverOperations : object.operations;
+        if (operations != null) {
+            principal = (operations as AnyOperationsInfo)[operation] ?? defaultValue;
+        }
     }
-    const operations = op.useReceiverOperations ? object.receiverOperations : object.operations;
-    if (operations == null) {
-        return op.ifNoOperation;
-    }
-    const principal = (operations as AnyOperationsInfo)[operation];
-    if (principal == null) {
-        return op.ifNoOperation;
-    }
-    const ownerName = op.useReceiverOperations ? object.receiverName : object.ownerName;
+
+    const ownerName = op.useReceiverOperations ? object?.receiverName : object?.ownerName;
     switch (principal) {
         case "none":
             break;
@@ -142,29 +136,25 @@ export function isPermitted(operation: string, object: ProtectedObject | null, s
 
 interface IsPrincipalEqualsOptions {
     useReceiverOperations: boolean;
-    ifNoObject: boolean;
-    ifNoOperation: boolean;
 }
 
 const defaultIsPrincipalEqualsOptions: IsPrincipalEqualsOptions = {
-    useReceiverOperations: false,
-    ifNoObject: false,
-    ifNoOperation: false
+    useReceiverOperations: false
 };
 
-export function isPrincipalEquals(operation: string, object: ProtectedObject | null, value: PrincipalValue,
-                                  options: Partial<IsPrincipalEqualsOptions> = {}): boolean {
+export function isPrincipalEquals(operation: string, object: ProtectedObject | null, defaultValue: PrincipalValue,
+                                  value: PrincipalValue, options: Partial<IsPrincipalEqualsOptions> = {}): boolean {
     const op: IsPrincipalEqualsOptions = {
         ...defaultIsPrincipalEqualsOptions,
         useReceiverOperations: object?.receiverName != null,
         ...options
     };
     if (object == null) {
-        return op.ifNoObject;
+        return defaultValue === value;
     }
     const operations = op.useReceiverOperations ? object.receiverOperations : object.operations;
     if (operations == null) {
-        return op.ifNoOperation;
+        return defaultValue === value;
     }
     return (operations as AnyOperationsInfo)[operation] === value;
 }

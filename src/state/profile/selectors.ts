@@ -15,7 +15,7 @@ export function isProfileEditing(state: ClientState): boolean {
 }
 
 export function isProfileEditable(state: ClientState): boolean {
-    return isProfileReady(state) && (isPermitted("edit", state.profile.profile, state));
+    return isProfileReady(state) && (isPermitted("edit", state.profile.profile, "admin", state));
 }
 
 export function getAvatars(state: ClientState): AvatarInfo[] {

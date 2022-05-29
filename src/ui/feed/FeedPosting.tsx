@@ -27,6 +27,7 @@ import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
+import { PrincipalValue } from "api/node/api-types";
 
 interface ContentProps {
     posting: ExtPostingInfo;
@@ -72,7 +73,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                         <br/>
                         <PostingDate posting={posting} story={story}/>
                         <PostingUpdated posting={posting} story={story}/>
-                        <PostingVisibility posting={posting} editable={isPermitted("edit", posting)}/>
+                        <PostingVisibility posting={posting} editable={isPermitted("edit", posting, "owner")}/>
                     </div>
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
@@ -96,7 +97,8 @@ const connector = connect(
     (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
         atHome: isAtHomeNode(state),
-        isPermitted: (operation: string, object: ProtectedObject) => isPermitted(operation, object, state)
+        isPermitted: (operation: string, object: ProtectedObject, defaultValue: PrincipalValue) =>
+            isPermitted(operation, object, defaultValue, state)
     }),
     { goToPosting }
 );

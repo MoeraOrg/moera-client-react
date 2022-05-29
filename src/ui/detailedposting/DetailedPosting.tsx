@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { detailedPostingLoadAttached } from "state/detailedposting/actions";
 import { isConnectedToHome } from "state/home/selectors";
@@ -58,8 +58,6 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
         scrollToPostingGallery();
     }
 
-    console.log(posting);
-    console.log(isPermitted("edit", posting));
     return (
         <div className="posting entry mt-2">
             <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
@@ -72,7 +70,7 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
                     <br/>
                     <PostingDate posting={posting} story={story}/>
                     <PostingUpdated posting={posting} story={story}/>
-                    <PostingVisibility posting={posting} editable={isPermitted("edit", posting)}/>
+                    <PostingVisibility posting={posting} editable={isPermitted("edit", posting, "owner")}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>
@@ -110,7 +108,8 @@ const connector = connect(
         loadedAttached: state.detailedPosting.loadedAttached,
         galleryExpanded: state.detailedPosting.galleryExpanded,
         connectedToHome: isConnectedToHome(state),
-        isPermitted: (operation: string, object: ProtectedObject) => isPermitted(operation, object, state),
+        isPermitted: (operation: string, object: ProtectedObject, defaultValue: PrincipalValue) =>
+            isPermitted(operation, object, defaultValue, state),
     }),
     { detailedPostingLoadAttached }
 );

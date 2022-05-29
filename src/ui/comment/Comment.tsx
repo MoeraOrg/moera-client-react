@@ -2,14 +2,14 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
-import { CommentInfo } from "api/node/api-types";
+import { CommentInfo, PrincipalValue } from "api/node/api-types";
 import { isConnectedToHome } from "state/home/selectors";
 import { ClientState } from "state/state";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import { isPermitted } from "state/node/selectors";
 import {
+    getCommentsReceiverName,
     getCommentsReceiverPostingId,
-    getCommentsState,
     getDetailedPosting,
     getDetailedPostingId
 } from "state/detailedposting/selectors";
@@ -85,10 +85,10 @@ const connector = connect(
         connectedToHome: isConnectedToHome(state),
         postingId: getDetailedPostingId(state),
         postingOwnerName: getDetailedPosting(state)?.ownerName,
-        postingReceiverName: getCommentsState(state).receiverName,
+        postingReceiverName: getCommentsReceiverName(state),
         postingReceiverPostingId: getCommentsReceiverPostingId(state),
-        isPermitted: (operation: string, comment: CommentInfo) =>
-            isPermitted(operation, comment, state, {objectSourceName: getCommentsState(state).receiverName})
+        isPermitted: (operation: string, comment: CommentInfo, defaultValue: PrincipalValue) =>
+            isPermitted(operation, comment, defaultValue, state, {objectSourceName: getCommentsReceiverName(state)})
     })
 );
 
