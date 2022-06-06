@@ -44,8 +44,8 @@ const connector = connect(
         homeOwnerName: getHomeOwnerName(state),
         enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean,
         commentsVisible: isPermitted("viewComments", props.posting, "public", state),
-        reactionsEnabled: isPermitted("addReaction", props.posting, "public", state),
-        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.posting, "public", state)
+        reactionsEnabled: isPermitted("addReaction", props.posting, "signed", state),
+        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.posting, "signed", state)
     })
 );
 

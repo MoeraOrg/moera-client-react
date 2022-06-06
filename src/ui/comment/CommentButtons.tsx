@@ -46,7 +46,7 @@ const connector = connect(
         reactionsEnabled: isPermitted("addReaction", props.comment, "public", state, {
             objectSourceName: props.nodeName
         }),
-        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, "public", state, {
+        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, "signed", state, {
             objectSourceName: props.nodeName,
         })
     })

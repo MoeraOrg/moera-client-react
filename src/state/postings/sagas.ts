@@ -112,8 +112,8 @@ function* postingVerifySaga(action: WithContext<PostingVerifyAction>) {
 function* postingOperationsUpdateSaga(action: PostingOperationsUpdateAction) {
     const {id, nodeName, operations} = action.payload;
     try {
-        const data = yield* call(Node.putPostingOperations, nodeName, id, operations);
-        yield* put(postingOperationsUpdated(id, nodeName, data));
+        const data = yield* call(Node.putPosting, nodeName, id, {operations});
+        yield* put(postingOperationsUpdated(id, nodeName, data.operations ?? {}));
     } catch (e) {
         yield* put(errorThrown(e));
     }

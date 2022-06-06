@@ -261,7 +261,7 @@ const composePageLogic = {
     isPostingTextEmpty(postingText: PostingText): boolean {
         let textEmpty = postingText.bodySrc == null;
         if (!textEmpty) {
-            const {subject, text} = JSON.parse(postingText.bodySrc);
+            const {subject, text} = JSON.parse(postingText.bodySrc!);
             textEmpty = !subject && !text;
         }
         const mediaEmpty = postingText.media == null || postingText.media.length === 0;

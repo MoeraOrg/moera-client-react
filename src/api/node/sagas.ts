@@ -23,11 +23,12 @@ import {
     EmailHint,
     FeedInfo,
     FeedSliceInfo,
-    FeedStatus, LinkPreviewInfo,
+    FeedStatus,
+    LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
     PostingFeatures,
-    PostingInfo, PostingOperations, PostingOperationsInfo,
+    PostingInfo,
     PostingSourceText,
     PostingText,
     PrivateMediaFileInfo,
@@ -311,14 +312,6 @@ export function* putRemotePosting(nodeName: string | null, remoteNodeName: strin
 export function* deletePosting(nodeName: string | null, id: string): CallApiResult<Result> {
     return yield* callApi({
         nodeName, location: ut`/postings/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
-    });
-}
-
-export function* putPostingOperations(nodeName: string | null, id: string,
-                                      operations: PostingOperations): CallApiResult<PostingOperationsInfo> {
-    return yield* callApi({
-        nodeName, location: ut`/postings/${id}/operations`, method: "PUT", auth: true, body: operations,
-        schema: NodeApi.PostingOperationsInfo
     });
 }
 

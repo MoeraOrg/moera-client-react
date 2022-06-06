@@ -200,7 +200,7 @@ export interface PostingText {
     ownerAvatar?: AvatarDescription | null;
     acceptedReactions?: AcceptedReactions | null;
     bodyPreview?: string | null;
-    bodySrc: string;
+    bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
     body?: Body | string | null;
     bodyFormat?: BodyFormat | null;
