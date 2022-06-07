@@ -211,6 +211,7 @@ export interface PostingText {
     publications?: StoryAttributes[] | null;
     updateInfo?: UpdateInfo | null;
     operations?: PostingOperations | null;
+    commentOperations?: CommentOperations | null;
 }
 
 export interface PostingSourceText {
@@ -220,6 +221,7 @@ export interface PostingSourceText {
     media?: MediaWithDigest[] | null;
     acceptedReactions?: AcceptedReactions | null;
     operations?: PostingOperations | null;
+    commentOperations?: CommentOperations | null;
 }
 
 export interface PostingOperationsInfo {
@@ -271,6 +273,7 @@ export interface PostingInfoBase<B> {
     clientReaction?: ClientReactionInfo | null;
     operations?: PostingOperationsInfo | null;
     receiverOperations?: PostingOperationsInfo | null;
+    commentOperations?: CommentOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
@@ -316,7 +319,7 @@ export interface CommentOperations {
 }
 
 export interface CommentText {
-    ownerName: string;
+    ownerName?: string | null;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodyPreview?: string | null;
@@ -331,6 +334,7 @@ export interface CommentText {
     signature?: string | null;
     signatureVersion?: number | null;
     operations?: CommentOperations | null;
+    seniorOperations?: CommentOperations | null;
 }
 
 export interface MediaWithDigest {
@@ -346,6 +350,7 @@ export interface CommentSourceText {
     acceptedReactions?: AcceptedReactions | null;
     repliedToId?: string | null;
     operations?: CommentOperations | null;
+    seniorOperations?: CommentOperations | null;
 }
 
 export interface RepliedTo {
@@ -396,6 +401,8 @@ interface CommentInfoBase<B> {
     signature?: string | null;
     signatureVersion?: number | null;
     operations?: CommentOperationsInfo | null;
+    ownerOperations?: CommentOperationsInfo | null;
+    seniorOperations?: CommentOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     clientReaction?: ClientReactionInfo | null;
     seniorReaction?: ClientReactionInfo | null;
@@ -480,7 +487,7 @@ export interface PostingFeatures {
     imageFormats: string[];
 }
 
-export type PrincipalValue = "none" | "private" | "admin" | "owner" | "signed" | "public";
+export type PrincipalValue = "none" | "private" | "admin" | "owner" | "signed" | "public" | "unset";
 
 export interface SettingInfo {
     name: string;

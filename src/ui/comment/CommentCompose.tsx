@@ -11,7 +11,7 @@ import { commentPost } from "state/detailedposting/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
-import { isPermitted, isPrincipalEquals } from "state/node/selectors";
+import { isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
@@ -140,7 +140,7 @@ const connector = connect(
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
         features: getPostingFeatures(state),
         commentingAllowed: isPermitted("addComment", getDetailedPosting(state), "signed", state),
-        discussionClosed: isPrincipalEquals("addComment", getDetailedPosting(state), "signed", "none")
+        discussionClosed: isPrincipalIn("addComment", getDetailedPosting(state), "signed", "none")
     }),
     { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
 );

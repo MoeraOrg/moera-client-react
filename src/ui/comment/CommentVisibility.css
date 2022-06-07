@@ -1,0 +1,8 @@
+.comment .owner-line .visibility {
+    color: var(--bs-gray-500);
+    padding-left: .4rem;
+}
+
+.comment .owner-line .visibility .principal {
+    padding-left: .4rem;
+}

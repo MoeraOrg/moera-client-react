@@ -412,6 +412,16 @@ export const commentDeleteFailed = (nodeName: string, postingId: string,
     payload: {nodeName, postingId, commentId}
 });
 
+export const COMMENT_SET_VISIBILITY = "COMMENT_SET_VISIBILITY";
+export type CommentSetVisibilityAction = ActionWithPayload<typeof COMMENT_SET_VISIBILITY, {
+    commentId: string;
+    visible: boolean;
+}>;
+export const commentSetVisibility = (commentId: string, visible: boolean): CommentSetVisibilityAction => ({
+    type: COMMENT_SET_VISIBILITY,
+    payload: {commentId, visible}
+});
+
 export const FOCUS_COMMENT = "FOCUS_COMMENT";
 export type FocusCommentAction = Action<typeof FOCUS_COMMENT>;
 export const focusComment = (): FocusCommentAction => ({
@@ -691,6 +701,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentDeleteAction
     | CommentDeletedAction
     | CommentDeleteFailedAction
+    | CommentSetVisibilityAction
     | FocusCommentAction
     | FocusedCommentLoadAction
     | FocusedCommentLoadedAction

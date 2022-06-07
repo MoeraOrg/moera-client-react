@@ -4,6 +4,7 @@ import clipboardCopy from 'clipboard-copy';
 import { Node, NodeApiError } from "api";
 import {
     CommentInfo,
+    CommentText,
     DraftInfo,
     MediaAttachment,
     PrivateMediaFileInfo,
@@ -11,6 +12,9 @@ import {
     ReactionInfo,
     RepliedTo
 } from "api/node/api-types";
+import { WithContext } from "state/action-types";
+import { executor } from "state/executor";
+import { introduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import {
     closeCommentDialog,
@@ -28,6 +32,7 @@ import {
     COMMENT_REACTION_DELETE,
     COMMENT_REACTION_LOAD,
     COMMENT_REPLY,
+    COMMENT_SET_VISIBILITY,
     COMMENT_VERIFY,
     commentComposeCancelled,
     CommentCopyLinkAction,
@@ -63,6 +68,7 @@ import {
     COMMENTS_RECEIVER_SWITCH,
     COMMENTS_UPDATE,
     commentSet,
+    CommentSetVisibilityAction,
     commentsFutureSliceLoadFailed,
     commentsFutureSliceSet,
     commentsPastSliceLoadFailed,
@@ -95,18 +101,16 @@ import {
 } from "state/detailedposting/selectors";
 import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
 import { postingCommentsSet, postingsSet } from "state/postings/actions";
+import { ClientState } from "state/state";
 import { getOwnerFullName, getOwnerName } from "state/owner/selectors";
+import { isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getPosting, isPostingCached } from "state/postings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { executor } from "state/executor";
-import { ClientState } from "state/state";
-import { introduced } from "state/init-selectors";
 import { Browser } from "ui/browser";
 import { getWindowSelectionHtml, insertText, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
-import { WithContext } from "state/action-types";
 
 export default [
     executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
@@ -123,6 +127,7 @@ export default [
     executor(COMMENT_DRAFT_DELETE, "", commentDraftDeleteSaga),
     executor(COMMENT_COMPOSE_CANCEL, "", commentComposeCancelSaga),
     executor(COMMENT_DELETE, payload => payload.commentId, commentDeleteSaga),
+    executor(COMMENT_SET_VISIBILITY, payload => payload.commentId, commentSetVisibilitySaga),
     executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
     executor(COMMENT_COPY_LINK, null, commentCopyLinkSaga),
     executor(COMMENT_DIALOG_COMMENT_LOAD, "", commentDialogCommentLoadSaga),
@@ -460,6 +465,48 @@ function* commentDeleteSaga(action: CommentDeleteAction) {
         yield* call(Node.deleteRemoteComment, ":", receiverName, receiverPostingId, commentId);
     } catch (e) {
         yield* put(commentDeleteFailed(receiverName, receiverPostingId, commentId));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* commentSetVisibilitySaga(action: CommentSetVisibilityAction) {
+    const {commentId, visible} = action.payload;
+
+    const {
+        receiverName, receiverPostingId, isOwner, ownerVisible, isSenior, seniorVisible
+    } = yield* select((state: ClientState) => ({
+        receiverName: getCommentsState(state).receiverName,
+        receiverPostingId: getCommentsState(state).receiverPostingId,
+        isOwner: isPermitted("edit", getComment(state, commentId), "owner", state),
+        ownerVisible: isPrincipalIn("view", getComment(state, commentId), "public", "public", {
+            useOperations: "owner"
+        }),
+        isSenior: isPermitted("edit", getDetailedPosting(state), "owner", state),
+        seniorVisible: isPrincipalIn("view", getComment(state, commentId), "unset", ["unset", "public"], {
+            useOperations: "senior"
+        })
+    }));
+    if (receiverName == null || receiverPostingId == null) {
+        return;
+    }
+
+    const commentText: CommentText = {};
+    console.log(isSenior, seniorVisible, visible, isOwner);
+    if (isSenior && seniorVisible !== visible && !(isOwner && !visible)) {
+        commentText.seniorOperations = {
+            view: visible ? "public" : "private"
+        }
+    }
+    if (isOwner && ownerVisible !== visible) {
+        commentText.operations = {
+            view: visible ? "public" : "private"
+        }
+    }
+
+    try {
+        const comment = yield* call(Node.putComment, receiverName, receiverPostingId, commentId, commentText);
+        yield* put(commentSet(receiverName, comment));
+    } catch (e) {
         yield* put(errorThrown(e));
     }
 }

@@ -2,11 +2,9 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
-import { CommentInfo, PrincipalValue } from "api/node/api-types";
-import { isConnectedToHome } from "state/home/selectors";
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
-import { isPermitted } from "state/node/selectors";
 import {
     getCommentsReceiverName,
     getCommentsReceiverPostingId,
@@ -18,6 +16,7 @@ import CommentAvatar from "ui/comment/CommentAvatar";
 import CommentOwner from "ui/comment/CommentOwner";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
+import CommentVisibility from "ui/comment/CommentVisibility";
 import CommentDeleting from "ui/comment/CommentDeleting";
 import CommentContent from "ui/comment/CommentContent";
 import CommentButtons from "ui/comment/CommentButtons";
@@ -34,7 +33,7 @@ type Props = {
 
 const Comment = ({
      comment, previousId, focused, connectedToHome, postingId, postingOwnerName, postingReceiverName,
-     postingReceiverPostingId, isPermitted
+     postingReceiverPostingId
 }: Props) => {
     const realOwnerName = postingReceiverName ?? postingOwnerName;
     if (postingId == null || realOwnerName == null) {
@@ -52,14 +51,14 @@ const Comment = ({
                 <CommentDeleting/>
             :
                 <>
-                    <CommentMenu comment={comment} nodeName={realOwnerName} postingId={postingId}
-                                 isPermitted={isPermitted}/>
+                    <CommentMenu comment={comment} nodeName={realOwnerName} postingId={postingId}/>
                     <CommentAvatar comment={comment} nodeName={realOwnerName}/>
                     <div className="details">
                         <div className="owner-line">
                             <CommentOwner comment={comment} nodeName={realOwnerName}/>
                             <CommentDate nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             <CommentUpdated comment={comment}/>
+                            <CommentVisibility comment={comment}/>
                         </div>
                         <CommentContent comment={comment} previousId={previousId} receiverName={postingReceiverName}/>
                         <EntryLinkPreviews nodeName={realOwnerName} linkPreviews={comment.body.linkPreviews} limit={2}
@@ -86,9 +85,7 @@ const connector = connect(
         postingId: getDetailedPostingId(state),
         postingOwnerName: getDetailedPosting(state)?.ownerName,
         postingReceiverName: getCommentsReceiverName(state),
-        postingReceiverPostingId: getCommentsReceiverPostingId(state),
-        isPermitted: (operation: string, comment: CommentInfo, defaultValue: PrincipalValue) =>
-            isPermitted(operation, comment, defaultValue, state, {objectSourceName: getCommentsReceiverName(state)})
+        postingReceiverPostingId: getCommentsReceiverPostingId(state)
     })
 );
 

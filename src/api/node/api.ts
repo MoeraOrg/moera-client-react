@@ -718,6 +718,59 @@ const PostingOperationsInfoType: JSONSchemaType<API.PostingOperationsInfo> = {
 
 export const PostingOperationsInfo = schema(PostingOperationsInfoType);
 
+const CommentOperationsInfoType: JSONSchemaType<API.CommentOperationsInfo> = {
+    type: "object",
+    properties: {
+        "view": {
+            type: "string",
+            nullable: true
+        },
+        "edit": {
+            type: "string",
+            nullable: true
+        },
+        "delete": {
+            type: "string",
+            nullable: true
+        },
+        "viewReactions": {
+            type: "string",
+            nullable: true
+        },
+        "viewNegativeReactions": {
+            type: "string",
+            nullable: true
+        },
+        "viewReactionTotals": {
+            type: "string",
+            nullable: true
+        },
+        "viewNegativeReactionTotals": {
+            type: "string",
+            nullable: true
+        },
+        "viewReactionRatios": {
+            type: "string",
+            nullable: true
+        },
+        "viewNegativeReactionRatios": {
+            type: "string",
+            nullable: true
+        },
+        "addReaction": {
+            type: "string",
+            nullable: true
+        },
+        "addNegativeReaction": {
+            type: "string",
+            nullable: true
+        }
+    },
+    additionalProperties: false
+};
+
+export const CommentOperationsInfo = schema(CommentOperationsInfoType);
+
 const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     type: "object",
     properties: {
@@ -842,6 +895,10 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         },
         "receiverOperations": {
             ...PostingOperationsInfoType,
+            nullable: true
+        },
+        "commentOperations": {
+            ...CommentOperationsInfoType,
             nullable: true
         },
         "acceptedReactions": {
@@ -1011,6 +1068,10 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
             ...PostingOperationsInfoType,
             nullable: true
         },
+        "commentOperations": {
+            ...CommentOperationsInfoType,
+            nullable: true
+        },
         "acceptedReactions": {
             ...AcceptedReactionsType,
             nullable: true
@@ -1133,59 +1194,6 @@ const RepliedToType: JSONSchemaType<API.RepliedTo> = {
     additionalProperties: false
 };
 
-const CommentOperationsInfoType: JSONSchemaType<API.CommentOperationsInfo> = {
-    type: "object",
-    properties: {
-        "view": {
-            type: "string",
-            nullable: true
-        },
-        "edit": {
-            type: "string",
-            nullable: true
-        },
-        "delete": {
-            type: "string",
-            nullable: true
-        },
-        "viewReactions": {
-            type: "string",
-            nullable: true
-        },
-        "viewNegativeReactions": {
-            type: "string",
-            nullable: true
-        },
-        "viewReactionTotals": {
-            type: "string",
-            nullable: true
-        },
-        "viewNegativeReactionTotals": {
-            type: "string",
-            nullable: true
-        },
-        "viewReactionRatios": {
-            type: "string",
-            nullable: true
-        },
-        "viewNegativeReactionRatios": {
-            type: "string",
-            nullable: true
-        },
-        "addReaction": {
-            type: "string",
-            nullable: true
-        },
-        "addNegativeReaction": {
-            type: "string",
-            nullable: true
-        }
-    },
-    additionalProperties: false
-};
-
-export const CommentOperationsInfo = schema(CommentOperationsInfoType);
-
 const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
     type: "object",
     properties: {
@@ -1276,6 +1284,14 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
             nullable: true
         },
         "operations": {
+            ...CommentOperationsInfoType,
+            nullable: true
+        },
+        "ownerOperations": {
+            ...CommentOperationsInfoType,
+            nullable: true
+        },
+        "seniorOperations": {
             ...CommentOperationsInfoType,
             nullable: true
         },
@@ -1403,6 +1419,14 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
             nullable: true
         },
         "operations": {
+            ...CommentOperationsInfoType,
+            nullable: true
+        },
+        "ownerOperations": {
+            ...CommentOperationsInfoType,
+            nullable: true
+        },
+        "seniorOperations": {
             ...CommentOperationsInfoType,
             nullable: true
         },

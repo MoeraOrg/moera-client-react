@@ -2,123 +2,151 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { CommentInfo, PrincipalValue } from "api/node/api-types";
+import { ClientState } from "state/state";
+import {
+    getNodeRootLocation,
+    isPermitted,
+    IsPermittedOptions,
+    isPrincipalIn,
+    IsPrincipalEqualsOptions
+} from "state/node/selectors";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
-import { commentCopyLink, commentDelete, openCommentDialog } from "state/detailedposting/actions";
+import { commentCopyLink, commentDelete, commentSetVisibility, openCommentDialog } from "state/detailedposting/actions";
+import {
+    getCommentsReceiverName,
+    getCommentsReceiverPostingId,
+    getDetailedPosting
+} from "state/detailedposting/selectors";
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
-import { getNodeRootLocation } from "state/node/selectors";
-import { getCommentsReceiverName, getCommentsReceiverPostingId } from "state/detailedposting/selectors";
-import { ClientState } from "state/state";
 import { DropdownMenu } from "ui/control";
 
-type Props = {
+interface OwnProps {
     nodeName: string;
     postingId: string;
     comment: CommentInfo;
-    isPermitted: (operation: string, object: CommentInfo, defaultValue: PrincipalValue) => boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-class CommentMenu extends React.PureComponent<Props> {
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
-    onCopyLink = () => {
-        const {postingId, comment, commentCopyLink} = this.props;
+function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, receiverPostingId, isPostingPermitted,
+                      isCommentPermitted, isCommentPrincipalIn, commentCopyLink, openCommentDialog,
+                      openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText, commentSetVisibility}: Props) {
 
-        commentCopyLink(comment.id, postingId);
-    };
+    const onCopyLink = () => commentCopyLink(comment.id, postingId);
 
-    onCopyText = () => {
-        const {comment, entryCopyText, receiverName} = this.props;
+    const onCopyText = () => entryCopyText(comment.body, "ask", receiverName ?? "", comment.media ?? null);
 
-        entryCopyText(comment.body, "ask", receiverName ?? "", comment.media ?? null);
-    };
-
-    onShare = () => {
-        const {postingId, nodeName, comment, shareDialogPrepare} = this.props;
-
+    const onShare = () => {
         const href = `/post/${postingId}?comment=${comment.id}`;
         shareDialogPrepare(nodeName, href);
     };
 
-    onEdit = () => {
-        const {comment, openCommentDialog} = this.props;
+    const onEdit = () => openCommentDialog(comment.id);
 
-        openCommentDialog(comment.id);
-    };
-
-    onDelete = () => {
-        const {comment, confirmBox} = this.props;
-
+    const onDelete = () => {
         confirmBox(`Do you really want to delete the comment "${comment.heading}"?`, "Delete", "Cancel",
             commentDelete(comment.id), null, "danger");
     };
 
-    onViewSource = () => {
-        const {receiverName, receiverPostingId, comment, openSourceDialog} = this.props;
-
+    const onViewSource = () => {
         if (receiverName != null && receiverPostingId != null) {
             openSourceDialog(receiverName, receiverPostingId, comment.id);
         }
     };
 
-    render() {
-        const {postingId, comment, isPermitted, rootLocation} = this.props;
+    const onHide = () => commentSetVisibility(comment.id, false);
 
-        const commentHref = `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`;
-        return (
-            <DropdownMenu items={[
-                {
-                    title: "Copy link",
-                    href: commentHref,
-                    onClick: this.onCopyLink,
-                    show: true
-                },
-                {
-                    title: "Copy text",
-                    href: commentHref,
-                    onClick: this.onCopyText,
-                    show: true
-                },
-                {
-                    title: "Share...",
-                    href: commentHref,
-                    onClick: this.onShare,
-                    show: true
-                },
-                {
-                    divider: true
-                },
-                {
-                    title: "Edit...",
-                    href: commentHref,
-                    onClick: this.onEdit,
-                    show: isPermitted("edit", comment, "owner"),
-                },
-                {
-                    title: "View source",
-                    href: commentHref,
-                    onClick: this.onViewSource,
-                    show: true
-                },
-                {
-                    title: "Delete",
-                    href: commentHref,
-                    onClick: this.onDelete,
-                    show: isPermitted("delete", comment, "private")
-                }
-            ]}/>
-        );
-    }
+    const onShow = () => commentSetVisibility(comment.id, true);
 
+    const commentHref = `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`;
+    const hideable = (isCommentPermitted("edit", "owner", {})
+            && isCommentPrincipalIn("view", "public", "public", {useOperations: "owner"}))
+        || (isPostingPermitted("edit", "owner", {}) && !isCommentPermitted("edit", "owner", {})
+            && isCommentPrincipalIn("view", "unset", ["unset", "public"], {useOperations: "senior"}));
+    const showable = (isCommentPermitted("edit", "owner", {})
+            && isCommentPrincipalIn("view", "public", "private", {useOperations: "owner"}))
+        || (isPostingPermitted("edit", "owner", {})
+            && isCommentPrincipalIn("view", "unset", "private", {useOperations: "senior"}));
+    return (
+        <DropdownMenu items={[
+            {
+                title: "Copy link",
+                href: commentHref,
+                onClick: onCopyLink,
+                show: true
+            },
+            {
+                title: "Copy text",
+                href: commentHref,
+                onClick: onCopyText,
+                show: true
+            },
+            {
+                title: "Share...",
+                href: commentHref,
+                onClick: onShare,
+                show: true
+            },
+            {
+                divider: true
+            },
+            {
+                title: "Edit...",
+                href: commentHref,
+                onClick: onEdit,
+                show: isCommentPermitted("edit", "owner", {}),
+            },
+            {
+                title: "View source",
+                href: commentHref,
+                onClick: onViewSource,
+                show: true
+            },
+            {
+                title: "Delete",
+                href: commentHref,
+                onClick: onDelete,
+                show: isCommentPermitted("delete", "private", {})
+            },
+            {
+                divider: true
+            },
+            {
+                title: "Hide",
+                href: commentHref,
+                onClick: onHide,
+                show: hideable
+            },
+            {
+                title: "Show",
+                href: commentHref,
+                onClick: onShow,
+                show: !hideable && showable
+            }
+        ]}/>
+    );
 }
 
 const connector = connect(
-    (state: ClientState) => ({
+    (state: ClientState, ownProps: OwnProps) => ({
         rootLocation: getNodeRootLocation(state),
         receiverName: getCommentsReceiverName(state),
-        receiverPostingId: getCommentsReceiverPostingId(state)
+        receiverPostingId: getCommentsReceiverPostingId(state),
+        isPostingPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
+            isPermitted(operation, getDetailedPosting(state), defaultValue, state, options),
+        isCommentPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
+            isPermitted(operation, ownProps.comment, defaultValue, state,
+                {...options, objectSourceName: getCommentsReceiverName(state)}),
+        isCommentPrincipalIn: (operation: string, defaultValue: PrincipalValue,
+                               value: PrincipalValue | PrincipalValue[], options: Partial<IsPrincipalEqualsOptions>) =>
+            isPrincipalIn(operation, ownProps.comment, defaultValue, value, options)
     }),
-    { commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText }
+    {
+        commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText,
+        commentSetVisibility
+    }
 );
 
 export default connector(CommentMenu);
