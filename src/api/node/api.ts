@@ -680,6 +680,10 @@ const PostingOperationsInfoType: JSONSchemaType<API.PostingOperationsInfo> = {
             type: "string",
             nullable: true
         },
+        "overrideComment": {
+            type: "string",
+            nullable: true
+        },
         "viewReactions": {
             type: "string",
             nullable: true

@@ -63,11 +63,11 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
     const commentHref = `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`;
     const hideable = (isCommentPermitted("edit", "owner", {})
             && isCommentPrincipalIn("view", "public", "public", {useOperations: "owner"}))
-        || (isPostingPermitted("edit", "owner", {}) && !isCommentPermitted("edit", "owner", {})
+        || (isPostingPermitted("overrideComment", "owner", {}) && !isCommentPermitted("edit", "owner", {})
             && isCommentPrincipalIn("view", "unset", ["unset", "public"], {useOperations: "senior"}));
     const unhideable = (isCommentPermitted("edit", "owner", {})
             && isCommentPrincipalIn("view", "public", "private", {useOperations: "owner"}))
-        || (isPostingPermitted("edit", "owner", {})
+        || (isPostingPermitted("overrideComment", "owner", {})
             && isCommentPrincipalIn("view", "unset", "private", {useOperations: "senior"}));
     return (
         <DropdownMenu items={[

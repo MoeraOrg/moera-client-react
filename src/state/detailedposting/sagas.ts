@@ -481,7 +481,7 @@ function* commentSetVisibilitySaga(action: CommentSetVisibilityAction) {
         ownerVisible: isPrincipalIn("view", getComment(state, commentId), "public", "public", {
             useOperations: "owner"
         }),
-        isSenior: isPermitted("edit", getDetailedPosting(state), "owner", state),
+        isSenior: isPermitted("overrideComment", getDetailedPosting(state), "owner", state),
         seniorVisible: isPrincipalIn("view", getComment(state, commentId), "unset", ["unset", "public"], {
             useOperations: "senior"
         })

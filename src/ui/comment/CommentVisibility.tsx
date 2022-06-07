@@ -39,7 +39,7 @@ function CommentVisibility({comment, isSenior}: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        isSenior: isPermitted("edit", getDetailedPosting(state), "owner", state)
+        isSenior: isPermitted("overrideComment", getDetailedPosting(state), "owner", state)
     })
 );
 

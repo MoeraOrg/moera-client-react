@@ -230,6 +230,7 @@ export interface PostingOperationsInfo {
     delete?: PrincipalValue | null;
     viewComments?: PrincipalValue | null;
     addComment?: PrincipalValue | null;
+    overrideComment?: PrincipalValue | null;
     viewReactions?: PrincipalValue | null;
     viewNegativeReactions?: PrincipalValue | null;
     viewReactionTotals?: PrincipalValue | null;
