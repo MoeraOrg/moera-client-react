@@ -65,7 +65,7 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
             && isCommentPrincipalIn("view", "public", "public", {useOperations: "owner"}))
         || (isPostingPermitted("edit", "owner", {}) && !isCommentPermitted("edit", "owner", {})
             && isCommentPrincipalIn("view", "unset", ["unset", "public"], {useOperations: "senior"}));
-    const showable = (isCommentPermitted("edit", "owner", {})
+    const unhideable = (isCommentPermitted("edit", "owner", {})
             && isCommentPrincipalIn("view", "public", "private", {useOperations: "owner"}))
         || (isPostingPermitted("edit", "owner", {})
             && isCommentPrincipalIn("view", "unset", "private", {useOperations: "senior"}));
@@ -120,10 +120,10 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
                 show: hideable
             },
             {
-                title: "Show",
+                title: "Unhide",
                 href: commentHref,
                 onClick: onShow,
-                show: !hideable && showable
+                show: !hideable && unhideable
             }
         ]}/>
     );

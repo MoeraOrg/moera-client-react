@@ -34,7 +34,7 @@ const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUp
                 (posting.receiverDeletedAt == null ?
                     <Principal value={value}/>
                 :
-                    <span className="principal" title={`Original deleted ${deletionDate}`}>
+                    <span className="principal text-danger opacity-75" title={`Original deleted ${deletionDate}`}>
                         <FontAwesomeIcon icon="trash-can"/>
                     </span>
                 )

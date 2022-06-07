@@ -491,10 +491,9 @@ function* commentSetVisibilitySaga(action: CommentSetVisibilityAction) {
     }
 
     const commentText: CommentText = {};
-    console.log(isSenior, seniorVisible, visible, isOwner);
     if (isSenior && seniorVisible !== visible && !(isOwner && !visible)) {
         commentText.seniorOperations = {
-            view: visible ? "public" : "private"
+            view: visible ? "unset" : "private"
         }
     }
     if (isOwner && ownerVisible !== visible) {
