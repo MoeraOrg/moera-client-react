@@ -272,11 +272,18 @@ const META: ClientSettingMetaInfo[] = [
     {
         name: "posting.comments.addition.default",
         type: "Principal",
-        defaultValue: "public",
+        defaultValue: "signed",
         title: "Commenting allowed by default",
         modifiers: {
-            principals: ["none", "private", "signed", "public"]
+            principals: ["none", "private", "signed"]
         }
+    },
+    {
+        name: "posting.comments.hide.default",
+        type: "bool",
+        defaultValue: "false",
+        title: "Automatically hide comments by default",
+        modifiers: {}
     },
     {
         name: "posting.body-src-format.default",

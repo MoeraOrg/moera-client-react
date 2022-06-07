@@ -2314,6 +2314,49 @@ const DraftInfoType: JSONSchemaType<API.EncodedDraftInfo> = {
             },
             nullable: true,
             additionalProperties: false
+        },
+        "commentOperations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewReactions": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewNegativeReactions": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewReactionTotals": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewNegativeReactionTotals": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewReactionRatios": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewNegativeReactionRatios": {
+                    type: "string",
+                    nullable: true
+                },
+                "addReaction": {
+                    type: "string",
+                    nullable: true
+                },
+                "addNegativeReaction": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["id", "draftType", "receiverName", "createdAt", "body", "heading"],

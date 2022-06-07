@@ -37,6 +37,8 @@ export interface ComposePageValues {
     viewCommentsPrincipalDefault: PrincipalValue;
     addCommentPrincipal: PrincipalValue;
     addCommentPrincipalDefault: PrincipalValue;
+    hideComments: boolean;
+    hideCommentsDefault: boolean;
     reactionsEnabled: boolean;
     reactionsEnabledDefault: boolean;
     reactionsNegativeEnabled: boolean;
@@ -108,6 +110,9 @@ const composePageLogic = {
         const addCommentPrincipal = props.draft != null
             ? props.draft.operations?.addComment ?? props.commentAdditionDefault
             : props.posting?.operations?.addComment ?? props.commentAdditionDefault;
+        const hideComments = props.draft != null
+            ? props.draft.commentOperations?.view === "private" ?? props.commentsHideDefault
+            : props.posting?.commentOperations?.view === "private" ?? props.commentsHideDefault;
         const reactionsEnabled = props.draft != null
             ? props.draft.operations?.addReaction !== "none"
             : props.posting != null
@@ -153,6 +158,8 @@ const composePageLogic = {
             viewCommentsPrincipalDefault: viewCommentsPrincipal,
             addCommentPrincipal,
             addCommentPrincipalDefault: addCommentPrincipal,
+            hideComments,
+            hideCommentsDefault: hideComments,
             reactionsEnabled,
             reactionsEnabledDefault: reactionsEnabled,
             reactionsNegativeEnabled,
@@ -242,8 +249,11 @@ const composePageLogic = {
                 viewNegativeReactionRatios: values.reactionsEnabled && values.reactionsNegativeEnabled
                     ? "public"
                     : "none",
-                addReaction: values.reactionsEnabled ? "public" : "none",
-                addNegativeReaction: values.reactionsEnabled && values.reactionsNegativeEnabled ? "public" : "none"
+                addReaction: values.reactionsEnabled ? "signed" : "none",
+                addNegativeReaction: values.reactionsEnabled && values.reactionsNegativeEnabled ? "signed" : "none"
+            },
+            commentOperations: {
+                view: values.hideComments ? "private" : "unset"
             }
         };
     },

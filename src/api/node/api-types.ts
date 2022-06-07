@@ -774,6 +774,17 @@ export interface DraftInfoBase<B> {
         addReaction?: PrincipalValue | null;
         addNegativeReaction?: PrincipalValue | null;
     } | null;
+    commentOperations?: {
+        view?: PrincipalValue | null;
+        viewReactions?: PrincipalValue | null;
+        viewNegativeReactions?: PrincipalValue | null;
+        viewReactionTotals?: PrincipalValue | null;
+        viewNegativeReactionTotals?: PrincipalValue | null;
+        viewReactionRatios?: PrincipalValue | null;
+        viewNegativeReactionRatios?: PrincipalValue | null;
+        addReaction?: PrincipalValue | null;
+        addNegativeReaction?: PrincipalValue | null;
+    } | null;
 }
 
 export type EncodedDraftInfo = DraftInfoBase<string>;
