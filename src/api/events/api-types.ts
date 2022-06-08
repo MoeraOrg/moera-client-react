@@ -1,4 +1,12 @@
-import { AvatarImage, AvatarInfo, DraftType, FeedStatus, StoryType, SubscriptionType } from "api/node/api-types";
+import {
+    AvatarImage,
+    AvatarInfo,
+    DraftType,
+    FeedStatus,
+    PrincipalValue,
+    StoryType,
+    SubscriptionType
+} from "api/node/api-types";
 
 export interface EventPacket {
     queueStartedAt: number;
@@ -161,8 +169,8 @@ export interface StoryEvent<T> extends BaseEvent<T> {
     remotePostingId?: string | null;
     remoteCommentId?: string | null;
     operations?: {
-        edit?: string[] | null;
-        delete?: string[] | null;
+        edit?: PrincipalValue | null;
+        delete?: PrincipalValue | null;
     } | null;
 }
 

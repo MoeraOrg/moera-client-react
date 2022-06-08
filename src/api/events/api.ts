@@ -582,17 +582,11 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             type: "object",
             properties: {
                 "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
+                    type: "string",
                     nullable: true
                 },
                 "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
+                    type: "string",
                     nullable: true
                 }
             },
@@ -706,17 +700,11 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             type: "object",
             properties: {
                 "edit": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
+                    type: "string",
                     nullable: true
                 },
                 "delete": {
-                    type: "array",
-                    items: {
-                        type: "string"
-                    },
+                    type: "string",
                     nullable: true
                 }
             },
