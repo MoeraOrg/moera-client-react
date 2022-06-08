@@ -11,6 +11,7 @@ import {
     AvatarOrdinal,
     CommentCreated,
     CommentInfo,
+    CommentMassAttributes,
     CommentSourceText,
     CommentsSliceInfo,
     CommentText,
@@ -498,6 +499,14 @@ export function* putRemoteComment(nodeName: string | null, remoteNodeName: strin
     return yield* callApi({
         nodeName, location: ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${id}`, method: "PUT",
         auth: true, body: commentText, schema: NodeApi.Result
+    });
+}
+
+export function* putComments(nodeName: string | null, postingId: string,
+                             attributes: CommentMassAttributes): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/postings/${postingId}/comments`, method: "PUT", auth: true, body: attributes,
+        schema: NodeApi.Result
     });
 }
 

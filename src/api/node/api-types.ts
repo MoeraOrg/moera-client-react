@@ -194,6 +194,23 @@ export interface PostingOperations {
     addNegativeReaction?: PrincipalValue | null;
 }
 
+export interface PostingOperationsInfo {
+    view?: PrincipalValue | null;
+    edit?: PrincipalValue | null;
+    delete?: PrincipalValue | null;
+    viewComments?: PrincipalValue | null;
+    addComment?: PrincipalValue | null;
+    overrideComment?: PrincipalValue | null;
+    viewReactions?: PrincipalValue | null;
+    viewNegativeReactions?: PrincipalValue | null;
+    viewReactionTotals?: PrincipalValue | null;
+    viewNegativeReactionTotals?: PrincipalValue | null;
+    viewReactionRatios?: PrincipalValue | null;
+    viewNegativeReactionRatios?: PrincipalValue | null;
+    addReaction?: PrincipalValue | null;
+    addNegativeReaction?: PrincipalValue | null;
+}
+
 export interface PostingText {
     ownerName?: string | null;
     ownerFullName?: string | null;
@@ -222,23 +239,6 @@ export interface PostingSourceText {
     acceptedReactions?: AcceptedReactions | null;
     operations?: PostingOperations | null;
     commentOperations?: CommentOperations | null;
-}
-
-export interface PostingOperationsInfo {
-    view?: PrincipalValue | null;
-    edit?: PrincipalValue | null;
-    delete?: PrincipalValue | null;
-    viewComments?: PrincipalValue | null;
-    addComment?: PrincipalValue | null;
-    overrideComment?: PrincipalValue | null;
-    viewReactions?: PrincipalValue | null;
-    viewNegativeReactions?: PrincipalValue | null;
-    viewReactionTotals?: PrincipalValue | null;
-    viewNegativeReactionTotals?: PrincipalValue | null;
-    viewReactionRatios?: PrincipalValue | null;
-    viewNegativeReactionRatios?: PrincipalValue | null;
-    addReaction?: PrincipalValue | null;
-    addNegativeReaction?: PrincipalValue | null;
 }
 
 export interface PostingInfoBase<B> {
@@ -351,6 +351,10 @@ export interface CommentSourceText {
     acceptedReactions?: AcceptedReactions | null;
     repliedToId?: string | null;
     operations?: CommentOperations | null;
+    seniorOperations?: CommentOperations | null;
+}
+
+export interface CommentMassAttributes {
     seniorOperations?: CommentOperations | null;
 }
 

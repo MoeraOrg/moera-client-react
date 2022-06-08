@@ -87,7 +87,7 @@ function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) 
 }
 
 function* composePostSaga(action: ComposePostAction) {
-    const {id, draftId, postingText} = action.payload;
+    const {id, draftId, postingText, prevState} = action.payload;
 
     try {
         let data;
@@ -104,6 +104,17 @@ function* composePostSaga(action: ComposePostAction) {
             }
         }
         yield* put(composePostSucceeded(data));
+
+        if (id != null) {
+            const hideComments = postingText.commentOperations?.view === "private";
+            if (hideComments !== prevState.hideComments) {
+                yield* call(Node.putComments, "", id, {
+                    seniorOperations: {
+                        view: postingText.commentOperations?.view
+                    }
+                });
+            }
+        }
     } catch (e) {
         yield* put(composePostFailed());
         yield* put(errorThrown(e));

@@ -316,7 +316,8 @@ const composePageLogic = {
         formik.props.composePost(
             formik.props.postingId,
             formik.props.draftId,
-            composePageLogic.mapValuesToPostingText(values, formik.props)
+            composePageLogic.mapValuesToPostingText(values, formik.props),
+            {hideComments: values.hideCommentsDefault}
         );
         let settings = [];
         if (values.bodyFormat.trim() !== formik.props.sourceFormatDefault) {

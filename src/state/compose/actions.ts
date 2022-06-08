@@ -64,15 +64,19 @@ export const composeConflictClose = (): ComposeConflictCloseAction => ({
 });
 
 export const COMPOSE_POST = "COMPOSE_POST";
+interface ComposePostPrevState {
+    hideComments: boolean;
+}
 export type ComposePostAction = ActionWithPayload<typeof COMPOSE_POST, {
     id: string | null;
     draftId: string | null;
     postingText: PostingText;
+    prevState: ComposePostPrevState;
 }>;
 export const composePost = (id: string | null, draftId: string | null,
-                            postingText: PostingText): ComposePostAction => ({
+                            postingText: PostingText, prevState: ComposePostPrevState): ComposePostAction => ({
     type: COMPOSE_POST,
-    payload: {id, draftId, postingText}
+    payload: {id, draftId, postingText, prevState}
 });
 
 export const COMPOSE_POST_SUCCEEDED = "COMPOSE_POST_SUCCEEDED";
