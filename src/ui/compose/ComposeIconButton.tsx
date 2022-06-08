@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default function ComposeIconButton({icon, name, changed = false, tooltip = null}: Props) {
-    const [{onBlur}, {value}, {setValue}] = useField<ComposePageToolsTab>("toolsTab");
+    const [, {value}, {setValue}] = useField<ComposePageToolsTab>("toolsTab");
 
     const onClick = (e: React.MouseEvent) => {
         setValue(value !== name ? name : null);
@@ -24,7 +24,7 @@ export default function ComposeIconButton({icon, name, changed = false, tooltip 
 
     return (
         <button className={cx("composer-icon", {"composer-icon-active": value === name})} title={tooltip ?? undefined}
-                onClick={onClick} onBlur={onBlur}>
+                onClick={onClick}>
             <FontAwesomeIcon icon={icon}/>
             {changed && <div className="changed"><FontAwesomeIcon icon="circle"/></div>}
         </button>
