@@ -403,7 +403,7 @@ const META: ClientSettingMetaInfo[] = [
     {
         name: "rich-text-editor.link-previews.max-automatic",
         type: "int",
-        defaultValue: "4",
+        defaultValue: "2",
         title: "Maximal number of link previews created automatically",
         modifiers: {
             min: 0,
