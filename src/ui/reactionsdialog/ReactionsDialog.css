@@ -134,14 +134,20 @@
     flex: auto;
 }
 
-.reactions-dialog .more {
+.reactions-dialog DIV.more {
     text-align: center;
-    color: var(--bs-primary);
-    border: solid 1px var(--bs-gray-500);
+    color: var(--bs-gray-500);
+    border-top: solid 1px var(--bs-gray-400);
     padding: 0.3rem;
-    cursor: pointer;
 }
 
-.reactions-dialog .more:hover {
+.reactions-dialog BUTTON.more {
+    width: 100%;
+    color: var(--bs-primary);
+    background-color: transparent;
+    border: solid 1px var(--bs-primary);
+}
+
+.reactions-dialog BUTTON.more:hover {
     background-color: var(--highlight);
 }

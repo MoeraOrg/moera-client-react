@@ -33,7 +33,7 @@ function* reactionsDialogPastReactionsLoadSaga() {
         posting: getPosting(state, state.reactionsDialog.postingId),
         commentId: state.reactionsDialog.commentId,
         negative: state.reactionsDialog.negative,
-        before: state.reactionsDialog.reactions.after,
+        before: state.reactionsDialog.reactions[state.reactionsDialog.activeTab ?? 0].after,
         emoji: state.reactionsDialog.activeTab
     }));
     if (posting == null) {

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { closeReactionsDialog } from "state/reactionsdialog/actions";
+import { closeReactionsDialog, reactionsDialogPastReactionsLoad } from "state/reactionsdialog/actions";
 import { AvatarWithPopup, CloseButton, Loading } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import Twemoji from "ui/twemoji/Twemoji";
@@ -12,6 +12,7 @@ import {
     getReactionsDialogItems,
     getReactionsDialogNodeName,
     getReactionsDialogRemainingCount,
+    isReactionsDialogReactionsAllLoaded,
     isReactionsDialogReactionsLoading
 } from "state/reactionsdialog/selectors";
 import { ClientState } from "state/state";
@@ -22,7 +23,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reactionsNodeName, remaining,
-                            reactionsLoading, reactions, closeReactionsDialog}: Props) => (
+                            reactionsLoading, reactionsLoaded, reactions, closeReactionsDialog,
+                            reactionsDialogPastReactionsLoad}: Props) => (
     <>
         <div className="totals clearfix">
             <TotalsTabs/>
@@ -50,7 +52,13 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
                 </div>
             )}
         </div>
-        {remaining > 0 && !reactionsLoading && <div className="more">{remaining} more</div>}
+        {remaining > 0 && !reactionsLoading &&
+            (reactionsLoaded ?
+                <div className="more">{remaining} more hidden</div>
+            :
+                <button className="more" onClick={reactionsDialogPastReactionsLoad}>{remaining} more</button>
+            )
+        }
         <Loading active={reactionsLoading}/>
     </>
 );
@@ -62,9 +70,10 @@ const connector = connect(
         reactionsNodeName: getReactionsDialogNodeName(state),
         remaining: getReactionsDialogRemainingCount(state),
         reactionsLoading: isReactionsDialogReactionsLoading(state),
+        reactionsLoaded: isReactionsDialogReactionsAllLoaded(state),
         reactions: getReactionsDialogItems(state)
     }),
-    { closeReactionsDialog }
+    { closeReactionsDialog, reactionsDialogPastReactionsLoad }
 );
 
 export default connector(ReactionsListView);

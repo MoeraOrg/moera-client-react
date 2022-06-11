@@ -28,7 +28,7 @@ function getReactions(state: ClientState): ReactionsDialogTabsState | null {
 }
 
 export function isReactionsDialogReactionsToBeLoaded(state: ClientState): boolean {
-    return getReactionsDialogItems(state).length === 0;
+    return !isReactionsDialogReactionsAllLoaded(state) && getReactionsDialogItems(state).length === 0;
 }
 
 export function isReactionsDialogReactionsLoading(state: ClientState): boolean {
@@ -44,6 +44,11 @@ export function getReactionsDialogItems(state: ClientState): ReactionInfo[] {
 export function getReactionsDialogRemainingCount(state: ClientState): number {
     const reactions = getReactions(state);
     return reactions != null ? reactions.total - reactions.items.length : 0;
+}
+
+export function isReactionsDialogReactionsAllLoaded(state: ClientState): boolean {
+    const reactions = getReactions(state);
+    return reactions != null && reactions.after <= Number.MIN_SAFE_INTEGER;
 }
 
 export function isReactionsDialogTotalsToBeLoaded(state: ClientState): boolean {
