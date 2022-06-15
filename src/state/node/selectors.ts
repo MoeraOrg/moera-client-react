@@ -143,9 +143,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             }
             break;
         default:
-            if (getNodePermissions(state).includes(principal)) { // FIXME not exactly
-                return true;
-            }
+            console.warn(`Don't know how to check '${principal}' principal`)
             break;
     }
     return false;

@@ -20,9 +20,21 @@ export function getPrincipalDisplay(principal: PrincipalValue | null | undefined
 
         case "private":
         case "owner":
-        case "admin":
             display.icon = "lock";
             display.title = "Only me";
+            break;
+
+        case "secret":
+        case "senior":
+            display.icon = "user-secret";
+            display.title = "Author";
+            break;
+
+        case "enigma":
+        case "major":
+        case "admin":
+            display.icon = "hat-cowboy";
+            display.title = "Admin";
             break;
 
         case "none":

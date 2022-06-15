@@ -492,7 +492,8 @@ export interface PostingFeatures {
     imageFormats: string[];
 }
 
-export type PrincipalValue = "none" | "private" | "admin" | "owner" | "signed" | "public" | "unset";
+export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
+    | "signed" | "public" | "unset";
 
 export interface SettingInfo {
     name: string;

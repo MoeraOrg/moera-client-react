@@ -32,6 +32,7 @@ import {
     faGlobe,
     faGlobeEurope,
     faHandHoldingHeart,
+    faHatCowboy,
     faHome,
     faImage,
     faItalic,
@@ -68,6 +69,7 @@ import {
     faUndoAlt,
     faUserCheck,
     faUserClock,
+    faUserSecret,
     faUserTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { faBitcoin, faEthereum, faMarkdown, faPatreon, faPaypal } from '@fortawesome/free-brands-svg-icons';
@@ -123,6 +125,7 @@ export default function initIconLibrary() {
     library.add(faGlobe);
     library.add(faGlobeEurope);
     library.add(faHandHoldingHeart);
+    library.add(faHatCowboy);
     library.add(faHome);
     library.add(faImage);
     library.add(faItalic);
@@ -166,5 +169,6 @@ export default function initIconLibrary() {
     library.add(faUser);
     library.add(faUserCheck);
     library.add(faUserClock);
+    library.add(faUserSecret);
     library.add(faUserTimes);
 }
