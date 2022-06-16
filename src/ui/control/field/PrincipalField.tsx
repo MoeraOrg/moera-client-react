@@ -19,7 +19,7 @@ interface Props {
 }
 
 export function PrincipalField({name, values, long, title, disabled, groupClassName, labelClassName, initialValue,
-                             defaultValue, setting}: Props) {
+                                defaultValue, setting}: Props) {
     const [{value}, {touched, error}, {setValue}, {undo, reset, onUndo, onReset}] =
         useUndoableField<PrincipalValue>(name, initialValue, defaultValue);
 
