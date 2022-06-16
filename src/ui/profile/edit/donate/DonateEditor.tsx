@@ -98,7 +98,7 @@ export default function DonateEditor({value, setValue}: Props) {
             <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
                 <SortableContext items={fundraiserIds}>
                     {value.map((fundraiser, index) =>
-                        <FundraiserButton index={index} fundraiser={fundraiser} dragged={index === dragged}
+                        <FundraiserButton key={index} index={index} fundraiser={fundraiser} dragged={index === dragged}
                                           onClick={onClick(index)}/>
                     )}
                 </SortableContext>
