@@ -47,12 +47,12 @@ export function getHomePermissions(state: ClientState): string[] {
 
 export function isNodeAdmin(state: ClientState): boolean {
     const permissions = getNodePermissions(state);
-    return isAtHomeNode(state) && permissions != null && permissions.includes("admin");
+    return isAtHomeNode(state) && permissions != null && permissions.includes("other");
 }
 
 export function isReceiverAdmin(state: ClientState, receiverName: string | null): boolean {
     const permissions = getHomePermissions(state);
-    return getHomeOwnerName(state) === receiverName && permissions != null && permissions.includes("admin");
+    return getHomeOwnerName(state) === receiverName && permissions != null && permissions.includes("other");
 }
 
 type AnyOperationsInfo = Partial<Record<string, PrincipalValue | null>>;

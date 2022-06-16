@@ -63,6 +63,9 @@ export interface ProfileAttributes {
     bioSrcFormat?: SourceFormat | null;
     avatarId?: string | null;
     fundraisers?: FundraiserInfo[] | null;
+    operations?: {
+        viewEmail?: PrincipalValue | null;
+    } | null;
 }
 
 export interface ProfileInfo {
@@ -75,6 +78,7 @@ export interface ProfileInfo {
     avatar?: AvatarInfo | null;
     fundraisers?: FundraiserInfo[] | null;
     operations?: {
+        viewEmail?: PrincipalValue | null;
         edit?: PrincipalValue | null;
     } | null;
 }

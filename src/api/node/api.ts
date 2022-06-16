@@ -184,6 +184,10 @@ const ProfileInfoType: JSONSchemaType<API.ProfileInfo> = {
         "operations": {
             type: "object",
             properties: {
+                "viewEmail": {
+                    type: "string",
+                    nullable: true
+                },
                 "edit": {
                     type: "string",
                     nullable: true

@@ -45,7 +45,8 @@ const emptyProfileInfo = {
     avatar: null,
     fundraisers: [],
     operations: {
-        edit: "none" as const
+        viewEmail: "admin" as const,
+        edit: "admin" as const
     }
 };
 
