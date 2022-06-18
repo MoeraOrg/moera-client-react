@@ -197,7 +197,7 @@ export function* putStory(nodeName: string | null, id: string,
 }
 
 export function* getPeopleGeneral(nodeName: string | null): CallApiResult<PeopleGeneralInfo> {
-    return yield* callApi({nodeName, location: "/people", schema: NodeApi.PeopleGeneralInfo});
+    return yield* callApi({nodeName, location: "/people", auth: true, schema: NodeApi.PeopleGeneralInfo});
 }
 
 export function* getSubscribers(nodeName: string | null, type: SubscriptionType): CallApiResult<SubscriberInfo[]> {

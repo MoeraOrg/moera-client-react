@@ -622,11 +622,13 @@ export interface ActivityReactionInfo {
 }
 
 export interface PeopleGeneralInfo {
-    feedSubscribersTotal: number;
-    feedSubscriptionsTotal: number;
+    feedSubscribersTotal?: number | null;
+    feedSubscriptionsTotal?: number | null;
     operations?: {
         viewSubscribers?: PrincipalValue | null;
         viewSubscriptions?: PrincipalValue | null;
+        viewSubscribersTotal?: PrincipalValue | null;
+        viewSubscriptionsTotal?: PrincipalValue | null;
     } | null;
 }
 

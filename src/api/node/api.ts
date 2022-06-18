@@ -2034,10 +2034,12 @@ const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
     type: "object",
     properties: {
         "feedSubscribersTotal": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         },
         "feedSubscriptionsTotal": {
-            type: "integer"
+            type: "integer",
+            nullable: true
         },
         "operations": {
             type: "object",
@@ -2049,13 +2051,20 @@ const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
                 "viewSubscriptions": {
                     type: "string",
                     nullable: true
+                },
+                "viewSubscribersTotal": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewSubscriptionsTotal": {
+                    type: "string",
+                    nullable: true
                 }
             },
             nullable: true,
             additionalProperties: false
         }
     },
-    required: ["feedSubscribersTotal", "feedSubscriptionsTotal"],
     additionalProperties: false
 };
 

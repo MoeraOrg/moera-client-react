@@ -7,8 +7,10 @@ import {
     isAtSubscriptionsTab,
     isPeopleGeneralToBeLoaded,
     isSubscribersToBeLoaded,
+    isSubscribersTotalVisible,
     isSubscribersVisible,
     isSubscriptionsToBeLoaded,
+    isSubscriptionsTotalVisible,
     isSubscriptionsVisible
 } from "state/people/selectors";
 import {
@@ -28,12 +30,12 @@ export default [
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
     trigger(
         PEOPLE_GENERAL_LOADED,
-        conj(isAtPeoplePage, inv(isSubscribersVisible), isAtSubscribersTab),
+        conj(isAtPeoplePage, inv(isSubscribersVisible), inv(isSubscribersTotalVisible), isAtSubscribersTab),
         peopleGoToTab("subscriptions")
     ),
     trigger(
         PEOPLE_GENERAL_LOADED,
-        conj(isAtPeoplePage, inv(isSubscriptionsVisible), isAtSubscriptionsTab),
+        conj(isAtPeoplePage, inv(isSubscriptionsVisible), inv(isSubscriptionsTotalVisible), isAtSubscriptionsTab),
         peopleGoToTab("subscribers")
     )
 ];

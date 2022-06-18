@@ -70,11 +70,11 @@ export const nodeCardStoriesSet = (nodeName: string, storiesTotal: number,
 export const NODE_CARD_PEOPLE_SET = "NODE_CARD_PEOPLE_SET";
 export type NodeCardPeopleSetAction = ActionWithPayload<typeof NODE_CARD_PEOPLE_SET, {
     nodeName: string;
-    subscribersTotal: number;
-    subscriptionsTotal: number;
+    subscribersTotal: number | null;
+    subscriptionsTotal: number | null;
 }>;
-export const nodeCardPeopleSet = (nodeName: string, subscribersTotal: number,
-                                  subscriptionsTotal: number): NodeCardPeopleSetAction => ({
+export const nodeCardPeopleSet = (nodeName: string, subscribersTotal: number | null,
+                                  subscriptionsTotal: number | null): NodeCardPeopleSetAction => ({
     type: NODE_CARD_PEOPLE_SET,
     payload: {nodeName, subscribersTotal, subscriptionsTotal}
 });

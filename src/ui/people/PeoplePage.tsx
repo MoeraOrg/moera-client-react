@@ -3,7 +3,6 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
-import { isSubscribersVisible, isSubscriptionsVisible } from "state/people/selectors";
 import { Avatar, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";
@@ -15,7 +14,7 @@ import "./PeoplePage.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName, subscribersVisible, subscriptionsVisible}: Props) => (
+const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => (
     <>
         <PageHeader>
             <h2>
@@ -28,10 +27,10 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName, subscribersVis
         <Page>
             <div className="people-page">
                 <PeopleTabs active={tab}/>
-                {(tab === "subscribers" && subscribersVisible) &&
+                {tab === "subscribers" &&
                     <SubscribersSubpage/>
                 }
-                {(tab === "subscriptions" && subscriptionsVisible) &&
+                {tab === "subscriptions" &&
                     <SubscriptionsSubpage/>
                 }
             </div>
@@ -44,9 +43,7 @@ const connector = connect(
         tab: state.people.tab,
         loadingGeneral: state.people.loadingGeneral,
         ownerAvatar: getOwnerAvatar(state),
-        ownerName: getOwnerName(state),
-        subscribersVisible: isSubscribersVisible(state),
-        subscriptionsVisible: isSubscriptionsVisible(state)
+        ownerName: getOwnerName(state)
     })
 );
 

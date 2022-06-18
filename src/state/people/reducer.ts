@@ -33,8 +33,8 @@ const initialState: PeopleState = {
     tab: "subscribers",
     loadingGeneral: false,
     loadedGeneral: false,
-    subscribersTotal: 0,
-    subscriptionsTotal: 0,
+    subscribersTotal: null,
+    subscriptionsTotal: null,
     loadingSubscribers: false,
     loadedSubscribers: false,
     subscribers: [],
@@ -81,8 +81,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return immutable.wrap(state)
                 .set("loadingGeneral", false)
                 .set("loadedGeneral", true)
-                .set("subscribersTotal", action.payload.info.feedSubscribersTotal)
-                .set("subscriptionsTotal", action.payload.info.feedSubscriptionsTotal)
+                .set("subscribersTotal", action.payload.info.feedSubscribersTotal ?? null)
+                .set("subscriptionsTotal", action.payload.info.feedSubscriptionsTotal ?? null)
                 .set("operations", action.payload.info.operations ?? {})
                 .value();
 

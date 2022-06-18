@@ -53,7 +53,7 @@ function* loadDetails(nodeName: string) {
 
 function* loadPeople(nodeName: string) {
     const data = yield* call(Node.getPeopleGeneral, nodeName);
-    yield* put(nodeCardPeopleSet(nodeName, data.feedSubscribersTotal, data.feedSubscriptionsTotal));
+    yield* put(nodeCardPeopleSet(nodeName, data.feedSubscribersTotal ?? null, data.feedSubscriptionsTotal ?? null));
 }
 
 function* loadStoriesAndSubscription(nodeName: string, homeOwnerName: string | null) {

@@ -6,8 +6,8 @@ export interface PeopleState {
     tab: PeopleTab;
     loadingGeneral: boolean;
     loadedGeneral: boolean;
-    subscribersTotal: number;
-    subscriptionsTotal: number;
+    subscribersTotal: number | null;
+    subscriptionsTotal: number | null;
     loadingSubscribers: boolean;
     loadedSubscribers: boolean;
     subscribers: SubscriberInfo[];
@@ -17,5 +17,7 @@ export interface PeopleState {
     operations: {
         viewSubscribers?: PrincipalValue | null;
         viewSubscriptions?: PrincipalValue | null;
+        viewSubscribersTotal?: PrincipalValue | null;
+        viewSubscriptionsTotal?: PrincipalValue | null;
     };
 }

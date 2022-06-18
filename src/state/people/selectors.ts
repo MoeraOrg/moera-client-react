@@ -28,3 +28,11 @@ export function isSubscribersVisible(state: ClientState): boolean {
 export function isSubscriptionsVisible(state: ClientState): boolean {
     return isPermitted("viewSubscriptions", state.people, "public", state);
 }
+
+export function isSubscribersTotalVisible(state: ClientState): boolean {
+    return isPermitted("viewSubscribersTotal", state.people, "public", state);
+}
+
+export function isSubscriptionsTotalVisible(state: ClientState): boolean {
+    return isPermitted("viewSubscriptionsTotal", state.people, "public", state);
+}

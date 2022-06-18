@@ -5,7 +5,6 @@ import cx from 'classnames';
 import { ClientState } from "state/state";
 import { peopleGoToTab } from "state/people/actions";
 import { PeopleTab } from "state/people/state";
-import { isSubscribersVisible, isSubscriptionsVisible } from "state/people/selectors";
 import "./PeopleTabs.css";
 
 interface TabProps {
@@ -27,14 +26,13 @@ type PeopleTabsProps = {
     active: PeopleTab;
 } & ConnectedProps<typeof connector>;
 
-const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal, subscribersVisible,
-                     subscriptionsVisible, peopleGoToTab}: PeopleTabsProps) => (
+const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal, peopleGoToTab}: PeopleTabsProps) => (
     <div className="people-tabs">
-        {subscribersVisible &&
+        {subscribersTotal != null &&
             <Tab name="subscribers" title="Subscribers" total={subscribersTotal} loaded={loadedGeneral}
                  active={active} peopleGoToTab={peopleGoToTab}/>
         }
-        {subscriptionsVisible &&
+        {subscriptionsTotal != null &&
             <Tab name="subscriptions" title="Subscriptions" total={subscriptionsTotal} loaded={loadedGeneral}
                  active={active} peopleGoToTab={peopleGoToTab}/>
         }
@@ -46,9 +44,7 @@ const connector = connect(
     (state: ClientState) => ({
         loadedGeneral: state.people.loadedGeneral,
         subscribersTotal: state.people.subscribersTotal,
-        subscriptionsTotal: state.people.subscriptionsTotal,
-        subscribersVisible: isSubscribersVisible(state),
-        subscriptionsVisible: isSubscriptionsVisible(state)
+        subscriptionsTotal: state.people.subscriptionsTotal
     }),
     { peopleGoToTab }
 );
