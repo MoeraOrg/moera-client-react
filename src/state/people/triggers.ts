@@ -1,4 +1,5 @@
-import { conj, trigger } from "state/trigger";
+import { conj, inv, trigger } from "state/trigger";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { GO_TO_PAGE, newLocation } from "state/navigation/actions";
 import { isAtPeoplePage } from "state/navigation/selectors";
 import {
@@ -6,13 +7,33 @@ import {
     isAtSubscriptionsTab,
     isPeopleGeneralToBeLoaded,
     isSubscribersToBeLoaded,
-    isSubscriptionsToBeLoaded
+    isSubscribersVisible,
+    isSubscriptionsToBeLoaded,
+    isSubscriptionsVisible
 } from "state/people/selectors";
-import { PEOPLE_GO_TO_TAB, peopleGeneralLoad, subscribersLoad, subscriptionsLoad } from "state/people/actions";
+import {
+    PEOPLE_GENERAL_LOADED,
+    PEOPLE_GO_TO_TAB,
+    peopleGeneralLoad,
+    peopleGoToTab,
+    subscribersLoad,
+    subscriptionsLoad
+} from "state/people/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtPeoplePage, peopleGeneralLoad),
     trigger(PEOPLE_GO_TO_TAB, true, newLocation),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscribersTab, isSubscribersToBeLoaded), subscribersLoad),
-    trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad)
+    trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
+    trigger(
+        PEOPLE_GENERAL_LOADED,
+        conj(isAtPeoplePage, inv(isSubscribersVisible), isAtSubscribersTab),
+        peopleGoToTab("subscriptions")
+    ),
+    trigger(
+        PEOPLE_GENERAL_LOADED,
+        conj(isAtPeoplePage, inv(isSubscriptionsVisible), isAtSubscriptionsTab),
+        peopleGoToTab("subscribers")
+    )
 ];

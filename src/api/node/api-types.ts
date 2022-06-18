@@ -624,6 +624,10 @@ export interface ActivityReactionInfo {
 export interface PeopleGeneralInfo {
     feedSubscribersTotal: number;
     feedSubscriptionsTotal: number;
+    operations?: {
+        viewSubscribers?: PrincipalValue | null;
+        viewSubscriptions?: PrincipalValue | null;
+    } | null;
 }
 
 export interface CommentCreatedBase<B> {

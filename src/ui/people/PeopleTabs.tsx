@@ -4,15 +4,17 @@ import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { peopleGoToTab } from "state/people/actions";
+import { PeopleTab } from "state/people/state";
+import { isSubscribersVisible, isSubscriptionsVisible } from "state/people/selectors";
 import "./PeopleTabs.css";
 
 interface TabProps {
-    name: string;
+    name: PeopleTab;
     title: string;
     total: number;
     loaded: boolean;
     active: string;
-    peopleGoToTab: (tab: string) => void;
+    peopleGoToTab: (tab: PeopleTab) => void;
 }
 
 const Tab = ({name, title, total, loaded, active, peopleGoToTab}: TabProps) => (
@@ -22,15 +24,20 @@ const Tab = ({name, title, total, loaded, active, peopleGoToTab}: TabProps) => (
 );
 
 type PeopleTabsProps = {
-    active: string;
+    active: PeopleTab;
 } & ConnectedProps<typeof connector>;
 
-const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal, peopleGoToTab}: PeopleTabsProps) => (
+const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal, subscribersVisible,
+                     subscriptionsVisible, peopleGoToTab}: PeopleTabsProps) => (
     <div className="people-tabs">
-        <Tab name="subscribers" title="Subscribers" total={subscribersTotal} loaded={loadedGeneral} active={active}
-             peopleGoToTab={peopleGoToTab}/>
-        <Tab name="subscriptions" title="Subscriptions" total={subscriptionsTotal} loaded={loadedGeneral} active={active}
-             peopleGoToTab={peopleGoToTab}/>
+        {subscribersVisible &&
+            <Tab name="subscribers" title="Subscribers" total={subscribersTotal} loaded={loadedGeneral}
+                 active={active} peopleGoToTab={peopleGoToTab}/>
+        }
+        {subscriptionsVisible &&
+            <Tab name="subscriptions" title="Subscriptions" total={subscriptionsTotal} loaded={loadedGeneral}
+                 active={active} peopleGoToTab={peopleGoToTab}/>
+        }
         <div className="rest"/>
     </div>
 );
@@ -39,7 +46,9 @@ const connector = connect(
     (state: ClientState) => ({
         loadedGeneral: state.people.loadedGeneral,
         subscribersTotal: state.people.subscribersTotal,
-        subscriptionsTotal: state.people.subscriptionsTotal
+        subscriptionsTotal: state.people.subscriptionsTotal,
+        subscribersVisible: isSubscribersVisible(state),
+        subscriptionsVisible: isSubscriptionsVisible(state)
     }),
     { peopleGoToTab }
 );

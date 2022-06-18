@@ -1,5 +1,6 @@
 import { call, put } from 'typed-redux-saga/macro';
 
+import { NodeApiError } from "api";
 import { Node } from "api/node";
 import { errorThrown } from "state/error/actions";
 import {
@@ -33,20 +34,28 @@ function* peopleGeneralLoadSaga() {
 
 function* subscribersLoadSaga() {
     try {
-        const data = yield* call(Node.getSubscribers, "", "feed");
-        yield* put(subscribersLoaded(data));
+        const subscribers = yield* call(Node.getSubscribers, "", "feed");
+        yield* put(subscribersLoaded(subscribers));
     } catch (e) {
-        yield* put(subscribersLoadFailed());
-        yield* put(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            yield* put(subscribersLoaded([]));
+        } else {
+            yield* put(subscribersLoadFailed());
+            yield* put(errorThrown(e));
+        }
     }
 }
 
 function* subscriptionsLoadSaga() {
     try {
-        const data = yield* call(Node.getSubscriptions, "", "feed");
-        yield* put(subscriptionsLoaded(data));
+        const subscriptions = yield* call(Node.getSubscriptions, "", "feed");
+        yield* put(subscriptionsLoaded(subscriptions));
     } catch (e) {
-        yield* put(subscriptionsLoadFailed());
-        yield* put(errorThrown(e));
+        if (e instanceof NodeApiError) {
+            yield* put(subscriptionsLoaded([]));
+        } else {
+            yield* put(subscriptionsLoadFailed());
+            yield* put(errorThrown(e));
+        }
     }
 }

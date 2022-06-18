@@ -202,7 +202,8 @@ export function* getPeopleGeneral(nodeName: string | null): CallApiResult<People
 
 export function* getSubscribers(nodeName: string | null, type: SubscriptionType): CallApiResult<SubscriberInfo[]> {
     return yield* callApi({
-        nodeName, location: ut`/people/subscribers?type=${type}`, schema: NodeApi.SubscriberInfoArray
+        nodeName, location: ut`/people/subscribers?type=${type}`, auth: true, schema: NodeApi.SubscriberInfoArray,
+        errorFilter: ["authentication.required"]
     });
 }
 
@@ -231,7 +232,8 @@ export function* deleteSubscriber(nodeName: string | null, subscriberId: string)
 
 export function* getSubscriptions(nodeName: string | null, type: SubscriptionType): CallApiResult<SubscriptionInfo[]> {
     return yield* callApi({
-        nodeName, location: ut`/people/subscriptions?type=${type}`, schema: NodeApi.SubscriptionInfoArray
+        nodeName, location: ut`/people/subscriptions?type=${type}`, auth: true, schema: NodeApi.SubscriptionInfoArray,
+        errorFilter: ["authentication.required"]
     });
 }
 

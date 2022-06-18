@@ -29,7 +29,7 @@ import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { SubscriberInfo, SubscriptionInfo, SubscriptionType } from "api/node/api-types";
 
-const initialState = {
+const initialState: PeopleState = {
     tab: "subscribers",
     loadingGeneral: false,
     loadedGeneral: false,
@@ -40,7 +40,8 @@ const initialState = {
     subscribers: [],
     loadingSubscriptions: false,
     loadedSubscriptions: false,
-    subscriptions: []
+    subscriptions: [],
+    operations: {}
 };
 
 function sortSubscribers(list: SubscriberInfo[]): SubscriberInfo[] {
@@ -82,6 +83,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 .set("loadedGeneral", true)
                 .set("subscribersTotal", action.payload.info.feedSubscribersTotal)
                 .set("subscriptionsTotal", action.payload.info.feedSubscriptionsTotal)
+                .set("operations", action.payload.info.operations ?? {})
                 .value();
 
         case PEOPLE_GENERAL_LOAD_FAILED:

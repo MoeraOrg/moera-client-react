@@ -1,7 +1,9 @@
-import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+
+export type PeopleTab = "subscribers" | "subscriptions";
 
 export interface PeopleState {
-    tab: string;
+    tab: PeopleTab;
     loadingGeneral: boolean;
     loadedGeneral: boolean;
     subscribersTotal: number;
@@ -12,4 +14,8 @@ export interface PeopleState {
     loadingSubscriptions: boolean;
     loadedSubscriptions: boolean;
     subscriptions: SubscriptionInfo[];
+    operations: {
+        viewSubscribers?: PrincipalValue | null;
+        viewSubscriptions?: PrincipalValue | null;
+    };
 }

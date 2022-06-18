@@ -2,12 +2,13 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { PeopleGeneralInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { PeopleTab } from "state/people/state";
 
 export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";
 export type PeopleGoToTabAction = ActionWithPayload<typeof PEOPLE_GO_TO_TAB, {
-    tab: string;
+    tab: PeopleTab;
 }>;
-export const peopleGoToTab = (tab: string): PeopleGoToTabAction => ({
+export const peopleGoToTab = (tab: PeopleTab): PeopleGoToTabAction => ({
     type: PEOPLE_GO_TO_TAB,
     payload: {tab}
 });

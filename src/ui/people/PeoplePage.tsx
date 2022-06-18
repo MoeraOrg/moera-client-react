@@ -1,20 +1,21 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import PageHeader from "ui/page/PageHeader";
-import { Page } from "ui/page/Page";
+import { ClientState } from "state/state";
+import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
+import { isSubscribersVisible, isSubscriptionsVisible } from "state/people/selectors";
 import { Avatar, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import PageHeader from "ui/page/PageHeader";
+import { Page } from "ui/page/Page";
 import PeopleTabs from "ui/people/PeopleTabs";
 import SubscribersSubpage from "ui/people/SubscribersSubpage";
 import SubscriptionsSubpage from "ui/people/SubscriptionsSubpage";
-import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
-import { ClientState } from "state/state";
 import "./PeoplePage.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => (
+const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName, subscribersVisible, subscriptionsVisible}: Props) => (
     <>
         <PageHeader>
             <h2>
@@ -27,8 +28,12 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => (
         <Page>
             <div className="people-page">
                 <PeopleTabs active={tab}/>
-                {tab === "subscribers" && <SubscribersSubpage/>}
-                {tab === "subscriptions" && <SubscriptionsSubpage/>}
+                {(tab === "subscribers" && subscribersVisible) &&
+                    <SubscribersSubpage/>
+                }
+                {(tab === "subscriptions" && subscriptionsVisible) &&
+                    <SubscriptionsSubpage/>
+                }
             </div>
         </Page>
     </>
@@ -39,7 +44,9 @@ const connector = connect(
         tab: state.people.tab,
         loadingGeneral: state.people.loadingGeneral,
         ownerAvatar: getOwnerAvatar(state),
-        ownerName: getOwnerName(state)
+        ownerName: getOwnerName(state),
+        subscribersVisible: isSubscribersVisible(state),
+        subscriptionsVisible: isSubscriptionsVisible(state)
     })
 );
 
