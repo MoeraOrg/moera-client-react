@@ -9,9 +9,11 @@ import {
     SUBSCRIBERS_LOAD,
     SUBSCRIBERS_LOAD_FAILED,
     SUBSCRIBERS_LOADED,
+    SUBSCRIBERS_UNSET,
     SUBSCRIPTIONS_LOAD,
     SUBSCRIPTIONS_LOAD_FAILED,
-    SUBSCRIPTIONS_LOADED
+    SUBSCRIPTIONS_LOADED,
+    SUBSCRIPTIONS_UNSET
 } from "state/people/actions";
 import { FEED_SUBSCRIBED, FEED_UNSUBSCRIBED } from "state/feeds/actions";
 import {
@@ -102,6 +104,12 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
         case SUBSCRIBERS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscribers", false);
 
+        case SUBSCRIBERS_UNSET:
+            return immutable.wrap(state)
+                .set("loadedSubscribers", false)
+                .set("subscribers", [])
+                .value();
+
         case SUBSCRIPTIONS_LOAD:
             return immutable.set(state, "loadingSubscriptions", true);
 
@@ -114,6 +122,12 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
+
+        case SUBSCRIPTIONS_UNSET:
+            return immutable.wrap(state)
+                .set("loadedSubscriptions", false)
+                .set("subscriptions", [])
+                .value();
 
         case FEED_SUBSCRIBED: {
             const istate = immutable.wrap(state);

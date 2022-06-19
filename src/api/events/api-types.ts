@@ -63,8 +63,11 @@ export interface RemoteNodeFullNameChangedEvent extends BaseEvent<"REMOTE_NODE_F
     fullName?: string | null;
 }
 
-export interface PeopleChangedEvent extends BaseEvent<"PEOPLE_CHANGED"> {
+export interface SubscribersTotalChangedEvent extends BaseEvent<"SUBSCRIBERS_TOTAL_CHANGED"> {
     feedSubscribersTotal: number;
+}
+
+export interface SubscriptionsTotalChangedEvent extends BaseEvent<"SUBSCRIPTIONS_TOTAL_CHANGED"> {
     feedSubscriptionsTotal: number;
 }
 

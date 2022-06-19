@@ -55,6 +55,12 @@ export const subscribersLoadFailed = (): SubscribersLoadFailedAction => ({
     type: SUBSCRIBERS_LOAD_FAILED
 });
 
+export const SUBSCRIBERS_UNSET = "SUBSCRIBERS_UNSET";
+export type SubscribersUnsetAction = Action<typeof SUBSCRIBERS_UNSET>;
+export const subscribersUnset = (): SubscribersUnsetAction => ({
+    type: SUBSCRIBERS_UNSET
+});
+
 export const SUBSCRIPTIONS_LOAD = "SUBSCRIPTIONS_LOAD";
 export type SubscriptionsLoadAction = Action<typeof SUBSCRIPTIONS_LOAD>;
 export const subscriptionsLoad = (): SubscriptionsLoadAction => ({
@@ -76,6 +82,12 @@ export const subscriptionsLoadFailed = (): SubscriptionsLoadFailedAction => ({
     type: SUBSCRIPTIONS_LOAD_FAILED
 });
 
+export const SUBSCRIPTIONS_UNSET = "SUBSCRIPTIONS_UNSET";
+export type SubscriptionsUnsetAction = Action<typeof SUBSCRIPTIONS_UNSET>;
+export const subscriptionsUnset = (): SubscriptionsUnsetAction => ({
+    type: SUBSCRIPTIONS_UNSET
+});
+
 export type PeopleAnyAction =
     PeopleGoToTabAction
     | PeopleGeneralLoadAction
@@ -84,6 +96,8 @@ export type PeopleAnyAction =
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction
+    | SubscribersUnsetAction
     | SubscriptionsLoadAction
     | SubscriptionsLoadedAction
-    | SubscriptionsLoadFailedAction;
+    | SubscriptionsLoadFailedAction
+    | SubscriptionsUnsetAction;

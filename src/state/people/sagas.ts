@@ -15,11 +15,12 @@ import {
     subscriptionsLoadFailed
 } from "state/people/actions";
 import { executor } from "state/executor";
+import { introduced } from "state/init-selectors";
 
 export default [
-    executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga),
-    executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga),
-    executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga)
+    executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
+    executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga, introduced),
+    executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced)
 ];
 
 function* peopleGeneralLoadSaga() {

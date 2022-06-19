@@ -17,7 +17,6 @@ import {
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
-    PeopleChangedEvent,
     PingEvent,
     PostingAddedEvent,
     PostingCommentsChangedEvent,
@@ -49,8 +48,10 @@ import {
     StoryUpdatedEvent,
     SubscriberAddedEvent,
     SubscriberDeletedEvent,
+    SubscribersTotalChangedEvent,
     SubscriptionAddedEvent,
-    SubscriptionDeletedEvent
+    SubscriptionDeletedEvent,
+    SubscriptionsTotalChangedEvent
 } from "api/events/api-types";
 import { JSONSchemaType, ValidateFunction } from "ajv";
 
@@ -1139,7 +1140,7 @@ const RemoteNodeFullNameChangedEventType: JSONSchemaType<RemoteNodeFullNameChang
     required: ["type", "name"]
 };
 
-const PeopleChangedEventType: JSONSchemaType<PeopleChangedEvent> = {
+const SubscribersTotalChangedEventType: JSONSchemaType<SubscribersTotalChangedEvent> = {
     type: "object",
     properties: {
         "type": {
@@ -1147,13 +1148,24 @@ const PeopleChangedEventType: JSONSchemaType<PeopleChangedEvent> = {
         },
         "feedSubscribersTotal": {
             type: "integer"
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "feedSubscribersTotal"]
+};
+
+const SubscriptionsTotalChangedEventType: JSONSchemaType<SubscriptionsTotalChangedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
         },
         "feedSubscriptionsTotal": {
             type: "integer"
         }
     },
     additionalProperties: false,
-    required: ["type", "feedSubscribersTotal", "feedSubscriptionsTotal"]
+    required: ["type", "feedSubscriptionsTotal"]
 };
 
 const RemoteNodeAvatarChangedEventType: JSONSchemaType<RemoteNodeAvatarChangedEvent> = {
@@ -1316,7 +1328,8 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "REMOTE_COMMENT_VERIFIED": schema(RemoteCommentVerifiedEventType),
     "REMOTE_COMMENT_VERIFICATION_FAILED": schema(RemoteCommentVerificationFailedEventType),
     "REMOTE_NODE_FULL_NAME_CHANGED": schema(RemoteNodeFullNameChangedEventType),
-    "PEOPLE_CHANGED": schema(PeopleChangedEventType),
+    "SUBSCRIBERS_TOTAL_CHANGED": schema(SubscribersTotalChangedEventType),
+    "SUBSCRIPTIONS_TOTAL_CHANGED": schema(SubscriptionsTotalChangedEventType),
     "REMOTE_NODE_AVATAR_CHANGED": schema(RemoteNodeAvatarChangedEventType),
     "AVATAR_ADDED": schema(AvatarAddedEventType),
     "AVATAR_DELETED": schema(AvatarDeletedEventType),
@@ -1332,5 +1345,6 @@ export const ALLOWED_SELF_EVENTS = new Set([
     "STORY_UPDATED",
     "FEED_STATUS_UPDATED",
     "NODE_NAME_CHANGED",
-    "PEOPLE_CHANGED"
+    "SUBSCRIBERS_TOTAL_CHANGED",
+    "SUBSCRIPTIONS_TOTAL_CHANGED"
 ]);

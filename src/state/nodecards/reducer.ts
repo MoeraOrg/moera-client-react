@@ -20,10 +20,12 @@ import {
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
 import {
-    EVENT_HOME_PEOPLE_CHANGED,
     EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
-    EVENT_NODE_PEOPLE_CHANGED
+    EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED,
+    EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED,
+    EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED,
+    EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED
 } from "api/events/actions";
 import { NodeCardsState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
@@ -206,26 +208,38 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_NODE_PEOPLE_CHANGED: {
-            const {feedSubscribersTotal, feedSubscriptionsTotal} = action.payload;
+        case EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED: {
+            const {feedSubscribersTotal} = action.payload;
             const {ownerName} = action.context;
             if (ownerName != null && state[ownerName]) {
-                return immutable.assign(state, [ownerName], {
-                    subscribersTotal: feedSubscribersTotal,
-                    subscriptionsTotal: feedSubscriptionsTotal,
-                })
+                return immutable.set(state, [ownerName, "subscribersTotal"], feedSubscribersTotal);
             }
             return state;
         }
 
-        case EVENT_HOME_PEOPLE_CHANGED: {
-            const {feedSubscribersTotal, feedSubscriptionsTotal} = action.payload;
+        case EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED: {
+            const {feedSubscriptionsTotal} = action.payload;
+            const {ownerName} = action.context;
+            if (ownerName != null && state[ownerName]) {
+                return immutable.set(state, [ownerName, "subscriptionsTotal"], feedSubscriptionsTotal);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED: {
+            const {feedSubscribersTotal} = action.payload;
             const {homeOwnerName} = action.context;
             if (homeOwnerName != null && state[homeOwnerName]) {
-                return immutable.assign(state, [homeOwnerName], {
-                    subscribersTotal: feedSubscribersTotal,
-                    subscriptionsTotal: feedSubscriptionsTotal,
-                })
+                return immutable.set(state, [homeOwnerName, "subscribersTotal"], feedSubscribersTotal);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED: {
+            const {feedSubscriptionsTotal} = action.payload;
+            const {homeOwnerName} = action.context;
+            if (homeOwnerName != null && state[homeOwnerName]) {
+                return immutable.set(state, [homeOwnerName, "subscriptionsTotal"], feedSubscriptionsTotal);
             }
             return state;
         }

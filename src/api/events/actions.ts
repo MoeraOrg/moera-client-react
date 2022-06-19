@@ -16,7 +16,6 @@ import {
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
-    PeopleChangedEvent,
     PingEvent,
     PostingAddedEvent,
     PostingCommentsChangedEvent,
@@ -45,8 +44,10 @@ import {
     StoryUpdatedEvent,
     SubscriberAddedEvent,
     SubscriberDeletedEvent,
+    SubscribersTotalChangedEvent,
     SubscriptionAddedEvent,
-    SubscriptionDeletedEvent
+    SubscriptionDeletedEvent,
+    SubscriptionsTotalChangedEvent
 } from "api/events/api-types";
 import { ActionWithPayload } from "state/action-types";
 
@@ -95,8 +96,10 @@ export const EVENT_HOME_REMOTE_COMMENT_VERIFIED = "EVENT_HOME_REMOTE_COMMENT_VER
 export const EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED = "EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED";
 export const EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED = "EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED";
 export const EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED = "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED";
-export const EVENT_NODE_PEOPLE_CHANGED = "EVENT_NODE_PEOPLE_CHANGED";
-export const EVENT_HOME_PEOPLE_CHANGED = "EVENT_HOME_PEOPLE_CHANGED";
+export const EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED = "EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED";
+export const EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED = "EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED";
+export const EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED = "EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED";
+export const EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED = "EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED";
 export const EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED = "EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED";
 export const EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED = "EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED";
 export const EVENT_NODE_AVATAR_ADDED = "EVENT_NODE_AVATAR_ADDED";
@@ -129,7 +132,8 @@ export type ClientEventAction =
     | EventAction<FeedStatusUpdatedEvent>
     | EventAction<StoriesStatusUpdatedEvent>
     | EventAction<RemoteNodeFullNameChangedEvent>
-    | EventAction<PeopleChangedEvent>
+    | EventAction<SubscribersTotalChangedEvent>
+    | EventAction<SubscriptionsTotalChangedEvent>
     | EventAction<RemoteNodeAvatarChangedEvent>
     | EventAction<PostingAddedEvent>
     | EventAction<PostingUpdatedEvent>

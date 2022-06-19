@@ -18,13 +18,12 @@ import {
     PEOPLE_GO_TO_TAB,
     peopleGeneralLoad,
     peopleGoToTab,
-    subscribersLoad,
+    subscribersLoad, subscribersUnset, subscriptionsUnset,
     subscriptionsLoad
 } from "state/people/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtPeoplePage, peopleGeneralLoad),
     trigger(PEOPLE_GO_TO_TAB, true, newLocation),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscribersTab, isSubscribersToBeLoaded), subscribersLoad),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
@@ -37,5 +36,26 @@ export default [
         PEOPLE_GENERAL_LOADED,
         conj(isAtPeoplePage, inv(isSubscriptionsVisible), inv(isSubscriptionsTotalVisible), isAtSubscriptionsTab),
         peopleGoToTab("subscribers")
+    ),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtPeoplePage, peopleGeneralLoad),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtPeoplePage, isAtSubscribersTab),
+        subscribersLoad
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtPeoplePage, inv(isAtSubscribersTab)),
+        subscribersUnset
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtPeoplePage, isAtSubscriptionsTab),
+        subscriptionsLoad
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtPeoplePage, inv(isAtSubscriptionsTab)),
+        subscriptionsUnset
     )
 ];
