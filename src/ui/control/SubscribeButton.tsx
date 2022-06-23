@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { Button } from "ui/control/index";
 import { ClientState } from "state/state";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
+import { Button, DropdownMenu } from "ui/control";
 import "./SubscribeButton.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type Props = {
     show: boolean;
@@ -29,16 +30,39 @@ function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, h
         return null;
     }
 
+    const loading = !subscribed ? subscribing : unsubscribing;
+    if ((!subscribed && !subscribedToMe) || loading) {
+        return (
+            <Button variant="outline-primary" size="sm" className="subscribe-button" loading={loading}
+                    onClick={onSubscribe}>
+                Subscribe
+            </Button>
+        );
+    }
+
     return (
-        <Button variant="outline-primary" size="sm" className="subscribe-button"
-                loading={!subscribed ? subscribing: unsubscribing}
-                onClick={!subscribed ? onSubscribe : onUnsubscribe}>
+        <DropdownMenu className="btn btn-sm btn-outline-primary subscribe-button" items={[
+            {
+                title: "Subscribe back",
+                href: null,
+                onClick: onSubscribe,
+                show: !subscribed
+            },
+            {
+                title: "Unsubscribe",
+                href: null,
+                onClick: onUnsubscribe,
+                show: subscribed
+            }
+        ]}>
             {!subscribed ?
-                (!subscribedToMe ? "Subscribe" : "Subscribed to me")
+                "Subscribed to me"
             :
                 (!subscribedToMe ? "Subscribed" : "Mutually subscribed")
             }
-        </Button>
+            &nbsp;&nbsp;
+            <FontAwesomeIcon icon="chevron-down"/>
+        </DropdownMenu>
     );
 }
 
