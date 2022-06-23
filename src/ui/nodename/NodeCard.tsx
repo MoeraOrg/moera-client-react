@@ -42,6 +42,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
     const subscribersTotal = card.subscribersTotal ?? "?";
     const subscriptionsTotal = card.subscriptionsTotal ?? "?";
     const subscribed = card.subscribed ?? false;
+    const subscribedToMe = card.subscribedToMe ?? false;
     const {title, subscribing, unsubscribing, subscriberId} = card;
     return (
         <div className="node-card">
@@ -91,7 +92,8 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
                 <CopyMentionButton nodeName={nodeName} fullName={card.fullName ?? fullName ?? null}/>
                 <SubscribeButton show={nodeName !== homeOwnerName} ready={card.subscribed != null}
                                  subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
-                                 nodeName={nodeName} feedName="timeline" subscriberId={subscriberId}/>
+                                 nodeName={nodeName} feedName="timeline" subscriberId={subscriberId}
+                                 subscribedToMe={subscribedToMe}/>
             </div>
             <Loading active={card.loading}/>
         </div>

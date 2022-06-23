@@ -1,10 +1,11 @@
 import { FeedState } from "state/feeds/state";
-import { FeedStatus } from "api/node/api-types";
+import { FeedInfo, FeedStatus } from "api/node/api-types";
 
-export const emptyInfo = {
+export const emptyInfo: Omit<FeedInfo, "feedName"> = {
+    total: 0,
     subscriberId: null,
     operations: {
-        add: "none"
+        add: "none" as const
     }
 };
 
@@ -21,6 +22,7 @@ export const emptyFeed: FeedState = {
     loadedGeneral: false,
     subscribing: false,
     unsubscribing: false,
+    subscribedToMe: false,
     ...emptyInfo,
     loadingStatus: false,
     loadedStatus: false,

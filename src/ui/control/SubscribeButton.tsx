@@ -16,10 +16,11 @@ type Props = {
     nodeName: string;
     feedName: string;
     subscriberId: string | null;
+    subscribedToMe: boolean;
 } & ConnectedProps<typeof connector>;
 
 function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, homeSet, nodeName, feedName,
-                          subscriberId, feedSubscribe, feedUnsubscribe}: Props) {
+                          subscriberId, subscribedToMe, feedSubscribe, feedUnsubscribe}: Props) {
     const onSubscribe = () => feedSubscribe(nodeName, feedName);
 
     const onUnsubscribe = () => subscriberId != null && feedUnsubscribe(nodeName, feedName, subscriberId);
@@ -28,21 +29,17 @@ function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, h
         return null;
     }
 
-    if (!subscribed) {
-        return (
-            <Button variant="outline-primary" size="sm" className="subscribe-button" loading={subscribing}
-                    onClick={onSubscribe}>
-                Subscribe
-            </Button>
-        );
-    } else {
-        return (
-            <Button variant="outline-secondary" size="sm" className="subscribe-button" loading={unsubscribing}
-                    onClick={onUnsubscribe}>
-                Unsubscribe
-            </Button>
-        );
-    }
+    return (
+        <Button variant="outline-primary" size="sm" className="subscribe-button"
+                loading={!subscribed ? subscribing: unsubscribing}
+                onClick={!subscribed ? onSubscribe : onUnsubscribe}>
+            {!subscribed ?
+                (!subscribedToMe ? "Subscribe" : "Subscribed to me")
+            :
+                (!subscribedToMe ? "Subscribed" : "Mutually subscribed")
+            }
+        </Button>
+    );
 }
 
 const connector = connect(

@@ -29,18 +29,19 @@ import {
     FeedSubscribeAction,
     feedSubscribed,
     feedSubscribeFailed,
+    feedSubscriptionSet,
     FeedUnsubscribeAction,
     feedUnsubscribed,
     feedUnsubscribeFailed
 } from "state/feeds/actions";
 import { errorThrown } from "state/error/actions";
+import { WithContext } from "state/action-types";
+import { introduced } from "state/init-selectors";
+import { executor } from "state/executor";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
-import { executor } from "state/executor";
 import { toAvatarDescription } from "util/avatar";
-import { WithContext } from "state/action-types";
-import { introduced } from "state/init-selectors";
 
 export default [
     executor(FEED_GENERAL_LOAD, payload => payload.feedName, feedGeneralLoadSaga, introduced),
@@ -53,11 +54,14 @@ export default [
     executor(FEEDS_UPDATE, "", feedsUpdateSaga, introduced)
 ];
 
-function* feedGeneralLoadSaga(action: FeedGeneralLoadAction) {
+function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
     const {feedName} = action.payload;
     try {
         const info = yield* call(Node.getFeedGeneral, "", feedName);
         yield* put(feedGeneralSet(feedName, info));
+
+        const subscribers = yield* call(Node.getSubscribers, ":", "feed", action.context.ownerName);
+        yield* put(feedSubscriptionSet(feedName, subscribers.length > 0));
     } catch (e) {
         yield* put(feedGeneralLoadFailed(feedName));
         yield* put(errorThrown(e));

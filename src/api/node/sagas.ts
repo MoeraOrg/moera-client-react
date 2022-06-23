@@ -200,10 +200,11 @@ export function* getPeopleGeneral(nodeName: string | null): CallApiResult<People
     return yield* callApi({nodeName, location: "/people", auth: true, schema: NodeApi.PeopleGeneralInfo});
 }
 
-export function* getSubscribers(nodeName: string | null, type: SubscriptionType): CallApiResult<SubscriberInfo[]> {
+export function* getSubscribers(nodeName: string | null, type: SubscriptionType,
+                                remoteNodeName: string | null = null): CallApiResult<SubscriberInfo[]> {
+    const location = urlWithParameters("/people/subscribers", {type, nodeName: remoteNodeName});
     return yield* callApi({
-        nodeName, location: ut`/people/subscribers?type=${type}`, auth: true, schema: NodeApi.SubscriberInfoArray,
-        errorFilter: ["authentication.required"]
+        nodeName, location, auth: true, schema: NodeApi.SubscriberInfoArray, errorFilter: ["authentication.required"]
     });
 }
 
@@ -230,10 +231,11 @@ export function* deleteSubscriber(nodeName: string | null, subscriberId: string)
     });
 }
 
-export function* getSubscriptions(nodeName: string | null, type: SubscriptionType): CallApiResult<SubscriptionInfo[]> {
+export function* getSubscriptions(nodeName: string | null, type: SubscriptionType,
+                                  remoteNodeName: string | null = null): CallApiResult<SubscriptionInfo[]> {
+    const location = urlWithParameters("/people/subscriptions", {type, nodeName: remoteNodeName});
     return yield* callApi({
-        nodeName, location: ut`/people/subscriptions?type=${type}`, auth: true, schema: NodeApi.SubscriptionInfoArray,
-        errorFilter: ["authentication.required"]
+        nodeName, location, auth: true, schema: NodeApi.SubscriptionInfoArray, errorFilter: ["authentication.required"]
     });
 }
 

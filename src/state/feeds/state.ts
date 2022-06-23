@@ -1,19 +1,16 @@
-import { FeedStatus, StoryInfo } from "api/node/api-types";
+import { FeedInfo, FeedStatus, StoryInfo } from "api/node/api-types";
 
 export interface ExtStoryInfo extends Omit<StoryInfo, "feedName" | "posting" | "comment"> {
     postingId?: string;
     commentId?: string;
 }
 
-export interface FeedState {
+export interface FeedState extends Omit<FeedInfo, "feedName"> {
     loadingGeneral: boolean;
     loadedGeneral: boolean;
     subscribing: boolean;
     unsubscribing: boolean;
-    subscriberId: string | null;
-    operations: {
-        add: string;
-    }
+    subscribedToMe: boolean;
     loadingStatus: boolean;
     loadedStatus: boolean;
     status: FeedStatus;

@@ -5,6 +5,7 @@ import { Loading } from "ui/control";
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import {
+    getFeedSubscribedToMe,
     getFeedSubscriberId,
     isFeedGeneralLoading,
     isFeedGeneralReady,
@@ -22,12 +23,12 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 const FeedSubscribeButton = ({feedName, show, ownerName, generalReady, generalLoading, subscribed, subscribing,
-                              unsubscribing, subscriberId}: Props) => (
+                              unsubscribing, subscriberId, subscribedToMe}: Props) => (
     ownerName != null ?
         <>
             <SubscribeButton nodeName={ownerName} feedName={feedName} show={show} ready={generalReady}
                              subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
-                             subscriberId={subscriberId}/>
+                             subscriberId={subscriberId} subscribedToMe={subscribedToMe}/>
             <Loading active={generalLoading}/>
         </>
     :
@@ -43,7 +44,8 @@ const connector = connect(
         subscribed: isSubscribedToFeed(state, ownProps.feedName),
         subscribing: isSubscribingToFeed(state, ownProps.feedName),
         unsubscribing: isUnsubscribingFromFeed(state, ownProps.feedName),
-        subscriberId: getFeedSubscriberId(state, ownProps.feedName)
+        subscriberId: getFeedSubscriberId(state, ownProps.feedName),
+        subscribedToMe: getFeedSubscribedToMe(state, ownProps.feedName)
     })
 );
 

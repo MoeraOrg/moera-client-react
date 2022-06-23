@@ -591,6 +591,16 @@ export interface SubscriberInfo {
     fullName?: string | null;
     avatar?: AvatarImage | null;
     createdAt: number;
+    operations?: {
+        view?: PrincipalValue | null;
+        delete?: PrincipalValue | null;
+    } | null;
+    ownerOperations?: {
+        view?: PrincipalValue | null;
+    } | null;
+    adminOperations?: {
+        view?: PrincipalValue | null;
+    } | null;
 }
 
 export interface SubscriptionInfo {
@@ -604,6 +614,9 @@ export interface SubscriptionInfo {
     remoteFeedName?: string | null;
     remotePostingId?: string | null;
     createdAt: number;
+    operations?: {
+        view?: PrincipalValue | null;
+    } | null;
 }
 
 export interface RemotePosting {

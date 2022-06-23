@@ -14,6 +14,7 @@ export interface NodeCardState {
     subscribing: boolean;
     unsubscribing: boolean;
     subscriberId: string | null;
+    subscribedToMe: boolean | null;
     loading: boolean;
     loaded: boolean;
 }

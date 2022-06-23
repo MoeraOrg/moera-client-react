@@ -31,6 +31,16 @@ export const feedGeneralSet = (feedName: string, info: FeedInfo): FeedGeneralSet
     payload: {feedName, info}
 });
 
+export const FEED_SUBSCRIPTION_SET = "FEED_SUBSCRIPTION_SET";
+export type FeedSubscriptionSetAction = ActionWithPayload<typeof FEED_SUBSCRIPTION_SET, {
+    feedName: string;
+    subscribedToMe: boolean;
+}>;
+export const feedSubscriptionSet = (feedName: string, subscribedToMe: boolean): FeedSubscriptionSetAction => ({
+    type: FEED_SUBSCRIPTION_SET,
+    payload: {feedName, subscribedToMe}
+});
+
 export const FEED_GENERAL_UNSET = "FEED_GENERAL_UNSET";
 export type FeedGeneralUnsetAction = ActionWithPayload<typeof FEED_GENERAL_UNSET, {
     feedName: string;
@@ -292,6 +302,7 @@ export type FeedsAnyAction =
     FeedGeneralLoadAction
     | FeedGeneralLoadFailedAction
     | FeedGeneralSetAction
+    | FeedSubscriptionSetAction
     | FeedGeneralUnsetAction
     | FeedSubscribeAction
     | FeedSubscribedAction

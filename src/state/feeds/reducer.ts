@@ -23,6 +23,7 @@ import {
     FEED_SUBSCRIBE,
     FEED_SUBSCRIBE_FAILED,
     FEED_SUBSCRIBED,
+    FEED_SUBSCRIPTION_SET,
     FEED_UNSUBSCRIBE,
     FEED_UNSUBSCRIBE_FAILED,
     FEED_UNSUBSCRIBED,
@@ -155,6 +156,13 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     loadingGeneral: false,
                     loadedGeneral: true
                 })
+                .value();
+        }
+
+        case FEED_SUBSCRIPTION_SET: {
+            const {feedName, subscribedToMe} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "subscribedToMe"], subscribedToMe)
                 .value();
         }
 

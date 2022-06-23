@@ -1931,6 +1931,43 @@ const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
         },
         "createdAt": {
             type: "integer"
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                },
+                "delete": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
+        },
+        "ownerOperations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
+        },
+        "adminOperations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["id", "type", "nodeName", "createdAt"],
@@ -1981,6 +2018,17 @@ const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
         },
         "createdAt": {
             type: "integer"
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["id", "type", "remoteSubscriberId", "remoteNodeName", "createdAt"],

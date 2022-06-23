@@ -83,7 +83,11 @@ export function isFeedStatusToBeLoaded(state: ClientState, feedName: string): bo
 }
 
 export function getFeedSubscriberId(state: ClientState, feedName: string): string | null {
-    return getFeedState(state, feedName).subscriberId;
+    return getFeedState(state, feedName).subscriberId ?? null;
+}
+
+export function getFeedSubscribedToMe(state: ClientState, feedName: string): boolean {
+    return getFeedState(state, feedName).subscribedToMe;
 }
 
 export function getFeedNotViewed(state: ClientState, feedName: string): number | null {

@@ -79,15 +79,25 @@ export const nodeCardPeopleSet = (nodeName: string, subscribersTotal: number | n
     payload: {nodeName, subscribersTotal, subscriptionsTotal}
 });
 
-export const NODE_CARD_SUBSCRIPTION_SET = "NODE_CARD_SUBSCRIPTION_SET";
-export type NodeCardSubscriptionSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_SET, {
+export const NODE_CARD_SUBSCRIBER_SET = "NODE_CARD_SUBSCRIBER_SET";
+export type NodeCardSubscriberSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIBER_SET, {
     nodeName: string;
     subscriberId: string | null;
 }>;
-export const nodeCardSubscriptionSet = (nodeName: string,
-                                        subscriberId: string | null): NodeCardSubscriptionSetAction => ({
-    type: NODE_CARD_SUBSCRIPTION_SET,
+export const nodeCardSubscriberSet = (nodeName: string,
+                                      subscriberId: string | null): NodeCardSubscriberSetAction => ({
+    type: NODE_CARD_SUBSCRIBER_SET,
     payload: {nodeName, subscriberId}
+});
+
+export const NODE_CARD_SUBSCRIPTION_SET = "NODE_CARD_SUBSCRIPTION_SET";
+export type NodeCardSubscriptionSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_SET, {
+    nodeName: string;
+    subscribedToMe: boolean;
+}>;
+export const nodeCardSubscriptionSet = (nodeName: string, subscribedToMe: boolean): NodeCardSubscriptionSetAction => ({
+    type: NODE_CARD_SUBSCRIPTION_SET,
+    payload: {nodeName, subscribedToMe}
 });
 
 export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
@@ -114,6 +124,7 @@ export type NodeCardsAnyAction =
     | NodeCardDetailsSetAction
     | NodeCardStoriesSetAction
     | NodeCardPeopleSetAction
+    | NodeCardSubscriberSetAction
     | NodeCardSubscriptionSetAction
     | NodeCardsUnsetAction
     | NodeCardCopyMentionAction;

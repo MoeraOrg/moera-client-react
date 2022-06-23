@@ -8,6 +8,7 @@ import {
     NODE_CARD_LOADED,
     NODE_CARD_PEOPLE_SET,
     NODE_CARD_STORIES_SET,
+    NODE_CARD_SUBSCRIBER_SET,
     NODE_CARD_SUBSCRIPTION_SET,
     NODE_CARDS_UNSET
 } from "state/nodecards/actions";
@@ -27,14 +28,14 @@ import {
     EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED,
     EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED
 } from "api/events/actions";
-import { NodeCardsState } from "state/nodecards/state";
+import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 
 const initialState = {
 };
 
-const emptyCard = {
+const emptyCard: NodeCardState = {
     fullName: null,
     gender: null,
     title: null,
@@ -48,6 +49,7 @@ const emptyCard = {
     subscribing: false,
     unsubscribing: false,
     subscriberId: null,
+    subscribedToMe: null,
     loading: false,
     loaded: false
 };
@@ -112,13 +114,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case NODE_CARD_SUBSCRIPTION_SET: {
+        case NODE_CARD_SUBSCRIBER_SET: {
             const {nodeName, subscriberId} = action.payload;
             if (state[nodeName]) {
                 return immutable.assign(state, [nodeName], {
                     subscribed: subscriberId != null,
                     subscriberId
                 });
+            }
+            return state;
+        }
+
+        case NODE_CARD_SUBSCRIPTION_SET: {
+            const {nodeName, subscribedToMe} = action.payload;
+            if (state[nodeName]) {
+                return immutable.set(state, [nodeName, "subscribedToMe"], subscribedToMe);
             }
             return state;
         }

@@ -1,7 +1,8 @@
-import { all, call, put } from 'typed-redux-saga/macro';
+import { all, call, put } from 'typed-redux-saga';
+import clipboardCopy from 'clipboard-copy';
 
-import { executor } from "state/executor";
 import { NameResolvingError, Node } from "api";
+import { executor } from "state/executor";
 import {
     NODE_CARD_COPY_MENTION,
     NODE_CARD_LOAD,
@@ -12,13 +13,12 @@ import {
     nodeCardLoadFailed,
     nodeCardPeopleSet,
     nodeCardStoriesSet,
-    nodeCardSubscriptionSet
+    nodeCardSubscriberSet, nodeCardSubscriptionSet
 } from "state/nodecards/actions";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
-import clipboardCopy from "clipboard-copy";
-import { Browser } from "ui/browser";
 import { flashBox } from "state/flashbox/actions";
+import { Browser } from "ui/browser";
 import { mentionName } from "util/misc";
 
 export default [
@@ -33,7 +33,8 @@ function* nodeCardLoadSaga(action: WithContext<NodeCardLoadAction>) {
         yield* all([
             call(loadDetails, nodeName),
             call(loadPeople, nodeName),
-            call(loadStoriesAndSubscription, nodeName, homeOwnerName)
+            call(loadStoriesAndSubscription, nodeName, homeOwnerName),
+            call(loadSubscribedToMe, nodeName, homeOwnerName)
         ]);
         yield* put(nodeCardLoaded(nodeName));
     } catch (e) {
@@ -60,8 +61,16 @@ function* loadStoriesAndSubscription(nodeName: string, homeOwnerName: string | n
     const {total, lastCreatedAt = null, subscriberId = null} = yield* call(Node.getFeedGeneral, nodeName, "timeline");
     yield* put(nodeCardStoriesSet(nodeName, total, lastCreatedAt));
     if (nodeName !== homeOwnerName) {
-        yield* put(nodeCardSubscriptionSet(nodeName, subscriberId));
+        yield* put(nodeCardSubscriberSet(nodeName, subscriberId));
     }
+}
+
+function* loadSubscribedToMe(nodeName: string, homeOwnerName: string | null) {
+    if (homeOwnerName == null || nodeName === homeOwnerName) {
+        return;
+    }
+    const subscribers = yield* call(Node.getSubscribers, ":", "feed", nodeName);
+    yield* put(nodeCardSubscriptionSet(nodeName, subscribers.length > 0));
 }
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
