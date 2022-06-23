@@ -1,13 +1,13 @@
 import { fromUnixTime } from 'date-fns';
 import { isString } from 'formik';
 
-import { SettingType, SettingTypeModifiers } from "api/node/api-types";
+import { PrincipalValue, SettingType, SettingTypeModifiers } from "api/node/api-types";
 import { ClientSettingTypeModifiers } from "api/settings";
 import { Duration } from "util/duration";
 import { InfoQuantity } from "util/info-quantity";
 import { isNumber, parseBool } from "util/misc";
 
-export type SettingValue = boolean | number | Date | string;
+export type SettingValue = boolean | number | Date | string | PrincipalValue;
 type SettingModifiers = SettingTypeModifiers | ClientSettingTypeModifiers;
 
 export function toValue(type: SettingType, valueString: string): SettingValue {

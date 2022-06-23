@@ -1,6 +1,7 @@
 import { ClientSettings, SettingTypes } from "api";
 import { ClientSettingMetaInfo } from "api/settings";
 import { SettingValue } from "api/setting-types";
+import { SettingMetaInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 
 export function isAtSettingsNodeTab(state: ClientState): boolean {
@@ -25,6 +26,19 @@ export function isSettingsClientValuesLoaded(state: ClientState): boolean {
 
 export function getSettingsClientMeta(state: ClientState): Map<string, ClientSettingMetaInfo> {
     return state.settings.client.meta;
+}
+
+export function getSettingNodeMeta(state: ClientState, name: string): SettingMetaInfo | null {
+    return state.settings.node.meta.get(name) ?? null;
+}
+
+export function getSettingNode(state: ClientState, name: string): SettingValue | null {
+    const meta = getSettingNodeMeta(state, name);
+    if (!meta) {
+        return null;
+    }
+    const value = state.settings.node.values.get(name);
+    return SettingTypes.toValue(meta.type, value ?? meta.defaultValue ?? "");
 }
 
 export function getSettingMeta(state: ClientState, name: string): ClientSettingMetaInfo | null {

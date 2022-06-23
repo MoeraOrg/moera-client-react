@@ -19,6 +19,10 @@
     color: var(--bs-gray-800);
 }
 
+.people-tabs .tab .principal {
+    margin-left: .6em;
+}
+
 .people-tabs .tab.active {
     color: var(--bs-primary);
     cursor: default;
@@ -26,6 +30,10 @@
 }
 
 .people-tabs .tab.active:hover {
+    color: var(--bs-primary);
+}
+
+.people-tabs .tab.active .principal {
     color: var(--bs-primary);
 }
 
