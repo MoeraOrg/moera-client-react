@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getSettingNode } from "state/settings/selectors";
 import { peopleGoToTab } from "state/people/actions";
 import { PeopleTab } from "state/people/state";
 import PeopleTabsItem from "ui/people/PeopleTabsItem";
@@ -35,8 +33,8 @@ const connector = connect(
         loadedGeneral: state.people.loadedGeneral,
         subscribersTotal: state.people.subscribersTotal,
         subscriptionsTotal: state.people.subscriptionsTotal,
-        viewSubscribers: getSettingNode(state, "subscribers.view") as PrincipalValue,
-        viewSubscriptions: getSettingNode(state, "subscriptions.view") as PrincipalValue
+        viewSubscribers: state.people.operations.viewSubscribers ?? "public",
+        viewSubscriptions: state.people.operations.viewSubscriptions ?? "public"
     }),
     { peopleGoToTab }
 );

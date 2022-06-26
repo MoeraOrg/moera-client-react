@@ -5,6 +5,7 @@ import {
     PEOPLE_GENERAL_LOAD,
     PEOPLE_GENERAL_LOAD_FAILED,
     PEOPLE_GENERAL_LOADED,
+    PEOPLE_GENERAL_UNSET,
     PEOPLE_GO_TO_TAB,
     SUBSCRIBERS_LOAD,
     SUBSCRIBERS_LOAD_FAILED,
@@ -80,54 +81,62 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return immutable.set(state, "loadingGeneral", true);
 
         case PEOPLE_GENERAL_LOADED:
-            return immutable.wrap(state)
-                .set("loadingGeneral", false)
-                .set("loadedGeneral", true)
-                .set("subscribersTotal", action.payload.info.feedSubscribersTotal ?? null)
-                .set("subscriptionsTotal", action.payload.info.feedSubscriptionsTotal ?? null)
-                .set("operations", action.payload.info.operations ?? {})
-                .value();
+            return immutable.assign(state, "", {
+                loadingGeneral: false,
+                loadedGeneral: true,
+                subscribersTotal: action.payload.info.feedSubscribersTotal ?? null,
+                subscriptionsTotal: action.payload.info.feedSubscriptionsTotal ?? null,
+                operations: action.payload.info.operations ?? {}
+            });
 
         case PEOPLE_GENERAL_LOAD_FAILED:
             return immutable.set(state, "loadingGeneral", false);
+
+        case PEOPLE_GENERAL_UNSET:
+            return immutable.assign(state, "", {
+                loadedGeneral: false,
+                subscribersTotal: null,
+                subscriptionsTotal: null,
+                operations: {}
+            });
 
         case SUBSCRIBERS_LOAD:
             return immutable.set(state, "loadingSubscribers", true);
 
         case SUBSCRIBERS_LOADED:
-            return immutable.wrap(state)
-                .set("loadingSubscribers", false)
-                .set("loadedSubscribers", true)
-                .set("subscribers", sortSubscribers(action.payload.list))
-                .value();
+            return immutable.assign(state, "", {
+                loadingSubscribers: false,
+                loadedSubscribers: true,
+                subscribers: sortSubscribers(action.payload.list)
+            });
 
         case SUBSCRIBERS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscribers", false);
 
         case SUBSCRIBERS_UNSET:
-            return immutable.wrap(state)
-                .set("loadedSubscribers", false)
-                .set("subscribers", [])
-                .value();
+            return immutable.assign(state, "", {
+                loadedSubscribers: false,
+                subscribers: []
+            });
 
         case SUBSCRIPTIONS_LOAD:
             return immutable.set(state, "loadingSubscriptions", true);
 
         case SUBSCRIPTIONS_LOADED:
-            return immutable.wrap(state)
-                .set("loadingSubscriptions", false)
-                .set("loadedSubscriptions", true)
-                .set("subscriptions", sortSubscriptions(action.payload.list))
-                .value();
+            return immutable.assign(state, "", {
+                loadingSubscriptions: false,
+                loadedSubscriptions: true,
+                subscriptions: sortSubscriptions(action.payload.list)
+            });
 
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
 
         case SUBSCRIPTIONS_UNSET:
-            return immutable.wrap(state)
-                .set("loadedSubscriptions", false)
-                .set("subscriptions", [])
-                .value();
+            return immutable.assign(state, "", {
+                loadedSubscriptions: false,
+                subscriptions: []
+            });
 
         case FEED_SUBSCRIBED: {
             const istate = immutable.wrap(state);

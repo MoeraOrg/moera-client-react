@@ -34,6 +34,12 @@ export const peopleGeneralLoadFailed = (): PeopleGeneralLoadFailedAction => ({
     type: PEOPLE_GENERAL_LOAD_FAILED
 });
 
+export const PEOPLE_GENERAL_UNSET = "PEOPLE_GENERAL_UNSET";
+export type PeopleGeneralUnsetAction = Action<typeof PEOPLE_GENERAL_UNSET>;
+export const peopleGeneralUnset = (): PeopleGeneralUnsetAction => ({
+    type: PEOPLE_GENERAL_UNSET
+});
+
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -93,6 +99,7 @@ export type PeopleAnyAction =
     | PeopleGeneralLoadAction
     | PeopleGeneralLoadedAction
     | PeopleGeneralLoadFailedAction
+    | PeopleGeneralUnsetAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction
