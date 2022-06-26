@@ -18,8 +18,8 @@ interface Props {
 const PeopleTabsItem = ({name, title, principal, total, loaded, active, peopleGoToTab}: Props) => (
     <div className={cx("tab", {"active": name === active})} onClick={() => peopleGoToTab(name)}>
         {title}{loaded ? ` (${total})` : ""}
-        {(principal && principal !== "public") &&
-            <Principal value={principal} icons={{"admin": "lock"}}/>
+        {principal &&
+            <Principal value={principal} defaultValue="public" icons={{"admin": "lock"}}/>
         }
     </div>
 );

@@ -6,11 +6,3 @@
 .comment .owner-line .visibility .principal {
     margin-left: .4rem;
 }
-
-.comment .owner-line .visibility .principal.senior {
-    background-color: var(--bs-gray-500);
-    color: white;
-    border: 1px solid var(--bs-gray-500);
-    border-radius: 5px;
-    padding: 2px 4px;
-}
