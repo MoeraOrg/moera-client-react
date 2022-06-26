@@ -20,6 +20,10 @@ export function isSettingsNodeMetaToBeLoaded(state: ClientState): boolean {
     return !state.settings.node.loadedMeta && !state.settings.node.loadingMeta;
 }
 
+export function isSettingsClientValuesToBeLoaded(state: ClientState): boolean {
+    return !state.settings.client.loadedValues && !state.settings.client.loadingValues;
+}
+
 export function isSettingsClientValuesLoaded(state: ClientState): boolean {
     return state.settings.client.loadedValues;
 }
