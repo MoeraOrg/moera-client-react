@@ -582,6 +582,10 @@ export interface ReactionsSliceInfo {
 
 export type SubscriptionType = "feed" | "posting" | "posting-comments" | "profile";
 
+export interface SubscriberOperations {
+    view?: PrincipalValue | null;
+}
+
 export interface SubscriberInfo {
     id: string;
     type: SubscriptionType;
@@ -601,6 +605,10 @@ export interface SubscriberInfo {
     adminOperations?: {
         view?: PrincipalValue | null;
     } | null;
+}
+
+export interface SubscriptionOperations {
+    view?: PrincipalValue | null;
 }
 
 export interface SubscriptionInfo {

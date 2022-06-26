@@ -42,6 +42,9 @@ import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { toAvatarDescription } from "util/avatar";
+import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { getSettingNode } from "state/settings/selectors";
+import { PrincipalValue } from "api/node/api-types";
 
 export default [
     executor(FEED_GENERAL_LOAD, payload => payload.feedName, feedGeneralLoadSaga, introduced),
@@ -70,11 +73,16 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
 
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
     const {nodeName, feedName} = action.payload;
-    const {homeOwnerFullName, homeOwnerAvatar} = action.context;
+    const {homeOwnerFullName, homeOwnerAvatar, viewSubscriptions} = yield* select(state => ({
+        homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerAvatar: getHomeOwnerAvatar(state),
+        viewSubscriptions: getSettingNode(state, "subscriptions.view") as PrincipalValue
+    }));
+    const viewSubscriber: PrincipalValue = viewSubscriptions === "admin" ? "private" : viewSubscriptions;
     try {
         const whoAmI = yield* call(Node.getWhoAmI, nodeName);
         const subscriber = yield* call(Node.postFeedSubscriber, nodeName, feedName, homeOwnerFullName,
-            toAvatarDescription(homeOwnerAvatar));
+            toAvatarDescription(homeOwnerAvatar), {view: viewSubscriber});
         yield* call(Node.postFeedSubscription, ":", subscriber.id, nodeName, whoAmI.fullName ?? null,
             toAvatarDescription(whoAmI.avatar), feedName);
         yield* put(feedSubscribed(nodeName, whoAmI.fullName ?? null, whoAmI.avatar ?? null, feedName, subscriber));

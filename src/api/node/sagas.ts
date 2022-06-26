@@ -48,6 +48,7 @@ import {
     StoryAttributes,
     StoryInfo,
     SubscriberInfo,
+    SubscriberOperations,
     SubscriptionInfo,
     SubscriptionType,
     TokenCreated,
@@ -209,10 +210,11 @@ export function* getSubscribers(nodeName: string | null, type: SubscriptionType,
 }
 
 export function* postFeedSubscriber(nodeName: string | null, feedName: string, ownerFullName: string | null,
-                                    ownerAvatar: AvatarDescription | null): CallApiResult<SubscriberInfo> {
+                                    ownerAvatar: AvatarDescription | null,
+                                    operations: SubscriberOperations | null): CallApiResult<SubscriberInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscribers", method: "POST", auth: true,
-        body: {type: "feed", feedName, ownerFullName, ownerAvatar}, schema: NodeApi.SubscriberInfo
+        body: {type: "feed", feedName, ownerFullName, ownerAvatar, operations}, schema: NodeApi.SubscriberInfo
     });
 }
 

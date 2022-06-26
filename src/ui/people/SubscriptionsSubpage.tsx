@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { AvatarWithPopup, Loading } from "ui/control";
+import { AvatarWithPopup, Loading, Principal } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 
 type Props = ConnectedProps<typeof connector>;
@@ -15,6 +15,7 @@ const SubscriptionsSubpage = ({loading, subscriptions}: Props) => (
                 <AvatarWithPopup ownerName={sr.remoteNodeName} ownerFullName={sr.remoteFullName}
                                  avatar={sr.remoteAvatar} size={48}/>
                 <NodeName name={sr.remoteNodeName} fullName={sr.remoteFullName}/>
+                <Principal value={sr.operations?.view ?? "public"} defaultValue="public"/>
             </div>
         )}
     </div>
