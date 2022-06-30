@@ -1,34 +1,53 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
+import {
+    feedSubscribe,
+    feedSubscriberSetVisibility,
+    feedSubscriptionSetVisibility,
+    feedUnsubscribe
+} from "state/feeds/actions";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
+import { getNamingNameNodeUri } from "state/naming/selectors";
+import { isPrincipalIn } from "state/node/selectors";
+import { getSettingNode } from "state/settings/selectors";
 import { Button, DropdownMenu } from "ui/control";
 import "./SubscribeButton.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-type Props = {
+interface OwnProps {
     show: boolean;
     ready: boolean;
-    subscribed: boolean;
     subscribing: boolean;
     unsubscribing: boolean;
     nodeName: string;
     feedName: string;
-    subscriberId: string | null;
-    subscribedToMe: boolean;
-} & ConnectedProps<typeof connector>;
+    subscriber: SubscriberInfo | null;
+    subscription: SubscriptionInfo | null;
+}
 
-function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, homeSet, nodeName, feedName,
-                          subscriberId, subscribedToMe, feedSubscribe, feedUnsubscribe}: Props) {
-    const onSubscribe = () => feedSubscribe(nodeName, feedName);
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
-    const onUnsubscribe = () => subscriberId != null && feedUnsubscribe(nodeName, feedName, subscriberId);
-
+function SubscribeButton({show, ready, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
+                          homeSet, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
+                          subscriptionHidden, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
+                          feedSubscriptionSetVisibility}: Props) {
     if (!homeSet || !show || !ready) {
         return null;
     }
+
+    const onSubscribe = () => feedSubscribe(nodeName, feedName);
+
+    const onUnsubscribe = () => {
+        if (subscription != null) {
+            feedUnsubscribe(nodeName, feedName, subscription.remoteSubscriberId);
+        }
+    }
+
+    const subscribed = subscription != null;
+    const subscribedToMe = subscriber != null;
 
     const loading = !subscribed ? subscribing : unsubscribing;
     if ((!subscribed && !subscribedToMe) || loading) {
@@ -40,19 +59,75 @@ function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, h
         );
     }
 
+    const onSubscriptionHide = () => {
+        if (subscription?.remoteNodeName != null) {
+            feedSubscriptionSetVisibility(subscription?.remoteNodeName, subscription?.remoteSubscriberId, false);
+        }
+    }
+
+    const onSubscriptionShow = () => {
+        if (subscription?.remoteNodeName != null) {
+            feedSubscriptionSetVisibility(subscription?.remoteNodeName, subscription?.remoteSubscriberId, true);
+        }
+    };
+
+    const onSubscriberHide = () => {
+        if (subscriber?.id != null) {
+            feedSubscriberSetVisibility(subscriber?.id, false);
+        }
+    };
+
+    const onSubscriberShow = () => {
+        if (subscriber?.id != null) {
+            feedSubscriberSetVisibility(subscriber?.id, true);
+        }
+    };
+
+    const subscriptionHideable = subscribed && !subscriptionsHidden && !subscriptionHidden;
+    const subscriptionUnhideable = subscribed && !subscriptionsHidden && subscriptionHidden;
+    const subscriberHideable = subscribedToMe && !subscribersHidden && !subscriberHidden;
+    const subscriberUnhideable = subscribedToMe && !subscribersHidden && subscriberHidden;
+
     return (
         <DropdownMenu className="btn btn-sm btn-outline-primary subscribe-button" items={[
             {
                 title: "Subscribe back",
-                href: null,
+                href: peerHref,
                 onClick: onSubscribe,
                 show: !subscribed
             },
             {
                 title: "Unsubscribe",
-                href: null,
+                href: peerHref,
                 onClick: onUnsubscribe,
                 show: subscribed
+            },
+            {
+                divider: true
+            },
+            {
+                title: "Hide my subscription",
+                href: peerHref,
+                onClick: onSubscriptionHide,
+                show: subscriptionHideable
+            },
+            {
+                title: "Unhide my subscription",
+                href: peerHref,
+                onClick: onSubscriptionShow,
+                show: !subscriptionHideable && subscriptionUnhideable
+            },
+            {
+                title: "Hide subscription to me",
+                href: peerHref,
+                onClick: onSubscriberHide,
+                show: subscriberHideable
+            },
+            {
+                title: "Unhide subscription to me",
+                href: peerHref,
+                onClick: onSubscriberShow,
+                show: !subscriberHideable && subscriberUnhideable
             }
         ]}>
             {!subscribed ?
@@ -67,10 +142,15 @@ function SubscribeButton({show, ready, subscribed, subscribing, unsubscribing, h
 }
 
 const connector = connect(
-    (state: ClientState) => ({
-        homeSet: isConnectedToHome(state) && isHomeOwnerNameSet(state)
+    (state: ClientState, ownProps: OwnProps) => ({
+        homeSet: isConnectedToHome(state) && isHomeOwnerNameSet(state),
+        peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
+        subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
+        subscriptionsHidden: (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin",
+        subscriberHidden: isPrincipalIn("view", ownProps.subscriber, "unset", "private", {useOperations: "admin"}),
+        subscriptionHidden: isPrincipalIn("view", ownProps.subscription, "public", "private")
     }),
-    { feedSubscribe, feedUnsubscribe }
+    { feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility }
 );
 
 export default connector(SubscribeButton);

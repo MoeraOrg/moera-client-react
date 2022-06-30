@@ -13,7 +13,8 @@ import {
     nodeCardLoadFailed,
     nodeCardPeopleSet,
     nodeCardStoriesSet,
-    nodeCardSubscriberSet, nodeCardSubscriptionSet
+    nodeCardSubscriberSet,
+    nodeCardSubscriptionSet
 } from "state/nodecards/actions";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
@@ -33,8 +34,9 @@ function* nodeCardLoadSaga(action: WithContext<NodeCardLoadAction>) {
         yield* all([
             call(loadDetails, nodeName),
             call(loadPeople, nodeName),
-            call(loadStoriesAndSubscription, nodeName, homeOwnerName),
-            call(loadSubscribedToMe, nodeName, homeOwnerName)
+            call(loadStories, nodeName),
+            call(loadSubscriber, nodeName, homeOwnerName),
+            call(loadSubscription, nodeName, homeOwnerName)
         ]);
         yield* put(nodeCardLoaded(nodeName));
     } catch (e) {
@@ -57,20 +59,25 @@ function* loadPeople(nodeName: string) {
     yield* put(nodeCardPeopleSet(nodeName, data.feedSubscribersTotal ?? null, data.feedSubscriptionsTotal ?? null));
 }
 
-function* loadStoriesAndSubscription(nodeName: string, homeOwnerName: string | null) {
-    const {total, lastCreatedAt = null, subscriberId = null} = yield* call(Node.getFeedGeneral, nodeName, "timeline");
+function* loadStories(nodeName: string) {
+    const {total, lastCreatedAt = null} = yield* call(Node.getFeedGeneral, nodeName, "timeline");
     yield* put(nodeCardStoriesSet(nodeName, total, lastCreatedAt));
-    if (nodeName !== homeOwnerName) {
-        yield* put(nodeCardSubscriberSet(nodeName, subscriberId));
-    }
 }
 
-function* loadSubscribedToMe(nodeName: string, homeOwnerName: string | null) {
+function* loadSubscriber(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return;
     }
     const subscribers = yield* call(Node.getSubscribers, ":", "feed", nodeName);
-    yield* put(nodeCardSubscriptionSet(nodeName, subscribers.length > 0));
+    yield* put(nodeCardSubscriberSet(nodeName, subscribers?.[0]));
+}
+
+function* loadSubscription(nodeName: string, homeOwnerName: string | null) {
+    if (homeOwnerName == null || nodeName === homeOwnerName) {
+        return;
+    }
+    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", nodeName);
+    yield* put(nodeCardSubscriptionSet(nodeName, subscriptions?.[0]));
 }
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {

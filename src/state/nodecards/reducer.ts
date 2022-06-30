@@ -16,6 +16,8 @@ import {
     FEED_SUBSCRIBE,
     FEED_SUBSCRIBE_FAILED,
     FEED_SUBSCRIBED,
+    FEED_SUBSCRIBER_UPDATED,
+    FEED_SUBSCRIPTION_UPDATED,
     FEED_UNSUBSCRIBE,
     FEED_UNSUBSCRIBE_FAILED,
     FEED_UNSUBSCRIBED
@@ -45,13 +47,12 @@ const emptyCard: NodeCardState = {
     lastStoryCreatedAt: null,
     subscribersTotal: null,
     subscriptionsTotal: null,
-    subscribed: null,
     subscribing: false,
     unsubscribing: false,
-    subscriberId: null,
-    subscribedToMe: null,
     loading: false,
-    loaded: false
+    loaded: false,
+    subscriber: null,
+    subscription: null
 };
 
 export default (state: NodeCardsState = initialState, action: WithContext<ClientAction>): NodeCardsState => {
@@ -115,20 +116,17 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case NODE_CARD_SUBSCRIBER_SET: {
-            const {nodeName, subscriberId} = action.payload;
+            const {nodeName, subscriber} = action.payload;
             if (state[nodeName]) {
-                return immutable.assign(state, [nodeName], {
-                    subscribed: subscriberId != null,
-                    subscriberId
-                });
+                return immutable.set(state, [nodeName, "subscriber"], subscriber);
             }
             return state;
         }
 
         case NODE_CARD_SUBSCRIPTION_SET: {
-            const {nodeName, subscribedToMe} = action.payload;
+            const {nodeName, subscription} = action.payload;
             if (state[nodeName]) {
-                return immutable.set(state, [nodeName, "subscribedToMe"], subscribedToMe);
+                return immutable.set(state, [nodeName, "subscription"], subscription);
             }
             return state;
         }
@@ -142,14 +140,13 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case FEED_SUBSCRIBED: {
-            const {nodeName, subscriber} = action.payload;
+            const {nodeName, subscription} = action.payload;
             const {ownerName} = action.context;
             const istate = immutable.wrap(state);
             if (state[nodeName]) {
                 istate.assign([nodeName], {
                     subscribing: false,
-                    subscribed: true,
-                    subscriberId: subscriber.id
+                    subscription
                 });
                 if (nodeName !== ownerName) {
                     istate.update([nodeName, "subscribersTotal"], total => total + 1);
@@ -181,8 +178,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             if (state[nodeName]) {
                 istate.assign([nodeName], {
                     unsubscribing: false,
-                    subscribed: false,
-                    subscriberId: null
+                    subscription: null
                 });
                 if (nodeName !== ownerName) {
                     istate.update([nodeName, "subscribersTotal"], total => total > 0 ? total - 1 : 0);
@@ -195,6 +191,24 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             const {nodeName} = action.payload;
             if (state[nodeName]) {
                 return immutable.set(state, [nodeName, "unsubscribing"], false);
+            }
+            return state;
+        }
+
+        case FEED_SUBSCRIBER_UPDATED: {
+            const {nodeName, subscriber} = action.payload;
+            const {homeOwnerName} = action.context;
+            if (nodeName === homeOwnerName && state[subscriber.nodeName]) {
+                return immutable.set(state, [subscriber.nodeName, "subscriber"], subscriber);
+            }
+            return state;
+        }
+
+        case FEED_SUBSCRIPTION_UPDATED: {
+            const {nodeName, subscription} = action.payload;
+            const {homeOwnerName} = action.context;
+            if (nodeName === homeOwnerName && state[subscription.remoteNodeName]) {
+                return immutable.set(state, [subscription.remoteNodeName, "subscription"], subscription);
             }
             return state;
         }

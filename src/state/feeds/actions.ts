@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo } from "api/node/api-types";
+import { FeedInfo, FeedStatus, StoryInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export const FEED_GENERAL_LOAD = "FEED_GENERAL_LOAD";
 export type FeedGeneralLoadAction = ActionWithPayload<typeof FEED_GENERAL_LOAD, {
@@ -31,14 +31,25 @@ export const feedGeneralSet = (feedName: string, info: FeedInfo): FeedGeneralSet
     payload: {feedName, info}
 });
 
+export const FEED_SUBSCRIBER_SET = "FEED_SUBSCRIBER_SET";
+export type FeedSubscriberSetAction = ActionWithPayload<typeof FEED_SUBSCRIBER_SET, {
+    feedName: string;
+    subscriber: SubscriberInfo | null;
+}>;
+export const feedSubscriberSet = (feedName: string, subscriber: SubscriberInfo | null): FeedSubscriberSetAction => ({
+    type: FEED_SUBSCRIBER_SET,
+    payload: {feedName, subscriber}
+});
+
 export const FEED_SUBSCRIPTION_SET = "FEED_SUBSCRIPTION_SET";
 export type FeedSubscriptionSetAction = ActionWithPayload<typeof FEED_SUBSCRIPTION_SET, {
     feedName: string;
-    subscribedToMe: boolean;
+    subscription: SubscriptionInfo | null;
 }>;
-export const feedSubscriptionSet = (feedName: string, subscribedToMe: boolean): FeedSubscriptionSetAction => ({
+export const feedSubscriptionSet = (feedName: string,
+                                    subscription: SubscriptionInfo | null): FeedSubscriptionSetAction => ({
     type: FEED_SUBSCRIPTION_SET,
-    payload: {feedName, subscribedToMe}
+    payload: {feedName, subscription}
 });
 
 export const FEED_GENERAL_UNSET = "FEED_GENERAL_UNSET";
@@ -63,15 +74,11 @@ export const feedSubscribe = (nodeName: string, feedName: string): FeedSubscribe
 export const FEED_SUBSCRIBED = "FEED_SUBSCRIBED";
 export type FeedSubscribedAction = ActionWithPayload<typeof FEED_SUBSCRIBED, {
     nodeName: string;
-    fullName: string | null;
-    avatar: AvatarImage | null;
-    feedName: string;
-    subscriber: SubscriberInfo;
+    subscription: SubscriptionInfo;
 }>;
-export const feedSubscribed = (nodeName: string, fullName: string | null, avatar: AvatarImage | null, feedName: string,
-                               subscriber: SubscriberInfo): FeedSubscribedAction => ({
+export const feedSubscribed = (nodeName: string, subscription: SubscriptionInfo): FeedSubscribedAction => ({
     type: FEED_SUBSCRIBED,
-    payload: {nodeName, fullName, avatar, feedName, subscriber}
+    payload: {nodeName, subscription}
 });
 
 export const FEED_SUBSCRIBE_FAILED = "FEED_SUBSCRIBE_FAILED";
@@ -113,6 +120,50 @@ export type FeedUnsubscribeFailedAction = ActionWithPayload<typeof FEED_UNSUBSCR
 export const feedUnsubscribeFailed = (nodeName: string, feedName: string): FeedUnsubscribeFailedAction => ({
     type: FEED_UNSUBSCRIBE_FAILED,
     payload: {nodeName, feedName}
+});
+
+export const FEED_SUBSCRIBER_SET_VISIBILITY = "FEED_SUBSCRIBER_SET_VISIBILITY";
+export type FeedSubscriberSetVisibilityAction = ActionWithPayload<typeof FEED_SUBSCRIBER_SET_VISIBILITY, {
+    subscriberId: string;
+    visible: boolean;
+}>;
+export const feedSubscriberSetVisibility = (subscriberId: string,
+                                            visible: boolean): FeedSubscriberSetVisibilityAction => ({
+    type: FEED_SUBSCRIBER_SET_VISIBILITY,
+    payload: {subscriberId, visible}
+});
+
+export const FEED_SUBSCRIPTION_SET_VISIBILITY = "FEED_SUBSCRIPTION_SET_VISIBILITY";
+export type FeedSubscriptionSetVisibilityAction = ActionWithPayload<typeof FEED_SUBSCRIPTION_SET_VISIBILITY, {
+    nodeName: string;
+    subscriberId: string;
+    visible: boolean;
+}>;
+export const feedSubscriptionSetVisibility = (nodeName: string, subscriberId: string,
+                                              visible: boolean): FeedSubscriptionSetVisibilityAction => ({
+    type: FEED_SUBSCRIPTION_SET_VISIBILITY,
+    payload: {nodeName, subscriberId, visible}
+});
+
+export const FEED_SUBSCRIBER_UPDATED = "FEED_SUBSCRIBER_UPDATED";
+export type FeedSubscriberUpdatedAction = ActionWithPayload<typeof FEED_SUBSCRIBER_UPDATED, {
+    nodeName: string;
+    subscriber: SubscriberInfo;
+}>;
+export const feedSubscriberUpdated = (nodeName: string, subscriber: SubscriberInfo): FeedSubscriberUpdatedAction => ({
+    type: FEED_SUBSCRIBER_UPDATED,
+    payload: {nodeName, subscriber}
+});
+
+export const FEED_SUBSCRIPTION_UPDATED = "FEED_SUBSCRIPTION_UPDATED";
+export type FeedSubscriptionUpdatedAction = ActionWithPayload<typeof FEED_SUBSCRIPTION_UPDATED, {
+    nodeName: string;
+    subscription: SubscriptionInfo;
+}>;
+export const feedSubscriptionUpdated = (nodeName: string,
+                                        subscription: SubscriptionInfo): FeedSubscriptionUpdatedAction => ({
+    type: FEED_SUBSCRIPTION_UPDATED,
+    payload: {nodeName, subscription}
 });
 
 export const FEED_STATUS_LOAD = "FEED_STATUS_LOAD";
@@ -302,6 +353,7 @@ export type FeedsAnyAction =
     FeedGeneralLoadAction
     | FeedGeneralLoadFailedAction
     | FeedGeneralSetAction
+    | FeedSubscriberSetAction
     | FeedSubscriptionSetAction
     | FeedGeneralUnsetAction
     | FeedSubscribeAction
@@ -310,6 +362,10 @@ export type FeedsAnyAction =
     | FeedUnsubscribeAction
     | FeedUnsubscribedAction
     | FeedUnsubscribeFailedAction
+    | FeedSubscriberSetVisibilityAction
+    | FeedSubscriptionSetVisibilityAction
+    | FeedSubscriberUpdatedAction
+    | FeedSubscriptionUpdatedAction
     | FeedStatusLoadAction
     | FeedStatusLoadFailedAction
     | FeedStatusSetAction

@@ -41,9 +41,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
     const storiesLastDate = card.lastStoryCreatedAt != null ? fromUnixTime(card.lastStoryCreatedAt) : null;
     const subscribersTotal = card.subscribersTotal ?? "?";
     const subscriptionsTotal = card.subscriptionsTotal ?? "?";
-    const subscribed = card.subscribed ?? false;
-    const subscribedToMe = card.subscribedToMe ?? false;
-    const {title, subscribing, unsubscribing, subscriberId} = card;
+    const {loading, loaded, title, fundraisers, subscribing, unsubscribing, subscriber, subscription} = card;
     return (
         <div className="node-card">
             <div className="main">
@@ -62,7 +60,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
                         <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
                     </div>
                     {title && <div className="title">{title}</div>}
-                    <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={card.fundraisers}
+                    <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={fundraisers}
                                   styles="small"/>
                 </div>
             </div>
@@ -90,12 +88,12 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
             </div>
             <div className="buttons">
                 <CopyMentionButton nodeName={nodeName} fullName={card.fullName ?? fullName ?? null}/>
-                <SubscribeButton show={nodeName !== homeOwnerName} ready={card.subscribed != null}
-                                 subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
-                                 nodeName={nodeName} feedName="timeline" subscriberId={subscriberId}
-                                 subscribedToMe={subscribedToMe}/>
+                <SubscribeButton show={nodeName !== homeOwnerName} ready={loaded != null}
+                                 subscribing={subscribing} unsubscribing={unsubscribing}
+                                 nodeName={nodeName} feedName="timeline" subscriber={subscriber}
+                                 subscription={subscription}/>
             </div>
-            <Loading active={card.loading}/>
+            <Loading active={loading}/>
         </div>
     );
 }

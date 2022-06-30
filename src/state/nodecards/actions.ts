@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage, FundraiserInfo } from "api/node/api-types";
+import { AvatarImage, FundraiserInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 export type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
@@ -82,22 +82,23 @@ export const nodeCardPeopleSet = (nodeName: string, subscribersTotal: number | n
 export const NODE_CARD_SUBSCRIBER_SET = "NODE_CARD_SUBSCRIBER_SET";
 export type NodeCardSubscriberSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIBER_SET, {
     nodeName: string;
-    subscriberId: string | null;
+    subscriber: SubscriberInfo | null;
 }>;
 export const nodeCardSubscriberSet = (nodeName: string,
-                                      subscriberId: string | null): NodeCardSubscriberSetAction => ({
+                                      subscriber: SubscriberInfo | null): NodeCardSubscriberSetAction => ({
     type: NODE_CARD_SUBSCRIBER_SET,
-    payload: {nodeName, subscriberId}
+    payload: {nodeName, subscriber}
 });
 
 export const NODE_CARD_SUBSCRIPTION_SET = "NODE_CARD_SUBSCRIPTION_SET";
 export type NodeCardSubscriptionSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_SET, {
     nodeName: string;
-    subscribedToMe: boolean;
+    subscription: SubscriptionInfo | null;
 }>;
-export const nodeCardSubscriptionSet = (nodeName: string, subscribedToMe: boolean): NodeCardSubscriptionSetAction => ({
+export const nodeCardSubscriptionSet = (nodeName: string,
+                                        subscription: SubscriptionInfo | null): NodeCardSubscriptionSetAction => ({
     type: NODE_CARD_SUBSCRIPTION_SET,
-    payload: {nodeName, subscribedToMe}
+    payload: {nodeName, subscription}
 });
 
 export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";

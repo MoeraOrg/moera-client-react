@@ -15,12 +15,7 @@ import {
     feedsUpdate,
     feedUnsubscribed
 } from "state/feeds/actions";
-import {
-    isFeedGeneralToBeLoaded,
-    isFeedStatusToBeLoaded,
-    isFeedToBeLoaded,
-    subscriptionToSubscriber
-} from "state/feeds/selectors";
+import { isFeedGeneralToBeLoaded, isFeedStatusToBeLoaded, isFeedToBeLoaded } from "state/feeds/selectors";
 import {
     EVENT_HOME_FEED_STATUS_UPDATED,
     EVENT_HOME_STORIES_STATUS_UPDATED,
@@ -171,10 +166,8 @@ export default [
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal: WithContext<EventAction<SubscriptionAddedEvent>>) =>
             getOwnerName(state) === signal.payload.remoteNodeName && signal.payload.remoteFeedName != null,
-        signal => feedSubscribed(signal.payload.remoteNodeName, signal.payload.remoteFullName ?? null,
-            signal.payload.remoteAvatar ?? null, signal.payload.remoteFeedName!,
-            subscriptionToSubscriber({...signal.payload, type: signal.payload.subscriptionType},
-                signal.context.homeOwnerName!, signal.context.homeOwnerFullName, signal.context.homeOwnerAvatar))
+        signal => feedSubscribed(signal.payload.remoteNodeName,
+            {...signal.payload, type: signal.payload.subscriptionType})
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,

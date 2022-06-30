@@ -64,9 +64,10 @@ export interface ProtectedObject {
     receiverOperations?: AnyOperationsInfo | PostingOperationsInfo | null;
     ownerOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
     seniorOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
+    adminOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
 }
 
-type ObjectOperations = "normal" | "receiver" | "owner" | "senior";
+type ObjectOperations = "normal" | "receiver" | "owner" | "senior" | "admin";
 
 function getOperations(object: ProtectedObject, useOperations: ObjectOperations): AnyOperationsInfo | null {
     switch (useOperations) {
@@ -78,6 +79,8 @@ function getOperations(object: ProtectedObject, useOperations: ObjectOperations)
             return object.ownerOperations as AnyOperationsInfo | null;
         case "senior":
             return object.seniorOperations as AnyOperationsInfo | null;
+        case "admin":
+            return object.adminOperations as AnyOperationsInfo | null;
     }
 }
 

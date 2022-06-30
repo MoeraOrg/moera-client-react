@@ -23,7 +23,10 @@ import {
     FEED_SUBSCRIBE,
     FEED_SUBSCRIBE_FAILED,
     FEED_SUBSCRIBED,
+    FEED_SUBSCRIBER_SET,
+    FEED_SUBSCRIBER_UPDATED,
     FEED_SUBSCRIPTION_SET,
+    FEED_SUBSCRIPTION_UPDATED,
     FEED_UNSUBSCRIBE,
     FEED_UNSUBSCRIBE_FAILED,
     FEED_UNSUBSCRIBED,
@@ -159,10 +162,17 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case FEED_SUBSCRIPTION_SET: {
-            const {feedName, subscribedToMe} = action.payload;
+        case FEED_SUBSCRIBER_SET: {
+            const {feedName, subscriber} = action.payload;
             return getFeed(state, feedName).istate
-                .set([feedName, "subscribedToMe"], subscribedToMe)
+                .set([feedName, "subscriber"], subscriber)
+                .value();
+        }
+
+        case FEED_SUBSCRIPTION_SET: {
+            const {feedName, subscription} = action.payload;
+            return getFeed(state, feedName).istate
+                .set([feedName, "subscription"], subscription)
                 .value();
         }
 
@@ -188,12 +198,13 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         }
 
         case FEED_SUBSCRIBED: {
-            const {nodeName, feedName, subscriber} = action.payload;
-            if (nodeName === action.context.ownerName) {
+            const {nodeName, subscription} = action.payload;
+            const feedName = subscription.remoteFeedName;
+            if (nodeName === action.context.ownerName && feedName != null) {
                 return getFeed(state, feedName).istate
                     .assign([feedName], {
                         subscribing: false,
-                        subscriberId: subscriber.id
+                        subscription: subscription
                     })
                     .value();
             }
@@ -226,7 +237,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 return getFeed(state, feedName).istate
                     .assign([feedName], {
                         unsubscribing: false,
-                        subscriberId: null
+                        subscription: null
                     })
                     .value();
             }
@@ -238,6 +249,30 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             if (nodeName === action.context.ownerName) {
                 return getFeed(state, feedName).istate
                     .set([feedName, "unsubscribing"], false)
+                    .value();
+            }
+            return state;
+        }
+
+        case FEED_SUBSCRIBER_UPDATED: {
+            const {nodeName, subscriber} = action.payload;
+            const {homeOwnerName, ownerName} = action.context;
+            const feedName = "timeline";
+            if (nodeName === homeOwnerName && subscriber.nodeName === ownerName) {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscriber"], subscriber)
+                    .value();
+            }
+            return state;
+        }
+
+        case FEED_SUBSCRIPTION_UPDATED: {
+            const {nodeName, subscription} = action.payload;
+            const {homeOwnerName, ownerName} = action.context;
+            const feedName = "timeline";
+            if (nodeName === homeOwnerName && subscription.remoteNodeName === ownerName) {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscription"], subscription)
                     .value();
             }
             return state;

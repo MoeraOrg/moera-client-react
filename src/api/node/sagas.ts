@@ -50,6 +50,7 @@ import {
     SubscriberInfo,
     SubscriberOperations,
     SubscriptionInfo,
+    SubscriptionOperations,
     SubscriptionType,
     TokenCreated,
     WhoAmI
@@ -226,6 +227,15 @@ export function* postPostingCommentsSubscriber(nodeName: string | null, postingI
     });
 }
 
+export function* putSubscriber(nodeName: string | null, subscriberId: string,
+                               operations: SubscriberOperations | null,
+                               adminOperations: SubscriberOperations | null): CallApiResult<SubscriberInfo> {
+    return yield* callApi({
+        nodeName, location: ut`/people/subscribers/${subscriberId}`, method: "PUT", auth: true,
+        body: {operations, adminOperations}, schema: NodeApi.SubscriberInfo
+    });
+}
+
 export function* deleteSubscriber(nodeName: string | null, subscriberId: string): CallApiResult<Result> {
     return yield* callApi({
         nodeName, location: ut`/people/subscribers/${subscriberId}`, method: "DELETE", auth: true,
@@ -264,6 +274,16 @@ export function* postPostingCommentsSubscription(nodeName: string | null, remote
             type: "posting-comments", remoteSubscriberId, remoteNodeName, remoteFullName, remoteAvatar, remotePostingId
         },
         schema: NodeApi.SubscriptionInfo
+    });
+}
+
+export function* putSubscription(nodeName: string | null, remoteSubscriberId: string,
+                                 remoteNodeName: string,
+                                 operations: SubscriptionOperations): CallApiResult<SubscriptionInfo> {
+    const location = urlWithParameters("/people/subscriptions",
+        {nodeName: remoteNodeName, subscriberId: remoteSubscriberId});
+    return yield* callApi({
+        nodeName, location, method: "PUT", auth: true, body: {operations}, schema: NodeApi.SubscriptionInfo
     });
 }
 

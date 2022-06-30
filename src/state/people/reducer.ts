@@ -16,7 +16,12 @@ import {
     SUBSCRIPTIONS_LOADED,
     SUBSCRIPTIONS_UNSET
 } from "state/people/actions";
-import { FEED_SUBSCRIBED, FEED_UNSUBSCRIBED } from "state/feeds/actions";
+import {
+    FEED_SUBSCRIBED,
+    FEED_SUBSCRIBER_UPDATED,
+    FEED_SUBSCRIPTION_UPDATED,
+    FEED_UNSUBSCRIBED
+} from "state/feeds/actions";
 import {
     EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
@@ -26,7 +31,7 @@ import {
     EVENT_NODE_SUBSCRIPTION_DELETED
 } from "api/events/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import { subscriberToSubscription } from "state/feeds/selectors";
+import { subscriptionToSubscriber } from "state/feeds/selectors";
 import { PeopleState } from "state/people/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
@@ -142,9 +147,11 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const istate = immutable.wrap(state);
             if (state.loadedSubscribers) {
                 let subscribers = state.subscribers;
-                if (action.context.ownerName === action.payload.nodeName) {
-                    subscribers = state.subscribers.filter(sr => sr.id !== action.payload.subscriber.id);
-                    subscribers.push(cloneDeep(action.payload.subscriber));
+                if (action.context.ownerName === action.payload.nodeName && action.context.homeOwnerName != null) {
+                    subscribers = state.subscribers
+                        .filter(sr => sr.id !== action.payload.subscription.remoteSubscriberId);
+                    subscribers.push(subscriptionToSubscriber(action.payload.subscription,
+                        action.context.homeOwnerName, action.context.homeOwnerFullName, action.context.homeOwnerAvatar));
                 }
                 if (subscribers.length !== state.subscribers.length) {
                     sortSubscribers(subscribers);
@@ -157,8 +164,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 if (action.context.ownerName === action.context.homeOwnerName) {
                     subscriptions = state.subscriptions
                         .filter(sr => sr.remoteNodeName !== action.payload.nodeName);
-                    subscriptions.push(subscriberToSubscription(action.payload.subscriber, "news",
-                        action.payload.nodeName, action.payload.fullName, action.payload.avatar));
+                    subscriptions.push(cloneDeep(action.payload.subscription));
                 }
                 if (subscriptions.length !== state.subscriptions.length) {
                     sortSubscriptions(subscriptions);
@@ -198,6 +204,36 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 }
             }
             return istate.value();
+        }
+
+        case FEED_SUBSCRIBER_UPDATED: {
+            const {nodeName, subscriber} = action.payload;
+            const {ownerName} = action.context;
+            if (state.loadedSubscribers && nodeName === ownerName) {
+                const subscribers = state.subscribers
+                    .map(
+                        sr => sr.nodeName === subscriber.nodeName && sr.feedName === subscriber.feedName
+                            ? subscriber
+                            : sr
+                    );
+                return immutable.set(state, "subscribers", subscribers);
+            }
+            return state;
+        }
+
+        case FEED_SUBSCRIPTION_UPDATED: {
+            const {nodeName, subscription} = action.payload;
+            const {ownerName} = action.context;
+            if (state.loadedSubscriptions && nodeName === ownerName) {
+                const subscriptions = state.subscriptions
+                    .map(
+                        sr => sr.remoteNodeName === subscription.remoteNodeName && sr.feedName === subscription.feedName
+                            ? subscription
+                            : sr
+                    );
+                return immutable.set(state, "subscriptions", subscriptions);
+            }
+            return state;
         }
 
         case EVENT_NODE_SUBSCRIBER_ADDED:

@@ -1,19 +1,18 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { Loading } from "ui/control";
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import {
-    getFeedSubscribedToMe,
-    getFeedSubscriberId,
+    getFeedSubscriber,
+    getFeedSubscription,
     isFeedGeneralLoading,
     isFeedGeneralReady,
-    isSubscribedToFeed,
     isSubscribingToFeed,
     isUnsubscribingFromFeed
 } from "state/feeds/selectors";
 import { getOwnerName, isOwnerNameSet } from "state/owner/selectors";
+import { Loading } from "ui/control";
 import SubscribeButton from "ui/control/SubscribeButton";
 
 interface OwnProps {
@@ -22,13 +21,13 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-const FeedSubscribeButton = ({feedName, show, ownerName, generalReady, generalLoading, subscribed, subscribing,
-                              unsubscribing, subscriberId, subscribedToMe}: Props) => (
+const FeedSubscribeButton = ({feedName, show, ownerName, generalReady, generalLoading, subscribing, unsubscribing,
+                              subscriber, subscription}: Props) => (
     ownerName != null ?
         <>
             <SubscribeButton nodeName={ownerName} feedName={feedName} show={show} ready={generalReady}
-                             subscribed={subscribed} subscribing={subscribing} unsubscribing={unsubscribing}
-                             subscriberId={subscriberId} subscribedToMe={subscribedToMe}/>
+                             subscribing={subscribing} unsubscribing={unsubscribing} subscriber={subscriber}
+                             subscription={subscription}/>
             <Loading active={generalLoading}/>
         </>
     :
@@ -41,11 +40,10 @@ const connector = connect(
         ownerName: getOwnerName(state),
         generalReady: isFeedGeneralReady(state, ownProps.feedName),
         generalLoading: isFeedGeneralLoading(state, ownProps.feedName),
-        subscribed: isSubscribedToFeed(state, ownProps.feedName),
         subscribing: isSubscribingToFeed(state, ownProps.feedName),
         unsubscribing: isUnsubscribingFromFeed(state, ownProps.feedName),
-        subscriberId: getFeedSubscriberId(state, ownProps.feedName),
-        subscribedToMe: getFeedSubscribedToMe(state, ownProps.feedName)
+        subscriber: getFeedSubscriber(state, ownProps.feedName),
+        subscription: getFeedSubscription(state, ownProps.feedName)
     })
 );
 
