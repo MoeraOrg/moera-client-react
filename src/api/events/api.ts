@@ -1,5 +1,11 @@
 import schema from "api/schema";
-import { AvatarImageType, AvatarInfoType, FeedStatusType } from "api/node/api";
+import {
+    AvatarImageType,
+    AvatarInfoType,
+    FeedStatusType,
+    SubscriberInfoType,
+    SubscriptionInfoType
+} from "api/node/api";
 import {
     AvatarAddedEvent,
     AvatarDeletedEvent,
@@ -48,10 +54,10 @@ import {
     StoryUpdatedEvent,
     SubscriberAddedEvent,
     SubscriberDeletedEvent,
-    SubscribersTotalChangedEvent,
+    SubscribersTotalChangedEvent, SubscriberUpdatedEvent,
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent,
-    SubscriptionsTotalChangedEvent
+    SubscriptionsTotalChangedEvent, SubscriptionUpdatedEvent
 } from "api/events/api-types";
 import { JSONSchemaType, ValidateFunction } from "ajv";
 
@@ -763,37 +769,22 @@ const SubscriberAddedEventType: JSONSchemaType<SubscriberAddedEvent> = {
         "type": {
             type: "string"
         },
-        "id": {
-            type: "string"
-        },
-        "subscriptionType": {
-            type: "string"
-        },
-        "feedName": {
-            type: "string",
-            nullable: true
-        },
-        "postingId": {
-            type: "string",
-            nullable: true
-        },
-        "nodeName": {
-            type: "string"
-        },
-        "fullName": {
-            type: "string",
-            nullable: true
-        },
-        "avatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
-        "createdAt": {
-            type: "integer"
-        }
+        "subscriber": SubscriberInfoType
     },
     additionalProperties: false,
-    required: ["type", "id", "subscriptionType", "nodeName", "createdAt"]
+    required: ["subscriber"]
+};
+
+const SubscriberUpdatedEventType: JSONSchemaType<SubscriberUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "subscriber": SubscriberInfoType
+    },
+    additionalProperties: false,
+    required: ["subscriber"]
 };
 
 const SubscriberDeletedEventType: JSONSchemaType<SubscriberDeletedEvent> = {
@@ -802,37 +793,10 @@ const SubscriberDeletedEventType: JSONSchemaType<SubscriberDeletedEvent> = {
         "type": {
             type: "string"
         },
-        "id": {
-            type: "string"
-        },
-        "subscriptionType": {
-            type: "string"
-        },
-        "feedName": {
-            type: "string",
-            nullable: true
-        },
-        "postingId": {
-            type: "string",
-            nullable: true
-        },
-        "nodeName": {
-            type: "string"
-        },
-        "fullName": {
-            type: "string",
-            nullable: true
-        },
-        "avatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
-        "createdAt": {
-            type: "integer"
-        }
+        "subscriber": SubscriberInfoType
     },
     additionalProperties: false,
-    required: ["type", "id", "subscriptionType", "nodeName", "createdAt"]
+    required: ["subscriber"]
 };
 
 const SubscriptionAddedEventType: JSONSchemaType<SubscriptionAddedEvent> = {
@@ -841,44 +805,22 @@ const SubscriptionAddedEventType: JSONSchemaType<SubscriptionAddedEvent> = {
         "type": {
             type: "string"
         },
-        "id": {
-            type: "string"
-        },
-        "subscriptionType": {
-            type: "string"
-        },
-        "feedName": {
-            type: "string",
-            nullable: true
-        },
-        "remoteSubscriberId": {
-            type: "string"
-        },
-        "remoteNodeName": {
-            type: "string"
-        },
-        "remoteFullName": {
-            type: "string",
-            nullable: true
-        },
-        "remoteAvatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
-        "remoteFeedName": {
-            type: "string",
-            nullable: true
-        },
-        "remotePostingId": {
-            type: "string",
-            nullable: true
-        },
-        "createdAt": {
-            type: "integer"
-        }
+        "subscription": SubscriptionInfoType
     },
     additionalProperties: false,
-    required: ["type", "id", "subscriptionType", "remoteSubscriberId", "remoteNodeName", "createdAt"]
+    required: ["subscription"]
+};
+
+const SubscriptionUpdatedEventType: JSONSchemaType<SubscriptionUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "subscription": SubscriptionInfoType
+    },
+    additionalProperties: false,
+    required: ["subscription"]
 };
 
 const SubscriptionDeletedEventType: JSONSchemaType<SubscriptionDeletedEvent> = {
@@ -887,44 +829,10 @@ const SubscriptionDeletedEventType: JSONSchemaType<SubscriptionDeletedEvent> = {
         "type": {
             type: "string"
         },
-        "id": {
-            type: "string"
-        },
-        "subscriptionType": {
-            type: "string"
-        },
-        "feedName": {
-            type: "string",
-            nullable: true
-        },
-        "remoteSubscriberId": {
-            type: "string"
-        },
-        "remoteNodeName": {
-            type: "string"
-        },
-        "remoteFullName": {
-            type: "string",
-            nullable: true
-        },
-        "remoteAvatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
-        "remoteFeedName": {
-            type: "string",
-            nullable: true
-        },
-        "remotePostingId": {
-            type: "string",
-            nullable: true
-        },
-        "createdAt": {
-            type: "integer"
-        }
+        "subscription": SubscriptionInfoType
     },
     additionalProperties: false,
-    required: ["type", "id", "subscriptionType", "remoteSubscriberId", "remoteNodeName", "createdAt"]
+    required: ["subscription"]
 };
 
 const CommentAddedEventType: JSONSchemaType<CommentAddedEvent> = {
@@ -1315,8 +1223,10 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "FEED_STATUS_UPDATED": schema(FeedStatusUpdatedEventType),
     "STORIES_STATUS_UPDATED": schema(StoriesStatusUpdatedEventType),
     "SUBSCRIBER_ADDED": schema(SubscriberAddedEventType),
+    "SUBSCRIBER_UPDATED": schema(SubscriberUpdatedEventType),
     "SUBSCRIBER_DELETED": schema(SubscriberDeletedEventType),
     "SUBSCRIPTION_ADDED": schema(SubscriptionAddedEventType),
+    "SUBSCRIPTION_UPDATED": schema(SubscriptionUpdatedEventType),
     "SUBSCRIPTION_DELETED": schema(SubscriptionDeletedEventType),
     "COMMENT_ADDED": schema(CommentAddedEventType),
     "COMMENT_UPDATED": schema(CommentUpdatedEventType),

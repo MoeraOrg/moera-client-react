@@ -1901,7 +1901,7 @@ const ReactionsSliceInfoType: JSONSchemaType<API.ReactionsSliceInfo> = {
 
 export const ReactionsSliceInfo = schema(ReactionsSliceInfoType);
 
-const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
+export const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
     type: "object",
     properties: {
         "id": {
@@ -1981,7 +1981,7 @@ export const SubscriberInfoArray = schema({
     items: SubscriberInfoType
 } as JSONSchemaType<API.SubscriberInfo[]>);
 
-const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
+export const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
     type: "object",
     properties: {
         "id": {

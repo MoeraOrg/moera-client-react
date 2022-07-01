@@ -45,9 +45,11 @@ import {
     SubscriberAddedEvent,
     SubscriberDeletedEvent,
     SubscribersTotalChangedEvent,
+    SubscriberUpdatedEvent,
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent,
-    SubscriptionsTotalChangedEvent
+    SubscriptionsTotalChangedEvent,
+    SubscriptionUpdatedEvent
 } from "api/events/api-types";
 import { ActionWithPayload } from "state/action-types";
 
@@ -83,9 +85,13 @@ export const EVENT_HOME_FEED_STATUS_UPDATED = "EVENT_HOME_FEED_STATUS_UPDATED";
 export const EVENT_NODE_STORIES_STATUS_UPDATED = "EVENT_NODE_STORIES_STATUS_UPDATED";
 export const EVENT_HOME_STORIES_STATUS_UPDATED = "EVENT_HOME_STORIES_STATUS_UPDATED";
 export const EVENT_NODE_SUBSCRIBER_ADDED = "EVENT_NODE_SUBSCRIBER_ADDED";
+export const EVENT_HOME_SUBSCRIBER_UPDATED = "EVENT_HOME_SUBSCRIBER_UPDATED";
+export const EVENT_NODE_SUBSCRIBER_UPDATED = "EVENT_NODE_SUBSCRIBER_UPDATED";
 export const EVENT_NODE_SUBSCRIBER_DELETED = "EVENT_NODE_SUBSCRIBER_DELETED";
 export const EVENT_NODE_SUBSCRIPTION_ADDED = "EVENT_NODE_SUBSCRIPTION_ADDED";
 export const EVENT_HOME_SUBSCRIPTION_ADDED = "EVENT_HOME_SUBSCRIPTION_ADDED";
+export const EVENT_HOME_SUBSCRIPTION_UPDATED = "EVENT_HOME_SUBSCRIPTION_UPDATED";
+export const EVENT_NODE_SUBSCRIPTION_UPDATED = "EVENT_NODE_SUBSCRIPTION_UPDATED";
 export const EVENT_NODE_SUBSCRIPTION_DELETED = "EVENT_NODE_SUBSCRIPTION_DELETED";
 export const EVENT_HOME_SUBSCRIPTION_DELETED = "EVENT_HOME_SUBSCRIPTION_DELETED";
 export const EVENT_RECEIVER_COMMENT_ADDED = "EVENT_RECEIVER_COMMENT_ADDED";
@@ -154,8 +160,10 @@ export type ClientEventAction =
     | EventAction<StoryDeletedEvent>
     | EventAction<StoryUpdatedEvent>
     | EventAction<SubscriberAddedEvent>
+    | EventAction<SubscriberUpdatedEvent>
     | EventAction<SubscriberDeletedEvent>
     | EventAction<SubscriptionAddedEvent>
+    | EventAction<SubscriptionUpdatedEvent>
     | EventAction<SubscriptionDeletedEvent>
     | EventAction<CommentAddedEvent>
     | EventAction<CommentUpdatedEvent>

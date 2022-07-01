@@ -5,7 +5,8 @@ import {
     FeedStatus,
     PrincipalValue,
     StoryType,
-    SubscriptionType
+    SubscriberInfo,
+    SubscriptionInfo
 } from "api/node/api-types";
 
 export interface EventPacket {
@@ -190,34 +191,22 @@ export interface StoryDeletedEvent extends BaseEvent<"STORY_DELETED"> {
 }
 
 interface SubscriberEvent<T> extends BaseEvent<T> {
-    id: string;
-    subscriptionType: SubscriptionType;
-    feedName?: string | null;
-    postingId?: string | null;
-    nodeName: string;
-    fullName?: string | null;
-    avatar?: AvatarImage | null;
-    createdAt: number;
+    subscriber: SubscriberInfo;
 }
 
 export type SubscriberAddedEvent = SubscriberEvent<"SUBSCRIBER_ADDED">;
 
+export type SubscriberUpdatedEvent = SubscriberEvent<"SUBSCRIBER_UPDATED">;
+
 export type SubscriberDeletedEvent = SubscriberEvent<"SUBSCRIBER_DELETED">;
 
 interface SubscriptionEvent<T> extends BaseEvent<T> {
-    id: string;
-    subscriptionType: SubscriptionType;
-    feedName?: string | null;
-    remoteSubscriberId: string;
-    remoteNodeName: string;
-    remoteFullName?: string | null;
-    remoteAvatar?: AvatarImage | null;
-    remoteFeedName?: string | null;
-    remotePostingId?: string | null;
-    createdAt: number;
+    subscription: SubscriptionInfo;
 }
 
 export type SubscriptionAddedEvent = SubscriptionEvent<"SUBSCRIPTION_ADDED">;
+
+export type SubscriptionUpdatedEvent = SubscriptionEvent<"SUBSCRIPTION_UPDATED">;
 
 export type SubscriptionDeletedEvent = SubscriptionEvent<"SUBSCRIPTION_DELETED">;
 

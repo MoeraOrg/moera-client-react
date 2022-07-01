@@ -35,7 +35,7 @@ import { subscriptionToSubscriber } from "state/feeds/selectors";
 import { PeopleState } from "state/people/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { SubscriberInfo, SubscriptionInfo, SubscriptionType } from "api/node/api-types";
+import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 const initialState: PeopleState = {
     tab: "subscribers",
@@ -237,14 +237,9 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
         }
 
         case EVENT_NODE_SUBSCRIBER_ADDED:
-            if (state.loadedSubscribers && action.payload.subscriptionType === "feed") {
-                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.id);
-                const subscriber: SubscriberInfo & {subscriptionType?: SubscriptionType} = {
-                    ...action.payload,
-                    type: "feed"
-                }
-                delete subscriber.subscriptionType;
-                subscribers.push(subscriber);
+            if (state.loadedSubscribers && action.payload.subscriber.type === "feed") {
+                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.subscriber.id);
+                subscribers.push(cloneDeep(action.payload.subscriber));
                 sortSubscribers(subscribers);
                 return immutable.wrap(state)
                     .set("subscribers", subscribers)
@@ -254,8 +249,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return state;
 
         case EVENT_NODE_SUBSCRIBER_DELETED:
-            if (state.loadedSubscribers && action.payload.subscriptionType === "feed") {
-                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.id);
+            if (state.loadedSubscribers && action.payload.subscriber.type === "feed") {
+                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.subscriber.id);
                 if (subscribers.length !== state.subscribers.length) {
                     return immutable.wrap(state)
                         .set("subscribers", subscribers)
@@ -266,14 +261,9 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return state;
 
         case EVENT_NODE_SUBSCRIPTION_ADDED:
-            if (state.loadedSubscriptions && action.payload.subscriptionType === "feed") {
-                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.id);
-                const subscription: SubscriptionInfo & {subscriptionType?: SubscriptionType} = {
-                    ...action.payload,
-                    type: "feed"
-                }
-                delete subscription.subscriptionType;
-                subscriptions.push(subscription);
+            if (state.loadedSubscriptions && action.payload.subscription.type === "feed") {
+                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.subscription.id);
+                subscriptions.push(cloneDeep(action.payload.subscription));
                 sortSubscriptions(subscriptions);
                 return immutable.wrap(state)
                     .set("subscriptions", subscriptions)
@@ -283,8 +273,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return state;
 
         case EVENT_NODE_SUBSCRIPTION_DELETED:
-            if (state.loadedSubscriptions && action.payload.subscriptionType === "feed") {
-                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.id);
+            if (state.loadedSubscriptions && action.payload.subscription.type === "feed") {
+                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.subscription.id);
                 if (subscriptions.length !== state.subscriptions.length) {
                     return immutable.wrap(state)
                         .set("subscriptions", subscriptions)

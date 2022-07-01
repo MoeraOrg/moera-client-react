@@ -11,6 +11,8 @@ import {
     feedStatusSet,
     feedStatusUpdated,
     feedSubscribed,
+    feedSubscriberUpdated,
+    feedSubscriptionUpdated,
     feedsUnset,
     feedsUpdate,
     feedUnsubscribed
@@ -22,13 +24,17 @@ import {
     EVENT_HOME_STORY_ADDED,
     EVENT_HOME_STORY_DELETED,
     EVENT_HOME_STORY_UPDATED,
+    EVENT_HOME_SUBSCRIBER_UPDATED,
     EVENT_HOME_SUBSCRIPTION_ADDED,
     EVENT_HOME_SUBSCRIPTION_DELETED,
+    EVENT_HOME_SUBSCRIPTION_UPDATED,
     EVENT_NODE_FEED_STATUS_UPDATED,
     EVENT_NODE_STORIES_STATUS_UPDATED,
     EVENT_NODE_STORY_ADDED,
     EVENT_NODE_STORY_DELETED,
     EVENT_NODE_STORY_UPDATED,
+    EVENT_NODE_SUBSCRIBER_UPDATED,
+    EVENT_NODE_SUBSCRIPTION_UPDATED,
     EventAction
 } from "api/events/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
@@ -44,8 +50,10 @@ import {
     StoryDeletedEvent,
     StoryEvent,
     StoryUpdatedEvent,
+    SubscriberUpdatedEvent,
     SubscriptionAddedEvent,
-    SubscriptionDeletedEvent
+    SubscriptionDeletedEvent,
+    SubscriptionUpdatedEvent
 } from "api/events/api-types";
 import { WithContext } from "state/action-types";
 import { StoryInfo } from "api/node/api-types";
@@ -165,42 +173,69 @@ export default [
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal: WithContext<EventAction<SubscriptionAddedEvent>>) =>
-            getOwnerName(state) === signal.payload.remoteNodeName && signal.payload.remoteFeedName != null,
-        signal => feedSubscribed(signal.payload.remoteNodeName,
-            {...signal.payload, type: signal.payload.subscriptionType})
+            getOwnerName(state) === signal.payload.subscription.remoteNodeName
+            && signal.payload.subscription.remoteFeedName != null,
+        signal => feedSubscribed(signal.payload.subscription.remoteNodeName, signal.payload.subscription)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal: EventAction<SubscriptionDeletedEvent>) =>
-            getOwnerName(state) === signal.payload.remoteNodeName && signal.payload.remoteFeedName != null,
-        signal => feedUnsubscribed(signal.payload.remoteNodeName, signal.payload.remoteFeedName!)
+            getOwnerName(state) === signal.payload.subscription.remoteNodeName
+            && signal.payload.subscription.remoteFeedName != null,
+        signal => feedUnsubscribed(signal.payload.subscription.remoteNodeName,
+            signal.payload.subscription.remoteFeedName!)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal: EventAction<SubscriptionAddedEvent>) =>
-            signal.payload.remotePostingId != null && getOwnerName(state) === signal.payload.remoteNodeName,
-        signal => postingSubscriptionSet(signal.payload.remotePostingId!, signal.payload.subscriptionType,
-            signal.payload.remoteSubscriberId)
+            signal.payload.subscription.remotePostingId != null
+            && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
+        signal => postingSubscriptionSet(signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
+            signal.payload.subscription.remoteSubscriberId)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal: EventAction<SubscriptionAddedEvent>) =>
-            signal.payload.remotePostingId != null && getOwnerName(state) !== signal.payload.remoteNodeName,
-        signal => remotePostingSubscriptionSet(signal.payload.remoteNodeName, signal.payload.remotePostingId!,
-            signal.payload.subscriptionType, signal.payload.remoteSubscriberId)
+            signal.payload.subscription.remotePostingId != null
+            && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
+        signal => remotePostingSubscriptionSet(signal.payload.subscription.remoteNodeName,
+            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
+            signal.payload.subscription.remoteSubscriberId)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal: EventAction<SubscriptionDeletedEvent>) =>
-            signal.payload.remotePostingId != null && getOwnerName(state) === signal.payload.remoteNodeName,
-        signal => postingSubscriptionSet(signal.payload.remotePostingId!, signal.payload.subscriptionType,
+            signal.payload.subscription.remotePostingId != null
+            && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
+        signal => postingSubscriptionSet(signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
             null)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal: EventAction<SubscriptionDeletedEvent>) =>
-            signal.payload.remotePostingId != null && getOwnerName(state) !== signal.payload.remoteNodeName,
-        signal => remotePostingSubscriptionSet(signal.payload.remoteNodeName, signal.payload.remotePostingId!,
-            signal.payload.subscriptionType, null)
+            signal.payload.subscription.remotePostingId != null
+            && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
+        signal => remotePostingSubscriptionSet(signal.payload.subscription.remoteNodeName,
+            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type, null)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIBER_UPDATED,
+        (state, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
+        signal => feedSubscriberUpdated(signal.context.homeOwnerName!, signal.payload.subscriber)
+    ),
+    trigger(
+        EVENT_NODE_SUBSCRIBER_UPDATED,
+        (state, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
+        signal => feedSubscriberUpdated(signal.context.ownerName!, signal.payload.subscriber)
+    ),
+    trigger(
+        EVENT_HOME_SUBSCRIPTION_UPDATED,
+        (state, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
+        signal => feedSubscriptionUpdated(signal.context.homeOwnerName!, signal.payload.subscription)
+    ),
+    trigger(
+        EVENT_NODE_SUBSCRIPTION_UPDATED,
+        (state, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
+        signal => feedSubscriptionUpdated(signal.context.ownerName!, signal.payload.subscription)
     )
 ];
