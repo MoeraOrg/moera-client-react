@@ -25,7 +25,11 @@ import {
 import {
     EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
+    EVENT_HOME_SUBSCRIBER_ADDED,
+    EVENT_HOME_SUBSCRIBER_DELETED,
     EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED,
+    EVENT_HOME_SUBSCRIPTION_ADDED,
+    EVENT_HOME_SUBSCRIPTION_DELETED,
     EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED,
     EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED,
     EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED
@@ -264,6 +268,44 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             const {homeOwnerName} = action.context;
             if (homeOwnerName != null && state[homeOwnerName]) {
                 return immutable.set(state, [homeOwnerName, "subscriptionsTotal"], feedSubscriptionsTotal);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIBER_ADDED: {
+            const {subscriber} = action.payload;
+            if (state[subscriber.nodeName]) {
+                return immutable.set(state, [subscriber.nodeName, "subscriber"], subscriber);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIBER_DELETED: {
+            const {subscriber} = action.payload;
+            if (state[subscriber.nodeName]) {
+                return immutable.set(state, [subscriber.nodeName, "subscriber"], null);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIPTION_ADDED: {
+            const {subscription} = action.payload;
+            if (state[subscription.remoteNodeName]) {
+                return immutable.assign(state, [subscription.remoteNodeName], {
+                    subscribing: false,
+                    subscription
+                });
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIPTION_DELETED: {
+            const {subscription} = action.payload;
+            if (state[subscription.remoteNodeName]) {
+                return immutable.assign(state, [subscription.remoteNodeName], {
+                    unsubscribing: false,
+                    subscription: null
+                });
             }
             return state;
         }

@@ -41,6 +41,12 @@ import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
 import { ClientAction } from "state/action";
 import { StoryInfo } from "api/node/api-types";
 import { WithContext } from "state/action-types";
+import {
+    EVENT_HOME_SUBSCRIBER_ADDED,
+    EVENT_HOME_SUBSCRIBER_DELETED,
+    EVENT_HOME_SUBSCRIPTION_ADDED,
+    EVENT_HOME_SUBSCRIPTION_DELETED
+} from "api/events/actions";
 
 const initialState = {
 };
@@ -273,6 +279,54 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             if (nodeName === homeOwnerName && subscription.remoteNodeName === ownerName) {
                 return getFeed(state, feedName).istate
                     .set([feedName, "subscription"], subscription)
+                    .value();
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIBER_ADDED: {
+            const {subscriber} = action.payload;
+            const {ownerName} = action.context;
+            const feedName = "timeline";
+            if (subscriber.nodeName === ownerName) {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscriber"], subscriber)
+                    .value();
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIBER_DELETED: {
+            const {subscriber} = action.payload;
+            const {ownerName} = action.context;
+            const feedName = "timeline";
+            if (subscriber.nodeName === ownerName) {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscriber"], null)
+                    .value();
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIPTION_ADDED: {
+            const {subscription} = action.payload;
+            const {ownerName} = action.context;
+            const feedName = "timeline";
+            if (subscription.remoteNodeName === ownerName) {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscription"], subscription)
+                    .value();
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SUBSCRIPTION_DELETED: {
+            const {subscription} = action.payload;
+            const {ownerName} = action.context;
+            const feedName = "timeline";
+            if (subscription.remoteNodeName === ownerName) {
+                return getFeed(state, feedName).istate
+                    .set([feedName, "subscription"], null)
                     .value();
             }
             return state;
