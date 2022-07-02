@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -7,7 +7,6 @@ import {
     DragOverlay,
     DragStartEvent,
     KeyboardSensor,
-    Modifier,
     PointerSensor,
     useSensor,
     useSensors,
@@ -35,7 +34,11 @@ interface Props {
 
 export default function AvatarSelector({nodeName, loaded, loading, avatars, active, onSelect, onNew, onDelete,
                                         onReorder}: Props) {
-    const mouseSensor = useSensor(PointerSensor);
+    const mouseSensor = useSensor(PointerSensor, {
+        activationConstraint: {
+            distance: 10
+        }
+    });
     const keyboardSensor = useSensor(KeyboardSensor);
 
     const sensors = useSensors(
@@ -56,23 +59,10 @@ export default function AvatarSelector({nodeName, loaded, loading, avatars, acti
 
     const avatarIds = avatars.map(avatar => avatar.id);
 
-    const selectorRef = useRef<HTMLDivElement>(null);
-    const relateToSelector: Modifier = ({transform}) => {
-        if (selectorRef.current) {
-            const r = selectorRef.current.getBoundingClientRect();
-            return {
-                ...transform,
-                y: transform.y + r.y + window.scrollY - 120
-            };
-        } else {
-            return transform;
-        }
-    };
-
     return (
         <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={onDragCancel}>
             <SortableContext items={avatarIds}>
-                <div className="avatar-selector" ref={selectorRef}>
+                <div className="avatar-selector">
                     {loaded ?
                         <>
                             <div className="item">
@@ -96,7 +86,7 @@ export default function AvatarSelector({nodeName, loaded, loading, avatars, acti
             </SortableContext>
             {ReactDOM.createPortal(
                 <DragOverlay zIndex={1080} dropAnimation={null}
-                             modifiers={[restrictToFirstScrollableAncestor, relateToSelector]}>
+                             modifiers={[restrictToFirstScrollableAncestor]}>
                     {dragged &&
                         <Avatar avatar={dragged} ownerName={nodeName} size={100} shape="design" draggable={false}/>
                     }
