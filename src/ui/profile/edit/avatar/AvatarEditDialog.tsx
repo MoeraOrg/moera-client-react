@@ -109,19 +109,20 @@ class AvatarEditDialog extends React.PureComponent<Props, State> {
     }
 
     onCreateClick = () => {
-        const {imageId, width, height, profileAvatarCreate} = this.props;
+        const {imageId, profileAvatarCreate} = this.props;
         const {rotate, shape} = this.state;
 
-        if (this.#refEditor == null || width == null || height == null || imageId == null) {
+        if (this.#refEditor == null || imageId == null) {
             return;
         }
 
         const clip = this.#refEditor.getCroppingRect();
+        const image = this.#refEditor.getImage();
         profileAvatarCreate({
             mediaId: imageId,
-            clipX: Math.round(clip.x * width),
-            clipY: Math.round(clip.y * height),
-            clipSize: Math.round(clip.width * width),
+            clipX: Math.round(clip.x * image.width),
+            clipY: Math.round(clip.y * image.height),
+            clipSize: Math.round(clip.width * image.width),
             avatarSize: 200,
             rotate,
             shape
