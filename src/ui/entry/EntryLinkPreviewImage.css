@@ -30,7 +30,7 @@
     }
 
     .link-preview.large IMG {
-        width: 100vw;
+        width: 99.5vw;
         max-height: 67vw;
     }
 }
