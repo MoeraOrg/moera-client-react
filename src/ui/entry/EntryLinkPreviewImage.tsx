@@ -24,7 +24,7 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 function EntryLinkPreviewImage({mediaFile, loading, rootPage, carte}: Props) {
     if (mediaFile == null) {
         if (loading) {
-            return <div><Loading active={true}/></div>;
+            return <div className="image-loading">Loading preview <Loading active={true}/></div>;
         }
         return null;
     }

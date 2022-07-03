@@ -34,3 +34,9 @@
         max-height: 67vw;
     }
 }
+
+.link-preview .image-loading {
+    padding-left: 1rem;
+    padding-bottom: .5rem;
+    border-bottom: solid 1px var(--bs-gray-400);
+}

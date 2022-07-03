@@ -16,6 +16,7 @@ interface Props {
     url?: string | null;
     title?: string | null;
     description?: string | null;
+    imageUploading?: boolean;
     imageHash?: string | null;
     media: MediaAttachment[] | null;
     small?: boolean | null;
@@ -24,8 +25,8 @@ interface Props {
     onDelete?: MouseEventHandler;
 }
 
-export function EntryLinkPreview({nodeName, siteName, url, title, description, imageHash, media, small = false,
-                                  editing, onUpdate, onDelete}: Props) {
+export function EntryLinkPreview({nodeName, siteName, url, title, description, imageUploading, imageHash, media,
+                                  small = false, editing, onUpdate, onDelete}: Props) {
     const [edit, setEdit] = useState<boolean>(false);
 
     if (url == null) {
@@ -37,13 +38,14 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
         return null;
     }
 
-    let large = false;
+    let large;
     let mediaFile: PrivateMediaFileInfo | null = null;
     if (imageHash != null && media != null) {
         mediaFile = media.find(ma => ma.media?.hash === imageHash)?.media ?? null;
         large = !small && mediaFile != null && mediaFile.width > 450;
+    } else {
+        large = imageUploading;
     }
-    const imageLoading = imageHash != null && mediaFile == null;
 
     const onEdit = (e: React.MouseEvent) => {
         setEdit(true);
@@ -60,7 +62,7 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
     return (
         <Frame className={cx("link-preview", {"large": large}, {"small": small})} url={url} editing={editing}
                onEdit={onEdit} onDelete={onDelete}>
-            <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageLoading}/>
+            <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageUploading ?? false}/>
             <div className="details">
                 {title &&
                     <div className="title">{ellipsize(title, small ? 35 : 75)}</div>

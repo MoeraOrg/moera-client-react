@@ -108,9 +108,10 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, small, owner
             <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}/>
             {value.previews.map((preview, index) =>
                 <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url} title={preview.title}
-                                  description={preview.description} imageHash={preview.imageHash}
-                                  siteName={preview.siteName} media={media} small={small} editing
-                                  onUpdate={onUpdate(preview.url)} onDelete={onDelete(preview.url)}/>
+                                  description={preview.description}
+                                  imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}
+                                  imageHash={preview.imageHash} siteName={preview.siteName} media={media} small={small}
+                                  editing onUpdate={onUpdate(preview.url)} onDelete={onDelete(preview.url)}/>
             )}
         </>
     );
@@ -194,6 +195,14 @@ function buildValue(urls: string[], nodeName: string | null,
     addedUrls.forEach((url, index) => istatus.set([url], index < more ? "loaded" : "deleted"));
 
     return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: istatus.value()}};
+}
+
+function isImageUploading(linkPreviewsState: LinkPreviewsState, url: string | null | undefined,
+                          nodeName: string | null): boolean {
+    if (url == null || nodeName == null) {
+        return false;
+    }
+    return linkPreviewsState[url]?.images[nodeName]?.uploading ?? false;
 }
 
 const connector = connect(
