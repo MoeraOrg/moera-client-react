@@ -18,6 +18,9 @@ import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
+import { ExtPostingInfo } from "state/postings/state";
+import { ExtCommentInfo } from "state/detailedposting/state";
+import { MediaAttachment } from "api/node/api-types";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -27,7 +30,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
         return null;
     }
 
-    const media = comment != null ? comment?.media : posting?.media;
+    const media = getGallery(posting, comment);
     const auth = carte != null ? "carte:" + carte : null;
     let mainSrc = "";
     let mainMimeType = "";
@@ -83,6 +86,20 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
                   ]}
                   imageCaption={<LightBoxCaption posting={mediaPosting}/>}/>
     );
+}
+
+function getGallery(posting: ExtPostingInfo | null, comment: ExtCommentInfo | null): MediaAttachment[] | null {
+    const entry = comment != null ? comment : posting;
+    const media = entry?.media;
+    if (media == null) {
+        return null;
+    }
+    const linkPreviews = entry?.body.linkPreviews ?? [];
+    if (linkPreviews.length === 0) {
+        return media;
+    }
+    const linkPreviewImages = new Set(linkPreviews.map(lp => lp.imageHash));
+    return media.filter(mf => !linkPreviewImages.has(mf.media?.hash));
 }
 
 const connector = connect(

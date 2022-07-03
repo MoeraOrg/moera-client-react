@@ -51,6 +51,7 @@ function getMediaPostings(state: ClientState, media: MediaAttachment[] | null): 
         return new Map();
     }
     return new Map(media
+        .filter(ma => !ma.embedded)
         .map(ma => ma.media)
         .filter((m): m is PrivateMediaFileInfo => m != null)
         .map(m => [m.id, getPosting(state, m.postingId ?? null)])
