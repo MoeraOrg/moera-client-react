@@ -14,6 +14,7 @@ import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 import { extractUrls } from "util/text";
+import * as URI from "uri-js";
 
 type Props = {
     name: string;
@@ -192,9 +193,25 @@ function buildValue(urls: string[], nodeName: string | null,
 
     const istatus = immutable.wrap(value.status);
     const more = addedUrls.length <= maxAutomatic ? maxAutomatic - totalVisible : 0;
-    addedUrls.forEach((url, index) => istatus.set([url], index < more ? "loaded" : "deleted"));
+    addedUrls.forEach((url, index) =>
+        istatus.set([url], index < more && !isUrlPreviewBanned(url) ? "loaded" : "deleted")
+    );
 
     return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: istatus.value()}};
+}
+
+const BANNED_PREVIEW_DOMAINS: string[] = [];
+
+function isUrlPreviewBanned(url: string) {
+    const components = URI.parse(url.toLowerCase());
+    if (components.host != null) {
+        for (const domain of BANNED_PREVIEW_DOMAINS) {
+            if (components.host === domain || components.host.endsWith("." + domain)) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function isImageUploading(linkPreviewsState: LinkPreviewsState, url: string | null | undefined,
