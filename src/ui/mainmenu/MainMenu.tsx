@@ -8,7 +8,6 @@ import OwnerSwitcher from "ui/mainmenu/owner/OwnerSwitcher";
 import MainMenuPages from "ui/mainmenu/MainMenuPages";
 import ConnectionStatus from "ui/mainmenu/connectionstatus/ConnectionStatus";
 import VerticalMenuToggler from "ui/mainmenu/vertical/VerticalMenuToggler";
-import AddonInvitation from "ui/mainmenu/AddonInvitation";
 import RefreshIndicator from "ui/mainmenu/RefreshIndicator";
 import "./MainMenu.css";
 
@@ -31,7 +30,6 @@ const MainMenu = ({atNode}: Props) => (
             <ConnectionStatus/>
             <VerticalMenuToggler/>
         </nav>
-        <AddonInvitation/>
         <RefreshIndicator/>
     </>
 );
