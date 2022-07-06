@@ -166,6 +166,9 @@ function buildValue(urls: string[], nodeName: string | null,
                     if (lpState.info == null) {
                         break;
                     }
+                    if (!lpState.info.title && !lpState.info.description && !lpState.info.imageUrl) {
+                        break;
+                    }
                     if (lpState.info.imageUrl != null && lpState.images?.[nodeName] == null) {
                         loadImages.push(url);
                     }
