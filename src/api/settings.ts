@@ -257,7 +257,7 @@ const META: ClientSettingMetaInfo[] = [
         defaultValue: "public",
         title: "Post visibility by default",
         modifiers: {
-            principals: ["private", "signed", "public"]
+            principals: ["public", "signed", "private"]
         }
     },
     {
@@ -266,7 +266,7 @@ const META: ClientSettingMetaInfo[] = [
         defaultValue: "public",
         title: "Comments visibility by default",
         modifiers: {
-            principals: ["none", "private", "signed", "public"]
+            principals: ["public", "signed", "private", "none"]
         }
     },
     {
@@ -275,7 +275,7 @@ const META: ClientSettingMetaInfo[] = [
         defaultValue: "signed",
         title: "Commenting allowed by default",
         modifiers: {
-            principals: ["none", "private", "signed"]
+            principals: ["signed", "private", "none"]
         }
     },
     {
@@ -480,6 +480,13 @@ const META: ClientSettingMetaInfo[] = [
         type: "string",
         defaultValue: "",
         title: "Preferred donation method (scheme or domain)",
+        modifiers: {}
+    },
+    {
+        name: "principal.public.disabled",
+        type: "bool",
+        defaultValue: "false",
+        title: "Disable \"Public\" access level",
         modifiers: {}
     }
 ];

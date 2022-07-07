@@ -1,23 +1,26 @@
 import React from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 
 import { PrincipalValue } from "api/node/api-types";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import { Principal } from "ui/control/Principal";
 import { useButtonPopper } from "ui/hook";
-import "./PrincipalSelect.css";
 import { getPrincipalDisplay } from "ui/control/principal-display";
+import "./PrincipalSelect.css";
 
-interface Props {
+type Props = {
     value: PrincipalValue | null | undefined;
     values? : PrincipalValue[] | null;
     long?: boolean | null;
     className?: string;
     disabled?: boolean | null;
     onChange?: (value: PrincipalValue) => void;
-}
+} & ConnectedProps<typeof connector>;
 
-export function PrincipalSelect({value, values, long, className, disabled, onChange}: Props) {
+function PrincipalSelectImpl({value, values, long, className, disabled, onChange, publicDisabled}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -34,11 +37,14 @@ export function PrincipalSelect({value, values, long, className, disabled, onCha
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
-                    {(values ?? []).map(v =>
-                        <div key={v} className="dropdown-item" onClick={onClick(v)}>
-                            <PrincipalSelectItem value={v}/>
-                        </div>
-                    )}
+                    {(values ?? [])
+                        .filter(v => !publicDisabled || value === "public" || v !== "public")
+                        .map(v =>
+                            <div key={v} className="dropdown-item" onClick={onClick(v)}>
+                                <PrincipalSelectItem value={v}/>
+                            </div>
+                        )
+                    }
                 </div>
             }
         </>
@@ -53,3 +59,11 @@ function PrincipalSelectItem({value}: PrincipalSelectItemProps) {
     const {icon, title} = getPrincipalDisplay(value);
     return <><FontAwesomeIcon icon={icon}/>&nbsp;&nbsp;{title}</>;
 }
+
+const connector = connect(
+    (state: ClientState) => ({
+        publicDisabled: getSetting(state, "principal.public.disabled") as boolean
+    })
+);
+
+export const PrincipalSelect = connector(PrincipalSelectImpl);

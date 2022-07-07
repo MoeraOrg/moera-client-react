@@ -18,7 +18,7 @@ type Props = {
 const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUpdate}: Props) => {
     const onChange = (value: PrincipalValue) => postingOperationsUpdate(posting.id, "", {view: value});
 
-    const value = posting.receiverOperations?.view ?? posting.operations?.view;
+    const value = posting.receiverOperations?.view ?? posting.operations?.view ?? "public";
     let deletionDate = "";
     if (posting.receiverDeletedAt != null) {
         const date = fromUnixTime(posting.receiverDeletedAt);
