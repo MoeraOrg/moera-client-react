@@ -43,6 +43,7 @@ const emptyPosting = {
     loadingPosting: false,
     conflict: false,
     beingPosted: false,
+    posted: false,
     draftId: null,
     draft: null,
     loadingDraft: false,
@@ -52,7 +53,7 @@ const emptyPosting = {
     sharedTextType: null
 };
 
-const initialState = {
+const initialState: ComposeState = {
     loadingFeatures: false,
     loadedFeatures: false,
     features: null,
@@ -183,6 +184,12 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             };
 
         case COMPOSE_POST_SUCCEEDED:
+            return {
+                ...state,
+                beingPosted: false,
+                posted: true
+            };
+
         case COMPOSE_POST_FAILED:
             return {
                 ...state,

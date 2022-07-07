@@ -19,6 +19,7 @@ export interface ComposeState {
     loadingPosting: boolean;
     conflict: boolean;
     beingPosted: boolean;
+    posted: boolean;
     draftId: string | null;
     draft: ExtDraftInfo | null;
     loadingDraft: boolean;

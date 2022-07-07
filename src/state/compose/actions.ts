@@ -69,14 +69,13 @@ interface ComposePostPrevState {
 }
 export type ComposePostAction = ActionWithPayload<typeof COMPOSE_POST, {
     id: string | null;
-    draftId: string | null;
     postingText: PostingText;
     prevState: ComposePostPrevState;
 }>;
-export const composePost = (id: string | null, draftId: string | null,
-                            postingText: PostingText, prevState: ComposePostPrevState): ComposePostAction => ({
+export const composePost = (id: string | null, postingText: PostingText,
+                            prevState: ComposePostPrevState): ComposePostAction => ({
     type: COMPOSE_POST,
-    payload: {id, draftId, postingText, prevState}
+    payload: {id, postingText, prevState}
 });
 
 export const COMPOSE_POST_SUCCEEDED = "COMPOSE_POST_SUCCEEDED";
@@ -139,6 +138,12 @@ export const COMPOSE_DRAFT_SAVE_FAILED = "COMPOSE_DRAFT_SAVE_FAILED";
 export type ComposeDraftSaveFailedAction = Action<typeof COMPOSE_DRAFT_SAVE_FAILED>;
 export const composeDraftSaveFailed = (): ComposeDraftSaveFailedAction => ({
     type: COMPOSE_DRAFT_SAVE_FAILED
+});
+
+export const COMPOSE_DRAFT_DELETE = "COMPOSE_DRAFT_DELETE";
+export type ComposeDraftDeleteAction = Action<typeof COMPOSE_DRAFT_DELETE>;
+export const composeDraftDelete = (): ComposeDraftDeleteAction => ({
+    type: COMPOSE_DRAFT_DELETE
 });
 
 export const COMPOSE_DRAFT_UNSET = "COMPOSE_DRAFT_UNSET";
@@ -273,6 +278,7 @@ export type ComposeAnyAction =
     | ComposeDraftSaveAction
     | ComposeDraftSavedAction
     | ComposeDraftSaveFailedAction
+    | ComposeDraftDeleteAction
     | ComposeDraftUnsetAction
     | ComposeDraftListLoadAction
     | ComposeDraftListLoadedAction

@@ -8,6 +8,7 @@ import {
     COMPOSE_PREVIEW,
     COMPOSE_PREVIEW_CLOSE,
     composeConflict,
+    composeDraftDelete,
     composeDraftListItemDeleted,
     composeDraftListItemReload,
     composeDraftListLoad,
@@ -24,12 +25,14 @@ import { dialogClosed, dialogOpened, GO_TO_PAGE, goToPosting, updateLocation } f
 import { postingSet } from "state/postings/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
+    getComposeDraftId,
     getComposePostingId,
     isAtComposeFeaturesPage,
     isComposeDraftListLoaded,
     isComposeDraftListToBeLoaded,
     isComposeDraftToBeLoaded,
     isComposeFeaturesToBeLoaded,
+    isComposePosted,
     isComposePostingEditing,
     isComposePostingToBeLoaded,
     isComposeSharedTextToBeLoaded
@@ -59,6 +62,8 @@ export default [
     trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
     trigger(CONNECTED_TO_HOME, conj(isAtComposePage, isConnectionSwitch), composeDraftListLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
+    trigger(COMPOSE_POST_SUCCEEDED, state => getComposeDraftId(state) != null, composeDraftDelete),
+    trigger(COMPOSE_DRAFT_SAVED, isComposePosted, composeDraftDelete),
     trigger(
         COMPOSE_POST_SUCCEEDED,
         true,

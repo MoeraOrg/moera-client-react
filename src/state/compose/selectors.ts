@@ -37,6 +37,10 @@ export function isComposePostingEditing(state: ClientState): boolean {
     return getComposePostingId(state) != null;
 }
 
+export function isComposePosted(state: ClientState): boolean {
+    return state.compose.posted;
+}
+
 export function getComposeDraftId(state: ClientState): string | null {
     return state.compose.draftId;
 }

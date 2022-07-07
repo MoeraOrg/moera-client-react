@@ -298,15 +298,15 @@ const composePageLogic = {
         const prevOperations = {
             view: posting.operations?.view ?? "public",
             viewComments: posting.operations?.viewComments ?? "public",
-            addComment: posting.operations?.addComment ?? "public",
+            addComment: posting.operations?.addComment ?? "signed",
             viewReactions: posting.operations?.viewReactions ?? "public",
             viewNegativeReactions: posting.operations?.viewNegativeReactions ?? "public",
             viewReactionTotals: posting.operations?.viewReactionTotals ?? "public",
             viewNegativeReactionTotals: posting.operations?.viewNegativeReactionTotals ?? "public",
             viewReactionRatios: posting.operations?.viewReactionRatios ?? "public",
             viewNegativeReactionRatios: posting.operations?.viewNegativeReactionRatios ?? "public",
-            addReaction: posting.operations?.addReaction ?? "public",
-            addNegativeReaction: posting.operations?.addNegativeReaction ?? "public"
+            addReaction: posting.operations?.addReaction ?? "signed",
+            addNegativeReaction: posting.operations?.addNegativeReaction ?? "signed"
         }
         return !deepEqual(postingText.operations, prevOperations);
     },
@@ -315,7 +315,6 @@ const composePageLogic = {
         formik.setStatus("submitted");
         formik.props.composePost(
             formik.props.postingId,
-            formik.props.draftId,
             composePageLogic.mapValuesToPostingText(values, formik.props),
             {hideComments: values.hideCommentsDefault}
         );

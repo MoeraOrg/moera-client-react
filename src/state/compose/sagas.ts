@@ -3,6 +3,7 @@ import { call, put, select } from 'typed-redux-saga/macro';
 import { errorThrown } from "state/error/actions";
 import { Node, NodeApiError } from "api";
 import {
+    COMPOSE_DRAFT_DELETE,
     COMPOSE_DRAFT_LIST_ITEM_DELETE,
     COMPOSE_DRAFT_LIST_ITEM_RELOAD,
     COMPOSE_DRAFT_LIST_LOAD,
@@ -37,7 +38,7 @@ import {
     composeSharedTextSet,
     ComposeUpdateDraftDeleteAction
 } from "state/compose/actions";
-import { getComposeDraftId, getComposePostingId } from "state/compose/selectors";
+import { getComposeDraftId, getComposePostingId, isComposePostingEditing } from "state/compose/selectors";
 import { executor } from "state/executor";
 import { WithContext } from "state/action-types";
 import { flashBox } from "state/flashbox/actions";
@@ -49,6 +50,7 @@ export default [
     executor(COMPOSE_POST, null, composePostSaga),
     executor(COMPOSE_DRAFT_LOAD, "", composeDraftLoadSaga, mutuallyIntroduced),
     executor(COMPOSE_DRAFT_SAVE, "", composeDraftSaveSaga),
+    executor(COMPOSE_DRAFT_DELETE, "", composeDraftDeleteSaga),
     executor(COMPOSE_DRAFT_LIST_LOAD, "", composeDraftListLoadSaga, mutuallyIntroduced),
     executor(COMPOSE_DRAFT_LIST_ITEM_RELOAD, payload => payload.id, composeDraftListItemReloadSaga),
     executor(COMPOSE_DRAFT_LIST_ITEM_DELETE, payload => payload.id, composeDraftListItemDeleteSaga),
@@ -87,23 +89,16 @@ function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) 
 }
 
 function* composePostSaga(action: ComposePostAction) {
-    const {id, draftId, postingText, prevState} = action.payload;
+    const {id, postingText, prevState} = action.payload;
 
     try {
-        let data;
+        let posting;
         if (id == null) {
-            data = yield* call(Node.postPosting, "", postingText);
-            if (draftId != null) {
-                yield* call(Node.deleteDraft, ":", draftId);
-                yield* put(composeDraftListItemDeleted(draftId));
-            }
+            posting = yield* call(Node.postPosting, "", postingText);
         } else {
-            data = yield* call(Node.putPosting, "", id, postingText);
-            if (draftId != null) {
-                yield* call(Node.deleteDraft, ":", draftId);
-            }
+            posting = yield* call(Node.putPosting, "", id, postingText);
         }
-        yield* put(composePostSucceeded(data));
+        yield* put(composePostSucceeded(posting));
 
         if (id != null) {
             const hideComments = postingText.commentOperations?.view === "private";
@@ -160,6 +155,23 @@ function* composeDraftSaveSaga(action: ComposeDraftSaveAction) {
         yield* put(composeDraftSaveFailed());
         yield* put(errorThrown(e));
     }
+}
+
+function* composeDraftDeleteSaga() {
+    const {draftId, editing} = yield* select(state => ({
+        draftId: getComposeDraftId(state),
+        editing: isComposePostingEditing(state)
+    }));
+    if (draftId == null) {
+        return;
+    }
+    if (!editing) {
+        yield* call(Node.deleteDraft, ":", draftId);
+        yield* put(composeDraftListItemDeleted(draftId));
+    } else {
+        yield* call(Node.deleteDraft, ":", draftId);
+    }
+
 }
 
 function* composeDraftListLoadSaga(action: WithContext<ComposeDraftListLoadAction>) {
