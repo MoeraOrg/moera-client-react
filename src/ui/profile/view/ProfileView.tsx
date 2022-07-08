@@ -12,6 +12,7 @@ import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import PageShareButton from "ui/page/PageShareButton";
 import NodeNameView from "ui/profile/view/NodeNameView";
+import EntryHtml from "ui/entry/EntryHtml";
 import { shortGender } from "util/misc";
 import "./ProfileView.css";
 
@@ -62,7 +63,7 @@ const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml
                         <span className="title">E-mail:</span> <a href={`mailto:${email}`}>{email}</a>
                     </div>
                 }
-                {bioHtml && <div className="bio" dangerouslySetInnerHTML={{__html: bioHtml}}/>}
+                {bioHtml && <EntryHtml className="bio" html={bioHtml} nodeName={ownerName}/>}
             </div>
         </Page>
     </>
