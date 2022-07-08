@@ -31,6 +31,7 @@ function* errorSaga(action: ErrorThrownAction) {
         console.error(stack);
     }
     if (document.visibilityState === "visible") {
+        yield* delay(1000);
         yield* put(errorShow(message, messageVerbose));
         yield* delay(10000);
         yield* put(errorDismiss());
