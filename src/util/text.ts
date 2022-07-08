@@ -1,6 +1,7 @@
 import { SMILEY_LIKE, SMILEYS } from "smileys";
+import { unhtmlEntitiesMinimal } from "util/html";
 
-const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9()!@:%_+.,~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?/ig;
+const URLS = /https?:\/\/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9()!@:%_+.,;~#?&/=]*[-a-zA-Z0-9@:%_+~#&/=])?/ig;
 const EMBEDDED = /<(?:iframe|img)[^>]+src=['"]([^'"]+)['"][^>]*>/ig;
 
 export function replaceSmileys(text: string, removeEscapes = true): string {
@@ -45,5 +46,7 @@ export function extractUrls(text: string | null | undefined): string[] {
         return [];
     }
     const embedded = new Set(Array.from(text.matchAll(EMBEDDED), m => m[1]));
-    return Array.from(text.matchAll(URLS), m => m[0]).filter(url => !embedded.has(url));
+    return Array.from(text.matchAll(URLS), m => m[0])
+        .map(url => unhtmlEntitiesMinimal(url))
+        .filter(url => !embedded.has(url));
 }

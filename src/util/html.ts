@@ -231,3 +231,7 @@ export function htmlEntities(s: string | null | undefined): string {
 export function unhtmlEntities(s: string | null | undefined): string {
     return HtmlEntities.decode(s);
 }
+
+export function unhtmlEntitiesMinimal(s: string | null | undefined): string {
+    return (s ?? "").replaceAll("&amp;", "&").replaceAll("&lt;", "<");
+}
