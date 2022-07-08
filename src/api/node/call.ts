@@ -136,7 +136,13 @@ export function* callApi<T>({
     }
 }
 
-export function* selectApi(nodeName: string | null | undefined) {
+interface ApiSelection {
+    rootLocation: string | null;
+    rootApi: string;
+    errorTitle: string;
+}
+
+export function* selectApi(nodeName: string | null | undefined): Generator<CallEffect | SelectEffect, ApiSelection> {
     let root;
     let errorTitle = "";
     switch (nodeName) {

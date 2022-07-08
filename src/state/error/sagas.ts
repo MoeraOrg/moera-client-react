@@ -27,15 +27,19 @@ function* errorSaga(action: ErrorThrownAction) {
     } else if (err instanceof VerboseError) {
         messageVerbose = err.messageVerbose;
     }
+
     if (stack) {
         console.error(stack);
     }
-    if (document.visibilityState === "visible") {
-        yield* delay(1000);
-        yield* put(errorShow(message, messageVerbose));
-        yield* delay(10000);
-        yield* put(errorDismiss());
+
+    if (document.visibilityState !== "visible") {
+        return;
     }
+
+    yield* delay(1000);
+    yield* put(errorShow(message, messageVerbose));
+    yield* delay(10000);
+    yield* put(errorDismiss());
 }
 
 function* errorAuthInvalidSaga() {
