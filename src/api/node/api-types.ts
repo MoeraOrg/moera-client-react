@@ -720,6 +720,9 @@ export interface PrivateMediaFileInfo {
     size: number;
     postingId?: string | null;
     previews?: MediaFilePreviewInfo[] | null;
+    operations?: {
+        view?: PrincipalValue | null;
+    }
 }
 
 export interface RemoteMediaInfo {

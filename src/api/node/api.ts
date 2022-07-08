@@ -614,6 +614,17 @@ const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
             type: "array",
             items: MediaFilePreviewInfoType,
             nullable: true
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["id", "hash", "path", "mimeType", "width", "height", "size"],

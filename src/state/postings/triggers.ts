@@ -1,4 +1,5 @@
 import { trigger } from "state/trigger";
+import { PostingCommentsChangedEvent, PostingReactionsChangedEvent, PostingUpdatedEvent } from "api/events/api-types";
 import {
     EVENT_NODE_POSTING_COMMENTS_CHANGED,
     EVENT_NODE_POSTING_REACTIONS_CHANGED,
@@ -9,8 +10,10 @@ import {
 import {
     POSTING_COMMENTS_SUBSCRIBED,
     POSTING_COMMENTS_UNSUBSCRIBED,
+    POSTING_OPERATIONS_UPDATED,
     postingCommentsSet,
     postingLoad,
+    PostingOperationsUpdatedAction,
     postingReactionLoad,
     postingReactionsReload
 } from "state/postings/actions";
@@ -19,7 +22,6 @@ import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, StoryUpdatedAction } from
 import { DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
 import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
-import { PostingCommentsChangedEvent, PostingReactionsChangedEvent, PostingUpdatedEvent } from "api/events/api-types";
 
 export default [
     trigger(
@@ -33,6 +35,12 @@ export default [
     trigger(POSTING_COMMENTS_SUBSCRIBED, true, flashBox("Following comments")),
     trigger(POSTING_COMMENTS_UNSUBSCRIBED, true, flashBox("Not following comments")),
     trigger([HOME_OWNER_SET, DISCONNECTED_FROM_HOME], true, postingReactionsReload),
+    trigger(
+        POSTING_OPERATIONS_UPDATED,
+        (state, signal: PostingOperationsUpdatedAction) =>
+            isPostingCached(state, signal.payload.id, signal.payload.nodeName),
+        signal => postingLoad(signal.payload.id, signal.payload.nodeName)
+    ),
     trigger(
         [EVENT_NODE_POSTING_UPDATED, EVENT_NODE_POSTING_RESTORED],
         (state, signal: EventAction<PostingUpdatedEvent>) =>

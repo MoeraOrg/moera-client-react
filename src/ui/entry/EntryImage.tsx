@@ -31,7 +31,8 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count, rootPage,
                      carte, openLightBox}: Props) {
-    const auth = carte != null ? "carte:" + carte : null;
+    const isPublic = (mediaFile.operations?.view ?? "public") === "public";
+    const auth = !isPublic && carte != null ? "carte:" + carte : null;
     const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
     const src = mediaImagePreview(mediaLocation, 900);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);

@@ -29,7 +29,8 @@ function EntryLinkPreviewImage({mediaFile, loading, rootPage, carte}: Props) {
         return null;
     }
 
-    const auth = carte != null ? "carte:" + carte : null;
+    const isPublic = (mediaFile.operations?.view ?? "public") === "public";
+    const auth = !isPublic && carte != null ? "carte:" + carte : null;
     const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
     const src = mediaImagePreview(mediaLocation, 800);
     const srcSet = mediaSources(mediaLocation, mediaFile.previews);
