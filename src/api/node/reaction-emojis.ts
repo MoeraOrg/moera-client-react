@@ -45,7 +45,7 @@ export const REACTION_EMOJIS: ReactionEmojis = {
         },
         0x1f620: {
             title: "Angry",
-            color: "#ffcc4d"
+            color: "#da2f47"
         },
         0x1f92e: {
             title: "Disgust",

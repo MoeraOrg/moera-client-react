@@ -42,6 +42,7 @@ import { ReactComponent as Twemoji1f917 } from "./1f917.svg";
 import { ReactComponent as Twemoji1f921 } from "./1f921.svg";
 import { ReactComponent as Twemoji1f923 } from "./1f923.svg";
 import { ReactComponent as Twemoji1f926 } from "./1f926.svg";
+import { ReactComponent as Twemoji1f92c } from "./1f92c.svg";
 import { ReactComponent as Twemoji1f92e } from "./1f92e.svg";
 import { ReactComponent as Twemoji1f970 } from "./1f970.svg";
 import { ReactComponent as Twemoji1f9f8 } from "./1f9f8.svg";
@@ -83,6 +84,7 @@ const CACHED = new Map([
     ["1f921", Twemoji1f921],
     ["1f923", Twemoji1f923],
     ["1f926", Twemoji1f926],
+    ["1f92c", Twemoji1f92c],
     ["1f92e", Twemoji1f92e],
     ["1f970", Twemoji1f970],
     ["1f9f8", Twemoji1f9f8],
@@ -95,18 +97,19 @@ interface Props {
 }
 
 export default function Twemoji({code, title = ""}: Props) {
-    const emoji = typeof(code) === "string" ? code : Number(code).toString(16);
+    let emoji = typeof(code) === "string" ? code : Number(code).toString(16);
     switch (emoji) {
         case "1f44d":
             return <FontAwesomeIcon icon="thumbs-up" color="#2078f4" title={title}/>;
         case "1f44e":
             return <FontAwesomeIcon icon="thumbs-down" color="#2078f4" title={title}/>;
-        default:
-            if (CACHED.has(emoji)) {
-                return React.createElement(CACHED.get(emoji)!, {title, className: "twemoji"});
-            } else {
-                return <img className="twemoji" src={`https://twemoji.maxcdn.com/v/latest/svg/${emoji}.svg`}
-                            alt={title} title={title}/>
-            }
+        case "1f620":
+            emoji = "1f92c";
+    }
+    if (CACHED.has(emoji)) {
+        return React.createElement(CACHED.get(emoji)!, {title, className: "twemoji"});
+    } else {
+        return <img className="twemoji" src={`https://twemoji.maxcdn.com/v/latest/svg/${emoji}.svg`}
+                    alt={title} title={title}/>
     }
 }
