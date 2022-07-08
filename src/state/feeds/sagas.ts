@@ -210,7 +210,6 @@ function* feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>) {
         }
     } catch (e) {
         yield* put(feedStatusUpdateFailed(feedName));
-        yield* put(errorThrown(e));
     }
 }
 
