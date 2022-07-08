@@ -27,17 +27,19 @@ export default function EntryLinkSelector({urls, onSelect}: Props) {
         e.preventDefault();
     }
 
+    const uniqueUrls = [...new Set(urls)];
+
     return (
         <div className="entry-link-selector">
             <div ref={setButtonRef} className="btn-group dropdown">
                 <Button variant="outline-secondary" size="sm" className="dropdown-toggle" onClick={onToggle}>
                     Links{" "}
-                    <span className="badge bg-info text-light">{urls.length}</span>
+                    <span className="badge bg-info text-light">{uniqueUrls.length}</span>
                 </Button>
                 {visible &&
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                          className="fade popover shadow-sm show">
-                        {urls.map(url =>
+                        {uniqueUrls.map(url =>
                             <div key={url} className="item" onClick={onClick(url)}>
                                 <FontAwesomeIcon icon="link"/>
                                 {" " + shortenUrl(url, 75)}
