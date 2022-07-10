@@ -14,7 +14,14 @@ function CommentUpdated({comment}: Props) {
         return null;
     }
 
-    const date = fromUnixTime(comment.editedAt ?? comment.createdAt);
+    const editedAt = comment.editedAt ?? comment.createdAt;
+    const editedImmediately = Math.abs(editedAt - comment.createdAt) < 20 * 60;
+
+    if (editedImmediately) {
+        return null;
+    }
+
+    const date = fromUnixTime(editedAt);
     return (
         <time className="date" dateTime={formatISO(date)}>
             {" "}(updated <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>)
