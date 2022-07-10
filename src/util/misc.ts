@@ -1,5 +1,7 @@
 import * as Base64js from 'base64-js';
 import cloneDeep from 'lodash.clonedeep';
+// @ts-ignore
+import charCategory from 'general-category';
 
 import { NodeName } from "api";
 import { PrincipalValue } from "api/node/api-types";
@@ -61,6 +63,24 @@ export function isNumber(value: unknown): value is number {
 
 export function isBoolean(value: unknown): value is boolean {
     return typeof value === "boolean";
+}
+
+export function isSpaces(value: string | null | undefined): boolean {
+    if (value == null) {
+        return true;
+    }
+    for (const c of value) {
+        switch (charCategory(c)) {
+            case "Cc":
+            case "Zl":
+            case "Zp":
+            case "Zs":
+                break;
+            default:
+                return false;
+        }
+    }
+    return true;
 }
 
 export function now(): number {
@@ -125,7 +145,44 @@ export function wrapSelection(field: HTMLTextAreaElement | HTMLInputElement, wra
     insertText(field, wrap + selection + (wrapEnd ?? wrap));
     // Restore the selection around the previously-selected text
     field.selectionStart = (selectionStart ?? 0) + wrap.length;
-    field.selectionEnd = (selectionEnd ?? selectionStart ?? 0)+ wrap.length;
+    field.selectionEnd = (selectionEnd ?? selectionStart ?? 0) + wrap.length;
+}
+
+export function wrapSelectionLines(field: HTMLTextAreaElement | HTMLInputElement,
+                                   wrapStart: string, wrap?: string): void {
+    const wrapEnd = wrap ?? wrapStart;
+    const selectionStart = field.selectionStart;
+    const selection = getTextSelection(field);
+    const wrapped = wrapLines(selection, wrapStart, wrapEnd);
+    insertText(field, wrapped);
+    // Restore the selection around the previously-selected text
+    const startShift = wrapped.startsWith(wrapStart) ? wrapStart.length : 0;
+    const endShift = wrapped.endsWith(wrapEnd) ? -wrapEnd.length : 0;
+    field.selectionStart = (selectionStart ?? 0) + startShift;
+    field.selectionEnd = (selectionStart ?? 0) + wrapped.length + endShift;
+}
+
+function wrapLines(s: string, wrapStart: string, wrapEnd: string): string {
+    const lines = s.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        let begin = 0;
+        while (isSpaces(lines[i][begin]) && begin < lines[i].length) {
+            begin++;
+        }
+        if (begin >= lines[i].length) {
+            if (lines.length === 1) {
+                lines[i] = wrapStart + wrapEnd + lines[i];
+            }
+            continue;
+        }
+        let end = lines[i].length - 1;
+        while (isSpaces(lines[i][end]) && end > begin) {
+            end--;
+        }
+        lines[i] = lines[i].substring(0, begin) + wrapStart + lines[i].substring(begin, end + 1) + wrapEnd
+            + lines[i].substring(end + 1);
+    }
+    return lines.join("\n");
 }
 
 export function getPageHeaderHeight(): number {

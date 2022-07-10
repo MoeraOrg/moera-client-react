@@ -16,7 +16,7 @@ import RichTextImageDialog, {
 } from "ui/control/richtexteditor/RichTextImageDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
 import { htmlEntities } from "util/html";
-import { getTextSelection, insertText, mentionName, wrapSelection } from "util/misc";
+import { getTextSelection, insertText, mentionName, wrapSelection, wrapSelectionLines } from "util/misc";
 import { redirectUrl } from "util/url";
 import { NameListItem } from "util/names-list";
 import "./RichTextEditorPanel.css";
@@ -85,7 +85,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
 
         if (this.isMarkdown()) {
-            wrapSelection(textArea.current, "**");
+            wrapSelectionLines(textArea.current, "**");
         } else {
             wrapSelection(textArea.current, "<b>", "</b>");
         }
@@ -101,7 +101,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
 
         if (this.isMarkdown()) {
-            wrapSelection(textArea.current, "_");
+            wrapSelectionLines(textArea.current, "_");
         } else {
             wrapSelection(textArea.current, "<i>", "</i>");
         }
@@ -117,7 +117,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
 
         if (this.isMarkdown()) {
-            wrapSelection(textArea.current, "~~");
+            wrapSelectionLines(textArea.current, "~~");
         } else {
             wrapSelection(textArea.current, "<strike>", "</strike>");
         }
