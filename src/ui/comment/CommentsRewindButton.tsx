@@ -26,7 +26,7 @@ function CommentsRewindButton({end, forward, before, after, total, commentsScrol
     return (
         <button className="comments-rewind" title={forward ? "Go to the last comment" : "Go to the first comment"}
                 onClick={onClick}>
-            <FontAwesomeIcon icon={forward ? "fast-forward" : "fast-backward"}/>
+            <FontAwesomeIcon icon={["fas", forward ? "forward-fast" : "backward-fast"]}/>
         </button>
     )
 }

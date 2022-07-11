@@ -4,6 +4,7 @@ import {
     faArrowUp,
     faAt,
     faBackspace,
+    faBackwardFast,
     faBan,
     faBars,
     faBell,
@@ -24,10 +25,9 @@ import {
     faExternalLinkAlt,
     faEye,
     faEyeSlash,
-    faFastBackward,
-    faFastForward,
     faFileAlt,
     faFileDownload,
+    faForwardFast,
     faFrown,
     faGlobe,
     faGlobeEurope,
@@ -90,6 +90,7 @@ export default function initIconLibrary() {
     library.add(faArrowUp);
     library.add(faAt);
     library.add(faBackspace);
+    library.add(faBackwardFast);
     library.add(faBan);
     library.add(faBars);
     library.add(faBell);
@@ -117,10 +118,9 @@ export default function initIconLibrary() {
     library.add(faExternalLinkAlt);
     library.add(faEye);
     library.add(faEyeSlash);
-    library.add(faFastBackward);
-    library.add(faFastForward);
     library.add(faFileAlt);
     library.add(faFileDownload);
+    library.add(faForwardFast);
     library.add(faFrown);
     library.add(faGlobe);
     library.add(faGlobeEurope);
