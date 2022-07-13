@@ -1,10 +1,10 @@
-import { getPosting } from "state/postings/selectors";
-import { ClientState } from "state/state";
-import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
 import { PrincipalValue, ReactionInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
-import { getComment, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { isPermitted } from "state/node/selectors";
+import { getPosting } from "state/postings/selectors";
+import { getComment, getCommentsReceiverName } from "state/detailedposting/selectors";
+import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
 
 export function getReactionsDialogNodeName(state: ClientState): string | null {
     return state.reactionsDialog.nodeName;
@@ -68,14 +68,8 @@ export function isReactionsDialogPermitted(operation: string, defaultValue: Prin
         });
     } else {
         const posting = getPosting(state, state.reactionsDialog.postingId);
-        if (posting?.receiverName != null) {
-            const rposting = getPosting(state, posting.receiverPostingId ?? null, posting.receiverName)
-            if (rposting != null) {
-                return isPermitted(operation, rposting, defaultValue, state, {
-                    objectSourceName: posting.receiverName
-                });
-            }
-        }
-        return isPermitted(operation, posting, defaultValue, state);
+        return isPermitted(operation, posting, defaultValue, state, {
+            objectSourceName: posting?.receiverName
+        });
     }
 }
