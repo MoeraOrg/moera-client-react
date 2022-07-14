@@ -37,7 +37,7 @@ import {
     EVENT_NODE_SUBSCRIPTION_UPDATED,
     EventAction
 } from "api/events/actions";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { getOwnerName } from "state/owner/selectors";
@@ -96,12 +96,12 @@ export default [
     ),
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
         disj(isAtTimelinePage, isAtProfilePage),
         feedGeneralLoad("timeline")
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
         inv(disj(isAtTimelinePage, isAtProfilePage)),
         feedGeneralUnset("timeline")
     ),

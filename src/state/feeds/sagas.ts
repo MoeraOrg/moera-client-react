@@ -54,7 +54,12 @@ import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
 import { getSettingNode } from "state/settings/selectors";
 
 export default [
-    executor(FEED_GENERAL_LOAD, payload => payload.feedName, feedGeneralLoadSaga, introduced),
+    executor(
+        FEED_GENERAL_LOAD,
+        (payload, context) => `${context?.homeOwnerName}:${context?.ownerName}:${payload.feedName}`,
+        feedGeneralLoadSaga,
+        introduced
+    ),
     executor(FEED_SUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga, introduced),
     executor(FEED_UNSUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga, introduced),
     executor(
@@ -85,12 +90,6 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
             call(loadSubscriber, action.context.ownerName, action.context.homeOwnerName),
             call(loadSubscription, action.context.ownerName, action.context.homeOwnerName)
         ])
-        if (action.context.homeOwnerName != null) {
-            const subscribers = yield* call(Node.getSubscribers, ":", "feed", action.context.ownerName);
-            yield* put(feedSubscriberSet(feedName, subscribers?.[0]));
-            const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", action.context.ownerName);
-            yield* put(feedSubscriptionSet(feedName, subscriptions?.[0]));
-        }
     } catch (e) {
         yield* put(feedGeneralLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -102,7 +101,7 @@ function* loadSubscriber(nodeName: string | null, homeOwnerName: string | null) 
         return;
     }
     const subscribers = yield* call(Node.getSubscribers, ":", "feed", nodeName);
-    yield* put(feedSubscriberSet(nodeName, subscribers?.[0]));
+    yield* put(feedSubscriberSet(subscribers?.[0].feedName!, subscribers?.[0]));
 }
 
 function* loadSubscription(nodeName: string | null, homeOwnerName: string | null) {
@@ -110,7 +109,7 @@ function* loadSubscription(nodeName: string | null, homeOwnerName: string | null
         return;
     }
     const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", nodeName);
-    yield* put(feedSubscriptionSet(nodeName, subscriptions?.[0]));
+    yield* put(feedSubscriptionSet(subscriptions?.[0].remoteFeedName!, subscriptions?.[0]));
 }
 
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {

@@ -4,14 +4,14 @@ import { buffers, channel, Channel } from 'redux-saga';
 
 import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
-import { WithContext } from "state/action-types";
+import { ActionContext, WithContext } from "state/action-types";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { CARTES_SET } from "state/cartes/actions";
 import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 import { ClientState } from "state/state";
 import { OWNER_SET } from "state/owner/actions";
 
-type PayloadExtractor<T> = (payload: T) => string;
+type PayloadExtractor<T> = (payload: T, context: ActionContext | null) => string;
 
 type PayloadToKey = PayloadExtractor<any> | string | null;
 
@@ -99,7 +99,7 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
     if (executor.payloadToKey != null) {
         if (typeof(executor.payloadToKey) === "function") {
             if ("payload" in action) {
-                key = executor.payloadToKey(action.payload);
+                key = executor.payloadToKey(action.payload, action.context);
             } else {
                 console.error("Action executor requires payload, but action does not have one", action);
             }
