@@ -85,10 +85,12 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
             call(loadSubscriber, action.context.ownerName, action.context.homeOwnerName),
             call(loadSubscription, action.context.ownerName, action.context.homeOwnerName)
         ])
-        const subscribers = yield* call(Node.getSubscribers, ":", "feed", action.context.ownerName);
-        yield* put(feedSubscriberSet(feedName, subscribers?.[0]));
-        const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", action.context.ownerName);
-        yield* put(feedSubscriptionSet(feedName, subscriptions?.[0]));
+        if (action.context.homeOwnerName != null) {
+            const subscribers = yield* call(Node.getSubscribers, ":", "feed", action.context.ownerName);
+            yield* put(feedSubscriberSet(feedName, subscribers?.[0]));
+            const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", action.context.ownerName);
+            yield* put(feedSubscriptionSet(feedName, subscriptions?.[0]));
+        }
     } catch (e) {
         yield* put(feedGeneralLoadFailed(feedName));
         yield* put(errorThrown(e));
