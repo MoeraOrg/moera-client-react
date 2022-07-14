@@ -20,6 +20,10 @@ const DonateButtonImpl = ({name, fullName, fundraisers, styles = "large", classN
         return null;
     }
 
+    if (window.Android && window.Android.isDonationsEnabled && !window.Android.isDonationsEnabled()) {
+        return null;
+    }
+
     const onClick = () => {
         document.dispatchEvent(new Event("hidepopper"));
         openDonateDialog(name, fullName, fundraisers);
