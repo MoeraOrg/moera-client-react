@@ -96,8 +96,10 @@ const composePageLogic = {
         [linkPreviews, bodyUrls, media] = bodyToLinkPreviews(body, linkPreviewsInfo, media);
 
         const viewPrincipal = props.draft != null
-            ? props.draft.operations?.view ?? props.visibilityDefault
-            : props.posting?.operations?.view ?? props.visibilityDefault;
+            ? props.draft.operations?.view ?? "public"
+            : props.posting != null
+                ? props.posting.operations?.view ?? "public"
+                : props.visibilityDefault;
         const publishAtDefault = new Date();
         const publishAt = props.draft != null
             ? (props.draft.publishAt != null ? fromUnixTime(props.draft.publishAt) : publishAtDefault)
@@ -105,39 +107,49 @@ const composePageLogic = {
                 ? composePageLogic._getPublishAt(props.posting.feedReferences) ?? publishAtDefault
                 : publishAtDefault;
         const viewCommentsPrincipal = props.draft != null
-            ? props.draft.operations?.viewComments ?? props.commentsVisibilityDefault
-            : props.posting?.operations?.viewComments ?? props.commentsVisibilityDefault;
-        const addCommentPrincipal = props.draft != null
-            ? props.draft.operations?.addComment ?? props.commentAdditionDefault
-            : props.posting?.operations?.addComment ?? props.commentAdditionDefault;
-        const hideComments = props.draft != null
-            ? props.draft.commentOperations?.view === "private" ?? props.commentsHideDefault
-            : props.posting?.commentOperations?.view === "private" ?? props.commentsHideDefault;
-        const reactionsEnabled = props.draft != null
-            ? props.draft.operations?.addReaction !== "none"
+            ? props.draft.operations?.viewComments ?? "public"
             : props.posting != null
-                ? props.posting.operations?.addReaction !== "none"
+                ? props.posting.operations?.viewComments ?? "public"
+                : props.commentsVisibilityDefault;
+        const addCommentPrincipal = props.draft != null
+            ? props.draft.operations?.addComment ?? "signed"
+            : props.posting != null
+                ? props.posting.operations?.addComment ?? "signed"
+                : props.commentAdditionDefault;
+        const hideComments = props.draft != null
+            ? (props.draft.commentOperations?.view ?? "public") === "private" ?? props.commentsHideDefault
+            : props.posting != null
+                ? (props.posting.commentOperations?.view ?? "public") === "private"
+                : props.commentsHideDefault;
+        const reactionsEnabled = props.draft != null
+            ? (props.draft.operations?.addReaction ?? "signed") !== "none"
+            : props.posting != null
+                ? (props.posting.operations?.addReaction ?? "signed") !== "none"
                 : props.reactionsEnabledDefault;
         const reactionsNegativeEnabled = props.draft != null
-            ? props.draft.operations?.addNegativeReaction !== "none"
+            ? (props.draft.operations?.addNegativeReaction ?? "signed") !== "none"
             : props.posting != null
-                ? props.posting.operations?.addNegativeReaction !== "none"
+                ? (props.posting.operations?.addNegativeReaction ?? "signed") !== "none"
                 : props.reactionsNegativeEnabledDefault;
         const reactionsPositive = props.draft != null
             ? props.draft.acceptedReactions?.positive ?? ""
-            : props.posting != null ? props.posting.acceptedReactions?.positive ?? "" : props.reactionsPositiveDefault;
+            : props.posting != null
+                ? props.posting.acceptedReactions?.positive ?? ""
+                : props.reactionsPositiveDefault;
         const reactionsNegative = props.draft != null
             ? props.draft.acceptedReactions?.negative ?? ""
-            : props.posting != null ? props.posting.acceptedReactions?.negative ?? "" : props.reactionsNegativeDefault;
-        const reactionsVisible = props.draft != null
-            ? props.draft.operations?.viewReactions === "public"
             : props.posting != null
-                ? props.posting.operations?.viewReactions === "public"
+                ? props.posting.acceptedReactions?.negative ?? ""
+                : props.reactionsNegativeDefault;
+        const reactionsVisible = props.draft != null
+            ? (props.draft.operations?.viewReactions ?? "public") === "public"
+            : props.posting != null
+                ? (props.posting.operations?.viewReactions ?? "public") === "public"
                 : props.reactionsVisibleDefault;
         const reactionTotalsVisible = props.draft != null
-            ? props.draft.operations?.viewReactionTotals === "public"
+            ? (props.draft.operations?.viewReactionTotals ?? "public") === "public"
             : props.posting != null
-                ? props.posting.operations?.viewReactionTotals === "public"
+                ? (props.posting.operations?.viewReactionTotals ?? "public") === "public"
                 : props.reactionTotalsVisibleDefault;
         const updateImportant = props.draft != null ? props.draft.updateInfo?.important ?? false : false;
         const updateDescription = props.draft != null ? props.draft.updateInfo?.description ?? "" : "";
