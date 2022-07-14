@@ -203,7 +203,7 @@ function buildValue(urls: string[], nodeName: string | null,
     return {urlsToLoad: loadUrls, imagesToLoad: loadImages, value: {previews, media, status: istatus.value()}};
 }
 
-const BANNED_PREVIEW_DOMAINS: string[] = [];
+const BANNED_PREVIEW_DOMAINS: string[] = ["facebook.com", "instagram.com"];
 
 function isUrlPreviewBanned(url: string) {
     const components = URI.parse(url.toLowerCase());
