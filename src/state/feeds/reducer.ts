@@ -350,6 +350,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             const {feedName, status} = action.payload;
             return getFeed(state, feedName).istate
                 .update([feedName], feedState => ({
+                    ...feedState,
                     status: {
                         total: status.total,
                         totalPinned: status.totalPinned,
