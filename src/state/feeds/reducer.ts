@@ -349,11 +349,17 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         case FEED_STATUS_SET: {
             const {feedName, status} = action.payload;
             return getFeed(state, feedName).istate
-                .assign([feedName], {
-                    status: cloneDeep(status),
+                .update([feedName], feedState => ({
+                    status: {
+                        total: status.total,
+                        totalPinned: status.totalPinned,
+                        notViewed: status.notViewed ?? feedState.status.notViewed,
+                        notRead: status.notRead ?? feedState.status.notRead,
+                        notViewedMoment: status.notViewedMoment ?? feedState.status.notViewedMoment
+                    },
                     loadingStatus: false,
                     loadedStatus: true
-                })
+                }))
                 .value();
         }
 
