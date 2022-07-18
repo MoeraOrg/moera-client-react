@@ -349,17 +349,16 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
         case FEED_STATUS_SET: {
             const {feedName, status} = action.payload;
             return getFeed(state, feedName).istate
-                .update([feedName], feedState => ({
-                    ...feedState,
-                    status: {
-                        total: status.total,
-                        totalPinned: status.totalPinned,
-                        notViewed: status.notViewed ?? feedState.status.notViewed,
-                        notRead: status.notRead ?? feedState.status.notRead,
-                        notViewedMoment: status.notViewedMoment ?? feedState.status.notViewedMoment
-                    },
+                .assign([feedName], {
                     loadingStatus: false,
                     loadedStatus: true
+                })
+                .update([feedName, "status"], prevStatus => ({
+                    total: status.total,
+                    totalPinned: status.totalPinned,
+                    notViewed: status.notViewed ?? prevStatus.notViewed,
+                    notRead: status.notRead ?? prevStatus.notRead,
+                    notViewedMoment: status.notViewedMoment ?? prevStatus.notViewedMoment
                 }))
                 .value();
         }
