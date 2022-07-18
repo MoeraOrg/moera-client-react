@@ -82,6 +82,8 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
         return;
     }
 
+    action.context = yield* select(getContext);
+
     if (executor.condition != null) {
         const condition = executor.condition;
         let payload: any = null;
@@ -113,7 +115,7 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
             executor.running.add(key);
         }
     }
-    action.context = yield* select(getContext);
+
     try {
         yield* call(executor.saga, action);
     } catch (e) {
