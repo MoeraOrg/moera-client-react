@@ -38,9 +38,10 @@ import {
     EventAction
 } from "api/events/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
-import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
+import { OWNER_SET } from "state/owner/actions";
 import { getOwnerName } from "state/owner/selectors";
+import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
 import { POST_INIT, POST_INIT_DELAYED } from "state/pulse/actions";
 import {
@@ -96,12 +97,12 @@ export default [
     ),
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, OWNER_SET, HOME_OWNER_SET],
         disj(isAtTimelinePage, isAtProfilePage),
         feedGeneralLoad("timeline")
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, OWNER_SET, HOME_OWNER_SET],
         inv(disj(isAtTimelinePage, isAtProfilePage)),
         feedGeneralUnset("timeline")
     ),
