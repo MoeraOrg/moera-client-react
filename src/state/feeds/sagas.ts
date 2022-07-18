@@ -87,8 +87,8 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
         const info = yield* call(Node.getFeedGeneral, "", feedName);
         yield* put(feedGeneralSet(feedName, info));
         yield* all([
-            call(loadSubscriber, action.context.ownerName, action.context.homeOwnerName),
-            call(loadSubscription, action.context.ownerName, action.context.homeOwnerName)
+            call(loadSubscriber, action.context.ownerName, action.context.homeOwnerName, feedName),
+            call(loadSubscription, action.context.ownerName, action.context.homeOwnerName, feedName)
         ])
     } catch (e) {
         yield* put(feedGeneralLoadFailed(feedName));
@@ -96,20 +96,22 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
     }
 }
 
-function* loadSubscriber(nodeName: string | null, homeOwnerName: string | null) {
+function* loadSubscriber(nodeName: string | null, homeOwnerName: string | null, feedName: string) {
     if (homeOwnerName == null || nodeName == null || nodeName === homeOwnerName) {
         return;
     }
     const subscribers = yield* call(Node.getSubscribers, ":", "feed", nodeName);
-    yield* put(feedSubscriberSet(subscribers?.[0].feedName!, subscribers?.[0]));
+    const subscriber = (subscribers ?? []).find(sr => sr.feedName === feedName) ?? null;
+    yield* put(feedSubscriberSet(feedName, subscriber));
 }
 
-function* loadSubscription(nodeName: string | null, homeOwnerName: string | null) {
+function* loadSubscription(nodeName: string | null, homeOwnerName: string | null, feedName: string) {
     if (homeOwnerName == null || nodeName == null || nodeName === homeOwnerName) {
         return;
     }
     const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", nodeName);
-    yield* put(feedSubscriptionSet(subscriptions?.[0].remoteFeedName!, subscriptions?.[0]));
+    const subscription = (subscriptions ?? []).find(sr => sr.remoteFeedName === feedName) ?? null;
+    yield* put(feedSubscriptionSet(feedName, subscription));
 }
 
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
