@@ -144,9 +144,11 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
 
         case FEED_GENERAL_LOAD: {
             const {feedName} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "loadingGeneral"], true)
-                .value();
+            const {istate, feed} = getFeed(state, feedName);
+            if (!feed.loadedGeneral) {
+                istate.set([feedName, "loadingGeneral"], true);
+            }
+            return istate.value();
         }
 
         case FEED_GENERAL_LOAD_FAILED: {
