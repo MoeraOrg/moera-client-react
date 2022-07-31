@@ -8,17 +8,15 @@ import { ClientSettingMetaInfo } from "api/settings";
 import { SettingValue } from "api/setting-types";
 import { SettingInfo, SettingMetaInfo } from "api/node/api-types";
 import { messageBox } from "state/messagebox/actions";
+import { Item, option } from "ui/settings/settings-menu";
 import { settingsUpdate } from "state/settings/actions";
-import SettingsField from "ui/settings/SettingsField";
+import { SettingsSheetItems, toFieldName } from "ui/settings/SettingsSheetItems";
 import SettingsButtons from "ui/settings/SettingsButtons";
 import { mapEquals } from "util/map";
-import "./SettingsSheetAutomatic.css";
-
-function toFieldName(name: string): string {
-    return name.replace(/\./g, "_");
-}
+import "./SettingsSheet.css";
 
 type OuterProps = {
+    items?: Item[];
     valuesMap: Map<string, string>;
     metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
 } & ConnectedProps<typeof connector>;
@@ -31,7 +29,7 @@ interface State {
     sheetMaxHeight: Property.MaxHeight;
 }
 
-class SettingsSheetAutomatic extends React.PureComponent<Props, State> {
+class SettingsSheet extends React.PureComponent<Props, State> {
 
     constructor(props: Props, context: any) {
         super(props, context);
@@ -72,26 +70,19 @@ class SettingsSheetAutomatic extends React.PureComponent<Props, State> {
             || ((this.props.metaMap.size > 0) !== (prevProps.metaMap.size > 0))) {
 
             this.props.resetForm({
-                values: settingsSheetOtherLogic.mapPropsToValues(this.props),
+                values: settingsSheetLogic.mapPropsToValues(this.props),
             });
         }
     }
 
     render() {
         const {valuesMap, metaMap} = this.props;
+        const items = this.props.items ?? [...metaMap.keys()].sort().map(name => option(name));
 
         return (
             <Form>
                 <div className="settings-sheet" style={{maxHeight: this.state.sheetMaxHeight}}>
-                    {[...metaMap.keys()].sort().map(name => {
-                        const meta = metaMap.get(name);
-                        if (meta == null) {
-                            return null;
-                        }
-                        const initialValue = valuesMap.get(name) ?? meta.defaultValue;
-                        return <SettingsField key={name} name={name} fieldName={toFieldName(name)} meta={meta}
-                                              initialValue={initialValue}/>
-                    })}
+                    <SettingsSheetItems items={items} valuesMap={valuesMap} metaMap={metaMap}/>
                 </div>
                 <SettingsButtons/>
             </Form>
@@ -100,7 +91,7 @@ class SettingsSheetAutomatic extends React.PureComponent<Props, State> {
 
 }
 
-const settingsSheetOtherLogic = {
+const settingsSheetLogic = {
 
     mapPropsToValues(props: OuterProps): Values {
         const {valuesMap, metaMap} = props;
@@ -165,4 +156,4 @@ const connector = connect(
     { messageBox, settingsUpdate }
 );
 
-export default connector(withFormik(settingsSheetOtherLogic)(SettingsSheetAutomatic));
+export default connector(withFormik(settingsSheetLogic)(SettingsSheet));

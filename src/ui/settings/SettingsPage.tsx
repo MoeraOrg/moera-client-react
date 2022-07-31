@@ -7,8 +7,7 @@ import PageHeader from "ui/page/PageHeader";
 import SettingsConflicts from "ui/settings/SettingsConflicts";
 import SettingsTabs from "ui/settings/SettingsTabs";
 import SettingsMenu from "ui/settings/SettingsMenu";
-import SettingsTabNode from "ui/settings/SettingsTabNode";
-import SettingsTabClient from "ui/settings/SettingsTabClient";
+import SettingsTabContent from "ui/settings/SettingsTabContent";
 import "./SettingsPage.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -24,8 +23,7 @@ const SettingsPage = ({tab}: Props) => (
             <div className="row settings-notebook">
                 <SettingsMenu/>
                 <div className="col-md-10">
-                    {tab === "node" && <SettingsTabNode/>}
-                    {tab === "client" && <SettingsTabClient/>}
+                    <SettingsTabContent tab={tab}/>
                 </div>
             </div>
         </Page>

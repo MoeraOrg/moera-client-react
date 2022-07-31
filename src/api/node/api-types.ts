@@ -523,6 +523,7 @@ export interface SettingMetaInfo {
     privileged: boolean;
     defaultValue?: string | null;
     title: string;
+    internal?: boolean;
     modifiers?: SettingTypeModifiers | null;
 }
 

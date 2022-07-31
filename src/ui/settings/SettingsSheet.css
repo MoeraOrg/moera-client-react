@@ -1,0 +1,14 @@
+.settings-sheet {
+    overflow-y: auto;
+    padding-right: .2rem;
+}
+
+.settings-sheet .chapter {
+    margin-bottom: 2rem;
+    padding-top: .5rem;
+}
+
+.settings-sheet .chapter .title {
+    font-size: 18pt;
+    padding-bottom: 1.5rem;
+}

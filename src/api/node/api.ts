@@ -1727,6 +1727,10 @@ const SettingMetaInfoType: JSONSchemaType<API.SettingMetaInfo> = {
         "title": {
             type: "string"
         },
+        "internal": {
+            type: "boolean",
+            nullable: true
+        },
         "modifiers": {
             ...SettingTypeModifiersType,
             nullable: true

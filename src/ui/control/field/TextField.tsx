@@ -18,6 +18,7 @@ interface Props {
     autoComplete?: string;
     noFeedback?: boolean;
     disabled?: boolean;
+    groupClassName?: string;
     initialValue?: string | null;
     defaultValue?: string | null;
     onKeyDown?: (event: React.KeyboardEvent) => void;
@@ -25,7 +26,7 @@ interface Props {
 
 export function TextField({name, title, rows = 3, maxRows = 20, maxLength, placeholder = "Enter text here...",
                            autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false,
-                           initialValue, defaultValue, onKeyDown}: Props) {
+                           groupClassName, initialValue, defaultValue, onKeyDown}: Props) {
 
     const inputDom = useRef<HTMLTextAreaElement>(null);
 
@@ -42,6 +43,7 @@ export function TextField({name, title, rows = 3, maxRows = 20, maxLength, place
         <FormGroup
             title={title}
             name={name}
+            groupClassName={groupClassName}
             undo={undo}
             reset={reset}
             onUndo={onUndo}

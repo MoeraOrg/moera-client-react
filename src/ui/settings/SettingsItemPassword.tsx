@@ -7,11 +7,11 @@ import { settingsChangePasswordDialogOpen } from "state/settings/actions";
 
 type Props = ConnectedProps<typeof connector>;
 
-const SettingsSheetNodeSecurity = ({settingsChangePasswordDialogOpen}: Props) => (
-    <div className="settings-sheet">
+const SettingsItemPassword = ({settingsChangePasswordDialogOpen}: Props) => (
+    <>
         <Button variant="outline-primary" onClick={() => settingsChangePasswordDialogOpen()}>Change Password...</Button>
         <ChangePasswordDialog/>
-    </div>
+    </>
 );
 
 const connector = connect(
@@ -19,4 +19,4 @@ const connector = connect(
     { settingsChangePasswordDialogOpen }
 );
 
-export default connector(SettingsSheetNodeSecurity);
+export default connector(SettingsItemPassword);

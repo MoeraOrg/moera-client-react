@@ -43,9 +43,10 @@ interface Props {
     fieldName: string;
     meta?: SettingMetaInfo | ClientSettingMetaInfo | null;
     initialValue?: string | null;
+    groupClassName?: string;
 }
 
-export default function SettingsField({name, fieldName, meta, initialValue}: Props) {
+export default function SettingsField({name, fieldName, meta, initialValue, groupClassName}: Props) {
     const type = meta ? meta.type : "string";
     const privileged = meta != null && "privileged" in meta && meta.privileged;
     const title = meta ? meta.title + (privileged ? " (provider setting)" : "") : name;
@@ -54,7 +55,7 @@ export default function SettingsField({name, fieldName, meta, initialValue}: Pro
     const modifiers = meta && meta.modifiers ? meta.modifiers : {};
     switch (type) {
         case "bool":
-            return <CheckboxField name={fieldName} title={title} disabled={disabled}
+            return <CheckboxField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                   initialValue={deserializeBool(initialValue)}
                                   defaultValue={deserializeBool(defaultValue)}/>;
 
@@ -63,6 +64,7 @@ export default function SettingsField({name, fieldName, meta, initialValue}: Pro
                 switch (modifiers.format) {
                     case "size":
                         return <InfoQuantityField name={fieldName} title={title} disabled={disabled}
+                                                  groupClassName={groupClassName}
                                                   min={deserializeInt(modifiers.min)}
                                                   max={deserializeInt(modifiers.max)}
                                                   initialValue={deserializeInt(initialValue)}
@@ -71,7 +73,7 @@ export default function SettingsField({name, fieldName, meta, initialValue}: Pro
                         // continue
                 }
             }
-            return <NumberField name={fieldName} title={title} disabled={disabled}
+            return <NumberField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                 min={deserializeInt(modifiers.min)}
                                 max={deserializeInt(modifiers.max)}
                                 step={"step" in modifiers ? deserializeInt(modifiers.step) : undefined}
@@ -84,46 +86,51 @@ export default function SettingsField({name, fieldName, meta, initialValue}: Pro
                 switch (modifiers.format) {
                     default:
                         return <InputField name={fieldName} title={title} disabled={disabled}
-                                           initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
+                                           groupClassName={groupClassName} initialValue={initialValue}
+                                           defaultValue={defaultValue} anyValue/>;
                     case "select":
                         return <SelectField name={fieldName} title={title} disabled={disabled}
+                                            groupClassName={groupClassName}
                                             choices={"items" in modifiers ? modifiers.items : undefined}
                                             initialValue={initialValue} defaultValue={defaultValue} anyValue/>
                     case "emoji-list-positive":
-                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled} negative={false}
+                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
+                                                    groupClassName={groupClassName} negative={false}
                                                     initialValue={initialValue} defaultValue={defaultValue}/>;
                     case "emoji-list-negative":
-                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled} negative={true}
+                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
+                                                    groupClassName={groupClassName} negative={true}
                                                     initialValue={initialValue} defaultValue={defaultValue}/>;
                     case "emoji-list-positive-advanced":
-                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled} negative={false}
-                                                    advanced={true} initialValue={initialValue}
-                                                    defaultValue={defaultValue}/>;
+                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
+                                                    groupClassName={groupClassName} negative={false} advanced={true}
+                                                    initialValue={initialValue} defaultValue={defaultValue}/>;
                     case "emoji-list-negative-advanced":
-                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled} negative={true}
-                                                    advanced={true} initialValue={initialValue}
-                                                    defaultValue={defaultValue}/>;
+                        return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
+                                                    groupClassName={groupClassName} negative={true} advanced={true}
+                                                    initialValue={initialValue} defaultValue={defaultValue}/>;
                 }
             } else if (modifiers.multiline) {
-                return <TextField name={fieldName} title={title} disabled={disabled}
+                return <TextField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                   initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
             } else {
-                return <InputField name={fieldName} title={title} disabled={disabled}
+                return <InputField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                    initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
             }
 
         case "Duration":
-            return <DurationField name={fieldName} title={title} disabled={disabled} min={modifiers.min}
-                                  max={modifiers.max} never={modifiers.never} always={modifiers.always}
-                                  initialValue={initialValue} defaultValue={defaultValue}/>;
+            return <DurationField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
+                                  min={modifiers.min} max={modifiers.max} never={modifiers.never}
+                                  always={modifiers.always} initialValue={initialValue} defaultValue={defaultValue}/>;
 
         case "Principal":
-            return <PrincipalField name={fieldName} title={title} disabled={disabled} values={modifiers.principals}
+            return <PrincipalField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
+                                   values={modifiers.principals}
                                    initialValue={deserializePrincipal(initialValue)}
                                    defaultValue={deserializePrincipal(defaultValue)} long/>;
 
         default:
-            return <InputField name={fieldName} title={title} disabled={disabled}
+            return <InputField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                initialValue={initialValue} defaultValue={defaultValue} anyValue/>;
     }
 }
