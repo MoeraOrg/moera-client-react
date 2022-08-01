@@ -66,13 +66,29 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
         sheet("other", "Other")
     ],
     "client": [
+        sheet("appearance", "Appearance", [
+            option(PREFIX + "feed.width"),
+            option(PREFIX + "avatar.shape"),
+            option(PREFIX + "full-name.display", 4),
+            option(PREFIX + "entry.gallery.loop"),
+            option(PREFIX + "instants.number.mode"),
+            option(PREFIX + "instants.profile-link"),
+            option(PREFIX + "news-button.target-story")
+        ]),
         sheet("posting", "Post", [
             chapter("General", [
+                option(PREFIX + "posting.visibility.default"),
                 option(PREFIX + "posting.body.font-magnitude"),
                 option(PREFIX + "posting.feed.news.enabled", 0),
                 option(PREFIX + "posting.media.compress.default", 0),
                 option(PREFIX + "posting.smileys.enabled", 0),
-                option(PREFIX + "posting.time.relative")
+                option(PREFIX + "posting.time.relative"),
+                option(PREFIX + "rich-text-editor.link-previews.max-automatic")
+            ]),
+            chapter("Comments", [
+                option(PREFIX + "posting.comments.visibility.default", 0),
+                option(PREFIX + "posting.comments.addition.default", 2),
+                option(PREFIX + "posting.comments.hide.default")
             ]),
             chapter("Reactions", [
                 option(PREFIX + "posting.reactions.enabled.default", 1),
@@ -90,12 +106,16 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             ])
         ]),
         sheet("comment", "Comment", [
-            option(PREFIX + "comment.reactions.positive.default"),
-            option(PREFIX + "comment.reactions.negative.default", 4),
-            option(PREFIX + "comment.reactions.self.enabled", 0),
-            option(PREFIX + "comment.replied-to.glance.enabled", 0),
-            option(PREFIX + "comment.smileys.enabled"),
-            option(PREFIX + "comment.submit-key")
+            chapter("General", [
+                option(PREFIX + "comment.replied-to.glance.enabled", 0),
+                option(PREFIX + "comment.smileys.enabled"),
+                option(PREFIX + "comment.submit-key")
+            ]),
+            chapter("Reactions", [
+                option(PREFIX + "comment.reactions.positive.default"),
+                option(PREFIX + "comment.reactions.negative.default", 4),
+                option(PREFIX + "comment.reactions.self.enabled")
+            ]),
         ]),
         sheet("reactions", "Reactions", [
             option(PREFIX + "reactions.positive.available"),
