@@ -42,7 +42,7 @@ function sheet(name: string, title: string, children: Item[] = []): Sheet {
     return {type: "sheet", name, title, children};
 }
 
-function chapter(title: string, children: Option[]): Chapter {
+function chapter(title: string, children: (Option | Component)[]): Chapter {
     return {type: "chapter", name: null, title, children, marginBottom: null};
 }
 
@@ -57,11 +57,43 @@ export function component(element: ElementType, marginBottom?: number): Componen
 const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
     "node": [
         sheet("posting", "Post", [
-            option("posting.subject.present"),
-            option("posting.time.relative")
+            chapter("General", [
+                option("posting.subject.present"),
+                option("posting.max-size"),
+                option("posting.revealed.notification.age")
+            ]),
+            chapter("Media", [
+                option("media.max-size"),
+                option("posting.media.max-size"),
+                option("posting.image.recommended-size"),
+                option("posting.image.recommended-pixels")
+            ])
+        ]),
+        sheet("news", "News", [
+            option("news.lifetime"),
+            option("news.purge-pinned"),
+            option("posting.picked.hide-on-delete")
         ]),
         sheet("security", "Security", [
-            component(SettingsItemPassword)
+            chapter("Password", [
+                component(SettingsItemPassword)
+            ]),
+            chapter("Subscribers & Subscriptions", [
+                option("subscribers.view", 0),
+                option("subscribers.view-total", 0),
+                option("subscriptions.view", 0),
+                option("subscriptions.view-total")
+            ])
+        ]),
+        sheet("webui", "Web UI", [
+            option("webui.enabled"),
+            option("webui.redirect-to-client"),
+            option("feed.width"),
+            option("posting.time.relative"),
+            option("webui.allow-indexing"),
+            option("webui.head.top.html"),
+            option("webmaster.name"),
+            option("webmaster.email")
         ]),
         sheet("other", "Other")
     ],
