@@ -102,10 +102,14 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option(PREFIX + "feed.width"),
             option(PREFIX + "avatar.shape"),
             option(PREFIX + "full-name.display", 4),
-            option(PREFIX + "entry.gallery.loop"),
+            option(PREFIX + "entry.gallery.loop")
+        ]),
+        sheet("notifications", "Notifications", [
             option(PREFIX + "instants.number.mode"),
             option(PREFIX + "instants.profile-link"),
-            option(PREFIX + "news-button.target-story")
+            option(PREFIX + "news-button.target-story"),
+            option(PREFIX + "mobile.notifications.enabled", 0),
+            option(PREFIX + "mobile.notifications.news.enabled")
         ]),
         sheet("posting", "Post", [
             chapter("General", [
