@@ -2,6 +2,7 @@ import {
     AvatarImage,
     AvatarInfo,
     DraftType,
+    Features,
     FeedStatus,
     PrincipalValue,
     StoryType,
@@ -45,6 +46,10 @@ export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
     gender?: string | null;
     title?: string | null;
     avatar?: AvatarImage | null;
+}
+
+export interface FeaturesUpdatedEvent extends BaseEvent<"FEATURES_UPDATED"> {
+    features: Features;
 }
 
 export interface FeedStatusUpdatedEvent extends BaseEvent<"FEED_STATUS_UPDATED"> {

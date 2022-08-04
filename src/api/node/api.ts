@@ -1650,6 +1650,29 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
 
 export const PostingFeatures = schema(PostingFeaturesType);
 
+export const FeaturesType: JSONSchemaType<API.Features> = {
+    type: "object",
+    properties: {
+        "posting": PostingFeaturesType,
+        "plugins": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "feedWidth": {
+            type: "integer"
+        }
+    },
+    required: [
+        "posting", "feedWidth"
+    ],
+    additionalProperties: false
+};
+
+export const Features = schema(FeaturesType);
+
 const SettingInfoType: JSONSchemaType<API.SettingInfo> = {
     type: "object",
     properties: {
@@ -1726,10 +1749,6 @@ const SettingMetaInfoType: JSONSchemaType<API.SettingMetaInfo> = {
         },
         "title": {
             type: "string"
-        },
-        "internal": {
-            type: "boolean",
-            nullable: true
         },
         "modifiers": {
             ...SettingTypeModifiersType,

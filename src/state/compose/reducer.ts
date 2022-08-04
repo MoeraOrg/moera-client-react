@@ -17,10 +17,6 @@ import {
     COMPOSE_DRAFT_SAVED,
     COMPOSE_DRAFT_SELECT,
     COMPOSE_DRAFT_UNSET,
-    COMPOSE_FEATURES_LOAD,
-    COMPOSE_FEATURES_LOAD_FAILED,
-    COMPOSE_FEATURES_LOADED,
-    COMPOSE_FEATURES_UNSET,
     COMPOSE_POST,
     COMPOSE_POST_FAILED,
     COMPOSE_POST_SUCCEEDED,
@@ -54,9 +50,6 @@ const emptyPosting = {
 };
 
 const initialState: ComposeState = {
-    loadingFeatures: false,
-    loadedFeatures: false,
-    features: null,
     ...emptyPosting,
     formId: 0,
     draftList: [],
@@ -116,34 +109,6 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 }
             }
             return state;
-
-        case COMPOSE_FEATURES_LOAD:
-            return {
-                ...state,
-                loadingFeatures: true
-            };
-
-        case COMPOSE_FEATURES_LOADED:
-            return {
-                ...state,
-                loadingFeatures: false,
-                loadedFeatures: true,
-                features: action.payload.features
-            };
-
-        case COMPOSE_FEATURES_LOAD_FAILED:
-            return {
-                ...state,
-                loadingFeatures: false
-            };
-
-        case COMPOSE_FEATURES_UNSET:
-            return {
-                ...state,
-                loadingFeatures: false,
-                loadedFeatures: false,
-                features: null
-            };
 
         case COMPOSE_POSTING_LOAD:
             return {

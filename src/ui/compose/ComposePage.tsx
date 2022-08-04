@@ -42,8 +42,8 @@ type Props = ComposePageOuterProps & FormikProps<ComposePageValues>;
 
 function ComposePage(props: Props) {
     const {
-        avatarDefault, loadingFeatures, features, loadingPosting, postingId, posting, loadingDraft, formId, conflict,
-        beingPosted, sharedText, smileysEnabled, composeConflictClose, values, resetForm
+        avatarDefault, features, loadingPosting, postingId, posting, loadingDraft, formId, conflict, beingPosted,
+        sharedText, smileysEnabled, composeConflictClose, values, resetForm
     } = props;
     const [initialPostingText, setInitialPostingText] = useState<PostingText>({bodySrc: ""});
 
@@ -68,7 +68,7 @@ function ComposePage(props: Props) {
                             &larr; Post
                         </Jump>
                     }
-                    <Loading active={loadingFeatures || loadingContent}/>
+                    <Loading active={loadingContent}/>
                 </h2>
             </PageHeader>
             <Page className="compose-page">
@@ -131,7 +131,6 @@ const connector = connect(
     (state: ClientState) => ({
         avatarDefault: getHomeOwnerAvatar(state),
         fullNameDefault: getHomeOwnerFullName(state),
-        loadingFeatures: state.compose.loadingFeatures,
         features: getPostingFeatures(state),
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,

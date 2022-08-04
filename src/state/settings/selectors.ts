@@ -3,6 +3,9 @@ import { ClientSettingMetaInfo } from "api/settings";
 import { SettingValue } from "api/setting-types";
 import { SettingMetaInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
+import { getNodeFeatures } from "state/node/selectors";
+import { Browser } from "ui/browser";
 
 export function isAtSettingsNodeTab(state: ClientState): boolean {
     return state.settings.tab === "node";
@@ -56,4 +59,17 @@ export function getSetting(state: ClientState, name: string): SettingValue | nul
     }
     const value = state.settings.client.values.get(ClientSettings.PREFIX + name);
     return SettingTypes.toValue(meta.type, value ?? meta.defaultValue ?? "");
+}
+
+export function getPostingBodyFontMagnitude(state: ClientState): number {
+    const name = Browser.isTinyScreen() ? "posting.body.font-magnitude.mobile" : "posting.body.font-magnitude";
+    return getSetting(state, name) as number;
+}
+
+export function getFeedWidth(state: ClientState): number {
+    const feedWidth = getSetting(state, "feed.width") as number;
+    if (isConnectedToHome(state)) {
+        return feedWidth;
+    }
+    return getNodeFeatures(state)?.feedWidth ?? feedWidth;
 }

@@ -496,6 +496,12 @@ export interface PostingFeatures {
     imageFormats: string[];
 }
 
+export interface Features {
+    posting: PostingFeatures;
+    plugins?: string[] | null;
+    feedWidth: number;
+}
+
 export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
     | "signed" | "public" | "unset";
 
@@ -523,7 +529,6 @@ export interface SettingMetaInfo {
     privileged: boolean;
     defaultValue?: string | null;
     title: string;
-    internal?: boolean;
     modifiers?: SettingTypeModifiers | null;
 }
 

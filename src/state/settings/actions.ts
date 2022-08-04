@@ -109,6 +109,12 @@ export const settingsClientValuesLoadFailed = (): SettingsClientValuesLoadFailed
     type: SETTINGS_CLIENT_VALUES_LOAD_FAILED
 });
 
+export const SETTINGS_CLIENT_VALUES_UNSET = "SETTINGS_CLIENT_VALUES_UNSET";
+export type SettingsClientValuesUnsetAction = Action<typeof SETTINGS_CLIENT_VALUES_UNSET>;
+export const settingsClientValuesUnset = (): SettingsClientValuesUnsetAction => ({
+    type: SETTINGS_CLIENT_VALUES_UNSET
+});
+
 export const SETTINGS_CLIENT_CONFLICT = "SETTINGS_CLIENT_CONFLICT";
 export type SettingsClientConflictAction = Action<typeof SETTINGS_CLIENT_CONFLICT>;
 export const settingsClientConflict = (): SettingsClientConflictAction => ({
@@ -199,6 +205,7 @@ export type SettingsAnyAction =
     | SettingsClientValuesLoadAction
     | SettingsClientValuesLoadedAction
     | SettingsClientValuesLoadFailedAction
+    | SettingsClientValuesUnsetAction
     | SettingsClientConflictAction
     | SettingsClientConflictCloseAction
     | SettingsUpdateAction

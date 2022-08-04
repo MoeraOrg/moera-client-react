@@ -7,7 +7,7 @@ import 'katex/dist/katex.min.css';
 import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import store from "state/store";
-import { getSetting } from "state/settings/selectors";
+import { getPostingBodyFontMagnitude } from "state/settings/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
@@ -186,7 +186,7 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
 const connector = connect(
     (state: ClientState) => ({
         standalone: isStandaloneMode(state),
-        fontMagnitude: getSetting(state, "posting.body.font-magnitude") as number
+        fontMagnitude: getPostingBodyFontMagnitude(state)
     }),
     { initFromLocation, goToLocation, newLocation }
 );

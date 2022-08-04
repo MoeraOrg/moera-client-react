@@ -14,6 +14,8 @@ export interface ClientSettingTypeModifiers {
     principals?: PrincipalValue[];
 }
 
+export type ClientSettingScope = "desktop" | "mobile" | "android";
+
 export interface ClientSettingMetaInfo {
     name: string;
     type: SettingType;
@@ -21,7 +23,7 @@ export interface ClientSettingMetaInfo {
     title?: string;
     internal?: boolean;
     modifiers?: ClientSettingTypeModifiers;
-    mobile?: boolean;
+    scope?: ClientSettingScope;
 }
 
 const META: ClientSettingMetaInfo[] = [
@@ -135,7 +137,8 @@ const META: ClientSettingMetaInfo[] = [
         type: "bool",
         defaultValue: "true",
         title: "Show quick preview of the comment replied to",
-        modifiers: {}
+        modifiers: {},
+        scope: "desktop"
     },
     {
         name: "comment.smileys.enabled",
@@ -152,7 +155,8 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {
             min: 100,
             max: 10000
-        }
+        },
+        scope: "desktop"
     },
     {
         name: "full-name.display",
@@ -307,7 +311,21 @@ const META: ClientSettingMetaInfo[] = [
             max: 300,
             step: 5,
             format: "percentage"
-        }
+        },
+        scope: "desktop"
+    },
+    {
+        name: "posting.body.font-magnitude.mobile",
+        type: "int",
+        defaultValue: "100",
+        title: "Post font size",
+        modifiers: {
+            min: 15,
+            max: 300,
+            step: 5,
+            format: "percentage"
+        },
+        scope: "mobile"
     },
     {
         name: "posting.reply.subject-prefix",
@@ -500,7 +518,7 @@ export function buildMetaMap(): Map<string, ClientSettingMetaInfo> {
     collectMetaMap(metaMap, META);
     if (window.Android) {
         const settings = JSON.parse(window.Android.loadSettingsMeta()) as ClientSettingMetaInfo[];
-        const mobileMeta = settings.map(meta => ({...meta, mobile: true}));
+        const mobileMeta = settings.map(meta => ({...meta, scope: "mobile" as const}));
         collectMetaMap(metaMap, mobileMeta);
     }
     return metaMap;

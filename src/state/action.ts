@@ -17,6 +17,7 @@ import { LinkPreviewsAnyAction } from "state/linkpreviews/actions";
 import { MessageBoxAnyAction } from "state/messagebox/actions";
 import { NamingAnyAction } from "state/naming/actions";
 import { NavigationAnyAction } from "state/navigation/actions";
+import { NodeAnyAction } from "state/node/actions";
 import { NodeCardsAnyAction } from "state/nodecards/actions";
 import { NodeNameAnyAction } from "state/nodename/actions";
 import { OwnerAnyAction } from "state/owner/actions";
@@ -57,6 +58,7 @@ export type ClientAction =
     | MessageBoxAnyAction
     | NamingAnyAction
     | NavigationAnyAction
+    | NodeAnyAction
     | NodeCardsAnyAction
     | NodeNameAnyAction
     | OwnerAnyAction

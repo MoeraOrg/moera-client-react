@@ -12,6 +12,7 @@ import {
     SETTINGS_CLIENT_VALUES_LOAD,
     SETTINGS_CLIENT_VALUES_LOAD_FAILED,
     SETTINGS_CLIENT_VALUES_LOADED,
+    SETTINGS_CLIENT_VALUES_UNSET,
     SETTINGS_GO_TO_SHEET,
     SETTINGS_GO_TO_TAB,
     SETTINGS_NODE_CONFLICT,
@@ -151,6 +152,14 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case SETTINGS_CLIENT_VALUES_LOAD_FAILED:
             return immutable.set(state, "client.loadingValues", false);
+
+        case SETTINGS_CLIENT_VALUES_UNSET:
+            return immutable.wrap(state)
+                .set("client.loadingValues", false)
+                .set("client.loadedValues", false)
+                .set("client.conflict", false)
+                .set("client.values", new Map())
+                .value();
 
         case SETTINGS_CLIENT_CONFLICT:
             return immutable.set(state, "client.conflict", true);

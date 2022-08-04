@@ -46,6 +46,7 @@ import { spawn } from 'typed-redux-saga/macro';
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";
+import nodeExecutors from "state/node/sagas";
 import ownerExecutors from "state/owner/sagas";
 import connectExecutors from "state/home/connect";
 import connectDialogExecutors from "state/connectdialog/sagas";
@@ -82,6 +83,7 @@ import homeTriggers from "state/home/triggers";
 import cartesTriggers from "state/cartes/triggers";
 import navigationTriggers from "state/navigation/triggers";
 import connectDialogTriggers from "state/connectdialog/triggers";
+import nodeTriggers from "state/node/triggers";
 import ownerTriggers from "state/owner/triggers";
 import nodeNameTriggers from "state/nodename/triggers";
 import profileTriggers from "state/profile/triggers";
@@ -159,6 +161,7 @@ const triggers = collectTriggers(
     cartesTriggers,
     navigationTriggers,
     connectDialogTriggers,
+    nodeTriggers,
     ownerTriggers,
     nodeNameTriggers,
     profileTriggers,
@@ -186,6 +189,7 @@ const triggers = collectTriggers(
 const executors = collectExecutors(
     navigationExecutors,
     errorExecutors,
+    nodeExecutors,
     ownerExecutors,
     connectExecutors,
     connectDialogExecutors,

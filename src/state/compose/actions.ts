@@ -1,34 +1,7 @@
 import { Action } from 'redux';
 
-import { DraftInfo, DraftText, PostingFeatures, PostingInfo, PostingText } from "api/node/api-types";
+import { DraftInfo, DraftText, PostingInfo, PostingText } from "api/node/api-types";
 import { ActionWithPayload } from "state/action-types";
-
-export const COMPOSE_FEATURES_LOAD = "COMPOSE_FEATURES_LOAD";
-export type ComposeFeaturesLoadAction = Action<typeof COMPOSE_FEATURES_LOAD>;
-export const composeFeaturesLoad = (): ComposeFeaturesLoadAction => ({
-    type: COMPOSE_FEATURES_LOAD
-});
-
-export const COMPOSE_FEATURES_LOADED = "COMPOSE_FEATURES_LOADED";
-export type ComposeFeaturesLoadedAction = ActionWithPayload<typeof COMPOSE_FEATURES_LOADED, {
-    features: PostingFeatures;
-}>;
-export const composeFeaturesLoaded = (features: PostingFeatures) => ({
-    type: COMPOSE_FEATURES_LOADED,
-    payload: {features}
-});
-
-export const COMPOSE_FEATURES_LOAD_FAILED = "COMPOSE_FEATURES_LOAD_FAILED";
-export type ComposeFeaturesLoadFailedAction = Action<typeof COMPOSE_FEATURES_LOAD_FAILED>;
-export const composeFeaturesLoadFailed = (): ComposeFeaturesLoadFailedAction => ({
-    type: COMPOSE_FEATURES_LOAD_FAILED
-});
-
-export const COMPOSE_FEATURES_UNSET = "COMPOSE_FEATURES_UNSET";
-export type ComposeFeaturesUnsetAction = Action<typeof COMPOSE_FEATURES_UNSET>;
-export const composeFeaturesUnset = (): ComposeFeaturesUnsetAction => ({
-    type: COMPOSE_FEATURES_UNSET
-});
 
 export const COMPOSE_POSTING_LOAD = "COMPOSE_POSTING_LOAD";
 export type ComposePostingLoadAction = Action<typeof COMPOSE_POSTING_LOAD>;
@@ -260,11 +233,7 @@ export const composeSharedTextSet = (text: string, type: SharedTextType): Compos
 });
 
 export type ComposeAnyAction =
-    ComposeFeaturesLoadAction
-    | ComposeFeaturesLoadedAction
-    | ComposeFeaturesLoadFailedAction
-    | ComposeFeaturesUnsetAction
-    | ComposePostingLoadAction
+    ComposePostingLoadAction
     | ComposePostingLoadedAction
     | ComposePostingLoadFailedAction
     | ComposeConflictAction

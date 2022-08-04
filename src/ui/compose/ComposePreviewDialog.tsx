@@ -4,7 +4,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Button, ModalDialog } from "ui/control";
 import { ClientState } from "state/state";
 import { composePreviewClose } from "state/compose/actions";
-import { getSetting } from "state/settings/selectors";
+import { getFeedWidth } from "state/settings/selectors";
 import DraftOwner from "ui/draft/DraftOwner";
 import DraftSubject from "ui/draft/DraftSubject";
 import EntryHtml from "ui/entry/EntryHtml";
@@ -56,7 +56,7 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.compose.showPreview,
         draft: state.compose.draft ?? state.compose.posting,
-        feedWidth: getSetting(state, "feed.width") as number
+        feedWidth: getFeedWidth(state)
     }),
     { composePreviewClose }
 );

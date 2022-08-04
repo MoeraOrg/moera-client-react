@@ -80,7 +80,7 @@ function* settingsClientValuesLoadSaga() {
 }
 
 function isMobileSetting(meta: Map<string, ClientSettingMetaInfo>, name: string): boolean {
-    return meta.has(name) && (meta.get(name)!.mobile ?? false);
+    return meta.get(name)?.scope === "mobile";
 }
 
 function* settingsUpdateSaga(action: SettingsUpdateAction) {

@@ -22,13 +22,13 @@ import {
     DraftInfo,
     DraftText,
     EmailHint,
+    Features,
     FeedInfo,
     FeedSliceInfo,
     FeedStatus,
     LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
-    PostingFeatures,
     PostingInfo,
     PostingSourceText,
     PostingText,
@@ -302,8 +302,8 @@ export function* postSubscriptionsSearch(nodeName: string | null,
     });
 }
 
-export function* getPostingFeatures(nodeName: string | null): CallApiResult<PostingFeatures> {
-    return yield* callApi({nodeName, location: "/postings/features", schema: NodeApi.PostingFeatures});
+export function* getFeatures(nodeName: string | null): CallApiResult<Features> {
+    return yield* callApi({nodeName, location: "/features", schema: NodeApi.Features});
 }
 
 export function* getPosting(nodeName: string | null, id: string,

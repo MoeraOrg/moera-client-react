@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { Button, Loading, ModalDialog } from "ui/control";
-import { getSetting } from "state/settings/selectors";
+import { getFeedWidth } from "state/settings/selectors";
 import { closeSourceDialog } from "state/sourcedialog/actions";
 import { ClientState } from "state/state";
 import "./SourceDialog.css";
@@ -36,7 +36,7 @@ const connector = connect(
         show: state.sourceDialog.show,
         text: state.sourceDialog.text,
         loading: state.sourceDialog.loading,
-        feedWidth: getSetting(state, "feed.width") as number
+        feedWidth: getFeedWidth(state)
     }),
     { closeSourceDialog }
 );

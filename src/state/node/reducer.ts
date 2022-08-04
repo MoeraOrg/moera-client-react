@@ -1,7 +1,8 @@
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import { toWsUrl } from "util/url";
+import { NODE_FEATURES_LOADED } from "state/node/actions";
 import { NodeState } from "state/node/state";
 import { ClientAction } from "state/action";
+import { toWsUrl } from "util/url";
 
 const initialState = {
     root: {
@@ -9,7 +10,8 @@ const initialState = {
         page: null,
         api: null,
         events: null
-    }
+    },
+    features: null
 };
 
 export default (state: NodeState = initialState, action: ClientAction): NodeState => {
@@ -33,6 +35,12 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                 }
             };
         }
+
+        case NODE_FEATURES_LOADED:
+            return {
+                ...state,
+                features: action.payload.features
+            };
 
         default:
             return state;

@@ -1,13 +1,13 @@
 import { trigger } from "state/trigger";
-import { INIT_FROM_LOCATION, newLocation, updateLocation } from "state/navigation/actions";
-import { OWNER_SET, OWNER_SWITCH_FAILED, ownerLoad, ownerSet, ownerVerify } from "state/owner/actions";
-import { PULSE_6H } from "state/pulse/actions";
-import { getOwnerName, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/owner/selectors";
-import { messageBox } from "state/messagebox/actions";
+import { NodeNameChangedEvent } from "api/events/api-types";
 import { EVENT_NODE_NODE_NAME_CHANGED, EventAction } from "api/events/actions";
 import { NAMING_NAME_LOADED, NamingNameLoadedAction } from "state/naming/actions";
+import { INIT_FROM_LOCATION, newLocation, updateLocation } from "state/navigation/actions";
 import { isAtNode } from "state/node/selectors";
-import { NodeNameChangedEvent } from "api/events/api-types";
+import { OWNER_SET, OWNER_SWITCH_FAILED, ownerLoad, ownerSet, ownerVerify } from "state/owner/actions";
+import { getOwnerName, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/owner/selectors";
+import { PULSE_6H } from "state/pulse/actions";
+import { messageBox } from "state/messagebox/actions";
 
 export default [
     trigger(INIT_FROM_LOCATION, isAtNode, ownerLoad),

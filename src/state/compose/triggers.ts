@@ -1,4 +1,4 @@
-import { conj, inv, trigger } from "state/trigger";
+import { conj, trigger } from "state/trigger";
 import {
     COMPOSE_DRAFT_LIST_ITEM_DELETED,
     COMPOSE_DRAFT_SAVED,
@@ -14,8 +14,6 @@ import {
     composeDraftListLoad,
     composeDraftLoad,
     composeDraftUnset,
-    composeFeaturesLoad,
-    composeFeaturesUnset,
     composePostingLoad,
     ComposePostSucceededAction,
     composePreviewClose,
@@ -27,22 +25,18 @@ import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposeDraftId,
     getComposePostingId,
-    isAtComposeFeaturesPage,
     isComposeDraftListLoaded,
     isComposeDraftListToBeLoaded,
     isComposeDraftToBeLoaded,
-    isComposeFeaturesToBeLoaded,
     isComposePosted,
     isComposePostingEditing,
     isComposePostingToBeLoaded,
     isComposeSharedTextToBeLoaded
 } from "state/compose/selectors";
-import { SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
 import {
     EVENT_HOME_DRAFT_ADDED,
     EVENT_HOME_DRAFT_DELETED,
     EVENT_HOME_DRAFT_UPDATED,
-    EVENT_HOME_NODE_SETTINGS_CHANGED,
     EVENT_NODE_POSTING_UPDATED,
     EventAction
 } from "api/events/actions";
@@ -56,7 +50,7 @@ import { ClientState } from "state/state";
 const isConnectionSwitch = (state: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
 
 export default [
-    trigger(GO_TO_PAGE, conj(isAtComposeFeaturesPage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
+    // trigger(GO_TO_PAGE, conj(isAtComposeFeaturesPage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
     trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
@@ -88,17 +82,17 @@ export default [
             isAtComposePage(state) && getComposePostingId(state) === signal.payload.id,
         composeConflict
     ),
-    trigger(
-        [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
-        isAtComposeFeaturesPage,
-        composeFeaturesLoad
-    ),
-    trigger(CONNECTED_TO_HOME, conj(isAtComposeFeaturesPage, isConnectionSwitch), composeFeaturesLoad),
-    trigger(
-        [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
-        inv(isAtComposeFeaturesPage),
-        composeFeaturesUnset
-    ),
+    // trigger(
+    //     [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
+    //     isAtComposeFeaturesPage,
+    //     composeFeaturesLoad
+    // ),
+    // trigger(CONNECTED_TO_HOME, conj(isAtComposeFeaturesPage, isConnectionSwitch), composeFeaturesLoad),
+    // trigger(
+    //     [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
+    //     inv(isAtComposeFeaturesPage),
+    //     composeFeaturesUnset
+    // ),
     trigger(COMPOSE_DRAFT_SAVED, true, updateLocation),
     trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad),
     trigger(COMPOSE_DRAFT_SELECT, true, updateLocation),

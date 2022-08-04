@@ -1,4 +1,4 @@
-import { CommentOperationsInfo, PostingOperationsInfo, PrincipalValue } from "api/node/api-types";
+import { CommentOperationsInfo, Features, PostingOperationsInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeOwnerName, getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 
@@ -16,6 +16,10 @@ export function getNodeRootLocation(state: ClientState): string | null {
 
 export function getNodeRootPage(state: ClientState): string | null {
     return state.node.root.page;
+}
+
+export function getNodeFeatures(state: ClientState): Features | null {
+    return state.node.features;
 }
 
 export function getToken(state: ClientState, rootLocation: string | null): string | null {

@@ -9,7 +9,6 @@ import {
     COMPOSE_DRAFT_LIST_LOAD,
     COMPOSE_DRAFT_LOAD,
     COMPOSE_DRAFT_SAVE,
-    COMPOSE_FEATURES_LOAD,
     COMPOSE_POST,
     COMPOSE_POSTING_LOAD,
     COMPOSE_SHARED_TEXT_LOAD,
@@ -27,8 +26,6 @@ import {
     composeDraftSaved,
     composeDraftSaveFailed,
     composeDraftUnset,
-    composeFeaturesLoaded,
-    composeFeaturesLoadFailed,
     ComposePostAction,
     composePostFailed,
     ComposePostingLoadAction,
@@ -45,7 +42,6 @@ import { flashBox } from "state/flashbox/actions";
 import { introduced, mutuallyIntroduced } from "state/init-selectors";
 
 export default [
-    executor(COMPOSE_FEATURES_LOAD, "", composeFeaturesLoadSaga),
     executor(COMPOSE_POSTING_LOAD, "", composePostingLoadSaga, introduced),
     executor(COMPOSE_POST, null, composePostSaga),
     executor(COMPOSE_DRAFT_LOAD, "", composeDraftLoadSaga, mutuallyIntroduced),
@@ -57,16 +53,6 @@ export default [
     executor(COMPOSE_UPDATE_DRAFT_DELETE, "", composeUpdateDraftDeleteSaga),
     executor(COMPOSE_SHARED_TEXT_LOAD, "", composeSharedTextLoadSaga)
 ];
-
-function* composeFeaturesLoadSaga() {
-    try {
-        const data = yield* call(Node.getPostingFeatures, "");
-        yield* put(composeFeaturesLoaded(data));
-    } catch (e) {
-        yield* put(composeFeaturesLoadFailed());
-        yield* put(errorThrown(e));
-    }
-}
 
 function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) {
     const id = yield* select(getComposePostingId);

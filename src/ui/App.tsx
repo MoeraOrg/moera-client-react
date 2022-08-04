@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
-import { getSetting } from "state/settings/selectors";
+import { getFeedWidth } from "state/settings/selectors";
 import Storage from "ui/storage/Storage";
 import HomeEvents from "ui/events/HomeEvents";
 import NodeEvents from "ui/events/NodeEvents";
@@ -75,7 +75,7 @@ const App = ({atNode, feedWidth}: Props) => (
 const connector = connect(
     (state: ClientState) => ({
         atNode: isAtNode(state),
-        feedWidth: getSetting(state, "feed.width") as number
+        feedWidth: getFeedWidth(state)
     })
 );
 

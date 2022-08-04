@@ -12,6 +12,7 @@ import {
     DraftAddedEvent,
     DraftDeletedEvent,
     DraftUpdatedEvent,
+    FeaturesUpdatedEvent,
     FeedStatusUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
@@ -62,6 +63,7 @@ export const EVENT_NODE_POSTING_UPDATED = "EVENT_NODE_POSTING_UPDATED";
 export const EVENT_NODE_POSTING_RESTORED = "EVENT_NODE_POSTING_RESTORED";
 export const EVENT_NODE_NODE_NAME_CHANGED = "EVENT_NODE_NODE_NAME_CHANGED";
 export const EVENT_HOME_NODE_NAME_CHANGED = "EVENT_HOME_NODE_NAME_CHANGED";
+export const EVENT_NODE_FEATURES_UPDATED = "EVENT_NODE_FEATURES_UPDATED";
 export const EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS = "EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS";
 export const EVENT_HOME_REMOTE_POSTING_VERIFIED = "EVENT_HOME_REMOTE_POSTING_VERIFIED";
 export const EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED = "EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED";
@@ -137,6 +139,7 @@ export type ClientEventAction =
     | EventAction<ClientSettingsChangedEvent>
     | EventAction<RegisteredNameOperationStatusEvent>
     | EventAction<NodeNameChangedEvent>
+    | EventAction<FeaturesUpdatedEvent>
     | EventAction<FeedStatusUpdatedEvent>
     | EventAction<StoriesStatusUpdatedEvent>
     | EventAction<RemoteNodeFullNameChangedEvent>

@@ -4,9 +4,14 @@ import { SettingMetaInfo } from "api/node/api-types";
 import { ClientSettingMetaInfo } from "api/settings";
 import { Item } from "ui/settings/settings-menu";
 import SettingsField from "ui/settings/SettingsField";
+import { Browser } from "ui/browser";
 
 export function toFieldName(name: string): string {
     return name.replace(/\./g, "_");
+}
+
+function isClientMeta(meta: SettingMetaInfo | ClientSettingMetaInfo): meta is ClientSettingMetaInfo {
+    return "internal" in meta || "scope" in meta;
 }
 
 interface Props {
@@ -29,8 +34,16 @@ export const SettingsSheetItems = ({items, valuesMap, metaMap}: Props) => (
 
                 case "option":
                     const meta = metaMap.get(item.name);
-                    if (meta == null || meta.internal) {
+                    if (meta == null) {
                         return null;
+                    }
+                    if (isClientMeta(meta)) {
+                        const wrongScope = meta.internal
+                            || (meta.scope === "desktop" && Browser.isTinyScreen())
+                            || (meta.scope === "mobile" && !Browser.isTinyScreen());
+                        if (wrongScope) {
+                            return null;
+                        }
                     }
                     const initialValue = valuesMap.get(item.name) ?? meta.defaultValue;
                     const groupClassName = item.marginBottom != null ? `mb-${item.marginBottom}` : undefined;

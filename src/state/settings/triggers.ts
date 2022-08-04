@@ -1,4 +1,4 @@
-import { conj, trigger } from "state/trigger";
+import { conj, inv, trigger } from "state/trigger";
 import { isAtSettingsPage } from "state/navigation/selectors";
 import {
     isAtSettingsClientTab,
@@ -16,11 +16,15 @@ import {
     settingsChangePasswordDialogClose,
     settingsClientConflict,
     settingsClientValuesLoad,
+    settingsClientValuesUnset,
     settingsNodeConflict,
     settingsNodeMetaLoad,
-    settingsNodeValuesLoad
+    settingsNodeMetaUnset,
+    settingsNodeValuesLoad,
+    settingsNodeValuesUnset
 } from "state/settings/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { isConnectedToHome } from "state/home/selectors";
 import { dialogClosed, dialogOpened, newLocation, updateLocation, WAKE_UP } from "state/navigation/actions";
 import {
     EVENT_HOME_CLIENT_SETTINGS_CHANGED,
@@ -40,26 +44,17 @@ export default [
         isSettingsNodeMetaToBeLoaded,
         settingsNodeMetaLoad
     ),
-    trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
-        true,
-        settingsNodeValuesLoad
-    ),
-    trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, EVENT_HOME_NODE_SETTINGS_META_CHANGED],
-        true,
-        settingsNodeMetaLoad
-    ),
+    trigger([CONNECTED_TO_HOME, WAKE_UP], isConnectedToHome, settingsNodeValuesLoad),
+    trigger([CONNECTED_TO_HOME, EVENT_HOME_NODE_SETTINGS_META_CHANGED], isConnectedToHome, settingsNodeMetaLoad),
+    trigger([DISCONNECTED_FROM_HOME, WAKE_UP], inv(isConnectedToHome), settingsNodeValuesUnset),
+    trigger([DISCONNECTED_FROM_HOME, WAKE_UP], inv(isConnectedToHome), settingsNodeMetaUnset),
     trigger(
         SETTINGS_GO_TO_TAB,
         isSettingsClientValuesToBeLoaded,
         settingsClientValuesLoad
     ),
-    trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
-        true,
-        settingsClientValuesLoad
-    ),
+    trigger([CONNECTED_TO_HOME, WAKE_UP], isConnectedToHome, settingsClientValuesLoad),
+    trigger([DISCONNECTED_FROM_HOME, WAKE_UP], inv(isConnectedToHome), settingsClientValuesUnset),
     trigger(SETTINGS_GO_TO_TAB, true, newLocation),
     trigger(SETTINGS_GO_TO_SHEET, true, updateLocation),
     trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN, true, dialogOpened(settingsChangePasswordDialogClose())),

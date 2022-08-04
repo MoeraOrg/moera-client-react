@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getSetting } from "state/settings/selectors";
+import { getFeedWidth } from "state/settings/selectors";
 import EntryImage from "ui/entry/EntryImage";
 import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
 import "./EntryGallery.css";
@@ -144,7 +144,7 @@ function EntryGallery({postingId, commentId, nodeName, media, onCollapse, onExpa
 
 const connector = connect(
     (state: ClientState) => ({
-        feedWidth: getSetting(state, "feed.width") as number
+        feedWidth: getFeedWidth(state)
     })
 );
 
