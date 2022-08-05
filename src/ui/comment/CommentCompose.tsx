@@ -69,7 +69,9 @@ function CommentCompose(props: Props) {
     }
 
     const onFocus = () => {
-        viewComposer();
+        if (values.body.text.length !== 0) {
+            viewComposer();
+        }
         bottomMenuHide();
     }
 
