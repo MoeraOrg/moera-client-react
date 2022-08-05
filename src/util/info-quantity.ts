@@ -16,6 +16,7 @@ export class InfoQuantityParsingError extends Error {
     }
 
 }
+
 export class InfoQuantity {
 
     static MIN = new InfoQuantity(0, "bytes");

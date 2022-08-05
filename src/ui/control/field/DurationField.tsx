@@ -5,20 +5,8 @@ import cx from 'classnames';
 import { Wrapper } from "ui/control/index";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import { FormGroup } from "ui/control/FormGroup";
-import { Duration, DurationUnit, FixedUnit, isFixedUnit } from "util/duration";
+import { Duration, DurationUnit, isFixedUnit, UNIT_NAMES } from "util/duration";
 import "./DurationField.css";
-
-interface UnitName {
-    short: FixedUnit;
-    long: string;
-}
-
-const UNITS: UnitName[] = [
-    {short: "s", long: "seconds"},
-    {short: "m", long: "minutes"},
-    {short: "h", long: "hours"},
-    {short: "d", long: "days"}
-];
 
 interface Props {
     name: string;
@@ -98,7 +86,7 @@ export function DurationField({name, title, horizontal = false, groupClassName, 
                     <select name={name + "_unit"} value={duration.unit} disabled={disabled}
                             onChange={e => onChange(e.target.value as DurationUnit, null)}>
                         {never && <option value="never">never</option>}
-                        {UNITS.map(({short, long}) => (
+                        {UNIT_NAMES.map(({short, long}) => (
                             dmax.toSeconds() >= new Duration(1, short).toSeconds() ?
                                 <option key={short} value={short}>{long}</option>
                             :

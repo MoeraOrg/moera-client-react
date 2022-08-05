@@ -10,6 +10,19 @@ const UNIT_FACTORS: Record<FixedUnit, number> = {
     "d": 24 * 60 * 60
 };
 
+export interface UnitName {
+    short: FixedUnit;
+    shorter: string;
+    long: string;
+}
+
+export const UNIT_NAMES: UnitName[] = [
+    {short: "s", shorter: "secs", long: "seconds"},
+    {short: "m", shorter: "mins", long: "minutes"},
+    {short: "h", shorter: "hours", long: "hours"},
+    {short: "d", shorter: "days", long: "days"}
+];
+
 export function isFixedUnit(unit: DurationUnit): unit is FixedUnit {
     return unit !== "never" && unit !== "always";
 }
@@ -94,6 +107,11 @@ export class Duration {
 
     toString(): string {
         return this.isFixed() ? `${this.amount}${this.unit}` : this.unit;
+    }
+
+    toReadableString(): string {
+        const name = UNIT_NAMES.find(un => un.short === this.unit)?.shorter ?? "secs";
+        return this.isFixed() ? `${this.amount} ${name}` : this.unit;
     }
 
 }

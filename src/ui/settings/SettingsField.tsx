@@ -1,18 +1,21 @@
 import React from 'react';
 
-import { PrincipalValue, SettingMetaInfo } from "api/node/api-types";
-import { ClientSettingMetaInfo } from "api/settings";
+import { PrincipalValue, SettingMetaInfo, SettingType, SettingTypeModifiers } from "api/node/api-types";
+import { ClientSettingMetaInfo, ClientSettingTypeModifiers } from "api/settings";
 import {
     CheckboxField,
     DurationField,
     EmojiListInputField,
     InfoQuantityField,
     InputField,
-    NumberField, PrincipalField,
+    NumberField,
+    PrincipalField,
     SelectField,
     TextField
 } from "ui/control/field";
 import { isNumber, parseBool } from "util/misc";
+import { InfoQuantity } from "util/info-quantity";
+import { Duration } from "util/duration";
 
 function deserializeBool(value: string | boolean | null | undefined): boolean | null {
     return value != null ? parseBool(value) : null;
@@ -38,6 +41,48 @@ function convertFormat(format: string | null | undefined) {
     }
 }
 
+function valueRange(type: SettingType, modifiers: SettingTypeModifiers | ClientSettingTypeModifiers): string {
+    let min: number | string | null = null;
+    let max: number | string | null = null;
+
+    switch (type) {
+        case "int":
+            min = deserializeInt(modifiers.min);
+            max = deserializeInt(modifiers.max);
+            switch (modifiers.format) {
+                case "size":
+                    min = min != null ? InfoQuantity.ofBytes(min).toString() : null;
+                    max = max != null ? InfoQuantity.ofBytes(max).toString() : null;
+                    break;
+
+                case "percentage":
+                    min = min != null ? `${min}%` : null;
+                    max = max != null ? `${max}%` : null;
+                    break;
+            }
+            break;
+
+        case "Duration":
+            min = modifiers.min != null ? Duration.parse(modifiers.min).toReadableString() : null;
+            max = modifiers.max != null ? Duration.parse(modifiers.max).toReadableString() : null;
+            break;
+    }
+
+    if (min != null) {
+        if (max != null) {
+            return ` [${min} \u2013 ${max}]`;
+        } else {
+            return ` [\u2265 ${min}]`;
+        }
+    } else {
+        if (max != null) {
+            return ` [\u2264 ${max}]`;
+        } else {
+            return "";
+        }
+    }
+}
+
 interface Props {
     name: string;
     fieldName: string;
@@ -47,12 +92,12 @@ interface Props {
 }
 
 export default function SettingsField({name, fieldName, meta, initialValue, groupClassName}: Props) {
-    const type = meta ? meta.type : "string";
+    const type: SettingType = meta ? meta.type : "string";
+    const modifiers = meta && meta.modifiers ? meta.modifiers : {};
     const privileged = meta != null && "privileged" in meta && meta.privileged;
-    const title = meta ? meta.title + (privileged ? " (provider setting)" : "") : name;
+    const title = (meta ? meta.title + (privileged ? " (provider setting)" : "") : name) + valueRange(type, modifiers);
     const defaultValue = meta ? meta.defaultValue : null;
     const disabled = meta ? privileged : false;
-    const modifiers = meta && meta.modifiers ? meta.modifiers : {};
     switch (type) {
         case "bool":
             return <CheckboxField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
