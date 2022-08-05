@@ -104,16 +104,15 @@ export function validate(value: SettingValue, type: SettingType,
 
 export function toString(value: SettingValue, type: SettingType,
                          modifiers: SettingModifiers | null | undefined): string {
-    if (!modifiers) {
-        return value.toString();
-    }
-
     switch (type) {
         case "int":
-            if (modifiers.format === "size") {
+            if (modifiers != null && modifiers.format === "size") {
                 return InfoQuantity.parse(value.toString()).toBytes().toString();
             }
             return value.toString();
+
+        case "json":
+            return JSON.stringify(value);
 
         default:
             return value.toString();
