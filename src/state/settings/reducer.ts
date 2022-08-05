@@ -12,6 +12,7 @@ import {
     SETTINGS_CLIENT_VALUES_LOAD,
     SETTINGS_CLIENT_VALUES_LOAD_FAILED,
     SETTINGS_CLIENT_VALUES_LOADED,
+    SETTINGS_CLIENT_VALUES_SET,
     SETTINGS_CLIENT_VALUES_UNSET,
     SETTINGS_GO_TO_SHEET,
     SETTINGS_GO_TO_TAB,
@@ -152,6 +153,12 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case SETTINGS_CLIENT_VALUES_LOAD_FAILED:
             return immutable.set(state, "client.loadingValues", false);
+
+        case SETTINGS_CLIENT_VALUES_SET: {
+            const values = new Map();
+            action.payload.settings.forEach(({name, value}) => values.set(name, value));
+            return immutable.set(state, "client.values", values);
+        }
 
         case SETTINGS_CLIENT_VALUES_UNSET:
             return immutable.wrap(state)

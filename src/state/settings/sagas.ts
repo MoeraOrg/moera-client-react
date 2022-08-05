@@ -27,6 +27,7 @@ import {
 import { executor } from "state/executor";
 import { getSettingsClientMeta } from "state/settings/selectors";
 import { introduced } from "state/init-selectors";
+import { Browser } from "ui/browser";
 
 export default [
     executor(SETTINGS_NODE_VALUES_LOAD, "", settingsNodeValuesLoadSaga, introduced),
@@ -59,16 +60,17 @@ function* settingsNodeMetaLoadSaga() {
 
 function* settingsClientValuesLoadSaga() {
     try {
-        let data = yield* call(Node.getClientSettings, ":");
+        let settings = yield* call(Node.getClientSettings, ":");
         if (window.Android) {
             const mobileData = window.Android.loadSettings();
             if (mobileData != null) {
                 const mobileSettings = JSON.parse(mobileData)
                     .map((t: {name: string, value: string}) => ({name: PREFIX + t.name, value: t.value}));
-                data = data.concat(mobileSettings);
+                settings = settings.concat(mobileSettings);
             }
         }
-        yield* put(settingsClientValuesLoaded(data));
+        yield* put(settingsClientValuesLoaded(settings));
+        Browser.storeSettings(settings);
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
             yield* put(settingsClientValuesLoaded([]));

@@ -1,6 +1,6 @@
 import * as URI from 'uri-js';
 
-import { AvatarImage, CarteInfo } from "api/node/api-types";
+import { AvatarImage, CarteInfo, SettingInfo } from "api/node/api-types";
 import { rootUrl } from "util/url";
 import { randomId } from "util/misc";
 import {
@@ -11,6 +11,7 @@ import {
     storeNameMessage,
     switchDataMessage
 } from "api/addon/api-types";
+import { PREFIX } from "api/settings";
 
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
 type UserAgentOs = "android" | "ios" | "unknown";
@@ -192,6 +193,10 @@ export class Browser {
 
     static storeCartesData(cartesIp: string | null, cartes: CarteInfo[] | null): void {
         this.storeData({cartesIp, cartes});
+    }
+
+    static storeSettings(settings: SettingInfo[]): void {
+        this.storeData({settings: settings.map(si => [si.name.substring(PREFIX.length), si.value])});
     }
 
     static deleteData(location: string): void {

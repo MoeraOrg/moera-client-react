@@ -1,15 +1,17 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { isAddonMessage, loadDataMessage, LoadedData, StoredName } from "api/addon/api-types";
+import { PREFIX } from "api/settings";
 import { ClientState } from "state/state";
 import { browserApiSet, connectionsSet, disconnectedFromHome, homeOwnerSet, homeRestore } from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
+import { settingsClientValuesSet } from "state/settings/actions";
 import LocalStorageBackend from "ui/storage/LocalStorageBackend";
 import { Browser } from "ui/browser";
-import { isAddonMessage, loadDataMessage, LoadedData, StoredName } from "api/addon/api-types";
 import { now } from "util/misc";
 
 type Props = ConnectedProps<typeof connector>;
@@ -53,7 +55,7 @@ class Storage extends React.PureComponent<Props> {
     loadedData(data: LoadedData) {
         const {
             home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
-            disconnectedFromHome
+            disconnectedFromHome, settingsClientValuesSet
         } = this.props;
 
         if (!data) {
@@ -70,6 +72,10 @@ class Storage extends React.PureComponent<Props> {
 
         if (data.clientId === Browser.clientId) {
             return;
+        }
+
+        if (data.settings != null) {
+            settingsClientValuesSet(data.settings.map(([name, value]) => ({name: PREFIX + name, value})));
         }
 
         const {location, nodeName, fullName = null, avatar = null, login = null, token = null,
@@ -107,7 +113,7 @@ const connector = connect(
     }),
     {
         homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded,
-        disconnectedFromHome
+        disconnectedFromHome, settingsClientValuesSet
     }
 );
 

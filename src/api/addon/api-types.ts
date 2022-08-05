@@ -23,6 +23,7 @@ export interface StoredData {
     roots?: RootInfo[];
     cartesIp?: string | null;
     cartes?: CarteInfo[] | null;
+    settings?: [string, string | null][] | null;
 }
 
 export interface LoadedData extends StoredData {
