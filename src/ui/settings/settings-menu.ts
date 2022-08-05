@@ -99,6 +99,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
     ],
     "client": [
         sheet("appearance", "Appearance", [
+            option(PREFIX + "posting.body.font-magnitude"),
             option(PREFIX + "feed.width"),
             option(PREFIX + "avatar.shape"),
             option(PREFIX + "full-name.display", 4),
@@ -114,7 +115,6 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
         sheet("posting", "Post", [
             chapter("General", [
                 option(PREFIX + "posting.visibility.default"),
-                option(PREFIX + "posting.body.font-magnitude"),
                 option(PREFIX + "posting.feed.news.enabled", 0),
                 option(PREFIX + "posting.media.compress.default", 0),
                 option(PREFIX + "posting.smileys.enabled", 0),

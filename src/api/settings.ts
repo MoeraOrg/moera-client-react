@@ -305,7 +305,7 @@ const META: ClientSettingMetaInfo[] = [
         name: "posting.body.font-magnitude",
         type: "int",
         defaultValue: "100",
-        title: "Post font size",
+        title: "Font size",
         modifiers: {
             min: 15,
             max: 300,
