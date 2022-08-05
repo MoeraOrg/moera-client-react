@@ -35,6 +35,10 @@ export function getSettingsClientMeta(state: ClientState): Map<string, ClientSet
     return state.settings.client.meta;
 }
 
+export function getSettingsClient(state: ClientState): Map<string, string | null> {
+    return state.settings.client.values;
+}
+
 export function getSettingNodeMeta(state: ClientState, name: string): SettingMetaInfo | null {
     return state.settings.node.meta.get(name) ?? null;
 }

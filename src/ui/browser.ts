@@ -1,6 +1,6 @@
 import * as URI from 'uri-js';
 
-import { AvatarImage, CarteInfo, SettingInfo } from "api/node/api-types";
+import { AvatarImage, CarteInfo } from "api/node/api-types";
 import { rootUrl } from "util/url";
 import { randomId } from "util/misc";
 import {
@@ -195,8 +195,10 @@ export class Browser {
         this.storeData({cartesIp, cartes});
     }
 
-    static storeSettings(settings: SettingInfo[]): void {
-        this.storeData({settings: settings.map(si => [si.name.substring(PREFIX.length), si.value])});
+    static storeSettings(settings: Map<string, string | null>): void {
+        const data: [string, string | null][] = [];
+        settings.forEach((value, name) => data.push([name.substring(PREFIX.length), value]));
+        this.storeData({settings: data});
     }
 
     static deleteData(location: string): void {

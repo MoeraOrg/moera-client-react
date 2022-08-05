@@ -14,7 +14,7 @@ export interface ClientSettingTypeModifiers {
     principals?: PrincipalValue[];
 }
 
-export type ClientSettingScope = "desktop" | "mobile" | "android";
+export type ClientSettingScope = "desktop" | "mobile" | "android" | "device";
 
 export interface ClientSettingMetaInfo {
     name: string;
@@ -484,7 +484,8 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {
             min: -2,
             max: 2
-        }
+        },
+        scope: "device"
     },
     {
         name: "fundraiser.preferred.auto",

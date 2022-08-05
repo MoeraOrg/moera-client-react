@@ -6,6 +6,7 @@ import { ClientSettingMetaInfo, PREFIX } from "api/settings";
 import {
     SETTINGS_CHANGE_PASSWORD,
     SETTINGS_CLIENT_VALUES_LOAD,
+    SETTINGS_CLIENT_VALUES_LOADED,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
     SETTINGS_UPDATE,
@@ -25,7 +26,7 @@ import {
     SettingsUpdateSucceededAction
 } from "state/settings/actions";
 import { executor } from "state/executor";
-import { getSettingsClientMeta } from "state/settings/selectors";
+import { getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
 import { introduced } from "state/init-selectors";
 import { Browser } from "ui/browser";
 
@@ -33,6 +34,7 @@ export default [
     executor(SETTINGS_NODE_VALUES_LOAD, "", settingsNodeValuesLoadSaga, introduced),
     executor(SETTINGS_NODE_META_LOAD, "", settingsNodeMetaLoadSaga, introduced),
     executor(SETTINGS_CLIENT_VALUES_LOAD, "", settingsClientValuesLoadSaga, introduced),
+    executor(SETTINGS_CLIENT_VALUES_LOADED, "", settingsClientValuesLoadedSaga),
     executor(SETTINGS_UPDATE, null, settingsUpdateSaga),
     executor(SETTINGS_UPDATE_SUCCEEDED, null, settingsUpdateSucceededSaga),
     executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga)
@@ -58,6 +60,18 @@ function* settingsNodeMetaLoadSaga() {
     }
 }
 
+function isMobileSetting(meta: Map<string, ClientSettingMetaInfo>, name: string): boolean {
+    return meta.get(name)?.scope === "mobile";
+}
+
+function isDeviceSetting(meta: Map<string, ClientSettingMetaInfo>, name: string): boolean {
+    return meta.get(name)?.scope === "device";
+}
+
+function* storeSettings() {
+    Browser.storeSettings(yield* select(getSettingsClient));
+}
+
 function* settingsClientValuesLoadSaga() {
     try {
         let settings = yield* call(Node.getClientSettings, ":");
@@ -69,8 +83,9 @@ function* settingsClientValuesLoadSaga() {
                 settings = settings.concat(mobileSettings);
             }
         }
+        const clientMeta = yield* select(getSettingsClientMeta);
+        settings = settings.filter(t => !isDeviceSetting(clientMeta, t.name));
         yield* put(settingsClientValuesLoaded(settings));
-        Browser.storeSettings(settings);
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
             yield* put(settingsClientValuesLoaded([]));
@@ -81,15 +96,16 @@ function* settingsClientValuesLoadSaga() {
     }
 }
 
-function isMobileSetting(meta: Map<string, ClientSettingMetaInfo>, name: string): boolean {
-    return meta.get(name)?.scope === "mobile";
+function* settingsClientValuesLoadedSaga() {
+    yield* call(storeSettings);
 }
 
 function* settingsUpdateSaga(action: SettingsUpdateAction) {
     const {settings, onSuccess} = action.payload;
 
     const clientMeta = yield* select(getSettingsClientMeta);
-    const toHome = settings.filter(t => !isMobileSetting(clientMeta, t.name));
+    const toHome = settings
+        .filter(t => !isMobileSetting(clientMeta, t.name) && !isDeviceSetting(clientMeta, t.name));
     const toMobile = settings
         .filter(t => isMobileSetting(clientMeta, t.name))
         .map(t => ({name: t.name.substring(PREFIX.length), value: t.value}));
@@ -99,6 +115,7 @@ function* settingsUpdateSaga(action: SettingsUpdateAction) {
             window.Android.storeSettings(JSON.stringify(toMobile));
         }
         yield* put(settingsUpdateSucceeded(settings, onSuccess));
+        yield* call(storeSettings);
     } catch (e) {
         yield* put(settingsUpdateFailed());
         yield* put(errorThrown(e));

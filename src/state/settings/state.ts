@@ -10,7 +10,7 @@ export interface SettingsState {
         loadingValues: boolean;
         loadedValues: boolean;
         conflict: boolean;
-        values: Map<string, string>;
+        values: Map<string, string | null>;
         loadingMeta: boolean;
         loadedMeta: boolean;
         meta: Map<string, SettingMetaInfo>;
@@ -19,7 +19,7 @@ export interface SettingsState {
         loadingValues: boolean;
         loadedValues: boolean;
         conflict: boolean;
-        values: Map<string, string>;
+        values: Map<string, string | null>;
         meta: Map<string, ClientSettingMetaInfo>;
     },
     updating: boolean;

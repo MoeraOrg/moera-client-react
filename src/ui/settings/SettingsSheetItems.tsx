@@ -16,7 +16,7 @@ function isClientMeta(meta: SettingMetaInfo | ClientSettingMetaInfo): meta is Cl
 
 interface Props {
     items: Item[];
-    valuesMap: Map<string, string>;
+    valuesMap: Map<string, string | null>;
     metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
 }
 

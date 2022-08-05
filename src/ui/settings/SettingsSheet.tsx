@@ -17,7 +17,7 @@ import "./SettingsSheet.css";
 
 type OuterProps = {
     items?: Item[];
-    valuesMap: Map<string, string>;
+    valuesMap: Map<string, string | null>;
     metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
 } & ConnectedProps<typeof connector>;
 
