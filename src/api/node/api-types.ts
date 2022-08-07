@@ -83,9 +83,13 @@ export interface ProfileInfo {
     } | null;
 }
 
-export interface TokenCreated {
+export interface TokenInfo {
+    id: string;
     token: string;
     permissions: string[];
+    pluginName?: string | null;
+    createdAt: number;
+    deadline?: number | null;
 }
 
 export interface NodeNameInfo {

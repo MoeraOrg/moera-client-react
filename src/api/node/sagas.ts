@@ -51,8 +51,7 @@ import {
     SubscriberOperations,
     SubscriptionInfo,
     SubscriptionOperations,
-    SubscriptionType,
-    TokenCreated,
+    SubscriptionType, TokenInfo,
     WhoAmI
 } from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
@@ -102,9 +101,9 @@ export function* postCredentialsReset(nodeName: string | null): CallApiResult<Em
     });
 }
 
-export function* createToken(nodeName: string | null, login: string, password: string): CallApiResult<TokenCreated> {
+export function* createToken(nodeName: string | null, login: string, password: string): CallApiResult<TokenInfo> {
     return yield* callApi({
-        nodeName, location: "/tokens", method: "POST", body: {login, password}, schema: NodeApi.TokenCreated,
+        nodeName, location: "/tokens", method: "POST", body: {login, password}, schema: NodeApi.TokenInfo,
         errorFilter: ["credentials.login-incorrect", "credentials.not-created"]
     });
 }

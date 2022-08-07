@@ -202,9 +202,12 @@ const ProfileInfoType: JSONSchemaType<API.ProfileInfo> = {
 
 export const ProfileInfo = schema(ProfileInfoType);
 
-const TokenCreatedType: JSONSchemaType<API.TokenCreated> = {
+const TokenInfoType: JSONSchemaType<API.TokenInfo> = {
     type: "object",
     properties: {
+        "id": {
+            type: "string"
+        },
         "token": {
             type: "string"
         },
@@ -214,13 +217,24 @@ const TokenCreatedType: JSONSchemaType<API.TokenCreated> = {
                 type: "string"
             },
             default: []
+        },
+        "pluginName": {
+            type: "string",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "deadline": {
+            type: "integer",
+            nullable: true
         }
     },
     additionalProperties: false,
-    required: ["token", "permissions"]
+    required: ["id", "token", "permissions", "createdAt"]
 };
 
-export const TokenCreated = schema(TokenCreatedType);
+export const TokenInfo = schema(TokenInfoType);
 
 const NodeNameInfoType: JSONSchemaType<API.NodeNameInfo> = {
     type: "object",
