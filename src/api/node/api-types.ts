@@ -86,6 +86,7 @@ export interface ProfileInfo {
 export interface TokenInfo {
     id: string;
     token: string;
+    name?: string | null;
     permissions: string[];
     pluginName?: string | null;
     createdAt: number;

@@ -211,6 +211,10 @@ const TokenInfoType: JSONSchemaType<API.TokenInfo> = {
         "token": {
             type: "string"
         },
+        "name": {
+            type: "string",
+            nullable: true
+        },
         "permissions": {
             type: "array",
             items: {
@@ -235,6 +239,11 @@ const TokenInfoType: JSONSchemaType<API.TokenInfo> = {
 };
 
 export const TokenInfo = schema(TokenInfoType);
+
+export const TokenInfoArray = schema({
+    type: "array",
+    items: TokenInfoType
+} as JSONSchemaType<API.TokenInfo[]>);
 
 const NodeNameInfoType: JSONSchemaType<API.NodeNameInfo> = {
     type: "object",

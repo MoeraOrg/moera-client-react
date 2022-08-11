@@ -108,6 +108,10 @@ export function* createToken(nodeName: string | null, login: string, password: s
     });
 }
 
+export function* getTokens(nodeName: string | null): CallApiResult<TokenInfo[]> {
+    return yield* callApi({nodeName, location: "/tokens", auth: true, schema: NodeApi.TokenInfoArray});
+}
+
 export function* getWhoAmI(nodeName: string | null): CallApiResult<WhoAmI> {
     return yield* callApi({nodeName, location: "/whoami", schema: NodeApi.WhoAmI});
 }

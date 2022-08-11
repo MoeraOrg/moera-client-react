@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { SettingInfo, SettingMetaInfo } from "api/node/api-types";
+import { SettingInfo, SettingMetaInfo, TokenInfo } from "api/node/api-types";
 import { SettingsTabId } from "state/settings/state";
 
 export const SETTINGS_GO_TO_TAB = "SETTINGS_GO_TO_TAB";
@@ -198,6 +198,33 @@ export const settingsChangePasswordFailed = (): SettingsChangePasswordFailedActi
     type: SETTINGS_CHANGE_PASSWORD_FAILED
 });
 
+export const SETTINGS_TOKENS_LOAD = "SETTINGS_TOKENS_LOAD";
+export type SettingsTokensLoadAction = Action<typeof SETTINGS_TOKENS_LOAD>;
+export const settingsTokensLoad = (): SettingsTokensLoadAction => ({
+    type: SETTINGS_TOKENS_LOAD
+});
+
+export const SETTINGS_TOKENS_LOADED = "SETTINGS_TOKENS_LOADED";
+export type SettingsTokensLoadedAction = ActionWithPayload<typeof SETTINGS_TOKENS_LOADED, {
+    tokens: TokenInfo[];
+}>;
+export const settingsTokensLoaded = (tokens: TokenInfo[]): SettingsTokensLoadedAction => ({
+    type: SETTINGS_TOKENS_LOADED,
+    payload: {tokens}
+});
+
+export const SETTINGS_TOKENS_LOAD_FAILED = "SETTINGS_TOKENS_LOAD_FAILED";
+export type SettingsTokensLoadFailedAction = Action<typeof SETTINGS_TOKENS_LOAD_FAILED>;
+export const settingsTokensLoadFailed = (): SettingsTokensLoadFailedAction => ({
+    type: SETTINGS_TOKENS_LOAD_FAILED
+});
+
+export const SETTINGS_TOKENS_UNSET = "SETTINGS_TOKENS_UNSET";
+export type SettingsTokensUnsetAction = Action<typeof SETTINGS_TOKENS_UNSET>;
+export const settingsTokensUnset = (): SettingsTokensUnsetAction => ({
+    type: SETTINGS_TOKENS_UNSET
+});
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -225,4 +252,8 @@ export type SettingsAnyAction =
     | SettingsChangePasswordDialogCloseAction
     | SettingsChangePasswordAction
     | SettingsChangedPasswordAction
-    | SettingsChangePasswordFailedAction;
+    | SettingsChangePasswordFailedAction
+    | SettingsTokensLoadAction
+    | SettingsTokensLoadedAction
+    | SettingsTokensLoadFailedAction
+    | SettingsTokensUnsetAction;

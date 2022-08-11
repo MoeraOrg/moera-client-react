@@ -36,6 +36,7 @@ import {
     faHome,
     faImage,
     faItalic,
+    faKey,
     faLink,
     faList,
     faLock,
@@ -131,6 +132,7 @@ export default function initIconLibrary() {
     library.add(faItalic);
     library.add(faMinus);
     library.add(faNetworkWired);
+    library.add(faKey);
     library.add(faLink);
     library.add(faList);
     library.add(faLock);

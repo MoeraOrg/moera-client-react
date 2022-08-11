@@ -1,5 +1,8 @@
 import * as immutable from 'object-path-immutable';
+import cloneDeep from 'lodash.clonedeep';
 
+import { ClientSettings } from "api";
+import { ClientAction } from "state/action";
 import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
     SETTINGS_CHANGE_PASSWORD,
@@ -26,13 +29,15 @@ import {
     SETTINGS_NODE_VALUES_LOAD_FAILED,
     SETTINGS_NODE_VALUES_LOADED,
     SETTINGS_NODE_VALUES_UNSET,
+    SETTINGS_TOKENS_LOAD,
+    SETTINGS_TOKENS_LOAD_FAILED,
+    SETTINGS_TOKENS_LOADED,
+    SETTINGS_TOKENS_UNSET,
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_FAILED,
     SETTINGS_UPDATE_SUCCEEDED
 } from "state/settings/actions";
-import { ClientSettings } from "api";
 import { SettingsState } from "state/settings/state";
-import { ClientAction } from "state/action";
 
 const emptySettings = {
     node: {
@@ -53,7 +58,12 @@ const emptySettings = {
     },
     updating: false,
     changePasswordDialogShow: false,
-    changingPassword: false
+    changingPassword: false,
+    tokens: {
+        loading: false,
+        loaded: false,
+        tokens: []
+    }
 };
 
 const initialState = {
@@ -248,6 +258,22 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 ...state,
                 changingPassword: false
             }
+
+        case SETTINGS_TOKENS_LOAD:
+            return immutable.set(state, "tokens.loading", true);
+
+        case SETTINGS_TOKENS_LOADED:
+            return immutable.assign(state, "tokens", {
+                loading: false,
+                loaded: true,
+                tokens: action.payload.tokens
+            });
+
+        case SETTINGS_TOKENS_LOAD_FAILED:
+            return immutable.set(state, "tokens.loading", false);
+
+        case SETTINGS_TOKENS_UNSET:
+            return immutable.set(state, "tokens", cloneDeep(initialState.tokens));
 
         default:
             return state;

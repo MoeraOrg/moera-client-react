@@ -9,6 +9,7 @@ import {
     SETTINGS_CLIENT_VALUES_LOADED,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
+    SETTINGS_TOKENS_LOAD,
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_SUCCEEDED,
     settingsChangedPassword,
@@ -20,6 +21,8 @@ import {
     settingsNodeMetaLoadFailed,
     settingsNodeValuesLoaded,
     settingsNodeValuesLoadFailed,
+    settingsTokensLoaded,
+    settingsTokensLoadFailed,
     SettingsUpdateAction,
     settingsUpdateFailed,
     settingsUpdateSucceeded,
@@ -37,7 +40,8 @@ export default [
     executor(SETTINGS_CLIENT_VALUES_LOADED, "", settingsClientValuesLoadedSaga),
     executor(SETTINGS_UPDATE, null, settingsUpdateSaga),
     executor(SETTINGS_UPDATE_SUCCEEDED, null, settingsUpdateSucceededSaga),
-    executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga)
+    executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga),
+    executor(SETTINGS_TOKENS_LOAD, "", settingsTokensLoadSaga, introduced)
 ];
 
 function* settingsNodeValuesLoadSaga() {
@@ -139,6 +143,16 @@ function* settingsChangePasswordSaga(action: SettingsChangePasswordAction) {
             onLoginIncorrect();
         }
         yield* put(settingsChangePasswordFailed());
+        yield* put(errorThrown(e));
+    }
+}
+
+function* settingsTokensLoadSaga() {
+    try {
+        const tokens = yield* call(Node.getTokens, ":");
+        yield* put(settingsTokensLoaded(tokens));
+    } catch (e) {
+        yield* put(settingsTokensLoadFailed());
         yield* put(errorThrown(e));
     }
 }

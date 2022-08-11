@@ -3,6 +3,7 @@ import { ElementType } from 'react';
 import { PREFIX } from "api/settings";
 import { SettingsTabId } from "state/settings/state";
 import SettingsItemPassword from "ui/settings/SettingsItemPassword";
+import SettingsItemTokens from "ui/settings/SettingsItemTokens";
 
 interface Sheet {
     type: "sheet";
@@ -94,6 +95,11 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("webui.head.top.html"),
             option("webmaster.name"),
             option("webmaster.email")
+        ]),
+        sheet("addons", "Add-ons", [
+            chapter("Tokens", [
+                component(SettingsItemTokens)
+            ])
         ]),
         sheet("other", "Other")
     ],

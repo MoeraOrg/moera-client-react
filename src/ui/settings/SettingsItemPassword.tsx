@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { settingsChangePasswordDialogOpen } from "state/settings/actions";
 import { Button } from "ui/control";
 import ChangePasswordDialog from "ui/settings/ChangePasswordDialog";
-import { settingsChangePasswordDialogOpen } from "state/settings/actions";
 
 type Props = ConnectedProps<typeof connector>;
 

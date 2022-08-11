@@ -1,0 +1,28 @@
+.token-info .icon {
+    color: var(--bs-gray-500);
+}
+
+.token-info .btn {
+    padding-top: .1em;
+    padding-bottom: .25em;
+}
+
+.token-info .btn:focus:not(:focus-visible) {
+    outline: 0;
+    box-shadow: none;
+}
+
+.token-info .details {
+    margin: .25em 0 .5em 1em;
+}
+
+.token-info .details .item {
+    display: inline-block;
+    margin-right: 2em;
+}
+
+.token-info .details .item EM {
+    font-weight: bold;
+    font-style: normal;
+    margin-right: .5em;
+}

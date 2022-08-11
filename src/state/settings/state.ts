@@ -1,4 +1,4 @@
-import { SettingMetaInfo } from "api/node/api-types";
+import { SettingMetaInfo, TokenInfo } from "api/node/api-types";
 import { ClientSettingMetaInfo } from "api/settings";
 
 export type SettingsTabId = "node" | "client";
@@ -25,4 +25,9 @@ export interface SettingsState {
     updating: boolean;
     changePasswordDialogShow: boolean;
     changingPassword: boolean;
+    tokens: {
+        loading: boolean;
+        loaded: boolean;
+        tokens: TokenInfo[];
+    }
 }

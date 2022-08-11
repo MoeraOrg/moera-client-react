@@ -31,6 +31,15 @@ export function isSettingsClientValuesLoaded(state: ClientState): boolean {
     return state.settings.client.loadedValues;
 }
 
+export function isSettingsAtAddonsSheet(state: ClientState): boolean {
+    console.log(state.settings.tab, state.settings.sheet);
+    return state.settings.tab === "node" && state.settings.sheet === "addons";
+}
+
+export function isSettingsTokensToBeLoaded(state: ClientState): boolean {
+    return !state.settings.tokens.loaded && !state.settings.tokens.loading;
+}
+
 export function getSettingsClientMeta(state: ClientState): Map<string, ClientSettingMetaInfo> {
     return state.settings.client.meta;
 }
