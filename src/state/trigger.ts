@@ -88,7 +88,6 @@ function* triggersSaga(triggers: TriggerMap, action: WithContext<ClientAction>) 
     for (const trigger of list) {
         let enabled;
         if (typeof(trigger.filter) === "function") {
-            // @ts-ignore
             enabled = !!(yield* select(trigger.filter, action));
         } else {
             enabled = trigger.filter;

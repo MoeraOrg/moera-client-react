@@ -100,7 +100,7 @@ function* loadSubscriber(nodeName: string | null, homeOwnerName: string | null, 
     if (homeOwnerName == null || nodeName == null || nodeName === homeOwnerName) {
         return;
     }
-    const subscribers = yield* call(Node.getSubscribers, ":", "feed", nodeName);
+    const subscribers = yield* call(Node.getSubscribers, ":", "feed" as const, nodeName);
     const subscriber = (subscribers ?? []).find(sr => sr.feedName === feedName) ?? null;
     yield* put(feedSubscriberSet(feedName, subscriber));
 }
@@ -109,7 +109,7 @@ function* loadSubscription(nodeName: string | null, homeOwnerName: string | null
     if (homeOwnerName == null || nodeName == null || nodeName === homeOwnerName) {
         return;
     }
-    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", nodeName);
+    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
     const subscription = (subscriptions ?? []).find(sr => sr.remoteFeedName === feedName) ?? null;
     yield* put(feedSubscriptionSet(feedName, subscription));
 }
@@ -156,7 +156,7 @@ function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetV
     }
 
     try {
-        const view = visible ? "public" : "private";
+        const view: PrincipalValue = visible ? "public" : "private";
         const subscriber = yield* call(Node.putSubscriber, ":", subscriberId, null, {view});
         yield* put(feedSubscriberUpdated(homeOwnerName, subscriber));
         const subscription = yield* call(Node.putSubscription, subscriber.nodeName, subscriberId, homeOwnerName, {view});
@@ -175,7 +175,7 @@ function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscription
     }
 
     try {
-        const view = visible ? "public" : "private";
+        const view: PrincipalValue = visible ? "public" : "private";
         const subscription = yield* call(Node.putSubscription, ":", subscriberId, nodeName, {view});
         yield* put(feedSubscriptionUpdated(homeOwnerName, subscription));
         const subscriber = yield* call(Node.putSubscriber, nodeName, subscriberId, {view}, null);

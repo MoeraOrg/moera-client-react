@@ -16,6 +16,7 @@ function PageShareButton({href, ownerName, shareDialogPrepare, sharePageCopyLink
     const onShare = () => shareDialogPrepare(ownerName ?? "", href);
     const onCopyLink = () => sharePageCopyLink(ownerName ?? "", href);
 
+    // @ts-ignore
     if (window.Android || navigator.share) {
         return (
             <DropdownMenu className="page-share" items={[

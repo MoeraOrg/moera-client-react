@@ -19,7 +19,7 @@ export default [
 function* richTextEditorImageUpload(action: RichTextEditorImagesUploadAction, index: number) {
     const {features, nodeName, files, compress, onSuccess, onProgress, onFailure} = action.payload;
     const mediaFile = yield* call(imageUpload, features, nodeName, files[index], compress,
-        (loaded, total) => onProgress(index, loaded, total));
+        (loaded: number, total: number) => onProgress(index, loaded, total));
     if (mediaFile != null) {
         onSuccess(index, mediaFile);
     } else {

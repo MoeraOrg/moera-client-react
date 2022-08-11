@@ -35,7 +35,7 @@ function* peopleGeneralLoadSaga() {
 
 function* subscribersLoadSaga() {
     try {
-        const subscribers = yield* call(Node.getSubscribers, "", "feed");
+        const subscribers = yield* call(Node.getSubscribers, "", "feed" as const);
         yield* put(subscribersLoaded(subscribers));
     } catch (e) {
         if (e instanceof NodeApiError) {
@@ -49,7 +49,7 @@ function* subscribersLoadSaga() {
 
 function* subscriptionsLoadSaga() {
     try {
-        const subscriptions = yield* call(Node.getSubscriptions, "", "feed");
+        const subscriptions = yield* call(Node.getSubscriptions, "", "feed" as const);
         yield* put(subscriptionsLoaded(subscriptions));
     } catch (e) {
         if (e instanceof NodeApiError) {

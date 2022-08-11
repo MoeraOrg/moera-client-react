@@ -68,7 +68,7 @@ function* loadSubscriber(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return;
     }
-    const subscribers = yield* call(Node.getSubscribers, ":", "feed", nodeName);
+    const subscribers = yield* call(Node.getSubscribers, ":", "feed" as const, nodeName);
     yield* put(nodeCardSubscriberSet(nodeName, subscribers?.[0]));
 }
 
@@ -76,7 +76,7 @@ function* loadSubscription(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return;
     }
-    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed", nodeName);
+    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
     yield* put(nodeCardSubscriptionSet(nodeName, subscriptions?.[0]));
 }
 

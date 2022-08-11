@@ -59,7 +59,6 @@ export function mapEquals<Key, Value>(map1: Map<Key, Value> | null, map2: Map<Ke
     if (map1.size !== map2.size) {
         return false;
     }
-    // @ts-ignore
     for (const [key, value] of map1) {
         if (!map2.has(key) || map2.get(key) !== value) {
             return false;
