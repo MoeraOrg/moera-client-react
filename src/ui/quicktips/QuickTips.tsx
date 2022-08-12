@@ -16,11 +16,12 @@ import "./QuickTips.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-class QuickTips extends React.PureComponent<Props> {
+function QuickTips({show, ownerName, shown, closeQuickTips, settingsUpdate}: Props) {
+    if (!show) {
+        return null;
+    }
 
-    onClose = () => {
-        const {shown, closeQuickTips, settingsUpdate} = this.props;
-
+    const onClose = () => {
         closeQuickTips();
         if (!shown) {
             settingsUpdate([{
@@ -30,67 +31,58 @@ class QuickTips extends React.PureComponent<Props> {
         }
     };
 
-    onJump = (href: string, performJump: () => void) => {
-        this.onClose();
+    const onJump = (href: string, performJump: () => void) => {
+        onClose();
         performJump();
     }
 
-    render() {
-        const {show, ownerName} = this.props;
-
-        if (!show) {
-            return null;
-        }
-
-        return (
-            <ModalDialog className="quick-tips" title="Quick tips" onClose={this.onClose}>
-                <div className="modal-body">
-                    <ul>
-                        <li className="new-post">
-                            To write a post, click
-                            <Button variant="success" size="sm">
-                                <FontAwesomeIcon icon="pen-alt"/>&nbsp;&nbsp;New post
-                            </Button>
-                            button in the {Browser.isTinyScreen()? "bottom panel" : "top-right corner"}.
+    return (
+        <ModalDialog className="quick-tips" title="Quick tips" onClose={onClose}>
+            <div className="modal-body">
+                <ul>
+                    <li className="new-post">
+                        To write a post, click
+                        <Button variant="success" size="sm">
+                            <FontAwesomeIcon icon="pen-alt"/>&nbsp;&nbsp;New post
+                        </Button>
+                        button in the {Browser.isTinyScreen()? "bottom panel" : "top-right corner"}.
+                    </li>
+                    {ownerName &&
+                        <li className="visit">
+                            To visit someone's blog, click <NodeName name={ownerName} linked={false} popup={false}/>
+                            {" "}in the {Browser.isTinyScreen()? "top panel" : "top-left corner"} and type the blog
+                            name.
                         </li>
-                        {ownerName &&
-                            <li className="visit">
-                                To visit someone's blog, click <NodeName name={ownerName} linked={false} popup={false}/>
-                                {" "}in the {Browser.isTinyScreen()? "top panel" : "top-left corner"} and type the blog
-                                name.
-                            </li>
-                        }
-                        <li className="subscribe">
-                            To subscribe to a blog, open it and click
-                            <Button variant="outline-primary" size="sm">Subscribe</Button>
-                            button.
-                        </li>
-                        <li className="blog">
-                            To quickly access your blog, use buttons in the
-                            {Browser.isTinyScreen()? " bottom panel" : " top-right corner"}:
-                            <p>
-                                <button><FontAwesomeIcon icon="newspaper"/></button> &mdash; your News feed;<br/>
-                                <button><FontAwesomeIcon icon="bell"/></button> &mdash; your Notifications;<br/>
-                                <button><FontAwesomeIcon icon="cog"/></button> &mdash; your Settings;<br/>
-                                <button><FontAwesomeIcon icon="home"/></button> &mdash; your Timeline.
-                            </p>
-                        </li>
-                        <li>
-                            Discover new blogs in the{" "}
-                            <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74"
-                                  onNear={this.onJump} onFar={this.onJump}>
-                                <b>list of blogs</b>
-                            </Jump>.
-                        </li>
-                    </ul>
-                </div>
-                <div className="modal-footer">
-                    <Button variant="primary" block onClick={this.onClose} autoFocus>OK</Button>
-                </div>
-            </ModalDialog>
-        );
-    }
-
+                    }
+                    <li className="subscribe">
+                        To subscribe to a blog, open it and click
+                        <Button variant="outline-primary" size="sm">Subscribe</Button>
+                        button.
+                    </li>
+                    <li className="blog">
+                        To quickly access your blog, use buttons in the
+                        {Browser.isTinyScreen()? " bottom panel" : " top-right corner"}:
+                        <p>
+                            <button><FontAwesomeIcon icon="newspaper"/></button> &mdash; your News feed;<br/>
+                            <button><FontAwesomeIcon icon="bell"/></button> &mdash; your Notifications;<br/>
+                            <button><FontAwesomeIcon icon="cog"/></button> &mdash; your Settings;<br/>
+                            <button><FontAwesomeIcon icon="home"/></button> &mdash; your Timeline.
+                        </p>
+                    </li>
+                    <li>
+                        Discover new blogs in the{" "}
+                        <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74"
+                              onNear={onJump} onFar={onJump}>
+                            <b>list of blogs</b>
+                        </Jump>.
+                    </li>
+                </ul>
+            </div>
+            <div className="modal-footer">
+                <Button variant="primary" block onClick={onClose} autoFocus>OK</Button>
+            </div>
+        </ModalDialog>
+    );
 }
 
 const connector = connect(
