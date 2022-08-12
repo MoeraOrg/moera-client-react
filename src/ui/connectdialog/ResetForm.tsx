@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
@@ -21,47 +21,38 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-class ResetForm extends React.PureComponent<Props> {
+function ResetForm(props: Props) {
+    const {show, emailHint, connectDialogSetForm, values, resetForm} = props;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.show !== prevProps.show && this.props.show) {
-            this.props.resetForm({
-                values: resetFormLogic.mapPropsToValues(this.props),
-            });
+    useEffect(() => {
+        if (show) {
+            resetForm({values: resetFormLogic.mapPropsToValues(props)})
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, resetForm]); // 'props' are missing on purpose
 
-    onResend = (event: React.MouseEvent) => {
-        const {location} = this.props.values;
-        const {connectDialogSetForm} = this.props;
-
-        connectDialogSetForm(location, "admin", "forgot");
-
+    const onResend = (event: React.MouseEvent) => {
+        connectDialogSetForm(values.location, "admin", "forgot");
         event.preventDefault();
     }
 
-    render() {
-        const {emailHint} = this.props;
-
-        return (
-            <ConnectDialogModal title="Set Home Password" buttonCaption="Set Password & Connect">
-                {emailHint &&
-                    <div className="instructions">
-                        A message was sent to your E-mail address <b>{emailHint}</b> with a secret code needed to reset
-                        the password. Please enter it in the field below.
-                    </div>
-                }
-                <InputField name="resetToken" title="Secret code" autoFocus/>
-                <InputField name="location" title="Name or node URL"/>
-                <InputField name="password" title="New password"/>
-                <InputField name="confirmPassword" title="Confirm password"/>
-                <div className="links">
-                    <button className="btn btn-link" onClick={this.onResend}>Send mail again</button>
+    return (
+        <ConnectDialogModal title="Set Home Password" buttonCaption="Set Password & Connect">
+            {emailHint &&
+                <div className="instructions">
+                    A message was sent to your E-mail address <b>{emailHint}</b> with a secret code needed to reset
+                    the password. Please enter it in the field below.
                 </div>
-            </ConnectDialogModal>
-        );
-    }
-
+            }
+            <InputField name="resetToken" title="Secret code" autoFocus/>
+            <InputField name="location" title="Name or node URL"/>
+            <InputField name="password" title="New password"/>
+            <InputField name="confirmPassword" title="Confirm password"/>
+            <div className="links">
+                <button className="btn btn-link" onClick={onResend}>Send mail again</button>
+            </div>
+        </ConnectDialogModal>
+    );
 }
 
 const resetFormLogic = {

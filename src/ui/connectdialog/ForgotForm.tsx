@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
@@ -17,41 +17,32 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-class ForgotForm extends React.PureComponent<Props> {
+function ForgotForm(props: Props) {
+    const {show, resettingPassword, connectDialogSetForm, values, resetForm} = props;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.show !== prevProps.show && this.props.show) {
-            this.props.resetForm({
-                values: forgotFormLogic.mapPropsToValues(this.props),
-            });
+    useEffect(() => {
+        if (show) {
+            resetForm({values: forgotFormLogic.mapPropsToValues(props)})
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, resetForm]); // 'props' are missing on purpose
 
-    onMail = (event: React.MouseEvent) => {
-        const {location} = this.props.values;
-        const {connectDialogSetForm} = this.props;
-
-        connectDialogSetForm(location, "admin", "reset");
-
+    const onMail = (event: React.MouseEvent) => {
+        connectDialogSetForm(values.location, "admin", "reset");
         event.preventDefault();
     }
 
-    render() {
-        const {resettingPassword} = this.props;
-
-        return (
-            <ConnectDialogModal title="Forgot Home Password" buttonCaption="Reset Password" loading={resettingPassword}>
-                <div className="instructions">
-                    To reset the password, please enter the name or the URL of your home node.
-                </div>
-                <InputField name="location" title="Name or node URL" autoFocus/>
-                <div className="links">
-                    <button className="btn btn-link" onClick={this.onMail}>Received the mail already</button>
-                </div>
-            </ConnectDialogModal>
-        );
-    }
-
+    return (
+        <ConnectDialogModal title="Forgot Home Password" buttonCaption="Reset Password" loading={resettingPassword}>
+            <div className="instructions">
+                To reset the password, please enter the name or the URL of your home node.
+            </div>
+            <InputField name="location" title="Name or node URL" autoFocus/>
+            <div className="links">
+                <button className="btn btn-link" onClick={onMail}>Received the mail already</button>
+            </div>
+        </ConnectDialogModal>
+    );
 }
 
 const forgotFormLogic = {

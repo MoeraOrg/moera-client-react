@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
@@ -19,26 +19,24 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-class AssignForm extends React.PureComponent<Props> {
+function AssignForm(props: Props) {
+    const {show, resetForm} = props;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.show !== prevProps.show && this.props.show) {
-            this.props.resetForm({
-                values: assignFormLogic.mapPropsToValues(this.props),
-            });
+    useEffect(() => {
+        if (show) {
+            resetForm({values: assignFormLogic.mapPropsToValues(props)})
         }
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, resetForm]); // 'props' are missing on purpose
 
-    render() {
-        return (
-            <ConnectDialogModal title="Set Home Password" buttonCaption="Set Password & Connect">
-                <InputField name="location" title="Name or node URL" autoFocus/>
-                <InputField name="password" title="New password"/>
-                <InputField name="confirmPassword" title="Confirm password"/>
-            </ConnectDialogModal>
-        );
-    }
 
+    return (
+        <ConnectDialogModal title="Set Home Password" buttonCaption="Set Password & Connect">
+            <InputField name="location" title="Name or node URL" autoFocus/>
+            <InputField name="password" title="New password"/>
+            <InputField name="confirmPassword" title="Confirm password"/>
+        </ConnectDialogModal>
+    );
 }
 
 const assignFormLogic = {

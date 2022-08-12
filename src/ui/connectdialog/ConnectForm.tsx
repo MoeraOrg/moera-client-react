@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
@@ -22,46 +22,40 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-class ConnectForm extends React.PureComponent<Props> {
+function ConnectForm(props: Props) {
+    const {show, connectDialogSetForm, values, resetForm} = props;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.show !== prevProps.show && this.props.show) {
-            this.props.resetForm({
-                values: connectFormLogic.mapPropsToValues(this.props),
-            });
+    useEffect(() => {
+        if (show) {
+            resetForm({values: connectFormLogic.mapPropsToValues(props)})
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show, resetForm]); // 'props' are missing on purpose
+
+    const setForm = (form: ConnectDialogForm) => {
+        connectDialogSetForm(values.location, "admin", form);
     }
 
-    setForm(form: ConnectDialogForm) {
-        const {location} = this.props.values;
-        const {connectDialogSetForm} = this.props;
-
-        connectDialogSetForm(location, "admin", form);
-    }
-
-    onSetPassword = (event: React.MouseEvent) => {
-        this.setForm("assign");
+    const onSetPassword = (event: React.MouseEvent) => {
+        setForm("assign");
         event.preventDefault();
     }
 
-    onForgotPassword = (event: React.MouseEvent) => {
-        this.setForm("forgot");
+    const onForgotPassword = (event: React.MouseEvent) => {
+        setForm("forgot");
         event.preventDefault();
     }
 
-    render() {
-        return (
-            <ConnectDialogModal title="Connect to Home" buttonCaption="Connect">
-                <InputField name="location" title="Name or node URL" autoFocus/>
-                <InputField name="password" title="Password"/>
-                <div className="links">
-                    <Button variant="link" onClick={this.onSetPassword}>Password not set yet</Button>
-                    <Button variant="link" onClick={this.onForgotPassword}>Forgot password</Button>
-                </div>
-            </ConnectDialogModal>
-        );
-    }
-
+    return (
+        <ConnectDialogModal title="Connect to Home" buttonCaption="Connect">
+            <InputField name="location" title="Name or node URL" autoFocus/>
+            <InputField name="password" title="Password"/>
+            <div className="links">
+                <Button variant="link" onClick={onSetPassword}>Password not set yet</Button>
+                <Button variant="link" onClick={onForgotPassword}>Forgot password</Button>
+            </div>
+        </ConnectDialogModal>
+    );
 }
 
 const connectFormLogic = {
