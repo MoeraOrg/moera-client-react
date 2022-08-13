@@ -31,6 +31,11 @@ function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensD
     return (
         <>
             <Loading active={loading}/>
+            {loaded &&
+                <Button variant="primary" onClick={() => settingsTokensDialogOpen(null)}>Create a Token</Button>
+            }
+            <br/>
+            <br/>
             {tokens.map(t =>
                 <div className="token-info" key={t.id}>
                     <FontAwesomeIcon icon="key" className="icon"/>
@@ -66,10 +71,6 @@ function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensD
                     }
                 </div>
             )}
-            <br/>
-            {loaded &&
-                <Button variant="primary" onClick={() => settingsTokensDialogOpen(null)}>Create a Token</Button>
-            }
             <TokenDialog/>
             <NewTokenDialog/>
         </>

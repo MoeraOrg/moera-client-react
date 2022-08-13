@@ -84,6 +84,9 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option("subscribers.view-total", 0),
                 option("subscriptions.view", 0),
                 option("subscriptions.view-total")
+            ]),
+            chapter("Tokens", [
+                component(SettingsItemTokens)
             ])
         ]),
         sheet("webui", "Web UI", [
@@ -97,9 +100,6 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("webmaster.email")
         ]),
         sheet("addons", "Add-ons", [
-            chapter("Tokens", [
-                component(SettingsItemTokens)
-            ])
         ]),
         sheet("other", "Other")
     ],
