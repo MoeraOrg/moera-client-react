@@ -60,12 +60,10 @@ function ConnectForm(props: Props) {
 
 const connectFormLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            location: props.location || props.nodeRoot || "",
-            password: ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        location: props.location || props.nodeRoot || "",
+        password: ""
+    }),
 
     validationSchema: yup.object().shape({
         location: yup.string().trim()

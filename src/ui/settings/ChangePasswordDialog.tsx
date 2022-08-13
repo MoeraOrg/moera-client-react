@@ -51,13 +51,11 @@ function ChangePasswordDialog(props: Props) {
 
 const changePasswordLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            oldPassword: "",
-            password: "",
-            confirmPassword: ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        oldPassword: "",
+        password: "",
+        confirmPassword: ""
+    }),
 
     validationSchema: yup.object().shape({
         oldPassword: yup.string().trim().required("Must not be empty"),

@@ -41,13 +41,11 @@ function AssignForm(props: Props) {
 
 const assignFormLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            location: props.location || props.nodeRoot || "",
-            password: "",
-            confirmPassword: ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        location: props.location || props.nodeRoot || "",
+        password: "",
+        confirmPassword: ""
+    }),
 
     validationSchema: yup.object().shape({
         location: yup.string().trim().required("Must not be empty"),

@@ -53,7 +53,7 @@ function TokenDialog(props: Props) {
 
 const tokenLogic = {
 
-    mapPropsToValues: (props: OuterProps) => ({
+    mapPropsToValues: (props: OuterProps): Values => ({
         name: props.token?.name ?? "",
         password: ""
     }),

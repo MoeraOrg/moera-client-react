@@ -193,19 +193,17 @@ class SignUpDialog extends React.PureComponent<Props> {
 
 const signUpDialogLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            provider: Browser.isDevMode() ? "local" : "moera.blog",
-            name: props.name ?? "",
-            nameTaken: null,
-            domain: props.domain ?? "",
-            domainTaken: null,
-            autoDomain: !props.domain,
-            password: props.password ?? "",
-            confirmPassword: props.password ?? "",
-            email: props.email ?? ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        provider: Browser.isDevMode() ? "local" : "moera.blog",
+        name: props.name ?? "",
+        nameTaken: null,
+        domain: props.domain ?? "",
+        domainTaken: null,
+        autoDomain: !props.domain,
+        password: props.password ?? "",
+        confirmPassword: props.password ?? "",
+        email: props.email ?? ""
+    }),
 
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)

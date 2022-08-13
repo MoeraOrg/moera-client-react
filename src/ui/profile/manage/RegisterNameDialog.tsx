@@ -41,11 +41,9 @@ function RegisterNameDialog({show, registering, registerNameDialogCancel}: Props
 
 const registerNameDialogLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            name: ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        name: ""
+    }),
 
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)

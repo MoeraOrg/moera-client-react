@@ -62,11 +62,9 @@ function MnemonicDialog({name, mnemonic, values: {confirmed}, resetForm}: Props)
 
 const mnemonicDialogLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            confirmed: false
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        confirmed: false
+    }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.mnemonicClose();

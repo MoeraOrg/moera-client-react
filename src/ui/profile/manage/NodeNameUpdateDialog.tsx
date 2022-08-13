@@ -92,12 +92,10 @@ class NodeNameUpdateDialog extends React.PureComponent<Props> {
 
 const nodeNameUpdateDialogLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            name: NodeName.shorten(props.name) ?? "",
-            mnemonic: Array(24).fill("")
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        name: NodeName.shorten(props.name) ?? "",
+        mnemonic: Array(24).fill("")
+    }),
 
     validationSchema(props: OuterProps) {
         const mnemonic = yup.array().transform(value =>

@@ -67,11 +67,9 @@ function ImageEditDialog(props: Props) {
 
 const logic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            caption: new RichTextValue(props.posting?.bodySrc?.text ?? "")
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        caption: new RichTextValue(props.posting?.bodySrc?.text ?? "")
+    }),
 
     _replaceSmileys(enabled: boolean, text: string): string {
         return enabled ? replaceSmileys(text) : text;

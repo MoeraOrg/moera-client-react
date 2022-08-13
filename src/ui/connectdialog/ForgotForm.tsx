@@ -47,11 +47,9 @@ function ForgotForm(props: Props) {
 
 const forgotFormLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            location: props.location || props.nodeRoot || ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        location: props.location || props.nodeRoot || ""
+    }),
 
     validationSchema: yup.object().shape({
         location: yup.string().trim().required("Must not be empty")

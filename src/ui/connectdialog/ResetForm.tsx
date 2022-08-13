@@ -57,14 +57,12 @@ function ResetForm(props: Props) {
 
 const resetFormLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            resetToken: "",
-            location: props.location || props.nodeRoot || "",
-            password: "",
-            confirmPassword: ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        resetToken: "",
+        location: props.location || props.nodeRoot || "",
+        password: "",
+        confirmPassword: ""
+    }),
 
     validationSchema: yup.object().shape({
         resetToken: yup.string().trim().required("Must not be empty"),

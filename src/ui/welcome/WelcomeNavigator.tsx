@@ -29,11 +29,9 @@ const WelcomeNavigator = ({switching}: Props) => (
 
 const welcomeNavigatorLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            ownerName: ""
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        ownerName: ""
+    }),
 
     validationSchema: yup.object().shape({
         ownerName: yup.string().trim().required("Must not be empty")

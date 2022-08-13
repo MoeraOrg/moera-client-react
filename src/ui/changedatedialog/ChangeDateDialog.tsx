@@ -47,11 +47,9 @@ function ChangeDateDialog(props: Props) {
 
 const changeDateDialogLogic = {
 
-    mapPropsToValues(props: OuterProps): Values {
-        return {
-            publishedAt: fromUnixTime(props.publishedAt)
-        }
-    },
+    mapPropsToValues: (props: OuterProps): Values => ({
+        publishedAt: fromUnixTime(props.publishedAt)
+    }),
 
     validationSchema: yup.object().shape({
         publishedAt: yup.date()

@@ -106,12 +106,10 @@ const ShareDialog = ({
 
 const shareDialogLogic = {
 
-    mapPropsToValues(props: MapToValuesProps): Values {
-        return {
-            title: props.title,
-            url: props.url
-        }
-    },
+    mapPropsToValues: (props: MapToValuesProps): Values => ({
+        title: props.title,
+        url: props.url
+    }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setSubmitting(false);
