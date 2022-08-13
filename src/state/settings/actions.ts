@@ -225,6 +225,60 @@ export const settingsTokensUnset = (): SettingsTokensUnsetAction => ({
     type: SETTINGS_TOKENS_UNSET
 });
 
+export const SETTINGS_TOKENS_DIALOG_OPEN = "SETTINGS_TOKENS_DIALOG_OPEN";
+export type SettingsTokensDialogOpenAction = ActionWithPayload<typeof SETTINGS_TOKENS_DIALOG_OPEN, {
+    token: TokenInfo | null;
+}>;
+export const settingsTokensDialogOpen = (token: TokenInfo | null): SettingsTokensDialogOpenAction => ({
+    type: SETTINGS_TOKENS_DIALOG_OPEN,
+    payload: {token}
+});
+
+export const SETTINGS_TOKENS_DIALOG_CLOSE = "SETTINGS_TOKENS_DIALOG_CLOSE";
+export type SettingsTokensDialogCloseAction = Action<typeof SETTINGS_TOKENS_DIALOG_CLOSE>;
+export const settingsTokensDialogClose = (): SettingsTokensDialogCloseAction => ({
+    type: SETTINGS_TOKENS_DIALOG_CLOSE
+});
+
+export const SETTINGS_TOKENS_CREATE = "SETTINGS_TOKENS_CREATE";
+export type SettingsTokensCreateAction = ActionWithPayload<typeof SETTINGS_TOKENS_CREATE, {
+    password: string;
+    name: string | null;
+    onLoginIncorrect: () => void
+}>;
+export const settingsTokensCreate = (password: string, name: string | null,
+                                     onLoginIncorrect: () => void): SettingsTokensCreateAction => ({
+    type: SETTINGS_TOKENS_CREATE,
+    payload: {password, name, onLoginIncorrect}
+});
+
+export const SETTINGS_TOKENS_CREATED = "SETTINGS_TOKENS_CREATED";
+export type SettingsTokensCreatedAction = ActionWithPayload<typeof SETTINGS_TOKENS_CREATED, {
+    token: TokenInfo;
+}>;
+export const settingsTokensCreated = (token: TokenInfo): SettingsTokensCreatedAction => ({
+    type: SETTINGS_TOKENS_CREATED,
+    payload: {token}
+});
+
+export const SETTINGS_TOKENS_CREATE_FAILED = "SETTINGS_TOKENS_CREATE_FAILED";
+export type SettingsTokensCreateFailedAction = Action<typeof SETTINGS_TOKENS_CREATE_FAILED>;
+export const settingsTokensCreateFailed = (): SettingsTokensCreateFailedAction => ({
+    type: SETTINGS_TOKENS_CREATE_FAILED
+});
+
+export const SETTINGS_TOKENS_NEW_TOKEN_CLOSE = "SETTINGS_TOKENS_NEW_TOKEN_CLOSE";
+export type SettingsTokensNewTokenCloseAction = Action<typeof SETTINGS_TOKENS_NEW_TOKEN_CLOSE>;
+export const settingsTokensNewTokenClose = (): SettingsTokensNewTokenCloseAction => ({
+    type: SETTINGS_TOKENS_NEW_TOKEN_CLOSE
+});
+
+export const SETTINGS_TOKENS_NEW_TOKEN_COPY = "SETTINGS_TOKENS_NEW_TOKEN_COPY";
+export type SettingsTokensNewTokenCopyAction = Action<typeof SETTINGS_TOKENS_NEW_TOKEN_COPY>;
+export const settingsTokensNewTokenCopy = (): SettingsTokensNewTokenCopyAction => ({
+    type: SETTINGS_TOKENS_NEW_TOKEN_COPY
+});
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -256,4 +310,11 @@ export type SettingsAnyAction =
     | SettingsTokensLoadAction
     | SettingsTokensLoadedAction
     | SettingsTokensLoadFailedAction
-    | SettingsTokensUnsetAction;
+    | SettingsTokensUnsetAction
+    | SettingsTokensDialogOpenAction
+    | SettingsTokensDialogCloseAction
+    | SettingsTokensCreateAction
+    | SettingsTokensCreatedAction
+    | SettingsTokensCreateFailedAction
+    | SettingsTokensNewTokenCloseAction
+    | SettingsTokensNewTokenCopyAction;

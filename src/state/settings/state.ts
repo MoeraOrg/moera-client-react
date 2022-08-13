@@ -29,5 +29,11 @@ export interface SettingsState {
         loading: boolean;
         loaded: boolean;
         tokens: TokenInfo[];
+        dialog: {
+            show: boolean;
+            token: TokenInfo | null;
+            updating: boolean;
+            newToken: TokenInfo | null;
+        }
     }
 }

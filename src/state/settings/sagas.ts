@@ -1,4 +1,5 @@
 import { call, put, select } from 'typed-redux-saga/macro';
+import clipboardCopy from 'clipboard-copy';
 
 import { errorThrown } from "state/error/actions";
 import { HomeNotConnectedError, Node, NodeApiError } from "api";
@@ -9,7 +10,9 @@ import {
     SETTINGS_CLIENT_VALUES_LOADED,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
+    SETTINGS_TOKENS_CREATE,
     SETTINGS_TOKENS_LOAD,
+    SETTINGS_TOKENS_NEW_TOKEN_COPY,
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_SUCCEEDED,
     settingsChangedPassword,
@@ -21,6 +24,9 @@ import {
     settingsNodeMetaLoadFailed,
     settingsNodeValuesLoaded,
     settingsNodeValuesLoadFailed,
+    SettingsTokensCreateAction,
+    settingsTokensCreated,
+    settingsTokensCreateFailed,
     settingsTokensLoaded,
     settingsTokensLoadFailed,
     SettingsUpdateAction,
@@ -30,6 +36,7 @@ import {
 } from "state/settings/actions";
 import { executor } from "state/executor";
 import { getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
+import { flashBox } from "state/flashbox/actions";
 import { introduced } from "state/init-selectors";
 import { Browser } from "ui/browser";
 
@@ -41,7 +48,9 @@ export default [
     executor(SETTINGS_UPDATE, null, settingsUpdateSaga),
     executor(SETTINGS_UPDATE_SUCCEEDED, null, settingsUpdateSucceededSaga),
     executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga),
-    executor(SETTINGS_TOKENS_LOAD, "", settingsTokensLoadSaga, introduced)
+    executor(SETTINGS_TOKENS_LOAD, "", settingsTokensLoadSaga, introduced),
+    executor(SETTINGS_TOKENS_CREATE, null, settingsTokensCreateSaga),
+    executor(SETTINGS_TOKENS_NEW_TOKEN_COPY, null, settingsTokensNewTokenCopySaga)
 ];
 
 function* settingsNodeValuesLoadSaga() {
@@ -141,9 +150,10 @@ function* settingsChangePasswordSaga(action: SettingsChangePasswordAction) {
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
             onLoginIncorrect();
+        } else {
+            yield* put(errorThrown(e));
         }
         yield* put(settingsChangePasswordFailed());
-        yield* put(errorThrown(e));
     }
 }
 
@@ -154,5 +164,29 @@ function* settingsTokensLoadSaga() {
     } catch (e) {
         yield* put(settingsTokensLoadFailed());
         yield* put(errorThrown(e));
+    }
+}
+
+function* settingsTokensCreateSaga(action: SettingsTokensCreateAction) {
+    const {password, name, onLoginIncorrect} = action.payload;
+
+    try {
+        const token = yield* call(Node.createToken, ":", "admin", password, name);
+        yield* put(settingsTokensCreated(token));
+    } catch (e) {
+        if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
+            onLoginIncorrect();
+        } else {
+            yield* put(errorThrown(e));
+        }
+        yield* put(settingsTokensCreateFailed());
+    }
+}
+
+function* settingsTokensNewTokenCopySaga() {
+    const token = yield* select(state => state.settings.tokens.dialog.newToken);
+    yield* call(clipboardCopy, token.token);
+    if (Browser.userAgentOs !== "android" || window.Android) {
+        yield* put(flashBox("Token copied to the clipboard"));
     }
 }

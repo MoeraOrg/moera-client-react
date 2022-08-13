@@ -101,9 +101,10 @@ export function* postCredentialsReset(nodeName: string | null): CallApiResult<Em
     });
 }
 
-export function* createToken(nodeName: string | null, login: string, password: string): CallApiResult<TokenInfo> {
+export function* createToken(nodeName: string | null, login: string, password: string,
+                             name: string | null): CallApiResult<TokenInfo> {
     return yield* callApi({
-        nodeName, location: "/tokens", method: "POST", body: {login, password}, schema: NodeApi.TokenInfo,
+        nodeName, location: "/tokens", method: "POST", body: {login, password, name}, schema: NodeApi.TokenInfo,
         errorFilter: ["credentials.login-incorrect", "credentials.not-created"]
     });
 }

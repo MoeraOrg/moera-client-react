@@ -101,7 +101,7 @@ function* signUpSaga(action: SignUpAction) {
     if (stage <= SIGN_UP_STAGE_CONNECT) {
         let data;
         try {
-            data = yield* call(Node.createToken, rootLocation, login, password);
+            data = yield* call(Node.createToken, rootLocation, login, password, null);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
                 yield* put(errorThrown(e));

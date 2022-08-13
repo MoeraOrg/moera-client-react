@@ -29,9 +29,15 @@ import {
     SETTINGS_NODE_VALUES_LOAD_FAILED,
     SETTINGS_NODE_VALUES_LOADED,
     SETTINGS_NODE_VALUES_UNSET,
+    SETTINGS_TOKENS_CREATE,
+    SETTINGS_TOKENS_CREATE_FAILED,
+    SETTINGS_TOKENS_CREATED,
+    SETTINGS_TOKENS_DIALOG_CLOSE,
+    SETTINGS_TOKENS_DIALOG_OPEN,
     SETTINGS_TOKENS_LOAD,
     SETTINGS_TOKENS_LOAD_FAILED,
     SETTINGS_TOKENS_LOADED,
+    SETTINGS_TOKENS_NEW_TOKEN_CLOSE,
     SETTINGS_TOKENS_UNSET,
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_FAILED,
@@ -62,7 +68,13 @@ const emptySettings = {
     tokens: {
         loading: false,
         loaded: false,
-        tokens: []
+        tokens: [],
+        dialog: {
+            show: false,
+            token: null,
+            updating: false,
+            newToken: null
+        }
     }
 };
 
@@ -274,6 +286,34 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case SETTINGS_TOKENS_UNSET:
             return immutable.set(state, "tokens", cloneDeep(initialState.tokens));
+
+        case SETTINGS_TOKENS_DIALOG_OPEN:
+            return immutable.assign(state, "tokens.dialog", {
+                show: true,
+                token: action.payload.token
+            });
+
+        case SETTINGS_TOKENS_DIALOG_CLOSE:
+            return immutable.set(state, "tokens.dialog.show", false);
+
+        case SETTINGS_TOKENS_CREATE:
+            return immutable.set(state, "tokens.dialog.updating", true);
+
+        case SETTINGS_TOKENS_CREATED:
+            return immutable.wrap(state)
+                .assign("tokens.dialog", {
+                    show: false,
+                    updating: false,
+                    newToken: action.payload.token
+                })
+                .set("tokens.tokens", [action.payload.token].concat(state.tokens.tokens))
+                .value();
+
+        case SETTINGS_TOKENS_CREATE_FAILED:
+            return immutable.set(state, "tokens.dialog.updating", false);
+
+        case SETTINGS_TOKENS_NEW_TOKEN_CLOSE:
+            return immutable.set(state, "tokens.dialog.newToken", null);
 
         default:
             return state;

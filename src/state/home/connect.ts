@@ -59,7 +59,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         } else if (oldPassword || resetToken) {
             yield* call(Node.putCredentials, location, resetToken, oldPassword, login, password);
         }
-        data = yield* call(Node.createToken, location, login, password);
+        data = yield* call(Node.createToken, location, login, password, null);
     } catch (e) {
         yield* call(connectToHomeFailure, action, e);
         return;

@@ -19,6 +19,7 @@ import {
     faCode,
     faCog,
     faComment,
+    faCopy,
     faDesktop,
     faExclamationCircle,
     faExclamationTriangle,
@@ -110,6 +111,7 @@ export default function initIconLibrary() {
     library.add(faCog);
     library.add(faComment);
     library.add(faCommentRegular);
+    library.add(faCopy);
     library.add(faDesktop);
     library.add(faEnvelope);
     library.add(faEnvelopeOpen);
