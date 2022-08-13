@@ -32,6 +32,7 @@ import {
     SETTINGS_TOKENS_CREATE,
     SETTINGS_TOKENS_CREATE_FAILED,
     SETTINGS_TOKENS_CREATED,
+    SETTINGS_TOKENS_DELETED,
     SETTINGS_TOKENS_DIALOG_CLOSE,
     SETTINGS_TOKENS_DIALOG_OPEN,
     SETTINGS_TOKENS_LOAD,
@@ -39,6 +40,9 @@ import {
     SETTINGS_TOKENS_LOADED,
     SETTINGS_TOKENS_NEW_TOKEN_CLOSE,
     SETTINGS_TOKENS_UNSET,
+    SETTINGS_TOKENS_UPDATE,
+    SETTINGS_TOKENS_UPDATE_FAILED,
+    SETTINGS_TOKENS_UPDATED,
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_FAILED,
     SETTINGS_UPDATE_SUCCEEDED
@@ -297,6 +301,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
             return immutable.set(state, "tokens.dialog.show", false);
 
         case SETTINGS_TOKENS_CREATE:
+        case SETTINGS_TOKENS_UPDATE:
             return immutable.set(state, "tokens.dialog.updating", true);
 
         case SETTINGS_TOKENS_CREATED:
@@ -309,8 +314,23 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("tokens.tokens", [action.payload.token].concat(state.tokens.tokens))
                 .value();
 
+        case SETTINGS_TOKENS_UPDATED:
+            return immutable.wrap(state)
+                .assign("tokens.dialog", {
+                    show: false,
+                    updating: false
+                })
+                .set("tokens.tokens",
+                    state.tokens.tokens.map(t => t.id === action.payload.token.id ? action.payload.token : t)
+                )
+                .value();
+
         case SETTINGS_TOKENS_CREATE_FAILED:
+        case SETTINGS_TOKENS_UPDATE_FAILED:
             return immutable.set(state, "tokens.dialog.updating", false);
+
+        case SETTINGS_TOKENS_DELETED:
+            return immutable.set(state, "tokens.tokens", state.tokens.tokens.filter(t => t.id !== action.payload.id));
 
         case SETTINGS_TOKENS_NEW_TOKEN_CLOSE:
             return immutable.set(state, "tokens.dialog.newToken", null);

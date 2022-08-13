@@ -11,8 +11,10 @@ import {
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
     SETTINGS_TOKENS_CREATE,
+    SETTINGS_TOKENS_DELETE,
     SETTINGS_TOKENS_LOAD,
     SETTINGS_TOKENS_NEW_TOKEN_COPY,
+    SETTINGS_TOKENS_UPDATE,
     SETTINGS_UPDATE,
     SETTINGS_UPDATE_SUCCEEDED,
     settingsChangedPassword,
@@ -27,8 +29,13 @@ import {
     SettingsTokensCreateAction,
     settingsTokensCreated,
     settingsTokensCreateFailed,
+    SettingsTokensDeleteAction,
+    settingsTokensDeleted,
     settingsTokensLoaded,
     settingsTokensLoadFailed,
+    SettingsTokensUpdateAction,
+    settingsTokensUpdated,
+    settingsTokensUpdateFailed,
     SettingsUpdateAction,
     settingsUpdateFailed,
     settingsUpdateSucceeded,
@@ -50,6 +57,8 @@ export default [
     executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga),
     executor(SETTINGS_TOKENS_LOAD, "", settingsTokensLoadSaga, introduced),
     executor(SETTINGS_TOKENS_CREATE, null, settingsTokensCreateSaga),
+    executor(SETTINGS_TOKENS_UPDATE, payload => payload.id, settingsTokensUpdateSaga),
+    executor(SETTINGS_TOKENS_DELETE, payload => payload.id, settingsTokensDeleteSaga),
     executor(SETTINGS_TOKENS_NEW_TOKEN_COPY, null, settingsTokensNewTokenCopySaga)
 ];
 
@@ -180,6 +189,29 @@ function* settingsTokensCreateSaga(action: SettingsTokensCreateAction) {
             yield* put(errorThrown(e));
         }
         yield* put(settingsTokensCreateFailed());
+    }
+}
+
+function* settingsTokensUpdateSaga(action: SettingsTokensUpdateAction) {
+    const {id, name} = action.payload;
+
+    try {
+        const token = yield* call(Node.putToken, ":", id, name);
+        yield* put(settingsTokensUpdated(token));
+    } catch (e) {
+        yield* put(settingsTokensUpdateFailed());
+        yield* put(errorThrown(e));
+    }
+}
+
+function* settingsTokensDeleteSaga(action: SettingsTokensDeleteAction) {
+    const {id} = action.payload;
+
+    try {
+        yield* call(Node.deleteToken, ":", id);
+        yield* put(settingsTokensDeleted(id));
+    } catch (e) {
+        yield* put(errorThrown(e));
     }
 }
 

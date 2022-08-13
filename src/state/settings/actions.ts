@@ -267,6 +267,49 @@ export const settingsTokensCreateFailed = (): SettingsTokensCreateFailedAction =
     type: SETTINGS_TOKENS_CREATE_FAILED
 });
 
+export const SETTINGS_TOKENS_UPDATE = "SETTINGS_TOKENS_UPDATE";
+export type SettingsTokensUpdateAction = ActionWithPayload<typeof SETTINGS_TOKENS_UPDATE, {
+    id: string;
+    name: string | null;
+}>;
+export const settingsTokensUpdate = (id: string, name: string | null): SettingsTokensUpdateAction => ({
+    type: SETTINGS_TOKENS_UPDATE,
+    payload: {id, name}
+});
+
+export const SETTINGS_TOKENS_UPDATED = "SETTINGS_TOKENS_UPDATED";
+export type SettingsTokensUpdatedAction = ActionWithPayload<typeof SETTINGS_TOKENS_UPDATED, {
+    token: TokenInfo;
+}>;
+export const settingsTokensUpdated = (token: TokenInfo): SettingsTokensUpdatedAction => ({
+    type: SETTINGS_TOKENS_UPDATED,
+    payload: {token}
+});
+
+export const SETTINGS_TOKENS_UPDATE_FAILED = "SETTINGS_TOKENS_UPDATE_FAILED";
+export type SettingsTokensUpdateFailedAction = Action<typeof SETTINGS_TOKENS_UPDATE_FAILED>;
+export const settingsTokensUpdateFailed = (): SettingsTokensUpdateFailedAction => ({
+    type: SETTINGS_TOKENS_UPDATE_FAILED
+});
+
+export const SETTINGS_TOKENS_DELETE = "SETTINGS_TOKENS_DELETE";
+export type SettingsTokensDeleteAction = ActionWithPayload<typeof SETTINGS_TOKENS_DELETE, {
+    id: string;
+}>;
+export const settingsTokensDelete = (id: string): SettingsTokensDeleteAction => ({
+    type: SETTINGS_TOKENS_DELETE,
+    payload: {id}
+});
+
+export const SETTINGS_TOKENS_DELETED = "SETTINGS_TOKENS_DELETED";
+export type SettingsTokensDeletedAction = ActionWithPayload<typeof SETTINGS_TOKENS_DELETED, {
+    id: string;
+}>;
+export const settingsTokensDeleted = (id: string): SettingsTokensDeletedAction => ({
+    type: SETTINGS_TOKENS_DELETED,
+    payload: {id}
+});
+
 export const SETTINGS_TOKENS_NEW_TOKEN_CLOSE = "SETTINGS_TOKENS_NEW_TOKEN_CLOSE";
 export type SettingsTokensNewTokenCloseAction = Action<typeof SETTINGS_TOKENS_NEW_TOKEN_CLOSE>;
 export const settingsTokensNewTokenClose = (): SettingsTokensNewTokenCloseAction => ({
@@ -316,5 +359,10 @@ export type SettingsAnyAction =
     | SettingsTokensCreateAction
     | SettingsTokensCreatedAction
     | SettingsTokensCreateFailedAction
+    | SettingsTokensUpdateAction
+    | SettingsTokensUpdatedAction
+    | SettingsTokensUpdateFailedAction
+    | SettingsTokensDeleteAction
+    | SettingsTokensDeletedAction
     | SettingsTokensNewTokenCloseAction
     | SettingsTokensNewTokenCopyAction;

@@ -109,6 +109,18 @@ export function* createToken(nodeName: string | null, login: string, password: s
     });
 }
 
+export function* putToken(nodeName: string | null, id: string, name: string | null): CallApiResult<TokenInfo> {
+    return yield* callApi({
+        nodeName, location: ut`/tokens/${id}`, method: "PUT", body: {name}, auth: true, schema: NodeApi.TokenInfo
+    });
+}
+
+export function* deleteToken(nodeName: string | null, id: string): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/tokens/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}
+
 export function* getTokens(nodeName: string | null): CallApiResult<TokenInfo[]> {
     return yield* callApi({nodeName, location: "/tokens", auth: true, schema: NodeApi.TokenInfoArray});
 }
