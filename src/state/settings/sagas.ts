@@ -10,6 +10,7 @@ import {
     SETTINGS_CLIENT_VALUES_LOADED,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
+    SETTINGS_PLUGINS_LOAD,
     SETTINGS_TOKENS_CREATE,
     SETTINGS_TOKENS_DELETE,
     SETTINGS_TOKENS_LOAD,
@@ -26,6 +27,8 @@ import {
     settingsNodeMetaLoadFailed,
     settingsNodeValuesLoaded,
     settingsNodeValuesLoadFailed,
+    settingsPluginsLoaded,
+    settingsPluginsLoadFailed,
     SettingsTokensCreateAction,
     settingsTokensCreated,
     settingsTokensCreateFailed,
@@ -59,7 +62,8 @@ export default [
     executor(SETTINGS_TOKENS_CREATE, null, settingsTokensCreateSaga),
     executor(SETTINGS_TOKENS_UPDATE, payload => payload.id, settingsTokensUpdateSaga),
     executor(SETTINGS_TOKENS_DELETE, payload => payload.id, settingsTokensDeleteSaga),
-    executor(SETTINGS_TOKENS_NEW_TOKEN_COPY, null, settingsTokensNewTokenCopySaga)
+    executor(SETTINGS_TOKENS_NEW_TOKEN_COPY, null, settingsTokensNewTokenCopySaga),
+    executor(SETTINGS_PLUGINS_LOAD, "", settingsPluginsLoadSaga, introduced)
 ];
 
 function* settingsNodeValuesLoadSaga() {
@@ -220,5 +224,15 @@ function* settingsTokensNewTokenCopySaga() {
     yield* call(clipboardCopy, token.token);
     if (Browser.userAgentOs !== "android" || window.Android) {
         yield* put(flashBox("Token copied to the clipboard"));
+    }
+}
+
+function* settingsPluginsLoadSaga() {
+    try {
+        const plugins = yield* call(Node.getPlugins, ":");
+        yield* put(settingsPluginsLoaded(plugins));
+    } catch (e) {
+        yield* put(settingsPluginsLoadFailed());
+        yield* put(errorThrown(e));
     }
 }

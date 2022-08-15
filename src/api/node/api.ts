@@ -2502,3 +2502,52 @@ export const DraftInfoList = schema({
     type: "array",
     items: DraftInfoType
 } as JSONSchemaType<API.EncodedDraftInfo[]>);
+
+const PluginInfoType: JSONSchemaType<API.PluginInfo> = {
+    type: "object",
+    properties: {
+        "local": {
+            type: "boolean"
+        },
+        "name": {
+            type: "string"
+        },
+        "title": {
+            type: "string",
+            nullable: true
+        },
+        "description": {
+            type: "string",
+            nullable: true
+        },
+        "location": {
+            type: "string",
+            nullable: true
+        },
+        "acceptedEvents": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "settings": {
+            type: "array",
+            items: SettingMetaInfoType,
+            nullable: true
+        },
+        "tokenId": {
+            type: "string",
+            nullable: true
+        },
+    },
+    required: ["local", "name"],
+    additionalProperties: false
+};
+
+export const PluginInfo = schema(PluginInfoType);
+
+export const PluginInfoArray = schema({
+    type: "array",
+    items: PluginInfoType
+} as JSONSchemaType<API.PluginInfo[]>);

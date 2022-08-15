@@ -1,6 +1,7 @@
 import { ElementType } from 'react';
 
-import { PREFIX } from "api/settings";
+import { PLUGIN_PREFIX, PREFIX } from "api/settings";
+import { PluginInfo } from "api/node/api-types";
 import { SettingsTabId } from "state/settings/state";
 import SettingsItemPassword from "ui/settings/SettingsItemPassword";
 import SettingsItemTokens from "ui/settings/SettingsItemTokens";
@@ -14,56 +15,63 @@ interface Sheet {
 
 interface Chapter {
     type: "chapter";
-    name: null;
     title: string;
+    description: string | null;
     children: Item[];
-    marginBottom: null;
 }
 
 interface Option {
     type: "option";
     name: string;
-    title: null;
     children: null;
     marginBottom: number | undefined;
 }
 
 interface Component {
     type: "component";
-    name: null;
-    title: null;
     element: ElementType;
     children: null;
     marginBottom: number | undefined;
 }
 
-export type Item = Chapter | Option | Component;
+interface Text {
+    type: "text";
+    title: string;
+    children: null;
+    marginBottom: number | undefined;
+}
+
+export type Item = Chapter | Option | Component | Text;
 
 function sheet(name: string, title: string, children: Item[] = []): Sheet {
     return {type: "sheet", name, title, children};
 }
 
-function chapter(title: string, children: (Option | Component)[]): Chapter {
-    return {type: "chapter", name: null, title, children, marginBottom: null};
+function chapter(title: string, description: string | null, children: (Option | Component | Text)[]): Chapter {
+    return {type: "chapter", title, description, children};
 }
 
 export function option(name: string, marginBottom?: number): Option {
-    return {type: "option", name, title: null, children: null, marginBottom};
+    return {type: "option", name, children: null, marginBottom};
 }
 
 export function component(element: ElementType, marginBottom?: number): Component {
-    return {type: "component", name: null, title: null, element, children: null, marginBottom};
+    return {type: "component", element, children: null, marginBottom};
+}
+
+export function text(text: string, marginBottom?: number): Text {
+    return {type: "text", title: text, children: null, marginBottom};
 }
 
 const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
     "node": [
         sheet("posting", "Post", [
-            chapter("General", [
+            chapter("General", null, [
                 option("posting.subject.present"),
                 option("posting.max-size"),
                 option("posting.revealed.notification.age")
             ]),
-            chapter("Media", [
+            chapter("Media", null, [
                 option("media.max-size"),
                 option("posting.media.max-size"),
                 option("posting.image.recommended-size"),
@@ -76,16 +84,16 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("posting.picked.hide-on-delete")
         ]),
         sheet("security", "Security", [
-            chapter("Password", [
+            chapter("Password", null, [
                 component(SettingsItemPassword)
             ]),
-            chapter("Subscribers & Subscriptions", [
+            chapter("Subscribers & Subscriptions", null, [
                 option("subscribers.view", 0),
                 option("subscribers.view-total", 0),
                 option("subscriptions.view", 0),
                 option("subscriptions.view-total")
             ]),
-            chapter("Tokens", [
+            chapter("Tokens", null, [
                 component(SettingsItemTokens)
             ])
         ]),
@@ -99,8 +107,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("webmaster.name"),
             option("webmaster.email")
         ]),
-        sheet("addons", "Add-ons", [
-        ]),
+        sheet("addons", "Add-ons"),
         sheet("other", "Other")
     ],
     "client": [
@@ -119,7 +126,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option(PREFIX + "mobile.notifications.news.enabled")
         ]),
         sheet("posting", "Post", [
-            chapter("General", [
+            chapter("General", null, [
                 option(PREFIX + "posting.visibility.default"),
                 option(PREFIX + "posting.feed.news.enabled", 0),
                 option(PREFIX + "posting.media.compress.default", 0),
@@ -127,12 +134,12 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option(PREFIX + "posting.time.relative"),
                 option(PREFIX + "rich-text-editor.link-previews.max-automatic")
             ]),
-            chapter("Comments", [
+            chapter("Comments", null, [
                 option(PREFIX + "posting.comments.visibility.default", 0),
                 option(PREFIX + "posting.comments.addition.default", 2),
                 option(PREFIX + "posting.comments.hide.default")
             ]),
-            chapter("Reactions", [
+            chapter("Reactions", null, [
                 option(PREFIX + "posting.reactions.enabled.default", 1),
                 option(PREFIX + "posting.reactions.positive.default", 4),
                 option(PREFIX + "posting.reactions.negative.enabled.default", 1),
@@ -141,19 +148,19 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option(PREFIX + "posting.reactions.totals-visible.default", 0),
                 option(PREFIX + "posting.reactions.visible.default")
             ]),
-            chapter("Replies", [
+            chapter("Replies", null, [
                 option(PREFIX + "posting.reply.subject-prefix"),
                 option(PREFIX + "posting.reply.preamble"),
                 option(PREFIX + "posting.reply.quote-all")
             ])
         ]),
         sheet("comment", "Comment", [
-            chapter("General", [
+            chapter("General", null, [
                 option(PREFIX + "comment.replied-to.glance.enabled", 0),
                 option(PREFIX + "comment.smileys.enabled"),
                 option(PREFIX + "comment.submit-key")
             ]),
-            chapter("Reactions", [
+            chapter("Reactions", null, [
                 option(PREFIX + "comment.reactions.positive.default"),
                 option(PREFIX + "comment.reactions.negative.default", 4),
                 option(PREFIX + "comment.reactions.self.enabled")
@@ -203,9 +210,14 @@ export function getOtherOptions(tab: SettingsTabId, allNames: Iterable<string>):
     collectUsedOptions(getSheets(tab), used);
     const other = [];
     for (const name of allNames) {
-        if (!used.has(name)) {
+        if (!used.has(name) && !name.startsWith(PLUGIN_PREFIX)) {
             other.push(option(name));
         }
     }
     return other.sort();
+}
+
+export function getPluginsItems(plugins: PluginInfo[]): Item[] {
+    return plugins.map(p =>
+        chapter(p.title ?? p.name, p.description ?? null, p.settings?.map(st => option(st.name)) ?? []));
 }

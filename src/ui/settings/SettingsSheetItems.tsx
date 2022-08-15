@@ -27,12 +27,17 @@ export const SettingsSheetItems = ({items, valuesMap, metaMap}: Props) => (
                 case "chapter":
                     return (
                         <div className="chapter" key={index}>
-                            <div className="title">{item.title}</div>
+                            <div className="title">
+                                {item.title}
+                                {item.description != null &&
+                                    <div className="description">{item.description}</div>
+                                }
+                            </div>
                             <SettingsSheetItems items={item.children} valuesMap={valuesMap} metaMap={metaMap}/>
                         </div>
                     );
 
-                case "option":
+                case "option": {
                     const meta = metaMap.get(item.name);
                     if (meta == null) {
                         return null;
@@ -49,9 +54,15 @@ export const SettingsSheetItems = ({items, valuesMap, metaMap}: Props) => (
                     const groupClassName = item.marginBottom != null ? `mb-${item.marginBottom}` : undefined;
                     return <SettingsField key={index} name={item.name} fieldName={toFieldName(item.name)}
                                           meta={meta} initialValue={initialValue} groupClassName={groupClassName}/>
+                }
 
                 case "component":
                     return React.createElement(item.element, {key: index});
+
+                case "text": {
+                    const className = item.marginBottom != null ? `mb-${item.marginBottom}` : undefined;
+                    return <div className={className}>{item.title}</div>
+                }
 
                 default:
                     return null;

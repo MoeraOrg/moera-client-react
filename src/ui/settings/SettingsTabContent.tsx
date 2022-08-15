@@ -4,8 +4,16 @@ import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { SettingsTabId } from "state/settings/state";
-import { getActualSheetName, getOtherOptions, getSheet } from "ui/settings/settings-menu";
+import {
+    component,
+    getActualSheetName,
+    getOtherOptions,
+    getPluginsItems,
+    getSheet,
+    Item
+} from "ui/settings/settings-menu";
 import SettingsSheet from "ui/settings/SettingsSheet";
+import SettingsItemAddonsEmpty from "ui/settings/SettingsItemAddonsEmpty";
 
 interface OwnProps {
     tab: SettingsTabId;
@@ -13,12 +21,24 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function SettingsTabContent({sheet, otherItems, clientValues, clientMeta}: Props) {
+function SettingsTabContent({sheet, otherItems, addonsItems, clientValues, clientMeta}: Props) {
     if (sheet == null) {
         return null;
     }
 
-    const items = sheet.name !== "other" ? sheet.children : otherItems;
+    let items: Item[];
+    switch (sheet.name) {
+        case "other":
+            items = otherItems;
+            break;
+        case "addons":
+            items = addonsItems;
+            break;
+        default:
+            items = sheet.children;
+            break;
+    }
+
     return <SettingsSheet items={items} valuesMap={clientValues} metaMap={clientMeta}/>;
 }
 
@@ -28,10 +48,16 @@ const getOtherItems = createSelector(
     (tab, meta) => getOtherOptions(tab, meta.keys())
 );
 
+const getAddonsItems = createSelector(
+    (state: ClientState) => state.settings.plugins.plugins,
+    plugins => plugins != null && plugins.length > 0 ? getPluginsItems(plugins) : [component(SettingsItemAddonsEmpty)]
+);
+
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         sheet: getSheet(ownProps.tab, getActualSheetName(ownProps.tab, state.settings.sheet)),
         otherItems: getOtherItems(state, ownProps.tab),
+        addonsItems: getAddonsItems(state),
         clientValues: ownProps.tab === "node" ? state.settings.node.values : state.settings.client.values,
         clientMeta: ownProps.tab === "node" ? state.settings.node.meta : state.settings.client.meta
     })

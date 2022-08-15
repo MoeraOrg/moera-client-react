@@ -4,9 +4,11 @@ import {
     isAtSettingsClientTab,
     isAtSettingsNodeTab,
     isSettingsAtAddonsSheet,
+    isSettingsAtSecuritySheet,
     isSettingsClientValuesToBeLoaded,
     isSettingsNodeMetaToBeLoaded,
     isSettingsNodeValuesToBeLoaded,
+    isSettingsPluginsToBeLoaded,
     isSettingsTokensToBeLoaded
 } from "state/settings/selectors";
 import {
@@ -24,6 +26,8 @@ import {
     settingsNodeMetaUnset,
     settingsNodeValuesLoad,
     settingsNodeValuesUnset,
+    settingsPluginsLoad,
+    settingsPluginsUnset,
     settingsTokensLoad,
     settingsTokensUnset
 } from "state/settings/actions";
@@ -53,10 +57,16 @@ export default [
     trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE, true, dialogClosed()),
     trigger(
         [CONNECTED_TO_HOME, GO_TO_PAGE, SETTINGS_GO_TO_SHEET],
-        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtAddonsSheet, isSettingsTokensToBeLoaded),
+        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsTokensToBeLoaded),
         settingsTokensLoad
     ),
     trigger(DISCONNECTED_FROM_HOME, inv(isConnectedToHome), settingsTokensUnset),
+    trigger(
+        [CONNECTED_TO_HOME, GO_TO_PAGE, SETTINGS_GO_TO_SHEET],
+        conj(isConnectedToHome, isAtSettingsPage, isSettingsAtAddonsSheet, isSettingsPluginsToBeLoaded),
+        settingsPluginsLoad
+    ),
+    trigger(DISCONNECTED_FROM_HOME, inv(isConnectedToHome), settingsPluginsUnset),
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, true, settingsNodeValuesLoad),
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, true, settingsClientValuesLoad),

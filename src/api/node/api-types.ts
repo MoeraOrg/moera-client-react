@@ -839,3 +839,14 @@ export interface DraftInfoBase<B> {
 
 export type EncodedDraftInfo = DraftInfoBase<string>;
 export type DraftInfo = DraftInfoBase<Body>;
+
+export interface PluginInfo {
+    local: boolean;
+    name: string;
+    title?: string | null;
+    description?: string | null;
+    location?: string | null;
+    acceptedEvents?: string[] | null;
+    settings?: SettingMetaInfo[] | null;
+    tokenId?: string | null;
+}

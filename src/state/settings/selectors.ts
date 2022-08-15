@@ -31,13 +31,20 @@ export function isSettingsClientValuesLoaded(state: ClientState): boolean {
     return state.settings.client.loadedValues;
 }
 
+export function isSettingsAtSecuritySheet(state: ClientState): boolean {
+    return state.settings.tab === "node" && state.settings.sheet === "security";
+}
+
 export function isSettingsAtAddonsSheet(state: ClientState): boolean {
-    console.log(state.settings.tab, state.settings.sheet);
     return state.settings.tab === "node" && state.settings.sheet === "addons";
 }
 
 export function isSettingsTokensToBeLoaded(state: ClientState): boolean {
     return !state.settings.tokens.loaded && !state.settings.tokens.loading;
+}
+
+export function isSettingsPluginsToBeLoaded(state: ClientState): boolean {
+    return !state.settings.plugins.loaded && !state.settings.plugins.loading;
 }
 
 export function getSettingsClientMeta(state: ClientState): Map<string, ClientSettingMetaInfo> {

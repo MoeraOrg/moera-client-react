@@ -12,3 +12,8 @@
     font-size: 18pt;
     padding-bottom: 1.5rem;
 }
+
+.settings-sheet .chapter .title .description {
+    font-size: 12pt;
+    color: var(--bs-gray-600);
+}

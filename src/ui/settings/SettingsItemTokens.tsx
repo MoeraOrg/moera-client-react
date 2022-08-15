@@ -5,13 +5,13 @@ import { format, fromUnixTime } from 'date-fns';
 
 import { TokenInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { getHomeToken } from "state/home/selectors";
 import { settingsTokensDelete, settingsTokensDialogOpen } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { Button, Loading } from "ui/control";
 import TokenDialog from "ui/settings/TokenDialog";
 import NewTokenDialog from "ui/settings/NewTokenDialog";
 import "./SettingsItemTokens.css";
-import { getHomeToken } from "state/home/selectors";
 
 type Props = ConnectedProps<typeof connector>;
 

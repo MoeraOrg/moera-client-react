@@ -29,6 +29,10 @@ import {
     SETTINGS_NODE_VALUES_LOAD_FAILED,
     SETTINGS_NODE_VALUES_LOADED,
     SETTINGS_NODE_VALUES_UNSET,
+    SETTINGS_PLUGINS_LOAD,
+    SETTINGS_PLUGINS_LOAD_FAILED,
+    SETTINGS_PLUGINS_LOADED,
+    SETTINGS_PLUGINS_UNSET,
     SETTINGS_TOKENS_CREATE,
     SETTINGS_TOKENS_CREATE_FAILED,
     SETTINGS_TOKENS_CREATED,
@@ -79,6 +83,11 @@ const emptySettings = {
             updating: false,
             newToken: null
         }
+    },
+    plugins: {
+        loading: false,
+        loaded: false,
+        plugins: []
     }
 };
 
@@ -334,6 +343,22 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case SETTINGS_TOKENS_NEW_TOKEN_CLOSE:
             return immutable.set(state, "tokens.dialog.newToken", null);
+
+        case SETTINGS_PLUGINS_LOAD:
+            return immutable.set(state, "plugins.loading", true);
+
+        case SETTINGS_PLUGINS_LOADED:
+            return immutable.assign(state, "plugins", {
+                loading: false,
+                loaded: true,
+                plugins: action.payload.plugins
+            });
+
+        case SETTINGS_PLUGINS_LOAD_FAILED:
+            return immutable.set(state, "plugins.loading", false);
+
+        case SETTINGS_PLUGINS_UNSET:
+            return immutable.set(state, "plugins", cloneDeep(initialState.plugins));
 
         default:
             return state;

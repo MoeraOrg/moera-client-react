@@ -29,6 +29,7 @@ import {
     LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
+    PluginInfo,
     PostingInfo,
     PostingSourceText,
     PostingText,
@@ -51,7 +52,8 @@ import {
     SubscriberOperations,
     SubscriptionInfo,
     SubscriptionOperations,
-    SubscriptionType, TokenInfo,
+    SubscriptionType,
+    TokenInfo,
     WhoAmI
 } from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
@@ -709,4 +711,8 @@ export function* proxyLinkPreview(nodeName: string | null, url: string): CallApi
     return yield* callApi({
         nodeName, location: ut`/proxy/link-preview?url=${url}`, auth: true, schema: NodeApi.LinkPreviewInfo
     });
+}
+
+export function* getPlugins(nodeName: string | null): CallApiResult<PluginInfo[]> {
+    return yield* callApi({nodeName, location: "/plugins", auth: true, schema: NodeApi.PluginInfoArray});
 }

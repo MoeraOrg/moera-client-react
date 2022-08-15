@@ -1,6 +1,7 @@
 import { Choice, PrincipalValue, SettingType } from "api/node/api-types";
 
 export const PREFIX = "client.mercy.";
+export const PLUGIN_PREFIX = "plugin.";
 
 export interface ClientSettingTypeModifiers {
     format?: string;

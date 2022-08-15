@@ -1,4 +1,4 @@
-import { SettingMetaInfo, TokenInfo } from "api/node/api-types";
+import { PluginInfo, SettingMetaInfo, TokenInfo } from "api/node/api-types";
 import { ClientSettingMetaInfo } from "api/settings";
 
 export type SettingsTabId = "node" | "client";
@@ -35,5 +35,10 @@ export interface SettingsState {
             updating: boolean;
             newToken: TokenInfo | null;
         }
+    },
+    plugins: {
+        loading: boolean;
+        loaded: boolean;
+        plugins: PluginInfo[];
     }
 }

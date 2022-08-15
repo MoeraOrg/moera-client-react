@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { SettingInfo, SettingMetaInfo, TokenInfo } from "api/node/api-types";
+import { PluginInfo, SettingInfo, SettingMetaInfo, TokenInfo } from "api/node/api-types";
 import { SettingsTabId } from "state/settings/state";
 
 export const SETTINGS_GO_TO_TAB = "SETTINGS_GO_TO_TAB";
@@ -322,6 +322,33 @@ export const settingsTokensNewTokenCopy = (): SettingsTokensNewTokenCopyAction =
     type: SETTINGS_TOKENS_NEW_TOKEN_COPY
 });
 
+export const SETTINGS_PLUGINS_LOAD = "SETTINGS_PLUGINS_LOAD";
+export type SettingsPluginsLoadAction = Action<typeof SETTINGS_PLUGINS_LOAD>;
+export const settingsPluginsLoad = (): SettingsPluginsLoadAction => ({
+    type: SETTINGS_PLUGINS_LOAD
+});
+
+export const SETTINGS_PLUGINS_LOADED = "SETTINGS_PLUGINS_LOADED";
+export type SettingsPluginsLoadedAction = ActionWithPayload<typeof SETTINGS_PLUGINS_LOADED, {
+    plugins: PluginInfo[];
+}>;
+export const settingsPluginsLoaded = (plugins: PluginInfo[]): SettingsPluginsLoadedAction => ({
+    type: SETTINGS_PLUGINS_LOADED,
+    payload: {plugins}
+});
+
+export const SETTINGS_PLUGINS_LOAD_FAILED = "SETTINGS_PLUGINS_LOAD_FAILED";
+export type SettingsPluginsLoadFailedAction = Action<typeof SETTINGS_PLUGINS_LOAD_FAILED>;
+export const settingsPluginsLoadFailed = (): SettingsPluginsLoadFailedAction => ({
+    type: SETTINGS_PLUGINS_LOAD_FAILED
+});
+
+export const SETTINGS_PLUGINS_UNSET = "SETTINGS_PLUGINS_UNSET";
+export type SettingsPluginsUnsetAction = Action<typeof SETTINGS_PLUGINS_UNSET>;
+export const settingsPluginsUnset = (): SettingsPluginsUnsetAction => ({
+    type: SETTINGS_PLUGINS_UNSET
+});
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -365,4 +392,8 @@ export type SettingsAnyAction =
     | SettingsTokensDeleteAction
     | SettingsTokensDeletedAction
     | SettingsTokensNewTokenCloseAction
-    | SettingsTokensNewTokenCopyAction;
+    | SettingsTokensNewTokenCopyAction
+    | SettingsPluginsLoadAction
+    | SettingsPluginsLoadedAction
+    | SettingsPluginsLoadFailedAction
+    | SettingsPluginsUnsetAction;
