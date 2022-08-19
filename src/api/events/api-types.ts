@@ -7,7 +7,8 @@ import {
     PrincipalValue,
     StoryType,
     SubscriberInfo,
-    SubscriptionInfo
+    SubscriptionInfo,
+    TokenInfo
 } from "api/node/api-types";
 
 export interface EventPacket {
@@ -283,3 +284,15 @@ export type RemotePostingAddedEvent = RemotePostingEvent<"REMOTE_POSTING_ADDED">
 export type RemotePostingUpdatedEvent = RemotePostingEvent<"REMOTE_POSTING_UPDATED">;
 
 export type RemotePostingDeletedEvent = RemotePostingEvent<"REMOTE_POSTING_DELETED">;
+
+export interface TokenAddedEvent extends BaseEvent<"TOKEN_ADDED"> {
+    token: TokenInfo;
+}
+
+export interface TokenUpdatedEvent extends BaseEvent<"TOKEN_UPDATED"> {
+    token: TokenInfo;
+}
+
+export interface TokenDeletedEvent extends BaseEvent<"TOKEN_DELETED"> {
+    id: string;
+}

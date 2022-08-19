@@ -50,7 +50,10 @@ import {
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent,
     SubscriptionsTotalChangedEvent,
-    SubscriptionUpdatedEvent
+    SubscriptionUpdatedEvent,
+    TokenAddedEvent,
+    TokenDeletedEvent,
+    TokenUpdatedEvent
 } from "api/events/api-types";
 import { ActionWithPayload } from "state/action-types";
 
@@ -118,6 +121,9 @@ export const EVENT_NODE_AVATAR_DELETED = "EVENT_NODE_AVATAR_DELETED";
 export const EVENT_HOME_AVATAR_DELETED = "EVENT_HOME_AVATAR_DELETED";
 export const EVENT_NODE_AVATAR_ORDERED = "EVENT_NODE_AVATAR_ORDERED";
 export const EVENT_HOME_AVATAR_ORDERED = "EVENT_HOME_AVATAR_ORDERED";
+export const EVENT_HOME_TOKEN_ADDED = "EVENT_HOME_TOKEN_ADDED";
+export const EVENT_HOME_TOKEN_UPDATED = "EVENT_HOME_TOKEN_UPDATED";
+export const EVENT_HOME_TOKEN_DELETED = "EVENT_HOME_TOKEN_DELETED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -181,4 +187,7 @@ export type ClientEventAction =
     | EventAction<RemoteCommentVerificationFailedEvent>
     | EventAction<AvatarAddedEvent>
     | EventAction<AvatarDeletedEvent>
-    | EventAction<AvatarOrderedEvent>;
+    | EventAction<AvatarOrderedEvent>
+    | EventAction<TokenAddedEvent>
+    | EventAction<TokenUpdatedEvent>
+    | EventAction<TokenDeletedEvent>;

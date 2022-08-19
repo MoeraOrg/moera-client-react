@@ -202,7 +202,7 @@ const ProfileInfoType: JSONSchemaType<API.ProfileInfo> = {
 
 export const ProfileInfo = schema(ProfileInfoType);
 
-const TokenInfoType: JSONSchemaType<API.TokenInfo> = {
+export const TokenInfoType: JSONSchemaType<API.TokenInfo> = {
     type: "object",
     properties: {
         "id": {

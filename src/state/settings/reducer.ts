@@ -53,6 +53,7 @@ import {
     SETTINGS_UPDATE_SUCCEEDED
 } from "state/settings/actions";
 import { SettingsState } from "state/settings/state";
+import { EVENT_HOME_TOKEN_ADDED, EVENT_HOME_TOKEN_DELETED, EVENT_HOME_TOKEN_UPDATED } from "api/events/actions";
 
 const emptySettings = {
     node: {
@@ -321,8 +322,17 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                     updating: false,
                     newToken: action.payload.token
                 })
-                .set("tokens.tokens", [action.payload.token].concat(state.tokens.tokens))
+                .set("tokens.tokens", [{
+                    ...action.payload.token,
+                    token: action.payload.token.token.substring(0, 4) + "\u2026"
+                }].concat(state.tokens.tokens))
                 .value();
+
+        case EVENT_HOME_TOKEN_ADDED:
+            if (state.tokens.loaded) {
+                return immutable.set(state, "tokens.tokens", [action.payload.token].concat(state.tokens.tokens));
+            }
+            return state;
 
         case SETTINGS_TOKENS_UPDATED:
             return immutable.wrap(state)
@@ -335,12 +345,26 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 )
                 .value();
 
+        case EVENT_HOME_TOKEN_UPDATED:
+            if (state.tokens.loaded) {
+                return immutable.set(state, "tokens.tokens",
+                    state.tokens.tokens.map(t => t.id === action.payload.token.id ? action.payload.token : t))
+            }
+            return state;
+
         case SETTINGS_TOKENS_CREATE_FAILED:
         case SETTINGS_TOKENS_UPDATE_FAILED:
             return immutable.set(state, "tokens.dialog.updating", false);
 
         case SETTINGS_TOKENS_DELETED:
             return immutable.set(state, "tokens.tokens", state.tokens.tokens.filter(t => t.id !== action.payload.id));
+
+        case EVENT_HOME_TOKEN_DELETED:
+            if (state.tokens.loaded) {
+                return immutable.set(state, "tokens.tokens",
+                    state.tokens.tokens.filter(t => t.id !== action.payload.id));
+            }
+            return state;
 
         case SETTINGS_TOKENS_NEW_TOKEN_CLOSE:
             return immutable.set(state, "tokens.dialog.newToken", null);

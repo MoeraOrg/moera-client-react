@@ -5,7 +5,8 @@ import {
     FeaturesType,
     FeedStatusType,
     SubscriberInfoType,
-    SubscriptionInfoType
+    SubscriptionInfoType,
+    TokenInfoType
 } from "api/node/api";
 import {
     AvatarAddedEvent,
@@ -61,7 +62,10 @@ import {
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent,
     SubscriptionsTotalChangedEvent,
-    SubscriptionUpdatedEvent
+    SubscriptionUpdatedEvent,
+    TokenAddedEvent,
+    TokenDeletedEvent,
+    TokenUpdatedEvent
 } from "api/events/api-types";
 import { JSONSchemaType, ValidateFunction } from "ajv";
 
@@ -1210,6 +1214,44 @@ const RemotePostingDeletedEventType: JSONSchemaType<RemotePostingDeletedEvent> =
     required: ["type", "remoteNodeName", "remotePostingId"]
 };
 
+const TokenAddedEventType: JSONSchemaType<TokenAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "token": TokenInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "token"]
+}
+
+const TokenUpdatedEventType: JSONSchemaType<TokenUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "token": TokenInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "token"]
+}
+
+const TokenDeletedEventType: JSONSchemaType<TokenDeletedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "id": {
+            type: "string"
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "id"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1263,7 +1305,10 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "AVATAR_ORDERED": schema(AvatarOrderedEventType),
     "REMOTE_POSTING_ADDED": schema(RemotePostingAddedEventType),
     "REMOTE_POSTING_UPDATED": schema(RemotePostingUpdatedEventType),
-    "REMOTE_POSTING_DELETED": schema(RemotePostingDeletedEventType)
+    "REMOTE_POSTING_DELETED": schema(RemotePostingDeletedEventType),
+    "TOKEN_ADDED": schema(TokenAddedEventType),
+    "TOKEN_UPDATED": schema(TokenUpdatedEventType),
+    "TOKEN_DELETED": schema(TokenDeletedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([
