@@ -29,6 +29,8 @@ import {
     SETTINGS_NODE_VALUES_LOAD_FAILED,
     SETTINGS_NODE_VALUES_LOADED,
     SETTINGS_NODE_VALUES_UNSET,
+    SETTINGS_PLUGINS_CONFLICT,
+    SETTINGS_PLUGINS_CONFLICT_CLOSE,
     SETTINGS_PLUGINS_DELETED,
     SETTINGS_PLUGINS_LOAD,
     SETTINGS_PLUGINS_LOAD_FAILED,
@@ -89,6 +91,7 @@ const emptySettings = {
     plugins: {
         loading: false,
         loaded: false,
+        conflict: false,
         plugins: []
     }
 };
@@ -107,6 +110,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("sheet", "posting")
                 .set("node.conflict", false)
                 .set("client.conflict", false)
+                .set("plugins.conflict", false)
                 .value();
 
         case SETTINGS_GO_TO_SHEET:
@@ -114,6 +118,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("sheet", action.payload.sheet)
                 .set("node.conflict", false)
                 .set("client.conflict", false)
+                .set("plugins.conflict", false)
                 .value();
 
         case DISCONNECTED_FROM_HOME:
@@ -244,6 +249,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
             return immutable.wrap(state)
                 .set("node.conflict", false)
                 .set("client.conflict", false)
+                .set("plugins.conflict", false)
                 .set("node.values", nodeValues)
                 .set("client.values", clientValues)
                 .set("updating", false)
@@ -388,6 +394,12 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case SETTINGS_PLUGINS_DELETED:
             return immutable.set(state, "plugins.plugins",
                 state.plugins.plugins.filter(p => p.name !== action.payload.name));
+
+        case SETTINGS_PLUGINS_CONFLICT:
+            return immutable.set(state, "plugins.conflict", true);
+
+        case SETTINGS_PLUGINS_CONFLICT_CLOSE:
+            return immutable.set(state, "plugins.conflict", false);
 
         default:
             return state;

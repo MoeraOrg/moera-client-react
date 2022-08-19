@@ -47,6 +47,10 @@ export function isSettingsPluginsToBeLoaded(state: ClientState): boolean {
     return !state.settings.plugins.loaded && !state.settings.plugins.loading;
 }
 
+export function isSettingsPluginsLoaded(state: ClientState): boolean {
+    return state.settings.plugins.loaded;
+}
+
 export function getSettingsClientMeta(state: ClientState): Map<string, ClientSettingMetaInfo> {
     return state.settings.client.meta;
 }

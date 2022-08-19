@@ -368,6 +368,18 @@ export const settingsPluginsDeleted = (name: string): SettingsPluginsDeletedActi
     payload: {name}
 });
 
+export const SETTINGS_PLUGINS_CONFLICT = "SETTINGS_PLUGINS_CONFLICT";
+export type SettingsPluginsConflictAction = Action<typeof SETTINGS_PLUGINS_CONFLICT>;
+export const settingsPluginsConflict = (): SettingsPluginsConflictAction => ({
+    type: SETTINGS_PLUGINS_CONFLICT
+});
+
+export const SETTINGS_PLUGINS_CONFLICT_CLOSE = "SETTINGS_PLUGINS_CONFLICT_CLOSE";
+export type SettingsPluginsConflictCloseAction = Action<typeof SETTINGS_PLUGINS_CONFLICT_CLOSE>;
+export const settingsPluginsConflictClose = (): SettingsPluginsConflictCloseAction => ({
+    type: SETTINGS_PLUGINS_CONFLICT_CLOSE
+});
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -417,4 +429,6 @@ export type SettingsAnyAction =
     | SettingsPluginsLoadFailedAction
     | SettingsPluginsUnsetAction
     | SettingsPluginsDeleteAction
-    | SettingsPluginsDeletedAction;
+    | SettingsPluginsDeletedAction
+    | SettingsPluginsConflictAction
+    | SettingsPluginsConflictCloseAction;

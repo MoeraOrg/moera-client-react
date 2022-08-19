@@ -296,3 +296,5 @@ export interface TokenUpdatedEvent extends BaseEvent<"TOKEN_UPDATED"> {
 export interface TokenDeletedEvent extends BaseEvent<"TOKEN_DELETED"> {
     id: string;
 }
+
+export type PluginsUpdatedEvent = BaseEvent<"PLUGINS_UPDATED">;

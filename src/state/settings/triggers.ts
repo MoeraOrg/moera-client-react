@@ -8,6 +8,7 @@ import {
     isSettingsClientValuesToBeLoaded,
     isSettingsNodeMetaToBeLoaded,
     isSettingsNodeValuesToBeLoaded,
+    isSettingsPluginsLoaded,
     isSettingsPluginsToBeLoaded,
     isSettingsTokensToBeLoaded
 } from "state/settings/selectors";
@@ -26,6 +27,7 @@ import {
     settingsNodeMetaUnset,
     settingsNodeValuesLoad,
     settingsNodeValuesUnset,
+    settingsPluginsConflict,
     settingsPluginsLoad,
     settingsPluginsUnset,
     settingsTokensLoad,
@@ -37,7 +39,8 @@ import { dialogClosed, dialogOpened, GO_TO_PAGE, newLocation, updateLocation, WA
 import {
     EVENT_HOME_CLIENT_SETTINGS_CHANGED,
     EVENT_HOME_NODE_SETTINGS_CHANGED,
-    EVENT_HOME_NODE_SETTINGS_META_CHANGED
+    EVENT_HOME_NODE_SETTINGS_META_CHANGED,
+    EVENT_HOME_PLUGINS_UPDATED
 } from "api/events/actions";
 import { flashBox } from "state/flashbox/actions";
 
@@ -71,5 +74,11 @@ export default [
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, true, settingsClientValuesLoad),
     trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsClientTab), settingsClientConflict),
-    trigger(SETTINGS_CHANGED_PASSWORD, true, flashBox("Password changed"))
+    trigger(SETTINGS_CHANGED_PASSWORD, true, flashBox("Password changed")),
+    trigger(EVENT_HOME_PLUGINS_UPDATED, isSettingsPluginsLoaded, settingsPluginsLoad),
+    trigger(
+        EVENT_HOME_PLUGINS_UPDATED,
+        conj(isAtSettingsPage, isAtSettingsNodeTab, isSettingsPluginsLoaded),
+        settingsPluginsConflict
+    )
 ];

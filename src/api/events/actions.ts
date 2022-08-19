@@ -18,6 +18,7 @@ import {
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
     PingEvent,
+    PluginsUpdatedEvent,
     PostingAddedEvent,
     PostingCommentsChangedEvent,
     PostingDeletedEvent,
@@ -124,6 +125,7 @@ export const EVENT_HOME_AVATAR_ORDERED = "EVENT_HOME_AVATAR_ORDERED";
 export const EVENT_HOME_TOKEN_ADDED = "EVENT_HOME_TOKEN_ADDED";
 export const EVENT_HOME_TOKEN_UPDATED = "EVENT_HOME_TOKEN_UPDATED";
 export const EVENT_HOME_TOKEN_DELETED = "EVENT_HOME_TOKEN_DELETED";
+export const EVENT_HOME_PLUGINS_UPDATED = "EVENT_HOME_PLUGINS_UPDATED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -190,4 +192,5 @@ export type ClientEventAction =
     | EventAction<AvatarOrderedEvent>
     | EventAction<TokenAddedEvent>
     | EventAction<TokenUpdatedEvent>
-    | EventAction<TokenDeletedEvent>;
+    | EventAction<TokenDeletedEvent>
+    | EventAction<PluginsUpdatedEvent>;

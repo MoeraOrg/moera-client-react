@@ -26,7 +26,7 @@ import {
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
-    PingEvent,
+    PingEvent, PluginsUpdatedEvent,
     PostingAddedEvent,
     PostingCommentsChangedEvent,
     PostingDeletedEvent,
@@ -1252,6 +1252,17 @@ const TokenDeletedEventType: JSONSchemaType<TokenDeletedEvent> = {
     required: ["type", "id"]
 }
 
+const PluginsUpdatedEventType: JSONSchemaType<PluginsUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        }
+    },
+    additionalProperties: false,
+    required: ["type"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1308,7 +1319,8 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "REMOTE_POSTING_DELETED": schema(RemotePostingDeletedEventType),
     "TOKEN_ADDED": schema(TokenAddedEventType),
     "TOKEN_UPDATED": schema(TokenUpdatedEventType),
-    "TOKEN_DELETED": schema(TokenDeletedEventType)
+    "TOKEN_DELETED": schema(TokenDeletedEventType),
+    "PLUGINS_UPDATED": schema(PluginsUpdatedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

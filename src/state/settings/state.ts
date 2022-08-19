@@ -39,6 +39,7 @@ export interface SettingsState {
     plugins: {
         loading: boolean;
         loaded: boolean;
+        conflict: boolean;
         plugins: PluginInfo[];
     }
 }
