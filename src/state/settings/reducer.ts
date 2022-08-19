@@ -29,6 +29,7 @@ import {
     SETTINGS_NODE_VALUES_LOAD_FAILED,
     SETTINGS_NODE_VALUES_LOADED,
     SETTINGS_NODE_VALUES_UNSET,
+    SETTINGS_PLUGINS_DELETED,
     SETTINGS_PLUGINS_LOAD,
     SETTINGS_PLUGINS_LOAD_FAILED,
     SETTINGS_PLUGINS_LOADED,
@@ -359,6 +360,10 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case SETTINGS_PLUGINS_UNSET:
             return immutable.set(state, "plugins", cloneDeep(initialState.plugins));
+
+        case SETTINGS_PLUGINS_DELETED:
+            return immutable.set(state, "plugins.plugins",
+                state.plugins.plugins.filter(p => p.name !== action.payload.name));
 
         default:
             return state;

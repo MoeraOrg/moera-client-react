@@ -716,3 +716,9 @@ export function* proxyLinkPreview(nodeName: string | null, url: string): CallApi
 export function* getPlugins(nodeName: string | null): CallApiResult<PluginInfo[]> {
     return yield* callApi({nodeName, location: "/plugins", auth: true, schema: NodeApi.PluginInfoArray});
 }
+
+export function* deletePlugin(nodeName: string | null, name: string): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/plugins/${name}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}

@@ -10,6 +10,7 @@ import {
     SETTINGS_CLIENT_VALUES_LOADED,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
+    SETTINGS_PLUGINS_DELETE,
     SETTINGS_PLUGINS_LOAD,
     SETTINGS_TOKENS_CREATE,
     SETTINGS_TOKENS_DELETE,
@@ -27,6 +28,8 @@ import {
     settingsNodeMetaLoadFailed,
     settingsNodeValuesLoaded,
     settingsNodeValuesLoadFailed,
+    SettingsPluginsDeleteAction,
+    settingsPluginsDeleted,
     settingsPluginsLoaded,
     settingsPluginsLoadFailed,
     SettingsTokensCreateAction,
@@ -63,7 +66,8 @@ export default [
     executor(SETTINGS_TOKENS_UPDATE, payload => payload.id, settingsTokensUpdateSaga),
     executor(SETTINGS_TOKENS_DELETE, payload => payload.id, settingsTokensDeleteSaga),
     executor(SETTINGS_TOKENS_NEW_TOKEN_COPY, null, settingsTokensNewTokenCopySaga),
-    executor(SETTINGS_PLUGINS_LOAD, "", settingsPluginsLoadSaga, introduced)
+    executor(SETTINGS_PLUGINS_LOAD, "", settingsPluginsLoadSaga, introduced),
+    executor(SETTINGS_PLUGINS_DELETE, payload => payload.name, settingsPluginsDeleteSaga)
 ];
 
 function* settingsNodeValuesLoadSaga() {
@@ -233,6 +237,19 @@ function* settingsPluginsLoadSaga() {
         yield* put(settingsPluginsLoaded(plugins));
     } catch (e) {
         yield* put(settingsPluginsLoadFailed());
+        yield* put(errorThrown(e));
+    }
+}
+
+function* settingsPluginsDeleteSaga(action: SettingsPluginsDeleteAction) {
+    const {name, tokenId} = action.payload;
+
+    try {
+        yield* call(Node.deleteToken, ":", tokenId);
+        yield* put(settingsTokensDeleted(tokenId));
+        yield* call(Node.deletePlugin, ":", name);
+        yield* put(settingsPluginsDeleted(name));
+    } catch (e) {
         yield* put(errorThrown(e));
     }
 }

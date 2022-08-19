@@ -29,6 +29,9 @@ export const SettingsSheetItems = ({items, valuesMap, metaMap}: Props) => (
                         <div className="chapter" key={index}>
                             <div className="title">
                                 {item.title}
+                                {item.controls != null
+                                    ? React.createElement(item.controls, item.controlsParameters)
+                                    : null}
                                 {item.description != null &&
                                     <div className="description">{item.description}</div>
                                 }

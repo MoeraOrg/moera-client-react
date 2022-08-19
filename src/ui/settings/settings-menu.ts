@@ -1,4 +1,4 @@
-import { ElementType } from 'react';
+import { ComponentType } from 'react';
 
 import { PLUGIN_PREFIX, PREFIX } from "api/settings";
 import { PluginInfo } from "api/node/api-types";
@@ -18,6 +18,8 @@ interface Chapter {
     title: string;
     description: string | null;
     children: Item[];
+    controls?: ComponentType<any>;
+    controlsParameters?: {};
 }
 
 interface Option {
@@ -29,7 +31,7 @@ interface Option {
 
 interface Component {
     type: "component";
-    element: ElementType;
+    element: ComponentType;
     children: null;
     marginBottom: number | undefined;
 }
@@ -47,15 +49,16 @@ function sheet(name: string, title: string, children: Item[] = []): Sheet {
     return {type: "sheet", name, title, children};
 }
 
-function chapter(title: string, description: string | null, children: (Option | Component | Text)[]): Chapter {
-    return {type: "chapter", title, description, children};
+function chapter<CP extends {}>(title: string, description: string | null, children: (Option | Component | Text)[],
+                                controls?: ComponentType<CP>, controlsParameters?: CP): Chapter {
+    return {type: "chapter", title, description, children, controls, controlsParameters};
 }
 
 export function option(name: string, marginBottom?: number): Option {
     return {type: "option", name, children: null, marginBottom};
 }
 
-export function component(element: ElementType, marginBottom?: number): Component {
+export function component(element: ComponentType, marginBottom?: number): Component {
     return {type: "component", element, children: null, marginBottom};
 }
 
@@ -217,7 +220,18 @@ export function getOtherOptions(tab: SettingsTabId, allNames: Iterable<string>):
     return other.sort();
 }
 
-export function getPluginsItems(plugins: PluginInfo[]): Item[] {
+export interface PluginProps {
+    plugin: PluginInfo;
+}
+
+export function getPluginsItems(plugins: PluginInfo[], controls: ComponentType<PluginProps>): Item[] {
     return plugins.map(p =>
-        chapter(p.title ?? p.name, p.description ?? null, p.settings?.map(st => option(st.name)) ?? []));
+        chapter(
+            p.title ?? p.name,
+            p.description ?? null,
+            p.settings?.map(st => option(st.name)) ?? [],
+            controls,
+            {plugin: p}
+        )
+    );
 }

@@ -17,3 +17,19 @@
     font-size: 12pt;
     color: var(--bs-gray-600);
 }
+
+.settings-sheet .chapter .title .delete {
+    border: 0;
+    border-radius: 5px;
+    background: none;
+    font-size: 12pt;
+    color: var(--bs-gray-400);
+    margin-left: .5rem;
+    position: relative;
+    top: -.1rem;
+}
+
+.settings-sheet .chapter .title .delete:hover {
+    background-color: var(--highlight);
+    color: var(--bs-red);
+}

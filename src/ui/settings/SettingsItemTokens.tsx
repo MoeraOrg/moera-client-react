@@ -15,17 +15,23 @@ import "./SettingsItemTokens.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensDialogOpen, settingsTokensDelete,
-                             confirmBox}: Props) {
+function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensDialogOpen, confirmBox}: Props) {
     const [expanded, setExpanded] = useState<string | null>(null);
 
-    const onClick = (id: string) => () => setExpanded(expanded !== id ? id : null);
+    const onClick = (id: string) => (e: React.MouseEvent) => {
+        setExpanded(expanded !== id ? id : null);
+        e.preventDefault();
+    }
 
-    const onEdit = (token: TokenInfo) => () => settingsTokensDialogOpen(token);
+    const onEdit = (token: TokenInfo) => (e: React.MouseEvent) => {
+        settingsTokensDialogOpen(token);
+        e.preventDefault();
+    }
 
-    const onDelete = (token: TokenInfo) => () => {
+    const onDelete = (token: TokenInfo) => (e: React.MouseEvent) => {
         confirmBox(`Do you really want to delete the token "${getName(token)}"?`, "Delete", "Cancel",
             settingsTokensDelete(token.id), null, "danger");
+        e.preventDefault();
     }
 
     return (
@@ -95,7 +101,7 @@ const connector = connect(
         tokens: state.settings.tokens.tokens,
         homeToken: getHomeToken(state)
     }),
-    { settingsTokensDialogOpen, settingsTokensDelete, confirmBox }
+    { settingsTokensDialogOpen, confirmBox }
 );
 
 export default connector(SettingsItemTokens);

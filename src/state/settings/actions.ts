@@ -349,6 +349,25 @@ export const settingsPluginsUnset = (): SettingsPluginsUnsetAction => ({
     type: SETTINGS_PLUGINS_UNSET
 });
 
+export const SETTINGS_PLUGINS_DELETE = "SETTINGS_PLUGINS_DELETE";
+export type SettingsPluginsDeleteAction = ActionWithPayload<typeof SETTINGS_PLUGINS_DELETE, {
+    name: string;
+    tokenId: string;
+}>;
+export const settingsPluginsDelete = (name: string, tokenId: string): SettingsPluginsDeleteAction => ({
+    type: SETTINGS_PLUGINS_DELETE,
+    payload: {name, tokenId}
+});
+
+export const SETTINGS_PLUGINS_DELETED = "SETTINGS_PLUGINS_DELETED";
+export type SettingsPluginsDeletedAction = ActionWithPayload<typeof SETTINGS_PLUGINS_DELETED, {
+    name: string;
+}>;
+export const settingsPluginsDeleted = (name: string): SettingsPluginsDeletedAction => ({
+    type: SETTINGS_PLUGINS_DELETED,
+    payload: {name}
+});
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -396,4 +415,6 @@ export type SettingsAnyAction =
     | SettingsPluginsLoadAction
     | SettingsPluginsLoadedAction
     | SettingsPluginsLoadFailedAction
-    | SettingsPluginsUnsetAction;
+    | SettingsPluginsUnsetAction
+    | SettingsPluginsDeleteAction
+    | SettingsPluginsDeletedAction;

@@ -14,6 +14,7 @@ import {
 } from "ui/settings/settings-menu";
 import SettingsSheet from "ui/settings/SettingsSheet";
 import SettingsItemAddonsEmpty from "ui/settings/SettingsItemAddonsEmpty";
+import SettingsPluginControls from "ui/settings/SettingsPluginControls";
 
 interface OwnProps {
     tab: SettingsTabId;
@@ -50,7 +51,9 @@ const getOtherItems = createSelector(
 
 const getAddonsItems = createSelector(
     (state: ClientState) => state.settings.plugins.plugins,
-    plugins => plugins != null && plugins.length > 0 ? getPluginsItems(plugins) : [component(SettingsItemAddonsEmpty)]
+    plugins => plugins != null && plugins.length > 0
+        ? getPluginsItems(plugins, SettingsPluginControls)
+        : [component(SettingsItemAddonsEmpty)]
 );
 
 const connector = connect(
