@@ -711,6 +711,7 @@ export interface PublicMediaFileInfo {
     path: string;
     width: number;
     height: number;
+    orientation: number;
     size: number;
 }
 
@@ -728,6 +729,7 @@ export interface PrivateMediaFileInfo {
     mimeType: string;
     width: number;
     height: number;
+    orientation: number;
     size: number;
     postingId?: string | null;
     previews?: MediaFilePreviewInfo[] | null;

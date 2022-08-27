@@ -70,6 +70,7 @@ const emptyAvatarEditDialog = {
     path: null,
     width: null,
     height: null,
+    orientation: null,
     avatarCreating: false,
     onCreate: null
 };
@@ -205,7 +206,8 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 imageId: action.payload.id,
                 path: action.payload.path,
                 width: action.payload.width,
-                height: action.payload.height
+                height: action.payload.height,
+                orientation: action.payload.orientation
             })
 
         case PROFILE_IMAGE_UPLOAD_FAILED:

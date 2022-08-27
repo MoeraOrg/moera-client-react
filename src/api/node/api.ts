@@ -574,6 +574,10 @@ const PublicMediaFileInfoType: JSONSchemaType<API.PublicMediaFileInfo> = {
         "height": {
             type: "integer"
         },
+        "orientation": {
+            type: "integer",
+            default: 1
+        },
         "size": {
             type: "integer"
         }
@@ -625,6 +629,10 @@ const PrivateMediaFileInfoType: JSONSchemaType<API.PrivateMediaFileInfo> = {
         },
         "height": {
             type: "integer"
+        },
+        "orientation": {
+            type: "integer",
+            default: 1
         },
         "size": {
             type: "integer"

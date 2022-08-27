@@ -140,11 +140,13 @@ export type ProfileImageUploadedAction = ActionWithPayload<typeof PROFILE_IMAGE_
     path: string;
     width: number;
     height: number;
+    orientation: number;
 }>;
 export const profileImageUploaded = (id: string, path: string,
-                                     width: number, height: number): ProfileImageUploadedAction => ({
+                                     width: number, height: number,
+                                     orientation: number): ProfileImageUploadedAction => ({
     type: PROFILE_IMAGE_UPLOADED,
-    payload: {id, path, width, height}
+    payload: {id, path, width, height, orientation}
 });
 
 export const PROFILE_IMAGE_UPLOAD_FAILED = "PROFILE_IMAGE_UPLOAD_FAILED";

@@ -10,6 +10,7 @@ export interface AvatarEditDialogState {
     path: string | null;
     width: number | null;
     height: number | null;
+    orientation: number | null;
     avatarCreating: boolean;
     onCreate: AvatarOnCreate | null;
 }
