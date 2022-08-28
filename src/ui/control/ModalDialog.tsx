@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
@@ -18,6 +18,9 @@ interface Props {
 }
 
 export function ModalDialog({title, size, className, style, centered, risen, children, onClose, onKeyDown}: Props) {
+    const mouseDownX = useRef<number>();
+    const mouseDownY = useRef<number>();
+
     const onModalKeyDown = useCallback(event => {
         if (event.key === "Escape" && onClose) {
             onClose();
@@ -27,7 +30,33 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
         }
     }, [onClose, onKeyDown]);
 
-    const onModalDialogClick = (e: React.MouseEvent) => e.stopPropagation();
+    const modalDialog = useRef<HTMLDivElement>(null);
+
+    const onBackdropMouseDown = (e: React.MouseEvent) => {
+        if (modalDialog.current != null) {
+            const r = modalDialog.current.getBoundingClientRect();
+            if (r.left <= e.clientX && r.right >= e.clientX
+                && r.top <= e.clientY && r.bottom >= e.clientY) {
+
+                mouseDownX.current = undefined;
+                mouseDownY.current = undefined;
+                return;
+            }
+        }
+        mouseDownX.current = e.clientX;
+        mouseDownY.current = e.clientY;
+    }
+
+    const onBackdropMouseUp = (e: React.MouseEvent) => {
+        if (mouseDownX.current != null && Math.abs(mouseDownX.current - e.clientX) <= 10
+            && mouseDownY.current != null && Math.abs(mouseDownY.current - e.clientY) <= 10
+            && onClose != null) {
+
+            onClose();
+        }
+        mouseDownX.current = undefined;
+        mouseDownY.current = undefined;
+    }
 
     useEffect(() => {
         document.body.addEventListener("keydown", onModalKeyDown);
@@ -39,7 +68,8 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
     return ReactDOM.createPortal(
         <>
             <div className={cx("modal-backdrop", "show", {"risen": risen})}/>
-            <div className={cx("modal", "show", {"risen": risen})} onClick={onClose}>
+            <div className={cx("modal", "show", {"risen": risen})}
+                 onMouseDown={onBackdropMouseDown} onMouseUp={onBackdropMouseUp}>
                 <div className={cx(
                     "modal-dialog",
                     className,
@@ -47,7 +77,7 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
                         "modal-dialog-centered": centered,
                         [`modal-${size}`]: !!size
                     }
-                )} style={style} onClick={onModalDialogClick}>
+                )} style={style} ref={modalDialog}>
                     <div className="modal-content">
                         {title &&
                             <div className="modal-header">
