@@ -16,55 +16,49 @@ type Props = {
     hide: () => void;
 } & ConnectedProps<typeof connector>;
 
-class Connections extends React.PureComponent<Props> {
-
-    onAddClick = (hide: () => void) => () => {
-        this.props.openConnectDialog();
+function Connections({hide, location, owner, roots, openConnectDialog, openSignUpDialog}: Props) {
+    const onAddClick = () => {
+        openConnectDialog();
         hide();
     };
 
-    onSignUpClick = (hide: () => void) => () => {
-        this.props.openSignUpDialog();
+    const onSignUpClick = () => {
+        openSignUpDialog();
         hide();
     };
 
-    onItemClick = (location: string, hide: () => void) => () => {
+    const onItemClick = (location: string) => () => {
         Browser.switchData(location);
         hide();
     };
 
-    onDisconnect = (location: string) => () => {
+    const onDisconnect = (location: string) => () => {
         Browser.deleteData(location);
     };
 
-    render() {
-        const {hide, location, owner, roots} = this.props;
-
-        return (
-            <div id="connections">
-                {roots.map(root => (
-                    root.url === location ?
-                        <div className="connection active" key={root.url}>
-                            <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
-                                      linked={false} popup={false}/><br/>
-                            {location}<br/>
-                            <span className="connected">Connected</span>
-                        </div>
-                    :
-                        <ConnectionItem key={root.url} name={root.name} url={root.url}
-                                        onClick={this.onItemClick(root.url, hide)}
-                                        onDisconnect={this.onDisconnect(root.url)}/>
-                ))}
-                <div className="connection-add" onClick={this.onAddClick(hide)}>
-                    <FontAwesomeIcon icon="plus"/> Add connection
-                </div>
-                <div className="connection-sign-up">
-                    <Button variant="primary" size="sm" onClick={this.onSignUpClick(hide)}>Sign Up</Button>
-                </div>
+    return (
+        <div id="connections">
+            {roots.map(root => (
+                root.url === location ?
+                    <div className="connection active" key={root.url}>
+                        <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
+                                  linked={false} popup={false}/><br/>
+                        {location}<br/>
+                        <span className="connected">Connected</span>
+                    </div>
+                :
+                    <ConnectionItem key={root.url} name={root.name} url={root.url}
+                                    onClick={onItemClick(root.url)}
+                                    onDisconnect={onDisconnect(root.url)}/>
+            ))}
+            <div className="connection-add" onClick={onAddClick}>
+                <FontAwesomeIcon icon="plus"/> Add connection
             </div>
-        );
-    }
-
+            <div className="connection-sign-up">
+                <Button variant="primary" size="sm" onClick={onSignUpClick}>Sign Up</Button>
+            </div>
+        </div>
+    );
 }
 
 const connector = connect(
