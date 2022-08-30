@@ -8,7 +8,7 @@ export function replaceSmileys(text: string, removeEscapes = true): string {
     if (text == null) {
         return text;
     }
-    return text.replace(SMILEY_LIKE, (match, p1, p2) => {
+    return text.replace(SMILEY_LIKE, (match: string, p1: string, p2: string) => {
         if (p2.startsWith("\\")) {
             return removeEscapes ? p1 + p2.substring(1) : match;
         }

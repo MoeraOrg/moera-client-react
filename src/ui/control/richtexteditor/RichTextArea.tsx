@@ -100,14 +100,15 @@ class RichTextArea extends React.PureComponent<Props, State> {
         const {panel, smileysEnabled, onChange, onUrls} = this.props;
 
         const textArea = event.target as HTMLTextAreaElement;
-        const value = textArea.value;
         const start = textArea.selectionStart;
+        const value = textArea.value.substring(0, start) + "\u001a" + textArea.value.substring(start);
         if (smileysEnabled && this.#spaceInput) {
             const newValue = replaceSmileys(value, false);
             if (newValue !== value) {
-                textArea.value = newValue;
-                textArea.selectionStart = start;
-                textArea.selectionEnd = start;
+                const newStart = newValue.indexOf("\u001a");
+                textArea.value = newValue.replace("\u001a", "");
+                textArea.selectionStart = newStart;
+                textArea.selectionEnd = newStart;
             }
         }
         if (onUrls) {
