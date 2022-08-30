@@ -26,10 +26,10 @@ import QuickTips from "ui/quicktips/QuickTips";
 import LightBox from "ui/lightbox/LightBox";
 import ImageEditDialog from "ui/imageeditdialog/ImageEditDialog";
 import DonateDialog from "ui/donatedialog/DonateDialog";
+import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 import "./colors.css";
 import "./zindex.css";
 import "./App.css";
-import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 
 const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 

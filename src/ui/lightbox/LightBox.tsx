@@ -4,12 +4,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 
+import { MediaAttachment } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
+import { isStandaloneMode } from "state/navigation/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
 import { getLightBoxMediaId, getLightBoxMediaPostingId, isLightBoxShown } from "state/lightbox/selectors";
+import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
+import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -18,9 +22,6 @@ import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
-import { ExtPostingInfo } from "state/postings/state";
-import { ExtCommentInfo } from "state/detailedposting/state";
-import { MediaAttachment } from "api/node/api-types";
 
 type Props = ConnectedProps<typeof connector>;
 
