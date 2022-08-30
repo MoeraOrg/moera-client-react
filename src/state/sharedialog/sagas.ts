@@ -26,6 +26,21 @@ export default [
     executor(SHARE_PAGE_COPY_LINK, null, sharePageCopyLink)
 ];
 
+function* share(url: string, text: string) {
+    if (window.Android) {
+        window.Android.share(url, text);
+        return;
+    }
+    if (navigator.share) {
+        const data = {title: text, url};
+        if (!navigator.canShare || navigator.canShare(data)) {
+            navigator.share(data);
+            return;
+        }
+    }
+    yield* put(openShareDialog(text, url));
+}
+
 function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
     const {nodeName, href} = action.payload;
 
@@ -37,13 +52,7 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
         return;
     }
     const url = normalizeUrl(nodeUri) + href;
-    if (window.Android) {
-        window.Android.share(url, text);
-    } else if (navigator.share) {
-        navigator.share({title: text, url});
-    } else {
-        yield* put(openShareDialog(text, url));
-    }
+    yield* call(share, url, text);
 }
 
 function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
