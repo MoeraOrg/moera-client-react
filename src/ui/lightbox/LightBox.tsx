@@ -80,7 +80,8 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
                       <LightBoxShareButton mediaUrl={mainSrc}/>,
-                      <a className="lightbox-button lightbox-download" href={mainSrc} download onClick={onDownload}>
+                      <a className="lightbox-button lightbox-download" download onClick={onDownload}
+                         href={urlWithParameters(mainSrc, {download: true})}>
                           <FontAwesomeIcon icon="file-download"/>
                       </a>,
                       <LightBoxReactions/>
