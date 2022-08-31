@@ -51,10 +51,7 @@ const emptyProfileInfo = {
     bioHtml: null,
     avatar: null,
     fundraisers: [],
-    operations: {
-        viewEmail: "admin" as const,
-        edit: "admin" as const
-    }
+    operations: null
 };
 
 const emptyCard: NodeCardState = {
@@ -120,7 +117,10 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .assign([nodeName, "details"], {
                     loading: false,
                     loaded: true,
-                    profile
+                    profile: {
+                        ...cloneDeep(emptyProfileInfo),
+                        ...cloneDeep(profile)
+                    }
                 })
                 .value();
         }

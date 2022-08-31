@@ -1,10 +1,8 @@
 import * as Base64js from 'base64-js';
-import cloneDeep from 'lodash.clonedeep';
 // @ts-ignore
 import charCategory from 'general-category';
 
 import { NodeName } from "api";
-import { PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 
 const DIGITS = /^\d+$/;
@@ -198,15 +196,4 @@ export function getFeedHeaderHeight(): number {
     const feedTitle = document.getElementById("feed-title");
     const feedTitleHeight = feedTitle != null ? feedTitle.getBoundingClientRect().height : 0;
     return headerHeight + feedTitleHeight;
-}
-
-export function cloneOperations<T extends Partial<Record<string, PrincipalValue>>>
-                (operations: Record<string, PrincipalValue | null | undefined> | null | undefined, defaults: T): T {
-    if (operations == null) {
-        return cloneDeep(defaults);
-    }
-
-    const result: Partial<Record<string, string>> = {};
-    Object.getOwnPropertyNames(defaults).forEach(key => result[key] = operations[key] ?? defaults[key]);
-    return result as T;
 }

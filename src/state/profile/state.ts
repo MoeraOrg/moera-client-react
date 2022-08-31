@@ -18,7 +18,6 @@ export interface AvatarEditDialogState {
 export interface ProfileState {
     loaded: boolean;
     loading: boolean;
-    nodeName: string | null;
     profile: ProfileInfo;
     avatars: {
         loading: boolean;

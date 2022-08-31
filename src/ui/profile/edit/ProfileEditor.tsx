@@ -126,7 +126,7 @@ const connector = connect(
         updating: state.profile.updating,
         profile: state.profile.profile
     }),
-    {profileEditCancel, profileEditConflictClose, profileUpdate}
+    { profileEditCancel, profileEditConflictClose, profileUpdate }
 );
 
 export default connector(withFormik(profileEditorLogic)(ProfileEditor));

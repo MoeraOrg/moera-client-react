@@ -33,7 +33,6 @@ import {
 } from "state/profile/actions";
 import { ProfileState } from "state/profile/state";
 import { ClientAction } from "state/action";
-import { cloneOperations } from "util/misc";
 
 const emptyProfileInfo = {
     fullName: null,
@@ -44,17 +43,13 @@ const emptyProfileInfo = {
     bioHtml: null,
     avatar: null,
     fundraisers: [],
-    operations: {
-        viewEmail: "admin" as const,
-        edit: "admin" as const
-    }
+    operations: null
 };
 
 const emptyProfile = {
     loaded: false,
     loading: false,
-    nodeName: null,
-    profile: cloneDeep(emptyProfileInfo),
+    profile: emptyProfileInfo,
     avatars: {
         loading: false,
         loaded: false,
@@ -104,15 +99,7 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 ...state,
                 profile: {
                     ...cloneDeep(emptyProfileInfo),
-                    fullName: action.payload.profile.fullName ?? null,
-                    gender: action.payload.profile.gender ?? null,
-                    email: action.payload.profile.email ?? null,
-                    title: action.payload.profile.title ?? null,
-                    bioSrc: action.payload.profile.bioSrc ?? null,
-                    bioHtml: action.payload.profile.bioHtml ?? null,
-                    avatar: cloneDeep(action.payload.profile.avatar) ?? null,
-                    fundraisers: cloneDeep(action.payload.profile.fundraisers) ?? [],
-                    operations: cloneOperations(action.payload.profile.operations, emptyProfileInfo.operations),
+                    ...cloneDeep(action.payload.profile)
                 },
                 loading: false,
                 loaded: true

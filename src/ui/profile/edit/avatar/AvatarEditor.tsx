@@ -12,6 +12,7 @@ import {
     profileAvatarsReorder,
     profileOpenAvatarEditDialog
 } from "state/profile/actions";
+import { getOwnerName } from "state/owner/selectors";
 import { Avatar } from "ui/control";
 import AvatarSelector from "ui/profile/edit/avatar/AvatarSelector";
 import AvatarEditDialog from "ui/profile/edit/avatar/AvatarEditDialog";
@@ -85,7 +86,7 @@ const connector = connect(
         avatarsLoading: state.profile.avatars.loading,
         avatarsLoaded: state.profile.avatars.loaded,
         avatars: state.profile.avatars.avatars,
-        nodeName: state.profile.nodeName
+        nodeName: getOwnerName(state)
     }),
     { profileAvatarsLoad, profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder }
 );
