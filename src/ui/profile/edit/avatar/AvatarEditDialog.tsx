@@ -59,6 +59,7 @@ function AvatarEditDialog({show, imageUploading, imageUploadProgress, imageId, p
         if (show) {
             setShape(shapeDefault);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]); // 'shapeDefault' is missing on purpose
 
     useEffect(() => {
