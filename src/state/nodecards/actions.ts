@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage, FundraiserInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 export type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
@@ -12,50 +12,53 @@ export const nodeCardPrepare = (nodeName: string): NodeCardPrepareAction => ({
     payload: {nodeName}
 });
 
-export const NODE_CARD_LOAD = "NODE_CARD_LOAD";
-export type NodeCardLoadAction = ActionWithPayload<typeof NODE_CARD_LOAD, {
+export const NODE_CARD_DETAILS_LOAD = "NODE_CARD_DETAILS_LOAD";
+export type NodeCardDetailsLoadAction = ActionWithPayload<typeof NODE_CARD_DETAILS_LOAD, {
     nodeName: string;
 }>;
-export const nodeCardLoad = (nodeName: string): NodeCardLoadAction => ({
-    type: NODE_CARD_LOAD,
+export const nodeCardDetailsLoad = (nodeName: string): NodeCardDetailsLoadAction => ({
+    type: NODE_CARD_DETAILS_LOAD,
     payload: {nodeName}
 });
 
-export const NODE_CARD_LOADED = "NODE_CARD_LOADED";
-export type NodeCardLoadedAction = ActionWithPayload<typeof NODE_CARD_LOADED, {
+export const NODE_CARD_DETAILS_LOAD_FAILED = "NODE_CARD_DETAILS_LOAD_FAILED";
+export type NodeCardDetailsLoadFailedAction = ActionWithPayload<typeof NODE_CARD_DETAILS_LOAD_FAILED, {
     nodeName: string;
 }>;
-export const nodeCardLoaded = (nodeName: string): NodeCardLoadedAction => ({
-    type: NODE_CARD_LOADED,
-    payload: {nodeName}
-});
-
-export const NODE_CARD_LOAD_FAILED = "NODE_CARD_LOAD_FAILED";
-export type NodeCardLoadFailedAction = ActionWithPayload<typeof NODE_CARD_LOAD_FAILED, {
-    nodeName: string;
-}>;
-export const nodeCardLoadFailed = (nodeName: string): NodeCardLoadFailedAction => ({
-    type: NODE_CARD_LOAD_FAILED,
+export const nodeCardDetailsLoadFailed = (nodeName: string): NodeCardDetailsLoadFailedAction => ({
+    type: NODE_CARD_DETAILS_LOAD_FAILED,
     payload: {nodeName}
 });
 
 export const NODE_CARD_DETAILS_SET = "NODE_CARD_DETAILS_SET";
 export type NodeCardDetailsSetAction = ActionWithPayload<typeof NODE_CARD_DETAILS_SET, {
     nodeName: string;
-    fullName: string | null;
-    gender: string | null;
-    title: string | null;
-    avatar: AvatarImage | null;
-    fundraisers: FundraiserInfo[] | null;
+    profile: ProfileInfo
 }>;
-export const nodeCardDetailsSet = (nodeName: string, fullName: string | null, gender: string | null,
-                                   title: string | null, avatar: AvatarImage | null,
-                                   fundraisers: FundraiserInfo[] | null): NodeCardDetailsSetAction => ({
+export const nodeCardDetailsSet = (nodeName: string, profile: ProfileInfo): NodeCardDetailsSetAction => ({
     type: NODE_CARD_DETAILS_SET,
-    payload: {nodeName, fullName, gender, title, avatar, fundraisers}
+    payload: {nodeName, profile}
 });
 
-export const NODE_CARD_STORIES_SET = "NODE_CARD_STORIESSET";
+export const NODE_CARD_STORIES_LOAD = "NODE_CARD_STORIES_LOAD";
+export type NodeCardStoriesLoadAction = ActionWithPayload<typeof NODE_CARD_STORIES_LOAD, {
+    nodeName: string;
+}>;
+export const nodeCardStoriesLoad = (nodeName: string): NodeCardStoriesLoadAction => ({
+    type: NODE_CARD_STORIES_LOAD,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_STORIES_LOAD_FAILED = "NODE_CARD_STORIES_LOAD_FAILED";
+export type NodeCardStoriesLoadFailedAction = ActionWithPayload<typeof NODE_CARD_STORIES_LOAD_FAILED, {
+    nodeName: string;
+}>;
+export const nodeCardStoriesLoadFailed = (nodeName: string): NodeCardStoriesLoadFailedAction => ({
+    type: NODE_CARD_STORIES_LOAD_FAILED,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_STORIES_SET = "NODE_CARD_STORIES_SET";
 export type NodeCardStoriesSetAction = ActionWithPayload<typeof NODE_CARD_STORIES_SET, {
     nodeName: string;
     storiesTotal: number;
@@ -65,6 +68,24 @@ export const nodeCardStoriesSet = (nodeName: string, storiesTotal: number,
                                    lastStoryCreatedAt: number | null): NodeCardStoriesSetAction => ({
     type: NODE_CARD_STORIES_SET,
     payload: {nodeName, storiesTotal, lastStoryCreatedAt}
+});
+
+export const NODE_CARD_PEOPLE_LOAD = "NODE_CARD_PEOPLE_LOAD";
+export type NodeCardPeopleLoadAction = ActionWithPayload<typeof NODE_CARD_PEOPLE_LOAD, {
+    nodeName: string;
+}>;
+export const nodeCardPeopleLoad = (nodeName: string): NodeCardPeopleLoadAction => ({
+    type: NODE_CARD_PEOPLE_LOAD,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_PEOPLE_LOAD_FAILED = "NODE_CARD_PEOPLE_LOAD_FAILED";
+export type NodeCardPeopleLoadFailedAction = ActionWithPayload<typeof NODE_CARD_PEOPLE_LOAD_FAILED, {
+    nodeName: string;
+}>;
+export const nodeCardPeopleLoadFailed = (nodeName: string): NodeCardPeopleLoadFailedAction => ({
+    type: NODE_CARD_PEOPLE_LOAD_FAILED,
+    payload: {nodeName}
 });
 
 export const NODE_CARD_PEOPLE_SET = "NODE_CARD_PEOPLE_SET";
@@ -79,26 +100,35 @@ export const nodeCardPeopleSet = (nodeName: string, subscribersTotal: number | n
     payload: {nodeName, subscribersTotal, subscriptionsTotal}
 });
 
-export const NODE_CARD_SUBSCRIBER_SET = "NODE_CARD_SUBSCRIBER_SET";
-export type NodeCardSubscriberSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIBER_SET, {
+export const NODE_CARD_SUBSCRIPTION_LOAD = "NODE_CARD_SUBSCRIPTION_LOAD";
+export type NodeCardSubscriptionLoadAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_LOAD, {
     nodeName: string;
-    subscriber: SubscriberInfo | null;
 }>;
-export const nodeCardSubscriberSet = (nodeName: string,
-                                      subscriber: SubscriberInfo | null): NodeCardSubscriberSetAction => ({
-    type: NODE_CARD_SUBSCRIBER_SET,
-    payload: {nodeName, subscriber}
+export const nodeCardSubscriptionLoad = (nodeName: string): NodeCardSubscriptionLoadAction => ({
+    type: NODE_CARD_SUBSCRIPTION_LOAD,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_SUBSCRIPTION_LOAD_FAILED = "NODE_CARD_SUBSCRIPTION_LOAD_FAILED";
+export type NodeCardSubscriptionLoadFailedAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_LOAD_FAILED, {
+    nodeName: string;
+}>;
+export const nodeCardSubscriptionLoadFailed = (nodeName: string): NodeCardSubscriptionLoadFailedAction => ({
+    type: NODE_CARD_SUBSCRIPTION_LOAD_FAILED,
+    payload: {nodeName}
 });
 
 export const NODE_CARD_SUBSCRIPTION_SET = "NODE_CARD_SUBSCRIPTION_SET";
 export type NodeCardSubscriptionSetAction = ActionWithPayload<typeof NODE_CARD_SUBSCRIPTION_SET, {
     nodeName: string;
+    subscriber: SubscriberInfo | null;
     subscription: SubscriptionInfo | null;
 }>;
 export const nodeCardSubscriptionSet = (nodeName: string,
+                                        subscriber: SubscriberInfo | null,
                                         subscription: SubscriptionInfo | null): NodeCardSubscriptionSetAction => ({
     type: NODE_CARD_SUBSCRIPTION_SET,
-    payload: {nodeName, subscription}
+    payload: {nodeName, subscriber, subscription}
 });
 
 export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
@@ -119,13 +149,17 @@ export const nodeCardCopyMention = (nodeName: string, fullName: string | null): 
 
 export type NodeCardsAnyAction =
     NodeCardPrepareAction
-    | NodeCardLoadAction
-    | NodeCardLoadedAction
-    | NodeCardLoadFailedAction
+    | NodeCardDetailsLoadAction
+    | NodeCardDetailsLoadFailedAction
     | NodeCardDetailsSetAction
+    | NodeCardStoriesLoadAction
+    | NodeCardStoriesLoadFailedAction
     | NodeCardStoriesSetAction
+    | NodeCardPeopleLoadAction
+    | NodeCardPeopleLoadFailedAction
     | NodeCardPeopleSetAction
-    | NodeCardSubscriberSetAction
+    | NodeCardSubscriptionLoadAction
+    | NodeCardSubscriptionLoadFailedAction
     | NodeCardSubscriptionSetAction
     | NodeCardsUnsetAction
     | NodeCardCopyMentionAction;

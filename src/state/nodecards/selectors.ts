@@ -5,11 +5,19 @@ export function getNodeCard(state: ClientState, nodeName: string): NodeCardState
     return state.nodeCards[nodeName] ?? null;
 }
 
-export function isNodeCardCached(state: ClientState, nodeName: string): boolean {
-    return getNodeCard(state, nodeName) != null;
+export function isNodeCardDetailsLoaded(state: ClientState, nodeName: string): boolean {
+    const card = getNodeCard(state, nodeName);
+    return card != null && card.details.loaded;
 }
 
-export function isNodeCardToBeLoaded(state: ClientState, nodeName: string): boolean {
-    const nodeCard = getNodeCard(state, nodeName);
-    return nodeCard == null || (!nodeCard.loaded && !nodeCard.loading);
+export function isNodeCardAnyLoaded(state: ClientState, nodeName: string): boolean {
+    const card = getNodeCard(state, nodeName);
+    return card != null
+        && (card.details.loaded || card.stories.loaded || card.people.loaded || card.subscription.loaded);
+}
+
+export function isNodeCardAnyLoading(state: ClientState, nodeName: string): boolean {
+    const card = getNodeCard(state, nodeName);
+    return card != null
+        && (card.details.loading || card.stories.loading || card.people.loading || card.subscription.loading);
 }

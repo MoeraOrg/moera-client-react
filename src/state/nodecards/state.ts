@@ -1,21 +1,31 @@
-import { AvatarImage, FundraiserInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export interface NodeCardState {
-    fullName: string | null;
-    gender: string | null;
-    title: string | null;
-    avatar: AvatarImage | null;
-    fundraisers: FundraiserInfo[] | null;
-    storiesTotal: number | null;
-    lastStoryCreatedAt: number | null;
-    subscribersTotal: number | null;
-    subscriptionsTotal: number | null;
-    subscribing: boolean;
-    unsubscribing: boolean;
-    loading: boolean;
-    loaded: boolean;
-    subscriber: SubscriberInfo | null;
-    subscription: SubscriptionInfo | null;
+    details: {
+        loading: boolean;
+        loaded: boolean;
+        profile: ProfileInfo;
+    },
+    stories: {
+        loading: boolean;
+        loaded: boolean;
+        storiesTotal: number | null;
+        lastStoryCreatedAt: number | null;
+    },
+    people: {
+        loading: boolean;
+        loaded: boolean;
+        subscribersTotal: number | null;
+        subscriptionsTotal: number | null;
+    },
+    subscription: {
+        loading: boolean;
+        loaded: boolean;
+        subscribing: boolean;
+        unsubscribing: boolean;
+        subscriber: SubscriberInfo | null;
+        subscription: SubscriptionInfo | null;
+    }
 }
 
 export type NodeCardsState = Partial<Record<string, NodeCardState>>;

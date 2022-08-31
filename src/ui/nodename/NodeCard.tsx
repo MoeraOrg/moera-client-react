@@ -5,7 +5,7 @@ import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { NodeName } from "api";
 import { AvatarImage } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getNodeCard, isNodeCardToBeLoaded } from "state/nodecards/selectors";
+import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import CopyMentionButton from "ui/nodename/CopyMentionButton";
 import SubscribeButton from "ui/control/SubscribeButton";
@@ -24,8 +24,8 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoaded, homeOwnerName}: Props) {
-    if (cardNotLoaded || card == null) {
+function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, anyLoading, homeOwnerName}: Props) {
+    if (card == null || (!anyLoaded && !anyLoading)) {
         return (
             <div className="node-card">
                 <div className="unknown">Unknown name</div>
@@ -33,15 +33,21 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
         );
     }
 
-    const realFullName = card.fullName ?? (fullName || NodeName.shorten(nodeName));
-    const realAvatar =  card.avatar ?? avatar ?? null;
-    const realAvatarNodeName = card.avatar != null ? nodeName : avatarNodeName ?? null;
-    const gender = shortGender(card.gender);
-    const storiesTotal = card.storiesTotal ?? "?";
-    const storiesLastDate = card.lastStoryCreatedAt != null ? fromUnixTime(card.lastStoryCreatedAt) : null;
-    const subscribersTotal = card.subscribersTotal ?? "?";
-    const subscriptionsTotal = card.subscriptionsTotal ?? "?";
-    const {loading, loaded, title, fundraisers, subscribing, unsubscribing, subscriber, subscription} = card;
+    const realFullName = card.details.profile.fullName ?? (fullName || NodeName.shorten(nodeName));
+    const realAvatar =  card.details.profile.avatar ?? avatar ?? null;
+    const realAvatarNodeName = card.details.profile.avatar != null ? nodeName : avatarNodeName ?? null;
+    const gender = shortGender(card.details.profile.gender ?? null);
+    const storiesTotal = card.stories.storiesTotal ?? "?";
+    const storiesLastDate = card.stories.lastStoryCreatedAt != null
+        ? fromUnixTime(card.stories.lastStoryCreatedAt)
+        : null;
+    const subscribersTotal = card.people.subscribersTotal ?? "?";
+    const subscriptionsTotal = card.people.subscriptionsTotal ?? "?";
+    const {
+        details: {profile: {title, fundraisers}},
+        subscription: {subscribing, unsubscribing, subscriber, subscription}
+    } = card;
+
     return (
         <div className="node-card">
             <div className="main">
@@ -60,7 +66,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
                         <Jump className="name" nodeName={nodeName} href="/">{mentionName(nodeName)}</Jump>
                     </div>
                     {title && <div className="title">{title}</div>}
-                    <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={fundraisers}
+                    <DonateButton name={nodeName} fullName={fullName ?? null} fundraisers={fundraisers ?? null}
                                   styles="small"/>
                 </div>
             </div>
@@ -87,13 +93,13 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
                 </Jump>
             </div>
             <div className="buttons">
-                <CopyMentionButton nodeName={nodeName} fullName={card.fullName ?? fullName ?? null}/>
-                <SubscribeButton show={nodeName !== homeOwnerName} ready={loaded != null}
+                <CopyMentionButton nodeName={nodeName} fullName={card.details.profile.fullName ?? fullName ?? null}/>
+                <SubscribeButton show={nodeName !== homeOwnerName} ready={card.subscription.loaded != null}
                                  subscribing={subscribing} unsubscribing={unsubscribing}
                                  nodeName={nodeName} feedName="timeline" subscriber={subscriber}
                                  subscription={subscription}/>
             </div>
-            <Loading active={loading}/>
+            <Loading active={anyLoading}/>
         </div>
     );
 }
@@ -101,7 +107,8 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, cardNotLoad
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         card: getNodeCard(state, ownProps.nodeName),
-        cardNotLoaded: isNodeCardToBeLoaded(state, ownProps.nodeName),
+        anyLoaded: isNodeCardAnyLoaded(state, ownProps.nodeName),
+        anyLoading: isNodeCardAnyLoading(state, ownProps.nodeName),
         homeOwnerName: getHomeOwnerName(state)
     })
 );
