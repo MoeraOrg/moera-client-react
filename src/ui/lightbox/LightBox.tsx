@@ -7,7 +7,6 @@ import 'react-image-lightbox/style.css';
 import { MediaAttachment } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
-import { isStandaloneMode } from "state/navigation/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
 import { getLightBoxMediaId, getLightBoxMediaPostingId, isLightBoxShown } from "state/lightbox/selectors";
