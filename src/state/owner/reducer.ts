@@ -16,10 +16,6 @@ import { ClientAction } from "state/action";
 
 const initialState = {
     name: null,
-    fullName: null,
-    gender: null,
-    title: null,
-    avatar: null,
     correct: false,
     verified: false,
     verifiedAt: 0,
@@ -40,18 +36,6 @@ export default (state: OwnerState = initialState, action: ClientAction): OwnerSt
             }
             if (action.payload.changing != null) {
                 istate.set("changing", action.payload.changing);
-            }
-            if (action.payload.fullName !== false) {
-                istate.set("fullName", action.payload.fullName);
-            }
-            if (action.payload.gender !== false) {
-                istate.set("gender", action.payload.gender);
-            }
-            if (action.payload.title !== false) {
-                istate.set("title", action.payload.title);
-            }
-            if (action.payload.avatar != null) {
-                istate.set("avatar", action.payload.avatar);
             }
             return istate.value();
         }
