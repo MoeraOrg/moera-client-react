@@ -5,12 +5,9 @@ import { AvatarAttributes, AvatarImage, AvatarInfo, ProfileAttributes, ProfileIn
 import { AvatarOnCreate } from "state/profile/state";
 
 export const PROFILE_LOAD = "PROFILE_LOAD";
-export type ProfileLoadAction = ActionWithPayload<typeof PROFILE_LOAD, {
-    withSource: boolean;
-}>;
-export const profileLoad = (withSource: boolean = false): ProfileLoadAction => ({
-    type: PROFILE_LOAD,
-    payload: {withSource}
+export type ProfileLoadAction = Action<typeof PROFILE_LOAD>;
+export const profileLoad = (): ProfileLoadAction => ({
+    type: PROFILE_LOAD
 });
 
 export const PROFILE_LOAD_FAILED = "PROFILE_LOAD_FAILED";

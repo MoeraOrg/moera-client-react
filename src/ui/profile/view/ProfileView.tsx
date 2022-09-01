@@ -2,10 +2,11 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
+import { ClientState } from "state/state";
 import { profileEdit } from "state/profile/actions";
 import { isProfileEditable } from "state/profile/selectors";
-import { getOwnerName } from "state/owner/selectors";
-import { ClientState } from "state/state";
+import { getOwnerName, getOwnerNameOrUrl } from "state/owner/selectors";
+import { getNodeCard } from "state/nodecards/selectors";
 import { Avatar, Button, DonateButton, Loading } from "ui/control";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { Page } from "ui/page/Page";
@@ -33,8 +34,7 @@ const EditButton = editButtonConnector(EditButtonImpl);
 
 type ProfileViewProps = ConnectedProps<typeof profileViewConnector>;
 
-const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml, avatar, fundraisers}, ownerName,
-                      editable}: ProfileViewProps) => (
+const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) => (
     <>
         <PageHeader>
             <h2>
@@ -48,34 +48,37 @@ const ProfileView = ({loading, profile: {fullName, gender, email, title, bioHtml
         </PageHeader>
         <Page>
             <div className="profile-view">
-                <Avatar avatar={avatar} ownerName={ownerName} size={200}/>
+                <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
                 <Loading active={loading}/>
                 <div className="full-name">
-                    {fullName ? fullName : NodeName.shorten(ownerName)}
-                    {gender && <span className="gender">{shortGender(gender)}</span>}
+                    {profile?.fullName ?? NodeName.shorten(ownerName)}
+                    {profile?.gender && <span className="gender">{shortGender(profile.gender)}</span>}
                 </div>
                 <NodeNameView/>
-                {title && <div className="title">{title}</div>}
-                <DonateButton name={ownerName} fullName={fullName ?? null} fundraisers={fundraisers ?? null}
-                              className="donate"/>
-                {email &&
+                {profile?.title && <div className="title">{profile.title}</div>}
+                <DonateButton name={ownerName} fullName={profile?.fullName ?? null}
+                              fundraisers={profile?.fundraisers ?? null} className="donate"/>
+                {profile?.email &&
                     <div className="email">
-                        <span className="title">E-mail:</span> <a href={`mailto:${email}`}>{email}</a>
+                        <span className="title">E-mail:</span> <a href={`mailto:${profile.email}`}>{profile.email}</a>
                     </div>
                 }
-                {bioHtml && <EntryHtml className="bio" html={bioHtml} nodeName={ownerName}/>}
+                {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={ownerName}/>}
             </div>
         </Page>
     </>
 );
 
 const profileViewConnector = connect(
-    (state: ClientState) => ({
-        loading: state.profile.loading,
-        profile: state.profile.profile,
-        ownerName: getOwnerName(state),
-        editable: isProfileEditable(state)
-    })
+    (state: ClientState) => {
+        const details = getNodeCard(state, getOwnerNameOrUrl(state))?.details;
+        return ({
+            loading: details?.loading ?? true,
+            profile: details?.profile,
+            ownerName: getOwnerName(state),
+            editable: isProfileEditable(state)
+        });
+    }
 );
 
 export default profileViewConnector(ProfileView);

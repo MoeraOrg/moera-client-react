@@ -39,3 +39,12 @@ export class RegisteredName<NT extends string | null = string | null> {
     }
 
 }
+
+export type NodeNameScheme = "registered" | "http";
+
+export function getNodeNameScheme(nodeName: string): NodeNameScheme {
+    if (nodeName.startsWith("http:") || nodeName.startsWith("https:")) {
+        return "http";
+    }
+    return "registered";
+}

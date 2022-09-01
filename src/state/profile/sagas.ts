@@ -20,7 +20,6 @@ import {
     profileImageUploaded,
     profileImageUploadFailed,
     profileImageUploadProgress,
-    ProfileLoadAction,
     profileLoadFailed,
     profileSet,
     ProfileUpdateAction,
@@ -46,9 +45,9 @@ export default [
     executor(PROFILE_AVATARS_REORDER, "", profileAvatarsReorderSaga)
 ];
 
-function* profileLoadSaga(action: ProfileLoadAction) {
+function* profileLoadSaga() {
     try {
-        const data = yield* call(Node.getProfile, "", action.payload.withSource);
+        const data = yield* call(Node.getProfile, "", true);
         yield* put(profileSet(data));
     } catch (e) {
         yield* put(profileLoadFailed());

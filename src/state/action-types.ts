@@ -4,6 +4,7 @@ import { AvatarImage } from "api/node/api-types";
 
 export interface ActionContext {
     ownerName: string | null,
+    ownerNameOrUrl: string,
     ownerFullName: string | null,
     homeOwnerName: string | null,
     homeOwnerFullName: string | null,

@@ -6,6 +6,10 @@ export function getOwnerName(state: ClientState): string | null {
     return state.owner.name;
 }
 
+export function getOwnerNameOrUrl(state: ClientState): string {
+    return getOwnerName(state) ?? state.node.root.location ?? "";
+}
+
 export function getOwnerFullName(state: ClientState): string | null {
     return state.owner.fullName;
 }

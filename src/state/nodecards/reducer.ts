@@ -41,13 +41,13 @@ import {
 import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
+import { OWNER_SET } from "state/owner/actions";
 
 const emptyProfileInfo = {
     fullName: null,
     gender: null,
     email: null,
     title: null,
-    bioSrc: null,
     bioHtml: null,
     avatar: null,
     fundraisers: [],
@@ -123,6 +123,30 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                     }
                 })
                 .value();
+        }
+
+        case OWNER_SET: {
+            let {name, fullName, gender, title, avatar} = action.payload;
+            const {ownerNameOrUrl} = action.context;
+
+            name = name ?? ownerNameOrUrl;
+            const istate = getCard(state, name).istate;
+            const urlCard = getCard(state, ownerNameOrUrl).card;
+            istate.assign([name], cloneDeep(urlCard));
+
+            if (fullName !== false) {
+                istate.set("fullName", action.payload.fullName);
+            }
+            if (gender !== false) {
+                istate.set("gender", action.payload.gender);
+            }
+            if (title !== false) {
+                istate.set("title", action.payload.title);
+            }
+            if (avatar != null) {
+                istate.set("avatar", action.payload.avatar);
+            }
+            return istate.value();
         }
 
         case NODE_CARD_STORIES_LOAD: {
