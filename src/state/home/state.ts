@@ -1,4 +1,4 @@
-import { AvatarImage, AvatarInfo } from "api/node/api-types";
+import { AvatarInfo } from "api/node/api-types";
 import { RootInfo } from "api/addon/api-types";
 
 export interface HomeState {
