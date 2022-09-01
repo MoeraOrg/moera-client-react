@@ -96,19 +96,36 @@ function getCard(state: NodeCardsState, nodeName: string): {istate: WrappedObjec
     return {istate, card};
 }
 
+function migrateCard(target: WrappedObject<NodeCardsState>, targetNodeName: string, source: NodeCardState): void {
+    target.assign([targetNodeName, "details"], {
+        loaded: source.details.loaded,
+        profile: cloneDeep(source.details.profile)
+    });
+    target.assign([targetNodeName, "stories"], {
+        loaded: source.stories.loaded,
+        storiesTotal: source.stories.storiesTotal,
+        lastStoryCreatedAt: source.stories.lastStoryCreatedAt
+    });
+    target.assign([targetNodeName, "people"], {
+        loaded: source.people.loaded,
+        subscribersTotal: source.people.subscribersTotal,
+        subscriptionsTotal: source.people.subscriptionsTotal
+    });
+}
+
 export default (state: NodeCardsState = initialState, action: WithContext<ClientAction>): NodeCardsState => {
     switch (action.type) {
         case NODE_CARD_DETAILS_LOAD: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "details.loading"], true)
+                .set([nodeName, "details", "loading"], true)
                 .value();
         }
 
         case NODE_CARD_DETAILS_LOAD_FAILED: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "details.loading"], false)
+                .set([nodeName, "details", "loading"], false)
                 .value();
         }
 
@@ -133,19 +150,18 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             name = name ?? ownerNameOrUrl;
             const istate = getCard(state, name).istate;
             const urlCard = getCard(state, ownerNameOrUrl).card;
-            istate.assign([name], cloneDeep(urlCard));
-
+            migrateCard(istate, name, urlCard);
             if (fullName !== false) {
-                istate.set("fullName", action.payload.fullName);
+                istate.set([name, "details", "profile", "fullName"], action.payload.fullName);
             }
             if (gender !== false) {
-                istate.set("gender", action.payload.gender);
+                istate.set([name, "details", "profile", "gender"], action.payload.gender);
             }
             if (title !== false) {
-                istate.set("title", action.payload.title);
+                istate.set([name, "details", "profile", "title"], action.payload.title);
             }
             if (avatar != null) {
-                istate.set("avatar", action.payload.avatar);
+                istate.set([name, "details", "profile", "avatar"], action.payload.avatar);
             }
             return istate.value();
         }
@@ -157,8 +173,8 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             name = name ?? homeOwnerNameOrUrl;
             const istate = getCard(state, name).istate;
             const urlCard = getCard(state, homeOwnerNameOrUrl).card;
-            istate.assign([name], {
-                ...cloneDeep(urlCard),
+            migrateCard(istate, name, urlCard);
+            istate.assign([name, "details", "profile"], {
                 fullName,
                 avatar
             });
@@ -168,14 +184,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         case NODE_CARD_STORIES_LOAD: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "stories.loading"], true)
+                .set([nodeName, "stories", "loading"], true)
                 .value();
         }
 
         case NODE_CARD_STORIES_LOAD_FAILED: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "stories.loading"], false)
+                .set([nodeName, "stories", "loading"], false)
                 .value();
         }
 
@@ -194,14 +210,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         case NODE_CARD_PEOPLE_LOAD: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "people.loading"], true)
+                .set([nodeName, "people", "loading"], true)
                 .value();
         }
 
         case NODE_CARD_PEOPLE_LOAD_FAILED: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "people.loading"], false)
+                .set([nodeName, "people", "loading"], false)
                 .value();
         }
 
@@ -220,14 +236,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         case NODE_CARD_SUBSCRIPTION_LOAD: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "subscription.loading"], true)
+                .set([nodeName, "subscription", "loading"], true)
                 .value();
         }
 
         case NODE_CARD_SUBSCRIPTION_LOAD_FAILED: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "subscription.loading"], false)
+                .set([nodeName, "subscription", "loading"], false)
                 .value();
         }
 
@@ -246,7 +262,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         case FEED_SUBSCRIBE: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "subscription.subscribing"], true)
+                .set([nodeName, "subscription", "subscribing"], true)
                 .value();
         }
 
@@ -267,14 +283,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         case FEED_SUBSCRIBE_FAILED: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "subscription.subscribing"], false)
+                .set([nodeName, "subscription", "subscribing"], false)
                 .value();
         }
 
         case FEED_UNSUBSCRIBE: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "subscription.unsubscribing"], false)
+                .set([nodeName, "subscription", "unsubscribing"], false)
                 .value();
         }
 
@@ -295,7 +311,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         case FEED_UNSUBSCRIBE_FAILED: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
-                .set([nodeName, "subscription.unsubscribing"], false)
+                .set([nodeName, "subscription", "unsubscribing"], false)
                 .value();
         }
 
@@ -304,7 +320,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             const {homeOwnerName} = action.context;
             const istate = getCard(state, subscriber.nodeName).istate;
             if (nodeName === homeOwnerName) {
-                istate.set([subscriber.nodeName, "subscription.subscriber"], subscriber);
+                istate.set([subscriber.nodeName, "subscription", "subscriber"], subscriber);
             }
             return istate.value();
         }
@@ -314,7 +330,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             const {homeOwnerName} = action.context;
             const istate = getCard(state, subscription.remoteNodeName).istate;
             if (nodeName === homeOwnerName) {
-                istate.set([subscription.remoteNodeName, "subscription.subscription"], subscription);
+                istate.set([subscription.remoteNodeName, "subscription", "subscription"], subscription);
             }
             return istate.value();
         }
@@ -383,14 +399,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         case EVENT_HOME_SUBSCRIBER_ADDED: {
             const {subscriber} = action.payload;
             return getCard(state, subscriber.nodeName).istate
-                .set([subscriber.nodeName, "subscription.subscriber"], subscriber)
+                .set([subscriber.nodeName, "subscription", "subscriber"], subscriber)
                 .value();
         }
 
         case EVENT_HOME_SUBSCRIBER_DELETED: {
             const {subscriber} = action.payload;
             return getCard(state, subscriber.nodeName).istate
-                .set([subscriber.nodeName, "subscription.subscriber"], null)
+                .set([subscriber.nodeName, "subscription", "subscriber"], null)
                 .value();
         }
 

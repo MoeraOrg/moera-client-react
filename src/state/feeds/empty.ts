@@ -20,10 +20,6 @@ const emptyStatus: FeedStatus = {
 export const emptyFeed: FeedState = {
     loadingGeneral: false,
     loadedGeneral: false,
-    subscribing: false,
-    unsubscribing: false,
-    subscriber: null,
-    subscription: null,
     ...emptyInfo,
     loadingStatus: false,
     loadedStatus: false,

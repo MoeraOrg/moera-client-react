@@ -8,10 +8,6 @@ export interface ExtStoryInfo extends Omit<StoryInfo, "feedName" | "posting" | "
 export interface FeedState extends Omit<FeedInfo, "feedName" | "subscriberId"> {
     loadingGeneral: boolean;
     loadedGeneral: boolean;
-    subscribing: boolean;
-    unsubscribing: boolean;
-    subscriber: SubscriberInfo | null;
-    subscription: SubscriptionInfo | null;
     loadingStatus: boolean;
     loadedStatus: boolean;
     status: FeedStatus;

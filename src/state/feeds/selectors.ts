@@ -82,28 +82,12 @@ export function isFeedStatusToBeLoaded(state: ClientState, feedName: string): bo
     return !feed.loadedStatus && !feed.loadingStatus;
 }
 
-export function getFeedSubscriber(state: ClientState, feedName: string): SubscriberInfo | null {
-    return getFeedState(state, feedName).subscriber;
-}
-
-export function getFeedSubscription(state: ClientState, feedName: string): SubscriptionInfo | null {
-    return getFeedState(state, feedName).subscription;
-}
-
 export function getFeedNotViewed(state: ClientState, feedName: string): number | null {
     return getFeedState(state, feedName).status.notViewed ?? null;
 }
 
 export function getFeedNotViewedMoment(state: ClientState, feedName: string): number | null {
     return getFeedState(state, feedName).status.notViewedMoment ?? null;
-}
-
-export function isSubscribingToFeed(state: ClientState, feedName: string): boolean {
-    return getFeedState(state, feedName).subscribing;
-}
-
-export function isUnsubscribingFromFeed(state: ClientState, feedName: string): boolean {
-    return getFeedState(state, feedName).unsubscribing;
 }
 
 export function getFeedAt(state: ClientState, feedName: string): number {

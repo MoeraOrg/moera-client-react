@@ -20,16 +20,6 @@ import {
     FEED_STATUS_LOAD_FAILED,
     FEED_STATUS_SET,
     FEED_STATUS_UPDATED,
-    FEED_SUBSCRIBE,
-    FEED_SUBSCRIBE_FAILED,
-    FEED_SUBSCRIBED,
-    FEED_SUBSCRIBER_SET,
-    FEED_SUBSCRIBER_UPDATED,
-    FEED_SUBSCRIPTION_SET,
-    FEED_SUBSCRIPTION_UPDATED,
-    FEED_UNSUBSCRIBE,
-    FEED_UNSUBSCRIBE_FAILED,
-    FEED_UNSUBSCRIBED,
     FEEDS_UNSET
 } from "state/feeds/actions";
 import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
@@ -41,12 +31,6 @@ import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
 import { ClientAction } from "state/action";
 import { StoryInfo } from "api/node/api-types";
 import { WithContext } from "state/action-types";
-import {
-    EVENT_HOME_SUBSCRIBER_ADDED,
-    EVENT_HOME_SUBSCRIBER_DELETED,
-    EVENT_HOME_SUBSCRIPTION_ADDED,
-    EVENT_HOME_SUBSCRIPTION_DELETED
-} from "api/events/actions";
 
 const initialState = {
 };
@@ -170,20 +154,6 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case FEED_SUBSCRIBER_SET: {
-            const {feedName, subscriber} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "subscriber"], subscriber)
-                .value();
-        }
-
-        case FEED_SUBSCRIPTION_SET: {
-            const {feedName, subscription} = action.payload;
-            return getFeed(state, feedName).istate
-                .set([feedName, "subscription"], subscription)
-                .value();
-        }
-
         case FEED_GENERAL_UNSET: {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
@@ -193,145 +163,6 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                     loadedGeneral: false
                 })
                 .value();
-        }
-
-        case FEED_SUBSCRIBE: {
-            const {nodeName, feedName} = action.payload;
-            if (nodeName === action.context.ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscribing"], true)
-                    .value();
-            }
-            return state;
-        }
-
-        case FEED_SUBSCRIBED: {
-            const {nodeName, subscription} = action.payload;
-            const feedName = subscription.remoteFeedName;
-            if (nodeName === action.context.ownerName && feedName != null) {
-                return getFeed(state, feedName).istate
-                    .assign([feedName], {
-                        subscribing: false,
-                        subscription: subscription
-                    })
-                    .value();
-            }
-            return state;
-        }
-
-        case FEED_SUBSCRIBE_FAILED: {
-            const {nodeName, feedName} = action.payload;
-            if (nodeName === action.context.ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscribing"], false)
-                    .value();
-            }
-            return state;
-        }
-
-        case FEED_UNSUBSCRIBE: {
-            const {nodeName, feedName} = action.payload;
-            if (nodeName === action.context.ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "unsubscribing"], true)
-                    .value();
-            }
-            return state;
-        }
-
-        case FEED_UNSUBSCRIBED: {
-            const {nodeName, feedName} = action.payload;
-            if (nodeName === action.context.ownerName) {
-                return getFeed(state, feedName).istate
-                    .assign([feedName], {
-                        unsubscribing: false,
-                        subscription: null
-                    })
-                    .value();
-            }
-            return state;
-        }
-
-        case FEED_UNSUBSCRIBE_FAILED: {
-            const {nodeName, feedName} = action.payload;
-            if (nodeName === action.context.ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "unsubscribing"], false)
-                    .value();
-            }
-            return state;
-        }
-
-        case FEED_SUBSCRIBER_UPDATED: {
-            const {nodeName, subscriber} = action.payload;
-            const {homeOwnerName, ownerName} = action.context;
-            const feedName = "timeline";
-            if (nodeName === homeOwnerName && subscriber.nodeName === ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscriber"], subscriber)
-                    .value();
-            }
-            return state;
-        }
-
-        case FEED_SUBSCRIPTION_UPDATED: {
-            const {nodeName, subscription} = action.payload;
-            const {homeOwnerName, ownerName} = action.context;
-            const feedName = "timeline";
-            if (nodeName === homeOwnerName && subscription.remoteNodeName === ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscription"], subscription)
-                    .value();
-            }
-            return state;
-        }
-
-        case EVENT_HOME_SUBSCRIBER_ADDED: {
-            const {subscriber} = action.payload;
-            const {ownerName} = action.context;
-            const feedName = "timeline";
-            if (subscriber.nodeName === ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscriber"], subscriber)
-                    .value();
-            }
-            return state;
-        }
-
-        case EVENT_HOME_SUBSCRIBER_DELETED: {
-            const {subscriber} = action.payload;
-            const {ownerName} = action.context;
-            const feedName = "timeline";
-            if (subscriber.nodeName === ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscriber"], null)
-                    .value();
-            }
-            return state;
-        }
-
-        case EVENT_HOME_SUBSCRIPTION_ADDED: {
-            const {subscription} = action.payload;
-            const {ownerName} = action.context;
-            const feedName = "timeline";
-            if (subscription.remoteNodeName === ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscription"], subscription)
-                    .value();
-            }
-            return state;
-        }
-
-        case EVENT_HOME_SUBSCRIPTION_DELETED: {
-            const {subscription} = action.payload;
-            const {ownerName} = action.context;
-            const feedName = "timeline";
-            if (subscription.remoteNodeName === ownerName) {
-                return getFeed(state, feedName).istate
-                    .set([feedName, "subscription"], null)
-                    .value();
-            }
-            return state;
         }
 
         case FEED_STATUS_LOAD: {

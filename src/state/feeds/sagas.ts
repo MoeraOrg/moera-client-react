@@ -1,4 +1,4 @@
-import { all, call, put, select } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga/macro';
 
 import { Node } from "api";
 import { PrincipalValue } from "api/node/api-types";
@@ -32,10 +32,8 @@ import {
     FeedSubscribeAction,
     feedSubscribed,
     feedSubscribeFailed,
-    feedSubscriberSet,
     FeedSubscriberSetVisibilityAction,
     feedSubscriberUpdated,
-    feedSubscriptionSet,
     FeedSubscriptionSetVisibilityAction,
     feedSubscriptionUpdated,
     FeedUnsubscribeAction,
@@ -86,32 +84,10 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
     try {
         const info = yield* call(Node.getFeedGeneral, "", feedName);
         yield* put(feedGeneralSet(feedName, info));
-        yield* all([
-            call(loadSubscriber, action.context.ownerName, action.context.homeOwnerName, feedName),
-            call(loadSubscription, action.context.ownerName, action.context.homeOwnerName, feedName)
-        ])
     } catch (e) {
         yield* put(feedGeneralLoadFailed(feedName));
         yield* put(errorThrown(e));
     }
-}
-
-function* loadSubscriber(nodeName: string | null, homeOwnerName: string | null, feedName: string) {
-    if (homeOwnerName == null || nodeName == null || nodeName === homeOwnerName) {
-        return;
-    }
-    const subscribers = yield* call(Node.getSubscribers, ":", "feed" as const, nodeName);
-    const subscriber = (subscribers ?? []).find(sr => sr.feedName === feedName) ?? null;
-    yield* put(feedSubscriberSet(feedName, subscriber));
-}
-
-function* loadSubscription(nodeName: string | null, homeOwnerName: string | null, feedName: string) {
-    if (homeOwnerName == null || nodeName == null || nodeName === homeOwnerName) {
-        return;
-    }
-    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
-    const subscription = (subscriptions ?? []).find(sr => sr.remoteFeedName === feedName) ?? null;
-    yield* put(feedSubscriptionSet(feedName, subscription));
 }
 
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
