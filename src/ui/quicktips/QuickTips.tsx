@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import { ClientState } from "state/state";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";

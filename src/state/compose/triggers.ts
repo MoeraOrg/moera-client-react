@@ -42,7 +42,7 @@ import {
 } from "api/events/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, PostingUpdatedEvent } from "api/events/api-types";
 import { CONNECTED_TO_HOME, ConnectedToHomeAction } from "state/home/actions";
 import { ClientState } from "state/state";

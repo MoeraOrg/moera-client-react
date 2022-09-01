@@ -69,7 +69,7 @@ const connector = connect(
         atNode: isAtNode(state),
         connecting: state.home.connecting,
         connected: isConnectedToHome(state),
-        showNavigator: state.owner.showNavigator
+        showNavigator: state.node.owner.showNavigator
     }),
     { openConnectDialog, openSignUpDialog }
 );

@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/owner/selectors";
+import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
 import { Avatar, DonateButton } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName } from "util/misc";

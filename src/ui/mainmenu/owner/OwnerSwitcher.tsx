@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
+import { ownerSwitchClose, ownerSwitchOpen } from "state/node/actions";
 import OwnerName from "ui/mainmenu/owner/OwnerName";
 import OwnerNavigator from "ui/mainmenu/owner/OwnerNavigator";
-import { ownerSwitchClose, ownerSwitchOpen } from "state/owner/actions";
-import { ClientState } from "state/state";
 import "./OwnerSwitcher.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -70,7 +70,7 @@ class OwnerSwitcher extends React.PureComponent<Props> {
 
 const connector = connect(
     (state: ClientState) => ({
-        showNavigator: state.owner.showNavigator
+        showNavigator: state.node.owner.showNavigator
     }),
     { ownerSwitchOpen, ownerSwitchClose }
 );

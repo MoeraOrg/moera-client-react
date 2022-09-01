@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import NodeName from "ui/nodename/NodeName";
 

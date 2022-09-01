@@ -39,8 +39,8 @@ import {
 } from "api/events/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
-import { OWNER_SET } from "state/owner/actions";
-import { getOwnerName } from "state/owner/selectors";
+import { OWNER_SET } from "state/node/actions";
+import { getOwnerName } from "state/node/selectors";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
 import { POST_INIT, POST_INIT_DELAYED } from "state/pulse/actions";

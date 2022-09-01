@@ -2,9 +2,9 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
-import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
+import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
+import { getOwnerName } from "state/node/selectors";
 import { DropdownMenu } from "ui/control";
 import "./PageShareButton.css";
 

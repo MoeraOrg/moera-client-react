@@ -4,8 +4,8 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { CommentText, DraftText, SourceFormat } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
-import { getOwnerName } from "state/owner/selectors";
 import { ClientState } from "state/state";
+import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerFullName } from "state/home/selectors";
 import {

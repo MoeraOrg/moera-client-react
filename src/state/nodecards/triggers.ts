@@ -5,7 +5,7 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state
 import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction } from "api/events/actions";
 import { ProfileUpdatedEvent } from "api/events/api-types";
 import { INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
-import { OWNER_SET } from "state/owner/actions";
+import { OWNER_SET } from "state/node/actions";
 import { PROFILE_SET, ProfileSetAction } from "state/profile/actions";
 import { WithContext } from "state/action-types";
 

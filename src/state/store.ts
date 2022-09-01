@@ -12,7 +12,6 @@ import home from "state/home/reducer";
 import tokens from "state/tokens/reducer";
 import navigation from "state/navigation/reducer";
 import connectDialog from "state/connectdialog/reducer";
-import owner from "state/owner/reducer";
 import nodeName from "state/nodename/reducer";
 import profile from "state/profile/reducer";
 import detailedPosting from "state/detailedposting/reducer";
@@ -47,7 +46,6 @@ import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";
 import nodeExecutors from "state/node/sagas";
-import ownerExecutors from "state/owner/sagas";
 import connectExecutors from "state/home/connect";
 import connectDialogExecutors from "state/connectdialog/sagas";
 import homeExecutors from "state/home/sagas";
@@ -84,7 +82,6 @@ import cartesTriggers from "state/cartes/triggers";
 import navigationTriggers from "state/navigation/triggers";
 import connectDialogTriggers from "state/connectdialog/triggers";
 import nodeTriggers from "state/node/triggers";
-import ownerTriggers from "state/owner/triggers";
 import nodeNameTriggers from "state/nodename/triggers";
 import profileTriggers from "state/profile/triggers";
 import feedTriggers from "state/feeds/triggers";
@@ -118,7 +115,6 @@ const reducers = combineReducers({
     tokens,
     navigation,
     connectDialog,
-    owner,
     nodeName,
     profile,
     detailedPosting,
@@ -162,7 +158,6 @@ const triggers = collectTriggers(
     navigationTriggers,
     connectDialogTriggers,
     nodeTriggers,
-    ownerTriggers,
     nodeNameTriggers,
     profileTriggers,
     feedTriggers,
@@ -190,7 +185,6 @@ const executors = collectExecutors(
     navigationExecutors,
     errorExecutors,
     nodeExecutors,
-    ownerExecutors,
     connectExecutors,
     connectDialogExecutors,
     homeExecutors,

@@ -7,5 +7,14 @@ export interface NodeState {
         api: string | null;
         events: string | null;
     },
+    owner: {
+        name: string | null;
+        correct: boolean;
+        verified: boolean;
+        verifiedAt: number;
+        changing: boolean;
+        showNavigator: boolean;
+        switching: boolean;
+    },
     features: Features | null;
 }

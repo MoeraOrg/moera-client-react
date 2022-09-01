@@ -1,6 +1,15 @@
-import { CommentOperationsInfo, Features, PostingOperationsInfo, PrincipalValue } from "api/node/api-types";
+import {
+    AvatarImage,
+    CommentOperationsInfo,
+    Features,
+    PostingOperationsInfo,
+    PrincipalValue
+} from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeOwnerName, getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
+import { NodeCardState } from "state/nodecards/state";
+import { getNodeCard } from "state/nodecards/selectors";
+import { isNodeNameOperationFinished } from "state/nodename/selectors";
 
 export function isAtNode(state: ClientState): boolean {
     return !!state.node.root.api;
@@ -61,6 +70,41 @@ export function isReceiverAdmin(state: ClientState, receiverName: string | null)
     // Permission "admin" may be saved for older tokens
     return getHomeOwnerName(state) === receiverName && permissions != null
         && (permissions.includes("other") || permissions.includes("admin"));
+}
+
+export function getOwnerName(state: ClientState): string | null {
+    return state.node.owner.name;
+}
+
+export function getOwnerNameOrUrl(state: ClientState): string {
+    return getOwnerName(state) ?? state.node.root.location ?? "";
+}
+
+export function getOwnerCard(state: ClientState): NodeCardState | null {
+    return getNodeCard(state, getOwnerNameOrUrl(state));
+}
+
+export function getOwnerFullName(state: ClientState): string | null {
+    return getOwnerCard(state)?.details.profile.fullName ?? null;
+}
+
+export function getOwnerTitle(state: ClientState): string | null {
+    return getOwnerCard(state)?.details.profile.title ?? null;
+}
+
+export function getOwnerAvatar(state: ClientState): AvatarImage | null {
+    return getOwnerCard(state)?.details.profile.avatar ?? null;
+}
+
+export function isOwnerNameSet(state: ClientState): boolean {
+    return getOwnerName(state) != null;
+}
+
+export function isOwnerNameRecentlyChanged(state: ClientState): boolean {
+    return isOwnerNameSet(state)
+        && (state.node.owner.verifiedAt === 0
+            || (isNodeNameOperationFinished(state)
+                && state.node.owner.verifiedAt < (state.nodeName.operationStatusUpdated ?? 0)));
 }
 
 type AnyOperationsInfo = Partial<Record<string, PrincipalValue | null>>;

@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { urlWithParameters, ut } from "util/url";
 
 type Props = {

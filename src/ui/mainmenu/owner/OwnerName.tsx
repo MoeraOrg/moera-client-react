@@ -24,7 +24,7 @@ const OwnerName = ({name, changing, atHome, ...props}: Props) => (
 
 const connector = connect(
     (state: ClientState) => ({
-        ...state.owner,
+        ...state.node.owner,
         atHome: isAtHomeNode(state)
     })
 );

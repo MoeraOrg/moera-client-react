@@ -1,7 +1,6 @@
 import { AvatarInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { isPermitted } from "state/node/selectors";
-import { getOwnerCard } from "state/owner/selectors";
+import { getOwnerCard, isPermitted } from "state/node/selectors";
 
 export function isProfileEditing(state: ClientState): boolean {
     return state.profile.editing;

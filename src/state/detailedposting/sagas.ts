@@ -102,8 +102,7 @@ import {
 import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
 import { postingCommentsSet, postingsSet } from "state/postings/actions";
 import { ClientState } from "state/state";
-import { getOwnerFullName, getOwnerName } from "state/owner/selectors";
-import { isPermitted, isPrincipalIn } from "state/node/selectors";
+import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getPosting, isPostingCached } from "state/postings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";

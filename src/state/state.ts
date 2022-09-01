@@ -20,7 +20,6 @@ import { NavigationState } from "state/navigation/state";
 import { NodeState } from "state/node/state";
 import { NodeCardsState } from "state/nodecards/state";
 import { NodeNameState } from "state/nodename/state";
-import { OwnerState } from "state/owner/state";
 import { PeopleState } from "state/people/state";
 import { PostingReplyState } from "state/postingreply/state";
 import { PostingsState } from "state/postings/state";
@@ -58,7 +57,6 @@ export interface ClientState {
     node: NodeState;
     nodeCards: NodeCardsState;
     nodeName: NodeNameState;
-    owner: OwnerState;
     people: PeopleState;
     postingReply: PostingReplyState;
     postings: PostingsState;

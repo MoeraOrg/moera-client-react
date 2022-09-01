@@ -4,7 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 
 import { ClientState } from "state/state";
-import { ownerSwitch } from "state/owner/actions";
+import { ownerSwitch } from "state/node/actions";
 import { InputField } from "ui/control/field";
 import { Button } from "ui/control";
 import "./WelcomeNavigator.css";
@@ -46,7 +46,7 @@ const welcomeNavigatorLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        switching: state.owner.switching
+        switching: state.node.owner.switching
     }),
     { ownerSwitch }
 );

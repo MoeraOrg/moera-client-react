@@ -1,4 +1,4 @@
-import { getOwnerFullName, getOwnerName, getOwnerNameOrUrl } from "state/owner/selectors";
+import { getOwnerFullName, getOwnerName, getOwnerNameOrUrl } from "state/node/selectors";
 import {
     getHomeOwnerAvatar,
     getHomeOwnerFullName,

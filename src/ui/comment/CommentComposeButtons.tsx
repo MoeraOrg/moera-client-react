@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import { CommentText, SourceFormat } from "api/node/api-types";
 import { commentComposeCancel } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";

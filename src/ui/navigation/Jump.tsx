@@ -3,11 +3,10 @@ import { connect, ConnectedProps } from 'react-redux';
 import * as URI from 'uri-js';
 
 import { goToLocation, initFromLocation, initFromNodeLocation } from "state/navigation/actions";
-import { getOwnerName } from "state/owner/selectors";
+import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { getNodeRootPage } from "state/node/selectors";
 import { ClientState } from "state/state";
 import { redirectUrl, rootUrl } from "util/url";
 

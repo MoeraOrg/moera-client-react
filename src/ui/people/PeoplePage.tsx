@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
+import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
 import { Avatar, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";

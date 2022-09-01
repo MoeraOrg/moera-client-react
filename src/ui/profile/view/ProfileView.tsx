@@ -5,7 +5,7 @@ import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { profileEdit } from "state/profile/actions";
 import { isProfileEditable } from "state/profile/selectors";
-import { getOwnerCard, getOwnerName } from "state/owner/selectors";
+import { getOwnerCard, getOwnerName } from "state/node/selectors";
 import { Avatar, Button, DonateButton, Loading } from "ui/control";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import { Page } from "ui/page/Page";

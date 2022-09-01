@@ -7,7 +7,7 @@ import * as immutable from 'object-path-immutable';
 import { LinkPreview, MediaAttachment, PostingFeatures } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { linkPreviewImageUpload, linkPreviewLoad } from "state/linkpreviews/actions";
 import { LinkPreviewsState } from "state/linkpreviews/state";

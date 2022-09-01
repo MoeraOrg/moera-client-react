@@ -5,14 +5,14 @@ import { useField } from 'formik';
 
 import { AvatarInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { useButtonPopper } from "ui/hook";
+import { getOwnerName } from "state/node/selectors";
 import {
     profileAvatarConfirmDelete,
     profileAvatarsLoad,
     profileAvatarsReorder,
     profileOpenAvatarEditDialog
 } from "state/profile/actions";
-import { getOwnerName } from "state/owner/selectors";
+import { useButtonPopper } from "ui/hook";
 import { Avatar } from "ui/control";
 import AvatarSelector from "ui/profile/edit/avatar/AvatarSelector";
 import AvatarEditDialog from "ui/profile/edit/avatar/AvatarEditDialog";

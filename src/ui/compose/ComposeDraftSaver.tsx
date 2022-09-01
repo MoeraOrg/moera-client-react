@@ -7,7 +7,7 @@ import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { DraftSaver } from "ui/control";
 import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";

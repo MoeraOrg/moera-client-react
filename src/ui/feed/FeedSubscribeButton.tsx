@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { isAtHomeNode } from "state/node/selectors";
+import { getOwnerName, isAtHomeNode, isOwnerNameSet } from "state/node/selectors";
 import {
     getFeedSubscriber,
     getFeedSubscription,
@@ -11,7 +11,6 @@ import {
     isSubscribingToFeed,
     isUnsubscribingFromFeed
 } from "state/feeds/selectors";
-import { getOwnerName, isOwnerNameSet } from "state/owner/selectors";
 import { Loading } from "ui/control";
 import SubscribeButton from "ui/control/SubscribeButton";
 

@@ -1,6 +1,6 @@
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import { getCommentsState } from "state/detailedposting/selectors";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { ClientState } from "state/state";
 

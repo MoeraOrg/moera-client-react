@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 
-import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
-import { getOwnerName } from "state/owner/selectors";
-import { isConnectedToHome } from "state/home/selectors";
-import { ClientState } from "state/state";
 import { AvatarImage, CommentInfo, PostingInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
+import { getOwnerName } from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
+import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
 import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
 
 export function getDetailedPostingId(state: ClientState): string | null {

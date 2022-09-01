@@ -18,7 +18,7 @@ import {
     NamingNamesUsedAction
 } from "state/naming/actions";
 import { getNamingNameDetails, getNamingNamesToBeLoaded } from "state/naming/selectors";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";

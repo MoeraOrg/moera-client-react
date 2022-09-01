@@ -4,7 +4,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { NodeName } from "api";
 import { Button, NameSelector } from "ui/control";
 import { ClientState } from "state/state";
-import { ownerSwitch, ownerSwitchClose } from "state/owner/actions";
+import { ownerSwitch, ownerSwitchClose } from "state/node/actions";
 import { NameListItem } from "util/names-list";
 import "./OwnerNavigator.css";
 
@@ -42,8 +42,8 @@ function OwnerNavigator({ownerName, switching, ownerSwitch, ownerSwitchClose}: P
 
 const connector = connect(
     (state: ClientState) => ({
-        ownerName: state.owner.name,
-        switching: state.owner.switching
+        ownerName: state.node.owner.name,
+        switching: state.node.owner.switching
     }),
     { ownerSwitch, ownerSwitchClose }
 );

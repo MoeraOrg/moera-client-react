@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
-import { getOwnerAvatar, getOwnerName } from "state/owner/selectors";
+import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
 import PageHeader from "ui/page/PageHeader";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";

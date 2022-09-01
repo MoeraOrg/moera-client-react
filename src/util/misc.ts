@@ -4,6 +4,7 @@ import charCategory from 'general-category';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
+import { getOwnerName } from "state/node/selectors";
 
 const DIGITS = /^\d+$/;
 
@@ -29,7 +30,7 @@ export function shortGender(gender: string | null): string | null {
 }
 
 export function atOwner(state: ClientState): string {
-    const ownerName = state.owner.name;
+    const ownerName = getOwnerName(state);
     return ownerName ? " @ " + NodeName.shorten(ownerName) : "";
 }
 

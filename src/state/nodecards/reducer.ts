@@ -41,7 +41,7 @@ import {
 import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { OWNER_SET } from "state/owner/actions";
+import { OWNER_SET } from "state/node/actions";
 import { HOME_OWNER_SET } from "state/home/actions";
 
 const emptyProfileInfo = {

@@ -14,7 +14,7 @@ import {
     registerNameFailed,
     registerNameSucceeded
 } from "state/nodename/actions";
-import { ownerSet } from "state/owner/actions";
+import { ownerSet } from "state/node/actions";
 import { Naming, Node } from "api";
 import { executor } from "state/executor";
 

@@ -9,7 +9,7 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { CARTES_SET } from "state/cartes/actions";
 import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 import { ClientState } from "state/state";
-import { OWNER_SET } from "state/owner/actions";
+import { OWNER_SET } from "state/node/actions";
 
 type PayloadExtractor<T> = (payload: T, context: ActionContext | null) => string;
 

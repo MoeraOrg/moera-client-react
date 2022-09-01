@@ -8,7 +8,7 @@ import { lightBoxCopyLink, lightBoxCopyMediaLink } from "state/lightbox/actions"
 import { getLightBoxMediaId, getLightBoxNodeName, getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
-import { getOwnerName } from "state/owner/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { DropdownMenu } from "ui/control";
 import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
