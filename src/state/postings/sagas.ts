@@ -45,7 +45,7 @@ import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, isConnectedToHome } from "state/home/selectors";
 import { introduced } from "state/init-selectors";
 import { executor } from "state/executor";
 import { Browser } from "ui/browser";
@@ -153,10 +153,17 @@ function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
 }
 
 function* postingReactionsReloadSaga() {
-    const postingsState = yield* select((state: ClientState) => state.postings);
+    const {postingsState, connectedToHome} = yield* select((state: ClientState) => ({
+        postingsState: state.postings,
+        connectedToHome: isConnectedToHome(state)
+    }));
     for (const nodeName of Object.getOwnPropertyNames(postingsState)) {
         for (const id of Object.getOwnPropertyNames(postingsState[nodeName])) {
-            yield* spawn(postingReactionLoad, id, nodeName);
+            if (connectedToHome) {
+                yield* spawn(postingReactionLoad, id, nodeName);
+            } else {
+                put(postingReactionSet(id, null, postingsState[nodeName]![id]!.posting.reactions!))
+            }
         }
     }
 }

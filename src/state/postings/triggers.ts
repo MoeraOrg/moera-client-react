@@ -20,6 +20,7 @@ import {
 import { isPostingCached } from "state/postings/selectors";
 import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
 import { DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
+import { isConnectedToHome } from "state/home/selectors";
 import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
 
@@ -50,7 +51,7 @@ export default [
     trigger(
         EVENT_NODE_POSTING_REACTIONS_CHANGED,
         (state, signal: EventAction<PostingReactionsChangedEvent>) =>
-            isPostingCached(state, signal.payload.id),
+            isPostingCached(state, signal.payload.id) && isConnectedToHome(state),
         signal => postingReactionLoad(signal.payload.id)
     ),
     trigger(
