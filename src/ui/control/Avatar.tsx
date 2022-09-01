@@ -55,17 +55,23 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 export function AvatarImpl({avatar, ownerName, size, shape: shapeLocal, className, draggable = true, onClick,
                             onMouseEnter, onMouseLeave, onTouchStart, imageRef, rootPage, shapeGlobal}: Props) {
-    const {src, alt, shape, style} = avatar ? {
-        src: `${rootPage}/media/${avatar.path}`,
-        alt: "Avatar",
-        shape: effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal),
-        style: undefined
-    } : {
-        src: avatarPlaceholder,
-        alt: "Avatar placeholder",
-        shape: effectiveShape("circle", shapeLocal, shapeGlobal),
-        style: {filter: `hue-rotate(${nameAngle(ownerName)}deg)`}
-    };
+    if (window.loadedAvatars == null) {
+        window.loadedAvatars = new Map<string, string>();
+    }
+
+    let src: string, alt: string, shape: string | null, style: React.CSSProperties | undefined;
+    if (avatar != null) {
+        src = window.loadedAvatars.get(avatar.path) ?? `${rootPage}/media/${avatar.path}`;
+        window.loadedAvatars.set(avatar.path, src);
+        alt = "Avatar";
+        shape = effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal);
+        style = undefined;
+    } else {
+        src = avatarPlaceholder;
+        alt = "Avatar placeholder";
+        shape = effectiveShape("circle", shapeLocal, shapeGlobal);
+        style = {filter: `hue-rotate(${nameAngle(ownerName)}deg)`};
+    }
 
     return (
         <img src={src} alt={alt} width={size} height={size} draggable={draggable} ref={imageRef} onClick={onClick}
