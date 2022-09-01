@@ -1,7 +1,7 @@
 import { trigger } from "state/trigger";
 import { nodeCardDetailsLoad, nodeCardDetailsSet, nodeCardPrepare, nodeCardsUnset } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
 import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction } from "api/events/actions";
 import { ProfileUpdatedEvent } from "api/events/api-types";
 import { INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
@@ -15,6 +15,11 @@ export default [
         [INIT_FROM_LOCATION, OWNER_SET, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
         true,
         signal => nodeCardPrepare(signal.context.ownerNameOrUrl)
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
+        true,
+        signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)
     ),
     trigger(
         PROFILE_SET,

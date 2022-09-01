@@ -32,8 +32,6 @@ const emptyConnection = {
     login: null,
     owner: {
         name: null,
-        fullName: null,
-        avatar: null,
         verified: false,
         correct: false,
         changing: false
@@ -91,8 +89,6 @@ export default (state: HomeState = initialState, action: ClientAction): HomeStat
                 owner: {
                     ...state.owner,
                     name: action.payload.name,
-                    fullName: action.payload.fullName,
-                    avatar: action.payload.avatar,
                     verified: false,
                     correct: false,
                     changing: action.payload.changing ?? state.owner.changing

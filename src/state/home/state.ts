@@ -12,8 +12,6 @@ export interface HomeState {
     login: string | null;
     owner: {
         name: string | null;
-        fullName: string | null;
-        avatar: AvatarImage | null;
         verified: boolean;
         correct: boolean;
         changing: boolean;

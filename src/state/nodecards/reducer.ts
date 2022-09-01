@@ -42,6 +42,7 @@ import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { OWNER_SET } from "state/owner/actions";
+import { HOME_OWNER_SET } from "state/home/actions";
 
 const emptyProfileInfo = {
     fullName: null,
@@ -146,6 +147,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             if (avatar != null) {
                 istate.set("avatar", action.payload.avatar);
             }
+            return istate.value();
+        }
+
+        case HOME_OWNER_SET: {
+            let {name, fullName, avatar} = action.payload;
+            const {homeOwnerNameOrUrl} = action.context;
+
+            name = name ?? homeOwnerNameOrUrl;
+            const istate = getCard(state, name).istate;
+            const urlCard = getCard(state, homeOwnerNameOrUrl).card;
+            istate.assign([name], {
+                ...cloneDeep(urlCard),
+                fullName,
+                avatar
+            });
             return istate.value();
         }
 

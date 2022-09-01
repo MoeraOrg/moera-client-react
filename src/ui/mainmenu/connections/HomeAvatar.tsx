@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { ClientState } from "state/state";
+import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { Avatar } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import "./HomeAvatar.css";
@@ -16,8 +17,8 @@ const HomeAvatar = ({ownerName, avatar}: Props) => (
 
 const connector = connect(
     (state: ClientState) => ({
-        ownerName: state.home.owner.name,
-        avatar: state.home.owner.avatar
+        ownerName: getHomeOwnerName(state),
+        avatar: getHomeOwnerAvatar(state)
     })
 );
 

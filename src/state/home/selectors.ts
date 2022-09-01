@@ -1,6 +1,8 @@
-import { getToken } from "state/node/selectors";
-import { ClientState } from "state/state";
 import { AvatarImage } from "api/node/api-types";
+import { ClientState } from "state/state";
+import { getToken } from "state/node/selectors";
+import { NodeCardState } from "state/nodecards/state";
+import { getNodeCard } from "state/nodecards/selectors";
 
 export function getHomeRootLocation(state: ClientState): string | null {
     return state.home.root.location;
@@ -27,12 +29,20 @@ export function getHomeOwnerName(state: ClientState): string | null {
     return state.home.owner.name;
 }
 
+export function getHomeOwnerNameOrUrl(state: ClientState): string {
+    return getHomeOwnerName(state) ?? getHomeRootLocation(state) ?? "";
+}
+
+export function getHomeOwnerCard(state: ClientState): NodeCardState | null {
+    return getNodeCard(state, getHomeOwnerNameOrUrl(state));
+}
+
 export function getHomeOwnerFullName(state: ClientState): string | null {
-    return state.home.owner.fullName;
+    return getHomeOwnerCard(state)?.details.profile.fullName ?? null;
 }
 
 export function getHomeOwnerAvatar(state: ClientState): AvatarImage | null {
-    return state.home.owner.avatar;
+    return getHomeOwnerCard(state)?.details.profile.avatar ?? null;
 }
 
 export function isHomeOwnerNameSet(state: ClientState): boolean {
