@@ -1168,10 +1168,6 @@ const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
             type: "integer",
             nullable: true
         },
-        "subscriberId": {
-            type: "string",
-            nullable: true
-        },
         "operations": {
             type: "object",
             properties: {
@@ -1186,7 +1182,7 @@ const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
     },
     required: ["feedName", "total"],
     additionalProperties: false
-};
+}
 
 export const FeedInfo = schema(FeedInfoType);
 

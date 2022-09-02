@@ -3,7 +3,6 @@ import { FeedInfo, FeedStatus } from "api/node/api-types";
 
 export const emptyInfo: Omit<FeedInfo, "feedName"> = {
     total: 0,
-    subscriberId: null,
     operations: {
         add: "none" as const
     }
