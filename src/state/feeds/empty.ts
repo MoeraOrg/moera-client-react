@@ -1,5 +1,5 @@
-import { FeedState } from "state/feeds/state";
 import { FeedInfo, FeedStatus } from "api/node/api-types";
+import { FeedState } from "state/feeds/state";
 
 export const emptyInfo: Omit<FeedInfo, "feedName"> = {
     total: 0,

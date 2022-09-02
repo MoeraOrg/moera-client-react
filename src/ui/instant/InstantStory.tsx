@@ -7,12 +7,12 @@ import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { ClientState } from "state/state";
 import { storyReadingUpdate } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
+import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
 import { Avatar } from "ui/control";
 import { getInstantTarget } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
 import "./InstantStory.css";
-import { getSetting } from "state/settings/selectors";
 
 type Props = {
     story: ExtStoryInfo;
