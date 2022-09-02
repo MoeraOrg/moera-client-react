@@ -19,7 +19,6 @@ import "./SubscribeButton.css";
 
 interface OwnProps {
     show: boolean;
-    ready: boolean;
     subscribing: boolean;
     unsubscribing: boolean;
     nodeName: string;
@@ -30,11 +29,11 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function SubscribeButton({show, ready, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
+function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
                           homeSet, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
                           subscriptionHidden, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
                           feedSubscriptionSetVisibility}: Props) {
-    if (!homeSet || !show || !ready) {
+    if (!homeSet || !show) {
         return null;
     }
 

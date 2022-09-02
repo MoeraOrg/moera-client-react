@@ -16,13 +16,12 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 const FeedSubscribeButton = ({feedName, show, ownerName, generalReady, generalLoading, subscription}: Props) => (
     ownerName != null ?
         <>
-            {(!generalLoading && subscription?.loaded) &&
-                <SubscribeButton nodeName={ownerName} feedName={feedName} show={show} ready={generalReady}
-                                 subscribing={subscription?.subscribing ?? false}
-                                 unsubscribing={subscription?.unsubscribing ?? false}
-                                 subscriber={subscription?.subscriber ?? null}
-                                 subscription={subscription?.subscription ?? null}/>
-            }
+            <SubscribeButton nodeName={ownerName} feedName={feedName}
+                             show={show && generalReady && (subscription?.loaded ?? false)}
+                             subscribing={subscription?.subscribing ?? false}
+                             unsubscribing={subscription?.unsubscribing ?? false}
+                             subscriber={subscription?.subscriber ?? null}
+                             subscription={subscription?.subscription ?? null}/>
             <Loading active={generalLoading || subscription?.loading}/>
         </>
     :
