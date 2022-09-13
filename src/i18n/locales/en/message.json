@@ -5,5 +5,8 @@
       "news": "News"
     }
   },
-  "moera": "Moera"
+  "in": "in",
+  "moera": "Moera",
+  "posting-not-found": "Posting not found or cannot be displayed.",
+  "where-from": "Where it comes from?"
 }

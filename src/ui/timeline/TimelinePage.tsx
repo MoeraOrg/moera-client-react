@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation, withTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isAtTimelinePage } from "state/navigation/selectors";
@@ -8,9 +9,11 @@ import { getFeedTitle } from "ui/feed/feeds";
 
 type Props = ConnectedProps<typeof connector>;
 
-const TimelinePage = ({visible}: Props) => (
-    <FeedPage feedName="timeline" title={getFeedTitle("timeline")} shareable visible={visible}/>
-);
+const TimelinePage = ({visible}: Props) => {
+    const {t} = useTranslation();
+
+    return <FeedPage feedName="timeline" title={getFeedTitle("timeline", t)} shareable visible={visible}/>
+};
 
 const connector = connect(
     (state: ClientState) => ({
@@ -18,4 +21,4 @@ const connector = connect(
     })
 );
 
-export default connector(TimelinePage);
+export default connector(withTranslation()(TimelinePage));

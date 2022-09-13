@@ -29,6 +29,25 @@ export interface ClientSettingMetaInfo {
 
 const META: ClientSettingMetaInfo[] = [
     {
+        name: "language",
+        type: "string",
+        defaultValue: "not-viewed",
+        title: "Language",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "English",
+                    value: "en"
+                },
+                {
+                    title: "Русский",
+                    value: "ru"
+                }
+            ]
+        }
+    },
+    {
         name: "invitation.addon.shown-at",
         type: "Timestamp",
         defaultValue: "0",

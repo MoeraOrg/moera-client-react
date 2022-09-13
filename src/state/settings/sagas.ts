@@ -1,13 +1,16 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
+import i18n from 'i18next';
 
 import { errorThrown } from "state/error/actions";
 import { HomeNotConnectedError, Node, NodeApiError } from "api";
 import { ClientSettingMetaInfo, PREFIX } from "api/settings";
+import { ClientState } from "state/state";
+import { introduced } from "state/init-selectors";
 import {
     SETTINGS_CHANGE_PASSWORD,
     SETTINGS_CLIENT_VALUES_LOAD,
-    SETTINGS_CLIENT_VALUES_LOADED,
+    SETTINGS_CLIENT_VALUES_LOADED, SETTINGS_CLIENT_VALUES_SET,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
     SETTINGS_PLUGINS_DELETE,
@@ -23,7 +26,7 @@ import {
     SettingsChangePasswordAction,
     settingsChangePasswordFailed,
     settingsClientValuesLoaded,
-    settingsClientValuesLoadFailed,
+    settingsClientValuesLoadFailed, SettingsClientValuesSetAction,
     settingsNodeMetaLoaded,
     settingsNodeMetaLoadFailed,
     settingsNodeValuesLoaded,
@@ -48,16 +51,17 @@ import {
     SettingsUpdateSucceededAction
 } from "state/settings/actions";
 import { executor } from "state/executor";
-import { getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
+import { getSetting, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
 import { flashBox } from "state/flashbox/actions";
-import { introduced } from "state/init-selectors";
 import { Browser } from "ui/browser";
+import { SettingInfo } from "api/node/api-types";
 
 export default [
     executor(SETTINGS_NODE_VALUES_LOAD, "", settingsNodeValuesLoadSaga, introduced),
     executor(SETTINGS_NODE_META_LOAD, "", settingsNodeMetaLoadSaga, introduced),
     executor(SETTINGS_CLIENT_VALUES_LOAD, "", settingsClientValuesLoadSaga, introduced),
     executor(SETTINGS_CLIENT_VALUES_LOADED, "", settingsClientValuesLoadedSaga),
+    executor(SETTINGS_CLIENT_VALUES_SET, "", settingsClientValuesSetSaga),
     executor(SETTINGS_UPDATE, null, settingsUpdateSaga),
     executor(SETTINGS_UPDATE_SUCCEEDED, null, settingsUpdateSucceededSaga),
     executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga),
@@ -127,11 +131,31 @@ function* settingsClientValuesLoadSaga() {
 }
 
 function* settingsClientValuesLoadedSaga() {
+    const lang = yield* select((state: ClientState) => getSetting(state, "language") as string);
+    if (lang !== i18n.language) {
+        i18n.changeLanguage(lang);
+    }
     yield* call(storeSettings);
+}
+
+function updateLanguage(settings: SettingInfo[]) {
+    const lang = settings.find(st => st.name === PREFIX + "language")?.value;
+    console.log("Update language", lang, settings);
+    if (lang != null && lang !== i18n.language) {
+        i18n.changeLanguage(lang);
+    }
+}
+
+function* settingsClientValuesSetSaga(action: SettingsClientValuesSetAction) {
+    const {settings} = action.payload;
+
+    updateLanguage(settings);
 }
 
 function* settingsUpdateSaga(action: SettingsUpdateAction) {
     const {settings, onSuccess} = action.payload;
+
+    updateLanguage(settings);
 
     const clientMeta = yield* select(getSettingsClientMeta);
     const toHome = settings

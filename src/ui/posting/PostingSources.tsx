@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
+import { TFunction, useTranslation } from 'react-i18next';
 
 import { PostingInfo } from "api/node/api-types";
 import Jump from "ui/navigation/Jump";
@@ -12,22 +13,26 @@ interface Props {
     posting: PostingInfo;
 }
 
-const PostingSources = ({posting}: Props) => (
-    <div className="posting-sources">
-        <div className="title">Where it comes from?</div>
-        {sourcesList(posting).map((line, index) =>
-            <div className="source" key={index}>
+const PostingSources = ({posting}: Props) => {
+    const {t} = useTranslation();
+
+    return (
+        <div className="posting-sources">
+            <div className="title">{t("where-from")}</div>
+            {sourcesList(posting, t).map((line, index) =>
+                <div className="source" key={index}>
                 <span className={cx("icon", {"original": line.original})}>
                     <FontAwesomeIcon icon={line.original ? "star" : "share-square"}/>
                 </span>
-                <Jump nodeName={line.nodeName} href={`/post/${line.postingId}`}>
-                    <NodeName name={line.nodeName} fullName={line.fullName} linked={false} popup={false}/>
-                    {" "}in {line.feedTitle}
-                </Jump>
-            </div>
-        )}
-    </div>
-);
+                    <Jump nodeName={line.nodeName} href={`/post/${line.postingId}`}>
+                        <NodeName name={line.nodeName} fullName={line.fullName} linked={false} popup={false}/>
+                        {" "}{t("in")} {line.feedTitle}
+                    </Jump>
+                </div>
+            )}
+        </div>
+    );
+}
 
 interface SourcesLine {
     nodeName: string | null;
@@ -37,7 +42,7 @@ interface SourcesLine {
     original: boolean;
 }
 
-function sourcesList(posting: PostingInfo): SourcesLine[] {
+function sourcesList(posting: PostingInfo, t: TFunction): SourcesLine[] {
     if (posting.sources == null) {
         return [];
     }
@@ -48,7 +53,7 @@ function sourcesList(posting: PostingInfo): SourcesLine[] {
         .map(sr => ({
             nodeName: sr.nodeName,
             fullName: sr.fullName ?? null,
-            feedTitle: getFeedTitle(sr.feedName),
+            feedTitle: getFeedTitle(sr.feedName, t),
             postingId: sr.postingId,
             original: false
         }));
@@ -60,7 +65,7 @@ function sourcesList(posting: PostingInfo): SourcesLine[] {
         list.unshift({
             nodeName: posting.receiverName ?? null,
             fullName: posting.receiverFullName ?? null,
-            feedTitle: getFeedTitle(receiverFeedName),
+            feedTitle: getFeedTitle(receiverFeedName, t),
             postingId: posting.receiverPostingId ?? null,
             original: true
         });

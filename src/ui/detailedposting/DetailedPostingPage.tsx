@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TFunction, useTranslation } from 'react-i18next';
 
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -25,7 +26,7 @@ function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | nu
     }
 }
 
-function getFeedAndStory(posting: PostingInfo | null): {
+function getFeedAndStory(posting: PostingInfo | null, t: TFunction): {
     story: MinimalStoryInfo | null, href: string, feedTitle: string
 } {
     if (posting == null) {
@@ -34,11 +35,11 @@ function getFeedAndStory(posting: PostingInfo | null): {
 
     let story = getStory(posting, "timeline");
     let href = "/timeline";
-    let feedTitle = getFeedTitle("timeline");
+    let feedTitle = getFeedTitle("timeline", t);
     if (story == null) {
         story = getStory(posting, "news");
         href = "/news";
-        feedTitle = getFeedTitle("news");
+        feedTitle = getFeedTitle("news", t);
     }
     return {story, href, feedTitle};
 }
@@ -46,7 +47,9 @@ function getFeedAndStory(posting: PostingInfo | null): {
 type Props = ConnectedProps<typeof connector>;
 
 function DetailedPostingPage({loading, deleting, posting}: Props) {
-    const {story = null, href, feedTitle} = getFeedAndStory(posting);
+    const {t} = useTranslation();
+
+    const {story = null, href, feedTitle} = getFeedAndStory(posting, t);
     const postingReady = posting != null && posting.parentMediaId == null;
     return (
         <>
@@ -61,7 +64,7 @@ function DetailedPostingPage({loading, deleting, posting}: Props) {
                 {!postingReady && !loading &&
                     <div className="posting-not-found">
                         <FontAwesomeIcon className="icon" icon="frown" size="3x"/>
-                        <div className="message">Posting not found or cannot be displayed.</div>
+                        <div className="message">{t("posting-not-found")}</div>
                     </div>
                 }
             </Page>

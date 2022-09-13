@@ -1,3 +1,6 @@
+import i18n from 'i18next';
+import { TFunction } from 'react-i18next';
+
 import { NodeName } from "api";
 import {
     StorySummaryData,
@@ -114,12 +117,12 @@ function buildMentionPostingSummary(data: StorySummaryData): string {
     return `${formatNodeName(data.posting)} mentioned you in a post ${formatHeading(data.posting)}`;
 }
 
-function buildSubscriberAddedSummary(data: StorySummaryData): string {
-    return `${formatNodeName(data.node)} subscribed to your ${getFeedTitle(data.feedName)}`;
+function buildSubscriberAddedSummary(data: StorySummaryData, t: TFunction): string {
+    return `${formatNodeName(data.node)} subscribed to your ${getFeedTitle(data.feedName, t)}`;
 }
 
-function buildSubscriberDeletedSummary(data: StorySummaryData): string {
-    return `${formatNodeName(data.node)} unsubscribed from your ${getFeedTitle(data.feedName)}`;
+function buildSubscriberDeletedSummary(data: StorySummaryData, t: TFunction): string {
+    return `${formatNodeName(data.node)} unsubscribed from your ${getFeedTitle(data.feedName, t)}`;
 }
 
 function buildCommentAddedSummary(data: StorySummaryData): string {
@@ -225,9 +228,9 @@ export function buildSummary(type: StoryType, data: StorySummaryData, homeOwnerN
         case "mention-posting":
             return buildMentionPostingSummary(data);
         case "subscriber-added":
-            return buildSubscriberAddedSummary(data);
+            return buildSubscriberAddedSummary(data, i18n.t);
         case "subscriber-deleted":
-            return buildSubscriberDeletedSummary(data);
+            return buildSubscriberDeletedSummary(data, i18n.t);
         case "comment-added":
             return buildCommentAddedSummary(data);
         case "mention-comment":

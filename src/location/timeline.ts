@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 import { LocationInfo } from "location/LocationInfo";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
@@ -15,5 +17,5 @@ export function build(state: ClientState, info: LocationInfo): LocationInfo {
     info = info.sub("timeline");
     const at = getFeedAt(state, "timeline");
     info = at < Number.MAX_SAFE_INTEGER ? info.withParameter("before", String(at)) : info;
-    return info.withTitle(getFeedTitle("timeline") + atOwner(state));
+    return info.withTitle(getFeedTitle("timeline", i18n.t) + atOwner(state));
 }

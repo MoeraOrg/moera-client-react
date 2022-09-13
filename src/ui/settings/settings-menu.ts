@@ -115,6 +115,7 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
     ],
     "client": [
         sheet("appearance", "Appearance", [
+            option(PREFIX + "language"),
             option(PREFIX + "posting.body.font-magnitude"),
             option(PREFIX + "feed.width"),
             option(PREFIX + "avatar.shape"),
