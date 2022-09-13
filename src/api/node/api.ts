@@ -2,6 +2,7 @@ import { JSONSchemaType, ValidateFunction } from 'ajv';
 
 import schema from "api/schema";
 import * as API from "api/node/api-types";
+import { StorySummaryNode } from "api/node/api-types";
 
 const ResultType: JSONSchemaType<API.Result> = {
     type: "object",
@@ -1499,6 +1500,120 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
 
 export const CommentInfo = schema(CommentInfoType);
 
+const StorySummaryNodeType: JSONSchemaType<API.StorySummaryNode> = {
+    type: "object",
+    properties: {
+        "ownerName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerFullName": {
+            type: "string",
+            nullable: true
+        }
+    },
+    required: [],
+    additionalProperties: false
+};
+
+const StorySummaryEntryType: JSONSchemaType<API.StorySummaryEntry> = {
+    type: "object",
+    properties: {
+        "ownerName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "heading": {
+            type: "string",
+            nullable: true
+        }
+    },
+    required: [],
+    additionalProperties: false
+};
+
+const StorySummaryReactionType: JSONSchemaType<API.StorySummaryReaction> = {
+    type: "object",
+    properties: {
+        "ownerName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "emoji": {
+            type: "integer",
+            nullable: true
+        }
+    },
+    required: [],
+    additionalProperties: false
+};
+
+const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
+    type: "object",
+    properties: {
+        "node": {
+            ...StorySummaryNodeType,
+            nullable: true
+        },
+        "posting": {
+            ...StorySummaryEntryType,
+            nullable: true
+        },
+        "comment": {
+            ...StorySummaryEntryType,
+            nullable: true
+        },
+        "comments": {
+            type: "array",
+            items: StorySummaryEntryType,
+            nullable: true
+        },
+        "totalComments": {
+            type: "integer",
+            nullable: true
+        },
+        "repliedTo": {
+            ...StorySummaryEntryType,
+            nullable: true
+        },
+        "reaction": {
+            ...StorySummaryReactionType,
+            nullable: true
+        },
+        "reactions": {
+            type: "array",
+            items: StorySummaryReactionType,
+            nullable: true
+        },
+        "totalReactions": {
+            type: "integer",
+            nullable: true
+        },
+        "feedName": {
+            type: "string",
+            nullable: true
+        },
+        "subscriptionReason": {
+            type: "string",
+            nullable: true
+        },
+        "description": {
+            type: "string",
+            nullable: true
+        }
+    },
+    required: [],
+    additionalProperties: false
+};
+
 const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
     type: "object",
     properties: {
@@ -1554,6 +1669,10 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
         },
         "summary": {
             type: "string",
+            nullable: true
+        },
+        "summaryData": {
+            ...StorySummaryDataType,
             nullable: true
         },
         "trackingId": {

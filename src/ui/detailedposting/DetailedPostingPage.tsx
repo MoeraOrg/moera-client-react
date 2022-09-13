@@ -2,15 +2,16 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Page } from "ui/page/Page";
-import { Loading } from "ui/control";
-import DetailedPostingPageHeader from "ui/detailedposting/DetailedPostingPageHeader";
-import DetailedPosting from "ui/detailedposting/DetailedPosting";
+import { PostingInfo } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
 import { getPostingFeedReference } from "state/postings/selectors";
-import { ClientState } from "state/state";
-import { PostingInfo } from "api/node/api-types";
+import { Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
+import { Page } from "ui/page/Page";
+import DetailedPostingPageHeader from "ui/detailedposting/DetailedPostingPageHeader";
+import DetailedPosting from "ui/detailedposting/DetailedPosting";
+import { getFeedTitle } from "ui/feed/feeds";
 import "./DetailedPostingPage.css";
 
 function getStory(posting: PostingInfo, feedName: string): MinimalStoryInfo | null {
@@ -33,11 +34,11 @@ function getFeedAndStory(posting: PostingInfo | null): {
 
     let story = getStory(posting, "timeline");
     let href = "/timeline";
-    let feedTitle = "Timeline";
+    let feedTitle = getFeedTitle("timeline");
     if (story == null) {
         story = getStory(posting, "news");
         href = "/news";
-        feedTitle = "News";
+        feedTitle = getFeedTitle("news");
     }
     return {story, href, feedTitle};
 }

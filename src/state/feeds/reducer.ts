@@ -1,6 +1,9 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
+import { StoryInfo } from "api/node/api-types";
+import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 import {
     FEED_FUTURE_SLICE_LOAD,
     FEED_FUTURE_SLICE_LOAD_FAILED,
@@ -22,15 +25,13 @@ import {
     FEED_STATUS_UPDATED,
     FEEDS_UNSET
 } from "state/feeds/actions";
-import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
-import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
-import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
-import { replaceEmojis } from "util/html";
 import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
-import { ClientAction } from "state/action";
-import { StoryInfo } from "api/node/api-types";
-import { WithContext } from "state/action-types";
+import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
+import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
+import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
+import { buildSummary } from "ui/instant/instant-summaries";
+import { replaceEmojis } from "util/html";
 
 const initialState = {
 };
@@ -50,7 +51,7 @@ const PAGE_FEEDS = new Map<Page, string>([
     [PAGE_NEWS, "news"]
 ]);
 
-function extractStory(story: StoryInfo): ExtStoryInfo {
+function extractStory(story: StoryInfo, homeOwnerName: string | null): ExtStoryInfo {
     const t: any = {...story};
     delete t.feedName;
     delete t.posting;
@@ -60,6 +61,9 @@ function extractStory(story: StoryInfo): ExtStoryInfo {
     delete t.comment;
     if (story.comment) {
         t.commentId = story.comment.id;
+    }
+    if (story.summary == null && story.summaryData != null) {
+        story.summary = buildSummary(story.storyType, story.summaryData, homeOwnerName);
     }
     t.summary = replaceEmojis(story.summary);
     return t;
@@ -247,7 +251,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 const stories = feed.stories.slice();
                 action.payload.stories
                     .filter(t => t.moment <= feed.after)
-                    .forEach(t => stories.push(extractStory(t)));
+                    .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
                 stories.sort((a, b) => b.moment - a.moment);
                 istate.assign([feedName], {
                     loadingPast: false,
@@ -273,7 +277,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 const stories = feed.stories.slice();
                 action.payload.stories
                     .filter(t => t.moment > feed.before)
-                    .forEach(t => stories.push(extractStory(t)));
+                    .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
                 stories.sort((a, b) => b.moment - a.moment);
                 istate.assign([feedName], {
                     loadingFuture: false,
@@ -300,7 +304,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .filter(t => t.moment > action.payload.before || t.moment <= action.payload.after);
             action.payload.stories
                 .filter(t => t.moment <= feed.before && t.moment > feed.after)
-                .forEach(t => stories.push(extractStory(t)));
+                .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
             stories.sort((a, b) => b.moment - a.moment);
             return istate.set([feedName, "stories"], stories).value();
         }
@@ -329,7 +333,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                         const postingId = posting != null ? posting.id : null;
                         const count = feed.stories.length;
                         const stories = feed.stories.filter(p => p.postingId !== postingId);
-                        stories.push(extractStory(action.payload.story));
+                        stories.push(extractStory(action.payload.story, action.context.homeOwnerName));
                         stories.sort((a, b) => b.moment - a.moment);
                         istate.set([feedName, "stories"], stories);
                         istate.set([feedName, "status", "total"], feed.status.total + (stories.length - count));
@@ -374,7 +378,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 stories.splice(index, 1);
             }
             if (moment != null && moment <= feed.before && moment > feed.after) {
-                const story = extractStory(action.payload.story);
+                const story = extractStory(action.payload.story, action.context.homeOwnerName);
                 if (stories == null) {
                     stories = feed.stories.slice();
                 }

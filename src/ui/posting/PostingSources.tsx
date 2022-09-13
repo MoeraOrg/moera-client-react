@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { PostingInfo } from "api/node/api-types";
 import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
+import { getFeedTitle } from "ui/feed/feeds";
 import "./PostingSources.css";
 
 interface Props {
@@ -47,7 +48,7 @@ function sourcesList(posting: PostingInfo): SourcesLine[] {
         .map(sr => ({
             nodeName: sr.nodeName,
             fullName: sr.fullName ?? null,
-            feedTitle: feedTitle(sr.feedName),
+            feedTitle: getFeedTitle(sr.feedName),
             postingId: sr.postingId,
             original: false
         }));
@@ -59,26 +60,13 @@ function sourcesList(posting: PostingInfo): SourcesLine[] {
         list.unshift({
             nodeName: posting.receiverName ?? null,
             fullName: posting.receiverFullName ?? null,
-            feedTitle: feedTitle(receiverFeedName),
+            feedTitle: getFeedTitle(receiverFeedName),
             postingId: posting.receiverPostingId ?? null,
             original: true
         });
     }
 
     return list;
-}
-
-function feedTitle(feedName: string): string {
-    switch (feedName) {
-        case "timeline":
-            return "Timeline";
-        case "news":
-            return "News";
-        case null:
-            return "Timeline";
-        default:
-            return feedName;
-    }
 }
 
 export default PostingSources;

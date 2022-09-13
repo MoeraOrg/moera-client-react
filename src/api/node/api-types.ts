@@ -437,12 +437,46 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "posting-media-reaction-failed" | "comment-media-reaction-failed" | "posting-subscribe-task-failed"
     | "posting-reaction-task-failed" | "comment-reaction-task-failed";
 
+export type SubscriptionReason = "user" | "mention" | "comment";
+
 export interface StoryAttributes {
     feedName?: string | null;
     publishAt?: number | null;
     pinned?: boolean | null;
     viewed?: boolean | null;
     read?: boolean | null;
+}
+
+export interface StorySummaryNode {
+    ownerName?: string | null;
+    ownerFullName?: string | null;
+}
+
+export interface StorySummaryEntry {
+    ownerName?: string | null;
+    ownerFullName?: string | null;
+    heading?: string | null;
+}
+
+export interface StorySummaryReaction {
+    ownerName?: string | null;
+    ownerFullName?: string | null;
+    emoji?: number | null;
+}
+
+export interface StorySummaryData {
+    node?: StorySummaryNode | null;
+    posting?: StorySummaryEntry | null;
+    comment?: StorySummaryEntry | null;
+    comments?: StorySummaryEntry[] | null;
+    totalComments?: number | null;
+    repliedTo?: StorySummaryEntry | null;
+    reaction?: StorySummaryReaction | null;
+    reactions?: StorySummaryReaction[] | null;
+    totalReactions?: number | null;
+    feedName?: string | null;
+    subscriptionReason?: SubscriptionReason | null;
+    description?: string | null;
 }
 
 export interface StoryInfoBase<B> {
@@ -461,6 +495,7 @@ export interface StoryInfoBase<B> {
     summaryFullName?: string | null;
     summaryAvatar?: AvatarImage | null;
     summary?: string | null;
+    summaryData?: StorySummaryData | null;
     trackingId?: string | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
