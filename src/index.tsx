@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-widgets/styles.css';
 import 'react-datepicker/dist/react-datepicker.min.css';
 
+import "i18n";
 import store from "state/store";
 import { initFromLocation, initStorage } from "state/navigation/actions";
 import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
