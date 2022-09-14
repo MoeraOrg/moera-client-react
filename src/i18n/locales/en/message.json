@@ -1,12 +1,29 @@
 {
+  "add-comment": "Add Comment",
+  "add-comments-need": "To add comments, you need to",
+  "cancel": "Cancel",
+  "change": "Change",
+  "change-date-time": "Change Date/Time",
+  "connect": "Connect",
+  "connecting": "Connecting",
+  "discussion-closed": "Discussion is closed",
   "feed": {
     "title": {
       "timeline": "Timeline",
       "news": "News"
     }
   },
+  "forget": "Forget",
+  "forget-unfinished-comment": "Do you really want to forget the unfinished comment?",
   "in": "in",
   "moera": "Moera",
+  "not-connected-home": "Not connected to home",
+  "oppose": "Oppose",
+  "or": "or",
   "posting-not-found": "Posting not found or cannot be displayed.",
-  "where-from": "Where it comes from?"
+  "sign-up": "Sign Up",
+  "support": "Support",
+  "unsigned": "Unsigned",
+  "where-from": "Where it comes from?",
+  "write-comment-here": "Write a comment to {{mention}} here..."
 }

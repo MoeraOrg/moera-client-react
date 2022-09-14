@@ -2,6 +2,10 @@
     text-align: right;
 }
 
+#comment-composer .buttons BUTTON {
+    text-transform: uppercase;
+}
+
 #comment-composer .buttons BUTTON[type=submit] {
     margin-left: .5rem;
     margin-right: 1rem;

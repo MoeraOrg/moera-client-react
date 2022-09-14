@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useFormikContext } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import { CommentText, SourceFormat } from "api/node/api-types";
 import { commentComposeCancel } from "state/detailedposting/actions";
@@ -22,6 +23,8 @@ type Props = {
 function CommentComposeButtons(props: Props) {
     const {loading, ownerName, draft, confirmBox} = props;
 
+    const {t} = useTranslation();
+
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
 
     useEffect(() => {
@@ -34,8 +37,7 @@ function CommentComposeButtons(props: Props) {
     }, [ownerName, draft, setInitialText]); // 'props' are missing on purpose
 
     const onCancel = (e: React.MouseEvent) => {
-        confirmBox("Do you really want to forget the unfinished comment?", "Forget", "Cancel",
-            commentComposeCancel(), null, "danger");
+        confirmBox(t("forget-unfinished-comment"), t("forget"), t("cancel"), commentComposeCancel(), null, "danger");
         e.preventDefault();
     };
 
@@ -47,10 +49,10 @@ function CommentComposeButtons(props: Props) {
         <div className="buttons">
             <CommentDraftSaver initialized={true} initialText={initialText} commentId={null}/>
             <Button variant="secondary" invisible={invisible} onClick={onCancel}>
-                CANCEL
+                {t("cancel")}
             </Button>
             <Button variant="primary" type="submit" loading={loading} invisible={invisible}>
-                ADD COMMENT
+                {t("add-comment")}
             </Button>
         </div>
     );

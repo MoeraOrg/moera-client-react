@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Loading } from "ui/control";
 import QuickTipsButton from "ui/quicktips/QuickTipsButton";
@@ -20,12 +21,13 @@ import "./BottomMenu.css";
 type Props = ConnectedProps<typeof connector>;
 
 function BottomMenu({atNode, connecting,  connected, visible, openConnectDialog, openSignUpDialog}: Props) {
+    const {t} = useTranslation();
     const className = cx(["connection-status", "d-lg-none", "navbar-dark", "bg-dark"], {"invisible": !visible});
 
     if (connecting) {
         return (
             <div id="bottom-menu" className={className}>
-                Connecting <Loading/>
+                {t("connecting")} <Loading/>
             </div>
         );
     }
@@ -36,9 +38,9 @@ function BottomMenu({atNode, connecting,  connected, visible, openConnectDialog,
         }
         return (
             <div id="bottom-menu" className={className}>
-                Not connected to home
-                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
-                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
+                {t("not-connected-home")}
+                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>{t("sign-up")}</Button>
+                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>{t("connect")}</Button>
             </div>
         );
     }

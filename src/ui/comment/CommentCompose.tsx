@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
+import { useTranslation } from 'react-i18next';
 
 import { SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -35,6 +36,8 @@ function CommentCompose(props: Props) {
         sourceFormatDefault, openSignUpDialog, openConnectDialog, values, resetForm, submitForm
     } = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
         resetForm({values});
@@ -46,10 +49,10 @@ function CommentCompose(props: Props) {
     if (!ownerName) {
         return (
             <div id="comment-composer" className="alert alert-info">
-                To add comments, you need to&nbsp;
-                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>Sign Up</Button>
-                &nbsp;or&nbsp;
-                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>Connect</Button>
+                {t("add-comments-need")}&nbsp;
+                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>{t("sign-up")}</Button>
+                &nbsp;{t("or")}&nbsp;
+                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>{t("connect")}</Button>
             </div>
         );
     }
@@ -57,9 +60,7 @@ function CommentCompose(props: Props) {
     if (!commentingAllowed) {
         if (discussionClosed) {
             return (
-                <div id="comment-composer" className="disabled">
-                    Discussion is closed
-                </div>
+                <div id="comment-composer" className="disabled">{t("discussion-closed")}</div>
             );
         } else {
             return (
@@ -102,7 +103,7 @@ function CommentCompose(props: Props) {
                 <div className="content">
                     <CommentComposeRepliedTo/>
                     <RichTextField name="body" rows={1} features={features} nodeName={receiverName}
-                                   forceImageCompress anyValue placeholder={`Write a comment to ${mention} here...`}
+                                   forceImageCompress anyValue placeholder={t("write-comment-here", {mention})}
                                    disabled={beingPosted} smileysEnabled={smileysEnabled}
                                    hidingPanel={commentComposeLogic.areValuesEmpty(values)}
                                    format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>

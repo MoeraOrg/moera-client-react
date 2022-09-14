@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
@@ -35,6 +36,8 @@ const Comment = ({
      comment, previousId, focused, connectedToHome, postingId, postingOwnerName, postingReceiverName,
      postingReceiverPostingId
 }: Props) => {
+    const {t} = useTranslation();
+
     const realOwnerName = postingReceiverName ?? postingOwnerName;
     if (postingId == null || realOwnerName == null) {
         return null;
@@ -66,7 +69,7 @@ const Comment = ({
                         <EntryGallery postingId={realPostingId} commentId={comment.id} nodeName={realOwnerName}
                                       media={comment.media ?? null}/>
                         <div className="reactions-line">
-                            {comment.signature == null && <div className="unsigned">Unsigned</div>}
+                            {comment.signature == null && <div className="unsigned">{t("unsigned")}</div>}
                             {connectedToHome && comment.signature != null &&
                                 <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             }

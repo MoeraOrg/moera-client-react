@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { fromUnixTime, getUnixTime } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { closeChangeDateDialog, storyChangeDate } from "state/changedatedialog/actions";
@@ -19,6 +20,7 @@ type Props = OuterProps & FormikProps<Values>;
 
 function ChangeDateDialog(props: Props) {
     const {show, changing, publishedAt, closeChangeDateDialog} = props;
+    const {t} = useTranslation();
 
     useEffect(() => {
         const values = changeDateDialogLogic.mapPropsToValues(props);
@@ -31,14 +33,14 @@ function ChangeDateDialog(props: Props) {
     }
 
     return (
-        <ModalDialog title="Change Date/Time" onClose={closeChangeDateDialog}>
+        <ModalDialog title={t("change-date-time")} onClose={closeChangeDateDialog}>
             <Form>
                 <div className="modal-body">
                     <DateTimeField name="publishedAt"/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeChangeDateDialog}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={changing}>Change</Button>
+                    <Button variant="secondary" onClick={closeChangeDateDialog}>{t("cancel")}</Button>
+                    <Button variant="primary" type="submit" loading={changing}>{t("change")}</Button>
                 </div>
             </Form>
         </ModalDialog>

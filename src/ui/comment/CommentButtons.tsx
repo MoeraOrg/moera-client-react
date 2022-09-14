@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, CommentInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -21,16 +22,18 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function CommentButtons({nodeName, postingId, comment, homeOwnerName, enableSelf, reactionsEnabled,
                          reactionsNegativeEnabled}: Props) {
+    const {t} = useTranslation();
+
     const cr = comment.clientReaction || {} as ClientReactionInfo;
     const hideAll = !reactionsEnabled || (comment.ownerName === homeOwnerName && !enableSelf && !cr.emoji);
     const hidePositive = hideAll || (cr.emoji != null && cr.negative);
     const hideNegative = hideAll || !reactionsNegativeEnabled || (cr.emoji != null && !cr.negative);
     return (
         <div className="comment-buttons">
-            <CommentReactionButton icon="thumbs-up" caption="Support" invisible={hidePositive} id={comment.id}
+            <CommentReactionButton icon="thumbs-up" caption={t("support")} invisible={hidePositive} id={comment.id}
                                    negative={false} emoji={!cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions?.positive ?? ""}/>
-            <CommentReactionButton icon="thumbs-down" caption="Oppose" invisible={hideNegative} id={comment.id}
+            <CommentReactionButton icon="thumbs-down" caption={t("oppose")} invisible={hideNegative} id={comment.id}
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions?.negative ?? ""}/>
             <CommentReplyButton comment={comment}/>
