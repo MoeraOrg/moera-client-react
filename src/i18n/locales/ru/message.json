@@ -1,10 +1,10 @@
 {
-  "feed": {
-    "title": {
-      "timeline": "Хроника",
-      "news": "Новости"
+  "feed" : {
+    "title" : {
+      "news" : "Новости",
+      "timeline" : "Хроника"
     }
   },
-  "moera": "Moera",
-  "write-comment-here": "Напишите тут комментарий для {mention}..."
+  "moera" : "Moera",
+  "write-comment-here" : "Напишите тут комментарий для {mention}..."
 }

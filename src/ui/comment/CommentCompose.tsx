@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -49,10 +49,10 @@ function CommentCompose(props: Props) {
     if (!ownerName) {
         return (
             <div id="comment-composer" className="alert alert-info">
-                {t("add-comments-need")}&nbsp;
-                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>{t("sign-up")}</Button>
-                &nbsp;{t("or")}&nbsp;
-                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>{t("connect")}</Button>
+                <Trans i18nKey="add-comments-need" values={{signup: t("sign-up"), connect: t("connect")}}>
+                    <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}/>
+                    <Button variant="success" size="sm" onClick={() => openConnectDialog()}/>
+                </Trans>
             </div>
         );
     }

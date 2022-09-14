@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { ExtCommentInfo } from "state/detailedposting/state";
 import CommentRepliedTo from "ui/comment/CommentRepliedTo";
@@ -14,6 +15,8 @@ interface Props {
 
 function CommentContent({comment, previousId, receiverName}: Props) {
     const [preview, setPreview] = useState(true);
+
+    const {t} = useTranslation();
 
     const onClick = (e: React.MouseEvent) => {
         if (!hasWindowSelection()
@@ -32,7 +35,7 @@ function CommentContent({comment, previousId, receiverName}: Props) {
                         <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.bodyPreview.text}
                                    nodeName={receiverName} media={comment.media} onClick={onClick}/>
                         <p>
-                            <button className="btn btn-link read-more" onClick={onClick}>Read more...</button>
+                            <button className="btn btn-link read-more" onClick={onClick}>{t("read-more")}</button>
                         </p>
                     </>
                 );

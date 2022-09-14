@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
@@ -27,7 +28,7 @@ import CommentDialog from "ui/comment/CommentDialog";
 import { getPageHeaderHeight } from "util/misc";
 import "./Comments.css";
 
-type Props = ConnectedProps<typeof connector>;
+type Props = ConnectedProps<typeof connector> & WithTranslation;
 
 interface State {
     atTop: boolean;
@@ -191,15 +192,11 @@ class Comments extends React.PureComponent<Props, State> {
     render() {
         const {
             total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture, focusedCommentId,
-            commentsVisible
+            commentsVisible, t
         } = this.props;
 
         if (!commentsVisible) {
-            return (
-                <div id="comments" className="disabled">
-                    Comments are disabled
-                </div>
-            );
+            return <div id="comments" className="disabled">{t("comments-disabled")}</div>;
         }
 
         const empty = comments.length === 0 && !loadingFuture && !loadingPast
@@ -211,8 +208,8 @@ class Comments extends React.PureComponent<Props, State> {
                     {empty ||
                         <>
                             {comments.length > 0 &&
-                                <CommentsSentinelLine end={false} loading={loadingPast} title="View earlier comments"
-                                                      total={totalInPast}
+                                <CommentsSentinelLine end={false} loading={loadingPast}
+                                                      title={t("view-earlier-comments")} total={totalInPast}
                                                       visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
                                                       onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                             }
@@ -222,7 +219,11 @@ class Comments extends React.PureComponent<Props, State> {
                                          focused={comment.id === focusedCommentId}/>
                             )}
                             <CommentsSentinelLine end={true} loading={loadingFuture}
-                                                  title={comments.length !== 0 ? "View later comments" : "View comments"}
+                                                  title={
+                                                      comments.length !== 0
+                                                          ? t("view-later-comments")
+                                                          : t("view-comments")
+                                                  }
                                                   total={totalInFuture}
                                                   visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
                                                   onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
@@ -260,4 +261,4 @@ const connector = connect(
     }
 );
 
-export default connector(Comments);
+export default connector(withTranslation()(Comments));

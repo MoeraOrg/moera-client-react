@@ -1,9 +1,9 @@
 import React from 'react';
 
+import { ExtCommentInfo } from "state/detailedposting/state";
 import NodeName from "ui/nodename/NodeName";
 import CommentVerifyButton from "ui/comment/CommentVerifyButton";
 import "./CommentOwner.css";
-import { ExtCommentInfo } from "state/detailedposting/state";
 
 interface Props {
     comment: ExtCommentInfo;

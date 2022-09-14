@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { CommentInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -34,6 +35,8 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
                       isCommentPermitted, isCommentPrincipalIn, commentCopyLink, openCommentDialog,
                       openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText, commentSetVisibility}: Props) {
 
+    const {t} = useTranslation();
+
     const onCopyLink = () => commentCopyLink(comment.id, postingId);
 
     const onCopyText = () => entryCopyText(comment.body, "ask", receiverName ?? "", comment.media ?? null);
@@ -46,7 +49,7 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
     const onEdit = () => openCommentDialog(comment.id);
 
     const onDelete = () => {
-        confirmBox(`Do you really want to delete the comment "${comment.heading}"?`, "Delete", "Cancel",
+        confirmBox(t("delete-comment", {heading: comment.heading}), t("delete"), t("cancel"),
             commentDelete(comment.id), null, "danger");
     };
 
@@ -72,19 +75,19 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
     return (
         <DropdownMenu items={[
             {
-                title: "Copy link",
+                title: t("copy-link"),
                 href: commentHref,
                 onClick: onCopyLink,
                 show: true
             },
             {
-                title: "Copy text",
+                title: t("copy-text"),
                 href: commentHref,
                 onClick: onCopyText,
                 show: true
             },
             {
-                title: "Share...",
+                title: t("share-ellipsis"),
                 href: commentHref,
                 onClick: onShare,
                 show: true
@@ -93,19 +96,19 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
                 divider: true
             },
             {
-                title: "Edit...",
+                title: t("edit-ellipsis"),
                 href: commentHref,
                 onClick: onEdit,
                 show: isCommentPermitted("edit", "owner", {}),
             },
             {
-                title: "View source",
+                title: t("view-source"),
                 href: commentHref,
                 onClick: onViewSource,
                 show: true
             },
             {
-                title: "Delete",
+                title: t("delete"),
                 href: commentHref,
                 onClick: onDelete,
                 show: isCommentPermitted("delete", "private", {})
@@ -114,13 +117,13 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
                 divider: true
             },
             {
-                title: "Hide",
+                title: t("hide"),
                 href: commentHref,
                 onClick: onHide,
                 show: hideable
             },
             {
-                title: "Unhide",
+                title: t("unhide"),
                 href: commentHref,
                 onClick: onShow,
                 show: !hideable && unhideable

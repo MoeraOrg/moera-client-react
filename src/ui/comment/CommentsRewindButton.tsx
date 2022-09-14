@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
@@ -13,6 +14,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentsRewindButton({end, forward, before, after, total, commentsScrollToAnchor}: Props) {
+    const {t} = useTranslation();
+
     const visible = total > 1
         && ((end && (!forward || before < Number.MAX_SAFE_INTEGER))
             || (!end && (forward || after > Number.MIN_SAFE_INTEGER)));
@@ -24,7 +27,7 @@ function CommentsRewindButton({end, forward, before, after, total, commentsScrol
     const onClick = () => commentsScrollToAnchor(forward ? Number.MAX_SAFE_INTEGER : Number.MIN_SAFE_INTEGER + 1);
 
     return (
-        <button className="comments-rewind" title={forward ? "Go to the last comment" : "Go to the first comment"}
+        <button className="comments-rewind" title={forward ? t("go-last-comment") : t("go-first-comment")}
                 onClick={onClick}>
             <FontAwesomeIcon icon={["fas", forward ? "forward-fast" : "backward-fast"]}/>
         </button>

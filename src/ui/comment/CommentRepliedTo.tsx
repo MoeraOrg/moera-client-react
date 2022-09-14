@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { ExtCommentInfo } from "state/detailedposting/state";
@@ -14,11 +15,17 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentRepliedTo({comment, postingId, previousId}: Props) {
+    const {t} = useTranslation();
+
     if (postingId == null || !comment.repliedTo) {
         return null;
     }
     if (comment.repliedTo.id === previousId) {
-        return <div className="replied-to-previous" title="Reply to previous comment"><FontAwesomeIcon icon="reply"/></div>;
+        return (
+            <div className="replied-to-previous" title={t("reply-prev-comment")}>
+                <FontAwesomeIcon icon="reply"/>
+            </div>
+        );
     }
     return (
         <RepliedTo postingId={postingId} commentId={comment.repliedTo.id} ownerName={comment.repliedTo.name}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { shareDialogPrepare } from "state/sharedialog/actions";
 
@@ -11,11 +12,13 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentShareButton({nodeName, postingId, commentId, shareDialogPrepare}: Props) {
+    const {t} = useTranslation();
+
     const href = `/post/${postingId}?comment=${commentId}`;
     return (
         <button className="comment-button" onClick={() => shareDialogPrepare(nodeName, href)}>
             <FontAwesomeIcon icon="share-alt"/>
-            <span className="caption">Share</span>
+            <span className="caption">{t("share")}</span>
         </button>
     );
 }

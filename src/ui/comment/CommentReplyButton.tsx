@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { commentReply } from "state/detailedposting/actions";
 import { CommentInfo } from "api/node/api-types";
@@ -10,6 +11,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentReplyButton({comment, commentReply}: Props) {
+    const {t} = useTranslation();
+
     const onClick = () => {
         commentReply(comment.id, comment.ownerName, comment.ownerFullName ?? null, comment.heading);
     }
@@ -17,7 +20,7 @@ function CommentReplyButton({comment, commentReply}: Props) {
     return (
         <button className="comment-button" onClick={onClick}>
             <FontAwesomeIcon icon="reply"/>
-            <span className="caption">Reply</span>
+            <span className="caption">{t("reply")}</span>
         </button>
     );
 }

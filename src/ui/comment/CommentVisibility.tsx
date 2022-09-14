@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { CommentInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -13,6 +14,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentVisibility({comment, isSenior}: Props) {
+    const {t} = useTranslation();
+
     const view = comment.operations?.view ?? "public";
     const seniorView = comment.seniorOperations?.view ?? "unset";
 
@@ -20,7 +23,7 @@ function CommentVisibility({comment, isSenior}: Props) {
         return (
             <span className="visibility">
                 &middot;
-                <Principal value={view} className="senior" comment="set by post owner"/>
+                <Principal value={view} className="senior" comment={t("set-by-post-owner")}/>
             </span>
         );
     }

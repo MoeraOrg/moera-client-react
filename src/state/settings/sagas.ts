@@ -140,7 +140,6 @@ function* settingsClientValuesLoadedSaga() {
 
 function updateLanguage(settings: SettingInfo[]) {
     const lang = settings.find(st => st.name === PREFIX + "language")?.value;
-    console.log("Update language", lang, settings);
     if (lang != null && lang !== i18n.language) {
         i18n.changeLanguage(lang);
     }

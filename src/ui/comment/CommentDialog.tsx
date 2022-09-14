@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import { CommentText, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -38,6 +39,8 @@ function CommentDialog(props: Props) {
 
     const commentId = comment != null ? comment.id : null;
 
+    const {t} = useTranslation();
+
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
 
     useEffect(() => {
@@ -71,7 +74,7 @@ function CommentDialog(props: Props) {
         if (draft == null) {
             closeCommentDialog();
         } else {
-            confirmBox("Do you really want to forget the changes?", "Forget", "Cancel",
+            confirmBox(t("forget-changes"), t("forget"), t("cancel"),
                 commentDialogCommentReset(draft.id, true), null, "danger");
         }
         event.preventDefault();
@@ -79,7 +82,7 @@ function CommentDialog(props: Props) {
 
     return (
         <ModalDialog title="Edit Comment" className="comment-dialog" onClose={closeCommentDialog}>
-            <ConflictWarning text="The comment was edited by somebody." show={conflict}
+            <ConflictWarning text={t("comment-edited-conflict")} show={conflict}
                              onClose={commentDialogConflictClose}/>
             <Form>
                 <div className="modal-body">
@@ -95,8 +98,8 @@ function CommentDialog(props: Props) {
                 </div>
                 <div className="modal-footer">
                     <CommentDraftSaver initialized={loaded} initialText={initialText} commentId={commentId}/>
-                    <Button variant="secondary" onClick={onCancel}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={beingPosted}>Update</Button>
+                    <Button variant="secondary" onClick={onCancel}>{t("cancel")}</Button>
+                    <Button variant="primary" type="submit" loading={beingPosted}>{t("update")}</Button>
                 </div>
             </Form>
         </ModalDialog>

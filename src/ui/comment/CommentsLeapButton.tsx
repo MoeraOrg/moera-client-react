@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { getCommentsState } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
@@ -10,6 +11,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function CommentsLeapButton({end, loadedCount}: Props) {
+    const {t} = useTranslation();
+
     if (loadedCount === 0) {
         return null;
     }
@@ -23,7 +26,7 @@ function CommentsLeapButton({end, loadedCount}: Props) {
     }
 
     return (
-        <button className="comments-rewind" title={end ? "Go to the top" : "Go to the bottom"} onClick={onClick}>
+        <button className="comments-rewind" title={end ? t("go-top") : t("go-bottom")} onClick={onClick}>
             <FontAwesomeIcon icon={end ? "arrow-up" : "arrow-down"}/>
         </button>
     );
