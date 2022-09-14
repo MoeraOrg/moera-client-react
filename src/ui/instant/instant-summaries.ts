@@ -54,8 +54,8 @@ function formatListOfComments(data: StorySummaryData): string {
     return formatList(data.comments, data.totalComments, formatNodeName);
 }
 
-function formatListOfReactions(data: StorySummaryData): string {
-    return formatList(data.reactions, data.totalReactions, formatReaction);
+function formatListOfReactions(data: StorySummaryData, negative: boolean): string {
+    return formatList(data.reactions, data.totalReactions, formatReaction) + (!negative ? " supported" : " opposed");
 }
 
 type IsTheirPredicate = (data: StorySummaryData, node: StorySummaryNode | StorySummaryEntry) => boolean;
@@ -107,10 +107,7 @@ function formatReason(data: StorySummaryData): string {
 }
 
 function buildReactionAddedSummary(data: StorySummaryData, negative: boolean): string {
-    let summary = formatListOfReactions(data);
-    summary += !negative ? " supported" : " opposed";
-    summary += ` your post ${formatHeading(data.posting)}`
-    return summary;
+    return `${formatListOfReactions(data, negative)} your post ${formatHeading(data.posting)}`;
 }
 
 function buildMentionPostingSummary(data: StorySummaryData): string {
@@ -142,11 +139,8 @@ function buildReplyCommentSummary(data: StorySummaryData, homeOwnerName: string 
 
 function buildCommentReactionAddedSummary(data: StorySummaryData, negative: boolean,
                                           homeOwnerName: string | null): string {
-    let summary = formatListOfReactions(data);
-    summary += !negative ? " supported" : " opposed";
-    summary += ` your comment ${formatHeading(data.comment)} on `
+    return `${formatListOfReactions(data, negative)} your comment ${formatHeading(data.comment)} on `
         + formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner);
-    return summary;
 }
 
 function buildRemoteCommentAddedSummary(data: StorySummaryData, homeOwnerName: string | null): string {
@@ -181,20 +175,14 @@ function buildPostingUpdateTaskFailedSummary(data: StorySummaryData): string {
 
 function buildPostingMediaReactionAddedSummary(data: StorySummaryData, negative: boolean,
                                                homeOwnerName: string | null): string {
-    let summary = formatListOfReactions(data);
-    summary += !negative ? " supported" : " opposed";
-    summary += ` a media in your post ${formatHeading(data.posting)} in `
+    return `${formatListOfReactions(data, negative)} a media in your post ${formatHeading(data.posting)} in `
         + formatSomebodysNode(data, homeOwnerName, isByFirstReactionOwner);
-    return summary;
 }
 
 function buildCommentMediaReactionAddedSummary(data: StorySummaryData, negative: boolean,
                                                homeOwnerName: string | null): string {
-    let summary = formatListOfReactions(data);
-    summary += !negative ? " supported" : " opposed";
-    summary += ` a media in your comment ${formatHeading(data.comment)} on `
+    return `${formatListOfReactions(data, negative)} a media in your comment ${formatHeading(data.comment)} on `
         + formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner);
-    return summary;
 }
 
 function buildPostingMediaReactionFailedSummary(data: StorySummaryData): string {
