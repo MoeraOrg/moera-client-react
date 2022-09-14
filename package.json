@@ -41,6 +41,8 @@
     "general-category": "^1.6.0",
     "html-entities": "^2.3.3",
     "i18next": "^21.9.1",
+    "i18next-icu": "^2.0.3",
+    "intl-messageformat": "^10.1.4",
     "katex": "^0.16.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",

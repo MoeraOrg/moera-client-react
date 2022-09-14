@@ -6,5 +6,5 @@
     }
   },
   "moera": "Moera",
-  "write-comment-here": "Напишите тут комментарий для {{mention}}..."
+  "write-comment-here": "Напишите тут комментарий для {mention}..."
 }

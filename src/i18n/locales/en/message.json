@@ -25,5 +25,5 @@
   "support": "Support",
   "unsigned": "Unsigned",
   "where-from": "Where it comes from?",
-  "write-comment-here": "Write a comment to {{mention}} here..."
+  "write-comment-here": "Write a comment to {mention} here..."
 }
