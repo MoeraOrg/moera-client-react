@@ -1,9 +1,10 @@
 import React from 'react';
 import { useField } from 'formik';
 
-import DonateEditor from "ui/profile/edit/donate/DonateEditor";
-import { FormGroup } from "ui/control";
 import { FundraiserInfo } from "api/node/api-types";
+import { FormGroup } from "ui/control";
+import FieldError from "ui/control/field/FieldError";
+import DonateEditor from "ui/profile/edit/donate/DonateEditor";
 
 interface Props {
     name: string;
@@ -24,7 +25,7 @@ export default function DonateField({name, title, groupClassName, labelClassName
         >
             <>
                 <DonateEditor value={value} setValue={setValue}/>
-                {touched && error && <div className="invalid-feedback">{error}</div>}
+                {touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );

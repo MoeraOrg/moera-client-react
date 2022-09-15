@@ -2,7 +2,8 @@ import React from 'react';
 import { useField } from 'formik';
 import DatePicker from 'react-datepicker';
 
-import { FormGroup, Wrapper } from "ui/control/index";
+import { FormGroup, Wrapper } from "ui/control";
+import FieldError from "ui/control/field/FieldError";
 import { Browser } from "ui/browser";
 import "./DateTimeField.css";
 
@@ -42,7 +43,7 @@ export const DateTimeField = ({name, title, horizontal = false, groupClassName, 
                     portalId={!Browser.isTinyScreen() ? "modal-root" : undefined}
                     withPortal={Browser.isTinyScreen()}
                 />
-                {touched && error && <div className="invalid-feedback">{error}</div>}
+                {touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

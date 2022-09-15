@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 
-import { useUndoableField } from "ui/control/field/undoable-field";
 import { FormGroup } from "ui/control/FormGroup";
+import { useUndoableField } from "ui/control/field/undoable-field";
+import FieldError from "ui/control/field/FieldError";
 import "./CheckboxField.css";
 
 interface Props {
@@ -60,7 +61,7 @@ export function CheckboxField({name, title, disabled, groupClassName, labelClass
                 })}
                 ref={inputDom}
             />
-            {touched && error && <div className="invalid-feedback">{error}</div>}
+            {touched && <FieldError error={error}/>}
         </FormGroup>
     );
 }

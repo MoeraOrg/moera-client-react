@@ -2,7 +2,8 @@ import React from 'react';
 import { useField } from 'formik';
 import { Combobox } from 'react-widgets';
 
-import { FormGroup, Wrapper } from "ui/control/index";
+import { FormGroup, Wrapper } from "ui/control";
+import FieldError from "ui/control/field/FieldError";
 
 interface Props<T> {
     name: string;
@@ -32,7 +33,7 @@ export function ComboboxField<T>({name, title, horizontal = false, groupClassNam
                     autoFocus={autoFocus}
                     data={data}
                 />
-                {touched && error && <div className="invalid-feedback">{error}</div>}
+                {touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

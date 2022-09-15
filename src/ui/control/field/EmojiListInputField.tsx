@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { EmojiListInput, Wrapper } from "ui/control/index";
+import { EmojiListInput, FormGroup, Wrapper } from "ui/control";
+import { FormGroupStyle } from "ui/control/FormGroup";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup, FormGroupStyle } from "ui/control/FormGroup";
+import FieldError from "ui/control/field/FieldError";
 
 interface Props {
     name: string;
@@ -45,7 +46,7 @@ export function EmojiListInputField({name, title, disabled, horizontal = false, 
             <Wrapper className={col}>
                 <EmojiListInput className="form-control" negative={negative} value={value} advanced={advanced}
                                 disabled={disabled} onChange={v => setValue(v)}/>
-                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

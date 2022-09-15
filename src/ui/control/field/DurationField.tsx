@@ -2,9 +2,9 @@ import React from 'react';
 import { NumberPicker } from 'react-widgets';
 import cx from 'classnames';
 
-import { Wrapper } from "ui/control/index";
+import { FormGroup, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup } from "ui/control/FormGroup";
+import FieldError from "ui/control/field/FieldError";
 import { Duration, DurationUnit, isFixedUnit, UNIT_NAMES } from "util/duration";
 import "./DurationField.css";
 
@@ -95,7 +95,7 @@ export function DurationField({name, title, horizontal = false, groupClassName, 
                         {always && <option value="always">always</option>}
                     </select>
                 </div>
-                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

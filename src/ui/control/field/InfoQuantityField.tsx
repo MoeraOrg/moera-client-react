@@ -1,9 +1,9 @@
 import React from 'react';
 import { NumberPicker } from 'react-widgets';
 
-import { Wrapper } from "ui/control/index";
+import { FormGroup, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup } from "ui/control/FormGroup";
+import FieldError from "ui/control/field/FieldError";
 import { InfoQuantity, InfoQuantityUnit } from "util/info-quantity";
 import "./InfoQuantityField.css";
 
@@ -92,7 +92,7 @@ export function InfoQuantityField({name, title, horizontal = false, groupClassNa
                         ))}
                     </select>
                 </div>
-                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

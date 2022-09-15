@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { PrincipalValue } from "api/node/api-types";
 import { FormGroup, PrincipalSelect } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
+import FieldError from "ui/control/field/FieldError";
 
 interface Props {
     name: string;
@@ -39,7 +40,7 @@ export function PrincipalField({name, values, long, title, disabled, groupClassN
         >
             <PrincipalSelect value={value} values={values} long={long} className={cx({"me-2": undo || reset})}
                              disabled={disabled} onChange={v => setValue(v)}/>
-            {touched && error && <div className="invalid-feedback">{error}</div>}
+            {touched && <FieldError error={error}/>}
         </FormGroup>
     );
 }

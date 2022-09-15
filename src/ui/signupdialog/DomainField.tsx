@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import PROVIDERS from "providers";
 import { Button, FormGroup } from "ui/control";
+import FieldError from "ui/control/field/FieldError";
 import "./DomainField.css";
 
 interface Props {
@@ -98,7 +99,7 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
                         {autoDomainValue ? "Change" : "Auto"}
                     </Button>
                 </div>
-                {touched && error && <div className="invalid-feedback">{error}</div>}
+                {touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );

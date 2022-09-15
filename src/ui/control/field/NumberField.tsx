@@ -1,8 +1,9 @@
 import React from 'react';
 import { NumberPicker } from 'react-widgets';
 
+import { FormGroup } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup } from "ui/control/FormGroup";
+import FieldError from "ui/control/field/FieldError";
 import "./NumberField.css";
 
 interface Props {
@@ -51,7 +52,7 @@ export const NumberField = ({name, title, horizontal, autoFocus, disabled, group
                         step={step ?? 1}
                     />
                 </div>
-                {touched && error && <div className="invalid-feedback">{error}</div>}
+                {touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );

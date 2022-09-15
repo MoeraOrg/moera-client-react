@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 
-import { Wrapper } from "ui/control/index";
+import { FormGroup, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup } from "ui/control/FormGroup";
+import FieldError from "ui/control/field/FieldError";
 
 interface Props {
     name: string;
@@ -82,7 +82,7 @@ export function InputField({name, title, placeholder, disabled, maxLength, horiz
                     }}
                     onKeyDown={onKeyDown}
                 />
-                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

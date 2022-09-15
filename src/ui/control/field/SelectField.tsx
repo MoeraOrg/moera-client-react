@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 
-import { Wrapper } from "ui/control";
+import { FormGroup, Wrapper } from "ui/control";
+import { FormGroupStyle } from "ui/control/FormGroup";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup, FormGroupStyle } from "ui/control/FormGroup";
+import FieldError from "ui/control/field/FieldError";
 
 interface Choice {
     title: string;
@@ -86,7 +87,7 @@ export function SelectField({name, title, horizontal = false, layout, groupClass
                 >
                     {choices.map(c => <option key={c.value} value={c.value}>{c.title}</option>)}
                 </select>
-                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>
         </FormGroup>
     );

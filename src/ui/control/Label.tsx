@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { LabelButton, Wrapper } from "ui/control/index";
+import { LabelButton, Wrapper } from "ui/control";
 import SetDefaultButton from "ui/control/field/SetDefaultButton";
 
 interface Props {

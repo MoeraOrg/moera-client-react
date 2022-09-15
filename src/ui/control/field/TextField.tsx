@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 import TextareaAutosize from 'react-autosize-textarea';
 
+import { FormGroup } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import { FormGroup } from "ui/control/FormGroup";
+import FieldError from "ui/control/field/FieldError";
 
 interface Props {
     name: string;
@@ -68,7 +69,7 @@ export function TextField({name, title, rows = 3, maxRows = 20, maxLength, place
                     onKeyDown={onKeyDown}
                     ref={inputDom}
                 />
-                {!noFeedback && touched && error && <div className="invalid-feedback">{error}</div>}
+                {!noFeedback && touched && <FieldError error={error}/>}
             </>
         </FormGroup>
     );
