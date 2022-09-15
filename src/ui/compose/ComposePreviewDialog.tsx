@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { Button, ModalDialog } from "ui/control";
 import { ClientState } from "state/state";
@@ -13,43 +14,35 @@ import "./ComposePreviewDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-class ComposePreviewDialog extends React.PureComponent<Props> {
+function ComposePreviewDialog({show, draft, feedWidth, composePreviewClose}: Props) {
+    const {t} = useTranslation();
 
-    onClose = () => {
-        const {composePreviewClose} = this.props;
-
-        composePreviewClose();
+    if (!show) {
+        return null;
     }
 
-    render() {
-        const {show, draft, feedWidth} = this.props;
+    const onClose = () => composePreviewClose();
 
-        if (!show) {
-            return null;
-        }
-
-        return (
-            <ModalDialog className="compose-preview-dialog" style={{"--feed-width": feedWidth + "px"}}
-                         title="Post Preview" onClose={this.onClose}>
-                <div className="modal-body">
-                    {draft &&
-                        <div className="posting entry">
-                            <div className="owner-line">
-                                <DraftOwner draft={draft}/>
-                            </div>
-                            <DraftSubject draft={draft}/>
-                            <EntryHtml className="content" html={draft.body.text} nodeName="" media={draft.media}/>
-                            <EntryGallery nodeName="" media={draft.media ?? null}/>
+    return (
+        <ModalDialog className="compose-preview-dialog" style={{"--feed-width": feedWidth + "px"}}
+                     title={t("post-preview")} onClose={onClose}>
+            <div className="modal-body">
+                {draft &&
+                    <div className="posting entry">
+                        <div className="owner-line">
+                            <DraftOwner draft={draft}/>
                         </div>
-                    }
-                </div>
-                <div className="modal-footer">
-                    <Button variant="primary" onClick={this.onClose}>Close</Button>
-                </div>
-            </ModalDialog>
-        );
-    }
-
+                        <DraftSubject draft={draft}/>
+                        <EntryHtml className="content" html={draft.body.text} nodeName="" media={draft.media}/>
+                        <EntryGallery nodeName="" media={draft.media ?? null}/>
+                    </div>
+                }
+            </div>
+            <div className="modal-footer">
+                <Button variant="primary" onClick={onClose}>{t("close")}</Button>
+            </div>
+        </ModalDialog>
+    );
 }
 
 const connector = connect(

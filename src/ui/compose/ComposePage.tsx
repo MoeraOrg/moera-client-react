@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import { PostingText, PrincipalValue, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -47,6 +48,8 @@ function ComposePage(props: Props) {
     } = props;
     const [initialPostingText, setInitialPostingText] = useState<PostingText>({bodySrc: ""});
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         const values = composePageLogic.mapPropsToValues(props);
         setInitialPostingText(composePageLogic.mapValuesToPostingText(values, props));
@@ -54,7 +57,7 @@ function ComposePage(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [posting, avatarDefault, formId, sharedText, setInitialPostingText]); // 'props' are missing on purpose
 
-    const title = postingId == null ? "New Post" : "Edit Post";
+    const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const loadingContent = loadingPosting || loadingDraft;
     const sourceFormats = features?.sourceFormats ?? [];
     const submitDisabled = composePageLogic.areValuesEmpty(values) || !composePageLogic.areImagesUploaded(values);
@@ -65,7 +68,7 @@ function ComposePage(props: Props) {
                     {title}
                     {postingId != null &&
                         <Jump className="btn btn-sm btn-outline-secondary ms-3" href={`/post/${postingId}`}>
-                            &larr; Post
+                            {t("to-post")}
                         </Jump>
                     }
                     <Loading active={loadingContent}/>
@@ -74,7 +77,7 @@ function ComposePage(props: Props) {
             <Page className="compose-page">
                 <div className="composer">
                     <Form>
-                        <ConflictWarning text="The post was edited by somebody." show={conflict}
+                        <ConflictWarning text={t("post-edited-conflict")} show={conflict}
                                          onClose={composeConflictClose}/>
                         <div className="info">
                             <AvatarField name="avatar" size={56}/>

@@ -1,4 +1,5 @@
 .preview-button {
     flex: none;
     margin-right: .5rem;
+    text-transform: uppercase;
 }

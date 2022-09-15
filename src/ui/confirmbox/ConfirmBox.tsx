@@ -1,19 +1,16 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { Button, ModalDialog } from "ui/control";
-import { closeConfirmBox } from "state/confirmbox/actions";
 import { ClientState } from "state/state";
+import { closeConfirmBox } from "state/confirmbox/actions";
+import { Button, ModalDialog } from "ui/control";
 
 const forwardAction = (action: any) => action;
 
 type Props = ConnectedProps<typeof connector>;
 
-class ConfirmBox extends React.PureComponent<Props> {
-
-    onYes = () => {
-        const {closeConfirmBox, onYes, forwardAction} = this.props;
-
+function ConfirmBox({show, message, yes, no, onYes, onNo, variant, closeConfirmBox, forwardAction}: Props) {
+    const onClickYes = () => {
         closeConfirmBox();
         if (onYes) {
             if (typeof(onYes) === "function") {
@@ -24,9 +21,7 @@ class ConfirmBox extends React.PureComponent<Props> {
         }
     };
 
-    onNo = () => {
-        const {closeConfirmBox, onNo, forwardAction} = this.props;
-
+    const onClickNo = () => {
         closeConfirmBox();
         if (onNo) {
             if (typeof(onNo) === "function") {
@@ -37,26 +32,21 @@ class ConfirmBox extends React.PureComponent<Props> {
         }
     };
 
-    render() {
-        const {show, message, yes, no, variant} = this.props;
-
-        if (!show) {
-            return null;
-        }
-
-        return (
-            <ModalDialog risen onClose={this.onNo}>
-                <div className="modal-body">
-                    {message}
-                </div>
-                <div className="modal-footer">
-                    <Button variant="secondary" onClick={this.onNo} autoFocus>{no}</Button>
-                    <Button variant={variant} onClick={this.onYes} autoFocus>{yes}</Button>
-                </div>
-            </ModalDialog>
-        );
+    if (!show) {
+        return null;
     }
 
+    return (
+        <ModalDialog risen onClose={onClickNo}>
+            <div className="modal-body">
+                {message}
+            </div>
+            <div className="modal-footer">
+                <Button variant="secondary" onClick={onClickNo} autoFocus>{no}</Button>
+                <Button variant={variant} onClick={onClickYes} autoFocus>{yes}</Button>
+            </div>
+        </ModalDialog>
+    );
 }
 
 const connector = connect(

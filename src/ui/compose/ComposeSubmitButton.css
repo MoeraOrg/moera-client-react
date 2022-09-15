@@ -1,3 +1,4 @@
 .submit-button {
     flex: auto;
+    text-transform: uppercase;
 }

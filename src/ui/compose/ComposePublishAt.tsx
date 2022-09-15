@@ -4,6 +4,7 @@ import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, formatISO } from 'date-fns';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
@@ -17,6 +18,8 @@ function ComposePublishAt({postingId, draftId}: Props) {
     const {
         edit, field, value, setValue, onEdit, onReset, onKeyDown
     } = useComposeTextEditable<Date, HTMLDivElement>("publishAt", postingId, draftId);
+
+    const {t} = useTranslation();
 
     return (
         edit ?
@@ -36,7 +39,7 @@ function ComposePublishAt({postingId, draftId}: Props) {
                             withPortal={Browser.isTinyScreen()}
                             onKeyDown={onKeyDown}
                             autoFocus/>
-                <button title="Reset to default" onClick={onReset}>
+                <button title={t("reset-to-default")} onClick={onReset}>
                     <FontAwesomeIcon icon="backspace"/>
                 </button>
             </div>

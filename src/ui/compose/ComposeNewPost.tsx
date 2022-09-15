@@ -2,13 +2,14 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { composeDraftSelect } from "state/compose/actions";
+import { getComposePostingId, getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
 import "./ComposeNewPost.css";
-import { getComposePostingId, getPostingFeatures } from "state/compose/selectors";
 
 function isEmpty(values: ComposePageValues): boolean {
     return composePageLogic.areValuesEmpty(values);
@@ -18,6 +19,7 @@ type Props = ConnectedProps<typeof connector>;
 
 function ComposeNewPost({postingId, composeDraftSelect}: Props) {
     const {values} = useFormikContext<ComposePageValues>();
+    const {t} = useTranslation();
 
     const onClick = () => composeDraftSelect(null);
 
@@ -27,7 +29,7 @@ function ComposeNewPost({postingId, composeDraftSelect}: Props) {
     return (
         <div className="dropdown-item new-post" onClick={onClick}>
             <FontAwesomeIcon icon="pen-alt"/>
-            &nbsp;&nbsp;New post
+            &nbsp;&nbsp;{t("new-post-item")}
         </div>
     );
 }

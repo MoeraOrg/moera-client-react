@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from "ui/control";
 import { ClientState } from "state/state";
@@ -11,23 +12,23 @@ import "./ComposeResetButton.css";
 type Props = ConnectedProps<typeof connector>;
 
 function ComposeResetButton({postingId, draftId, confirmBox}: Props) {
+    const {t} = useTranslation();
+
     if (draftId == null) {
         return null;
     }
 
     const onClick = () => {
         if (postingId == null) {
-            confirmBox("Do you really want to delete the draft?", "Yes", "No",
-                composeDraftListItemDelete(draftId));
+            confirmBox(t("want-delete-draft"), t("yes"), t("no"), composeDraftListItemDelete(draftId));
         } else {
-            confirmBox("Do you really want to forget all changes?", "Yes", "No",
-                composeUpdateDraftDelete(true));
+            confirmBox(t("want-forget-changes"), t("yes"), t("no"), composeUpdateDraftDelete(true));
         }
     };
 
     if (postingId == null) {
         return (
-            <Button variant="danger" className="reset-button" title="Delete draft" onClick={onClick}>
+            <Button variant="danger" className="reset-button" title={t("delete-draft")} onClick={onClick}>
                 <FontAwesomeIcon icon="trash-can"/>
             </Button>
         );
@@ -35,7 +36,7 @@ function ComposeResetButton({postingId, draftId, confirmBox}: Props) {
         return (
             <Button variant="info" className="reset-button" onClick={onClick}>
                 <FontAwesomeIcon icon="undo-alt"/>
-                {" "}Undo
+                {" " + t("undo")}
             </Button>
         );
     }

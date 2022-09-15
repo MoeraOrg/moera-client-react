@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
@@ -16,6 +17,8 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-start");
+
+    const {t} = useTranslation();
 
     const onSelect = (id: string) => {
         if (id !== draftId) {
@@ -38,7 +41,7 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
     return (
         <div ref={setButtonRef} className="draft-selector btn-group dropdown">
             <Button variant="info" className="dropdown-toggle" onClick={onToggle}>
-                Drafts{" "}
+                {t("Drafts") + " "}
                 {loadingDraftList ?
                     <LoadingInline active={loadingDraftList}/>
                 :

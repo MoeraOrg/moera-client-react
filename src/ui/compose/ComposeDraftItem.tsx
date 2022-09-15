@@ -4,6 +4,7 @@ import cx from 'classnames';
 // @ts-ignore
 import LinesEllipsis from 'react-lines-ellipsis';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import { ExtDraftInfo } from "state/compose/state";
 import "./ComposeDraftItem.css";
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export default function ComposeDraftItem({draft, current, onSelect, onDelete}: Props) {
+    const {t} = useTranslation();
+
     const handleSelect = (e: React.MouseEvent) => {
         onSelect(draft.id);
         e.preventDefault();
@@ -33,11 +36,11 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
             <div className="draft-info" onClick={handleSelect}>
                 <div className="content">
                     {draft.subject && <b>{draft.subject} </b>}
-                    <LinesEllipsis text={draft.text ? draft.text : "(no text)"} maxLine="3"/>
+                    <LinesEllipsis text={draft.text ? draft.text : t("no-text")} maxLine="3"/>
                 </div>
                 <time className="edited" dateTime={formatISO(editDate)}>{formatDistanceToNow(editDate)}</time>
             </div>
-            <div className="draft-delete" title="Delete draft" onClick={handleDelete}>
+            <div className="draft-delete" title={t("delete-draft")} onClick={handleDelete}>
                 <FontAwesomeIcon icon="trash-can"/>
             </div>
         </div>

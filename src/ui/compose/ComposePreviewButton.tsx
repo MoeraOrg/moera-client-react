@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from "ui/control";
 import { composePreview } from "state/compose/actions";
@@ -9,25 +10,19 @@ type Props = {
     disabled: boolean;
 } & ConnectedProps<typeof connector>;
 
-class ComposePreviewButton extends React.PureComponent<Props> {
+function ComposePreviewButton({disabled, composePreview}: Props) {
+    const {t} = useTranslation();
 
-    onClick = (event: React.MouseEvent) => {
-        const {composePreview} = this.props;
-
+    const onClick = (event: React.MouseEvent) => {
         composePreview();
         event.preventDefault();
     }
 
-    render() {
-        const {disabled} = this.props;
-
-        return (
-            <Button variant="secondary" className="preview-button" disabled={disabled} onClick={this.onClick}>
-                PREVIEW
-            </Button>
-        );
-    }
-
+    return (
+        <Button variant="secondary" className="preview-button" disabled={disabled} onClick={onClick}>
+            {t("preview")}
+        </Button>
+    );
 }
 
 const connector = connect(

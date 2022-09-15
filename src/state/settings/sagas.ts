@@ -145,6 +145,7 @@ function updateLanguage(settings: SettingInfo[]) {
     }
 }
 
+// eslint-disable-next-line require-yield
 function* settingsClientValuesSetSaga(action: SettingsClientValuesSetAction) {
     const {settings} = action.payload;
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientSettings } from "api";
 import { SourceFormat } from "api/node/api-types";
@@ -14,6 +15,8 @@ type Props = ConnectedProps<typeof connector>;
 
 function ComposeFormattingHelp({show, settingsUpdate}: Props) {
     const [visible, setVisible] = useState<boolean>(show);
+
+    const {t} = useTranslation();
 
     const toggleHelp = (show: boolean) => {
         setVisible(show);
@@ -40,16 +43,21 @@ function ComposeFormattingHelp({show, settingsUpdate}: Props) {
     if (visible) {
         return (
             <div className="dialog-help">
-                <b>Markdown:</b> see{" "}
-                <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">cheatsheet</a>
-                {" or "}<a href="https://www.markdowntutorial.com/">tutorial</a> to see how to do more.
-                See also <a href="https://www.webfx.com/tools/emoji-cheat-sheet/">emoji cheatsheet</a>.
+                <Trans i18nKey="formatting-hint">
+                    <b/>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                    <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"/>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                    <a href="https://www.markdowntutorial.com/"/>
+                    {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                    <a href="https://www.webfx.com/tools/emoji-cheat-sheet/"/>
+                </Trans>
                 <CloseButton onClick={hideHelp}/>
             </div>
         );
     } else {
         return (
-            <div className="formatting-help-show" onClick={showHelp}>Show formatting hint</div>
+            <div className="formatting-help-show" onClick={showHelp}>{t("show-formatting-hint")}</div>
         );
     }
 }

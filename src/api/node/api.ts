@@ -2,7 +2,6 @@ import { JSONSchemaType, ValidateFunction } from 'ajv';
 
 import schema from "api/schema";
 import * as API from "api/node/api-types";
-import { StorySummaryNode } from "api/node/api-types";
 
 const ResultType: JSONSchemaType<API.Result> = {
     type: "object",
