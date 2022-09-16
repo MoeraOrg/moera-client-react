@@ -1,6 +1,7 @@
 import React from 'react';
 import { NumberPicker } from 'react-widgets';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { FormGroup, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
@@ -28,6 +29,8 @@ interface Props {
 
 export function DurationField({name, title, horizontal = false, groupClassName, labelClassName, col, noFeedback = false,
                                autoFocus, disabled, initialValue, defaultValue, min, max, never, always}: Props) {
+
+    const {t} = useTranslation();
 
     const dmin = min != null ? Duration.parse(min) : Duration.MIN;
     const dmax = max != null ? Duration.parse(max) : Duration.MAX;
@@ -86,9 +89,9 @@ export function DurationField({name, title, horizontal = false, groupClassName, 
                     <select name={name + "_unit"} value={duration.unit} disabled={disabled}
                             onChange={e => onChange(e.target.value as DurationUnit, null)}>
                         {never && <option value="never">never</option>}
-                        {UNIT_NAMES.map(({short, long}) => (
+                        {UNIT_NAMES.map(({short, key}) => (
                             dmax.toSeconds() >= new Duration(1, short).toSeconds() ?
-                                <option key={short} value={short}>{long}</option>
+                                <option key={short} value={short}>{t(`duration-unit.name.${key}`)}</option>
                             :
                                 null
                         ))}

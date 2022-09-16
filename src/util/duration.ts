@@ -1,3 +1,5 @@
+import { TFunction } from 'react-i18next';
+
 import { isNumber } from "util/misc";
 
 export type FixedUnit = "s" | "m" | "h" | "d";
@@ -12,15 +14,14 @@ const UNIT_FACTORS: Record<FixedUnit, number> = {
 
 export interface UnitName {
     short: FixedUnit;
-    shorter: string;
-    long: string;
+    key: string;
 }
 
 export const UNIT_NAMES: UnitName[] = [
-    {short: "s", shorter: "secs", long: "seconds"},
-    {short: "m", shorter: "mins", long: "minutes"},
-    {short: "h", shorter: "hours", long: "hours"},
-    {short: "d", shorter: "days", long: "days"}
+    {short: "s", key: "sec"},
+    {short: "m", key: "min"},
+    {short: "h", key: "hour"},
+    {short: "d", key: "day"}
 ];
 
 export function isFixedUnit(unit: DurationUnit): unit is FixedUnit {
@@ -109,9 +110,10 @@ export class Duration {
         return this.isFixed() ? `${this.amount}${this.unit}` : this.unit;
     }
 
-    toReadableString(): string {
-        const name = UNIT_NAMES.find(un => un.short === this.unit)?.shorter ?? "secs";
-        return this.isFixed() ? `${this.amount} ${name}` : this.unit;
+    toReadableString(t: TFunction): string {
+        let key = UNIT_NAMES.find(un => un.short === this.unit)?.key ?? "sec";
+        key = `duration-unit.format.${this.isFixed() ? key : this.unit}`;
+        return t(key, {count: this.amount});
     }
 
 }

@@ -28,6 +28,24 @@
   "drafts" : "Drafts",
   "draft-saved" : "Draft saved.",
   "draft-saving" : "Saving...",
+  "duration-unit" : {
+    "format" : {
+      "always" : "always",
+      "day" : "{count} {count, plural, one {day} other {days}}",
+      "hour" : "{count} {count, plural, one {hour} other {hours}}",
+      "min" : "{count} {count, plural, one {min} other {mins}}",
+      "never" : "never",
+      "sec" : "{count} {count, plural, one {sec} other {secs}}"
+    },
+    "name" : {
+      "always" : "always",
+      "day" : "days",
+      "hour" : "hours",
+      "min" : "minutes",
+      "never" : "never",
+      "sec" : "seconds"
+    }
+  },
   "edit-ellipsis" : "Edit...",
   "edit-post-title" : "Edit Post",
   "enable-oppose-reactions" : "Enable \"Oppose\" reactions",
@@ -70,6 +88,7 @@
   "posting-not-found" : "Posting not found or cannot be displayed.",
   "post-preview" : "Post Preview",
   "preview" : "Preview",
+  "provider-setting" : "(provider setting)",
   "reactions" : "Reactions",
   "read-more" : "Read more...",
   "received-mail" : "Received the mail already",

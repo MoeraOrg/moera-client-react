@@ -1,4 +1,5 @@
 import React from 'react';
+import { TFunction, useTranslation } from 'react-i18next';
 
 import { PrincipalValue, SettingMetaInfo, SettingType, SettingTypeModifiers } from "api/node/api-types";
 import { ClientSettingMetaInfo, ClientSettingTypeModifiers } from "api/settings";
@@ -41,7 +42,8 @@ function convertFormat(format: string | null | undefined) {
     }
 }
 
-function valueRange(type: SettingType, modifiers: SettingTypeModifiers | ClientSettingTypeModifiers): string {
+function valueRange(type: SettingType, modifiers: SettingTypeModifiers | ClientSettingTypeModifiers,
+                    t: TFunction): string {
     let min: number | string | null = null;
     let max: number | string | null = null;
 
@@ -63,8 +65,8 @@ function valueRange(type: SettingType, modifiers: SettingTypeModifiers | ClientS
             break;
 
         case "Duration":
-            min = modifiers.min != null ? Duration.parse(modifiers.min).toReadableString() : null;
-            max = modifiers.max != null ? Duration.parse(modifiers.max).toReadableString() : null;
+            min = modifiers.min != null ? Duration.parse(modifiers.min).toReadableString(t) : null;
+            max = modifiers.max != null ? Duration.parse(modifiers.max).toReadableString(t) : null;
             break;
     }
 
@@ -92,10 +94,13 @@ interface Props {
 }
 
 export default function SettingsField({name, fieldName, meta, initialValue, groupClassName}: Props) {
+    const {t} = useTranslation();
+
     const type: SettingType = meta ? meta.type : "string";
     const modifiers = meta && meta.modifiers ? meta.modifiers : {};
     const privileged = meta != null && "privileged" in meta && meta.privileged;
-    const title = (meta ? meta.title + (privileged ? " (provider setting)" : "") : name) + valueRange(type, modifiers);
+    const title = (meta ? meta.title + (privileged ? " " + t("provider-setting") : "") : name)
+        + valueRange(type, modifiers, t);
     const defaultValue = meta ? meta.defaultValue : null;
     const disabled = meta ? privileged : false;
     switch (type) {
