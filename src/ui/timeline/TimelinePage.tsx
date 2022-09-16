@@ -21,4 +21,4 @@ const connector = connect(
     })
 );
 
-export default connector(withTranslation()(TimelinePage));
+export default withTranslation()(connector(TimelinePage));

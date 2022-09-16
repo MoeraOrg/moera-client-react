@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import TextareaAutosize from 'react-autosize-textarea';
 import debounce from 'lodash.debounce';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import { Browser } from "ui/browser";
 import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
@@ -37,7 +38,7 @@ export interface RichTextAreaProps {
     uploadImage?: (image: File) => void;
 }
 
-type Props = RichTextAreaProps & ConnectedProps<typeof connector>;
+type Props = RichTextAreaProps & ConnectedProps<typeof connector> & WithTranslation;
 
 interface State {
     pasteDialogShow: boolean;
@@ -48,8 +49,7 @@ interface State {
 class RichTextArea extends React.PureComponent<Props, State> {
 
     static defaultProps = {
-        rows: 3,
-        placeholder: "Enter text here..."
+        rows: 3
     }
 
     #sentenceInput = false;
@@ -282,7 +282,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            name, value, className, autoComplete, placeholder, rows, maxRows, disabled, onBlur, textArea
+            name, value, className, autoComplete, placeholder, rows, maxRows, disabled, onBlur, textArea, t
         } = this.props;
         const {pasteDialogShow} = this.state;
 
@@ -294,7 +294,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
                     id={name}
                     className={className}
                     autoComplete={autoComplete}
-                    placeholder={placeholder}
+                    placeholder={placeholder ?? t("enter-text-here")}
                     rows={rows}
                     maxRows={maxRows ?? (Browser.isTinyScreen() ? 12 : 20)}
                     disabled={disabled}
@@ -317,4 +317,4 @@ const connector = connect(
     { settingsUpdate }
 );
 
-export default connector(RichTextArea);
+export default withTranslation()(connector(RichTextArea));

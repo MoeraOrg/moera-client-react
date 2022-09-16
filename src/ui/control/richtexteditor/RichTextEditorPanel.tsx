@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
@@ -36,7 +37,7 @@ type Props = {
     onImageDeleted?: (id: string) => void;
     externalImage?: File;
     uploadingExternalImage?: () => void;
-} & ConnectedProps<typeof connector>;
+} & ConnectedProps<typeof connector> & WithTranslation;
 
 interface State {
     spoilerDialog: boolean;
@@ -380,7 +381,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
     render() {
         const {
             hiding, format, panel, features, noMedia, nodeName, forceImageCompress, selectedImage, onImageAdded,
-            onImageDeleted, externalImage, uploadingExternalImage
+            onImageDeleted, externalImage, uploadingExternalImage, t
         } = this.props;
         const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText} = this.state;
 
@@ -395,21 +396,22 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         return (
             <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
                 <div className="group">
-                    <RichTextEditorButton icon="bold" title="Bold" letter="B" onClick={this.onBold}/>
-                    <RichTextEditorButton icon="italic" title="Italic" letter="I" onClick={this.onItalic}/>
-                    <RichTextEditorButton icon="strikethrough" title="Strikeout" letter="R" onClick={this.onStrike}/>
+                    <RichTextEditorButton icon="bold" title={t("bold")} letter="B" onClick={this.onBold}/>
+                    <RichTextEditorButton icon="italic" title={t("italic")} letter="I" onClick={this.onItalic}/>
+                    <RichTextEditorButton icon="strikethrough" title={t("strikeout")} letter="R"
+                                          onClick={this.onStrike}/>
                 </div>
                 <div className="group">
-                    <RichTextEditorButton icon="exclamation-circle" title="Spoiler" onClick={this.onSpoiler}/>
-                    <RichTextEditorButton icon="caret-square-down" title="Fold" onClick={this.onFold}/>
+                    <RichTextEditorButton icon="exclamation-circle" title={t("spoiler")} onClick={this.onSpoiler}/>
+                    <RichTextEditorButton icon="caret-square-down" title={t("fold")} onClick={this.onFold}/>
                 </div>
                 <div className="group">
-                    <RichTextEditorButton icon="at" title="Mention" className="mention" onClick={this.onMention}/>
-                    <RichTextEditorButton icon="quote-left" title="Quote" letter="Q" onClick={this.onQuote}/>
+                    <RichTextEditorButton icon="at" title={t("mention")} className="mention" onClick={this.onMention}/>
+                    <RichTextEditorButton icon="quote-left" title={t("quote")} letter="Q" onClick={this.onQuote}/>
                 </div>
                 <div className="group">
-                    <RichTextEditorButton icon="link" title="Link" letter="L" onClick={this.onLink}/>
-                    <RichTextEditorButton icon="image" title="Image" letter="M" onClick={this.onImage}/>
+                    <RichTextEditorButton icon="link" title={t("link")} letter="L" onClick={this.onLink}/>
+                    <RichTextEditorButton icon="image" title={t("image")} letter="M" onClick={this.onImage}/>
                 </div>
                 <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
                 <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
@@ -432,4 +434,4 @@ const connector = connect(
     })
 );
 
-export default connector(RichTextEditorPanel);
+export default withTranslation()(connector(RichTextEditorPanel));

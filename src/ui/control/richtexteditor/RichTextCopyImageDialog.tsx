@@ -1,4 +1,5 @@
 import React from 'react';
+import { WithTranslation } from 'react-i18next';
 
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
@@ -13,9 +14,9 @@ const mapPropsToValues = (): RichTextCopyImageValues => ({
     url: ""
 });
 
-const RichTextCopyImageDialog = () => (
-    <InputField name="url" title="URL" autoFocus/>
+const RichTextCopyImageDialog = ({t}: Props & WithTranslation) => (
+    <InputField name="url" title={t("url")} autoFocus/>
 );
 
 export default richTextEditorDialog<Props, RichTextCopyImageValues>(
-    "Copy Image From Internet", mapPropsToValues, RichTextCopyImageDialog);
+    "copy-image-from-internet", mapPropsToValues, RichTextCopyImageDialog);

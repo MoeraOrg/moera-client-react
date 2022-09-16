@@ -1,9 +1,8 @@
 {
-  "feed" : {
-    "title" : {
-      "news" : "Новости",
-      "timeline" : "Хроника"
-    }
+  "cancel" : "Отмена",
+  "feed-title" : {
+    "news" : "Новости",
+    "timeline" : "Хроника"
   },
   "moera" : "Moera",
   "write-comment-here" : "Напишите тут комментарий для {mention}..."

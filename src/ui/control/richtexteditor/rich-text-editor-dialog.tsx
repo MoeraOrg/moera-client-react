@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
@@ -10,8 +11,10 @@ export interface RichTextEditorDialogProps<V> {
     onSubmit: (ok: boolean, values: Partial<V>) => void;
 }
 
+type OuterProps<P> = P & WithTranslation;
+
 export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
-    title: string, mapPropsToValues: (props: P) => V, DialogBody: React.ComponentType<P>) {
+    title: string, mapPropsToValues: (props: OuterProps<P>) => V, DialogBody: React.ComponentType<OuterProps<P>>) {
 
     const logic = {
         mapPropsToValues,
@@ -20,7 +23,7 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
         }
     };
 
-    type Props = P & FormikProps<V>;
+    type Props = OuterProps<P> & FormikProps<V>;
 
     const dialog = class extends React.PureComponent<Props> {
 
@@ -37,21 +40,21 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
         }
 
         render() {
-            const {show, risen} = this.props;
+            const {show, risen, t} = this.props;
 
             if (!show) {
                 return null;
             }
 
             return (
-                <ModalDialog title={title} onClose={this.onClose} risen={risen}>
+                <ModalDialog title={t(title)} onClose={this.onClose} risen={risen}>
                     <Form>
                         <div className="modal-body">
                             <DialogBody {...this.props}/>
                         </div>
                         <div className="modal-footer">
-                            <Button variant="secondary" onClick={this.onClose}>Cancel</Button>
-                            <Button variant="primary" type="submit">OK</Button>
+                            <Button variant="secondary" onClick={this.onClose}>{t("cancel")}</Button>
+                            <Button variant="primary" type="submit">{t("ok")}</Button>
                         </div>
                     </Form>
                 </ModalDialog>
@@ -60,5 +63,5 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
 
     }
 
-    return withFormik(logic)(dialog);
+    return withTranslation()(withFormik(logic)(dialog));
 }

@@ -261,4 +261,4 @@ const connector = connect(
     }
 );
 
-export default connector(withTranslation()(Comments));
+export default withTranslation()(connector(Comments));

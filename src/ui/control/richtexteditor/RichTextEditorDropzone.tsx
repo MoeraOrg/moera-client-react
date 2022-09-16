@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
@@ -83,6 +84,8 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
     const onLoadedRef = useRef<ImageLoadedHandler>();
     onLoadedRef.current = onLoaded;
 
+    const {t} = useTranslation();
+
     const onImageUploadSuccess = (startIndex: number) => (index: number, mediaFile: VerifiedMediaFile) => {
         setUploadProgress(progress => updateStatus(progress, index, "success"));
         if (onLoadedRef.current) {
@@ -142,6 +145,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
         useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, onDrop: uploadImage});
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
+    const buttonsTitle = !Browser.isTinyScreen() ? "upload-or-copy-or-drop-images" : "upload-or-copy-images";
 
     return (
         <div className={cx(
@@ -152,21 +156,20 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
                                      selectImage={selectImage} onDeleted={onDeleted} onReorder={onReorder}/>
             <div className="upload">
                 {uploadProgress.length > 0 ?
-                    `Uploading ${progressSummary.loadedFiles} of ${progressSummary.totalFiles}
-                     ${progressSummary.progress}% ...`
+                    t("uploading-files", progressSummary)
                 : downloading ?
-                    "Downloading image..."
+                    t("downloading-image")
                 :
                     <>
-                        <Button variant="outline-info" size="sm" onClick={open}>Upload images</Button>
-                        {" or "}
-                        <Button variant="outline-secondary" size="sm" onClick={openCopyImage}>Copy image</Button>
-                        {!Browser.isTinyScreen() ? " or drop them here" : ""}
+                        <Trans i18nKey={buttonsTitle}>
+                            <Button variant="outline-info" size="sm" onClick={open}/>
+                            <Button variant="outline-secondary" size="sm" onClick={openCopyImage}/>
+                        </Trans>
                         {!forceCompress &&
                             <>
                                 <br/>
                                 <label className="form-check-label" htmlFor="editorImagesCompress">
-                                    Compress images
+                                    {t("compress-images")}
                                 </label>
                                 <input className="form-check-input" type="checkbox" checked={compress}
                                        onChange={e => setCompress(e.target.checked)} id="editorImagesCompress"/>

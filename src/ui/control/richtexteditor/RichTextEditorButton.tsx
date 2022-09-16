@@ -1,9 +1,9 @@
 import React from 'react';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import "./RichTextEditorButton.css";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
 interface Props {
     icon: IconProp;

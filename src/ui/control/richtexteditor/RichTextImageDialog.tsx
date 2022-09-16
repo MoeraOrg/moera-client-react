@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import { Choice, PostingFeatures } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
@@ -13,12 +14,12 @@ import "./RichTextImageDialog.css";
 type RichTextImageStandardSize = "full" | "large" | "medium" | "small" | "tiny" | "custom";
 
 const STANDARD_SIZES: Choice<RichTextImageStandardSize>[] = [
-    {title: "Full", value: "full"},
-    {title: "Large", value: "large"},
-    {title: "Medium", value: "medium"},
-    {title: "Small", value: "small"},
-    {title: "Tiny", value: "tiny"},
-    {title: "Custom", value: "custom"}
+    {title: "image-size.full", value: "full"},
+    {title: "image-size.large", value: "large"},
+    {title: "image-size.medium", value: "medium"},
+    {title: "image-size.small", value: "small"},
+    {title: "image-size.tiny", value: "tiny"},
+    {title: "image-size.custom", value: "custom"}
 ];
 
 export function getImageDimensions(standardSize: RichTextImageStandardSize,
@@ -44,11 +45,11 @@ export function getImageDimensions(standardSize: RichTextImageStandardSize,
 type RichTextImageAlign = "text-start" | "text-center" | "text-end" | "float-text-start" | "float-text-end";
 
 const ALIGNMENTS: Choice<RichTextImageAlign>[] = [
-    {title: "Left", value: "text-start"},
-    {title: "Center", value: "text-center"},
-    {title: "Right", value: "text-end"},
-    {title: "Left, wrapping text", value: "float-text-start"},
-    {title: "Right, wrapping text", value: "float-text-end"}
+    {title: "text-alignment.left", value: "text-start"},
+    {title: "text-alignment.center", value: "text-center"},
+    {title: "text-alignment.right", value: "text-end"},
+    {title: "text-alignment.left-wrap", value: "float-text-start"},
+    {title: "text-alignment.right-wrap", value: "float-text-end"}
 ];
 
 export interface RichTextImageValues {
@@ -97,6 +98,7 @@ function RichTextImageDialog({features, noMedia = false, nodeName, forceCompress
     const [showAlt, setShowAlt] = useState<boolean>(false);
     const [, {value: source}] = useField<string>("source");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
+    const {t} = useTranslation();
 
     return (
         <>
@@ -107,24 +109,26 @@ function RichTextImageDialog({features, noMedia = false, nodeName, forceCompress
                                              uploadingExternalImage={uploadingExternalImage}
                                              externalImage={externalImage}/>
             :
-                <InputField name="href" title="URL" autoFocus/>
+                <InputField name="href" title={t("url")} autoFocus/>
             }
-            <SelectField name="standardSize" title="Size" choices={STANDARD_SIZES} horizontal anyValue/>
+            <SelectField name="standardSize" title={t("size")} choices={STANDARD_SIZES} horizontal anyValue/>
             {standardSize === "custom" &&
                 <div className="rich-text-image-dialog-size">
-                    <NumberField name="customWidth" title="Width" horizontal min={0} format={{useGrouping: false}}/>
-                    <NumberField name="customHeight" title="Height" horizontal min={0} format={{useGrouping: false}}/>
+                    <NumberField name="customWidth" title={t("width")} horizontal min={0}
+                                 format={{useGrouping: false}}/>
+                    <NumberField name="customHeight" title={t("height")} horizontal min={0}
+                                 format={{useGrouping: false}}/>
                 </div>
             }
-            {showAlign && <SelectField name="align" title="Align" choices={ALIGNMENTS} horizontal anyValue/>}
-            {showCaption && <InputField name="caption" title="Caption"/>}
-            {showTooltip && <InputField name="title" title="Tooltip"/>}
-            {showAlt && <InputField name="alt" title="Alternative text"/>}
+            {showAlign && <SelectField name="align" title={t("align")} choices={ALIGNMENTS} horizontal anyValue/>}
+            {showCaption && <InputField name="caption" title={t("caption")}/>}
+            {showTooltip && <InputField name="title" title={t("tooltip")}/>}
+            {showAlt && <InputField name="alt" title={t("alt-text")}/>}
             <div className="mb-3">
-                <PlusButton title="Align" visible={!showAlign} onClick={() => setShowAlign(true)}/>
-                <PlusButton title="Caption" visible={!showCaption} onClick={() => setShowCaption(true)}/>
-                <PlusButton title="Tooltip" visible={!showTooltip} onClick={() => setShowTooltip(true)}/>
-                <PlusButton title="Alt text" visible={!showAlt} onClick={() => setShowAlt(true)}/>
+                <PlusButton title={t("align")} visible={!showAlign} onClick={() => setShowAlign(true)}/>
+                <PlusButton title={t("caption")} visible={!showCaption} onClick={() => setShowCaption(true)}/>
+                <PlusButton title={t("tooltip")} visible={!showTooltip} onClick={() => setShowTooltip(true)}/>
+                <PlusButton title={t("alt-text-button")} visible={!showAlt} onClick={() => setShowAlt(true)}/>
             </div>
         </>
     );
