@@ -32,11 +32,9 @@
   "edit-post-title" : "Edit Post",
   "enable-oppose-reactions" : "Enable \"Oppose\" reactions",
   "enable-reactions" : "Enable reactions",
-  "feed" : {
-    "title" : {
-      "news" : "News",
-      "timeline" : "Timeline"
-    }
+  "feed-title" : {
+    "news" : "News",
+    "timeline" : "Timeline"
   },
   "forget" : "Forget",
   "forget-changes" : "Do you really want to forget the changes?",

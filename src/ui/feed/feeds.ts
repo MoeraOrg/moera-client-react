@@ -4,12 +4,12 @@ export function getFeedTitle(feedName: string | null | undefined, t?: TFunction)
     t = t ?? ((text: string) => text);
     switch (feedName) {
         case "timeline":
-            return t("feed.title.timeline");
+            return t("feed-title.timeline");
         case "news":
-            return t("feed.title.news");
+            return t("feed-title.news");
         case null:
         case undefined:
-            return t("feed.title.timeline");
+            return t("feed-title.timeline");
         default:
             return feedName;
     }
