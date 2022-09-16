@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import { ClientSettings, SettingTypes } from "api";
 import { SettingValue } from "api/setting-types";
@@ -21,6 +22,8 @@ function SetDefaultButton({name, setting, settingMeta, settingValue, settingsUpd
 
     const [assignedDefaultValue, setAssignedDefaultValue] = useState<SettingValue | null>(null);
 
+    const {t} = useTranslation();
+
     if (!setting || !settingMeta || settingValue === value || assignedDefaultValue === value) {
         return null;
     }
@@ -33,7 +36,7 @@ function SetDefaultButton({name, setting, settingMeta, settingValue, settingsUpd
         }]);
     };
 
-    return <LabelButton icon="star" title="Set as default" className="form-label-button-default"
+    return <LabelButton icon="star" title={t("set-as-default")} className="form-label-button-default"
                         onClick={onSetDefault}/>
 }
 

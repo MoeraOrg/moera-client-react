@@ -5,6 +5,7 @@ import { useFormikContext } from 'formik';
 import { PostingFeatures, SourceFormat } from "api/node/api-types";
 import { FormGroup, RichTextEditor, RichTextValue } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
+import FieldError from "ui/control/field/FieldError";
 
 interface Props {
     name: string;
@@ -80,7 +81,7 @@ export function RichTextField({name, title, rows = 3, maxRows, features, noMedia
                     nodeName={nodeName}
                     forceImageCompress={forceImageCompress}
                 />
-                {!noFeedback && touched && error && <div className="invalid-feedback">{(error as any).text}</div>}
+                {!noFeedback && touched && <FieldError error={(error as any)?.text}/>}
             </>
         </FormGroup>
     );

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { FormGroup, Wrapper } from "ui/control";
 import { FormGroupStyle } from "ui/control/FormGroup";
@@ -37,6 +38,8 @@ interface Props {
 export function SelectField({name, title, horizontal = false, layout, groupClassName, labelClassName, col, size,
                              choices = [], multiple, autoFocus, anyValue, className, autoComplete, noFeedback = false,
                              initialValue, defaultValue, disabled, selectRef, setting}: Props) {
+
+    const {t} = useTranslation();
 
     const inputDom = useRef<HTMLSelectElement>();
 
@@ -85,7 +88,7 @@ export function SelectField({name, title, horizontal = false, layout, groupClass
                         }
                     }}
                 >
-                    {choices.map(c => <option key={c.value} value={c.value}>{c.title}</option>)}
+                    {choices.map(c => <option key={c.value} value={c.value}>{t(c.title)}</option>)}
                 </select>
                 {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>

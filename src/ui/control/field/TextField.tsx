@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 import TextareaAutosize from 'react-autosize-textarea';
+import { useTranslation } from 'react-i18next';
 
 import { FormGroup } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
@@ -25,9 +26,13 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function TextField({name, title, rows = 3, maxRows = 20, maxLength, placeholder = "Enter text here...",
-                           autoFocus, anyValue, className, autoComplete, noFeedback = false, disabled = false,
-                           groupClassName, initialValue, defaultValue, onKeyDown}: Props) {
+export function TextField({name, title, rows = 3, maxRows = 20, maxLength, placeholder, autoFocus, anyValue, className,
+                           autoComplete, noFeedback = false, disabled = false, groupClassName, initialValue,
+                           defaultValue, onKeyDown}: Props) {
+
+    const {t} = useTranslation();
+
+    placeholder = placeholder ?? t("enter-text-here");
 
     const inputDom = useRef<HTMLTextAreaElement>(null);
 
