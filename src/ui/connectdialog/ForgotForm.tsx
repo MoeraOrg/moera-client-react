@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
@@ -20,6 +21,8 @@ type Props = OuterProps & FormikProps<Values>;
 function ForgotForm(props: Props) {
     const {show, resettingPassword, connectDialogSetForm, values, resetForm} = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (show) {
             resetForm({values: forgotFormLogic.mapPropsToValues(props)})
@@ -33,13 +36,12 @@ function ForgotForm(props: Props) {
     }
 
     return (
-        <ConnectDialogModal title="Forgot Home Password" buttonCaption="Reset Password" loading={resettingPassword}>
-            <div className="instructions">
-                To reset the password, please enter the name or the URL of your home node.
-            </div>
-            <InputField name="location" title="Name or node URL" autoFocus/>
+        <ConnectDialogModal title={t("forgot-home-password")} buttonCaption={t("reset-password")}
+                            loading={resettingPassword}>
+            <div className="instructions">{t("reset-password-instructions")}</div>
+            <InputField name="location" title={t("name-or-node-url")} autoFocus/>
             <div className="links">
-                <button className="btn btn-link" onClick={onMail}>Received the mail already</button>
+                <button className="btn btn-link" onClick={onMail}>{t("received-mail")}</button>
             </div>
         </ConnectDialogModal>
     );
@@ -52,7 +54,7 @@ const forgotFormLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        location: yup.string().trim().required("Must not be empty")
+        location: yup.string().trim().required("must-not-empty")
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {

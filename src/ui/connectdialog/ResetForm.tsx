@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { InputField } from "ui/control/field";
-import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import { ClientState } from "state/state";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
 import { connectDialogSetForm } from "state/connectdialog/actions";
-import { ClientState } from "state/state";
+import { InputField } from "ui/control/field";
+import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -24,6 +25,8 @@ type Props = OuterProps & FormikProps<Values>;
 function ResetForm(props: Props) {
     const {show, emailHint, connectDialogSetForm, values, resetForm} = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (show) {
             resetForm({values: resetFormLogic.mapPropsToValues(props)})
@@ -37,19 +40,20 @@ function ResetForm(props: Props) {
     }
 
     return (
-        <ConnectDialogModal title="Set Home Password" buttonCaption="Set Password & Connect">
+        <ConnectDialogModal title={t("set-home-password")} buttonCaption={t("set-password-and-connect")}>
             {emailHint &&
                 <div className="instructions">
-                    A message was sent to your E-mail address <b>{emailHint}</b> with a secret code needed to reset
-                    the password. Please enter it in the field below.
+                    <Trans i18nKey="reset-password-hint-instructions" values={emailHint}>
+                        <b/>
+                    </Trans>
                 </div>
             }
-            <InputField name="resetToken" title="Secret code" autoFocus/>
-            <InputField name="location" title="Name or node URL"/>
-            <InputField name="password" title="New password"/>
-            <InputField name="confirmPassword" title="Confirm password"/>
+            <InputField name="resetToken" title={t("secret-code")} autoFocus/>
+            <InputField name="location" title={t("name-or-node-url")}/>
+            <InputField name="password" title={t("new-password")}/>
+            <InputField name="confirmPassword" title={t("confirm-password")}/>
             <div className="links">
-                <button className="btn btn-link" onClick={onResend}>Send mail again</button>
+                <button className="btn btn-link" onClick={onResend}>{t("resend-mail")}</button>
             </div>
         </ConnectDialogModal>
     );
@@ -65,11 +69,11 @@ const resetFormLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        resetToken: yup.string().trim().required("Must not be empty"),
-        location: yup.string().trim().required("Must not be empty"),
-        password: yup.string().required("Must not be empty"),
+        resetToken: yup.string().trim().required("must-not-empty"),
+        location: yup.string().trim().required("must-not-empty"),
+        password: yup.string().required("must-not-empty"),
         confirmPassword: yup.string().when(["password"], (password, schema) =>
-                schema.required("Please type the password again").oneOf([password], "Passwords are different")
+                schema.required("retype-password").oneOf([password], "passwords-different")
         )
     }),
 

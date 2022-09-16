@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useFormikContext } from 'formik';
 import debounce from 'lodash.debounce';
 import deepEqual from 'react-fast-compare';
+import { useTranslation } from 'react-i18next';
+
 import "./DraftSaver.css";
 
 interface DraftSaverProps<Text, Values> {
@@ -21,6 +23,7 @@ export function DraftSaver<Text, Values>(props: DraftSaverProps<Text, Values>) {
     const [, setPrevText] = useState<Text>(initialText);
     const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
     const {status, values} = useFormikContext<Values>();
+    const {t} = useTranslation();
 
     const initializedRef = useRef<boolean>();
     initializedRef.current = initialized;
@@ -71,8 +74,8 @@ export function DraftSaver<Text, Values>(props: DraftSaverProps<Text, Values>) {
 
     return (
         <div className="draft-saver">
-            {!unsavedChanges && savingDraft && "Saving..."}
-            {!unsavedChanges && savedDraft && "Draft saved."}
+            {!unsavedChanges && savingDraft && t("draft-saving")}
+            {!unsavedChanges && savedDraft && t("draft-saved")}
         </div>
     );
 }

@@ -2,16 +2,17 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
+import * as Rules from "api/naming/rules";
+import { ClientState } from "state/state";
+import { connectToHome } from "state/home/actions";
+import { getNodeRootLocation } from "state/node/selectors";
+import { cancelConnectDialog, connectDialogSetForm } from "state/connectdialog/actions";
+import { ConnectDialogForm } from "state/connectdialog/state";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
-import { cancelConnectDialog, connectDialogSetForm } from "state/connectdialog/actions";
-import { connectToHome } from "state/home/actions";
-import { getNodeRootLocation } from "state/node/selectors";
-import { ClientState } from "state/state";
-import { ConnectDialogForm } from "state/connectdialog/state";
-import * as Rules from "api/naming/rules";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -24,6 +25,8 @@ type Props = OuterProps & FormikProps<Values>;
 
 function ConnectForm(props: Props) {
     const {show, connectDialogSetForm, values, resetForm} = props;
+
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (show) {
@@ -47,12 +50,12 @@ function ConnectForm(props: Props) {
     }
 
     return (
-        <ConnectDialogModal title="Connect to Home" buttonCaption="Connect">
-            <InputField name="location" title="Name or node URL" autoFocus/>
-            <InputField name="password" title="Password"/>
+        <ConnectDialogModal title={t("connect-home")} buttonCaption={t("connect")}>
+            <InputField name="location" title={t("name-or-node-url")} autoFocus/>
+            <InputField name="password" title={t("password")}/>
             <div className="links">
-                <Button variant="link" onClick={onSetPassword}>Password not set yet</Button>
-                <Button variant="link" onClick={onForgotPassword}>Forgot password</Button>
+                <Button variant="link" onClick={onSetPassword}>{t("password-not-set")}</Button>
+                <Button variant="link" onClick={onForgotPassword}>{t("forgot-password")}</Button>
             </div>
         </ConnectDialogModal>
     );
@@ -67,10 +70,10 @@ const connectFormLogic = {
 
     validationSchema: yup.object().shape({
         location: yup.string().trim()
-            .required("Must not be empty")
+            .required("must-not-empty")
             .test(
                 "is-allowed",
-                "Name or node URL is not valid",
+                "name-or-node-url-not-valid",
                 (name: string | undefined) => {
                     if (!name) {
                         return false;
@@ -81,7 +84,7 @@ const connectFormLogic = {
                     return Rules.isRegisteredNameValid(name)
                 }
             ),
-        password: yup.string().required("Must not be empty")
+        password: yup.string().required("must-not-empty")
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
@@ -22,6 +23,8 @@ type Props = OuterProps & FormikProps<Values>;
 function AssignForm(props: Props) {
     const {show, resetForm} = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (show) {
             resetForm({values: assignFormLogic.mapPropsToValues(props)})
@@ -31,10 +34,10 @@ function AssignForm(props: Props) {
 
 
     return (
-        <ConnectDialogModal title="Set Home Password" buttonCaption="Set Password & Connect">
-            <InputField name="location" title="Name or node URL" autoFocus/>
-            <InputField name="password" title="New password"/>
-            <InputField name="confirmPassword" title="Confirm password"/>
+        <ConnectDialogModal title={t("set-home-password")} buttonCaption={t("set-password-and-connect")}>
+            <InputField name="location" title={t("name-or-node-url")} autoFocus/>
+            <InputField name="password" title={t("new-password")}/>
+            <InputField name="confirmPassword" title={t("confirm-password")}/>
         </ConnectDialogModal>
     );
 }
@@ -48,10 +51,10 @@ const assignFormLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        location: yup.string().trim().required("Must not be empty"),
-        password: yup.string().required("Must not be empty"),
+        location: yup.string().trim().required("must-not-empty"),
+        password: yup.string().required("must-not-empty"),
         confirmPassword: yup.string().when(["password"], (password, schema) =>
-                schema.required("Please type the password again").oneOf([password], "Passwords are different")
+                schema.required("retype-password").oneOf([password], "passwords-different")
         )
     }),
 
