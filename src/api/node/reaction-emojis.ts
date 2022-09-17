@@ -12,142 +12,142 @@ export const REACTION_EMOJIS: ReactionEmojis = {
     positive: {
         // Main
         0x1f4a1: {
-            title: "Hmm",
+            title: "reaction-title.hmm",
             color: "#ffcc4d"
         },
         0x1f44d: {
-            title: "Like",
+            title: "reaction-title.like",
             color: "#2078f4"
         },
         0x1f4af: {
-            title: "Super",
+            title: "reaction-title.super",
             color: "#bb1a34"
         },
         0x1f60d: {
-            title: "Love",
+            title: "reaction-title.love",
             color: "#dd2e44"
         },
         0x1f600: {
-            title: "Ha-ha",
+            title: "reaction-title.haha",
             color: "#ffcc4d"
         },
         0x1f926: {
-            title: "Facepalm",
+            title: "reaction-title.facepalm",
             color: "#ffcc4d"
         },
         0x1f62e: {
-            title: "Wow",
+            title: "reaction-title.wow",
             color: "#ffcc4d"
         },
         0x1f622: {
-            title: "Sad",
+            title: "reaction-title.sad",
             color: "#5dadec"
         },
         0x1f620: {
-            title: "Angry",
+            title: "reaction-title.angry",
             color: "#da2f47"
         },
         0x1f92e: {
-            title: "Disgust",
+            title: "reaction-title.disgust",
             color: "#77af57"
         },
         // Additional
         0x1f48e: {
-            title: "Brilliant",
+            title: "reaction-title.brilliant",
             color: "#8ccaf7"
         },
         0x1f37f: {
-            title: "Popcorn",
+            title: "reaction-title.popcorn",
             color: "#ffcc4d"
         },
         0x1f62b: {
-            title: "Damn",
+            title: "reaction-title.damn",
             color: "#664500"
         },
         0x1f49d: {
-            title: "Congrats",
+            title: "reaction-title.congrats",
             color: "#dd2944"
         },
         0x1f62d: {
-            title: "Cry",
+            title: "reaction-title.cry",
             color: "#5dadec"
         },
         0x1f9f8: {
-            title: "Get well",
+            title: "reaction-title.get-well",
             color: "#a0041e"
         },
         0x2708: {
-            title: "Good trip",
+            title: "reaction-title.good-trip",
             color: "#55acee"
         },
         0x1f379: {
-            title: "Enjoy",
+            title: "reaction-title.enjoy",
             color: "#f4900c"
         },
         0x1f64f: {
-            title: "Hope",
+            title: "reaction-title.hope",
             color: "#ffcc4d"
         },
         0x1f60c: {
-            title: "Keep calm",
+            title: "reaction-title.keep-calm",
             color: "#ffcc4d"
         },
         0x1fac2: {
-            title: "Hug",
+            title: "reaction-title.hug",
             color: "#55acee"
         },
         0x1f525: {
-            title: "Hot",
+            title: "reaction-title.hot",
             color: "#f4900c"
         },
         0x1f923: {
-            title: "LOL",
+            title: "reaction-title.lol",
             color: "#ffcb4c"
         },
         0x1f970: {
-            title: "Sweet",
+            title: "reaction-title.sweet",
             color: "#dd2e44"
         }
     },
     negative: {
         0x1f4a4: {
-            title: "Boring",
+            title: "reaction-title.boring",
             color: "#4289c1"
         },
         0x1f44e: {
-            title: "Dislike",
+            title: "reaction-title.dislike",
             color: "#2078f4"
         },
         0x1f4a9: {
-            title: "Dirt",
+            title: "reaction-title.dirt",
             color: "#bf6952"
         },
         0x2694: {
-            title: "Disagree",
+            title: "reaction-title.disagree",
             color: "#9aaab4"
         },
         0x23f3: {
-            title: "Too long",
+            title: "reaction-title.too-long",
             color: "#ffac33"
         },
         0x1f3a9: {
-            title: "Arrogant",
+            title: "reaction-title.arrogant",
             color: "#744eaa"
         },
         0x1f643: {
-            title: "Absurd",
+            title: "reaction-title.absurd",
             color: "#ffcc4d"
         },
         0x1f61c: {
-            title: "Be-be",
+            title: "reaction-title.be-be",
             color: "#ffcb4c"
         },
         0x1f494: {
-            title: "Hurt",
+            title: "reaction-title.hurt",
             color: "#dd2e44"
         },
         0x1f47f: {
-            title: "Hostile",
+            title: "reaction-title.hostile",
             color: "#aa8dd8"
         }
     }

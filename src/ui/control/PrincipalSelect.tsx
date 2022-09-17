@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -56,8 +57,10 @@ interface PrincipalSelectItemProps {
 }
 
 function PrincipalSelectItem({value}: PrincipalSelectItemProps) {
+    const {t} = useTranslation();
+
     const {icon, title} = getPrincipalDisplay(value);
-    return <><FontAwesomeIcon icon={icon}/>&nbsp;&nbsp;{title}</>;
+    return <><FontAwesomeIcon icon={icon}/>&nbsp;&nbsp;{t(title)}</>;
 }
 
 const connector = connect(

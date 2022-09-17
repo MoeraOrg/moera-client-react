@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api/node/api-types";
 import { getPrincipalDisplay } from "ui/control/principal-display";
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export function Principal({value, defaultValue, long, className, comment, icons}: Props) {
+    const {t} = useTranslation();
+
     if (defaultValue != null && value === defaultValue) {
         return null;
     }
@@ -27,6 +30,7 @@ export function Principal({value, defaultValue, long, className, comment, icons}
             icon = ic;
         }
     }
+    title = t(title);
     if (comment != null) {
         title = `${title} (${comment})`;
     }

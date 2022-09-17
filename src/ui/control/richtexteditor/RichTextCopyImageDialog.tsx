@@ -8,13 +8,13 @@ export interface RichTextCopyImageValues {
     url?: string;
 }
 
-type Props = RichTextEditorDialogProps<RichTextCopyImageValues>;
+type Props = RichTextEditorDialogProps<RichTextCopyImageValues> & WithTranslation;
 
 const mapPropsToValues = (): RichTextCopyImageValues => ({
     url: ""
 });
 
-const RichTextCopyImageDialog = ({t}: Props & WithTranslation) => (
+const RichTextCopyImageDialog = ({t}: Props) => (
     <InputField name="url" title={t("url")} autoFocus/>
 );
 

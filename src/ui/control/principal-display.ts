@@ -10,36 +10,36 @@ interface PrincipalDisplay {
 export function getPrincipalDisplay(principal: PrincipalValue | null | undefined): PrincipalDisplay {
     const display: PrincipalDisplay = {
         icon: "globe",
-        title: "Public"
+        title: "principal-title.public"
     };
     switch (principal) {
         case "signed":
             display.icon = "shield-halved";
-            display.title = "Signed";
+            display.title = "principal-title.signed";
             break;
 
         case "private":
         case "owner":
             display.icon = "lock";
-            display.title = "Only me";
+            display.title = "principal-title.only-me";
             break;
 
         case "secret":
         case "senior":
             display.icon = "user-secret";
-            display.title = "Author";
+            display.title = "principal-title.author";
             break;
 
         case "enigma":
         case "major":
         case "admin":
             display.icon = "hat-cowboy";
-            display.title = "Admin";
+            display.title = "principal-title.admin";
             break;
 
         case "none":
             display.icon = "ban";
-            display.title = "Nobody";
+            display.title = "principal-title.nobody";
     }
     return display;
 }

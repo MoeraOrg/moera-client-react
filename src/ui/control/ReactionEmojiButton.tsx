@@ -1,4 +1,5 @@
 import React, { MouseEventHandler, TouchEventHandler } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { REACTION_EMOJIS } from "api";
 import { EmojiButton } from "ui/control/index";
@@ -21,13 +22,15 @@ interface Props {
 
 const ReactionEmojiButton = ({icon, emoji, negative, caption, className, invisible, buttonRef, onMouseEnter,
                               onMouseLeave, onTouchStart, onReactionAdd, onReactionDelete}: Props) => {
+    const {t} = useTranslation();
+
     if (emoji == null) {
         return <EmojiButton icon={icon ? ["far", icon] : null} caption={caption} className={className}
                             invisible={invisible} buttonRef={buttonRef} onMouseEnter={onMouseEnter}
                             onMouseLeave={onMouseLeave} onTouchStart={onTouchStart} onClick={onReactionAdd}/>;
     } else {
         const re = !negative ? REACTION_EMOJIS.positive[emoji] : REACTION_EMOJIS.negative[emoji];
-        return <EmojiButton emoji={emoji} caption={re ? re.title : caption} color={re ? re.color : null}
+        return <EmojiButton emoji={emoji} caption={re ? t(re.title) : caption} color={re ? re.color : null}
                             className={className} buttonRef={buttonRef} onMouseEnter={onMouseEnter}
                             onMouseLeave={onMouseLeave} onTouchStart={onTouchStart} onClick={onReactionDelete}/>;
     }

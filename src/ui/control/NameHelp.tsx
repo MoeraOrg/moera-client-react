@@ -1,9 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-export const NameHelp = () => (
-    <div className="dialog-help">
-        The name must be 4 - 120 characters long. You may use any Unicode character (including
-        non-Latin alphabets), except whitespace and punctuation. Only this punctuation is allowed:
-        {" "}<b>!</b> <b>%</b> <b>&</b> <b>*</b> <b>-</b> <b>.</b> <b>?</b>
-    </div>
-);
+export const NameHelp = () => {
+    const {t} = useTranslation();
+
+    return (
+        <div className="dialog-help">
+            {t("name-help") + " "}<b>!</b> <b>%</b> <b>&</b> <b>*</b> <b>-</b> <b>.</b> <b>?</b>
+        </div>
+    );
+}

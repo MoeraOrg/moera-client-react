@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import avatarPlaceholder from "./avatar.png";
 import { getSetting } from "state/settings/selectors";
@@ -55,6 +56,8 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 export function AvatarImpl({avatar, ownerName, size, shape: shapeLocal, className, draggable = true, onClick,
                             onMouseEnter, onMouseLeave, onTouchStart, imageRef, rootPage, shapeGlobal}: Props) {
+    const {t} = useTranslation();
+
     if (window.loadedAvatars == null) {
         window.loadedAvatars = new Map<string, string>();
     }
@@ -63,12 +66,12 @@ export function AvatarImpl({avatar, ownerName, size, shape: shapeLocal, classNam
     if (avatar != null) {
         src = window.loadedAvatars.get(avatar.path) ?? `${rootPage}/media/${avatar.path}`;
         window.loadedAvatars.set(avatar.path, src);
-        alt = "Avatar";
+        alt = t("avatar");
         shape = effectiveShape(avatar.shape ?? null, shapeLocal, shapeGlobal);
         style = undefined;
     } else {
         src = avatarPlaceholder;
-        alt = "Avatar placeholder";
+        alt = t("avatar-placeholder");
         shape = effectiveShape("circle", shapeLocal, shapeGlobal);
         style = {filter: `hue-rotate(${nameAngle(ownerName)}deg)`};
     }

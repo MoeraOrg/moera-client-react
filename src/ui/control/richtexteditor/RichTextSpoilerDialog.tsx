@@ -1,4 +1,5 @@
 import React from 'react';
+import { WithTranslation } from 'react-i18next';
 
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
@@ -13,8 +14,8 @@ const mapPropsToValues = (): RichTextSpoilerValues => ({
     title: ""
 });
 
-const RichTextSpoilerDialog = () => (
-    <InputField name="title" title="Alert text" placeholder="spoiler!" autoFocus/>
+const RichTextSpoilerDialog = ({t}: Props & WithTranslation) => (
+    <InputField name="title" title={t("alert-text")} placeholder="spoiler!" autoFocus/>
 );
 
-export default richTextEditorDialog<Props, RichTextSpoilerValues>("Spoiler", mapPropsToValues, RichTextSpoilerDialog);
+export default richTextEditorDialog<Props, RichTextSpoilerValues>("spoiler", mapPropsToValues, RichTextSpoilerDialog);

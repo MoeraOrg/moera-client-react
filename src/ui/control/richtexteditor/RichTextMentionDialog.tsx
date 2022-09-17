@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { NameSelector } from "ui/control/NameSelector";
@@ -9,42 +10,25 @@ type Props = {
     onSubmit: (ok: boolean, values: NameListItem) => void;
 };
 
-type State = {
-    query: string;
-};
+export default function RichTextMentionDialog({show, onSubmit}: Props) {
+    const [query, setQuery] = useState<string>("");
+    const {t} = useTranslation();
 
-export default class RichTextMentionDialog extends React.PureComponent<Props, State> {
+    const onChange = (newQuery: string | null) => setQuery(newQuery ?? "");
 
-    state = {
-        query: ""
+    const onSubmitted = (success: boolean, data: NameListItem) => onSubmit(success, data);
+
+    const onClose = () => onSubmit(false, {nodeName: query});
+
+    if (!show) {
+        return null;
     }
 
-    onChange = (query: string | null) => {
-        this.setState({query: query ?? ""});
-    }
-
-    onSubmit = (success: boolean, data: NameListItem) => {
-        this.props.onSubmit(success, data);
-    }
-
-    onClose = () => {
-        this.onSubmit(false, {nodeName: this.state.query});
-    }
-
-    render() {
-        const {show} = this.props;
-
-        if (!show) {
-            return null;
-        }
-
-        return (
-            <ModalDialog title="Insert a mention" centered={false} onClose={this.onClose}>
-                <div className="modal-body">
-                    <NameSelector onSubmit={this.onSubmit} onChange={this.onChange}/>
-                </div>
-            </ModalDialog>
-        );
-    }
-
+    return (
+        <ModalDialog title={t("insert-mention")} centered={false} onClose={onClose}>
+            <div className="modal-body">
+                <NameSelector onSubmit={onSubmitted} onChange={onChange}/>
+            </div>
+        </ModalDialog>
+    );
 }

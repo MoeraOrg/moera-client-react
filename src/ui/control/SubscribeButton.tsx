@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -33,6 +34,8 @@ function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, 
                           homeSet, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
                           subscriptionHidden, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
                           feedSubscriptionSetVisibility}: Props) {
+    const {t} = useTranslation();
+
     if (!homeSet || !show) {
         return null;
     }
@@ -90,13 +93,13 @@ function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, 
     return (
         <DropdownMenu className="btn btn-sm btn-outline-primary subscribe-button" items={[
             {
-                title: "Subscribe back",
+                title: t("subscribe-back"),
                 href: peerHref,
                 onClick: onSubscribe,
                 show: !subscribed
             },
             {
-                title: "Unsubscribe",
+                title: t("unsubscribe"),
                 href: peerHref,
                 onClick: onUnsubscribe,
                 show: subscribed
@@ -105,34 +108,34 @@ function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, 
                 divider: true
             },
             {
-                title: "Hide my subscription",
+                title: t("hide-my-subscription"),
                 href: peerHref,
                 onClick: onSubscriptionHide,
                 show: subscriptionHideable
             },
             {
-                title: "Unhide my subscription",
+                title: t("unhide-my-subscription"),
                 href: peerHref,
                 onClick: onSubscriptionShow,
                 show: !subscriptionHideable && subscriptionUnhideable
             },
             {
-                title: "Hide subscription to me",
+                title: t("hide-subscription-to-me"),
                 href: peerHref,
                 onClick: onSubscriberHide,
                 show: subscriberHideable
             },
             {
-                title: "Unhide subscription to me",
+                title: t("unhide-subscription-to-me"),
                 href: peerHref,
                 onClick: onSubscriberShow,
                 show: !subscriberHideable && subscriberUnhideable
             }
         ]}>
             {!subscribed ?
-                "Subscribed to me"
+                t("subscribed-to-me")
             :
-                (!subscribedToMe ? "Subscribed" : "Mutually subscribed")
+                (!subscribedToMe ? t("subscribed") : t("mutually-subscribed"))
             }
             &nbsp;&nbsp;
             <FontAwesomeIcon icon="chevron-down"/>

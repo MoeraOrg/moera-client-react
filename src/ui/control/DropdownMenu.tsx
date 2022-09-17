@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isStandaloneMode } from "state/navigation/selectors";
@@ -61,6 +62,7 @@ function DropdownMenuImpl({items, className, children, standalone}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
+    const {t} = useTranslation();
 
     const itemList = buildItems(items, standalone);
     return (
@@ -83,7 +85,7 @@ function DropdownMenuImpl({items, className, children, standalone}: Props) {
                             </React.Fragment>
                         ))
                         :
-                        <span className="dropdown-item disabled no-actions">No actions</span>
+                        <span className="dropdown-item disabled no-actions">{t("no-actions")}</span>
                     }
                 </div>
             }

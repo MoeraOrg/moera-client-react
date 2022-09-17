@@ -1,6 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { REACTION_EMOJIS } from "api";
 import Twemoji from "ui/twemoji/Twemoji";
@@ -22,9 +23,11 @@ interface Props extends EmojiProps {
 
 export function EmojiChoice({negative, emoji, invisible, dimmed, marked, onClick}: Props) {
     const re = !negative ? REACTION_EMOJIS.positive[emoji] : REACTION_EMOJIS.negative[emoji];
+    const {t} = useTranslation();
+
     return (
         <div className={cx("choice", {invisible, dimmed})} onClick={() => onClick(negative, emoji)}>
-            <Twemoji key={emoji} code={emoji} title={re ? re.title : ""}/>
+            <Twemoji key={emoji} code={emoji} title={re ? t(re.title) : ""}/>
             {marked && <div className="marker"><FontAwesomeIcon icon="certificate"/></div>}
         </div>
     );

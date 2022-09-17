@@ -2,6 +2,7 @@ import React from 'react';
 import * as immutable from 'object-path-immutable';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans, WithTranslation, withTranslation } from 'react-i18next';
 
 import {
     MAIN_NEGATIVE_REACTIONS,
@@ -15,13 +16,15 @@ import { EmojiProps } from "ui/control/EmojiChoice";
 import EmojiList from "util/emoji-list";
 import "./EmojiListDialog.css";
 
-interface Props {
+const StarMarker = () => <span className="marker"><FontAwesomeIcon icon="certificate"/></span>;
+
+type Props = {
     negative: boolean;
     value: string;
     advanced?: boolean;
     onConfirm: (emojis: string) => void;
     onCancel: () => void;
-}
+} & WithTranslation;
 
 interface Marks {
     dimmed: boolean;
@@ -33,7 +36,7 @@ interface State {
     other: boolean;
 }
 
-export class EmojiListDialog extends React.PureComponent<Props, State> {
+class EmojiListDialogImpl extends React.PureComponent<Props, State> {
 
     constructor(props: Props, context: any) {
         super(props, context);
@@ -150,7 +153,7 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
     };
 
     render() {
-        const {negative, advanced, onCancel} = this.props;
+        const {negative, advanced, onCancel, t} = this.props;
 
         const additionalReactions = this.getAdditionalReactions();
         return (
@@ -158,9 +161,9 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
                 <div className="emoji-list-dialog modal-body">
                     {advanced ?
                         <div className="help">
-                            Only selected are allowed, marked by{" "}
-                            <span className="marker"><FontAwesomeIcon icon="certificate"/></span>
-                            {" "}are preferred
+                            <Trans i18nKey="only-selected-allowed-star-preferred">
+                                <StarMarker/>
+                            </Trans>
                         </div>
                     :
                         <div className="text-end">
@@ -174,7 +177,7 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
                                         }
                                     )}
                                     onClick={this.onOtherClick}>
-                                {this.state.other ? "Selected are preferred" : "Only selected are allowed"}
+                                {this.state.other ? t("selected-preferred") : t("only-selected-allowed")}
                             </button>
                         </div>
                     }
@@ -183,9 +186,9 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
                         {advanced ||
                             <div className={cx("btn-group", {"ms-3": additionalReactions.length > 0})}>
                                 <button type="button" className="btn btn-sm btn-outline-secondary"
-                                        onClick={this.onSelectAll}>Select all</button>
+                                        onClick={this.onSelectAll}>{t("select-all")}</button>
                                 <button type="button" className="btn btn-sm btn-outline-secondary"
-                                        onClick={this.onUnselectAll}>Unselect all</button>
+                                        onClick={this.onUnselectAll}>{t("unselect-all")}</button>
                             </div>
                         }
                     </h5>
@@ -193,18 +196,21 @@ export class EmojiListDialog extends React.PureComponent<Props, State> {
                                       onClick={this.onClick} autoFocus/>
                     {additionalReactions.length > 0 &&
                         <>
-                            <h5 className="mt-3">Additional</h5>
+                            <h5 className="mt-3">{t("additional")}</h5>
                             <EmojiSelector negative={negative} reactions={additionalReactions} fixedWidth={false}
                                               onClick={this.onClick}/>
                         </>
                     }
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={onCancel}>Cancel</Button>
-                    <Button variant="primary" onClick={this.onConfirm}>OK</Button>
+                    <Button variant="secondary" onClick={onCancel}>{t("cancel")}</Button>
+                    <Button variant="primary" onClick={this.onConfirm}>{t("ok")}</Button>
                 </div>
             </ModalDialog>
         );
     }
 
 }
+
+// the functional wrapper is needed due to a strange TS error
+export const EmojiListDialog = withTranslation()((props: Props) => <EmojiListDialogImpl {...props}/>);

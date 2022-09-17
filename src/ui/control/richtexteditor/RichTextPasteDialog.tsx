@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
@@ -13,6 +14,7 @@ type Props = {
 
 export default function RichTextPasteDialog({show, onSubmit}: Props) {
     const [persist, setPersist] = useState(false);
+    const {t} = useTranslation();
 
     if (!show) {
         return null;
@@ -30,20 +32,24 @@ export default function RichTextPasteDialog({show, onSubmit}: Props) {
     }
 
     return (
-        <ModalDialog title="Paste text with formatting" className="rich-text-paste-dialog" onKeyDown={onKeyDown}
+        <ModalDialog title={t("paste-with-formatting")} className="rich-text-paste-dialog" onKeyDown={onKeyDown}
                      onClose={() => onSubmit("none", false)}>
             <div className="modal-body">
-                The clipboard contains text with formatting. Do you want to paste the text with formatting tags?
+                {t("clipboard-contains-formatting")}
                 <div className="check">
                     <label>
                         <input type="checkbox" checked={persist} onChange={() => setPersist(!persist)}/>
-                        Don't ask next time
+                        {t("dont-ask-next-time")}
                     </label>
                 </div>
             </div>
             <div className="modal-footer">
-                <Button variant="warning" onClick={() => onSubmit("text", persist)}>Text only (t)</Button>
-                <Button variant="primary" onClick={() => onSubmit("html", persist)}>Preserve formatting (p)</Button>
+                <Button variant="warning" onClick={() => onSubmit("text", persist)}>
+                    {t("text-only")} (t)
+                </Button>
+                <Button variant="primary" onClick={() => onSubmit("html", persist)}>
+                    {t("preserve-formatting")} (p)
+                </Button>
             </div>
         </ModalDialog>
     );

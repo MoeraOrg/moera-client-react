@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import { useField } from 'formik';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { PostingFeatures } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
@@ -38,6 +39,7 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
     const [, {value}, {setValue}] = useField<VerifiedMediaFile | null>("mediaFile");
+    const {t} = useTranslation();
 
     const onImageUploadSuccess = (index: number, mediaFile: VerifiedMediaFile) => {
         setUploading(false);
@@ -110,6 +112,7 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
         uploadImage([externalImage]);
         uploadingExternalImage?.();
     }
+    const buttonsTitle = !Browser.isTinyScreen() ? "upload-or-copy-or-drop-images" : "upload-or-copy-images";
 
     return (
         <div className={cx(
@@ -117,9 +120,9 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
             {"drag-accept": isDragAccept, "drag-reject": isDragReject}
         )} {...getRootProps()}>
             {uploading ?
-                `Uploading ${uploadProgress}% ...`
+                t("uploading-file", {progress: uploadProgress})
             : downloading ?
-                "Downloading image..."
+                t("downloading-image")
             :
                 (src != null ?
                     <div className="uploaded-image">
@@ -128,15 +131,15 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
                     </div>
                 :
                     <>
-                        <Button variant="outline-info" size="sm" onClick={open}>Upload image</Button>
-                        {" or "}
-                        <Button variant="outline-secondary" size="sm" onClick={openCopyImage}>Copy image</Button>
-                        {!Browser.isTinyScreen() ? " or drop it here" : ""}
+                        <Trans i18nKey={buttonsTitle}>
+                            <Button variant="outline-info" size="sm" onClick={open}/>
+                            <Button variant="outline-secondary" size="sm" onClick={openCopyImage}/>
+                        </Trans>
                         {!forceCompress &&
                             <>
                                 <br/>
                                 <label className="form-check-label" htmlFor="dialogImagesCompress">
-                                    Compress image
+                                    {t("compress-images")}
                                 </label>
                                 <input className="form-check-input" type="checkbox" checked={compress}
                                        onChange={e => setCompress(e.target.checked)} id="dialogImagesCompress"/>

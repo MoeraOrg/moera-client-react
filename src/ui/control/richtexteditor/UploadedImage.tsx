@@ -4,6 +4,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { VerifiedMediaFile } from "api/node/images-upload";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
@@ -29,13 +30,14 @@ function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDel
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,
     };
+    const {t} = useTranslation();
 
     return (
         <div className={cx("rich-text-editor-uploaded-image", {"dragged": dragged})}>
             {showMenu &&
                 <DropdownMenu items={[
                     {
-                        title: "Edit...",
+                        title: t("edit-ellipsis"),
                         href: null,
                         onClick: () => openImageEditDialog(nodeName, media),
                         show: media.postingId != null
@@ -44,7 +46,7 @@ function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDel
                         divider: true
                     },
                     {
-                        title: "Delete",
+                        title: t("delete"),
                         href: null,
                         onClick: onDelete!,
                         show: onDelete != null

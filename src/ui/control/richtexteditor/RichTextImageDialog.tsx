@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
-import { useTranslation } from 'react-i18next';
+import { WithTranslation } from 'react-i18next';
 
 import { Choice, PostingFeatures } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
@@ -91,14 +91,13 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
 });
 
 function RichTextImageDialog({features, noMedia = false, nodeName, forceCompress,
-                              onAdded, onDeleted, externalImage, uploadingExternalImage}: Props) {
+                              onAdded, onDeleted, externalImage, uploadingExternalImage, t}: Props & WithTranslation) {
     const [showAlign, setShowAlign] = useState<boolean>(false);
     const [showCaption, setShowCaption] = useState<boolean>(false);
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [showAlt, setShowAlt] = useState<boolean>(false);
     const [, {value: source}] = useField<string>("source");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
-    const {t} = useTranslation();
 
     return (
         <>
@@ -134,4 +133,4 @@ function RichTextImageDialog({features, noMedia = false, nodeName, forceCompress
     );
 }
 
-export default richTextEditorDialog<Props, RichTextImageValues>("Insert an image", mapPropsToValues, RichTextImageDialog);
+export default richTextEditorDialog<Props, RichTextImageValues>("insert-image", mapPropsToValues, RichTextImageDialog);
