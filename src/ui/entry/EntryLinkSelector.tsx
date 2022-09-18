@@ -2,6 +2,7 @@ import React from 'react';
 // @ts-ignore
 import shortenUrl from 'shorten-url';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { useButtonPopper } from "ui/hook";
 import { Button } from "ui/control";
@@ -16,6 +17,7 @@ export default function EntryLinkSelector({urls, onSelect}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-start");
+    const {t} = useTranslation();
 
     if (urls.length === 0) {
         return null;
@@ -33,7 +35,7 @@ export default function EntryLinkSelector({urls, onSelect}: Props) {
         <div className="entry-link-selector">
             <div ref={setButtonRef} className="btn-group dropdown">
                 <Button variant="outline-secondary" size="sm" className="dropdown-toggle" onClick={onToggle}>
-                    Links{" "}
+                    {t("links") + " "}
                     <span className="badge bg-info text-light">{uniqueUrls.length}</span>
                 </Button>
                 {visible &&

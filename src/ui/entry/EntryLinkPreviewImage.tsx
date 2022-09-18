@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -22,9 +23,11 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function EntryLinkPreviewImage({mediaFile, loading, rootPage, carte}: Props) {
+    const {t} = useTranslation();
+
     if (mediaFile == null) {
         if (loading) {
-            return <div className="image-loading">Loading preview <Loading active={true}/></div>;
+            return <div className="image-loading">{t("loading-preview")} <Loading active={true}/></div>;
         }
         return null;
     }

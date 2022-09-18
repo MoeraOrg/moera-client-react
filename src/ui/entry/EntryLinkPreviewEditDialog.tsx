@@ -1,4 +1,5 @@
 import React from 'react';
+import { WithTranslation } from 'react-i18next';
 
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import { InputField, TextField } from "ui/control/field";
@@ -18,12 +19,12 @@ const mapPropsToValues = (props: Props): EntryLinkPreviewEditValues => ({
     description: props.description
 });
 
-const EntryLinkPreviewEditDialog = () => (
+const EntryLinkPreviewEditDialog = ({t}: Props & WithTranslation) => (
     <>
-        <InputField name="title" title="Title" maxLength={75} autoFocus/>
-        <TextField name="description" title="Description" maxRows={3} maxLength={120}/>
+        <InputField name="title" title={t("title")} maxLength={75} autoFocus/>
+        <TextField name="description" title={t("description")} maxRows={3} maxLength={120}/>
     </>
 );
 
 export default richTextEditorDialog<Props, EntryLinkPreviewEditValues>(
-    "Edit link preview", mapPropsToValues, EntryLinkPreviewEditDialog);
+    "edit-link-preview", mapPropsToValues, EntryLinkPreviewEditDialog);

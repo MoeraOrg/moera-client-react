@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { LinkPreview, MediaAttachment } from "api/node/api-types";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
@@ -14,6 +15,7 @@ interface Props {
 
 export default function EntryLinkPreviews({nodeName, linkPreviews, limit, small, media}: Props) {
     const [expanded, setExpanded] = useState<boolean>(false);
+    const {t} = useTranslation();
 
     if (linkPreviews == null) {
         return null;
@@ -38,8 +40,7 @@ export default function EntryLinkPreviews({nodeName, linkPreviews, limit, small,
                 <>
                     <br/>
                     <button className="entry-link-previews-expand" onClick={onExpand}>
-                        {max != null ? "+" : "-"}{linkPreviews.length - 2}
-                        {linkPreviews.length === 3 ? " link" : " links"}
+                        {max != null ? "+" : "-"}{t("more-links", {count: linkPreviews.length - 2})}
                     </button>
                 </>
             }

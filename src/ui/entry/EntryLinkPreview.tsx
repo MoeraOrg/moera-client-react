@@ -2,6 +2,7 @@ import React, { MouseEventHandler, useState } from 'react';
 import * as URI from 'uri-js';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { DeleteButton } from "ui/control";
@@ -112,11 +113,15 @@ interface EditButtonProps {
     onClick?: MouseEventHandler;
 }
 
-export const EditButton = ({onClick}: EditButtonProps) => (
-    <div className="edit-button" title="Edit" onClick={onClick}>
+export const EditButton = ({onClick}: EditButtonProps) => {
+    const {t} = useTranslation();
+
+    return (
+        <div className="edit-button" title={t("edit")} onClick={onClick}>
         <span className="fa-layers fa-fw">
             <FontAwesomeIcon icon="circle"/>
             <span className="pen"><FontAwesomeIcon icon="pen" color="white"/></span>
         </span>
-    </div>
-);
+        </div>
+    );
+}

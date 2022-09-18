@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
@@ -11,23 +12,27 @@ import "./FeedTitle.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const FeedTitle = ({nodeName, fullName, title, avatar, fundraisers}: Props) => (
-    <div id="feed-title">
-        <div className="panel">
-            <Jump href="/profile" title="Profile" className="avatar-link">
-                <Avatar avatar={avatar} ownerName={nodeName} size={100}/>
-            </Jump>
-            <div className="body">
-                <div className="full-name">
-                    {fullName || NodeName.shorten(nodeName)}
-                    <DonateButton name={nodeName} fullName={fullName} fundraisers={fundraisers ?? null} styles="icon"/>
+const FeedTitle = ({nodeName, fullName, title, avatar, fundraisers}: Props) => {
+    const {t} = useTranslation();
+
+    return (
+        <div id="feed-title">
+            <div className="panel">
+                <Jump href="/profile" title={t("profile")} className="avatar-link">
+                    <Avatar avatar={avatar} ownerName={nodeName} size={100}/>
+                </Jump>
+                <div className="body">
+                    <div className="full-name">
+                        {fullName || NodeName.shorten(nodeName)}
+                        <DonateButton name={nodeName} fullName={fullName} fundraisers={fundraisers ?? null} styles="icon"/>
+                    </div>
+                    <div className="mention">{mentionName(nodeName)}</div>
+                    {title && <div className="title">{title}</div>}
                 </div>
-                <div className="mention">{mentionName(nodeName)}</div>
-                {title && <div className="title">{title}</div>}
             </div>
         </div>
-    </div>
-);
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({

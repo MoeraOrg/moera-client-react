@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
 import { ClientState } from "state/state";
@@ -30,6 +31,8 @@ function ImageEditDialog(props: Props) {
         show, media, rootPage, carte, loading, posting, saving, smileysEnabled, closeImageEditDialog, resetForm
     } = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (show) {
             resetForm({values: logic.mapPropsToValues(props)});
@@ -48,7 +51,7 @@ function ImageEditDialog(props: Props) {
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, media);
 
     return (
-        <ModalDialog title="Edit Image" onClose={onClose}>
+        <ModalDialog title={t("edit-image")} onClose={onClose}>
             <Form>
                 <div className="modal-body image-edit-dialog">
                     <img className="preview" alt="" src={src} width={imageWidth} height={imageHeight}/>
@@ -57,8 +60,8 @@ function ImageEditDialog(props: Props) {
                                    smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={onClose}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={saving}>OK</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
+                    <Button variant="primary" type="submit" loading={saving}>{t("ok")}</Button>
                 </div>
             </Form>
         </ModalDialog>

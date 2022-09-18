@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { closeEntryCopyTextDialog, entryCopyText, EntryCopyTextMode } from "state/entrycopytextdialog/actions";
 import { ClientState } from "state/state";
@@ -10,6 +11,8 @@ import "./EntryCopyTextDialog.css";
 type Props = ConnectedProps<typeof connector>;
 
 function EntryCopyTextDialog({show, body, nodeName, media, closeEntryCopyTextDialog, entryCopyText}: Props) {
+    const {t} = useTranslation();
+
     if (!show) {
         return null;
     }
@@ -22,14 +25,14 @@ function EntryCopyTextDialog({show, body, nodeName, media, closeEntryCopyTextDia
     }
 
     return (
-        <ModalDialog title="Copy text with formatting" className="entry-copy-text-dialog"
+        <ModalDialog title={t("copy-with-formatting")} className="entry-copy-text-dialog"
                      onClose={closeEntryCopyTextDialog}>
             <div className="modal-body">
-                The text contains formatting. Do you want to copy the text with formatting tags?
+                {t("text-contains-formatting")}
             </div>
             <div className="modal-footer">
-                <Button variant="warning" onClick={onSubmit("text")}>Text only</Button>
-                <Button variant="primary" onClick={onSubmit("html")}>Preserve formatting</Button>
+                <Button variant="warning" onClick={onSubmit("text")}>{t("text-only")}</Button>
+                <Button variant="primary" onClick={onSubmit("html")}>{t("preserve-formatting")}</Button>
             </div>
         </ModalDialog>
     );

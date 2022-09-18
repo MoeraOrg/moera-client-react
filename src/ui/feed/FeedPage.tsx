@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import debounce from 'lodash.debounce';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import FeedTitle from "ui/feed/FeedTitle";
 import FeedPageHeader from "ui/feed/FeedPageHeader";
@@ -31,7 +32,7 @@ interface OwnProps {
     shareable?: boolean;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+type Props = OwnProps & ConnectedProps<typeof connector> & WithTranslation;
 
 interface State {
     atTop: boolean;
@@ -285,7 +286,7 @@ class FeedPage extends React.PureComponent<Props, State> {
     render() {
         const {
             feedName, title, shareable, loadingFuture, loadingPast, stories, notViewed, notViewedMoment, postings,
-            before, after
+            before, after, t
         } = this.props;
         const {atTop, atBottom} = this.state;
 
@@ -297,7 +298,7 @@ class FeedPage extends React.PureComponent<Props, State> {
                     <FeedTitle/>
                     <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}
                                     totalAfterTop={0} notViewed={0} notViewedMoment={null}/>
-                    <div className="no-postings">Nothing yet.</div>
+                    <div className="no-postings">{t("nothing-yet")}</div>
                 </>
             );
         }
@@ -311,7 +312,7 @@ class FeedPage extends React.PureComponent<Props, State> {
                                 totalAfterTop={this.getTotalAfterTop()}
                                 notViewed={notViewed ?? 0} notViewedMoment={notViewedMoment ?? null}/>
                 <Page>
-                    <FeedSentinel loading={loadingFuture} title="Load newer posts" margin="250px 0px 0px 0px"
+                    <FeedSentinel loading={loadingFuture} title={t("load-newer-posts")} margin="250px 0px 0px 0px"
                                   visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
                                   onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
                     {stories
@@ -320,11 +321,11 @@ class FeedPage extends React.PureComponent<Props, State> {
                         .map(t => ({story: t, ...postings[t.postingId!]!}))
                         .map(({story, posting, deleting}) =>
                             <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
-                    <FeedSentinel loading={loadingPast} title="Load older posts" margin="0px 0px 250px 0px"
+                    <FeedSentinel loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 250px 0px"
                                   visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
                                   onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
                     {after <= Number.MIN_SAFE_INTEGER
-                        && <div className="feed-end">&mdash; You've reached the bottom &mdash;</div>}
+                        && <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>}
                 </Page>
             </>
         );
@@ -349,4 +350,4 @@ const connector = connect(
     { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor, feedStatusUpdate }
 );
 
-export default connector(FeedPage);
+export default connector(withTranslation()(FeedPage));

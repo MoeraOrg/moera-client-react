@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { feedScrollToAnchor } from "state/feeds/actions";
 import "./FeedTopButton.css";
@@ -14,23 +15,25 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, notViewedMoment, feedScrollToAnchor}: Props) => {
+    const {t} = useTranslation();
+
     if (atTop) {
         return null;
     }
 
-    let title = " Top";
+    let title = " " + t("top");
     let news = 0;
     if (totalAfterTop > 0) {
         if (notViewed > 0) {
             if (totalAfterTop > notViewed) {
-                title = ` ${totalAfterTop} more`;
+                title = " " + t("count-more", {count: totalAfterTop});
                 news = notViewed;
             } else {
                 title = "";
                 news = totalAfterTop;
             }
         } else {
-            title = ` ${totalAfterTop} more`;
+            title = " " + t("count-more", {count: totalAfterTop});
         }
     }
 
@@ -44,7 +47,7 @@ const FeedTopButton = ({feedName, atTop, totalAfterTop, notViewed, notViewedMome
                 e.preventDefault();
             }}>
                 <FontAwesomeIcon icon="arrow-up"/>{title}
-                {news > 0 && <span className="new">{news} new</span>}
+                {news > 0 && <span className="new">{t("count-new", {count: news})}</span>}
             </div>
         </div>
     );

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 import QRCode from 'react-qr-code';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientSettings, NodeName } from "api";
 import { FundraiserInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
 import { closeDonateDialog } from "state/donatedialog/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
@@ -14,7 +16,6 @@ import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
 import { getFundraiserAutoHref } from "ui/donatedialog/fundraiser-util";
 import { getSchemeOrDomain, hasSchemeOrDomain } from "util/url";
 import "./DonateDialog.css";
-import { isConnectedToHome } from "state/home/selectors";
 
 function getPreferredFundraiserIndex(fundraisers: FundraiserInfo[], prefix: string): number {
     if (!prefix) {
@@ -31,6 +32,7 @@ type Props = ConnectedProps<typeof connector>;
 function DonateDialog({show, name, fullName, fundraisers, connectedToHome, autoPreferred, preferredPrefix,
                        closeDonateDialog, settingsUpdate}: Props) {
     const [fundraiserIndex, setFundraiserIndex] = useState<number>(0);
+    const {t} = useTranslation();
 
     useEffect(
         () => setFundraiserIndex(getPreferredFundraiserIndex(fundraisers, preferredPrefix)),
@@ -46,16 +48,17 @@ function DonateDialog({show, name, fullName, fundraisers, connectedToHome, autoP
         && !window.Android.isDonationsEnabled()) {
 
         return (
-            <ModalDialog title="Donate" className="donate-dialog" onClose={closeDonateDialog}>
+            <ModalDialog title={t("donate")} className="donate-dialog" onClose={closeDonateDialog}>
                 <div className="modal-body">
-                    Donations feature is prohibited in Android apps downloaded from Google Play according to{" "}
-                    <a href="https://support.google.com/googleplay/android-developer/answer/9858738/">
-                        Google Play Payments Policy</a>.
-                    <br/><br/>
-                    Please use Moera web client for this.
+                    <Trans i18nKey="donations-android-prohibited">
+                        {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                        <a href="https://support.google.com/googleplay/android-developer/answer/9858738/"/>
+                        <br/>
+                        <br/>
+                    </Trans>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="danger" onClick={closeDonateDialog}>Close</Button>
+                    <Button variant="danger" onClick={closeDonateDialog}>{t("close")}</Button>
                 </div>
             </ModalDialog>
         );
@@ -76,9 +79,11 @@ function DonateDialog({show, name, fullName, fundraisers, connectedToHome, autoP
     }
 
     return (
-        <ModalDialog title="Donate" className="donate-dialog" onClose={closeDonateDialog}>
+        <ModalDialog title={t("donate")} className="donate-dialog" onClose={closeDonateDialog}>
             <div className="modal-body">
-                <div className="recipient">Donate to <span className="name">{recipientName}</span></div>
+                <div className="recipient">
+                    <Trans i18nKey="donate-to-recipient" values={{recipientName}}><span className="name"/></Trans>
+                </div>
                 <div className="fundraisers">
                     <ul className="nav nav-pills flex-md-column">
                         {fundraisers.map((fundraiser, index) =>

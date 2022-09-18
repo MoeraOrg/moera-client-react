@@ -81,7 +81,7 @@ function CommentDialog(props: Props) {
     };
 
     return (
-        <ModalDialog title="Edit Comment" className="comment-dialog" onClose={closeCommentDialog}>
+        <ModalDialog title={t("edit-comment")} className="comment-dialog" onClose={closeCommentDialog}>
             <ConflictWarning text={t("comment-edited-conflict")} show={conflict}
                              onClose={commentDialogConflictClose}/>
             <Form>

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
@@ -27,6 +28,7 @@ type Props = {
 function FeedPageHeader({feedName, title, empty = false, shareable = false, atTop, atBottom, totalAfterTop, notViewed,
                          notViewedMoment, avatar, ownerName}: Props) {
     const [avatarVisible, setAvatarVisible] = useState(window.scrollY >= getPageHeaderHeight());
+    const {t} = useTranslation();
 
     const onScroll = useCallback(
         () => setAvatarVisible(window.scrollY >= getPageHeaderHeight()),
@@ -44,7 +46,7 @@ function FeedPageHeader({feedName, title, empty = false, shareable = false, atTo
         <PageHeader>
             <h2>
                 {avatarVisible &&
-                    <Jump href="/profile" title="Profile" className="avatar-link">
+                    <Jump href="/profile" title={t("profile")} className="avatar-link">
                         <Avatar avatar={avatar} ownerName={ownerName} size={40}/>
                     </Jump>
                 }

@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
+import { PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { ExtPostingInfo } from "state/postings/state";
 import { isAtHomeNode, isPermitted, ProtectedObject } from "state/node/selectors";
@@ -27,18 +29,19 @@ import PostingButtons from "ui/posting/PostingButtons";
 import Jump from "ui/navigation/Jump";
 import "ui/posting/Posting.css";
 import "ui/entry/Entry.css";
-import { PrincipalValue } from "api/node/api-types";
 
 interface ContentProps {
     posting: ExtPostingInfo;
 }
 
 function Content({posting}: ContentProps) {
+    const {t} = useTranslation();
+
     if (posting.bodyPreview != null && posting.bodyPreview.text) {
         return (
             <div className="content">
                 <EntryHtml postingId={posting.id} html={posting.bodyPreview.text} nodeName="" media={posting.media}/>
-                <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">Continue Reading &rarr;</Jump>
+                <Jump href={`/post/${posting.id}`} className="btn btn-link read-more">{t("continue-reading")}</Jump>
             </div>
         );
     } else {

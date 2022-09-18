@@ -43,9 +43,7 @@ function ResetForm(props: Props) {
         <ConnectDialogModal title={t("set-home-password")} buttonCaption={t("set-password-and-connect")}>
             {emailHint &&
                 <div className="instructions">
-                    <Trans i18nKey="reset-password-hint-instructions" values={emailHint}>
-                        <b/>
-                    </Trans>
+                    <Trans i18nKey="reset-password-hint-instructions" values={{emailHint}}><b/></Trans>
                 </div>
             }
             <InputField name="resetToken" title={t("secret-code")} autoFocus/>
