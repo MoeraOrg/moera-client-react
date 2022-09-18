@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { Button, NameSelector } from "ui/control";
@@ -12,6 +13,7 @@ type Props = ConnectedProps<typeof connector>;
 
 function OwnerNavigator({ownerName, switching, ownerSwitch, ownerSwitchClose}: Props) {
     const [query, setQuery] = useState<string>("");
+    const {t} = useTranslation();
 
     const onChange = (query: string | null) => {
         if (query != null) {
@@ -35,7 +37,7 @@ function OwnerNavigator({ownerName, switching, ownerSwitch, ownerSwitchClose}: P
         <div id="owner-navigator">
             <NameSelector defaultQuery={NodeName.shorten(ownerName) ?? undefined} onChange={onChange}
                           onSubmit={onSubmit}/>
-            <Button variant="secondary" size="sm" loading={switching} onClick={onButtonClick}>Go</Button>
+            <Button variant="secondary" size="sm" loading={switching} onClick={onButtonClick}>{t("go")}</Button>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getHomeRootLocation } from "state/home/selectors";
@@ -17,6 +18,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function Connections({hide, location, owner, roots, openConnectDialog, openSignUpDialog}: Props) {
+    const {t} = useTranslation();
+
     const onAddClick = () => {
         openConnectDialog();
         hide();
@@ -44,7 +47,7 @@ function Connections({hide, location, owner, roots, openConnectDialog, openSignU
                         <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
                                   linked={false} popup={false}/><br/>
                         {location}<br/>
-                        <span className="connected">Connected</span>
+                        <span className="connected">{t("connected")}</span>
                     </div>
                 :
                     <ConnectionItem key={root.url} name={root.name} url={root.url}
@@ -52,10 +55,10 @@ function Connections({hide, location, owner, roots, openConnectDialog, openSignU
                                     onDisconnect={onDisconnect(root.url)}/>
             ))}
             <div className="connection-add" onClick={onAddClick}>
-                <FontAwesomeIcon icon="plus"/> Add connection
+                <FontAwesomeIcon icon="plus"/> {t("add-connection")}
             </div>
             <div className="connection-sign-up">
-                <Button variant="primary" size="sm" onClick={onSignUpClick}>Sign Up</Button>
+                <Button variant="primary" size="sm" onClick={onSignUpClick}>{t("sign-up")}</Button>
             </div>
         </div>
     );

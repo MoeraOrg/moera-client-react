@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { Button, ModalDialog } from "ui/control";
 import { closeMessageBox } from "state/messagebox/actions";
@@ -10,11 +11,14 @@ const forwardAction = (action: any) => action;
 
 type Props = ConnectedProps<typeof connector>;
 
-class MessageBox extends React.PureComponent<Props> {
+function MessageBox({show, message, onClose, closeMessageBox, forwardAction}: Props) {
+    const {t} = useTranslation();
 
-    onClose = () => {
-        const {closeMessageBox, onClose, forwardAction} = this.props;
+    if (!show) {
+        return null;
+    }
 
+    const onCloseClick = () => {
         closeMessageBox();
         if (onClose) {
             if (typeof(onClose) === "function") {
@@ -25,29 +29,18 @@ class MessageBox extends React.PureComponent<Props> {
         }
     };
 
-    getMessage() {
-        return htmlEntities(this.props.message ?? "")
+    const escapedMessage = htmlEntities(message ?? "")
             .replace("&lt;b&gt;", "<b>") // Only <b></b> tag is allowed
             .replace("&lt;/b&gt;", "</b>");
-    }
 
-    render() {
-        const {show} = this.props;
-
-        if (!show) {
-            return null;
-        }
-
-        return (
-            <ModalDialog risen onClose={this.onClose}>
-                <div className="modal-body" dangerouslySetInnerHTML={{__html: this.getMessage()}}/>
-                <div className="modal-footer">
-                    <Button variant="primary" onClick={this.onClose} autoFocus>OK</Button>
-                </div>
-            </ModalDialog>
-        );
-    }
-
+    return (
+        <ModalDialog risen onClose={onClose}>
+            <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
+            <div className="modal-footer">
+                <Button variant="primary" onClick={onCloseClick} autoFocus>{t("ok")}</Button>
+            </div>
+        </ModalDialog>
+    );
 }
 
 const connector = connect(

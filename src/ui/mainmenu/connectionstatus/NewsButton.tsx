@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import Jump from "ui/navigation/Jump";
 import { ClientState } from "state/state";
@@ -14,6 +15,8 @@ import "./NewsButton.css";
 type Props = ConnectedProps<typeof connector>;
 
 const NewsButton = ({atHome, atHomeNews, count, moment, atBeginning, targetStory}: Props) => {
+    const {t} = useTranslation();
+
     let href = "/news";
     if (targetStory === "earliest-new") {
         if (atHome) {
@@ -27,7 +30,7 @@ const NewsButton = ({atHome, atHomeNews, count, moment, atBeginning, targetStory
 
     return (
         <Jump nodeName=":" href={href} className={cx("connection-button", "news-button", {"active": atHomeNews})}
-              title="Your news">
+              title={t("your-news")}>
             <FontAwesomeIcon icon="newspaper"/>
             {count != null && count > 0 && <div className="count">{count}</div>}
         </Jump>
