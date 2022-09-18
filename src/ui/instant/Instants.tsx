@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
-import { confirmBox } from "state/confirmbox/actions";
 import { swipeRefreshUpdate } from "state/navigation/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
@@ -16,71 +16,65 @@ type Props = {
     instantCount: number;
 } & ConnectedProps<typeof connector>;
 
-class Instants extends React.PureComponent<Props> {
+function Instants({hide, instantCount, loadingPast, after, stories, feedPastSliceLoad, feedStatusUpdate,
+                   swipeRefreshUpdate}: Props) {
+    const {t} = useTranslation();
 
-    #pastIntersecting = true;
+    const pastIntersecting = useRef<boolean>(true);
 
-    componentDidMount() {
-        window.closeLightDialog = this.props.hide;
+    useEffect(() => {
+        window.closeLightDialog = hide;
         if (window.Android) {
-            this.props.swipeRefreshUpdate();
+            swipeRefreshUpdate();
         }
-    }
 
-    componentWillUnmount() {
-        window.closeLightDialog = null;
-        if (window.Android) {
-            this.props.swipeRefreshUpdate();
+        return () => {
+            window.closeLightDialog = null;
+            if (window.Android) {
+                swipeRefreshUpdate();
+            }
         }
-    }
+    }, [hide, swipeRefreshUpdate]);
 
-    onSentinelPast = (intersecting: boolean) => {
-        this.#pastIntersecting = intersecting;
-        if (this.#pastIntersecting) {
-            this.loadPast();
-        }
-    }
-
-    loadPast = () => {
-        if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
+    const loadPast = () => {
+        if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        this.props.feedPastSliceLoad(":instant");
+        feedPastSliceLoad(":instant");
     }
 
-    onReadAll = () => {
-        const {stories, feedStatusUpdate} = this.props;
+    const onSentinelPast = (intersecting: boolean) => {
+        pastIntersecting.current = intersecting;
+        if (pastIntersecting.current) {
+            loadPast();
+        }
+    }
 
+    const onReadAll = () => {
         if (stories == null || stories.length === 0) {
             return;
         }
         feedStatusUpdate(":instant", null, true, stories[0].moment);
     }
 
-    render() {
-        const {hide, loadingPast, after, stories, instantCount} = this.props;
-
-        return (
-            <div id="instants">
-                <div className="header">
-                    <div className="title">Notifications</div>
-                    <div className="action" onClick={this.onReadAll}>Mark All as Read</div>
-                </div>
-                <div className="content">
-                    {stories.map((story, i) =>
-                        <InstantStory key={story.moment} story={story} hide={hide} lastNew={i + 1 === instantCount}/>
-                    )}
-                    <InstantsSentinel loading={loadingPast} title="Load more..." margin="0px 0px 100px 0px"
-                                  visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
-                                  onClick={this.loadPast}/>
-                </div>
-                <div className="footer">
-                    <div className="build-number">rev {BUILD_NUMBER}</div>
-                </div>
+    return (
+        <div id="instants">
+            <div className="header">
+                <div className="title">{t("instants")}</div>
+                <div className="action" onClick={onReadAll}>{t("mark-all-read")}</div>
             </div>
-        );
-    }
-
+            <div className="content">
+                {stories.map((story, i) =>
+                    <InstantStory key={story.moment} story={story} hide={hide} lastNew={i + 1 === instantCount}/>
+                )}
+                <InstantsSentinel loading={loadingPast} title={t("load-more")} margin="0px 0px 100px 0px"
+                              visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast} onClick={loadPast}/>
+            </div>
+            <div className="footer">
+                <div className="build-number">rev {BUILD_NUMBER}</div>
+            </div>
+        </div>
+    );
 }
 
 const connector = connect(
@@ -89,7 +83,7 @@ const connector = connect(
         after: getFeedState(state, ":instant").after,
         stories: getFeedState(state, ":instant").stories
     }),
-    { feedPastSliceLoad, feedStatusUpdate, confirmBox, swipeRefreshUpdate }
+    { feedPastSliceLoad, feedStatusUpdate, swipeRefreshUpdate }
 );
 
 export default connector(Instants);

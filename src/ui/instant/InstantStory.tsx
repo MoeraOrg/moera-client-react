@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { storyReadingUpdate } from "state/stories/actions";
@@ -21,6 +22,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: Props) {
+    const {t} = useTranslation();
+
     const onJump = (href: string, performJump: () => void) => {
         hide();
         performJump();
@@ -51,7 +54,7 @@ function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: P
                 <time className="date" dateTime={formatISO(publishDate)}>{formatDistanceToNow(publishDate)}</time>
             </div>
             <div className="sidebar">
-                <span className="envelope" title={story.read ? "Mark as Unread" : "Mark as Read"}
+                <span className="envelope" title={story.read ? t("mark-unread") : t("mark-read")}
                       onClick={onEnvelope}>
                     <FontAwesomeIcon icon={["far", story.read ? "envelope-open" : "envelope"]}/>
                 </span>

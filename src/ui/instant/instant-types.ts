@@ -4,14 +4,12 @@ import { StoryInfo, StoryType } from "api/node/api-types";
 import { ExtStoryInfo } from "state/feeds/state";
 
 interface InstantTypeDetails {
-    title?: string;
     color?: string;
     icon?: IconProp;
 }
 
 const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     "posting-added": {
-        title: "Post added",
         color: "var(--bs-green)",
         icon: "pen-alt"
     },
@@ -24,62 +22,50 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     "comment-reaction-added-negative": {
     },
     "mention-posting": {
-        title: "Mention in post",
         color: "var(--bs-blue)",
         icon: "at"
     },
     "mention-comment": {
-        title: "Mention in comment",
         color: "var(--bs-blue)",
         icon: "at"
     },
     "subscriber-added": {
-        title: "Subscribed",
         color: "var(--bs-indigo)",
         icon: "eye"
     },
     "subscriber-deleted": {
-        title: "Unsubscribed",
         color: "var(--bs-indigo)",
         icon: "eye-slash"
     },
     "comment-added": {
-        title: "Commented",
         color: "var(--green-light)",
         icon: "comment"
     },
     "remote-comment-added": {
-        title: "Commented",
         color: "var(--green-light)",
         icon: "comment"
     },
     "reply-comment": {
-        title: "Reply to comment",
         color: "var(--green-light)",
         icon: "reply"
     },
     "comment-post-task-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
     "comment-update-task-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
     "posting-updated": {
-        title: "Post updated",
         color: "var(--bs-green)",
         icon: "pen-alt"
     },
     "posting-post-task-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
     "posting-update-task-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
@@ -92,27 +78,22 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     "comment-media-reaction-added-negative": {
     },
     "posting-media-reaction-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
     "comment-media-reaction-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
     "posting-subscribe-task-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
     "posting-reaction-task-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     },
     "comment-reaction-task-failed": {
-        title: "Operation failed",
         color: "var(--incorrect)",
         icon: "exclamation-circle"
     }

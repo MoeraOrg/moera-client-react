@@ -33,29 +33,30 @@ function formatHeading(entry: StorySummaryEntry | null | undefined): string {
 }
 
 function formatList<T>(entries: T[] | null | undefined, total: number | null | undefined,
-                       formatter: (entry: T) => string): string {
+                       formatter: (entry: T) => string, t: TFunction): string {
     let summary = "";
     if (entries != null && total != null) {
         if (entries.length > 0) {
             summary += formatter(entries[0]);
         }
         if (entries.length > 1) {
-            summary += total === 2 ? " and " : ", ";
+            summary += total === 2 ? ` ${t("instant-summary.and")} ` : ", ";
             summary += formatter(entries[1]);
         }
         if (total > 2) {
-            summary += total === 3 ? " and 1 other" : ` and ${total} others`;
+            summary += " " + t("instant-summary.and-others", {count: total - 2});
         }
     }
     return summary;
 }
 
-function formatListOfComments(data: StorySummaryData): string {
-    return formatList(data.comments, data.totalComments, formatNodeName);
+function formatListOfComments(data: StorySummaryData, t: TFunction): string {
+    return formatList(data.comments, data.totalComments, formatNodeName, t);
 }
 
-function formatListOfReactions(data: StorySummaryData, negative: boolean): string {
-    return formatList(data.reactions, data.totalReactions, formatReaction) + (!negative ? " supported" : " opposed");
+function formatListOfReactions(data: StorySummaryData, negative: boolean, t: TFunction): string {
+    return formatList(data.reactions, data.totalReactions, formatReaction, t) + " "
+        + (!negative ? t("instant-summary.supported") : t("instant-summary.opposed"));
 }
 
 type IsTheirPredicate = (data: StorySummaryData, node: StorySummaryNode | StorySummaryEntry) => boolean;
@@ -73,192 +74,249 @@ function isByFirstCommentOwner(data: StorySummaryData, node: StorySummaryNode | 
 }
 
 function formatSomebodysPosting(data: StorySummaryData, homeOwnerName: string | null,
-                                isTheir: IsTheirPredicate): string {
+                                isTheir: IsTheirPredicate, t: TFunction): string {
     if (data.posting?.ownerName === homeOwnerName) {
-        return "your post";
+        return t("instant-summary.your-post");
     } else if (data.posting != null && isTheir(data, data.posting)) {
-        return "their post";
+        return t("instant-summary.their-post");
     } else {
-        return `${formatNodeName(data.posting)} post`;
+        return t("instant-summary.node-post", {node: formatNodeName(data.posting)});
     }
 }
 
 function formatSomebodysNode(data: StorySummaryData, homeOwnerName: string | null,
-                             isTheir: IsTheirPredicate): string {
+                             isTheir: IsTheirPredicate, t: TFunction): string {
     if (data.node?.ownerName === homeOwnerName) {
-        return "your node";
+        return t("instant-summary.your-blog");
     } else if (data.node != null && isTheir(data, data.node)) {
-        return "their node";
+        return t("instant-summary.their-blog");
     } else {
-        return `${formatNodeName(data.posting)} node`;
+        return t("instant-summary.node-blog", {node: formatNodeName(data.posting)});
     }
 }
 
-function formatReason(data: StorySummaryData): string {
-    switch (data.subscriptionReason) {
-        default:
-        case "user":
-            return "you subscribed to";
-        case "mention":
-            return "you have been mentioned in";
-        case "comment":
-            return "you commented";
-    }
+function formatReason(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.reason." + (data.subscriptionReason ?? "user"));
 }
 
-function buildReactionAddedSummary(data: StorySummaryData, negative: boolean): string {
-    return `${formatListOfReactions(data, negative)} your post ${formatHeading(data.posting)}`;
+function buildReactionAddedSummary(data: StorySummaryData, negative: boolean, t: TFunction): string {
+    return t("instant-summary.story.reaction-added", {
+        reactions: formatListOfReactions(data, negative, t),
+        heading: formatHeading(data.posting)
+    });
 }
 
-function buildMentionPostingSummary(data: StorySummaryData): string {
-    return `${formatNodeName(data.posting)} mentioned you in a post ${formatHeading(data.posting)}`;
+function buildMentionPostingSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.mention-posting", {
+        node: formatNodeName(data.posting),
+        heading: formatHeading(data.posting)
+    });
 }
 
 function buildSubscriberAddedSummary(data: StorySummaryData, t: TFunction): string {
-    return `${formatNodeName(data.node)} subscribed to your ${getFeedTitle(data.feedName, t)}`;
+    return t("instant-summary.story.subscriber-added", {
+        node: formatNodeName(data.node),
+        feed: getFeedTitle(data.feedName, t)
+    });
 }
 
 function buildSubscriberDeletedSummary(data: StorySummaryData, t: TFunction): string {
-    return `${formatNodeName(data.node)} unsubscribed from your ${getFeedTitle(data.feedName, t)}`;
+    return t("instant-summary.story.subscriber-deleted", {
+        node: formatNodeName(data.node),
+        feed: getFeedTitle(data.feedName, t)
+    });
 }
 
-function buildCommentAddedSummary(data: StorySummaryData): string {
-    return `${formatListOfComments(data)} commented on your post ${formatHeading(data.posting)}`;
+function buildCommentAddedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.comment-added", {
+        comments: formatListOfComments(data, t),
+        heading: formatHeading(data.posting)
+    });
 }
 
-function buildMentionCommentSummary(data: StorySummaryData, homeOwnerName: string | null): string {
-    return `${formatNodeName(data.comment)} mentioned you in a comment ${formatHeading(data.comment)} on`
-        + ` ${formatSomebodysPosting(data, homeOwnerName, isByCommentOwner)}`
-        + ` ${formatHeading(data.posting)}`;
+function buildMentionCommentSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.mention-comment", {
+        node: formatNodeName(data.comment),
+        commentHeading: formatHeading(data.comment),
+        posting: formatSomebodysPosting(data, homeOwnerName, isByCommentOwner, t),
+        postingHeading: formatHeading(data.posting)
+    });
 }
 
-function buildReplyCommentSummary(data: StorySummaryData, homeOwnerName: string | null): string {
-    return `${formatListOfComments(data)} replied to your comment ${formatHeading(data.comment)} on `
-        + formatSomebodysPosting(data, homeOwnerName, isByFirstCommentOwner);
+function buildReplyCommentSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.reply-comment", {
+        replies: formatListOfComments(data, t),
+        heading: formatHeading(data.comment),
+        posting: formatSomebodysPosting(data, homeOwnerName, isByFirstCommentOwner, t)
+    });
 }
 
 function buildCommentReactionAddedSummary(data: StorySummaryData, negative: boolean,
-                                          homeOwnerName: string | null): string {
-    return `${formatListOfReactions(data, negative)} your comment ${formatHeading(data.comment)} on `
-        + formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner);
+                                          homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.comment-reaction-added", {
+        reactions: formatListOfReactions(data, negative, t),
+        heading: formatHeading(data.comment),
+        posting: formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner, t)
+    });
 }
 
-function buildRemoteCommentAddedSummary(data: StorySummaryData, homeOwnerName: string | null): string {
-    return `${formatListOfComments(data)} commented on ${formatSomebodysPosting(data, homeOwnerName, isByCommentOwner)}`
-        + ` ${formatReason(data)} ${formatHeading(data.posting)}`;
+function buildRemoteCommentAddedSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.remote-comment-added", {
+        comments: formatListOfComments(data, t),
+        posting: formatSomebodysPosting(data, homeOwnerName, isByCommentOwner, t),
+        reason: formatReason(data, t),
+        heading: formatHeading(data.posting)
+    });
 }
 
-function buildCommentPostTaskFailedSummary(data: StorySummaryData): string {
-    return `Failed to add a comment to ${formatNodeName(data.posting)} post ${formatHeading(data.posting)}`;
+function buildCommentPostTaskFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.comment-post-task-failed", {
+        node: formatNodeName(data.posting),
+        heading: formatHeading(data.posting)
+    });
 }
 
-function buildCommentUpdateTaskFailedSummary(data: StorySummaryData): string {
-    return `Failed to sign the comment ${formatHeading(data.comment)} to ${formatNodeName(data.posting)}`
-        + ` post ${formatHeading(data.posting)}`;
+function buildCommentUpdateTaskFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.comment-update-task-failed", {
+        commentHeading: formatHeading(data.comment),
+        node: formatNodeName(data.posting),
+        postingHeading: formatHeading(data.posting)
+    });
 }
 
-function buildPostingUpdatedSummary(data: StorySummaryData): string {
-    let summary = `${formatNodeName(data.posting)} updated their post ${formatHeading(data.posting)}`;
+function buildPostingUpdatedSummary(data: StorySummaryData, t: TFunction): string {
+    let summary = t("instant-summary.story.posting-updated", {
+        node: formatNodeName(data.posting),
+        heading: formatHeading(data.posting)
+    });
     if (data.description) {
         summary += `: ${data.description}`;
     }
     return summary;
 }
 
-function buildPostingPostTaskFailedSummary(data: StorySummaryData): string {
-    return `Failed to add your post to ${formatNodeName(data.node)} blog`;
+function buildPostingPostTaskFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.posting-post-task-failed", {
+        node: formatNodeName(data.node)
+    });
 }
 
-function buildPostingUpdateTaskFailedSummary(data: StorySummaryData): string {
-    return `Failed to sign your post ${formatHeading(data.posting)} in ${formatNodeName(data.node)} blog`;
+function buildPostingUpdateTaskFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.posting-update-task-failed", {
+        heading: formatHeading(data.posting),
+        node: formatNodeName(data.node)
+    });
 }
 
 function buildPostingMediaReactionAddedSummary(data: StorySummaryData, negative: boolean,
-                                               homeOwnerName: string | null): string {
-    return `${formatListOfReactions(data, negative)} a media in your post ${formatHeading(data.posting)} in `
-        + formatSomebodysNode(data, homeOwnerName, isByFirstReactionOwner);
+                                               homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.posting-media-reaction-added", {
+        reactions: formatListOfReactions(data, negative, t),
+        heading: formatHeading(data.posting),
+        node: formatSomebodysNode(data, homeOwnerName, isByFirstReactionOwner, t)
+    });
 }
 
 function buildCommentMediaReactionAddedSummary(data: StorySummaryData, negative: boolean,
-                                               homeOwnerName: string | null): string {
-    return `${formatListOfReactions(data, negative)} a media in your comment ${formatHeading(data.comment)} on `
-        + formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner);
+                                               homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.comment-media-reaction-added", {
+        reactions: formatListOfReactions(data, negative, t),
+        heading: formatHeading(data.comment),
+        posting: formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner, t)
+    });
 }
 
-function buildPostingMediaReactionFailedSummary(data: StorySummaryData): string {
-    return `Failed to sign a reaction to a media in ${formatNodeName(data.posting)} post ${formatHeading(data.posting)}`;
+function buildPostingMediaReactionFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.posting-media-reaction-failed", {
+        node: formatNodeName(data.posting),
+        heading: formatHeading(data.posting)
+    });
 }
 
-function buildCommentMediaReactionFailedSummary(data: StorySummaryData): string {
-    return `Failed to sign a reaction to a media in ${formatNodeName(data.comment)} comment`
-        + ` ${formatHeading(data.comment)} to ${formatNodeName(data.posting)} post ${formatHeading(data.posting)}`;
+function buildCommentMediaReactionFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.comment-media-reaction-failed", {
+        commentNode: formatNodeName(data.comment),
+        commentHeading: formatHeading(data.comment),
+        postingNode: formatNodeName(data.posting),
+        postingHeading: formatHeading(data.posting)
+    });
 }
 
-function buildPostingSubscribeTaskFailedSummary(data: StorySummaryData): string {
-    return `Failed to subscribe to comments to ${formatNodeName(data.posting)} post ${formatHeading(data.posting)}`;
+function buildPostingSubscribeTaskFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.posting-subscribe-task-failed", {
+        node: formatNodeName(data.posting),
+        heading: formatHeading(data.posting)
+    });
 }
 
-function buildPostingReactionTaskFailedSummary(data: StorySummaryData): string {
-    return `Failed to sign a reaction to ${formatNodeName(data.posting)} post ${formatHeading(data.posting)}`;
+function buildPostingReactionTaskFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.posting-reaction-task-failed", {
+        node: formatNodeName(data.posting),
+        heading: formatHeading(data.posting)
+    });
 }
 
-function buildCommentReactionTaskFailedSummary(data: StorySummaryData): string {
-    return `Failed to sign a reaction to ${formatNodeName(data.comment)} comment`
-        + ` ${formatHeading(data.comment)} to ${formatNodeName(data.posting)} post ${formatHeading(data.posting)}`;
+function buildCommentReactionTaskFailedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.comment-reaction-task-failed", {
+        commentNode: formatNodeName(data.comment),
+        commentHeading: formatHeading(data.comment),
+        postingNode: formatNodeName(data.posting),
+        postingHeading: formatHeading(data.posting)
+    });
 }
 
 export function buildSummary(type: StoryType, data: StorySummaryData, homeOwnerName: string | null): string {
     switch (type) {
         case "reaction-added-positive":
-            return buildReactionAddedSummary(data, false);
+            return buildReactionAddedSummary(data, false, i18n.t);
         case "reaction-added-negative":
-            return buildReactionAddedSummary(data, true);
+            return buildReactionAddedSummary(data, true, i18n.t);
         case "mention-posting":
-            return buildMentionPostingSummary(data);
+            return buildMentionPostingSummary(data, i18n.t);
         case "subscriber-added":
             return buildSubscriberAddedSummary(data, i18n.t);
         case "subscriber-deleted":
             return buildSubscriberDeletedSummary(data, i18n.t);
         case "comment-added":
-            return buildCommentAddedSummary(data);
+            return buildCommentAddedSummary(data, i18n.t);
         case "mention-comment":
-            return buildMentionCommentSummary(data, homeOwnerName);
+            return buildMentionCommentSummary(data, homeOwnerName, i18n.t);
         case "reply-comment":
-            return buildReplyCommentSummary(data, homeOwnerName);
+            return buildReplyCommentSummary(data, homeOwnerName, i18n.t);
         case "comment-reaction-added-positive":
-            return buildCommentReactionAddedSummary(data, false, homeOwnerName);
+            return buildCommentReactionAddedSummary(data, false, homeOwnerName, i18n.t);
         case "comment-reaction-added-negative":
-            return buildCommentReactionAddedSummary(data, true, homeOwnerName);
+            return buildCommentReactionAddedSummary(data, true, homeOwnerName, i18n.t);
         case "remote-comment-added":
-            return buildRemoteCommentAddedSummary(data, homeOwnerName);
+            return buildRemoteCommentAddedSummary(data, homeOwnerName, i18n.t);
         case "comment-post-task-failed":
-            return buildCommentPostTaskFailedSummary(data);
+            return buildCommentPostTaskFailedSummary(data, i18n.t);
         case "comment-update-task-failed":
-            return buildCommentUpdateTaskFailedSummary(data);
+            return buildCommentUpdateTaskFailedSummary(data, i18n.t);
         case "posting-updated":
-            return buildPostingUpdatedSummary(data);
+            return buildPostingUpdatedSummary(data, i18n.t);
         case "posting-post-task-failed":
-            return buildPostingPostTaskFailedSummary(data);
+            return buildPostingPostTaskFailedSummary(data, i18n.t);
         case "posting-update-task-failed":
-            return buildPostingUpdateTaskFailedSummary(data);
+            return buildPostingUpdateTaskFailedSummary(data, i18n.t);
         case "posting-media-reaction-added-positive":
-            return buildPostingMediaReactionAddedSummary(data, false, homeOwnerName);
+            return buildPostingMediaReactionAddedSummary(data, false, homeOwnerName, i18n.t);
         case "posting-media-reaction-added-negative":
-            return buildPostingMediaReactionAddedSummary(data, true, homeOwnerName);
+            return buildPostingMediaReactionAddedSummary(data, true, homeOwnerName, i18n.t);
         case "comment-media-reaction-added-positive":
-            return buildCommentMediaReactionAddedSummary(data, false, homeOwnerName);
+            return buildCommentMediaReactionAddedSummary(data, false, homeOwnerName, i18n.t);
         case "comment-media-reaction-added-negative":
-            return buildCommentMediaReactionAddedSummary(data, true, homeOwnerName);
+            return buildCommentMediaReactionAddedSummary(data, true, homeOwnerName, i18n.t);
         case "posting-media-reaction-failed":
-            return buildPostingMediaReactionFailedSummary(data);
+            return buildPostingMediaReactionFailedSummary(data, i18n.t);
         case "comment-media-reaction-failed":
-            return buildCommentMediaReactionFailedSummary(data);
+            return buildCommentMediaReactionFailedSummary(data, i18n.t);
         case "posting-subscribe-task-failed":
-            return buildPostingSubscribeTaskFailedSummary(data);
+            return buildPostingSubscribeTaskFailedSummary(data, i18n.t);
         case "posting-reaction-task-failed":
-            return buildPostingReactionTaskFailedSummary(data);
+            return buildPostingReactionTaskFailedSummary(data, i18n.t);
         case "comment-reaction-task-failed":
-            return buildCommentReactionTaskFailedSummary(data);
+            return buildCommentReactionTaskFailedSummary(data, i18n.t);
         default:
             return "";
     }
