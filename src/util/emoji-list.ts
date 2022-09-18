@@ -1,42 +1,42 @@
 export default class EmojiList {
 
-    _other: boolean;
-    _included: number[];
-    _includedSet: Set<number>;
-    _recommended: number[];
-    _recommendedSet: Set<number>;
+    #other: boolean;
+    #included: number[];
+    #includedSet: Set<number>;
+    #recommended: number[];
+    #recommendedSet: Set<number>;
 
     constructor(str: string) {
         const list = str ? str.split(",").map(s => s.trim()) : [];
-        this._other = list.includes("*");
-        this._included = list.filter(s => s !== "*").map(v => parseInt(v));
-        this._includedSet = new Set(this._included);
-        this._recommended = list.filter(s => s.startsWith("+")).map(v => parseInt(v));
-        this._recommendedSet = new Set(this._recommended);
+        this.#other = list.includes("*");
+        this.#included = list.filter(s => s !== "*").map(v => parseInt(v));
+        this.#includedSet = new Set(this.#included);
+        this.#recommended = list.filter(s => s.startsWith("+")).map(v => parseInt(v));
+        this.#recommendedSet = new Set(this.#recommended);
     }
 
     other(): boolean {
-        return this._other;
+        return this.#other;
     }
 
     included(): number[] {
-        return this._included;
+        return this.#included;
     }
 
     includes(emoji: number): boolean {
-        return this._other || this._includedSet.has(emoji);
+        return this.#other || this.#includedSet.has(emoji);
     }
 
     includesExplicitly(emoji: number): boolean {
-        return this._includedSet.has(emoji);
+        return this.#includedSet.has(emoji);
     }
 
     recommended(): number[] {
-        return this._recommended;
+        return this.#recommended;
     }
 
     recommends(emoji: number): boolean {
-        return this._recommendedSet.has(emoji);
+        return this.#recommendedSet.has(emoji);
     }
 
 }
