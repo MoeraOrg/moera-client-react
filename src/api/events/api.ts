@@ -4,6 +4,7 @@ import {
     AvatarInfoType,
     FeaturesType,
     FeedStatusType,
+    StorySummaryDataType,
     SubscriberInfoType,
     SubscriptionInfoType,
     TokenInfoType
@@ -26,7 +27,8 @@ import {
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
-    PingEvent, PluginsUpdatedEvent,
+    PingEvent,
+    PluginsUpdatedEvent,
     PostingAddedEvent,
     PostingCommentsChangedEvent,
     PostingDeletedEvent,
@@ -583,7 +585,12 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             nullable: true
         },
         "summary": {
-            type: "string"
+            type: "string",
+            nullable: true
+        },
+        "summaryData": {
+            ...StorySummaryDataType,
+            nullable: true
         },
         "trackingId": {
             type: "string",
@@ -622,7 +629,7 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "summary"]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment"]
 };
 
 const StoryDeletedEventType: JSONSchemaType<StoryDeletedEvent> = {
@@ -701,7 +708,12 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             nullable: true
         },
         "summary": {
-            type: "string"
+            type: "string",
+            nullable: true
+        },
+        "summaryData": {
+            ...StorySummaryDataType,
+            nullable: true
         },
         "trackingId": {
             type: "string",
@@ -740,7 +752,7 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
         }
     },
     additionalProperties: false,
-    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment", "summary"]
+    required: ["type", "id", "storyType", "feedName", "publishedAt", "pinned", "moment"]
 };
 
 const FeedStatusUpdatedEventType: JSONSchemaType<FeedStatusUpdatedEvent> = {

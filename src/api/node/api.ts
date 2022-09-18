@@ -1555,7 +1555,7 @@ const StorySummaryReactionType: JSONSchemaType<API.StorySummaryReaction> = {
     additionalProperties: false
 };
 
-const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
+export const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
     type: "object",
     properties: {
         "node": {

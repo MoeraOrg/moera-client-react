@@ -4,7 +4,7 @@ import {
     DraftType,
     Features,
     FeedStatus,
-    PrincipalValue,
+    PrincipalValue, StorySummaryData,
     StoryType,
     SubscriberInfo,
     SubscriptionInfo,
@@ -172,7 +172,8 @@ export interface StoryEvent<T> extends BaseEvent<T> {
     summaryNodeName?: string | null;
     summaryFullName?: string | null;
     summaryAvatar?: AvatarImage | null,
-    summary: string;
+    summary?: string | null;
+    summaryData?: StorySummaryData | null;
     trackingId?: string | null;
     remoteNodeName?: string | null;
     remoteFullName?: string | null;
