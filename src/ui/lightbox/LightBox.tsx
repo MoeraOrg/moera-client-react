@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
+import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -19,6 +19,7 @@ import { getSetting } from "state/settings/selectors";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
+import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
 
@@ -26,6 +27,8 @@ type Props = ConnectedProps<typeof connector>;
 
 function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, carte, loopGallery, closeLightBox,
                    lightBoxMediaSet}: Props) {
+    const {t} = useTranslation();
+
     if (!show) {
         return null;
     }
@@ -64,27 +67,22 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
         title = `${index + 1} / ${media.length}`;
     }
 
-    const onDownload = window.Android
-        ? (e: React.MouseEvent) => {
-            window.Android?.saveImage(mainSrc, mainMimeType);
-            e.preventDefault();
-        }
-        : undefined;
-
     return (
         <Lightbox mainSrc={mainSrc} prevSrc={prevSrc} nextSrc={nextSrc} imageTitle={title}
                   onCloseRequest={() => closeLightBox()}
+                  closeLabel={t("close")}
                   onMovePrevRequest={() => prevMediaId != null ? lightBoxMediaSet(prevMediaId) : null}
+                  prevLabel={t("previous-image")}
                   onMoveNextRequest={() => nextMediaId != null ? lightBoxMediaSet(nextMediaId) : null}
+                  nextLabel={t("next-image")}
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
                       <LightBoxShareButton mediaUrl={mainSrc}/>,
-                      <a className="lightbox-button lightbox-download" download onClick={onDownload}
-                         href={urlWithParameters(mainSrc, {download: true})}>
-                          <FontAwesomeIcon icon="file-download"/>
-                      </a>,
+                      <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
                       <LightBoxReactions/>
                   ]}
+                  zoomInLabel={t("zoom-in")}
+                  zoomOutLabel={t("zoom-out")}
                   imageCaption={<LightBoxCaption posting={mediaPosting}/>}/>
     );
 }

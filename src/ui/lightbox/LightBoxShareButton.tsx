@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
@@ -19,6 +20,8 @@ type Props = {
 
 function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaId, shareDialogPrepare,
                               lightBoxCopyLink, lightBoxCopyMediaLink}: Props) {
+    const {t} = useTranslation();
+
     const onShare = () => {
         if (sourceNodeName == null) {
             return;
@@ -43,7 +46,7 @@ function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaI
     return (
         <DropdownMenu className="lightbox-button lightbox-share" items={[
             {
-                title: "Share to...",
+                title: t("share-ellipsis"),
                 href: null,
                 onClick: onShare,
                 show: true
@@ -52,19 +55,19 @@ function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaI
                 divider: true
             },
             {
-                title: "Copy link",
+                title: t("copy-link"),
                 href: null,
                 onClick: () => lightBoxCopyLink(),
                 show: true
             },
             {
-                title: "Copy image link",
+                title: t("copy-image-link"),
                 href: mediaUrl,
                 onClick: () => lightBoxCopyMediaLink(mediaUrl),
                 show: true
             },
         ]}>
-            <FontAwesomeIcon icon="share-alt"/>
+            <FontAwesomeIcon icon="share-alt" title={t("share")}/>
         </DropdownMenu>
     );
 }

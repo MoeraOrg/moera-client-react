@@ -32,6 +32,7 @@
   "connecting" : "Connecting",
   "continue-reading" : "Continue Reading →",
   "copy-image-from-internet" : "Copy Image From Internet",
+  "copy-image-link" : "Copy image link",
   "copy-link" : "Copy link",
   "copy-text" : "Copy text",
   "copy-with-formatting" : "Copy text with formatting",
@@ -47,6 +48,7 @@
   "donate-to-recipient" : "Donate to <0>{recipientName}</0>",
   "donations-android-prohibited" : "Donations feature is prohibited in Android apps downloaded from Google Play according to <0>Google Play Payments Policy</0>.<1/><2/>Please use Moera web client for this.",
   "dont-ask-next-time" : "Don't ask next time",
+  "download" : "Download",
   "downloading-image" : "Downloading image...",
   "drafts" : "Drafts",
   "draft-saved" : "Draft saved.",
@@ -184,6 +186,7 @@
   "new-password" : "New password",
   "new-post-item" : "New post",
   "new-post-title" : "New Post",
+  "next-image" : "Next image",
   "no" : "No",
   "no-actions" : "No actions",
   "not-connected-home" : "Not connected to home",
@@ -205,6 +208,7 @@
   "post-preview" : "Post Preview",
   "preserve-formatting" : "Preserve formatting",
   "preview" : "Preview",
+  "previous-image" : "Previous image",
   "principal-title" : {
     "admin" : "Admin",
     "author" : "Author",
@@ -322,5 +326,7 @@
   "where-from" : "Where it comes from?",
   "width" : "Width",
   "write-comment-here" : "Write a comment to {mention} here...",
-  "yes" : "Yes"
+  "yes" : "Yes",
+  "zoom-in" : "Zoom in",
+  "zoom-out" : "Zoom out"
 }
