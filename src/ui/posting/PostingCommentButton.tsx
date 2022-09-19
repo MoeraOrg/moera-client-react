@@ -19,7 +19,7 @@ const PostingCommentButton = ({posting, invisible}: Props) => {
         :
             <Jump className="posting-button" href={`/post/${posting.id}#comment-add`}>
                 <FontAwesomeIcon icon={["far", "comment"]}/>
-                <span className="caption">{t("comment")}</span>
+                <span className="caption">{t("comment-button")}</span>
             </Jump>
     );
 }
