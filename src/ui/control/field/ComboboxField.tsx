@@ -1,6 +1,7 @@
 import React from 'react';
 import { useField } from 'formik';
 import { Combobox } from 'react-widgets';
+import { TextAccessor } from 'react-widgets/cjs/Accessors';
 
 import { FormGroup, Wrapper } from "ui/control";
 import FieldError from "ui/control/field/FieldError";
@@ -14,10 +15,11 @@ interface Props<T> {
     col?: string;
     autoFocus?: boolean;
     data?: T[];
+    textField?: TextAccessor;
 }
 
 export function ComboboxField<T>({name, title, horizontal = false, groupClassName, labelClassName, col, autoFocus,
-                                  data}: Props<T>) {
+                                  data, textField}: Props<T>) {
     const [{onBlur}, {value, touched, error}, {setValue}] = useField<T | string>(name);
 
     return (
@@ -32,6 +34,7 @@ export function ComboboxField<T>({name, title, horizontal = false, groupClassNam
                     onBlur={onBlur}
                     autoFocus={autoFocus}
                     data={data}
+                    textField={textField}
                 />
                 {touched && <FieldError error={error}/>}
             </Wrapper>

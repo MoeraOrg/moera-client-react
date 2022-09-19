@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import "./Scale.css";
 
@@ -10,6 +11,8 @@ interface Props {
 }
 
 export default function Scale({max = 1, value, onChange}: Props) {
+    const {t} = useTranslation();
+
     const onClick = (sign: 1 | -1) => () => {
         if (onChange) {
             let v = value + sign * (max - 1) / 100;
@@ -28,12 +31,12 @@ export default function Scale({max = 1, value, onChange}: Props) {
 
     return (
         <div className="scale">
-            <button className="btn btn-light btn-sm" onClick={onClick(-1)} disabled={value === 1}>
+            <button className="btn btn-light btn-sm" title={t("zoom-out")} onClick={onClick(-1)} disabled={value === 1}>
                 <FontAwesomeIcon icon="minus"/>
             </button>
             <input type="range" className="form-control-range" min={1} max={max} step="any" value={value}
                    onChange={onScaleChange}/>
-            <button className="btn btn-light btn-sm" onClick={onClick(1)} disabled={value === max}>
+            <button className="btn btn-light btn-sm" title={t("zoom-in")} onClick={onClick(1)} disabled={value === max}>
                 <FontAwesomeIcon icon="plus"/>
             </button>
         </div>

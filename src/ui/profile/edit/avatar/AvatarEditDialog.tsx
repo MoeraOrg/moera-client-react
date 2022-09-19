@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import ReactAvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { ACCEPTED_IMAGE_TYPES } from "ui/image-types";
 import { Button, ModalDialog } from "ui/control";
@@ -21,6 +22,8 @@ type Props = ConnectedProps<typeof connector>;
 function AvatarEditDialog({show, imageUploading, imageUploadProgress, imageId, path, width, height, orientation,
                            creating, rootPage, shapeDefault, profileCloseAvatarEditDialog, profileImageUpload,
                            profileAvatarCreate}: Props) {
+
+    const {t} = useTranslation();
 
     const domFile = useRef<HTMLInputElement>(null);
     const refEditor = useRef<ReactAvatarEditor>(null);
@@ -123,7 +126,7 @@ function AvatarEditDialog({show, imageUploading, imageUploadProgress, imageId, p
     }
 
     return (
-        <ModalDialog title="Create Avatar" className="avatar-edit-dialog" onClose={profileCloseAvatarEditDialog}>
+        <ModalDialog title={t("create-avatar")} className="avatar-edit-dialog" onClose={profileCloseAvatarEditDialog}>
             <div className="modal-body">
                 <div className="tools">
                     <Rotate value={rotate} onChange={onRotateChange}/>
@@ -144,15 +147,19 @@ function AvatarEditDialog({show, imageUploading, imageUploadProgress, imageId, p
                 </Dropzone>
                 <Button variant={imageId ? "outline-secondary" : "primary"} size="sm" className="upload"
                         loading={imageUploading} onClick={onUploadClick}>
-                    Upload image {imageUploadProgress != null ? `(${imageUploadProgress}%)` : ""}
+                    {imageUploadProgress == null
+                        ? t("upload-image")
+                        : t("uploading-file", {progress: imageUploadProgress})
+                    }
                 </Button>
                 <Scale max={getScaleMax()} value={scale} onChange={onScaleChange}/>
                 <input type="file" accept="image/*" ref={domFile} onChange={onFileChange}/>
             </div>
             <div className="modal-footer">
-                <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>Cancel</Button>
-                <Button variant="primary" type="submit" loading={creating} disabled={!imageId}
-                        onClick={onCreateClick}>Create</Button>
+                <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>{t("cancel")}</Button>
+                <Button variant="primary" type="submit" loading={creating} disabled={!imageId} onClick={onCreateClick}>
+                    {t("create")}
+                </Button>
             </div>
         </ModalDialog>
     );

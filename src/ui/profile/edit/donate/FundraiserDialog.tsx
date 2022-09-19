@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api/node/api-types";
 import { Button, ModalDialog } from "ui/control";
@@ -26,6 +27,8 @@ type Props = OuterProps & FormikProps<Values>;
 function FundraiserDialog(props: Props) {
     const {show, fundraiser, onCancel, onDelete, resetForm} = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (show) {
             resetForm({values: fundraiserDialogLogic.mapPropsToValues(props)});
@@ -38,20 +41,20 @@ function FundraiserDialog(props: Props) {
     }
 
     return (
-        <ModalDialog title={fundraiser != null ? "Edit Donation" : "Add Donation"} onClose={onCancel}>
+        <ModalDialog title={fundraiser != null ? t("edit-donation") : t("add-donation")} onClose={onCancel}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="title" title="Title" autoFocus/>
-                    <InputField name="qrCode" title="QR Code"/>
-                    <InputField name="text" title="Text"/>
-                    <InputField name="href" title="Link"/>
+                    <InputField name="title" title={t("title")} autoFocus/>
+                    <InputField name="qrCode" title={t("qr-code")}/>
+                    <InputField name="text" title={t("text")}/>
+                    <InputField name="href" title={t("link")}/>
                 </div>
                 <div className="modal-footer">
                     {fundraiser != null &&
-                        <Button variant="danger" className="me-auto" onClick={onDelete}>Delete</Button>
+                        <Button variant="danger" className="me-auto" onClick={onDelete}>{t("delete")}</Button>
                     }
-                    <Button variant="secondary" onClick={onCancel}>Cancel</Button>
-                    <Button variant="primary" type="submit">OK</Button>
+                    <Button variant="secondary" onClick={onCancel}>{t("cancel")}</Button>
+                    <Button variant="primary" type="submit">{t("ok")}</Button>
                 </div>
             </Form>
         </ModalDialog>
@@ -68,7 +71,7 @@ const fundraiserDialogLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        title: yup.string().trim().required("Must not be empty")
+        title: yup.string().trim().required("must-not-empty")
     }),
 
     mapValuesToFundraiserInfo: (values: Values): FundraiserInfo => ({

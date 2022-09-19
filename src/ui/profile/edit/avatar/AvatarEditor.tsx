@@ -22,8 +22,8 @@ type Props = {
     name: string;
 } & ConnectedProps<typeof connector>;
 
-function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, profileAvatarsLoad, profileOpenAvatarEditDialog,
-                       profileAvatarConfirmDelete, profileAvatarsReorder}: Props) {
+function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, profileAvatarsLoad,
+                       profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder}: Props) {
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
     const {

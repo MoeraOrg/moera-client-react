@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { formatISO, fromUnixTime } from 'date-fns';
 import cx from 'classnames';
+import { useTranslation } from "react-i18next";
 
 import { ClientState } from "state/state";
 import { Popover } from "ui/control";
@@ -10,33 +11,11 @@ import "./OperationStatus.css";
 type Props = ConnectedProps<typeof connector>;
 
 function OperationStatus({status, statusUpdated, errorCode, errorMessage}: Props) {
-    let text;
-    let success = false;
-    let failure = false;
-    switch (status) {
-        case "waiting":
-            text = "Operation is waiting";
-            break;
-        case "added":
-            text = "Operation has been added";
-            break;
-        case "started":
-            text = "Operation has been started";
-            break;
-        case "succeeded":
-            text = "Operation succeeded";
-            success = true;
-            break;
-        case "failed":
-            text = "Operation failed";
-            failure = true;
-            break;
-        case "unknown":
-            text = "Operation status is unknown";
-            break;
-        default:
-            return null;
-    }
+    const {t} = useTranslation();
+
+    const text = status != null ? t(`operation-status.${status}`) : undefined;
+    const success = status === "succeeded";
+    const failure = status === "failed";
     const date = statusUpdated ? fromUnixTime(statusUpdated) : null;
     return (
         <span className={cx(
@@ -48,12 +27,12 @@ function OperationStatus({status, statusUpdated, errorCode, errorMessage}: Props
             {!failure && <>{text}</>}
             {failure &&
                 <Popover text={text} textClassName="failure-reason">
-                    Failure reason: {errorMessage ? errorMessage : errorCode}
+                    {t("failure-reason")}: {errorMessage || errorCode}
                 </Popover>
             }
             {date &&
                 <>
-                    {" "}at <time dateTime={formatISO(date)}>format(date, "dd-MM-yyyy HH:mm:ss")</time>
+                    {` ${t("operation-at")} `}<time dateTime={formatISO(date)}>format(date, "dd-MM-yyyy HH:mm:ss")</time>
                 </>
             }
         </span>

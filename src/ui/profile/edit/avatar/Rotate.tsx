@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from "ui/control";
 
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export default function Rotate({value, onChange}: Props) {
+    const {t} = useTranslation();
+
     const onClick = (sign: 1 | -1) => () => {
         if (onChange) {
             onChange((value + sign * 90) % 360);
@@ -17,10 +20,10 @@ export default function Rotate({value, onChange}: Props) {
 
     return (
         <div className="btn-group">
-            <Button variant="light" size="sm" onClick={onClick(-1)}>
+            <Button variant="light" size="sm" title={t("rotate-left")} onClick={onClick(-1)}>
                 <FontAwesomeIcon icon="undo-alt"/>
             </Button>
-            <Button variant="light" size="sm" onClick={onClick(1)}>
+            <Button variant="light" size="sm" title={t("rotate-right")} onClick={onClick(1)}>
                 <FontAwesomeIcon icon="redo-alt"/>
             </Button>
         </div>

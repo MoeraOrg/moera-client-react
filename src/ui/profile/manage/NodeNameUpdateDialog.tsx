@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
+import { NodeName } from "api";
+import * as Rules from "api/naming/rules";
+import { ClientState } from "state/state";
+import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
-import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
-import { ClientState } from "state/state";
-import * as Rules from "api/naming/rules";
-import { NodeName } from "api";
 import { range } from "util/misc";
 import "./NodeNameUpdateDialog.css";
 
@@ -40,54 +41,51 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-class NodeNameUpdateDialog extends React.PureComponent<Props> {
+function NodeNameUpdateDialog(props: Props) {
+    const {show, showChangeName, updating, nodeNameUpdateDialogCancel, resetForm} = props;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.show !== prevProps.show) { // Mnemonic must be cleared immediately after hiding the dialog
-            this.props.resetForm({
-                values: nodeNameUpdateDialogLogic.mapPropsToValues(this.props),
-            });
-        }
+    const {t} = useTranslation();
+
+    useEffect(() => {
+        const values = nodeNameUpdateDialogLogic.mapPropsToValues(props);
+        resetForm({values});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [show]); // 'props' are missing on purpose
+
+    if (!show) {
+        return null;
     }
 
-    render() {
-        const {show, showChangeName, updating, nodeNameUpdateDialogCancel} = this.props;
-
-        if (!show) {
-            return null;
-        }
-
-        return (
-            <ModalDialog title={showChangeName ? "Transfer Name From Another Node" : "Update Node Name"} size="lg"
-                         onClose={nodeNameUpdateDialogCancel}>
-                <Form>
-                    <div className="modal-body">
-                        {showChangeName &&
-                            <div className="row">
-                                <div className="col-sm-6">
-                                    <InputField name="name" title="Name" autoFocus/>
-                                </div>
-                            </div>
-                        }
-                        <h5 className="mnemonic-title">Secret Words</h5>
+    return (
+        <ModalDialog title={showChangeName ? t("transfer-node-name") : t("update-node-name")} size="lg"
+                     onClose={nodeNameUpdateDialogCancel}>
+            <Form>
+                <div className="modal-body">
+                    {showChangeName &&
                         <div className="row">
-                            <Column start={0} end={8} autoFocus={!showChangeName}/>
-                            <Column start={8} end={16}/>
-                            <Column start={16} end={24}/>
+                            <div className="col-sm-6">
+                                <InputField name="name" title={t("name")} autoFocus/>
+                            </div>
                         </div>
+                    }
+                    <h5 className="mnemonic-title">{t("secret-words")}</h5>
+                    <div className="row">
+                        <Column start={0} end={8} autoFocus={!showChangeName}/>
+                        <Column start={8} end={16}/>
+                        <Column start={16} end={24}/>
                     </div>
-                    <div className="modal-footer">
-                        <Button variant="secondary" onClick={nodeNameUpdateDialogCancel}
-                                disabled={updating}>Cancel</Button>
-                        <Button variant="primary" type="submit" loading={updating}>
-                            {showChangeName ? "Transfer" : "Update"}
-                        </Button>
-                    </div>
-                </Form>
-            </ModalDialog>
-        );
-    }
-
+                </div>
+                <div className="modal-footer">
+                    <Button variant="secondary" onClick={nodeNameUpdateDialogCancel} disabled={updating}>
+                        {t("cancel")}
+                    </Button>
+                    <Button variant="primary" type="submit" loading={updating}>
+                        {showChangeName ? t("transfer") : t("update")}
+                    </Button>
+                </div>
+            </Form>
+        </ModalDialog>
+    );
 }
 
 const nodeNameUpdateDialogLogic = {
@@ -101,14 +99,14 @@ const nodeNameUpdateDialogLogic = {
         const mnemonic = yup.array().transform(value =>
                 Array(24).fill("").map((v, i) => value[i] ?? v)
             ).of(yup.string().trim()
-                    .required("Must not be empty")
-                    .matches(/^[A-Za-z]*$/, "Must be a single English word"));
+                    .required("must-not-empty")
+                    .matches(/^[A-Za-z]*$/, "must-single-english-word"));
         return props.showChangeName ?
             yup.object().shape({
                 name: yup.string().trim()
-                    .required("Must not be empty")
+                    .required("must-not-empty")
                     .max(Rules.NAME_MAX_LENGTH)
-                    .test("is-allowed", "Name is not allowed", Rules.isRegisteredNameValid),
+                    .test("is-allowed", "name-not-allowed", Rules.isRegisteredNameValid),
                 mnemonic
             })
         :

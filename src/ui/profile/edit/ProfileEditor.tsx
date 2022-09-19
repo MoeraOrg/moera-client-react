@@ -2,18 +2,20 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 import { AvatarInfo, FundraiserInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
+import { Browser } from "ui/browser";
 import { Button, ConflictWarning, Loading, RichTextValue } from "ui/control";
 import { ComboboxField, InputField, PrincipalField, RichTextField } from "ui/control/field";
-import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import DonateField from "ui/profile/edit/donate/DonateField";
+import { longGender } from "util/misc";
 import "./ProfileEditor.css";
-import { Browser } from "ui/browser";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -33,6 +35,8 @@ type Props = OuterProps & FormikProps<Values>;
 function ProfileEditor(props: Props) {
     const {loading, loaded, updating, conflict, profile, profileEditCancel, profileEditConflictClose, resetForm} = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         const values = profileEditorLogic.mapPropsToValues(props);
         resetForm({values});
@@ -42,32 +46,32 @@ function ProfileEditor(props: Props) {
     return (
         <>
             <PageHeader>
-                <h2>Edit Profile <Loading active={loading}/></h2>
+                <h2>{t("edit-profile")} <Loading active={loading}/></h2>
             </PageHeader>
             <Page>
                 <div className="profile-editor">
                     <Form>
-                        <ConflictWarning text="Profile was edited by somebody." show={conflict}
+                        <ConflictWarning text={t("profile-edited-conflict")} show={conflict}
                                          onClose={profileEditConflictClose}/>
                         <AvatarEditor name="avatar"/>
-                        <InputField title="Full name" name="fullName" maxLength={96} anyValue autoFocus/>
-                        <InputField title="Title" name="title" maxLength={120}/>
-                        <ComboboxField title="Gender (choose or type anything)" name="gender" data={["Male", "Female"]}
-                                       col="col-sm-6"/>
+                        <InputField title={t("full-name")} name="fullName" maxLength={96} anyValue autoFocus/>
+                        <InputField title={t("title")} name="title" maxLength={120}/>
+                        <ComboboxField title={t("gender")} name="gender" col="col-sm-6" data={["Male", "Female"]}
+                                       textField={g => longGender(g, t)}/>
                         <div className="row">
-                            <InputField title="E-Mail" name="email" maxLength={63}
+                            <InputField title={t("e-mail")} name="email" maxLength={63}
                                         groupClassName="col-sm-6 col-10 pe-0"/>
                             <PrincipalField name="viewEmail" values={["public", "signed", "admin"]}
                                             long={!Browser.isTinyScreen()}
                                             groupClassName="col-2 align-self-end pb-1"/>
                         </div>
-                        <RichTextField title="Bio" name="bioSrc" placeholder="Write anything..." format="markdown"
-                                       smileysEnabled anyValue noMedia/>
-                        <DonateField title="Donate" name="fundraisers"/>
+                        <RichTextField title={t("bio")} name="bioSrc" placeholder={t("write-anything")}
+                                       format="markdown" smileysEnabled anyValue noMedia/>
+                        <DonateField title={t("donate")} name="fundraisers"/>
                         <div className="profile-editor-footer">
                             <Button variant="secondary" onClick={profileEditCancel}
-                                    disabled={updating}>Cancel</Button>
-                            <Button variant="primary" type="submit" loading={updating}>Update</Button>
+                                    disabled={updating}>{t("cancel")}</Button>
+                            <Button variant="primary" type="submit" loading={updating}>{t("update")}</Button>
                         </div>
                     </Form>
                 </div>
@@ -90,12 +94,12 @@ const profileEditorLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        fullName: yup.string().trim().max(96, "Too long"),
-        title: yup.string().trim().max(120, "Too long"),
-        gender: yup.string().trim().max(31, "Too long"),
-        email: yup.string().trim().max(63, "Too long").email("Must be a valid e-mail"),
+        fullName: yup.string().trim().max(96, "too-long"),
+        title: yup.string().trim().max(120, "too-long"),
+        gender: yup.string().trim().max(31, "too-long"),
+        email: yup.string().trim().max(63, "too-long").email("must-valid-e-mail"),
         bioSrc: yup.object().shape({
-            text: yup.string().trim().max(4096, "Too long")
+            text: yup.string().trim().max(4096, "too-long")
         })
     }),
 

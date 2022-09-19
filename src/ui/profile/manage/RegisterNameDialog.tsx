@@ -2,12 +2,13 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from "react-i18next";
 
+import * as Rules from "api/naming/rules";
+import { ClientState } from "state/state";
+import { registerName, registerNameDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
-import { registerName, registerNameDialogCancel } from "state/nodename/actions";
-import { ClientState } from "state/state";
-import * as Rules from "api/naming/rules";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -18,21 +19,23 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function RegisterNameDialog({show, registering, registerNameDialogCancel}: Props) {
+    const {t} = useTranslation();
+
     if (!show) {
         return null;
     }
 
     return (
-        <ModalDialog title="Register a New Name" onClose={registerNameDialogCancel}>
+        <ModalDialog title={t("register-new-name")} onClose={registerNameDialogCancel}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="name" title="Name" autoFocus/>
+                    <InputField name="name" title={t("name")} autoFocus/>
                     <NameHelp/>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={registerNameDialogCancel}
-                            disabled={registering}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={registering}>Register</Button>
+                            disabled={registering}>{t("cancel")}</Button>
+                    <Button variant="primary" type="submit" loading={registering}>{t("register")}</Button>
                 </div>
             </Form>
         </ModalDialog>
@@ -46,8 +49,8 @@ const registerNameDialogLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
-            .test("is-allowed", "Name is not allowed", Rules.isRegisteredNameValid)
+        name: yup.string().trim().required("must-not-empty").max(Rules.NAME_MAX_LENGTH)
+            .test("is-allowed", "name-not-allowed", Rules.isRegisteredNameValid)
     }),
 
     validateOnBlur: false,
@@ -56,7 +59,7 @@ const registerNameDialogLogic = {
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.registerName(
             values.name.trim(),
-            () => formik.setFieldError("name", "Name is already taken"));
+            () => formik.setFieldError("name", "name-taken"));
         formik.setSubmitting(false);
     }
 

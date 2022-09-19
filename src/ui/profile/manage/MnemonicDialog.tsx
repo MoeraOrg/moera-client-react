@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { mnemonicClose } from "state/nodename/actions";
@@ -30,6 +31,8 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function MnemonicDialog({name, mnemonic, values: {confirmed}, resetForm}: Props) {
+    const {t} = useTranslation();
+
     useEffect(() => resetForm(), [mnemonic, resetForm]);
 
     if (!mnemonic) {
@@ -37,23 +40,23 @@ function MnemonicDialog({name, mnemonic, values: {confirmed}, resetForm}: Props)
     }
 
     return (
-        <ModalDialog title="Registered Name Secret">
+        <ModalDialog title={t("registered-name-secret")}>
             <Form>
                 <div className="modal-body">
                     <p>
-                        Please write down or print these words and keep them in a safe place. You will need them for
-                        any operations with the name ‘{name}’. <b>If you loose these words, they cannot be recovered
-                        and you will completely loose control of your registered name.</b>
+                        <Trans i18nKey="write-down-words" values={{name}}>
+                            <b/>
+                        </Trans>
                     </p>
                     <div className="row">
                         <Column mnemonic={mnemonic} start={0} end={8}/>
                         <Column mnemonic={mnemonic} start={8} end={16}/>
                         <Column mnemonic={mnemonic} start={16} end={24}/>
                     </div>
-                    <CheckboxField name="confirmed" title="I have written down all these words"/>
+                    <CheckboxField name="confirmed" title={t("written-down-words")}/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="primary" type="submit" disabled={!confirmed}>Close</Button>
+                    <Button variant="primary" type="submit" disabled={!confirmed}>{t("close")}</Button>
                 </div>
             </Form>
         </ModalDialog>

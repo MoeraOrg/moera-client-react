@@ -39,7 +39,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
     const realFullName = card.details.profile.fullName ?? (fullName || NodeName.shorten(nodeName));
     const realAvatar =  card.details.profile.avatar ?? avatar ?? null;
     const realAvatarNodeName = card.details.profile.avatar != null ? nodeName : avatarNodeName ?? null;
-    const gender = shortGender(card.details.profile.gender ?? null);
+    const gender = shortGender(card.details.profile.gender ?? "male", t);
     const storiesTotal = card.stories.storiesTotal ?? "?";
     const storiesLastDate = card.stories.lastStoryCreatedAt != null
         ? fromUnixTime(card.stories.lastStoryCreatedAt)

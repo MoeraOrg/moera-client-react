@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
@@ -18,11 +19,15 @@ import "./ProfileView.css";
 
 type EditButtonProps = ConnectedProps<typeof editButtonConnector>;
 
-const EditButtonImpl = ({profileEdit}: EditButtonProps) => (
-    <Button variant="outline-primary" size="sm" style={{marginLeft: "1rem"}} onClick={profileEdit}>
-        Edit
-    </Button>
-);
+const EditButtonImpl = ({profileEdit}: EditButtonProps) => {
+    const {t} = useTranslation();
+
+    return (
+        <Button variant="outline-primary" size="sm" style={{marginLeft: "1rem"}} onClick={profileEdit}>
+            {t("edit")}
+        </Button>
+    );
+}
 
 const editButtonConnector = connect(
     null,
@@ -33,40 +38,45 @@ const EditButton = editButtonConnector(EditButtonImpl);
 
 type ProfileViewProps = ConnectedProps<typeof profileViewConnector>;
 
-const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) => (
-    <>
-        <PageHeader>
-            <h2>
-                Profile
-                {" "}<FeedSubscribeButton feedName="timeline"/>
-                {" "}{editable && <EditButton/>}
-            </h2>
-            <div className="page-header-buttons">
-                <PageShareButton href="/profile"/>
-            </div>
-        </PageHeader>
-        <Page>
-            <div className="profile-view">
-                <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
-                <Loading active={loading}/>
-                <div className="full-name">
-                    {profile?.fullName ?? NodeName.shorten(ownerName)}
-                    {profile?.gender && <span className="gender">{shortGender(profile.gender)}</span>}
+const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) => {
+    const {t} = useTranslation();
+
+    return (
+        <>
+            <PageHeader>
+                <h2>
+                    {t("profile")}
+                    {" "}<FeedSubscribeButton feedName="timeline"/>
+                    {" "}{editable && <EditButton/>}
+                </h2>
+                <div className="page-header-buttons">
+                    <PageShareButton href="/profile"/>
                 </div>
-                <NodeNameView/>
-                {profile?.title && <div className="title">{profile.title}</div>}
-                <DonateButton name={ownerName} fullName={profile?.fullName ?? null}
-                              fundraisers={profile?.fundraisers ?? null} className="donate"/>
-                {profile?.email &&
-                    <div className="email">
-                        <span className="title">E-mail:</span> <a href={`mailto:${profile.email}`}>{profile.email}</a>
+            </PageHeader>
+            <Page>
+                <div className="profile-view">
+                    <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
+                    <Loading active={loading}/>
+                    <div className="full-name">
+                        {profile?.fullName ?? NodeName.shorten(ownerName)}
+                        {profile?.gender && <span className="gender">{shortGender(profile.gender, t)}</span>}
                     </div>
-                }
-                {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={ownerName}/>}
-            </div>
-        </Page>
-    </>
-);
+                    <NodeNameView/>
+                    {profile?.title && <div className="title">{profile.title}</div>}
+                    <DonateButton name={ownerName} fullName={profile?.fullName ?? null}
+                                  fundraisers={profile?.fundraisers ?? null} className="donate"/>
+                    {profile?.email &&
+                        <div className="email">
+                            <span className="title">{t("e-mail")}:</span>{" "}
+                            <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                        </div>
+                    }
+                    {profile?.bioHtml && <EntryHtml className="bio" html={profile.bioHtml} nodeName={ownerName}/>}
+                </div>
+            </Page>
+        </>
+    );
+}
 
 const profileViewConnector = connect(
     (state: ClientState) => {

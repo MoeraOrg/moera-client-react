@@ -12,6 +12,7 @@ import {
     useSensors
 } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
+import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api/node/api-types";
 import FundraiserButton from "ui/profile/edit/donate/FundraiserButton";
@@ -49,6 +50,7 @@ export default function DonateEditor({value, setValue}: Props) {
     const [dragged, setDragged] = useState<number | null>(null);
     const [showDialog, setShowDialog] = useState<boolean>(false);
     const [selected, setSelected] = useState<number | null>(null);
+    const {t} = useTranslation();
 
     const onClick = (index: number | null) => (e: React.MouseEvent) => {
         setSelected(index);
@@ -115,7 +117,7 @@ export default function DonateEditor({value, setValue}: Props) {
             </DndContext>
             <button className="new-fundraiser" onClick={onClick(null)}>
                 <FontAwesomeIcon className="icon" icon="plus"/>
-                Add donation
+                {t("add-donation-button")}
             </button>
             <FundraiserDialog show={showDialog} fundraiser={selected != null ? value[selected] : null}
                               onSubmit={onSubmitDialog} onCancel={onCancelDialog} onDelete={onDelete}/>

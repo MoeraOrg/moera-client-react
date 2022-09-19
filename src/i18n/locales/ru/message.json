@@ -4,6 +4,10 @@
     "news" : "Новости",
     "timeline" : "Хроника"
   },
+  "female" : "Женский",
+  "female-short" : "ж.",
+  "male" : "Мужской",
+  "male-short" : "м.",
   "moera" : "Moera",
   "reaction-title" : {
     "absurd" : "Абсурд",
@@ -41,5 +45,6 @@
     "too-long" : "Длинно",
     "wow" : "Ого"
   },
+  "undo" : "Отменить",
   "write-comment-here" : "Напишите тут комментарий для {mention}..."
 }

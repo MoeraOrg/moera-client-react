@@ -1,6 +1,7 @@
 import * as Base64js from 'base64-js';
 // @ts-ignore
 import charCategory from 'general-category';
+import { TFunction } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
@@ -15,15 +16,23 @@ export function mentionName(name: string | null | undefined, fullName?: string |
     return "@" + NodeName.shorten(name) + (fullName ? `[${fullName}]` : "");
 }
 
-export function shortGender(gender: string | null): string | null {
+export function longGender(gender: any, t: TFunction): string {
+    if (typeof gender === "string") {
+        gender = gender.toLowerCase();
+        return gender === "male" || gender === "female" ? t(gender) : gender;
+    }
+    return "";
+}
+
+export function shortGender(gender: string | null, t: TFunction): string | null {
     if (gender == null) {
         return null;
     }
     switch (gender.toLowerCase()) {
         case "male":
-            return "m.";
+            return t("male-short");
         case "female":
-            return "f.";
+            return t("female-short");
         default:
             return gender;
     }
