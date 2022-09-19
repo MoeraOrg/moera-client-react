@@ -2,6 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from "ui/control";
 import "./Scale.css";
 
 interface Props {
@@ -31,14 +32,14 @@ export default function Scale({max = 1, value, onChange}: Props) {
 
     return (
         <div className="scale">
-            <button className="btn btn-light btn-sm" title={t("zoom-out")} onClick={onClick(-1)} disabled={value === 1}>
+            <Button variant="light" size="sm" title={t("zoom-out")} onClick={onClick(-1)} disabled={value === 1}>
                 <FontAwesomeIcon icon="minus"/>
-            </button>
+            </Button>
             <input type="range" className="form-control-range" min={1} max={max} step="any" value={value}
                    onChange={onScaleChange}/>
-            <button className="btn btn-light btn-sm" title={t("zoom-in")} onClick={onClick(1)} disabled={value === max}>
+            <Button variant="light" size="sm" title={t("zoom-in")} onClick={onClick(1)} disabled={value === max}>
                 <FontAwesomeIcon icon="plus"/>
-            </button>
+            </Button>
         </div>
     );
 }
