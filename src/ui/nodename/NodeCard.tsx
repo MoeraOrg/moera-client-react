@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { AvatarImage } from "api/node/api-types";
@@ -25,10 +26,12 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, anyLoading, homeOwnerName}: Props) {
+    const {t} = useTranslation();
+
     if (card == null || (!anyLoaded && !anyLoading)) {
         return (
             <div className="node-card">
-                <div className="unknown">Unknown name</div>
+                <div className="unknown">{t("unknown-name")}</div>
             </div>
         );
     }
@@ -51,7 +54,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
     return (
         <div className="node-card">
             <div className="main">
-                <Jump nodeName={nodeName} href="/profile" title="Profile" className="avatar-link">
+                <Jump nodeName={nodeName} href="/profile" title={t("profile")} className="avatar-link">
                     <Avatar avatar={realAvatar} ownerName={nodeName} size={Browser.isTinyScreen() ? 64 : 100}
                             nodeName={realAvatarNodeName}/>
                 </Jump>
@@ -72,10 +75,10 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
             </div>
             <div className="stories">
                 <span className="counter">
-                    <em>{storiesTotal}</em> {storiesTotal === 1 ? "post" : "posts"}
+                    <Trans i18nKey="count-posts" values={{count: storiesTotal}}><em/></Trans>
                     {storiesLastDate &&
                         <>
-                            , last{" "}
+                            {`, ${t("last-post")} `}
                             <time dateTime={formatISO(storiesLastDate)}
                                   title={format(storiesLastDate, "dd-MM-yyyy HH:mm")}>
                                 {formatDistanceToNow(storiesLastDate, {addSuffix: true})}
@@ -86,10 +89,10 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
             </div>
             <div className="people">
                 <Jump className="counter" nodeName={nodeName} href="/people/subscribers">
-                    <em>{subscribersTotal}</em> {subscribersTotal === 1 ? "subscriber" : "subscribers"}
+                    <Trans i18nKey="count-subscribers" values={{count: subscribersTotal}}><em/></Trans>
                 </Jump>
                 <Jump className="counter" nodeName={nodeName} href="/people/subscriptions">
-                    <em>{subscriptionsTotal}</em> {subscriptionsTotal === 1 ? "subscription" : "subscriptions"}
+                    <Trans i18nKey="count-subscriptions" values={{count: subscriptionsTotal}}><em/></Trans>
                 </Jump>
             </div>
             <div className="buttons">

@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
-import { DropdownMenu } from "ui/control";
+import { PostingInfo, PrincipalValue } from "api/node/api-types";
+import { ClientState } from "state/state";
 import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import {
@@ -18,9 +20,8 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootLocation, ProtectedObject } from "state/node/selectors";
-import { ClientState } from "state/state";
-import { PostingInfo, PrincipalValue } from "api/node/api-types";
 import { MinimalStoryInfo } from "ui/types";
+import { DropdownMenu } from "ui/control";
 import "ui/entry/EntryMenu.css";
 
 type Props = {
@@ -29,23 +30,18 @@ type Props = {
     isPermitted: (operation: string, object: ProtectedObject, defaultValue: PrincipalValue) => boolean;
 } & ConnectedProps<typeof connector>;
 
-class PostingMenu extends React.PureComponent<Props> {
+function PostingMenu({
+     posting, story, isPermitted, rootLocation, homeOwnerName, goToCompose, confirmBox, storyPinningUpdate,
+     openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe,
+     openSourceDialog, shareDialogPrepare, entryCopyText
+}: Props) {
+    const {t} = useTranslation();
 
-    onCopyLink = () => {
-        const {posting, postingCopyLink} = this.props;
+    const onCopyLink = () => postingCopyLink(posting.id);
 
-        postingCopyLink(posting.id);
-    };
+    const onCopyText = () => entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null);
 
-    onCopyText = () => {
-        const {posting, entryCopyText} = this.props;
-
-        entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null);
-    };
-
-    onShare = () => {
-        const {posting, shareDialogPrepare} = this.props;
-
+    const onShare = () => {
         const nodeName = posting.receiverName ?? posting.ownerName;
         const postingId = posting.receiverPostingId ?? posting.id;
         const href = `/post/${postingId}`;
@@ -53,52 +49,24 @@ class PostingMenu extends React.PureComponent<Props> {
         shareDialogPrepare(nodeName, href);
     };
 
-    onReply = () => {
-        const {posting, postingReply} = this.props;
+    const onReply = () => postingReply(posting.id);
 
-        postingReply(posting.id);
-    };
+    const onEdit = () => goToCompose(posting.id);
 
-    onEdit = () => {
-        const {posting, goToCompose} = this.props;
+    const onFollowComments = () => postingCommentsSubscribe(posting.id);
 
-        goToCompose(posting.id);
-    };
+    const onUnfollowComments = () => postingCommentsUnsubscribe(posting.id);
 
-    onFollowComments = () => {
-        const {posting, postingCommentsSubscribe} = this.props;
-
-        postingCommentsSubscribe(posting.id);
-    };
-
-    onUnfollowComments = () => {
-        const {posting, postingCommentsUnsubscribe} = this.props;
-
-        postingCommentsUnsubscribe(posting.id);
-    };
-
-    onDelete = () => {
-        const {posting, confirmBox} = this.props;
-
+    const onDelete = () => {
         confirmBox(`Do you really want to delete the post "${posting.heading}"?`, "Delete", "Cancel",
             postingDelete(posting.id), null, "danger");
     };
 
-    onPin = () => {
-        const {story, storyPinningUpdate} = this.props;
+    const onPin = () => storyPinningUpdate(story.id, !story.pinned);
 
-        storyPinningUpdate(story.id, !story.pinned);
-    };
+    const onChangeDate = () => openChangeDateDialog(story.id, story.publishedAt);
 
-    onChangeDate = () => {
-        const {story, openChangeDateDialog} = this.props;
-
-        openChangeDateDialog(story.id, story.publishedAt);
-    };
-
-    onViewSource = () => {
-        const {posting, openSourceDialog} = this.props;
-
+    const onViewSource = () => {
         if (posting.receiverName == null) {
             openSourceDialog("", posting.id);
         } else {
@@ -108,88 +76,83 @@ class PostingMenu extends React.PureComponent<Props> {
         }
     };
 
-    render() {
-        const {posting, story, isPermitted, rootLocation, homeOwnerName} = this.props;
-
-        const postingHref = `${rootLocation}/moera/post/${posting.id}`;
-        return (
-            <DropdownMenu items={[
-                {
-                    title: "Copy link",
-                    href: postingHref,
-                    onClick: this.onCopyLink,
-                    show: true
-                },
-                {
-                    title: "Copy text",
-                    href: postingHref,
-                    onClick: this.onCopyText,
-                    show: true
-                },
-                {
-                    title: "Share...",
-                    href: postingHref,
-                    onClick: this.onShare,
-                    show: true
-                },
-                {
-                    title: "Reply...",
-                    href: `${rootLocation}/moera/compose`,
-                    onClick: this.onReply,
-                    show: true
-                },
-                {
-                    title: "Follow comments",
-                    href: postingHref,
-                    onClick: this.onFollowComments,
-                    show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments == null
-                },
-                {
-                    title: "Unfollow comments",
-                    href: postingHref,
-                    onClick: this.onUnfollowComments,
-                    show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments != null
-                },
-                {
-                    divider: true
-                },
-                {
-                    title: "Edit...",
-                    href: `${rootLocation}/moera/compose?id=${posting.id}`,
-                    onClick: this.onEdit,
-                    show: isPermitted("edit", posting, "owner")
-                },
-                {
-                    title: story != null && !story.pinned ? "Pin" : "Unpin",
-                    href: postingHref,
-                    onClick: this.onPin,
-                    show: story != null && (isPermitted("edit", story, "admin"))
-                },
-                {
-                    title: "Change date/time...",
-                    href: postingHref,
-                    onClick: this.onChangeDate,
-                    show: posting.receiverName == null && (isPermitted("edit", story, "admin"))
-                },
-                {
-                    divider: true
-                },
-                {
-                    title: "View source",
-                    href: postingHref,
-                    onClick: this.onViewSource,
-                    show: true
-                },
-                {
-                    title: "Delete",
-                    href: postingHref,
-                    onClick: this.onDelete,
-                    show: isPermitted("delete", posting, "private")
-                }
-            ]}/>
-        );
-    }
-
+    const postingHref = `${rootLocation}/moera/post/${posting.id}`;
+    return (
+        <DropdownMenu items={[
+            {
+                title: t("copy-link"),
+                href: postingHref,
+                onClick: onCopyLink,
+                show: true
+            },
+            {
+                title: t("copy-text"),
+                href: postingHref,
+                onClick: onCopyText,
+                show: true
+            },
+            {
+                title: t("share-ellipsis"),
+                href: postingHref,
+                onClick: onShare,
+                show: true
+            },
+            {
+                title: t("reply-ellipsis"),
+                href: `${rootLocation}/moera/compose`,
+                onClick: onReply,
+                show: true
+            },
+            {
+                title: t("follow-comments"),
+                href: postingHref,
+                onClick: onFollowComments,
+                show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments == null
+            },
+            {
+                title: t("unfollow-comments"),
+                href: postingHref,
+                onClick: onUnfollowComments,
+                show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments != null
+            },
+            {
+                divider: true
+            },
+            {
+                title: t("edit-ellipsis"),
+                href: `${rootLocation}/moera/compose?id=${posting.id}`,
+                onClick: onEdit,
+                show: isPermitted("edit", posting, "owner")
+            },
+            {
+                title: story != null && !story.pinned ? t("pin") : t("unpin"),
+                href: postingHref,
+                onClick: onPin,
+                show: story != null && (isPermitted("edit", story, "admin"))
+            },
+            {
+                title: t("change-date-time-ellipsis"),
+                href: postingHref,
+                onClick: onChangeDate,
+                show: posting.receiverName == null && (isPermitted("edit", story, "admin"))
+            },
+            {
+                divider: true
+            },
+            {
+                title: t("view-source"),
+                href: postingHref,
+                onClick: onViewSource,
+                show: true
+            },
+            {
+                title: t("delete"),
+                href: postingHref,
+                onClick: onDelete,
+                show: isPermitted("delete", posting, "private")
+            }
+        ]}/>
+    );
 }
 
 const connector = connect(

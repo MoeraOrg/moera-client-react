@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { AvatarWithPopup } from "ui/control";
 import { PostingInfo } from "api/node/api-types";
+import { AvatarWithPopup } from "ui/control";
 
 interface Props {
     posting: PostingInfo;

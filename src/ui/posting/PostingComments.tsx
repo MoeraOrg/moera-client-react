@@ -1,5 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { PostingInfo } from "api/node/api-types";
 import Jump from "ui/navigation/Jump";
@@ -11,19 +12,19 @@ interface Props {
 }
 
 export default function PostingComments({posting}: Props) {
+    const {t} = useTranslation();
+
     if (posting.totalComments == null || posting.totalComments <= 0) {
         return null;
     }
 
-    let commentsText = "";
-    if (!Browser.isTinyScreen()) {
-        commentsText = posting.totalComments === 1 ? "comment" : "comments"
-    }
+    const commentsText = !Browser.isTinyScreen()
+        ? t("count-comments", {count: posting.totalComments})
+        : `${posting.totalComments}`;
     return (
         <div className="posting-comments">
             <Jump className="total-comments" href={`/post/${posting.id}#comments`}>
-                <FontAwesomeIcon icon="comment"/>{" "}&nbsp;
-                {posting.totalComments}&nbsp;{commentsText}
+                <FontAwesomeIcon icon="comment"/>{" "}&nbsp;{commentsText}
             </Jump>
         </div>
     );

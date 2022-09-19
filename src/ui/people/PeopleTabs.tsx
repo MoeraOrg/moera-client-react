@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { peopleGoToTab } from "state/people/actions";
@@ -12,21 +13,25 @@ type PeopleTabsProps = {
 } & ConnectedProps<typeof connector>;
 
 const PeopleTabs = ({active, loadedGeneral, subscribersTotal, subscriptionsTotal, viewSubscribers, viewSubscriptions,
-                     peopleGoToTab}: PeopleTabsProps) => (
-    <div className="people-tabs">
-        {subscribersTotal != null &&
-            <PeopleTabsItem name="subscribers" title="Subscribers" principal={viewSubscribers}
-                            total={subscribersTotal} loaded={loadedGeneral} active={active}
-                            peopleGoToTab={peopleGoToTab}/>
-        }
-        {subscriptionsTotal != null &&
-            <PeopleTabsItem name="subscriptions" title="Subscriptions" principal={viewSubscriptions}
-                            total={subscriptionsTotal} loaded={loadedGeneral} active={active}
-                            peopleGoToTab={peopleGoToTab}/>
-        }
-        <div className="rest"/>
-    </div>
-);
+                     peopleGoToTab}: PeopleTabsProps) => {
+    const {t} = useTranslation();
+
+    return (
+        <div className="people-tabs">
+            {subscribersTotal != null &&
+                <PeopleTabsItem name="subscribers" title={t("subscribers")} principal={viewSubscribers}
+                                total={subscribersTotal} loaded={loadedGeneral} active={active}
+                                peopleGoToTab={peopleGoToTab}/>
+            }
+            {subscriptionsTotal != null &&
+                <PeopleTabsItem name="subscriptions" title={t("subscriptions")} principal={viewSubscriptions}
+                                total={subscriptionsTotal} loaded={loadedGeneral} active={active}
+                                peopleGoToTab={peopleGoToTab}/>
+            }
+            <div className="rest"/>
+        </div>
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -19,17 +20,19 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function PostingButtons({posting, homeOwnerName, enableSelf, commentsVisible, reactionsEnabled,
                          reactionsNegativeEnabled}: Props) {
+    const {t} = useTranslation();
+
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hideAll = !reactionsEnabled || (posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji);
     const hidePositive = hideAll || (cr.emoji != null && cr.negative);
     const hideNegative = hideAll || !reactionsNegativeEnabled || (cr.emoji != null && !cr.negative);
     return (
         <div className="posting-buttons">
-            <PostingReactionButton icon="thumbs-up" caption="Support"
+            <PostingReactionButton icon="thumbs-up" caption={t("support")}
                                    invisible={hidePositive} id={posting.id} negative={false}
                                    emoji={!cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.positive ?? ""}/>
-            <PostingReactionButton icon="thumbs-down" caption="Oppose"
+            <PostingReactionButton icon="thumbs-down" caption={t("oppose")}
                                    invisible={hideNegative} id={posting.id} negative={true}
                                    emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.negative ?? ""}/>

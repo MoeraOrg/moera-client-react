@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import { PostingInfo } from "api/node/api-types";
 import { getSetting } from "state/settings/selectors";
@@ -13,6 +14,8 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function PostingUpdated({posting, story, timeRelative}: Props) {
+    const {t} = useTranslation();
+
     if (posting.totalRevisions <= 1) {
         return null;
     }
@@ -30,7 +33,7 @@ function PostingUpdated({posting, story, timeRelative}: Props) {
 
     return (
         <time className="date" dateTime={formatISO(date)}>
-            {" "}(updated {
+            {" "}({t("posting-updated-at")} {
                 timeRelative ?
                     <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>
                 :

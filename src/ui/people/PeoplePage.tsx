@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
@@ -14,29 +15,33 @@ import "./PeoplePage.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => (
-    <>
-        <PageHeader>
-            <h2>
-                <Jump href="/profile" title="Profile" className="avatar-link">
-                    <Avatar avatar={ownerAvatar} ownerName={ownerName} size={40}/>
-                </Jump>
-                People <Loading active={loadingGeneral}/>
-            </h2>
-        </PageHeader>
-        <Page>
-            <div className="people-page">
-                <PeopleTabs active={tab}/>
-                {tab === "subscribers" &&
-                    <SubscribersSubpage/>
-                }
-                {tab === "subscriptions" &&
-                    <SubscriptionsSubpage/>
-                }
-            </div>
-        </Page>
-    </>
-);
+const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => {
+    const {t} = useTranslation();
+
+    return (
+        <>
+            <PageHeader>
+                <h2>
+                    <Jump href="/profile" title={t("profile")} className="avatar-link">
+                        <Avatar avatar={ownerAvatar} ownerName={ownerName} size={40}/>
+                    </Jump>
+                    {t("people")} <Loading active={loadingGeneral}/>
+                </h2>
+            </PageHeader>
+            <Page>
+                <div className="people-page">
+                    <PeopleTabs active={tab}/>
+                    {tab === "subscribers" &&
+                        <SubscribersSubpage/>
+                    }
+                    {tab === "subscriptions" &&
+                        <SubscriptionsSubpage/>
+                    }
+                </div>
+            </Page>
+        </>
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { SubscriberInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -11,11 +12,13 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function SubscriberVisibility({subscriber, isAdmin}: Props) {
+    const {t} = useTranslation();
+
     const view = subscriber.operations?.view ?? "public";
     const seniorView = subscriber.adminOperations?.view ?? "unset";
 
     if (seniorView !== "unset" && (isAdmin || seniorView !== "public")) {
-        return <Principal value={view} className="senior" comment="set by admin"/>;
+        return <Principal value={view} className="senior" comment={t("set-by-admin")}/>;
     }
 
     if (view === "public") {
