@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 import * as Rules from "api/naming/rules";
 import { ClientState } from "state/state";

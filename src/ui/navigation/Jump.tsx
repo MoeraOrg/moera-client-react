@@ -10,6 +10,8 @@ import { isStandaloneMode } from "state/navigation/selectors";
 import { ClientState } from "state/state";
 import { redirectUrl, rootUrl } from "util/url";
 
+export type JumpCallback = (href: string, callback: () => void) => void | null;
+
 interface OwnProps {
     nodeName?: string | null;
     nodeUri?: string | null;
@@ -18,8 +20,8 @@ interface OwnProps {
     style?: React.CSSProperties;
     title?: string;
     trackingId?: string | null;
-    onNear?: (href: string, callback: () => void) => void | null;
-    onFar?: (href: string, callback: () => void) => void | null;
+    onNear?: JumpCallback;
+    onFar?: JumpCallback;
     anchorRef?: React.Ref<HTMLAnchorElement> | null,
     onMouseEnter?: MouseEventHandler<HTMLAnchorElement>,
     onMouseLeave?: MouseEventHandler<HTMLAnchorElement>,

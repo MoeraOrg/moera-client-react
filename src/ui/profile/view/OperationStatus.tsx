@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { formatISO, fromUnixTime } from 'date-fns';
 import cx from 'classnames';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { Popover } from "ui/control";

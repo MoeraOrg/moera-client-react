@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { Button, ModalDialog } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
@@ -10,13 +11,15 @@ import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { PREFIX } from "api/settings";
-import Jump from "ui/navigation/Jump";
+import Jump, { JumpCallback } from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
 import "./QuickTips.css";
 
 type Props = ConnectedProps<typeof connector>;
 
 function QuickTips({show, ownerName, shown, closeQuickTips, settingsUpdate}: Props) {
+    const {t} = useTranslation();
+
     if (!show) {
         return null;
     }
@@ -36,54 +39,84 @@ function QuickTips({show, ownerName, shown, closeQuickTips, settingsUpdate}: Pro
         performJump();
     }
 
+    const variant = Browser.isTinyScreen()? "mobile" : "desktop";
+
     return (
-        <ModalDialog className="quick-tips" title="Quick tips" onClose={onClose}>
+        <ModalDialog className="quick-tips" title={t("quick-tips.title")} onClose={onClose}>
             <div className="modal-body">
                 <ul>
                     <li className="new-post">
-                        To write a post, click
-                        <Button variant="success" size="sm">
-                            <FontAwesomeIcon icon="pen-alt"/>&nbsp;&nbsp;New post
-                        </Button>
-                        button in the {Browser.isTinyScreen()? "bottom panel" : "top-right corner"}.
+                        <Trans i18nKey={`quick-tips.new-post-${variant}`}>
+                            <NewPostButton/>
+                        </Trans>
                     </li>
                     {ownerName &&
                         <li className="visit">
-                            To visit someone's blog, click <NodeName name={ownerName} linked={false} popup={false}/>
-                            {" "}in the {Browser.isTinyScreen()? "top panel" : "top-left corner"} and type the blog
-                            name.
+                            <Trans i18nKey={`quick-tips.visit-${variant}`}>
+                                <NodeName name={ownerName} linked={false} popup={false}/>
+                            </Trans>
                         </li>
                     }
                     <li className="subscribe">
-                        To subscribe to a blog, open it and click
-                        <Button variant="outline-primary" size="sm">Subscribe</Button>
-                        button.
+                        <Trans i18nKey={"quick-tips.subscribe"}>
+                            <SubscribeButton/>
+                        </Trans>
                     </li>
                     <li className="blog">
-                        To quickly access your blog, use buttons in the
-                        {Browser.isTinyScreen()? " bottom panel" : " top-right corner"}:
+                        {t(`quick-tips.blog-buttons-${variant}`)}
                         <p>
-                            <button><FontAwesomeIcon icon="newspaper"/></button> &mdash; your News feed;<br/>
-                            <button><FontAwesomeIcon icon="bell"/></button> &mdash; your Notifications;<br/>
-                            <button><FontAwesomeIcon icon="cog"/></button> &mdash; your Settings;<br/>
-                            <button><FontAwesomeIcon icon="home"/></button> &mdash; your Timeline.
+                            <button><FontAwesomeIcon icon="newspaper"/></button>
+                            {" "}&mdash; {t("quick-tips.your-news")}<br/>
+                            <button><FontAwesomeIcon icon="bell"/></button>
+                            {" "}&mdash; {t("quick-tips.your-notifications")}<br/>
+                            <button><FontAwesomeIcon icon="cog"/></button>
+                            {" "}&mdash; {t("quick-tips.your-settings")}<br/>
+                            <button><FontAwesomeIcon icon="home"/></button>
+                            {" "}&mdash; {t("quick-tips.your-timeline")}
                         </p>
                     </li>
                     <li>
-                        Discover new blogs in the{" "}
-                        <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74"
-                              onNear={onJump} onFar={onJump}>
-                            <b>list of blogs</b>
-                        </Jump>.
+                        <Trans i18nKey="quick-tips.discover-blogs">
+                            <ListOfBlogsLink onJump={onJump}/>
+                        </Trans>
                     </li>
                 </ul>
             </div>
             <div className="modal-footer">
-                <Button variant="primary" block onClick={onClose} autoFocus>OK</Button>
+                <Button variant="primary" block onClick={onClose} autoFocus>{t("ok")}</Button>
             </div>
         </ModalDialog>
     );
 }
+
+function NewPostButton() {
+    const {t} = useTranslation();
+
+    return (
+        <Button variant="success" size="sm">
+            <FontAwesomeIcon icon="pen-alt"/>&nbsp;&nbsp;{t("new-post-button")}
+        </Button>
+    );
+}
+
+function SubscribeButton() {
+    const {t} = useTranslation();
+
+    return (
+        <Button variant="outline-primary" size="sm">{t("subscribe")}</Button>
+    );
+}
+
+interface ListOfBlogsLinkProps {
+    children?: any;
+    onJump: JumpCallback;
+}
+
+const ListOfBlogsLink = ({children, onJump}: ListOfBlogsLinkProps) => (
+    <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74" onNear={onJump} onFar={onJump}>
+        <b>{children}</b>
+    </Jump>
+);
 
 const connector = connect(
     (state: ClientState) => ({

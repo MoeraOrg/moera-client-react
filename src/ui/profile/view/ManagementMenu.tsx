@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getNodeRootLocation } from "state/node/selectors";

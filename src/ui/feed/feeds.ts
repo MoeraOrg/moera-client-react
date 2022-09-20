@@ -1,4 +1,4 @@
-import { TFunction } from "react-i18next";
+import { TFunction } from 'react-i18next';
 
 export function getFeedTitle(feedName: string | null | undefined, t?: TFunction): string {
     t = t ?? ((text: string) => text);

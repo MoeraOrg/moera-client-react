@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 import { Button, Loading } from "ui/control";
 import { isNodeNameDefined, isNodeNameManageable, isNodeNameOperationPending } from "state/nodename/selectors";

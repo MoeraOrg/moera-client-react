@@ -56,7 +56,7 @@ function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, 
         return (
             <Button variant="outline-primary" size="sm" className="subscribe-button" loading={loading}
                     onClick={onSubscribe}>
-                Subscribe
+                {t("subscribe")}
             </Button>
         );
     }
