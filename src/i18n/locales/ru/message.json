@@ -8,7 +8,6 @@
   "female-short" : "ж.",
   "male" : "Мужской",
   "male-short" : "м.",
-  "moera" : "Moera",
   "reaction-title" : {
     "absurd" : "Абсурд",
     "angry" : "Бесит",
@@ -44,6 +43,11 @@
     "sweet" : "Очаровательно",
     "too-long" : "Длинно",
     "wow" : "Ого"
+  },
+  "setting" : {
+    "sheet" : {
+      "posting" : "Пост"
+    }
   },
   "undo" : "Отменить",
   "write-comment-here" : "Напишите тут комментарий для {mention}..."

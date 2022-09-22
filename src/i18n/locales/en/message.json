@@ -227,7 +227,6 @@
   "mark-read" : "Mark as Read",
   "mark-unread" : "Mark as Unread",
   "mention" : "Mention",
-  "moera" : "Moera",
   "more-links" : "{count} {count, plural, one {link} other {links}}",
   "more-reactions" : "{remaining} more",
   "more-reactions-hidden" : "{remaining} more hidden",
@@ -391,6 +390,30 @@
   "set-by-post-owner" : "set by post owner",
   "set-home-password" : "Set Home Password",
   "set-password-and-connect" : "Set Password & Connect",
+  "setting" : {
+    "chapter" : {
+      "comments" : "Comments",
+      "general" : "General",
+      "media" : "Media",
+      "password" : "Password",
+      "reactions" : "Reactions",
+      "replies" : "Replies",
+      "subscribers-and-subscriptions" : "Subscribers & Subscriptions",
+      "tokens" : "Tokens"
+    },
+    "sheet" : {
+      "addons" : "Add-ons",
+      "appearance" : "Appearance",
+      "comment" : "Comment",
+      "news" : "News",
+      "notifications" : "Notifications",
+      "other" : "Other",
+      "posting" : "Post",
+      "reactions" : "Reactions",
+      "security" : "Security",
+      "webui" : "Web UI"
+    }
+  },
   "settings" : "Settings",
   "settings-incorrect-values" : "Some settings have incorrect values.",
   "share" : "Share",

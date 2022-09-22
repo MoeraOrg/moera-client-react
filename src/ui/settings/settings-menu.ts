@@ -9,13 +9,12 @@ import SettingsItemTokens from "ui/settings/SettingsItemTokens";
 interface Sheet {
     type: "sheet";
     name: string;
-    title: string;
     children: Item[];
 }
 
 interface Chapter {
     type: "chapter";
-    title: string;
+    name: string;
     description: string | null;
     children: Item[];
     controls?: ComponentType<any>;
@@ -45,13 +44,13 @@ interface Text {
 
 export type Item = Chapter | Option | Component | Text;
 
-function sheet(name: string, title: string, children: Item[] = []): Sheet {
-    return {type: "sheet", name, title, children};
+function sheet(name: string, children: Item[] = []): Sheet {
+    return {type: "sheet", name, children};
 }
 
-function chapter<CP extends {}>(title: string, description: string | null, children: (Option | Component | Text)[],
+function chapter<CP extends {}>(name: string, description: string | null, children: (Option | Component | Text)[],
                                 controls?: ComponentType<CP>, controlsParameters?: CP): Chapter {
-    return {type: "chapter", title, description, children, controls, controlsParameters};
+    return {type: "chapter", name, description, children, controls, controlsParameters};
 }
 
 export function option(name: string, marginBottom?: number): Option {
@@ -68,39 +67,39 @@ export function text(text: string, marginBottom?: number): Text {
 
 const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
     "node": [
-        sheet("posting", "Post", [
-            chapter("General", null, [
+        sheet("posting", [
+            chapter("general", null, [
                 option("posting.subject.present"),
                 option("posting.max-size"),
                 option("posting.revealed.notification.age")
             ]),
-            chapter("Media", null, [
+            chapter("media", null, [
                 option("media.max-size"),
                 option("posting.media.max-size"),
                 option("posting.image.recommended-size"),
                 option("posting.image.recommended-pixels")
             ])
         ]),
-        sheet("news", "News", [
+        sheet("news", [
             option("news.lifetime"),
             option("news.purge-pinned"),
             option("posting.picked.hide-on-delete")
         ]),
-        sheet("security", "Security", [
-            chapter("Password", null, [
+        sheet("security", [
+            chapter("password", null, [
                 component(SettingsItemPassword)
             ]),
-            chapter("Subscribers & Subscriptions", null, [
+            chapter("subscribers-and-subscriptions", null, [
                 option("subscribers.view", 0),
                 option("subscribers.view-total", 0),
                 option("subscriptions.view", 0),
                 option("subscriptions.view-total")
             ]),
-            chapter("Tokens", null, [
+            chapter("tokens", null, [
                 component(SettingsItemTokens)
             ])
         ]),
-        sheet("webui", "Web UI", [
+        sheet("webui", [
             option("webui.enabled"),
             option("webui.redirect-to-client"),
             option("feed.width"),
@@ -110,11 +109,11 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option("webmaster.name"),
             option("webmaster.email")
         ]),
-        sheet("addons", "Add-ons"),
-        sheet("other", "Other")
+        sheet("addons"),
+        sheet("other")
     ],
     "client": [
-        sheet("appearance", "Appearance", [
+        sheet("appearance", [
             option(PREFIX + "language"),
             option(PREFIX + "posting.body.font-magnitude"),
             option(PREFIX + "feed.width"),
@@ -122,15 +121,15 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
             option(PREFIX + "full-name.display", 4),
             option(PREFIX + "entry.gallery.loop")
         ]),
-        sheet("notifications", "Notifications", [
+        sheet("notifications", [
             option(PREFIX + "instants.number.mode"),
             option(PREFIX + "instants.profile-link"),
             option(PREFIX + "news-button.target-story"),
             option(PREFIX + "mobile.notifications.enabled", 0),
             option(PREFIX + "mobile.notifications.news.enabled")
         ]),
-        sheet("posting", "Post", [
-            chapter("General", null, [
+        sheet("posting", [
+            chapter("general", null, [
                 option(PREFIX + "posting.visibility.default"),
                 option(PREFIX + "posting.feed.news.enabled", 0),
                 option(PREFIX + "posting.media.compress.default", 0),
@@ -138,12 +137,12 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option(PREFIX + "posting.time.relative"),
                 option(PREFIX + "rich-text-editor.link-previews.max-automatic")
             ]),
-            chapter("Comments", null, [
+            chapter("comments", null, [
                 option(PREFIX + "posting.comments.visibility.default", 0),
                 option(PREFIX + "posting.comments.addition.default", 2),
                 option(PREFIX + "posting.comments.hide.default")
             ]),
-            chapter("Reactions", null, [
+            chapter("reactions", null, [
                 option(PREFIX + "posting.reactions.enabled.default", 1),
                 option(PREFIX + "posting.reactions.positive.default", 4),
                 option(PREFIX + "posting.reactions.negative.enabled.default", 1),
@@ -152,29 +151,29 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option(PREFIX + "posting.reactions.totals-visible.default", 0),
                 option(PREFIX + "posting.reactions.visible.default")
             ]),
-            chapter("Replies", null, [
+            chapter("replies", null, [
                 option(PREFIX + "posting.reply.subject-prefix"),
                 option(PREFIX + "posting.reply.preamble"),
                 option(PREFIX + "posting.reply.quote-all")
             ])
         ]),
-        sheet("comment", "Comment", [
-            chapter("General", null, [
+        sheet("comment", [
+            chapter("general", null, [
                 option(PREFIX + "comment.replied-to.glance.enabled", 0),
                 option(PREFIX + "comment.smileys.enabled"),
                 option(PREFIX + "comment.submit-key")
             ]),
-            chapter("Reactions", null, [
+            chapter("reactions", null, [
                 option(PREFIX + "comment.reactions.positive.default"),
                 option(PREFIX + "comment.reactions.negative.default", 4),
                 option(PREFIX + "comment.reactions.self.enabled")
             ]),
         ]),
-        sheet("reactions", "Reactions", [
+        sheet("reactions", [
             option(PREFIX + "reactions.positive.available"),
             option(PREFIX + "reactions.negative.available")
         ]),
-        sheet("other", "Other")
+        sheet("other")
     ]
 }
 
