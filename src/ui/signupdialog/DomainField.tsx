@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useField } from 'formik';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import PROVIDERS from "providers";
 import { Button, FormGroup } from "ui/control";
@@ -17,8 +18,8 @@ interface Props {
 }
 
 export default function DomainField({name, title, disabled, onDomainInput, onDomainBlur, onAutoChange}: Props) {
-
     const inputDom = useRef<HTMLInputElement>();
+    const {t} = useTranslation();
 
     const onInputInput = (event: Event) => {
         if (onDomainInput) {
@@ -76,7 +77,7 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
                                 <span className="hostname">{value}</span>{suffix}
                             </div>
                         :
-                            <div className="domain-auto">Selected automatically</div>
+                            <div className="domain-auto">{t("selected-automatically")}</div>
                         )
                     :
                         <>
@@ -96,7 +97,7 @@ export default function DomainField({name, title, disabled, onDomainInput, onDom
                         </>
                     }
                     <Button variant="outline-secondary" size="sm" onClick={onAutoClick}>
-                        {autoDomainValue ? "Change" : "Auto"}
+                        {autoDomainValue ? t("change") : t("auto")}
                     </Button>
                 </div>
                 {touched && <FieldError error={error}/>}

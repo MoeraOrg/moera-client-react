@@ -1,16 +1,20 @@
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { Loading } from "ui/control";
 
 type Props = ConnectedProps<typeof connector>;
 
-const SettingsItemAddonsEmpty = ({loading, loaded}: Props) => (
-    loaded ?
-        <div className="mb-4">No add-ons loaded.</div>
-    :
-        <Loading active={loading}/>
-);
+const SettingsItemAddonsEmpty = ({loading, loaded}: Props) => {
+    const {t} = useTranslation();
+
+    if (loaded) {
+        return <div className="mb-4">{t("no-addons")}</div>;
+    } else {
+        return <Loading active={loading}/>;
+    }
+}
 
 const connector = connect(
     (state: ClientState) => ({

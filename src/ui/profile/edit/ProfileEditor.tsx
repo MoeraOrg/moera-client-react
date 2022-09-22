@@ -97,7 +97,7 @@ const profileEditorLogic = {
         fullName: yup.string().trim().max(96, "too-long"),
         title: yup.string().trim().max(120, "too-long"),
         gender: yup.string().trim().max(31, "too-long"),
-        email: yup.string().trim().max(63, "too-long").email("must-valid-e-mail"),
+        email: yup.string().trim().max(63, "too-long").email("not-valid-e-mail"),
         bioSrc: yup.object().shape({
             text: yup.string().trim().max(4096, "too-long")
         })

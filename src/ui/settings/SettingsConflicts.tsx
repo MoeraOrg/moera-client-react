@@ -1,34 +1,39 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
+import { ClientState } from "state/state";
 import {
     settingsClientConflictClose,
     settingsNodeConflictClose,
     settingsPluginsConflictClose
 } from "state/settings/actions";
-import { ClientState } from "state/state";
 import { ConflictWarning } from "ui/control";
 
 type Props = ConnectedProps<typeof connector>;
 
 const SettingsConflicts = ({tab, nodeConflict, clientConflict, pluginsConflict,
                             settingsNodeConflictClose, settingsClientConflictClose,
-                            settingsPluginsConflictClose}: Props) => (
-    <>
-        {tab === "node" &&
-            <ConflictWarning text="Node settings were changed by somebody." show={nodeConflict}
-                             onClose={settingsNodeConflictClose}/>
-        }
-        {tab === "client" &&
-            <ConflictWarning text="Client settings were changed by somebody." show={clientConflict}
-                             onClose={settingsClientConflictClose}/>
-        }
-        {tab === "node" &&
-            <ConflictWarning text="List of plugins has been changed." show={pluginsConflict}
-                             onClose={settingsPluginsConflictClose}/>
-        }
-    </>
-);
+                            settingsPluginsConflictClose}: Props) => {
+    const {t} = useTranslation();
+
+    return (
+        <>
+            {tab === "node" &&
+                <ConflictWarning text={t("node-settings-changed-conflict")} show={nodeConflict}
+                                 onClose={settingsNodeConflictClose}/>
+            }
+            {tab === "client" &&
+                <ConflictWarning text={t("client-settings-changed-conflict")} show={clientConflict}
+                                 onClose={settingsClientConflictClose}/>
+            }
+            {tab === "node" &&
+                <ConflictWarning text={t("addons-changed-conflict")} show={pluginsConflict}
+                                 onClose={settingsPluginsConflictClose}/>
+            }
+        </>
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({

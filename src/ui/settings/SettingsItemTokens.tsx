@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, fromUnixTime } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 import { TokenInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -17,6 +18,7 @@ type Props = ConnectedProps<typeof connector>;
 
 function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensDialogOpen, confirmBox}: Props) {
     const [expanded, setExpanded] = useState<string | null>(null);
+    const {t} = useTranslation();
 
     const onClick = (id: string) => (e: React.MouseEvent) => {
         setExpanded(expanded !== id ? id : null);
@@ -29,7 +31,7 @@ function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensD
     }
 
     const onDelete = (token: TokenInfo) => (e: React.MouseEvent) => {
-        confirmBox(`Do you really want to delete the token "${getName(token)}"?`, "Delete", "Cancel",
+        confirmBox(t("want-delete-token", {name: getName(token)}), t("delete"), t("cancel"),
             settingsTokensDelete(token.id), null, "danger");
         e.preventDefault();
     }
@@ -38,39 +40,39 @@ function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensD
         <>
             <Loading active={loading}/>
             {loaded &&
-                <Button variant="primary" onClick={() => settingsTokensDialogOpen(null)}>Create a Token</Button>
+                <Button variant="primary" onClick={() => settingsTokensDialogOpen(null)}>{t("create-token")}</Button>
             }
             <br/>
             <br/>
-            {tokens.map(t =>
-                <div className="token-info" key={t.id}>
+            {tokens.map(tk =>
+                <div className="token-info" key={tk.id}>
                     <FontAwesomeIcon icon="key" className="icon"/>
-                    <Button variant="link" onClick={onClick(t.id)}>{getName(t)}</Button>
-                    {!isHomeToken(t, homeToken) ?
+                    <Button variant="link" onClick={onClick(tk.id)}>{getName(tk)}</Button>
+                    {!isHomeToken(tk, homeToken) ?
                         <>
-                            <button className="token-button" title="Rename" onClick={onEdit(t)}>
+                            <button className="token-button" title={t("rename")} onClick={onEdit(tk)}>
                                 <FontAwesomeIcon icon="pen"/>
                             </button>
-                            <button className="token-button red" title="Delete" onClick={onDelete(t)}>
+                            <button className="token-button red" title={t("delete")} onClick={onDelete(tk)}>
                                 <FontAwesomeIcon icon="trash-can"/>
                             </button>
                         </>
                     :
-                        <span className="current">Current</span>
+                        <span className="current">{t("current")}</span>
                     }
-                    {expanded === t.id &&
+                    {expanded === tk.id &&
                         <div className="details">
-                            {t.pluginName != null &&
+                            {tk.pluginName != null &&
                                 <span className="item">
-                                    <em>Used by plugin:</em>{t.pluginName}
+                                    <em>{t("used-by-addon")}</em>{tk.pluginName}
                                 </span>
                             }
                             <span className="item">
-                                <em>Created at:</em>{format(fromUnixTime(t.createdAt), "yyyy-MM-dd HH:mm:ss")}
+                                <em>{t("created-at")}</em>{format(fromUnixTime(tk.createdAt), "yyyy-MM-dd HH:mm:ss")}
                             </span>
-                            {t.deadline != null &&
+                            {tk.deadline != null &&
                                 <span className="item">
-                                    <em>Expires:</em>{format(fromUnixTime(t.deadline), "yyyy-MM-dd HH:mm:ss")}
+                                    <em>{t("expires")}</em>{format(fromUnixTime(tk.deadline), "yyyy-MM-dd HH:mm:ss")}
                                 </span>
                             }
                         </div>

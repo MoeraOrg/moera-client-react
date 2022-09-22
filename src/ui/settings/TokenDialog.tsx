@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { settingsTokensCreate, settingsTokensDialogClose, settingsTokensUpdate } from "state/settings/actions";
@@ -20,6 +21,8 @@ type Props = OuterProps & FormikProps<Values>;
 function TokenDialog(props: Props) {
     const {show, token, updating, settingsTokensDialogClose, resetForm} = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (show) {
             resetForm({values: tokenLogic.mapPropsToValues(props)})
@@ -32,18 +35,18 @@ function TokenDialog(props: Props) {
     }
 
     return (
-        <ModalDialog title={token == null ? "Create Token" : "Rename Token"} onClose={settingsTokensDialogClose}>
+        <ModalDialog title={token == null ? t("create-token") : t("rename-token")} onClose={settingsTokensDialogClose}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="name" title="Token name" autoFocus/>
+                    <InputField name="name" title={t("token-name")} autoFocus/>
                     {token == null &&
-                        <InputField name="password" title="Your password"/>
+                        <InputField name="password" title={t("your-password")}/>
                     }
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={settingsTokensDialogClose}>Cancel</Button>
+                    <Button variant="secondary" onClick={settingsTokensDialogClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={updating}>
-                        {token == null ? "Create" : "Rename"}
+                        {token == null ? t("create") : t("rename")}
                     </Button>
                 </div>
             </Form>
@@ -60,7 +63,7 @@ const tokenLogic = {
 
     validationSchema: (props: OuterProps) =>
         yup.object().shape(props.token == null ? {
-            password: yup.string().required("Must not be empty")
+            password: yup.string().required("must-not-empty")
         } : {}),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -68,7 +71,7 @@ const tokenLogic = {
         name = name.length > 0 ? name : null;
         if (formik.props.token == null) {
             formik.props.settingsTokensCreate(values.password.trim(), name,
-                () => formik.setFieldError("password", "Password is incorrect"));
+                () => formik.setFieldError("password", "password-incorrect"));
         } else {
             formik.props.settingsTokensUpdate(formik.props.token.id, name);
         }

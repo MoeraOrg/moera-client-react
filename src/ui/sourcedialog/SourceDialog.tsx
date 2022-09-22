@@ -1,22 +1,25 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
-import { Button, Loading, ModalDialog } from "ui/control";
+import { ClientState } from "state/state";
 import { getFeedWidth } from "state/settings/selectors";
 import { closeSourceDialog } from "state/sourcedialog/actions";
-import { ClientState } from "state/state";
+import { Button, Loading, ModalDialog } from "ui/control";
 import "./SourceDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
 
 function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}: Props) {
+    const {t} = useTranslation();
+
     if (!show) {
         return null;
     }
 
     return (
-        <ModalDialog className="source-dialog" style={{"--feed-width": feedWidth + "px"}}
-                     title="View Source" onClose={closeSourceDialog}>
+        <ModalDialog className="source-dialog" style={{"--feed-width": feedWidth + "px"}} title={t("view-source-title")}
+                     onClose={closeSourceDialog}>
             <div className="modal-body">
                 {loading ?
                     <Loading active={true}/>
@@ -25,7 +28,7 @@ function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}: Props
                 }
             </div>
             <div className="modal-footer">
-                <Button variant="primary" onClick={closeSourceDialog}>Close</Button>
+                <Button variant="primary" onClick={closeSourceDialog}>{t("close")}</Button>
             </div>
         </ModalDialog>
     );

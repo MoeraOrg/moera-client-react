@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { settingsChangePassword, settingsChangePasswordDialogClose } from "state/settings/actions";
@@ -21,6 +22,8 @@ type Props = OuterProps & FormikProps<Values>;
 function ChangePasswordDialog(props: Props) {
     const {show, changing, settingsChangePasswordDialogClose, resetForm} = props;
 
+    const {t} = useTranslation();
+
     useEffect(() => {
         if (show) {
             resetForm({values: changePasswordLogic.mapPropsToValues(props)})
@@ -33,16 +36,16 @@ function ChangePasswordDialog(props: Props) {
     }
 
     return (
-        <ModalDialog title="Change Home Password" onClose={settingsChangePasswordDialogClose}>
+        <ModalDialog title={t("change-home-password")} onClose={settingsChangePasswordDialogClose}>
             <Form>
                 <div className="modal-body">
-                    <InputField name="oldPassword" title="Current password" autoFocus/>
-                    <InputField name="password" title="New password"/>
-                    <InputField name="confirmPassword" title="Confirm password"/>
+                    <InputField name="oldPassword" title={t("current-password")} autoFocus/>
+                    <InputField name="password" title={t("new-password")}/>
+                    <InputField name="confirmPassword" title={t("confirm-password")}/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={settingsChangePasswordDialogClose}>Cancel</Button>
-                    <Button variant="primary" type="submit" loading={changing}>Change Password</Button>
+                    <Button variant="secondary" onClick={settingsChangePasswordDialogClose}>{t("cancel")}</Button>
+                    <Button variant="primary" type="submit" loading={changing}>{t("change-password")}</Button>
                 </div>
             </Form>
         </ModalDialog>
@@ -58,16 +61,16 @@ const changePasswordLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        oldPassword: yup.string().trim().required("Must not be empty"),
-        password: yup.string().required("Must not be empty"),
+        oldPassword: yup.string().trim().required("must-not-empty"),
+        password: yup.string().required("must-not-empty"),
         confirmPassword: yup.string().when(["password"], (password, schema) =>
-            schema.required("Please type the password again").oneOf([password], "Passwords are different")
+            schema.required("retype-password").oneOf([password], "passwords-different")
         )
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.settingsChangePassword(values.oldPassword.trim(), values.password.trim(),
-            () => formik.setFieldError("oldPassword", "Password is incorrect"));
+            () => formik.setFieldError("oldPassword", "password-incorrect"));
         formik.setSubmitting(false);
     }
 

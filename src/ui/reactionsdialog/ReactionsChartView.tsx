@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
@@ -12,13 +13,19 @@ type Props = {
     onSwitchView?: () => void;
 } & ConnectedProps<typeof connector>;
 
-const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis, closeReactionsDialog}: Props) => (
-    loaded ?
+const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis, closeReactionsDialog}: Props) => {
+    const {t} = useTranslation();
+
+    if (!loaded) {
+        return null;
+    }
+
+    return (
         <>
             <div className="totals clearfix">
                 <div className="topright">
                     {onSwitchView &&
-                        <div className="switch-view" title="View as list" onClick={onSwitchView}>
+                        <div className="switch-view" title={t("view-as-list")} onClick={onSwitchView}>
                             <FontAwesomeIcon icon="list"/>
                         </div>
                     }
@@ -28,7 +35,7 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
             <div className="items" tabIndex={-1} ref={itemsRef}>
                 {total !== 0 &&
                     <div className="item">
-                        <div className="all">All</div>
+                        <div className="all">{t("all")}</div>
                         <div className="total">{total}</div>
                         <div className="bar"/>
                     </div>
@@ -53,9 +60,8 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
             </div>
             <Loading active={loading}/>
         </>
-    :
-        null
-);
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({

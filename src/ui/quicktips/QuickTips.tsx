@@ -83,7 +83,7 @@ function QuickTips({show, ownerName, shown, closeQuickTips, settingsUpdate}: Pro
                 </ul>
             </div>
             <div className="modal-footer">
-                <Button variant="primary" block onClick={onClose} autoFocus>{t("ok")}</Button>
+                <Button variant="primary" block onClick={onClose} autoFocus>{t("close")}</Button>
             </div>
         </ModalDialog>
     );

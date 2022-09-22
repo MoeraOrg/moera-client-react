@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { createSelector } from 'reselect';
 import { Field, Form, FormikBag, FormikProps, withFormik } from 'formik';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { Button, ModalDialog } from "ui/control";
 import { ShareTextMode } from "ui/sharedialog/share-text-mode";
@@ -49,6 +50,7 @@ const ShareDialog = ({
     show, title, url, socialButtons, closeShareDialog, shareDialogCopyLink, values, resetForm
 }: Props) => {
     const [mode, setMode] = useState("text" as ShareTextMode);
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (show) {
@@ -71,7 +73,7 @@ const ShareDialog = ({
     }
 
     return (
-        <ModalDialog title="Share" className="share-dialog" onClose={closeShareDialog}>
+        <ModalDialog title={t("share")} className="share-dialog" onClose={closeShareDialog}>
             <div className="modal-body">
                 <ul className="nav nav-pills">
                     {MODE_TABS.map(({mode: mod, title}) => (
@@ -87,7 +89,7 @@ const ShareDialog = ({
                     <Field component="textarea" name="title" className="form-control title" rows={4}/>
                     <div className="link">
                         <Field type="text" name="url" className="form-control"/>
-                        <Button variant="secondary" onClick={() => shareDialogCopyLink(values.url)}>Copy</Button>
+                        <Button variant="secondary" onClick={() => shareDialogCopyLink(values.url)}>{t("copy")}</Button>
                     </div>
                 </Form>
                 <div className="social">
@@ -98,7 +100,7 @@ const ShareDialog = ({
                 </div>
             </div>
             <div className="modal-footer">
-                <Button variant="primary" onClick={closeShareDialog}>Close</Button>
+                <Button variant="primary" onClick={closeShareDialog}>{t("close")}</Button>
             </div>
         </ModalDialog>
     );

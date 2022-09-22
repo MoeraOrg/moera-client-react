@@ -1,28 +1,36 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { Trans, useTranslation } from 'react-i18next';
 
-import { Button } from "ui/control";
+import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
+import { Button } from "ui/control";
 import "./Invitation.css";
-import { ClientState } from "state/state";
 
 type Props = ConnectedProps<typeof connector>;
 
-const Invitation = ({connected, openConnectDialog, openSignUpDialog}: Props) => (
-    !connected ?
+const Invitation = ({connected, openConnectDialog, openSignUpDialog}: Props) => {
+    const {t} = useTranslation();
+
+    if (connected) {
+        return null;
+    }
+
+    return (
         <div id="invitation">
-            <h1>Do you have a Moera blog?</h1>
+            <h1>{t("do-you-have-blog")}</h1>
             <div className="buttons">
-                <Button variant="primary" size="lg" onClick={() => openSignUpDialog()}>Create a new blog</Button>
-                <div className="or">or</div>
-                <Button variant="success" size="lg" onClick={() => openConnectDialog()}>Connect to your blog</Button>
+                <Trans i18nKey="invitation-buttons">
+                    <Button variant="primary" size="lg" onClick={() => openSignUpDialog()}/>
+                    <div className="or"/>
+                    <Button variant="success" size="lg" onClick={() => openConnectDialog()}/>
+                </Trans>
             </div>
         </div>
-    :
-        null
-);
+    );
+}
 
 const connector = connect(
     (state: ClientState) => ({

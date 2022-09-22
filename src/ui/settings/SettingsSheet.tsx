@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Property } from 'csstype';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import { SettingTypes } from "api";
 import { ClientSettingMetaInfo } from "api/settings";
@@ -19,7 +20,7 @@ type OuterProps = {
     items?: Item[];
     valuesMap: Map<string, string | null>;
     metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
-} & ConnectedProps<typeof connector>;
+} & ConnectedProps<typeof connector> & WithTranslation;
 
 type Values = Partial<Record<string, SettingValue>>;
 
@@ -112,7 +113,7 @@ const settingsSheetLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const {valuesMap, metaMap, messageBox, settingsUpdate} = formik.props;
+        const {valuesMap, metaMap, messageBox, settingsUpdate, t} = formik.props;
 
         if (metaMap.size === 0) {
             formik.setSubmitting(false);
@@ -141,7 +142,7 @@ const settingsSheetLogic = {
         });
 
         if (hasErrors) {
-            messageBox("Some settings have incorrect values.");
+            messageBox(t("settings-incorrect-values"));
         } else {
             settingsUpdate(settingsToUpdate);
         }
@@ -156,4 +157,4 @@ const connector = connect(
     { messageBox, settingsUpdate }
 );
 
-export default connector(withFormik(settingsSheetLogic)(SettingsSheet));
+export default connector(withTranslation()(withFormik(settingsSheetLogic)(SettingsSheet)));

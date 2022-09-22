@@ -4,6 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { StringSchema } from 'yup';
 import debounce from 'lodash.debounce';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import * as Rules from "api/naming/rules";
 import PROVIDERS from "providers";
@@ -24,7 +25,7 @@ import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField, SelectField } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
 
-type OuterProps = ConnectedProps<typeof connector>;
+type OuterProps = ConnectedProps<typeof connector> & WithTranslation;
 
 interface Values {
     provider: string;
@@ -153,36 +154,36 @@ class SignUpDialog extends React.PureComponent<Props> {
     }
 
     render() {
-        const {show, processing, stage, cancelSignUpDialog} = this.props;
+        const {show, processing, stage, cancelSignUpDialog, t} = this.props;
 
         if (!show) {
             return null;
         }
 
         return (
-            <ModalDialog title="Create a Blog" onClose={cancelSignUpDialog}>
+            <ModalDialog title={t("create-blog")} onClose={cancelSignUpDialog}>
                 <Form>
                     <div className="modal-body sign-up-dialog">
-                        <SelectField name="provider" title="Provider" choices={this.getProviders()} anyValue
+                        <SelectField name="provider" title={t("provider")} choices={this.getProviders()} anyValue
                                      disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
                                      selectRef={this.setProviderSelectRef}/>
-                        <InputField name="name" title="Name" autoFocus inputRef={this.setNameInputRef}
+                        <InputField name="name" title={t("name")} autoFocus inputRef={this.setNameInputRef}
                                     disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
                         <NameHelp/>
-                        <DomainField name="domain" title="Domain"
+                        <DomainField name="domain" title={t("domain")}
                                      disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
                                      onDomainInput={this.onDomainInput} onDomainBlur={this.onDomainBlur}
                                      onAutoChange={this.onAutoDomainChange}/>
-                        <InputField name="password" title="New password"
+                        <InputField name="password" title={t("new-password")}
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
-                        <InputField name="confirmPassword" title="Confirm password"
+                        <InputField name="confirmPassword" title={t("confirm-password")}
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
-                        <InputField name="email" title="E-mail"
+                        <InputField name="email" title={t("e-mail")}
                                     disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
                     </div>
                     <div className="modal-footer">
-                        <Button variant="secondary" onClick={cancelSignUpDialog}>Cancel</Button>
-                        <Button variant="primary" type="submit" loading={processing}>Create</Button>
+                        <Button variant="secondary" onClick={cancelSignUpDialog}>{t("cancel")}</Button>
+                        <Button variant="primary" type="submit" loading={processing}>{t("create")}</Button>
                     </div>
                 </Form>
             </ModalDialog>
@@ -206,29 +207,28 @@ const signUpDialogLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        name: yup.string().trim().required("Must not be empty").max(Rules.NAME_MAX_LENGTH)
-            .test("is-allowed", "Not allowed", Rules.isRegisteredNameValid)
+        name: yup.string().trim().required("must-not-empty").max(Rules.NAME_MAX_LENGTH)
+            .test("is-allowed", "not-allowed", Rules.isRegisteredNameValid)
             .when("nameTaken",
-                (nameTaken: string, schema: StringSchema) => schema.notOneOf([nameTaken],
-                    "Name is already taken. Note that you can add any number to the name (like 'Arthur_42')")),
+                (nameTaken: string, schema: StringSchema) => schema.notOneOf([nameTaken], "name-already-taken")),
         domain: yup.string()
             .when("autoDomain", {
                 is: true,
                 then: yup.string().notRequired(),
                 otherwise: yup.string().trim()
-                    .required("Must not be empty")
-                    .min(4, "Too short, should be 4 characters at least")
-                    .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "Not allowed")
+                    .required("must-not-empty")
+                    .min(4, "domain-too-short")
+                    .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "not-allowed")
                     .when("domainTaken",
                         (domainTaken: string, schema: StringSchema) =>
-                            schema.notOneOf([domainTaken], "Domain is already taken")),
+                            schema.notOneOf([domainTaken], "domain-already-taken")),
             }),
-        password: yup.string().required("Must not be empty"),
+        password: yup.string().required("must-not-empty"),
         confirmPassword: yup.string().when("password",
             (password: string, schema: StringSchema) =>
-                schema.required("Please type the password again").oneOf([password], "Passwords are different")
+                schema.required("retype-password").oneOf([password], "passwords-different")
         ),
-        email: yup.string().email("Not a valid e-mail address")
+        email: yup.string().email("not-valid-e-mail")
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -247,4 +247,4 @@ const connector = connect(
     { cancelSignUpDialog, signUp, signUpNameVerify, signUpFindDomain, signUpDomainVerify }
 );
 
-export default connector(withFormik(signUpDialogLogic)(SignUpDialog));
+export default connector(withTranslation()(withFormik(signUpDialogLogic)(SignUpDialog)));
