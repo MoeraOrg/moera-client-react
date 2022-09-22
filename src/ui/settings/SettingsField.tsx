@@ -88,18 +88,20 @@ function valueRange(type: SettingType, modifiers: SettingTypeModifiers | ClientS
 interface Props {
     name: string;
     fieldName: string;
+    titleName: string;
     meta?: SettingMetaInfo | ClientSettingMetaInfo | null;
     initialValue?: string | null;
     groupClassName?: string;
 }
 
-export default function SettingsField({name, fieldName, meta, initialValue, groupClassName}: Props) {
+export default function SettingsField({name, fieldName, titleName, meta, initialValue, groupClassName}: Props) {
     const {t} = useTranslation();
 
     const type: SettingType = meta ? meta.type : "string";
     const modifiers = meta && meta.modifiers ? meta.modifiers : {};
     const privileged = meta != null && "privileged" in meta && meta.privileged;
-    const title = (meta ? meta.title + (privileged ? " " + t("provider-setting") : "") : name)
+    const title = t(titleName, {defaultValue: meta ? meta.title : name})
+        + (privileged ? " " + t("provider-setting") : "")
         + valueRange(type, modifiers, t);
     const defaultValue = meta ? meta.defaultValue : null;
     const disabled = meta ? privileged : false;

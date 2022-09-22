@@ -45,6 +45,11 @@
     "wow" : "Ого"
   },
   "setting" : {
+    "client" : {
+      "mercy" : {
+        "language" : "Язык"
+      }
+    },
     "sheet" : {
       "posting" : "Пост"
     }
