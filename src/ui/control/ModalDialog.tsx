@@ -35,9 +35,10 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
     const onBackdropMouseDown = (e: React.MouseEvent) => {
         if (modalDialog.current != null) {
             const r = modalDialog.current.getBoundingClientRect();
-            if (r.left <= e.clientX && r.right >= e.clientX
-                && r.top <= e.clientY && r.bottom >= e.clientY) {
-
+            if (
+                (r.left <= e.clientX && r.right >= e.clientX && r.top <= e.clientY && r.bottom >= e.clientY)
+                || (e.clientX === 0 && e.clientY === 0) // Ugly hack, but need to workaround wrong mouse events in FF
+            ) {
                 mouseDownX.current = undefined;
                 mouseDownY.current = undefined;
                 return;
