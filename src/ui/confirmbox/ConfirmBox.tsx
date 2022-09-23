@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { closeConfirmBox } from "state/confirmbox/actions";
@@ -10,6 +11,8 @@ const forwardAction = (action: any) => action;
 type Props = ConnectedProps<typeof connector>;
 
 function ConfirmBox({show, message, yes, no, onYes, onNo, variant, closeConfirmBox, forwardAction}: Props) {
+    const {t} = useTranslation();
+
     const onClickYes = () => {
         closeConfirmBox();
         if (onYes) {
@@ -42,8 +45,8 @@ function ConfirmBox({show, message, yes, no, onYes, onNo, variant, closeConfirmB
                 {message}
             </div>
             <div className="modal-footer">
-                <Button variant="secondary" onClick={onClickNo} autoFocus>{no}</Button>
-                <Button variant={variant} onClick={onClickYes} autoFocus>{yes}</Button>
+                <Button variant="secondary" onClick={onClickNo} autoFocus>{no ?? t("no")}</Button>
+                <Button variant={variant} onClick={onClickYes} autoFocus>{yes ?? t("yes")}</Button>
             </div>
         </ModalDialog>
     );

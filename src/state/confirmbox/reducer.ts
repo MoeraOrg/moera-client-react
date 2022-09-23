@@ -5,8 +5,8 @@ import { ClientAction } from "state/action";
 const initialState = {
     show: false,
     message: null,
-    yes: "Yes",
-    no: "No",
+    yes: null,
+    no: null,
     onYes: null,
     onNo: null,
     variant: "primary"
