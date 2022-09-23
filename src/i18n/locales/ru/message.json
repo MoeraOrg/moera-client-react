@@ -6,6 +6,12 @@
   },
   "female" : "Женский",
   "female-short" : "ж.",
+  "instant-summary" : {
+    "story" : {
+      "reaction-added" : "{reactions} ваш пост {heading}"
+    },
+    "supported" : "одобрил"
+  },
   "male" : "Мужской",
   "male-short" : "м.",
   "reaction-title" : {

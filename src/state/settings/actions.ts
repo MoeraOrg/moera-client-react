@@ -380,6 +380,12 @@ export const settingsPluginsConflictClose = (): SettingsPluginsConflictCloseActi
     type: SETTINGS_PLUGINS_CONFLICT_CLOSE
 });
 
+export const SETTINGS_LANGUAGE_CHANGED = "SETTINGS_LANGUAGE_CHANGED";
+export type SettingsLanguageChangedAction = Action<typeof SETTINGS_LANGUAGE_CHANGED>;
+export const settingsLanguageChanged = (): SettingsLanguageChangedAction => ({
+    type: SETTINGS_LANGUAGE_CHANGED
+});
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -431,4 +437,5 @@ export type SettingsAnyAction =
     | SettingsPluginsDeleteAction
     | SettingsPluginsDeletedAction
     | SettingsPluginsConflictAction
-    | SettingsPluginsConflictCloseAction;
+    | SettingsPluginsConflictCloseAction
+    | SettingsLanguageChangedAction;

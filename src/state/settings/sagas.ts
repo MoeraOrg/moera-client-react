@@ -10,7 +10,8 @@ import { introduced } from "state/init-selectors";
 import {
     SETTINGS_CHANGE_PASSWORD,
     SETTINGS_CLIENT_VALUES_LOAD,
-    SETTINGS_CLIENT_VALUES_LOADED, SETTINGS_CLIENT_VALUES_SET,
+    SETTINGS_CLIENT_VALUES_LOADED,
+    SETTINGS_CLIENT_VALUES_SET,
     SETTINGS_NODE_META_LOAD,
     SETTINGS_NODE_VALUES_LOAD,
     SETTINGS_PLUGINS_DELETE,
@@ -26,7 +27,9 @@ import {
     SettingsChangePasswordAction,
     settingsChangePasswordFailed,
     settingsClientValuesLoaded,
-    settingsClientValuesLoadFailed, SettingsClientValuesSetAction,
+    settingsClientValuesLoadFailed,
+    SettingsClientValuesSetAction,
+    settingsLanguageChanged,
     settingsNodeMetaLoaded,
     settingsNodeMetaLoadFailed,
     settingsNodeValuesLoaded,
@@ -133,29 +136,30 @@ function* settingsClientValuesLoadSaga() {
 function* settingsClientValuesLoadedSaga() {
     const lang = yield* select((state: ClientState) => getSetting(state, "language") as string);
     if (lang !== i18n.language) {
-        i18n.changeLanguage(lang);
+        yield* call(i18n.changeLanguage, lang);
+        yield* put(settingsLanguageChanged());
     }
     yield* call(storeSettings);
 }
 
-function updateLanguage(settings: SettingInfo[]) {
+function* updateLanguage(settings: SettingInfo[]) {
     const lang = settings.find(st => st.name === PREFIX + "language")?.value;
     if (lang != null && lang !== i18n.language) {
-        i18n.changeLanguage(lang);
+        yield* call(i18n.changeLanguage, lang);
+        yield* put(settingsLanguageChanged());
     }
 }
 
-// eslint-disable-next-line require-yield
 function* settingsClientValuesSetSaga(action: SettingsClientValuesSetAction) {
     const {settings} = action.payload;
 
-    updateLanguage(settings);
+    yield* call(updateLanguage, settings);
 }
 
 function* settingsUpdateSaga(action: SettingsUpdateAction) {
     const {settings, onSuccess} = action.payload;
 
-    updateLanguage(settings);
+    yield* call(updateLanguage, settings);
 
     const clientMeta = yield* select(getSettingsClientMeta);
     const toHome = settings

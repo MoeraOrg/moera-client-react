@@ -32,6 +32,7 @@ import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_UPDATED } from "state/stories/actions";
 import { buildSummary } from "ui/instant/instant-summaries";
 import { replaceEmojis } from "util/html";
+import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 
 const initialState = {
 };
@@ -421,6 +422,25 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             const index = feed.stories.findIndex(t => t.id === id);
             if (index >= 0) {
                 istate.set([feedName, "stories", index, "read"], read);
+            }
+            return istate.value();
+        }
+
+        case SETTINGS_LANGUAGE_CHANGED: {
+            const {homeOwnerName} = action.context;
+            const istate = immutable.wrap(state);
+            for (let [fn, feed] of Object.entries(state)) {
+                if (feed != null) {
+                    istate.set([fn, "stories"], feed.stories.map(story => {
+                        if (story.summaryData == null) {
+                            return story;
+                        }
+                        return {
+                            ...story,
+                            summary: replaceEmojis(buildSummary(story.storyType, story.summaryData, homeOwnerName))
+                        }
+                    }));
+                }
             }
             return istate.value();
         }
