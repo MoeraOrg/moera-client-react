@@ -47,6 +47,11 @@
   "setting" : {
     "client" : {
       "mercy" : {
+        "instants_number_mode" : "Показывать число уведомлений",
+        "instants_number_mode-items" : {
+          "not-read" : "Непрочитанных",
+          "not-viewed" : "Непросмотренных"
+        },
         "language" : "Язык"
       }
     },

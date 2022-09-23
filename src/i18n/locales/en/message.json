@@ -404,8 +404,16 @@
     "client" : {
       "mercy" : {
         "avatar_shape" : "Avatars shape",
+        "avatar_shape-items" : {
+          "circle" : "Round",
+          "design" : "As designed",
+          "square" : "Square"
+        },
         "clock_offset" : "Clock offset from the real time (in hours)",
         "comment_body-src-format_default" : "Default comment text formatting",
+        "comment_body-src-format_default-items" : {
+          "plain-text" : "No formatting"
+        },
         "comment_reactions_negative_default" : "Default set of \"Oppose\" reactions to my comment",
         "comment_reactions_positive_default" : "Default set of \"Support\" reactions to my comment",
         "comment_reactions_self_enabled" : "Allow to add reactions to your own comments",
@@ -415,13 +423,26 @@
         "entry_gallery_loop" : "Loop gallery view",
         "feed_width" : "Feed width (in pixels)",
         "full-name_display" : "Displaying full names of users",
+        "full-name_display-items" : {
+          "both" : "Both",
+          "full-name" : "Full name only",
+          "name" : "Nickname only"
+        },
         "fundraiser_preferred_auto" : "Automatically set preferred donation method",
         "fundraiser_preferred_prefix" : "Preferred donation method (scheme or domain)",
         "instants_number_mode" : "Number of notifications to be displayed",
+        "instants_number_mode-items" : {
+          "not-read" : "Not read",
+          "not-viewed" : "Not viewed"
+        },
         "instants_profile-link" : "Click on avatar in a notification to open the user's profile",
         "language" : "Language",
         "naming_location" : "Naming server location",
         "news-button_target-story" : "\"Your news\" button opens",
+        "news-button_target-story-items" : {
+          "earliest-new" : "The earliest new post",
+          "latest" : "The latest post"
+        },
         "posting_body_font-magnitude" : "Font size",
         "posting_body_font-magnitude_mobile" : "Post font size",
         "posting_comments_addition_default" : "Commenting allowed by default",
@@ -446,7 +467,12 @@
         "reactions_negative_available" : "Usable \"Oppose\" reactions",
         "reactions_positive_available" : "Usable \"Support\" reactions",
         "rich-text-editor_link-previews_max-automatic" : "Maximal number of link previews created automatically",
-        "rich-text-editor_paste-rich" : "When pasting text with formatting tags"
+        "rich-text-editor_paste-rich" : "When pasting text with formatting tags",
+        "rich-text-editor_paste-rich-items" : {
+          "ask" : "Ask",
+          "html" : "Paste with tags",
+          "text" : "Paste text only"
+        }
       }
     },
     "node" : {

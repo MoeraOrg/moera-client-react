@@ -140,11 +140,18 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
                         return <InputField name={fieldName} title={title} disabled={disabled}
                                            groupClassName={groupClassName} initialValue={initialValue}
                                            defaultValue={defaultValue} anyValue/>;
-                    case "select":
+                    case "select": {
+                        let items = undefined;
+                        if ("items" in modifiers && modifiers.items != null) {
+                            items = modifiers.items.map(item => ({
+                                title: t(`${titleName}-items.${item.value}`, {defaultValue: item.title}),
+                                value: item.value
+                            }));
+                        }
                         return <SelectField name={fieldName} title={title} disabled={disabled}
-                                            groupClassName={groupClassName}
-                                            choices={"items" in modifiers ? modifiers.items : undefined}
+                                            groupClassName={groupClassName} choices={items}
                                             initialValue={initialValue} defaultValue={defaultValue} anyValue/>
+                    }
                     case "emoji-list-positive":
                         return <EmojiListInputField name={fieldName} title={title} disabled={disabled}
                                                     groupClassName={groupClassName} negative={false}
