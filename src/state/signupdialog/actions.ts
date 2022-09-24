@@ -24,6 +24,7 @@ export const cancelSignUpDialog = (): CancelSignUpDialogAction => ({
 export const SIGN_UP = "SIGN_UP";
 type SignUpOnError = (fieldName: string, message: string) => void;
 export type SignUpAction = ActionWithPayload<typeof SIGN_UP, {
+    language: string;
     provider: string;
     name: string;
     domain: string | null;
@@ -31,10 +32,10 @@ export type SignUpAction = ActionWithPayload<typeof SIGN_UP, {
     email: string | null;
     onError: SignUpOnError;
 }>;
-export const signUp = (provider: string, name: string, domain: string | null, password: string, email: string | null,
-                       onError: SignUpOnError): SignUpAction => ({
+export const signUp = (language: string, provider: string, name: string, domain: string | null, password: string,
+                       email: string | null, onError: SignUpOnError): SignUpAction => ({
     type: SIGN_UP,
-    payload: {provider, name, domain, password, email, onError}
+    payload: {language, provider, name, domain, password, email, onError}
 });
 
 export const SIGNED_UP = "SIGNED_UP";

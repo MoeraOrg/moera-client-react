@@ -213,6 +213,7 @@
   },
   "invitation-buttons" : "<0>Create a new blog</0><1>or</1><2>Connect to your blog</2>",
   "italic" : "Italic",
+  "language" : "Language",
   "last-post" : "last",
   "link" : "Link",
   "links" : "Links",
@@ -437,6 +438,9 @@
         },
         "instants_profile-link" : "Click on avatar in a notification to open the user's profile",
         "language" : "Language",
+        "language-items" : {
+          "auto" : "Automatically"
+        },
         "naming_location" : "Naming server location",
         "news-button_target-story" : "\"Your news\" button opens",
         "news-button_target-story-items" : {

@@ -103,7 +103,6 @@ function updateScrollingOnInactive(istate: WrappedObject<FeedsState>, feedName: 
 }
 
 export default (state: FeedsState = initialState, action: WithContext<ClientAction>): FeedsState => {
-    console.log(action);
     switch (action.type) {
         case INIT_FROM_LOCATION: {
             const istate = immutable.wrap(state);

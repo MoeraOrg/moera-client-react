@@ -1,8 +1,6 @@
 import * as URI from 'uri-js';
 
 import { AvatarImage, CarteInfo } from "api/node/api-types";
-import { rootUrl } from "util/url";
-import { randomId } from "util/misc";
 import {
     AddonMessage,
     deleteDataMessage,
@@ -12,6 +10,8 @@ import {
     switchDataMessage
 } from "api/addon/api-types";
 import { PREFIX } from "api/settings";
+import { rootUrl } from "util/url";
+import { randomId } from "util/misc";
 
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
 type UserAgentOs = "android" | "ios" | "unknown";

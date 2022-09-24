@@ -12,6 +12,7 @@
     },
     "supported" : "одобрил"
   },
+  "language" : "Язык",
   "male" : "Мужской",
   "male-short" : "м.",
   "reaction-title" : {
@@ -58,7 +59,10 @@
           "not-read" : "Непрочитанных",
           "not-viewed" : "Непросмотренных"
         },
-        "language" : "Язык"
+        "language" : "Язык",
+        "language-items" : {
+          "auto" : "Автоматически"
+        }
       }
     },
     "sheet" : {

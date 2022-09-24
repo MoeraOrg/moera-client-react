@@ -3,6 +3,7 @@ import { call, put, select } from 'typed-redux-saga';
 import { Naming, Node, NodeApiError } from "api";
 import { CarteSet } from "api/node/api-types";
 import { getCartes } from "api/node/cartes";
+import { PREFIX } from "api/settings";
 import PROVIDERS, { Provider } from "providers";
 import { errorThrown } from "state/error/actions";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
@@ -46,7 +47,7 @@ function getProvider(name: string): Provider {
 }
 
 function* signUpSaga(action: SignUpAction) {
-    const {provider: providerName, name, domain, password, email, onError} = action.payload;
+    const {language, provider: providerName, name, domain, password, email, onError} = action.payload;
 
     const stage = yield* select(state => state.signUpDialog.stage);
     const provider = getProvider(providerName);
@@ -121,8 +122,7 @@ function* signUpSaga(action: SignUpAction) {
             yield* put(errorThrown(e));
         }
 
-        Browser.storeConnectionData(
-            rootLocation, null, null, null, login, data.token, data.permissions);
+        Browser.storeConnectionData(rootLocation, null, null, null, login, data.token, data.permissions);
         Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
         const homeLocation = yield* select(getHomeRootLocation);
         yield* put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp,
@@ -130,9 +130,12 @@ function* signUpSaga(action: SignUpAction) {
             homeLocation != null && homeLocation !== rootLocation));
     }
 
-    if (stage <= SIGN_UP_STAGE_PROFILE && email) {
+    if (stage <= SIGN_UP_STAGE_PROFILE) {
         try {
-            yield* call(Node.putProfile, rootLocation, {email});
+            if (email) {
+                yield* call(Node.putProfile, rootLocation, {email});
+            }
+            yield* call(Node.putSettings, rootLocation, [{name: PREFIX + "language", value: language}]);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
                 yield* put(errorThrown(e));

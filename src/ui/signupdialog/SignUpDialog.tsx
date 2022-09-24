@@ -4,11 +4,15 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { StringSchema } from 'yup';
 import debounce from 'lodash.debounce';
+import i18n from 'i18next';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import * as Rules from "api/naming/rules";
 import PROVIDERS from "providers";
+import * as Rules from "api/naming/rules";
+import { Choice } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
+import { getSetting, getSettingMeta } from "state/settings/selectors";
 import {
     cancelSignUpDialog,
     SIGN_UP_STAGE_DOMAIN,
@@ -20,6 +24,7 @@ import {
     signUpFindDomain,
     signUpNameVerify
 } from "state/signupdialog/actions";
+import { findPreferredLanguage } from "i18n";
 import { Browser } from "ui/browser";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField, SelectField } from "ui/control/field";
@@ -28,6 +33,7 @@ import DomainField from "ui/signupdialog/DomainField";
 type OuterProps = ConnectedProps<typeof connector> & WithTranslation;
 
 interface Values {
+    language: string;
     provider: string;
     name: string;
     nameTaken: string | null;
@@ -43,15 +49,24 @@ type Props = OuterProps  & FormikProps<Values>;
 
 class SignUpDialog extends React.PureComponent<Props> {
 
+    #languageSelectDom: HTMLSelectElement | null = null;
     #providerSelectDom: HTMLSelectElement | null = null;
     #nameInputDom: HTMLInputElement | null = null;
     #lastVerifiedName: string | null = null;
     #lastVerifiedDomain: string | null = null;
 
+    setLanguageSelectRef = (dom: HTMLSelectElement | null) => {
+        this.#languageSelectDom = dom;
+        if (this.#languageSelectDom) {
+            this.#languageSelectDom.addEventListener("click", this.onLanguageClick);
+            this.onLanguageClick();
+        }
+    }
+
     setProviderSelectRef = (dom: HTMLSelectElement | null) => {
         this.#providerSelectDom = dom;
         if (this.#providerSelectDom) {
-            this.#providerSelectDom.addEventListener("click", this.onProviderChange);
+            this.#providerSelectDom.addEventListener("click", this.onProviderClick);
         }
     }
 
@@ -64,8 +79,11 @@ class SignUpDialog extends React.PureComponent<Props> {
     }
 
     componentWillUnmount() {
+        if (this.#languageSelectDom) {
+            this.#languageSelectDom.removeEventListener("click", this.onLanguageClick);
+        }
         if (this.#providerSelectDom) {
-            this.#providerSelectDom.removeEventListener("click", this.onProviderChange);
+            this.#providerSelectDom.removeEventListener("click", this.onProviderClick);
         }
         if (this.#nameInputDom) {
             this.#nameInputDom.removeEventListener("input", this.onNameInput);
@@ -81,7 +99,19 @@ class SignUpDialog extends React.PureComponent<Props> {
         }
     }
 
-    onProviderChange = () => {
+    onLanguageClick = () => {
+        if (!this.props.connectedToHome) {
+            let lang = this.#languageSelectDom?.value;
+            if (lang === "auto") {
+                lang = findPreferredLanguage();
+            }
+            if (lang !== i18n.language) {
+                i18n.changeLanguage(lang);
+            }
+        }
+    }
+
+    onProviderClick = () => {
         this.verifyName(this.props.values.name);
         this.verifyName.flush();
     }
@@ -154,16 +184,24 @@ class SignUpDialog extends React.PureComponent<Props> {
     }
 
     render() {
-        const {show, processing, stage, cancelSignUpDialog, t} = this.props;
+        const {show, processing, stage, languages, cancelSignUpDialog, t} = this.props;
 
         if (!show) {
             return null;
         }
 
+        const languageChoices = (languages ?? [{value: "auto"} as Choice<string>])
+            .map(l => ({
+                title: t(`setting.client.mercy.language-items.${l.value}`, {defaultValue: l.title}),
+                value: l.value
+            }));
         return (
             <ModalDialog title={t("create-blog")} onClose={cancelSignUpDialog}>
                 <Form>
                     <div className="modal-body sign-up-dialog">
+                        <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
+                                     disabled={processing || stage > SIGN_UP_STAGE_PROFILE}
+                                     selectRef={this.setLanguageSelectRef}/>
                         <SelectField name="provider" title={t("provider")} choices={this.getProviders()} anyValue
                                      disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
                                      selectRef={this.setProviderSelectRef}/>
@@ -195,6 +233,7 @@ class SignUpDialog extends React.PureComponent<Props> {
 const signUpDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
+        language: props.language,
         provider: Browser.isDevMode() ? "local" : "moera.blog",
         name: props.name ?? "",
         nameTaken: null,
@@ -232,7 +271,7 @@ const signUpDialogLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.signUp(values.provider, values.name.trim(),
+        formik.props.signUp(values.language, values.provider, values.name.trim(),
             values.autoDomain && formik.props.stage <= SIGN_UP_STAGE_DOMAIN ? null : values.domain.trim(),
             values.password, values.email, (fieldName, message) => formik.setFieldError(fieldName, message));
         formik.setSubmitting(false);
@@ -242,7 +281,10 @@ const signUpDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        ...state.signUpDialog
+        ...state.signUpDialog,
+        language: getSetting(state, "language") as string,
+        languages: getSettingMeta(state, "language")?.modifiers?.items,
+        connectedToHome: isConnectedToHome(state)
     }),
     { cancelSignUpDialog, signUp, signUpNameVerify, signUpFindDomain, signUpDomainVerify }
 );

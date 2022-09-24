@@ -2,8 +2,8 @@ import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { errorThrown } from "state/error/actions";
 import { HomeNotConnectedError, Node, NodeApiError } from "api";
+import { SettingInfo } from "api/node/api-types";
 import { ClientSettingMetaInfo, PREFIX } from "api/settings";
 import { ClientState } from "state/state";
 import { introduced } from "state/init-selectors";
@@ -53,11 +53,12 @@ import {
     settingsUpdateSucceeded,
     SettingsUpdateSucceededAction
 } from "state/settings/actions";
+import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import { getSetting, getSettingsClient, getSettingsClientMeta } from "state/settings/selectors";
 import { flashBox } from "state/flashbox/actions";
+import { findPreferredLanguage } from "i18n";
 import { Browser } from "ui/browser";
-import { SettingInfo } from "api/node/api-types";
 
 export default [
     executor(SETTINGS_NODE_VALUES_LOAD, "", settingsNodeValuesLoadSaga, introduced),
@@ -134,7 +135,10 @@ function* settingsClientValuesLoadSaga() {
 }
 
 function* settingsClientValuesLoadedSaga() {
-    const lang = yield* select((state: ClientState) => getSetting(state, "language") as string);
+    let lang = yield* select((state: ClientState) => getSetting(state, "language") as string);
+    if (lang === "auto") {
+        lang = findPreferredLanguage();
+    }
     if (lang !== i18n.language) {
         yield* call(i18n.changeLanguage, lang);
         yield* put(settingsLanguageChanged());
@@ -143,10 +147,15 @@ function* settingsClientValuesLoadedSaga() {
 }
 
 function* updateLanguage(settings: SettingInfo[]) {
-    const lang = settings.find(st => st.name === PREFIX + "language")?.value;
-    if (lang != null && lang !== i18n.language) {
-        yield* call(i18n.changeLanguage, lang);
-        yield* put(settingsLanguageChanged());
+    let lang = settings.find(st => st.name === PREFIX + "language")?.value;
+    if (lang != null) {
+        if (lang === "auto") {
+            lang = findPreferredLanguage();
+        }
+        if (lang !== i18n.language) {
+            yield* call(i18n.changeLanguage, lang);
+            yield* put(settingsLanguageChanged());
+        }
     }
 }
 

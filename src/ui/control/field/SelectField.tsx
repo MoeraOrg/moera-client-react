@@ -88,7 +88,7 @@ export function SelectField({name, title, horizontal = false, layout, groupClass
                         }
                     }}
                 >
-                    {choices.map(c => <option key={c.value} value={c.value}>{t(c.title)}</option>)}
+                    {choices.map((c, index) => <option key={index} value={c.value}>{t(c.title)}</option>)}
                 </select>
                 {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>

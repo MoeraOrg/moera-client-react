@@ -31,10 +31,14 @@ const META: ClientSettingMetaInfo[] = [
     {
         name: "language",
         type: "string",
-        defaultValue: "not-viewed",
+        defaultValue: "auto",
         modifiers: {
             format: "select",
             items: [
+                {
+                    title: "Automatically",
+                    value: "auto"
+                },
                 {
                     title: "English",
                     value: "en"
