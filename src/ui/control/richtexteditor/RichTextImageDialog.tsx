@@ -45,11 +45,11 @@ export function getImageDimensions(standardSize: RichTextImageStandardSize,
 type RichTextImageAlign = "text-start" | "text-center" | "text-end" | "float-text-start" | "float-text-end";
 
 const ALIGNMENTS: Choice<RichTextImageAlign>[] = [
-    {title: "text-alignment.left", value: "text-start"},
-    {title: "text-alignment.center", value: "text-center"},
-    {title: "text-alignment.right", value: "text-end"},
-    {title: "text-alignment.left-wrap", value: "float-text-start"},
-    {title: "text-alignment.right-wrap", value: "float-text-end"}
+    {title: "image-alignment.left", value: "text-start"},
+    {title: "image-alignment.center", value: "text-center"},
+    {title: "image-alignment.right", value: "text-end"},
+    {title: "image-alignment.left-wrap", value: "float-text-start"},
+    {title: "image-alignment.right-wrap", value: "float-text-end"}
 ];
 
 export interface RichTextImageValues {

@@ -299,7 +299,7 @@
     "nobody" : "Nobody",
     "only-me" : "Only me",
     "public" : "Everybody",
-    "signed" : "Signed"
+    "signed" : "Signed in"
   },
   "profile" : "Profile",
   "profile-edited-conflict" : "Profile was edited by somebody.",
