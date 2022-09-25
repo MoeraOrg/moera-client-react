@@ -6,6 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
+    z-index: var(--zindex-page-header);
 }
 
 #bottom-menu .new-post-button {
