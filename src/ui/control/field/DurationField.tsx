@@ -88,14 +88,14 @@ export function DurationField({name, title, horizontal = false, groupClassName, 
                     </span>
                     <select name={name + "_unit"} value={duration.unit} disabled={disabled}
                             onChange={e => onChange(e.target.value as DurationUnit, null)}>
-                        {never && <option value="never">never</option>}
+                        {never && <option value="never">{t("duration-unit.name.never")}</option>}
                         {UNIT_NAMES.map(({short, key}) => (
                             dmax.toSeconds() >= new Duration(1, short).toSeconds() ?
                                 <option key={short} value={short}>{t(`duration-unit.name.${key}`)}</option>
                             :
                                 null
                         ))}
-                        {always && <option value="always">always</option>}
+                        {always && <option value="always">{t("duration-unit.name.always")}</option>}
                     </select>
                 </div>
                 {!noFeedback && touched && <FieldError error={error}/>}
