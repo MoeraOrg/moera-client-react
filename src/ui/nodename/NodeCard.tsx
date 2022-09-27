@@ -5,6 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { AvatarImage } from "api/node/api-types";
+import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
@@ -81,7 +82,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
                             {`, ${t("last-post")} `}
                             <time dateTime={formatISO(storiesLastDate)}
                                   title={format(storiesLastDate, "dd-MM-yyyy HH:mm")}>
-                                {formatDistanceToNow(storiesLastDate, {addSuffix: true})}
+                                {formatDistanceToNow(storiesLastDate, {addSuffix: true, locale: getDateFnsLocale()})}
                             </time>
                         </>
                     }

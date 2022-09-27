@@ -5,6 +5,7 @@ import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { PostingInfo, PrincipalValue } from "api/node/api-types";
+import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { postingOperationsUpdate } from "state/postings/actions";
 import { getSetting } from "state/settings/selectors";
@@ -25,7 +26,9 @@ const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUp
     let deletionDate = "";
     if (posting.receiverDeletedAt != null) {
         const date = fromUnixTime(posting.receiverDeletedAt);
-        deletionDate = timeRelative ? formatDistanceToNow(date) : format(date, "dd-MM-yyyy HH:mm")
+        deletionDate = timeRelative
+            ? formatDistanceToNow(date, {locale: getDateFnsLocale()})
+            : format(date, "dd-MM-yyyy HH:mm")
     }
 
     return (

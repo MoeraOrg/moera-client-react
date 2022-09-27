@@ -6,6 +6,7 @@ import LinesEllipsis from 'react-lines-ellipsis';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
+import { getDateFnsLocale } from "i18n";
 import { ExtDraftInfo } from "state/compose/state";
 import "./ComposeDraftItem.css";
 
@@ -38,7 +39,9 @@ export default function ComposeDraftItem({draft, current, onSelect, onDelete}: P
                     {draft.subject && <b>{draft.subject} </b>}
                     <LinesEllipsis text={draft.text ? draft.text : t("no-text")} maxLine="3"/>
                 </div>
-                <time className="edited" dateTime={formatISO(editDate)}>{formatDistanceToNow(editDate)}</time>
+                <time className="edited" dateTime={formatISO(editDate)}>
+                    {formatDistanceToNow(editDate, {locale: getDateFnsLocale()})}
+                </time>
             </div>
             <div className="draft-delete" title={t("delete-draft")} onClick={handleDelete}>
                 <FontAwesomeIcon icon="trash-can"/>

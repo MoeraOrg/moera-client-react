@@ -3,8 +3,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
 import { CommentInfo } from "api/node/api-types";
+import { getDateFnsLocale } from "i18n";
+import { ClientState } from "state/state";
 
 type Props = {
     comment: CommentInfo;
@@ -28,7 +29,9 @@ function CommentUpdated({comment}: Props) {
     return (
         <time className="date" dateTime={formatISO(date)}>{" "}
             ({t("comment-updated-at")}{" "}
-            <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>)
+            <abbr title={format(date, "dd-MM-yyyy HH:mm")}>
+                {formatDistanceToNow(date, {locale: getDateFnsLocale()})}
+            </abbr>)
         </time>
     );
 }

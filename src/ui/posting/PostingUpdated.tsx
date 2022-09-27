@@ -4,8 +4,9 @@ import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { PostingInfo } from "api/node/api-types";
-import { getSetting } from "state/settings/selectors";
+import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
 import { MinimalStoryInfo } from "ui/types";
 
 type Props = {
@@ -35,7 +36,9 @@ function PostingUpdated({posting, story, timeRelative}: Props) {
         <time className="date" dateTime={formatISO(date)}>
             {" "}({t("posting-updated-at")} {
                 timeRelative ?
-                    <abbr title={format(date, "dd-MM-yyyy HH:mm")}>{formatDistanceToNow(date)}</abbr>
+                    <abbr title={format(date, "dd-MM-yyyy HH:mm")}>
+                        {formatDistanceToNow(date, {locale: getDateFnsLocale()})}
+                    </abbr>
                 :
                     (editedSoon ? format(date, "HH:mm") : format(date, "dd-MM-yyyy HH:mm"))
             })

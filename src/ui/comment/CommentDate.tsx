@@ -2,8 +2,9 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
-import { ClientState } from "state/state";
 import { CommentInfo } from "api/node/api-types";
+import { getDateFnsLocale } from "i18n";
+import { ClientState } from "state/state";
 import Jump from "ui/navigation/Jump";
 import "./CommentDate.css"
 
@@ -18,7 +19,7 @@ function CommentDate({nodeName, postingId, comment}: Props) {
     return (
         <Jump nodeName={nodeName} href={`/post/${postingId}?comment=${comment.id}`} className="date">
             <time dateTime={formatISO(date)} title={format(date, "dd-MM-yyyy HH:mm")}>
-                {formatDistanceToNow(date)}
+                {formatDistanceToNow(date, {locale: getDateFnsLocale()})}
             </time>
         </Jump>
     );

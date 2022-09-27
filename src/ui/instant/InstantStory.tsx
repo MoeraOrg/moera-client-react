@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
+import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { storyReadingUpdate } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
@@ -51,7 +52,9 @@ function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: P
                 <InstantHtml story={story}/>
             </div>
             <div className="footer">
-                <time className="date" dateTime={formatISO(publishDate)}>{formatDistanceToNow(publishDate)}</time>
+                <time className="date" dateTime={formatISO(publishDate)}>
+                    {formatDistanceToNow(publishDate, {locale: getDateFnsLocale()})}
+                </time>
             </div>
             <div className="sidebar">
                 <span className="envelope" title={story.read ? t("mark-unread") : t("mark-read")}
