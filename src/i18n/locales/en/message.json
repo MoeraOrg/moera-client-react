@@ -159,7 +159,7 @@
     "right-wrap" : "Right, wrapping text"
   },
   "image-size" : {
-    "custom" : "Custom",
+    "custom" : "Custom...",
     "full" : "Full",
     "large" : "Large",
     "medium" : "Medium",
@@ -174,8 +174,13 @@
   "instant-summary" : {
     "and" : "and",
     "and-others" : "and {count} {count, plural, one {other} other {others}}",
-    "node-blog" : "{node} blog",
+    "in-node-blog" : "{node} blog",
+    "in-their-blog" : "their blog",
+    "in-your-blog" : "your blog",
     "node-post" : "{node} post",
+    "on-node-post" : "{node} post",
+    "on-their-post" : "their post",
+    "on-your-post" : "your post",
     "opposed" : "opposed",
     "reason" : {
       "comment" : "you commented",
@@ -191,7 +196,7 @@
       "comment-reaction-task-failed" : "Failed to sign a reaction to {commentNode} comment {commentHeading} to {postingNode} post {postingHeading}",
       "comment-update-task-failed" : "Failed to sign the comment {commentHeading} to {node} post {postingHeading}",
       "mention-comment" : "{node} mentioned you in a comment {commentHeading} on {posting} {postingHeading}",
-      "mention-posting" : "{node} mentioned you in a post ${heading}",
+      "mention-posting" : "{node} mentioned you in a post {heading}",
       "posting-media-reaction-added" : "{reactions} a media in your post {heading} in {node}",
       "posting-media-reaction-failed" : "Failed to sign a reaction to a media in {node} post {heading}",
       "posting-post-task-failed" : "Failed to add your post to {node} blog",
@@ -206,9 +211,7 @@
       "subscriber-deleted" : "{node} unsubscribed from your {feed}"
     },
     "supported" : "supported",
-    "their-blog" : "their blog",
     "their-post" : "their post",
-    "your-blog" : "your blog",
     "your-post" : "your post"
   },
   "invitation-buttons" : "<0>Create a new blog</0><1>or</1><2>Connect to your blog</2>",

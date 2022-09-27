@@ -56,7 +56,7 @@ function formatListOfComments(data: StorySummaryData, t: TFunction): string {
 
 function formatListOfReactions(data: StorySummaryData, negative: boolean, t: TFunction): string {
     return formatList(data.reactions, data.totalReactions, formatReaction, t) + " "
-        + (!negative ? t("instant-summary.supported") : t("instant-summary.opposed"));
+        + t(!negative ? "instant-summary.supported" : "instant-summary.opposed", {count: data.totalReactions ?? 1});
 }
 
 type IsTheirPredicate = (data: StorySummaryData, node: StorySummaryNode | StorySummaryEntry) => boolean;
@@ -84,14 +84,25 @@ function formatSomebodysPosting(data: StorySummaryData, homeOwnerName: string | 
     }
 }
 
-function formatSomebodysNode(data: StorySummaryData, homeOwnerName: string | null,
+function formatOnSomebodysPosting(data: StorySummaryData, homeOwnerName: string | null,
+                                  isTheir: IsTheirPredicate, t: TFunction): string {
+    if (data.posting?.ownerName === homeOwnerName) {
+        return t("instant-summary.on-your-post");
+    } else if (data.posting != null && isTheir(data, data.posting)) {
+        return t("instant-summary.on-their-post");
+    } else {
+        return t("instant-summary.on-node-post", {node: formatNodeName(data.posting)});
+    }
+}
+
+function formatInSomebodysNode(data: StorySummaryData, homeOwnerName: string | null,
                              isTheir: IsTheirPredicate, t: TFunction): string {
     if (data.node?.ownerName === homeOwnerName) {
-        return t("instant-summary.your-blog");
+        return t("instant-summary.in-your-blog");
     } else if (data.node != null && isTheir(data, data.node)) {
-        return t("instant-summary.their-blog");
+        return t("instant-summary.in-their-blog");
     } else {
-        return t("instant-summary.node-blog", {node: formatNodeName(data.posting)});
+        return t("instant-summary.in-node-blog", {node: formatNodeName(data.posting)});
     }
 }
 
@@ -130,6 +141,7 @@ function buildSubscriberDeletedSummary(data: StorySummaryData, t: TFunction): st
 function buildCommentAddedSummary(data: StorySummaryData, t: TFunction): string {
     return t("instant-summary.story.comment-added", {
         comments: formatListOfComments(data, t),
+        count: data.totalComments ?? 1,
         heading: formatHeading(data.posting)
     });
 }
@@ -138,7 +150,7 @@ function buildMentionCommentSummary(data: StorySummaryData, homeOwnerName: strin
     return t("instant-summary.story.mention-comment", {
         node: formatNodeName(data.comment),
         commentHeading: formatHeading(data.comment),
-        posting: formatSomebodysPosting(data, homeOwnerName, isByCommentOwner, t),
+        posting: formatOnSomebodysPosting(data, homeOwnerName, isByCommentOwner, t),
         postingHeading: formatHeading(data.posting)
     });
 }
@@ -146,8 +158,9 @@ function buildMentionCommentSummary(data: StorySummaryData, homeOwnerName: strin
 function buildReplyCommentSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
     return t("instant-summary.story.reply-comment", {
         replies: formatListOfComments(data, t),
+        count: data.totalComments ?? 1,
         heading: formatHeading(data.comment),
-        posting: formatSomebodysPosting(data, homeOwnerName, isByFirstCommentOwner, t)
+        posting: formatOnSomebodysPosting(data, homeOwnerName, isByFirstCommentOwner, t)
     });
 }
 
@@ -156,13 +169,14 @@ function buildCommentReactionAddedSummary(data: StorySummaryData, negative: bool
     return t("instant-summary.story.comment-reaction-added", {
         reactions: formatListOfReactions(data, negative, t),
         heading: formatHeading(data.comment),
-        posting: formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner, t)
+        posting: formatOnSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner, t)
     });
 }
 
 function buildRemoteCommentAddedSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
     return t("instant-summary.story.remote-comment-added", {
         comments: formatListOfComments(data, t),
+        count: data.totalComments ?? 1,
         posting: formatSomebodysPosting(data, homeOwnerName, isByCommentOwner, t),
         reason: formatReason(data, t),
         heading: formatHeading(data.posting)
@@ -213,7 +227,7 @@ function buildPostingMediaReactionAddedSummary(data: StorySummaryData, negative:
     return t("instant-summary.story.posting-media-reaction-added", {
         reactions: formatListOfReactions(data, negative, t),
         heading: formatHeading(data.posting),
-        node: formatSomebodysNode(data, homeOwnerName, isByFirstReactionOwner, t)
+        node: formatInSomebodysNode(data, homeOwnerName, isByFirstReactionOwner, t)
     });
 }
 
@@ -222,7 +236,7 @@ function buildCommentMediaReactionAddedSummary(data: StorySummaryData, negative:
     return t("instant-summary.story.comment-media-reaction-added", {
         reactions: formatListOfReactions(data, negative, t),
         heading: formatHeading(data.comment),
-        posting: formatSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner, t)
+        posting: formatOnSomebodysPosting(data, homeOwnerName, isByFirstReactionOwner, t)
     });
 }
 
