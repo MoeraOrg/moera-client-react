@@ -187,7 +187,7 @@ export function getSheet(tab: SettingsTabId, sheetName: string): Sheet | null {
 }
 
 export function getActualTab(tab: SettingsTabId): SettingsTabId {
-    return MENU_ITEMS[tab] ? tab : "node";
+    return MENU_ITEMS[tab] ? tab : "client";
 }
 
 export function getActualSheetName(tab: SettingsTabId, sheetName: string): string {

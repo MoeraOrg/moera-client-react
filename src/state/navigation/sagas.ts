@@ -51,7 +51,7 @@ function* goToPageWithDefaultSubpageSaga(action: GoToPageWithDefaultSubpageActio
     switch (action.payload.page) {
         case PAGE_SETTINGS:
             yield* put(goToSettings());
-            yield* put(settingsGoToTab("node"));
+            yield* put(settingsGoToTab("client"));
             break;
 
         default:

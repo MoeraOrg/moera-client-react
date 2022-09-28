@@ -13,10 +13,10 @@ const SettingsTabs = ({loadingNodeValues, loadingNodeMeta, loadingClientValues}:
 
     return (
         <ul className="nav nav-tabs settings-tabs">
-            <SettingsTab name="node" title={t("my-node")} href={"/settings/node"}
-                         loading={loadingNodeValues || loadingNodeMeta}/>
             <SettingsTab name="client" title={t("my-client")} href={"/settings/client"}
                          loading={loadingClientValues}/>
+            <SettingsTab name="node" title={t("my-node")} href={"/settings/node"}
+                         loading={loadingNodeValues || loadingNodeMeta}/>
         </ul>
     );
 }

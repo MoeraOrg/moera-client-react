@@ -14,7 +14,7 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     }
     const srcTab = srcInfo.directories.length > 1
         && (srcInfo.directories[1] === "client" || srcInfo.directories[1] === "node") ? srcInfo.directories[1] : "";
-    const dstTab = dstInfo.directories.length > 1 && dstInfo.directories[1] === "client" ? "client" : "node";
+    const dstTab = dstInfo.directories.length > 1 && dstInfo.directories[1] === "node" ? "node" : "client";
     if (srcTab !== dstTab) {
         actions.push(settingsGoToTab(dstTab));
     }
