@@ -395,16 +395,90 @@
   "set-home-password" : "Установка домашнего пароля",
   "set-password-and-connect" : "Установить пароль и подключиться",
   "setting" : {
+    "chapter" : {
+      "comments" : "Комментарии",
+      "general" : "Общие",
+      "media" : "Медиа",
+      "password" : "Пароль",
+      "reactions" : "Реакции",
+      "replies" : "Ответы",
+      "subscribers-and-subscriptions" : "Подписчики и подписки",
+      "tokens" : "Токены"
+    },
     "client" : {
       "mercy" : {
+        "avatar_shape" : "Форма аватаров",
+        "avatar_shape-items" : {
+          "circle" : "Круглая",
+          "design" : "Как есть",
+          "square" : "Квадратная"
+        },
+        "clock_offset" : "Смещение часов относительно реального времени (в часах)",
+        "comment_body-src-format_default" : "Форматирование текста комментария (по умолчанию)",
+        "comment_body-src-format_default-items" : {
+          "plain-text" : "Без форматирования"
+        },
+        "comment_reactions_negative_default" : "Набор неодобрительных реакций на мой комментарий (по умолчанию)",
+        "comment_reactions_positive_default" : "Набор одобрительных реакций на мой комментарий (по умолчанию)",
+        "comment_reactions_self_enabled" : "Разрешить оставлять реакции на собственные комментарии",
+        "comment_replied-to_glance_enabled" : "Включить быстрый просмотр комментария, на который отвечали",
+        "comment_smileys_enabled" : "Заменять простые смайлики на эмодзи",
+        "comment_submit-key" : "Отправлять комментарий по нажатию",
+        "entry_gallery_loop" : "Зацикливать просмотр галереи",
+        "feed_width" : "Ширина ленты (в пикселах)",
+        "full-name_display" : "Показ полных имён пользователей",
+        "full-name_display-items" : {
+          "both" : "И то, и другое",
+          "full-name" : "Только полное имя",
+          "name" : "Только никнейм"
+        },
+        "fundraiser_preferred_auto" : "Автоматически выбирать предпочтительный способ доната",
+        "fundraiser_preferred_prefix" : "Предпочтительный способ доната (схема или домен)",
         "instants_number_mode" : "Показывать число уведомлений",
         "instants_number_mode-items" : {
           "not-read" : "Непрочитанных",
           "not-viewed" : "Непросмотренных"
         },
+        "instants_profile-link" : "Нажатие на аватар в уведомлении открывает профиль пользователя",
         "language" : "Язык",
         "language-items" : {
           "auto" : "Автоматически"
+        },
+        "naming_location" : "Местонахождение сервера имён",
+        "news-button_target-story" : "Кнопка \"ваши новости\" открывает",
+        "news-button_target-story-items" : {
+          "earliest-new" : "Самый ранний из новых постов",
+          "latest" : "Последний пост"
+        },
+        "posting_body_font-magnitude" : "Размер шрифта",
+        "posting_body_font-magnitude_mobile" : "Размер шрифта в постах",
+        "posting_comments_addition_default" : "Разрешить комментарии (по умолчанию)",
+        "posting_comments_hide_default" : "Автоматически скрывать комментарии (по умолчанию)",
+        "posting_comments_visibility_default" : "Комментарии видны (по умолчанию)",
+        "posting_feed_news_enabled" : "Добавлять свои посты в ленту новостей",
+        "posting_media_compress_default" : "Сжимать картинки в постах (по умолчанию)",
+        "posting_reactions_enabled_default" : "Разрешить реакции на мои посты (по умолчанию)",
+        "posting_reactions_negative_default" : "Набор неодобрительных реакций на мои посты (по умолчанию)",
+        "posting_reactions_negative_enabled_default" : "Разрешить неодобрительные реакции на мои посты (по умолчанию)",
+        "posting_reactions_positive_default" : "Набор одобрительных реакций на мои посты (по умолчанию)",
+        "posting_reactions_self_enabled" : "Разрешить оставлять реакции на собственные посты",
+        "posting_reactions_totals-visible_default" : "Показывать число реакций на мой пост (по умолчанию)",
+        "posting_reactions_visible_default" : "Показывать список реакций на мой пост (по умолчанию)",
+        "posting_reply_preamble" : "Преамбула ответа на пост",
+        "posting_reply_quote-all" : "Цитировать пост целиком в ответе",
+        "posting_reply_subject-prefix" : "Префикс заголовка при ответе на пост",
+        "posting_smileys_enabled" : "Заменять простые смайлики на эмодзи",
+        "posting_time_relative" : "Показывать в постах относительное время",
+        "posting_visibility_default" : "Посты видны (по умолчанию)",
+        "principal_public_disabled" : "Выключить уровень доступа \"Для всех\"",
+        "reactions_negative_available" : "Используемые неодобрительные реакции",
+        "reactions_positive_available" : "Используемые одобрительные реакции",
+        "rich-text-editor_link-previews_max-automatic" : "Максимальное число ссылок, для которых автоматически создаётся предпросмотр",
+        "rich-text-editor_paste-rich" : "При вставке текста с тегами форматирования",
+        "rich-text-editor_paste-rich-items" : {
+          "ask" : "Спрашивать",
+          "html" : "Вставлять с тегами",
+          "text" : "Вставлять только текст"
         }
       }
     },
