@@ -80,7 +80,7 @@ function NodeNameUpdateDialog(props: Props) {
                         {t("cancel")}
                     </Button>
                     <Button variant="primary" type="submit" loading={updating}>
-                        {showChangeName ? t("transfer") : t("update")}
+                        {showChangeName ? t("transfer") : t("update-name")}
                     </Button>
                 </div>
             </Form>

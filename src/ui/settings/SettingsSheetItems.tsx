@@ -15,7 +15,7 @@ export function toTitleName(name: string): string {
     const clientSetting = name.startsWith(PREFIX);
     let settingName = clientSetting ? name.substring(PREFIX.length) : name;
     settingName = settingName.replace(/\./g, "_");
-    return clientSetting ? `setting.${PREFIX}${settingName}` : `setting.${settingName}`;
+    return clientSetting ? `setting.${PREFIX}${settingName}` : `setting.node.${settingName}`;
 }
 
 function isClientMeta(meta: SettingMetaInfo | ClientSettingMetaInfo): meta is ClientSettingMetaInfo {
