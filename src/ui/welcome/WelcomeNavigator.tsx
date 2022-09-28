@@ -24,7 +24,7 @@ const WelcomeNavigator = ({switching}: Props) => {
     return (
         <div id="welcome-navigator">
             <h1>{t("where-go")}</h1>
-            <Form className="d-flex">
+            <Form className="d-flex justify-content-center">
                 <InputField name="ownerName" horizontal autoFocus anyValue placeholder={t("enter-name")}/>
                 <Button variant="primary" type="submit" loading={switching}>{t("go")}</Button>
             </Form>
