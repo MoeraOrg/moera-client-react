@@ -59,7 +59,7 @@ const registerNameDialogLogic = {
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.registerName(
             values.name.trim(),
-            () => formik.setFieldError("name", "name-taken"));
+            () => formik.setFieldError("name", "name-already-taken"));
         formik.setSubmitting(false);
     }
 

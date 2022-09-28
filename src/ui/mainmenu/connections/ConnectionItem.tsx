@@ -23,7 +23,7 @@ const ConnectionItem = ({name, url, onClick, onDisconnect, standalone}: Props) =
             <div className="connection" onClick={onClick}>
                 {name ?
                     <NodeName name={name} linked={false} popup={false}/>
-                    :
+                :
                     <span className="no-name">{t("no-name-known")}</span>
                 }<br/>
                 {url}

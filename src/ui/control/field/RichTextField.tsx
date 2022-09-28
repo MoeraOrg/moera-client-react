@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import cx from 'classnames';
 import { useFormikContext } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import { PostingFeatures, SourceFormat } from "api/node/api-types";
 import { FormGroup, RichTextEditor, RichTextValue } from "ui/control";
@@ -16,7 +17,7 @@ interface Props {
     noMedia?: boolean;
     nodeName?: string | null;
     forceImageCompress?: boolean;
-    placeholder?: string;
+    placeholder?: string | null;
     autoFocus?: boolean;
     anyValue?: boolean;
     className?: string;
@@ -33,12 +34,13 @@ interface Props {
 }
 
 export function RichTextField({name, title, rows = 3, maxRows, features, noMedia, nodeName, forceImageCompress,
-                               placeholder = "Enter text here...", autoFocus, anyValue, className, autoComplete,
-                               noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled,
-                               hidingPanel, format, onKeyDown, urlsField}: Props) {
+                               placeholder, autoFocus, anyValue, className, autoComplete, noFeedback = false,
+                               disabled = false, initialValue, defaultValue, smileysEnabled, hidingPanel, format,
+                               onKeyDown, urlsField}: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
     const {setFieldValue} = useFormikContext();
+    const {t} = useTranslation();
 
     // useCallback() and setFieldValue() (not setValue()) is mandatory here
     const onChange = useCallback(v => setFieldValue(name, v), [name, setFieldValue]);
@@ -67,7 +69,7 @@ export function RichTextField({name, title, rows = 3, maxRows, features, noMedia
                         })}
                     autoFocus={autoFocus}
                     autoComplete={autoComplete}
-                    placeholder={placeholder}
+                    placeholder={placeholder ?? t("enter-text-here")}
                     rows={rows}
                     maxRows={maxRows}
                     features={features ?? null}
