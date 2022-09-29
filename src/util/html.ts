@@ -61,7 +61,8 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         "rumble.com",
         "www.facebook.com",
         "www.youtube-nocookie.com",
-        "www.youtube.com"
+        "www.youtube.com",
+        "gifer.com"
     ],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
