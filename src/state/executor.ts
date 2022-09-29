@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { flush, put, select, spawn, takeEvery } from 'typed-redux-saga';
+import { call, flush, put, select, takeEvery } from 'typed-redux-saga';
 import { buffers, channel, Channel } from 'redux-saga';
 
 import getContext from "state/context";
@@ -117,7 +117,7 @@ function* executorsSaga(executors: ExecutorMap, action: WithContext<ClientAction
     }
 
     try {
-        yield* spawn(executor.saga, action);
+        yield* call(executor.saga, action);
     } catch (e) {
         console.error("Error running saga for action", action);
         console.error(e);
