@@ -53,12 +53,13 @@ function buildItems(items: MenuItem[], standalone: boolean) {
 }
 
 type Props = {
+    caption?: string | null;
     items: MenuItem[];
     className?: string | null;
     children?: ReactNode;
 } & ConnectedProps<typeof connector>;
 
-function DropdownMenuImpl({items, className, children, standalone}: Props) {
+function DropdownMenuImpl({caption, items, className, children, standalone}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -75,6 +76,7 @@ function DropdownMenuImpl({items, className, children, standalone}: Props) {
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
+                    {caption && <div className="caption">{caption}</div>}
                     {itemList.length > 0 ?
                         itemList.map((item, index) => (
                             <React.Fragment key={index}>
@@ -84,7 +86,7 @@ function DropdownMenuImpl({items, className, children, standalone}: Props) {
                                 </a>
                             </React.Fragment>
                         ))
-                        :
+                    :
                         <span className="dropdown-item disabled no-actions">{t("no-actions")}</span>
                     }
                 </div>

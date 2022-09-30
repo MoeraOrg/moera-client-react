@@ -8,6 +8,12 @@
     pointer-events: auto;
 }
 
+.dropdown-menu .caption {
+    font-weight: bold;
+    margin-bottom: .5rem;
+    margin-left: .6rem;
+}
+
 .dropdown-menu .dropdown-item {
     cursor: pointer;
 }

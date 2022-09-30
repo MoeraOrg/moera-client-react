@@ -9,15 +9,16 @@ import SubscribeButton from "ui/control/SubscribeButton";
 
 interface OwnProps {
     feedName: string;
+    small?: boolean | null;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-const FeedSubscribeButton = ({feedName, show, ownerName, generalReady, generalLoading, subscription}: Props) => (
+const FeedSubscribeButton = ({feedName, small, show, ownerName, generalReady, generalLoading, subscription}: Props) => (
     ownerName != null ?
         <>
             <SubscribeButton nodeName={ownerName} feedName={feedName}
-                             show={show && generalReady && (subscription?.loaded ?? false)}
+                             show={show && generalReady && (subscription?.loaded ?? false)} small={small}
                              subscribing={subscription?.subscribing ?? false}
                              unsubscribing={subscription?.unsubscribing ?? false}
                              subscriber={subscription?.subscriber ?? null}

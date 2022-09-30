@@ -11,6 +11,7 @@ import FeedTopButton from "ui/feed/FeedTopButton";
 import PageShareButton from "ui/page/PageShareButton";
 import { Avatar } from "ui/control";
 import Jump from "ui/navigation/Jump";
+import { Browser } from "ui/browser";
 import { getPageHeaderHeight } from "util/misc";
 
 type Props = {
@@ -51,7 +52,7 @@ function FeedPageHeader({feedName, title, empty = false, shareable = false, atTo
                     </Jump>
                 }
                 {title}
-                <FeedSubscribeButton feedName={feedName}/>
+                <FeedSubscribeButton feedName={feedName} small={Browser.isTinyScreen()}/>
             </h2>
             <div className="page-header-buttons">
                 {shareable && <PageShareButton href="/"/>}

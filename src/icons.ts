@@ -76,8 +76,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faBitcoin, faEthereum, faMarkdown, faPatreon, faPaypal } from '@fortawesome/free-brands-svg-icons';
 import {
+    faBell as faBellRegular,
     faCircle,
-    faClock,
     faComment as faCommentRegular,
     faEnvelope,
     faEnvelopeOpen,
@@ -96,6 +96,7 @@ export default function initIconLibrary() {
     library.add(faBan);
     library.add(faBars);
     library.add(faBell);
+    library.add(faBellRegular);
     library.add(faBitcoin);
     library.add(faBold);
     library.add(faBolt);
@@ -106,7 +107,6 @@ export default function initIconLibrary() {
     library.add(faChevronDown);
     library.add(faCircle);
     library.add(faCircleSolid);
-    library.add(faClock);
     library.add(faCode);
     library.add(faCog);
     library.add(faComment);

@@ -20,6 +20,7 @@ import "./SubscribeButton.css";
 
 interface OwnProps {
     show: boolean;
+    small?: boolean | null;
     subscribing: boolean;
     unsubscribing: boolean;
     nodeName: string;
@@ -30,7 +31,7 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
+function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
                           homeSet, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
                           subscriptionHidden, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
                           feedSubscriptionSetVisibility}: Props) {
@@ -89,9 +90,13 @@ function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, 
     const subscriptionUnhideable = subscribed && !subscriptionsHidden && subscriptionHidden;
     const subscriberHideable = subscribedToMe && !subscribersHidden && !subscriberHidden;
     const subscriberUnhideable = subscribedToMe && !subscribersHidden && subscriberHidden;
+    const caption = !subscribed
+        ? t("subscribed-to-me")
+        : (!subscribedToMe ? t("subscribed") : t("mutually-subscribed"));
 
     return (
-        <DropdownMenu className="btn btn-sm btn-outline-primary subscribe-button" items={[
+        <DropdownMenu caption={small ? caption : undefined} className="btn btn-sm btn-outline-primary subscribe-button"
+                      items={[
             {
                 title: t("subscribe-back"),
                 href: peerHref,
@@ -132,11 +137,7 @@ function SubscribeButton({show, subscribing, unsubscribing, nodeName, feedName, 
                 show: !subscriberHideable && subscriberUnhideable
             }
         ]}>
-            {!subscribed ?
-                t("subscribed-to-me")
-            :
-                (!subscribedToMe ? t("subscribed") : t("mutually-subscribed"))
-            }
+            {small ? <FontAwesomeIcon icon={["far", "bell"]}/> : caption}
             &nbsp;&nbsp;
             <FontAwesomeIcon icon="chevron-down"/>
         </DropdownMenu>
