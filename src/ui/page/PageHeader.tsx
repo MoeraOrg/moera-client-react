@@ -46,7 +46,7 @@ function PageHeader({children}: Props) {
     }, [onScroll]);
 
     return (
-        <div id="page-header" className={cx({"invisible": state.invisible})}>
+        <div id="page-header" className={cx({"hidden": state.invisible})}>
             <div className="panel">
                 {children}
             </div>
