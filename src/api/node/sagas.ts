@@ -312,8 +312,8 @@ export function* deleteSubscription(nodeName: string | null, remoteSubscriberId:
     return yield* callApi({nodeName, location, method: "DELETE", auth: true, schema: NodeApi.Result});
 }
 
-export function* postSubscriptionsSearch(nodeName: string | null,
-                                         remotePostings: RemotePosting[]): CallApiResult<SubscriptionInfo[]> {
+export function* searchSubscriptions(nodeName: string | null,
+                                     remotePostings: RemotePosting[]): CallApiResult<SubscriptionInfo[]> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions/search", method: "POST", auth: true,
         body: {postings: remotePostings}, schema: NodeApi.SubscriptionInfoArray
@@ -394,6 +394,14 @@ export function* getPostingReaction(nodeName: string | null, postingId: string):
     });
 }
 
+export function* searchPostingReactions(nodeName: string | null, postingIds: string[]): CallApiResult<ReactionInfo[]> {
+    const ownerName = yield* select(getHomeOwnerName);
+    return yield* callApi({
+        nodeName, location: "/postings/reactions/search", method: "POST", auth: true,
+        body: {ownerName, postings: postingIds}, schema: NodeApi.ReactionInfoArray
+    });
+}
+
 export function* deletePostingReaction(nodeName: string | null, postingId: string): CallApiResult<ReactionTotalsInfo> {
     const ownerName = yield* select(getHomeOwnerName);
     return yield* callApi({
@@ -406,6 +414,14 @@ export function* getPostingReactionTotals(nodeName: string | null,
                                           postingId: string): CallApiResult<ReactionTotalsInfo> {
     return yield* callApi({
         nodeName, location: ut`/postings/${postingId}/reaction-totals`, auth: true, schema: NodeApi.ReactionTotalsInfo
+    });
+}
+
+export function* searchPostingReactionTotals(nodeName: string | null,
+                                             postingIds: string[]): CallApiResult<ReactionTotalsInfo[]> {
+    return yield* callApi({
+        nodeName, location: "/postings/reaction-totals/search", method: "POST", auth: true,
+        body: {postings: postingIds}, schema: NodeApi.ReactionTotalsInfoArray
     });
 }
 
@@ -499,8 +515,8 @@ export function* deleteDraft(nodeName: string | null, id: string): CallApiResult
     });
 }
 
-export function* postActivityReactionsSearch(nodeName: string | null,
-                                             remotePostings: RemotePosting[]): CallApiResult<ActivityReactionInfo[]> {
+export function* searchActivityReactions(nodeName: string | null,
+                                         remotePostings: RemotePosting[]): CallApiResult<ActivityReactionInfo[]> {
     return yield* callApi({
         nodeName, location: "/activity/reactions/search", method: "POST", auth: true, body: {postings: remotePostings},
         schema: NodeApi.ActivityReactionInfoArray

@@ -413,6 +413,9 @@ const ReactionTotalInfoType: JSONSchemaType<API.ReactionTotalInfo> = {
 const ReactionTotalsInfoType: JSONSchemaType<API.ReactionTotalsInfo> = {
     type: "object",
     properties: {
+        "entryId": {
+            type: "string"
+        },
         "positive": {
             type: "array",
             items: ReactionTotalInfoType,
@@ -424,11 +427,16 @@ const ReactionTotalsInfoType: JSONSchemaType<API.ReactionTotalsInfo> = {
             default: []
         }
     },
-    required: ["positive", "negative"],
+    required: ["entryId", "positive", "negative"],
     additionalProperties: false
 };
 
 export const ReactionTotalsInfo = schema(ReactionTotalsInfoType);
+
+export const ReactionTotalsInfoArray = schema({
+    type: "array",
+    items: ReactionTotalsInfoType
+} as JSONSchemaType<API.ReactionTotalsInfo[]>);
 
 const UpdateInfoType: JSONSchemaType<API.UpdateInfo> = {
     type: "object",
@@ -2041,6 +2049,11 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
 };
 
 export const ReactionInfo = schema(ReactionInfoType);
+
+export const ReactionInfoArray = schema({
+    type: "array",
+    items: ReactionInfoType
+} as JSONSchemaType<API.ReactionInfo[]>);
 
 const ReactionCreatedType: JSONSchemaType<API.ReactionCreated> = {
     type: "object",

@@ -1,9 +1,11 @@
-import { call, put, select, spawn } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
 
 import { Node } from "api";
+import { ReactionTotalsInfo } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
+    EntryReactionAttributes,
     POSTING_COMMENTS_SUBSCRIBE,
     POSTING_COMMENTS_UNSUBSCRIBE,
     POSTING_COPY_LINK,
@@ -34,6 +36,7 @@ import {
     PostingReactionLoadAction,
     postingReactionSet,
     postingSet,
+    postingsReactionSet,
     PostingVerifyAction,
     postingVerifyFailed
 } from "state/postings/actions";
@@ -136,7 +139,8 @@ function* postingReactSaga(action: PostingReactAction) {
     }
 }
 
-function* postingReactionLoad(id: string, nodeName: string) {
+function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
+    const {id, nodeName} = action.payload;
     try {
         const {negative, emoji} = yield* call(Node.getPostingReaction, nodeName, id);
         const reaction = negative != null && emoji != null ? {negative, emoji} : null;
@@ -147,23 +151,25 @@ function* postingReactionLoad(id: string, nodeName: string) {
     }
 }
 
-function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
-    const {id, nodeName} = action.payload;
-    yield* call(postingReactionLoad, id, nodeName);
-}
-
 function* postingReactionsReloadSaga() {
     const {postingsState, connectedToHome} = yield* select((state: ClientState) => ({
         postingsState: state.postings,
         connectedToHome: isConnectedToHome(state)
     }));
     for (const nodeName of Object.getOwnPropertyNames(postingsState)) {
-        for (const id of Object.getOwnPropertyNames(postingsState[nodeName])) {
-            if (connectedToHome) {
-                yield* spawn(postingReactionLoad, id, nodeName);
-            } else {
-                put(postingReactionSet(id, null, postingsState[nodeName]![id]!.posting.reactions!))
-            }
+        const ids = Object.getOwnPropertyNames(postingsState[nodeName]);
+        if (connectedToHome) {
+            const infos = yield* call(Node.searchPostingReactions, nodeName, ids);
+            const reactions = infos
+                .map(info => ({entryId: info.postingId, negative: info.negative, emoji: info.emoji}))
+                .filter((attr): attr is EntryReactionAttributes => attr.negative != null && attr.emoji != null);
+            const totals = yield* call(Node.searchPostingReactionTotals, nodeName, ids);
+            put(postingsReactionSet(reactions, totals, nodeName));
+        } else {
+            const totals = ids
+                .map(id => postingsState[nodeName]![id]!.posting.reactions)
+                .filter((ts): ts is ReactionTotalsInfo => ts != null);
+            put(postingsReactionSet([], totals, nodeName))
         }
     }
 }

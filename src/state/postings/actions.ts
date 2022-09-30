@@ -179,6 +179,21 @@ export const postingReactionSet = (id: string, reaction: ReactionAttributes | nu
     payload: {id, reaction, totals, nodeName}
 });
 
+export type EntryReactionAttributes = ReactionAttributes & {
+    entryId: string
+};
+export const POSTINGS_REACTION_SET = "POSTINGS_REACTION_SET";
+export type PostingsReactionSetAction = ActionWithPayload<typeof POSTINGS_REACTION_SET, {
+    reactions: EntryReactionAttributes[];
+    totals: ReactionTotalsInfo[];
+    nodeName: string;
+}>;
+export const postingsReactionSet = (reactions: EntryReactionAttributes[], totals: ReactionTotalsInfo[],
+                                    nodeName: string): PostingsReactionSetAction => ({
+    type: POSTINGS_REACTION_SET,
+    payload: {reactions, totals, nodeName}
+});
+
 export const POSTING_COPY_LINK = "POSTING_COPY_LINK";
 export type PostingCopyLinkAction = ActionWithPayload<typeof POSTING_COPY_LINK, {
     id: string;
@@ -310,6 +325,7 @@ export type PostingsAnyAction =
     | PostingReactionsReloadAction
     | PostingReactionDeleteAction
     | PostingReactionSetAction
+    | PostingsReactionSetAction
     | PostingCopyLinkAction
     | PostingCommentsSetAction
     | PostingCommentsSubscribeAction

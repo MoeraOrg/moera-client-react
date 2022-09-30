@@ -139,6 +139,7 @@ export interface ReactionTotalInfo {
 }
 
 export interface ReactionTotalsInfo {
+    entryId: string;
     positive: ReactionTotalInfo[];
     negative: ReactionTotalInfo[];
 }

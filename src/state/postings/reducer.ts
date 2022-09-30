@@ -18,6 +18,7 @@ import {
     POSTING_SUBSCRIPTION_SET,
     POSTING_VERIFY,
     POSTING_VERIFY_FAILED,
+    POSTINGS_REACTION_SET,
     POSTINGS_SET,
     REMOTE_POSTING_SUBSCRIPTION_SET
 } from "state/postings/actions";
@@ -200,6 +201,23 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 if (postingState.posting.receiverName == null) {
                     istate.set([nodeName, id, "posting", "clientReaction"], reaction);
                 }
+                return istate.value();
+            }
+            return state;
+        }
+
+        case POSTINGS_REACTION_SET: {
+            const {reactions, totals, nodeName} = action.payload;
+            const nodeState = state[nodeName];
+            if (nodeState) {
+                const istate = immutable.wrap(state);
+                totals
+                    .filter(ts => nodeState[ts.entryId] != null)
+                    .forEach(ts => istate.set([nodeName, ts.entryId, "posting", "reactions"], ts));
+                reactions
+                    .filter(r => nodeState[r.entryId] != null)
+                    .filter(r => nodeState[r.entryId]?.posting.receiverName == null)
+                    .forEach(r => istate.set([nodeName, r.entryId, "posting", "clientReaction"], r));
                 return istate.value();
             }
             return state;

@@ -19,7 +19,7 @@ export function* fillSubscriptions(stories: StoryInfo[]) {
         return;
     }
     const remotePostings = postings.map(p => ({nodeName: p.receiverName!, postingId: p.receiverPostingId!}));
-    const subscriptions = yield* call(Node.postSubscriptionsSearch, ":", remotePostings);
+    const subscriptions = yield* call(Node.searchSubscriptions, ":", remotePostings);
     const subscriptionMap = new Map(subscriptions.map(r => [`${r.remoteNodeName} ${r.remotePostingId}`, r]));
     postings.forEach(p => {
         const key = `${p.receiverName} ${p.receiverPostingId}`;
@@ -39,6 +39,6 @@ export function* fillSubscription(posting: PostingInfo) {
         return;
     }
     const remotePostings = [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}];
-    const subscriptions = yield* call(Node.postSubscriptionsSearch, ":", remotePostings);
+    const subscriptions = yield* call(Node.searchSubscriptions, ":", remotePostings);
     subscriptions.forEach(sr => fillSubscriptionId(posting, sr));
 }
