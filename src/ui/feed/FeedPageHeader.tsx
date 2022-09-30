@@ -53,9 +53,9 @@ function FeedPageHeader({feedName, title, empty = false, shareable = false, atTo
                 }
                 {title}
                 <FeedSubscribeButton feedName={feedName} small={Browser.isTinyScreen()}/>
+                {shareable && <PageShareButton href="/"/>}
             </h2>
             <div className="page-header-buttons">
-                {shareable && <PageShareButton href="/"/>}
                 {!empty && <FeedGotoButton feedName={feedName} atBottom={atBottom}/>}
             </div>
             <FeedTopButton feedName={feedName} atTop={atTop} totalAfterTop={totalAfterTop} notViewed={notViewed}

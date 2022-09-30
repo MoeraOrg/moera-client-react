@@ -49,8 +49,8 @@ function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, fee
         }
     }
 
-    const subscribed = subscription != null;
-    const subscribedToMe = subscriber != null;
+    const subscribed = false;//subscription != null;
+    const subscribedToMe = false;//subscriber != null;
 
     const loading = !subscribed ? subscribing : unsubscribing;
     if ((!subscribed && !subscribedToMe) || loading) {

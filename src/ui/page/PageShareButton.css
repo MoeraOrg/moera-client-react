@@ -1,11 +1,18 @@
 .page-share {
     display: inline-block;
-    font-size: 1.2em;
+    font-size: .7em;
+    margin-left: .15em;
     margin-right: .25em;
     background-color: transparent;
     color: var(--bs-gray-400);
     border-width: 0;
     border-radius: 3px;
+}
+
+@media only screen and (max-width: 575px) {
+    .page-share {
+        font-size: .8em;
+    }
 }
 
 .page-share:hover {
