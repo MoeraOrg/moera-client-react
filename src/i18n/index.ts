@@ -1,10 +1,11 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ICU from 'i18next-icu';
-import { enUS, ru } from 'date-fns/locale'
+import { enUS, ru, uk } from 'date-fns/locale'
 
 import message_en from "i18n/locales/en/message.json";
 import message_ru from "i18n/locales/ru/message.json";
+import message_uk from "i18n/locales/uk/message.json";
 
 // Do not forget to add languages to src/api/settings.ts
 
@@ -14,14 +15,18 @@ const LANGUAGE_RESOURCES = {
     },
     ru: {
         message: message_ru
+    },
+    uk: {
+        message: message_uk
     }
 };
 
-const LANGUAGES_SUPPORTED: string[] = ["en", "ru"];
+const LANGUAGES_SUPPORTED: string[] = ["en", "ru", "uk"];
 
 const DATE_FNS_LOCALES: Partial<Record<string, Locale>> = {
     "en": enUS,
-    "ru": ru
+    "ru": ru,
+    "uk": uk
 }
 
 export function findPreferredLanguage(): string {

@@ -46,6 +46,10 @@ const META: ClientSettingMetaInfo[] = [
                 {
                     title: "Русский",
                     value: "ru"
+                },
+                {
+                    title: "Українська",
+                    value: "uk"
                 }
             ]
         }

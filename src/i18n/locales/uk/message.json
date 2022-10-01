@@ -1,0 +1,13 @@
+{
+  "add-comment" : "Відправити",
+  "add-comments-need" : "Щоб коментувати, вам треба <0>{signup}</0> або <1>{connect}</1>",
+  "add-connection" : "Додати з'єднання",
+  "add-donation" : "Додати донат",
+  "add-donation-button" : "Додати донат",
+  "additional" : "Додаткові",
+  "addons-changed-conflict" : "Список додатків був змінений.",
+  "alert-text" : "Текст попередження",
+  "align" : "Вирівнювання",
+  "all" : "Усі",
+  "allowed-oppose-reactions" : "Дозволені схвальні реакції"
+}
