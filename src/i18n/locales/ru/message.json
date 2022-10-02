@@ -564,7 +564,7 @@
   "subscribe" : "Подписаться",
   "subscribe-back" : "Подписаться в ответ",
   "subscribed" : "{gender, select, female {Подписана} other {Подписан}}",
-  "subscribed-to-me" : "Подписан на меня",
+  "subscribed-to-me" : "{gender, select, female {Подписана} other {Подписан}} на меня",
   "subscribers" : "Подписчики",
   "subscriptions" : "Подписки",
   "summary" : "Коротко",

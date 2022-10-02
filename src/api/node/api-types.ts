@@ -224,6 +224,7 @@ export interface PostingOperationsInfo {
 export interface PostingText {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerGender?: string | null;
     ownerAvatar?: AvatarDescription | null;
     acceptedReactions?: AcceptedReactions | null;
     bodyPreview?: string | null;
@@ -258,11 +259,13 @@ export interface PostingInfoBase<B> {
     totalRevisions: number;
     receiverName?: string | null;
     receiverFullName?: string | null;
+    receiverGender?: string | null;
     receiverAvatar?: AvatarImage | null;
     receiverPostingId?: string | null;
     parentMediaId?: string | null;
     ownerName: string;
     ownerFullName?: string | null;
+    ownerGender?: string | null;
     ownerAvatar?: AvatarImage | null;
     bodyPreview?: B | null;
     bodySrc?: B | null;
@@ -331,6 +334,7 @@ export interface CommentOperations {
 export interface CommentText {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerGender?: string | null;
     ownerAvatar?: AvatarDescription | null;
     bodyPreview?: string | null;
     bodySrc?: string | null;
@@ -371,6 +375,7 @@ export interface RepliedTo {
     id: string;
     name: string;
     fullName?: string | null;
+    gender?: string | null;
     avatar?: AvatarImage | null;
     heading?: string | null;
 }
@@ -394,6 +399,7 @@ interface CommentInfoBase<B> {
     ownerName: string;
     ownerFullName?: string | null;
     ownerAvatar?: AvatarImage | null;
+    ownerGender?: string | null;
     postingId: string;
     postingRevisionId: string;
     revisionId: string;
@@ -639,6 +645,7 @@ export interface SubscriberInfo {
     postingId?: string | null;
     nodeName: string;
     fullName?: string | null;
+    gender?: string | null;
     avatar?: AvatarImage | null;
     createdAt: number;
     operations?: {
@@ -664,6 +671,7 @@ export interface SubscriptionInfo {
     remoteSubscriberId: string;
     remoteNodeName: string;
     remoteFullName?: string | null;
+    remoteGender?: string | null;
     remoteAvatar?: AvatarImage | null;
     remoteFeedName?: string | null;
     remotePostingId?: string | null;
@@ -733,6 +741,7 @@ export interface DomainAvailable {
 export interface ContactInfo {
     nodeName: string;
     fullName?: string | null;
+    gender?: string | null;
     avatar?: AvatarImage | null;
     closeness: number;
 }

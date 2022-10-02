@@ -853,6 +853,10 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             type: "string",
             nullable: true
         },
+        "receiverGender": {
+            type: "string",
+            nullable: true
+        },
         "receiverAvatar": {
             ...AvatarImageType,
             nullable: true
@@ -869,6 +873,10 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             type: "string"
         },
         "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
             type: "string",
             nullable: true
         },
@@ -1020,6 +1028,10 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
             type: "string",
             nullable: true
         },
+        "receiverGender": {
+            type: "string",
+            nullable: true
+        },
         "receiverAvatar": {
             ...AvatarImageType,
             nullable: true
@@ -1037,6 +1049,10 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
             nullable: true
         },
         "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
             type: "string",
             nullable: true
         },
@@ -1235,6 +1251,10 @@ const RepliedToType: JSONSchemaType<API.RepliedTo> = {
             type: "string",
             nullable: true
         },
+        "gender": {
+            type: "string",
+            nullable: true
+        },
         "avatar": {
             ...AvatarImageType,
             nullable: true
@@ -1258,6 +1278,10 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
             type: "string"
         },
         "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
             type: "string",
             nullable: true
         },
@@ -1384,6 +1408,10 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
             nullable: true
         },
         "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
             type: "string",
             nullable: true
         },
@@ -2117,6 +2145,10 @@ export const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
             type: "string",
             nullable: true
         },
+        "gender": {
+            type: "string",
+            nullable: true
+        },
         "avatar": {
             ...AvatarImageType,
             nullable: true
@@ -2193,6 +2225,10 @@ export const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
             type: "string"
         },
         "remoteFullName": {
+            type: "string",
+            nullable: true
+        },
+        "remoteGender": {
             type: "string",
             nullable: true
         },
@@ -2402,6 +2438,10 @@ const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
             type: "string"
         },
         "fullName": {
+            type: "string",
+            nullable: true
+        },
+        "gender": {
             type: "string",
             nullable: true
         },

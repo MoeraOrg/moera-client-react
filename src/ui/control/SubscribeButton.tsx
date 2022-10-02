@@ -92,7 +92,7 @@ function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, fee
     const subscriberHideable = subscribedToMe && !subscribersHidden && !subscriberHidden;
     const subscriberUnhideable = subscribedToMe && !subscribersHidden && subscriberHidden;
     const caption = !subscribed
-        ? t("subscribed-to-me")
+        ? t("subscribed-to-me", {"gender": tGender(subscriber?.gender)})
         : (!subscribedToMe ? t("subscribed", {"gender": tGender(homeGender)}) : t("mutually-subscribed"));
 
     return (
