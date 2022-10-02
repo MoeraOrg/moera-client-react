@@ -45,6 +45,10 @@ export function getHomeOwnerAvatar(state: ClientState): AvatarImage | null {
     return getHomeOwnerCard(state)?.details.profile.avatar ?? null;
 }
 
+export function getHomeOwnerGender(state: ClientState): string | null {
+    return getHomeOwnerCard(state)?.details.profile.gender ?? null;
+}
+
 export function isHomeOwnerNameSet(state: ClientState): boolean {
     return !!getHomeOwnerName(state);
 }

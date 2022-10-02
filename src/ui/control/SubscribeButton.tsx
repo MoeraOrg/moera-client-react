@@ -11,12 +11,13 @@ import {
     feedSubscriptionSetVisibility,
     feedUnsubscribe
 } from "state/feeds/actions";
-import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
+import { getHomeOwnerGender, isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { isPrincipalIn } from "state/node/selectors";
 import { getSettingNode } from "state/settings/selectors";
 import { Button, DropdownMenu } from "ui/control";
 import "./SubscribeButton.css";
+import { tGender } from "i18n";
 
 interface OwnProps {
     show: boolean;
@@ -32,7 +33,7 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
-                          homeSet, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
+                          homeSet, homeGender, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
                           subscriptionHidden, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
                           feedSubscriptionSetVisibility}: Props) {
     const {t} = useTranslation();
@@ -49,8 +50,8 @@ function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, fee
         }
     }
 
-    const subscribed = false;//subscription != null;
-    const subscribedToMe = false;//subscriber != null;
+    const subscribed = subscription != null;
+    const subscribedToMe = subscriber != null;
 
     const loading = !subscribed ? subscribing : unsubscribing;
     if ((!subscribed && !subscribedToMe) || loading) {
@@ -92,7 +93,7 @@ function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, fee
     const subscriberUnhideable = subscribedToMe && !subscribersHidden && subscriberHidden;
     const caption = !subscribed
         ? t("subscribed-to-me")
-        : (!subscribedToMe ? t("subscribed") : t("mutually-subscribed"));
+        : (!subscribedToMe ? t("subscribed", {"gender": tGender(homeGender)}) : t("mutually-subscribed"));
 
     return (
         <DropdownMenu caption={small ? caption : undefined} className="btn btn-sm btn-outline-primary subscribe-button"
@@ -147,6 +148,7 @@ function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, fee
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         homeSet: isConnectedToHome(state) && isHomeOwnerNameSet(state),
+        homeGender: getHomeOwnerGender(state),
         peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
         subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
         subscriptionsHidden: (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin",

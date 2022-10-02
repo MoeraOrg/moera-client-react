@@ -563,7 +563,7 @@
   "strikeout" : "Зачёркнутый",
   "subscribe" : "Подписаться",
   "subscribe-back" : "Подписаться в ответ",
-  "subscribed" : "Подписан",
+  "subscribed" : "{gender, select, female {Подписана} other {Подписан}}",
   "subscribed-to-me" : "Подписан на меня",
   "subscribers" : "Подписчики",
   "subscriptions" : "Подписки",

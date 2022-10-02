@@ -47,6 +47,10 @@ export function getDateFnsLocale(): Locale {
     return DATE_FNS_LOCALES[i18n.language] ?? enUS;
 }
 
+export function tGender(gender: string | null | undefined): string {
+    return gender != null ? gender.toLowerCase() : "";
+}
+
 i18n.use(initReactI18next)
     .use(ICU)
     .init({
