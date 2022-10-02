@@ -63,7 +63,7 @@ function ProfileEditor(props: Props) {
                                         groupClassName="col-sm-6 col-10 pe-0"/>
                             <PrincipalField name="viewEmail" values={["public", "signed", "admin"]}
                                             long={!Browser.isTinyScreen()}
-                                            groupClassName="col-2 align-self-end pb-1"/>
+                                            groupClassName="col-sm-6 col-2 align-self-end pb-1"/>
                         </div>
                         <RichTextField title={t("bio")} name="bioSrc" placeholder={t("write-anything")}
                                        format="markdown" smileysEnabled anyValue noMedia/>
