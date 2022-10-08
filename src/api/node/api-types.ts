@@ -457,17 +457,20 @@ export interface StoryAttributes {
 export interface StorySummaryNode {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerGender?: string | null;
 }
 
 export interface StorySummaryEntry {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerGender?: string | null;
     heading?: string | null;
 }
 
 export interface StorySummaryReaction {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerGender?: string | null;
     emoji?: number | null;
 }
 
@@ -600,9 +603,24 @@ export interface ReactionAttributes {
     emoji: number;
 }
 
+export interface ReactionDescription {
+    ownerName?: string | null;
+    ownerFullName?: string | null;
+    ownerGender?: string | null;
+    ownerAvatar?: AvatarDescription | null;
+    negative: boolean;
+    emoji: number;
+    signature?: string | null;
+    signatureVersion?: number | null;
+    operations?: {
+        delete?: PrincipalValue | null;
+    } | null;
+}
+
 export interface ReactionInfo {
     ownerName?: string | null;
     ownerFullName?: string | null;
+    ownerGender?: string | null;
     ownerAvatar?: AvatarImage | null;
     postingId?: string | null;
     postingRevisionId?: string | null;

@@ -38,6 +38,7 @@ import {
     ProfileInfo,
     PublicMediaFileInfo,
     ReactionCreated,
+    ReactionDescription,
     ReactionInfo,
     ReactionsSliceInfo,
     ReactionTotalsInfo,
@@ -57,7 +58,7 @@ import {
     WhoAmI
 } from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
-import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { urlWithParameters, ut } from "util/url";
 import { toAvatarDescription } from "util/avatar";
 
@@ -229,19 +230,22 @@ export function* getSubscribers(nodeName: string | null, type: SubscriptionType,
 }
 
 export function* postFeedSubscriber(nodeName: string | null, feedName: string, ownerFullName: string | null,
-                                    ownerAvatar: AvatarDescription | null,
+                                    ownerGender: string | null, ownerAvatar: AvatarDescription | null,
                                     operations: SubscriberOperations | null): CallApiResult<SubscriberInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscribers", method: "POST", auth: true,
-        body: {type: "feed", feedName, ownerFullName, ownerAvatar, operations}, schema: NodeApi.SubscriberInfo
+        body: {type: "feed", feedName, ownerFullName, ownerGender, ownerAvatar, operations},
+        schema: NodeApi.SubscriberInfo
     });
 }
 
 export function* postPostingCommentsSubscriber(nodeName: string | null, postingId: string, ownerFullName: string | null,
+                                               ownerGender: string | null,
                                                ownerAvatar: AvatarDescription | null): CallApiResult<SubscriberInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscribers", method: "POST", auth: true,
-        body: {type: "posting-comments", postingId, ownerFullName, ownerAvatar}, schema: NodeApi.SubscriberInfo
+        body: {type: "posting-comments", postingId, ownerFullName, ownerGender, ownerAvatar},
+        schema: NodeApi.SubscriberInfo
     });
 }
 
@@ -270,13 +274,14 @@ export function* getSubscriptions(nodeName: string | null, type: SubscriptionTyp
 }
 
 export function* postFeedSubscription(nodeName: string | null, remoteSubscriberId: string, remoteNodeName: string,
-                                      remoteFullName: string | null, remoteAvatar: AvatarDescription | null,
+                                      remoteFullName: string | null, remoteGender: string | null,
+                                      remoteAvatar: AvatarDescription | null,
                                       remoteFeedName: string): CallApiResult<SubscriptionInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
         body: {
-            type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFullName, remoteAvatar,
-            remoteFeedName
+            type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFullName, remoteGender,
+            remoteAvatar, remoteFeedName
         },
         schema: NodeApi.SubscriptionInfo
     });
@@ -284,12 +289,13 @@ export function* postFeedSubscription(nodeName: string | null, remoteSubscriberI
 
 export function* postPostingCommentsSubscription(nodeName: string | null, remoteSubscriberId: string,
                                                  remoteNodeName: string, remoteFullName: string | null,
-                                                 remoteAvatar: AvatarDescription | null,
+                                                 remoteGender: string | null, remoteAvatar: AvatarDescription | null,
                                                  remotePostingId: string): CallApiResult<SubscriptionInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
         body: {
-            type: "posting-comments", remoteSubscriberId, remoteNodeName, remoteFullName, remoteAvatar, remotePostingId
+            type: "posting-comments", remoteSubscriberId, remoteNodeName, remoteFullName, remoteGender, remoteAvatar,
+            remotePostingId
         },
         schema: NodeApi.SubscriptionInfo
     });
@@ -376,11 +382,15 @@ export function* remotePostingVerify(nodeName: string | null, remoteNodeName: st
 
 export function* postPostingReaction(nodeName: string | null, postingId: string,
                                      negative: boolean, emoji: number): CallApiResult<ReactionCreated> {
-    const {ownerName, avatar} = {
+    const {ownerName, ownerFullName, ownerGender, avatar} = {
         ownerName: yield* select(getHomeOwnerName),
+        ownerFullName: yield* select(getHomeOwnerFullName),
+        ownerGender: yield* select(getHomeOwnerGender),
         avatar: yield* select(getHomeOwnerAvatar)
     };
-    const body = {ownerName, ownerAvatar: toAvatarDescription(avatar), negative, emoji};
+    const body: ReactionDescription = {
+        ownerName, ownerFullName, ownerGender, ownerAvatar: toAvatarDescription(avatar), negative, emoji
+    };
     return yield* callApi({
         nodeName, location: ut`/postings/${postingId}/reactions`, method: "POST", auth: true, body,
         schema: NodeApi.ReactionCreated
@@ -596,11 +606,15 @@ export function* remoteCommentVerify(nodeName: string | null, remoteNodeName: st
 
 export function* postCommentReaction(nodeName: string | null, postingId: string, commentId: string,
                                      negative: boolean, emoji: number): CallApiResult<ReactionCreated> {
-    const {ownerName, avatar} = yield* select(state => ({
+    const {ownerName, ownerFullName, ownerGender, avatar} = yield* select(state => ({
         ownerName: getHomeOwnerName(state),
+        ownerFullName: getHomeOwnerFullName(state),
+        ownerGender: getHomeOwnerGender(state),
         avatar: getHomeOwnerAvatar(state)
     }));
-    const body = {ownerName, ownerAvatar: toAvatarDescription(avatar), negative, emoji};
+    const body: ReactionDescription = {
+        ownerName, ownerFullName, ownerGender, ownerAvatar: toAvatarDescription(avatar), negative, emoji
+    };
     return yield* callApi({
         nodeName, location: ut`/postings/${postingId}/comments/${commentId}/reactions`, method: "POST", auth: true,
         body, schema: NodeApi.ReactionCreated

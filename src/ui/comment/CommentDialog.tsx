@@ -12,7 +12,7 @@ import {
     commentPost
 } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getCommentDialogComment, getCommentsState, isCommentDialogConflict } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
@@ -111,6 +111,7 @@ const connector = connect(
         show: state.detailedPosting.commentDialog.show,
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
+        ownerGender: getHomeOwnerGender(state),
         avatarDefault: getHomeOwnerAvatar(state),
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,

@@ -48,7 +48,7 @@ import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, isConnectedToHome } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, isConnectedToHome } from "state/home/selectors";
 import { introduced } from "state/init-selectors";
 import { executor } from "state/executor";
 import { Browser } from "ui/browser";
@@ -223,10 +223,11 @@ function* postingCopyLinkSaga(action: PostingCopyLinkAction) {
 
 function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
     const {id, nodeName} = action.payload;
-    const {posting, ownerName, homeOwnerFullName, homeOwnerAvatar} = yield* select(state => ({
+    const {posting, ownerName, homeOwnerFullName, homeOwnerGender, homeOwnerAvatar} = yield* select(state => ({
         posting: getPosting(state, id),
         ownerName: getOwnerName(state),
         homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerGender: getHomeOwnerGender(state),
         homeOwnerAvatar: getHomeOwnerAvatar(state)
     }));
     if (posting == null || ownerName == null) {
@@ -238,9 +239,9 @@ function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
     try {
         const whoAmI = yield* call(Node.getWhoAmI, targetNode);
         const subscriber = yield* call(Node.postPostingCommentsSubscriber, targetNode, postingId, homeOwnerFullName,
-            toAvatarDescription(homeOwnerAvatar));
+            homeOwnerGender, toAvatarDescription(homeOwnerAvatar));
         yield* call(Node.postPostingCommentsSubscription, ":", subscriber.id, targetNode, whoAmI.fullName ?? null,
-            toAvatarDescription(whoAmI.avatar), postingId);
+            whoAmI.gender ?? null, toAvatarDescription(whoAmI.avatar), postingId);
         yield* put(postingCommentsSubscribed(id, subscriber.id, nodeName));
     } catch (e) {
         yield* put(postingCommentsSubscribeFailed(id, nodeName));

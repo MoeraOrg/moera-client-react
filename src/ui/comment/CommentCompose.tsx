@@ -13,7 +13,7 @@ import { openSignUpDialog } from "state/signupdialog/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
 import { isPermitted, isPrincipalIn } from "state/node/selectors";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getCommentComposerRepliedToId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
@@ -126,6 +126,7 @@ const connector = connect(
     (state: ClientState) => ({
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
+        ownerGender: getHomeOwnerGender(state),
         avatarDefault: getHomeOwnerAvatar(state),
         receiverName: getCommentsState(state).receiverName,
         receiverFullName: getCommentsState(state).receiverFullName,

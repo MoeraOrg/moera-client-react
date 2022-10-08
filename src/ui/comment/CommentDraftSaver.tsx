@@ -7,7 +7,7 @@ import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerFullName } from "state/home/selectors";
+import { getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
 import {
     getCommentComposerRepliedToId,
     getCommentDialogComment,
@@ -85,6 +85,7 @@ const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         ownerName: getOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
+        ownerGender: getHomeOwnerGender(state),
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
         repliedToId: ownProps.commentId == null

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PostingText, PrincipalValue, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
@@ -134,6 +134,7 @@ const connector = connect(
     (state: ClientState) => ({
         avatarDefault: getHomeOwnerAvatar(state),
         fullNameDefault: getHomeOwnerFullName(state),
+        gender: getHomeOwnerGender(state),
         features: getPostingFeatures(state),
         loadingPosting: state.compose.loadingPosting,
         postingId: state.compose.postingId,

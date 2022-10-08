@@ -7,7 +7,7 @@ import { CommentText, SourceFormat } from "api/node/api-types";
 import { commentComposeCancel } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { getOwnerName } from "state/node/selectors";
-import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
@@ -62,6 +62,7 @@ const connector = connect(
     (state: ClientState) => ({
         ownerName: getOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
+        ownerGender: getHomeOwnerGender(state),
         avatarDefault: getHomeOwnerAvatar(state),
         draft: state.detailedPosting.compose.draft,
         comment: null,

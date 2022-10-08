@@ -48,7 +48,7 @@ import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { toAvatarDescription } from "util/avatar";
-import { getHomeOwnerAvatar, getHomeOwnerFullName } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
 import { getSettingNode } from "state/settings/selectors";
 
 export default [
@@ -92,18 +92,19 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
 
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
     const {nodeName, feedName} = action.payload;
-    const {homeOwnerFullName, homeOwnerAvatar, viewSubscriptions} = yield* select(state => ({
+    const {homeOwnerFullName, homeOwnerGender, homeOwnerAvatar, viewSubscriptions} = yield* select(state => ({
         homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerGender: getHomeOwnerGender(state),
         homeOwnerAvatar: getHomeOwnerAvatar(state),
         viewSubscriptions: getSettingNode(state, "subscriptions.view") as PrincipalValue
     }));
     const viewSubscriber: PrincipalValue = viewSubscriptions === "admin" ? "private" : viewSubscriptions;
     try {
         const whoAmI = yield* call(Node.getWhoAmI, nodeName);
-        const subscriber = yield* call(Node.postFeedSubscriber, nodeName, feedName, homeOwnerFullName,
+        const subscriber = yield* call(Node.postFeedSubscriber, nodeName, feedName, homeOwnerFullName, homeOwnerGender,
             toAvatarDescription(homeOwnerAvatar), {view: viewSubscriber});
         const subscription = yield* call(Node.postFeedSubscription, ":", subscriber.id, nodeName,
-            whoAmI.fullName ?? null, toAvatarDescription(whoAmI.avatar), feedName);
+            whoAmI.fullName ?? null, whoAmI.gender ?? null, toAvatarDescription(whoAmI.avatar), feedName);
         yield* put(feedSubscribed(nodeName, subscription));
     } catch (e) {
         yield* put(feedSubscribeFailed(nodeName, feedName));

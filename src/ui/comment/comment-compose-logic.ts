@@ -17,6 +17,7 @@ interface MapToValuesProps {
 interface MapToCommentTextProps {
     ownerName: string | null;
     ownerFullName: string | null;
+    ownerGender: string | null;
     smileysEnabled: boolean;
     sourceFormatDefault: SourceFormat;
     reactionsPositiveDefault: string;
@@ -79,6 +80,7 @@ const commentComposeLogic = {
         return {
             ownerName: props.ownerName,
             ownerFullName: props.ownerFullName,
+            ownerGender: props.ownerGender,
             ownerAvatar: toAvatarDescription(values.avatar),
             bodySrc: JSON.stringify({
                 text: this._replaceSmileys(props.smileysEnabled, values.body.text.trim()),

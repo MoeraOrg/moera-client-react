@@ -11,6 +11,7 @@ import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { DraftSaver } from "ui/control";
 import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
+import { getHomeOwnerGender } from "state/home/selectors";
 
 type Props = {
     initialText: PostingText;
@@ -78,6 +79,7 @@ const ComposeDraftSaver = (props: Props) => {
 const connector = connect(
     (state: ClientState) => ({
         ownerName: getOwnerName(state),
+        gender: getHomeOwnerGender(state),
         features: getPostingFeatures(state),
         postingId: state.compose.postingId,
         posting: state.compose.posting,

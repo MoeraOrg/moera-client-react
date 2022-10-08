@@ -56,6 +56,7 @@ export interface ComposePageValues {
 }
 
 export interface MapToPostingTextProps {
+    gender: string | null;
     postingId: string | null;
     features: PostingFeatures | null;
     smileysEnabled: boolean;
@@ -224,6 +225,7 @@ const composePageLogic = {
     mapValuesToPostingText(values: ComposePageValues, props: MapToPostingTextProps): PostingText {
         return {
             ownerFullName: values.fullName,
+            ownerGender: props.gender,
             ownerAvatar: values.avatar ? {
                 mediaId: values.avatar.mediaId,
                 shape: values.avatar.shape ?? props.avatarShapeDefault

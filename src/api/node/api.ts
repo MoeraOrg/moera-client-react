@@ -1545,6 +1545,10 @@ const StorySummaryNodeType: JSONSchemaType<API.StorySummaryNode> = {
         "ownerFullName": {
             type: "string",
             nullable: true
+        },
+        "ownerGender": {
+            type: "string",
+            nullable: true
         }
     },
     required: [],
@@ -1559,6 +1563,10 @@ const StorySummaryEntryType: JSONSchemaType<API.StorySummaryEntry> = {
             nullable: true
         },
         "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
             type: "string",
             nullable: true
         },
@@ -1579,6 +1587,10 @@ const StorySummaryReactionType: JSONSchemaType<API.StorySummaryReaction> = {
             nullable: true
         },
         "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
             type: "string",
             nullable: true
         },
@@ -2010,6 +2022,10 @@ const ReactionInfoType: JSONSchemaType<API.ReactionInfo> = {
             nullable: true
         },
         "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
             type: "string",
             nullable: true
         },
