@@ -132,5 +132,27 @@
   "forget" : "Забути",
   "forget-changes" : "Ви дійсно бажаєте забути зміни?",
   "forget-unfinished-comment" : "Ви дійсно бажаєте забути незавершений коментар?",
+  "instant-summary" : {
+    "in-their-blog" : "своєму блозі",
+    "on-their-post" : "свого поста",
+    "on-your-post" : "вашого поста",
+    "opposed" : "{count, plural, =1 {{gender, select, female {заперечила} other {заперечив}}} other {заперечили}} на",
+    "story" : {
+      "comment-added" : "{comments} {count, plural, =1 {{gender, select, female {прокоментувала} other {прокоментував}}} other {прокоментували}} ваш пост {heading}",
+      "mention-comment" : "{node} {nodeGender, select, female {згадала} other {згадав}} вас у коментарі {commentHeading} до {posting} {postingHeading}",
+      "mention-posting" : "{node} {nodeGender, select, female {згадала} other {згадав}} вас у пості {heading}",
+      "posting-updated" : "{node} {nodeGender, select, female {оновила} other {оновив}} свій пост {heading}",
+      "reaction-added" : "{reactions} ваш пост {heading}",
+      "remote-comment-added" : "{comments} {count, plural, =1 {{gender, select, female {прокоментувала} other {прокоментував}}} other {прокоментували}} {posting} {heading}, {reason}",
+      "reply-comment" : "{replies} {count, plural, =1 {{gender, select, female {відповіла} other {відповів}}} other {відповіли}} на ваш коментар {heading} до {posting}",
+      "subscriber-added" : "{node} {gender, select, female {підписалась} other {підписався}} на вашу стрічку {feed}",
+      "subscriber-deleted" : "{node} {gender, select, female {відписалась} other {відписався}} від вашої стрічки {feed}"
+    },
+    "supported" : "{count, plural, =1 {{gender, select, female {схвалила} other {схвалив}}} other {схвалили}}",
+    "their-post" : "свій пост",
+    "your-post" : "ваш пост"
+  },
+  "subscribed" : "{gender, select, female {Підписана} other {Підписаний}}",
+  "subscribed-to-me" : "{gender, select, female {Підписана} other {Підписаний}} на мене",
   "undo" : "Скасувати"
 }
