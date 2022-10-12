@@ -256,7 +256,7 @@
   "no-actions" : "Действий нет",
   "no-addons" : "Нет загруженных дополнений.",
   "node-settings-changed-conflict" : "Настройки блога были кем-то изменены.",
-  "no-name-known" : "имя неизвестно",
+  "no-name-known" : "неизвестное имя",
   "no-name-set" : "имя не задано",
   "not-allowed" : "Недопустимо",
   "not-connected-home" : "Не подключён к дому",
@@ -490,7 +490,7 @@
       "comment_max-size_soft" : "Максимальный размер комментариев",
       "comment_revision_lifetime" : "Стирать старые версии комментариев через",
       "credentials-reset_token_lifetime" : "Аннулировать код для сброса пароля через",
-      "feed_width" : "Web UI: Ширина ленты (в пикселах)",
+      "feed_width" : "Ширина ленты (в пикселах)",
       "instants_lifetime" : "Стирать уведомления через",
       "instants_viewed_lifetime" : "Стирать просмотренные уведомления через",
       "media_max-size" : "Максимальный размер загружаемых медиафайлов",
@@ -512,7 +512,7 @@
       "posting_revealed_notification_age" : "Уведомлять подписчиков об открытии закрытого поста, если он новее, чем",
       "posting_revision_lifetime" : "Стирать старые версии постов через",
       "posting_subject_present" : "У постов есть заголовки",
-      "posting_time_relative" : "Web UI: Показывать в постах относительное время",
+      "posting_time_relative" : "Показывать в постах относительное время",
       "profile_signing-key_valid-from_layover" : "Задержка активации ключа для подписи",
       "push_client_lifetime" : "Прекращать посылать пуш-уведомления неактивным клиентам через",
       "push_client_max-number" : "Максимальное число клиентов, получающих пуш-уведомления",
@@ -530,8 +530,8 @@
       "webmaster_name" : "Имя вебмастера",
       "webui_allow-indexing" : "Разрешить поисковым системам индексировать блог",
       "webui_enabled" : "Включить Web UI",
-      "webui_head_top_html" : "Web UI: HTML для вставки в начало <HEAD>",
-      "webui_redirect-to-client" : "Web UI: Открывать в веб-клиенте"
+      "webui_head_top_html" : "HTML для вставки в начало <HEAD>",
+      "webui_redirect-to-client" : "Открывать в веб-клиенте"
     },
     "sheet" : {
       "addons" : "Дополнения",

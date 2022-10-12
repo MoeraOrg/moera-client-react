@@ -490,7 +490,7 @@
       "comment_max-size_soft" : "Maximal size of comments",
       "comment_revision_lifetime" : "Purge old comment revisions after",
       "credentials-reset_token_lifetime" : "Invalidate code for resetting a password after",
-      "feed_width" : "Web UI: Feed width (in pixels)",
+      "feed_width" : "Feed width (in pixels)",
       "instants_lifetime" : "Purge notifications after",
       "instants_viewed_lifetime" : "Purge viewed notifications after",
       "media_max-size" : "Maximal size of an uploaded media",
@@ -512,7 +512,7 @@
       "posting_revealed_notification_age" : "Notify subscribers about opening a closed post, if it is newer than",
       "posting_revision_lifetime" : "Purge old post revisions after",
       "posting_subject_present" : "Posts have titles",
-      "posting_time_relative" : "Web UI: Show relative time in posts",
+      "posting_time_relative" : "Show relative time in posts",
       "profile_signing-key_valid-from_layover" : "Signing key activation layover",
       "push_client_lifetime" : "Stop sending push notifications to inactive clients after",
       "push_client_max-number" : "Maximal number of clients receiving push notifications",
@@ -530,8 +530,8 @@
       "webmaster_name" : "Webmaster name",
       "webui_allow-indexing" : "Allow search engines to index the blog",
       "webui_enabled" : "Enable Web UI",
-      "webui_head_top_html" : "Web UI: HTML to insert at the beginning of <HEAD>",
-      "webui_redirect-to-client" : "Web UI: Open in web client"
+      "webui_head_top_html" : "HTML to insert at the beginning of <HEAD>",
+      "webui_redirect-to-client" : "Open in web client"
     },
     "sheet" : {
       "addons" : "Add-ons",
