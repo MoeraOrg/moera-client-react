@@ -94,7 +94,8 @@ function CommentDialog(props: Props) {
                     <RichTextField name="body" rows={5} features={features} nodeName={receiverName} forceImageCompress
                                    anyValue autoFocus disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
                                    format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
-                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features} small/>
+                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
+                                          features={features} small/>
                 </div>
                 <div className="modal-footer">
                     <CommentDraftSaver initialized={loaded} initialText={initialText} commentId={commentId}/>

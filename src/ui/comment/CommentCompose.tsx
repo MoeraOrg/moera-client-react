@@ -107,7 +107,8 @@ function CommentCompose(props: Props) {
                                    disabled={beingPosted} smileysEnabled={smileysEnabled}
                                    hidingPanel={commentComposeLogic.areValuesEmpty(values)}
                                    format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
-                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features} small/>
+                    <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
+                                          features={features} small/>
                 </div>
                 <CommentComposeButtons loading={beingPosted}/>
             </Form>
