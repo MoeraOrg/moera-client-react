@@ -21,9 +21,14 @@ DIV.link-preview {
 @media only screen and (max-width: 575px) {
     A.link-preview, DIV.link-preview {
         display: flex;
-        width: 99.6vw;
         margin-left: -.5rem;
         margin-right: -.5rem;
+    }
+    A.link-preview {
+        width: 99.6vw;
+    }
+    DIV.link-preview {
+        width: calc(99.6vw - 1rem);
     }
 }
 
