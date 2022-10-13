@@ -229,7 +229,7 @@ class FeedPage extends React.PureComponent<Props, State> {
         setTimeout(() => {
             const y = posting.getBoundingClientRect().top;
             const minY = getPageHeaderHeight() + 10;
-            window.scrollBy(0, y - minY);
+            window.scrollBy(0, y - minY - 25);
         });
         return true;
     }
