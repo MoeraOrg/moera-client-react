@@ -90,7 +90,9 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                     <PostingReactions posting={posting}/>
                     <PostingComments posting={posting}/>
                 </div>
-                {connectedToHome && <PostingButtons posting={posting}/>}
+                {(connectedToHome && posting.receiverDeletedAt == null) &&
+                    <PostingButtons posting={posting}/>
+                }
             </>
         }
     </div>

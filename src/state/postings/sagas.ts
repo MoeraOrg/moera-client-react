@@ -199,7 +199,7 @@ function* postingReactionDeleteSaga(action: PostingReactionDeleteAction) {
 export function* postingGetLink(id: string, nodeName: string = "") {
     const posting = yield* select(getPosting, id, nodeName);
     const targetNode = posting?.receiverName != null ? posting.receiverName : nodeName;
-    if (targetNode) {
+    if (targetNode && posting?.receiverDeletedAt == null) {
         const nodeUri = yield* call(getNodeUri, targetNode);
         return `${nodeUri}/post/${posting?.receiverPostingId ?? id}`;
     } else {

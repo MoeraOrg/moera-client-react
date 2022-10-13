@@ -86,12 +86,16 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
                 <PostingReactions posting={posting}/>
                 <PostingComments posting={posting}/>
             </div>
-            {connectedToHome && <PostingButtons posting={posting}/>}
+            {(connectedToHome && posting.receiverDeletedAt == null) &&
+                <PostingButtons posting={posting}/>
+            }
             {expanded &&
                 <EntryGalleryExpanded postingId={posting.id} nodeName="" media={posting.media ?? null}
                                       onCollapse={onCollapse}/>
             }
-            <Comments/>
+            {posting.receiverDeletedAt == null &&
+                <Comments/>
+            }
         </div>
     );
 }

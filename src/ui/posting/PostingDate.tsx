@@ -23,8 +23,9 @@ function PostingDate({posting, story, timeRelative}: Props) {
         publishedAt = story != null ? story.publishedAt : posting.createdAt;
     }
     const date = fromUnixTime(publishedAt);
-    const nodeName = posting.receiverName ?? posting.ownerName;
-    const postingId = posting.receiverPostingId ?? posting.id;
+    const originalDeleted = posting.receiverDeletedAt != null;
+    const nodeName = originalDeleted ? "" : (posting.receiverName ?? posting.ownerName);
+    const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
     return (
         <Jump className="date" nodeName={nodeName} href={`/post/${postingId}`}>{
             timeRelative ?

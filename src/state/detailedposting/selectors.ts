@@ -91,7 +91,8 @@ export function getFocusedCommentId(state: ClientState): string | null {
 export function isFocusedCommentToBeLoaded(state: ClientState): boolean {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
-    if (ownerName == null || posting == null || isCommentsReceiverToBeSwitched(state)) {
+    if (ownerName == null || posting == null || posting.receiverDeletedAt != null
+        || isCommentsReceiverToBeSwitched(state)) {
         return false;
     }
     const comments = getCommentsState(state);
@@ -116,8 +117,8 @@ export function isFocusedCommentInList(state: ClientState): boolean {
 export function isCommentsReadyToBeLoaded(state: ClientState): boolean {
     const ownerName = getOwnerName(state);
     const posting = getDetailedPosting(state);
-    return ownerName != null && posting != null && !isCommentsReceiverToBeSwitched(state)
-        && isFocusedCommentReady(state);
+    return ownerName != null && posting != null && posting.receiverDeletedAt == null
+        && !isCommentsReceiverToBeSwitched(state) && isFocusedCommentReady(state);
 }
 
 export function isFutureCommentsToBeLoaded(state: ClientState): boolean {

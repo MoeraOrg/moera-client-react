@@ -19,7 +19,7 @@ import { openSourceDialog } from "state/sourcedialog/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getNodeRootLocation, ProtectedObject } from "state/node/selectors";
+import { getNodeRootLocation, getOwnerName, ProtectedObject } from "state/node/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu } from "ui/control";
 import "ui/entry/EntryMenu.css";
@@ -31,9 +31,9 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function PostingMenu({
-     posting, story, isPermitted, rootLocation, homeOwnerName, goToCompose, confirmBox, storyPinningUpdate,
-     openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe,
-     openSourceDialog, shareDialogPrepare, entryCopyText
+     posting, story, isPermitted, rootLocation, nodeOwnerName, homeOwnerName, goToCompose, confirmBox,
+     storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
+     postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare, entryCopyText
 }: Props) {
     const {t} = useTranslation();
 
@@ -42,8 +42,9 @@ function PostingMenu({
     const onCopyText = () => entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null);
 
     const onShare = () => {
-        const nodeName = posting.receiverName ?? posting.ownerName;
-        const postingId = posting.receiverPostingId ?? posting.id;
+        const originalDeleted = posting.receiverDeletedAt != null;
+        const nodeName = originalDeleted ? (nodeOwnerName ?? "") : (posting.receiverName ?? posting.ownerName);
+        const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
         const href = `/post/${postingId}`;
 
         shareDialogPrepare(nodeName, href);
@@ -158,6 +159,7 @@ function PostingMenu({
 const connector = connect(
     (state: ClientState) => ({
         rootLocation: getNodeRootLocation(state),
+        nodeOwnerName: getOwnerName(state),
         homeOwnerName: getHomeOwnerName(state)
     }),
     {
