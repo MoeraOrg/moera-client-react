@@ -9,6 +9,7 @@ export const CloseButton = ({onClick}: Props) => {
     const {t} = useTranslation();
 
     return (
-        <button type="button" className="btn-close" aria-label={t("close")} onClick={onClick ?? undefined}/>
+        <button type="button" className="btn-close" title={t("close")} aria-label={t("close")}
+                onClick={onClick ?? undefined}/>
     );
 }

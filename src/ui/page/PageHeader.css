@@ -72,5 +72,6 @@
 }
 
 #page-header .react-datepicker-wrapper {
-    margin-bottom: .5rem;
+    line-height: 1.5;
+    margin-left: .5rem;
 }

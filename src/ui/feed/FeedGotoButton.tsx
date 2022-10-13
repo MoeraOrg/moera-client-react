@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +9,7 @@ import { ClientState } from "state/state";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 import { Browser } from "ui/browser";
-import { Button } from "ui/control";
+import { Button, CloseButton } from "ui/control";
 
 interface OwnProps {
     feedName: string;
@@ -22,9 +22,9 @@ function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Pro
     const [active, setActive] = useState<boolean>(false);
     const {t} = useTranslation();
 
-    useEffect(() => setActive(false), [timestamp]);
-
     const activate = () => setActive(true);
+
+    const deactivate = () => setActive(false);
 
     const goToTimestamp = (date: Date) => {
         const moment = getUnixTime(endOfDay(date)) * 1000;
@@ -45,6 +45,7 @@ function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Pro
                 <Button variant="outline-info" size="sm" onClick={activate}>{t("go-to")}</Button>
             :
                 <>
+                    <CloseButton onClick={deactivate}/>
                     <DatePicker selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
                                 onChange={v => {
                                     if (v instanceof Date) {
