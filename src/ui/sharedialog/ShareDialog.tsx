@@ -77,11 +77,12 @@ const ShareDialog = ({
             <div className="modal-body">
                 <ul className="nav nav-pills">
                     {MODE_TABS.map(({mode: mod, title}) => (
-                        <li className="nav-item">
+                        <li key={mod} className="nav-item">
                             {/* FIXME Bootstrap requires <a> here */}
                             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                            <a key={mod} className={cx("nav-link", {"active": mod === mode})} href="#"
-                               onClick={onModeClick(mod)}>{title}</a>
+                            <a className={cx("nav-link", {"active": mod === mode})} href="#" onClick={onModeClick(mod)}>
+                                {title}
+                            </a>
                         </li>
                     ))}
                 </ul>
