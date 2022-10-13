@@ -1,20 +1,18 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import { connect, ConnectedProps, Provider } from 'react-redux';
-import * as URI from 'uri-js';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import store from "state/store";
 import { getPostingBodyFontMagnitude } from "state/settings/selectors";
+import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
+import { isStandaloneMode } from "state/navigation/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
-import { isStandaloneMode } from "state/navigation/selectors";
-import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
-import { Browser } from "ui/browser";
-import { rootUrl } from "util/url";
+import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import { isNumericString } from "util/misc";
 
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
@@ -113,44 +111,7 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
         });
     }
 
-    const onClickLink = (event: MouseEvent) => {
-        if (event.target == null) {
-            return;
-        }
-        const href = (event.target as HTMLElement).getAttribute("href");
-        if (!href) {
-            return;
-        }
-        const parts = URI.parse(URI.normalize(href));
-        if (parts.scheme !== "https" || parts.host == null) {
-            return;
-        }
-        fetch(URI.serialize(parts), {
-            method: "GET",
-            headers: {
-                "X-Accept-Moera": "1.0"
-            },
-            referrerPolicy: "no-referrer"
-        }).then(response => {
-            const headers = response.headers;
-            if (headers && headers.has("X-Moera")) {
-                const rootPage = rootUrl(parts.scheme!, parts.host!, parts.port);
-                const {rootLocation, path = null, query = null, hash = null} =
-                    Browser.getLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
-                if (rootLocation != null && rootLocation !== Browser.getRootLocation()) {
-                    newLocation();
-                    initFromLocation(rootLocation, path, query, hash);
-                } else {
-                    goToLocation(path, query, hash);
-                }
-            } else {
-                window.location.href = href;
-            }
-        }).catch(() => {
-            window.location.href = href;
-        });
-        event.preventDefault();
-    }
+    const onClickLink = (event: MouseEvent) => interceptLinkClick(event, initFromLocation, newLocation, goToLocation);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => hydrate(), [html]);
