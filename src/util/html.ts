@@ -188,6 +188,7 @@ export function safeImportHtml(html: string | null | undefined): string {
         .replace(/<div(\s[^>]*)?>/gi, "\n")
         .replace(/<\/div>/gi, "")
         .replace(/\n\s*\n/g, "\n\n")
+        .replace("<a></a>", "") // Facebook post cutting mark
         .trim();
 }
 

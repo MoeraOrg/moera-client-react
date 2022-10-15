@@ -188,7 +188,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
     }
 
     _shouldPasteHtml(html: string): boolean {
-        const clean = html.replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
+        const clean = safeImportHtml(html).replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
         return !containsTags(htmlToEmoji(clean));
     }
 
@@ -258,7 +258,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
             return;
         }
 
-        let content;
+        let content: string | null;
         if (mode === "html") {
             content = safeImportHtml(html);
             if (format === "markdown") {
