@@ -35,6 +35,9 @@ import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
+import { ellipsize } from "util/text";
+
+const MAX_SHORT_TITLE = 120;
 
 const initialState = {
 };
@@ -44,8 +47,9 @@ function safeguard(posting: PostingInfo): ExtPostingInfo {
     if (posting.bodyPreview == null || !posting.bodyPreview.text) {
         iposting.set("body.previewText", safePreviewHtml(posting.body.text));
     }
-    if (posting.bodyPreview != null && posting.bodyPreview.subject) {
-        iposting.set("bodyPreview.subjectHtml", replaceEmojis(htmlEntities(posting.bodyPreview.subject)));
+    const subjectPreview = posting.bodyPreview?.subject || posting.body.subject;
+    if (subjectPreview) {
+        iposting.set("bodyPreview.subjectHtml", replaceEmojis(htmlEntities(ellipsize(subjectPreview, MAX_SHORT_TITLE))));
     }
     if (posting.body.subject) {
         iposting.set("body.subjectHtml", replaceEmojis(htmlEntities(posting.body.subject)));
