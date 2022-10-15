@@ -802,7 +802,7 @@ export interface PrivateMediaFileInfo {
 
 export interface RemoteMediaInfo {
     id: string;
-    hash: string;
+    hash?: string | null;
     digest?: string | null;
 }
 

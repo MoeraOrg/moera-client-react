@@ -679,14 +679,15 @@ const RemoteMediaInfoType: JSONSchemaType<API.RemoteMediaInfo> = {
             type: "string"
         },
         "hash": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "digest": {
             type: "string",
             nullable: true
         }
     },
-    required: ["id", "hash"],
+    required: ["id"],
     additionalProperties: false
 };
 

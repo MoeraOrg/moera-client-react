@@ -22,26 +22,31 @@ function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaI
                               lightBoxCopyLink, lightBoxCopyMediaLink}: Props) {
     const {t} = useTranslation();
 
-    const onShare = () => {
-        if (sourceNodeName == null) {
-            return;
-        }
-
-        let nodeName: string;
-        let href: string;
-        if (comment == null) {
-            if (posting == null) {
-                return;
-            }
-            nodeName = posting.receiverName ?? sourceNodeName;
-            const postingId = posting.receiverPostingId ?? posting.id;
-            href = urlWithParameters(ut`/post/${postingId}`, {"media": mediaId});
-        } else {
-            nodeName = sourceNodeName;
-            href = urlWithParameters(ut`/post/${comment.postingId}`, {"comment": comment.id, "media": mediaId});
-        }
-        shareDialogPrepare(nodeName, href);
+    if (sourceNodeName == null) {
+        return null;
     }
+
+    let nodeName: string;
+    let href: string;
+    if (comment == null) {
+        if (posting == null) {
+            return null;
+        }
+        const originalDeleted = posting.receiverDeletedAt != null;
+        nodeName = originalDeleted ? sourceNodeName : (posting.receiverName ?? sourceNodeName);
+        const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
+        let targetMediaId = mediaId;
+        if (!originalDeleted && posting.receiverName != null) {
+            const attachment = posting.media?.find(ma => ma.media?.id === mediaId);
+            targetMediaId = attachment?.remoteMedia?.id ?? mediaId;
+        }
+        href = urlWithParameters(ut`/post/${postingId}`, {"media": targetMediaId});
+    } else {
+        nodeName = sourceNodeName;
+        href = urlWithParameters(ut`/post/${comment.postingId}`, {"comment": comment.id, "media": mediaId});
+    }
+
+    const onShare = () => shareDialogPrepare(nodeName, href);
 
     return (
         <DropdownMenu className="lightbox-button lightbox-share" items={[
@@ -57,7 +62,7 @@ function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaI
             {
                 title: t("copy-link"),
                 href: null,
-                onClick: () => lightBoxCopyLink(),
+                onClick: () => lightBoxCopyLink(nodeName, href),
                 show: true
             },
             {

@@ -1,27 +1,21 @@
 import { call, put, select } from 'typed-redux-saga';
-import clipboardCopy from "clipboard-copy";
+import clipboardCopy from 'clipboard-copy';
 
-import {
-    getLightBoxCommentId,
-    getLightBoxMediaId,
-    getLightBoxMediaPostingId,
-    getLightBoxNodeName,
-    getLightBoxPostingId
-} from "state/lightbox/selectors";
+import { ClientState } from "state/state";
+import { executor } from "state/executor";
+import { getNodeUri } from "state/naming/sagas";
 import { postingLoad } from "state/postings/actions";
 import { flashBox } from "state/flashbox/actions";
 import { errorThrown } from "state/error/actions";
-import { executor } from "state/executor";
 import {
     LIGHT_BOX_COPY_LINK,
     LIGHT_BOX_COPY_MEDIA_LINK,
     LIGHT_BOX_MEDIA_POSTING_LOAD,
+    LightBoxCopyLinkAction,
     LightBoxCopyMediaLinkAction
 } from "state/lightbox/actions";
-import { ClientState } from "state/state";
-import { postingGetLink } from "state/postings/sagas";
+import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import { Browser } from "ui/browser";
-import { urlWithParameters } from "util/url";
 
 export default [
     executor(LIGHT_BOX_MEDIA_POSTING_LOAD, null, lightBoxMediaPostingLoadSaga),
@@ -39,20 +33,11 @@ function* lightBoxMediaPostingLoadSaga() {
     }
 }
 
-function* lightBoxCopyLinkSaga() {
-    const {nodeName, postingId, commentId, mediaId} = yield* select((state: ClientState) => ({
-        nodeName: getLightBoxNodeName(state),
-        postingId: getLightBoxPostingId(state),
-        commentId: getLightBoxCommentId(state),
-        mediaId: getLightBoxMediaId(state)
-    }));
-    if (postingId == null) {
-        return;
-    }
+function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
+    const {nodeName, url} = action.payload;
     try {
-        let href = yield* call(postingGetLink, postingId, nodeName);
-        href = urlWithParameters(href, {"comment": commentId, "media": mediaId});
-        yield* call(clipboardCopy, href);
+        const nodeUri = yield* call(getNodeUri, nodeName);
+        yield* call(clipboardCopy, nodeUri + url);
         if (Browser.userAgentOs !== "android" || window.Android) {
             yield* put(flashBox("Link copied to the clipboard"));
         }

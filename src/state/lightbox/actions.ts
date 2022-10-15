@@ -37,9 +37,13 @@ export const lightBoxMediaPostingLoad = (): LightBoxMediaPostingLoadAction => ({
 });
 
 export const LIGHT_BOX_COPY_LINK = "LIGHT_BOX_COPY_LINK";
-export type LightBoxCopyLinkAction = Action<typeof LIGHT_BOX_COPY_LINK>;
-export const lightBoxCopyLink = (): LightBoxCopyLinkAction => ({
-    type: LIGHT_BOX_COPY_LINK
+export type LightBoxCopyLinkAction = ActionWithPayload<typeof LIGHT_BOX_COPY_LINK, {
+    nodeName: string;
+    url: string;
+}>;
+export const lightBoxCopyLink = (nodeName: string, url: string): LightBoxCopyLinkAction => ({
+    type: LIGHT_BOX_COPY_LINK,
+    payload: {nodeName, url}
 });
 
 export const LIGHT_BOX_COPY_MEDIA_LINK = "LIGHT_BOX_COPY_MEDIA_LINK";
