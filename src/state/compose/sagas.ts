@@ -153,7 +153,7 @@ function* composeDraftDeleteSaga() {
     }
     if (!editing) {
         yield* call(Node.deleteDraft, ":", draftId);
-        yield* put(composeDraftListItemDeleted(draftId));
+        yield* put(composeDraftListItemDeleted(draftId, true));
     } else {
         yield* call(Node.deleteDraft, ":", draftId);
     }
@@ -185,12 +185,14 @@ function* composeDraftListItemReloadSaga(action: ComposeDraftListItemReloadActio
 }
 
 function* composeDraftListItemDeleteSaga(action: ComposeDraftListItemDeleteAction) {
+    const {id, resetForm} = action.payload;
+
     try {
-        yield* call(Node.deleteDraft, ":", action.payload.id);
-        yield* put(composeDraftListItemDeleted(action.payload.id));
+        yield* call(Node.deleteDraft, ":", id);
+        yield* put(composeDraftListItemDeleted(id, resetForm));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(composeDraftListItemDeleted(action.payload.id));
+            yield* put(composeDraftListItemDeleted(id, resetForm));
         } else {
             yield* put(errorThrown(e));
         }

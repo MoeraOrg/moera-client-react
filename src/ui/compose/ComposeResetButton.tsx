@@ -20,7 +20,7 @@ function ComposeResetButton({postingId, draftId, confirmBox}: Props) {
 
     const onClick = () => {
         if (postingId == null) {
-            confirmBox(t("want-delete-draft"), t("yes"), t("no"), composeDraftListItemDelete(draftId));
+            confirmBox(t("want-delete-draft"), t("yes"), t("no"), composeDraftListItemDelete(draftId, true));
         } else {
             confirmBox(t("want-forget-changes"), t("yes"), t("no"), composeUpdateDraftDelete(true));
         }

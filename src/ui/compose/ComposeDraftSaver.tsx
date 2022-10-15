@@ -63,7 +63,7 @@ const ComposeDraftSaver = (props: Props) => {
     const drop = (): void => {
         if (draftId != null) {
             if (postingId == null) {
-                composeDraftListItemDelete(draftId);
+                composeDraftListItemDelete(draftId, false);
             } else {
                 composeUpdateDraftDelete(false);
             }

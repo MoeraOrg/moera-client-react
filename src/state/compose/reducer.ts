@@ -256,7 +256,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 result = {
                     ...state,
                     ...emptyPosting,
-                    formId: state.formId + 1
+                    formId: action.payload.resetForm ? state.formId + 1 : state.formId
                 }
             } else {
                 result = {

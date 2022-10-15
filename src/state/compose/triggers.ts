@@ -115,6 +115,6 @@ export default [
             signal.payload.draftType === "new-posting"
             && signal.payload.receiverName === getOwnerName(state)
             && isComposeDraftListLoaded(state),
-        signal => composeDraftListItemDeleted(signal.payload.id)
+        signal => composeDraftListItemDeleted(signal.payload.id, false)
     )
 ];

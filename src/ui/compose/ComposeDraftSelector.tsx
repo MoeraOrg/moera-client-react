@@ -26,7 +26,7 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
         }
    };
 
-    const onDelete = (id: string) => composeDraftListItemDelete(id);
+    const onDelete = (id: string) => composeDraftListItemDelete(id, true);
 
     if (postingId != null) {
         return null;

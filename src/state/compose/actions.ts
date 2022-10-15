@@ -180,24 +180,26 @@ export const composeDraftListItemSet = (id: string, draft: DraftInfo): ComposeDr
 export const COMPOSE_DRAFT_LIST_ITEM_DELETE = "COMPOSE_DRAFT_LIST_ITEM_DELETE";
 export type ComposeDraftListItemDeleteAction = ActionWithPayload<typeof COMPOSE_DRAFT_LIST_ITEM_DELETE, {
     id: string;
+    resetForm: boolean;
 }>;
-export const composeDraftListItemDelete = (id: string): ComposeDraftListItemDeleteAction => ({
+export const composeDraftListItemDelete = (id: string, resetForm: boolean): ComposeDraftListItemDeleteAction => ({
     type: COMPOSE_DRAFT_LIST_ITEM_DELETE,
-    payload: {id}
+    payload: {id, resetForm}
 });
 
 export const COMPOSE_DRAFT_LIST_ITEM_DELETED = "COMPOSE_DRAFT_LIST_ITEM_DELETED";
 export type ComposeDraftListItemDeletedAction = ActionWithPayload<typeof COMPOSE_DRAFT_LIST_ITEM_DELETED, {
     id: string;
+    resetForm: boolean;
 }>;
-export const composeDraftListItemDeleted = (id: string): ComposeDraftListItemDeletedAction => ({
+export const composeDraftListItemDeleted = (id: string, resetForm: boolean): ComposeDraftListItemDeletedAction => ({
     type: COMPOSE_DRAFT_LIST_ITEM_DELETED,
-    payload: {id}
+    payload: {id, resetForm}
 });
 
 export const COMPOSE_UPDATE_DRAFT_DELETE = "COMPOSE_UPDATE_DRAFT_DELETE";
 export type ComposeUpdateDraftDeleteAction = ActionWithPayload<typeof COMPOSE_UPDATE_DRAFT_DELETE, {
-    resetForm: boolean
+    resetForm: boolean;
 }>;
 export const composeUpdateDraftDelete = (resetForm: boolean): ComposeUpdateDraftDeleteAction => ({
     type: COMPOSE_UPDATE_DRAFT_DELETE,
