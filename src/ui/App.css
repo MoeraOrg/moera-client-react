@@ -27,6 +27,14 @@ ABBR[title] {
     cursor: pointer !important;
 }
 
+DETAILS {
+    cursor: pointer;
+}
+
+DETAILS[open] {
+    cursor: unset;
+}
+
 .emoji {
     background-repeat: no-repeat;
     color: transparent;
