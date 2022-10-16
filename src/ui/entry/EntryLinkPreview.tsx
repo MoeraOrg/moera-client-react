@@ -69,7 +69,7 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
             <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageUploading ?? false}/>
             <div className="details">
                 {title &&
-                    <div className="title">{ellipsize(title, small ? 35 : 75)}</div>
+                    <div className="title">{ellipsize(title, small ? 35 : 81)}</div>
                 }
                 {description &&
                     <div className="description">{ellipsize(description, small ? 70 : 120)}</div>
