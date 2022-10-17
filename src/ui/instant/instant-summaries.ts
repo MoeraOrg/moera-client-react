@@ -26,7 +26,11 @@ function formatNodeName(node: StorySummaryNode | StorySummaryEntry | StorySummar
 }
 
 function formatReaction(reaction: StorySummaryReaction | null | undefined): string {
-    return String.fromCodePoint(reaction?.emoji ?? 0x1f44d) + " " + formatNodeName(reaction);
+    let emoji = reaction?.emoji ?? 0x1f44d;
+    if (emoji === 0x1f620) {
+        emoji = 0x1f92c;
+    }
+    return String.fromCodePoint(emoji) + " " + formatNodeName(reaction);
 }
 
 function formatHeading(entry: StorySummaryEntry | null | undefined): string {
