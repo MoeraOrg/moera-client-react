@@ -22,7 +22,7 @@ const mapPropsToValues = (props: Props): EntryLinkPreviewEditValues => ({
 const EntryLinkPreviewEditDialog = ({t}: Props & WithTranslation) => (
     <>
         <InputField name="title" title={t("title")} maxLength={75} autoFocus/>
-        <TextField name="description" title={t("description")} maxRows={3} maxLength={120}/>
+        <TextField name="description" title={t("description")} maxHeight="5em" maxLength={120}/>
     </>
 );
 

@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
-import TextareaAutosize from 'react-autosize-textarea';
 import { useTranslation } from 'react-i18next';
 
-import { FormGroup } from "ui/control";
+import { FormGroup, TextareaAutosize } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 
@@ -11,7 +10,7 @@ interface Props {
     name: string;
     title?: string;
     rows?: number;
-    maxRows?: number;
+    maxHeight?: string;
     maxLength?: number;
     placeholder?: string;
     autoFocus?: boolean;
@@ -26,7 +25,7 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function TextField({name, title, rows = 3, maxRows = 20, maxLength, placeholder, autoFocus, anyValue, className,
+export function TextField({name, title, rows = 3, maxHeight, maxLength, placeholder, autoFocus, anyValue, className,
                            autoComplete, noFeedback = false, disabled = false, groupClassName, initialValue,
                            defaultValue, onKeyDown}: Props) {
 
@@ -68,11 +67,11 @@ export function TextField({name, title, rows = 3, maxRows = 20, maxLength, place
                     autoComplete={autoComplete}
                     placeholder={placeholder}
                     rows={rows}
-                    maxRows={maxRows}
+                    style={{maxHeight: maxHeight ?? "30em"}}
                     maxLength={maxLength}
                     disabled={disabled}
                     onKeyDown={onKeyDown}
-                    ref={inputDom}
+                    innerRef={inputDom}
                 />
                 {!noFeedback && touched && <FieldError error={error}/>}
             </>

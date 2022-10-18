@@ -29,4 +29,5 @@ export { ReactionTotals } from "ui/control/ReactionTotals";
 export { RichTextEditor } from "ui/control/richtexteditor/RichTextEditor";
 export { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
+export { TextareaAutosize } from "ui/control/TextareaAutosize";
 export { Wrapper } from "ui/control/Wrapper";

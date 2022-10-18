@@ -56,7 +56,7 @@ function ImageEditDialog(props: Props) {
                 <div className="modal-body image-edit-dialog">
                     <img className="preview" alt="" src={src} width={imageWidth} height={imageHeight}/>
                     <Loading active={loading}/>
-                    <RichTextField name="caption" format={posting?.bodySrcFormat || "markdown"} maxRows={9}
+                    <RichTextField name="caption" format={posting?.bodySrcFormat || "markdown"} maxHeight="14em"
                                    smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
                 </div>
                 <div className="modal-footer">

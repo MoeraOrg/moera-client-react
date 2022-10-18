@@ -12,7 +12,7 @@ interface Props {
     name: string;
     title?: string;
     rows?: number;
-    maxRows?: number;
+    maxHeight?: string | null;
     features?: PostingFeatures | null;
     noMedia?: boolean;
     nodeName?: string | null;
@@ -33,10 +33,11 @@ interface Props {
     urlsField?: string;
 }
 
-export function RichTextField({name, title, rows = 3, maxRows, features, noMedia, nodeName, forceImageCompress,
-                               placeholder, autoFocus, anyValue, className, autoComplete, noFeedback = false,
-                               disabled = false, initialValue, defaultValue, smileysEnabled, hidingPanel, format,
-                               onKeyDown, urlsField}: Props) {
+export function RichTextField({
+    name, title, rows = 3, maxHeight, features, noMedia, nodeName, forceImageCompress, placeholder, autoFocus, anyValue,
+    className, autoComplete, noFeedback = false, disabled = false, initialValue, defaultValue, smileysEnabled,
+    hidingPanel, format, onKeyDown, urlsField
+}: Props) {
     const [{value, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<RichTextValue>(name, initialValue, defaultValue);
     const {setFieldValue} = useFormikContext();
@@ -69,9 +70,9 @@ export function RichTextField({name, title, rows = 3, maxRows, features, noMedia
                         })}
                     autoFocus={autoFocus}
                     autoComplete={autoComplete}
+                    maxHeight={maxHeight}
                     placeholder={placeholder ?? t("enter-text-here")}
                     rows={rows}
-                    maxRows={maxRows}
                     features={features ?? null}
                     disabled={disabled}
                     smileysEnabled={smileysEnabled}

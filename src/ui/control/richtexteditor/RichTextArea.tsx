@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import TextareaAutosize from 'react-autosize-textarea';
 import debounce from 'lodash.debounce';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import { Browser } from "ui/browser";
-import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
-import { getSetting } from "state/settings/selectors";
-import { settingsUpdate } from "state/settings/actions";
-import { ClientState } from "state/state";
 import { SourceFormat } from "api/node/api-types";
 import { PREFIX } from "api/settings";
+import { ClientState } from "state/state";
+import { settingsUpdate } from "state/settings/actions";
+import { getSetting } from "state/settings/selectors";
+import { TextareaAutosize } from "ui/control";
+import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
 import { extractUrls, replaceSmileys } from "util/text";
 import { containsTags, htmlToEmoji, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/misc";
@@ -22,7 +21,7 @@ export interface RichTextAreaProps {
     value?: string;
     format: SourceFormat;
     rows?: number;
-    maxRows?: number;
+    maxHeight?: string | null;
     placeholder?: string;
     className?: string;
     autoFocus?: boolean;
@@ -282,7 +281,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            name, value, className, autoComplete, placeholder, rows, maxRows, disabled, onBlur, textArea, t
+            name, value, className, autoComplete, maxHeight, placeholder, rows, disabled, onBlur, textArea, t
         } = this.props;
         const {pasteDialogShow} = this.state;
 
@@ -296,12 +295,12 @@ class RichTextArea extends React.PureComponent<Props, State> {
                     autoComplete={autoComplete}
                     placeholder={placeholder ?? t("enter-text-here")}
                     rows={rows}
-                    maxRows={maxRows ?? (Browser.isTinyScreen() ? 12 : 20)}
+                    style={{maxHeight: maxHeight ?? "calc(100vh - 26rem)"}}
                     disabled={disabled}
                     onKeyDown={this.onKeyDown}
                     onBlur={onBlur}
                     onChange={this.onChange}
-                    ref={textArea} // impossible to pass lambda here
+                    innerRef={textArea} // impossible to pass lambda here
                 />
                 <RichTextPasteDialog show={pasteDialogShow} onSubmit={this.onPasteDialogSubmit}/>
             </>
