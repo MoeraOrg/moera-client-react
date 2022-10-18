@@ -240,6 +240,7 @@ function* commentsLoadAllSaga() {
 function* commentsPastSliceLoadSaga() {
     const {receiverName, receiverPostingId, after} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
+        yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId));
         return;
     }
     try {
@@ -255,6 +256,7 @@ function* commentsPastSliceLoadSaga() {
 function* commentsFutureSliceLoadSaga() {
     const {receiverName, receiverPostingId, before} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
+        yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId));
         return;
     }
     try {

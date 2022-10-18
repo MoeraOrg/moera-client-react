@@ -83,11 +83,11 @@ export const commentsPastSliceLoad = (): CommentsPastSliceLoadAction => ({
 
 export const COMMENTS_PAST_SLICE_LOAD_FAILED = "COMMENTS_PAST_SLICE_LOAD_FAILED";
 export type CommentsPastSliceLoadFailedAction = ActionWithPayload<typeof COMMENTS_PAST_SLICE_LOAD_FAILED, {
-    nodeName: string;
-    postingId: string;
+    nodeName: string | null;
+    postingId: string | null;
 }>;
-export const commentsPastSliceLoadFailed = (nodeName: string,
-                                            postingId: string): CommentsPastSliceLoadFailedAction => ({
+export const commentsPastSliceLoadFailed = (nodeName: string | null,
+                                            postingId: string | null): CommentsPastSliceLoadFailedAction => ({
     type: COMMENTS_PAST_SLICE_LOAD_FAILED,
     payload: {nodeName, postingId}
 });
@@ -100,11 +100,11 @@ export const commentsFutureSliceLoad = (): CommentsFutureSliceLoadAction => ({
 
 export const COMMENTS_FUTURE_SLICE_LOAD_FAILED = "COMMENTS_FUTURE_SLICE_LOAD_FAILED";
 export type CommentsFutureSliceLoadFailedAction = ActionWithPayload<typeof COMMENTS_FUTURE_SLICE_LOAD_FAILED, {
-    nodeName: string;
-    postingId: string;
+    nodeName: string | null;
+    postingId: string | null;
 }>;
-export const commentsFutureSliceLoadFailed = (nodeName: string,
-                                              postingId: string): CommentsFutureSliceLoadFailedAction => ({
+export const commentsFutureSliceLoadFailed = (nodeName: string | null,
+                                              postingId: string | null): CommentsFutureSliceLoadFailedAction => ({
     type: COMMENTS_FUTURE_SLICE_LOAD_FAILED,
     payload: {nodeName, postingId}
 });
