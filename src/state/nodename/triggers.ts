@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { dialogClosed, dialogOpened, GO_TO_PAGE } from "state/navigation/actions";
@@ -29,7 +31,7 @@ export default [
     trigger(NODE_NAME_UPDATE_DIALOG, true, dialogOpened(nodeNameUpdateDialogCancel())),
     trigger(NODE_NAME_UPDATE_DIALOG_CANCEL, true, dialogClosed()),
     trigger(NODE_NAME_UPDATE_SUCCEEDED, true, nodeNameLoad),
-    trigger(NODE_NAME_UPDATE_SUCCEEDED, true, flashBox("Name operation started")),
+    trigger(NODE_NAME_UPDATE_SUCCEEDED, true, flashBox(i18n.t("name-operation-started"))),
     trigger(
         [EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS, EVENT_NODE_NODE_NAME_CHANGED],
         isAtProfilePage,

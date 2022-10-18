@@ -1,5 +1,6 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
+import i18n from 'i18next';
 
 import { Node, NodeApiError } from "api";
 import {
@@ -524,7 +525,7 @@ function* focusedCommentLoadSaga() {
         if (!(e instanceof NodeApiError) || e.errorCode !== "comment.not-found") {
             yield* put(errorThrown(e));
         } else {
-            yield* put(flashBox("Comment not found"));
+            yield* put(flashBox(i18n.t("comment-not-found")));
         }
     }
 }
@@ -535,7 +536,7 @@ function* commentCopyLinkSaga(action: CommentCopyLinkAction) {
         const href = yield* call(postingGetLink, postingId);
         yield* call(clipboardCopy, `${href}?comment=${id}`);
         if (Browser.userAgentOs !== "android" || window.Android) {
-            yield* put(flashBox("Link copied to the clipboard"));
+            yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {
         yield* put(errorThrown(e));

@@ -1,5 +1,6 @@
 import { all, call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
+import i18n from 'i18next';
 
 import { NameResolvingError, Node } from "api";
 import { executor } from "state/executor";
@@ -136,6 +137,6 @@ function* loadSubscription(nodeName: string, homeOwnerName: string | null) {
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
     yield* call(clipboardCopy, mentionName(action.payload.nodeName, action.payload.fullName));
     if (Browser.userAgentOs !== "android" || window.Android) {
-        yield* put(flashBox("Mention copied to the clipboard"));
+        yield* put(flashBox(i18n.t("mention-copied")));
     }
 }

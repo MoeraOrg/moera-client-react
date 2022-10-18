@@ -1,5 +1,6 @@
 import { call, put } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
+import i18n from 'i18next';
 
 import {
     closeShareDialog,
@@ -59,7 +60,7 @@ function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
     yield* put(closeShareDialog());
     yield* call(clipboardCopy, action.payload.url);
     if (Browser.userAgentOs !== "android" || window.Android) {
-        yield* put(flashBox("Link copied to the clipboard"));
+        yield* put(flashBox(i18n.t("link-copied")));
     }
 }
 
@@ -73,6 +74,6 @@ function* sharePageCopyLink(action: SharePageCopyLinkAction) {
     }
     yield* call(clipboardCopy, normalizeUrl(nodeUri) + href);
     if (Browser.userAgentOs !== "android" || window.Android) {
-        yield* put(flashBox("Link copied to the clipboard"));
+        yield* put(flashBox(i18n.t("link-copied")));
     }
 }

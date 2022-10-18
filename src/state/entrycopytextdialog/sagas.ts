@@ -1,5 +1,6 @@
 import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
+import i18n from 'i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
 import { executor } from "state/executor";
@@ -50,7 +51,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
     }
     yield* call(clipboardCopy, text);
     if (Browser.userAgentOs !== "android" || window.Android) {
-        yield* put(flashBox("Text copied to the clipboard"));
+        yield* put(flashBox(i18n.t("text-copied")));
     }
 }
 

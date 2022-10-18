@@ -1,5 +1,6 @@
 import { call, put, select } from 'typed-redux-saga/macro';
 import clipboardCopy from 'clipboard-copy';
+import i18n from 'i18next';
 
 import { Node } from "api";
 import { ReactionTotalsInfo } from "api/node/api-types";
@@ -214,7 +215,7 @@ function* postingCopyLinkSaga(action: PostingCopyLinkAction) {
         const href = yield* call(postingGetLink, id, nodeName);
         yield* call(clipboardCopy, href);
         if (Browser.userAgentOs !== "android" || window.Android) {
-            yield* put(flashBox("Link copied to the clipboard"));
+            yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {
         yield* put(errorThrown(e));

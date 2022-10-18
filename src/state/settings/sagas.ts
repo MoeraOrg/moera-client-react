@@ -264,7 +264,7 @@ function* settingsTokensNewTokenCopySaga() {
     const token = yield* select(state => state.settings.tokens.dialog.newToken);
     yield* call(clipboardCopy, token.token);
     if (Browser.userAgentOs !== "android" || window.Android) {
-        yield* put(flashBox("Token copied to the clipboard"));
+        yield* put(flashBox(i18n.t("token-copied")));
     }
 }
 

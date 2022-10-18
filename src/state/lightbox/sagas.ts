@@ -54,7 +54,7 @@ function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
         const nodeUri = yield* call(getNodeUri, nodeName);
         yield* call(clipboardCopy, nodeUri + url);
         if (Browser.userAgentOs !== "android" || window.Android) {
-            yield* put(flashBox("Link copied to the clipboard"));
+            yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {
         yield* put(errorThrown(e));
@@ -65,7 +65,7 @@ function* lightBoxCopyMediaLinkSaga(action: LightBoxCopyMediaLinkAction) {
     try {
         yield* call(clipboardCopy, action.payload.url);
         if (Browser.userAgentOs !== "android" || window.Android) {
-            yield* put(flashBox("Link copied to the clipboard"));
+            yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {
         yield* put(errorThrown(e));

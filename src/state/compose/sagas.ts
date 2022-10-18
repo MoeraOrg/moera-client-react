@@ -1,4 +1,5 @@
 import { call, put, select } from 'typed-redux-saga/macro';
+import i18n from 'i18next';
 
 import { errorThrown } from "state/error/actions";
 import { Node, NodeApiError } from "api";
@@ -116,7 +117,7 @@ function* composeDraftLoadSaga() {
     } catch (e) {
         yield* put(composeDraftLoadFailed());
         if (e instanceof NodeApiError) {
-            yield* put(flashBox("Draft not found"));
+            yield* put(flashBox(i18n.t("draft-not-found")));
         } else {
             yield* put(errorThrown(e));
         }
