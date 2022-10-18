@@ -8,7 +8,7 @@ import { MediaAttachment } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import { closeLightBox, lightBoxMediaSet } from "state/lightbox/actions";
+import { closeLightBox, LightBoxMediaSequence, lightBoxMediaSet } from "state/lightbox/actions";
 import { getLightBoxMediaId, getLightBoxMediaPostingId, isLightBoxShown } from "state/lightbox/selectors";
 import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
@@ -39,8 +39,10 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
     let mainMimeType = "";
     let prevSrc: string | undefined = undefined;
     let prevMediaId: string | undefined = undefined;
+    let prevSequence: LightBoxMediaSequence = "normal";
     let nextSrc: string | undefined = undefined;
     let nextMediaId: string | undefined = undefined;
+    let nextSequence: LightBoxMediaSequence = "normal";
     let title = "";
     if (media != null && media.length > 0) {
         const loop = loopGallery && media.length > 1;
@@ -59,10 +61,12 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
         if (prevIndex != null) {
             prevSrc = urlWithParameters(rootPage + "/media/" + media[prevIndex].media?.path, {auth});
             prevMediaId = media[prevIndex].media?.id;
+            prevSequence = prevIndex > index ? "prev-loop" : "normal";
         }
         if (nextIndex != null) {
             nextSrc = urlWithParameters(rootPage + "/media/" + media[nextIndex].media?.path, {auth});
             nextMediaId = media[nextIndex].media?.id;
+            nextSequence = nextIndex < index ? "next-loop" : "normal";
         }
         title = `${index + 1} / ${media.length}`;
     }
@@ -71,9 +75,9 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
         <Lightbox mainSrc={mainSrc} prevSrc={prevSrc} nextSrc={nextSrc} imageTitle={title}
                   onCloseRequest={() => closeLightBox()}
                   closeLabel={t("close")}
-                  onMovePrevRequest={() => prevMediaId != null ? lightBoxMediaSet(prevMediaId) : null}
+                  onMovePrevRequest={() => prevMediaId != null ? lightBoxMediaSet(prevMediaId, prevSequence) : null}
                   prevLabel={t("previous-image")}
-                  onMoveNextRequest={() => nextMediaId != null ? lightBoxMediaSet(nextMediaId) : null}
+                  onMoveNextRequest={() => nextMediaId != null ? lightBoxMediaSet(nextMediaId, nextSequence) : null}
                   nextLabel={t("next-image")}
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[

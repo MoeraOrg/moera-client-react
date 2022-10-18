@@ -21,13 +21,16 @@ export const closeLightBox = (): CloseLightBoxAction => ({
     type: CLOSE_LIGHT_BOX
 });
 
+export type LightBoxMediaSequence = "normal" | "next-loop" | "prev-loop";
+
 export const LIGHT_BOX_MEDIA_SET = "LIGHT_BOX_MEDIA_SET";
 export type LightBoxMediaSetAction = ActionWithPayload<typeof LIGHT_BOX_MEDIA_SET, {
     mediaId: string;
+    sequence: LightBoxMediaSequence;
 }>;
-export const lightBoxMediaSet = (mediaId: string): LightBoxMediaSetAction => ({
+export const lightBoxMediaSet = (mediaId: string, sequence: LightBoxMediaSequence): LightBoxMediaSetAction => ({
     type: LIGHT_BOX_MEDIA_SET,
-    payload: {mediaId}
+    payload: {mediaId, sequence}
 });
 
 export const LIGHT_BOX_MEDIA_POSTING_LOAD = "LIGHT_BOX_MEDIA_POSTING_LOAD";

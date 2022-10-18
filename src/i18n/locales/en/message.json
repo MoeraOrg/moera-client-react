@@ -380,6 +380,8 @@
   "reset-password-hint-instructions" : "A message was sent to your E-mail address <b>{emailHint}</b> with a secret code needed to reset the password. Please enter it in the field below.",
   "reset-password-instructions" : "To reset the password, please enter the name or the URL of your blog.",
   "reset-to-default" : "Reset to default",
+  "returned-to-beginning" : "You've returned to the beginning",
+  "returned-to-end" : "You've returned to the end",
   "retype-password" : "Please type the password again",
   "rotate-left" : "Rotate left",
   "rotate-right" : "Rotate right",
