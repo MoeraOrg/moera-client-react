@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 import { trigger } from "state/trigger";
 import { FeaturesUpdatedEvent, NodeNameChangedEvent } from "api/events/api-types";
 import { EVENT_NODE_FEATURES_UPDATED, EVENT_NODE_NODE_NAME_CHANGED, EventAction } from "api/events/actions";
@@ -27,7 +29,7 @@ export default [
         updateLocation
     ),
     trigger(PULSE_6H, isOwnerNameSet, ownerVerify),
-    trigger(OWNER_SWITCH_FAILED, true, messageBox("No node with such name exist.")),
+    trigger(OWNER_SWITCH_FAILED, true, messageBox(i18n.t("node-name-not-exists"))),
     trigger(
         EVENT_NODE_NODE_NAME_CHANGED,
         true,

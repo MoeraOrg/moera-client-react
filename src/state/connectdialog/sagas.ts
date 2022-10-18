@@ -1,4 +1,5 @@
 import { call, put } from 'typed-redux-saga/macro';
+import i18n from 'i18next';
 
 import { executor } from "state/executor";
 import { Node, NodeApiError } from "api";
@@ -25,10 +26,7 @@ function* connectDialogResetPasswordSaga(action: ConnectDialogResetPasswordActio
     } catch (e) {
         yield* put(connectDialogResetPasswordFailed());
         if (e instanceof NodeApiError) {
-            yield* put(messageBox(
-                `Unfortunately, E-mail address for node <b>${location}</b> is not set, so automatic password`
-                + " reset is impossible. Please, contact your Moera provider or server owner to find alternative ways"
-                + " to reset the password."));
+            yield* put(messageBox(i18n.t("email-not-set", {location})));
         } else {
             yield* put(errorThrown(e));
         }

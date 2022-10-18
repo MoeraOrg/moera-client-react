@@ -1,6 +1,7 @@
 import { call, put } from 'typed-redux-saga';
 import * as Base64js from 'base64-js';
 import imageCompression from 'browser-image-compression';
+import i18n from 'i18next';
 
 import { Node } from "api/node";
 import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
@@ -33,9 +34,11 @@ export function* imageUpload(features: PostingFeatures | null, nodeName: string 
                 }
             } else {
                 if (file.size > features.mediaMaxSize) {
-                    yield* put(messageBox(`File "${file.name}" cannot be uploaded because its size`
-                        + ` (${formatMb(file.size)}) is larger than maximum allowed size`
-                        + ` (${formatMb(features.mediaMaxSize)})`));
+                    yield* put(messageBox(i18n.t("upload-too-large", {
+                        name: file.name,
+                        size: formatMb(file.size),
+                        maxSize: formatMb(features.mediaMaxSize)
+                    })));
                     return null;
                 }
             }

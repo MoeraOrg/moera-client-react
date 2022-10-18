@@ -1,4 +1,5 @@
 import { delay, put, select } from 'typed-redux-saga/macro';
+import i18n from 'i18next';
 
 import { NodeApiError, VerboseError } from "api";
 import { ERROR_AUTH_INVALID, ERROR_THROWN, errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
@@ -50,6 +51,6 @@ function* errorAuthInvalidSaga() {
     if (location != null) {
         Browser.deleteData(location);
         yield* put(disconnectFromHome(location, login));
-        yield* put(messageBox("You have been disconnected from your home node.", openConnectDialog()));
+        yield* put(messageBox(i18n.t("disconnected-from-home"), openConnectDialog()));
     }
 }

@@ -49,7 +49,7 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
 
     const nodeUri = yield* call(getNodeUri, nodeName);
     if (nodeUri == null) {
-        yield* put(messageBox(`Cannot resolve name: ${nodeName}`));
+        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName));
         return;
     }
     const url = normalizeUrl(nodeUri) + href;
@@ -69,7 +69,7 @@ function* sharePageCopyLink(action: SharePageCopyLinkAction) {
 
     const nodeUri = yield* call(getNodeUri, nodeName);
     if (nodeUri == null) {
-        yield* put(messageBox(`Cannot resolve name: ${nodeName}`));
+        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName));
         return;
     }
     yield* call(clipboardCopy, normalizeUrl(nodeUri) + href);

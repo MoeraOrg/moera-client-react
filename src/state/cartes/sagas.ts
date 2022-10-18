@@ -1,13 +1,14 @@
 import { call, put } from 'typed-redux-saga/macro';
+import i18n from 'i18next';
 
 import { NodeApiError } from "api";
+import { getCartes } from "api/node/cartes";
+import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import { CARTES_LOAD, cartesSet, CLOCK_OFFSET_WARN } from "state/cartes/actions";
-import { Browser } from "ui/browser";
-import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
+import { Browser } from "ui/browser";
 import { now } from "util/misc";
-import { getCartes } from "api/node/cartes";
 
 export default [
     executor(CARTES_LOAD, "", cartesLoadSaga),
@@ -29,8 +30,5 @@ function* cartesLoadSaga() {
 }
 
 function* clockOffsetWarnSaga() {
-    yield* put(messageBox(
-        "<b>Warning:</b> Clock in your computer significantly differ from the real time. This may affect"
-        + " cryptographic algorithms and cause problems for Moera client. It is recommended to turn clock"
-        + " synchronization on in your operation system."));
+    yield* put(messageBox(i18n.t("clock-differ")));
 }

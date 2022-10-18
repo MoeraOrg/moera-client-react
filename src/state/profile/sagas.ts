@@ -1,4 +1,5 @@
 import { call, put, select } from 'typed-redux-saga/macro';
+import i18n from 'i18next';
 
 import { errorThrown } from "state/error/actions";
 import {
@@ -71,7 +72,7 @@ function* profileImageUploadSaga(action: ProfileImageUploadAction) {
         const {id, path, width, height, orientation} = yield* call(Node.postMediaPublic, "", action.payload.file,
             (loaded: number, total: number) => store.dispatch(profileImageUploadProgress(loaded, total)));
         if (width < 100 || height < 100) {
-            yield* put(messageBox("Avatar image size should be at least 100x100 pixels."));
+            yield* put(messageBox(i18n.t("avatar-too-small")));
             yield* put(profileImageUploadFailed());
         } else {
             yield* put(profileImageUploaded(id, path, width, height, orientation));

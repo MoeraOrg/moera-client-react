@@ -1,4 +1,5 @@
 import { call, put, select } from 'typed-redux-saga/macro';
+import i18n from 'i18next';
 
 import { messageBox } from "state/messagebox/actions";
 import { normalizeUrl } from "util/url";
@@ -36,10 +37,10 @@ function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
     if (error instanceof NodeApiError) {
         switch (error.errorCode) {
             case "credentials.wrong-reset-token":
-                message = "Wrong secret code";
+                message = i18n.t("wrong-reset-token");
                 break;
             case "credentials.reset-token-expired":
-                message = "Secret code is expired";
+                message = i18n.t("reset-token-expired");
                 yield* put(connectDialogSetForm(location, login, "forgot"));
                 break;
             default:
