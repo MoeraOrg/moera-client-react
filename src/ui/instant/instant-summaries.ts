@@ -176,7 +176,6 @@ function buildMentionCommentSummary(data: StorySummaryData, homeOwnerName: strin
 }
 
 function buildReplyCommentSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
-    console.log(data);
     return t("instant-summary.story.reply-comment", {
         replies: formatListOfComments(data, t),
         count: data.totalComments ?? 1,
