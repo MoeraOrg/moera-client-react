@@ -1,5 +1,6 @@
 import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { OWNER_SET } from "state/node/actions";
 import {
     bottomMenuShow,
     dialogClosed,
@@ -96,7 +97,7 @@ export default [
         detailedPostingLoadAttached
     ),
     trigger(
-        [GO_TO_PAGE, POSTING_SET],
+        [GO_TO_PAGE, POSTING_SET, OWNER_SET],
         conj(isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
         commentsReceiverSwitch
     ),
