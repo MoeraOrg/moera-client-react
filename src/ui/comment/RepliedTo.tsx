@@ -22,49 +22,45 @@ type Props = {
     onUnset?: () => void | null;
 } & ConnectedProps<typeof connector>;
 
-class RepliedTo extends React.PureComponent<Props> {
-
-    onPreparePopper = () => {
-        if (this.props.commentId != null) {
-            this.props.glanceComment(this.props.commentId);
+function RepliedTo({
+    postingId, commentId, ownerName, ownerFullName, headingHtml, unset, onUnset, popperEnabled, glanceComment
+}: Props) {
+    const onPreparePopper = () => {
+        if (commentId != null) {
+            glanceComment(commentId);
         }
     }
 
-    onUnset = () => {
-        if (this.props.onUnset != null) {
-            this.props.onUnset();
+    const onUnsetClick = () => {
+        if (onUnset != null) {
+            onUnset();
         }
     }
 
-    render() {
-        const {postingId, commentId, ownerName, ownerFullName, headingHtml, unset, popperEnabled} = this.props;
-
-        if (commentId == null) {
-            return null;
-        }
-
-        return (
-            <div className="replied-to">
-                {unset && <button className="unset" onClick={this.onUnset}>&times;</button>}
-                <Manager onPreparePopper={this.onPreparePopper} disabled={!popperEnabled}>
-                    <Reference>
-                        {(ref, mainEnter, mainLeave, mainTouch) =>
-                            <Jump href={`/post/${postingId}?comment=${commentId}`} anchorRef={ref}
-                                  onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
-                                <span className="icon"><FontAwesomeIcon icon="reply"/></span>
-                                <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
-                                <span className="heading" dangerouslySetInnerHTML={{__html: headingHtml}}/>
-                            </Jump>
-                        }
-                    </Reference>
-                    <DelayedPopper placement="top" className="glance-comment-popover">
-                        <GlanceComment/>
-                    </DelayedPopper>
-                </Manager>
-            </div>
-        );
+    if (commentId == null) {
+        return null;
     }
 
+    return (
+        <div className="replied-to">
+            {unset && <button className="unset" onClick={onUnsetClick}>&times;</button>}
+            <Manager onPreparePopper={onPreparePopper} disabled={!popperEnabled}>
+                <Reference>
+                    {(ref, mainEnter, mainLeave, mainTouch) =>
+                        <Jump href={`/post/${postingId}?comment=${commentId}`} anchorRef={ref}
+                              onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
+                            <span className="icon"><FontAwesomeIcon icon="reply"/></span>
+                            <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
+                            <span className="heading" dangerouslySetInnerHTML={{__html: headingHtml}}/>
+                        </Jump>
+                    }
+                </Reference>
+                <DelayedPopper placement="top" className="glance-comment-popover">
+                    <GlanceComment/>
+                </DelayedPopper>
+            </Manager>
+        </div>
+    );
 }
 
 const connector = connect(
