@@ -15,6 +15,10 @@ BODY {
     height: 100%;
 }
 
+BODY.no-scroll {
+    overflow: hidden;
+}
+
 #app-root {
     height: 100%;
 }

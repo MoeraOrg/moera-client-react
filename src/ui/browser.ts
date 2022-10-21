@@ -92,6 +92,14 @@ export class Browser {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
     }
 
+    static disableBodyScroll(): void {
+        document.body.classList.add("no-scroll");
+    }
+
+    static enableBodyScroll(): void {
+        document.body.classList.remove("no-scroll");
+    }
+
     static getRootLocation(): string {
         const {protocol, host} = window.location;
         return rootUrl(protocol, host);

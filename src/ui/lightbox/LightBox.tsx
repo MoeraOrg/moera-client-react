@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
@@ -16,6 +16,7 @@ import { ExtCommentInfo } from "state/detailedposting/state";
 import { getComment } from "state/detailedposting/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
+import { Browser } from "ui/browser";
 import LightBoxCaption from "ui/lightbox/LightBoxCaption";
 import LightBoxReactions from "ui/lightbox/LightBoxReactions";
 import LightBoxShareButton from "ui/lightbox/LightBoxShareButton";
@@ -28,6 +29,14 @@ type Props = ConnectedProps<typeof connector>;
 function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, carte, loopGallery, closeLightBox,
                    lightBoxMediaSet}: Props) {
     const {t} = useTranslation();
+
+    useEffect(() => {
+        if (show) {
+            Browser.disableBodyScroll();
+        } else {
+            Browser.enableBodyScroll();
+        }
+    }, [show]);
 
     if (!show) {
         return null;
