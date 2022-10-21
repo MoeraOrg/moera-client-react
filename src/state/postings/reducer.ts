@@ -5,6 +5,7 @@ import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
 import {
+    POSTING_COMMENT_COUNT_UPDATE,
     POSTING_COMMENTS_SET,
     POSTING_COMMENTS_SUBSCRIBED,
     POSTING_COMMENTS_UNSUBSCRIBED,
@@ -233,6 +234,22 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 return immutable.set(state, [nodeName, id, "posting", "totalComments"], total);
             }
             return state;
+        }
+
+        case POSTING_COMMENT_COUNT_UPDATE: {
+            const {id, nodeName, delta} = action.payload;
+            const istate = immutable.wrap(state);
+            for (const postingNode of Object.getOwnPropertyNames(state)) {
+                for (const postingId of Object.getOwnPropertyNames(state[postingNode])) {
+                    const posting = state[postingNode]![postingId]!.posting;
+                    if ((postingNode === nodeName && postingId === id)
+                        || (posting.receiverName === nodeName && posting.receiverPostingId === id)
+                    ) {
+                        istate.update([postingNode, postingId, "posting", "totalComments"], total => total + delta);
+                    }
+                }
+            }
+            return istate.value();
         }
 
         case EVENT_HOME_REMOTE_REACTION_ADDED: {

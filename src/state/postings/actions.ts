@@ -215,6 +215,18 @@ export const postingCommentsSet = (id: string, total: number, nodeName: string =
     payload: {id, total, nodeName}
 });
 
+export const POSTING_COMMENT_COUNT_UPDATE = "POSTING_COMMENT_COUNT_UPDATE";
+export type PostingCommentCountUpdateAction = ActionWithPayload<typeof POSTING_COMMENT_COUNT_UPDATE, {
+    id: string;
+    nodeName: string;
+    delta: number;
+}>;
+export const postingCommentCountUpdate = (id: string, nodeName: string,
+                                          delta: number): PostingCommentCountUpdateAction => ({
+    type: POSTING_COMMENT_COUNT_UPDATE,
+    payload: {id, nodeName, delta}
+});
+
 export const POSTING_COMMENTS_SUBSCRIBE = "POSTING_COMMENTS_SUBSCRIBE";
 export type PostingCommentsSubscribeAction = ActionWithPayload<typeof POSTING_COMMENTS_SUBSCRIBE, {
     id: string;
@@ -328,6 +340,7 @@ export type PostingsAnyAction =
     | PostingsReactionSetAction
     | PostingCopyLinkAction
     | PostingCommentsSetAction
+    | PostingCommentCountUpdateAction
     | PostingCommentsSubscribeAction
     | PostingCommentsSubscribedAction
     | PostingCommentsSubscribeFailedAction

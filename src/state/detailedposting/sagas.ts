@@ -101,7 +101,7 @@ import {
     isCommentComposerReplied
 } from "state/detailedposting/selectors";
 import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
-import { postingCommentsSet, postingsSet } from "state/postings/actions";
+import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "state/postings/actions";
 import { ClientState } from "state/state";
 import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getPosting, isPostingCached } from "state/postings/selectors";
@@ -316,6 +316,7 @@ function* commentPostSaga(action: CommentPostAction) {
     try {
         let comment;
         if (commentId == null) {
+            yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, 1));
             const data = yield* call(Node.postComment, receiverName, receiverPostingId, commentText);
             yield* put(postingCommentsSet(postingId, data.total));
             comment = data.comment;
@@ -460,6 +461,7 @@ function* commentDeleteSaga(action: CommentDeleteAction) {
     if (receiverName == null || receiverPostingId == null || postingId == null) {
         return;
     }
+    yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, -1));
     try {
         const data = yield* call(Node.deleteComment, receiverName, receiverPostingId, commentId);
         yield* put(commentDeleted(receiverName, receiverPostingId, commentId));
