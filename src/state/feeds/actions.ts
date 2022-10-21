@@ -280,11 +280,14 @@ export type FeedSliceUpdateAction = ActionWithPayload<typeof FEED_SLICE_UPDATE, 
     stories: StoryInfo[];
     before: number;
     after: number;
+    totalInPast: number;
+    totalInFuture: number;
 }>;
 export const feedSliceUpdate = (feedName: string, stories: StoryInfo[],
-                                before: number, after: number): FeedSliceUpdateAction => ({
+                                before: number, after: number,
+                                totalInPast: number, totalInFuture: number): FeedSliceUpdateAction => ({
     type: FEED_SLICE_UPDATE,
-    payload: {feedName, stories, before, after}
+    payload: {feedName, stories, before, after, totalInPast, totalInFuture}
 });
 
 export const FEEDS_UNSET = "FEEDS_UNSET";

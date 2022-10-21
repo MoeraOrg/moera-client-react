@@ -306,10 +306,22 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             const stories = feed.stories.slice()
                 .filter(t => t.moment > action.payload.before || t.moment <= action.payload.after);
             action.payload.stories
-                .filter(t => t.moment <= feed.before && t.moment > feed.after)
                 .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
             stories.sort((a, b) => b.moment - a.moment);
-            return istate.set([feedName, "stories"], stories).value();
+            istate.set([feedName, "stories"], stories);
+            if (action.payload.after <= feed.after) {
+                istate.assign([feedName], {
+                    after: action.payload.after,
+                    totalInPast: action.payload.totalInPast
+                });
+            }
+            if (action.payload.before >= feed.before) {
+                istate.assign([feedName], {
+                    before: action.payload.before,
+                    totalInFuture: action.payload.totalInFuture
+                });
+            }
+            return istate.value();
         }
 
         case FEEDS_UNSET: {

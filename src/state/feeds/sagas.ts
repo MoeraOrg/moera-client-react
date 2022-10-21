@@ -265,7 +265,8 @@ function* feedUpdateSlice(feedName: string, before: number, after: number) {
                 : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
             yield* call(fillActivityReactionsInStories, data.stories);
             yield* call(fillSubscriptions, data.stories);
-            yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
+            yield* put(feedSliceUpdate(
+                feedName, data.stories, data.before, data.after, data.totalInPast, data.totalInFuture));
             if (after === data.before) {
                 break;
             }
