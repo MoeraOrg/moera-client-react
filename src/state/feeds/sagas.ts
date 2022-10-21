@@ -252,26 +252,26 @@ function* feedsUpdateSaga() {
                 yield* put(errorThrown(e));
             }
         }
-        try {
-            let {before, after} = yield* select(state => getFeedState(state, feedName));
-            yield* call(feedUpdateSlice, feedName, before, after);
-        } catch (e) {
-            yield* put(errorThrown(e));
-        }
+        let {before, after} = yield* select(state => getFeedState(state, feedName));
+        yield* call(feedUpdateSlice, feedName, before, after);
     }
 }
 
 function* feedUpdateSlice(feedName: string, before: number, after: number) {
-    while (before > after && after < Number.MAX_SAFE_INTEGER) {
-        const data = feedName.startsWith(":")
-            ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
-            : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-        yield* call(fillActivityReactionsInStories, data.stories);
-        yield* call(fillSubscriptions, data.stories);
-        yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
-        if (after === data.before) {
-            break;
+    try {
+        while (before > after && after < Number.MAX_SAFE_INTEGER) {
+            const data = feedName.startsWith(":")
+                ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
+                : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
+            yield* call(fillActivityReactionsInStories, data.stories);
+            yield* call(fillSubscriptions, data.stories);
+            yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
+            if (after === data.before) {
+                break;
+            }
+            after = data.before;
         }
-        after = data.before;
+    } catch (e) {
+        yield* put(errorThrown(e));
     }
 }
