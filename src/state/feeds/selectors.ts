@@ -109,6 +109,12 @@ export function getInstantCount(state: ClientState): number {
     return (mode === "not-viewed" ? feed.status.notViewed : feed.status.notRead) ?? 0;
 }
 
+export function getInstantBorder(state: ClientState): number {
+    const feed = getFeedState(state, ":instant");
+    const mode = getSetting(state, "instants.number.mode") as string;
+    return (mode === "not-viewed" ? feed.status.notViewedMoment : feed.status.notReadMoment) ?? Number.MAX_SAFE_INTEGER;
+}
+
 export function isFeedToBeLoaded(state: ClientState, feedName: string): boolean {
     const feed = getFeedState(state, feedName);
     return feed.stories.length === 0 && !feed.loadingFuture && !feed.loadingPast

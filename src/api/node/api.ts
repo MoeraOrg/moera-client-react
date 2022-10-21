@@ -1220,6 +1220,10 @@ export const FeedStatusType: JSONSchemaType<API.FeedStatus> = {
         "totalPinned": {
             type: "integer"
         },
+        "lastMoment": {
+            type: "integer",
+            nullable: true
+        },
         "notViewed": {
             type: "integer",
             nullable: true
@@ -1229,6 +1233,10 @@ export const FeedStatusType: JSONSchemaType<API.FeedStatus> = {
             nullable: true
         },
         "notViewedMoment": {
+            type: "integer",
+            nullable: true
+        },
+        "notReadMoment": {
             type: "integer",
             nullable: true
         }

@@ -1,4 +1,4 @@
-import { call, put, select } from 'typed-redux-saga/macro';
+import { call, delay, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
 import { PrincipalValue } from "api/node/api-types";
@@ -7,6 +7,7 @@ import {
     FEED_GENERAL_LOAD,
     FEED_PAST_SLICE_LOAD,
     FEED_STATUS_LOAD,
+    FEED_STATUS_SET,
     FEED_STATUS_UPDATE,
     FEED_SUBSCRIBE,
     FEED_SUBSCRIBER_SET_VISIBILITY,
@@ -26,6 +27,7 @@ import {
     FeedStatusLoadAction,
     feedStatusLoadFailed,
     feedStatusSet,
+    FeedStatusSetAction,
     FeedStatusUpdateAction,
     feedStatusUpdated,
     feedStatusUpdateFailed,
@@ -76,6 +78,7 @@ export default [
     executor(FEED_STATUS_UPDATE, payload => payload.feedName, feedStatusUpdateSaga),
     executor(FEED_PAST_SLICE_LOAD, payload => payload.feedName, feedPastSliceLoadSaga, introduced),
     executor(FEED_FUTURE_SLICE_LOAD, payload => payload.feedName, feedFutureSliceLoadSaga, introduced),
+    executor(FEED_STATUS_SET, payload => payload.feedName, feedStatusSetSaga, introduced),
     executor(FEEDS_UPDATE, "", feedsUpdateSaga, introduced)
 ];
 
@@ -227,6 +230,17 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
     }
 }
 
+function* feedStatusSetSaga(action: FeedStatusSetAction) {
+    const {feedName} = action.payload;
+    yield* delay(5000); // Wait for events to make updates, so re-fetching may not be needed
+    const feedState = yield* select(state => getFeedState(state, feedName));
+    if (feedState.status.lastMoment != null && feedState.before >= Number.MAX_SAFE_INTEGER
+        && feedState.stories.length > 0 && feedState.status.lastMoment > feedState.stories[0].moment
+    ) {
+        yield* call(feedUpdateSlice, feedName, Number.MAX_SAFE_INTEGER, feedState.stories[0].moment);
+    }
+}
+
 function* feedsUpdateSaga() {
     const feedNames = yield* select(getAllFeeds);
     for (const feedName of feedNames) {
@@ -240,20 +254,24 @@ function* feedsUpdateSaga() {
         }
         try {
             let {before, after} = yield* select(state => getFeedState(state, feedName));
-            while (before > after) {
-                const data = feedName.startsWith(":")
-                    ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
-                    : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-                yield* call(fillActivityReactionsInStories, data.stories);
-                yield* call(fillSubscriptions, data.stories);
-                yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
-                if (after === data.before) {
-                    break;
-                }
-                after = data.before;
-            }
+            yield* call(feedUpdateSlice, feedName, before, after);
         } catch (e) {
             yield* put(errorThrown(e));
         }
+    }
+}
+
+function* feedUpdateSlice(feedName: string, before: number, after: number) {
+    while (before > after && after < Number.MAX_SAFE_INTEGER) {
+        const data = feedName.startsWith(":")
+            ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
+            : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
+        yield* call(fillActivityReactionsInStories, data.stories);
+        yield* call(fillSubscriptions, data.stories);
+        yield* put(feedSliceUpdate(feedName, data.stories, data.before, data.after));
+        if (after === data.before) {
+            break;
+        }
+        after = data.before;
     }
 }

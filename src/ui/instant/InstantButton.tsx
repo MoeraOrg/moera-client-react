@@ -1,17 +1,17 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { ClientState } from "state/state";
+import { feedStatusUpdate } from "state/feeds/actions";
+import { getFeedNotViewed, getFeedState, getInstantBorder } from "state/feeds/selectors";
 import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
-import { feedStatusUpdate } from "state/feeds/actions";
-import { getFeedNotViewed, getFeedState, getInstantCount } from "state/feeds/selectors";
-import { ClientState } from "state/state";
 
 type Props = ConnectedProps<typeof connector>;
 
 interface State {
-    instantCount: number;
+    instantBorder: number;
 }
 
 class InstantButton extends React.PureComponent<Props, State> {
@@ -23,7 +23,7 @@ class InstantButton extends React.PureComponent<Props, State> {
         super(props, context);
 
         this.state = {
-            instantCount: 0
+            instantBorder: Number.MAX_SAFE_INTEGER
         };
     }
 
@@ -33,7 +33,7 @@ class InstantButton extends React.PureComponent<Props, State> {
 
     onToggle = (visible: boolean) => {
         if (visible && this.#visible !== visible) {
-            this.setState({instantCount: this.props.instantCount});
+            this.setState({instantBorder: this.props.instantBorder});
         }
         this.#visible = visible;
         this.viewAll();
@@ -55,9 +55,9 @@ class InstantButton extends React.PureComponent<Props, State> {
         return (
             <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
                      onToggle={this.onToggle}>
-                {({hide}) => (
-                    <Instants hide={hide} instantCount={this.state.instantCount}/>
-                )}
+                {({hide}) =>
+                    <Instants hide={hide} instantBorder={this.state.instantBorder}/>
+                }
             </Popover>
         );
     }
@@ -68,7 +68,7 @@ const connector = connect(
     (state: ClientState) => ({
         stories: getFeedState(state, ":instant").stories,
         notViewedCount: getFeedNotViewed(state, ":instant"),
-        instantCount: getInstantCount(state)
+        instantBorder: getInstantBorder(state)
     }),
     { feedStatusUpdate }
 );

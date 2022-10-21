@@ -13,10 +13,10 @@ import "./Instants.css";
 
 type Props = {
     hide: () => void;
-    instantCount: number;
+    instantBorder: number;
 } & ConnectedProps<typeof connector>;
 
-function Instants({hide, instantCount, loadingPast, after, stories, feedPastSliceLoad, feedStatusUpdate,
+function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSliceLoad, feedStatusUpdate,
                    swipeRefreshUpdate}: Props) {
     const {t} = useTranslation();
 
@@ -64,8 +64,9 @@ function Instants({hide, instantCount, loadingPast, after, stories, feedPastSlic
                 <div className="action" onClick={onReadAll}>{t("mark-all-read")}</div>
             </div>
             <div className="content">
-                {stories.map((story, i) =>
-                    <InstantStory key={story.moment} story={story} hide={hide} lastNew={i + 1 === instantCount}/>
+                {stories.map(story =>
+                    <InstantStory key={story.moment} story={story} hide={hide}
+                                  lastNew={story.moment === instantBorder}/>
                 )}
                 <InstantsSentinel loading={loadingPast} title={t("load-more")} margin="0px 0px 100px 0px"
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast} onClick={loadPast}/>

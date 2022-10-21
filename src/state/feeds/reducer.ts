@@ -194,9 +194,11 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .update([feedName, "status"], prevStatus => ({
                     total: status.total,
                     totalPinned: status.totalPinned,
+                    lastMoment: status.lastMoment ?? prevStatus.lastMoment,
                     notViewed: status.notViewed ?? prevStatus.notViewed,
                     notRead: status.notRead ?? prevStatus.notRead,
-                    notViewedMoment: status.notViewedMoment ?? prevStatus.notViewedMoment
+                    notViewedMoment: status.notViewedMoment ?? prevStatus.notViewedMoment,
+                    notReadMoment: status.notReadMoment ?? prevStatus.notReadMoment
                 }))
                 .value();
         }

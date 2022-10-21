@@ -314,9 +314,11 @@ export interface FeedInfo {
 export interface FeedStatus {
     total: number;
     totalPinned: number;
+    lastMoment?: number | null;
     notViewed?: number | null;
     notRead?: number | null;
     notViewedMoment?: number | null;
+    notReadMoment?: number | null;
 }
 
 export interface CommentOperations {
