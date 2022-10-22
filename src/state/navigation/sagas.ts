@@ -1,4 +1,4 @@
-import { call, put, select } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga';
 import * as URI from 'uri-js';
 
 import { PAGE_SETTINGS } from "state/navigation/pages";

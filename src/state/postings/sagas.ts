@@ -1,4 +1,4 @@
-import { call, put, select } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 

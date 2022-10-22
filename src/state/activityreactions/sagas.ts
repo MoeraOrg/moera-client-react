@@ -1,4 +1,4 @@
-import { call, select } from 'typed-redux-saga/macro';
+import { call, select } from 'typed-redux-saga';
 
 import { isAtHomeNode } from "state/node/selectors";
 import { Node } from "api/node";

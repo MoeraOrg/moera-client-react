@@ -1,4 +1,4 @@
-import { call, put } from 'typed-redux-saga/macro';
+import { call, put } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { NodeApiError } from "api";

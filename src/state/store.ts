@@ -41,7 +41,7 @@ import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
 
 import createSagaMiddleware from 'redux-saga';
-import { spawn } from 'typed-redux-saga/macro';
+import { spawn } from 'typed-redux-saga';
 import { pulseSaga, signalPostInitSaga } from "state/pulse/sagas";
 import navigationExecutors from "state/navigation/sagas";
 import errorExecutors from "state/error/sagas";

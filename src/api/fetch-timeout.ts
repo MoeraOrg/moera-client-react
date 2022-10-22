@@ -1,4 +1,4 @@
-import { retry } from 'typed-redux-saga/macro';
+import { retry } from 'typed-redux-saga';
 import { CallEffect } from 'redux-saga/effects';
 
 import { FetcherOptions } from "api/fetcher";

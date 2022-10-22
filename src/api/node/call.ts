@@ -1,4 +1,4 @@
-import { apply, call, put, select } from 'typed-redux-saga/macro';
+import { apply, call, put, select } from 'typed-redux-saga';
 import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 import { ValidateFunction } from 'ajv';
 

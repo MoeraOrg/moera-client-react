@@ -1,4 +1,4 @@
-import { call, put, select } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga';
 import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 
 import { Naming, NodeName } from "api";

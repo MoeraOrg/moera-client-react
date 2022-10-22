@@ -1,4 +1,4 @@
-import { call, put } from 'typed-redux-saga/macro';
+import { call, put } from 'typed-redux-saga';
 
 import { Node } from "api/node";
 import { storyUpdated } from "state/stories/actions";

@@ -1,4 +1,4 @@
-import { delay, put, race, take } from 'typed-redux-saga/macro';
+import { delay, put, race, take } from 'typed-redux-saga';
 
 import { postInit, postInitDelayed, pulse10Min, pulse1Min, pulse6H } from "state/pulse/actions";
 

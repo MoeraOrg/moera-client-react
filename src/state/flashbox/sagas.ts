@@ -1,4 +1,4 @@
-import { delay, put } from 'typed-redux-saga/macro';
+import { delay, put } from 'typed-redux-saga';
 
 import { FLASH_BOX, FlashBoxAction, flashBoxClose, flashBoxDismiss } from "state/flashbox/actions";
 import { executor } from "state/executor";

@@ -1,4 +1,4 @@
-import { delay, put, select } from 'typed-redux-saga/macro';
+import { delay, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { NodeApiError, VerboseError } from "api";

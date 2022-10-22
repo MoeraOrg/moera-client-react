@@ -1,4 +1,4 @@
-import { delay, put } from 'typed-redux-saga/macro';
+import { delay, put } from 'typed-redux-saga';
 
 import { REFRESH_SHOW, refreshHide } from "state/refresh/actions";
 import { executor } from "state/executor";

@@ -1,4 +1,4 @@
-import { call, put } from 'typed-redux-saga/macro';
+import { call, put } from 'typed-redux-saga';
 
 import { errorThrown } from "state/error/actions";
 import {

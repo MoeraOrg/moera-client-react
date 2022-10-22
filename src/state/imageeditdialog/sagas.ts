@@ -1,4 +1,4 @@
-import { call, put, select } from 'typed-redux-saga/macro';
+import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";

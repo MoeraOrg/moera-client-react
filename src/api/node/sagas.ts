@@ -1,4 +1,4 @@
-import { select } from 'typed-redux-saga/macro';
+import { select } from 'typed-redux-saga';
 
 import { ClientSettings, NodeApi } from "api";
 import { callApi, CallApiResult, decodeBodies } from "api/node/call";

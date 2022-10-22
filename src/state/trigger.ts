@@ -1,4 +1,4 @@
-import { put, select, takeEvery } from 'typed-redux-saga/macro';
+import { put, select, takeEvery } from 'typed-redux-saga';
 
 import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
