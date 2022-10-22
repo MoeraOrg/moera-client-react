@@ -107,12 +107,14 @@ function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, 
 
     const handleClick = (index: number) => () => handleSubmit(true, index);
 
+    const searchList = reorderNames(names, query);
+
     return (
         <>
             <input type="search" className="form-control" value={query ?? defaultQuery} ref={inputDom}
                    onKeyDown={handleKeyDown} onChange={handleChange}/>
-            <div className={cx("name-select", {"d-none": names.length === 0})} ref={listDom}>
-                {names.map((item, index) =>
+            <div className={cx("name-select", {"d-none": searchList.length === 0})} ref={listDom}>
+                {searchList.map((item, index) =>
                     <div key={index} data-index={index}
                          className={cx("item", {"selected": index === selectedIndex})}
                          onClick={handleClick(index)}>
@@ -134,6 +136,20 @@ function trimQuery(text: string | null | undefined): string | null {
         return null;
     }
     return text.startsWith("@") ? text.substring(1) : text;
+}
+
+function reorderNames(names: NameListItem[], query: string | null): NameListItem[] {
+    if (names.length <= 1 || query == null) {
+        return names;
+    }
+    const index = names.findIndex(nm => nm.nodeName === query);
+    if (index <= 0) { // Not found or at the first place
+        return names;
+    }
+    const list = names.slice();
+    const t = list.splice(index, 1);
+    list.unshift(...t);
+    return list;
 }
 
 const getNames = createSelector(

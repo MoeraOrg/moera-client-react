@@ -1,8 +1,8 @@
 import { call, put, select } from 'typed-redux-saga/macro';
+import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 
 import { Naming, NodeName } from "api";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
-import { errorThrown } from "state/error/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import {
@@ -48,14 +48,25 @@ function* namingNamesUsedSaga(action: NamingNamesUsedAction) {
 }
 
 function* namingNameLoadSaga(action: NamingNameLoadAction) {
-    yield* call(fetchName, action.payload.name);
+    yield* call(fetchName, action.payload.name, false);
 }
 
-export function* getNodeUri(nodeName: string) {
+export function* getNodeUri(nodeName: string): Generator<CallEffect, string | null> {
     return (yield* call(getNameDetails, nodeName)).nodeUri;
 }
 
-export function* getNameDetails(nodeName: string) {
+export interface NameInfo {
+    nodeName?: string;
+    accessed: number;
+    updated: number;
+    loading: boolean;
+    loaded: boolean;
+    nodeUri: string | null;
+}
+
+type NameInfoGenerator = Generator<CallEffect | PutEffect | SelectEffect, NameInfo>;
+
+export function* getNameDetails(nodeName: string, includeSimilar: boolean = false): NameInfoGenerator {
     const details = yield* select(state => getNamingNameDetails(state, nodeName));
     if (details.loaded) {
         if (details.nodeUri != null && now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
@@ -64,26 +75,34 @@ export function* getNameDetails(nodeName: string) {
         }
         return details;
     }
-    return yield* call(fetchName, nodeName);
+    return yield* call(fetchName, nodeName, includeSimilar);
 }
 
-function* fetchName(nodeName: string) {
-    let nodeUri = null;
+function* fetchName(nodeName: string, includeSimilar: boolean): NameInfoGenerator {
+    let nodeNameFound: string = nodeName;
+    let nodeUri: string | null = null;
     try {
         const {name, generation} = NodeName.parse(nodeName);
         if (name != null && generation != null) {
-            const data = yield* call(Naming.getCurrent, name, generation);
-            nodeUri = data ? data.nodeUri : null;
+            const current = yield* call(Naming.getCurrent, name, generation);
+            if (current?.nodeUri != null) {
+                nodeUri = current.nodeUri;
+            } else if (includeSimilar) {
+                const similar = yield* Naming.getSimilar(name);
+                if (similar?.nodeUri != null) {
+                    nodeNameFound = similar.name;
+                    nodeUri = similar.nodeUri;
+                }
+            }
             if (nodeUri) {
-                Browser.storeName(nodeName, nodeUri, now());
-                yield* put(namingNameLoaded(nodeName, nodeUri, now()));
+                Browser.storeName(nodeNameFound, nodeUri, now());
+                yield* put(namingNameLoaded(nodeNameFound, nodeUri, now()));
             }
         }
     } catch (e) {
         yield* put(namingNameLoadFailed(nodeName));
-        yield* put(errorThrown(e));
     }
-    return {accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};
+    return {nodeName: nodeNameFound, accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};
 }
 
 function* namingNamesMaintenanceSaga() {
@@ -105,7 +124,7 @@ function* namingNamesMaintenanceSaga() {
     yield* put(namingNamesPurge(unused.splice(0, purgeSize)));
 }
 
-function* getUsedNames() {
+function* getUsedNames(): Generator<SelectEffect, Set<string>> {
     let used = new Set<string>();
 
     const {feedNames, postings} = yield* select((state: ClientState) => ({

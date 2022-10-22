@@ -1,7 +1,13 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { CONTACTS_LOAD, CONTACTS_LOAD_FAILED, CONTACTS_LOADED, CONTACTS_UNSET } from "state/contacts/actions";
+import {
+    CONTACTS_LOAD,
+    CONTACTS_LOAD_FAILED,
+    CONTACTS_LOADED,
+    CONTACTS_NAME_FOUND,
+    CONTACTS_UNSET
+} from "state/contacts/actions";
 import { EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED, EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events/actions";
 import { ContactsState } from "state/contacts/state";
 import { ClientAction } from "state/action";
@@ -32,6 +38,15 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
             const names = new Set(action.payload.contacts.map(c => c.nodeName));
             istate.set("contacts", state.contacts.filter(c => !names.has(c.nodeName)).concat(action.payload.contacts));
             return istate.value();
+        }
+
+        case CONTACTS_NAME_FOUND: {
+            const {nodeName} = action.payload;
+            const hasName = state.contacts.find(c => c.nodeName === nodeName) != null;
+            if (!hasName) {
+                return immutable.set(state, "contacts", [...state.contacts, {nodeName, closeness: 0}]);
+            }
+            return state;
         }
 
         case CONTACTS_LOAD_FAILED:

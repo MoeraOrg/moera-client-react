@@ -9,3 +9,7 @@ export function isContactsQueryToBeLoaded(state: ClientState, query: string): bo
 export function getContacts(state: ClientState): ContactInfo[] {
     return state.contacts.contacts;
 }
+
+export function hasContactsName(state: ClientState, nodeName: string) {
+    return state.contacts.contacts.find(c => c.nodeName === nodeName) != null;
+}

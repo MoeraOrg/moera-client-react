@@ -31,6 +31,15 @@ export const contactsLoaded = (query: string, contacts: ContactInfo[]): Contacts
     payload: {query, contacts}
 });
 
+export const CONTACTS_NAME_FOUND = "CONTACTS_NAME_FOUND";
+export type ContactsNameFoundAction = ActionWithPayload<typeof CONTACTS_NAME_FOUND, {
+    nodeName: string;
+}>;
+export const contactsNameFound = (nodeName: string): ContactsNameFoundAction => ({
+    type: CONTACTS_NAME_FOUND,
+    payload: {nodeName}
+});
+
 export const CONTACTS_LOAD_FAILED = "CONTACTS_LOAD_FAILED";
 export type ContactsLoadFailedAction = ActionWithPayload<typeof CONTACTS_LOAD_FAILED, {
     query: string;
@@ -50,5 +59,6 @@ export type ContactsAnyAction =
     ContactsPrepareAction
     | ContactsLoadAction
     | ContactsLoadedAction
+    | ContactsNameFoundAction
     | ContactsLoadFailedAction
     | ContactsUnsetAction;
