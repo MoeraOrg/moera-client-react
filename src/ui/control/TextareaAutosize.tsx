@@ -19,5 +19,11 @@ export function TextareaAutosize({innerRef, ...props}: Props) {
         }
     }, [textarea]);
 
+    useEffect(() => {
+        if (textarea.current != null) {
+            autosize.update(textarea.current);
+        }
+    }, [textarea, props.value]);
+
     return <textarea ref={textarea} {...props}/>
 }
