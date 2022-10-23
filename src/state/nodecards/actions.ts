@@ -137,6 +137,12 @@ export const nodeCardsClientSwitch = (): NodeCardsClientSwitchAction => ({
     type: NODE_CARDS_CLIENT_SWITCH
 });
 
+export const NODE_CARDS_REFRESH = "NODE_CARDS_REFRESH";
+export type NodeCardsRefreshAction = Action<typeof NODE_CARDS_REFRESH>;
+export const nodeCardsRefresh = (): NodeCardsRefreshAction => ({
+    type: NODE_CARDS_REFRESH
+});
+
 export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
 export type NodeCardsUnsetAction = Action<typeof NODE_CARDS_UNSET>;
 export const nodeCardsUnset = (): NodeCardsUnsetAction => ({
@@ -168,5 +174,6 @@ export type NodeCardsAnyAction =
     | NodeCardSubscriptionLoadFailedAction
     | NodeCardSubscriptionSetAction
     | NodeCardsClientSwitchAction
+    | NodeCardsRefreshAction
     | NodeCardsUnsetAction
     | NodeCardCopyMentionAction;

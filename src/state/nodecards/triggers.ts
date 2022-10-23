@@ -6,6 +6,7 @@ import {
     nodeCardDetailsSet,
     nodeCardPrepare,
     nodeCardsClientSwitch,
+    nodeCardsRefresh,
     nodeCardsUnset
 } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
@@ -16,6 +17,7 @@ import { INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
 import { OWNER_SET, OwnerSetAction } from "state/node/actions";
 import { PROFILE_SET, ProfileSetAction } from "state/profile/actions";
 import { WithContext } from "state/action-types";
+import { PULSE_6H } from "state/pulse/actions";
 
 export default [
     trigger(
@@ -23,6 +25,7 @@ export default [
         true,
         nodeCardsClientSwitch
     ),
+    trigger(PULSE_6H, true, nodeCardsRefresh),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, nodeCardsUnset),
     trigger(
         [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],

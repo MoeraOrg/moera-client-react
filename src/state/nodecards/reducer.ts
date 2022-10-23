@@ -15,6 +15,7 @@ import {
     NODE_CARD_SUBSCRIPTION_LOAD_FAILED,
     NODE_CARD_SUBSCRIPTION_SET,
     NODE_CARDS_CLIENT_SWITCH,
+    NODE_CARDS_REFRESH,
     NODE_CARDS_UNSET
 } from "state/nodecards/actions";
 import {
@@ -350,6 +351,17 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                     details: cloneDeep(emptyCard.details),
                     people: cloneDeep(emptyCard.people),
                     subscription: cloneDeep(emptyCard.subscription)
+                });
+            }
+            return istate.value();
+        }
+
+        case NODE_CARDS_REFRESH: {
+            const istate = immutable.wrap(state);
+            for (const nodeName of Object.getOwnPropertyNames(state.cards)) {
+                istate.assign(["cards", nodeName], { // Other parts are refreshed by events
+                    stories: cloneDeep(emptyCard.stories),
+                    people: cloneDeep(emptyCard.people)
                 });
             }
             return istate.value();
