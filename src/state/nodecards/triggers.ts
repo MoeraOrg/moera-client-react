@@ -1,5 +1,13 @@
+import { Action } from 'redux';
+
 import { trigger } from "state/trigger";
-import { nodeCardDetailsLoad, nodeCardDetailsSet, nodeCardPrepare, nodeCardsUnset } from "state/nodecards/actions";
+import {
+    nodeCardDetailsLoad,
+    nodeCardDetailsSet,
+    nodeCardPrepare,
+    nodeCardsClientSwitch,
+    nodeCardsUnset
+} from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET, HomeOwnerSetAction } from "state/home/actions";
 import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction } from "api/events/actions";
@@ -10,6 +18,11 @@ import { PROFILE_SET, ProfileSetAction } from "state/profile/actions";
 import { WithContext } from "state/action-types";
 
 export default [
+    trigger(
+        [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
+        true,
+        nodeCardsClientSwitch
+    ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, nodeCardsUnset),
     trigger(
         [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
@@ -25,6 +38,11 @@ export default [
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         true,
         signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
+        (state, signal: WithContext<Action>) => signal.context.ownerName != null,
+        (signal: WithContext<Action>) => nodeCardPrepare(signal.context.ownerName!)
     ),
     trigger(
         HOME_OWNER_SET,

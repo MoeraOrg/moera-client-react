@@ -98,10 +98,11 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
             </div>
             <div className="buttons">
                 <CopyMentionButton nodeName={nodeName} fullName={card.details.profile.fullName ?? fullName ?? null}/>
-                <SubscribeButton show={nodeName !== homeOwnerName && (card.subscription.loaded ?? false)}
-                                 subscribing={subscribing} unsubscribing={unsubscribing}
-                                 nodeName={nodeName} feedName="timeline" subscriber={subscriber}
-                                 subscription={subscription}/>
+                {(homeOwnerName != null && nodeName !== homeOwnerName && (card.subscription.loaded ?? false)) &&
+                    <SubscribeButton subscribing={subscribing} unsubscribing={unsubscribing}
+                                     nodeName={nodeName} feedName="timeline" subscriber={subscriber}
+                                     subscription={subscription}/>
+                }
             </div>
             <Loading active={anyLoading}/>
         </div>

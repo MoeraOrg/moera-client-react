@@ -11,16 +11,15 @@ import {
     feedSubscriptionSetVisibility,
     feedUnsubscribe
 } from "state/feeds/actions";
-import { getHomeOwnerGender, isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
+import { getHomeOwnerGender } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { isPrincipalIn } from "state/node/selectors";
 import { getSettingNode } from "state/settings/selectors";
 import { Button, DropdownMenu } from "ui/control";
-import "./SubscribeButton.css";
 import { tGender } from "i18n";
+import "./SubscribeButton.css";
 
 interface OwnProps {
-    show: boolean;
     small?: boolean | null;
     subscribing: boolean;
     unsubscribing: boolean;
@@ -32,15 +31,11 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
-                          homeSet, homeGender, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
+function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
+                          homeGender, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
                           subscriptionHidden, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
                           feedSubscriptionSetVisibility}: Props) {
     const {t} = useTranslation();
-
-    if (!homeSet || !show) {
-        return null;
-    }
 
     const onSubscribe = () => feedSubscribe(nodeName, feedName);
 
@@ -147,7 +142,6 @@ function SubscribeButton({show, small, subscribing, unsubscribing, nodeName, fee
 
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
-        homeSet: isConnectedToHome(state) && isHomeOwnerNameSet(state),
         homeGender: getHomeOwnerGender(state),
         peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
         subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
