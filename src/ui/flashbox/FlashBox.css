@@ -11,6 +11,7 @@
 }
 
 .flash-box.dismissing {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: transparent;
+    color: transparent;
     transition: all 1s;
 }
