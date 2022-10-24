@@ -103,7 +103,7 @@ function formatOnSomebodysPosting(data: StorySummaryData, homeOwnerName: string 
     if (data.posting?.ownerName === homeOwnerName) {
         return t("instant-summary.on-your-post");
     } else if (data.posting != null && isTheir(data, data.posting)) {
-        return t("instant-summary.on-their-post", tGender(theirGender));
+        return t("instant-summary.on-their-post", {gender: tGender(theirGender)});
     } else {
         return t("instant-summary.on-node-post", {node: formatNodeName(data.posting)});
     }
