@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
@@ -16,6 +16,10 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
         }
     }, [message, messageVerbose, visible]);
 
+    const [expanded, setExpanded] = useState<boolean>(false);
+
+    const onClick = () => setExpanded(!expanded);
+
     return (
         <div className={
             cx(
@@ -27,8 +31,8 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
                     "error-pane-hidden": !visible
                 }
             )
-        }>
-            {message}
+        } onClick={onClick}>
+            {!expanded ? message : messageVerbose}
             <CloseButton onClick={() => errorDismiss()}/>
         </div>
     );
