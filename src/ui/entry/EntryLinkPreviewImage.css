@@ -29,9 +29,14 @@
         max-height: 30vw;
     }
 
-    .link-preview.large IMG {
+    A.link-preview.large IMG {
         width: 99.5vw;
         max-height: 67vw;
+    }
+
+    DIV.link-preview.large IMG {
+        width: calc(99.5vw - 1rem);
+        max-height: calc(67vw - .6rem);
     }
 }
 
