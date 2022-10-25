@@ -40,10 +40,10 @@ import { getComposeDraftId, getComposePostingId, isComposePostingEditing } from 
 import { executor } from "state/executor";
 import { WithContext } from "state/action-types";
 import { flashBox } from "state/flashbox/actions";
-import { introduced, mutuallyIntroduced } from "state/init-selectors";
+import { mutuallyIntroduced } from "state/init-selectors";
 
 export default [
-    executor(COMPOSE_POSTING_LOAD, "", composePostingLoadSaga, introduced),
+    executor(COMPOSE_POSTING_LOAD, "", composePostingLoadSaga, mutuallyIntroduced),
     executor(COMPOSE_POST, null, composePostSaga),
     executor(COMPOSE_DRAFT_LOAD, "", composeDraftLoadSaga, mutuallyIntroduced),
     executor(COMPOSE_DRAFT_SAVE, "", composeDraftSaveSaga),

@@ -1,4 +1,15 @@
 import { conj, trigger } from "state/trigger";
+import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, PostingUpdatedEvent } from "api/events/api-types";
+import {
+    EVENT_HOME_DRAFT_ADDED,
+    EVENT_HOME_DRAFT_DELETED,
+    EVENT_HOME_DRAFT_UPDATED,
+    EVENT_NODE_POSTING_UPDATED,
+    EventAction
+} from "api/events/actions";
+import { ClientState } from "state/state";
+import { getOwnerName } from "state/node/selectors";
+import { CONNECTED_TO_HOME, ConnectedToHomeAction } from "state/home/actions";
 import {
     COMPOSE_DRAFT_LIST_ITEM_DELETED,
     COMPOSE_DRAFT_SAVED,
@@ -20,7 +31,6 @@ import {
     composeSharedTextLoad
 } from "state/compose/actions";
 import { dialogClosed, dialogOpened, GO_TO_PAGE, goToPosting, updateLocation } from "state/navigation/actions";
-import { postingSet } from "state/postings/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposeDraftId,
@@ -33,19 +43,9 @@ import {
     isComposePostingToBeLoaded,
     isComposeSharedTextToBeLoaded
 } from "state/compose/selectors";
-import {
-    EVENT_HOME_DRAFT_ADDED,
-    EVENT_HOME_DRAFT_DELETED,
-    EVENT_HOME_DRAFT_UPDATED,
-    EVENT_NODE_POSTING_UPDATED,
-    EventAction
-} from "api/events/actions";
+import { postingSet } from "state/postings/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
-import { getOwnerName } from "state/node/selectors";
-import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, PostingUpdatedEvent } from "api/events/api-types";
-import { CONNECTED_TO_HOME, ConnectedToHomeAction } from "state/home/actions";
-import { ClientState } from "state/state";
 
 const isConnectionSwitch = (state: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
 
