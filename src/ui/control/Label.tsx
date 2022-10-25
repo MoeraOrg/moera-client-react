@@ -7,6 +7,7 @@ import SetDefaultButton from "ui/control/field/SetDefaultButton";
 
 interface Props {
     title?: string;
+    titleHtml?: string;
     name?: string;
     className?: string;
     horizontal?: boolean;
@@ -19,13 +20,14 @@ interface Props {
     children?: any;
 }
 
-export const Label = ({title, name, className, horizontal, checkbox, undo, reset, setting, onUndo, onReset,
-                       children}: Props) => {
+export const Label = ({
+    title, titleHtml, name, className, horizontal, checkbox, undo, reset, setting, onUndo, onReset, children
+}: Props) => {
     const {t} = useTranslation();
 
     return (
         <>
-            {title ?
+            {(title || titleHtml) ?
                 <>
                     <label htmlFor={name} className={cx(
                         className, {
@@ -37,10 +39,11 @@ export const Label = ({title, name, className, horizontal, checkbox, undo, reset
                             "me-3": horizontal
                         })}>
                         {title}
+                        {titleHtml && <span dangerouslySetInnerHTML={{__html: titleHtml}}/>}
                     </label>
                     {children}
                 </>
-                :
+            :
                 children ?? null
             }
             <Wrapper className={cx({"ms-2 align-self-center": (undo || reset || setting) && horizontal && children})}>

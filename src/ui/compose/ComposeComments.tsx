@@ -16,7 +16,7 @@ const ComposeComments = () => {
                 <PrincipalField name="addCommentPrincipal" values={["signed", "private", "none"]}
                                 title={t("commenting-allowed-to")} long setting="posting.comments.addition.default"/>
                 <CheckboxField name="hideComments" title={t("auto-hide-comments")}
-                               setting="posting.comments.hide.default"/>
+                               setting="posting.comments.hide.default" anyValue/>
             </div>
         </ComposePageTool>
     );

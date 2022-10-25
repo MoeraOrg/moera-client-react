@@ -3,25 +3,27 @@ import cx from 'classnames';
 
 import { FormGroup } from "ui/control/FormGroup";
 import { useUndoableField } from "ui/control/field/undoable-field";
-import FieldError from "ui/control/field/FieldError";
 import "./CheckboxField.css";
 
 interface Props {
     name: string;
     title?: string;
+    titleHtml?: string;
     disabled?: boolean;
     groupClassName?: string;
     labelClassName?: string;
     autoFocus?: boolean;
     single?: boolean;
+    anyValue?: boolean;
     initialValue?: boolean | null;
     defaultValue?: boolean | null;
     setting?: string;
 }
 
-export function CheckboxField({name, title, disabled, groupClassName, labelClassName, autoFocus, single, initialValue,
-                               defaultValue, setting}: Props) {
-
+export function CheckboxField({
+    name, title, titleHtml, disabled, groupClassName, labelClassName, autoFocus, single, anyValue, initialValue,
+    defaultValue, setting
+}: Props) {
     const inputDom = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -36,6 +38,7 @@ export function CheckboxField({name, title, disabled, groupClassName, labelClass
     return (
         <FormGroup
             title={title}
+            titleHtml={titleHtml}
             name={name}
             labelClassName={labelClassName}
             groupClassName={groupClassName}
@@ -57,11 +60,12 @@ export function CheckboxField({name, title, disabled, groupClassName, labelClass
                 className={cx({
                     "form-check-input": !single,
                     "form-control": single,
+                    "is-valid": !anyValue && touched && !error,
+                    "is-invalid": !anyValue && touched && error,
                     "checkbox-control-single": single
                 })}
                 ref={inputDom}
             />
-            {touched && <FieldError error={error}/>}
         </FormGroup>
     );
 }

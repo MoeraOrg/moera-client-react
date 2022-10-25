@@ -109,7 +109,7 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
         case "bool":
             return <CheckboxField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}
                                   initialValue={deserializeBool(initialValue)}
-                                  defaultValue={deserializeBool(defaultValue)}/>;
+                                  defaultValue={deserializeBool(defaultValue)} anyValue/>;
 
         case "int":
             if (modifiers.format) {

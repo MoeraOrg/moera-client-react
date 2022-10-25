@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { StringSchema } from 'yup';
 import debounce from 'lodash.debounce';
 import i18n from 'i18next';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { TFunction, WithTranslation, withTranslation } from 'react-i18next';
 
 import PROVIDERS from "providers";
 import * as Rules from "api/naming/rules";
@@ -27,7 +27,7 @@ import {
 import { findPreferredLanguage } from "i18n";
 import { Browser } from "ui/browser";
 import { Button, ModalDialog, NameHelp } from "ui/control";
-import { InputField, SelectField } from "ui/control/field";
+import { CheckboxField, InputField, SelectField } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
 
 type OuterProps = ConnectedProps<typeof connector> & WithTranslation;
@@ -43,6 +43,7 @@ interface Values {
     password: string;
     confirmPassword: string;
     email: string;
+    termsAgree: boolean;
 }
 
 type Props = OuterProps  & FormikProps<Values>;
@@ -218,6 +219,7 @@ class SignUpDialog extends React.PureComponent<Props> {
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
                         <InputField name="email" title={t("e-mail")}
                                     disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
+                        {window.Android && <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>}
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={cancelSignUpDialog}>{t("cancel")}</Button>
@@ -228,6 +230,13 @@ class SignUpDialog extends React.PureComponent<Props> {
         );
     }
 
+}
+
+function getTermsTitle(t: TFunction): string {
+    return t("read-and-agree-with")
+        + " <a href='https://moera.org/license/terms-and-conditions.html' target='_blank'>"
+        + t("terms-and-conditions")
+        + "</a>";
 }
 
 const signUpDialogLogic = {
@@ -242,7 +251,8 @@ const signUpDialogLogic = {
         autoDomain: !props.domain,
         password: props.password ?? "",
         confirmPassword: props.password ?? "",
-        email: props.email ?? ""
+        email: props.email ?? "",
+        termsAgree: window.Android == null
     }),
 
     validationSchema: yup.object().shape({
@@ -267,7 +277,8 @@ const signUpDialogLogic = {
             (password: string, schema: StringSchema) =>
                 schema.required("retype-password").oneOf([password], "passwords-different")
         ),
-        email: yup.string().email("not-valid-e-mail")
+        email: yup.string().email("not-valid-e-mail"),
+        termsAgree: yup.boolean().test("agree", "need-agree-with-terms", v => v ?? false)
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {

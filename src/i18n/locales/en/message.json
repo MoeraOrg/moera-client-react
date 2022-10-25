@@ -378,6 +378,7 @@
     "too-long" : "Too long",
     "wow" : "Wow"
   },
+  "read-and-agree-with" : "I read and agree with",
   "read-more" : "Read more...",
   "received-mail" : "Received the mail already",
   "register" : "Register",
@@ -586,6 +587,7 @@
   "subscriptions" : "Subscriptions",
   "summary" : "Summary",
   "support" : "Support",
+  "terms-and-conditions" : "Terms and Conditions",
   "text" : "Text",
   "text-contains-formatting" : "The text contains formatting. Do you want to copy the text with formatting tags?",
   "text-copied" : "Text copied to the clipboard",

@@ -8,6 +8,7 @@ export type FormGroupStyle = "follow" | "left" | "right";
 
 interface Props {
     title?: string;
+    titleHtml?: string;
     name?: string;
     horizontal?: boolean;
     layout?: FormGroupStyle;
@@ -21,8 +22,10 @@ interface Props {
     children: any;
 }
 
-export const FormGroup = ({title, name, horizontal = false, layout = "follow", groupClassName, labelClassName,
-                           undo = false, reset = false, setting, onUndo, onReset, children}: Props) => (
+export const FormGroup = ({
+    title, titleHtml, name, horizontal = false, layout = "follow", groupClassName, labelClassName, undo = false,
+    reset = false, setting, onUndo, onReset, children
+}: Props) => (
     <div className={cx(
             "form-group",
             groupClassName, {
@@ -30,22 +33,27 @@ export const FormGroup = ({title, name, horizontal = false, layout = "follow", g
             })}>
         {layout === "follow" &&
             <>
-                <Label title={title} name={name} className={labelClassName} horizontal={horizontal}
-                       undo={undo} reset={reset} setting={setting} onUndo={onUndo} onReset={onReset}/>
+                <Label title={title} titleHtml={titleHtml} name={name} className={labelClassName}
+                       horizontal={horizontal} undo={undo} reset={reset} setting={setting} onUndo={onUndo}
+                       onReset={onReset}/>
                 {children}
             </>
         }
         {layout === "left" &&
             <>
-                <Label title={title} name={name} className={labelClassName} horizontal={horizontal}
-                       undo={undo} reset={reset} setting={setting} onUndo={onUndo} onReset={onReset}>{children}</Label>
+                <Label title={title} titleHtml={titleHtml} name={name} className={labelClassName}
+                       horizontal={horizontal} undo={undo} reset={reset} setting={setting} onUndo={onUndo}
+                       onReset={onReset}>
+                    {children}
+                </Label>
             </>
         }
         {layout === "right" &&
             <div className="form-check">
                 {children}
-                <Label title={title} name={name} className={labelClassName} horizontal={horizontal} checkbox
-                       undo={undo} reset={reset} setting={setting} onUndo={onUndo} onReset={onReset}/>
+                <Label title={title} titleHtml={titleHtml} name={name} className={labelClassName}
+                       horizontal={horizontal} checkbox undo={undo} reset={reset} setting={setting} onUndo={onUndo}
+                       onReset={onReset}/>
             </div>
         }
     </div>
