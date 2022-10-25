@@ -50,7 +50,6 @@ import { ClientState } from "state/state";
 const isConnectionSwitch = (state: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
 
 export default [
-    // trigger(GO_TO_PAGE, conj(isAtComposeFeaturesPage, isComposeFeaturesToBeLoaded), composeFeaturesLoad),
     trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
     trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
@@ -82,17 +81,6 @@ export default [
             isAtComposePage(state) && getComposePostingId(state) === signal.payload.id,
         composeConflict
     ),
-    // trigger(
-    //     [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
-    //     isAtComposeFeaturesPage,
-    //     composeFeaturesLoad
-    // ),
-    // trigger(CONNECTED_TO_HOME, conj(isAtComposeFeaturesPage, isConnectionSwitch), composeFeaturesLoad),
-    // trigger(
-    //     [SETTINGS_UPDATE_SUCCEEDED, EVENT_HOME_NODE_SETTINGS_CHANGED],
-    //     inv(isAtComposeFeaturesPage),
-    //     composeFeaturesUnset
-    // ),
     trigger(COMPOSE_DRAFT_SAVED, true, updateLocation),
     trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad),
     trigger(COMPOSE_DRAFT_SELECT, true, updateLocation),
