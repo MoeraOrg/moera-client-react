@@ -62,7 +62,8 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         "www.facebook.com",
         "www.youtube-nocookie.com",
         "www.youtube.com",
-        "gifer.com"
+        "gifer.com",
+        "giphy.com"
     ],
     allowedIframeDomains: ["livejournal.com"],
     allowedStyles: {
