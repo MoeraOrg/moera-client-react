@@ -295,7 +295,10 @@ class RichTextArea extends React.PureComponent<Props, State> {
                     autoComplete={autoComplete}
                     placeholder={placeholder ?? t("enter-text-here")}
                     rows={rows}
-                    style={{maxHeight: maxHeight ?? "calc(100vh - 26rem)"}}
+                    style={{
+                        minHeight: rows != null ? `${Math.ceil(rows * 1.5)}em` : undefined,
+                        maxHeight: maxHeight ?? "calc(100vh - 26rem)"
+                    }}
                     disabled={disabled}
                     onKeyDown={this.onKeyDown}
                     onBlur={onBlur}
