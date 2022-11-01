@@ -78,8 +78,8 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
                         "modal-dialog-centered": centered,
                         [`modal-${size}`]: !!size
                     }
-                )} style={style} ref={modalDialog}>
-                    <div className="modal-content">
+                )} style={style}>
+                    <div className="modal-content" ref={modalDialog}>
                         {title &&
                             <div className="modal-header">
                                 <h4 className="modal-title">{title}</h4>
