@@ -102,11 +102,12 @@ function CommentCompose(props: Props) {
                 <AvatarField name="avatar" size={36}/>
                 <div className="content">
                     <CommentComposeRepliedTo/>
-                    <RichTextField name="body" rows={1} features={features} nodeName={receiverName}
-                                   forceImageCompress anyValue placeholder={t("write-comment-here", {mention})}
-                                   disabled={beingPosted} smileysEnabled={smileysEnabled}
-                                   hidingPanel={commentComposeLogic.areValuesEmpty(values)}
-                                   format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
+                    <RichTextField name="body" rows={1} maxHeight="max(100vh - 26rem, 7.5em)" features={features}
+                                   nodeName={receiverName} forceImageCompress anyValue
+                                   placeholder={t("write-comment-here", {mention})} disabled={beingPosted}
+                                   smileysEnabled={smileysEnabled}
+                                   hidingPanel={commentComposeLogic.areValuesEmpty(values)} format={sourceFormatDefault}
+                                   onKeyDown={onKeyDown} urlsField="bodyUrls"/>
                     <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
                                           features={features} small/>
                 </div>

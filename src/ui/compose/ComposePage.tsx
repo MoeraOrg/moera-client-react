@@ -92,7 +92,8 @@ function ComposePage(props: Props) {
                         }
                         <RichTextField name="body" disabled={loadingContent || beingPosted}
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
-                                       features={features} nodeName="" urlsField="bodyUrls" anyValue autoFocus/>
+                                       features={features} nodeName="" urlsField="bodyUrls" anyValue autoFocus
+                                       maxHeight="max(100vh - 26rem, 9em)"/>
                         <ComposeFormattingHelp/>
                         <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features}/>
 
