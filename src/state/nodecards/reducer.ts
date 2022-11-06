@@ -437,9 +437,13 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
 
         case EVENT_HOME_SUBSCRIBER_DELETED: {
             const {subscriber} = action.payload;
-            return getCard(state, subscriber.nodeName).istate
-                .set(["cards", subscriber.nodeName, "subscription", "subscriber"], null)
-                .value();
+            const {istate, card} = getCard(state, subscriber.nodeName);
+            if (card.subscription.subscriber?.id === subscriber.id) {
+                return istate
+                    .set(["cards", subscriber.nodeName, "subscription", "subscriber"], null)
+                    .value();
+            }
+            return state;
         }
 
         case EVENT_HOME_SUBSCRIPTION_ADDED: {
