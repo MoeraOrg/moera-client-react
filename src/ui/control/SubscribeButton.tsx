@@ -41,7 +41,7 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
 
     const onUnsubscribe = () => {
         if (subscription != null) {
-            feedUnsubscribe(nodeName, feedName, subscription.remoteSubscriberId);
+            feedUnsubscribe(nodeName, feedName, subscription.id);
         }
     }
 
@@ -59,26 +59,26 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
     }
 
     const onSubscriptionHide = () => {
-        if (subscription?.remoteNodeName != null) {
-            feedSubscriptionSetVisibility(subscription?.remoteNodeName, subscription?.remoteSubscriberId, false);
+        if (subscription?.id != null) {
+            feedSubscriptionSetVisibility(subscription.id, false);
         }
     }
 
     const onSubscriptionShow = () => {
-        if (subscription?.remoteNodeName != null) {
-            feedSubscriptionSetVisibility(subscription?.remoteNodeName, subscription?.remoteSubscriberId, true);
+        if (subscription?.id != null) {
+            feedSubscriptionSetVisibility(subscription.id, true);
         }
     };
 
     const onSubscriberHide = () => {
         if (subscriber?.id != null) {
-            feedSubscriberSetVisibility(subscriber?.id, false);
+            feedSubscriberSetVisibility(subscriber.id, feedName, false);
         }
     };
 
     const onSubscriberShow = () => {
         if (subscriber?.id != null) {
-            feedSubscriberSetVisibility(subscriber?.id, true);
+            feedSubscriberSetVisibility(subscriber.id, feedName, true);
         }
     };
 

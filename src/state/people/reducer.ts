@@ -22,6 +22,7 @@ import {
     FEED_SUBSCRIPTION_UPDATED,
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
+import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 import {
     EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
@@ -31,11 +32,9 @@ import {
     EVENT_NODE_SUBSCRIPTION_DELETED
 } from "api/events/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import { subscriptionToSubscriber } from "state/feeds/selectors";
 import { PeopleState } from "state/people/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 const initialState: PeopleState = {
     tab: "subscribers",
@@ -145,20 +144,6 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case FEED_SUBSCRIBED: {
             const istate = immutable.wrap(state);
-            if (state.loadedSubscribers) {
-                let subscribers = state.subscribers;
-                if (action.context.ownerName === action.payload.nodeName && action.context.homeOwnerName != null) {
-                    subscribers = state.subscribers
-                        .filter(sr => sr.id !== action.payload.subscription.remoteSubscriberId);
-                    subscribers.push(subscriptionToSubscriber(action.payload.subscription,
-                        action.context.homeOwnerName, action.context.homeOwnerFullName, action.context.homeOwnerAvatar));
-                }
-                if (subscribers.length !== state.subscribers.length) {
-                    sortSubscribers(subscribers);
-                    istate.set("subscribers", subscribers)
-                        .set("subscribersTotal", subscribers.length);
-                }
-            }
             if (state.loadedSubscriptions) {
                 let subscriptions = state.subscriptions;
                 if (action.context.ownerName === action.context.homeOwnerName) {

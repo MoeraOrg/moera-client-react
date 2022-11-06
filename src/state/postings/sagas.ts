@@ -49,7 +49,7 @@ import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, isConnectedToHome } from "state/home/selectors";
+import { isConnectedToHome } from "state/home/selectors";
 import { introduced } from "state/init-selectors";
 import { executor } from "state/executor";
 import { Browser } from "ui/browser";
@@ -224,12 +224,9 @@ function* postingCopyLinkSaga(action: PostingCopyLinkAction) {
 
 function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
     const {id, nodeName} = action.payload;
-    const {posting, ownerName, homeOwnerFullName, homeOwnerGender, homeOwnerAvatar} = yield* select(state => ({
+    const {posting, ownerName} = yield* select(state => ({
         posting: getPosting(state, id),
-        ownerName: getOwnerName(state),
-        homeOwnerFullName: getHomeOwnerFullName(state),
-        homeOwnerGender: getHomeOwnerGender(state),
-        homeOwnerAvatar: getHomeOwnerAvatar(state)
+        ownerName: getOwnerName(state)
     }));
     if (posting == null || ownerName == null) {
         yield* put(postingCommentsSubscribeFailed(id));
@@ -238,12 +235,10 @@ function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
     const targetNode = posting.receiverName ?? (nodeName || ownerName);
     const postingId = posting.receiverPostingId ?? id;
     try {
-        const whoAmI = yield* call(Node.getWhoAmI, targetNode);
-        const subscriber = yield* call(Node.postPostingCommentsSubscriber, targetNode, postingId, homeOwnerFullName,
-            homeOwnerGender, toAvatarDescription(homeOwnerAvatar));
-        yield* call(Node.postPostingCommentsSubscription, ":", subscriber.id, targetNode, whoAmI.fullName ?? null,
+        const whoAmI = yield* call(Node.getWhoAmI, targetNode);  // Just for not to wait for backend to update this
+        const subscription = yield* call(Node.postPostingCommentsSubscription, ":", targetNode, whoAmI.fullName ?? null,
             whoAmI.gender ?? null, toAvatarDescription(whoAmI.avatar), postingId);
-        yield* put(postingCommentsSubscribed(id, subscriber.id, nodeName));
+        yield* put(postingCommentsSubscribed(id, subscription.id, nodeName));
     } catch (e) {
         yield* put(postingCommentsSubscribeFailed(id, nodeName));
         yield* put(errorThrown(e));

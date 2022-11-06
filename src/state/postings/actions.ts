@@ -240,13 +240,13 @@ export const postingCommentsSubscribe = (id: string, nodeName: string = ""): Pos
 export const POSTING_COMMENTS_SUBSCRIBED = "POSTING_COMMENTS_SUBSCRIBED";
 export type PostingCommentsSubscribedAction = ActionWithPayload<typeof POSTING_COMMENTS_SUBSCRIBED, {
     id: string;
-    subscriberId: string;
+    subscriptionId: string;
     nodeName: string;
 }>;
-export const postingCommentsSubscribed = (id: string, subscriberId: string,
+export const postingCommentsSubscribed = (id: string, subscriptionId: string,
                                           nodeName: string = ""): PostingCommentsSubscribedAction => ({
     type: POSTING_COMMENTS_SUBSCRIBED,
-    payload: {id, subscriberId, nodeName}
+    payload: {id, subscriptionId, nodeName}
 });
 
 export const POSTING_COMMENTS_SUBSCRIBE_FAILED = "POSTING_COMMENTS_SUBSCRIBE_FAILED";
@@ -295,14 +295,14 @@ export const POSTING_SUBSCRIPTION_SET = "POSTING_SUBSCRIPTION_SET";
 export type PostingSubscriptionSetAction = ActionWithPayload<typeof POSTING_SUBSCRIPTION_SET, {
     id: string;
     type: SubscriptionType;
-    subscriberId: string | null;
+    subscriptionId: string | null;
     nodeName: string;
 }>;
 export const postingSubscriptionSet = (id: string, type: SubscriptionType,
-                                       subscriberId: string | null,
+                                       subscriptionId: string | null,
                                        nodeName: string = ""): PostingSubscriptionSetAction => ({
     type: POSTING_SUBSCRIPTION_SET,
-    payload: {id, type, subscriberId, nodeName}
+    payload: {id, type, subscriptionId, nodeName}
 });
 
 export const REMOTE_POSTING_SUBSCRIPTION_SET = "REMOTE_POSTING_SUBSCRIPTION_SET";
@@ -310,14 +310,14 @@ export type RemotePostingSubscriptionSetAction = ActionWithPayload<typeof REMOTE
     remoteNodeName: string;
     remotePostingId: string;
     type: SubscriptionType;
-    subscriberId: string | null;
+    subscriptionId: string | null;
     nodeName: string;
 }>;
 export const remotePostingSubscriptionSet = (remoteNodeName: string, remotePostingId: string, type: SubscriptionType,
-                                             subscriberId: string | null,
+                                             subscriptionId: string | null,
                                              nodeName: string = ""): RemotePostingSubscriptionSetAction => ({
     type: REMOTE_POSTING_SUBSCRIPTION_SET,
-    payload: {remoteNodeName, remotePostingId, type, subscriberId, nodeName}
+    payload: {remoteNodeName, remotePostingId, type, subscriptionId, nodeName}
 });
 
 export type PostingsAnyAction =

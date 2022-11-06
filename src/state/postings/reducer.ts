@@ -279,9 +279,9 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case POSTING_COMMENTS_SUBSCRIBED: {
-            const {id, subscriberId, nodeName} = action.payload;
+            const {id, subscriptionId, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
-                return immutable.set(state, [nodeName, id, "posting", "subscriptions", "comments"], subscriberId);
+                return immutable.set(state, [nodeName, id, "posting", "subscriptions", "comments"], subscriptionId);
             }
             return state;
         }
@@ -295,19 +295,19 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         }
 
         case POSTING_SUBSCRIPTION_SET: {
-            const {id, type, subscriberId, nodeName} = action.payload;
+            const {id, type, subscriptionId, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
-                return immutableSetSubscriptionId(state, nodeName, id, type, subscriberId);
+                return immutableSetSubscriptionId(state, nodeName, id, type, subscriptionId);
             }
             return state;
         }
 
         case REMOTE_POSTING_SUBSCRIPTION_SET: {
-            const {remoteNodeName, remotePostingId, type, subscriberId} = action.payload;
+            const {remoteNodeName, remotePostingId, type, subscriptionId} = action.payload;
             const ids = findPostingIdsByRemote(state, remoteNodeName, remotePostingId);
             let nstate = state;
             for (const {nodeName, postingId} of ids) {
-                nstate = immutableSetSubscriptionId(nstate, nodeName, postingId, type, subscriberId);
+                nstate = immutableSetSubscriptionId(nstate, nodeName, postingId, type, subscriptionId);
             }
             return nstate;
         }

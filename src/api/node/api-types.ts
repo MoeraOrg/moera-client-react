@@ -688,7 +688,6 @@ export interface SubscriptionInfo {
     id: string;
     type: SubscriptionType;
     feedName?: string | null;
-    remoteSubscriberId: string;
     remoteNodeName: string;
     remoteFullName?: string | null;
     remoteGender?: string | null;
@@ -699,6 +698,11 @@ export interface SubscriptionInfo {
     operations?: {
         view?: PrincipalValue | null;
     } | null;
+}
+
+export interface RemoteFeed {
+    nodeName: string;
+    feedName: string;
 }
 
 export interface RemotePosting {

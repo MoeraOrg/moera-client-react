@@ -2243,9 +2243,6 @@ export const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
             type: "string",
             nullable: true
         },
-        "remoteSubscriberId": {
-            type: "string"
-        },
         "remoteNodeName": {
             type: "string"
         },
@@ -2284,7 +2281,7 @@ export const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
             additionalProperties: false
         }
     },
-    required: ["id", "type", "remoteSubscriberId", "remoteNodeName", "createdAt"],
+    required: ["id", "type", "remoteNodeName", "createdAt"],
     additionalProperties: false
 };
 

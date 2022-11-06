@@ -43,6 +43,7 @@ import {
     ReactionsSliceInfo,
     ReactionTotalsInfo,
     RegisteredNameSecret,
+    RemoteFeed,
     RemotePosting,
     Result,
     SettingInfo,
@@ -273,56 +274,51 @@ export function* getSubscriptions(nodeName: string | null, type: SubscriptionTyp
     });
 }
 
-export function* postFeedSubscription(nodeName: string | null, remoteSubscriberId: string, remoteNodeName: string,
-                                      remoteFullName: string | null, remoteGender: string | null,
-                                      remoteAvatar: AvatarDescription | null,
+export function* postFeedSubscription(nodeName: string | null, remoteNodeName: string, remoteFullName: string | null,
+                                      remoteGender: string | null, remoteAvatar: AvatarDescription | null,
                                       remoteFeedName: string): CallApiResult<SubscriptionInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
         body: {
-            type: "feed", feedName: "news", remoteSubscriberId, remoteNodeName, remoteFullName, remoteGender,
-            remoteAvatar, remoteFeedName
+            type: "feed", feedName: "news", remoteNodeName, remoteFullName, remoteGender, remoteAvatar, remoteFeedName
         },
         schema: NodeApi.SubscriptionInfo
     });
 }
 
-export function* postPostingCommentsSubscription(nodeName: string | null, remoteSubscriberId: string,
-                                                 remoteNodeName: string, remoteFullName: string | null,
-                                                 remoteGender: string | null, remoteAvatar: AvatarDescription | null,
+export function* postPostingCommentsSubscription(nodeName: string | null, remoteNodeName: string,
+                                                 remoteFullName: string | null, remoteGender: string | null,
+                                                 remoteAvatar: AvatarDescription | null,
                                                  remotePostingId: string): CallApiResult<SubscriptionInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
         body: {
-            type: "posting-comments", remoteSubscriberId, remoteNodeName, remoteFullName, remoteGender, remoteAvatar,
-            remotePostingId
+            type: "posting-comments", remoteNodeName, remoteFullName, remoteGender, remoteAvatar, remotePostingId
         },
         schema: NodeApi.SubscriptionInfo
     });
 }
 
-export function* putSubscription(nodeName: string | null, remoteSubscriberId: string,
-                                 remoteNodeName: string,
+export function* putSubscription(nodeName: string | null, id: string,
                                  operations: SubscriptionOperations): CallApiResult<SubscriptionInfo> {
-    const location = urlWithParameters("/people/subscriptions",
-        {nodeName: remoteNodeName, subscriberId: remoteSubscriberId});
     return yield* callApi({
-        nodeName, location, method: "PUT", auth: true, body: {operations}, schema: NodeApi.SubscriptionInfo
+        nodeName, location: ut`/people/subscriptions/${id}`, method: "PUT", auth: true, body: {operations},
+        schema: NodeApi.SubscriptionInfo
     });
 }
 
-export function* deleteSubscription(nodeName: string | null, remoteSubscriberId: string,
-                                    remoteNodeName: string): CallApiResult<Result> {
-    const location = urlWithParameters("/people/subscriptions",
-        {nodeName: remoteNodeName, subscriberId: remoteSubscriberId});
-    return yield* callApi({nodeName, location, method: "DELETE", auth: true, schema: NodeApi.Result});
+export function* deleteSubscription(nodeName: string | null, id: string): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/people/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
 }
 
-export function* searchSubscriptions(nodeName: string | null,
-                                     remotePostings: RemotePosting[]): CallApiResult<SubscriptionInfo[]> {
+export function* searchSubscriptions(nodeName: string | null, type: string | null,
+                                     remoteFeeds: RemoteFeed[] | null,
+                                     remotePostings: RemotePosting[] | null): CallApiResult<SubscriptionInfo[]> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions/search", method: "POST", auth: true,
-        body: {postings: remotePostings}, schema: NodeApi.SubscriptionInfoArray
+        body: {type, feeds: remoteFeeds, postings: remotePostings}, schema: NodeApi.SubscriptionInfoArray
     });
 }
 

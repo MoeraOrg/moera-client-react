@@ -9,17 +9,17 @@ export function fillSubscriptionId(posting: PostingInfo, subscription: Subscript
             if (posting.subscriptions == null) {
                 posting.subscriptions = {comments: null};
             }
-            posting.subscriptions.comments = subscription.remoteSubscriberId;
+            posting.subscriptions.comments = subscription.id;
             break;
         default:
     }
 }
 
 export function immutableSetSubscriptionId(state: PostingsState, nodeName: string, id: string, type: SubscriptionType,
-                                           subscriberId: string | null) {
+                                           subscriptionId: string | null) {
     switch (type) {
         case "posting-comments":
-            return immutable.set(state, [nodeName, id, "posting", "subscriptions", "comments"], subscriberId);
+            return immutable.set(state, [nodeName, id, "posting", "subscriptions", "comments"], subscriptionId);
         default:
             return state;
     }

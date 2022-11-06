@@ -1,59 +1,11 @@
 import { getUnixTime } from 'date-fns';
 
-import { AvatarImage, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { FeedState } from "state/feeds/state";
 import { emptyFeed } from "state/feeds/empty";
 import { getSetting } from "state/settings/selectors";
 
 const MAX_MOMENT = 25337597040000; // January 1, 9999
-
-export function subscriberToSubscription(subscriber: SubscriberInfo, feedName: string, remoteNodeName: string,
-                                         remoteFullName: string | null,
-                                         remoteAvatar: AvatarImage | null): SubscriptionInfo;
-export function subscriberToSubscription(subscriber: null, feedName: string, remoteNodeName: string,
-                                         remoteFullName: string | null,
-                                         remoteAvatar: AvatarImage | null): null;
-export function subscriberToSubscription(subscriber: SubscriberInfo | null, feedName: string, remoteNodeName: string,
-                                         remoteFullName: string | null,
-                                         remoteAvatar: AvatarImage | null): SubscriptionInfo | null {
-    if (subscriber == null) {
-        return null;
-    }
-    return {
-        id: "",
-        type: subscriber.type,
-        feedName,
-        remoteSubscriberId: subscriber.id,
-        remoteNodeName,
-        remoteFullName,
-        remoteAvatar,
-        remoteFeedName: subscriber.feedName,
-        remotePostingId: subscriber.postingId,
-        createdAt: subscriber.createdAt
-    }
-}
-
-export function subscriptionToSubscriber(subscription: SubscriptionInfo, nodeName: string, fullName: string | null,
-                                         avatar: AvatarImage | null): SubscriberInfo;
-export function subscriptionToSubscriber(subscription: null, nodeName: string, fullName: string | null,
-                                         avatar: AvatarImage | null): null;
-export function subscriptionToSubscriber(subscription: SubscriptionInfo | null, nodeName: string,
-                                         fullName: string | null, avatar: AvatarImage | null): SubscriberInfo | null {
-    if (subscription == null) {
-        return null;
-    }
-    return {
-        id: subscription.remoteSubscriberId,
-        type: subscription.type,
-        feedName: subscription.remoteFeedName,
-        postingId: subscription.remotePostingId,
-        nodeName,
-        fullName,
-        avatar,
-        createdAt: subscription.createdAt
-    }
-}
 
 export function getAllFeeds(state: ClientState): string[] {
     return Object.getOwnPropertyNames(state.feeds);

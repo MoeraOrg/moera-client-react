@@ -74,11 +74,11 @@ export const FEED_UNSUBSCRIBE = "FEED_UNSUBSCRIBE";
 export type FeedUnsubscribeAction = ActionWithPayload<typeof FEED_UNSUBSCRIBE, {
     nodeName: string;
     feedName: string;
-    subscriberId: string;
+    subscriptionId: string;
 }>;
-export const feedUnsubscribe = (nodeName: string, feedName: string, subscriberId: string): FeedUnsubscribeAction => ({
+export const feedUnsubscribe = (nodeName: string, feedName: string, subscriptionId: string): FeedUnsubscribeAction => ({
     type: FEED_UNSUBSCRIBE,
-    payload: {nodeName, feedName, subscriberId}
+    payload: {nodeName, feedName, subscriptionId}
 });
 
 export const FEED_UNSUBSCRIBED = "FEED_UNSUBSCRIBED";
@@ -104,24 +104,24 @@ export const feedUnsubscribeFailed = (nodeName: string, feedName: string): FeedU
 export const FEED_SUBSCRIBER_SET_VISIBILITY = "FEED_SUBSCRIBER_SET_VISIBILITY";
 export type FeedSubscriberSetVisibilityAction = ActionWithPayload<typeof FEED_SUBSCRIBER_SET_VISIBILITY, {
     subscriberId: string;
+    feedName: string;
     visible: boolean;
 }>;
-export const feedSubscriberSetVisibility = (subscriberId: string,
+export const feedSubscriberSetVisibility = (subscriberId: string, feedName: string,
                                             visible: boolean): FeedSubscriberSetVisibilityAction => ({
     type: FEED_SUBSCRIBER_SET_VISIBILITY,
-    payload: {subscriberId, visible}
+    payload: {subscriberId, feedName, visible}
 });
 
 export const FEED_SUBSCRIPTION_SET_VISIBILITY = "FEED_SUBSCRIPTION_SET_VISIBILITY";
 export type FeedSubscriptionSetVisibilityAction = ActionWithPayload<typeof FEED_SUBSCRIPTION_SET_VISIBILITY, {
-    nodeName: string;
-    subscriberId: string;
+    subscriptionId: string;
     visible: boolean;
 }>;
-export const feedSubscriptionSetVisibility = (nodeName: string, subscriberId: string,
+export const feedSubscriptionSetVisibility = (subscriptionId: string,
                                               visible: boolean): FeedSubscriptionSetVisibilityAction => ({
     type: FEED_SUBSCRIPTION_SET_VISIBILITY,
-    payload: {nodeName, subscriberId, visible}
+    payload: {subscriptionId, visible}
 });
 
 export const FEED_SUBSCRIBER_UPDATED = "FEED_SUBSCRIBER_UPDATED";

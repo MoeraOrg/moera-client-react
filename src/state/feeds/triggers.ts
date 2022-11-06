@@ -192,7 +192,7 @@ export default [
             signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
         signal => postingSubscriptionSet(signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
-            signal.payload.subscription.remoteSubscriberId)
+            signal.payload.subscription.id)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
@@ -201,7 +201,7 @@ export default [
             && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
         signal => remotePostingSubscriptionSet(signal.payload.subscription.remoteNodeName,
             signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
-            signal.payload.subscription.remoteSubscriberId)
+            signal.payload.subscription.id)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,

@@ -5,7 +5,7 @@ export interface ExtStoryInfo extends Omit<StoryInfo, "feedName" | "posting" | "
     commentId?: string;
 }
 
-export interface FeedState extends Omit<FeedInfo, "feedName" | "subscriberId"> {
+export interface FeedState extends Omit<FeedInfo, "feedName"> {
     loadingGeneral: boolean;
     loadedGeneral: boolean;
     loadingStatus: boolean;
