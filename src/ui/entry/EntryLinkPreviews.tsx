@@ -36,7 +36,7 @@ export default function EntryLinkPreviews({nodeName, linkPreviews, limit, small,
                                       description={linkPreview.description} imageHash={linkPreview.imageHash}
                                       siteName={linkPreview.siteName} media={media ?? null} small={small}/>
             )}
-            {(linkPreviews.length > 2) &&
+            {(limit != null && linkPreviews.length > limit) &&
                 <>
                     <br/>
                     <button className="entry-link-previews-expand" onClick={onExpand}>
