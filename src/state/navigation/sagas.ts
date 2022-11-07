@@ -175,7 +175,8 @@ function* swipeRefreshUpdateSaga() {
         closeDialogAction: state.navigation.closeDialogAction,
     }));
 
-    const enabled = !location.startsWith("/profile")
+    const enabled = !location.startsWith("/compose")
+        && !location.startsWith("/profile")
         && !location.startsWith("/settings")
         && !messageBoxShow
         && !confirmBoxShow
