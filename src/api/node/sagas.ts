@@ -323,7 +323,7 @@ export function* searchSubscriptions(nodeName: string | null, type: string | nul
 }
 
 export function* getFeatures(nodeName: string | null): CallApiResult<Features> {
-    return yield* callApi({nodeName, location: "/features", schema: NodeApi.Features});
+    return yield* callApi({nodeName, location: "/features", auth: true, schema: NodeApi.Features});
 }
 
 export function* getPosting(nodeName: string | null, id: string,

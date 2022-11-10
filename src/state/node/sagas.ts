@@ -19,7 +19,7 @@ import {
 import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { initFromLocation } from "state/navigation/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { namingInitialized } from "state/init-selectors";
+import { introduced, namingInitialized } from "state/init-selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { normalizeUrl, rootUrl } from "util/url";
 
@@ -27,7 +27,7 @@ export default [
     executor(OWNER_LOAD, "", ownerLoadSaga),
     executor(OWNER_VERIFY, null, ownerVerifySaga, namingInitialized),
     executor(OWNER_SWITCH, payload => payload.name, ownerSwitchSaga),
-    executor(NODE_FEATURES_LOAD, "", nodeFeaturesLoadSaga)
+    executor(NODE_FEATURES_LOAD, "", nodeFeaturesLoadSaga, introduced)
 ];
 
 function* ownerLoadSaga() {

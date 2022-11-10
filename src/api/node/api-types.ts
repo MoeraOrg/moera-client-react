@@ -547,10 +547,23 @@ export interface PostingFeatures {
     imageFormats: string[];
 }
 
+export interface FriendGroupInfo {
+    id: string;
+    title: string;
+    visible?: boolean | null;
+    createdAt: number;
+}
+
+export interface FriendGroupsFeatures {
+    available: FriendGroupInfo[];
+    memberOf?: FriendGroupInfo[] | null;
+}
+
 export interface Features {
     posting: PostingFeatures;
     plugins?: string[] | null;
     feedWidth: number;
+    friendGroups?: FriendGroupsFeatures | null;
 }
 
 export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"

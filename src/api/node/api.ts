@@ -1852,6 +1852,48 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
 
 export const PostingFeatures = schema(PostingFeaturesType);
 
+const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "title": {
+            type: "string"
+        },
+        "visible": {
+            type: "boolean",
+            nullable: true
+        },
+        "createdAt": {
+            type: "number"
+        }
+    },
+    required: ["id", "title", "createdAt"],
+    additionalProperties: false
+};
+
+export const FriendGroupInfo = schema(FriendGroupInfoType);
+
+const FriendGroupsFeaturesType: JSONSchemaType<API.FriendGroupsFeatures> = {
+    type: "object",
+    properties: {
+        "available": {
+            type: "array",
+            items: FriendGroupInfoType
+        },
+        "memberOf": {
+            type: "array",
+            items: FriendGroupInfoType,
+            nullable: true
+        }
+    },
+    required: ["available"],
+    additionalProperties: false
+};
+
+export const FriendGroupsFeatures = schema(FriendGroupsFeaturesType);
+
 export const FeaturesType: JSONSchemaType<API.Features> = {
     type: "object",
     properties: {
@@ -1865,11 +1907,13 @@ export const FeaturesType: JSONSchemaType<API.Features> = {
         },
         "feedWidth": {
             type: "integer"
+        },
+        "friendGroups": {
+            ...FriendGroupsFeaturesType,
+            nullable: true
         }
     },
-    required: [
-        "posting", "feedWidth"
-    ],
+    required: ["posting", "feedWidth"],
     additionalProperties: false
 };
 

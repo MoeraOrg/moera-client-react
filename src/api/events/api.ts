@@ -2,7 +2,6 @@ import schema from "api/schema";
 import {
     AvatarImageType,
     AvatarInfoType,
-    FeaturesType,
     FeedStatusType,
     StorySummaryDataType,
     SubscriberInfoType,
@@ -292,11 +291,10 @@ const FeaturesUpdatedEventType: JSONSchemaType<FeaturesUpdatedEvent> = {
     properties: {
         "type": {
             type: "string"
-        },
-        "features": FeaturesType,
+        }
     },
     additionalProperties: false,
-    required: ["features"]
+    required: ["type"]
 };
 
 const RemotePostingVerifiedEventType: JSONSchemaType<RemotePostingVerifiedEvent> = {
