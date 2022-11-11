@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage, AvatarInfo, CarteInfo } from "api/node/api-types";
+import { AvatarImage, AvatarInfo, CarteInfo, FriendGroupInfo } from "api/node/api-types";
 import { RootInfo } from "api/addon/api-types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
@@ -151,6 +151,21 @@ export const homeAvatarsLoadFailed = (): HomeAvatarsLoadFailedAction => ({
     type: HOME_AVATARS_LOAD_FAILED
 });
 
+export const HOME_FRIEND_GROUPS_LOAD = "HOME_FRIEND_GROUPS_LOAD";
+export type HomeFriendGroupsLoadAction = Action<typeof HOME_FRIEND_GROUPS_LOAD>;
+export const homeFriendGroupsLoad = (): HomeFriendGroupsLoadAction => ({
+    type: HOME_FRIEND_GROUPS_LOAD
+});
+
+export const HOME_FRIEND_GROUPS_LOADED = "HOME_FRIEND_GROUPS_LOADED";
+export type HomeFriendGroupsLoadedAction = ActionWithPayload<typeof HOME_FRIEND_GROUPS_LOADED, {
+    friendGroups: FriendGroupInfo[];
+}>;
+export const homeFriendGroupsLoaded = (friendGroups: FriendGroupInfo[]): HomeFriendGroupsLoadedAction => ({
+    type: HOME_FRIEND_GROUPS_LOADED,
+    payload: {friendGroups}
+});
+
 export type HomeAnyAction =
     ConnectToHomeAction
     | ConnectionToHomeFailedAction
@@ -165,4 +180,6 @@ export type HomeAnyAction =
     | ConnectionsSetAction
     | HomeAvatarsLoadAction
     | HomeAvatarsLoadedAction
-    | HomeAvatarsLoadFailedAction;
+    | HomeAvatarsLoadFailedAction
+    | HomeFriendGroupsLoadAction
+    | HomeFriendGroupsLoadedAction;

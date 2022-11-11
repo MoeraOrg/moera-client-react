@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { FriendGroupDetails, ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 export type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
@@ -131,6 +131,37 @@ export const nodeCardSubscriptionSet = (nodeName: string,
     payload: {nodeName, subscriber, subscription}
 });
 
+export const NODE_CARD_FRIENDSHIP_LOAD = "NODE_CARD_FRIENDSHIP_LOAD";
+export type NodeCardFriendshipLoadAction = ActionWithPayload<typeof NODE_CARD_FRIENDSHIP_LOAD, {
+    nodeName: string;
+}>;
+export const nodeCardFriendshipLoad = (nodeName: string): NodeCardFriendshipLoadAction => ({
+    type: NODE_CARD_FRIENDSHIP_LOAD,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_FRIENDSHIP_LOAD_FAILED = "NODE_CARD_FRIENDSHIP_LOAD_FAILED";
+export type NodeCardFriendshipLoadFailedAction = ActionWithPayload<typeof NODE_CARD_FRIENDSHIP_LOAD_FAILED, {
+    nodeName: string;
+}>;
+export const nodeCardFriendshipLoadFailed = (nodeName: string): NodeCardFriendshipLoadFailedAction => ({
+    type: NODE_CARD_FRIENDSHIP_LOAD_FAILED,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_FRIENDSHIP_SET = "NODE_CARD_FRIENDSHIP_SET";
+export type NodeCardFriendshipSetAction = ActionWithPayload<typeof NODE_CARD_FRIENDSHIP_SET, {
+    nodeName: string;
+    groups: FriendGroupDetails[] | null;
+    remoteGroups: FriendGroupDetails[] | null;
+}>;
+export const nodeCardFriendshipSet = (nodeName: string,
+                                      groups: FriendGroupDetails[] | null,
+                                      remoteGroups: FriendGroupDetails[] | null): NodeCardFriendshipSetAction => ({
+    type: NODE_CARD_FRIENDSHIP_SET,
+    payload: {nodeName, groups, remoteGroups}
+});
+
 export const NODE_CARDS_CLIENT_SWITCH = "NODE_CARDS_CLIENT_SWITCH";
 export type NodeCardsClientSwitchAction = Action<typeof NODE_CARDS_CLIENT_SWITCH>;
 export const nodeCardsClientSwitch = (): NodeCardsClientSwitchAction => ({
@@ -173,6 +204,9 @@ export type NodeCardsAnyAction =
     | NodeCardSubscriptionLoadAction
     | NodeCardSubscriptionLoadFailedAction
     | NodeCardSubscriptionSetAction
+    | NodeCardFriendshipLoadAction
+    | NodeCardFriendshipLoadFailedAction
+    | NodeCardFriendshipSetAction
     | NodeCardsClientSwitchAction
     | NodeCardsRefreshAction
     | NodeCardsUnsetAction

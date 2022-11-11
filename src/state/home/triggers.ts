@@ -4,6 +4,8 @@ import {
     DISCONNECT_FROM_HOME,
     disconnectedFromHome,
     DisconnectFromHomeAction,
+    HOME_OWNER_SET,
+    homeFriendGroupsLoad,
     homeOwnerSet,
     homeOwnerVerify
 } from "state/home/actions";
@@ -18,6 +20,7 @@ export default [
         conj(isConnectedToHome, inv(hasInactiveConnections)),
         (signal: DisconnectFromHomeAction) => disconnectedFromHome(signal.payload.location, signal.payload.login)
     ),
+    trigger(HOME_OWNER_SET, true, homeFriendGroupsLoad),
     trigger(
         EVENT_HOME_NODE_NAME_CHANGED,
         true,

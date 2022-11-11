@@ -8,11 +8,14 @@ import {
     connectedToHome,
     disconnectFromHome,
     HOME_AVATARS_LOAD,
+    HOME_FRIEND_GROUPS_LOAD,
     HOME_RESTORE,
     homeAvatarsLoaded,
     homeAvatarsLoadFailed,
+    homeFriendGroupsLoaded,
     HomeRestoreAction
 } from "state/home/actions";
+import { introduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import { getHomeRootLocation } from "state/home/selectors";
@@ -24,6 +27,7 @@ import { now } from "util/misc";
 export default [
     executor(HOME_RESTORE, null, homeRestoreSaga),
     executor(HOME_AVATARS_LOAD, "", homeAvatarsLoadSaga),
+    executor(HOME_FRIEND_GROUPS_LOAD, "", homeFriendGroupsLoadSaga, introduced)
 ];
 
 function* homeRestoreSaga(action: HomeRestoreAction) {
@@ -56,10 +60,19 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
 
 function* homeAvatarsLoadSaga() {
     try {
-        const data = yield* call(Node.getAvatars, ":");
-        yield* put(homeAvatarsLoaded(data));
+        const avatars = yield* call(Node.getAvatars, ":");
+        yield* put(homeAvatarsLoaded(avatars));
     } catch (e) {
         yield* put(homeAvatarsLoadFailed());
+        yield* put(errorThrown(e));
+    }
+}
+
+function* homeFriendGroupsLoadSaga() {
+    try {
+        const friendGroups = yield* call(Node.getFriendGroups, ":");
+        yield* put(homeFriendGroupsLoaded(friendGroups));
+    } catch (e) {
         yield* put(errorThrown(e));
     }
 }

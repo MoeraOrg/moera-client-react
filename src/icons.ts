@@ -47,6 +47,9 @@ import {
     faNewspaper,
     faPen,
     faPenAlt,
+    faPeopleArrows,
+    faPerson,
+    faPersonWalkingArrowRight,
     faPlus,
     faQuestionCircle,
     faQuoteLeft,
@@ -145,6 +148,9 @@ export default function initIconLibrary() {
     library.add(faPaypal);
     library.add(faPen);
     library.add(faPenAlt);
+    library.add(faPeopleArrows);
+    library.add(faPerson);
+    library.add(faPersonWalkingArrowRight);
     library.add(faPlus);
     library.add(faQuestionCircle);
     library.add(faQuoteLeft);

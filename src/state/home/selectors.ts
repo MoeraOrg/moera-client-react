@@ -1,6 +1,6 @@
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage, FriendGroupInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getToken } from "state/node/selectors";
+import { getNodeFeatures, getToken } from "state/node/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 
@@ -51,6 +51,14 @@ export function getHomeOwnerGender(state: ClientState): string | null {
 
 export function isHomeOwnerNameSet(state: ClientState): boolean {
     return !!getHomeOwnerName(state);
+}
+
+export function getHomeFriendGroups(state: ClientState): FriendGroupInfo[] {
+    return state.home.friendGroups;
+}
+
+export function getHomeFriendsId(state: ClientState): string | null {
+    return getHomeFriendGroups(state).find(fg => fg.title === "t:friends")?.id ?? null;
 }
 
 export interface HomeConnectionData {

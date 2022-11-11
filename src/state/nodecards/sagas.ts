@@ -4,30 +4,36 @@ import i18n from 'i18next';
 
 import { NameResolvingError, Node } from "api";
 import { executor } from "state/executor";
+import { mutuallyIntroduced } from "state/init-selectors";
 import {
     NODE_CARD_COPY_MENTION,
     NODE_CARD_DETAILS_LOAD,
-    NODE_CARD_PREPARE,
+    NODE_CARD_FRIENDSHIP_LOAD,
     NODE_CARD_PEOPLE_LOAD,
+    NODE_CARD_PREPARE,
     NODE_CARD_STORIES_LOAD,
     NODE_CARD_SUBSCRIPTION_LOAD,
     NodeCardCopyMentionAction,
+    nodeCardDetailsLoad,
     NodeCardDetailsLoadAction,
     nodeCardDetailsLoadFailed,
     nodeCardDetailsSet,
+    nodeCardFriendshipLoad,
+    NodeCardFriendshipLoadAction,
+    nodeCardFriendshipLoadFailed,
+    nodeCardFriendshipSet,
+    nodeCardPeopleLoad,
     NodeCardPeopleLoadAction,
     nodeCardPeopleLoadFailed,
     nodeCardPeopleSet,
+    NodeCardPrepareAction,
+    nodeCardStoriesLoad,
     NodeCardStoriesLoadAction,
     nodeCardStoriesSet,
+    nodeCardSubscriptionLoad,
     NodeCardSubscriptionLoadAction,
     nodeCardSubscriptionLoadFailed,
-    nodeCardSubscriptionSet,
-    NodeCardPrepareAction,
-    nodeCardDetailsLoad,
-    nodeCardPeopleLoad,
-    nodeCardStoriesLoad,
-    nodeCardSubscriptionLoad
+    nodeCardSubscriptionSet
 } from "state/nodecards/actions";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
@@ -42,6 +48,7 @@ export default [
     executor(NODE_CARD_PEOPLE_LOAD, payload => payload.nodeName, nodeCardPeopleLoadSaga),
     executor(NODE_CARD_STORIES_LOAD, payload => payload.nodeName, nodeCardStoriesLoadSaga),
     executor(NODE_CARD_SUBSCRIPTION_LOAD, payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
+    executor(NODE_CARD_FRIENDSHIP_LOAD, payload => payload.nodeName, nodeCardFriendshipLoadSaga, mutuallyIntroduced),
     executor(NODE_CARD_COPY_MENTION, "", nodeCardCopyMention)
 ];
 
@@ -59,6 +66,9 @@ function* nodeCardPrepareSaga(action: NodeCardPrepareAction) {
     }
     if (card == null || (!card.subscription.loaded && !card.subscription.loading)) {
         yield* put(nodeCardSubscriptionLoad(nodeName));
+    }
+    if (card == null || (!card.friendship.loaded && !card.friendship.loading)) {
+        yield* put(nodeCardFriendshipLoad(nodeName));
     }
 }
 
@@ -120,7 +130,7 @@ function* nodeCardSubscriptionLoadSaga(action: WithContext<NodeCardSubscriptionL
 
 function* loadSubscriber(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName) {
-        return;
+        return null;
     }
     const subscribers = yield* call(Node.getSubscribers, ":", "feed" as const, nodeName);
     return subscribers?.[0];
@@ -128,10 +138,43 @@ function* loadSubscriber(nodeName: string, homeOwnerName: string | null) {
 
 function* loadSubscription(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName) {
-        return;
+        return null;
     }
     const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
     return subscriptions?.[0];
+}
+
+function* nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendshipLoadAction>) {
+    const {nodeName} = action.payload;
+    const {homeOwnerName} = action.context;
+    try {
+        const {groups, remoteGroups} = yield* all({
+            groups: call(loadFriendGroups, nodeName, homeOwnerName),
+            remoteGroups: call(loadRemoteFriendGroups, nodeName, homeOwnerName)
+        });
+        yield* put(nodeCardFriendshipSet(nodeName, groups ?? null, remoteGroups ?? null));
+    } catch (e) {
+        yield* put(nodeCardFriendshipLoadFailed(nodeName));
+        if (!(e instanceof NameResolvingError)) {
+            yield* put(errorThrown(e));
+        }
+    }
+}
+
+function* loadFriendGroups(nodeName: string, homeOwnerName: string | null) {
+    if (homeOwnerName == null || nodeName === homeOwnerName || nodeName.includes(":")) {
+        return null;
+    }
+    const {groups} = yield* call(Node.getFriend, ":", nodeName);
+    return groups;
+}
+
+function* loadRemoteFriendGroups(nodeName: string, homeOwnerName: string | null) {
+    if (homeOwnerName == null || nodeName === homeOwnerName || homeOwnerName.includes(":")) {
+        return null;
+    }
+    const {groups} = yield* call(Node.getFriend, nodeName, homeOwnerName);
+    return groups;
 }
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {

@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { PeopleGeneralInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { FriendGroupDetails, PeopleGeneralInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 import { PeopleTab } from "state/people/state";
 
 export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";
@@ -94,6 +94,36 @@ export const subscriptionsUnset = (): SubscriptionsUnsetAction => ({
     type: SUBSCRIPTIONS_UNSET
 });
 
+export const FRIENDSHIP_UPDATE = "FRIENDSHIP_UPDATE";
+export type FriendshipUpdateAction = ActionWithPayload<typeof FRIENDSHIP_UPDATE, {
+    nodeName: string;
+    friendGroups: string[] | null;
+}>;
+export const friendshipUpdate = (nodeName: string, friendGroups: string[] | null): FriendshipUpdateAction => ({
+    type: FRIENDSHIP_UPDATE,
+    payload: {nodeName, friendGroups}
+});
+
+export const FRIENDSHIP_UPDATED = "FRIENDSHIP_UPDATED";
+export type FriendshipUpdatedAction = ActionWithPayload<typeof FRIENDSHIP_UPDATED, {
+    nodeName: string;
+    friendGroups: FriendGroupDetails[] | null;
+}>;
+export const friendshipUpdated = (nodeName: string,
+                                  friendGroups: FriendGroupDetails[] | null): FriendshipUpdatedAction => ({
+    type: FRIENDSHIP_UPDATED,
+    payload: {nodeName, friendGroups}
+});
+
+export const FRIENDSHIP_UPDATE_FAILED = "FRIENDSHIP_UPDATE_FAILED";
+export type FriendshipUpdateFailedAction = ActionWithPayload<typeof FRIENDSHIP_UPDATE_FAILED, {
+    nodeName: string;
+}>;
+export const friendshipUpdateFailed = (nodeName: string): FriendshipUpdateFailedAction => ({
+    type: FRIENDSHIP_UPDATE_FAILED,
+    payload: {nodeName}
+});
+
 export type PeopleAnyAction =
     PeopleGoToTabAction
     | PeopleGeneralLoadAction
@@ -107,4 +137,7 @@ export type PeopleAnyAction =
     | SubscriptionsLoadAction
     | SubscriptionsLoadedAction
     | SubscriptionsLoadFailedAction
-    | SubscriptionsUnsetAction;
+    | SubscriptionsUnsetAction
+    | FriendshipUpdateAction
+    | FriendshipUpdatedAction
+    | FriendshipUpdateFailedAction;

@@ -103,7 +103,11 @@ function SubscribeButton() {
     const {t} = useTranslation();
 
     return (
-        <Button variant="outline-primary" size="sm">{t("subscribe")}</Button>
+        <Button variant="outline-primary" size="sm">
+            {t("subscribe")}
+            &nbsp;&nbsp;
+            <FontAwesomeIcon icon="chevron-down"/>
+        </Button>
     );
 }
 

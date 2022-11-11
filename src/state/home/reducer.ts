@@ -13,6 +13,7 @@ import {
     HOME_AVATARS_LOAD,
     HOME_AVATARS_LOAD_FAILED,
     HOME_AVATARS_LOADED,
+    HOME_FRIEND_GROUPS_LOADED,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
@@ -40,7 +41,8 @@ const emptyConnection = {
         loading: false,
         loaded: false,
         avatars: []
-    }
+    },
+    friendGroups: []
 };
 
 const initialState = {
@@ -133,6 +135,9 @@ export default (state: HomeState = initialState, action: ClientAction): HomeStat
 
         case HOME_AVATARS_LOAD_FAILED:
             return immutable.set(state, "avatars.loading", false);
+
+        case HOME_FRIEND_GROUPS_LOADED:
+            return immutable.set(state, "friendGroups", action.payload.friendGroups);
 
         case PROFILE_AVATAR_CREATED:
             if (state.avatars.loaded) {

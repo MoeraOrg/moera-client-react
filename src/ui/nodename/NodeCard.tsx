@@ -49,7 +49,8 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
     const subscriptionsTotal = card.people.subscriptionsTotal ?? "?";
     const {
         details: {profile: {title, fundraisers}},
-        subscription: {subscribing, unsubscribing, subscriber, subscription}
+        subscription: {subscribing, unsubscribing, subscriber, subscription},
+        friendship: {groups: friendGroups, remoteGroups: remoteFriendGroups, updating: updatingFriendship}
     } = card;
 
     return (
@@ -100,8 +101,10 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
                 <CopyMentionButton nodeName={nodeName} fullName={card.details.profile.fullName ?? fullName ?? null}/>
                 {(homeOwnerName != null && nodeName !== homeOwnerName && (card.subscription.loaded ?? false)) &&
                     <SubscribeButton subscribing={subscribing} unsubscribing={unsubscribing}
-                                     nodeName={nodeName} feedName="timeline" subscriber={subscriber}
-                                     subscription={subscription}/>
+                                     nodeName={nodeName} feedName="timeline"
+                                     subscriber={subscriber} subscription={subscription}
+                                     friendGroups={friendGroups} remoteFriendGroups={remoteFriendGroups}
+                                     updatingFriendship={updatingFriendship}/>
                 }
             </div>
             <Loading active={anyLoading}/>

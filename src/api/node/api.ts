@@ -1875,6 +1875,53 @@ const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
 
 export const FriendGroupInfo = schema(FriendGroupInfoType);
 
+export const FriendGroupInfoArray = schema({
+    type: "array",
+    items: FriendGroupInfoType
+} as JSONSchemaType<API.FriendGroupInfo[]>);
+
+const FriendGroupDetailsType: JSONSchemaType<API.FriendGroupDetails> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "title": {
+            type: "string"
+        },
+        "addedAt": {
+            type: "number"
+        }
+    },
+    required: ["id", "title", "addedAt"],
+    additionalProperties: false
+};
+
+export const FriendGroupDetails = schema(FriendGroupDetailsType);
+
+const FriendInfoType: JSONSchemaType<API.FriendInfo> = {
+    type: "object",
+    properties: {
+        "nodeName": {
+            type: "string"
+        },
+        "groups": {
+            type: "array",
+            items: FriendGroupDetailsType,
+            nullable: true
+        }
+    },
+    required: ["nodeName"],
+    additionalProperties: false
+};
+
+export const FriendInfo = schema(FriendInfoType);
+
+export const FriendInfoArray = schema({
+    type: "array",
+    items: FriendInfoType
+} as JSONSchemaType<API.FriendInfo[]>);
+
 const FriendGroupsFeaturesType: JSONSchemaType<API.FriendGroupsFeatures> = {
     type: "object",
     properties: {
@@ -1884,7 +1931,7 @@ const FriendGroupsFeaturesType: JSONSchemaType<API.FriendGroupsFeatures> = {
         },
         "memberOf": {
             type: "array",
-            items: FriendGroupInfoType,
+            items: FriendGroupDetailsType,
             nullable: true
         }
     },

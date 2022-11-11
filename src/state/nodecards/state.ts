@@ -1,4 +1,4 @@
-import { ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { FriendGroupDetails, ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export interface NodeCardState {
     details: {
@@ -25,6 +25,13 @@ export interface NodeCardState {
         unsubscribing: boolean;
         subscriber: SubscriberInfo | null;
         subscription: SubscriptionInfo | null;
+    },
+    friendship: {
+        loading: boolean;
+        loaded: boolean;
+        updating: boolean;
+        groups: FriendGroupDetails[] | null;
+        remoteGroups: FriendGroupDetails[] | null;
     }
 }
 

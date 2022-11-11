@@ -25,7 +25,7 @@ import {
     Features,
     FeedInfo,
     FeedSliceInfo,
-    FeedStatus,
+    FeedStatus, FriendDescription, FriendGroupInfo, FriendInfo,
     LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
@@ -319,6 +319,24 @@ export function* searchSubscriptions(nodeName: string | null, type: string | nul
     return yield* callApi({
         nodeName, location: "/people/subscriptions/search", method: "POST", auth: true,
         body: {type, feeds: remoteFeeds, postings: remotePostings}, schema: NodeApi.SubscriptionInfoArray
+    });
+}
+
+export function* getFriendGroups(nodeName: string | null): CallApiResult<FriendGroupInfo[]> {
+    return yield* callApi({
+        nodeName, location: "/people/friends/groups", auth: true, schema: NodeApi.FriendGroupInfoArray
+    });
+}
+
+export function* getFriend(nodeName: string | null, remoteNodeName: string): CallApiResult<FriendInfo> {
+    return yield* callApi({
+        nodeName, location: ut`/people/friends/${remoteNodeName}`, auth: true, schema: NodeApi.FriendInfo
+    });
+}
+
+export function* putFriends(nodeName: string | null, friends: FriendDescription[]): CallApiResult<FriendInfo[]> {
+    return yield* callApi({
+        nodeName, location: "/people/friends", method: "PUT", auth: true, body: friends, schema: NodeApi.FriendInfoArray
     });
 }
 

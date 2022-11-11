@@ -547,6 +547,11 @@ export interface PostingFeatures {
     imageFormats: string[];
 }
 
+export interface FriendDescription {
+    nodeName: string;
+    groups: string[] | null;
+}
+
 export interface FriendGroupInfo {
     id: string;
     title: string;
@@ -554,9 +559,20 @@ export interface FriendGroupInfo {
     createdAt: number;
 }
 
+export interface FriendGroupDetails {
+    id: string;
+    title: string;
+    addedAt: number;
+}
+
+export interface FriendInfo {
+    nodeName: string;
+    groups?: FriendGroupDetails[] | null;
+}
+
 export interface FriendGroupsFeatures {
     available: FriendGroupInfo[];
-    memberOf?: FriendGroupInfo[] | null;
+    memberOf?: FriendGroupDetails[] | null;
 }
 
 export interface Features {

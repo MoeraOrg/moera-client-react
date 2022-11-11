@@ -4,6 +4,10 @@ import { NodeApiError } from "api";
 import { Node } from "api/node";
 import { errorThrown } from "state/error/actions";
 import {
+    FRIENDSHIP_UPDATE,
+    FriendshipUpdateAction,
+    friendshipUpdated,
+    friendshipUpdateFailed,
     PEOPLE_GENERAL_LOAD,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
@@ -20,7 +24,8 @@ import { introduced } from "state/init-selectors";
 export default [
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
     executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga, introduced),
-    executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced)
+    executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced),
+    executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -58,5 +63,17 @@ function* subscriptionsLoadSaga() {
             yield* put(subscriptionsLoadFailed());
             yield* put(errorThrown(e));
         }
+    }
+}
+
+function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
+    const {nodeName, friendGroups} = action.payload;
+
+    try {
+        const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: friendGroups}]);
+        yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null))
+    } catch (e) {
+        yield* put(friendshipUpdateFailed(nodeName));
+        yield* put(errorThrown(e));
     }
 }

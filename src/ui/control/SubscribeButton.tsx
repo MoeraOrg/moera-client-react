@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { FriendGroupDetails, PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import {
     feedSubscribe,
@@ -11,7 +11,8 @@ import {
     feedSubscriptionSetVisibility,
     feedUnsubscribe
 } from "state/feeds/actions";
-import { getHomeOwnerGender } from "state/home/selectors";
+import { friendshipUpdate } from "state/people/actions";
+import { getHomeFriendsId, getHomeOwnerGender } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { isPrincipalIn } from "state/node/selectors";
 import { getSettingNode } from "state/settings/selectors";
@@ -27,14 +28,18 @@ interface OwnProps {
     feedName: string;
     subscriber: SubscriberInfo | null;
     subscription: SubscriptionInfo | null;
+    friendGroups: FriendGroupDetails[] | null;
+    remoteFriendGroups: FriendGroupDetails[] | null;
+    updatingFriendship: boolean;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
-                          homeGender, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
-                          subscriptionHidden, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
-                          feedSubscriptionSetVisibility}: Props) {
+                          friendGroups, remoteFriendGroups, updatingFriendship, homeGender, peerHref, subscribersHidden,
+                          subscriptionsHidden, subscriberHidden, subscriptionHidden, friendsId, feedSubscribe,
+                          feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility,
+                          friendshipUpdate}: Props) {
     const {t} = useTranslation();
 
     const onSubscribe = () => feedSubscribe(nodeName, feedName);
@@ -45,17 +50,25 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
         }
     }
 
+    const onAddFriend = () => {
+        if (friendsId != null) {
+            friendshipUpdate(nodeName, [friendsId]);
+        }
+    }
+
+    const onUnfriend = () => friendshipUpdate(nodeName, null);
+
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;
+    const friend = friendGroups != null && friendGroups.length > 0;
+    const friendOf = remoteFriendGroups != null && remoteFriendGroups.length > 0;
+    const friendIcon = friend
+        ? (friendOf ? "people-arrows" : "person")
+        : (friendOf ? "person-walking-arrow-right" : null)
 
-    const loading = !subscribed ? subscribing : unsubscribing;
-    if ((!subscribed && !subscribedToMe) || loading) {
-        return (
-            <Button variant="outline-primary" size="sm" className="subscribe-button" loading={loading}
-                    onClick={onSubscribe}>
-                {t("subscribe")}
-            </Button>
-        );
+    const loading = (!subscribed ? subscribing : unsubscribing) || updatingFriendship;
+    if (loading) {
+        return <Button variant="outline-primary" size="sm" className="subscribe-button" loading={loading}/>;
     }
 
     const onSubscriptionHide = () => {
@@ -87,14 +100,14 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
     const subscriberHideable = subscribedToMe && !subscribersHidden && !subscriberHidden;
     const subscriberUnhideable = subscribedToMe && !subscribersHidden && subscriberHidden;
     const caption = !subscribed
-        ? t("subscribed-to-me", {"gender": tGender(subscriber?.gender)})
+        ? (!subscribedToMe ? t("subscribe") : t("subscribed-to-me", {"gender": tGender(subscriber?.gender)}))
         : (!subscribedToMe ? t("subscribed", {"gender": tGender(homeGender)}) : t("mutually-subscribed"));
 
     return (
         <DropdownMenu caption={small ? caption : undefined} className="btn btn-sm btn-outline-primary subscribe-button"
                       items={[
             {
-                title: t("subscribe-back"),
+                title: !subscribedToMe ? t("subscribe") : t("subscribe-back"),
                 href: peerHref,
                 onClick: onSubscribe,
                 show: !subscribed
@@ -107,6 +120,21 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
             },
             {
                 divider: true
+            },
+            {
+                title: t("add-friend"),
+                href: peerHref,
+                onClick: onAddFriend,
+                show: !friend
+            },
+            {
+                title: t("unfriend"),
+                href: peerHref,
+                onClick: onUnfriend,
+                show: friend
+            },
+            {
+                  divider: true
             },
             {
                 title: t("hide-my-subscription"),
@@ -133,6 +161,7 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
                 show: !subscriberHideable && subscriberUnhideable
             }
         ]}>
+            {friendIcon && <><FontAwesomeIcon icon={friendIcon}/>&nbsp;</>}
             {small ? <FontAwesomeIcon icon={["far", "bell"]}/> : caption}
             &nbsp;&nbsp;
             <FontAwesomeIcon icon="chevron-down"/>
@@ -147,9 +176,10 @@ const connector = connect(
         subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
         subscriptionsHidden: (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin",
         subscriberHidden: isPrincipalIn("view", ownProps.subscriber, "unset", "private", {useOperations: "admin"}),
-        subscriptionHidden: isPrincipalIn("view", ownProps.subscription, "public", "private")
+        subscriptionHidden: isPrincipalIn("view", ownProps.subscription, "public", "private"),
+        friendsId: getHomeFriendsId(state)
     }),
-    { feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility }
+    { feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility, friendshipUpdate }
 );
 
 export default connector(SubscribeButton);
