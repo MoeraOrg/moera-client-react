@@ -33,6 +33,7 @@ import lightBox from "state/lightbox/reducer";
 import donateDialog from "state/donatedialog/reducer";
 import entryCopyTextDialog from "state/entrycopytextdialog/reducer";
 import linkPreviews from "state/linkpreviews/reducer";
+import friendGroupsDialog from "state/friendgroupsdialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -72,6 +73,7 @@ import lightBoxExecutors from "state/lightbox/sagas";
 import richTextEditorExecutors from "state/richtexteditor/sagas";
 import entryCopyTextDialogExecutors from "state/entrycopytextdialog/sagas";
 import linkPreviewsExecutors from "state/linkpreviews/sagas";
+import friendGroupsDialogExecutors from "state/friendgroupsdialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -136,6 +138,7 @@ const reducers = combineReducers({
     donateDialog,
     entryCopyTextDialog,
     linkPreviews,
+    friendGroupsDialog,
     messageBox,
     confirmBox,
     flashBox,
@@ -211,6 +214,7 @@ const executors = collectExecutors(
     richTextEditorExecutors,
     entryCopyTextDialogExecutors,
     linkPreviewsExecutors,
+    friendGroupsDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

@@ -6,6 +6,7 @@ import { TFunction } from 'react-i18next';
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
+import { NameDisplayMode } from "ui/types";
 
 const DIGITS = /^\d+$/;
 
@@ -14,6 +15,20 @@ export function mentionName(name: string | null | undefined, fullName?: string |
         return "";
     }
     return "@" + NodeName.shorten(name) + (fullName ? `[${fullName}]` : "");
+}
+
+export function formatFullName(name: string | null | undefined, fullName: string | null | undefined,
+                               mode: NameDisplayMode): string {
+    switch (mode) {
+        case "name":
+            return name || "?";
+        case "full-name":
+            return fullName || name || "?";
+        case "both":
+            return fullName ? `${fullName} (${name || "?"})` : (name || "?");
+        default:
+            return "?";
+    }
 }
 
 export function longGender(gender: any, t: TFunction): string {

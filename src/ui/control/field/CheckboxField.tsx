@@ -5,25 +5,27 @@ import { FormGroup } from "ui/control/FormGroup";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import "./CheckboxField.css";
 
-interface Props {
+interface Props<V> {
     name: string;
     title?: string;
     titleHtml?: string;
+    isChecked?: (value: V) => boolean;
+    value?: string;
     disabled?: boolean;
     groupClassName?: string;
     labelClassName?: string;
     autoFocus?: boolean;
     single?: boolean;
     anyValue?: boolean;
-    initialValue?: boolean | null;
-    defaultValue?: boolean | null;
+    initialValue?: V | null;
+    defaultValue?: V | null;
     setting?: string;
 }
 
-export function CheckboxField({
-    name, title, titleHtml, disabled, groupClassName, labelClassName, autoFocus, single, anyValue, initialValue,
-    defaultValue, setting
-}: Props) {
+export function CheckboxField<V = boolean>({
+    name, title, titleHtml, isChecked, value: inputValue, disabled, groupClassName, labelClassName, autoFocus, single,
+    anyValue, initialValue, defaultValue, setting
+}: Props<V>) {
     const inputDom = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -33,7 +35,7 @@ export function CheckboxField({
     }, [autoFocus]);
 
     const [{value, onChange, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
-        useUndoableField<boolean>(name, initialValue, defaultValue);
+        useUndoableField<V>(name, initialValue, defaultValue);
 
     return (
         <FormGroup
@@ -51,7 +53,8 @@ export function CheckboxField({
         >
             <input
                 name={name}
-                checked={value}
+                checked={isChecked ? isChecked(value) : Boolean(value)}
+                value={inputValue}
                 onChange={onChange}
                 onBlur={onBlur}
                 id={name}

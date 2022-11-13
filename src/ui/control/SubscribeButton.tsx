@@ -12,6 +12,7 @@ import {
     feedUnsubscribe
 } from "state/feeds/actions";
 import { friendshipUpdate } from "state/people/actions";
+import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
 import { getHomeFriendsId, getHomeOwnerGender } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { isPrincipalIn } from "state/node/selectors";
@@ -39,7 +40,7 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
                           friendGroups, remoteFriendGroups, updatingFriendship, homeGender, peerHref, subscribersHidden,
                           subscriptionsHidden, subscriberHidden, subscriptionHidden, friendsId, feedSubscribe,
                           feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility,
-                          friendshipUpdate}: Props) {
+                          friendshipUpdate, openFriendGroupsDialog}: Props) {
     const {t} = useTranslation();
 
     const onSubscribe = () => feedSubscribe(nodeName, feedName);
@@ -55,6 +56,8 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
             friendshipUpdate(nodeName, [friendsId]);
         }
     }
+
+    const onFriendGroups = () => openFriendGroupsDialog(nodeName);
 
     const onUnfriend = () => friendshipUpdate(nodeName, null);
 
@@ -128,6 +131,12 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
                 show: !friend
             },
             {
+                title: t("friend-groups"),
+                href: peerHref,
+                onClick: onFriendGroups,
+                show: friend
+            },
+            {
                 title: t("unfriend"),
                 href: peerHref,
                 onClick: onUnfriend,
@@ -179,7 +188,10 @@ const connector = connect(
         subscriptionHidden: isPrincipalIn("view", ownProps.subscription, "public", "private"),
         friendsId: getHomeFriendsId(state)
     }),
-    { feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility, friendshipUpdate }
+    {
+        feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility, friendshipUpdate,
+        openFriendGroupsDialog
+    }
 );
 
 export default connector(SubscribeButton);

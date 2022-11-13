@@ -11,6 +11,7 @@ import { ErrorState } from "state/error/state";
 import { FeedsState } from "state/feeds/state";
 import { HomeState } from "state/home/state";
 import { FlashBoxState } from "state/flashbox/state";
+import { FriendGroupsDialogState } from "state/friendgroupsdialog/state";
 import { ImageEditDialogState } from "state/imageeditdialog/state";
 import { LightBoxState } from "state/lightbox/state";
 import { LinkPreviewsState } from "state/linkpreviews/state";
@@ -47,6 +48,7 @@ export interface ClientState {
     error: ErrorState;
     feeds: FeedsState;
     flashBox: FlashBoxState;
+    friendGroupsDialog: FriendGroupsDialogState;
     home: HomeState;
     imageEditDialog: ImageEditDialogState;
     lightBox: LightBoxState;
