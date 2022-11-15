@@ -10,7 +10,7 @@ interface Props<V> {
     title?: string;
     titleHtml?: string;
     isChecked?: (value: V) => boolean;
-    value?: string;
+    value?: string | number;
     disabled?: boolean;
     groupClassName?: string;
     labelClassName?: string;

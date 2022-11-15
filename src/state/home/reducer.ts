@@ -3,6 +3,8 @@ import * as immutable from 'object-path-immutable';
 
 import { EVENT_HOME_AVATAR_ADDED, EVENT_HOME_AVATAR_DELETED, EVENT_HOME_AVATAR_ORDERED } from "api/events/actions";
 import { AvatarInfo } from "api/node/api-types";
+import { WithContext } from "state/action-types";
+import { ClientAction } from "state/action";
 import {
     BROWSER_API_SET,
     CONNECT_TO_HOME,
@@ -17,10 +19,10 @@ import {
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
-import { toWsUrl } from "util/url";
+import { FRIEND_GROUP_ADDED } from "state/people/actions";
 import { PROFILE_AVATAR_CREATED, PROFILE_AVATAR_DELETED } from "state/profile/actions";
 import { HomeState } from "state/home/state";
-import { ClientAction } from "state/action";
+import { toWsUrl } from "util/url";
 
 const emptyConnection = {
     connecting: false,
@@ -51,7 +53,7 @@ const initialState = {
     roots: []
 };
 
-export default (state: HomeState = initialState, action: ClientAction): HomeState => {
+export default (state: HomeState = initialState, action: WithContext<ClientAction>): HomeState => {
     switch (action.type) {
         case CONNECT_TO_HOME:
             return {
@@ -138,6 +140,12 @@ export default (state: HomeState = initialState, action: ClientAction): HomeStat
 
         case HOME_FRIEND_GROUPS_LOADED:
             return immutable.set(state, "friendGroups", action.payload.friendGroups);
+
+        case FRIEND_GROUP_ADDED:
+            if (action.payload.nodeName === action.context.homeOwnerNameOrUrl) {
+                return immutable.update(state, "friendGroups", fgs => [...fgs, action.payload.details]);
+            }
+            return state;
 
         case PROFILE_AVATAR_CREATED:
             if (state.avatars.loaded) {

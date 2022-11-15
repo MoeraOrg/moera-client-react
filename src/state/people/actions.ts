@@ -1,7 +1,13 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { FriendGroupDetails, PeopleGeneralInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import {
+    FriendGroupDetails,
+    FriendGroupInfo,
+    PeopleGeneralInfo,
+    SubscriberInfo,
+    SubscriptionInfo
+} from "api/node/api-types";
 import { PeopleTab } from "state/people/state";
 
 export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";
@@ -124,6 +130,16 @@ export const friendshipUpdateFailed = (nodeName: string): FriendshipUpdateFailed
     payload: {nodeName}
 });
 
+export const FRIEND_GROUP_ADDED = "FRIEND_GROUP_ADDED";
+export type FriendGroupAddedAction = ActionWithPayload<typeof FRIEND_GROUP_ADDED, {
+    nodeName: string;
+    details: FriendGroupInfo;
+}>;
+export const friendGroupAdded = (nodeName: string, details: FriendGroupInfo): FriendGroupAddedAction => ({
+    type: FRIEND_GROUP_ADDED,
+    payload: {nodeName, details}
+});
+
 export type PeopleAnyAction =
     PeopleGoToTabAction
     | PeopleGeneralLoadAction
@@ -140,4 +156,5 @@ export type PeopleAnyAction =
     | SubscriptionsUnsetAction
     | FriendshipUpdateAction
     | FriendshipUpdatedAction
-    | FriendshipUpdateFailedAction;
+    | FriendshipUpdateFailedAction
+    | FriendGroupAddedAction;

@@ -21,10 +21,13 @@ export const NODE_CHANGE_FRIEND_GROUPS = "NODE_CHANGE_FRIEND_GROUPS";
 export type NodeChangeFriendGroupsAction = ActionWithPayload<typeof NODE_CHANGE_FRIEND_GROUPS, {
     nodeName: string;
     groups: string[];
+    addedGroups: number[];
+    addedGroupTitles: string[];
 }>;
-export const nodeChangeFriendGroups = (nodeName: string, groups: string[]): NodeChangeFriendGroupsAction => ({
+export const nodeChangeFriendGroups = (nodeName: string, groups: string[], addedGroups: number[],
+                                       addedGroupTitles: string[]): NodeChangeFriendGroupsAction => ({
     type: NODE_CHANGE_FRIEND_GROUPS,
-    payload: {nodeName, groups}
+    payload: {nodeName, groups, addedGroups, addedGroupTitles}
 });
 
 export const NODE_CHANGE_FRIEND_GROUPS_FAILED = "NODE_CHANGE_FRIEND_GROUPS_FAILED";

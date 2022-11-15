@@ -25,7 +25,10 @@ import {
     Features,
     FeedInfo,
     FeedSliceInfo,
-    FeedStatus, FriendDescription, FriendGroupInfo, FriendInfo,
+    FeedStatus,
+    FriendDescription,
+    FriendGroupInfo,
+    FriendInfo,
     LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
@@ -325,6 +328,14 @@ export function* searchSubscriptions(nodeName: string | null, type: string | nul
 export function* getFriendGroups(nodeName: string | null): CallApiResult<FriendGroupInfo[]> {
     return yield* callApi({
         nodeName, location: "/people/friends/groups", auth: true, schema: NodeApi.FriendGroupInfoArray
+    });
+}
+
+export function* postFriendGroup(nodeName: string | null, title: string,
+                                 visible: boolean): CallApiResult<FriendGroupInfo> {
+    return yield* callApi({
+        nodeName, location: "/people/friends/groups", method: "POST", auth: true, body: {title, visible},
+        schema: NodeApi.FriendGroupInfo
     });
 }
 

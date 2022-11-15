@@ -9,7 +9,7 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeFriendGroupsDialog, nodeChangeFriendGroups } from "state/friendgroupsdialog/actions";
 import { Button, ModalDialog } from "ui/control";
-import { CheckboxField } from "ui/control/field";
+import { CheckboxField, InputField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
 import { tGender } from "i18n";
@@ -18,12 +18,16 @@ type OuterProps = ConnectedProps<typeof connector>;
 
 interface Values {
     groups: string[];
+    addedGroups: string[];
+    addedGroupTitles: string[];
 }
 
 type Props = OuterProps & FormikProps<Values>;
 
 function FriendGroupsDialog(props: Props) {
-    const {show, nodeName, nodeCard, changing, availableGroups, nameDisplayMode, closeFriendGroupsDialog} = props;
+    const {
+        show, nodeName, nodeCard, changing, availableGroups, nameDisplayMode, closeFriendGroupsDialog, values
+    } = props;
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -44,6 +48,11 @@ function FriendGroupsDialog(props: Props) {
         .filter(fg => fg.title !== "t:friends")
         .sort((a, b) => a.createdAt - b.createdAt);
 
+    const onAddGroup = () => {
+        props.setFieldValue("addedGroupTitles", [...values.addedGroupTitles, ""]);
+        props.setFieldValue("addedGroups", [...values.addedGroups, String(values.addedGroupTitles.length)]);
+    }
+
     return (
         <ModalDialog title={t("change-friend-groups", {name, gender})} onClose={closeFriendGroupsDialog}>
             <Form>
@@ -52,6 +61,14 @@ function FriendGroupsDialog(props: Props) {
                         <CheckboxField<string[]> key={fg.id} name="groups" title={fg.title} value={fg.id}
                                                  isChecked={(v: string[]) => v.includes(fg.id)} anyValue/>
                     )}
+                    {values.addedGroupTitles.map((title, index) =>
+                        <div key={index} className="d-flex">
+                            <CheckboxField<string[]> name="addedGroups" value={String(index)}
+                                                     isChecked={(v: string[]) => v.includes(String(index))} anyValue/>
+                            <InputField name={`addedGroupTitles[${index}]`} maxLength={63}/>
+                        </div>
+                    )}
+                    <Button variant="outline-secondary" size="sm" onClick={onAddGroup}>{t("add-group")}</Button>
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={closeFriendGroupsDialog}>{t("cancel")}</Button>
@@ -65,14 +82,26 @@ function FriendGroupsDialog(props: Props) {
 const friendGroupsDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
-        groups: props.nodeCard?.friendship.groups?.map(fg => fg.id) ?? []
+        groups: props.nodeCard?.friendship.groups?.map(fg => fg.id) ?? [],
+        addedGroups: [],
+        addedGroupTitles: []
     }),
+
+    validate(values: Values) {
+        const errors: string[] = [];
+        values.addedGroups.forEach(g => {
+            const index = parseInt(g);
+            if (!values.addedGroupTitles[index]) {
+                errors[index] = "must-not-empty";
+            }
+        });
+        return errors.length > 0 ? {addedGroupTitles: errors} : {};
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         if (formik.props.nodeName != null) {
-            const friendsId = formik.props.availableGroups.find(fg => fg.title === "t:friends")?.id;
-            const groups = friendsId != null ? [...values.groups, friendsId] : values.groups;
-            formik.props.nodeChangeFriendGroups(formik.props.nodeName, groups);
+            formik.props.nodeChangeFriendGroups(formik.props.nodeName, values.groups,
+                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles);
         }
         formik.setSubmitting(false);
     }
