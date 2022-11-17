@@ -547,9 +547,18 @@ export interface PostingFeatures {
     imageFormats: string[];
 }
 
+export interface FriendOperations {
+    view?: PrincipalValue | null;
+}
+
+export interface FriendGroupAssignment {
+    id: string;
+    operations?: FriendOperations | null;
+}
+
 export interface FriendDescription {
     nodeName: string;
-    groups: string[] | null;
+    groups: FriendGroupAssignment[] | null;
 }
 
 export interface FriendGroupInfo {
@@ -563,6 +572,7 @@ export interface FriendGroupDetails {
     id: string;
     title: string;
     addedAt: number;
+    operations?: FriendOperations | null;
 }
 
 export interface FriendInfo {

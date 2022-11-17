@@ -1,6 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api/node";
+import { FriendGroupAssignment, FriendGroupInfo } from "api/node/api-types";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
@@ -12,7 +13,6 @@ import {
 } from "state/friendgroupsdialog/actions";
 import { friendGroupAdded, friendshipUpdated } from "state/people/actions";
 import { getHomeFriendsId } from "state/home/selectors";
-import { FriendGroupInfo } from "api/node/api-types";
 
 export default [
     executor(NODE_CHANGE_FRIEND_GROUPS, payload => payload.nodeName, nodeChangeFriendGroupsSaga)
@@ -22,10 +22,10 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
     const {nodeName, groups, addedGroups, addedGroupTitles} = action.payload;
     const {homeOwnerNameOrUrl} = action.context;
 
-    const allGroups = [...groups];
+    const allGroups: FriendGroupAssignment[] = groups.map(id => ({id}));
     const friendsId = yield* select(state => getHomeFriendsId(state));
     if (friendsId != null) {
-        allGroups.push(friendsId);
+        allGroups.push({id: friendsId});
     }
 
     const added: FriendGroupInfo[] = [];
@@ -37,7 +37,7 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
             const group = yield* call(Node.postFriendGroup, ":", addedGroupTitles[i], false);
             added.push(group);
             if (addedGroups.includes(i)) {
-                allGroups.push(group.id);
+                allGroups.push({id: group.id});
             }
         }
         const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: allGroups}]);

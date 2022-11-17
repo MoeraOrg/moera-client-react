@@ -1891,6 +1891,17 @@ const FriendGroupDetailsType: JSONSchemaType<API.FriendGroupDetails> = {
         },
         "addedAt": {
             type: "number"
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["id", "title", "addedAt"],

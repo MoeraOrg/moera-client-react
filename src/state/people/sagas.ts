@@ -70,7 +70,7 @@ function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
     const {nodeName, friendGroups} = action.payload;
 
     try {
-        const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: friendGroups}]);
+        const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]);
         yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null))
     } catch (e) {
         yield* put(friendshipUpdateFailed(nodeName));
