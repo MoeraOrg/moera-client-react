@@ -411,7 +411,8 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 istate.assign(["cards", nodeName], {
                     details: cloneDeep(emptyCard.details),
                     people: cloneDeep(emptyCard.people),
-                    subscription: cloneDeep(emptyCard.subscription)
+                    subscription: cloneDeep(emptyCard.subscription),
+                    friendship: cloneDeep(emptyCard.friendship)
                 });
             }
             return istate.value();
