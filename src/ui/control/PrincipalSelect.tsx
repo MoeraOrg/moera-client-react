@@ -60,7 +60,7 @@ function PrincipalSelectItem({value}: PrincipalSelectItemProps) {
     const {t} = useTranslation();
 
     const {icon, title} = getPrincipalDisplay(value);
-    return <><FontAwesomeIcon icon={icon}/>&nbsp;&nbsp;{t(title)}</>;
+    return <><FontAwesomeIcon icon={icon} fixedWidth/>&nbsp;&nbsp;{t(title)}</>;
 }
 
 const connector = connect(
