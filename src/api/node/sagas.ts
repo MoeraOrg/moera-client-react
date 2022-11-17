@@ -332,10 +332,10 @@ export function* getFriendGroups(nodeName: string | null): CallApiResult<FriendG
 }
 
 export function* postFriendGroup(nodeName: string | null, title: string,
-                                 visible: boolean): CallApiResult<FriendGroupInfo> {
+                                 viewPrincipal: string): CallApiResult<FriendGroupInfo> {
     return yield* callApi({
-        nodeName, location: "/people/friends/groups", method: "POST", auth: true, body: {title, visible},
-        schema: NodeApi.FriendGroupInfo
+        nodeName, location: "/people/friends/groups", method: "POST", auth: true,
+        body: {title, operations: {view: viewPrincipal}}, schema: NodeApi.FriendGroupInfo
     });
 }
 

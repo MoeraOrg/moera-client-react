@@ -19,7 +19,7 @@ export default [
 ];
 
 function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsAction>) {
-    const {nodeName, groups, addedGroups, addedGroupTitles} = action.payload;
+    const {nodeName, groups, addedGroups, addedGroupTitles, addedGroupView} = action.payload;
     const {homeOwnerNameOrUrl} = action.context;
 
     const allGroups: FriendGroupAssignment[] = groups.map(id => ({id}));
@@ -34,7 +34,7 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
             if (!addedGroupTitles[i]) {
                 continue;
             }
-            const group = yield* call(Node.postFriendGroup, ":", addedGroupTitles[i], false);
+            const group = yield* call(Node.postFriendGroup, ":", addedGroupTitles[i], addedGroupView[i]);
             added.push(group);
             if (addedGroups.includes(i)) {
                 allGroups.push({id: group.id});

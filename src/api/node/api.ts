@@ -1861,12 +1861,19 @@ const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
         "title": {
             type: "string"
         },
-        "visible": {
-            type: "boolean",
-            nullable: true
-        },
         "createdAt": {
             type: "number"
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "view": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["id", "title", "createdAt"],

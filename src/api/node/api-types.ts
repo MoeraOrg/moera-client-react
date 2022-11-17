@@ -564,8 +564,10 @@ export interface FriendDescription {
 export interface FriendGroupInfo {
     id: string;
     title: string;
-    visible?: boolean | null;
     createdAt: number;
+    operations?: {
+        view?: PrincipalValue | null;
+    } | null;
 }
 
 export interface FriendGroupDetails {

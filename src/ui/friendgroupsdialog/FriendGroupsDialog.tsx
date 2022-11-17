@@ -9,7 +9,7 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeFriendGroupsDialog, nodeChangeFriendGroups } from "state/friendgroupsdialog/actions";
 import { Button, ModalDialog } from "ui/control";
-import { CheckboxField, InputField } from "ui/control/field";
+import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
 import { tGender } from "i18n";
@@ -20,6 +20,7 @@ interface Values {
     groups: string[];
     addedGroups: string[];
     addedGroupTitles: string[];
+    addedGroupView: string[];
 }
 
 type Props = OuterProps & FormikProps<Values>;
@@ -50,6 +51,7 @@ function FriendGroupsDialog(props: Props) {
 
     const onAddGroup = () => {
         props.setFieldValue("addedGroupTitles", [...values.addedGroupTitles, ""]);
+        props.setFieldValue("addedGroupView", [...values.addedGroupView, "admin"]);
         props.setFieldValue("addedGroups", [...values.addedGroups, String(values.addedGroupTitles.length)]);
     }
 
@@ -66,6 +68,8 @@ function FriendGroupsDialog(props: Props) {
                             <CheckboxField<string[]> name="addedGroups" value={String(index)}
                                                      isChecked={(v: string[]) => v.includes(String(index))} anyValue/>
                             <InputField name={`addedGroupTitles[${index}]`} maxLength={63}/>
+                            <PrincipalField name={`addedGroupView[${index}]`} values={["public", "private", "admin"]}
+                                            groupClassName="ms-1"/>
                         </div>
                     )}
                     <Button variant="outline-secondary" size="sm" onClick={onAddGroup}>{t("add-group")}</Button>
@@ -84,7 +88,8 @@ const friendGroupsDialogLogic = {
     mapPropsToValues: (props: OuterProps): Values => ({
         groups: props.nodeCard?.friendship.groups?.map(fg => fg.id) ?? [],
         addedGroups: [],
-        addedGroupTitles: []
+        addedGroupTitles: [],
+        addedGroupView: []
     }),
 
     validate(values: Values) {
@@ -101,7 +106,7 @@ const friendGroupsDialogLogic = {
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         if (formik.props.nodeName != null) {
             formik.props.nodeChangeFriendGroups(formik.props.nodeName, values.groups,
-                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles);
+                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView);
         }
         formik.setSubmitting(false);
     }
