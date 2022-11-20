@@ -46,8 +46,7 @@ function FriendGroupsDialog(props: Props) {
     const name = formatFullName(nodeName, nodeCard?.details.profile.fullName, nameDisplayMode);
     const gender = tGender(nodeCard?.details.profile.gender);
     const available = (availableGroups ?? [])
-        .filter(fg => fg.title !== "t:friends")
-        .sort((a, b) => a.createdAt - b.createdAt);
+        .filter(fg => fg.title !== "t:friends");
 
     const onAddGroup = () => {
         props.setFieldValue("addedGroupTitles", [...values.addedGroupTitles, ""]);

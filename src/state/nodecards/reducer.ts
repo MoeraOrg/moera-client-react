@@ -32,6 +32,7 @@ import {
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
 import {
+    EVENT_HOME_FRIEND_GROUP_DELETED,
     EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_HOME_SUBSCRIBER_ADDED,
@@ -49,6 +50,7 @@ import { WithContext } from "state/action-types";
 import { OWNER_SET } from "state/node/actions";
 import { HOME_OWNER_SET } from "state/home/actions";
 import { FRIENDSHIP_UPDATE, FRIENDSHIP_UPDATE_FAILED, FRIENDSHIP_UPDATED } from "state/people/actions";
+import { FriendGroupDetails } from "api/node/api-types";
 
 const emptyProfileInfo = {
     fullName: null,
@@ -526,6 +528,17 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                     subscription: null
                 })
                 .value();
+        }
+
+        case EVENT_HOME_FRIEND_GROUP_DELETED: {
+            const istate = immutable.wrap(state);
+            for (let nodeName of Object.getOwnPropertyNames(state.cards)) {
+                if (state.cards[nodeName]?.friendship.groups != null) {
+                    istate.update(["cards", nodeName, "friendship", "groups"],
+                        (groups: FriendGroupDetails[]) => groups.filter(fg => fg.id !== action.payload.friendGroupId));
+                }
+            }
+            return istate.value();
         }
 
         default:

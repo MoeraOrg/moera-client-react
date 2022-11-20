@@ -1852,7 +1852,7 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
 
 export const PostingFeatures = schema(PostingFeaturesType);
 
-const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
+export const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
     type: "object",
     properties: {
         "id": {

@@ -3,6 +3,7 @@ import {
     AvatarImageType,
     AvatarInfoType,
     FeedStatusType,
+    FriendGroupInfoType,
     StorySummaryDataType,
     SubscriberInfoType,
     SubscriptionInfoType,
@@ -23,6 +24,9 @@ import {
     EventPacket as APIEventPacket,
     FeaturesUpdatedEvent,
     FeedStatusUpdatedEvent,
+    FriendGroupAddedEvent,
+    FriendGroupDeletedEvent,
+    FriendGroupUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
@@ -1273,6 +1277,44 @@ const PluginsUpdatedEventType: JSONSchemaType<PluginsUpdatedEvent> = {
     required: ["type"]
 }
 
+const FriendGroupAddedEventType: JSONSchemaType<FriendGroupAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "friendGroup": FriendGroupInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "friendGroup"]
+}
+
+const FriendGroupUpdatedEventType: JSONSchemaType<FriendGroupUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "friendGroup": FriendGroupInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "friendGroup"]
+}
+
+const FriendGroupDeletedEventType: JSONSchemaType<FriendGroupDeletedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "friendGroupId": {
+            type: "string"
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "friendGroupId"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1330,7 +1372,10 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "TOKEN_ADDED": schema(TokenAddedEventType),
     "TOKEN_UPDATED": schema(TokenUpdatedEventType),
     "TOKEN_DELETED": schema(TokenDeletedEventType),
-    "PLUGINS_UPDATED": schema(PluginsUpdatedEventType)
+    "PLUGINS_UPDATED": schema(PluginsUpdatedEventType),
+    "FRIEND_GROUP_ADDED": schema(FriendGroupAddedEventType),
+    "FRIEND_GROUP_UPDATED": schema(FriendGroupUpdatedEventType),
+    "FRIEND_GROUP_DELETED": schema(FriendGroupDeletedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

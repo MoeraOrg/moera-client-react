@@ -3,6 +3,7 @@ import {
     AvatarInfo,
     DraftType,
     FeedStatus,
+    FriendGroupInfo,
     PrincipalValue,
     StorySummaryData,
     StoryType,
@@ -297,3 +298,15 @@ export interface TokenDeletedEvent extends BaseEvent<"TOKEN_DELETED"> {
 }
 
 export type PluginsUpdatedEvent = BaseEvent<"PLUGINS_UPDATED">;
+
+interface FriendGroupEvent<T> extends BaseEvent<T> {
+    friendGroup: FriendGroupInfo;
+}
+
+export type FriendGroupAddedEvent = FriendGroupEvent<"FRIEND_GROUP_ADDED">;
+
+export type FriendGroupUpdatedEvent = FriendGroupEvent<"FRIEND_GROUP_UPDATED">;
+
+export interface FriendGroupDeletedEvent extends BaseEvent<"FRIEND_GROUP_DELETED"> {
+    friendGroupId: string;
+}

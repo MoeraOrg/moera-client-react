@@ -14,6 +14,9 @@ import {
     DraftUpdatedEvent,
     FeaturesUpdatedEvent,
     FeedStatusUpdatedEvent,
+    FriendGroupAddedEvent,
+    FriendGroupDeletedEvent,
+    FriendGroupUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
@@ -126,6 +129,9 @@ export const EVENT_HOME_TOKEN_ADDED = "EVENT_HOME_TOKEN_ADDED";
 export const EVENT_HOME_TOKEN_UPDATED = "EVENT_HOME_TOKEN_UPDATED";
 export const EVENT_HOME_TOKEN_DELETED = "EVENT_HOME_TOKEN_DELETED";
 export const EVENT_HOME_PLUGINS_UPDATED = "EVENT_HOME_PLUGINS_UPDATED";
+export const EVENT_HOME_FRIEND_GROUP_ADDED = "EVENT_HOME_FRIEND_GROUP_ADDED";
+export const EVENT_HOME_FRIEND_GROUP_UPDATED = "EVENT_HOME_FRIEND_GROUP_UPDATED";
+export const EVENT_HOME_FRIEND_GROUP_DELETED = "EVENT_HOME_FRIEND_GROUP_DELETED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -193,4 +199,7 @@ export type ClientEventAction =
     | EventAction<TokenAddedEvent>
     | EventAction<TokenUpdatedEvent>
     | EventAction<TokenDeletedEvent>
-    | EventAction<PluginsUpdatedEvent>;
+    | EventAction<PluginsUpdatedEvent>
+    | EventAction<FriendGroupAddedEvent>
+    | EventAction<FriendGroupUpdatedEvent>
+    | EventAction<FriendGroupDeletedEvent>;

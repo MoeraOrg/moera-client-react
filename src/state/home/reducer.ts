@@ -1,8 +1,15 @@
 import cloneDeep from 'lodash.clonedeep';
 import * as immutable from 'object-path-immutable';
 
-import { EVENT_HOME_AVATAR_ADDED, EVENT_HOME_AVATAR_DELETED, EVENT_HOME_AVATAR_ORDERED } from "api/events/actions";
-import { AvatarInfo } from "api/node/api-types";
+import {
+    EVENT_HOME_AVATAR_ADDED,
+    EVENT_HOME_AVATAR_DELETED,
+    EVENT_HOME_AVATAR_ORDERED,
+    EVENT_HOME_FRIEND_GROUP_ADDED,
+    EVENT_HOME_FRIEND_GROUP_DELETED,
+    EVENT_HOME_FRIEND_GROUP_UPDATED
+} from "api/events/actions";
+import { AvatarInfo, FriendGroupInfo } from "api/node/api-types";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import {
@@ -139,11 +146,17 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             return immutable.set(state, "avatars.loading", false);
 
         case HOME_FRIEND_GROUPS_LOADED:
-            return immutable.set(state, "friendGroups", action.payload.friendGroups);
+            return immutable.set(state, "friendGroups",
+                action.payload.friendGroups.sort((a, b) => a.createdAt - b.createdAt));
 
         case FRIEND_GROUP_ADDED:
             if (action.payload.nodeName === action.context.homeOwnerNameOrUrl) {
-                return immutable.update(state, "friendGroups", fgs => [...fgs, action.payload.details]);
+                return immutable.update(
+                    state,
+                    "friendGroups",
+                    (fgs: FriendGroupInfo[]) =>
+                        [...fgs, action.payload.details].sort((a, b) => a.createdAt - b.createdAt)
+                );
             }
             return state;
 
@@ -190,6 +203,30 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 return immutable.set(state, "avatars.avatars", avatars);
             }
             return state;
+
+        case EVENT_HOME_FRIEND_GROUP_ADDED:
+            return immutable.update(
+                state,
+                "friendGroups",
+                (fgs: FriendGroupInfo[]) =>
+                    [...fgs, action.payload.friendGroup].sort((a, b) => a.createdAt - b.createdAt)
+            );
+
+        case EVENT_HOME_FRIEND_GROUP_UPDATED:
+            return immutable.update(
+                state,
+                "friendGroups",
+                (fgs: FriendGroupInfo[]) =>
+                    [...fgs.filter(fg => fg.id !== action.payload.friendGroup.id), action.payload.friendGroup]
+                        .sort((a, b) => a.createdAt - b.createdAt)
+            );
+
+        case EVENT_HOME_FRIEND_GROUP_DELETED:
+            return immutable.update(
+                state,
+                "friendGroups",
+                (fgs: FriendGroupInfo[]) => fgs.filter(fg => fg.id !== action.payload.friendGroupId)
+            );
 
         default:
             return state;
