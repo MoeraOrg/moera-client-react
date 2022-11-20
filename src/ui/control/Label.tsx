@@ -9,6 +9,7 @@ interface Props {
     title?: string;
     titleHtml?: string;
     name?: string;
+    htmlFor?: string;
     className?: string;
     horizontal?: boolean;
     checkbox?: boolean;
@@ -21,7 +22,7 @@ interface Props {
 }
 
 export const Label = ({
-    title, titleHtml, name, className, horizontal, checkbox, undo, reset, setting, onUndo, onReset, children
+    title, titleHtml, name, htmlFor, className, horizontal, checkbox, undo, reset, setting, onUndo, onReset, children
 }: Props) => {
     const {t} = useTranslation();
 
@@ -29,7 +30,7 @@ export const Label = ({
         <>
             {(title || titleHtml) ?
                 <>
-                    <label htmlFor={name} className={cx(
+                    <label htmlFor={htmlFor ?? name} className={cx(
                         className, {
                             "form-label": !horizontal,
                             "col-form-label": horizontal,

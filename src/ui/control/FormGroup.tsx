@@ -10,6 +10,7 @@ interface Props {
     title?: string;
     titleHtml?: string;
     name?: string;
+    labelFor?: string;
     horizontal?: boolean;
     layout?: FormGroupStyle;
     groupClassName?: string;
@@ -23,8 +24,8 @@ interface Props {
 }
 
 export const FormGroup = ({
-    title, titleHtml, name, horizontal = false, layout = "follow", groupClassName, labelClassName, undo = false,
-    reset = false, setting, onUndo, onReset, children
+    title, titleHtml, name, labelFor, horizontal = false, layout = "follow", groupClassName, labelClassName,
+    undo = false, reset = false, setting, onUndo, onReset, children
 }: Props) => (
     <div className={cx(
             "form-group",
@@ -33,7 +34,7 @@ export const FormGroup = ({
             })}>
         {layout === "follow" &&
             <>
-                <Label title={title} titleHtml={titleHtml} name={name} className={labelClassName}
+                <Label title={title} titleHtml={titleHtml} name={name} htmlFor={labelFor} className={labelClassName}
                        horizontal={horizontal} undo={undo} reset={reset} setting={setting} onUndo={onUndo}
                        onReset={onReset}/>
                 {children}
@@ -41,7 +42,7 @@ export const FormGroup = ({
         }
         {layout === "left" &&
             <>
-                <Label title={title} titleHtml={titleHtml} name={name} className={labelClassName}
+                <Label title={title} titleHtml={titleHtml} name={name} htmlFor={labelFor} className={labelClassName}
                        horizontal={horizontal} undo={undo} reset={reset} setting={setting} onUndo={onUndo}
                        onReset={onReset}>
                     {children}
@@ -51,7 +52,7 @@ export const FormGroup = ({
         {layout === "right" &&
             <div className="form-check">
                 {children}
-                <Label title={title} titleHtml={titleHtml} name={name} className={labelClassName}
+                <Label title={title} titleHtml={titleHtml} name={name} htmlFor={labelFor} className={labelClassName}
                        horizontal={horizontal} checkbox undo={undo} reset={reset} setting={setting} onUndo={onUndo}
                        onReset={onReset}/>
             </div>

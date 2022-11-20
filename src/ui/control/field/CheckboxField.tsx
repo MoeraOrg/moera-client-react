@@ -6,6 +6,7 @@ import { useUndoableField } from "ui/control/field/undoable-field";
 import "./CheckboxField.css";
 
 interface Props<V> {
+    id?: string;
     name: string;
     title?: string;
     titleHtml?: string;
@@ -23,8 +24,8 @@ interface Props<V> {
 }
 
 export function CheckboxField<V = boolean>({
-    name, title, titleHtml, isChecked, value: inputValue, disabled, groupClassName, labelClassName, autoFocus, single,
-    anyValue, initialValue, defaultValue, setting
+    id, name, title, titleHtml, isChecked, value: inputValue, disabled, groupClassName, labelClassName, autoFocus,
+    single, anyValue, initialValue, defaultValue, setting
 }: Props<V>) {
     const inputDom = useRef<HTMLInputElement>(null);
 
@@ -42,6 +43,7 @@ export function CheckboxField<V = boolean>({
             title={title}
             titleHtml={titleHtml}
             name={name}
+            labelFor={id}
             labelClassName={labelClassName}
             groupClassName={groupClassName}
             layout={single ? "follow" : "right"}
@@ -57,7 +59,7 @@ export function CheckboxField<V = boolean>({
                 value={inputValue}
                 onChange={onChange}
                 onBlur={onBlur}
-                id={name}
+                id={id ?? name}
                 type="checkbox"
                 disabled={disabled}
                 className={cx({

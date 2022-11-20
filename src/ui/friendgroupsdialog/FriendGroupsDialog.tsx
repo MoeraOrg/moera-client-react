@@ -59,8 +59,8 @@ function FriendGroupsDialog(props: Props) {
             <Form>
                 <div className="modal-body">
                     {available.map(fg =>
-                        <CheckboxField<string[]> key={fg.id} name="groups" title={fg.title} value={fg.id}
-                                                 isChecked={(v: string[]) => v.includes(fg.id)} anyValue/>
+                        <CheckboxField<string[]> key={fg.id} id={`groups_${fg.id}`} name="groups" title={fg.title}
+                                                 value={fg.id} isChecked={(v: string[]) => v.includes(fg.id)} anyValue/>
                     )}
                     {values.addedGroupTitles.map((title, index) =>
                         <div key={index} className="d-flex">
