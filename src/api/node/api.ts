@@ -1887,7 +1887,7 @@ export const FriendGroupInfoArray = schema({
     items: FriendGroupInfoType
 } as JSONSchemaType<API.FriendGroupInfo[]>);
 
-const FriendGroupDetailsType: JSONSchemaType<API.FriendGroupDetails> = {
+export const FriendGroupDetailsType: JSONSchemaType<API.FriendGroupDetails> = {
     type: "object",
     properties: {
         "id": {

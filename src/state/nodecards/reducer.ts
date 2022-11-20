@@ -33,6 +33,7 @@ import {
 } from "state/feeds/actions";
 import {
     EVENT_HOME_FRIEND_GROUP_DELETED,
+    EVENT_HOME_FRIENDSHIP_UPDATED,
     EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_HOME_SUBSCRIBER_ADDED,
@@ -539,6 +540,16 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 }
             }
             return istate.value();
+        }
+
+        case EVENT_HOME_FRIENDSHIP_UPDATED: {
+            const {nodeName, friendGroups} = action.payload;
+            const {istate, card} = getCard(state, nodeName);
+            if (card.friendship.loaded) {
+                istate.set(["cards", nodeName, "friendship", "groups"], friendGroups);
+                return istate.value();
+            }
+            return state;
         }
 
         default:

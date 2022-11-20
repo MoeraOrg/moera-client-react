@@ -17,6 +17,7 @@ import {
     FriendGroupAddedEvent,
     FriendGroupDeletedEvent,
     FriendGroupUpdatedEvent,
+    FriendshipUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
@@ -132,6 +133,7 @@ export const EVENT_HOME_PLUGINS_UPDATED = "EVENT_HOME_PLUGINS_UPDATED";
 export const EVENT_HOME_FRIEND_GROUP_ADDED = "EVENT_HOME_FRIEND_GROUP_ADDED";
 export const EVENT_HOME_FRIEND_GROUP_UPDATED = "EVENT_HOME_FRIEND_GROUP_UPDATED";
 export const EVENT_HOME_FRIEND_GROUP_DELETED = "EVENT_HOME_FRIEND_GROUP_DELETED";
+export const EVENT_HOME_FRIENDSHIP_UPDATED = "EVENT_HOME_FRIENDSHIP_UPDATED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -202,4 +204,5 @@ export type ClientEventAction =
     | EventAction<PluginsUpdatedEvent>
     | EventAction<FriendGroupAddedEvent>
     | EventAction<FriendGroupUpdatedEvent>
-    | EventAction<FriendGroupDeletedEvent>;
+    | EventAction<FriendGroupDeletedEvent>
+    | EventAction<FriendshipUpdatedEvent>;

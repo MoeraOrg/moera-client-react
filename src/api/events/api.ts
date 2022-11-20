@@ -1,3 +1,5 @@
+import { JSONSchemaType, ValidateFunction } from 'ajv';
+
 import schema from "api/schema";
 import {
     AvatarImageType,
@@ -7,7 +9,8 @@ import {
     StorySummaryDataType,
     SubscriberInfoType,
     SubscriptionInfoType,
-    TokenInfoType
+    TokenInfoType,
+    FriendGroupDetailsType
 } from "api/node/api";
 import {
     AvatarAddedEvent,
@@ -26,7 +29,7 @@ import {
     FeedStatusUpdatedEvent,
     FriendGroupAddedEvent,
     FriendGroupDeletedEvent,
-    FriendGroupUpdatedEvent,
+    FriendGroupUpdatedEvent, FriendshipUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
@@ -72,7 +75,6 @@ import {
     TokenDeletedEvent,
     TokenUpdatedEvent
 } from "api/events/api-types";
-import { JSONSchemaType, ValidateFunction } from "ajv";
 
 const EventPacketType: JSONSchemaType<APIEventPacket> = {
     type: "object",
@@ -1315,6 +1317,25 @@ const FriendGroupDeletedEventType: JSONSchemaType<FriendGroupDeletedEvent> = {
     required: ["type", "friendGroupId"]
 }
 
+const FriendshipUpdatedEventType: JSONSchemaType<FriendshipUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "nodeName": {
+            type: "string"
+        },
+        "friendGroups": {
+            type: "array",
+            items: FriendGroupDetailsType,
+            nullable: true
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "nodeName"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1375,7 +1396,8 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PLUGINS_UPDATED": schema(PluginsUpdatedEventType),
     "FRIEND_GROUP_ADDED": schema(FriendGroupAddedEventType),
     "FRIEND_GROUP_UPDATED": schema(FriendGroupUpdatedEventType),
-    "FRIEND_GROUP_DELETED": schema(FriendGroupDeletedEventType)
+    "FRIEND_GROUP_DELETED": schema(FriendGroupDeletedEventType),
+    "FRIENDSHIP_UPDATED": schema(FriendshipUpdatedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

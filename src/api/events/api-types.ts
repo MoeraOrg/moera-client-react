@@ -2,7 +2,7 @@ import {
     AvatarImage,
     AvatarInfo,
     DraftType,
-    FeedStatus,
+    FeedStatus, FriendGroupDetails,
     FriendGroupInfo,
     PrincipalValue,
     StorySummaryData,
@@ -309,4 +309,9 @@ export type FriendGroupUpdatedEvent = FriendGroupEvent<"FRIEND_GROUP_UPDATED">;
 
 export interface FriendGroupDeletedEvent extends BaseEvent<"FRIEND_GROUP_DELETED"> {
     friendGroupId: string;
+}
+
+export interface FriendshipUpdatedEvent extends BaseEvent<"FRIENDSHIP_UPDATED"> {
+    nodeName: string;
+    friendGroups?: FriendGroupDetails[] | null;
 }
