@@ -5,12 +5,12 @@ import {
     AvatarImageType,
     AvatarInfoType,
     FeedStatusType,
+    FriendGroupDetailsType,
     FriendGroupInfoType,
     StorySummaryDataType,
     SubscriberInfoType,
     SubscriptionInfoType,
-    TokenInfoType,
-    FriendGroupDetailsType
+    TokenInfoType
 } from "api/node/api";
 import {
     AvatarAddedEvent,
@@ -25,11 +25,11 @@ import {
     DraftDeletedEvent,
     DraftUpdatedEvent,
     EventPacket as APIEventPacket,
-    FeaturesUpdatedEvent,
     FeedStatusUpdatedEvent,
     FriendGroupAddedEvent,
     FriendGroupDeletedEvent,
-    FriendGroupUpdatedEvent, FriendshipUpdatedEvent,
+    FriendGroupUpdatedEvent,
+    FriendshipUpdatedEvent,
     NodeNameChangedEvent,
     NodeSettingsChangedEvent,
     NodeSettingsMetaChangedEvent,
@@ -290,17 +290,6 @@ const NodeNameChangedEventType: JSONSchemaType<NodeNameChangedEvent> = {
     },
     additionalProperties: false,
     required: ["type", "name"]
-};
-
-const FeaturesUpdatedEventType: JSONSchemaType<FeaturesUpdatedEvent> = {
-    type: "object",
-    properties: {
-        "type": {
-            type: "string"
-        }
-    },
-    additionalProperties: false,
-    required: ["type"]
 };
 
 const RemotePostingVerifiedEventType: JSONSchemaType<RemotePostingVerifiedEvent> = {
@@ -1350,7 +1339,6 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "POSTING_COMMENTS_CHANGED": schema(PostingCommentsChangedEventType),
     "REGISTERED_NAME_OPERATION_STATUS": schema(RegisteredNameOperationStatusEventType),
     "NODE_NAME_CHANGED": schema(NodeNameChangedEventType),
-    "FEATURES_UPDATED": schema(FeaturesUpdatedEventType),
     "REMOTE_POSTING_VERIFIED": schema(RemotePostingVerifiedEventType),
     "REMOTE_POSTING_VERIFICATION_FAILED": schema(RemotePostingVerificationFailedEventType),
     "REMOTE_REACTION_ADDED": schema(RemoteReactionAddedEventType),
@@ -1406,7 +1394,9 @@ export const ALLOWED_SELF_EVENTS = new Set([
     "STORY_UPDATED",
     "FEED_STATUS_UPDATED",
     "NODE_NAME_CHANGED",
-    "FEATURES_UPDATED",
     "SUBSCRIBERS_TOTAL_CHANGED",
-    "SUBSCRIPTIONS_TOTAL_CHANGED"
+    "SUBSCRIPTIONS_TOTAL_CHANGED",
+    "FRIEND_GROUP_ADDED",
+    "FRIEND_GROUP_UPDATED",
+    "FRIEND_GROUP_DELETED"
 ]);

@@ -50,8 +50,6 @@ export interface NodeNameChangedEvent extends BaseEvent<"NODE_NAME_CHANGED"> {
     avatar?: AvatarImage | null;
 }
 
-export type FeaturesUpdatedEvent = BaseEvent<"FEATURES_UPDATED">;
-
 export interface FeedStatusUpdatedEvent extends BaseEvent<"FEED_STATUS_UPDATED"> {
     feedName: string;
     status: FeedStatus;

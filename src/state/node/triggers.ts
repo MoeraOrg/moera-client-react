@@ -2,13 +2,22 @@ import i18n from 'i18next';
 
 import { trigger } from "state/trigger";
 import { NodeNameChangedEvent } from "api/events/api-types";
-import { EVENT_NODE_FEATURES_UPDATED, EVENT_NODE_NODE_NAME_CHANGED, EventAction } from "api/events/actions";
+import {
+    EVENT_NODE_FRIEND_GROUP_ADDED,
+    EVENT_NODE_FRIEND_GROUP_DELETED,
+    EVENT_NODE_FRIEND_GROUP_UPDATED,
+    EVENT_NODE_NODE_NAME_CHANGED,
+    EVENT_NODE_NODE_SETTINGS_CHANGED,
+    EVENT_NODE_PLUGINS_UPDATED,
+    EventAction
+} from "api/events/actions";
 import { INIT_FROM_LOCATION, newLocation, updateLocation } from "state/navigation/actions";
 import { nodeFeaturesLoad, OWNER_SET, OWNER_SWITCH_FAILED, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
-import { getOwnerName, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
+import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
 import { NAMING_NAME_LOADED, NamingNameLoadedAction } from "state/naming/actions";
 import { PULSE_6H } from "state/pulse/actions";
 import { messageBox } from "state/messagebox/actions";
+import { SETTINGS_PLUGINS_DELETED, SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
 
 export default [
     trigger(INIT_FROM_LOCATION, isAtNode, nodeFeaturesLoad),
@@ -29,5 +38,16 @@ export default [
             ownerSet(signal.payload.name, false, signal.payload.fullName ?? null, signal.payload.gender ?? null,
                 signal.payload.title ?? null, signal.payload.avatar ?? null)
     ),
-    trigger(EVENT_NODE_FEATURES_UPDATED, true, nodeFeaturesLoad)
+    trigger(
+        [
+            EVENT_NODE_FRIEND_GROUP_ADDED,
+            EVENT_NODE_FRIEND_GROUP_UPDATED,
+            EVENT_NODE_FRIEND_GROUP_DELETED,
+            EVENT_NODE_PLUGINS_UPDATED,
+            EVENT_NODE_NODE_SETTINGS_CHANGED
+        ],
+        true,
+        nodeFeaturesLoad
+    ),
+    trigger([SETTINGS_PLUGINS_DELETED, SETTINGS_UPDATE_SUCCEEDED], isAtHomeNode, nodeFeaturesLoad)
 ]
