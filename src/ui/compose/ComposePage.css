@@ -57,6 +57,10 @@
     border-color: var(--bs-gray-400);
 }
 
+.composer .text-editable .node-name:hover {
+    text-decoration: unset;
+}
+
 .composer .text-editable.disabled:hover {
     border-color: transparent;
 }
