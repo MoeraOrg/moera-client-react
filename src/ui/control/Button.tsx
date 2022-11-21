@@ -40,10 +40,10 @@ export function Button({variant, size, block = false, borderless = false, invisi
     return (
         <button type={type} className={klass} disabled={loading || disabled} {...props}
                 ref={composeRefs(domRef, innerRef)}>
-            <LoadingInline active={loading}/>
             {!(loading && Browser.isTinyScreen()) &&
-                <>{props.children}{loading && "…"}</>
+                <>{props.children}</>
             }
+            <LoadingInline active={loading}/>
         </button>
     );
 }
