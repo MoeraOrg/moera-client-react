@@ -4,7 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { disconnectFromHome } from "state/home/actions";
 import { getHomeRootLocation } from "state/home/selectors";
+import { confirmBox } from "state/confirmbox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
 import { Browser } from "ui/browser";
@@ -17,7 +19,9 @@ type Props = {
     hide: () => void;
 } & ConnectedProps<typeof connector>;
 
-function Connections({hide, location, owner, roots, openConnectDialog, openSignUpDialog}: Props) {
+function Connections({
+    hide, location, login, owner, roots, openConnectDialog, openSignUpDialog, confirmBox, disconnectFromHome
+}: Props) {
     const {t} = useTranslation();
 
     const onAddClick = () => {
@@ -39,15 +43,33 @@ function Connections({hide, location, owner, roots, openConnectDialog, openSignU
         Browser.deleteData(location);
     };
 
+    const onConfirmed = () => {
+        if (location == null || login == null) {
+            return;
+        }
+        Browser.deleteData(location);
+        disconnectFromHome(location, login);
+    };
+
+    const onDisconnectActive = () =>
+        confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger");
+
     return (
         <div id="connections">
             {roots.map(root => (
                 root.url === location ?
-                    <div className="connection active" key={root.url}>
-                        <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
-                                  linked={false} popup={false}/><br/>
-                        {location}<br/>
-                        <span className="connected">{t("connected")}</span>
+                    <div className="connection-item active">
+                        <div className="connection" key={root.url}>
+                            <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
+                                      linked={false} popup={false}/><br/>
+                            {location}<br/>
+                            <span className="connected">{t("connected")}</span>
+                        </div>
+                        <div className="connection-buttons">
+                            <div className="disconnect" title={t("disconnect")} onClick={onDisconnectActive}>
+                                <FontAwesomeIcon icon="sign-out-alt"/>
+                            </div>
+                        </div>
                     </div>
                 :
                     <ConnectionItem key={root.url} name={root.name} url={root.url}
@@ -67,10 +89,11 @@ function Connections({hide, location, owner, roots, openConnectDialog, openSignU
 const connector = connect(
     (state: ClientState) => ({
         location: getHomeRootLocation(state),
+        login: state.home.login,
         owner: state.home.owner,
         roots: state.home.roots
     }),
-    { openConnectDialog, openSignUpDialog }
+    { openConnectDialog, openSignUpDialog, confirmBox, disconnectFromHome }
 );
 
 export default connector(Connections);

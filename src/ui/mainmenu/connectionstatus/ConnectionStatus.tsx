@@ -16,7 +16,6 @@ import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
-import DisconnectButton from "ui/mainmenu/connectionstatus/DisconnectButton";
 import ConnectDialog from "ui/connectdialog/ConnectDialog";
 import "./ConnectionStatus.css";
 
@@ -53,7 +52,6 @@ function ConnectionButtons({atNode, connecting,  connected, showNavigator, openC
             <SettingsButton/>
             <HomeButton/>
             <ConnectionsButton/>
-            <DisconnectButton/>
         </span>
     );
 }

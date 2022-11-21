@@ -2,23 +2,26 @@
     display: flex;
 }
 
+#connections .connection-item.active {
+    background-color: var(--highlight-cyan);
+}
+
+#connections .connection-item:hover {
+    background-color: var(--highlight);
+}
+
+#connections .connection-item.active:hover {
+    background-color: var(--highlight-cyan);
+}
+
 #connections .connection {
     flex: auto;
     padding: 0.5em;
     cursor: pointer;
 }
 
-#connections .connection.active {
+#connections .connection-item.active .connection {
     cursor: default;
-    background-color: var(--highlight-cyan);
-}
-
-#connections .connection:hover {
-    background-color: var(--highlight);
-}
-
-#connections .connection.active:hover {
-    background-color: var(--highlight-cyan);
 }
 
 #connections .connection .node-name {
