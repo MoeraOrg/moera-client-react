@@ -1,7 +1,7 @@
 import { call, put, select, spawn } from 'typed-redux-saga';
 
 import { executor } from "state/executor";
-import { Node } from "api";
+import { Node, RegisteredName } from "api";
 import { errorThrown } from "state/error/actions";
 import {
     CONTACTS_LOAD,
@@ -34,8 +34,9 @@ function* contactsFindName(nodeName: string) {
     if (hasName) {
         return;
     }
-    const details = yield* call(getNameDetails, nodeName, true);
+    const registeredName = new RegisteredName(nodeName).format();
+    const details = yield* call(getNameDetails, registeredName, true);
     if (details.loaded && details.nodeUri != null) {
-        yield* put(contactsNameFound(details.nodeName ?? nodeName));
+        yield* put(contactsNameFound(details.nodeName ?? registeredName));
     }
 }
