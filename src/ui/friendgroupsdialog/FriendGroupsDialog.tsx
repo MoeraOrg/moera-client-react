@@ -13,6 +13,7 @@ import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
 import { tGender } from "i18n";
+import { FriendGroupInfo } from "api/node/api-types";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -24,6 +25,8 @@ interface Values {
 }
 
 type Props = OuterProps & FormikProps<Values>;
+
+type TitledFriendGroupInfo = Omit<FriendGroupInfo, "title"> & { title: string };
 
 function FriendGroupsDialog(props: Props) {
     const {
@@ -58,7 +61,7 @@ function FriendGroupsDialog(props: Props) {
         <ModalDialog title={t("change-friend-groups", {name, gender})} onClose={closeFriendGroupsDialog}>
             <Form>
                 <div className="modal-body">
-                    {available.map(fg =>
+                    {available.filter((fg): fg is TitledFriendGroupInfo => fg.title != null).map(fg =>
                         <CheckboxField<string[]> key={fg.id} id={`groups_${fg.id}`} name="groups" title={fg.title}
                                                  value={fg.id} isChecked={(v: string[]) => v.includes(fg.id)} anyValue/>
                     )}

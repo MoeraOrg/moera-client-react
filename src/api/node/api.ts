@@ -1859,7 +1859,8 @@ export const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
             type: "string"
         },
         "title": {
-            type: "string"
+            type: "string",
+            nullable: true,
         },
         "createdAt": {
             type: "number"
@@ -1876,7 +1877,7 @@ export const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
             additionalProperties: false
         }
     },
-    required: ["id", "title", "createdAt"],
+    required: ["id", "createdAt"],
     additionalProperties: false
 };
 
@@ -1894,7 +1895,8 @@ export const FriendGroupDetailsType: JSONSchemaType<API.FriendGroupDetails> = {
             type: "string"
         },
         "title": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "addedAt": {
             type: "number"
@@ -1911,7 +1913,7 @@ export const FriendGroupDetailsType: JSONSchemaType<API.FriendGroupDetails> = {
             additionalProperties: false
         }
     },
-    required: ["id", "title", "addedAt"],
+    required: ["id", "addedAt"],
     additionalProperties: false
 };
 

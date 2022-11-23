@@ -563,7 +563,7 @@ export interface FriendDescription {
 
 export interface FriendGroupInfo {
     id: string;
-    title: string;
+    title?: string | null;
     createdAt: number;
     operations?: {
         view?: PrincipalValue | null;
@@ -572,7 +572,7 @@ export interface FriendGroupInfo {
 
 export interface FriendGroupDetails {
     id: string;
-    title: string;
+    title?: string | null;
     addedAt: number;
     operations?: FriendOperations | null;
 }
