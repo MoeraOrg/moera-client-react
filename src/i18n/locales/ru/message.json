@@ -163,6 +163,7 @@
   "hide" : "Скрыть",
   "hide-my-subscription" : "Скрыть мою подписку",
   "hide-subscription-to-me" : "Скрыть подписку на меня",
+  "ignore" : "Игнорировать",
   "image" : "Картинка",
   "image-alignment" : {
     "center" : "По центру",
@@ -665,6 +666,7 @@
   "your-profile" : "Ваш профиль",
   "your-settings" : "Ваши настройки",
   "your-timeline" : "Ваша хроника",
+  "you-subscribed" : "Вы подписаны",
   "zoom-in" : "Увеличить",
   "zoom-out" : "Уменьшить"
 }

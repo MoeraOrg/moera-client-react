@@ -44,10 +44,11 @@ export const FEED_SUBSCRIBE = "FEED_SUBSCRIBE";
 export type FeedSubscribeAction = ActionWithPayload<typeof FEED_SUBSCRIBE, {
     nodeName: string;
     feedName: string;
+    storyId?: string | null;
 }>;
-export const feedSubscribe = (nodeName: string, feedName: string): FeedSubscribeAction => ({
+export const feedSubscribe = (nodeName: string, feedName: string, storyId?: string | null): FeedSubscribeAction => ({
     type: FEED_SUBSCRIBE,
-    payload: {nodeName, feedName}
+    payload: {nodeName, feedName, storyId}
 });
 
 export const FEED_SUBSCRIBED = "FEED_SUBSCRIBED";

@@ -22,6 +22,16 @@ export const storyReadingUpdate = (feedName: string, id: string, read: boolean):
     payload: {feedName, id, read}
 });
 
+export const STORY_SATISFY = "STORY_SATISFY";
+export type StorySatisfyAction = ActionWithPayload<typeof STORY_SATISFY, {
+    feedName: string;
+    id: string;
+}>;
+export const storySatisfy = (feedName: string, id: string): StorySatisfyAction => ({
+    type: STORY_SATISFY,
+    payload: {feedName, id}
+});
+
 export const STORY_ADDED = "STORY_ADDED";
 export type StoryAddedAction = ActionWithPayload<typeof STORY_ADDED, {
     story: StoryInfo;
@@ -52,6 +62,7 @@ export const storyUpdated = (story: StoryInfo): StoryUpdatedAction => ({
 export type StoriesAnyAction =
     StoryPinningUpdateAction
     | StoryReadingUpdateAction
+    | StorySatisfyAction
     | StoryAddedAction
     | StoryDeletedAction
     | StoryUpdatedAction;

@@ -8,6 +8,7 @@ import { LoadingInline } from "ui/control";
 type Props = {
     variant: string;
     size?: "sm" | "lg";
+    compact?: boolean;
     block?: boolean;
     borderless?: boolean;
     invisible?: boolean;
@@ -15,8 +16,10 @@ type Props = {
     innerRef?: React.Ref<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function Button({variant, size, block = false, borderless = false, invisible = false, loading = false,
-                        disabled = false, className = "", type = "button", autoFocus, innerRef, ...props}: Props) {
+export function Button({
+    variant, size, compact = false, block = false, borderless = false, invisible = false, loading = false,
+    disabled = false, className = "", type = "button", autoFocus, innerRef, ...props
+}: Props) {
     const domRef = useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
@@ -40,7 +43,7 @@ export function Button({variant, size, block = false, borderless = false, invisi
     return (
         <button type={type} className={klass} disabled={loading || disabled} {...props}
                 ref={composeRefs(domRef, innerRef)}>
-            {!(loading && Browser.isTinyScreen()) &&
+            {!(loading && (compact || Browser.isTinyScreen())) &&
                 <>{props.children}</>
             }
             <LoadingInline active={loading}/>

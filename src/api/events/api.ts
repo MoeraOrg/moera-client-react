@@ -565,6 +565,10 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             type: "boolean",
             nullable: true
         },
+        "satisfied": {
+            type: "boolean",
+            nullable: true
+        },
         "summaryNodeName": {
             type: "string",
             nullable: true
@@ -685,6 +689,10 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             nullable: true
         },
         "read": {
+            type: "boolean",
+            nullable: true
+        },
+        "satisfied": {
             type: "boolean",
             nullable: true
         },

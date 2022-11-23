@@ -1703,6 +1703,10 @@ const StoryInfoType: JSONSchemaType<API.EncodedStoryInfo> = {
             type: "boolean",
             nullable: true
         },
+        "satisfied": {
+            type: "boolean",
+            nullable: true
+        },
         "posting": {
             ...PartialPostingInfoType,
             nullable: true

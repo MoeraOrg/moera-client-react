@@ -1,6 +1,6 @@
 #instants .instant {
     display: grid;
-    grid-template: auto min-content / calc(40px + .25rem) auto 1.5em;
+    grid-template: auto min-content min-content / calc(40px + .25rem) auto 1.5em;
     border-bottom: 1px solid var(--bs-gray-200);
     overflow-wrap: anywhere;
     padding: .2rem .5rem;
@@ -64,6 +64,26 @@
 
 #instants .instant .footer .date {
     color: var(--bs-gray-500);
+}
+
+#instants .instant .buttons {
+    grid-row: 3 / 4;
+    grid-column: 2 / 3;
+    margin-top: .3em;
+    margin-bottom: .3em;
+}
+
+#instants .instant .buttons BUTTON:not(:last-child) {
+    margin-right: .3em;
+}
+
+#instants .instant .buttons .message {
+    color: var(--bs-gray-700);
+}
+
+#instants .instant .buttons .message .check {
+    margin-right: .25em;
+    color: var(--bs-success);
 }
 
 #instants .instant .sidebar {

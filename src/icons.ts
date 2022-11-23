@@ -13,6 +13,7 @@ import {
     faCaretSquareDown,
     faCertificate,
     faChartBar,
+    faCheck,
     faChevronCircleDown,
     faChevronDown,
     faCircle as faCircleSolid,
@@ -106,6 +107,7 @@ export default function initIconLibrary() {
     library.add(faCaretSquareDown);
     library.add(faCertificate);
     library.add(faChartBar);
+    library.add(faCheck);
     library.add(faChevronCircleDown);
     library.add(faChevronDown);
     library.add(faCircle);

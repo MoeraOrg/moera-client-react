@@ -4,8 +4,11 @@ import { Node } from "api";
 import { PrincipalValue } from "api/node/api-types";
 import {
     FEED_FUTURE_SLICE_LOAD,
+    FEED_FUTURE_SLICE_SET,
     FEED_GENERAL_LOAD,
     FEED_PAST_SLICE_LOAD,
+    FEED_PAST_SLICE_SET,
+    FEED_SLICE_UPDATE,
     FEED_STATUS_LOAD,
     FEED_STATUS_SET,
     FEED_STATUS_UPDATE,
@@ -16,14 +19,17 @@ import {
     FeedFutureSliceLoadAction,
     feedFutureSliceLoadFailed,
     feedFutureSliceSet,
+    FeedFutureSliceSetAction,
     FeedGeneralLoadAction,
     feedGeneralLoadFailed,
     feedGeneralSet,
     FeedPastSliceLoadAction,
     feedPastSliceLoadFailed,
     feedPastSliceSet,
+    FeedPastSliceSetAction,
     FEEDS_UPDATE,
     feedSliceUpdate,
+    FeedSliceUpdateAction,
     FeedStatusLoadAction,
     feedStatusLoadFailed,
     feedStatusSet,
@@ -46,9 +52,11 @@ import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { introduced } from "state/init-selectors";
 import { executor } from "state/executor";
+import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
+import { getInstantTypeDetails } from "ui/instant/instant-types";
 import { toAvatarDescription } from "util/avatar";
 
 export default [
@@ -77,7 +85,12 @@ export default [
     executor(FEED_PAST_SLICE_LOAD, payload => payload.feedName, feedPastSliceLoadSaga, introduced),
     executor(FEED_FUTURE_SLICE_LOAD, payload => payload.feedName, feedFutureSliceLoadSaga, introduced),
     executor(FEED_STATUS_SET, payload => payload.feedName, feedStatusSetSaga, introduced),
-    executor(FEEDS_UPDATE, "", feedsUpdateSaga, introduced)
+    executor(FEEDS_UPDATE, "", feedsUpdateSaga, introduced),
+    executor(FEED_PAST_SLICE_SET, null, feedExecuteSliceButtonsActions),
+    executor(FEED_FUTURE_SLICE_SET, null, feedExecuteSliceButtonsActions),
+    executor(FEED_SLICE_UPDATE, null, feedExecuteSliceButtonsActions),
+    executor(STORY_ADDED, null, feedExecuteButtonsActions),
+    executor(STORY_UPDATED, null, feedExecuteButtonsActions)
 ];
 
 function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
@@ -92,12 +105,15 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
 }
 
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
-    const {nodeName, feedName} = action.payload;
+    const {nodeName, feedName, storyId} = action.payload;
     try {
         const whoAmI = yield* call(Node.getWhoAmI, nodeName); // Just for not to wait for backend to update this
         const subscription = yield* call(Node.postFeedSubscription, ":", nodeName, whoAmI.fullName ?? null,
             whoAmI.gender ?? null, toAvatarDescription(whoAmI.avatar), feedName);
         yield* put(feedSubscribed(nodeName, subscription));
+        if (storyId != null) {
+            yield* put(storySatisfy(feedName, storyId));
+        }
     } catch (e) {
         yield* put(feedSubscribeFailed(nodeName, feedName));
         yield* put(errorThrown(e));
@@ -264,5 +280,30 @@ function* feedUpdateSlice(feedName: string, before: number, after: number) {
         }
     } catch (e) {
         yield* put(errorThrown(e));
+    }
+}
+
+function* feedExecuteSliceButtonsActions(
+    action: FeedPastSliceSetAction | FeedFutureSliceSetAction | FeedSliceUpdateAction
+) {
+    for (const story of action.payload.stories) {
+        const details = getInstantTypeDetails(story.storyType);
+        if (details?.buttonsAction != null) {
+            const action = details.buttonsAction(story);
+            if (action != null) {
+                yield* put(action);
+            }
+        }
+    }
+}
+
+function* feedExecuteButtonsActions(action: StoryAddedAction | StoryUpdatedAction) {
+    const {story} = action.payload;
+    const details = getInstantTypeDetails(story.storyType);
+    if (details?.buttonsAction != null) {
+        const action = details.buttonsAction(story);
+        if (action != null) {
+            yield* put(action);
+        }
     }
 }

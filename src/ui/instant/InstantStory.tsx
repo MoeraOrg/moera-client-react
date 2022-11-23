@@ -12,7 +12,7 @@ import { ExtStoryInfo } from "state/feeds/state";
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
 import { Avatar } from "ui/control";
-import { getInstantTarget } from "ui/instant/instant-types";
+import { getInstantTarget, getInstantTypeDetails } from "ui/instant/instant-types";
 import InstantHtml from "ui/instant/InstantHtml";
 import "./InstantStory.css";
 
@@ -36,6 +36,7 @@ function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: P
     const onEnvelope = () => storyReadingUpdate(":instant", story.id, !story.read);
 
     const {nodeName, href} = getInstantTarget(story);
+    const buttons = getInstantTypeDetails(story.storyType)?.buttons;
     const trackingId = story.read ? null : story.trackingId;
 
     const publishDate = fromUnixTime(story.publishedAt);
@@ -56,6 +57,7 @@ function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: P
                     {formatDistanceToNow(publishDate, {locale: getDateFnsLocale()})}
                 </time>
             </div>
+            {buttons && React.createElement(buttons, {story})}
             <div className="sidebar">
                 <span className="envelope" title={story.read ? t("mark-unread") : t("mark-read")}
                       onClick={onEnvelope}>

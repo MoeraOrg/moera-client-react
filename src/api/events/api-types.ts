@@ -166,6 +166,7 @@ export interface StoryEvent<T> extends BaseEvent<T> {
     postingId?: string | null;
     viewed?: boolean | null;
     read?: boolean | null;
+    satisfied?: boolean | null;
     summaryNodeName?: string | null;
     summaryFullName?: string | null;
     summaryAvatar?: AvatarImage | null,

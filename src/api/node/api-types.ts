@@ -454,6 +454,7 @@ export interface StoryAttributes {
     pinned?: boolean | null;
     viewed?: boolean | null;
     read?: boolean | null;
+    satisfied?: boolean | null;
 }
 
 export interface StorySummaryNode {
@@ -501,6 +502,7 @@ export interface StoryInfoBase<B> {
     moment: number;
     viewed?: boolean | null;
     read?: boolean | null;
+    satisfied?: boolean | null;
     posting?: PartialPostingInfoBase<B> | null;
     comment?: PartialCommentInfoBase<B> | null;
     summaryNodeName?: string | null;

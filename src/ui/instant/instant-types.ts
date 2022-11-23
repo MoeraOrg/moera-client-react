@@ -1,11 +1,18 @@
+import React from 'react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { StoryInfo, StoryType } from "api/node/api-types";
 import { ExtStoryInfo } from "state/feeds/state";
+import InstantStorySubscribeButtons, {
+    instantStorySubscribeAction
+} from "ui/instant/buttons/InstantStorySubscribeButtons";
+import { InstantStoryButtonsActionSupplier, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 
 interface InstantTypeDetails {
     color?: string;
     icon?: IconProp;
+    buttons?: React.ComponentType<InstantStoryButtonsProps>;
+    buttonsAction?: InstantStoryButtonsActionSupplier;
 }
 
 const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
@@ -31,7 +38,9 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     },
     "subscriber-added": {
         color: "var(--bs-indigo)",
-        icon: "eye"
+        icon: "eye",
+        buttons: InstantStorySubscribeButtons,
+        buttonsAction: instantStorySubscribeAction
     },
     "subscriber-deleted": {
         color: "var(--bs-indigo)",
