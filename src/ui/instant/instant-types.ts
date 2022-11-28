@@ -105,6 +105,18 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     "comment-reaction-task-failed": {
         color: "var(--incorrect)",
         icon: "exclamation-circle"
+    },
+    "friend-added": {
+        color: "var(--bs-teal)",
+        icon: "user"
+    },
+    "friend-deleted": {
+        color: "var(--bs-teal)",
+        icon: "user-slash"
+    },
+    "friend-group-deleted": {
+        color: "var(--bs-teal)",
+        icon: "user-times"
     }
 };
 
@@ -138,6 +150,10 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
         case "subscriber-added":
         case "subscriber-deleted":
         case "posting-post-task-failed":
+        case "friend-added":
+        case "friend-deleted":
+        case "friend-group-deleted":
+            console.log(story);
             return {nodeName: story.remoteNodeName, href: "/"}
         case "comment-added":
             return {nodeName: ":", href: `/post/${postingId}?comment=${story.remoteCommentId}`}

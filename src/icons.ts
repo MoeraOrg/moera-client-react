@@ -73,9 +73,11 @@ import {
     faTimesCircle,
     faTrashCan,
     faUndoAlt,
+    faUser as faUserSolid,
     faUserCheck,
     faUserClock,
     faUserSecret,
+    faUserSlash,
     faUserTimes
 } from '@fortawesome/free-solid-svg-icons';
 import { faBitcoin, faEthereum, faMarkdown, faPatreon, faPaypal } from '@fortawesome/free-brands-svg-icons';
@@ -182,5 +184,7 @@ export default function initIconLibrary() {
     library.add(faUserCheck);
     library.add(faUserClock);
     library.add(faUserSecret);
+    library.add(faUserSolid);
+    library.add(faUserSlash);
     library.add(faUserTimes);
 }

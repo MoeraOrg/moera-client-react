@@ -302,6 +302,44 @@ function buildCommentReactionTaskFailedSummary(data: StorySummaryData, t: TFunct
     });
 }
 
+function buildFriendAddedSummary(data: StorySummaryData, t: TFunction): string {
+    if (data.friend?.friendGroupTitle == null || data.friend.friendGroupTitle === "t:friends") {
+        return t("instant-summary.story.friend-added-to-friends", {
+            node: formatNodeName(data.friend),
+            gender: tGender(data.friend?.ownerGender)
+        });
+    } else {
+        return t("instant-summary.story.friend-added", {
+            node: formatNodeName(data.friend),
+            gender: tGender(data.friend.ownerGender),
+            group: data.friend.friendGroupTitle
+        });
+    }
+}
+
+function buildFriendDeletedSummary(data: StorySummaryData, t: TFunction): string {
+    if (data.friend?.friendGroupTitle == null || data.friend.friendGroupTitle === "t:friends") {
+        return t("instant-summary.story.friend-deleted-from-friends", {
+            node: formatNodeName(data.friend),
+            gender: tGender(data.friend?.ownerGender)
+        });
+    } else {
+        return t("instant-summary.story.friend-deleted", {
+            node: formatNodeName(data.friend),
+            gender: tGender(data.friend.ownerGender),
+            group: data.friend.friendGroupTitle
+        });
+    }
+}
+
+function buildFriendGroupDeletedSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.friend-group-deleted", {
+        node: formatNodeName(data.friend),
+        gender: tGender(data.friend?.ownerGender),
+        group: data.friend?.friendGroupTitle ?? ""
+    });
+}
+
 export function buildSummary(type: StoryType, data: StorySummaryData, homeOwnerName: string | null): string {
     switch (type) {
         case "reaction-added-positive":
@@ -354,6 +392,12 @@ export function buildSummary(type: StoryType, data: StorySummaryData, homeOwnerN
             return buildPostingReactionTaskFailedSummary(data, i18n.t);
         case "comment-reaction-task-failed":
             return buildCommentReactionTaskFailedSummary(data, i18n.t);
+        case "friend-added":
+            return buildFriendAddedSummary(data, i18n.t);
+        case "friend-deleted":
+            return buildFriendDeletedSummary(data, i18n.t);
+        case "friend-group-deleted":
+            return buildFriendGroupDeletedSummary(data, i18n.t);
         default:
             return "";
     }

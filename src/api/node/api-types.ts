@@ -444,7 +444,8 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "posting-update-task-failed" | "posting-media-reaction-added-positive" | "posting-media-reaction-added-negative"
     | "comment-media-reaction-added-positive" | "comment-media-reaction-added-negative"
     | "posting-media-reaction-failed" | "comment-media-reaction-failed" | "posting-subscribe-task-failed"
-    | "posting-reaction-task-failed" | "comment-reaction-task-failed";
+    | "posting-reaction-task-failed" | "comment-reaction-task-failed" | "friend-added" | "friend-deleted"
+    | "friend-group-deleted";
 
 export type SubscriptionReason = "user" | "mention" | "comment";
 
@@ -477,6 +478,13 @@ export interface StorySummaryReaction {
     emoji?: number | null;
 }
 
+export interface StorySummaryFriend {
+    ownerName?: string | null;
+    ownerFullName?: string | null;
+    ownerGender?: string | null;
+    friendGroupTitle?: string | null;
+}
+
 export interface StorySummaryData {
     node?: StorySummaryNode | null;
     posting?: StorySummaryEntry | null;
@@ -489,6 +497,7 @@ export interface StorySummaryData {
     totalReactions?: number | null;
     feedName?: string | null;
     subscriptionReason?: SubscriptionReason | null;
+    friend?: StorySummaryFriend | null;
     description?: string | null;
 }
 
