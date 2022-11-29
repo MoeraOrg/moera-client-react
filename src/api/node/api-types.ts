@@ -569,6 +569,9 @@ export interface FriendGroupAssignment {
 
 export interface FriendDescription {
     nodeName: string;
+    fullName?: string | null;
+    gender?: string | null;
+    avatar?: AvatarDescription | null;
     groups: FriendGroupAssignment[] | null;
 }
 
