@@ -146,6 +146,7 @@
   "forgot-home-password" : "Забув домашній пароль",
   "forgot-password" : "Забув пароль",
   "formatting-hint" : "<0>Markdown:</0> зазирніть у <1>шпаргалку</1> чи <2>підручник</2>, щоб дізнатися про інші можливості. Див. також <3>шпаргалку з емодзі</3>.",
+  "friend" : "Друг",
   "friend-groups" : "Групи друзів...",
   "from-computer" : "З комп'ютера",
   "from-device" : "З пристрою",
@@ -181,6 +182,7 @@
     "tiny" : "Крихітний"
   },
   "in" : "у",
+  "in-friends" : "У друзях",
   "insert-image" : "Вставити картинку",
   "insert-link" : "Вставити посилання",
   "insert-mention" : "Вставити згадку",
@@ -257,6 +259,7 @@
   "more-reactions-hidden" : "Ещё {remaining} {remaining, plural, one {прихована} other {прихованих}}",
   "must-not-empty" : "Обов'язкове поле",
   "must-single-english-word" : "Введіть одне англійське слово",
+  "mutual-friends" : "Взаємні друзі",
   "mutually-subscribed" : "Взаємно підписані",
   "my-client" : "Мій клієнт",
   "my-node" : "Мій блог",

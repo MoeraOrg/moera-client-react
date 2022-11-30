@@ -68,6 +68,9 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
     const friendIcon = friend
         ? (friendOf ? "people-arrows" : "person")
         : (friendOf ? "person-walking-arrow-right" : null)
+    const friendCaption = friend
+        ? (friendOf ? t("mutual-friends") : t("friend"))
+        : (friendOf ? t("in-friends") : null)
 
     const loading = (!subscribed ? subscribing : unsubscribing) || updatingFriendship;
     if (loading) {
@@ -102,13 +105,16 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
     const subscriptionUnhideable = subscribed && !subscriptionsHidden && subscriptionHidden;
     const subscriberHideable = subscribedToMe && !subscribersHidden && !subscriberHidden;
     const subscriberUnhideable = subscribedToMe && !subscribersHidden && subscriberHidden;
-    const caption = !subscribed
+    const subscriptionCaption = !subscribed
         ? (!subscribedToMe ? t("subscribe") : t("subscribed-to-me", {"gender": tGender(subscriber?.gender)}))
         : (!subscribedToMe ? t("subscribed", {"gender": tGender(homeGender)}) : t("mutually-subscribed"));
 
     return (
-        <DropdownMenu caption={small ? caption : undefined} className="btn btn-sm btn-outline-primary subscribe-button"
-                      items={[
+        <DropdownMenu className="btn btn-sm btn-outline-primary subscribe-button" items={[
+            {
+                caption: subscriptionCaption,
+                show: small ?? false
+            },
             {
                 title: !subscribedToMe ? t("subscribe") : t("subscribe-back"),
                 href: peerHref,
@@ -123,6 +129,10 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
             },
             {
                 divider: true
+            },
+            {
+                caption: friendCaption ?? "",
+                show: friendCaption != null
             },
             {
                 title: t("add-friend"),
@@ -171,7 +181,7 @@ function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName,
             }
         ]}>
             {friendIcon && <><FontAwesomeIcon icon={friendIcon}/>&nbsp;</>}
-            {small ? <FontAwesomeIcon icon={["far", "bell"]}/> : caption}
+            {small ? <FontAwesomeIcon icon={["far", "bell"]}/> : subscriptionCaption}
             &nbsp;&nbsp;
             <FontAwesomeIcon icon="chevron-down"/>
         </DropdownMenu>

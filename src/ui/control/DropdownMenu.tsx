@@ -10,25 +10,42 @@ import { Browser } from "ui/browser";
 import { useButtonPopper } from "ui/hook";
 import "./DropdownMenu.css";
 
-type TextMenuItem = {
+interface TextMenuItem {
     show: boolean;
     title: string;
     href: string | null;
     onClick: () => void;
-};
+}
 
-type DividerMenuItem = {
+interface DividerMenuItem {
     divider: boolean;
-};
+}
 
-type MenuItem = TextMenuItem | DividerMenuItem;
+interface CaptionMenuItem {
+    show: boolean;
+    caption: string;
+}
+
+type MenuItem = TextMenuItem | DividerMenuItem | CaptionMenuItem;
 
 function isDivider(item: MenuItem): item is DividerMenuItem {
     return "divider" in item && item.divider;
 }
 
-function buildItems(items: MenuItem[], standalone: boolean) {
-    const itemList = [];
+function isCaption(item: MenuItem): item is CaptionMenuItem {
+    return "caption" in item;
+}
+
+interface RenderedItem {
+    title: string;
+    href?: string | null;
+    onClick?: (event: React.MouseEvent) => void;
+    divider: boolean;
+    caption: boolean;
+}
+
+function buildItems(items: MenuItem[], standalone: boolean): RenderedItem[] {
+    const itemList: RenderedItem[] = [];
     let divider = false;
     for (const item of items) {
         if (isDivider(item)) {
@@ -38,28 +55,36 @@ function buildItems(items: MenuItem[], standalone: boolean) {
         if (!item.show) {
             continue;
         }
-        itemList.push({
-            title: item.title,
-            href: !standalone || item.href == null ? item.href : Browser.passedLocation(item.href),
-            onClick: (event: React.MouseEvent) => {
-                item.onClick();
-                event.preventDefault();
-            },
-            divider: divider && itemList.length > 0
-        });
+        if (isCaption(item)) {
+            itemList.push({
+                title: item.caption,
+                divider: divider && itemList.length > 0,
+                caption: true
+            });
+        } else {
+            itemList.push({
+                title: item.title,
+                href: !standalone || item.href == null ? item.href : Browser.passedLocation(item.href),
+                onClick: (event: React.MouseEvent) => {
+                    item.onClick();
+                    event.preventDefault();
+                },
+                divider: divider && itemList.length > 0,
+                caption: false
+            });
+        }
         divider = false;
     }
     return itemList;
 }
 
 type Props = {
-    caption?: string | null;
     items: MenuItem[];
     className?: string | null;
     children?: ReactNode;
 } & ConnectedProps<typeof connector>;
 
-function DropdownMenuImpl({caption, items, className, children, standalone}: Props) {
+function DropdownMenuImpl({items, className, children, standalone}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -76,14 +101,17 @@ function DropdownMenuImpl({caption, items, className, children, standalone}: Pro
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
-                    {caption && <div className="caption">{caption}</div>}
                     {itemList.length > 0 ?
                         itemList.map((item, index) => (
                             <React.Fragment key={index}>
                                 {item.divider && <div className="dropdown-divider"/>}
-                                <a className="dropdown-item" href={item.href ?? undefined} onClick={item.onClick}>
-                                    {item.title}
-                                </a>
+                                {item.caption ?
+                                    <div className="caption">{item.title}</div>
+                                :
+                                    <a className="dropdown-item" href={item.href ?? undefined} onClick={item.onClick}>
+                                        {item.title}
+                                    </a>
+                                }
                             </React.Fragment>
                         ))
                     :
