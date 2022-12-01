@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import { EmojiChoice, EmojiOnClick, EmojiProps } from "ui/control/EmojiChoice";
+import { EmojiChoice, EmojiOnClick, EmojiProps } from "ui/control";
 import "./EmojiSelector.css";
 
 interface Props {

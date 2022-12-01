@@ -1,9 +1,9 @@
 import React, { MouseEventHandler, TouchEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
+import { IconName } from '@fortawesome/free-regular-svg-icons';
 
 import { REACTION_EMOJIS } from "api";
-import { EmojiButton } from "ui/control/index";
-import { IconName } from "@fortawesome/free-regular-svg-icons";
+import { EmojiButton } from "ui/control";
 
 interface Props {
     icon?: IconName;
@@ -20,8 +20,10 @@ interface Props {
     onReactionDelete: MouseEventHandler<HTMLButtonElement>;
 }
 
-const ReactionEmojiButton = ({icon, emoji, negative, caption, className, invisible, buttonRef, onMouseEnter,
-                              onMouseLeave, onTouchStart, onReactionAdd, onReactionDelete}: Props) => {
+const ReactionEmojiButton = ({
+    icon, emoji, negative, caption, className, invisible, buttonRef, onMouseEnter, onMouseLeave, onTouchStart,
+    onReactionAdd, onReactionDelete
+}: Props) => {
     const {t} = useTranslation();
 
     if (emoji == null) {

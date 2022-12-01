@@ -5,8 +5,7 @@ import { ClientState } from "state/state";
 import { getOwnerCard, getOwnerName, isAtHomeNode, isOwnerNameSet } from "state/node/selectors";
 import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isFeedGeneralLoading, isFeedGeneralReady } from "state/feeds/selectors";
-import { Loading } from "ui/control";
-import SubscribeButton from "ui/control/SubscribeButton";
+import { Loading, SubscribeButton } from "ui/control";
 
 interface OwnProps {
     feedName: string;

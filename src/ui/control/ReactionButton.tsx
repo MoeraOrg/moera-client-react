@@ -3,9 +3,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IconName } from '@fortawesome/free-regular-svg-icons';
 
 import { ClientState } from "state/state";
-import { EmojiProps } from "ui/control/EmojiChoice";
+import { EmojiProps, EmojiSelector, ReactionEmojiButton } from "ui/control";
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
-import { EmojiSelector, ReactionEmojiButton } from "ui/control/index";
 import { getSetting } from "state/settings/selectors";
 import {
     MAIN_NEGATIVE_REACTIONS,

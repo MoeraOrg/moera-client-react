@@ -36,11 +36,12 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function SubscribeButton({small, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription,
-                          friendGroups, remoteFriendGroups, updatingFriendship, homeGender, peerHref, subscribersHidden,
-                          subscriptionsHidden, subscriberHidden, subscriptionHidden, friendsId, feedSubscribe,
-                          feedUnsubscribe, feedSubscriberSetVisibility, feedSubscriptionSetVisibility,
-                          friendshipUpdate, openFriendGroupsDialog}: Props) {
+function SubscribeButtonImpl({
+    small, subscribing, unsubscribing, nodeName, feedName, subscriber, subscription, friendGroups, remoteFriendGroups,
+    updatingFriendship, homeGender, peerHref, subscribersHidden, subscriptionsHidden, subscriberHidden,
+    subscriptionHidden, friendsId, feedSubscribe, feedUnsubscribe, feedSubscriberSetVisibility,
+    feedSubscriptionSetVisibility, friendshipUpdate, openFriendGroupsDialog
+}: Props) {
     const {t} = useTranslation();
 
     const onSubscribe = () => feedSubscribe(nodeName, feedName);
@@ -204,4 +205,4 @@ const connector = connect(
     }
 );
 
-export default connector(SubscribeButton);
+export const SubscribeButton = connector(SubscribeButtonImpl);

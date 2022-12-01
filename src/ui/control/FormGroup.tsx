@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { Label } from "ui/control/index";
+import { Label } from "ui/control";
 import "./FormGroup.css";
 
 export type FormGroupStyle = "follow" | "left" | "right";
