@@ -141,8 +141,8 @@ function SubscribeButtonImpl({
                 <FontAwesomeIcon icon="chevron-down"/>
             </DropdownMenu>
             {hideDialog &&
-                <PeopleHideDialog feedName={feedName} subscriber={subscriber} subscription={subscription}
-                                  onClose={onHideDialogClose}/>
+                <PeopleHideDialog nodeName={nodeName} feedName={feedName} subscriber={subscriber}
+                                  subscription={subscription} friendGroups={friendGroups} onClose={onHideDialogClose}/>
             }
         </>
     );

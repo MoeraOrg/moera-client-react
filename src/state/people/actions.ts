@@ -130,6 +130,16 @@ export const friendshipUpdateFailed = (nodeName: string): FriendshipUpdateFailed
     payload: {nodeName}
 });
 
+export const FRIENDSHIP_SET_VISIBILITY = "FRIENDSHIP_SET_VISIBILITY";
+export type FriendshipSetVisibilityAction = ActionWithPayload<typeof FRIENDSHIP_SET_VISIBILITY, {
+    nodeName: string;
+    visible: boolean;
+}>;
+export const friendshipSetVisibility = (nodeName: string, visible: boolean): FriendshipSetVisibilityAction => ({
+    type: FRIENDSHIP_SET_VISIBILITY,
+    payload: {nodeName, visible}
+});
+
 export const FRIEND_GROUP_ADDED = "FRIEND_GROUP_ADDED";
 export type FriendGroupAddedAction = ActionWithPayload<typeof FRIEND_GROUP_ADDED, {
     nodeName: string;
@@ -157,4 +167,5 @@ export type PeopleAnyAction =
     | FriendshipUpdateAction
     | FriendshipUpdatedAction
     | FriendshipUpdateFailedAction
+    | FriendshipSetVisibilityAction
     | FriendGroupAddedAction;

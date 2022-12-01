@@ -1,10 +1,12 @@
-import { call, put } from 'typed-redux-saga';
+import { call, put, select } from 'typed-redux-saga';
 
 import { NodeApiError } from "api";
 import { Node } from "api/node";
 import { errorThrown } from "state/error/actions";
 import {
+    FRIENDSHIP_SET_VISIBILITY,
     FRIENDSHIP_UPDATE,
+    FriendshipSetVisibilityAction,
     FriendshipUpdateAction,
     friendshipUpdated,
     friendshipUpdateFailed,
@@ -20,12 +22,15 @@ import {
 } from "state/people/actions";
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
+import { getNodeCard } from "state/nodecards/selectors";
+import { PrincipalValue } from "api/node/api-types";
 
 export default [
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
     executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga, introduced),
     executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced),
-    executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga)
+    executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga),
+    executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -71,6 +76,26 @@ function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
 
     try {
         const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]);
+        yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null))
+    } catch (e) {
+        yield* put(friendshipUpdateFailed(nodeName));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* friendshipSetVisibilitySaga(action: FriendshipSetVisibilityAction) {
+    const {nodeName, visible} = action.payload;
+
+    const view: PrincipalValue = visible ? "public" : "private";
+    const nodeCard = yield* select(state => getNodeCard(state, nodeName));
+
+    if (nodeCard == null || !nodeCard.friendship.loaded) {
+        return;
+    }
+
+    try {
+        const friends = yield* call(Node.putFriends, ":", [{
+            nodeName, groups: nodeCard.friendship.groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
         yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null))
     } catch (e) {
         yield* put(friendshipUpdateFailed(nodeName));
