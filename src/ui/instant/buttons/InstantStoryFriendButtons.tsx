@@ -30,9 +30,8 @@ function InstantStoryFriendButtons({story, friendship, friendsId, friendshipUpda
     }
 
     return (
-        <InstantStoryButtons story={story} accepting={friendship?.updating ?? false}
-                             accepted={(friendship?.loaded ?? false) && friendship?.groups != null
-                                 && friendship.groups.length > 0}
+        <InstantStoryButtons story={story} ready={friendship?.loaded ?? false} accepting={friendship?.updating ?? false}
+                             accepted={friendship?.groups != null && friendship.groups.length > 0}
                              acceptTitle={t("add-friend")} acceptedTitle={t("you-friends")}
                              onAccept={onAddFriend}/>
     )

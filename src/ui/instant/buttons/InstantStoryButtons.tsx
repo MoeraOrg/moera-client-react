@@ -15,6 +15,7 @@ export interface InstantStoryButtonsProps {
 }
 
 type Props = InstantStoryButtonsProps & {
+    ready: boolean;
     accepting: boolean;
     accepted: boolean;
     acceptTitle: string;
@@ -22,8 +23,12 @@ type Props = InstantStoryButtonsProps & {
     onAccept: () => void;
 };
 
-function InstantStoryButtonsImpl({story, accepting, accepted, acceptTitle, acceptedTitle, onAccept}: Props) {
+function InstantStoryButtonsImpl({story, ready, accepting, accepted, acceptTitle, acceptedTitle, onAccept}: Props) {
     const {t} = useTranslation();
+
+    if (!ready) {
+        return null;
+    }
 
     const onIgnore = () => storySatisfy(":instant", story.id);
 

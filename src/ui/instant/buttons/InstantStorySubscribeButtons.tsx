@@ -24,8 +24,9 @@ function InstantStorySubscribeButtons({story, subscription, feedSubscribe}: Prop
     }
 
     return (
-        <InstantStoryButtons story={story} accepting={subscription?.subscribing ?? false}
-                             accepted={(subscription?.loaded ?? false) && subscription?.subscription != null}
+        <InstantStoryButtons story={story} ready={subscription?.loaded ?? false}
+                             accepting={subscription?.subscribing ?? false}
+                             accepted={subscription?.subscription != null}
                              acceptTitle={t("subscribe-back")} acceptedTitle={t("you-subscribed")}
                              onAccept={onSubscribe}/>
     )
