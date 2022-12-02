@@ -18,16 +18,14 @@ interface Values {
     hideFriend: boolean;
 }
 
-interface OwnProps {
+type OuterProps = {
     nodeName: string;
     feedName: string;
     subscriber: SubscriberInfo | null;
     subscription: SubscriptionInfo | null;
     friendGroups: FriendGroupDetails[] | null;
     onClose: () => void;
-}
-
-type OuterProps = OwnProps & ConnectedProps<typeof connector>;
+} & ConnectedProps<typeof connector>;
 
 type Props = OuterProps & FormikProps<Values>;
 
