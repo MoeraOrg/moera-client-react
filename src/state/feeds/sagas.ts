@@ -112,7 +112,7 @@ function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
             whoAmI.gender ?? null, toAvatarDescription(whoAmI.avatar), feedName);
         yield* put(feedSubscribed(nodeName, subscription));
         if (storyId != null) {
-            yield* put(storySatisfy(feedName, storyId));
+            yield* put(storySatisfy(":instant", storyId));
         }
     } catch (e) {
         yield* put(feedSubscribeFailed(nodeName, feedName));

@@ -104,10 +104,12 @@ export const FRIENDSHIP_UPDATE = "FRIENDSHIP_UPDATE";
 export type FriendshipUpdateAction = ActionWithPayload<typeof FRIENDSHIP_UPDATE, {
     nodeName: string;
     friendGroups: string[] | null;
+    storyId?: string | null;
 }>;
-export const friendshipUpdate = (nodeName: string, friendGroups: string[] | null): FriendshipUpdateAction => ({
+export const friendshipUpdate = (nodeName: string, friendGroups: string[] | null,
+                                 storyId?: string | null): FriendshipUpdateAction => ({
     type: FRIENDSHIP_UPDATE,
-    payload: {nodeName, friendGroups}
+    payload: {nodeName, friendGroups, storyId}
 });
 
 export const FRIENDSHIP_UPDATED = "FRIENDSHIP_UPDATED";

@@ -24,6 +24,7 @@ import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { PrincipalValue } from "api/node/api-types";
+import { storySatisfy } from "state/stories/actions";
 
 export default [
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
@@ -72,11 +73,14 @@ function* subscriptionsLoadSaga() {
 }
 
 function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
-    const {nodeName, friendGroups} = action.payload;
+    const {nodeName, friendGroups, storyId} = action.payload;
 
     try {
         const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]);
         yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null))
+        if (storyId != null) {
+            yield* put(storySatisfy(":instant", storyId));
+        }
     } catch (e) {
         yield* put(friendshipUpdateFailed(nodeName));
         yield* put(errorThrown(e));

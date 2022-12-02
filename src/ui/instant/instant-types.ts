@@ -3,10 +3,11 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { StoryInfo, StoryType } from "api/node/api-types";
 import { ExtStoryInfo } from "state/feeds/state";
+import { InstantStoryButtonsActionSupplier, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 import InstantStorySubscribeButtons, {
     instantStorySubscribeAction
 } from "ui/instant/buttons/InstantStorySubscribeButtons";
-import { InstantStoryButtonsActionSupplier, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
+import InstantStoryFriendButtons, { instantStoryFriendAction } from "ui/instant/buttons/InstantStoryFriendButtons";
 
 interface InstantTypeDetails {
     color?: string;
@@ -108,7 +109,9 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     },
     "friend-added": {
         color: "var(--bs-teal)",
-        icon: "user"
+        icon: "user",
+        buttons: InstantStoryFriendButtons,
+        buttonsAction: instantStoryFriendAction
     },
     "friend-deleted": {
         color: "var(--bs-teal)",

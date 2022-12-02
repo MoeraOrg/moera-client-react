@@ -1,19 +1,20 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { StoryInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { feedSubscribe } from "state/feeds/actions";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";
-import { storySatisfy } from "state/stories/actions";
-import { Button } from "ui/control";
-import { InstantStoryButtonsActionSupplier, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
+import {
+    InstantStoryButtons,
+    InstantStoryButtonsActionSupplier,
+    InstantStoryButtonsProps
+} from "ui/instant/buttons/InstantStoryButtons";
 
 type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
 
-function InstantStorySubscribeButtons({story, subscription, feedSubscribe, storySatisfy}: Props) {
+function InstantStorySubscribeButtons({story, subscription, feedSubscribe}: Props) {
     const {t} = useTranslation();
 
     const onSubscribe = () => {
@@ -22,26 +23,11 @@ function InstantStorySubscribeButtons({story, subscription, feedSubscribe, story
         }
     }
 
-    const onIgnore = () => storySatisfy(":instant", story.id);
-
     return (
-        <div className="buttons">
-            {!subscription?.loaded || subscription.subscription == null ?
-                !story.satisfied &&
-                    <>
-                        <Button variant="primary" size="sm" compact loading={subscription?.subscribing}
-                                onClick={onSubscribe}>
-                            {t("subscribe-back")}
-                        </Button>
-                        <Button variant="secondary" size="sm" compact onClick={onIgnore}>{t("ignore")}</Button>
-                    </>
-            :
-                <span className="message">
-                    <span className="check"><FontAwesomeIcon icon="check"/></span>
-                    {t("you-subscribed")}
-                </span>
-            }
-        </div>
+        <InstantStoryButtons story={story} accepting={subscription?.subscribing ?? false}
+                             accepted={(subscription?.loaded ?? false) && subscription?.subscription != null}
+                             acceptTitle={t("subscribe-back")} acceptedTitle={t("you-subscribed")}
+                             onAccept={onSubscribe}/>
     )
 }
 
@@ -54,7 +40,7 @@ const connector = connect(
             ? getNodeCard(state, ownProps.story.remoteNodeName)?.subscription
             : null
     }),
-    { feedSubscribe, storySatisfy }
+    { feedSubscribe }
 );
 
 export default connector(InstantStorySubscribeButtons);
