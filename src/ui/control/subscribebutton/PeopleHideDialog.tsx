@@ -7,6 +7,7 @@ import { FriendGroupDetails, PrincipalValue, SubscriberInfo, SubscriptionInfo } 
 import { ClientState } from "state/state";
 import { getSettingNode } from "state/settings/selectors";
 import { isPrincipalIn } from "state/node/selectors";
+import { getNodeCard } from "state/nodecards/selectors";
 import { feedSubscriberSetVisibility, feedSubscriptionSetVisibility } from "state/feeds/actions";
 import { friendshipSetVisibility } from "state/people/actions";
 import { Button, ModalDialog } from "ui/control";
@@ -21,9 +22,6 @@ interface Values {
 interface OwnProps {
     nodeName: string;
     feedName: string;
-    subscriber: SubscriberInfo | null;
-    subscription: SubscriptionInfo | null;
-    friendGroups: FriendGroupDetails[] | null;
     onClose: () => void;
 }
 
@@ -31,24 +29,22 @@ type OuterProps = OwnProps & ConnectedProps<typeof connector>;
 
 type Props = OuterProps & FormikProps<Values>;
 
-function PeopleHideDialog({
-    subscriber, subscription, friendGroups, subscribersHidden, subscriptionsHidden, friendsHidden, onClose
-}: Props) {
+function PeopleHideDialog({card, subscribersHidden, subscriptionsHidden, friendsHidden, onClose}: Props) {
     const {t} = useTranslation();
 
     return (
         <ModalDialog title={t("hide")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
-                    {subscription != null &&
+                    {card?.subscription.subscription != null &&
                         <CheckboxField title={t("hide-my-subscription")} name="hideMySubscription"
                                        disabled={subscriptionsHidden} anyValue/>
                     }
-                    {subscriber != null &&
+                    {card?.subscription.subscriber != null &&
                         <CheckboxField title={t("hide-subscription-to-me")} name="hideSubscriptionToMe"
                                        disabled={subscribersHidden} anyValue/>
                     }
-                    {(friendGroups != null && friendGroups.length > 0) &&
+                    {(card?.friendship.groups != null && card.friendship.groups.length > 0) &&
                         <CheckboxField title={t("hide-friendship")} name="hideFriend"
                                        disabled={friendsHidden} anyValue/>
                     }
@@ -64,29 +60,33 @@ function PeopleHideDialog({
 
 const subscribeHideDialogLogic = {
 
-    isSubscriptionHidden: (subscription: SubscriptionInfo | null) =>
-        isPrincipalIn("view", subscription, "public", "private"),
+    isSubscriptionHidden: (subscription: SubscriptionInfo | null | undefined) =>
+        isPrincipalIn("view", subscription ?? null, "public", "private"),
 
-    isSubscriberHidden: (subscriber: SubscriberInfo | null) =>
-        isPrincipalIn("view", subscriber, "unset", "private", {useOperations: "admin"}),
+    isSubscriberHidden: (subscriber: SubscriberInfo | null | undefined) =>
+        isPrincipalIn("view", subscriber ?? null, "unset", "private", {useOperations: "admin"}),
 
-    isFriendHidden: (friendGroups: FriendGroupDetails[] | null) =>
+    isFriendHidden: (friendGroups: FriendGroupDetails[] | null | undefined) =>
         friendGroups != null && friendGroups.length > 0 && isPrincipalIn("view", friendGroups[0], "public", "private"),
 
     mapPropsToValues: (props: OuterProps): Values => ({
         hideMySubscription: props.subscriptionsHidden
-            || subscribeHideDialogLogic.isSubscriptionHidden(props.subscription),
+            || subscribeHideDialogLogic.isSubscriptionHidden(props.card?.subscription.subscription),
         hideSubscriptionToMe: props.subscribersHidden
-            || subscribeHideDialogLogic.isSubscriberHidden(props.subscriber),
+            || subscribeHideDialogLogic.isSubscriberHidden(props.card?.subscription.subscriber),
         hideFriend: props.friendsHidden
-            || subscribeHideDialogLogic.isFriendHidden(props.friendGroups)
+            || subscribeHideDialogLogic.isFriendHidden(props.card?.friendship.groups)
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const {
-            nodeName, feedName, subscription, subscriptionsHidden, subscriber, subscribersHidden, friendGroups,
-            friendsHidden, feedSubscriptionSetVisibility, feedSubscriberSetVisibility, friendshipSetVisibility, onClose
+            nodeName, feedName, card, subscriptionsHidden, subscribersHidden, friendsHidden,
+            feedSubscriptionSetVisibility, feedSubscriberSetVisibility, friendshipSetVisibility, onClose
         } = formik.props;
+
+        const subscription = card?.subscription.subscription;
+        const subscriber = card?.subscription.subscriber;
+        const friendGroups = card?.friendship.groups;
 
         formik.setStatus("submitted");
         if (subscription?.id != null && !subscriptionsHidden
@@ -108,7 +108,8 @@ const subscribeHideDialogLogic = {
 };
 
 const connector = connect(
-    (state: ClientState) => ({
+    (state: ClientState, ownProps: OwnProps) => ({
+        card: getNodeCard(state, ownProps.nodeName),
         subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
         subscriptionsHidden: (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin",
         friendsHidden: (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin"

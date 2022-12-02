@@ -14,24 +14,17 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function FeedSubscribeButton({feedName, small, show, ownerName, generalReady, generalLoading, card}: Props) {
+function FeedSubscribeButton({feedName, small, show, ownerName, generalReady, generalLoading, subscription}: Props) {
     if (ownerName == null || !show) {
         return null;
     }
 
     return (
         <>
-            {(generalReady && (card?.subscription?.loaded ?? false)) &&
-                <SubscribeButton nodeName={ownerName} feedName={feedName} small={small}
-                                 subscribing={card?.subscription?.subscribing ?? false}
-                                 unsubscribing={card?.subscription?.unsubscribing ?? false}
-                                 subscriber={card?.subscription?.subscriber ?? null}
-                                 subscription={card?.subscription?.subscription ?? null}
-                                 friendGroups={card?.friendship?.groups ?? null}
-                                 remoteFriendGroups={card?.friendship?.remoteGroups ?? null}
-                                 updatingFriendship={card?.friendship?.updating ?? false}/>
+            {(generalReady && (subscription?.loaded ?? false)) &&
+                <SubscribeButton nodeName={ownerName} feedName={feedName} small={small}/>
             }
-            <Loading active={generalLoading || card?.subscription?.loading}/>
+            <Loading active={generalLoading || subscription?.loading}/>
         </>
     );
 }
@@ -42,7 +35,7 @@ const connector = connect(
         ownerName: getOwnerName(state),
         generalReady: isFeedGeneralReady(state, ownProps.feedName),
         generalLoading: isFeedGeneralLoading(state, ownProps.feedName),
-        card: getOwnerCard(state)
+        subscription: getOwnerCard(state)?.subscription
     })
 );
 
