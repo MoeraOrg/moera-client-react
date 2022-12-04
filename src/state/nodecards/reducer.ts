@@ -1,6 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
+import { FriendGroupDetails, ProfileInfo } from "api/node/api-types";
 import {
     NODE_CARD_DETAILS_LOAD,
     NODE_CARD_DETAILS_LOAD_FAILED,
@@ -51,9 +52,8 @@ import { WithContext } from "state/action-types";
 import { OWNER_SET } from "state/node/actions";
 import { HOME_OWNER_SET } from "state/home/actions";
 import { FRIENDSHIP_UPDATE, FRIENDSHIP_UPDATE_FAILED, FRIENDSHIP_UPDATED } from "state/people/actions";
-import { FriendGroupDetails } from "api/node/api-types";
 
-const emptyProfileInfo = {
+const emptyProfileInfo: ProfileInfo = {
     fullName: null,
     gender: null,
     email: null,
