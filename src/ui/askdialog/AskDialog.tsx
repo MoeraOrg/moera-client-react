@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { isPermitted, ProtectedObject } from "state/node/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { askDialogSend, closeAskDialog } from "state/askdialog/actions";
 import { Button, Loading, ModalDialog } from "ui/control";
@@ -23,7 +24,10 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function AskDialog(props: Props) {
-    const {show, nodeName, card, loading, allGroups, sending, nameDisplayMode, closeAskDialog, resetForm} = props;
+    const {
+        show, nodeName, card, loading, allGroups, sending, subscribeEnabled, friendEnabled, nameDisplayMode,
+        closeAskDialog, resetForm
+    } = props;
 
     const {t} = useTranslation();
 
@@ -44,35 +48,41 @@ function AskDialog(props: Props) {
         {title: "choose-request", value: "s:select"}
     ];
 
-    if (card?.subscription.subscriber == null) {
+    if (card?.subscription.subscriber == null && subscribeEnabled) {
         subjects.push({title: "subscribe-me", value: "s:subscribe"});
     }
 
-    const remoteGroups = card?.friendship.remoteGroups ?? [];
-    for (const group of allGroups) {
-        if (group.title != null && remoteGroups.find(g => g.id === group.id) == null) {
-            subjects.push({
-                title: group.title === "t:friends"
-                    ? "add-me-friends"
-                    : ["add-me-friend-group", {group: group.title}],
-                value: group.id
-            });
+    if (friendEnabled) {
+        const remoteGroups = card?.friendship.remoteGroups ?? [];
+        for (const group of allGroups) {
+            if (group.title != null && remoteGroups.find(g => g.id === group.id) == null) {
+                subjects.push({
+                    title: group.title === "t:friends"
+                        ? "add-me-friends"
+                        : ["add-me-friend-group", {group: group.title}],
+                    value: group.id
+                });
+            }
         }
     }
 
     return (
         <ModalDialog title={t("ask-node", {name})} onClose={closeAskDialog}>
-            <Form>
-                <div className="modal-body">
-                    <Loading active={loading}/>
-                    <SelectField name="subject" choices={subjects}/>
-                    <InputField name="message" title={t("message")} maxLength={70} anyValue/>
-                </div>
-                <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeAskDialog}>{t("cancel")}</Button>
-                    <Button variant="primary" type="submit" loading={sending}>{t("ask")}</Button>
-                </div>
-            </Form>
+            {loading || subjects.length > 1 ?
+                <Form>
+                    <div className="modal-body">
+                        <Loading active={loading}/>
+                        <SelectField name="subject" choices={subjects}/>
+                        <InputField name="message" title={t("message")} maxLength={70} anyValue/>
+                    </div>
+                    <div className="modal-footer">
+                        <Button variant="secondary" onClick={closeAskDialog}>{t("cancel")}</Button>
+                        <Button variant="primary" type="submit" loading={sending}>{t("ask")}</Button>
+                    </div>
+                </Form>
+            :
+                <div className="modal-empty">{t("no-requests-available")}</div>
+            }
         </ModalDialog>
     );
 }
@@ -103,15 +113,27 @@ const askDialogLogic = {
 };
 
 const connector = connect(
-    (state: ClientState) => ({
-        show: state.askDialog.show,
-        nodeName: state.askDialog.nodeName,
-        card: state.askDialog.nodeName != null ? getNodeCard(state, state.askDialog.nodeName) : null,
-        loading: state.askDialog.loading,
-        allGroups: state.askDialog.friendGroups,
-        sending: state.askDialog.sending,
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
+    (state: ClientState) => {
+        const nodeObject: ProtectedObject = {
+            ownerName: state.askDialog.nodeName ?? undefined,
+            operations: {
+                "subscribe": state.askDialog.subscribePrincipal,
+                "friend": state.askDialog.friendPrincipal
+            }
+        };
+
+        return {
+            show: state.askDialog.show,
+            nodeName: state.askDialog.nodeName,
+            card: state.askDialog.nodeName != null ? getNodeCard(state, state.askDialog.nodeName) : null,
+            loading: state.askDialog.loading,
+            allGroups: state.askDialog.friendGroups,
+            sending: state.askDialog.sending,
+            subscribeEnabled: isPermitted("subscribe", nodeObject, "signed", state),
+            friendEnabled: isPermitted("friend", nodeObject, "signed", state),
+            nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
+        };
+    },
     { closeAskDialog, askDialogSend }
 );
 

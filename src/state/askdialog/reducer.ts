@@ -21,6 +21,8 @@ const initialState: AskDialogState = {
     loading: false,
     nodeName: null,
     friendGroups: [],
+    subscribePrincipal: "signed",
+    friendPrincipal: "signed",
     sending: false
 };
 
@@ -49,7 +51,9 @@ export default (state: AskDialogState = initialState, action: WithContext<Client
                     ...state,
                     loaded: true,
                     loading: false,
-                    friendGroups: action.payload.friendGroups
+                    friendGroups: action.payload.friendGroups,
+                    subscribePrincipal: action.payload.subscribePrincipal,
+                    friendPrincipal: action.payload.friendPrincipal
                 }
             }
             return state;

@@ -22,8 +22,9 @@ export default [
 function* askDialogLoadSaga(action: AskDialogLoadAction) {
     const {nodeName} = action.payload;
     try {
-        const groups = yield* call(Node.getFriendGroups, nodeName);
-        yield* put(askDialogLoaded(nodeName, groups));
+        const features = yield* call(Node.getFeatures, nodeName);
+        yield* put(askDialogLoaded(nodeName, features.friendGroups?.available ?? [],
+            features.ask?.subscribe ?? "signed", features.ask?.friend ?? "signed"));
     } catch (e) {
         yield* put(askDialogLoadFailed(nodeName));
         yield* put(errorThrown(e));

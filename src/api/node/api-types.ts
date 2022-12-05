@@ -599,11 +599,17 @@ export interface FriendGroupsFeatures {
     memberOf?: FriendGroupDetails[] | null;
 }
 
+export interface AskFeatures {
+    subscribe: PrincipalValue;
+    friend: PrincipalValue;
+}
+
 export interface Features {
     posting: PostingFeatures;
     plugins?: string[] | null;
     feedWidth: number;
     friendGroups?: FriendGroupsFeatures | null;
+    ask?: AskFeatures | null;
 }
 
 export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"

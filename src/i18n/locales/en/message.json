@@ -296,6 +296,7 @@
   "node-settings-changed-conflict" : "Blog settings were changed by somebody.",
   "no-name-known" : "no name known",
   "no-name-set" : "no name set",
+  "no-requests-available" : "No requests available.",
   "not-allowed" : "Not allowed",
   "not-connected-home" : "Not connected to home",
   "no-text" : "(no text)",

@@ -16,3 +16,11 @@
     overflow-y: auto;
     overscroll-behavior-y: none;
 }
+
+.modal-empty {
+    color: var(--bs-gray-500);
+    text-align: center;
+    font-style: italic;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

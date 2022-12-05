@@ -1985,6 +1985,20 @@ const FriendGroupsFeaturesType: JSONSchemaType<API.FriendGroupsFeatures> = {
 
 export const FriendGroupsFeatures = schema(FriendGroupsFeaturesType);
 
+const AskFeaturesType: JSONSchemaType<API.AskFeatures> = {
+    type: "object",
+    properties: {
+        "subscribe": {
+            type: "string",
+        },
+        "friend": {
+            type: "string",
+        }
+    },
+    required: ["subscribe", "friend"],
+    additionalProperties: false
+};
+
 export const FeaturesType: JSONSchemaType<API.Features> = {
     type: "object",
     properties: {
@@ -2001,6 +2015,10 @@ export const FeaturesType: JSONSchemaType<API.Features> = {
         },
         "friendGroups": {
             ...FriendGroupsFeaturesType,
+            nullable: true
+        },
+        "ask": {
+            ...AskFeaturesType,
             nullable: true
         }
     },

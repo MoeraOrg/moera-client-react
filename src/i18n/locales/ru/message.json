@@ -296,6 +296,7 @@
   "node-settings-changed-conflict" : "Настройки блога были кем-то изменены.",
   "no-name-known" : "неизвестное имя",
   "no-name-set" : "имя не задано",
+  "no-requests-available" : "Нет доступных просьб.",
   "not-allowed" : "Недопустимо",
   "not-connected-home" : "Не подключён к дому",
   "no-text" : "(без текста)",
