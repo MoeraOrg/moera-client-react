@@ -28,6 +28,7 @@ import ImageEditDialog from "ui/imageeditdialog/ImageEditDialog";
 import DonateDialog from "ui/donatedialog/DonateDialog";
 import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 import FriendGroupsDialog from "ui/friendgroupsdialog/FriendGroupsDialog";
+import AskDialog from "ui/askdialog/AskDialog";
 import "./colors.css";
 import "./zindex.css";
 import "./App.css";
@@ -57,6 +58,7 @@ const App = ({atNode, feedWidth}: Props) => (
                 <DonateDialog/>
                 <EntryCopyTextDialog/>
                 <FriendGroupsDialog/>
+                <AskDialog/>
             </>
         :
             <WelcomePage/>

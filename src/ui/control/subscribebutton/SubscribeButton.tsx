@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { friendshipUpdate } from "state/people/actions";
 import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
+import { openAskDialog } from "state/askdialog/actions";
 import { getHomeFriendsId, getHomeOwnerGender } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
@@ -25,7 +26,7 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButtonImpl({
     small, nodeName, feedName, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe, friendshipUpdate,
-    openFriendGroupsDialog
+    openFriendGroupsDialog, openAskDialog
 }: Props) {
     const subscribing = card?.subscription?.subscribing ?? false;
     const unsubscribing = card?.subscription?.unsubscribing ?? false;
@@ -56,6 +57,8 @@ function SubscribeButtonImpl({
     const onFriendGroups = () => openFriendGroupsDialog(nodeName);
 
     const onUnfriend = () => friendshipUpdate(nodeName, null);
+
+    const onAskDialog = () => openAskDialog(nodeName);
 
     const onHideDialogOpen = () => setHideDialog(true);
 
@@ -129,6 +132,12 @@ function SubscribeButtonImpl({
                       divider: true
                 },
                 {
+                    title: t("ask-ellipsis"),
+                    href: peerHref,
+                    onClick: onAskDialog,
+                    show: true
+                },
+                {
                     title: t("hide-ellipsis"),
                     href: peerHref,
                     onClick: onHideDialogOpen,
@@ -154,7 +163,7 @@ const connector = connect(
         peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
         friendsId: getHomeFriendsId(state)
     }),
-    { feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog }
+    { feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog }
 );
 
 export const SubscribeButton = connector(SubscribeButtonImpl);

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 
 import { StoryInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getHomeFriendsId } from "state/home/selectors";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { friendshipUpdate } from "state/people/actions";
@@ -15,39 +14,36 @@ import {
 
 type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
 
-function InstantStoryFriendButtons({story, friendship, friendsId, friendshipUpdate}: Props) {
+function InstantStoryFriendGroupButtons({story, friendship, friendshipUpdate}: Props) {
     const {t} = useTranslation();
 
-    const friendGroup = story.summaryData?.friendGroup;
-    if (friendGroup?.title != null && friendGroup.title !== "t:friends") {
-        return null;
-    }
+    const friendGroupIds = friendship?.groups?.map(fg => fg.id) ?? [];
+    const friendGroupId = story.summaryData?.friendGroup?.id;
 
     const onAddFriend = () => {
-        if (story.remoteNodeName != null && friendsId != null) {
-            friendshipUpdate(story.remoteNodeName, [friendsId], story.id);
+        if (story.remoteNodeName != null && friendGroupId != null) {
+            friendshipUpdate(story.remoteNodeName, [...friendGroupIds, friendGroupId], story.id);
         }
     }
 
     return (
         <InstantStoryButtons story={story} ready={friendship?.loaded ?? false} accepting={friendship?.updating ?? false}
-                             accepted={friendship?.groups != null && friendship.groups.length > 0}
+                             accepted={friendGroupId != null && friendGroupIds.includes(friendGroupId)}
                              acceptTitle={t("add-friend")} acceptedTitle={t("you-friends")}
                              onAccept={onAddFriend}/>
     )
 }
 
-export const instantStoryFriendAction: InstantStoryButtonsActionSupplier =
+export const instantStoryFriendGroupAction: InstantStoryButtonsActionSupplier =
     (story: StoryInfo) => story.remoteNodeName != null ? nodeCardPrepare(story.remoteNodeName) : null;
 
 const connector = connect(
     (state: ClientState, ownProps: InstantStoryButtonsProps) => ({
         friendship: ownProps.story.remoteNodeName != null
             ? getNodeCard(state, ownProps.story.remoteNodeName)?.friendship
-            : null,
-        friendsId: getHomeFriendsId(state)
+            : null
     }),
     { friendshipUpdate }
 );
 
-export default connector(InstantStoryFriendButtons);
+export default connector(InstantStoryFriendGroupButtons);

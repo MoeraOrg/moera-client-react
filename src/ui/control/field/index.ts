@@ -10,4 +10,5 @@ export { NumberField } from "ui/control/field/NumberField";
 export { PrincipalField } from "ui/control/field/PrincipalField";
 export { RichTextField } from "ui/control/field/RichTextField";
 export { SelectField } from "ui/control/field/SelectField";
+export type { SelectFieldChoice } from "ui/control/field/SelectField";
 export { TextField } from "ui/control/field/TextField";

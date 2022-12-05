@@ -52,6 +52,7 @@ import {
     faPerson,
     faPersonWalkingArrowRight,
     faPlus,
+    faQuestion,
     faQuestionCircle,
     faQuoteLeft,
     faRedoAlt,
@@ -156,6 +157,7 @@ export default function initIconLibrary() {
     library.add(faPerson);
     library.add(faPersonWalkingArrowRight);
     library.add(faPlus);
+    library.add(faQuestion);
     library.add(faQuestionCircle);
     library.add(faQuoteLeft);
     library.add(faRedoAlt);

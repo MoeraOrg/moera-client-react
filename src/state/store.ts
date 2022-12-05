@@ -34,6 +34,7 @@ import donateDialog from "state/donatedialog/reducer";
 import entryCopyTextDialog from "state/entrycopytextdialog/reducer";
 import linkPreviews from "state/linkpreviews/reducer";
 import friendGroupsDialog from "state/friendgroupsdialog/reducer";
+import askDialog from "state/askdialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -74,6 +75,7 @@ import richTextEditorExecutors from "state/richtexteditor/sagas";
 import entryCopyTextDialogExecutors from "state/entrycopytextdialog/sagas";
 import linkPreviewsExecutors from "state/linkpreviews/sagas";
 import friendGroupsDialogExecutors from "state/friendgroupsdialog/sagas";
+import askDialogExecutors from "state/askdialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -100,6 +102,7 @@ import contactsTriggers from "state/contacts/triggers";
 import sourceDialogTriggers from "state/sourcedialog/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
+import askDialogTriggers from "state/askdialog/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
@@ -139,6 +142,7 @@ const reducers = combineReducers({
     entryCopyTextDialog,
     linkPreviews,
     friendGroupsDialog,
+    askDialog,
     messageBox,
     confirmBox,
     flashBox,
@@ -177,6 +181,7 @@ const triggers = collectTriggers(
     sourceDialogTriggers,
     imageEditDialogTriggers,
     lightBoxTriggers,
+    askDialogTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,
     signUpDialogTriggers,
@@ -215,6 +220,7 @@ const executors = collectExecutors(
     entryCopyTextDialogExecutors,
     linkPreviewsExecutors,
     friendGroupsDialogExecutors,
+    askDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

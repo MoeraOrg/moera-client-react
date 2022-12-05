@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
+import { TOptions } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { FormGroup, Wrapper } from "ui/control";
@@ -7,8 +8,8 @@ import { FormGroupStyle } from "ui/control/FormGroup";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 
-interface Choice {
-    title: string;
+export interface SelectFieldChoice {
+    title: string | [string, TOptions];
     value: string;
 }
 
@@ -21,7 +22,7 @@ interface Props {
     labelClassName?: string;
     col?: string;
     size?: string;
-    choices?: Choice[],
+    choices?: SelectFieldChoice[],
     multiple?: boolean;
     autoFocus?: boolean;
     anyValue?: boolean;
@@ -35,10 +36,11 @@ interface Props {
     setting?: string;
 }
 
-export function SelectField({name, title, horizontal = false, layout, groupClassName, labelClassName, col, size,
-                             choices = [], multiple, autoFocus, anyValue, className, autoComplete, noFeedback = false,
-                             initialValue, defaultValue, disabled, selectRef, setting}: Props) {
-
+export function SelectField({
+    name, title, horizontal = false, layout, groupClassName, labelClassName, col, size, choices = [], multiple,
+    autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, disabled, selectRef,
+    setting
+}: Props) {
     const {t} = useTranslation();
 
     const inputDom = useRef<HTMLSelectElement>();
@@ -88,7 +90,11 @@ export function SelectField({name, title, horizontal = false, layout, groupClass
                         }
                     }}
                 >
-                    {choices.map((c, index) => <option key={index} value={c.value}>{t(c.title)}</option>)}
+                    {choices.map((c, index) =>
+                        <option key={index} value={c.value}>
+                            {Array.isArray(c.title) ? t(c.title[0], c.title[1]) : t(c.title)}
+                        </option>
+                    )}
                 </select>
                 {!noFeedback && touched && <FieldError error={error}/>}
             </Wrapper>

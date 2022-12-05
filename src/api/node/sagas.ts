@@ -3,7 +3,7 @@ import { select } from 'typed-redux-saga';
 import { ClientSettings, NodeApi } from "api";
 import { callApi, CallApiResult, decodeBodies } from "api/node/call";
 import {
-    ActivityReactionInfo,
+    ActivityReactionInfo, AskSubject,
     AsyncOperationCreated,
     AvatarAttributes,
     AvatarDescription,
@@ -775,5 +775,13 @@ export function* getPlugins(nodeName: string | null): CallApiResult<PluginInfo[]
 export function* deletePlugin(nodeName: string | null, name: string): CallApiResult<Result> {
     return yield* callApi({
         nodeName, location: ut`/plugins/${name}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}
+
+export function* askRemoteNode(nodeName: string | null, remoteNodeName: string, subject: AskSubject,
+                               friendGroupId: string | null, message: string): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/nodes/${remoteNodeName}/ask`, method: "POST", auth: true,
+        body: {subject, friendGroupId, message}, schema: NodeApi.Result
     });
 }

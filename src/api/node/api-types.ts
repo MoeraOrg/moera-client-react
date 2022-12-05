@@ -445,7 +445,7 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "comment-media-reaction-added-positive" | "comment-media-reaction-added-negative"
     | "posting-media-reaction-failed" | "comment-media-reaction-failed" | "posting-subscribe-task-failed"
     | "posting-reaction-task-failed" | "comment-reaction-task-failed" | "friend-added" | "friend-deleted"
-    | "friend-group-deleted";
+    | "friend-group-deleted" | "asked-to-subscribe" | "asked-to-friend";
 
 export type SubscriptionReason = "user" | "mention" | "comment";
 
@@ -478,11 +478,9 @@ export interface StorySummaryReaction {
     emoji?: number | null;
 }
 
-export interface StorySummaryFriend {
-    ownerName?: string | null;
-    ownerFullName?: string | null;
-    ownerGender?: string | null;
-    friendGroupTitle?: string | null;
+export interface StorySummaryFriendGroup {
+    id?: string | null;
+    title?: string | null;
 }
 
 export interface StorySummaryData {
@@ -497,7 +495,7 @@ export interface StorySummaryData {
     totalReactions?: number | null;
     feedName?: string | null;
     subscriptionReason?: SubscriptionReason | null;
-    friend?: StorySummaryFriend | null;
+    friendGroup?: StorySummaryFriendGroup | null;
     description?: string | null;
 }
 
@@ -975,3 +973,5 @@ export interface PluginInfo {
     settings?: SettingMetaInfo[] | null;
     tokenId?: string | null;
 }
+
+export type AskSubject = "subscribe" | "friend";

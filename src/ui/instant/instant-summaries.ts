@@ -303,41 +303,75 @@ function buildCommentReactionTaskFailedSummary(data: StorySummaryData, t: TFunct
 }
 
 function buildFriendAddedSummary(data: StorySummaryData, t: TFunction): string {
-    if (data.friend?.friendGroupTitle == null || data.friend.friendGroupTitle === "t:friends") {
+    if (data.friendGroup?.title == null || data.friendGroup.title === "t:friends") {
         return t("instant-summary.story.friend-added-to-friends", {
-            node: formatNodeName(data.friend),
-            gender: tGender(data.friend?.ownerGender)
+            node: formatNodeName(data.node),
+            gender: tGender(data.node?.ownerGender)
         });
     } else {
         return t("instant-summary.story.friend-added", {
-            node: formatNodeName(data.friend),
-            gender: tGender(data.friend.ownerGender),
-            group: data.friend.friendGroupTitle
+            node: formatNodeName(data.node),
+            gender: tGender(data.node?.ownerGender),
+            group: data.friendGroup.title
         });
     }
 }
 
 function buildFriendDeletedSummary(data: StorySummaryData, t: TFunction): string {
-    if (data.friend?.friendGroupTitle == null || data.friend.friendGroupTitle === "t:friends") {
+    if (data.friendGroup?.title == null || data.friendGroup.title === "t:friends") {
         return t("instant-summary.story.friend-deleted-from-friends", {
-            node: formatNodeName(data.friend),
-            gender: tGender(data.friend?.ownerGender)
+            node: formatNodeName(data.node),
+            gender: tGender(data.node?.ownerGender)
         });
     } else {
         return t("instant-summary.story.friend-deleted", {
-            node: formatNodeName(data.friend),
-            gender: tGender(data.friend.ownerGender),
-            group: data.friend.friendGroupTitle
+            node: formatNodeName(data.node),
+            gender: tGender(data.node?.ownerGender),
+            group: data.friendGroup.title
         });
     }
 }
 
 function buildFriendGroupDeletedSummary(data: StorySummaryData, t: TFunction): string {
     return t("instant-summary.story.friend-group-deleted", {
-        node: formatNodeName(data.friend),
-        gender: tGender(data.friend?.ownerGender),
-        group: data.friend?.friendGroupTitle ?? ""
+        node: formatNodeName(data.node),
+        gender: tGender(data.node?.ownerGender),
+        group: data.friendGroup?.title ?? ""
     });
+}
+
+function buildAskedToSubscribeSummary(data: StorySummaryData, t: TFunction): string {
+    let summary = t("instant-summary.story.asked-to-subscribe", {
+        node: formatNodeName(data.node),
+        gender: tGender(data.node?.ownerGender),
+        message: data.description ?? ""
+    });
+    if (data.description) {
+        summary += `: ${data.description}`;
+    }
+    return summary;
+}
+
+function buildAskedToFriendSummary(data: StorySummaryData, t: TFunction): string {
+    let summary: string;
+    if (data.friendGroup?.title == null || data.friendGroup.title === "t:friends") {
+        summary = t("instant-summary.story.asked-to-friend", {
+            node: formatNodeName(data.node),
+            gender: tGender(data.node?.ownerGender),
+            message: data.description ?? ""
+        });
+    } else {
+        summary = t("instant-summary.story.asked-to-friend-group", {
+            node: formatNodeName(data.node),
+            gender: tGender(data.node?.ownerGender),
+            group: data.friendGroup.title,
+            message: data.description ?? ""
+        });
+    }
+    if (data.description) {
+        summary += `: ${data.description}`;
+    }
+    return summary;
 }
 
 export function buildSummary(type: StoryType, data: StorySummaryData, homeOwnerName: string | null): string {
@@ -398,6 +432,10 @@ export function buildSummary(type: StoryType, data: StorySummaryData, homeOwnerN
             return buildFriendDeletedSummary(data, i18n.t);
         case "friend-group-deleted":
             return buildFriendGroupDeletedSummary(data, i18n.t);
+        case "asked-to-subscribe":
+            return buildAskedToSubscribeSummary(data, i18n.t);
+        case "asked-to-friend":
+            return buildAskedToFriendSummary(data, i18n.t);
         default:
             return "";
     }

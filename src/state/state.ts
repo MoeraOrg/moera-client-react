@@ -1,3 +1,4 @@
+import { AskDialogState } from "state/askdialog/state";
 import { CartesState } from "state/cartes/state";
 import { ChangeDateDialogState } from "state/changedatedialog/state";
 import { ComposeState } from "state/compose/state";
@@ -36,6 +37,7 @@ import { SourceDialogState } from "state/sourcedialog/state";
 import { TokensState } from "state/tokens/state";
 
 export interface ClientState {
+    askDialog: AskDialogState;
     cartes: CartesState;
     changeDateDialog: ChangeDateDialogState;
     compose: ComposeState;

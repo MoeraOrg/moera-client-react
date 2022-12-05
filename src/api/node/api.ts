@@ -1612,22 +1612,14 @@ const StorySummaryReactionType: JSONSchemaType<API.StorySummaryReaction> = {
     additionalProperties: false
 };
 
-const StorySummaryFriendType: JSONSchemaType<API.StorySummaryFriend> = {
+const StorySummaryFriendGroupType: JSONSchemaType<API.StorySummaryFriendGroup> = {
     type: "object",
     properties: {
-        "ownerName": {
+        "id": {
             type: "string",
             nullable: true
         },
-        "ownerFullName": {
-            type: "string",
-            nullable: true
-        },
-        "ownerGender": {
-            type: "string",
-            nullable: true
-        },
-        "friendGroupTitle": {
+        "title": {
             type: "string",
             nullable: true
         }
@@ -1685,8 +1677,8 @@ export const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
             type: "string",
             nullable: true
         },
-        "friend": {
-            ...StorySummaryFriendType,
+        "friendGroup": {
+            ...StorySummaryFriendGroupType,
             nullable: true
         },
         "description": {

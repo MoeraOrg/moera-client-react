@@ -8,6 +8,9 @@ import InstantStorySubscribeButtons, {
     instantStorySubscribeAction
 } from "ui/instant/buttons/InstantStorySubscribeButtons";
 import InstantStoryFriendButtons, { instantStoryFriendAction } from "ui/instant/buttons/InstantStoryFriendButtons";
+import InstantStoryFriendGroupButtons, {
+    instantStoryFriendGroupAction
+} from "ui/instant/buttons/InstantStoryFriendGroupButtons";
 
 interface InstantTypeDetails {
     color?: string;
@@ -120,6 +123,18 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
     "friend-group-deleted": {
         color: "var(--bs-teal)",
         icon: "user-times"
+    },
+    "asked-to-subscribe": {
+        color: "var(--bs-indigo)",
+        icon: "question",
+        buttons: InstantStorySubscribeButtons,
+        buttonsAction: instantStorySubscribeAction
+    },
+    "asked-to-friend": {
+        color: "var(--bs-teal)",
+        icon: "question",
+        buttons: InstantStoryFriendGroupButtons,
+        buttonsAction: instantStoryFriendGroupAction
     }
 };
 
@@ -156,7 +171,8 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
         case "friend-added":
         case "friend-deleted":
         case "friend-group-deleted":
-            console.log(story);
+        case "asked-to-subscribe":
+        case "asked-to-friend":
             return {nodeName: story.remoteNodeName, href: "/"}
         case "comment-added":
             return {nodeName: ":", href: `/post/${postingId}?comment=${story.remoteCommentId}`}

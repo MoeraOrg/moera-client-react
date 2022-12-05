@@ -1,3 +1,4 @@
+import { AskDialogAnyAction } from "state/askdialog/actions";
 import { CartesAnyAction } from "state/cartes/actions";
 import { ChangeDateDialogAnyAction } from "state/changedatedialog/actions";
 import { ComposeAnyAction } from "state/compose/actions";
@@ -39,6 +40,7 @@ import { ClientEventAction } from "api/events/actions";
 
 export type ClientAction =
     ClientEventAction
+    | AskDialogAnyAction
     | CartesAnyAction
     | ChangeDateDialogAnyAction
     | ComposeAnyAction
