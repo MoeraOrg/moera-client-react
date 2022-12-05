@@ -10,6 +10,7 @@ import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
 import { openAskDialog } from "state/askdialog/actions";
 import { getHomeFriendsId, getHomeOwnerGender } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
+import { dialogClosed, dialogOpened } from "state/navigation/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { Button, DropdownMenu } from "ui/control";
 import PeopleHideDialog from "ui/control/subscribebutton/PeopleHideDialog";
@@ -26,7 +27,7 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButtonImpl({
     small, nodeName, feedName, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe, friendshipUpdate,
-    openFriendGroupsDialog, openAskDialog
+    openFriendGroupsDialog, openAskDialog, dialogOpened, dialogClosed
 }: Props) {
     const subscribing = card?.subscription?.subscribing ?? false;
     const unsubscribing = card?.subscription?.unsubscribing ?? false;
@@ -60,9 +61,15 @@ function SubscribeButtonImpl({
 
     const onAskDialog = () => openAskDialog(nodeName);
 
-    const onHideDialogOpen = () => setHideDialog(true);
+    const onHideDialogClose = () => {
+        dialogClosed();
+        setHideDialog(false);
+    }
 
-    const onHideDialogClose = () => setHideDialog(false);
+    const onHideDialogOpen = () => {
+        setHideDialog(true);
+        dialogOpened(onHideDialogClose);
+    }
 
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;
@@ -163,7 +170,10 @@ const connector = connect(
         peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
         friendsId: getHomeFriendsId(state)
     }),
-    { feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog }
+    {
+        feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog, dialogOpened,
+        dialogClosed
+    }
 );
 
 export const SubscribeButton = connector(SubscribeButtonImpl);
