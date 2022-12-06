@@ -1,5 +1,6 @@
 import * as immutable from 'object-path-immutable';
 import {
+    AskSubjectsChangedEvent,
     AvatarAddedEvent,
     AvatarDeletedEvent,
     AvatarOrderedEvent,
@@ -138,6 +139,7 @@ export const EVENT_NODE_FRIEND_GROUP_DELETED = "EVENT_NODE_FRIEND_GROUP_DELETED"
 export const EVENT_HOME_FRIEND_GROUP_DELETED = "EVENT_HOME_FRIEND_GROUP_DELETED";
 export const EVENT_NODE_FRIENDSHIP_UPDATED = "EVENT_NODE_FRIENDSHIP_UPDATED";
 export const EVENT_HOME_FRIENDSHIP_UPDATED = "EVENT_HOME_FRIENDSHIP_UPDATED";
+export const EVENT_NODE_ASK_SUBJECTS_CHANGED = "EVENT_NODE_ASK_SUBJECTS_CHANGED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -208,4 +210,5 @@ export type ClientEventAction =
     | EventAction<FriendGroupAddedEvent>
     | EventAction<FriendGroupUpdatedEvent>
     | EventAction<FriendGroupDeletedEvent>
-    | EventAction<FriendshipUpdatedEvent>;
+    | EventAction<FriendshipUpdatedEvent>
+    | EventAction<AskSubjectsChangedEvent>;

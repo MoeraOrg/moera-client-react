@@ -314,3 +314,5 @@ export interface FriendshipUpdatedEvent extends BaseEvent<"FRIENDSHIP_UPDATED"> 
     nodeName: string;
     friendGroups?: FriendGroupDetails[] | null;
 }
+
+export type AskSubjectsChangedEvent = BaseEvent<"ASK_SUBJECTS_CHANGED">;

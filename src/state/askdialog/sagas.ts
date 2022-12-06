@@ -1,8 +1,11 @@
-import { call, put } from 'typed-redux-saga';
+import { call, put, select } from 'typed-redux-saga';
 
 import { executor } from "state/executor";
 import { Node } from "api";
+import { Features } from "api/node/api-types";
+import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
+import { getNodeFeatures } from "state/node/selectors";
 import {
     ASK_DIALOG_LOAD,
     ASK_DIALOG_SEND,
@@ -19,12 +22,16 @@ export default [
     executor(ASK_DIALOG_SEND, null, askDialogSendSaga)
 ];
 
-function* askDialogLoadSaga(action: AskDialogLoadAction) {
+function* askDialogLoadSaga(action: WithContext<AskDialogLoadAction>) {
     const {nodeName} = action.payload;
     try {
-        const features = yield* call(Node.getFeatures, nodeName);
-        yield* put(askDialogLoaded(nodeName, features.friendGroups?.available ?? [],
-            features.ask?.subscribe ?? "signed", features.ask?.friend ?? "signed"));
+        let features: Features | null;
+        if (nodeName === action.context.ownerName) {
+            features = yield* select(getNodeFeatures);
+        } else {
+            features = yield* call(Node.getFeatures, nodeName);
+        }
+        yield* put(askDialogLoaded(nodeName, features?.friendGroups?.available ?? [], features?.ask ?? []));
     } catch (e) {
         yield* put(askDialogLoadFailed(nodeName));
         yield* put(errorThrown(e));

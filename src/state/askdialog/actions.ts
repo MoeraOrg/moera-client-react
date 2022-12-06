@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AskSubject, FriendGroupInfo, PrincipalValue } from "api/node/api-types";
+import { AskSubject, FriendGroupInfo } from "api/node/api-types";
 
 export const OPEN_ASK_DIALOG = "OPEN_ASK_DIALOG";
 export type OpenAskDialogAction = ActionWithPayload<typeof OPEN_ASK_DIALOG, {
@@ -31,13 +31,12 @@ export const ASK_DIALOG_LOADED = "ASK_DIALOG_LOADED";
 export type AskDialogLoadedAction = ActionWithPayload<typeof ASK_DIALOG_LOADED, {
     nodeName: string;
     friendGroups: FriendGroupInfo[];
-    subscribePrincipal: PrincipalValue;
-    friendPrincipal: PrincipalValue;
+    subjectsAllowed: AskSubject[];
 }>;
-export const askDialogLoaded = (nodeName: string, friendGroups: FriendGroupInfo[], subscribePrincipal: PrincipalValue,
-                                friendPrincipal: PrincipalValue): AskDialogLoadedAction => ({
+export const askDialogLoaded = (nodeName: string, friendGroups: FriendGroupInfo[],
+                                subjectsAllowed: AskSubject[]): AskDialogLoadedAction => ({
     type: ASK_DIALOG_LOADED,
-    payload: {nodeName, friendGroups, subscribePrincipal, friendPrincipal}
+    payload: {nodeName, friendGroups, subjectsAllowed}
 });
 
 export const ASK_DIALOG_LOAD_FAILED = "ASK_DIALOG_LOAD_FAILED";

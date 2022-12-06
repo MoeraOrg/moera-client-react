@@ -21,22 +21,17 @@ const initialState: AskDialogState = {
     loading: false,
     nodeName: null,
     friendGroups: [],
-    subscribePrincipal: "signed",
-    friendPrincipal: "signed",
+    subjectsAllowed: [],
     sending: false
 };
 
 export default (state: AskDialogState = initialState, action: WithContext<ClientAction>): AskDialogState => {
     switch (action.type) {
         case OPEN_ASK_DIALOG:
-            if (state.nodeName !== action.payload.nodeName) {
-                return {
-                    ...cloneDeep(initialState),
-                    show: true,
-                    nodeName: action.payload.nodeName
-                }
-            } else {
-                return immutable.set(state, "show", true);
+            return {
+                ...cloneDeep(initialState),
+                show: true,
+                nodeName: action.payload.nodeName
             }
 
         case CLOSE_ASK_DIALOG:
@@ -52,8 +47,7 @@ export default (state: AskDialogState = initialState, action: WithContext<Client
                     loaded: true,
                     loading: false,
                     friendGroups: action.payload.friendGroups,
-                    subscribePrincipal: action.payload.subscribePrincipal,
-                    friendPrincipal: action.payload.friendPrincipal
+                    subjectsAllowed: action.payload.subjectsAllowed
                 }
             }
             return state;

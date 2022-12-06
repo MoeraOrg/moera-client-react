@@ -1,4 +1,4 @@
-import { FriendGroupInfo, PrincipalValue } from "api/node/api-types";
+import { AskSubject, FriendGroupInfo } from "api/node/api-types";
 
 export interface AskDialogState {
     show: boolean;
@@ -6,7 +6,6 @@ export interface AskDialogState {
     loading: boolean;
     nodeName: string | null;
     friendGroups: FriendGroupInfo[];
-    subscribePrincipal: PrincipalValue;
-    friendPrincipal: PrincipalValue;
+    subjectsAllowed: AskSubject[];
     sending: boolean;
 }

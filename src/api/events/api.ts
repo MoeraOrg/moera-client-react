@@ -13,6 +13,7 @@ import {
     TokenInfoType
 } from "api/node/api";
 import {
+    AskSubjectsChangedEvent,
     AvatarAddedEvent,
     AvatarDeletedEvent,
     AvatarOrderedEvent,
@@ -1333,6 +1334,17 @@ const FriendshipUpdatedEventType: JSONSchemaType<FriendshipUpdatedEvent> = {
     required: ["type", "nodeName"]
 }
 
+const AskSubjectsChangedEventType: JSONSchemaType<AskSubjectsChangedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        }
+    },
+    additionalProperties: false,
+    required: ["type"]
+};
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1393,7 +1405,8 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "FRIEND_GROUP_ADDED": schema(FriendGroupAddedEventType),
     "FRIEND_GROUP_UPDATED": schema(FriendGroupUpdatedEventType),
     "FRIEND_GROUP_DELETED": schema(FriendGroupDeletedEventType),
-    "FRIENDSHIP_UPDATED": schema(FriendshipUpdatedEventType)
+    "FRIENDSHIP_UPDATED": schema(FriendshipUpdatedEventType),
+    "ASK_SUBJECTS_CHANGED": schema(AskSubjectsChangedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

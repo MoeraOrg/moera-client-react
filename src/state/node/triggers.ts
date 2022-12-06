@@ -3,6 +3,7 @@ import i18n from 'i18next';
 import { inv, trigger } from "state/trigger";
 import { NodeNameChangedEvent } from "api/events/api-types";
 import {
+    EVENT_NODE_ASK_SUBJECTS_CHANGED,
     EVENT_NODE_FRIEND_GROUP_ADDED,
     EVENT_NODE_FRIEND_GROUP_DELETED,
     EVENT_NODE_FRIEND_GROUP_UPDATED,
@@ -50,6 +51,6 @@ export default [
         true,
         nodeFeaturesLoad
     ),
-    trigger(EVENT_NODE_FRIENDSHIP_UPDATED, inv(isAtHomeNode), nodeFeaturesLoad),
+    trigger([EVENT_NODE_FRIENDSHIP_UPDATED, EVENT_NODE_ASK_SUBJECTS_CHANGED], inv(isAtHomeNode), nodeFeaturesLoad),
     trigger([SETTINGS_PLUGINS_DELETED, SETTINGS_UPDATE_SUCCEEDED], isAtHomeNode, nodeFeaturesLoad)
 ]

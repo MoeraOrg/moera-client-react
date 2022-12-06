@@ -599,17 +599,14 @@ export interface FriendGroupsFeatures {
     memberOf?: FriendGroupDetails[] | null;
 }
 
-export interface AskFeatures {
-    subscribe: PrincipalValue;
-    friend: PrincipalValue;
-}
+export type AskSubject = "subscribe" | "friend";
 
 export interface Features {
     posting: PostingFeatures;
     plugins?: string[] | null;
     feedWidth: number;
     friendGroups?: FriendGroupsFeatures | null;
-    ask?: AskFeatures | null;
+    ask?: AskSubject[] | null;
 }
 
 export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
@@ -979,5 +976,3 @@ export interface PluginInfo {
     settings?: SettingMetaInfo[] | null;
     tokenId?: string | null;
 }
-
-export type AskSubject = "subscribe" | "friend";
