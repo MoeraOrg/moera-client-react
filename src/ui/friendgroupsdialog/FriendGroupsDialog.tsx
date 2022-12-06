@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { FriendGroupInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeFriendGroups } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
@@ -13,7 +14,6 @@ import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
 import { tGender } from "i18n";
-import { FriendGroupInfo } from "api/node/api-types";
 
 type OuterProps = ConnectedProps<typeof connector>;
 
@@ -21,7 +21,7 @@ interface Values {
     groups: string[];
     addedGroups: string[];
     addedGroupTitles: string[];
-    addedGroupView: string[];
+    addedGroupView: PrincipalValue[];
 }
 
 type Props = OuterProps & FormikProps<Values>;
@@ -107,7 +107,11 @@ const friendGroupsDialogLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         if (formik.props.nodeName != null) {
-            formik.props.nodeChangeFriendGroups(formik.props.nodeName, values.groups,
+            const prevGroups = formik.props.nodeCard?.friendship.groups;
+            const view: PrincipalValue = prevGroups != null && prevGroups.length > 0
+                ? (prevGroups[0].operations?.view ?? "public")
+                : "public";
+            formik.props.nodeChangeFriendGroups(formik.props.nodeName, values.groups, view,
                 values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView);
         }
         formik.setSubmitting(false);

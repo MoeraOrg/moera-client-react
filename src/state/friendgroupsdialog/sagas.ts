@@ -19,10 +19,10 @@ export default [
 ];
 
 function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsAction>) {
-    const {nodeName, groups, addedGroups, addedGroupTitles, addedGroupView} = action.payload;
+    const {nodeName, groups, view, addedGroups, addedGroupTitles, addedGroupView} = action.payload;
     const {homeOwnerNameOrUrl} = action.context;
 
-    const allGroups: FriendGroupAssignment[] = groups.map(id => ({id}));
+    const allGroups: FriendGroupAssignment[] = groups.map(id => ({id, operations: {view}}));
     const friendsId = yield* select(state => getHomeFriendsId(state));
     if (friendsId != null) {
         allGroups.push({id: friendsId});
@@ -37,7 +37,7 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
             const group = yield* call(Node.postFriendGroup, ":", addedGroupTitles[i], addedGroupView[i]);
             added.push(group);
             if (addedGroups.includes(i)) {
-                allGroups.push({id: group.id});
+                allGroups.push({id: group.id, operations: {view}});
             }
         }
         const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: allGroups}]);

@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
+import { PrincipalValue } from "api/node/api-types";
 
 export const OPEN_FRIEND_GROUPS_DIALOG = "OPEN_FRIEND_GROUPS_DIALOG";
 export type OpenFriendGroupsDialogAction = ActionWithPayload<typeof OPEN_FRIEND_GROUPS_DIALOG, {
@@ -21,15 +22,16 @@ export const NODE_CHANGE_FRIEND_GROUPS = "NODE_CHANGE_FRIEND_GROUPS";
 export type NodeChangeFriendGroupsAction = ActionWithPayload<typeof NODE_CHANGE_FRIEND_GROUPS, {
     nodeName: string;
     groups: string[];
+    view: PrincipalValue;
     addedGroups: number[];
     addedGroupTitles: string[];
-    addedGroupView: string[];
+    addedGroupView: PrincipalValue[];
 }>;
-export const nodeChangeFriendGroups = (nodeName: string, groups: string[], addedGroups: number[],
+export const nodeChangeFriendGroups = (nodeName: string, groups: string[], view: PrincipalValue, addedGroups: number[],
                                        addedGroupTitles: string[],
-                                       addedGroupView: string[]): NodeChangeFriendGroupsAction => ({
+                                       addedGroupView: PrincipalValue[]): NodeChangeFriendGroupsAction => ({
     type: NODE_CHANGE_FRIEND_GROUPS,
-    payload: {nodeName, groups, addedGroups, addedGroupTitles, addedGroupView}
+    payload: {nodeName, groups, view, addedGroups, addedGroupTitles, addedGroupView}
 });
 
 export const NODE_CHANGE_FRIEND_GROUPS_FAILED = "NODE_CHANGE_FRIEND_GROUPS_FAILED";
