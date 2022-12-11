@@ -1,6 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import { FeedReference, PostingInfo, StoryInfo } from "api/node/api-types";
+import { FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api/node/api-types";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
@@ -31,7 +31,6 @@ import {
 } from "api/events/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
 import { findPostingIdsByRemote } from "state/postings/selectors";
-import { immutableSetSubscriptionId } from "state/subscriptions/util";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
@@ -80,6 +79,16 @@ function outsideIn(story: StoryInfo): PostingInfo | null {
     return posting;
 }
 
+function immutableSetSubscriptionId(state: PostingsState, nodeName: string, id: string, type: SubscriptionType,
+                                           subscriptionId: string | null) {
+    switch (type) {
+        case "posting-comments":
+            return immutable.set(state, [nodeName, id, "subscriptions", "comments"], subscriptionId);
+        default:
+            return state;
+    }
+}
+
 export default (state: PostingsState = initialState, action: WithContext<ClientAction>): PostingsState => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
@@ -95,7 +104,10 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 .forEach(p => istate.assign(["", p.id], {
                     posting: safeguard(p),
                     deleting: false,
-                    verificationStatus: "none"
+                    verificationStatus: "none",
+                    subscriptions: {
+                        comments: null
+                    }
                 }));
             return istate.value();
         }
@@ -106,7 +118,10 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 .forEach(p => istate.assign(["", p.id], {
                     posting: safeguard(p),
                     deleting: false,
-                    verificationStatus: "none"
+                    verificationStatus: "none",
+                    subscriptions: {
+                        comments: null
+                    }
                 }));
             return istate.value();
         }
@@ -142,7 +157,10 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return immutable.wrap(state).assign([nodeName, posting.id], {
                 posting: safeguard(posting),
                 deleting: false,
-                verificationStatus: "none"
+                verificationStatus: "none",
+                subscriptions: {
+                    comments: null
+                }
             }).value();
         }
 
@@ -281,7 +299,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case POSTING_COMMENTS_SUBSCRIBED: {
             const {id, subscriptionId, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
-                return immutable.set(state, [nodeName, id, "posting", "subscriptions", "comments"], subscriptionId);
+                return immutable.set(state, [nodeName, id, "subscriptions", "comments"], subscriptionId);
             }
             return state;
         }
@@ -289,7 +307,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case POSTING_COMMENTS_UNSUBSCRIBED: {
             const {id, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
-                return immutable.set(state, [nodeName, id, "posting", "subscriptions", "comments"], null);
+                return immutable.set(state, [nodeName, id, "subscriptions", "comments"], null);
             }
             return state;
         }

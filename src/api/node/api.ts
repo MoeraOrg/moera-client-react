@@ -555,18 +555,6 @@ const PostingSourceInfo: JSONSchemaType<API.PostingSourceInfo> = {
     additionalProperties: false
 };
 
-const PostingSubscriptionsInfo: JSONSchemaType<API.PostingSubscriptionsInfo> = {
-    type: "object",
-    properties: {
-        "comments": {
-            type: "string",
-            nullable: true
-        }
-    },
-    required: ["comments"],
-    additionalProperties: false
-};
-
 const PublicMediaFileInfoType: JSONSchemaType<API.PublicMediaFileInfo> = {
     type: "object",
     properties: {
@@ -984,12 +972,6 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         "totalComments": {
             type: "integer",
             nullable: true
-        },
-        "subscriptions": {
-            ...PostingSubscriptionsInfo,
-            default: {
-                comments: null
-            }
         }
     },
     required: ["id", "revisionId", "totalRevisions", "ownerName", "body", "heading", "createdAt"],
@@ -1163,13 +1145,6 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
         "totalComments": {
             type: "integer",
             nullable: true
-        },
-        "subscriptions": {
-            ...PostingSubscriptionsInfo,
-            nullable: true,
-            default: {
-                comments: null
-            }
         }
     },
     required: ["id"],

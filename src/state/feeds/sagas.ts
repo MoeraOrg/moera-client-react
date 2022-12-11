@@ -210,9 +210,9 @@ function* feedPastSliceLoadSaga(action: FeedPastSliceLoadAction) {
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), null, before, 20)
             : yield* call(Node.getFeedSlice, "", feedName, null, before, 20);
         yield* call(fillActivityReactionsInStories, data.stories);
-        yield* call(fillSubscriptions, data.stories);
         yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after,
             data.totalInPast, data.totalInFuture));
+        yield* call(fillSubscriptions, data.stories);
     } catch (e) {
         yield* put(feedPastSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -227,9 +227,9 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
             : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
         yield* call(fillActivityReactionsInStories, data.stories);
-        yield* call(fillSubscriptions, data.stories);
         yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after,
             data.totalInPast, data.totalInFuture));
+        yield* call(fillSubscriptions, data.stories);
     } catch (e) {
         yield* put(feedFutureSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -270,9 +270,9 @@ function* feedUpdateSlice(feedName: string, before: number, after: number) {
                 ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
                 : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
             yield* call(fillActivityReactionsInStories, data.stories);
-            yield* call(fillSubscriptions, data.stories);
             yield* put(feedSliceUpdate(
                 feedName, data.stories, data.before, data.after, data.totalInPast, data.totalInFuture));
+            yield* call(fillSubscriptions, data.stories);
             if (after === data.before) {
                 break;
             }

@@ -27,6 +27,11 @@ export function getPostingVerificationStatus(state: ClientState, id: string,
     return state.postings[nodeName]?.[id]?.verificationStatus ?? null;
 }
 
+export function getPostingCommentsSubscriptionId(state: ClientState, id: string,
+                                                 nodeName: string = ""): string | null {
+    return state.postings[nodeName]?.[id]?.subscriptions.comments ?? null;
+}
+
 export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">,
                                         feedName: string): FeedReference | null {
     return posting.feedReferences ? (posting.feedReferences.find(r => r.feedName === feedName) ?? null) : null;

@@ -35,8 +35,8 @@ export default [
             && !isPostingCached(state, signal.payload.story.posting.id),
         signal => postingLoad(signal.payload.story.posting!.id)
     ),
-    trigger(POSTING_COMMENTS_SUBSCRIBED, true, flashBox(i18n.t("following-comments"))),
-    trigger(POSTING_COMMENTS_UNSUBSCRIBED, true, flashBox(i18n.t("not-following-comments"))),
+    trigger(POSTING_COMMENTS_SUBSCRIBED, true, () => flashBox(i18n.t("following-comments"))),
+    trigger(POSTING_COMMENTS_UNSUBSCRIBED, true, () => flashBox(i18n.t("not-following-comments"))),
     trigger([HOME_OWNER_SET, DISCONNECTED_FROM_HOME], true, postingReactionsReload),
     trigger(
         POSTING_OPERATIONS_UPDATED,

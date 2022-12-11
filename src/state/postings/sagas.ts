@@ -44,7 +44,7 @@ import {
 import { WithContext } from "state/action-types";
 import { ClientState } from "state/state";
 import { flashBox } from "state/flashbox/actions";
-import { getPosting } from "state/postings/selectors";
+import { getPosting, getPostingCommentsSubscriptionId } from "state/postings/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
@@ -89,8 +89,8 @@ function* postingLoadSaga(action: PostingLoadAction) {
     try {
         const posting = yield* call(Node.getPosting, nodeName, id);
         yield* call(fillActivityReaction, posting);
-        yield* call(fillSubscription, posting);
         yield* put(postingSet(posting, nodeName));
+        yield* call(fillSubscription, posting);
     } catch (e) {
         yield* put(postingLoadFailed(id, nodeName));
         yield* put(errorThrown(e));
@@ -247,19 +247,18 @@ function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
 
 function* postingCommentsUnsubscribeSaga(action: PostingCommentsUnsubscribeAction) {
     const {id, nodeName} = action.payload;
-    const {posting, ownerName} = yield* select(state => ({
+    const {posting, ownerName, subscriptionId} = yield* select(state => ({
         posting: getPosting(state, id),
-        ownerName: getOwnerName(state)
+        ownerName: getOwnerName(state),
+        subscriptionId: getPostingCommentsSubscriptionId(state, id)
     }));
     if (posting == null || ownerName == null) {
         yield* put(postingCommentsUnsubscribeFailed(id));
         return;
     }
-    const targetNode = posting.receiverName ?? (nodeName || ownerName);
     try {
-        if (posting.subscriptions?.comments != null) {
-            yield* call(Node.deleteSubscriber, targetNode, posting.subscriptions.comments);
-            yield* call(Node.deleteSubscription, ":", posting.subscriptions.comments, targetNode);
+        if (subscriptionId != null) {
+            yield* call(Node.deleteSubscription, ":", subscriptionId);
         }
         yield* put(postingCommentsUnsubscribed(id, nodeName));
     } catch (e) {

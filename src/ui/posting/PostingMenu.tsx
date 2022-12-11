@@ -20,19 +20,22 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootLocation, getOwnerName, ProtectedObject } from "state/node/selectors";
+import { getPostingCommentsSubscriptionId } from "state/postings/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu } from "ui/control";
 import "ui/entry/EntryMenu.css";
 
-type Props = {
+interface OwnProps {
     posting: PostingInfo;
     story: MinimalStoryInfo;
     isPermitted: (operation: string, object: ProtectedObject, defaultValue: PrincipalValue) => boolean;
-} & ConnectedProps<typeof connector>;
+}
+
+type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function PostingMenu({
-     posting, story, isPermitted, rootLocation, nodeOwnerName, homeOwnerName, goToCompose, confirmBox,
-     storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
+     posting, story, isPermitted, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, goToCompose,
+     confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
      postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare, entryCopyText
 }: Props) {
     const {t} = useTranslation();
@@ -108,13 +111,13 @@ function PostingMenu({
                 title: t("follow-comments"),
                 href: postingHref,
                 onClick: onFollowComments,
-                show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments == null
+                show: (posting.receiverName ?? posting.ownerName) !== homeOwnerName && commentsSubscriptionId == null
             },
             {
                 title: t("unfollow-comments"),
                 href: postingHref,
                 onClick: onUnfollowComments,
-                show: posting.ownerName !== homeOwnerName && posting.subscriptions?.comments != null
+                show: (posting.receiverName ?? posting.ownerName) !== homeOwnerName && commentsSubscriptionId != null
             },
             {
                 divider: true
@@ -157,10 +160,11 @@ function PostingMenu({
 }
 
 const connector = connect(
-    (state: ClientState) => ({
+    (state: ClientState, ownProps: OwnProps) => ({
         rootLocation: getNodeRootLocation(state),
         nodeOwnerName: getOwnerName(state),
-        homeOwnerName: getHomeOwnerName(state)
+        homeOwnerName: getHomeOwnerName(state),
+        commentsSubscriptionId: getPostingCommentsSubscriptionId(state, ownProps.posting.id)
     }),
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,

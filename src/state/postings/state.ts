@@ -11,10 +11,13 @@ export interface ExtPostingInfo extends PostingInfo {
     body: ExtBody;
 }
 
-interface PostingState {
+export interface PostingState {
     posting: ExtPostingInfo;
     deleting: boolean;
     verificationStatus: VerificationStatus;
+    subscriptions: {
+        comments: string | null;
+    }
 }
 
 type NodePostingsState = Partial<Record<string, PostingState>>;

@@ -1,44 +1,63 @@
-import { call, select } from 'typed-redux-saga';
+import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api/node";
 import { PostingInfo, StoryInfo } from "api/node/api-types";
-import { isAtHomeNode } from "state/node/selectors";
-import { isConnectedToHome } from "state/home/selectors";
-import { fillSubscriptionId } from "state/subscriptions/util";
+import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
+import { postingSubscriptionSet } from "state/postings/actions";
 
 export function* fillSubscriptions(stories: StoryInfo[]) {
+    const {connectedToHome, homeOwnerName} = yield* select(state => ({
+        connectedToHome: isConnectedToHome(state),
+        homeOwnerName: getHomeOwnerName(state)
+    }));
+
+    if (!connectedToHome) {
+        return;
+    }
+
     const postings = stories
         .map(t => t.posting)
         .filter((p): p is PostingInfo => p != null)
-        .filter(p => p.receiverName != null && p.receiverPostingId != null);
+        .map(posting => ({
+            id: posting.id,
+            nodeName: posting.receiverName ?? posting.ownerName,
+            postingId: posting.receiverPostingId ?? posting.id
+        }))
+        .filter(t => t.nodeName != null && t.nodeName !== homeOwnerName && t.postingId != null);
+
     if (postings.length === 0) {
         return;
     }
-    const toBeFilled = yield* select(state => isConnectedToHome(state) && !isAtHomeNode(state));
-    if (!toBeFilled) {
-        return;
-    }
-    const remotePostings = postings.map(p => ({nodeName: p.receiverName!, postingId: p.receiverPostingId!}));
+
+    const remotePostings = postings.map(t => ({nodeName: t.nodeName!, postingId: t.postingId!}));
     const subscriptions = yield* call(Node.searchSubscriptions, ":", "posting-comments", null, remotePostings);
-    const subscriptionMap = new Map(subscriptions.map(r => [`${r.remoteNodeName} ${r.remotePostingId}`, r]));
-    postings.forEach(p => {
-        const key = `${p.receiverName} ${p.receiverPostingId}`;
+    const subscriptionMap = new Map(subscriptions.map(sr => [`${sr.remoteNodeName} ${sr.remotePostingId}`, sr]));
+
+    for (const t of postings) {
+        const key = `${t.nodeName} ${t.postingId}`;
         const subscription = subscriptionMap.get(key);
         if (subscription != null) {
-            fillSubscriptionId(p, subscription);
+            yield* put(postingSubscriptionSet(t.id, "posting-comments", subscription.id))
         }
-    })
+    }
 }
 
 export function* fillSubscription(posting: PostingInfo) {
-    if (posting.receiverName == null || posting.receiverPostingId == null) {
+    const {connectedToHome, homeOwnerName} = yield* select(state => ({
+        connectedToHome: isConnectedToHome(state),
+        homeOwnerName: getHomeOwnerName(state)
+    }));
+    if (!connectedToHome) {
         return;
     }
-    const toBeFilled = yield* select(state => isConnectedToHome(state) && !isAtHomeNode(state));
-    if (!toBeFilled) {
+    const nodeName = posting.receiverName ?? posting.ownerName;
+    const postingId = posting.receiverPostingId ?? posting.id;
+    if (nodeName == null || nodeName === homeOwnerName || postingId == null) {
         return;
     }
-    const remotePostings = [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}];
+    const remotePostings = [{nodeName, postingId}];
     const subscriptions = yield* call(Node.searchSubscriptions, ":", "posting-comments", null, remotePostings);
-    subscriptions.forEach(sr => fillSubscriptionId(posting, sr));
+    for (const subscription of subscriptions) {
+        yield* put(postingSubscriptionSet(posting.id, "posting-comments", subscription.id))
+    }
 }

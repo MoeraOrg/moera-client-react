@@ -160,8 +160,8 @@ function* detailedPostingLoadSaga() {
     try {
         const posting = yield* call(Node.getPosting, "", id);
         yield* call(fillActivityReaction, posting)
-        yield* call(fillSubscription, posting)
         yield* put(detailedPostingLoaded(posting));
+        yield* call(fillSubscription, posting)
     } catch (e) {
         yield* put(detailedPostingLoadFailed());
         yield* put(errorThrown(e));

@@ -186,10 +186,6 @@ export interface PostingSourceInfo {
     createdAt: number;
 }
 
-export interface PostingSubscriptionsInfo {
-    comments: string | null;
-}
-
 export interface PostingOperations {
     view?: PrincipalValue | null;
     viewComments?: PrincipalValue | null;
@@ -292,7 +288,6 @@ export interface PostingInfoBase<B> {
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
     totalComments?: number | null;
-    subscriptions: PostingSubscriptionsInfo | null;
 }
 
 export type EncodedPostingInfo = PostingInfoBase<string>;
