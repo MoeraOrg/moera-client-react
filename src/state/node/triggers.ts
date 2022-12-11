@@ -32,7 +32,7 @@ export default [
         updateLocation
     ),
     trigger(PULSE_6H, isOwnerNameSet, ownerVerify),
-    trigger(OWNER_SWITCH_FAILED, true, messageBox(i18n.t("node-name-not-exists"))),
+    trigger(OWNER_SWITCH_FAILED, true, () => messageBox(i18n.t("node-name-not-exists"))),
     trigger(
         EVENT_NODE_NODE_NAME_CHANGED,
         true,

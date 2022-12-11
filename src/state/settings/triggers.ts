@@ -76,7 +76,7 @@ export default [
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, true, settingsClientValuesLoad),
     trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsClientTab), settingsClientConflict),
-    trigger(SETTINGS_CHANGED_PASSWORD, true, flashBox(i18n.t("password-changed"))),
+    trigger(SETTINGS_CHANGED_PASSWORD, true, () => flashBox(i18n.t("password-changed"))),
     trigger(EVENT_HOME_PLUGINS_UPDATED, isSettingsPluginsLoaded, settingsPluginsLoad),
     trigger(
         EVENT_HOME_PLUGINS_UPDATED,
