@@ -1,5 +1,7 @@
 # Moera Web Client
 
+Live network: https://web.moera.org
+
 Read more about Moera at https://moera.org
 
 Learn more about Moera web client: http://moera.org/overview/browser-extension.html
