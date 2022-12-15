@@ -718,6 +718,7 @@ export interface SubscriberInfo {
     fullName?: string | null;
     gender?: string | null;
     avatar?: AvatarImage | null;
+    contact?: ContactInfo | null;
     createdAt: number;
     operations?: {
         view?: PrincipalValue | null;
@@ -743,6 +744,7 @@ export interface SubscriptionInfo {
     remoteFullName?: string | null;
     remoteGender?: string | null;
     remoteAvatar?: AvatarImage | null;
+    contact?: ContactInfo | null;
     remoteFeedName?: string | null;
     remotePostingId?: string | null;
     createdAt: number;

@@ -2263,6 +2263,37 @@ const ReactionsSliceInfoType: JSONSchemaType<API.ReactionsSliceInfo> = {
 
 export const ReactionsSliceInfo = schema(ReactionsSliceInfoType);
 
+const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
+    type: "object",
+    properties: {
+        "nodeName": {
+            type: "string"
+        },
+        "fullName": {
+            type: "string",
+            nullable: true
+        },
+        "gender": {
+            type: "string",
+            nullable: true
+        },
+        "avatar": {
+            ...AvatarImageType,
+            nullable: true
+        },
+        "closeness": {
+            type: "number"
+        }
+    },
+    required: ["nodeName", "closeness"],
+    additionalProperties: false
+};
+
+export const ContactInfoArray = schema({
+    type: "array",
+    items: ContactInfoType
+} as JSONSchemaType<API.ContactInfo[]>);
+
 export const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
     type: "object",
     properties: {
@@ -2293,6 +2324,10 @@ export const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
         },
         "avatar": {
             ...AvatarImageType,
+            nullable: true
+        },
+        "contact": {
+            ...ContactInfoType,
             nullable: true
         },
         "createdAt": {
@@ -2373,6 +2408,10 @@ export const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
         },
         "remoteAvatar": {
             ...AvatarImageType,
+            nullable: true
+        },
+        "contact": {
+            ...ContactInfoType,
             nullable: true
         },
         "remoteFeedName": {
@@ -2569,37 +2608,6 @@ const DomainAvailableType: JSONSchemaType<API.DomainAvailable> = {
 };
 
 export const DomainAvailable = schema(DomainAvailableType);
-
-const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
-    type: "object",
-    properties: {
-        "nodeName": {
-            type: "string"
-        },
-        "fullName": {
-            type: "string",
-            nullable: true
-        },
-        "gender": {
-            type: "string",
-            nullable: true
-        },
-        "avatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
-        "closeness": {
-            type: "number"
-        }
-    },
-    required: ["nodeName", "closeness"],
-    additionalProperties: false
-};
-
-export const ContactInfoArray = schema({
-    type: "array",
-    items: ContactInfoType
-} as JSONSchemaType<API.ContactInfo[]>);
 
 const EmailHintType: JSONSchemaType<API.EmailHint> = {
     type: "object",

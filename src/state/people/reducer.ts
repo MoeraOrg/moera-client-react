@@ -1,6 +1,15 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
-
+import {
+    EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
+    EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
+    EVENT_NODE_SUBSCRIBER_ADDED,
+    EVENT_NODE_SUBSCRIBER_DELETED,
+    EVENT_NODE_SUBSCRIPTION_ADDED,
+    EVENT_NODE_SUBSCRIPTION_DELETED
+} from "api/events/actions";
+import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 import {
     PEOPLE_GENERAL_LOAD,
     PEOPLE_GENERAL_LOAD_FAILED,
@@ -16,25 +25,14 @@ import {
     SUBSCRIPTIONS_LOADED,
     SUBSCRIPTIONS_UNSET
 } from "state/people/actions";
+import { ContactState, PeopleState } from "state/people/state";
 import {
     FEED_SUBSCRIBED,
     FEED_SUBSCRIBER_UPDATED,
     FEED_SUBSCRIPTION_UPDATED,
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
-import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
-import {
-    EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
-    EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
-    EVENT_NODE_SUBSCRIBER_ADDED,
-    EVENT_NODE_SUBSCRIBER_DELETED,
-    EVENT_NODE_SUBSCRIPTION_ADDED,
-    EVENT_NODE_SUBSCRIPTION_DELETED
-} from "api/events/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import { PeopleState } from "state/people/state";
-import { ClientAction } from "state/action";
-import { WithContext } from "state/action-types";
 
 const initialState: PeopleState = {
     tab: "subscribers",
@@ -44,33 +42,23 @@ const initialState: PeopleState = {
     subscriptionsTotal: null,
     loadingSubscribers: false,
     loadedSubscribers: false,
-    subscribers: [],
     loadingSubscriptions: false,
     loadedSubscriptions: false,
-    subscriptions: [],
+    contacts: {},
     operations: {}
 };
 
-function sortSubscribers(list: SubscriberInfo[]): SubscriberInfo[] {
-    if (list) {
-        list.sort((sr1, sr2) => {
-            const sr1name = sr1.fullName || sr1.nodeName;
-            const sr2name = sr2.fullName || sr2.nodeName;
-            return sr1name.localeCompare(sr2name);
-        });
+function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string): ContactState {
+    let contact = state.contacts[nodeName];
+    if (contact == null) {
+        contact = {
+            contact: {nodeName, closeness: 0},
+            subscriber: null,
+            subscription: null
+        };
+        istate.set(["contacts", nodeName], contact);
     }
-    return list;
-}
-
-function sortSubscriptions(list: SubscriptionInfo[]): SubscriptionInfo[] {
-    if (list) {
-        list.sort((sr1, sr2) => {
-            const sr1name = sr1.remoteFullName || sr1.remoteNodeName;
-            const sr2name = sr2.remoteFullName || sr2.remoteNodeName;
-            return sr1name.localeCompare(sr2name);
-        });
-    }
-    return list;
+    return contact;
 }
 
 export default (state: PeopleState = initialState, action: WithContext<ClientAction>): PeopleState => {
@@ -107,12 +95,22 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
         case SUBSCRIBERS_LOAD:
             return immutable.set(state, "loadingSubscribers", true);
 
-        case SUBSCRIBERS_LOADED:
-            return immutable.assign(state, "", {
+        case SUBSCRIBERS_LOADED: {
+            const istate = immutable.wrap(state);
+            istate.assign("", {
                 loadingSubscribers: false,
-                loadedSubscribers: true,
-                subscribers: sortSubscribers(action.payload.list)
+                loadedSubscribers: true
             });
+            action.payload.list.forEach(subscriber => {
+                prepareContact(state, istate, subscriber.nodeName);
+                if (subscriber.contact != null) {
+                    istate.set(["contacts", subscriber.nodeName, "contact"], subscriber.contact);
+                    delete subscriber.contact;
+                }
+                istate.set(["contacts", subscriber.nodeName, "subscriber"], subscriber);
+            });
+            return istate.value();
+        }
 
         case SUBSCRIBERS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscribers", false);
@@ -126,12 +124,22 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
         case SUBSCRIPTIONS_LOAD:
             return immutable.set(state, "loadingSubscriptions", true);
 
-        case SUBSCRIPTIONS_LOADED:
-            return immutable.assign(state, "", {
+        case SUBSCRIPTIONS_LOADED: {
+            const istate = immutable.wrap(state);
+            istate.assign("", {
                 loadingSubscriptions: false,
                 loadedSubscriptions: true,
-                subscriptions: sortSubscriptions(action.payload.list)
             });
+            action.payload.list.forEach(subscription => {
+                prepareContact(state, istate, subscription.remoteNodeName);
+                if (subscription.contact != null) {
+                    istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                    delete subscription.contact;
+                }
+                istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
+            });
+            return istate.value();
+        }
 
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
@@ -143,173 +151,185 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             });
 
         case FEED_SUBSCRIBED: {
+            if (action.context.ownerName !== action.context.homeOwnerName) {
+                return state;
+            }
+
             const istate = immutable.wrap(state);
-            if (state.loadedSubscriptions) {
-                let subscriptions = state.subscriptions;
-                if (action.context.ownerName === action.context.homeOwnerName) {
-                    subscriptions = state.subscriptions
-                        .filter(sr => sr.remoteNodeName !== action.payload.nodeName);
-                    subscriptions.push(cloneDeep(action.payload.subscription));
-                }
-                if (subscriptions.length !== state.subscriptions.length) {
-                    sortSubscriptions(subscriptions);
-                    istate.set("subscriptions", subscriptions)
-                        .set("subscriptionsTotal", subscriptions.length);
-                }
+            const contact = prepareContact(state, istate, action.payload.nodeName);
+            const subscription = cloneDeep(action.payload.subscription);
+            if (subscription.contact != null) {
+                istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                delete subscription.contact;
+            }
+            istate.set(["contacts", action.payload.nodeName, "subscription"], subscription);
+            if (state.loadedSubscriptions && contact.subscription == null) {
+                istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 0) + 1);
             }
             return istate.value();
         }
 
         case FEED_UNSUBSCRIBED: {
             const istate = immutable.wrap(state);
-            if (state.loadedSubscribers) {
-                let subscribers = state.subscribers;
-                if (action.context.ownerName === action.payload.nodeName) {
-                    subscribers = subscribers.filter(
-                        sr => sr.nodeName !== action.context.homeOwnerName
-                            || sr.feedName !== action.payload.feedName
-                    );
-                }
-                if (subscribers.length !== state.subscribers.length) {
-                    istate.set("subscribers", subscribers)
-                        .set("subscribersTotal", subscribers.length);
+            if (action.context.ownerName === action.payload.nodeName && action.context.homeOwnerName != null) {
+                const contact = prepareContact(state, istate, action.context.homeOwnerName);
+                if (contact.subscriber != null && contact.subscriber.feedName === action.payload.feedName) {
+                    istate.set(["contacts", action.context.homeOwnerName, "subscriber"], null);
+                    if (state.loadedSubscribers) {
+                        istate.set("subscribersTotal", (state.subscribersTotal ?? 1) - 1);
+                    }
                 }
             }
-            if (state.loadedSubscriptions) {
-                let subscriptions = state.subscriptions;
-                if (action.context.ownerName === action.context.homeOwnerName) {
-                    subscriptions = subscriptions.filter(
-                        sr => sr.remoteNodeName !== action.payload.nodeName
-                            || sr.remoteFeedName !== action.payload.feedName
-                    );
-                }
-                if (subscriptions.length !== state.subscriptions.length) {
-                    istate.set("subscriptions", subscriptions)
-                        .set("subscriptionsTotal", subscriptions.length);
+            if (action.context.ownerName === action.context.homeOwnerName) {
+                const contact = prepareContact(state, istate, action.payload.nodeName);
+                if (contact.subscription != null && contact.subscription.remoteFeedName === action.payload.feedName) {
+                    istate.set(["contacts", action.payload.nodeName, "subscription"], null);
+                    if (state.loadedSubscriptions) {
+                        istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 1) - 1);
+                    }
                 }
             }
             return istate.value();
         }
 
         case FEED_SUBSCRIBER_UPDATED: {
-            const {nodeName, subscriber} = action.payload;
-            const {ownerName} = action.context;
-            if (state.loadedSubscribers && nodeName === ownerName) {
-                const subscribers = state.subscribers
-                    .map(
-                        sr => sr.nodeName === subscriber.nodeName && sr.feedName === subscriber.feedName
-                            ? subscriber
-                            : sr
-                    );
-                return immutable.set(state, "subscribers", subscribers);
+            if (action.payload.nodeName !== action.context.ownerName) {
+                return state;
             }
-            return state;
+
+            const istate = immutable.wrap(state);
+            const subscriber = cloneDeep(action.payload.subscriber);
+            const contact = prepareContact(state, istate, subscriber.nodeName);
+            if (subscriber.contact != null) {
+                istate.set(["contacts", subscriber.nodeName, "contact"], subscriber.contact);
+                delete subscriber.contact;
+            }
+            if (contact.subscriber == null || contact.subscriber.feedName === subscriber.feedName) {
+                istate.set(["contacts", subscriber.nodeName, "subscriber"], subscriber);
+            }
+            return istate.value();
         }
 
         case FEED_SUBSCRIPTION_UPDATED: {
-            const {nodeName, subscription} = action.payload;
-            const {ownerName} = action.context;
-            if (state.loadedSubscriptions && nodeName === ownerName) {
-                const subscriptions = state.subscriptions
-                    .map(
-                        sr => sr.remoteNodeName === subscription.remoteNodeName && sr.feedName === subscription.feedName
-                            ? subscription
-                            : sr
-                    );
-                return immutable.set(state, "subscriptions", subscriptions);
+            if (action.payload.nodeName !== action.context.ownerName) {
+                return state;
             }
-            return state;
+
+            const istate = immutable.wrap(state);
+            const subscription = cloneDeep(action.payload.subscription);
+            const contact = prepareContact(state, istate, subscription.remoteNodeName);
+            if (subscription.contact != null) {
+                istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                delete subscription.contact;
+            }
+            if (contact.subscription == null || contact.subscription.remoteFeedName === subscription.remoteFeedName) {
+                istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
+            }
+            return istate.value();
         }
 
-        case EVENT_NODE_SUBSCRIBER_ADDED:
-            if (state.loadedSubscribers && action.payload.subscriber.type === "feed") {
-                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.subscriber.id);
-                subscribers.push(cloneDeep(action.payload.subscriber));
-                sortSubscribers(subscribers);
-                return immutable.wrap(state)
-                    .set("subscribers", subscribers)
-                    .set("subscribersTotal", subscribers.length)
-                    .value()
+        case EVENT_NODE_SUBSCRIBER_ADDED: {
+            if (action.payload.subscriber.type !== "feed") {
+                return state;
             }
-            return state;
 
-        case EVENT_NODE_SUBSCRIBER_DELETED:
-            if (state.loadedSubscribers && action.payload.subscriber.type === "feed") {
-                const subscribers = state.subscribers.filter(sr => sr.id !== action.payload.subscriber.id);
-                if (subscribers.length !== state.subscribers.length) {
-                    return immutable.wrap(state)
-                        .set("subscribers", subscribers)
-                        .set("subscribersTotal", subscribers.length)
-                        .value();
-                }
+            const istate = immutable.wrap(state);
+            const subscriber = cloneDeep(action.payload.subscriber);
+            const contact = prepareContact(state, istate, subscriber.nodeName);
+            if (subscriber.contact != null) {
+                istate.set(["contacts", subscriber.nodeName, "contact"], subscriber.contact);
+                delete subscriber.contact;
             }
-            return state;
-
-        case EVENT_NODE_SUBSCRIPTION_ADDED:
-            if (state.loadedSubscriptions && action.payload.subscription.type === "feed") {
-                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.subscription.id);
-                subscriptions.push(cloneDeep(action.payload.subscription));
-                sortSubscriptions(subscriptions);
-                return immutable.wrap(state)
-                    .set("subscriptions", subscriptions)
-                    .set("subscriptionsTotal", subscriptions.length)
-                    .value()
+            istate.set(["contacts", subscriber.nodeName, "subscriber"], subscriber);
+            if (state.loadedSubscribers && contact.subscriber == null) {
+                istate.set("subscribersTotal", (state.subscribersTotal ?? 0) + 1);
             }
-            return state;
+            return istate.value();
+        }
 
-        case EVENT_NODE_SUBSCRIPTION_DELETED:
-            if (state.loadedSubscriptions && action.payload.subscription.type === "feed") {
-                const subscriptions = state.subscriptions.filter(sr => sr.id !== action.payload.subscription.id);
-                if (subscriptions.length !== state.subscriptions.length) {
-                    return immutable.wrap(state)
-                        .set("subscriptions", subscriptions)
-                        .set("subscriptionsTotal", subscriptions.length)
-                        .value();
-                }
+        case EVENT_NODE_SUBSCRIBER_DELETED: {
+            const {subscriber} = action.payload;
+            if (subscriber.type !== "feed") {
+                return state;
             }
-            return state;
 
-        case EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED:
-            if (state.loadedSubscribers || state.loadedSubscriptions) {
-                const istate = immutable.wrap(state);
+            const istate = immutable.wrap(state);
+            const contact = prepareContact(state, istate, subscriber.nodeName);
+            if (contact.subscriber != null && contact.subscriber.id === subscriber.id) {
+                istate.set(["contacts", subscriber.nodeName, "subscriber"], null);
                 if (state.loadedSubscribers) {
-                    const index = state.subscribers.findIndex(sr => sr.nodeName === action.payload.name);
-                    if (index >= 0) {
-                        istate.update(["subscribers", index],
-                            sr => ({...sr, fullName: action.payload.fullName}));
-                    }
+                    istate.set("subscribersTotal", (state.subscribersTotal ?? 1) - 1);
                 }
-                if (state.loadedSubscriptions) {
-                    const index = state.subscriptions.findIndex(sr => sr.remoteNodeName === action.payload.name);
-                    if (index >= 0) {
-                        istate.update(["subscriptions", index],
-                            sr => ({...sr, fullName: action.payload.fullName}));
-                    }
-                }
-                return istate.value();
             }
-            return state;
+            return istate.value();
+        }
 
-        case EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED:
-            if (state.loadedSubscribers || state.loadedSubscriptions) {
-                const istate = immutable.wrap(state);
-                if (state.loadedSubscribers) {
-                    const index = state.subscribers.findIndex(sr => sr.nodeName === action.payload.name);
-                    if (index >= 0) {
-                        istate.update(["subscribers", index],
-                            sr => ({...sr, avatar: cloneDeep(action.payload.avatar)}));
-                    }
-                }
-                if (state.loadedSubscriptions) {
-                    const index = state.subscriptions.findIndex(sr => sr.remoteNodeName === action.payload.name);
-                    if (index >= 0) {
-                        istate.update(["subscriptions", index],
-                            sr => ({...sr, avatar: cloneDeep(action.payload.avatar)}));
-                    }
-                }
-                return istate.value();
+        case EVENT_NODE_SUBSCRIPTION_ADDED: {
+            if (action.payload.subscription.type !== "feed") {
+                return state;
             }
-            return state;
+
+            const istate = immutable.wrap(state);
+            const subscription = cloneDeep(action.payload.subscription);
+            const contact = prepareContact(state, istate, subscription.remoteNodeName);
+            if (subscription.contact != null) {
+                istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                delete subscription.contact;
+            }
+            istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
+            if (state.loadedSubscriptions && contact.subscription == null) {
+                istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 0) + 1);
+            }
+            return istate.value();
+        }
+
+        case EVENT_NODE_SUBSCRIPTION_DELETED: {
+            const {subscription} = action.payload;
+            if (subscription.type !== "feed") {
+                return state;
+            }
+
+            const istate = immutable.wrap(state);
+            const contact = prepareContact(state, istate, subscription.remoteNodeName);
+            if (contact.subscription != null && contact.subscription.id === subscription.id) {
+                istate.set(["contacts", subscription.remoteNodeName, "subscription"], null);
+                if (state.loadedSubscriptions) {
+                    istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 1) - 1);
+                }
+            }
+            return istate.value();
+        }
+
+        case EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED: {
+            const {name, fullName} = action.payload;
+
+            const istate = immutable.wrap(state);
+            const contact = prepareContact(state, istate, name);
+            istate.set(["contacts", name, "contact", "fullName"], fullName);
+            if (contact.subscriber != null) {
+                istate.set(["contacts", name, "subscriber", "fullName"], fullName); // FIXME to be removed
+            }
+            if (contact.subscription != null) {
+                istate.set(["contacts", name, "subscription", "remoteFullName"], fullName); // FIXME to be removed
+            }
+            return istate.value();
+        }
+
+        case EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED: {
+            const {name} = action.payload;
+            const avatar = cloneDeep(action.payload.avatar);
+
+            const istate = immutable.wrap(state);
+            const contact = prepareContact(state, istate, name);
+            istate.set(["contacts", name, "contact", "avatar"], avatar);
+            if (contact.subscriber != null) {
+                istate.set(["contacts", name, "subscriber", "avatar"], avatar); // FIXME to be removed
+            }
+            if (contact.subscription != null) {
+                istate.set(["contacts", name, "subscription", "remoteAvatar"], avatar); // FIXME to be removed
+            }
+            return istate.value();
+        }
 
         default:
             return state;

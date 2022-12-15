@@ -1,5 +1,7 @@
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
+import { ContactState } from "state/people/state";
+import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;
@@ -35,4 +37,18 @@ export function isSubscribersTotalVisible(state: ClientState): boolean {
 
 export function isSubscriptionsTotalVisible(state: ClientState): boolean {
     return isPermitted("viewSubscriptionsTotal", state.people, "public", state);
+}
+
+type SubscriberContactState = ContactState & { subscriber: SubscriberInfo };
+
+export function getPeopleSubscribers(state: ClientState): SubscriberContactState[] {
+    return Object.values(state.people.contacts)
+        .filter((contact): contact is SubscriberContactState => contact?.subscriber != null);
+}
+
+type SubscriptionContactState = ContactState & { subscription: SubscriptionInfo };
+
+export function getPeopleSubscriptions(state: ClientState): SubscriptionContactState[] {
+    return Object.values(state.people.contacts)
+        .filter((contact): contact is SubscriptionContactState => contact?.subscription != null);
 }
