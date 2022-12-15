@@ -2314,18 +2314,6 @@ export const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
         "nodeName": {
             type: "string"
         },
-        "fullName": {
-            type: "string",
-            nullable: true
-        },
-        "gender": {
-            type: "string",
-            nullable: true
-        },
-        "avatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
         "contact": {
             ...ContactInfoType,
             nullable: true
@@ -2397,18 +2385,6 @@ export const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
         },
         "remoteNodeName": {
             type: "string"
-        },
-        "remoteFullName": {
-            type: "string",
-            nullable: true
-        },
-        "remoteGender": {
-            type: "string",
-            nullable: true
-        },
-        "remoteAvatar": {
-            ...AvatarImageType,
-            nullable: true
         },
         "contact": {
             ...ContactInfoType,

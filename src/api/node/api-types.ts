@@ -562,9 +562,6 @@ export interface FriendGroupAssignment {
 
 export interface FriendDescription {
     nodeName: string;
-    fullName?: string | null;
-    gender?: string | null;
-    avatar?: AvatarDescription | null;
     groups: FriendGroupAssignment[] | null;
 }
 
@@ -715,9 +712,6 @@ export interface SubscriberInfo {
     feedName?: string | null;
     postingId?: string | null;
     nodeName: string;
-    fullName?: string | null;
-    gender?: string | null;
-    avatar?: AvatarImage | null;
     contact?: ContactInfo | null;
     createdAt: number;
     operations?: {
@@ -741,9 +735,6 @@ export interface SubscriptionInfo {
     type: SubscriptionType;
     feedName?: string | null;
     remoteNodeName: string;
-    remoteFullName?: string | null;
-    remoteGender?: string | null;
-    remoteAvatar?: AvatarImage | null;
     contact?: ContactInfo | null;
     remoteFeedName?: string | null;
     remotePostingId?: string | null;

@@ -88,7 +88,7 @@ function SubscribeButtonImpl({
     }
 
     const subscriptionCaption = !subscribed
-        ? (!subscribedToMe ? t("subscribe") : t("subscribed-to-me", {"gender": tGender(subscriber?.gender)}))
+        ? (!subscribedToMe ? t("subscribe") : t("subscribed-to-me", {"gender": tGender(subscriber?.contact?.gender)}))
         : (!subscribedToMe ? t("subscribed", {"gender": tGender(homeGender)}) : t("mutually-subscribed"));
 
     return (
