@@ -2471,6 +2471,19 @@ const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
             type: "integer",
             nullable: true
         },
+        "friendsTotal": {
+            type: "object",
+            patternProperties: {
+                "^.*$": {
+                    type: "integer"
+                }
+            },
+            nullable: true
+        },
+        "friendOfsTotal": {
+            type: "integer",
+            nullable: true
+        },
         "operations": {
             type: "object",
             properties: {
@@ -2482,11 +2495,27 @@ const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
                     type: "string",
                     nullable: true
                 },
+                "viewFriends": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFriendOfs": {
+                    type: "string",
+                    nullable: true
+                },
                 "viewSubscribersTotal": {
                     type: "string",
                     nullable: true
                 },
                 "viewSubscriptionsTotal": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFriendsTotal": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFriendOfsTotal": {
                     type: "string",
                     nullable: true
                 }

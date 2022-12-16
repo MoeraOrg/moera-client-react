@@ -767,11 +767,17 @@ export interface ActivityReactionInfo {
 export interface PeopleGeneralInfo {
     feedSubscribersTotal?: number | null;
     feedSubscriptionsTotal?: number | null;
+    friendsTotal?: Partial<Record<string, number>> | null;
+    friendOfsTotal?: number | null;
     operations?: {
         viewSubscribers?: PrincipalValue | null;
         viewSubscriptions?: PrincipalValue | null;
+        viewFriends?: PrincipalValue | null;
+        viewFriendOfs?: PrincipalValue | null;
         viewSubscribersTotal?: PrincipalValue | null;
         viewSubscriptionsTotal?: PrincipalValue | null;
+        viewFriendsTotal?: PrincipalValue | null;
+        viewFriendOfsTotal?: PrincipalValue | null;
     } | null;
 }
 
