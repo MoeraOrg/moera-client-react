@@ -1,18 +1,22 @@
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
-import { ContactState } from "state/people/state";
+import { ContactState, PeopleTab } from "state/people/state";
 import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;
 }
 
+export function getPeopleTab(state: ClientState): PeopleTab {
+    return state.people.tab;
+}
+
 export function isAtSubscribersTab(state: ClientState): boolean {
-    return state.people.tab === "subscribers";
+    return getPeopleTab(state) === "subscribers";
 }
 
 export function isAtSubscriptionsTab(state: ClientState): boolean {
-    return state.people.tab === "subscriptions";
+    return getPeopleTab(state) === "subscriptions";
 }
 
 export function isSubscribersToBeLoaded(state: ClientState): boolean {

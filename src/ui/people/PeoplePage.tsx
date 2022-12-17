@@ -9,8 +9,7 @@ import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import PeopleTabs from "ui/people/PeopleTabs";
-import SubscribersSubpage from "ui/people/SubscribersSubpage";
-import SubscriptionsSubpage from "ui/people/SubscriptionsSubpage";
+import PeopleContent from "ui/people/PeopleContent";
 import "./PeoplePage.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -31,12 +30,7 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => {
             <Page>
                 <div className="people-page">
                     <PeopleTabs active={tab}/>
-                    {tab === "subscribers" &&
-                        <SubscribersSubpage/>
-                    }
-                    {tab === "subscriptions" &&
-                        <SubscriptionsSubpage/>
-                    }
+                    <PeopleContent/>
                 </div>
             </Page>
         </>
