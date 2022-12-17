@@ -16,14 +16,13 @@ import {
     PEOPLE_GENERAL_LOADED,
     PEOPLE_GENERAL_UNSET,
     PEOPLE_GO_TO_TAB,
+    PEOPLE_UNSET,
     SUBSCRIBERS_LOAD,
     SUBSCRIBERS_LOAD_FAILED,
     SUBSCRIBERS_LOADED,
-    SUBSCRIBERS_UNSET,
     SUBSCRIPTIONS_LOAD,
     SUBSCRIPTIONS_LOAD_FAILED,
-    SUBSCRIPTIONS_LOADED,
-    SUBSCRIPTIONS_UNSET
+    SUBSCRIPTIONS_LOADED
 } from "state/people/actions";
 import { ContactState, PeopleState } from "state/people/state";
 import {
@@ -92,6 +91,17 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 operations: {}
             });
 
+        case PEOPLE_UNSET:
+            return immutable.assign(state, "", {
+                loadedGeneral: false,
+                subscribersTotal: null,
+                subscriptionsTotal: null,
+                loadedSubscribers: false,
+                loadedSubscriptions: false,
+                contacts: {},
+                operations: {}
+            });
+
         case SUBSCRIBERS_LOAD:
             return immutable.set(state, "loadingSubscribers", true);
 
@@ -115,12 +125,6 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
         case SUBSCRIBERS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscribers", false);
 
-        case SUBSCRIBERS_UNSET:
-            return immutable.assign(state, "", {
-                loadedSubscribers: false,
-                subscribers: []
-            });
-
         case SUBSCRIPTIONS_LOAD:
             return immutable.set(state, "loadingSubscriptions", true);
 
@@ -143,12 +147,6 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
-
-        case SUBSCRIPTIONS_UNSET:
-            return immutable.assign(state, "", {
-                loadedSubscriptions: false,
-                subscriptions: []
-            });
 
         case FEED_SUBSCRIBED: {
             if (action.context.ownerName !== action.context.homeOwnerName) {

@@ -19,10 +19,9 @@ import {
     peopleGeneralLoad,
     peopleGeneralUnset,
     peopleGoToTab,
+    peopleUnset,
     subscribersLoad,
-    subscribersUnset,
-    subscriptionsLoad,
-    subscriptionsUnset
+    subscriptionsLoad
 } from "state/people/actions";
 import { FEED_SUBSCRIBED, FEED_UNSUBSCRIBED } from "state/feeds/actions";
 import {
@@ -48,6 +47,7 @@ export default [
         peopleGoToTab("subscribers")
     ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtPeoplePage, peopleGeneralLoad),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], inv(isAtPeoplePage), peopleUnset),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         conj(isAtPeoplePage, isAtSubscribersTab),
@@ -55,18 +55,8 @@ export default [
     ),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
-        conj(isAtPeoplePage, inv(isAtSubscribersTab)),
-        subscribersUnset
-    ),
-    trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         conj(isAtPeoplePage, isAtSubscriptionsTab),
         subscriptionsLoad
-    ),
-    trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
-        conj(isAtPeoplePage, inv(isAtSubscriptionsTab)),
-        subscriptionsUnset
     ),
     trigger(
         [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED,

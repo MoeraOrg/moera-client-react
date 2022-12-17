@@ -46,6 +46,12 @@ export const peopleGeneralUnset = (): PeopleGeneralUnsetAction => ({
     type: PEOPLE_GENERAL_UNSET
 });
 
+export const PEOPLE_UNSET = "PEOPLE_UNSET";
+export type PeopleUnsetAction = Action<typeof PEOPLE_UNSET>;
+export const peopleUnset = (): PeopleUnsetAction => ({
+    type: PEOPLE_UNSET
+});
+
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -67,12 +73,6 @@ export const subscribersLoadFailed = (): SubscribersLoadFailedAction => ({
     type: SUBSCRIBERS_LOAD_FAILED
 });
 
-export const SUBSCRIBERS_UNSET = "SUBSCRIBERS_UNSET";
-export type SubscribersUnsetAction = Action<typeof SUBSCRIBERS_UNSET>;
-export const subscribersUnset = (): SubscribersUnsetAction => ({
-    type: SUBSCRIBERS_UNSET
-});
-
 export const SUBSCRIPTIONS_LOAD = "SUBSCRIPTIONS_LOAD";
 export type SubscriptionsLoadAction = Action<typeof SUBSCRIPTIONS_LOAD>;
 export const subscriptionsLoad = (): SubscriptionsLoadAction => ({
@@ -92,12 +92,6 @@ export const SUBSCRIPTIONS_LOAD_FAILED = "SUBSCRIPTIONS_LOAD_FAILED";
 export type SubscriptionsLoadFailedAction = Action<typeof SUBSCRIPTIONS_LOAD_FAILED>;
 export const subscriptionsLoadFailed = (): SubscriptionsLoadFailedAction => ({
     type: SUBSCRIPTIONS_LOAD_FAILED
-});
-
-export const SUBSCRIPTIONS_UNSET = "SUBSCRIPTIONS_UNSET";
-export type SubscriptionsUnsetAction = Action<typeof SUBSCRIPTIONS_UNSET>;
-export const subscriptionsUnset = (): SubscriptionsUnsetAction => ({
-    type: SUBSCRIPTIONS_UNSET
 });
 
 export const FRIENDSHIP_UPDATE = "FRIENDSHIP_UPDATE";
@@ -158,14 +152,13 @@ export type PeopleAnyAction =
     | PeopleGeneralLoadedAction
     | PeopleGeneralLoadFailedAction
     | PeopleGeneralUnsetAction
+    | PeopleUnsetAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction
-    | SubscribersUnsetAction
     | SubscriptionsLoadAction
     | SubscriptionsLoadedAction
     | SubscriptionsLoadFailedAction
-    | SubscriptionsUnsetAction
     | FriendshipUpdateAction
     | FriendshipUpdatedAction
     | FriendshipUpdateFailedAction
