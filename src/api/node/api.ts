@@ -1849,8 +1849,6 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
     additionalProperties: false
 };
 
-export const PostingFeatures = schema(PostingFeaturesType);
-
 export const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
     type: "object",
     properties: {
