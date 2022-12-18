@@ -583,6 +583,7 @@ export interface FriendGroupDetails {
 
 export interface FriendInfo {
     nodeName: string;
+    contact?: ContactInfo | null;
     groups?: FriendGroupDetails[] | null;
 }
 

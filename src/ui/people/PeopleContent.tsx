@@ -4,7 +4,7 @@ import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { ContactState } from "state/people/state";
-import { getPeopleSubscribers, getPeopleSubscriptions, getPeopleTab } from "state/people/selectors";
+import { getPeopleFriends, getPeopleSubscribers, getPeopleSubscriptions, getPeopleTab } from "state/people/selectors";
 import { AvatarWithPopup, Loading } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import PeopleContactIcons from "ui/people/PeopleContactIcons";
@@ -32,18 +32,19 @@ function isLoading(state: ClientState): boolean {
         case "subscriptions":
             return state.people.loadingSubscriptions;
         default:
-            return false;
+            return state.people.loadingFriends;
     }
 }
 
 function getPeopleContacts(state: ClientState): ContactState[] {
-    switch (getPeopleTab(state)) {
+    const tab = getPeopleTab(state);
+    switch (tab) {
         case "subscribers":
             return getPeopleSubscribers(state);
         case "subscriptions":
             return getPeopleSubscriptions(state);
         default:
-            return [];
+            return getPeopleFriends(state, tab);
     }
 }
 

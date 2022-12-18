@@ -23,6 +23,12 @@ function PeopleContactIcons({contact, tab}: Props) {
                 return <Principal value={contact.subscription.operations?.view ?? "public"} defaultValue="public"/>
             }
             break;
+        default:
+            if (contact.friend != null) {
+                const view = contact.friend.groups?.find(fg => fg.id === tab)?.operations?.view ?? "public";
+                return <Principal value={view} defaultValue="public"/>
+            }
+            break;
     }
     return null;
 }

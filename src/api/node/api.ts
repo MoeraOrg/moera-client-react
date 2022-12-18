@@ -1849,6 +1849,37 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
     additionalProperties: false
 };
 
+const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
+    type: "object",
+    properties: {
+        "nodeName": {
+            type: "string"
+        },
+        "fullName": {
+            type: "string",
+            nullable: true
+        },
+        "gender": {
+            type: "string",
+            nullable: true
+        },
+        "avatar": {
+            ...AvatarImageType,
+            nullable: true
+        },
+        "closeness": {
+            type: "number"
+        }
+    },
+    required: ["nodeName", "closeness"],
+    additionalProperties: false
+};
+
+export const ContactInfoArray = schema({
+    type: "array",
+    items: ContactInfoType
+} as JSONSchemaType<API.ContactInfo[]>);
+
 export const FriendGroupInfoType: JSONSchemaType<API.FriendGroupInfo> = {
     type: "object",
     properties: {
@@ -1921,6 +1952,10 @@ const FriendInfoType: JSONSchemaType<API.FriendInfo> = {
     properties: {
         "nodeName": {
             type: "string"
+        },
+        "contact": {
+            ...ContactInfoType,
+            nullable: true
         },
         "groups": {
             type: "array",
@@ -2260,37 +2295,6 @@ const ReactionsSliceInfoType: JSONSchemaType<API.ReactionsSliceInfo> = {
 };
 
 export const ReactionsSliceInfo = schema(ReactionsSliceInfoType);
-
-const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
-    type: "object",
-    properties: {
-        "nodeName": {
-            type: "string"
-        },
-        "fullName": {
-            type: "string",
-            nullable: true
-        },
-        "gender": {
-            type: "string",
-            nullable: true
-        },
-        "avatar": {
-            ...AvatarImageType,
-            nullable: true
-        },
-        "closeness": {
-            type: "number"
-        }
-    },
-    required: ["nodeName", "closeness"],
-    additionalProperties: false
-};
-
-export const ContactInfoArray = schema({
-    type: "array",
-    items: ContactInfoType
-} as JSONSchemaType<API.ContactInfo[]>);
 
 export const SubscriberInfoType: JSONSchemaType<API.SubscriberInfo> = {
     type: "object",

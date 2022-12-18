@@ -16,13 +16,14 @@ import {
 import { INIT_FROM_LOCATION, newLocation, updateLocation } from "state/navigation/actions";
 import { nodeFeaturesLoad, OWNER_SET, OWNER_SWITCH_FAILED, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
 import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { NAMING_NAME_LOADED, NamingNameLoadedAction } from "state/naming/actions";
 import { PULSE_6H } from "state/pulse/actions";
 import { messageBox } from "state/messagebox/actions";
 import { SETTINGS_PLUGINS_DELETED, SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
 
 export default [
-    trigger(INIT_FROM_LOCATION, isAtNode, nodeFeaturesLoad),
+    trigger([INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtNode, nodeFeaturesLoad),
     trigger(INIT_FROM_LOCATION, isAtNode, ownerLoad),
     trigger(OWNER_SET, isOwnerNameRecentlyChanged, ownerVerify),
     trigger(OWNER_SET, true, newLocation),

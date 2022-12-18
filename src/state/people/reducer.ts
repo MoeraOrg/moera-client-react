@@ -11,6 +11,9 @@ import {
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import {
+    FRIENDS_LOAD,
+    FRIENDS_LOAD_FAILED,
+    FRIENDS_LOADED,
     PEOPLE_GENERAL_LOAD,
     PEOPLE_GENERAL_LOAD_FAILED,
     PEOPLE_GENERAL_LOADED,
@@ -39,10 +42,14 @@ const initialState: PeopleState = {
     loadedGeneral: false,
     subscribersTotal: null,
     subscriptionsTotal: null,
+    friendsTotal: null,
+    friendOfsTotal: null,
     loadingSubscribers: false,
     loadedSubscribers: false,
     loadingSubscriptions: false,
     loadedSubscriptions: false,
+    loadingFriends: false,
+    loadedFriends: false,
     contacts: {},
     operations: {}
 };
@@ -53,7 +60,8 @@ function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, 
         contact = {
             contact: {nodeName, closeness: 0},
             subscriber: null,
-            subscription: null
+            subscription: null,
+            friend: null
         };
         istate.set(["contacts", nodeName], contact);
     }
@@ -77,6 +85,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 loadedGeneral: true,
                 subscribersTotal: action.payload.info.feedSubscribersTotal ?? null,
                 subscriptionsTotal: action.payload.info.feedSubscriptionsTotal ?? null,
+                friendsTotal: action.payload.info.friendsTotal ?? null,
+                friendOfsTotal: action.payload.info.friendOfsTotal ?? null,
                 operations: action.payload.info.operations ?? {}
             });
 
@@ -88,6 +98,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 loadedGeneral: false,
                 subscribersTotal: null,
                 subscriptionsTotal: null,
+                friendsTotal: null,
+                friendOfsTotal: null,
                 operations: {}
             });
 
@@ -96,6 +108,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 loadedGeneral: false,
                 subscribersTotal: null,
                 subscriptionsTotal: null,
+                friendsTotal: null,
+                friendOfsTotal: null,
                 loadedSubscribers: false,
                 loadedSubscriptions: false,
                 contacts: {},
@@ -147,6 +161,29 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case SUBSCRIPTIONS_LOAD_FAILED:
             return immutable.set(state, "loadingSubscriptions", false);
+
+        case FRIENDS_LOAD:
+            return immutable.set(state, "loadingFriends", true);
+
+        case FRIENDS_LOADED: {
+            const istate = immutable.wrap(state);
+            istate.assign("", {
+                loadingFriends: false,
+                loadedFriends: true,
+            });
+            action.payload.list.forEach(friend => {
+                prepareContact(state, istate, friend.nodeName);
+                if (friend.contact != null) {
+                    istate.set(["contacts", friend.nodeName, "contact"], friend.contact);
+                    delete friend.contact;
+                }
+                istate.set(["contacts", friend.nodeName, "friend"], friend);
+            });
+            return istate.value();
+        }
+
+        case FRIENDS_LOAD_FAILED:
+            return immutable.set(state, "loadingFriends", false);
 
         case FEED_SUBSCRIBED: {
             if (action.context.ownerName !== action.context.homeOwnerName) {

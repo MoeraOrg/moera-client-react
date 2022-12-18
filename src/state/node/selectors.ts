@@ -1,7 +1,7 @@
 import {
     AvatarImage,
     CommentOperationsInfo,
-    Features,
+    Features, FriendGroupInfo,
     PostingOperationsInfo,
     PrincipalValue
 } from "api/node/api-types";
@@ -29,6 +29,10 @@ export function getNodeRootPage(state: ClientState): string | null {
 
 export function getNodeFeatures(state: ClientState): Features | null {
     return state.node.features;
+}
+
+export function getNodeFriendGroups(state: ClientState): FriendGroupInfo[] {
+    return getNodeFeatures(state)?.friendGroups?.available ?? [];
 }
 
 export function getToken(state: ClientState, rootLocation: string | null): string | null {

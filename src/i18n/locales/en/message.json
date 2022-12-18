@@ -154,6 +154,7 @@
   "formatting-hint" : "<0>Markdown:</0> see <1>cheatsheet</1> or <2>tutorial</2> to see how to do more. See also <3>emoji cheatsheet</3>.",
   "friend" : "Friend",
   "friend-groups" : "Groups of friends...",
+  "friend-groups.friends" : "Friends",
   "from-computer" : "From Computer",
   "from-device" : "From Device",
   "from-internet" : "From Internet",

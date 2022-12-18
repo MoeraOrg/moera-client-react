@@ -4,12 +4,15 @@ import { NodeApiError } from "api";
 import { Node } from "api/node";
 import { errorThrown } from "state/error/actions";
 import {
+    FRIENDS_LOAD,
     FRIENDSHIP_SET_VISIBILITY,
     FRIENDSHIP_UPDATE,
     FriendshipSetVisibilityAction,
     FriendshipUpdateAction,
     friendshipUpdated,
     friendshipUpdateFailed,
+    friendsLoaded,
+    friendsLoadFailed,
     PEOPLE_GENERAL_LOAD,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
@@ -30,6 +33,7 @@ export default [
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
     executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga, introduced),
     executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced),
+    executor(FRIENDS_LOAD, "", friendsLoadSaga, introduced),
     executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga),
     executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga)
 ];
@@ -67,6 +71,20 @@ function* subscriptionsLoadSaga() {
             yield* put(subscriptionsLoaded([]));
         } else {
             yield* put(subscriptionsLoadFailed());
+            yield* put(errorThrown(e));
+        }
+    }
+}
+
+function* friendsLoadSaga() {
+    try {
+        const friends = yield* call(Node.getFriends, "");
+        yield* put(friendsLoaded(friends));
+    } catch (e) {
+        if (e instanceof NodeApiError) {
+            yield* put(friendsLoaded([]));
+        } else {
+            yield* put(friendsLoadFailed());
             yield* put(errorThrown(e));
         }
     }

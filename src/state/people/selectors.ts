@@ -1,7 +1,7 @@
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
 import { ContactState, PeopleTab } from "state/people/state";
-import { SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { FriendInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;
@@ -19,12 +19,28 @@ export function isAtSubscriptionsTab(state: ClientState): boolean {
     return getPeopleTab(state) === "subscriptions";
 }
 
+export function isAtFriendsTab(state: ClientState): boolean {
+    return !isAtSubscribersTab(state) && !isAtSubscriptionsTab(state) && !isAtFriendOfsTab(state);
+}
+
+export function isAtFriendGroupTab(state: ClientState, id: string): boolean {
+    return getPeopleTab(state) === id;
+}
+
+export function isAtFriendOfsTab(state: ClientState): boolean {
+    return getPeopleTab(state) === "friend-ofs";
+}
+
 export function isSubscribersToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedSubscribers && !state.people.loadingSubscribers;
 }
 
 export function isSubscriptionsToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedSubscriptions && !state.people.loadingSubscriptions;
+}
+
+export function isFriendsToBeLoaded(state: ClientState): boolean {
+    return !state.people.loadedFriends && !state.people.loadingFriends;
 }
 
 export function isSubscribersVisible(state: ClientState): boolean {
@@ -35,12 +51,20 @@ export function isSubscriptionsVisible(state: ClientState): boolean {
     return isPermitted("viewSubscriptions", state.people, "public", state);
 }
 
+export function isFriendsVisible(state: ClientState): boolean {
+    return isPermitted("viewFriends", state.people, "public", state);
+}
+
 export function isSubscribersTotalVisible(state: ClientState): boolean {
     return isPermitted("viewSubscribersTotal", state.people, "public", state);
 }
 
 export function isSubscriptionsTotalVisible(state: ClientState): boolean {
     return isPermitted("viewSubscriptionsTotal", state.people, "public", state);
+}
+
+export function isFriendsTotalVisible(state: ClientState): boolean {
+    return isPermitted("viewFriendsTotal", state.people, "public", state);
 }
 
 type SubscriberContactState = ContactState & { subscriber: SubscriberInfo };
@@ -55,4 +79,12 @@ type SubscriptionContactState = ContactState & { subscription: SubscriptionInfo 
 export function getPeopleSubscriptions(state: ClientState): SubscriptionContactState[] {
     return Object.values(state.people.contacts)
         .filter((contact): contact is SubscriptionContactState => contact?.subscription != null);
+}
+
+type FriendContactState = ContactState & { friend: FriendInfo };
+
+export function getPeopleFriends(state: ClientState, friendGroupId: string): FriendContactState[] {
+    return Object.values(state.people.contacts)
+        .filter((contact): contact is FriendContactState => contact?.friend != null
+            && contact.friend.groups?.find(fg => fg.id === friendGroupId) != null);
 }

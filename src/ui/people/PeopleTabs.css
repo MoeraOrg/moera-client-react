@@ -2,6 +2,7 @@
     display: flex;
     margin-top: -.5em;
     margin-bottom: 1.5em;
+    flex-wrap: wrap;
 }
 
 .people-tabs .tab {

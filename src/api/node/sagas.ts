@@ -339,6 +339,12 @@ export function* postFriendGroup(nodeName: string | null, title: string,
     });
 }
 
+export function* getFriends(nodeName: string | null): CallApiResult<FriendInfo[]> {
+    return yield* callApi({
+        nodeName, location: "/people/friends", auth: true, schema: NodeApi.FriendInfoArray
+    });
+}
+
 export function* getFriend(nodeName: string | null, remoteNodeName: string): CallApiResult<FriendInfo> {
     return yield* callApi({
         nodeName, location: ut`/people/friends/${remoteNodeName}`, auth: true, schema: NodeApi.FriendInfo
