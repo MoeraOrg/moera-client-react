@@ -15,8 +15,8 @@ type PeopleTabsProps = {
 } & ConnectedProps<typeof connector>;
 
 const PeopleTabs = ({
-    active, loadedGeneral, subscribersTotal, subscriptionsTotal, friendsTotal, viewSubscribers, viewSubscriptions,
-    viewFriends, friendGroups, peopleGoToTab
+    active, loadedGeneral, subscribersTotal, subscriptionsTotal, friendsTotal, friendOfsTotal, viewSubscribers,
+    viewSubscriptions, viewFriends, viewFriendOfs, friendGroups, peopleGoToTab
 }: PeopleTabsProps) => {
     const {t} = useTranslation();
 
@@ -39,6 +39,11 @@ const PeopleTabs = ({
                                     peopleGoToTab={peopleGoToTab}/>
                 )
             }
+            {friendOfsTotal != null &&
+                <PeopleTabsItem name="friend-ofs" title={t("in-friends")} principal={viewFriendOfs}
+                                total={friendOfsTotal} loaded={loadedGeneral} active={active}
+                                peopleGoToTab={peopleGoToTab}/>
+            }
             <div className="rest"/>
         </div>
     );
@@ -60,9 +65,11 @@ const connector = connect(
         subscribersTotal: state.people.subscribersTotal,
         subscriptionsTotal: state.people.subscriptionsTotal,
         friendsTotal: state.people.friendsTotal,
+        friendOfsTotal: state.people.friendOfsTotal,
         viewSubscribers: state.people.operations.viewSubscribers ?? "public",
         viewSubscriptions: state.people.operations.viewSubscriptions ?? "public",
         viewFriends: state.people.operations.viewFriends ?? "public",
+        viewFriendOfs: state.people.operations.viewFriendOfs ?? "public",
         friendGroups: getNodeFriendGroups(state)
     }),
     { peopleGoToTab }

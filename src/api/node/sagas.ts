@@ -28,7 +28,7 @@ import {
     FeedStatus,
     FriendDescription,
     FriendGroupInfo,
-    FriendInfo,
+    FriendInfo, FriendOfInfo,
     LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
@@ -354,6 +354,12 @@ export function* getFriend(nodeName: string | null, remoteNodeName: string): Cal
 export function* putFriends(nodeName: string | null, friends: FriendDescription[]): CallApiResult<FriendInfo[]> {
     return yield* callApi({
         nodeName, location: "/people/friends", method: "PUT", auth: true, body: friends, schema: NodeApi.FriendInfoArray
+    });
+}
+
+export function* getFriendOfs(nodeName: string | null): CallApiResult<FriendOfInfo[]> {
+    return yield* callApi({
+        nodeName, location: "/people/friend-ofs", auth: true, schema: NodeApi.FriendOfInfoArray
     });
 }
 

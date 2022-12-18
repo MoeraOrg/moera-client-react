@@ -587,6 +587,12 @@ export interface FriendInfo {
     groups?: FriendGroupDetails[] | null;
 }
 
+export interface FriendOfInfo {
+    remoteNodeName: string;
+    contact?: ContactInfo | null;
+    groups?: FriendGroupDetails[] | null;
+}
+
 export interface FriendGroupsFeatures {
     available: FriendGroupInfo[];
     memberOf?: FriendGroupDetails[] | null;

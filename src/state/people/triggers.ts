@@ -3,9 +3,13 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { GO_TO_PAGE, newLocation } from "state/navigation/actions";
 import { isAtPeoplePage } from "state/navigation/selectors";
 import {
+    isAtFriendOfsTab,
     isAtFriendsTab,
     isAtSubscribersTab,
     isAtSubscriptionsTab,
+    isFriendOfsToBeLoaded,
+    isFriendOfsTotalVisible,
+    isFriendOfsVisible,
     isFriendsToBeLoaded,
     isFriendsTotalVisible,
     isFriendsVisible,
@@ -18,6 +22,7 @@ import {
     isSubscriptionsVisible
 } from "state/people/selectors";
 import {
+    friendOfsLoad,
     friendsLoad,
     PEOPLE_GENERAL_LOADED,
     PEOPLE_GO_TO_TAB,
@@ -42,6 +47,7 @@ export default [
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscribersTab, isSubscribersToBeLoaded), subscribersLoad),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendsTab, isFriendsToBeLoaded), friendsLoad),
+    trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendOfsTab, isFriendOfsToBeLoaded), friendOfsLoad),
     trigger(
         PEOPLE_GENERAL_LOADED,
         conj(isAtPeoplePage, inv(isSubscribersVisible), inv(isSubscribersTotalVisible), isAtSubscribersTab),
@@ -57,8 +63,13 @@ export default [
         conj(isAtPeoplePage, inv(isFriendsVisible), inv(isFriendsTotalVisible), isAtFriendsTab),
         peopleGoToTab("subscribers") // FIXME not exactly
     ),
+    trigger(
+        PEOPLE_GENERAL_LOADED,
+        conj(isAtPeoplePage, inv(isFriendOfsVisible), inv(isFriendOfsTotalVisible), isAtFriendOfsTab),
+        peopleGoToTab("subscribers") // FIXME not exactly
+    ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtPeoplePage, peopleGeneralLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], inv(isAtPeoplePage), peopleUnset),
+    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, peopleUnset),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         conj(isAtPeoplePage, isAtSubscribersTab),
@@ -73,6 +84,11 @@ export default [
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         conj(isAtPeoplePage, isAtFriendsTab),
         friendsLoad
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtPeoplePage, isAtFriendOfsTab),
+        friendOfsLoad
     ),
     trigger(
         [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED,

@@ -23,6 +23,11 @@ function PeopleContactIcons({contact, tab}: Props) {
                 return <Principal value={contact.subscription.operations?.view ?? "public"} defaultValue="public"/>
             }
             break;
+        case "friend-ofs":
+            if (contact.friendOf != null) {
+                return null;
+            }
+            break;
         default:
             if (contact.friend != null) {
                 const view = contact.friend.groups?.find(fg => fg.id === tab)?.operations?.view ?? "public";

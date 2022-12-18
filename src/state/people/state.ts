@@ -1,4 +1,11 @@
-import { ContactInfo, FriendInfo, PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import {
+    ContactInfo,
+    FriendInfo,
+    FriendOfInfo,
+    PrincipalValue,
+    SubscriberInfo,
+    SubscriptionInfo
+} from "api/node/api-types";
 
 export type PeopleTab = string;
 
@@ -7,6 +14,7 @@ export interface ContactState {
     subscriber: SubscriberInfo | null;
     subscription: SubscriptionInfo | null;
     friend: FriendInfo | null;
+    friendOf: FriendOfInfo | null;
 }
 
 type ContactsState = Partial<Record<string, ContactState>>;
@@ -25,6 +33,8 @@ export interface PeopleState {
     loadedSubscriptions: boolean;
     loadingFriends: boolean;
     loadedFriends: boolean;
+    loadingFriendOfs: boolean;
+    loadedFriendOfs: boolean;
     contacts: ContactsState;
     operations: {
         viewSubscribers?: PrincipalValue | null;

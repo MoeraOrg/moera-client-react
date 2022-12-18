@@ -2,8 +2,12 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { NodeApiError } from "api";
 import { Node } from "api/node";
+import { PrincipalValue } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
+    FRIEND_OFS_LOAD,
+    friendOfsLoaded,
+    friendOfsLoadFailed,
     FRIENDS_LOAD,
     FRIENDSHIP_SET_VISIBILITY,
     FRIENDSHIP_UPDATE,
@@ -26,7 +30,6 @@ import {
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
 import { getNodeCard } from "state/nodecards/selectors";
-import { PrincipalValue } from "api/node/api-types";
 import { storySatisfy } from "state/stories/actions";
 
 export default [
@@ -34,6 +37,7 @@ export default [
     executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga, introduced),
     executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced),
     executor(FRIENDS_LOAD, "", friendsLoadSaga, introduced),
+    executor(FRIEND_OFS_LOAD, "", friendOfsLoadSaga, introduced),
     executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga),
     executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga)
 ];
@@ -85,6 +89,20 @@ function* friendsLoadSaga() {
             yield* put(friendsLoaded([]));
         } else {
             yield* put(friendsLoadFailed());
+            yield* put(errorThrown(e));
+        }
+    }
+}
+
+function* friendOfsLoadSaga() {
+    try {
+        const friends = yield* call(Node.getFriendOfs, "");
+        yield* put(friendOfsLoaded(friends));
+    } catch (e) {
+        if (e instanceof NodeApiError) {
+            yield* put(friendOfsLoaded([]));
+        } else {
+            yield* put(friendOfsLoadFailed());
             yield* put(errorThrown(e));
         }
     }

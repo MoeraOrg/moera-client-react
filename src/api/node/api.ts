@@ -1974,6 +1974,33 @@ export const FriendInfoArray = schema({
     items: FriendInfoType
 } as JSONSchemaType<API.FriendInfo[]>);
 
+const FriendOfInfoType: JSONSchemaType<API.FriendOfInfo> = {
+    type: "object",
+    properties: {
+        "remoteNodeName": {
+            type: "string"
+        },
+        "contact": {
+            ...ContactInfoType,
+            nullable: true
+        },
+        "groups": {
+            type: "array",
+            items: FriendGroupDetailsType,
+            nullable: true
+        }
+    },
+    required: ["remoteNodeName"],
+    additionalProperties: false
+};
+
+export const FriendOfInfo = schema(FriendOfInfoType);
+
+export const FriendOfInfoArray = schema({
+    type: "array",
+    items: FriendOfInfoType
+} as JSONSchemaType<API.FriendOfInfo[]>);
+
 const FriendGroupsFeaturesType: JSONSchemaType<API.FriendGroupsFeatures> = {
     type: "object",
     properties: {

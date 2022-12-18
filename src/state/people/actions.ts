@@ -5,6 +5,7 @@ import {
     FriendGroupDetails,
     FriendGroupInfo,
     FriendInfo,
+    FriendOfInfo,
     PeopleGeneralInfo,
     SubscriberInfo,
     SubscriptionInfo
@@ -116,6 +117,27 @@ export const friendsLoadFailed = (): FriendsLoadFailedAction => ({
     type: FRIENDS_LOAD_FAILED
 });
 
+export const FRIEND_OFS_LOAD = "FRIEND_OFS_LOAD";
+export type FriendOfsLoadAction = Action<typeof FRIEND_OFS_LOAD>;
+export const friendOfsLoad = (): FriendOfsLoadAction => ({
+    type: FRIEND_OFS_LOAD
+});
+
+export const FRIEND_OFS_LOADED = "FRIEND_OFS_LOADED";
+export type FriendOfsLoadedAction = ActionWithPayload<typeof FRIEND_OFS_LOADED, {
+    list: FriendOfInfo[];
+}>;
+export const friendOfsLoaded = (list: FriendOfInfo[]): FriendOfsLoadedAction => ({
+    type: FRIEND_OFS_LOADED,
+    payload: {list}
+});
+
+export const FRIEND_OFS_LOAD_FAILED = "FRIEND_OFS_LOAD_FAILED";
+export type FriendOfsLoadFailedAction = Action<typeof FRIEND_OFS_LOAD_FAILED>;
+export const friendOfsLoadFailed = (): FriendOfsLoadFailedAction => ({
+    type: FRIEND_OFS_LOAD_FAILED
+});
+
 export const FRIENDSHIP_UPDATE = "FRIENDSHIP_UPDATE";
 export type FriendshipUpdateAction = ActionWithPayload<typeof FRIENDSHIP_UPDATE, {
     nodeName: string;
@@ -184,6 +206,9 @@ export type PeopleAnyAction =
     | FriendsLoadAction
     | FriendsLoadedAction
     | FriendsLoadFailedAction
+    | FriendOfsLoadAction
+    | FriendOfsLoadedAction
+    | FriendOfsLoadFailedAction
     | FriendshipUpdateAction
     | FriendshipUpdatedAction
     | FriendshipUpdateFailedAction

@@ -4,7 +4,13 @@ import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { ContactState } from "state/people/state";
-import { getPeopleFriends, getPeopleSubscribers, getPeopleSubscriptions, getPeopleTab } from "state/people/selectors";
+import {
+    getPeopleFriendOfs,
+    getPeopleFriends,
+    getPeopleSubscribers,
+    getPeopleSubscriptions,
+    getPeopleTab
+} from "state/people/selectors";
 import { AvatarWithPopup, Loading } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import PeopleContactIcons from "ui/people/PeopleContactIcons";
@@ -31,6 +37,8 @@ function isLoading(state: ClientState): boolean {
             return state.people.loadingSubscribers;
         case "subscriptions":
             return state.people.loadingSubscriptions;
+        case "friend-ofs":
+            return state.people.loadingFriendOfs;
         default:
             return state.people.loadingFriends;
     }
@@ -43,6 +51,8 @@ function getPeopleContacts(state: ClientState): ContactState[] {
             return getPeopleSubscribers(state);
         case "subscriptions":
             return getPeopleSubscriptions(state);
+        case "friend-ofs":
+            return getPeopleFriendOfs(state);
         default:
             return getPeopleFriends(state, tab);
     }

@@ -1,7 +1,7 @@
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
 import { ContactState, PeopleTab } from "state/people/state";
-import { FriendInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { FriendInfo, FriendOfInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;
@@ -43,6 +43,10 @@ export function isFriendsToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedFriends && !state.people.loadingFriends;
 }
 
+export function isFriendOfsToBeLoaded(state: ClientState): boolean {
+    return !state.people.loadedFriendOfs && !state.people.loadingFriendOfs;
+}
+
 export function isSubscribersVisible(state: ClientState): boolean {
     return isPermitted("viewSubscribers", state.people, "public", state);
 }
@@ -55,6 +59,10 @@ export function isFriendsVisible(state: ClientState): boolean {
     return isPermitted("viewFriends", state.people, "public", state);
 }
 
+export function isFriendOfsVisible(state: ClientState): boolean {
+    return isPermitted("viewFriendOfs", state.people, "public", state);
+}
+
 export function isSubscribersTotalVisible(state: ClientState): boolean {
     return isPermitted("viewSubscribersTotal", state.people, "public", state);
 }
@@ -65,6 +73,10 @@ export function isSubscriptionsTotalVisible(state: ClientState): boolean {
 
 export function isFriendsTotalVisible(state: ClientState): boolean {
     return isPermitted("viewFriendsTotal", state.people, "public", state);
+}
+
+export function isFriendOfsTotalVisible(state: ClientState): boolean {
+    return isPermitted("viewFriendOfsTotal", state.people, "public", state);
 }
 
 type SubscriberContactState = ContactState & { subscriber: SubscriberInfo };
@@ -87,4 +99,11 @@ export function getPeopleFriends(state: ClientState, friendGroupId: string): Fri
     return Object.values(state.people.contacts)
         .filter((contact): contact is FriendContactState => contact?.friend != null
             && contact.friend.groups?.find(fg => fg.id === friendGroupId) != null);
+}
+
+type FriendOfContactState = ContactState & { friendOf: FriendOfInfo };
+
+export function getPeopleFriendOfs(state: ClientState): FriendOfContactState[] {
+    return Object.values(state.people.contacts)
+        .filter((contact): contact is FriendOfContactState => contact?.friendOf != null);
 }

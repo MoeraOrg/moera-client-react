@@ -11,6 +11,9 @@ import {
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import {
+    FRIEND_OFS_LOAD,
+    FRIEND_OFS_LOAD_FAILED,
+    FRIEND_OFS_LOADED,
     FRIENDS_LOAD,
     FRIENDS_LOAD_FAILED,
     FRIENDS_LOADED,
@@ -50,6 +53,8 @@ const initialState: PeopleState = {
     loadedSubscriptions: false,
     loadingFriends: false,
     loadedFriends: false,
+    loadingFriendOfs: false,
+    loadedFriendOfs: false,
     contacts: {},
     operations: {}
 };
@@ -61,7 +66,8 @@ function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, 
             contact: {nodeName, closeness: 0},
             subscriber: null,
             subscription: null,
-            friend: null
+            friend: null,
+            friendOf: null
         };
         istate.set(["contacts", nodeName], contact);
     }
@@ -184,6 +190,29 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case FRIENDS_LOAD_FAILED:
             return immutable.set(state, "loadingFriends", false);
+
+        case FRIEND_OFS_LOAD:
+            return immutable.set(state, "loadingFriendOfs", true);
+
+        case FRIEND_OFS_LOADED: {
+            const istate = immutable.wrap(state);
+            istate.assign("", {
+                loadingFriendOfs: false,
+                loadedFriendOfs: true,
+            });
+            action.payload.list.forEach(friendOf => {
+                prepareContact(state, istate, friendOf.remoteNodeName);
+                if (friendOf.contact != null) {
+                    istate.set(["contacts", friendOf.remoteNodeName, "contact"], friendOf.contact);
+                    delete friendOf.contact;
+                }
+                istate.set(["contacts", friendOf.remoteNodeName, "friendOf"], friendOf);
+            });
+            return istate.value();
+        }
+
+        case FRIEND_OFS_LOAD_FAILED:
+            return immutable.set(state, "loadingFriendOfs", false);
 
         case FEED_SUBSCRIBED: {
             if (action.context.ownerName !== action.context.homeOwnerName) {
