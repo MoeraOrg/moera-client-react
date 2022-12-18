@@ -18,10 +18,10 @@ import PeopleContactIcons from "ui/people/PeopleContactIcons";
 type Props = ConnectedProps<typeof connector>;
 
 const PeopleContent = ({loading, contacts}: Props) => (
-    <div className="row">
+    <div>
         <Loading active={loading}/>
         {contacts.map((cs, index) =>
-            <div key={index} className="person col-sm-4">
+            <div key={index} className="person">
                 <AvatarWithPopup ownerName={cs.contact.nodeName} ownerFullName={cs.contact.fullName}
                                  avatar={cs.contact.avatar} size={48}/>
                 <NodeName name={cs.contact.nodeName} fullName={cs.contact.fullName}/>

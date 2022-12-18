@@ -18,13 +18,13 @@ const SettingsMenu = ({tab, sheetName, settingsGoToSheet}: Props) => {
         <ul className="nav nav-pills flex-md-column col-md-2 settings-menu">{
             getSheets(tab).map(sh =>
                 <li className="nav-item" key={sh.name}>
-                <span className={cx("nav-link", {"active": sh.name === sheetName})}
-                      onClick={() => settingsGoToSheet(sh.name)}>{
-                    sh.name === sheetName ?
-                        t(`setting.sheet.${sh.name}`)
-                    :
-                        <Jump href={`/settings/${tab}#${sh}`}>{t(`setting.sheet.${sh.name}`)}</Jump>
-                }</span>
+                    <span className={cx("nav-link", {"active": sh.name === sheetName})}
+                          onClick={() => settingsGoToSheet(sh.name)}>{
+                        sh.name === sheetName ?
+                            t(`setting.sheet.${sh.name}`)
+                        :
+                            <Jump href={`/settings/${tab}#${sh}`}>{t(`setting.sheet.${sh.name}`)}</Jump>
+                    }</span>
                 </li>
             )
         }</ul>

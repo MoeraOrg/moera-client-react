@@ -1,44 +1,30 @@
-.people-tabs {
+@media only screen and (min-width: 576px) {
+    .people-tabs {
+        min-width: 15%;
+        max-width: 20%;
+        flex: none;
+        margin-right: 1rem;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .people-tabs {
+        margin-bottom: 1rem;
+    }
+}
+
+.people-tabs .nav-link {
     display: flex;
-    margin-top: -.5em;
-    margin-bottom: 1.5em;
-    flex-wrap: wrap;
+    align-items: flex-start;
 }
 
-.people-tabs .tab {
-    flex: 1;
-    max-width: 10em;
-    cursor: pointer;
-    padding: .3rem;
-    font-size: larger;
-    margin-right: 1rem;
-    white-space: nowrap;
-    color: var(--bs-gray-600);
-}
-
-.people-tabs .tab:hover {
-    color: var(--bs-gray-800);
-}
-
-.people-tabs .tab .principal {
-    margin-left: .6em;
-    font-size: .8em;
-}
-
-.people-tabs .tab.active {
-    color: var(--bs-primary);
-    cursor: default;
-    border-bottom: solid .25rem var(--bs-primary);
-}
-
-.people-tabs .tab.active:hover {
-    color: var(--bs-primary);
-}
-
-.people-tabs .tab.active .principal {
-    color: var(--bs-primary);
-}
-
-.people-tabs .rest {
+.people-tabs .title {
     flex: auto;
+}
+
+.people-tabs .badge {
+    flex: none;
+    background-color: var(--bs-gray-500);
+    margin-top: .2em;
+    margin-left: .75em;
 }

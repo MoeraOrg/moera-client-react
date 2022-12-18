@@ -5,6 +5,13 @@
     min-height: 25vh;
 }
 
+@media only screen and (min-width: 576px) {
+    .people-page {
+        display: flex;
+        align-items: flex-start;
+    }
+}
+
 @media only screen and (max-width: 575px) {
     .people-page {
         padding-bottom: 3rem;
@@ -14,7 +21,8 @@
 .people-page .person {
     margin-bottom: .3rem;
     padding-right: .5rem;
-    display: flex;
+    width: min(16rem, 95vw);
+    display: inline-flex;
     align-items: center;
 }
 

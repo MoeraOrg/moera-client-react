@@ -3,17 +3,3 @@
         margin-bottom: 1.5rem;
     }
 }
-
-.settings-menu .nav-link.active:hover {
-    background-color: var(--bs-primary);
-}
-
-.settings-menu .nav-link:hover {
-    background-color: var(--highlight-blue);
-    cursor: pointer;
-}
-
-.settings-menu .nav-link A:hover {
-    text-decoration: none;
-    color: var(--bs-primary);
-}

@@ -21,7 +21,7 @@ const PeopleTabs = ({
     const {t} = useTranslation();
 
     return (
-        <div className="people-tabs">
+        <ul className="nav nav-pills flex-md-column people-tabs">
             {subscribersTotal != null &&
                 <PeopleTabsItem name="subscribers" title={t("subscribers")} principal={viewSubscribers}
                                 total={subscribersTotal} loaded={loadedGeneral} active={active}
@@ -36,7 +36,7 @@ const PeopleTabs = ({
                 friendGroups.map(friendGroup =>
                     <PeopleTabsItem name={friendGroup.id} title={getTitle(friendGroup, t)} principal={viewFriends}
                                     total={friendsTotal[friendGroup.id] ?? 0} loaded={loadedGeneral} active={active}
-                                    peopleGoToTab={peopleGoToTab}/>
+                                    peopleGoToTab={peopleGoToTab} key={friendGroup.id}/>
                 )
             }
             {friendOfsTotal != null &&
@@ -44,8 +44,7 @@ const PeopleTabs = ({
                                 total={friendOfsTotal} loaded={loadedGeneral} active={active}
                                 peopleGoToTab={peopleGoToTab}/>
             }
-            <div className="rest"/>
-        </div>
+        </ul>
     );
 }
 

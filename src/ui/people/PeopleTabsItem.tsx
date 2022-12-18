@@ -16,12 +16,17 @@ interface Props {
 }
 
 const PeopleTabsItem = ({name, title, principal, total, loaded, active, peopleGoToTab}: Props) => (
-    <div className={cx("tab", {"active": name === active})} onClick={() => peopleGoToTab(name)}>
-        {title}{loaded ? ` (${total})` : ""}
-        {principal &&
-            <Principal value={principal} defaultValue="public" icons={{"admin": "lock"}}/>
-        }
-    </div>
+    <li className="nav-item">
+        <span className={cx("nav-link", {"active": name === active})} onClick={() => peopleGoToTab(name)}>
+            <span className="title">
+                {title}
+                {principal &&
+                    <Principal value={principal} defaultValue="public" icons={{"admin": "lock"}}/>
+                }
+            </span>
+            {loaded && <span className="badge">{total}</span>}
+        </span>
+    </li>
 );
 
 export default PeopleTabsItem;

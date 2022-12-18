@@ -13,20 +13,6 @@
     font-weight: 600;
 }
 
-.donate-dialog .nav-link.active:hover {
-    background-color: var(--bs-primary);
-}
-
-.donate-dialog .nav-link:hover {
-    background-color: var(--highlight-blue);
-    cursor: pointer;
-}
-
-.donate-dialog .nav-link A:hover {
-    text-decoration: none;
-    color: var(--bs-primary);
-}
-
 .donate-dialog .fundraisers {
     display: flex;
     flex-wrap: wrap;
