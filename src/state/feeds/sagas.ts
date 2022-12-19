@@ -140,7 +140,7 @@ function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetV
     }
 
     try {
-        const view: PrincipalValue = visible ? "public" : "private";
+        const view: PrincipalValue = visible ? "unset" : "private";
         const subscriber = yield* call(Node.putSubscriber, ":", subscriberId, null, {view});
         yield* put(feedSubscriberUpdated(homeOwnerName, subscriber));
         const subscriptions = yield* call(Node.searchSubscriptions, ":", "feed",
