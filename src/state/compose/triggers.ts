@@ -88,7 +88,7 @@ export default [
     trigger(COMPOSE_DRAFT_LIST_ITEM_DELETED, true, updateLocation),
     trigger(CONNECTED_TO_HOME, conj(isAtComposePage, isConnectionSwitch), () => composeDraftUnset(true)),
     trigger(COMPOSE_PREVIEW, true, dialogOpened(composePreviewClose())),
-    trigger(COMPOSE_PREVIEW_CLOSE, true, dialogClosed()),
+    trigger(COMPOSE_PREVIEW_CLOSE, true, dialogClosed),
     trigger(
         [EVENT_HOME_DRAFT_ADDED, EVENT_HOME_DRAFT_UPDATED],
         (state, signal: EventAction<DraftAddedEvent | DraftUpdatedEvent>) =>

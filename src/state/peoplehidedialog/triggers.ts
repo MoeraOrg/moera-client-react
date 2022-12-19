@@ -8,5 +8,5 @@ import {
 
 export default [
     trigger(OPEN_PEOPLE_HIDE_DIALOG, true, dialogOpened(closePeopleHideDialog())),
-    trigger(CLOSE_PEOPLE_HIDE_DIALOG, true, dialogClosed())
+    trigger(CLOSE_PEOPLE_HIDE_DIALOG, true, dialogClosed)
 ];

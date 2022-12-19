@@ -173,7 +173,7 @@ export default [
     ),
     trigger(OPEN_COMMENT_DIALOG, true, commentDialogCommentLoad),
     trigger(OPEN_COMMENT_DIALOG, true, dialogOpened(closeCommentDialog())),
-    trigger(CLOSE_COMMENT_DIALOG, true, dialogClosed()),
+    trigger(CLOSE_COMMENT_DIALOG, true, dialogClosed),
     trigger(
         EVENT_RECEIVER_COMMENT_UPDATED,
         (state, signal: EventAction<CommentUpdatedEvent>) =>

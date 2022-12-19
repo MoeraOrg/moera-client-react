@@ -24,7 +24,7 @@ export default [
         (signal: OpenLightBoxAction) => postingLoad(signal.payload.postingId)
     ),
     trigger(OPEN_LIGHT_BOX, true, dialogOpened(closeLightBox())),
-    trigger(CLOSE_LIGHT_BOX, true, dialogClosed()),
+    trigger(CLOSE_LIGHT_BOX, true, dialogClosed),
     trigger([OPEN_LIGHT_BOX, CLOSE_LIGHT_BOX, LIGHT_BOX_MEDIA_SET], true, updateLocation),
     trigger(
         [OPEN_LIGHT_BOX, LIGHT_BOX_MEDIA_SET, POSTING_SET, COMMENT_SET, COMMENTS_PAST_SLICE_SET,

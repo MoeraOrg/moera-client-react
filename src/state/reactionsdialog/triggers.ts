@@ -40,7 +40,7 @@ export default [
     ),
     trigger(OPEN_REACTIONS_DIALOG, isReactionsDialogTotalsToBeLoaded, reactionsDialogTotalsLoad),
     trigger(OPEN_REACTIONS_DIALOG, true, dialogOpened(closeReactionsDialog())),
-    trigger(CLOSE_REACTIONS_DIALOG, true, dialogClosed()),
+    trigger(CLOSE_REACTIONS_DIALOG, true, dialogClosed),
     trigger(
         [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
         true,

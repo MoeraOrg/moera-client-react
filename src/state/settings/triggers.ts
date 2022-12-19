@@ -59,7 +59,7 @@ export default [
     trigger(SETTINGS_GO_TO_TAB, true, newLocation),
     trigger(SETTINGS_GO_TO_SHEET, true, updateLocation),
     trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN, true, dialogOpened(settingsChangePasswordDialogClose())),
-    trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE, true, dialogClosed()),
+    trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE, true, dialogClosed),
     trigger(
         [CONNECTED_TO_HOME, GO_TO_PAGE, SETTINGS_GO_TO_SHEET],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsTokensToBeLoaded),

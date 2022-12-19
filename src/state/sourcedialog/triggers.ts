@@ -4,5 +4,5 @@ import { dialogClosed, dialogOpened } from "state/navigation/actions";
 
 export default [
     trigger(OPEN_SOURCE_DIALOG, true, dialogOpened(closeSourceDialog())),
-    trigger(CLOSE_SOURCE_DIALOG, true, dialogClosed())
+    trigger(CLOSE_SOURCE_DIALOG, true, dialogClosed)
 ];

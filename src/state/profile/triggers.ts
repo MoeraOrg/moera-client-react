@@ -44,6 +44,6 @@ export default [
             confirmBox("Delete the avatar?", "Delete", "Cancel",
                 profileAvatarDelete(signal.payload.id, signal.payload.onDeleted))),
     trigger(PROFILE_OPEN_AVATAR_EDIT_DIALOG, true, dialogOpened(profileCloseAvatarEditDialog())),
-    trigger(PROFILE_CLOSE_AVATAR_EDIT_DIALOG, true, dialogClosed()),
+    trigger(PROFILE_CLOSE_AVATAR_EDIT_DIALOG, true, dialogClosed),
     trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict)
 ]

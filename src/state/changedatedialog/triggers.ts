@@ -8,5 +8,5 @@ import {
 
 export default [
     trigger(OPEN_CHANGE_DATE_DIALOG, true, dialogOpened(closeChangeDateDialog())),
-    trigger(CLOSE_CHANGE_DATE_DIALOG, true, dialogClosed())
+    trigger(CLOSE_CHANGE_DATE_DIALOG, true, dialogClosed)
 ];

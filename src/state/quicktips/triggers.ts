@@ -8,5 +8,5 @@ import { dialogClosed, dialogOpened } from "state/navigation/actions";
 export default [
     trigger([SETTINGS_CLIENT_VALUES_LOADED, MNEMONIC_CLOSE], isQuickTipsToBeShown, openQuickTips),
     trigger(OPEN_QUICK_TIPS, true, dialogOpened(closeQuickTips())),
-    trigger(CLOSE_QUICK_TIPS, true, dialogClosed())
+    trigger(CLOSE_QUICK_TIPS, true, dialogClosed)
 ];

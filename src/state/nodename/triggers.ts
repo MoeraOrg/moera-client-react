@@ -26,10 +26,10 @@ export default [
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtProfilePage, nodeNameLoad),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], inv(isAtProfilePage), nodeNameUnset),
     trigger(REGISTER_NAME_DIALOG, true, dialogOpened(registerNameDialogCancel())),
-    trigger(REGISTER_NAME_DIALOG_CANCEL, true, dialogClosed()),
+    trigger(REGISTER_NAME_DIALOG_CANCEL, true, dialogClosed),
     trigger(REGISTER_NAME_SUCCEEDED, isAtNode, nodeNameLoad),
     trigger(NODE_NAME_UPDATE_DIALOG, true, dialogOpened(nodeNameUpdateDialogCancel())),
-    trigger(NODE_NAME_UPDATE_DIALOG_CANCEL, true, dialogClosed()),
+    trigger(NODE_NAME_UPDATE_DIALOG_CANCEL, true, dialogClosed),
     trigger(NODE_NAME_UPDATE_SUCCEEDED, true, nodeNameLoad),
     trigger(NODE_NAME_UPDATE_SUCCEEDED, true, () => flashBox(i18n.t("name-operation-started"))),
     trigger(

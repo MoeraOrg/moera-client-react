@@ -7,5 +7,5 @@ import { CANCEL_SIGN_UP_DIALOG, cancelSignUpDialog, OPEN_SIGN_UP_DIALOG } from "
 export default [
     trigger(MNEMONIC_CLOSE, inv(isAtNode), goHome),
     trigger(OPEN_SIGN_UP_DIALOG, true, dialogOpened(cancelSignUpDialog())),
-    trigger(CANCEL_SIGN_UP_DIALOG, true, dialogClosed())
+    trigger(CANCEL_SIGN_UP_DIALOG, true, dialogClosed)
 ];

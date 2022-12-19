@@ -16,5 +16,5 @@ export default [
         isAskDialogToBeLoaded,
         (signal: OpenAskDialogAction) => askDialogLoad(signal.payload.nodeName)
     ),
-    trigger(CLOSE_ASK_DIALOG, true, dialogClosed())
+    trigger(CLOSE_ASK_DIALOG, true, dialogClosed)
 ];

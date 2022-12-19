@@ -8,5 +8,5 @@ import {
 
 export default [
     trigger(OPEN_FRIEND_GROUPS_DIALOG, true, dialogOpened(closeFriendGroupsDialog())),
-    trigger(CLOSE_FRIEND_GROUPS_DIALOG, true, dialogClosed())
+    trigger(CLOSE_FRIEND_GROUPS_DIALOG, true, dialogClosed)
 ];
