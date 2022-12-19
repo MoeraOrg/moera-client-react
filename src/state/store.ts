@@ -33,6 +33,7 @@ import lightBox from "state/lightbox/reducer";
 import donateDialog from "state/donatedialog/reducer";
 import entryCopyTextDialog from "state/entrycopytextdialog/reducer";
 import linkPreviews from "state/linkpreviews/reducer";
+import peopleHideDialog from "state/peoplehidedialog/reducer";
 import friendGroupsDialog from "state/friendgroupsdialog/reducer";
 import askDialog from "state/askdialog/reducer";
 import messageBox from "state/messagebox/reducer";
@@ -102,6 +103,7 @@ import contactsTriggers from "state/contacts/triggers";
 import sourceDialogTriggers from "state/sourcedialog/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
+import peopleHideDialogTriggers from "state/peoplehidedialog/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
@@ -141,6 +143,7 @@ const reducers = combineReducers({
     donateDialog,
     entryCopyTextDialog,
     linkPreviews,
+    peopleHideDialog,
     friendGroupsDialog,
     askDialog,
     messageBox,
@@ -181,6 +184,7 @@ const triggers = collectTriggers(
     sourceDialogTriggers,
     imageEditDialogTriggers,
     lightBoxTriggers,
+    peopleHideDialogTriggers,
     askDialogTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,

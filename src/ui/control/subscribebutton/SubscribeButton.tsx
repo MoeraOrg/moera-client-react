@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
@@ -8,12 +8,11 @@ import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { friendshipUpdate } from "state/people/actions";
 import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
 import { openAskDialog } from "state/askdialog/actions";
+import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
 import { getHomeFriendsId, getHomeOwnerGender } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
-import { dialogClosed, dialogOpened } from "state/navigation/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { Button, DropdownMenu } from "ui/control";
-import PeopleHideDialog from "ui/control/subscribebutton/PeopleHideDialog";
 import { tGender } from "i18n";
 import "./SubscribeButton.css";
 
@@ -27,7 +26,7 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButtonImpl({
     small, nodeName, feedName, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe, friendshipUpdate,
-    openFriendGroupsDialog, openAskDialog, dialogOpened, dialogClosed
+    openFriendGroupsDialog, openAskDialog, openPeopleHideDialog
 }: Props) {
     const subscribing = card?.subscription?.subscribing ?? false;
     const unsubscribing = card?.subscription?.unsubscribing ?? false;
@@ -36,8 +35,6 @@ function SubscribeButtonImpl({
     const friendGroups = card?.friendship?.groups;
     const remoteFriendGroups = card?.friendship?.remoteGroups;
     const updatingFriendship = card?.friendship?.updating;
-
-    const [hideDialog, setHideDialog] = useState<boolean>(false);
 
     const {t} = useTranslation();
 
@@ -61,15 +58,7 @@ function SubscribeButtonImpl({
 
     const onAskDialog = () => openAskDialog(nodeName);
 
-    const onHideDialogClose = () => {
-        dialogClosed();
-        setHideDialog(false);
-    }
-
-    const onHideDialogOpen = () => {
-        setHideDialog(true);
-        dialogOpened(onHideDialogClose);
-    }
+    const onHideDialog = () => openPeopleHideDialog(nodeName, feedName);
 
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;
@@ -147,7 +136,7 @@ function SubscribeButtonImpl({
                 {
                     title: t("hide-ellipsis"),
                     href: peerHref,
-                    onClick: onHideDialogOpen,
+                    onClick: onHideDialog,
                     show: subscribed || subscribedToMe
                 }
             ]}>
@@ -156,9 +145,6 @@ function SubscribeButtonImpl({
                 &nbsp;&nbsp;
                 <FontAwesomeIcon icon="chevron-down"/>
             </DropdownMenu>
-            {hideDialog &&
-                <PeopleHideDialog nodeName={nodeName} feedName={feedName} onClose={onHideDialogClose}/>
-            }
         </>
     );
 }
@@ -170,10 +156,7 @@ const connector = connect(
         peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
         friendsId: getHomeFriendsId(state)
     }),
-    {
-        feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog, dialogOpened,
-        dialogClosed
-    }
+    { feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog, openPeopleHideDialog }
 );
 
 export const SubscribeButton = connector(SubscribeButtonImpl);

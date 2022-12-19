@@ -23,6 +23,7 @@ import { NodeAnyAction } from "state/node/actions";
 import { NodeCardsAnyAction } from "state/nodecards/actions";
 import { NodeNameAnyAction } from "state/nodename/actions";
 import { PeopleAnyAction } from "state/people/actions";
+import { PeopleHideDialogAnyAction } from "state/peoplehidedialog/actions";
 import { PostingReplyAnyAction } from "state/postingreply/actions";
 import { PostingsAnyAction } from "state/postings/actions";
 import { ProfileAnyAction } from "state/profile/actions";
@@ -65,6 +66,7 @@ export type ClientAction =
     | NodeCardsAnyAction
     | NodeNameAnyAction
     | PeopleAnyAction
+    | PeopleHideDialogAnyAction
     | PostingReplyAnyAction
     | PostingsAnyAction
     | ProfileAnyAction

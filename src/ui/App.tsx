@@ -27,6 +27,7 @@ import LightBox from "ui/lightbox/LightBox";
 import ImageEditDialog from "ui/imageeditdialog/ImageEditDialog";
 import DonateDialog from "ui/donatedialog/DonateDialog";
 import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
+import PeopleHideDialog from "ui/peoplehidedialog/PeopleHideDialog";
 import FriendGroupsDialog from "ui/friendgroupsdialog/FriendGroupsDialog";
 import AskDialog from "ui/askdialog/AskDialog";
 import "./colors.css";
@@ -57,6 +58,7 @@ const App = ({atNode, feedWidth}: Props) => (
                 <ImageEditDialog/>
                 <DonateDialog/>
                 <EntryCopyTextDialog/>
+                <PeopleHideDialog/>
                 <FriendGroupsDialog/>
                 <AskDialog/>
             </>
