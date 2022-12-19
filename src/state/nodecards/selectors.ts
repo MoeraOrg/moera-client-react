@@ -1,8 +1,8 @@
 import { ClientState } from "state/state";
 import { NodeCardState } from "state/nodecards/state";
 
-export function getNodeCard(state: ClientState, nodeName: string): NodeCardState | null {
-    return state.nodeCards.cards[nodeName] ?? null;
+export function getNodeCard(state: ClientState, nodeName: string | null | undefined): NodeCardState | null {
+    return nodeName != null ? state.nodeCards.cards[nodeName] ?? null : null;
 }
 
 export function isNodeCardDetailsLoaded(state: ClientState, nodeName: string): boolean {

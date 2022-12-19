@@ -123,9 +123,7 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.friendGroupsDialog.show,
         nodeName: state.friendGroupsDialog.nodeName,
-        nodeCard: state.friendGroupsDialog.nodeName != null
-            ? getNodeCard(state, state.friendGroupsDialog.nodeName)
-            : null,
+        nodeCard: getNodeCard(state, state.friendGroupsDialog.nodeName),
         changing: state.friendGroupsDialog.changing,
         availableGroups: getHomeFriendGroups(state),
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode

@@ -42,9 +42,7 @@ export const instantStoryFriendAction: InstantStoryButtonsActionSupplier =
 
 const connector = connect(
     (state: ClientState, ownProps: InstantStoryButtonsProps) => ({
-        friendship: ownProps.story.remoteNodeName != null
-            ? getNodeCard(state, ownProps.story.remoteNodeName)?.friendship
-            : null,
+        friendship: getNodeCard(state, ownProps.story.remoteNodeName)?.friendship,
         friendsId: getHomeFriendsId(state)
     }),
     { friendshipUpdate }

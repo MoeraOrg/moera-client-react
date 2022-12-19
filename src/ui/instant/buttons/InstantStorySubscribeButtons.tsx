@@ -37,9 +37,7 @@ export const instantStorySubscribeAction: InstantStoryButtonsActionSupplier =
 
 const connector = connect(
     (state: ClientState, ownProps: InstantStoryButtonsProps) => ({
-        subscription: ownProps.story.remoteNodeName != null
-            ? getNodeCard(state, ownProps.story.remoteNodeName)?.subscription
-            : null
+        subscription: getNodeCard(state, ownProps.story.remoteNodeName)?.subscription
     }),
     { feedSubscribe }
 );

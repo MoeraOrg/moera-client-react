@@ -119,7 +119,7 @@ const connector = connect(
         show: state.peopleHideDialog.show,
         nodeName: state.peopleHideDialog.nodeName,
         feedName: state.peopleHideDialog.feedName,
-        card: state.peopleHideDialog.nodeName != null ? getNodeCard(state, state.peopleHideDialog.nodeName) : null,
+        card: getNodeCard(state, state.peopleHideDialog.nodeName),
         subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
         subscriptionsHidden: (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin",
         friendsHidden: (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin"

@@ -114,7 +114,7 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.askDialog.show,
         nodeName: state.askDialog.nodeName,
-        card: state.askDialog.nodeName != null ? getNodeCard(state, state.askDialog.nodeName) : null,
+        card: getNodeCard(state, state.askDialog.nodeName),
         loading: state.askDialog.loading,
         allGroups: state.askDialog.friendGroups,
         subjectsAllowed: state.askDialog.subjectsAllowed,
