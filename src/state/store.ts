@@ -104,6 +104,7 @@ import sourceDialogTriggers from "state/sourcedialog/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
 import peopleHideDialogTriggers from "state/peoplehidedialog/triggers";
+import friendGroupsDialogTriggers from "state/friendgroupsdialog/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
@@ -185,6 +186,7 @@ const triggers = collectTriggers(
     imageEditDialogTriggers,
     lightBoxTriggers,
     peopleHideDialogTriggers,
+    friendGroupsDialogTriggers,
     askDialogTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,
