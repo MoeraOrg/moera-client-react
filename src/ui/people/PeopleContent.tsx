@@ -11,23 +11,15 @@ import {
     getPeopleSubscriptions,
     getPeopleTab
 } from "state/people/selectors";
-import { AvatarWithPopup, Loading } from "ui/control";
-import NodeName from "ui/nodename/NodeName";
-import PeopleContactIcons from "ui/people/PeopleContactIcons";
+import { Loading } from "ui/control";
+import PeoplePerson from "ui/people/PeoplePerson";
 
 type Props = ConnectedProps<typeof connector>;
 
 const PeopleContent = ({loading, contacts}: Props) => (
     <div>
         <Loading active={loading}/>
-        {contacts.map((cs, index) =>
-            <div key={index} className="person">
-                <AvatarWithPopup ownerName={cs.contact.nodeName} ownerFullName={cs.contact.fullName}
-                                 avatar={cs.contact.avatar} size={48}/>
-                <NodeName name={cs.contact.nodeName} fullName={cs.contact.fullName}/>
-                <PeopleContactIcons contact={cs}/>
-            </div>
-        )}
+        {contacts.map((cs, index) => <PeoplePerson key={index} contact={cs}/>)}
     </div>
 );
 

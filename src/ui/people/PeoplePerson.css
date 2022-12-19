@@ -1,0 +1,15 @@
+.people-page .person {
+    margin-bottom: .3rem;
+    padding-right: .5rem;
+    width: min(16rem, 95vw);
+    display: inline-flex;
+    align-items: center;
+}
+
+.people-page .person .avatar {
+    margin-right: .5rem;
+}
+
+.people-page .person .node-name {
+    flex: auto;
+}
