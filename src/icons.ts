@@ -1,6 +1,8 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faArrowDown,
+    faArrowRightArrowLeft,
+    faArrowsToEye,
     faArrowUp,
     faAt,
     faBackspace,
@@ -96,6 +98,8 @@ import {
 
 export default function initIconLibrary() {
     library.add(faArrowDown);
+    library.add(faArrowRightArrowLeft);
+    library.add(faArrowsToEye);
     library.add(faArrowUp);
     library.add(faAt);
     library.add(faBackspace);

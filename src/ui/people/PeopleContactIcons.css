@@ -1,0 +1,7 @@
+.people-page .person .icons {
+    display: flex;
+    gap: .1rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+    max-height: 3.4rem;
+}

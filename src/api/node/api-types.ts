@@ -825,6 +825,21 @@ export interface ContactInfo {
     gender?: string | null;
     avatar?: AvatarImage | null;
     closeness: number;
+    hasFeedSubscriber?: boolean | null;
+    hasFeedSubscription?: boolean | null;
+    hasFriend?: boolean | null;
+    hasFriendOf?: boolean | null;
+    operations?: {
+        viewFeedSubscriber?: PrincipalValue | null;
+        viewFeedSubscription?: PrincipalValue | null;
+        viewFriend?: PrincipalValue | null;
+    },
+    adminOperations?: {
+        viewFeedSubscriber?: PrincipalValue | null;
+        viewFeedSubscription?: PrincipalValue | null;
+        viewFriend?: PrincipalValue | null;
+        viewFriendOf?: PrincipalValue | null;
+    }
 }
 
 export interface EmailHint {

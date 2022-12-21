@@ -1,9 +1,15 @@
 .people-page .person {
     margin-bottom: .3rem;
+    margin-right: 1rem;
     padding-right: .5rem;
-    width: min(16rem, 95vw);
+    border-radius: 5px;
+    width: min(15rem, 95vw);
     display: inline-flex;
     align-items: center;
+}
+
+.people-page .person:hover {
+    background-color: var(--highlight);
 }
 
 .people-page .person .avatar {

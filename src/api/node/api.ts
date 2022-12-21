@@ -1869,6 +1869,64 @@ const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
         },
         "closeness": {
             type: "number"
+        },
+        "hasFeedSubscriber": {
+            type: "boolean",
+            nullable: true
+        },
+        "hasFeedSubscription": {
+            type: "boolean",
+            nullable: true
+        },
+        "hasFriend": {
+            type: "boolean",
+            nullable: true
+        },
+        "hasFriendOf": {
+            type: "boolean",
+            nullable: true
+        },
+        "operations": {
+            type: "object",
+            properties: {
+                "viewFeedSubscriber": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFeedSubscription": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFriend": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
+        },
+        "adminOperations": {
+            type: "object",
+            properties: {
+                "viewFeedSubscriber": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFeedSubscription": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFriend": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewFriendOf": {
+                    type: "string",
+                    nullable: true
+                }
+            },
+            nullable: true,
+            additionalProperties: false
         }
     },
     required: ["nodeName", "closeness"],

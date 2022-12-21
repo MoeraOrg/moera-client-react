@@ -1,0 +1,23 @@
+.people-page .person .icons .icon {
+    font-size: .8rem;
+    color: var(--bs-gray-500);
+    width: 1.4rem;
+    height: 1.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.people-page .person:hover .icons .icon {
+    color: var(--bs-gray-600);
+}
+
+.people-page .person:hover .icons .principal {
+    color: var(--bs-gray-600);
+}
+
+.people-page .person:hover .icons .principal.senior {
+    background-color: var(--bs-gray-600);
+    color: white;
+    border-color: var(--bs-gray-600);
+}
