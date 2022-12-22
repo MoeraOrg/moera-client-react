@@ -1,7 +1,7 @@
 .people-page .person {
     margin-bottom: .3rem;
     margin-right: 1rem;
-    padding-right: .5rem;
+    padding: .1rem .5rem .1rem .1rem;
     border-radius: 5px;
     width: min(15rem, 95vw);
     display: inline-flex;
@@ -14,6 +14,30 @@
 
 .people-page .person .avatar {
     margin-right: .5rem;
+}
+
+.people-page .person .avatar-selector {
+    position: relative;
+    cursor: pointer;
+    margin: 0;
+}
+
+.people-page .person .avatar-selector .selection {
+    position: absolute;
+    background: white;
+    border: solid 1px var(--bs-primary);
+    border-radius: 50%;
+    padding: 0;
+    width: 1rem;
+    height: 1rem;
+    right: .5rem;
+    bottom: 0;
+}
+
+.people-page .person .avatar-selector .selection.selected {
+    background-color: var(--bs-primary);
+    color: white;
+    font-size: .6em;
 }
 
 .people-page .person .node-name {

@@ -12,13 +12,14 @@ type Props = {
     block?: boolean;
     borderless?: boolean;
     invisible?: boolean;
+    active?: boolean;
     loading?: boolean;
     innerRef?: React.Ref<HTMLButtonElement>;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function Button({
-    variant, size, compact = false, block = false, borderless = false, invisible = false, loading = false,
-    disabled = false, className = "", type = "button", autoFocus, innerRef, ...props
+    variant, size, compact = false, block = false, borderless = false, invisible = false, active = false,
+    loading = false, disabled = false, className = "", type = "button", autoFocus, innerRef, ...props
 }: Props) {
     const domRef = useRef<HTMLButtonElement>(null);
 
@@ -35,7 +36,8 @@ export function Button({
             "btn-lg": size === "lg",
             "flex-fill": block,
             "border-0": borderless,
-            "invisible": invisible
+            "invisible": invisible,
+            "active": active
         },
         className
     );

@@ -46,4 +46,6 @@ export interface PeopleState {
         viewFriendsTotal?: PrincipalValue | null;
         viewFriendOfsTotal?: PrincipalValue | null;
     };
+    selecting: boolean;
+    selected: Partial<Record<string, boolean>>;
 }

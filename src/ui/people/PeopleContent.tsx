@@ -12,6 +12,7 @@ import {
     getPeopleTab
 } from "state/people/selectors";
 import { Loading } from "ui/control";
+import PeopleSelectionPanel from "ui/people/PeopleSelectionPanel";
 import PeoplePerson from "ui/people/PeoplePerson";
 
 type Props = ConnectedProps<typeof connector>;
@@ -19,6 +20,9 @@ type Props = ConnectedProps<typeof connector>;
 const PeopleContent = ({loading, contacts}: Props) => (
     <div>
         <Loading active={loading}/>
+        {(!loading && contacts.length > 0) &&
+            <PeopleSelectionPanel/>
+        }
         {contacts.map((cs, index) => <PeoplePerson key={index} contact={cs}/>)}
     </div>
 );

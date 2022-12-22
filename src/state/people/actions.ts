@@ -54,6 +54,27 @@ export const peopleUnset = (): PeopleUnsetAction => ({
     type: PEOPLE_UNSET
 });
 
+export const PEOPLE_START_SELECTION = "PEOPLE_START_SELECTION";
+export type PeopleStartSelectionAction = Action<typeof PEOPLE_START_SELECTION>;
+export const peopleStartSelection = (): PeopleStartSelectionAction => ({
+    type: PEOPLE_START_SELECTION
+});
+
+export const PEOPLE_STOP_SELECTION = "PEOPLE_STOP_SELECTION";
+export type PeopleStopSelectionAction = Action<typeof PEOPLE_STOP_SELECTION>;
+export const peopleStopSelection = (): PeopleStopSelectionAction => ({
+    type: PEOPLE_STOP_SELECTION
+});
+
+export const PEOPLE_SELECT_TOGGLE = "PEOPLE_SELECT_TOGGLE";
+export type PeopleSelectToggleAction = ActionWithPayload<typeof PEOPLE_SELECT_TOGGLE, {
+    nodeName: string
+}>;
+export const peopleSelectToggle = (nodeName: string): PeopleSelectToggleAction => ({
+    type: PEOPLE_SELECT_TOGGLE,
+    payload: {nodeName}
+});
+
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -197,6 +218,9 @@ export type PeopleAnyAction =
     | PeopleGeneralLoadFailedAction
     | PeopleGeneralUnsetAction
     | PeopleUnsetAction
+    | PeopleStartSelectionAction
+    | PeopleStopSelectionAction
+    | PeopleSelectToggleAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction
