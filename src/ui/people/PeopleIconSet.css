@@ -12,11 +12,11 @@
     color: var(--bs-gray-600);
 }
 
-.people-page .person:hover .icons .principal {
+.people-page .person:hover .principal {
     color: var(--bs-gray-600);
 }
 
-.people-page .person:hover .icons .principal.senior {
+.people-page .person:hover .principal.senior {
     background-color: var(--bs-gray-600);
     color: white;
     border-color: var(--bs-gray-600);
