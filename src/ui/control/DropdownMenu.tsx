@@ -81,10 +81,11 @@ function buildItems(items: MenuItem[], standalone: boolean): RenderedItem[] {
 type Props = {
     items: MenuItem[];
     className?: string | null;
+    disabled?: boolean;
     children?: ReactNode;
 } & ConnectedProps<typeof connector>;
 
-function DropdownMenuImpl({items, className, children, standalone}: Props) {
+function DropdownMenuImpl({items, className, disabled, children, standalone}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -93,7 +94,7 @@ function DropdownMenuImpl({items, className, children, standalone}: Props) {
     const itemList = buildItems(items, standalone);
     return (
         <>
-            <button className={cx("menu", className)} ref={setButtonRef} onClick={onToggle}>
+            <button className={cx("menu", className)} disabled={disabled} ref={setButtonRef} onClick={onToggle}>
                 {children ??
                     <FontAwesomeIcon icon="chevron-down" className="chevron"/>
                 }

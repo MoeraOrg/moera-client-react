@@ -1933,6 +1933,8 @@ const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
     additionalProperties: false
 };
 
+export const ContactInfo = schema(ContactInfoType);
+
 export const ContactInfoArray = schema({
     type: "array",
     items: ContactInfoType

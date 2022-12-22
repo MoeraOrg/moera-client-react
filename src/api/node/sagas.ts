@@ -277,9 +277,9 @@ export function* putSubscription(nodeName: string | null, id: string,
     });
 }
 
-export function* deleteSubscription(nodeName: string | null, id: string): CallApiResult<Result> {
+export function* deleteSubscription(nodeName: string | null, id: string): CallApiResult<ContactInfo> {
     return yield* callApi({
-        nodeName, location: ut`/people/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/people/subscriptions/${id}`, method: "DELETE", auth: true, schema: NodeApi.ContactInfo
     });
 }
 

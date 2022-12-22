@@ -120,8 +120,8 @@ function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
 function* feedUnsubscribeSaga(action: FeedUnsubscribeAction) {
     const {nodeName, feedName, subscriptionId} = action.payload;
     try {
-        yield* call(Node.deleteSubscription, ":", subscriptionId);
-        yield* put(feedUnsubscribed(nodeName, feedName));
+        const contact = yield* call(Node.deleteSubscription, ":", subscriptionId);
+        yield* put(feedUnsubscribed(nodeName, feedName, contact));
     } catch (e) {
         yield* put(feedUnsubscribeFailed(nodeName, feedName));
         yield* put(errorThrown(e));

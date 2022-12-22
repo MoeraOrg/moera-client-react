@@ -18,8 +18,10 @@ import {
     friendsLoaded,
     friendsLoadFailed,
     PEOPLE_GENERAL_LOAD,
+    PEOPLE_SELECTED_SUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
+    peopleSelectedProceeded,
     SUBSCRIBERS_LOAD,
     subscribersLoaded,
     subscribersLoadFailed,
@@ -31,6 +33,8 @@ import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
+import { getPeopleSelectedContacts } from "state/people/selectors";
+import { feedSubscribed } from "state/feeds/actions";
 
 export default [
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
@@ -39,7 +43,8 @@ export default [
     executor(FRIENDS_LOAD, "", friendsLoadSaga, introduced),
     executor(FRIEND_OFS_LOAD, "", friendOfsLoadSaga, introduced),
     executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga),
-    executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga)
+    executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga),
+    executor(PEOPLE_SELECTED_SUBSCRIBE, "", peopleSelectedSubscribeSaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -141,4 +146,21 @@ function* friendshipSetVisibilitySaga(action: FriendshipSetVisibilityAction) {
         yield* put(friendshipUpdateFailed(nodeName));
         yield* put(errorThrown(e));
     }
+}
+
+function* peopleSelectedSubscribeSaga() {
+    const contacts = yield* select(getPeopleSelectedContacts);
+    for (const contact of contacts) {
+        if (contact.hasFeedSubscription) {
+            continue;
+        }
+
+        try {
+            const subscription = yield* call(Node.postFeedSubscription, ":", contact.nodeName, "timeline");
+            yield* put(feedSubscribed(contact.nodeName, subscription));
+        } catch (e) {
+            yield* put(errorThrown(e));
+        }
+    }
+    yield* put(peopleSelectedProceeded());
 }

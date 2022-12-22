@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { FeedInfo, FeedStatus, StoryInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { ContactInfo, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export const FEED_GENERAL_LOAD = "FEED_GENERAL_LOAD";
 export type FeedGeneralLoadAction = ActionWithPayload<typeof FEED_GENERAL_LOAD, {
@@ -86,10 +86,12 @@ export const FEED_UNSUBSCRIBED = "FEED_UNSUBSCRIBED";
 export type FeedUnsubscribedAction = ActionWithPayload<typeof FEED_UNSUBSCRIBED, {
     nodeName: string;
     feedName: string;
+    contact: ContactInfo | null;
 }>;
-export const feedUnsubscribed = (nodeName: string, feedName: string): FeedUnsubscribedAction => ({
+export const feedUnsubscribed = (nodeName: string, feedName: string,
+                                 contact: ContactInfo | null): FeedUnsubscribedAction => ({
     type: FEED_UNSUBSCRIBED,
-    payload: {nodeName, feedName}
+    payload: {nodeName, feedName, contact}
 });
 
 export const FEED_UNSUBSCRIBE_FAILED = "FEED_UNSUBSCRIBE_FAILED";

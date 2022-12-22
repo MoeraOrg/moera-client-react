@@ -184,7 +184,7 @@ export default [
             getOwnerName(state) === signal.payload.subscription.remoteNodeName
             && signal.payload.subscription.remoteFeedName != null,
         signal => feedUnsubscribed(signal.payload.subscription.remoteNodeName,
-            signal.payload.subscription.remoteFeedName!)
+            signal.payload.subscription.remoteFeedName!, signal.payload.subscription.contact ?? null)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,

@@ -1,18 +1,18 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { peopleStartSelection, peopleStopSelection } from "state/people/actions";
-import { Button } from "ui/control";
+import { Button, Loading } from "ui/control";
+import PeopleSelectedButton from "ui/people/PeopleSelectedButton";
 import "./PeopleSelectionPanel.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function PeopleSelectionPanel({atHome, selecting, totalSelected, peopleStartSelection, peopleStopSelection}: Props) {
+function PeopleSelectionPanel({atHome, selecting, proceeding, peopleStartSelection, peopleStopSelection}: Props) {
     const {t} = useTranslation();
 
     if (!atHome) {
@@ -34,26 +34,17 @@ function PeopleSelectionPanel({atHome, selecting, totalSelected, peopleStartSele
                 {" "}
                 {!selecting ? t("select") : t("clear-selection")}
             </Button>
-            {totalSelected > 0 &&
-                <Button variant="primary" size="sm" className="ms-1">
-                    {t("count-selected", {count: totalSelected}) + " "}
-                    <FontAwesomeIcon icon="chevron-down"/>
-                </Button>
-            }
+            <PeopleSelectedButton/>
+            <Loading active={proceeding}/>
         </div>
     );
 }
-
-const getTotalSelected = createSelector(
-    (state: ClientState) => state.people.selected,
-    selected => Object.values(selected).reduce((count, v) => count + (v ? 1 : 0), 0)
-);
 
 const connector = connect(
     (state: ClientState) => ({
         atHome: isAtHomeNode(state),
         selecting: state.people.selecting,
-        totalSelected: getTotalSelected(state)
+        proceeding: state.people.selectedProceeding
     }),
     { peopleStartSelection, peopleStopSelection }
 );

@@ -1,7 +1,7 @@
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
 import { ContactState, PeopleTab } from "state/people/state";
-import { FriendInfo, FriendOfInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { ContactInfo, FriendInfo, FriendOfInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;
@@ -106,4 +106,12 @@ type FriendOfContactState = ContactState & { friendOf: FriendOfInfo };
 export function getPeopleFriendOfs(state: ClientState): FriendOfContactState[] {
     return Object.values(state.people.contacts)
         .filter((contact): contact is FriendOfContactState => contact?.friendOf != null);
+}
+
+export function getPeopleSelectedContacts(state: ClientState): ContactInfo[] {
+    return Object.entries(state.people.selected)
+        .filter(([, selected]) => selected)
+        .map(([nodeName]) => state.people.contacts[nodeName])
+        .filter((cs): cs is ContactState => cs != null)
+        .map(cs => cs.contact);
 }

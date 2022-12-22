@@ -137,7 +137,7 @@ function SubscribeButtonImpl({
                     title: t("hide-ellipsis"),
                     href: peerHref,
                     onClick: onHideDialog,
-                    show: subscribed || subscribedToMe
+                    show: subscribed || subscribedToMe || friend
                 }
             ]}>
                 {friendIcon && <><FontAwesomeIcon icon={friendIcon}/>&nbsp;</>}
