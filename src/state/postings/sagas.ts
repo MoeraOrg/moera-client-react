@@ -53,7 +53,6 @@ import { isConnectedToHome } from "state/home/selectors";
 import { introduced } from "state/init-selectors";
 import { executor } from "state/executor";
 import { Browser } from "ui/browser";
-import { toAvatarDescription } from "util/avatar";
 
 export default [
     executor(POSTING_DELETE, payload => payload.id, postingDeleteSaga),
@@ -235,9 +234,7 @@ function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
     const targetNode = posting.receiverName ?? (nodeName || ownerName);
     const postingId = posting.receiverPostingId ?? id;
     try {
-        const whoAmI = yield* call(Node.getWhoAmI, targetNode);  // Just for not to wait for backend to update this
-        const subscription = yield* call(Node.postPostingCommentsSubscription, ":", targetNode, whoAmI.fullName ?? null,
-            whoAmI.gender ?? null, toAvatarDescription(whoAmI.avatar), postingId);
+        const subscription = yield* call(Node.postPostingCommentsSubscription, ":", targetNode, postingId);
         yield* put(postingCommentsSubscribed(id, subscription.id, nodeName));
     } catch (e) {
         yield* put(postingCommentsSubscribeFailed(id, nodeName));

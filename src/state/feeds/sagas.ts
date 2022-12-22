@@ -57,7 +57,6 @@ import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
-import { toAvatarDescription } from "util/avatar";
 
 export default [
     executor(
@@ -107,9 +106,7 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
     const {nodeName, feedName, storyId} = action.payload;
     try {
-        const whoAmI = yield* call(Node.getWhoAmI, nodeName); // Just for not to wait for backend to update this
-        const subscription = yield* call(Node.postFeedSubscription, ":", nodeName, whoAmI.fullName ?? null,
-            whoAmI.gender ?? null, toAvatarDescription(whoAmI.avatar), feedName);
+        const subscription = yield* call(Node.postFeedSubscription, ":", nodeName, feedName);
         yield* put(feedSubscribed(nodeName, subscription));
         if (storyId != null) {
             yield* put(storySatisfy(":instant", storyId));

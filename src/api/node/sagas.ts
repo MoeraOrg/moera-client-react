@@ -3,10 +3,10 @@ import { select } from 'typed-redux-saga';
 import { ClientSettings, NodeApi } from "api";
 import { callApi, CallApiResult, decodeBodies } from "api/node/call";
 import {
-    ActivityReactionInfo, AskSubject,
+    ActivityReactionInfo,
+    AskSubject,
     AsyncOperationCreated,
     AvatarAttributes,
-    AvatarDescription,
     AvatarInfo,
     AvatarOrdinal,
     CommentCreated,
@@ -28,7 +28,8 @@ import {
     FeedStatus,
     FriendDescription,
     FriendGroupInfo,
-    FriendInfo, FriendOfInfo,
+    FriendInfo,
+    FriendOfInfo,
     LinkPreviewInfo,
     NodeNameInfo,
     PeopleGeneralInfo,
@@ -233,39 +234,12 @@ export function* getSubscribers(nodeName: string | null, type: SubscriptionType,
     });
 }
 
-export function* postFeedSubscriber(nodeName: string | null, feedName: string, ownerFullName: string | null,
-                                    ownerGender: string | null, ownerAvatar: AvatarDescription | null,
-                                    operations: SubscriberOperations | null): CallApiResult<SubscriberInfo> {
-    return yield* callApi({
-        nodeName, location: "/people/subscribers", method: "POST", auth: true,
-        body: {type: "feed", feedName, ownerFullName, ownerGender, ownerAvatar, operations},
-        schema: NodeApi.SubscriberInfo
-    });
-}
-
-export function* postPostingCommentsSubscriber(nodeName: string | null, postingId: string, ownerFullName: string | null,
-                                               ownerGender: string | null,
-                                               ownerAvatar: AvatarDescription | null): CallApiResult<SubscriberInfo> {
-    return yield* callApi({
-        nodeName, location: "/people/subscribers", method: "POST", auth: true,
-        body: {type: "posting-comments", postingId, ownerFullName, ownerGender, ownerAvatar},
-        schema: NodeApi.SubscriberInfo
-    });
-}
-
 export function* putSubscriber(nodeName: string | null, subscriberId: string,
                                operations: SubscriberOperations | null,
                                adminOperations: SubscriberOperations | null): CallApiResult<SubscriberInfo> {
     return yield* callApi({
         nodeName, location: ut`/people/subscribers/${subscriberId}`, method: "PUT", auth: true,
         body: {operations, adminOperations}, schema: NodeApi.SubscriberInfo
-    });
-}
-
-export function* deleteSubscriber(nodeName: string | null, subscriberId: string): CallApiResult<Result> {
-    return yield* callApi({
-        nodeName, location: ut`/people/subscribers/${subscriberId}`, method: "DELETE", auth: true,
-        schema: NodeApi.Result
     });
 }
 
@@ -277,27 +251,20 @@ export function* getSubscriptions(nodeName: string | null, type: SubscriptionTyp
     });
 }
 
-export function* postFeedSubscription(nodeName: string | null, remoteNodeName: string, remoteFullName: string | null,
-                                      remoteGender: string | null, remoteAvatar: AvatarDescription | null,
+export function* postFeedSubscription(nodeName: string | null, remoteNodeName: string,
                                       remoteFeedName: string): CallApiResult<SubscriptionInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
-        body: {
-            type: "feed", feedName: "news", remoteNodeName, remoteFullName, remoteGender, remoteAvatar, remoteFeedName
-        },
+        body: {type: "feed", feedName: "news", remoteNodeName, remoteFeedName},
         schema: NodeApi.SubscriptionInfo
     });
 }
 
 export function* postPostingCommentsSubscription(nodeName: string | null, remoteNodeName: string,
-                                                 remoteFullName: string | null, remoteGender: string | null,
-                                                 remoteAvatar: AvatarDescription | null,
                                                  remotePostingId: string): CallApiResult<SubscriptionInfo> {
     return yield* callApi({
         nodeName, location: "/people/subscriptions", method: "POST", auth: true,
-        body: {
-            type: "posting-comments", remoteNodeName, remoteFullName, remoteGender, remoteAvatar, remotePostingId
-        },
+        body: {type: "posting-comments", remoteNodeName, remotePostingId},
         schema: NodeApi.SubscriptionInfo
     });
 }
