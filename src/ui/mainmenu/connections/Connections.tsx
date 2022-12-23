@@ -58,8 +58,8 @@ function Connections({
         <div id="connections">
             {roots.map(root => (
                 root.url === location ?
-                    <div className="connection-item active">
-                        <div className="connection" key={root.url}>
+                    <div className="connection-item active" key={root.url}>
+                        <div className="connection">
                             <NodeName name={owner.name} verified={owner.verified} correct={owner.correct}
                                       linked={false} popup={false}/><br/>
                             {location}<br/>
