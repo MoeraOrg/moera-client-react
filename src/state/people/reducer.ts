@@ -5,8 +5,10 @@ import {
     EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_NODE_SUBSCRIBER_ADDED,
     EVENT_NODE_SUBSCRIBER_DELETED,
+    EVENT_NODE_SUBSCRIBER_UPDATED,
     EVENT_NODE_SUBSCRIPTION_ADDED,
-    EVENT_NODE_SUBSCRIPTION_DELETED
+    EVENT_NODE_SUBSCRIPTION_DELETED,
+    EVENT_NODE_SUBSCRIPTION_UPDATED
 } from "api/events/actions";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
@@ -364,6 +366,24 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
+        case EVENT_NODE_SUBSCRIBER_UPDATED: {
+            const {subscriber} = action.payload;
+            if (subscriber.type !== "feed") {
+                return state;
+            }
+
+            const istate = immutable.wrap(state);
+            const contactState = prepareContact(state, istate, subscriber.nodeName);
+            if (subscriber.contact != null) {
+                putContact(state, istate, subscriber.nodeName, subscriber.contact);
+                delete subscriber.contact;
+            }
+            if (contactState.subscriber == null || contactState.subscriber.id === subscriber.id) {
+                istate.set(["contacts", subscriber.nodeName, "subscriber"], subscriber);
+            }
+            return istate.value();
+        }
+
         case EVENT_NODE_SUBSCRIBER_DELETED: {
             const {subscriber} = action.payload;
             if (subscriber.type !== "feed") {
@@ -400,6 +420,24 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
             if (state.loadedSubscriptions && contactState.subscription == null) {
                 istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 0) + 1);
+            }
+            return istate.value();
+        }
+
+        case EVENT_NODE_SUBSCRIPTION_UPDATED: {
+            const {subscription} = action.payload;
+            if (subscription.type !== "feed") {
+                return state;
+            }
+
+            const istate = immutable.wrap(state);
+            const contactState = prepareContact(state, istate, subscription.remoteNodeName);
+            if (subscription.contact != null) {
+                putContact(state, istate, subscription.remoteNodeName, subscription.contact);
+                delete subscription.contact;
+            }
+            if (contactState.subscription == null || contactState.subscription.id === subscription.id) {
+                istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
             }
             return istate.value();
         }
