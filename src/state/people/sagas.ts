@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { NodeApiError } from "api";
 import { Node } from "api/node";
-import { PrincipalValue } from "api/node/api-types";
+import { PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
     FRIEND_OFS_LOAD,
@@ -19,6 +19,7 @@ import {
     friendsLoadFailed,
     PEOPLE_GENERAL_LOAD,
     PEOPLE_SELECTED_SUBSCRIBE,
+    PEOPLE_SELECTED_UNSUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
     peopleSelectedProceeded,
@@ -34,7 +35,7 @@ import { introduced } from "state/init-selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
 import { getPeopleSelectedContacts } from "state/people/selectors";
-import { feedSubscribed } from "state/feeds/actions";
+import { feedSubscribed, feedUnsubscribed } from "state/feeds/actions";
 
 export default [
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
@@ -44,7 +45,8 @@ export default [
     executor(FRIEND_OFS_LOAD, "", friendOfsLoadSaga, introduced),
     executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga),
     executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga),
-    executor(PEOPLE_SELECTED_SUBSCRIBE, "", peopleSelectedSubscribeSaga)
+    executor(PEOPLE_SELECTED_SUBSCRIBE, "", peopleSelectedSubscribeSaga),
+    executor(PEOPLE_SELECTED_UNSUBSCRIBE, "", peopleSelectedUnsubscribeSaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -158,6 +160,30 @@ function* peopleSelectedSubscribeSaga() {
         try {
             const subscription = yield* call(Node.postFeedSubscription, ":", contact.nodeName, "timeline");
             yield* put(feedSubscribed(contact.nodeName, subscription));
+        } catch (e) {
+            yield* put(errorThrown(e));
+        }
+    }
+    yield* put(peopleSelectedProceeded());
+}
+
+function* peopleSelectedUnsubscribeSaga() {
+    const contacts = yield* select(getPeopleSelectedContacts);
+    const remoteFeeds: RemoteFeed[] = contacts
+        .filter(c => c.hasFeedSubscription)
+        .map(c => ({nodeName: c.nodeName, feedName: "timeline"}));
+    let subscriptions: SubscriptionInfo[] = [];
+    try {
+        subscriptions = yield* call(Node.searchSubscriptions, ":", "feed", remoteFeeds, null);
+    } catch (e) {
+        yield* put(errorThrown(e));
+        yield* put(peopleSelectedProceeded());
+        return;
+    }
+    for (const subscription of subscriptions) {
+        try {
+            const contact = yield* call(Node.deleteSubscription, ":", subscription.id);
+            yield* put(feedUnsubscribed(subscription.remoteNodeName, "timeline", contact));
         } catch (e) {
             yield* put(errorThrown(e));
         }

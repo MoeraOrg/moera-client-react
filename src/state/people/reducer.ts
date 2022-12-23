@@ -25,6 +25,7 @@ import {
     PEOPLE_SELECT_TOGGLE,
     PEOPLE_SELECTED_PROCEEDED,
     PEOPLE_SELECTED_SUBSCRIBE,
+    PEOPLE_SELECTED_UNSUBSCRIBE,
     PEOPLE_START_SELECTION,
     PEOPLE_STOP_SELECTION,
     PEOPLE_UNSET,
@@ -43,6 +44,7 @@ import {
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
+import { ContactInfo } from "api/node/api-types";
 
 const initialState: PeopleState = {
     tab: "subscribers",
@@ -80,6 +82,17 @@ function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, 
         istate.set(["contacts", nodeName], contact);
     }
     return contact;
+}
+
+const isRemoved = (contact: ContactInfo | null | undefined): boolean =>
+    contact == null
+    || (!contact.hasFeedSubscriber && !contact.hasFeedSubscription && !contact.hasFriend && !contact.hasFriendOf);
+
+function putContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string, contact: ContactInfo) {
+    istate.set(["contacts", nodeName, "contact"], contact);
+    if (state.selected[nodeName] && isRemoved(contact)) {
+        istate.set(["selected", nodeName], false);
+    }
 }
 
 export default (state: PeopleState = initialState, action: WithContext<ClientAction>): PeopleState => {
@@ -149,6 +162,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             );
 
         case PEOPLE_SELECTED_SUBSCRIBE:
+        case PEOPLE_SELECTED_UNSUBSCRIBE:
             return immutable.set(state, "selectedProceeding", true);
 
         case PEOPLE_SELECTED_PROCEEDED:
@@ -166,7 +180,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             action.payload.list.forEach(subscriber => {
                 prepareContact(state, istate, subscriber.nodeName);
                 if (subscriber.contact != null) {
-                    istate.set(["contacts", subscriber.nodeName, "contact"], subscriber.contact);
+                    putContact(state, istate, subscriber.nodeName, subscriber.contact);
                     delete subscriber.contact;
                 }
                 istate.set(["contacts", subscriber.nodeName, "subscriber"], subscriber);
@@ -189,7 +203,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             action.payload.list.forEach(subscription => {
                 prepareContact(state, istate, subscription.remoteNodeName);
                 if (subscription.contact != null) {
-                    istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                    putContact(state, istate, subscription.remoteNodeName, subscription.contact);
                     delete subscription.contact;
                 }
                 istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
@@ -212,7 +226,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             action.payload.list.forEach(friend => {
                 prepareContact(state, istate, friend.nodeName);
                 if (friend.contact != null) {
-                    istate.set(["contacts", friend.nodeName, "contact"], friend.contact);
+                    putContact(state, istate, friend.nodeName, friend.contact);
                     delete friend.contact;
                 }
                 istate.set(["contacts", friend.nodeName, "friend"], friend);
@@ -235,7 +249,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             action.payload.list.forEach(friendOf => {
                 prepareContact(state, istate, friendOf.remoteNodeName);
                 if (friendOf.contact != null) {
-                    istate.set(["contacts", friendOf.remoteNodeName, "contact"], friendOf.contact);
+                    putContact(state, istate, friendOf.remoteNodeName, friendOf.contact);
                     delete friendOf.contact;
                 }
                 istate.set(["contacts", friendOf.remoteNodeName, "friendOf"], friendOf);
@@ -254,7 +268,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const contactState = prepareContact(state, istate, action.payload.nodeName);
             const subscription = cloneDeep(action.payload.subscription);
             if (subscription.contact != null) {
-                istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                putContact(state, istate, subscription.remoteNodeName, subscription.contact);
                 delete subscription.contact;
             }
             istate.set(["contacts", action.payload.nodeName, "subscription"], subscription);
@@ -269,7 +283,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             if (action.context.ownerName === action.payload.nodeName && action.context.homeOwnerName != null) {
                 const contactState = prepareContact(state, istate, action.context.homeOwnerName);
                 if (action.payload.contact != null) {
-                    istate.set(["contacts", action.context.homeOwnerName, "contact"], action.payload.contact);
+                    putContact(state, istate, action.context.homeOwnerName, action.payload.contact);
                 }
                 if (contactState.subscriber != null && contactState.subscriber.feedName === action.payload.feedName) {
                     istate.set(["contacts", action.context.homeOwnerName, "subscriber"], null);
@@ -281,7 +295,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             if (action.context.ownerName === action.context.homeOwnerName) {
                 const contactState = prepareContact(state, istate, action.payload.nodeName);
                 if (action.payload.contact != null) {
-                    istate.set(["contacts", action.payload.nodeName, "contact"], action.payload.contact);
+                    putContact(state, istate, action.payload.nodeName, action.payload.contact);
                 }
                 if (contactState.subscription != null
                         && contactState.subscription.remoteFeedName === action.payload.feedName) {
@@ -303,7 +317,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const subscriber = cloneDeep(action.payload.subscriber);
             const contactState = prepareContact(state, istate, subscriber.nodeName);
             if (subscriber.contact != null) {
-                istate.set(["contacts", subscriber.nodeName, "contact"], subscriber.contact);
+                putContact(state, istate, subscriber.nodeName, subscriber.contact);
                 delete subscriber.contact;
             }
             if (contactState.subscriber == null || contactState.subscriber.feedName === subscriber.feedName) {
@@ -321,7 +335,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const subscription = cloneDeep(action.payload.subscription);
             const contactState = prepareContact(state, istate, subscription.remoteNodeName);
             if (subscription.contact != null) {
-                istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                putContact(state, istate, subscription.remoteNodeName, subscription.contact);
                 delete subscription.contact;
             }
             if (contactState.subscription == null
@@ -340,7 +354,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const subscriber = cloneDeep(action.payload.subscriber);
             const contactState = prepareContact(state, istate, subscriber.nodeName);
             if (subscriber.contact != null) {
-                istate.set(["contacts", subscriber.nodeName, "contact"], subscriber.contact);
+                putContact(state, istate, subscriber.nodeName, subscriber.contact);
                 delete subscriber.contact;
             }
             istate.set(["contacts", subscriber.nodeName, "subscriber"], subscriber);
@@ -358,6 +372,10 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
             const istate = immutable.wrap(state);
             const contactState = prepareContact(state, istate, subscriber.nodeName);
+            if (subscriber.contact != null) {
+                putContact(state, istate, subscriber.nodeName, subscriber.contact);
+                delete subscriber.contact;
+            }
             if (contactState.subscriber != null && contactState.subscriber.id === subscriber.id) {
                 istate.set(["contacts", subscriber.nodeName, "subscriber"], null);
                 if (state.loadedSubscribers) {
@@ -376,7 +394,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const subscription = cloneDeep(action.payload.subscription);
             const contactState = prepareContact(state, istate, subscription.remoteNodeName);
             if (subscription.contact != null) {
-                istate.set(["contacts", subscription.remoteNodeName, "contact"], subscription.contact);
+                putContact(state, istate, subscription.remoteNodeName, subscription.contact);
                 delete subscription.contact;
             }
             istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
@@ -394,6 +412,10 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
             const istate = immutable.wrap(state);
             const contactState = prepareContact(state, istate, subscription.remoteNodeName);
+            if (subscription.contact != null) {
+                putContact(state, istate, subscription.remoteNodeName, subscription.contact);
+                delete subscription.contact;
+            }
             if (contactState.subscription != null && contactState.subscription.id === subscription.id) {
                 istate.set(["contacts", subscription.remoteNodeName, "subscription"], null);
                 if (state.loadedSubscriptions) {

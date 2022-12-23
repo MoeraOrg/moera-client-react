@@ -5,12 +5,14 @@ import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { peopleSelectedSubscribe, peopleSelectedUnsubscribe } from "state/people/actions";
 import { DropdownMenu } from "ui/control";
-import { peopleSelectedSubscribe } from "state/people/actions";
 
 type Props = ConnectedProps<typeof connector>;
 
-function PeopleSelectedButton({totalSelected, summary, proceeding, peopleSelectedSubscribe}: Props) {
+function PeopleSelectedButton({
+    totalSelected, summary, proceeding, peopleSelectedSubscribe, peopleSelectedUnsubscribe
+}: Props) {
     const {t} = useTranslation();
 
     if (totalSelected <= 0) {
@@ -19,7 +21,7 @@ function PeopleSelectedButton({totalSelected, summary, proceeding, peopleSelecte
 
     const onSubscribe = () => peopleSelectedSubscribe();
 
-    const onUnsubscribe = () => {};
+    const onUnsubscribe = () => peopleSelectedUnsubscribe();
 
     const onAddFriend = () => {};
 
@@ -136,7 +138,7 @@ const connector = connect(
         summary: getSelectedSummary(state),
         proceeding: state.people.selectedProceeding
     }),
-    { peopleSelectedSubscribe }
+    { peopleSelectedSubscribe, peopleSelectedUnsubscribe }
 );
 
 export default connector(PeopleSelectedButton);
