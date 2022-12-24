@@ -120,7 +120,9 @@ function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
 
     try {
         const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]);
-        yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null))
+        if (friends.length > 0) {
+            yield* put(friendshipUpdated(friends[0]));
+        }
         if (storyId != null) {
             yield* put(storySatisfy(":instant", storyId));
         }
@@ -143,7 +145,9 @@ function* friendshipSetVisibilitySaga(action: FriendshipSetVisibilityAction) {
     try {
         const friends = yield* call(Node.putFriends, ":", [{
             nodeName, groups: nodeCard.friendship.groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
-        yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null))
+        if (friends.length > 0) {
+            yield* put(friendshipUpdated(friends[0]));
+        }
     } catch (e) {
         yield* put(friendshipUpdateFailed(nodeName));
         yield* put(errorThrown(e));

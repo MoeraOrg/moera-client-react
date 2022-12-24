@@ -1849,7 +1849,7 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
     additionalProperties: false
 };
 
-const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
+export const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
     type: "object",
     properties: {
         "nodeName": {
@@ -2007,7 +2007,7 @@ export const FriendGroupDetailsType: JSONSchemaType<API.FriendGroupDetails> = {
 
 export const FriendGroupDetails = schema(FriendGroupDetailsType);
 
-const FriendInfoType: JSONSchemaType<API.FriendInfo> = {
+export const FriendInfoType: JSONSchemaType<API.FriendInfo> = {
     type: "object",
     properties: {
         "nodeName": {

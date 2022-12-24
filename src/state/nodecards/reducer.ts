@@ -387,11 +387,11 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case FRIENDSHIP_UPDATED: {
-            const {nodeName, friendGroups} = action.payload;
+            const {friend: {nodeName, groups}} = action.payload;
             const istate = getCard(state, nodeName).istate;
             istate.assign(["cards", nodeName, "friendship"], {
                 updating: false,
-                groups: friendGroups
+                groups
             });
             return istate.value();
         }
@@ -543,10 +543,10 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case EVENT_HOME_FRIENDSHIP_UPDATED: {
-            const {nodeName, friendGroups} = action.payload;
+            const {friend: {nodeName, groups}} = action.payload;
             const {istate, card} = getCard(state, nodeName);
             if (card.friendship.loaded) {
-                istate.set(["cards", nodeName, "friendship", "groups"], friendGroups);
+                istate.set(["cards", nodeName, "friendship", "groups"], groups);
                 return istate.value();
             }
             return state;

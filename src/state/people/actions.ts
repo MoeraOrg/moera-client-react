@@ -2,7 +2,6 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import {
-    FriendGroupDetails,
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
@@ -191,13 +190,11 @@ export const friendshipUpdate = (nodeName: string, friendGroups: string[] | null
 
 export const FRIENDSHIP_UPDATED = "FRIENDSHIP_UPDATED";
 export type FriendshipUpdatedAction = ActionWithPayload<typeof FRIENDSHIP_UPDATED, {
-    nodeName: string;
-    friendGroups: FriendGroupDetails[] | null;
+    friend: FriendInfo;
 }>;
-export const friendshipUpdated = (nodeName: string,
-                                  friendGroups: FriendGroupDetails[] | null): FriendshipUpdatedAction => ({
+export const friendshipUpdated = (friend: FriendInfo): FriendshipUpdatedAction => ({
     type: FRIENDSHIP_UPDATED,
-    payload: {nodeName, friendGroups}
+    payload: {friend}
 });
 
 export const FRIENDSHIP_UPDATE_FAILED = "FRIENDSHIP_UPDATE_FAILED";

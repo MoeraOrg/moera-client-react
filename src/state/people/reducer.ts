@@ -1,6 +1,9 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
+
+import { ContactInfo, FriendInfo } from "api/node/api-types";
 import {
+    EVENT_NODE_FRIENDSHIP_UPDATED,
     EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_NODE_SUBSCRIBER_ADDED,
@@ -12,6 +15,13 @@ import {
 } from "api/events/actions";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
+import { INIT_FROM_LOCATION } from "state/navigation/actions";
+import {
+    FEED_SUBSCRIBED,
+    FEED_SUBSCRIBER_UPDATED,
+    FEED_SUBSCRIPTION_UPDATED,
+    FEED_UNSUBSCRIBED
+} from "state/feeds/actions";
 import {
     FRIEND_OFS_LOAD,
     FRIEND_OFS_LOAD_FAILED,
@@ -19,6 +29,7 @@ import {
     FRIENDS_LOAD,
     FRIENDS_LOAD_FAILED,
     FRIENDS_LOADED,
+    FRIENDSHIP_UPDATED,
     PEOPLE_GENERAL_LOAD,
     PEOPLE_GENERAL_LOAD_FAILED,
     PEOPLE_GENERAL_LOADED,
@@ -39,14 +50,6 @@ import {
     SUBSCRIPTIONS_LOADED
 } from "state/people/actions";
 import { ContactState, PeopleState } from "state/people/state";
-import {
-    FEED_SUBSCRIBED,
-    FEED_SUBSCRIBER_UPDATED,
-    FEED_SUBSCRIPTION_UPDATED,
-    FEED_UNSUBSCRIBED
-} from "state/feeds/actions";
-import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import { ContactInfo } from "api/node/api-types";
 
 const initialState: PeopleState = {
     tab: "subscribers",
@@ -90,11 +93,36 @@ const isRemoved = (contact: ContactInfo | null | undefined): boolean =>
     contact == null
     || (!contact.hasFeedSubscriber && !contact.hasFeedSubscription && !contact.hasFriend && !contact.hasFriendOf);
 
-function putContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string, contact: ContactInfo) {
+function putContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string,
+                    contact: ContactInfo): void {
     istate.set(["contacts", nodeName, "contact"], contact);
     if (state.selected[nodeName] && isRemoved(contact)) {
         istate.set(["selected", nodeName], false);
     }
+}
+
+function updateFriendship(state: PeopleState, friend: FriendInfo): PeopleState {
+    const istate = immutable.wrap(state);
+
+    prepareContact(state, istate, friend.nodeName);
+    if (friend.contact != null) {
+        putContact(state, istate, friend.nodeName, friend.contact);
+        delete friend.contact;
+    }
+    if (friend.groups != null && friend.groups.length > 0) {
+        istate.set(["contacts", friend.nodeName, "friend"], friend);
+    } else {
+        istate.set(["contacts", friend.nodeName, "friend"], null);
+    }
+
+    if (state.loadedGeneral) {
+        const totals: Partial<Record<string, number>> = cloneDeep(state.friendsTotal) ?? {};
+        state.contacts[friend.nodeName]?.friend?.groups?.forEach(g => totals[g.id] = (totals[g.id] ?? 1) - 1);
+        friend.groups?.forEach(g => totals[g.id] = (totals[g.id] ?? 0) + 1);
+        istate.set("friendsTotal", totals);
+    }
+
+    return istate.value();
 }
 
 export default (state: PeopleState = initialState, action: WithContext<ClientAction>): PeopleState => {
@@ -177,7 +205,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingSubscribers: false,
-                loadedSubscribers: true
+                loadedSubscribers: true,
+                subscribersTotal: action.payload.list.length
             });
             action.payload.list.forEach(subscriber => {
                 prepareContact(state, istate, subscriber.nodeName);
@@ -201,6 +230,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             istate.assign("", {
                 loadingSubscriptions: false,
                 loadedSubscriptions: true,
+                subscriptionsTotal: action.payload.list.length
             });
             action.payload.list.forEach(subscription => {
                 prepareContact(state, istate, subscription.remoteNodeName);
@@ -223,8 +253,9 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingFriends: false,
-                loadedFriends: true,
+                loadedFriends: true
             });
+            const totals: Partial<Record<string, number>> = {};
             action.payload.list.forEach(friend => {
                 prepareContact(state, istate, friend.nodeName);
                 if (friend.contact != null) {
@@ -232,7 +263,9 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                     delete friend.contact;
                 }
                 istate.set(["contacts", friend.nodeName, "friend"], friend);
+                friend.groups?.forEach(g => totals[g.id] = (totals[g.id] ?? 0) + 1);
             });
+            istate.set("friendsTotal", totals);
             return istate.value();
         }
 
@@ -247,6 +280,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             istate.assign("", {
                 loadingFriendOfs: false,
                 loadedFriendOfs: true,
+                friendOfsTotal: action.payload.list.length
             });
             action.payload.list.forEach(friendOf => {
                 prepareContact(state, istate, friendOf.remoteNodeName);
@@ -274,7 +308,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 delete subscription.contact;
             }
             istate.set(["contacts", action.payload.nodeName, "subscription"], subscription);
-            if (state.loadedSubscriptions && contactState.subscription == null) {
+            if (state.loadedGeneral && state.loadedSubscriptions && contactState.subscription == null) {
                 istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 0) + 1);
             }
             return istate.value();
@@ -289,7 +323,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 }
                 if (contactState.subscriber != null && contactState.subscriber.feedName === action.payload.feedName) {
                     istate.set(["contacts", action.context.homeOwnerName, "subscriber"], null);
-                    if (state.loadedSubscribers) {
+                    if (state.loadedGeneral && state.loadedSubscribers) {
                         istate.set("subscribersTotal", (state.subscribersTotal ?? 1) - 1);
                     }
                 }
@@ -302,7 +336,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 if (contactState.subscription != null
                         && contactState.subscription.remoteFeedName === action.payload.feedName) {
                     istate.set(["contacts", action.payload.nodeName, "subscription"], null);
-                    if (state.loadedSubscriptions) {
+                    if (state.loadedGeneral && state.loadedSubscriptions) {
                         istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 1) - 1);
                     }
                 }
@@ -347,6 +381,12 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
+        case FRIENDSHIP_UPDATED:
+            if (action.context.ownerName === action.context.homeOwnerName) {
+                return updateFriendship(state, action.payload.friend);
+            }
+            return state;
+
         case EVENT_NODE_SUBSCRIBER_ADDED: {
             if (action.payload.subscriber.type !== "feed") {
                 return state;
@@ -360,7 +400,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 delete subscriber.contact;
             }
             istate.set(["contacts", subscriber.nodeName, "subscriber"], subscriber);
-            if (state.loadedSubscribers && contactState.subscriber == null) {
+            if (state.loadedGeneral && state.loadedSubscribers && contactState.subscriber == null) {
                 istate.set("subscribersTotal", (state.subscribersTotal ?? 0) + 1);
             }
             return istate.value();
@@ -398,7 +438,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             }
             if (contactState.subscriber != null && contactState.subscriber.id === subscriber.id) {
                 istate.set(["contacts", subscriber.nodeName, "subscriber"], null);
-                if (state.loadedSubscribers) {
+                if (state.loadedGeneral && state.loadedSubscribers) {
                     istate.set("subscribersTotal", (state.subscribersTotal ?? 1) - 1);
                 }
             }
@@ -418,7 +458,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 delete subscription.contact;
             }
             istate.set(["contacts", subscription.remoteNodeName, "subscription"], subscription);
-            if (state.loadedSubscriptions && contactState.subscription == null) {
+            if (state.loadedGeneral && state.loadedSubscriptions && contactState.subscription == null) {
                 istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 0) + 1);
             }
             return istate.value();
@@ -456,25 +496,22 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             }
             if (contactState.subscription != null && contactState.subscription.id === subscription.id) {
                 istate.set(["contacts", subscription.remoteNodeName, "subscription"], null);
-                if (state.loadedSubscriptions) {
+                if (state.loadedGeneral && state.loadedSubscriptions) {
                     istate.set("subscriptionsTotal", (state.subscriptionsTotal ?? 1) - 1);
                 }
             }
             return istate.value();
         }
 
+        case EVENT_NODE_FRIENDSHIP_UPDATED:
+            return updateFriendship(state, action.payload.friend);
+
         case EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED: {
             const {name, fullName} = action.payload;
 
             const istate = immutable.wrap(state);
-            const contactState = prepareContact(state, istate, name);
+            prepareContact(state, istate, name);
             istate.set(["contacts", name, "contact", "fullName"], fullName);
-            if (contactState.subscriber != null) {
-                istate.set(["contacts", name, "subscriber", "fullName"], fullName); // FIXME to be removed
-            }
-            if (contactState.subscription != null) {
-                istate.set(["contacts", name, "subscription", "remoteFullName"], fullName); // FIXME to be removed
-            }
             return istate.value();
         }
 
@@ -483,14 +520,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             const avatar = cloneDeep(action.payload.avatar);
 
             const istate = immutable.wrap(state);
-            const contactState = prepareContact(state, istate, name);
+            prepareContact(state, istate, name);
             istate.set(["contacts", name, "contact", "avatar"], avatar);
-            if (contactState.subscriber != null) {
-                istate.set(["contacts", name, "subscriber", "avatar"], avatar); // FIXME to be removed
-            }
-            if (contactState.subscription != null) {
-                istate.set(["contacts", name, "subscription", "remoteAvatar"], avatar); // FIXME to be removed
-            }
             return istate.value();
         }
 

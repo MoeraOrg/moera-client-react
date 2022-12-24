@@ -5,8 +5,8 @@ import {
     AvatarImageType,
     AvatarInfoType,
     FeedStatusType,
-    FriendGroupDetailsType,
     FriendGroupInfoType,
+    FriendInfoType,
     StorySummaryDataType,
     SubscriberInfoType,
     SubscriptionInfoType,
@@ -1321,17 +1321,10 @@ const FriendshipUpdatedEventType: JSONSchemaType<FriendshipUpdatedEvent> = {
         "type": {
             type: "string"
         },
-        "nodeName": {
-            type: "string"
-        },
-        "friendGroups": {
-            type: "array",
-            items: FriendGroupDetailsType,
-            nullable: true
-        }
+        "friend": FriendInfoType
     },
     additionalProperties: false,
-    required: ["type", "nodeName"]
+    required: ["type", "friend"]
 }
 
 const AskSubjectsChangedEventType: JSONSchemaType<AskSubjectsChangedEvent> = {

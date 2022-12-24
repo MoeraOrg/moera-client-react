@@ -42,7 +42,9 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
         }
         const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: allGroups}]);
         yield* put(closeFriendGroupsDialog());
-        yield* put(friendshipUpdated(nodeName, friends[0]?.groups ?? null));
+        if (friends.length > 0) {
+            yield* put(friendshipUpdated(friends[0]));
+        }
     } catch (e) {
         yield* put(nodeChangeFriendGroupsFailed())
         yield* put(errorThrown(e));

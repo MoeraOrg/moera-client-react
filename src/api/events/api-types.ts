@@ -2,8 +2,9 @@ import {
     AvatarImage,
     AvatarInfo,
     DraftType,
-    FeedStatus, FriendGroupDetails,
+    FeedStatus,
     FriendGroupInfo,
+    FriendInfo,
     PrincipalValue,
     StorySummaryData,
     StoryType,
@@ -311,8 +312,7 @@ export interface FriendGroupDeletedEvent extends BaseEvent<"FRIEND_GROUP_DELETED
 }
 
 export interface FriendshipUpdatedEvent extends BaseEvent<"FRIENDSHIP_UPDATED"> {
-    nodeName: string;
-    friendGroups?: FriendGroupDetails[] | null;
+    friend: FriendInfo;
 }
 
 export type AskSubjectsChangedEvent = BaseEvent<"ASK_SUBJECTS_CHANGED">;
