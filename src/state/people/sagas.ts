@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { NodeApiError } from "api";
 import { Node } from "api/node";
-import { PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
+import { FriendDescription, PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
     FRIEND_OFS_LOAD,
@@ -18,7 +18,9 @@ import {
     friendsLoaded,
     friendsLoadFailed,
     PEOPLE_GENERAL_LOAD,
+    PEOPLE_SELECTED_FRIEND,
     PEOPLE_SELECTED_SUBSCRIBE,
+    PEOPLE_SELECTED_UNFRIEND,
     PEOPLE_SELECTED_UNSUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
@@ -31,6 +33,7 @@ import {
 } from "state/people/actions";
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
+import { getHomeFriendsId } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
 import { getPeopleSelectedContacts } from "state/people/selectors";
@@ -46,7 +49,9 @@ export default [
     executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga),
     executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga),
     executor(PEOPLE_SELECTED_SUBSCRIBE, "", peopleSelectedSubscribeSaga),
-    executor(PEOPLE_SELECTED_UNSUBSCRIBE, "", peopleSelectedUnsubscribeSaga)
+    executor(PEOPLE_SELECTED_UNSUBSCRIBE, "", peopleSelectedUnsubscribeSaga),
+    executor(PEOPLE_SELECTED_FRIEND, "", peopleSelectedFriendSaga),
+    executor(PEOPLE_SELECTED_UNFRIEND, "", peopleSelectedUnfriendSaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -181,6 +186,7 @@ function* peopleSelectedUnsubscribeSaga() {
         subscriptions = yield* call(Node.searchSubscriptions, ":", "feed", remoteFeeds, null);
     } catch (e) {
         yield* put(errorThrown(e));
+        yield* put(closeProgressBox());
         return;
     }
     yield* put(updateProgressBox(0, subscriptions.length));
@@ -193,6 +199,46 @@ function* peopleSelectedUnsubscribeSaga() {
         } catch (e) {
             yield* put(errorThrown(e));
         }
+    }
+    yield* put(closeProgressBox());
+}
+
+function* peopleSelectedFriendSaga() {
+    const friendsId = (yield* select(getHomeFriendsId));
+    if (friendsId == null) {
+        return;
+    }
+    const friendDescriptions: FriendDescription[] = (yield* select(getPeopleSelectedContacts))
+        .filter(c => !c.hasFriend)
+        .map(c => ({nodeName: c.nodeName, groups: [{id: friendsId}]}));
+    try {
+        yield* put(openProgressBox(0, friendDescriptions.length));
+        const friends = yield* call(Node.putFriends, ":", friendDescriptions);
+        let done = 0;
+        for (const friend of friends) {
+            yield* put(friendshipUpdated(friend));
+            yield* put(updateProgressBox(++done, friends.length));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+    yield* put(closeProgressBox());
+}
+
+function* peopleSelectedUnfriendSaga() {
+    const friendDescriptions: FriendDescription[] = (yield* select(getPeopleSelectedContacts))
+        .filter(c => c.hasFriend)
+        .map(c => ({nodeName: c.nodeName, groups: []}));
+    try {
+        yield* put(openProgressBox(0, friendDescriptions.length));
+        const friends = yield* call(Node.putFriends, ":", friendDescriptions);
+        let done = 0;
+        for (const friend of friends) {
+            yield* put(friendshipUpdated(friend));
+            yield* put(updateProgressBox(++done, friends.length));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
     }
     yield* put(closeProgressBox());
 }

@@ -5,12 +5,20 @@ import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { peopleSelectedSubscribe, peopleSelectedUnsubscribe } from "state/people/actions";
+import {
+    peopleSelectedFriend,
+    peopleSelectedSubscribe,
+    peopleSelectedUnfriend,
+    peopleSelectedUnsubscribe
+} from "state/people/actions";
 import { DropdownMenu } from "ui/control";
 
 type Props = ConnectedProps<typeof connector>;
 
-function PeopleSelectedButton({totalSelected, summary, peopleSelectedSubscribe, peopleSelectedUnsubscribe}: Props) {
+function PeopleSelectedButton({
+    totalSelected, summary, peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend,
+    peopleSelectedUnfriend
+}: Props) {
     const {t} = useTranslation();
 
     if (totalSelected <= 0) {
@@ -21,11 +29,11 @@ function PeopleSelectedButton({totalSelected, summary, peopleSelectedSubscribe, 
 
     const onUnsubscribe = () => peopleSelectedUnsubscribe();
 
-    const onAddFriend = () => {};
+    const onAddFriend = () => peopleSelectedFriend();
 
     const onFriendGroups = () => {};
 
-    const onUnfriend = () => {};
+    const onUnfriend = () => peopleSelectedUnfriend();
 
     const onAskDialog = () => {};
 
@@ -135,7 +143,7 @@ const connector = connect(
         totalSelected: getTotalSelected(state),
         summary: getSelectedSummary(state)
     }),
-    { peopleSelectedSubscribe, peopleSelectedUnsubscribe }
+    { peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend, peopleSelectedUnfriend }
 );
 
 export default connector(PeopleSelectedButton);

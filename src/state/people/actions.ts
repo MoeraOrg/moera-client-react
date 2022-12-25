@@ -86,6 +86,18 @@ export const peopleSelectedUnsubscribe = (): PeopleSelectedUnsubscribeAction => 
     type: PEOPLE_SELECTED_UNSUBSCRIBE
 });
 
+export const PEOPLE_SELECTED_FRIEND = "PEOPLE_SELECTED_FRIEND";
+export type PeopleSelectedFriendAction = Action<typeof PEOPLE_SELECTED_FRIEND>;
+export const peopleSelectedFriend = (): PeopleSelectedFriendAction => ({
+    type: PEOPLE_SELECTED_FRIEND
+});
+
+export const PEOPLE_SELECTED_UNFRIEND = "PEOPLE_SELECTED_UNFRIEND";
+export type PeopleSelectedUnfriendAction = Action<typeof PEOPLE_SELECTED_UNFRIEND>;
+export const peopleSelectedUnfriend = (): PeopleSelectedUnfriendAction => ({
+    type: PEOPLE_SELECTED_UNFRIEND
+});
+
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -232,6 +244,8 @@ export type PeopleAnyAction =
     | PeopleSelectToggleAction
     | PeopleSelectedSubscribeAction
     | PeopleSelectedUnsubscribeAction
+    | PeopleSelectedFriendAction
+    | PeopleSelectedUnfriendAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction
