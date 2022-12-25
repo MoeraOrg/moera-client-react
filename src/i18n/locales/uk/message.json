@@ -18,6 +18,7 @@
   "alt-text" : "Альтернативний текст",
   "alt-text-button" : "Альт. текст",
   "ask" : "Попросити",
+  "ask-count" : "Попросити {count} {count, plural, one {користувача} other {користувачів}}",
   "ask-ellipsis" : "Попросити...",
   "ask-node" : "Попросити {name}",
   "auto" : "Авто",

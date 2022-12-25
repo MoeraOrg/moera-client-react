@@ -2,6 +2,7 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import {
+    AskSubject,
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
@@ -96,6 +97,16 @@ export const PEOPLE_SELECTED_UNFRIEND = "PEOPLE_SELECTED_UNFRIEND";
 export type PeopleSelectedUnfriendAction = Action<typeof PEOPLE_SELECTED_UNFRIEND>;
 export const peopleSelectedUnfriend = (): PeopleSelectedUnfriendAction => ({
     type: PEOPLE_SELECTED_UNFRIEND
+});
+
+export const PEOPLE_SELECTED_ASK = "PEOPLE_SELECTED_ASK";
+export type PeopleSelectedAskAction = ActionWithPayload<typeof PEOPLE_SELECTED_ASK, {
+    subject: AskSubject;
+    message: string;
+}>;
+export const peopleSelectedAsk = (subject: AskSubject, message: string): PeopleSelectedAskAction => ({
+    type: PEOPLE_SELECTED_ASK,
+    payload: {subject, message}
 });
 
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
@@ -246,6 +257,7 @@ export type PeopleAnyAction =
     | PeopleSelectedUnsubscribeAction
     | PeopleSelectedFriendAction
     | PeopleSelectedUnfriendAction
+    | PeopleSelectedAskAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction

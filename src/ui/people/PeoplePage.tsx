@@ -10,6 +10,7 @@ import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import PeopleTabs from "ui/people/PeopleTabs";
 import PeopleContent from "ui/people/PeopleContent";
+import AskSelectedDialog from "ui/askdialog/AskSelectedDialog";
 import "./PeoplePage.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -32,6 +33,7 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => {
                     <PeopleTabs active={tab}/>
                     <PeopleContent/>
                 </div>
+                <AskSelectedDialog/>
             </Page>
         </>
     );

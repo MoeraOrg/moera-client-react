@@ -18,12 +18,14 @@ import {
     friendsLoaded,
     friendsLoadFailed,
     PEOPLE_GENERAL_LOAD,
+    PEOPLE_SELECTED_ASK,
     PEOPLE_SELECTED_FRIEND,
     PEOPLE_SELECTED_SUBSCRIBE,
     PEOPLE_SELECTED_UNFRIEND,
     PEOPLE_SELECTED_UNSUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
+    PeopleSelectedAskAction,
     SUBSCRIBERS_LOAD,
     subscribersLoaded,
     subscribersLoadFailed,
@@ -51,7 +53,8 @@ export default [
     executor(PEOPLE_SELECTED_SUBSCRIBE, "", peopleSelectedSubscribeSaga),
     executor(PEOPLE_SELECTED_UNSUBSCRIBE, "", peopleSelectedUnsubscribeSaga),
     executor(PEOPLE_SELECTED_FRIEND, "", peopleSelectedFriendSaga),
-    executor(PEOPLE_SELECTED_UNFRIEND, "", peopleSelectedUnfriendSaga)
+    executor(PEOPLE_SELECTED_UNFRIEND, "", peopleSelectedUnfriendSaga),
+    executor(PEOPLE_SELECTED_ASK, "", peopleSelectedAskSaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -236,6 +239,43 @@ function* peopleSelectedUnfriendSaga() {
         for (const friend of friends) {
             yield* put(friendshipUpdated(friend));
             yield* put(updateProgressBox(++done, friends.length));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+    yield* put(closeProgressBox());
+}
+
+function* peopleSelectedAskSaga(action: PeopleSelectedAskAction) {
+    const {subject, message} = action.payload;
+
+    let contacts = yield* select(getPeopleSelectedContacts);
+    switch (subject) {
+        case "subscribe":
+            contacts = contacts.filter(c => !c.hasFeedSubscriber);
+            break;
+        case "friend":
+            contacts = contacts.filter(c => !c.hasFriend);
+            break;
+    }
+    if (contacts.length === 0) {
+        return;
+    }
+    yield* put(openProgressBox(0, contacts.length));
+    try {
+        let done = 0;
+        for (const contact of contacts) {
+            const features = yield* call(Node.getFeatures, contact.nodeName);
+            if (features.ask != null && features.ask.includes(subject)) {
+                let friendsId = null;
+                if (subject === "friend") {
+                    friendsId = features.friendGroups?.available.find(fg => fg.title === "t:friends")?.id ?? null;
+                }
+                if (subject === "subscribe" || friendsId != null) {
+                    yield* call(Node.askRemoteNode, ":", contact.nodeName, subject, friendsId, message);
+                }
+            }
+            yield* put(updateProgressBox(++done, contacts.length));
         }
     } catch (e) {
         yield* put(errorThrown(e));

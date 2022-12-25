@@ -36,7 +36,7 @@ function AskDialog(props: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]); // 'props' are missing on purpose
 
-    if (!show) {
+    if (!show || nodeName == null) {
         return null;
     }
 

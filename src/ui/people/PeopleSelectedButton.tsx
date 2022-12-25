@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { openAskDialog } from "state/askdialog/actions";
 import {
     peopleSelectedFriend,
     peopleSelectedSubscribe,
@@ -17,7 +18,7 @@ type Props = ConnectedProps<typeof connector>;
 
 function PeopleSelectedButton({
     totalSelected, summary, peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend,
-    peopleSelectedUnfriend
+    peopleSelectedUnfriend, openAskDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -35,7 +36,7 @@ function PeopleSelectedButton({
 
     const onUnfriend = () => peopleSelectedUnfriend();
 
-    const onAskDialog = () => {};
+    const onAskDialog = () => openAskDialog(null, totalSelected);
 
     const onHideDialog = () => {};
 
@@ -81,7 +82,7 @@ function PeopleSelectedButton({
                 title: t("ask-ellipsis"),
                 href: "/people",
                 onClick: onAskDialog,
-                show: true
+                show: summary.notSubscribedToMe || summary.notFriendOfs
             },
             {
                 title: t("hide-ellipsis"),
@@ -105,8 +106,10 @@ interface SelectedSummary {
     subscribed: boolean;
     notSubscribed: boolean;
     subscribedToMe: boolean;
+    notSubscribedToMe: boolean;
     friends: boolean;
     notFriends: boolean;
+    notFriendOfs: boolean;
 }
 
 const getSelectedSummary = createSelector(
@@ -124,16 +127,20 @@ const getSelectedSummary = createSelector(
                 subscribed: summary.subscribed || contact.contact.hasFeedSubscription === true,
                 notSubscribed: summary.notSubscribed || contact.contact.hasFeedSubscription !== true,
                 subscribedToMe: summary.subscribedToMe || contact.contact.hasFeedSubscriber === true,
+                notSubscribedToMe: summary.notSubscribedToMe || contact.contact.hasFeedSubscriber !== true,
                 friends: summary.friends || contact.contact.hasFriend === true,
-                notFriends: summary.notFriends || contact.contact.hasFriend !== true
+                notFriends: summary.notFriends || contact.contact.hasFriend !== true,
+                notFriendOfs: summary.notFriendOfs || contact.contact.hasFriendOf !== true
             }
         },
         {
             subscribed: false,
             notSubscribed: false,
             subscribedToMe: false,
+            notSubscribedToMe: false,
             friends: false,
-            notFriends: false
+            notFriends: false,
+            notFriendOfs: false
         }
     )
 );
@@ -143,7 +150,7 @@ const connector = connect(
         totalSelected: getTotalSelected(state),
         summary: getSelectedSummary(state)
     }),
-    { peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend, peopleSelectedUnfriend }
+    { peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend, peopleSelectedUnfriend, openAskDialog }
 );
 
 export default connector(PeopleSelectedButton);

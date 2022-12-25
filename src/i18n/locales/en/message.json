@@ -18,6 +18,7 @@
   "alt-text" : "Alternative text",
   "alt-text-button" : "Alt text",
   "ask" : "Ask",
+  "ask-count" : "Ask {count} {count, plural, one {user} other {users}}",
   "ask-ellipsis" : "Ask...",
   "ask-node" : "Ask {name}",
   "auto" : "Auto",

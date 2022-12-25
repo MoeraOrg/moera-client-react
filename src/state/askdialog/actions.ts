@@ -5,11 +5,12 @@ import { AskSubject, FriendGroupInfo } from "api/node/api-types";
 
 export const OPEN_ASK_DIALOG = "OPEN_ASK_DIALOG";
 export type OpenAskDialogAction = ActionWithPayload<typeof OPEN_ASK_DIALOG, {
-    nodeName: string;
+    nodeName: string | null;
+    nodeCount: number;
 }>;
-export const openAskDialog = (nodeName: string): OpenAskDialogAction => ({
+export const openAskDialog = (nodeName: string | null, nodeCount: number = 0): OpenAskDialogAction => ({
     type: OPEN_ASK_DIALOG,
-    payload: {nodeName}
+    payload: {nodeName, nodeCount}
 });
 
 export const CLOSE_ASK_DIALOG = "CLOSE_ASK_DIALOG";

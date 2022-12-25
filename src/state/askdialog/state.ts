@@ -5,6 +5,7 @@ export interface AskDialogState {
     loaded: boolean;
     loading: boolean;
     nodeName: string | null;
+    nodeCount: number;
     friendGroups: FriendGroupInfo[];
     subjectsAllowed: AskSubject[];
     sending: boolean;

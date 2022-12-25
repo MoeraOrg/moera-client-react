@@ -20,6 +20,7 @@ const initialState: AskDialogState = {
     loaded: false,
     loading: false,
     nodeName: null,
+    nodeCount: 0,
     friendGroups: [],
     subjectsAllowed: [],
     sending: false
@@ -31,7 +32,8 @@ export default (state: AskDialogState = initialState, action: WithContext<Client
             return {
                 ...cloneDeep(initialState),
                 show: true,
-                nodeName: action.payload.nodeName
+                nodeName: action.payload.nodeName,
+                nodeCount: action.payload.nodeCount
             }
 
         case CLOSE_ASK_DIALOG:
