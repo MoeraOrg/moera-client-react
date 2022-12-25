@@ -2034,7 +2034,7 @@ export const FriendInfoArray = schema({
     items: FriendInfoType
 } as JSONSchemaType<API.FriendInfo[]>);
 
-const FriendOfInfoType: JSONSchemaType<API.FriendOfInfo> = {
+export const FriendOfInfoType: JSONSchemaType<API.FriendOfInfo> = {
     type: "object",
     properties: {
         "remoteNodeName": {

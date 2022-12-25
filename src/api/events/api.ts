@@ -7,6 +7,7 @@ import {
     FeedStatusType,
     FriendGroupInfoType,
     FriendInfoType,
+    FriendOfInfoType,
     StorySummaryDataType,
     SubscriberInfoType,
     SubscriptionInfoType,
@@ -49,6 +50,7 @@ import {
     RemoteCommentUpdatedEvent,
     RemoteCommentVerificationFailedEvent,
     RemoteCommentVerifiedEvent,
+    RemoteFriendshipUpdatedEvent,
     RemoteNodeAvatarChangedEvent,
     RemoteNodeFullNameChangedEvent,
     RemotePostingAddedEvent,
@@ -1338,6 +1340,18 @@ const AskSubjectsChangedEventType: JSONSchemaType<AskSubjectsChangedEvent> = {
     required: ["type"]
 };
 
+const RemoteFriendshipUpdatedEventType: JSONSchemaType<RemoteFriendshipUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "friendOf": FriendOfInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "friendOf"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1399,7 +1413,8 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "FRIEND_GROUP_UPDATED": schema(FriendGroupUpdatedEventType),
     "FRIEND_GROUP_DELETED": schema(FriendGroupDeletedEventType),
     "FRIENDSHIP_UPDATED": schema(FriendshipUpdatedEventType),
-    "ASK_SUBJECTS_CHANGED": schema(AskSubjectsChangedEventType)
+    "ASK_SUBJECTS_CHANGED": schema(AskSubjectsChangedEventType),
+    "REMOTE_FRIENDSHIP_UPDATED": schema(RemoteFriendshipUpdatedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([
@@ -1412,5 +1427,6 @@ export const ALLOWED_SELF_EVENTS = new Set([
     "SUBSCRIPTIONS_TOTAL_CHANGED",
     "FRIEND_GROUP_ADDED",
     "FRIEND_GROUP_UPDATED",
-    "FRIEND_GROUP_DELETED"
+    "FRIEND_GROUP_DELETED",
+    "REMOTE_FRIENDSHIP_UPDATED"
 ]);

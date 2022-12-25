@@ -4,6 +4,7 @@ import cloneDeep from 'lodash.clonedeep';
 import { ContactInfo, FriendInfo } from "api/node/api-types";
 import {
     EVENT_NODE_FRIENDSHIP_UPDATED,
+    EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED,
     EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
     EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
     EVENT_NODE_SUBSCRIBER_ADDED,
@@ -505,6 +506,29 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case EVENT_NODE_FRIENDSHIP_UPDATED:
             return updateFriendship(state, action.payload.friend);
+
+        case EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED: {
+            const {friendOf} = action.payload;
+
+            const istate = immutable.wrap(state);
+            const contactState = prepareContact(state, istate, friendOf.remoteNodeName);
+            if (friendOf.contact != null) {
+                putContact(state, istate, friendOf.remoteNodeName, friendOf.contact);
+                delete friendOf.contact;
+            }
+            if (friendOf.groups != null && friendOf.groups.length > 0) {
+                istate.set(["contacts", friendOf.remoteNodeName, "friendOf"], friendOf);
+                if (state.loadedGeneral && state.loadedFriendOfs && contactState.friendOf == null) {
+                    istate.set("friendOfsTotal", (state.friendOfsTotal ?? 0) + 1);
+                }
+            } else {
+                istate.set(["contacts", friendOf.remoteNodeName, "friendOf"], null);
+                if (state.loadedGeneral && state.loadedFriendOfs && contactState.friendOf != null) {
+                    istate.set("friendOfsTotal", (state.friendOfsTotal ?? 1) - 1);
+                }
+            }
+            return istate.value();
+        }
 
         case EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED: {
             const {name, fullName} = action.payload;

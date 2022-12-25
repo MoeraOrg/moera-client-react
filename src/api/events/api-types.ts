@@ -5,6 +5,7 @@ import {
     FeedStatus,
     FriendGroupInfo,
     FriendInfo,
+    FriendOfInfo,
     PrincipalValue,
     StorySummaryData,
     StoryType,
@@ -316,3 +317,7 @@ export interface FriendshipUpdatedEvent extends BaseEvent<"FRIENDSHIP_UPDATED"> 
 }
 
 export type AskSubjectsChangedEvent = BaseEvent<"ASK_SUBJECTS_CHANGED">;
+
+export interface RemoteFriendshipUpdatedEvent extends BaseEvent<"REMOTE_FRIENDSHIP_UPDATED"> {
+    friendOf: FriendOfInfo;
+}
