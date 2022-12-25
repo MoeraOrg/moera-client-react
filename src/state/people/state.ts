@@ -48,5 +48,4 @@ export interface PeopleState {
     };
     selecting: boolean;
     selected: Partial<Record<string, boolean>>;
-    selectedProceeding: boolean;
 }

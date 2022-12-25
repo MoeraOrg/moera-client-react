@@ -10,9 +10,7 @@ import { DropdownMenu } from "ui/control";
 
 type Props = ConnectedProps<typeof connector>;
 
-function PeopleSelectedButton({
-    totalSelected, summary, proceeding, peopleSelectedSubscribe, peopleSelectedUnsubscribe
-}: Props) {
+function PeopleSelectedButton({totalSelected, summary, peopleSelectedSubscribe, peopleSelectedUnsubscribe}: Props) {
     const {t} = useTranslation();
 
     if (totalSelected <= 0) {
@@ -34,7 +32,7 @@ function PeopleSelectedButton({
     const onHideDialog = () => {};
 
     return (
-        <DropdownMenu className="btn btn-sm btn-primary ms-1" disabled={proceeding} items={[
+        <DropdownMenu className="btn btn-sm btn-primary ms-1" items={[
             {
                 title: t("subscribe"),
                 href: "/people",
@@ -135,8 +133,7 @@ const getSelectedSummary = createSelector(
 const connector = connect(
     (state: ClientState) => ({
         totalSelected: getTotalSelected(state),
-        summary: getSelectedSummary(state),
-        proceeding: state.people.selectedProceeding
+        summary: getSelectedSummary(state)
     }),
     { peopleSelectedSubscribe, peopleSelectedUnsubscribe }
 );

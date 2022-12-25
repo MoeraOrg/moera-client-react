@@ -27,6 +27,7 @@ import { PeopleHideDialogAnyAction } from "state/peoplehidedialog/actions";
 import { PostingReplyAnyAction } from "state/postingreply/actions";
 import { PostingsAnyAction } from "state/postings/actions";
 import { ProfileAnyAction } from "state/profile/actions";
+import { ProgressBoxAnyAction } from "state/progressbox/actions";
 import { PulseAnyAction } from "state/pulse/actions";
 import { QuickTipsAnyAction } from "state/quicktips/actions";
 import { ReactionsDialogAnyAction } from "state/reactionsdialog/actions";
@@ -70,6 +71,7 @@ export type ClientAction =
     | PostingReplyAnyAction
     | PostingsAnyAction
     | ProfileAnyAction
+    | ProgressBoxAnyAction
     | PulseAnyAction
     | QuickTipsAnyAction
     | ReactionsDialogAnyAction

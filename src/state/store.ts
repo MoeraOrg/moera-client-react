@@ -39,6 +39,7 @@ import askDialog from "state/askdialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
+import progressBox from "state/progressbox/reducer";
 import signUpDialog from "state/signupdialog/reducer";
 import quickTips from "state/quicktips/reducer";
 import refresh from "state/refresh/reducer";
@@ -150,6 +151,7 @@ const reducers = combineReducers({
     messageBox,
     confirmBox,
     flashBox,
+    progressBox,
     signUpDialog,
     quickTips,
     refresh

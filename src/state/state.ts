@@ -27,6 +27,7 @@ import { PeopleHideDialogState } from "state/peoplehidedialog/state";
 import { PostingReplyState } from "state/postingreply/state";
 import { PostingsState } from "state/postings/state";
 import { ProfileState } from "state/profile/state";
+import { ProgressBoxState } from "state/progressbox/state";
 import { PulseState } from "state/pulse/state";
 import { QuickTipsState } from "state/quicktips/state";
 import { ReactionsDialogState } from "state/reactionsdialog/state";
@@ -67,6 +68,7 @@ export interface ClientState {
     postingReply: PostingReplyState;
     postings: PostingsState;
     profile: ProfileState;
+    progressBox: ProgressBoxState;
     pulse: PulseState;
     quickTips: QuickTipsState;
     reactionsDialog: ReactionsDialogState;

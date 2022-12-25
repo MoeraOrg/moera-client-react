@@ -22,7 +22,6 @@ import {
     PEOPLE_SELECTED_UNSUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
-    peopleSelectedProceeded,
     SUBSCRIBERS_LOAD,
     subscribersLoaded,
     subscribersLoadFailed,
@@ -36,6 +35,7 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
 import { getPeopleSelectedContacts } from "state/people/selectors";
 import { feedSubscribed, feedUnsubscribed } from "state/feeds/actions";
+import { closeProgressBox, openProgressBox, updateProgressBox } from "state/progressbox/actions";
 
 export default [
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
@@ -155,20 +155,19 @@ function* friendshipSetVisibilitySaga(action: FriendshipSetVisibilityAction) {
 }
 
 function* peopleSelectedSubscribeSaga() {
-    const contacts = yield* select(getPeopleSelectedContacts);
+    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => !c.hasFeedSubscription);
+    yield* put(openProgressBox(0, contacts.length));
+    let done = 0;
     for (const contact of contacts) {
-        if (contact.hasFeedSubscription) {
-            continue;
-        }
-
         try {
             const subscription = yield* call(Node.postFeedSubscription, ":", contact.nodeName, "timeline");
             yield* put(feedSubscribed(contact.nodeName, subscription));
+            yield* put(updateProgressBox(++done, contacts.length));
         } catch (e) {
             yield* put(errorThrown(e));
         }
     }
-    yield* put(peopleSelectedProceeded());
+    yield* put(closeProgressBox());
 }
 
 function* peopleSelectedUnsubscribeSaga() {
@@ -176,21 +175,24 @@ function* peopleSelectedUnsubscribeSaga() {
     const remoteFeeds: RemoteFeed[] = contacts
         .filter(c => c.hasFeedSubscription)
         .map(c => ({nodeName: c.nodeName, feedName: "timeline"}));
+    yield* put(openProgressBox());
     let subscriptions: SubscriptionInfo[] = [];
     try {
         subscriptions = yield* call(Node.searchSubscriptions, ":", "feed", remoteFeeds, null);
     } catch (e) {
         yield* put(errorThrown(e));
-        yield* put(peopleSelectedProceeded());
         return;
     }
+    yield* put(updateProgressBox(0, subscriptions.length));
+    let done = 0;
     for (const subscription of subscriptions) {
         try {
             const contact = yield* call(Node.deleteSubscription, ":", subscription.id);
             yield* put(feedUnsubscribed(subscription.remoteNodeName, "timeline", contact));
+            yield* put(updateProgressBox(++done, subscriptions.length));
         } catch (e) {
             yield* put(errorThrown(e));
         }
     }
-    yield* put(peopleSelectedProceeded());
+    yield* put(closeProgressBox());
 }

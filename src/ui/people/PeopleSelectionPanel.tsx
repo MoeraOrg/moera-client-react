@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { peopleStartSelection, peopleStopSelection } from "state/people/actions";
-import { Button, Loading } from "ui/control";
+import { Button } from "ui/control";
 import PeopleSelectedButton from "ui/people/PeopleSelectedButton";
 import "./PeopleSelectionPanel.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function PeopleSelectionPanel({atHome, selecting, proceeding, peopleStartSelection, peopleStopSelection}: Props) {
+function PeopleSelectionPanel({atHome, selecting, peopleStartSelection, peopleStopSelection}: Props) {
     const {t} = useTranslation();
 
     if (!atHome) {
@@ -35,7 +35,6 @@ function PeopleSelectionPanel({atHome, selecting, proceeding, peopleStartSelecti
                 {!selecting ? t("select") : t("clear-selection")}
             </Button>
             <PeopleSelectedButton/>
-            <Loading active={proceeding}/>
         </div>
     );
 }
@@ -43,8 +42,7 @@ function PeopleSelectionPanel({atHome, selecting, proceeding, peopleStartSelecti
 const connector = connect(
     (state: ClientState) => ({
         atHome: isAtHomeNode(state),
-        selecting: state.people.selecting,
-        proceeding: state.people.selectedProceeding
+        selecting: state.people.selecting
     }),
     { peopleStartSelection, peopleStopSelection }
 );

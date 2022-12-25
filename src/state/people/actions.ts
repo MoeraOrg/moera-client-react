@@ -86,12 +86,6 @@ export const peopleSelectedUnsubscribe = (): PeopleSelectedUnsubscribeAction => 
     type: PEOPLE_SELECTED_UNSUBSCRIBE
 });
 
-export const PEOPLE_SELECTED_PROCEEDED = "PEOPLE_SELECTED_PROCEEDED";
-export type PeopleSelectedProceededAction = Action<typeof PEOPLE_SELECTED_PROCEEDED>;
-export const peopleSelectedProceeded = (): PeopleSelectedProceededAction => ({
-    type: PEOPLE_SELECTED_PROCEEDED
-});
-
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -238,7 +232,6 @@ export type PeopleAnyAction =
     | PeopleSelectToggleAction
     | PeopleSelectedSubscribeAction
     | PeopleSelectedUnsubscribeAction
-    | PeopleSelectedProceededAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction

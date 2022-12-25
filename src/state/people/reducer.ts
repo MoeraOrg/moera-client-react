@@ -37,9 +37,6 @@ import {
     PEOPLE_GENERAL_UNSET,
     PEOPLE_GO_TO_TAB,
     PEOPLE_SELECT_TOGGLE,
-    PEOPLE_SELECTED_PROCEEDED,
-    PEOPLE_SELECTED_SUBSCRIBE,
-    PEOPLE_SELECTED_UNSUBSCRIBE,
     PEOPLE_START_SELECTION,
     PEOPLE_STOP_SELECTION,
     PEOPLE_UNSET,
@@ -71,8 +68,7 @@ const initialState: PeopleState = {
     contacts: {},
     operations: {},
     selecting: false,
-    selected: {},
-    selectedProceeding: false
+    selected: {}
 };
 
 function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string): ContactState {
@@ -191,13 +187,6 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 ["selected", action.payload.nodeName],
                 (v: boolean | null | undefined) => !v
             );
-
-        case PEOPLE_SELECTED_SUBSCRIBE:
-        case PEOPLE_SELECTED_UNSUBSCRIBE:
-            return immutable.set(state, "selectedProceeding", true);
-
-        case PEOPLE_SELECTED_PROCEEDED:
-            return immutable.set(state, "selectedProceeding", false);
 
         case SUBSCRIBERS_LOAD:
             return immutable.set(state, "loadingSubscribers", true);
