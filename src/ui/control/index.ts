@@ -1,6 +1,7 @@
 export { Avatar } from "ui/control/Avatar";
 export { AvatarWithPopup } from "ui/control/AvatarWithPopup";
 export { Button } from "ui/control/Button";
+export { Checkbox } from "ui/control/Checkbox";
 export { CloseButton } from "ui/control/CloseButton";
 export { ConflictWarning } from "ui/control/ConflictWarning";
 export { DeleteButton } from "ui/control/DeleteButton";
