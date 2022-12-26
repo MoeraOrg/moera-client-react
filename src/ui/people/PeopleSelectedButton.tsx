@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { openAskDialog } from "state/askdialog/actions";
+import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
 import {
     peopleSelectedFriend,
     peopleSelectedSubscribe,
@@ -18,7 +19,7 @@ type Props = ConnectedProps<typeof connector>;
 
 function PeopleSelectedButton({
     totalSelected, summary, peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend,
-    peopleSelectedUnfriend, openAskDialog
+    peopleSelectedUnfriend, openAskDialog, openPeopleHideDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -38,7 +39,7 @@ function PeopleSelectedButton({
 
     const onAskDialog = () => openAskDialog(null, totalSelected);
 
-    const onHideDialog = () => {};
+    const onHideDialog = () => openPeopleHideDialog(null, null);
 
     return (
         <DropdownMenu className="btn btn-sm btn-primary ms-1" items={[
@@ -150,7 +151,10 @@ const connector = connect(
         totalSelected: getTotalSelected(state),
         summary: getSelectedSummary(state)
     }),
-    { peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend, peopleSelectedUnfriend, openAskDialog }
+    {
+        peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend, peopleSelectedUnfriend, openAskDialog,
+        openPeopleHideDialog
+    }
 );
 
 export default connector(PeopleSelectedButton);

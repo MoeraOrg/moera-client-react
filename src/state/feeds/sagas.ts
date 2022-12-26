@@ -128,8 +128,25 @@ function* feedUnsubscribeSaga(action: FeedUnsubscribeAction) {
     }
 }
 
+export function* nodeFeedSubscriberSetVisibility(subscriberId: string, visible: boolean, homeOwnerName: string) {
+    const view: PrincipalValue = visible ? "unset" : "private";
+    const subscriber = yield* call(Node.putSubscriber, ":", subscriberId, null, {view});
+    yield* put(feedSubscriberUpdated(homeOwnerName, subscriber));
+
+    if (subscriber.feedName == null) {
+        return;
+    }
+
+    const subscriptions = yield* call(Node.searchSubscriptions, ":", "feed",
+        [{nodeName: subscriber.nodeName, feedName: subscriber.feedName}], null);
+    if (subscriptions.length > 0) {
+        const subscription = yield* call(Node.putSubscription, subscriber.nodeName, subscriptions[0].id, {view});
+        yield* put(feedSubscriptionUpdated(subscriber.nodeName, subscription));
+    }
+}
+
 function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetVisibilityAction>) {
-    const {subscriberId, feedName, visible} = action.payload;
+    const {subscriberId, visible} = action.payload;
     const {homeOwnerName} = action.context;
 
     if (homeOwnerName == null) {
@@ -137,18 +154,16 @@ function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetV
     }
 
     try {
-        const view: PrincipalValue = visible ? "unset" : "private";
-        const subscriber = yield* call(Node.putSubscriber, ":", subscriberId, null, {view});
-        yield* put(feedSubscriberUpdated(homeOwnerName, subscriber));
-        const subscriptions = yield* call(Node.searchSubscriptions, ":", "feed",
-            [{nodeName: subscriber.nodeName, feedName}], null);
-        if (subscriptions.length > 0) {
-            const subscription = yield* call(Node.putSubscription, subscriber.nodeName, subscriptions[0].id, {view});
-            yield* put(feedSubscriptionUpdated(subscriber.nodeName, subscription));
-        }
+        yield* call(nodeFeedSubscriberSetVisibility, subscriberId, visible, homeOwnerName);
     } catch (e) {
         yield* put(errorThrown(e));
     }
+}
+
+export function* nodeFeedSubscriptionSetVisibility(subscriptionId: string, visible: boolean, homeOwnerName: string) {
+    const view: PrincipalValue = visible ? "public" : "private";
+    const subscription = yield* call(Node.putSubscription, ":", subscriptionId, {view});
+    yield* put(feedSubscriptionUpdated(homeOwnerName, subscription));
 }
 
 function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscriptionSetVisibilityAction>) {
@@ -160,9 +175,7 @@ function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscription
     }
 
     try {
-        const view: PrincipalValue = visible ? "public" : "private";
-        const subscription = yield* call(Node.putSubscription, ":", subscriptionId, {view});
-        yield* put(feedSubscriptionUpdated(homeOwnerName, subscription));
+        yield* call(nodeFeedSubscriptionSetVisibility, subscriptionId, visible, homeOwnerName);
     } catch (e) {
         yield* put(errorThrown(e));
     }

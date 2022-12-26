@@ -109,6 +109,39 @@ export const peopleSelectedAsk = (subject: AskSubject, message: string): PeopleS
     payload: {subject, message}
 });
 
+export const PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY = "PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY";
+export type PeopleSelectedSubscriberSetVisibilityAction =
+    ActionWithPayload<typeof PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY, {
+        visible: boolean;
+    }>;
+export const peopleSelectedSubscriberSetVisibility =
+    (visible: boolean): PeopleSelectedSubscriberSetVisibilityAction => ({
+        type: PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY,
+        payload: {visible}
+    });
+
+export const PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY = "PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY";
+export type PeopleSelectedSubscriptionSetVisibilityAction =
+    ActionWithPayload<typeof PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY, {
+        visible: boolean;
+    }>;
+export const peopleSelectedSubscriptionSetVisibility =
+    (visible: boolean): PeopleSelectedSubscriptionSetVisibilityAction => ({
+        type: PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY,
+        payload: {visible}
+    });
+
+export const PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY = "PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY";
+export type PeopleSelectedFriendshipSetVisibilityAction =
+    ActionWithPayload<typeof PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY, {
+        visible: boolean;
+    }>;
+export const peopleSelectedFriendshipSetVisibility =
+    (visible: boolean): PeopleSelectedFriendshipSetVisibilityAction => ({
+        type: PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY,
+        payload: {visible}
+    });
+
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -258,6 +291,9 @@ export type PeopleAnyAction =
     | PeopleSelectedFriendAction
     | PeopleSelectedUnfriendAction
     | PeopleSelectedAskAction
+    | PeopleSelectedSubscriberSetVisibilityAction
+    | PeopleSelectedSubscriptionSetVisibilityAction
+    | PeopleSelectedFriendshipSetVisibilityAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction

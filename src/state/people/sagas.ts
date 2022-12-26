@@ -3,6 +3,7 @@ import { call, put, select } from 'typed-redux-saga';
 import { NodeApiError } from "api";
 import { Node } from "api/node";
 import { FriendDescription, PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
+import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
     FRIEND_OFS_LOAD,
@@ -20,12 +21,17 @@ import {
     PEOPLE_GENERAL_LOAD,
     PEOPLE_SELECTED_ASK,
     PEOPLE_SELECTED_FRIEND,
+    PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY,
     PEOPLE_SELECTED_SUBSCRIBE,
+    PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY,
+    PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY,
     PEOPLE_SELECTED_UNFRIEND,
     PEOPLE_SELECTED_UNSUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
-    PeopleSelectedAskAction,
+    PeopleSelectedAskAction, PeopleSelectedFriendshipSetVisibilityAction,
+    PeopleSelectedSubscriberSetVisibilityAction,
+    PeopleSelectedSubscriptionSetVisibilityAction,
     SUBSCRIBERS_LOAD,
     subscribersLoaded,
     subscribersLoadFailed,
@@ -40,6 +46,7 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
 import { getPeopleSelectedContacts } from "state/people/selectors";
 import { feedSubscribed, feedUnsubscribed } from "state/feeds/actions";
+import { nodeFeedSubscriberSetVisibility, nodeFeedSubscriptionSetVisibility } from "state/feeds/sagas";
 import { closeProgressBox, openProgressBox, updateProgressBox } from "state/progressbox/actions";
 
 export default [
@@ -54,7 +61,10 @@ export default [
     executor(PEOPLE_SELECTED_UNSUBSCRIBE, "", peopleSelectedUnsubscribeSaga),
     executor(PEOPLE_SELECTED_FRIEND, "", peopleSelectedFriendSaga),
     executor(PEOPLE_SELECTED_UNFRIEND, "", peopleSelectedUnfriendSaga),
-    executor(PEOPLE_SELECTED_ASK, "", peopleSelectedAskSaga)
+    executor(PEOPLE_SELECTED_ASK, "", peopleSelectedAskSaga),
+    executor(PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY, "", peopleSelectedSubscriberSetVisibilitySaga),
+    executor(PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY, "", peopleSelectedSubscriptionSetVisibilitySaga),
+    executor(PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY, "", peopleSelectedFriendshipSetVisibilitySaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -206,14 +216,7 @@ function* peopleSelectedUnsubscribeSaga() {
     yield* put(closeProgressBox());
 }
 
-function* peopleSelectedFriendSaga() {
-    const friendsId = (yield* select(getHomeFriendsId));
-    if (friendsId == null) {
-        return;
-    }
-    const friendDescriptions: FriendDescription[] = (yield* select(getPeopleSelectedContacts))
-        .filter(c => !c.hasFriend)
-        .map(c => ({nodeName: c.nodeName, groups: [{id: friendsId}]}));
+function* updateSelectedFriendship(friendDescriptions: FriendDescription[]) {
     try {
         yield* put(openProgressBox(0, friendDescriptions.length));
         const friends = yield* call(Node.putFriends, ":", friendDescriptions);
@@ -228,22 +231,22 @@ function* peopleSelectedFriendSaga() {
     yield* put(closeProgressBox());
 }
 
+function* peopleSelectedFriendSaga() {
+    const friendsId = (yield* select(getHomeFriendsId));
+    if (friendsId == null) {
+        return;
+    }
+    const friendDescriptions: FriendDescription[] = (yield* select(getPeopleSelectedContacts))
+        .filter(c => !c.hasFriend)
+        .map(c => ({nodeName: c.nodeName, groups: [{id: friendsId}]}));
+    yield* call(updateSelectedFriendship, friendDescriptions);
+}
+
 function* peopleSelectedUnfriendSaga() {
     const friendDescriptions: FriendDescription[] = (yield* select(getPeopleSelectedContacts))
         .filter(c => c.hasFriend)
         .map(c => ({nodeName: c.nodeName, groups: []}));
-    try {
-        yield* put(openProgressBox(0, friendDescriptions.length));
-        const friends = yield* call(Node.putFriends, ":", friendDescriptions);
-        let done = 0;
-        for (const friend of friends) {
-            yield* put(friendshipUpdated(friend));
-            yield* put(updateProgressBox(++done, friends.length));
-        }
-    } catch (e) {
-        yield* put(errorThrown(e));
-    }
-    yield* put(closeProgressBox());
+    yield* call(updateSelectedFriendship, friendDescriptions);
 }
 
 function* peopleSelectedAskSaga(action: PeopleSelectedAskAction) {
@@ -274,6 +277,93 @@ function* peopleSelectedAskSaga(action: PeopleSelectedAskAction) {
                 if (subject === "subscribe" || friendsId != null) {
                     yield* call(Node.askRemoteNode, ":", contact.nodeName, subject, friendsId, message);
                 }
+            }
+            yield* put(updateProgressBox(++done, contacts.length));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+    yield* put(closeProgressBox());
+}
+
+function* peopleSelectedSubscriberSetVisibilitySaga(action: WithContext<PeopleSelectedSubscriberSetVisibilityAction>) {
+    const {visible} = action.payload;
+    const {homeOwnerName} = action.context;
+
+    if (homeOwnerName == null) {
+        return;
+    }
+
+    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFeedSubscriber);
+    if (contacts.length === 0) {
+        return;
+    }
+    yield* put(openProgressBox(0, contacts.length));
+    try {
+        let done = 0;
+        for (const contact of contacts) {
+            let subscriber = (yield* call(Node.getSubscribers, ":", "feed" as const, contact.nodeName))?.[0];
+            if (subscriber != null) {
+                yield* call(nodeFeedSubscriberSetVisibility, subscriber.id, visible, homeOwnerName);
+            }
+            yield* put(updateProgressBox(++done, contacts.length));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+    yield* put(closeProgressBox());
+}
+
+function* peopleSelectedSubscriptionSetVisibilitySaga(action: WithContext<PeopleSelectedSubscriptionSetVisibilityAction>) {
+    const {visible} = action.payload;
+    const {homeOwnerName} = action.context;
+
+    if (homeOwnerName == null) {
+        return;
+    }
+
+    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFeedSubscription);
+    if (contacts.length === 0) {
+        return;
+    }
+    yield* put(openProgressBox(0, contacts.length));
+    try {
+        let done = 0;
+        for (const contact of contacts) {
+            let subscription = (yield* call(Node.getSubscriptions, ":", "feed" as const, contact.nodeName))?.[0];
+            if (subscription != null) {
+                yield* call(nodeFeedSubscriptionSetVisibility, subscription.id, visible, homeOwnerName);
+            }
+            yield* put(updateProgressBox(++done, contacts.length));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+    yield* put(closeProgressBox());
+}
+
+function* peopleSelectedFriendshipSetVisibilitySaga(action: WithContext<PeopleSelectedFriendshipSetVisibilityAction>) {
+    const {visible} = action.payload;
+    const {homeOwnerName} = action.context;
+
+    if (homeOwnerName == null) {
+        return;
+    }
+
+    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFriend);
+    if (contacts.length === 0) {
+        return;
+    }
+    yield* put(openProgressBox(0, contacts.length));
+    const view: PrincipalValue = visible ? "public" : "private";
+    try {
+        let done = 0;
+        for (const contact of contacts) {
+            const {groups} = yield* call(Node.getFriend, ":", contact.nodeName);
+            const friends = yield* call(Node.putFriends, ":", [{
+                nodeName: contact.nodeName, groups: groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
+            if (friends.length > 0) {
+                yield* put(friendshipUpdated(friends[0]));
             }
             yield* put(updateProgressBox(++done, contacts.length));
         }

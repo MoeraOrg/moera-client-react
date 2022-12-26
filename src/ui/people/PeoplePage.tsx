@@ -11,6 +11,7 @@ import { Page } from "ui/page/Page";
 import PeopleTabs from "ui/people/PeopleTabs";
 import PeopleContent from "ui/people/PeopleContent";
 import AskSelectedDialog from "ui/askdialog/AskSelectedDialog";
+import PeopleSelectedHideDialog from "ui/peoplehidedialog/PeopleSelectedHideDialog";
 import "./PeoplePage.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -34,6 +35,7 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => {
                     <PeopleContent/>
                 </div>
                 <AskSelectedDialog/>
+                <PeopleSelectedHideDialog/>
             </Page>
         </>
     );

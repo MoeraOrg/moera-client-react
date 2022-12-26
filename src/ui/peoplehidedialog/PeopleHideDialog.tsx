@@ -25,17 +25,19 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function PeopleHideDialog(props: Props) {
-    const {show, card, subscribersHidden, subscriptionsHidden, friendsHidden, closePeopleHideDialog, resetForm} = props;
+    const {
+        show, nodeName, card, subscribersHidden, subscriptionsHidden, friendsHidden, closePeopleHideDialog, resetForm
+    } = props;
     const {t} = useTranslation();
 
     useEffect(() => {
         if (show) {
-            resetForm({values: subscribeHideDialogLogic.mapPropsToValues(props)});
+            resetForm({values: peopleHideDialogLogic.mapPropsToValues(props)});
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]); // 'props' are missing on purpose
 
-    if (!show) {
+    if (!show || nodeName == null) {
         return null;
     }
 
@@ -65,7 +67,7 @@ function PeopleHideDialog(props: Props) {
     );
 }
 
-const subscribeHideDialogLogic = {
+const peopleHideDialogLogic = {
 
     isSubscriptionHidden: (subscription: SubscriptionInfo | null | undefined) =>
         isPrincipalIn("view", subscription ?? null, "public", "private"),
@@ -78,11 +80,11 @@ const subscribeHideDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
         hideMySubscription: props.subscriptionsHidden
-            || subscribeHideDialogLogic.isSubscriptionHidden(props.card?.subscription.subscription),
+            || peopleHideDialogLogic.isSubscriptionHidden(props.card?.subscription.subscription),
         hideSubscriptionToMe: props.subscribersHidden
-            || subscribeHideDialogLogic.isSubscriberHidden(props.card?.subscription.subscriber),
+            || peopleHideDialogLogic.isSubscriberHidden(props.card?.subscription.subscriber),
         hideFriend: props.friendsHidden
-            || subscribeHideDialogLogic.isFriendHidden(props.card?.friendship.groups)
+            || peopleHideDialogLogic.isFriendHidden(props.card?.friendship.groups)
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -97,15 +99,15 @@ const subscribeHideDialogLogic = {
 
         formik.setStatus("submitted");
         if (subscription?.id != null && !subscriptionsHidden
-                && values.hideMySubscription !== subscribeHideDialogLogic.isSubscriptionHidden(subscription)) {
+                && values.hideMySubscription !== peopleHideDialogLogic.isSubscriptionHidden(subscription)) {
             feedSubscriptionSetVisibility(subscription?.id, !values.hideMySubscription);
         }
         if (subscriber?.id != null && !subscribersHidden && feedName != null
-                && values.hideSubscriptionToMe !== subscribeHideDialogLogic.isSubscriberHidden(subscriber)) {
+                && values.hideSubscriptionToMe !== peopleHideDialogLogic.isSubscriberHidden(subscriber)) {
             feedSubscriberSetVisibility(subscriber?.id, feedName, !values.hideSubscriptionToMe);
         }
         if (friendGroups != null && friendGroups.length > 0 && !friendsHidden && nodeName != null
-                && values.hideFriend !== subscribeHideDialogLogic.isFriendHidden(friendGroups)) {
+                && values.hideFriend !== peopleHideDialogLogic.isFriendHidden(friendGroups)) {
             friendshipSetVisibility(nodeName, !values.hideFriend);
         }
         closePeopleHideDialog();
@@ -127,4 +129,4 @@ const connector = connect(
     { feedSubscriberSetVisibility, feedSubscriptionSetVisibility, friendshipSetVisibility, closePeopleHideDialog }
 );
 
-export default connector(withFormik(subscribeHideDialogLogic)(PeopleHideDialog));
+export default connector(withFormik(peopleHideDialogLogic)(PeopleHideDialog));
