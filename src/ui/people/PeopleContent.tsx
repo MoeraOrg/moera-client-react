@@ -9,22 +9,34 @@ import {
     getPeopleContactsTotal,
     isPeopleContactsLoading
 } from "state/people/selectors";
+import { ContactState } from "state/people/state";
 import { Loading } from "ui/control";
 import { Browser } from "ui/browser";
 import PeopleSelectionPanel from "ui/people/PeopleSelectionPanel";
 import PeoplePerson from "ui/people/PeoplePerson";
+import { nameListItemMatch } from "util/names-list";
 
 type Props = ConnectedProps<typeof connector>;
 
-const PeopleContent = ({atHome, loading, loadingGeneral, contacts, contactsTotal, contactsMax}: Props) => (
-    <div>
+const PeopleContent = ({
+    atHome, loading, loadingGeneral, contacts, contactsTotal, contactsMax, searchRegexes
+}: Props) => (
+    <div className="flex-fill">
         {(atHome && !loadingGeneral && contactsTotal > 0 && (Browser.isDevMode() || contactsMax > 12)) &&
             <PeopleSelectionPanel/>
         }
         <Loading active={loading}/>
-        {contacts.map((cs, index) => <PeoplePerson key={index} contact={cs}/>)}
+        {contacts
+            .filter(cs => matchesSearch(cs, searchRegexes))
+            .map((cs, index) => <PeoplePerson key={index} contact={cs}/>)
+        }
     </div>
 );
+
+function matchesSearch(contactState: ContactState, searchRegexes: RegExp[]): boolean {
+    const {nodeName, fullName} = contactState.contact;
+    return nameListItemMatch({nodeName, fullName}, searchRegexes);
+}
 
 const connector = connect(
     (state: ClientState) => ({
@@ -33,7 +45,8 @@ const connector = connect(
         loadingGeneral: state.people.loadingGeneral,
         contacts: getPeopleContactsSorted(state),
         contactsTotal: getPeopleContactsTotal(state),
-        contactsMax: getPeopleContactsMaxInTabs(state)
+        contactsMax: getPeopleContactsMaxInTabs(state),
+        searchRegexes: state.people.searchRegexes
     })
 );
 

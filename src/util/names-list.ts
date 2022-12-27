@@ -13,11 +13,19 @@ export function namesListQuery(list: NameListItem[], query: string | null): Name
     if (query == null) {
         return list.slice();
     }
-    const regexes = query.trim().split(/\s+/).map(prefix => RegExp("(?:^|\\s)" + regexEscape(prefix), "ig"));
-    return list.filter(item => itemMatch(item, regexes));
+    const regexes = nameListQueryToRegexes(query);
+    return list.filter(item => nameListItemMatch(item, regexes));
 }
 
-function itemMatch(item: NameListItem, regexes: RegExp[]): boolean {
+export function nameListQueryToRegexes(query: string): RegExp[] {
+    return query.trim().split(/\s+/).map(prefix => RegExp("(?:^|\\s)" + regexEscape(prefix), "ig"));
+}
+
+export function nameListItemMatch(item: NameListItem, regexes: RegExp[]): boolean {
+    if (regexes.length === 0) {
+        return true;
+    }
+
     const nodeName = item.nodeName ?? "";
     const haystack = item.fullName ? item.fullName + " " + nodeName: nodeName;
     const allFound = regexes.every(regex => regex.test(haystack));

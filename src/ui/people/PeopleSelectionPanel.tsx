@@ -8,6 +8,7 @@ import { isAtHomeNode } from "state/node/selectors";
 import { peopleStartSelection, peopleStopSelection } from "state/people/actions";
 import { Button } from "ui/control";
 import PeopleSelectedButton from "ui/people/PeopleSelectedButton";
+import PeopleSearch from "ui/people/PeopleSearch";
 import "./PeopleSelectionPanel.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -35,6 +36,7 @@ function PeopleSelectionPanel({atHome, selecting, peopleStartSelection, peopleSt
                 {!selecting ? t("select") : t("clear-selection")}
             </Button>
             <PeopleSelectedButton/>
+            <PeopleSearch/>
         </div>
     );
 }

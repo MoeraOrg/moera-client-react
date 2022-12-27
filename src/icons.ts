@@ -45,6 +45,7 @@ import {
     faLink,
     faList,
     faLock,
+    faMagnifyingGlass,
     faMinus,
     faMobileAlt,
     faNetworkWired,
@@ -146,6 +147,7 @@ export default function initIconLibrary() {
     library.add(faHome);
     library.add(faImage);
     library.add(faItalic);
+    library.add(faMagnifyingGlass);
     library.add(faMinus);
     library.add(faNetworkWired);
     library.add(faKey);

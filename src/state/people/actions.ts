@@ -158,6 +158,15 @@ export const peopleSelectedChangeFriendGroups = (
     payload: {includedGroups, excludedGroups, addedGroups, addedGroupTitles, addedGroupView}
 });
 
+export const PEOPLE_SET_SEARCH_PREFIX = "PEOPLE_SET_SEARCH_PREFIX";
+export type PeopleSetSearchPrefixAction = ActionWithPayload<typeof PEOPLE_SET_SEARCH_PREFIX, {
+    prefix: string;
+}>;
+export const peopleSetSearchPrefix = (prefix: string): PeopleSetSearchPrefixAction => ({
+    type: PEOPLE_SET_SEARCH_PREFIX,
+    payload: {prefix}
+});
+
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -311,6 +320,7 @@ export type PeopleAnyAction =
     | PeopleSelectedSubscriptionSetVisibilityAction
     | PeopleSelectedFriendshipSetVisibilityAction
     | PeopleSelectedChangeFriendGroupsAction
+    | PeopleSetSearchPrefixAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction
