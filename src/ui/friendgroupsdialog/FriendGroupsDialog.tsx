@@ -9,6 +9,7 @@ import { getHomeFriendGroups } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeFriendGroupsDialog, nodeChangeFriendGroups } from "state/friendgroupsdialog/actions";
+import { peopleSelectedChangeFriendGroups } from "state/people/actions";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
@@ -19,6 +20,7 @@ type OuterProps = ConnectedProps<typeof connector>;
 
 interface Values {
     groups: string[];
+    touchedGroups: string[];
     addedGroups: string[];
     addedGroupTitles: string[];
     addedGroupView: PrincipalValue[];
@@ -30,7 +32,8 @@ type TitledFriendGroupInfo = Omit<FriendGroupInfo, "title"> & { title: string };
 
 function FriendGroupsDialog(props: Props) {
     const {
-        show, nodeName, nodeCard, changing, availableGroups, nameDisplayMode, closeFriendGroupsDialog, values
+        show, nodeName, nodeCard, changing, availableGroups, nameDisplayMode, closeFriendGroupsDialog, values,
+        setFieldValue
     } = props;
     const {t} = useTranslation();
 
@@ -51,19 +54,31 @@ function FriendGroupsDialog(props: Props) {
     const available = (availableGroups ?? [])
         .filter(fg => fg.title !== "t:friends");
 
+    const isGroupChecked = (id: string) => (v: string[]): boolean | null =>
+        nodeName != null ? v.includes(id) : (values.touchedGroups.includes(id) ? v.includes(id) : null);
+
     const onAddGroup = () => {
-        props.setFieldValue("addedGroupTitles", [...values.addedGroupTitles, ""]);
-        props.setFieldValue("addedGroupView", [...values.addedGroupView, "admin"]);
-        props.setFieldValue("addedGroups", [...values.addedGroups, String(values.addedGroupTitles.length)]);
+        setFieldValue("addedGroupTitles", [...values.addedGroupTitles, ""]);
+        setFieldValue("addedGroupView", [...values.addedGroupView, "admin"]);
+        setFieldValue("addedGroups", [...values.addedGroups, String(values.addedGroupTitles.length)]);
+    }
+
+    const onGroupChecked = (id: string) => () => {
+        const touched = values["touchedGroups"];
+        if (!touched.includes(id)) {
+            setFieldValue("touchedGroups", [...touched, id]);
+        }
     }
 
     return (
-        <ModalDialog title={t("change-friend-groups", {name, gender})} onClose={closeFriendGroupsDialog}>
+        <ModalDialog title={nodeName != null ? t("change-friend-groups", {name, gender}) : t("change-groups")}
+                     onClose={closeFriendGroupsDialog}>
             <Form>
                 <div className="modal-body">
                     {available.filter((fg): fg is TitledFriendGroupInfo => fg.title != null).map(fg =>
                         <CheckboxField<string[]> key={fg.id} id={`groups_${fg.id}`} name="groups" title={fg.title}
-                                                 value={fg.id} isChecked={(v: string[]) => v.includes(fg.id)} anyValue/>
+                                                 value={fg.id} isChecked={isGroupChecked(fg.id)}
+                                                 onChange={onGroupChecked(fg.id)} anyValue/>
                     )}
                     {values.addedGroupTitles.map((title, index) =>
                         <div key={index} className="d-flex">
@@ -89,6 +104,7 @@ const friendGroupsDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
         groups: props.nodeCard?.friendship.groups?.map(fg => fg.id) ?? [],
+        touchedGroups: [],
         addedGroups: [],
         addedGroupTitles: [],
         addedGroupView: []
@@ -113,6 +129,11 @@ const friendGroupsDialogLogic = {
                 : "public";
             formik.props.nodeChangeFriendGroups(formik.props.nodeName, values.groups, view,
                 values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView);
+        } else {
+            formik.props.closeFriendGroupsDialog();
+            const excludedGroups = values.touchedGroups.filter(g => !values.addedGroups.includes(g));
+            formik.props.peopleSelectedChangeFriendGroups(values.groups, excludedGroups,
+                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView);
         }
         formik.setSubmitting(false);
     }
@@ -128,7 +149,7 @@ const connector = connect(
         availableGroups: getHomeFriendGroups(state),
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
     }),
-    { closeFriendGroupsDialog, nodeChangeFriendGroups }
+    { closeFriendGroupsDialog, nodeChangeFriendGroups, peopleSelectedChangeFriendGroups }
 );
 
 export default connector(withFormik(friendGroupsDialogLogic)(FriendGroupsDialog));

@@ -5,9 +5,9 @@ import { PrincipalValue } from "api/node/api-types";
 
 export const OPEN_FRIEND_GROUPS_DIALOG = "OPEN_FRIEND_GROUPS_DIALOG";
 export type OpenFriendGroupsDialogAction = ActionWithPayload<typeof OPEN_FRIEND_GROUPS_DIALOG, {
-    nodeName: string;
+    nodeName: string | null;
 }>;
-export const openFriendGroupsDialog = (nodeName: string): OpenFriendGroupsDialogAction => ({
+export const openFriendGroupsDialog = (nodeName: string | null): OpenFriendGroupsDialogAction => ({
     type: OPEN_FRIEND_GROUPS_DIALOG,
     payload: {nodeName}
 });

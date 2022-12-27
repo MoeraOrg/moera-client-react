@@ -6,7 +6,7 @@ import {
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
-    PeopleGeneralInfo,
+    PeopleGeneralInfo, PrincipalValue,
     SubscriberInfo,
     SubscriptionInfo
 } from "api/node/api-types";
@@ -141,6 +141,22 @@ export const peopleSelectedFriendshipSetVisibility =
         type: PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY,
         payload: {visible}
     });
+
+export const PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS = "PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS";
+export type PeopleSelectedChangeFriendGroupsAction = ActionWithPayload<typeof PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS, {
+    includedGroups: string[];
+    excludedGroups: string[];
+    addedGroups: number[];
+    addedGroupTitles: string[];
+    addedGroupView: PrincipalValue[];
+}>;
+export const peopleSelectedChangeFriendGroups = (
+    includedGroups: string[], excludedGroups: string[], addedGroups: number[], addedGroupTitles: string[],
+    addedGroupView: PrincipalValue[]
+): PeopleSelectedChangeFriendGroupsAction => ({
+    type: PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS,
+    payload: {includedGroups, excludedGroups, addedGroups, addedGroupTitles, addedGroupView}
+});
 
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
@@ -294,6 +310,7 @@ export type PeopleAnyAction =
     | PeopleSelectedSubscriberSetVisibilityAction
     | PeopleSelectedSubscriptionSetVisibilityAction
     | PeopleSelectedFriendshipSetVisibilityAction
+    | PeopleSelectedChangeFriendGroupsAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction

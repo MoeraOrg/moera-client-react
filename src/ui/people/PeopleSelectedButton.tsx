@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { openAskDialog } from "state/askdialog/actions";
 import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
+import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
 import {
     peopleSelectedFriend,
     peopleSelectedSubscribe,
@@ -19,7 +20,7 @@ type Props = ConnectedProps<typeof connector>;
 
 function PeopleSelectedButton({
     totalSelected, summary, peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend,
-    peopleSelectedUnfriend, openAskDialog, openPeopleHideDialog
+    peopleSelectedUnfriend, openAskDialog, openPeopleHideDialog, openFriendGroupsDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -33,7 +34,7 @@ function PeopleSelectedButton({
 
     const onAddFriend = () => peopleSelectedFriend();
 
-    const onFriendGroups = () => {};
+    const onFriendGroups = () => openFriendGroupsDialog(null);
 
     const onUnfriend = () => peopleSelectedUnfriend();
 
@@ -153,7 +154,7 @@ const connector = connect(
     }),
     {
         peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend, peopleSelectedUnfriend, openAskDialog,
-        openPeopleHideDialog
+        openPeopleHideDialog, openFriendGroupsDialog
     }
 );
 

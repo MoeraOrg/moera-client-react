@@ -2,11 +2,12 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { NodeApiError } from "api";
 import { Node } from "api/node";
-import { FriendDescription, PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
+import { FriendDescription, FriendGroupInfo, PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
     FRIEND_OFS_LOAD,
+    friendGroupAdded,
     friendOfsLoaded,
     friendOfsLoadFailed,
     FRIENDS_LOAD,
@@ -20,6 +21,7 @@ import {
     friendsLoadFailed,
     PEOPLE_GENERAL_LOAD,
     PEOPLE_SELECTED_ASK,
+    PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS,
     PEOPLE_SELECTED_FRIEND,
     PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY,
     PEOPLE_SELECTED_SUBSCRIBE,
@@ -29,7 +31,9 @@ import {
     PEOPLE_SELECTED_UNSUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
-    PeopleSelectedAskAction, PeopleSelectedFriendshipSetVisibilityAction,
+    PeopleSelectedAskAction,
+    PeopleSelectedChangeFriendGroupsAction,
+    PeopleSelectedFriendshipSetVisibilityAction,
     PeopleSelectedSubscriberSetVisibilityAction,
     PeopleSelectedSubscriptionSetVisibilityAction,
     SUBSCRIBERS_LOAD,
@@ -64,7 +68,8 @@ export default [
     executor(PEOPLE_SELECTED_ASK, "", peopleSelectedAskSaga),
     executor(PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY, "", peopleSelectedSubscriberSetVisibilitySaga),
     executor(PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY, "", peopleSelectedSubscriptionSetVisibilitySaga),
-    executor(PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY, "", peopleSelectedFriendshipSetVisibilitySaga)
+    executor(PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY, "", peopleSelectedFriendshipSetVisibilitySaga),
+    executor(PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS, "", peopleSelectedChangeFriendGroupsSaga)
 ];
 
 function* peopleGeneralLoadSaga() {
@@ -371,4 +376,58 @@ function* peopleSelectedFriendshipSetVisibilitySaga(action: WithContext<PeopleSe
         yield* put(errorThrown(e));
     }
     yield* put(closeProgressBox());
+}
+
+function* peopleSelectedChangeFriendGroupsSaga(action: WithContext<PeopleSelectedChangeFriendGroupsAction>) {
+    const {includedGroups, excludedGroups, addedGroups, addedGroupTitles, addedGroupView} = action.payload;
+    const {homeOwnerName} = action.context;
+
+    if (homeOwnerName == null) {
+        return;
+    }
+
+    const contacts = (yield* select(getPeopleSelectedContacts)).filter(c => c.hasFriend);
+    if (contacts.length === 0) {
+        return;
+    }
+
+    const progressTotal = addedGroupTitles.length + contacts.length;
+    yield* put(openProgressBox(0, progressTotal));
+    const added: FriendGroupInfo[] = [];
+    try {
+        for (let i = 0; i < addedGroupTitles.length; i++) {
+            if (!addedGroupTitles[i]) {
+                yield* put(updateProgressBox(i + 1, progressTotal));
+                continue;
+            }
+            const group = yield* call(Node.postFriendGroup, ":", addedGroupTitles[i], addedGroupView[i]);
+            added.push(group);
+            if (addedGroups.includes(i)) {
+                includedGroups.push(group.id);
+            }
+            yield* put(updateProgressBox(i + 1, progressTotal));
+        }
+        let done = 0;
+        for (const contact of contacts) {
+            const {groups} = yield* call(Node.getFriend, ":", contact.nodeName);
+            if (groups != null && groups.length > 0) {
+                const newGroups = groups
+                    .filter(gr => !excludedGroups.includes(gr.id))
+                    .map(({id, operations}) => ({id, operations}));
+                const view: PrincipalValue = groups[0].operations?.view ?? "public";
+                includedGroups.forEach(id => newGroups.push({id, operations: {view}}));
+                const friends = yield* call(Node.putFriends, ":", [{nodeName: contact.nodeName, groups: newGroups}]);
+                if (friends.length > 0) {
+                    yield* put(friendshipUpdated(friends[0]));
+                }
+            }
+            yield* put(updateProgressBox(addedGroupTitles.length + (++done), progressTotal));
+        }
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+    yield* put(closeProgressBox());
+    for (const group of added) {
+        yield* put(friendGroupAdded(homeOwnerName, group));
+    }
 }

@@ -11,6 +11,7 @@ interface Props<V> {
     title?: string;
     titleHtml?: string;
     isChecked?: (value: V) => boolean | null;
+    onChange?: () => void;
     value?: string | number;
     disabled?: boolean;
     groupClassName?: string;
@@ -24,8 +25,8 @@ interface Props<V> {
 }
 
 export function CheckboxField<V = boolean>({
-    id, name, title, titleHtml, isChecked, value: inputValue, disabled, groupClassName, labelClassName, autoFocus,
-    single, anyValue, initialValue, defaultValue, setting
+    id, name, title, titleHtml, isChecked, onChange: onInputChange, value: inputValue, disabled, groupClassName,
+    labelClassName, autoFocus, single, anyValue, initialValue, defaultValue, setting
 }: Props<V>) {
     const [{value, onChange, onBlur}, {touched, error}, , {undo, reset, onUndo, onReset}] =
         useUndoableField<V>(name, initialValue, defaultValue);
@@ -49,7 +50,10 @@ export function CheckboxField<V = boolean>({
                 name={name}
                 checked={isChecked ? isChecked(value) : (value != null ? Boolean(value) : null)}
                 value={inputValue}
-                onChange={onChange}
+                onChange={e => {
+                    onInputChange && onInputChange();
+                    onChange && onChange(e);
+                }}
                 onBlur={onBlur}
                 id={id ?? name}
                 disabled={disabled}
