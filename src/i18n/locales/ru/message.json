@@ -38,6 +38,7 @@
   "change-date-time" : "Изменить дату/время",
   "change-date-time-ellipsis" : "Изменить дату/время...",
   "change-friend-groups" : "Изменить группы {gender, select, female {подруги} other {друга}} {name}",
+  "change-groups" : "Изменить группы друзей",
   "change-home-password" : "Изменить домашний пароль",
   "change-password" : "Изменить пароль",
   "change-password-ellipsis" : "Изменить пароль...",
