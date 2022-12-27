@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
-import { peopleStartSelection, peopleStopSelection } from "state/people/actions";
+import { peopleSetSort, peopleStartSelection, peopleStopSelection } from "state/people/actions";
 import { Button } from "ui/control";
 import PeopleSelectedButton from "ui/people/PeopleSelectedButton";
 import PeopleSearch from "ui/people/PeopleSearch";
@@ -13,7 +13,9 @@ import "./PeopleSelectionPanel.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function PeopleSelectionPanel({atHome, selecting, peopleStartSelection, peopleStopSelection}: Props) {
+function PeopleSelectionPanel({
+    atHome, selecting, sortAlpha, peopleStartSelection, peopleStopSelection, peopleSetSort
+}: Props) {
     const {t} = useTranslation();
 
     if (!atHome) {
@@ -28,14 +30,22 @@ function PeopleSelectionPanel({atHome, selecting, peopleStartSelection, peopleSt
         }
     }
 
+    const onSortClick = () => peopleSetSort(!sortAlpha);
+
     return (
         <div className="people-panel">
-            <Button variant="outline-primary" size="sm" active={selecting} onClick={onSelectClick}>
-                <FontAwesomeIcon icon="arrow-pointer"/>
-                {" "}
-                {!selecting ? t("select") : t("clear-selection")}
-            </Button>
-            <PeopleSelectedButton/>
+            <div className="d-flex">
+                <Button variant="outline-primary" size="sm" active={selecting} onClick={onSelectClick}>
+                    <FontAwesomeIcon icon="arrow-pointer"/>
+                    {" "}
+                    {!selecting ? t("select") : t("clear-selection")}
+                </Button>
+                <PeopleSelectedButton/>
+                <Button variant="outline-secondary" size="sm" className="ms-auto" active={sortAlpha}
+                        onClick={onSortClick}>
+                    <FontAwesomeIcon icon="arrow-down-a-z"/>
+                </Button>
+            </div>
             <PeopleSearch/>
         </div>
     );
@@ -44,9 +54,10 @@ function PeopleSelectionPanel({atHome, selecting, peopleStartSelection, peopleSt
 const connector = connect(
     (state: ClientState) => ({
         atHome: isAtHomeNode(state),
-        selecting: state.people.selecting
+        selecting: state.people.selecting,
+        sortAlpha: state.people.sortAlpha
     }),
-    { peopleStartSelection, peopleStopSelection }
+    { peopleStartSelection, peopleStopSelection, peopleSetSort }
 );
 
 export default connector(PeopleSelectionPanel);

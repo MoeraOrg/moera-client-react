@@ -49,4 +49,5 @@ export interface PeopleState {
     selecting: boolean;
     selected: Partial<Record<string, boolean>>;
     searchRegexes: RegExp[];
+    sortAlpha: boolean;
 }

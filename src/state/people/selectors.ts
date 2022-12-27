@@ -137,7 +137,13 @@ export function getPeopleContacts(state: ClientState): ContactState[] {
     }
 }
 
-export const getPeopleContactsSorted = createSelector(
+export const getPeopleContactsByCloseness = createSelector(
+    getPeopleContacts,
+    contacts =>
+        contacts.sort((sr1, sr2) => sr2.contact.closeness - sr1.contact.closeness)
+);
+
+export const getPeopleContactsByAlpha = createSelector(
     getPeopleContacts,
     contacts =>
         contacts.sort((sr1, sr2) => {

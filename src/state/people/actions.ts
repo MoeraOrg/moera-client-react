@@ -167,6 +167,15 @@ export const peopleSetSearchPrefix = (prefix: string): PeopleSetSearchPrefixActi
     payload: {prefix}
 });
 
+export const PEOPLE_SET_SORT = "PEOPLE_SET_SORT";
+export type PeopleSetSortAction = ActionWithPayload<typeof PEOPLE_SET_SORT, {
+    sortAlpha: boolean;
+}>;
+export const peopleSetSort = (sortAlpha: boolean): PeopleSetSortAction => ({
+    type: PEOPLE_SET_SORT,
+    payload: {sortAlpha}
+});
+
 export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
 export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
 export const subscribersLoad = (): SubscribersLoadAction => ({
@@ -321,6 +330,7 @@ export type PeopleAnyAction =
     | PeopleSelectedFriendshipSetVisibilityAction
     | PeopleSelectedChangeFriendGroupsAction
     | PeopleSetSearchPrefixAction
+    | PeopleSetSortAction
     | SubscribersLoadAction
     | SubscribersLoadedAction
     | SubscribersLoadFailedAction

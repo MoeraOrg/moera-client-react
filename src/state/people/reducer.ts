@@ -38,6 +38,7 @@ import {
     PEOPLE_GO_TO_TAB,
     PEOPLE_SELECT_TOGGLE,
     PEOPLE_SET_SEARCH_PREFIX,
+    PEOPLE_SET_SORT,
     PEOPLE_START_SELECTION,
     PEOPLE_STOP_SELECTION,
     PEOPLE_UNSET,
@@ -71,7 +72,8 @@ const initialState: PeopleState = {
     operations: {},
     selecting: false,
     selected: {},
-    searchRegexes: []
+    searchRegexes: [],
+    sortAlpha: false
 };
 
 function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string): ContactState {
@@ -193,6 +195,9 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case PEOPLE_SET_SEARCH_PREFIX:
             return immutable.set(state, "searchRegexes", nameListQueryToRegexes(action.payload.prefix));
+
+        case PEOPLE_SET_SORT:
+            return immutable.set(state, "sortAlpha", action.payload.sortAlpha);
 
         case SUBSCRIBERS_LOAD:
             return immutable.set(state, "loadingSubscribers", true);

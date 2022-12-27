@@ -4,8 +4,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import {
+    getPeopleContactsByAlpha,
+    getPeopleContactsByCloseness,
     getPeopleContactsMaxInTabs,
-    getPeopleContactsSorted,
     getPeopleContactsTotal,
     isPeopleContactsLoading
 } from "state/people/selectors";
@@ -43,7 +44,7 @@ const connector = connect(
         atHome: isAtHomeNode(state),
         loading: isPeopleContactsLoading(state),
         loadingGeneral: state.people.loadingGeneral,
-        contacts: getPeopleContactsSorted(state),
+        contacts: state.people.sortAlpha ? getPeopleContactsByAlpha(state) : getPeopleContactsByCloseness(state),
         contactsTotal: getPeopleContactsTotal(state),
         contactsMax: getPeopleContactsMaxInTabs(state),
         searchRegexes: state.people.searchRegexes
