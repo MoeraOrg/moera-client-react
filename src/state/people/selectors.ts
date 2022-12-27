@@ -1,3 +1,5 @@
+import { createSelector } from 'reselect';
+
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
 import { ContactState, PeopleTab } from "state/people/state";
@@ -107,6 +109,56 @@ export function getPeopleFriendOfs(state: ClientState): FriendOfContactState[] {
     return Object.values(state.people.contacts)
         .filter((contact): contact is FriendOfContactState => contact?.friendOf != null);
 }
+
+export function isPeopleContactsLoading(state: ClientState): boolean {
+    switch (getPeopleTab(state)) {
+        case "subscribers":
+            return state.people.loadingSubscribers;
+        case "subscriptions":
+            return state.people.loadingSubscriptions;
+        case "friend-ofs":
+            return state.people.loadingFriendOfs;
+        default:
+            return state.people.loadingFriends;
+    }
+}
+
+export function getPeopleContacts(state: ClientState): ContactState[] {
+    const tab = getPeopleTab(state);
+    switch (tab) {
+        case "subscribers":
+            return getPeopleSubscribers(state);
+        case "subscriptions":
+            return getPeopleSubscriptions(state);
+        case "friend-ofs":
+            return getPeopleFriendOfs(state);
+        default:
+            return getPeopleFriends(state, tab);
+    }
+}
+
+export const getPeopleContactsSorted = createSelector(
+    getPeopleContacts,
+    contacts =>
+        contacts.sort((sr1, sr2) => {
+            const sr1name = sr1.contact.fullName || sr1.contact.nodeName;
+            const sr2name = sr2.contact.fullName || sr2.contact.nodeName;
+            return sr1name.localeCompare(sr2name);
+        })
+);
+
+export const getPeopleContactsTotal = createSelector(
+    (state: ClientState) => state.people,
+    people => {
+        const friendsTotal = people.friendsTotal != null
+            ? Object.values(people.friendsTotal).reduce((sum, v) => (sum ?? 0) + (v ?? 0), 0) ?? 0
+            : 0;
+        return (people.subscribersTotal ?? 0)
+            + (people.subscriptionsTotal ?? 0)
+            + friendsTotal
+            + (people.friendOfsTotal ?? 0);
+    }
+);
 
 export function getPeopleSelectedContacts(state: ClientState): ContactInfo[] {
     return Object.entries(state.people.selected)
