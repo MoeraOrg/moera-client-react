@@ -147,18 +147,24 @@ export const getPeopleContactsSorted = createSelector(
         })
 );
 
-export const getPeopleContactsTotal = createSelector(
-    (state: ClientState) => state.people,
-    people => {
-        const friendsTotal = people.friendsTotal != null
-            ? Object.values(people.friendsTotal).reduce((sum, v) => (sum ?? 0) + (v ?? 0), 0) ?? 0
-            : 0;
-        return (people.subscribersTotal ?? 0)
-            + (people.subscriptionsTotal ?? 0)
-            + friendsTotal
-            + (people.friendOfsTotal ?? 0);
-    }
+const getPeopleFriendsTotal = createSelector(
+    (state: ClientState) => state.people.friendsTotal,
+    friendsTotal => friendsTotal != null
+        ? Object.values(friendsTotal).reduce((max = 0, v = 0) => v > max ? v : max, 0) ?? 0
+        : 0
 );
+
+export function getPeopleContactsTotal(state: ClientState) {
+    return (state.people.subscribersTotal ?? 0)
+        + (state.people.subscriptionsTotal ?? 0)
+        + getPeopleFriendsTotal(state)
+        + (state.people.friendOfsTotal ?? 0);
+}
+
+export function getPeopleContactsMaxInTabs(state: ClientState) {
+    return Math.max(state.people.subscribersTotal ?? 0, state.people.subscriptionsTotal ?? 0,
+        getPeopleFriendsTotal(state), state.people.friendOfsTotal ?? 0);
+}
 
 export function getPeopleSelectedContacts(state: ClientState): ContactInfo[] {
     return Object.entries(state.people.selected)
