@@ -2,29 +2,34 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import { useTranslation } from 'react-i18next';
+import { TFunction, useTranslation } from 'react-i18next';
 
-import { PrincipalValue } from "api/node/api-types";
+import { FriendGroupInfo, PrincipalFlag, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { getNodeFriendGroups } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { Principal } from "ui/control/Principal";
 import { useButtonPopper } from "ui/hook";
-import { getPrincipalDisplay } from "ui/control/principal-display";
+import { getPrincipalDisplay, PrincipalDisplay } from "ui/control/principal-display";
 import "./PrincipalSelect.css";
 
 type Props = {
     value: PrincipalValue | null | undefined;
-    values? : PrincipalValue[] | null;
+    values? : PrincipalFlag[] | null;
     long?: boolean | null;
     className?: string;
     disabled?: boolean | null;
     onChange?: (value: PrincipalValue) => void;
 } & ConnectedProps<typeof connector>;
 
-function PrincipalSelectImpl({value, values, long, className, disabled, onChange, publicDisabled}: Props) {
+function PrincipalSelectImpl({
+    value, values, long, className, disabled, onChange, friendGroups, publicDisabled
+}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
+
+    const {t} = useTranslation();
 
     const onClick = (value: PrincipalValue) => onChange ? () => onChange(value) : undefined;
 
@@ -38,11 +43,10 @@ function PrincipalSelectImpl({value, values, long, className, disabled, onChange
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
-                    {(values ?? [])
-                        .filter(v => !publicDisabled || value === "public" || v !== "public")
-                        .map(v =>
+                    {getValues(values, friendGroups, publicDisabled && value !== "public", t)
+                        .map(({value: v, icon, title}) =>
                             <div key={v} className="dropdown-item" onClick={onClick(v)}>
-                                <PrincipalSelectItem value={v}/>
+                                <FontAwesomeIcon icon={icon} fixedWidth/>&nbsp;&nbsp;{title}
                             </div>
                         )
                     }
@@ -52,19 +56,30 @@ function PrincipalSelectImpl({value, values, long, className, disabled, onChange
     );
 }
 
-interface PrincipalSelectItemProps {
-    value: PrincipalValue;
-}
+type ItemValue = {value: PrincipalValue} & PrincipalDisplay;
 
-function PrincipalSelectItem({value}: PrincipalSelectItemProps) {
-    const {t} = useTranslation();
+function getValues(flags: PrincipalFlag[] | null | undefined, friendGroups: FriendGroupInfo[], publicDisabled: boolean,
+                   t: TFunction): ItemValue[] {
+    if (flags == null) {
+        return [];
+    }
 
-    const {icon, title} = getPrincipalDisplay(value);
-    return <><FontAwesomeIcon icon={icon} fixedWidth/>&nbsp;&nbsp;{t(title)}</>;
+    const values = [];
+    for (const flag of flags) {
+        if (flag === "friends") {
+            friendGroups
+                .map(fg => ({value: `f:${fg.id}`, ...getPrincipalDisplay(`f:${fg.id}`, friendGroups, t)}))
+                .forEach(v => values.push(v));
+        } else if (flag !== "public" || !publicDisabled) {
+            values.push({value: flag, ...getPrincipalDisplay(flag, friendGroups, t)});
+        }
+    }
+    return values;
 }
 
 const connector = connect(
     (state: ClientState) => ({
+        friendGroups: getNodeFriendGroups(state),
         publicDisabled: getSetting(state, "principal.public.disabled") as boolean
     })
 );

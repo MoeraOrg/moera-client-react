@@ -1,6 +1,6 @@
 import { AvatarImage, FriendGroupInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getNodeFeatures, getToken } from "state/node/selectors";
+import { getToken } from "state/node/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 

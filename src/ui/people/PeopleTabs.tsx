@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { TFunction, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { FriendGroupInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { peopleGoToTab } from "state/people/actions";
 import { PeopleTab } from "state/people/state";
+import { getFriendGroupTitle } from "ui/control/principal-display";
 import PeopleTabsItem from "ui/people/PeopleTabsItem";
 import "./PeopleTabs.css";
 
@@ -34,9 +34,10 @@ const PeopleTabs = ({
             }
             {friendsTotal != null &&
                 friendGroups.map(friendGroup =>
-                    <PeopleTabsItem name={friendGroup.id} title={getTitle(friendGroup, t)} principal={viewFriends}
-                                    total={friendsTotal[friendGroup.id] ?? 0} loaded={loadedGeneral} active={active}
-                                    peopleGoToTab={peopleGoToTab} key={friendGroup.id}/>
+                    <PeopleTabsItem name={friendGroup.id} title={getFriendGroupTitle(friendGroup.title, t)}
+                                    principal={viewFriends} total={friendsTotal[friendGroup.id] ?? 0}
+                                    loaded={loadedGeneral} active={active} peopleGoToTab={peopleGoToTab}
+                                    key={friendGroup.id}/>
                 )
             }
             {friendOfsTotal != null &&
@@ -46,16 +47,6 @@ const PeopleTabs = ({
             }
         </ul>
     );
-}
-
-function getTitle(friendGroup: FriendGroupInfo, t: TFunction): string {
-    if (friendGroup.title == null) {
-        return "";
-    }
-    if (friendGroup.title.startsWith("t:")) {
-        return t("friend-groups." + friendGroup.title.substring(2));
-    }
-    return friendGroup.title;
 }
 
 const connector = connect(

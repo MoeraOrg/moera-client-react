@@ -82,6 +82,8 @@ import {
     faUser as faUserSolid,
     faUserCheck,
     faUserClock,
+    faUserGroup,
+    faUsers,
     faUserSecret,
     faUserSlash,
     faUserTimes
@@ -195,6 +197,8 @@ export default function initIconLibrary() {
     library.add(faUser);
     library.add(faUserCheck);
     library.add(faUserClock);
+    library.add(faUserGroup);
+    library.add(faUsers);
     library.add(faUserSecret);
     library.add(faUserSolid);
     library.add(faUserSlash);

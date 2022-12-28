@@ -10,10 +10,10 @@ const ComposeComments = () => {
     return (
         <ComposePageTool name="comments">
             <div className="ps-2 pb-2">
-                <PrincipalField name="viewCommentsPrincipal" values={["public", "signed", "private", "none"]}
+                <PrincipalField name="viewCommentsPrincipal" values={["public", "signed", "friends", "private", "none"]}
                                 title={t("comments-visible-to")} long setting="posting.comments.visibility.default"
                                 groupClassName="mb-1"/>
-                <PrincipalField name="addCommentPrincipal" values={["signed", "private", "none"]}
+                <PrincipalField name="addCommentPrincipal" values={["signed", "friends", "private", "none"]}
                                 title={t("commenting-allowed-to")} long setting="posting.comments.addition.default"/>
                 <CheckboxField name="hideComments" title={t("auto-hide-comments")}
                                setting="posting.comments.hide.default" anyValue/>

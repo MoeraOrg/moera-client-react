@@ -609,7 +609,10 @@ export interface Features {
 }
 
 export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
-    | "signed" | "public" | "unset";
+    | "signed" | "public" | "unset" | string;
+
+export type PrincipalFlag = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
+    | "signed" | "public" | "unset" | "friends";
 
 export interface SettingInfo {
     name: string;
@@ -623,7 +626,7 @@ export interface SettingTypeModifiers {
     multiline?: boolean | null;
     never?: boolean | null;
     always?: boolean | null;
-    principals?: PrincipalValue[] | null;
+    principals?: PrincipalFlag[] | null;
 }
 
 export type SettingType = "bool" | "int" | "string" | "json" | "Duration" | "PrivateKey" | "PublicKey" | "Timestamp"

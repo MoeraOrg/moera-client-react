@@ -1,4 +1,4 @@
-import { Choice, PrincipalValue, SettingType } from "api/node/api-types";
+import { Choice, PrincipalFlag, SettingType } from "api/node/api-types";
 
 export const PREFIX = "client.mercy.";
 export const PLUGIN_PREFIX = "plugin.";
@@ -12,7 +12,7 @@ export interface ClientSettingTypeModifiers {
     never?: boolean;
     always?: boolean;
     items?: Choice<string>[];
-    principals?: PrincipalValue[];
+    principals?: PrincipalFlag[];
 }
 
 export type ClientSettingScope = "desktop" | "mobile" | "android" | "device";
@@ -266,7 +266,7 @@ const META: ClientSettingMetaInfo[] = [
         type: "Principal",
         defaultValue: "public",
         modifiers: {
-            principals: ["public", "signed", "private"]
+            principals: ["public", "signed", "friends", "private"]
         }
     },
     {
@@ -274,7 +274,7 @@ const META: ClientSettingMetaInfo[] = [
         type: "Principal",
         defaultValue: "public",
         modifiers: {
-            principals: ["public", "signed", "private", "none"]
+            principals: ["public", "signed", "friends", "private", "none"]
         }
     },
     {
@@ -282,7 +282,7 @@ const META: ClientSettingMetaInfo[] = [
         type: "Principal",
         defaultValue: "signed",
         modifiers: {
-            principals: ["signed", "private", "none"]
+            principals: ["signed", "friends", "private", "none"]
         }
     },
     {

@@ -1,7 +1,9 @@
 import {
     AvatarImage,
     CommentOperationsInfo,
-    Features, FriendGroupInfo,
+    Features,
+    FriendGroupDetails,
+    FriendGroupInfo,
     PostingOperationsInfo,
     PrincipalValue
 } from "api/node/api-types";
@@ -33,6 +35,10 @@ export function getNodeFeatures(state: ClientState): Features | null {
 
 export function getNodeFriendGroups(state: ClientState): FriendGroupInfo[] {
     return getNodeFeatures(state)?.friendGroups?.available ?? [];
+}
+
+export function getNodeFriendGroupsMemberOf(state: ClientState): FriendGroupDetails[] {
+    return getNodeFeatures(state)?.friendGroups?.memberOf ?? [];
 }
 
 export function getToken(state: ClientState, rootLocation: string | null): string | null {
@@ -202,6 +208,10 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             }
             break;
         default:
+            if (principal.startsWith("f:")) {
+                return op.objectSourceName == null
+                    && getNodeFriendGroupsMemberOf(state)?.find(fgd => fgd.id === principal.substring(2)) != null;
+            }
             console.warn(`Don't know how to check '${principal}' principal`)
             break;
     }

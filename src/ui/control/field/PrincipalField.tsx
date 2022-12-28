@@ -1,14 +1,14 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { PrincipalValue } from "api/node/api-types";
+import { PrincipalFlag, PrincipalValue } from "api/node/api-types";
 import { FormGroup, PrincipalSelect } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 
 interface Props {
     name: string;
-    values?: PrincipalValue[] | null;
+    values?: PrincipalFlag[] | null;
     long?: boolean | null;
     title?: string;
     disabled?: boolean;
