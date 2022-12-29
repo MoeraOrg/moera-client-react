@@ -15,7 +15,7 @@ const mapPropsToValues = (): RichTextSpoilerValues => ({
 });
 
 const RichTextSpoilerDialog = ({t}: Props & WithTranslation) => (
-    <InputField name="title" title={t("alert-text")} placeholder="spoiler!" autoFocus/>
+    <InputField name="title" title={t("alert-text")} placeholder={t("spoiler-alert")} autoFocus/>
 );
 
 export default richTextEditorDialog<Props, RichTextSpoilerValues>("spoiler", mapPropsToValues, RichTextSpoilerDialog);

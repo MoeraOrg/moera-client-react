@@ -8,7 +8,6 @@ import 'react-datepicker/dist/react-datepicker.min.css';
 import "i18n";
 import store from "state/store";
 import { initFromLocation, initStorage } from "state/navigation/actions";
-import { registerSpoilerElement } from 'ui/customelements/MoeraSpoilerElement'
 import initIconLibrary from "./icons";
 import { Browser } from "ui/browser";
 import App from "ui/App";
@@ -28,7 +27,6 @@ const standalone = document.body.dataset.comPassword == null && document.body.da
 if (standalone || document.contentType === "text/plain") {
     Browser.init();
     initIconLibrary();
-    registerSpoilerElement();
     ReactDOM.render(
         <Provider store={store}>
             <App/>

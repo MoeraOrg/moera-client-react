@@ -14,6 +14,7 @@ import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
 import { isNumericString } from "util/misc";
+import MrSpoiler from "ui/entry/MrSpoiler";
 
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
@@ -108,6 +109,15 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
                 <Suspense fallback={<>Loading math...</>}>
                     <BlockMath math={(node as HTMLElement).innerText}/>
                 </Suspense>, node);
+        });
+        dom.current.querySelectorAll("mr-spoiler").forEach(node => {
+            const title = node.getAttribute("title") ?? undefined;
+            const html = node.innerHTML;
+
+            ReactDOM.render(
+                <Provider store={store}>
+                    <MrSpoiler title={title}><span dangerouslySetInnerHTML={{__html: html}}/></MrSpoiler>
+                </Provider>, node);
         });
     }
 

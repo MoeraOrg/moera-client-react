@@ -1,0 +1,7 @@
+.spoiler {
+    color: white;
+    background-color: black;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
