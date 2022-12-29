@@ -606,13 +606,14 @@ export interface Features {
     feedWidth: number;
     friendGroups?: FriendGroupsFeatures | null;
     ask?: AskSubject[] | null;
+    subscribed?: boolean | null;
 }
 
 export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
-    | "signed" | "public" | "unset" | string;
+    | "signed" | "subscribed" | "public" | "unset" | string;
 
 export type PrincipalFlag = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
-    | "signed" | "public" | "unset" | "friends";
+    | "signed" | "subscribed" | "public" | "friends" | "unset";
 
 export interface SettingInfo {
     name: string;

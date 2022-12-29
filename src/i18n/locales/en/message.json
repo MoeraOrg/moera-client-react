@@ -349,7 +349,8 @@
     "nobody" : "Nobody",
     "only-me" : "Only me",
     "public" : "Everybody",
-    "signed" : "Signed in"
+    "signed" : "Signed in",
+    "subscribed" : "Subscriptions"
   },
   "profile" : "Profile",
   "profile-edited-conflict" : "Profile was edited by somebody.",

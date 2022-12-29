@@ -2104,7 +2104,11 @@ export const FeaturesType: JSONSchemaType<API.Features> = {
                 type: "string"
             },
             nullable: true
-        }
+        },
+        "subscribed": {
+            type: "boolean",
+            nullable: true
+        },
     },
     required: ["posting", "feedWidth"],
     additionalProperties: false

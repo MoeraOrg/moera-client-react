@@ -41,6 +41,10 @@ export function getNodeFriendGroupsMemberOf(state: ClientState): FriendGroupDeta
     return getNodeFeatures(state)?.friendGroups?.memberOf ?? [];
 }
 
+export function isNodeSubscribedToHome(state: ClientState): boolean {
+    return getNodeFeatures(state)?.subscribed ?? false;
+}
+
 export function getToken(state: ClientState, rootLocation: string | null): string | null {
     if (rootLocation == null) {
         return null;
@@ -180,6 +184,11 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             return true;
         case "signed":
             if (isConnectedToHome(state)) {
+                return true;
+            }
+            break;
+        case "subscribed":
+            if (isNodeSubscribedToHome(state)) {
                 return true;
             }
             break;

@@ -61,7 +61,8 @@ function ProfileEditor(props: Props) {
                         <div className="row">
                             <InputField title={t("e-mail")} name="email" maxLength={63}
                                         groupClassName="col-sm-6 col-10 pe-0"/>
-                            <PrincipalField name="viewEmail" values={["public", "signed", "friends", "admin"]}
+                            <PrincipalField name="viewEmail"
+                                            values={["public", "signed", "subscribed", "friends", "admin"]}
                                             long={!Browser.isTinyScreen()}
                                             groupClassName="col-sm-6 col-2 align-self-end pb-1"/>
                         </div>

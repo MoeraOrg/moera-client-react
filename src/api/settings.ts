@@ -266,7 +266,7 @@ const META: ClientSettingMetaInfo[] = [
         type: "Principal",
         defaultValue: "public",
         modifiers: {
-            principals: ["public", "signed", "friends", "private"]
+            principals: ["public", "signed", "subscribed", "friends", "private"]
         }
     },
     {
@@ -274,7 +274,7 @@ const META: ClientSettingMetaInfo[] = [
         type: "Principal",
         defaultValue: "public",
         modifiers: {
-            principals: ["public", "signed", "friends", "private", "none"]
+            principals: ["public", "signed", "subscribed", "friends", "private", "none"]
         }
     },
     {
@@ -282,7 +282,7 @@ const META: ClientSettingMetaInfo[] = [
         type: "Principal",
         defaultValue: "signed",
         modifiers: {
-            principals: ["signed", "friends", "private", "none"]
+            principals: ["signed", "subscribed", "friends", "private", "none"]
         }
     },
     {

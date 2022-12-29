@@ -35,7 +35,8 @@ const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUp
         <span className="visibility">
             &middot;
             {editable ?
-                <PrincipalSelect value={value} values={["public", "signed", "friends", "private"]} onChange={onChange}/>
+                <PrincipalSelect value={value} values={["public", "signed", "subscribed", "friends", "private"]}
+                                 onChange={onChange}/>
             :
                 (posting.receiverDeletedAt == null ?
                     <Principal value={value}/>

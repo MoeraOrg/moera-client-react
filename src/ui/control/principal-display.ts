@@ -24,6 +24,11 @@ export function getPrincipalDisplay(principal: PrincipalValue | null | undefined
             display.title = t("principal-title.signed");
             break;
 
+        case "subscribed":
+            display.icon = "eye";
+            display.title = t("principal-title.subscribed");
+            break;
+
         case "private":
         case "owner":
             display.icon = "lock";
