@@ -1819,6 +1819,10 @@ const ChoiceType: JSONSchemaType<API.Choice<API.SourceFormat>> = {
 const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
     type: "object",
     properties: {
+        "post": {
+            type: "boolean",
+            nullable: true
+        },
         "subjectPresent": {
             type: "boolean"
         },

@@ -36,6 +36,7 @@ import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-log
 import ComposePreviewDialog from "ui/compose/ComposePreviewDialog";
 import Jump from "ui/navigation/Jump";
 import "./ComposePage.css";
+import { isAtHomeNode } from "state/node/selectors";
 
 export type ComposePageOuterProps = ConnectedProps<typeof connector>;
 
@@ -43,19 +44,24 @@ type Props = ComposePageOuterProps & FormikProps<ComposePageValues>;
 
 function ComposePage(props: Props) {
     const {
-        avatarDefault, features, loadingPosting, postingId, posting, loadingDraft, formId, conflict, beingPosted,
-        sharedText, smileysEnabled, composeConflictClose, values, resetForm
+        avatarDefault, features, loadingPosting, postingId, posting, loadingDraft, formId, postAllowed, conflict,
+        beingPosted, sharedText, smileysEnabled, composeConflictClose, values, resetForm
     } = props;
     const [initialPostingText, setInitialPostingText] = useState<PostingText>({bodySrc: ""});
 
     const {t} = useTranslation();
 
+    const [postWarningClosed, setPostWarningClosed] = useState<boolean>(false);
+
+    const postWarningClose = () => setPostWarningClosed(true);
+
     useEffect(() => {
         const values = composePageLogic.mapPropsToValues(props);
         setInitialPostingText(composePageLogic.mapValuesToPostingText(values, props));
         resetForm({values});
+        setPostWarningClosed(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [posting, avatarDefault, formId, sharedText, setInitialPostingText]); // 'props' are missing on purpose
+    }, [posting, avatarDefault, formId, sharedText, setInitialPostingText, setPostWarningClosed]); // 'props' are missing on purpose
 
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const loadingContent = loadingPosting || loadingDraft;
@@ -77,6 +83,8 @@ function ComposePage(props: Props) {
             <Page className="compose-page">
                 <div className="composer">
                     <Form>
+                        <ConflictWarning text={t("post-not-allowed")} show={!postAllowed && !postWarningClosed}
+                                         onClose={postWarningClose}/>
                         <ConflictWarning text={t("post-edited-conflict")} show={conflict}
                                          onClose={composeConflictClose}/>
                         <div className="info">
@@ -144,6 +152,7 @@ const connector = connect(
         draftId: state.compose.draftId,
         draft: state.compose.draft,
         formId: state.compose.formId,
+        postAllowed: state.node.features?.posting.post ?? isAtHomeNode(state),
         conflict: state.compose.conflict,
         beingPosted: state.compose.beingPosted,
         sharedText: state.compose.sharedText,

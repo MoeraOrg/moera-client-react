@@ -338,6 +338,7 @@
   "post-edited-conflict" : "The post was edited by somebody.",
   "posting-not-found" : "Post is not found or cannot be displayed.",
   "posting-updated-at" : "updated",
+  "post-not-allowed" : "You cannot post to this blog.",
   "post-preview" : "Post Preview",
   "preparing" : "Preparing...",
   "preserve-formatting" : "Preserve formatting",

@@ -338,6 +338,7 @@
   "post-edited-conflict" : "Пост був кимось відредагований.",
   "posting-not-found" : "Пост не знайдений або не може бути показаний.",
   "posting-updated-at" : "змінений",
+  "post-not-allowed" : "Ви не в змозі писати у цей блог.",
   "post-preview" : "Перегляд поста",
   "preparing" : "Підготовка...",
   "preserve-formatting" : "Зберегти форматування",

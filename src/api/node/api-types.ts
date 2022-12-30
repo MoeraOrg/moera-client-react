@@ -543,6 +543,7 @@ export interface Choice<T> {
 }
 
 export interface PostingFeatures {
+    post?: boolean | null;
     subjectPresent: boolean;
     sourceFormats: Choice<SourceFormat>[];
     mediaMaxSize: number;
