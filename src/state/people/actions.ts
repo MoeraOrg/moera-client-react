@@ -6,7 +6,8 @@ import {
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
-    PeopleGeneralInfo, PrincipalValue,
+    PeopleGeneralInfo,
+    PrincipalValue,
     SubscriberInfo,
     SubscriptionInfo
 } from "api/node/api-types";
@@ -19,6 +20,12 @@ export type PeopleGoToTabAction = ActionWithPayload<typeof PEOPLE_GO_TO_TAB, {
 export const peopleGoToTab = (tab: PeopleTab): PeopleGoToTabAction => ({
     type: PEOPLE_GO_TO_TAB,
     payload: {tab}
+});
+
+export const PEOPLE_GO_TO_DEFAULT_TAB = "PEOPLE_GO_TO_DEFAULT_TAB";
+export type PeopleGoToDefaultTabAction = Action<typeof PEOPLE_GO_TO_DEFAULT_TAB>;
+export const peopleGoToDefaultTab = (): PeopleGoToDefaultTabAction => ({
+    type: PEOPLE_GO_TO_DEFAULT_TAB
 });
 
 export const PEOPLE_GENERAL_LOAD = "PEOPLE_GENERAL_LOAD";
@@ -312,6 +319,7 @@ export const friendGroupAdded = (nodeName: string, details: FriendGroupInfo): Fr
 
 export type PeopleAnyAction =
     PeopleGoToTabAction
+    | PeopleGoToDefaultTabAction
     | PeopleGeneralLoadAction
     | PeopleGeneralLoadedAction
     | PeopleGeneralLoadFailedAction

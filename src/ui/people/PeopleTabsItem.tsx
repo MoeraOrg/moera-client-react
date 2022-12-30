@@ -21,7 +21,7 @@ const PeopleTabsItem = ({name, title, principal, total, loaded, active, peopleGo
             <span className="title">
                 {title}
                 {principal &&
-                    <Principal value={principal} defaultValue="public" icons={{"admin": "lock"}}/>
+                    <>{" "}<Principal value={principal} defaultValue="public" icons={{"admin": "lock"}}/></>
                 }
             </span>
             {loaded && <span className="badge">{total}</span>}

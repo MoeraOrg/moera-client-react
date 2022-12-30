@@ -20,6 +20,7 @@ import {
     friendsLoaded,
     friendsLoadFailed,
     PEOPLE_GENERAL_LOAD,
+    PEOPLE_GO_TO_DEFAULT_TAB,
     PEOPLE_SELECTED_ASK,
     PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS,
     PEOPLE_SELECTED_FRIEND,
@@ -31,6 +32,7 @@ import {
     PEOPLE_SELECTED_UNSUBSCRIBE,
     peopleGeneralLoaded,
     peopleGeneralLoadFailed,
+    peopleGoToTab,
     PeopleSelectedAskAction,
     PeopleSelectedChangeFriendGroupsAction,
     PeopleSelectedFriendshipSetVisibilityAction,
@@ -46,14 +48,28 @@ import {
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
 import { getHomeFriendsId } from "state/home/selectors";
+import { getNodeFriendGroups } from "state/node/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
-import { getPeopleSelectedContacts } from "state/people/selectors";
+import {
+    getPeopleSelectedContacts,
+    getPeopleTab,
+    isFriendOfsTotalVisible,
+    isFriendOfsVisible,
+    isFriendsTotalVisible,
+    isFriendsVisible,
+    isSubscribersTotalVisible,
+    isSubscribersVisible,
+    isSubscriptionsTotalVisible,
+    isSubscriptionsVisible
+} from "state/people/selectors";
 import { feedSubscribed, feedUnsubscribed } from "state/feeds/actions";
 import { nodeFeedSubscriberSetVisibility, nodeFeedSubscriptionSetVisibility } from "state/feeds/sagas";
 import { closeProgressBox, openProgressBox, updateProgressBox } from "state/progressbox/actions";
+import { PeopleTab } from "state/people/state";
 
 export default [
+    executor(PEOPLE_GO_TO_DEFAULT_TAB, "", peopleGoToDefaultTabSaga),
     executor(PEOPLE_GENERAL_LOAD, "", peopleGeneralLoadSaga, introduced),
     executor(SUBSCRIBERS_LOAD, "", subscribersLoadSaga, introduced),
     executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced),
@@ -71,6 +87,59 @@ export default [
     executor(PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY, "", peopleSelectedFriendshipSetVisibilitySaga),
     executor(PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS, "", peopleSelectedChangeFriendGroupsSaga)
 ];
+
+function* peopleGoToDefaultTabSaga() {
+    const {loaded, tab, friendGroups, ...visible} = yield* select(state => ({
+        loaded: state.people.loadedGeneral,
+        tab: getPeopleTab(state),
+        subscribers: isSubscribersVisible(state) || isSubscribersTotalVisible(state),
+        subscriptions: isSubscriptionsVisible(state) || isSubscriptionsTotalVisible(state),
+        friends: isFriendsVisible(state) || isFriendsTotalVisible(state),
+        friendOfs: isFriendOfsVisible(state) || isFriendOfsTotalVisible(state),
+        friendGroups: getNodeFriendGroups(state),
+        friendGroupTab: getNodeFriendGroups(state).map(fg => fg.id).includes(getPeopleTab(state))
+    }));
+
+    if (!loaded) {
+        return;
+    }
+
+    switch (tab) {
+        case "subscribers":
+            if (visible.subscribers) {
+                return;
+            }
+            break;
+        case "subscriptions":
+            if (visible.subscriptions) {
+                return;
+            }
+            break;
+        case "friend-ofs":
+            if (visible.friendOfs) {
+                return;
+            }
+            break;
+        default:
+            if (visible.friends && visible.friendGroupTab) {
+                return;
+            }
+    }
+
+    let targetTab: PeopleTab;
+    if (visible.subscribers) {
+        targetTab = "subscribers";
+    } else if (visible.subscriptions) {
+        targetTab = "subscriptions"
+    } else if (visible.friends && friendGroups.length > 0) {
+        targetTab = friendGroups[0].id;
+    } else if (visible.friendOfs) {
+        targetTab = "friend-ofs";
+    } else {
+        return;
+    }
+    yield* put(peopleGoToTab(targetTab));
+}
 
 function* peopleGeneralLoadSaga() {
     try {

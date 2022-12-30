@@ -7,7 +7,7 @@ import {
     SubscriptionInfo
 } from "api/node/api-types";
 
-export type PeopleTab = string;
+export type PeopleTab = "subscribers" | "subscriptions" | "friend-ofs" | string;
 
 export interface ContactState {
     contact: ContactInfo;

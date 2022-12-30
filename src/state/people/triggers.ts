@@ -27,7 +27,7 @@ import {
     PEOPLE_GENERAL_LOADED,
     PEOPLE_GO_TO_TAB,
     peopleGeneralLoad,
-    peopleGeneralUnset,
+    peopleGeneralUnset, peopleGoToDefaultTab,
     peopleGoToTab,
     peopleUnset,
     subscribersLoad,
@@ -48,26 +48,7 @@ export default [
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendsTab, isFriendsToBeLoaded), friendsLoad),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendOfsTab, isFriendOfsToBeLoaded), friendOfsLoad),
-    trigger(
-        PEOPLE_GENERAL_LOADED,
-        conj(isAtPeoplePage, inv(isSubscribersVisible), inv(isSubscribersTotalVisible), isAtSubscribersTab),
-        peopleGoToTab("subscriptions")
-    ),
-    trigger(
-        PEOPLE_GENERAL_LOADED,
-        conj(isAtPeoplePage, inv(isSubscriptionsVisible), inv(isSubscriptionsTotalVisible), isAtSubscriptionsTab),
-        peopleGoToTab("subscribers")
-    ),
-    trigger(
-        PEOPLE_GENERAL_LOADED,
-        conj(isAtPeoplePage, inv(isFriendsVisible), inv(isFriendsTotalVisible), isAtFriendsTab),
-        peopleGoToTab("subscribers") // FIXME not exactly
-    ),
-    trigger(
-        PEOPLE_GENERAL_LOADED,
-        conj(isAtPeoplePage, inv(isFriendOfsVisible), inv(isFriendOfsTotalVisible), isAtFriendOfsTab),
-        peopleGoToTab("subscribers") // FIXME not exactly
-    ),
+    trigger(PEOPLE_GENERAL_LOADED, isAtPeoplePage, peopleGoToDefaultTab),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtPeoplePage, peopleGeneralLoad),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, peopleUnset),
     trigger(
