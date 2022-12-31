@@ -40,10 +40,10 @@ function* lightBoxMediaPostingLoadSaga() {
 function* lightBoxMediaSetSaga(action: LightBoxMediaSetAction) {
     switch (action.payload.sequence) {
         case "next-loop":
-            yield* put(flashBox(i18n.t("returned-to-beginning")));
+            yield* put(flashBox(i18n.t("returned-to-beginning"), true));
             break;
         case "prev-loop":
-            yield* put(flashBox(i18n.t("returned-to-end")));
+            yield* put(flashBox(i18n.t("returned-to-end"), true));
             break;
     }
 }

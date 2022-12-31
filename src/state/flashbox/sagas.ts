@@ -8,12 +8,9 @@ export default [
 ];
 
 function* flashBoxSaga(action: FlashBoxAction) {
-    if (window.Android && window.Android.toast) {
-        window.Android.toast(action.payload.message);
-        return;
-    }
+    const {short} = action.payload;
 
-    yield* delay(1000);
+    yield* delay(!short ? 1000 : 0);
     yield* put(flashBoxDismiss());
     yield* delay(1000);
     yield* put(flashBoxClose());

@@ -5,10 +5,11 @@ import { ActionWithPayload } from "state/action-types";
 export const FLASH_BOX = "FLASH_BOX";
 export type FlashBoxAction = ActionWithPayload<typeof FLASH_BOX, {
     message: string;
+    short: boolean;
 }>;
-export const flashBox = (message: string): FlashBoxAction => ({
+export const flashBox = (message: string, short: boolean = false): FlashBoxAction => ({
     type: FLASH_BOX,
-    payload: {message}
+    payload: {message, short}
 });
 
 export const FLASH_BOX_DISMISS = "FLASH_BOX_DISMISS";
