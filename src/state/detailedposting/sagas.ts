@@ -326,8 +326,8 @@ function* commentPostSaga(action: CommentPostAction) {
         yield* put(commentSet(receiverName, comment));
         yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment));
 
-        const draftId = yield* select(state =>
-            commentId == null ? state.detailedPosting.compose.draft.id : state.detailedPosting.commentDialog.draft.id);
+        const draftId = yield* select((state: ClientState) =>
+            (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id);
         if (draftId != null) {
             yield* call(Node.deleteDraft, ":", draftId);
         }
