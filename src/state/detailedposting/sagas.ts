@@ -307,7 +307,7 @@ function* commentLoadSaga(action: CommentLoadAction) {
 }
 
 function* commentPostSaga(action: CommentPostAction) {
-    const {commentId, postingId, draftId, commentText, commentSourceText} = action.payload;
+    const {commentId, postingId, commentText, commentSourceText} = action.payload;
 
     const {receiverName, receiverPostingId} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
@@ -325,9 +325,13 @@ function* commentPostSaga(action: CommentPostAction) {
         }
         yield* put(commentSet(receiverName, comment));
         yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment));
+
+        const draftId = yield* select(state =>
+            commentId == null ? state.detailedPosting.compose.draft.id : state.detailedPosting.commentDialog.draft.id);
         if (draftId != null) {
             yield* call(Node.deleteDraft, ":", draftId);
         }
+
         if (receiverName !== commentText.ownerName) {
             yield* call(Node.putRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentSourceText);
         }
@@ -406,7 +410,7 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
 }
 
 function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
-    const {draftId, draftText} = action.payload;
+    const {draftId, draftText, formId} = action.payload;
 
     if (draftText.receiverPostingId == null) {
         return;
@@ -420,7 +424,7 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
             draft = yield* call(Node.putDraft, ":", draftId, draftText);
         }
         yield* put(commentDraftSaved(draftText.receiverName, draftText.receiverPostingId,
-            draftText.receiverCommentId ?? null, draft));
+            draftText.receiverCommentId ?? null, draft, formId));
     } catch (e) {
         yield* put(commentDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
             draftText.receiverCommentId ?? null));

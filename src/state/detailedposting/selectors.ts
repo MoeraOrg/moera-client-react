@@ -182,6 +182,12 @@ export function isCommentComposerReplied(state: ClientState): boolean {
     return getCommentComposerRepliedToId(state) != null;
 }
 
+export function isCommentPosted(state: ClientState, commentId: string | null, formId: number | null): boolean {
+    return commentId == null
+        ? state.detailedPosting.compose.formId !== formId
+        : commentId === state.detailedPosting.commentDialog.commentId && state.detailedPosting.commentDialog.posted;
+}
+
 export function isCommentDialogShown(state: ClientState): boolean {
     return state.detailedPosting.commentDialog.show;
 }

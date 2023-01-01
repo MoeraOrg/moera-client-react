@@ -62,6 +62,7 @@ export interface CommentDialogState {
     commentId: string | null;
     comment: CommentInfo | null;
     beingPosted: boolean;
+    posted: boolean;
     conflict: boolean;
     loadingDraft: boolean;
     loadedDraft: boolean;

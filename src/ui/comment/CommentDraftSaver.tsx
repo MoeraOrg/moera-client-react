@@ -43,7 +43,7 @@ const toDraftText = (receiverName: string, postingId: string, commentId: string 
 const ComposeDraftSaver = (props: Props) => {
     const {
         initialized, initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId,
-        repliedToId, comment, draft, commentDraftSave, commentDraftDelete, commentDialogCommentReset
+        repliedToId, comment, formId, draft, commentDraftSave, commentDraftDelete, commentDialogCommentReset
     } = props;
 
     const toText = (values: CommentComposeValues): CommentText | null =>
@@ -61,7 +61,7 @@ const ComposeDraftSaver = (props: Props) => {
                     .map(rm => [rm.id, rm])
             );
             commentDraftSave(draft?.id ?? null,
-                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media));
+                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media), formId);
         }
     };
 
@@ -92,6 +92,7 @@ const connector = connect(
             ? getCommentComposerRepliedToId(state)
             : getCommentDialogComment(state)?.repliedTo?.id ?? null,
         comment: ownProps.commentId != null ? state.detailedPosting.commentDialog.comment : null,
+        formId: ownProps.commentId != null ? null : state.detailedPosting.compose.formId,
         draft: ownProps.commentId == null
             ? state.detailedPosting.compose.draft
             : state.detailedPosting.commentDialog.draft,

@@ -266,10 +266,12 @@ export const COMMENT_DRAFT_SAVE = "COMMENT_DRAFT_SAVE";
 export type CommentDraftSaveAction = ActionWithPayload<typeof COMMENT_DRAFT_SAVE, {
     draftId: string | null;
     draftText: DraftText;
+    formId: number | null;
 }>;
-export const commentDraftSave = (draftId: string | null, draftText: DraftText): CommentDraftSaveAction => ({
+export const commentDraftSave = (draftId: string | null, draftText: DraftText,
+                                 formId: number | null): CommentDraftSaveAction => ({
     type: COMMENT_DRAFT_SAVE,
-    payload: {draftId, draftText}
+    payload: {draftId, draftText, formId}
 });
 
 export const COMMENT_DRAFT_SAVED = "COMMENT_DRAFT_SAVED";
@@ -278,11 +280,12 @@ export type CommentDraftSavedAction = ActionWithPayload<typeof COMMENT_DRAFT_SAV
     postingId: string;
     commentId: string | null;
     draft: DraftInfo;
+    formId: number | null;
 }>;
 export const commentDraftSaved = (nodeName: string, postingId: string, commentId: string | null,
-                                  draft: DraftInfo): CommentDraftSavedAction => ({
+                                  draft: DraftInfo, formId: number | null): CommentDraftSavedAction => ({
     type: COMMENT_DRAFT_SAVED,
-    payload: {nodeName, postingId, commentId, draft}
+    payload: {nodeName, postingId, commentId, draft, formId}
 });
 
 export const COMMENT_DRAFT_SAVE_FAILED = "COMMENT_DRAFT_SAVE_FAILED";
@@ -317,14 +320,13 @@ export const COMMENT_POST = "COMMENT_POST";
 export type CommentPostAction = ActionWithPayload<typeof COMMENT_POST, {
     postingId: string;
     commentId: string | null;
-    draftId: string | null;
     commentText: CommentText;
     commentSourceText: CommentSourceText;
 }>;
-export const commentPost = (postingId: string, commentId: string | null, draftId: string | null,
-                            commentText: CommentText, commentSourceText: CommentSourceText): CommentPostAction => ({
+export const commentPost = (postingId: string, commentId: string | null, commentText: CommentText,
+                            commentSourceText: CommentSourceText): CommentPostAction => ({
     type: COMMENT_POST,
-    payload: {postingId, commentId, draftId, commentText, commentSourceText}
+    payload: {postingId, commentId, commentText, commentSourceText}
 });
 
 export const COMMENT_POSTED = "COMMENT_POSTED";

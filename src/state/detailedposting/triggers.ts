@@ -15,10 +15,14 @@ import {
     CLOSE_COMMENT_DIALOG,
     closeCommentDialog,
     COMMENT_COMPOSE_CANCEL,
+    COMMENT_DRAFT_SAVED,
     COMMENT_POSTED,
     commentDialogCommentLoad,
+    commentDialogCommentReset,
     commentDialogConflict,
+    commentDraftDelete,
     commentDraftLoad,
+    CommentDraftSavedAction,
     commentLoad,
     CommentPostedAction,
     commentReactionLoad,
@@ -50,6 +54,7 @@ import {
     isCommentDialogDraftToBeLoaded,
     isCommentDialogShown,
     isCommentMomentInLoadedRange,
+    isCommentPosted,
     isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
     isDetailedPostingDefined,
@@ -156,6 +161,14 @@ export default [
         signal => commentsScrollToAnchor(signal.payload.moment)
     ),
     trigger([COMMENT_POSTED, COMMENT_COMPOSE_CANCEL], true, bottomMenuShow),
+    trigger(
+        COMMENT_DRAFT_SAVED,
+        (state, signal: CommentDraftSavedAction) =>
+            isCommentPosted(state, signal.payload.commentId, signal.payload.formId),
+        signal => signal.payload.commentId == null
+            ? commentDraftDelete()
+            : commentDialogCommentReset(signal.payload.draft.id, false)
+    ),
     trigger(
         [EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED],
         (state, signal: EventAction<CommentAddedEvent | CommentUpdatedEvent>) =>

@@ -27,8 +27,8 @@ interface MapToCommentTextProps {
 
 interface CommentComposeProps extends MapToValuesProps, MapToCommentTextProps {
     receiverPostingId: string | null;
-    commentPost: (postingId: string, commentId: string | null, draftId: string | null,
-                  commentText: CommentText, commentSourceText: CommentSourceText) => void;
+    commentPost: (postingId: string, commentId: string | null, commentText: CommentText,
+                  commentSourceText: CommentSourceText) => void;
 }
 
 export interface CommentComposeValues {
@@ -152,7 +152,6 @@ const commentComposeLogic = {
             formik.props.commentPost(
                 formik.props.receiverPostingId,
                 formik.props.comment != null ? formik.props.comment.id : null,
-                formik.props.draft?.id ?? null,
                 commentText,
                 commentSourceText
             );

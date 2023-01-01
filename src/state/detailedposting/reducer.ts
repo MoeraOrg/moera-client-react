@@ -63,8 +63,13 @@ import {
     GLANCE_COMMENT_LOADED,
     OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
-import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
-import { CommentsState, DetailedPostingState, ExtCommentInfo } from "state/detailedposting/state";
+import {
+    CommentComposeState,
+    CommentDialogState,
+    CommentsState,
+    DetailedPostingState,
+    ExtCommentInfo
+} from "state/detailedposting/state";
 import { ClientAction } from "state/action";
 import { CommentInfo } from "api/node/api-types";
 import {
@@ -72,8 +77,9 @@ import {
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
     EVENT_RECEIVER_COMMENT_DELETED
 } from "api/events/actions";
+import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 
-const emptyComments = {
+const emptyComments: CommentsState = {
     receiverName: null,
     receiverFullName: null,
     receiverPostingId: null,
@@ -96,7 +102,7 @@ const emptyComments = {
     glanceComment: null
 };
 
-const emptyCompose = {
+const emptyCompose: Omit<CommentComposeState, "formId"> = {
     beingPosted: false,
     focused: false,
     repliedToId: null,
@@ -110,13 +116,14 @@ const emptyCompose = {
     savedDraft: false
 };
 
-const emptyComposeDialog = {
+const emptyComposeDialog: CommentDialogState = {
     show: false,
     loading: false,
     loaded: false,
     commentId: null,
     comment: null,
     beingPosted: false,
+    posted: false,
     conflict: false,
     loadingDraft: false,
     loadedDraft: false,
@@ -125,7 +132,7 @@ const emptyComposeDialog = {
     savedDraft: false
 };
 
-const initialState = {
+const initialState: DetailedPostingState = {
     id: null,
     loading: false,
     loadedAttached: false,
@@ -441,7 +448,10 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
             });
 
             if (action.payload.commentId === state.commentDialog.commentId) {
-                istate.set("commentDialog", cloneDeep(emptyComposeDialog));
+                istate.assign("commentDialog", {
+                    show: false,
+                    posted: true
+                });
             } else {
                 istate.assign("compose", {
                     formId: state.compose.formId + 1,
