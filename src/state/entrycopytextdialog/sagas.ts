@@ -10,7 +10,7 @@ import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { Browser } from "ui/browser";
-import { clearHtml, containsTags, htmlEntities, htmlToEmoji, quoteHtml } from "util/html";
+import { clearHtml, containsTags, htmlEntities, quoteHtml } from "util/html";
 import { mediaImagePreview } from "util/media-images";
 import { urlWithParameters } from "util/url";
 
@@ -26,8 +26,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
     }
 
     if (mode === "ask") {
-        const clean = text.replace(/<\/?(p|br)(\s[^>]*)?>/gi, "");
-        if (!containsTags(htmlToEmoji(clean))) {
+        if (!containsTags(text, "basic")) {
             mode = "text";
         }
     }

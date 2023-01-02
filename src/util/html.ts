@@ -206,6 +206,7 @@ export function quoteHtml(html?: string | null): string | null {
         .replace(/<\/p>/gi, "")
         .replace(/\n*<br\s*\/?>\n*/gi, "\n")
         .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
+        .replace(/<a[^>]*href=(['"])([^'"]+)\1[^>]*>\2<\/a>/gi, "$2")
         .replace(/\n\s*\n/g, "\n\n")
         .trim()
 }
@@ -219,7 +220,20 @@ export function htmlToEmoji(html: string): string {
             (g0, g1) => String.fromCodePoint(parseInt(g1, 16)));
 }
 
-export function containsTags(html: string): boolean {
+type ReplacementLevel = "none" | "basic" | "all";
+
+export function containsTags(html: string, replacementLevel: ReplacementLevel): boolean {
+    if (replacementLevel !== "none") {
+        if (replacementLevel === "all") {
+            html = html.replace(/<\/?(p|div|span|br)(\s[^>]*)?>/gi, "");
+        } else {
+            html = html.replace(/<\/?(p|br)(\s[^>]*)?>/gi, "");
+        }
+        html = html
+            .replace(/<a[^>]*data-nodename[^>]*>(@[^<]+)<\/a>/gi, "$1")
+            .replace(/<a[^>]*href=(['"])([^'"]+)\1[^>]*>\2<\/a>/gi, "$2");
+        html = htmlToEmoji(html);
+    }
     return html.search(/<[a-zA-z][^\n]*>/) >= 0;
 }
 
