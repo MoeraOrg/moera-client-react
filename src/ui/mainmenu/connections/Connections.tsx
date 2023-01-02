@@ -80,7 +80,9 @@ function Connections({
                 <FontAwesomeIcon icon="plus"/> {t("add-connection")}
             </div>
             <div className="connection-sign-up">
-                <Button variant="primary" size="sm" onClick={onSignUpClick}>{t("sign-up")}</Button>
+                <Button variant="outline-secondary" size="sm" onClick={onSignUpClick}>
+                    {t("create-another-blog")}
+                </Button>
             </div>
         </div>
     );

@@ -78,6 +78,7 @@
   "count-subscribers" : "<0>{count}</0> {count, plural, one {подписчик} few {подписчика} other {подписчиков}}",
   "count-subscriptions" : "<0>{count}</0> {count, plural, one {подписка} few {подписки} other {подписок}}",
   "create" : "Создать",
+  "create-another-blog" : "Создать ещё один блог",
   "create-avatar" : "Создать аватар",
   "create-blog" : "Создать блог",
   "created-at" : "Создан:",

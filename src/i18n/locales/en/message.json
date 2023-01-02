@@ -78,6 +78,7 @@
   "count-subscribers" : "<0>{count}</0> {count, plural, one {subscriber} other {subscribers}}",
   "count-subscriptions" : "<0>{count}</0> {count, plural, one {subscription} other {subscriptions}}",
   "create" : "Create",
+  "create-another-blog" : "Create another blog",
   "create-avatar" : "Create Avatar",
   "create-blog" : "Create a Blog",
   "created-at" : "Created at:",
