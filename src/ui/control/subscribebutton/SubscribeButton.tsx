@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { isPrincipalIn } from "state/node/selectors";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { friendshipUpdate } from "state/people/actions";
 import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
@@ -97,7 +98,7 @@ function SubscribeButtonImpl({
                     title: t("unsubscribe"),
                     href: peerHref,
                     onClick: onUnsubscribe,
-                    show: subscribed
+                    show: subscribed && isPrincipalIn("delete", subscription, "admin", "admin")
                 },
                 {
                     divider: true

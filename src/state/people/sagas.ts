@@ -48,7 +48,7 @@ import {
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
 import { getHomeFriendsId } from "state/home/selectors";
-import { getNodeFriendGroups } from "state/node/selectors";
+import { getNodeFriendGroups, isPrincipalIn } from "state/node/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { storySatisfy } from "state/stories/actions";
 import {
@@ -270,7 +270,8 @@ function* peopleSelectedUnsubscribeSaga() {
     yield* put(openProgressBox());
     let subscriptions: SubscriptionInfo[] = [];
     try {
-        subscriptions = yield* call(Node.searchSubscriptions, ":", "feed", remoteFeeds, null);
+        subscriptions = (yield* call(Node.searchSubscriptions, ":", "feed", remoteFeeds, null))
+            .filter(sr => isPrincipalIn("delete", sr, "admin", "admin"));
     } catch (e) {
         yield* put(errorThrown(e));
         yield* put(closeProgressBox());

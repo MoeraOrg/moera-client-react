@@ -2504,6 +2504,10 @@ export const SubscriptionInfoType: JSONSchemaType<API.SubscriptionInfo> = {
                 "view": {
                     type: "string",
                     nullable: true
+                },
+                "delete": {
+                    type: "string",
+                    nullable: true
                 }
             },
             nullable: true,

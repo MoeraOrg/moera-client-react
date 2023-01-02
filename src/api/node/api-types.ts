@@ -753,6 +753,7 @@ export interface SubscriptionInfo {
     createdAt: number;
     operations?: {
         view?: PrincipalValue | null;
+        delete?: PrincipalValue | null;
     } | null;
 }
 
