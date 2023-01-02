@@ -19,8 +19,7 @@ import {
     NODE_CARD_SUBSCRIPTION_LOAD_FAILED,
     NODE_CARD_SUBSCRIPTION_SET,
     NODE_CARDS_CLIENT_SWITCH,
-    NODE_CARDS_REFRESH,
-    NODE_CARDS_UNSET
+    NODE_CARDS_REFRESH
 } from "state/nodecards/actions";
 import {
     FEED_SUBSCRIBE,
@@ -411,8 +410,8 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             const istate = immutable.wrap(state);
             istate.set("clientName", homeOwnerNameOrUrl);
             for (const nodeName of Object.getOwnPropertyNames(state.cards)) {
+                istate.set(["cards", nodeName, "details", "loaded"], false);
                 istate.assign(["cards", nodeName], {
-                    details: cloneDeep(emptyCard.details),
                     people: cloneDeep(emptyCard.people),
                     subscription: cloneDeep(emptyCard.subscription),
                     friendship: cloneDeep(emptyCard.friendship)
@@ -431,9 +430,6 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             }
             return istate.value();
         }
-
-        case NODE_CARDS_UNSET:
-            return cloneDeep(initialState);
 
         case EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED: {
             const {name, fullName} = action.payload;

@@ -6,8 +6,7 @@ import {
     nodeCardDetailsSet,
     nodeCardPrepare,
     nodeCardsClientSwitch,
-    nodeCardsRefresh,
-    nodeCardsUnset
+    nodeCardsRefresh
 } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET, HomeOwnerSetAction } from "state/home/actions";
@@ -26,7 +25,6 @@ export default [
         nodeCardsClientSwitch
     ),
     trigger(PULSE_6H, true, nodeCardsRefresh),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, nodeCardsUnset),
     trigger(
         [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
         true,

@@ -174,12 +174,6 @@ export const nodeCardsRefresh = (): NodeCardsRefreshAction => ({
     type: NODE_CARDS_REFRESH
 });
 
-export const NODE_CARDS_UNSET = "NODE_CARDS_UNSET";
-export type NodeCardsUnsetAction = Action<typeof NODE_CARDS_UNSET>;
-export const nodeCardsUnset = (): NodeCardsUnsetAction => ({
-    type: NODE_CARDS_UNSET
-});
-
 export const NODE_CARD_COPY_MENTION = "NODE_CARD_COPY_MENTION";
 export type NodeCardCopyMentionAction = ActionWithPayload<typeof NODE_CARD_COPY_MENTION, {
     nodeName: string;
@@ -209,5 +203,4 @@ export type NodeCardsAnyAction =
     | NodeCardFriendshipSetAction
     | NodeCardsClientSwitchAction
     | NodeCardsRefreshAction
-    | NodeCardsUnsetAction
     | NodeCardCopyMentionAction;
