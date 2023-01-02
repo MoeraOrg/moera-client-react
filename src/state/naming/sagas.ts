@@ -111,7 +111,7 @@ function* namingNamesMaintenanceSaga() {
         yield* put(namingNamesUsed(Array.from(used)));
     }
     const details = yield* select(state => state.naming.names);
-    const names = Object.getOwnPropertyNames(details);
+    const names = Object.keys(details);
     if (names.length <= MAX_NAMES_SIZE) {
         return;
     }

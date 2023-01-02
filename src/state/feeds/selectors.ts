@@ -8,7 +8,7 @@ import { getSetting } from "state/settings/selectors";
 const MAX_MOMENT = 25337597040000; // January 1, 9999
 
 export function getAllFeeds(state: ClientState): string[] {
-    return Object.getOwnPropertyNames(state.feeds);
+    return Object.keys(state.feeds);
 }
 
 export function getFeedState(state: ClientState, feedName: string): FeedState {

@@ -156,8 +156,8 @@ function* postingReactionsReloadSaga() {
         postingsState: state.postings,
         connectedToHome: isConnectedToHome(state)
     }));
-    for (const nodeName of Object.getOwnPropertyNames(postingsState)) {
-        const ids = Object.getOwnPropertyNames(postingsState[nodeName]);
+    for (const nodeName of Object.keys(postingsState)) {
+        const ids = Object.keys(postingsState[nodeName] ?? {});
         if (connectedToHome) {
             const infos = yield* call(Node.searchPostingReactions, nodeName, ids);
             const reactions = infos

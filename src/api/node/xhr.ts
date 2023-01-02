@@ -85,7 +85,7 @@ export function xhrFetch(url: string, options: FetcherOptions): Promise<Response
                 options.headers.forEach(header => xhr.setRequestHeader(header[0], header[1]));
             } else {
                 const headers = options.headers;
-                Object.getOwnPropertyNames(headers).forEach(name => xhr.setRequestHeader(name, headers[name]))
+                Object.keys(headers).forEach(name => xhr.setRequestHeader(name, headers[name]))
             }
         }
         xhr.send(options.body);

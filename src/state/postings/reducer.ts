@@ -257,8 +257,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
         case POSTING_COMMENT_COUNT_UPDATE: {
             const {id, nodeName, delta} = action.payload;
             const istate = immutable.wrap(state);
-            for (const postingNode of Object.getOwnPropertyNames(state)) {
-                for (const postingId of Object.getOwnPropertyNames(state[postingNode])) {
+            for (const postingNode of Object.keys(state)) {
+                for (const postingId of Object.keys(state[postingNode] ?? {})) {
                     const posting = state[postingNode]![postingId]!.posting;
                     if ((postingNode === nodeName && postingId === id)
                         || (posting.receiverName === nodeName && posting.receiverPostingId === id)

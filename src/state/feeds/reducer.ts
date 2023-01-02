@@ -106,7 +106,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
     switch (action.type) {
         case INIT_FROM_LOCATION: {
             const istate = immutable.wrap(state);
-            Object.getOwnPropertyNames(state)
+            Object.keys(state)
                 .filter(name => !name.startsWith(":"))
                 .forEach(name => istate.del([name]));
             return istate.value();

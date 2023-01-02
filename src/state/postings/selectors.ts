@@ -70,7 +70,7 @@ interface FullPostingId {
 export function findPostingIdsByRemote(postings: PostingsState, remoteNodeName: string | null,
                                        remotePostingId: string | null): FullPostingId[] {
     const ids: FullPostingId[] = [];
-    for (let nodeName of Object.getOwnPropertyNames(postings)) {
+    for (let nodeName of Object.keys(postings)) {
         const nodePostings = postings[nodeName];
         if (nodePostings == null) {
             continue;

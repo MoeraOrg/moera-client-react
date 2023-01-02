@@ -409,7 +409,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             }
             const istate = immutable.wrap(state);
             istate.set("clientName", homeOwnerNameOrUrl);
-            for (const nodeName of Object.getOwnPropertyNames(state.cards)) {
+            for (const nodeName of Object.keys(state.cards)) {
                 istate.set(["cards", nodeName, "details", "loaded"], false);
                 istate.assign(["cards", nodeName], {
                     people: cloneDeep(emptyCard.people),
@@ -422,7 +422,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
 
         case NODE_CARDS_REFRESH: {
             const istate = immutable.wrap(state);
-            for (const nodeName of Object.getOwnPropertyNames(state.cards)) {
+            for (const nodeName of Object.keys(state.cards)) {
                 istate.assign(["cards", nodeName], { // Other parts are refreshed by events
                     stories: cloneDeep(emptyCard.stories),
                     people: cloneDeep(emptyCard.people)
@@ -535,7 +535,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
 
         case EVENT_HOME_FRIEND_GROUP_DELETED: {
             const istate = immutable.wrap(state);
-            for (let nodeName of Object.getOwnPropertyNames(state.cards)) {
+            for (let nodeName of Object.keys(state.cards)) {
                 if (state.cards[nodeName]?.friendship.groups != null) {
                     istate.update(["cards", nodeName, "friendship", "groups"],
                         (groups: FriendGroupDetails[]) => groups.filter(fg => fg.id !== action.payload.friendGroupId));
