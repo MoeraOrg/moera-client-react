@@ -513,6 +513,9 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
 
         case EVENT_HOME_SUBSCRIPTION_ADDED: {
             const {subscription} = action.payload;
+            if (subscription.type !== "feed") {
+                return state;
+            }
             return getCard(state, subscription.remoteNodeName).istate
                 .assign(["cards", subscription.remoteNodeName, "subscription"], {
                     subscribing: false,
@@ -523,6 +526,9 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
 
         case EVENT_HOME_SUBSCRIPTION_DELETED: {
             const {subscription} = action.payload;
+            if (subscription.type !== "feed") {
+                return state;
+            }
             return getCard(state, subscription.remoteNodeName).istate
                 .assign(["cards", subscription.remoteNodeName, "subscription"], {
                     unsubscribing: false,

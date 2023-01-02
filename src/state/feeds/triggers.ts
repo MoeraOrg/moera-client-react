@@ -174,14 +174,16 @@ export default [
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal: WithContext<EventAction<SubscriptionAddedEvent>>) =>
-            getOwnerName(state) === signal.payload.subscription.remoteNodeName
+            signal.payload.subscription.type === "feed"
+            && getOwnerName(state) === signal.payload.subscription.remoteNodeName
             && signal.payload.subscription.remoteFeedName != null,
         signal => feedSubscribed(signal.payload.subscription.remoteNodeName, signal.payload.subscription)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal: EventAction<SubscriptionDeletedEvent>) =>
-            getOwnerName(state) === signal.payload.subscription.remoteNodeName
+            signal.payload.subscription.type === "feed"
+            && getOwnerName(state) === signal.payload.subscription.remoteNodeName
             && signal.payload.subscription.remoteFeedName != null,
         signal => feedUnsubscribed(signal.payload.subscription.remoteNodeName,
             signal.payload.subscription.remoteFeedName!, signal.payload.subscription.contact ?? null)
@@ -189,7 +191,8 @@ export default [
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal: EventAction<SubscriptionAddedEvent>) =>
-            signal.payload.subscription.remotePostingId != null
+            signal.payload.subscription.type === "posting-comments"
+            && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
         signal => postingSubscriptionSet(signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
             signal.payload.subscription.id)
@@ -197,7 +200,8 @@ export default [
     trigger(
         EVENT_HOME_SUBSCRIPTION_ADDED,
         (state, signal: EventAction<SubscriptionAddedEvent>) =>
-            signal.payload.subscription.remotePostingId != null
+            signal.payload.subscription.type === "posting-comments"
+            && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
         signal => remotePostingSubscriptionSet(signal.payload.subscription.remoteNodeName,
             signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
@@ -206,7 +210,8 @@ export default [
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal: EventAction<SubscriptionDeletedEvent>) =>
-            signal.payload.subscription.remotePostingId != null
+            signal.payload.subscription.type === "posting-comments"
+            && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
         signal => postingSubscriptionSet(signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
             null)
@@ -214,7 +219,8 @@ export default [
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
         (state, signal: EventAction<SubscriptionDeletedEvent>) =>
-            signal.payload.subscription.remotePostingId != null
+            signal.payload.subscription.type === "posting-comments"
+            && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
         signal => remotePostingSubscriptionSet(signal.payload.subscription.remoteNodeName,
             signal.payload.subscription.remotePostingId!, signal.payload.subscription.type, null)

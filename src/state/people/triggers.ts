@@ -8,18 +8,10 @@ import {
     isAtSubscribersTab,
     isAtSubscriptionsTab,
     isFriendOfsToBeLoaded,
-    isFriendOfsTotalVisible,
-    isFriendOfsVisible,
     isFriendsToBeLoaded,
-    isFriendsTotalVisible,
-    isFriendsVisible,
     isPeopleGeneralToBeLoaded,
     isSubscribersToBeLoaded,
-    isSubscribersTotalVisible,
-    isSubscribersVisible,
-    isSubscriptionsToBeLoaded,
-    isSubscriptionsTotalVisible,
-    isSubscriptionsVisible
+    isSubscriptionsToBeLoaded
 } from "state/people/selectors";
 import {
     friendOfsLoad,
@@ -27,8 +19,8 @@ import {
     PEOPLE_GENERAL_LOADED,
     PEOPLE_GO_TO_TAB,
     peopleGeneralLoad,
-    peopleGeneralUnset, peopleGoToDefaultTab,
-    peopleGoToTab,
+    peopleGeneralUnset,
+    peopleGoToDefaultTab,
     peopleUnset,
     subscribersLoad,
     subscriptionsLoad
@@ -38,8 +30,10 @@ import {
     EVENT_NODE_SUBSCRIBER_ADDED,
     EVENT_NODE_SUBSCRIBER_DELETED,
     EVENT_NODE_SUBSCRIPTION_ADDED,
-    EVENT_NODE_SUBSCRIPTION_DELETED
+    EVENT_NODE_SUBSCRIPTION_DELETED,
+    EventAction
 } from "api/events/actions";
+import { SubscriptionAddedEvent, SubscriptionDeletedEvent } from "api/events/api-types";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),
@@ -72,15 +66,25 @@ export default [
         friendOfsLoad
     ),
     trigger(
-        [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED,
-         EVENT_NODE_SUBSCRIPTION_ADDED, EVENT_NODE_SUBSCRIPTION_DELETED],
+        [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED],
         isAtPeoplePage,
         peopleGeneralLoad
     ),
     trigger(
-        [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED,
-         EVENT_NODE_SUBSCRIPTION_ADDED, EVENT_NODE_SUBSCRIPTION_DELETED],
+        [EVENT_NODE_SUBSCRIPTION_ADDED, EVENT_NODE_SUBSCRIPTION_DELETED],
+        (state, signal: EventAction<SubscriptionAddedEvent | SubscriptionDeletedEvent>) =>
+            isAtPeoplePage(state) && signal.payload.subscription.type === "feed",
+        peopleGeneralLoad
+    ),
+    trigger(
+        [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED],
         inv(isAtPeoplePage),
+        peopleGeneralUnset
+    ),
+    trigger(
+        [EVENT_NODE_SUBSCRIPTION_ADDED, EVENT_NODE_SUBSCRIPTION_DELETED],
+        (state, signal: EventAction<SubscriptionAddedEvent | SubscriptionDeletedEvent>) =>
+            !isAtPeoplePage(state) && signal.payload.subscription.type === "feed",
         peopleGeneralUnset
     )
 ];
