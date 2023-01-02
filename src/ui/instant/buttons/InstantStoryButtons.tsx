@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -21,9 +21,11 @@ type Props = InstantStoryButtonsProps & {
     acceptTitle: string;
     acceptedTitle: string;
     onAccept: () => void;
-};
+} & ConnectedProps<typeof connector>;
 
-function InstantStoryButtonsImpl({story, ready, accepting, accepted, acceptTitle, acceptedTitle, onAccept}: Props) {
+function InstantStoryButtonsImpl({
+    story, ready, accepting, accepted, acceptTitle, acceptedTitle, onAccept, storySatisfy
+}: Props) {
     const {t} = useTranslation();
 
     if (!ready) {

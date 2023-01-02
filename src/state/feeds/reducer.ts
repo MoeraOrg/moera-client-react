@@ -29,10 +29,10 @@ import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
 import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
+import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_SATISFY, STORY_UPDATED } from "state/stories/actions";
 import { buildSummary } from "ui/instant/instant-summaries";
 import { replaceEmojis } from "util/html";
-import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 
 const initialState = {
 };
