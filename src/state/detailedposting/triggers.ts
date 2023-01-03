@@ -1,6 +1,7 @@
 import { conj, inv, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { OWNER_SET } from "state/node/actions";
+import { isAtHomeNode } from "state/node/selectors";
 import {
     bottomMenuShow,
     dialogClosed,
@@ -39,6 +40,7 @@ import {
     detailedPostingLoad,
     detailedPostingLoadAttached,
     DetailedPostingLoadedAction,
+    detailedPostingViewed,
     focusComment,
     FOCUSED_COMMENT_LOAD_FAILED,
     FOCUSED_COMMENT_LOADED,
@@ -60,6 +62,7 @@ import {
     isDetailedPostingDefined,
     isDetailedPostingGalleryExpanded,
     isDetailedPostingId,
+    isDetailedPostingLoaded,
     isDetailedPostingToBeLoaded,
     isFocusedCommentInList,
     isFocusedCommentToBeLoaded,
@@ -85,6 +88,7 @@ import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent } 
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
+    trigger(GO_TO_PAGE, conj(isAtHomeNode, isAtDetailedPostingPage, isDetailedPostingLoaded), detailedPostingViewed),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP], isDetailedPostingDefined, detailedPostingLoad),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, commentsUnset),
     trigger(WAKE_UP, isAtDetailedPostingPage, commentsUpdate),
@@ -95,6 +99,14 @@ export default [
         (state, signal: PostingSetAction) =>
             isAtDetailedPostingPage(state) && isDetailedPostingId(state, signal.payload.posting.id),
         updateLocation
+    ),
+    trigger(
+        POSTING_SET,
+        (state, signal: PostingSetAction) =>
+            isAtHomeNode(state)
+            && isAtDetailedPostingPage(state)
+            && isDetailedPostingId(state, signal.payload.posting.id),
+        detailedPostingViewed
     ),
     trigger(
         GO_TO_PAGE,
