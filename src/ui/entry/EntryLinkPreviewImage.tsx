@@ -27,7 +27,7 @@ function EntryLinkPreviewImage({mediaFile, loading, rootPage, carte}: Props) {
 
     if (mediaFile == null) {
         if (loading) {
-            return <div className="image-loading">{t("loading-preview")} <Loading active={true}/></div>;
+            return <div className="image-loading">{t("loading-preview")} <Loading active/></div>;
         }
         return null;
     }

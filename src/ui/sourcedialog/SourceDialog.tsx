@@ -22,7 +22,7 @@ function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}: Props
                      onClose={closeSourceDialog}>
             <div className="modal-body">
                 {loading ?
-                    <Loading active={true}/>
+                    <Loading active/>
                 :
                     <textarea className="form-control" value={text} onChange={() => {}}/>
                 }

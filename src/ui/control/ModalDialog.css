@@ -10,6 +10,20 @@
     z-index: var(--zindex-risen-modal);
 }
 
+.modal .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    opacity: 60%;
+    z-index: var(--zindex-modal-loading);
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
 .modal-children {
     max-height: calc(100vh - 8.5rem);
     overflow-x: hidden;

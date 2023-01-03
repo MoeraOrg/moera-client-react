@@ -81,7 +81,8 @@ function CommentDialog(props: Props) {
     };
 
     return (
-        <ModalDialog title={t("edit-comment")} className="comment-dialog" onClose={closeCommentDialog}>
+        <ModalDialog title={t("edit-comment")} className="comment-dialog" loading={loading}
+                     onClose={closeCommentDialog}>
             <ConflictWarning text={t("comment-edited-conflict")} show={conflict}
                              onClose={commentDialogConflictClose}/>
             <Form>
@@ -90,7 +91,6 @@ function CommentDialog(props: Props) {
                         <AvatarField name="avatar" size={36}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
-                    <Loading active={loading}/>
                     <RichTextField name="body" rows={5} features={features} nodeName={receiverName} forceImageCompress
                                    anyValue autoFocus disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
                                    format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>

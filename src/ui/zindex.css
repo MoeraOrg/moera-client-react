@@ -10,6 +10,7 @@
     --zindex-offcanvas: 1045; /* Bootstrap */
     --zindex-modal-backdrop: 1050; /* Bootstrap */
     --zindex-modal: 1055; /* Bootstrap */
+    --zindex-modal-loading: 1056;
     --zindex-popover: 1070; /* Bootstrap */
     --zindex-risen-modal-backdrop: 1072;
     --zindex-risen-modal: 1077;

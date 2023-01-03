@@ -65,11 +65,10 @@ function AskDialog(props: Props) {
     }
 
     return (
-        <ModalDialog title={t("ask-node", {name})} onClose={closeAskDialog}>
+        <ModalDialog title={t("ask-node", {name})} loading={loading} onClose={closeAskDialog}>
             {loading || subjects.length > 1 ?
                 <Form>
                     <div className="modal-body">
-                        <Loading active={loading}/>
                         <SelectField name="subject" choices={subjects}/>
                         <InputField name="message" title={t("message")} maxLength={70} anyValue/>
                     </div>

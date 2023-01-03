@@ -51,11 +51,10 @@ function ImageEditDialog(props: Props) {
     const [imageWidth, imageHeight] = mediaImageSize(800, null, null, media);
 
     return (
-        <ModalDialog title={t("edit-image")} onClose={onClose}>
+        <ModalDialog title={t("edit-image")} loading={loading} onClose={onClose}>
             <Form>
                 <div className="modal-body image-edit-dialog">
                     <img className="preview" alt="" src={src} width={imageWidth} height={imageHeight}/>
-                    <Loading active={loading}/>
                     <RichTextField name="caption" format={posting?.bodySrcFormat || "markdown"} maxHeight="14em"
                                    smileysEnabled={smileysEnabled} anyValue noMedia autoFocus/>
                 </div>

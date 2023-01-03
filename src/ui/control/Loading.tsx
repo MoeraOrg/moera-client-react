@@ -7,11 +7,13 @@ import "./Loading.css";
 interface Props {
     active?: boolean;
     className?: string | null;
+    large?: boolean;
 }
 
-export const Loading = ({active = true, className = null}: Props) => (
+export const Loading = ({active = true, className = null, large = false}: Props) => (
     active ?
-        <ReactLoading className={cx("loading", className)} type="bubbles" color="black" width={32} height={24}/>
+        <ReactLoading className={cx("loading", className)} type="bubbles" color="black"
+                      width={large ? 80 : 32} height={large ? 60 : 24}/>
     :
         null
 );

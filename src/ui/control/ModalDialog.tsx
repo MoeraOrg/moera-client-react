@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 
-import { CloseButton } from "ui/control/CloseButton";
+import { CloseButton, Loading } from "ui/control";
 import "./ModalDialog.css";
 
 interface Props {
@@ -12,12 +12,15 @@ interface Props {
     style?: Partial<Record<string, string>>;
     centered?: boolean;
     risen?: boolean;
+    loading?: boolean;
     onClose?: () => void;
     onKeyDown?: (event: KeyboardEvent) => void;
     children: any;
 }
 
-export function ModalDialog({title, size, className, style, centered, risen, children, onClose, onKeyDown}: Props) {
+export function ModalDialog({
+    title, size, className, style, centered, risen, loading, children, onClose, onKeyDown
+}: Props) {
     const mouseDownX = useRef<number>();
     const mouseDownY = useRef<number>();
 
@@ -80,6 +83,9 @@ export function ModalDialog({title, size, className, style, centered, risen, chi
                     }
                 )} style={style}>
                     <div className="modal-content" ref={modalDialog}>
+                        {loading &&
+                            <div className="loading-overlay"><Loading active large/></div>
+                        }
                         {title &&
                             <div className="modal-header">
                                 <h4 className="modal-title">{title}</h4>
