@@ -1,16 +1,34 @@
 import React from 'react';
+import { connect, ConnectedProps } from 'react-redux';
 
-import useMainMenuTimeline from "ui/mainmenu/main-menu-timeline";
+import { ClientState } from "state/state";
+import { isConnectedToHome } from "state/home/selectors";
+import { useMainMenuHomeNews, useMainMenuTimeline } from "ui/mainmenu/main-menu";
+import Jump from "ui/navigation/Jump";
 import "./Logo.css";
 
-export default function Logo() {
-    const {href, onClick} = useMainMenuTimeline();
+type Props = ConnectedProps<typeof connector>;
+
+function Logo({connectedToHome}: Props) {
+    const {href: timelineHref} = useMainMenuTimeline();
+    const {href: newsHref} = useMainMenuHomeNews();
+
+    const nodeName = connectedToHome ? ":" : "";
+    const href = connectedToHome ? newsHref : timelineHref;
 
     return (
         <div id="logo" className="navbar-brand">
-            <a href={href} onClick={onClick}>
+            <Jump nodeName={nodeName} href={href}>
                 <img id="logo-image" src="pics/logo-o-32.png" alt="Moera"/>
-            </a>
+            </Jump>
         </div>
     );
 }
+
+const connector = connect(
+    (state: ClientState) => ({
+        connectedToHome: isConnectedToHome(state)
+    })
+);
+
+export default connector(Logo);
