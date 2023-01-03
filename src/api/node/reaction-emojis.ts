@@ -107,6 +107,10 @@ export const REACTION_EMOJIS: ReactionEmojis = {
         0x1f970: {
             title: "reaction-title.sweet",
             color: "#dd2e44"
+        },
+        0x1f971: {
+            title: "reaction-title.tired",
+            color: "#ffcc4d"
         }
     },
     negative: {
