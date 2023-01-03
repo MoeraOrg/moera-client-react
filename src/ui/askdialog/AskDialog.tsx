@@ -8,7 +8,7 @@ import { ClientState } from "state/state";
 import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { askDialogSend, closeAskDialog } from "state/askdialog/actions";
-import { Button, Loading, ModalDialog } from "ui/control";
+import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";

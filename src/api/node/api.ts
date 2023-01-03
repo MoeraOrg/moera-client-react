@@ -232,6 +232,18 @@ export const TokenInfoType: JSONSchemaType<API.TokenInfo> = {
         "deadline": {
             type: "integer",
             nullable: true
+        },
+        "lastUsedAt": {
+            type: "integer",
+            nullable: true
+        },
+        "lastUsedBrowser": {
+            type: "string",
+            nullable: true
+        },
+        "lastUsedIp": {
+            type: "string",
+            nullable: true
         }
     },
     additionalProperties: false,

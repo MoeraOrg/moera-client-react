@@ -91,6 +91,9 @@ export interface TokenInfo {
     pluginName?: string | null;
     createdAt: number;
     deadline?: number | null;
+    lastUsedAt?: number | null;
+    lastUsedBrowser?: string | null;
+    lastUsedIp?: string | null;
 }
 
 export interface NodeNameInfo {

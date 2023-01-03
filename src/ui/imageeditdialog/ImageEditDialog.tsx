@@ -11,7 +11,7 @@ import { getNodeRootPage } from "state/node/selectors";
 import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { getSetting } from "state/settings/selectors";
-import { Button, Loading, ModalDialog, RichTextValue } from "ui/control";
+import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { RichTextField } from "ui/control/field";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { replaceSmileys } from "util/text";

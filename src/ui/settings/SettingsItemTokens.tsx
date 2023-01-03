@@ -67,6 +67,15 @@ function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensD
                                     <em>{t("used-by-addon")}</em>{tk.pluginName}
                                 </span>
                             }
+                            {(tk.lastUsedAt != null || tk.lastUsedBrowser != null || tk.lastUsedIp != null) &&
+                                <span className="item">
+                                    <em>{t("last-used")}</em>
+                                    {tk.lastUsedAt != null
+                                        ? format(fromUnixTime(tk.lastUsedAt), "yyyy-MM-dd HH:mm:ss")
+                                        : ""}
+                                    {" (" + (tk.lastUsedBrowser ?? "") + " " + (tk.lastUsedIp ?? "") + ")"}
+                                </span>
+                            }
                             <span className="item">
                                 <em>{t("created-at")}</em>{format(fromUnixTime(tk.createdAt), "yyyy-MM-dd HH:mm:ss")}
                             </span>

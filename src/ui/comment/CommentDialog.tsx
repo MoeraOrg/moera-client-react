@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { CommentText, SourceFormat } from "api/node/api-types";
 import { ClientState } from "state/state";
 import {
-    commentDialogCommentReset,
     closeCommentDialog,
+    commentDialogCommentReset,
     commentDialogConflictClose,
     commentPost
 } from "state/detailedposting/actions";
@@ -18,7 +18,7 @@ import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { Browser } from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
-import { Button, ConflictWarning, Loading, ModalDialog } from "ui/control";
+import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
 import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
