@@ -1,6 +1,11 @@
 .posting-buttons {
     display: flex;
+    position: relative;
     border-top: 1px solid var(--bs-gray-400);
     padding-top: .5rem;
     margin-top: .7rem;
+}
+
+.posting-buttons.with-menu {
+    padding-right: 1.8rem;
 }

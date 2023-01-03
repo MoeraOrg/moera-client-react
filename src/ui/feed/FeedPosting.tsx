@@ -3,11 +3,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { ExtPostingInfo } from "state/postings/state";
-import { isAtHomeNode, isPermitted, ProtectedObject } from "state/node/selectors";
-import { isConnectedToHome } from "state/home/selectors";
+import { isAtHomeNode, isPermitted } from "state/node/selectors";
 import { goToPosting } from "state/navigation/actions";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
@@ -52,21 +50,22 @@ function Content({posting}: ContentProps) {
     }
 }
 
-type FeedPostingProps = {
+interface FeedPostingOwnProps {
     posting: ExtPostingInfo;
     story: MinimalStoryInfo;
     deleting: boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermitted,
-                      goToPosting}: FeedPostingProps) => (
+type FeedPostingProps = FeedPostingOwnProps & ConnectedProps<typeof connector>;
+
+const FeedPosting = ({posting, story, deleting, atHome, postingEditable, goToPosting}: FeedPostingProps) => (
     <div className={cx("posting entry preview", {"not-viewed": atHome && story.viewed === false})}
          data-moment={story.moment} data-viewed={story.viewed !== false}>
         {deleting ?
             <PostingDeleting/>
         :
             <>
-                <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
+                <PostingMenu posting={posting} story={story}/>
                 <PostingPin pinned={story.pinned}/>
                 <div className="owner-line">
                     <PostingAvatar posting={posting}/>
@@ -76,7 +75,7 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                         <br/>
                         <PostingDate posting={posting} story={story}/>
                         <PostingUpdated posting={posting} story={story}/>
-                        <PostingVisibility posting={posting} editable={isPermitted("edit", posting, "owner")}/>
+                        <PostingVisibility posting={posting} editable={postingEditable}/>
                     </div>
                 </div>
                 <PostingSubject posting={posting} preview={true}/>
@@ -90,20 +89,16 @@ const FeedPosting = ({posting, story, deleting, connectedToHome, atHome, isPermi
                     <PostingReactions posting={posting}/>
                     <PostingComments posting={posting}/>
                 </div>
-                {(connectedToHome && posting.receiverDeletedAt == null) &&
-                    <PostingButtons posting={posting}/>
-                }
+                <PostingButtons posting={posting} story={story}/>
             </>
         }
     </div>
 );
 
 const connector = connect(
-    (state: ClientState) => ({
-        connectedToHome: isConnectedToHome(state),
+    (state: ClientState, ownProps: FeedPostingOwnProps) => ({
         atHome: isAtHomeNode(state),
-        isPermitted: (operation: string, object: ProtectedObject, defaultValue: PrincipalValue) =>
-            isPermitted(operation, object, defaultValue, state)
+        postingEditable: isPermitted("edit", ownProps.posting, "owner", state)
     }),
     { goToPosting }
 );

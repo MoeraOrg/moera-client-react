@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { PostingInfo, PrincipalValue } from "api/node/api-types";
+import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { detailedPostingLoadAttached } from "state/detailedposting/actions";
-import { isConnectedToHome } from "state/home/selectors";
-import { isPermitted, ProtectedObject } from "state/node/selectors";
+import { isPermitted } from "state/node/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
@@ -27,14 +26,17 @@ import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 import { getPageHeaderHeight } from "util/misc";
 
-type Props = {
+interface OwnProps {
     story: MinimalStoryInfo;
     posting: PostingInfo;
     deleting?: boolean | null;
-} & ConnectedProps<typeof connector>;
+}
 
-function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpanded, connectedToHome, isPermitted,
-                          detailedPostingLoadAttached}: Props) {
+type Props = OwnProps & ConnectedProps<typeof connector>;
+
+function DetailedPosting({
+    story, posting, deleting, loadedAttached, galleryExpanded, postingEditable, detailedPostingLoadAttached
+}: Props) {
     const [expanded, setExpanded] = useState<boolean>(galleryExpanded);
 
     if (deleting) {
@@ -60,7 +62,7 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
 
     return (
         <div className="posting entry mt-2">
-            <PostingMenu posting={posting} story={story} isPermitted={isPermitted}/>
+            <PostingMenu posting={posting} story={story}/>
             <PostingPin pinned={story != null && story.pinned}/>
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>
@@ -70,7 +72,7 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
                     <br/>
                     <PostingDate posting={posting} story={story}/>
                     <PostingUpdated posting={posting} story={story}/>
-                    <PostingVisibility posting={posting} editable={isPermitted("edit", posting, "owner")}/>
+                    <PostingVisibility posting={posting} editable={postingEditable}/>
                 </div>
             </div>
             <PostingSubject posting={posting} preview={false}/>
@@ -86,9 +88,7 @@ function DetailedPosting({story, posting, deleting, loadedAttached, galleryExpan
                 <PostingReactions posting={posting}/>
                 <PostingComments posting={posting}/>
             </div>
-            {(connectedToHome && posting.receiverDeletedAt == null) &&
-                <PostingButtons posting={posting}/>
-            }
+            <PostingButtons posting={posting} story={story} menu/>
             {expanded &&
                 <EntryGalleryExpanded postingId={posting.id} nodeName="" media={posting.media ?? null}
                                       onCollapse={onCollapse}/>
@@ -108,12 +108,10 @@ function scrollToPostingGallery() {
 }
 
 const connector = connect(
-    (state: ClientState) => ({
+    (state: ClientState, ownProps: OwnProps) => ({
         loadedAttached: state.detailedPosting.loadedAttached,
         galleryExpanded: state.detailedPosting.galleryExpanded,
-        connectedToHome: isConnectedToHome(state),
-        isPermitted: (operation: string, object: ProtectedObject, defaultValue: PrincipalValue) =>
-            isPermitted(operation, object, defaultValue, state),
+        postingEditable: isPermitted("edit", ownProps.posting, "owner", state)
     }),
     { detailedPostingLoadAttached }
 );

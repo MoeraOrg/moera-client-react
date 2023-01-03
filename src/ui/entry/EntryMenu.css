@@ -1,7 +1,7 @@
 .entry .menu {
     position: absolute;
-    top: 0.2rem;
-    right: 0.4rem;
+    top: .2rem;
+    right: .4rem;
     background-color: transparent;
     border: 0;
 }

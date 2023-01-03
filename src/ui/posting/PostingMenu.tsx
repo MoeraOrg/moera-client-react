@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo, PrincipalValue } from "api/node/api-types";
+import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
@@ -19,7 +19,7 @@ import { openSourceDialog } from "state/sourcedialog/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getNodeRootLocation, getOwnerName, ProtectedObject } from "state/node/selectors";
+import { getNodeRootLocation, getOwnerName, isPermitted } from "state/node/selectors";
 import { getPostingCommentsSubscriptionId } from "state/postings/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu } from "ui/control";
@@ -28,15 +28,15 @@ import "ui/entry/EntryMenu.css";
 interface OwnProps {
     posting: PostingInfo;
     story: MinimalStoryInfo;
-    isPermitted: (operation: string, object: ProtectedObject, defaultValue: PrincipalValue) => boolean;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function PostingMenu({
-     posting, story, isPermitted, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, goToCompose,
-     confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
-     postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare, entryCopyText
+     posting, story, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, postingEditable,
+     postingDeletable, storyEditable, goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog,
+     postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog,
+     shareDialogPrepare, entryCopyText
 }: Props) {
     const {t} = useTranslation();
 
@@ -126,19 +126,19 @@ function PostingMenu({
                 title: t("edit-ellipsis"),
                 href: `${rootLocation}/moera/compose?id=${posting.id}`,
                 onClick: onEdit,
-                show: isPermitted("edit", posting, "owner")
+                show: postingEditable
             },
             {
                 title: story != null && !story.pinned ? t("pin") : t("unpin"),
                 href: postingHref,
                 onClick: onPin,
-                show: story != null && (isPermitted("edit", story, "admin"))
+                show: story != null && storyEditable
             },
             {
                 title: t("change-date-time-ellipsis"),
                 href: postingHref,
                 onClick: onChangeDate,
-                show: posting.receiverName == null && (isPermitted("edit", story, "admin"))
+                show: posting.receiverName == null && storyEditable
             },
             {
                 divider: true
@@ -153,7 +153,7 @@ function PostingMenu({
                 title: t("delete"),
                 href: postingHref,
                 onClick: onDelete,
-                show: isPermitted("delete", posting, "private")
+                show: postingDeletable
             }
         ]}/>
     );
@@ -164,7 +164,10 @@ const connector = connect(
         rootLocation: getNodeRootLocation(state),
         nodeOwnerName: getOwnerName(state),
         homeOwnerName: getHomeOwnerName(state),
-        commentsSubscriptionId: getPostingCommentsSubscriptionId(state, ownProps.posting.id)
+        commentsSubscriptionId: getPostingCommentsSubscriptionId(state, ownProps.posting.id),
+        postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
+        postingDeletable: isPermitted("delete", ownProps.posting, "private", state),
+        storyEditable: isPermitted("edit", ownProps.story, "admin", state)
     }),
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
