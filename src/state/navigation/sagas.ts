@@ -1,8 +1,12 @@
 import { call, put, select } from 'typed-redux-saga';
 import * as URI from 'uri-js';
 
+import { locationBuild, LocationInfo, locationTransform } from "location";
+import { executor } from "state/executor";
+import { getNodeUri } from "state/naming/sagas";
 import { PAGE_SETTINGS } from "state/navigation/pages";
 import {
+    BODY_SCROLL_UPDATE,
     GO_HOME,
     GO_HOME_NEWS,
     GO_TO_LOCATION,
@@ -26,13 +30,11 @@ import {
     UPDATE_LOCATION,
     UpdateLocationAction
 } from "state/navigation/actions";
-import { settingsGoToTab } from "state/settings/actions";
 import { isStandaloneMode } from "state/navigation/selectors";
-import { locationBuild, LocationInfo, locationTransform } from "location";
-import { rootUrl } from "util/url";
 import { getHomeRootPage } from "state/home/selectors";
-import { executor } from "state/executor";
-import { getNodeUri } from "state/naming/sagas";
+import { settingsGoToTab } from "state/settings/actions";
+import { Browser } from "ui/browser";
+import { rootUrl } from "util/url";
 
 export default [
     executor(INIT_STORAGE, "", initStorageSaga),
@@ -44,7 +46,8 @@ export default [
     executor(GO_TO_PAGE_WITH_DEFAULT_SUBPAGE, null, goToPageWithDefaultSubpageSaga),
     executor(GO_HOME, "", goHomeSaga),
     executor(GO_HOME_NEWS, "", goHomeNewsSaga),
-    executor(SWIPE_REFRESH_UPDATE, "", swipeRefreshUpdateSaga)
+    executor(SWIPE_REFRESH_UPDATE, "", swipeRefreshUpdateSaga),
+    executor(BODY_SCROLL_UPDATE, "", bodyScrollUpdateSaga)
 ];
 
 function* goToPageWithDefaultSubpageSaga(action: GoToPageWithDefaultSubpageAction) {
@@ -185,4 +188,25 @@ function* swipeRefreshUpdateSaga() {
         && !window.closeLightDialog;
 
     window.Android.setSwipeRefreshEnabled(enabled);
+}
+
+function* bodyScrollUpdateSaga() {
+    const {messageBoxShow, confirmBoxShow, lightBoxShow, closeDialogAction} = yield* select(state => ({
+        messageBoxShow: state.messageBox.show,
+        confirmBoxShow: state.confirmBox.show,
+        lightBoxShow: state.lightBox.show,
+        closeDialogAction: state.navigation.closeDialogAction,
+    }));
+
+    const enabled = !messageBoxShow
+        && !confirmBoxShow
+        && closeDialogAction == null
+        && !lightBoxShow
+        && !window.closeLightDialog;
+
+    if (enabled) {
+        Browser.enableBodyScroll();
+    } else {
+        Browser.disableBodyScroll();
+    }
 }

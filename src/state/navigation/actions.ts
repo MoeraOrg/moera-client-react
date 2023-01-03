@@ -212,6 +212,12 @@ export const swipeRefreshUpdate = (): SwipeRefreshUpdateAction => ({
     type: SWIPE_REFRESH_UPDATE
 });
 
+export const BODY_SCROLL_UPDATE = "BODY_SCROLL_UPDATE";
+export type BodyScrollUpdateAction = Action<typeof BODY_SCROLL_UPDATE>;
+export const bodyScrollUpdate = (): BodyScrollUpdateAction => ({
+    type: BODY_SCROLL_UPDATE
+});
+
 export type NavigationAnyAction =
     InitStorageAction
     | InitFromNodeLocationAction
@@ -231,4 +237,5 @@ export type NavigationAnyAction =
     | BottomMenuShowAction
     | DialogOpenedAction
     | DialogClosedAction
-    | SwipeRefreshUpdateAction;
+    | SwipeRefreshUpdateAction
+    | BodyScrollUpdateAction;

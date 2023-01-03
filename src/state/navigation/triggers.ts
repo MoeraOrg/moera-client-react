@@ -1,11 +1,13 @@
 import { conj, inv, trigger } from "state/trigger";
 import {
+    bodyScrollUpdate,
     DIALOG_CLOSED,
     DIALOG_OPENED,
     GO_TO_PAGE,
     goHomeNews,
     newLocation,
-    swipeRefreshUpdate, updateLocation
+    swipeRefreshUpdate,
+    updateLocation
 } from "state/navigation/actions";
 import { CONNECTED_TO_HOME } from "state/home/actions";
 import { isAtNode } from "state/node/selectors";
@@ -16,5 +18,6 @@ export default [
     trigger(GO_TO_PAGE, true, newLocation),
     trigger(CONNECTED_TO_HOME, conj(inv(isAtNode), isStandaloneMode), goHomeNews),
     trigger([DIALOG_OPENED, DIALOG_CLOSED], !!window.Android, swipeRefreshUpdate),
+    trigger([DIALOG_OPENED, DIALOG_CLOSED], true, bodyScrollUpdate),
     trigger(SETTINGS_LANGUAGE_CHANGED, true, updateLocation)
 ];

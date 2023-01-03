@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
-import { swipeRefreshUpdate } from "state/navigation/actions";
+import { bodyScrollUpdate, swipeRefreshUpdate } from "state/navigation/actions";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";
@@ -17,7 +17,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSliceLoad, feedStatusUpdate,
-                   swipeRefreshUpdate}: Props) {
+                   swipeRefreshUpdate, bodyScrollUpdate}: Props) {
     const {t} = useTranslation();
 
     const pastIntersecting = useRef<boolean>(true);
@@ -27,14 +27,16 @@ function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSli
         if (window.Android) {
             swipeRefreshUpdate();
         }
+        bodyScrollUpdate();
 
         return () => {
             window.closeLightDialog = null;
             if (window.Android) {
                 swipeRefreshUpdate();
             }
+            bodyScrollUpdate();
         }
-    }, [hide, swipeRefreshUpdate]);
+    }, [hide, swipeRefreshUpdate, bodyScrollUpdate]);
 
     const loadPast = () => {
         if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {
@@ -84,7 +86,7 @@ const connector = connect(
         after: getFeedState(state, ":instant").after,
         stories: getFeedState(state, ":instant").stories
     }),
-    { feedPastSliceLoad, feedStatusUpdate, swipeRefreshUpdate }
+    { feedPastSliceLoad, feedStatusUpdate, swipeRefreshUpdate, bodyScrollUpdate }
 );
 
 export default connector(Instants);
