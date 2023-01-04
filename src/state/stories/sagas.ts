@@ -25,8 +25,8 @@ export default [
 function* storyPinningUpdateSaga(action: StoryPinningUpdateAction) {
     const {id, pinned} = action.payload;
     try {
-        const data = yield* call(Node.putStory, "", id, {pinned});
-        yield* put(storyUpdated(data));
+        const story = yield* call(Node.putStory, "", id, {pinned});
+        yield* put(storyUpdated(story));
     } catch (e) {
         yield* put(errorThrown(e));
     }
@@ -35,8 +35,8 @@ function* storyPinningUpdateSaga(action: StoryPinningUpdateAction) {
 function* storyReadingUpdateSaga(action: StoryReadingUpdateAction) {
     const {id, read} = action.payload;
     try {
-        const data = yield* call(Node.putStory, ":", id, {read});
-        yield* put(storyUpdated(data));
+        const story = yield* call(Node.putStory, ":", id, {read});
+        yield* put(storyUpdated(story));
     } catch (e) {
         // ignore, not important
     }
@@ -45,8 +45,8 @@ function* storyReadingUpdateSaga(action: StoryReadingUpdateAction) {
 function* storyViewingUpdateSaga(action: StoryViewingUpdateAction) {
     const {id, viewed} = action.payload;
     try {
-        const data = yield* call(Node.putStory, ":", id, {viewed});
-        yield* put(storyUpdated(data));
+        const story = yield* call(Node.putStory, ":", id, {viewed});
+        yield* put(storyUpdated(story));
     } catch (e) {
         // ignore, not important
     }
@@ -55,8 +55,8 @@ function* storyViewingUpdateSaga(action: StoryViewingUpdateAction) {
 function* storySatisfySaga(action: StorySatisfyAction) {
     const {id} = action.payload;
     try {
-        const data = yield* call(Node.putStory, ":", id, {satisfied: true});
-        yield* put(storyUpdated(data));
+        const story = yield* call(Node.putStory, ":", id, {satisfied: true});
+        yield* put(storyUpdated(story));
     } catch (e) {
         yield* put(errorThrown(e));
     }
