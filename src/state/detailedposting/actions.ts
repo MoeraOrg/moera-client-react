@@ -51,12 +51,6 @@ export const detailedPostingScrolledToGallery = (): DetailedPostingScrolledToGal
     type: DETAILED_POSTING_SCROLLED_TO_GALLERY
 });
 
-export const DETAILED_POSTING_VIEWED = "DETAILED_POSTING_READ";
-export type DetailedPostingViewedAction = Action<typeof DETAILED_POSTING_VIEWED>;
-export const detailedPostingViewed = (): DetailedPostingViewedAction => ({
-    type: DETAILED_POSTING_VIEWED
-});
-
 export const COMMENTS_RECEIVER_SWITCH = "COMMENTS_RECEIVER_SWITCH";
 export type CommentsReceiverSwitchAction = Action<typeof COMMENTS_RECEIVER_SWITCH>;
 export const commentsReceiverSwitch = (): CommentsReceiverSwitchAction => ({
@@ -672,7 +666,6 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | DetailedPostingLoadAttachedAction
     | DetailedPostingLoadedAttachedAction
     | DetailedPostingScrolledToGalleryAction
-    | DetailedPostingViewedAction
     | CommentsReceiverSwitchAction
     | CommentsReceiverSwitchedAction
     | CommentsLoadAllAction

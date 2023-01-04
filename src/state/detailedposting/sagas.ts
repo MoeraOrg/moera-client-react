@@ -81,7 +81,6 @@ import {
     commentVerifyFailed,
     DETAILED_POSTING_LOAD,
     DETAILED_POSTING_LOAD_ATTACHED,
-    DETAILED_POSTING_VIEWED,
     detailedPostingLoaded,
     detailedPostingLoadedAttached,
     detailedPostingLoadFailed,
@@ -104,12 +103,11 @@ import {
 import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
 import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "state/postings/actions";
 import { ClientState } from "state/state";
-import { getOwnerFullName, getOwnerName, isAtHomeNode, isPermitted, isPrincipalIn } from "state/node/selectors";
+import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getPosting, isPostingCached } from "state/postings/selectors";
 import { flashBox } from "state/flashbox/actions";
 import { postingGetLink } from "state/postings/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
-import { storyViewingUpdate } from "state/stories/actions";
 import { Browser } from "ui/browser";
 import { getWindowSelectionHtml, insertText, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
@@ -117,7 +115,6 @@ import { quoteHtml } from "util/html";
 export default [
     executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
     executor(DETAILED_POSTING_LOAD_ATTACHED, "", detailedPostingLoadAttachedSaga, introduced),
-    executor(DETAILED_POSTING_VIEWED, "", detailedPostingViewedSaga, introduced),
     executor(COMMENTS_RECEIVER_SWITCH, "", commentsReceiverSwitchSaga, introduced),
     executor(COMMENTS_LOAD_ALL, "", commentsLoadAllSaga, introduced),
     executor(COMMENTS_PAST_SLICE_LOAD, "", commentsPastSliceLoadSaga, introduced),
@@ -200,19 +197,6 @@ function* detailedPostingLoadAttachedSaga() {
         yield* put(detailedPostingLoadedAttached());
     } catch (e) {
         yield* put(errorThrown(e));
-    }
-}
-
-function* detailedPostingViewedSaga() {
-    const {atHome, posting} = yield* select(state => ({
-        atHome: isAtHomeNode(state),
-        posting: getDetailedPosting(state)
-    }));
-    if (!atHome || posting?.feedReferences == null || posting.feedReferences.length === 0) {
-        return;
-    }
-    for (const feedReference of posting.feedReferences) {
-        yield* put(storyViewingUpdate(feedReference.feedName, feedReference.storyId, true));
     }
 }
 
