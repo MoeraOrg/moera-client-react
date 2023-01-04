@@ -5,6 +5,8 @@ import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
 import {
+    POSTING_COMMENT_ADDED_BLOCKED,
+    POSTING_COMMENT_ADDED_UNBLOCKED,
     POSTING_COMMENT_COUNT_UPDATE,
     POSTING_COMMENTS_SET,
     POSTING_COMMENTS_SUBSCRIBED,
@@ -24,6 +26,8 @@ import {
     REMOTE_POSTING_SUBSCRIPTION_SET
 } from "state/postings/actions";
 import {
+    EVENT_HOME_BLOCKED_INSTANT_ADDED,
+    EVENT_HOME_BLOCKED_INSTANT_DELETED,
     EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_POSTING_VERIFIED,
     EVENT_HOME_REMOTE_REACTION_ADDED,
@@ -308,6 +312,66 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             const {id, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "subscriptions", "comments"], null);
+            }
+            return state;
+        }
+
+        case POSTING_COMMENT_ADDED_BLOCKED: {
+            const {id, blockedInstantId, nodeName} = action.payload;
+
+            const postingState = state[nodeName]?.[id];
+            if (postingState != null) {
+                const blockedInstants = [
+                    ...(postingState.posting.blockedInstants ?? []),
+                    {id: blockedInstantId, storyType: "comment-added" as const}
+                ];
+                return immutable.set(state, [nodeName, id, "posting", "blockedInstants"], blockedInstants);
+            }
+            return state;
+        }
+
+        case POSTING_COMMENT_ADDED_UNBLOCKED: {
+            const {id, nodeName} = action.payload;
+
+            const postingState = state[nodeName]?.[id];
+            if (postingState?.posting.blockedInstants != null) {
+                const blockedInstants = postingState.posting.blockedInstants
+                    .filter(bi => bi.storyType !== "comment-added");
+                return immutable.set(state, [nodeName, id, "posting", "blockedInstants"], blockedInstants);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_BLOCKED_INSTANT_ADDED: {
+            const {blockedInstant: {id, storyType, entryId}} = action.payload;
+            const {ownerName, homeOwnerName} = action.context;
+
+            const nodeName = ownerName === homeOwnerName ? "" : homeOwnerName;
+            if (nodeName == null || entryId == null) {
+                return state;
+            }
+
+            const postingState = state[nodeName]?.[entryId];
+            if (postingState != null) {
+                const blockedInstants = [...(postingState.posting.blockedInstants ?? []), {id, storyType}];
+                return immutable.set(state, [nodeName, entryId, "posting", "blockedInstants"], blockedInstants);
+            }
+            return state;
+        }
+
+        case EVENT_HOME_BLOCKED_INSTANT_DELETED: {
+            const {blockedInstant: {id, entryId}} = action.payload;
+            const {ownerName, homeOwnerName} = action.context;
+
+            const nodeName = ownerName === homeOwnerName ? "" : homeOwnerName;
+            if (nodeName == null || entryId == null) {
+                return state;
+            }
+
+            const postingState = state[nodeName]?.[entryId];
+            if (postingState?.posting.blockedInstants != null) {
+                const blockedInstants = postingState.posting.blockedInstants.filter(bi => bi.id !== id);
+                return immutable.set(state, [nodeName, entryId, "posting", "blockedInstants"], blockedInstants);
             }
             return state;
         }

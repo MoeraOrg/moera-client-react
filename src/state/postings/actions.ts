@@ -320,6 +320,71 @@ export const remotePostingSubscriptionSet = (remoteNodeName: string, remotePosti
     payload: {remoteNodeName, remotePostingId, type, subscriptionId, nodeName}
 });
 
+export const POSTING_COMMENT_ADDED_BLOCK = "POSTING_COMMENT_ADDED_BLOCK";
+export type PostingCommentAddedBlockAction = ActionWithPayload<typeof POSTING_COMMENT_ADDED_BLOCK, {
+    id: string;
+    nodeName: string;
+}>;
+export const postingCommentAddedBlock = (id: string, nodeName: string = ""): PostingCommentAddedBlockAction => ({
+    type: POSTING_COMMENT_ADDED_BLOCK,
+    payload: {id, nodeName}
+});
+
+export const POSTING_COMMENT_ADDED_BLOCKED = "POSTING_COMMENT_ADDED_BLOCKED";
+export type PostingCommentAddedBlockedAction = ActionWithPayload<typeof POSTING_COMMENT_ADDED_BLOCKED, {
+    id: string;
+    blockedInstantId: string;
+    nodeName: string;
+}>;
+export const postingCommentAddedBlocked = (id: string, blockedInstantId: string,
+                                           nodeName: string = ""): PostingCommentAddedBlockedAction => ({
+    type: POSTING_COMMENT_ADDED_BLOCKED,
+    payload: {id, blockedInstantId, nodeName}
+});
+
+export const POSTING_COMMENT_ADDED_BLOCK_FAILED = "POSTING_COMMENT_ADDED_BLOCK_FAILED";
+export type PostingCommentAddedBlockFailedAction = ActionWithPayload<typeof POSTING_COMMENT_ADDED_BLOCK_FAILED, {
+    id: string;
+    nodeName: string;
+}>;
+export const postingCommentAddedBlockFailed = (id: string,
+                                               nodeName: string = ""): PostingCommentAddedBlockFailedAction => ({
+    type: POSTING_COMMENT_ADDED_BLOCK_FAILED,
+    payload: {id, nodeName}
+});
+
+export const POSTING_COMMENT_ADDED_UNBLOCK = "POSTING_COMMENT_ADDED_UNBLOCK";
+export type PostingCommentAddedUnblockAction = ActionWithPayload<typeof POSTING_COMMENT_ADDED_UNBLOCK, {
+    id: string;
+    nodeName: string;
+}>;
+export const postingCommentAddedUnblock = (id: string, nodeName: string = ""): PostingCommentAddedUnblockAction => ({
+    type: POSTING_COMMENT_ADDED_UNBLOCK,
+    payload: {id, nodeName}
+});
+
+export const POSTING_COMMENT_ADDED_UNBLOCKED = "POSTING_COMMENT_ADDED_UNBLOCKED";
+export type PostingCommentAddedUnblockedAction = ActionWithPayload<typeof POSTING_COMMENT_ADDED_UNBLOCKED, {
+    id: string;
+    nodeName: string;
+}>;
+export const postingCommentAddedUnblocked = (id: string,
+                                             nodeName: string = ""): PostingCommentAddedUnblockedAction => ({
+    type: POSTING_COMMENT_ADDED_UNBLOCKED,
+    payload: {id, nodeName}
+});
+
+export const POSTING_COMMENT_ADDED_UNBLOCK_FAILED = "POSTING_COMMENT_ADDED_UNBLOCK_FAILED";
+export type PostingCommentAddedUnblockFailedAction = ActionWithPayload<typeof POSTING_COMMENT_ADDED_UNBLOCK_FAILED, {
+    id: string;
+    nodeName: string;
+}>;
+export const postingCommentAddedUnblockFailed = (id: string,
+                                                 nodeName: string = ""): PostingCommentAddedUnblockFailedAction => ({
+    type: POSTING_COMMENT_ADDED_UNBLOCK_FAILED,
+    payload: {id, nodeName}
+});
+
 export type PostingsAnyAction =
     PostingSetAction
     | PostingsSetAction
@@ -348,4 +413,10 @@ export type PostingsAnyAction =
     | PostingCommentsUnsubscribedAction
     | PostingCommentsUnsubscribeFailedAction
     | PostingSubscriptionSetAction
-    | RemotePostingSubscriptionSetAction;
+    | RemotePostingSubscriptionSetAction
+    | PostingCommentAddedBlockAction
+    | PostingCommentAddedBlockedAction
+    | PostingCommentAddedBlockFailedAction
+    | PostingCommentAddedUnblockAction
+    | PostingCommentAddedUnblockedAction
+    | PostingCommentAddedUnblockFailedAction;

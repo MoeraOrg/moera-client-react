@@ -7,6 +7,8 @@ import { ReactionTotalsInfo } from "api/node/api-types";
 import { errorThrown } from "state/error/actions";
 import {
     EntryReactionAttributes,
+    POSTING_COMMENT_ADDED_BLOCK,
+    POSTING_COMMENT_ADDED_UNBLOCK,
     POSTING_COMMENTS_SUBSCRIBE,
     POSTING_COMMENTS_UNSUBSCRIBE,
     POSTING_COPY_LINK,
@@ -18,6 +20,12 @@ import {
     POSTING_REACTION_LOAD,
     POSTING_REACTIONS_RELOAD,
     POSTING_VERIFY,
+    PostingCommentAddedBlockAction,
+    postingCommentAddedBlocked,
+    postingCommentAddedBlockFailed,
+    PostingCommentAddedUnblockAction,
+    postingCommentAddedUnblocked,
+    postingCommentAddedUnblockFailed,
     PostingCommentsSubscribeAction,
     postingCommentsSubscribed,
     postingCommentsSubscribeFailed,
@@ -44,7 +52,11 @@ import {
 import { WithContext } from "state/action-types";
 import { ClientState } from "state/state";
 import { flashBox } from "state/flashbox/actions";
-import { getPosting, getPostingCommentsSubscriptionId } from "state/postings/selectors";
+import {
+    getPosting,
+    getPostingCommentAddedInstantBlockId,
+    getPostingCommentsSubscriptionId
+} from "state/postings/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
 import { getNodeUri } from "state/naming/sagas";
@@ -65,7 +77,9 @@ export default [
     executor(POSTING_REACTION_DELETE, payload => payload.id, postingReactionDeleteSaga, introduced),
     executor(POSTING_COPY_LINK, payload => payload.id, postingCopyLinkSaga),
     executor(POSTING_COMMENTS_SUBSCRIBE, payload => payload.id, postingCommentsSubscribeSaga, introduced),
-    executor(POSTING_COMMENTS_UNSUBSCRIBE, payload => payload.id, postingCommentsUnsubscribeSaga, introduced)
+    executor(POSTING_COMMENTS_UNSUBSCRIBE, payload => payload.id, postingCommentsUnsubscribeSaga, introduced),
+    executor(POSTING_COMMENT_ADDED_BLOCK, payload => payload.id, postingCommentAddedBlockSaga, introduced),
+    executor(POSTING_COMMENT_ADDED_UNBLOCK, payload => payload.id, postingCommentAddedUnblockSaga, introduced)
 ];
 
 function* postingDeleteSaga(action: PostingDeleteAction) {
@@ -228,7 +242,7 @@ function* postingCommentsSubscribeSaga(action: PostingCommentsSubscribeAction) {
         ownerName: getOwnerName(state)
     }));
     if (posting == null || ownerName == null) {
-        yield* put(postingCommentsSubscribeFailed(id));
+        yield* put(postingCommentsSubscribeFailed(id, nodeName));
         return;
     }
     const targetNode = posting.receiverName ?? (nodeName || ownerName);
@@ -250,7 +264,7 @@ function* postingCommentsUnsubscribeSaga(action: PostingCommentsUnsubscribeActio
         subscriptionId: getPostingCommentsSubscriptionId(state, id)
     }));
     if (posting == null || ownerName == null) {
-        yield* put(postingCommentsUnsubscribeFailed(id));
+        yield* put(postingCommentsUnsubscribeFailed(id, nodeName));
         return;
     }
     try {
@@ -260,6 +274,47 @@ function* postingCommentsUnsubscribeSaga(action: PostingCommentsUnsubscribeActio
         yield* put(postingCommentsUnsubscribed(id, nodeName));
     } catch (e) {
         yield* put(postingCommentsUnsubscribeFailed(id, nodeName));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* postingCommentAddedBlockSaga(action: PostingCommentAddedBlockAction) {
+    const {id, nodeName} = action.payload;
+    const {posting} = yield* select(state => ({
+        posting: getPosting(state, id)
+    }));
+    if (posting == null) {
+        yield* put(postingCommentAddedBlockFailed(id, nodeName));
+        return;
+    }
+    const postingId = posting.receiverPostingId ?? id;
+    try {
+        const blockedInstant = yield* call(Node.postBlockedInstant, ":",
+            {storyType: "comment-added" as const, entryId: postingId});
+        yield* put(postingCommentAddedBlocked(id, blockedInstant.id, nodeName));
+    } catch (e) {
+        yield* put(postingCommentAddedBlockFailed(id, nodeName));
+        yield* put(errorThrown(e));
+    }
+}
+
+function* postingCommentAddedUnblockSaga(action: PostingCommentAddedUnblockAction) {
+    const {id, nodeName} = action.payload;
+    const {posting, instantBlockId} = yield* select(state => ({
+        posting: getPosting(state, id),
+        instantBlockId: getPostingCommentAddedInstantBlockId(state, id)
+    }));
+    if (posting == null) {
+        yield* put(postingCommentAddedUnblockFailed(id, nodeName));
+        return;
+    }
+    try {
+        if (instantBlockId != null) {
+            yield* call(Node.deleteBlockedInstant, ":", instantBlockId);
+        }
+        yield* put(postingCommentAddedUnblocked(id, nodeName));
+    } catch (e) {
+        yield* put(postingCommentAddedUnblockFailed(id, nodeName));
         yield* put(errorThrown(e));
     }
 }

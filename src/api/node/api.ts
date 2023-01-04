@@ -504,6 +504,43 @@ const FeedReferenceType: JSONSchemaType<API.FeedReference> = {
     additionalProperties: false
 };
 
+export const BlockedInstantInfoType: JSONSchemaType<API.BlockedInstantInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "storyType": {
+            type: "string"
+        },
+        "entryId": {
+            type: "string",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer"
+        }
+    },
+    required: ["id", "storyType", "createdAt"],
+    additionalProperties: false
+};
+
+export const BlockedInstantInfo = schema(BlockedInstantInfoType);
+
+const BlockedPostingInstantInfoType: JSONSchemaType<API.BlockedPostingInstantInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "storyType": {
+            type: "string"
+        }
+    },
+    required: ["id", "storyType"],
+    additionalProperties: false
+};
+
 const ClientReactionInfoType: JSONSchemaType<API.ClientReactionInfo> = {
     type: "object",
     properties: {
@@ -952,6 +989,11 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             items: FeedReferenceType,
             nullable: true
         },
+        "blockedInstants": {
+            type: "array",
+            items: BlockedPostingInstantInfoType,
+            nullable: true
+        },
         "clientReaction": {
             ...ClientReactionInfoType,
             nullable: true
@@ -1123,6 +1165,11 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
         "feedReferences": {
             type: "array",
             items: FeedReferenceType,
+            nullable: true
+        },
+        "blockedInstants": {
+            type: "array",
+            items: BlockedPostingInstantInfoType,
             nullable: true
         },
         "clientReaction": {

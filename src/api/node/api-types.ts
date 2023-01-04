@@ -168,6 +168,23 @@ export interface FeedReference {
     } | null;
 }
 
+export interface BlockedInstantAttributes {
+    storyType: StoryType;
+    entryId?: string | null;
+}
+
+export interface BlockedInstantInfo {
+    id: string;
+    storyType: StoryType;
+    entryId?: string | null;
+    createdAt: number;
+}
+
+export interface BlockedPostingInstantInfo {
+    id: string;
+    storyType: StoryType;
+}
+
 export interface ClientReactionInfo {
     negative: boolean;
     emoji: number;
@@ -283,6 +300,7 @@ export interface PostingInfoBase<B> {
     signature?: string | null;
     signatureVersion?: number | null;
     feedReferences?: FeedReference[] | null;
+    blockedInstants?: BlockedPostingInstantInfo[] | null;
     clientReaction?: ClientReactionInfo | null;
     operations?: PostingOperationsInfo | null;
     receiverOperations?: PostingOperationsInfo | null;

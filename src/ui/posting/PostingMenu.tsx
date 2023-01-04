@@ -7,6 +7,8 @@ import { ClientState } from "state/state";
 import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import {
+    postingCommentAddedBlock,
+    postingCommentAddedUnblock,
     postingCommentsSubscribe,
     postingCommentsUnsubscribe,
     postingCopyLink,
@@ -20,7 +22,7 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootLocation, getOwnerName, isPermitted } from "state/node/selectors";
-import { getPostingCommentsSubscriptionId } from "state/postings/selectors";
+import { getPostingCommentAddedInstantBlockId, getPostingCommentsSubscriptionId } from "state/postings/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu } from "ui/control";
 import "ui/entry/EntryMenu.css";
@@ -33,10 +35,10 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function PostingMenu({
-     posting, story, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, postingEditable,
-     postingDeletable, storyEditable, goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog,
-     postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog,
-     shareDialogPrepare, entryCopyText
+     posting, story, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, commentAddedInstantBlockId,
+     postingEditable, postingDeletable, storyEditable, goToCompose, confirmBox, storyPinningUpdate,
+     openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe,
+     postingCommentAddedBlock, postingCommentAddedUnblock, openSourceDialog, shareDialogPrepare, entryCopyText
 }: Props) {
     const {t} = useTranslation();
 
@@ -57,9 +59,24 @@ function PostingMenu({
 
     const onEdit = () => goToCompose(posting.id);
 
-    const onFollowComments = () => postingCommentsSubscribe(posting.id);
+    const ownPosting = (posting.receiverName ?? posting.ownerName) === homeOwnerName;
+    const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
 
-    const onUnfollowComments = () => postingCommentsUnsubscribe(posting.id);
+    const onFollowComments = () => {
+        if (ownPosting) {
+            postingCommentAddedUnblock(posting.id);
+        } else {
+            postingCommentsSubscribe(posting.id);
+        }
+    }
+
+    const onUnfollowComments = () => {
+        if (ownPosting) {
+            postingCommentAddedBlock(posting.id);
+        } else {
+            postingCommentsUnsubscribe(posting.id);
+        }
+    }
 
     const onDelete = () => {
         confirmBox(`Do you really want to delete the post "${posting.heading}"?`, "Delete", "Cancel",
@@ -111,13 +128,13 @@ function PostingMenu({
                 title: t("follow-comments"),
                 href: postingHref,
                 onClick: onFollowComments,
-                show: (posting.receiverName ?? posting.ownerName) !== homeOwnerName && commentsSubscriptionId == null
+                show: !followingComments
             },
             {
                 title: t("unfollow-comments"),
                 href: postingHref,
                 onClick: onUnfollowComments,
-                show: (posting.receiverName ?? posting.ownerName) !== homeOwnerName && commentsSubscriptionId != null
+                show: followingComments
             },
             {
                 divider: true
@@ -165,13 +182,15 @@ const connector = connect(
         nodeOwnerName: getOwnerName(state),
         homeOwnerName: getHomeOwnerName(state),
         commentsSubscriptionId: getPostingCommentsSubscriptionId(state, ownProps.posting.id),
+        commentAddedInstantBlockId: getPostingCommentAddedInstantBlockId(state, ownProps.posting.id),
         postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
         postingDeletable: isPermitted("delete", ownProps.posting, "private", state),
         storyEditable: isPermitted("edit", ownProps.story, "admin", state)
     }),
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
-        postingCommentsSubscribe, postingCommentsUnsubscribe, openSourceDialog, shareDialogPrepare, entryCopyText
+        postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock,
+        openSourceDialog, shareDialogPrepare, entryCopyText
     }
 );
 

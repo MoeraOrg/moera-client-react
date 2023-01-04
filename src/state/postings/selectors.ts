@@ -34,11 +34,17 @@ export function getPostingCommentsSubscriptionId(state: ClientState, id: string,
 
 export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">,
                                         feedName: string): FeedReference | null {
-    return posting.feedReferences ? (posting.feedReferences.find(r => r.feedName === feedName) ?? null) : null;
+    return posting.feedReferences?.find(r => r.feedName === feedName) ?? null;
 }
 
 export function hasPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">, feedName: string): boolean {
     return getPostingFeedReference(posting, feedName) != null;
+}
+
+export function getPostingCommentAddedInstantBlockId(state: ClientState, id: string,
+                                                     nodeName: string = ""): string | null {
+    return state.postings[nodeName]?.[id]?.posting.blockedInstants
+        ?.find(bi => bi.storyType === "comment-added")?.id ?? null;
 }
 
 export function getPostingMoment(posting: Pick<PostingInfo, "feedReferences">, feedName: string): number | null {

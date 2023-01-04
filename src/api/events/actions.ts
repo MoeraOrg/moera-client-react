@@ -5,6 +5,8 @@ import {
     AvatarDeletedEvent,
     AvatarOrderedEvent,
     BaseEvent,
+    BlockedInstantAddedEvent,
+    BlockedInstantDeletedEvent,
     ClientSettingsChangedEvent,
     CommentAddedEvent,
     CommentDeletedEvent,
@@ -142,6 +144,8 @@ export const EVENT_NODE_FRIENDSHIP_UPDATED = "EVENT_NODE_FRIENDSHIP_UPDATED";
 export const EVENT_HOME_FRIENDSHIP_UPDATED = "EVENT_HOME_FRIENDSHIP_UPDATED";
 export const EVENT_NODE_ASK_SUBJECTS_CHANGED = "EVENT_NODE_ASK_SUBJECTS_CHANGED";
 export const EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED = "EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED";
+export const EVENT_HOME_BLOCKED_INSTANT_ADDED = "EVENT_HOME_BLOCKED_INSTANT_ADDED";
+export const EVENT_HOME_BLOCKED_INSTANT_DELETED = "EVENT_HOME_BLOCKED_INSTANT_DELETED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -214,4 +218,6 @@ export type ClientEventAction =
     | EventAction<FriendGroupDeletedEvent>
     | EventAction<FriendshipUpdatedEvent>
     | EventAction<AskSubjectsChangedEvent>
-    | EventAction<RemoteFriendshipUpdatedEvent>;
+    | EventAction<RemoteFriendshipUpdatedEvent>
+    | EventAction<BlockedInstantAddedEvent>
+    | EventAction<BlockedInstantDeletedEvent>;

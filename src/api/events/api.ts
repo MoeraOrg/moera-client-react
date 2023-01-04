@@ -4,6 +4,7 @@ import schema from "api/schema";
 import {
     AvatarImageType,
     AvatarInfoType,
+    BlockedInstantInfoType,
     FeedStatusType,
     FriendGroupInfoType,
     FriendInfoType,
@@ -18,6 +19,8 @@ import {
     AvatarAddedEvent,
     AvatarDeletedEvent,
     AvatarOrderedEvent,
+    BlockedInstantAddedEvent,
+    BlockedInstantDeletedEvent,
     ClientSettingsChangedEvent,
     CommentAddedEvent,
     CommentDeletedEvent,
@@ -1352,6 +1355,30 @@ const RemoteFriendshipUpdatedEventType: JSONSchemaType<RemoteFriendshipUpdatedEv
     required: ["type", "friendOf"]
 }
 
+const BlockedInstantAddedEventType: JSONSchemaType<BlockedInstantAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "blockedInstant": BlockedInstantInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "blockedInstant"]
+}
+
+const BlockedInstantDeletedEventType: JSONSchemaType<BlockedInstantDeletedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "blockedInstant": BlockedInstantInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "blockedInstant"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1414,7 +1441,9 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "FRIEND_GROUP_DELETED": schema(FriendGroupDeletedEventType),
     "FRIENDSHIP_UPDATED": schema(FriendshipUpdatedEventType),
     "ASK_SUBJECTS_CHANGED": schema(AskSubjectsChangedEventType),
-    "REMOTE_FRIENDSHIP_UPDATED": schema(RemoteFriendshipUpdatedEventType)
+    "REMOTE_FRIENDSHIP_UPDATED": schema(RemoteFriendshipUpdatedEventType),
+    "BLOCKED_INSTANT_ADDED": schema(BlockedInstantAddedEventType),
+    "BLOCKED_INSTANT_DELETED": schema(BlockedInstantDeletedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

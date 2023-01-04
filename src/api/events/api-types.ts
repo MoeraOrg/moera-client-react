@@ -1,6 +1,6 @@
 import {
     AvatarImage,
-    AvatarInfo,
+    AvatarInfo, BlockedInstantInfo,
     DraftType,
     FeedStatus,
     FriendGroupInfo,
@@ -321,3 +321,11 @@ export type AskSubjectsChangedEvent = BaseEvent<"ASK_SUBJECTS_CHANGED">;
 export interface RemoteFriendshipUpdatedEvent extends BaseEvent<"REMOTE_FRIENDSHIP_UPDATED"> {
     friendOf: FriendOfInfo;
 }
+
+interface BlockedInstantEvent<T> extends BaseEvent<T> {
+    blockedInstant: BlockedInstantInfo;
+}
+
+export type BlockedInstantAddedEvent = BlockedInstantEvent<"BLOCKED_INSTANT_ADDED">
+
+export type BlockedInstantDeletedEvent = BlockedInstantEvent<"BLOCKED_INSTANT_DELETED">

@@ -9,6 +9,8 @@ import {
     AvatarAttributes,
     AvatarInfo,
     AvatarOrdinal,
+    BlockedInstantAttributes,
+    BlockedInstantInfo,
     CommentCreated,
     CommentInfo,
     CommentMassAttributes,
@@ -762,5 +764,19 @@ export function* askRemoteNode(nodeName: string | null, remoteNodeName: string, 
     return yield* callApi({
         nodeName, location: ut`/nodes/${remoteNodeName}/ask`, method: "POST", auth: true,
         body: {subject, friendGroupId, message}, schema: NodeApi.Result
+    });
+}
+
+export function* postBlockedInstant(nodeName: string | null,
+                                    blockedInstant: BlockedInstantAttributes): CallApiResult<BlockedInstantInfo> {
+    return yield* callApi({
+        nodeName, location: "/blocked-instants", method: "POST", auth: true, body: blockedInstant,
+        schema: NodeApi.BlockedInstantInfo
+    });
+}
+
+export function* deleteBlockedInstant(nodeName: string | null, id: string): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/blocked-instants/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }
