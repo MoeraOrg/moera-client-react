@@ -2,6 +2,7 @@ import { conj, trigger } from "state/trigger";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
     PROFILE_AVATAR_CONFIRM_DELETE,
+    PROFILE_AVATAR_CREATED,
     PROFILE_CLOSE_AVATAR_EDIT_DIALOG,
     PROFILE_EDIT,
     PROFILE_EDIT_CANCEL,
@@ -45,5 +46,6 @@ export default [
                 profileAvatarDelete(signal.payload.id, signal.payload.onDeleted))),
     trigger(PROFILE_OPEN_AVATAR_EDIT_DIALOG, true, dialogOpened(profileCloseAvatarEditDialog())),
     trigger(PROFILE_CLOSE_AVATAR_EDIT_DIALOG, true, dialogClosed),
+    trigger(PROFILE_AVATAR_CREATED, true, dialogClosed),
     trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict)
 ]
