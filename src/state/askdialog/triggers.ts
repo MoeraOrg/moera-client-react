@@ -1,6 +1,7 @@
 import { trigger } from "state/trigger";
 import { dialogClosed, dialogOpened } from "state/navigation/actions";
 import {
+    ASK_DIALOG_SENT,
     askDialogLoad,
     CLOSE_ASK_DIALOG,
     closeAskDialog,
@@ -16,5 +17,6 @@ export default [
         isAskDialogToBeLoaded,
         (signal: OpenAskDialogAction) => askDialogLoad(signal.payload.nodeName!)
     ),
-    trigger(CLOSE_ASK_DIALOG, true, dialogClosed)
+    trigger(CLOSE_ASK_DIALOG, true, dialogClosed),
+    trigger(ASK_DIALOG_SENT, true, dialogClosed)
 ];
