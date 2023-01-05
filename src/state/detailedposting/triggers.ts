@@ -166,7 +166,7 @@ export default [
         (state, signal: CommentDraftSavedAction) =>
             isCommentPosted(state, signal.payload.commentId, signal.payload.formId),
         signal => signal.payload.commentId == null
-            ? commentDraftDelete()
+            ? commentDraftDelete(signal.payload.draft)
             : commentDialogCommentReset(signal.payload.draft.id, false)
     ),
     trigger(

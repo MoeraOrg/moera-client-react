@@ -71,7 +71,9 @@ const ComposeDraftSaver = (props: Props) => {
                 commentDialogCommentReset(draft.id, false);
             }
         } else {
-            commentDraftDelete();
+            if (draft != null) {
+                commentDraftDelete(draft);
+            }
         }
     }
 

@@ -301,9 +301,12 @@ export const commentDraftSaveFailed = (nodeName: string, postingId: string,
 });
 
 export const COMMENT_DRAFT_DELETE = "COMMENT_DRAFT_DELETE";
-export type CommentDraftDeleteAction = Action<typeof COMMENT_DRAFT_DELETE>;
-export const commentDraftDelete = (): CommentDraftDeleteAction => ({
-    type: COMMENT_DRAFT_DELETE
+export type CommentDraftDeleteAction = ActionWithPayload<typeof COMMENT_DRAFT_DELETE, {
+    draft: DraftInfo;
+}>;
+export const commentDraftDelete = (draft: DraftInfo): CommentDraftDeleteAction => ({
+    type: COMMENT_DRAFT_DELETE,
+    payload: {draft}
 });
 
 export const COMMENT_DRAFT_DELETED = "COMMENT_DRAFT_DELETED";

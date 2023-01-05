@@ -44,6 +44,7 @@ import {
     commentDialogCommentLoadFailed,
     CommentDialogCommentResetAction,
     commentDraftAbsent,
+    CommentDraftDeleteAction,
     commentDraftDeleted,
     CommentDraftLoadAction,
     commentDraftLoaded,
@@ -324,10 +325,12 @@ function* commentPostSaga(action: CommentPostAction) {
             comment = yield* call(Node.putComment, receiverName, receiverPostingId, commentId, commentText);
         }
         yield* put(commentSet(receiverName, comment));
-        yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment));
 
         const draftId = yield* select((state: ClientState) =>
             (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id);
+
+        yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment));
+
         if (draftId != null) {
             yield* call(Node.deleteDraft, ":", draftId);
         }
@@ -432,8 +435,8 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     }
 }
 
-function* commentDraftDeleteSaga() {
-    const draft = yield* select((state: ClientState) => state.detailedPosting.compose.draft);
+function* commentDraftDeleteSaga(action: CommentDraftDeleteAction) {
+    const {draft} = action.payload;
 
     if (draft?.id == null) {
         return;
