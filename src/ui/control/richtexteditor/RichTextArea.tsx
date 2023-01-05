@@ -11,7 +11,7 @@ import { getSetting } from "state/settings/selectors";
 import { TextareaAutosize } from "ui/control";
 import RichTextPasteDialog, { RichTextPasteMode } from "ui/control/richtexteditor/RichTextPasteDialog";
 import { extractUrls, replaceSmileys } from "util/text";
-import { containsTags, htmlToEmoji, quoteHtml, safeImportHtml } from "util/html";
+import { containsTags, quoteHtml, safeImportHtml } from "util/html";
 import { insertText } from "util/misc";
 
 const MENTION_START = /(^|\s)@$/;
