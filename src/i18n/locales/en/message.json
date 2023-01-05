@@ -460,7 +460,8 @@
       "password" : "Password",
       "reactions" : "Reactions",
       "replies" : "Replies",
-      "subscribers-and-subscriptions" : "Subscribers & Subscriptions",
+      "subscribers-and-subscriptions" : "Subscribers, Subscriptions and Friends",
+      "subscription-friend-requests" : "Subscription and Friend Requests",
       "tokens" : "Tokens"
     },
     "client" : {
@@ -541,6 +542,10 @@
       }
     },
     "node" : {
+      "ask_friend_allowed" : "Allow to ask for friendship",
+      "ask_interval" : "Not more often than once in",
+      "ask_subscribe_allowed" : "Allow to ask for subscription",
+      "ask_total_max" : "No more than",
       "avatar_max-size" : "Maximal size of avatars",
       "comment_deleted_lifetime" : "Purge deleted comments after",
       "comment_draft_lifetime" : "Purge comment drafts after",
@@ -549,6 +554,10 @@
       "comment_revision_lifetime" : "Purge old comment revisions after",
       "credentials-reset_token_lifetime" : "Invalidate code for resetting a password after",
       "feed_width" : "Feed width (in pixels)",
+      "friend-ofs_view" : "List of added me as a friend is visible to",
+      "friend-ofs_view-total" : "Number of added me as a friend is visible to",
+      "friends_view" : "List of friends is visible to",
+      "friends_view-total" : "Number of friends is visible to",
       "instants_lifetime" : "Purge notifications after",
       "instants_viewed_lifetime" : "Purge viewed notifications after",
       "media_max-size" : "Maximal size of an uploaded media",
@@ -581,6 +590,8 @@
       "remote-reaction-verification_lifetime" : "Reaction verification information lifetime",
       "subscribers_view" : "List of subscribers is visible to",
       "subscribers_view-total" : "Number of subscribers is visible to",
+      "subscription_auto_forced" : "Do not allow to unsubscribe from the automatic subscription",
+      "subscription_auto_node" : "Automatically subscribe to the blog",
       "subscriptions_view" : "List of subscriptions is visible to",
       "subscriptions_view-total" : "Number of subscriptions is visible to",
       "token_lifetime" : "Authentication token lifetime",

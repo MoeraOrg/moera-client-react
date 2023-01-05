@@ -460,7 +460,8 @@
       "password" : "Пароль",
       "reactions" : "Реакції",
       "replies" : "Відповіді",
-      "subscribers-and-subscriptions" : "Підписники та підписки",
+      "subscribers-and-subscriptions" : "Підписники, підписки та друзі",
+      "subscription-friend-requests" : "Запити на підписку і дружбу",
       "tokens" : "Токени"
     },
     "client" : {
@@ -541,6 +542,10 @@
       }
     },
     "node" : {
+      "ask_friend_allowed" : "Дозволяти запити на дружбу",
+      "ask_interval" : "Не частіше, ніж один раз у",
+      "ask_subscribe_allowed" : "Дозволяти запити на підписку",
+      "ask_total_max" : "Не більше, ніж",
       "avatar_max-size" : "Максимальний розмір аватарів",
       "comment_deleted_lifetime" : "Стирати видалені коментарі через",
       "comment_draft_lifetime" : "Стирати чернетки коментарів через",
@@ -549,6 +554,10 @@
       "comment_revision_lifetime" : "Стирати старі версії коментарів через",
       "credentials-reset_token_lifetime" : "Анулювати код для скидання пароля через",
       "feed_width" : "Ширина стрічки (у пікселах)",
+      "friend-ofs_view" : "Список тих, хто додав мене у друзі, видно",
+      "friend-ofs_view-total" : "Кількість тих, хто додав мене у друзі, видно",
+      "friends_view" : "Список друзів видно",
+      "friends_view-total" : "Кількість друзів видно",
       "instants_lifetime" : "Стирати повідомлення через",
       "instants_viewed_lifetime" : "Стирати переглянуті повідомлення через",
       "media_max-size" : "Максимальний розмір відправленних медіафайлів",
@@ -581,6 +590,8 @@
       "remote-reaction-verification_lifetime" : "Зберігати результати верифікації реакції протягом",
       "subscribers_view" : "Список підписників видно",
       "subscribers_view-total" : "Кількість підписників видно",
+      "subscription_auto_forced" : "Не дозволяти відписуватись від автоматичної підписки",
+      "subscription_auto_node" : "Автоматична підписка на блог",
       "subscriptions_view" : "Список підписок видно",
       "subscriptions_view-total" : "Кількість підписок видно",
       "token_lifetime" : "Термін життя токена для автентифікації",

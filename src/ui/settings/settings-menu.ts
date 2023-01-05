@@ -93,7 +93,17 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option("subscribers.view", 0),
                 option("subscribers.view-total", 0),
                 option("subscriptions.view", 0),
-                option("subscriptions.view-total")
+                option("subscriptions.view-total", 0),
+                option("friends.view", 0),
+                option("friends.view-total", 0),
+                option("friend-ofs.view", 0),
+                option("friend-ofs.view-total")
+            ]),
+            chapter("subscription-friend-requests", null, [
+                option("ask.subscribe.allowed", 0),
+                option("ask.friend.allowed"),
+                option("ask.interval"),
+                option("ask.total.max")
             ]),
             chapter("tokens", null, [
                 component(SettingsItemTokens)

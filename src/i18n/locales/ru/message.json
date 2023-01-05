@@ -460,7 +460,8 @@
       "password" : "Пароль",
       "reactions" : "Реакции",
       "replies" : "Ответы",
-      "subscribers-and-subscriptions" : "Подписчики и подписки",
+      "subscribers-and-subscriptions" : "Подписчики, подписки и друзья",
+      "subscription-friend-requests" : "Запросы на подписку и дружбу",
       "tokens" : "Токены"
     },
     "client" : {
@@ -541,6 +542,10 @@
       }
     },
     "node" : {
+      "ask_friend_allowed" : "Разрешить запросы на дружбу",
+      "ask_interval" : "Не чаще, чем один раз в",
+      "ask_subscribe_allowed" : "Разрешить запросы на подписку",
+      "ask_total_max" : "Не больше, чем",
       "avatar_max-size" : "Максимальный размер аватаров",
       "comment_deleted_lifetime" : "Стирать удалённые комментарии через",
       "comment_draft_lifetime" : "Стирать черновики комментариев через",
@@ -549,6 +554,10 @@
       "comment_revision_lifetime" : "Стирать старые версии комментариев через",
       "credentials-reset_token_lifetime" : "Аннулировать код для сброса пароля через",
       "feed_width" : "Ширина ленты (в пикселах)",
+      "friend-ofs_view" : "Список добавивших меня в друзья виден",
+      "friend-ofs_view-total" : "Число добавивших меня в друзья видно",
+      "friends_view" : "Список друзей виден",
+      "friends_view-total" : "Число друзей видно",
       "instants_lifetime" : "Стирать уведомления через",
       "instants_viewed_lifetime" : "Стирать просмотренные уведомления через",
       "media_max-size" : "Максимальный размер загружаемых медиафайлов",
@@ -581,6 +590,8 @@
       "remote-reaction-verification_lifetime" : "Хранить результаты верификации реакции в течение",
       "subscribers_view" : "Список подписчиков виден",
       "subscribers_view-total" : "Число подписчиков видно",
+      "subscription_auto_forced" : "Не разрешать отписываться от автоматической подписки",
+      "subscription_auto_node" : "Автоматическая подписка на блог",
       "subscriptions_view" : "Список подписок виден",
       "subscriptions_view-total" : "Число подписок видно",
       "token_lifetime" : "Срок жизни токена для аутентификации",
