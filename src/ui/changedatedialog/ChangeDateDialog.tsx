@@ -33,7 +33,7 @@ function ChangeDateDialog(props: Props) {
     }
 
     return (
-        <ModalDialog title={t("change-date-time")} onClose={closeChangeDateDialog}>
+        <ModalDialog title={t("change-date-time")} onClose={closeChangeDateDialog} shadowClick={false}>
             <Form>
                 <div className="modal-body">
                     <DateTimeField name="publishedAt"/>

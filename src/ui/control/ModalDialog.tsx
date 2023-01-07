@@ -12,6 +12,7 @@ interface Props {
     style?: Partial<Record<string, string>>;
     centered?: boolean;
     risen?: boolean;
+    shadowClick?: boolean;
     loading?: boolean;
     onClose?: () => void;
     onKeyDown?: (event: KeyboardEvent) => void;
@@ -19,7 +20,7 @@ interface Props {
 }
 
 export function ModalDialog({
-    title, size, className, style, centered, risen, loading, children, onClose, onKeyDown
+    title, size, className, style, centered, risen, shadowClick = true, loading, children, onClose, onKeyDown
 }: Props) {
     const mouseDownX = useRef<number>();
     const mouseDownY = useRef<number>();
@@ -52,10 +53,11 @@ export function ModalDialog({
     }
 
     const onBackdropMouseUp = (e: React.MouseEvent) => {
-        if (mouseDownX.current != null && Math.abs(mouseDownX.current - e.clientX) <= 10
+        if (
+            mouseDownX.current != null && Math.abs(mouseDownX.current - e.clientX) <= 10
             && mouseDownY.current != null && Math.abs(mouseDownY.current - e.clientY) <= 10
-            && onClose != null) {
-
+            && shadowClick && onClose != null
+        ) {
             onClose();
         }
         mouseDownX.current = undefined;
