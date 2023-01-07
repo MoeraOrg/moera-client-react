@@ -112,7 +112,7 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
                             {
                                 icon: "people-arrows",
                                 title: "mutual-friends",
-                                visible: hasFriendOf
+                                visible: hasFriend
                             }
                         ]}/>
                     </div>
@@ -147,7 +147,7 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
                                 {
                                     icon: "people-arrows",
                                     title: "mutual-friends",
-                                    visible: hasFriend
+                                    visible: hasFriendOf
                                 }
                             ]}/>
                         </div>
