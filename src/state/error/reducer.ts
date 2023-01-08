@@ -14,7 +14,7 @@ export default (state: ErrorState = initialState, action: ClientAction): ErrorSt
             const {message, messageVerbose} = action.payload;
             return {
                 message: message,
-                messageVerbose: messageVerbose ? messageVerbose : message,
+                messageVerbose: messageVerbose ?? message,
                 visible: true
             };
         case ERROR_DISMISS:

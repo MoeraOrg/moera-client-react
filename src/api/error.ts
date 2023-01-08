@@ -16,9 +16,9 @@ export class VerboseError extends Error {
 
     messageVerbose: string;
 
-    constructor(message: string, messageVerbose: string) {
+    constructor(message: string, messageVerbose: string | null = null) {
         super(message);
-        this.messageVerbose = messageVerbose;
+        this.messageVerbose = messageVerbose ?? message;
     }
 
 }
@@ -65,10 +65,14 @@ export class NodeApiError extends Error {
 
 }
 
-export class HomeNotConnectedError extends Error {
+export class HomeNotConnectedError extends VerboseError {
 
     constructor() {
         super("Not connected to home");
+    }
+
+    setQuery(method: string, location: string): void {
+        this.messageVerbose = `${method} ${location}: ${this.message}`
     }
 
 }

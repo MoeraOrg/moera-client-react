@@ -67,7 +67,16 @@ export function* callApi<T>({
     errorFilter = false,
     onProgress
 }: CallApiParams<T>):  CallApiResult<T> {
-    const {rootLocation, rootApi, errorTitle} = yield* call(selectApi, nodeName);
+    let api: ApiSelection = {rootLocation: null, rootApi: "", errorTitle: ""};
+    try {
+        api = yield* call(selectApi, nodeName);
+    } catch (e) {
+        if (e instanceof HomeNotConnectedError) {
+            e.setQuery(method ?? "", location);
+        }
+        throw e;
+    }
+    const {rootLocation, rootApi, errorTitle} = api;
     if (!rootLocation) {
         throw new NameResolvingError(nodeName);
     }
