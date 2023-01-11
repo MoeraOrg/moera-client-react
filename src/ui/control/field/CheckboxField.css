@@ -6,3 +6,10 @@
 .form-control.checkbox-control-single {
     width: auto;
 }
+
+.form-control.is-invalid {
+    padding-right: 0.75rem;
+}
+.form-control.is-valid {
+    padding-right: 0.75rem;
+}
