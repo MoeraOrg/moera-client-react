@@ -85,7 +85,7 @@ function FriendGroupsDialog(props: Props) {
                         <div key={index} className="d-flex">
                             <CheckboxField<string[]> name="addedGroups" value={String(index)}
                                 isChecked={(v: string[]) => v.includes(String(index))} anyValue />
-                            <div className="friendGroupsDialog-input">
+                            <div className="group-titles-written">
                                 <InputField name={`addedGroupTitles[${index}]`} maxLength={63} />
                             </div>
                             <PrincipalField name={`addedGroupView[${index}]`} values={["public", "private", "admin"]}
