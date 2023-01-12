@@ -36,14 +36,14 @@ function FriendGroupsDialog(props: Props) {
         show, nodeName, nodeCard, changing, availableGroups, nameDisplayMode, closeFriendGroupsDialog, values,
         setFieldValue
     } = props;
-    const { t } = useTranslation();
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (show) {
             const values = friendGroupsDialogLogic.mapPropsToValues(props);
-            props.resetForm({ values });
+            props.resetForm({values});
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show, nodeName]); // 'props' are missing on purpose
 
     if (!show) {
@@ -73,13 +73,13 @@ function FriendGroupsDialog(props: Props) {
 
     return (
         <ModalDialog title={nodeName != null ? t("change-friend-groups", { name, gender }) : t("change-groups")}
-            onClose={closeFriendGroupsDialog}>
+                     onClose={closeFriendGroupsDialog}>
             <Form>
                 <div className="modal-body">
                     {available.filter((fg): fg is TitledFriendGroupInfo => fg.title != null).map(fg =>
                         <CheckboxField<string[]> key={fg.id} id={`groups_${fg.id}`} name="groups" title={fg.title}
-                            value={fg.id} isChecked={isGroupChecked(fg.id)}
-                            onChange={onGroupChecked(fg.id)} anyValue />
+                                                 value={fg.id} isChecked={isGroupChecked(fg.id)}
+                                                 onChange={onGroupChecked(fg.id)} anyValue/>
                     )}
                     {values.addedGroupTitles.map((title, index) =>
                         <div key={index} className="d-flex">
@@ -89,7 +89,7 @@ function FriendGroupsDialog(props: Props) {
                                 <InputField name={`addedGroupTitles[${index}]`} maxLength={63} />
                             </div>
                             <PrincipalField name={`addedGroupView[${index}]`} values={["public", "private", "admin"]}
-                                groupClassName="ms-1" />
+                                            groupClassName="ms-1"/>
                         </div>
                     )}
                     <Button variant="outline-secondary" size="sm" onClick={onAddGroup}>{t("add-group")}</Button>
@@ -121,7 +121,7 @@ const friendGroupsDialogLogic = {
                 errors[index] = "must-not-empty";
             }
         });
-        return errors.length > 0 ? { addedGroupTitles: errors } : {};
+        return errors.length > 0 ? {addedGroupTitles: errors} : {};
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
