@@ -49,6 +49,7 @@ import { ReactComponent as Twemoji1f971 } from "./1f971.svg";
 import { ReactComponent as Twemoji1f9f8 } from "./1f9f8.svg";
 import { ReactComponent as Twemoji1fac2 } from "./1fac2.svg";
 
+import { twemojiUrl } from "util/twemoji";
 import "./Twemoji.css";
 
 const CACHED = new Map([
@@ -111,7 +112,6 @@ export default function Twemoji({code, title = ""}: Props) {
     if (CACHED.has(emoji)) {
         return React.createElement(CACHED.get(emoji)!, {title, className: "twemoji"});
     } else {
-        return <img className="twemoji" src={`https://twemoji.maxcdn.com/v/latest/svg/${emoji}.svg`}
-                    alt={title} title={title}/>
+        return <img className="twemoji" src={twemojiUrl(emoji)} alt={title} title={title}/>
     }
 }

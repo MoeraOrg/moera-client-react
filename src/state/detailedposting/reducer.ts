@@ -78,6 +78,7 @@ import {
     EVENT_RECEIVER_COMMENT_DELETED
 } from "api/events/actions";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
+import { twemojiUrl } from "util/twemoji";
 
 const emptyComments: CommentsState = {
     receiverName: null,
@@ -169,7 +170,7 @@ function isSingleEmojiComment(comment: CommentInfo) {
     }
 
     const innerText = match[1];
-    const emojis = parseEmojis(innerText);
+    const emojis = parseEmojis(innerText, {buildUrl: twemojiUrl});
     if (emojis.length !== 1) {
         return false;
     }

@@ -2,6 +2,8 @@ import sanitizeHtml, { Attributes, IOptions, Tag, Transformer } from 'sanitize-h
 import { EmojiEntity, parse as parseEmojis } from 'twemoji-parser';
 import * as HtmlEntities from 'html-entities';
 
+import { twemojiUrl } from "util/twemoji";
+
 let prefixIndex = 0;
 
 function addDirAuto(tagName: string, attribs: Attributes): Tag {
@@ -71,7 +73,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
             "text-align": [/^left$/, /^right$/, /^center$/],
         },
         b: {
-            "background-image": [/^url\('https:\/\/twemoji.maxcdn.com\//]
+            "background-image": [/^url\('https:\/\/cdnjs.cloudflare.com\/ajax\/libs\/twemoji\//]
         },
         iframe: {
             "width": [/^\d+px$/],
@@ -142,7 +144,7 @@ export function replaceEmojis(html: string | null | undefined): string {
         return "";
     }
 
-    const entities = parseEmojis(html);
+    const entities = parseEmojis(html, {buildUrl: twemojiUrl});
     let shift = 0;
     let current = html;
     for (let entity of entities) {
