@@ -2,7 +2,7 @@ import { all, call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { NameResolvingError, Node } from "api";
+import { HomeNotConnectedError, NameResolvingError, Node } from "api";
 import { executor } from "state/executor";
 import { mutuallyIntroduced } from "state/init-selectors";
 import {
@@ -122,7 +122,7 @@ function* nodeCardSubscriptionLoadSaga(action: WithContext<NodeCardSubscriptionL
         yield* put(nodeCardSubscriptionSet(nodeName, subscriber ?? null, subscription ?? null));
     } catch (e) {
         yield* put(nodeCardSubscriptionLoadFailed(nodeName));
-        if (!(e instanceof NameResolvingError)) {
+        if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
             yield* put(errorThrown(e));
         }
     }
@@ -155,7 +155,7 @@ function* nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendshipLoadA
         yield* put(nodeCardFriendshipSet(nodeName, groups ?? null, remoteGroups ?? null));
     } catch (e) {
         yield* put(nodeCardFriendshipLoadFailed(nodeName));
-        if (!(e instanceof NameResolvingError)) {
+        if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
             yield* put(errorThrown(e));
         }
     }
