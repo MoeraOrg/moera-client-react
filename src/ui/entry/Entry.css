@@ -40,3 +40,7 @@
         margin-inline-start: .5rem;
     }
 }
+
+.entry .footnotes LI P:last-of-type {
+    margin-bottom: 0;
+}

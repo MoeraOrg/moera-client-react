@@ -49,7 +49,7 @@ const BASE_SAFE_HTML_SETTINGS: IOptions = {
         img: ["emoji"],
         b: ["emoji"],
         span: ["katex"],
-        div: ["katex"]
+        div: ["footnotes", "katex"]
     },
     allowedIframeHostnames: [
         "c.simmer.io",
