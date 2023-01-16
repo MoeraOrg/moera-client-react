@@ -31,7 +31,7 @@ import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_SATISFY, STORY_UPDATED } from "state/stories/actions";
-import { buildSummary } from "ui/instant/instant-summaries";
+import { buildInstantSummary } from "ui/instant/instant-types";
 import { replaceEmojis } from "util/html";
 
 const initialState = {
@@ -63,8 +63,8 @@ function extractStory(story: StoryInfo, homeOwnerName: string | null): ExtStoryI
     if (story.comment) {
         t.commentId = story.comment.id;
     }
-    if (story.summary == null && story.summaryData != null) {
-        story.summary = buildSummary(story.storyType, story.summaryData, homeOwnerName);
+    if (story.summary == null) {
+        story.summary = buildInstantSummary(story, homeOwnerName);
     }
     t.summary = replaceEmojis(story.summary);
     return t;
@@ -454,15 +454,10 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             const istate = immutable.wrap(state);
             for (let [fn, feed] of Object.entries(state)) {
                 if (feed != null) {
-                    istate.set([fn, "stories"], feed.stories.map(story => {
-                        if (story.summaryData == null) {
-                            return story;
-                        }
-                        return {
-                            ...story,
-                            summary: replaceEmojis(buildSummary(story.storyType, story.summaryData, homeOwnerName))
-                        }
-                    }));
+                    istate.set([fn, "stories"], feed.stories.map(story => ({
+                        ...story,
+                        summary: replaceEmojis(buildInstantSummary(story, homeOwnerName))
+                    })));
                 }
             }
             return istate.value();
