@@ -2,13 +2,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { StoryInfo } from "api/node/api-types";
-import { ClientAction } from "state/action";
 import { storySatisfy } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
 import { Button } from "ui/control";
-
-export type InstantStoryButtonsActionSupplier = (story: StoryInfo) => ClientAction | null | undefined;
 
 export interface InstantStoryButtonsProps {
     story: ExtStoryInfo;

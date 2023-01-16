@@ -6,11 +6,8 @@ import { ClientState } from "state/state";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { friendshipUpdate } from "state/people/actions";
-import {
-    InstantStoryButtons,
-    InstantStoryButtonsActionSupplier,
-    InstantStoryButtonsProps
-} from "ui/instant/buttons/InstantStoryButtons";
+import { InstantStoryButtonsActionSupplier } from "ui/instant/instant-types";
+import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 
 type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
 
