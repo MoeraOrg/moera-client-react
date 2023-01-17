@@ -299,7 +299,7 @@ export function getInstantTarget(story: StoryInfo | ExtStoryInfo): InstantTarget
     return getInstantTypeDetails(story.storyType)?.target(story) ?? {nodeName: ":", href: "/"};
 }
 
-export function buildInstantSummary(story: StoryInfo | ExtStoryInfo, homeOwnerName: string | null): string {
+export function getInstantSummary(story: StoryInfo | ExtStoryInfo, homeOwnerName: string | null): string {
     if (story.summaryData == null) {
         return "";
     }

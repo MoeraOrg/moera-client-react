@@ -31,7 +31,7 @@ import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_SATISFY, STORY_UPDATED } from "state/stories/actions";
-import { buildInstantSummary } from "ui/instant/instant-types";
+import { getInstantSummary } from "ui/instant/instant-types";
 import { replaceEmojis } from "util/html";
 
 const initialState = {
@@ -64,7 +64,7 @@ function extractStory(story: StoryInfo, homeOwnerName: string | null): ExtStoryI
         t.commentId = story.comment.id;
     }
     if (story.summary == null) {
-        story.summary = buildInstantSummary(story, homeOwnerName);
+        story.summary = getInstantSummary(story, homeOwnerName);
     }
     t.summary = replaceEmojis(story.summary);
     return t;
@@ -456,7 +456,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 if (feed != null) {
                     istate.set([fn, "stories"], feed.stories.map(story => ({
                         ...story,
-                        summary: replaceEmojis(buildInstantSummary(story, homeOwnerName))
+                        summary: replaceEmojis(getInstantSummary(story, homeOwnerName))
                     })));
                 }
             }
