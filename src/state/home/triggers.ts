@@ -24,7 +24,12 @@ export default [
         EVENT_HOME_NODE_NAME_CHANGED,
         true,
         (signal: EventAction<NodeNameChangedEvent>) =>
-            homeOwnerSet(signal.payload.name, false, signal.payload.fullName ?? null, signal.payload.avatar ?? null)
+            homeOwnerSet(
+                signal.payload.name || null, // may be ""
+                false,
+                signal.payload.fullName ?? null,
+                signal.payload.avatar ?? null
+            )
     ),
     trigger(EVENT_HOME_NODE_NAME_CHANGED, true, homeOwnerVerify)
 ];
