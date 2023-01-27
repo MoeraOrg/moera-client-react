@@ -11,6 +11,7 @@ import { friendshipUpdate } from "state/people/actions";
 import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
 import { openAskDialog } from "state/askdialog/actions";
 import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
+import { openBlockDialog } from "state/blockdialog/actions";
 import { getHomeFriendsId, getHomeOwnerGender } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
@@ -28,7 +29,7 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButtonImpl({
     small, nodeName, feedName, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe, friendshipUpdate,
-    openFriendGroupsDialog, openAskDialog, openPeopleHideDialog
+    openFriendGroupsDialog, openAskDialog, openPeopleHideDialog, openBlockDialog
 }: Props) {
     const subscribing = card?.subscription?.subscribing ?? false;
     const unsubscribing = card?.subscription?.unsubscribing ?? false;
@@ -61,6 +62,8 @@ function SubscribeButtonImpl({
     const onAskDialog = () => openAskDialog(nodeName);
 
     const onHideDialog = () => openPeopleHideDialog(nodeName, feedName);
+
+    const onBlockDialog = () => openBlockDialog(nodeName);
 
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;
@@ -144,6 +147,15 @@ function SubscribeButtonImpl({
                     href: peerHref,
                     onClick: onHideDialog,
                     show: subscribed || subscribedToMe || friend
+                },
+                {
+                    divider: true
+                },
+                {
+                    title: t("block-ellipsis"),
+                    href: peerHref,
+                    onClick: onBlockDialog,
+                    show: true
                 }
             ]}>
                 {small ?
@@ -165,7 +177,10 @@ const connector = connect(
         peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
         friendsId: getHomeFriendsId(state)
     }),
-    { feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog, openPeopleHideDialog }
+    {
+        feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog, openPeopleHideDialog,
+        openBlockDialog
+    }
 );
 
 export const SubscribeButton = connector(SubscribeButtonImpl);

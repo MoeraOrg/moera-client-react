@@ -36,6 +36,7 @@ import linkPreviews from "state/linkpreviews/reducer";
 import peopleHideDialog from "state/peoplehidedialog/reducer";
 import friendGroupsDialog from "state/friendgroupsdialog/reducer";
 import askDialog from "state/askdialog/reducer";
+import blockDialog from "state/blockdialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -148,6 +149,7 @@ const reducers = combineReducers({
     peopleHideDialog,
     friendGroupsDialog,
     askDialog,
+    blockDialog,
     messageBox,
     confirmBox,
     flashBox,

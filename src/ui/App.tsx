@@ -30,6 +30,7 @@ import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 import PeopleHideDialog from "ui/peoplehidedialog/PeopleHideDialog";
 import FriendGroupsDialog from "ui/friendgroupsdialog/FriendGroupsDialog";
 import AskDialog from "ui/askdialog/AskDialog";
+import BlockDialog from "ui/blockdialog/BlockDialog";
 import ProgressBox from "ui/progressbox/ProgressBox";
 import "./colors.css";
 import "./zindex.css";
@@ -62,6 +63,7 @@ const App = ({atNode, feedWidth}: Props) => (
                 <PeopleHideDialog/>
                 <FriendGroupsDialog/>
                 <AskDialog/>
+                <BlockDialog/>
             </>
         :
             <WelcomePage/>
