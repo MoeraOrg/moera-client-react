@@ -48,10 +48,8 @@ const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) 
                     {t("profile")}
                     {" "}<FeedSubscribeButton feedName="timeline"/>
                     {" "}{editable && <EditButton/>}
-                </h2>
-                <div className="page-header-buttons">
                     <PageShareButton href="/profile"/>
-                </div>
+                </h2>
             </PageHeader>
             <Page>
                 <div className="profile-view">
