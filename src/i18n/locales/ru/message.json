@@ -311,6 +311,7 @@
   "nothing-yet" : "Тут пока пусто.",
   "notify-about-update" : "Уведомить подписчиков об обновлении",
   "notify-followers" : "Уведомить подписчиков",
+  "not-subscribed" : "Не {gender, select, female {подписан} other {подписана}}",
   "not-valid-e-mail" : "Недопустимый адрес e-mail",
   "ok" : "OK",
   "only-selected-allowed" : "Разрешены только выбранные",

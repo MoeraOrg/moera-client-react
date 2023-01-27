@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -63,30 +64,34 @@ function SubscribeButtonImpl({
 
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;
-    const friend = friendGroups != null && friendGroups.length > 0;
-    const friendOf = remoteFriendGroups != null && remoteFriendGroups.length > 0;
-    const friendIcon = friend
-        ? (friendOf ? "people-arrows" : "person")
-        : (friendOf ? "person-walking-arrow-right" : null)
-    const friendCaption = friend
-        ? (friendOf ? t("mutual-friends") : t("friend"))
-        : (friendOf ? t("in-friends") : null)
 
     const loading = (!subscribed ? subscribing : unsubscribing) || updatingFriendship;
     if (loading) {
         return <Button variant="outline-primary" size="sm" className="subscribe-button" loading={loading}/>;
     }
 
-    const subscriptionCaption = !subscribed
-        ? (!subscribedToMe ? t("subscribe") : t("subscribed-to-me", {"gender": tGender(subscriber?.contact?.gender)}))
-        : (!subscribedToMe ? t("subscribed", {"gender": tGender(homeGender)}) : t("mutually-subscribed"));
+    const subscriptionIcon: IconProp | null = subscribed
+        ? (subscribedToMe ? "arrow-right-arrow-left" : "eye")
+        : (subscribedToMe ? "arrows-to-eye" : null)
+    const subscriptionCaption = subscribed
+        ? (subscribedToMe ? t("mutually-subscribed") : t("subscribed", {"gender": tGender(homeGender)}))
+        : (subscribedToMe ? t("subscribed-to-me", {"gender": tGender(subscriber?.contact?.gender)}) : null);
+
+    const friend = friendGroups != null && friendGroups.length > 0;
+    const friendOf = remoteFriendGroups != null && remoteFriendGroups.length > 0;
+    const friendIcon: IconProp | null = friend
+        ? (friendOf ? "people-arrows" : "person")
+        : (friendOf ? "person-walking-arrow-right" : null)
+    const friendCaption = friend
+        ? (friendOf ? t("mutual-friends") : t("friend"))
+        : (friendOf ? t("in-friends") : null)
 
     return (
         <>
             <DropdownMenu className="btn btn-sm btn-outline-primary subscribe-button" items={[
                 {
-                    caption: subscriptionCaption,
-                    show: small ?? false
+                    caption: subscriptionCaption ?? t("not-subscribed", {"gender": tGender(homeGender)}),
+                    show: subscriptionCaption != null || friendCaption != null
                 },
                 {
                     title: !subscribedToMe ? t("subscribe") : t("subscribe-back"),
@@ -141,8 +146,11 @@ function SubscribeButtonImpl({
                     show: subscribed || subscribedToMe || friend
                 }
             ]}>
-                {friendIcon && <><FontAwesomeIcon icon={friendIcon}/>&nbsp;</>}
-                {small ? <FontAwesomeIcon icon={["far", "bell"]}/> : subscriptionCaption}
+                {small ?
+                    <FontAwesomeIcon icon={friendIcon ?? subscriptionIcon ?? ["far", "bell"]}/>
+                :
+                    friendCaption ?? subscriptionCaption ?? t("subscribe")
+                }
                 &nbsp;&nbsp;
                 <FontAwesomeIcon icon="chevron-down"/>
             </DropdownMenu>
