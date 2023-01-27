@@ -8,6 +8,7 @@ export { InfoQuantityField } from "ui/control/field/InfoQuantityField";
 export { InputField } from "ui/control/field/InputField";
 export { NumberField } from "ui/control/field/NumberField";
 export { PrincipalField } from "ui/control/field/PrincipalField";
+export { RadioField } from "ui/control/field/RadioField";
 export { RichTextField } from "ui/control/field/RichTextField";
 export { SelectField } from "ui/control/field/SelectField";
 export type { SelectFieldChoice } from "ui/control/field/SelectField";
