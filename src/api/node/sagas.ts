@@ -10,7 +10,7 @@ import {
     AvatarInfo,
     AvatarOrdinal,
     BlockedInstantAttributes,
-    BlockedInstantInfo,
+    BlockedInstantInfo, BlockedUserAttributes, BlockedUserInfo,
     CommentCreated,
     CommentInfo,
     CommentMassAttributes,
@@ -778,5 +778,19 @@ export function* postBlockedInstant(nodeName: string | null,
 export function* deleteBlockedInstant(nodeName: string | null, id: string): CallApiResult<Result> {
     return yield* callApi({
         nodeName, location: ut`/blocked-instants/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+    });
+}
+
+export function* postBlockedUser(nodeName: string | null,
+                                 blockedUser: BlockedUserAttributes): CallApiResult<BlockedUserInfo> {
+    return yield* callApi({
+        nodeName, location: "/blocked-users", method: "POST", auth: true, body: blockedUser,
+        schema: NodeApi.BlockedUserInfo
+    });
+}
+
+export function* deleteBlockedUser(nodeName: string | null, id: string): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/blocked-user/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
 }

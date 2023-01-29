@@ -3026,7 +3026,7 @@ const PluginInfoType: JSONSchemaType<API.PluginInfo> = {
         "tokenId": {
             type: "string",
             nullable: true
-        },
+        }
     },
     required: ["local", "name"],
     additionalProperties: false
@@ -3038,3 +3038,45 @@ export const PluginInfoArray = schema({
     type: "array",
     items: PluginInfoType
 } as JSONSchemaType<API.PluginInfo[]>);
+
+const BlockedUserInfoType: JSONSchemaType<API.BlockedUserInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "blockedOperation": {
+            type: "string"
+        },
+        "nodeName": {
+            type: "string"
+        },
+        "contact": {
+            ...ContactInfoType,
+            nullable: true
+        },
+        "entryId": {
+            type: "string",
+            nullable: true
+        },
+        "entryNodeName": {
+            type: "string",
+            nullable: true
+        },
+        "entryPostingId": {
+            type: "string",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "deadline": {
+            type: "integer",
+            nullable: true
+        }
+    },
+    required: ["id", "blockedOperation", "nodeName", "createdAt"],
+    additionalProperties: false
+};
+
+export const BlockedUserInfo = schema(BlockedUserInfoType);

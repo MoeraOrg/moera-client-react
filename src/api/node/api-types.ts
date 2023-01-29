@@ -1019,3 +1019,34 @@ export interface PluginInfo {
     settings?: SettingMetaInfo[] | null;
     tokenId?: string | null;
 }
+
+export type BlockedOperation = "reaction" | "comment" | "posting" | "visibility" | "instant";
+
+export interface BlockedUserAttributes {
+    blockedOperation: BlockedOperation;
+    nodeName: string;
+    entryId?: string | null;
+    entryNodeName?: string | null;
+    entryPostingId?: string | null;
+    deadline?: number | null;
+}
+
+export interface BlockedUserFilter {
+    blockedOperation?: BlockedOperation | null;
+    nodeName?: string | null;
+    entryId?: string | null;
+    entryNodeName?: string | null;
+    entryPostingId?: string | null;
+}
+
+export interface BlockedUserInfo {
+    id: string;
+    blockedOperation: BlockedOperation;
+    nodeName: string;
+    contact?: ContactInfo | null;
+    entryId?: string | null;
+    entryNodeName?: string | null;
+    entryPostingId?: string | null;
+    createdAt: number;
+    deadline?: number | null;
+}

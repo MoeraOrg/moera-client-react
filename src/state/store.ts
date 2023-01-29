@@ -79,6 +79,7 @@ import entryCopyTextDialogExecutors from "state/entrycopytextdialog/sagas";
 import linkPreviewsExecutors from "state/linkpreviews/sagas";
 import friendGroupsDialogExecutors from "state/friendgroupsdialog/sagas";
 import askDialogExecutors from "state/askdialog/sagas";
+import blockDialogExecutors from "state/blockdialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -231,6 +232,7 @@ const executors = collectExecutors(
     linkPreviewsExecutors,
     friendGroupsDialogExecutors,
     askDialogExecutors,
+    blockDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

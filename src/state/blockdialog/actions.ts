@@ -1,6 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
+import { BlockedOperation, BlockedUserInfo } from "api/node/api-types";
 
 export const OPEN_BLOCK_DIALOG = "OPEN_BLOCK_DIALOG";
 export type OpenBlockDialogAction = ActionWithPayload<typeof OPEN_BLOCK_DIALOG, {
@@ -17,6 +18,34 @@ export const closeBlockDialog = (): CloseBlockDialogAction => ({
     type: CLOSE_BLOCK_DIALOG
 });
 
+export const BLOCK_DIALOG_SUBMIT = "BLOCK_DIALOG_SUBMIT";
+export type BlockDialogSubmitAction = ActionWithPayload<typeof BLOCK_DIALOG_SUBMIT, {
+    nodeName: string;
+    prevBlockedUsers: BlockedUserInfo[];
+    blockedOperations: BlockedOperation[];
+}>;
+export const blockDialogSubmit = (nodeName: string,
+                                  prevBlockedUsers: BlockedUserInfo[],
+                                  blockedOperations: BlockedOperation[]): BlockDialogSubmitAction => ({
+    type: BLOCK_DIALOG_SUBMIT,
+    payload: {nodeName, prevBlockedUsers, blockedOperations}
+});
+
+export const BLOCK_DIALOG_SUBMITTED = "BLOCK_DIALOG_SUBMITTED";
+export type BlockDialogSubmittedAction = Action<typeof BLOCK_DIALOG_SUBMITTED>;
+export const blockDialogSubmitted = (): BlockDialogSubmittedAction => ({
+    type: BLOCK_DIALOG_SUBMITTED
+});
+
+export const BLOCK_DIALOG_SUBMIT_FAILED = "BLOCK_DIALOG_SUBMIT_FAILED";
+export type BlockDialogSubmitFailedAction = Action<typeof BLOCK_DIALOG_SUBMIT_FAILED>;
+export const blockDialogSubmitFailed = (): BlockDialogSubmitFailedAction => ({
+    type: BLOCK_DIALOG_SUBMIT_FAILED
+});
+
 export type BlockDialogAnyAction =
     OpenBlockDialogAction
-    | CloseBlockDialogAction;
+    | CloseBlockDialogAction
+    | BlockDialogSubmitAction
+    | BlockDialogSubmittedAction
+    | BlockDialogSubmitFailedAction;

@@ -3,16 +3,25 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { BlockedOperation } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { closeBlockDialog } from "state/blockdialog/actions";
-import { Button, ModalDialog } from "ui/control";
-import { formatFullName } from "util/misc";
 import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
+import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";
 import { NameDisplayMode } from "ui/types";
+import { Button, ModalDialog } from "ui/control";
 import { RadioField } from "ui/control/field";
+import { formatFullName } from "util/misc";
 
 type BlockingLevel = "none" | "ignore" | "comments" | "reactions" | "hide";
+
+const BLOCKED_OPERATIONS: Record<BlockingLevel, BlockedOperation[]> = {
+    "none": [],
+    "ignore": ["instant", "visibility"],
+    "comments": ["comment"],
+    "reactions": ["comment", "reaction"],
+    "hide": ["comment", "reaction", "instant", "visibility"]
+}
 
 interface Values {
     level: BlockingLevel;
@@ -23,7 +32,7 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function BlockDialog(props: Props) {
-    const {show, nodeName, card, nameDisplayMode, closeBlockDialog, values, resetForm} = props;
+    const {show, nodeName, submitting, card, nameDisplayMode, closeBlockDialog, values, resetForm} = props;
 
     const {t} = useTranslation();
 
@@ -59,7 +68,7 @@ function BlockDialog(props: Props) {
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={closeBlockDialog}>{t("cancel")}</Button>
-                    <Button variant="primary" type="submit" loading={/*sending*/false}>
+                    <Button variant="primary" type="submit" loading={submitting}>
                         {values.level !== "none" ? t("block") : t("unblock")}
                     </Button>
                 </div>
@@ -76,13 +85,7 @@ const blockDialogLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
-        // if (formik.props.nodeName != null) {
-        //     if (values.subject === "s:subscribe") {
-        //         formik.props.askDialogSend(formik.props.nodeName, "subscribe", null, values.message);
-        //     } else {
-        //         formik.props.askDialogSend(formik.props.nodeName, "friend", values.subject, values.message);
-        //     }
-        // }
+        formik.props.blockDialogSubmit(formik.props.nodeName, [], BLOCKED_OPERATIONS[values.level]);
         formik.setSubmitting(false);
     }
 
@@ -92,10 +95,11 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.blockDialog.show,
         nodeName: state.blockDialog.nodeName,
+        submitting: state.blockDialog.submitting,
         card: getNodeCard(state, state.askDialog.nodeName),
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
     }),
-    { closeBlockDialog }
+    { closeBlockDialog, blockDialogSubmit }
 );
 
 export default connector(withFormik(blockDialogLogic)(BlockDialog));
