@@ -3080,3 +3080,47 @@ const BlockedUserInfoType: JSONSchemaType<API.BlockedUserInfo> = {
 };
 
 export const BlockedUserInfo = schema(BlockedUserInfoType);
+
+export const BlockedUserInfoArray = schema({
+    type: "array",
+    items: BlockedUserInfoType
+} as JSONSchemaType<API.BlockedUserInfo[]>);
+
+const BlockedByUserInfoType: JSONSchemaType<API.BlockedByUserInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "blockedOperation": {
+            type: "string"
+        },
+        "contact": {
+            ...ContactInfoType,
+            nullable: true
+        },
+        "nodeName": {
+            type: "string"
+        },
+        "postingId": {
+            type: "string",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "deadline": {
+            type: "integer",
+            nullable: true
+        }
+    },
+    required: ["id", "blockedOperation", "nodeName", "createdAt"],
+    additionalProperties: false
+};
+
+export const BlockedByUserInfo = schema(BlockedByUserInfoType);
+
+export const BlockedByUserInfoArray = schema({
+    type: "array",
+    items: BlockedByUserInfoType
+} as JSONSchemaType<API.BlockedByUserInfo[]>);

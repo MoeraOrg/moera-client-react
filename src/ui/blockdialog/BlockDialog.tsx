@@ -23,6 +23,24 @@ const BLOCKED_OPERATIONS: Record<BlockingLevel, BlockedOperation[]> = {
     "hide": ["comment", "reaction", "instant", "visibility"]
 }
 
+function blockingLevel(operations: BlockedOperation[]): BlockingLevel {
+    if (operations.length === 0) {
+        return "none";
+    }
+    if (operations.includes("visibility")) {
+        if (operations.includes("comment")) {
+            return "hide";
+        } else {
+            return "ignore";
+        }
+    }
+    if (operations.includes("reaction")) {
+        return "reactions";
+    } else {
+        return "comments";
+    }
+}
+
 interface Values {
     level: BlockingLevel;
 }
@@ -38,7 +56,7 @@ function BlockDialog(props: Props) {
 
     useEffect(() => {
         if (show) {
-            resetForm({values: blockDialogLogic.mapPropsToValues()});
+            resetForm({values: blockDialogLogic.mapPropsToValues(props)});
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]); // 'props' are missing on purpose
@@ -52,7 +70,7 @@ function BlockDialog(props: Props) {
     const isChecked = (v: BlockingLevel) => (value: BlockingLevel) => value === v;
 
     return (
-        <ModalDialog title={t("block-node", {name})} onClose={closeBlockDialog}>
+        <ModalDialog title={t("blocking-node", {name})} onClose={closeBlockDialog}>
             <Form>
                 <div className="modal-body">
                     <RadioField<BlockingLevel> id="level-none" name="level" title={t("no-block")}
@@ -68,7 +86,7 @@ function BlockDialog(props: Props) {
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={closeBlockDialog}>{t("cancel")}</Button>
-                    <Button variant="primary" type="submit" loading={submitting}>
+                    <Button variant={values.level !== "none" ? "danger" : "success"} type="submit" loading={submitting}>
                         {values.level !== "none" ? t("block") : t("unblock")}
                     </Button>
                 </div>
@@ -79,13 +97,14 @@ function BlockDialog(props: Props) {
 
 const blockDialogLogic = {
 
-    mapPropsToValues: (): Values => ({
-        level: "none",
+    mapPropsToValues: (props: OuterProps): Values => ({
+        level: blockingLevel(props.card?.blocking.blocked?.map(bu => bu.blockedOperation) ?? []),
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
-        formik.props.blockDialogSubmit(formik.props.nodeName, [], BLOCKED_OPERATIONS[values.level]);
+        const prev = formik.props.card?.blocking.blocked ?? [];
+        formik.props.blockDialogSubmit(formik.props.nodeName, prev, BLOCKED_OPERATIONS[values.level]);
         formik.setSubmitting(false);
     }
 
@@ -96,7 +115,7 @@ const connector = connect(
         show: state.blockDialog.show,
         nodeName: state.blockDialog.nodeName,
         submitting: state.blockDialog.submitting,
-        card: getNodeCard(state, state.askDialog.nodeName),
+        card: getNodeCard(state, state.blockDialog.nodeName),
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
     }),
     { closeBlockDialog, blockDialogSubmit }

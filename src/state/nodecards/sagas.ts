@@ -6,6 +6,7 @@ import { HomeNotConnectedError, NameResolvingError, Node } from "api";
 import { executor } from "state/executor";
 import { mutuallyIntroduced } from "state/init-selectors";
 import {
+    NODE_CARD_BLOCKING_LOAD,
     NODE_CARD_COPY_MENTION,
     NODE_CARD_DETAILS_LOAD,
     NODE_CARD_FRIENDSHIP_LOAD,
@@ -13,6 +14,10 @@ import {
     NODE_CARD_PREPARE,
     NODE_CARD_STORIES_LOAD,
     NODE_CARD_SUBSCRIPTION_LOAD,
+    nodeCardBlockingLoad,
+    NodeCardBlockingLoadAction,
+    nodeCardBlockingLoadFailed,
+    nodeCardBlockingSet,
     NodeCardCopyMentionAction,
     nodeCardDetailsLoad,
     NodeCardDetailsLoadAction,
@@ -49,6 +54,7 @@ export default [
     executor(NODE_CARD_STORIES_LOAD, payload => payload.nodeName, nodeCardStoriesLoadSaga),
     executor(NODE_CARD_SUBSCRIPTION_LOAD, payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
     executor(NODE_CARD_FRIENDSHIP_LOAD, payload => payload.nodeName, nodeCardFriendshipLoadSaga, mutuallyIntroduced),
+    executor(NODE_CARD_BLOCKING_LOAD, payload => payload.nodeName, nodeCardBlockingLoadSaga, mutuallyIntroduced),
     executor(NODE_CARD_COPY_MENTION, "", nodeCardCopyMention)
 ];
 
@@ -69,6 +75,9 @@ function* nodeCardPrepareSaga(action: NodeCardPrepareAction) {
     }
     if (card == null || (!card.friendship.loaded && !card.friendship.loading)) {
         yield* put(nodeCardFriendshipLoad(nodeName));
+    }
+    if (card == null || (!card.blocking.loaded && !card.blocking.loading)) {
+        yield* put(nodeCardBlockingLoad(nodeName));
     }
 }
 
@@ -175,6 +184,37 @@ function* loadRemoteFriendGroups(nodeName: string, homeOwnerName: string | null)
     }
     const {groups} = yield* call(Node.getFriend, nodeName, homeOwnerName);
     return groups;
+}
+
+function* nodeCardBlockingLoadSaga(action: WithContext<NodeCardBlockingLoadAction>) {
+    const {nodeName} = action.payload;
+    const {homeOwnerName} = action.context;
+    try {
+        const {blocked, blockedBy} = yield* all({
+            blocked: call(loadBlocked, nodeName, homeOwnerName),
+            blockedBy: call(loadBlockedBy, nodeName, homeOwnerName)
+        });
+        yield* put(nodeCardBlockingSet(nodeName, blocked ?? null, blockedBy ?? null));
+    } catch (e) {
+        yield* put(nodeCardBlockingLoadFailed(nodeName));
+        if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
+            yield* put(errorThrown(e));
+        }
+    }
+}
+
+function* loadBlocked(nodeName: string, homeOwnerName: string | null) {
+    if (homeOwnerName == null || nodeName === homeOwnerName || nodeName.includes(":")) {
+        return null;
+    }
+    return yield* call(Node.searchBlockedUsers, ":", {nodeName});
+}
+
+function* loadBlockedBy(nodeName: string, homeOwnerName: string | null) {
+    if (homeOwnerName == null || nodeName === homeOwnerName || homeOwnerName.includes(":")) {
+        return null;
+    }
+    return yield* call(Node.getBlockedByUsers, ":", nodeName, null);
 }
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {

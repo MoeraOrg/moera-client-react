@@ -1050,3 +1050,13 @@ export interface BlockedUserInfo {
     createdAt: number;
     deadline?: number | null;
 }
+
+export interface BlockedByUserInfo {
+    id: string;
+    blockedOperation: BlockedOperation;
+    contact?: ContactInfo | null;
+    nodeName: string;
+    postingId?: string | null;
+    createdAt: number;
+    deadline?: number | null;
+}

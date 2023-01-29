@@ -9,8 +9,12 @@ import {
     AvatarAttributes,
     AvatarInfo,
     AvatarOrdinal,
+    BlockedByUserInfo,
     BlockedInstantAttributes,
-    BlockedInstantInfo, BlockedUserAttributes, BlockedUserInfo,
+    BlockedInstantInfo,
+    BlockedUserAttributes,
+    BlockedUserFilter,
+    BlockedUserInfo,
     CommentCreated,
     CommentInfo,
     CommentMassAttributes,
@@ -793,4 +797,21 @@ export function* deleteBlockedUser(nodeName: string | null, id: string): CallApi
     return yield* callApi({
         nodeName, location: ut`/people/blocked-users/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
     });
+}
+
+export function* searchBlockedUsers(nodeName: string | null,
+                                    filter: BlockedUserFilter): CallApiResult<BlockedUserInfo[]> {
+    return yield* callApi({
+        nodeName, location: "/people/blocked-users/search", method: "POST", auth: true, body: filter,
+        schema: NodeApi.BlockedUserInfoArray
+    });
+}
+
+export function* getBlockedByUsers(nodeName: string | null, remoteNodeName: string | null,
+                                   remotePostingId: string | null): CallApiResult<BlockedByUserInfo[]> {
+    const location = urlWithParameters(
+        "/people/blocked-by-users",
+        {nodeName: remoteNodeName, postingId: remotePostingId}
+    );
+    return yield* callApi({nodeName, location, auth: true, schema: NodeApi.BlockedByUserInfoArray});
 }

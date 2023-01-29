@@ -1,4 +1,11 @@
-import { FriendGroupDetails, ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import {
+    BlockedByUserInfo,
+    BlockedUserInfo,
+    FriendGroupDetails,
+    ProfileInfo,
+    SubscriberInfo,
+    SubscriptionInfo
+} from "api/node/api-types";
 
 export interface NodeCardState {
     details: {
@@ -32,6 +39,12 @@ export interface NodeCardState {
         updating: boolean;
         groups: FriendGroupDetails[] | null;
         remoteGroups: FriendGroupDetails[] | null;
+    },
+    blocking: {
+        loading: boolean;
+        loaded: boolean;
+        blocked: BlockedUserInfo[] | null;
+        blockedBy: BlockedByUserInfo[] | null;
     }
 }
 

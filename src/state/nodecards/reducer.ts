@@ -3,6 +3,9 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { FriendGroupDetails, ProfileInfo } from "api/node/api-types";
 import {
+    NODE_CARD_BLOCKING_LOAD,
+    NODE_CARD_BLOCKING_LOAD_FAILED,
+    NODE_CARD_BLOCKING_SET,
     NODE_CARD_DETAILS_LOAD,
     NODE_CARD_DETAILS_LOAD_FAILED,
     NODE_CARD_DETAILS_SET,
@@ -51,6 +54,7 @@ import { WithContext } from "state/action-types";
 import { OWNER_SET } from "state/node/actions";
 import { HOME_OWNER_SET } from "state/home/actions";
 import { FRIENDSHIP_UPDATE, FRIENDSHIP_UPDATE_FAILED, FRIENDSHIP_UPDATED } from "state/people/actions";
+import { BLOCK_DIALOG_SUBMITTED } from "state/blockdialog/actions";
 
 const emptyProfileInfo: ProfileInfo = {
     fullName: null,
@@ -95,6 +99,12 @@ const emptyCard: NodeCardState = {
         updating: false,
         groups: null,
         remoteGroups: null
+    },
+    blocking: {
+        loaded: false,
+        loading: false,
+        blocked: null,
+        blockedBy: null
     }
 };
 
@@ -302,6 +312,32 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
+        case NODE_CARD_BLOCKING_LOAD: {
+            const {nodeName} = action.payload;
+            return getCard(state, nodeName).istate
+                .set(["cards", nodeName, "blocking", "loading"], true)
+                .value();
+        }
+
+        case NODE_CARD_BLOCKING_LOAD_FAILED: {
+            const {nodeName} = action.payload;
+            return getCard(state, nodeName).istate
+                .set(["cards", nodeName, "blocking", "loading"], false)
+                .value();
+        }
+
+        case NODE_CARD_BLOCKING_SET: {
+            const {nodeName, blocked, blockedBy} = action.payload;
+            return getCard(state, nodeName).istate
+                .assign(["cards", nodeName, "blocking"], {
+                    loading: false,
+                    loaded: true,
+                    blocked,
+                    blockedBy
+                })
+                .value();
+        }
+
         case FEED_SUBSCRIBE: {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
@@ -402,6 +438,13 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
+        case BLOCK_DIALOG_SUBMITTED: {
+            const {nodeName, blockedUsers} = action.payload;
+            return getCard(state, nodeName).istate
+                .set(["cards", nodeName, "blocking", "blocked"], blockedUsers)
+                .value();
+        }
+
         case NODE_CARDS_CLIENT_SWITCH: {
             const {homeOwnerNameOrUrl} = action.context;
             if (state.clientName === homeOwnerNameOrUrl) {
@@ -414,7 +457,8 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 istate.assign(["cards", nodeName], {
                     people: cloneDeep(emptyCard.people),
                     subscription: cloneDeep(emptyCard.subscription),
-                    friendship: cloneDeep(emptyCard.friendship)
+                    friendship: cloneDeep(emptyCard.friendship),
+                    blocking: cloneDeep(emptyCard.blocking)
                 });
             }
             return istate.value();

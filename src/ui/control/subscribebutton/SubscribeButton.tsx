@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -38,6 +39,8 @@ function SubscribeButtonImpl({
     const friendGroups = card?.friendship?.groups;
     const remoteFriendGroups = card?.friendship?.remoteGroups;
     const updatingFriendship = card?.friendship?.updating;
+    const blockedList = card?.blocking?.blocked;
+    const blockedByList = card?.blocking?.blockedBy;
 
     const {t} = useTranslation();
 
@@ -89,9 +92,21 @@ function SubscribeButtonImpl({
         ? (friendOf ? t("mutual-friends") : t("friend"))
         : (friendOf ? t("in-friends") : null)
 
+    const blocked = blockedList != null && blockedList.length > 0;
+    const blockedBy = blockedByList != null && blockedByList.length > 0;
+    const blockedIcon: IconProp | null = blocked
+        ? "ban"
+        : (blockedBy ? "handcuffs" : null)
+    const blockedCaption = blocked
+        ? t("blocked")
+        : (blockedBy ? t("in-blocked") : null)
+
     return (
         <>
-            <DropdownMenu className="btn btn-sm btn-outline-primary subscribe-button" items={[
+            <DropdownMenu className={cx(
+                ["btn", "btn-sm", "subscribe-button"],
+                {"btn-outline-primary": !blocked && !blockedBy, "btn-outline-danger": blocked || blockedBy}
+            )} items={[
                 {
                     caption: subscriptionCaption ?? t("not-subscribed", {"gender": tGender(homeGender)}),
                     show: subscriptionCaption != null || friendCaption != null
@@ -100,7 +115,7 @@ function SubscribeButtonImpl({
                     title: !subscribedToMe ? t("subscribe") : t("subscribe-back"),
                     href: peerHref,
                     onClick: onSubscribe,
-                    show: !subscribed
+                    show: !subscribed && !blocked
                 },
                 {
                     title: t("unsubscribe"),
@@ -119,7 +134,7 @@ function SubscribeButtonImpl({
                     title: t("add-friend"),
                     href: peerHref,
                     onClick: onAddFriend,
-                    show: !friend
+                    show: !friend && !blocked
                 },
                 {
                     title: t("friend-groups"),
@@ -140,7 +155,7 @@ function SubscribeButtonImpl({
                     title: t("ask-ellipsis"),
                     href: peerHref,
                     onClick: onAskDialog,
-                    show: true
+                    show: !blocked && !blockedBy
                 },
                 {
                     title: t("hide-ellipsis"),
@@ -152,16 +167,20 @@ function SubscribeButtonImpl({
                     divider: true
                 },
                 {
-                    title: t("block-ellipsis"),
+                    caption: blockedCaption ?? "",
+                    show: blockedCaption != null
+                },
+                {
+                    title: !blocked ? t("block-ellipsis") : t("blocking-ellipsis"),
                     href: peerHref,
                     onClick: onBlockDialog,
                     show: true
                 }
             ]}>
                 {small ?
-                    <FontAwesomeIcon icon={friendIcon ?? subscriptionIcon ?? ["far", "bell"]}/>
+                    <FontAwesomeIcon icon={blockedIcon ?? friendIcon ?? subscriptionIcon ?? ["far", "bell"]}/>
                 :
-                    friendCaption ?? subscriptionCaption ?? t("subscribe")
+                    blockedCaption ?? friendCaption ?? subscriptionCaption ?? t("subscribe")
                 }
                 &nbsp;&nbsp;
                 <FontAwesomeIcon icon="chevron-down"/>

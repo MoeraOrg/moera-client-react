@@ -1,7 +1,14 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { FriendGroupDetails, ProfileInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import {
+    BlockedByUserInfo,
+    BlockedUserInfo,
+    FriendGroupDetails,
+    ProfileInfo,
+    SubscriberInfo,
+    SubscriptionInfo
+} from "api/node/api-types";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 export type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {
@@ -162,6 +169,37 @@ export const nodeCardFriendshipSet = (nodeName: string,
     payload: {nodeName, groups, remoteGroups}
 });
 
+export const NODE_CARD_BLOCKING_LOAD = "NODE_CARD_BLOCKING_LOAD";
+export type NodeCardBlockingLoadAction = ActionWithPayload<typeof NODE_CARD_BLOCKING_LOAD, {
+    nodeName: string;
+}>;
+export const nodeCardBlockingLoad = (nodeName: string): NodeCardBlockingLoadAction => ({
+    type: NODE_CARD_BLOCKING_LOAD,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_BLOCKING_LOAD_FAILED = "NODE_CARD_BLOCKING_LOAD_FAILED";
+export type NodeCardBlockingLoadFailedAction = ActionWithPayload<typeof NODE_CARD_BLOCKING_LOAD_FAILED, {
+    nodeName: string;
+}>;
+export const nodeCardBlockingLoadFailed = (nodeName: string): NodeCardBlockingLoadFailedAction => ({
+    type: NODE_CARD_BLOCKING_LOAD_FAILED,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_BLOCKING_SET = "NODE_CARD_BLOCKING_SET";
+export type NodeCardBlockingSetAction = ActionWithPayload<typeof NODE_CARD_BLOCKING_SET, {
+    nodeName: string;
+    blocked: BlockedUserInfo[] | null;
+    blockedBy: BlockedByUserInfo[] | null;
+}>;
+export const nodeCardBlockingSet = (nodeName: string,
+                                    blocked: BlockedUserInfo[] | null,
+                                    blockedBy: BlockedByUserInfo[] | null): NodeCardBlockingSetAction => ({
+    type: NODE_CARD_BLOCKING_SET,
+    payload: {nodeName, blocked, blockedBy}
+});
+
 export const NODE_CARDS_CLIENT_SWITCH = "NODE_CARDS_CLIENT_SWITCH";
 export type NodeCardsClientSwitchAction = Action<typeof NODE_CARDS_CLIENT_SWITCH>;
 export const nodeCardsClientSwitch = (): NodeCardsClientSwitchAction => ({
@@ -201,6 +239,9 @@ export type NodeCardsAnyAction =
     | NodeCardFriendshipLoadAction
     | NodeCardFriendshipLoadFailedAction
     | NodeCardFriendshipSetAction
+    | NodeCardBlockingLoadAction
+    | NodeCardBlockingLoadFailedAction
+    | NodeCardBlockingSetAction
     | NodeCardsClientSwitchAction
     | NodeCardsRefreshAction
     | NodeCardCopyMentionAction;
