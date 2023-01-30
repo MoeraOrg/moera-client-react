@@ -6,6 +6,12 @@ import { FriendDescription, FriendGroupInfo, PrincipalValue, RemoteFeed, Subscri
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
+    BLOCKED_BY_LOAD,
+    BLOCKED_LOAD,
+    blockedByLoaded,
+    blockedByLoadFailed,
+    blockedLoaded,
+    blockedLoadFailed,
     FRIEND_OFS_LOAD,
     friendGroupAdded,
     friendOfsLoaded,
@@ -54,6 +60,8 @@ import { storySatisfy } from "state/stories/actions";
 import {
     getPeopleSelectedContacts,
     getPeopleTab,
+    isBlockedByVisible,
+    isBlockedVisible,
     isFriendOfsTotalVisible,
     isFriendOfsVisible,
     isFriendsTotalVisible,
@@ -75,6 +83,8 @@ export default [
     executor(SUBSCRIPTIONS_LOAD, "", subscriptionsLoadSaga, introduced),
     executor(FRIENDS_LOAD, "", friendsLoadSaga, introduced),
     executor(FRIEND_OFS_LOAD, "", friendOfsLoadSaga, introduced),
+    executor(BLOCKED_LOAD, "", blockedLoadSaga, introduced),
+    executor(BLOCKED_BY_LOAD, "", blockedByLoadSaga, introduced),
     executor(FRIENDSHIP_UPDATE, payload => payload.nodeName, friendshipUpdateSaga),
     executor(FRIENDSHIP_SET_VISIBILITY, payload => payload.nodeName, friendshipSetVisibilitySaga),
     executor(PEOPLE_SELECTED_SUBSCRIBE, "", peopleSelectedSubscribeSaga),
@@ -96,6 +106,8 @@ function* peopleGoToDefaultTabSaga() {
         subscriptions: isSubscriptionsVisible(state) || isSubscriptionsTotalVisible(state),
         friends: isFriendsVisible(state) || isFriendsTotalVisible(state),
         friendOfs: isFriendOfsVisible(state) || isFriendOfsTotalVisible(state),
+        blocked: isBlockedVisible(state),
+        blockedBy: isBlockedByVisible(state),
         friendGroups: getNodeFriendGroups(state),
         friendGroupTab: getNodeFriendGroups(state).map(fg => fg.id).includes(getPeopleTab(state))
     }));
@@ -120,6 +132,16 @@ function* peopleGoToDefaultTabSaga() {
                 return;
             }
             break;
+        case "blocked":
+            if (visible.blocked) {
+                return;
+            }
+            break;
+        case "blocked-by":
+            if (visible.blockedBy) {
+                return;
+            }
+            break;
         default:
             if (visible.friends && visible.friendGroupTab) {
                 return;
@@ -135,6 +157,10 @@ function* peopleGoToDefaultTabSaga() {
         targetTab = friendGroups[0].id;
     } else if (visible.friendOfs) {
         targetTab = "friend-ofs";
+    } else if (visible.blocked) {
+        targetTab = "blocked";
+    } else if (visible.blockedBy) {
+        targetTab = "blocked-by";
     } else {
         return;
     }
@@ -195,13 +221,42 @@ function* friendsLoadSaga() {
 
 function* friendOfsLoadSaga() {
     try {
-        const friends = yield* call(Node.getFriendOfs, "");
-        yield* put(friendOfsLoaded(friends));
+        const friendOfs = yield* call(Node.getFriendOfs, "");
+        yield* put(friendOfsLoaded(friendOfs));
     } catch (e) {
         if (e instanceof NodeApiError) {
             yield* put(friendOfsLoaded([]));
         } else {
             yield* put(friendOfsLoadFailed());
+            yield* put(errorThrown(e));
+        }
+    }
+}
+
+function* blockedLoadSaga() {
+    try {
+        const blocked = yield* call(Node.searchBlockedUsers, "",
+            {blockedOperations: ["comment" as const, "reaction" as const]});
+        yield* put(blockedLoaded(blocked));
+    } catch (e) {
+        if (e instanceof NodeApiError) {
+            yield* put(blockedLoaded([]));
+        } else {
+            yield* put(blockedLoadFailed());
+            yield* put(errorThrown(e));
+        }
+    }
+}
+
+function* blockedByLoadSaga() {
+    try {
+        const blockedBy = yield* call(Node.getBlockedByUsers, "", null, null);
+        yield* put(blockedByLoaded(blockedBy));
+    } catch (e) {
+        if (e instanceof NodeApiError) {
+            yield* put(blockedByLoaded([]));
+        } else {
+            yield* put(blockedByLoadFailed());
             yield* put(errorThrown(e));
         }
     }

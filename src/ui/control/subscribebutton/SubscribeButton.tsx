@@ -115,7 +115,7 @@ function SubscribeButtonImpl({
                     title: !subscribedToMe ? t("subscribe") : t("subscribe-back"),
                     href: peerHref,
                     onClick: onSubscribe,
-                    show: !subscribed && !blocked
+                    show: !subscribed
                 },
                 {
                     title: t("unsubscribe"),

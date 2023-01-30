@@ -3,7 +3,15 @@ import { createSelector } from 'reselect';
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
 import { ContactState, PeopleTab } from "state/people/state";
-import { ContactInfo, FriendInfo, FriendOfInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import {
+    BlockedByUserInfo,
+    BlockedUserInfo,
+    ContactInfo,
+    FriendInfo,
+    FriendOfInfo,
+    SubscriberInfo,
+    SubscriptionInfo
+} from "api/node/api-types";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;
@@ -33,6 +41,14 @@ export function isAtFriendOfsTab(state: ClientState): boolean {
     return getPeopleTab(state) === "friend-ofs";
 }
 
+export function isAtBlockedTab(state: ClientState): boolean {
+    return getPeopleTab(state) === "blocked";
+}
+
+export function isAtBlockedByTab(state: ClientState): boolean {
+    return getPeopleTab(state) === "blocked-by";
+}
+
 export function isSubscribersToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedSubscribers && !state.people.loadingSubscribers;
 }
@@ -49,6 +65,14 @@ export function isFriendOfsToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedFriendOfs && !state.people.loadingFriendOfs;
 }
 
+export function isBlockedToBeLoaded(state: ClientState): boolean {
+    return !state.people.loadedBlocked && !state.people.loadingBlocked;
+}
+
+export function isBlockedByToBeLoaded(state: ClientState): boolean {
+    return !state.people.loadedBlockedBy && !state.people.loadingBlockedBy;
+}
+
 export function isSubscribersVisible(state: ClientState): boolean {
     return isPermitted("viewSubscribers", state.people, "public", state);
 }
@@ -63,6 +87,14 @@ export function isFriendsVisible(state: ClientState): boolean {
 
 export function isFriendOfsVisible(state: ClientState): boolean {
     return isPermitted("viewFriendOfs", state.people, "public", state);
+}
+
+export function isBlockedVisible(state: ClientState): boolean {
+    return isPermitted("viewBlocked", state.people, "public", state);
+}
+
+export function isBlockedByVisible(state: ClientState): boolean {
+    return isPermitted("viewBlockedBy", state.people, "public", state);
 }
 
 export function isSubscribersTotalVisible(state: ClientState): boolean {
@@ -110,6 +142,21 @@ export function getPeopleFriendOfs(state: ClientState): FriendOfContactState[] {
         .filter((contact): contact is FriendOfContactState => contact?.friendOf != null);
 }
 
+type BlockedContactState = ContactState & { blocked: BlockedUserInfo[] };
+
+export function getPeopleBlocked(state: ClientState): BlockedContactState[] {
+    return Object.values(state.people.contacts)
+        .filter((contact): contact is BlockedContactState => contact?.blocked != null && contact.blocked.length > 0);
+}
+
+type BlockedByContactState = ContactState & { blockedBy: BlockedByUserInfo[] };
+
+export function getPeopleBlockedBy(state: ClientState): BlockedByContactState[] {
+    return Object.values(state.people.contacts)
+        .filter((contact): contact is BlockedByContactState =>
+            contact?.blockedBy != null && contact.blockedBy.length > 0);
+}
+
 export function isPeopleContactsLoading(state: ClientState): boolean {
     switch (getPeopleTab(state)) {
         case "subscribers":
@@ -118,6 +165,10 @@ export function isPeopleContactsLoading(state: ClientState): boolean {
             return state.people.loadingSubscriptions;
         case "friend-ofs":
             return state.people.loadingFriendOfs;
+        case "blocked":
+            return state.people.loadingBlocked;
+        case "blocked-by":
+            return state.people.loadingBlockedBy;
         default:
             return state.people.loadingFriends;
     }
@@ -132,6 +183,10 @@ export function getPeopleContacts(state: ClientState): ContactState[] {
             return getPeopleSubscriptions(state);
         case "friend-ofs":
             return getPeopleFriendOfs(state);
+        case "blocked":
+            return getPeopleBlocked(state);
+        case "blocked-by":
+            return getPeopleBlockedBy(state);
         default:
             return getPeopleFriends(state, tab);
     }
@@ -164,12 +219,20 @@ export function getPeopleContactsTotal(state: ClientState) {
     return (state.people.subscribersTotal ?? 0)
         + (state.people.subscriptionsTotal ?? 0)
         + getPeopleFriendsTotal(state)
-        + (state.people.friendOfsTotal ?? 0);
+        + (state.people.friendOfsTotal ?? 0)
+        + (state.people.blockedTotal ?? 0)
+        + (state.people.blockedByTotal ?? 0);
 }
 
 export function getPeopleContactsMaxInTabs(state: ClientState) {
-    return Math.max(state.people.subscribersTotal ?? 0, state.people.subscriptionsTotal ?? 0,
-        getPeopleFriendsTotal(state), state.people.friendOfsTotal ?? 0);
+    return Math.max(
+        state.people.subscribersTotal ?? 0,
+        state.people.subscriptionsTotal ?? 0,
+        getPeopleFriendsTotal(state),
+        state.people.friendOfsTotal ?? 0,
+        state.people.blockedTotal ?? 0,
+        state.people.blockedByTotal ?? 0
+    );
 }
 
 export function getPeopleSelectedContacts(state: ClientState): ContactInfo[] {

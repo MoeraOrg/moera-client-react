@@ -15,8 +15,9 @@ type PeopleTabsProps = {
 } & ConnectedProps<typeof connector>;
 
 const PeopleTabs = ({
-    active, loadedGeneral, subscribersTotal, subscriptionsTotal, friendsTotal, friendOfsTotal, viewSubscribers,
-    viewSubscriptions, viewFriends, viewFriendOfs, friendGroups, peopleGoToTab
+    active, loadedGeneral, subscribersTotal, subscriptionsTotal, friendsTotal, friendOfsTotal, blockedTotal,
+    blockedByTotal, viewSubscribers, viewSubscriptions, viewFriends, viewFriendOfs, viewBlocked, viewBlockedBy,
+    friendGroups, peopleGoToTab
 }: PeopleTabsProps) => {
     const {t} = useTranslation();
 
@@ -45,6 +46,16 @@ const PeopleTabs = ({
                                 total={friendOfsTotal} loaded={loadedGeneral} active={active}
                                 peopleGoToTab={peopleGoToTab}/>
             }
+            {blockedTotal != null &&
+                <PeopleTabsItem name="blocked" title={t("blocked-plural")} principal={viewBlocked}
+                                total={blockedTotal} loaded={loadedGeneral} active={active}
+                                peopleGoToTab={peopleGoToTab}/>
+            }
+            {blockedByTotal != null &&
+                <PeopleTabsItem name="blocked-by" title={t("in-blocked-plural")} principal={viewBlockedBy}
+                                total={blockedByTotal} loaded={loadedGeneral} active={active}
+                                peopleGoToTab={peopleGoToTab}/>
+            }
         </ul>
     );
 }
@@ -56,10 +67,14 @@ const connector = connect(
         subscriptionsTotal: state.people.subscriptionsTotal,
         friendsTotal: state.people.friendsTotal,
         friendOfsTotal: state.people.friendOfsTotal,
+        blockedTotal: state.people.blockedTotal,
+        blockedByTotal: state.people.blockedByTotal,
         viewSubscribers: state.people.operations.viewSubscribers ?? "public",
         viewSubscriptions: state.people.operations.viewSubscriptions ?? "public",
         viewFriends: state.people.operations.viewFriends ?? "public",
         viewFriendOfs: state.people.operations.viewFriendOfs ?? "public",
+        viewBlocked: state.people.operations.viewBlocked ?? "public",
+        viewBlockedBy: state.people.operations.viewBlockedBy ?? "admin",
         friendGroups: getNodeFriendGroups(state)
     }),
     { peopleGoToTab }

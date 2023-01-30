@@ -3,6 +3,8 @@ import { Action } from 'redux';
 import { ActionWithPayload } from "state/action-types";
 import {
     AskSubject,
+    BlockedByUserInfo,
+    BlockedUserInfo,
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
@@ -267,6 +269,48 @@ export const friendOfsLoadFailed = (): FriendOfsLoadFailedAction => ({
     type: FRIEND_OFS_LOAD_FAILED
 });
 
+export const BLOCKED_LOAD = "BLOCKED_LOAD";
+export type BlockedLoadAction = Action<typeof BLOCKED_LOAD>;
+export const blockedLoad = (): BlockedLoadAction => ({
+    type: BLOCKED_LOAD
+});
+
+export const BLOCKED_LOADED = "BLOCKED_LOADED";
+export type BlockedLoadedAction = ActionWithPayload<typeof BLOCKED_LOADED, {
+    list: BlockedUserInfo[];
+}>;
+export const blockedLoaded = (list: BlockedUserInfo[]): BlockedLoadedAction => ({
+    type: BLOCKED_LOADED,
+    payload: {list}
+});
+
+export const BLOCKED_LOAD_FAILED = "BLOCKED_LOAD_FAILED";
+export type BlockedLoadFailedAction = Action<typeof BLOCKED_LOAD_FAILED>;
+export const blockedLoadFailed = (): BlockedLoadFailedAction => ({
+    type: BLOCKED_LOAD_FAILED
+});
+
+export const BLOCKED_BY_LOAD = "BLOCKED_BY_LOAD";
+export type BlockedByLoadAction = Action<typeof BLOCKED_BY_LOAD>;
+export const blockedByLoad = (): BlockedByLoadAction => ({
+    type: BLOCKED_BY_LOAD
+});
+
+export const BLOCKED_BY_LOADED = "BLOCKED_BY_LOADED";
+export type BlockedByLoadedAction = ActionWithPayload<typeof BLOCKED_BY_LOADED, {
+    list: BlockedByUserInfo[];
+}>;
+export const blockedByLoaded = (list: BlockedByUserInfo[]): BlockedByLoadedAction => ({
+    type: BLOCKED_BY_LOADED,
+    payload: {list}
+});
+
+export const BLOCKED_BY_LOAD_FAILED = "BLOCKED_BY_LOAD_FAILED";
+export type BlockedByLoadFailedAction = Action<typeof BLOCKED_BY_LOAD_FAILED>;
+export const blockedByLoadFailed = (): BlockedByLoadFailedAction => ({
+    type: BLOCKED_BY_LOAD_FAILED
+});
+
 export const FRIENDSHIP_UPDATE = "FRIENDSHIP_UPDATE";
 export type FriendshipUpdateAction = ActionWithPayload<typeof FRIENDSHIP_UPDATE, {
     nodeName: string;
@@ -351,6 +395,12 @@ export type PeopleAnyAction =
     | FriendOfsLoadAction
     | FriendOfsLoadedAction
     | FriendOfsLoadFailedAction
+    | BlockedLoadAction
+    | BlockedLoadedAction
+    | BlockedLoadFailedAction
+    | BlockedByLoadAction
+    | BlockedByLoadedAction
+    | BlockedByLoadFailedAction
     | FriendshipUpdateAction
     | FriendshipUpdatedAction
     | FriendshipUpdateFailedAction

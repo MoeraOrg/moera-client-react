@@ -803,11 +803,15 @@ export interface PeopleGeneralInfo {
     feedSubscriptionsTotal?: number | null;
     friendsTotal?: Partial<Record<string, number>> | null;
     friendOfsTotal?: number | null;
+    blockedTotal?: number | null;
+    blockedByTotal?: number | null;
     operations?: {
         viewSubscribers?: PrincipalValue | null;
         viewSubscriptions?: PrincipalValue | null;
         viewFriends?: PrincipalValue | null;
         viewFriendOfs?: PrincipalValue | null;
+        viewBlocked?: PrincipalValue | null;
+        viewBlockedBy?: PrincipalValue | null;
         viewSubscribersTotal?: PrincipalValue | null;
         viewSubscriptionsTotal?: PrincipalValue | null;
         viewFriendsTotal?: PrincipalValue | null;
@@ -856,6 +860,8 @@ export interface ContactInfo {
     hasFeedSubscription?: boolean | null;
     hasFriend?: boolean | null;
     hasFriendOf?: boolean | null;
+    hasBlock?: boolean | null;
+    hasBlockBy?: boolean | null;
     operations?: {
         viewFeedSubscriber?: PrincipalValue | null;
         viewFeedSubscription?: PrincipalValue | null;
@@ -866,6 +872,8 @@ export interface ContactInfo {
         viewFeedSubscription?: PrincipalValue | null;
         viewFriend?: PrincipalValue | null;
         viewFriendOf?: PrincipalValue | null;
+        viewBlock?: PrincipalValue | null;
+        viewBlockBy?: PrincipalValue | null;
     }
 }
 
@@ -1032,7 +1040,7 @@ export interface BlockedUserAttributes {
 }
 
 export interface BlockedUserFilter {
-    blockedOperation?: BlockedOperation | null;
+    blockedOperations?: BlockedOperation[] | null;
     nodeName?: string | null;
     entryId?: string | null;
     entryNodeName?: string | null;

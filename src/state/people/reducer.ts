@@ -24,6 +24,12 @@ import {
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
 import {
+    BLOCKED_BY_LOAD,
+    BLOCKED_BY_LOAD_FAILED,
+    BLOCKED_BY_LOADED,
+    BLOCKED_LOAD,
+    BLOCKED_LOAD_FAILED,
+    BLOCKED_LOADED,
     FRIEND_OFS_LOAD,
     FRIEND_OFS_LOAD_FAILED,
     FRIEND_OFS_LOADED,
@@ -60,6 +66,8 @@ const initialState: PeopleState = {
     subscriptionsTotal: null,
     friendsTotal: null,
     friendOfsTotal: null,
+    blockedTotal: null,
+    blockedByTotal: null,
     loadingSubscribers: false,
     loadedSubscribers: false,
     loadingSubscriptions: false,
@@ -68,6 +76,10 @@ const initialState: PeopleState = {
     loadedFriends: false,
     loadingFriendOfs: false,
     loadedFriendOfs: false,
+    loadingBlocked: false,
+    loadedBlocked: false,
+    loadingBlockedBy: false,
+    loadedBlockedBy: false,
     contacts: {},
     operations: {},
     selecting: false,
@@ -84,7 +96,9 @@ function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, 
             subscriber: null,
             subscription: null,
             friend: null,
-            friendOf: null
+            friendOf: null,
+            blocked: null,
+            blockedBy: null
         };
         istate.set(["contacts", nodeName], contact);
     }
@@ -93,7 +107,8 @@ function prepareContact(state: PeopleState, istate: WrappedObject<PeopleState>, 
 
 const isRemoved = (contact: ContactInfo | null | undefined): boolean =>
     contact == null
-    || (!contact.hasFeedSubscriber && !contact.hasFeedSubscription && !contact.hasFriend && !contact.hasFriendOf);
+    || (!contact.hasFeedSubscriber && !contact.hasFeedSubscription && !contact.hasFriend && !contact.hasFriendOf
+        && !contact.hasBlock && !contact.hasBlockBy);
 
 function putContact(state: PeopleState, istate: WrappedObject<PeopleState>, nodeName: string,
                     contact: ContactInfo): void {
@@ -146,6 +161,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 subscriptionsTotal: action.payload.info.feedSubscriptionsTotal ?? null,
                 friendsTotal: action.payload.info.friendsTotal ?? null,
                 friendOfsTotal: action.payload.info.friendOfsTotal ?? null,
+                blockedTotal: action.payload.info.blockedTotal ?? null,
+                blockedByTotal: action.payload.info.blockedByTotal ?? null,
                 operations: action.payload.info.operations ?? {}
             });
 
@@ -159,6 +176,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 subscriptionsTotal: null,
                 friendsTotal: null,
                 friendOfsTotal: null,
+                blockedTotal: null,
+                blockedByTotal: null,
                 operations: {}
             });
 
@@ -169,6 +188,8 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 subscriptionsTotal: null,
                 friendsTotal: null,
                 friendOfsTotal: null,
+                blockedTotal: null,
+                blockedByTotal: null,
                 loadedSubscribers: false,
                 loadedSubscriptions: false,
                 contacts: {},
@@ -296,6 +317,54 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
 
         case FRIEND_OFS_LOAD_FAILED:
             return immutable.set(state, "loadingFriendOfs", false);
+
+        case BLOCKED_LOAD:
+            return immutable.set(state, "loadingBlocked", true);
+
+        case BLOCKED_LOADED: {
+            const istate = immutable.wrap(state);
+            istate.assign("", {
+                loadingBlocked: false,
+                loadedBlocked: true,
+                blockedTotal: new Set(action.payload.list.map(blocked => blocked.nodeName)).size
+            });
+            action.payload.list.forEach(blocked => {
+                prepareContact(state, istate, blocked.nodeName);
+                if (blocked.contact != null) {
+                    putContact(state, istate, blocked.nodeName, blocked.contact);
+                    delete blocked.contact;
+                }
+                istate.push(["contacts", blocked.nodeName, "blocked"], blocked);
+            });
+            return istate.value();
+        }
+
+        case BLOCKED_LOAD_FAILED:
+            return immutable.set(state, "loadingBlocked", false);
+
+        case BLOCKED_BY_LOAD:
+            return immutable.set(state, "loadingBlockedBy", true);
+
+        case BLOCKED_BY_LOADED: {
+            const istate = immutable.wrap(state);
+            istate.assign("", {
+                loadingBlockedBy: false,
+                loadedBlockedBy: true,
+                blockedByTotal: new Set(action.payload.list.map(blockedBy => blockedBy.nodeName)).size
+            });
+            action.payload.list.forEach(blockedBy => {
+                prepareContact(state, istate, blockedBy.nodeName);
+                if (blockedBy.contact != null) {
+                    putContact(state, istate, blockedBy.nodeName, blockedBy.contact);
+                    delete blockedBy.contact;
+                }
+                istate.push(["contacts", blockedBy.nodeName, "blockedBy"], blockedBy);
+            });
+            return istate.value();
+        }
+
+        case BLOCKED_BY_LOAD_FAILED:
+            return immutable.set(state, "loadingBlockedBy", false);
 
         case FEED_SUBSCRIBED: {
             if (action.context.ownerName !== action.context.homeOwnerName) {

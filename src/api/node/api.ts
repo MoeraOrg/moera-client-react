@@ -1949,6 +1949,14 @@ export const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
             type: "boolean",
             nullable: true
         },
+        "hasBlock": {
+            type: "boolean",
+            nullable: true
+        },
+        "hasBlockBy": {
+            type: "boolean",
+            nullable: true
+        },
         "operations": {
             type: "object",
             properties: {
@@ -1984,6 +1992,14 @@ export const ContactInfoType: JSONSchemaType<API.ContactInfo> = {
                     nullable: true
                 },
                 "viewFriendOf": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewBlock": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewBlockBy": {
                     type: "string",
                     nullable: true
                 }
@@ -2644,6 +2660,14 @@ const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
             type: "integer",
             nullable: true
         },
+        "blockedTotal": {
+            type: "integer",
+            nullable: true
+        },
+        "blockedByTotal": {
+            type: "integer",
+            nullable: true
+        },
         "operations": {
             type: "object",
             properties: {
@@ -2660,6 +2684,14 @@ const PeopleGeneralInfoType: JSONSchemaType<API.PeopleGeneralInfo> = {
                     nullable: true
                 },
                 "viewFriendOfs": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewBlocked": {
+                    type: "string",
+                    nullable: true
+                },
+                "viewBlockedBy": {
                     type: "string",
                     nullable: true
                 },

@@ -3,10 +3,14 @@ import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { GO_TO_PAGE, newLocation } from "state/navigation/actions";
 import { isAtPeoplePage } from "state/navigation/selectors";
 import {
+    isAtBlockedByTab,
+    isAtBlockedTab,
     isAtFriendOfsTab,
     isAtFriendsTab,
     isAtSubscribersTab,
     isAtSubscriptionsTab,
+    isBlockedByToBeLoaded,
+    isBlockedToBeLoaded,
     isFriendOfsToBeLoaded,
     isFriendsToBeLoaded,
     isPeopleGeneralToBeLoaded,
@@ -14,6 +18,8 @@ import {
     isSubscriptionsToBeLoaded
 } from "state/people/selectors";
 import {
+    blockedByLoad,
+    blockedLoad,
     friendOfsLoad,
     friendsLoad,
     PEOPLE_GENERAL_LOADED,
@@ -42,6 +48,8 @@ export default [
     trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendsTab, isFriendsToBeLoaded), friendsLoad),
     trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendOfsTab, isFriendOfsToBeLoaded), friendOfsLoad),
+    trigger(PEOPLE_GO_TO_TAB, conj(isAtBlockedTab, isBlockedToBeLoaded), blockedLoad),
+    trigger(PEOPLE_GO_TO_TAB, conj(isAtBlockedByTab, isBlockedByToBeLoaded), blockedByLoad),
     trigger(PEOPLE_GENERAL_LOADED, isAtPeoplePage, peopleGoToDefaultTab),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtPeoplePage, peopleGeneralLoad),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, peopleUnset),
@@ -64,6 +72,16 @@ export default [
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
         conj(isAtPeoplePage, isAtFriendOfsTab),
         friendOfsLoad
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtPeoplePage, isAtBlockedTab),
+        blockedLoad
+    ),
+    trigger(
+        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtPeoplePage, isAtBlockedByTab),
+        blockedByLoad
     ),
     trigger(
         [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED],

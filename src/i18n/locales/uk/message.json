@@ -31,6 +31,7 @@
   "bio" : "Про себе",
   "block" : "Заблокувати",
   "blocked" : "Заблокований",
+  "blocked-plural" : "Заблоковані",
   "block-ellipsis" : "Заблокувати...",
   "blocking-ellipsis" : "Блокування...",
   "blocking-node" : "Блокування {name}",
@@ -204,7 +205,8 @@
     "tiny" : "Крихітний"
   },
   "in" : "у",
-  "in-blocked" : "У заблокованих",
+  "in-blocked" : "Заблокував",
+  "in-blocked-plural" : "Заблокували",
   "in-friends" : "У друзях",
   "insert-image" : "Вставити картинку",
   "insert-link" : "Вставити посилання",

@@ -19,6 +19,8 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
     const hasSubscription = contact.contact.hasFeedSubscription ?? false;
     const hasFriend = contact.contact.hasFriend ?? false;
     const hasFriendOf = contact.contact.hasFriendOf ?? false;
+    const hasBlock = contact.contact.hasBlock ?? false;
+    const hasBlockBy = contact.contact.hasBlockBy ?? false;
 
     switch (tab) {
         case "subscribers":
@@ -47,6 +49,16 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
                                     icon: "people-arrows",
                                     title: "mutual-friends",
                                     visible: hasFriend && hasFriendOf
+                                },
+                                {
+                                    icon: "ban",
+                                    title: "blocked",
+                                    visible: hasBlock
+                                },
+                                {
+                                    icon: "handcuffs",
+                                    title: "in-blocked",
+                                    visible: !hasBlock && hasBlockBy
                                 }
                             ]}/>
                         </div>
@@ -80,6 +92,16 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
                                     icon: "people-arrows",
                                     title: "mutual-friends",
                                     visible: hasFriend && hasFriendOf
+                                },
+                                {
+                                    icon: "ban",
+                                    title: "blocked",
+                                    visible: hasBlock
+                                },
+                                {
+                                    icon: "handcuffs",
+                                    title: "in-blocked",
+                                    visible: !hasBlock && hasBlockBy
                                 }
                             ]}/>
                         </div>
@@ -113,6 +135,105 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
                                 icon: "people-arrows",
                                 title: "mutual-friends",
                                 visible: hasFriend
+                            },
+                            {
+                                icon: "ban",
+                                title: "blocked",
+                                visible: hasBlock
+                            },
+                            {
+                                icon: "handcuffs",
+                                title: "in-blocked",
+                                visible: !hasBlock && hasBlockBy
+                            }
+                        ]}/>
+                    </div>
+                );
+            }
+            break;
+        case "blocked":
+            if (contact.blocked != null && contact.blocked.length > 0) {
+                return (
+                    <div className="icons">
+                        <PeopleIconSet icons={[
+                            {
+                                icon: "eye",
+                                title: "subscribed",
+                                gender: homeOwnerGender,
+                                visible: !hasSubscriber && hasSubscription
+                            },
+                            {
+                                icon: "arrows-to-eye",
+                                title: "subscribed-to-me",
+                                gender: contact.contact.gender,
+                                visible: hasSubscriber && !hasSubscription
+                            },
+                            {
+                                icon: "arrow-right-arrow-left",
+                                title: "mutually-subscribed",
+                                visible: hasSubscriber && hasSubscription
+                            },
+                            {
+                                icon: "person",
+                                title: "friend",
+                                visible: hasFriend && !hasFriendOf
+                            },
+                            {
+                                icon: "person-walking-arrow-right",
+                                title: "in-friends",
+                                visible: !hasFriend && hasFriendOf
+                            },
+                            {
+                                icon: "people-arrows",
+                                title: "mutual-friends",
+                                visible: hasFriend && hasFriendOf
+                            }
+                        ]}/>
+                    </div>
+                );
+            }
+            break;
+        case "blocked-by":
+            if (contact.blockedBy != null && contact.blockedBy.length > 0) {
+                return (
+                    <div className="icons">
+                        <PeopleIconSet icons={[
+                            {
+                                icon: "eye",
+                                title: "subscribed",
+                                gender: homeOwnerGender,
+                                visible: !hasSubscriber && hasSubscription
+                            },
+                            {
+                                icon: "arrows-to-eye",
+                                title: "subscribed-to-me",
+                                gender: contact.contact.gender,
+                                visible: hasSubscriber && !hasSubscription
+                            },
+                            {
+                                icon: "arrow-right-arrow-left",
+                                title: "mutually-subscribed",
+                                visible: hasSubscriber && hasSubscription
+                            },
+                            {
+                                icon: "person",
+                                title: "friend",
+                                visible: hasFriend && !hasFriendOf
+                            },
+                            {
+                                icon: "person-walking-arrow-right",
+                                title: "in-friends",
+                                visible: !hasFriend && hasFriendOf
+                            },
+                            {
+                                icon: "people-arrows",
+                                title: "mutual-friends",
+                                visible: hasFriend && hasFriendOf
+                            },
+                            {
+                                icon: "ban",
+                                title: "blocked",
+                                visible: hasBlock
                             }
                         ]}/>
                     </div>
@@ -148,6 +269,16 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
                                     icon: "people-arrows",
                                     title: "mutual-friends",
                                     visible: hasFriendOf
+                                },
+                                {
+                                    icon: "ban",
+                                    title: "blocked",
+                                    visible: hasBlock
+                                },
+                                {
+                                    icon: "handcuffs",
+                                    title: "in-blocked",
+                                    visible: !hasBlock && hasBlockBy
                                 }
                             ]}/>
                         </div>
