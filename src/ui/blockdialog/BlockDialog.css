@@ -1,0 +1,18 @@
+.block-dialog .unblock-days {
+    display: flex;
+    flex-wrap: wrap;
+    height: 3rem;
+}
+
+.block-dialog .unblock-days .rw-widget-picker {
+    width: 7em;
+    min-height: unset;
+    margin-left: .5em;
+    margin-right: .5em;
+    position: relative;
+    top: -.25em;
+}
+
+.block-dialog .unblock-days INPUT[name="days"] {
+    width: 100%;
+}

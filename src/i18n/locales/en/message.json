@@ -672,6 +672,8 @@
   "transfer-existing-name-button" : "Transfer an Existing Name",
   "transfer-node-name" : "Transfer Name From Another Node",
   "unblock" : "Unblock",
+  "unblock-after-days" : "Unblock after <0/> {count, plural, one {day} other {days}}",
+  "unblock-after-time" : "Unblock after some time",
   "undo" : "Undo",
   "unfollow-comments" : "Unfollow comments",
   "unfriend" : "Unfriend",

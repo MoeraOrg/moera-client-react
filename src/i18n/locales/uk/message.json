@@ -672,6 +672,8 @@
   "transfer-existing-name-button" : "Перемістити існуюче ім'я",
   "transfer-node-name" : "Перемістити ім'я з іншого вузла",
   "unblock" : "Розблокувати",
+  "unblock-after-days" : "Розблокувати через <0/> {count, plural, one {день} few {дні} other {днів}}",
+  "unblock-after-time" : "Розблокувати через певний час",
   "undo" : "Скасувати",
   "unfollow-comments" : "Не слідкувати за коментарями",
   "unfriend" : "Вилучити з друзів",

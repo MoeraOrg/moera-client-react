@@ -23,12 +23,14 @@ export type BlockDialogSubmitAction = ActionWithPayload<typeof BLOCK_DIALOG_SUBM
     nodeName: string;
     prevBlockedUsers: BlockedUserInfo[];
     blockedOperations: BlockedOperation[];
+    deadline: number | null;
 }>;
 export const blockDialogSubmit = (nodeName: string,
                                   prevBlockedUsers: BlockedUserInfo[],
-                                  blockedOperations: BlockedOperation[]): BlockDialogSubmitAction => ({
+                                  blockedOperations: BlockedOperation[],
+                                  deadline: number | null): BlockDialogSubmitAction => ({
     type: BLOCK_DIALOG_SUBMIT,
-    payload: {nodeName, prevBlockedUsers, blockedOperations}
+    payload: {nodeName, prevBlockedUsers, blockedOperations, deadline}
 });
 
 export const BLOCK_DIALOG_SUBMITTED = "BLOCK_DIALOG_SUBMITTED";

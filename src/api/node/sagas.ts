@@ -795,7 +795,8 @@ export function* postBlockedUser(nodeName: string | null,
 
 export function* deleteBlockedUser(nodeName: string | null, id: string): CallApiResult<Result> {
     return yield* callApi({
-        nodeName, location: ut`/people/blocked-users/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result
+        nodeName, location: ut`/people/blocked-users/${id}`, method: "DELETE", auth: true, schema: NodeApi.Result,
+        errorFilter: ["blocked-user.not-found"]
     });
 }
 
