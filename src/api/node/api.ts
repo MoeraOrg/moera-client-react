@@ -3105,6 +3105,18 @@ const BlockedUserInfoType: JSONSchemaType<API.BlockedUserInfo> = {
         "deadline": {
             type: "integer",
             nullable: true
+        },
+        "reasonSrc": {
+            type: "string",
+            nullable: true
+        },
+        "reasonSrcFormat": {
+            type: "string",
+            nullable: true
+        },
+        "reason": {
+            type: "string",
+            nullable: true
         }
     },
     required: ["id", "blockedOperation", "nodeName", "createdAt"],
@@ -3143,6 +3155,10 @@ const BlockedByUserInfoType: JSONSchemaType<API.BlockedByUserInfo> = {
         },
         "deadline": {
             type: "integer",
+            nullable: true
+        },
+        "reason": {
+            type: "string",
             nullable: true
         }
     },

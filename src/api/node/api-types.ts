@@ -1037,6 +1037,8 @@ export interface BlockedUserAttributes {
     entryNodeName?: string | null;
     entryPostingId?: string | null;
     deadline?: number | null;
+    reasonSrc?: string | null;
+    reasonSrcFormat?: SourceFormat | null;
 }
 
 export interface BlockedUserFilter {
@@ -1057,6 +1059,9 @@ export interface BlockedUserInfo {
     entryPostingId?: string | null;
     createdAt: number;
     deadline?: number | null;
+    reasonSrc?: string | null;
+    reasonSrcFormat?: SourceFormat | null;
+    reason?: string | null;
 }
 
 export interface BlockedByUserInfo {
@@ -1067,4 +1072,5 @@ export interface BlockedByUserInfo {
     postingId?: string | null;
     createdAt: number;
     deadline?: number | null;
+    reason?: string | null;
 }

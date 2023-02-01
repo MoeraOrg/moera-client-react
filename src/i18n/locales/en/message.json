@@ -35,6 +35,7 @@
   "block-ellipsis" : "Block...",
   "blocking-ellipsis" : "Blocking...",
   "blocking-node" : "Blocking {name}",
+  "blocking-reason" : "Reason of blocking",
   "bold" : "Bold",
   "bottom" : "Bottom",
   "cancel" : "Cancel",

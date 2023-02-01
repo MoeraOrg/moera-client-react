@@ -16,13 +16,13 @@ export default [
 ];
 
 function* blockDialogSubmitSaga(action: BlockDialogSubmitAction) {
-    const {nodeName, prevBlockedUsers, blockedOperations, deadline} = action.payload;
+    const {nodeName, prevBlockedUsers, blockedOperations, deadline, reasonSrc} = action.payload;
 
     try {
         const result = yield* all([
             ...prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, blockedUser.id)),
             ...blockedOperations.map(blockedOperation =>
-                call(postBlockedUser, ":", {blockedOperation, nodeName, deadline}))
+                call(postBlockedUser, ":", {blockedOperation, nodeName, deadline, reasonSrc}))
         ]);
         const blockedUsers = result.filter((r): r is BlockedUserInfo => r != null && "id" in r);
         yield* put(blockDialogSubmitted(nodeName, blockedUsers));

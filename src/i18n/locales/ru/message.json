@@ -35,6 +35,7 @@
   "block-ellipsis" : "Заблокировать...",
   "blocking-ellipsis" : "Блокировка...",
   "blocking-node" : "Блокировка {name}",
+  "blocking-reason" : "Причина блокировки",
   "bold" : "Полужирный",
   "bottom" : "В начало",
   "cancel" : "Отмена",
