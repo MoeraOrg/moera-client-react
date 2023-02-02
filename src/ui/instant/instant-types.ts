@@ -8,7 +8,7 @@ import { ClientAction } from "state/action";
 import { ExtStoryInfo } from "state/feeds/state";
 import {
     buildAskedToFriendSummary,
-    buildAskedToSubscribeSummary,
+    buildAskedToSubscribeSummary, buildBlockedUserSummary,
     buildCommentAddedSummary,
     buildCommentMediaReactionAddedSummary,
     buildCommentMediaReactionFailedSummary,
@@ -32,7 +32,7 @@ import {
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
     buildSubscriberAddedSummary,
-    buildSubscriberDeletedSummary
+    buildSubscriberDeletedSummary, buildUnblockedUserSummary
 } from "ui/instant/instant-summaries";
 import { InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 import InstantStorySubscribeButtons, {
@@ -280,6 +280,18 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({nodeName: story.remoteNodeName, href: "/"}),
         buttons: InstantStoryFriendGroupButtons,
         buttonsAction: instantStoryFriendGroupAction
+    },
+    "blocked-user": {
+        color: "var(--incorrect)",
+        icon: "handcuffs",
+        summary: (data, homeOwnerName, t) => buildBlockedUserSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: "/"})
+    },
+    "unblocked-user": {
+        color: "var(--correct)",
+        icon: "handcuffs",
+        summary: (data, homeOwnerName, t) => buildUnblockedUserSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: "/"})
     }
 };
 

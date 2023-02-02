@@ -1662,6 +1662,21 @@ const StorySummaryFriendGroupType: JSONSchemaType<API.StorySummaryFriendGroup> =
     additionalProperties: false
 };
 
+const StorySummaryBlockedType: JSONSchemaType<API.StorySummaryBlocked> = {
+    type: "object",
+    properties: {
+        "operations": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        }
+    },
+    required: [],
+    additionalProperties: false
+};
+
 export const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
     type: "object",
     properties: {
@@ -1713,6 +1728,10 @@ export const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
         },
         "friendGroup": {
             ...StorySummaryFriendGroupType,
+            nullable: true
+        },
+        "blocked": {
+            ...StorySummaryBlockedType,
             nullable: true
         },
         "description": {

@@ -216,6 +216,9 @@
   "instant-summary" : {
     "and" : "and",
     "and-others" : "and {count} {count, plural, one {other} other {others}}",
+    "blocked-comment" : "to comment",
+    "blocked-reaction" : "to add reactions to",
+    "blocked-reaction-and-comment" : "to comment and to add reactions to",
     "in-node-blog" : "{node} blog",
     "in-their-blog" : "{gender, select, male {his} female {her} other {their}} blog",
     "in-your-blog" : "your blog",
@@ -233,6 +236,7 @@
       "asked-to-friend" : "{node} has asked you to add {gender, select, male {him} female {her} other {them}} to your friends",
       "asked-to-friend-group" : "{node} has asked you to add {gender, select, male {him} female {her} other {them}} to your group of friends \"{group}\"",
       "asked-to-subscribe" : "{node} has asked you to subscribe to {gender, select, male {his} female {her} other {their}} feed",
+      "blocked-user" : "{node} has denied you {operations} {gender, select, male {his} female {her} other {their}} posts",
       "comment-added" : "{comments} commented on your post {heading}",
       "comment-media-reaction-added" : "{reactions} a media in your comment {heading} on {posting}",
       "comment-media-reaction-failed" : "Failed to sign a reaction to a media in {commentNode} comment {commentHeading} to {postingNode} post {postingHeading}",
@@ -258,7 +262,8 @@
       "remote-comment-added" : "{comments} commented on {posting} {heading} {reason}",
       "reply-comment" : "{replies} replied to your comment {heading} on {posting}",
       "subscriber-added" : "{node} subscribed to your {feed}",
-      "subscriber-deleted" : "{node} unsubscribed from your {feed}"
+      "subscriber-deleted" : "{node} unsubscribed from your {feed}",
+      "unblocked-user" : "{node} has allowed you {operations} {gender, select, male {his} female {her} other {their}} posts"
     },
     "supported" : "supported",
     "their-post" : "{gender, select, male {his} female {her} other {their}} post",

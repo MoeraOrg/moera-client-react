@@ -118,6 +118,21 @@ function formatReason(data: StorySummaryData, t: TFunction): string {
     return t("instant-summary.reason." + (data.subscriptionReason ?? "user"));
 }
 
+function formatBlockedOperations(data: StorySummaryData, t: TFunction): string {
+    if (data.blocked?.operations != null) {
+        if (data.blocked.operations.includes("reaction")) {
+            if (!data.blocked.operations.includes("comment")) {
+                return t("instant-summary.blocked-reaction");
+            }
+        } else {
+            if (data.blocked.operations.includes("comment")) {
+                return t("instant-summary.blocked-comment");
+            }
+        }
+    }
+    return t("instant-summary.blocked-reaction-and-comment");
+}
+
 export function buildReactionAddedSummary(data: StorySummaryData, negative: boolean, t: TFunction): string {
     return t("instant-summary.story.reaction-added", {
         reactions: formatListOfReactions(data, negative, t),
@@ -366,4 +381,20 @@ export function buildAskedToFriendSummary(data: StorySummaryData, t: TFunction):
         summary += `: ${data.description}`;
     }
     return summary;
+}
+
+export function buildBlockedUserSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.blocked-user", {
+        node: formatNodeName(data.node),
+        gender: tGender(data.node?.ownerGender),
+        operations: formatBlockedOperations(data, t)
+    });
+}
+
+export function buildUnblockedUserSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.unblocked-user", {
+        node: formatNodeName(data.node),
+        gender: tGender(data.node?.ownerGender),
+        operations: formatBlockedOperations(data, t)
+    });
 }

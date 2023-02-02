@@ -461,7 +461,7 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "comment-media-reaction-added-positive" | "comment-media-reaction-added-negative"
     | "posting-media-reaction-failed" | "comment-media-reaction-failed" | "posting-subscribe-task-failed"
     | "posting-reaction-task-failed" | "comment-reaction-task-failed" | "friend-added" | "friend-deleted"
-    | "friend-group-deleted" | "asked-to-subscribe" | "asked-to-friend";
+    | "friend-group-deleted" | "asked-to-subscribe" | "asked-to-friend" | "blocked-user" | "unblocked-user";
 
 export type SubscriptionReason = "user" | "mention" | "comment";
 
@@ -499,6 +499,10 @@ export interface StorySummaryFriendGroup {
     title?: string | null;
 }
 
+export interface StorySummaryBlocked {
+    operations: BlockedOperation[];
+}
+
 export interface StorySummaryData {
     node?: StorySummaryNode | null;
     posting?: StorySummaryEntry | null;
@@ -512,6 +516,7 @@ export interface StorySummaryData {
     feedName?: string | null;
     subscriptionReason?: SubscriptionReason | null;
     friendGroup?: StorySummaryFriendGroup | null;
+    blocked?: StorySummaryBlocked | null;
     description?: string | null;
 }
 

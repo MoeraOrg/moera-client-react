@@ -216,6 +216,9 @@
   "instant-summary" : {
     "and" : "и",
     "and-others" : "и ещё {count}",
+    "blocked-comment" : "комментировать",
+    "blocked-reaction" : "реагировать на",
+    "blocked-reaction-and-comment" : "комментировать и реагировать на",
     "in-node-blog" : "блоге {node}",
     "in-their-blog" : "своём блоге",
     "in-your-blog" : "вашем блоге",
@@ -233,6 +236,7 @@
       "asked-to-friend" : "{node} {gender, select, female {попросила} other {попросил}} вас добавить {gender, select, female {её} other {его}} к себе в друзья",
       "asked-to-friend-group" : "{node} {gender, select, female {попросила} other {попросил}} вас добавить {gender, select, female {её} other {его}} в свою группу друзей \"{group}\"",
       "asked-to-subscribe" : "{node} {gender, select, female {попросила} other {попросил}} вас подписаться на {gender, select, female {её} other {его}} ленту",
+      "blocked-user" : "{node} {gender, select, female {запретила} other {запретил}} вам {operations} {gender, select, female {её} other {его}} посты",
       "comment-added" : "{comments} {count, plural, =1 {{gender, select, female {прокомментировала} other {прокомментировал}}} other {прокомментировали}} ваш пост {heading}",
       "comment-media-reaction-added" : "{reactions} картинку в вашем комментарии {heading} к {posting}",
       "comment-media-reaction-failed" : "Не удалось подписать реакцию на картинку в комментарии {commentNode} {commentHeading} к посту {postingNode} {postingHeading}",
@@ -258,7 +262,8 @@
       "remote-comment-added" : "{comments} {count, plural, =1 {{gender, select, female {прокомментировала} other {прокомментировал}}} other {прокомментировали}} {posting} {heading}, {reason}",
       "reply-comment" : "{replies} {count, plural, =1 {{gender, select, female {ответила} other {ответил}}} other {ответили}} на ваш комментарий {heading} к {posting}",
       "subscriber-added" : "{node} {gender, select, female {подписалась} other {подписался}} на вашу ленту {feed}",
-      "subscriber-deleted" : "{node} {gender, select, female {отписалась} other {отписался}} от вашей ленты {feed}"
+      "subscriber-deleted" : "{node} {gender, select, female {отписалась} other {отписался}} от вашей ленты {feed}",
+      "unblocked-user" : "{node} {gender, select, female {разрешила} other {разрешил}} вам {operations} {gender, select, female {её} other {его}} посты"
     },
     "supported" : "{count, plural, =1 {{gender, select, female {одобрила} other {одобрил}}} other {одобрили}}",
     "their-post" : "свой пост",
