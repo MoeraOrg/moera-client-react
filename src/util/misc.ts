@@ -17,8 +17,9 @@ export function mentionName(name: string | null | undefined, fullName?: string |
     return "@" + NodeName.shorten(name) + (fullName ? `[${fullName}]` : "");
 }
 
-export function formatFullName(name: string | null | undefined, fullName: string | null | undefined,
+export function formatFullName(nodeName: string | null | undefined, fullName: string | null | undefined,
                                mode: NameDisplayMode): string {
+    const name = nodeName != null ? NodeName.shorten(nodeName) : null;
     switch (mode) {
         case "name":
             return name || "?";

@@ -37,6 +37,7 @@ import peopleHideDialog from "state/peoplehidedialog/reducer";
 import friendGroupsDialog from "state/friendgroupsdialog/reducer";
 import askDialog from "state/askdialog/reducer";
 import blockDialog from "state/blockdialog/reducer";
+import blockingDetailsDialog from "state/blockingdetailsdialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -80,6 +81,7 @@ import linkPreviewsExecutors from "state/linkpreviews/sagas";
 import friendGroupsDialogExecutors from "state/friendgroupsdialog/sagas";
 import askDialogExecutors from "state/askdialog/sagas";
 import blockDialogExecutors from "state/blockdialog/sagas";
+import blockingDetailsDialogExecutors from "state/blockingdetailsdialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -109,6 +111,7 @@ import lightBoxTriggers from "state/lightbox/triggers";
 import peopleHideDialogTriggers from "state/peoplehidedialog/triggers";
 import friendGroupsDialogTriggers from "state/friendgroupsdialog/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
+import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
@@ -151,6 +154,7 @@ const reducers = combineReducers({
     friendGroupsDialog,
     askDialog,
     blockDialog,
+    blockingDetailsDialog,
     messageBox,
     confirmBox,
     flashBox,
@@ -193,6 +197,7 @@ const triggers = collectTriggers(
     peopleHideDialogTriggers,
     friendGroupsDialogTriggers,
     askDialogTriggers,
+    blockingDetailsDialogTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,
     signUpDialogTriggers,
@@ -233,6 +238,7 @@ const executors = collectExecutors(
     friendGroupsDialogExecutors,
     askDialogExecutors,
     blockDialogExecutors,
+    blockingDetailsDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

@@ -1,4 +1,4 @@
-.people-page .person .icons .icon {
+.people-page .person .details .icons .icon {
     font-size: .8rem;
     color: var(--bs-gray-500);
     width: 1.4rem;
@@ -8,15 +8,15 @@
     justify-content: center;
 }
 
-.people-page .person:hover .icons .icon {
+.people-page .person:hover .details .icons .icon {
     color: var(--bs-gray-600);
 }
 
-.people-page .person:hover .principal {
+.people-page .person:hover .details .principal {
     color: var(--bs-gray-600);
 }
 
-.people-page .person:hover .principal.senior {
+.people-page .person:hover .details .principal.senior {
     background-color: var(--bs-gray-600);
     color: white;
     border-color: var(--bs-gray-600);

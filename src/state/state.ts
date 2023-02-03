@@ -1,5 +1,6 @@
 import { AskDialogState } from "state/askdialog/state";
 import { BlockDialogState } from "state/blockdialog/state";
+import { BlockingDetailsDialogState } from "state/blockingdetailsdialog/state";
 import { CartesState } from "state/cartes/state";
 import { ChangeDateDialogState } from "state/changedatedialog/state";
 import { ComposeState } from "state/compose/state";
@@ -42,6 +43,7 @@ import { TokensState } from "state/tokens/state";
 export interface ClientState {
     askDialog: AskDialogState;
     blockDialog: BlockDialogState;
+    blockingDetailsDialog: BlockingDetailsDialogState;
     cartes: CartesState;
     changeDateDialog: ChangeDateDialogState;
     compose: ComposeState;
