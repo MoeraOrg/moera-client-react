@@ -1669,7 +1669,10 @@ const StorySummaryBlockedType: JSONSchemaType<API.StorySummaryBlocked> = {
             type: "array",
             items: {
                 type: "string"
-            },
+            }
+        },
+        "period": {
+            type: "integer",
             nullable: true
         }
     },

@@ -133,6 +133,13 @@ function formatBlockedOperations(data: StorySummaryData, t: TFunction): string {
     return t("instant-summary.blocked-reaction-and-comment");
 }
 
+function formatBlockedPeriod(data: StorySummaryData, t: TFunction): string {
+    if (data.blocked?.period == null) {
+        return "";
+    }
+    return t("instant-summary.blocked-period", {days: Math.ceil(data.blocked.period / 86400)});
+}
+
 export function buildReactionAddedSummary(data: StorySummaryData, negative: boolean, t: TFunction): string {
     return t("instant-summary.story.reaction-added", {
         reactions: formatListOfReactions(data, negative, t),
@@ -387,7 +394,8 @@ export function buildBlockedUserSummary(data: StorySummaryData, t: TFunction): s
     return t("instant-summary.story.blocked-user", {
         node: formatNodeName(data.node),
         gender: tGender(data.node?.ownerGender),
-        operations: formatBlockedOperations(data, t)
+        operations: formatBlockedOperations(data, t),
+        period: formatBlockedPeriod(data, t)
     });
 }
 

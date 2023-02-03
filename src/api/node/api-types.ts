@@ -501,6 +501,7 @@ export interface StorySummaryFriendGroup {
 
 export interface StorySummaryBlocked {
     operations: BlockedOperation[];
+    period?: number | null;
 }
 
 export interface StorySummaryData {
