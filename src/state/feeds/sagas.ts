@@ -294,26 +294,26 @@ function* feedUpdateSlice(feedName: string, before: number, after: number) {
 }
 
 function* feedExecuteSliceButtonsActions(
-    action: FeedPastSliceSetAction | FeedFutureSliceSetAction | FeedSliceUpdateAction
+    action: WithContext<FeedPastSliceSetAction | FeedFutureSliceSetAction | FeedSliceUpdateAction>
 ) {
     for (const story of action.payload.stories) {
         const details = getInstantTypeDetails(story.storyType);
         if (details?.buttonsAction != null) {
-            const action = details.buttonsAction(story);
-            if (action != null) {
-                yield* put(action);
+            const storyAction = details.buttonsAction(story, action.context);
+            if (storyAction != null) {
+                yield* put(storyAction);
             }
         }
     }
 }
 
-function* feedExecuteButtonsActions(action: StoryAddedAction | StoryUpdatedAction) {
+function* feedExecuteButtonsActions(action: WithContext<StoryAddedAction | StoryUpdatedAction>) {
     const {story} = action.payload;
     const details = getInstantTypeDetails(story.storyType);
     if (details?.buttonsAction != null) {
-        const action = details.buttonsAction(story);
-        if (action != null) {
-            yield* put(action);
+        const storyAction = details.buttonsAction(story, action.context);
+        if (storyAction != null) {
+            yield* put(storyAction);
         }
     }
 }

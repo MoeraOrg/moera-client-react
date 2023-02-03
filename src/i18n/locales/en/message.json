@@ -322,6 +322,7 @@
   "no-actions" : "No actions",
   "no-addons" : "No add-ons loaded.",
   "no-block" : "Do not block",
+  "no-blocking" : "No blocking.",
   "node-name-not-exists" : "No node with such name exist.",
   "node-settings-changed-conflict" : "Blog settings were changed by somebody.",
   "no-name-known" : "no name known",

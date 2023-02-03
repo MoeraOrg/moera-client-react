@@ -14,7 +14,7 @@ import { formatFullName } from "util/misc";
 type Props = ConnectedProps<typeof connector>;
 
 function ComposePreviewDialog({
-    show, loading, nodeName, remoteNodeName, by, blocked, nameDisplayMode, closeBlockingDetailsDialog
+    show, loaded, loading, nodeName, remoteNodeName, by, blocked, nameDisplayMode, closeBlockingDetailsDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -24,7 +24,7 @@ function ComposePreviewDialog({
 
     const onClose = () => closeBlockingDetailsDialog();
 
-    const name = formatFullName(!by ? remoteNodeName : nodeName, blocked[0]?.contact?.fullName, nameDisplayMode);
+    const name = formatFullName(remoteNodeName, blocked[0]?.contact?.fullName, nameDisplayMode);
     const deadline = blocked[0]?.deadline;
     const reason = blocked[0]?.reason;
 
@@ -32,23 +32,31 @@ function ComposePreviewDialog({
         <ModalDialog title={t(!by ? "details-blocking-name" : "details-blocking-by-name", {name})} loading={loading}
                      onClose={onClose}>
             <div className="modal-body">
-                <p>
-                    <strong>{t("prohibited")}: </strong>
-                    {blocked.map(bu => t(`prohibited-to-${bu.blockedOperation}`)).join(", ")}
-                    {deadline &&
-                        <>
-                            <br/>
-                            <strong>{t("blocking-till")}: </strong>
-                            {format(fromUnixTime(deadline), "dd-MM-yyyy HH:mm")}
-                        </>
-                    }
-                </p>
-                <strong>{t("blocking-reason")}:</strong>
-                <br/>
-                {reason ?
-                    <EntryHtml html={reason} nodeName={nodeName}/>
+                {loaded && blocked.length === 0 ?
+                    <p>
+                        <strong>{t("no-blocking")}</strong>
+                    </p>
                 :
-                    <p>{t("not-specified")}</p>
+                    <>
+                        <p>
+                            <strong>{t("prohibited")}: </strong>
+                            {blocked.map(bu => t(`prohibited-to-${bu.blockedOperation}`)).join(", ")}
+                            {deadline &&
+                                <>
+                                    <br/>
+                                    <strong>{t("blocking-till")}: </strong>
+                                    {format(fromUnixTime(deadline), "dd-MM-yyyy HH:mm")}
+                                </>
+                            }
+                        </p>
+                        <strong>{t("blocking-reason")}:</strong>
+                        <br/>
+                        {reason ?
+                            <EntryHtml html={reason} nodeName={nodeName}/>
+                        :
+                            <p>{t("not-specified")}</p>
+                        }
+                    </>
                 }
             </div>
             <div className="modal-footer">
@@ -61,6 +69,7 @@ function ComposePreviewDialog({
 const connector = connect(
     (state: ClientState) => ({
         show: state.blockingDetailsDialog.show,
+        loaded: state.blockingDetailsDialog.loaded,
         loading: state.blockingDetailsDialog.loading,
         nodeName: state.blockingDetailsDialog.nodeName,
         remoteNodeName: state.blockingDetailsDialog.remoteNodeName,

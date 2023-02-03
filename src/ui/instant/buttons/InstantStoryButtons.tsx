@@ -47,8 +47,9 @@ function InstantStoryButtonsImpl({
                 </span>
             }
         </div>
-    )
+    );
 }
+
 const connector = connect(
     null,
     { storySatisfy }

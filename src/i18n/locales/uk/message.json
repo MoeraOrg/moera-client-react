@@ -322,6 +322,7 @@
   "no-actions" : "Дій немає",
   "no-addons" : "Немає завантажених додатків.",
   "no-block" : "Не блокувати",
+  "no-blocking" : "Немає блокування.",
   "node-name-not-exists" : "Не існує блогу з цим ім'ям.",
   "node-settings-changed-conflict" : "Налаштування блога були кимось змінені.",
   "no-name-known" : "невідоме ім'я",

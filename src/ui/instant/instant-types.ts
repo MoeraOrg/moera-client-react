@@ -4,6 +4,7 @@ import i18n from 'i18next';
 import { TFunction } from 'react-i18next';
 
 import { StoryInfo, StorySummaryData, StoryType } from "api/node/api-types";
+import { ActionContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { ExtStoryInfo } from "state/feeds/state";
 import {
@@ -42,6 +43,7 @@ import InstantStoryFriendButtons, { instantStoryFriendAction } from "ui/instant/
 import InstantStoryFriendGroupButtons, {
     instantStoryFriendGroupAction
 } from "ui/instant/buttons/InstantStoryFriendGroupButtons";
+import InstantStoryBlockedButtons from "ui/instant/buttons/InstantStoryBlockedButtons";
 
 type InstantSummarySupplier = (data: StorySummaryData, homeOwnerName: string | null, t: TFunction) => string;
 
@@ -52,7 +54,8 @@ interface InstantTarget {
 
 type InstantTargetSupplier = (story: StoryInfo | ExtStoryInfo) => InstantTarget;
 
-export type InstantStoryButtonsActionSupplier = (story: StoryInfo) => ClientAction | null | undefined;
+export type InstantStoryButtonsActionSupplier = (story: StoryInfo,
+                                                 context: ActionContext) => ClientAction | null | undefined;
 
 interface InstantTypeDetails {
     color?: string;
@@ -285,7 +288,8 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         color: "var(--incorrect)",
         icon: "handcuffs",
         summary: (data, homeOwnerName, t) => buildBlockedUserSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: "/"})
+        target: story => ({nodeName: story.remoteNodeName, href: "/"}),
+        buttons: InstantStoryBlockedButtons
     },
     "unblocked-user": {
         color: "var(--correct)",
