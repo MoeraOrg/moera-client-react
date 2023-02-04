@@ -81,8 +81,9 @@ function BlockDialog(props: Props) {
                 <div className="modal-body">
                     <RadioField<BlockingLevel> id="level-none" name="level" title={t("no-block")} groupClassName="mb-0"
                                                isChecked={isChecked("none")} value="none" anyValue autoFocus/>
-                    <RadioField<BlockingLevel> id="level-ignore" name="level" title={t("hide")} groupClassName="mb-0"
-                                               isChecked={isChecked("ignore")} value="ignore" anyValue/>
+                    <RadioField<BlockingLevel> id="level-ignore" name="level" title={t("hide-in-discussions")}
+                                               groupClassName="mb-0" isChecked={isChecked("ignore")}
+                                               value="ignore" anyValue/>
                     <RadioField<BlockingLevel> id="level-comments" name="level" title={t("deny-comments")}
                                                groupClassName="mb-0" isChecked={isChecked("comments")}
                                                value="comments" anyValue/>
