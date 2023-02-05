@@ -32,6 +32,7 @@ function SubscribeButtonImpl({
     small, nodeName, feedName, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe, friendshipUpdate,
     openFriendGroupsDialog, openAskDialog, openPeopleHideDialog, openBlockDialog
 }: Props) {
+    const fullName = card?.details.profile.fullName ?? null;
     const subscribing = card?.subscription?.subscribing ?? false;
     const unsubscribing = card?.subscription?.unsubscribing ?? false;
     const subscriber = card?.subscription?.subscriber;
@@ -66,7 +67,7 @@ function SubscribeButtonImpl({
 
     const onHideDialog = () => openPeopleHideDialog(nodeName, feedName);
 
-    const onBlockDialog = () => openBlockDialog(nodeName);
+    const onBlockDialog = () => openBlockDialog(nodeName, fullName, null, null, blockedList ?? []);
 
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;

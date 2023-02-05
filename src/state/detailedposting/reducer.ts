@@ -2,6 +2,13 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
 
+import { CommentInfo } from "api/node/api-types";
+import {
+    EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
+    EVENT_HOME_REMOTE_COMMENT_VERIFIED,
+    EVENT_RECEIVER_COMMENT_DELETED
+} from "api/events/actions";
+import { ClientAction } from "state/action";
 import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
@@ -35,6 +42,9 @@ import {
     COMMENT_SET,
     COMMENT_VERIFY,
     COMMENT_VERIFY_FAILED,
+    COMMENTS_BLOCKED_USERS_LOAD,
+    COMMENTS_BLOCKED_USERS_LOAD_FAILED,
+    COMMENTS_BLOCKED_USERS_LOADED,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_FUTURE_SLICE_LOAD_FAILED,
     COMMENTS_FUTURE_SLICE_SET,
@@ -70,13 +80,7 @@ import {
     DetailedPostingState,
     ExtCommentInfo
 } from "state/detailedposting/state";
-import { ClientAction } from "state/action";
-import { CommentInfo } from "api/node/api-types";
-import {
-    EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
-    EVENT_HOME_REMOTE_COMMENT_VERIFIED,
-    EVENT_RECEIVER_COMMENT_DELETED
-} from "api/events/actions";
+import { BLOCK_DIALOG_SUBMITTED } from "state/blockdialog/actions";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { twemojiUrl } from "util/twemoji";
 
@@ -100,7 +104,10 @@ const emptyComments: CommentsState = {
     loadingGlanceComment: false,
     loadedGlanceComment: false,
     glanceCommentId: null,
-    glanceComment: null
+    glanceComment: null,
+    loadingBlockedUsers: false,
+    loadedBlockedUsers: false,
+    blockedUsers: []
 };
 
 const emptyCompose: Omit<CommentComposeState, "formId"> = {
@@ -419,6 +426,30 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
 
         case COMMENTS_SCROLLED_TO_COMPOSER:
             return immutable.set(state, "compose.focused", false);
+
+        case COMMENTS_BLOCKED_USERS_LOAD:
+            return immutable.set(state, "comments.loadingBlockedUsers", true);
+
+        case COMMENTS_BLOCKED_USERS_LOADED:
+            if (action.payload.receiverName !== state.comments.receiverName
+                || action.payload.receiverPostingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            return immutable.assign(state, "comments", {
+                loadingBlockedUsers: false,
+                loadedBlockedUsers: true,
+                blockedUsers: action.payload.list
+            });
+
+        case BLOCK_DIALOG_SUBMITTED:
+            if (action.payload.entryNodeName !== state.comments.receiverName
+                || action.payload.entryPostingId !== state.comments.receiverPostingId) {
+                return state;
+            }
+            return immutable.set(state, "comments.blockedUsers", action.payload.blockedUsers);
+
+        case COMMENTS_BLOCKED_USERS_LOAD_FAILED:
+            return immutable.set(state, "comments.loadingBlockedUsers", false);
 
         case COMMENT_COMPOSE_CANCELLED:
             return immutable.assign(state, "compose", {

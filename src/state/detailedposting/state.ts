@@ -1,4 +1,4 @@
-import { Body, CommentInfo, DraftInfo, RepliedTo } from "api/node/api-types";
+import { BlockedUserInfo, Body, CommentInfo, DraftInfo, RepliedTo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
 
 export interface ExtBody extends Body {
@@ -38,6 +38,9 @@ export interface CommentsState {
     loadedGlanceComment: boolean;
     glanceCommentId: string | null;
     glanceComment: ExtCommentInfo | null;
+    loadingBlockedUsers: boolean;
+    loadedBlockedUsers: boolean;
+    blockedUsers: BlockedUserInfo[];
 }
 
 export interface CommentComposeState {

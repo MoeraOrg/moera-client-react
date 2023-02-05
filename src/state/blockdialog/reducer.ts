@@ -15,6 +15,10 @@ import {
 const initialState: BlockDialogState = {
     show: false,
     nodeName: "",
+    fullName: null,
+    entryNodeName: null,
+    entryPostingId: null,
+    prevBlocked: [],
     submitting: false
 };
 
@@ -24,7 +28,11 @@ export default (state: BlockDialogState = initialState, action: WithContext<Clie
             return {
                 ...cloneDeep(initialState),
                 show: true,
-                nodeName: action.payload.nodeName
+                nodeName: action.payload.nodeName,
+                fullName: action.payload.fullName,
+                entryNodeName: action.payload.entryNodeName,
+                entryPostingId: action.payload.entryPostingId,
+                prevBlocked: action.payload.prevBlocked
             }
 
         case CLOSE_BLOCK_DIALOG:

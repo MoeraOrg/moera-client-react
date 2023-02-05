@@ -45,7 +45,8 @@ import {
     focusedCommentLoad,
     GLANCE_COMMENT,
     glanceCommentLoad,
-    OPEN_COMMENT_DIALOG
+    OPEN_COMMENT_DIALOG,
+    commentsBlockedUsersLoad
 } from "state/detailedposting/actions";
 import {
     getCommentDialogCommentId,
@@ -55,6 +56,7 @@ import {
     isCommentDialogShown,
     isCommentMomentInLoadedRange,
     isCommentPosted,
+    isCommentsBlockedUsersToBeLoaded,
     isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
     isDetailedPostingDefined,
@@ -141,6 +143,11 @@ export default [
         ],
         conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
         commentsPastSliceLoad
+    ),
+    trigger(
+        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, CONNECTED_TO_HOME],
+        conj(isAtDetailedPostingPage, isCommentsBlockedUsersToBeLoaded),
+        commentsBlockedUsersLoad
     ),
     trigger(
         POSTING_DELETED,

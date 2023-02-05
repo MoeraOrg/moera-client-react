@@ -2,6 +2,7 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import {
+    BlockedUserInfo,
     CommentInfo,
     CommentSourceText,
     CommentText,
@@ -206,6 +207,30 @@ export const COMMENTS_SCROLLED_TO_COMPOSER = "COMMENTS_SCROLLED_TO_COMPOSER";
 export type CommentsScrolledToComposerAction = Action<typeof COMMENTS_SCROLLED_TO_COMPOSER>;
 export const commentsScrolledToComposer = (): CommentsScrolledToComposerAction => ({
     type: COMMENTS_SCROLLED_TO_COMPOSER
+});
+
+export const COMMENTS_BLOCKED_USERS_LOAD = "COMMENTS_BLOCKED_USERS_LOAD";
+export type CommentsBlockedUsersLoadAction = Action<typeof COMMENTS_BLOCKED_USERS_LOAD>;
+export const commentsBlockedUsersLoad = (): CommentsBlockedUsersLoadAction => ({
+    type: COMMENTS_BLOCKED_USERS_LOAD
+});
+
+export const COMMENTS_BLOCKED_USERS_LOADED = "COMMENTS_BLOCKED_USERS_LOADED";
+export type CommentsBlockedUsersLoadedAction = ActionWithPayload<typeof COMMENTS_BLOCKED_USERS_LOADED, {
+    receiverName: string;
+    receiverPostingId: string;
+    list: BlockedUserInfo[];
+}>;
+export const commentsBlockedUsersLoaded = (receiverName: string, receiverPostingId: string,
+                                           list: BlockedUserInfo[]): CommentsBlockedUsersLoadedAction => ({
+    type: COMMENTS_BLOCKED_USERS_LOADED,
+    payload: {receiverName, receiverPostingId, list}
+});
+
+export const COMMENTS_BLOCKED_USERS_LOAD_FAILED = "COMMENTS_BLOCKED_USERS_LOAD_FAILED";
+export type CommentsBlockedUsersLoadFailedAction = Action<typeof COMMENTS_BLOCKED_USERS_LOAD_FAILED>;
+export const commentsBlockedUsersLoadFailed = (): CommentsBlockedUsersLoadFailedAction => ({
+    type: COMMENTS_BLOCKED_USERS_LOAD_FAILED
 });
 
 export const COMMENT_COMPOSE_CANCEL = "COMMENT_COMPOSE_CANCEL";
@@ -686,6 +711,9 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentsScrolledToAnchorAction
     | CommentsScrolledToCommentsAction
     | CommentsScrolledToComposerAction
+    | CommentsBlockedUsersLoadAction
+    | CommentsBlockedUsersLoadedAction
+    | CommentsBlockedUsersLoadFailedAction
     | CommentComposeCancelAction
     | CommentComposeCancelledAction
     | CommentDraftLoadAction

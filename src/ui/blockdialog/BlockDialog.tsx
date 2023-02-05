@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { BlockedOperation, BlockedUserInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getNodeCard } from "state/nodecards/selectors";
+import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";
 import { NameDisplayMode } from "ui/types";
@@ -56,7 +56,10 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function BlockDialog(props: Props) {
-    const {show, nodeName, submitting, card, nameDisplayMode, closeBlockDialog, values, resetForm} = props;
+    const {
+        show, nodeName, fullName, entryNodeName, submitting, homeOwnerName, nameDisplayMode, closeBlockDialog, values,
+        resetForm
+    } = props;
 
     const {t} = useTranslation();
 
@@ -71,39 +74,59 @@ function BlockDialog(props: Props) {
         return null;
     }
 
-    const name = formatFullName(nodeName, card?.details.profile.fullName, nameDisplayMode);
+    const name = formatFullName(nodeName, fullName, nameDisplayMode);
 
     const isChecked = (v: BlockingLevel) => (value: BlockingLevel) => value === v;
 
     return (
-        <ModalDialog title={t("blocking-node", {name})} className="block-dialog" onClose={closeBlockDialog}>
+        <ModalDialog title={entryNodeName == null ? t("blocking-node", {name}) : t("kicking-node", {name})}
+                     className="block-dialog" onClose={closeBlockDialog}>
             <Form>
                 <div className="modal-body">
-                    <RadioField<BlockingLevel> id="level-none" name="level" title={t("no-block")} groupClassName="mb-0"
-                                               isChecked={isChecked("none")} value="none" anyValue autoFocus/>
-                    <RadioField<BlockingLevel> id="level-ignore" name="level" title={t("hide-in-discussions")}
+                    <RadioField<BlockingLevel> id="level-none" name="level"
+                                               title={entryNodeName == null ? t("no-block") : t("no-kick")}
+                                               groupClassName="mb-0" isChecked={isChecked("none")}
+                                               value="none" anyValue/>
+                    <RadioField<BlockingLevel> id="level-ignore" name="level"
+                                               title={
+                                                   entryNodeName == null
+                                                       ? t("hide-in-discussions")
+                                                       : t("hide-in-discussion")
+                                               }
                                                groupClassName="mb-0" isChecked={isChecked("ignore")}
                                                value="ignore" anyValue/>
-                    <RadioField<BlockingLevel> id="level-comments" name="level" title={t("deny-comments")}
-                                               groupClassName="mb-0" isChecked={isChecked("comments")}
-                                               value="comments" anyValue/>
-                    <RadioField<BlockingLevel> id="level-reactions" name="level" title={t("deny-comments-reactions")}
-                                               groupClassName="mb-0" isChecked={isChecked("reactions")}
-                                               value="reactions" anyValue/>
-                    <RadioField<BlockingLevel> id="level-hide" name="level" title={t("deny-everything-hide")}
-                                               isChecked={isChecked("hide")} value="hide" anyValue/>
+                    {(entryNodeName == null || entryNodeName === homeOwnerName) &&
+                        <>
+                            <RadioField<BlockingLevel> id="level-comments" name="level"
+                                                       title={t("deny-comments")} groupClassName="mb-0"
+                                                       isChecked={isChecked("comments")} value="comments" anyValue/>
+                            <RadioField<BlockingLevel> id="level-reactions" name="level"
+                                                       title={t("deny-comments-reactions")} groupClassName="mb-0"
+                                                       isChecked={isChecked("reactions")} value="reactions" anyValue/>
+                            <RadioField<BlockingLevel> id="level-hide" name="level"
+                                                       title={
+                                                           entryNodeName == null
+                                                               ? t("deny-everything-hide")
+                                                               : t("deny-everything-hide-in-discussion")
+                                                       }
+                                                       isChecked={isChecked("hide")} value="hide" anyValue/>
+                        </>
+                    }
                     {values.level !== "none" &&
                         <>
                             <hr/>
-                            <div className="unblock-days">
-                                <CheckboxField name="temporary" groupClassName="mb-0"
-                                               title={values.temporary ? undefined : t("unblock-after-time")} anyValue/>
-                                {values.temporary &&
-                                    <Trans i18nKey="unblock-after-days" values={{count: values.days}}>
-                                        <NumberField name="days" horizontal min={1} max={1000}/>
-                                    </Trans>
-                                }
-                            </div>
+                            {entryNodeName == null &&
+                                <div className="unblock-days">
+                                    <CheckboxField name="temporary" groupClassName="mb-0"
+                                                   title={values.temporary ? undefined : t("unblock-after-time")}
+                                                   anyValue/>
+                                    {values.temporary &&
+                                        <Trans i18nKey="unblock-after-days" values={{count: values.days}}>
+                                            <NumberField name="days" horizontal min={1} max={1000}/>
+                                        </Trans>
+                                    }
+                                </div>
+                            }
                             <details open={values.reasonOpen}>
                                 <summary>{t("blocking-reason")}</summary>
                                 <RichTextField name="reason" format="markdown" smileysEnabled anyValue noMedia/>
@@ -114,7 +137,11 @@ function BlockDialog(props: Props) {
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={closeBlockDialog}>{t("cancel")}</Button>
                     <Button variant={values.level !== "none" ? "danger" : "success"} type="submit" loading={submitting}>
-                        {values.level !== "none" ? t("block") : t("unblock")}
+                        {
+                            entryNodeName == null
+                                ? (values.level !== "none" ? t("block") : t("unblock"))
+                                : (values.level !== "none" ? t("kick") : t("unkick"))
+                        }
                     </Button>
                 </div>
             </Form>
@@ -122,8 +149,8 @@ function BlockDialog(props: Props) {
     );
 }
 
-function daysTillDeadline(blocked: BlockedUserInfo[] | null): number | null {
-    if (blocked == null || blocked.length === 0 || blocked[0].deadline == null) {
+function daysTillDeadline(blocked: BlockedUserInfo[]): number | null {
+    if (blocked.length === 0 || blocked[0].deadline == null) {
         return null;
     }
     return Math.ceil((blocked[0].deadline - getUnixTime(new Date())) / 86400);
@@ -132,9 +159,9 @@ function daysTillDeadline(blocked: BlockedUserInfo[] | null): number | null {
 const blockDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => {
-        const level = blockingLevel(props.card?.blocking.blocked?.map(bu => bu.blockedOperation) ?? []);
-        const days = daysTillDeadline(props.card?.blocking.blocked ?? null);
-        const reason = new RichTextValue(props.card?.blocking.blocked?.[0]?.reasonSrc ?? "");
+        const level = blockingLevel(props.prevBlocked.map(bu => bu.blockedOperation));
+        const days = daysTillDeadline(props.prevBlocked);
+        const reason = new RichTextValue(props.prevBlocked[0]?.reasonSrc ?? "");
         return {
             level,
             temporary: days != null,
@@ -145,11 +172,14 @@ const blockDialogLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
+        const {nodeName, entryNodeName, entryPostingId, prevBlocked, blockDialogSubmit} = formik.props;
+
         formik.setStatus("submitted");
-        const prev = formik.props.card?.blocking.blocked ?? [];
         const deadline = values.temporary ? getUnixTime(add(new Date(), {days: values.days})) : null;
-        formik.props.blockDialogSubmit(
-            formik.props.nodeName, prev, BLOCKED_OPERATIONS[values.level], deadline, values.reason.text);
+        blockDialogSubmit(
+            nodeName, entryNodeName, entryPostingId, prevBlocked, BLOCKED_OPERATIONS[values.level], deadline,
+            values.reason.text
+        );
         formik.setSubmitting(false);
     }
 
@@ -159,8 +189,12 @@ const connector = connect(
     (state: ClientState) => ({
         show: state.blockDialog.show,
         nodeName: state.blockDialog.nodeName,
+        fullName: state.blockDialog.fullName,
+        entryNodeName: state.blockDialog.entryNodeName,
+        entryPostingId: state.blockDialog.entryPostingId,
+        prevBlocked: state.blockDialog.prevBlocked,
         submitting: state.blockDialog.submitting,
-        card: getNodeCard(state, state.blockDialog.nodeName),
+        homeOwnerName: getHomeOwnerName(state),
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
     }),
     { closeBlockDialog, blockDialogSubmit }

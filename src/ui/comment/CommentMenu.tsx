@@ -14,6 +14,7 @@ import {
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, commentSetVisibility, openCommentDialog } from "state/detailedposting/actions";
 import {
+    getCommentsBlockedUsers,
     getCommentsReceiverName,
     getCommentsReceiverPostingId,
     getDetailedPosting
@@ -22,6 +23,8 @@ import { openSourceDialog } from "state/sourcedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { DropdownMenu } from "ui/control";
+import { openBlockDialog } from "state/blockdialog/actions";
+import { getHomeOwnerName } from "state/home/selectors";
 
 interface OwnProps {
     nodeName: string;
@@ -31,10 +34,11 @@ interface OwnProps {
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, receiverPostingId, isPostingPermitted,
-                      isCommentPermitted, isCommentPrincipalIn, commentCopyLink, openCommentDialog,
-                      openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText, commentSetVisibility}: Props) {
-
+function CommentMenu({
+    nodeName, postingId, comment, rootLocation, homeOwnerName, receiverName, receiverPostingId, blockedUsers,
+    isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, commentCopyLink, openCommentDialog, openSourceDialog,
+    confirmBox, shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog
+}: Props) {
     const {t} = useTranslation();
 
     const onCopyLink = () => commentCopyLink(comment.id, postingId);
@@ -62,6 +66,14 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
     const onHide = () => commentSetVisibility(comment.id, false);
 
     const onShow = () => commentSetVisibility(comment.id, true);
+
+    const onBlockDialog = () => {
+        if (receiverName != null && receiverPostingId != null) {
+            openBlockDialog(
+                comment.ownerName, comment.ownerFullName ?? null, receiverName, receiverPostingId, blockedUsers
+            );
+        }
+    }
 
     const commentHref = `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`;
     const hideable = (isCommentPermitted("edit", "owner", {})
@@ -127,6 +139,12 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
                 href: commentHref,
                 onClick: onShow,
                 show: !hideable && unhideable
+            },
+            {
+                title: t("kick-ellipsis"),
+                href: commentHref,
+                onClick: onBlockDialog,
+                show: comment.ownerName !== homeOwnerName
             }
         ]}/>
     );
@@ -135,8 +153,10 @@ function CommentMenu({nodeName, postingId, comment, rootLocation, receiverName, 
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         rootLocation: getNodeRootLocation(state),
+        homeOwnerName: getHomeOwnerName(state),
         receiverName: getCommentsReceiverName(state),
         receiverPostingId: getCommentsReceiverPostingId(state),
+        blockedUsers: getCommentsBlockedUsers(state),
         isPostingPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
             isPermitted(operation, getDetailedPosting(state), defaultValue, state, options),
         isCommentPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
@@ -148,7 +168,7 @@ const connector = connect(
     }),
     {
         commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText,
-        commentSetVisibility
+        commentSetVisibility, openBlockDialog
     }
 );
 

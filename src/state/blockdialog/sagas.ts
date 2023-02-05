@@ -3,6 +3,7 @@ import { all, call, put } from 'typed-redux-saga';
 import { executor } from "state/executor";
 import { NodeApiError } from "api";
 import { deleteBlockedUser, postBlockedUser } from "api/node/sagas";
+import { WithContext } from "state/action-types";
 import {
     BLOCK_DIALOG_SUBMIT,
     BlockDialogSubmitAction,
@@ -14,16 +15,30 @@ export default [
     executor(BLOCK_DIALOG_SUBMIT, "", blockDialogSubmitSaga)
 ];
 
-function* blockDialogSubmitSaga(action: BlockDialogSubmitAction) {
-    const {nodeName, prevBlockedUsers, blockedOperations, deadline, reasonSrc} = action.payload;
+function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
+    const {
+        nodeName, entryNodeName, entryPostingId, prevBlockedUsers, blockedOperations, deadline, reasonSrc
+    } = action.payload;
+    const {homeOwnerName} = action.context;
+
+    const ownEntryId = entryNodeName == null ? null : entryNodeName === homeOwnerName ? entryPostingId : null;
+    const targetNodeName = entryNodeName == null || entryNodeName === homeOwnerName ? null : entryNodeName;
+    const targetPostingId = entryNodeName == null || entryNodeName === homeOwnerName ? null : entryPostingId;
 
     try {
         yield* all(prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, blockedUser.id)));
         const blockedUsers = yield* all(
-            blockedOperations.map(blockedOperation =>
-                call(postBlockedUser, ":", {blockedOperation, nodeName, deadline, reasonSrc}))
+            blockedOperations.map(blockedOperation => call(postBlockedUser, ":", {
+                blockedOperation,
+                nodeName,
+                entryId: ownEntryId,
+                entryNodeName: targetNodeName,
+                entryPostingId: targetPostingId,
+                deadline,
+                reasonSrc
+            }))
         );
-        yield* put(blockDialogSubmitted(nodeName, blockedUsers));
+        yield* put(blockDialogSubmitted(nodeName, entryNodeName, entryPostingId, blockedUsers));
     } catch (e) {
         yield* put(blockDialogSubmitFailed());
     }

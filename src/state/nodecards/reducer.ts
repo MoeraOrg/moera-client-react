@@ -439,7 +439,10 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
         }
 
         case BLOCK_DIALOG_SUBMITTED: {
-            const {nodeName, blockedUsers} = action.payload;
+            const {nodeName, entryNodeName, blockedUsers} = action.payload;
+            if (entryNodeName != null) {
+                return state;
+            }
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "blocking", "blocked"], blockedUsers)
                 .value();

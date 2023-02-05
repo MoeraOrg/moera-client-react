@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { AvatarImage, CommentInfo, PostingInfo } from "api/node/api-types";
+import { AvatarImage, BlockedUserInfo, CommentInfo, PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
@@ -74,6 +74,15 @@ export function isCommentsReceiverToBeSwitched(state: ClientState): boolean {
     const comments = getCommentsState(state);
 
     return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
+}
+
+export function isCommentsBlockedUsersToBeLoaded(state: ClientState): boolean {
+    const commentsState = getCommentsState(state);
+    return isConnectedToHome(state) && !commentsState.loadedBlockedUsers && !commentsState.loadingBlockedUsers;
+}
+
+export function getCommentsBlockedUsers(state: ClientState): BlockedUserInfo[] {
+    return getCommentsState(state).blockedUsers;
 }
 
 export function getComments(state: ClientState): ExtCommentInfo[] {

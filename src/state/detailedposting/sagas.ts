@@ -64,11 +64,15 @@ import {
     commentRepliedToSet,
     commentRepliedToUnset,
     CommentReplyAction,
+    COMMENTS_BLOCKED_USERS_LOAD,
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_LOAD_ALL,
     COMMENTS_PAST_SLICE_LOAD,
     COMMENTS_RECEIVER_SWITCH,
     COMMENTS_UPDATE,
+    CommentsBlockedUsersLoadAction,
+    commentsBlockedUsersLoaded,
+    commentsBlockedUsersLoadFailed,
     commentSet,
     CommentSetVisibilityAction,
     commentsFutureSliceLoadFailed,
@@ -96,6 +100,8 @@ import {
     getComment,
     getCommentComposerRepliedToName,
     getCommentDialogCommentId,
+    getCommentsReceiverName,
+    getCommentsReceiverPostingId,
     getCommentsState,
     getDetailedPosting,
     getDetailedPostingId,
@@ -121,6 +127,7 @@ export default [
     executor(COMMENTS_PAST_SLICE_LOAD, "", commentsPastSliceLoadSaga, introduced),
     executor(COMMENTS_FUTURE_SLICE_LOAD, "", commentsFutureSliceLoadSaga, introduced),
     executor(COMMENTS_UPDATE, "", commentsUpdateSaga, introduced),
+    executor(COMMENTS_BLOCKED_USERS_LOAD, "", commentsBlockedUsersLoadSaga, introduced),
     executor(COMMENT_LOAD, payload => payload.commentId, commentLoadSaga, introduced),
     executor(COMMENT_POST, null, commentPostSaga),
     executor(COMMENT_DRAFT_LOAD, "", commentDraftLoadSaga),
@@ -287,6 +294,31 @@ function* commentsUpdateSaga() {
             after = data.before;
         }
     } catch (e) {
+        yield* put(errorThrown(e));
+    }
+}
+
+function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersLoadAction>) {
+    const {homeOwnerName} = action.context;
+
+    const {receiverName, receiverPostingId} = yield* select(state => ({
+        receiverName: getCommentsReceiverName(state),
+        receiverPostingId: getCommentsReceiverPostingId(state)
+    }));
+    if (receiverName == null || receiverPostingId == null || homeOwnerName == null) {
+        yield* put(commentsBlockedUsersLoadFailed());
+        return;
+    }
+
+    const entryId = receiverName === homeOwnerName ? receiverPostingId : null;
+    const entryNodeName = receiverName === homeOwnerName ? null : receiverName;
+    const entryPostingId = receiverName === homeOwnerName ? null : receiverPostingId;
+
+    try {
+        const blocked = yield* call(Node.searchBlockedUsers, ":", {entryId, entryNodeName, entryPostingId});
+        yield* put(commentsBlockedUsersLoaded(receiverName, receiverPostingId, blocked));
+    } catch (e) {
+        yield* put(commentsBlockedUsersLoadFailed());
         yield* put(errorThrown(e));
     }
 }
