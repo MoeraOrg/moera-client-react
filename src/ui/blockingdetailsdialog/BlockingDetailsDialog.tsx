@@ -13,7 +13,7 @@ import { formatFullName } from "util/misc";
 
 type Props = ConnectedProps<typeof connector>;
 
-function ComposePreviewDialog({
+function BlockingDetailsDialog({
     show, loaded, loading, nodeName, remoteNodeName, by, blocked, nameDisplayMode, closeBlockingDetailsDialog
 }: Props) {
     const {t} = useTranslation();
@@ -80,4 +80,4 @@ const connector = connect(
     { closeBlockingDetailsDialog }
 );
 
-export default connector(ComposePreviewDialog);
+export default connector(BlockingDetailsDialog);
