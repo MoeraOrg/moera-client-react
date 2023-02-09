@@ -7,12 +7,16 @@ export const OPEN_BLOCKING_DETAILS_DIALOG = "OPEN_BLOCKING_DETAILS_DIALOG";
 export type OpenBlockingDetailsDialogAction = ActionWithPayload<typeof OPEN_BLOCKING_DETAILS_DIALOG, {
     nodeName: string;
     remoteNodeName: string;
+    remotePostingId: string | null;
+    remotePostingHeading: string | null;
     by: boolean;
 }>;
-export const openBlockingDetailsDialog = (nodeName: string, remoteNodeName: string,
-                                          by: boolean): OpenBlockingDetailsDialogAction => ({
+export const openBlockingDetailsDialog = (
+    nodeName: string, remoteNodeName: string, remotePostingId: string | null, remotePostingHeading: string | null,
+    by: boolean
+): OpenBlockingDetailsDialogAction => ({
     type: OPEN_BLOCKING_DETAILS_DIALOG,
-    payload: {nodeName, remoteNodeName, by}
+    payload: {nodeName, remoteNodeName, remotePostingId, remotePostingHeading, by}
 });
 
 export const CLOSE_BLOCKING_DETAILS_DIALOG = "CLOSE_BLOCKING_DETAILS_DIALOG";

@@ -18,6 +18,8 @@ const initialState: BlockingDetailsDialogState = {
     loading: false,
     nodeName: null,
     remoteNodeName: null,
+    remotePostingId: null,
+    remotePostingHeading: null,
     by: false,
     blocked: []
 };
@@ -31,6 +33,8 @@ export default (state: BlockingDetailsDialogState = initialState,
                 show: true,
                 nodeName: action.payload.nodeName,
                 remoteNodeName: action.payload.remoteNodeName,
+                remotePostingId: action.payload.remotePostingId,
+                remotePostingHeading: action.payload.remotePostingHeading,
                 by: action.payload.by
             }
 

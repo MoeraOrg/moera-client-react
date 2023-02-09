@@ -31,7 +31,7 @@ const PeoplePerson = ({
 
     const onBlockingDetailsClick = () => {
         if (ownerName != null) {
-            openBlockingDetailsDialog(ownerName, contact.contact.nodeName, tab === "blocked-by");
+            openBlockingDetailsDialog(ownerName, contact.contact.nodeName, null, null, tab === "blocked-by");
         }
     }
 

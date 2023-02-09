@@ -13,8 +13,10 @@ function InstantStoryBlockedButtons({story, homeOwnerName, openBlockingDetailsDi
     const {t} = useTranslation();
 
     const onClick = () => {
+        console.log(story);
         if (homeOwnerName != null && story.remoteNodeName != null) {
-            openBlockingDetailsDialog(homeOwnerName, story.remoteNodeName, true);
+            openBlockingDetailsDialog(homeOwnerName, story.remoteNodeName, story.remotePostingId ?? null,
+                story.summaryData?.posting?.heading ?? null, true);
         }
     }
 

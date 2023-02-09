@@ -10,11 +10,14 @@ import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import EntryHtml from "ui/entry/EntryHtml";
 import { formatFullName } from "util/misc";
+import Jump from "ui/navigation/Jump";
+import { htmlEntities, replaceEmojis } from "util/html";
 
 type Props = ConnectedProps<typeof connector>;
 
 function BlockingDetailsDialog({
-    show, loaded, loading, nodeName, remoteNodeName, by, blocked, nameDisplayMode, closeBlockingDetailsDialog
+    show, loaded, loading, nodeName, remoteNodeName, remotePostingId, remotePostingHeading, by, blocked,
+    nameDisplayMode, closeBlockingDetailsDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -27,11 +30,20 @@ function BlockingDetailsDialog({
     const name = formatFullName(remoteNodeName, blocked[0]?.contact?.fullName, nameDisplayMode);
     const deadline = blocked[0]?.deadline;
     const reason = blocked[0]?.reason;
+    const headingHtml = remotePostingHeading != null ? replaceEmojis(htmlEntities(remotePostingHeading)) : "";
 
     return (
         <ModalDialog title={t(!by ? "details-blocking-name" : "details-blocking-by-name", {name})} loading={loading}
                      onClose={onClose}>
             <div className="modal-body">
+                {remotePostingId != null &&
+                    <p>
+                        <strong>{t("in-post")}: </strong>
+                        <Jump nodeName={remoteNodeName} href={`/post/${remotePostingId}`}>
+                            <span dangerouslySetInnerHTML={{__html: headingHtml}}/>
+                        </Jump>
+                    </p>
+                }
                 {loaded && blocked.length === 0 ?
                     <p>
                         <strong>{t("no-blocking")}</strong>
@@ -73,6 +85,8 @@ const connector = connect(
         loading: state.blockingDetailsDialog.loading,
         nodeName: state.blockingDetailsDialog.nodeName,
         remoteNodeName: state.blockingDetailsDialog.remoteNodeName,
+        remotePostingId: state.blockingDetailsDialog.remotePostingId,
+        remotePostingHeading: state.blockingDetailsDialog.remotePostingHeading,
         by: state.blockingDetailsDialog.by,
         blocked: state.blockingDetailsDialog.blocked,
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode

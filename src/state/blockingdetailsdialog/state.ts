@@ -6,6 +6,8 @@ export interface BlockingDetailsDialogState {
     loading: boolean;
     nodeName: string | null;
     remoteNodeName: string | null;
+    remotePostingId: string | null;
+    remotePostingHeading: string | null;
     by: boolean;
     blocked: (BlockedUserInfo | BlockedByUserInfo)[];
 }

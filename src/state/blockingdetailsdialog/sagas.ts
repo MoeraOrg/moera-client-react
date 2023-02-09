@@ -16,9 +16,10 @@ export default [
 ];
 
 function* blockingDetailsDialogLoadSaga() {
-    const {nodeName, remoteNodeName, by} = yield* select((state: ClientState) => ({
+    const {nodeName, remoteNodeName, remotePostingId, by} = yield* select((state: ClientState) => ({
         nodeName: state.blockingDetailsDialog.nodeName,
         remoteNodeName: state.blockingDetailsDialog.remoteNodeName,
+        remotePostingId: state.blockingDetailsDialog.remotePostingId,
         by: state.blockingDetailsDialog.by
     }));
 
@@ -30,7 +31,7 @@ function* blockingDetailsDialogLoadSaga() {
                 nodeName: remoteNodeName
             })
         } else {
-            blocked = yield* call(Node.getBlockedByUsers, nodeName, remoteNodeName, null);
+            blocked = yield* call(Node.getBlockedByUsers, nodeName, remoteNodeName, remotePostingId);
         }
         yield* put(blockingDetailsDialogLoaded(blocked));
     } catch (e) {
