@@ -406,3 +406,22 @@ export function buildUnblockedUserSummary(data: StorySummaryData, t: TFunction):
         operations: formatBlockedOperations(data, t)
     });
 }
+
+export function buildBlockedUserInPostingSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.blocked-user-in-posting", {
+        node: formatNodeName(data.node),
+        gender: tGender(data.node?.ownerGender),
+        operations: formatBlockedOperations(data, t),
+        heading: formatHeading(data.posting),
+        period: formatBlockedPeriod(data, t)
+    });
+}
+
+export function buildUnblockedUserInPostingSummary(data: StorySummaryData, t: TFunction): string {
+    return t("instant-summary.story.unblocked-user-in-posting", {
+        node: formatNodeName(data.node),
+        gender: tGender(data.node?.ownerGender),
+        operations: formatBlockedOperations(data, t),
+        heading: formatHeading(data.posting)
+    });
+}

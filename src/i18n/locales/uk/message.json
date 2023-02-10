@@ -245,6 +245,7 @@
       "asked-to-friend-group" : "{node} {gender, select, female {попросила} other {попросив}} вас додати {gender, select, female {її} other {його}} до своєї групи друзів \"{group}\"",
       "asked-to-subscribe" : "{node} {gender, select, female {попросила} other {попросив}} вас підписатись на {gender, select, female {її} other {його}} стрічку",
       "blocked-user" : "{node} {gender, select, female {заборонила} other {заборонив}} вам {operations} {gender, select, female {її} other {його}} пости {period}",
+      "blocked-user-in-posting" : "{node} {gender, select, female {заборонила} other {заборонив}} вам {operations} {gender, select, female {її} other {його}} пост {heading} {period}",
       "comment-added" : "{comments} {count, plural, =1 {{gender, select, female {прокоментувала} other {прокоментував}}} other {прокоментували}} ваш пост {heading}",
       "comment-media-reaction-added" : "{reactions} картинку у вашому коментарі {heading} до {posting}",
       "comment-media-reaction-failed" : "Не вдалося підписати реакцію на картинку в коментарі {commentNode} {commentHeading} до посту {postingNode} {postingHeading}",
@@ -271,7 +272,8 @@
       "reply-comment" : "{replies} {count, plural, =1 {{gender, select, female {відповіла} other {відповів}}} other {відповіли}} на ваш коментар {heading} до {posting}",
       "subscriber-added" : "{node} {gender, select, female {підписалась} other {підписався}} на вашу стрічку {feed}",
       "subscriber-deleted" : "{node} {gender, select, female {відписалась} other {відписався}} від вашої стрічки {feed}",
-      "unblocked-user" : "{node} {gender, select, female {дозволила} other {дозволив}} вам {operations} {gender, select, female {її} other {його}} пости"
+      "unblocked-user" : "{node} {gender, select, female {дозволила} other {дозволив}} вам {operations} {gender, select, female {її} other {його}} пости",
+      "unblocked-user-in-posting" : "{node} {gender, select, female {дозволила} other {дозволив}} вам {operations} {gender, select, female {її} other {його}} пост {heading}"
     },
     "supported" : "{count, plural, =1 {{gender, select, female {схвалила} other {схвалив}}} other {схвалили}}",
     "their-post" : "свій пост",

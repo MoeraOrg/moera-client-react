@@ -245,6 +245,7 @@
       "asked-to-friend-group" : "{node} has asked you to add {gender, select, male {him} female {her} other {them}} to your group of friends \"{group}\"",
       "asked-to-subscribe" : "{node} has asked you to subscribe to {gender, select, male {his} female {her} other {their}} feed",
       "blocked-user" : "{node} has denied you {operations} {gender, select, male {his} female {her} other {their}} posts {period}",
+      "blocked-user-in-posting" : "{node} has denied you {operations} {gender, select, male {his} female {her} other {their}} post {heading} {period}",
       "comment-added" : "{comments} commented on your post {heading}",
       "comment-media-reaction-added" : "{reactions} a media in your comment {heading} on {posting}",
       "comment-media-reaction-failed" : "Failed to sign a reaction to a media in {commentNode} comment {commentHeading} to {postingNode} post {postingHeading}",
@@ -271,7 +272,8 @@
       "reply-comment" : "{replies} replied to your comment {heading} on {posting}",
       "subscriber-added" : "{node} subscribed to your {feed}",
       "subscriber-deleted" : "{node} unsubscribed from your {feed}",
-      "unblocked-user" : "{node} has allowed you {operations} {gender, select, male {his} female {her} other {their}} posts"
+      "unblocked-user" : "{node} has allowed you {operations} {gender, select, male {his} female {her} other {their}} posts",
+      "unblocked-user-in-posting" : "{node} has allowed you {operations} {gender, select, male {his} female {her} other {their}} post {heading}"
     },
     "supported" : "supported",
     "their-post" : "{gender, select, male {his} female {her} other {their}} post",

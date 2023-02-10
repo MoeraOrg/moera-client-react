@@ -9,7 +9,9 @@ import { ClientAction } from "state/action";
 import { ExtStoryInfo } from "state/feeds/state";
 import {
     buildAskedToFriendSummary,
-    buildAskedToSubscribeSummary, buildBlockedUserSummary,
+    buildAskedToSubscribeSummary,
+    buildBlockedUserInPostingSummary,
+    buildBlockedUserSummary,
     buildCommentAddedSummary,
     buildCommentMediaReactionAddedSummary,
     buildCommentMediaReactionFailedSummary,
@@ -33,7 +35,9 @@ import {
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
     buildSubscriberAddedSummary,
-    buildSubscriberDeletedSummary, buildUnblockedUserSummary
+    buildSubscriberDeletedSummary,
+    buildUnblockedUserInPostingSummary,
+    buildUnblockedUserSummary
 } from "ui/instant/instant-summaries";
 import { InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 import InstantStorySubscribeButtons, {
@@ -296,6 +300,19 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         icon: "handcuffs",
         summary: (data, homeOwnerName, t) => buildUnblockedUserSummary(data, t),
         target: story => ({nodeName: story.remoteNodeName, href: "/"})
+    },
+    "blocked-user-in-posting": {
+        color: "var(--incorrect)",
+        icon: "handcuffs",
+        summary: (data, homeOwnerName, t) => buildBlockedUserInPostingSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}),
+        buttons: InstantStoryBlockedButtons
+    },
+    "unblocked-user-in-posting": {
+        color: "var(--correct)",
+        icon: "handcuffs",
+        summary: (data, homeOwnerName, t) => buildUnblockedUserInPostingSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
     }
 };
 
