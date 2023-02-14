@@ -8,6 +8,7 @@ import {
     CommentText,
     DraftInfo,
     DraftText,
+    Features,
     PostingInfo,
     ReactionAttributes,
     ReactionTotalsInfo
@@ -68,6 +69,23 @@ export const commentsReceiverSwitched = (nodeName: string, fullName: string | nu
                                          postingId: string): CommentsReceiverSwitchedAction => ({
     type: COMMENTS_RECEIVER_SWITCHED,
     payload: {nodeName, fullName, postingId}
+});
+
+export const COMMENTS_RECEIVER_FEATURES_LOAD = "COMMENTS_RECEIVER_FEATURES_LOAD";
+export type CommentsReceiverFeaturesLoadAction = Action<typeof COMMENTS_RECEIVER_FEATURES_LOAD>;
+export const commentsReceiverFeaturesLoad = (): CommentsReceiverFeaturesLoadAction => ({
+    type: COMMENTS_RECEIVER_FEATURES_LOAD
+});
+
+export const COMMENTS_RECEIVER_FEATURES_LOADED = "COMMENTS_RECEIVER_FEATURES_LOADED";
+export type CommentsReceiverFeaturesLoadedAction = ActionWithPayload<typeof COMMENTS_RECEIVER_FEATURES_LOADED, {
+    nodeName: string;
+    features: Features;
+}>;
+export const commentsReceiverFeaturesLoaded = (nodeName: string,
+                                               features: Features): CommentsReceiverFeaturesLoadedAction => ({
+    type: COMMENTS_RECEIVER_FEATURES_LOADED,
+    payload: {nodeName, features}
 });
 
 export const COMMENTS_LOAD_ALL = "COMMENTS_LOAD_ALL";
@@ -696,6 +714,8 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | DetailedPostingScrolledToGalleryAction
     | CommentsReceiverSwitchAction
     | CommentsReceiverSwitchedAction
+    | CommentsReceiverFeaturesLoadAction
+    | CommentsReceiverFeaturesLoadedAction
     | CommentsLoadAllAction
     | CommentsPastSliceLoadAction
     | CommentsPastSliceLoadFailedAction

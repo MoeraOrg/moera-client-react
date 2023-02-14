@@ -14,7 +14,14 @@ import { openConnectDialog } from "state/connectdialog/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
 import { isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
-import { getCommentComposerRepliedToId, getCommentsState, getDetailedPosting } from "state/detailedposting/selectors";
+import {
+    getCommentComposerRepliedToId,
+    getCommentsReceiverFeatures,
+    getCommentsReceiverFullName,
+    getCommentsReceiverName,
+    getCommentsReceiverPostingId,
+    getDetailedPosting
+} from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { Button } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
@@ -130,9 +137,9 @@ const connector = connect(
         ownerFullName: getHomeOwnerFullName(state),
         ownerGender: getHomeOwnerGender(state),
         avatarDefault: getHomeOwnerAvatar(state),
-        receiverName: getCommentsState(state).receiverName,
-        receiverFullName: getCommentsState(state).receiverFullName,
-        receiverPostingId: getCommentsState(state).receiverPostingId,
+        receiverName: getCommentsReceiverName(state),
+        receiverFullName: getCommentsReceiverFullName(state),
+        receiverPostingId: getCommentsReceiverPostingId(state),
         comment: null,
         draft: state.detailedPosting.compose.draft,
         loadedDraft: state.detailedPosting.compose.loadedDraft,
@@ -145,7 +152,10 @@ const connector = connect(
         submitKey: getSetting(state, "comment.submit-key") as string,
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
         features: getPostingFeatures(state),
-        commentingAllowed: isPermitted("addComment", getDetailedPosting(state), "signed", state),
+        commentingAllowed: isPermitted("addComment", getDetailedPosting(state), "signed", state, {
+            objectSourceName: getCommentsReceiverName(state),
+            objectSourceFeatures: getCommentsReceiverFeatures(state)
+        }),
         discussionClosed: isPrincipalIn("addComment", getDetailedPosting(state), "signed", "none")
     }),
     { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }

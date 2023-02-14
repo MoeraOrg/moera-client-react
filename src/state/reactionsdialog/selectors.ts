@@ -3,7 +3,7 @@ import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
 import { isPermitted } from "state/node/selectors";
 import { getPosting } from "state/postings/selectors";
-import { getComment, getCommentsReceiverName } from "state/detailedposting/selectors";
+import { getComment, getCommentsReceiverFeatures, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
 
 export function getReactionsDialogNodeName(state: ClientState): string | null {
@@ -64,7 +64,8 @@ export function isReactionsDialogPermitted(operation: string, defaultValue: Prin
     if (state.reactionsDialog.commentId != null) {
         const comment = getComment(state, state.reactionsDialog.commentId);
         return isPermitted(operation, comment, defaultValue, state, {
-            objectSourceName: getCommentsReceiverName(state)
+            objectSourceName: getCommentsReceiverName(state),
+            objectSourceFeatures: getCommentsReceiverFeatures(state)
         });
     } else {
         const posting = getPosting(state, state.reactionsDialog.postingId);

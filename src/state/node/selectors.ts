@@ -42,8 +42,17 @@ export function getNodeFriendGroupsMemberOf(state: ClientState): FriendGroupDeta
     return getNodeFeatures(state)?.friendGroups?.memberOf ?? [];
 }
 
+export function getReceiverFriendGroupsMemberOf(state: ClientState,
+                                                receiverFeatures: Features | null): FriendGroupDetails[] {
+    return receiverFeatures?.friendGroups?.memberOf ?? [];
+}
+
 export function isNodeSubscribedToHome(state: ClientState): boolean {
     return getNodeFeatures(state)?.subscribed ?? false;
+}
+
+export function isReceiverSubscribedToHome(state: ClientState, receiverFeatures: Features | null): boolean {
+    return receiverFeatures?.subscribed ?? false;
 }
 
 export function getToken(state: ClientState, rootLocation: string | null): string | null {
@@ -154,11 +163,13 @@ function getOperations(object: ProtectedObject, useOperations: ObjectOperations)
 
 export interface IsPermittedOptions {
     objectSourceName: string | null;
+    objectSourceFeatures: Features | null;
     useOperations: ObjectOperations;
 }
 
 const defaultIsPermittedOptions: IsPermittedOptions = {
     objectSourceName: null,
+    objectSourceFeatures: null,
     useOperations: "normal"
 };
 
@@ -184,6 +195,12 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
     const ownerName = op.useOperations === "receiver" ? object?.receiverName : object?.ownerName;
     const isOwner = state.home.owner.name === ownerName;
     const isAdmin = op.objectSourceName != null ? isReceiverAdmin(state, op.objectSourceName) : isNodeAdmin(state);
+    const isSubscribed = op.objectSourceFeatures != null
+        ? isReceiverSubscribedToHome(state, op.objectSourceFeatures)
+        : isNodeSubscribedToHome(state);
+    const friendGroups = op.objectSourceFeatures != null
+        ? getReceiverFriendGroupsMemberOf(state, op.objectSourceFeatures)
+        : getNodeFriendGroupsMemberOf(state);
     switch (principal) {
         case "none":
             break;
@@ -198,7 +215,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             if (isOwner || isAdmin) {
                 return true;
             }
-            if (isNodeSubscribedToHome(state)) {
+            if (isSubscribed) {
                 return true;
             }
             break;
@@ -222,8 +239,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
                 if (isOwner || isAdmin) {
                     return true;
                 }
-                return op.objectSourceName == null
-                    && getNodeFriendGroupsMemberOf(state)?.find(fgd => fgd.id === principal.substring(2)) != null;
+                return friendGroups.find(fgd => fgd.id === principal.substring(2)) != null;
             }
             console.warn(`Don't know how to check '${principal}' principal`)
             break;

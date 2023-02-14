@@ -8,13 +8,14 @@ import {
     getNodeRootLocation,
     isPermitted,
     IsPermittedOptions,
-    isPrincipalIn,
-    IsPrincipalEqualsOptions
+    IsPrincipalEqualsOptions,
+    isPrincipalIn
 } from "state/node/selectors";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, commentSetVisibility, openCommentDialog } from "state/detailedposting/actions";
 import {
     getCommentsBlockedUsers,
+    getCommentsReceiverFeatures,
     getCommentsReceiverName,
     getCommentsReceiverPostingId,
     getDetailedPosting
@@ -160,8 +161,11 @@ const connector = connect(
         isPostingPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
             isPermitted(operation, getDetailedPosting(state), defaultValue, state, options),
         isCommentPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
-            isPermitted(operation, ownProps.comment, defaultValue, state,
-                {...options, objectSourceName: getCommentsReceiverName(state)}),
+            isPermitted(operation, ownProps.comment, defaultValue, state, {
+                ...options,
+                objectSourceName: getCommentsReceiverName(state),
+                objectSourceFeatures: getCommentsReceiverFeatures(state)
+            }),
         isCommentPrincipalIn: (operation: string, defaultValue: PrincipalValue,
                                value: PrincipalValue | PrincipalValue[], options: Partial<IsPrincipalEqualsOptions>) =>
             isPrincipalIn(operation, ownProps.comment, defaultValue, value, options)

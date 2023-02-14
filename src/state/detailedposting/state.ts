@@ -1,4 +1,4 @@
-import { BlockedUserInfo, Body, CommentInfo, DraftInfo, RepliedTo } from "api/node/api-types";
+import { BlockedUserInfo, Body, CommentInfo, DraftInfo, Features, RepliedTo } from "api/node/api-types";
 import { VerificationStatus } from "state/state-types";
 
 export interface ExtBody extends Body {
@@ -21,6 +21,7 @@ export interface CommentsState {
     receiverName: string | null;
     receiverFullName: string | null;
     receiverPostingId: string | null;
+    receiverFeatures: Features | null;
     loadingFuture: boolean;
     loadingPast: boolean;
     before: number;

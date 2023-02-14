@@ -68,6 +68,7 @@ import {
     COMMENTS_FUTURE_SLICE_LOAD,
     COMMENTS_LOAD_ALL,
     COMMENTS_PAST_SLICE_LOAD,
+    COMMENTS_RECEIVER_FEATURES_LOAD,
     COMMENTS_RECEIVER_SWITCH,
     COMMENTS_UPDATE,
     CommentsBlockedUsersLoadAction,
@@ -79,6 +80,7 @@ import {
     commentsFutureSliceSet,
     commentsPastSliceLoadFailed,
     commentsPastSliceSet,
+    commentsReceiverFeaturesLoaded,
     commentsReceiverSwitched,
     commentsScrollToComposer,
     commentsSliceUpdate,
@@ -123,6 +125,7 @@ export default [
     executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
     executor(DETAILED_POSTING_LOAD_ATTACHED, "", detailedPostingLoadAttachedSaga, introduced),
     executor(COMMENTS_RECEIVER_SWITCH, "", commentsReceiverSwitchSaga, introduced),
+    executor(COMMENTS_RECEIVER_FEATURES_LOAD, payload => payload.nodeName, commentsReceiverFeaturesLoadSaga, introduced),
     executor(COMMENTS_LOAD_ALL, "", commentsLoadAllSaga, introduced),
     executor(COMMENTS_PAST_SLICE_LOAD, "", commentsPastSliceLoadSaga, introduced),
     executor(COMMENTS_FUTURE_SLICE_LOAD, "", commentsFutureSliceLoadSaga, introduced),
@@ -221,6 +224,19 @@ function* commentsReceiverSwitchSaga() {
     const receiverFullName = posting.receiverFullName ?? ownerFullName;
     const receiverPostingId = posting.receiverPostingId ?? posting.id;
     yield* put(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId));
+}
+
+function* commentsReceiverFeaturesLoadSaga() {
+    const nodeName = yield* select(getCommentsReceiverName);
+    if (nodeName == null) {
+        return;
+    }
+    try {
+        const features = yield* call(Node.getFeatures, nodeName);
+        yield* put(commentsReceiverFeaturesLoaded(nodeName, features));
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
 }
 
 function* commentsLoadAllSaga() {

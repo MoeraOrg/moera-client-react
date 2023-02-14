@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
+import { getCommentsReceiverFeatures } from "state/detailedposting/selectors";
 import CommentReactionButton from "ui/comment/CommentReactionButton";
 import CommentReplyButton from "ui/comment/CommentReplyButton";
 import CommentShareButton from "ui/comment/CommentShareButton";
@@ -47,10 +48,12 @@ const connector = connect(
         homeOwnerName: getHomeOwnerName(state),
         enableSelf: getSetting(state, "comment.reactions.self.enabled") as boolean,
         reactionsEnabled: isPermitted("addReaction", props.comment, "public", state, {
-            objectSourceName: props.nodeName
+            objectSourceName: props.nodeName,
+            objectSourceFeatures: getCommentsReceiverFeatures(state)
         }),
         reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, "signed", state, {
             objectSourceName: props.nodeName,
+            objectSourceFeatures: getCommentsReceiverFeatures(state)
         })
     })
 );

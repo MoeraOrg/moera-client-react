@@ -29,8 +29,10 @@ import {
     COMMENTS_RECEIVER_SWITCHED,
     COMMENTS_SCROLL_TO_ANCHOR,
     COMMENTS_UNSET,
+    commentsBlockedUsersLoad,
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
+    commentsReceiverFeaturesLoad,
     commentsReceiverSwitch,
     commentsScrollToAnchor,
     commentsUnset,
@@ -45,8 +47,7 @@ import {
     focusedCommentLoad,
     GLANCE_COMMENT,
     glanceCommentLoad,
-    OPEN_COMMENT_DIALOG,
-    commentsBlockedUsersLoad
+    OPEN_COMMENT_DIALOG
 } from "state/detailedposting/actions";
 import {
     getCommentDialogCommentId,
@@ -57,6 +58,7 @@ import {
     isCommentMomentInLoadedRange,
     isCommentPosted,
     isCommentsBlockedUsersToBeLoaded,
+    isCommentsReceiverFeaturesToBeLoaded,
     isCommentsReceiverPostingId,
     isCommentsReceiverToBeSwitched,
     isDetailedPostingDefined,
@@ -107,6 +109,11 @@ export default [
         [GO_TO_PAGE, POSTING_SET, OWNER_SET],
         conj(isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
         commentsReceiverSwitch
+    ),
+    trigger(
+        [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
+        conj(isAtDetailedPostingPage, isCommentsReceiverFeaturesToBeLoaded),
+        commentsReceiverFeaturesLoad
     ),
     trigger(
         [GO_TO_PAGE, COMMENTS_RECEIVER_SWITCHED, CONNECTED_TO_HOME],

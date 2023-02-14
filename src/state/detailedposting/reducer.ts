@@ -51,6 +51,7 @@ import {
     COMMENTS_PAST_SLICE_LOAD,
     COMMENTS_PAST_SLICE_LOAD_FAILED,
     COMMENTS_PAST_SLICE_SET,
+    COMMENTS_RECEIVER_FEATURES_LOADED,
     COMMENTS_RECEIVER_SWITCHED,
     COMMENTS_SCROLL_TO_ANCHOR,
     COMMENTS_SCROLL_TO_COMPOSER,
@@ -88,6 +89,7 @@ const emptyComments: CommentsState = {
     receiverName: null,
     receiverFullName: null,
     receiverPostingId: null,
+    receiverFeatures: null,
     loadingFuture: false,
     loadingPast: false,
     before: Number.MIN_SAFE_INTEGER,
@@ -288,6 +290,12 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                 .assign("compose", cloneDeep(emptyCompose)) // assign, not set!
                 .set("commentDialog", cloneDeep(emptyComposeDialog))
                 .value()
+
+        case COMMENTS_RECEIVER_FEATURES_LOADED:
+            if (action.payload.nodeName !== state.comments.receiverName) {
+                return state;
+            }
+            return immutable.set(state, "comments.receiverFeatures", action.payload.features);
 
         case COMMENTS_PAST_SLICE_LOAD:
             return immutable.set(state, "comments.loadingPast", true);

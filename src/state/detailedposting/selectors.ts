@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-import { AvatarImage, BlockedUserInfo, CommentInfo, PostingInfo } from "api/node/api-types";
+import { AvatarImage, BlockedUserInfo, CommentInfo, Features, PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { isConnectedToHome } from "state/home/selectors";
@@ -55,12 +55,20 @@ export function getCommentsReceiverName(state: ClientState): string | null {
     return getCommentsState(state).receiverName;
 }
 
+export function getCommentsReceiverFullName(state: ClientState): string | null {
+    return getCommentsState(state).receiverFullName;
+}
+
 export function getCommentsReceiverPostingId(state: ClientState): string | null {
     return getCommentsState(state).receiverPostingId;
 }
 
 export function isCommentsReceiverPostingId(state: ClientState, id: string): boolean {
     return getCommentsState(state).receiverPostingId === id;
+}
+
+export function getCommentsReceiverFeatures(state: ClientState): Features | null {
+    return getCommentsState(state).receiverFeatures;
 }
 
 export function isCommentsReceiverToBeSwitched(state: ClientState): boolean {
@@ -74,6 +82,11 @@ export function isCommentsReceiverToBeSwitched(state: ClientState): boolean {
     const comments = getCommentsState(state);
 
     return comments.receiverName !== receiverName || comments.receiverPostingId !== receiverPostingId;
+}
+
+export function isCommentsReceiverFeaturesToBeLoaded(state: ClientState): boolean {
+    const receiverName = getCommentsReceiverName(state);
+    return receiverName != null && receiverName !== getOwnerName(state);
 }
 
 export function isCommentsBlockedUsersToBeLoaded(state: ClientState): boolean {
