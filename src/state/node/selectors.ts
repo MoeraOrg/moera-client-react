@@ -193,6 +193,15 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             }
             break;
         case "subscribed":
+            if (state.home.owner.name === ownerName) {
+                return true;
+            }
+            if (op.objectSourceName != null
+                ? isReceiverAdmin(state, op.objectSourceName)
+                : isNodeAdmin(state)
+            ) {
+                return true;
+            }
             if (isNodeSubscribedToHome(state)) {
                 return true;
             }
@@ -223,6 +232,15 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             break;
         default:
             if (principal.startsWith("f:")) {
+                if (state.home.owner.name === ownerName) {
+                    return true;
+                }
+                if (op.objectSourceName != null
+                    ? isReceiverAdmin(state, op.objectSourceName)
+                    : isNodeAdmin(state)
+                ) {
+                    return true;
+                }
                 return op.objectSourceName == null
                     && getNodeFriendGroupsMemberOf(state)?.find(fgd => fgd.id === principal.substring(2)) != null;
             }
