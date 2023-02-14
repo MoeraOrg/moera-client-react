@@ -182,6 +182,8 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
     }
 
     const ownerName = op.useOperations === "receiver" ? object?.receiverName : object?.ownerName;
+    const isOwner = state.home.owner.name === ownerName;
+    const isAdmin = op.objectSourceName != null ? isReceiverAdmin(state, op.objectSourceName) : isNodeAdmin(state);
     switch (principal) {
         case "none":
             break;
@@ -193,13 +195,7 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             }
             break;
         case "subscribed":
-            if (state.home.owner.name === ownerName) {
-                return true;
-            }
-            if (op.objectSourceName != null
-                ? isReceiverAdmin(state, op.objectSourceName)
-                : isNodeAdmin(state)
-            ) {
+            if (isOwner || isAdmin) {
                 return true;
             }
             if (isNodeSubscribedToHome(state)) {
@@ -207,38 +203,23 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
             }
             break;
         case "private":
-            if (state.home.owner.name === ownerName) {
-                return true;
-            }
-            if (op.objectSourceName != null
-                ? isReceiverAdmin(state, op.objectSourceName)
-                : isNodeAdmin(state)
-            ) {
+            if (isOwner || isAdmin) {
                 return true;
             }
             break;
         case "owner":
-            if (state.home.owner.name === ownerName) {
+            if (isOwner) {
                 return true;
             }
             break;
         case "admin":
-            if (op.objectSourceName != null
-                ? isReceiverAdmin(state, op.objectSourceName)
-                : isNodeAdmin(state)
-            ) {
+            if (isAdmin) {
                 return true;
             }
             break;
         default:
             if (principal.startsWith("f:")) {
-                if (state.home.owner.name === ownerName) {
-                    return true;
-                }
-                if (op.objectSourceName != null
-                    ? isReceiverAdmin(state, op.objectSourceName)
-                    : isNodeAdmin(state)
-                ) {
+                if (isOwner || isAdmin) {
                     return true;
                 }
                 return op.objectSourceName == null
