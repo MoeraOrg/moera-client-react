@@ -237,6 +237,8 @@ export interface PostingOperationsInfo {
     addNegativeReaction?: PrincipalValue | null;
 }
 
+export type BlockedOperationsInfo = ("addComment" | "addReaction")[];
+
 export interface PostingText {
     ownerName?: string | null;
     ownerFullName?: string | null;
@@ -305,6 +307,8 @@ export interface PostingInfoBase<B> {
     operations?: PostingOperationsInfo | null;
     receiverOperations?: PostingOperationsInfo | null;
     commentOperations?: CommentOperationsInfo | null;
+    blockedOperations?: BlockedOperationsInfo | null;
+    blockedCommentOperations?: BlockedOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
@@ -442,6 +446,7 @@ interface CommentInfoBase<B> {
     ownerOperations?: CommentOperationsInfo | null;
     seniorOperations?: CommentOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
+    blockedOperations?: BlockedOperationsInfo | null;
     clientReaction?: ClientReactionInfo | null;
     seniorReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;

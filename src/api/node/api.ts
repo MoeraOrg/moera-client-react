@@ -1010,6 +1010,20 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             ...CommentOperationsInfoType,
             nullable: true
         },
+        "blockedOperations": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "blockedCommentOperations": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
         "acceptedReactions": {
             ...AcceptedReactionsType,
             nullable: true
@@ -1186,6 +1200,20 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
         },
         "commentOperations": {
             ...CommentOperationsInfoType,
+            nullable: true
+        },
+        "blockedOperations": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "blockedCommentOperations": {
+            type: "array",
+            items: {
+                type: "string"
+            },
             nullable: true
         },
         "acceptedReactions": {
@@ -1416,6 +1444,13 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
             ...CommentOperationsInfoType,
             nullable: true
         },
+        "blockedOperations": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
         "acceptedReactions": {
             ...AcceptedReactionsType,
             nullable: true
@@ -1553,6 +1588,13 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
         },
         "seniorOperations": {
             ...CommentOperationsInfoType,
+            nullable: true
+        },
+        "blockedOperations": {
+            type: "array",
+            items: {
+                type: "string"
+            },
             nullable: true
         },
         "acceptedReactions": {

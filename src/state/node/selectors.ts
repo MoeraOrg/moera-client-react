@@ -1,5 +1,6 @@
 import {
     AvatarImage,
+    BlockedOperationsInfo,
     CommentOperationsInfo,
     Features,
     FriendGroupDetails,
@@ -131,6 +132,7 @@ export interface ProtectedObject {
     ownerOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
     seniorOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
     adminOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
+    blockedOperations?: BlockedOperationsInfo | null;
 }
 
 type ObjectOperations = "normal" | "receiver" | "owner" | "senior" | "admin";
@@ -170,6 +172,9 @@ export function isPermitted(operation: string, object: ProtectedObject | null, d
 
     let principal = defaultValue;
     if (object != null) {
+        if (object.blockedOperations != null && (object.blockedOperations as string[]).includes(operation)) {
+            return false;
+        }
         const operations = getOperations(object, op.useOperations);
         if (operations != null) {
             principal = operations[operation] ?? defaultValue;
