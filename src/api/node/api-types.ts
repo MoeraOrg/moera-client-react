@@ -1076,6 +1076,11 @@ export interface BlockedUserInfo {
     reason?: string | null;
 }
 
+export interface BlockedByUserFilter {
+    blockedOperations?: BlockedOperation[] | null;
+    postings?: RemotePosting[] | null;
+}
+
 export interface BlockedByUserInfo {
     id: string;
     blockedOperation: BlockedOperation;

@@ -59,6 +59,7 @@ import {
 } from "state/postings/selectors";
 import { getNodeRootLocation, getOwnerName } from "state/node/selectors";
 import { fillActivityReaction } from "state/activityreactions/sagas";
+import { fillBlockedOperations } from "state/blockedoperations/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { isConnectedToHome } from "state/home/selectors";
@@ -102,6 +103,7 @@ function* postingLoadSaga(action: PostingLoadAction) {
     try {
         const posting = yield* call(Node.getPosting, nodeName, id);
         yield* call(fillActivityReaction, posting);
+        yield* call(fillBlockedOperations, posting);
         yield* put(postingSet(posting, nodeName));
         yield* call(fillSubscription, posting);
     } catch (e) {

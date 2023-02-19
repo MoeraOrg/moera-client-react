@@ -110,6 +110,7 @@ import {
     isCommentComposerReplied
 } from "state/detailedposting/selectors";
 import { fillActivityReaction, fillActivityReactionsInPostings } from "state/activityreactions/sagas";
+import { fillBlockedOperations, fillBlockedOperationsInPostings } from "state/blockedoperations/sagas";
 import { postingCommentCountUpdate, postingCommentsSet, postingsSet } from "state/postings/actions";
 import { ClientState } from "state/state";
 import { getOwnerFullName, getOwnerName, isPermitted, isPrincipalIn } from "state/node/selectors";
@@ -171,6 +172,7 @@ function* detailedPostingLoadSaga() {
     try {
         const posting = yield* call(Node.getPosting, "", id);
         yield* call(fillActivityReaction, posting)
+        yield* call(fillBlockedOperations, posting)
         yield* put(detailedPostingLoaded(posting));
         yield* call(fillSubscription, posting)
     } catch (e) {
@@ -204,6 +206,7 @@ function* detailedPostingLoadAttachedSaga() {
     try {
         const postings = yield* call(Node.getPostingAttached, "", id);
         yield* call(fillActivityReactionsInPostings, postings);
+        yield* call(fillBlockedOperationsInPostings, postings);
         yield* put(postingsSet(postings, ""));
         yield* put(detailedPostingLoadedAttached());
     } catch (e) {

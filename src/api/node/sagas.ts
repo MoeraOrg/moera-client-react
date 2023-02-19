@@ -8,7 +8,7 @@ import {
     AsyncOperationCreated,
     AvatarAttributes,
     AvatarInfo,
-    AvatarOrdinal,
+    AvatarOrdinal, BlockedByUserFilter,
     BlockedByUserInfo,
     BlockedInstantAttributes,
     BlockedInstantInfo,
@@ -815,4 +815,12 @@ export function* getBlockedByUsers(nodeName: string | null, remoteNodeName: stri
         {nodeName: remoteNodeName, postingId: remotePostingId}
     );
     return yield* callApi({nodeName, location, auth: true, schema: NodeApi.BlockedByUserInfoArray});
+}
+
+export function* searchBlockedByUsers(nodeName: string | null,
+                                      filter: BlockedByUserFilter): CallApiResult<BlockedByUserInfo[]> {
+    return yield* callApi({
+        nodeName, location: "/people/blocked-by-users/search", method: "POST", auth: true, body: filter,
+        schema: NodeApi.BlockedByUserInfoArray
+    });
 }

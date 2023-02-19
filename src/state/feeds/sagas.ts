@@ -55,6 +55,7 @@ import { executor } from "state/executor";
 import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
+import { fillBlockedOperationsInStories } from "state/blockedoperations/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
 
@@ -220,6 +221,7 @@ function* feedPastSliceLoadSaga(action: FeedPastSliceLoadAction) {
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), null, before, 20)
             : yield* call(Node.getFeedSlice, "", feedName, null, before, 20);
         yield* call(fillActivityReactionsInStories, data.stories);
+        yield* call(fillBlockedOperationsInStories, data.stories);
         yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after,
             data.totalInPast, data.totalInFuture));
         yield* call(fillSubscriptions, data.stories);
@@ -237,6 +239,7 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
             : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
         yield* call(fillActivityReactionsInStories, data.stories);
+        yield* call(fillBlockedOperationsInStories, data.stories);
         yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after,
             data.totalInPast, data.totalInFuture));
         yield* call(fillSubscriptions, data.stories);

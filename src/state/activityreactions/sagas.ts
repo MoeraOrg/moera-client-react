@@ -34,7 +34,7 @@ export function* fillActivityReactionsInPostings(postings: PostingInfo[]) {
                 createdAt: reaction.createdAt
             }
         }
-    })
+    });
 }
 
 export function* fillActivityReaction(posting: PostingInfo) {
