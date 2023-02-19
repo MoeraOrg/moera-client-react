@@ -334,7 +334,12 @@ function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersL
     const entryPostingId = receiverName === homeOwnerName ? null : receiverPostingId;
 
     try {
-        const blocked = yield* call(Node.searchBlockedUsers, ":", {entryId, entryNodeName, entryPostingId});
+        const blocked = yield* call(Node.searchBlockedUsers, ":", {
+            entryId,
+            entryNodeName,
+            entryPostingId,
+            strict: true
+        });
         yield* put(commentsBlockedUsersLoaded(receiverName, receiverPostingId, blocked));
     } catch (e) {
         yield* put(commentsBlockedUsersLoadFailed());

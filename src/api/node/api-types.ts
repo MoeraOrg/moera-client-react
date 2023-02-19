@@ -1059,6 +1059,7 @@ export interface BlockedUserFilter {
     entryId?: string | null;
     entryNodeName?: string | null;
     entryPostingId?: string | null;
+    strict?: boolean | null;
 }
 
 export interface BlockedUserInfo {

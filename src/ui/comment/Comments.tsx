@@ -13,6 +13,8 @@ import {
     detailedPostingScrolledToGallery
 } from "state/detailedposting/actions";
 import {
+    getComments,
+    getCommentsBlockedUsers,
     getCommentsState,
     getDetailedPosting,
     isCommentComposerFocused,
@@ -27,6 +29,7 @@ import CommentCompose from "ui/comment/CommentCompose";
 import CommentDialog from "ui/comment/CommentDialog";
 import { getPageHeaderHeight } from "util/misc";
 import "./Comments.css";
+import { createSelector } from "reselect";
 
 type Props = ConnectedProps<typeof connector> & WithTranslation;
 
@@ -237,6 +240,25 @@ class Comments extends React.PureComponent<Props, State> {
     }
 }
 
+const getVisibleComments = createSelector(
+    getComments,
+    getCommentsBlockedUsers,
+    (comments, blockedUsers) => {
+        if (blockedUsers == null || blockedUsers.length === 0) {
+            return comments;
+        }
+        const invisibleNames = new Set(
+            blockedUsers
+                .filter(bu => bu.blockedOperation === "visibility")
+                .map(bu => bu.nodeName)
+        );
+        if (invisibleNames.size === 0) {
+            return comments;
+        }
+        return comments.filter(c => !invisibleNames.has(c.ownerName));
+    }
+);
+
 const connector = connect(
     (state: ClientState) => ({
         visible: isAtDetailedPostingPage(state),
@@ -248,7 +270,7 @@ const connector = connect(
         after: getCommentsState(state).after,
         totalInPast: getCommentsState(state).totalInPast,
         totalInFuture: getCommentsState(state).totalInFuture,
-        comments: getCommentsState(state).comments,
+        comments: getVisibleComments(state),
         anchor: getCommentsState(state).anchor,
         focusedCommentId: getCommentsState(state).focusedCommentId,
         focused: isCommentsFocused(state),
