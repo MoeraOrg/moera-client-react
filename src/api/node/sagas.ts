@@ -808,15 +808,6 @@ export function* searchBlockedUsers(nodeName: string | null,
     });
 }
 
-export function* getBlockedByUsers(nodeName: string | null, remoteNodeName: string | null,
-                                   remotePostingId: string | null): CallApiResult<BlockedByUserInfo[]> {
-    const location = urlWithParameters(
-        "/people/blocked-by-users",
-        {nodeName: remoteNodeName, postingId: remotePostingId}
-    );
-    return yield* callApi({nodeName, location, auth: true, schema: NodeApi.BlockedByUserInfoArray});
-}
-
 export function* searchBlockedByUsers(nodeName: string | null,
                                       filter: BlockedByUserFilter): CallApiResult<BlockedByUserInfo[]> {
     return yield* callApi({

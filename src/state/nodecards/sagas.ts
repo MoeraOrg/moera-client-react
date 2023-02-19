@@ -214,7 +214,7 @@ function* loadBlockedBy(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName || homeOwnerName.includes(":")) {
         return null;
     }
-    return yield* call(Node.getBlockedByUsers, ":", nodeName, null);
+    return yield* call(Node.searchBlockedByUsers, ":", {postings: [{nodeName}]});
 }
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {

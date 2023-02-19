@@ -800,6 +800,11 @@ export interface RemotePosting {
     postingId: string;
 }
 
+export interface PartialRemotePosting {
+    nodeName?: string | null;
+    postingId?: string | null;
+}
+
 export interface ActivityReactionInfo {
     remoteNodeName: string;
     remoteFullName?: string | null;
@@ -1079,7 +1084,8 @@ export interface BlockedUserInfo {
 
 export interface BlockedByUserFilter {
     blockedOperations?: BlockedOperation[] | null;
-    postings?: RemotePosting[] | null;
+    postings?: PartialRemotePosting[] | null;
+    strict?: boolean | null;
 }
 
 export interface BlockedByUserInfo {

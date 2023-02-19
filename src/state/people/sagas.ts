@@ -250,7 +250,7 @@ function* blockedLoadSaga() {
 
 function* blockedByLoadSaga() {
     try {
-        const blockedBy = yield* call(Node.getBlockedByUsers, "", null, null);
+        const blockedBy = yield* call(Node.searchBlockedByUsers, "", {strict: true});
         yield* put(blockedByLoaded(blockedBy));
     } catch (e) {
         if (e instanceof NodeApiError) {

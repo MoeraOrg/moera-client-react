@@ -31,7 +31,10 @@ function* blockingDetailsDialogLoadSaga() {
                 nodeName: remoteNodeName
             })
         } else {
-            blocked = yield* call(Node.getBlockedByUsers, nodeName, remoteNodeName, remotePostingId);
+            blocked = yield* call(Node.searchBlockedByUsers, nodeName, {
+                postings: [{nodeName: remoteNodeName, postingId: remotePostingId}],
+                strict: true
+            });
         }
         yield* put(blockingDetailsDialogLoaded(blocked));
     } catch (e) {
