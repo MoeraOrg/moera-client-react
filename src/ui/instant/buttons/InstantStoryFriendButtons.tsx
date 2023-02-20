@@ -12,7 +12,7 @@ import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/button
 
 type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
 
-function InstantStoryFriendButtons({story, friendship, friendsId, friendshipUpdate}: Props) {
+function InstantStoryFriendButtons({story, hide, friendship, friendsId, friendshipUpdate}: Props) {
     const {t} = useTranslation();
 
     const friendGroup = story.summaryData?.friendGroup;
@@ -27,7 +27,8 @@ function InstantStoryFriendButtons({story, friendship, friendsId, friendshipUpda
     }
 
     return (
-        <InstantStoryButtons story={story} ready={friendship?.loaded ?? false} accepting={friendship?.updating ?? false}
+        <InstantStoryButtons story={story} hide={hide} ready={friendship?.loaded ?? false}
+                             accepting={friendship?.updating ?? false}
                              accepted={friendship?.groups != null && friendship.groups.length > 0}
                              acceptTitle={t("add-friend")} acceptedTitle={t("you-friends")}
                              onAccept={onAddFriend}/>

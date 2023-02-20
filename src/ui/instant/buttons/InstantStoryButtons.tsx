@@ -8,6 +8,7 @@ import { Button } from "ui/control";
 
 export interface InstantStoryButtonsProps {
     story: ExtStoryInfo;
+    hide: () => void;
 }
 
 type Props = InstantStoryButtonsProps & {

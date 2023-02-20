@@ -57,7 +57,7 @@ function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: P
                     {formatDistanceToNow(publishDate, {locale: getDateFnsLocale()})}
                 </time>
             </div>
-            {buttons && React.createElement(buttons, {story})}
+            {buttons && React.createElement(buttons, {story, hide})}
             <div className="sidebar">
                 <span className="envelope" title={story.read ? t("mark-unread") : t("mark-read")}
                       onClick={onEnvelope}>

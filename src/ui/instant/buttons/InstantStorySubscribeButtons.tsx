@@ -11,7 +11,7 @@ import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/button
 
 type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
 
-function InstantStorySubscribeButtons({story, subscription, feedSubscribe}: Props) {
+function InstantStorySubscribeButtons({story, hide, subscription, feedSubscribe}: Props) {
     const {t} = useTranslation();
 
     const onSubscribe = () => {
@@ -21,7 +21,7 @@ function InstantStorySubscribeButtons({story, subscription, feedSubscribe}: Prop
     }
 
     return (
-        <InstantStoryButtons story={story} ready={subscription?.loaded ?? false}
+        <InstantStoryButtons story={story} hide={hide} ready={subscription?.loaded ?? false}
                              accepting={subscription?.subscribing ?? false}
                              accepted={subscription?.subscription != null}
                              acceptTitle={t("subscribe-back")} acceptedTitle={t("you-subscribed")}

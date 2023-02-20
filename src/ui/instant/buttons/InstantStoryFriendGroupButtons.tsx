@@ -11,7 +11,7 @@ import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/button
 
 type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
 
-function InstantStoryFriendGroupButtons({story, friendship, friendshipUpdate}: Props) {
+function InstantStoryFriendGroupButtons({story, hide, friendship, friendshipUpdate}: Props) {
     const {t} = useTranslation();
 
     const friendGroupIds = friendship?.groups?.map(fg => fg.id) ?? [];
@@ -24,7 +24,8 @@ function InstantStoryFriendGroupButtons({story, friendship, friendshipUpdate}: P
     }
 
     return (
-        <InstantStoryButtons story={story} ready={friendship?.loaded ?? false} accepting={friendship?.updating ?? false}
+        <InstantStoryButtons story={story} hide={hide} ready={friendship?.loaded ?? false}
+                             accepting={friendship?.updating ?? false}
                              accepted={friendGroupId != null && friendGroupIds.includes(friendGroupId)}
                              acceptTitle={t("add-friend")} acceptedTitle={t("you-friends")}
                              onAccept={onAddFriend}/>

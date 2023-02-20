@@ -9,12 +9,12 @@ import { InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons
 
 type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
 
-function InstantStoryBlockedButtons({story, homeOwnerName, openBlockingDetailsDialog}: Props) {
+function InstantStoryBlockedButtons({story, hide, homeOwnerName, openBlockingDetailsDialog}: Props) {
     const {t} = useTranslation();
 
     const onClick = () => {
-        console.log(story);
         if (homeOwnerName != null && story.remoteNodeName != null) {
+            hide();
             openBlockingDetailsDialog(homeOwnerName, story.remoteNodeName, story.remotePostingId ?? null,
                 story.summaryData?.posting?.heading ?? null, true);
         }
