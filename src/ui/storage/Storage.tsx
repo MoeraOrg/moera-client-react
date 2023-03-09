@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { isAddonMessage, loadDataMessage, LoadedData, StoredName } from "api/addon/api-types";
@@ -16,48 +16,22 @@ import { now } from "util/misc";
 
 type Props = ConnectedProps<typeof connector>;
 
-class Storage extends React.PureComponent<Props> {
+function Storage({
+    standalone, home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
+    namingNameLoaded, disconnectedFromHome, settingsClientValuesSet
+}: Props) {
+    const initiated = useRef<boolean>(false);
 
-    componentDidMount() {
-        window.addEventListener("message", this.messageReceived);
-        if (this.props.standalone) {
+    useEffect(() => {
+        window.addEventListener("message", messageReceived);
+        if (standalone && !initiated.current) {
+            initiated.current = true;
             Browser.postMessage(loadDataMessage());
         }
-    }
+        return () => window.removeEventListener("message", messageReceived);
+    });
 
-    messageReceived = (event: MessageEvent) => {
-        // Only accept messages from the same frame
-        if (event.source !== window) {
-            return;
-        }
-
-        const message = event.data;
-
-        // Only accept messages that we know are ours
-        if (!isAddonMessage(message)) {
-            return;
-        }
-
-        switch (message.action) {
-            case "loadedData":
-                this.loadedData(message.payload);
-                return;
-
-            case "storedName":
-                this.storedName(message.payload);
-                return;
-
-            default:
-                return;
-        }
-    };
-
-    loadedData(data: LoadedData) {
-        const {
-            home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
-            disconnectedFromHome, settingsClientValuesSet
-        } = this.props;
-
+    const loadedData = (data: LoadedData) => {
         if (!data) {
             return;
         }
@@ -79,10 +53,10 @@ class Storage extends React.PureComponent<Props> {
         }
 
         const {location, nodeName, fullName = null, avatar = null, login = null, token = null,
-               permissions} = data.home || {};
+            permissions} = data.home || {};
         if (location != null
-                && (fullName != null || avatar != null || login != null || token != null || permissions != null)
-                && (location !== home.location || login !== home.login || token !== home.token)) {
+            && (fullName != null || avatar != null || login != null || token != null || permissions != null)
+            && (location !== home.location || login !== home.login || token !== home.token)) {
             homeRestore(data.version, location, login, token, permissions ?? [],
                 data.cartesIp ?? null, data.cartes ?? [], data.roots ?? []);
             if (nodeName) {
@@ -96,14 +70,36 @@ class Storage extends React.PureComponent<Props> {
         }
     }
 
-    storedName(data: StoredName) {
-        this.props.namingNameLoaded(data.name, data.nodeUri, now());
-    }
+    const storedName = (data: StoredName) => namingNameLoaded(data.name, data.nodeUri, now());
 
-    render() {
-        return this.props.standalone ? <LocalStorageBackend/> : null;
-    }
+    const messageReceived = (event: MessageEvent) => {
+        // Only accept messages from the same frame
+        if (event.source !== window) {
+            return;
+        }
 
+        const message = event.data;
+
+        // Only accept messages that we know are ours
+        if (!isAddonMessage(message)) {
+            return;
+        }
+
+        switch (message.action) {
+            case "loadedData":
+                loadedData(message.payload);
+                return;
+
+            case "storedName":
+                storedName(message.payload);
+                return;
+
+            default:
+                return;
+        }
+    };
+
+    return standalone ? <LocalStorageBackend/> : null;
 }
 
 const connector = connect(
