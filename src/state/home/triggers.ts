@@ -5,12 +5,13 @@ import {
     disconnectedFromHome,
     DisconnectFromHomeAction,
     homeFriendGroupsLoad,
+    homeInvisibleUsersLoad,
     homeOwnerSet,
     homeOwnerVerify
 } from "state/home/actions";
+import { NodeNameChangedEvent } from "api/events/api-types";
 import { EVENT_HOME_NODE_NAME_CHANGED, EventAction } from "api/events/actions";
 import { hasInactiveConnections, isConnectedToHome } from "state/home/selectors";
-import { NodeNameChangedEvent } from "api/events/api-types";
 
 export default [
     trigger(CONNECTED_TO_HOME, true, homeOwnerVerify),
@@ -20,6 +21,7 @@ export default [
         (signal: DisconnectFromHomeAction) => disconnectedFromHome(signal.payload.location, signal.payload.login)
     ),
     trigger(CONNECTED_TO_HOME, true, homeFriendGroupsLoad),
+    trigger(CONNECTED_TO_HOME, true, homeInvisibleUsersLoad),
     trigger(
         EVENT_HOME_NODE_NAME_CHANGED,
         true,

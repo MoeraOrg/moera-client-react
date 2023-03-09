@@ -4,7 +4,14 @@ import { connect, ConnectedProps } from 'react-redux';
 import { isAddonMessage, loadDataMessage, LoadedData, StoredName } from "api/addon/api-types";
 import { PREFIX } from "api/settings";
 import { ClientState } from "state/state";
-import { browserApiSet, connectionsSet, disconnectedFromHome, homeOwnerSet, homeRestore } from "state/home/actions";
+import {
+    browserApiSet,
+    connectionsSet,
+    disconnectedFromHome,
+    homeInvisibleUsersLoaded,
+    homeOwnerSet,
+    homeRestore
+} from "state/home/actions";
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
@@ -18,7 +25,7 @@ type Props = ConnectedProps<typeof connector>;
 
 function Storage({
     standalone, home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
-    namingNameLoaded, disconnectedFromHome, settingsClientValuesSet
+    namingNameLoaded, disconnectedFromHome, settingsClientValuesSet, homeInvisibleUsersLoaded
 }: Props) {
     const initiated = useRef<boolean>(false);
 
@@ -50,6 +57,16 @@ function Storage({
 
         if (data.settings != null) {
             settingsClientValuesSet(data.settings.map(([name, value]) => ({name: PREFIX + name, value})));
+        }
+
+        if (data.invisibleUsers != null) {
+            const {checksum, blockedUsers} = data.invisibleUsers;
+            homeInvisibleUsersLoaded(checksum, blockedUsers.map(([id, nodeName]) => ({
+                id,
+                blockedOperation: "visibility",
+                nodeName,
+                createdAt: 0
+            })));
         }
 
         const {location, nodeName, fullName = null, avatar = null, login = null, token = null,
@@ -109,7 +126,7 @@ const connector = connect(
     }),
     {
         homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded,
-        disconnectedFromHome, settingsClientValuesSet
+        disconnectedFromHome, settingsClientValuesSet, homeInvisibleUsersLoaded
     }
 );
 

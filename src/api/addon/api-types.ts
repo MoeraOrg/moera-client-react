@@ -24,6 +24,10 @@ export interface StoredData {
     cartesIp?: string | null;
     cartes?: CarteInfo[] | null;
     settings?: [string, string | null][] | null;
+    invisibleUsers?: {
+        checksum: number;
+        blockedUsers: [string, string][];
+    } | null;
 }
 
 export interface LoadedData extends StoredData {

@@ -1,4 +1,4 @@
-import { AvatarImage, FriendGroupInfo } from "api/node/api-types";
+import { AvatarImage, BlockedUserInfo, FriendGroupInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getToken } from "state/node/selectors";
 import { NodeCardState } from "state/nodecards/state";
@@ -59,6 +59,14 @@ export function getHomeFriendGroups(state: ClientState): FriendGroupInfo[] {
 
 export function getHomeFriendsId(state: ClientState): string | null {
     return getHomeFriendGroups(state).find(fg => fg.title === "t:friends")?.id ?? null;
+}
+
+export function getHomeInvisibleUsersChecksum(state: ClientState): number {
+    return state.home.invisibleUsers.checksum;
+}
+
+export function getHomeInvisibleUsers(state: ClientState): BlockedUserInfo[] {
+    return state.home.invisibleUsers.blockedUsers;
 }
 
 export interface HomeConnectionData {

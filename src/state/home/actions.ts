@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage, AvatarInfo, CarteInfo, FriendGroupInfo } from "api/node/api-types";
+import { AvatarImage, AvatarInfo, BlockedUserInfo, CarteInfo, FriendGroupInfo } from "api/node/api-types";
 import { RootInfo } from "api/addon/api-types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
@@ -166,6 +166,23 @@ export const homeFriendGroupsLoaded = (friendGroups: FriendGroupInfo[]): HomeFri
     payload: {friendGroups}
 });
 
+export const HOME_INVISIBLE_USERS_LOAD = "HOME_INVISIBLE_USERS_LOAD";
+export type HomeInvisibleUsersLoadAction = Action<typeof HOME_INVISIBLE_USERS_LOAD>;
+export const homeInvisibleUsersLoad = (): HomeInvisibleUsersLoadAction => ({
+    type: HOME_INVISIBLE_USERS_LOAD
+});
+
+export const HOME_INVISIBLE_USERS_LOADED = "HOME_INVISIBLE_USERS_LOADED";
+export type HomeInvisibleUsersLoadedAction = ActionWithPayload<typeof HOME_INVISIBLE_USERS_LOADED, {
+    checksum: number;
+    blockedUsers: BlockedUserInfo[];
+}>;
+export const homeInvisibleUsersLoaded = (checksum: number,
+                                         blockedUsers: BlockedUserInfo[]): HomeInvisibleUsersLoadedAction => ({
+    type: HOME_INVISIBLE_USERS_LOADED,
+    payload: {checksum, blockedUsers}
+});
+
 export type HomeAnyAction =
     ConnectToHomeAction
     | ConnectionToHomeFailedAction
@@ -182,4 +199,6 @@ export type HomeAnyAction =
     | HomeAvatarsLoadedAction
     | HomeAvatarsLoadFailedAction
     | HomeFriendGroupsLoadAction
-    | HomeFriendGroupsLoadedAction;
+    | HomeFriendGroupsLoadedAction
+    | HomeInvisibleUsersLoadAction
+    | HomeInvisibleUsersLoadedAction;

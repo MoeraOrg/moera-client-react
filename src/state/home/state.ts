@@ -1,4 +1,4 @@
-import { AvatarInfo, FriendGroupInfo } from "api/node/api-types";
+import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api/node/api-types";
 import { RootInfo } from "api/addon/api-types";
 
 export interface HomeState {
@@ -24,4 +24,8 @@ export interface HomeState {
     addonApiVersion: number | null;
     roots: RootInfo[];
     friendGroups: FriendGroupInfo[];
+    invisibleUsers: {
+        checksum: number;
+        blockedUsers: BlockedUserInfo[];
+    }
 }

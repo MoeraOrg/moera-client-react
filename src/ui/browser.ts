@@ -1,6 +1,6 @@
 import * as URI from 'uri-js';
 
-import { AvatarImage, CarteInfo } from "api/node/api-types";
+import { AvatarImage, BlockedUserInfo, CarteInfo } from "api/node/api-types";
 import {
     AddonMessage,
     deleteDataMessage,
@@ -207,6 +207,13 @@ export class Browser {
         const data: [string, string | null][] = [];
         settings.forEach((value, name) => data.push([name.substring(PREFIX.length), value]));
         this.storeData({settings: data});
+    }
+
+    static storeInvisibleUsers(checksum: number, blockedUsers: BlockedUserInfo[]): void {
+        this.storeData({invisibleUsers: {
+            checksum,
+            blockedUsers: blockedUsers.map(bu => [bu.id, bu.nodeName])
+        }});
     }
 
     static deleteData(location: string): void {

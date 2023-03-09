@@ -9,16 +9,18 @@ import {
     disconnectFromHome,
     HOME_AVATARS_LOAD,
     HOME_FRIEND_GROUPS_LOAD,
+    HOME_INVISIBLE_USERS_LOAD,
     HOME_RESTORE,
     homeAvatarsLoaded,
     homeAvatarsLoadFailed,
     homeFriendGroupsLoaded,
+    homeInvisibleUsersLoaded,
     HomeRestoreAction
 } from "state/home/actions";
 import { introduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
-import { getHomeRootLocation } from "state/home/selectors";
+import { getHomeInvisibleUsersChecksum, getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
 import { Browser } from "ui/browser";
 import { normalizeUrl } from "util/url";
@@ -27,7 +29,8 @@ import { now } from "util/misc";
 export default [
     executor(HOME_RESTORE, null, homeRestoreSaga),
     executor(HOME_AVATARS_LOAD, "", homeAvatarsLoadSaga),
-    executor(HOME_FRIEND_GROUPS_LOAD, "", homeFriendGroupsLoadSaga, introduced)
+    executor(HOME_FRIEND_GROUPS_LOAD, "", homeFriendGroupsLoadSaga, introduced),
+    executor(HOME_INVISIBLE_USERS_LOAD, "", homeInvisibleUsersLoadSaga, introduced)
 ];
 
 function* homeRestoreSaga(action: HomeRestoreAction) {
@@ -72,6 +75,24 @@ function* homeFriendGroupsLoadSaga() {
     try {
         const friendGroups = yield* call(Node.getFriendGroups, ":");
         yield* put(homeFriendGroupsLoaded(friendGroups));
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+}
+
+function* homeInvisibleUsersLoadSaga() {
+    const prevChecksum = yield* select(getHomeInvisibleUsersChecksum);
+    try {
+        const checksums = yield* call(Node.getBlockedUsersChecksums, ":");
+        if (checksums.visibility === prevChecksum) {
+            return;
+        }
+        const blockedUsers = yield* call(Node.searchBlockedUsers, ":", {
+            blockedOperations: ["visibility" as const],
+            strict: true
+        });
+        yield* put(homeInvisibleUsersLoaded(checksums.visibility, blockedUsers));
+        Browser.storeInvisibleUsers(checksums.visibility, blockedUsers);
     } catch (e) {
         yield* put(errorThrown(e));
     }

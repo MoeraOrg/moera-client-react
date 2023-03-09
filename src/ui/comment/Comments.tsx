@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
+import { getHomeInvisibleUsers } from "state/home/selectors";
 import {
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
@@ -29,7 +31,6 @@ import CommentCompose from "ui/comment/CommentCompose";
 import CommentDialog from "ui/comment/CommentDialog";
 import { getPageHeaderHeight } from "util/misc";
 import "./Comments.css";
-import { createSelector } from "reselect";
 
 type Props = ConnectedProps<typeof connector> & WithTranslation;
 
@@ -243,12 +244,14 @@ class Comments extends React.PureComponent<Props, State> {
 const getVisibleComments = createSelector(
     getComments,
     getCommentsBlockedUsers,
-    (comments, blockedUsers) => {
-        if (blockedUsers == null || blockedUsers.length === 0) {
+    getHomeInvisibleUsers,
+    (comments, locallyBlocked, globallyBlocked) => {
+        if (locallyBlocked.length === 0 && globallyBlocked.length === 0) {
             return comments;
         }
         const invisibleNames = new Set(
-            blockedUsers
+            locallyBlocked
+                .concat(globallyBlocked)
                 .filter(bu => bu.blockedOperation === "visibility")
                 .map(bu => bu.nodeName)
         );

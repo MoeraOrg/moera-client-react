@@ -8,13 +8,15 @@ import {
     AsyncOperationCreated,
     AvatarAttributes,
     AvatarInfo,
-    AvatarOrdinal, BlockedByUserFilter,
+    AvatarOrdinal,
+    BlockedByUserFilter,
     BlockedByUserInfo,
     BlockedInstantAttributes,
     BlockedInstantInfo,
     BlockedUserAttributes,
     BlockedUserFilter,
     BlockedUserInfo,
+    BlockedUsersChecksums,
     CommentCreated,
     CommentInfo,
     CommentMassAttributes,
@@ -805,6 +807,12 @@ export function* searchBlockedUsers(nodeName: string | null,
     return yield* callApi({
         nodeName, location: "/people/blocked-users/search", method: "POST", auth: true, body: filter,
         schema: NodeApi.BlockedUserInfoArray
+    });
+}
+
+export function* getBlockedUsersChecksums(nodeName: string | null): CallApiResult<BlockedUsersChecksums> {
+    return yield* callApi({
+        nodeName, location: "/people/blocked-users/checksums", auth: true, schema: NodeApi.BlockedUsersChecksums
     });
 }
 

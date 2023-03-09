@@ -1082,6 +1082,10 @@ export interface BlockedUserInfo {
     reason?: string | null;
 }
 
+export interface BlockedUsersChecksums {
+    visibility: number;
+}
+
 export interface BlockedByUserFilter {
     blockedOperations?: BlockedOperation[] | null;
     postings?: PartialRemotePosting[] | null;

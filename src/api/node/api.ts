@@ -3194,6 +3194,19 @@ export const BlockedUserInfoArray = schema({
     items: BlockedUserInfoType
 } as JSONSchemaType<API.BlockedUserInfo[]>);
 
+const BlockedUsersChecksumsType: JSONSchemaType<API.BlockedUsersChecksums> = {
+    type: "object",
+    properties: {
+        "visibility": {
+            type: "integer"
+        }
+    },
+    required: ["visibility"],
+    additionalProperties: false
+};
+
+export const BlockedUsersChecksums = schema(BlockedUsersChecksumsType);
+
 const BlockedByUserInfoType: JSONSchemaType<API.BlockedByUserInfo> = {
     type: "object",
     properties: {

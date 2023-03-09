@@ -23,6 +23,7 @@ import {
     HOME_AVATARS_LOAD_FAILED,
     HOME_AVATARS_LOADED,
     HOME_FRIEND_GROUPS_LOADED,
+    HOME_INVISIBLE_USERS_LOADED,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
@@ -51,7 +52,11 @@ const emptyConnection = {
         loaded: false,
         avatars: []
     },
-    friendGroups: []
+    friendGroups: [],
+    invisibleUsers: {
+        checksum: 0,
+        blockedUsers: []
+    }
 };
 
 const initialState = {
@@ -148,6 +153,12 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
         case HOME_FRIEND_GROUPS_LOADED:
             return immutable.set(state, "friendGroups",
                 action.payload.friendGroups.sort((a, b) => a.createdAt - b.createdAt));
+
+        case HOME_INVISIBLE_USERS_LOADED:
+            return immutable.assign(state, "invisibleUsers", {
+                checksum: action.payload.checksum,
+                blockedUsers: action.payload.blockedUsers
+            });
 
         case FRIEND_GROUP_ADDED:
             if (action.payload.nodeName === action.context.homeOwnerNameOrUrl) {
