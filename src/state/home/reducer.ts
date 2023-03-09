@@ -9,7 +9,7 @@ import {
     EVENT_HOME_FRIEND_GROUP_DELETED,
     EVENT_HOME_FRIEND_GROUP_UPDATED
 } from "api/events/actions";
-import { AvatarInfo, FriendGroupInfo } from "api/node/api-types";
+import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api/node/api-types";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import {
@@ -23,6 +23,8 @@ import {
     HOME_AVATARS_LOAD_FAILED,
     HOME_AVATARS_LOADED,
     HOME_FRIEND_GROUPS_LOADED,
+    HOME_INVISIBLE_USERS_ADDED,
+    HOME_INVISIBLE_USERS_DELETED,
     HOME_INVISIBLE_USERS_LOADED,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
@@ -159,6 +161,19 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 checksum: action.payload.checksum,
                 blockedUsers: action.payload.blockedUsers
             });
+
+        case HOME_INVISIBLE_USERS_ADDED: {
+            const ids = action.payload.blockedUsers.map(bu => bu.id);
+            return immutable.update(state, "invisibleUsers.blockedUsers",
+                (blockedUsers: BlockedUserInfo[]) =>
+                    blockedUsers.filter(bu => !ids.includes(bu.id)).concat(action.payload.blockedUsers));
+        }
+
+        case HOME_INVISIBLE_USERS_DELETED: {
+            const ids = action.payload.blockedUsers.map(bu => bu.id);
+            return immutable.update(state, "invisibleUsers.blockedUsers",
+                (blockedUsers: BlockedUserInfo[]) => blockedUsers.filter(bu => !ids.includes(bu.id)));
+        }
 
         case FRIEND_GROUP_ADDED:
             if (action.payload.nodeName === action.context.homeOwnerNameOrUrl) {

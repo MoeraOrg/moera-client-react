@@ -10,6 +10,7 @@ import {
     blockDialogSubmitFailed,
     blockDialogSubmitted
 } from "state/blockdialog/actions";
+import { homeInvisibleUsersAdded, homeInvisibleUsersDeleted } from "state/home/actions";
 
 export default [
     executor(BLOCK_DIALOG_SUBMIT, "", blockDialogSubmitSaga)
@@ -39,6 +40,17 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
             }))
         );
         yield* put(blockDialogSubmitted(nodeName, entryNodeName, entryPostingId, blockedUsers));
+
+        if (entryNodeName == null && entryPostingId == null) {
+            const prevInvisible = prevBlockedUsers.filter(bu => bu.blockedOperation === "visibility");
+            if (prevInvisible.length > 0) {
+                yield* put(homeInvisibleUsersDeleted(prevInvisible));
+            }
+            const invisible = blockedUsers.filter(bu => bu.blockedOperation === "visibility");
+            if (invisible.length > 0) {
+                yield* put(homeInvisibleUsersAdded(invisible));
+            }
+        }
     } catch (e) {
         yield* put(blockDialogSubmitFailed());
     }

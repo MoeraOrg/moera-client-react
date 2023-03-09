@@ -183,6 +183,24 @@ export const homeInvisibleUsersLoaded = (checksum: number,
     payload: {checksum, blockedUsers}
 });
 
+export const HOME_INVISIBLE_USERS_ADDED = "HOME_INVISIBLE_USERS_ADDED";
+export type HomeInvisibleUsersAddedAction = ActionWithPayload<typeof HOME_INVISIBLE_USERS_ADDED, {
+    blockedUsers: BlockedUserInfo[];
+}>;
+export const homeInvisibleUsersAdded = (blockedUsers: BlockedUserInfo[]): HomeInvisibleUsersAddedAction => ({
+    type: HOME_INVISIBLE_USERS_ADDED,
+    payload: {blockedUsers}
+});
+
+export const HOME_INVISIBLE_USERS_DELETED = "HOME_INVISIBLE_USERS_DELETED";
+export type HomeInvisibleUsersDeletedAction = ActionWithPayload<typeof HOME_INVISIBLE_USERS_DELETED, {
+    blockedUsers: BlockedUserInfo[];
+}>;
+export const homeInvisibleUsersDeleted = (blockedUsers: BlockedUserInfo[]): HomeInvisibleUsersDeletedAction => ({
+    type: HOME_INVISIBLE_USERS_DELETED,
+    payload: {blockedUsers}
+});
+
 export type HomeAnyAction =
     ConnectToHomeAction
     | ConnectionToHomeFailedAction
@@ -201,4 +219,6 @@ export type HomeAnyAction =
     | HomeFriendGroupsLoadAction
     | HomeFriendGroupsLoadedAction
     | HomeInvisibleUsersLoadAction
-    | HomeInvisibleUsersLoadedAction;
+    | HomeInvisibleUsersLoadedAction
+    | HomeInvisibleUsersAddedAction
+    | HomeInvisibleUsersDeletedAction;
