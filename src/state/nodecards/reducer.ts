@@ -141,7 +141,10 @@ function migrateCard(target: WrappedObject<NodeCardsState>, targetNodeName: stri
 }
 
 function updateBlocked(state: NodeCardsState, list: BlockedUserInfo[], append: boolean): NodeCardsState {
-    const blockedUsers = list.filter(bu => bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null);
+    const blockedUsers = list.filter(bu =>
+        bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null
+        && (bu.blockedOperation === "reaction" || bu.blockedOperation === "comment"
+            || bu.blockedOperation === "visibility"));
     if (blockedUsers.length === 0) {
         return state;
     }

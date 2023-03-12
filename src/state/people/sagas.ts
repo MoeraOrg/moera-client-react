@@ -236,7 +236,7 @@ function* friendOfsLoadSaga() {
 function* blockedLoadSaga() {
     try {
         const blocked = yield* call(Node.searchBlockedUsers, "",
-            {blockedOperations: ["comment" as const, "reaction" as const]});
+            {blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]});
         yield* put(blockedLoaded(blocked));
     } catch (e) {
         if (e instanceof NodeApiError) {

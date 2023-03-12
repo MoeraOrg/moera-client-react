@@ -207,7 +207,10 @@ function* loadBlocked(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName || nodeName.includes(":")) {
         return null;
     }
-    return yield* call(Node.searchBlockedUsers, ":", {nodeName});
+    return yield* call(Node.searchBlockedUsers, ":", {
+        nodeName,
+        blockedOperations: ["comment" as const, "reaction" as const, "visibility" as const]
+    });
 }
 
 function* loadBlockedBy(nodeName: string, homeOwnerName: string | null) {

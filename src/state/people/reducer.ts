@@ -152,7 +152,9 @@ function cloneBlocked(list: BlockedUserInfo[]): BlockedUserInfo[] {
 }
 
 function updateBlocked(state: PeopleState, list: BlockedUserInfo[], append: boolean): PeopleState {
-    let blockedUsers = list.filter(bu => bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null);
+    let blockedUsers = list.filter(bu => bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null
+        && (bu.blockedOperation === "reaction" || bu.blockedOperation === "comment"
+            || bu.blockedOperation === "visibility"));
     if (blockedUsers.length === 0) {
         return state;
     }
