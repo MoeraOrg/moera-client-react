@@ -5,8 +5,12 @@ import {
     AvatarDeletedEvent,
     AvatarOrderedEvent,
     BaseEvent,
+    BlockedByUserAddedEvent,
+    BlockedByUserDeletedEvent,
     BlockedInstantAddedEvent,
     BlockedInstantDeletedEvent,
+    BlockedUserAddedEvent,
+    BlockedUserDeletedEvent,
     ClientSettingsChangedEvent,
     CommentAddedEvent,
     CommentDeletedEvent,
@@ -146,6 +150,10 @@ export const EVENT_NODE_ASK_SUBJECTS_CHANGED = "EVENT_NODE_ASK_SUBJECTS_CHANGED"
 export const EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED = "EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED";
 export const EVENT_HOME_BLOCKED_INSTANT_ADDED = "EVENT_HOME_BLOCKED_INSTANT_ADDED";
 export const EVENT_HOME_BLOCKED_INSTANT_DELETED = "EVENT_HOME_BLOCKED_INSTANT_DELETED";
+export const EVENT_HOME_BLOCKED_USER_ADDED = "EVENT_HOME_BLOCKED_USER_ADDED";
+export const EVENT_HOME_BLOCKED_USER_DELETED = "EVENT_HOME_BLOCKED_USER_DELETED";
+export const EVENT_HOME_BLOCKED_BY_USER_ADDED = "EVENT_HOME_BLOCKED_BY_USER_ADDED";
+export const EVENT_HOME_BLOCKED_BY_USER_DELETED = "EVENT_HOME_BLOCKED_BY_USER_DELETED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -220,4 +228,8 @@ export type ClientEventAction =
     | EventAction<AskSubjectsChangedEvent>
     | EventAction<RemoteFriendshipUpdatedEvent>
     | EventAction<BlockedInstantAddedEvent>
-    | EventAction<BlockedInstantDeletedEvent>;
+    | EventAction<BlockedInstantDeletedEvent>
+    | EventAction<BlockedUserAddedEvent>
+    | EventAction<BlockedUserDeletedEvent>
+    | EventAction<BlockedByUserAddedEvent>
+    | EventAction<BlockedByUserDeletedEvent>;

@@ -4,7 +4,9 @@ import schema from "api/schema";
 import {
     AvatarImageType,
     AvatarInfoType,
+    BlockedByUserInfoType,
     BlockedInstantInfoType,
+    BlockedUserInfoType,
     FeedStatusType,
     FriendGroupInfoType,
     FriendInfoType,
@@ -19,8 +21,12 @@ import {
     AvatarAddedEvent,
     AvatarDeletedEvent,
     AvatarOrderedEvent,
+    BlockedByUserAddedEvent,
+    BlockedByUserDeletedEvent,
     BlockedInstantAddedEvent,
     BlockedInstantDeletedEvent,
+    BlockedUserAddedEvent,
+    BlockedUserDeletedEvent,
     ClientSettingsChangedEvent,
     CommentAddedEvent,
     CommentDeletedEvent,
@@ -1379,6 +1385,54 @@ const BlockedInstantDeletedEventType: JSONSchemaType<BlockedInstantDeletedEvent>
     required: ["type", "blockedInstant"]
 }
 
+const BlockedUserAddedEventType: JSONSchemaType<BlockedUserAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "blockedUser": BlockedUserInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "blockedUser"]
+}
+
+const BlockedUserDeletedEventType: JSONSchemaType<BlockedUserDeletedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "blockedUser": BlockedUserInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "blockedUser"]
+}
+
+const BlockedByUserAddedEventType: JSONSchemaType<BlockedByUserAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "blockedByUser": BlockedByUserInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "blockedByUser"]
+}
+
+const BlockedByUserDeletedEventType: JSONSchemaType<BlockedByUserDeletedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "blockedByUser": BlockedByUserInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "blockedByUser"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1443,7 +1497,11 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "ASK_SUBJECTS_CHANGED": schema(AskSubjectsChangedEventType),
     "REMOTE_FRIENDSHIP_UPDATED": schema(RemoteFriendshipUpdatedEventType),
     "BLOCKED_INSTANT_ADDED": schema(BlockedInstantAddedEventType),
-    "BLOCKED_INSTANT_DELETED": schema(BlockedInstantDeletedEventType)
+    "BLOCKED_INSTANT_DELETED": schema(BlockedInstantDeletedEventType),
+    "BLOCKED_USER_ADDED": schema(BlockedUserAddedEventType),
+    "BLOCKED_USER_DELETED": schema(BlockedUserDeletedEventType),
+    "BLOCKED_BY_USER_ADDED": schema(BlockedByUserAddedEventType),
+    "BLOCKED_BY_USER_DELETED": schema(BlockedByUserDeletedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([

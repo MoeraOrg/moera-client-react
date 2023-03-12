@@ -112,6 +112,7 @@ import peopleHideDialogTriggers from "state/peoplehidedialog/triggers";
 import friendGroupsDialogTriggers from "state/friendgroupsdialog/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
+import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
@@ -198,6 +199,7 @@ const triggers = collectTriggers(
     friendGroupsDialogTriggers,
     askDialogTriggers,
     blockingDetailsDialogTriggers,
+    blockedOperationsTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,
     signUpDialogTriggers,

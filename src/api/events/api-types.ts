@@ -1,6 +1,9 @@
 import {
     AvatarImage,
-    AvatarInfo, BlockedInstantInfo,
+    AvatarInfo,
+    BlockedByUserInfo,
+    BlockedInstantInfo,
+    BlockedUserInfo,
     DraftType,
     FeedStatus,
     FriendGroupInfo,
@@ -329,3 +332,19 @@ interface BlockedInstantEvent<T> extends BaseEvent<T> {
 export type BlockedInstantAddedEvent = BlockedInstantEvent<"BLOCKED_INSTANT_ADDED">
 
 export type BlockedInstantDeletedEvent = BlockedInstantEvent<"BLOCKED_INSTANT_DELETED">
+
+interface BlockedUserEvent<T> extends BaseEvent<T> {
+    blockedUser: BlockedUserInfo;
+}
+
+export type BlockedUserAddedEvent = BlockedUserEvent<"BLOCKED_USER_ADDED">
+
+export type BlockedUserDeletedEvent = BlockedUserEvent<"BLOCKED_USER_DELETED">
+
+interface BlockedByUserEvent<T> extends BaseEvent<T> {
+    blockedByUser: BlockedByUserInfo;
+}
+
+export type BlockedByUserAddedEvent = BlockedByUserEvent<"BLOCKED_BY_USER_ADDED">
+
+export type BlockedByUserDeletedEvent = BlockedByUserEvent<"BLOCKED_BY_USER_DELETED">

@@ -48,16 +48,10 @@ export const blockDialogSubmit = (nodeName: string,
 export const BLOCK_DIALOG_SUBMITTED = "BLOCK_DIALOG_SUBMITTED";
 export type BlockDialogSubmittedAction = ActionWithPayload<typeof BLOCK_DIALOG_SUBMITTED, {
     nodeName: string;
-    entryNodeName: string | null;
-    entryPostingId: string | null;
-    blockedUsers: BlockedUserInfo[];
 }>;
-export const blockDialogSubmitted = (nodeName: string,
-                                     entryNodeName: string | null,
-                                     entryPostingId: string | null,
-                                     blockedUsers: BlockedUserInfo[]): BlockDialogSubmittedAction => ({
+export const blockDialogSubmitted = (nodeName: string): BlockDialogSubmittedAction => ({
     type: BLOCK_DIALOG_SUBMITTED,
-    payload: {nodeName, entryNodeName, entryPostingId, blockedUsers}
+    payload: {nodeName}
 });
 
 export const BLOCK_DIALOG_SUBMIT_FAILED = "BLOCK_DIALOG_SUBMIT_FAILED";

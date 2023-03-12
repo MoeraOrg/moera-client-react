@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { FriendGroupDetails, ProfileInfo } from "api/node/api-types";
+import { BlockedUserInfo, FriendGroupDetails, ProfileInfo } from "api/node/api-types";
 import {
     NODE_CARD_BLOCKING_LOAD,
     NODE_CARD_BLOCKING_LOAD_FAILED,
@@ -54,7 +54,7 @@ import { WithContext } from "state/action-types";
 import { OWNER_SET } from "state/node/actions";
 import { HOME_OWNER_SET } from "state/home/actions";
 import { FRIENDSHIP_UPDATE, FRIENDSHIP_UPDATE_FAILED, FRIENDSHIP_UPDATED } from "state/people/actions";
-import { BLOCK_DIALOG_SUBMITTED } from "state/blockdialog/actions";
+import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 
 const emptyProfileInfo: ProfileInfo = {
     fullName: null,
@@ -138,6 +138,20 @@ function migrateCard(target: WrappedObject<NodeCardsState>, targetNodeName: stri
         subscribersTotal: source.people.subscribersTotal,
         subscriptionsTotal: source.people.subscriptionsTotal
     });
+}
+
+function updateBlocked(state: NodeCardsState, list: BlockedUserInfo[], append: boolean): NodeCardsState {
+    const blockedUsers = list.filter(bu => bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null);
+    if (blockedUsers.length === 0) {
+        return state;
+    }
+    const ids = blockedUsers.map(bu => bu.id);
+    const nodeName = blockedUsers[0].nodeName;
+    return getCard(state, nodeName).istate
+        .update(["cards", nodeName, "blocking", "blocked"],
+            (bus: BlockedUserInfo[] | null) =>
+                (bus?.filter(bu => !ids.includes(bu.id)) ?? []).concat(append ? blockedUsers : []))
+        .value();
 }
 
 export default (state: NodeCardsState = initialState, action: WithContext<ClientAction>): NodeCardsState => {
@@ -438,15 +452,11 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case BLOCK_DIALOG_SUBMITTED: {
-            const {nodeName, entryNodeName, blockedUsers} = action.payload;
-            if (entryNodeName != null) {
-                return state;
-            }
-            return getCard(state, nodeName).istate
-                .set(["cards", nodeName, "blocking", "blocked"], blockedUsers)
-                .value();
-        }
+        case BLOCKED_USERS_ADDED:
+            return updateBlocked(state, action.payload.blockedUsers, true);
+
+        case BLOCKED_USERS_DELETED:
+            return updateBlocked(state, action.payload.blockedUsers, false);
 
         case NODE_CARDS_CLIENT_SWITCH: {
             const {homeOwnerNameOrUrl} = action.context;

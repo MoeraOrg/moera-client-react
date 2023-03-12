@@ -2,13 +2,14 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
 
-import { CommentInfo } from "api/node/api-types";
+import { BlockedUserInfo, CommentInfo } from "api/node/api-types";
 import {
     EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
     EVENT_RECEIVER_COMMENT_DELETED
 } from "api/events/actions";
 import { ClientAction } from "state/action";
+import { WithContext } from "state/action-types";
 import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
@@ -81,7 +82,7 @@ import {
     DetailedPostingState,
     ExtCommentInfo
 } from "state/detailedposting/state";
-import { BLOCK_DIALOG_SUBMITTED } from "state/blockdialog/actions";
+import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { twemojiUrl } from "util/twemoji";
 
@@ -211,7 +212,21 @@ function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
         .value();
 }
 
-export default (state: DetailedPostingState = initialState, action: ClientAction): DetailedPostingState => {
+function updateBlocked(state: DetailedPostingState, homeOwnerName: string | null, list: BlockedUserInfo[],
+                       append: boolean): DetailedPostingState {
+    const blockedUsers = list.filter(bu =>
+        (homeOwnerName === state.comments.receiverName && bu.entryId === state.comments.receiverPostingId)
+        || (bu.entryNodeName === state.comments.receiverName && bu.entryPostingId === state.comments.receiverPostingId)
+    );
+    if (blockedUsers.length === 0) {
+        return state;
+    }
+    const ids = blockedUsers.map(bu => bu.id);
+    return immutable.update(state, "comments.blockedUsers",
+        (bus: BlockedUserInfo[]) => bus.filter(bu => !ids.includes(bu.id)).concat(append ? blockedUsers : []));
+}
+
+export default (state: DetailedPostingState = initialState, action: WithContext<ClientAction>): DetailedPostingState => {
     switch (action.type) {
         case INIT_FROM_LOCATION:
             return cloneDeep(initialState);
@@ -449,12 +464,11 @@ export default (state: DetailedPostingState = initialState, action: ClientAction
                 blockedUsers: action.payload.list
             });
 
-        case BLOCK_DIALOG_SUBMITTED:
-            if (action.payload.entryNodeName !== state.comments.receiverName
-                || action.payload.entryPostingId !== state.comments.receiverPostingId) {
-                return state;
-            }
-            return immutable.set(state, "comments.blockedUsers", action.payload.blockedUsers);
+        case BLOCKED_USERS_ADDED:
+            return updateBlocked(state, action.context.homeOwnerName, action.payload.blockedUsers, true);
+
+        case BLOCKED_USERS_DELETED:
+            return updateBlocked(state, action.context.homeOwnerName, action.payload.blockedUsers, false);
 
         case COMMENTS_BLOCKED_USERS_LOAD_FAILED:
             return immutable.set(state, "comments.loadingBlockedUsers", false);

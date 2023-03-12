@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { ContactInfo, FriendInfo } from "api/node/api-types";
+import { BlockedUserInfo, ContactInfo, FriendInfo } from "api/node/api-types";
 import {
     EVENT_NODE_FRIENDSHIP_UPDATED,
     EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED,
@@ -56,6 +56,7 @@ import {
     SUBSCRIPTIONS_LOADED
 } from "state/people/actions";
 import { ContactState, PeopleState } from "state/people/state";
+import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 import { nameListQueryToRegexes } from "util/names-list";
 
 const initialState: PeopleState = {
@@ -137,6 +138,41 @@ function updateFriendship(state: PeopleState, friend: FriendInfo): PeopleState {
         state.contacts[friend.nodeName]?.friend?.groups?.forEach(g => totals[g.id] = (totals[g.id] ?? 1) - 1);
         friend.groups?.forEach(g => totals[g.id] = (totals[g.id] ?? 0) + 1);
         istate.set("friendsTotal", totals);
+    }
+
+    return istate.value();
+}
+
+function cloneBlocked(list: BlockedUserInfo[]): BlockedUserInfo[] {
+    return list.map(bu => {
+        const cbu = cloneDeep(bu);
+        delete cbu.contact;
+        return cbu;
+    });
+}
+
+function updateBlocked(state: PeopleState, list: BlockedUserInfo[], append: boolean): PeopleState {
+    let blockedUsers = list.filter(bu => bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null);
+    if (blockedUsers.length === 0) {
+        return state;
+    }
+
+    const istate = immutable.wrap(state);
+
+    const blockedUser = blockedUsers[0];
+    const prevBlocked = state.contacts[blockedUser.nodeName]?.blocked?.length !== 0;
+    prepareContact(state, istate, blockedUser.nodeName);
+    if (blockedUser.contact != null) {
+        putContact(state, istate, blockedUser.nodeName, blockedUser.contact);
+    }
+
+    const ids = blockedUsers.map(bu => bu.id);
+    istate.update(["contacts", blockedUser.nodeName, "blocked"],
+        (bus: BlockedUserInfo[] | null) =>
+            (bus?.filter(bu => !ids.includes(bu.id)) ?? []).concat(append ? cloneBlocked(blockedUsers) : []))
+
+    if (state.loadedGeneral) {
+        istate.update("blockedTotal", total => (total ?? 0) - (prevBlocked ? 1 : 0) + (append ? 1 : 0));
     }
 
     return istate.value();
@@ -454,6 +490,18 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
         case FRIENDSHIP_UPDATED:
             if (action.context.ownerName === action.context.homeOwnerName) {
                 return updateFriendship(state, action.payload.friend);
+            }
+            return state;
+
+        case BLOCKED_USERS_ADDED:
+            if (action.context.ownerName === action.context.homeOwnerName) {
+                return updateBlocked(state, action.payload.blockedUsers, true);
+            }
+            return state;
+
+        case BLOCKED_USERS_DELETED:
+            if (action.context.ownerName === action.context.homeOwnerName) {
+                return updateBlocked(state, action.payload.blockedUsers, false);
             }
             return state;
 

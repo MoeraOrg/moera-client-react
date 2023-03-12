@@ -1,5 +1,6 @@
 import { AskDialogAnyAction } from "state/askdialog/actions";
 import { BlockDialogAnyAction } from "state/blockdialog/actions";
+import { BlockedOperationsAnyAction } from "state/blockedoperations/actions";
 import { BlockingDetailsDialogAnyAction } from "state/blockingdetailsdialog/actions";
 import { CartesAnyAction } from "state/cartes/actions";
 import { ChangeDateDialogAnyAction } from "state/changedatedialog/actions";
@@ -46,6 +47,7 @@ export type ClientAction =
     ClientEventAction
     | AskDialogAnyAction
     | BlockDialogAnyAction
+    | BlockedOperationsAnyAction
     | BlockingDetailsDialogAnyAction
     | CartesAnyAction
     | ChangeDateDialogAnyAction

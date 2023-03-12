@@ -23,14 +23,13 @@ import {
     HOME_AVATARS_LOAD_FAILED,
     HOME_AVATARS_LOADED,
     HOME_FRIEND_GROUPS_LOADED,
-    HOME_INVISIBLE_USERS_ADDED,
-    HOME_INVISIBLE_USERS_DELETED,
     HOME_INVISIBLE_USERS_LOADED,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
 } from "state/home/actions";
 import { FRIEND_GROUP_ADDED } from "state/people/actions";
 import { PROFILE_AVATAR_CREATED, PROFILE_AVATAR_DELETED } from "state/profile/actions";
+import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 import { HomeState } from "state/home/state";
 import { toWsUrl } from "util/url";
 
@@ -66,6 +65,18 @@ const initialState = {
     addonApiVersion: 1,
     roots: []
 };
+
+function updateBlocked(state: HomeState, list: BlockedUserInfo[], append: boolean): HomeState {
+    const blockedUsers = list.filter(bu =>
+        bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null
+        && bu.blockedOperation === "visibility");
+    if (blockedUsers.length === 0) {
+        return state;
+    }
+    const ids = blockedUsers.map(bu => bu.id);
+    return immutable.update(state, "invisibleUsers.blockedUsers",
+        (bus: BlockedUserInfo[]) => bus.filter(bu => !ids.includes(bu.id)).concat(append ? blockedUsers : []));
+}
 
 export default (state: HomeState = initialState, action: WithContext<ClientAction>): HomeState => {
     switch (action.type) {
@@ -162,18 +173,11 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 blockedUsers: action.payload.blockedUsers
             });
 
-        case HOME_INVISIBLE_USERS_ADDED: {
-            const ids = action.payload.blockedUsers.map(bu => bu.id);
-            return immutable.update(state, "invisibleUsers.blockedUsers",
-                (blockedUsers: BlockedUserInfo[]) =>
-                    blockedUsers.filter(bu => !ids.includes(bu.id)).concat(action.payload.blockedUsers));
-        }
+        case BLOCKED_USERS_ADDED:
+            return updateBlocked(state, action.payload.blockedUsers, true);
 
-        case HOME_INVISIBLE_USERS_DELETED: {
-            const ids = action.payload.blockedUsers.map(bu => bu.id);
-            return immutable.update(state, "invisibleUsers.blockedUsers",
-                (blockedUsers: BlockedUserInfo[]) => blockedUsers.filter(bu => !ids.includes(bu.id)));
-        }
+        case BLOCKED_USERS_DELETED:
+            return updateBlocked(state, action.payload.blockedUsers, false);
 
         case FRIEND_GROUP_ADDED:
             if (action.payload.nodeName === action.context.homeOwnerNameOrUrl) {

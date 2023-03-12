@@ -3135,7 +3135,7 @@ export const PluginInfoArray = schema({
     items: PluginInfoType
 } as JSONSchemaType<API.PluginInfo[]>);
 
-const BlockedUserInfoType: JSONSchemaType<API.BlockedUserInfo> = {
+export const BlockedUserInfoType: JSONSchemaType<API.BlockedUserInfo> = {
     type: "object",
     properties: {
         "id": {
@@ -3207,7 +3207,7 @@ const BlockedUsersChecksumsType: JSONSchemaType<API.BlockedUsersChecksums> = {
 
 export const BlockedUsersChecksums = schema(BlockedUsersChecksumsType);
 
-const BlockedByUserInfoType: JSONSchemaType<API.BlockedByUserInfo> = {
+export const BlockedByUserInfoType: JSONSchemaType<API.BlockedByUserInfo> = {
     type: "object",
     properties: {
         "id": {
