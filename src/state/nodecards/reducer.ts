@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { BlockedUserInfo, FriendGroupDetails, ProfileInfo } from "api/node/api-types";
+import { BlockedByUserInfo, BlockedUserInfo, FriendGroupDetails, ProfileInfo } from "api/node/api-types";
 import {
     NODE_CARD_BLOCKING_LOAD,
     NODE_CARD_BLOCKING_LOAD_FAILED,
@@ -35,6 +35,8 @@ import {
     FEED_UNSUBSCRIBED
 } from "state/feeds/actions";
 import {
+    EVENT_HOME_BLOCKED_BY_USER_ADDED,
+    EVENT_HOME_BLOCKED_BY_USER_DELETED,
     EVENT_HOME_FRIEND_GROUP_DELETED,
     EVENT_HOME_FRIENDSHIP_UPDATED,
     EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED,
@@ -154,6 +156,17 @@ function updateBlocked(state: NodeCardsState, list: BlockedUserInfo[], append: b
         .update(["cards", nodeName, "blocking", "blocked"],
             (bus: BlockedUserInfo[] | null) =>
                 (bus?.filter(bu => !ids.includes(bu.id)) ?? []).concat(append ? blockedUsers : []))
+        .value();
+}
+
+function updateBlockedBy(state: NodeCardsState, blockedByUser: BlockedByUserInfo, append: boolean): NodeCardsState {
+    if (blockedByUser.postingId != null) {
+        return state;
+    }
+    return getCard(state, blockedByUser.nodeName).istate
+        .update(["cards", blockedByUser.nodeName, "blocking", "blockedBy"],
+            (bbus: BlockedByUserInfo[] | null) =>
+                (bbus?.filter(bbu => bbu.id === blockedByUser.id) ?? []).concat(append ? [blockedByUser] : []))
         .value();
 }
 
@@ -613,6 +626,12 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             }
             return state;
         }
+
+        case EVENT_HOME_BLOCKED_BY_USER_ADDED:
+            return updateBlockedBy(state, action.payload.blockedByUser, true);
+
+        case EVENT_HOME_BLOCKED_BY_USER_DELETED:
+            return updateBlockedBy(state, action.payload.blockedByUser, false);
 
         default:
             return state;

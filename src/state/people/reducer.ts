@@ -1,8 +1,12 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { BlockedUserInfo, ContactInfo, FriendInfo } from "api/node/api-types";
+import { BlockedByUserInfo, BlockedUserInfo, ContactInfo, FriendInfo } from "api/node/api-types";
 import {
+    EVENT_NODE_BLOCKED_BY_USER_ADDED,
+    EVENT_NODE_BLOCKED_BY_USER_DELETED,
+    EVENT_NODE_BLOCKED_USER_ADDED,
+    EVENT_NODE_BLOCKED_USER_DELETED,
     EVENT_NODE_FRIENDSHIP_UPDATED,
     EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED,
     EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
@@ -152,7 +156,7 @@ function cloneBlocked(list: BlockedUserInfo[]): BlockedUserInfo[] {
 }
 
 function updateBlocked(state: PeopleState, list: BlockedUserInfo[], append: boolean): PeopleState {
-    let blockedUsers = list.filter(bu => bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null
+    const blockedUsers = list.filter(bu => bu.entryId == null && bu.entryNodeName == null && bu.entryPostingId == null
         && (bu.blockedOperation === "reaction" || bu.blockedOperation === "comment"
             || bu.blockedOperation === "visibility"));
     if (blockedUsers.length === 0) {
@@ -162,19 +166,60 @@ function updateBlocked(state: PeopleState, list: BlockedUserInfo[], append: bool
     const istate = immutable.wrap(state);
 
     const blockedUser = blockedUsers[0];
-    const prevBlocked = state.contacts[blockedUser.nodeName]?.blocked?.length !== 0;
+    const prevBlocked = (state.contacts[blockedUser.nodeName]?.blocked ?? []).length !== 0;
     prepareContact(state, istate, blockedUser.nodeName);
     if (blockedUser.contact != null) {
         putContact(state, istate, blockedUser.nodeName, blockedUser.contact);
     }
 
+    let nextBlocked: boolean = false;
     const ids = blockedUsers.map(bu => bu.id);
     istate.update(["contacts", blockedUser.nodeName, "blocked"],
-        (bus: BlockedUserInfo[] | null) =>
-            (bus?.filter(bu => !ids.includes(bu.id)) ?? []).concat(append ? cloneBlocked(blockedUsers) : []))
+        (bus: BlockedUserInfo[] | null) => {
+            const nbus = (bus?.filter(bu => !ids.includes(bu.id)) ?? [])
+                .concat(append ? cloneBlocked(blockedUsers) : []);
+            nextBlocked = nbus.length !== 0;
+            return nbus;
+        });
 
     if (state.loadedGeneral) {
-        istate.update("blockedTotal", total => (total ?? 0) - (prevBlocked ? 1 : 0) + (append ? 1 : 0));
+        console.log(prevBlocked, nextBlocked);
+        istate.update("blockedTotal", total => (total ?? 0) - (prevBlocked ? 1 : 0) + (nextBlocked ? 1 : 0));
+    }
+
+    return istate.value();
+}
+
+function cloneBlockedBy(blockedByUser: BlockedByUserInfo): BlockedByUserInfo {
+    const cbbu = cloneDeep(blockedByUser);
+    delete cbbu.contact;
+    return cbbu;
+}
+
+function updateBlockedBy(state: PeopleState, blockedByUser: BlockedByUserInfo, append: boolean): PeopleState {
+    if (blockedByUser.postingId != null) {
+        return state;
+    }
+
+    const istate = immutable.wrap(state);
+
+    const prevBlockedBy = (state.contacts[blockedByUser.nodeName]?.blockedBy ?? []).length !== 0;
+    prepareContact(state, istate, blockedByUser.nodeName);
+    if (blockedByUser.contact != null) {
+        putContact(state, istate, blockedByUser.nodeName, blockedByUser.contact);
+    }
+
+    let nextBlockedBy: boolean;
+    istate.update(["contacts", blockedByUser.nodeName, "blockedBy"],
+        (bbus: BlockedByUserInfo[] | null) => {
+            const nbbus = (bbus?.filter(bbu => bbu.id !== blockedByUser.id) ?? [])
+                .concat(append ? [cloneBlockedBy(blockedByUser)] : []);
+            nextBlockedBy = nbbus.length !== 0;
+            return nbbus;
+        });
+
+    if (state.loadedGeneral) {
+        istate.update("blockedByTotal", total => (total ?? 0) - (prevBlockedBy ? 1 : 0) + (nextBlockedBy ? 1 : 0));
     }
 
     return istate.value();
@@ -648,6 +693,24 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             }
             return istate.value();
         }
+
+        case EVENT_NODE_BLOCKED_USER_ADDED:
+            if (action.context.ownerName !== action.context.homeOwnerName) { // otherwise home event handled by trigger
+                return updateBlocked(state, [action.payload.blockedUser], true);
+            }
+            return state;
+
+        case EVENT_NODE_BLOCKED_USER_DELETED:
+            if (action.context.ownerName !== action.context.homeOwnerName) { // otherwise home event handled by trigger
+                return updateBlocked(state, [action.payload.blockedUser], false);
+            }
+            return state;
+
+        case EVENT_NODE_BLOCKED_BY_USER_ADDED:
+            return updateBlockedBy(state, action.payload.blockedByUser, true);
+
+        case EVENT_NODE_BLOCKED_BY_USER_DELETED:
+            return updateBlockedBy(state, action.payload.blockedByUser, false);
 
         case EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED: {
             const {name, fullName} = action.payload;
