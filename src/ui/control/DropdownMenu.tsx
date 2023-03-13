@@ -15,6 +15,7 @@ interface TextMenuItem {
     title: string;
     href: string | null;
     onClick: () => void;
+    opensDialog?: boolean;
 }
 
 interface DividerMenuItem {
@@ -40,6 +41,7 @@ interface RenderedItem {
     title: string;
     href?: string | null;
     onClick?: (event: React.MouseEvent) => void;
+    opensDialog?: boolean;
     divider: boolean;
     caption: boolean;
 }
@@ -69,6 +71,7 @@ function buildItems(items: MenuItem[], standalone: boolean): RenderedItem[] {
                     item.onClick();
                     event.preventDefault();
                 },
+                opensDialog: item.opensDialog,
                 divider: divider && itemList.length > 0,
                 caption: false
             });
@@ -82,14 +85,25 @@ type Props = {
     items: MenuItem[];
     className?: string | null;
     disabled?: boolean;
+    onDialogOpened?: () => void;
     children?: ReactNode;
 } & ConnectedProps<typeof connector>;
 
-function DropdownMenuImpl({items, className, disabled, children, standalone}: Props) {
+function DropdownMenuImpl({items, className, disabled, onDialogOpened, children, standalone}: Props) {
     const {
-        visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
+        visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
     const {t} = useTranslation();
+
+    const onClick = (item: RenderedItem) => (event: React.MouseEvent) => {
+        if (item.onClick != null) {
+            hide();
+            if (item.opensDialog && onDialogOpened != null) {
+                onDialogOpened();
+            }
+            item.onClick(event);
+        }
+    }
 
     const itemList = buildItems(items, standalone);
     return (
@@ -109,7 +123,7 @@ function DropdownMenuImpl({items, className, disabled, children, standalone}: Pr
                                 {item.caption ?
                                     <div className="caption">{item.title}</div>
                                 :
-                                    <a className="dropdown-item" href={item.href ?? undefined} onClick={item.onClick}>
+                                    <a className="dropdown-item" href={item.href ?? undefined} onClick={onClick(item)}>
                                         {item.title}
                                     </a>
                                 }

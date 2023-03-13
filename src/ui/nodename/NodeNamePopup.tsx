@@ -28,7 +28,10 @@ function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, ch
             </Reference>
             {ReactDOM.createPortal(
                 <DelayedPopper placement="top" className="node-name-popover">
-                    <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>
+                    {(hide) =>
+                        <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar}
+                                  avatarNodeName={avatarNodeName} hide={hide}/>
+                    }
                 </DelayedPopper>,
                 document.getElementById("hovercard-root")!
             )}

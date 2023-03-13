@@ -27,6 +27,7 @@ interface ManagerState {
     mainTouch: () => void;
     popupEnter: () => void;
     popupLeave: () => void;
+    hide: () => void;
 }
 
 const DelayedPopperContext = React.createContext({} as ManagerState);
@@ -46,7 +47,8 @@ class Manager extends React.PureComponent<ManagerProps, ManagerState> {
             mainLeave: this.mainLeave,
             mainTouch: this.mainTouch,
             popupEnter: this.popupEnter,
-            popupLeave: this.popupLeave
+            popupLeave: this.popupLeave,
+            hide: this.hide
         };
     }
 
@@ -235,7 +237,7 @@ interface DelayedPopperProps {
     arrow?: boolean;
     className?: string;
     styles?: "popover" | "menu";
-    children?: any;
+    children?: ((hide: () => void) => React.ReactNode) | React.ReactNode;
 }
 
 const DelayedPopper = ({placement, arrow, className, styles = "popover", children}: DelayedPopperProps) => (
@@ -259,7 +261,7 @@ const DelayedPopper = ({placement, arrow, className, styles = "popover", childre
                             <div className={cx({"popover-body": styles === "popover"})}
                                  onMouseEnter={context.popupEnter}
                                  onMouseLeave={!context.sticky ? context.popupLeave : undefined}>
-                                {children}
+                                {typeof(children) === "function" ? children(context.hide) : children}
                             </div>
                         </div>
                     )}

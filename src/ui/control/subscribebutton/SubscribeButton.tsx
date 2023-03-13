@@ -24,13 +24,14 @@ interface OwnProps {
     small?: boolean | null;
     nodeName: string;
     feedName: string;
+    onDialogOpened?: () => void;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButtonImpl({
-    small, nodeName, feedName, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe, friendshipUpdate,
-    openFriendGroupsDialog, openAskDialog, openPeopleHideDialog, openBlockDialog
+    small, nodeName, feedName, onDialogOpened, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe,
+    friendshipUpdate, openFriendGroupsDialog, openAskDialog, openPeopleHideDialog, openBlockDialog
 }: Props) {
     const fullName = card?.details.profile.fullName ?? null;
     const subscribing = card?.subscription?.subscribing ?? false;
@@ -141,6 +142,7 @@ function SubscribeButtonImpl({
                     title: t("friend-groups"),
                     href: peerHref,
                     onClick: onFriendGroups,
+                    opensDialog: true,
                     show: friend
                 },
                 {
@@ -156,12 +158,14 @@ function SubscribeButtonImpl({
                     title: t("ask-ellipsis"),
                     href: peerHref,
                     onClick: onAskDialog,
+                    opensDialog: true,
                     show: !blocked && !blockedBy
                 },
                 {
                     title: t("hide-ellipsis"),
                     href: peerHref,
                     onClick: onHideDialog,
+                    opensDialog: true,
                     show: subscribed || subscribedToMe || friend
                 },
                 {
@@ -175,9 +179,10 @@ function SubscribeButtonImpl({
                     title: !blocked ? t("block-ellipsis") : t("blocking-ellipsis"),
                     href: peerHref,
                     onClick: onBlockDialog,
+                    opensDialog: true,
                     show: true
                 }
-            ]}>
+            ]} onDialogOpened={onDialogOpened}>
                 {small ?
                     <FontAwesomeIcon icon={blockedIcon ?? friendIcon ?? subscriptionIcon ?? ["far", "bell"]}/>
                 :

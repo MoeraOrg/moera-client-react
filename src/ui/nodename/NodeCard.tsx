@@ -21,11 +21,14 @@ interface OwnProps {
     fullName?: string | null;
     avatar?: AvatarImage | null;
     avatarNodeName?: string;
+    hide: () => void;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
-function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, anyLoading, homeOwnerName}: Props) {
+function NodeCard({
+    nodeName, fullName, avatar, avatarNodeName, hide, card, anyLoaded, anyLoading, homeOwnerName
+}: Props) {
     const {t} = useTranslation();
 
     if (card == null || (!anyLoaded && !anyLoading)) {
@@ -95,7 +98,7 @@ function NodeCard({nodeName, fullName, avatar, avatarNodeName, card, anyLoaded, 
             <div className="buttons">
                 <CopyMentionButton nodeName={nodeName} fullName={card.details.profile.fullName ?? fullName ?? null}/>
                 {(homeOwnerName != null && nodeName !== homeOwnerName && (card.subscription.loaded ?? false)) &&
-                    <SubscribeButton nodeName={nodeName} feedName="timeline"/>
+                    <SubscribeButton nodeName={nodeName} feedName="timeline" onDialogOpened={hide}/>
                 }
             </div>
             <Loading active={anyLoading}/>
