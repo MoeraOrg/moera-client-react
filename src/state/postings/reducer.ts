@@ -1,6 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import { FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api/node/api-types";
+import { BlockedOperationsInfo, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api/node/api-types";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
@@ -26,6 +26,8 @@ import {
     REMOTE_POSTING_SUBSCRIPTION_SET
 } from "state/postings/actions";
 import {
+    EVENT_HOME_BLOCKED_BY_USER_ADDED,
+    EVENT_HOME_BLOCKED_BY_USER_DELETED,
     EVENT_HOME_BLOCKED_INSTANT_ADDED,
     EVENT_HOME_BLOCKED_INSTANT_DELETED,
     EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED,
@@ -374,6 +376,61 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 return immutable.set(state, [nodeName, entryId, "posting", "blockedInstants"], blockedInstants);
             }
             return state;
+        }
+
+        case EVENT_HOME_BLOCKED_BY_USER_ADDED: {
+            const {blockedByUser} = action.payload;
+            const {ownerName} = action.context;
+
+            const nodeName = blockedByUser.nodeName === ownerName ? "" : blockedByUser.nodeName;
+            if (nodeName == null) {
+                return state;
+            }
+
+            const istate = immutable.wrap(state);
+            const nodeState = state[nodeName] ?? {};
+            const postingIds = blockedByUser.postingId != null ? [blockedByUser.postingId] : Object.keys(nodeState);
+            for (const postingId of postingIds) {
+                switch (blockedByUser.blockedOperation) {
+                    case "comment":
+                        istate.push([nodeName, postingId, "posting", "blockedOperations"], "addComment");
+                        break;
+                    case "reaction":
+                        istate.push([nodeName, postingId, "posting", "blockedOperations"], "addReaction");
+                        istate.push([nodeName, postingId, "posting", "blockedCommentOperations"], "addReaction");
+                        break;
+                }
+            }
+            return istate.value();
+        }
+
+        case EVENT_HOME_BLOCKED_BY_USER_DELETED: {
+            const {blockedByUser} = action.payload;
+            const {ownerName} = action.context;
+
+            const nodeName = blockedByUser.nodeName === ownerName ? "" : blockedByUser.nodeName;
+            if (nodeName == null) {
+                return state;
+            }
+
+            const istate = immutable.wrap(state);
+            const nodeState = state[nodeName] ?? {};
+            const postingIds = blockedByUser.postingId != null ? [blockedByUser.postingId] : Object.keys(nodeState);
+            for (const postingId of postingIds) {
+                switch (blockedByUser.blockedOperation) {
+                    case "comment":
+                        istate.update([nodeName, postingId, "posting", "blockedOperations"],
+                            (ops: BlockedOperationsInfo) => ops.filter(op => op !== "addComment"));
+                        break;
+                    case "reaction":
+                        istate.update([nodeName, postingId, "posting", "blockedOperations"],
+                            (ops: BlockedOperationsInfo) => ops.filter(op => op !== "addReaction"));
+                        istate.update([nodeName, postingId, "posting", "blockedCommentOperations"],
+                            (ops: BlockedOperationsInfo) => ops.filter(op => op !== "addReaction"));
+                        break;
+                }
+            }
+            return istate.value();
         }
 
         case POSTING_SUBSCRIPTION_SET: {
