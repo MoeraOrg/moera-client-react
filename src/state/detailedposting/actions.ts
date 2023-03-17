@@ -251,6 +251,15 @@ export const commentsBlockedUsersLoadFailed = (): CommentsBlockedUsersLoadFailed
     type: COMMENTS_BLOCKED_USERS_LOAD_FAILED
 });
 
+export const COMMENTS_SHOW_INVISIBLE_SET = "COMMENTS_SHOW_INVISIBLE_SET";
+export type CommentsShowInvisibleSetAction = ActionWithPayload<typeof COMMENTS_SHOW_INVISIBLE_SET, {
+    showInvisible: boolean
+}>;
+export const commentsShowInvisibleSet = (showInvisible: boolean): CommentsShowInvisibleSetAction => ({
+    type: COMMENTS_SHOW_INVISIBLE_SET,
+    payload: {showInvisible}
+});
+
 export const COMMENT_COMPOSE_CANCEL = "COMMENT_COMPOSE_CANCEL";
 export type CommentComposeCancelAction = Action<typeof COMMENT_COMPOSE_CANCEL>;
 export const commentComposeCancel = (): CommentComposeCancelAction => ({
@@ -734,6 +743,7 @@ export type DetailedPostingAnyAction = DetailedPostingLoadAction
     | CommentsBlockedUsersLoadAction
     | CommentsBlockedUsersLoadedAction
     | CommentsBlockedUsersLoadFailedAction
+    | CommentsShowInvisibleSetAction
     | CommentComposeCancelAction
     | CommentComposeCancelledAction
     | CommentDraftLoadAction

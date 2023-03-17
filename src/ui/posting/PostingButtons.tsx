@@ -54,7 +54,7 @@ function PostingButtons({
                     <PostingShareButton posting={posting}/>
                 </>
             }
-            {menu && <PostingMenu posting={posting} story={story}/>}
+            {menu && <PostingMenu posting={posting} story={story} detailed/>}
         </div>
     );
 }

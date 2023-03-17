@@ -62,7 +62,7 @@ function DetailedPosting({
 
     return (
         <div className="posting entry mt-2">
-            <PostingMenu posting={posting} story={story}/>
+            <PostingMenu posting={posting} story={story} detailed/>
             <PostingPin pinned={story != null && story.pinned}/>
             <div className="owner-line">
                 <PostingAvatar posting={posting}/>

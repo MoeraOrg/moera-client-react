@@ -26,19 +26,23 @@ import { getPostingCommentAddedInstantBlockId, getPostingCommentsSubscriptionId 
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu } from "ui/control";
 import "ui/entry/EntryMenu.css";
+import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedposting/selectors";
+import { commentsShowInvisibleSet } from "state/detailedposting/actions";
 
 interface OwnProps {
     posting: PostingInfo;
     story: MinimalStoryInfo;
+    detailed?: boolean;
 }
 
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function PostingMenu({
      posting, story, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, commentAddedInstantBlockId,
-     postingEditable, postingDeletable, storyEditable, goToCompose, confirmBox, storyPinningUpdate,
-     openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe,
-     postingCommentAddedBlock, postingCommentAddedUnblock, openSourceDialog, shareDialogPrepare, entryCopyText
+     hasInvisibleComments, showInvisibleComments, postingEditable, postingDeletable, storyEditable, goToCompose,
+     confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
+     postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock, openSourceDialog,
+     shareDialogPrepare, entryCopyText, commentsShowInvisibleSet
 }: Props) {
     const {t} = useTranslation();
 
@@ -96,6 +100,10 @@ function PostingMenu({
             }
         }
     };
+
+    const onShowInvisibleComments = () => commentsShowInvisibleSet(true);
+
+    const onHideInvisibleComments = () => commentsShowInvisibleSet(false);
 
     const postingHref = `${rootLocation}/moera/post/${posting.id}`;
     return (
@@ -171,6 +179,21 @@ function PostingMenu({
                 href: postingHref,
                 onClick: onDelete,
                 show: postingDeletable
+            },
+            {
+                divider: true
+            },
+            {
+                title: t("show-hidden-comments"),
+                href: postingHref,
+                onClick: onShowInvisibleComments,
+                show: hasInvisibleComments && !showInvisibleComments
+            },
+            {
+                title: t("hide-hidden-comments"),
+                href: postingHref,
+                onClick: onHideInvisibleComments,
+                show: hasInvisibleComments && showInvisibleComments
             }
         ]}/>
     );
@@ -183,6 +206,8 @@ const connector = connect(
         homeOwnerName: getHomeOwnerName(state),
         commentsSubscriptionId: getPostingCommentsSubscriptionId(state, ownProps.posting.id),
         commentAddedInstantBlockId: getPostingCommentAddedInstantBlockId(state, ownProps.posting.id),
+        hasInvisibleComments: (ownProps.detailed ?? false) && hasInvisibleComments(state),
+        showInvisibleComments: (ownProps.detailed ?? false) && isCommentsShowInvisible(state),
         postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
         postingDeletable: isPermitted("delete", ownProps.posting, "private", state),
         storyEditable: isPermitted("edit", ownProps.story, "admin", state)
@@ -190,7 +215,7 @@ const connector = connect(
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
         postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock,
-        openSourceDialog, shareDialogPrepare, entryCopyText
+        openSourceDialog, shareDialogPrepare, entryCopyText, commentsShowInvisibleSet
     }
 );
 

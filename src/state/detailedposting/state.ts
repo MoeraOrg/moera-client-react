@@ -15,6 +15,7 @@ export interface ExtCommentInfo extends CommentInfo {
     singleEmoji: boolean;
     body: ExtBody;
     repliedTo?: ExtRepliedTo | null;
+    invisible: boolean;
 }
 
 export interface CommentsState {
@@ -42,6 +43,7 @@ export interface CommentsState {
     loadingBlockedUsers: boolean;
     loadedBlockedUsers: boolean;
     blockedUsers: BlockedUserInfo[];
+    showInvisible: boolean;
 }
 
 export interface CommentComposeState {

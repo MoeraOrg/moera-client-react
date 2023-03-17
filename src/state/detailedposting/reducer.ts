@@ -59,6 +59,7 @@ import {
     COMMENTS_SCROLLED_TO_ANCHOR,
     COMMENTS_SCROLLED_TO_COMMENTS,
     COMMENTS_SCROLLED_TO_COMPOSER,
+    COMMENTS_SHOW_INVISIBLE_SET,
     COMMENTS_SLICE_UPDATE,
     COMMENTS_UNSET,
     DETAILED_POSTING_LOAD,
@@ -110,7 +111,8 @@ const emptyComments: CommentsState = {
     glanceComment: null,
     loadingBlockedUsers: false,
     loadedBlockedUsers: false,
-    blockedUsers: []
+    blockedUsers: [],
+    showInvisible: false
 };
 
 const emptyCompose: Omit<CommentComposeState, "formId"> = {
@@ -209,6 +211,7 @@ function extractComment(comment: CommentInfo | ExtCommentInfo): ExtCommentInfo {
         .set("deleting", false)
         .set("verificationStatus", "none")
         .set("singleEmoji", isSingleEmojiComment(comment))
+        .set("invisible", false)
         .value();
 }
 
@@ -472,6 +475,9 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
 
         case COMMENTS_BLOCKED_USERS_LOAD_FAILED:
             return immutable.set(state, "comments.loadingBlockedUsers", false);
+
+        case COMMENTS_SHOW_INVISIBLE_SET:
+            return immutable.set(state, "comments.showInvisible", action.payload.showInvisible);
 
         case COMMENT_COMPOSE_CANCELLED:
             return immutable.assign(state, "compose", {

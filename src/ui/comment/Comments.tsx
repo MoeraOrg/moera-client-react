@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
-import { getHomeInvisibleUsers } from "state/home/selectors";
 import {
     commentsFutureSliceLoad,
     commentsPastSliceLoad,
@@ -15,12 +13,12 @@ import {
     detailedPostingScrolledToGallery
 } from "state/detailedposting/actions";
 import {
-    getComments,
-    getCommentsBlockedUsers,
     getCommentsState,
+    getCommentsWithVisibility,
     getDetailedPosting,
     isCommentComposerFocused,
     isCommentsFocused,
+    isCommentsShowInvisible,
     isDetailedPostingCached,
     isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
@@ -241,27 +239,6 @@ class Comments extends React.PureComponent<Props, State> {
     }
 }
 
-const getVisibleComments = createSelector(
-    getComments,
-    getCommentsBlockedUsers,
-    getHomeInvisibleUsers,
-    (comments, locallyBlocked, globallyBlocked) => {
-        if (locallyBlocked.length === 0 && globallyBlocked.length === 0) {
-            return comments;
-        }
-        const invisibleNames = new Set(
-            locallyBlocked
-                .concat(globallyBlocked)
-                .filter(bu => bu.blockedOperation === "visibility")
-                .map(bu => bu.nodeName)
-        );
-        if (invisibleNames.size === 0) {
-            return comments;
-        }
-        return comments.filter(c => !invisibleNames.has(c.ownerName));
-    }
-);
-
 const connector = connect(
     (state: ClientState) => ({
         visible: isAtDetailedPostingPage(state),
@@ -273,7 +250,9 @@ const connector = connect(
         after: getCommentsState(state).after,
         totalInPast: getCommentsState(state).totalInPast,
         totalInFuture: getCommentsState(state).totalInFuture,
-        comments: getVisibleComments(state),
+        comments: isCommentsShowInvisible(state)
+            ? getCommentsWithVisibility(state)
+            : getCommentsWithVisibility(state).filter(c => !c.invisible),
         anchor: getCommentsState(state).anchor,
         focusedCommentId: getCommentsState(state).focusedCommentId,
         focused: isCommentsFocused(state),

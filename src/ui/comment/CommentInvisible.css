@@ -1,0 +1,4 @@
+.comment .banned {
+    color: var(--bs-red);
+    margin-right: .5rem;
+}

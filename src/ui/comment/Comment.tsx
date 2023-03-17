@@ -15,6 +15,7 @@ import {
 import CommentMenu from "ui/comment/CommentMenu";
 import CommentAvatar from "ui/comment/CommentAvatar";
 import CommentOwner from "ui/comment/CommentOwner";
+import CommentInvisible from "ui/comment/CommentInvisible";
 import CommentDate from "ui/comment/CommentDate";
 import CommentUpdated from "ui/comment/CommentUpdated";
 import CommentVisibility from "ui/comment/CommentVisibility";
@@ -59,6 +60,7 @@ const Comment = ({
                     <div className="details">
                         <div className="owner-line">
                             <CommentOwner comment={comment} nodeName={realOwnerName}/>
+                            <CommentInvisible comment={comment}/>
                             <CommentDate nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             <CommentUpdated comment={comment}/>
                             <CommentVisibility comment={comment}/>

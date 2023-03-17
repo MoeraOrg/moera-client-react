@@ -3,7 +3,7 @@ import { createSelector } from 'reselect';
 import { AvatarImage, BlockedUserInfo, CommentInfo, Features, PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
-import { isConnectedToHome } from "state/home/selectors";
+import { getHomeInvisibleUsers, isConnectedToHome } from "state/home/selectors";
 import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
 import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
 
@@ -163,7 +163,7 @@ export function isCommentMomentInLoadedRange(state: ClientState, moment: number)
 }
 
 export function isCommentsFocused(state: ClientState): boolean {
-    return state.detailedPosting.comments.focused;
+    return getCommentsState(state).focused;
 }
 
 export function isCommentComposerFocused(state: ClientState): boolean {
@@ -229,6 +229,35 @@ export function isGlanceCommentToBeLoaded(state: ClientState): boolean {
     return !comments.loadedGlanceComment
         || (comments.glanceCommentId != null
             && (comments.glanceComment == null || comments.glanceComment.id !== comments.glanceCommentId));
+}
+
+export const getCommentsWithVisibility = createSelector(
+    getComments,
+    getCommentsBlockedUsers,
+    getHomeInvisibleUsers,
+    (comments, locallyBlocked, globallyBlocked) => {
+        if (locallyBlocked.length === 0 && globallyBlocked.length === 0) {
+            return comments;
+        }
+        const invisibleNames = new Set(
+            locallyBlocked
+                .concat(globallyBlocked)
+                .filter(bu => bu.blockedOperation === "visibility")
+                .map(bu => bu.nodeName)
+        );
+        if (invisibleNames.size === 0) {
+            return comments;
+        }
+        return comments.map(c => invisibleNames.has(c.ownerName) ? {...c, invisible: true} : c);
+    }
+);
+
+export function hasInvisibleComments(state: ClientState): boolean {
+    return !getCommentsWithVisibility(state).every(c => !c.invisible);
+}
+
+export function isCommentsShowInvisible(state: ClientState): boolean {
+    return getCommentsState(state).showInvisible;
 }
 
 export interface NameUsage {
