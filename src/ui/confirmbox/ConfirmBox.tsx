@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { closeConfirmBox } from "state/confirmbox/actions";
 import { Button, ModalDialog } from "ui/control";
+import { htmlEntities } from "util/html";
 
 const forwardAction = (action: any) => action;
 
@@ -39,11 +40,13 @@ function ConfirmBox({show, message, yes, no, onYes, onNo, variant, closeConfirmB
         return null;
     }
 
+    const escapedMessage = htmlEntities(message ?? "")
+        .replace("&lt;b&gt;", "<b>") // Only <b></b> tag is allowed
+        .replace("&lt;/b&gt;", "</b>");
+
     return (
         <ModalDialog risen onClose={onClickNo}>
-            <div className="modal-body">
-                {message}
-            </div>
+            <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
             <div className="modal-footer">
                 <Button variant="secondary" onClick={onClickNo} autoFocus>{no ?? t("no")}</Button>
                 <Button variant={variant} onClick={onClickYes} autoFocus>{yes ?? t("yes")}</Button>
