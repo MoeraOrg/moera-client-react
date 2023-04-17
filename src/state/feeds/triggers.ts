@@ -1,6 +1,6 @@
 import { disj, inv, trigger } from "state/trigger";
 import { GO_TO_PAGE, updateLocation, WAKE_UP } from "state/navigation/actions";
-import { isAtNewsPage, isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
+import { isAtDetailedPostingPage, isAtNewsPage, isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
 import {
     FEED_SCROLLED,
     feedGeneralLoad,
@@ -98,12 +98,12 @@ export default [
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, OWNER_SET, HOME_OWNER_SET],
-        disj(isAtTimelinePage, isAtProfilePage),
+        disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage),
         feedGeneralLoad("timeline")
     ),
     trigger(
         [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, OWNER_SET, HOME_OWNER_SET],
-        inv(disj(isAtTimelinePage, isAtProfilePage)),
+        inv(disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage)),
         feedGeneralUnset("timeline")
     ),
     trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, feedsUnset),

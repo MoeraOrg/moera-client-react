@@ -9,7 +9,7 @@ import {
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
-    PrincipalValue,
+    PrincipalValue, SheriffMark,
     StorySummaryData,
     StoryType,
     SubscriberInfo,
@@ -348,3 +348,9 @@ interface BlockedByUserEvent<T> extends BaseEvent<T> {
 export type BlockedByUserAddedEvent = BlockedByUserEvent<"BLOCKED_BY_USER_ADDED">
 
 export type BlockedByUserDeletedEvent = BlockedByUserEvent<"BLOCKED_BY_USER_DELETED">
+
+export interface FeedSheriffDataUpdatedEvent extends BaseEvent<"FEED_SHERIFF_DATA_UPDATED"> {
+    feedName: string;
+    sheriffs?: string[] | null;
+    sheriffMarks?: SheriffMark[] | null;
+}

@@ -29,6 +29,32 @@ export function isFeedGeneralLoading(state: ClientState, feedName: string): bool
     return getFeedState(state, feedName).loadingGeneral;
 }
 
+export function isFeedSheriff(state: ClientState, feedName: string, sheriffName: string | null): boolean {
+    if (sheriffName == null) {
+        return false;
+    }
+    const feed = getFeedState(state, feedName);
+    if (!feed.loadedGeneral || feed.sheriffs == null) {
+        return false;
+    }
+    return feed.sheriffs.includes(sheriffName);
+}
+
+export function isFeedSheriffMarked(state: ClientState, feedName: string, sheriffName: string | null): boolean {
+    if (sheriffName == null) {
+        return false;
+    }
+    const feed = getFeedState(state, feedName);
+    if (!feed.loadedGeneral) {
+        return false;
+    }
+    return feed.sheriffMarks?.find(sm => sm.sheriffName === sheriffName) != null;
+}
+
+export function isFeedSheriffProhibited(state: ClientState, feedName: string, sheriffName: string | null): boolean {
+    return !isFeedSheriff(state, feedName, sheriffName) || isFeedSheriffMarked(state, feedName, sheriffName);
+}
+
 export function isFeedStatusToBeLoaded(state: ClientState, feedName: string): boolean {
     const feed = getFeedState(state, feedName);
     return !feed.loadedStatus && !feed.loadingStatus;

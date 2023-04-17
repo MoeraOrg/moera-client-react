@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { CommentInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import {
@@ -11,21 +12,24 @@ import {
     IsPrincipalEqualsOptions,
     isPrincipalIn
 } from "state/node/selectors";
+import { getHomeOwnerName } from "state/home/selectors";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, commentSetVisibility, openCommentDialog } from "state/detailedposting/actions";
 import {
     getCommentsBlockedUsers,
-    getCommentsReceiverFeatures,
+    getCommentsReceiverFeatures, getCommentsReceiverFullName,
     getCommentsReceiverName,
     getCommentsReceiverPostingId,
-    getDetailedPosting
+    getDetailedPosting,
+    isCommentSheriffProhibited
 } from "state/detailedposting/selectors";
+import { isPostingSheriff, isPostingSheriffProhibited } from "state/postings/selectors";
 import { openSourceDialog } from "state/sourcedialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
-import { DropdownMenu } from "ui/control";
 import { openBlockDialog } from "state/blockdialog/actions";
-import { getHomeOwnerName } from "state/home/selectors";
+import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
+import { DropdownMenu } from "ui/control";
 
 interface OwnProps {
     nodeName: string;
@@ -36,9 +40,10 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function CommentMenu({
-    nodeName, postingId, comment, rootLocation, homeOwnerName, receiverName, receiverPostingId, blockedUsers,
-    isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, commentCopyLink, openCommentDialog, openSourceDialog,
-    confirmBox, shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog
+    nodeName, postingId, comment, rootLocation, homeOwnerName, receiverName, receiverFullName, receiverPostingId,
+    blockedUsers, isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, googlePlayGoverned, googlePlaySheriff,
+    googlePlayPostingProhibited, googlePlayProhibited, commentCopyLink, openCommentDialog, openSourceDialog, confirmBox,
+    shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog, openSheriffOrderDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -75,6 +80,20 @@ function CommentMenu({
             );
         }
     }
+
+    const onHideInGooglePlay = () => {
+        if (receiverName != null && receiverPostingId != null) {
+            openSheriffOrderDialog(receiverName, receiverFullName, "timeline", receiverPostingId, comment.id,
+                comment.heading);
+        }
+    }
+
+    const onUnhideInGooglePlay = () => {
+        if (receiverName != null && receiverPostingId != null) {
+            confirmBox(t("unhide-comment-google-play", {heading: comment.heading}), t("unhide"), t("cancel"),
+                sheriffOrderDelete(receiverName, "timeline", receiverPostingId, comment.id), null, "success");
+        }
+    };
 
     const commentHref = `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`;
     const hideable = (isCommentPermitted("edit", "owner", {})
@@ -146,6 +165,21 @@ function CommentMenu({
                 href: commentHref,
                 onClick: onBlockDialog,
                 show: comment.ownerName !== homeOwnerName
+            },
+            {
+                divider: true
+            },
+            {
+                title: t("hide-in-google-play"),
+                href: commentHref,
+                onClick: onHideInGooglePlay,
+                show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && !googlePlayProhibited
+            },
+            {
+                title: t("unhide-in-google-play"),
+                href: commentHref,
+                onClick: onUnhideInGooglePlay,
+                show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && googlePlayProhibited
             }
         ]}/>
     );
@@ -156,6 +190,7 @@ const connector = connect(
         rootLocation: getNodeRootLocation(state),
         homeOwnerName: getHomeOwnerName(state),
         receiverName: getCommentsReceiverName(state),
+        receiverFullName: getCommentsReceiverFullName(state),
         receiverPostingId: getCommentsReceiverPostingId(state),
         blockedUsers: getCommentsBlockedUsers(state),
         isPostingPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
@@ -168,11 +203,17 @@ const connector = connect(
             }),
         isCommentPrincipalIn: (operation: string, defaultValue: PrincipalValue,
                                value: PrincipalValue | PrincipalValue[], options: Partial<IsPrincipalEqualsOptions>) =>
-            isPrincipalIn(operation, ownProps.comment, defaultValue, value, options)
+            isPrincipalIn(operation, ownProps.comment, defaultValue, value, options),
+        googlePlayGoverned: isPostingSheriff(getDetailedPosting(state), SHERIFF_GOOGLE_PLAY_TIMELINE),
+        googlePlaySheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
+        googlePlayPostingProhibited: isPostingSheriffProhibited(
+            getDetailedPosting(state), SHERIFF_GOOGLE_PLAY_TIMELINE),
+        googlePlayProhibited: isCommentSheriffProhibited(
+            getDetailedPosting(state), ownProps.comment, SHERIFF_GOOGLE_PLAY_TIMELINE)
     }),
     {
         commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText,
-        commentSetVisibility, openBlockDialog
+        commentSetVisibility, openBlockDialog, openSheriffOrderDialog
     }
 );
 

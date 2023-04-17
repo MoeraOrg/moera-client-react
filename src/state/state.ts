@@ -39,6 +39,7 @@ import { ShareDialogState } from "state/sharedialog/state";
 import { SignUpDialogState } from "state/signupdialog/state";
 import { SourceDialogState } from "state/sourcedialog/state";
 import { TokensState } from "state/tokens/state";
+import { SheriffOrderDialogState } from "state/sherifforderdialog/state";
 
 export interface ClientState {
     askDialog: AskDialogState;
@@ -79,6 +80,7 @@ export interface ClientState {
     refresh: RefreshState;
     settings: SettingsState;
     shareDialog: ShareDialogState;
+    sheriffOrderDialog: SheriffOrderDialogState;
     signUpDialog: SignUpDialogState;
     sourceDialog: SourceDialogState;
     tokens: TokensState;

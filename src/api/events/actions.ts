@@ -19,6 +19,7 @@ import {
     DraftAddedEvent,
     DraftDeletedEvent,
     DraftUpdatedEvent,
+    FeedSheriffDataUpdatedEvent,
     FeedStatusUpdatedEvent,
     FriendGroupAddedEvent,
     FriendGroupDeletedEvent,
@@ -158,6 +159,7 @@ export const EVENT_NODE_BLOCKED_BY_USER_ADDED = "EVENT_NODE_BLOCKED_BY_USER_ADDE
 export const EVENT_HOME_BLOCKED_BY_USER_ADDED = "EVENT_HOME_BLOCKED_BY_USER_ADDED";
 export const EVENT_NODE_BLOCKED_BY_USER_DELETED = "EVENT_NODE_BLOCKED_BY_USER_DELETED";
 export const EVENT_HOME_BLOCKED_BY_USER_DELETED = "EVENT_HOME_BLOCKED_BY_USER_DELETED";
+export const EVENT_NODE_FEED_SHERIFF_DATA_UPDATED = "EVENT_NODE_FEED_SHERIFF_DATA_UPDATED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -236,4 +238,5 @@ export type ClientEventAction =
     | EventAction<BlockedUserAddedEvent>
     | EventAction<BlockedUserDeletedEvent>
     | EventAction<BlockedByUserAddedEvent>
-    | EventAction<BlockedByUserDeletedEvent>;
+    | EventAction<BlockedByUserDeletedEvent>
+    | EventAction<FeedSheriffDataUpdatedEvent>;

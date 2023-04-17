@@ -2,6 +2,7 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import { StoryInfo } from "api/node/api-types";
+import { EVENT_NODE_FEED_SHERIFF_DATA_UPDATED } from "api/events/actions";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import {
@@ -461,6 +462,15 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 }
             }
             return istate.value();
+        }
+
+        case EVENT_NODE_FEED_SHERIFF_DATA_UPDATED: {
+            const {feedName, sheriffs, sheriffMarks} = action.payload;
+            const {istate, feed} = getFeed(state, feedName);
+            if (!feed.loadedGeneral) {
+                return state;
+            }
+            return istate.assign([feedName], {sheriffs, sheriffMarks}).value();
         }
 
         default:

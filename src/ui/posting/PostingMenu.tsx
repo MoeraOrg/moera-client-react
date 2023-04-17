@@ -2,6 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { goToCompose } from "state/navigation/actions";
@@ -22,12 +23,18 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootLocation, getOwnerName, isPermitted } from "state/node/selectors";
-import { getPostingCommentAddedInstantBlockId, getPostingCommentsSubscriptionId } from "state/postings/selectors";
+import {
+    getPostingCommentAddedInstantBlockId,
+    getPostingCommentsSubscriptionId,
+    isPostingSheriff,
+    isPostingSheriffProhibited
+} from "state/postings/selectors";
+import { commentsShowInvisibleSet } from "state/detailedposting/actions";
+import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedposting/selectors";
+import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu } from "ui/control";
 import "ui/entry/EntryMenu.css";
-import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedposting/selectors";
-import { commentsShowInvisibleSet } from "state/detailedposting/actions";
 
 interface OwnProps {
     posting: PostingInfo;
@@ -39,10 +46,11 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function PostingMenu({
      posting, story, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, commentAddedInstantBlockId,
-     hasInvisibleComments, showInvisibleComments, postingEditable, postingDeletable, storyEditable, goToCompose,
-     confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
-     postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock, openSourceDialog,
-     shareDialogPrepare, entryCopyText, commentsShowInvisibleSet
+     hasInvisibleComments, showInvisibleComments, postingEditable, postingDeletable, storyEditable, googlePlayGoverned,
+     googlePlaySheriff, googlePlayProhibited, goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog,
+     postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock,
+     postingCommentAddedUnblock, openSourceDialog, shareDialogPrepare, entryCopyText, commentsShowInvisibleSet,
+     openSheriffOrderDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -83,7 +91,7 @@ function PostingMenu({
     }
 
     const onDelete = () => {
-        confirmBox(`Do you really want to delete the post "${posting.heading}"?`, "Delete", "Cancel",
+        confirmBox(t("delete-post", {heading: posting.heading}), t("delete"), t("cancel"),
             postingDelete(posting.id), null, "danger");
     };
 
@@ -104,6 +112,18 @@ function PostingMenu({
     const onShowInvisibleComments = () => commentsShowInvisibleSet(true);
 
     const onHideInvisibleComments = () => commentsShowInvisibleSet(false);
+
+    const ownerName = posting.receiverName ?? posting.ownerName;
+    const fullName = (posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName) ?? null;
+    const postingId = posting.receiverPostingId ?? posting.id;
+
+    const onHideInGooglePlay = () =>
+        openSheriffOrderDialog(ownerName, fullName, "timeline", postingId, null, posting.heading);
+
+    const onUnhideInGooglePlay = () => {
+        confirmBox(t("unhide-post-google-play", {heading: posting.heading}), t("unhide"), t("cancel"),
+            sheriffOrderDelete(ownerName, "timeline", postingId, null), null, "success");
+    };
 
     const postingHref = `${rootLocation}/moera/post/${posting.id}`;
     return (
@@ -194,6 +214,21 @@ function PostingMenu({
                 href: postingHref,
                 onClick: onHideInvisibleComments,
                 show: hasInvisibleComments && showInvisibleComments
+            },
+            {
+                divider: true
+            },
+            {
+                title: t("hide-in-google-play"),
+                href: postingHref,
+                onClick: onHideInGooglePlay,
+                show: googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
+            },
+            {
+                title: t("unhide-in-google-play"),
+                href: postingHref,
+                onClick: onUnhideInGooglePlay,
+                show: googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
             }
         ]}/>
     );
@@ -210,12 +245,15 @@ const connector = connect(
         showInvisibleComments: (ownProps.detailed ?? false) && isCommentsShowInvisible(state),
         postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
         postingDeletable: isPermitted("delete", ownProps.posting, "private", state),
-        storyEditable: isPermitted("edit", ownProps.story, "admin", state)
+        storyEditable: isPermitted("edit", ownProps.story, "admin", state),
+        googlePlayGoverned: isPostingSheriff(ownProps.posting, SHERIFF_GOOGLE_PLAY_TIMELINE),
+        googlePlaySheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
+        googlePlayProhibited: isPostingSheriffProhibited(ownProps.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
     }),
     {
         goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
         postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock,
-        openSourceDialog, shareDialogPrepare, entryCopyText, commentsShowInvisibleSet
+        openSourceDialog, shareDialogPrepare, entryCopyText, commentsShowInvisibleSet, openSheriffOrderDialog
     }
 );
 

@@ -42,6 +42,7 @@ import { SignUpDialogAnyAction } from "state/signupdialog/actions";
 import { SourceDialogAnyAction } from "state/sourcedialog/actions";
 import { StoriesAnyAction } from "state/stories/actions";
 import { ClientEventAction } from "api/events/actions";
+import { SheriffOrderDialogAnyAction } from "state/sherifforderdialog/actions";
 
 export type ClientAction =
     ClientEventAction
@@ -85,6 +86,7 @@ export type ClientAction =
     | RichTextEditorAnyAction
     | SettingsAnyAction
     | ShareDialogAnyAction
+    | SheriffOrderDialogAnyAction
     | SignUpDialogAnyAction
     | SourceDialogAnyAction
     | StoriesAnyAction;

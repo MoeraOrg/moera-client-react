@@ -59,7 +59,7 @@ import {
     RemotePosting,
     Result,
     SettingInfo,
-    SettingMetaInfo,
+    SettingMetaInfo, SheriffOrderAttributes,
     StoryAttributes,
     StoryInfo,
     SubscriberInfo,
@@ -821,5 +821,13 @@ export function* searchBlockedByUsers(nodeName: string | null,
     return yield* callApi({
         nodeName, location: "/people/blocked-by-users/search", method: "POST", auth: true, body: filter,
         schema: NodeApi.BlockedByUserInfoArray
+    });
+}
+
+export function* postRemoteSheriffOrder(nodeName: string | null, remoteNodeName: string,
+                                        sheriffOrder: SheriffOrderAttributes): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: `/nodes/${remoteNodeName}/sheriff/orders`, method: "POST", auth: true, body: sheriffOrder,
+        schema: NodeApi.Result
     });
 }

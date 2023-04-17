@@ -5,20 +5,25 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import { isPrincipalIn } from "state/node/selectors";
+import { getOwnerName, isPrincipalIn } from "state/node/selectors";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
 import { friendshipUpdate } from "state/people/actions";
 import { openFriendGroupsDialog } from "state/friendgroupsdialog/actions";
 import { openAskDialog } from "state/askdialog/actions";
 import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
-import { getHomeFriendsId, getHomeOwnerGender } from "state/home/selectors";
+import { getHomeFriendsId, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
+import { isFeedSheriff, isFeedSheriffProhibited } from "state/feeds/selectors";
+import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
+import { confirmBox } from "state/confirmbox/actions";
 import { Button, DropdownMenu } from "ui/control";
 import { tGender } from "i18n";
 import "./SubscribeButton.css";
+import { NodeName } from "api";
 
 interface OwnProps {
     small?: boolean | null;
@@ -30,10 +35,12 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButtonImpl({
-    small, nodeName, feedName, onDialogOpened, card, homeGender, peerHref, friendsId, feedSubscribe, feedUnsubscribe,
-    friendshipUpdate, openFriendGroupsDialog, openAskDialog, openPeopleHideDialog, openBlockDialog
+    small, nodeName, feedName, onDialogOpened, card, homeGender, peerHref, friendsId, ownerName, googlePlayGoverned,
+    googlePlaySheriff, googlePlayProhibited, feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog,
+    openAskDialog, openPeopleHideDialog, openBlockDialog, openSheriffOrderDialog, confirmBox
 }: Props) {
     const fullName = card?.details.profile.fullName ?? null;
+    const blogName = fullName || NodeName.shorten(nodeName);
     const subscribing = card?.subscription?.subscribing ?? false;
     const unsubscribing = card?.subscription?.unsubscribing ?? false;
     const subscriber = card?.subscription?.subscriber;
@@ -69,6 +76,14 @@ function SubscribeButtonImpl({
     const onHideDialog = () => openPeopleHideDialog(nodeName, feedName);
 
     const onBlockDialog = () => openBlockDialog(nodeName, fullName, null, null, blockedList ?? []);
+
+    const onHideInGooglePlay = () =>
+        openSheriffOrderDialog(nodeName, fullName, "timeline", null, null, "");
+
+    const onUnhideInGooglePlay = () => {
+        confirmBox(t("unhide-blog-google-play", {"name": blogName}), t("unhide"), t("cancel"),
+            sheriffOrderDelete(nodeName, "timeline", null, null), null, "success");
+    };
 
     const subscribed = subscription != null;
     const subscribedToMe = subscriber != null;
@@ -181,6 +196,25 @@ function SubscribeButtonImpl({
                     onClick: onBlockDialog,
                     opensDialog: true,
                     show: true
+                },
+                {
+                    divider: true
+                },
+                {
+                    caption: t("banned-android-google-play"),
+                    show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
+                },
+                {
+                    title: t("hide-in-google-play"),
+                    href: peerHref,
+                    onClick: onHideInGooglePlay,
+                    show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
+                },
+                {
+                    title: t("unhide-in-google-play"),
+                    href: peerHref,
+                    onClick: onUnhideInGooglePlay,
+                    show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
                 }
             ]} onDialogOpened={onDialogOpened}>
                 {small ?
@@ -200,11 +234,15 @@ const connector = connect(
         card: getNodeCard(state, ownProps.nodeName),
         homeGender: getHomeOwnerGender(state),
         peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
-        friendsId: getHomeFriendsId(state)
+        friendsId: getHomeFriendsId(state),
+        ownerName: getOwnerName(state),
+        googlePlayGoverned: isFeedSheriff(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE),
+        googlePlaySheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
+        googlePlayProhibited: isFeedSheriffProhibited(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
     }),
     {
         feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog, openPeopleHideDialog,
-        openBlockDialog
+        openBlockDialog, openSheriffOrderDialog, confirmBox
     }
 );
 

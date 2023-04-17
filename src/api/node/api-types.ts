@@ -309,6 +309,8 @@ export interface PostingInfoBase<B> {
     commentOperations?: CommentOperationsInfo | null;
     blockedOperations?: BlockedOperationsInfo | null;
     blockedCommentOperations?: BlockedOperationsInfo | null;
+    sheriffs?: string[] | null;
+    sheriffMarks?: SheriffMark[] | null;
     acceptedReactions?: AcceptedReactions | null;
     reactions?: ReactionTotalsInfo | null;
     sources?: PostingSourceInfo[] | null;
@@ -321,6 +323,10 @@ export type PostingInfo = PostingInfoBase<Body>;
 type PartialPostingInfoBase<B> = Omit<Partial<PostingInfoBase<B>>, "id"> & { id: string };
 export type EncodedPartialPostingInfo = PartialPostingInfoBase<string>;
 
+export interface SheriffMark {
+    sheriffName: string;
+}
+
 export interface FeedInfo {
     feedName: string;
     total: number;
@@ -329,6 +335,8 @@ export interface FeedInfo {
     operations?: {
         add?: PrincipalValue | null;
     } | null;
+    sheriffs?: string[] | null;
+    sheriffMarks?: SheriffMark[] | null;
 }
 
 export interface FeedStatus {
@@ -447,6 +455,7 @@ interface CommentInfoBase<B> {
     seniorOperations?: CommentOperationsInfo | null;
     acceptedReactions?: AcceptedReactions | null;
     blockedOperations?: BlockedOperationsInfo | null;
+    sheriffMarks?: SheriffMark[] | null;
     clientReaction?: ClientReactionInfo | null;
     seniorReaction?: ClientReactionInfo | null;
     reactions?: ReactionTotalsInfo | null;
@@ -1101,4 +1110,19 @@ export interface BlockedByUserInfo {
     createdAt: number;
     deadline?: number | null;
     reason?: string | null;
+}
+
+export type SheriffOrderCategory = "visibility";
+
+export type SheriffOrderReason = "unknown" | "unlawful" | "defamatory" | "threat" | "spam" | "scam" | "malware"
+    | "copyright" | "impersonating" | "privacy";
+
+export interface SheriffOrderAttributes {
+    delete?: boolean | null;
+    feedName: string;
+    postingId?: string | null;
+    commentId?: string | null;
+    category: SheriffOrderCategory;
+    reasonCode?: SheriffOrderReason | null;
+    reasonDetails?: string | null;
 }

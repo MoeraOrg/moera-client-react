@@ -11,6 +11,12 @@ import { peopleSelectedAsk } from "state/people/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 
+const SUBJECTS: SelectFieldChoice[] = [
+    {title: "choose-request", value: "s:select"},
+    {title: "subscribe-me", value: "s:subscribe"},
+    {title: "add-me-friends", value: "s:friend"}
+];
+
 interface Values {
     subject: string;
     message: string;
@@ -36,17 +42,11 @@ function AskSelectedDialog(props: Props) {
         return null;
     }
 
-    const subjects: SelectFieldChoice[] = [
-        {title: "choose-request", value: "s:select"},
-        {title: "subscribe-me", value: "s:subscribe"},
-        {title: "add-me-friends", value: "s:friend"}
-    ];
-
     return (
         <ModalDialog title={t("ask-count", {count: nodeCount})} onClose={closeAskDialog}>
             <Form>
                 <div className="modal-body">
-                    <SelectField name="subject" choices={subjects}/>
+                    <SelectField name="subject" choices={SUBJECTS}/>
                     <InputField name="message" title={t("message")} maxLength={70} anyValue/>
                 </div>
                 <div className="modal-footer">

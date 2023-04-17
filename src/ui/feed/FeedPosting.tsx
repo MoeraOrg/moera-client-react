@@ -17,6 +17,7 @@ import PostingDeleting from "ui/posting/PostingDeleting";
 import PostingAvatar from "ui/posting/PostingAvatar";
 import PostingSource from "ui/posting/PostingSource";
 import PostingOwner from "ui/posting/PostingOwner";
+import PostingSheriffVisibility from "ui/posting/PostingSheriffVisibility";
 import PostingSubject from "ui/posting/PostingSubject";
 import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
@@ -72,6 +73,7 @@ const FeedPosting = ({posting, story, deleting, atHome, postingEditable, goToPos
                     <div className="owner-info">
                         <PostingSource posting={posting}/>
                         <PostingOwner posting={posting}/>
+                        <PostingSheriffVisibility posting={posting}/>
                         <br/>
                         <PostingDate posting={posting} story={story}/>
                         <PostingUpdated posting={posting} story={story}/>

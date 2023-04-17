@@ -11,6 +11,7 @@ import {
     FriendGroupInfoType,
     FriendInfoType,
     FriendOfInfoType,
+    SheriffMarkType,
     StorySummaryDataType,
     SubscriberInfoType,
     SubscriptionInfoType,
@@ -36,6 +37,7 @@ import {
     DraftDeletedEvent,
     DraftUpdatedEvent,
     EventPacket as APIEventPacket,
+    FeedSheriffDataUpdatedEvent,
     FeedStatusUpdatedEvent,
     FriendGroupAddedEvent,
     FriendGroupDeletedEvent,
@@ -1433,6 +1435,32 @@ const BlockedByUserDeletedEventType: JSONSchemaType<BlockedByUserDeletedEvent> =
     required: ["type", "blockedByUser"]
 }
 
+const FeedSheriffDataUpdatedEventType: JSONSchemaType<FeedSheriffDataUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "feedName": {
+            type: "string"
+        },
+        "sheriffs": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "sheriffMarks": {
+            type: "array",
+            items: SheriffMarkType,
+            nullable: true
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "feedName"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1501,7 +1529,8 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "BLOCKED_USER_ADDED": schema(BlockedUserAddedEventType),
     "BLOCKED_USER_DELETED": schema(BlockedUserDeletedEventType),
     "BLOCKED_BY_USER_ADDED": schema(BlockedByUserAddedEventType),
-    "BLOCKED_BY_USER_DELETED": schema(BlockedByUserDeletedEventType)
+    "BLOCKED_BY_USER_DELETED": schema(BlockedByUserDeletedEventType),
+    "FEED_SHERIFF_DATA_UPDATED": schema(FeedSheriffDataUpdatedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([
@@ -1518,5 +1547,6 @@ export const ALLOWED_SELF_EVENTS = new Set([
     "FRIEND_GROUP_ADDED",
     "FRIEND_GROUP_UPDATED",
     "FRIEND_GROUP_DELETED",
-    "REMOTE_FRIENDSHIP_UPDATED"
+    "REMOTE_FRIENDSHIP_UPDATED",
+    "FEED_SHERIFF_DATA_UPDATED"
 ]);

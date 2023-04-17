@@ -4,7 +4,12 @@ import { AvatarImage, BlockedUserInfo, CommentInfo, Features, PostingInfo } from
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getHomeInvisibleUsers, isConnectedToHome } from "state/home/selectors";
-import { getPosting, isPostingBeingDeleted, isPostingCached } from "state/postings/selectors";
+import {
+    getPosting,
+    isPostingBeingDeleted,
+    isPostingCached,
+    isPostingSheriffProhibited
+} from "state/postings/selectors";
 import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
 
 export function getDetailedPostingId(state: ClientState): string | null {
@@ -258,6 +263,15 @@ export function hasInvisibleComments(state: ClientState): boolean {
 
 export function isCommentsShowInvisible(state: ClientState): boolean {
     return getCommentsState(state).showInvisible;
+}
+
+export function isCommentSheriffMarked(comment: CommentInfo | null, sheriffName: string | null): boolean {
+    return sheriffName != null && comment?.sheriffMarks?.find(sm => sm.sheriffName === sheriffName) != null;
+}
+
+export function isCommentSheriffProhibited(posting: PostingInfo | null, comment: CommentInfo | null,
+                                           sheriffName: string | null): boolean {
+    return isPostingSheriffProhibited(posting, sheriffName) || isCommentSheriffMarked(comment, sheriffName);
 }
 
 export interface NameUsage {

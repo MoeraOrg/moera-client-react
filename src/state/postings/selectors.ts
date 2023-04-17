@@ -32,12 +32,13 @@ export function getPostingCommentsSubscriptionId(state: ClientState, id: string,
     return state.postings[nodeName]?.[id]?.subscriptions.comments ?? null;
 }
 
-export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">,
+export function getPostingFeedReference(posting: Pick<PostingInfo, "feedReferences"> | null,
                                         feedName: string): FeedReference | null {
-    return posting.feedReferences?.find(r => r.feedName === feedName) ?? null;
+    return posting?.feedReferences?.find(r => r.feedName === feedName) ?? null;
 }
 
-export function hasPostingFeedReference(posting: Pick<PostingInfo, "feedReferences">, feedName: string): boolean {
+export function hasPostingFeedReference(posting: Pick<PostingInfo, "feedReferences"> | null,
+                                        feedName: string): boolean {
     return getPostingFeedReference(posting, feedName) != null;
 }
 
@@ -91,4 +92,16 @@ export function findPostingIdsByRemote(postings: PostingsState, remoteNodeName: 
         ids.push({nodeName: remoteNodeName, postingId: remotePostingId});
     }
     return ids;
+}
+
+export function isPostingSheriff(posting: PostingInfo | null, sheriffName: string | null): boolean {
+    return sheriffName != null && posting?.sheriffs != null && posting.sheriffs.includes(sheriffName);
+}
+
+export function isPostingSheriffMarked(posting: PostingInfo | null, sheriffName: string | null): boolean {
+    return sheriffName != null && posting?.sheriffMarks?.find(sm => sm.sheriffName === sheriffName) != null;
+}
+
+export function isPostingSheriffProhibited(posting: PostingInfo | null, sheriffName: string | null): boolean {
+    return !isPostingSheriff(posting, sheriffName) || isPostingSheriffMarked(posting, sheriffName);
 }

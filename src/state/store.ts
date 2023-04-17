@@ -38,6 +38,7 @@ import friendGroupsDialog from "state/friendgroupsdialog/reducer";
 import askDialog from "state/askdialog/reducer";
 import blockDialog from "state/blockdialog/reducer";
 import blockingDetailsDialog from "state/blockingdetailsdialog/reducer";
+import sheriffOrderDialog from "state/sherifforderdialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -82,6 +83,7 @@ import friendGroupsDialogExecutors from "state/friendgroupsdialog/sagas";
 import askDialogExecutors from "state/askdialog/sagas";
 import blockDialogExecutors from "state/blockdialog/sagas";
 import blockingDetailsDialogExecutors from "state/blockingdetailsdialog/sagas";
+import sheriffOrderDialogExecutors from "state/sherifforderdialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -114,6 +116,7 @@ import askDialogTriggers from "state/askdialog/triggers";
 import blockDialogTriggers from "state/blockdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
+import sheriffOrderDialogTriggers from "state/sherifforderdialog/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
@@ -157,6 +160,7 @@ const reducers = combineReducers({
     askDialog,
     blockDialog,
     blockingDetailsDialog,
+    sheriffOrderDialog,
     messageBox,
     confirmBox,
     flashBox,
@@ -202,6 +206,7 @@ const triggers = collectTriggers(
     blockDialogTriggers,
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
+    sheriffOrderDialogTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,
     signUpDialogTriggers,
@@ -243,6 +248,7 @@ const executors = collectExecutors(
     askDialogExecutors,
     blockDialogExecutors,
     blockingDetailsDialogExecutors,
+    sheriffOrderDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

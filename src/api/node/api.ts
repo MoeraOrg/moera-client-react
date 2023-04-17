@@ -867,6 +867,17 @@ const CommentOperationsInfoType: JSONSchemaType<API.CommentOperationsInfo> = {
 
 export const CommentOperationsInfo = schema(CommentOperationsInfoType);
 
+export const SheriffMarkType: JSONSchemaType<API.SheriffMark> = {
+    type: "object",
+    properties: {
+        "sheriffName": {
+            type: "string"
+        }
+    },
+    required: ["sheriffName"],
+    additionalProperties: false
+}
+
 const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
     type: "object",
     properties: {
@@ -1022,6 +1033,18 @@ const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             items: {
                 type: "string"
             },
+            nullable: true
+        },
+        "sheriffs": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "sheriffMarks": {
+            type: "array",
+            items: SheriffMarkType,
             nullable: true
         },
         "acceptedReactions": {
@@ -1216,6 +1239,18 @@ const PartialPostingInfoType: JSONSchemaType<API.EncodedPartialPostingInfo> = {
             },
             nullable: true
         },
+        "sheriffs": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "sheriffMarks": {
+            type: "array",
+            items: SheriffMarkType,
+            nullable: true
+        },
         "acceptedReactions": {
             ...AcceptedReactionsType,
             nullable: true
@@ -1265,6 +1300,18 @@ const FeedInfoType: JSONSchemaType<API.FeedInfo> = {
             },
             nullable: true,
             additionalProperties: false
+        },
+        "sheriffs": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "sheriffMarks": {
+            type: "array",
+            items: SheriffMarkType,
+            nullable: true
         }
     },
     required: ["feedName", "total"],
@@ -1451,6 +1498,11 @@ const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
             },
             nullable: true
         },
+        "sheriffMarks": {
+            type: "array",
+            items: SheriffMarkType,
+            nullable: true
+        },
         "acceptedReactions": {
             ...AcceptedReactionsType,
             nullable: true
@@ -1595,6 +1647,11 @@ const PartialCommentInfoType: JSONSchemaType<API.EncodedPartialCommentInfo> = {
             items: {
                 type: "string"
             },
+            nullable: true
+        },
+        "sheriffMarks": {
+            type: "array",
+            items: SheriffMarkType,
             nullable: true
         },
         "acceptedReactions": {
