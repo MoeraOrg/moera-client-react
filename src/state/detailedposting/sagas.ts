@@ -600,7 +600,7 @@ function* commentCopyLinkSaga(action: CommentCopyLinkAction) {
     try {
         const href = yield* call(postingGetLink, postingId);
         yield* call(clipboardCopy, `${href}?comment=${id}`);
-        if (Browser.userAgentOs !== "android" || window.Android) {
+        if (!Browser.isAndroidBrowser()) {
             yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {

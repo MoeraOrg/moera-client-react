@@ -222,7 +222,7 @@ function* loadBlockedBy(nodeName: string, homeOwnerName: string | null) {
 
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
     yield* call(clipboardCopy, mentionName(action.payload.nodeName, action.payload.fullName));
-    if (Browser.userAgentOs !== "android" || window.Android) {
+    if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("mention-copied")));
     }
 }

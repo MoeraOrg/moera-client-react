@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { FundraiserInfo } from "api/node/api-types";
 import { openDonateDialog } from "state/donatedialog/actions";
 import { Button } from "ui/control";
+import { Browser } from "ui/browser";
 
 type Props = {
     name: string | null;
@@ -23,7 +24,7 @@ const DonateButtonImpl = ({name, fullName, fundraisers, styles = "large", classN
         return null;
     }
 
-    if (window.Android && window.Android.isDonationsEnabled && !window.Android.isDonationsEnabled()) {
+    if (Browser.androidAppFlavor === "google-play") {
         return null;
     }
 

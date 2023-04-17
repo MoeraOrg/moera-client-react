@@ -21,7 +21,7 @@ class Navigation extends React.PureComponent<Props> {
 
     componentDidMount() {
         window.addEventListener("popstate", this.popState);
-        if (window.Android) {
+        if (Browser.isAndroidApp()) {
             window.addEventListener("message", this.messageReceived);
         }
     }

@@ -14,6 +14,7 @@ import { getSetting } from "state/settings/selectors";
 import { Button, ModalDialog } from "ui/control";
 import FundraiserIcon from "ui/donatedialog/FundraiserIcon";
 import { getFundraiserAutoHref } from "ui/donatedialog/fundraiser-util";
+import { Browser } from "ui/browser";
 import { getSchemeOrDomain, hasSchemeOrDomain } from "util/url";
 import "./DonateDialog.css";
 
@@ -44,8 +45,7 @@ function DonateDialog({show, name, fullName, fundraisers, connectedToHome, autoP
         return null;
     }
 
-    if (!connectedToHome && window.Android && window.Android.isDonationsEnabled
-        && !window.Android.isDonationsEnabled()) {
+    if (Browser.androidAppFlavor === "google-play") {
 
         return (
             <ModalDialog title={t("donate")} className="donate-dialog" onClose={closeDonateDialog}>

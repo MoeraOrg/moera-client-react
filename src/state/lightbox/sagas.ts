@@ -53,7 +53,7 @@ function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
     try {
         const nodeUri = yield* call(getNodeUri, nodeName);
         yield* call(clipboardCopy, nodeUri + url);
-        if (Browser.userAgentOs !== "android" || window.Android) {
+        if (!Browser.isAndroidBrowser()) {
             yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {
@@ -64,7 +64,7 @@ function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
 function* lightBoxCopyMediaLinkSaga(action: LightBoxCopyMediaLinkAction) {
     try {
         yield* call(clipboardCopy, action.payload.url);
-        if (Browser.userAgentOs !== "android" || window.Android) {
+        if (!Browser.isAndroidBrowser()) {
             yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {

@@ -32,7 +32,7 @@ function CopyQuoteButton({url, title, mode, closeShareDialog, flashBox}: Props) 
         closeShareDialog();
         clipboardCopy((title ? title + "\n\n" : "") + formatLink(url, mode))
             .then(() => {
-                if (Browser.userAgentOs !== "android" || window.Android) {
+                if (!Browser.isAndroidBrowser()) {
                     flashBox(t("quote-copied"));
                 }
             });

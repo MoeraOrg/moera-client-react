@@ -28,9 +28,11 @@ export class Browser {
     static clientId: string = randomId();
     static userAgent: UserAgent = "unknown";
     static userAgentOs: UserAgentOs = "unknown";
+    static androidAppFlavor: AndroidAppFlavor | null = null;
 
     static init(): void {
         this._initUserAgent();
+        this._initAndroidAppFlavor();
     }
 
     static _initUserAgent(): void {
@@ -56,6 +58,20 @@ export class Browser {
             this.userAgentOs = "android";
         } else if (navigator.userAgent.includes("iPhone")) {
             this.userAgentOs = "ios";
+        }
+    }
+
+    static _initAndroidAppFlavor(): void {
+        if (window.Android) {
+            if (window.Android.getFlavor) {
+                this.androidAppFlavor = window.Android.getFlavor();
+            } else if (window.Android.isDonationsEnabled) {
+                this.androidAppFlavor = window.Android.isDonationsEnabled() ? "apk" : "google-play";
+            } else {
+                this.androidAppFlavor = "google-play";
+            }
+        } else {
+            this.androidAppFlavor = null;
         }
     }
 
@@ -90,6 +106,14 @@ export class Browser {
 
     static isMobile(): boolean {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
+    }
+
+    static isAndroidApp(): boolean {
+        return this.androidAppFlavor != null;
+    }
+
+    static isAndroidBrowser(): boolean {
+        return this.userAgentOs === "android" && !this.isAndroidApp();
     }
 
     static disableBodyScroll(): void {

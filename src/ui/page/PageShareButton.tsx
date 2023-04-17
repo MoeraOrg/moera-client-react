@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
 import { getOwnerName } from "state/node/selectors";
+import { Browser } from "ui/browser";
 import { DropdownMenu } from "ui/control";
 import "./PageShareButton.css";
 
@@ -20,7 +21,7 @@ function PageShareButton({href, ownerName, shareDialogPrepare, sharePageCopyLink
     const onCopyLink = () => sharePageCopyLink(ownerName ?? "", href);
 
     // @ts-ignore
-    if (window.Android || navigator.share) {
+    if (Browser.isAndroidApp() || navigator.share) {
         return (
             <DropdownMenu className="page-share" items={[
                 {

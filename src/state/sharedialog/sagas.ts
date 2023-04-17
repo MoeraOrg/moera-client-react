@@ -59,7 +59,7 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
 function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
     yield* put(closeShareDialog());
     yield* call(clipboardCopy, action.payload.url);
-    if (Browser.userAgentOs !== "android" || window.Android) {
+    if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("link-copied")));
     }
 }
@@ -73,7 +73,7 @@ function* sharePageCopyLink(action: SharePageCopyLinkAction) {
         return;
     }
     yield* call(clipboardCopy, normalizeUrl(nodeUri) + href);
-    if (Browser.userAgentOs !== "android" || window.Android) {
+    if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("link-copied")));
     }
 }

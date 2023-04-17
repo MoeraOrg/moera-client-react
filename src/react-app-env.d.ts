@@ -2,6 +2,8 @@
 
 type SharedTextType = "html" | "text";
 
+type AndroidAppFlavor = "google-play" | "apk";
+
 interface AndroidJsInterface {
     locationChanged(url: string, location: string): void;
     connectedToHome(url: string | null, token: string | null, ownerName: string | null): void;
@@ -15,7 +17,8 @@ interface AndroidJsInterface {
     back(): void;
     toast(text: string): void;
     setSwipeRefreshEnabled(enabled: boolean): void;
-    isDonationsEnabled(): boolean;
+    isDonationsEnabled(): boolean; // deprecated
+    getFlavor(): AndroidAppFlavor;
     log(text: string): void;
 }
 

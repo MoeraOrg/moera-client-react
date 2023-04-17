@@ -219,7 +219,7 @@ class SignUpDialog extends React.PureComponent<Props> {
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
                         <InputField name="email" title={t("e-mail")}
                                     disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
-                        {window.Android && <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>}
+                        {Browser.isAndroidApp() && <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>}
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={cancelSignUpDialog}>{t("cancel")}</Button>
@@ -252,7 +252,7 @@ const signUpDialogLogic = {
         password: props.password ?? "",
         confirmPassword: props.password ?? "",
         email: props.email ?? "",
-        termsAgree: window.Android == null
+        termsAgree: !Browser.isAndroidApp()
     }),
 
     validationSchema: yup.object().shape({

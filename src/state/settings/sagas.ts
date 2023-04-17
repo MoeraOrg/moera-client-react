@@ -263,7 +263,7 @@ function* settingsTokensDeleteSaga(action: SettingsTokensDeleteAction) {
 function* settingsTokensNewTokenCopySaga() {
     const token = yield* select(state => state.settings.tokens.dialog.newToken);
     yield* call(clipboardCopy, token.token);
-    if (Browser.userAgentOs !== "android" || window.Android) {
+    if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("token-copied")));
     }
 }

@@ -22,6 +22,7 @@ import {
     COMMENTS_PAST_SLICE_SET,
     FOCUSED_COMMENT_LOADED
 } from "state/detailedposting/actions";
+import { Browser } from "ui/browser";
 
 export default [
     trigger(
@@ -38,6 +39,6 @@ export default [
         conj(isLightBoxShown, isLightBoxMediaPostingToBeLoaded),
         lightBoxMediaPostingLoad
     ),
-    trigger([OPEN_LIGHT_BOX, CLOSE_LIGHT_BOX], !!window.Android, swipeRefreshUpdate),
+    trigger([OPEN_LIGHT_BOX, CLOSE_LIGHT_BOX], Browser.isAndroidApp(), swipeRefreshUpdate),
     trigger([OPEN_LIGHT_BOX, CLOSE_LIGHT_BOX], true, bodyScrollUpdate)
 ];

@@ -2,6 +2,7 @@ import { PostingFeatures } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeFeatures } from "state/node/selectors";
+import { Browser } from "ui/browser";
 
 export function isComposePostingToBeLoaded(state: ClientState): boolean {
     return state.compose.postingId != null && state.compose.posting == null && !state.compose.loadingPosting;
@@ -14,7 +15,7 @@ export function isComposeDraftToBeLoaded(state: ClientState): boolean {
 
 export function isComposeSharedTextToBeLoaded(state: ClientState): boolean {
     return state.compose.postingId == null && state.compose.draftId == null && state.compose.sharedText == null
-        && !!window.Android;
+        && Browser.isAndroidApp();
 }
 
 export function getPostingFeatures(state: ClientState): PostingFeatures | null {

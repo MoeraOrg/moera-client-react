@@ -229,7 +229,7 @@ function* postingCopyLinkSaga(action: PostingCopyLinkAction) {
     try {
         const href = yield* call(postingGetLink, id, nodeName);
         yield* call(clipboardCopy, href);
-        if (Browser.userAgentOs !== "android" || window.Android) {
+        if (!Browser.isAndroidBrowser()) {
             yield* put(flashBox(i18n.t("link-copied")));
         }
     } catch (e) {

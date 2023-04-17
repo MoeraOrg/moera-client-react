@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import { bodyScrollUpdate, swipeRefreshUpdate } from "state/navigation/actions";
+import { Browser } from "ui/browser";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";
@@ -24,14 +25,14 @@ function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSli
 
     useEffect(() => {
         window.closeLightDialog = hide;
-        if (window.Android) {
+        if (Browser.isAndroidApp()) {
             swipeRefreshUpdate();
         }
         bodyScrollUpdate();
 
         return () => {
             window.closeLightDialog = null;
-            if (window.Android) {
+            if (Browser.isAndroidApp()) {
                 swipeRefreshUpdate();
             }
             bodyScrollUpdate();

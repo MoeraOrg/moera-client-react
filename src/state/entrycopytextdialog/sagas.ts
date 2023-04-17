@@ -49,7 +49,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
         }
     }
     yield* call(clipboardCopy, text);
-    if (Browser.userAgentOs !== "android" || window.Android) {
+    if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("text-copied")));
     }
 }
