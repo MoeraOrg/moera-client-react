@@ -94,14 +94,15 @@ export function findPostingIdsByRemote(postings: PostingsState, remoteNodeName: 
     return ids;
 }
 
-export function isPostingSheriff(posting: PostingInfo | null, sheriffName: string | null): boolean {
+export function isPostingSheriff(posting: PostingInfo | null | undefined, sheriffName: string | null): boolean {
     return sheriffName != null && posting?.sheriffs != null && posting.sheriffs.includes(sheriffName);
 }
 
-export function isPostingSheriffMarked(posting: PostingInfo | null, sheriffName: string | null): boolean {
+export function isPostingSheriffMarked(posting: PostingInfo | null | undefined, sheriffName: string | null): boolean {
     return sheriffName != null && posting?.sheriffMarks?.find(sm => sm.sheriffName === sheriffName) != null;
 }
 
-export function isPostingSheriffProhibited(posting: PostingInfo | null, sheriffName: string | null): boolean {
+export function isPostingSheriffProhibited(posting: PostingInfo | null | undefined,
+                                           sheriffName: string | null): boolean {
     return !isPostingSheriff(posting, sheriffName) || isPostingSheriffMarked(posting, sheriffName);
 }

@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { AvatarImage, BlockedUserInfo, CommentInfo, Features, PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { getOwnerName } from "state/node/selectors";
+import { getOwnerName, isGooglePlayHiding } from "state/node/selectors";
 import { getHomeInvisibleUsers, isConnectedToHome } from "state/home/selectors";
 import {
     getPosting,
@@ -240,7 +241,8 @@ export const getCommentsWithVisibility = createSelector(
     getComments,
     getCommentsBlockedUsers,
     getHomeInvisibleUsers,
-    (comments, locallyBlocked, globallyBlocked) => {
+    isGooglePlayHiding,
+    (comments, locallyBlocked, globallyBlocked, hideSheriffMarked) => {
         if (locallyBlocked.length === 0 && globallyBlocked.length === 0) {
             return comments;
         }
@@ -253,7 +255,12 @@ export const getCommentsWithVisibility = createSelector(
         if (invisibleNames.size === 0) {
             return comments;
         }
-        return comments.map(c => invisibleNames.has(c.ownerName) ? {...c, invisible: true} : c);
+        return comments.map(c =>
+            invisibleNames.has(c.ownerName)
+            || (hideSheriffMarked && isCommentSheriffMarked(c, SHERIFF_GOOGLE_PLAY_TIMELINE))
+                ? {...c, invisible: true}
+                : c
+        );
     }
 );
 

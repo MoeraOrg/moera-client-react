@@ -1,15 +1,12 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import debounce from 'lodash.debounce';
+import { createSelector } from 'reselect';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import FeedTitle from "ui/feed/FeedTitle";
-import FeedPageHeader from "ui/feed/FeedPageHeader";
-import { Page } from "ui/page/Page";
-import FeedPosting from "ui/feed/FeedPosting";
-import FeedSentinel from "ui/feed/FeedSentinel";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import { getFeedState } from "state/feeds/selectors";
+import { isAtHomeNode, isGooglePlayHiding } from "state/node/selectors";
 import {
     feedFutureSliceLoad,
     feedPastSliceLoad,
@@ -17,7 +14,13 @@ import {
     feedScrolledToAnchor,
     feedStatusUpdate
 } from "state/feeds/actions";
-import { isAtHomeNode } from "state/node/selectors";
+import { getFeedState } from "state/feeds/selectors";
+import { isPostingSheriffProhibited } from "state/postings/selectors";
+import { Page } from "ui/page/Page";
+import FeedTitle from "ui/feed/FeedTitle";
+import FeedPageHeader from "ui/feed/FeedPageHeader";
+import FeedPosting from "ui/feed/FeedPosting";
+import FeedSentinel from "ui/feed/FeedSentinel";
 import { getPageHeaderHeight } from "util/misc";
 import "./FeedPage.css";
 
@@ -277,7 +280,7 @@ class FeedPage extends React.PureComponent<Props, State> {
         if (topmostMoment >= Number.MAX_SAFE_INTEGER) {
             return 0;
         }
-        const afterTop = stories.filter(story => story.moment > topmostMoment).length;
+        const afterTop = stories.filter(({story}) => story.moment > topmostMoment).length;
         const total = afterTop + totalInFuture - totalPinned;
 
         return total > 0 ? total : 0;
@@ -285,8 +288,8 @@ class FeedPage extends React.PureComponent<Props, State> {
 
     render() {
         const {
-            feedName, title, shareable, loadingFuture, loadingPast, stories, notViewed, notViewedMoment, postings,
-            before, after, t
+            feedName, title, shareable, loadingFuture, loadingPast, stories, notViewed, notViewedMoment, before, after,
+            t
         } = this.props;
         const {atTop, atBottom} = this.state;
 
@@ -316,9 +319,6 @@ class FeedPage extends React.PureComponent<Props, State> {
                                   visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
                                   onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
                     {stories
-                        .filter(t => t.postingId != null)
-                        .filter(t => postings[t.postingId!])
-                        .map(t => ({story: t, ...postings[t.postingId!]!}))
                         .map(({story, posting, deleting}) =>
                             <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
                     <FeedSentinel loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 250px 0px"
@@ -332,18 +332,29 @@ class FeedPage extends React.PureComponent<Props, State> {
     }
 }
 
+export const getStories = createSelector(
+    (state: ClientState, feedName: string) => getFeedState(state, feedName).stories,
+    (state: ClientState) => state.postings[""] ?? {}, // FIXME it is an overly general dependency
+    isGooglePlayHiding,
+    (stories, postings, hiding) =>
+        stories
+            .filter(t => t.postingId != null)
+            .filter(t => postings[t.postingId!])
+            .map(t => ({story: t, ...postings[t.postingId!]!}))
+            .filter(({posting}) => !hiding || !isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE))
+);
+
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         loadingFuture: getFeedState(state, ownProps.feedName).loadingFuture,
         loadingPast: getFeedState(state, ownProps.feedName).loadingPast,
         before: getFeedState(state, ownProps.feedName).before,
         after: getFeedState(state, ownProps.feedName).after,
-        stories: getFeedState(state, ownProps.feedName).stories,
+        stories: getStories(state, ownProps.feedName),
         totalInFuture: getFeedState(state, ownProps.feedName).totalInFuture,
         totalPinned: getFeedState(state, ownProps.feedName).status.totalPinned,
         notViewed: getFeedState(state, ownProps.feedName).status.notViewed,
         notViewedMoment: getFeedState(state, ownProps.feedName).status.notViewedMoment,
-        postings: state.postings[""] ?? {},
         anchor: getFeedState(state, ownProps.feedName).anchor,
         atHomeNode: isAtHomeNode(state)
     }),

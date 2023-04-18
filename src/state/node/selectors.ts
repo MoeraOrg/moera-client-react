@@ -1,3 +1,4 @@
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import {
     AvatarImage,
     BlockedOperationsInfo,
@@ -13,6 +14,7 @@ import { getHomeOwnerName, getHomeRootLocation, isConnectedToHome } from "state/
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
 import { isNodeNameOperationFinished } from "state/nodename/selectors";
+import { Browser } from "ui/browser";
 
 export function isAtNode(state: ClientState): boolean {
     return !!state.node.root.api;
@@ -129,6 +131,11 @@ export function isOwnerNameRecentlyChanged(state: ClientState): boolean {
         && (state.node.owner.verifiedAt === 0
             || (isNodeNameOperationFinished(state)
                 && state.node.owner.verifiedAt < (state.nodeName.operationStatusUpdated ?? 0)));
+}
+
+export function isGooglePlayHiding(state: ClientState): boolean {
+    return Browser.androidAppFlavor === "google-play" && !isAtHomeNode(state)
+        && getHomeOwnerName(state) !== SHERIFF_GOOGLE_PLAY_TIMELINE;
 }
 
 type AnyOperationsInfo = Partial<Record<string, PrincipalValue | null>>;

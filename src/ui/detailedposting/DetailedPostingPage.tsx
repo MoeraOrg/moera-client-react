@@ -3,10 +3,12 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TFunction, useTranslation } from 'react-i18next';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { isGooglePlayHiding } from "state/node/selectors";
 import { getDetailedPosting, isDetailedPostingBeingDeleted } from "state/detailedposting/selectors";
-import { getPostingFeedReference } from "state/postings/selectors";
+import { getPostingFeedReference, isPostingSheriffProhibited } from "state/postings/selectors";
 import { Loading } from "ui/control";
 import { MinimalStoryInfo } from "ui/types";
 import { Page } from "ui/page/Page";
@@ -46,16 +48,19 @@ function getFeedAndStory(posting: PostingInfo | null, t: TFunction): {
 
 type Props = ConnectedProps<typeof connector>;
 
-function DetailedPostingPage({loading, deleting, posting}: Props) {
+function DetailedPostingPage({loading, deleting, posting, googlePlayHiding}: Props) {
     const {t} = useTranslation();
 
     const {story = null, href, feedTitle} = getFeedAndStory(posting, t);
-    const postingReady = posting != null && posting.parentMediaId == null;
+    const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const postingReady = posting != null && posting.parentMediaId == null && !googlePlayProhibited;
     return (
         <>
             <DetailedPostingPageHeader story={story} href={href} feedTitle={feedTitle}/>
             <Page>
-                {(postingReady && story) && <DetailedPosting posting={posting} story={story} deleting={deleting}/>}
+                {(postingReady && story) &&
+                    <DetailedPosting posting={posting} story={story} deleting={deleting}/>
+                }
                 {!postingReady && loading &&
                     <div className="posting">
                         <Loading active={loading}/>
@@ -64,7 +69,9 @@ function DetailedPostingPage({loading, deleting, posting}: Props) {
                 {!postingReady && !loading &&
                     <div className="posting-not-found">
                         <FontAwesomeIcon className="icon" icon="frown" size="3x"/>
-                        <div className="message">{t("posting-not-found")}</div>
+                        <div className="message">
+                            {!googlePlayProhibited ? t("posting-not-found") : t("content-not-accessible-android")}
+                        </div>
                     </div>
                 }
             </Page>
@@ -76,7 +83,8 @@ const connector = connect(
     (state: ClientState) => ({
         loading: state.detailedPosting.loading,
         deleting: isDetailedPostingBeingDeleted(state),
-        posting: getDetailedPosting(state)
+        posting: getDetailedPosting(state),
+        googlePlayHiding: isGooglePlayHiding(state)
     })
 );
 

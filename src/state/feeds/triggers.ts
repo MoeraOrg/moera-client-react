@@ -81,7 +81,7 @@ function toStory(eventPayload: Omit<StoryEvent<any> | StoryDeletedEvent, "type">
 export default [
     trigger(
         GO_TO_PAGE,
-        state => (isAtTimelinePage(state) || isAtProfilePage(state))
+        state => (isAtTimelinePage(state) || isAtProfilePage(state) || isAtDetailedPostingPage(state))
             && isFeedGeneralToBeLoaded(state, "timeline"),
         feedGeneralLoad("timeline")
     ),
