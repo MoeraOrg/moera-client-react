@@ -1779,6 +1779,20 @@ const StorySummaryBlockedType: JSONSchemaType<API.StorySummaryBlocked> = {
     additionalProperties: false
 };
 
+const StorySummarySheriffType: JSONSchemaType<API.StorySummarySheriff> = {
+    type: "object",
+    properties: {
+        "sheriffName": {
+            type: "string"
+        },
+        "orderId": {
+            type: "string"
+        }
+    },
+    required: ["sheriffName", "orderId"],
+    additionalProperties: false
+};
+
 export const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
     type: "object",
     properties: {
@@ -1834,6 +1848,10 @@ export const StorySummaryDataType: JSONSchemaType<API.StorySummaryData> = {
         },
         "blocked": {
             ...StorySummaryBlockedType,
+            nullable: true
+        },
+        "sheriff": {
+            ...StorySummarySheriffType,
             nullable: true
         },
         "description": {

@@ -18,7 +18,11 @@ import {
     buildCommentPostTaskFailedSummary,
     buildCommentReactionAddedSummary,
     buildCommentReactionTaskFailedSummary,
+    buildCommentSheriffMarkedSummary,
+    buildCommentSheriffUnmarkedSummary,
     buildCommentUpdateTaskFailedSummary,
+    buildFeedSheriffMarkedSummary,
+    buildFeedSheriffUnmarkedSummary,
     buildFriendAddedSummary,
     buildFriendDeletedSummary,
     buildFriendGroupDeletedSummary,
@@ -28,6 +32,8 @@ import {
     buildPostingMediaReactionFailedSummary,
     buildPostingPostTaskFailedSummary,
     buildPostingReactionTaskFailedSummary,
+    buildPostingSheriffMarkedSummary,
+    buildPostingSheriffUnmarkedSummary,
     buildPostingSubscribeTaskFailedSummary,
     buildPostingUpdatedSummary,
     buildPostingUpdateTaskFailedSummary,
@@ -313,6 +319,48 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         icon: "handcuffs",
         summary: (data, homeOwnerName, t) => buildUnblockedUserInPostingSummary(data, t),
         target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
+    },
+    "feed-sheriff-marked": {
+        color: "var(--incorrect)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildFeedSheriffMarkedSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: "/"})
+    },
+    "posting-sheriff-marked": {
+        color: "var(--incorrect)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildPostingSheriffMarkedSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
+    },
+    "comment-sheriff-marked": {
+        color: "var(--incorrect)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildCommentSheriffMarkedSummary(data, homeOwnerName, t),
+        target: story => ({
+            nodeName: story.remoteNodeName,
+            href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+        })
+    },
+    "feed-sheriff-unmarked": {
+        color: "var(--correct)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildFeedSheriffUnmarkedSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: "/"})
+    },
+    "posting-sheriff-unmarked": {
+        color: "var(--correct)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildPostingSheriffUnmarkedSummary(data, t),
+        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
+    },
+    "comment-sheriff-unmarked": {
+        color: "var(--correct)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildCommentSheriffUnmarkedSummary(data, homeOwnerName, t),
+        target: story => ({
+            nodeName: story.remoteNodeName,
+            href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+        })
     }
 };
 
