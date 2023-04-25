@@ -696,6 +696,7 @@
     "unknown" : "Невідомо",
     "unlawful" : "Порушення закону"
   },
+  "sheriff-order-sent" : "Наказ шерифа надіслано",
   "show-formatting-hint" : "Показати підказку щодо форматування",
   "show-hidden-comments" : "Показати приховані коментарі",
   "show-list-reactions" : "Показувати список реакцій",

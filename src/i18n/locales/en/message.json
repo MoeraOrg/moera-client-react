@@ -696,6 +696,7 @@
     "unknown" : "Unknown",
     "unlawful" : "Violation of the law"
   },
+  "sheriff-order-sent" : "Sheriff's order is sent",
   "show-formatting-hint" : "Show formatting hint",
   "show-hidden-comments" : "Show hidden comments",
   "show-list-reactions" : "Show the detailed list of reactions",

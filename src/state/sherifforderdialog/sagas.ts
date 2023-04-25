@@ -1,4 +1,5 @@
 import { call, put } from 'typed-redux-saga';
+import i18n from 'i18next';
 
 import { executor } from "state/executor";
 import { postRemoteSheriffOrder } from "api/node/sagas";
@@ -12,6 +13,7 @@ import {
     sheriffOrderDialogSubmitFailed,
     sheriffOrderDialogSubmitted
 } from "state/sherifforderdialog/actions";
+import { flashBox } from "state/flashbox/actions";
 
 export default [
     executor(SHERIFF_ORDER_DIALOG_SUBMIT, "", sheriffOrderDialogSubmitSaga),
@@ -26,6 +28,7 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
             delete: false, feedName, postingId, commentId, category: "visibility" as const, reasonCode, reasonDetails
         });
         yield* put(sheriffOrderDialogSubmitted());
+        yield* put(flashBox(i18n.t("sheriff-order-sent")));
     } catch (e) {
         yield* put(sheriffOrderDialogSubmitFailed());
         yield* put(errorThrown(e));
@@ -39,6 +42,7 @@ function* sheriffOrderDeleteSaga(action: WithContext<SheriffOrderDeleteAction>) 
         yield* call(postRemoteSheriffOrder, ":", nodeName, {
             delete: true, feedName, postingId, commentId, category: "visibility" as const
         });
+        yield* put(flashBox(i18n.t("sheriff-order-sent")));
     } catch (e) {
         yield* put(errorThrown(e));
     }
