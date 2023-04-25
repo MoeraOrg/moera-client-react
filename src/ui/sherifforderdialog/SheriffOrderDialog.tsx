@@ -3,12 +3,14 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { NodeName } from "api";
 import { SheriffOrderReason } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
-import { Button, ModalDialog } from "ui/control";
+import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
+import { formatFullName } from "util/misc";
+import { getSetting } from "state/settings/selectors";
+import { NameDisplayMode } from "ui/types";
 
 const REASON_CODES: SelectFieldChoice[] = [
     {title: "sheriff-order-reason.unknown", value: "unknown"},
@@ -25,7 +27,7 @@ const REASON_CODES: SelectFieldChoice[] = [
 
 interface Values {
     reasonCode: SheriffOrderReason;
-    reasonDetails: string;
+    reasonDetails: RichTextValue;
 }
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -34,7 +36,8 @@ type Props = OuterProps & FormikProps<Values>;
 
 function SheriffOrderDialog(props: Props) {
     const {
-        show, nodeName, fullName, postingId, commentId, heading, submitting, closeSheriffOrderDialog, resetForm
+        show, nodeName, fullName, postingId, commentId, heading, submitting, nameDisplayMode, closeSheriffOrderDialog,
+        resetForm
     } = props;
 
     const {t} = useTranslation();
@@ -54,7 +57,7 @@ function SheriffOrderDialog(props: Props) {
     let messageValues;
     if (postingId == null) {
         messageKey = "hide-blog-google-play";
-        messageValues = {name: fullName || NodeName.shorten(nodeName)};
+        messageValues = {name: formatFullName(nodeName, fullName, nameDisplayMode)};
     } else if (commentId == null) {
         messageKey = "hide-post-google-play";
         messageValues = {heading};
@@ -89,14 +92,14 @@ const sheriffOrderDialogLogic = {
 
     mapPropsToValues: (): Values => ({
         reasonCode: "unknown",
-        reasonDetails: ""
+        reasonDetails: new RichTextValue("")
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         const {nodeName, feedName, postingId, commentId, sheriffOrderDialogSubmit} = formik.props;
 
         formik.setStatus("submitted");
-        sheriffOrderDialogSubmit(nodeName, feedName, postingId, commentId, values.reasonCode, values.reasonDetails);
+        sheriffOrderDialogSubmit(nodeName, feedName, postingId, commentId, values.reasonCode, values.reasonDetails.text);
         formik.setSubmitting(false);
     }
 
@@ -111,7 +114,8 @@ const connector = connect(
         postingId: state.sheriffOrderDialog.postingId,
         commentId: state.sheriffOrderDialog.commentId,
         heading: state.sheriffOrderDialog.heading,
-        submitting: state.sheriffOrderDialog.submitting
+        submitting: state.sheriffOrderDialog.submitting,
+        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
     }),
     { closeSheriffOrderDialog, sheriffOrderDialogSubmit }
 );

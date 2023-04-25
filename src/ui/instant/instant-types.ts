@@ -54,6 +54,7 @@ import InstantStoryFriendGroupButtons, {
     instantStoryFriendGroupAction
 } from "ui/instant/buttons/InstantStoryFriendGroupButtons";
 import InstantStoryBlockedButtons from "ui/instant/buttons/InstantStoryBlockedButtons";
+import InstantStorySheriffOrderButtons from "ui/instant/buttons/InstantStorySheriffOrderButtons";
 
 type InstantSummarySupplier = (data: StorySummaryData, homeOwnerName: string | null, t: TFunction) => string;
 
@@ -324,13 +325,15 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         color: "var(--incorrect)",
         icon: "hat-cowboy",
         summary: (data, homeOwnerName, t) => buildFeedSheriffMarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: "/"})
+        target: story => ({nodeName: story.remoteNodeName, href: "/"}),
+        buttons: InstantStorySheriffOrderButtons
     },
     "posting-sheriff-marked": {
         color: "var(--incorrect)",
         icon: "hat-cowboy",
         summary: (data, homeOwnerName, t) => buildPostingSheriffMarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
+        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}),
+        buttons: InstantStorySheriffOrderButtons
     },
     "comment-sheriff-marked": {
         color: "var(--incorrect)",
@@ -339,19 +342,22 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: story.remoteNodeName,
             href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
-        })
+        }),
+        buttons: InstantStorySheriffOrderButtons
     },
     "feed-sheriff-unmarked": {
         color: "var(--correct)",
         icon: "hat-cowboy",
         summary: (data, homeOwnerName, t) => buildFeedSheriffUnmarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: "/"})
+        target: story => ({nodeName: story.remoteNodeName, href: "/"}),
+        buttons: InstantStorySheriffOrderButtons
     },
     "posting-sheriff-unmarked": {
         color: "var(--correct)",
         icon: "hat-cowboy",
         summary: (data, homeOwnerName, t) => buildPostingSheriffUnmarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
+        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}),
+        buttons: InstantStorySheriffOrderButtons
     },
     "comment-sheriff-unmarked": {
         color: "var(--correct)",
@@ -360,7 +366,8 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: story.remoteNodeName,
             href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
-        })
+        }),
+        buttons: InstantStorySheriffOrderButtons
     }
 };
 

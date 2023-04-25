@@ -59,7 +59,9 @@ import {
     RemotePosting,
     Result,
     SettingInfo,
-    SettingMetaInfo, SheriffOrderAttributes,
+    SettingMetaInfo,
+    SheriffOrderAttributes,
+    SheriffOrderInfo,
     StoryAttributes,
     StoryInfo,
     SubscriberInfo,
@@ -829,5 +831,12 @@ export function* postRemoteSheriffOrder(nodeName: string | null, remoteNodeName:
     return yield* callApi({
         nodeName, location: `/nodes/${remoteNodeName}/sheriff/orders`, method: "POST", auth: true, body: sheriffOrder,
         schema: NodeApi.Result
+    });
+}
+
+export function* getRemoteSheriffOrder(nodeName: string | null, remoteNodeName: string,
+                                       id: string): CallApiResult<SheriffOrderInfo> {
+    return yield* callApi({
+        nodeName, location: `/nodes/${remoteNodeName}/sheriff/orders/${id}`, schema: NodeApi.SheriffOrderInfo
     });
 }

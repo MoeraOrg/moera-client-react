@@ -39,6 +39,7 @@ import askDialog from "state/askdialog/reducer";
 import blockDialog from "state/blockdialog/reducer";
 import blockingDetailsDialog from "state/blockingdetailsdialog/reducer";
 import sheriffOrderDialog from "state/sherifforderdialog/reducer";
+import sheriffOrderDetailsDialog from "state/sherifforderdetailsdialog/reducer";
 import messageBox from "state/messagebox/reducer";
 import confirmBox from "state/confirmbox/reducer";
 import flashBox from "state/flashbox/reducer";
@@ -84,6 +85,7 @@ import askDialogExecutors from "state/askdialog/sagas";
 import blockDialogExecutors from "state/blockdialog/sagas";
 import blockingDetailsDialogExecutors from "state/blockingdetailsdialog/sagas";
 import sheriffOrderDialogExecutors from "state/sherifforderdialog/sagas";
+import sheriffOrderDetailsDialogExecutors from "state/sherifforderdetailsdialog/sagas";
 import flashBoxExecutors from "state/flashbox/sagas";
 import signUpDialogExecutors from "state/signupdialog/sagas";
 import refreshExecutors from "state/refresh/sagas";
@@ -117,6 +119,7 @@ import blockDialogTriggers from "state/blockdialog/triggers";
 import blockingDetailsDialogTriggers from "state/blockingdetailsdialog/triggers";
 import blockedOperationsTriggers from "state/blockedoperations/triggers";
 import sheriffOrderDialogTriggers from "state/sherifforderdialog/triggers";
+import sheriffOrderDetailsDialogTriggers from "state/sherifforderdetailsdialog/triggers";
 import messageBoxTriggers from "state/messagebox/triggers";
 import confirmBoxTriggers from "state/confirmbox/triggers";
 import signUpDialogTriggers from "state/signupdialog/triggers";
@@ -161,6 +164,7 @@ const reducers = combineReducers({
     blockDialog,
     blockingDetailsDialog,
     sheriffOrderDialog,
+    sheriffOrderDetailsDialog,
     messageBox,
     confirmBox,
     flashBox,
@@ -207,6 +211,7 @@ const triggers = collectTriggers(
     blockingDetailsDialogTriggers,
     blockedOperationsTriggers,
     sheriffOrderDialogTriggers,
+    sheriffOrderDetailsDialogTriggers,
     messageBoxTriggers,
     confirmBoxTriggers,
     signUpDialogTriggers,
@@ -249,6 +254,7 @@ const executors = collectExecutors(
     blockDialogExecutors,
     blockingDetailsDialogExecutors,
     sheriffOrderDialogExecutors,
+    sheriffOrderDetailsDialogExecutors,
     flashBoxExecutors,
     signUpDialogExecutors,
     refreshExecutors

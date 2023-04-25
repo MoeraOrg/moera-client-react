@@ -3324,3 +3324,101 @@ export const BlockedByUserInfoArray = schema({
     type: "array",
     items: BlockedByUserInfoType
 } as JSONSchemaType<API.BlockedByUserInfo[]>);
+
+const SheriffOrderInfoType: JSONSchemaType<API.SheriffOrderInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "delete": {
+            type: "boolean",
+            nullable: true
+        },
+        "sheriffName": {
+            type: "string"
+        },
+        "nodeName": {
+            type: "string"
+        },
+        "nodeFullName": {
+            type: "string",
+            nullable: true
+        },
+        "feedName": {
+            type: "string"
+        },
+        "postingOwnerName": {
+            type: "string",
+            nullable: true
+        },
+        "postingOwnerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "postingOwnerGender": {
+            type: "string",
+            nullable: true
+        },
+        "postingHeading": {
+            type: "string",
+            nullable: true
+        },
+        "postingId": {
+            type: "string",
+            nullable: true
+        },
+        "postingRevisionId": {
+            type: "string",
+            nullable: true
+        },
+        "commentOwnerName": {
+            type: "string",
+            nullable: true
+        },
+        "commentOwnerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "commentOwnerGender": {
+            type: "string",
+            nullable: true
+        },
+        "commentHeading": {
+            type: "string",
+            nullable: true
+        },
+        "commentId": {
+            type: "string",
+            nullable: true
+        },
+        "commentRevisionId": {
+            type: "string",
+            nullable: true
+        },
+        "category": {
+            type: "string"
+        },
+        "reasonCode": {
+            type: "string",
+            nullable: true
+        },
+        "reasonDetails": {
+            type: "string",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "signature": {
+            type: "string"
+        },
+        "signatureVersion": {
+            type: "integer"
+        }
+    },
+    required: ["id", "sheriffName", "nodeName", "feedName", "category", "createdAt", "signature", "signatureVersion"],
+    additionalProperties: false
+};
+
+export const SheriffOrderInfo = schema(SheriffOrderInfoType);

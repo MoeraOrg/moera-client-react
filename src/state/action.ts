@@ -38,11 +38,12 @@ import { RefreshAnyAction } from "state/refresh/actions";
 import { RichTextEditorAnyAction } from "state/richtexteditor/actions";
 import { SettingsAnyAction } from "state/settings/actions";
 import { ShareDialogAnyAction } from "state/sharedialog/actions";
+import { SheriffOrderDialogAnyAction } from "state/sherifforderdialog/actions";
+import { SheriffOrderDetailsDialogAnyAction } from "state/sherifforderdetailsdialog/actions";
 import { SignUpDialogAnyAction } from "state/signupdialog/actions";
 import { SourceDialogAnyAction } from "state/sourcedialog/actions";
 import { StoriesAnyAction } from "state/stories/actions";
 import { ClientEventAction } from "api/events/actions";
-import { SheriffOrderDialogAnyAction } from "state/sherifforderdialog/actions";
 
 export type ClientAction =
     ClientEventAction
@@ -87,6 +88,7 @@ export type ClientAction =
     | SettingsAnyAction
     | ShareDialogAnyAction
     | SheriffOrderDialogAnyAction
+    | SheriffOrderDetailsDialogAnyAction
     | SignUpDialogAnyAction
     | SourceDialogAnyAction
     | StoriesAnyAction;

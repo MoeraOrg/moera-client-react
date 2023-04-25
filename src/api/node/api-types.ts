@@ -1133,3 +1133,30 @@ export interface SheriffOrderAttributes {
     reasonCode?: SheriffOrderReason | null;
     reasonDetails?: string | null;
 }
+
+export interface SheriffOrderInfo {
+    id: string;
+    delete?: boolean | null;
+    sheriffName: string;
+    nodeName: string;
+    nodeFullName?: string | null;
+    feedName: string;
+    postingOwnerName?: string | null;
+    postingOwnerFullName?: string | null;
+    postingOwnerGender?: string | null;
+    postingHeading?: string | null;
+    postingId?: string | null;
+    postingRevisionId?: string | null;
+    commentOwnerName?: string | null;
+    commentOwnerFullName?: string | null;
+    commentOwnerGender?: string | null;
+    commentHeading?: string | null;
+    commentId?: string | null;
+    commentRevisionId?: string | null;
+    category: SheriffOrderCategory;
+    reasonCode?: SheriffOrderReason | null;
+    reasonDetails?: string | null;
+    createdAt: number;
+    signature: string;
+    signatureVersion: number;
+}

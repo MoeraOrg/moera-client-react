@@ -33,6 +33,7 @@ import AskDialog from "ui/askdialog/AskDialog";
 import BlockDialog from "ui/blockdialog/BlockDialog";
 import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialog";
 import SheriffOrderDialog from "ui/sherifforderdialog/SheriffOrderDialog";
+import SheriffOrderDetailsDialog from "ui/sherifforderdetailsdialog/SheriffOrderDetailsDialog";
 import ProgressBox from "ui/progressbox/ProgressBox";
 import "./colors.css";
 import "./zindex.css";
@@ -68,6 +69,7 @@ const App = ({atNode, feedWidth}: Props) => (
                 <BlockDialog/>
                 <BlockingDetailsDialog/>
                 <SheriffOrderDialog/>
+                <SheriffOrderDetailsDialog/>
             </>
         :
             <WelcomePage/>
