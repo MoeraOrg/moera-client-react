@@ -3,8 +3,9 @@ import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import { isConnectedToHome } from "state/home/selectors";
+import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
 import {
     getCommentsReceiverName,
@@ -35,7 +36,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 const Comment = ({
-     comment, previousId, focused, connectedToHome, postingId, postingOwnerName, postingReceiverName,
+     comment, previousId, focused, connectedToHome, isSheriff, postingId, postingOwnerName, postingReceiverName,
      postingReceiverPostingId
 }: Props) => {
     const {t} = useTranslation();
@@ -62,7 +63,9 @@ const Comment = ({
                         <div className="owner-line">
                             <CommentOwner comment={comment} nodeName={realOwnerName}/>
                             <CommentInvisible comment={comment}/>
-                            <CommentSheriffVisibility comment={comment}/>
+                            {isSheriff &&
+                                <CommentSheriffVisibility comment={comment}/>
+                            }
                             <CommentDate nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             <CommentUpdated comment={comment}/>
                             <CommentVisibility comment={comment}/>
@@ -89,6 +92,7 @@ const Comment = ({
 const connector = connect(
     (state: ClientState) => ({
         connectedToHome: isConnectedToHome(state),
+        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
         postingId: getDetailedPostingId(state),
         postingOwnerName: getDetailedPosting(state)?.ownerName,
         postingReceiverName: getCommentsReceiverName(state),

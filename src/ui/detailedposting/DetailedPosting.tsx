@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { detailedPostingLoadAttached } from "state/detailedposting/actions";
 import { isPermitted } from "state/node/selectors";
+import { getHomeOwnerName } from "state/home/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import PostingMenu from "ui/posting/PostingMenu";
 import PostingPin from "ui/posting/PostingPin";
@@ -36,7 +38,7 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function DetailedPosting({
-    story, posting, deleting, loadedAttached, galleryExpanded, postingEditable, detailedPostingLoadAttached
+    story, posting, deleting, loadedAttached, galleryExpanded, postingEditable, isSheriff, detailedPostingLoadAttached
 }: Props) {
     const [expanded, setExpanded] = useState<boolean>(galleryExpanded);
 
@@ -70,7 +72,9 @@ function DetailedPosting({
                 <div className="owner-info">
                     <PostingSource posting={posting}/>
                     <PostingOwner posting={posting}/>
-                    <PostingSheriffVisibility posting={posting}/>
+                    {isSheriff &&
+                        <PostingSheriffVisibility posting={posting}/>
+                    }
                     <br/>
                     <PostingDate posting={posting} story={story}/>
                     <PostingUpdated posting={posting} story={story}/>
@@ -113,7 +117,8 @@ const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         loadedAttached: state.detailedPosting.loadedAttached,
         galleryExpanded: state.detailedPosting.galleryExpanded,
-        postingEditable: isPermitted("edit", ownProps.posting, "owner", state)
+        postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
+        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE
     }),
     { detailedPostingLoadAttached }
 );

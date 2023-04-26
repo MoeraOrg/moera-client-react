@@ -3,8 +3,10 @@ import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import { ExtPostingInfo } from "state/postings/state";
+import { getHomeOwnerName } from "state/home/selectors";
 import { isAtHomeNode, isPermitted } from "state/node/selectors";
 import { goToPosting } from "state/navigation/actions";
 import { MinimalStoryInfo } from "ui/types";
@@ -59,7 +61,7 @@ interface FeedPostingOwnProps {
 
 type FeedPostingProps = FeedPostingOwnProps & ConnectedProps<typeof connector>;
 
-const FeedPosting = ({posting, story, deleting, atHome, postingEditable, goToPosting}: FeedPostingProps) => (
+const FeedPosting = ({posting, story, deleting, atHome, postingEditable, isSheriff, goToPosting}: FeedPostingProps) => (
     <div className={cx("posting entry preview", {"not-viewed": atHome && story.viewed === false})}
          data-moment={story.moment} data-viewed={story.viewed !== false}>
         {deleting ?
@@ -73,7 +75,9 @@ const FeedPosting = ({posting, story, deleting, atHome, postingEditable, goToPos
                     <div className="owner-info">
                         <PostingSource posting={posting}/>
                         <PostingOwner posting={posting}/>
-                        <PostingSheriffVisibility posting={posting}/>
+                        {isSheriff &&
+                            <PostingSheriffVisibility posting={posting}/>
+                        }
                         <br/>
                         <PostingDate posting={posting} story={story}/>
                         <PostingUpdated posting={posting} story={story}/>
@@ -100,7 +104,8 @@ const FeedPosting = ({posting, story, deleting, atHome, postingEditable, goToPos
 const connector = connect(
     (state: ClientState, ownProps: FeedPostingOwnProps) => ({
         atHome: isAtHomeNode(state),
-        postingEditable: isPermitted("edit", ownProps.posting, "owner", state)
+        postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
+        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE
     }),
     { goToPosting }
 );
