@@ -116,6 +116,10 @@ export class Browser {
         return this.userAgentOs === "android" && !this.isAndroidApp();
     }
 
+    static isAndroidGooglePlay(): boolean {
+        return this.androidAppFlavor === "google-play";
+    }
+
     static disableBodyScroll(): void {
         document.body.classList.add("no-scroll");
     }

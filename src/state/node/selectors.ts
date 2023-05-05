@@ -134,7 +134,7 @@ export function isOwnerNameRecentlyChanged(state: ClientState): boolean {
 }
 
 export function isGooglePlayHiding(state: ClientState): boolean {
-    return Browser.androidAppFlavor === "google-play" && !isAtHomeNode(state)
+    return Browser.isAndroidGooglePlay() && !isAtHomeNode(state)
         && getHomeOwnerName(state) !== SHERIFF_GOOGLE_PLAY_TIMELINE;
 }
 

@@ -7,7 +7,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ClientSettings, NodeName } from "api";
 import { FundraiserInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { isConnectedToHome } from "state/home/selectors";
 import { closeDonateDialog } from "state/donatedialog/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
@@ -30,8 +29,9 @@ function getPreferredFundraiserIndex(fundraisers: FundraiserInfo[], prefix: stri
 
 type Props = ConnectedProps<typeof connector>;
 
-function DonateDialog({show, name, fullName, fundraisers, connectedToHome, autoPreferred, preferredPrefix,
-                       closeDonateDialog, settingsUpdate}: Props) {
+function DonateDialog({
+    show, name, fullName, fundraisers, autoPreferred, preferredPrefix, closeDonateDialog, settingsUpdate
+}: Props) {
     const [fundraiserIndex, setFundraiserIndex] = useState<number>(0);
     const {t} = useTranslation();
 
@@ -45,8 +45,7 @@ function DonateDialog({show, name, fullName, fundraisers, connectedToHome, autoP
         return null;
     }
 
-    if (Browser.androidAppFlavor === "google-play") {
-
+    if (Browser.isAndroidGooglePlay()) {
         return (
             <ModalDialog title={t("donate")} className="donate-dialog" onClose={closeDonateDialog}>
                 <div className="modal-body">
@@ -125,7 +124,6 @@ const connector = connect(
         name: state.donateDialog.name,
         fullName: state.donateDialog.fullName,
         fundraisers: state.donateDialog.fundraisers,
-        connectedToHome: isConnectedToHome(state),
         autoPreferred: getSetting(state, "fundraiser.preferred.auto") as boolean,
         preferredPrefix: getSetting(state, "fundraiser.preferred.prefix") as string
     }),

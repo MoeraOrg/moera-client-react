@@ -24,7 +24,7 @@ const DonateButtonImpl = ({name, fullName, fundraisers, styles = "large", classN
         return null;
     }
 
-    if (Browser.androidAppFlavor === "google-play") {
+    if (Browser.isAndroidGooglePlay()) {
         return null;
     }
 
