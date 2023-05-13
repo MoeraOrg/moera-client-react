@@ -14,12 +14,7 @@ import {
 
 const initialState: SheriffOrderDialogState = {
     show: false,
-    nodeName: "",
-    fullName: null,
-    feedName: "",
-    postingId: null,
-    commentId: null,
-    heading: "",
+    target: null,
     submitting: false
 };
 
@@ -30,12 +25,7 @@ export default (state: SheriffOrderDialogState = initialState,
             return {
                 ...cloneDeep(initialState),
                 show: true,
-                nodeName: action.payload.nodeName,
-                fullName: action.payload.fullName,
-                feedName: action.payload.feedName,
-                postingId: action.payload.postingId,
-                commentId: action.payload.commentId,
-                heading: action.payload.heading
+                target: action.payload.target
             }
 
         case CLOSE_SHERIFF_ORDER_DIALOG:

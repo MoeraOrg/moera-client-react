@@ -34,6 +34,7 @@ import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedpos
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { MinimalStoryInfo } from "ui/types";
 import { DropdownMenu } from "ui/control";
+import { Browser } from "ui/browser";
 import "ui/entry/EntryMenu.css";
 
 interface OwnProps {
@@ -115,14 +116,24 @@ function PostingMenu({
 
     const ownerName = posting.receiverName ?? posting.ownerName;
     const fullName = (posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName) ?? null;
+    const gender = (posting.receiverName != null ? posting.receiverGender : posting.ownerGender) ?? null;
     const postingId = posting.receiverPostingId ?? posting.id;
 
     const onHideInGooglePlay = () =>
-        openSheriffOrderDialog(ownerName, fullName, "timeline", postingId, null, posting.heading);
+        openSheriffOrderDialog({
+            nodeName: ownerName,
+            fullName,
+            feedName: "timeline",
+            postingOwnerName: ownerName,
+            postingOwnerFullName: fullName,
+            postingOwnerGender: gender,
+            postingId,
+            postingHeading: posting.heading
+        });
 
     const onUnhideInGooglePlay = () => {
         confirmBox(t("unhide-post-google-play", {heading: posting.heading}), t("unhide"), t("cancel"),
-            sheriffOrderDelete(ownerName, "timeline", postingId, null), null, "success");
+            sheriffOrderDelete({nodeName: ownerName, feedName: "timeline", postingId}), null, "success");
     };
 
     const postingHref = `${rootLocation}/moera/post/${posting.id}`;
@@ -229,6 +240,12 @@ function PostingMenu({
                 href: postingHref,
                 onClick: onUnhideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
+            },
+            {
+                title: t("report-sheriff-ellipsis"),
+                href: postingHref,
+                onClick: onHideInGooglePlay,
+                show: Browser.isAndroidGooglePlay() && !googlePlaySheriff
             }
         ]}/>
     );

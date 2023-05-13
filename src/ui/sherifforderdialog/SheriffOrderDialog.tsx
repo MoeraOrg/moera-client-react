@@ -11,6 +11,8 @@ import { RichTextField, SelectField, SelectFieldChoice } from "ui/control/field"
 import { formatFullName } from "util/misc";
 import { getSetting } from "state/settings/selectors";
 import { NameDisplayMode } from "ui/types";
+import { getHomeOwnerName } from "state/home/selectors";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
 const REASON_CODES: SelectFieldChoice[] = [
     {title: "sheriff-order-reason.unknown", value: "unknown"},
@@ -36,8 +38,7 @@ type Props = OuterProps & FormikProps<Values>;
 
 function SheriffOrderDialog(props: Props) {
     const {
-        show, nodeName, fullName, postingId, commentId, heading, submitting, nameDisplayMode, closeSheriffOrderDialog,
-        resetForm
+        show, target, submitting, isSheriff, nameDisplayMode, closeSheriffOrderDialog, resetForm
     } = props;
 
     const {t} = useTranslation();
@@ -49,25 +50,27 @@ function SheriffOrderDialog(props: Props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [show]); // 'props' are missing on purpose
 
-    if (!show) {
+    if (!show || target == null) {
         return null;
     }
 
+    const title = isSheriff ? t("sheriff-order") : t("report-sheriff-title");
+
     let messageKey: string;
     let messageValues;
-    if (postingId == null) {
-        messageKey = "hide-blog-google-play";
-        messageValues = {name: formatFullName(nodeName, fullName, nameDisplayMode)};
-    } else if (commentId == null) {
-        messageKey = "hide-post-google-play";
-        messageValues = {heading};
+    if (target.postingId == null) {
+        messageKey = isSheriff ? "hide-blog-google-play" : "i-think-blog-hide";
+        messageValues = {name: formatFullName(target.nodeName, target.fullName, nameDisplayMode)};
+    } else if (target.commentId == null) {
+        messageKey = isSheriff ? "hide-post-google-play" : "i-think-post-hide";
+        messageValues = {heading: target.postingHeading};
     } else {
-        messageKey = "hide-comment-google-play";
-        messageValues = {heading};
+        messageKey = isSheriff ? "hide-comment-google-play" : "i-think-comment-hide";
+        messageValues = {heading: target.commentHeading};
     }
 
     return (
-        <ModalDialog title={t("sheriff-order")} onClose={closeSheriffOrderDialog}>
+        <ModalDialog title={title} onClose={closeSheriffOrderDialog}>
             <Form>
                 <div className="modal-body">
                     <p>
@@ -76,7 +79,7 @@ function SheriffOrderDialog(props: Props) {
                         </Trans>
                     </p>
                     <SelectField name="reasonCode" title={t("reason")} choices={REASON_CODES} anyValue/>
-                    <RichTextField name="reasonDetails" title={t("comment-title")} format="plain-text" smileysEnabled
+                    <RichTextField name="reasonDetails" title={t("comment-optional")} format="plain-text" smileysEnabled
                                    anyValue noMedia/>
                 </div>
                 <div className="modal-footer">
@@ -96,10 +99,12 @@ const sheriffOrderDialogLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const {nodeName, feedName, postingId, commentId, sheriffOrderDialogSubmit} = formik.props;
+        const {target, sheriffOrderDialogSubmit} = formik.props;
 
         formik.setStatus("submitted");
-        sheriffOrderDialogSubmit(nodeName, feedName, postingId, commentId, values.reasonCode, values.reasonDetails.text);
+        if (target != null) {
+            sheriffOrderDialogSubmit(target, values.reasonCode, values.reasonDetails.text);
+        }
         formik.setSubmitting(false);
     }
 
@@ -108,13 +113,9 @@ const sheriffOrderDialogLogic = {
 const connector = connect(
     (state: ClientState) => ({
         show: state.sheriffOrderDialog.show,
-        nodeName: state.sheriffOrderDialog.nodeName,
-        fullName: state.sheriffOrderDialog.fullName,
-        feedName: state.sheriffOrderDialog.feedName,
-        postingId: state.sheriffOrderDialog.postingId,
-        commentId: state.sheriffOrderDialog.commentId,
-        heading: state.sheriffOrderDialog.heading,
+        target: state.sheriffOrderDialog.target,
         submitting: state.sheriffOrderDialog.submitting,
+        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
     }),
     { closeSheriffOrderDialog, sheriffOrderDialogSubmit }

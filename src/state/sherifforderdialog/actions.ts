@@ -2,21 +2,15 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { SheriffOrderReason } from "api/node/api-types";
+import { SheriffOrderTarget } from "state/sherifforderdialog/state";
 
 export const OPEN_SHERIFF_ORDER_DIALOG = "OPEN_SHERIFF_ORDER_DIALOG";
 export type OpenSheriffOrderDialogAction = ActionWithPayload<typeof OPEN_SHERIFF_ORDER_DIALOG, {
-    nodeName: string;
-    fullName: string | null;
-    feedName: string;
-    postingId: string | null;
-    commentId: string | null;
-    heading: string;
+    target: SheriffOrderTarget;
 }>;
-export const openSheriffOrderDialog = (nodeName: string, fullName: string | null, feedName: string,
-                                       postingId: string | null,
-                                       commentId: string | null, heading: string): OpenSheriffOrderDialogAction => ({
+export const openSheriffOrderDialog = (target: SheriffOrderTarget): OpenSheriffOrderDialogAction => ({
     type: OPEN_SHERIFF_ORDER_DIALOG,
-    payload: {nodeName, fullName, feedName, postingId, commentId, heading}
+    payload: {target}
 });
 
 export const CLOSE_SHERIFF_ORDER_DIALOG = "CLOSE_SHERIFF_ORDER_DIALOG";
@@ -27,18 +21,14 @@ export const closeSheriffOrderDialog = (): CloseSheriffOrderDialogAction => ({
 
 export const SHERIFF_ORDER_DIALOG_SUBMIT = "SHERIFF_ORDER_DIALOG_SUBMIT";
 export type SheriffOrderDialogSubmitAction = ActionWithPayload<typeof SHERIFF_ORDER_DIALOG_SUBMIT, {
-    nodeName: string;
-    feedName: string;
-    postingId: string | null;
-    commentId: string | null;
+    target: SheriffOrderTarget;
     reasonCode: SheriffOrderReason;
     reasonDetails: string | null;
 }>;
-export const sheriffOrderDialogSubmit = (nodeName: string, feedName: string, postingId: string | null,
-                                         commentId: string | null, reasonCode: SheriffOrderReason,
+export const sheriffOrderDialogSubmit = (target: SheriffOrderTarget, reasonCode: SheriffOrderReason,
                                          reasonDetails: string | null): SheriffOrderDialogSubmitAction => ({
     type: SHERIFF_ORDER_DIALOG_SUBMIT,
-    payload: {nodeName, feedName, postingId, commentId, reasonCode, reasonDetails}
+    payload: {target, reasonCode, reasonDetails}
 });
 
 export const SHERIFF_ORDER_DIALOG_SUBMITTED = "SHERIFF_ORDER_DIALOG_SUBMITTED";
@@ -55,15 +45,11 @@ export const sheriffOrderDialogSubmitFailed = (): SheriffOrderDialogSubmitFailed
 
 export const SHERIFF_ORDER_DELETE = "SHERIFF_ORDER_DELETE";
 export type SheriffOrderDeleteAction = ActionWithPayload<typeof SHERIFF_ORDER_DELETE, {
-    nodeName: string;
-    feedName: string;
-    postingId: string | null;
-    commentId: string | null;
+    target: SheriffOrderTarget;
 }>;
-export const sheriffOrderDelete = (nodeName: string, feedName: string, postingId: string | null,
-                                   commentId: string | null): SheriffOrderDeleteAction => ({
+export const sheriffOrderDelete = (target: SheriffOrderTarget): SheriffOrderDeleteAction => ({
     type: SHERIFF_ORDER_DELETE,
-    payload: {nodeName, feedName, postingId, commentId}
+    payload: {target}
 });
 
 export type SheriffOrderDialogAnyAction =

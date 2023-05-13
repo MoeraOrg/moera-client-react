@@ -60,6 +60,7 @@ import {
     Result,
     SettingInfo,
     SettingMetaInfo,
+    SheriffComplainText,
     SheriffOrderAttributes,
     SheriffOrderInfo,
     StoryAttributes,
@@ -838,5 +839,11 @@ export function* getRemoteSheriffOrder(nodeName: string | null, remoteNodeName: 
                                        id: string): CallApiResult<SheriffOrderInfo> {
     return yield* callApi({
         nodeName, location: `/nodes/${remoteNodeName}/sheriff/orders/${id}`, schema: NodeApi.SheriffOrderInfo
+    });
+}
+
+export function* postSheriffComplain(nodeName: string | null, complain: SheriffComplainText): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: "/sheriff/complains", method: "POST", auth: true, body: complain, schema: NodeApi.Result
     });
 }

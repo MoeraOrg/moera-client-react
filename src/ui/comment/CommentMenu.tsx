@@ -17,7 +17,8 @@ import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, commentSetVisibility, openCommentDialog } from "state/detailedposting/actions";
 import {
     getCommentsBlockedUsers,
-    getCommentsReceiverFeatures, getCommentsReceiverFullName,
+    getCommentsReceiverFeatures,
+    getCommentsReceiverFullName,
     getCommentsReceiverName,
     getCommentsReceiverPostingId,
     getDetailedPosting,
@@ -30,6 +31,7 @@ import { shareDialogPrepare } from "state/sharedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { DropdownMenu } from "ui/control";
+import { Browser } from "ui/browser";
 
 interface OwnProps {
     nodeName: string;
@@ -41,9 +43,10 @@ type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function CommentMenu({
     nodeName, postingId, comment, rootLocation, homeOwnerName, receiverName, receiverFullName, receiverPostingId,
-    blockedUsers, isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, googlePlayGoverned, googlePlaySheriff,
-    googlePlayPostingProhibited, googlePlayProhibited, commentCopyLink, openCommentDialog, openSourceDialog, confirmBox,
-    shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog, openSheriffOrderDialog
+    posting, blockedUsers, isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, googlePlayGoverned,
+    googlePlaySheriff, googlePlayPostingProhibited, googlePlayProhibited, commentCopyLink, openCommentDialog,
+    openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog,
+    openSheriffOrderDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -82,16 +85,35 @@ function CommentMenu({
     }
 
     const onHideInGooglePlay = () => {
-        if (receiverName != null && receiverPostingId != null) {
-            openSheriffOrderDialog(receiverName, receiverFullName, "timeline", receiverPostingId, comment.id,
-                comment.heading);
+        if (receiverName != null && receiverPostingId != null && posting != null) {
+            const postingOwnerName = posting.receiverName ?? posting.ownerName;
+            const postingOwnerFullName = posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName;
+            const postingOwnerGender = posting.receiverName != null ? posting.receiverGender : posting.ownerGender;
+
+            openSheriffOrderDialog({
+                nodeName: receiverName,
+                fullName: receiverFullName,
+                feedName: "timeline",
+                postingOwnerName,
+                postingOwnerFullName,
+                postingOwnerGender,
+                postingId: receiverPostingId,
+                postingHeading: posting.heading,
+                commentId: comment.id,
+                commentHeading: comment.heading
+            });
         }
     }
 
     const onUnhideInGooglePlay = () => {
         if (receiverName != null && receiverPostingId != null) {
             confirmBox(t("unhide-comment-google-play", {heading: comment.heading}), t("unhide"), t("cancel"),
-                sheriffOrderDelete(receiverName, "timeline", receiverPostingId, comment.id), null, "success");
+                sheriffOrderDelete({
+                    nodeName: receiverName,
+                    feedName: "timeline",
+                    postingId: receiverPostingId,
+                    commentId: comment.id
+                }), null, "success");
         }
     };
 
@@ -180,6 +202,12 @@ function CommentMenu({
                 href: commentHref,
                 onClick: onUnhideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && googlePlayProhibited
+            },
+            {
+                title: t("report-sheriff-ellipsis"),
+                href: commentHref,
+                onClick: onHideInGooglePlay,
+                show: Browser.isAndroidGooglePlay() && !googlePlaySheriff
             }
         ]}/>
     );
@@ -192,6 +220,7 @@ const connector = connect(
         receiverName: getCommentsReceiverName(state),
         receiverFullName: getCommentsReceiverFullName(state),
         receiverPostingId: getCommentsReceiverPostingId(state),
+        posting: getDetailedPosting(state),
         blockedUsers: getCommentsBlockedUsers(state),
         isPostingPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
             isPermitted(operation, getDetailedPosting(state), defaultValue, state, options),

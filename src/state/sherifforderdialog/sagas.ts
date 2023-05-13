@@ -1,10 +1,14 @@
-import { call, put } from 'typed-redux-saga';
+import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { executor } from "state/executor";
-import { postRemoteSheriffOrder } from "api/node/sagas";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import { postRemoteSheriffOrder, postSheriffComplain } from "api/node/sagas";
+import { ClientState } from "state/state";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
+import { flashBox } from "state/flashbox/actions";
+import { getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import {
     SHERIFF_ORDER_DELETE,
     SHERIFF_ORDER_DIALOG_SUBMIT,
@@ -13,7 +17,6 @@ import {
     sheriffOrderDialogSubmitFailed,
     sheriffOrderDialogSubmitted
 } from "state/sherifforderdialog/actions";
-import { flashBox } from "state/flashbox/actions";
 
 export default [
     executor(SHERIFF_ORDER_DIALOG_SUBMIT, "", sheriffOrderDialogSubmitSaga),
@@ -21,14 +24,36 @@ export default [
 ];
 
 function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSubmitAction>) {
-    const {nodeName, feedName, postingId, commentId, reasonCode, reasonDetails} = action.payload;
+    const {
+        target: {
+            nodeName, fullName, feedName, postingOwnerName, postingOwnerFullName, postingOwnerGender, postingHeading,
+            postingId, commentOwnerName, commentOwnerFullName, commentOwnerGender, commentHeading, commentId
+        },
+        reasonCode, reasonDetails
+    } = action.payload;
+
+    const {isSheriff, homeOwnerFullName, homeOwnerGender} = yield* select((state: ClientState) => ({
+        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
+        homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerGender: getHomeOwnerGender(state)
+    }));
 
     try {
-        yield* call(postRemoteSheriffOrder, ":", nodeName, {
-            delete: false, feedName, postingId, commentId, category: "visibility" as const, reasonCode, reasonDetails
-        });
+        if (isSheriff) {
+            yield* call(postRemoteSheriffOrder, ":", nodeName, {
+                delete: false, feedName, postingId, commentId, category: "visibility" as const, reasonCode,
+                reasonDetails
+            });
+        } else {
+            yield* call(postSheriffComplain, SHERIFF_GOOGLE_PLAY_TIMELINE, {
+                ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender, nodeName, fullName, feedName,
+                postingOwnerName, postingOwnerFullName, postingOwnerGender, postingHeading, postingId,
+                commentOwnerName, commentOwnerFullName, commentOwnerGender, commentHeading, commentId, reasonCode,
+                reasonDetails
+            });
+        }
         yield* put(sheriffOrderDialogSubmitted());
-        yield* put(flashBox(i18n.t("sheriff-order-sent")));
+        yield* put(flashBox(isSheriff ? i18n.t("sheriff-order-sent") : i18n.t("report-sheriff-sent")));
     } catch (e) {
         yield* put(sheriffOrderDialogSubmitFailed());
         yield* put(errorThrown(e));
@@ -36,7 +61,7 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
 }
 
 function* sheriffOrderDeleteSaga(action: WithContext<SheriffOrderDeleteAction>) {
-    const {nodeName, feedName, postingId, commentId} = action.payload;
+    const {nodeName, feedName, postingId, commentId} = action.payload.target;
 
     try {
         yield* call(postRemoteSheriffOrder, ":", nodeName, {

@@ -78,11 +78,11 @@ function SubscribeButtonImpl({
     const onBlockDialog = () => openBlockDialog(nodeName, fullName, null, null, blockedList ?? []);
 
     const onHideInGooglePlay = () =>
-        openSheriffOrderDialog(nodeName, fullName, "timeline", null, null, "");
+        openSheriffOrderDialog({nodeName, fullName, feedName: "timeline"});
 
     const onUnhideInGooglePlay = () => {
         confirmBox(t("unhide-blog-google-play", {"name": blogName}), t("unhide"), t("cancel"),
-            sheriffOrderDelete(nodeName, "timeline", null, null), null, "success");
+            sheriffOrderDelete({nodeName, feedName: "timeline"}), null, "success");
     };
 
     const subscribed = subscription != null;
