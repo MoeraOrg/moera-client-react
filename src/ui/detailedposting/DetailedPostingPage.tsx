@@ -70,7 +70,10 @@ function DetailedPostingPage({loading, deleting, posting, googlePlayHiding}: Pro
                     <div className="posting-not-found">
                         <FontAwesomeIcon className="icon" icon="frown" size="3x"/>
                         <div className="message">
-                            {!googlePlayProhibited ? t("posting-not-found") : t("content-not-accessible-android")}
+                            {posting == null || posting.parentMediaId != null
+                                ? t("posting-not-found")
+                                : t("content-not-accessible-android")
+                            }
                         </div>
                     </div>
                 }
