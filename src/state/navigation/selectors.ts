@@ -1,4 +1,5 @@
 import {
+    PAGE_COMPLAINS,
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
     PAGE_NEWS,
@@ -40,6 +41,10 @@ export function isAtNewsPage(state: ClientState): boolean {
 
 export function isAtPeoplePage(state: ClientState): boolean {
     return isAtNode(state) && state.navigation.page === PAGE_PEOPLE;
+}
+
+export function isAtComplainsPage(state: ClientState): boolean {
+    return isAtNode(state) && state.navigation.page === PAGE_COMPLAINS;
 }
 
 export function isBottomMenuVisible(state: ClientState): boolean {

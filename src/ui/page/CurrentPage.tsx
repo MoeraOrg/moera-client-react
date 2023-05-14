@@ -4,6 +4,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import {
+    PAGE_COMPLAINS,
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
     PAGE_NEWS,
@@ -22,6 +23,7 @@ import ComposePage from "ui/compose/ComposePage";
 import SettingsPage from "ui/settings/SettingsPage";
 import NewsPage from "ui/news/NewsPage";
 import PeoplePage from "ui/people/PeoplePage";
+import ComplainsPage from "ui/complains/ComplainsPage";
 import GooglePlayProhibitedPage from "ui/page/GooglePlayProhibitedPage";
 
 type Props = ConnectedProps<typeof connector>;
@@ -52,6 +54,8 @@ function CurrentPage({page, positioned, googlePlayProhibited}: Props) {
             return <NewsPage/>;
         case PAGE_PEOPLE:
             return <PeoplePage/>;
+        case PAGE_COMPLAINS:
+            return <ComplainsPage/>;
         default:
             return null;
     }

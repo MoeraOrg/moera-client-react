@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import {
-    Page,
+    Page, PAGE_COMPLAINS,
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
     PAGE_NEWS,
@@ -102,6 +102,10 @@ export type GoToPeopleAction = GoToPageAction<typeof PAGE_PEOPLE, {}>;
 export const goToPeople = (): GoToPeopleAction =>
     goToPage(PAGE_PEOPLE, {});
 
+export type GoToComplainsAction = GoToPageAction<typeof PAGE_COMPLAINS, {}>;
+export const goToComplains = (): GoToComplainsAction =>
+    goToPage(PAGE_COMPLAINS, {});
+
 export type GoToPageAnyAction =
     GoToProfileAction
     | GoToTimelineAction
@@ -109,7 +113,8 @@ export type GoToPageAnyAction =
     | GoToComposeAction
     | GoToSettingsAction
     | GoToNewsAction
-    | GoToPeopleAction;
+    | GoToPeopleAction
+    | GoToComplainsAction;
 
 export const GO_TO_PAGE_WITH_DEFAULT_SUBPAGE = "GO_TO_PAGE_WITH_DEFAULT_SUBPAGE";
 export type GoToPageWithDefaultSubpageAction = ActionWithPayload<typeof GO_TO_PAGE_WITH_DEFAULT_SUBPAGE, {
