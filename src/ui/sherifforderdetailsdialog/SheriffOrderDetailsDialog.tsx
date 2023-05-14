@@ -64,7 +64,7 @@ function SheriffOrderDetailsDialog({
                         {!deleted &&
                             <p>
                                 <strong>{t("reason")}: </strong>
-                                {t(`sheriff-order-reason.${info?.reasonCode ?? "unknown"}`)}
+                                {t(`sheriff-order-reason.${info?.reasonCode ?? "other"}`)}
                             </p>
                         }
                         {info?.reasonDetails &&

@@ -15,7 +15,7 @@ import { getHomeOwnerName } from "state/home/selectors";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
 const REASON_CODES: SelectFieldChoice[] = [
-    {title: "sheriff-order-reason.unknown", value: "unknown"},
+    {title: "sheriff-order-reason.other", value: "other"},
     {title: "sheriff-order-reason.unlawful", value: "unlawful"},
     {title: "sheriff-order-reason.defamatory", value: "defamatory"},
     {title: "sheriff-order-reason.threat", value: "threat"},
@@ -94,7 +94,7 @@ function SheriffOrderDialog(props: Props) {
 const sheriffOrderDialogLogic = {
 
     mapPropsToValues: (): Values => ({
-        reasonCode: "unknown",
+        reasonCode: "other",
         reasonDetails: new RichTextValue("")
     }),
 

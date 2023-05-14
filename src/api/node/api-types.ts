@@ -1121,7 +1121,7 @@ export interface BlockedByUserInfo {
 
 export type SheriffOrderCategory = "visibility";
 
-export type SheriffOrderReason = "unknown" | "unlawful" | "defamatory" | "threat" | "spam" | "scam" | "malware"
+export type SheriffOrderReason = "other" | "unlawful" | "defamatory" | "threat" | "spam" | "scam" | "malware"
     | "copyright" | "impersonating" | "privacy";
 
 export interface SheriffOrderAttributes {

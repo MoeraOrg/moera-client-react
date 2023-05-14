@@ -696,11 +696,11 @@
     "defamatory" : "Defamation (including racism)",
     "impersonating" : "Impersonation",
     "malware" : "Malware",
+    "other" : "Other",
     "privacy" : "Privacy violation",
     "scam" : "Scam",
     "spam" : "Spam",
     "threat" : "Threats",
-    "unknown" : "Unknown",
     "unlawful" : "Violation of the law"
   },
   "sheriff-order-sent" : "Sheriff's order is sent",
