@@ -1180,3 +1180,51 @@ export interface SheriffComplainText {
     reasonCode?: SheriffOrderReason | null;
     reasonDetails?: string | null;
 }
+
+export type SheriffComplainStatus = "posted" | "prepared" | "prepare-failed" | "not-found" | "invalid-target"
+    | "not-original" | "not-sheriff" | "accepted" | "rejected";
+
+export interface SheriffComplainGroupInfo {
+    id: string;
+    remoteNodeName: string;
+    remoteNodeFullName?: string | null;
+    remoteFeedName: string;
+    remotePostingOwnerName?: string | null;
+    remotePostingOwnerFullName?: string | null;
+    remotePostingOwnerGender?: string | null;
+    remotePostingHeading?: string | null;
+    remotePostingId?: string | null;
+    remotePostingRevisionId?: string | null;
+    remoteCommentOwnerName?: string | null;
+    remoteCommentOwnerFullName?: string | null;
+    remoteCommentOwnerGender?: string | null;
+    remoteCommentHeading?: string | null;
+    remoteCommentId?: string | null;
+    remoteCommentRevisionId?: string | null;
+    createdAt: number;
+    moment: number;
+    status: SheriffComplainStatus;
+    decisionCode?: SheriffOrderReason | null;
+    decisionDetails?: string | null;
+    decidedAt?: number | null;
+}
+
+export interface SheriffComplainGroupsSliceInfo {
+    before: number;
+    after: number;
+    groups: SheriffComplainGroupInfo[];
+    total: number;
+    totalInPast: number;
+    totalInFuture: number;
+}
+
+export interface SheriffComplainInfo {
+    id: string;
+    ownerName: string;
+    ownerFullName?: string | null;
+    ownerGender?: string | null;
+    group?: SheriffComplainGroupInfo | null;
+    reasonCode: SheriffOrderReason;
+    reasonDetails?: string | null;
+    createdAt: number;
+}

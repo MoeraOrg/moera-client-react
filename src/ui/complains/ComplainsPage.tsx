@@ -9,7 +9,7 @@ import PageHeader from "ui/page/PageHeader";
 
 type Props = ConnectedProps<typeof connector>;
 
-const ComplainsPage = ({}: Props) => {
+const ComplainsPage = ({complainGroups}: Props) => {
     const {t} = useTranslation();
 
     return (
@@ -20,6 +20,12 @@ const ComplainsPage = ({}: Props) => {
                 </h2>
             </PageHeader>
             <Page>
+                {complainGroups.map(group =>
+                    <div>
+                        {group.status + " "}
+                        <span dangerouslySetInnerHTML={{__html: group.remotePostingHeadingHtml ?? ""}}/>
+                    </div>
+                )}
             </Page>
         </>
     );
@@ -27,6 +33,7 @@ const ComplainsPage = ({}: Props) => {
 
 const connector = connect(
     (state: ClientState) => ({
+        complainGroups: state.complains.complainGroups
     })
 );
 

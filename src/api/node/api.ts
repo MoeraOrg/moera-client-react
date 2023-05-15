@@ -3422,3 +3422,162 @@ const SheriffOrderInfoType: JSONSchemaType<API.SheriffOrderInfo> = {
 };
 
 export const SheriffOrderInfo = schema(SheriffOrderInfoType);
+
+const SheriffComplainGroupInfoType: JSONSchemaType<API.SheriffComplainGroupInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "remoteNodeName": {
+            type: "string"
+        },
+        "remoteNodeFullName": {
+            type: "string",
+            nullable: true
+        },
+        "remoteFeedName": {
+            type: "string"
+        },
+        "remotePostingOwnerName": {
+            type: "string",
+            nullable: true
+        },
+        "remotePostingOwnerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "remotePostingOwnerGender": {
+            type: "string",
+            nullable: true
+        },
+        "remotePostingHeading": {
+            type: "string",
+            nullable: true
+        },
+        "remotePostingId": {
+            type: "string",
+            nullable: true
+        },
+        "remotePostingRevisionId": {
+            type: "string",
+            nullable: true
+        },
+        "remoteCommentOwnerName": {
+            type: "string",
+            nullable: true
+        },
+        "remoteCommentOwnerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "remoteCommentOwnerGender": {
+            type: "string",
+            nullable: true
+        },
+        "remoteCommentHeading": {
+            type: "string",
+            nullable: true
+        },
+        "remoteCommentId": {
+            type: "string",
+            nullable: true
+        },
+        "remoteCommentRevisionId": {
+            type: "string",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "moment": {
+            type: "integer"
+        },
+        "status": {
+            type: "string"
+        },
+        "decisionCode": {
+            type: "string",
+            nullable: true
+        },
+        "decisionDetails": {
+            type: "string",
+            nullable: true
+        },
+        "decidedAt": {
+            type: "integer",
+            nullable: true
+        }
+    },
+    required: ["id", "remoteNodeName", "remoteFeedName", "createdAt", "moment", "status"],
+    additionalProperties: false
+};
+
+export const SheriffComplainGroupInfo = schema(SheriffComplainGroupInfoType);
+
+const SheriffComplainGroupsSliceInfoType: JSONSchemaType<API.SheriffComplainGroupsSliceInfo> = {
+    type: "object",
+    properties: {
+        "before": {
+            type: "integer"
+        },
+        "after": {
+            type: "integer"
+        },
+        "groups": {
+            type: "array",
+            items: SheriffComplainGroupInfoType
+        },
+        "total": {
+            type: "integer"
+        },
+        "totalInPast": {
+            type: "integer"
+        },
+        "totalInFuture": {
+            type: "integer"
+        }
+    },
+    required: ["before", "after", "groups", "total", "totalInPast", "totalInFuture"],
+    additionalProperties: false
+};
+
+export const SheriffComplainGroupsSliceInfo = schema(SheriffComplainGroupsSliceInfoType);
+
+const SheriffComplainInfoType: JSONSchemaType<API.SheriffComplainInfo> = {
+    type: "object",
+    properties: {
+        "id": {
+            type: "string"
+        },
+        "ownerName": {
+            type: "string"
+        },
+        "ownerFullName": {
+            type: "string",
+            nullable: true
+        },
+        "ownerGender": {
+            type: "string",
+            nullable: true
+        },
+        "group": {
+            ...SheriffComplainGroupInfoType,
+            nullable: true
+        },
+        "reasonCode": {
+            type: "string"
+        },
+        "reasonDetails": {
+            type: "string",
+            nullable: true
+        },
+        "createdAt": {
+            type: "integer"
+        }
+    },
+    required: ["id", "ownerName", "reasonCode", "createdAt"],
+    additionalProperties: false
+};
+
+export const SheriffComplainInfo = schema(SheriffComplainInfoType);

@@ -3,6 +3,7 @@ import { BlockDialogState } from "state/blockdialog/state";
 import { BlockingDetailsDialogState } from "state/blockingdetailsdialog/state";
 import { CartesState } from "state/cartes/state";
 import { ChangeDateDialogState } from "state/changedatedialog/state";
+import { ComplainsState } from "state/complains/state";
 import { ComposeState } from "state/compose/state";
 import { ConfirmBoxState } from "state/confirmbox/state";
 import { ConnectDialogState } from "state/connectdialog/state";
@@ -48,6 +49,7 @@ export interface ClientState {
     blockingDetailsDialog: BlockingDetailsDialogState;
     cartes: CartesState;
     changeDateDialog: ChangeDateDialogState;
+    complains: ComplainsState;
     compose: ComposeState;
     confirmBox: ConfirmBoxState;
     connectDialog: ConnectDialogState;

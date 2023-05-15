@@ -4,6 +4,7 @@ import { BlockedOperationsAnyAction } from "state/blockedoperations/actions";
 import { BlockingDetailsDialogAnyAction } from "state/blockingdetailsdialog/actions";
 import { CartesAnyAction } from "state/cartes/actions";
 import { ChangeDateDialogAnyAction } from "state/changedatedialog/actions";
+import { ComplainsAnyAction } from "state/complains/actions";
 import { ComposeAnyAction } from "state/compose/actions";
 import { ConfirmBoxAnyAction } from "state/confirmbox/actions";
 import { ConnectDialogAnyAction } from "state/connectdialog/actions";
@@ -53,6 +54,7 @@ export type ClientAction =
     | BlockingDetailsDialogAnyAction
     | CartesAnyAction
     | ChangeDateDialogAnyAction
+    | ComplainsAnyAction
     | ComposeAnyAction
     | ConfirmBoxAnyAction
     | ConnectDialogAnyAction
