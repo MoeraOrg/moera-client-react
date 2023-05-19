@@ -62,9 +62,9 @@ DETAILS[open] {
 .dialog-help {
     border: solid 1px cornsilk;
     border-radius: 5px;
-    padding: 0.5em;
-    margin-bottom: 0.5rem;
-    margin-top: -0.5rem;
+    padding: .5em;
+    margin-bottom: .5rem;
+    margin-top: -.5rem;
     background-color: floralwhite;
 }
 
@@ -84,4 +84,21 @@ DETAILS[open] {
 .nav.nav-pills .nav-link A:hover {
     text-decoration: none;
     color: var(--bs-primary);
+}
+
+.content-panel {
+    display: flow-root;
+    background-color: white;
+    border: var(--bs-gray-400) 1px solid;
+    border-radius: .25rem;
+    padding: 1rem;
+}
+
+@media only screen and (max-width: 575px) {
+    .content-panel {
+        border-left-width: 0;
+        border-right-width: 0;
+        border-radius: 0;
+        padding-bottom: 3rem;
+    }
 }

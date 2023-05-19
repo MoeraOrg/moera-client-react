@@ -1,7 +1,7 @@
 .posting {
     position: relative;
     border: var(--bs-gray-400) 1px solid;
-    border-radius: 5px;
+    border-radius: .25rem;
     margin-bottom: 1rem;
     padding: .5rem;
 }

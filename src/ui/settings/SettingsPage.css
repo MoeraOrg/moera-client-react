@@ -1,10 +1,10 @@
 .settings-notebook {
     background-color: white;
-    padding: 0.5rem;
+    padding: .5rem;
     border-left: var(--bs-gray-400) 1px solid;
     border-right: var(--bs-gray-400) 1px solid;
     border-bottom: var(--bs-gray-400) 1px solid;
-    border-radius: 5px;
+    border-radius: .25rem;
 }
 
 .settings-notebook .form-check {

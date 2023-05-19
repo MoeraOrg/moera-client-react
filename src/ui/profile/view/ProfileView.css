@@ -1,23 +1,5 @@
-.profile-view {
-    display: flow-root;
-    background-color: white;
-    border: var(--bs-gray-400) 1px solid;
-    border-radius: 5px;
-    padding: 1rem;
-    margin-top: 1rem;
-}
-
 .profile-view A:hover {
     text-decoration: underline;
-}
-
-@media only screen and (max-width: 575px) {
-    .profile-view {
-        border-left-width: 0;
-        border-right-width: 0;
-        border-radius: 0;
-        padding-bottom: 3rem;
-    }
 }
 
 .profile-view .avatar {

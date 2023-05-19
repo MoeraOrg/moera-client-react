@@ -30,7 +30,7 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => {
                 </h2>
             </PageHeader>
             <Page>
-                <div className="people-page">
+                <div className="people-page content-panel">
                     <PeopleTabs active={tab}/>
                     <PeopleContent/>
                 </div>

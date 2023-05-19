@@ -49,7 +49,7 @@ function ProfileEditor(props: Props) {
                 <h2>{t("edit-profile")} <Loading active={loading}/></h2>
             </PageHeader>
             <Page>
-                <div className="profile-editor">
+                <div className="profile-editor content-panel">
                     <Form>
                         <ConflictWarning text={t("profile-edited-conflict")} show={conflict}
                                          onClose={profileEditConflictClose}/>

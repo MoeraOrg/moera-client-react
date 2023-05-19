@@ -52,7 +52,7 @@ const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) 
                 </h2>
             </PageHeader>
             <Page>
-                <div className="profile-view">
+                <div className="profile-view content-panel">
                     <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
                     <Loading active={loading}/>
                     <div className="full-name">

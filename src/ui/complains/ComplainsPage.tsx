@@ -26,7 +26,7 @@ const ComplainsPage = ({
                 <h2>{t("complains")}</h2>
             </PageHeader>
             <Page>
-                <div className="complains">
+                <div className="complains content-panel">
                     <div className="navigator">{`${t("total-colon")} ${total}`}</div>
                     {complainGroups.map(group =>
                         group != null && <ComplainGroupLine key={group.id} group={group}/>

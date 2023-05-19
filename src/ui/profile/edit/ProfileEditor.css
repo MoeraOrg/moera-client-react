@@ -1,16 +1,6 @@
-.profile-editor {
-    background-color: white;
-    border: var(--bs-gray-400) 1px solid;
-    border-radius: 5px;
-    padding: 1rem;
-    margin-top: 1rem;
-}
-
 @media only screen and (max-width: 575px) {
-    .profile-editor {
-        border-left-width: 0;
-        border-right-width: 0;
-        border-radius: 0;
+    .profile-editor.content-panel {
+        padding-bottom: 0;
     }
 }
 

@@ -1,12 +1,9 @@
-.people-page {
-    background-color: white;
-    border-radius: .25rem;
-    padding: 1rem;
+.people-page.content-panel {
     min-height: 25vh;
 }
 
 @media only screen and (min-width: 576px) {
-    .people-page {
+    .people-page.content-panel {
         display: flex;
         align-items: flex-start;
     }
