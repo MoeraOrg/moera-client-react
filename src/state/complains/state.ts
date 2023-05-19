@@ -12,7 +12,8 @@ export interface ComplainsState {
     loadingPast: boolean;
     before: number;
     after: number;
-    complainGroups: ExtComplainGroupInfo[];
+    complainGroups: Partial<Record<string, ExtComplainGroupInfo>>;
+    complainGroupList: string[];
     total: number;
     totalInFuture: number;
     totalInPast: number;

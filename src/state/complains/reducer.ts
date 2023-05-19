@@ -21,7 +21,8 @@ const initialState: ComplainsState = {
     loadingPast: false,
     before: Number.MAX_SAFE_INTEGER,
     after: Number.MAX_SAFE_INTEGER,
-    complainGroups: [],
+    complainGroups: {},
+    complainGroupList: [],
     total: 0,
     totalInFuture: 0,
     totalInPast: 0
@@ -70,18 +71,26 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
         case COMPLAINS_PAST_SLICE_SET: {
             const istate = immutable.wrap(state);
             if (action.payload.before >= state.after && action.payload.after < state.after) {
-                const groups = state.complainGroups.slice();
+                action.payload.complainGroups.forEach(cg =>
+                    istate.set(["complainGroups", cg.id], extractComplainGroup(cg))
+                );
+                const groups = state.complainGroupList
+                    .map(id => ({id, moment: state.complainGroups[id]!.moment}));
                 action.payload.complainGroups
-                    .filter(c => c.moment <= state.after)
-                    .forEach(c => groups.push(extractComplainGroup(c)));
+                    .filter(cg => cg.moment <= state.after)
+                    .forEach(cg => groups.push({id: cg.id, moment: cg.moment}));
                 groups.sort((a, b) => a.moment - b.moment);
-                return istate.assign("", {
+                istate.assign("", {
                     loadingPast: false,
                     after: action.payload.after,
-                    complainGroups: groups,
+                    complainGroupList: groups.map(g => g.id),
                     total: action.payload.total,
                     totalInPast: action.payload.totalInPast
-                }).value();
+                });
+                action.payload.complainGroups.forEach(cg =>
+                    istate.set(["complainGroups", cg.id], extractComplainGroup(cg))
+                );
+                return istate.value();
             } else {
                 return istate.set("loadingPast", false).value();
             }
@@ -90,18 +99,23 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
         case COMPLAINS_FUTURE_SLICE_SET: {
             const istate = immutable.wrap(state);
             if (action.payload.before > state.before && action.payload.after <= state.before) {
-                const groups = state.complainGroups.slice();
+                const groups = state.complainGroupList
+                    .map(id => ({id, moment: state.complainGroups[id]!.moment}));
                 action.payload.complainGroups
-                    .filter(c => c.moment > state.before)
-                    .forEach(c => groups.push(extractComplainGroup(c)));
+                    .filter(cg => cg.moment > state.before)
+                    .forEach(cg => groups.push({id: cg.id, moment: cg.moment}));
                 groups.sort((a, b) => a.moment - b.moment);
-                return istate.assign("", {
+                istate.assign("", {
                     loadingFuture: false,
                     before: action.payload.before,
-                    complainGroups: groups,
+                    complainGroupList: groups.map(g => g.id),
                     total: action.payload.total,
                     totalInFuture: action.payload.totalInFuture
-                }).value();
+                });
+                action.payload.complainGroups.forEach(cg =>
+                    istate.set(["complainGroups", cg.id], extractComplainGroup(cg))
+                );
+                return istate.value();
             } else {
                 return istate.set("loadingFuture", false).value();
             }

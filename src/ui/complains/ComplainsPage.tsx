@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
 import { complainsPastSliceLoad } from "state/complains/actions";
@@ -28,7 +29,7 @@ const ComplainsPage = ({
                 <div className="complains">
                     <div className="navigator">{`${t("total-colon")} ${total}`}</div>
                     {complainGroups.map(group =>
-                        <ComplainGroupLine group={group}/>
+                        group != null && <ComplainGroupLine key={group.id} group={group}/>
                     )}
                     <ComplainsSentinel loading={loadingFuture}
                                        title={
@@ -43,9 +44,15 @@ const ComplainsPage = ({
     );
 }
 
+const getComplainGroups = createSelector(
+    (state: ClientState) => state.complains.complainGroupList,
+    (state: ClientState) => state.complains.complainGroups,
+    (list, groups) => list.map(id => groups[id])
+);
+
 const connector = connect(
     (state: ClientState) => ({
-        complainGroups: state.complains.complainGroups,
+        complainGroups: getComplainGroups(state),
         loadingFuture: state.complains.loadingFuture,
         total: state.complains.total,
         totalInFuture: state.complains.totalInFuture,
