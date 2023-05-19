@@ -59,9 +59,26 @@ export const complainsFutureSliceSet = (complainGroups: SheriffComplainGroupInfo
     payload: {complainGroups, before, after, total, totalInPast, totalInFuture}
 });
 
+export const COMPLAINS_GROUP_OPEN = "COMPLAINS_GROUP_OPEN";
+export type ComplainsGroupOpenAction = ActionWithPayload<typeof COMPLAINS_GROUP_OPEN, {
+    id: string;
+}>;
+export const complainsGroupOpen = (id: string): ComplainsGroupOpenAction => ({
+    type: COMPLAINS_GROUP_OPEN,
+    payload: {id}
+});
+
+export const COMPLAINS_GROUP_CLOSE = "COMPLAINS_GROUP_CLOSE";
+export type ComplainsGroupCloseAction = Action<typeof COMPLAINS_GROUP_CLOSE>;
+export const complainsGroupClose = (): ComplainsGroupCloseAction => ({
+    type: COMPLAINS_GROUP_CLOSE
+});
+
 export type ComplainsAnyAction = ComplainsPastSliceLoadAction
     | ComplainsPastSliceLoadFailedAction
     | ComplainsFutureSliceLoadAction
     | ComplainsFutureSliceLoadFailedAction
     | ComplainsPastSliceSetAction
-    | ComplainsFutureSliceSetAction;
+    | ComplainsFutureSliceSetAction
+    | ComplainsGroupOpenAction
+    | ComplainsGroupCloseAction;

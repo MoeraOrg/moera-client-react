@@ -17,4 +17,5 @@ export interface ComplainsState {
     total: number;
     totalInFuture: number;
     totalInPast: number;
+    activeComplainGroupId: string | null;
 }

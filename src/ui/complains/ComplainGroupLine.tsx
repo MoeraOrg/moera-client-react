@@ -9,6 +9,7 @@ import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { ExtComplainGroupInfo } from "state/complains/state";
 import { NameDisplayMode } from "ui/types";
+import Jump from "ui/navigation/Jump";
 import { formatFullName } from "util/misc";
 import "./ComplainGroupLine.css";
 
@@ -73,7 +74,7 @@ function ComplainGroupLine({group, nameDisplayMode}: Props) {
     }
 
     return (
-        <a className="complain-group-line">
+        <Jump href={`/complains/${group.id}`} className="complain-group-line">
             <div className={cx("status", statusClass)} title={t("complain-status." + group.status)}>
                 {statusIcon &&
                     <FontAwesomeIcon icon={statusIcon}/>
@@ -81,7 +82,7 @@ function ComplainGroupLine({group, nameDisplayMode}: Props) {
             </div>
             <div className={cx("heading", {"unread": unread})}
                  dangerouslySetInnerHTML={{__html: t(subjectKey, subjectValues)}}/>
-        </a>
+        </Jump>
     );
 }
 

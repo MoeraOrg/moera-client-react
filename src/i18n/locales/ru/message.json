@@ -31,6 +31,7 @@
   "avatar-shape" : "Форма аватара",
   "avatar-too-small" : "Размер картинки для аватара должен быть хотя бы 100x100 пикселов",
   "back-to-feed" : "← {feed}",
+  "back-to-list-complains" : "← Список жалоб",
   "banned-android-google-play" : "Запрещено к показу на Android (Google Play)",
   "bio" : "О себе",
   "block" : "Заблокировать",

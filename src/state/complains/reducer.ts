@@ -9,6 +9,8 @@ import {
     COMPLAINS_FUTURE_SLICE_LOAD,
     COMPLAINS_FUTURE_SLICE_LOAD_FAILED,
     COMPLAINS_FUTURE_SLICE_SET,
+    COMPLAINS_GROUP_CLOSE,
+    COMPLAINS_GROUP_OPEN,
     COMPLAINS_PAST_SLICE_LOAD,
     COMPLAINS_PAST_SLICE_LOAD_FAILED,
     COMPLAINS_PAST_SLICE_SET
@@ -25,7 +27,8 @@ const initialState: ComplainsState = {
     complainGroupList: [],
     total: 0,
     totalInFuture: 0,
-    totalInPast: 0
+    totalInPast: 0,
+    activeComplainGroupId: null
 };
 
 function isExtracted(group: SheriffComplainGroupInfo | ExtComplainGroupInfo): group is ExtComplainGroupInfo {
@@ -120,6 +123,12 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
                 return istate.set("loadingFuture", false).value();
             }
         }
+
+        case COMPLAINS_GROUP_OPEN:
+            return immutable.set(state, "activeComplainGroupId", action.payload.id);
+
+        case COMPLAINS_GROUP_CLOSE:
+            return immutable.set(state, "activeComplainGroupId", null);
 
         default:
             return state;

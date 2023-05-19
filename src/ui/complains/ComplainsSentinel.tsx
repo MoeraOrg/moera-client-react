@@ -13,15 +13,15 @@ interface Props {
 }
 
 export default function ComplainsSentinel({visible, loading, title, total, onClick}: Props) {
-    if (!visible) {
-        return <div className="comments-sentinel"/>;
-    }
     if (loading) {
         return (
-            <div className="comments-sentinel">
+            <div className="complains-sentinel">
                 <Loading active={loading}/>
             </div>
         );
+    }
+    if (!visible) {
+        return <div className="complains-sentinel"/>;
     }
     const fullTitle = total > 0 ? `${title} (${total})` : title;
     return (

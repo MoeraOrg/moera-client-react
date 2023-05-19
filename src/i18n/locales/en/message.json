@@ -31,6 +31,7 @@
   "avatar-shape" : "Avatar shape",
   "avatar-too-small" : "Avatar image size should be at least 100x100 pixels.",
   "back-to-feed" : "← {feed}",
+  "back-to-list-complains" : "← List of complains",
   "banned-android-google-play" : "Banned on Android (Google Play)",
   "bio" : "Bio",
   "block" : "Block",
