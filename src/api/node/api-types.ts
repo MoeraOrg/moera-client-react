@@ -1182,7 +1182,7 @@ export interface SheriffComplainText {
 }
 
 export type SheriffComplainStatus = "posted" | "prepared" | "prepare-failed" | "not-found" | "invalid-target"
-    | "not-original" | "not-sheriff" | "accepted" | "rejected";
+    | "not-original" | "not-sheriff" | "approved" | "rejected";
 
 export interface SheriffComplainGroupInfo {
     id: string;

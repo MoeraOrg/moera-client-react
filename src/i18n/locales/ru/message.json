@@ -79,7 +79,7 @@
   },
   "complains" : "Жалобы",
   "complain-status" : {
-    "accepted" : "Одобрено",
+    "approved" : "Одобрено",
     "invalid-target" : "Некорректные данные",
     "not-found" : "Не найдено",
     "not-original" : "Не оригинальный пост",

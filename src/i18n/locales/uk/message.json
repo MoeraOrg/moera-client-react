@@ -79,7 +79,7 @@
   },
   "complains" : "Скарги",
   "complain-status" : {
-    "accepted" : "Затверджено",
+    "approved" : "Затверджено",
     "invalid-target" : "Невірні дані",
     "not-found" : "Не знайдено",
     "not-original" : "Не оригінальний пост",

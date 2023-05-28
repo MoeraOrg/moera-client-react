@@ -79,7 +79,7 @@
   },
   "complains" : "Complains",
   "complain-status" : {
-    "accepted" : "Approved",
+    "approved" : "Approved",
     "invalid-target" : "Incorrect data",
     "not-found" : "Not found",
     "not-original" : "Not an original post",

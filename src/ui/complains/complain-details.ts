@@ -36,7 +36,7 @@ export function getComplainStatusDetails(status: SheriffComplainStatus | null | 
             details.icon = "ban";
             details.className = "wrong";
             break;
-        case "accepted":
+        case "approved":
             details.icon = "check";
             details.className = "good";
             break;
