@@ -60,6 +60,7 @@ import {
     Result,
     SettingInfo,
     SettingMetaInfo,
+    SheriffComplainDecisionText,
     SheriffComplainGroupInfo,
     SheriffComplainGroupsSliceInfo,
     SheriffComplainInfo,
@@ -867,5 +868,13 @@ export function* getSheriffComplainsByGroup(nodeName: string | null, id: string)
     return yield* callApi({
         nodeName, location: `/sheriff/complains/groups/${id}/complains`, auth: true,
         schema: NodeApi.SheriffComplainInfoArray
+    });
+}
+
+export function* putSheriffComplainGroup(nodeName: string | null, id: string,
+                                         decision: SheriffComplainDecisionText): CallApiResult<SheriffComplainGroupInfo> {
+    return yield* callApi({
+        nodeName, location: `/sheriff/complains/groups/${id}`, method: "PUT", auth: true, body: decision,
+        schema: NodeApi.SheriffComplainGroupInfo
     });
 }

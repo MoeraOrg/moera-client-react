@@ -9,6 +9,9 @@ import {
     COMPLAINS_COMPLAINS_LOAD,
     COMPLAINS_COMPLAINS_LOAD_FAILED,
     COMPLAINS_COMPLAINS_LOADED,
+    COMPLAINS_DECISION_POST,
+    COMPLAINS_DECISION_POST_FAILED,
+    COMPLAINS_DECISION_POSTED,
     COMPLAINS_FUTURE_SLICE_LOAD,
     COMPLAINS_FUTURE_SLICE_LOAD_FAILED,
     COMPLAINS_FUTURE_SLICE_SET,
@@ -37,8 +40,16 @@ const initialState: ComplainsState = {
     activeComplainGroupId: null,
     loadingActive: false,
     complains: [],
-    loadingComplains: false
+    loadingComplains: false,
+    submitting: false
 };
+
+const emptyActiveComplain = {
+    loadingActive: false,
+    complains: [],
+    loadingComplains: false,
+    submitting: false
+}
 
 function isComplainGroupExtracted(group: SheriffComplainGroupInfo | ExtComplainGroupInfo): group is ExtComplainGroupInfo {
     return (group as ExtComplainGroupInfo).extracted != null;
@@ -153,7 +164,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
         case COMPLAINS_GROUP_OPEN:
             return immutable.assign(state, "", {
                 activeComplainGroupId: action.payload.id,
-                loadingActive: false
+                ...emptyActiveComplain
             });
 
         case COMPLAINS_GROUP_CLOSE:
@@ -193,6 +204,29 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
         case COMPLAINS_COMPLAINS_LOAD_FAILED:
             if (action.payload.groupId === state.activeComplainGroupId) {
                 return immutable.set(state, "loadingComplains", false);
+            }
+            return state;
+
+        case COMPLAINS_DECISION_POST:
+            if (action.payload.groupId === state.activeComplainGroupId) {
+                return immutable.set(state, "submitting", true);
+            }
+            return state;
+
+        case COMPLAINS_DECISION_POSTED: {
+            const {group} = action.payload;
+            const istate = immutable.wrap(state);
+            istate.set(["complainGroups", group.id], extractComplainGroup(group));
+            if (group.id === state.activeComplainGroupId) {
+                istate.set("submitting", false);
+            }
+            istate.set("activeComplainGroupId", null);
+            return istate.value();
+        }
+
+        case COMPLAINS_DECISION_POST_FAILED:
+            if (action.payload.groupId === state.activeComplainGroupId) {
+                return immutable.set(state, "submitting", false);
             }
             return state;
 

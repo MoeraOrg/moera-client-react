@@ -3,29 +3,22 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import { SHERIFF_ORDER_REASON_CODES } from "api/node/sheriff-order-reason-codes";
 import { SheriffOrderReason } from "api/node/api-types";
 import { ClientState } from "state/state";
+import { getHomeOwnerName } from "state/home/selectors";
+import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
+import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { formatFullName } from "util/misc";
-import { getSetting } from "state/settings/selectors";
-import { NameDisplayMode } from "ui/types";
-import { getHomeOwnerName } from "state/home/selectors";
-import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
-const REASON_CODES: SelectFieldChoice[] = [
-    {title: "sheriff-order-reason.other", value: "other"},
-    {title: "sheriff-order-reason.unlawful", value: "unlawful"},
-    {title: "sheriff-order-reason.defamatory", value: "defamatory"},
-    {title: "sheriff-order-reason.threat", value: "threat"},
-    {title: "sheriff-order-reason.spam", value: "spam"},
-    {title: "sheriff-order-reason.scam", value: "scam"},
-    {title: "sheriff-order-reason.malware", value: "malware"},
-    {title: "sheriff-order-reason.copyright", value: "copyright"},
-    {title: "sheriff-order-reason.impersonating", value: "impersonating"},
-    {title: "sheriff-order-reason.privacy", value: "privacy"}
-];
+const REASON_CODES: SelectFieldChoice[] = SHERIFF_ORDER_REASON_CODES.map(code => ({
+    title: `sheriff-order-reason.${code}`,
+    value: code
+}));
 
 interface Values {
     reasonCode: SheriffOrderReason;

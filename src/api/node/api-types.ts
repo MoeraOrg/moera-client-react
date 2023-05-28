@@ -1228,3 +1228,9 @@ export interface SheriffComplainInfo {
     reasonDetails?: string | null;
     createdAt: number;
 }
+
+export interface SheriffComplainDecisionText {
+    reject: boolean;
+    decisionCode?: SheriffOrderReason | null;
+    decisionDetails?: string | null;
+}

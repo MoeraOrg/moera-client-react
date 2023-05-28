@@ -26,4 +26,5 @@ export interface ComplainsState {
     loadingActive: boolean;
     complains: ExtComplainInfo[];
     loadingComplains: boolean;
+    submitting: boolean;
 }

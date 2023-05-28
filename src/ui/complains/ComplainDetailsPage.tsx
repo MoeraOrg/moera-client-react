@@ -14,9 +14,9 @@ import Jump from "ui/navigation/Jump";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import { getComplainHeadingHtml, getComplainStatusDetails } from "ui/complains/complain-details";
-import "./ComplainDetailsPage.css";
-import NodeName from "ui/nodename/NodeName";
 import Complain from "ui/complains/Complain";
+import ComplainDecisionEditor from "ui/complains/ComplainDecisionEditor";
+import "./ComplainDetailsPage.css";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -59,6 +59,7 @@ function ComplainsListPage({complainGroup, loadingGroup, complains, loadingCompl
                             </div>
                             <Loading active={loadingComplains}/>
                             {complains.map(complain => <Complain complain={complain}/>)}
+                            <ComplainDecisionEditor/>
                         </>
                     }
                 </div>

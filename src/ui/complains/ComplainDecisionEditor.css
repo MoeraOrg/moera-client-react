@@ -1,0 +1,6 @@
+.complain-decision-editor {
+    background-color: var(--bs-blue-100);
+    border-radius: .25rem;
+    padding: .5rem;
+    margin-top: 1rem;
+}

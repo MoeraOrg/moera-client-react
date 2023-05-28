@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
+import { SheriffComplainDecisionText, SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
 
 export const COMPLAINS_PAST_SLICE_LOAD = "COMPLAINS_PAST_SLICE_LOAD";
 export type ComplainsPastSliceLoadAction = Action<typeof COMPLAINS_PAST_SLICE_LOAD>;
@@ -124,6 +124,35 @@ export const complainsComplainsLoadFailed = (groupId: string): ComplainsComplain
     payload: {groupId}
 });
 
+export const COMPLAINS_DECISION_POST = "COMPLAINS_DECISION_POST";
+export type ComplainsDecisionPostAction = ActionWithPayload<typeof COMPLAINS_DECISION_POST, {
+    groupId: string;
+    decision: SheriffComplainDecisionText;
+}>;
+export const complainsDecisionPost = (groupId: string,
+                                      decision: SheriffComplainDecisionText): ComplainsDecisionPostAction => ({
+    type: COMPLAINS_DECISION_POST,
+    payload: {groupId, decision}
+});
+
+export const COMPLAINS_DECISION_POSTED = "COMPLAINS_DECISION_POSTED";
+export type ComplainsDecisionPostedAction = ActionWithPayload<typeof COMPLAINS_DECISION_POSTED, {
+    group: SheriffComplainGroupInfo;
+}>;
+export const complainsDecisionPosted = (group: SheriffComplainGroupInfo): ComplainsDecisionPostedAction => ({
+    type: COMPLAINS_DECISION_POSTED,
+    payload: {group}
+});
+
+export const COMPLAINS_DECISION_POST_FAILED = "COMPLAINS_DECISION_POST_FAILED";
+export type ComplainsDecisionPostFailedAction = ActionWithPayload<typeof COMPLAINS_DECISION_POST_FAILED, {
+    groupId: string;
+}>;
+export const complainsDecisionPostFailed = (groupId: string): ComplainsDecisionPostFailedAction => ({
+    type: COMPLAINS_DECISION_POST_FAILED,
+    payload: {groupId}
+});
+
 export type ComplainsAnyAction = ComplainsPastSliceLoadAction
     | ComplainsPastSliceLoadFailedAction
     | ComplainsFutureSliceLoadAction
@@ -137,4 +166,7 @@ export type ComplainsAnyAction = ComplainsPastSliceLoadAction
     | ComplainsGroupLoadFailedAction
     | ComplainsComplainsLoadAction
     | ComplainsComplainsLoadedAction
-    | ComplainsComplainsLoadFailedAction;
+    | ComplainsComplainsLoadFailedAction
+    | ComplainsDecisionPostAction
+    | ComplainsDecisionPostedAction
+    | ComplainsDecisionPostFailedAction;
