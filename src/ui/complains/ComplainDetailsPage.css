@@ -1,0 +1,11 @@
+.complain .status.processing {
+    color: var(--verifying);
+}
+
+.complain .status.good {
+    color: var(--correct);
+}
+
+.complain .status.wrong {
+    color: var(--incorrect);
+}

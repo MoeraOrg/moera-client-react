@@ -1,21 +1,27 @@
 import cloneDeep from 'lodash.clonedeep';
 import * as immutable from 'object-path-immutable';
 
-import { SheriffComplainGroupInfo } from "api/node/api-types";
+import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import {
+    COMPLAINS_COMPLAINS_LOAD,
+    COMPLAINS_COMPLAINS_LOAD_FAILED,
+    COMPLAINS_COMPLAINS_LOADED,
     COMPLAINS_FUTURE_SLICE_LOAD,
     COMPLAINS_FUTURE_SLICE_LOAD_FAILED,
     COMPLAINS_FUTURE_SLICE_SET,
     COMPLAINS_GROUP_CLOSE,
+    COMPLAINS_GROUP_LOAD,
+    COMPLAINS_GROUP_LOAD_FAILED,
+    COMPLAINS_GROUP_LOADED,
     COMPLAINS_GROUP_OPEN,
     COMPLAINS_PAST_SLICE_LOAD,
     COMPLAINS_PAST_SLICE_LOAD_FAILED,
     COMPLAINS_PAST_SLICE_SET
 } from "state/complains/actions";
-import { ComplainsState, ExtComplainGroupInfo } from "state/complains/state";
+import { ComplainsState, ExtComplainGroupInfo, ExtComplainInfo } from "state/complains/state";
 import { htmlEntities, replaceEmojis } from "util/html";
 
 const initialState: ComplainsState = {
@@ -28,15 +34,18 @@ const initialState: ComplainsState = {
     total: 0,
     totalInFuture: 0,
     totalInPast: 0,
-    activeComplainGroupId: null
+    activeComplainGroupId: null,
+    loadingActive: false,
+    complains: [],
+    loadingComplains: false
 };
 
-function isExtracted(group: SheriffComplainGroupInfo | ExtComplainGroupInfo): group is ExtComplainGroupInfo {
+function isComplainGroupExtracted(group: SheriffComplainGroupInfo | ExtComplainGroupInfo): group is ExtComplainGroupInfo {
     return (group as ExtComplainGroupInfo).extracted != null;
 }
 
 function extractComplainGroup(group: SheriffComplainGroupInfo | ExtComplainGroupInfo): ExtComplainGroupInfo {
-    if (isExtracted(group)) { // Already extracted
+    if (isComplainGroupExtracted(group)) { // Already extracted
         return group;
     }
     const igroup = immutable.wrap(group as ExtComplainGroupInfo);
@@ -50,6 +59,23 @@ function extractComplainGroup(group: SheriffComplainGroupInfo | ExtComplainGroup
         igroup.set("decisionDetailsHtml", replaceEmojis(htmlEntities(group.decisionDetails)));
     }
     return igroup
+        .set("extracted", true)
+        .value();
+}
+
+function isComplainExtracted(complain: SheriffComplainInfo | ExtComplainInfo): complain is ExtComplainInfo {
+    return (complain as ExtComplainInfo).extracted != null;
+}
+
+function extractComplain(complain: SheriffComplainInfo | ExtComplainInfo): ExtComplainInfo {
+    if (isComplainExtracted(complain)) { // Already extracted
+        return complain;
+    }
+    const icomplain = immutable.wrap(complain as ExtComplainInfo);
+    if (complain.reasonDetails) {
+        icomplain.set("reasonDetailsHtml", replaceEmojis(htmlEntities(complain.reasonDetails)));
+    }
+    return icomplain
         .set("extracted", true)
         .value();
 }
@@ -125,10 +151,50 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
         }
 
         case COMPLAINS_GROUP_OPEN:
-            return immutable.set(state, "activeComplainGroupId", action.payload.id);
+            return immutable.assign(state, "", {
+                activeComplainGroupId: action.payload.id,
+                loadingActive: false
+            });
 
         case COMPLAINS_GROUP_CLOSE:
             return immutable.set(state, "activeComplainGroupId", null);
+
+        case COMPLAINS_GROUP_LOAD:
+            return immutable.set(state, "loadingActive", true);
+
+        case COMPLAINS_GROUP_LOADED: {
+            const {group} = action.payload;
+            const istate = immutable.wrap(state);
+            istate.set(["complainGroups", group.id], extractComplainGroup(group));
+            if (group.id === state.activeComplainGroupId) {
+                istate.set("loadingActive", false);
+            }
+            return istate.value();
+        }
+
+        case COMPLAINS_GROUP_LOAD_FAILED:
+            if (action.payload.id === state.activeComplainGroupId) {
+                return immutable.set(state, "loadingActive", false);
+            }
+            return state;
+
+        case COMPLAINS_COMPLAINS_LOAD:
+            return immutable.set(state, "loadingComplains", true);
+
+        case COMPLAINS_COMPLAINS_LOADED:
+            if (action.payload.groupId === state.activeComplainGroupId) {
+                return immutable.assign(state, "", {
+                    loadingComplains: false,
+                    complains: action.payload.complains.map(c => extractComplain(c))
+                });
+            }
+            return state;
+
+        case COMPLAINS_COMPLAINS_LOAD_FAILED:
+            if (action.payload.groupId === state.activeComplainGroupId) {
+                return immutable.set(state, "loadingComplains", false);
+            }
+            return state;
 
         default:
             return state;

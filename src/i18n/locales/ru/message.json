@@ -88,6 +88,7 @@
     "prepare-failed" : "Не удалось обработать",
     "rejected" : "Отклонено"
   },
+  "complain-status-colon" : "Статус жалобы:",
   "compress-images" : "Сжимать картинки",
   "confirm-password" : "Подтверждение пароля",
   "connect" : "Подключиться",

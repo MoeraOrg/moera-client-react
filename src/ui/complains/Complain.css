@@ -1,0 +1,30 @@
+.user-complain {
+    background-color: var(--comments);
+    border-radius: .25rem;
+    padding: .5rem;
+    overflow-wrap: break-word;
+    text-align: start;
+    margin-top: 1rem;
+}
+
+.user-complain .owner {
+    font-weight: bold;
+    margin-right: .5em;
+}
+
+.user-complain .owner > A {
+    color: var(--node-name);
+}
+
+.user-complain .date {
+    font-size: .8rem;
+    color: var(--bs-gray-500);
+}
+
+.user-complain P {
+    margin-top: 1rem;
+}
+
+.user-complain P:last-child {
+    margin-bottom: 0;
+}

@@ -3581,3 +3581,8 @@ const SheriffComplainInfoType: JSONSchemaType<API.SheriffComplainInfo> = {
 };
 
 export const SheriffComplainInfo = schema(SheriffComplainInfoType);
+
+export const SheriffComplainInfoArray = schema({
+    type: "array",
+    items: SheriffComplainInfoType
+} as JSONSchemaType<API.SheriffComplainInfo[]>);

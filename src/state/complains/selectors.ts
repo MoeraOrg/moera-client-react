@@ -22,3 +22,7 @@ export function getActiveComplainGroupId(state: ClientState): string | null {
 export function getActiveComplainGroup(state: ClientState): ExtComplainGroupInfo | null {
     return getComplainGroup(state, getActiveComplainGroupId(state));
 }
+
+export function isActiveComplainGroupToBeLoaded(state: ClientState): boolean {
+    return getActiveComplainGroup(state) == null && !state.complains.loadingActive;
+}

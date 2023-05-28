@@ -1,10 +1,15 @@
-import { SheriffComplainGroupInfo } from "api/node/api-types";
+import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
 
 export interface ExtComplainGroupInfo extends SheriffComplainGroupInfo {
     extracted?: true;
     remotePostingHeadingHtml: string | null;
     remoteCommentHeadingHtml: string | null;
     decisionDetailsHtml: string | null;
+}
+
+export interface ExtComplainInfo extends SheriffComplainInfo {
+    extracted?: true;
+    reasonDetailsHtml: string | null;
 }
 
 export interface ComplainsState {
@@ -18,4 +23,7 @@ export interface ComplainsState {
     totalInFuture: number;
     totalInPast: number;
     activeComplainGroupId: string | null;
+    loadingActive: boolean;
+    complains: ExtComplainInfo[];
+    loadingComplains: boolean;
 }

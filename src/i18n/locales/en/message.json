@@ -88,6 +88,7 @@
     "prepare-failed" : "Could not be processed",
     "rejected" : "Rejected"
   },
+  "complain-status-colon" : "Complain status:",
   "compress-images" : "Compress images",
   "confirm-password" : "Confirm password",
   "connect" : "Connect",
