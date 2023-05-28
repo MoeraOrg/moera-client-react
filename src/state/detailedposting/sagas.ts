@@ -126,7 +126,7 @@ export default [
     executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
     executor(DETAILED_POSTING_LOAD_ATTACHED, "", detailedPostingLoadAttachedSaga, introduced),
     executor(COMMENTS_RECEIVER_SWITCH, "", commentsReceiverSwitchSaga, introduced),
-    executor(COMMENTS_RECEIVER_FEATURES_LOAD, payload => payload.nodeName, commentsReceiverFeaturesLoadSaga, introduced),
+    executor(COMMENTS_RECEIVER_FEATURES_LOAD, "", commentsReceiverFeaturesLoadSaga, introduced),
     executor(COMMENTS_LOAD_ALL, "", commentsLoadAllSaga, introduced),
     executor(COMMENTS_PAST_SLICE_LOAD, "", commentsPastSliceLoadSaga, introduced),
     executor(COMMENTS_FUTURE_SLICE_LOAD, "", commentsFutureSliceLoadSaga, introduced),
