@@ -58,8 +58,12 @@ function ComplainsListPage({complainGroup, loadingGroup, complains, loadingCompl
                                 {" " + t("complain-status." + complainGroup.status)}
                             </div>
                             <Loading active={loadingComplains}/>
-                            {complains.map(complain => <Complain complain={complain}/>)}
-                            <ComplainDecisionEditor/>
+                            {complains.map(complain =>
+                                <Complain complain={complain}/>
+                            )}
+                            {complainGroup.status !== "posted" &&
+                                <ComplainDecisionEditor/>
+                            }
                         </>
                     }
                 </div>
