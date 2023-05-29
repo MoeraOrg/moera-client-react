@@ -1,10 +1,10 @@
 import { TFunction } from 'react-i18next';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { ExtComplainGroupInfo } from "state/complains/state";
-import { formatFullName } from "util/misc";
-import { NameDisplayMode } from "ui/types";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { SheriffComplainStatus } from "api/node/api-types";
+import { ExtComplainGroupInfo } from "state/complains/state";
+import { NameDisplayMode } from "ui/types";
+import { formatFullName } from "util/misc";
 
 interface ComplainStatusDetails {
     icon: IconProp | null,

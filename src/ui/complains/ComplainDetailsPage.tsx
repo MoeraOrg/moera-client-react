@@ -50,7 +50,9 @@ function ComplainsListPage({complainGroup, loadingGroup, complains, loadingCompl
                     {complainGroup != null &&
                         <>
                             <h4>
-                                <Jump nodeName={complainGroup.remoteNodeName} href={href}>{heading}</Jump>
+                                <Jump nodeName={complainGroup.remoteNodeName} href={href}>
+                                    <span dangerouslySetInnerHTML={{__html: heading}}/>
+                                </Jump>
                             </h4>
                             <div className={cx("status", statusClass)}>
                                 <strong>{t("complain-status-colon")} </strong>
