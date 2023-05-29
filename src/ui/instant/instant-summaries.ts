@@ -140,6 +140,23 @@ function formatBlockedPeriod(data: StorySummaryData, t: TFunction): string {
     return t("instant-summary.blocked-period", {days: Math.ceil(data.blocked.period / 86400)});
 }
 
+export function formatSheriffTarget(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
+    if (data.posting == null) {
+        return t("instant-summary.target-your-blog");
+    } else if (data.comment == null) {
+        return t("instant-summary.target-your-post", {
+            heading: formatHeading(data.posting),
+        });
+    } else {
+        return t("instant-summary.target-your-comment", {
+            heading: formatHeading(data.comment),
+            posting: formatOnSomebodysPosting(data, homeOwnerName, isByCommentOwner, data.posting?.ownerGender, t)
+        });
+    }
+}
+
+/* * */
+
 export function buildReactionAddedSummary(data: StorySummaryData, negative: boolean, t: TFunction): string {
     return t("instant-summary.story.reaction-added", {
         reactions: formatListOfReactions(data, negative, t),
@@ -426,38 +443,14 @@ export function buildUnblockedUserInPostingSummary(data: StorySummaryData, t: TF
     });
 }
 
-export function buildFeedSheriffMarkedSummary(data: StorySummaryData, t: TFunction): string {
-    return t("instant-summary.story.feed-sheriff-marked");
-}
-
-export function buildPostingSheriffMarkedSummary(data: StorySummaryData, t: TFunction): string {
-    return t("instant-summary.story.posting-sheriff-marked", {
-        heading: formatHeading(data.posting),
+export function buildSheriffMarkedSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.sheriff-marked", {
+        target: formatSheriffTarget(data, homeOwnerName, t)
     });
 }
 
-export function buildCommentSheriffMarkedSummary(data: StorySummaryData, homeOwnerName: string | null,
-                                                 t: TFunction): string {
-    return t("instant-summary.story.comment-sheriff-marked", {
-        heading: formatHeading(data.comment),
-        posting: formatOnSomebodysPosting(data, homeOwnerName, isByCommentOwner, data.posting?.ownerGender, t)
-    });
-}
-
-export function buildFeedSheriffUnmarkedSummary(data: StorySummaryData, t: TFunction): string {
-    return t("instant-summary.story.feed-sheriff-unmarked");
-}
-
-export function buildPostingSheriffUnmarkedSummary(data: StorySummaryData, t: TFunction): string {
-    return t("instant-summary.story.posting-sheriff-unmarked", {
-        heading: formatHeading(data.posting),
-    });
-}
-
-export function buildCommentSheriffUnmarkedSummary(data: StorySummaryData, homeOwnerName: string | null,
-                                                 t: TFunction): string {
-    return t("instant-summary.story.comment-sheriff-unmarked", {
-        heading: formatHeading(data.comment),
-        posting: formatOnSomebodysPosting(data, homeOwnerName, isByCommentOwner, data.posting?.ownerGender, t)
+export function buildSheriffUnmarkedSummary(data: StorySummaryData, homeOwnerName: string | null, t: TFunction): string {
+    return t("instant-summary.story.sheriff-unmarked", {
+        target: formatSheriffTarget(data, homeOwnerName, t)
     });
 }

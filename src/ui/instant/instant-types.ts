@@ -18,11 +18,7 @@ import {
     buildCommentPostTaskFailedSummary,
     buildCommentReactionAddedSummary,
     buildCommentReactionTaskFailedSummary,
-    buildCommentSheriffMarkedSummary,
-    buildCommentSheriffUnmarkedSummary,
     buildCommentUpdateTaskFailedSummary,
-    buildFeedSheriffMarkedSummary,
-    buildFeedSheriffUnmarkedSummary,
     buildFriendAddedSummary,
     buildFriendDeletedSummary,
     buildFriendGroupDeletedSummary,
@@ -32,14 +28,14 @@ import {
     buildPostingMediaReactionFailedSummary,
     buildPostingPostTaskFailedSummary,
     buildPostingReactionTaskFailedSummary,
-    buildPostingSheriffMarkedSummary,
-    buildPostingSheriffUnmarkedSummary,
     buildPostingSubscribeTaskFailedSummary,
     buildPostingUpdatedSummary,
     buildPostingUpdateTaskFailedSummary,
     buildReactionAddedSummary,
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
+    buildSheriffMarkedSummary,
+    buildSheriffUnmarkedSummary,
     buildSubscriberAddedSummary,
     buildSubscriberDeletedSummary,
     buildUnblockedUserInPostingSummary,
@@ -321,51 +317,31 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         summary: (data, homeOwnerName, t) => buildUnblockedUserInPostingSummary(data, t),
         target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
     },
-    "feed-sheriff-marked": {
+    "sheriff-marked": {
         color: "var(--incorrect)",
         icon: "hat-cowboy",
-        summary: (data, homeOwnerName, t) => buildFeedSheriffMarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: "/"}),
-        buttons: InstantStorySheriffOrderButtons
-    },
-    "posting-sheriff-marked": {
-        color: "var(--incorrect)",
-        icon: "hat-cowboy",
-        summary: (data, homeOwnerName, t) => buildPostingSheriffMarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}),
-        buttons: InstantStorySheriffOrderButtons
-    },
-    "comment-sheriff-marked": {
-        color: "var(--incorrect)",
-        icon: "hat-cowboy",
-        summary: (data, homeOwnerName, t) => buildCommentSheriffMarkedSummary(data, homeOwnerName, t),
+        summary: (data, homeOwnerName, t) => buildSheriffMarkedSummary(data, homeOwnerName, t),
         target: story => ({
             nodeName: story.remoteNodeName,
-            href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+            href: story.remotePostingId == null
+                ? "/"
+                : story.remoteCommentId == null
+                    ? `/post/${story.remotePostingId}`
+                    : `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
         }),
         buttons: InstantStorySheriffOrderButtons
     },
-    "feed-sheriff-unmarked": {
+    "sheriff-unmarked": {
         color: "var(--correct)",
         icon: "hat-cowboy",
-        summary: (data, homeOwnerName, t) => buildFeedSheriffUnmarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: "/"}),
-        buttons: InstantStorySheriffOrderButtons
-    },
-    "posting-sheriff-unmarked": {
-        color: "var(--correct)",
-        icon: "hat-cowboy",
-        summary: (data, homeOwnerName, t) => buildPostingSheriffUnmarkedSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}),
-        buttons: InstantStorySheriffOrderButtons
-    },
-    "comment-sheriff-unmarked": {
-        color: "var(--correct)",
-        icon: "hat-cowboy",
-        summary: (data, homeOwnerName, t) => buildCommentSheriffUnmarkedSummary(data, homeOwnerName, t),
+        summary: (data, homeOwnerName, t) => buildSheriffUnmarkedSummary(data, homeOwnerName, t),
         target: story => ({
             nodeName: story.remoteNodeName,
-            href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
+            href: story.remotePostingId == null
+                ? "/"
+                : story.remoteCommentId == null
+                    ? `/post/${story.remotePostingId}`
+                    : `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
         }),
         buttons: InstantStorySheriffOrderButtons
     }
