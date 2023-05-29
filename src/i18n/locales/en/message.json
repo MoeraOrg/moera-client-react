@@ -396,6 +396,7 @@
   "not-subscribed" : "Not subscribed",
   "not-valid-e-mail" : "Not a valid e-mail address",
   "ok" : "OK",
+  "only-new" : "Only new",
   "only-selected-allowed" : "Only selected are allowed",
   "only-selected-allowed-star-preferred" : "Only selected are allowed, marked by <0/> are preferred",
   "open" : "Open",

@@ -2,9 +2,11 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { createSelector } from 'reselect';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ClientState } from "state/state";
-import { complainsPastSliceLoad } from "state/complains/actions";
+import { complainsInboxSet, complainsPastSliceLoad } from "state/complains/actions";
+import { Button } from "ui/control";
 import { Page } from "ui/page/Page";
 import PageHeader from "ui/page/PageHeader";
 import ComplainGroupLine from "ui/complains/ComplainGroupLine";
@@ -13,10 +15,14 @@ import "./ComplainsListPage.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function ComplainsListPage({complainGroups, loadingPast, total, totalInPast, before, complainsPastSliceLoad}: Props) {
+function ComplainsListPage({
+    complainGroups, loadingPast, total, totalInPast, before, inboxOnly, complainsPastSliceLoad, complainsInboxSet
+}: Props) {
     const {t} = useTranslation();
 
     const onLoadPast = () => complainsPastSliceLoad();
+
+    const onInboxToggle = () => complainsInboxSet(!inboxOnly);
 
     return (
         <>
@@ -25,7 +31,13 @@ function ComplainsListPage({complainGroups, loadingPast, total, totalInPast, bef
             </PageHeader>
             <Page>
                 <div className="complains content-panel">
-                    <div className="navigator">{`${t("total-colon")} ${total}`}</div>
+                    <div className="navigator">
+                        <div className="total">{`${t("total-colon")} ${total}`}</div>
+                        <Button variant={inboxOnly ? "primary" : "outline-secondary"} size="sm" title={t("only-new")}
+                                onClick={onInboxToggle}>
+                            <FontAwesomeIcon icon="inbox"/>
+                        </Button>
+                    </div>
                     {complainGroups.map(group =>
                         group != null && <ComplainGroupLine key={group.id} group={group}/>
                     )}
@@ -54,9 +66,10 @@ const connector = connect(
         loadingPast: state.complains.loadingPast,
         total: state.complains.total,
         totalInPast: state.complains.totalInPast,
-        before: state.complains.before
+        before: state.complains.before,
+        inboxOnly: state.complains.inboxOnly
     }),
-    { complainsPastSliceLoad }
+    { complainsPastSliceLoad, complainsInboxSet }
 );
 
 export default connector(ComplainsListPage);

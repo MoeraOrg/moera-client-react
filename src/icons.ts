@@ -42,6 +42,7 @@ import {
     faHatCowboy,
     faHome,
     faImage,
+    faInbox,
     faItalic,
     faKey,
     faLink,
@@ -152,6 +153,7 @@ export default function initIconLibrary() {
     library.add(faHatCowboy);
     library.add(faHome);
     library.add(faImage);
+    library.add(faInbox);
     library.add(faItalic);
     library.add(faMagnifyingGlass);
     library.add(faMinus);

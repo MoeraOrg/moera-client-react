@@ -19,6 +19,7 @@ export interface ComplainsState {
     after: number;
     complainGroups: Partial<Record<string, ExtComplainGroupInfo>>;
     complainGroupList: string[];
+    inboxOnly: boolean;
     total: number;
     totalInFuture: number;
     totalInPast: number;

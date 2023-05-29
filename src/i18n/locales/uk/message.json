@@ -396,6 +396,7 @@
   "not-subscribed" : "Не {gender, select, female {підписаний} other {підписана}}",
   "not-valid-e-mail" : "Неприпустима адреса e-mail",
   "ok" : "OK",
+  "only-new" : "Тільки нові",
   "only-selected-allowed" : "Дозволені лише обрані",
   "only-selected-allowed-star-preferred" : "Дозволені лише обрані, а зазначені <0/> мають перевагу",
   "open" : "Відкрити",

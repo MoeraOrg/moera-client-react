@@ -3,6 +3,7 @@ import { call, put, select } from 'typed-redux-saga';
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
 import { Node } from "api";
+import { SheriffComplainStatus } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { errorThrown } from "state/error/actions";
 import {
@@ -34,9 +35,14 @@ export default [
 ];
 
 function* complainsPastSliceLoadSaga() {
-    const after = yield* select((state: ClientState) => state.complains.after);
+    const {after, inboxOnly} = yield* select((state: ClientState) => ({
+        after: state.complains.after,
+        inboxOnly: state.complains.inboxOnly
+    }));
+    const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
+
     try {
-        const data = yield* call(Node.getSheriffComplainGroupsSlice, ":", null, after, 20);
+        const data = yield* call(Node.getSheriffComplainGroupsSlice, ":", null, after, 20, status);
         yield* put(complainsPastSliceSet(data.groups, data.before, data.after, data.total, data.totalInPast,
             data.totalInFuture));
     } catch (e) {
@@ -46,9 +52,14 @@ function* complainsPastSliceLoadSaga() {
 }
 
 function* complainsFutureSliceLoadSaga() {
-    const before = yield* select((state: ClientState) => state.complains.before);
+    const {before, inboxOnly} = yield* select((state: ClientState) => ({
+        before: state.complains.before,
+        inboxOnly: state.complains.inboxOnly
+    }));
+    const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
+
     try {
-        const data = yield* call(Node.getSheriffComplainGroupsSlice, ":", before, null, 20);
+        const data = yield* call(Node.getSheriffComplainGroupsSlice, ":", before, null, 20, status);
         yield* put(complainsFutureSliceSet(data.groups, data.before, data.after, data.total, data.totalInPast,
             data.totalInFuture));
     } catch (e) {

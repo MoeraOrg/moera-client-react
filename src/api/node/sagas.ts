@@ -64,6 +64,7 @@ import {
     SheriffComplainGroupInfo,
     SheriffComplainGroupsSliceInfo,
     SheriffComplainInfo,
+    SheriffComplainStatus,
     SheriffComplainText,
     SheriffOrderAttributes,
     SheriffOrderInfo,
@@ -846,15 +847,19 @@ export function* getRemoteSheriffOrder(nodeName: string | null, remoteNodeName: 
     });
 }
 
-export function* postSheriffComplain(nodeName: string | null, complain: SheriffComplainText): CallApiResult<Result> {
+export function* postSheriffComplain(nodeName: string | null,
+                                     complain: SheriffComplainText): CallApiResult<SheriffComplainInfo> {
     return yield* callApi({
-        nodeName, location: "/sheriff/complains", method: "POST", auth: true, body: complain, schema: NodeApi.Result
+        nodeName, location: "/sheriff/complains", method: "POST", auth: true, body: complain,
+        schema: NodeApi.SheriffComplainInfo
     });
 }
 
-export function* getSheriffComplainGroupsSlice(nodeName: string | null, after: number | null, before: number | null,
-                                               limit: number | null): CallApiResult<SheriffComplainGroupsSliceInfo> {
-    const location = urlWithParameters("/sheriff/complains/groups", {after, before, limit});
+export function* getSheriffComplainGroupsSlice(
+    nodeName: string | null, after: number | null, before: number | null, limit: number | null,
+    status: SheriffComplainStatus | null
+): CallApiResult<SheriffComplainGroupsSliceInfo> {
+    const location = urlWithParameters("/sheriff/complains/groups", {after, before, limit, status});
     return yield* callApi({nodeName, location, auth: true, schema: NodeApi.SheriffComplainGroupsSliceInfo});
 }
 

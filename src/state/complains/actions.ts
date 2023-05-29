@@ -59,6 +59,15 @@ export const complainsFutureSliceSet = (complainGroups: SheriffComplainGroupInfo
     payload: {complainGroups, before, after, total, totalInPast, totalInFuture}
 });
 
+export const COMPLAINS_INBOX_SET = "COMPLAINS_INBOX_SET";
+export type ComplainsInboxSetAction = ActionWithPayload<typeof COMPLAINS_INBOX_SET, {
+    inboxOnly: boolean;
+}>;
+export const complainsInboxSet = (inboxOnly: boolean): ComplainsInboxSetAction => ({
+    type: COMPLAINS_INBOX_SET,
+    payload: {inboxOnly}
+});
+
 export const COMPLAINS_GROUP_OPEN = "COMPLAINS_GROUP_OPEN";
 export type ComplainsGroupOpenAction = ActionWithPayload<typeof COMPLAINS_GROUP_OPEN, {
     id: string;
@@ -159,6 +168,7 @@ export type ComplainsAnyAction = ComplainsPastSliceLoadAction
     | ComplainsFutureSliceLoadFailedAction
     | ComplainsPastSliceSetAction
     | ComplainsFutureSliceSetAction
+    | ComplainsInboxSetAction
     | ComplainsGroupOpenAction
     | ComplainsGroupCloseAction
     | ComplainsGroupLoadAction

@@ -20,6 +20,7 @@ import {
     COMPLAINS_GROUP_LOAD_FAILED,
     COMPLAINS_GROUP_LOADED,
     COMPLAINS_GROUP_OPEN,
+    COMPLAINS_INBOX_SET,
     COMPLAINS_PAST_SLICE_LOAD,
     COMPLAINS_PAST_SLICE_LOAD_FAILED,
     COMPLAINS_PAST_SLICE_SET
@@ -34,6 +35,7 @@ const initialState: ComplainsState = {
     after: Number.MAX_SAFE_INTEGER,
     complainGroups: {},
     complainGroupList: [],
+    inboxOnly: false,
     total: 0,
     totalInFuture: 0,
     totalInPast: 0,
@@ -119,7 +121,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
                 action.payload.complainGroups
                     .filter(cg => cg.moment <= state.after)
                     .forEach(cg => groups.push({id: cg.id, moment: cg.moment}));
-                groups.sort((a, b) => a.moment - b.moment);
+                groups.sort((a, b) => b.moment - a.moment);
                 istate.assign("", {
                     loadingPast: false,
                     after: action.payload.after,
@@ -144,7 +146,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
                 action.payload.complainGroups
                     .filter(cg => cg.moment > state.before)
                     .forEach(cg => groups.push({id: cg.id, moment: cg.moment}));
-                groups.sort((a, b) => a.moment - b.moment);
+                groups.sort((a, b) => b.moment - a.moment);
                 istate.assign("", {
                     loadingFuture: false,
                     before: action.payload.before,
@@ -160,6 +162,19 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
                 return istate.set("loadingFuture", false).value();
             }
         }
+
+        case COMPLAINS_INBOX_SET:
+            return immutable.assign(state, "", {
+                loadingFuture: false,
+                loadingPast: false,
+                before: Number.MAX_SAFE_INTEGER,
+                after: Number.MAX_SAFE_INTEGER,
+                complainGroupList: [],
+                total: 0,
+                totalInFuture: 0,
+                totalInPast: 0,
+                inboxOnly: action.payload.inboxOnly
+            });
 
         case COMPLAINS_GROUP_OPEN:
             return immutable.assign(state, "", {
