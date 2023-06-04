@@ -2,6 +2,11 @@ import cloneDeep from 'lodash.clonedeep';
 import * as immutable from 'object-path-immutable';
 
 import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
+import {
+    EVENT_HOME_SHERIFF_COMPLAIN_ADDED,
+    EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED,
+    EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED
+} from "api/events/actions";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
@@ -244,6 +249,49 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
                 return immutable.set(state, "submitting", false);
             }
             return state;
+
+        case EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED: {
+            const {group} = action.payload;
+            if (group.moment > state.before) {
+                return immutable.update(state, "totalInFuture", t => t + 1);
+            }
+            if (group.moment <= state.after) {
+                return immutable.update(state, "totalInPast", t => t + 1);
+            }
+            const istate = immutable.wrap(state);
+            const groups = state.complainGroupList
+                .filter(id => id !== group.id)
+                .map(id => ({id, moment: state.complainGroups[id]!.moment}));
+            groups.push({id: group.id, moment: group.moment});
+            groups.sort((a, b) => b.moment - a.moment);
+            istate.assign("", {
+                complainGroupList: groups.map(g => g.id),
+                total: state.total + (groups.length - state.complainGroupList.length)
+            });
+            if (!state.complainGroups.hasOwnProperty(group.id)) {
+                istate.set(["complainGroups", group.id], extractComplainGroup(group))
+            }
+            return istate.value();
+        }
+
+        case EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED: {
+            const {group} = action.payload;
+            if (group.moment <= state.before && group.moment > state.after) {
+                return immutable.set(state, ["complainGroups", group.id], extractComplainGroup(group));
+            }
+            return state;
+        }
+
+        case EVENT_HOME_SHERIFF_COMPLAIN_ADDED: {
+            const {complain, groupId} = action.payload;
+            if (state.activeComplainGroupId !== groupId || state.loadingComplains) {
+                return state;
+            }
+            const complains = state.complains.filter(c => c.id !== complain.id);
+            complains.push(extractComplain(complain));
+            complains.sort((a, b) => a.createdAt - b.createdAt);
+            return immutable.set(state, "complains", complains);
+        }
 
         default:
             return state;

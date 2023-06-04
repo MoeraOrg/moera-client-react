@@ -11,6 +11,8 @@ import {
     FriendGroupInfoType,
     FriendInfoType,
     FriendOfInfoType,
+    SheriffComplainGroupInfoType,
+    SheriffComplainInfoType,
     SheriffMarkType,
     StorySummaryDataType,
     SubscriberInfoType,
@@ -73,6 +75,9 @@ import {
     RemoteReactionDeletedEvent,
     RemoteReactionVerificationFailedEvent,
     RemoteReactionVerifiedEvent,
+    SheriffComplainAddedEvent,
+    SheriffComplainGroupAddedEvent,
+    SheriffComplainGroupUpdatedEvent,
     StoriesStatusUpdatedEvent,
     StoryAddedEvent,
     StoryDeletedEvent,
@@ -1461,6 +1466,45 @@ const FeedSheriffDataUpdatedEventType: JSONSchemaType<FeedSheriffDataUpdatedEven
     required: ["type", "feedName"]
 }
 
+const SheriffComplainGroupAddedEventType: JSONSchemaType<SheriffComplainGroupAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "group": SheriffComplainGroupInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "group"]
+}
+
+const SheriffComplainGroupUpdatedEventType: JSONSchemaType<SheriffComplainGroupUpdatedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "group": SheriffComplainGroupInfoType
+    },
+    additionalProperties: false,
+    required: ["type", "group"]
+}
+
+const SheriffComplainAddedEventType: JSONSchemaType<SheriffComplainAddedEvent> = {
+    type: "object",
+    properties: {
+        "type": {
+            type: "string"
+        },
+        "complain": SheriffComplainInfoType,
+        "groupId": {
+            type: "string"
+        }
+    },
+    additionalProperties: false,
+    required: ["type", "complain", "groupId"]
+}
+
 export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
@@ -1530,7 +1574,10 @@ export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
     "BLOCKED_USER_DELETED": schema(BlockedUserDeletedEventType),
     "BLOCKED_BY_USER_ADDED": schema(BlockedByUserAddedEventType),
     "BLOCKED_BY_USER_DELETED": schema(BlockedByUserDeletedEventType),
-    "FEED_SHERIFF_DATA_UPDATED": schema(FeedSheriffDataUpdatedEventType)
+    "FEED_SHERIFF_DATA_UPDATED": schema(FeedSheriffDataUpdatedEventType),
+    "SHERIFF_COMPLAIN_GROUP_ADDED": schema(SheriffComplainGroupAddedEventType),
+    "SHERIFF_COMPLAIN_GROUP_UPDATED": schema(SheriffComplainGroupUpdatedEventType),
+    "SHERIFF_COMPLAIN_ADDED": schema(SheriffComplainAddedEventType)
 };
 
 export const ALLOWED_SELF_EVENTS = new Set([
@@ -1548,5 +1595,7 @@ export const ALLOWED_SELF_EVENTS = new Set([
     "FRIEND_GROUP_UPDATED",
     "FRIEND_GROUP_DELETED",
     "REMOTE_FRIENDSHIP_UPDATED",
-    "FEED_SHERIFF_DATA_UPDATED"
+    "FEED_SHERIFF_DATA_UPDATED",
+    "SHERIFF_COMPLAIN_GROUP_ADDED",
+    "SHERIFF_COMPLAIN_ADDED"
 ]);

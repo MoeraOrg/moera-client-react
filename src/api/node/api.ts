@@ -3423,7 +3423,7 @@ const SheriffOrderInfoType: JSONSchemaType<API.SheriffOrderInfo> = {
 
 export const SheriffOrderInfo = schema(SheriffOrderInfoType);
 
-const SheriffComplainGroupInfoType: JSONSchemaType<API.SheriffComplainGroupInfo> = {
+export const SheriffComplainGroupInfoType: JSONSchemaType<API.SheriffComplainGroupInfo> = {
     type: "object",
     properties: {
         "id": {
@@ -3544,7 +3544,7 @@ const SheriffComplainGroupsSliceInfoType: JSONSchemaType<API.SheriffComplainGrou
 
 export const SheriffComplainGroupsSliceInfo = schema(SheriffComplainGroupsSliceInfoType);
 
-const SheriffComplainInfoType: JSONSchemaType<API.SheriffComplainInfo> = {
+export const SheriffComplainInfoType: JSONSchemaType<API.SheriffComplainInfo> = {
     type: "object",
     properties: {
         "id": {

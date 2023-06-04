@@ -9,7 +9,7 @@ import {
     FriendGroupInfo,
     FriendInfo,
     FriendOfInfo,
-    PrincipalValue, SheriffMark,
+    PrincipalValue, SheriffComplainGroupInfo, SheriffComplainInfo, SheriffMark,
     StorySummaryData,
     StoryType,
     SubscriberInfo,
@@ -353,4 +353,17 @@ export interface FeedSheriffDataUpdatedEvent extends BaseEvent<"FEED_SHERIFF_DAT
     feedName: string;
     sheriffs?: string[] | null;
     sheriffMarks?: SheriffMark[] | null;
+}
+
+interface SheriffComplainGroupEvent<T> extends BaseEvent<T> {
+    group: SheriffComplainGroupInfo;
+}
+
+export type SheriffComplainGroupAddedEvent = SheriffComplainGroupEvent<"SHERIFF_COMPLAIN_GROUP_ADDED">
+
+export type SheriffComplainGroupUpdatedEvent = SheriffComplainGroupEvent<"SHERIFF_COMPLAIN_GROUP_UPDATED">
+
+export interface SheriffComplainAddedEvent extends BaseEvent<"SHERIFF_COMPLAIN_ADDED"> {
+    complain: SheriffComplainInfo;
+    groupId: string;
 }

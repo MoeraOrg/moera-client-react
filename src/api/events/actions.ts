@@ -52,6 +52,9 @@ import {
     RemoteReactionDeletedEvent,
     RemoteReactionVerificationFailedEvent,
     RemoteReactionVerifiedEvent,
+    SheriffComplainAddedEvent,
+    SheriffComplainGroupAddedEvent,
+    SheriffComplainGroupUpdatedEvent,
     StoriesStatusUpdatedEvent,
     StoryAddedEvent,
     StoryDeletedEvent,
@@ -160,6 +163,9 @@ export const EVENT_HOME_BLOCKED_BY_USER_ADDED = "EVENT_HOME_BLOCKED_BY_USER_ADDE
 export const EVENT_NODE_BLOCKED_BY_USER_DELETED = "EVENT_NODE_BLOCKED_BY_USER_DELETED";
 export const EVENT_HOME_BLOCKED_BY_USER_DELETED = "EVENT_HOME_BLOCKED_BY_USER_DELETED";
 export const EVENT_NODE_FEED_SHERIFF_DATA_UPDATED = "EVENT_NODE_FEED_SHERIFF_DATA_UPDATED";
+export const EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED = "EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED";
+export const EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED = "EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED";
+export const EVENT_HOME_SHERIFF_COMPLAIN_ADDED = "EVENT_HOME_SHERIFF_COMPLAIN_ADDED";
 
 export type EventSource = "HOME" | "NODE" | "RECEIVER";
 export type EventActionType<T extends string> = `EVENT_${EventSource}_${T}`;
@@ -239,4 +245,7 @@ export type ClientEventAction =
     | EventAction<BlockedUserDeletedEvent>
     | EventAction<BlockedByUserAddedEvent>
     | EventAction<BlockedByUserDeletedEvent>
-    | EventAction<FeedSheriffDataUpdatedEvent>;
+    | EventAction<FeedSheriffDataUpdatedEvent>
+    | EventAction<SheriffComplainGroupAddedEvent>
+    | EventAction<SheriffComplainGroupUpdatedEvent>
+    | EventAction<SheriffComplainAddedEvent>;
