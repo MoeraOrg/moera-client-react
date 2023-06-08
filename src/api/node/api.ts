@@ -1786,10 +1786,15 @@ const StorySummarySheriffType: JSONSchemaType<API.StorySummarySheriff> = {
             type: "string"
         },
         "orderId": {
-            type: "string"
+            type: "string",
+            nullable: true
+        },
+        "complainId": {
+            type: "string",
+            nullable: true
         }
     },
-    required: ["sheriffName", "orderId"],
+    required: ["sheriffName"],
     additionalProperties: false
 };
 

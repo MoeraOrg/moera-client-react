@@ -454,3 +454,7 @@ export function buildSheriffUnmarkedSummary(data: StorySummaryData, homeOwnerNam
         target: formatSheriffTarget(data, homeOwnerName, t)
     });
 }
+
+export function buildSheriffComplainAddedSummary(t: TFunction): string {
+    return t("instant-summary.story.sheriff-complain-added");
+}

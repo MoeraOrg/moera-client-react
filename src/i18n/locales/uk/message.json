@@ -309,6 +309,7 @@
       "reaction-added" : "{reactions} ваш пост {heading}",
       "remote-comment-added" : "{comments} {count, plural, =1 {{gender, select, female {прокоментувала} other {прокоментував}}} other {прокоментували}} {posting} {heading}, {reason}",
       "reply-comment" : "{replies} {count, plural, =1 {{gender, select, female {відповіла} other {відповів}}} other {відповіли}} на ваш коментар {heading} до {posting}",
+      "sheriff-complain-added" : "Ви отримали нову скаргу",
       "sheriff-marked" : "Шериф заборонив показувати {target} на Android",
       "sheriff-unmarked" : "Шериф дозволив показувати {target} на Android",
       "subscriber-added" : "{node} {gender, select, female {підписалась} other {підписався}} на вашу стрічку {feed}",

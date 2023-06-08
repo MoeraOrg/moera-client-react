@@ -34,6 +34,7 @@ import {
     buildReactionAddedSummary,
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
+    buildSheriffComplainAddedSummary,
     buildSheriffMarkedSummary,
     buildSheriffUnmarkedSummary,
     buildSubscriberAddedSummary,
@@ -344,6 +345,15 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
                     : `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
         }),
         buttons: InstantStorySheriffOrderButtons
+    },
+    "sheriff-complain-added": {
+        color: "var(--bs-blue)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildSheriffComplainAddedSummary(t),
+        target: story => ({
+            nodeName: story.summaryNodeName,
+            href: `/complains/${story.summaryData?.sheriff?.complainId}`
+        })
     }
 };
 

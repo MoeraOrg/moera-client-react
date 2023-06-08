@@ -309,6 +309,7 @@
       "reaction-added" : "{reactions} your post {heading}",
       "remote-comment-added" : "{comments} commented on {posting} {heading} {reason}",
       "reply-comment" : "{replies} replied to your comment {heading} on {posting}",
+      "sheriff-complain-added" : "You have received a new complain",
       "sheriff-marked" : "Sheriff has hidden {target} on Android",
       "sheriff-unmarked" : "Sheriff has revealed {target} on Android",
       "subscriber-added" : "{node} subscribed to your {feed}",

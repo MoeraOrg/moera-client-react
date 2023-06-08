@@ -476,7 +476,8 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "posting-media-reaction-failed" | "comment-media-reaction-failed" | "posting-subscribe-task-failed"
     | "posting-reaction-task-failed" | "comment-reaction-task-failed" | "friend-added" | "friend-deleted"
     | "friend-group-deleted" | "asked-to-subscribe" | "asked-to-friend" | "blocked-user" | "unblocked-user"
-    | "blocked-user-in-posting" | "unblocked-user-in-posting" | "sheriff-marked" | "sheriff-unmarked";
+    | "blocked-user-in-posting" | "unblocked-user-in-posting" | "sheriff-marked" | "sheriff-unmarked"
+    | "sheriff-complain-added";
 
 export type SubscriptionReason = "user" | "mention" | "comment";
 
@@ -521,7 +522,8 @@ export interface StorySummaryBlocked {
 
 export interface StorySummarySheriff {
     sheriffName: string;
-    orderId: string;
+    orderId?: string | null;
+    complainId?: string | null;
 }
 
 export interface StorySummaryData {
