@@ -12,7 +12,7 @@ import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
-import { RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
+import { CheckboxField, RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { formatFullName } from "util/misc";
 
 const REASON_CODES: SelectFieldChoice[] = SHERIFF_ORDER_REASON_CODES.map(code => ({
@@ -23,6 +23,7 @@ const REASON_CODES: SelectFieldChoice[] = SHERIFF_ORDER_REASON_CODES.map(code =>
 interface Values {
     reasonCode: SheriffOrderReason;
     reasonDetails: RichTextValue;
+    anonymous: boolean;
 }
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -74,6 +75,13 @@ function SheriffOrderDialog(props: Props) {
                     <SelectField name="reasonCode" title={t("reason")} choices={REASON_CODES} anyValue/>
                     <RichTextField name="reasonDetails" title={t("comment-optional")} format="plain-text" smileysEnabled
                                    anyValue noMedia/>
+                    {!isSheriff &&
+                        <div className="alert alert-warning">
+                            <CheckboxField name="anonymous" title={t("not-publish-my-complain")} groupClassName="mb-0"
+                                           anyValue/>
+                            <span dangerouslySetInnerHTML={{__html: t("note-complains-public")}}/>
+                        </div>
+                    }
                 </div>
                 <div className="modal-footer">
                     <Button variant="secondary" onClick={closeSheriffOrderDialog}>{t("cancel")}</Button>
@@ -88,7 +96,8 @@ const sheriffOrderDialogLogic = {
 
     mapPropsToValues: (): Values => ({
         reasonCode: "other",
-        reasonDetails: new RichTextValue("")
+        reasonDetails: new RichTextValue(""),
+        anonymous: false
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -96,7 +105,7 @@ const sheriffOrderDialogLogic = {
 
         formik.setStatus("submitted");
         if (target != null) {
-            sheriffOrderDialogSubmit(target, values.reasonCode, values.reasonDetails.text);
+            sheriffOrderDialogSubmit(target, values.reasonCode, values.reasonDetails.text, values.anonymous);
         }
         formik.setSubmitting(false);
     }

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { isAtHomeNode } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { complainsPastSliceLoad } from "state/complains/actions";
 import { getActiveComplainGroup } from "state/complains/selectors";
@@ -16,11 +17,14 @@ import PageHeader from "ui/page/PageHeader";
 import { getComplainHeadingHtml, getComplainStatusDetails } from "ui/complains/complain-details";
 import Complain from "ui/complains/Complain";
 import ComplainDecisionEditor from "ui/complains/ComplainDecisionEditor";
+import ComplainDecisionView from "ui/complains/ComplainDecisionView";
 import "./ComplainDetailsPage.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function ComplainsListPage({complainGroup, loadingGroup, complains, loadingComplains, nameDisplayMode}: Props) {
+function ComplainsListPage({
+    complainGroup, loadingGroup, complains, loadingComplains, atHomeNode, nameDisplayMode
+}: Props) {
     const {t} = useTranslation();
 
     const {icon: statusIcon, className: statusClass} = getComplainStatusDetails(complainGroup?.status);
@@ -60,11 +64,24 @@ function ComplainsListPage({complainGroup, loadingGroup, complains, loadingCompl
                                 {" " + t("complain-status." + complainGroup.status)}
                             </div>
                             <Loading active={loadingComplains}/>
-                            {complains.map(complain =>
-                                <Complain complain={complain}/>
-                            )}
-                            {complainGroup.status !== "posted" &&
-                                <ComplainDecisionEditor/>
+                            {atHomeNode || !complainGroup.anonymous || complains.length > 0 ?
+                                <>
+                                    {complains.map(complain =>
+                                        <Complain complain={complain}/>
+                                    )}
+                                </>
+                            :
+                                <div className="anonymous">{t("sheriff-decided-not-publish-complains")}</div>
+                            }
+                            {atHomeNode ?
+                                (complainGroup.status !== "posted" &&
+                                    <ComplainDecisionEditor/>
+                                )
+                            :
+                                ((complainGroup.status === "approved"
+                                        || (complainGroup.status === "rejected" && complainGroup.decisionDetails)) &&
+                                    <ComplainDecisionView/>
+                                )
                             }
                         </>
                     }
@@ -80,6 +97,7 @@ const connector = connect(
         loadingGroup: state.complains.loadingActive,
         complains: state.complains.complains,
         loadingComplains: state.complains.loadingComplains,
+        atHomeNode: isAtHomeNode(state),
         nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
     }),
     { complainsPastSliceLoad }

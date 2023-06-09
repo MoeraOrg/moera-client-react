@@ -24,11 +24,13 @@ export type SheriffOrderDialogSubmitAction = ActionWithPayload<typeof SHERIFF_OR
     target: SheriffOrderTarget;
     reasonCode: SheriffOrderReason;
     reasonDetails: string | null;
+    anonymous: boolean;
 }>;
 export const sheriffOrderDialogSubmit = (target: SheriffOrderTarget, reasonCode: SheriffOrderReason,
-                                         reasonDetails: string | null): SheriffOrderDialogSubmitAction => ({
+                                         reasonDetails: string | null,
+                                         anonymous: boolean): SheriffOrderDialogSubmitAction => ({
     type: SHERIFF_ORDER_DIALOG_SUBMIT,
-    payload: {target, reasonCode, reasonDetails}
+    payload: {target, reasonCode, reasonDetails, anonymous}
 });
 
 export const SHERIFF_ORDER_DIALOG_SUBMITTED = "SHERIFF_ORDER_DIALOG_SUBMITTED";

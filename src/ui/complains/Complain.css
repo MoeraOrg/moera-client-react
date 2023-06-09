@@ -28,3 +28,7 @@
 .user-complain P:last-child {
     margin-bottom: 0;
 }
+
+.user-complain .anonymous-requested {
+    color: var(--bs-danger);
+}

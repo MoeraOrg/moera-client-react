@@ -29,7 +29,7 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
             nodeName, fullName, feedName, postingOwnerName, postingOwnerFullName, postingOwnerGender, postingHeading,
             postingId, commentOwnerName, commentOwnerFullName, commentOwnerGender, commentHeading, commentId
         },
-        reasonCode, reasonDetails
+        reasonCode, reasonDetails, anonymous
     } = action.payload;
 
     const {isSheriff, homeOwnerFullName, homeOwnerGender} = yield* select((state: ClientState) => ({
@@ -49,7 +49,7 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
                 ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender, nodeName, fullName, feedName,
                 postingOwnerName, postingOwnerFullName, postingOwnerGender, postingHeading, postingId,
                 commentOwnerName, commentOwnerFullName, commentOwnerGender, commentHeading, commentId, reasonCode,
-                reasonDetails
+                reasonDetails, anonymous
             });
         }
         yield* put(sheriffOrderDialogSubmitted());

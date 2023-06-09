@@ -42,7 +42,7 @@ function* complainsPastSliceLoadSaga() {
     const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
 
     try {
-        const data = yield* call(Node.getSheriffComplainGroupsSlice, ":", null, after, 20, status);
+        const data = yield* call(Node.getSheriffComplainGroupsSlice, "", null, after, 20, status);
         yield* put(complainsPastSliceSet(data.groups, data.before, data.after, data.total, data.totalInPast,
             data.totalInFuture));
     } catch (e) {
@@ -59,7 +59,7 @@ function* complainsFutureSliceLoadSaga() {
     const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
 
     try {
-        const data = yield* call(Node.getSheriffComplainGroupsSlice, ":", before, null, 20, status);
+        const data = yield* call(Node.getSheriffComplainGroupsSlice, "", before, null, 20, status);
         yield* put(complainsFutureSliceSet(data.groups, data.before, data.after, data.total, data.totalInPast,
             data.totalInFuture));
     } catch (e) {
@@ -74,7 +74,7 @@ function* complainsGroupLoadSaga() {
         return;
     }
     try {
-        const group = yield* call(Node.getSheriffComplainGroup, ":", id);
+        const group = yield* call(Node.getSheriffComplainGroup, "", id);
         yield* put(complainsGroupLoaded(group));
     } catch (e) {
         yield* put(complainsGroupLoadFailed(id));
@@ -88,7 +88,7 @@ function* complainsComplainsLoadSaga() {
         return;
     }
     try {
-        const complains = yield* call(Node.getSheriffComplainsByGroup, ":", id);
+        const complains = yield* call(Node.getSheriffComplainsByGroup, "", id);
         yield* put(complainsComplainsLoaded(id, complains));
     } catch (e) {
         yield* put(complainsComplainsLoadFailed(id));
@@ -100,7 +100,7 @@ function* complainsDecisionPostSaga(action: ComplainsDecisionPostAction) {
     const {groupId, decision} = action.payload;
 
     try {
-        const group = yield* call(Node.putSheriffComplainGroup, ":", groupId, decision);
+        const group = yield* call(Node.putSheriffComplainGroup, "", groupId, decision);
         yield* put(complainsDecisionPosted(group));
     } catch (e) {
         yield* put(complainsDecisionPostFailed(groupId));

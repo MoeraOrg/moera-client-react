@@ -3512,6 +3512,10 @@ export const SheriffComplainGroupInfoType: JSONSchemaType<API.SheriffComplainGro
         "decidedAt": {
             type: "integer",
             nullable: true
+        },
+        "anonymous": {
+            type: "boolean",
+            nullable: true
         }
     },
     required: ["id", "remoteNodeName", "remoteFeedName", "createdAt", "moment", "status"],
@@ -3575,6 +3579,10 @@ export const SheriffComplainInfoType: JSONSchemaType<API.SheriffComplainInfo> = 
         },
         "reasonDetails": {
             type: "string",
+            nullable: true
+        },
+        "anonymousRequested": {
+            type: "boolean",
             nullable: true
         },
         "createdAt": {

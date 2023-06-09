@@ -1180,6 +1180,7 @@ export interface SheriffComplainText {
     commentId?: string | null;
     reasonCode?: SheriffOrderReason | null;
     reasonDetails?: string | null;
+    anonymous?: boolean | null;
 }
 
 export type SheriffComplainStatus = "posted" | "prepared" | "prepare-failed" | "not-found" | "invalid-target"
@@ -1208,6 +1209,7 @@ export interface SheriffComplainGroupInfo {
     decisionCode?: SheriffOrderReason | null;
     decisionDetails?: string | null;
     decidedAt?: number | null;
+    anonymous?: boolean | null;
 }
 
 export interface SheriffComplainGroupsSliceInfo {
@@ -1227,6 +1229,7 @@ export interface SheriffComplainInfo {
     group?: SheriffComplainGroupInfo | null;
     reasonCode: SheriffOrderReason;
     reasonDetails?: string | null;
+    anonymousRequested?: boolean | null;
     createdAt: number;
 }
 
@@ -1234,4 +1237,5 @@ export interface SheriffComplainDecisionText {
     reject: boolean;
     decisionCode?: SheriffOrderReason | null;
     decisionDetails?: string | null;
+    anonymous?: boolean | null;
 }

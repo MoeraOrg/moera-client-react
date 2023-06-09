@@ -5,15 +5,15 @@ import { useTranslation } from 'react-i18next';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import { PAGE_COMPLAINS } from "state/navigation/pages";
-import { getHomeOwnerName } from "state/home/selectors";
+import { getOwnerName } from "state/node/selectors";
 import MainMenuLink from "ui/mainmenu/MainMenuLink";
 
 type Props = ConnectedProps<typeof connector>;
 
-function MainMenuComplainsLink({homeOwnerName}: Props) {
+function MainMenuComplainsLink({ownerName}: Props) {
     const {t} = useTranslation();
 
-    if (homeOwnerName !== SHERIFF_GOOGLE_PLAY_TIMELINE) {
+    if (ownerName !== SHERIFF_GOOGLE_PLAY_TIMELINE) {
         return null;
     }
 
@@ -22,7 +22,7 @@ function MainMenuComplainsLink({homeOwnerName}: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        homeOwnerName: getHomeOwnerName(state)
+        ownerName: getOwnerName(state)
     })
 );
 

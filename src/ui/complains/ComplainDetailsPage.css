@@ -9,3 +9,11 @@
 .complain .status.wrong {
     color: var(--incorrect);
 }
+
+.complain .anonymous {
+    background-color: var(--bs-gray-100);
+    border-radius: .25rem;
+    padding: .5rem;
+    margin-top: 1rem;
+    font-style: italic;
+}

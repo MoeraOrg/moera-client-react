@@ -1,6 +1,7 @@
 import { conj, trigger } from "state/trigger";
 import { GO_TO_PAGE, newLocation } from "state/navigation/actions";
 import { isAtComplainsPage } from "state/navigation/selectors";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
     COMPLAINS_DECISION_POSTED,
     COMPLAINS_GROUP_CLOSE,
@@ -23,5 +24,5 @@ export default [
     trigger(COMPLAINS_INBOX_SET, isPastComplainGroupsToBeLoaded, complainsPastSliceLoad),
     trigger([COMPLAINS_GROUP_OPEN, COMPLAINS_GROUP_CLOSE, COMPLAINS_DECISION_POSTED], true, newLocation),
     trigger(COMPLAINS_GROUP_OPEN, isActiveComplainGroupToBeLoaded, complainsGroupLoad),
-    trigger(COMPLAINS_GROUP_OPEN, true, complainsComplainsLoad)
+    trigger([COMPLAINS_GROUP_OPEN, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, complainsComplainsLoad)
 ];

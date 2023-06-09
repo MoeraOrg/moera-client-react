@@ -7,11 +7,11 @@ import cx from 'classnames';
 import { SheriffComplainDecisionText, SheriffOrderReason } from "api/node/api-types";
 import { SHERIFF_ORDER_REASON_CODES } from "api/node/sheriff-order-reason-codes";
 import { ClientState } from "state/state";
+import { complainsDecisionPost } from "state/complains/actions";
 import { getActiveComplainGroup } from "state/complains/selectors";
 import { Button, RichTextValue } from "ui/control";
-import { RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
+import { CheckboxField, RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
 import "./ComplainDecisionEditor.css";
-import { complainsDecisionPost } from "state/complains/actions";
 
 type DecisionCode = "choose" | "reject" | SheriffOrderReason;
 
@@ -26,6 +26,7 @@ const DECISION_CODES: SelectFieldChoice[] = [
 interface Values {
     decisionCode: DecisionCode;
     decisionDetails: RichTextValue;
+    anonymous: boolean;
 }
 
 type OuterProps = ConnectedProps<typeof connector>;
@@ -45,6 +46,7 @@ function ComplainDecisionEditor({group, submitting, values}: Props) {
                 <SelectField name="decisionCode" choices={DECISION_CODES} anyValue/>
                 <div className={cx({"d-none": values.decisionCode === "choose"})}>
                     <RichTextField name="decisionDetails" format="plain-text" smileysEnabled anyValue noMedia/>
+                    <CheckboxField name="anonymous" title={t("not-show-complains")} anyValue/>
                 </div>
                 <Button variant="primary" type="submit" loading={submitting} disabled={!submitEnabled}
                         className={cx({"d-none": !submitEnabled})}>
@@ -59,7 +61,8 @@ const complainDecisionEditorLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
         decisionCode: props.group?.status === "rejected" ? "reject" : props.group?.decisionCode ?? "choose",
-        decisionDetails: new RichTextValue(props.group?.decisionDetails ?? "")
+        decisionDetails: new RichTextValue(props.group?.decisionDetails ?? ""),
+        anonymous: props.group?.anonymous ?? false
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
@@ -72,7 +75,8 @@ const complainDecisionEditorLogic = {
         const decision: SheriffComplainDecisionText = {
             reject: values.decisionCode === "reject",
             decisionCode: values.decisionCode === "reject" ? null : values.decisionCode,
-            decisionDetails: values.decisionDetails.text
+            decisionDetails: values.decisionDetails.text,
+            anonymous: values.anonymous
         }
 
         formik.setStatus("submitted");
