@@ -477,7 +477,7 @@ export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-
     | "posting-reaction-task-failed" | "comment-reaction-task-failed" | "friend-added" | "friend-deleted"
     | "friend-group-deleted" | "asked-to-subscribe" | "asked-to-friend" | "blocked-user" | "unblocked-user"
     | "blocked-user-in-posting" | "unblocked-user-in-posting" | "sheriff-marked" | "sheriff-unmarked"
-    | "sheriff-complain-added";
+    | "sheriff-complain-added" | "sheriff-complain-decided";
 
 export type SubscriptionReason = "user" | "mention" | "comment";
 

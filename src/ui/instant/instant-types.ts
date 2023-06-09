@@ -34,7 +34,7 @@ import {
     buildReactionAddedSummary,
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
-    buildSheriffComplainAddedSummary,
+    buildSheriffComplainAddedSummary, buildSheriffComplainDecidedSummary,
     buildSheriffMarkedSummary,
     buildSheriffUnmarkedSummary,
     buildSubscriberAddedSummary,
@@ -350,6 +350,15 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         color: "var(--bs-blue)",
         icon: "hat-cowboy",
         summary: (data, homeOwnerName, t) => buildSheriffComplainAddedSummary(t),
+        target: story => ({
+            nodeName: story.summaryNodeName,
+            href: `/complains/${story.summaryData?.sheriff?.complainId}`
+        })
+    },
+    "sheriff-complain-decided": {
+        color: "var(--bs-indigo)",
+        icon: "hat-cowboy",
+        summary: (data, homeOwnerName, t) => buildSheriffComplainDecidedSummary(data, homeOwnerName, t),
         target: story => ({
             nodeName: story.summaryNodeName,
             href: `/complains/${story.summaryData?.sheriff?.complainId}`
