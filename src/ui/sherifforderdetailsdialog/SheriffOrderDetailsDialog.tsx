@@ -8,6 +8,7 @@ import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDetailsDialog } from "state/sherifforderdetailsdialog/actions";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
+import Jump from "ui/navigation/Jump";
 import { formatFullName } from "util/misc";
 import { htmlEntities, replaceEmojis } from "util/html";
 
@@ -23,6 +24,11 @@ function SheriffOrderDetailsDialog({
     }
 
     const onClose = () => closeSheriffOrderDetailsDialog();
+
+    const onOpenComplain = (href: string, performJump: () => void) => {
+        closeSheriffOrderDetailsDialog();
+        performJump();
+    }
 
     const deleted = info?.delete ?? false;
     const nodeName = formatFullName(info?.nodeName, info?.nodeFullName, nameDisplayMode);
@@ -60,6 +66,16 @@ function SheriffOrderDetailsDialog({
                                 <span className={cx("fw-bold", {"text-danger": !deleted, "text-success": deleted})}/>
                                 <b/>
                             </Trans>
+                        </p>
+                        <p>
+                            {info?.complainGroupId != null ?
+                                <Trans i18nKey="decision-upon-complain">
+                                    <Jump nodeName={info.sheriffName} href={`/complains/${info.complainGroupId}`}
+                                          onNear={onOpenComplain} onFar={onOpenComplain}/>
+                                </Trans>
+                            :
+                                t("decision-sheriff-initiative")
+                            }
                         </p>
                         {!deleted &&
                             <p>

@@ -121,6 +121,8 @@
   "current" : "Текущий",
   "current-password" : "Текущий пароль",
   "decision" : "Решение",
+  "decision-sheriff-initiative" : "Решение было принято по инициативе шерифа.",
+  "decision-upon-complain" : "Решение было принято по <0>жалобе</0> другого пользователя.",
   "delete" : "Удалить",
   "delete-comment" : "Вы действительно хотите удалить комментарий \"{heading}\"?",
   "delete-draft" : "Удалить черновик",

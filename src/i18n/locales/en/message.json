@@ -121,6 +121,8 @@
   "current" : "Current",
   "current-password" : "Current password",
   "decision" : "Decision",
+  "decision-sheriff-initiative" : "The decision was made at the sheriff's initiative.",
+  "decision-upon-complain" : "The decision was made upon <0>a complaint</0> by another user.",
   "delete" : "Delete",
   "delete-comment" : "Do you really want to delete the comment \"{heading}\"?",
   "delete-draft" : "Delete draft",

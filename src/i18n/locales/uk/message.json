@@ -121,6 +121,8 @@
   "current" : "Поточний",
   "current-password" : "Поточний пароль",
   "decision" : "Рішення",
+  "decision-sheriff-initiative" : "Рішення було прийнято за ініціативою шерифа.",
+  "decision-upon-complain" : "Рішення було прийнято за <0>скаргою</0> іншого користувача.",
   "delete" : "Видалити",
   "delete-comment" : "Ви дійсно бажаєте видалити коментар \"{heading}\"?",
   "delete-draft" : "Видалити чернетку",

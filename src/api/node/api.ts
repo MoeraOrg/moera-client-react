@@ -3420,6 +3420,10 @@ const SheriffOrderInfoType: JSONSchemaType<API.SheriffOrderInfo> = {
         },
         "signatureVersion": {
             type: "integer"
+        },
+        "complainGroupId": {
+            type: "string",
+            nullable: true
         }
     },
     required: ["id", "sheriffName", "nodeName", "feedName", "category", "createdAt", "signature", "signatureVersion"],

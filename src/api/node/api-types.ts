@@ -1160,6 +1160,7 @@ export interface SheriffOrderInfo {
     createdAt: number;
     signature: string;
     signatureVersion: number;
+    complainGroupId?: string | null;
 }
 
 export interface SheriffComplainText {
