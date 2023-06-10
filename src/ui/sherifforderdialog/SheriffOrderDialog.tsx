@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { SHERIFF_ORDER_REASON_CODES } from "api/node/sheriff-order-reason-codes";
@@ -67,11 +67,7 @@ function SheriffOrderDialog(props: Props) {
         <ModalDialog title={title} onClose={closeSheriffOrderDialog}>
             <Form>
                 <div className="modal-body">
-                    <p>
-                        <Trans i18nKey={messageKey} values={messageValues}>
-                            <b/>
-                        </Trans>
-                    </p>
+                    <p dangerouslySetInnerHTML={{__html: t(messageKey, messageValues)}}/>
                     <SelectField name="reasonCode" title={t("reason")} choices={REASON_CODES} anyValue/>
                     <RichTextField name="reasonDetails" title={t("comment-optional")} format="plain-text" smileysEnabled
                                    anyValue noMedia/>

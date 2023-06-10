@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { connectToHome } from "state/home/actions";
@@ -42,9 +42,8 @@ function ResetForm(props: Props) {
     return (
         <ConnectDialogModal title={t("set-home-password")} buttonCaption={t("set-password-and-connect")}>
             {emailHint &&
-                <div className="instructions">
-                    <Trans i18nKey="reset-password-hint-instructions" values={{emailHint}}><b/></Trans>
-                </div>
+                <div className="instructions"
+                     dangerouslySetInnerHTML={{__html: t("reset-password-hint-instructions", {emailHint})}}/>
             }
             <InputField name="resetToken" title={t("secret-code")} autoFocus/>
             <InputField name="location" title={t("name-or-node-url")}/>

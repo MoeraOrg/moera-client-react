@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { mnemonicClose } from "state/nodename/actions";
@@ -43,11 +43,7 @@ function MnemonicDialog({name, mnemonic, values: {confirmed}, resetForm}: Props)
         <ModalDialog title={t("registered-name-secret")}>
             <Form>
                 <div className="modal-body">
-                    <p>
-                        <Trans i18nKey="write-down-words" values={{name}}>
-                            <b/>
-                        </Trans>
-                    </p>
+                    <p dangerouslySetInnerHTML={{__html: t("write-down-words", {name})}}/>
                     <div className="row">
                         <Column mnemonic={mnemonic} start={0} end={8}/>
                         <Column mnemonic={mnemonic} start={8} end={16}/>
