@@ -15,6 +15,9 @@ import {
     NODE_CARD_PEOPLE_LOAD,
     NODE_CARD_PEOPLE_LOAD_FAILED,
     NODE_CARD_PEOPLE_SET,
+    NODE_CARD_SHERIFF_LIST_LOAD,
+    NODE_CARD_SHERIFF_LIST_LOAD_FAILED,
+    NODE_CARD_SHERIFF_LIST_SET,
     NODE_CARD_STORIES_LOAD,
     NODE_CARD_STORIES_LOAD_FAILED,
     NODE_CARD_STORIES_SET,
@@ -107,6 +110,11 @@ const emptyCard: NodeCardState = {
         loading: false,
         blocked: null,
         blockedBy: null
+    },
+    sheriffList: {
+        loaded: false,
+        loading: false,
+        blocked: null
     }
 };
 
@@ -364,6 +372,31 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                     loaded: true,
                     blocked,
                     blockedBy
+                })
+                .value();
+        }
+
+        case NODE_CARD_SHERIFF_LIST_LOAD: {
+            const {nodeName} = action.payload;
+            return getCard(state, nodeName).istate
+                .set(["cards", nodeName, "sheriffList", "loading"], true)
+                .value();
+        }
+
+        case NODE_CARD_SHERIFF_LIST_LOAD_FAILED: {
+            const {nodeName} = action.payload;
+            return getCard(state, nodeName).istate
+                .set(["cards", nodeName, "sheriffList", "loading"], false)
+                .value();
+        }
+
+        case NODE_CARD_SHERIFF_LIST_SET: {
+            const {nodeName, blocked} = action.payload;
+            return getCard(state, nodeName).istate
+                .assign(["cards", nodeName, "sheriffList"], {
+                    loading: false,
+                    loaded: true,
+                    blocked
                 })
                 .value();
         }

@@ -1240,3 +1240,9 @@ export interface SheriffComplainDecisionText {
     decisionDetails?: string | null;
     anonymous?: boolean | null;
 }
+
+export interface UserListItemInfo {
+    nodeName: string;
+    createdAt: number;
+    moment: number;
+}

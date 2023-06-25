@@ -2,7 +2,8 @@ import { all, call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { HomeNotConnectedError, NameResolvingError, Node } from "api";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE, SHERIFF_USER_LIST_HIDE } from "sheriffs";
+import { HomeNotConnectedError, NameResolvingError, Node, NodeApiError } from "api";
 import { executor } from "state/executor";
 import { mutuallyIntroduced } from "state/init-selectors";
 import {
@@ -12,6 +13,7 @@ import {
     NODE_CARD_FRIENDSHIP_LOAD,
     NODE_CARD_PEOPLE_LOAD,
     NODE_CARD_PREPARE,
+    NODE_CARD_SHERIFF_LIST_LOAD,
     NODE_CARD_STORIES_LOAD,
     NODE_CARD_SUBSCRIPTION_LOAD,
     nodeCardBlockingLoad,
@@ -32,13 +34,20 @@ import {
     nodeCardPeopleLoadFailed,
     nodeCardPeopleSet,
     NodeCardPrepareAction,
+    nodeCardSheriffListLoad,
+    NodeCardSheriffListLoadAction,
+    nodeCardSheriffListSet,
     nodeCardStoriesLoad,
     NodeCardStoriesLoadAction,
     nodeCardStoriesSet,
     nodeCardSubscriptionLoad,
     NodeCardSubscriptionLoadAction,
     nodeCardSubscriptionLoadFailed,
-    nodeCardSubscriptionSet
+    nodeCardSubscriptionSet,
+    SHERIFF_LIST_ADD,
+    SHERIFF_LIST_DELETE,
+    SheriffListAddAction,
+    SheriffListDeleteAction
 } from "state/nodecards/actions";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
@@ -55,11 +64,15 @@ export default [
     executor(NODE_CARD_SUBSCRIPTION_LOAD, payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
     executor(NODE_CARD_FRIENDSHIP_LOAD, payload => payload.nodeName, nodeCardFriendshipLoadSaga, mutuallyIntroduced),
     executor(NODE_CARD_BLOCKING_LOAD, payload => payload.nodeName, nodeCardBlockingLoadSaga, mutuallyIntroduced),
-    executor(NODE_CARD_COPY_MENTION, "", nodeCardCopyMention)
+    executor(NODE_CARD_SHERIFF_LIST_LOAD, payload => payload.nodeName, nodeCardSheriffListLoadSaga, mutuallyIntroduced),
+    executor(NODE_CARD_COPY_MENTION, "", nodeCardCopyMention),
+    executor(SHERIFF_LIST_ADD, payload => payload.nodeName, sheriffListAddSaga),
+    executor(SHERIFF_LIST_DELETE, payload => payload.nodeName, sheriffListDeleteSaga)
 ];
 
-function* nodeCardPrepareSaga(action: NodeCardPrepareAction) {
+function* nodeCardPrepareSaga(action: WithContext<NodeCardPrepareAction>) {
     const {nodeName} = action.payload;
+    const {homeOwnerName} = action.context;
     const card = yield* select(getNodeCard, nodeName);
     if (card == null || (!card.details.loaded && !card.details.loading)) {
         yield* put(nodeCardDetailsLoad(nodeName));
@@ -78,6 +91,11 @@ function* nodeCardPrepareSaga(action: NodeCardPrepareAction) {
     }
     if (card == null || (!card.blocking.loaded && !card.blocking.loading)) {
         yield* put(nodeCardBlockingLoad(nodeName));
+    }
+    if (homeOwnerName === SHERIFF_GOOGLE_PLAY_TIMELINE
+        && (card == null || (!card.sheriffList.loaded && !card.sheriffList.loading))) {
+
+        yield* put(nodeCardSheriffListLoad(nodeName));
     }
 }
 
@@ -220,9 +238,55 @@ function* loadBlockedBy(nodeName: string, homeOwnerName: string | null) {
     return yield* call(Node.searchBlockedByUsers, ":", {postings: [{nodeName}]});
 }
 
+function* nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoadAction>) {
+    const {nodeName} = action.payload;
+
+    if (nodeName.search(/[/:]/g) >= 0) {
+        // FIXME dirty hack to avoid URLs as node names in the request's URL - this creates a malformed URL and
+        // causes CORS error
+        return;
+    }
+
+    try {
+        yield* call(Node.getUserListItem, ":", SHERIFF_USER_LIST_HIDE, nodeName);
+        yield* put(nodeCardSheriffListSet(nodeName, true));
+    } catch (e) {
+        if (e instanceof NodeApiError && e.errorCode === "user-list-item.not-found") {
+            yield* put(nodeCardSheriffListSet(nodeName, false));
+        } else {
+            yield* put(nodeCardBlockingLoadFailed(nodeName));
+            if (!(e instanceof NameResolvingError) && !(e instanceof HomeNotConnectedError)) {
+                yield* put(errorThrown(e));
+            }
+        }
+    }
+}
+
 function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
     yield* call(clipboardCopy, mentionName(action.payload.nodeName, action.payload.fullName));
     if (!Browser.isAndroidBrowser()) {
         yield* put(flashBox(i18n.t("mention-copied")));
+    }
+}
+
+function* sheriffListAddSaga(action: SheriffListAddAction) {
+    const {nodeName} = action.payload;
+    try {
+        yield* call(Node.postUserListItem, ":", SHERIFF_USER_LIST_HIDE, nodeName);
+        yield* put(nodeCardSheriffListSet(nodeName, true));
+        yield* put(flashBox(i18n.t("content-hidden-in-google-play")));
+    } catch (e) {
+        yield* put(errorThrown(e));
+    }
+}
+
+function* sheriffListDeleteSaga(action: SheriffListDeleteAction) {
+    const {nodeName} = action.payload;
+    try {
+        yield* call(Node.deleteUserListItem, ":", SHERIFF_USER_LIST_HIDE, nodeName);
+        yield* put(nodeCardSheriffListSet(nodeName, false));
+        yield* put(flashBox(i18n.t("content-unhidden-in-google-play")));
+    } catch (e) {
+        yield* put(errorThrown(e));
     }
 }

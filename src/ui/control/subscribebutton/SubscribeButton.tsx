@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import { NodeName } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName, isPrincipalIn } from "state/node/selectors";
 import { feedSubscribe, feedUnsubscribe } from "state/feeds/actions";
@@ -18,12 +19,12 @@ import { getHomeFriendsId, getHomeOwnerGender, getHomeOwnerName } from "state/ho
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { isFeedSheriff, isFeedSheriffProhibited } from "state/feeds/selectors";
+import { sheriffListAdd, sheriffListDelete } from "state/nodecards/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { Button, DropdownMenu } from "ui/control";
 import { tGender } from "i18n";
 import "./SubscribeButton.css";
-import { NodeName } from "api";
 
 interface OwnProps {
     small?: boolean | null;
@@ -41,15 +42,15 @@ function SubscribeButtonImpl({
 }: Props) {
     const fullName = card?.details.profile.fullName ?? null;
     const blogName = fullName || NodeName.shorten(nodeName);
-    const subscribing = card?.subscription?.subscribing ?? false;
-    const unsubscribing = card?.subscription?.unsubscribing ?? false;
-    const subscriber = card?.subscription?.subscriber;
-    const subscription = card?.subscription?.subscription;
-    const friendGroups = card?.friendship?.groups;
-    const remoteFriendGroups = card?.friendship?.remoteGroups;
-    const updatingFriendship = card?.friendship?.updating;
-    const blockedList = card?.blocking?.blocked;
-    const blockedByList = card?.blocking?.blockedBy;
+    const subscribing = card?.subscription.subscribing ?? false;
+    const unsubscribing = card?.subscription.unsubscribing ?? false;
+    const subscriber = card?.subscription.subscriber;
+    const subscription = card?.subscription.subscription;
+    const friendGroups = card?.friendship.groups;
+    const remoteFriendGroups = card?.friendship.remoteGroups;
+    const updatingFriendship = card?.friendship.updating;
+    const blockedList = card?.blocking.blocked;
+    const blockedByList = card?.blocking.blockedBy;
 
     const {t} = useTranslation();
 
@@ -83,6 +84,16 @@ function SubscribeButtonImpl({
     const onUnhideInGooglePlay = () => {
         confirmBox(t("unhide-blog-google-play", {"name": blogName}), t("unhide"), t("cancel"),
             sheriffOrderDelete({nodeName, feedName: "timeline"}), null, "success");
+    };
+
+    const onHideContentInGooglePlay = () => {
+        confirmBox(t("hide-content-user-in-google-play", {"name": blogName}), t("hide"), t("cancel"),
+            sheriffListAdd(nodeName), null, "danger");
+    };
+
+    const onUnhideContentInGooglePlay = () => {
+        confirmBox(t("unhide-content-user-in-google-play", {"name": blogName}), t("unhide"), t("cancel"),
+            sheriffListDelete(nodeName), null, "success");
     };
 
     const subscribed = subscription != null;
@@ -215,6 +226,22 @@ function SubscribeButtonImpl({
                     href: peerHref,
                     onClick: onUnhideInGooglePlay,
                     show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
+                },
+                {
+                    caption: t("banned-content-android-google-play"),
+                    show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === true
+                },
+                {
+                    title: t("hide-content-in-google-play"),
+                    href: peerHref,
+                    onClick: onHideContentInGooglePlay,
+                    show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === false
+                },
+                {
+                    title: t("unhide-content-in-google-play"),
+                    href: peerHref,
+                    onClick: onUnhideContentInGooglePlay,
+                    show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === true
                 }
             ]} onDialogOpened={onDialogOpened}>
                 {small ?

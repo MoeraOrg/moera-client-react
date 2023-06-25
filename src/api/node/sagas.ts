@@ -75,7 +75,7 @@ import {
     SubscriptionInfo,
     SubscriptionOperations,
     SubscriptionType,
-    TokenInfo,
+    TokenInfo, UserListItemInfo,
     WhoAmI
 } from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
@@ -835,7 +835,7 @@ export function* searchBlockedByUsers(nodeName: string | null,
 export function* postRemoteSheriffOrder(nodeName: string | null, remoteNodeName: string,
                                         sheriffOrder: SheriffOrderAttributes): CallApiResult<Result> {
     return yield* callApi({
-        nodeName, location: `/nodes/${remoteNodeName}/sheriff/orders`, method: "POST", auth: true, body: sheriffOrder,
+        nodeName, location: ut`/nodes/${remoteNodeName}/sheriff/orders`, method: "POST", auth: true, body: sheriffOrder,
         schema: NodeApi.Result
     });
 }
@@ -843,7 +843,7 @@ export function* postRemoteSheriffOrder(nodeName: string | null, remoteNodeName:
 export function* getRemoteSheriffOrder(nodeName: string | null, remoteNodeName: string,
                                        id: string): CallApiResult<SheriffOrderInfo> {
     return yield* callApi({
-        nodeName, location: `/nodes/${remoteNodeName}/sheriff/orders/${id}`, schema: NodeApi.SheriffOrderInfo
+        nodeName, location: ut`/nodes/${remoteNodeName}/sheriff/orders/${id}`, schema: NodeApi.SheriffOrderInfo
     });
 }
 
@@ -865,13 +865,13 @@ export function* getSheriffComplainGroupsSlice(
 
 export function* getSheriffComplainGroup(nodeName: string | null, id: string): CallApiResult<SheriffComplainGroupInfo> {
     return yield* callApi({
-        nodeName, location: `/sheriff/complains/groups/${id}`, auth: true, schema: NodeApi.SheriffComplainGroupInfo
+        nodeName, location: ut`/sheriff/complains/groups/${id}`, auth: true, schema: NodeApi.SheriffComplainGroupInfo
     });
 }
 
 export function* getSheriffComplainsByGroup(nodeName: string | null, id: string): CallApiResult<SheriffComplainInfo[]> {
     return yield* callApi({
-        nodeName, location: `/sheriff/complains/groups/${id}/complains`, auth: true,
+        nodeName, location: ut`/sheriff/complains/groups/${id}/complains`, auth: true,
         schema: NodeApi.SheriffComplainInfoArray
     });
 }
@@ -879,7 +879,31 @@ export function* getSheriffComplainsByGroup(nodeName: string | null, id: string)
 export function* putSheriffComplainGroup(nodeName: string | null, id: string,
                                          decision: SheriffComplainDecisionText): CallApiResult<SheriffComplainGroupInfo> {
     return yield* callApi({
-        nodeName, location: `/sheriff/complains/groups/${id}`, method: "PUT", auth: true, body: decision,
+        nodeName, location: ut`/sheriff/complains/groups/${id}`, method: "PUT", auth: true, body: decision,
         schema: NodeApi.SheriffComplainGroupInfo
+    });
+}
+
+export function* getUserListItem(nodeName: string | null, listName: string,
+                                 name: string): CallApiResult<UserListItemInfo> {
+    return yield* callApi({
+        nodeName, location: ut`/user-lists/${listName}/items/${name}`, schema: NodeApi.UserListItemInfo,
+        errorFilter: ["user-list-item.not-found"]
+    });
+}
+
+export function* postUserListItem(nodeName: string | null, listName: string,
+                                  name: string): CallApiResult<UserListItemInfo> {
+    return yield* callApi({
+        nodeName, location: ut`/user-lists/${listName}/items`, method: "POST", auth: true, body: {nodeName: name},
+        schema: NodeApi.UserListItemInfo
+    });
+}
+
+export function* deleteUserListItem(nodeName: string | null, listName: string,
+                                    name: string): CallApiResult<Result> {
+    return yield* callApi({
+        nodeName, location: ut`/user-lists/${listName}/items/${name}`, method: "DELETE", auth: true,
+        schema: NodeApi.Result
     });
 }

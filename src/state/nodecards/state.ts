@@ -45,6 +45,11 @@ export interface NodeCardState {
         loaded: boolean;
         blocked: BlockedUserInfo[] | null;
         blockedBy: BlockedByUserInfo[] | null;
+    },
+    sheriffList: {
+        loading: boolean;
+        loaded: boolean;
+        blocked: boolean | null;
     }
 }
 

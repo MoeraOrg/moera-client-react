@@ -3603,3 +3603,22 @@ export const SheriffComplainInfoArray = schema({
     type: "array",
     items: SheriffComplainInfoType
 } as JSONSchemaType<API.SheriffComplainInfo[]>);
+
+export const UserListItemInfoType: JSONSchemaType<API.UserListItemInfo> = {
+    type: "object",
+    properties: {
+        "nodeName": {
+            type: "string"
+        },
+        "createdAt": {
+            type: "integer"
+        },
+        "moment": {
+            type: "integer"
+        }
+    },
+    required: ["nodeName", "createdAt", "moment"],
+    additionalProperties: false
+};
+
+export const UserListItemInfo = schema(UserListItemInfoType);

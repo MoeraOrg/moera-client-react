@@ -200,6 +200,34 @@ export const nodeCardBlockingSet = (nodeName: string,
     payload: {nodeName, blocked, blockedBy}
 });
 
+export const NODE_CARD_SHERIFF_LIST_LOAD = "NODE_CARD_SHERIFF_LIST_LOAD";
+export type NodeCardSheriffListLoadAction = ActionWithPayload<typeof NODE_CARD_SHERIFF_LIST_LOAD, {
+    nodeName: string;
+}>;
+export const nodeCardSheriffListLoad = (nodeName: string): NodeCardSheriffListLoadAction => ({
+    type: NODE_CARD_SHERIFF_LIST_LOAD,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_SHERIFF_LIST_LOAD_FAILED = "NODE_CARD_SHERIFF_LIST_LOAD_FAILED";
+export type NodeCardSheriffListLoadFailedAction = ActionWithPayload<typeof NODE_CARD_SHERIFF_LIST_LOAD_FAILED, {
+    nodeName: string;
+}>;
+export const nodeCardSheriffListLoadFailed = (nodeName: string): NodeCardSheriffListLoadFailedAction => ({
+    type: NODE_CARD_SHERIFF_LIST_LOAD_FAILED,
+    payload: {nodeName}
+});
+
+export const NODE_CARD_SHERIFF_LIST_SET = "NODE_CARD_SHERIFF_LIST_SET";
+export type NodeCardSheriffListSetAction = ActionWithPayload<typeof NODE_CARD_SHERIFF_LIST_SET, {
+    nodeName: string;
+    blocked: boolean;
+}>;
+export const nodeCardSheriffListSet = (nodeName: string, blocked: boolean): NodeCardSheriffListSetAction => ({
+    type: NODE_CARD_SHERIFF_LIST_SET,
+    payload: {nodeName, blocked}
+});
+
 export const NODE_CARDS_CLIENT_SWITCH = "NODE_CARDS_CLIENT_SWITCH";
 export type NodeCardsClientSwitchAction = Action<typeof NODE_CARDS_CLIENT_SWITCH>;
 export const nodeCardsClientSwitch = (): NodeCardsClientSwitchAction => ({
@@ -222,6 +250,24 @@ export const nodeCardCopyMention = (nodeName: string, fullName: string | null): 
     payload: {nodeName, fullName}
 });
 
+export const SHERIFF_LIST_ADD = "SHERIFF_LIST_ADD";
+export type SheriffListAddAction = ActionWithPayload<typeof SHERIFF_LIST_ADD, {
+    nodeName: string;
+}>;
+export const sheriffListAdd = (nodeName: string): SheriffListAddAction => ({
+    type: SHERIFF_LIST_ADD,
+    payload: {nodeName}
+});
+
+export const SHERIFF_LIST_DELETE = "SHERIFF_LIST_DELETE";
+export type SheriffListDeleteAction = ActionWithPayload<typeof SHERIFF_LIST_DELETE, {
+    nodeName: string;
+}>;
+export const sheriffListDelete = (nodeName: string): SheriffListDeleteAction => ({
+    type: SHERIFF_LIST_DELETE,
+    payload: {nodeName}
+});
+
 export type NodeCardsAnyAction =
     NodeCardPrepareAction
     | NodeCardDetailsLoadAction
@@ -242,6 +288,11 @@ export type NodeCardsAnyAction =
     | NodeCardBlockingLoadAction
     | NodeCardBlockingLoadFailedAction
     | NodeCardBlockingSetAction
+    | NodeCardSheriffListLoadAction
+    | NodeCardSheriffListLoadFailedAction
+    | NodeCardSheriffListSetAction
     | NodeCardsClientSwitchAction
     | NodeCardsRefreshAction
-    | NodeCardCopyMentionAction;
+    | NodeCardCopyMentionAction
+    | SheriffListAddAction
+    | SheriffListDeleteAction;
