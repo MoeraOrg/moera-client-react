@@ -1,9 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import ICU from 'i18next-icu';
-import { enUS, ru, uk } from 'date-fns/locale'
+import { enUS, pl, ru, uk } from 'date-fns/locale'
 
 import message_en from "i18n/locales/en/message.json";
+import message_pl from "i18n/locales/pl/message.json";
 import message_ru from "i18n/locales/ru/message.json";
 import message_uk from "i18n/locales/uk/message.json";
 
@@ -13,6 +14,9 @@ const LANGUAGE_RESOURCES = {
     en: {
         message: message_en
     },
+    pl: {
+        message: message_pl
+    },
     ru: {
         message: message_ru
     },
@@ -21,10 +25,11 @@ const LANGUAGE_RESOURCES = {
     }
 };
 
-const LANGUAGES_SUPPORTED: string[] = ["en", "ru", "uk"];
+const LANGUAGES_SUPPORTED: string[] = ["en", "pl", "ru", "uk"];
 
 const DATE_FNS_LOCALES: Partial<Record<string, Locale>> = {
     "en": enUS,
+    "pl": pl,
     "ru": ru,
     "uk": uk
 }
