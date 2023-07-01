@@ -1715,6 +1715,18 @@ const StorySummaryEntryType: JSONSchemaType<API.StorySummaryEntry> = {
         "heading": {
             type: "string",
             nullable: true
+        },
+        "sheriffs": {
+            type: "array",
+            items: {
+                type: "string"
+            },
+            nullable: true
+        },
+        "sheriffMarks": {
+            type: "array",
+            items: SheriffMarkType,
+            nullable: true
         }
     },
     required: [],

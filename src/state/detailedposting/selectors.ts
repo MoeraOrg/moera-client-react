@@ -12,6 +12,7 @@ import {
     isPostingSheriffProhibited
 } from "state/postings/selectors";
 import { CommentsState, ExtCommentInfo } from "state/detailedposting/state";
+import { isSheriffMarked } from "util/sheriff";
 
 export function getDetailedPostingId(state: ClientState): string | null {
     return state.detailedPosting.id;
@@ -273,7 +274,7 @@ export function isCommentsShowInvisible(state: ClientState): boolean {
 }
 
 export function isCommentSheriffMarked(comment: CommentInfo | null, sheriffName: string | null): boolean {
-    return sheriffName != null && comment?.sheriffMarks?.find(sm => sm.sheriffName === sheriffName) != null;
+    return isSheriffMarked(comment, sheriffName);
 }
 
 export function isCommentSheriffProhibited(posting: PostingInfo | null, comment: CommentInfo | null,

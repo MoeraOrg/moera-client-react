@@ -501,6 +501,8 @@ export interface StorySummaryEntry {
     ownerFullName?: string | null;
     ownerGender?: string | null;
     heading?: string | null;
+    sheriffs?: string[] | null;
+    sheriffMarks?: SheriffMark[] | null;
 }
 
 export interface StorySummaryReaction {

@@ -4,6 +4,7 @@ import { ClientState } from "state/state";
 import { FeedState } from "state/feeds/state";
 import { emptyFeed } from "state/feeds/empty";
 import { getSetting } from "state/settings/selectors";
+import { isSheriffMarked } from "util/sheriff";
 
 const MAX_MOMENT = 25337597040000; // January 1, 9999
 
@@ -41,14 +42,11 @@ export function isFeedSheriff(state: ClientState, feedName: string, sheriffName:
 }
 
 export function isFeedSheriffMarked(state: ClientState, feedName: string, sheriffName: string | null): boolean {
-    if (sheriffName == null) {
-        return false;
-    }
     const feed = getFeedState(state, feedName);
     if (!feed.loadedGeneral) {
         return false;
     }
-    return feed.sheriffMarks?.find(sm => sm.sheriffName === sheriffName) != null;
+    return isSheriffMarked(feed, sheriffName);
 }
 
 export function isFeedSheriffProhibited(state: ClientState, feedName: string, sheriffName: string | null): boolean {

@@ -3,6 +3,8 @@ import { ClientState } from "state/state";
 import { getToken } from "state/node/selectors";
 import { NodeCardState } from "state/nodecards/state";
 import { getNodeCard } from "state/nodecards/selectors";
+import { Browser } from "ui/browser";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
 export function getHomeRootLocation(state: ClientState): string | null {
     return state.home.root.location;
@@ -93,4 +95,8 @@ export function getAddonApiVersion(state: ClientState): number {
 
 export function hasInactiveConnections(state: ClientState): boolean {
     return state.home.roots.length > 1;
+}
+
+export function isHomeGooglePlayHiding(state: ClientState): boolean {
+    return Browser.isAndroidGooglePlay() && getHomeOwnerName(state) !== SHERIFF_GOOGLE_PLAY_TIMELINE;
 }

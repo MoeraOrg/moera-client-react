@@ -65,6 +65,8 @@ type InstantTargetSupplier = (story: StoryInfo | ExtStoryInfo) => InstantTarget;
 export type InstantStoryButtonsActionSupplier = (story: StoryInfo,
                                                  context: ActionContext) => ClientAction | null | undefined;
 
+type SheriffField = "posting" | "comment" | "comments";
+
 interface InstantTypeDetails {
     color?: string;
     icon?: IconProp;
@@ -72,6 +74,7 @@ interface InstantTypeDetails {
     target: InstantTargetSupplier;
     buttons?: React.ComponentType<InstantStoryButtonsProps>;
     buttonsAction?: InstantStoryButtonsActionSupplier;
+    sheriffFields?: SheriffField[];
 }
 
 const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
@@ -107,7 +110,8 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         color: "var(--bs-blue)",
         icon: "at",
         summary: (data, homeOwnerName, t) => buildMentionPostingSummary(data, t),
-        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`})
+        target: story => ({nodeName: story.remoteNodeName, href: `/post/${story.remotePostingId}`}),
+        sheriffFields: ["posting"]
     },
     "mention-comment": {
         color: "var(--bs-blue)",
@@ -116,7 +120,8 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: story.remoteNodeName,
             href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
-        })
+        }),
+        sheriffFields: ["posting", "comment"]
     },
     "subscriber-added": {
         color: "var(--bs-indigo)",
@@ -145,7 +150,8 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: story.remoteNodeName,
             href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
-        })
+        }),
+        sheriffFields: ["posting", "comments"]
     },
     "reply-comment": {
         color: "var(--green-light)",
@@ -154,7 +160,8 @@ const INSTANT_TYPES: Record<StoryType, InstantTypeDetails> = {
         target: story => ({
             nodeName: story.remoteNodeName,
             href: `/post/${story.remotePostingId}?comment=${story.remoteCommentId}`
-        })
+        }),
+        sheriffFields: ["posting", "comments"]
     },
     "comment-post-task-failed": {
         color: "var(--incorrect)",

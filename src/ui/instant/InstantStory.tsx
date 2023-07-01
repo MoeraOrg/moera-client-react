@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
+import { isHomeGooglePlayHiding } from "state/home/selectors";
 import { storyReadingUpdate } from "state/stories/actions";
 import { ExtStoryInfo } from "state/feeds/state";
 import { getSetting } from "state/settings/selectors";
@@ -22,7 +23,7 @@ type Props = {
     hide: () => void;
 } & ConnectedProps<typeof connector>;
 
-function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: Props) {
+function InstantStory({story, lastNew, hide, profileLink, googlePlayHiding, storyReadingUpdate}: Props) {
     const {t} = useTranslation();
 
     const onJump = (href: string, performJump: () => void) => {
@@ -43,15 +44,30 @@ function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: P
 
     return (
         <div className={cx("instant", {"unread": !story.read, "last-new": lastNew})}>
-            {profileLink && <Jump nodeName={story.summaryNodeName} href="/profile" className="outer cells-avatar"/>}
-            <Jump nodeName={nodeName} href={href} trackingId={trackingId} onNear={onJump} onFar={onJump}
-                  className={cx("outer", {"cells-summary": profileLink, "cells-all": !profileLink})}/>
-            <div className="summary-avatar">
-                <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName=":" size={36}/>
-            </div>
-            <div className="summary">
-                <InstantHtml story={story}/>
-            </div>
+            {!googlePlayHiding || !story.hideSheriffMarked ?
+                <>
+                    {profileLink &&
+                        <Jump nodeName={story.summaryNodeName} href="/profile" className="outer cells-avatar"/>
+                    }
+                    <Jump nodeName={nodeName} href={href} trackingId={trackingId} onNear={onJump} onFar={onJump}
+                          className={cx("outer", {"cells-summary": profileLink, "cells-all": !profileLink})}/>
+                    <div className="summary-avatar">
+                        <Avatar avatar={story.summaryAvatar} ownerName={story.summaryNodeName} nodeName=":" size={36}/>
+                    </div>
+                    <div className="summary">
+                        <InstantHtml story={story}/>
+                    </div>
+                </>
+            :
+                <>
+                    <div className="summary-avatar">
+                        <Avatar avatar={null} ownerName={null} size={36}/>
+                    </div>
+                    <div className="summary">
+                        {t("content-not-accessible-android")}
+                    </div>
+                </>
+            }
             <div className="footer">
                 <time className="date" dateTime={formatISO(publishDate)}>
                     {formatDistanceToNow(publishDate, {locale: getDateFnsLocale()})}
@@ -71,7 +87,8 @@ function InstantStory({story, lastNew, hide, profileLink, storyReadingUpdate}: P
 const connector = connect(
     (state: ClientState) => ({
         pulse: state.pulse.pulse, // To force re-rendering only
-        profileLink: getSetting(state, "instants.profile-link") as boolean
+        profileLink: getSetting(state, "instants.profile-link") as boolean,
+        googlePlayHiding: isHomeGooglePlayHiding(state)
     }),
     { storyReadingUpdate }
 );

@@ -32,8 +32,10 @@ import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_SATISFY, STORY_UPDATED } from "state/stories/actions";
-import { getInstantSummary } from "ui/instant/instant-types";
+import { getInstantSummary, getInstantTypeDetails } from "ui/instant/instant-types";
 import { replaceEmojis } from "util/html";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
 
 const initialState = {
 };
@@ -64,11 +66,49 @@ function extractStory(story: StoryInfo, homeOwnerName: string | null): ExtStoryI
     if (story.comment) {
         t.commentId = story.comment.id;
     }
+    sheriffMarkStory(t);
     if (story.summary == null) {
         story.summary = getInstantSummary(story, homeOwnerName);
     }
     t.summary = replaceEmojis(story.summary);
     return t;
+}
+
+function sheriffMarkStory(story: ExtStoryInfo): void {
+    const fields = getInstantTypeDetails(story.storyType)?.sheriffFields;
+    if (fields == null || fields.length === 0 || story.summaryData == null) {
+        return;
+    }
+    story.hideSheriffMarked = false;
+    const data = story.summaryData;
+    for (const field of fields) {
+        switch (field) {
+            case "posting":
+                if (!isSheriffGoverned(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
+                    || isSheriffMarked(data.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)) {
+
+                    story.hideSheriffMarked = true;
+                    return;
+                }
+                break;
+            case "comment":
+                if (isSheriffMarked(data.comment, SHERIFF_GOOGLE_PLAY_TIMELINE)) {
+                    story.hideSheriffMarked = true;
+                    return;
+                }
+                break;
+            case "comments": {
+                const comments = data.comments?.filter(c => !isSheriffMarked(c, SHERIFF_GOOGLE_PLAY_TIMELINE));
+                if (comments?.length === 0) {
+                    story.hideSheriffMarked = true;
+                    return;
+                } else {
+                    data.comments = comments;
+                }
+                break;
+            }
+        }
+    }
 }
 
 function updateScrollingOnActive(istate: WrappedObject<FeedsState>, feedName: string, feed: FeedState,

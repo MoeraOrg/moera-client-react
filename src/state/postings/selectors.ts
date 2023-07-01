@@ -2,6 +2,7 @@ import { FeedReference, PostingInfo, StoryInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
+import { isSheriffGoverned, isSheriffMarked } from "util/sheriff";
 import { now } from "util/misc";
 
 export function getPosting(state: ClientState, id: string | null, nodeName: string = ""): ExtPostingInfo | null {
@@ -95,11 +96,11 @@ export function findPostingIdsByRemote(postings: PostingsState, remoteNodeName: 
 }
 
 export function isPostingSheriff(posting: PostingInfo | null | undefined, sheriffName: string | null): boolean {
-    return sheriffName != null && posting?.sheriffs != null && posting.sheriffs.includes(sheriffName);
+    return isSheriffGoverned(posting, sheriffName);
 }
 
 export function isPostingSheriffMarked(posting: PostingInfo | null | undefined, sheriffName: string | null): boolean {
-    return sheriffName != null && posting?.sheriffMarks?.find(sm => sm.sheriffName === sheriffName) != null;
+    return isSheriffMarked(posting, sheriffName);
 }
 
 export function isPostingSheriffProhibited(posting: PostingInfo | null | undefined,
