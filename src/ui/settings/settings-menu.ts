@@ -109,6 +109,9 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 component(SettingsItemTokens)
             ])
         ]),
+        sheet("moderation", [
+            option("sheriffs.timeline")
+        ]),
         sheet("webui", [
             option("webui.enabled"),
             option("webui.redirect-to-client"),

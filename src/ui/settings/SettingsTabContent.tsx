@@ -15,6 +15,7 @@ import {
 import SettingsSheet from "ui/settings/SettingsSheet";
 import SettingsItemAddonsEmpty from "ui/settings/SettingsItemAddonsEmpty";
 import SettingsPluginControls from "ui/settings/SettingsPluginControls";
+import SettingsModerationSheet from "ui/settings/SettingsModerationSheet";
 
 interface OwnProps {
     tab: SettingsTabId;
@@ -35,6 +36,8 @@ function SettingsTabContent({sheet, otherItems, addonsItems, clientValues, clien
         case "addons":
             items = addonsItems;
             break;
+        case "moderation":
+            return <SettingsModerationSheet valuesMap={clientValues}/>;
         default:
             items = sheet.children;
             break;
