@@ -386,6 +386,21 @@ export const settingsLanguageChanged = (): SettingsLanguageChangedAction => ({
     type: SETTINGS_LANGUAGE_CHANGED
 });
 
+export const SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY = "SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY";
+export type SettingsRemindSetSheriffGooglePlayAction = Action<typeof SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY>;
+export const settingsRemindSetSheriffGooglePlay = (): SettingsRemindSetSheriffGooglePlayAction => ({
+    type: SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY
+});
+
+export const SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE = "SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE";
+export type SettingsRemindSetSheriffGooglePlayChoiceAction = ActionWithPayload<typeof SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE, {
+    allow: boolean | null
+}>;
+export const settingsRemindSetSheriffGooglePlayChoice = (allow: boolean | null): SettingsRemindSetSheriffGooglePlayChoiceAction => ({
+    type: SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE,
+    payload: {allow}
+});
+
 export type SettingsAnyAction =
     SettingsGoToTabAction
     | SettingsGoToSheetAction
@@ -438,4 +453,6 @@ export type SettingsAnyAction =
     | SettingsPluginsDeletedAction
     | SettingsPluginsConflictAction
     | SettingsPluginsConflictCloseAction
-    | SettingsLanguageChangedAction;
+    | SettingsLanguageChangedAction
+    | SettingsRemindSetSheriffGooglePlayAction
+    | SettingsRemindSetSheriffGooglePlayChoiceAction;

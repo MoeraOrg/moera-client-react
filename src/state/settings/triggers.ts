@@ -4,7 +4,7 @@ import { conj, inv, trigger } from "state/trigger";
 import { isAtSettingsPage } from "state/navigation/selectors";
 import {
     isAtSettingsClientTab,
-    isAtSettingsNodeTab,
+    isAtSettingsNodeTab, isRemindToSetSheriffGooglePlay,
     isSettingsAtAddonsSheet,
     isSettingsAtSecuritySheet,
     isSettingsClientValuesToBeLoaded,
@@ -31,7 +31,7 @@ import {
     settingsNodeValuesUnset,
     settingsPluginsConflict,
     settingsPluginsLoad,
-    settingsPluginsUnset,
+    settingsPluginsUnset, settingsRemindSetSheriffGooglePlay,
     settingsTokensLoad,
     settingsTokensUnset
 } from "state/settings/actions";
@@ -45,6 +45,7 @@ import {
     EVENT_HOME_PLUGINS_UPDATED
 } from "api/events/actions";
 import { flashBox } from "state/flashbox/actions";
+import { POST_INIT_DELAYED } from "state/pulse/actions";
 
 export default [
     trigger(SETTINGS_GO_TO_TAB, isSettingsNodeValuesToBeLoaded, settingsNodeValuesLoad),
@@ -82,5 +83,6 @@ export default [
         EVENT_HOME_PLUGINS_UPDATED,
         conj(isAtSettingsPage, isAtSettingsNodeTab, isSettingsPluginsLoaded),
         settingsPluginsConflict
-    )
+    ),
+    trigger(POST_INIT_DELAYED, isRemindToSetSheriffGooglePlay, settingsRemindSetSheriffGooglePlay)
 ];

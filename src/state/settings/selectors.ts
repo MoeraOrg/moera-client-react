@@ -1,3 +1,6 @@
+import { addDays, isPast } from 'date-fns';
+
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientSettings, SettingTypes } from "api";
 import { ClientSettingMetaInfo } from "api/settings";
 import { SettingValue } from "api/setting-types";
@@ -6,6 +9,7 @@ import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeFeatures } from "state/node/selectors";
 import { Browser } from "ui/browser";
+import { deserializeSheriffs } from "util/sheriff";
 
 export function isAtSettingsNodeTab(state: ClientState): boolean {
     return state.settings.tab === "node";
@@ -21,6 +25,10 @@ export function isSettingsNodeValuesToBeLoaded(state: ClientState): boolean {
 
 export function isSettingsNodeMetaToBeLoaded(state: ClientState): boolean {
     return !state.settings.node.loadedMeta && !state.settings.node.loadingMeta;
+}
+
+export function isSettingsNodeLoaded(state: ClientState): boolean {
+    return state.settings.node.loadedMeta && state.settings.node.loadedValues;
 }
 
 export function isSettingsClientValuesToBeLoaded(state: ClientState): boolean {
@@ -96,4 +104,12 @@ export function getFeedWidth(state: ClientState): number {
         return feedWidth;
     }
     return getNodeFeatures(state)?.feedWidth ?? feedWidth;
+}
+
+export function isRemindToSetSheriffGooglePlay(state: ClientState): boolean {
+    return isConnectedToHome(state) && isSettingsNodeLoaded(state) && isSettingsClientValuesLoaded(state)
+        && !deserializeSheriffs(getSettingNode(state, "sheriffs.timeline") as string)
+                .includes(SHERIFF_GOOGLE_PLAY_TIMELINE)
+        && (getSetting(state, "sheriff.google-play.reminder.count") as number) < 3
+        && isPast(addDays(getSetting(state, "sheriff.google-play.reminder.shown-at") as Date, 7))
 }

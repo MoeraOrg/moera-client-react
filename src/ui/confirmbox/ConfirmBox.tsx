@@ -11,7 +11,9 @@ const forwardAction = (action: any) => action;
 
 type Props = ConnectedProps<typeof connector>;
 
-function ConfirmBox({show, message, yes, no, onYes, onNo, variant, closeConfirmBox, forwardAction}: Props) {
+function ConfirmBox({
+    show, message, yes, no, cancel, onYes, onNo, onCancel, variant, closeConfirmBox, forwardAction
+}: Props) {
     const {t} = useTranslation();
 
     const onClickYes = () => {
@@ -36,19 +38,34 @@ function ConfirmBox({show, message, yes, no, onYes, onNo, variant, closeConfirmB
         }
     };
 
+    const onClickCancel = () => {
+        closeConfirmBox();
+        if (onCancel) {
+            if (typeof(onCancel) === "function") {
+                onCancel();
+            } else {
+                forwardAction(onCancel);
+            }
+        }
+    };
+
     if (!show) {
         return null;
     }
 
     const escapedMessage = htmlEntities(message ?? "")
-        .replace("&lt;b&gt;", "<b>") // Only <b></b> tag is allowed
-        .replace("&lt;/b&gt;", "</b>");
+        .replaceAll("&lt;b&gt;", "<b>") // <b></b> tag is allowed
+        .replaceAll("&lt;/b&gt;", "</b>")
+        .replaceAll("&lt;br&gt;", "<br>"); // <br> tag is allowed
 
     return (
-        <ModalDialog risen onClose={onClickNo}>
+        <ModalDialog risen onClose={onCancel != null ? onClickCancel : onClickNo}>
             <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
             <div className="modal-footer">
-                <Button variant="secondary" onClick={onClickNo} autoFocus>{no ?? t("no")}</Button>
+                {onClickCancel &&
+                    <Button variant="outline-secondary" onClick={onClickCancel}>{cancel ?? t("cancel")}</Button>
+                }
+                <Button variant="secondary" onClick={onClickNo}>{no ?? t("no")}</Button>
                 <Button variant={variant} onClick={onClickYes} autoFocus>{yes ?? t("yes")}</Button>
             </div>
         </ModalDialog>

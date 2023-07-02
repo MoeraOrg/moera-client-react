@@ -10,6 +10,7 @@ import { settingsUpdate } from "state/settings/actions";
 import SettingsButtons from "ui/settings/SettingsButtons";
 import { CheckboxField } from "ui/control/field";
 import { mapEquals } from "util/map";
+import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import "./SettingsSheet.css";
 
 type OuterProps = {
@@ -88,7 +89,7 @@ class SettingsModerationSheet extends React.PureComponent<Props, State> {
 const settingsSheetLogic = {
 
     mapPropsToValues(props: OuterProps): Values {
-        const sheriffs = (props.valuesMap.get("sheriffs.timeline") ?? "").split(",").map(name => name.trim());
+        const sheriffs = deserializeSheriffs(props.valuesMap.get("sheriffs.timeline"));
         return {
             googlePlayAllowed: sheriffs.includes(SHERIFF_GOOGLE_PLAY_TIMELINE)
         };
@@ -99,7 +100,7 @@ const settingsSheetLogic = {
         if (values.googlePlayAllowed) {
             sheriffs.push(SHERIFF_GOOGLE_PLAY_TIMELINE);
         }
-        formik.props.settingsUpdate([{name: "sheriffs.timeline", value: sheriffs.join(",")}]);
+        formik.props.settingsUpdate([{name: "sheriffs.timeline", value: serializeSheriffs(sheriffs)}]);
         formik.setSubmitting(false);
     }
 

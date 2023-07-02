@@ -7,8 +7,10 @@ const initialState = {
     message: null,
     yes: null,
     no: null,
+    cancel: null,
     onYes: null,
     onNo: null,
+    onCancel: null,
     variant: "primary"
 };
 
