@@ -1,10 +1,11 @@
 import { call, put, select } from 'typed-redux-saga';
 
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
+import PROVIDERS, { Provider } from "providers";
 import { Naming, Node, NodeApiError } from "api";
-import { CarteSet } from "api/node/api-types";
+import { CarteSet, SettingInfo } from "api/node/api-types";
 import { getCartes } from "api/node/cartes";
 import { PREFIX } from "api/settings";
-import PROVIDERS, { Provider } from "providers";
 import { errorThrown } from "state/error/actions";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
@@ -28,6 +29,7 @@ import {
 import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
 import { Browser } from "ui/browser";
+import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
 import { now } from "util/misc";
 
@@ -47,7 +49,9 @@ function getProvider(name: string): Provider {
 }
 
 function* signUpSaga(action: SignUpAction) {
-    const {language, provider: providerName, name, domain, password, email, onError} = action.payload;
+    const {
+        language, provider: providerName, name, domain, password, email, googlePlayAllowed, onError
+    } = action.payload;
 
     const stage = yield* select(state => state.signUpDialog.stage);
     const provider = getProvider(providerName);
@@ -135,7 +139,11 @@ function* signUpSaga(action: SignUpAction) {
             if (email) {
                 yield* call(Node.putProfile, rootLocation, {email});
             }
-            yield* call(Node.putSettings, rootLocation, [{name: PREFIX + "language", value: language}]);
+            const settings: SettingInfo[] = [{name: PREFIX + "language", value: language}];
+            if (googlePlayAllowed) {
+                settings.push({name: "sheriffs.timeline", value: serializeSheriffs([SHERIFF_GOOGLE_PLAY_TIMELINE])});
+            }
+            yield* call(Node.putSettings, rootLocation, settings);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
                 yield* put(errorThrown(e));

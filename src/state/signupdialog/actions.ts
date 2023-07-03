@@ -30,12 +30,13 @@ export type SignUpAction = ActionWithPayload<typeof SIGN_UP, {
     domain: string | null;
     password: string;
     email: string | null;
+    googlePlayAllowed: boolean;
     onError: SignUpOnError;
 }>;
 export const signUp = (language: string, provider: string, name: string, domain: string | null, password: string,
-                       email: string | null, onError: SignUpOnError): SignUpAction => ({
+                       email: string | null, googlePlayAllowed: boolean, onError: SignUpOnError): SignUpAction => ({
     type: SIGN_UP,
-    payload: {language, provider, name, domain, password, email, onError}
+    payload: {language, provider, name, domain, password, email, googlePlayAllowed, onError}
 });
 
 export const SIGNED_UP = "SIGNED_UP";

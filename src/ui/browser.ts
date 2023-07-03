@@ -117,7 +117,7 @@ export class Browser {
     }
 
     static isAndroidGooglePlay(): boolean {
-        return true;//this.androidAppFlavor === "google-play";
+        return this.androidAppFlavor === "google-play";
     }
 
     static disableBodyScroll(): void {

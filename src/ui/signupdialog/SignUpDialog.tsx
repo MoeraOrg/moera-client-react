@@ -44,6 +44,7 @@ interface Values {
     confirmPassword: string;
     email: string;
     termsAgree: boolean;
+    googlePlayAllowed: boolean;
 }
 
 type Props = OuterProps  & FormikProps<Values>;
@@ -202,11 +203,11 @@ class SignUpDialog extends React.PureComponent<Props> {
                     <div className="modal-body sign-up-dialog">
                         <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
                                      disabled={processing || stage > SIGN_UP_STAGE_PROFILE}
-                                     selectRef={this.setLanguageSelectRef}/>
+                                     selectRef={this.setLanguageSelectRef} autoFocus/>
                         <SelectField name="provider" title={t("provider")} choices={this.getProviders()} anyValue
                                      disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
                                      selectRef={this.setProviderSelectRef}/>
-                        <InputField name="name" title={t("name")} autoFocus inputRef={this.setNameInputRef}
+                        <InputField name="name" title={t("name")} inputRef={this.setNameInputRef}
                                     disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
                         <NameHelp/>
                         <DomainField name="domain" title={t("domain")}
@@ -219,7 +220,10 @@ class SignUpDialog extends React.PureComponent<Props> {
                                     disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
                         <InputField name="email" title={t("e-mail")}
                                     disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
-                        {Browser.isAndroidApp() && <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>}
+                        {Browser.isAndroidGooglePlay() &&
+                            <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>
+                        }
+                        <CheckboxField title={t("want-allow-android-google-play")} name="googlePlayAllowed"/>
                     </div>
                     <div className="modal-footer">
                         <Button variant="secondary" onClick={cancelSignUpDialog}>{t("cancel")}</Button>
@@ -252,7 +256,8 @@ const signUpDialogLogic = {
         password: props.password ?? "",
         confirmPassword: props.password ?? "",
         email: props.email ?? "",
-        termsAgree: !Browser.isAndroidApp()
+        termsAgree: !Browser.isAndroidApp(),
+        googlePlayAllowed: true
     }),
 
     validationSchema: yup.object().shape({
@@ -278,13 +283,16 @@ const signUpDialogLogic = {
                 schema.required("retype-password").oneOf([password], "passwords-different")
         ),
         email: yup.string().email("not-valid-e-mail"),
-        termsAgree: yup.boolean().test("agree", "need-agree-with-terms", v => v ?? false)
+        termsAgree: yup.boolean().test("agree", "need-agree-with-terms", v => v ?? false),
+        googlePlayAllowed: yup.boolean().test("agree", "need-allow-google-play",
+                v => !Browser.isAndroidGooglePlay() || (v ?? false))
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.props.signUp(values.language, values.provider, values.name.trim(),
             values.autoDomain && formik.props.stage <= SIGN_UP_STAGE_DOMAIN ? null : values.domain.trim(),
-            values.password, values.email, (fieldName, message) => formik.setFieldError(fieldName, message));
+            values.password, values.email, values.googlePlayAllowed,
+            (fieldName, message) => formik.setFieldError(fieldName, message));
         formik.setSubmitting(false);
     }
 
