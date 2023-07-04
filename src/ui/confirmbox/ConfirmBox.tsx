@@ -62,7 +62,7 @@ function ConfirmBox({
         <ModalDialog risen onClose={onCancel != null ? onClickCancel : onClickNo}>
             <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
             <div className="modal-footer">
-                {onClickCancel &&
+                {onCancel &&
                     <Button variant="outline-secondary" onClick={onClickCancel}>{cancel ?? t("cancel")}</Button>
                 }
                 <Button variant="secondary" onClick={onClickNo}>{no ?? t("no")}</Button>

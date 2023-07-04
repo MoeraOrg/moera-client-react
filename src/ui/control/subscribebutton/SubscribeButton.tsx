@@ -216,6 +216,10 @@ function SubscribeButtonImpl({
                     show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
                 },
                 {
+                    caption: t("banned-content-android-google-play"),
+                    show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === true
+                },
+                {
                     title: t("hide-in-google-play"),
                     href: peerHref,
                     onClick: onHideInGooglePlay,
@@ -226,10 +230,6 @@ function SubscribeButtonImpl({
                     href: peerHref,
                     onClick: onUnhideInGooglePlay,
                     show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
-                },
-                {
-                    caption: t("banned-content-android-google-play"),
-                    show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === true
                 },
                 {
                     title: t("hide-content-in-google-play"),
