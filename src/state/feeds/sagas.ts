@@ -1,4 +1,5 @@
 import { call, delay, put, select } from 'typed-redux-saga';
+import i18n from 'i18next';
 
 import { Node } from "api";
 import { PrincipalValue } from "api/node/api-types";
@@ -57,6 +58,7 @@ import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillBlockedOperationsInStories } from "state/blockedoperations/sagas";
 import { fillSubscriptions } from "state/subscriptions/sagas";
+import { flashBox } from "state/flashbox/actions";
 import { getInstantTypeDetails } from "ui/instant/instant-types";
 
 export default [
@@ -108,6 +110,7 @@ function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
     const {nodeName, feedName, storyId} = action.payload;
     try {
         const subscription = yield* call(Node.postFeedSubscription, ":", nodeName, feedName);
+        yield* put(flashBox(i18n.t("you-subscribed")));
         yield* put(feedSubscribed(nodeName, subscription));
         if (storyId != null) {
             yield* put(storySatisfy(":instant", storyId));
@@ -122,6 +125,7 @@ function* feedUnsubscribeSaga(action: FeedUnsubscribeAction) {
     const {nodeName, feedName, subscriptionId} = action.payload;
     try {
         const contact = yield* call(Node.deleteSubscription, ":", subscriptionId);
+        yield* put(flashBox(i18n.t("you-no-longer-subscribed")));
         yield* put(feedUnsubscribed(nodeName, feedName, contact));
     } catch (e) {
         yield* put(feedUnsubscribeFailed(nodeName, feedName));
