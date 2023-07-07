@@ -4,7 +4,9 @@ import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { goToPeople } from "state/navigation/actions";
 import { peopleGoToTab } from "state/people/actions";
+import { getNodeFriendGroups } from "state/node/selectors";
 import { LocationInfo } from "location/LocationInfo";
+import { getPeopleTabTitle } from "ui/people/people-tabs";
 import { atOwner } from "util/misc";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
@@ -12,11 +14,8 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
     if (srcInfo.directories[0] !== "people") {
         actions.push(goToPeople());
     }
-    const srcTab = srcInfo.directories.length > 1
-        && (srcInfo.directories[1] === "subscriptions" || srcInfo.directories[1] === "subscribers")
-        ? srcInfo.directories[1] : "";
-    const dstTab = dstInfo.directories.length > 1 && dstInfo.directories[1] === "subscriptions"
-        ? "subscriptions" : "subscribers";
+    const srcTab = srcInfo.directories.length > 1 ? srcInfo.directories[1] : "";
+    const dstTab = dstInfo.directories.length > 1 ? dstInfo.directories[1] : "subscribers";
     if (srcTab !== dstTab) {
         actions.push(peopleGoToTab(dstTab));
     }
@@ -24,11 +23,8 @@ export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientA
 }
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
-    info = info.sub("people");
-    if (state.people.tab === "subscribers") {
-        info = info.sub("subscribers").withTitle(i18n.t("subscribers") + atOwner(state));
-    } else if (state.people.tab === "subscriptions") {
-        info = info.sub("subscriptions").withTitle(i18n.t("subscriptions") + atOwner(state));
-    }
-    return info;
+    return info
+        .sub("people")
+        .sub(state.people.tab)
+        .withTitle(getPeopleTabTitle(state.people.tab, getNodeFriendGroups(state), i18n.t) + atOwner(state));
 }
