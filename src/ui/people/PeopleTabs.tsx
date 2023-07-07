@@ -34,12 +34,23 @@ const PeopleTabs = ({
                                 peopleGoToTab={peopleGoToTab}/>
             }
             {friendsTotal != null &&
-                friendGroups.map(friendGroup =>
-                    <PeopleTabsItem name={friendGroup.id} title={getFriendGroupTitle(friendGroup.title, t)}
-                                    principal={viewFriends} total={friendsTotal[friendGroup.id] ?? 0}
-                                    loaded={loadedGeneral} active={active} peopleGoToTab={peopleGoToTab}
-                                    key={friendGroup.id}/>
-                )
+                friendGroups.map(friendGroup => {
+                    const title = getFriendGroupTitle(friendGroup.title, t);
+                    const principal = friendGroup.title !== "t:friends"
+                        ? friendGroup.operations?.view ?? "public"
+                        : viewFriends;
+                    const principalTitles = friendGroup.title !== "t:friends"
+                        ? {
+                              "private": t("friend-group-visibility.private"),
+                              "admin": t("friend-group-visibility.admin")
+                          }
+                        :
+                          null;
+                    const total = friendsTotal[friendGroup.id] ?? 0;
+                    return <PeopleTabsItem name={friendGroup.id} title={title} principal={principal}
+                                           principalTitles={principalTitles} total={total} loaded={loadedGeneral}
+                                           active={active} peopleGoToTab={peopleGoToTab} key={friendGroup.id}/>;
+                })
             }
             {friendOfsTotal != null &&
                 <PeopleTabsItem name="friend-ofs" title={t("in-friends")} principal={viewFriendOfs}

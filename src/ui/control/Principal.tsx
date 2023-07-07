@@ -17,9 +17,10 @@ type Props = {
     className?: string | null;
     comment?: string | null;
     icons?: Partial<Record<PrincipalValue, IconProp>> | null;
+    titles?: Partial<Record<PrincipalValue, string>> | null;
 } & ConnectedProps<typeof connector>;
 
-function PrincipalImpl({value, defaultValue, long, className, comment, icons, friendGroups}: Props) {
+function PrincipalImpl({value, defaultValue, long, className, comment, icons, titles, friendGroups}: Props) {
     const {t} = useTranslation();
 
     if (defaultValue != null && value === defaultValue) {
@@ -28,10 +29,8 @@ function PrincipalImpl({value, defaultValue, long, className, comment, icons, fr
 
     let {icon, title} = getPrincipalDisplay(value, friendGroups, t);
     if (value != null) {
-        const ic = icons?.[value];
-        if (ic != null) {
-            icon = ic;
-        }
+        icon = icons?.[value] ?? icon;
+        title = titles?.[value] ?? title;
     }
     if (comment != null) {
         title = `${title} (${comment})`;

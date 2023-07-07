@@ -185,7 +185,8 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                     state,
                     "friendGroups",
                     (fgs: FriendGroupInfo[]) =>
-                        [...fgs, action.payload.details].sort((a, b) => a.createdAt - b.createdAt)
+                        [...fgs.filter(fg => fg.id !== action.payload.details.id), action.payload.details]
+                            .sort((a, b) => a.createdAt - b.createdAt)
                 );
             }
             return state;
@@ -235,13 +236,6 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             return state;
 
         case EVENT_HOME_FRIEND_GROUP_ADDED:
-            return immutable.update(
-                state,
-                "friendGroups",
-                (fgs: FriendGroupInfo[]) =>
-                    [...fgs, action.payload.friendGroup].sort((a, b) => a.createdAt - b.createdAt)
-            );
-
         case EVENT_HOME_FRIEND_GROUP_UPDATED:
             return immutable.update(
                 state,

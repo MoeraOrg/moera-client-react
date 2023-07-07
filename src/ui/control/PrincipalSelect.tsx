@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { TFunction, useTranslation } from 'react-i18next';
@@ -16,6 +17,9 @@ import "./PrincipalSelect.css";
 type Props = {
     value: PrincipalValue | null | undefined;
     values? : PrincipalFlag[] | null;
+    icons?: Partial<Record<PrincipalValue, IconProp>> | null;
+    titles?: Partial<Record<PrincipalValue, string>> | null;
+    caption?: string | null;
     long?: boolean | null;
     className?: string;
     disabled?: boolean | null;
@@ -23,7 +27,7 @@ type Props = {
 } & ConnectedProps<typeof connector>;
 
 function PrincipalSelectImpl({
-    value, values, long, className, disabled, onChange, friendGroups, publicDisabled
+    value, values, icons, titles, caption, long, className, disabled, onChange, friendGroups, publicDisabled
 }: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
@@ -43,10 +47,12 @@ function PrincipalSelectImpl({
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
+                    {caption && <div className="caption">{caption}</div>}
                     {getValues(values, friendGroups, publicDisabled && value !== "public", t)
                         .map(({value: v, icon, title}) =>
                             <div key={v} className="dropdown-item" onClick={onClick(v)}>
-                                <FontAwesomeIcon icon={icon} fixedWidth/>&nbsp;&nbsp;{title}
+                                <FontAwesomeIcon icon="check" className={cx({"invisible": v !== value})}/>{" "}
+                                <FontAwesomeIcon icon={icons?.[v] ?? icon} fixedWidth/>&nbsp;&nbsp;{titles?.[v] ?? title}
                             </div>
                         )
                     }

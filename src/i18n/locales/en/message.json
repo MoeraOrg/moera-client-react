@@ -214,6 +214,11 @@
   "friend" : "Friend",
   "friend-groups" : "Groups of friends...",
   "friend-groups.friends" : "Friends",
+  "friend-group-visibility" : {
+    "admin" : "Private",
+    "private" : "Members only",
+    "public" : "Public"
+  },
   "from-computer" : "From Computer",
   "from-device" : "From Device",
   "from-internet" : "From Internet",
@@ -829,6 +834,7 @@
   "view-previous-complains" : "View previous complaints",
   "view-source" : "View source",
   "view-source-title" : "View Source",
+  "visibility" : "Visibility",
   "want-allow-android-google-play" : "I want my blog to be accessible with Moera for Android app installed from Google Play. I allow the sheriff to read the content of my blog and decide (according to the rules), which posts or comments are to be hidden in Moera for Android",
   "want-delete-addon" : "Do you really want to delete the add-on \"{name}\"?",
   "want-delete-draft" : "Do you really want to delete the draft?",

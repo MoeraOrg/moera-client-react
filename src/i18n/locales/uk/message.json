@@ -214,6 +214,11 @@
   "friend" : "Друг",
   "friend-groups" : "Групи друзів...",
   "friend-groups.friends" : "Друзі",
+  "friend-group-visibility" : {
+    "admin" : "Приватна",
+    "private" : "Тільки для членів",
+    "public" : "Публічна"
+  },
   "from-computer" : "З комп'ютера",
   "from-device" : "З пристрою",
   "from-internet" : "З Інтернету",
@@ -829,6 +834,7 @@
   "view-previous-complains" : "Показати попередні скарги",
   "view-source" : "Показати початковий текст",
   "view-source-title" : "Показати початковий текст",
+  "visibility" : "Видимість",
   "want-allow-android-google-play" : "Я бажаю, щоб мій блог було видно у додатку Moera для Android, що встановлений із Google Play. Я дозволяю шерифу читати вміст мого блогу і вирішувати (відповідно до правил), які пости або коментарі слід приховати у Moera для Android",
   "want-delete-addon" : "Ви дійсно бажаєте видалити доповнення \"{name}\"?",
   "want-delete-draft" : "Ви дійсно бажаєте видалити чернетку?",

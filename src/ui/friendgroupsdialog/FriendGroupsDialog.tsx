@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { tGender } from "i18n";
 import { FriendGroupInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeFriendGroups } from "state/home/selectors";
@@ -14,9 +15,11 @@ import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
-import { tGender } from "i18n";
+import "./FriendGroupsDialog.css";
 
 type OuterProps = ConnectedProps<typeof connector>;
+
+type TitledFriendGroupInfo = Omit<FriendGroupInfo, "title"> & { title: string };
 
 interface Values {
     groups: string[];
@@ -24,17 +27,13 @@ interface Values {
     addedGroups: string[];
     addedGroupTitles: string[];
     addedGroupView: PrincipalValue[];
+    availableGroups: TitledFriendGroupInfo[];
 }
 
 type Props = OuterProps & FormikProps<Values>;
 
-type TitledFriendGroupInfo = Omit<FriendGroupInfo, "title"> & { title: string };
-
 function FriendGroupsDialog(props: Props) {
-    const {
-        show, nodeName, nodeCard, changing, availableGroups, nameDisplayMode, closeFriendGroupsDialog, values,
-        setFieldValue
-    } = props;
+    const {show, nodeName, nodeCard, changing, nameDisplayMode, closeFriendGroupsDialog, values, setFieldValue} = props;
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -51,8 +50,6 @@ function FriendGroupsDialog(props: Props) {
 
     const name = formatFullName(nodeName, nodeCard?.details.profile.fullName, nameDisplayMode);
     const gender = tGender(nodeCard?.details.profile.gender);
-    const available = (availableGroups ?? [])
-        .filter(fg => fg.title !== "t:friends");
 
     const isGroupChecked = (id: string) => (v: string[]): boolean | null =>
         nodeName != null ? v.includes(id) : (values.touchedGroups.includes(id) ? v.includes(id) : null);
@@ -72,10 +69,10 @@ function FriendGroupsDialog(props: Props) {
 
     return (
         <ModalDialog title={nodeName != null ? t("change-friend-groups", {name, gender}) : t("change-groups")}
-                     onClose={closeFriendGroupsDialog}>
+                     className="friend-groups-dialog" onClose={closeFriendGroupsDialog}>
             <Form>
                 <div className="modal-body">
-                    {available.filter((fg): fg is TitledFriendGroupInfo => fg.title != null).map(fg =>
+                    {values.availableGroups.map(fg =>
                         <CheckboxField<string[]> key={fg.id} id={`groups_${fg.id}`} name="groups" title={fg.title}
                                                  value={fg.id} isChecked={isGroupChecked(fg.id)}
                                                  onChange={onGroupChecked(fg.id)} anyValue/>
@@ -84,9 +81,14 @@ function FriendGroupsDialog(props: Props) {
                         <div key={index} className="d-flex">
                             <CheckboxField<string[]> name="addedGroups" value={String(index)}
                                                      isChecked={(v: string[]) => v.includes(String(index))} anyValue/>
-                            <InputField name={`addedGroupTitles[${index}]`} maxLength={63}/>
+                            <InputField name={`addedGroupTitles[${index}]`} maxLength={63}
+                                        groupClassName="add-group-name"/>
                             <PrincipalField name={`addedGroupView[${index}]`} values={["public", "private", "admin"]}
-                                            groupClassName="ms-1"/>
+                                            titles={{
+                                                "public": t("friend-group-visibility.public"),
+                                                "private": t("friend-group-visibility.private"),
+                                                "admin": t("friend-group-visibility.admin")
+                                            }} caption={t("visibility")}/>
                         </div>
                     )}
                     <Button variant="outline-secondary" size="sm" onClick={onAddGroup}>{t("add-group")}</Button>
@@ -107,7 +109,10 @@ const friendGroupsDialogLogic = {
         touchedGroups: [],
         addedGroups: [],
         addedGroupTitles: [],
-        addedGroupView: []
+        addedGroupView: [],
+        availableGroups: (props.availableGroups ?? [])
+            .filter(fg => fg.title !== "t:friends")
+            .filter((fg): fg is TitledFriendGroupInfo => fg.title != null)
     }),
 
     validate(values: Values) {
