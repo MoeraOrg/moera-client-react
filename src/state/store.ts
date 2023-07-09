@@ -114,9 +114,12 @@ import changeDateDialogTriggers from "state/changedatedialog/triggers";
 import peopleTriggers from "state/people/triggers";
 import nodeCardsTriggers from "state/nodecards/triggers";
 import contactsTriggers from "state/contacts/triggers";
+import shareDialogTriggers from "state/sharedialog/triggers";
 import sourceDialogTriggers from "state/sourcedialog/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
+import donateDialogTriggers from "state/donatedialog/triggers";
+import entryCopyTextDialogTriggers from "state/entrycopytextdialog/triggers";
 import peopleHideDialogTriggers from "state/peoplehidedialog/triggers";
 import friendGroupAddDialogTriggers from "state/friendgroupadddialog/triggers";
 import friendGroupsDialogTriggers from "state/friendgroupsdialog/triggers";
@@ -210,9 +213,12 @@ const triggers = collectTriggers(
     peopleTriggers,
     nodeCardsTriggers,
     contactsTriggers,
+    shareDialogTriggers,
     sourceDialogTriggers,
     imageEditDialogTriggers,
     lightBoxTriggers,
+    donateDialogTriggers,
+    entryCopyTextDialogTriggers,
     peopleHideDialogTriggers,
     friendGroupAddDialogTriggers,
     friendGroupsDialogTriggers,

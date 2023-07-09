@@ -4,7 +4,8 @@ import { conj, inv, trigger } from "state/trigger";
 import { isAtSettingsPage } from "state/navigation/selectors";
 import {
     isAtSettingsClientTab,
-    isAtSettingsNodeTab, isRemindToSetSheriffGooglePlay,
+    isAtSettingsNodeTab,
+    isRemindToSetSheriffGooglePlay,
     isSettingsAtAddonsSheet,
     isSettingsAtSecuritySheet,
     isSettingsClientValuesToBeLoaded,
@@ -20,6 +21,10 @@ import {
     SETTINGS_CHANGED_PASSWORD,
     SETTINGS_GO_TO_SHEET,
     SETTINGS_GO_TO_TAB,
+    SETTINGS_TOKENS_CREATED,
+    SETTINGS_TOKENS_DIALOG_CLOSE,
+    SETTINGS_TOKENS_DIALOG_OPEN,
+    SETTINGS_TOKENS_UPDATED,
     settingsChangePasswordDialogClose,
     settingsClientConflict,
     settingsClientValuesLoad,
@@ -31,7 +36,9 @@ import {
     settingsNodeValuesUnset,
     settingsPluginsConflict,
     settingsPluginsLoad,
-    settingsPluginsUnset, settingsRemindSetSheriffGooglePlay,
+    settingsPluginsUnset,
+    settingsRemindSetSheriffGooglePlay,
+    settingsTokensDialogClose,
     settingsTokensLoad,
     settingsTokensUnset
 } from "state/settings/actions";
@@ -84,5 +91,9 @@ export default [
         conj(isAtSettingsPage, isAtSettingsNodeTab, isSettingsPluginsLoaded),
         settingsPluginsConflict
     ),
+    trigger(SETTINGS_TOKENS_DIALOG_OPEN, true, dialogOpened(settingsTokensDialogClose())),
+    trigger(SETTINGS_TOKENS_DIALOG_CLOSE, true, dialogClosed),
+    trigger(SETTINGS_TOKENS_CREATED, true, dialogClosed),
+    trigger(SETTINGS_TOKENS_UPDATED, true, dialogClosed),
     trigger(POST_INIT_DELAYED, isRemindToSetSheriffGooglePlay, settingsRemindSetSheriffGooglePlay)
 ];
