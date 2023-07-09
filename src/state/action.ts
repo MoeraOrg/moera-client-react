@@ -15,6 +15,7 @@ import { EntryCopyTextDialogAnyAction } from "state/entrycopytextdialog/actions"
 import { ErrorAnyAction } from "state/error/actions";
 import { FeedsAnyAction } from "state/feeds/actions";
 import { FlashBoxAnyAction } from "state/flashbox/actions";
+import { FriendGroupAddDialogAnyAction } from "state/friendgroupadddialog/actions";
 import { FriendGroupsDialogAnyAction } from "state/friendgroupsdialog/actions";
 import { HomeAnyAction } from "state/home/actions";
 import { ImageEditDialogAnyAction } from "state/imageeditdialog/actions";
@@ -65,6 +66,7 @@ export type ClientAction =
     | ErrorAnyAction
     | FeedsAnyAction
     | FlashBoxAnyAction
+    | FriendGroupAddDialogAnyAction
     | FriendGroupsDialogAnyAction
     | HomeAnyAction
     | ImageEditDialogAnyAction

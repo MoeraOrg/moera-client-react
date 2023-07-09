@@ -42,6 +42,7 @@ import { SheriffOrderDetailsDialogState } from "state/sherifforderdetailsdialog/
 import { SignUpDialogState } from "state/signupdialog/state";
 import { SourceDialogState } from "state/sourcedialog/state";
 import { TokensState } from "state/tokens/state";
+import { FriendGroupAddDialogState } from "state/friendgroupadddialog/state";
 
 export interface ClientState {
     askDialog: AskDialogState;
@@ -60,6 +61,7 @@ export interface ClientState {
     error: ErrorState;
     feeds: FeedsState;
     flashBox: FlashBoxState;
+    friendGroupAddDialog: FriendGroupAddDialogState;
     friendGroupsDialog: FriendGroupsDialogState;
     home: HomeState;
     imageEditDialog: ImageEditDialogState;

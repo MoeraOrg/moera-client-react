@@ -41,7 +41,7 @@ function PrincipalSelectImpl({
         <>
             <button className={cx("principal-select", className, {long})} ref={setButtonRef} onClick={onToggle}
                     disabled={disabled ?? undefined}>
-                <Principal value={value} long={long}/>
+                <Principal value={value} long={long} icons={icons} titles={titles}/>
                 <FontAwesomeIcon icon="chevron-down" className="chevron"/>
             </button>
             {visible &&

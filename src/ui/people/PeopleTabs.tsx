@@ -3,12 +3,15 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { getNodeFriendGroups } from "state/node/selectors";
+import { getNodeFriendGroups, isAtHomeNode } from "state/node/selectors";
 import { peopleGoToTab } from "state/people/actions";
+import { openFriendGroupAddDialog } from "state/friendgroupadddialog/actions";
 import { PeopleTab } from "state/people/state";
+import { Button } from "ui/control";
 import { getFriendGroupTitle } from "ui/control/principal-display";
 import PeopleTabsItem from "ui/people/PeopleTabsItem";
 import "./PeopleTabs.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type PeopleTabsProps = {
     active: PeopleTab;
@@ -17,7 +20,7 @@ type PeopleTabsProps = {
 const PeopleTabs = ({
     active, loadedGeneral, subscribersTotal, subscriptionsTotal, friendsTotal, friendOfsTotal, blockedTotal,
     blockedByTotal, viewSubscribers, viewSubscriptions, viewFriends, viewFriendOfs, viewBlocked, viewBlockedBy,
-    friendGroups, peopleGoToTab
+    friendGroups, atHome, peopleGoToTab, openFriendGroupAddDialog
 }: PeopleTabsProps) => {
     const {t} = useTranslation();
 
@@ -67,6 +70,11 @@ const PeopleTabs = ({
                                 total={blockedByTotal} loaded={loadedGeneral} active={active}
                                 peopleGoToTab={peopleGoToTab}/>
             }
+            {atHome &&
+                <Button variant="outline-info" size="sm" onClick={() => openFriendGroupAddDialog()}>
+                    <FontAwesomeIcon icon="plus"/>{" "}{t("add-friend-group")}
+                </Button>
+            }
         </ul>
     );
 }
@@ -86,9 +94,10 @@ const connector = connect(
         viewFriendOfs: state.people.operations.viewFriendOfs ?? "public",
         viewBlocked: state.people.operations.viewBlocked ?? "public",
         viewBlockedBy: state.people.operations.viewBlockedBy ?? "admin",
-        friendGroups: getNodeFriendGroups(state)
+        friendGroups: getNodeFriendGroups(state),
+        atHome: isAtHomeNode(state)
     }),
-    { peopleGoToTab }
+    { peopleGoToTab, openFriendGroupAddDialog }
 );
 
 export default connector(PeopleTabs);

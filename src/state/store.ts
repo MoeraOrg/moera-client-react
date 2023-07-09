@@ -35,6 +35,7 @@ import donateDialog from "state/donatedialog/reducer";
 import entryCopyTextDialog from "state/entrycopytextdialog/reducer";
 import linkPreviews from "state/linkpreviews/reducer";
 import peopleHideDialog from "state/peoplehidedialog/reducer";
+import friendGroupAddDialog from "state/friendgroupadddialog/reducer";
 import friendGroupsDialog from "state/friendgroupsdialog/reducer";
 import askDialog from "state/askdialog/reducer";
 import blockDialog from "state/blockdialog/reducer";
@@ -82,6 +83,7 @@ import lightBoxExecutors from "state/lightbox/sagas";
 import richTextEditorExecutors from "state/richtexteditor/sagas";
 import entryCopyTextDialogExecutors from "state/entrycopytextdialog/sagas";
 import linkPreviewsExecutors from "state/linkpreviews/sagas";
+import friendGroupAddDialogExecutors from "state/friendgroupadddialog/sagas";
 import friendGroupsDialogExecutors from "state/friendgroupsdialog/sagas";
 import askDialogExecutors from "state/askdialog/sagas";
 import blockDialogExecutors from "state/blockdialog/sagas";
@@ -116,6 +118,7 @@ import sourceDialogTriggers from "state/sourcedialog/triggers";
 import imageEditDialogTriggers from "state/imageeditdialog/triggers";
 import lightBoxTriggers from "state/lightbox/triggers";
 import peopleHideDialogTriggers from "state/peoplehidedialog/triggers";
+import friendGroupAddDialogTriggers from "state/friendgroupadddialog/triggers";
 import friendGroupsDialogTriggers from "state/friendgroupsdialog/triggers";
 import askDialogTriggers from "state/askdialog/triggers";
 import blockDialogTriggers from "state/blockdialog/triggers";
@@ -163,6 +166,7 @@ const reducers = combineReducers({
     entryCopyTextDialog,
     linkPreviews,
     peopleHideDialog,
+    friendGroupAddDialog,
     friendGroupsDialog,
     askDialog,
     blockDialog,
@@ -210,6 +214,7 @@ const triggers = collectTriggers(
     imageEditDialogTriggers,
     lightBoxTriggers,
     peopleHideDialogTriggers,
+    friendGroupAddDialogTriggers,
     friendGroupsDialogTriggers,
     askDialogTriggers,
     blockDialogTriggers,
@@ -255,6 +260,7 @@ const executors = collectExecutors(
     richTextEditorExecutors,
     entryCopyTextDialogExecutors,
     linkPreviewsExecutors,
+    friendGroupAddDialogExecutors,
     friendGroupsDialogExecutors,
     askDialogExecutors,
     blockDialogExecutors,
