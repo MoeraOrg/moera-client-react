@@ -1,6 +1,7 @@
 import { apply, call, put, select } from 'typed-redux-saga';
 import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 import { ValidateFunction } from 'ajv';
+import i18n from 'i18next';
 
 import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApi, NodeApiError, NodeError } from "api";
 import { retryFetch } from "api/fetch-timeout";
@@ -29,6 +30,7 @@ import { ProgressHandler } from "api/fetcher";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
 import { errorAuthInvalid } from "state/error/actions";
+import { messageBox } from "state/messagebox/actions";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
@@ -122,6 +124,10 @@ export function* callApi<T>({
             }
             if (data.errorCode === "authentication.invalid") {
                 yield* put(errorAuthInvalid());
+                throw new NodeApiError(data.errorCode, data.message);
+            }
+            if (data.errorCode === "authentication.blocked") {
+                yield* put(messageBox(i18n.t("sorry-you-banned")));
                 throw new NodeApiError(data.errorCode, data.message);
             }
             if (data.errorCode.startsWith("carte.") && !cartesRenewed) {

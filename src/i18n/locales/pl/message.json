@@ -1,6 +1,6 @@
 {
   "add-comment" : "Dodaj komentarz",
-  "add-comments-need" : "Aby dodać komentarze, musisz się <0>zarejestrować</0> lub <1>połączyć</1>",
+  "add-comments-need" : "Aby dodać komentarze, musisz się <0>{signup}</0> lub <1>{connect}</1>",
   "add-connection" : "Dodaj połączenie",
   "add-donation" : "Dodaj darowiznę",
   "add-donation-button" : "Dodaj darowiznę",
@@ -98,7 +98,7 @@
   "connected" : "Połączono",
   "connect-home" : "Połącz z domem",
   "connecting" : "Łączenie",
-  "content-not-accessible-android" : "Ten kontent nie jest dostępny na Androidzie.",
+  "content-not-accessible-android" : "Ten kontent nie jest dostępny na Androidzie",
   "continue-reading" : "Kontynuuj czytanie →",
   "copy" : "Kopiuj",
   "copy-image-from-internet" : "Kopiuj obraz z internetu",
