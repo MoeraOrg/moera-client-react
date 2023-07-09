@@ -163,7 +163,9 @@ function* postingReactionLoadSaga(action: PostingReactionLoadAction) {
         const totals = yield* call(Node.getPostingReactionTotals, nodeName, id);
         yield* put(postingReactionSet(id, reaction, totals, nodeName));
     } catch (e) {
-        yield* put(errorThrown(e));
+        if (Browser.isDevMode()) {
+            yield* put(errorThrown(e));
+        }
     }
 }
 

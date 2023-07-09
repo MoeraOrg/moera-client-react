@@ -691,7 +691,9 @@ function* commentReactionLoadSaga(action: CommentReactionLoadAction) {
         const totals = yield* call(Node.getCommentReactionTotals, receiverName, receiverPostingId, id);
         yield* put(commentReactionSet(receiverName, id, receiverPostingId, reaction, seniorReaction, totals));
     } catch (e) {
-        yield* put(errorThrown(e));
+        if (Browser.isDevMode()) {
+            yield* put(errorThrown(e));
+        }
     }
 }
 
