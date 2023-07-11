@@ -1,20 +1,18 @@
 import React, { ReactNode } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
-import { isStandaloneMode } from "state/navigation/selectors";
-import { Browser } from "ui/browser";
 import { useButtonPopper } from "ui/hook";
+import Jump from "ui/navigation/Jump";
 import "./DropdownMenu.css";
 
 interface TextMenuItem {
     show: boolean;
     title: string;
+    nodeName: string | null;
     href: string | null;
-    onClick: () => void;
+    onClick?: () => void;
     opensDialog?: boolean;
 }
 
@@ -39,14 +37,15 @@ function isCaption(item: MenuItem): item is CaptionMenuItem {
 
 interface RenderedItem {
     title: string;
+    nodeName?: string | null;
     href?: string | null;
-    onClick?: (event: React.MouseEvent) => void;
+    onClick?: () => void;
     opensDialog?: boolean;
     divider: boolean;
     caption: boolean;
 }
 
-function buildItems(items: MenuItem[], standalone: boolean): RenderedItem[] {
+function buildItems(items: MenuItem[]): RenderedItem[] {
     const itemList: RenderedItem[] = [];
     let divider = false;
     for (const item of items) {
@@ -66,11 +65,9 @@ function buildItems(items: MenuItem[], standalone: boolean): RenderedItem[] {
         } else {
             itemList.push({
                 title: item.title,
-                href: !standalone || item.href == null ? item.href : Browser.passedLocation(item.href),
-                onClick: (event: React.MouseEvent) => {
-                    item.onClick();
-                    event.preventDefault();
-                },
+                nodeName: item.nodeName,
+                href: item.href,
+                onClick: item.onClick,
                 opensDialog: item.opensDialog,
                 divider: divider && itemList.length > 0,
                 caption: false
@@ -81,31 +78,33 @@ function buildItems(items: MenuItem[], standalone: boolean): RenderedItem[] {
     return itemList;
 }
 
-type Props = {
+interface Props {
     items: MenuItem[];
     className?: string | null;
     disabled?: boolean;
     onDialogOpened?: () => void;
     children?: ReactNode;
-} & ConnectedProps<typeof connector>;
+}
 
-function DropdownMenuImpl({items, className, disabled, onDialogOpened, children, standalone}: Props) {
+export function DropdownMenu({items, className, disabled, onDialogOpened, children}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
     const {t} = useTranslation();
 
-    const onClick = (item: RenderedItem) => (event: React.MouseEvent) => {
+    const onClick = (item: RenderedItem) => (href: string, performJump: () => void) => {
+        hide();
         if (item.onClick != null) {
-            hide();
             if (item.opensDialog && onDialogOpened != null) {
                 onDialogOpened();
             }
-            item.onClick(event);
+            item.onClick();
+        } else {
+            performJump();
         }
     }
 
-    const itemList = buildItems(items, standalone);
+    const itemList = buildItems(items);
     return (
         <>
             <button className={cx("menu", className)} disabled={disabled} ref={setButtonRef} onClick={onToggle}>
@@ -123,9 +122,10 @@ function DropdownMenuImpl({items, className, disabled, onDialogOpened, children,
                                 {item.caption ?
                                     <div className="caption">{item.title}</div>
                                 :
-                                    <a className="dropdown-item" href={item.href ?? undefined} onClick={onClick(item)}>
+                                    <Jump className="dropdown-item" nodeName={item.nodeName} href={item.href ?? ""}
+                                          onNear={onClick(item)} onFar={onClick(item)}>
                                         {item.title}
-                                    </a>
+                                    </Jump>
                                 }
                             </React.Fragment>
                         ))
@@ -138,11 +138,3 @@ function DropdownMenuImpl({items, className, disabled, onDialogOpened, children,
     );
 
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        standalone: isStandaloneMode(state)
-    })
-);
-
-export const DropdownMenu = connector(DropdownMenuImpl);

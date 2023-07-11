@@ -38,6 +38,7 @@ function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDel
                 <DropdownMenu items={[
                     {
                         title: t("edit-ellipsis"),
+                        nodeName: "",
                         href: null,
                         onClick: () => openImageEditDialog(nodeName, media),
                         show: media.postingId != null
@@ -47,6 +48,7 @@ function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDel
                     },
                     {
                         title: t("delete"),
+                        nodeName: "",
                         href: null,
                         onClick: onDelete!,
                         show: onDelete != null

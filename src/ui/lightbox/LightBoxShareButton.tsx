@@ -15,11 +15,15 @@ import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
 
 type Props = {
+    mediaNodeName: string,
+    mediaHref: string,
     mediaUrl: string;
 } & ConnectedProps<typeof connector>;
 
-function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaId, shareDialogPrepare,
-                              lightBoxCopyLink, lightBoxCopyMediaLink}: Props) {
+function LightBoxShareButton({
+    mediaNodeName, mediaHref, mediaUrl, sourceNodeName, posting, comment, mediaId, shareDialogPrepare, lightBoxCopyLink,
+    lightBoxCopyMediaLink
+}: Props) {
     const {t} = useTranslation();
 
     if (sourceNodeName == null) {
@@ -52,7 +56,8 @@ function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaI
         <DropdownMenu className="lightbox-button lightbox-share" items={[
             {
                 title: t("share-ellipsis"),
-                href: null,
+                nodeName: nodeName,
+                href: href,
                 onClick: onShare,
                 show: true
             },
@@ -61,13 +66,15 @@ function LightBoxShareButton({mediaUrl, sourceNodeName, posting, comment, mediaI
             },
             {
                 title: t("copy-link"),
-                href: null,
+                nodeName: nodeName,
+                href: href,
                 onClick: () => lightBoxCopyLink(nodeName, href),
                 show: true
             },
             {
                 title: t("copy-image-link"),
-                href: mediaUrl,
+                nodeName: mediaNodeName,
+                href: mediaHref,
                 onClick: () => lightBoxCopyMediaLink(mediaUrl),
                 show: true
             },

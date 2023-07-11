@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
-import { goToCompose } from "state/navigation/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import {
     postingCommentAddedBlock,
@@ -22,7 +21,7 @@ import { openSourceDialog } from "state/sourcedialog/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getNodeRootLocation, getOwnerName, isPermitted } from "state/node/selectors";
+import { getOwnerName, isPermitted } from "state/node/selectors";
 import {
     getPostingCommentAddedInstantBlockId,
     getPostingCommentsSubscriptionId,
@@ -46,10 +45,10 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function PostingMenu({
-     posting, story, rootLocation, nodeOwnerName, homeOwnerName, commentsSubscriptionId, commentAddedInstantBlockId,
+     posting, story, nodeOwnerName, homeOwnerName, commentsSubscriptionId, commentAddedInstantBlockId,
      hasInvisibleComments, showInvisibleComments, postingEditable, postingDeletable, storyEditable, googlePlayGoverned,
-     googlePlaySheriff, googlePlayProhibited, goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog,
-     postingCopyLink, postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock,
+     googlePlaySheriff, googlePlayProhibited, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink,
+     postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock,
      postingCommentAddedUnblock, openSourceDialog, shareDialogPrepare, entryCopyText, commentsShowInvisibleSet,
      openSheriffOrderDialog
 }: Props) {
@@ -69,8 +68,6 @@ function PostingMenu({
     };
 
     const onReply = () => postingReply(posting.id);
-
-    const onEdit = () => goToCompose(posting.id);
 
     const ownPosting = (posting.receiverName ?? posting.ownerName) === homeOwnerName;
     const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
@@ -136,41 +133,47 @@ function PostingMenu({
             sheriffOrderDelete({nodeName: ownerName, feedName: "timeline", postingId}), null, "success");
     };
 
-    const postingHref = `${rootLocation}/moera/post/${posting.id}`;
+    const postingHref = `/post/${posting.id}`;
     return (
         <DropdownMenu items={[
             {
                 title: t("copy-link"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onCopyLink,
                 show: true
             },
             {
                 title: t("copy-text"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onCopyText,
                 show: true
             },
             {
                 title: t("share-ellipsis"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onShare,
                 show: true
             },
             {
                 title: t("reply-ellipsis"),
-                href: `${rootLocation}/moera/compose`,
+                nodeName: ":",
+                href: "/compose",
                 onClick: onReply,
                 show: true
             },
             {
                 title: t("follow-comments"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onFollowComments,
                 show: !followingComments
             },
             {
                 title: t("unfollow-comments"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onUnfollowComments,
                 show: followingComments
@@ -180,18 +183,20 @@ function PostingMenu({
             },
             {
                 title: t("edit-ellipsis"),
-                href: `${rootLocation}/moera/compose?id=${posting.id}`,
-                onClick: onEdit,
+                nodeName: ":",
+                href: `/compose?id=${postingId}`,
                 show: postingEditable
             },
             {
                 title: story != null && !story.pinned ? t("pin") : t("unpin"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onPin,
                 show: story != null && storyEditable
             },
             {
                 title: t("change-date-time-ellipsis"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onChangeDate,
                 show: posting.receiverName == null && storyEditable
@@ -201,12 +206,14 @@ function PostingMenu({
             },
             {
                 title: t("view-source"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onViewSource,
                 show: true
             },
             {
                 title: t("delete"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onDelete,
                 show: postingDeletable
@@ -216,12 +223,14 @@ function PostingMenu({
             },
             {
                 title: t("show-hidden-comments"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onShowInvisibleComments,
                 show: hasInvisibleComments && !showInvisibleComments
             },
             {
                 title: t("hide-hidden-comments"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onHideInvisibleComments,
                 show: hasInvisibleComments && showInvisibleComments
@@ -231,18 +240,21 @@ function PostingMenu({
             },
             {
                 title: t("hide-in-google-play"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onHideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
             },
             {
                 title: t("unhide-in-google-play"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onUnhideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
             },
             {
                 title: t("report-sheriff-ellipsis"),
+                nodeName: "",
                 href: postingHref,
                 onClick: onHideInGooglePlay,
                 show: Browser.isAndroidGooglePlay() && !googlePlaySheriff
@@ -253,7 +265,6 @@ function PostingMenu({
 
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
-        rootLocation: getNodeRootLocation(state),
         nodeOwnerName: getOwnerName(state),
         homeOwnerName: getHomeOwnerName(state),
         commentsSubscriptionId: getPostingCommentsSubscriptionId(state, ownProps.posting.id),
@@ -268,9 +279,9 @@ const connector = connect(
         googlePlayProhibited: isPostingSheriffProhibited(ownProps.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
     }),
     {
-        goToCompose, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply,
-        postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock,
-        openSourceDialog, shareDialogPrepare, entryCopyText, commentsShowInvisibleSet, openSheriffOrderDialog
+        confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
+        postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock, openSourceDialog,
+        shareDialogPrepare, entryCopyText, commentsShowInvisibleSet, openSheriffOrderDialog
     }
 );
 

@@ -46,12 +46,14 @@ function PeopleSelectedButton({
         <DropdownMenu className="btn btn-sm btn-primary ms-1" items={[
             {
                 title: t("subscribe"),
+                nodeName: "",
                 href: "/people",
                 onClick: onSubscribe,
                 show: summary.notSubscribed
             },
             {
                 title: t("unsubscribe"),
+                nodeName: "",
                 href: "/people",
                 onClick: onUnsubscribe,
                 show: summary.subscribed
@@ -61,18 +63,21 @@ function PeopleSelectedButton({
             },
             {
                 title: t("add-friend"),
+                nodeName: "",
                 href: "/people",
                 onClick: onAddFriend,
                 show: summary.notFriends
             },
             {
                 title: t("friend-groups"),
+                nodeName: "",
                 href: "/people",
                 onClick: onFriendGroups,
                 show: summary.friends
             },
             {
                 title: t("unfriend"),
+                nodeName: "",
                 href: "/people",
                 onClick: onUnfriend,
                 show: summary.friends
@@ -82,12 +87,14 @@ function PeopleSelectedButton({
             },
             {
                 title: t("ask-ellipsis"),
+                nodeName: "",
                 href: "/people",
                 onClick: onAskDialog,
                 show: summary.notSubscribedToMe || summary.notFriendOfs
             },
             {
                 title: t("hide-ellipsis"),
+                nodeName: "",
                 href: "/people",
                 onClick: onHideDialog,
                 show: summary.subscribed || summary.subscribedToMe || summary.friends

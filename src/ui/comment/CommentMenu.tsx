@@ -5,13 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { CommentInfo, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";
-import {
-    getNodeRootLocation,
-    isPermitted,
-    IsPermittedOptions,
-    IsPrincipalEqualsOptions,
-    isPrincipalIn
-} from "state/node/selectors";
+import { isPermitted, IsPermittedOptions, IsPrincipalEqualsOptions, isPrincipalIn } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, commentSetVisibility, openCommentDialog } from "state/detailedposting/actions";
@@ -42,11 +36,10 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function CommentMenu({
-    nodeName, postingId, comment, rootLocation, homeOwnerName, receiverName, receiverFullName, receiverPostingId,
-    posting, blockedUsers, isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, googlePlayGoverned,
-    googlePlaySheriff, googlePlayPostingProhibited, googlePlayProhibited, commentCopyLink, openCommentDialog,
-    openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog,
-    openSheriffOrderDialog
+    nodeName, postingId, comment, homeOwnerName, receiverName, receiverFullName, receiverPostingId, posting,
+    blockedUsers, isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, googlePlayGoverned, googlePlaySheriff,
+    googlePlayPostingProhibited, googlePlayProhibited, commentCopyLink, openCommentDialog, openSourceDialog, confirmBox,
+    shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog, openSheriffOrderDialog
 }: Props) {
     const {t} = useTranslation();
 
@@ -117,7 +110,7 @@ function CommentMenu({
         }
     };
 
-    const commentHref = `${rootLocation}/moera/post/${postingId}?comment=${comment.id}`;
+    const commentHref = `/post/${postingId}?comment=${comment.id}`;
     const hideable = (isCommentPermitted("edit", "owner", {})
             && isCommentPrincipalIn("view", "public", "public", {useOperations: "owner"}))
         || (isPostingPermitted("overrideComment", "owner", {}) && !isCommentPermitted("edit", "owner", {})
@@ -130,18 +123,21 @@ function CommentMenu({
         <DropdownMenu items={[
             {
                 title: t("copy-link"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onCopyLink,
                 show: true
             },
             {
                 title: t("copy-text"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onCopyText,
                 show: true
             },
             {
                 title: t("share-ellipsis"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onShare,
                 show: true
@@ -151,18 +147,21 @@ function CommentMenu({
             },
             {
                 title: t("edit-ellipsis"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onEdit,
                 show: isCommentPermitted("edit", "owner", {}),
             },
             {
                 title: t("view-source"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onViewSource,
                 show: true
             },
             {
                 title: t("delete"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onDelete,
                 show: isCommentPermitted("delete", "private", {})
@@ -172,18 +171,21 @@ function CommentMenu({
             },
             {
                 title: t("hide"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onHide,
                 show: hideable
             },
             {
                 title: t("unhide"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onShow,
                 show: !hideable && unhideable
             },
             {
                 title: t("kick-ellipsis"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onBlockDialog,
                 show: comment.ownerName !== homeOwnerName
@@ -193,18 +195,21 @@ function CommentMenu({
             },
             {
                 title: t("hide-in-google-play"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onHideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && !googlePlayProhibited
             },
             {
                 title: t("unhide-in-google-play"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onUnhideInGooglePlay,
                 show: googlePlaySheriff && googlePlayGoverned && !googlePlayPostingProhibited && googlePlayProhibited
             },
             {
                 title: t("report-sheriff-ellipsis"),
+                nodeName: "",
                 href: commentHref,
                 onClick: onHideInGooglePlay,
                 show: Browser.isAndroidGooglePlay() && !googlePlaySheriff
@@ -215,7 +220,6 @@ function CommentMenu({
 
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
-        rootLocation: getNodeRootLocation(state),
         homeOwnerName: getHomeOwnerName(state),
         receiverName: getCommentsReceiverName(state),
         receiverFullName: getCommentsReceiverFullName(state),

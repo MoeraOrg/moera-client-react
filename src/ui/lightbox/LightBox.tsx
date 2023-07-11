@@ -26,8 +26,10 @@ import "./LightBox.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, carte, loopGallery, closeLightBox,
-                   lightBoxMediaSet}: Props) {
+function LightBox({
+    show, posting, comment, mediaId, mediaPosting, mediaNodeName, rootPage, carte, loopGallery, closeLightBox,
+    lightBoxMediaSet
+}: Props) {
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -44,6 +46,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
 
     const media = getGallery(posting, comment);
     const auth = carte != null ? "carte:" + carte : null;
+    let mainHref = "";
     let mainSrc = "";
     let mainMimeType = "";
     let prevSrc: string | undefined = undefined;
@@ -59,7 +62,8 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
         if (index < 0) {
             index = 0;
         }
-        mainSrc = urlWithParameters(rootPage + "/media/" + media[index].media?.path, {auth});
+        mainHref = "/media/" + media[index].media?.path;
+        mainSrc = urlWithParameters(rootPage + mainHref, {auth});
         mainMimeType = media[index].media?.mimeType ?? "image/jpeg";
         const prevIndex = index > 0
             ? index - 1
@@ -90,7 +94,7 @@ function LightBox({show, posting, comment, mediaId, mediaPosting, rootPage, cart
                   nextLabel={t("next-image")}
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
-                      <LightBoxShareButton mediaUrl={mainSrc}/>,
+                      <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref} mediaUrl={mainSrc}/>,
                       <LightBoxDownloadButton mediaUrl={mainSrc} mediaMimeType={mainMimeType}/>,
                       <LightBoxReactions/>
                   ]}
@@ -121,6 +125,7 @@ const connector = connect(
         comment: state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null,
         mediaId: getLightBoxMediaId(state),
         mediaPosting: getPosting(state, getLightBoxMediaPostingId(state)),
+        mediaNodeName: state.lightBox.nodeName,
         rootPage: state.lightBox.nodeName
             ? getNamingNameNodeUri(state, state.lightBox.nodeName)
             : getNodeRootPage(state),

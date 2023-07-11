@@ -16,7 +16,6 @@ import { openAskDialog } from "state/askdialog/actions";
 import { openPeopleHideDialog } from "state/peoplehidedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { getHomeFriendsId, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
-import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
 import { isFeedSheriff, isFeedSheriffProhibited } from "state/feeds/selectors";
 import { sheriffListAdd, sheriffListDelete } from "state/nodecards/actions";
@@ -36,7 +35,7 @@ interface OwnProps {
 type Props = OwnProps & ConnectedProps<typeof connector>;
 
 function SubscribeButtonImpl({
-    small, nodeName, feedName, onDialogOpened, card, homeGender, peerHref, friendsId, ownerName, googlePlayGoverned,
+    small, nodeName, feedName, onDialogOpened, card, homeGender, friendsId, ownerName, googlePlayGoverned,
     googlePlaySheriff, googlePlayProhibited, feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog,
     openAskDialog, openPeopleHideDialog, openBlockDialog, openSheriffOrderDialog, confirmBox
 }: Props) {
@@ -141,13 +140,15 @@ function SubscribeButtonImpl({
                 },
                 {
                     title: !subscribedToMe ? t("subscribe") : t("subscribe-back"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onSubscribe,
                     show: !subscribed
                 },
                 {
                     title: t("unsubscribe"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onUnsubscribe,
                     show: subscribed && isPrincipalIn("delete", subscription, "admin", "admin")
                 },
@@ -160,20 +161,23 @@ function SubscribeButtonImpl({
                 },
                 {
                     title: t("add-friend"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onAddFriend,
                     show: !friend && !blocked
                 },
                 {
                     title: t("friend-groups"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onFriendGroups,
                     opensDialog: true,
                     show: friend
                 },
                 {
                     title: t("unfriend"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onUnfriend,
                     show: friend
                 },
@@ -182,14 +186,16 @@ function SubscribeButtonImpl({
                 },
                 {
                     title: t("ask-ellipsis"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onAskDialog,
                     opensDialog: true,
                     show: !blocked && !blockedBy
                 },
                 {
                     title: t("hide-ellipsis"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onHideDialog,
                     opensDialog: true,
                     show: subscribed || subscribedToMe || friend
@@ -203,7 +209,8 @@ function SubscribeButtonImpl({
                 },
                 {
                     title: !blocked ? t("block-ellipsis") : t("blocking-ellipsis"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onBlockDialog,
                     opensDialog: true,
                     show: true
@@ -221,25 +228,29 @@ function SubscribeButtonImpl({
                 },
                 {
                     title: t("hide-in-google-play"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onHideInGooglePlay,
                     show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && !googlePlayProhibited
                 },
                 {
                     title: t("unhide-in-google-play"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onUnhideInGooglePlay,
                     show: nodeName === ownerName && googlePlaySheriff && googlePlayGoverned && googlePlayProhibited
                 },
                 {
                     title: t("hide-content-in-google-play"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onHideContentInGooglePlay,
                     show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === false
                 },
                 {
                     title: t("unhide-content-in-google-play"),
-                    href: peerHref,
+                    nodeName,
+                    href: null,
                     onClick: onUnhideContentInGooglePlay,
                     show: nodeName === ownerName && googlePlaySheriff && card?.sheriffList.blocked === true
                 }
@@ -260,7 +271,6 @@ const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
         card: getNodeCard(state, ownProps.nodeName),
         homeGender: getHomeOwnerGender(state),
-        peerHref: getNamingNameNodeUri(state, ownProps.nodeName),
         friendsId: getHomeFriendsId(state),
         ownerName: getOwnerName(state),
         googlePlayGoverned: isFeedSheriff(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE),

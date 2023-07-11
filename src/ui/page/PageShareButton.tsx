@@ -26,12 +26,14 @@ function PageShareButton({href, ownerName, shareDialogPrepare, sharePageCopyLink
             <DropdownMenu className="page-share" items={[
                 {
                     title: t("share-ellipsis"),
+                    nodeName: ownerName ?? "",
                     href,
                     onClick: onShare,
                     show: true
                 },
                 {
                     title: t("copy-link"),
+                    nodeName: ownerName ?? "",
                     href,
                     onClick: onCopyLink,
                     show: true
