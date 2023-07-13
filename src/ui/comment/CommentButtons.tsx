@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ClientReactionInfo, CommentInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
-import { isPermitted } from "state/node/selectors";
+import { isPermitted, IsPermittedOptions } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getCommentsReceiverFeatures } from "state/detailedposting/selectors";
 import CommentReactionButton from "ui/comment/CommentReactionButton";
@@ -44,18 +44,18 @@ function CommentButtons({nodeName, postingId, comment, homeOwnerName, enableSelf
 }
 
 const connector = connect(
-    (state: ClientState, props: OwnProps) => ({
-        homeOwnerName: getHomeOwnerName(state),
-        enableSelf: getSetting(state, "comment.reactions.self.enabled") as boolean,
-        reactionsEnabled: isPermitted("addReaction", props.comment, "public", state, {
+    (state: ClientState, props: OwnProps) => {
+        const options: Partial<IsPermittedOptions> = {
             objectSourceName: props.nodeName,
             objectSourceFeatures: getCommentsReceiverFeatures(state)
-        }),
-        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, "signed", state, {
-            objectSourceName: props.nodeName,
-            objectSourceFeatures: getCommentsReceiverFeatures(state)
-        })
-    })
+        };
+        return ({
+            homeOwnerName: getHomeOwnerName(state),
+            enableSelf: getSetting(state, "comment.reactions.self.enabled") as boolean,
+            reactionsEnabled: isPermitted("addReaction", props.comment, "public", state, options),
+            reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, "signed", state, options)
+        });
+    }
 );
 
 export default connector(CommentButtons);

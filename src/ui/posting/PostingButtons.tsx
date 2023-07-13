@@ -6,8 +6,9 @@ import cx from 'classnames';
 import { ClientReactionInfo, PostingInfo } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
-import { isPermitted } from "state/node/selectors";
+import { isPermitted, IsPermittedOptions } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
+import { getCommentsReceiverFeatures, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { MinimalStoryInfo } from "ui/types";
 import PostingReactionButton from "ui/posting/PostingReactionButton";
 import PostingCommentButton from "ui/posting/PostingCommentButton";
@@ -60,14 +61,20 @@ function PostingButtons({
 }
 
 const connector = connect(
-    (state: ClientState, props: OwnProps) => ({
-        connectedToHome: isConnectedToHome(state),
-        homeOwnerName: getHomeOwnerName(state),
-        enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean,
-        commentsVisible: isPermitted("viewComments", props.posting, "public", state),
-        reactionsEnabled: isPermitted("addReaction", props.posting, "signed", state),
-        reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.posting, "signed", state)
-    })
+    (state: ClientState, props: OwnProps) => {
+        const options: Partial<IsPermittedOptions> = {
+            objectSourceName: getCommentsReceiverName(state),
+            objectSourceFeatures: getCommentsReceiverFeatures(state)
+        }
+        return ({
+            connectedToHome: isConnectedToHome(state),
+            homeOwnerName: getHomeOwnerName(state),
+            enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean,
+            commentsVisible: isPermitted("viewComments", props.posting, "public", state, options),
+            reactionsEnabled: isPermitted("addReaction", props.posting, "signed", state, options),
+            reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.posting, "signed", state, options)
+        });
+    }
 );
 
 export default connector(PostingButtons);
