@@ -146,8 +146,11 @@ class RichTextArea extends React.PureComponent<Props, State> {
         this.#anyInput = inputEvent.inputType.startsWith("insert");
         this.#spaceInput = inputEvent.inputType === "insertLineBreak"
             || (this.#anyInput && inputEvent.data != null && inputEvent.data.match(/\s/) != null);
+
         this.#sentenceInput = inputEvent.inputType.startsWith("insertFromPaste")
-            || inputEvent.inputType.startsWith("history") || this.#spaceInput;
+            || inputEvent.inputType === "insertLink"
+            || inputEvent.inputType.startsWith("history")
+            || this.#spaceInput;
         this.#anyDelete = inputEvent.inputType.startsWith("delete");
     }
 
