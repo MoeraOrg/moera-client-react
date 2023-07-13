@@ -86,12 +86,12 @@ export default [
         feedGeneralLoad("timeline")
     ),
     trigger(
-        GO_TO_PAGE,
+        [GO_TO_PAGE, FEEDS_UNSET],
         state => isAtTimelinePage(state) && isFeedStatusToBeLoaded(state, "timeline"),
         feedStatusLoad("timeline")
     ),
     trigger(
-        GO_TO_PAGE,
+        [GO_TO_PAGE, FEEDS_UNSET],
         state => isAtNewsPage(state) && isFeedStatusToBeLoaded(state, "news"),
         feedStatusLoad("news")
     ),

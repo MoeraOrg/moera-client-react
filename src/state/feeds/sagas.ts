@@ -267,13 +267,13 @@ function* feedStatusSetSaga(action: FeedStatusSetAction) {
 function* feedsUpdateSaga() {
     const feedNames = yield* select(getAllFeeds);
     for (const feedName of feedNames) {
-        if (feedName.startsWith(":")) {
-            try {
-                const data = yield* call(Node.getFeedStatus, ":", feedName.substring(1));
-                yield* put(feedStatusSet(feedName, data));
-            } catch (e) {
-                yield* put(errorThrown(e));
-            }
+        try {
+            const status = feedName.startsWith(":")
+                ? yield* call(Node.getFeedStatus, ":", feedName.substring(1))
+                : yield* call(Node.getFeedStatus, "", feedName);
+            yield* put(feedStatusSet(feedName, status));
+        } catch (e) {
+            yield* put(errorThrown(e));
         }
         let {before, after} = yield* select(state => getFeedState(state, feedName));
         yield* call(feedUpdateSlice, feedName, before, after);

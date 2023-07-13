@@ -373,8 +373,15 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                         before: feed.at,
                         after: feed.at,
                         stories: [],
-                        anchor: feed.at
-                    })
+                        anchor: feed.at,
+                        loadedStatus: false
+                    });
+                    istate.assign([feedName, "status"], {
+                        notViewed: 0,
+                        notRead: 0,
+                        notViewedMoment: null,
+                        notReadMoment: null
+                    });
                 }
             }
             return istate.value();

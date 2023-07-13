@@ -13,7 +13,8 @@ const emptyStatus: FeedStatus = {
     totalPinned: 0,
     notViewed: 0,
     notRead: 0,
-    notViewedMoment: null
+    notViewedMoment: null,
+    notReadMoment: null
 }
 
 export const emptyFeed: FeedState = {
