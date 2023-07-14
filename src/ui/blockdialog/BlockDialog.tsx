@@ -44,6 +44,7 @@ function blockingLevel(operations: BlockedOperation[]): BlockingLevel {
 }
 
 interface Values {
+    formattedName: string;
     level: BlockingLevel;
     temporary: boolean;
     days: number;
@@ -56,10 +57,7 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function BlockDialog(props: Props) {
-    const {
-        show, nodeName, fullName, entryNodeName, submitting, homeOwnerName, nameDisplayMode, closeBlockDialog, values,
-        resetForm
-    } = props;
+    const {show, entryNodeName, submitting, homeOwnerName, closeBlockDialog, values, resetForm} = props;
 
     const {t} = useTranslation();
 
@@ -74,12 +72,14 @@ function BlockDialog(props: Props) {
         return null;
     }
 
-    const name = formatFullName(nodeName, fullName, nameDisplayMode);
-
     const isChecked = (v: BlockingLevel) => (value: BlockingLevel) => value === v;
 
+    const title = entryNodeName == null
+        ? t("blocking-node", {name: values.formattedName})
+        : t("kicking-node", {name: values.formattedName});
+
     return (
-        <ModalDialog title={entryNodeName == null ? t("blocking-node", {name}) : t("kicking-node", {name})}
+        <ModalDialog title={title}
                      className="block-dialog" onClose={closeBlockDialog}>
             <Form>
                 <div className="modal-body">
@@ -159,10 +159,12 @@ function daysTillDeadline(blocked: BlockedUserInfo[]): number | null {
 const blockDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => {
+        const formattedName = formatFullName(props.nodeName, props.fullName, props.nameDisplayMode);
         const level = blockingLevel(props.prevBlocked.map(bu => bu.blockedOperation));
         const days = daysTillDeadline(props.prevBlocked);
         const reason = new RichTextValue(props.prevBlocked[0]?.reasonSrc ?? "");
         return {
+            formattedName,
             level,
             temporary: days != null,
             days: days ?? 3,
@@ -177,8 +179,8 @@ const blockDialogLogic = {
         formik.setStatus("submitted");
         const deadline = values.temporary ? getUnixTime(add(new Date(), {days: values.days})) : null;
         blockDialogSubmit(
-            nodeName, entryNodeName, entryPostingId, prevBlocked, BLOCKED_OPERATIONS[values.level], deadline,
-            values.reason.text
+            nodeName, values.formattedName, entryNodeName, entryPostingId, prevBlocked,
+            BLOCKED_OPERATIONS[values.level], deadline, values.reason.text
         );
         formik.setSubmitting(false);
     }

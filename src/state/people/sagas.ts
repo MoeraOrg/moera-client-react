@@ -1,6 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
+import i18n from 'i18next';
 
-import { NodeApiError } from "api";
+import { ClientSettings, NodeApiError } from "api";
 import { Node } from "api/node";
 import { FriendDescription, FriendGroupInfo, PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
 import { WithContext } from "state/action-types";
@@ -52,6 +53,8 @@ import {
     subscriptionsLoadFailed
 } from "state/people/actions";
 import { executor } from "state/executor";
+import { ClientAction } from "state/action";
+import { ClientState } from "state/state";
 import { introduced } from "state/init-selectors";
 import { getHomeFriendsId } from "state/home/selectors";
 import { getNodeFriendGroups, isPrincipalIn } from "state/node/selectors";
@@ -71,10 +74,13 @@ import {
     isSubscriptionsTotalVisible,
     isSubscriptionsVisible
 } from "state/people/selectors";
-import { feedSubscribed, feedUnsubscribed } from "state/feeds/actions";
+import { feedSubscribe, feedSubscribed, feedUnsubscribed } from "state/feeds/actions";
 import { nodeFeedSubscriberSetVisibility, nodeFeedSubscriptionSetVisibility } from "state/feeds/sagas";
 import { closeProgressBox, openProgressBox, updateProgressBox } from "state/progressbox/actions";
 import { PeopleTab } from "state/people/state";
+import { confirmBox } from "state/confirmbox/actions";
+import { settingsUpdate } from "state/settings/actions";
+import { getSetting } from "state/settings/selectors";
 
 export default [
     executor(PEOPLE_GO_TO_DEFAULT_TAB, "", peopleGoToDefaultTabSaga),
@@ -273,9 +279,48 @@ function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
         if (storyId != null) {
             yield* put(storySatisfy(":instant", storyId));
         }
+        if (friendGroups != null && friendGroups.length > 0) {
+            yield* call(subscribeToFriend, nodeName);
+        }
     } catch (e) {
         yield* put(friendshipUpdateFailed(nodeName));
         yield* put(errorThrown(e));
+    }
+}
+
+function* subscribeToFriend(nodeName: string) {
+    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
+    if (subscriptions.length > 0) {
+        return;
+    }
+
+    const add = yield* select((state: ClientState) => getSetting(state, "friends.subscribe-on-add") as string);
+
+    if (add === "ask") {
+        const onYes = (dontShowAgain: boolean): ClientAction[] => {
+            const actions: ClientAction[] = [];
+            actions.push(feedSubscribe(nodeName, "timeline"));
+            if (dontShowAgain) {
+                actions.push(settingsUpdate([{
+                    name: ClientSettings.PREFIX + "friends.subscribe-on-add",
+                    value: "yes"
+                }]));
+            }
+            return actions;
+        }
+
+        const onNo = (dontShowAgain: boolean): ClientAction | void => {
+            if (dontShowAgain) {
+                return settingsUpdate([{
+                    name: ClientSettings.PREFIX + "friends.subscribe-on-add",
+                    value: "no"
+                }]);
+            }
+        }
+
+        yield* put(confirmBox(i18n.t("not-subscribed-friend"), null, null, onYes, onNo, "primary", null, null, true));
+    } else if (add === "yes") {
+        yield* put(feedSubscribe(nodeName, "timeline"));
     }
 }
 

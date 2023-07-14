@@ -153,6 +153,7 @@
   "donate" : "Donate",
   "donate-to-recipient" : "Donate to <0>{recipientName}</0>",
   "donations-android-prohibited" : "Donations feature is prohibited in Android apps downloaded from Google Play according to <0>Google Play Payments Policy</0>.<1/><2/>Please use Moera web client for this.",
+  "dont-ask-again" : "Don't ask again",
   "dont-ask-next-time" : "Don't ask next time",
   "do-want-allow-android-google-play" : "<b>Do you want your blog to be accessible with Moera for Android app installed from Google Play?</b><br><br>Answering \"Yes\" will allow the sheriff to read the content of your blog and decide (according to the rules), which posts or comments are to be hidden in Moera for Android.",
   "download" : "Download",
@@ -412,6 +413,7 @@
   "not-show-complains" : "Do not show complaints",
   "not-specified" : "Not specified",
   "not-subscribed" : "Not subscribed",
+  "not-subscribed-friend" : "You are not yet subscribed to your friend. Do you want to subscribe?",
   "not-valid-e-mail" : "Not a valid e-mail address",
   "ok" : "OK",
   "only-new" : "Only new",
@@ -584,6 +586,18 @@
           "design" : "As designed",
           "square" : "Square"
         },
+        "blocked-users_unfriend-on-block" : "When blocked a friend",
+        "blocked-users_unfriend-on-block-items" : {
+          "ask" : "Ask",
+          "no" : "Do nothing",
+          "yes" : "Unfriend"
+        },
+        "blocked-users_unsubscribe-on-block" : "When blocked a user you are subscribed to",
+        "blocked-users_unsubscribe-on-block-items" : {
+          "ask" : "Ask",
+          "no" : "Do nothing",
+          "yes" : "Unsubscribe"
+        },
         "clock_offset" : "Clock offset from the real time (in hours)",
         "comment_body-src-format_default" : "Default comment text formatting",
         "comment_body-src-format_default-items" : {
@@ -597,6 +611,12 @@
         "comment_submit-key" : "Send comment when pressed",
         "entry_gallery_loop" : "Loop gallery view",
         "feed_width" : "Feed width (in pixels)",
+        "friends_subscribe-on-add" : "When adding a friend you are not subscribed to",
+        "friends_subscribe-on-add-items" : {
+          "ask" : "Ask",
+          "no" : "Do nothing",
+          "yes" : "Subscribe"
+        },
         "full-name_display" : "Displaying full names of users",
         "full-name_display-items" : {
           "both" : "Both",
@@ -760,6 +780,8 @@
   "sorry-you-banned" : "Sorry, you cannot perform this operation, because the author has banned you.",
   "spoiler" : "Spoiler",
   "spoiler-alert" : "spoiler!",
+  "still-friend-blocked-user" : "The blocked user <b>{name}</b> is still your friend. Do you want to unfriend?",
+  "still-subscribed-blocked-user" : "You are still subscribed to the blocked user <b>{name}</b>. Do you want to unsubscribe?",
   "stop-asking" : "Stop asking",
   "strikeout" : "Strikeout",
   "subscribe" : "Subscribe",

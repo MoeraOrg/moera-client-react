@@ -27,6 +27,7 @@ export const closeBlockDialog = (): CloseBlockDialogAction => ({
 export const BLOCK_DIALOG_SUBMIT = "BLOCK_DIALOG_SUBMIT";
 export type BlockDialogSubmitAction = ActionWithPayload<typeof BLOCK_DIALOG_SUBMIT, {
     nodeName: string;
+    formattedName: string;
     entryNodeName: string | null;
     entryPostingId: string | null;
     prevBlockedUsers: BlockedUserInfo[];
@@ -35,6 +36,7 @@ export type BlockDialogSubmitAction = ActionWithPayload<typeof BLOCK_DIALOG_SUBM
     reasonSrc: string;
 }>;
 export const blockDialogSubmit = (nodeName: string,
+                                  formattedName: string,
                                   entryNodeName: string | null,
                                   entryPostingId: string | null,
                                   prevBlockedUsers: BlockedUserInfo[],
@@ -42,7 +44,9 @@ export const blockDialogSubmit = (nodeName: string,
                                   deadline: number | null,
                                   reasonSrc: string): BlockDialogSubmitAction => ({
     type: BLOCK_DIALOG_SUBMIT,
-    payload: {nodeName, entryNodeName, entryPostingId, prevBlockedUsers, blockedOperations, deadline, reasonSrc}
+    payload: {
+        nodeName, formattedName, entryNodeName, entryPostingId, prevBlockedUsers, blockedOperations, deadline, reasonSrc
+    }
 });
 
 export const BLOCK_DIALOG_SUBMITTED = "BLOCK_DIALOG_SUBMITTED";
@@ -60,9 +64,31 @@ export const blockDialogSubmitFailed = (): BlockDialogSubmitFailedAction => ({
     type: BLOCK_DIALOG_SUBMIT_FAILED
 });
 
+export const BLOCKED_USER_UNFRIEND = "BLOCKED_USER_UNFRIEND";
+export type BlockedUserUnfriendAction = ActionWithPayload<typeof BLOCKED_USER_UNFRIEND, {
+    nodeName: string;
+    formattedName: string;
+}>;
+export const blockedUserUnfriend = (nodeName: string, formattedName: string): BlockedUserUnfriendAction => ({
+    type: BLOCKED_USER_UNFRIEND,
+    payload: {nodeName, formattedName}
+});
+
+export const BLOCKED_USER_UNSUBSCRIBE = "BLOCKED_USER_UNSUBSCRIBE";
+export type BlockedUserUnsubscribeAction = ActionWithPayload<typeof BLOCKED_USER_UNSUBSCRIBE, {
+    nodeName: string;
+    formattedName: string;
+}>;
+export const blockedUserUnsubscribe = (nodeName: string, formattedName: string): BlockedUserUnsubscribeAction => ({
+    type: BLOCKED_USER_UNSUBSCRIBE,
+    payload: {nodeName, formattedName}
+});
+
 export type BlockDialogAnyAction =
     OpenBlockDialogAction
     | CloseBlockDialogAction
     | BlockDialogSubmitAction
     | BlockDialogSubmittedAction
-    | BlockDialogSubmitFailedAction;
+    | BlockDialogSubmitFailedAction
+    | BlockedUserUnfriendAction
+    | BlockedUserUnsubscribeAction;

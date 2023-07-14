@@ -153,6 +153,7 @@
   "donate" : "Донат",
   "donate-to-recipient" : "Донаты для <0>{recipientName}</0>",
   "donations-android-prohibited" : "Функция донатов запрещена в приложениях для Android, загруженных из Google Play, в соответствии с <0>Политикой платежей Google Play</0>.<1/><2/> Пожалуйста, используйте веб-клиент Moera для этого.",
+  "dont-ask-again" : "Больше не спрашивать",
   "dont-ask-next-time" : "Не спрашивать следующий раз",
   "do-want-allow-android-google-play" : "<b>Вы хотите, чтобы ваш блог был виден в приложении Moera для Android, установленном из Google Play?</b><br><br>Ответ \"Да\" означает, что вы разрешаете шерифу читать содержимое вашего блога и решать (в соответствии с правилами), какие посты или комментарии следует скрыть в Moera для Android.",
   "download" : "Скачать",
@@ -412,6 +413,7 @@
   "not-show-complains" : "Не показывать жалобы",
   "not-specified" : "Не указана",
   "not-subscribed" : "Не {gender, select, female {подписан} other {подписана}}",
+  "not-subscribed-friend" : "Вы еще не подписаны на своего друга. Хотите подписаться?",
   "not-valid-e-mail" : "Недопустимый адрес e-mail",
   "ok" : "OK",
   "only-new" : "Только новые",
@@ -584,6 +586,18 @@
           "design" : "Как есть",
           "square" : "Квадратная"
         },
+        "blocked-users_unfriend-on-block" : "Когда заблокировали друга",
+        "blocked-users_unfriend-on-block-items" : {
+          "ask" : "Спрашивать",
+          "no" : "Ничего не делать",
+          "yes" : "Удалять из друзей"
+        },
+        "blocked-users_unsubscribe-on-block" : "Когда заблокировали пользователя, на которого вы подписаны",
+        "blocked-users_unsubscribe-on-block-items" : {
+          "ask" : "Спрашивать",
+          "no" : "Ничего не делать",
+          "yes" : "Отписываться"
+        },
         "clock_offset" : "Смещение часов относительно реального времени (в часах)",
         "comment_body-src-format_default" : "Форматирование текста комментария (по умолчанию)",
         "comment_body-src-format_default-items" : {
@@ -597,6 +611,12 @@
         "comment_submit-key" : "Отправлять комментарий по нажатию",
         "entry_gallery_loop" : "Зацикливать просмотр галереи",
         "feed_width" : "Ширина ленты (в пикселах)",
+        "friends_subscribe-on-add" : "При добавлении друга, на которого вы не подписаны",
+        "friends_subscribe-on-add-items" : {
+          "ask" : "Спрашивать",
+          "no" : "Ничего не делать",
+          "yes" : "Подписываться"
+        },
         "full-name_display" : "Показ полных имён пользователей",
         "full-name_display-items" : {
           "both" : "И то, и другое",
@@ -760,6 +780,8 @@
   "sorry-you-banned" : "К сожалению, вы не можете выполнить эту операцию, так как автор забанил вас.",
   "spoiler" : "Спойлер",
   "spoiler-alert" : "спойлер!",
+  "still-friend-blocked-user" : "Заблокированный пользователь <b>{name}</b> всё ещё ваш друг. Хотите удалить из друзей?",
+  "still-subscribed-blocked-user" : "Вы все еще подписаны на заблокированного пользователя <b>{name}</b>. Хотите отписаться?",
   "stop-asking" : "Больше не спрашивать",
   "strikeout" : "Зачёркнутый",
   "subscribe" : "Подписаться",

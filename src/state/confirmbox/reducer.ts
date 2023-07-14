@@ -2,7 +2,7 @@ import { CONFIRM_BOX, CLOSE_CONFIRM_BOX } from "state/confirmbox/actions";
 import { ConfirmBoxState } from "state/confirmbox/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
+const initialState: ConfirmBoxState = {
     show: false,
     message: null,
     yes: null,
@@ -11,7 +11,8 @@ const initialState = {
     onYes: null,
     onNo: null,
     onCancel: null,
-    variant: "primary"
+    variant: "primary",
+    dontShowAgainBox: false
 };
 
 export default (state: ConfirmBoxState = initialState, action: ClientAction): ConfirmBoxState => {

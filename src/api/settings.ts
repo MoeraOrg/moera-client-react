@@ -497,6 +497,72 @@ const META: ClientSettingMetaInfo[] = [
         modifiers: {}
     },
     {
+        name: "friends.subscribe-on-add",
+        type: "string",
+        defaultValue: "ask",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Ask",
+                    value: "ask"
+                },
+                {
+                    title: "Yes",
+                    value: "yes"
+                },
+                {
+                    title: "No",
+                    value: "no"
+                }
+            ]
+        }
+    },
+    {
+        name: "blocked-users.unsubscribe-on-block",
+        type: "string",
+        defaultValue: "ask",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Ask",
+                    value: "ask"
+                },
+                {
+                    title: "Yes",
+                    value: "yes"
+                },
+                {
+                    title: "No",
+                    value: "no"
+                }
+            ]
+        }
+    },
+    {
+        name: "blocked-users.unfriend-on-block",
+        type: "string",
+        defaultValue: "ask",
+        modifiers: {
+            format: "select",
+            items: [
+                {
+                    title: "Ask",
+                    value: "ask"
+                },
+                {
+                    title: "Yes",
+                    value: "yes"
+                },
+                {
+                    title: "No",
+                    value: "no"
+                }
+            ]
+        }
+    },
+    {
         name: "sheriff.google-play.reminder.count",
         type: "int",
         defaultValue: "0",

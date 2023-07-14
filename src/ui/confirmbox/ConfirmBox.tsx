@@ -1,56 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { ClientAction } from "state/action";
+import { ConfirmBoxButtonAction } from "state/confirmbox/state";
 import { closeConfirmBox } from "state/confirmbox/actions";
-import { Button, ModalDialog } from "ui/control";
+import { Button, Checkbox, ModalDialog } from "ui/control";
 import { htmlEntities } from "util/html";
 
-const forwardAction = (action: any) => action;
+const forwardAction = (action: ClientAction) => action;
 
 type Props = ConnectedProps<typeof connector>;
 
 function ConfirmBox({
-    show, message, yes, no, cancel, onYes, onNo, onCancel, variant, closeConfirmBox, forwardAction
+    show, message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox, closeConfirmBox, forwardAction
 }: Props) {
     const {t} = useTranslation();
 
-    const onClickYes = () => {
-        closeConfirmBox();
-        if (onYes) {
-            if (typeof(onYes) === "function") {
-                onYes();
-            } else {
-                forwardAction(onYes);
-            }
-        }
-    };
-
-    const onClickNo = () => {
-        closeConfirmBox();
-        if (onNo) {
-            if (typeof(onNo) === "function") {
-                onNo();
-            } else {
-                forwardAction(onNo);
-            }
-        }
-    };
-
-    const onClickCancel = () => {
-        closeConfirmBox();
-        if (onCancel) {
-            if (typeof(onCancel) === "function") {
-                onCancel();
-            } else {
-                forwardAction(onCancel);
-            }
-        }
-    };
+    const [dontShowAgain, setDontShowAgain] = useState<boolean>(false);
 
     if (!show) {
         return null;
+    }
+
+    const onClick = (buttonAction: ConfirmBoxButtonAction | null) => {
+        closeConfirmBox();
+        if (buttonAction) {
+            let action: ClientAction | ClientAction[] | null | undefined | void;
+            if (typeof(buttonAction) === "function") {
+                action = buttonAction(dontShowAgain);
+            } else {
+                action = buttonAction;
+            }
+            if (action != null) {
+                if (Array.isArray(action)) {
+                    action.forEach(forwardAction);
+                } else {
+                    forwardAction(action);
+                }
+            }
+        }
+    };
+
+    const onClickYes = () => onClick(onYes);
+
+    const onClickNo = () => onClick(onNo);
+
+    const onClickCancel = () => onClick(onCancel);
+
+    const onDontShowAgainChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDontShowAgain(event.target.checked);
     }
 
     const escapedMessage = htmlEntities(message ?? "")
@@ -60,7 +60,18 @@ function ConfirmBox({
 
     return (
         <ModalDialog risen onClose={onCancel != null ? onClickCancel : onClickNo}>
-            <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
+            <div className="modal-body">
+                <div dangerouslySetInnerHTML={{__html: escapedMessage}}/>
+                {dontShowAgainBox &&
+                    <>
+                        <br/>
+                        <Checkbox name="dont-show-again" id="dont-show-again" checked={dontShowAgain} value={1}
+                                  onChange={onDontShowAgainChange}/>
+                        {" "}
+                        <label htmlFor="dont-show-again">{t("dont-ask-again")}</label>
+                    </>
+                }
+            </div>
             <div className="modal-footer">
                 {onCancel &&
                     <Button variant="outline-secondary" onClick={onClickCancel}>{cancel ?? t("cancel")}</Button>
