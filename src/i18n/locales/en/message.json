@@ -679,6 +679,8 @@
       "ask_subscribe_allowed" : "Allow to ask for subscription",
       "ask_total_max" : "No more than",
       "avatar_max-size" : "Maximal size of avatars",
+      "blocked-by-users_view" : "List of users who have blocked me is visible to",
+      "blocked-users_view" : "List of blocked users is visible to",
       "comment_deleted_lifetime" : "Purge deleted comments after",
       "comment_draft_lifetime" : "Purge comment drafts after",
       "comment_max-size" : "Maximal size of comments",

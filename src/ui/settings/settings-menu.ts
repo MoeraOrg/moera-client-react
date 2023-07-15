@@ -97,7 +97,9 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
                 option("friends.view", 0),
                 option("friends.view-total", 0),
                 option("friend-ofs.view", 0),
-                option("friend-ofs.view-total")
+                option("friend-ofs.view-total", 0),
+                option("blocked-users.view", 0),
+                option("blocked-by-users.view")
             ]),
             chapter("subscription-friend-requests", null, [
                 option("ask.subscribe.allowed", 0),
