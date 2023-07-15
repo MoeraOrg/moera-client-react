@@ -15,8 +15,9 @@ const WelcomePage = () => {
             <div className="title">{t("welcome")}</div>
             <WelcomeNavigator/>
             <div className="discover">
-                <Jump className="btn btn-primary btn-sm" nodeName="lamed_0" nodeUri="https://lamed.moera.blog/moera"
-                      href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74">
+                <Jump className="btn btn-primary btn-sm" nodeName="moera-activity-blog_0"
+                      nodeUri="https://moera-activity-blog.moera.blog/moera"
+                      href="/post/9f838e8f-d419-4c89-8908-06ae029d2482">
                     {t("find-more-people")}
                 </Jump>
             </div>

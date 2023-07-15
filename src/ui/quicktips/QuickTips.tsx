@@ -117,7 +117,8 @@ interface ListOfBlogsLinkProps {
 }
 
 const ListOfBlogsLink = ({children, onJump}: ListOfBlogsLinkProps) => (
-    <Jump nodeName="lamed_0" href="/post/1549a6ef-2ea8-47ce-9643-abebc95e3d74" onNear={onJump} onFar={onJump}>
+    <Jump nodeName="moera-activity-blog_0" href="/post/9f838e8f-d419-4c89-8908-06ae029d2482"
+          onNear={onJump} onFar={onJump}>
         <b>{children}</b>
     </Jump>
 );
