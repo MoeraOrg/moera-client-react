@@ -57,7 +57,7 @@ export function getPrincipalDisplay(principal: PrincipalValue | null | undefined
             if (principal.startsWith("f:")) {
                 const title = friendGroups.find(fg => fg.id === principal.substring(2))?.title;
                 display.icon = title === "t:friends" ? "users" : "user-group";
-                display.title = getFriendGroupTitle(title, t);
+                display.title = getFriendGroupTitle(title, t) || t("friend-groups.friends");
             }
     }
     return display;
