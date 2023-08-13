@@ -53,7 +53,11 @@ class Manager extends React.PureComponent<ManagerProps, ManagerState> {
     }
 
     isInPopover(event: MouseEvent) {
-        for (let element of document.querySelectorAll(".popover-body").values()) {
+        return this.isInElements(event, ".popover-body") || this.isInElements(event, ".dropdown-menu");
+    }
+
+    isInElements(event: MouseEvent, selector: string) {
+        for (let element of document.querySelectorAll(selector).values()) {
             const r = element.getBoundingClientRect();
             if (r.left <= event.clientX && r.right >= event.clientX
                 && r.top <= event.clientY && r.bottom >= event.clientY) {
