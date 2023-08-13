@@ -97,7 +97,7 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 ...state,
                 connecting: false,
                 root: {
-                    location: action.payload.location,
+                    location: action.payload.location.toLowerCase(),
                     page: action.payload.location + "/moera",
                     api: action.payload.location + "/moera/api",
                     events: toWsUrl(action.payload.location + "/moera/api/events"),

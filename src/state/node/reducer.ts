@@ -42,7 +42,7 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                 return state;
             }
 
-            const location = action.payload.rootLocation;
+            const location = action.payload.rootLocation.toLowerCase();
             const page = location + "/moera";
             const api = page + "/api";
             const events = toWsUrl(api + "/events");
