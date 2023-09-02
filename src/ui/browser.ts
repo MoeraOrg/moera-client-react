@@ -83,23 +83,6 @@ export class Browser {
         return window.screen.width <= 575;
     }
 
-    static isAddonSupported(): boolean {
-        switch (this.userAgent) {
-            default:
-            case "unknown":
-            case "opera":
-            case "dolphin":
-                return false;
-            case "firefox":
-            case "chrome":
-                return this.userAgentOs === "unknown";
-            case "yandex":
-            case "brave":
-            case "vivaldi":
-                return true;
-        }
-    }
-
     static isTouchScreen(): boolean {
         return this.userAgentOs === "android" || this.userAgentOs === "ios";
     }
