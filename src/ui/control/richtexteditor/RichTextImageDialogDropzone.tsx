@@ -102,7 +102,15 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
     }
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
-        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, maxFiles: 1, onDrop: uploadImage});
+        useDropzone({
+            noClick: true,
+            noKeyboard: true,
+            accept: {
+                "image/*": features?.imageFormats ?? []
+            },
+            maxFiles: 1,
+            onDrop: uploadImage
+        });
 
     const auth = carte != null ? "carte:" + carte : null;
     const mediaLocation = value != null ? urlWithParameters(rootPage + "/media/" + value.path, {auth}) : null;

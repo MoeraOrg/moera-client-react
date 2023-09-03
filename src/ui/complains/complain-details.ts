@@ -1,4 +1,4 @@
-import { TFunction } from 'react-i18next';
+import { TFunction } from 'i18next';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 import { SheriffComplainStatus } from "api/node/api-types";

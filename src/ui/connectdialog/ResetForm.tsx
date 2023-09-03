@@ -69,7 +69,7 @@ const resetFormLogic = {
         resetToken: yup.string().trim().required("must-not-empty"),
         location: yup.string().trim().required("must-not-empty"),
         password: yup.string().required("must-not-empty"),
-        confirmPassword: yup.string().when(["password"], (password, schema) =>
+        confirmPassword: yup.string().when(["password"], ([password]: string[], schema: yup.StringSchema) =>
                 schema.required("retype-password").oneOf([password], "passwords-different")
         )
     }),

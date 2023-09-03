@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { Form, FormikBag, FormikProps, FormikValues, withFormik } from 'formik';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
 import { ModalDialog } from "ui/control/ModalDialog";
@@ -13,7 +13,7 @@ export interface RichTextEditorDialogProps<V> {
 
 type OuterProps<P> = P & WithTranslation;
 
-export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V>(
+export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V extends FormikValues>(
     title: string, mapPropsToValues: (props: OuterProps<P>) => V, DialogBody: React.ComponentType<OuterProps<P>>) {
 
     const logic = {

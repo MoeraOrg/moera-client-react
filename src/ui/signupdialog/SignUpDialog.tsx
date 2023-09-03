@@ -2,10 +2,9 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
-import { StringSchema } from 'yup';
 import debounce from 'lodash.debounce';
-import i18n from 'i18next';
-import { TFunction, WithTranslation, withTranslation } from 'react-i18next';
+import i18n, { TFunction } from 'i18next';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 import PROVIDERS from "providers";
 import * as Rules from "api/naming/rules";
@@ -263,23 +262,23 @@ const signUpDialogLogic = {
     validationSchema: yup.object().shape({
         name: yup.string().trim().required("must-not-empty").max(Rules.NAME_MAX_LENGTH)
             .test("is-allowed", "not-allowed", Rules.isRegisteredNameValid)
-            .when("nameTaken",
-                (nameTaken: string, schema: StringSchema) => schema.notOneOf([nameTaken], "name-already-taken")),
+            .when("nameTaken", ([nameTaken]: string[], schema: yup.StringSchema) =>
+                schema.notOneOf([nameTaken], "name-already-taken")),
         domain: yup.string()
             .when("autoDomain", {
                 is: true,
-                then: yup.string().notRequired(),
-                otherwise: yup.string().trim()
+                then: () => yup.string().notRequired(),
+                otherwise: () => yup.string().trim()
                     .required("must-not-empty")
                     .min(4, "domain-too-short")
                     .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "not-allowed")
                     .when("domainTaken",
-                        (domainTaken: string, schema: StringSchema) =>
+                        ([domainTaken]: string[], schema: yup.StringSchema) =>
                             schema.notOneOf([domainTaken], "domain-already-taken")),
             }),
         password: yup.string().required("must-not-empty"),
         confirmPassword: yup.string().when("password",
-            (password: string, schema: StringSchema) =>
+            ([password]: string[], schema: yup.StringSchema) =>
                 schema.required("retype-password").oneOf([password], "passwords-different")
         ),
         email: yup.string().email("not-valid-e-mail"),

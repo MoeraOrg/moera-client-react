@@ -1,6 +1,6 @@
 interface Result<T> {
     jsonrpc: string;
-    result: T | null;
+    result?: T | null;
     id: number;
 }
 

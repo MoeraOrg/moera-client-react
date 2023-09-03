@@ -1,4 +1,4 @@
-import { TFunction } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 import { FriendGroupInfo } from "api/node/api-types";
 import { getFriendGroupTitle } from "ui/control/principal-display";

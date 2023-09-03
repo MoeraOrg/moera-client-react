@@ -29,7 +29,8 @@ export function* imageUpload(features: PostingFeatures | null, nodeName: string 
                 if (file.size > features.imageRecommendedSize) {
                     file = yield* call(imageCompression, file, {
                         maxSizeMB: features.imageRecommendedSize / 1024 / 1024,
-                        maxWidthOrHeight: features.imageRecommendedPixels
+                        maxWidthOrHeight: features.imageRecommendedPixels,
+                        preserveExif: true
                     });
                 }
             } else {

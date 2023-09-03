@@ -57,7 +57,7 @@ export default function RichTextEditorImageList({value, nodeName, selectedImage,
         setDragged(mediaList.find(mf => mf.id === active.id) ?? null);
     const onDragEnd = ({active, over}: DragEndEvent) => {
         if (onReorder != null && over != null && active.id !== over.id) {
-            onReorder(active.id, over.id);
+            onReorder(String(active.id), String(over.id));
         }
         setDragged(null);
     };

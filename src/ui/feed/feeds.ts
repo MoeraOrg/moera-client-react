@@ -1,15 +1,15 @@
-import { TFunction } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 export function getFeedTitle(feedName: string | null | undefined, t?: TFunction): string {
-    t = t ?? ((text: string) => text);
+    const te = t ?? ((text: string) => text);
     switch (feedName) {
         case "timeline":
-            return t("feed-title.timeline");
+            return te("feed-title.timeline");
         case "news":
-            return t("feed-title.news");
+            return te("feed-title.news");
         case null:
         case undefined:
-            return t("feed-title.timeline");
+            return te("feed-title.timeline");
         default:
             return feedName;
     }

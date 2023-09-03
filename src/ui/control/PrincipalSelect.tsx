@@ -3,7 +3,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import { TFunction, useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { FriendGroupInfo, PrincipalFlag, PrincipalValue } from "api/node/api-types";
 import { ClientState } from "state/state";

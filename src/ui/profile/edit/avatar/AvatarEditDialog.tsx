@@ -132,7 +132,7 @@ function AvatarEditDialog({show, imageUploading, imageUploadProgress, imageId, p
                     <Rotate value={rotate} onChange={onRotateChange}/>
                     <AvatarShape value={shape} onChange={onShapeChange}/>
                 </div>
-                <Dropzone onDrop={onDrop} noClick noKeyboard accept={ACCEPTED_IMAGE_TYPES} maxFiles={1}>
+                <Dropzone onDrop={onDrop} noClick noKeyboard accept={{"image/*": ACCEPTED_IMAGE_TYPES}} maxFiles={1}>
                     {({getRootProps, getInputProps, isDragAccept, isDragReject}) => (
                         <div {...getRootProps()}>
                             <ReactAvatarEditor

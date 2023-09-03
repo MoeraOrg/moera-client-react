@@ -1,7 +1,6 @@
 import React from 'react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import i18n from 'i18next';
-import { TFunction } from 'react-i18next';
+import i18n, { TFunction } from 'i18next';
 
 import { StoryInfo, StorySummaryData, StoryType } from "api/node/api-types";
 import { ActionContext } from "state/action-types";
@@ -34,7 +33,8 @@ import {
     buildReactionAddedSummary,
     buildRemoteCommentAddedSummary,
     buildReplyCommentSummary,
-    buildSheriffComplainAddedSummary, buildSheriffComplainDecidedSummary,
+    buildSheriffComplainAddedSummary,
+    buildSheriffComplainDecidedSummary,
     buildSheriffMarkedSummary,
     buildSheriffUnmarkedSummary,
     buildSubscriberAddedSummary,

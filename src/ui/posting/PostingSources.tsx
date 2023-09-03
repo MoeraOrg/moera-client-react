@@ -1,7 +1,8 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
-import { TFunction, useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 import { PostingInfo } from "api/node/api-types";
 import Jump from "ui/navigation/Jump";

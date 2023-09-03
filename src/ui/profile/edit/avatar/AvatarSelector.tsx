@@ -51,7 +51,7 @@ export default function AvatarSelector({nodeName, loaded, loading, avatars, acti
         setDragged(avatars.find(avatar => avatar.id === active.id) ?? null);
     const onDragEnd = ({active, over}: DragEndEvent) => {
         if (over != null && active.id !== over.id) {
-            onReorder(active.id, over.id);
+            onReorder(String(active.id), String(over.id));
         }
         setDragged(null);
     };

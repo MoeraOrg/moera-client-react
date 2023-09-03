@@ -1,7 +1,7 @@
 import * as Base64js from 'base64-js';
 // @ts-ignore
 import charCategory from 'general-category';
-import { TFunction } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";

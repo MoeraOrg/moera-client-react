@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function FundraiserButton({index, fundraiser, dragged, onClick}: Props) {
-    const sortable = useSortable({id: index.toString()});
+    const sortable = useSortable({id: index});
     const sortableStyle = {
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,

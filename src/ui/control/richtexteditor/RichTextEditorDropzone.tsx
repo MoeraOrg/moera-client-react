@@ -8,7 +8,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
 import { ClientState } from "state/state";
-import { richTextEditorImagesUpload, richTextEditorImageCopy } from "state/richtexteditor/actions";
+import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";
 import { Button, RichTextValue } from "ui/control";
 import RichTextEditorImageList from "ui/control/richtexteditor/RichTextEditorImageList";
@@ -143,7 +143,14 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
     }
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
-        useDropzone({noClick: true, noKeyboard: true, accept: features?.imageFormats, onDrop: uploadImage});
+        useDropzone({
+            noClick: true,
+            noKeyboard: true,
+            accept: {
+                "image/*": features?.imageFormats ?? []
+            },
+            onDrop: uploadImage
+        });
     const progressSummary = useMemo(() => calcProgressSummary(uploadProgress), [uploadProgress])
     const buttonsTitle = !Browser.isTinyScreen() ? "upload-or-copy-or-drop-images" : "upload-or-copy-images";
 

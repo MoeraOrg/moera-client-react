@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as immutable from 'object-path-immutable';
 import {
-    DndContext, DragEndEvent,
+    DndContext,
+    DragEndEvent,
     DragOverlay,
     DragStartEvent,
     KeyboardSensor,
     PointerSensor,
+    UniqueIdentifier,
     useSensor,
     useSensors
 } from '@dnd-kit/core';
@@ -24,11 +26,11 @@ interface Props {
     setValue: (value: FundraiserInfo[]) => void;
 }
 
-function idSequence(n: number): {id: string}[] {
-    const ids:{id: string}[] = [];
+function idSequence(n: number): {id: UniqueIdentifier}[] {
+    const ids:{id: UniqueIdentifier}[] = [];
 
     for (let i = 0; i < n; i++) {
-        ids.push({id: i.toString()});
+        ids.push({id: i});
     }
 
     return ids;
@@ -81,12 +83,12 @@ export default function DonateEditor({value, setValue}: Props) {
     const fundraiserIds = idSequence(value.length);
 
     const onDragStart = ({active}: DragStartEvent) =>
-        setDragged(parseInt(active.id));
+        setDragged(active.id as number);
     const onDragEnd = ({active, over}: DragEndEvent) => {
         if (over != null && active.id !== over.id) {
             const newValue = [...value];
-            const activeId = parseInt(active.id);
-            const overId = parseInt(over.id);
+            const activeId = active.id as number;
+            const overId = over.id as number;
             newValue[activeId] = value[overId];
             newValue[overId] = value[activeId];
             setValue(newValue);

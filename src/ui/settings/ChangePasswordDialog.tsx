@@ -26,10 +26,9 @@ function ChangePasswordDialog(props: Props) {
 
     useEffect(() => {
         if (show) {
-            resetForm({values: changePasswordLogic.mapPropsToValues(props)})
+            resetForm({values: changePasswordLogic.mapPropsToValues()})
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, resetForm]); // 'props' are missing on purpose
+    }, [show, resetForm]);
 
     if (!show) {
         return null;
@@ -54,7 +53,7 @@ function ChangePasswordDialog(props: Props) {
 
 const changePasswordLogic = {
 
-    mapPropsToValues: (props: OuterProps): Values => ({
+    mapPropsToValues: (): Values => ({
         oldPassword: "",
         password: "",
         confirmPassword: ""
@@ -63,7 +62,7 @@ const changePasswordLogic = {
     validationSchema: yup.object().shape({
         oldPassword: yup.string().trim().required("must-not-empty"),
         password: yup.string().required("must-not-empty"),
-        confirmPassword: yup.string().when(["password"], (password, schema) =>
+        confirmPassword: yup.string().when(["password"], ([password]: string[], schema: yup.StringSchema) =>
             schema.required("retype-password").oneOf([password], "passwords-different")
         )
     }),

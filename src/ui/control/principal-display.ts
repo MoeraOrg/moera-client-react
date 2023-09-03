@@ -1,7 +1,7 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { TFunction } from 'i18next';
 
 import { FriendGroupInfo, PrincipalValue } from "api/node/api-types";
-import { TFunction } from "react-i18next";
 
 export interface PrincipalDisplay {
     icon: IconProp,

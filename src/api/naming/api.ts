@@ -18,7 +18,7 @@ const ObjectResultType: JSONSchemaType<API.ObjectResult> = ({
         }
     },
     additionalProperties: false,
-    required: ["jsonrpc", "result", "id"]
+    required: ["jsonrpc", "id"]
 });
 export const ObjectResult = schema(ObjectResultType);
 
@@ -37,7 +37,7 @@ const BooleanResultType: JSONSchemaType<API.BooleanResult> = ({
         }
     },
     additionalProperties: false,
-    required: ["jsonrpc", "result", "id"]
+    required: ["jsonrpc", "id"]
 });
 export const BooleanResult = schema(BooleanResultType);
 
