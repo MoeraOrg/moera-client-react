@@ -1,4 +1,5 @@
 import { Choice, PrincipalFlag, SettingType } from "api/node/api-types";
+import { Browser } from "ui/browser";
 
 export const PREFIX = "client.mercy.";
 export const PLUGIN_PREFIX = "plugin.";
@@ -21,6 +22,7 @@ export interface ClientSettingMetaInfo {
     name: string;
     type: SettingType;
     defaultValue?: string;
+    devDefaultValue?: string;
     title?: string;
     internal?: boolean;
     modifiers?: ClientSettingTypeModifiers;
@@ -205,6 +207,7 @@ const META: ClientSettingMetaInfo[] = [
         name: "naming.location",
         type: "string",
         defaultValue: "https://naming.moera.org/moera-naming",
+        devDefaultValue: "https://naming-dev.moera.org/moera-naming",
         modifiers: {}
     },
     {
@@ -581,7 +584,11 @@ const META: ClientSettingMetaInfo[] = [
 ];
 
 function collectMetaMap(map: Map<string, ClientSettingMetaInfo>, metadata: ClientSettingMetaInfo[]) {
-    metadata.forEach(meta => map.set(PREFIX + meta.name, {...meta, name: PREFIX + meta.name}));
+    metadata
+        .map(meta => meta.devDefaultValue !== undefined && Browser.isDevMode()
+            ? {...meta, defaultValue: meta.devDefaultValue}
+            : meta)
+        .forEach(meta => map.set(PREFIX + meta.name, {...meta, name: PREFIX + meta.name}));
 }
 
 export function buildMetaMap(): Map<string, ClientSettingMetaInfo> {
