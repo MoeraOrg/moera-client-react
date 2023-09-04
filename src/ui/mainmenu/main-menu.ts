@@ -12,12 +12,12 @@ interface MainMenuTimelineProps {
 }
 
 export function useMainMenuTimeline(): MainMenuTimelineProps {
-    const {active, anchor} = useSelector((state: ClientState) => ({
-        active: isAtTimelinePage(state),
-        anchor: getFeedState(state, "timeline").anchor
-    }))
+    const active = useSelector((state: ClientState) => isAtTimelinePage(state));
+    const href = useSelector((state: ClientState) => {
+        const anchor = getFeedState(state, "timeline").anchor;
+        return anchor != null ? `/timeline?before=${anchor}` : "/timeline";
+    });
 
-    const href = anchor != null ? `/timeline?before=${anchor}` : "/timeline";
     return {active, href};
 }
 
@@ -27,24 +27,27 @@ interface MainMenuHomeNewsProps {
 }
 
 export function useMainMenuHomeNews(): MainMenuHomeNewsProps {
-    const {atHome, atHomeNews, moment, atBeginning, targetStory} = useSelector((state: ClientState) => ({
-        atHome: isAtHomeNode(state),
-        atHomeNews: isAtHomeNode(state) && isAtNewsPage(state),
-        moment: getFeedNotViewedMoment(state, ":news"),
-        atBeginning: isFeedAtBeginning(state, "news"), // not ":news"!
-        targetStory: getSetting(state, "news-button.target-story") as string
-    }))
+    const atHomeNews = useSelector((state: ClientState) => isAtHomeNode(state) && isAtNewsPage(state));
+    const href = useSelector((state: ClientState) => {
+        const atHome = isAtHomeNode(state);
+        const moment = getFeedNotViewedMoment(state, ":news");
+        const atBeginning = isFeedAtBeginning(state, "news"); // not ":news"!
+        const targetStory = getSetting(state, "news-button.target-story") as string;
 
-    let href = "/news";
-    if (targetStory === "earliest-new") {
-        if (atHome) {
-            if ((atBeginning || atHomeNews) && moment != null) {
+        let href = "/news";
+        if (targetStory === "earliest-new") {
+            if (atHome) {
+                if ((atBeginning || atHomeNews) && moment != null) {
+                    href += `?before=${moment}`;
+                }
+            } else if (moment) {
                 href += `?before=${moment}`;
             }
-        } else if (moment) {
-            href += `?before=${moment}`;
         }
-    }
+
+        return href;
+    });
+
 
     return {active: atHomeNews, href};
 }

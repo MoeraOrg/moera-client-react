@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ClientState } from "state/state";
 import { getNodeFriendGroups, isAtHomeNode } from "state/node/selectors";
@@ -11,7 +12,6 @@ import { Button } from "ui/control";
 import { getFriendGroupTitle } from "ui/control/principal-display";
 import PeopleTabsItem from "ui/people/PeopleTabsItem";
 import "./PeopleTabs.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type PeopleTabsProps = {
     active: PeopleTab;
