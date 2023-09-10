@@ -1,24 +1,24 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Choice, SourceFormat } from "api/node/api-types";
-import { SelectField } from "ui/control/field";
+import { SourceFormat } from "api/node/api-types";
+import { SelectField, SelectFieldChoice } from "ui/control/field";
 import ComposePageTool from "ui/compose/ComposePageTool";
 
 interface Props {
-    sourceFormats: Choice<SourceFormat>[];
+    sourceFormats: SourceFormat[];
 }
 
-const ComposeBodyFormat = ({sourceFormats}: Props) => {
+export default function ComposeBodyFormat({sourceFormats}: Props) {
     const {t} = useTranslation();
 
+    const choices: SelectFieldChoice[] = sourceFormats
+        .filter(f => f !== "application")
+        .map(value => ({value, title: `source-format.${value}`}));
     return (
         <ComposePageTool name="format">
             <SelectField title={t("text-formatting")} name="bodyFormat" horizontal layout="left" groupClassName="ps-2"
-                         col="col-md-2" choices={sourceFormats.filter(c => c.value !== "application")} anyValue
-                         setting="posting.body-src-format.default"/>
+                         col="col-md-2" choices={choices} anyValue setting="posting.body-src-format.default"/>
         </ComposePageTool>
     );
 }
-
-export default ComposeBodyFormat;

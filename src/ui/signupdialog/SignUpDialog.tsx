@@ -8,7 +8,6 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 
 import PROVIDERS from "providers";
 import * as Rules from "api/naming/rules";
-import { Choice } from "api/node/api-types";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
@@ -26,7 +25,7 @@ import {
 import { findPreferredLanguage } from "i18n";
 import { Browser } from "ui/browser";
 import { Button, ModalDialog, NameHelp } from "ui/control";
-import { CheckboxField, InputField, SelectField } from "ui/control/field";
+import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
 
 type OuterProps = ConnectedProps<typeof connector> & WithTranslation;
@@ -191,7 +190,7 @@ class SignUpDialog extends React.PureComponent<Props> {
             return null;
         }
 
-        const languageChoices = (languages ?? [{value: "auto"} as Choice<string>])
+        const languageChoices = (languages ?? [{value: "auto"} as SelectFieldChoice])
             .map(l => ({
                 title: t(`setting.client.mercy.language-items.${l.value}`, {defaultValue: l.title}),
                 value: l.value

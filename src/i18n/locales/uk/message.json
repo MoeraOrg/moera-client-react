@@ -780,6 +780,11 @@
   "sign-up" : "Реєстрація",
   "size" : "Розмір",
   "sorry-you-banned" : "На жаль, ви не можете здійснити цю операцію, оскільки автор забанив вас.",
+  "source-format" : {
+    "html" : "HTML",
+    "markdown" : "Markdown",
+    "plain-text" : "Без форматування"
+  },
   "spoiler" : "Спойлер",
   "spoiler-alert" : "спойлер!",
   "still-friend-blocked-user" : "Заблокований користувач <b>{name}</b> все ще є вашим другом. Хочете видалити з друзів?",

@@ -780,6 +780,11 @@
   "sign-up" : "Sign Up",
   "size" : "Size",
   "sorry-you-banned" : "Sorry, you cannot perform this operation, because the author has banned you.",
+  "source-format" : {
+    "html" : "HTML",
+    "markdown" : "Markdown",
+    "plain-text" : "No formatting"
+  },
   "spoiler" : "Spoiler",
   "spoiler-alert" : "spoiler!",
   "still-friend-blocked-user" : "The blocked user <b>{name}</b> is still your friend. Do you want to unfriend?",

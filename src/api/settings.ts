@@ -1,8 +1,13 @@
-import { Choice, PrincipalFlag, SettingType } from "api/node/api-types";
+import { PrincipalFlag, SettingType } from "api/node/api-types";
 import { Browser } from "ui/browser";
 
 export const PREFIX = "client.mercy.";
 export const PLUGIN_PREFIX = "plugin.";
+
+interface Choice {
+    value: string;
+    title: string;
+}
 
 export interface ClientSettingTypeModifiers {
     format?: string;
@@ -12,7 +17,7 @@ export interface ClientSettingTypeModifiers {
     multiline?: boolean;
     never?: boolean;
     always?: boolean;
-    items?: Choice<string>[];
+    items?: Choice[];
     principals?: PrincipalFlag[];
 }
 

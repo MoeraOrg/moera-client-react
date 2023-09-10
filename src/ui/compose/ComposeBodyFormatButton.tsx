@@ -1,9 +1,10 @@
 import React from 'react';
 import { useField } from 'formik';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { useTranslation } from 'react-i18next';
 
+import { SourceFormat } from "api/node/api-types";
 import ComposeIconButton from "ui/compose/ComposeIconButton";
-import { Choice, SourceFormat } from "api/node/api-types";
 
 const BODY_FORMAT_ICONS: Record<SourceFormat, IconProp | null> = {
     "plain-text": "remove-format",
@@ -12,19 +13,15 @@ const BODY_FORMAT_ICONS: Record<SourceFormat, IconProp | null> = {
     "application": null
 };
 
-function getTooltip(format: SourceFormat, sourceFormats: Choice<SourceFormat>[]) {
-    const info = sourceFormats.find(f => f.value === format);
-    return info != null ? info.title : null;
-}
-
 interface Props {
-    sourceFormats: Choice<SourceFormat>[];
+    sourceFormats: SourceFormat[];
 }
 
 export default function ComposeBodyFormatButton({sourceFormats}: Props) {
     const [, {value, initialValue}] = useField<SourceFormat>("bodyFormat");
+    const {t} = useTranslation();
 
     const icon = BODY_FORMAT_ICONS[value] ?? "file-alt";
     return <ComposeIconButton icon={icon} name="format" changed={value !== initialValue}
-                              tooltip={getTooltip(value, sourceFormats)}/>
+                              tooltip={sourceFormats.includes(value) ? t(`source-format.${value}`) : null}/>
 };

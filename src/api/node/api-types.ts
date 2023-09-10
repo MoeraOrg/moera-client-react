@@ -589,15 +589,10 @@ export interface FeedSliceInfoBase<B> {
 export type EncodedFeedSliceInfo = FeedSliceInfoBase<string>;
 export type FeedSliceInfo = FeedSliceInfoBase<Body>;
 
-export interface Choice<T> {
-    value: T;
-    title: string;
-}
-
 export interface PostingFeatures {
     post?: boolean | null;
     subjectPresent: boolean;
-    sourceFormats: Choice<SourceFormat>[];
+    sourceFormats: SourceFormat[];
     mediaMaxSize: number;
     imageRecommendedSize: number;
     imageRecommendedPixels: number;

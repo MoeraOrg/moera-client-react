@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useField } from 'formik';
 import { WithTranslation } from 'react-i18next';
 
-import { Choice, PostingFeatures } from "api/node/api-types";
+import { PostingFeatures } from "api/node/api-types";
 import { VerifiedMediaFile } from "api/node/images-upload";
 import { PlusButton } from "ui/control";
-import { InputField, NumberField, SelectField } from "ui/control/field";
+import { InputField, NumberField, SelectField, SelectFieldChoiceBase } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
 import RichTextImageDialogTabs from "ui/control/richtexteditor/RichTextImageDialogTabs";
 import RichTextImageDialogDropzone from "ui/control/richtexteditor/RichTextImageDialogDropzone";
@@ -13,7 +13,7 @@ import "./RichTextImageDialog.css";
 
 type RichTextImageStandardSize = "full" | "large" | "medium" | "small" | "tiny" | "custom";
 
-const STANDARD_SIZES: Choice<RichTextImageStandardSize>[] = [
+const STANDARD_SIZES: SelectFieldChoiceBase<RichTextImageStandardSize>[] = [
     {title: "image-size.full", value: "full"},
     {title: "image-size.large", value: "large"},
     {title: "image-size.medium", value: "medium"},
@@ -44,7 +44,7 @@ export function getImageDimensions(standardSize: RichTextImageStandardSize,
 
 type RichTextImageAlign = "text-start" | "text-center" | "text-end" | "float-text-start" | "float-text-end";
 
-const ALIGNMENTS: Choice<RichTextImageAlign>[] = [
+const ALIGNMENTS: SelectFieldChoiceBase<RichTextImageAlign>[] = [
     {title: "image-alignment.left", value: "text-start"},
     {title: "image-alignment.center", value: "text-center"},
     {title: "image-alignment.right", value: "text-end"},

@@ -8,10 +8,12 @@ import { FormGroupStyle } from "ui/control/FormGroup";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";
 
-export interface SelectFieldChoice {
+export interface SelectFieldChoiceBase<T> {
     title: string | [string, TOptions];
-    value: string;
+    value: T;
 }
+
+export type SelectFieldChoice = SelectFieldChoiceBase<string>;
 
 interface Props {
     name: string;

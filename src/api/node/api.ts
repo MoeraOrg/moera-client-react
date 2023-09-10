@@ -2017,20 +2017,6 @@ const FeedSliceInfoType: JSONSchemaType<API.EncodedFeedSliceInfo> = {
 
 export const FeedSliceInfo = schema(FeedSliceInfoType);
 
-const ChoiceType: JSONSchemaType<API.Choice<API.SourceFormat>> = {
-    type: "object",
-    properties: {
-        "value": {
-            type: "string"
-        },
-        "title": {
-            type: "string"
-        }
-    },
-    required: ["value", "title"],
-    additionalProperties: false
-};
-
 const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
     type: "object",
     properties: {
@@ -2043,7 +2029,9 @@ const PostingFeaturesType: JSONSchemaType<API.PostingFeatures> = {
         },
         "sourceFormats": {
             type: "array",
-            items: ChoiceType
+            items: {
+                type: "string"
+            }
         },
         "mediaMaxSize": {
             type: "integer"
