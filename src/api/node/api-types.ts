@@ -248,7 +248,7 @@ export interface PostingText {
     bodyPreview?: string | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    body?: Body | string | null;
+    body?: string | null;
     bodyFormat?: BodyFormat | null;
     media?: string[] | null;
     createdAt?: number | null;
@@ -320,9 +320,6 @@ export interface PostingInfoBase<B> {
 export type EncodedPostingInfo = PostingInfoBase<string>;
 export type PostingInfo = PostingInfoBase<Body>;
 
-type PartialPostingInfoBase<B> = Omit<Partial<PostingInfoBase<B>>, "id"> & { id: string };
-export type EncodedPartialPostingInfo = PartialPostingInfoBase<string>;
-
 export interface SheriffMark {
     sheriffName: string;
 }
@@ -369,7 +366,7 @@ export interface CommentText {
     bodyPreview?: string | null;
     bodySrc?: string | null;
     bodySrcFormat?: SourceFormat | null;
-    body?: Body | string | null;
+    body?: string | null;
     bodyFormat?: BodyFormat | null;
     media?: string[] | null;
     createdAt?: number | null;
@@ -464,9 +461,6 @@ interface CommentInfoBase<B> {
 export type EncodedCommentInfo = CommentInfoBase<string>;
 export type CommentInfo = CommentInfoBase<Body>;
 
-type PartialCommentInfoBase<B> = Omit<Partial<CommentInfoBase<B>>, "id"> & { id: string };
-export type EncodedPartialCommentInfo = PartialCommentInfoBase<string>;
-
 export type StoryType = "posting-added" | "reaction-added-positive" | "reaction-added-negative" | "mention-posting"
     | "subscriber-added" | "subscriber-deleted" | "comment-added" | "mention-comment" | "reply-comment"
     | "comment-reaction-added-positive" | "comment-reaction-added-negative" | "remote-comment-added"
@@ -557,8 +551,10 @@ export interface StoryInfoBase<B> {
     viewed?: boolean | null;
     read?: boolean | null;
     satisfied?: boolean | null;
-    posting?: PartialPostingInfoBase<B> | null;
-    comment?: PartialCommentInfoBase<B> | null;
+    posting?: PostingInfoBase<B> | null;
+    postingId?: string | null;
+    comment?: CommentInfoBase<B> | null;
+    commentId?: string | null;
     summaryNodeName?: string | null;
     summaryFullName?: string | null;
     summaryAvatar?: AvatarImage | null;

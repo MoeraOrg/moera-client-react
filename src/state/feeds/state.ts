@@ -1,8 +1,6 @@
 import { FeedInfo, FeedStatus, StoryInfo } from "api/node/api-types";
 
 export interface ExtStoryInfo extends Omit<StoryInfo, "feedName" | "posting" | "comment"> {
-    postingId?: string;
-    commentId?: string;
     hideSheriffMarked?: boolean;
 }
 

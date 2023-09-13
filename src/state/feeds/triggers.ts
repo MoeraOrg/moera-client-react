@@ -61,7 +61,7 @@ import { StoryInfo } from "api/node/api-types";
 import { now } from "util/misc";
 
 function toStory(eventPayload: Omit<StoryEvent<any> | StoryDeletedEvent, "type">, isHome: boolean): StoryInfo {
-    const story: StoryInfo & {postingId?: string | null} = {
+    const story: StoryInfo = {
         publishedAt: 0,
         ...eventPayload,
         createdAt: now()
@@ -69,12 +69,6 @@ function toStory(eventPayload: Omit<StoryEvent<any> | StoryDeletedEvent, "type">
     if (isHome) {
         story.feedName = ":" + story.feedName;
     }
-    if (eventPayload.postingId) {
-        story.posting = {
-            id: eventPayload.postingId,
-        };
-    }
-    delete story.postingId;
     return story;
 }
 

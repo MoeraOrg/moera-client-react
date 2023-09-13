@@ -377,7 +377,7 @@ function isStoryInfo(story: StoryInfo | ExtStoryInfo): story is StoryInfo {
     return "posting" in story;
 }
 
-function getStoryPostingId(story: StoryInfo | ExtStoryInfo): string | undefined {
+function getStoryPostingId(story: StoryInfo | ExtStoryInfo): string | null | undefined {
     return isStoryInfo(story) ? story.posting?.id : story.postingId;
 }
 
