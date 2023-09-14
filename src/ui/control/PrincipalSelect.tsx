@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { FriendGroupInfo, PrincipalFlag, PrincipalValue } from "api/node/api-types";
+import { FriendGroupInfo, PrincipalFlag, PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";

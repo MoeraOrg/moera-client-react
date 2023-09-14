@@ -1,4 +1,4 @@
-import { PrincipalValue } from "api/node/api-types";
+import { PrincipalValue } from "api";
 
 export interface NodeNameState {
     loaded: boolean;

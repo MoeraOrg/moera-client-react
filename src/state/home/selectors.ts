@@ -1,4 +1,4 @@
-import { AvatarImage, BlockedUserInfo, FriendGroupInfo } from "api/node/api-types";
+import { AvatarImage, BlockedUserInfo, FriendGroupInfo } from "api";
 import { ClientState } from "state/state";
 import { getToken } from "state/node/selectors";
 import { NodeCardState } from "state/nodecards/state";

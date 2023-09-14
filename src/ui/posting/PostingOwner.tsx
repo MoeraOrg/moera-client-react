@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import NodeName from "ui/nodename/NodeName";
 import PostingVerifyButton from "ui/posting/PostingVerifyButton";
 import "./PostingOwner.css";

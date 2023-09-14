@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { CommentText, SourceFormat } from "api/node/api-types";
+import { CommentText, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import {
     closeCommentDialog,

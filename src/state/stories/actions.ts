@@ -1,5 +1,5 @@
 import { ActionWithPayload } from "state/action-types";
-import { StoryInfo } from "api/node/api-types";
+import { StoryInfo } from "api";
 
 export const STORY_PINNING_UPDATE = "STORY_PINNING_UPDATE";
 export type StoryPinningUpdateAction = ActionWithPayload<typeof STORY_PINNING_UPDATE, {

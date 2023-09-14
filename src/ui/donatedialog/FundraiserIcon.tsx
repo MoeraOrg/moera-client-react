@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { FundraiserInfo } from "api/node/api-types";
+import { FundraiserInfo } from "api";
 import { findIcon } from "ui/donatedialog/fundraiser-util";
 
 interface FundraiserIconProps {

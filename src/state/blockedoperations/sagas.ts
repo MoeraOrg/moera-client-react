@@ -1,7 +1,6 @@
 import { call, select } from 'typed-redux-saga';
 
-import { Node } from "api";
-import { BlockedByUserFilter, BlockedOperation, PostingInfo, StoryInfo } from "api/node/api-types";
+import { BlockedByUserFilter, BlockedOperation, Node, PostingInfo, StoryInfo } from "api";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtHomeNode } from "state/node/selectors";
 

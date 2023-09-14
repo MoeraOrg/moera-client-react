@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PostingText, PrincipalValue, SourceFormat } from "api/node/api-types";
+import { PostingText, PrincipalValue, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
 import { getPostingFeatures } from "state/compose/selectors";

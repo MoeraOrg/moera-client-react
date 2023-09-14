@@ -1,6 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api/node/api-types";
+import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
@@ -34,7 +34,7 @@ import {
     EVENT_HOME_REMOTE_POSTING_VERIFIED,
     EVENT_HOME_REMOTE_REACTION_ADDED,
     EVENT_HOME_REMOTE_REACTION_DELETED
-} from "api/events/actions";
+} from "api/events";
 import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
 import { findPostingIdsByRemote } from "state/postings/selectors";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";

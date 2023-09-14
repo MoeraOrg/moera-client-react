@@ -50,7 +50,7 @@ import {
     EVENT_HOME_NODE_SETTINGS_CHANGED,
     EVENT_HOME_NODE_SETTINGS_META_CHANGED,
     EVENT_HOME_PLUGINS_UPDATED
-} from "api/events/actions";
+} from "api/events";
 import { flashBox } from "state/flashbox/actions";
 import { POST_INIT_DELAYED } from "state/pulse/actions";
 

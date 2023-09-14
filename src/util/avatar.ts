@@ -1,4 +1,4 @@
-import { AvatarDescription, AvatarImage } from "api/node/api-types";
+import { AvatarDescription, AvatarImage } from "api";
 
 export function toAvatarDescription(avatarImage: AvatarImage | null | undefined,
                                     optional: boolean = true): AvatarDescription | null {

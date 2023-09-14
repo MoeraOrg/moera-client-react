@@ -1,5 +1,5 @@
 import { ClientState } from "state/state";
-import { ContactInfo } from "api/node/api-types";
+import { ContactInfo } from "api";
 
 export function isContactsQueryToBeLoaded(state: ClientState, query: string): boolean {
     const info = state.contacts.queries[query];

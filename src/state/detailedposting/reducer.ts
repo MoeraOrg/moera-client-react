@@ -2,12 +2,12 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
 
-import { BlockedUserInfo, CommentInfo } from "api/node/api-types";
+import { BlockedUserInfo, CommentInfo } from "api";
 import {
     EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_COMMENT_VERIFIED,
     EVENT_RECEIVER_COMMENT_DELETED
-} from "api/events/actions";
+} from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";

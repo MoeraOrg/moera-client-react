@@ -4,7 +4,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { PrincipalValue } from "api/node/api-types";
+import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { getPrincipalDisplay } from "ui/control/principal-display";

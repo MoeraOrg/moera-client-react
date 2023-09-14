@@ -1,4 +1,4 @@
-import { SheriffMark } from "api/node/api-types";
+import { SheriffMark } from "api";
 
 interface SheriffControlled {
     sheriffs?: string[] | null;

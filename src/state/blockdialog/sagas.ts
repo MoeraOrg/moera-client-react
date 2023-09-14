@@ -2,8 +2,7 @@ import { all, call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { executor } from "state/executor";
-import { ClientSettings, Node, NodeApiError } from "api";
-import { deleteBlockedUser, postBlockedUser } from "api/node/sagas";
+import { CLIENT_SETTINGS_PREFIX, Node, NodeApiError } from "api";
 import { WithContext } from "state/action-types";
 import {
     BLOCK_DIALOG_SUBMIT,
@@ -45,7 +44,7 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
     try {
         yield* all(prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, blockedUser.id)));
         const blockedUsers = yield* all(
-            blockedOperations.map(blockedOperation => call(postBlockedUser, ":", {
+            blockedOperations.map(blockedOperation => call(Node.postBlockedUser, ":", {
                 blockedOperation,
                 nodeName,
                 entryId: ownEntryId,
@@ -71,7 +70,7 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
 
 function* deleteBlockedUserIfExists(id: string) {
     try {
-        return yield* call(deleteBlockedUser, ":", id);
+        return yield* call(Node.deleteBlockedUser, ":", id);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {
             throw e;
@@ -97,7 +96,7 @@ function* blockedUserUnfriendSaga(action: BlockedUserUnfriendAction) {
             actions.push(friendshipUpdate(nodeName, null));
             if (dontShowAgain) {
                 actions.push(settingsUpdate([{
-                    name: ClientSettings.PREFIX + "blocked-users.unfriend-on-block",
+                    name: CLIENT_SETTINGS_PREFIX + "blocked-users.unfriend-on-block",
                     value: "yes"
                 }]));
             }
@@ -109,7 +108,7 @@ function* blockedUserUnfriendSaga(action: BlockedUserUnfriendAction) {
             const actions: ClientAction[] = [];
             if (dontShowAgain) {
                 actions.push(settingsUpdate([{
-                    name: ClientSettings.PREFIX + "blocked-users.unfriend-on-block",
+                    name: CLIENT_SETTINGS_PREFIX + "blocked-users.unfriend-on-block",
                     value: "no"
                 }]));
             }
@@ -144,7 +143,7 @@ function* blockedUserUnsubscribeSaga(action: BlockedUserUnsubscribeAction) {
             actions.push(feedUnsubscribe(nodeName, "timeline", subscriptionId));
             if (dontShowAgain) {
                 actions.push(settingsUpdate([{
-                    name: ClientSettings.PREFIX + "blocked-users.unsubscribe-on-block",
+                    name: CLIENT_SETTINGS_PREFIX + "blocked-users.unsubscribe-on-block",
                     value: "yes"
                 }]));
             }
@@ -154,7 +153,7 @@ function* blockedUserUnsubscribeSaga(action: BlockedUserUnsubscribeAction) {
         const onNo = (dontShowAgain: boolean): ClientAction | void => {
             if (dontShowAgain) {
                 return settingsUpdate([{
-                    name: ClientSettings.PREFIX + "blocked-users.unsubscribe-on-block",
+                    name: CLIENT_SETTINGS_PREFIX + "blocked-users.unsubscribe-on-block",
                     value: "no"
                 }]);
             }

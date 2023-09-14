@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";

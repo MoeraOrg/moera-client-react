@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SourceFormat } from "api/node/api-types";
+import { SourceFormat } from "api";
 import { SelectField, SelectFieldChoice } from "ui/control/field";
 import ComposePageTool from "ui/compose/ComposePageTool";
 

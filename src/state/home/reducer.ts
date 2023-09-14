@@ -8,8 +8,8 @@ import {
     EVENT_HOME_FRIEND_GROUP_ADDED,
     EVENT_HOME_FRIEND_GROUP_DELETED,
     EVENT_HOME_FRIEND_GROUP_UPDATED
-} from "api/events/actions";
-import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api/node/api-types";
+} from "api/events";
+import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import {

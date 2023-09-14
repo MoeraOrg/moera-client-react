@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { TokenInfo } from "api/node/api-types";
+import { TokenInfo } from "api";
 import { ClientState } from "state/state";
 import { getHomeToken } from "state/home/selectors";
 import { settingsTokensDelete, settingsTokensDialogOpen } from "state/settings/actions";

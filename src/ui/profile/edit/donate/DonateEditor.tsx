@@ -16,7 +16,7 @@ import {
 import { SortableContext } from '@dnd-kit/sortable';
 import { useTranslation } from 'react-i18next';
 
-import { FundraiserInfo } from "api/node/api-types";
+import { FundraiserInfo } from "api";
 import FundraiserButton from "ui/profile/edit/donate/FundraiserButton";
 import FundraiserDialog from "ui/profile/edit/donate/FundraiserDialog";
 import "./DonateEditor.css";

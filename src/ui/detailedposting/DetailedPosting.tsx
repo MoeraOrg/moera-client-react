@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { detailedPostingLoadAttached } from "state/detailedposting/actions";
 import { isPermitted } from "state/node/selectors";

@@ -1,6 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
+import { EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED, EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events";
 import {
     CONTACTS_LOAD,
     CONTACTS_LOAD_FAILED,
@@ -8,7 +9,6 @@ import {
     CONTACTS_NAME_FOUND,
     CONTACTS_UNSET
 } from "state/contacts/actions";
-import { EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED, EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events/actions";
 import { ContactsState } from "state/contacts/state";
 import { ClientAction } from "state/action";
 

@@ -8,7 +8,7 @@ import {
     ProfileInfo,
     SubscriberInfo,
     SubscriptionInfo
-} from "api/node/api-types";
+} from "api";
 
 export const NODE_CARD_PREPARE = "NODE_CARD_PREPARE";
 export type NodeCardPrepareAction = ActionWithPayload<typeof NODE_CARD_PREPARE, {

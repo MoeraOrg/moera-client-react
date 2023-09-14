@@ -4,7 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { tGender } from "i18n";
-import { FriendGroupInfo, PrincipalValue } from "api/node/api-types";
+import { FriendGroupInfo, PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getHomeFriendGroups } from "state/home/selectors";
 import { getNodeCard } from "state/nodecards/selectors";

@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { ReactionTotals } from "ui/control";
-import { openReactionsDialog } from "state/reactionsdialog/actions";
-import { getPosting } from "state/postings/selectors";
+import { CommentInfo } from "api";
 import { ClientState } from "state/state";
-import { CommentInfo } from "api/node/api-types";
+import { getPosting } from "state/postings/selectors";
+import { openReactionsDialog } from "state/reactionsdialog/actions";
+import { ReactionTotals } from "ui/control";
 import "./CommentReactions.css";
 
 interface OwnProps {

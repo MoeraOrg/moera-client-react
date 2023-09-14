@@ -1,7 +1,6 @@
 import { call, put, select } from 'typed-redux-saga';
 
-import { Node } from "api";
-import { DraftText, PostingInfo, PrincipalValue } from "api/node/api-types";
+import { DraftText, Node, PostingInfo, PrincipalValue } from "api";
 import { errorThrown } from "state/error/actions";
 import { POSTING_REPLY, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";

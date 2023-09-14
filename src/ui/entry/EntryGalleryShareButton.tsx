@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { getOwnerName } from "state/node/selectors";

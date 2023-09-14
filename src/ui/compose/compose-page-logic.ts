@@ -2,17 +2,18 @@ import { fromUnixTime, getUnixTime, isEqual } from 'date-fns';
 import { FormikBag } from 'formik';
 import deepEqual from 'react-fast-compare';
 
-import { ClientSettings } from "api";
 import {
     AvatarImage,
+    CLIENT_SETTINGS_PREFIX,
     FeedReference,
     PostingFeatures,
     PostingInfo,
-    PostingText, PrincipalValue,
+    PostingText,
+    PrincipalValue,
     PrivateMediaFileInfo,
     SourceFormat,
     StoryAttributes
-} from "api/node/api-types";
+} from "api";
 import { RichTextValue } from "ui/control";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { ComposePageOuterProps } from "ui/compose/ComposePage";
@@ -335,7 +336,7 @@ const composePageLogic = {
         let settings = [];
         if (values.bodyFormat.trim() !== formik.props.sourceFormatDefault) {
             settings.push({
-                name: ClientSettings.PREFIX + "posting.body-src-format.default",
+                name: CLIENT_SETTINGS_PREFIX + "posting.body-src-format.default",
                 value: values.bodyFormat.trim()
             });
         }

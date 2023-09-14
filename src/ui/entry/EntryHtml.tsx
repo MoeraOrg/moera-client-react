@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { connect, ConnectedProps, Provider } from 'react-redux';
 import 'katex/dist/katex.min.css';
 
-import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
+import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import store from "state/store";
 import { getPostingBodyFontMagnitude } from "state/settings/selectors";

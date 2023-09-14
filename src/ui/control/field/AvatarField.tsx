@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 import cx from 'classnames';
 
+import { AvatarInfo } from "api";
+import { ClientState } from "state/state";
 import { homeAvatarsLoad } from "state/home/actions";
 import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { useButtonPopper } from "ui/hook";
 import { Avatar } from "ui/control/Avatar";
 import { Loading } from "ui/control/Loading";
-import { ClientState } from "state/state";
-import { AvatarInfo } from "api/node/api-types";
 import "./AvatarField.css";
 
 type Props = {

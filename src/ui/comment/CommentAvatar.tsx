@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { AvatarWithPopup } from "ui/control";
-import { CommentInfo } from "api/node/api-types";
+import { CommentInfo } from "api";
 
 interface Props {
     comment: CommentInfo;

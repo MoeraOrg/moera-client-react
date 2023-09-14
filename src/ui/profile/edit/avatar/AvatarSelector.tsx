@@ -15,7 +15,7 @@ import { SortableContext, } from '@dnd-kit/sortable';
 import { restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 import cx from 'classnames';
 
-import { AvatarInfo } from "api/node/api-types";
+import { AvatarInfo } from "api";
 import { Avatar, Loading } from "ui/control";
 import AvatarSelectorItem from "ui/profile/edit/avatar/AvatarSelectorItem";
 import "./AvatarSelector.css";

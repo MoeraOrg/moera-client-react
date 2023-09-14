@@ -1,9 +1,16 @@
 import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { ClientSettings, NodeApiError } from "api";
-import { Node } from "api/node";
-import { FriendDescription, FriendGroupInfo, PrincipalValue, RemoteFeed, SubscriptionInfo } from "api/node/api-types";
+import {
+    CLIENT_SETTINGS_PREFIX,
+    FriendDescription,
+    FriendGroupInfo,
+    Node,
+    NodeApiError,
+    PrincipalValue,
+    RemoteFeed,
+    SubscriptionInfo
+} from "api";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import {
@@ -302,7 +309,7 @@ function* subscribeToFriend(nodeName: string) {
             actions.push(feedSubscribe(nodeName, "timeline"));
             if (dontShowAgain) {
                 actions.push(settingsUpdate([{
-                    name: ClientSettings.PREFIX + "friends.subscribe-on-add",
+                    name: CLIENT_SETTINGS_PREFIX + "friends.subscribe-on-add",
                     value: "yes"
                 }]));
             }
@@ -312,7 +319,7 @@ function* subscribeToFriend(nodeName: string) {
         const onNo = (dontShowAgain: boolean): ClientAction | void => {
             if (dontShowAgain) {
                 return settingsUpdate([{
-                    name: ClientSettings.PREFIX + "friends.subscribe-on-add",
+                    name: CLIENT_SETTINGS_PREFIX + "friends.subscribe-on-add",
                     value: "no"
                 }]);
             }

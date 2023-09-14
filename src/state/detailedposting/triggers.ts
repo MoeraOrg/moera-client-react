@@ -80,12 +80,14 @@ import {
 } from "state/postings/actions";
 import { getPostingMoment } from "state/postings/selectors";
 import {
+    CommentAddedEvent,
+    CommentReactionsChangedEvent,
+    CommentUpdatedEvent,
     EVENT_RECEIVER_COMMENT_ADDED,
     EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
     EVENT_RECEIVER_COMMENT_UPDATED,
     EventAction
-} from "api/events/actions";
-import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent } from "api/events/api-types";
+} from "api/events";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),

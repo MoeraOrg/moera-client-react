@@ -3,9 +3,14 @@ import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
 import { findPreferredLanguage } from "i18n";
-import { ClientSettings, HomeNotConnectedError, Node, NodeApiError } from "api";
-import { SettingInfo } from "api/node/api-types";
-import { ClientSettingMetaInfo, PREFIX } from "api/settings";
+import {
+    CLIENT_SETTINGS_PREFIX,
+    ClientSettingMetaInfo,
+    HomeNotConnectedError,
+    Node,
+    NodeApiError,
+    SettingInfo
+} from "api";
 import { ClientState } from "state/state";
 import { introduced } from "state/init-selectors";
 import {
@@ -128,7 +133,8 @@ function* settingsClientValuesLoadSaga() {
             const mobileData = window.Android.loadSettings();
             if (mobileData != null) {
                 const mobileSettings = JSON.parse(mobileData)
-                    .map((t: {name: string, value: string}) => ({name: PREFIX + t.name, value: t.value}));
+                    .map((t: {name: string, value: string}) =>
+                        ({name: CLIENT_SETTINGS_PREFIX + t.name, value: t.value}));
                 settings = settings.concat(mobileSettings);
             }
         }
@@ -158,7 +164,7 @@ function* settingsClientValuesLoadedSaga() {
 }
 
 function* updateLanguage(settings: SettingInfo[]) {
-    let lang = settings.find(st => st.name === PREFIX + "language")?.value;
+    let lang = settings.find(st => st.name === CLIENT_SETTINGS_PREFIX + "language")?.value;
     if (lang != null) {
         if (lang === "auto") {
             lang = findPreferredLanguage();
@@ -186,7 +192,7 @@ function* settingsUpdateSaga(action: SettingsUpdateAction) {
         .filter(t => !isMobileSetting(clientMeta, t.name) && !isDeviceSetting(clientMeta, t.name));
     const toMobile = settings
         .filter(t => isMobileSetting(clientMeta, t.name))
-        .map(t => ({name: t.name.substring(PREFIX.length), value: t.value}));
+        .map(t => ({name: t.name.substring(CLIENT_SETTINGS_PREFIX.length), value: t.value}));
     try {
         yield* call(Node.putSettings, ":", toHome);
         if (window.Android && toMobile.length > 0) {
@@ -318,16 +324,16 @@ function* settingsRemindSetSheriffGooglePlayChoiceSaga(action: SettingsRemindSet
     if (action.payload.allow === true) {
         updates.push(
             {name: "sheriffs.timeline", value: serializeSheriffs(sheriffs.concat(SHERIFF_GOOGLE_PLAY_TIMELINE))},
-            {name: ClientSettings.PREFIX + "sheriff.google-play.reminder.count", value: "3"}
+            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.count", value: "3"}
         );
     } else if (action.payload.allow === false) {
         updates.push(
-            {name: ClientSettings.PREFIX + "sheriff.google-play.reminder.count", value: "3"}
+            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.count", value: "3"}
         );
     } else {
         updates.push(
-            {name: ClientSettings.PREFIX + "sheriff.google-play.reminder.count", value: String(count + 1)},
-            {name: ClientSettings.PREFIX + "sheriff.google-play.reminder.shown-at", value: String(now())}
+            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.count", value: String(count + 1)},
+            {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.shown-at", value: String(now())}
         );
     }
     yield* put(settingsUpdate(updates));

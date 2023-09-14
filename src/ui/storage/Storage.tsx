@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { CLIENT_SETTINGS_PREFIX } from "api";
 import { isAddonMessage, loadDataMessage, LoadedData, StoredName } from "api/addon/api-types";
-import { PREFIX } from "api/settings";
 import { ClientState } from "state/state";
 import {
     browserApiSet,
@@ -56,7 +56,8 @@ function Storage({
         }
 
         if (data.settings != null) {
-            settingsClientValuesSet(data.settings.map(([name, value]) => ({name: PREFIX + name, value})));
+            settingsClientValuesSet(
+                data.settings.map(([name, value]) => ({name: CLIENT_SETTINGS_PREFIX + name, value})));
         }
 
         if (data.invisibleUsers != null) {

@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { ContactInfo, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo, SubscriptionInfo } from "api/node/api-types";
+import { ContactInfo, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo, SubscriptionInfo } from "api";
 
 export const FEED_GENERAL_LOAD = "FEED_GENERAL_LOAD";
 export type FeedGeneralLoadAction = ActionWithPayload<typeof FEED_GENERAL_LOAD, {

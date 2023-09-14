@@ -1,8 +1,7 @@
 import { call, put } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { NodeApiError } from "api";
-import { getCartes } from "api/node/cartes";
+import { NodeApiError, Node } from "api";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import { CARTES_LOAD, cartesSet, CLOCK_OFFSET_WARN } from "state/cartes/actions";
@@ -17,7 +16,7 @@ export default [
 
 function* cartesLoadSaga() {
     try {
-        const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":");
+        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, ":");
         Browser.storeCartesData(cartesIp ?? null, cartes);
         yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()));
     } catch (e) {

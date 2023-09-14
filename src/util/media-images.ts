@@ -1,4 +1,4 @@
-import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api/node/api-types";
+import { MediaFilePreviewInfo, PrivateMediaFileInfo } from "api";
 import { urlWithParameters } from "util/url";
 import { isNumber } from "util/misc";
 

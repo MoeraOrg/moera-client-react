@@ -11,7 +11,7 @@ import {
     MAIN_NEGATIVE_REACTIONS_SET,
     MAIN_POSITIVE_REACTIONS,
     MAIN_POSITIVE_REACTIONS_SET
-} from "api/node/reaction-emojis";
+} from "api";
 import EmojiList from "util/emoji-list";
 import { createSelector } from "reselect";
 

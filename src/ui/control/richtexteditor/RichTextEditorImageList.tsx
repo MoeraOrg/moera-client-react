@@ -12,8 +12,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 
-import { PrivateMediaFileInfo } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import { RichTextValue } from "ui/control";
 import UploadedImage from "ui/control/richtexteditor/UploadedImage";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";

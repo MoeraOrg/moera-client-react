@@ -1,8 +1,7 @@
 import { call, delay, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { Node } from "api";
-import { PrincipalValue } from "api/node/api-types";
+import { Node, PrincipalValue } from "api";
 import {
     FEED_FUTURE_SLICE_LOAD,
     FEED_FUTURE_SLICE_SET,

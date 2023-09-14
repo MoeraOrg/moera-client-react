@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 
-import { FriendGroupInfo } from "api/node/api-types";
+import { FriendGroupInfo } from "api";
 import { getFriendGroupTitle } from "ui/control/principal-display";
 
 export function getPeopleTabTitle(tab: string, friendGroups: FriendGroupInfo[], t: TFunction): string {

@@ -1,7 +1,6 @@
 import { call, put, select } from 'typed-redux-saga';
 
-import { Node } from "api/node";
-import { FriendGroupAssignment, FriendGroupInfo } from "api/node/api-types";
+import { FriendGroupAssignment, FriendGroupInfo, Node } from "api";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";

@@ -1,4 +1,4 @@
-import { PrivateMediaFileInfo } from "api/node/api-types";
+import { PrivateMediaFileInfo } from "api";
 
 export interface ImageEditDialogState {
     show: boolean;

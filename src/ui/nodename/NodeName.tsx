@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage } from "api";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ClientState } from "state/state";

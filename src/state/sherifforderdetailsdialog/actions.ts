@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { SheriffOrderInfo } from "api/node/api-types";
+import { SheriffOrderInfo } from "api";
 
 export const OPEN_SHERIFF_ORDER_DETAILS_DIALOG = "OPEN_SHERIFF_ORDER_DETAILS_DIALOG";
 export type OpenSheriffOrderDetailsDialogAction = ActionWithPayload<typeof OPEN_SHERIFF_ORDER_DETAILS_DIALOG, {

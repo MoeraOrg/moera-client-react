@@ -2,8 +2,8 @@ import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
+import { AvatarInfo } from "api";
 import { Avatar, DeleteButton } from "ui/control";
-import { AvatarInfo } from "api/node/api-types";
 
 interface Props {
     nodeName: string | null,

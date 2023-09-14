@@ -2,7 +2,7 @@ import React from 'react';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import i18n, { TFunction } from 'i18next';
 
-import { StoryInfo, StorySummaryData, StoryType } from "api/node/api-types";
+import { StoryInfo, StorySummaryData, StoryType } from "api";
 import { ActionContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { ExtStoryInfo } from "state/feeds/state";

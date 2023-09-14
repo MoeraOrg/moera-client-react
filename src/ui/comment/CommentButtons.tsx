@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ClientReactionInfo, CommentInfo } from "api/node/api-types";
+import { ClientReactionInfo, CommentInfo } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { isPermitted, IsPermittedOptions } from "state/node/selectors";

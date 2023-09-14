@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
+import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { executor } from "state/executor";
 import { ENTRY_COPY_TEXT, EntryCopyTextAction, openEntryCopyTextDialog } from "state/entrycopytextdialog/actions";
 import { flashBox } from "state/flashbox/actions";

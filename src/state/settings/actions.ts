@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { PluginInfo, SettingInfo, SettingMetaInfo, TokenInfo } from "api/node/api-types";
+import { PluginInfo, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 
 export const SETTINGS_GO_TO_TAB = "SETTINGS_GO_TO_TAB";

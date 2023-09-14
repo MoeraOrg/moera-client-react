@@ -1,7 +1,6 @@
 import { TFunction } from 'i18next';
 
-import { NodeName } from "api";
-import { StorySummaryData, StorySummaryEntry, StorySummaryNode, StorySummaryReaction } from "api/node/api-types";
+import { NodeName, StorySummaryData, StorySummaryEntry, StorySummaryNode, StorySummaryReaction } from "api";
 import { getFeedTitle } from "ui/feed/feeds";
 import { htmlEntities } from "util/html";
 import { tGender } from "i18n";

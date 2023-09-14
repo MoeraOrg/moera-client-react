@@ -1,4 +1,4 @@
-import { AskSubject, FriendGroupInfo } from "api/node/api-types";
+import { AskSubject, FriendGroupInfo } from "api";
 
 export interface AskDialogState {
     show: boolean;

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { CommentInfo } from "api/node/api-types";
+import { CommentInfo } from "api";
 import { ClientState } from "state/state";
 import { isPermitted } from "state/node/selectors";
 import { getDetailedPosting } from "state/detailedposting/selectors";

@@ -1,12 +1,15 @@
 import { conj, trigger } from "state/trigger";
-import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, PostingUpdatedEvent } from "api/events/api-types";
 import {
+    DraftAddedEvent,
+    DraftDeletedEvent,
+    DraftUpdatedEvent,
     EVENT_HOME_DRAFT_ADDED,
     EVENT_HOME_DRAFT_DELETED,
     EVENT_HOME_DRAFT_UPDATED,
     EVENT_NODE_POSTING_UPDATED,
-    EventAction
-} from "api/events/actions";
+    EventAction,
+    PostingUpdatedEvent
+} from "api/events";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { CONNECTED_TO_HOME, ConnectedToHomeAction } from "state/home/actions";

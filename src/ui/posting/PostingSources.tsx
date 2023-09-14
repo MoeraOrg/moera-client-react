@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import Jump from "ui/navigation/Jump";
 import NodeName from "ui/nodename/NodeName";
 import { getFeedTitle } from "ui/feed/feeds";

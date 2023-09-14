@@ -1,14 +1,13 @@
 import { call, put } from 'typed-redux-saga';
+import { CallEffect, PutEffect } from 'redux-saga/effects';
 import * as Base64js from 'base64-js';
 import imageCompression from 'browser-image-compression';
 import i18n from 'i18next';
 
-import { Node } from "api/node";
-import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
+import { Node, PostingFeatures, PrivateMediaFileInfo } from "api";
 import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
 import { readAsArrayBuffer } from "util/read-file";
-import { CallEffect, PutEffect } from "redux-saga/effects";
 
 export interface VerifiedMediaFile extends PrivateMediaFileInfo {
     digest?: string | null;

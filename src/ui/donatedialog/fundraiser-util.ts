@@ -1,5 +1,6 @@
-import { FundraiserInfo } from "api/node/api-types";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+
+import { FundraiserInfo } from "api";
 import { hasSchemeOrDomain } from "util/url";
 
 const BITCOIN_ADDRESS = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;

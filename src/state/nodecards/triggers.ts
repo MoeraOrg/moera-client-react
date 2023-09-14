@@ -10,8 +10,7 @@ import {
 } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET, HomeOwnerSetAction } from "state/home/actions";
-import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction } from "api/events/actions";
-import { ProfileUpdatedEvent } from "api/events/api-types";
+import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction, ProfileUpdatedEvent } from "api/events";
 import { INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
 import { OWNER_SET, OwnerSetAction } from "state/node/actions";
 import { PROFILE_SET, ProfileSetAction } from "state/profile/actions";

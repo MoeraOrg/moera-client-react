@@ -12,7 +12,7 @@ import {
     PrincipalValue,
     SubscriberInfo,
     SubscriptionInfo
-} from "api/node/api-types";
+} from "api";
 import { PeopleTab } from "state/people/state";
 
 export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";

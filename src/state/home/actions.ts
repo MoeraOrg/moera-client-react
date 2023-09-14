@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AvatarImage, AvatarInfo, BlockedUserInfo, CarteInfo, FriendGroupInfo } from "api/node/api-types";
+import { AvatarImage, AvatarInfo, BlockedUserInfo, CarteInfo, FriendGroupInfo } from "api";
 import { RootInfo } from "api/addon/api-types";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";

@@ -359,4 +359,4 @@ if len(sys.argv) < 2 or sys.argv[1] == '':
 
 api = read_api(sys.argv[1])
 outdir = sys.argv[2] if len(sys.argv) >= 3 else '.'
-generate_types(api, normpath(outdir + '/api-types.ts'), normpath(outdir + '/api.ts'))
+generate_types(api, normpath(outdir + '/api-types.ts'), normpath(outdir + '/api-schemas.ts'))

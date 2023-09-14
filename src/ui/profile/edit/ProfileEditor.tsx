@@ -4,7 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import { AvatarInfo, FundraiserInfo, PrincipalValue } from "api/node/api-types";
+import { AvatarInfo, FundraiserInfo, PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import { Browser } from "ui/browser";

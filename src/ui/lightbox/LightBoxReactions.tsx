@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { ClientReactionInfo } from "api/node/api-types";
+import { ClientReactionInfo } from "api";
 import { ClientState } from "state/state";
 import { postingReact, postingReactionDelete } from "state/postings/actions";
 import { getHomeOwnerName } from "state/home/selectors";

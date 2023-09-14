@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { MediaAttachment, PrivateMediaFileInfo } from "api/node/api-types";
+import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getFeedWidth } from "state/settings/selectors";
 import EntryImage from "ui/entry/EntryImage";

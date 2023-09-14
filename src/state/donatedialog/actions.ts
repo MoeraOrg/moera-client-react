@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { FundraiserInfo } from "api/node/api-types";
+import { FundraiserInfo } from "api";
 
 export const OPEN_DONATE_DIALOG = "OPEN_DONATE_DIALOG";
 export type OpenDonateDialogAction = ActionWithPayload<typeof OPEN_DONATE_DIALOG, {

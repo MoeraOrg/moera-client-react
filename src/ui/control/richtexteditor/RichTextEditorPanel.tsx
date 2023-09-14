@@ -3,8 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import { NodeName } from "api";
-import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
+import { NodeName, PostingFeatures, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";

@@ -8,7 +8,7 @@ import {
     ReactionAttributes,
     ReactionTotalsInfo,
     SubscriptionType
-} from "api/node/api-types";
+} from "api";
 
 export const POSTING_SET = "POSTING_SET";
 export type PostingSetAction = ActionWithPayload<typeof POSTING_SET, {

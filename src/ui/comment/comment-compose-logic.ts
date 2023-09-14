@@ -1,8 +1,15 @@
 import { FormikBag } from 'formik';
 import deepEqual from 'react-fast-compare';
 
-import { AvatarImage, CommentInfo, CommentSourceText, CommentText, DraftInfo, SourceFormat } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import {
+    AvatarImage,
+    CommentInfo,
+    CommentSourceText,
+    CommentText,
+    DraftInfo,
+    SourceFormat,
+    VerifiedMediaFile
+} from "api";
 import { RichTextValue } from "ui/control";
 import { bodyToLinkPreviews, RichTextLinkPreviewsValue } from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { replaceSmileys } from "util/text";

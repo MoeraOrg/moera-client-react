@@ -4,7 +4,7 @@ import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import { useTranslation } from 'react-i18next';
 
-import { MediaAttachment } from "api/node/api-types";
+import { MediaAttachment } from "api";
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";

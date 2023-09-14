@@ -1,12 +1,12 @@
 import cloneDeep from 'lodash.clonedeep';
 import * as immutable from 'object-path-immutable';
 
-import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
+import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api";
 import {
     EVENT_HOME_SHERIFF_COMPLAIN_ADDED,
     EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED,
     EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED
-} from "api/events/actions";
+} from "api/events";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";

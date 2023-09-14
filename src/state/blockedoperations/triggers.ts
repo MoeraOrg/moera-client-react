@@ -1,6 +1,11 @@
 import { trigger } from "state/trigger";
-import { EVENT_HOME_BLOCKED_USER_ADDED, EVENT_HOME_BLOCKED_USER_DELETED, EventAction } from "api/events/actions";
-import { BlockedUserAddedEvent, BlockedUserDeletedEvent } from "api/events/api-types";
+import {
+    BlockedUserAddedEvent,
+    BlockedUserDeletedEvent,
+    EVENT_HOME_BLOCKED_USER_ADDED,
+    EVENT_HOME_BLOCKED_USER_DELETED,
+    EventAction
+} from "api/events";
 import { blockedUsersAdded, blockedUsersDeleted } from "state/blockedoperations/actions";
 
 export default [

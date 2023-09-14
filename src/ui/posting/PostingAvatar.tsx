@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import { AvatarWithPopup } from "ui/control";
 
 interface Props {

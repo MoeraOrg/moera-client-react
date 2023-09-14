@@ -32,11 +32,11 @@ import {
 } from 'react-share';
 import * as immutable from 'object-path-immutable';
 
+import { CLIENT_SETTINGS_PREFIX } from "api";
+import { ClientState } from "state/state";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
-import { PREFIX } from "api/settings";
 import { closeShareDialog } from "state/sharedialog/actions";
-import { ClientState } from "state/state";
 
 type Props = {
     type: string;
@@ -49,7 +49,7 @@ function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog
         closeShareDialog();
         const data = immutable.update(usage, [type], n => (n ?? 0) + 1);
         settingsUpdate([{
-            name: PREFIX + "share.social-buttons.usage",
+            name: CLIENT_SETTINGS_PREFIX + "share.social-buttons.usage",
             value: JSON.stringify(data)
         }])
     };

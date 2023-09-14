@@ -7,7 +7,7 @@ import i18n, { TFunction } from 'i18next';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
 import PROVIDERS from "providers";
-import * as Rules from "api/naming/rules";
+import { NamingRules } from "api";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
@@ -146,7 +146,7 @@ class SignUpDialog extends React.PureComponent<Props> {
             return;
         }
         this.#lastVerifiedName = verifiedName;
-        if (!name || name.length > Rules.NAME_MAX_LENGTH || !Rules.isRegisteredNameValid(name)) {
+        if (!name || name.length > NamingRules.NAME_MAX_LENGTH || !NamingRules.isRegisteredNameValid(name)) {
             setFieldValue("domain", "");
             return;
         }
@@ -259,8 +259,8 @@ const signUpDialogLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        name: yup.string().trim().required("must-not-empty").max(Rules.NAME_MAX_LENGTH)
-            .test("is-allowed", "not-allowed", Rules.isRegisteredNameValid)
+        name: yup.string().trim().required("must-not-empty").max(NamingRules.NAME_MAX_LENGTH)
+            .test("is-allowed", "not-allowed", NamingRules.isRegisteredNameValid)
             .when("nameTaken", ([nameTaken]: string[], schema: yup.StringSchema) =>
                 schema.notOneOf([nameTaken], "name-already-taken")),
         domain: yup.string()

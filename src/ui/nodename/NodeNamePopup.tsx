@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect, ConnectedProps } from 'react-redux';
 
+import { AvatarImage } from "api";
+import { nodeCardPrepare } from "state/nodecards/actions";
 import { DelayedPopper, DelayedPopperChildren, Manager, Reference } from "ui/control/DelayedPopper";
 import NodeCard from "ui/nodename/NodeCard";
-import { nodeCardPrepare } from "state/nodecards/actions";
-import { AvatarImage } from "api/node/api-types";
 
 type Props = {
     nodeName: string;

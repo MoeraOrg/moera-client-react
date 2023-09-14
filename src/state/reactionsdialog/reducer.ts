@@ -17,7 +17,7 @@ import {
 import {
     EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED,
     EVENT_HOME_REMOTE_REACTION_VERIFIED
-} from "api/events/actions";
+} from "api/events";
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { ClientAction } from "state/action";
 

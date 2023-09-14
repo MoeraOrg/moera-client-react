@@ -1,4 +1,4 @@
-import { ContactInfo } from "api/node/api-types";
+import { ContactInfo } from "api";
 
 interface ContactsQueryState {
     loading: boolean;

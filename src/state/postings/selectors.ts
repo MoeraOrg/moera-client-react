@@ -1,4 +1,4 @@
-import { FeedReference, PostingInfo, StoryInfo } from "api/node/api-types";
+import { FeedReference, PostingInfo, StoryInfo } from "api";
 import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";

@@ -17,20 +17,18 @@ import {
 } from "state/reactionsdialog/actions";
 import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
+    CommentReactionsChangedEvent,
+    CommentUpdatedEvent,
     EVENT_NODE_POSTING_REACTIONS_CHANGED,
     EVENT_NODE_POSTING_UPDATED,
     EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
     EVENT_RECEIVER_COMMENT_UPDATED,
-    EventAction
-} from "api/events/actions";
-import { isCommentMomentInLoadedRange } from "state/detailedposting/selectors";
-import { dialogClosed, dialogOpened, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
-import {
-    CommentReactionsChangedEvent,
-    CommentUpdatedEvent,
+    EventAction,
     PostingReactionsChangedEvent,
     PostingUpdatedEvent
-} from "api/events/api-types";
+} from "api/events";
+import { isCommentMomentInLoadedRange } from "state/detailedposting/selectors";
+import { dialogClosed, dialogOpened, INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
 
 export default [
     trigger(

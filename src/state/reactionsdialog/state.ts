@@ -1,4 +1,4 @@
-import { ReactionInfo, ReactionTotalInfo } from "api/node/api-types";
+import { ReactionInfo, ReactionTotalInfo } from "api";
 import { VerificationStatus } from "state/state-types";
 
 export interface ReactionsDialogTabsState {

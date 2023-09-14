@@ -1,6 +1,6 @@
 import { call, put } from 'typed-redux-saga';
 
-import { Node } from "api/node";
+import { Node } from "api";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";

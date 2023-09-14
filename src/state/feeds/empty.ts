@@ -1,4 +1,4 @@
-import { FeedInfo, FeedStatus } from "api/node/api-types";
+import { FeedInfo, FeedStatus } from "api";
 import { FeedState } from "state/feeds/state";
 
 export const emptyInfo: Omit<FeedInfo, "feedName"> = {

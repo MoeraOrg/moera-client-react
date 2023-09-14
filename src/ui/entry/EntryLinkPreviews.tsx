@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LinkPreview, MediaAttachment } from "api/node/api-types";
+import { LinkPreview, MediaAttachment } from "api";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import "./EntryLinkPreviews.css";
 

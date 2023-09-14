@@ -1,6 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
+import { CLIENT_SETTINGS_PREFIX, Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
     PROFILE_AVATAR_CREATE,
@@ -27,8 +28,6 @@ import {
     profileUpdateFailed,
     profileUpdateSucceeded
 } from "state/profile/actions";
-import { Node } from "api/node";
-import { PREFIX } from "api/settings";
 import { executor } from "state/executor";
 import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
@@ -102,7 +101,7 @@ function* profileAvatarCreateSaga(action: ProfileAvatarCreateAction) {
             onCreate(data);
         }
         yield* put(settingsUpdate([{
-            name: PREFIX + "avatar.shape.default",
+            name: CLIENT_SETTINGS_PREFIX + "avatar.shape.default",
             value: data.shape ?? null
         }]));
     } catch (e) {

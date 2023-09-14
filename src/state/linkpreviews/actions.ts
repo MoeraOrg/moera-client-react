@@ -1,6 +1,5 @@
 import { ActionWithPayload } from "state/action-types";
-import { LinkPreviewInfo, PostingFeatures } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { LinkPreviewInfo, PostingFeatures, VerifiedMediaFile } from "api";
 
 export const LINK_PREVIEW_LOAD = "LINK_PREVIEW_LOAD";
 export type LinkPreviewLoadAction = ActionWithPayload<typeof LINK_PREVIEW_LOAD, {

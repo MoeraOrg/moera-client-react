@@ -3,8 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { ClientSettings, SettingTypes } from "api";
-import { SettingValue } from "api/setting-types";
+import { CLIENT_SETTINGS_PREFIX, SettingTypes, SettingValue } from "api";
 import { ClientState } from "state/state";
 import { getSetting, getSettingMeta } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
@@ -31,7 +30,7 @@ function SetDefaultButton({name, setting, settingMeta, settingValue, settingsUpd
     const onSetDefault = () => {
         setAssignedDefaultValue(value);
         settingsUpdate([{
-            name: ClientSettings.PREFIX + setting,
+            name: CLIENT_SETTINGS_PREFIX + setting,
             value: SettingTypes.toString(value, settingMeta.type, settingMeta.modifiers)
         }]);
     };

@@ -45,7 +45,7 @@ import { SheriffOrderDetailsDialogAnyAction } from "state/sherifforderdetailsdia
 import { SignUpDialogAnyAction } from "state/signupdialog/actions";
 import { SourceDialogAnyAction } from "state/sourcedialog/actions";
 import { StoriesAnyAction } from "state/stories/actions";
-import { ClientEventAction } from "api/events/actions";
+import { ClientEventAction } from "api/events";
 
 export type ClientAction =
     ClientEventAction

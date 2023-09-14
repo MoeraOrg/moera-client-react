@@ -1,4 +1,4 @@
-import { FeedInfo, FeedStatus, StoryInfo } from "api/node/api-types";
+import { FeedInfo, FeedStatus, StoryInfo } from "api";
 
 export interface ExtStoryInfo extends Omit<StoryInfo, "feedName" | "posting" | "comment"> {
     hideSheriffMarked?: boolean;

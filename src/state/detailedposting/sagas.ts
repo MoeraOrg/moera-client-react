@@ -12,7 +12,7 @@ import {
     ReactionAttributes,
     ReactionInfo,
     RepliedTo
-} from "api/node/api-types";
+} from "api";
 import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";

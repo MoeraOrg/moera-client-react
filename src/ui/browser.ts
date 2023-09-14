@@ -1,6 +1,6 @@
 import * as URI from 'uri-js';
 
-import { AvatarImage, BlockedUserInfo, CarteInfo } from "api/node/api-types";
+import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from "api";
 import {
     AddonMessage,
     deleteDataMessage,
@@ -9,7 +9,6 @@ import {
     storeNameMessage,
     switchDataMessage
 } from "api/addon/api-types";
-import { PREFIX } from "api/settings";
 import { rootUrl } from "util/url";
 import { randomId } from "util/misc";
 
@@ -216,7 +215,7 @@ export class Browser {
 
     static storeSettings(settings: Map<string, string | null>): void {
         const data: [string, string | null][] = [];
-        settings.forEach((value, name) => data.push([name.substring(PREFIX.length), value]));
+        settings.forEach((value, name) => data.push([name.substring(CLIENT_SETTINGS_PREFIX.length), value]));
         this.storeData({settings: data});
     }
 

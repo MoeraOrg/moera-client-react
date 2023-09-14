@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-import { FundraiserInfo } from "api/node/api-types";
+import { FundraiserInfo } from "api";
 
 interface Props {
     index: number;

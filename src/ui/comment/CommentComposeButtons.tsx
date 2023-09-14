@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { CommentText, SourceFormat } from "api/node/api-types";
+import { CommentText, SourceFormat } from "api";
 import { commentComposeCancel } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { getOwnerName } from "state/node/selectors";

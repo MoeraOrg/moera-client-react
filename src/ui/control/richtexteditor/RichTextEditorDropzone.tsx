@@ -5,8 +5,7 @@ import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PostingFeatures, PrivateMediaFileInfo } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { PostingFeatures, PrivateMediaFileInfo, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";
 import { getSetting } from "state/settings/selectors";

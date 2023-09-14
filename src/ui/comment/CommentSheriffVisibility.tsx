@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { CommentInfo } from "api/node/api-types";
+import { CommentInfo } from "api";
 import { ClientState } from "state/state";
 import { getDetailedPosting, isCommentSheriffProhibited } from "state/detailedposting/selectors";
 import { SheriffVisibility } from "ui/control";

@@ -2,8 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { CommentText, DraftText, SourceFormat } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { CommentText, DraftText, SourceFormat, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";

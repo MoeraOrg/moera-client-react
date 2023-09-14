@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { Body, MediaAttachment } from "api/node/api-types";
+import { Body, MediaAttachment } from "api";
 
 export type EntryCopyTextMode = "ask" | "text" | "html";
 

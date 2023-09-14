@@ -4,8 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
-import { SheriffComplainDecisionText, SheriffOrderReason } from "api/node/api-types";
-import { SHERIFF_ORDER_REASON_CODES } from "api/node/sheriff-order-reason-codes";
+import { SHERIFF_ORDER_REASON_CODES, SheriffComplainDecisionText, SheriffOrderReason } from "api";
 import { ClientState } from "state/state";
 import { complainsDecisionPost } from "state/complains/actions";
 import { getActiveComplainGroup } from "state/complains/selectors";

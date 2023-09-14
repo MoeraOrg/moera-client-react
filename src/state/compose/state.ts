@@ -1,4 +1,4 @@
-import { DraftInfo, PostingInfo } from "api/node/api-types";
+import { DraftInfo, PostingInfo } from "api";
 
 export interface ExtDraftInfo extends DraftInfo {
     subject: string | null;

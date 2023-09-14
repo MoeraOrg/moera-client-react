@@ -1,7 +1,6 @@
 import i18n from 'i18next';
 
 import { inv, trigger } from "state/trigger";
-import { NodeNameChangedEvent } from "api/events/api-types";
 import {
     EVENT_NODE_ASK_SUBJECTS_CHANGED,
     EVENT_NODE_FRIEND_GROUP_ADDED,
@@ -11,8 +10,9 @@ import {
     EVENT_NODE_NODE_NAME_CHANGED,
     EVENT_NODE_NODE_SETTINGS_CHANGED,
     EVENT_NODE_PLUGINS_UPDATED,
-    EventAction
-} from "api/events/actions";
+    EventAction,
+    NodeNameChangedEvent
+} from "api/events";
 import { INIT_FROM_LOCATION, newLocation, updateLocation } from "state/navigation/actions";
 import { nodeFeaturesLoad, OWNER_SET, OWNER_SWITCH_FAILED, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
 import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";

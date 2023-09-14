@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-import { PrincipalValue } from "api/node/api-types";
+import { PrincipalValue } from "api";
 import { PeopleTab } from "state/people/state";
 import { Principal } from "ui/control";
 

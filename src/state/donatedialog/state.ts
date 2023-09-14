@@ -1,4 +1,4 @@
-import { FundraiserInfo } from "api/node/api-types";
+import { FundraiserInfo } from "api";
 
 export interface DonateDialogState {
     show: boolean;

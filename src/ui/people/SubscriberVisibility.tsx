@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { SubscriberInfo } from "api/node/api-types";
+import { SubscriberInfo } from "api";
 import { ClientState } from "state/state";
 import { isNodeAdmin } from "state/node/selectors";
 import { Principal } from "ui/control";

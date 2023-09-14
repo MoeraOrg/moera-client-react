@@ -4,8 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import { NodeName } from "api";
-import * as Rules from "api/naming/rules";
+import { NodeName, NamingRules } from "api";
 import { ClientState } from "state/state";
 import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog } from "ui/control";
@@ -105,8 +104,8 @@ const nodeNameUpdateDialogLogic = {
             yup.object().shape({
                 name: yup.string().trim()
                     .required("must-not-empty")
-                    .max(Rules.NAME_MAX_LENGTH)
-                    .test("is-allowed", "name-not-allowed", Rules.isRegisteredNameValid),
+                    .max(NamingRules.NAME_MAX_LENGTH)
+                    .test("is-allowed", "name-not-allowed", NamingRules.isRegisteredNameValid),
                 mnemonic
             })
         :

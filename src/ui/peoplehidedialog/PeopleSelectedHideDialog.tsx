@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PrincipalValue } from "api/node/api-types";
+import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getSettingNode } from "state/settings/selectors";
 import {

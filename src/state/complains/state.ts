@@ -1,4 +1,4 @@
-import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
+import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api";
 
 export interface ExtComplainGroupInfo extends SheriffComplainGroupInfo {
     extracted?: true;

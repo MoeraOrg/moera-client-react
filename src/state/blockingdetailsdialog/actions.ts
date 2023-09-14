@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { BlockedByUserInfo, BlockedUserInfo } from "api/node/api-types";
+import { BlockedByUserInfo, BlockedUserInfo } from "api";
 
 export const OPEN_BLOCKING_DETAILS_DIALOG = "OPEN_BLOCKING_DETAILS_DIALOG";
 export type OpenBlockingDetailsDialogAction = ActionWithPayload<typeof OPEN_BLOCKING_DETAILS_DIALOG, {

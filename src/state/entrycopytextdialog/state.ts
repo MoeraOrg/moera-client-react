@@ -1,4 +1,4 @@
-import { Body, MediaAttachment } from "api/node/api-types";
+import { Body, MediaAttachment } from "api";
 
 export interface EntryCopyTextDialogState {
     show: boolean;

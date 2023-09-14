@@ -4,8 +4,8 @@ import { Client, IMessage, StompHeaders } from '@stomp/stompjs';
 import * as URI from 'uri-js';
 import { addMinutes, isBefore } from 'date-fns';
 
-import { ALLOWED_SELF_EVENTS, EVENT_SCHEMES, EventPacket, formatSchemaErrors } from "api";
-import { eventAction, EventSource } from "api/events/actions";
+import { formatSchemaErrors } from "api";
+import { ALLOWED_SELF_EVENTS, EVENT_SCHEMAS, eventAction, EventPacket, EventSource } from "api/events";
 import { ClientState } from "state/state";
 import { getHomeRootLocation } from "state/home/selectors";
 import { Browser } from "ui/browser";
@@ -127,13 +127,13 @@ class Events extends React.PureComponent<Props> {
             console.error("Incorrect event packet received", formatSchemaErrors(EventPacket.errors));
             return;
         }
-        const eventScheme = EVENT_SCHEMES[packet.event.type];
-        if (eventScheme == null) {
+        const eventSchema = EVENT_SCHEMAS[packet.event.type];
+        if (eventSchema == null) {
             console.error("Unknown event type: " + packet.event.type);
             return;
         }
-        if (!eventScheme(packet.event)) {
-            console.error("Incorrect event received", formatSchemaErrors(eventScheme.errors), message.body);
+        if (!eventSchema(packet.event)) {
+            console.error("Incorrect event received", formatSchemaErrors(eventSchema.errors), message.body);
             return;
         }
         if (ALLOWED_SELF_EVENTS.has(packet.event.type) || packet.cid !== Browser.clientId) {

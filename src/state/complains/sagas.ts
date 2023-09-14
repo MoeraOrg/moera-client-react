@@ -2,8 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
-import { Node } from "api";
-import { SheriffComplainStatus } from "api/node/api-types";
+import { Node, SheriffComplainStatus } from "api";
 import { ClientState } from "state/state";
 import { errorThrown } from "state/error/actions";
 import {

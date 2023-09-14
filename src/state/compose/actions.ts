@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { DraftInfo, DraftText, PostingInfo, PostingText } from "api/node/api-types";
+import { DraftInfo, DraftText, PostingInfo, PostingText } from "api";
 import { ActionWithPayload } from "state/action-types";
 
 export const COMPOSE_POSTING_LOAD = "COMPOSE_POSTING_LOAD";

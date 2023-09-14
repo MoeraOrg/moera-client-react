@@ -4,7 +4,7 @@ import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { SourceFormat } from "api/node/api-types";
+import { SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";

@@ -18,6 +18,7 @@ import {
     feedUnsubscribed
 } from "state/feeds/actions";
 import { isFeedGeneralToBeLoaded, isFeedStatusToBeLoaded, isFeedToBeLoaded } from "state/feeds/selectors";
+import { StoryInfo } from "api";
 import {
     EVENT_HOME_FEED_STATUS_UPDATED,
     EVENT_HOME_STORIES_STATUS_UPDATED,
@@ -35,16 +36,7 @@ import {
     EVENT_NODE_STORY_UPDATED,
     EVENT_NODE_SUBSCRIBER_UPDATED,
     EVENT_NODE_SUBSCRIPTION_UPDATED,
-    EventAction
-} from "api/events/actions";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
-import { isConnectedToHome } from "state/home/selectors";
-import { OWNER_SET } from "state/node/actions";
-import { getOwnerName } from "state/node/selectors";
-import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
-import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
-import { POST_INIT, POST_INIT_DELAYED } from "state/pulse/actions";
-import {
+    EventAction,
     FeedStatusUpdatedEvent,
     StoriesStatusUpdatedEvent,
     StoryAddedEvent,
@@ -55,9 +47,15 @@ import {
     SubscriptionAddedEvent,
     SubscriptionDeletedEvent,
     SubscriptionUpdatedEvent
-} from "api/events/api-types";
+} from "api/events";
+import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
+import { isConnectedToHome } from "state/home/selectors";
+import { OWNER_SET } from "state/node/actions";
+import { getOwnerName } from "state/node/selectors";
+import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
+import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
+import { POST_INIT, POST_INIT_DELAYED } from "state/pulse/actions";
 import { WithContext } from "state/action-types";
-import { StoryInfo } from "api/node/api-types";
 import { now } from "util/misc";
 
 function toStory(eventPayload: Omit<StoryEvent<any> | StoryDeletedEvent, "type">, isHome: boolean): StoryInfo {
@@ -171,7 +169,8 @@ export default [
             signal.payload.subscription.type === "feed"
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName
             && signal.payload.subscription.remoteFeedName != null,
-        signal => feedSubscribed(signal.payload.subscription.remoteNodeName, signal.payload.subscription)
+        (signal: EventAction<SubscriptionAddedEvent>) =>
+            feedSubscribed(signal.payload.subscription.remoteNodeName, signal.payload.subscription)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
@@ -179,7 +178,7 @@ export default [
             signal.payload.subscription.type === "feed"
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName
             && signal.payload.subscription.remoteFeedName != null,
-        signal => feedUnsubscribed(signal.payload.subscription.remoteNodeName,
+        (signal: EventAction<SubscriptionDeletedEvent>) => feedUnsubscribed(signal.payload.subscription.remoteNodeName,
             signal.payload.subscription.remoteFeedName!, signal.payload.subscription.contact ?? null)
     ),
     trigger(
@@ -188,7 +187,8 @@ export default [
             signal.payload.subscription.type === "posting-comments"
             && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
-        signal => postingSubscriptionSet(signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
+        (signal: EventAction<SubscriptionAddedEvent>) => postingSubscriptionSet(
+            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
             signal.payload.subscription.id)
     ),
     trigger(
@@ -197,9 +197,9 @@ export default [
             signal.payload.subscription.type === "posting-comments"
             && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
-        signal => remotePostingSubscriptionSet(signal.payload.subscription.remoteNodeName,
-            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
-            signal.payload.subscription.id)
+        (signal: EventAction<SubscriptionAddedEvent>) => remotePostingSubscriptionSet(
+            signal.payload.subscription.remoteNodeName, signal.payload.subscription.remotePostingId!,
+            signal.payload.subscription.type, signal.payload.subscription.id)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
@@ -207,8 +207,8 @@ export default [
             signal.payload.subscription.type === "posting-comments"
             && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) === signal.payload.subscription.remoteNodeName,
-        signal => postingSubscriptionSet(signal.payload.subscription.remotePostingId!, signal.payload.subscription.type,
-            null)
+        (signal: EventAction<SubscriptionDeletedEvent>) => postingSubscriptionSet(
+            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type, null)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_DELETED,
@@ -216,27 +216,32 @@ export default [
             signal.payload.subscription.type === "posting-comments"
             && signal.payload.subscription.remotePostingId != null
             && getOwnerName(state) !== signal.payload.subscription.remoteNodeName,
-        signal => remotePostingSubscriptionSet(signal.payload.subscription.remoteNodeName,
-            signal.payload.subscription.remotePostingId!, signal.payload.subscription.type, null)
+        (signal: EventAction<SubscriptionDeletedEvent>) => remotePostingSubscriptionSet(
+            signal.payload.subscription.remoteNodeName, signal.payload.subscription.remotePostingId!,
+            signal.payload.subscription.type, null)
     ),
     trigger(
         EVENT_HOME_SUBSCRIBER_UPDATED,
         (state, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
-        signal => feedSubscriberUpdated(signal.context.homeOwnerName!, signal.payload.subscriber)
+        (signal: WithContext<EventAction<SubscriberUpdatedEvent>>) =>
+            feedSubscriberUpdated(signal.context.homeOwnerName!, signal.payload.subscriber)
     ),
     trigger(
         EVENT_NODE_SUBSCRIBER_UPDATED,
         (state, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
-        signal => feedSubscriberUpdated(signal.context.ownerName!, signal.payload.subscriber)
+        (signal: WithContext<EventAction<SubscriberUpdatedEvent>>) =>
+            feedSubscriberUpdated(signal.context.ownerName!, signal.payload.subscriber)
     ),
     trigger(
         EVENT_HOME_SUBSCRIPTION_UPDATED,
         (state, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
-        signal => feedSubscriptionUpdated(signal.context.homeOwnerName!, signal.payload.subscription)
+        (signal: WithContext<EventAction<SubscriptionUpdatedEvent>>) =>
+            feedSubscriptionUpdated(signal.context.homeOwnerName!, signal.payload.subscription)
     ),
     trigger(
         EVENT_NODE_SUBSCRIPTION_UPDATED,
         (state, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
-        signal => feedSubscriptionUpdated(signal.context.ownerName!, signal.payload.subscription)
+        (signal: WithContext<EventAction<SubscriptionUpdatedEvent>>) =>
+            feedSubscriptionUpdated(signal.context.ownerName!, signal.payload.subscription)
     )
 ];

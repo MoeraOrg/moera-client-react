@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
-import { ClientReactionInfo, PostingInfo } from "api/node/api-types";
+import { ClientReactionInfo, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { isPermitted, IsPermittedOptions } from "state/node/selectors";

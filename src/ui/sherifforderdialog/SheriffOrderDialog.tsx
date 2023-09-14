@@ -4,8 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { SHERIFF_ORDER_REASON_CODES } from "api/node/sheriff-order-reason-codes";
-import { SheriffOrderReason } from "api/node/api-types";
+import { SHERIFF_ORDER_REASON_CODES, SheriffOrderReason } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";

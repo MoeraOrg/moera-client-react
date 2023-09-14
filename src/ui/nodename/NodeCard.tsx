@@ -3,8 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { NodeName } from "api";
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage, NodeName } from "api";
 import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";

@@ -2,8 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
-import { DraftText, PostingText, StoryAttributes } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { DraftText, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";

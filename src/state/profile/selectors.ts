@@ -1,4 +1,4 @@
-import { AvatarInfo } from "api/node/api-types";
+import { AvatarInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerCard, isPermitted } from "state/node/selectors";
 

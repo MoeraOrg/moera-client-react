@@ -4,7 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import { AskSubject } from "api/node/api-types";
+import { AskSubject } from "api";
 import { ClientState } from "state/state";
 import { closeAskDialog } from "state/askdialog/actions";
 import { peopleSelectedAsk } from "state/people/actions";

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage } from "api";
 import Jump from "ui/navigation/Jump";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import { Avatar } from "ui/control/Avatar";

@@ -17,7 +17,7 @@ import {
     REGISTER_NAME_SUCCEEDED,
     registerNameDialogCancel
 } from "state/nodename/actions";
-import { EVENT_NODE_NODE_NAME_CHANGED, EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS } from "api/events/actions";
+import { EVENT_NODE_NODE_NAME_CHANGED, EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS } from "api/events";
 import { isAtNode } from "state/node/selectors";
 import { flashBox } from "state/flashbox/actions";
 

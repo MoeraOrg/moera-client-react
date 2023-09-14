@@ -1,4 +1,4 @@
-import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api/node/api-types";
+import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
 import { RootInfo } from "api/addon/api-types";
 
 export interface HomeState {

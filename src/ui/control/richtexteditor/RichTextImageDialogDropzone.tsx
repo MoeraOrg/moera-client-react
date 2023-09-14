@@ -5,8 +5,7 @@ import cx from 'classnames';
 import { useField } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PostingFeatures } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { PostingFeatures, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getNodeRootPage } from "state/node/selectors";
 import { richTextEditorImageCopy, richTextEditorImagesUpload } from "state/richtexteditor/actions";

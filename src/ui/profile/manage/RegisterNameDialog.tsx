@@ -4,7 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import * as Rules from "api/naming/rules";
+import { NamingRules } from "api";
 import { ClientState } from "state/state";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
@@ -49,8 +49,8 @@ const registerNameDialogLogic = {
     }),
 
     validationSchema: yup.object().shape({
-        name: yup.string().trim().required("must-not-empty").max(Rules.NAME_MAX_LENGTH)
-            .test("is-allowed", "name-not-allowed", Rules.isRegisteredNameValid)
+        name: yup.string().trim().required("must-not-empty").max(NamingRules.NAME_MAX_LENGTH)
+            .test("is-allowed", "name-not-allowed", NamingRules.isRegisteredNameValid)
     }),
 
     validateOnBlur: false,

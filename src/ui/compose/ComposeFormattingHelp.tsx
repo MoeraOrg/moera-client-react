@@ -3,8 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useField } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { ClientSettings } from "api";
-import { SourceFormat } from "api/node/api-types";
+import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { settingsUpdate } from "state/settings/actions";
@@ -21,7 +20,7 @@ function ComposeFormattingHelp({show, settingsUpdate}: Props) {
     const toggleHelp = (show: boolean) => {
         setVisible(show);
         settingsUpdate([{
-            name: ClientSettings.PREFIX + "posting.body-src-format.show-help",
+            name: CLIENT_SETTINGS_PREFIX + "posting.body-src-format.show-help",
             value: show.toString()
         }]);
     };

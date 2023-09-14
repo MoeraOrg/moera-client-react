@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { BlockedByUserInfo, BlockedUserInfo, ContactInfo, FriendInfo } from "api/node/api-types";
+import { BlockedByUserInfo, BlockedUserInfo, ContactInfo, FriendInfo } from "api";
 import {
     EVENT_NODE_BLOCKED_BY_USER_ADDED,
     EVENT_NODE_BLOCKED_BY_USER_DELETED,
@@ -17,7 +17,7 @@ import {
     EVENT_NODE_SUBSCRIPTION_ADDED,
     EVENT_NODE_SUBSCRIPTION_DELETED,
     EVENT_NODE_SUBSCRIPTION_UPDATED
-} from "api/events/actions";
+} from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";

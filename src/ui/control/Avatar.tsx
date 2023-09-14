@@ -9,7 +9,7 @@ import { getHomeRootPage } from "state/home/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { ClientState } from "state/state";
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage } from "api";
 import "./Avatar.css";
 
 function effectiveShape(shape: string | null, shapeLocal: string | null | undefined,

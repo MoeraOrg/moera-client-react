@@ -70,7 +70,7 @@ import {
     TokenAddedEvent,
     TokenDeletedEvent,
     TokenUpdatedEvent
-} from "api/events/api-types";
+} from "api/events";
 import { ActionWithPayload } from "state/action-types";
 
 export const EVENT_NODE_PROFILE_UPDATED = "EVENT_NODE_PROFILE_UPDATED";

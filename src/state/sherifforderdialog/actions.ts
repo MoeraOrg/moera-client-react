@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { SheriffOrderReason } from "api/node/api-types";
+import { SheriffOrderReason } from "api";
 import { SheriffOrderTarget } from "state/sherifforderdialog/state";
 
 export const OPEN_SHERIFF_ORDER_DIALOG = "OPEN_SHERIFF_ORDER_DIALOG";

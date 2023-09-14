@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { AskSubject, FriendGroupInfo } from "api/node/api-types";
+import { AskSubject, FriendGroupInfo } from "api";
 
 export const OPEN_ASK_DIALOG = "OPEN_ASK_DIALOG";
 export type OpenAskDialogAction = ActionWithPayload<typeof OPEN_ASK_DIALOG, {

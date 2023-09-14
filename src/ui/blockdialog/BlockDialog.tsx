@@ -4,7 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { add, getUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { BlockedOperation, BlockedUserInfo } from "api/node/api-types";
+import { BlockedOperation, BlockedUserInfo } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";

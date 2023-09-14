@@ -1,7 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
-import { imageUpload } from "api/node/images-upload";
+import { imageUpload } from "api";
 import {
     LINK_PREVIEW_IMAGE_UPLOAD,
     LINK_PREVIEW_LOAD,

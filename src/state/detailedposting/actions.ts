@@ -12,7 +12,7 @@ import {
     PostingInfo,
     ReactionAttributes,
     ReactionTotalsInfo
-} from "api/node/api-types";
+} from "api";
 
 export const DETAILED_POSTING_LOAD = "DETAILED_POSTING_LOAD";
 export type DetailedPostingLoadAction = Action<typeof DETAILED_POSTING_LOAD>;

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { FundraiserInfo } from "api/node/api-types";
+import { FundraiserInfo } from "api";
 import { openDonateDialog } from "state/donatedialog/actions";
 import { Button } from "ui/control";
 import { Browser } from "ui/browser";

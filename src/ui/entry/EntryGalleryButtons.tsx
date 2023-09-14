@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ClientReactionInfo, PostingInfo } from "api/node/api-types";
+import { ClientReactionInfo, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { getHomeOwnerName } from "state/home/selectors";

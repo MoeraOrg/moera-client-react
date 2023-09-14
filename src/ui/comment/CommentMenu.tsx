@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { CommentInfo, PrincipalValue } from "api/node/api-types";
+import { CommentInfo, PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { isPermitted, IsPermittedOptions, IsPrincipalEqualsOptions, isPrincipalIn } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";

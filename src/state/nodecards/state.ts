@@ -5,7 +5,7 @@ import {
     ProfileInfo,
     SubscriberInfo,
     SubscriptionInfo
-} from "api/node/api-types";
+} from "api";
 
 export interface NodeCardState {
     details: {

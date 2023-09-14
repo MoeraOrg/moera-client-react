@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import Jump from "ui/navigation/Jump";
 import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import PostingSources from "ui/posting/PostingSources";

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { AvatarImage, BlockedUserInfo, CommentInfo, Features, PostingInfo } from "api/node/api-types";
+import { AvatarImage, BlockedUserInfo, CommentInfo, Features, PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName, isGooglePlayHiding } from "state/node/selectors";
 import { getHomeInvisibleUsers, isConnectedToHome } from "state/home/selectors";

@@ -10,7 +10,7 @@ import {
     MAIN_POSITIVE_REACTIONS,
     MAIN_POSITIVE_REACTIONS_SET,
     REACTION_EMOJIS
-} from "api/node/reaction-emojis";
+} from "api";
 import { Button, EmojiProps, EmojiSelector, ModalDialog } from "ui/control";
 import EmojiList from "util/emoji-list";
 import "./EmojiListDialog.css";

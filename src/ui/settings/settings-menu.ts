@@ -1,7 +1,6 @@
 import { ComponentType } from 'react';
 
-import { PLUGIN_PREFIX, PREFIX } from "api/settings";
-import { PluginInfo } from "api/node/api-types";
+import { CLIENT_SETTINGS_PLUGIN_PREFIX, CLIENT_SETTINGS_PREFIX, PluginInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 import SettingsItemPassword from "ui/settings/SettingsItemPassword";
 import SettingsItemTokens from "ui/settings/SettingsItemTokens";
@@ -129,64 +128,64 @@ const MENU_ITEMS: Record<SettingsTabId, Sheet[]> = {
     ],
     "client": [
         sheet("appearance", [
-            option(PREFIX + "language"),
-            option(PREFIX + "posting.body.font-magnitude"),
-            option(PREFIX + "feed.width"),
-            option(PREFIX + "avatar.shape"),
-            option(PREFIX + "full-name.display", 4),
-            option(PREFIX + "entry.gallery.loop")
+            option(CLIENT_SETTINGS_PREFIX + "language"),
+            option(CLIENT_SETTINGS_PREFIX + "posting.body.font-magnitude"),
+            option(CLIENT_SETTINGS_PREFIX + "feed.width"),
+            option(CLIENT_SETTINGS_PREFIX + "avatar.shape"),
+            option(CLIENT_SETTINGS_PREFIX + "full-name.display", 4),
+            option(CLIENT_SETTINGS_PREFIX + "entry.gallery.loop")
         ]),
         sheet("notifications", [
-            option(PREFIX + "instants.number.mode"),
-            option(PREFIX + "instants.profile-link"),
-            option(PREFIX + "news-button.target-story"),
-            option(PREFIX + "mobile.notifications.enabled", 0),
-            option(PREFIX + "mobile.notifications.news.enabled")
+            option(CLIENT_SETTINGS_PREFIX + "instants.number.mode"),
+            option(CLIENT_SETTINGS_PREFIX + "instants.profile-link"),
+            option(CLIENT_SETTINGS_PREFIX + "news-button.target-story"),
+            option(CLIENT_SETTINGS_PREFIX + "mobile.notifications.enabled", 0),
+            option(CLIENT_SETTINGS_PREFIX + "mobile.notifications.news.enabled")
         ]),
         sheet("posting", [
             chapter("general", null, [
-                option(PREFIX + "posting.visibility.default"),
-                option(PREFIX + "posting.feed.news.enabled", 0),
-                option(PREFIX + "posting.media.compress.default", 0),
-                option(PREFIX + "posting.smileys.enabled", 0),
-                option(PREFIX + "posting.time.relative"),
-                option(PREFIX + "rich-text-editor.link-previews.max-automatic")
+                option(CLIENT_SETTINGS_PREFIX + "posting.visibility.default"),
+                option(CLIENT_SETTINGS_PREFIX + "posting.feed.news.enabled", 0),
+                option(CLIENT_SETTINGS_PREFIX + "posting.media.compress.default", 0),
+                option(CLIENT_SETTINGS_PREFIX + "posting.smileys.enabled", 0),
+                option(CLIENT_SETTINGS_PREFIX + "posting.time.relative"),
+                option(CLIENT_SETTINGS_PREFIX + "rich-text-editor.link-previews.max-automatic")
             ]),
             chapter("comments", null, [
-                option(PREFIX + "posting.comments.visibility.default", 0),
-                option(PREFIX + "posting.comments.addition.default", 2),
-                option(PREFIX + "posting.comments.hide.default")
+                option(CLIENT_SETTINGS_PREFIX + "posting.comments.visibility.default", 0),
+                option(CLIENT_SETTINGS_PREFIX + "posting.comments.addition.default", 2),
+                option(CLIENT_SETTINGS_PREFIX + "posting.comments.hide.default")
             ]),
             chapter("reactions", null, [
-                option(PREFIX + "posting.reactions.enabled.default", 1),
-                option(PREFIX + "posting.reactions.positive.default", 4),
-                option(PREFIX + "posting.reactions.negative.enabled.default", 1),
-                option(PREFIX + "posting.reactions.negative.default", 4),
-                option(PREFIX + "posting.reactions.self.enabled", 0),
-                option(PREFIX + "posting.reactions.totals-visible.default", 0),
-                option(PREFIX + "posting.reactions.visible.default")
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.enabled.default", 1),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.positive.default", 4),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.negative.enabled.default", 1),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.negative.default", 4),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.self.enabled", 0),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.totals-visible.default", 0),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reactions.visible.default")
             ]),
             chapter("replies", null, [
-                option(PREFIX + "posting.reply.subject-prefix"),
-                option(PREFIX + "posting.reply.preamble"),
-                option(PREFIX + "posting.reply.quote-all")
+                option(CLIENT_SETTINGS_PREFIX + "posting.reply.subject-prefix"),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reply.preamble"),
+                option(CLIENT_SETTINGS_PREFIX + "posting.reply.quote-all")
             ])
         ]),
         sheet("comment", [
             chapter("general", null, [
-                option(PREFIX + "comment.replied-to.glance.enabled", 0),
-                option(PREFIX + "comment.smileys.enabled"),
-                option(PREFIX + "comment.submit-key")
+                option(CLIENT_SETTINGS_PREFIX + "comment.replied-to.glance.enabled", 0),
+                option(CLIENT_SETTINGS_PREFIX + "comment.smileys.enabled"),
+                option(CLIENT_SETTINGS_PREFIX + "comment.submit-key")
             ]),
             chapter("reactions", null, [
-                option(PREFIX + "comment.reactions.positive.default"),
-                option(PREFIX + "comment.reactions.negative.default", 4),
-                option(PREFIX + "comment.reactions.self.enabled")
+                option(CLIENT_SETTINGS_PREFIX + "comment.reactions.positive.default"),
+                option(CLIENT_SETTINGS_PREFIX + "comment.reactions.negative.default", 4),
+                option(CLIENT_SETTINGS_PREFIX + "comment.reactions.self.enabled")
             ]),
         ]),
         sheet("reactions", [
-            option(PREFIX + "reactions.positive.available"),
-            option(PREFIX + "reactions.negative.available")
+            option(CLIENT_SETTINGS_PREFIX + "reactions.positive.available"),
+            option(CLIENT_SETTINGS_PREFIX + "reactions.negative.available")
         ]),
         sheet("other")
     ]
@@ -228,7 +227,7 @@ export function getOtherOptions(tab: SettingsTabId, allNames: Iterable<string>):
     collectUsedOptions(getSheets(tab), used);
     const other = [];
     for (const name of allNames) {
-        if (!used.has(name) && !name.startsWith(PLUGIN_PREFIX)) {
+        if (!used.has(name) && !name.startsWith(CLIENT_SETTINGS_PLUGIN_PREFIX)) {
             other.push(option(name));
         }
     }

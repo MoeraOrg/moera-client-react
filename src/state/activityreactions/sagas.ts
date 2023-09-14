@@ -1,9 +1,8 @@
 import { call, select } from 'typed-redux-saga';
 
+import { Node, PostingInfo, StoryInfo } from "api";
 import { isAtHomeNode } from "state/node/selectors";
-import { Node } from "api/node";
 import { isConnectedToHome } from "state/home/selectors";
-import { PostingInfo, StoryInfo } from "api/node/api-types";
 
 export function* fillActivityReactionsInStories(stories: StoryInfo[]) {
     const postings: PostingInfo[] = stories

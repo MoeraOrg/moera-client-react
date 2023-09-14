@@ -3,16 +3,16 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { Button, ModalDialog } from "ui/control";
-import NodeName from "ui/nodename/NodeName";
+import { CLIENT_SETTINGS_PREFIX } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { closeQuickTips } from "state/quicktips/actions";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
-import { PREFIX } from "api/settings";
-import Jump, { JumpCallback } from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
+import { Button, ModalDialog } from "ui/control";
+import NodeName from "ui/nodename/NodeName";
+import Jump, { JumpCallback } from "ui/navigation/Jump";
 import "./QuickTips.css";
 
 type Props = ConnectedProps<typeof connector>;
@@ -28,7 +28,7 @@ function QuickTips({show, ownerName, shown, closeQuickTips, settingsUpdate}: Pro
         closeQuickTips();
         if (!shown) {
             settingsUpdate([{
-                name: PREFIX + "invitation.quick-tips.shown",
+                name: CLIENT_SETTINGS_PREFIX + "invitation.quick-tips.shown",
                 value: "true"
             }]);
         }

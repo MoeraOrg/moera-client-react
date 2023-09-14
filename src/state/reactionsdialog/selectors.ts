@@ -1,4 +1,4 @@
-import { PrincipalValue, ReactionInfo } from "api/node/api-types";
+import { PrincipalValue, ReactionInfo } from "api";
 import { ClientState } from "state/state";
 import { VerificationStatus } from "state/state-types";
 import { isPermitted } from "state/node/selectors";

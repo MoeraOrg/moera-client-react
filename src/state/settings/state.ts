@@ -1,5 +1,4 @@
-import { PluginInfo, SettingMetaInfo, TokenInfo } from "api/node/api-types";
-import { ClientSettingMetaInfo } from "api/settings";
+import { ClientSettingMetaInfo, PluginInfo, SettingMetaInfo, TokenInfo } from "api";
 
 export type SettingsTabId = "node" | "client";
 

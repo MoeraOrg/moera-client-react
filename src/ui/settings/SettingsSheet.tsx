@@ -4,10 +4,7 @@ import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { Property } from 'csstype';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import { SettingTypes } from "api";
-import { ClientSettingMetaInfo } from "api/settings";
-import { SettingValue } from "api/setting-types";
-import { SettingInfo, SettingMetaInfo } from "api/node/api-types";
+import { ClientSettingMetaInfo, SettingInfo, SettingMetaInfo, SettingTypes, SettingValue } from "api";
 import { messageBox } from "state/messagebox/actions";
 import { Item } from "ui/settings/settings-menu";
 import { settingsUpdate } from "state/settings/actions";

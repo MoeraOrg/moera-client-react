@@ -11,7 +11,7 @@ import {
     FriendOfInfo,
     SubscriberInfo,
     SubscriptionInfo
-} from "api/node/api-types";
+} from "api";
 
 export function isPeopleGeneralToBeLoaded(state: ClientState): boolean {
     return !state.people.loadedGeneral && !state.people.loadingGeneral;

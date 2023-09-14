@@ -1,8 +1,8 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { StoryInfo } from "api/node/api-types";
-import { EVENT_NODE_FEED_SHERIFF_DATA_UPDATED } from "api/events/actions";
+import { StoryInfo } from "api";
+import { EVENT_NODE_FEED_SHERIFF_DATA_UPDATED } from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import {

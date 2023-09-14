@@ -1,10 +1,7 @@
 import { addDays, isPast } from 'date-fns';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { ClientSettings, SettingTypes } from "api";
-import { ClientSettingMetaInfo } from "api/settings";
-import { SettingValue } from "api/setting-types";
-import { SettingMetaInfo } from "api/node/api-types";
+import { CLIENT_SETTINGS_PREFIX, ClientSettingMetaInfo, SettingMetaInfo, SettingTypes, SettingValue } from "api";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeFeatures } from "state/node/selectors";
@@ -81,7 +78,7 @@ export function getSettingNode(state: ClientState, name: string): SettingValue |
 }
 
 export function getSettingMeta(state: ClientState, name: string): ClientSettingMetaInfo | null {
-    return state.settings.client.meta.get(ClientSettings.PREFIX + name) ?? null;
+    return state.settings.client.meta.get(CLIENT_SETTINGS_PREFIX + name) ?? null;
 }
 
 export function getSetting(state: ClientState, name: string): SettingValue | null {
@@ -89,7 +86,7 @@ export function getSetting(state: ClientState, name: string): SettingValue | nul
     if (!meta) {
         return null;
     }
-    const value = state.settings.client.values.get(ClientSettings.PREFIX + name);
+    const value = state.settings.client.values.get(CLIENT_SETTINGS_PREFIX + name);
     return SettingTypes.toValue(meta.type, value ?? meta.defaultValue ?? "");
 }
 

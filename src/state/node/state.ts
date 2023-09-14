@@ -1,4 +1,4 @@
-import { Features } from "api/node/api-types";
+import { Features } from "api";
 
 export interface NodeState {
     root: {

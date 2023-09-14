@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PostingFeatures, SourceFormat } from "api/node/api-types";
+import { PostingFeatures, SourceFormat } from "api";
 import { FormGroup, RichTextEditor, RichTextValue } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
 import FieldError from "ui/control/field/FieldError";

@@ -1,5 +1,6 @@
 import regexEscape from 'escape-string-regexp';
-import { AvatarImage } from "api/node/api-types";
+
+import { AvatarImage } from "api";
 
 const ARRANGEMENT_DEPTH = 5;
 

@@ -4,7 +4,7 @@ import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import * as Rules from "api/naming/rules";
+import { NamingRules } from "api";
 import { ClientState } from "state/state";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
@@ -81,7 +81,7 @@ const connectFormLogic = {
                     if (/^http[s]?:/.test(name)) {
                         return true;
                     }
-                    return Rules.isRegisteredNameValid(name)
+                    return NamingRules.isRegisteredNameValid(name)
                 }
             ),
         password: yup.string().required("must-not-empty")

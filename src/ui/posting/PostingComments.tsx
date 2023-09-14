@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import Jump from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
 import "./PostingComments.css";

@@ -7,7 +7,7 @@ import {
     FriendGroupInfo,
     PostingOperations,
     PrincipalValue
-} from "api/node/api-types";
+} from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerName, getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { NodeCardState } from "state/nodecards/state";

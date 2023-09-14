@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { MediaAttachment, PostingInfo, PrivateMediaFileInfo } from "api/node/api-types";
+import { MediaAttachment, PostingInfo, PrivateMediaFileInfo } from "api";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getPosting } from "state/postings/selectors";

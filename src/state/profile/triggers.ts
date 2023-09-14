@@ -25,7 +25,7 @@ import {
     WAKE_UP
 } from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
-import { EVENT_NODE_PROFILE_UPDATED } from "api/events/actions";
+import { EVENT_NODE_PROFILE_UPDATED } from "api/events";
 import { confirmBox } from "state/confirmbox/actions";
 
 export default [

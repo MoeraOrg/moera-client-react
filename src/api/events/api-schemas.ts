@@ -1,24 +1,7 @@
 import { JSONSchemaType, ValidateFunction } from 'ajv';
 
 import schema from "api/schema";
-import {
-    AvatarImageType,
-    AvatarInfoType,
-    BlockedByUserInfoType,
-    BlockedInstantInfoType,
-    BlockedUserInfoType,
-    FeedStatusType,
-    FriendGroupInfoType,
-    FriendInfoType,
-    FriendOfInfoType,
-    SheriffComplainGroupInfoType,
-    SheriffComplainInfoType,
-    SheriffMarkType,
-    StorySummaryDataType,
-    SubscriberInfoType,
-    SubscriptionInfoType,
-    TokenInfoType
-} from "api/node/api";
+import * as NodeApiSchema from "api/node/api-schemas";
 import {
     AskSubjectsChangedEvent,
     AvatarAddedEvent,
@@ -303,7 +286,7 @@ const NodeNameChangedEventType: JSONSchemaType<NodeNameChangedEvent> = {
             nullable: true
         },
         "avatar": {
-            ...AvatarImageType,
+            ...NodeApiSchema.AvatarImageType,
             nullable: true
         }
     },
@@ -597,7 +580,7 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             nullable: true
         },
         "summaryAvatar": {
-            ...AvatarImageType,
+            ...NodeApiSchema.AvatarImageType,
             nullable: true
         },
         "summary": {
@@ -605,7 +588,7 @@ const StoryAddedEventType: JSONSchemaType<StoryAddedEvent> = {
             nullable: true
         },
         "summaryData": {
-            ...StorySummaryDataType,
+            ...NodeApiSchema.StorySummaryDataType,
             nullable: true
         },
         "trackingId": {
@@ -724,7 +707,7 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             nullable: true
         },
         "summaryAvatar": {
-            ...AvatarImageType,
+            ...NodeApiSchema.AvatarImageType,
             nullable: true
         },
         "summary": {
@@ -732,7 +715,7 @@ const StoryUpdatedEventType: JSONSchemaType<StoryUpdatedEvent> = {
             nullable: true
         },
         "summaryData": {
-            ...StorySummaryDataType,
+            ...NodeApiSchema.StorySummaryDataType,
             nullable: true
         },
         "trackingId": {
@@ -784,7 +767,7 @@ const FeedStatusUpdatedEventType: JSONSchemaType<FeedStatusUpdatedEvent> = {
         "feedName": {
             type: "string"
         },
-        "status": FeedStatusType
+        "status": NodeApiSchema.FeedStatusType
     },
     additionalProperties: false,
     required: ["type", "feedName", "status"]
@@ -821,7 +804,7 @@ const SubscriberAddedEventType: JSONSchemaType<SubscriberAddedEvent> = {
         "type": {
             type: "string"
         },
-        "subscriber": SubscriberInfoType
+        "subscriber": NodeApiSchema.SubscriberInfoType
     },
     additionalProperties: false,
     required: ["subscriber"]
@@ -833,7 +816,7 @@ const SubscriberUpdatedEventType: JSONSchemaType<SubscriberUpdatedEvent> = {
         "type": {
             type: "string"
         },
-        "subscriber": SubscriberInfoType
+        "subscriber": NodeApiSchema.SubscriberInfoType
     },
     additionalProperties: false,
     required: ["subscriber"]
@@ -845,7 +828,7 @@ const SubscriberDeletedEventType: JSONSchemaType<SubscriberDeletedEvent> = {
         "type": {
             type: "string"
         },
-        "subscriber": SubscriberInfoType
+        "subscriber": NodeApiSchema.SubscriberInfoType
     },
     additionalProperties: false,
     required: ["subscriber"]
@@ -857,7 +840,7 @@ const SubscriptionAddedEventType: JSONSchemaType<SubscriptionAddedEvent> = {
         "type": {
             type: "string"
         },
-        "subscription": SubscriptionInfoType
+        "subscription": NodeApiSchema.SubscriptionInfoType
     },
     additionalProperties: false,
     required: ["subscription"]
@@ -869,7 +852,7 @@ const SubscriptionUpdatedEventType: JSONSchemaType<SubscriptionUpdatedEvent> = {
         "type": {
             type: "string"
         },
-        "subscription": SubscriptionInfoType
+        "subscription": NodeApiSchema.SubscriptionInfoType
     },
     additionalProperties: false,
     required: ["subscription"]
@@ -881,7 +864,7 @@ const SubscriptionDeletedEventType: JSONSchemaType<SubscriptionDeletedEvent> = {
         "type": {
             type: "string"
         },
-        "subscription": SubscriptionInfoType
+        "subscription": NodeApiSchema.SubscriptionInfoType
     },
     additionalProperties: false,
     required: ["subscription"]
@@ -1138,7 +1121,7 @@ const RemoteNodeAvatarChangedEventType: JSONSchemaType<RemoteNodeAvatarChangedEv
             type: "string"
         },
         "avatar": {
-            ...AvatarImageType,
+            ...NodeApiSchema.AvatarImageType,
             nullable: true
         }
     },
@@ -1152,7 +1135,7 @@ const AvatarAddedEventType: JSONSchemaType<AvatarAddedEvent> = {
         "type": {
             type: "string"
         },
-        "avatar": AvatarInfoType
+        "avatar": NodeApiSchema.AvatarInfoType
     },
     additionalProperties: false,
     required: ["type", "avatar"]
@@ -1252,7 +1235,7 @@ const TokenAddedEventType: JSONSchemaType<TokenAddedEvent> = {
         "type": {
             type: "string"
         },
-        "token": TokenInfoType
+        "token": NodeApiSchema.TokenInfoType
     },
     additionalProperties: false,
     required: ["type", "token"]
@@ -1264,7 +1247,7 @@ const TokenUpdatedEventType: JSONSchemaType<TokenUpdatedEvent> = {
         "type": {
             type: "string"
         },
-        "token": TokenInfoType
+        "token": NodeApiSchema.TokenInfoType
     },
     additionalProperties: false,
     required: ["type", "token"]
@@ -1301,7 +1284,7 @@ const FriendGroupAddedEventType: JSONSchemaType<FriendGroupAddedEvent> = {
         "type": {
             type: "string"
         },
-        "friendGroup": FriendGroupInfoType
+        "friendGroup": NodeApiSchema.FriendGroupInfoType
     },
     additionalProperties: false,
     required: ["type", "friendGroup"]
@@ -1313,7 +1296,7 @@ const FriendGroupUpdatedEventType: JSONSchemaType<FriendGroupUpdatedEvent> = {
         "type": {
             type: "string"
         },
-        "friendGroup": FriendGroupInfoType
+        "friendGroup": NodeApiSchema.FriendGroupInfoType
     },
     additionalProperties: false,
     required: ["type", "friendGroup"]
@@ -1339,7 +1322,7 @@ const FriendshipUpdatedEventType: JSONSchemaType<FriendshipUpdatedEvent> = {
         "type": {
             type: "string"
         },
-        "friend": FriendInfoType
+        "friend": NodeApiSchema.FriendInfoType
     },
     additionalProperties: false,
     required: ["type", "friend"]
@@ -1362,7 +1345,7 @@ const RemoteFriendshipUpdatedEventType: JSONSchemaType<RemoteFriendshipUpdatedEv
         "type": {
             type: "string"
         },
-        "friendOf": FriendOfInfoType
+        "friendOf": NodeApiSchema.FriendOfInfoType
     },
     additionalProperties: false,
     required: ["type", "friendOf"]
@@ -1374,7 +1357,7 @@ const BlockedInstantAddedEventType: JSONSchemaType<BlockedInstantAddedEvent> = {
         "type": {
             type: "string"
         },
-        "blockedInstant": BlockedInstantInfoType
+        "blockedInstant": NodeApiSchema.BlockedInstantInfoType
     },
     additionalProperties: false,
     required: ["type", "blockedInstant"]
@@ -1386,7 +1369,7 @@ const BlockedInstantDeletedEventType: JSONSchemaType<BlockedInstantDeletedEvent>
         "type": {
             type: "string"
         },
-        "blockedInstant": BlockedInstantInfoType
+        "blockedInstant": NodeApiSchema.BlockedInstantInfoType
     },
     additionalProperties: false,
     required: ["type", "blockedInstant"]
@@ -1398,7 +1381,7 @@ const BlockedUserAddedEventType: JSONSchemaType<BlockedUserAddedEvent> = {
         "type": {
             type: "string"
         },
-        "blockedUser": BlockedUserInfoType
+        "blockedUser": NodeApiSchema.BlockedUserInfoType
     },
     additionalProperties: false,
     required: ["type", "blockedUser"]
@@ -1410,7 +1393,7 @@ const BlockedUserDeletedEventType: JSONSchemaType<BlockedUserDeletedEvent> = {
         "type": {
             type: "string"
         },
-        "blockedUser": BlockedUserInfoType
+        "blockedUser": NodeApiSchema.BlockedUserInfoType
     },
     additionalProperties: false,
     required: ["type", "blockedUser"]
@@ -1422,7 +1405,7 @@ const BlockedByUserAddedEventType: JSONSchemaType<BlockedByUserAddedEvent> = {
         "type": {
             type: "string"
         },
-        "blockedByUser": BlockedByUserInfoType
+        "blockedByUser": NodeApiSchema.BlockedByUserInfoType
     },
     additionalProperties: false,
     required: ["type", "blockedByUser"]
@@ -1434,7 +1417,7 @@ const BlockedByUserDeletedEventType: JSONSchemaType<BlockedByUserDeletedEvent> =
         "type": {
             type: "string"
         },
-        "blockedByUser": BlockedByUserInfoType
+        "blockedByUser": NodeApiSchema.BlockedByUserInfoType
     },
     additionalProperties: false,
     required: ["type", "blockedByUser"]
@@ -1458,7 +1441,7 @@ const FeedSheriffDataUpdatedEventType: JSONSchemaType<FeedSheriffDataUpdatedEven
         },
         "sheriffMarks": {
             type: "array",
-            items: SheriffMarkType,
+            items: NodeApiSchema.SheriffMarkType,
             nullable: true
         }
     },
@@ -1472,7 +1455,7 @@ const SheriffComplainGroupAddedEventType: JSONSchemaType<SheriffComplainGroupAdd
         "type": {
             type: "string"
         },
-        "group": SheriffComplainGroupInfoType
+        "group": NodeApiSchema.SheriffComplainGroupInfoType
     },
     additionalProperties: false,
     required: ["type", "group"]
@@ -1484,7 +1467,7 @@ const SheriffComplainGroupUpdatedEventType: JSONSchemaType<SheriffComplainGroupU
         "type": {
             type: "string"
         },
-        "group": SheriffComplainGroupInfoType
+        "group": NodeApiSchema.SheriffComplainGroupInfoType
     },
     additionalProperties: false,
     required: ["type", "group"]
@@ -1496,7 +1479,7 @@ const SheriffComplainAddedEventType: JSONSchemaType<SheriffComplainAddedEvent> =
         "type": {
             type: "string"
         },
-        "complain": SheriffComplainInfoType,
+        "complain": NodeApiSchema.SheriffComplainInfoType,
         "groupId": {
             type: "string"
         }
@@ -1505,7 +1488,7 @@ const SheriffComplainAddedEventType: JSONSchemaType<SheriffComplainAddedEvent> =
     required: ["type", "complain", "groupId"]
 }
 
-export const EVENT_SCHEMES: Partial<Record<string, ValidateFunction<any>>> = {
+export const EVENT_SCHEMAS: Partial<Record<string, ValidateFunction<any>>> = {
     "PING": schema(PingEventType),
     "PROFILE_UPDATED": schema(ProfileUpdatedEventType),
     "NODE_SETTINGS_META_CHANGED": schema(NodeSettingsMetaChangedEventType),

@@ -1,4 +1,4 @@
-import { AvatarInfo, ProfileInfo } from "api/node/api-types";
+import { AvatarInfo, ProfileInfo } from "api";
 
 export type AvatarOnCreate = (avatar: AvatarInfo) => void;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { NodeName } from "api";
-import { ClientReactionInfo, ReactionTotalInfo, ReactionTotalsInfo } from "api/node/api-types";
+import { ClientReactionInfo, ReactionTotalInfo, ReactionTotalsInfo } from "api";
 import Twemoji from "ui/twemoji/Twemoji";
 import "./ReactionTotals.css";
 

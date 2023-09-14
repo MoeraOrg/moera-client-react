@@ -1,7 +1,6 @@
 import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
-import { getCartes } from "api/node/cartes";
 import { restoreConnectDialog } from "state/connectdialog/actions";
 import {
     browserApiSet,
@@ -44,7 +43,7 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
         yield* put(restoreConnectDialog(location, login));
         if (getCartesListTtl(cartes) < 5 * 60) {
             try {
-                const data = yield* call(getCartes, normalizeUrl(location), token);
+                const data = yield* call(Node.getCartes, normalizeUrl(location), token);
                 cartesIp = data.cartesIp ?? null;
                 cartes = data.cartes;
                 createdAt = data.createdAt;

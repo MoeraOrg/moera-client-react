@@ -1,5 +1,4 @@
-import { MediaWithDigest } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { MediaWithDigest, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
 
 function toMediaWithDigest(media: VerifiedMediaFile): MediaWithDigest {

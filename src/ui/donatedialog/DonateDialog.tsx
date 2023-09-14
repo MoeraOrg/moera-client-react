@@ -4,8 +4,7 @@ import cx from 'classnames';
 import QRCode from 'react-qr-code';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { ClientSettings, NodeName } from "api";
-import { FundraiserInfo } from "api/node/api-types";
+import { CLIENT_SETTINGS_PREFIX, FundraiserInfo, NodeName } from "api";
 import { ClientState } from "state/state";
 import { closeDonateDialog } from "state/donatedialog/actions";
 import { settingsUpdate } from "state/settings/actions";
@@ -71,7 +70,7 @@ function DonateDialog({
         setFundraiserIndex(index);
         if (autoPreferred) {
             settingsUpdate([{
-                name: ClientSettings.PREFIX + "fundraiser.preferred.prefix",
+                name: CLIENT_SETTINGS_PREFIX + "fundraiser.preferred.prefix",
                 value: getSchemeOrDomain(fundraisers[index].href) ?? getSchemeOrDomain(fundraisers[index].qrCode)
             }]);
         }

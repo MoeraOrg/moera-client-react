@@ -1,6 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import { DraftInfo, PostingInfo } from "api/node/api-types";
+import { DraftInfo, PostingInfo } from "api";
 import {
     COMPOSE_CONFLICT,
     COMPOSE_CONFLICT_CLOSE,

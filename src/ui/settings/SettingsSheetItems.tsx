@@ -1,8 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SettingMetaInfo } from "api/node/api-types";
-import { ClientSettingMetaInfo, PREFIX } from "api/settings";
+import { CLIENT_SETTINGS_PREFIX, ClientSettingMetaInfo, SettingMetaInfo } from "api";
 import { Item } from "ui/settings/settings-menu";
 import SettingsField from "ui/settings/SettingsField";
 import { Browser } from "ui/browser";
@@ -12,10 +11,10 @@ export function toFieldName(name: string): string {
 }
 
 export function toTitleName(name: string): string {
-    const clientSetting = name.startsWith(PREFIX);
-    let settingName = clientSetting ? name.substring(PREFIX.length) : name;
+    const clientSetting = name.startsWith(CLIENT_SETTINGS_PREFIX);
+    let settingName = clientSetting ? name.substring(CLIENT_SETTINGS_PREFIX.length) : name;
     settingName = settingName.replace(/\./g, "_");
-    return clientSetting ? `setting.${PREFIX}${settingName}` : `setting.node.${settingName}`;
+    return clientSetting ? `setting.${CLIENT_SETTINGS_PREFIX}${settingName}` : `setting.node.${settingName}`;
 }
 
 function isClientMeta(meta: SettingMetaInfo | ClientSettingMetaInfo): meta is ClientSettingMetaInfo {

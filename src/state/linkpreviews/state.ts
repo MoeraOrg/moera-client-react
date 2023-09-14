@@ -1,5 +1,4 @@
-import { LinkPreviewInfo } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { LinkPreviewInfo, VerifiedMediaFile } from "api";
 
 export interface LinkImageState {
     uploading: boolean;

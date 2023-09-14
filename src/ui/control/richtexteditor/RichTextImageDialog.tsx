@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useField } from 'formik';
 import { WithTranslation } from 'react-i18next';
 
-import { PostingFeatures } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { PostingFeatures, VerifiedMediaFile } from "api";
 import { PlusButton } from "ui/control";
 import { InputField, NumberField, SelectField, SelectFieldChoiceBase } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";

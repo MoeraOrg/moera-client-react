@@ -1,7 +1,7 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { StoryInfo } from "api/node/api-types";
+import { StoryInfo } from "api";
 import { ClientState } from "state/state";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { getNodeCard } from "state/nodecards/selectors";

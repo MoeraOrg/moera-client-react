@@ -1,6 +1,5 @@
 import { ActionWithPayload } from "state/action-types";
-import { PostingFeatures } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { PostingFeatures, VerifiedMediaFile } from "api";
 
 type ImagesUploadSuccessHandler = (index: number, mediaFile: VerifiedMediaFile) => void;
 type ImagesUploadFailureHandler = (index: number) => void;

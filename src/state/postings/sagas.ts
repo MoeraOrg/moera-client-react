@@ -2,8 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { Node } from "api";
-import { ReactionTotalsInfo } from "api/node/api-types";
+import { Node, ReactionTotalsInfo } from "api";
 import { errorThrown } from "state/error/actions";
 import {
     EntryReactionAttributes,

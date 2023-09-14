@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { VerifiedMediaFile } from "api";
 import { openImageEditDialog } from "state/imageeditdialog/actions";
 import { DropdownMenu } from "ui/control";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";

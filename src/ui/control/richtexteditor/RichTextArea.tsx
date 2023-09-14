@@ -3,8 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import debounce from 'lodash.debounce';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-import { SourceFormat } from "api/node/api-types";
-import { PREFIX } from "api/settings";
+import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
@@ -239,7 +238,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
         this.setState({pasteDialogShow: false});
         if (persist) {
             settingsUpdate([{
-                name: PREFIX + "rich-text-editor.paste-rich",
+                name: CLIENT_SETTINGS_PREFIX + "rich-text-editor.paste-rich",
                 value: mode
             }])
         }

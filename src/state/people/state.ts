@@ -7,7 +7,7 @@ import {
     PrincipalValue,
     SubscriberInfo,
     SubscriptionInfo
-} from "api/node/api-types";
+} from "api";
 
 export type PeopleTab = "subscribers" | "subscriptions" | "friend-ofs" | "blocked" | "blocked-by" | string;
 

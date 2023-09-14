@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { BlockedByUserInfo, BlockedUserInfo, FriendGroupDetails, ProfileInfo } from "api/node/api-types";
+import { BlockedByUserInfo, BlockedUserInfo, FriendGroupDetails, ProfileInfo } from "api";
 import {
     NODE_CARD_BLOCKING_LOAD,
     NODE_CARD_BLOCKING_LOAD_FAILED,
@@ -52,7 +52,7 @@ import {
     EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED,
     EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED,
     EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED
-} from "api/events/actions";
+} from "api/events";
 import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";

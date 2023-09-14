@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { PostingText, PrivateMediaFileInfo } from "api/node/api-types";
+import { PostingText, PrivateMediaFileInfo } from "api";
 
 export const OPEN_IMAGE_EDIT_DIALOG = "OPEN_IMAGE_EDIT_DIALOG";
 export type OpenImageEditDialogAction = ActionWithPayload<typeof OPEN_IMAGE_EDIT_DIALOG, {

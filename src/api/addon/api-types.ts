@@ -1,5 +1,5 @@
 import { NameDetails } from "state/naming/actions";
-import { AvatarImage, CarteInfo } from "api/node/api-types";
+import { AvatarImage, CarteInfo } from "api";
 
 export interface RootInfo {
     name: string | null;

@@ -1,8 +1,7 @@
 import { fromUnixTime } from 'date-fns';
 import { isString } from 'formik';
 
-import { PrincipalValue, SettingType, SettingTypeModifiers } from "api/node/api-types";
-import { ClientSettingTypeModifiers } from "api/settings";
+import { ClientSettingTypeModifiers, PrincipalValue, SettingType, SettingTypeModifiers } from "api";
 import { Duration } from "util/duration";
 import { InfoQuantity } from "util/info-quantity";
 import { isNumber, parseBool } from "util/misc";

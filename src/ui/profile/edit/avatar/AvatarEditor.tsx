@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 
-import { AvatarInfo } from "api/node/api-types";
+import { AvatarInfo } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import {

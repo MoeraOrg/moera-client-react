@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import { ClientState } from "state/state";
 import { confirmBox } from "state/confirmbox/actions";
 import {

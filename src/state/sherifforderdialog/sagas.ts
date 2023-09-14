@@ -3,7 +3,7 @@ import i18n from 'i18next';
 
 import { executor } from "state/executor";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { postRemoteSheriffOrder, postSheriffComplain } from "api/node/sagas";
+import { Node } from "api";
 import { ClientState } from "state/state";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
@@ -40,12 +40,12 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
 
     try {
         if (isSheriff) {
-            yield* call(postRemoteSheriffOrder, ":", nodeName, {
+            yield* call(Node.postRemoteSheriffOrder, ":", nodeName, {
                 delete: false, feedName, postingId, commentId, category: "visibility" as const, reasonCode,
                 reasonDetails
             });
         } else {
-            yield* call(postSheriffComplain, SHERIFF_GOOGLE_PLAY_TIMELINE, {
+            yield* call(Node.postSheriffComplain, SHERIFF_GOOGLE_PLAY_TIMELINE, {
                 ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender, nodeName, fullName, feedName,
                 postingOwnerName, postingOwnerFullName, postingOwnerGender, postingHeading, postingId,
                 commentOwnerName, commentOwnerFullName, commentOwnerGender, commentHeading, commentId, reasonCode,
@@ -64,7 +64,7 @@ function* sheriffOrderDeleteSaga(action: WithContext<SheriffOrderDeleteAction>) 
     const {nodeName, feedName, postingId, commentId} = action.payload.target;
 
     try {
-        yield* call(postRemoteSheriffOrder, ":", nodeName, {
+        yield* call(Node.postRemoteSheriffOrder, ":", nodeName, {
             delete: true, feedName, postingId, commentId, category: "visibility" as const
         });
         yield* put(flashBox(i18n.t("sheriff-order-sent")));

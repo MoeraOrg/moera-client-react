@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 
-import { AvatarImage } from "api/node/api-types";
+import { AvatarImage } from "api";
 
 export interface ActionContext {
     ownerName: string | null,

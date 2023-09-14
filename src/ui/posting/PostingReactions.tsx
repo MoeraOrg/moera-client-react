@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import { PostingInfo } from "api/node/api-types";
+import { PostingInfo } from "api";
 import { openReactionsDialog } from "state/reactionsdialog/actions";
 import { ReactionTotals } from "ui/control";
 

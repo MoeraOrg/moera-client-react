@@ -3,7 +3,8 @@ import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 import { ValidateFunction } from 'ajv';
 import i18n from 'i18next';
 
-import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApi, NodeApiError, NodeError } from "api";
+import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
+import * as NodeApiSchema from "api/node/api-schemas"
 import { retryFetch } from "api/fetch-timeout";
 import {
     Body,
@@ -25,7 +26,7 @@ import {
     StoryInfo
 } from "api/node/api-types";
 import { xhrFetch } from "api/node/xhr";
-import { getCartes } from "api/node/cartes";
+import { getCartes } from "api/node/sagas";
 import { ProgressHandler } from "api/fetcher";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
@@ -119,7 +120,7 @@ export function* callApi<T>({
             }
         }
         if (!response.ok) {
-            if (!isSchemaValid(NodeApi.Result, data)) {
+            if (!isSchemaValid(NodeApiSchema.Result, data)) {
                 throw exception("Server returned error status");
             }
             if (data.errorCode === "authentication.invalid") {
@@ -277,8 +278,8 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
         return {text: ""};
     }
     let body = JSON.parse(encoded);
-    if (!isSchemaValid(NodeApi.Body, body)) {
-        throw new BodyError(formatSchemaErrors(NodeApi.Body.errors));
+    if (!isSchemaValid(NodeApiSchema.Body, body)) {
+        throw new BodyError(formatSchemaErrors(NodeApiSchema.Body.errors));
     }
     return body;
 }

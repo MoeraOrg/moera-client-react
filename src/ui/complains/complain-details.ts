@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
-import { SheriffComplainStatus } from "api/node/api-types";
+import { SheriffComplainStatus } from "api";
 import { ExtComplainGroupInfo } from "state/complains/state";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";

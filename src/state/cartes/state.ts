@@ -1,4 +1,4 @@
-import { CarteInfo } from "api/node/api-types";
+import { CarteInfo } from "api";
 
 export interface CartesState {
     initialized: boolean;

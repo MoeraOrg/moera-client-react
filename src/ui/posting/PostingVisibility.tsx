@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo, PrincipalValue } from "api/node/api-types";
+import { PostingInfo, PrincipalValue } from "api";
 import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { postingOperationsUpdate } from "state/postings/actions";

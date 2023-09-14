@@ -1,7 +1,7 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { ClientSettings } from "api";
+import { CLIENT_SETTINGS_PREFIX, clientSettingsBuildMetaMap } from "api";
 import { ClientAction } from "state/action";
 import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import {
@@ -55,7 +55,7 @@ import {
     SETTINGS_UPDATE_SUCCEEDED
 } from "state/settings/actions";
 import { SettingsState } from "state/settings/state";
-import { EVENT_HOME_TOKEN_ADDED, EVENT_HOME_TOKEN_DELETED, EVENT_HOME_TOKEN_UPDATED } from "api/events/actions";
+import { EVENT_HOME_TOKEN_ADDED, EVENT_HOME_TOKEN_DELETED, EVENT_HOME_TOKEN_UPDATED } from "api/events";
 
 const emptySettings = {
     node: {
@@ -72,7 +72,7 @@ const emptySettings = {
         loadedValues: false,
         conflict: false,
         values: new Map(),
-        meta: ClientSettings.buildMetaMap()
+        meta: clientSettingsBuildMetaMap()
     },
     updating: false,
     changePasswordDialogShow: false,
@@ -226,7 +226,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
             const nodeValues = new Map(state.node.values);
             const clientValues = new Map(state.client.values);
             action.payload.settings.forEach(({name, value}) => {
-                if (name.startsWith(ClientSettings.PREFIX)) {
+                if (name.startsWith(CLIENT_SETTINGS_PREFIX)) {
                     if (value != null) {
                         clientValues.set(name, value);
                     } else {

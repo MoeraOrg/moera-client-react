@@ -2,10 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import PROVIDERS, { Provider } from "providers";
-import { Naming, Node, NodeApiError } from "api";
-import { CarteSet, SettingInfo } from "api/node/api-types";
-import { getCartes } from "api/node/cartes";
-import { PREFIX } from "api/settings";
+import { CarteSet, CLIENT_SETTINGS_PREFIX, Naming, Node, NodeApiError, SettingInfo } from "api";
 import { errorThrown } from "state/error/actions";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
@@ -121,7 +118,7 @@ function* signUpSaga(action: SignUpAction) {
             createdAt: 0
         };
         try {
-            cartesData = yield* call(getCartes, rootLocation, data.token);
+            cartesData = yield* call(Node.getCartes, rootLocation, data.token);
         } catch (e) {
             yield* put(errorThrown(e));
         }
@@ -139,7 +136,7 @@ function* signUpSaga(action: SignUpAction) {
             if (email) {
                 yield* call(Node.putProfile, rootLocation, {email});
             }
-            const settings: SettingInfo[] = [{name: PREFIX + "language", value: language}];
+            const settings: SettingInfo[] = [{name: CLIENT_SETTINGS_PREFIX + "language", value: language}];
             if (googlePlayAllowed) {
                 settings.push({name: "sheriffs.timeline", value: serializeSheriffs([SHERIFF_GOOGLE_PLAY_TIMELINE])});
             }

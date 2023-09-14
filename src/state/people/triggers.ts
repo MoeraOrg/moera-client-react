@@ -37,9 +37,10 @@ import {
     EVENT_NODE_SUBSCRIBER_DELETED,
     EVENT_NODE_SUBSCRIPTION_ADDED,
     EVENT_NODE_SUBSCRIPTION_DELETED,
-    EventAction
-} from "api/events/actions";
-import { SubscriptionAddedEvent, SubscriptionDeletedEvent } from "api/events/api-types";
+    EventAction,
+    SubscriptionAddedEvent,
+    SubscriptionDeletedEvent
+} from "api/events";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),

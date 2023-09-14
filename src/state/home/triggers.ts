@@ -9,8 +9,7 @@ import {
     homeOwnerSet,
     homeOwnerVerify
 } from "state/home/actions";
-import { NodeNameChangedEvent } from "api/events/api-types";
-import { EVENT_HOME_NODE_NAME_CHANGED, EventAction } from "api/events/actions";
+import { EVENT_HOME_NODE_NAME_CHANGED, EventAction, NodeNameChangedEvent } from "api/events";
 import { hasInactiveConnections, isConnectedToHome } from "state/home/selectors";
 
 export default [

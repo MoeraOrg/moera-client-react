@@ -1,4 +1,4 @@
-import { SheriffOrderInfo } from "api/node/api-types";
+import { SheriffOrderInfo } from "api";
 
 export interface SheriffOrderDetailsDialogState {
     show: boolean;

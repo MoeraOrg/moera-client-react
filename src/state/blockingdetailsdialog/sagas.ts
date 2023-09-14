@@ -1,7 +1,6 @@
 import { call, put, select } from 'typed-redux-saga';
 
-import { Node } from "api";
-import { BlockedByUserInfo, BlockedUserInfo } from "api/node/api-types";
+import { BlockedByUserInfo, BlockedUserInfo, Node } from "api";
 import { ClientState } from "state/state";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";

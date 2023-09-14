@@ -2,7 +2,7 @@ import React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
-import { CommentInfo } from "api/node/api-types";
+import { CommentInfo } from "api";
 import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import Jump from "ui/navigation/Jump";

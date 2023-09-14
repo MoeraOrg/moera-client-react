@@ -3,7 +3,7 @@ import { useField } from 'formik';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { useTranslation } from 'react-i18next';
 
-import { SourceFormat } from "api/node/api-types";
+import { SourceFormat } from "api";
 import ComposeIconButton from "ui/compose/ComposeIconButton";
 
 const BODY_FORMAT_ICONS: Record<SourceFormat, IconProp | null> = {

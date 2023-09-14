@@ -1,7 +1,6 @@
 import { call, put, select } from 'typed-redux-saga';
 
-import { Node } from "api/node";
-import { PostingInfo, StoryInfo } from "api/node/api-types";
+import { Node, PostingInfo, StoryInfo } from "api";
 import { getHomeOwnerName, isConnectedToHome } from "state/home/selectors";
 import { postingSubscriptionSet } from "state/postings/actions";
 

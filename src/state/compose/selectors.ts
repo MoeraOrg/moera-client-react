@@ -1,4 +1,4 @@
-import { PostingFeatures } from "api/node/api-types";
+import { PostingFeatures } from "api";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { getNodeFeatures } from "state/node/selectors";

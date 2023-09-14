@@ -1,14 +1,16 @@
 import i18n from 'i18next';
 
 import { trigger } from "state/trigger";
-import { PostingCommentsChangedEvent, PostingReactionsChangedEvent, PostingUpdatedEvent } from "api/events/api-types";
 import {
     EVENT_NODE_POSTING_COMMENTS_CHANGED,
     EVENT_NODE_POSTING_REACTIONS_CHANGED,
     EVENT_NODE_POSTING_RESTORED,
     EVENT_NODE_POSTING_UPDATED,
-    EventAction
-} from "api/events/actions";
+    EventAction,
+    PostingCommentsChangedEvent,
+    PostingReactionsChangedEvent,
+    PostingUpdatedEvent
+} from "api/events";
 import {
     POSTING_COMMENTS_SUBSCRIBED,
     POSTING_COMMENTS_UNSUBSCRIBED,

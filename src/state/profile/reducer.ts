@@ -2,8 +2,8 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 import { arrayMove } from '@dnd-kit/sortable';
 
-import { EVENT_NODE_AVATAR_ADDED, EVENT_NODE_AVATAR_DELETED, EVENT_NODE_AVATAR_ORDERED } from 'api/events/actions';
-import { AvatarInfo } from "api/node/api-types";
+import { AvatarInfo } from "api";
+import { EVENT_NODE_AVATAR_ADDED, EVENT_NODE_AVATAR_DELETED, EVENT_NODE_AVATAR_ORDERED } from 'api/events';
 import {
     PROFILE_AVATAR_CREATE,
     PROFILE_AVATAR_CREATE_FAILED,

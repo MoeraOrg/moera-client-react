@@ -1,4 +1,4 @@
-import { CarteInfo } from "api/node/api-types";
+import { CarteInfo } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import { now } from "util/misc";

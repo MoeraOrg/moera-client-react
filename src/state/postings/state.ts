@@ -1,4 +1,4 @@
-import { Body, PostingInfo } from "api/node/api-types";
+import { Body, PostingInfo } from "api";
 import { VerificationStatus } from "state/state-types";
 
 interface ExtBody extends Body {

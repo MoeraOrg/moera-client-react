@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { PrincipalValue } from "api/node/api-types";
+import { PrincipalValue } from "api";
 
 export const OPEN_FRIEND_GROUPS_DIALOG = "OPEN_FRIEND_GROUPS_DIALOG";
 export type OpenFriendGroupsDialogAction = ActionWithPayload<typeof OPEN_FRIEND_GROUPS_DIALOG, {

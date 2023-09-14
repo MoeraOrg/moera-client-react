@@ -1,7 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-import { SheriffComplainDecisionText, SheriffComplainGroupInfo, SheriffComplainInfo } from "api/node/api-types";
+import { SheriffComplainDecisionText, SheriffComplainGroupInfo, SheriffComplainInfo } from "api";
 
 export const COMPLAINS_PAST_SLICE_LOAD = "COMPLAINS_PAST_SLICE_LOAD";
 export type ComplainsPastSliceLoadAction = Action<typeof COMPLAINS_PAST_SLICE_LOAD>;

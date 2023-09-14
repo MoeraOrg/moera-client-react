@@ -1,8 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 
 import { executor } from "state/executor";
-import { Node } from "api";
-import { Features } from "api/node/api-types";
+import { Features, Node } from "api";
 import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { getNodeFeatures } from "state/node/selectors";

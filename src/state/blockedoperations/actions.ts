@@ -1,5 +1,5 @@
 import { ActionWithPayload } from "state/action-types";
-import { BlockedUserInfo } from "api/node/api-types";
+import { BlockedUserInfo } from "api";
 
 export const BLOCKED_USERS_ADDED = "BLOCKED_USERS_ADDED";
 export type BlockedUsersAddedAction = ActionWithPayload<typeof BLOCKED_USERS_ADDED, {

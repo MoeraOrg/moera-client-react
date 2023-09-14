@@ -3,8 +3,8 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
+import { CommentInfo } from "api";
 import { commentReply } from "state/detailedposting/actions";
-import { CommentInfo } from "api/node/api-types";
 
 type Props = {
     comment: CommentInfo;

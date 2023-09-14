@@ -12,14 +12,11 @@ import {
     homeOwnerSet,
     homeOwnerVerified
 } from "state/home/actions";
-import { Naming, Node, NodeApiError, NodeName } from "api";
-import { selectApi } from "api/node/call";
+import { CarteSet, Naming, Node, NodeApiError, NodeName, selectApi } from "api";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
-import { CarteSet } from "api/node/api-types";
-import { getCartes } from "api/node/cartes";
 import { namingInitialized } from "state/init-selectors";
 import { Browser } from "ui/browser";
 import { now } from "util/misc";
@@ -72,7 +69,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         createdAt: 0
     };
     try {
-        cartesData = yield* call(getCartes, location, data.token);
+        cartesData = yield* call(Node.getCartes, location, data.token);
     } catch (e) {
         yield* put(errorThrown(e));
     }

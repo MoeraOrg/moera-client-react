@@ -4,8 +4,7 @@ import { useField } from 'formik';
 import deepEqual from 'react-fast-compare';
 import * as immutable from 'object-path-immutable';
 
-import { LinkPreview, MediaAttachment, PostingFeatures } from "api/node/api-types";
-import { VerifiedMediaFile } from "api/node/images-upload";
+import { LinkPreview, MediaAttachment, PostingFeatures, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";

@@ -9,7 +9,7 @@ import {
     sourceDialogLoaded,
     sourceDialogLoadFailed
 } from "state/sourcedialog/actions";
-import { CommentInfo, PostingInfo } from "api/node/api-types";
+import { CommentInfo, PostingInfo } from "api";
 
 export default [
     executor(OPEN_SOURCE_DIALOG, "", openSourceDialogSaga)

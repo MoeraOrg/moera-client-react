@@ -1,4 +1,4 @@
-import { BlockedUserInfo } from "api/node/api-types";
+import { BlockedUserInfo } from "api";
 
 export interface BlockDialogState {
     show: boolean;
