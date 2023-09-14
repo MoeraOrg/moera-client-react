@@ -1,6 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import { BlockedOperationsInfo, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api/node/api-types";
+import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api/node/api-types";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
@@ -420,13 +420,13 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
                 switch (blockedByUser.blockedOperation) {
                     case "comment":
                         istate.update([nodeName, postingId, "posting", "blockedOperations"],
-                            (ops: BlockedOperationsInfo) => ops.filter(op => op !== "addComment"));
+                            (ops: BlockedEntryOperation[]) => ops.filter(op => op !== "addComment"));
                         break;
                     case "reaction":
                         istate.update([nodeName, postingId, "posting", "blockedOperations"],
-                            (ops: BlockedOperationsInfo) => ops.filter(op => op !== "addReaction"));
+                            (ops: BlockedEntryOperation[]) => ops.filter(op => op !== "addReaction"));
                         istate.update([nodeName, postingId, "posting", "blockedCommentOperations"],
-                            (ops: BlockedOperationsInfo) => ops.filter(op => op !== "addReaction"));
+                            (ops: BlockedEntryOperation[]) => ops.filter(op => op !== "addReaction"));
                         break;
                 }
             }

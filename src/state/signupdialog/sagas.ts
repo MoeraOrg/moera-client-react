@@ -127,9 +127,9 @@ function* signUpSaga(action: SignUpAction) {
         }
 
         Browser.storeConnectionData(rootLocation, null, null, null, login, data.token, data.permissions);
-        Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
+        Browser.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
         const homeLocation = yield* select(getHomeRootLocation);
-        yield* put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp,
+        yield* put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp ?? null,
             cartesData.cartes, null, cartesData.createdAt - now(),
             homeLocation != null && homeLocation !== rootLocation));
     }

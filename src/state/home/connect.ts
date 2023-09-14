@@ -83,9 +83,9 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         return;
     }
     Browser.storeConnectionData(nodeUrl, null, null, null, login, data.token, data.permissions);
-    Browser.storeCartesData(cartesData.cartesIp, cartesData.cartes);
+    Browser.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
     const homeLocation = yield* select(getHomeRootLocation);
-    yield* put(connectedToHome(nodeUrl, login, data.token, data.permissions, cartesData.cartesIp,
+    yield* put(connectedToHome(nodeUrl, login, data.token, data.permissions, cartesData.cartesIp ?? null,
         cartesData.cartes, null, cartesData.createdAt - now(), homeLocation != null && nodeUrl !== homeLocation));
 }
 

@@ -45,7 +45,7 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
         if (getCartesListTtl(cartes) < 5 * 60) {
             try {
                 const data = yield* call(getCartes, normalizeUrl(location), token);
-                cartesIp = data.cartesIp;
+                cartesIp = data.cartesIp ?? null;
                 cartes = data.cartes;
                 createdAt = data.createdAt;
                 Browser.storeCartesData(cartesIp, cartes);

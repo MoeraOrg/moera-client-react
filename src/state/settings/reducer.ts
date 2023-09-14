@@ -185,7 +185,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case SETTINGS_CLIENT_VALUES_LOADED: {
             const values = new Map(state.client.values.entries());
-            action.payload.settings.forEach(({name, value}) => values.set(name, value));
+            action.payload.settings.forEach(({name, value}) => values.set(name, value ?? null));
             return immutable.wrap(state)
                 .set("client.loadingValues", false)
                 .set("client.loadedValues", true)
@@ -198,7 +198,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
 
         case SETTINGS_CLIENT_VALUES_SET: {
             const values = new Map(state.client.values.entries());
-            action.payload.settings.forEach(({name, value}) => values.set(name, value));
+            action.payload.settings.forEach(({name, value}) => values.set(name, value ?? null));
             return immutable.set(state, "client.values", values);
         }
 

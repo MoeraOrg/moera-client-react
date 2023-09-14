@@ -105,7 +105,7 @@ export default function SettingsField({name, fieldName, titleName, meta, initial
         + (privileged ? " " + t("provider-setting") : "")
         + valueRange(type, modifiers, t);
     const defaultValue = meta ? meta.defaultValue : null;
-    const disabled = meta ? privileged : false;
+    const disabled = (meta ? privileged : false) ?? undefined;
     switch (type) {
         case "bool":
             return <CheckboxField name={fieldName} title={title} disabled={disabled} groupClassName={groupClassName}

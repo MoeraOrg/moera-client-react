@@ -1,12 +1,11 @@
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import {
-    AvatarImage,
-    BlockedOperationsInfo,
-    CommentOperationsInfo,
+    AvatarImage, BlockedEntryOperation,
+    CommentOperations,
     Features,
     FriendGroupDetails,
     FriendGroupInfo,
-    PostingOperationsInfo,
+    PostingOperations,
     PrincipalValue
 } from "api/node/api-types";
 import { ClientState } from "state/state";
@@ -138,33 +137,33 @@ export function isGooglePlayHiding(state: ClientState): boolean {
         && getHomeOwnerName(state) !== SHERIFF_GOOGLE_PLAY_TIMELINE;
 }
 
-type AnyOperationsInfo = Partial<Record<string, PrincipalValue | null>>;
+type AnyOperations = Partial<Record<string, PrincipalValue | null>>;
 
 export interface ProtectedObject {
     ownerName?: string;
     receiverName?: string | null;
-    operations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
-    receiverOperations?: AnyOperationsInfo | PostingOperationsInfo | null;
-    ownerOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
-    seniorOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
-    adminOperations?: AnyOperationsInfo | PostingOperationsInfo | CommentOperationsInfo | null;
-    blockedOperations?: BlockedOperationsInfo | null;
+    operations?: AnyOperations | PostingOperations | CommentOperations | null;
+    receiverOperations?: AnyOperations | PostingOperations | null;
+    ownerOperations?: AnyOperations | PostingOperations | CommentOperations | null;
+    seniorOperations?: AnyOperations | PostingOperations | CommentOperations | null;
+    adminOperations?: AnyOperations | PostingOperations | CommentOperations | null;
+    blockedOperations?: BlockedEntryOperation[] | null;
 }
 
 type ObjectOperations = "normal" | "receiver" | "owner" | "senior" | "admin";
 
-function getOperations(object: ProtectedObject, useOperations: ObjectOperations): AnyOperationsInfo | null {
+function getOperations(object: ProtectedObject, useOperations: ObjectOperations): AnyOperations | null {
     switch (useOperations) {
         case "normal":
-            return object.operations as AnyOperationsInfo | null;
+            return object.operations as AnyOperations | null;
         case "receiver":
-            return object.receiverOperations as AnyOperationsInfo | null;
+            return object.receiverOperations as AnyOperations | null;
         case "owner":
-            return object.ownerOperations as AnyOperationsInfo | null;
+            return object.ownerOperations as AnyOperations | null;
         case "senior":
-            return object.seniorOperations as AnyOperationsInfo | null;
+            return object.seniorOperations as AnyOperations | null;
         case "admin":
-            return object.adminOperations as AnyOperationsInfo | null;
+            return object.adminOperations as AnyOperations | null;
     }
 }
 

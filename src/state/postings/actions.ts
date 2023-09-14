@@ -5,7 +5,6 @@ import {
     FeedReference,
     PostingInfo,
     PostingOperations,
-    PostingOperationsInfo,
     ReactionAttributes,
     ReactionTotalsInfo,
     SubscriptionType
@@ -119,10 +118,10 @@ export const POSTING_OPERATIONS_UPDATED = "POSTING_OPERATIONS_UPDATED";
 export type PostingOperationsUpdatedAction = ActionWithPayload<typeof POSTING_OPERATIONS_UPDATED, {
     id: string;
     nodeName: string;
-    operations: PostingOperationsInfo;
+    operations: PostingOperations;
 }>;
 export const postingOperationsUpdated = (id: string, nodeName: string,
-                                         operations: PostingOperationsInfo): PostingOperationsUpdatedAction => ({
+                                         operations: PostingOperations): PostingOperationsUpdatedAction => ({
     type: POSTING_OPERATIONS_UPDATED,
     payload: {id, nodeName, operations}
 });

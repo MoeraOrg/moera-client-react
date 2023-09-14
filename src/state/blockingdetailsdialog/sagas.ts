@@ -31,8 +31,9 @@ function* blockingDetailsDialogLoadSaga() {
                 nodeName: remoteNodeName
             })
         } else {
+            const postings = remoteNodeName != null ? [{nodeName: remoteNodeName, postingId: remotePostingId}] : [];
             blocked = yield* call(Node.searchBlockedByUsers, nodeName, {
-                postings: [{nodeName: remoteNodeName, postingId: remotePostingId}],
+                postings,
                 strict: true
             });
         }

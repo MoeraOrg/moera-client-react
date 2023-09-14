@@ -18,8 +18,8 @@ export default [
 function* cartesLoadSaga() {
     try {
         const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":");
-        Browser.storeCartesData(cartesIp, cartes);
-        yield* put(cartesSet(cartesIp, cartes, createdAt - now()));
+        Browser.storeCartesData(cartesIp ?? null, cartes);
+        yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()));
     } catch (e) {
         if (e instanceof NodeApiError) {
             yield* put(cartesSet(null, [], 0));

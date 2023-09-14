@@ -421,7 +421,8 @@ function* loadRepliedTo(nodeName: string, postingId: string, id: string) {
             name: repliedToComment.ownerName,
             fullName: repliedToComment.ownerFullName,
             avatar: repliedToComment.ownerAvatar,
-            heading: repliedToComment.heading
+            heading: repliedToComment.heading,
+            digest: repliedToComment.digest
         }
     } else {
         return null;

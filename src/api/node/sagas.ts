@@ -490,7 +490,7 @@ export function* remotePostingReactionVerify(nodeName: string | null, remoteNode
 export function* getDraftsNewPosting(nodeName: string | null, receiverName: string): CallApiResult<DraftInfo[]> {
     return decodeBodies(yield* callApi({
         nodeName, location: ut`/drafts?draftType=new-posting&nodeName=${receiverName}`, auth: true,
-        schema: NodeApi.DraftInfoList
+        schema: NodeApi.DraftInfoArray
     }));
 }
 
@@ -498,7 +498,7 @@ export function* getDraftPostingUpdate(nodeName: string | null, receiverName: st
                                        receiverPostingId: string): CallApiResult<DraftInfo | null> {
     const list = decodeBodies(yield* callApi({
         nodeName, location: ut`/drafts?draftType=posting-update&nodeName=${receiverName}&postingId=${receiverPostingId}`,
-        auth: true, schema: NodeApi.DraftInfoList
+        auth: true, schema: NodeApi.DraftInfoArray
     }));
     return list.length > 0 ? list[0] : null;
 }
@@ -507,7 +507,7 @@ export function* getDraftNewComment(nodeName: string | null, receiverName: strin
                                     receiverPostingId: string): CallApiResult<DraftInfo | null> {
     const list = decodeBodies(yield* callApi({
         nodeName, location: ut`/drafts?draftType=new-comment&nodeName=${receiverName}&postingId=${receiverPostingId}`,
-        auth: true, schema: NodeApi.DraftInfoList
+        auth: true, schema: NodeApi.DraftInfoArray
     }));
     return list.length > 0 ? list[0] : null;
 }
@@ -516,7 +516,7 @@ export function* getDraftCommentUpdate(nodeName: string | null, receiverName: st
                                        receiverCommentId: string): CallApiResult<DraftInfo | null> {
     const location = ut`/drafts?draftType=comment-update&nodeName=${receiverName}&postingId=${receiverPostingId}`
         + ut`&commentId=${receiverCommentId}`;
-    const list = decodeBodies(yield* callApi({nodeName, location, auth: true, schema: NodeApi.DraftInfoList}));
+    const list = decodeBodies(yield* callApi({nodeName, location, auth: true, schema: NodeApi.DraftInfoArray}));
     return list.length > 0 ? list[0] : null;
 }
 
