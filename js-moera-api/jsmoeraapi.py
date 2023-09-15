@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import sys
-from os.path import normpath
 from typing import Any, TextIO
 
 import yaml
@@ -127,6 +126,15 @@ JS_TYPES = {
     'String -> int': 'Partial<Record<string, number>>'
 }
 
+
+def to_js_type(api_type: str) -> str:
+    js_type = JS_TYPES.get(api_type)
+    if js_type is None:
+        print('Unrecognized field type: ' + api_type)
+        exit(1)
+    return js_type
+
+
 SCHEMA_TYPES = {
     'String': ('string', False),
     'String[]': ('string', True),
@@ -178,11 +186,7 @@ class Structure:
             else:
                 if field['type'] == 'any':
                     continue
-                ft = JS_TYPES.get(field['type'])
-                if ft is None:
-                    print('Unrecognized field type: ' + field['type'])
-                    exit(1)
-                t = ft
+                t = to_js_type(field['type'])
             if field.get('array', False):
                 t += '[]'
             tfile.write(tmpl % (field['name'], t))
@@ -305,11 +309,14 @@ def scan_output_usage(api: Any, structs: dict[str, Structure]) -> None:
                     modified = True
 
 
-def generate_structures(api: Any, tfile: TextIO, sfile: TextIO) -> None:
+def scan_structures(api: Any) -> dict[str, Structure]:
     structs: dict[str, Structure] = {struct['name']: Structure(struct) for struct in api['structures']}
     scan_body_usage(structs)
     scan_output_usage(api, structs)
+    return structs
 
+
+def generate_structures(structs: dict[str, Structure], tfile: TextIO, sfile: TextIO) -> None:
     gen = True
     while gen:
         gen = False
@@ -326,6 +333,121 @@ def generate_structures(api: Any, tfile: TextIO, sfile: TextIO) -> None:
         exit(1)
 
 
+def comma_wrap(s: str, indent: int) -> str:
+    result = ''
+    while True:
+        if len(s) <= 120:
+            result += s
+            break
+        pos = 0
+        while True:
+            next = s.find(', ', pos + 1)
+            if next < 0 or next > 120:
+                break
+            pos = next
+        result += s[:pos] + ',\n' + (indent * 4 * ' ')
+        s = s[pos + 2:]
+    return result
+
+
+def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> None:
+    for obj in api['objects']:
+        for request in obj.get('requests', []):
+            if 'function' not in request:
+                continue
+
+            params = '    nodeName: string | null'
+            tail_params = ''
+            op_params: list[tuple[str, str]] = []
+            flag_name: str | None = None
+            flag_js_name: str | None = None
+            flags: list[str] = []
+            if 'params' in request:
+                for param in request['params']:
+                    name = param['name']
+                    js_name = 'remoteNodeName' if name == 'nodeName' else name
+                    if 'enum' in param:
+                        js_type = 'string'
+                    else:
+                        js_type = to_js_type(param['type'])
+                    if 'flags' in param:
+                        flag_name = name
+                        flag_js_name = js_name
+                        flags = [flag['name'] for flag in param['flags']]
+                        for flag in flags:
+                            params += ', with{name}: boolean = false'.format(name=flag.capitalize())
+                        op_params.append((flag_name, flag_js_name))
+                    else:
+                        if param.get('optional', False):
+                            tail_params += f', {js_name}: {js_type} | null = null'
+                            op_params.append((name, js_name))
+                        else:
+                            params += f', {js_name}: {js_type}'
+            body = ''
+            if 'in' in request:
+                name = request['in']['name']
+                js_type = 'API.' + request['in']['struct']
+                if request['in'].get('array', False):
+                    js_type += '[]'
+                body = ', body: %s' % name
+                params += ', {name}: {type}'.format(name=name, type=js_type)
+            params += tail_params
+            auth = request.get('auth', 'none') != 'none'
+            params += ', errorFilter: ErrorFilter = false'
+            if auth:
+                params += ', auth: true | string = true'  # TODO optional auth
+
+            location: str = request['url']
+            if '{' in location:
+                location = 'ut`%s`' % location.replace('{', '${')
+            else:
+                location = '"%s"' % location
+            subs = []
+            for name, js_name in op_params:
+                if name == js_name:
+                    subs.append(name)
+                else:
+                    subs.append('%s: %s' % (name, js_name))
+            if len(subs) > 0:
+                location = 'urlWithParameters({location}, {{{subs}}})'.format(location=location, subs=', '.join(subs))
+
+            result = 'API.Result'
+            result_schema = 'Result'
+            result_body = False
+            if 'out' in request:
+                struct = request['out']['struct']
+                result = 'API.' + struct
+                result_schema = struct
+                if struct in structs and structs[struct].uses_body:
+                    result_body = True
+                if request['out'].get('array', False):
+                    result += '[]'
+                    result_schema += 'Array'
+
+            afile.write('\nexport function* {name}(\n{params}\n): CallApiResult<{result}> {{\n\n'
+                        .format(name=request['function'], params=comma_wrap(params, 1), result=result))
+            if flag_name is not None:
+                items = ', '.join('"%s": with%s' % (flag, flag.capitalize()) for flag in flags)
+                afile.write(f'    const {flag_js_name} = commaSeparatedFlags({{{items}}});\n')
+            afile.write(f'    const location = {location};\n')
+            if result_body:
+                afile.write('    return decodeBodies(yield* callApi({\n')
+            else:
+                afile.write('    return yield* callApi({\n')
+            call_params = ('        nodeName, method: "{method}", location{body}{auth}'
+                           ', schema: NodeApiSchema.{result_schema}, errorFilter\n'
+                           .format(method=request['type'],
+                                   body=body,
+                                   auth=(', auth' if auth else ''),
+                                   result_schema=result_schema))
+            afile.write(comma_wrap(call_params, 2))
+            if result_body:
+                afile.write('    }));\n')
+            else:
+                afile.write('    });\n')
+            afile.write('}\n')
+
+
 PREAMBLE_TYPES = '''// This file is generated
 
 export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" | "senior" | "enigma" | "major"
@@ -340,17 +462,33 @@ import schema from "api/schema";
 import * as API from "api/node/api-types";
 '''
 
+PREAMBLE_SAGAS = '''// This file is generated
 
-def generate_types(api: Any, tfname: str, sfname: str) -> None:
-    with open(tfname, 'w+') as tfile:
-        with open(sfname, 'w+') as sfile:
+import * as NodeApiSchema from "api/node/api-schemas"
+import { callApi, CallApiResult, decodeBodies, ErrorFilter } from "api/node/call";
+import * as API from "api/node/api-types";
+import { ProgressHandler } from 'api/fetcher';
+import { urlWithParameters, ut } from "util/url";
+import { commaSeparatedFlags } from "util/misc";
+'''
+
+
+def generate_types(api: Any, outdir: str) -> None:
+    structs = scan_structures(api)
+
+    with open(outdir + '/api-types.ts', 'w+') as tfile:
+        with open(outdir + '/api-schemas.ts', 'w+') as sfile:
             tfile.write(PREAMBLE_TYPES)
             sfile.write(PREAMBLE_SCHEMAS)
             for enum in api['enums']:
                 generate_enum(enum, tfile)
             for operations in api['operations']:
                 generate_operations(operations, tfile, sfile)
-            generate_structures(api, tfile, sfile)
+            generate_structures(structs, tfile, sfile)
+
+    with open(outdir + '/api-sagas.ts', 'w+') as afile:
+        afile.write(PREAMBLE_SAGAS)
+        generate_sagas(api, structs, afile)
 
 
 if len(sys.argv) < 2 or sys.argv[1] == '':
@@ -359,4 +497,4 @@ if len(sys.argv) < 2 or sys.argv[1] == '':
 
 api = read_api(sys.argv[1])
 outdir = sys.argv[2] if len(sys.argv) >= 3 else '.'
-generate_types(api, normpath(outdir + '/api-types.ts'), normpath(outdir + '/api-schemas.ts'))
+generate_types(api, outdir)

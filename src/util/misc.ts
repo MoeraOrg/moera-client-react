@@ -111,6 +111,11 @@ export function now(): number {
     return Math.floor(Date.now() / 1000);
 }
 
+export function commaSeparatedFlags(flags: Partial<Record<string, boolean>>): string | null {
+    const names = Object.entries(flags).filter(([name, value]) => value != null).map(([name]) => name);
+    return names.length > 0 ? names.join(',') : null;
+}
+
 export function hasWindowSelection(): boolean {
     if (window.getSelection) {
         const selection = window.getSelection();

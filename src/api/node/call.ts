@@ -43,7 +43,7 @@ import { now } from "util/misc";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
 
-type ErrorFilter = boolean | string[] | ((code: string) => boolean);
+export type ErrorFilter = boolean | string[] | ((code: string) => boolean);
 
 type CallException = (e: any, details?: string | null) => NodeError;
 
