@@ -558,11 +558,6 @@ export const BlockedUsersChecksumsType: JSONSchemaType<API.BlockedUsersChecksums
 
 export const BlockedUsersChecksums = schema(BlockedUsersChecksumsType);
 
-export const BlockedUsersChecksumsArray = schema({
-    type: "array",
-    items: BlockedUsersChecksumsType
-} as JSONSchemaType<API.BlockedUsersChecksums[]>);
-
 export const CarteInfoType: JSONSchemaType<API.CarteInfo> = {
     type: "object",
     properties: {

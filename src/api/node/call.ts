@@ -3,40 +3,50 @@ import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 import { ValidateFunction } from 'ajv';
 import i18n from 'i18next';
 
-import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
-import * as NodeApiSchema from "api/node/api-schemas"
-import { retryFetch } from "api/fetch-timeout";
 import {
     Body,
     BodyFormat,
     CommentCreated,
     CommentInfo,
+    CommentRevisionInfo,
     CommentsSliceInfo,
     DraftInfo,
     EncodedCommentCreated,
     EncodedCommentInfo,
+    EncodedCommentRevisionInfo,
     EncodedCommentsSliceInfo,
     EncodedDraftInfo,
+    EncodedEntryInfo,
     EncodedFeedSliceInfo,
     EncodedPostingInfo,
+    EncodedPostingRevisionInfo,
     EncodedStoryInfo,
+    EntryInfo,
     FeedSliceInfo,
+    formatSchemaErrors,
+    HomeNotConnectedError,
+    NameResolvingError,
+    NodeApiError,
+    NodeError,
     PostingInfo,
+    PostingRevisionInfo,
     SourceFormat,
     StoryInfo
-} from "api/node/api-types";
+} from "api";
+import * as NodeApiSchema from "api/node/api-schemas"
+import { retryFetch } from "api/fetch-timeout";
 import { xhrFetch } from "api/node/xhr";
-import { getCartes } from "api/node/sagas";
 import { ProgressHandler } from "api/fetcher";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
+import { cartesSet } from "state/cartes/actions";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import { cartesSet } from "state/cartes/actions";
+import { getCartes } from "api/node/sagas";
 import { Browser } from "ui/browser";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
 import { now } from "util/misc";
@@ -284,20 +294,27 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
     return body;
 }
 
-type Entities = Partial<PostingInfo | CommentInfo | StoryInfo | CommentCreated | DraftInfo | FeedSliceInfo
-    | CommentsSliceInfo>;
-type EncodedEntities = Partial<EncodedPostingInfo | EncodedCommentInfo | EncodedStoryInfo | EncodedCommentCreated
-    | EncodedDraftInfo | EncodedFeedSliceInfo | EncodedCommentsSliceInfo>;
+type Entities = Partial<PostingInfo | PostingRevisionInfo | CommentInfo | CommentRevisionInfo | StoryInfo
+    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | EntryInfo>;
+type EncodedEntities = Partial<EncodedPostingInfo | EncodedPostingRevisionInfo | EncodedCommentInfo
+    | EncodedCommentRevisionInfo | EncodedStoryInfo | EncodedCommentCreated | EncodedDraftInfo | EncodedFeedSliceInfo
+    | EncodedCommentsSliceInfo | EncodedEntryInfo>;
 
 export function decodeBodies(data: EncodedPostingInfo): PostingInfo;
+export function decodeBodies(data: EncodedPostingRevisionInfo): PostingRevisionInfo;
 export function decodeBodies(data: EncodedPostingInfo[]): PostingInfo[];
+export function decodeBodies(data: EncodedPostingRevisionInfo[]): PostingRevisionInfo[];
 export function decodeBodies(data: EncodedCommentInfo): CommentInfo;
+export function decodeBodies(data: EncodedCommentRevisionInfo): CommentRevisionInfo;
+export function decodeBodies(data: EncodedCommentRevisionInfo[]): CommentRevisionInfo[];
 export function decodeBodies(data: EncodedStoryInfo): StoryInfo;
 export function decodeBodies(data: EncodedCommentCreated): CommentCreated;
 export function decodeBodies(data: EncodedDraftInfo): DraftInfo;
 export function decodeBodies(data: EncodedDraftInfo[]): DraftInfo[];
 export function decodeBodies(data: EncodedFeedSliceInfo): FeedSliceInfo;
 export function decodeBodies(data: EncodedCommentsSliceInfo): CommentsSliceInfo;
+export function decodeBodies(data: EncodedEntryInfo): EntryInfo;
+export function decodeBodies(data: EncodedEntryInfo[]): EntryInfo[];
 export function decodeBodies(data: EncodedEntities): Entities;
 export function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Entities[] {
     if (Array.isArray(data)) {

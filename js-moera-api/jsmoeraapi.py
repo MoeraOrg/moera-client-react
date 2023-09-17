@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 from typing import Any, TextIO
 
@@ -334,15 +335,16 @@ def generate_structures(structs: dict[str, Structure], tfile: TextIO, sfile: Tex
 
 
 def comma_wrap(s: str, indent: int) -> str:
+    max_length = 120 - indent * 4
     result = ''
     while True:
-        if len(s) <= 120:
+        if len(s) <= max_length:
             result += s
             break
         pos = 0
         while True:
             next = s.find(', ', pos + 1)
-            if next < 0 or next > 120:
+            if next < 0 or next > max_length:
                 break
             pos = next
         result += s[:pos] + ',\n' + (indent * 4 * ' ')
@@ -358,7 +360,7 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
 
             params = '    nodeName: string | null'
             tail_params = ''
-            op_params: list[tuple[str, str]] = []
+            url_params: dict[str, str] = {}
             flag_name: str | None = None
             flag_js_name: str | None = None
             flags: list[str] = []
@@ -376,21 +378,33 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
                         flags = [flag['name'] for flag in param['flags']]
                         for flag in flags:
                             params += ', with{name}: boolean = false'.format(name=flag.capitalize())
-                        op_params.append((flag_name, flag_js_name))
+                        url_params[flag_name] = flag_js_name
                     else:
                         if param.get('optional', False):
                             tail_params += f', {js_name}: {js_type} | null = null'
-                            op_params.append((name, js_name))
                         else:
                             params += f', {js_name}: {js_type}'
+                        url_params[name] = js_name
             body = ''
             if 'in' in request:
-                name = request['in']['name']
-                js_type = 'API.' + request['in']['struct']
-                if request['in'].get('array', False):
-                    js_type += '[]'
-                body = ', body: %s' % name
-                params += ', {name}: {type}'.format(name=name, type=js_type)
+                if 'type' in request['in']:
+                    if request['in']['type'] != 'blob':
+                        print('Unrecognised type "{type}" of the input body of the request "{method} {url}"'
+                              .format(type=request['in']['type'], method=request['type'], url=request['url']))
+                        exit(1)
+                    body = ', body: file, onProgress'
+                    params += ', file: File, onProgress?: ProgressHandler'
+                else:
+                    if 'name' not in request['in']:
+                        print('Missing name of body of the request "{method} {url}"'
+                               .format(method=request['type'], url=request['url']))
+                        exit(1)
+                    name = request['in']['name']
+                    js_type = 'API.' + request['in']['struct']
+                    if request['in'].get('array', False):
+                        js_type += '[]'
+                    body = ', body: %s' % name
+                    params += ', {name}: {type}'.format(name=name, type=js_type)
             params += tail_params
             auth = request.get('auth', 'none') != 'none'
             params += ', errorFilter: ErrorFilter = false'
@@ -398,31 +412,52 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
                 params += ', auth: true | string = true'  # TODO optional auth
 
             location: str = request['url']
-            if '{' in location:
-                location = 'ut`%s`' % location.replace('{', '${')
+            if len(url_params) > 0:
+                p = re.compile(r'{(\w+)}')
+                for name in p.findall(location):
+                    if name not in url_params:
+                        print('Unknown parameter "{param}" referenced in location "{url}"'
+                              .format(param=name, url=request['url']))
+                        exit(1)
+                    location = location.replace(f'{{{name}}}', f'${{{url_params[name]}}}')
+                    del url_params[name]
+                location = 'ut`%s`' % location
             else:
                 location = '"%s"' % location
             subs = []
-            for name, js_name in op_params:
+            for name, js_name in url_params.items():
                 if name == js_name:
                     subs.append(name)
                 else:
                     subs.append('%s: %s' % (name, js_name))
             if len(subs) > 0:
                 location = 'urlWithParameters({location}, {{{subs}}})'.format(location=location, subs=', '.join(subs))
+                if len(location) > 81:
+                    location = (location
+                                .replace('(', '(\n        ')
+                                .replace(', {', ',\n        {')
+                                .replace(')', '\n    )'))
 
             result = 'API.Result'
-            result_schema = 'Result'
+            result_schema = 'NodeApiSchema.Result'
             result_body = False
             if 'out' in request:
-                struct = request['out']['struct']
-                result = 'API.' + struct
-                result_schema = struct
-                if struct in structs and structs[struct].uses_body:
-                    result_body = True
-                if request['out'].get('array', False):
-                    result += '[]'
-                    result_schema += 'Array'
+                if 'type' in request['out']:
+                    if request['out']['type'] != 'blob':
+                        print('Unrecognised type "{type}" of the output body of the request "{method} {url}"'
+                              .format(type=request['out']['type'], method=request['type'], url=request['url']))
+                        exit(1)
+                    result = 'Blob'
+                    result_schema = '"blob"'
+                else:
+                    struct = request['out']['struct']
+                    result = 'API.' + struct
+                    result_schema = 'NodeApiSchema.' + struct
+                    if struct in structs and structs[struct].uses_body:
+                        result_body = True
+                    if request['out'].get('array', False):
+                        result += '[]'
+                        result_schema += 'Array'
 
             afile.write('\nexport function* {name}(\n{params}\n): CallApiResult<{result}> {{\n\n'
                         .format(name=request['function'], params=comma_wrap(params, 1), result=result))
@@ -435,7 +470,7 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
             else:
                 afile.write('    return yield* callApi({\n')
             call_params = ('        nodeName, method: "{method}", location{body}{auth}'
-                           ', schema: NodeApiSchema.{result_schema}, errorFilter\n'
+                           ', schema: {result_schema}, errorFilter\n'
                            .format(method=request['type'],
                                    body=body,
                                    auth=(', auth' if auth else ''),
