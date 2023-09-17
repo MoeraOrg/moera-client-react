@@ -150,7 +150,7 @@ export function* blockUser(
 }
 
 export function* getBlockedUser(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.BlockedUserInfo> {
 
     const location = ut`/people/blocked-users/${id}`;
@@ -171,7 +171,7 @@ export function* unblockUser(
 
 export function* searchBlockedUsers(
     nodeName: string | null, filter: API.BlockedUserFilter, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.BlockedUserInfo[]> {
 
     const location = "/people/blocked-users/search";
@@ -192,7 +192,7 @@ export function* getBlockedUsersChecksums(
 }
 
 export function* getBlockedByUser(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.BlockedByUserInfo> {
 
     const location = ut`/people/blocked-by-users/${id}`;
@@ -203,7 +203,7 @@ export function* getBlockedByUser(
 
 export function* searchBlockedByUsers(
     nodeName: string | null, filter: API.BlockedByUserFilter, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.BlockedByUserInfo[]> {
 
     const location = "/people/blocked-by-users/search";
@@ -226,7 +226,7 @@ export function* getCartes(
 
 export function* getCommentsSlice(
     nodeName: string | null, postingId: string, before: number | null = null, after: number | null = null,
-    limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentsSliceInfo> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/comments`, {before, after, limit});
@@ -237,7 +237,7 @@ export function* getCommentsSlice(
 
 export function* createComment(
     nodeName: string | null, postingId: string, comment: API.CommentText, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.CommentCreated> {
 
     const location = ut`/postings/${postingId}/comments`;
@@ -249,7 +249,7 @@ export function* createComment(
 
 export function* getComment(
     nodeName: string | null, postingId: string, commentId: string, withSource: boolean = false,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentInfo> {
 
     const include = commaSeparatedFlags({"source": withSource});
@@ -261,7 +261,7 @@ export function* getComment(
 
 export function* updateAllComments(
     nodeName: string | null, postingId: string, attributes: API.CommentMassAttributes,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${postingId}/comments`;
@@ -272,7 +272,7 @@ export function* updateAllComments(
 
 export function* updateComment(
     nodeName: string | null, postingId: string, commentId: string, comment: API.CommentText,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}`;
@@ -294,7 +294,7 @@ export function* deleteComment(
 
 export function* getPostingsAttachedToComment(
     nodeName: string | null, postingId: string, commentId: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.PostingInfo[]> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/attached`;
@@ -305,7 +305,7 @@ export function* getPostingsAttachedToComment(
 
 export function* getCommentRevisions(
     nodeName: string | null, postingId: string, commentId: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.CommentRevisionInfo[]> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/revisions`;
@@ -316,7 +316,7 @@ export function* getCommentRevisions(
 
 export function* getCommentRevision(
     nodeName: string | null, postingId: string, commentId: string, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.CommentRevisionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/revisions/${id}`;
@@ -327,7 +327,7 @@ export function* getCommentRevision(
 
 export function* createCommentReaction(
     nodeName: string | null, postingId: string, commentId: string, reaction: API.ReactionDescription,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionCreated> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions`;
@@ -339,7 +339,7 @@ export function* createCommentReaction(
 
 export function* updateCommentReaction(
     nodeName: string | null, postingId: string, commentId: string, ownerName: string, reaction: API.ReactionOverride,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
@@ -352,7 +352,7 @@ export function* updateCommentReaction(
 export function* getCommentReactionsSlice(
     nodeName: string | null, postingId: string, commentId: string, negative: boolean | null = null,
     emoji: number | null = null, before: number | null = null, limit: number | null = null,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionsSliceInfo> {
 
     const location = urlWithParameters(
@@ -366,7 +366,7 @@ export function* getCommentReactionsSlice(
 
 export function* getCommentReaction(
     nodeName: string | null, postingId: string, commentId: string, ownerName: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
@@ -388,7 +388,7 @@ export function* deleteAllCommentReactions(
 
 export function* deleteCommentReaction(
     nodeName: string | null, postingId: string, commentId: string, ownerName: string,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
@@ -399,7 +399,7 @@ export function* deleteCommentReaction(
 
 export function* getCommentReactionTotals(
     nodeName: string | null, postingId: string, commentId: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reaction-totals`;
@@ -502,7 +502,7 @@ export function* restoreDeletedPosting(
 
 export function* getDeletePostingRevisions(
     nodeName: string | null, postingId: string, limit: number | null = null, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/deleted-postings/${postingId}/revisions`, {limit});
@@ -513,7 +513,7 @@ export function* getDeletePostingRevisions(
 
 export function* getDeletedPostingRevision(
     nodeName: string | null, postingId: string, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo> {
 
     const location = ut`/deleted-postings/${postingId}/revisions/${id}`;
@@ -544,7 +544,7 @@ export function* getDomains(
 }
 
 export function* getDomain(
-    nodeName: string | null, name: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, name: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.DomainInfo> {
 
     const location = ut`/domains/${name}`;
@@ -555,7 +555,7 @@ export function* getDomain(
 
 export function* createDomain(
     nodeName: string | null, domain: API.DomainAttributes, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.DomainInfo> {
 
     const location = "/domains";
@@ -652,7 +652,7 @@ export function* deleteDraft(
 }
 
 export function* getFeatures(
-    nodeName: string | null, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.Features> {
 
     const location = "/features";
@@ -662,7 +662,7 @@ export function* getFeatures(
 }
 
 export function* getFeeds(
-    nodeName: string | null, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedInfo[]> {
 
     const location = "/feeds";
@@ -672,7 +672,7 @@ export function* getFeeds(
 }
 
 export function* getFeedGeneral(
-    nodeName: string | null, feedName: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, feedName: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedInfo> {
 
     const location = ut`/feeds/${feedName}`;
@@ -682,7 +682,7 @@ export function* getFeedGeneral(
 }
 
 export function* getFeedStatus(
-    nodeName: string | null, feedName: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, feedName: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedStatus> {
 
     const location = ut`/feeds/${feedName}/status`;
@@ -704,7 +704,7 @@ export function* updateFeedStatus(
 
 export function* getFeedSlice(
     nodeName: string | null, feedName: string, before: number | null = null, after: number | null = null,
-    limit: number | null = null, errorFilter: ErrorFilter = false, auth: true | string = true
+    limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedSliceInfo> {
 
     const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {before, after, limit});
@@ -714,7 +714,7 @@ export function* getFeedSlice(
 }
 
 export function* getFriendGroups(
-    nodeName: string | null, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendGroupInfo[]> {
 
     const location = "/people/friends/groups";
@@ -724,7 +724,7 @@ export function* getFriendGroups(
 }
 
 export function* getFriendGroup(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendGroupInfo> {
 
     const location = ut`/people/friends/groups/${id}`;
@@ -769,7 +769,7 @@ export function* deleteFriendGroup(
 
 export function* getFriends(
     nodeName: string | null, groupId: string | null = null, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.FriendInfo[]> {
 
     const location = urlWithParameters(ut`/people/friends`, {groupId});
@@ -779,7 +779,7 @@ export function* getFriends(
 }
 
 export function* getFriend(
-    nodeName: string | null, name: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, name: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendInfo> {
 
     const location = ut`/people/friends/${name}`;
@@ -801,7 +801,7 @@ export function* updateFriends(
 }
 
 export function* getFriendOfs(
-    nodeName: string | null, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendOfInfo[]> {
 
     const location = "/people/friend-ofs";
@@ -811,7 +811,7 @@ export function* getFriendOfs(
 }
 
 export function* getFriendOf(
-    nodeName: string | null, name: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, name: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FriendOfInfo> {
 
     const location = ut`/people/friend-ofs/${name}`;
@@ -834,7 +834,7 @@ export function* uploadPrivateMedia(
 
 export function* getPrivateMedia(
     nodeName: string | null, id: string, width: number | null = null, download: boolean | null = null,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<Blob> {
 
     const location = urlWithParameters(ut`/media/private/${id}/data`, {width, download});
@@ -844,7 +844,7 @@ export function* getPrivateMedia(
 }
 
 export function* getPrivateMediaInfo(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PrivateMediaFileInfo> {
 
     const location = ut`/media/private/${id}/info`;
@@ -854,7 +854,7 @@ export function* getPrivateMediaInfo(
 }
 
 export function* getPrivateMediaParentEntry(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.EntryInfo[]> {
 
     const location = ut`/media/private/${id}/parent`;
@@ -940,18 +940,17 @@ export function* deleteNodeName(
 }
 
 export function* sendNotification(
-    nodeName: string | null, packet: API.NotificationPacket, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    nodeName: string | null, packet: API.NotificationPacket, errorFilter: ErrorFilter = false
 ): CallApiResult<API.Result> {
 
     const location = "/notifications";
     return yield* callApi({
-        nodeName, method: "POST", location, body: packet, auth, schema: NodeApiSchema.Result, errorFilter
+        nodeName, method: "POST", location, body: packet, schema: NodeApiSchema.Result, errorFilter
     });
 }
 
 export function* getPeopleGeneral(
-    nodeName: string | null, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PeopleGeneralInfo> {
 
     const location = "/people";
@@ -972,7 +971,7 @@ export function* registerPlugin(
 }
 
 export function* getPlugins(
-    nodeName: string | null, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PluginInfo[]> {
 
     const location = "/plugins";
@@ -982,7 +981,7 @@ export function* getPlugins(
 }
 
 export function* getPlugin(
-    nodeName: string | null, pluginName: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, pluginName: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PluginInfo> {
 
     const location = ut`/plugins/${pluginName}`;
@@ -1002,7 +1001,8 @@ export function* unregisterPlugin(
 }
 
 export function* createPosting(
-    nodeName: string | null, posting: API.PostingText, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, posting: API.PostingText, errorFilter: ErrorFilter = false,
+    auth: boolean | string = true
 ): CallApiResult<API.PostingInfo> {
 
     const location = "/postings";
@@ -1013,7 +1013,7 @@ export function* createPosting(
 
 export function* updatePosting(
     nodeName: string | null, id: string, posting: API.PostingText, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.PostingInfo> {
 
     const location = ut`/postings/${id}`;
@@ -1024,7 +1024,7 @@ export function* updatePosting(
 
 export function* getPosting(
     nodeName: string | null, id: string, withSource: boolean = false, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.PostingInfo> {
 
     const include = commaSeparatedFlags({"source": withSource});
@@ -1035,7 +1035,7 @@ export function* getPosting(
 }
 
 export function* deletePosting(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${id}`;
@@ -1045,7 +1045,7 @@ export function* deletePosting(
 }
 
 export function* getPostingsAttachedToPosting(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.PostingInfo[]> {
 
     const location = ut`/postings/${id}/attached`;
@@ -1056,7 +1056,7 @@ export function* getPostingsAttachedToPosting(
 
 export function* getPostingRevisions(
     nodeName: string | null, postingId: string, limit: number | null = null, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/revisions`, {limit});
@@ -1067,7 +1067,7 @@ export function* getPostingRevisions(
 
 export function* getPostingRevision(
     nodeName: string | null, postingId: string, id: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.PostingRevisionInfo> {
 
     const location = ut`/postings/${postingId}/revisions/${id}`;
@@ -1089,7 +1089,7 @@ export function* restorePostingRevision(
 
 export function* createPostingReaction(
     nodeName: string | null, postingId: string, reaction: API.ReactionDescription, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ReactionCreated> {
 
     const location = ut`/postings/${postingId}/reactions`;
@@ -1102,7 +1102,7 @@ export function* createPostingReaction(
 export function* getPostingReactionsSlice(
     nodeName: string | null, postingId: string, negative: boolean | null = null, emoji: number | null = null,
     before: number | null = null, limit: number | null = null, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ReactionsSliceInfo> {
 
     const location = urlWithParameters(
@@ -1116,7 +1116,7 @@ export function* getPostingReactionsSlice(
 
 export function* updatePostingReaction(
     nodeName: string | null, postingId: string, ownerName: string, reaction: API.ReactionOverride,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
@@ -1128,7 +1128,7 @@ export function* updatePostingReaction(
 
 export function* getPostingReaction(
     nodeName: string | null, postingId: string, ownerName: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
@@ -1138,7 +1138,7 @@ export function* getPostingReaction(
 }
 
 export function* deleteAllPostingReactions(
-    nodeName: string | null, postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, postingId: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${postingId}/reactions`;
@@ -1149,7 +1149,7 @@ export function* deleteAllPostingReactions(
 
 export function* deletePostingReaction(
     nodeName: string | null, postingId: string, ownerName: string, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
@@ -1160,7 +1160,7 @@ export function* deletePostingReaction(
 
 export function* searchPostingReactions(
     nodeName: string | null, filter: API.ReactionsFilter, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ReactionInfo[]> {
 
     const location = "/postings/reactions/search";
@@ -1171,7 +1171,7 @@ export function* searchPostingReactions(
 }
 
 export function* getPostingReactionTotals(
-    nodeName: string | null, postingId: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, postingId: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/reaction-totals`;
@@ -1182,7 +1182,7 @@ export function* getPostingReactionTotals(
 
 export function* searchPostingReactionTotals(
     nodeName: string | null, filter: API.ReactionTotalsFilter, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ReactionTotalsInfo[]> {
 
     const location = "/postings/reaction-totals/search";
@@ -1194,7 +1194,7 @@ export function* searchPostingReactionTotals(
 
 export function* getProfile(
     nodeName: string | null, withSource: boolean = false, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.ProfileInfo> {
 
     const include = commaSeparatedFlags({"source": withSource});
@@ -1543,18 +1543,17 @@ export function* createSheriffComplaint(
 }
 
 export function* createSheriffOrder(
-    nodeName: string | null, sheriffOrder: API.SheriffOrderDetails, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    nodeName: string | null, sheriffOrder: API.SheriffOrderDetails, errorFilter: ErrorFilter = false
 ): CallApiResult<API.Result> {
 
     const location = "/sheriff/orders";
     return yield* callApi({
-        nodeName, method: "POST", location, body: sheriffOrder, auth, schema: NodeApiSchema.Result, errorFilter
+        nodeName, method: "POST", location, body: sheriffOrder, schema: NodeApiSchema.Result, errorFilter
     });
 }
 
 export function* getStory(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.StoryInfo> {
 
     const location = ut`/stories/${id}`;
@@ -1577,7 +1576,7 @@ export function* updateStory(
 export function* getSubscribers(
     nodeName: string | null, remoteNodeName: string | null = null, type: string | null = null,
     feedName: string | null = null, entryId: string | null = null, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.SubscriberInfo[]> {
 
     const location = urlWithParameters(
@@ -1602,7 +1601,7 @@ export function* createSubscriber(
 }
 
 export function* getSubscriber(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.SubscriberInfo> {
 
     const location = ut`/people/subscribers/${id}`;
@@ -1624,7 +1623,7 @@ export function* updateSubscriber(
 }
 
 export function* deleteSubscriber(
-    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: true | string = true
+    nodeName: string | null, id: string, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.ContactInfo> {
 
     const location = ut`/people/subscribers/${id}`;
@@ -1635,7 +1634,7 @@ export function* deleteSubscriber(
 
 export function* getSubscriptions(
     nodeName: string | null, remoteNodeName: string | null = null, type: string | null = null,
-    errorFilter: ErrorFilter = false, auth: true | string = true
+    errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.SubscriptionInfo[]> {
 
     const location = urlWithParameters(ut`/people/subscriptions`, {nodeName: remoteNodeName, type});
@@ -1680,7 +1679,7 @@ export function* deleteSubscription(
 
 export function* searchSubscriptions(
     nodeName: string | null, filter: API.SubscriptionFilter, errorFilter: ErrorFilter = false,
-    auth: true | string = true
+    auth: boolean | string = true
 ): CallApiResult<API.SubscriptionInfo[]> {
 
     const location = "/people/subscriptions/search";

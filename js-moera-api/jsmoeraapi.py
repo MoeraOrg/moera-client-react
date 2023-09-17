@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import sys
+from enum import Enum
 from typing import Any, TextIO
 
 import yaml
@@ -352,6 +353,21 @@ def comma_wrap(s: str, indent: int) -> str:
     return result
 
 
+class AuthType(Enum):
+    NONE = 0
+    OPTIONAL = 1
+    REQUIRED = 2
+
+
+def auth_type(auth: str) -> AuthType:
+    variants = auth.split(" or ")
+    if variants == ['none'] or variants == ['signature']:
+        return AuthType.NONE
+    if 'none' in variants or 'signature' in variants or 'optional' in variants:
+        return AuthType.OPTIONAL
+    return AuthType.REQUIRED
+
+
 def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> None:
     for obj in api['objects']:
         for request in obj.get('requests', []):
@@ -406,11 +422,18 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
                     body = ', body: %s' % name
                     params += ', {name}: {type}'.format(name=name, type=js_type)
             params += tail_params
-            auth = request.get('auth', 'none') != 'none'
             params += ', errorFilter: ErrorFilter = false'
-            if auth:
-                params += ', auth: true | string = true'  # TODO optional auth
+            auth_t = auth_type(request.get('auth', 'none'))
+            if auth_t != AuthType.NONE:
+                auth = ', auth'
+                if auth_t == AuthType.OPTIONAL:
+                    params += ', auth: boolean | string = true'
+                else:
+                    params += ', auth: true | string = true'
+            else:
+                auth = ''
 
+            method = request['type']
             location: str = request['url']
             if len(url_params) > 0:
                 p = re.compile(r'{(\w+)}')
@@ -469,12 +492,8 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
                 afile.write('    return decodeBodies(yield* callApi({\n')
             else:
                 afile.write('    return yield* callApi({\n')
-            call_params = ('        nodeName, method: "{method}", location{body}{auth}'
-                           ', schema: {result_schema}, errorFilter\n'
-                           .format(method=request['type'],
-                                   body=body,
-                                   auth=(', auth' if auth else ''),
-                                   result_schema=result_schema))
+            call_params = (f'        nodeName, method: "{method}", location{body}{auth}'
+                           f', schema: {result_schema}, errorFilter\n')
             afile.write(comma_wrap(call_params, 2))
             if result_body:
                 afile.write('    }));\n')
