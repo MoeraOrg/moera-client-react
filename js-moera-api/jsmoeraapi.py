@@ -335,7 +335,7 @@ def generate_structures(structs: dict[str, Structure], tfile: TextIO, sfile: Tex
             gen = True
     loop = [s.data['name'] for s in structs.values() if not s.generated]
     if len(loop) > 0:
-        print('Dependence loop in structures: ' + ', '.join(loop))
+        print('Dependency loop in structures: ' + ', '.join(loop))
         exit(1)
 
 
