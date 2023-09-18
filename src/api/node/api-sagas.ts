@@ -225,11 +225,11 @@ export function* getCartes(
 }
 
 export function* getCommentsSlice(
-    nodeName: string | null, postingId: string, before: number | null = null, after: number | null = null,
+    nodeName: string | null, postingId: string, after: number | null = null, before: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.CommentsSliceInfo> {
 
-    const location = urlWithParameters(ut`/postings/${postingId}/comments`, {before, after, limit});
+    const location = urlWithParameters(ut`/postings/${postingId}/comments`, {after, before, limit});
     return decodeBodies(yield* callApi({
         nodeName, method: "GET", location, auth, schema: NodeApiSchema.CommentsSliceInfo, errorFilter
     }));
@@ -703,11 +703,11 @@ export function* updateFeedStatus(
 }
 
 export function* getFeedSlice(
-    nodeName: string | null, feedName: string, before: number | null = null, after: number | null = null,
+    nodeName: string | null, feedName: string, after: number | null = null, before: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.FeedSliceInfo> {
 
-    const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {before, after, limit});
+    const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {after, before, limit});
     return decodeBodies(yield* callApi({
         nodeName, method: "GET", location, auth, schema: NodeApiSchema.FeedSliceInfo, errorFilter
     }));
@@ -1488,11 +1488,11 @@ export function* updateNodeSettingsMetadata(
 }
 
 export function* getSheriffComplaintGroupsSlice(
-    nodeName: string | null, before: number | null = null, after: number | null = null, limit: number | null = null,
+    nodeName: string | null, after: number | null = null, before: number | null = null, limit: number | null = null,
     status: API.SheriffComplainStatus | null = null, errorFilter: ErrorFilter = false
 ): CallApiResult<API.SheriffComplainGroupsSliceInfo> {
 
-    const location = urlWithParameters(ut`/sheriff/complains/groups`, {before, after, limit, status});
+    const location = urlWithParameters(ut`/sheriff/complains/groups`, {after, before, limit, status});
     return yield* callApi({
         nodeName, method: "GET", location, schema: NodeApiSchema.SheriffComplainGroupsSliceInfo, errorFilter
     });
@@ -1751,11 +1751,11 @@ export function* getUserListGeneral(
 }
 
 export function* getUserListSlice(
-    nodeName: string | null, name: string, before: number | null = null, after: number | null = null,
+    nodeName: string | null, name: string, after: number | null = null, before: number | null = null,
     limit: number | null = null, errorFilter: ErrorFilter = false
 ): CallApiResult<API.UserListSliceInfo> {
 
-    const location = urlWithParameters(ut`/user-lists/${name}/items`, {before, after, limit});
+    const location = urlWithParameters(ut`/user-lists/${name}/items`, {after, before, limit});
     return yield* callApi({
         nodeName, method: "GET", location, schema: NodeApiSchema.UserListSliceInfo, errorFilter
     });
