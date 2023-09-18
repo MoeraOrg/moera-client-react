@@ -34,9 +34,9 @@ function* imageEditDialogLoadSaga() {
     }
 
     try {
-        const data = yield* call(Node.getPosting, nodeName, id, true);
-        yield* call(fillActivityReaction, data);
-        yield* put(postingSet(data));
+        const posting = yield* call(Node.getPosting, nodeName, id, true, ["posting.not-found"]);
+        yield* call(fillActivityReaction, posting);
+        yield* put(postingSet(posting));
         yield* put(imageEditDialogLoaded());
     } catch (e) {
         yield* put(imageEditDialogLoadFailed());
@@ -58,7 +58,7 @@ function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>
     }
 
     try {
-        const posting = yield* call(Node.putPosting, nodeName, id, postingText);
+        const posting = yield* call(Node.updatePosting, nodeName, id, postingText);
         yield* put(imageEditDialogPostSucceeded());
         yield* call(fillActivityReaction, posting);
         yield* put(postingSet(posting));
@@ -70,7 +70,7 @@ function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>
                 bodySrcFormat: postingText.bodySrcFormat,
                 acceptedReactions: postingText.acceptedReactions
             }
-            yield* call(Node.putRemotePosting, ":", remoteNodeName, id, sourceText);
+            yield* call(Node.updateRemotePosting, ":", remoteNodeName, id, sourceText);
         }
     } catch (e) {
         yield* put(imageEditDialogPostFailed());

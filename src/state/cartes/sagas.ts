@@ -16,7 +16,7 @@ export default [
 
 function* cartesLoadSaga() {
     try {
-        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, ":");
+        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, ":", null, ["node-name-not-set"]);
         Browser.storeCartesData(cartesIp ?? null, cartes);
         yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()));
     } catch (e) {

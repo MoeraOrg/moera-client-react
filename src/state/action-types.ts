@@ -9,6 +9,7 @@ export interface ActionContext {
     homeOwnerName: string | null,
     homeOwnerNameOrUrl: string,
     homeOwnerFullName: string | null,
+    homeOwnerGender: string | null,
     homeOwnerAvatar: AvatarImage | null
 }
 

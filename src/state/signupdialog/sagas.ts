@@ -56,7 +56,7 @@ function* signUpSaga(action: SignUpAction) {
     let nodeDomainName;
     if (!domain) {
         try {
-            const domain = yield* call(Node.getDomainAvailable, provider.controller, name);
+            const domain = yield* call(Node.isDomainAvailable, provider.controller, name);
             nodeDomainName = domain.name;
         } catch (e) {
             yield* put(signUpFailed(SIGN_UP_STAGE_DOMAIN));
@@ -73,7 +73,8 @@ function* signUpSaga(action: SignUpAction) {
 
     if (stage <= SIGN_UP_STAGE_DOMAIN) {
         try {
-            yield* call(Node.createDomain, provider.controller, nodeDomainName);
+            yield* call(Node.createDomain, provider.controller, {name: nodeDomainName},
+                ["domain.already-exists", "domainInfo.name.blank", "domainInfo.name.wrong-hostname"]);
         } catch (e) {
             yield* put(signUpFailed(SIGN_UP_STAGE_DOMAIN));
             if (e instanceof NodeApiError) {
@@ -90,7 +91,7 @@ function* signUpSaga(action: SignUpAction) {
 
     if (stage <= SIGN_UP_STAGE_PASSWORD) {
         try {
-            yield* call(Node.createCredentials, rootLocation, login, password);
+            yield* call(Node.createCredentials, rootLocation, {login, password}, ["credentials.already-created"]);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
                 yield* put(errorThrown(e));
@@ -101,9 +102,10 @@ function* signUpSaga(action: SignUpAction) {
     }
 
     if (stage <= SIGN_UP_STAGE_CONNECT) {
-        let data;
+        let info;
         try {
-            data = yield* call(Node.createToken, rootLocation, login, password, null);
+            info = yield* call(Node.createToken, rootLocation, {login, password},
+                ["credentials.login-incorrect", "credentials.not-created"]);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
                 yield* put(errorThrown(e));
@@ -118,15 +120,15 @@ function* signUpSaga(action: SignUpAction) {
             createdAt: 0
         };
         try {
-            cartesData = yield* call(Node.getCartes, rootLocation, data.token);
+            cartesData = yield* call(Node.getCartes, rootLocation, null, ["node-name-not-set"], info.token);
         } catch (e) {
             yield* put(errorThrown(e));
         }
 
-        Browser.storeConnectionData(rootLocation, null, null, null, login, data.token, data.permissions);
+        Browser.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
         Browser.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
         const homeLocation = yield* select(getHomeRootLocation);
-        yield* put(connectedToHome(rootLocation, login, data.token, data.permissions, cartesData.cartesIp ?? null,
+        yield* put(connectedToHome(rootLocation, login, info.token, info.permissions, cartesData.cartesIp ?? null,
             cartesData.cartes, null, cartesData.createdAt - now(),
             homeLocation != null && homeLocation !== rootLocation));
     }
@@ -134,13 +136,13 @@ function* signUpSaga(action: SignUpAction) {
     if (stage <= SIGN_UP_STAGE_PROFILE) {
         try {
             if (email) {
-                yield* call(Node.putProfile, rootLocation, {email});
+                yield* call(Node.updateProfile, rootLocation, {email});
             }
             const settings: SettingInfo[] = [{name: CLIENT_SETTINGS_PREFIX + "language", value: language}];
             if (googlePlayAllowed) {
                 settings.push({name: "sheriffs.timeline", value: serializeSheriffs([SHERIFF_GOOGLE_PLAY_TIMELINE])});
             }
-            yield* call(Node.putSettings, rootLocation, settings);
+            yield* call(Node.updateSettings, rootLocation, settings);
         } catch (e) {
             if (!(e instanceof NodeApiError)) {
                 yield* put(errorThrown(e));
@@ -158,10 +160,10 @@ function* signUpSaga(action: SignUpAction) {
                 yield* put(signUpFailed(SIGN_UP_STAGE_NAME));
                 return;
             }
-            const secret = yield* call(Node.registerName, ":", name);
+            const secret = yield* call(Node.createNodeName, ":", {name});
             yield* put(homeOwnerSet(null, true, null, null));
             yield* put(signedUp());
-            yield* put(registerNameSucceeded(secret.name, secret.mnemonic));
+            yield* put(registerNameSucceeded(secret.name, secret.mnemonic!));
         } catch (e) {
             yield* put(signUpFailed(SIGN_UP_STAGE_NAME));
             yield* put(errorThrown(e));
@@ -184,7 +186,7 @@ function* signUpFindDomainSaga(action: SignUpFindDomainAction) {
     const {provider, name, onFound} = action.payload;
 
     try {
-        const domain = yield* call(Node.getDomainAvailable, getProvider(provider).controller, name);
+        const domain = yield* call(Node.isDomainAvailable, getProvider(provider).controller, name);
         onFound(provider, name, domain.name);
     } catch (e) {
         yield* put(errorThrown(e));
@@ -198,7 +200,7 @@ function* signUpDomainVerifySaga(action: SignUpDomainVerifyAction) {
     const domain = name + "." + provider.domain;
 
     try {
-        yield* call(Node.getDomain, provider.controller, domain);
+        yield* call(Node.getDomain, provider.controller, domain, ["domain.not-found"]);
         onVerify(name, false);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {

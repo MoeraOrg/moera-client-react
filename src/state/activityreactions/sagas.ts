@@ -21,7 +21,7 @@ export function* fillActivityReactionsInPostings(postings: PostingInfo[]) {
         return;
     }
     const remotePostings = postings.map(p => ({nodeName: p.receiverName!, postingId: p.receiverPostingId!}));
-    const reactions = yield* call(Node.searchActivityReactions, ":", remotePostings);
+    const reactions = yield* call(Node.searchActivityReactions, ":", {postings: remotePostings});
     const reactionMap = new Map(reactions.map(r => [`${r.remoteNodeName} ${r.remotePostingId}`, r]));
     postings.forEach(p => {
         const key = `${p.receiverName} ${p.receiverPostingId}`;
@@ -45,7 +45,7 @@ export function* fillActivityReaction(posting: PostingInfo) {
         return;
     }
     const remotePostings = [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}];
-    const reactions = yield* call(Node.searchActivityReactions, ":", remotePostings);
+    const reactions = yield* call(Node.searchActivityReactions, ":", {postings: remotePostings});
     if (reactions.length > 0) {
         posting.clientReaction = {
             negative: reactions[0].negative,

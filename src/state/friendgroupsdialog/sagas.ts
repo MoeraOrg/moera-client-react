@@ -33,13 +33,14 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
             if (!addedGroupTitles[i]) {
                 continue;
             }
-            const group = yield* call(Node.postFriendGroup, ":", addedGroupTitles[i], addedGroupView[i]);
+            const group = yield* call(Node.createFriendGroup, ":",
+                {title: addedGroupTitles[i], operations: {view: addedGroupView[i]}});
             added.push(group);
             if (addedGroups.includes(i)) {
                 allGroups.push({id: group.id, operations: {view}});
             }
         }
-        const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: allGroups}]);
+        const friends = yield* call(Node.updateFriends, ":", [{nodeName, groups: allGroups}]);
         yield* put(closeFriendGroupsDialog());
         if (friends.length > 0) {
             yield* put(friendshipUpdated(friends[0]));

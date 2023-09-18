@@ -649,8 +649,8 @@ export interface ReactionOverride {
 
 export interface RegisteredNameSecret {
     name: string;
-    mnemonic: string[];
-    secret: string;
+    mnemonic?: string[] | null;
+    secret?: string | null;
 }
 
 export interface RemoteFeed {

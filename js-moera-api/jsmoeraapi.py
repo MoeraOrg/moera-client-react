@@ -385,7 +385,7 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
                     name = param['name']
                     js_name = 'remoteNodeName' if name == 'nodeName' else name
                     if 'enum' in param:
-                        js_type = 'string'
+                        js_type = 'API.' + param['enum']
                     else:
                         js_type = to_js_type(param['type'])
                     if 'flags' in param:

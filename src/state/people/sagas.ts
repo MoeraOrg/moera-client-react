@@ -182,8 +182,8 @@ function* peopleGoToDefaultTabSaga() {
 
 function* peopleGeneralLoadSaga() {
     try {
-        const data = yield* call(Node.getPeopleGeneral, "");
-        yield* put(peopleGeneralLoaded(data));
+        const info = yield* call(Node.getPeopleGeneral, "");
+        yield* put(peopleGeneralLoaded(info));
     } catch (e) {
         yield* put(peopleGeneralLoadFailed());
         yield* put(errorThrown(e));
@@ -192,7 +192,8 @@ function* peopleGeneralLoadSaga() {
 
 function* subscribersLoadSaga() {
     try {
-        const subscribers = yield* call(Node.getSubscribers, "", "feed" as const);
+        const subscribers = yield* call(Node.getSubscribers, "", null, "feed" as const, null, null,
+            ["authentication.required"]);
         yield* put(subscribersLoaded(subscribers));
     } catch (e) {
         if (e instanceof NodeApiError) {
@@ -206,7 +207,8 @@ function* subscribersLoadSaga() {
 
 function* subscriptionsLoadSaga() {
     try {
-        const subscriptions = yield* call(Node.getSubscriptions, "", "feed" as const);
+        const subscriptions = yield* call(Node.getSubscriptions, "", null, "feed" as const,
+            ["authentication.required"]);
         yield* put(subscriptionsLoaded(subscriptions));
     } catch (e) {
         if (e instanceof NodeApiError) {
@@ -279,7 +281,8 @@ function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
     const {nodeName, friendGroups, storyId} = action.payload;
 
     try {
-        const friends = yield* call(Node.putFriends, ":", [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]);
+        const friends = yield* call(Node.updateFriends, ":",
+            [{nodeName, groups: friendGroups?.map(id => ({id})) ?? null}]);
         if (friends.length > 0) {
             yield* put(friendshipUpdated(friends[0]));
         }
@@ -296,7 +299,8 @@ function* friendshipUpdateSaga(action: FriendshipUpdateAction) {
 }
 
 function* subscribeToFriend(nodeName: string) {
-    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
+    const subscriptions = yield* call(Node.getSubscriptions, ":", nodeName, "feed" as const,
+        ["authentication.required"]);
     if (subscriptions.length > 0) {
         return;
     }
@@ -342,8 +346,8 @@ function* friendshipSetVisibilitySaga(action: FriendshipSetVisibilityAction) {
     }
 
     try {
-        const friends = yield* call(Node.putFriends, ":", [{
-            nodeName, groups: nodeCard.friendship.groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
+        const friends = yield* call(Node.updateFriends, ":",
+            [{nodeName, groups: nodeCard.friendship.groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
         if (friends.length > 0) {
             yield* put(friendshipUpdated(friends[0]));
         }
@@ -359,7 +363,8 @@ function* peopleSelectedSubscribeSaga() {
     let done = 0;
     for (const contact of contacts) {
         try {
-            const subscription = yield* call(Node.postFeedSubscription, ":", contact.nodeName, "timeline");
+            const subscription = yield* call(Node.createSubscription, ":",
+                {type: "feed" as const, feedName: "news", remoteNodeName: contact.nodeName, remoteFeedName: "timeline"});
             yield* put(feedSubscribed(contact.nodeName, subscription));
             yield* put(updateProgressBox(++done, contacts.length));
         } catch (e) {
@@ -377,7 +382,7 @@ function* peopleSelectedUnsubscribeSaga() {
     yield* put(openProgressBox());
     let subscriptions: SubscriptionInfo[] = [];
     try {
-        subscriptions = (yield* call(Node.searchSubscriptions, ":", "feed", remoteFeeds, null))
+        subscriptions = (yield* call(Node.searchSubscriptions, ":", {type: "feed" as const, feeds: remoteFeeds}))
             .filter(sr => isPrincipalIn("delete", sr, "admin", "admin"));
     } catch (e) {
         yield* put(errorThrown(e));
@@ -401,7 +406,7 @@ function* peopleSelectedUnsubscribeSaga() {
 function* updateSelectedFriendship(friendDescriptions: FriendDescription[]) {
     try {
         yield* put(openProgressBox(0, friendDescriptions.length));
-        const friends = yield* call(Node.putFriends, ":", friendDescriptions);
+        const friends = yield* call(Node.updateFriends, ":", friendDescriptions);
         let done = 0;
         for (const friend of friends) {
             yield* put(friendshipUpdated(friend));
@@ -457,7 +462,8 @@ function* peopleSelectedAskSaga(action: PeopleSelectedAskAction) {
                     friendsId = features.friendGroups?.available.find(fg => fg.title === "t:friends")?.id ?? null;
                 }
                 if (subject === "subscribe" || friendsId != null) {
-                    yield* call(Node.askRemoteNode, ":", contact.nodeName, subject, friendsId, message);
+                    yield* call(Node.askRemoteNode, ":", contact.nodeName,
+                        {subject, friendGroupId: friendsId, message});
                 }
             }
             yield* put(updateProgressBox(++done, contacts.length));
@@ -484,7 +490,8 @@ function* peopleSelectedSubscriberSetVisibilitySaga(action: WithContext<PeopleSe
     try {
         let done = 0;
         for (const contact of contacts) {
-            let subscriber = (yield* call(Node.getSubscribers, ":", "feed" as const, contact.nodeName))?.[0];
+            let subscriber = (yield* call(Node.getSubscribers, ":", contact.nodeName, "feed" as const, null, null,
+                ["authentication.required"]))?.[0];
             if (subscriber != null) {
                 yield* call(nodeFeedSubscriberSetVisibility, subscriber.id, visible, homeOwnerName);
             }
@@ -512,7 +519,8 @@ function* peopleSelectedSubscriptionSetVisibilitySaga(action: WithContext<People
     try {
         let done = 0;
         for (const contact of contacts) {
-            let subscription = (yield* call(Node.getSubscriptions, ":", "feed" as const, contact.nodeName))?.[0];
+            let subscription = (yield* call(Node.getSubscriptions, ":", contact.nodeName, "feed" as const,
+                ["authentication.required"]))?.[0];
             if (subscription != null) {
                 yield* call(nodeFeedSubscriptionSetVisibility, subscription.id, visible, homeOwnerName);
             }
@@ -542,8 +550,8 @@ function* peopleSelectedFriendshipSetVisibilitySaga(action: WithContext<PeopleSe
         let done = 0;
         for (const contact of contacts) {
             const {groups} = yield* call(Node.getFriend, ":", contact.nodeName);
-            const friends = yield* call(Node.putFriends, ":", [{
-                nodeName: contact.nodeName, groups: groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
+            const friends = yield* call(Node.updateFriends, ":",
+                [{nodeName: contact.nodeName, groups: groups?.map(({id}) => ({id, operations: {view}})) ?? null}]);
             if (friends.length > 0) {
                 yield* put(friendshipUpdated(friends[0]));
             }
@@ -577,7 +585,8 @@ function* peopleSelectedChangeFriendGroupsSaga(action: WithContext<PeopleSelecte
                 yield* put(updateProgressBox(i + 1, progressTotal));
                 continue;
             }
-            const group = yield* call(Node.postFriendGroup, ":", addedGroupTitles[i], addedGroupView[i]);
+            const group = yield* call(Node.createFriendGroup, ":",
+                {title: addedGroupTitles[i], operations: {view: addedGroupView[i]}});
             added.push(group);
             if (addedGroups.includes(i)) {
                 includedGroups.push(group.id);
@@ -593,7 +602,7 @@ function* peopleSelectedChangeFriendGroupsSaga(action: WithContext<PeopleSelecte
                     .map(({id, operations}) => ({id, operations}));
                 const view: PrincipalValue = groups[0].operations?.view ?? "public";
                 includedGroups.forEach(id => newGroups.push({id, operations: {view}}));
-                const friends = yield* call(Node.putFriends, ":", [{nodeName: contact.nodeName, groups: newGroups}]);
+                const friends = yield* call(Node.updateFriends, ":", [{nodeName: contact.nodeName, groups: newGroups}]);
                 if (friends.length > 0) {
                     yield* put(friendshipUpdated(friends[0]));
                 }

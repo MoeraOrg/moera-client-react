@@ -40,7 +40,7 @@ function* askDialogLoadSaga(action: WithContext<AskDialogLoadAction>) {
 function* askDialogSendSaga(action: AskDialogSendAction) {
     const {nodeName, subject, friendGroupId, message} = action.payload;
     try {
-        yield* call(Node.askRemoteNode, ":", nodeName, subject, friendGroupId, message);
+        yield* call(Node.askRemoteNode, ":", nodeName, {subject, friendGroupId, message});
         yield* put(askDialogSent(nodeName));
     } catch (e) {
         yield* put(askDialogSendFailed(nodeName));

@@ -1634,17 +1634,17 @@ export const RegisteredNameSecretType: JSONSchemaType<API.RegisteredNameSecret> 
             items: {
                 type: "string"
             },
+            nullable: true,
             minItems: 24,
             maxItems: 24
         },
         "secret": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
     },
     required: [
         "name",
-        "mnemonic",
-        "secret",
     ],
     additionalProperties: false
 };

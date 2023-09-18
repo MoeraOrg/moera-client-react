@@ -44,8 +44,8 @@ function* registerNameSaga(action: RegisterNameAction) {
             yield* put(registerNameFailed());
             return;
         }
-        const secret = yield* call(Node.registerName, "", name);
-        yield* put(registerNameSucceeded(secret.name, secret.mnemonic));
+        const secret = yield* call(Node.createNodeName, "", {name});
+        yield* put(registerNameSucceeded(secret.name, secret.mnemonic!));
     } catch (e) {
         yield* put(registerNameFailed());
         yield* put(errorThrown(e));
@@ -55,7 +55,7 @@ function* registerNameSaga(action: RegisterNameAction) {
 function* nodeNameUpdateSaga(action: NodeNameUpdateAction) {
     const {name, mnemonic} = action.payload;
     try {
-        yield* call(Node.updateNodeName, "", name, mnemonic);
+        yield* call(Node.updateNodeName, "", {name, mnemonic});
         yield* put(nodeNameUpdateSucceeded());
     } catch (e) {
         yield* put(nodeNameUpdateFailed());

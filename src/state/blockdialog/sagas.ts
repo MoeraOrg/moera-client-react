@@ -44,7 +44,7 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
     try {
         yield* all(prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, blockedUser.id)));
         const blockedUsers = yield* all(
-            blockedOperations.map(blockedOperation => call(Node.postBlockedUser, ":", {
+            blockedOperations.map(blockedOperation => call(Node.blockUser, ":", {
                 blockedOperation,
                 nodeName,
                 entryId: ownEntryId,
@@ -70,7 +70,7 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
 
 function* deleteBlockedUserIfExists(id: string) {
     try {
-        return yield* call(Node.deleteBlockedUser, ":", id);
+        return yield* call(Node.unblockUser, ":", id, ["blocked-user.not-found"]);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {
             throw e;
@@ -128,7 +128,8 @@ function* blockedUserUnfriendSaga(action: BlockedUserUnfriendAction) {
 function* blockedUserUnsubscribeSaga(action: BlockedUserUnsubscribeAction) {
     const {nodeName, formattedName} = action.payload;
 
-    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
+    const subscriptions = yield* call(Node.getSubscriptions, ":", nodeName, "feed" as const,
+        ["authentication.required"]);
     const subscriptionId = subscriptions.find(s => s.remoteFeedName === "timeline")?.id;
     if (subscriptionId == null) {
         return;

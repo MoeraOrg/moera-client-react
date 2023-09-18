@@ -96,8 +96,8 @@ export default [
 
 function* settingsNodeValuesLoadSaga() {
     try {
-        const data = yield* call(Node.getNodeSettings, ":");
-        yield* put(settingsNodeValuesLoaded(data));
+        const settings = yield* call(Node.getNodeSettings, ":");
+        yield* put(settingsNodeValuesLoaded(settings));
     } catch (e) {
         yield* put(settingsNodeValuesLoadFailed());
         yield* put(errorThrown(e));
@@ -106,8 +106,8 @@ function* settingsNodeValuesLoadSaga() {
 
 function* settingsNodeMetaLoadSaga() {
     try {
-        const data = yield* call(Node.getNodeSettingsMetadata, ":");
-        yield* put(settingsNodeMetaLoaded(data));
+        const metadata = yield* call(Node.getNodeSettingsMetadata, ":");
+        yield* put(settingsNodeMetaLoaded(metadata));
     } catch (e) {
         yield* put(settingsNodeMetaLoadFailed());
         yield* put(errorThrown(e));
@@ -128,7 +128,7 @@ function* storeSettings() {
 
 function* settingsClientValuesLoadSaga() {
     try {
-        let settings = yield* call(Node.getClientSettings, ":");
+        let settings = yield* call(Node.getClientSettings, ":", CLIENT_SETTINGS_PREFIX);
         if (window.Android) {
             const mobileData = window.Android.loadSettings();
             if (mobileData != null) {
@@ -194,7 +194,7 @@ function* settingsUpdateSaga(action: SettingsUpdateAction) {
         .filter(t => isMobileSetting(clientMeta, t.name))
         .map(t => ({name: t.name.substring(CLIENT_SETTINGS_PREFIX.length), value: t.value}));
     try {
-        yield* call(Node.putSettings, ":", toHome);
+        yield* call(Node.updateSettings, ":", toHome);
         if (window.Android && toMobile.length > 0) {
             window.Android.storeSettings(JSON.stringify(toMobile));
         }
@@ -216,7 +216,8 @@ function* settingsChangePasswordSaga(action: SettingsChangePasswordAction) {
     const {oldPassword, password, onLoginIncorrect} = action.payload;
 
     try {
-        yield* call(Node.putCredentials, ":", null, oldPassword, "admin", password);
+        yield* call(Node.updateCredentials, ":", {oldPassword, login: "admin", password},
+            ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
         yield* put(settingsChangedPassword());
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
@@ -242,7 +243,8 @@ function* settingsTokensCreateSaga(action: SettingsTokensCreateAction) {
     const {password, name, onLoginIncorrect} = action.payload;
 
     try {
-        const token = yield* call(Node.createToken, ":", "admin", password, name);
+        const token = yield* call(Node.createToken, ":", {login: "admin", password, name},
+            ["credentials.login-incorrect", "credentials.not-created"]);
         yield* put(settingsTokensCreated(token));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
@@ -258,7 +260,7 @@ function* settingsTokensUpdateSaga(action: SettingsTokensUpdateAction) {
     const {id, name} = action.payload;
 
     try {
-        const token = yield* call(Node.putToken, ":", id, name);
+        const token = yield* call(Node.updateToken, ":", id, {name});
         yield* put(settingsTokensUpdated(token));
     } catch (e) {
         yield* put(settingsTokensUpdateFailed());
@@ -301,7 +303,7 @@ function* settingsPluginsDeleteSaga(action: SettingsPluginsDeleteAction) {
     try {
         yield* call(Node.deleteToken, ":", tokenId);
         yield* put(settingsTokensDeleted(tokenId));
-        yield* call(Node.deletePlugin, ":", name);
+        yield* call(Node.unregisterPlugin, ":", name);
         yield* put(settingsPluginsDeleted(name));
     } catch (e) {
         yield* put(errorThrown(e));

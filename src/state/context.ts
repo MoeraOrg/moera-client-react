@@ -2,6 +2,7 @@ import { getOwnerFullName, getOwnerName, getOwnerNameOrUrl } from "state/node/se
 import {
     getHomeOwnerAvatar,
     getHomeOwnerFullName,
+    getHomeOwnerGender,
     getHomeOwnerName,
     getHomeOwnerNameOrUrl
 } from "state/home/selectors";
@@ -17,6 +18,7 @@ export default function getContext(state?: ClientState | null): ActionContext {
             homeOwnerName: null,
             homeOwnerNameOrUrl: "",
             homeOwnerFullName: null,
+            homeOwnerGender: null,
             homeOwnerAvatar: null
         };
     }
@@ -28,6 +30,7 @@ export default function getContext(state?: ClientState | null): ActionContext {
         homeOwnerName: getHomeOwnerName(state),
         homeOwnerNameOrUrl: getHomeOwnerNameOrUrl(state),
         homeOwnerFullName: getHomeOwnerFullName(state),
+        homeOwnerGender: getHomeOwnerGender(state),
         homeOwnerAvatar: getHomeOwnerAvatar(state)
     }
 }

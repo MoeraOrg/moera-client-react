@@ -34,7 +34,7 @@ function* ownerLoadSaga() {
     try {
         const {
             nodeName = null, nodeNameChanging = false, fullName = null, gender = null, title = null, avatar = null
-        } = yield* call(Node.getWhoAmI, "");
+        } = yield* call(Node.whoAmI, "");
         yield* put(ownerSet(nodeName, nodeNameChanging, fullName, gender, title, avatar));
     } catch (e) {
         yield* put(errorThrown(e));

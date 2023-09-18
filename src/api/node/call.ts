@@ -46,7 +46,7 @@ import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import { getCartes } from "api/node/sagas";
+import { getCartes } from "api/node/api-sagas";
 import { Browser } from "ui/browser";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
 import { now } from "util/misc";
@@ -246,7 +246,7 @@ function apiUrl(rootApi: string, location: string, method: HttpMethod): string {
 
 function* cartesRenew() {
     try {
-        const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":");
+        const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":", null, ["node-name-not-set"]);
         Browser.storeCartesData(cartesIp ?? null, cartes);
         yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()));
     } catch (e) {

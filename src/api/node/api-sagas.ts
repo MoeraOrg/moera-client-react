@@ -596,7 +596,7 @@ export function* isDomainAvailable(
 }
 
 export function* getDrafts(
-    nodeName: string | null, draftType: string, remoteNodeName: string, postingId: string | null = null,
+    nodeName: string | null, draftType: API.DraftType, remoteNodeName: string, postingId: string | null = null,
     commentId: string | null = null, page: number | null = null, limit: number | null = null,
     errorFilter: ErrorFilter = false, auth: true | string = true
 ): CallApiResult<API.DraftInfo[]> {
@@ -1489,7 +1489,7 @@ export function* updateNodeSettingsMetadata(
 
 export function* getSheriffComplaintGroupsSlice(
     nodeName: string | null, before: number | null = null, after: number | null = null, limit: number | null = null,
-    status: string | null = null, errorFilter: ErrorFilter = false
+    status: API.SheriffComplainStatus | null = null, errorFilter: ErrorFilter = false
 ): CallApiResult<API.SheriffComplainGroupsSliceInfo> {
 
     const location = urlWithParameters(ut`/sheriff/complains/groups`, {before, after, limit, status});
@@ -1574,7 +1574,7 @@ export function* updateStory(
 }
 
 export function* getSubscribers(
-    nodeName: string | null, remoteNodeName: string | null = null, type: string | null = null,
+    nodeName: string | null, remoteNodeName: string | null = null, type: API.SubscriptionType | null = null,
     feedName: string | null = null, entryId: string | null = null, errorFilter: ErrorFilter = false,
     auth: boolean | string = true
 ): CallApiResult<API.SubscriberInfo[]> {
@@ -1633,7 +1633,7 @@ export function* deleteSubscriber(
 }
 
 export function* getSubscriptions(
-    nodeName: string | null, remoteNodeName: string | null = null, type: string | null = null,
+    nodeName: string | null, remoteNodeName: string | null = null, type: API.SubscriptionType | null = null,
     errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.SubscriptionInfo[]> {
 

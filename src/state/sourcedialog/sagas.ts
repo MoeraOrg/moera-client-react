@@ -21,9 +21,9 @@ function* openSourceDialogSaga(action: OpenSourceDialogAction) {
     try {
         let entry: PostingInfo | CommentInfo;
         if (commentId == null) {
-            entry = yield* call(Node.getPosting, nodeName, postingId, true);
+            entry = yield* call(Node.getPosting, nodeName, postingId, true, ["posting.not-found"]);
         } else {
-            entry = yield* call(Node.getComment, nodeName, postingId, commentId, true);
+            entry = yield* call(Node.getComment, nodeName, postingId, commentId, true, ["comment.not-found"]);
         }
         yield* put(sourceDialogLoaded(entry.bodySrc?.text ?? ""));
     } catch (e) {

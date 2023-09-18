@@ -41,11 +41,11 @@ function* reactionsDialogPastReactionsLoadSaga() {
     }
     const postingId = posting.receiverPostingId ?? posting.id;
     try {
-        const data = commentId == null
-            ? yield* call(Node.getPostingReactions, nodeName, postingId, negative, emoji, before, 40)
-            : yield* call(Node.getCommentReactions, nodeName, postingId, commentId, negative, emoji, before, 40);
+        const slice = commentId == null
+            ? yield* call(Node.getPostingReactionsSlice, nodeName, postingId, negative, emoji, before, 40)
+            : yield* call(Node.getCommentReactionsSlice, nodeName, postingId, commentId, negative, emoji, before, 40);
         yield* put(reactionsDialogPastReactionsLoaded(
-            data.reactions, posting.id, commentId, negative, emoji, data.before, data.after, data.total));
+            slice.reactions, posting.id, commentId, negative, emoji, slice.before, slice.after, slice.total));
     } catch (e) {
         yield* put(reactionsDialogPastReactionsLoadFailed(posting.id, null, negative, emoji));
         yield* put(errorThrown(e));
@@ -63,10 +63,10 @@ function* reactionsDialogTotalsLoadSaga() {
     }
     const postingId = posting.receiverPostingId ?? posting.id;
     try {
-        const data = commentId == null
+        const totals = commentId == null
             ? yield* call(Node.getPostingReactionTotals, "", posting.id)
             : yield* call(Node.getCommentReactionTotals, nodeName, postingId, commentId)
-        yield* put(reactionsDialogTotalsLoaded(data.positive, data.negative));
+        yield* put(reactionsDialogTotalsLoaded(totals.positive, totals.negative));
     } catch (e) {
         yield* put(reactionsDialogTotalsLoadFailed());
         yield* put(errorThrown(e));
@@ -82,9 +82,9 @@ function* reactionVerifySaga(action: WithContext<ReactionVerifyAction>) {
     }
     try {
         if (commentId == null) {
-            yield* call(Node.remotePostingReactionVerify, ":", nodeName, postingId, ownerName);
+            yield* call(Node.verifyRemotePostingReaction, ":", nodeName, postingId, ownerName);
         } else {
-            yield* call(Node.remoteCommentReactionVerify, ":", nodeName, postingId, commentId, ownerName);
+            yield* call(Node.verifyRemoteCommentReaction, ":", nodeName, postingId, commentId, ownerName);
         }
     } catch (e) {
         yield* put(reactionVerifyFailed(postingId, commentId, ownerName));

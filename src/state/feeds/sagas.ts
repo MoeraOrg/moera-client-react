@@ -108,7 +108,8 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
     const {nodeName, feedName, storyId} = action.payload;
     try {
-        const subscription = yield* call(Node.postFeedSubscription, ":", nodeName, feedName);
+        const subscription = yield* call(Node.createSubscription, ":",
+            {type: "feed" as const, feedName: "news", remoteNodeName: nodeName, remoteFeedName: feedName});
         yield* put(flashBox(i18n.t("you-subscribed")));
         yield* put(feedSubscribed(nodeName, subscription));
         if (storyId != null) {
@@ -134,17 +135,18 @@ function* feedUnsubscribeSaga(action: FeedUnsubscribeAction) {
 
 export function* nodeFeedSubscriberSetVisibility(subscriberId: string, visible: boolean, homeOwnerName: string) {
     const view: PrincipalValue = visible ? "unset" : "private";
-    const subscriber = yield* call(Node.putSubscriber, ":", subscriberId, null, {view});
+    const subscriber = yield* call(Node.updateSubscriber, ":", subscriberId, {adminOperations: {view}});
     yield* put(feedSubscriberUpdated(homeOwnerName, subscriber));
 
     if (subscriber.feedName == null) {
         return;
     }
 
-    const subscriptions = yield* call(Node.searchSubscriptions, ":", "feed",
-        [{nodeName: subscriber.nodeName, feedName: subscriber.feedName}], null);
+    const subscriptions = yield* call(Node.searchSubscriptions, ":",
+        {type: "feed" as const, feeds: [{nodeName: subscriber.nodeName, feedName: subscriber.feedName}]});
     if (subscriptions.length > 0) {
-        const subscription = yield* call(Node.putSubscription, subscriber.nodeName, subscriptions[0].id, {view});
+        const subscription = yield* call(Node.updateSubscription, subscriber.nodeName, subscriptions[0].id,
+            {operations: {view}});
         yield* put(feedSubscriptionUpdated(subscriber.nodeName, subscription));
     }
 }
@@ -166,7 +168,7 @@ function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetV
 
 export function* nodeFeedSubscriptionSetVisibility(subscriptionId: string, visible: boolean, homeOwnerName: string) {
     const view: PrincipalValue = visible ? "public" : "private";
-    const subscription = yield* call(Node.putSubscription, ":", subscriptionId, {view});
+    const subscription = yield* call(Node.updateSubscription, ":", subscriptionId, {operations: {view}});
     yield* put(feedSubscriptionUpdated(homeOwnerName, subscription));
 }
 
@@ -188,10 +190,10 @@ function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscription
 function* feedStatusLoadSaga(action: FeedStatusLoadAction) {
     const {feedName} = action.payload;
     try {
-        const data = feedName.startsWith(":")
+        const status = feedName.startsWith(":")
             ? yield* call(Node.getFeedStatus, ":", feedName.substring(1))
             : yield* call(Node.getFeedStatus, "", feedName);
-        yield* put(feedStatusSet(feedName, data));
+        yield* put(feedStatusSet(feedName, status));
     } catch (e) {
         yield* put(feedStatusLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -206,10 +208,10 @@ function* feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>) {
         if (action.context.ownerName === action.context.homeOwnerName) {
             yield* put(feedStatusUpdated(feedName.substring(1), viewed, read, before));
         }
-        const data = yield* call(Node.putFeedStatus, ":", feedName.substring(1), viewed, read, before);
-        yield* put(feedStatusSet(feedName, data));
+        const status = yield* call(Node.updateFeedStatus, ":", feedName.substring(1), {viewed, read, before});
+        yield* put(feedStatusSet(feedName, status));
         if (action.context.ownerName === action.context.homeOwnerName) {
-            yield* put(feedStatusSet(feedName.substring(1), data));
+            yield* put(feedStatusSet(feedName.substring(1), status));
         }
     } catch (e) {
         yield* put(feedStatusUpdateFailed(feedName));
@@ -220,14 +222,14 @@ function* feedPastSliceLoadSaga(action: FeedPastSliceLoadAction) {
     const {feedName} = action.payload;
     try {
         const before = (yield* select(state => getFeedState(state, feedName))).after;
-        const data = feedName.startsWith(":")
+        const slice = feedName.startsWith(":")
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), null, before, 20)
             : yield* call(Node.getFeedSlice, "", feedName, null, before, 20);
-        yield* call(fillActivityReactionsInStories, data.stories);
-        yield* call(fillBlockedOperationsInStories, data.stories);
-        yield* put(feedPastSliceSet(feedName, data.stories, data.before, data.after,
-            data.totalInPast, data.totalInFuture));
-        yield* call(fillSubscriptions, data.stories);
+        yield* call(fillActivityReactionsInStories, slice.stories);
+        yield* call(fillBlockedOperationsInStories, slice.stories);
+        yield* put(feedPastSliceSet(feedName, slice.stories, slice.before, slice.after,
+            slice.totalInPast, slice.totalInFuture));
+        yield* call(fillSubscriptions, slice.stories);
     } catch (e) {
         yield* put(feedPastSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -238,14 +240,14 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
     const {feedName} = action.payload;
     try {
         const after = (yield* select(state => getFeedState(state, feedName))).before;
-        const data = feedName.startsWith(":")
+        const slice = feedName.startsWith(":")
             ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
             : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-        yield* call(fillActivityReactionsInStories, data.stories);
-        yield* call(fillBlockedOperationsInStories, data.stories);
-        yield* put(feedFutureSliceSet(feedName, data.stories, data.before, data.after,
-            data.totalInPast, data.totalInFuture));
-        yield* call(fillSubscriptions, data.stories);
+        yield* call(fillActivityReactionsInStories, slice.stories);
+        yield* call(fillBlockedOperationsInStories, slice.stories);
+        yield* put(feedFutureSliceSet(feedName, slice.stories, slice.before, slice.after,
+            slice.totalInPast, slice.totalInFuture));
+        yield* call(fillSubscriptions, slice.stories);
     } catch (e) {
         yield* put(feedFutureSliceLoadFailed(feedName));
         yield* put(errorThrown(e));
@@ -282,17 +284,17 @@ function* feedsUpdateSaga() {
 function* feedUpdateSlice(feedName: string, before: number, after: number) {
     try {
         while (before > after && after < Number.MAX_SAFE_INTEGER) {
-            const data = feedName.startsWith(":")
+            const slice = feedName.startsWith(":")
                 ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
                 : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-            yield* call(fillActivityReactionsInStories, data.stories);
+            yield* call(fillActivityReactionsInStories, slice.stories);
             yield* put(feedSliceUpdate(
-                feedName, data.stories, data.before, data.after, data.totalInPast, data.totalInFuture));
-            yield* call(fillSubscriptions, data.stories);
-            if (after === data.before) {
+                feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture));
+            yield* call(fillSubscriptions, slice.stories);
+            if (after === slice.before) {
                 break;
             }
-            after = data.before;
+            after = slice.before;
         }
     } catch (e) {
         yield* put(errorThrown(e));

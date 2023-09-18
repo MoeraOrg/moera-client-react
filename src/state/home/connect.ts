@@ -50,14 +50,16 @@ function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
 function* connectToHomeSaga(action: ConnectToHomeAction) {
     const {location, assign, login, password, oldPassword, resetToken} = action.payload;
 
-    let data;
+    let info;
     try {
         if (assign) {
-            yield* call(Node.createCredentials, location, login, password);
+            yield* call(Node.createCredentials, location, {login, password}, ["credentials.already-created"]);
         } else if (oldPassword || resetToken) {
-            yield* call(Node.putCredentials, location, resetToken, oldPassword, login, password);
+            yield* call(Node.updateCredentials, location, {resetToken, oldPassword, login, password},
+                ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
         }
-        data = yield* call(Node.createToken, location, login, password, null);
+        info = yield* call(Node.createToken, location, {login, password},
+            ["credentials.login-incorrect", "credentials.not-created"]);
     } catch (e) {
         yield* call(connectToHomeFailure, action, e);
         return;
@@ -69,7 +71,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         createdAt: 0
     };
     try {
-        cartesData = yield* call(Node.getCartes, location, data.token);
+        cartesData = yield* call(Node.getCartes, location, null, ["node-name-not-set"], info.token);
     } catch (e) {
         yield* put(errorThrown(e));
     }
@@ -79,16 +81,16 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         yield* call(connectToHomeFailure, action, "Node URL not found");
         return;
     }
-    Browser.storeConnectionData(nodeUrl, null, null, null, login, data.token, data.permissions);
+    Browser.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
     Browser.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
     const homeLocation = yield* select(getHomeRootLocation);
-    yield* put(connectedToHome(nodeUrl, login, data.token, data.permissions, cartesData.cartesIp ?? null,
+    yield* put(connectedToHome(nodeUrl, login, info.token, info.permissions, cartesData.cartesIp ?? null,
         cartesData.cartes, null, cartesData.createdAt - now(), homeLocation != null && nodeUrl !== homeLocation));
 }
 
 function* verifyHomeOwnerSaga() {
     try {
-        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} = yield* call(Node.getWhoAmI, ":");
+        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} = yield* call(Node.whoAmI, ":");
         yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar));
 
         const {location, login, token, permissions} = yield* select(getHomeConnectionData);

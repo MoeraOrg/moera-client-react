@@ -40,12 +40,12 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
 
     try {
         if (isSheriff) {
-            yield* call(Node.postRemoteSheriffOrder, ":", nodeName, {
+            yield* call(Node.createRemoteSheriffOrder, ":", nodeName, {
                 delete: false, feedName, postingId, commentId, category: "visibility" as const, reasonCode,
                 reasonDetails
             });
         } else {
-            yield* call(Node.postSheriffComplain, SHERIFF_GOOGLE_PLAY_TIMELINE, {
+            yield* call(Node.createSheriffComplaint, SHERIFF_GOOGLE_PLAY_TIMELINE, {
                 ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender, nodeName, fullName, feedName,
                 postingOwnerName, postingOwnerFullName, postingOwnerGender, postingHeading, postingId,
                 commentOwnerName, commentOwnerFullName, commentOwnerGender, commentHeading, commentId, reasonCode,
@@ -64,7 +64,7 @@ function* sheriffOrderDeleteSaga(action: WithContext<SheriffOrderDeleteAction>) 
     const {nodeName, feedName, postingId, commentId} = action.payload.target;
 
     try {
-        yield* call(Node.postRemoteSheriffOrder, ":", nodeName, {
+        yield* call(Node.createRemoteSheriffOrder, ":", nodeName, {
             delete: true, feedName, postingId, commentId, category: "visibility" as const
         });
         yield* put(flashBox(i18n.t("sheriff-order-sent")));

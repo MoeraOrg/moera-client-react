@@ -84,15 +84,15 @@ function* postingReplySaga() {
                 addNegativeReaction: reactionsNegativeEnabledDefault ? "public" : "none"
             }
         };
-        const data = yield* call(Node.postDraft, ":", draftText);
+        const draft = yield* call(Node.createDraft, ":", draftText);
         if (nodeRootPage !== homeRootPage) {
             if (!standalone || homeRootLocation == null) {
-                window.location.href = urlWithParameters(homeRootPage + "/compose", {"draft": data.id});
+                window.location.href = urlWithParameters(homeRootPage + "/compose", {"draft": draft.id});
             } else {
-                yield* put(initFromLocation(homeRootLocation, "/compose", `?draft=${data.id}`, null))
+                yield* put(initFromLocation(homeRootLocation, "/compose", `?draft=${draft.id}`, null))
             }
         } else {
-            yield* put(goToLocation("/compose", `?draft=${data.id}`, null))
+            yield* put(goToLocation("/compose", `?draft=${draft.id}`, null))
         }
     } catch (e) {
         yield* put(postingReplyFailed());

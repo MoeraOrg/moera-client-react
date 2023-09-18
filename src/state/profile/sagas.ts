@@ -47,8 +47,8 @@ export default [
 
 function* profileLoadSaga() {
     try {
-        const data = yield* call(Node.getProfile, "", true);
-        yield* put(profileSet(data));
+        const profile = yield* call(Node.getProfile, "", true);
+        yield* put(profileSet(profile));
     } catch (e) {
         yield* put(profileLoadFailed());
         yield* put(errorThrown(e));
@@ -57,9 +57,9 @@ function* profileLoadSaga() {
 
 function* profileUpdateSaga(action: ProfileUpdateAction) {
     try {
-        const data = yield* call(Node.putProfile, "", action.payload.profile);
+        const profile = yield* call(Node.updateProfile, "", action.payload.profile);
         yield* put(profileUpdateSucceeded());
-        yield* put(profileSet(data));
+        yield* put(profileSet(profile));
     } catch (e) {
         yield* put(profileUpdateFailed());
         yield* put(errorThrown(e));
@@ -68,7 +68,7 @@ function* profileUpdateSaga(action: ProfileUpdateAction) {
 
 function* profileImageUploadSaga(action: ProfileImageUploadAction) {
     try {
-        const {id, path, width, height, orientation} = yield* call(Node.postMediaPublic, "", action.payload.file,
+        const {id, path, width, height, orientation} = yield* call(Node.uploadPublicMedia, "", action.payload.file,
             (loaded: number, total: number) => store.dispatch(profileImageUploadProgress(loaded, total)));
         if (width < 100 || height < 100) {
             yield* put(messageBox(i18n.t("avatar-too-small")));
@@ -84,8 +84,8 @@ function* profileImageUploadSaga(action: ProfileImageUploadAction) {
 
 function* profileAvatarsLoadSaga() {
     try {
-        const data = yield* call(Node.getAvatars, "");
-        yield* put(profileAvatarsLoaded(data));
+        const avatars = yield* call(Node.getAvatars, "");
+        yield* put(profileAvatarsLoaded(avatars));
     } catch (e) {
         yield* put(profileAvatarsLoadFailed());
         yield* put(errorThrown(e));
@@ -94,15 +94,15 @@ function* profileAvatarsLoadSaga() {
 
 function* profileAvatarCreateSaga(action: ProfileAvatarCreateAction) {
     try {
-        const data = yield* call(Node.postAvatar, "", action.payload.avatar);
-        yield* put(profileAvatarCreated(data));
+        const avatar = yield* call(Node.createAvatar, "", action.payload.avatar);
+        yield* put(profileAvatarCreated(avatar));
         const onCreate = yield* select(state => state.profile.avatarEditDialog.onCreate);
         if (onCreate) {
-            onCreate(data);
+            onCreate(avatar);
         }
         yield* put(settingsUpdate([{
             name: CLIENT_SETTINGS_PREFIX + "avatar.shape.default",
-            value: data.shape ?? null
+            value: avatar.shape ?? null
         }]));
     } catch (e) {
         yield* put(profileAvatarCreateFailed());
@@ -128,7 +128,7 @@ function* profileAvatarsReorderSaga() {
     const ids = yield* select(state => getAvatars(state).map(av => av.id));
     ids.reverse();
     try {
-        yield* call(Node.reorderAvatars, "", ids);
+        yield* call(Node.reorderAvatars, "", {ids});
     } catch (e) {
         yield* put(errorThrown(e));
     }

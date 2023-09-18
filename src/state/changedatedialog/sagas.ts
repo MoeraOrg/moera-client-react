@@ -18,9 +18,9 @@ export default [
 function* storyChangeDateSaga(action: StoryChangeDateAction) {
     const {id, publishedAt} = action.payload;
     try {
-        const data = yield* call(Node.putStory, "", id, {publishAt: publishedAt});
+        const story = yield* call(Node.updateStory, "", id, {publishAt: publishedAt});
         yield* put(closeChangeDateDialog());
-        yield* put(storyUpdated(data));
+        yield* put(storyUpdated(story));
     } catch (e) {
         yield* put(storyChangeDateFailed())
         yield* put(errorThrown(e));

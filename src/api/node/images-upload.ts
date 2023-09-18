@@ -51,7 +51,7 @@ export function* imageUpload(features: PostingFeatures | null, nodeName: string 
                 yield* call([window.crypto.subtle, window.crypto.subtle.digest], "SHA-256", fileContent)));
         }
 
-        const mediaFile = yield* call(Node.postMediaPrivate, nodeName, file, onProgress);
+        const mediaFile = yield* call(Node.uploadPrivateMedia, nodeName, file, onProgress);
         return {...mediaFile, digest};
     } catch (e) {
         yield* put(errorThrown(e));

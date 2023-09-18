@@ -20,8 +20,8 @@ export default [
 function* connectDialogResetPasswordSaga(action: ConnectDialogResetPasswordAction) {
     const {location} = action.payload;
     try {
-        const data = yield* call(Node.postCredentialsReset, location);
-        yield* put(connectDialogSetEmailHint(data.emailHint));
+        const hint = yield* call(Node.resetCredentials, location, ["credentials.email-not-set"]);
+        yield* put(connectDialogSetEmailHint(hint.emailHint));
         yield* put(connectDialogSetForm(location, "admin", "reset"));
     } catch (e) {
         yield* put(connectDialogResetPasswordFailed());

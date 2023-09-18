@@ -115,8 +115,8 @@ function* nodeCardDetailsLoadSaga(action: NodeCardDetailsLoadAction) {
 function* nodeCardPeopleLoadSaga(action: NodeCardPeopleLoadAction) {
     const {nodeName} = action.payload;
     try {
-        const data = yield* call(Node.getPeopleGeneral, nodeName);
-        yield* put(nodeCardPeopleSet(nodeName, data.feedSubscribersTotal ?? null, data.feedSubscriptionsTotal ?? null));
+        const info = yield* call(Node.getPeopleGeneral, nodeName);
+        yield* put(nodeCardPeopleSet(nodeName, info.feedSubscribersTotal ?? null, info.feedSubscriptionsTotal ?? null));
     } catch (e) {
         yield* put(nodeCardPeopleLoadFailed(nodeName));
         if (!(e instanceof NameResolvingError)) {
@@ -159,7 +159,8 @@ function* loadSubscriber(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    const subscribers = yield* call(Node.getSubscribers, ":", "feed" as const, nodeName);
+    const subscribers = yield* call(Node.getSubscribers, ":", nodeName, "feed" as const, null, null,
+        ["authentication.required"]);
     return subscribers?.[0];
 }
 
@@ -167,7 +168,8 @@ function* loadSubscription(nodeName: string, homeOwnerName: string | null) {
     if (homeOwnerName == null || nodeName === homeOwnerName) {
         return null;
     }
-    const subscriptions = yield* call(Node.getSubscriptions, ":", "feed" as const, nodeName);
+    const subscriptions = yield* call(Node.getSubscriptions, ":", nodeName, "feed" as const,
+        ["authentication.required"]);
     return subscriptions?.[0];
 }
 
@@ -248,7 +250,7 @@ function* nodeCardSheriffListLoadSaga(action: WithContext<NodeCardSheriffListLoa
     }
 
     try {
-        yield* call(Node.getUserListItem, ":", SHERIFF_USER_LIST_HIDE, nodeName);
+        yield* call(Node.getUserListItem, ":", SHERIFF_USER_LIST_HIDE, nodeName, ["user-list-item.not-found"]);
         yield* put(nodeCardSheriffListSet(nodeName, true));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "user-list-item.not-found") {
@@ -272,7 +274,7 @@ function* nodeCardCopyMention(action: NodeCardCopyMentionAction) {
 function* sheriffListAddSaga(action: SheriffListAddAction) {
     const {nodeName} = action.payload;
     try {
-        yield* call(Node.postUserListItem, ":", SHERIFF_USER_LIST_HIDE, nodeName);
+        yield* call(Node.createUserListItem, ":", SHERIFF_USER_LIST_HIDE, {nodeName});
         yield* put(nodeCardSheriffListSet(nodeName, true));
         yield* put(flashBox(i18n.t("content-hidden-in-google-play")));
     } catch (e) {

@@ -43,7 +43,7 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
         yield* put(restoreConnectDialog(location, login));
         if (getCartesListTtl(cartes) < 5 * 60) {
             try {
-                const data = yield* call(Node.getCartes, normalizeUrl(location), token);
+                const data = yield* call(Node.getCartes, normalizeUrl(location), null, ["node-name-not-set"], token);
                 cartesIp = data.cartesIp ?? null;
                 cartes = data.cartes;
                 createdAt = data.createdAt;

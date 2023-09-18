@@ -41,9 +41,9 @@ function* complainsPastSliceLoadSaga() {
     const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
 
     try {
-        const data = yield* call(Node.getSheriffComplainGroupsSlice, "", null, after, 20, status);
-        yield* put(complainsPastSliceSet(data.groups, data.before, data.after, data.total, data.totalInPast,
-            data.totalInFuture));
+        const slice = yield* call(Node.getSheriffComplaintGroupsSlice, "", null, after, 20, status);
+        yield* put(complainsPastSliceSet(slice.groups, slice.before, slice.after, slice.total, slice.totalInPast,
+            slice.totalInFuture));
     } catch (e) {
         yield* put(complainsPastSliceLoadFailed());
         yield* put(errorThrown(e));
@@ -58,9 +58,9 @@ function* complainsFutureSliceLoadSaga() {
     const status: SheriffComplainStatus | null = inboxOnly ? "prepared" : null;
 
     try {
-        const data = yield* call(Node.getSheriffComplainGroupsSlice, "", before, null, 20, status);
-        yield* put(complainsFutureSliceSet(data.groups, data.before, data.after, data.total, data.totalInPast,
-            data.totalInFuture));
+        const slice = yield* call(Node.getSheriffComplaintGroupsSlice, "", before, null, 20, status);
+        yield* put(complainsFutureSliceSet(slice.groups, slice.before, slice.after, slice.total, slice.totalInPast,
+            slice.totalInFuture));
     } catch (e) {
         yield* put(complainsFutureSliceLoadFailed());
         yield* put(errorThrown(e));
@@ -73,7 +73,7 @@ function* complainsGroupLoadSaga() {
         return;
     }
     try {
-        const group = yield* call(Node.getSheriffComplainGroup, "", id);
+        const group = yield* call(Node.getSheriffComplaintGroup, "", id);
         yield* put(complainsGroupLoaded(group));
     } catch (e) {
         yield* put(complainsGroupLoadFailed(id));
@@ -87,7 +87,7 @@ function* complainsComplainsLoadSaga() {
         return;
     }
     try {
-        const complains = yield* call(Node.getSheriffComplainsByGroup, "", id);
+        const complains = yield* call(Node.getSheriffComplaintsByGroup, "", id);
         yield* put(complainsComplainsLoaded(id, complains));
     } catch (e) {
         yield* put(complainsComplainsLoadFailed(id));
@@ -99,7 +99,7 @@ function* complainsDecisionPostSaga(action: ComplainsDecisionPostAction) {
     const {groupId, decision} = action.payload;
 
     try {
-        const group = yield* call(Node.putSheriffComplainGroup, "", groupId, decision);
+        const group = yield* call(Node.updateSheriffComplaintGroup, "", groupId, decision);
         yield* put(complainsDecisionPosted(group));
     } catch (e) {
         yield* put(complainsDecisionPostFailed(groupId));
