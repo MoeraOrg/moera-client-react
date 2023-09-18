@@ -368,7 +368,7 @@ def auth_type(auth: str) -> AuthType:
     return AuthType.REQUIRED
 
 
-def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> None:
+def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> None:
     for obj in api['objects']:
         for request in obj.get('requests', []):
             if 'function' not in request:
@@ -382,8 +382,13 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
             flags: list[str] = []
             if 'params' in request:
                 for param in request['params']:
+                    if 'name' not in param:
+                        print('Missing name of parameter of the request "{method} {url}"'
+                              .format(method=request['type'], url=request['url']))
+                        exit(1)
                     name = param['name']
                     js_name = 'remoteNodeName' if name == 'nodeName' else name
+                    url_params[name] = js_name
                     if 'enum' in param:
                         js_type = 'API.' + param['enum']
                     else:
@@ -394,13 +399,11 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
                         flags = [flag['name'] for flag in param['flags']]
                         for flag in flags:
                             params += ', with{name}: boolean = false'.format(name=flag.capitalize())
-                        url_params[flag_name] = flag_js_name
                     else:
                         if param.get('optional', False):
                             tail_params += f', {js_name}: {js_type} | null = null'
                         else:
                             params += f', {js_name}: {js_type}'
-                        url_params[name] = js_name
             body = ''
             if 'in' in request:
                 if 'type' in request['in']:
@@ -413,7 +416,7 @@ def generate_sagas(api: any, structs: dict[str, Structure], afile: TextIO) -> No
                 else:
                     if 'name' not in request['in']:
                         print('Missing name of body of the request "{method} {url}"'
-                               .format(method=request['type'], url=request['url']))
+                              .format(method=request['type'], url=request['url']))
                         exit(1)
                     name = request['in']['name']
                     js_type = 'API.' + request['in']['struct']
