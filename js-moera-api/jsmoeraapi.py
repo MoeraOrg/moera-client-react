@@ -8,6 +8,10 @@ from typing import Any, TextIO
 import yaml
 
 
+def ind(n: int) -> str:
+    return n * 4 * ' '
+
+
 def read_api(ifname: str) -> Any:
     with open(ifname, 'r') as ifile:
         return yaml.safe_load(ifile)
@@ -39,61 +43,61 @@ def schema_type(sfile: TextIO, indent: int, a_type: str, struct: bool = False, n
         return
     sfile.write('{\n')
     if struct:
-        sfile.write((indent + 1) * 4 * ' ' + f'...{a_type}Type')
+        sfile.write(ind(indent + 1) + f'...{a_type}Type')
     else:
-        sfile.write((indent + 1) * 4 * ' ' + f'type: "{a_type}"')
+        sfile.write(ind(indent + 1) + f'type: "{a_type}"')
     if nullable:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + 'nullable: true')
+        sfile.write(ind(indent + 1) + 'nullable: true')
     if default is not None:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + f'default: {default}')
+        sfile.write(ind(indent + 1) + f'default: {default}')
     if min is not None:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + f'minimum: {min}')
+        sfile.write(ind(indent + 1) + f'minimum: {min}')
     if max is not None:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + f'maximum: {max}')
+        sfile.write(ind(indent + 1) + f'maximum: {max}')
     sfile.write('\n')
-    sfile.write(indent * 4 * ' ' + '}')
+    sfile.write(ind(indent) + '}')
 
 
 def schema_array(sfile: TextIO, indent: int, a_type: str, struct: bool = False, nullable: bool = False,
                  default: Any = None, min_items: int | None = None, max_items: int | None = None,
                  min: float | None = None, max: float | None = None) -> None:
     sfile.write('{\n')
-    sfile.write((indent + 1) * 4 * ' ' + 'type: "array",\n')
-    sfile.write((indent + 1) * 4 * ' ' + 'items: ')
+    sfile.write(ind(indent + 1) + 'type: "array",\n')
+    sfile.write(ind(indent + 1) + 'items: ')
     schema_type(sfile, indent + 1, a_type, struct=struct, nullable=False, min=min, max=max)
     if nullable:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + 'nullable: true')
+        sfile.write(ind(indent + 1) + 'nullable: true')
     if default is not None:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + f'default: {default}')
+        sfile.write(ind(indent + 1) + f'default: {default}')
     if min_items is not None:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + f'minItems: {min_items}')
+        sfile.write(ind(indent + 1) + f'minItems: {min_items}')
     if max_items is not None:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + f'maxItems: {max_items}')
+        sfile.write(ind(indent + 1) + f'maxItems: {max_items}')
     sfile.write('\n')
-    sfile.write(indent * 4 * ' ' + '}')
+    sfile.write(ind(indent) + '}')
 
 
 def schema_map_string_int(sfile: TextIO, indent: int, nullable: bool = False) -> None:
     sfile.write('{\n')
-    sfile.write((indent + 1) * 4 * ' ' + 'type: "object",\n')
-    sfile.write((indent + 1) * 4 * ' ' + 'patternProperties: {\n')
-    sfile.write((indent + 2) * 4 * ' ' + '"^.*$": ')
+    sfile.write(ind(indent + 1) + 'type: "object",\n')
+    sfile.write(ind(indent + 1) + 'patternProperties: {\n')
+    sfile.write(ind(indent + 2) + '"^.*$": ')
     schema_type(sfile, indent + 2, 'integer')
     sfile.write('\n')
-    sfile.write((indent + 1) * 4 * ' ' + '}')
+    sfile.write(ind(indent + 1) + '}')
     if nullable:
         sfile.write(',\n')
-        sfile.write((indent + 1) * 4 * ' ' + 'nullable: true')
+        sfile.write(ind(indent + 1) + 'nullable: true')
     sfile.write('\n')
-    sfile.write(indent * 4 * ' ' + '}')
+    sfile.write(ind(indent) + '}')
 
 
 def generate_operations(operations: Any, tfile: TextIO, sfile: TextIO) -> None:
@@ -348,7 +352,7 @@ def comma_wrap(s: str, indent: int) -> str:
             if next < 0 or next > max_length:
                 break
             pos = next
-        result += s[:pos] + ',\n' + (indent * 4 * ' ')
+        result += s[:pos] + ',\n' + ind(indent)
         s = s[pos + 2:]
     return result
 
