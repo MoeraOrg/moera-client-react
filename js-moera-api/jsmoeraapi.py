@@ -18,10 +18,10 @@ def read_api(ifname: str) -> Any:
 
 
 def generate_enum(enum: Any, tfile: TextIO) -> None:
-    s = '\nexport type %s = ' % enum['name']
+    s = f'\nexport type {enum["name"]} = '
     first = True
     for item in enum['values']:
-        c = '"%s"' % item['name']
+        c = f'"{item["name"]}"'
         if first:
             s += c
             first = False
@@ -102,9 +102,9 @@ def schema_map_string_int(sfile: TextIO, indent: int, nullable: bool = False) ->
 
 def generate_operations(operations: Any, tfile: TextIO, sfile: TextIO) -> None:
     tfile.write('\n')
-    tfile.write('export interface %s {\n' % operations['name'])
+    tfile.write(f'export interface {operations["name"]} {{\n')
     for field in operations['fields']:
-        tfile.write('    %s?: PrincipalValue | null;\n' % field['name'])
+        tfile.write(f'    {field["name"]}?: PrincipalValue | null;\n')
     tfile.write('}\n')
 
     sfile.write('\n')
@@ -112,7 +112,7 @@ def generate_operations(operations: Any, tfile: TextIO, sfile: TextIO) -> None:
     sfile.write('    type: "object",\n')
     sfile.write('    properties: {\n')
     for field in operations['fields']:
-        sfile.write('        "%s": ' % field['name'])
+        sfile.write(f'{ind(2)}"{field["name"]}": ')
         schema_type(sfile, 2, "string", nullable=True)
         sfile.write(',\n')
     sfile.write('    },\n')
@@ -172,9 +172,9 @@ class Structure:
 
     def generate_class(self, tfile: TextIO, structs: dict[str, Structure]) -> None:
         if self.generic:
-            tfile.write('\nexport interface %sBase<B> {\n' % self.data['name'])
+            tfile.write(f'\nexport interface {self.data["name"]}Base<B> {{\n')
         else:
-            tfile.write('\nexport interface %s {\n' % self.data['name'])
+            tfile.write(f'\nexport interface {self.data["name"]} {{\n')
         for field in self.data['fields']:
             if field.get('optional', False) and 'js-default' not in field:
                 tmpl = '    %s?: %s | null;\n'
@@ -215,7 +215,7 @@ class Structure:
             if field.get('type') == 'any':
                 continue
 
-            sfile.write('        "%s": ' % field['name'])
+            sfile.write(f'{ind(2)}"{field["name"]}": ')
             default = field.get('js-default')
             optional = field.get('optional', False) and default is None
             array = field.get('array', False)
@@ -258,7 +258,7 @@ class Structure:
         sfile.write('\nexport const {name} = schema({name}Type);\n'.format(name=self.data['name']))
 
         if self.output_array:
-            sfile.write('\nexport const %sArray = schema(' % self.data['name'])
+            sfile.write(f'\nexport const {self.data["name"]}Array = schema(')
             schema_array(sfile, 0, self.data['name'], struct=True)
             if self.uses_body:
                 tmpl = ' as JSONSchemaType<API.Encoded%s[]>);\n'
@@ -426,8 +426,8 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                     js_type = 'API.' + request['in']['struct']
                     if request['in'].get('array', False):
                         js_type += '[]'
-                    body = ', body: %s' % name
-                    params += ', {name}: {type}'.format(name=name, type=js_type)
+                    body = f', body: {name}'
+                    params += f', {name}: {js_type}'
             params += tail_params
             params += ', errorFilter: ErrorFilter = false'
             auth_t = auth_type(request.get('auth', 'none'))
@@ -451,15 +451,15 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                         exit(1)
                     location = location.replace(f'{{{name}}}', f'${{{url_params[name]}}}')
                     del url_params[name]
-                location = 'ut`%s`' % location
+                location = f'ut`{location}`'
             else:
-                location = '"%s"' % location
+                location = f'"{location}"'
             subs = []
             for name, js_name in url_params.items():
                 if name == js_name:
                     subs.append(name)
                 else:
-                    subs.append('%s: %s' % (name, js_name))
+                    subs.append(f'{name}: {js_name}')
             if len(subs) > 0:
                 location = 'urlWithParameters({location}, {{{subs}}})'.format(location=location, subs=', '.join(subs))
                 if len(location) > 81:
