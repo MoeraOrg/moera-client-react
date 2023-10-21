@@ -26,7 +26,7 @@ export default [
 
 function* nodeNameLoadSaga() {
     try {
-        const {name = null} = yield* call(Node.getNodeName, "");
+        const {name = null} = yield* call(Node.getNodeName, "", false);
         yield* put(nodeNameSet(name));
         yield* put(ownerSet(name, null, false, false, false, null));
     } catch (e) {

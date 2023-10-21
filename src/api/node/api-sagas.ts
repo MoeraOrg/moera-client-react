@@ -897,12 +897,12 @@ export function* getPublicMediaInfo(
 }
 
 export function* getNodeName(
-    nodeName: string | null, errorFilter: ErrorFilter = false
+    nodeName: string | null, errorFilter: ErrorFilter = false, auth: boolean | string = true
 ): CallApiResult<API.NodeNameInfo> {
 
     const location = "/node-name";
     return yield* callApi({
-        nodeName, method: "GET", location, schema: NodeApiSchema.NodeNameInfo, errorFilter
+        nodeName, method: "GET", location, auth, schema: NodeApiSchema.NodeNameInfo, errorFilter
     });
 }
 
