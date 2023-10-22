@@ -384,30 +384,29 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
             flag_name: str | None = None
             flag_js_name: str | None = None
             flags: list[str] = []
-            if 'params' in request:
-                for param in request['params']:
-                    if 'name' not in param:
-                        print('Missing name of parameter of the request "{method} {url}"'
-                              .format(method=request['type'], url=request['url']))
-                        exit(1)
-                    name = param['name']
-                    js_name = 'remoteNodeName' if name == 'nodeName' else name
-                    url_params[name] = js_name
-                    if 'enum' in param:
-                        js_type = 'API.' + param['enum']
+            for param in request.get('params', []) + request.get('query', []):
+                if 'name' not in param:
+                    print('Missing name of parameter of the request "{method} {url}"'
+                          .format(method=request['type'], url=request['url']))
+                    exit(1)
+                name = param['name']
+                js_name = 'remoteNodeName' if name == 'nodeName' else name
+                url_params[name] = js_name
+                if 'enum' in param:
+                    js_type = 'API.' + param['enum']
+                else:
+                    js_type = to_js_type(param['type'])
+                if 'flags' in param:
+                    flag_name = name
+                    flag_js_name = js_name
+                    flags = [flag['name'] for flag in param['flags']]
+                    for flag in flags:
+                        params += ', with{name}: boolean = false'.format(name=flag.capitalize())
+                else:
+                    if param.get('optional', False):
+                        tail_params += f', {js_name}: {js_type} | null = null'
                     else:
-                        js_type = to_js_type(param['type'])
-                    if 'flags' in param:
-                        flag_name = name
-                        flag_js_name = js_name
-                        flags = [flag['name'] for flag in param['flags']]
-                        for flag in flags:
-                            params += ', with{name}: boolean = false'.format(name=flag.capitalize())
-                    else:
-                        if param.get('optional', False):
-                            tail_params += f', {js_name}: {js_type} | null = null'
-                        else:
-                            params += f', {js_name}: {js_type}'
+                        params += f', {js_name}: {js_type}'
             body = ''
             if 'in' in request:
                 if 'type' in request['in']:
