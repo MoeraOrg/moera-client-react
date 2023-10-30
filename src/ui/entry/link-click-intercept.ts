@@ -19,9 +19,6 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent, initFro
     }
     fetch(URI.serialize(parts), {
         method: "GET",
-        headers: {
-            "X-Accept-Moera": "1.0"
-        },
         referrerPolicy: "no-referrer"
     }).then(response => {
         const headers = response.headers;
