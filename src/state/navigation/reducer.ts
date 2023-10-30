@@ -5,7 +5,6 @@ import {
     DIALOG_OPENED,
     GO_TO_PAGE,
     INIT_FROM_LOCATION,
-    INIT_STORAGE,
     LOCATION_LOCK,
     LOCATION_SET,
     LOCATION_UNLOCK
@@ -14,8 +13,7 @@ import { PAGE_TIMELINE } from "state/navigation/pages";
 import { NavigationState } from "state/navigation/state";
 import { ClientAction } from "state/action";
 
-const initialState = {
-    standalone: true,
+const initialState: NavigationState = {
     page: PAGE_TIMELINE,
     location: "",
     title: "",
@@ -27,12 +25,6 @@ const initialState = {
 
 export default (state: NavigationState = initialState, action: ClientAction): NavigationState => {
     switch (action.type) {
-        case INIT_STORAGE:
-            return {
-                ...state,
-                standalone: action.payload.standalone
-            };
-
         case INIT_FROM_LOCATION: {
             let {path, query, hash} = action.payload;
             path = path != null && path.startsWith("/moera") ? path.substring(6) : path;

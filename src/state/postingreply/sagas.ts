@@ -7,11 +7,9 @@ import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { goToLocation, initFromLocation } from "state/navigation/actions";
-import { isStandaloneMode } from "state/navigation/selectors";
 import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { executor } from "state/executor";
-import { urlWithParameters } from "util/url";
 import { getWindowSelectionHtml, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
 
@@ -20,12 +18,12 @@ export default [
 ];
 
 function* postingReplySaga() {
-    const {standalone, posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix,
-           preambleTemplate, quoteAll, visibilityDefault, commentsVisibilityDefault, commentAdditionDefault,
-           reactionsEnabledDefault, reactionsNegativeEnabledDefault, reactionsPositiveDefault, reactionsNegativeDefault,
-           reactionsVisibleDefault, reactionTotalsVisibleDefault} =
-        yield* select(state => ({
-            standalone: isStandaloneMode(state),
+    const {
+        posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix, preambleTemplate, quoteAll,
+        visibilityDefault, commentsVisibilityDefault, commentAdditionDefault, reactionsEnabledDefault,
+        reactionsNegativeEnabledDefault, reactionsPositiveDefault, reactionsNegativeDefault, reactionsVisibleDefault,
+        reactionTotalsVisibleDefault
+    } = yield* select(state => ({
             posting: getPosting(state, state.postingReply.postingId),
             nodeRootPage: getNodeRootPage(state),
             homeOwnerName: getHomeOwnerName(state),
@@ -86,9 +84,7 @@ function* postingReplySaga() {
         };
         const draft = yield* call(Node.createDraft, ":", draftText);
         if (nodeRootPage !== homeRootPage) {
-            if (!standalone || homeRootLocation == null) {
-                window.location.href = urlWithParameters(homeRootPage + "/compose", {"draft": draft.id});
-            } else {
+            if (homeRootLocation != null) {
                 yield* put(initFromLocation(homeRootLocation, "/compose", `?draft=${draft.id}`, null))
             }
         } else {

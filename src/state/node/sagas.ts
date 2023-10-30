@@ -18,10 +18,10 @@ import {
 } from "state/node/actions";
 import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { initFromLocation } from "state/navigation/actions";
-import { isStandaloneMode } from "state/navigation/selectors";
 import { introduced, namingInitialized } from "state/init-selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { normalizeUrl, rootUrl } from "util/url";
+import { WithContext } from "state/action-types";
 
 export default [
     executor(OWNER_LOAD, "", ownerLoadSaga),
@@ -58,13 +58,8 @@ function* ownerVerifySaga() {
     }
 }
 
-function* ownerSwitchSaga(action: OwnerSwitchAction) {
-    const {standalone, ownerName} = yield* select(state => ({
-        standalone: isStandaloneMode(state),
-        ownerName: getOwnerName(state)
-    }));
-
-    if (action.payload.name === ownerName) {
+function* ownerSwitchSaga(action: WithContext<OwnerSwitchAction>) {
+    if (action.payload.name === action.context.ownerName) {
         yield* put(ownerSwitchClose());
         return;
     }
@@ -76,18 +71,10 @@ function* ownerSwitchSaga(action: OwnerSwitchAction) {
             info = yield* Naming.getSimilar(name);
         }
         if (info && info.nodeUri) {
-            if (!standalone) {
-                try {
-                    window.location.href = info.nodeUri;
-                } catch (e) {
-                    throw new Error("Node location is incorrect: " + info.nodeUri);
-                }
-            } else {
-                const {scheme, host, port, path = null} = URI.parse(info.nodeUri);
-                if (scheme != null && host != null) {
-                    const rootLocation = rootUrl(scheme, host, port);
-                    yield* put(initFromLocation(rootLocation, path, null, null));
-                }
+            const {scheme, host, port, path = null} = URI.parse(info.nodeUri);
+            if (scheme != null && host != null) {
+                const rootLocation = rootUrl(scheme, host, port);
+                yield* put(initFromLocation(rootLocation, path, null, null));
             }
         } else {
             yield* put(ownerSwitchFailed());

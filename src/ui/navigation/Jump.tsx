@@ -6,7 +6,6 @@ import { goToLocation, initFromLocation, initFromNodeLocation } from "state/navi
 import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { getNamingNameDetails } from "state/naming/selectors";
 import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
-import { isStandaloneMode } from "state/navigation/selectors";
 import { ClientState } from "state/state";
 import { redirectUrl, rootUrl } from "util/url";
 
@@ -54,15 +53,15 @@ class Jump extends React.PureComponent<Props> {
 
     onFar = (url: string, nodeLocation: string | null, nodeOwnerName: string | null, location: string) =>
             (e: React.MouseEvent) => {
-        const {standalone, onFar, initFromNodeLocation, initFromLocation} = this.props;
+        const {onFar, initFromNodeLocation, initFromLocation} = this.props;
 
         if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.altKey) {
             return;
         }
 
         const performJump = () => {
-            if (!standalone || nodeOwnerName == null) {
-                window.location.href = url;
+            if (nodeOwnerName == null) {
+                return;
             } else if (nodeLocation == null) {
                 initFromNodeLocation(nodeOwnerName, location, url);
             } else {
@@ -85,15 +84,15 @@ class Jump extends React.PureComponent<Props> {
 
     render() {
         const {
-            standalone, nodeName, nodeUri, href, className, style, title, ownerName, rootPage, homeOwnerName,
-            homeRootPage, details, trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
+            nodeName, nodeUri, href, className, style, title, ownerName, rootPage, homeOwnerName, homeRootPage, details,
+            trackingId, anchorRef, onMouseEnter, onMouseLeave, onTouchStart, children
         } = this.props;
 
         const redirectPage = homeRootPage ?? rootPage ?? "unknown";
         const nodeOwnerName = nodeName ? (nodeName === ":" ? homeOwnerName : nodeName) : ownerName;
         if (nodeOwnerName === ownerName) {
             const nodeLocation = rootPage ?? nodeUri ?? "unknown";
-            const url = redirectUrl(standalone, redirectPage, ownerName, nodeLocation, href, trackingId);
+            const url = redirectUrl(true, redirectPage, ownerName, nodeLocation, href, trackingId);
             return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                       data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onNear} suppressHydrationWarning>{children}</a>;
@@ -107,7 +106,7 @@ class Jump extends React.PureComponent<Props> {
                 nodeLocation = nodeUri;
             }
             nodeLocation ??= null;
-            const url = redirectUrl(standalone, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
+            const url = redirectUrl(true, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
             return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
                       data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
                       onTouchStart={onTouchStart} onClick={this.onFar(url, nodeLocation, nodeOwnerName, href)}
@@ -119,7 +118,6 @@ class Jump extends React.PureComponent<Props> {
 
 const connector = connect(
     (state: ClientState, ownProps: OwnProps) => ({
-        standalone: isStandaloneMode(state),
         ownerName: getOwnerName(state),
         rootPage: getNodeRootPage(state),
         homeOwnerName: getHomeOwnerName(state),

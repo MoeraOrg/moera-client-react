@@ -1,7 +1,6 @@
 import { Page } from "state/navigation/pages";
 
 export interface NavigationState {
-    standalone: boolean;
     page: Page;
     location: string;
     title: string;

@@ -17,7 +17,6 @@ import {
     goToSettings,
     INIT_FROM_LOCATION,
     INIT_FROM_NODE_LOCATION,
-    INIT_STORAGE,
     initFromLocation,
     InitFromLocationAction,
     InitFromNodeLocationAction,
@@ -30,14 +29,12 @@ import {
     UPDATE_LOCATION,
     UpdateLocationAction
 } from "state/navigation/actions";
-import { isStandaloneMode } from "state/navigation/selectors";
 import { getHomeRootPage } from "state/home/selectors";
 import { settingsGoToTab } from "state/settings/actions";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
 
 export default [
-    executor(INIT_STORAGE, "", initStorageSaga),
     executor(INIT_FROM_NODE_LOCATION, "", initFromNodeLocationSaga),
     executor(INIT_FROM_LOCATION, "", initFromLocationSaga),
     executor(NEW_LOCATION, null, newLocationSaga),
@@ -74,15 +71,6 @@ function* transformation(srcPath: string | null, srcQuery: string | null, srcHas
     }
     yield* call(changeLocation, null);
     yield* put(locationUnlock());
-}
-
-function initStorageSaga() {
-    try {
-        // Call the browser extension to inject communication code
-        fetch("https://moera.please.start.communication/");
-    } catch (e) {
-        // The request must fail
-    }
 }
 
 function* initFromNodeLocationSaga(action: InitFromNodeLocationAction) {
@@ -128,40 +116,26 @@ function* changeLocation(action: NewLocationAction | UpdateLocationAction | null
 }
 
 function* goHomeSaga() {
-    const {standalone, homeRootPage} = yield* select(state => ({
-        standalone: isStandaloneMode(state),
-        homeRootPage: getHomeRootPage(state)
-    }));
+    const homeRootPage = yield* select(getHomeRootPage);
     if (homeRootPage == null) {
         return;
     }
-    if (!standalone) {
-        window.location.href = homeRootPage;
-    } else {
-        const {scheme, host, port, path} = URI.parse(homeRootPage);
-        if (scheme != null && host != null) {
-            const rootLocation = rootUrl(scheme, host, port);
-            yield* put(initFromLocation(rootLocation, path ?? null, null, null));
-        }
+    const {scheme, host, port, path} = URI.parse(homeRootPage);
+    if (scheme != null && host != null) {
+        const rootLocation = rootUrl(scheme, host, port);
+        yield* put(initFromLocation(rootLocation, path ?? null, null, null));
     }
 }
 
 function* goHomeNewsSaga() {
-    const {standalone, homeRootPage} = yield* select(state => ({
-        standalone: isStandaloneMode(state),
-        homeRootPage: getHomeRootPage(state)
-    }));
+    const homeRootPage = yield* select(getHomeRootPage);
     if (homeRootPage == null) {
         return;
     }
-    if (!standalone) {
-        window.location.href = homeRootPage + "/news";
-    } else {
-        const {scheme, host, port, path} = URI.parse(homeRootPage);
-        if (scheme != null && host != null) {
-            const rootLocation = rootUrl(scheme, host, port);
-            yield* put(initFromLocation(rootLocation, path + "/news", null, null));
-        }
+    const {scheme, host, port, path} = URI.parse(homeRootPage);
+    if (scheme != null && host != null) {
+        const rootLocation = rootUrl(scheme, host, port);
+        yield* put(initFromLocation(rootLocation, path + "/news", null, null));
     }
 }
 

@@ -15,7 +15,6 @@ import {
 import { cartesSet } from "state/cartes/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNameLoaded, namingNamesPopulate } from "state/naming/actions";
-import { isStandaloneMode } from "state/navigation/selectors";
 import { settingsClientValuesSet } from "state/settings/actions";
 import LocalStorageBackend from "ui/storage/LocalStorageBackend";
 import { Browser } from "ui/browser";
@@ -24,14 +23,14 @@ import { now } from "util/misc";
 type Props = ConnectedProps<typeof connector>;
 
 function Storage({
-    standalone, home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate,
-    namingNameLoaded, disconnectedFromHome, settingsClientValuesSet, homeInvisibleUsersLoaded
+    home, homeRestore, homeOwnerSet, cartesSet, browserApiSet, connectionsSet, namingNamesPopulate, namingNameLoaded,
+    disconnectedFromHome, settingsClientValuesSet, homeInvisibleUsersLoaded
 }: Props) {
     const initiated = useRef<boolean>(false);
 
     useEffect(() => {
         window.addEventListener("message", messageReceived);
-        if (standalone && !initiated.current) {
+        if (!initiated.current) {
             initiated.current = true;
             Browser.postMessage(loadDataMessage());
         }
@@ -117,12 +116,11 @@ function Storage({
         }
     };
 
-    return standalone ? <LocalStorageBackend/> : null;
+    return <LocalStorageBackend/>;
 }
 
 const connector = connect(
     (state: ClientState) => ({
-        standalone: isStandaloneMode(state),
         home: getHomeConnectionData(state)
     }),
     {

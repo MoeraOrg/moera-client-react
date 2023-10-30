@@ -11,10 +11,6 @@ import {
 import { isAtNode } from "state/node/selectors";
 import { ClientState } from "state/state";
 
-export function isStandaloneMode(state: ClientState): boolean {
-    return state.navigation.standalone;
-}
-
 export function isAtTimelinePage(state: ClientState): boolean {
     return isAtNode(state) && state.navigation.page === PAGE_TIMELINE;
 }

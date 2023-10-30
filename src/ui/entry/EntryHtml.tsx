@@ -8,7 +8,6 @@ import { ClientState } from "state/state";
 import store from "state/store";
 import { getPostingBodyFontMagnitude } from "state/settings/selectors";
 import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
-import { isStandaloneMode } from "state/navigation/selectors";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
@@ -29,8 +28,10 @@ type Props = {
     onClick?: (event: React.MouseEvent) => void;
 } & ConnectedProps<typeof connector>;
 
-function EntryHtml({className, postingId, commentId, html, nodeName, media, onClick, standalone, fontMagnitude,
-                    initFromLocation, goToLocation, newLocation}: Props) {
+function EntryHtml({
+    className, postingId, commentId, html, nodeName, media, onClick, fontMagnitude, initFromLocation, goToLocation,
+    newLocation
+}: Props) {
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
@@ -129,7 +130,7 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
     useEffect(() => {
         const root = dom.current;
 
-        if (!standalone || root == null) {
+        if (root == null) {
             return;
         }
 
@@ -156,7 +157,6 @@ function EntryHtml({className, postingId, commentId, html, nodeName, media, onCl
 
 const connector = connect(
     (state: ClientState) => ({
-        standalone: isStandaloneMode(state),
         fontMagnitude: getPostingBodyFontMagnitude(state)
     }),
     { initFromLocation, goToLocation, newLocation }

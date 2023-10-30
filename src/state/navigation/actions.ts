@@ -12,15 +12,6 @@ import {
 } from "state/navigation/pages";
 import { ActionWithPayload } from "state/action-types";
 
-export const INIT_STORAGE = "INIT_STORAGE";
-export type InitStorageAction = ActionWithPayload<typeof INIT_STORAGE, {
-    standalone: boolean;
-}>;
-export const initStorage = (standalone: boolean): InitStorageAction => ({
-    type: INIT_STORAGE,
-    payload: {standalone}
-});
-
 export const INIT_FROM_NODE_LOCATION = "INIT_FROM_NODE_LOCATION";
 export type InitFromNodeLocationAction = ActionWithPayload<typeof INIT_FROM_NODE_LOCATION, {
     nodeName: string;
@@ -224,8 +215,7 @@ export const bodyScrollUpdate = (): BodyScrollUpdateAction => ({
 });
 
 export type NavigationAnyAction =
-    InitStorageAction
-    | InitFromNodeLocationAction
+    InitFromNodeLocationAction
     | InitFromLocationAction
     | WakeUpAction
     | GoToPageAnyAction

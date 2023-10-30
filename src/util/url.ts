@@ -68,12 +68,12 @@ export function nodeUrlToEvents(url: string | null): string | null {
     return url != null ? toWsUrl(normalizeUrl(url) + "/api/events") : null;
 }
 
-export function redirectUrl(standalone: boolean, redirectPage: string, nodeName: string | null,
+export function redirectUrl(wrapped: boolean, redirectPage: string, nodeName: string | null,
                             nodeRootPage: string | null, location: string, trackingId?: string | null): string {
     if (nodeRootPage && !trackingId) {
-        return standalone ? Browser.passedLocation(nodeRootPage + location) : nodeRootPage + location;
+        return wrapped ? Browser.passedLocation(nodeRootPage + location) : nodeRootPage + location;
     }
-    const client = standalone ? Browser.getRootLocation() : null;
+    const client = wrapped ? Browser.getRootLocation() : null;
     return urlWithParameters(redirectPage + "/gotoname",
         {client, name: nodeName, location: location, trackingId});
 }

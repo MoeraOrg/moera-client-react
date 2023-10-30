@@ -115,14 +115,6 @@ export class Browser {
         return rootUrl(protocol, host);
     }
 
-    static getDocumentLocation(): DocumentLocation {
-        const {pathname, search, hash} = window.location;
-        const rootLocation = Browser.getRootLocation();
-        const header = document.body.dataset.xMoera ?? null;
-
-        return this.getLocation(rootLocation, pathname, search, hash, header);
-    }
-
     static getLocation(rootLocation: string, path: string | null | undefined, query: string | null | undefined,
                        hash: string | null | undefined, header: string | null): DocumentLocation {
         if (header) {

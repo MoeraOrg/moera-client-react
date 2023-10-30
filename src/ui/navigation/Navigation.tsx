@@ -4,7 +4,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ClientState } from "state/state";
 import { dialogClosed, goToLocation, initFromLocation, swipeRefreshUpdate } from "state/navigation/actions";
 import { getInstantCount } from "state/feeds/selectors";
-import { isStandaloneMode } from "state/navigation/selectors";
 import { getNodeRootLocation, getNodeRootPage } from "state/node/selectors";
 import { closeMessageBox } from "state/messagebox/actions";
 import { closeConfirmBox } from "state/confirmbox/actions";
@@ -27,14 +26,14 @@ class Navigation extends React.PureComponent<Props> {
     }
 
     componentDidUpdate(prevProps: Readonly<Props>) {
-        const {standalone, rootPage, location, title, update, locked, count, swipeRefreshUpdate} = this.props;
+        const {rootPage, location, title, update, locked, count, swipeRefreshUpdate} = this.props;
 
         if (!locked
             && (rootPage !== this.#rootPage || location !== this.#location)
             && rootPage != null && location != null) {
 
-            const data = !standalone ? {location} : {location: rootPage + location};
-            const url = !standalone ? rootPage + location : Browser.passedLocation(rootPage + location);
+            const data = {location: rootPage + location};
+            const url = Browser.passedLocation(rootPage + location);
             if (update) {
                 window.history.pushState(data, "", url);
             } else {
@@ -58,18 +57,14 @@ class Navigation extends React.PureComponent<Props> {
     }
 
     popState = (event: PopStateEvent) => {
-        const {standalone, rootLocation, initFromLocation, goToLocation} = this.props;
+        const {rootLocation, initFromLocation, goToLocation} = this.props;
 
-        if (!standalone) {
-            goToLocation(window.location.pathname, window.location.search, window.location.hash);
+        const {rootLocation: root, path = null, query = null, hash = null} = Browser.getDocumentPassedLocation();
+        if (root === rootLocation) {
+            goToLocation(path, query, hash);
         } else {
-            const {rootLocation: root, path = null, query = null, hash = null} = Browser.getDocumentPassedLocation();
-            if (root === rootLocation) {
-                goToLocation(path, query, hash);
-            } else {
-                if (root != null) {
-                    initFromLocation(root, path, query, hash);
-                }
+            if (root != null) {
+                initFromLocation(root, path, query, hash);
             }
         }
         event.preventDefault();
@@ -141,7 +136,6 @@ class Navigation extends React.PureComponent<Props> {
 
 const connector = connect(
     (state: ClientState) => ({
-        standalone: isStandaloneMode(state),
         rootLocation: getNodeRootLocation(state),
         rootPage: getNodeRootPage(state),
         location: state.navigation.location,
