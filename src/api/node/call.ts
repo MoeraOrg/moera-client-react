@@ -39,6 +39,7 @@ import { xhrFetch } from "api/node/xhr";
 import { ProgressHandler } from "api/fetcher";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
+import { Storage } from "storage";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
 import { cartesSet } from "state/cartes/actions";
@@ -247,7 +248,7 @@ function apiUrl(rootApi: string, location: string, method: HttpMethod): string {
 function* cartesRenew() {
     try {
         const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":", null, ["node-name-not-set"]);
-        Browser.storeCartesData(cartesIp ?? null, cartes);
+        Storage.storeCartesData(cartesIp ?? null, cartes);
         yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()));
     } catch (e) {
         if (e instanceof NodeApiError) {

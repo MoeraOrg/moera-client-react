@@ -6,6 +6,7 @@ import 'react-widgets/styles.css';
 import 'react-datepicker/dist/react-datepicker.min.css';
 
 import "i18n";
+import { Storage } from "storage";
 import store from "state/store";
 import { initFromLocation } from "state/navigation/actions";
 import initIconLibrary from "./icons";
@@ -29,5 +30,6 @@ ReactDOM.render(
     document.getElementById("app-root")
 );
 sendInitAction();
+Storage.loadData();
 
 serviceWorker.unregister();

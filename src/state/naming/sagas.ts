@@ -2,6 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
 
 import { Naming, NodeName } from "api";
+import { Storage } from "storage";
 import { getComments, getDetailedPosting } from "state/detailedposting/selectors";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
@@ -23,7 +24,6 @@ import { getReactionsDialogItems } from "state/reactionsdialog/selectors";
 import { executor } from "state/executor";
 import { ClientState } from "state/state";
 import { namingInitialized } from "state/init-selectors";
-import { Browser } from "ui/browser";
 import { now } from "util/misc";
 
 const NAME_USAGE_UPDATE_PERIOD = 60;
@@ -70,7 +70,7 @@ export function* getNameDetails(nodeName: string, includeSimilar: boolean = fals
     const details = yield* select(state => getNamingNameDetails(state, nodeName));
     if (details.loaded) {
         if (details.nodeUri != null && now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
-            Browser.storeName(nodeName, details.nodeUri, details.updated);
+            Storage.storeName(nodeName, details.nodeUri, details.updated);
             yield* put(namingNamesUsed([nodeName]));
         }
         return details;
@@ -95,7 +95,7 @@ function* fetchName(nodeName: string, includeSimilar: boolean): NameInfoGenerato
                 }
             }
             if (nodeUri) {
-                Browser.storeName(nodeNameFound, nodeUri, now());
+                Storage.storeName(nodeNameFound, nodeUri, now());
                 yield* put(namingNameLoaded(nodeNameFound, nodeUri, now()));
             }
         }

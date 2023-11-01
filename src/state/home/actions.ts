@@ -2,7 +2,7 @@ import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
 import { AvatarImage, AvatarInfo, BlockedUserInfo, CarteInfo, FriendGroupInfo } from "api";
-import { RootInfo } from "api/addon/api-types";
+import { RootInfo } from "storage";
 
 export const CONNECT_TO_HOME = "CONNECT_TO_HOME";
 export type ConnectToHomeAction = ActionWithPayload<typeof CONNECT_TO_HOME, {
@@ -67,7 +67,6 @@ export const disconnectedFromHome = (location: string, login: string | null): Di
 
 export const HOME_RESTORE = "HOME_RESTORE";
 export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
-    addonApiVersion: number;
     location: string;
     login: string | null;
     token: string | null;
@@ -76,11 +75,11 @@ export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
     cartes: CarteInfo[];
     roots: RootInfo[] | null;
 }>;
-export const homeRestore = (addonApiVersion: number, location: string, login: string | null, token: string | null,
-                            permissions: string[], cartesIp: string | null, cartes: CarteInfo[],
+export const homeRestore = (location: string, login: string | null, token: string | null, permissions: string[],
+                            cartesIp: string | null, cartes: CarteInfo[],
                             roots: RootInfo[] | null): HomeRestoreAction => ({
     type: HOME_RESTORE,
-    payload: {addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots}
+    payload: {location, login, token, permissions, cartesIp, cartes, roots}
 });
 
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";
@@ -110,15 +109,6 @@ export type HomeOwnerVerifiedAction = ActionWithPayload<typeof HOME_OWNER_VERIFI
 export const homeOwnerVerified = (name: string, correct: boolean): HomeOwnerVerifiedAction => ({
     type: HOME_OWNER_VERIFIED,
     payload: {name, correct}
-});
-
-export const BROWSER_API_SET = "BROWSER_API_SET";
-export type BrowserApiSetAction = ActionWithPayload<typeof BROWSER_API_SET, {
-    version: number;
-}>;
-export const browserApiSet = (version: number): BrowserApiSetAction => ({
-    type: BROWSER_API_SET,
-    payload: {version}
 });
 
 export const CONNECTIONS_SET = "CONNECTIONS_SET";
@@ -193,7 +183,6 @@ export type HomeAnyAction =
     | HomeOwnerVerifyAction
     | HomeOwnerSetAction
     | HomeOwnerVerifiedAction
-    | BrowserApiSetAction
     | ConnectionsSetAction
     | HomeAvatarsLoadAction
     | HomeAvatarsLoadedAction

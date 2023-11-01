@@ -1,14 +1,4 @@
 import * as URI from 'uri-js';
-
-import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from "api";
-import {
-    AddonMessage,
-    deleteDataMessage,
-    storeDataMessage,
-    StoredData,
-    storeNameMessage,
-    switchDataMessage
-} from "api/addon/api-types";
 import { rootUrl } from "util/url";
 import { randomId } from "util/misc";
 
@@ -179,55 +169,6 @@ export class Browser {
 
     static passedLocation(location: string): string {
         return this.getRootLocation() + "/?href=" + encodeURIComponent(location);
-    }
-
-    static postMessage(message: AddonMessage): void {
-        window.postMessage(message, window.location.href);
-    }
-
-    static storeData(data: StoredData): void {
-        this.postMessage(storeDataMessage({
-            ...data,
-            clientId: this.clientId
-        }));
-    }
-
-    static storeConnectionData(location: string, nodeName: string | null, fullName: string | null,
-                               avatar: AvatarImage | null, login: string | null, token: string | null,
-                               permissions: string[] | null): void {
-        if (window.Android) {
-            window.Android.connectedToHome(location + "/moera", token, nodeName);
-        }
-        this.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
-    }
-
-    static storeCartesData(cartesIp: string | null, cartes: CarteInfo[] | null): void {
-        this.storeData({cartesIp, cartes});
-    }
-
-    static storeSettings(settings: Map<string, string | null>): void {
-        const data: [string, string | null][] = [];
-        settings.forEach((value, name) => data.push([name.substring(CLIENT_SETTINGS_PREFIX.length), value]));
-        this.storeData({settings: data});
-    }
-
-    static storeInvisibleUsers(checksum: number, blockedUsers: BlockedUserInfo[]): void {
-        this.storeData({invisibleUsers: {
-            checksum,
-            blockedUsers: blockedUsers.map(bu => [bu.id, bu.nodeName])
-        }});
-    }
-
-    static deleteData(location: string): void {
-        this.postMessage(deleteDataMessage(location));
-    }
-
-    static switchData(location: string): void {
-        this.postMessage(switchDataMessage(location));
-    }
-
-    static storeName(name: string, nodeUri: string, updated: number) {
-        this.postMessage(storeNameMessage(name, nodeUri, updated));
     }
 
 }

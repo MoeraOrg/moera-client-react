@@ -3,11 +3,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
+import { Storage } from "storage";
 import { ClientState } from "state/state";
 import { confirmBox } from "state/confirmbox/actions";
 import { disconnectFromHome } from "state/home/actions";
 import { getHomeRootLocation } from "state/home/selectors";
-import { Browser } from "ui/browser";
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -18,7 +18,7 @@ function DisconnectButton({location, login, confirmBox, disconnectFromHome}: Pro
         if (location == null || login == null) {
             return;
         }
-        Browser.deleteData(location);
+        Storage.deleteData(location);
         disconnectFromHome(location, login);
     };
 

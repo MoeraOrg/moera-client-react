@@ -13,7 +13,6 @@ import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import {
-    BROWSER_API_SET,
     CONNECT_TO_HOME,
     CONNECTED_TO_HOME,
     CONNECTION_TO_HOME_FAILED,
@@ -60,9 +59,8 @@ const emptyConnection = {
     }
 };
 
-const initialState = {
+const initialState: HomeState = {
     ...cloneDeep(emptyConnection),
-    addonApiVersion: 1,
     roots: []
 };
 
@@ -137,12 +135,6 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 };
             }
             return state;
-
-        case BROWSER_API_SET:
-            return {
-                ...state,
-                addonApiVersion: action.payload.version
-            };
 
         case CONNECTIONS_SET:
             return {

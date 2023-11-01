@@ -4,7 +4,6 @@ import { connect, ConnectedProps } from 'react-redux';
 import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
 import { getFeedWidth } from "state/settings/selectors";
-import Storage from "ui/storage/Storage";
 import HomeEvents from "ui/events/HomeEvents";
 import NodeEvents from "ui/events/NodeEvents";
 import ReceiverEvents from "ui/events/ReceiverEvents";
@@ -46,7 +45,6 @@ type Props = ConnectedProps<typeof connector>;
 const App = ({atNode, feedWidth}: Props) => (
     // FIXME React.CSSProperties does not include CSS variables
     <div style={{"--feed-width": feedWidth + "px"} as any}>
-        <Storage/>
         <HomeEvents/>
         <NodeEvents/>
         <ReceiverEvents/>

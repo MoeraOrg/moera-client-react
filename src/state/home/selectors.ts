@@ -72,7 +72,6 @@ export function getHomeInvisibleUsers(state: ClientState): BlockedUserInfo[] {
 }
 
 export interface HomeConnectionData {
-    addonApiVersion: number;
     location: string | null;
     login: string | null;
     token: string | null;
@@ -81,16 +80,11 @@ export interface HomeConnectionData {
 
 export function getHomeConnectionData(state: ClientState): HomeConnectionData {
     return {
-        addonApiVersion: getAddonApiVersion(state),
         location: getHomeRootLocation(state),
         login: state.home.login,
         token: getHomeToken(state),
         permissions: getHomePermissions(state)
     }
-}
-
-export function getAddonApiVersion(state: ClientState): number {
-    return state.home.addonApiVersion ?? 1;
 }
 
 export function hasInactiveConnections(state: ClientState): boolean {

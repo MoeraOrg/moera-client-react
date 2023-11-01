@@ -2,13 +2,13 @@ import { delay, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { NodeApiError, VerboseError } from "api";
+import { Storage } from "storage";
 import { ERROR_AUTH_INVALID, ERROR_THROWN, errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
 import { disconnectFromHome } from "state/home/actions";
 import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
-import { Browser } from "ui/browser";
 
 export default [
     executor(ERROR_THROWN, "", errorSaga),
@@ -49,7 +49,7 @@ function* errorAuthInvalidSaga() {
         login: state.home.login
     }));
     if (location != null) {
-        Browser.deleteData(location);
+        Storage.deleteData(location);
         yield* put(disconnectFromHome(location, login));
         yield* put(messageBox(i18n.t("disconnected-from-home"), openConnectDialog()));
     }

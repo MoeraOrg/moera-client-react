@@ -1,5 +1,5 @@
 import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
-import { RootInfo } from "api/addon/api-types";
+import { RootInfo } from "storage";
 
 export interface HomeState {
     connecting: boolean;
@@ -21,7 +21,6 @@ export interface HomeState {
         loaded: boolean;
         avatars: AvatarInfo[];
     };
-    addonApiVersion: number | null;
     roots: RootInfo[];
     friendGroups: FriendGroupInfo[];
     invisibleUsers: {

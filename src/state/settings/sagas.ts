@@ -11,6 +11,8 @@ import {
     NodeApiError,
     SettingInfo
 } from "api";
+import { Storage } from "storage";
+import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import { introduced } from "state/init-selectors";
 import {
@@ -71,7 +73,6 @@ import { flashBox } from "state/flashbox/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { Browser } from "ui/browser";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
-import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { now } from "util/misc";
 
 export default [
@@ -123,7 +124,7 @@ function isDeviceSetting(meta: Map<string, ClientSettingMetaInfo>, name: string)
 }
 
 function* storeSettings() {
-    Browser.storeSettings(yield* select(getSettingsClient));
+    Storage.storeSettings(yield* select(getSettingsClient));
 }
 
 function* settingsClientValuesLoadSaga() {

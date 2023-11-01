@@ -1,8 +1,9 @@
 import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
+import { CarteSet, Naming, Node, NodeApiError, NodeName, selectApi } from "api";
+import { Storage } from "storage";
 import { messageBox } from "state/messagebox/actions";
-import { normalizeUrl } from "util/url";
 import {
     CONNECT_TO_HOME,
     connectedToHome,
@@ -12,13 +13,12 @@ import {
     homeOwnerSet,
     homeOwnerVerified
 } from "state/home/actions";
-import { CarteSet, Naming, Node, NodeApiError, NodeName, selectApi } from "api";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { namingInitialized } from "state/init-selectors";
-import { Browser } from "ui/browser";
+import { normalizeUrl } from "util/url";
 import { now } from "util/misc";
 
 export default [
@@ -81,8 +81,8 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         yield* call(connectToHomeFailure, action, "Node URL not found");
         return;
     }
-    Browser.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
-    Browser.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
+    Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
+    Storage.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
     const homeLocation = yield* select(getHomeRootLocation);
     yield* put(connectedToHome(nodeUrl, login, info.token, info.permissions, cartesData.cartesIp ?? null,
         cartesData.cartes, null, cartesData.createdAt - now(), homeLocation != null && nodeUrl !== homeLocation));
@@ -95,7 +95,7 @@ function* verifyHomeOwnerSaga() {
 
         const {location, login, token, permissions} = yield* select(getHomeConnectionData);
         if (location != null) {
-            Browser.storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions);
+            Storage.storeConnectionData(location, nodeName, fullName, avatar, login, token, permissions);
         }
 
         if (nodeName == null) {

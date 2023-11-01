@@ -1,12 +1,7 @@
 import { Action } from 'redux';
 
 import { ActionWithPayload } from "state/action-types";
-
-export interface NameDetails {
-    name: string;
-    nodeUri: string;
-    updated: number;
-}
+import { NameDetails } from "storage";
 
 export const NAMING_NAMES_USED = "NAMING_NAMES_USED";
 export type NamingNamesUsedAction = ActionWithPayload<typeof NAMING_NAMES_USED, {

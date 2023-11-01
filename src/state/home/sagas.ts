@@ -1,9 +1,9 @@
 import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
+import { Storage } from "storage";
 import { restoreConnectDialog } from "state/connectdialog/actions";
 import {
-    browserApiSet,
     connectedToHome,
     disconnectFromHome,
     HOME_AVATARS_LOAD,
@@ -21,7 +21,6 @@ import { errorThrown } from "state/error/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import { getHomeInvisibleUsersChecksum, getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
-import { Browser } from "ui/browser";
 import { normalizeUrl } from "util/url";
 import { now } from "util/misc";
 
@@ -33,11 +32,8 @@ export default [
 ];
 
 function* homeRestoreSaga(action: HomeRestoreAction) {
-    let {addonApiVersion, location, login, token, permissions, cartesIp, cartes, roots} = action.payload;
+    let {location, login, token, permissions, cartesIp, cartes, roots} = action.payload;
     let createdAt = now();
-
-    addonApiVersion = addonApiVersion ?? 1;
-    yield* put(browserApiSet(addonApiVersion));
 
     if (token) {
         yield* put(restoreConnectDialog(location, login));
@@ -47,7 +43,7 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
                 cartesIp = data.cartesIp ?? null;
                 cartes = data.cartes;
                 createdAt = data.createdAt;
-                Browser.storeCartesData(cartesIp, cartes);
+                Storage.storeCartesData(cartesIp, cartes);
             } catch (e) {
                 yield* put(errorThrown(e));
             }
@@ -91,7 +87,7 @@ function* homeInvisibleUsersLoadSaga() {
             strict: true
         });
         yield* put(homeInvisibleUsersLoaded(checksums.visibility, blockedUsers));
-        Browser.storeInvisibleUsers(checksums.visibility, blockedUsers);
+        Storage.storeInvisibleUsers(checksums.visibility, blockedUsers);
     } catch (e) {
         yield* put(errorThrown(e));
     }

@@ -3,13 +3,13 @@ import { connect, ConnectedProps } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
+import { Storage } from "storage";
 import { ClientState } from "state/state";
 import { disconnectFromHome } from "state/home/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
-import { Browser } from "ui/browser";
 import { Button } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
@@ -35,19 +35,19 @@ function Connections({
     };
 
     const onItemClick = (location: string) => () => {
-        Browser.switchData(location);
+        Storage.switchData(location);
         hide();
     };
 
     const onDisconnect = (location: string) => () => {
-        Browser.deleteData(location);
+        Storage.deleteData(location);
     };
 
     const onConfirmed = () => {
         if (location == null || login == null) {
             return;
         }
-        Browser.deleteData(location);
+        Storage.deleteData(location);
         disconnectFromHome(location, login);
     };
 
