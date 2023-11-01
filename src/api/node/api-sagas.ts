@@ -14,7 +14,7 @@ export function* searchActivityReactions(
 
     const location = "/activity/reactions/search";
     return yield* callApi({
-        nodeName, method: "GET", location, body: filter, auth, schema: NodeApiSchema.ActivityReactionInfoArray,
+        nodeName, method: "POST", location, body: filter, auth, schema: NodeApiSchema.ActivityReactionInfoArray,
         errorFilter
     });
 }
@@ -1684,7 +1684,7 @@ export function* searchSubscriptions(
 
     const location = "/people/subscriptions/search";
     return yield* callApi({
-        nodeName, method: "GET", location, body: filter, auth, schema: NodeApiSchema.SubscriptionInfoArray,
+        nodeName, method: "POST", location, body: filter, auth, schema: NodeApiSchema.SubscriptionInfoArray,
         errorFilter
     });
 }

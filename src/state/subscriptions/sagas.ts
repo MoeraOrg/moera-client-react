@@ -30,7 +30,7 @@ export function* fillSubscriptions(stories: StoryInfo[]) {
 
     const remotePostings = postings.map(t => ({nodeName: t.nodeName!, postingId: t.postingId!}));
     const subscriptions = yield* call(Node.searchSubscriptions, ":",
-        {type: "posting-comments" as const, remotePostings});
+        {type: "posting-comments" as const, postings: remotePostings});
     const subscriptionMap = new Map(subscriptions.map(sr => [`${sr.remoteNodeName} ${sr.remotePostingId}`, sr]));
 
     for (const t of postings) {
@@ -57,7 +57,7 @@ export function* fillSubscription(posting: PostingInfo) {
     }
     const remotePostings = [{nodeName, postingId}];
     const subscriptions = yield* call(Node.searchSubscriptions, ":",
-        {type: "posting-comments" as const, remotePostings});
+        {type: "posting-comments" as const, postings: remotePostings});
     for (const subscription of subscriptions) {
         yield* put(postingSubscriptionSet(posting.id, "posting-comments", subscription.id))
     }
