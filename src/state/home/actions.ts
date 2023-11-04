@@ -65,21 +65,32 @@ export const disconnectedFromHome = (location: string, login: string | null): Di
     payload: {location, login}
 });
 
-export const HOME_RESTORE = "HOME_RESTORE";
-export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
+interface HomeData {
     location: string;
     login: string | null;
     token: string | null;
+    name: string | null;
+    fullName: string | null;
+    avatar: AvatarImage | null;
     permissions: string[];
     cartesIp: string | null;
     cartes: CarteInfo[] | null;
     roots: RootInfo[] | null;
+}
+
+export const HOME_RESTORE = "HOME_RESTORE";
+export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
+    data: HomeData;
 }>;
-export const homeRestore = (location: string, login: string | null, token: string | null, permissions: string[],
-                            cartesIp: string | null, cartes: CarteInfo[] | null,
-                            roots: RootInfo[] | null): HomeRestoreAction => ({
+export const homeRestore = (data: HomeData): HomeRestoreAction => ({
     type: HOME_RESTORE,
-    payload: {location, login, token, permissions, cartesIp, cartes, roots}
+    payload: {data}
+});
+
+export const HOME_INITIALIZED = "HOME_INITIALIZED";
+export type HomeInitializedAction = Action<typeof HOME_INITIALIZED>;
+export const homeInitialized = (): HomeInitializedAction => ({
+    type: HOME_INITIALIZED
 });
 
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";
@@ -180,6 +191,7 @@ export type HomeAnyAction =
     | DisconnectFromHomeAction
     | DisconnectedFromHomeAction
     | HomeRestoreAction
+    | HomeInitializedAction
     | HomeOwnerVerifyAction
     | HomeOwnerSetAction
     | HomeOwnerVerifiedAction

@@ -24,7 +24,8 @@ import {
     HOME_FRIEND_GROUPS_LOADED,
     HOME_INVISIBLE_USERS_LOADED,
     HOME_OWNER_SET,
-    HOME_OWNER_VERIFIED
+    HOME_OWNER_VERIFIED,
+    HOME_RESTORE
 } from "state/home/actions";
 import { FRIEND_GROUP_ADDED } from "state/people/actions";
 import { PROFILE_AVATAR_CREATED, PROFILE_AVATAR_DELETED } from "state/profile/actions";
@@ -109,6 +110,29 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 ...state,
                 ...cloneDeep(emptyConnection)
             };
+
+        case HOME_RESTORE: {
+            const {location, login, name, roots} = action.payload.data;
+            let root = location.toLowerCase();
+            return {
+                ...state,
+                connecting: false,
+                root: {
+                    location: root,
+                    page: root + "/moera",
+                    api: root + "/moera/api",
+                    events: toWsUrl(root + "/moera/api/events"),
+                },
+                login,
+                owner: {
+                    ...state.owner,
+                    name,
+                    verified: false,
+                    correct: false
+                },
+                roots: roots ?? state.roots
+            };
+        }
 
         case HOME_OWNER_SET:
             return {

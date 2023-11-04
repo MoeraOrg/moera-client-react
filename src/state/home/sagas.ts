@@ -31,7 +31,7 @@ export default [
 ];
 
 function* homeRestoreSaga(action: HomeRestoreAction) {
-    let {location, login, token, permissions, cartesIp, cartes, roots} = action.payload;
+    let {location, login, token, permissions, cartesIp, cartes, roots} = action.payload.data;
     let createdAt = now();
 
     if (token) {

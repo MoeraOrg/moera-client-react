@@ -4,8 +4,8 @@ import { cartesSet } from "state/cartes/actions";
 import {
     connectionsSet,
     disconnectedFromHome,
+    homeInitialized,
     homeInvisibleUsersLoaded,
-    homeOwnerSet,
     homeRestore
 } from "state/home/actions";
 import { getHomeConnectionData } from "state/home/selectors";
@@ -44,14 +44,23 @@ function loadedData(data: Access.StoredData) {
         location, nodeName, fullName = null, avatar = null, login = null, token = null, permissions
     } = data.home || {};
     const home = getHomeConnectionData(store.getState())
-    if (location != null
-        && (fullName != null || avatar != null || login != null || token != null || permissions != null)
-        && (location !== home.location || login !== home.login || token !== home.token)) {
-        store.dispatch(homeRestore(location, login, token, permissions ?? [], data.cartesIp ?? null, data.cartes ?? [],
-            data.roots ?? []));
-        if (nodeName) {
-            store.dispatch(homeOwnerSet(nodeName, null, fullName, avatar));
-        }
+    if (
+        location != null
+            && (fullName != null || avatar != null || login != null || token != null || permissions != null)
+            && (location !== home.location || login !== home.login || token !== home.token)
+    ) {
+        store.dispatch(homeRestore({
+            location,
+            login,
+            token,
+            name: nodeName ?? null,
+            fullName,
+            avatar,
+            permissions: permissions ?? [],
+            cartesIp: data.cartesIp ?? null,
+            cartes: data.cartes ?? [],
+            roots: data.roots ?? []
+        }));
     } else {
         store.dispatch(cartesSet(data.cartesIp ?? null, data.cartes ?? [], 0));
         if (token == null && location != null) {
@@ -62,6 +71,7 @@ function loadedData(data: Access.StoredData) {
 
 export function loadData(): void {
     loadedData(Access.loadData());
+    store.dispatch(homeInitialized());
 }
 
 export function storeConnectionData(location: string, nodeName: string | null, fullName: string | null,
