@@ -1,7 +1,8 @@
 import { Action } from 'redux';
 
 import {
-    Page, PAGE_COMPLAINS,
+    Page,
+    PAGE_COMPLAINS,
     PAGE_COMPOSE,
     PAGE_DETAILED_POSTING,
     PAGE_NEWS,
