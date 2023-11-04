@@ -12,12 +12,22 @@ export const cartesLoad = (): CartesLoadAction => ({
 export const CARTES_SET = "CARTES_SET";
 export type CartesSetAction = ActionWithPayload<typeof CARTES_SET, {
     cartesIp: string | null;
-    cartes: CarteInfo[];
-    clockOffset: number;
+    cartes: CarteInfo[] | null;
+    clockOffset: number | null;
 }>;
-export const cartesSet = (cartesIp: string | null, cartes: CarteInfo[], clockOffset: number): CartesSetAction => ({
+export const cartesSet = (
+    cartesIp: string | null,
+    cartes: CarteInfo[] | null,
+    clockOffset: number | null
+): CartesSetAction => ({
     type: CARTES_SET,
     payload: {cartesIp, cartes, clockOffset}
+});
+
+export const CARTES_LOADED = "CARTES_LOADED";
+export type CartesLoadedAction = Action<typeof CARTES_LOADED>;
+export const cartesLoaded = (): CartesLoadedAction => ({
+    type: CARTES_LOADED
 });
 
 export const CARTES_PURGE_EXPIRED = "CARTES_PURGE_EXPIRED";
@@ -35,5 +45,6 @@ export const clockOffsetWarn = (): ClockOffsetWarnAction => ({
 export type CartesAnyAction =
     CartesLoadAction
     | CartesSetAction
+    | CartesLoadedAction
     | CartesPurgeExpiredAction
     | ClockOffsetWarnAction;

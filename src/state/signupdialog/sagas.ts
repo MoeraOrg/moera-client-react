@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import PROVIDERS, { Provider } from "providers";
-import { CarteSet, CLIENT_SETTINGS_PREFIX, Naming, Node, NodeApiError, SettingInfo } from "api";
+import { CLIENT_SETTINGS_PREFIX, Naming, Node, NodeApiError, SettingInfo } from "api";
 import { Storage } from "storage";
 import { errorThrown } from "state/error/actions";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
@@ -28,7 +28,6 @@ import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
 import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
-import { now } from "util/misc";
 
 export default [
     executor(SIGN_UP, "", signUpSaga),
@@ -114,22 +113,9 @@ function* signUpSaga(action: SignUpAction) {
             return;
         }
 
-        let cartesData: CarteSet = {
-            cartesIp: null,
-            cartes: [],
-            createdAt: 0
-        };
-        try {
-            cartesData = yield* call(Node.getCartes, rootLocation, null, ["node-name-not-set"], info.token);
-        } catch (e) {
-            yield* put(errorThrown(e));
-        }
-
         Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
-        Storage.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
         const homeLocation = yield* select(getHomeRootLocation);
-        yield* put(connectedToHome(rootLocation, login, info.token, info.permissions, cartesData.cartesIp ?? null,
-            cartesData.cartes, null, cartesData.createdAt - now(),
+        yield* put(connectedToHome(rootLocation, login, info.token, info.permissions, null, null, null, null,
             homeLocation != null && homeLocation !== rootLocation));
     }
 

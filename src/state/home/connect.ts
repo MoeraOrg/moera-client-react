@@ -1,7 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { CarteSet, Naming, Node, NodeApiError, NodeName, selectApi } from "api";
+import { Naming, Node, NodeApiError, NodeName, selectApi } from "api";
 import { Storage } from "storage";
 import { messageBox } from "state/messagebox/actions";
 import {
@@ -19,7 +19,6 @@ import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { namingInitialized } from "state/init-selectors";
 import { normalizeUrl } from "util/url";
-import { now } from "util/misc";
 
 export default [
     executor(CONNECT_TO_HOME, null, connectToHomeSaga),
@@ -65,27 +64,15 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         return;
     }
 
-    let cartesData: CarteSet = {
-        cartesIp: null,
-        cartes: [],
-        createdAt: 0
-    };
-    try {
-        cartesData = yield* call(Node.getCartes, location, null, ["node-name-not-set"], info.token);
-    } catch (e) {
-        yield* put(errorThrown(e));
-    }
-
     const nodeUrl = normalizeUrl((yield* call(selectApi, location)).rootLocation);
     if (nodeUrl == null) {
         yield* call(connectToHomeFailure, action, "Node URL not found");
         return;
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
-    Storage.storeCartesData(cartesData.cartesIp ?? null, cartesData.cartes);
     const homeLocation = yield* select(getHomeRootLocation);
-    yield* put(connectedToHome(nodeUrl, login, info.token, info.permissions, cartesData.cartesIp ?? null,
-        cartesData.cartes, null, cartesData.createdAt - now(), homeLocation != null && nodeUrl !== homeLocation));
+    yield* put(connectedToHome(nodeUrl, login, info.token, info.permissions, null, null, null, null,
+        homeLocation != null && nodeUrl !== homeLocation));
 }
 
 function* verifyHomeOwnerSaga() {

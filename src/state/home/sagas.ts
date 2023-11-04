@@ -21,7 +21,6 @@ import { errorThrown } from "state/error/actions";
 import { getCartesListTtl } from "state/cartes/selectors";
 import { getHomeInvisibleUsersChecksum, getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
-import { normalizeUrl } from "util/url";
 import { now } from "util/misc";
 
 export default [
@@ -38,15 +37,8 @@ function* homeRestoreSaga(action: HomeRestoreAction) {
     if (token) {
         yield* put(restoreConnectDialog(location, login));
         if (getCartesListTtl(cartes) < 5 * 60) {
-            try {
-                const data = yield* call(Node.getCartes, normalizeUrl(location), null, ["node-name-not-set"], token);
-                cartesIp = data.cartesIp ?? null;
-                cartes = data.cartes;
-                createdAt = data.createdAt;
-                Storage.storeCartesData(cartesIp, cartes);
-            } catch (e) {
-                yield* put(errorThrown(e));
-            }
+            cartesIp = null;
+            cartes = null;
         }
         const homeLocation = yield* select(getHomeRootLocation);
         yield* put(connectedToHome(location, login, token, permissions, cartesIp, cartes, roots, createdAt - now(),

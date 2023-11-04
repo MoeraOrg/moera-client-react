@@ -5,7 +5,7 @@ import { NodeApiError, Node } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
-import { CARTES_LOAD, cartesSet, CLOCK_OFFSET_WARN } from "state/cartes/actions";
+import { CARTES_LOAD, cartesLoaded, cartesSet, CLOCK_OFFSET_WARN } from "state/cartes/actions";
 import { messageBox } from "state/messagebox/actions";
 import { now } from "util/misc";
 
@@ -26,6 +26,7 @@ function* cartesLoadSaga() {
             yield* put(errorThrown(e));
         }
     }
+    yield* put(cartesLoaded());
 }
 
 function* clockOffsetWarnSaga() {

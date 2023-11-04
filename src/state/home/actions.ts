@@ -33,14 +33,14 @@ export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, 
     token: string;
     permissions: string[];
     cartesIp: string | null;
-    cartes: CarteInfo[];
+    cartes: CarteInfo[] | null;
     roots: RootInfo[] | null;
-    clockOffset: number;
+    clockOffset: number | null;
     connectionSwitch: boolean;
 }>;
 export const connectedToHome = (location: string, login: string | null, token: string, permissions: string[],
-                                cartesIp: string | null, cartes: CarteInfo[], roots: RootInfo[] | null,
-                                clockOffset: number, connectionSwitch: boolean): ConnectedToHomeAction => ({
+                                cartesIp: string | null, cartes: CarteInfo[] | null, roots: RootInfo[] | null,
+                                clockOffset: number | null, connectionSwitch: boolean): ConnectedToHomeAction => ({
     type: CONNECTED_TO_HOME,
     payload: {location, login, token, permissions, cartesIp, cartes, roots, clockOffset, connectionSwitch}
 });
@@ -72,11 +72,11 @@ export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
     token: string | null;
     permissions: string[];
     cartesIp: string | null;
-    cartes: CarteInfo[];
+    cartes: CarteInfo[] | null;
     roots: RootInfo[] | null;
 }>;
 export const homeRestore = (location: string, login: string | null, token: string | null, permissions: string[],
-                            cartesIp: string | null, cartes: CarteInfo[],
+                            cartesIp: string | null, cartes: CarteInfo[] | null,
                             roots: RootInfo[] | null): HomeRestoreAction => ({
     type: HOME_RESTORE,
     payload: {location, login, token, permissions, cartesIp, cartes, roots}

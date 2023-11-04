@@ -1,5 +1,5 @@
 import { apply, call, put, select } from 'typed-redux-saga';
-import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
+import { CallEffect, PutEffect, SelectEffect, TakeEffect } from 'redux-saga/effects';
 import { ValidateFunction } from 'ajv';
 import i18n from 'i18next';
 
@@ -39,18 +39,16 @@ import { xhrFetch } from "api/node/xhr";
 import { ProgressHandler } from "api/fetcher";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
-import { Storage } from "storage";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
-import { cartesSet } from "state/cartes/actions";
+import { CARTES_LOADED, cartesLoad } from "state/cartes/actions";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
-import { getCartes } from "api/node/api-sagas";
 import { Browser } from "ui/browser";
+import { peek } from "util/saga-effects";
 import { nodeUrlToLocation, normalizeUrl, urlWithParameters } from "util/url";
-import { now } from "util/misc";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "HEAD" | "OPTIONS";
 
@@ -69,7 +67,7 @@ export type CallApiParams<T> = {
     onProgress?: ProgressHandler;
 };
 
-export type CallApiResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect, T>;
+export type CallApiResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect | TakeEffect, T>;
 
 export function* callApi<T>({
     location,
@@ -81,19 +79,21 @@ export function* callApi<T>({
     errorFilter = false,
     onProgress
 }: CallApiParams<T>):  CallApiResult<T> {
-    let api: ApiSelection = {rootLocation: null, rootApi: "", errorTitle: ""};
+    let rootLocation: string | null = null;
+    let rootApi = "";
+    let errorTitle = "";
     try {
-        api = yield* call(selectApi, nodeName);
+        ({rootLocation, rootApi, errorTitle} = yield* call(selectApi, nodeName));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
             e.setQuery(method ?? "", location);
         }
         throw e;
     }
-    const {rootLocation, rootApi, errorTitle} = api;
     if (!rootLocation) {
         throw new NameResolvingError(nodeName);
     }
+
     const exception: CallException =
         (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
     const headers = {
@@ -104,7 +104,14 @@ export function* callApi<T>({
     let cartesRenewed = false;
     const fetcher = onProgress != null ? xhrFetch : retryFetch;
     while (true) {
-        yield* call(authorize, headers, rootLocation, auth);
+        const authSuccess = yield* call(authorize, headers, rootLocation, auth);
+        if (!authSuccess && !cartesRenewed) {
+            yield* put(cartesLoad());
+            yield* peek(CARTES_LOADED);
+            cartesRenewed = true;
+            continue;
+        }
+
         let response: Response;
         try {
             response = yield* call(fetcher, apiUrl(rootApi, location, method), {
@@ -116,6 +123,7 @@ export function* callApi<T>({
         } catch (e) {
             throw exception(e);
         }
+
         let data: any;
         try {
             if (schema === "blob" && response.ok) {
@@ -130,6 +138,7 @@ export function* callApi<T>({
                 throw exception("Server returned empty result");
             }
         }
+
         if (!response.ok) {
             if (!isSchemaValid(NodeApiSchema.Result, data)) {
                 throw exception("Server returned error status");
@@ -143,10 +152,8 @@ export function* callApi<T>({
                 throw new NodeApiError(data.errorCode, data.message);
             }
             if (data.errorCode.startsWith("carte.") && !cartesRenewed) {
-                const error = yield* call(cartesRenew);
-                if (error != null) {
-                    throw exception(error);
-                }
+                yield* put(cartesLoad());
+                yield* peek(CARTES_LOADED);
                 cartesRenewed = true;
                 continue;
             }
@@ -222,19 +229,26 @@ export function* selectApi(nodeName: string | null | undefined): Generator<CallE
     return {rootLocation: root.location, rootApi: root.api, errorTitle};
 }
 
-function* authorize(headers: Partial<Record<string, string>>, rootLocation: string | null, auth: boolean | string) {
+function* authorize(headers: Partial<Record<string, string>>, rootLocation: string | null,
+                    auth: boolean | string): Generator<SelectEffect, boolean> {
     if (auth === false) {
-        return;
+        return true;
     }
     const token = auth === true ? yield* select(state => getToken(state, rootLocation)) : auth;
     if (token != null) {
         headers["Authorization"] = `Bearer token:${token}`;
-    } else {
-        const carte = yield* select(getCurrentAllCarte);
-        if (carte != null) {
-            headers["Authorization"] = `Bearer carte:${carte}`;
-        }
+        return true;
     }
+    const carte = yield* select(getCurrentAllCarte);
+    if (carte != null) {
+        headers["Authorization"] = `Bearer carte:${carte}`;
+        return true;
+    }
+    const connected = yield* select(isConnectedToHome);
+    if (!connected) {
+        return true;
+    }
+    return false;
 }
 
 function apiUrl(rootApi: string, location: string, method: HttpMethod): string {
@@ -243,21 +257,6 @@ function apiUrl(rootApi: string, location: string, method: HttpMethod): string {
     } else {
         return rootApi + location;
     }
-}
-
-function* cartesRenew() {
-    try {
-        const {cartesIp, cartes, createdAt} = yield* call(getCartes, ":", null, ["node-name-not-set"]);
-        Storage.storeCartesData(cartesIp ?? null, cartes);
-        yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()));
-    } catch (e) {
-        if (e instanceof NodeApiError) {
-            yield* put(cartesSet(null, [], 0));
-        } else {
-            return e;
-        }
-    }
-    return null;
 }
 
 function encodeBody(body: null): null;
