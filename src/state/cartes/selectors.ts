@@ -45,10 +45,6 @@ export function getCurrentViewMediaCarte(state: ClientState): string | null {
     );
 }
 
-export function isCartesRunOut(state: ClientState): boolean {
-    return getCurrentAllCarte(state) == null;
-}
-
 export function isCartesInitialized(state: ClientState): boolean {
     return state.cartes.initialized;
 }

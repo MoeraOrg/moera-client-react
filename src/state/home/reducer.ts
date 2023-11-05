@@ -22,6 +22,7 @@ import {
     HOME_AVATARS_LOAD_FAILED,
     HOME_AVATARS_LOADED,
     HOME_FRIEND_GROUPS_LOADED,
+    HOME_INTRODUCED,
     HOME_INVISIBLE_USERS_LOADED,
     HOME_OWNER_SET,
     HOME_OWNER_VERIFIED
@@ -33,6 +34,7 @@ import { HomeState } from "state/home/state";
 import { toWsUrl } from "util/url";
 
 const emptyConnection = {
+    introduced: false,
     connecting: false,
     root: {
         location: null,
@@ -95,6 +97,7 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             let root = location.toLowerCase();
             return {
                 ...state,
+                introduced: false,
                 connecting: false,
                 root: {
                     location: root,
@@ -117,6 +120,12 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             return {
                 ...state,
                 ...cloneDeep(emptyConnection)
+            };
+
+        case HOME_INTRODUCED:
+            return {
+                ...state,
+                introduced: true
             };
 
         case HOME_OWNER_SET:

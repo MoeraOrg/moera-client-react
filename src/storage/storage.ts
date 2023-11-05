@@ -1,17 +1,18 @@
 import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from "api";
 import store from "state/store";
 import { cartesSet } from "state/cartes/actions";
+import { getCartesListTtl } from "state/cartes/selectors";
 import {
     connectedToHome,
     connectionsSet,
     disconnectedFromHome,
+    homeIntroduced,
     homeInvisibleUsersLoaded
 } from "state/home/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNamesPopulate } from "state/naming/actions";
 import { settingsClientValuesSet } from "state/settings/actions";
 import * as Access from "./access"
-import { getCartesListTtl } from "state/cartes/selectors";
 
 function loadedData(data: Access.StoredData) {
     if (!data) {
@@ -74,7 +75,11 @@ function loadedData(data: Access.StoredData) {
 }
 
 export function loadData(): void {
-    loadedData(Access.loadData());
+    const data = Access.loadData();
+    loadedData(data);
+    if (data.home?.location == null) {
+        store.dispatch(homeIntroduced());
+    }
 }
 
 export function storeConnectionData(location: string, nodeName: string | null, fullName: string | null,

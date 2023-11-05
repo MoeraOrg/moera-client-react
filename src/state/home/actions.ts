@@ -68,6 +68,12 @@ export const disconnectedFromHome = (location: string, login: string | null): Di
     payload: {location, login}
 });
 
+export const HOME_INTRODUCED = "HOME_INTRODUCED";
+export type HomeIntroducedAction = Action<typeof HOME_INTRODUCED>;
+export const homeIntroduced = (): HomeIntroducedAction => ({
+    type: HOME_INTRODUCED
+});
+
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";
 export type HomeOwnerVerifyAction = Action<typeof HOME_OWNER_VERIFY>;
 export const homeOwnerVerify = (): HomeOwnerVerifyAction => ({
@@ -165,6 +171,7 @@ export type HomeAnyAction =
     | ConnectedToHomeAction
     | DisconnectFromHomeAction
     | DisconnectedFromHomeAction
+    | HomeIntroducedAction
     | HomeOwnerVerifyAction
     | HomeOwnerSetAction
     | HomeOwnerVerifiedAction

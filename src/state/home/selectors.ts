@@ -6,6 +6,10 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { Browser } from "ui/browser";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
+export function isHomeIntroduced(state: ClientState): boolean {
+    return state.home.introduced;
+}
+
 export function getHomeRootLocation(state: ClientState): string | null {
     return state.home.root.location;
 }

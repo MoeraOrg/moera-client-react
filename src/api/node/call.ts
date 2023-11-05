@@ -39,12 +39,13 @@ import { xhrFetch } from "api/node/xhr";
 import { ProgressHandler } from "api/fetcher";
 import { BodyError } from "api/error";
 import { isSchemaValid } from "api/schema";
+import { ClientState } from "state/state";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
 import { CARTES_LOADED, cartesLoad } from "state/cartes/actions";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
-import { getHomeRootLocation, isConnectedToHome } from "state/home/selectors";
+import { getHomeRootLocation, isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { Browser } from "ui/browser";
 import { peek } from "util/saga-effects";
@@ -234,7 +235,7 @@ function* authorize(headers: Partial<Record<string, string>>, rootLocation: stri
     if (auth === false) {
         return true;
     }
-    const token = auth === true ? yield* select(state => getToken(state, rootLocation)) : auth;
+    const token = auth === true ? yield* select((state: ClientState) => getToken(state, rootLocation)) : auth;
     if (token != null) {
         headers["Authorization"] = `Bearer token:${token}`;
         return true;
@@ -244,7 +245,7 @@ function* authorize(headers: Partial<Record<string, string>>, rootLocation: stri
         headers["Authorization"] = `Bearer carte:${carte}`;
         return true;
     }
-    const connected = yield* select(isConnectedToHome);
+    const connected = yield* select((state: ClientState) => isConnectedToHome(state) && isHomeOwnerNameSet(state));
     if (!connected) {
         return true;
     }

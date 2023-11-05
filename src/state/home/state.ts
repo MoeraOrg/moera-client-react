@@ -2,6 +2,7 @@ import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
 import { RootInfo } from "storage";
 
 export interface HomeState {
+    introduced: boolean;
     connecting: boolean;
     root: {
         location: string | null;
