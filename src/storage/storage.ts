@@ -55,7 +55,7 @@ function loadedData(data: Access.StoredData) {
             store.dispatch(connectedToHome(
                 location,
                 login,
-                token ?? home.token,
+                token,
                 permissions ?? [],
                 nodeName ?? null,
                 fullName,
@@ -69,7 +69,7 @@ function loadedData(data: Access.StoredData) {
     } else {
         store.dispatch(cartesSet(data.cartesIp ?? null, data.cartes ?? [], 0));
         if (location != null && token == null) {
-            store.dispatch(disconnectedFromHome(location, login));
+            store.dispatch(disconnectedFromHome());
         }
     }
 }
@@ -88,7 +88,8 @@ export function storeConnectionData(location: string, nodeName: string | null, f
     if (window.Android) {
         window.Android.connectedToHome(location + "/moera", token, nodeName);
     }
-    Access.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
+    const roots = Access.storeData({home: {location, nodeName, fullName, avatar, login, token, permissions}});
+    store.dispatch(connectionsSet(roots));
 }
 
 export function storeCartesData(cartesIp: string | null, cartes: CarteInfo[] | null): void {

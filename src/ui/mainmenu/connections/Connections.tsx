@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { Storage } from "storage";
 import { ClientState } from "state/state";
-import { disconnectFromHome } from "state/home/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
@@ -19,9 +18,7 @@ type Props = {
     hide: () => void;
 } & ConnectedProps<typeof connector>;
 
-function Connections({
-    hide, location, login, owner, roots, openConnectDialog, openSignUpDialog, confirmBox, disconnectFromHome
-}: Props) {
+function Connections({hide, location, login, owner, roots, openConnectDialog, openSignUpDialog, confirmBox}: Props) {
     const {t} = useTranslation();
 
     const onAddClick = () => {
@@ -48,7 +45,6 @@ function Connections({
             return;
         }
         Storage.deleteData(location);
-        disconnectFromHome(location, login);
     };
 
     const onDisconnectActive = () =>
@@ -95,7 +91,7 @@ const connector = connect(
         owner: state.home.owner,
         roots: state.home.roots
     }),
-    { openConnectDialog, openSignUpDialog, confirmBox, disconnectFromHome }
+    { openConnectDialog, openSignUpDialog, confirmBox }
 );
 
 export default connector(Connections);

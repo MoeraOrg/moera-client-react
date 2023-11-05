@@ -183,7 +183,6 @@ function updateBlocked(state: PeopleState, list: BlockedUserInfo[], append: bool
         });
 
     if (state.loadedGeneral) {
-        console.log(prevBlocked, nextBlocked);
         istate.update("blockedTotal", total => (total ?? 0) - (prevBlocked ? 1 : 0) + (nextBlocked ? 1 : 0));
     }
 

@@ -49,7 +49,7 @@ export function loadData(): StoredData {
     return buildData(homeRoot, clientData, roots, Data.getNames());
 }
 
-export function storeData(data: StoredData): void {
+export function storeData(data: StoredData): Data.RootInfo[] {
     let homeRoot = Data.getStorageItem("currentRoot");
     let roots = Data.getStorageItem("roots") ?? [];
     const location = ObjectPath.get<string | null>(data, "home.location", null);
@@ -63,7 +63,7 @@ export function storeData(data: StoredData): void {
         Data.setStorageItem("roots", null, roots);
     }
     if (!homeRoot) {
-        return;
+        return roots;
     }
 
     let clientData = Data.getStorageItem("clientData", homeRoot);
@@ -76,6 +76,8 @@ export function storeData(data: StoredData): void {
     const storedClientData = {...clientData};
     ObjectPath.del(storedClientData, "home.nodeName");
     Data.setStorageItem("clientData", homeRoot, storedClientData);
+
+    return roots;
 }
 
 export function deleteData(location: string | null): StoredData {

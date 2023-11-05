@@ -22,7 +22,7 @@ import { normalizeUrl } from "util/url";
 
 export default [
     executor(CONNECT_TO_HOME, null, connectToHomeSaga),
-    executor(HOME_OWNER_VERIFY, null, verifyHomeOwnerSaga, namingInitialized)
+    executor(HOME_OWNER_VERIFY, null, homeOwnerVerifySaga)
 ];
 
 function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
@@ -75,7 +75,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         homeLocation != null && nodeUrl !== homeLocation));
 }
 
-function* verifyHomeOwnerSaga() {
+function* homeOwnerVerifySaga() {
     try {
         const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} = yield* call(Node.whoAmI, ":");
         yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar));

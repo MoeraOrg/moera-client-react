@@ -6,12 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { Storage } from "storage";
 import { ClientState } from "state/state";
 import { confirmBox } from "state/confirmbox/actions";
-import { disconnectFromHome } from "state/home/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 
 type Props = ConnectedProps<typeof connector>;
 
-function DisconnectButton({location, login, confirmBox, disconnectFromHome}: Props) {
+function DisconnectButton({location, login, confirmBox}: Props) {
     const {t} = useTranslation();
 
     const onConfirmed = () => {
@@ -19,7 +18,6 @@ function DisconnectButton({location, login, confirmBox, disconnectFromHome}: Pro
             return;
         }
         Storage.deleteData(location);
-        disconnectFromHome(location, login);
     };
 
     const onClick = () => confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger");
@@ -36,7 +34,7 @@ const connector = connect(
         location: getHomeRootLocation(state),
         login: state.home.login
     }),
-    { confirmBox, disconnectFromHome }
+    { confirmBox }
 );
 
 export default connector(DisconnectButton);

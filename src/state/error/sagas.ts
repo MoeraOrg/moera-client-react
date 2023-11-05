@@ -4,7 +4,6 @@ import i18n from 'i18next';
 import { NodeApiError, VerboseError } from "api";
 import { Storage } from "storage";
 import { ERROR_AUTH_INVALID, ERROR_THROWN, errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
-import { disconnectFromHome } from "state/home/actions";
 import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { getHomeRootLocation } from "state/home/selectors";
@@ -44,13 +43,9 @@ function* errorSaga(action: ErrorThrownAction) {
 }
 
 function* errorAuthInvalidSaga() {
-    const {location, login} = yield* select(state => ({
-        location: getHomeRootLocation(state),
-        login: state.home.login
-    }));
+    const location = yield* select(getHomeRootLocation);
     if (location != null) {
         Storage.deleteData(location);
-        yield* put(disconnectFromHome(location, login));
         yield* put(messageBox(i18n.t("disconnected-from-home"), openConnectDialog()));
     }
 }

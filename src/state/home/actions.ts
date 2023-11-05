@@ -48,24 +48,10 @@ export const connectedToHome = (location: string, login: string | null, token: s
     payload: {location, login, token, name, fullName, avatar, permissions, cartesIp, cartes, roots, connectionSwitch}
 });
 
-export const DISCONNECT_FROM_HOME = "DISCONNECT_FROM_HOME";
-export type DisconnectFromHomeAction = ActionWithPayload<typeof DISCONNECT_FROM_HOME, {
-    location: string;
-    login: string | null;
-}>;
-export const disconnectFromHome = (location: string, login: string | null): DisconnectFromHomeAction => ({
-    type: DISCONNECT_FROM_HOME,
-    payload: {location, login}
-});
-
 export const DISCONNECTED_FROM_HOME = "DISCONNECTED_FROM_HOME";
-export type DisconnectedFromHomeAction = ActionWithPayload<typeof DISCONNECTED_FROM_HOME, {
-    location: string;
-    login: string | null;
-}>;
-export const disconnectedFromHome = (location: string, login: string | null): DisconnectedFromHomeAction => ({
-    type: DISCONNECTED_FROM_HOME,
-    payload: {location, login}
+export type DisconnectedFromHomeAction = Action<typeof DISCONNECTED_FROM_HOME>;
+export const disconnectedFromHome = (): DisconnectedFromHomeAction => ({
+    type: DISCONNECTED_FROM_HOME
 });
 
 export const HOME_INTRODUCED = "HOME_INTRODUCED";
@@ -169,7 +155,6 @@ export type HomeAnyAction =
     ConnectToHomeAction
     | ConnectionToHomeFailedAction
     | ConnectedToHomeAction
-    | DisconnectFromHomeAction
     | DisconnectedFromHomeAction
     | HomeIntroducedAction
     | HomeOwnerVerifyAction

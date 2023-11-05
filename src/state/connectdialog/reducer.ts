@@ -6,7 +6,7 @@ import {
     CONNECT_DIALOG_SET_FORM,
     OPEN_CONNECT_DIALOG
 } from "state/connectdialog/actions";
-import { CONNECT_TO_HOME, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { CONNECT_TO_HOME, CONNECTED_TO_HOME } from "state/home/actions";
 import { ConnectDialogState } from "state/connectdialog/state";
 import { ClientAction } from "state/action";
 
@@ -50,13 +50,6 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 location: action.payload.location,
                 login: action.payload.login ?? ""
             }
-
-        case DISCONNECTED_FROM_HOME:
-            return {
-                ...state,
-                location: action.payload.location || initialState.location,
-                login: action.payload.login || initialState.login
-            };
 
         case CONNECT_DIALOG_SET_FORM:
             return {
