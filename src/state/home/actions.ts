@@ -32,17 +32,20 @@ export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, 
     login: string | null;
     token: string;
     permissions: string[];
+    name: string | null;
+    fullName: string | null;
+    avatar: AvatarImage | null;
     cartesIp: string | null;
     cartes: CarteInfo[] | null;
     roots: RootInfo[] | null;
-    clockOffset: number | null;
     connectionSwitch: boolean;
 }>;
 export const connectedToHome = (location: string, login: string | null, token: string, permissions: string[],
+                                name: string | null, fullName: string | null, avatar: AvatarImage | null,
                                 cartesIp: string | null, cartes: CarteInfo[] | null, roots: RootInfo[] | null,
-                                clockOffset: number | null, connectionSwitch: boolean): ConnectedToHomeAction => ({
+                                connectionSwitch: boolean): ConnectedToHomeAction => ({
     type: CONNECTED_TO_HOME,
-    payload: {location, login, token, permissions, cartesIp, cartes, roots, clockOffset, connectionSwitch}
+    payload: {location, login, token, name, fullName, avatar, permissions, cartesIp, cartes, roots, connectionSwitch}
 });
 
 export const DISCONNECT_FROM_HOME = "DISCONNECT_FROM_HOME";
@@ -63,34 +66,6 @@ export type DisconnectedFromHomeAction = ActionWithPayload<typeof DISCONNECTED_F
 export const disconnectedFromHome = (location: string, login: string | null): DisconnectedFromHomeAction => ({
     type: DISCONNECTED_FROM_HOME,
     payload: {location, login}
-});
-
-interface HomeData {
-    location: string;
-    login: string | null;
-    token: string | null;
-    name: string | null;
-    fullName: string | null;
-    avatar: AvatarImage | null;
-    permissions: string[];
-    cartesIp: string | null;
-    cartes: CarteInfo[] | null;
-    roots: RootInfo[] | null;
-}
-
-export const HOME_RESTORE = "HOME_RESTORE";
-export type HomeRestoreAction = ActionWithPayload<typeof HOME_RESTORE, {
-    data: HomeData;
-}>;
-export const homeRestore = (data: HomeData): HomeRestoreAction => ({
-    type: HOME_RESTORE,
-    payload: {data}
-});
-
-export const HOME_INITIALIZED = "HOME_INITIALIZED";
-export type HomeInitializedAction = Action<typeof HOME_INITIALIZED>;
-export const homeInitialized = (): HomeInitializedAction => ({
-    type: HOME_INITIALIZED
 });
 
 export const HOME_OWNER_VERIFY = "HOME_OWNER_VERIFY";
@@ -190,8 +165,6 @@ export type HomeAnyAction =
     | ConnectedToHomeAction
     | DisconnectFromHomeAction
     | DisconnectedFromHomeAction
-    | HomeRestoreAction
-    | HomeInitializedAction
     | HomeOwnerVerifyAction
     | HomeOwnerSetAction
     | HomeOwnerVerifiedAction

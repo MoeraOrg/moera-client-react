@@ -71,7 +71,7 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
     const homeLocation = yield* select(getHomeRootLocation);
-    yield* put(connectedToHome(nodeUrl, login, info.token, info.permissions, null, null, null, null,
+    yield* put(connectedToHome(nodeUrl, login, info.token, info.permissions, null, null, null, null, null, null,
         homeLocation != null && nodeUrl !== homeLocation));
 }
 

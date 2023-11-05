@@ -15,16 +15,6 @@ export const cancelConnectDialog = (): CancelConnectDialogAction => ({
     type: CANCEL_CONNECT_DIALOG
 });
 
-export const RESTORE_CONNECT_DIALOG = "RESTORE_CONNECT_DIALOG";
-export type RestoreConnectDialogAction = ActionWithPayload<typeof RESTORE_CONNECT_DIALOG, {
-    location: string;
-    login: string | null;
-}>;
-export const restoreConnectDialog = (location: string, login: string | null): RestoreConnectDialogAction => ({
-    type: RESTORE_CONNECT_DIALOG,
-    payload: {location, login}
-});
-
 export const CONNECT_DIALOG_SET_FORM = "CONNECT_DIALOG_SET_FORM";
 export type ConnectDialogSetFormAction = ActionWithPayload<typeof CONNECT_DIALOG_SET_FORM, {
     location: string;
@@ -64,7 +54,6 @@ export const connectDialogSetEmailHint = (emailHint: string): ConnectDialogSetEm
 export type ConnectDialogAnyAction =
     OpenConnectDialogAction
     | CancelConnectDialogAction
-    | RestoreConnectDialogAction
     | ConnectDialogSetFormAction
     | ConnectDialogResetPasswordAction
     | ConnectDialogResetPasswordFailedAction

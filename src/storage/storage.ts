@@ -2,16 +2,16 @@ import { AvatarImage, BlockedUserInfo, CarteInfo, CLIENT_SETTINGS_PREFIX } from 
 import store from "state/store";
 import { cartesSet } from "state/cartes/actions";
 import {
+    connectedToHome,
     connectionsSet,
     disconnectedFromHome,
-    homeInitialized,
-    homeInvisibleUsersLoaded,
-    homeRestore
+    homeInvisibleUsersLoaded
 } from "state/home/actions";
 import { getHomeConnectionData } from "state/home/selectors";
 import { namingNamesPopulate } from "state/naming/actions";
 import { settingsClientValuesSet } from "state/settings/actions";
 import * as Access from "./access"
+import { getCartesListTtl } from "state/cartes/selectors";
 
 function loadedData(data: Access.StoredData) {
     if (!data) {
@@ -40,30 +40,34 @@ function loadedData(data: Access.StoredData) {
         }))));
     }
 
+    if (getCartesListTtl(data.cartes) < 5 * 60) {
+        data.cartesIp = null;
+        data.cartes = [];
+    }
+
     const {
         location, nodeName, fullName = null, avatar = null, login = null, token = null, permissions
     } = data.home || {};
     const home = getHomeConnectionData(store.getState())
-    if (
-        location != null
-            && (fullName != null || avatar != null || login != null || token != null || permissions != null)
-            && (location !== home.location || login !== home.login || token !== home.token)
-    ) {
-        store.dispatch(homeRestore({
-            location,
-            login,
-            token,
-            name: nodeName ?? null,
-            fullName,
-            avatar,
-            permissions: permissions ?? [],
-            cartesIp: data.cartesIp ?? null,
-            cartes: data.cartes ?? [],
-            roots: data.roots ?? []
-        }));
+    if (location != null && token != null) {
+        if (location !== home.location || login !== home.login || token !== home.token) {
+            store.dispatch(connectedToHome(
+                location,
+                login,
+                token ?? home.token,
+                permissions ?? [],
+                nodeName ?? null,
+                fullName,
+                avatar,
+                data.cartesIp ?? null,
+                data.cartes ?? [],
+                data.roots ?? [],
+                home.location != null && location !== home.location
+            ));
+        }
     } else {
         store.dispatch(cartesSet(data.cartesIp ?? null, data.cartes ?? [], 0));
-        if (token == null && location != null) {
+        if (location != null && token == null) {
             store.dispatch(disconnectedFromHome(location, login));
         }
     }
@@ -71,7 +75,6 @@ function loadedData(data: Access.StoredData) {
 
 export function loadData(): void {
     loadedData(Access.loadData());
-    store.dispatch(homeInitialized());
 }
 
 export function storeConnectionData(location: string, nodeName: string | null, fullName: string | null,

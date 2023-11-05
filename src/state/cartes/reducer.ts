@@ -20,8 +20,7 @@ export default (state: CartesState = initialState, action: ClientAction): Cartes
                 ...state,
                 initialized: true,
                 cartesIp: action.payload.cartesIp,
-                cartes: action.payload.cartes ?? [],
-                clockOffset: action.payload.clockOffset ?? state.clockOffset
+                cartes: action.payload.cartes ?? []
             };
 
         case CARTES_SET:
@@ -37,7 +36,9 @@ export default (state: CartesState = initialState, action: ClientAction): Cartes
             return {
                 ...state,
                 initialized: true,
-                cartes: []
+                cartesIp: null,
+                cartes: [],
+                clockOffset: 0
             };
 
         case CARTES_PURGE_EXPIRED:

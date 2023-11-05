@@ -57,7 +57,7 @@ import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { OWNER_SET } from "state/node/actions";
-import { HOME_OWNER_SET } from "state/home/actions";
+import { CONNECTED_TO_HOME, HOME_OWNER_SET } from "state/home/actions";
 import { FRIENDSHIP_UPDATE, FRIENDSHIP_UPDATE_FAILED, FRIENDSHIP_UPDATED } from "state/people/actions";
 import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 
@@ -227,6 +227,23 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             }
             if (avatar != null) {
                 istate.set(["cards", name, "details", "profile", "avatar"], action.payload.avatar);
+            }
+            return istate.value();
+        }
+
+        case CONNECTED_TO_HOME: {
+            const {name, fullName, avatar} = action.payload;
+
+            if (name == null || (fullName == null && avatar == null)) {
+                return state;
+            }
+
+            const istate = getCard(state, name).istate;
+            if (fullName != null) {
+                istate.set(["cards", name, "details", "profile", "fullName"], fullName);
+            }
+            if (avatar != null) {
+                istate.set(["cards", name, "details", "profile", "avatar"], avatar);
             }
             return istate.value();
         }

@@ -5,7 +5,7 @@ import { now } from "util/misc";
 
 const CLOCK_OFFSET_THRESHOLD = 10 * 60; // seconds
 
-export function getCartesListTtl(cartes: CarteInfo[] | null): number {
+export function getCartesListTtl(cartes: CarteInfo[] | null | undefined): number {
     if (!cartes) {
         return -now();
     }

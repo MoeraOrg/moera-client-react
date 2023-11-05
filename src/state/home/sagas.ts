@@ -2,51 +2,25 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
 import { Storage } from "storage";
-import { restoreConnectDialog } from "state/connectdialog/actions";
 import {
-    connectedToHome,
-    disconnectFromHome,
     HOME_AVATARS_LOAD,
     HOME_FRIEND_GROUPS_LOAD,
     HOME_INVISIBLE_USERS_LOAD,
-    HOME_RESTORE,
     homeAvatarsLoaded,
     homeAvatarsLoadFailed,
     homeFriendGroupsLoaded,
-    homeInvisibleUsersLoaded,
-    HomeRestoreAction
+    homeInvisibleUsersLoaded
 } from "state/home/actions";
 import { introduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
-import { getCartesListTtl } from "state/cartes/selectors";
-import { getHomeInvisibleUsersChecksum, getHomeRootLocation } from "state/home/selectors";
+import { getHomeInvisibleUsersChecksum } from "state/home/selectors";
 import { executor } from "state/executor";
-import { now } from "util/misc";
 
 export default [
-    executor(HOME_RESTORE, null, homeRestoreSaga),
     executor(HOME_AVATARS_LOAD, "", homeAvatarsLoadSaga),
     executor(HOME_FRIEND_GROUPS_LOAD, "", homeFriendGroupsLoadSaga, introduced),
     executor(HOME_INVISIBLE_USERS_LOAD, "", homeInvisibleUsersLoadSaga, introduced)
 ];
-
-function* homeRestoreSaga(action: HomeRestoreAction) {
-    let {location, login, token, permissions, cartesIp, cartes, roots} = action.payload.data;
-    let createdAt = now();
-
-    if (token) {
-        yield* put(restoreConnectDialog(location, login));
-        if (getCartesListTtl(cartes) < 5 * 60) {
-            cartesIp = null;
-            cartes = null;
-        }
-        const homeLocation = yield* select(getHomeRootLocation);
-        yield* put(connectedToHome(location, login, token, permissions, cartesIp, cartes, roots, createdAt - now(),
-            homeLocation != null && location !== homeLocation));
-    } else {
-        yield* put(disconnectFromHome(location, login));
-    }
-}
 
 function* homeAvatarsLoadSaga() {
     try {

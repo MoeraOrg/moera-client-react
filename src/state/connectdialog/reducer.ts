@@ -4,8 +4,7 @@ import {
     CONNECT_DIALOG_RESET_PASSWORD_FAILED,
     CONNECT_DIALOG_SET_EMAIL_HINT,
     CONNECT_DIALOG_SET_FORM,
-    OPEN_CONNECT_DIALOG,
-    RESTORE_CONNECT_DIALOG
+    OPEN_CONNECT_DIALOG
 } from "state/connectdialog/actions";
 import { CONNECT_TO_HOME, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { ConnectDialogState } from "state/connectdialog/state";
@@ -47,7 +46,9 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
         case CONNECTED_TO_HOME:
             return {
                 ...state,
-                show: false
+                show: false,
+                location: action.payload.location,
+                login: action.payload.login ?? ""
             }
 
         case DISCONNECTED_FROM_HOME:
@@ -55,13 +56,6 @@ export default (state: ConnectDialogState = initialState, action: ClientAction):
                 ...state,
                 location: action.payload.location || initialState.location,
                 login: action.payload.login || initialState.login
-            };
-
-        case RESTORE_CONNECT_DIALOG:
-            return {
-                ...state,
-                location: action.payload.location,
-                login: action.payload.login ?? ""
             };
 
         case CONNECT_DIALOG_SET_FORM:
