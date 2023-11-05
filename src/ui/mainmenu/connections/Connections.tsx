@@ -47,8 +47,10 @@ function Connections({hide, location, login, owner, roots, openConnectDialog, op
         Storage.deleteData(location);
     };
 
-    const onDisconnectActive = () =>
+    const onDisconnectActive = () => {
+        hide();
         confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger");
+    }
 
     return (
         <div id="connections">
