@@ -115,8 +115,13 @@ function* signUpSaga(action: SignUpAction) {
 
         Storage.storeConnectionData(rootLocation, null, null, null, login, info.token, info.permissions);
         const homeLocation = yield* select(getHomeRootLocation);
-        yield* put(connectedToHome(rootLocation, login, info.token, info.permissions, null, null, null, null, null,
-            null, homeLocation != null && homeLocation !== rootLocation));
+        yield* put(connectedToHome({
+            location: rootLocation,
+            login,
+            token: info.token,
+            permissions: info.permissions,
+            connectionSwitch: homeLocation != null && homeLocation !== rootLocation
+        }));
     }
 
     if (stage <= SIGN_UP_STAGE_PROFILE) {

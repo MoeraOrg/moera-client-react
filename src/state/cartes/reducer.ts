@@ -19,7 +19,7 @@ export default (state: CartesState = initialState, action: ClientAction): Cartes
             return {
                 ...state,
                 initialized: true,
-                cartesIp: action.payload.cartesIp,
+                cartesIp: action.payload.cartesIp ?? null,
                 cartes: action.payload.cartes ?? []
             };
 

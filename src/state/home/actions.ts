@@ -26,26 +26,25 @@ export const connectionToHomeFailed = (): ConnectionToHomeFailedAction => ({
     type: CONNECTION_TO_HOME_FAILED
 });
 
-export const CONNECTED_TO_HOME = "CONNECTED_TO_HOME";
-export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, {
+interface ConnectedToHomePayload {
     location: string;
     login: string | null;
     token: string;
     permissions: string[];
-    name: string | null;
-    fullName: string | null;
-    avatar: AvatarImage | null;
-    cartesIp: string | null;
-    cartes: CarteInfo[] | null;
-    roots: RootInfo[] | null;
+    name?: string | null;
+    fullName?: string | null;
+    avatar?: AvatarImage | null;
+    cartesIp?: string | null;
+    cartes?: CarteInfo[] | null;
+    roots?: RootInfo[] | null;
     connectionSwitch: boolean;
-}>;
-export const connectedToHome = (location: string, login: string | null, token: string, permissions: string[],
-                                name: string | null, fullName: string | null, avatar: AvatarImage | null,
-                                cartesIp: string | null, cartes: CarteInfo[] | null, roots: RootInfo[] | null,
-                                connectionSwitch: boolean): ConnectedToHomeAction => ({
+}
+
+export const CONNECTED_TO_HOME = "CONNECTED_TO_HOME";
+export type ConnectedToHomeAction = ActionWithPayload<typeof CONNECTED_TO_HOME, ConnectedToHomePayload>;
+export const connectedToHome = (payload: ConnectedToHomePayload): ConnectedToHomeAction => ({
     type: CONNECTED_TO_HOME,
-    payload: {location, login, token, name, fullName, avatar, permissions, cartesIp, cartes, roots, connectionSwitch}
+    payload
 });
 
 export const DISCONNECTED_FROM_HOME = "DISCONNECTED_FROM_HOME";

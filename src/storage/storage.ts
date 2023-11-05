@@ -52,19 +52,19 @@ function loadedData(data: Access.StoredData) {
     const home = getHomeConnectionData(store.getState())
     if (location != null && token != null) {
         if (location !== home.location || login !== home.login || token !== home.token) {
-            store.dispatch(connectedToHome(
+            store.dispatch(connectedToHome({
                 location,
                 login,
                 token,
-                permissions ?? [],
-                nodeName ?? null,
+                permissions: permissions ?? [],
+                name: nodeName,
                 fullName,
                 avatar,
-                data.cartesIp ?? null,
-                data.cartes ?? [],
-                data.roots ?? [],
-                home.location != null && location !== home.location
-            ));
+                cartesIp: data.cartesIp,
+                cartes: data.cartes ?? [],
+                roots: data.roots ?? [],
+                connectionSwitch: home.location != null && location !== home.location
+            }));
         }
     } else {
         store.dispatch(cartesSet(data.cartesIp ?? null, data.cartes ?? [], 0));

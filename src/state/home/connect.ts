@@ -17,7 +17,6 @@ import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { executor } from "state/executor";
 import { connectDialogSetForm } from "state/connectdialog/actions";
-import { namingInitialized } from "state/init-selectors";
 import { normalizeUrl } from "util/url";
 
 export default [
@@ -71,8 +70,13 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
     }
     Storage.storeConnectionData(nodeUrl, null, null, null, login, info.token, info.permissions);
     const homeLocation = yield* select(getHomeRootLocation);
-    yield* put(connectedToHome(nodeUrl, login, info.token, info.permissions, null, null, null, null, null, null,
-        homeLocation != null && nodeUrl !== homeLocation));
+    yield* put(connectedToHome({
+        location: nodeUrl,
+        login,
+        token: info.token,
+        permissions: info.permissions,
+        connectionSwitch: homeLocation != null && nodeUrl !== homeLocation
+    }));
 }
 
 function* homeOwnerVerifySaga() {

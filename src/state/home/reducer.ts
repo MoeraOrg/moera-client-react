@@ -108,7 +108,7 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 login,
                 owner: {
                     ...state.owner,
-                    name,
+                    name: name ?? null,
                     verified: false,
                     correct: false
                 },
