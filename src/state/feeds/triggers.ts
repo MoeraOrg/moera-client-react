@@ -48,9 +48,8 @@ import {
     SubscriptionDeletedEvent,
     SubscriptionUpdatedEvent
 } from "api/events";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
+import { HOME_INTRODUCED } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
-import { OWNER_SET } from "state/node/actions";
 import { getOwnerName } from "state/node/selectors";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
@@ -89,16 +88,16 @@ export default [
     ),
     trigger(FEED_SCROLLED, true, updateLocation),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, OWNER_SET, HOME_OWNER_SET],
+        HOME_INTRODUCED,
         disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage),
         feedGeneralLoad("timeline")
     ),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, OWNER_SET, HOME_OWNER_SET],
+        HOME_INTRODUCED,
         inv(disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage)),
         feedGeneralUnset("timeline")
     ),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, feedsUnset),
+    trigger(HOME_INTRODUCED, true, feedsUnset),
     trigger(WAKE_UP, true, feedsUpdate),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
     trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),

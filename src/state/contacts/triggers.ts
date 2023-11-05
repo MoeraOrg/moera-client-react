@@ -1,5 +1,5 @@
 import { trigger } from "state/trigger";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { HOME_INTRODUCED } from "state/home/actions";
 import { CONTACTS_PREPARE, contactsLoad, ContactsPrepareAction, contactsUnset } from "state/contacts/actions";
 import { isContactsQueryToBeLoaded } from "state/contacts/selectors";
 import { isConnectedToHome } from "state/home/selectors";
@@ -11,5 +11,5 @@ export default [
             isConnectedToHome(state) && isContactsQueryToBeLoaded(state, signal.payload.query),
         signal => contactsLoad(signal.payload.query)
     ),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], true, contactsUnset)
+    trigger(HOME_INTRODUCED, true, contactsUnset)
 ];

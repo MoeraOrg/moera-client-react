@@ -23,7 +23,7 @@ import {
 } from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
 import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
-import { DISCONNECTED_FROM_HOME, HOME_OWNER_SET } from "state/home/actions";
+import { HOME_INTRODUCED } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
@@ -39,7 +39,7 @@ export default [
     ),
     trigger(POSTING_COMMENTS_SUBSCRIBED, true, () => flashBox(i18n.t("following-comments"))),
     trigger(POSTING_COMMENTS_UNSUBSCRIBED, true, () => flashBox(i18n.t("not-following-comments"))),
-    trigger([HOME_OWNER_SET, DISCONNECTED_FROM_HOME], true, postingReactionsReload),
+    trigger(HOME_INTRODUCED, true, postingReactionsReload),
     trigger(
         POSTING_OPERATIONS_UPDATED,
         (state, signal: PostingOperationsUpdatedAction) =>

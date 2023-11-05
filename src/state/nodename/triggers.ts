@@ -1,7 +1,7 @@
 import i18n from 'i18next';
 
 import { conj, inv, trigger } from "state/trigger";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { HOME_INTRODUCED } from "state/home/actions";
 import { dialogClosed, dialogOpened, GO_TO_PAGE } from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
 import { isNodeNameToBeLoaded } from "state/nodename/selectors";
@@ -23,8 +23,8 @@ import { flashBox } from "state/flashbox/actions";
 
 export default [
     trigger(GO_TO_PAGE, conj(isAtProfilePage, isNodeNameToBeLoaded), nodeNameLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], isAtProfilePage, nodeNameLoad),
-    trigger([CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME], inv(isAtProfilePage), nodeNameUnset),
+    trigger(HOME_INTRODUCED, isAtProfilePage, nodeNameLoad),
+    trigger(HOME_INTRODUCED, inv(isAtProfilePage), nodeNameUnset),
     trigger(REGISTER_NAME_DIALOG, true, dialogOpened(registerNameDialogCancel())),
     trigger(REGISTER_NAME_DIALOG_CANCEL, true, dialogClosed),
     trigger(REGISTER_NAME_SUCCEEDED, isAtNode, nodeNameLoad),

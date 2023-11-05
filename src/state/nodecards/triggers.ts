@@ -9,7 +9,7 @@ import {
     nodeCardsRefresh
 } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET, HomeOwnerSetAction } from "state/home/actions";
+import { HOME_INTRODUCED } from "state/home/actions";
 import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction, ProfileUpdatedEvent } from "api/events";
 import { INIT_FROM_LOCATION, WAKE_UP } from "state/navigation/actions";
 import { OWNER_SET, OwnerSetAction } from "state/node/actions";
@@ -18,14 +18,10 @@ import { WithContext } from "state/action-types";
 import { PULSE_6H } from "state/pulse/actions";
 
 export default [
-    trigger(
-        [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
-        true,
-        nodeCardsClientSwitch
-    ),
+    trigger([INIT_FROM_LOCATION, HOME_INTRODUCED], true, nodeCardsClientSwitch),
     trigger(PULSE_6H, true, nodeCardsRefresh),
     trigger(
-        [INIT_FROM_LOCATION, CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP],
+        [INIT_FROM_LOCATION, HOME_INTRODUCED, WAKE_UP],
         true,
         signal => nodeCardPrepare(signal.context.ownerNameOrUrl)
     ),
@@ -34,20 +30,11 @@ export default [
         (state, signal: WithContext<OwnerSetAction>) => signal.payload.name != null,
         signal => nodeCardPrepare(signal.payload.name!)
     ),
+    trigger(HOME_INTRODUCED, true, signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME],
-        true,
-        signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)
-    ),
-    trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, HOME_OWNER_SET],
+        HOME_INTRODUCED,
         (state, signal: WithContext<Action>) => signal.context.ownerName != null,
         (signal: WithContext<Action>) => nodeCardPrepare(signal.context.ownerName!)
-    ),
-    trigger(
-        HOME_OWNER_SET,
-        (state, signal: WithContext<HomeOwnerSetAction>) => signal.payload.name != null,
-        signal => nodeCardPrepare(signal.payload.name!)
     ),
     trigger(
         PROFILE_SET,

@@ -1,5 +1,5 @@
 import { conj, trigger } from "state/trigger";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
+import { HOME_INTRODUCED } from "state/home/actions";
 import {
     PROFILE_AVATAR_CONFIRM_DELETE,
     PROFILE_AVATAR_CREATED,
@@ -31,7 +31,7 @@ import { confirmBox } from "state/confirmbox/actions";
 export default [
     trigger(GO_TO_PAGE, conj(isAtProfilePage, isProfileEditing), () => profileLoad()),
     trigger(
-        [CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME, WAKE_UP, PROFILE_EDIT],
+        [HOME_INTRODUCED, WAKE_UP, PROFILE_EDIT],
         conj(isAtProfilePage, isProfileEditing),
         () => profileLoad()
     ),
