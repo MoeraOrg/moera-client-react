@@ -6,11 +6,6 @@ import { Node, SheriffComplainStatus } from "api";
 import { ClientState } from "state/state";
 import { errorThrown } from "state/error/actions";
 import {
-    COMPLAINS_COMPLAINS_LOAD,
-    COMPLAINS_DECISION_POST,
-    COMPLAINS_FUTURE_SLICE_LOAD,
-    COMPLAINS_GROUP_LOAD,
-    COMPLAINS_PAST_SLICE_LOAD,
     complainsComplainsLoaded,
     complainsComplainsLoadFailed,
     ComplainsDecisionPostAction,
@@ -26,11 +21,11 @@ import {
 import { getActiveComplainGroupId } from "state/complains/selectors";
 
 export default [
-    executor(COMPLAINS_PAST_SLICE_LOAD, "", complainsPastSliceLoadSaga, introduced),
-    executor(COMPLAINS_FUTURE_SLICE_LOAD, "", complainsFutureSliceLoadSaga, introduced),
-    executor(COMPLAINS_GROUP_LOAD, null, complainsGroupLoadSaga, introduced),
-    executor(COMPLAINS_COMPLAINS_LOAD, null, complainsComplainsLoadSaga, introduced),
-    executor(COMPLAINS_DECISION_POST, payload => payload.groupId, complainsDecisionPostSaga)
+    executor("COMPLAINS_PAST_SLICE_LOAD", "", complainsPastSliceLoadSaga, introduced),
+    executor("COMPLAINS_FUTURE_SLICE_LOAD", "", complainsFutureSliceLoadSaga, introduced),
+    executor("COMPLAINS_GROUP_LOAD", null, complainsGroupLoadSaga, introduced),
+    executor("COMPLAINS_COMPLAINS_LOAD", null, complainsComplainsLoadSaga, introduced),
+    executor("COMPLAINS_DECISION_POST", payload => payload.groupId, complainsDecisionPostSaga)
 ];
 
 function* complainsPastSliceLoadSaga() {

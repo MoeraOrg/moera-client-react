@@ -4,16 +4,6 @@ import i18n from 'i18next';
 import { errorThrown } from "state/error/actions";
 import { Node, NodeApiError } from "api";
 import {
-    COMPOSE_DRAFT_DELETE,
-    COMPOSE_DRAFT_LIST_ITEM_DELETE,
-    COMPOSE_DRAFT_LIST_ITEM_RELOAD,
-    COMPOSE_DRAFT_LIST_LOAD,
-    COMPOSE_DRAFT_LOAD,
-    COMPOSE_DRAFT_SAVE,
-    COMPOSE_POST,
-    COMPOSE_POSTING_LOAD,
-    COMPOSE_SHARED_TEXT_LOAD,
-    COMPOSE_UPDATE_DRAFT_DELETE,
     ComposeDraftListItemDeleteAction,
     composeDraftListItemDeleted,
     ComposeDraftListItemReloadAction,
@@ -43,16 +33,16 @@ import { flashBox } from "state/flashbox/actions";
 import { mutuallyIntroduced } from "state/init-selectors";
 
 export default [
-    executor(COMPOSE_POSTING_LOAD, "", composePostingLoadSaga, mutuallyIntroduced),
-    executor(COMPOSE_POST, null, composePostSaga),
-    executor(COMPOSE_DRAFT_LOAD, "", composeDraftLoadSaga, mutuallyIntroduced),
-    executor(COMPOSE_DRAFT_SAVE, "", composeDraftSaveSaga),
-    executor(COMPOSE_DRAFT_DELETE, "", composeDraftDeleteSaga),
-    executor(COMPOSE_DRAFT_LIST_LOAD, "", composeDraftListLoadSaga, mutuallyIntroduced),
-    executor(COMPOSE_DRAFT_LIST_ITEM_RELOAD, payload => payload.id, composeDraftListItemReloadSaga),
-    executor(COMPOSE_DRAFT_LIST_ITEM_DELETE, payload => payload.id, composeDraftListItemDeleteSaga),
-    executor(COMPOSE_UPDATE_DRAFT_DELETE, "", composeUpdateDraftDeleteSaga),
-    executor(COMPOSE_SHARED_TEXT_LOAD, "", composeSharedTextLoadSaga)
+    executor("COMPOSE_POSTING_LOAD", "", composePostingLoadSaga, mutuallyIntroduced),
+    executor("COMPOSE_POST", null, composePostSaga),
+    executor("COMPOSE_DRAFT_LOAD", "", composeDraftLoadSaga, mutuallyIntroduced),
+    executor("COMPOSE_DRAFT_SAVE", "", composeDraftSaveSaga),
+    executor("COMPOSE_DRAFT_DELETE", "", composeDraftDeleteSaga),
+    executor("COMPOSE_DRAFT_LIST_LOAD", "", composeDraftListLoadSaga, mutuallyIntroduced),
+    executor("COMPOSE_DRAFT_LIST_ITEM_RELOAD", payload => payload.id, composeDraftListItemReloadSaga),
+    executor("COMPOSE_DRAFT_LIST_ITEM_DELETE", payload => payload.id, composeDraftListItemDeleteSaga),
+    executor("COMPOSE_UPDATE_DRAFT_DELETE", "", composeUpdateDraftDeleteSaga),
+    executor("COMPOSE_SHARED_TEXT_LOAD", "", composeSharedTextLoadSaga)
 ];
 
 function* composePostingLoadSaga(action: WithContext<ComposePostingLoadAction>) {

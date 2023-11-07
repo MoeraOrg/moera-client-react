@@ -20,47 +20,7 @@ import {
 } from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import {
-    FEED_SUBSCRIBED,
-    FEED_SUBSCRIBER_UPDATED,
-    FEED_SUBSCRIPTION_UPDATED,
-    FEED_UNSUBSCRIBED
-} from "state/feeds/actions";
-import {
-    BLOCKED_BY_LOAD,
-    BLOCKED_BY_LOAD_FAILED,
-    BLOCKED_BY_LOADED,
-    BLOCKED_LOAD,
-    BLOCKED_LOAD_FAILED,
-    BLOCKED_LOADED,
-    FRIEND_OFS_LOAD,
-    FRIEND_OFS_LOAD_FAILED,
-    FRIEND_OFS_LOADED,
-    FRIENDS_LOAD,
-    FRIENDS_LOAD_FAILED,
-    FRIENDS_LOADED,
-    FRIENDSHIP_UPDATED,
-    PEOPLE_GENERAL_LOAD,
-    PEOPLE_GENERAL_LOAD_FAILED,
-    PEOPLE_GENERAL_LOADED,
-    PEOPLE_GENERAL_UNSET,
-    PEOPLE_GO_TO_TAB,
-    PEOPLE_SELECT_TOGGLE,
-    PEOPLE_SET_SEARCH_PREFIX,
-    PEOPLE_SET_SORT,
-    PEOPLE_START_SELECTION,
-    PEOPLE_STOP_SELECTION,
-    PEOPLE_UNSET,
-    SUBSCRIBERS_LOAD,
-    SUBSCRIBERS_LOAD_FAILED,
-    SUBSCRIBERS_LOADED,
-    SUBSCRIPTIONS_LOAD,
-    SUBSCRIPTIONS_LOAD_FAILED,
-    SUBSCRIPTIONS_LOADED
-} from "state/people/actions";
 import { ContactState, PeopleState } from "state/people/state";
-import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 import { nameListQueryToRegexes } from "util/names-list";
 
 const initialState: PeopleState = {
@@ -226,16 +186,16 @@ function updateBlockedBy(state: PeopleState, blockedByUser: BlockedByUserInfo, a
 
 export default (state: PeopleState = initialState, action: WithContext<ClientAction>): PeopleState => {
     switch (action.type) {
-        case INIT_FROM_LOCATION:
+        case "INIT_FROM_LOCATION":
             return cloneDeep(initialState);
 
-        case PEOPLE_GO_TO_TAB:
+        case "PEOPLE_GO_TO_TAB":
             return immutable.set(state, "tab", action.payload.tab);
 
-        case PEOPLE_GENERAL_LOAD:
+        case "PEOPLE_GENERAL_LOAD":
             return immutable.set(state, "loadingGeneral", true);
 
-        case PEOPLE_GENERAL_LOADED:
+        case "PEOPLE_GENERAL_LOADED":
             return immutable.assign(state, "", {
                 loadingGeneral: false,
                 loadedGeneral: true,
@@ -248,10 +208,10 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 operations: action.payload.info.operations ?? {}
             });
 
-        case PEOPLE_GENERAL_LOAD_FAILED:
+        case "PEOPLE_GENERAL_LOAD_FAILED":
             return immutable.set(state, "loadingGeneral", false);
 
-        case PEOPLE_GENERAL_UNSET:
+        case "PEOPLE_GENERAL_UNSET":
             return immutable.assign(state, "", {
                 loadedGeneral: false,
                 subscribersTotal: null,
@@ -263,7 +223,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 operations: {}
             });
 
-        case PEOPLE_UNSET:
+        case "PEOPLE_UNSET":
             return immutable.assign(state, "", {
                 loadedGeneral: false,
                 subscribersTotal: null,
@@ -280,32 +240,32 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
                 selected: {}
             });
 
-        case PEOPLE_START_SELECTION:
+        case "PEOPLE_START_SELECTION":
             return immutable.set(state, "selecting", true);
 
-        case PEOPLE_STOP_SELECTION:
+        case "PEOPLE_STOP_SELECTION":
             return immutable.assign(state, "", {
                 selecting: false,
                 selected: {}
             });
 
-        case PEOPLE_SELECT_TOGGLE:
+        case "PEOPLE_SELECT_TOGGLE":
             return immutable.update(
                 state,
                 ["selected", action.payload.nodeName],
                 (v: boolean | null | undefined) => !v
             );
 
-        case PEOPLE_SET_SEARCH_PREFIX:
+        case "PEOPLE_SET_SEARCH_PREFIX":
             return immutable.set(state, "searchRegexes", nameListQueryToRegexes(action.payload.prefix));
 
-        case PEOPLE_SET_SORT:
+        case "PEOPLE_SET_SORT":
             return immutable.set(state, "sortAlpha", action.payload.sortAlpha);
 
-        case SUBSCRIBERS_LOAD:
+        case "SUBSCRIBERS_LOAD":
             return immutable.set(state, "loadingSubscribers", true);
 
-        case SUBSCRIBERS_LOADED: {
+        case "SUBSCRIBERS_LOADED": {
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingSubscribers: false,
@@ -323,13 +283,13 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case SUBSCRIBERS_LOAD_FAILED:
+        case "SUBSCRIBERS_LOAD_FAILED":
             return immutable.set(state, "loadingSubscribers", false);
 
-        case SUBSCRIPTIONS_LOAD:
+        case "SUBSCRIPTIONS_LOAD":
             return immutable.set(state, "loadingSubscriptions", true);
 
-        case SUBSCRIPTIONS_LOADED: {
+        case "SUBSCRIPTIONS_LOADED": {
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingSubscriptions: false,
@@ -347,13 +307,13 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case SUBSCRIPTIONS_LOAD_FAILED:
+        case "SUBSCRIPTIONS_LOAD_FAILED":
             return immutable.set(state, "loadingSubscriptions", false);
 
-        case FRIENDS_LOAD:
+        case "FRIENDS_LOAD":
             return immutable.set(state, "loadingFriends", true);
 
-        case FRIENDS_LOADED: {
+        case "FRIENDS_LOADED": {
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingFriends: false,
@@ -373,13 +333,13 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case FRIENDS_LOAD_FAILED:
+        case "FRIENDS_LOAD_FAILED":
             return immutable.set(state, "loadingFriends", false);
 
-        case FRIEND_OFS_LOAD:
+        case "FRIEND_OFS_LOAD":
             return immutable.set(state, "loadingFriendOfs", true);
 
-        case FRIEND_OFS_LOADED: {
+        case "FRIEND_OFS_LOADED": {
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingFriendOfs: false,
@@ -397,13 +357,13 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case FRIEND_OFS_LOAD_FAILED:
+        case "FRIEND_OFS_LOAD_FAILED":
             return immutable.set(state, "loadingFriendOfs", false);
 
-        case BLOCKED_LOAD:
+        case "BLOCKED_LOAD":
             return immutable.set(state, "loadingBlocked", true);
 
-        case BLOCKED_LOADED: {
+        case "BLOCKED_LOADED": {
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingBlocked: false,
@@ -421,13 +381,13 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case BLOCKED_LOAD_FAILED:
+        case "BLOCKED_LOAD_FAILED":
             return immutable.set(state, "loadingBlocked", false);
 
-        case BLOCKED_BY_LOAD:
+        case "BLOCKED_BY_LOAD":
             return immutable.set(state, "loadingBlockedBy", true);
 
-        case BLOCKED_BY_LOADED: {
+        case "BLOCKED_BY_LOADED": {
             const istate = immutable.wrap(state);
             istate.assign("", {
                 loadingBlockedBy: false,
@@ -445,10 +405,10 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case BLOCKED_BY_LOAD_FAILED:
+        case "BLOCKED_BY_LOAD_FAILED":
             return immutable.set(state, "loadingBlockedBy", false);
 
-        case FEED_SUBSCRIBED: {
+        case "FEED_SUBSCRIBED": {
             if (action.context.ownerName !== action.context.homeOwnerName) {
                 return state;
             }
@@ -466,7 +426,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case FEED_UNSUBSCRIBED: {
+        case "FEED_UNSUBSCRIBED": {
             const istate = immutable.wrap(state);
             if (action.context.ownerName === action.payload.nodeName && action.context.homeOwnerName != null) {
                 const contactState = prepareContact(state, istate, action.context.homeOwnerName);
@@ -496,7 +456,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case FEED_SUBSCRIBER_UPDATED: {
+        case "FEED_SUBSCRIBER_UPDATED": {
             if (action.payload.nodeName !== action.context.ownerName) {
                 return state;
             }
@@ -514,7 +474,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case FEED_SUBSCRIPTION_UPDATED: {
+        case "FEED_SUBSCRIPTION_UPDATED": {
             if (action.payload.nodeName !== action.context.ownerName) {
                 return state;
             }
@@ -533,19 +493,19 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case FRIENDSHIP_UPDATED:
+        case "FRIENDSHIP_UPDATED":
             if (action.context.ownerName === action.context.homeOwnerName) {
                 return updateFriendship(state, action.payload.friend);
             }
             return state;
 
-        case BLOCKED_USERS_ADDED:
+        case "BLOCKED_USERS_ADDED":
             if (action.context.ownerName === action.context.homeOwnerName) {
                 return updateBlocked(state, action.payload.blockedUsers, true);
             }
             return state;
 
-        case BLOCKED_USERS_DELETED:
+        case "BLOCKED_USERS_DELETED":
             if (action.context.ownerName === action.context.homeOwnerName) {
                 return updateBlocked(state, action.payload.blockedUsers, false);
             }

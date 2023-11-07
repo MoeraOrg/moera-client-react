@@ -1,4 +1,3 @@
-import { CONFIRM_BOX, CLOSE_CONFIRM_BOX } from "state/confirmbox/actions";
 import { ConfirmBoxState } from "state/confirmbox/state";
 import { ClientAction } from "state/action";
 
@@ -17,14 +16,14 @@ const initialState: ConfirmBoxState = {
 
 export default (state: ConfirmBoxState = initialState, action: ClientAction): ConfirmBoxState => {
     switch (action.type) {
-        case CONFIRM_BOX:
+        case "CONFIRM_BOX":
             return {
                 ...state,
                 show: true,
                 ...action.payload
             };
 
-        case CLOSE_CONFIRM_BOX:
+        case "CLOSE_CONFIRM_BOX":
             return {
                 ...state,
                 show: false

@@ -3,28 +3,6 @@ import * as immutable from 'object-path-immutable';
 import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
-import { FEED_FUTURE_SLICE_SET, FEED_PAST_SLICE_SET, FEED_SLICE_UPDATE } from "state/feeds/actions";
-import {
-    POSTING_COMMENT_ADDED_BLOCKED,
-    POSTING_COMMENT_ADDED_UNBLOCKED,
-    POSTING_COMMENT_COUNT_UPDATE,
-    POSTING_COMMENTS_SET,
-    POSTING_COMMENTS_SUBSCRIBED,
-    POSTING_COMMENTS_UNSUBSCRIBED,
-    POSTING_DELETE,
-    POSTING_DELETED,
-    POSTING_OPERATIONS_UPDATED,
-    POSTING_REACT,
-    POSTING_REACTION_DELETE,
-    POSTING_REACTION_SET,
-    POSTING_SET,
-    POSTING_SUBSCRIPTION_SET,
-    POSTING_VERIFY,
-    POSTING_VERIFY_FAILED,
-    POSTINGS_REACTION_SET,
-    POSTINGS_SET,
-    REMOTE_POSTING_SUBSCRIPTION_SET
-} from "state/postings/actions";
 import {
     EVENT_HOME_BLOCKED_BY_USER_ADDED,
     EVENT_HOME_BLOCKED_BY_USER_DELETED,
@@ -37,8 +15,6 @@ import {
 } from "api/events";
 import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
 import { findPostingIdsByRemote } from "state/postings/selectors";
-import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import { COMMENTS_FUTURE_SLICE_SET, COMMENTS_PAST_SLICE_SET } from "state/detailedposting/actions";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { ellipsize } from "util/text";
@@ -97,12 +73,12 @@ function immutableSetSubscriptionId(state: PostingsState, nodeName: string, id: 
 
 export default (state: PostingsState = initialState, action: WithContext<ClientAction>): PostingsState => {
     switch (action.type) {
-        case INIT_FROM_LOCATION:
+        case "INIT_FROM_LOCATION":
             return {};
 
-        case FEED_PAST_SLICE_SET:
-        case FEED_FUTURE_SLICE_SET:
-        case FEED_SLICE_UPDATE: {
+        case "FEED_PAST_SLICE_SET":
+        case "FEED_FUTURE_SLICE_SET":
+        case "FEED_SLICE_UPDATE": {
             const istate = immutable.wrap(state);
             action.payload.stories
                 .map(s => outsideIn(s))
@@ -118,7 +94,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return istate.value();
         }
 
-        case POSTINGS_SET: {
+        case "POSTINGS_SET": {
             const istate = immutable.wrap(state);
             action.payload.postings
                 .forEach(p => istate.assign(["", p.id], {
@@ -158,7 +134,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_SET: {
+        case "POSTING_SET": {
             const {posting, nodeName} = action.payload;
             return immutable.wrap(state).assign([nodeName, posting.id], {
                 posting: safeguard(posting),
@@ -170,19 +146,19 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             }).value();
         }
 
-        case POSTING_DELETE:
+        case "POSTING_DELETE":
             return immutable.set(state, [action.payload.nodeName, action.payload.id, "deleting"], true);
 
-        case POSTING_DELETED:
+        case "POSTING_DELETED":
             return immutable.del(state, [action.payload.nodeName, action.payload.id]);
 
-        case POSTING_VERIFY:
+        case "POSTING_VERIFY":
             return immutable.set(state, [action.payload.nodeName, action.payload.id, "verificationStatus"], "running");
 
-        case POSTING_VERIFY_FAILED:
+        case "POSTING_VERIFY_FAILED":
             return immutable.set(state, [action.payload.nodeName, action.payload.id, "verificationStatus"], "none");
 
-        case POSTING_OPERATIONS_UPDATED: {
+        case "POSTING_OPERATIONS_UPDATED": {
             const {id, nodeName, operations} = action.payload;
             return immutable.set(state, [nodeName, id, "posting", "operations"], operations);
         }
@@ -206,7 +182,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_REACT: {
+        case "POSTING_REACT": {
             const {id, negative, emoji, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "posting", "clientReaction"], {negative, emoji});
@@ -214,7 +190,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_REACTION_DELETE: {
+        case "POSTING_REACTION_DELETE": {
             const {id, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
                 return immutable.del(state, [nodeName, id, "posting", "clientReaction"]);
@@ -222,7 +198,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_REACTION_SET: {
+        case "POSTING_REACTION_SET": {
             const {id, reaction, totals, nodeName} = action.payload;
             const postingState = state[nodeName]?.[id];
             if (postingState) {
@@ -235,7 +211,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTINGS_REACTION_SET: {
+        case "POSTINGS_REACTION_SET": {
             const {reactions, totals, nodeName} = action.payload;
             const nodeState = state[nodeName];
             if (nodeState) {
@@ -252,7 +228,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_COMMENTS_SET: {
+        case "POSTING_COMMENTS_SET": {
             const {id, total, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "posting", "totalComments"], total);
@@ -260,7 +236,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_COMMENT_COUNT_UPDATE: {
+        case "POSTING_COMMENT_COUNT_UPDATE": {
             const {id, nodeName, delta} = action.payload;
             const istate = immutable.wrap(state);
             for (const postingNode of Object.keys(state)) {
@@ -302,7 +278,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_COMMENTS_SUBSCRIBED: {
+        case "POSTING_COMMENTS_SUBSCRIBED": {
             const {id, subscriptionId, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "subscriptions", "comments"], subscriptionId);
@@ -310,7 +286,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_COMMENTS_UNSUBSCRIBED: {
+        case "POSTING_COMMENTS_UNSUBSCRIBED": {
             const {id, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
                 return immutable.set(state, [nodeName, id, "subscriptions", "comments"], null);
@@ -318,7 +294,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_COMMENT_ADDED_BLOCKED: {
+        case "POSTING_COMMENT_ADDED_BLOCKED": {
             const {id, blockedInstantId, nodeName} = action.payload;
 
             const postingState = state[nodeName]?.[id];
@@ -332,7 +308,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case POSTING_COMMENT_ADDED_UNBLOCKED: {
+        case "POSTING_COMMENT_ADDED_UNBLOCKED": {
             const {id, nodeName} = action.payload;
 
             const postingState = state[nodeName]?.[id];
@@ -433,7 +409,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return istate.value();
         }
 
-        case POSTING_SUBSCRIPTION_SET: {
+        case "POSTING_SUBSCRIPTION_SET": {
             const {id, type, subscriptionId, nodeName} = action.payload;
             if (state[nodeName]?.[id]) {
                 return immutableSetSubscriptionId(state, nodeName, id, type, subscriptionId);
@@ -441,7 +417,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case REMOTE_POSTING_SUBSCRIPTION_SET: {
+        case "REMOTE_POSTING_SUBSCRIPTION_SET": {
             const {remoteNodeName, remotePostingId, type, subscriptionId} = action.payload;
             const ids = findPostingIdsByRemote(state, remoteNodeName, remotePostingId);
             let nstate = state;
@@ -451,8 +427,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return nstate;
         }
 
-        case COMMENTS_PAST_SLICE_SET:
-        case COMMENTS_FUTURE_SLICE_SET: {
+        case "COMMENTS_PAST_SLICE_SET":
+        case "COMMENTS_FUTURE_SLICE_SET": {
             const {nodeName, postingId, total} = action.payload;
             if (total == null) {
                 return state;

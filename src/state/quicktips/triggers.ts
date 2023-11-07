@@ -6,7 +6,7 @@ import { isQuickTipsToBeShown } from "state/quicktips/selectors";
 import { MNEMONIC_CLOSE } from "state/nodename/actions";
 
 export default [
-    trigger([SETTINGS_CLIENT_VALUES_LOADED, MNEMONIC_CLOSE], isQuickTipsToBeShown, openQuickTips),
+    trigger([SETTINGS_CLIENT_VALUES_LOADED, "MNEMONIC_CLOSE"], isQuickTipsToBeShown, openQuickTips),
     trigger(OPEN_QUICK_TIPS, true, dialogOpened(closeQuickTips())),
     trigger(CLOSE_QUICK_TIPS, true, dialogClosed)
 ];

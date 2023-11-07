@@ -1,14 +1,3 @@
-import {
-    BOTTOM_MENU_HIDE,
-    BOTTOM_MENU_SHOW,
-    DIALOG_CLOSED,
-    DIALOG_OPENED,
-    GO_TO_PAGE,
-    INIT_FROM_LOCATION,
-    LOCATION_LOCK,
-    LOCATION_SET,
-    LOCATION_UNLOCK
-} from "state/navigation/actions";
 import { PAGE_TIMELINE } from "state/navigation/pages";
 import { NavigationState } from "state/navigation/state";
 import { ClientAction } from "state/action";
@@ -25,7 +14,7 @@ const initialState: NavigationState = {
 
 export default (state: NavigationState = initialState, action: ClientAction): NavigationState => {
     switch (action.type) {
-        case INIT_FROM_LOCATION: {
+        case "INIT_FROM_LOCATION": {
             let {path, query, hash} = action.payload;
             path = path != null && path.startsWith("/moera") ? path.substring(6) : path;
             return {
@@ -35,7 +24,7 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
             };
         }
 
-        case GO_TO_PAGE:
+        case "GO_TO_PAGE":
             return {
                 ...state,
                 page: action.payload.page,
@@ -43,7 +32,7 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
                 closeDialogAction: state.page !== action.payload.page ? null : state.closeDialogAction
             };
 
-        case LOCATION_SET:
+        case "LOCATION_SET":
             return {
                 ...state,
                 location: action.payload.location,
@@ -51,38 +40,38 @@ export default (state: NavigationState = initialState, action: ClientAction): Na
                 update: !state.locked ? action.payload.update : state.update && action.payload.update
             };
 
-        case LOCATION_LOCK:
+        case "LOCATION_LOCK":
             return {
                 ...state,
                 locked: true,
                 update: true
             };
 
-        case LOCATION_UNLOCK:
+        case "LOCATION_UNLOCK":
             return {
                 ...state,
                 locked: false
             };
 
-        case BOTTOM_MENU_HIDE:
+        case "BOTTOM_MENU_HIDE":
             return {
                 ...state,
                 bottomMenuVisible: false
             }
 
-        case BOTTOM_MENU_SHOW:
+        case "BOTTOM_MENU_SHOW":
             return {
                 ...state,
                 bottomMenuVisible: true
             }
 
-        case DIALOG_OPENED:
+        case "DIALOG_OPENED":
             return {
                 ...state,
                 closeDialogAction: action.payload.closeAction
             }
 
-        case DIALOG_CLOSED:
+        case "DIALOG_CLOSED":
             return {
                 ...state,
                 closeDialogAction: null

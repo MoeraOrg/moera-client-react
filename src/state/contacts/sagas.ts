@@ -3,18 +3,12 @@ import { call, put, select, spawn } from 'typed-redux-saga';
 import { executor } from "state/executor";
 import { Node, RegisteredName } from "api";
 import { errorThrown } from "state/error/actions";
-import {
-    CONTACTS_LOAD,
-    ContactsLoadAction,
-    contactsLoaded,
-    contactsLoadFailed,
-    contactsNameFound
-} from "state/contacts/actions";
+import { ContactsLoadAction, contactsLoaded, contactsLoadFailed, contactsNameFound } from "state/contacts/actions";
 import { getNameDetails } from "state/naming/sagas";
 import { hasContactsName } from "state/contacts/selectors";
 
 export default [
-    executor(CONTACTS_LOAD, payload => payload.query, contactsLoadSaga)
+    executor("CONTACTS_LOAD", payload => payload.query, contactsLoadSaga)
 ];
 
 function* contactsLoadSaga(action: ContactsLoadAction) {

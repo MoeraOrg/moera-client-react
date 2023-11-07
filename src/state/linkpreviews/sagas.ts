@@ -1,10 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 
-import { Node } from "api";
-import { imageUpload } from "api";
+import { imageUpload, Node } from "api";
 import {
-    LINK_PREVIEW_IMAGE_UPLOAD,
-    LINK_PREVIEW_LOAD,
     LinkPreviewImageUploadAction,
     linkPreviewImageUploaded,
     linkPreviewImageUploadFailed,
@@ -17,8 +14,8 @@ import { getLinkPreviewInfo } from "state/linkpreviews/selectors";
 import { randomId } from "util/misc";
 
 export default [
-    executor(LINK_PREVIEW_LOAD, payload => payload.url, linkPreviewLoadSaga),
-    executor(LINK_PREVIEW_IMAGE_UPLOAD, payload => payload.url, linkPreviewImageUploadSaga)
+    executor("LINK_PREVIEW_LOAD", payload => payload.url, linkPreviewLoadSaga),
+    executor("LINK_PREVIEW_IMAGE_UPLOAD", payload => payload.url, linkPreviewImageUploadSaga)
 ];
 
 function* linkPreviewLoadSaga(action: LinkPreviewLoadAction) {

@@ -10,72 +10,8 @@ import {
 } from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
+import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
-import {
-    CLOSE_COMMENT_DIALOG,
-    COMMENT_COMPOSE_CANCELLED,
-    COMMENT_DELETE,
-    COMMENT_DELETE_FAILED,
-    COMMENT_DELETED,
-    COMMENT_DIALOG_COMMENT_LOAD,
-    COMMENT_DIALOG_COMMENT_LOAD_FAILED,
-    COMMENT_DIALOG_COMMENT_LOADED,
-    COMMENT_DIALOG_COMMENT_RESET,
-    COMMENT_DIALOG_CONFLICT,
-    COMMENT_DIALOG_CONFLICT_CLOSE,
-    COMMENT_DRAFT_ABSENT,
-    COMMENT_DRAFT_DELETED,
-    COMMENT_DRAFT_LOAD,
-    COMMENT_DRAFT_LOAD_FAILED,
-    COMMENT_DRAFT_LOADED,
-    COMMENT_DRAFT_SAVE,
-    COMMENT_DRAFT_SAVE_FAILED,
-    COMMENT_DRAFT_SAVED,
-    COMMENT_POST,
-    COMMENT_POST_FAILED,
-    COMMENT_POSTED,
-    COMMENT_REACT,
-    COMMENT_REACTION_DELETE,
-    COMMENT_REACTION_SET,
-    COMMENT_REPLIED_TO_SET,
-    COMMENT_REPLIED_TO_UNSET,
-    COMMENT_SET,
-    COMMENT_VERIFY,
-    COMMENT_VERIFY_FAILED,
-    COMMENTS_BLOCKED_USERS_LOAD,
-    COMMENTS_BLOCKED_USERS_LOAD_FAILED,
-    COMMENTS_BLOCKED_USERS_LOADED,
-    COMMENTS_FUTURE_SLICE_LOAD,
-    COMMENTS_FUTURE_SLICE_LOAD_FAILED,
-    COMMENTS_FUTURE_SLICE_SET,
-    COMMENTS_PAST_SLICE_LOAD,
-    COMMENTS_PAST_SLICE_LOAD_FAILED,
-    COMMENTS_PAST_SLICE_SET,
-    COMMENTS_RECEIVER_FEATURES_LOADED,
-    COMMENTS_RECEIVER_SWITCHED,
-    COMMENTS_SCROLL_TO_ANCHOR,
-    COMMENTS_SCROLL_TO_COMPOSER,
-    COMMENTS_SCROLLED_TO_ANCHOR,
-    COMMENTS_SCROLLED_TO_COMMENTS,
-    COMMENTS_SCROLLED_TO_COMPOSER,
-    COMMENTS_SHOW_INVISIBLE_SET,
-    COMMENTS_SLICE_UPDATE,
-    COMMENTS_UNSET,
-    DETAILED_POSTING_LOAD,
-    DETAILED_POSTING_LOAD_FAILED,
-    DETAILED_POSTING_LOADED,
-    DETAILED_POSTING_LOADED_ATTACHED,
-    FOCUS_COMMENT,
-    FOCUSED_COMMENT_LOAD,
-    FOCUSED_COMMENT_LOAD_FAILED,
-    FOCUSED_COMMENT_LOADED,
-    GLANCE_COMMENT,
-    GLANCE_COMMENT_LOAD,
-    GLANCE_COMMENT_LOAD_FAILED,
-    GLANCE_COMMENT_LOADED,
-    OPEN_COMMENT_DIALOG
-} from "state/detailedposting/actions";
 import {
     CommentComposeState,
     CommentDialogState,
@@ -83,7 +19,6 @@ import {
     DetailedPostingState,
     ExtCommentInfo
 } from "state/detailedposting/state";
-import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
 import { twemojiUrl } from "util/twemoji";
 
@@ -231,10 +166,10 @@ function updateBlocked(state: DetailedPostingState, homeOwnerName: string | null
 
 export default (state: DetailedPostingState = initialState, action: WithContext<ClientAction>): DetailedPostingState => {
     switch (action.type) {
-        case INIT_FROM_LOCATION:
+        case "INIT_FROM_LOCATION":
             return cloneDeep(initialState);
 
-        case GO_TO_PAGE: {
+        case "GO_TO_PAGE": {
             if (action.payload.page === PAGE_DETAILED_POSTING) {
                 const {details: {id, commentId, galleryExpanded}} = action.payload;
 
@@ -276,26 +211,26 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return state;
         }
 
-        case DETAILED_POSTING_LOAD:
+        case "DETAILED_POSTING_LOAD":
             return {
                 ...state,
                 loading: true
             };
 
-        case DETAILED_POSTING_LOADED:
-        case DETAILED_POSTING_LOAD_FAILED:
+        case "DETAILED_POSTING_LOADED":
+        case "DETAILED_POSTING_LOAD_FAILED":
             return {
                 ...state,
                 loading: false
             };
 
-        case DETAILED_POSTING_LOADED_ATTACHED:
+        case "DETAILED_POSTING_LOADED_ATTACHED":
             return {
                 ...state,
                 loadedAttached: true
             };
 
-        case COMMENTS_RECEIVER_SWITCHED:
+        case "COMMENTS_RECEIVER_SWITCHED":
             return immutable.wrap(state)
                 .assign("comments", {
                     ...cloneDeep(emptyComments),
@@ -309,33 +244,33 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 .set("commentDialog", cloneDeep(emptyComposeDialog))
                 .value()
 
-        case COMMENTS_RECEIVER_FEATURES_LOADED:
+        case "COMMENTS_RECEIVER_FEATURES_LOADED":
             if (action.payload.nodeName !== state.comments.receiverName) {
                 return state;
             }
             return immutable.set(state, "comments.receiverFeatures", action.payload.features);
 
-        case COMMENTS_PAST_SLICE_LOAD:
+        case "COMMENTS_PAST_SLICE_LOAD":
             return immutable.set(state, "comments.loadingPast", true);
 
-        case COMMENTS_PAST_SLICE_LOAD_FAILED:
+        case "COMMENTS_PAST_SLICE_LOAD_FAILED":
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
             return immutable.set(state, "comments.loadingPast", false);
 
-        case COMMENTS_FUTURE_SLICE_LOAD:
+        case "COMMENTS_FUTURE_SLICE_LOAD":
             return immutable.set(state, "comments.loadingFuture", true);
 
-        case COMMENTS_FUTURE_SLICE_LOAD_FAILED:
+        case "COMMENTS_FUTURE_SLICE_LOAD_FAILED":
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
             }
             return immutable.set(state, "comments.loadingFuture", false);
 
-        case COMMENTS_PAST_SLICE_SET: {
+        case "COMMENTS_PAST_SLICE_SET": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -358,7 +293,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             }
         }
 
-        case COMMENTS_FUTURE_SLICE_SET: {
+        case "COMMENTS_FUTURE_SLICE_SET": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -381,7 +316,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             }
         }
 
-        case COMMENTS_SLICE_UPDATE: {
+        case "COMMENTS_SLICE_UPDATE": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -403,7 +338,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return istate.value();
         }
 
-        case COMMENTS_SCROLL_TO_ANCHOR: {
+        case "COMMENTS_SCROLL_TO_ANCHOR": {
             const {anchor} = action.payload;
             const istate = immutable.wrap(state);
             if (anchor != null) {
@@ -423,7 +358,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return istate.value();
         }
 
-        case COMMENTS_UNSET: {
+        case "COMMENTS_UNSET": {
             const commentsFocused = state.comments.focused;
             const commentsFocusedCommentId = state.comments.focusedCommentId;
             const composeFocused = state.compose.focused;
@@ -441,22 +376,22 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 .value()
         }
 
-        case COMMENTS_SCROLL_TO_COMPOSER:
+        case "COMMENTS_SCROLL_TO_COMPOSER":
             return immutable.set(state, "compose.focused", true);
 
-        case COMMENTS_SCROLLED_TO_ANCHOR:
+        case "COMMENTS_SCROLLED_TO_ANCHOR":
             return immutable.set(state, "comments.anchor", null);
 
-        case COMMENTS_SCROLLED_TO_COMMENTS:
+        case "COMMENTS_SCROLLED_TO_COMMENTS":
             return immutable.set(state, "comments.focused", false);
 
-        case COMMENTS_SCROLLED_TO_COMPOSER:
+        case "COMMENTS_SCROLLED_TO_COMPOSER":
             return immutable.set(state, "compose.focused", false);
 
-        case COMMENTS_BLOCKED_USERS_LOAD:
+        case "COMMENTS_BLOCKED_USERS_LOAD":
             return immutable.set(state, "comments.loadingBlockedUsers", true);
 
-        case COMMENTS_BLOCKED_USERS_LOADED:
+        case "COMMENTS_BLOCKED_USERS_LOADED":
             if (action.payload.receiverName !== state.comments.receiverName
                 || action.payload.receiverPostingId !== state.comments.receiverPostingId) {
                 return state;
@@ -467,32 +402,32 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 blockedUsers: action.payload.list
             });
 
-        case BLOCKED_USERS_ADDED:
+        case "BLOCKED_USERS_ADDED":
             return updateBlocked(state, action.context.homeOwnerName, action.payload.blockedUsers, true);
 
-        case BLOCKED_USERS_DELETED:
+        case "BLOCKED_USERS_DELETED":
             return updateBlocked(state, action.context.homeOwnerName, action.payload.blockedUsers, false);
 
-        case COMMENTS_BLOCKED_USERS_LOAD_FAILED:
+        case "COMMENTS_BLOCKED_USERS_LOAD_FAILED":
             return immutable.set(state, "comments.loadingBlockedUsers", false);
 
-        case COMMENTS_SHOW_INVISIBLE_SET:
+        case "COMMENTS_SHOW_INVISIBLE_SET":
             return immutable.set(state, "comments.showInvisible", action.payload.showInvisible);
 
-        case COMMENT_COMPOSE_CANCELLED:
+        case "COMMENT_COMPOSE_CANCELLED":
             return immutable.assign(state, "compose", {
                 formId: state.compose.formId + 1,
                 ...emptyCompose
             });
 
-        case COMMENT_POST:
+        case "COMMENT_POST":
             if (action.payload.commentId != null) {
                 return immutable.set(state, "commentDialog.beingPosted", true);
             } else {
                 return immutable.set(state, "compose.beingPosted", true);
             }
 
-        case COMMENT_POSTED: {
+        case "COMMENT_POSTED": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -521,20 +456,20 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return istate.value();
         }
 
-        case COMMENT_POST_FAILED:
+        case "COMMENT_POST_FAILED":
                 return immutable.wrap(state)
                     .set("commentDialog.beingPosted", false)
                     .set("compose.beingPosted", false)
                     .value()
 
-        case COMMENT_DRAFT_LOAD: {
+        case "COMMENT_DRAFT_LOAD": {
             const property = action.payload.isDialog != null ? "commentDialog" : "compose";
             return immutable.assign(state, property, {
                 loadingDraft: true
             });
         }
 
-        case COMMENT_DRAFT_LOADED: {
+        case "COMMENT_DRAFT_LOADED": {
             if (action.payload.draft.receiverName !== state.comments.receiverName
                 || action.payload.draft.receiverPostingId !== state.comments.receiverPostingId) {
                 return state;
@@ -552,7 +487,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_DRAFT_LOAD_FAILED: {
+        case "COMMENT_DRAFT_LOAD_FAILED": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -567,7 +502,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_DRAFT_ABSENT: {
+        case "COMMENT_DRAFT_ABSENT": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -583,7 +518,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_DRAFT_SAVE: {
+        case "COMMENT_DRAFT_SAVE": {
             if (action.payload.draftText.receiverName !== state.comments.receiverName
                 || action.payload.draftText.receiverPostingId !== state.comments.receiverPostingId) {
                 return state;
@@ -596,7 +531,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_DRAFT_SAVED: {
+        case "COMMENT_DRAFT_SAVED": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -610,7 +545,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_DRAFT_SAVE_FAILED: {
+        case "COMMENT_DRAFT_SAVE_FAILED": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -623,7 +558,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_DRAFT_DELETED: {
+        case "COMMENT_DRAFT_DELETED": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -636,7 +571,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_SET: {
+        case "COMMENT_SET": {
             const {nodeName, comment} = action.payload;
             if (nodeName === state.comments.receiverName
                 && comment.postingId === state.comments.receiverPostingId
@@ -651,7 +586,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return state;
         }
 
-        case COMMENT_DELETE: {
+        case "COMMENT_DELETE": {
             const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
             if (index < 0) {
                 return state;
@@ -659,7 +594,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, ["comments", "comments", index, "deleting"], true);
         }
 
-        case COMMENT_DELETED: {
+        case "COMMENT_DELETED": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -671,7 +606,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.del(state, ["comments", "comments", index]);
         }
 
-        case COMMENT_DELETE_FAILED: {
+        case "COMMENT_DELETE_FAILED": {
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -698,7 +633,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.del(state, ["comments", "comments", index]);
         }
 
-        case FOCUS_COMMENT: {
+        case "FOCUS_COMMENT": {
             const comment = state.comments.comments.find(c => c.id === state.comments.focusedCommentId);
             if (comment == null) {
                 return state;
@@ -711,10 +646,10 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case FOCUSED_COMMENT_LOAD:
+        case "FOCUSED_COMMENT_LOAD":
             return immutable.set(state, "comments.loadingFocusedComment", true);
 
-        case FOCUSED_COMMENT_LOAD_FAILED:
+        case "FOCUSED_COMMENT_LOAD_FAILED":
             if (action.payload.nodeName !== state.comments.receiverName
                 || action.payload.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -724,7 +659,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 focusedCommentId: null
             });
 
-        case FOCUSED_COMMENT_LOADED: {
+        case "FOCUSED_COMMENT_LOADED": {
             const {nodeName, comment} = action.payload;
             if (nodeName !== state.comments.receiverName || comment.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -742,39 +677,39 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case OPEN_COMMENT_DIALOG:
+        case "OPEN_COMMENT_DIALOG":
             return immutable.assign(state, "commentDialog", {
                 ...emptyComposeDialog,
                 show: true,
                 commentId: action.payload.commentId
             });
 
-        case CLOSE_COMMENT_DIALOG:
+        case "CLOSE_COMMENT_DIALOG":
             return immutable.set(state, "commentDialog.show", false);
 
-        case COMMENT_DIALOG_COMMENT_LOAD:
+        case "COMMENT_DIALOG_COMMENT_LOAD":
             return immutable.set(state, "commentDialog.loading", true);
 
-        case COMMENT_DIALOG_COMMENT_LOADED:
+        case "COMMENT_DIALOG_COMMENT_LOADED":
             return immutable.assign(state, "commentDialog", {
                 loading: false,
                 loaded: true,
                 comment: action.payload.comment
             });
 
-        case COMMENT_DIALOG_COMMENT_LOAD_FAILED:
+        case "COMMENT_DIALOG_COMMENT_LOAD_FAILED":
             return immutable.set(state, "commentDialog.loading", false);
 
-        case COMMENT_DIALOG_COMMENT_RESET:
+        case "COMMENT_DIALOG_COMMENT_RESET":
             return immutable.set(state, "commentDialog.draft", null);
 
-        case COMMENT_DIALOG_CONFLICT:
+        case "COMMENT_DIALOG_CONFLICT":
             return immutable.set(state, "commentDialog.conflict", true);
 
-        case COMMENT_DIALOG_CONFLICT_CLOSE:
+        case "COMMENT_DIALOG_CONFLICT_CLOSE":
             return immutable.set(state, "commentDialog.conflict", false);
 
-        case COMMENT_VERIFY: {
+        case "COMMENT_VERIFY": {
             const index = state.comments.comments.findIndex(c => c.id === action.payload.commentId);
             if (index < 0) {
                 return state;
@@ -782,7 +717,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, ["comments", "comments", index, "verificationStatus"], "running");
         }
 
-        case COMMENT_VERIFY_FAILED:
+        case "COMMENT_VERIFY_FAILED":
         case EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED: {
             const {nodeName, postingId, commentId} = action.payload;
 
@@ -810,7 +745,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, ["comments", "comments", index, "verificationStatus"], status);
         }
 
-        case COMMENT_REACT: {
+        case "COMMENT_REACT": {
             const {id, negative, emoji} = action.payload;
 
             const index = state.comments.comments.findIndex(c => c.id === id);
@@ -821,7 +756,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return state;
         }
 
-        case COMMENT_REACTION_DELETE: {
+        case "COMMENT_REACTION_DELETE": {
             const index = state.comments.comments.findIndex(c => c.id === action.payload.id);
             if (index >= 0) {
                 return immutable.del(state, ["comments", "comments", index, "clientReaction"]);
@@ -829,7 +764,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return state;
         }
 
-        case COMMENT_REACTION_SET: {
+        case "COMMENT_REACTION_SET": {
             const {nodeName, id, postingId, reaction, seniorReaction, totals} = action.payload;
 
             if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
@@ -846,7 +781,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case COMMENT_REPLIED_TO_SET:
+        case "COMMENT_REPLIED_TO_SET":
             return immutable.assign(state, "compose", {
                 repliedToId: action.payload.commentId,
                 repliedToName: action.payload.ownerName,
@@ -854,7 +789,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 repliedToHeading: action.payload.heading
             });
 
-        case COMMENT_REPLIED_TO_UNSET:
+        case "COMMENT_REPLIED_TO_UNSET":
             return immutable.assign(state, "compose", {
                 repliedToId: null,
                 repliedToName: null,
@@ -862,17 +797,17 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 repliedToHeading: null
             });
 
-        case GLANCE_COMMENT:
+        case "GLANCE_COMMENT":
             return immutable.set(state, "comments.glanceCommentId", action.payload.commentId);
 
-        case GLANCE_COMMENT_LOAD:
+        case "GLANCE_COMMENT_LOAD":
             return immutable.assign(state, "comments", {
                 loadingGlanceComment: true,
                 loadedGlanceComment: false,
                 glanceComment: null
             });
 
-        case GLANCE_COMMENT_LOADED: {
+        case "GLANCE_COMMENT_LOADED": {
             const {nodeName, comment} = action.payload;
             if (nodeName !== state.comments.receiverName || comment.postingId !== state.comments.receiverPostingId) {
                 return state;
@@ -884,7 +819,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             });
         }
 
-        case GLANCE_COMMENT_LOAD_FAILED: {
+        case "GLANCE_COMMENT_LOAD_FAILED": {
             const {nodeName, postingId} = action.payload;
             if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
                 return state;

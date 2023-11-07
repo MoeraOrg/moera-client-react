@@ -1,16 +1,11 @@
-import { Action } from 'redux';
-
 import { AvatarImage, Features } from "api";
-import { ActionWithPayload } from "state/action-types";
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
-export const OWNER_LOAD = "OWNER_LOAD";
-export type OwnerLoadAction = Action<typeof OWNER_LOAD>;
-export const ownerLoad = (): OwnerLoadAction => ({
-    type: OWNER_LOAD
-});
+export type OwnerLoadAction = ActionWithoutPayload<"OWNER_LOAD">;
+export const ownerLoad = (): OwnerLoadAction =>
+    actionWithoutPayload("OWNER_LOAD");
 
-export const OWNER_SET = "OWNER_SET";
-export type OwnerSetAction = ActionWithPayload<typeof OWNER_SET, {
+export type OwnerSetAction = ActionWithPayload<"OWNER_SET", {
     name: string | null;
     changing: boolean | null;
     fullName: string | null | false;
@@ -18,70 +13,50 @@ export type OwnerSetAction = ActionWithPayload<typeof OWNER_SET, {
     title: string | null | false;
     avatar: AvatarImage | null;
 }>;
-export const ownerSet = (name: string | null, changing: boolean | null, fullName: string | null | false,
-                         gender: string | null | false, title: string | null | false,
-                         avatar: AvatarImage | null): OwnerSetAction => ({
-    type: OWNER_SET,
-    payload: {name, changing, fullName, gender, title, avatar}
-});
+export const ownerSet = (
+    name: string | null, changing: boolean | null, fullName: string | null | false, gender: string | null | false,
+    title: string | null | false, avatar: AvatarImage | null
+): OwnerSetAction =>
+    actionWithPayload("OWNER_SET", {name, changing, fullName, gender, title, avatar});
 
-export const OWNER_VERIFY = "OWNER_VERIFY";
-export type OwnerVerifyAction = Action<typeof OWNER_VERIFY>;
-export const ownerVerify = (): OwnerVerifyAction => ({
-    type: OWNER_VERIFY
-});
+export type OwnerVerifyAction = ActionWithoutPayload<"OWNER_VERIFY">;
+export const ownerVerify = (): OwnerVerifyAction =>
+    actionWithoutPayload("OWNER_VERIFY");
 
-export const OWNER_VERIFIED = "OWNER_VERIFIED";
-export type OwnerVerifiedLoadAction = ActionWithPayload<typeof OWNER_VERIFIED, {
+export type OwnerVerifiedLoadAction = ActionWithPayload<"OWNER_VERIFIED", {
     name: string;
     correct: boolean;
 }>;
-export const ownerVerified = (name: string, correct: boolean): OwnerVerifiedLoadAction => ({
-    type: OWNER_VERIFIED,
-    payload: {name, correct}
-});
+export const ownerVerified = (name: string, correct: boolean): OwnerVerifiedLoadAction =>
+    actionWithPayload("OWNER_VERIFIED", {name, correct});
 
-export const OWNER_SWITCH_OPEN = "OWNER_SWITCH_OPEN";
-export type OwnerSwitchOpenAction = Action<typeof OWNER_SWITCH_OPEN>;
-export const ownerSwitchOpen = (): OwnerSwitchOpenAction => ({
-    type: OWNER_SWITCH_OPEN
-});
+export type OwnerSwitchOpenAction = ActionWithoutPayload<"OWNER_SWITCH_OPEN">;
+export const ownerSwitchOpen = (): OwnerSwitchOpenAction =>
+    actionWithoutPayload("OWNER_SWITCH_OPEN");
 
-export const OWNER_SWITCH_CLOSE = "OWNER_SWITCH_CLOSE";
-export type OwnerSwitchCloseAction = Action<typeof OWNER_SWITCH_CLOSE>;
-export const ownerSwitchClose = (): OwnerSwitchCloseAction => ({
-    type: OWNER_SWITCH_CLOSE
-});
+export type OwnerSwitchCloseAction = ActionWithoutPayload<"OWNER_SWITCH_CLOSE">;
+export const ownerSwitchClose = (): OwnerSwitchCloseAction =>
+    actionWithoutPayload("OWNER_SWITCH_CLOSE");
 
-export const OWNER_SWITCH = "OWNER_SWITCH";
-export type OwnerSwitchAction = ActionWithPayload<typeof OWNER_SWITCH, {
+export type OwnerSwitchAction = ActionWithPayload<"OWNER_SWITCH", {
     name: string;
 }>;
-export const ownerSwitch = (name: string): OwnerSwitchAction => ({
-    type: OWNER_SWITCH,
-    payload: {name}
-});
+export const ownerSwitch = (name: string): OwnerSwitchAction =>
+    actionWithPayload("OWNER_SWITCH", {name});
 
-export const OWNER_SWITCH_FAILED = "OWNER_SWITCH_FAILED";
-export type OwnerSwitchFailedAction = Action<typeof OWNER_SWITCH_FAILED>;
-export const ownerSwitchFailed = (): OwnerSwitchFailedAction => ({
-    type: OWNER_SWITCH_FAILED
-});
+export type OwnerSwitchFailedAction = ActionWithoutPayload<"OWNER_SWITCH_FAILED">;
+export const ownerSwitchFailed = (): OwnerSwitchFailedAction =>
+    actionWithoutPayload("OWNER_SWITCH_FAILED");
 
-export const NODE_FEATURES_LOAD = "NODE_FEATURES_LOAD";
-export type NodeFeaturesLoadAction = Action<typeof NODE_FEATURES_LOAD>;
-export const nodeFeaturesLoad = (): NodeFeaturesLoadAction => ({
-    type: NODE_FEATURES_LOAD
-});
+export type NodeFeaturesLoadAction = ActionWithoutPayload<"NODE_FEATURES_LOAD">;
+export const nodeFeaturesLoad = (): NodeFeaturesLoadAction =>
+    actionWithoutPayload("NODE_FEATURES_LOAD");
 
-export const NODE_FEATURES_LOADED = "NODE_FEATURES_LOADED";
-export type NodeFeaturesLoadedAction = ActionWithPayload<typeof NODE_FEATURES_LOADED, {
+export type NodeFeaturesLoadedAction = ActionWithPayload<"NODE_FEATURES_LOADED", {
     features: Features;
 }>;
-export const nodeFeaturesLoaded = (features: Features): NodeFeaturesLoadedAction => ({
-    type: NODE_FEATURES_LOADED,
-    payload: {features}
-});
+export const nodeFeaturesLoaded = (features: Features): NodeFeaturesLoadedAction =>
+    actionWithPayload("NODE_FEATURES_LOADED", {features});
 
 export type NodeAnyAction =
     OwnerLoadAction

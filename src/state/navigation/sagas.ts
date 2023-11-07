@@ -4,60 +4,32 @@ import * as URI from 'uri-js';
 import { locationBuild, LocationInfo, locationTransform } from "location";
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
-import { PAGE_SETTINGS } from "state/navigation/pages";
 import {
-    BODY_SCROLL_UPDATE,
-    GO_HOME,
-    GO_HOME_NEWS,
-    GO_TO_LOCATION,
-    GO_TO_PAGE_WITH_DEFAULT_SUBPAGE,
     GoToLocationAction,
-    goToPage,
-    GoToPageWithDefaultSubpageAction,
-    goToSettings,
-    INIT_FROM_LOCATION,
-    INIT_FROM_NODE_LOCATION,
     initFromLocation,
     InitFromLocationAction,
     InitFromNodeLocationAction,
     locationLock,
     locationSet,
     locationUnlock,
-    NEW_LOCATION,
     NewLocationAction,
-    SWIPE_REFRESH_UPDATE,
-    UPDATE_LOCATION,
     UpdateLocationAction
 } from "state/navigation/actions";
 import { getHomeRootPage } from "state/home/selectors";
-import { settingsGoToTab } from "state/settings/actions";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
 
 export default [
-    executor(INIT_FROM_NODE_LOCATION, "", initFromNodeLocationSaga),
-    executor(INIT_FROM_LOCATION, "", initFromLocationSaga),
-    executor(NEW_LOCATION, null, newLocationSaga),
-    executor(UPDATE_LOCATION, null, updateLocationSaga),
-    executor(GO_TO_LOCATION, payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
-    executor(GO_TO_PAGE_WITH_DEFAULT_SUBPAGE, null, goToPageWithDefaultSubpageSaga),
-    executor(GO_HOME, "", goHomeSaga),
-    executor(GO_HOME_NEWS, "", goHomeNewsSaga),
-    executor(SWIPE_REFRESH_UPDATE, "", swipeRefreshUpdateSaga),
-    executor(BODY_SCROLL_UPDATE, "", bodyScrollUpdateSaga)
+    executor("INIT_FROM_NODE_LOCATION", "", initFromNodeLocationSaga),
+    executor("INIT_FROM_LOCATION", "", initFromLocationSaga),
+    executor("NEW_LOCATION", null, newLocationSaga),
+    executor("UPDATE_LOCATION", null, updateLocationSaga),
+    executor("GO_TO_LOCATION", payload => `${payload.path}:${payload.query}:${payload.hash}`, goToLocationSaga),
+    executor("GO_HOME", "", goHomeSaga),
+    executor("GO_HOME_NEWS", "", goHomeNewsSaga),
+    executor("SWIPE_REFRESH_UPDATE", "", swipeRefreshUpdateSaga),
+    executor("BODY_SCROLL_UPDATE", "", bodyScrollUpdateSaga)
 ];
-
-function* goToPageWithDefaultSubpageSaga(action: GoToPageWithDefaultSubpageAction) {
-    switch (action.payload.page) {
-        case PAGE_SETTINGS:
-            yield* put(goToSettings());
-            yield* put(settingsGoToTab("client"));
-            break;
-
-        default:
-            yield* put(goToPage(action.payload.page, action.payload.details));
-    }
-}
 
 function* transformation(srcPath: string | null, srcQuery: string | null, srcHash: string | null,
                          dstPath: string | null, dstQuery: string | null, dstHash: string | null) {
@@ -112,7 +84,7 @@ function* updateLocationSaga(action: UpdateLocationAction) {
 
 function* changeLocation(action: NewLocationAction | UpdateLocationAction | null) {
     const info = yield* select(locationBuild, new LocationInfo());
-    yield* put(locationSet(info.toUrl(), info.title, action == null || action.type === NEW_LOCATION));
+    yield* put(locationSet(info.toUrl(), info.title, action == null || action.type === "NEW_LOCATION"));
 }
 
 function* goHomeSaga() {

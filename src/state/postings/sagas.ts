@@ -6,19 +6,6 @@ import { Node, ReactionTotalsInfo } from "api";
 import { errorThrown } from "state/error/actions";
 import {
     EntryReactionAttributes,
-    POSTING_COMMENT_ADDED_BLOCK,
-    POSTING_COMMENT_ADDED_UNBLOCK,
-    POSTING_COMMENTS_SUBSCRIBE,
-    POSTING_COMMENTS_UNSUBSCRIBE,
-    POSTING_COPY_LINK,
-    POSTING_DELETE,
-    POSTING_LOAD,
-    POSTING_OPERATIONS_UPDATE,
-    POSTING_REACT,
-    POSTING_REACTION_DELETE,
-    POSTING_REACTION_LOAD,
-    POSTING_REACTIONS_RELOAD,
-    POSTING_VERIFY,
     PostingCommentAddedBlockAction,
     postingCommentAddedBlocked,
     postingCommentAddedBlockFailed,
@@ -69,19 +56,19 @@ import { Browser } from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 
 export default [
-    executor(POSTING_DELETE, payload => payload.id, postingDeleteSaga),
-    executor(POSTING_LOAD, payload => payload.id, postingLoadSaga, introduced),
-    executor(POSTING_VERIFY, payload => payload.id, postingVerifySaga),
-    executor(POSTING_OPERATIONS_UPDATE, payload => payload.id, postingOperationsUpdateSaga),
-    executor(POSTING_REACT, null, postingReactSaga, introduced),
-    executor(POSTING_REACTION_LOAD, payload => payload.id, postingReactionLoadSaga),
-    executor(POSTING_REACTIONS_RELOAD, "", postingReactionsReloadSaga),
-    executor(POSTING_REACTION_DELETE, payload => payload.id, postingReactionDeleteSaga, introduced),
-    executor(POSTING_COPY_LINK, payload => payload.id, postingCopyLinkSaga),
-    executor(POSTING_COMMENTS_SUBSCRIBE, payload => payload.id, postingCommentsSubscribeSaga, introduced),
-    executor(POSTING_COMMENTS_UNSUBSCRIBE, payload => payload.id, postingCommentsUnsubscribeSaga, introduced),
-    executor(POSTING_COMMENT_ADDED_BLOCK, payload => payload.id, postingCommentAddedBlockSaga, introduced),
-    executor(POSTING_COMMENT_ADDED_UNBLOCK, payload => payload.id, postingCommentAddedUnblockSaga, introduced)
+    executor("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
+    executor("POSTING_LOAD", payload => payload.id, postingLoadSaga, introduced),
+    executor("POSTING_VERIFY", payload => payload.id, postingVerifySaga),
+    executor("POSTING_OPERATIONS_UPDATE", payload => payload.id, postingOperationsUpdateSaga),
+    executor("POSTING_REACT", null, postingReactSaga, introduced),
+    executor("POSTING_REACTION_LOAD", payload => payload.id, postingReactionLoadSaga),
+    executor("POSTING_REACTIONS_RELOAD", "", postingReactionsReloadSaga),
+    executor("POSTING_REACTION_DELETE", payload => payload.id, postingReactionDeleteSaga, introduced),
+    executor("POSTING_COPY_LINK", payload => payload.id, postingCopyLinkSaga),
+    executor("POSTING_COMMENTS_SUBSCRIBE", payload => payload.id, postingCommentsSubscribeSaga, introduced),
+    executor("POSTING_COMMENTS_UNSUBSCRIBE", payload => payload.id, postingCommentsUnsubscribeSaga, introduced),
+    executor("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga, introduced),
+    executor("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga, introduced)
 ];
 
 function* postingDeleteSaga(action: PostingDeleteAction) {

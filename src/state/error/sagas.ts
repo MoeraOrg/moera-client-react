@@ -3,15 +3,15 @@ import i18n from 'i18next';
 
 import { NodeApiError, VerboseError } from "api";
 import { Storage } from "storage";
-import { ERROR_AUTH_INVALID, ERROR_THROWN, errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
+import { errorDismiss, errorShow, ErrorThrownAction } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 import { executor } from "state/executor";
 
 export default [
-    executor(ERROR_THROWN, "", errorSaga),
-    executor(ERROR_AUTH_INVALID, "", errorAuthInvalidSaga)
+    executor("ERROR_THROWN", "", errorSaga),
+    executor("ERROR_AUTH_INVALID", "", errorAuthInvalidSaga)
 ];
 
 function* errorSaga(action: ErrorThrownAction) {

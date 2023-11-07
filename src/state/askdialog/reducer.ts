@@ -4,16 +4,6 @@ import cloneDeep from 'lodash.clonedeep';
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { AskDialogState } from "state/askdialog/state";
-import {
-    ASK_DIALOG_LOAD,
-    ASK_DIALOG_LOAD_FAILED,
-    ASK_DIALOG_LOADED,
-    ASK_DIALOG_SEND,
-    ASK_DIALOG_SEND_FAILED,
-    ASK_DIALOG_SENT,
-    CLOSE_ASK_DIALOG,
-    OPEN_ASK_DIALOG
-} from "state/askdialog/actions";
 
 const initialState: AskDialogState = {
     show: false,
@@ -28,7 +18,7 @@ const initialState: AskDialogState = {
 
 export default (state: AskDialogState = initialState, action: WithContext<ClientAction>): AskDialogState => {
     switch (action.type) {
-        case OPEN_ASK_DIALOG:
+        case "OPEN_ASK_DIALOG":
             return {
                 ...cloneDeep(initialState),
                 show: true,
@@ -36,13 +26,13 @@ export default (state: AskDialogState = initialState, action: WithContext<Client
                 nodeCount: action.payload.nodeCount
             }
 
-        case CLOSE_ASK_DIALOG:
+        case "CLOSE_ASK_DIALOG":
             return immutable.set(state, "show", false);
 
-        case ASK_DIALOG_LOAD:
+        case "ASK_DIALOG_LOAD":
             return immutable.set(state, "loading", true);
 
-        case ASK_DIALOG_LOADED:
+        case "ASK_DIALOG_LOADED":
             if (action.payload.nodeName === state.nodeName) {
                 return {
                     ...state,
@@ -54,19 +44,19 @@ export default (state: AskDialogState = initialState, action: WithContext<Client
             }
             return state;
 
-        case ASK_DIALOG_LOAD_FAILED:
+        case "ASK_DIALOG_LOAD_FAILED":
             if (action.payload.nodeName === state.nodeName) {
                 return immutable.set(state, "loading", false);
             }
             return state;
 
-        case ASK_DIALOG_SEND:
+        case "ASK_DIALOG_SEND":
             if (action.payload.nodeName === state.nodeName) {
                 return immutable.set(state, "sending", true);
             }
             return state;
 
-        case ASK_DIALOG_SENT:
+        case "ASK_DIALOG_SENT":
             if (action.payload.nodeName === state.nodeName) {
                 return {
                     ...state,
@@ -76,7 +66,7 @@ export default (state: AskDialogState = initialState, action: WithContext<Client
             }
             return state;
 
-        case ASK_DIALOG_SEND_FAILED:
+        case "ASK_DIALOG_SEND_FAILED":
             if (action.payload.nodeName === state.nodeName) {
                 return immutable.set(state, "sending", false);
             }

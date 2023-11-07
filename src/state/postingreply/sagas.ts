@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { DraftText, Node, PostingInfo, PrincipalValue } from "api";
 import { errorThrown } from "state/error/actions";
-import { POSTING_REPLY, postingReplyFailed } from "state/postingreply/actions";
+import { postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
@@ -14,7 +14,7 @@ import { getWindowSelectionHtml, mentionName } from "util/misc";
 import { quoteHtml } from "util/html";
 
 export default [
-    executor(POSTING_REPLY, "", postingReplySaga)
+    executor("POSTING_REPLY", "", postingReplySaga)
 ];
 
 function* postingReplySaga() {

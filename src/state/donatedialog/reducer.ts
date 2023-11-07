@@ -1,5 +1,4 @@
 import { ClientAction } from "state/action";
-import { CLOSE_DONATE_DIALOG, OPEN_DONATE_DIALOG } from "state/donatedialog/actions";
 import { DonateDialogState } from "state/donatedialog/state";
 
 const initialState = {
@@ -11,7 +10,7 @@ const initialState = {
 
 export default (state: DonateDialogState = initialState, action: ClientAction): DonateDialogState => {
     switch (action.type) {
-        case OPEN_DONATE_DIALOG:
+        case "OPEN_DONATE_DIALOG":
             return {
                 ...state,
                 show: true,
@@ -20,7 +19,7 @@ export default (state: DonateDialogState = initialState, action: ClientAction): 
                 fundraisers: action.payload.fundraisers
             }
 
-        case CLOSE_DONATE_DIALOG:
+        case "CLOSE_DONATE_DIALOG":
             return {
                 ...state,
                 show: false

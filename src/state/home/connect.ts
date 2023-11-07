@@ -5,11 +5,9 @@ import { Naming, Node, NodeApiError, NodeName, selectApi } from "api";
 import { Storage } from "storage";
 import { messageBox } from "state/messagebox/actions";
 import {
-    CONNECT_TO_HOME,
     connectedToHome,
     connectionToHomeFailed,
     ConnectToHomeAction,
-    HOME_OWNER_VERIFY,
     homeOwnerSet,
     homeOwnerVerified
 } from "state/home/actions";
@@ -20,8 +18,8 @@ import { connectDialogSetForm } from "state/connectdialog/actions";
 import { normalizeUrl } from "util/url";
 
 export default [
-    executor(CONNECT_TO_HOME, null, connectToHomeSaga),
-    executor(HOME_OWNER_VERIFY, null, homeOwnerVerifySaga)
+    executor("CONNECT_TO_HOME", null, connectToHomeSaga),
+    executor("HOME_OWNER_VERIFY", null, homeOwnerVerifySaga)
 ];
 
 function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {

@@ -8,23 +8,15 @@ import { getNodeUri } from "state/naming/sagas";
 import { postingLoad } from "state/postings/actions";
 import { flashBox } from "state/flashbox/actions";
 import { errorThrown } from "state/error/actions";
-import {
-    LIGHT_BOX_COPY_LINK,
-    LIGHT_BOX_COPY_MEDIA_LINK,
-    LIGHT_BOX_MEDIA_POSTING_LOAD,
-    LIGHT_BOX_MEDIA_SET,
-    LightBoxCopyLinkAction,
-    LightBoxCopyMediaLinkAction,
-    LightBoxMediaSetAction
-} from "state/lightbox/actions";
+import { LightBoxCopyLinkAction, LightBoxCopyMediaLinkAction, LightBoxMediaSetAction } from "state/lightbox/actions";
 import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import { Browser } from "ui/browser";
 
 export default [
-    executor(LIGHT_BOX_MEDIA_POSTING_LOAD, null, lightBoxMediaPostingLoadSaga),
-    executor(LIGHT_BOX_MEDIA_SET, null, lightBoxMediaSetSaga),
-    executor(LIGHT_BOX_COPY_LINK, null, lightBoxCopyLinkSaga),
-    executor(LIGHT_BOX_COPY_MEDIA_LINK, null, lightBoxCopyMediaLinkSaga)
+    executor("LIGHT_BOX_MEDIA_POSTING_LOAD", null, lightBoxMediaPostingLoadSaga),
+    executor("LIGHT_BOX_MEDIA_SET", null, lightBoxMediaSetSaga),
+    executor("LIGHT_BOX_COPY_LINK", null, lightBoxCopyLinkSaga),
+    executor("LIGHT_BOX_COPY_MEDIA_LINK", null, lightBoxCopyMediaLinkSaga)
 ];
 
 function* lightBoxMediaPostingLoadSaga() {

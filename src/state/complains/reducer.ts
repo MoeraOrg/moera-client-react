@@ -10,26 +10,6 @@ import {
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { INIT_FROM_LOCATION } from "state/navigation/actions";
-import {
-    COMPLAINS_COMPLAINS_LOAD,
-    COMPLAINS_COMPLAINS_LOAD_FAILED,
-    COMPLAINS_COMPLAINS_LOADED,
-    COMPLAINS_DECISION_POST,
-    COMPLAINS_DECISION_POST_FAILED,
-    COMPLAINS_DECISION_POSTED,
-    COMPLAINS_FUTURE_SLICE_LOAD,
-    COMPLAINS_FUTURE_SLICE_LOAD_FAILED,
-    COMPLAINS_FUTURE_SLICE_SET,
-    COMPLAINS_GROUP_CLOSE,
-    COMPLAINS_GROUP_LOAD,
-    COMPLAINS_GROUP_LOAD_FAILED,
-    COMPLAINS_GROUP_LOADED,
-    COMPLAINS_GROUP_OPEN,
-    COMPLAINS_INBOX_SET,
-    COMPLAINS_PAST_SLICE_LOAD,
-    COMPLAINS_PAST_SLICE_LOAD_FAILED,
-    COMPLAINS_PAST_SLICE_SET
-} from "state/complains/actions";
 import { ComplainsState, ExtComplainGroupInfo, ExtComplainInfo } from "state/complains/state";
 import { htmlEntities, replaceEmojis } from "util/html";
 
@@ -100,22 +80,22 @@ function extractComplain(complain: SheriffComplainInfo | ExtComplainInfo): ExtCo
 
 export default (state: ComplainsState = initialState, action: WithContext<ClientAction>): ComplainsState => {
     switch (action.type) {
-        case INIT_FROM_LOCATION:
+        case "INIT_FROM_LOCATION":
             return cloneDeep(initialState);
 
-        case COMPLAINS_PAST_SLICE_LOAD:
+        case "COMPLAINS_PAST_SLICE_LOAD":
             return immutable.set(state, "loadingPast", true);
 
-        case COMPLAINS_PAST_SLICE_LOAD_FAILED:
+        case "COMPLAINS_PAST_SLICE_LOAD_FAILED":
             return immutable.set(state, "loadingPast", false);
 
-        case COMPLAINS_FUTURE_SLICE_LOAD:
+        case "COMPLAINS_FUTURE_SLICE_LOAD":
             return immutable.set(state, "loadingFuture", true);
 
-        case COMPLAINS_FUTURE_SLICE_LOAD_FAILED:
+        case "COMPLAINS_FUTURE_SLICE_LOAD_FAILED":
             return immutable.set(state, "loadingFuture", false);
 
-        case COMPLAINS_PAST_SLICE_SET: {
+        case "COMPLAINS_PAST_SLICE_SET": {
             const istate = immutable.wrap(state);
             if (action.payload.before >= state.after && action.payload.after < state.after) {
                 action.payload.complainGroups.forEach(cg =>
@@ -143,7 +123,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             }
         }
 
-        case COMPLAINS_FUTURE_SLICE_SET: {
+        case "COMPLAINS_FUTURE_SLICE_SET": {
             const istate = immutable.wrap(state);
             if (action.payload.before > state.before && action.payload.after <= state.before) {
                 const groups = state.complainGroupList
@@ -168,7 +148,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             }
         }
 
-        case COMPLAINS_INBOX_SET:
+        case "COMPLAINS_INBOX_SET":
             return immutable.assign(state, "", {
                 loadingFuture: false,
                 loadingPast: false,
@@ -181,19 +161,19 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
                 inboxOnly: action.payload.inboxOnly
             });
 
-        case COMPLAINS_GROUP_OPEN:
+        case "COMPLAINS_GROUP_OPEN":
             return immutable.assign(state, "", {
                 activeComplainGroupId: action.payload.id,
                 ...emptyActiveComplain
             });
 
-        case COMPLAINS_GROUP_CLOSE:
+        case "COMPLAINS_GROUP_CLOSE":
             return immutable.set(state, "activeComplainGroupId", null);
 
-        case COMPLAINS_GROUP_LOAD:
+        case "COMPLAINS_GROUP_LOAD":
             return immutable.set(state, "loadingActive", true);
 
-        case COMPLAINS_GROUP_LOADED: {
+        case "COMPLAINS_GROUP_LOADED": {
             const {group} = action.payload;
             const istate = immutable.wrap(state);
             istate.set(["complainGroups", group.id], extractComplainGroup(group));
@@ -203,16 +183,16 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case COMPLAINS_GROUP_LOAD_FAILED:
+        case "COMPLAINS_GROUP_LOAD_FAILED":
             if (action.payload.id === state.activeComplainGroupId) {
                 return immutable.set(state, "loadingActive", false);
             }
             return state;
 
-        case COMPLAINS_COMPLAINS_LOAD:
+        case "COMPLAINS_COMPLAINS_LOAD":
             return immutable.set(state, "loadingComplains", true);
 
-        case COMPLAINS_COMPLAINS_LOADED:
+        case "COMPLAINS_COMPLAINS_LOADED":
             if (action.payload.groupId === state.activeComplainGroupId) {
                 return immutable.assign(state, "", {
                     loadingComplains: false,
@@ -221,19 +201,19 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             }
             return state;
 
-        case COMPLAINS_COMPLAINS_LOAD_FAILED:
+        case "COMPLAINS_COMPLAINS_LOAD_FAILED":
             if (action.payload.groupId === state.activeComplainGroupId) {
                 return immutable.set(state, "loadingComplains", false);
             }
             return state;
 
-        case COMPLAINS_DECISION_POST:
+        case "COMPLAINS_DECISION_POST":
             if (action.payload.groupId === state.activeComplainGroupId) {
                 return immutable.set(state, "submitting", true);
             }
             return state;
 
-        case COMPLAINS_DECISION_POSTED: {
+        case "COMPLAINS_DECISION_POSTED": {
             const {group} = action.payload;
             const istate = immutable.wrap(state);
             istate.set(["complainGroups", group.id], extractComplainGroup(group));
@@ -244,7 +224,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case COMPLAINS_DECISION_POST_FAILED:
+        case "COMPLAINS_DECISION_POST_FAILED":
             if (action.payload.groupId === state.activeComplainGroupId) {
                 return immutable.set(state, "submitting", false);
             }

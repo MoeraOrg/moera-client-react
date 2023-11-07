@@ -1,17 +1,17 @@
 import { call, put } from 'typed-redux-saga';
 import i18n from 'i18next';
 
-import { NodeApiError, Node } from "api";
+import { Node, NodeApiError } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
-import { CARTES_LOAD, cartesLoaded, cartesSet, CLOCK_OFFSET_WARN } from "state/cartes/actions";
+import { cartesLoaded, cartesSet } from "state/cartes/actions";
 import { messageBox } from "state/messagebox/actions";
 import { now } from "util/misc";
 
 export default [
-    executor(CARTES_LOAD, "", cartesLoadSaga),
-    executor(CLOCK_OFFSET_WARN, "", clockOffsetWarnSaga)
+    executor("CARTES_LOAD", "", cartesLoadSaga),
+    executor("CLOCK_OFFSET_WARN", "", clockOffsetWarnSaga)
 ];
 
 function* cartesLoadSaga() {

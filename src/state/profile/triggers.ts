@@ -1,11 +1,8 @@
 import { conj, trigger } from "state/trigger";
-import { HOME_INTRODUCED } from "state/home/actions";
 import {
     PROFILE_AVATAR_CONFIRM_DELETE,
     PROFILE_AVATAR_CREATED,
     PROFILE_CLOSE_AVATAR_EDIT_DIALOG,
-    PROFILE_EDIT,
-    PROFILE_EDIT_CANCEL,
     PROFILE_OPEN_AVATAR_EDIT_DIALOG,
     PROFILE_UPDATE_SUCCEEDED,
     ProfileAvatarConfirmDeleteAction,
@@ -15,29 +12,21 @@ import {
     profileLoad
 } from "state/profile/actions";
 import { isProfileEditing } from "state/profile/selectors";
-import {
-    bottomMenuHide,
-    bottomMenuShow,
-    dialogClosed,
-    dialogOpened,
-    GO_TO_PAGE,
-    newLocation,
-    WAKE_UP
-} from "state/navigation/actions";
+import { bottomMenuHide, bottomMenuShow, dialogClosed, dialogOpened, newLocation } from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
 import { EVENT_NODE_PROFILE_UPDATED } from "api/events";
 import { confirmBox } from "state/confirmbox/actions";
 
 export default [
-    trigger(GO_TO_PAGE, conj(isAtProfilePage, isProfileEditing), () => profileLoad()),
+    trigger("GO_TO_PAGE", conj(isAtProfilePage, isProfileEditing), () => profileLoad()),
     trigger(
-        [HOME_INTRODUCED, WAKE_UP, PROFILE_EDIT],
+        ["HOME_INTRODUCED", "WAKE_UP", "PROFILE_EDIT"],
         conj(isAtProfilePage, isProfileEditing),
         () => profileLoad()
     ),
-    trigger([PROFILE_EDIT, PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, newLocation),
-    trigger(PROFILE_EDIT, isAtProfilePage, bottomMenuHide),
-    trigger([PROFILE_EDIT_CANCEL, PROFILE_UPDATE_SUCCEEDED], isAtProfilePage, bottomMenuShow),
+    trigger(["PROFILE_EDIT", "PROFILE_EDIT_CANCEL", "PROFILE_UPDATE_SUCCEEDED"], isAtProfilePage, newLocation),
+    trigger("PROFILE_EDIT", isAtProfilePage, bottomMenuHide),
+    trigger(["PROFILE_EDIT_CANCEL", "PROFILE_UPDATE_SUCCEEDED"], isAtProfilePage, bottomMenuShow),
     trigger(
         PROFILE_AVATAR_CONFIRM_DELETE,
         true,

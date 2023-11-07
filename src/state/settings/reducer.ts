@@ -121,7 +121,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 .set("plugins.conflict", false)
                 .value();
 
-        case DISCONNECTED_FROM_HOME:
+        case "DISCONNECTED_FROM_HOME":
             return {
                 ...state,
                 ...emptySettings

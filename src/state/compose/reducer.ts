@@ -1,32 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
 import { DraftInfo, PostingInfo } from "api";
-import {
-    COMPOSE_CONFLICT,
-    COMPOSE_CONFLICT_CLOSE,
-    COMPOSE_DRAFT_LIST_ITEM_DELETED,
-    COMPOSE_DRAFT_LIST_ITEM_SET,
-    COMPOSE_DRAFT_LIST_LOAD,
-    COMPOSE_DRAFT_LIST_LOAD_FAILED,
-    COMPOSE_DRAFT_LIST_LOADED,
-    COMPOSE_DRAFT_LOAD,
-    COMPOSE_DRAFT_LOAD_FAILED,
-    COMPOSE_DRAFT_LOADED,
-    COMPOSE_DRAFT_SAVE,
-    COMPOSE_DRAFT_SAVE_FAILED,
-    COMPOSE_DRAFT_SAVED,
-    COMPOSE_DRAFT_SELECT,
-    COMPOSE_DRAFT_UNSET,
-    COMPOSE_POST,
-    COMPOSE_POST_FAILED,
-    COMPOSE_POST_SUCCEEDED,
-    COMPOSE_POSTING_LOAD,
-    COMPOSE_POSTING_LOAD_FAILED,
-    COMPOSE_POSTING_LOADED,
-    COMPOSE_PREVIEW,
-    COMPOSE_PREVIEW_CLOSE,
-    COMPOSE_SHARED_TEXT_SET
-} from "state/compose/actions";
 import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
 import { ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
@@ -99,7 +73,7 @@ function postingToDraftPosting(posting: PostingInfo): DraftPostingInfo {
 
 export default (state: ComposeState = initialState, action: ClientAction): ComposeState => {
     switch (action.type) {
-        case GO_TO_PAGE:
+        case "GO_TO_PAGE":
             if (action.payload.page === PAGE_COMPOSE) {
                 return {
                     ...state,
@@ -110,13 +84,13 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             }
             return state;
 
-        case COMPOSE_POSTING_LOAD:
+        case "COMPOSE_POSTING_LOAD":
             return {
                 ...state,
                 loadingPosting: true
             };
 
-        case COMPOSE_POSTING_LOADED:
+        case "COMPOSE_POSTING_LOADED":
             return {
                 ...state,
                 posting: postingToDraftPosting(action.payload.posting),
@@ -124,50 +98,50 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 formId: state.formId + 1
             };
 
-        case COMPOSE_POSTING_LOAD_FAILED:
+        case "COMPOSE_POSTING_LOAD_FAILED":
             return {
                 ...state,
                 loadingPosting: false
             };
 
-        case COMPOSE_CONFLICT:
+        case "COMPOSE_CONFLICT":
             return {
                 ...state,
                 conflict: true
             };
 
-        case COMPOSE_CONFLICT_CLOSE:
+        case "COMPOSE_CONFLICT_CLOSE":
             return {
                 ...state,
                 conflict: false
             };
 
-        case COMPOSE_POST:
+        case "COMPOSE_POST":
             return {
                 ...state,
                 beingPosted: true
             };
 
-        case COMPOSE_POST_SUCCEEDED:
+        case "COMPOSE_POST_SUCCEEDED":
             return {
                 ...state,
                 beingPosted: false,
                 posted: true
             };
 
-        case COMPOSE_POST_FAILED:
+        case "COMPOSE_POST_FAILED":
             return {
                 ...state,
                 beingPosted: false
             };
 
-        case COMPOSE_DRAFT_LOAD:
+        case "COMPOSE_DRAFT_LOAD":
             return {
                 ...state,
                 loadingDraft: true
             };
 
-        case COMPOSE_DRAFT_LOADED:
+        case "COMPOSE_DRAFT_LOADED":
             return {
                 ...state,
                 draftId: action.payload.draft.id,
@@ -176,20 +150,20 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 formId: state.formId + 1
             };
 
-        case COMPOSE_DRAFT_LOAD_FAILED:
+        case "COMPOSE_DRAFT_LOAD_FAILED":
             return {
                 ...state,
                 loadingDraft: false
             };
 
-        case COMPOSE_DRAFT_SAVE:
+        case "COMPOSE_DRAFT_SAVE":
             return {
                 ...state,
                 savingDraft: true,
                 savedDraft: false
             };
 
-        case COMPOSE_DRAFT_SAVED:
+        case "COMPOSE_DRAFT_SAVED":
             if (action.payload.postingId === state.postingId) {
                 return {
                     ...state,
@@ -202,20 +176,20 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 return state;
             }
 
-        case COMPOSE_DRAFT_SAVE_FAILED:
+        case "COMPOSE_DRAFT_SAVE_FAILED":
             return {
                 ...state,
                 savingDraft: false,
                 savedDraft: false
             };
 
-        case COMPOSE_DRAFT_LIST_LOAD:
+        case "COMPOSE_DRAFT_LIST_LOAD":
             return {
                 ...state,
                 loadingDraftList: true
             };
 
-        case COMPOSE_DRAFT_LIST_LOADED:
+        case "COMPOSE_DRAFT_LIST_LOADED":
             return {
                 ...state,
                 draftList: sortDraftList(action.payload.draftList.map(buildDraftInfo)),
@@ -223,13 +197,13 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 loadedDraftList: true
             };
 
-        case COMPOSE_DRAFT_LIST_LOAD_FAILED:
+        case "COMPOSE_DRAFT_LIST_LOAD_FAILED":
             return {
                 ...state,
                 loadingDraftList: false
             };
 
-        case COMPOSE_DRAFT_SELECT:
+        case "COMPOSE_DRAFT_SELECT":
             return {
                 ...state,
                 ...emptyPosting,
@@ -237,7 +211,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 formId: action.payload.id == null ? state.formId + 1 : state.formId
             };
 
-        case COMPOSE_DRAFT_LIST_ITEM_SET:
+        case "COMPOSE_DRAFT_LIST_ITEM_SET":
             if (state.loadedDraftList) {
                 return {
                     ...state,
@@ -247,7 +221,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 return state;
             }
 
-        case COMPOSE_DRAFT_LIST_ITEM_DELETED: {
+        case "COMPOSE_DRAFT_LIST_ITEM_DELETED": {
             if (!state.loadedDraftList && (state.postingId != null || state.draftId !== action.payload.id)) {
                 return state;
             }
@@ -269,7 +243,7 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             return result;
         }
 
-        case COMPOSE_DRAFT_UNSET:
+        case "COMPOSE_DRAFT_UNSET":
             return {
                 ...state,
                 draftId: null,
@@ -280,19 +254,19 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
                 formId: action.payload.resetForm ? state.formId + 1 : state.formId
             };
 
-        case COMPOSE_PREVIEW:
+        case "COMPOSE_PREVIEW":
             return {
                 ...state,
                 showPreview: true
             };
 
-        case COMPOSE_PREVIEW_CLOSE:
+        case "COMPOSE_PREVIEW_CLOSE":
             return {
                 ...state,
                 showPreview: false
             };
 
-        case COMPOSE_SHARED_TEXT_SET:
+        case "COMPOSE_SHARED_TEXT_SET":
             return {
                 ...state,
                 sharedText: action.payload.text,

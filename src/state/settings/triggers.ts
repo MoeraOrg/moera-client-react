@@ -42,9 +42,8 @@ import {
     settingsTokensLoad,
     settingsTokensUnset
 } from "state/settings/actions";
-import { HOME_INTRODUCED } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
-import { dialogClosed, dialogOpened, GO_TO_PAGE, newLocation, updateLocation, WAKE_UP } from "state/navigation/actions";
+import { dialogClosed, dialogOpened, GO_TO_PAGE, newLocation, updateLocation } from "state/navigation/actions";
 import {
     EVENT_HOME_CLIENT_SETTINGS_CHANGED,
     EVENT_HOME_NODE_SETTINGS_CHANGED,
@@ -57,29 +56,29 @@ import { POST_INIT_DELAYED } from "state/pulse/actions";
 export default [
     trigger(SETTINGS_GO_TO_TAB, isSettingsNodeValuesToBeLoaded, settingsNodeValuesLoad),
     trigger(SETTINGS_GO_TO_TAB, isSettingsNodeMetaToBeLoaded, settingsNodeMetaLoad),
-    trigger([HOME_INTRODUCED, WAKE_UP], isConnectedToHome, settingsNodeValuesLoad),
-    trigger([HOME_INTRODUCED, EVENT_HOME_NODE_SETTINGS_META_CHANGED], isConnectedToHome, settingsNodeMetaLoad),
-    trigger([HOME_INTRODUCED, WAKE_UP], inv(isConnectedToHome), settingsNodeValuesUnset),
-    trigger([HOME_INTRODUCED, WAKE_UP], inv(isConnectedToHome), settingsNodeMetaUnset),
+    trigger(["HOME_INTRODUCED", "WAKE_UP"], isConnectedToHome, settingsNodeValuesLoad),
+    trigger(["HOME_INTRODUCED", EVENT_HOME_NODE_SETTINGS_META_CHANGED], isConnectedToHome, settingsNodeMetaLoad),
+    trigger(["HOME_INTRODUCED", "WAKE_UP"], inv(isConnectedToHome), settingsNodeValuesUnset),
+    trigger(["HOME_INTRODUCED", "WAKE_UP"], inv(isConnectedToHome), settingsNodeMetaUnset),
     trigger(SETTINGS_GO_TO_TAB, isSettingsClientValuesToBeLoaded, settingsClientValuesLoad),
-    trigger([HOME_INTRODUCED, WAKE_UP], isConnectedToHome, settingsClientValuesLoad),
-    trigger([HOME_INTRODUCED, WAKE_UP], inv(isConnectedToHome), settingsClientValuesUnset),
+    trigger(["HOME_INTRODUCED", "WAKE_UP"], isConnectedToHome, settingsClientValuesLoad),
+    trigger(["HOME_INTRODUCED", "WAKE_UP"], inv(isConnectedToHome), settingsClientValuesUnset),
     trigger(SETTINGS_GO_TO_TAB, true, newLocation),
     trigger(SETTINGS_GO_TO_SHEET, true, updateLocation),
     trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN, true, dialogOpened(settingsChangePasswordDialogClose())),
     trigger(SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE, true, dialogClosed),
     trigger(
-        [HOME_INTRODUCED, GO_TO_PAGE, SETTINGS_GO_TO_SHEET],
+        ["HOME_INTRODUCED", "GO_TO_PAGE", SETTINGS_GO_TO_SHEET],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtSecuritySheet, isSettingsTokensToBeLoaded),
         settingsTokensLoad
     ),
-    trigger(HOME_INTRODUCED, inv(isConnectedToHome), settingsTokensUnset),
+    trigger("HOME_INTRODUCED", inv(isConnectedToHome), settingsTokensUnset),
     trigger(
-        [HOME_INTRODUCED, GO_TO_PAGE, SETTINGS_GO_TO_SHEET],
+        ["HOME_INTRODUCED", "GO_TO_PAGE", SETTINGS_GO_TO_SHEET],
         conj(isConnectedToHome, isAtSettingsPage, isSettingsAtAddonsSheet, isSettingsPluginsToBeLoaded),
         settingsPluginsLoad
     ),
-    trigger(HOME_INTRODUCED, inv(isConnectedToHome), settingsPluginsUnset),
+    trigger("HOME_INTRODUCED", inv(isConnectedToHome), settingsPluginsUnset),
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, true, settingsNodeValuesLoad),
     trigger(EVENT_HOME_NODE_SETTINGS_CHANGED, conj(isAtSettingsPage, isAtSettingsNodeTab), settingsNodeConflict),
     trigger(EVENT_HOME_CLIENT_SETTINGS_CHANGED, true, settingsClientValuesLoad),

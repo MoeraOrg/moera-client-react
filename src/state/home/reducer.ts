@@ -12,24 +12,8 @@ import {
 import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
-import {
-    CONNECT_TO_HOME,
-    CONNECTED_TO_HOME,
-    CONNECTION_TO_HOME_FAILED,
-    CONNECTIONS_SET,
-    DISCONNECTED_FROM_HOME,
-    HOME_AVATARS_LOAD,
-    HOME_AVATARS_LOAD_FAILED,
-    HOME_AVATARS_LOADED,
-    HOME_FRIEND_GROUPS_LOADED,
-    HOME_INTRODUCED,
-    HOME_INVISIBLE_USERS_LOADED,
-    HOME_OWNER_SET,
-    HOME_OWNER_VERIFIED
-} from "state/home/actions";
 import { FRIEND_GROUP_ADDED } from "state/people/actions";
 import { PROFILE_AVATAR_CREATED, PROFILE_AVATAR_DELETED } from "state/profile/actions";
-import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
 import { HomeState } from "state/home/state";
 import { toWsUrl } from "util/url";
 
@@ -80,19 +64,19 @@ function updateBlocked(state: HomeState, list: BlockedUserInfo[], append: boolea
 
 export default (state: HomeState = initialState, action: WithContext<ClientAction>): HomeState => {
     switch (action.type) {
-        case CONNECT_TO_HOME:
+        case "CONNECT_TO_HOME":
             return {
                 ...state,
                 connecting: true
             };
 
-        case CONNECTION_TO_HOME_FAILED:
+        case "CONNECTION_TO_HOME_FAILED":
             return {
                 ...state,
                 connecting: false
             };
 
-        case CONNECTED_TO_HOME: {
+        case "CONNECTED_TO_HOME": {
             const {location, login, name, roots} = action.payload;
             let root = location.toLowerCase();
             return {
@@ -116,19 +100,19 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             };
         }
 
-        case DISCONNECTED_FROM_HOME:
+        case "DISCONNECTED_FROM_HOME":
             return {
                 ...state,
                 ...cloneDeep(emptyConnection)
             };
 
-        case HOME_INTRODUCED:
+        case "HOME_INTRODUCED":
             return {
                 ...state,
                 introduced: true
             };
 
-        case HOME_OWNER_SET:
+        case "HOME_OWNER_SET":
             return {
                 ...state,
                 owner: {
@@ -140,7 +124,7 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 }
             };
 
-        case HOME_OWNER_VERIFIED:
+        case "HOME_OWNER_VERIFIED":
             if (state.owner.name === action.payload.name) {
                 return {
                     ...state,
@@ -154,42 +138,42 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             }
             return state;
 
-        case CONNECTIONS_SET:
+        case "CONNECTIONS_SET":
             return {
                 ...state,
                 roots: action.payload.roots
             };
 
-        case HOME_AVATARS_LOAD:
+        case "HOME_AVATARS_LOAD":
             return immutable.set(state, "avatars.loading", true);
 
-        case HOME_AVATARS_LOADED:
+        case "HOME_AVATARS_LOADED":
             return immutable.assign(state, "avatars", {
                 loading: false,
                 loaded: true,
                 avatars: action.payload.avatars
             });
 
-        case HOME_AVATARS_LOAD_FAILED:
+        case "HOME_AVATARS_LOAD_FAILED":
             return immutable.set(state, "avatars.loading", false);
 
-        case HOME_FRIEND_GROUPS_LOADED:
+        case "HOME_FRIEND_GROUPS_LOADED":
             return immutable.set(state, "friendGroups",
                 action.payload.friendGroups.sort((a, b) => a.createdAt - b.createdAt));
 
-        case HOME_INVISIBLE_USERS_LOADED:
+        case "HOME_INVISIBLE_USERS_LOADED":
             return immutable.assign(state, "invisibleUsers", {
                 checksum: action.payload.checksum,
                 blockedUsers: action.payload.blockedUsers
             });
 
-        case BLOCKED_USERS_ADDED:
+        case "BLOCKED_USERS_ADDED":
             return updateBlocked(state, action.payload.blockedUsers, true);
 
-        case BLOCKED_USERS_DELETED:
+        case "BLOCKED_USERS_DELETED":
             return updateBlocked(state, action.payload.blockedUsers, false);
 
-        case FRIEND_GROUP_ADDED:
+        case "FRIEND_GROUP_ADDED":
             if (action.payload.nodeName === action.context.homeOwnerNameOrUrl) {
                 return immutable.update(
                     state,

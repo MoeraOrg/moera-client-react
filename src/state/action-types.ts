@@ -1,6 +1,17 @@
 import { Action } from 'redux';
 
 import { AvatarImage } from "api";
+import { ClientAction } from "state/action";
+
+export interface ActionWithoutPayload<T> extends Action<T> {
+    cause?: ClientAction;
+    causedBy: <T>(cause: ClientAction) => ActionWithoutPayload<T>;
+}
+
+export interface ActionWithPayload<T, P> extends ActionWithoutPayload<T> {
+    payload: P;
+    causedBy: <T, P>(cause: ClientAction) => ActionWithPayload<T, P>;
+}
 
 export interface ActionContext {
     ownerName: string | null,
@@ -13,10 +24,16 @@ export interface ActionContext {
     homeOwnerAvatar: AvatarImage | null
 }
 
-export type WithContext<T> = T & {
+export type WithContext<T extends Action> = T & {
     context: ActionContext;
 }
 
-export interface ActionWithPayload<T, P> extends Action<T> {
-    payload: P;
+function causedBy<T, P>(this: ActionWithPayload<T, P>, cause: ClientAction): ActionWithPayload<T, P>;
+function causedBy<T>(this: ActionWithoutPayload<T>, cause: ClientAction): ActionWithoutPayload<T> {
+    this.cause = cause;
+    return this;
 }
+
+export const actionWithoutPayload = <T>(type: T): ActionWithoutPayload<T> => ({type, causedBy});
+
+export const actionWithPayload = <T, P>(type: T, payload: P): ActionWithPayload<T, P> => ({type, payload, causedBy});

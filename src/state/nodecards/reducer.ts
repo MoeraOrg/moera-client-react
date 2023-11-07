@@ -3,41 +3,6 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { BlockedByUserInfo, BlockedUserInfo, FriendGroupDetails, ProfileInfo } from "api";
 import {
-    NODE_CARD_BLOCKING_LOAD,
-    NODE_CARD_BLOCKING_LOAD_FAILED,
-    NODE_CARD_BLOCKING_SET,
-    NODE_CARD_DETAILS_LOAD,
-    NODE_CARD_DETAILS_LOAD_FAILED,
-    NODE_CARD_DETAILS_SET,
-    NODE_CARD_FRIENDSHIP_LOAD,
-    NODE_CARD_FRIENDSHIP_LOAD_FAILED,
-    NODE_CARD_FRIENDSHIP_SET,
-    NODE_CARD_PEOPLE_LOAD,
-    NODE_CARD_PEOPLE_LOAD_FAILED,
-    NODE_CARD_PEOPLE_SET,
-    NODE_CARD_SHERIFF_LIST_LOAD,
-    NODE_CARD_SHERIFF_LIST_LOAD_FAILED,
-    NODE_CARD_SHERIFF_LIST_SET,
-    NODE_CARD_STORIES_LOAD,
-    NODE_CARD_STORIES_LOAD_FAILED,
-    NODE_CARD_STORIES_SET,
-    NODE_CARD_SUBSCRIPTION_LOAD,
-    NODE_CARD_SUBSCRIPTION_LOAD_FAILED,
-    NODE_CARD_SUBSCRIPTION_SET,
-    NODE_CARDS_CLIENT_SWITCH,
-    NODE_CARDS_REFRESH
-} from "state/nodecards/actions";
-import {
-    FEED_SUBSCRIBE,
-    FEED_SUBSCRIBE_FAILED,
-    FEED_SUBSCRIBED,
-    FEED_SUBSCRIBER_UPDATED,
-    FEED_SUBSCRIPTION_UPDATED,
-    FEED_UNSUBSCRIBE,
-    FEED_UNSUBSCRIBE_FAILED,
-    FEED_UNSUBSCRIBED
-} from "state/feeds/actions";
-import {
     EVENT_HOME_BLOCKED_BY_USER_ADDED,
     EVENT_HOME_BLOCKED_BY_USER_DELETED,
     EVENT_HOME_FRIEND_GROUP_DELETED,
@@ -56,10 +21,7 @@ import {
 import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { OWNER_SET } from "state/node/actions";
-import { CONNECTED_TO_HOME, HOME_OWNER_SET } from "state/home/actions";
-import { FRIENDSHIP_UPDATE, FRIENDSHIP_UPDATE_FAILED, FRIENDSHIP_UPDATED } from "state/people/actions";
-import { BLOCKED_USERS_ADDED, BLOCKED_USERS_DELETED } from "state/blockedoperations/actions";
+import { FRIENDSHIP_UPDATE_FAILED } from "state/people/actions";
 
 const emptyProfileInfo: ProfileInfo = {
     fullName: null,
@@ -180,21 +142,21 @@ function updateBlockedBy(state: NodeCardsState, blockedByUser: BlockedByUserInfo
 
 export default (state: NodeCardsState = initialState, action: WithContext<ClientAction>): NodeCardsState => {
     switch (action.type) {
-        case NODE_CARD_DETAILS_LOAD: {
+        case "NODE_CARD_DETAILS_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "details", "loading"], true)
                 .value();
         }
 
-        case NODE_CARD_DETAILS_LOAD_FAILED: {
+        case "NODE_CARD_DETAILS_LOAD_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "details", "loading"], false)
                 .value();
         }
 
-        case NODE_CARD_DETAILS_SET: {
+        case "NODE_CARD_DETAILS_SET": {
             const {nodeName, profile} = action.payload;
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "details"], {
@@ -208,7 +170,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case OWNER_SET: {
+        case "OWNER_SET": {
             let {name, fullName, gender, title, avatar} = action.payload;
             const {ownerNameOrUrl} = action.context;
 
@@ -231,7 +193,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case CONNECTED_TO_HOME: {
+        case "CONNECTED_TO_HOME": {
             const {name, fullName, avatar} = action.payload;
 
             if (name == null || (fullName == null && avatar == null)) {
@@ -248,7 +210,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case HOME_OWNER_SET: {
+        case "HOME_OWNER_SET": {
             let {name, fullName, avatar} = action.payload;
             const {homeOwnerNameOrUrl} = action.context;
 
@@ -263,21 +225,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case NODE_CARD_STORIES_LOAD: {
+        case "NODE_CARD_STORIES_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "stories", "loading"], true)
                 .value();
         }
 
-        case NODE_CARD_STORIES_LOAD_FAILED: {
+        case "NODE_CARD_STORIES_LOAD_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "stories", "loading"], false)
                 .value();
         }
 
-        case NODE_CARD_STORIES_SET: {
+        case "NODE_CARD_STORIES_SET": {
             const {nodeName, storiesTotal, lastStoryCreatedAt} = action.payload;
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "stories"], {
@@ -289,21 +251,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case NODE_CARD_PEOPLE_LOAD: {
+        case "NODE_CARD_PEOPLE_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "people", "loading"], true)
                 .value();
         }
 
-        case NODE_CARD_PEOPLE_LOAD_FAILED: {
+        case "NODE_CARD_PEOPLE_LOAD_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "people", "loading"], false)
                 .value();
         }
 
-        case NODE_CARD_PEOPLE_SET: {
+        case "NODE_CARD_PEOPLE_SET": {
             const {nodeName, subscribersTotal, subscriptionsTotal} = action.payload;
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "people"], {
@@ -315,21 +277,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case NODE_CARD_SUBSCRIPTION_LOAD: {
+        case "NODE_CARD_SUBSCRIPTION_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "subscription", "loading"], true)
                 .value();
         }
 
-        case NODE_CARD_SUBSCRIPTION_LOAD_FAILED: {
+        case "NODE_CARD_SUBSCRIPTION_LOAD_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "subscription", "loading"], false)
                 .value();
         }
 
-        case NODE_CARD_SUBSCRIPTION_SET: {
+        case "NODE_CARD_SUBSCRIPTION_SET": {
             const {nodeName, subscriber, subscription} = action.payload;
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "subscription"], {
@@ -341,21 +303,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case NODE_CARD_FRIENDSHIP_LOAD: {
+        case "NODE_CARD_FRIENDSHIP_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "friendship", "loading"], true)
                 .value();
         }
 
-        case NODE_CARD_FRIENDSHIP_LOAD_FAILED: {
+        case "NODE_CARD_FRIENDSHIP_LOAD_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "friendship", "loading"], false)
                 .value();
         }
 
-        case NODE_CARD_FRIENDSHIP_SET: {
+        case "NODE_CARD_FRIENDSHIP_SET": {
             const {nodeName, groups, remoteGroups} = action.payload;
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "friendship"], {
@@ -367,21 +329,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case NODE_CARD_BLOCKING_LOAD: {
+        case "NODE_CARD_BLOCKING_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "blocking", "loading"], true)
                 .value();
         }
 
-        case NODE_CARD_BLOCKING_LOAD_FAILED: {
+        case "NODE_CARD_BLOCKING_LOAD_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "blocking", "loading"], false)
                 .value();
         }
 
-        case NODE_CARD_BLOCKING_SET: {
+        case "NODE_CARD_BLOCKING_SET": {
             const {nodeName, blocked, blockedBy} = action.payload;
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "blocking"], {
@@ -393,21 +355,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case NODE_CARD_SHERIFF_LIST_LOAD: {
+        case "NODE_CARD_SHERIFF_LIST_LOAD": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "sheriffList", "loading"], true)
                 .value();
         }
 
-        case NODE_CARD_SHERIFF_LIST_LOAD_FAILED: {
+        case "NODE_CARD_SHERIFF_LIST_LOAD_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "sheriffList", "loading"], false)
                 .value();
         }
 
-        case NODE_CARD_SHERIFF_LIST_SET: {
+        case "NODE_CARD_SHERIFF_LIST_SET": {
             const {nodeName, blocked} = action.payload;
             return getCard(state, nodeName).istate
                 .assign(["cards", nodeName, "sheriffList"], {
@@ -418,14 +380,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case FEED_SUBSCRIBE: {
+        case "FEED_SUBSCRIBE": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "subscription", "subscribing"], true)
                 .value();
         }
 
-        case FEED_SUBSCRIBED: {
+        case "FEED_SUBSCRIBED": {
             const {nodeName, subscription} = action.payload;
             const {ownerName} = action.context;
             const istate = getCard(state, nodeName).istate;
@@ -439,21 +401,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case FEED_SUBSCRIBE_FAILED: {
+        case "FEED_SUBSCRIBE_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "subscription", "subscribing"], false)
                 .value();
         }
 
-        case FEED_UNSUBSCRIBE: {
+        case "FEED_UNSUBSCRIBE": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "subscription", "unsubscribing"], false)
                 .value();
         }
 
-        case FEED_UNSUBSCRIBED: {
+        case "FEED_UNSUBSCRIBED": {
             const {nodeName} = action.payload;
             const {ownerName} = action.context;
             const istate = getCard(state, nodeName).istate;
@@ -467,14 +429,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case FEED_UNSUBSCRIBE_FAILED: {
+        case "FEED_UNSUBSCRIBE_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "subscription", "unsubscribing"], false)
                 .value();
         }
 
-        case FEED_SUBSCRIBER_UPDATED: {
+        case "FEED_SUBSCRIBER_UPDATED": {
             const {nodeName, subscriber} = action.payload;
             const {homeOwnerName} = action.context;
             const istate = getCard(state, subscriber.nodeName).istate;
@@ -484,7 +446,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case FEED_SUBSCRIPTION_UPDATED: {
+        case "FEED_SUBSCRIPTION_UPDATED": {
             const {nodeName, subscription} = action.payload;
             const {homeOwnerName} = action.context;
             const istate = getCard(state, subscription.remoteNodeName).istate;
@@ -494,14 +456,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case FRIENDSHIP_UPDATE: {
+        case "FRIENDSHIP_UPDATE": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "friendship", "updating"], true)
                 .value();
         }
 
-        case FRIENDSHIP_UPDATED: {
+        case "FRIENDSHIP_UPDATED": {
             const {friend: {nodeName, groups}} = action.payload;
             const istate = getCard(state, nodeName).istate;
             istate.assign(["cards", nodeName, "friendship"], {
@@ -511,20 +473,20 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case FRIENDSHIP_UPDATE_FAILED: {
+        case "FRIENDSHIP_UPDATE_FAILED": {
             const {nodeName} = action.payload;
             return getCard(state, nodeName).istate
                 .set(["cards", nodeName, "friendship", "updating"], false)
                 .value();
         }
 
-        case BLOCKED_USERS_ADDED:
+        case "BLOCKED_USERS_ADDED":
             return updateBlocked(state, action.payload.blockedUsers, true);
 
-        case BLOCKED_USERS_DELETED:
+        case "BLOCKED_USERS_DELETED":
             return updateBlocked(state, action.payload.blockedUsers, false);
 
-        case NODE_CARDS_CLIENT_SWITCH: {
+        case "NODE_CARDS_CLIENT_SWITCH": {
             const {homeOwnerNameOrUrl} = action.context;
             if (state.clientName === homeOwnerNameOrUrl) {
                 return state;
@@ -543,7 +505,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case NODE_CARDS_REFRESH: {
+        case "NODE_CARDS_REFRESH": {
             const istate = immutable.wrap(state);
             for (const nodeName of Object.keys(state.cards)) {
                 istate.assign(["cards", nodeName], { // Other parts are refreshed by events

@@ -1,6 +1,5 @@
 import { conj, inv, trigger } from "state/trigger";
-import { HOME_INTRODUCED } from "state/home/actions";
-import { GO_TO_PAGE, newLocation } from "state/navigation/actions";
+import { newLocation } from "state/navigation/actions";
 import { isAtPeoplePage } from "state/navigation/selectors";
 import {
     isAtBlockedByTab,
@@ -22,8 +21,6 @@ import {
     blockedLoad,
     friendOfsLoad,
     friendsLoad,
-    PEOPLE_GENERAL_LOADED,
-    PEOPLE_GO_TO_TAB,
     peopleGeneralLoad,
     peopleGeneralUnset,
     peopleGoToDefaultTab,
@@ -31,7 +28,6 @@ import {
     subscribersLoad,
     subscriptionsLoad
 } from "state/people/actions";
-import { FEED_SUBSCRIBED, FEED_UNSUBSCRIBED } from "state/feeds/actions";
 import {
     EVENT_NODE_SUBSCRIBER_ADDED,
     EVENT_NODE_SUBSCRIBER_DELETED,
@@ -43,25 +39,25 @@ import {
 } from "api/events";
 
 export default [
-    trigger(GO_TO_PAGE, conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),
-    trigger(PEOPLE_GO_TO_TAB, true, newLocation),
-    trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscribersTab, isSubscribersToBeLoaded), subscribersLoad),
-    trigger(PEOPLE_GO_TO_TAB, conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
-    trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendsTab, isFriendsToBeLoaded), friendsLoad),
-    trigger(PEOPLE_GO_TO_TAB, conj(isAtFriendOfsTab, isFriendOfsToBeLoaded), friendOfsLoad),
-    trigger(PEOPLE_GO_TO_TAB, conj(isAtBlockedTab, isBlockedToBeLoaded), blockedLoad),
-    trigger(PEOPLE_GO_TO_TAB, conj(isAtBlockedByTab, isBlockedByToBeLoaded), blockedByLoad),
-    trigger(PEOPLE_GENERAL_LOADED, isAtPeoplePage, peopleGoToDefaultTab),
-    trigger(HOME_INTRODUCED, isAtPeoplePage, peopleGeneralLoad),
-    trigger(HOME_INTRODUCED, true, peopleUnset),
-    trigger(HOME_INTRODUCED, conj(isAtPeoplePage, isAtSubscribersTab), subscribersLoad),
-    trigger(HOME_INTRODUCED, conj(isAtPeoplePage, isAtSubscriptionsTab), subscriptionsLoad),
-    trigger(HOME_INTRODUCED, conj(isAtPeoplePage, isAtFriendsTab), friendsLoad),
-    trigger(HOME_INTRODUCED, conj(isAtPeoplePage, isAtFriendOfsTab), friendOfsLoad),
-    trigger(HOME_INTRODUCED, conj(isAtPeoplePage, isAtBlockedTab), blockedLoad),
-    trigger(HOME_INTRODUCED, conj(isAtPeoplePage, isAtBlockedByTab), blockedByLoad),
+    trigger("GO_TO_PAGE", conj(isAtPeoplePage, isPeopleGeneralToBeLoaded), peopleGeneralLoad),
+    trigger("PEOPLE_GO_TO_TAB", true, newLocation),
+    trigger("PEOPLE_GO_TO_TAB", conj(isAtSubscribersTab, isSubscribersToBeLoaded), subscribersLoad),
+    trigger("PEOPLE_GO_TO_TAB", conj(isAtSubscriptionsTab, isSubscriptionsToBeLoaded), subscriptionsLoad),
+    trigger("PEOPLE_GO_TO_TAB", conj(isAtFriendsTab, isFriendsToBeLoaded), friendsLoad),
+    trigger("PEOPLE_GO_TO_TAB", conj(isAtFriendOfsTab, isFriendOfsToBeLoaded), friendOfsLoad),
+    trigger("PEOPLE_GO_TO_TAB", conj(isAtBlockedTab, isBlockedToBeLoaded), blockedLoad),
+    trigger("PEOPLE_GO_TO_TAB", conj(isAtBlockedByTab, isBlockedByToBeLoaded), blockedByLoad),
+    trigger("PEOPLE_GENERAL_LOADED", isAtPeoplePage, peopleGoToDefaultTab),
+    trigger("HOME_INTRODUCED", isAtPeoplePage, peopleGeneralLoad),
+    trigger("HOME_INTRODUCED", true, peopleUnset),
+    trigger("HOME_INTRODUCED", conj(isAtPeoplePage, isAtSubscribersTab), subscribersLoad),
+    trigger("HOME_INTRODUCED", conj(isAtPeoplePage, isAtSubscriptionsTab), subscriptionsLoad),
+    trigger("HOME_INTRODUCED", conj(isAtPeoplePage, isAtFriendsTab), friendsLoad),
+    trigger("HOME_INTRODUCED", conj(isAtPeoplePage, isAtFriendOfsTab), friendOfsLoad),
+    trigger("HOME_INTRODUCED", conj(isAtPeoplePage, isAtBlockedTab), blockedLoad),
+    trigger("HOME_INTRODUCED", conj(isAtPeoplePage, isAtBlockedByTab), blockedByLoad),
     trigger(
-        [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED],
+        ["FEED_SUBSCRIBED", "FEED_UNSUBSCRIBED", EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED],
         isAtPeoplePage,
         peopleGeneralLoad
     ),
@@ -72,7 +68,7 @@ export default [
         peopleGeneralLoad
     ),
     trigger(
-        [FEED_SUBSCRIBED, FEED_UNSUBSCRIBED, EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED],
+        ["FEED_SUBSCRIBED", "FEED_UNSUBSCRIBED", EVENT_NODE_SUBSCRIBER_ADDED, EVENT_NODE_SUBSCRIBER_DELETED],
         inv(isAtPeoplePage),
         peopleGeneralUnset
     ),

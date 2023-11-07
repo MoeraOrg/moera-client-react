@@ -5,12 +5,9 @@ import { executor } from "state/executor";
 import { CLIENT_SETTINGS_PREFIX, Node, NodeApiError } from "api";
 import { WithContext } from "state/action-types";
 import {
-    BLOCK_DIALOG_SUBMIT,
     BlockDialogSubmitAction,
     blockDialogSubmitFailed,
     blockDialogSubmitted,
-    BLOCKED_USER_UNFRIEND,
-    BLOCKED_USER_UNSUBSCRIBE,
     blockedUserUnfriend,
     BlockedUserUnfriendAction,
     blockedUserUnsubscribe,
@@ -26,9 +23,9 @@ import { settingsUpdate } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
 
 export default [
-    executor(BLOCK_DIALOG_SUBMIT, "", blockDialogSubmitSaga),
-    executor(BLOCKED_USER_UNFRIEND, "", blockedUserUnfriendSaga),
-    executor(BLOCKED_USER_UNSUBSCRIBE, "", blockedUserUnsubscribeSaga)
+    executor("BLOCK_DIALOG_SUBMIT", "", blockDialogSubmitSaga),
+    executor("BLOCKED_USER_UNFRIEND", "", blockedUserUnfriendSaga),
+    executor("BLOCKED_USER_UNSUBSCRIBE", "", blockedUserUnsubscribeSaga)
 ];
 
 function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {

@@ -1,10 +1,10 @@
 import { delay, put } from 'typed-redux-saga';
 
-import { FLASH_BOX, FlashBoxAction, flashBoxClose, flashBoxDismiss } from "state/flashbox/actions";
+import { FlashBoxAction, flashBoxClose, flashBoxDismiss } from "state/flashbox/actions";
 import { executor } from "state/executor";
 
 export default [
-    executor(FLASH_BOX, null, flashBoxSaga)
+    executor("FLASH_BOX", null, flashBoxSaga)
 ];
 
 function* flashBoxSaga(action: FlashBoxAction) {

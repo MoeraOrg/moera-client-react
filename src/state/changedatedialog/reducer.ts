@@ -1,9 +1,3 @@
-import {
-    CLOSE_CHANGE_DATE_DIALOG,
-    OPEN_CHANGE_DATE_DIALOG,
-    STORY_CHANGE_DATE,
-    STORY_CHANGE_DATE_FAILED
-} from "state/changedatedialog/actions";
 import { ChangeDateDialogState } from "state/changedatedialog/state";
 import { ClientAction } from "state/action";
 
@@ -16,7 +10,7 @@ const initialState = {
 
 export default (state: ChangeDateDialogState = initialState, action: ClientAction): ChangeDateDialogState => {
     switch (action.type) {
-        case OPEN_CHANGE_DATE_DIALOG:
+        case "OPEN_CHANGE_DATE_DIALOG":
             return {
                 ...state,
                 show: true,
@@ -25,7 +19,7 @@ export default (state: ChangeDateDialogState = initialState, action: ClientActio
                 changing: false
             }
 
-        case CLOSE_CHANGE_DATE_DIALOG:
+        case "CLOSE_CHANGE_DATE_DIALOG":
             return {
                 ...state,
                 publishedAt: 0,
@@ -33,13 +27,13 @@ export default (state: ChangeDateDialogState = initialState, action: ClientActio
                 show: false
             }
 
-        case STORY_CHANGE_DATE:
+        case "STORY_CHANGE_DATE":
             return {
                 ...state,
                 changing: true
             }
 
-        case STORY_CHANGE_DATE_FAILED:
+        case "STORY_CHANGE_DATE_FAILED":
             return {
                 ...state,
                 changing: false

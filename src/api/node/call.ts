@@ -108,7 +108,7 @@ export function* callApi<T>({
         const authSuccess = yield* call(authorize, headers, rootLocation, auth);
         if (!authSuccess && !cartesRenewed) {
             yield* put(cartesLoad());
-            yield* peek(CARTES_LOADED);
+            yield* peek("CARTES_LOADED");
             cartesRenewed = true;
             continue;
         }
@@ -154,7 +154,7 @@ export function* callApi<T>({
             }
             if (data.errorCode.startsWith("carte.") && !cartesRenewed) {
                 yield* put(cartesLoad());
-                yield* peek(CARTES_LOADED);
+                yield* peek("CARTES_LOADED");
                 cartesRenewed = true;
                 continue;
             }

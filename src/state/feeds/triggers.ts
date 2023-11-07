@@ -1,12 +1,10 @@
 import { disj, inv, trigger } from "state/trigger";
-import { GO_TO_PAGE, updateLocation, WAKE_UP } from "state/navigation/actions";
+import { GO_TO_PAGE, updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage, isAtNewsPage, isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
 import {
-    FEED_SCROLLED,
     feedGeneralLoad,
     feedGeneralUnset,
     feedPastSliceLoad,
-    FEEDS_UNSET,
     feedStatusLoad,
     feedStatusSet,
     feedStatusUpdated,
@@ -48,7 +46,6 @@ import {
     SubscriptionDeletedEvent,
     SubscriptionUpdatedEvent
 } from "api/events";
-import { HOME_INTRODUCED } from "state/home/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
@@ -71,36 +68,36 @@ function toStory(eventPayload: Omit<StoryEvent<any> | StoryDeletedEvent, "type">
 
 export default [
     trigger(
-        GO_TO_PAGE,
+        "GO_TO_PAGE",
         state => (isAtTimelinePage(state) || isAtProfilePage(state) || isAtDetailedPostingPage(state))
             && isFeedGeneralToBeLoaded(state, "timeline"),
         feedGeneralLoad("timeline")
     ),
     trigger(
-        [GO_TO_PAGE, FEEDS_UNSET],
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
         state => isAtTimelinePage(state) && isFeedStatusToBeLoaded(state, "timeline"),
         feedStatusLoad("timeline")
     ),
     trigger(
-        [GO_TO_PAGE, FEEDS_UNSET],
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
         state => isAtNewsPage(state) && isFeedStatusToBeLoaded(state, "news"),
         feedStatusLoad("news")
     ),
-    trigger(FEED_SCROLLED, true, updateLocation),
+    trigger("FEED_SCROLLED", true, updateLocation),
     trigger(
-        HOME_INTRODUCED,
+        "HOME_INTRODUCED",
         disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage),
         feedGeneralLoad("timeline")
     ),
     trigger(
-        HOME_INTRODUCED,
+        "HOME_INTRODUCED",
         inv(disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage)),
         feedGeneralUnset("timeline")
     ),
-    trigger(HOME_INTRODUCED, true, feedsUnset),
-    trigger(WAKE_UP, true, feedsUpdate),
-    trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":instant")),
-    trigger(FEEDS_UNSET, isConnectedToHome, feedStatusLoad(":news")),
+    trigger("HOME_INTRODUCED", true, feedsUnset),
+    trigger("WAKE_UP", true, feedsUpdate),
+    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":instant")),
+    trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":news")),
     trigger(
         [POST_INIT, POST_INIT_DELAYED],
         state => isConnectedToHome(state) && isFeedToBeLoaded(state, ":instant"),

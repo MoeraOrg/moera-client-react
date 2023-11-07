@@ -5,11 +5,7 @@ import { Naming, Node, NodeName } from "api";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 import {
-    NODE_FEATURES_LOAD,
     nodeFeaturesLoaded,
-    OWNER_LOAD,
-    OWNER_SWITCH,
-    OWNER_VERIFY,
     ownerSet,
     OwnerSwitchAction,
     ownerSwitchClose,
@@ -24,10 +20,10 @@ import { normalizeUrl, rootUrl } from "util/url";
 import { WithContext } from "state/action-types";
 
 export default [
-    executor(OWNER_LOAD, "", ownerLoadSaga),
-    executor(OWNER_VERIFY, null, ownerVerifySaga, namingInitialized),
-    executor(OWNER_SWITCH, payload => payload.name, ownerSwitchSaga),
-    executor(NODE_FEATURES_LOAD, "", nodeFeaturesLoadSaga, introduced)
+    executor("OWNER_LOAD", "", ownerLoadSaga),
+    executor("OWNER_VERIFY", null, ownerVerifySaga, namingInitialized),
+    executor("OWNER_SWITCH", payload => payload.name, ownerSwitchSaga),
+    executor("NODE_FEATURES_LOAD", "", nodeFeaturesLoadSaga, introduced)
 ];
 
 function* ownerLoadSaga() {

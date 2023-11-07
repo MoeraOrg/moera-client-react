@@ -1,6 +1,4 @@
-import { Action } from 'redux';
-
-import { ActionWithPayload } from "state/action-types";
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import {
     AskSubject,
     BlockedByUserInfo,
@@ -15,144 +13,103 @@ import {
 } from "api";
 import { PeopleTab } from "state/people/state";
 
-export const PEOPLE_GO_TO_TAB = "PEOPLE_GO_TO_TAB";
-export type PeopleGoToTabAction = ActionWithPayload<typeof PEOPLE_GO_TO_TAB, {
+export type PeopleGoToTabAction = ActionWithPayload<"PEOPLE_GO_TO_TAB", {
     tab: PeopleTab;
 }>;
-export const peopleGoToTab = (tab: PeopleTab): PeopleGoToTabAction => ({
-    type: PEOPLE_GO_TO_TAB,
-    payload: {tab}
-});
+export const peopleGoToTab = (tab: PeopleTab): PeopleGoToTabAction =>
+    actionWithPayload("PEOPLE_GO_TO_TAB", {tab});
 
-export const PEOPLE_GO_TO_DEFAULT_TAB = "PEOPLE_GO_TO_DEFAULT_TAB";
-export type PeopleGoToDefaultTabAction = Action<typeof PEOPLE_GO_TO_DEFAULT_TAB>;
-export const peopleGoToDefaultTab = (): PeopleGoToDefaultTabAction => ({
-    type: PEOPLE_GO_TO_DEFAULT_TAB
-});
+export type PeopleGoToDefaultTabAction = ActionWithoutPayload<"PEOPLE_GO_TO_DEFAULT_TAB">;
+export const peopleGoToDefaultTab = (): PeopleGoToDefaultTabAction =>
+    actionWithoutPayload("PEOPLE_GO_TO_DEFAULT_TAB");
 
-export const PEOPLE_GENERAL_LOAD = "PEOPLE_GENERAL_LOAD";
-export type PeopleGeneralLoadAction = Action<typeof PEOPLE_GENERAL_LOAD>;
-export const peopleGeneralLoad = (): PeopleGeneralLoadAction => ({
-    type: PEOPLE_GENERAL_LOAD
-});
+export type PeopleGeneralLoadAction = ActionWithoutPayload<"PEOPLE_GENERAL_LOAD">;
+export const peopleGeneralLoad = (): PeopleGeneralLoadAction =>
+    actionWithoutPayload("PEOPLE_GENERAL_LOAD");
 
-export const PEOPLE_GENERAL_LOADED = "PEOPLE_GENERAL_LOADED";
-export type PeopleGeneralLoadedAction = ActionWithPayload<typeof PEOPLE_GENERAL_LOADED, {
+export type PeopleGeneralLoadedAction = ActionWithPayload<"PEOPLE_GENERAL_LOADED", {
     info: PeopleGeneralInfo;
 }>;
-export const peopleGeneralLoaded = (info: PeopleGeneralInfo): PeopleGeneralLoadedAction => ({
-    type: PEOPLE_GENERAL_LOADED,
-    payload: {info}
-});
+export const peopleGeneralLoaded = (info: PeopleGeneralInfo): PeopleGeneralLoadedAction =>
+    actionWithPayload("PEOPLE_GENERAL_LOADED", {info});
 
-export const PEOPLE_GENERAL_LOAD_FAILED = "PEOPLE_GENERAL_LOAD_FAILED";
-export type PeopleGeneralLoadFailedAction = Action<typeof PEOPLE_GENERAL_LOAD_FAILED>;
-export const peopleGeneralLoadFailed = (): PeopleGeneralLoadFailedAction => ({
-    type: PEOPLE_GENERAL_LOAD_FAILED
-});
+export type PeopleGeneralLoadFailedAction = ActionWithoutPayload<"PEOPLE_GENERAL_LOAD_FAILED">;
+export const peopleGeneralLoadFailed = (): PeopleGeneralLoadFailedAction =>
+    actionWithoutPayload("PEOPLE_GENERAL_LOAD_FAILED");
 
-export const PEOPLE_GENERAL_UNSET = "PEOPLE_GENERAL_UNSET";
-export type PeopleGeneralUnsetAction = Action<typeof PEOPLE_GENERAL_UNSET>;
-export const peopleGeneralUnset = (): PeopleGeneralUnsetAction => ({
-    type: PEOPLE_GENERAL_UNSET
-});
+export type PeopleGeneralUnsetAction = ActionWithoutPayload<"PEOPLE_GENERAL_UNSET">;
+export const peopleGeneralUnset = (): PeopleGeneralUnsetAction =>
+    actionWithoutPayload("PEOPLE_GENERAL_UNSET");
 
-export const PEOPLE_UNSET = "PEOPLE_UNSET";
-export type PeopleUnsetAction = Action<typeof PEOPLE_UNSET>;
-export const peopleUnset = (): PeopleUnsetAction => ({
-    type: PEOPLE_UNSET
-});
+export type PeopleUnsetAction = ActionWithoutPayload<"PEOPLE_UNSET">;
+export const peopleUnset = (): PeopleUnsetAction =>
+    actionWithoutPayload("PEOPLE_UNSET");
 
-export const PEOPLE_START_SELECTION = "PEOPLE_START_SELECTION";
-export type PeopleStartSelectionAction = Action<typeof PEOPLE_START_SELECTION>;
-export const peopleStartSelection = (): PeopleStartSelectionAction => ({
-    type: PEOPLE_START_SELECTION
-});
+export type PeopleStartSelectionAction = ActionWithoutPayload<"PEOPLE_START_SELECTION">;
+export const peopleStartSelection = (): PeopleStartSelectionAction =>
+    actionWithoutPayload("PEOPLE_START_SELECTION");
 
-export const PEOPLE_STOP_SELECTION = "PEOPLE_STOP_SELECTION";
-export type PeopleStopSelectionAction = Action<typeof PEOPLE_STOP_SELECTION>;
-export const peopleStopSelection = (): PeopleStopSelectionAction => ({
-    type: PEOPLE_STOP_SELECTION
-});
+export type PeopleStopSelectionAction = ActionWithoutPayload<"PEOPLE_STOP_SELECTION">;
+export const peopleStopSelection = (): PeopleStopSelectionAction =>
+    actionWithoutPayload("PEOPLE_STOP_SELECTION");
 
-export const PEOPLE_SELECT_TOGGLE = "PEOPLE_SELECT_TOGGLE";
-export type PeopleSelectToggleAction = ActionWithPayload<typeof PEOPLE_SELECT_TOGGLE, {
+export type PeopleSelectToggleAction = ActionWithPayload<"PEOPLE_SELECT_TOGGLE", {
     nodeName: string
 }>;
-export const peopleSelectToggle = (nodeName: string): PeopleSelectToggleAction => ({
-    type: PEOPLE_SELECT_TOGGLE,
-    payload: {nodeName}
-});
+export const peopleSelectToggle = (nodeName: string): PeopleSelectToggleAction =>
+    actionWithPayload("PEOPLE_SELECT_TOGGLE", {nodeName});
 
-export const PEOPLE_SELECTED_SUBSCRIBE = "PEOPLE_SELECTED_SUBSCRIBE";
-export type PeopleSelectedSubscribeAction = Action<typeof PEOPLE_SELECTED_SUBSCRIBE>;
-export const peopleSelectedSubscribe = (): PeopleSelectedSubscribeAction => ({
-    type: PEOPLE_SELECTED_SUBSCRIBE
-});
+export type PeopleSelectedSubscribeAction = ActionWithoutPayload<"PEOPLE_SELECTED_SUBSCRIBE">;
+export const peopleSelectedSubscribe = (): PeopleSelectedSubscribeAction =>
+    actionWithoutPayload("PEOPLE_SELECTED_SUBSCRIBE");
 
-export const PEOPLE_SELECTED_UNSUBSCRIBE = "PEOPLE_SELECTED_UNSUBSCRIBE";
-export type PeopleSelectedUnsubscribeAction = Action<typeof PEOPLE_SELECTED_UNSUBSCRIBE>;
-export const peopleSelectedUnsubscribe = (): PeopleSelectedUnsubscribeAction => ({
-    type: PEOPLE_SELECTED_UNSUBSCRIBE
-});
+export type PeopleSelectedUnsubscribeAction = ActionWithoutPayload<"PEOPLE_SELECTED_UNSUBSCRIBE">;
+export const peopleSelectedUnsubscribe = (): PeopleSelectedUnsubscribeAction =>
+    actionWithoutPayload("PEOPLE_SELECTED_UNSUBSCRIBE");
 
-export const PEOPLE_SELECTED_FRIEND = "PEOPLE_SELECTED_FRIEND";
-export type PeopleSelectedFriendAction = Action<typeof PEOPLE_SELECTED_FRIEND>;
-export const peopleSelectedFriend = (): PeopleSelectedFriendAction => ({
-    type: PEOPLE_SELECTED_FRIEND
-});
+export type PeopleSelectedFriendAction = ActionWithoutPayload<"PEOPLE_SELECTED_FRIEND">;
+export const peopleSelectedFriend = (): PeopleSelectedFriendAction =>
+    actionWithoutPayload("PEOPLE_SELECTED_FRIEND");
 
-export const PEOPLE_SELECTED_UNFRIEND = "PEOPLE_SELECTED_UNFRIEND";
-export type PeopleSelectedUnfriendAction = Action<typeof PEOPLE_SELECTED_UNFRIEND>;
-export const peopleSelectedUnfriend = (): PeopleSelectedUnfriendAction => ({
-    type: PEOPLE_SELECTED_UNFRIEND
-});
+export type PeopleSelectedUnfriendAction = ActionWithoutPayload<"PEOPLE_SELECTED_UNFRIEND">;
+export const peopleSelectedUnfriend = (): PeopleSelectedUnfriendAction =>
+    actionWithoutPayload("PEOPLE_SELECTED_UNFRIEND");
 
-export const PEOPLE_SELECTED_ASK = "PEOPLE_SELECTED_ASK";
-export type PeopleSelectedAskAction = ActionWithPayload<typeof PEOPLE_SELECTED_ASK, {
+export type PeopleSelectedAskAction = ActionWithPayload<"PEOPLE_SELECTED_ASK", {
     subject: AskSubject;
     message: string;
 }>;
-export const peopleSelectedAsk = (subject: AskSubject, message: string): PeopleSelectedAskAction => ({
-    type: PEOPLE_SELECTED_ASK,
-    payload: {subject, message}
-});
+export const peopleSelectedAsk = (subject: AskSubject, message: string): PeopleSelectedAskAction =>
+    actionWithPayload("PEOPLE_SELECTED_ASK", {subject, message});
 
-export const PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY = "PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY";
 export type PeopleSelectedSubscriberSetVisibilityAction =
-    ActionWithPayload<typeof PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY, {
+    ActionWithPayload<"PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY", {
         visible: boolean;
     }>;
-export const peopleSelectedSubscriberSetVisibility =
-    (visible: boolean): PeopleSelectedSubscriberSetVisibilityAction => ({
-        type: PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY,
-        payload: {visible}
-    });
+export const peopleSelectedSubscriberSetVisibility = (
+    visible: boolean
+): PeopleSelectedSubscriberSetVisibilityAction =>
+    actionWithPayload("PEOPLE_SELECTED_SUBSCRIBER_SET_VISIBILITY", {visible});
 
-export const PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY = "PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY";
 export type PeopleSelectedSubscriptionSetVisibilityAction =
-    ActionWithPayload<typeof PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY, {
+    ActionWithPayload<"PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY", {
         visible: boolean;
     }>;
-export const peopleSelectedSubscriptionSetVisibility =
-    (visible: boolean): PeopleSelectedSubscriptionSetVisibilityAction => ({
-        type: PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY,
-        payload: {visible}
-    });
+export const peopleSelectedSubscriptionSetVisibility = (
+    visible: boolean
+): PeopleSelectedSubscriptionSetVisibilityAction =>
+    actionWithPayload("PEOPLE_SELECTED_SUBSCRIPTION_SET_VISIBILITY", {visible});
 
-export const PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY = "PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY";
 export type PeopleSelectedFriendshipSetVisibilityAction =
-    ActionWithPayload<typeof PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY, {
+    ActionWithPayload<"PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY", {
         visible: boolean;
     }>;
-export const peopleSelectedFriendshipSetVisibility =
-    (visible: boolean): PeopleSelectedFriendshipSetVisibilityAction => ({
-        type: PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY,
-        payload: {visible}
-    });
+export const peopleSelectedFriendshipSetVisibility = (
+    visible: boolean
+): PeopleSelectedFriendshipSetVisibilityAction =>
+    actionWithPayload("PEOPLE_SELECTED_FRIENDSHIP_SET_VISIBILITY", {visible});
 
-export const PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS = "PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS";
-export type PeopleSelectedChangeFriendGroupsAction = ActionWithPayload<typeof PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS, {
+export type PeopleSelectedChangeFriendGroupsAction = ActionWithPayload<"PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS", {
     includedGroups: string[];
     excludedGroups: string[];
     addedGroups: number[];
@@ -162,204 +119,143 @@ export type PeopleSelectedChangeFriendGroupsAction = ActionWithPayload<typeof PE
 export const peopleSelectedChangeFriendGroups = (
     includedGroups: string[], excludedGroups: string[], addedGroups: number[], addedGroupTitles: string[],
     addedGroupView: PrincipalValue[]
-): PeopleSelectedChangeFriendGroupsAction => ({
-    type: PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS,
-    payload: {includedGroups, excludedGroups, addedGroups, addedGroupTitles, addedGroupView}
-});
+): PeopleSelectedChangeFriendGroupsAction =>
+    actionWithPayload(
+        "PEOPLE_SELECTED_CHANGE_FRIEND_GROUPS",
+        {includedGroups, excludedGroups, addedGroups, addedGroupTitles, addedGroupView}
+    );
 
-export const PEOPLE_SET_SEARCH_PREFIX = "PEOPLE_SET_SEARCH_PREFIX";
-export type PeopleSetSearchPrefixAction = ActionWithPayload<typeof PEOPLE_SET_SEARCH_PREFIX, {
+export type PeopleSetSearchPrefixAction = ActionWithPayload<"PEOPLE_SET_SEARCH_PREFIX", {
     prefix: string;
 }>;
-export const peopleSetSearchPrefix = (prefix: string): PeopleSetSearchPrefixAction => ({
-    type: PEOPLE_SET_SEARCH_PREFIX,
-    payload: {prefix}
-});
+export const peopleSetSearchPrefix = (prefix: string): PeopleSetSearchPrefixAction =>
+    actionWithPayload("PEOPLE_SET_SEARCH_PREFIX", {prefix});
 
-export const PEOPLE_SET_SORT = "PEOPLE_SET_SORT";
-export type PeopleSetSortAction = ActionWithPayload<typeof PEOPLE_SET_SORT, {
+export type PeopleSetSortAction = ActionWithPayload<"PEOPLE_SET_SORT", {
     sortAlpha: boolean;
 }>;
-export const peopleSetSort = (sortAlpha: boolean): PeopleSetSortAction => ({
-    type: PEOPLE_SET_SORT,
-    payload: {sortAlpha}
-});
+export const peopleSetSort = (sortAlpha: boolean): PeopleSetSortAction =>
+    actionWithPayload("PEOPLE_SET_SORT", {sortAlpha});
 
-export const SUBSCRIBERS_LOAD = "SUBSCRIBERS_LOAD";
-export type SubscribersLoadAction = Action<typeof SUBSCRIBERS_LOAD>;
-export const subscribersLoad = (): SubscribersLoadAction => ({
-    type: SUBSCRIBERS_LOAD
-});
+export type SubscribersLoadAction = ActionWithoutPayload<"SUBSCRIBERS_LOAD">;
+export const subscribersLoad = (): SubscribersLoadAction =>
+    actionWithoutPayload("SUBSCRIBERS_LOAD");
 
-export const SUBSCRIBERS_LOADED = "SUBSCRIBERS_LOADED";
-export type SubscribersLoadedAction = ActionWithPayload<typeof SUBSCRIBERS_LOADED, {
+export type SubscribersLoadedAction = ActionWithPayload<"SUBSCRIBERS_LOADED", {
     list: SubscriberInfo[];
 }>;
-export const subscribersLoaded = (list: SubscriberInfo[]): SubscribersLoadedAction => ({
-    type: SUBSCRIBERS_LOADED,
-    payload: {list}
-});
+export const subscribersLoaded = (list: SubscriberInfo[]): SubscribersLoadedAction =>
+    actionWithPayload("SUBSCRIBERS_LOADED", {list});
 
-export const SUBSCRIBERS_LOAD_FAILED = "SUBSCRIBERS_LOAD_FAILED";
-export type SubscribersLoadFailedAction = Action<typeof SUBSCRIBERS_LOAD_FAILED>;
-export const subscribersLoadFailed = (): SubscribersLoadFailedAction => ({
-    type: SUBSCRIBERS_LOAD_FAILED
-});
+export type SubscribersLoadFailedAction = ActionWithoutPayload<"SUBSCRIBERS_LOAD_FAILED">;
+export const subscribersLoadFailed = (): SubscribersLoadFailedAction =>
+    actionWithoutPayload("SUBSCRIBERS_LOAD_FAILED");
 
-export const SUBSCRIPTIONS_LOAD = "SUBSCRIPTIONS_LOAD";
-export type SubscriptionsLoadAction = Action<typeof SUBSCRIPTIONS_LOAD>;
-export const subscriptionsLoad = (): SubscriptionsLoadAction => ({
-    type: SUBSCRIPTIONS_LOAD
-});
+export type SubscriptionsLoadAction = ActionWithoutPayload<"SUBSCRIPTIONS_LOAD">;
+export const subscriptionsLoad = (): SubscriptionsLoadAction =>
+    actionWithoutPayload("SUBSCRIPTIONS_LOAD");
 
-export const SUBSCRIPTIONS_LOADED = "SUBSCRIPTIONS_LOADED";
-export type SubscriptionsLoadedAction = ActionWithPayload<typeof SUBSCRIPTIONS_LOADED, {
+export type SubscriptionsLoadedAction = ActionWithPayload<"SUBSCRIPTIONS_LOADED", {
     list: SubscriptionInfo[];
 }>;
-export const subscriptionsLoaded = (list: SubscriptionInfo[]): SubscriptionsLoadedAction => ({
-    type: SUBSCRIPTIONS_LOADED,
-    payload: {list}
-});
+export const subscriptionsLoaded = (list: SubscriptionInfo[]): SubscriptionsLoadedAction =>
+    actionWithPayload("SUBSCRIPTIONS_LOADED", {list});
 
-export const SUBSCRIPTIONS_LOAD_FAILED = "SUBSCRIPTIONS_LOAD_FAILED";
-export type SubscriptionsLoadFailedAction = Action<typeof SUBSCRIPTIONS_LOAD_FAILED>;
-export const subscriptionsLoadFailed = (): SubscriptionsLoadFailedAction => ({
-    type: SUBSCRIPTIONS_LOAD_FAILED
-});
+export type SubscriptionsLoadFailedAction = ActionWithoutPayload<"SUBSCRIPTIONS_LOAD_FAILED">;
+export const subscriptionsLoadFailed = (): SubscriptionsLoadFailedAction =>
+    actionWithoutPayload("SUBSCRIPTIONS_LOAD_FAILED");
 
-export const FRIENDS_LOAD = "FRIENDS_LOAD";
-export type FriendsLoadAction = Action<typeof FRIENDS_LOAD>;
-export const friendsLoad = (): FriendsLoadAction => ({
-    type: FRIENDS_LOAD
-});
+export type FriendsLoadAction = ActionWithoutPayload<"FRIENDS_LOAD">;
+export const friendsLoad = (): FriendsLoadAction =>
+    actionWithoutPayload("FRIENDS_LOAD");
 
-export const FRIENDS_LOADED = "FRIENDS_LOADED";
-export type FriendsLoadedAction = ActionWithPayload<typeof FRIENDS_LOADED, {
+export type FriendsLoadedAction = ActionWithPayload<"FRIENDS_LOADED", {
     list: FriendInfo[];
 }>;
-export const friendsLoaded = (list: FriendInfo[]): FriendsLoadedAction => ({
-    type: FRIENDS_LOADED,
-    payload: {list}
-});
+export const friendsLoaded = (list: FriendInfo[]): FriendsLoadedAction =>
+    actionWithPayload("FRIENDS_LOADED", {list});
 
-export const FRIENDS_LOAD_FAILED = "FRIENDS_LOAD_FAILED";
-export type FriendsLoadFailedAction = Action<typeof FRIENDS_LOAD_FAILED>;
-export const friendsLoadFailed = (): FriendsLoadFailedAction => ({
-    type: FRIENDS_LOAD_FAILED
-});
+export type FriendsLoadFailedAction = ActionWithoutPayload<"FRIENDS_LOAD_FAILED">;
+export const friendsLoadFailed = (): FriendsLoadFailedAction =>
+    actionWithoutPayload("FRIENDS_LOAD_FAILED");
 
-export const FRIEND_OFS_LOAD = "FRIEND_OFS_LOAD";
-export type FriendOfsLoadAction = Action<typeof FRIEND_OFS_LOAD>;
-export const friendOfsLoad = (): FriendOfsLoadAction => ({
-    type: FRIEND_OFS_LOAD
-});
+export type FriendOfsLoadAction = ActionWithoutPayload<"FRIEND_OFS_LOAD">;
+export const friendOfsLoad = (): FriendOfsLoadAction =>
+    actionWithoutPayload("FRIEND_OFS_LOAD");
 
-export const FRIEND_OFS_LOADED = "FRIEND_OFS_LOADED";
-export type FriendOfsLoadedAction = ActionWithPayload<typeof FRIEND_OFS_LOADED, {
+export type FriendOfsLoadedAction = ActionWithPayload<"FRIEND_OFS_LOADED", {
     list: FriendOfInfo[];
 }>;
-export const friendOfsLoaded = (list: FriendOfInfo[]): FriendOfsLoadedAction => ({
-    type: FRIEND_OFS_LOADED,
-    payload: {list}
-});
+export const friendOfsLoaded = (list: FriendOfInfo[]): FriendOfsLoadedAction =>
+    actionWithPayload("FRIEND_OFS_LOADED", {list});
 
-export const FRIEND_OFS_LOAD_FAILED = "FRIEND_OFS_LOAD_FAILED";
-export type FriendOfsLoadFailedAction = Action<typeof FRIEND_OFS_LOAD_FAILED>;
-export const friendOfsLoadFailed = (): FriendOfsLoadFailedAction => ({
-    type: FRIEND_OFS_LOAD_FAILED
-});
+export type FriendOfsLoadFailedAction = ActionWithoutPayload<"FRIEND_OFS_LOAD_FAILED">;
+export const friendOfsLoadFailed = (): FriendOfsLoadFailedAction =>
+    actionWithoutPayload("FRIEND_OFS_LOAD_FAILED");
 
-export const BLOCKED_LOAD = "BLOCKED_LOAD";
-export type BlockedLoadAction = Action<typeof BLOCKED_LOAD>;
-export const blockedLoad = (): BlockedLoadAction => ({
-    type: BLOCKED_LOAD
-});
+export type BlockedLoadAction = ActionWithoutPayload<"BLOCKED_LOAD">;
+export const blockedLoad = (): BlockedLoadAction =>
+    actionWithoutPayload("BLOCKED_LOAD");
 
-export const BLOCKED_LOADED = "BLOCKED_LOADED";
-export type BlockedLoadedAction = ActionWithPayload<typeof BLOCKED_LOADED, {
+export type BlockedLoadedAction = ActionWithPayload<"BLOCKED_LOADED", {
     list: BlockedUserInfo[];
 }>;
-export const blockedLoaded = (list: BlockedUserInfo[]): BlockedLoadedAction => ({
-    type: BLOCKED_LOADED,
-    payload: {list}
-});
+export const blockedLoaded = (list: BlockedUserInfo[]): BlockedLoadedAction =>
+    actionWithPayload("BLOCKED_LOADED", {list});
 
-export const BLOCKED_LOAD_FAILED = "BLOCKED_LOAD_FAILED";
-export type BlockedLoadFailedAction = Action<typeof BLOCKED_LOAD_FAILED>;
-export const blockedLoadFailed = (): BlockedLoadFailedAction => ({
-    type: BLOCKED_LOAD_FAILED
-});
+export type BlockedLoadFailedAction = ActionWithoutPayload<"BLOCKED_LOAD_FAILED">;
+export const blockedLoadFailed = (): BlockedLoadFailedAction =>
+    actionWithoutPayload("BLOCKED_LOAD_FAILED");
 
-export const BLOCKED_BY_LOAD = "BLOCKED_BY_LOAD";
-export type BlockedByLoadAction = Action<typeof BLOCKED_BY_LOAD>;
-export const blockedByLoad = (): BlockedByLoadAction => ({
-    type: BLOCKED_BY_LOAD
-});
+export type BlockedByLoadAction = ActionWithoutPayload<"BLOCKED_BY_LOAD">;
+export const blockedByLoad = (): BlockedByLoadAction =>
+    actionWithoutPayload("BLOCKED_BY_LOAD");
 
-export const BLOCKED_BY_LOADED = "BLOCKED_BY_LOADED";
-export type BlockedByLoadedAction = ActionWithPayload<typeof BLOCKED_BY_LOADED, {
+export type BlockedByLoadedAction = ActionWithPayload<"BLOCKED_BY_LOADED", {
     list: BlockedByUserInfo[];
 }>;
-export const blockedByLoaded = (list: BlockedByUserInfo[]): BlockedByLoadedAction => ({
-    type: BLOCKED_BY_LOADED,
-    payload: {list}
-});
+export const blockedByLoaded = (list: BlockedByUserInfo[]): BlockedByLoadedAction =>
+    actionWithPayload("BLOCKED_BY_LOADED", {list});
 
-export const BLOCKED_BY_LOAD_FAILED = "BLOCKED_BY_LOAD_FAILED";
-export type BlockedByLoadFailedAction = Action<typeof BLOCKED_BY_LOAD_FAILED>;
-export const blockedByLoadFailed = (): BlockedByLoadFailedAction => ({
-    type: BLOCKED_BY_LOAD_FAILED
-});
+export type BlockedByLoadFailedAction = ActionWithoutPayload<"BLOCKED_BY_LOAD_FAILED">;
+export const blockedByLoadFailed = (): BlockedByLoadFailedAction =>
+    actionWithoutPayload("BLOCKED_BY_LOAD_FAILED");
 
-export const FRIENDSHIP_UPDATE = "FRIENDSHIP_UPDATE";
-export type FriendshipUpdateAction = ActionWithPayload<typeof FRIENDSHIP_UPDATE, {
+export type FriendshipUpdateAction = ActionWithPayload<"FRIENDSHIP_UPDATE", {
     nodeName: string;
     friendGroups: string[] | null;
     storyId?: string | null;
 }>;
-export const friendshipUpdate = (nodeName: string, friendGroups: string[] | null,
-                                 storyId?: string | null): FriendshipUpdateAction => ({
-    type: FRIENDSHIP_UPDATE,
-    payload: {nodeName, friendGroups, storyId}
-});
+export const friendshipUpdate = (
+    nodeName: string, friendGroups: string[] | null, storyId?: string | null
+): FriendshipUpdateAction =>
+    actionWithPayload("FRIENDSHIP_UPDATE", {nodeName, friendGroups, storyId});
 
-export const FRIENDSHIP_UPDATED = "FRIENDSHIP_UPDATED";
-export type FriendshipUpdatedAction = ActionWithPayload<typeof FRIENDSHIP_UPDATED, {
+export type FriendshipUpdatedAction = ActionWithPayload<"FRIENDSHIP_UPDATED", {
     friend: FriendInfo;
 }>;
-export const friendshipUpdated = (friend: FriendInfo): FriendshipUpdatedAction => ({
-    type: FRIENDSHIP_UPDATED,
-    payload: {friend}
-});
+export const friendshipUpdated = (friend: FriendInfo): FriendshipUpdatedAction =>
+    actionWithPayload("FRIENDSHIP_UPDATED", {friend});
 
-export const FRIENDSHIP_UPDATE_FAILED = "FRIENDSHIP_UPDATE_FAILED";
-export type FriendshipUpdateFailedAction = ActionWithPayload<typeof FRIENDSHIP_UPDATE_FAILED, {
+export type FriendshipUpdateFailedAction = ActionWithPayload<"FRIENDSHIP_UPDATE_FAILED", {
     nodeName: string;
 }>;
-export const friendshipUpdateFailed = (nodeName: string): FriendshipUpdateFailedAction => ({
-    type: FRIENDSHIP_UPDATE_FAILED,
-    payload: {nodeName}
-});
+export const friendshipUpdateFailed = (nodeName: string): FriendshipUpdateFailedAction =>
+    actionWithPayload("FRIENDSHIP_UPDATE_FAILED", {nodeName});
 
-export const FRIENDSHIP_SET_VISIBILITY = "FRIENDSHIP_SET_VISIBILITY";
-export type FriendshipSetVisibilityAction = ActionWithPayload<typeof FRIENDSHIP_SET_VISIBILITY, {
+export type FriendshipSetVisibilityAction = ActionWithPayload<"FRIENDSHIP_SET_VISIBILITY", {
     nodeName: string;
     visible: boolean;
 }>;
-export const friendshipSetVisibility = (nodeName: string, visible: boolean): FriendshipSetVisibilityAction => ({
-    type: FRIENDSHIP_SET_VISIBILITY,
-    payload: {nodeName, visible}
-});
+export const friendshipSetVisibility = (nodeName: string, visible: boolean): FriendshipSetVisibilityAction =>
+    actionWithPayload("FRIENDSHIP_SET_VISIBILITY", {nodeName, visible});
 
-export const FRIEND_GROUP_ADDED = "FRIEND_GROUP_ADDED";
-export type FriendGroupAddedAction = ActionWithPayload<typeof FRIEND_GROUP_ADDED, {
+export type FriendGroupAddedAction = ActionWithPayload<"FRIEND_GROUP_ADDED", {
     nodeName: string;
     details: FriendGroupInfo;
 }>;
-export const friendGroupAdded = (nodeName: string, details: FriendGroupInfo): FriendGroupAddedAction => ({
-    type: FRIEND_GROUP_ADDED,
-    payload: {nodeName, details}
-});
+export const friendGroupAdded = (nodeName: string, details: FriendGroupInfo): FriendGroupAddedAction =>
+    actionWithPayload("FRIEND_GROUP_ADDED", {nodeName, details});
 
 export type PeopleAnyAction =
     PeopleGoToTabAction

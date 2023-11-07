@@ -12,15 +12,8 @@ import {
 } from "api/events";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
-import { CONNECTED_TO_HOME, ConnectedToHomeAction } from "state/home/actions";
+import { ConnectedToHomeAction } from "state/home/actions";
 import {
-    COMPOSE_DRAFT_LIST_ITEM_DELETED,
-    COMPOSE_DRAFT_SAVED,
-    COMPOSE_DRAFT_SELECT,
-    COMPOSE_DRAFT_UNSET,
-    COMPOSE_POST_SUCCEEDED,
-    COMPOSE_PREVIEW,
-    COMPOSE_PREVIEW_CLOSE,
     composeConflict,
     composeDraftDelete,
     composeDraftListItemDeleted,
@@ -53,27 +46,27 @@ import { storyAdded, storyUpdated } from "state/stories/actions";
 const isConnectionSwitch = (state: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
 
 export default [
-    trigger(GO_TO_PAGE, conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
-    trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
-    trigger([GO_TO_PAGE, CONNECTED_TO_HOME], conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
-    trigger(CONNECTED_TO_HOME, conj(isAtComposePage, isConnectionSwitch), composeDraftListLoad),
-    trigger(GO_TO_PAGE, conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
-    trigger(COMPOSE_POST_SUCCEEDED, state => getComposeDraftId(state) != null, composeDraftDelete),
-    trigger(COMPOSE_DRAFT_SAVED, isComposePosted, composeDraftDelete),
+    trigger("GO_TO_PAGE", conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
+    trigger(["GO_TO_PAGE", "CONNECTED_TO_HOME"], conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
+    trigger(["GO_TO_PAGE", "CONNECTED_TO_HOME"], conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
+    trigger("CONNECTED_TO_HOME", conj(isAtComposePage, isConnectionSwitch), composeDraftListLoad),
+    trigger("GO_TO_PAGE", conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
+    trigger("COMPOSE_POST_SUCCEEDED", state => getComposeDraftId(state) != null, composeDraftDelete),
+    trigger("COMPOSE_DRAFT_SAVED", isComposePosted, composeDraftDelete),
     trigger(
-        COMPOSE_POST_SUCCEEDED,
+        "COMPOSE_POST_SUCCEEDED",
         true,
         (signal: ComposePostSucceededAction) => goToPosting(signal.payload.posting.id)
     ),
-    trigger(COMPOSE_POST_SUCCEEDED, true, (signal: ComposePostSucceededAction) => postingSet(signal.payload.posting)),
+    trigger("COMPOSE_POST_SUCCEEDED", true, (signal: ComposePostSucceededAction) => postingSet(signal.payload.posting)),
     trigger(
-        COMPOSE_POST_SUCCEEDED,
+        "COMPOSE_POST_SUCCEEDED",
         (state, signal: ComposePostSucceededAction) =>
             !isComposePostingEditing(state) && hasPostingFeedReference(signal.payload.posting, "timeline"),
         signal => storyAdded(getPostingStory(signal.payload.posting, "timeline")!)
     ),
     trigger(
-        COMPOSE_POST_SUCCEEDED,
+        "COMPOSE_POST_SUCCEEDED",
         (state, signal: ComposePostSucceededAction) =>
             isComposePostingEditing(state) && hasPostingFeedReference(signal.payload.posting, "timeline"),
         signal => storyUpdated(getPostingStory(signal.payload.posting, "timeline")!)
@@ -84,14 +77,14 @@ export default [
             isAtComposePage(state) && getComposePostingId(state) === signal.payload.id,
         composeConflict
     ),
-    trigger(COMPOSE_DRAFT_SAVED, true, updateLocation),
-    trigger(COMPOSE_DRAFT_SELECT, isComposeDraftToBeLoaded, composeDraftLoad),
-    trigger(COMPOSE_DRAFT_SELECT, true, updateLocation),
-    trigger(COMPOSE_DRAFT_UNSET, true, updateLocation),
-    trigger(COMPOSE_DRAFT_LIST_ITEM_DELETED, true, updateLocation),
-    trigger(CONNECTED_TO_HOME, conj(isAtComposePage, isConnectionSwitch), () => composeDraftUnset(true)),
-    trigger(COMPOSE_PREVIEW, true, dialogOpened(composePreviewClose())),
-    trigger(COMPOSE_PREVIEW_CLOSE, true, dialogClosed),
+    trigger("COMPOSE_DRAFT_SAVED", true, updateLocation),
+    trigger("COMPOSE_DRAFT_SELECT", isComposeDraftToBeLoaded, composeDraftLoad),
+    trigger("COMPOSE_DRAFT_SELECT", true, updateLocation),
+    trigger("COMPOSE_DRAFT_UNSET", true, updateLocation),
+    trigger("COMPOSE_DRAFT_LIST_ITEM_DELETED", true, updateLocation),
+    trigger("CONNECTED_TO_HOME", conj(isAtComposePage, isConnectionSwitch), () => composeDraftUnset(true)),
+    trigger("COMPOSE_PREVIEW", true, dialogOpened(composePreviewClose())),
+    trigger("COMPOSE_PREVIEW_CLOSE", true, dialogClosed),
     trigger(
         [EVENT_HOME_DRAFT_ADDED, EVENT_HOME_DRAFT_UPDATED],
         (state, signal: EventAction<DraftAddedEvent | DraftUpdatedEvent>) =>

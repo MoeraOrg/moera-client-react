@@ -5,30 +5,9 @@ import { StoryInfo } from "api";
 import { EVENT_NODE_FEED_SHERIFF_DATA_UPDATED } from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import {
-    FEED_FUTURE_SLICE_LOAD,
-    FEED_FUTURE_SLICE_LOAD_FAILED,
-    FEED_FUTURE_SLICE_SET,
-    FEED_GENERAL_LOAD,
-    FEED_GENERAL_LOAD_FAILED,
-    FEED_GENERAL_SET,
-    FEED_GENERAL_UNSET,
-    FEED_PAST_SLICE_LOAD,
-    FEED_PAST_SLICE_LOAD_FAILED,
-    FEED_PAST_SLICE_SET,
-    FEED_SCROLL_TO_ANCHOR,
-    FEED_SCROLLED,
-    FEED_SCROLLED_TO_ANCHOR,
-    FEED_SLICE_UPDATE,
-    FEED_STATUS_LOAD,
-    FEED_STATUS_LOAD_FAILED,
-    FEED_STATUS_SET,
-    FEED_STATUS_UPDATED,
-    FEEDS_UNSET
-} from "state/feeds/actions";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
-import { GO_TO_PAGE, INIT_FROM_LOCATION } from "state/navigation/actions";
+import { GO_TO_PAGE } from "state/navigation/actions";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_SATISFY, STORY_UPDATED } from "state/stories/actions";
@@ -145,7 +124,7 @@ function updateScrollingOnInactive(istate: WrappedObject<FeedsState>, feedName: 
 
 export default (state: FeedsState = initialState, action: WithContext<ClientAction>): FeedsState => {
     switch (action.type) {
-        case INIT_FROM_LOCATION: {
+        case "INIT_FROM_LOCATION": {
             const istate = immutable.wrap(state);
             Object.keys(state)
                 .filter(name => !name.startsWith(":"))
@@ -153,7 +132,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case GO_TO_PAGE: {
+        case "GO_TO_PAGE": {
             const istate = immutable.wrap(state);
             const feedName = PAGE_FEEDS.get(action.payload.page);
             if (feedName != null && state[feedName] == null) {
@@ -172,7 +151,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case FEED_GENERAL_LOAD: {
+        case "FEED_GENERAL_LOAD": {
             const {feedName} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (!feed.loadedGeneral) {
@@ -181,14 +160,14 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case FEED_GENERAL_LOAD_FAILED: {
+        case "FEED_GENERAL_LOAD_FAILED": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "loadingGeneral"], false)
                 .value();
         }
 
-        case FEED_GENERAL_SET: {
+        case "FEED_GENERAL_SET": {
             const {feedName, info} = action.payload;
             return getFeed(state, feedName).istate
                 .assign([feedName], {
@@ -200,7 +179,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case FEED_GENERAL_UNSET: {
+        case "FEED_GENERAL_UNSET": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .assign([feedName], {
@@ -211,21 +190,21 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case FEED_STATUS_LOAD: {
+        case "FEED_STATUS_LOAD": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "loadingStatus"], true)
                 .value();
         }
 
-        case FEED_STATUS_LOAD_FAILED: {
+        case "FEED_STATUS_LOAD_FAILED": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "loadingStatus"], false)
                 .value();
         }
 
-        case FEED_STATUS_SET: {
+        case "FEED_STATUS_SET": {
             const {feedName, status} = action.payload;
             return getFeed(state, feedName).istate
                 .assign([feedName], {
@@ -244,7 +223,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case FEED_STATUS_UPDATED: {
+        case "FEED_STATUS_UPDATED": {
             const {feedName, viewed, read, before} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             for (let i = 0; i < feed.stories.length; i++) {
@@ -260,35 +239,35 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case FEED_PAST_SLICE_LOAD: {
+        case "FEED_PAST_SLICE_LOAD": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "loadingPast"], true)
                 .value();
         }
 
-        case FEED_PAST_SLICE_LOAD_FAILED: {
+        case "FEED_PAST_SLICE_LOAD_FAILED": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "loadingPast"], false)
                 .value();
         }
 
-        case FEED_FUTURE_SLICE_LOAD: {
+        case "FEED_FUTURE_SLICE_LOAD": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "loadingFuture"], true)
                 .value();
         }
 
-        case FEED_FUTURE_SLICE_LOAD_FAILED: {
+        case "FEED_FUTURE_SLICE_LOAD_FAILED": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "loadingFuture"], false)
                 .value();
         }
 
-        case FEED_PAST_SLICE_SET: {
+        case "FEED_PAST_SLICE_SET": {
             const {feedName} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (action.payload.before >= feed.after && action.payload.after < feed.after) {
@@ -314,7 +293,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case FEED_FUTURE_SLICE_SET: {
+        case "FEED_FUTURE_SLICE_SET": {
             const {feedName} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (action.payload.before > feed.before && action.payload.after <= feed.before) {
@@ -341,7 +320,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case FEED_SLICE_UPDATE: {
+        case "FEED_SLICE_UPDATE": {
             const {feedName} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             const stories = feed.stories.slice()
@@ -365,7 +344,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case FEEDS_UNSET: {
+        case "FEEDS_UNSET": {
             const istate = immutable.wrap(state);
             for (let [feedName, feed] of Object.entries(state)) {
                 if (feed != null) {
@@ -451,7 +430,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return stories != null ? istate.set([feedName, "stories"], stories).value() : istate.value();
         }
 
-        case FEED_SCROLLED: {
+        case "FEED_SCROLLED": {
             const {feedName, at} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (feed.scrollingActive) {
@@ -461,7 +440,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             }
         }
 
-        case FEED_SCROLL_TO_ANCHOR: {
+        case "FEED_SCROLL_TO_ANCHOR": {
             const {feedName, at} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (feed.scrollingActive) {
@@ -470,7 +449,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case FEED_SCROLLED_TO_ANCHOR: {
+        case "FEED_SCROLLED_TO_ANCHOR": {
             const {feedName} = action.payload;
             return getFeed(state, feedName).istate
                 .set([feedName, "anchor"], null)

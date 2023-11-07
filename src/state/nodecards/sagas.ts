@@ -7,15 +7,6 @@ import { HomeNotConnectedError, NameResolvingError, Node, NodeApiError } from "a
 import { executor } from "state/executor";
 import { mutuallyIntroduced } from "state/init-selectors";
 import {
-    NODE_CARD_BLOCKING_LOAD,
-    NODE_CARD_COPY_MENTION,
-    NODE_CARD_DETAILS_LOAD,
-    NODE_CARD_FRIENDSHIP_LOAD,
-    NODE_CARD_PEOPLE_LOAD,
-    NODE_CARD_PREPARE,
-    NODE_CARD_SHERIFF_LIST_LOAD,
-    NODE_CARD_STORIES_LOAD,
-    NODE_CARD_SUBSCRIPTION_LOAD,
     nodeCardBlockingLoad,
     NodeCardBlockingLoadAction,
     nodeCardBlockingLoadFailed,
@@ -44,8 +35,6 @@ import {
     NodeCardSubscriptionLoadAction,
     nodeCardSubscriptionLoadFailed,
     nodeCardSubscriptionSet,
-    SHERIFF_LIST_ADD,
-    SHERIFF_LIST_DELETE,
     SheriffListAddAction,
     SheriffListDeleteAction
 } from "state/nodecards/actions";
@@ -57,17 +46,17 @@ import { Browser } from "ui/browser";
 import { mentionName } from "util/misc";
 
 export default [
-    executor(NODE_CARD_PREPARE, payload => payload.nodeName, nodeCardPrepareSaga),
-    executor(NODE_CARD_DETAILS_LOAD, payload => payload.nodeName, nodeCardDetailsLoadSaga),
-    executor(NODE_CARD_PEOPLE_LOAD, payload => payload.nodeName, nodeCardPeopleLoadSaga),
-    executor(NODE_CARD_STORIES_LOAD, payload => payload.nodeName, nodeCardStoriesLoadSaga),
-    executor(NODE_CARD_SUBSCRIPTION_LOAD, payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
-    executor(NODE_CARD_FRIENDSHIP_LOAD, payload => payload.nodeName, nodeCardFriendshipLoadSaga, mutuallyIntroduced),
-    executor(NODE_CARD_BLOCKING_LOAD, payload => payload.nodeName, nodeCardBlockingLoadSaga, mutuallyIntroduced),
-    executor(NODE_CARD_SHERIFF_LIST_LOAD, payload => payload.nodeName, nodeCardSheriffListLoadSaga, mutuallyIntroduced),
-    executor(NODE_CARD_COPY_MENTION, "", nodeCardCopyMention),
-    executor(SHERIFF_LIST_ADD, payload => payload.nodeName, sheriffListAddSaga),
-    executor(SHERIFF_LIST_DELETE, payload => payload.nodeName, sheriffListDeleteSaga)
+    executor("NODE_CARD_PREPARE", payload => payload.nodeName, nodeCardPrepareSaga),
+    executor("NODE_CARD_DETAILS_LOAD", payload => payload.nodeName, nodeCardDetailsLoadSaga),
+    executor("NODE_CARD_PEOPLE_LOAD", payload => payload.nodeName, nodeCardPeopleLoadSaga),
+    executor("NODE_CARD_STORIES_LOAD", payload => payload.nodeName, nodeCardStoriesLoadSaga),
+    executor("NODE_CARD_SUBSCRIPTION_LOAD", payload => payload.nodeName, nodeCardSubscriptionLoadSaga),
+    executor("NODE_CARD_FRIENDSHIP_LOAD", payload => payload.nodeName, nodeCardFriendshipLoadSaga, mutuallyIntroduced),
+    executor("NODE_CARD_BLOCKING_LOAD", payload => payload.nodeName, nodeCardBlockingLoadSaga, mutuallyIntroduced),
+    executor("NODE_CARD_SHERIFF_LIST_LOAD", payload => payload.nodeName, nodeCardSheriffListLoadSaga, mutuallyIntroduced),
+    executor("NODE_CARD_COPY_MENTION", "", nodeCardCopyMention),
+    executor("SHERIFF_LIST_ADD", payload => payload.nodeName, sheriffListAddSaga),
+    executor("SHERIFF_LIST_DELETE", payload => payload.nodeName, sheriffListDeleteSaga)
 ];
 
 function* nodeCardPrepareSaga(action: WithContext<NodeCardPrepareAction>) {

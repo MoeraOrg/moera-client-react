@@ -1,40 +1,32 @@
-import { Action } from 'redux';
-
-import { ActionWithPayload } from "state/action-types";
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { Body, MediaAttachment } from "api";
 
 export type EntryCopyTextMode = "ask" | "text" | "html";
 
-export const ENTRY_COPY_TEXT = "ENTRY_COPY_TEXT";
-export type EntryCopyTextAction = ActionWithPayload<typeof ENTRY_COPY_TEXT, {
+export type EntryCopyTextAction = ActionWithPayload<"ENTRY_COPY_TEXT", {
     body: Body;
     mode: EntryCopyTextMode;
     nodeName: string;
     media: MediaAttachment[] | null;
 }>;
-export const entryCopyText = (body: Body, mode: EntryCopyTextMode, nodeName: string,
-                              media: MediaAttachment[] | null): EntryCopyTextAction => ({
-    type: ENTRY_COPY_TEXT,
-    payload: {body, mode, nodeName, media}
-});
+export const entryCopyText = (
+    body: Body, mode: EntryCopyTextMode, nodeName: string, media: MediaAttachment[] | null
+): EntryCopyTextAction =>
+    actionWithPayload("ENTRY_COPY_TEXT", {body, mode, nodeName, media});
 
-export const OPEN_ENTRY_COPY_TEXT_DIALOG = "OPEN_ENTRY_COPY_TEXT_DIALOG";
-export type OpenEntryCopyTextDialogAction = ActionWithPayload<typeof OPEN_ENTRY_COPY_TEXT_DIALOG, {
+export type OpenEntryCopyTextDialogAction = ActionWithPayload<"OPEN_ENTRY_COPY_TEXT_DIALOG", {
     body: Body;
     nodeName: string;
     media: MediaAttachment[] | null;
 }>;
-export const openEntryCopyTextDialog = (body: Body, nodeName: string,
-                                        media: MediaAttachment[] | null): OpenEntryCopyTextDialogAction => ({
-    type: OPEN_ENTRY_COPY_TEXT_DIALOG,
-    payload: {body, nodeName, media}
-});
+export const openEntryCopyTextDialog = (
+    body: Body, nodeName: string, media: MediaAttachment[] | null
+): OpenEntryCopyTextDialogAction =>
+    actionWithPayload("OPEN_ENTRY_COPY_TEXT_DIALOG", {body, nodeName, media});
 
-export const CLOSE_ENTRY_COPY_TEXT_DIALOG = "CLOSE_ENTRY_COPY_TEXT_DIALOG";
-export type CloseEntryCopyTextDialogAction = Action<typeof CLOSE_ENTRY_COPY_TEXT_DIALOG>;
-export const closeEntryCopyTextDialog = (): CloseEntryCopyTextDialogAction => ({
-    type: CLOSE_ENTRY_COPY_TEXT_DIALOG
-});
+export type CloseEntryCopyTextDialogAction = ActionWithoutPayload<"CLOSE_ENTRY_COPY_TEXT_DIALOG">;
+export const closeEntryCopyTextDialog = (): CloseEntryCopyTextDialogAction =>
+    actionWithoutPayload("CLOSE_ENTRY_COPY_TEXT_DIALOG");
 
 export type EntryCopyTextDialogAnyAction =
     EntryCopyTextAction

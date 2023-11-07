@@ -3,8 +3,6 @@ import { call, put, select } from 'typed-redux-saga';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
-    IMAGE_EDIT_DIALOG_LOAD,
-    IMAGE_EDIT_DIALOG_POST,
     imageEditDialogLoaded,
     imageEditDialogLoadFailed,
     ImageEditDialogPostAction,
@@ -18,8 +16,8 @@ import { fillActivityReaction } from "state/activityreactions/sagas";
 import { WithContext } from "state/action-types";
 
 export default [
-    executor(IMAGE_EDIT_DIALOG_LOAD, "", imageEditDialogLoadSaga),
-    executor(IMAGE_EDIT_DIALOG_POST, "", imageEditDialogPostSaga)
+    executor("IMAGE_EDIT_DIALOG_LOAD", "", imageEditDialogLoadSaga),
+    executor("IMAGE_EDIT_DIALOG_POST", "", imageEditDialogPostSaga)
 ];
 
 function* imageEditDialogLoadSaga() {

@@ -5,7 +5,6 @@ import { buffers, channel, Channel } from 'redux-saga';
 import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
 import { ActionContext, WithContext } from "state/action-types";
-import { HOME_INTRODUCED } from "state/home/actions";
 import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 import { ClientState } from "state/state";
 import { OWNER_SET } from "state/node/actions";
@@ -138,7 +137,7 @@ function* flushPostponedSaga() {
 export function* invokeExecutors(executors: ExecutorMap) {
     yield* takeEvery([...executors.keys()], executorsSaga, executors);
     yield* takeEvery(
-        [HOME_INTRODUCED, SETTINGS_CLIENT_VALUES_LOADED, OWNER_SET],
+        ["HOME_INTRODUCED", SETTINGS_CLIENT_VALUES_LOADED, "OWNER_SET"],
         flushPostponedSaga
     );
 }

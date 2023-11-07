@@ -6,13 +6,12 @@ import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import {
     closeFriendGroupAddDialog,
-    FRIEND_GROUP_ADD,
     FriendGroupAddAction,
     friendGroupAddFailed
 } from "state/friendgroupadddialog/actions";
 
 export default [
-    executor(FRIEND_GROUP_ADD, null, friendGroupAddSaga)
+    executor("FRIEND_GROUP_ADD", null, friendGroupAddSaga)
 ];
 
 function* friendGroupAddSaga(action: WithContext<FriendGroupAddAction>) {

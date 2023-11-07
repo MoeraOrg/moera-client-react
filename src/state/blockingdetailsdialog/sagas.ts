@@ -4,14 +4,10 @@ import { BlockedByUserInfo, BlockedUserInfo, Node } from "api";
 import { ClientState } from "state/state";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
-import {
-    BLOCKING_DETAILS_DIALOG_LOAD,
-    blockingDetailsDialogLoaded,
-    blockingDetailsDialogLoadFailed
-} from "state/blockingdetailsdialog/actions";
+import { blockingDetailsDialogLoaded, blockingDetailsDialogLoadFailed } from "state/blockingdetailsdialog/actions";
 
 export default [
-    executor(BLOCKING_DETAILS_DIALOG_LOAD, "", blockingDetailsDialogLoadSaga)
+    executor("BLOCKING_DETAILS_DIALOG_LOAD", "", blockingDetailsDialogLoadSaga)
 ];
 
 function* blockingDetailsDialogLoadSaga() {

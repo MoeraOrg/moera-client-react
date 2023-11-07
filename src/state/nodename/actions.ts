@@ -1,114 +1,77 @@
-import { Action } from 'redux';
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
-import { ActionWithPayload } from "state/action-types";
+export type NodeNameLoadAction = ActionWithoutPayload<"NODE_NAME_LOAD">;
+export const nodeNameLoad = (): NodeNameLoadAction =>
+    actionWithoutPayload("NODE_NAME_LOAD");
 
-export const NODE_NAME_LOAD = "NODE_NAME_LOAD";
-export type NodeNameLoadAction = Action<typeof NODE_NAME_LOAD>;
-export const nodeNameLoad = (): NodeNameLoadAction => ({
-    type: NODE_NAME_LOAD
-});
+export type NodeNameLoadFailedAction = ActionWithoutPayload<"NODE_NAME_LOAD_FAILED">;
+export const nodeNameLoadFailed = (): NodeNameLoadFailedAction =>
+    actionWithoutPayload("NODE_NAME_LOAD_FAILED");
 
-export const NODE_NAME_LOAD_FAILED = "NODE_NAME_LOAD_FAILED";
-export type NodeNameLoadFailedAction = Action<typeof NODE_NAME_LOAD_FAILED>;
-export const nodeNameLoadFailed = (): NodeNameLoadFailedAction => ({
-    type: NODE_NAME_LOAD_FAILED
-});
-
-export const NODE_NAME_SET = "NODE_NAME_SET";
-export type NodeNameSetAction = ActionWithPayload<typeof NODE_NAME_SET, {
+export type NodeNameSetAction = ActionWithPayload<"NODE_NAME_SET", {
     nodeName: string | null;
 }>;
-export const nodeNameSet = (nodeName: string | null): NodeNameSetAction => ({
-    type: NODE_NAME_SET,
-    payload: {nodeName}
-});
+export const nodeNameSet = (nodeName: string | null): NodeNameSetAction =>
+    actionWithPayload("NODE_NAME_SET", {nodeName});
 
-export const NODE_NAME_UNSET = "NODE_NAME_UNSET";
-export type NodeNameUnsetAction = Action<typeof NODE_NAME_UNSET>;
-export const nodeNameUnset = (): NodeNameUnsetAction => ({
-    type: NODE_NAME_UNSET
-});
+export type NodeNameUnsetAction = ActionWithoutPayload<"NODE_NAME_UNSET">;
+export const nodeNameUnset = (): NodeNameUnsetAction =>
+    actionWithoutPayload("NODE_NAME_UNSET");
 
-export const REGISTER_NAME_DIALOG = "REGISTER_NAME_DIALOG";
-export type RegisterNameDialogAction = Action<typeof REGISTER_NAME_DIALOG>;
-export const registerNameDialog = (): RegisterNameDialogAction => ({
-    type: REGISTER_NAME_DIALOG
-});
+export type RegisterNameDialogAction = ActionWithoutPayload<"REGISTER_NAME_DIALOG">;
+export const registerNameDialog = (): RegisterNameDialogAction =>
+    actionWithoutPayload("REGISTER_NAME_DIALOG");
 
-export const REGISTER_NAME_DIALOG_CANCEL = "REGISTER_NAME_DIALOG_CANCEL";
-export type RegisterNameDialogCancelAction = Action<typeof REGISTER_NAME_DIALOG_CANCEL>;
-export const registerNameDialogCancel = (): RegisterNameDialogCancelAction => ({
-    type: REGISTER_NAME_DIALOG_CANCEL
-});
+export type RegisterNameDialogCancelAction = ActionWithoutPayload<"REGISTER_NAME_DIALOG_CANCEL">;
+export const registerNameDialogCancel = (): RegisterNameDialogCancelAction =>
+    actionWithoutPayload("REGISTER_NAME_DIALOG_CANCEL");
 
-export const REGISTER_NAME = "REGISTER_NAME";
-export type RegisterNameAction = ActionWithPayload<typeof REGISTER_NAME, {
+export type RegisterNameAction = ActionWithPayload<"REGISTER_NAME", {
     name: string;
     onNameTaken: any;
 }>;
-export const registerName = (name: string, onNameTaken: any): RegisterNameAction => ({
-    type: REGISTER_NAME,
-    payload: {name, onNameTaken}
-});
+export const registerName = (name: string, onNameTaken: any): RegisterNameAction =>
+    actionWithPayload("REGISTER_NAME", {name, onNameTaken});
 
-export const REGISTER_NAME_SUCCEEDED = "REGISTER_NAME_SUCCEEDED";
-export type RegisterNameSucceededAction = ActionWithPayload<typeof REGISTER_NAME_SUCCEEDED, {
+export type RegisterNameSucceededAction = ActionWithPayload<"REGISTER_NAME_SUCCEEDED", {
     name: string;
     mnemonic: string[];
 }>;
-export const registerNameSucceeded = (name: string, mnemonic: string[]): RegisterNameSucceededAction => ({
-    type: REGISTER_NAME_SUCCEEDED,
-    payload: {name, mnemonic}
-});
+export const registerNameSucceeded = (name: string, mnemonic: string[]): RegisterNameSucceededAction =>
+    actionWithPayload("REGISTER_NAME_SUCCEEDED", {name, mnemonic});
 
-export const REGISTER_NAME_FAILED = "REGISTER_NAME_FAILED";
-export type RegisterNameFailedAction = Action<typeof REGISTER_NAME_FAILED>;
-export const registerNameFailed = (): RegisterNameFailedAction => ({
-    type: REGISTER_NAME_FAILED
-});
+export type RegisterNameFailedAction = ActionWithoutPayload<"REGISTER_NAME_FAILED">;
+export const registerNameFailed = (): RegisterNameFailedAction =>
+    actionWithoutPayload("REGISTER_NAME_FAILED");
 
-export const MNEMONIC_CLOSE = "MNEMONIC_CLOSE";
-export type MnemonicCloseAction = Action<typeof MNEMONIC_CLOSE>;
-export const mnemonicClose = (): MnemonicCloseAction => ({
-    type: MNEMONIC_CLOSE
-});
+export type MnemonicCloseAction = ActionWithoutPayload<"MNEMONIC_CLOSE">;
+export const mnemonicClose = (): MnemonicCloseAction =>
+    actionWithoutPayload("MNEMONIC_CLOSE");
 
-export const NODE_NAME_UPDATE_DIALOG = "NODE_NAME_UPDATE_DIALOG";
-export type NodeNameUpdateDialogAction = ActionWithPayload<typeof NODE_NAME_UPDATE_DIALOG, {
+export type NodeNameUpdateDialogAction = ActionWithPayload<"NODE_NAME_UPDATE_DIALOG", {
     changeName: boolean;
 }>;
-export const nodeNameUpdateDialog = (changeName: boolean): NodeNameUpdateDialogAction => ({
-    type: NODE_NAME_UPDATE_DIALOG,
-    payload: {changeName}
-});
+export const nodeNameUpdateDialog = (changeName: boolean): NodeNameUpdateDialogAction =>
+    actionWithPayload("NODE_NAME_UPDATE_DIALOG", {changeName});
 
-export const NODE_NAME_UPDATE_DIALOG_CANCEL = "NODE_NAME_UPDATE_DIALOG_CANCEL";
-export type NodeNameUpdateDialogCancelAction = Action<typeof NODE_NAME_UPDATE_DIALOG_CANCEL>;
-export const nodeNameUpdateDialogCancel = (): NodeNameUpdateDialogCancelAction => ({
-    type: NODE_NAME_UPDATE_DIALOG_CANCEL
-});
+export type NodeNameUpdateDialogCancelAction = ActionWithoutPayload<"NODE_NAME_UPDATE_DIALOG_CANCEL">;
+export const nodeNameUpdateDialogCancel = (): NodeNameUpdateDialogCancelAction =>
+    actionWithoutPayload("NODE_NAME_UPDATE_DIALOG_CANCEL");
 
-export const NODE_NAME_UPDATE = "NODE_NAME_UPDATE";
-export type NodeNameUpdateAction = ActionWithPayload<typeof NODE_NAME_UPDATE, {
+export type NodeNameUpdateAction = ActionWithPayload<"NODE_NAME_UPDATE", {
     name: string;
     mnemonic: string[];
 }>;
-export const nodeNameUpdate = (name: string, mnemonic: string[]): NodeNameUpdateAction => ({
-    type: NODE_NAME_UPDATE,
-    payload: {name, mnemonic}
-});
+export const nodeNameUpdate = (name: string, mnemonic: string[]): NodeNameUpdateAction =>
+    actionWithPayload("NODE_NAME_UPDATE", {name, mnemonic});
 
-export const NODE_NAME_UPDATE_SUCCEEDED = "NODE_NAME_UPDATE_SUCCEEDED";
-export type NodeNameUpdateSucceededAction = Action<typeof NODE_NAME_UPDATE_SUCCEEDED>;
-export const nodeNameUpdateSucceeded = (): NodeNameUpdateSucceededAction => ({
-    type: NODE_NAME_UPDATE_SUCCEEDED
-});
+export type NodeNameUpdateSucceededAction = ActionWithoutPayload<"NODE_NAME_UPDATE_SUCCEEDED">;
+export const nodeNameUpdateSucceeded = (): NodeNameUpdateSucceededAction =>
+    actionWithoutPayload("NODE_NAME_UPDATE_SUCCEEDED");
 
-export const NODE_NAME_UPDATE_FAILED = "NODE_NAME_UPDATE_FAILED";
-export type NodeNameUpdateFailedAction = Action<typeof NODE_NAME_UPDATE_FAILED>;
-export const nodeNameUpdateFailed = (): NodeNameUpdateFailedAction => ({
-    type: NODE_NAME_UPDATE_FAILED
-});
+export type NodeNameUpdateFailedAction = ActionWithoutPayload<"NODE_NAME_UPDATE_FAILED">;
+export const nodeNameUpdateFailed = (): NodeNameUpdateFailedAction =>
+    actionWithoutPayload("NODE_NAME_UPDATE_FAILED");
 
 export type NodeNameAnyAction =
     NodeNameLoadAction

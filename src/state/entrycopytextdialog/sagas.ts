@@ -4,7 +4,7 @@ import i18n from 'i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
 import { executor } from "state/executor";
-import { ENTRY_COPY_TEXT, EntryCopyTextAction, openEntryCopyTextDialog } from "state/entrycopytextdialog/actions";
+import { EntryCopyTextAction, openEntryCopyTextDialog } from "state/entrycopytextdialog/actions";
 import { flashBox } from "state/flashbox/actions";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
@@ -15,7 +15,7 @@ import { mediaImagePreview } from "util/media-images";
 import { urlWithParameters } from "util/url";
 
 export default [
-    executor(ENTRY_COPY_TEXT, null, entryCopyTextSaga)
+    executor("ENTRY_COPY_TEXT", null, entryCopyTextSaga)
 ];
 
 function* entryCopyTextSaga(action: EntryCopyTextAction) {

@@ -1,6 +1,5 @@
 import { ClientAction } from "state/action";
 import { LightBoxState } from "state/lightbox/state";
-import { CLOSE_LIGHT_BOX, LIGHT_BOX_MEDIA_SET, OPEN_LIGHT_BOX } from "state/lightbox/actions";
 
 const initialState = {
     show: false,
@@ -12,7 +11,7 @@ const initialState = {
 
 export default (state: LightBoxState = initialState, action: ClientAction): LightBoxState => {
     switch (action.type) {
-        case OPEN_LIGHT_BOX:
+        case "OPEN_LIGHT_BOX":
             return {
                 ...state,
                 show: true,
@@ -22,13 +21,13 @@ export default (state: LightBoxState = initialState, action: ClientAction): Ligh
                 mediaId: action.payload.mediaId
             }
 
-        case CLOSE_LIGHT_BOX:
+        case "CLOSE_LIGHT_BOX":
             return {
                 ...state,
                 show: false
             }
 
-        case LIGHT_BOX_MEDIA_SET:
+        case "LIGHT_BOX_MEDIA_SET":
             return {
                 ...state,
                 mediaId: action.payload.mediaId

@@ -14,22 +14,12 @@ import {
     PROFILE_AVATARS_LOADED,
     PROFILE_AVATARS_REORDER,
     PROFILE_CLOSE_AVATAR_EDIT_DIALOG,
-    PROFILE_EDIT,
-    PROFILE_EDIT_CANCEL,
-    PROFILE_EDIT_CONFLICT,
-    PROFILE_EDIT_CONFLICT_CLOSE,
     PROFILE_IMAGE_UPLOAD,
     PROFILE_IMAGE_UPLOAD_FAILED,
     PROFILE_IMAGE_UPLOAD_PROGRESS,
     PROFILE_IMAGE_UPLOADED,
-    PROFILE_LOAD,
-    PROFILE_LOAD_FAILED,
     PROFILE_OPEN_AVATAR_EDIT_DIALOG,
-    PROFILE_SET,
-    PROFILE_UNSET,
-    PROFILE_UPDATE,
-    PROFILE_UPDATE_FAILED,
-    PROFILE_UPDATE_SUCCEEDED
+    PROFILE_UPDATE_FAILED
 } from "state/profile/actions";
 import { ProfileState } from "state/profile/state";
 import { ClientAction } from "state/action";
@@ -82,19 +72,19 @@ const initialState = {
 
 export default (state: ProfileState = initialState, action: ClientAction): ProfileState => {
     switch (action.type) {
-        case PROFILE_LOAD:
+        case "PROFILE_LOAD":
             return {
                 ...state,
                 loading: true
             };
 
-        case PROFILE_LOAD_FAILED:
+        case "PROFILE_LOAD_FAILED":
             return {
                 ...state,
                 loading: false
             };
 
-        case PROFILE_SET:
+        case "PROFILE_SET":
             return {
                 ...state,
                 profile: {
@@ -105,39 +95,39 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 loaded: true
             };
 
-        case PROFILE_UNSET:
+        case "PROFILE_UNSET":
             return {
                 ...state,
                 ...cloneDeep(emptyProfile)
             };
 
-        case PROFILE_EDIT:
+        case "PROFILE_EDIT":
             return {
                 ...state,
                 editing: true,
                 conflict: false
             };
 
-        case PROFILE_EDIT_CONFLICT:
+        case "PROFILE_EDIT_CONFLICT":
             return {
                 ...state,
                 conflict: true
             };
 
-        case PROFILE_EDIT_CONFLICT_CLOSE:
+        case "PROFILE_EDIT_CONFLICT_CLOSE":
             return {
                 ...state,
                 conflict: false
             };
 
-        case PROFILE_UPDATE:
+        case "PROFILE_UPDATE":
             return {
                 ...state,
                 updating: true
             };
 
-        case PROFILE_EDIT_CANCEL:
-        case PROFILE_UPDATE_SUCCEEDED:
+        case "PROFILE_EDIT_CANCEL":
+        case "PROFILE_UPDATE_SUCCEEDED":
             return {
                 ...state,
                 editing: false,
@@ -145,7 +135,7 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 updating: false
             };
 
-        case PROFILE_UPDATE_FAILED:
+        case "PROFILE_UPDATE_FAILED":
             return {
                 ...state,
                 updating: false

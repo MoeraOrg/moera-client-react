@@ -5,7 +5,6 @@ import { executor } from "state/executor";
 import { Node, NodeApiError } from "api";
 import { errorThrown } from "state/error/actions";
 import {
-    CONNECT_DIALOG_RESET_PASSWORD,
     ConnectDialogResetPasswordAction,
     connectDialogResetPasswordFailed,
     connectDialogSetEmailHint,
@@ -14,7 +13,7 @@ import {
 import { messageBox } from "state/messagebox/actions";
 
 export default [
-    executor(CONNECT_DIALOG_RESET_PASSWORD, payload => payload.location, connectDialogResetPasswordSaga)
+    executor("CONNECT_DIALOG_RESET_PASSWORD", payload => payload.location, connectDialogResetPasswordSaga)
 ];
 
 function* connectDialogResetPasswordSaga(action: ConnectDialogResetPasswordAction) {

@@ -1,4 +1,3 @@
-import { FLASH_BOX, FLASH_BOX_CLOSE, FLASH_BOX_DISMISS } from "state/flashbox/actions";
 import { FlashBoxState } from "state/flashbox/state";
 import { ClientAction } from "state/action";
 
@@ -10,7 +9,7 @@ const initialState = {
 
 export default (state: FlashBoxState = initialState, action: ClientAction): FlashBoxState => {
     switch (action.type) {
-        case FLASH_BOX:
+        case "FLASH_BOX":
             return {
                 ...state,
                 show: true,
@@ -18,13 +17,13 @@ export default (state: FlashBoxState = initialState, action: ClientAction): Flas
                 message: action.payload.message
             };
 
-        case FLASH_BOX_DISMISS:
+        case "FLASH_BOX_DISMISS":
             return {
                 ...state,
                 dismissing: true
             };
 
-        case FLASH_BOX_CLOSE:
+        case "FLASH_BOX_CLOSE":
             return {
                 ...state,
                 show: false

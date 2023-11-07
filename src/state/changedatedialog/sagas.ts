@@ -3,16 +3,11 @@ import { call, put } from 'typed-redux-saga';
 import { Node } from "api";
 import { storyUpdated } from "state/stories/actions";
 import { errorThrown } from "state/error/actions";
-import {
-    closeChangeDateDialog,
-    STORY_CHANGE_DATE,
-    StoryChangeDateAction,
-    storyChangeDateFailed
-} from "state/changedatedialog/actions";
+import { closeChangeDateDialog, StoryChangeDateAction, storyChangeDateFailed } from "state/changedatedialog/actions";
 import { executor } from "state/executor";
 
 export default [
-    executor(STORY_CHANGE_DATE, null, storyChangeDateSaga)
+    executor("STORY_CHANGE_DATE", null, storyChangeDateSaga)
 ];
 
 function* storyChangeDateSaga(action: StoryChangeDateAction) {

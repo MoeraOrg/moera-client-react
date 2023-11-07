@@ -7,9 +7,6 @@ import { getComments, getDetailedPosting } from "state/detailedposting/selectors
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import {
-    NAMING_NAME_LOAD,
-    NAMING_NAMES_MAINTENANCE,
-    NAMING_NAMES_USED,
     namingNameLoad,
     NamingNameLoadAction,
     namingNameLoaded,
@@ -30,9 +27,9 @@ const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
 
 export default [
-    executor(NAMING_NAMES_USED, null, namingNamesUsedSaga, namingInitialized),
-    executor(NAMING_NAME_LOAD, payload => payload.name, namingNameLoadSaga, namingInitialized),
-    executor(NAMING_NAMES_MAINTENANCE, "", namingNamesMaintenanceSaga)
+    executor("NAMING_NAMES_USED", null, namingNamesUsedSaga, namingInitialized),
+    executor("NAMING_NAME_LOAD", payload => payload.name, namingNameLoadSaga, namingInitialized),
+    executor("NAMING_NAMES_MAINTENANCE", "", namingNamesMaintenanceSaga)
 ];
 
 function* namingNamesUsedSaga(action: NamingNamesUsedAction) {

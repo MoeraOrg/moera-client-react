@@ -5,7 +5,7 @@ import { PULSE_1MIN } from "state/pulse/actions";
 
 export default [
     trigger(
-        POSTING_SET,
+        "POSTING_SET",
         true,
         (signal: PostingSetAction) =>
             namingNamesUsed([signal.payload.posting.ownerName, signal.payload.posting.receiverName ?? null])

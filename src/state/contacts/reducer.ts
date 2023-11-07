@@ -2,13 +2,6 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import { EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED, EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events";
-import {
-    CONTACTS_LOAD,
-    CONTACTS_LOAD_FAILED,
-    CONTACTS_LOADED,
-    CONTACTS_NAME_FOUND,
-    CONTACTS_UNSET
-} from "state/contacts/actions";
 import { ContactsState } from "state/contacts/state";
 import { ClientAction } from "state/action";
 
@@ -24,7 +17,7 @@ const initialState = {
 
 export default (state: ContactsState = initialState, action: ClientAction): ContactsState => {
     switch (action.type) {
-        case CONTACTS_LOAD:
+        case "CONTACTS_LOAD":
             if (state.queries[action.payload.query]) {
                 return immutable.set(state, ["queries", action.payload.query, "loading"], true);
             } else {
@@ -32,7 +25,7 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
                     {...emptyQuery, loading: true});
             }
 
-        case CONTACTS_LOADED: {
+        case "CONTACTS_LOADED": {
             const istate = immutable.wrap(state);
             istate.assign(["queries", action.payload.query], {loading: false, loaded: true});
             const names = new Set(action.payload.contacts.map(c => c.nodeName));
@@ -40,7 +33,7 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
             return istate.value();
         }
 
-        case CONTACTS_NAME_FOUND: {
+        case "CONTACTS_NAME_FOUND": {
             const {nodeName} = action.payload;
             const hasName = state.contacts.find(c => c.nodeName === nodeName) != null;
             if (!hasName) {
@@ -49,10 +42,10 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
             return state;
         }
 
-        case CONTACTS_LOAD_FAILED:
+        case "CONTACTS_LOAD_FAILED":
             return immutable.set(state, ["queries", action.payload.query, "loading"], false);
 
-        case CONTACTS_UNSET:
+        case "CONTACTS_UNSET":
             return cloneDeep(initialState);
 
         case EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED: {

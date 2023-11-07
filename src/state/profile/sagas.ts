@@ -9,7 +9,6 @@ import {
     PROFILE_AVATARS_LOAD,
     PROFILE_AVATARS_REORDER,
     PROFILE_IMAGE_UPLOAD,
-    PROFILE_LOAD,
     PROFILE_UPDATE,
     ProfileAvatarCreateAction,
     profileAvatarCreated,
@@ -36,8 +35,8 @@ import store from "state/store";
 import { introduced } from "state/init-selectors";
 
 export default [
-    executor(PROFILE_LOAD, "", profileLoadSaga, introduced),
-    executor(PROFILE_UPDATE, null, profileUpdateSaga),
+    executor("PROFILE_LOAD", "", profileLoadSaga, introduced),
+    executor("PROFILE_UPDATE", null, profileUpdateSaga),
     executor(PROFILE_IMAGE_UPLOAD, null, profileImageUploadSaga),
     executor(PROFILE_AVATARS_LOAD, "", profileAvatarsLoadSaga),
     executor(PROFILE_AVATAR_CREATE, "", profileAvatarCreateSaga),

@@ -1,7 +1,6 @@
 import { CartesState } from "state/cartes/state";
 import { ClientAction } from "state/action";
-import { CONNECTED_TO_HOME, DISCONNECTED_FROM_HOME } from "state/home/actions";
-import { CARTES_PURGE_EXPIRED, CARTES_SET, CLOCK_OFFSET_WARN } from "state/cartes/actions";
+import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { now } from "util/misc";
 
 const initialState = {
@@ -15,7 +14,7 @@ const initialState = {
 
 export default (state: CartesState = initialState, action: ClientAction): CartesState => {
     switch (action.type) {
-        case CONNECTED_TO_HOME:
+        case "CONNECTED_TO_HOME":
             return {
                 ...state,
                 initialized: true,
@@ -23,7 +22,7 @@ export default (state: CartesState = initialState, action: ClientAction): Cartes
                 cartes: action.payload.cartes ?? []
             };
 
-        case CARTES_SET:
+        case "CARTES_SET":
             return {
                 ...state,
                 initialized: true,
@@ -32,7 +31,7 @@ export default (state: CartesState = initialState, action: ClientAction): Cartes
                 clockOffset: action.payload.clockOffset ?? state.clockOffset
             };
 
-        case DISCONNECTED_FROM_HOME:
+        case "DISCONNECTED_FROM_HOME":
             return {
                 ...state,
                 initialized: true,
@@ -41,13 +40,13 @@ export default (state: CartesState = initialState, action: ClientAction): Cartes
                 clockOffset: 0
             };
 
-        case CARTES_PURGE_EXPIRED:
+        case "CARTES_PURGE_EXPIRED":
             return {
                 ...state,
                 cartes: state.cartes.filter(carte => carte.deadline > now())
             };
 
-        case CLOCK_OFFSET_WARN:
+        case "CLOCK_OFFSET_WARN":
             return {
                 ...state,
                 clockOffsetWarned: true

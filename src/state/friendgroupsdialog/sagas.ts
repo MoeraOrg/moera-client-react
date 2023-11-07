@@ -6,7 +6,6 @@ import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import {
     closeFriendGroupsDialog,
-    NODE_CHANGE_FRIEND_GROUPS,
     NodeChangeFriendGroupsAction,
     nodeChangeFriendGroupsFailed
 } from "state/friendgroupsdialog/actions";
@@ -14,7 +13,7 @@ import { friendGroupAdded, friendshipUpdated } from "state/people/actions";
 import { getHomeFriendsId } from "state/home/selectors";
 
 export default [
-    executor(NODE_CHANGE_FRIEND_GROUPS, payload => payload.nodeName, nodeChangeFriendGroupsSaga)
+    executor("NODE_CHANGE_FRIEND_GROUPS", payload => payload.nodeName, nodeChangeFriendGroupsSaga)
 ];
 
 function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsAction>) {

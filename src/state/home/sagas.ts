@@ -3,9 +3,6 @@ import { call, put, select } from 'typed-redux-saga';
 import { Node } from "api";
 import { Storage } from "storage";
 import {
-    HOME_AVATARS_LOAD,
-    HOME_FRIEND_GROUPS_LOAD,
-    HOME_INVISIBLE_USERS_LOAD,
     homeAvatarsLoaded,
     homeAvatarsLoadFailed,
     homeFriendGroupsLoaded,
@@ -17,9 +14,9 @@ import { getHomeInvisibleUsersChecksum } from "state/home/selectors";
 import { executor } from "state/executor";
 
 export default [
-    executor(HOME_AVATARS_LOAD, "", homeAvatarsLoadSaga),
-    executor(HOME_FRIEND_GROUPS_LOAD, "", homeFriendGroupsLoadSaga, introduced),
-    executor(HOME_INVISIBLE_USERS_LOAD, "", homeInvisibleUsersLoadSaga, introduced)
+    executor("HOME_AVATARS_LOAD", "", homeAvatarsLoadSaga),
+    executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga, introduced),
+    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga, introduced)
 ];
 
 function* homeAvatarsLoadSaga() {

@@ -1,10 +1,4 @@
 import { ClientAction } from "state/action";
-import {
-    CLOSE_FRIEND_GROUPS_DIALOG,
-    NODE_CHANGE_FRIEND_GROUPS,
-    NODE_CHANGE_FRIEND_GROUPS_FAILED,
-    OPEN_FRIEND_GROUPS_DIALOG
-} from "state/friendgroupsdialog/actions";
 import { FriendGroupsDialogState } from "state/friendgroupsdialog/state";
 
 const initialState = {
@@ -15,7 +9,7 @@ const initialState = {
 
 export default (state: FriendGroupsDialogState = initialState, action: ClientAction): FriendGroupsDialogState => {
     switch (action.type) {
-        case OPEN_FRIEND_GROUPS_DIALOG:
+        case "OPEN_FRIEND_GROUPS_DIALOG":
             return {
                 ...state,
                 show: true,
@@ -23,20 +17,20 @@ export default (state: FriendGroupsDialogState = initialState, action: ClientAct
                 changing: false
             }
 
-        case CLOSE_FRIEND_GROUPS_DIALOG:
+        case "CLOSE_FRIEND_GROUPS_DIALOG":
             return {
                 ...state,
                 changing: false,
                 show: false
             }
 
-        case NODE_CHANGE_FRIEND_GROUPS:
+        case "NODE_CHANGE_FRIEND_GROUPS":
             return {
                 ...state,
                 changing: true
             }
 
-        case NODE_CHANGE_FRIEND_GROUPS_FAILED:
+        case "NODE_CHANGE_FRIEND_GROUPS_FAILED":
             return {
                 ...state,
                 changing: false

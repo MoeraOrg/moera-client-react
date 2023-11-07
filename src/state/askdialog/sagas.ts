@@ -6,8 +6,6 @@ import { WithContext } from "state/action-types";
 import { errorThrown } from "state/error/actions";
 import { getNodeFeatures } from "state/node/selectors";
 import {
-    ASK_DIALOG_LOAD,
-    ASK_DIALOG_SEND,
     AskDialogLoadAction,
     askDialogLoaded,
     askDialogLoadFailed,
@@ -17,8 +15,8 @@ import {
 } from "state/askdialog/actions";
 
 export default [
-    executor(ASK_DIALOG_LOAD, payload => payload.nodeName, askDialogLoadSaga),
-    executor(ASK_DIALOG_SEND, null, askDialogSendSaga)
+    executor("ASK_DIALOG_LOAD", payload => payload.nodeName, askDialogLoadSaga),
+    executor("ASK_DIALOG_SEND", null, askDialogSendSaga)
 ];
 
 function* askDialogLoadSaga(action: WithContext<AskDialogLoadAction>) {

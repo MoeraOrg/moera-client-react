@@ -1,6 +1,5 @@
 import { ClientAction } from "state/action";
 import { EntryCopyTextDialogState } from "state/entrycopytextdialog/state";
-import { CLOSE_ENTRY_COPY_TEXT_DIALOG, OPEN_ENTRY_COPY_TEXT_DIALOG } from "state/entrycopytextdialog/actions";
 
 const initialState = {
     show: false,
@@ -11,7 +10,7 @@ const initialState = {
 
 export default (state: EntryCopyTextDialogState = initialState, action: ClientAction): EntryCopyTextDialogState => {
     switch (action.type) {
-        case OPEN_ENTRY_COPY_TEXT_DIALOG:
+        case "OPEN_ENTRY_COPY_TEXT_DIALOG":
             return {
                 ...state,
                 show: true,
@@ -20,7 +19,7 @@ export default (state: EntryCopyTextDialogState = initialState, action: ClientAc
                 media: action.payload.media
             }
 
-        case CLOSE_ENTRY_COPY_TEXT_DIALOG:
+        case "CLOSE_ENTRY_COPY_TEXT_DIALOG":
             return {
                 ...state,
                 show: false

@@ -2,12 +2,14 @@ import { call, put, select } from 'typed-redux-saga';
 import clipboardCopy from 'clipboard-copy';
 import i18n from 'i18next';
 
-import { DraftType, Node, NodeApiError } from "api";
 import {
     CommentInfo,
     CommentText,
     DraftInfo,
+    DraftType,
     MediaAttachment,
+    Node,
+    NodeApiError,
     PrivateMediaFileInfo,
     ReactionAttributes,
     ReactionInfo,
@@ -19,22 +21,6 @@ import { introduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import {
     closeCommentDialog,
-    COMMENT_COMPOSE_CANCEL,
-    COMMENT_COPY_LINK,
-    COMMENT_DELETE,
-    COMMENT_DIALOG_COMMENT_LOAD,
-    COMMENT_DIALOG_COMMENT_RESET,
-    COMMENT_DRAFT_DELETE,
-    COMMENT_DRAFT_LOAD,
-    COMMENT_DRAFT_SAVE,
-    COMMENT_LOAD,
-    COMMENT_POST,
-    COMMENT_REACT,
-    COMMENT_REACTION_DELETE,
-    COMMENT_REACTION_LOAD,
-    COMMENT_REPLY,
-    COMMENT_SET_VISIBILITY,
-    COMMENT_VERIFY,
     commentComposeCancelled,
     CommentCopyLinkAction,
     CommentDeleteAction,
@@ -64,13 +50,6 @@ import {
     commentRepliedToSet,
     commentRepliedToUnset,
     CommentReplyAction,
-    COMMENTS_BLOCKED_USERS_LOAD,
-    COMMENTS_FUTURE_SLICE_LOAD,
-    COMMENTS_LOAD_ALL,
-    COMMENTS_PAST_SLICE_LOAD,
-    COMMENTS_RECEIVER_FEATURES_LOAD,
-    COMMENTS_RECEIVER_SWITCH,
-    COMMENTS_UPDATE,
     CommentsBlockedUsersLoadAction,
     commentsBlockedUsersLoaded,
     commentsBlockedUsersLoadFailed,
@@ -86,15 +65,12 @@ import {
     commentsSliceUpdate,
     CommentVerifyAction,
     commentVerifyFailed,
-    DETAILED_POSTING_LOAD,
-    DETAILED_POSTING_LOAD_ATTACHED,
+    DetailedPostingLoadAction,
     detailedPostingLoaded,
     detailedPostingLoadedAttached,
     detailedPostingLoadFailed,
-    FOCUSED_COMMENT_LOAD,
     focusedCommentLoaded,
     focusedCommentLoadFailed,
-    GLANCE_COMMENT_LOAD,
     glanceCommentLoaded,
     glanceCommentLoadFailed
 } from "state/detailedposting/actions";
@@ -124,49 +100,49 @@ import { quoteHtml } from "util/html";
 import { getWindowSelectionHtml, insertText, mentionName } from "util/misc";
 
 export default [
-    executor(DETAILED_POSTING_LOAD, "", detailedPostingLoadSaga, introduced),
-    executor(DETAILED_POSTING_LOAD_ATTACHED, "", detailedPostingLoadAttachedSaga, introduced),
-    executor(COMMENTS_RECEIVER_SWITCH, "", commentsReceiverSwitchSaga, introduced),
-    executor(COMMENTS_RECEIVER_FEATURES_LOAD, "", commentsReceiverFeaturesLoadSaga, introduced),
-    executor(COMMENTS_LOAD_ALL, "", commentsLoadAllSaga, introduced),
-    executor(COMMENTS_PAST_SLICE_LOAD, "", commentsPastSliceLoadSaga, introduced),
-    executor(COMMENTS_FUTURE_SLICE_LOAD, "", commentsFutureSliceLoadSaga, introduced),
-    executor(COMMENTS_UPDATE, "", commentsUpdateSaga, introduced),
-    executor(COMMENTS_BLOCKED_USERS_LOAD, "", commentsBlockedUsersLoadSaga, introduced),
-    executor(COMMENT_LOAD, payload => payload.commentId, commentLoadSaga, introduced),
-    executor(COMMENT_POST, null, commentPostSaga),
-    executor(COMMENT_DRAFT_LOAD, "", commentDraftLoadSaga),
-    executor(COMMENT_DRAFT_SAVE, "", commentDraftSaveSaga),
-    executor(COMMENT_DRAFT_DELETE, "", commentDraftDeleteSaga),
-    executor(COMMENT_COMPOSE_CANCEL, "", commentComposeCancelSaga),
-    executor(COMMENT_DELETE, payload => payload.commentId, commentDeleteSaga),
-    executor(COMMENT_SET_VISIBILITY, payload => payload.commentId, commentSetVisibilitySaga),
-    executor(FOCUSED_COMMENT_LOAD, "", focusedCommentLoadSaga),
-    executor(COMMENT_COPY_LINK, null, commentCopyLinkSaga),
-    executor(COMMENT_DIALOG_COMMENT_LOAD, "", commentDialogCommentLoadSaga),
-    executor(COMMENT_DIALOG_COMMENT_RESET, "", commentDialogCommentResetSaga),
-    executor(COMMENT_VERIFY, payload => payload.commentId, commentVerifySaga),
-    executor(COMMENT_REACT, null, commentReactSaga, introduced),
+    executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga, introduced),
+    executor("DETAILED_POSTING_LOAD_ATTACHED", "", detailedPostingLoadAttachedSaga, introduced),
+    executor("COMMENTS_RECEIVER_SWITCH", "", commentsReceiverSwitchSaga, introduced),
+    executor("COMMENTS_RECEIVER_FEATURES_LOAD", "", commentsReceiverFeaturesLoadSaga, introduced),
+    executor("COMMENTS_LOAD_ALL", "", commentsLoadAllSaga, introduced),
+    executor("COMMENTS_PAST_SLICE_LOAD", "", commentsPastSliceLoadSaga, introduced),
+    executor("COMMENTS_FUTURE_SLICE_LOAD", "", commentsFutureSliceLoadSaga, introduced),
+    executor("COMMENTS_UPDATE", "", commentsUpdateSaga, introduced),
+    executor("COMMENTS_BLOCKED_USERS_LOAD", "", commentsBlockedUsersLoadSaga, introduced),
+    executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga, introduced),
+    executor("COMMENT_POST", null, commentPostSaga),
+    executor("COMMENT_DRAFT_LOAD", "", commentDraftLoadSaga),
+    executor("COMMENT_DRAFT_SAVE", "", commentDraftSaveSaga),
+    executor("COMMENT_DRAFT_DELETE", "", commentDraftDeleteSaga),
+    executor("COMMENT_COMPOSE_CANCEL", "", commentComposeCancelSaga),
+    executor("COMMENT_DELETE", payload => payload.commentId, commentDeleteSaga),
+    executor("COMMENT_SET_VISIBILITY", payload => payload.commentId, commentSetVisibilitySaga),
+    executor("FOCUSED_COMMENT_LOAD", "", focusedCommentLoadSaga),
+    executor("COMMENT_COPY_LINK", null, commentCopyLinkSaga),
+    executor("COMMENT_DIALOG_COMMENT_LOAD", "", commentDialogCommentLoadSaga),
+    executor("COMMENT_DIALOG_COMMENT_RESET", "", commentDialogCommentResetSaga),
+    executor("COMMENT_VERIFY", payload => payload.commentId, commentVerifySaga),
+    executor("COMMENT_REACT", null, commentReactSaga, introduced),
     executor(
-        COMMENT_REACTION_LOAD,
+        "COMMENT_REACTION_LOAD",
         payload => `${payload.id}:${payload.postingId}`,
         commentReactionLoadSaga,
         introduced
     ),
     executor(
-        COMMENT_REACTION_DELETE,
+        "COMMENT_REACTION_DELETE",
         payload => `${payload.id}:${payload.postingId}`,
         commentReactionDeleteSaga,
         introduced
     ),
-    executor(COMMENT_REPLY, "", commentReplySaga),
-    executor(GLANCE_COMMENT_LOAD, null, glanceCommentLoadSaga)
+    executor("COMMENT_REPLY", "", commentReplySaga),
+    executor("GLANCE_COMMENT_LOAD", null, glanceCommentLoadSaga)
 ];
 
-function* detailedPostingLoadSaga() {
+function* detailedPostingLoadSaga(action: DetailedPostingLoadAction) {
     const id = yield* select(getDetailedPostingId);
     if (id == null) {
-        yield* put(detailedPostingLoadFailed());
+        yield* put(detailedPostingLoadFailed().causedBy(action));
         return;
     }
 
@@ -174,11 +150,11 @@ function* detailedPostingLoadSaga() {
         const posting = yield* call(Node.getPosting, "", id, false, ["posting.not-found"]);
         yield* call(fillActivityReaction, posting)
         yield* call(fillBlockedOperations, posting)
-        yield* put(detailedPostingLoaded(posting));
+        yield* put(detailedPostingLoaded(posting).causedBy(action));
         yield* call(fillSubscription, posting)
     } catch (e) {
         yield* put(detailedPostingLoadFailed());
-        yield* put(errorThrown(e));
+        yield* put(errorThrown(e).causedBy(action));
     }
 }
 

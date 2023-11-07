@@ -1,5 +1,4 @@
 import { ClientAction } from "state/action";
-import { CLOSE_PEOPLE_HIDE_DIALOG, OPEN_PEOPLE_HIDE_DIALOG } from "state/peoplehidedialog/actions";
 import { PeopleHideDialogState } from "state/peoplehidedialog/state";
 
 const initialState = {
@@ -10,7 +9,7 @@ const initialState = {
 
 export default (state: PeopleHideDialogState = initialState, action: ClientAction): PeopleHideDialogState => {
     switch (action.type) {
-        case OPEN_PEOPLE_HIDE_DIALOG:
+        case "OPEN_PEOPLE_HIDE_DIALOG":
             return {
                 ...state,
                 show: true,
@@ -18,7 +17,7 @@ export default (state: PeopleHideDialogState = initialState, action: ClientActio
                 feedName: action.payload.feedName,
             }
 
-        case CLOSE_PEOPLE_HIDE_DIALOG:
+        case "CLOSE_PEOPLE_HIDE_DIALOG":
             return {
                 ...state,
                 show: false

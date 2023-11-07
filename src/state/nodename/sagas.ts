@@ -2,14 +2,11 @@ import { call, put } from 'typed-redux-saga';
 
 import { errorThrown } from "state/error/actions";
 import {
-    NODE_NAME_LOAD,
-    NODE_NAME_UPDATE,
     nodeNameLoadFailed,
     nodeNameSet,
     NodeNameUpdateAction,
     nodeNameUpdateFailed,
     nodeNameUpdateSucceeded,
-    REGISTER_NAME,
     RegisterNameAction,
     registerNameFailed,
     registerNameSucceeded
@@ -19,9 +16,9 @@ import { Naming, Node } from "api";
 import { executor } from "state/executor";
 
 export default [
-    executor(NODE_NAME_LOAD, "", nodeNameLoadSaga),
-    executor(REGISTER_NAME, payload => payload.name, registerNameSaga),
-    executor(NODE_NAME_UPDATE, null, nodeNameUpdateSaga)
+    executor("NODE_NAME_LOAD", "", nodeNameLoadSaga),
+    executor("REGISTER_NAME", payload => payload.name, registerNameSaga),
+    executor("NODE_NAME_UPDATE", null, nodeNameUpdateSaga)
 ];
 
 function* nodeNameLoadSaga() {

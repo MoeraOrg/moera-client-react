@@ -3,19 +3,6 @@ import i18n from 'i18next';
 
 import { Node, PrincipalValue } from "api";
 import {
-    FEED_FUTURE_SLICE_LOAD,
-    FEED_FUTURE_SLICE_SET,
-    FEED_GENERAL_LOAD,
-    FEED_PAST_SLICE_LOAD,
-    FEED_PAST_SLICE_SET,
-    FEED_SLICE_UPDATE,
-    FEED_STATUS_LOAD,
-    FEED_STATUS_SET,
-    FEED_STATUS_UPDATE,
-    FEED_SUBSCRIBE,
-    FEED_SUBSCRIBER_SET_VISIBILITY,
-    FEED_SUBSCRIPTION_SET_VISIBILITY,
-    FEED_UNSUBSCRIBE,
     FeedFutureSliceLoadAction,
     feedFutureSliceLoadFailed,
     feedFutureSliceSet,
@@ -27,7 +14,6 @@ import {
     feedPastSliceLoadFailed,
     feedPastSliceSet,
     FeedPastSliceSetAction,
-    FEEDS_UPDATE,
     feedSliceUpdate,
     FeedSliceUpdateAction,
     FeedStatusLoadAction,
@@ -62,34 +48,34 @@ import { getInstantTypeDetails } from "ui/instant/instant-types";
 
 export default [
     executor(
-        FEED_GENERAL_LOAD,
+        "FEED_GENERAL_LOAD",
         (payload, context) => `${context?.homeOwnerName}:${context?.ownerName}:${payload.feedName}`,
         feedGeneralLoadSaga,
         introduced
     ),
-    executor(FEED_SUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga, introduced),
-    executor(FEED_UNSUBSCRIBE, payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga, introduced),
+    executor("FEED_SUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedSubscribeSaga, introduced),
+    executor("FEED_UNSUBSCRIBE", payload => `${payload.nodeName}:${payload.feedName}`, feedUnsubscribeSaga, introduced),
     executor(
-        FEED_SUBSCRIBER_SET_VISIBILITY,
+        "FEED_SUBSCRIBER_SET_VISIBILITY",
         payload => payload.subscriberId,
         feedSubscriberSetVisibilitySaga,
         introduced
     ),
     executor(
-        FEED_SUBSCRIPTION_SET_VISIBILITY,
+        "FEED_SUBSCRIPTION_SET_VISIBILITY",
         payload => payload.subscriptionId,
         feedSubscriptionSetVisibilitySaga,
         introduced
     ),
-    executor(FEED_STATUS_LOAD, payload => payload.feedName, feedStatusLoadSaga, introduced),
-    executor(FEED_STATUS_UPDATE, payload => payload.feedName, feedStatusUpdateSaga),
-    executor(FEED_PAST_SLICE_LOAD, null, feedPastSliceLoadSaga, introduced),
-    executor(FEED_FUTURE_SLICE_LOAD, null, feedFutureSliceLoadSaga, introduced),
-    executor(FEED_STATUS_SET, payload => payload.feedName, feedStatusSetSaga, introduced),
-    executor(FEEDS_UPDATE, "", feedsUpdateSaga, introduced),
-    executor(FEED_PAST_SLICE_SET, null, feedExecuteSliceButtonsActions),
-    executor(FEED_FUTURE_SLICE_SET, null, feedExecuteSliceButtonsActions),
-    executor(FEED_SLICE_UPDATE, null, feedExecuteSliceButtonsActions),
+    executor("FEED_STATUS_LOAD", payload => payload.feedName, feedStatusLoadSaga, introduced),
+    executor("FEED_STATUS_UPDATE", payload => payload.feedName, feedStatusUpdateSaga),
+    executor("FEED_PAST_SLICE_LOAD", null, feedPastSliceLoadSaga, introduced),
+    executor("FEED_FUTURE_SLICE_LOAD", null, feedFutureSliceLoadSaga, introduced),
+    executor("FEED_STATUS_SET", payload => payload.feedName, feedStatusSetSaga, introduced),
+    executor("FEEDS_UPDATE", "", feedsUpdateSaga, introduced),
+    executor("FEED_PAST_SLICE_SET", null, feedExecuteSliceButtonsActions),
+    executor("FEED_FUTURE_SLICE_SET", null, feedExecuteSliceButtonsActions),
+    executor("FEED_SLICE_UPDATE", null, feedExecuteSliceButtonsActions),
     executor(STORY_ADDED, null, feedExecuteButtonsActions),
     executor(STORY_UPDATED, null, feedExecuteButtonsActions)
 ];
