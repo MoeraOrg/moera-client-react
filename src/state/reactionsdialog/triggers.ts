@@ -7,10 +7,7 @@ import {
     isReactionsDialogTotalsToBeLoaded
 } from "state/reactionsdialog/selectors";
 import {
-    CLOSE_REACTIONS_DIALOG,
     closeReactionsDialog,
-    OPEN_REACTIONS_DIALOG,
-    REACTIONS_DIALOG_SELECT_TAB,
     reactionsDialogPastReactionsLoad,
     reactionsDialogTotalsLoad,
     reactionsDialogUnset
@@ -27,17 +24,17 @@ import {
     PostingUpdatedEvent
 } from "api/events";
 import { isCommentMomentInLoadedRange } from "state/detailedposting/selectors";
-import { dialogClosed, dialogOpened, WAKE_UP } from "state/navigation/actions";
+import { dialogClosed, dialogOpened } from "state/navigation/actions";
 
 export default [
     trigger(
-        [OPEN_REACTIONS_DIALOG, REACTIONS_DIALOG_SELECT_TAB],
+        ["OPEN_REACTIONS_DIALOG", "REACTIONS_DIALOG_SELECT_TAB"],
         isReactionsDialogReactionsToBeLoaded,
         reactionsDialogPastReactionsLoad
     ),
-    trigger(OPEN_REACTIONS_DIALOG, isReactionsDialogTotalsToBeLoaded, reactionsDialogTotalsLoad),
-    trigger(OPEN_REACTIONS_DIALOG, true, dialogOpened(closeReactionsDialog())),
-    trigger(CLOSE_REACTIONS_DIALOG, true, dialogClosed),
+    trigger("OPEN_REACTIONS_DIALOG", isReactionsDialogTotalsToBeLoaded, reactionsDialogTotalsLoad),
+    trigger("OPEN_REACTIONS_DIALOG", true, dialogOpened(closeReactionsDialog())),
+    trigger("CLOSE_REACTIONS_DIALOG", true, dialogClosed),
     trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED", "WAKE_UP"], true, reactionsDialogUnset),
     trigger(
         [EVENT_NODE_POSTING_UPDATED, EVENT_NODE_POSTING_REACTIONS_CHANGED],

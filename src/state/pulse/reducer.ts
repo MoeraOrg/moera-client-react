@@ -1,4 +1,3 @@
-import { PULSE_1MIN } from "state/pulse/actions";
 import { PulseState } from "state/pulse/state";
 import { ClientAction } from "state/action";
 
@@ -8,7 +7,7 @@ const initialState = {
 
 export default (state: PulseState = initialState, action: ClientAction): PulseState => {
     switch (action.type) {
-        case PULSE_1MIN:
+        case "PULSE_1MIN":
             return {
                 pulse: state.pulse + 1
             }

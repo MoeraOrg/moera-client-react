@@ -50,144 +50,101 @@ export type ProfileUpdateFailedAction = ActionWithoutPayload<"PROFILE_UPDATE_FAI
 export const profileUpdateFailed = (): ProfileUpdateFailedAction =>
     actionWithoutPayload("PROFILE_UPDATE_FAILED");
 
-export const PROFILE_AVATARS_LOAD = "PROFILE_AVATARS_LOAD";
-export type ProfileAvatarsLoadAction = ActionWithoutPayload<typeof PROFILE_AVATARS_LOAD>;
-export const profileAvatarsLoad = (): ProfileAvatarsLoadAction => ({
-    type: PROFILE_AVATARS_LOAD
-});
+export type ProfileAvatarsLoadAction = ActionWithoutPayload<"PROFILE_AVATARS_LOAD">;
+export const profileAvatarsLoad = (): ProfileAvatarsLoadAction =>
+    actionWithoutPayload("PROFILE_AVATARS_LOAD");
 
-export const PROFILE_AVATARS_LOADED = "PROFILE_AVATARS_LOADED";
-export type ProfileAvatarsLoadedAction = ActionWithPayload<typeof PROFILE_AVATARS_LOADED, {
+export type ProfileAvatarsLoadedAction = ActionWithPayload<"PROFILE_AVATARS_LOADED", {
     avatars: AvatarImage[];
 }>;
-export const profileAvatarsLoaded = (avatars: AvatarImage[]): ProfileAvatarsLoadedAction => ({
-    type: PROFILE_AVATARS_LOADED,
-    payload: {avatars}
-});
+export const profileAvatarsLoaded = (avatars: AvatarImage[]): ProfileAvatarsLoadedAction =>
+    actionWithPayload("PROFILE_AVATARS_LOADED", {avatars});
 
-export const PROFILE_AVATARS_LOAD_FAILED = "PROFILE_AVATARS_LOAD_FAILED";
-export type ProfileAvatarsLoadFailedAction = ActionWithoutPayload<typeof PROFILE_AVATARS_LOAD_FAILED>;
-export const profileAvatarsLoadFailed = (): ProfileAvatarsLoadFailedAction => ({
-    type: PROFILE_AVATARS_LOAD_FAILED
-});
+export type ProfileAvatarsLoadFailedAction = ActionWithoutPayload<"PROFILE_AVATARS_LOAD_FAILED">;
+export const profileAvatarsLoadFailed = (): ProfileAvatarsLoadFailedAction =>
+    actionWithoutPayload("PROFILE_AVATARS_LOAD_FAILED");
 
-export const PROFILE_OPEN_AVATAR_EDIT_DIALOG = "PROFILE_OPEN_AVATAR_EDIT_DIALOG";
-export type ProfileOpenAvatarEditDialogAction = ActionWithPayload<typeof PROFILE_OPEN_AVATAR_EDIT_DIALOG, {
+export type ProfileOpenAvatarEditDialogAction = ActionWithPayload<"PROFILE_OPEN_AVATAR_EDIT_DIALOG", {
     onCreate: AvatarOnCreate;
 }>;
-export const profileOpenAvatarEditDialog = (onCreate: AvatarOnCreate): ProfileOpenAvatarEditDialogAction => ({
-    type: PROFILE_OPEN_AVATAR_EDIT_DIALOG,
-    payload: {onCreate}
-});
+export const profileOpenAvatarEditDialog = (onCreate: AvatarOnCreate): ProfileOpenAvatarEditDialogAction =>
+    actionWithPayload("PROFILE_OPEN_AVATAR_EDIT_DIALOG", {onCreate});
 
-export const PROFILE_CLOSE_AVATAR_EDIT_DIALOG = "PROFILE_CLOSE_AVATAR_EDIT_DIALOG";
-export type ProfileCloseAvatarEditDialogAction = ActionWithoutPayload<typeof PROFILE_CLOSE_AVATAR_EDIT_DIALOG>;
-export const profileCloseAvatarEditDialog = (): ProfileCloseAvatarEditDialogAction => ({
-    type: PROFILE_CLOSE_AVATAR_EDIT_DIALOG
-});
+export type ProfileCloseAvatarEditDialogAction = ActionWithoutPayload<"PROFILE_CLOSE_AVATAR_EDIT_DIALOG">;
+export const profileCloseAvatarEditDialog = (): ProfileCloseAvatarEditDialogAction =>
+    actionWithoutPayload("PROFILE_CLOSE_AVATAR_EDIT_DIALOG");
 
-export const PROFILE_IMAGE_UPLOAD = "PROFILE_IMAGE_UPLOAD";
-export type ProfileImageUploadAction = ActionWithPayload<typeof PROFILE_IMAGE_UPLOAD, {
+export type ProfileImageUploadAction = ActionWithPayload<"PROFILE_IMAGE_UPLOAD", {
     file: File;
 }>;
-export const profileImageUpload = (file: File): ProfileImageUploadAction => ({
-    type: PROFILE_IMAGE_UPLOAD,
-    payload: {file}
-});
+export const profileImageUpload = (file: File): ProfileImageUploadAction =>
+    actionWithPayload("PROFILE_IMAGE_UPLOAD", {file});
 
-export const PROFILE_IMAGE_UPLOAD_PROGRESS = "PROFILE_IMAGE_UPLOAD_PROGRESS";
-export type ProfileImageUploadProgressAction = ActionWithPayload<typeof PROFILE_IMAGE_UPLOAD_PROGRESS, {
+export type ProfileImageUploadProgressAction = ActionWithPayload<"PROFILE_IMAGE_UPLOAD_PROGRESS", {
     loaded: number;
     total: number;
 }>;
-export const profileImageUploadProgress = (loaded: number, total: number): ProfileImageUploadProgressAction => ({
-    type: PROFILE_IMAGE_UPLOAD_PROGRESS,
-    payload: {loaded, total}
-});
+export const profileImageUploadProgress = (loaded: number, total: number): ProfileImageUploadProgressAction =>
+    actionWithPayload("PROFILE_IMAGE_UPLOAD_PROGRESS", {loaded, total});
 
-export const PROFILE_IMAGE_UPLOADED = "PROFILE_IMAGE_UPLOADED";
-export type ProfileImageUploadedAction = ActionWithPayload<typeof PROFILE_IMAGE_UPLOADED, {
+export type ProfileImageUploadedAction = ActionWithPayload<"PROFILE_IMAGE_UPLOADED", {
     id: string;
     path: string;
     width: number;
     height: number;
     orientation: number;
 }>;
-export const profileImageUploaded = (id: string, path: string,
-                                     width: number, height: number,
-                                     orientation: number): ProfileImageUploadedAction => ({
-    type: PROFILE_IMAGE_UPLOADED,
-    payload: {id, path, width, height, orientation}
-});
+export const profileImageUploaded = (
+    id: string, path: string, width: number, height: number, orientation: number
+): ProfileImageUploadedAction =>
+    actionWithPayload("PROFILE_IMAGE_UPLOADED", {id, path, width, height, orientation});
 
-export const PROFILE_IMAGE_UPLOAD_FAILED = "PROFILE_IMAGE_UPLOAD_FAILED";
-export type ProfileImageUploadFailedAction = ActionWithoutPayload<typeof PROFILE_IMAGE_UPLOAD_FAILED>;
-export const profileImageUploadFailed = (): ProfileImageUploadFailedAction => ({
-    type: PROFILE_IMAGE_UPLOAD_FAILED
-});
+export type ProfileImageUploadFailedAction = ActionWithoutPayload<"PROFILE_IMAGE_UPLOAD_FAILED">;
+export const profileImageUploadFailed = (): ProfileImageUploadFailedAction =>
+    actionWithoutPayload("PROFILE_IMAGE_UPLOAD_FAILED");
 
-export const PROFILE_AVATAR_CREATE = "PROFILE_AVATAR_CREATE";
-export type ProfileAvatarCreateAction = ActionWithPayload<typeof PROFILE_AVATAR_CREATE, {
+export type ProfileAvatarCreateAction = ActionWithPayload<"PROFILE_AVATAR_CREATE", {
     avatar: AvatarAttributes;
 }>;
-export const profileAvatarCreate = (avatar: AvatarAttributes): ProfileAvatarCreateAction => ({
-    type: PROFILE_AVATAR_CREATE,
-    payload: {avatar}
-});
+export const profileAvatarCreate = (avatar: AvatarAttributes): ProfileAvatarCreateAction =>
+    actionWithPayload("PROFILE_AVATAR_CREATE", {avatar});
 
-export const PROFILE_AVATAR_CREATED = "PROFILE_AVATAR_CREATED";
-export type ProfileAvatarCreatedAction = ActionWithPayload<typeof PROFILE_AVATAR_CREATED, {
+export type ProfileAvatarCreatedAction = ActionWithPayload<"PROFILE_AVATAR_CREATED", {
     avatar: AvatarInfo;
 }>;
-export const profileAvatarCreated = (avatar: AvatarInfo): ProfileAvatarCreatedAction => ({
-    type: PROFILE_AVATAR_CREATED,
-    payload: {avatar}
-});
+export const profileAvatarCreated = (avatar: AvatarInfo): ProfileAvatarCreatedAction =>
+    actionWithPayload("PROFILE_AVATAR_CREATED", {avatar});
 
-export const PROFILE_AVATAR_CREATE_FAILED = "PROFILE_AVATAR_CREATE_FAILED";
-export type ProfileAvatarCreateFailedAction = ActionWithoutPayload<typeof PROFILE_AVATAR_CREATE_FAILED>;
-export const profileAvatarCreateFailed = (): ProfileAvatarCreateFailedAction => ({
-    type: PROFILE_AVATAR_CREATE_FAILED
-});
+export type ProfileAvatarCreateFailedAction = ActionWithoutPayload<"PROFILE_AVATAR_CREATE_FAILED">;
+export const profileAvatarCreateFailed = (): ProfileAvatarCreateFailedAction =>
+    actionWithoutPayload("PROFILE_AVATAR_CREATE_FAILED");
 
-export const PROFILE_AVATAR_CONFIRM_DELETE = "PROFILE_AVATAR_CONFIRM_DELETE";
-export type ProfileAvatarConfirmDeleteAction = ActionWithPayload<typeof PROFILE_AVATAR_CONFIRM_DELETE, {
+export type ProfileAvatarConfirmDeleteAction = ActionWithPayload<"PROFILE_AVATAR_CONFIRM_DELETE", {
     id: string;
     onDeleted: any;
 }>;
-export const profileAvatarConfirmDelete = (id: string, onDeleted: any): ProfileAvatarConfirmDeleteAction => ({
-    type: PROFILE_AVATAR_CONFIRM_DELETE,
-    payload: {id, onDeleted}
-});
+export const profileAvatarConfirmDelete = (id: string, onDeleted: any): ProfileAvatarConfirmDeleteAction =>
+    actionWithPayload("PROFILE_AVATAR_CONFIRM_DELETE", {id, onDeleted});
 
-export const PROFILE_AVATAR_DELETE = "PROFILE_AVATAR_DELETE";
-export type ProfileAvatarDeleteAction = ActionWithPayload<typeof PROFILE_AVATAR_DELETE, {
+export type ProfileAvatarDeleteAction = ActionWithPayload<"PROFILE_AVATAR_DELETE", {
     id: string;
     onDeleted: any;
 }>;
-export const profileAvatarDelete = (id: string, onDeleted: any): ProfileAvatarDeleteAction => ({
-    type: PROFILE_AVATAR_DELETE,
-    payload: {id, onDeleted}
-});
+export const profileAvatarDelete = (id: string, onDeleted: any): ProfileAvatarDeleteAction =>
+    actionWithPayload("PROFILE_AVATAR_DELETE", {id, onDeleted});
 
-export const PROFILE_AVATAR_DELETED = "PROFILE_AVATAR_DELETED";
-export type ProfileAvatarDeletedAction = ActionWithPayload<typeof PROFILE_AVATAR_DELETED, {
+export type ProfileAvatarDeletedAction = ActionWithPayload<"PROFILE_AVATAR_DELETED", {
     id: string;
 }>;
-export const profileAvatarDeleted = (id: string): ProfileAvatarDeletedAction => ({
-    type: PROFILE_AVATAR_DELETED,
-    payload: {id}
-});
+export const profileAvatarDeleted = (id: string): ProfileAvatarDeletedAction =>
+    actionWithPayload("PROFILE_AVATAR_DELETED", {id});
 
-export const PROFILE_AVATARS_REORDER = "PROFILE_AVATARS_REORDER";
-export type ProfileAvatarsReorderAction = ActionWithPayload<typeof PROFILE_AVATARS_REORDER, {
+export type ProfileAvatarsReorderAction = ActionWithPayload<"PROFILE_AVATARS_REORDER", {
     avatarId: string;
     overAvatarId: string;
 }>;
-export const profileAvatarsReorder = (avatarId: string, overAvatarId: string): ProfileAvatarsReorderAction => ({
-    type: PROFILE_AVATARS_REORDER,
-    payload: {avatarId, overAvatarId}
-});
+export const profileAvatarsReorder = (avatarId: string, overAvatarId: string): ProfileAvatarsReorderAction =>
+    actionWithPayload("PROFILE_AVATARS_REORDER", {avatarId, overAvatarId});
 
 export type ProfileAnyAction =
     ProfileLoadAction

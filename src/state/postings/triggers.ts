@@ -19,14 +19,14 @@ import {
     postingReactionsReload
 } from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
-import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
+import { STORY_UPDATED, StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
 
 export default [
     trigger(
-        [STORY_ADDED, STORY_UPDATED],
+        ["STORY_ADDED", "STORY_UPDATED"],
         (state, signal: (StoryAddedAction | StoryUpdatedAction)) =>
             signal.payload.story.posting != null
             && isCurrentNodeStory(state, signal.payload.story)

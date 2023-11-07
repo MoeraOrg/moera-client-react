@@ -2,17 +2,11 @@ import { call, put } from 'typed-redux-saga';
 
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
-import { Node } from "api";
-import {
-    OPEN_SOURCE_DIALOG,
-    OpenSourceDialogAction,
-    sourceDialogLoaded,
-    sourceDialogLoadFailed
-} from "state/sourcedialog/actions";
-import { CommentInfo, PostingInfo } from "api";
+import { CommentInfo, Node, PostingInfo } from "api";
+import { OpenSourceDialogAction, sourceDialogLoaded, sourceDialogLoadFailed } from "state/sourcedialog/actions";
 
 export default [
-    executor(OPEN_SOURCE_DIALOG, "", openSourceDialogSaga)
+    executor("OPEN_SOURCE_DIALOG", "", openSourceDialogSaga)
 ];
 
 function* openSourceDialogSaga(action: OpenSourceDialogAction) {

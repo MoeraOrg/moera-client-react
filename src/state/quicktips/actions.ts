@@ -1,16 +1,12 @@
-import { Action } from 'redux';
+import { actionWithoutPayload, ActionWithoutPayload } from "state/action-types";
 
-export const OPEN_QUICK_TIPS = "OPEN_QUICK_TIPS";
-export type OpenQuickTipsAction = Action<typeof OPEN_QUICK_TIPS>;
-export const openQuickTips = (): OpenQuickTipsAction => ({
-    type: OPEN_QUICK_TIPS
-});
+export type OpenQuickTipsAction = ActionWithoutPayload<"OPEN_QUICK_TIPS">;
+export const openQuickTips = (): OpenQuickTipsAction =>
+    actionWithoutPayload("OPEN_QUICK_TIPS");
 
-export const CLOSE_QUICK_TIPS = "CLOSE_QUICK_TIPS";
-export type CloseQuickTipsAction = Action<typeof CLOSE_QUICK_TIPS>;
-export const closeQuickTips = (): CloseQuickTipsAction => ({
-    type: CLOSE_QUICK_TIPS
-});
+export type CloseQuickTipsAction = ActionWithoutPayload<"CLOSE_QUICK_TIPS">;
+export const closeQuickTips = (): CloseQuickTipsAction =>
+    actionWithoutPayload("CLOSE_QUICK_TIPS");
 
 export type QuickTipsAnyAction =
     OpenQuickTipsAction

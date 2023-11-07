@@ -16,23 +16,6 @@ import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
 import { introduced } from "state/init-selectors";
 import {
-    SETTINGS_CHANGE_PASSWORD,
-    SETTINGS_CLIENT_VALUES_LOAD,
-    SETTINGS_CLIENT_VALUES_LOADED,
-    SETTINGS_CLIENT_VALUES_SET,
-    SETTINGS_NODE_META_LOAD,
-    SETTINGS_NODE_VALUES_LOAD,
-    SETTINGS_PLUGINS_DELETE,
-    SETTINGS_PLUGINS_LOAD,
-    SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY,
-    SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE,
-    SETTINGS_TOKENS_CREATE,
-    SETTINGS_TOKENS_DELETE,
-    SETTINGS_TOKENS_LOAD,
-    SETTINGS_TOKENS_NEW_TOKEN_COPY,
-    SETTINGS_TOKENS_UPDATE,
-    SETTINGS_UPDATE,
-    SETTINGS_UPDATE_SUCCEEDED,
     settingsChangedPassword,
     SettingsChangePasswordAction,
     settingsChangePasswordFailed,
@@ -76,23 +59,23 @@ import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import { now } from "util/misc";
 
 export default [
-    executor(SETTINGS_NODE_VALUES_LOAD, "", settingsNodeValuesLoadSaga, introduced),
-    executor(SETTINGS_NODE_META_LOAD, "", settingsNodeMetaLoadSaga, introduced),
-    executor(SETTINGS_CLIENT_VALUES_LOAD, "", settingsClientValuesLoadSaga, introduced),
-    executor(SETTINGS_CLIENT_VALUES_LOADED, "", settingsClientValuesLoadedSaga),
-    executor(SETTINGS_CLIENT_VALUES_SET, "", settingsClientValuesSetSaga),
-    executor(SETTINGS_UPDATE, null, settingsUpdateSaga),
-    executor(SETTINGS_UPDATE_SUCCEEDED, null, settingsUpdateSucceededSaga),
-    executor(SETTINGS_CHANGE_PASSWORD, "", settingsChangePasswordSaga),
-    executor(SETTINGS_TOKENS_LOAD, "", settingsTokensLoadSaga, introduced),
-    executor(SETTINGS_TOKENS_CREATE, null, settingsTokensCreateSaga),
-    executor(SETTINGS_TOKENS_UPDATE, payload => payload.id, settingsTokensUpdateSaga),
-    executor(SETTINGS_TOKENS_DELETE, payload => payload.id, settingsTokensDeleteSaga),
-    executor(SETTINGS_TOKENS_NEW_TOKEN_COPY, null, settingsTokensNewTokenCopySaga),
-    executor(SETTINGS_PLUGINS_LOAD, "", settingsPluginsLoadSaga, introduced),
-    executor(SETTINGS_PLUGINS_DELETE, payload => payload.name, settingsPluginsDeleteSaga),
-    executor(SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY, "", settingsRemindSetSheriffGooglePlaySaga),
-    executor(SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE, "", settingsRemindSetSheriffGooglePlayChoiceSaga)
+    executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, introduced),
+    executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga, introduced),
+    executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga, introduced),
+    executor("SETTINGS_CLIENT_VALUES_LOADED", "", settingsClientValuesLoadedSaga),
+    executor("SETTINGS_CLIENT_VALUES_SET", "", settingsClientValuesSetSaga),
+    executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
+    executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
+    executor("SETTINGS_CHANGE_PASSWORD", "", settingsChangePasswordSaga),
+    executor("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga, introduced),
+    executor("SETTINGS_TOKENS_CREATE", null, settingsTokensCreateSaga),
+    executor("SETTINGS_TOKENS_UPDATE", payload => payload.id, settingsTokensUpdateSaga),
+    executor("SETTINGS_TOKENS_DELETE", payload => payload.id, settingsTokensDeleteSaga),
+    executor("SETTINGS_TOKENS_NEW_TOKEN_COPY", null, settingsTokensNewTokenCopySaga),
+    executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga, introduced),
+    executor("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
+    executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY", "", settingsRemindSetSheriffGooglePlaySaga),
+    executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", "", settingsRemindSetSheriffGooglePlayChoiceSaga)
 ];
 
 function* settingsNodeValuesLoadSaga() {

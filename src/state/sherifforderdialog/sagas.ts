@@ -10,8 +10,6 @@ import { errorThrown } from "state/error/actions";
 import { flashBox } from "state/flashbox/actions";
 import { getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import {
-    SHERIFF_ORDER_DELETE,
-    SHERIFF_ORDER_DIALOG_SUBMIT,
     SheriffOrderDeleteAction,
     SheriffOrderDialogSubmitAction,
     sheriffOrderDialogSubmitFailed,
@@ -19,8 +17,8 @@ import {
 } from "state/sherifforderdialog/actions";
 
 export default [
-    executor(SHERIFF_ORDER_DIALOG_SUBMIT, "", sheriffOrderDialogSubmitSaga),
-    executor(SHERIFF_ORDER_DELETE, "", sheriffOrderDeleteSaga)
+    executor("SHERIFF_ORDER_DIALOG_SUBMIT", "", sheriffOrderDialogSubmitSaga),
+    executor("SHERIFF_ORDER_DELETE", "", sheriffOrderDeleteSaga)
 ];
 
 function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSubmitAction>) {

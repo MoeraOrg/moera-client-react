@@ -12,8 +12,7 @@ import {
 import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
-import { FRIEND_GROUP_ADDED } from "state/people/actions";
-import { PROFILE_AVATAR_CREATED, PROFILE_AVATAR_DELETED } from "state/profile/actions";
+import { PROFILE_AVATAR_DELETED } from "state/profile/actions";
 import { HomeState } from "state/home/state";
 import { toWsUrl } from "util/url";
 
@@ -185,13 +184,13 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             }
             return state;
 
-        case PROFILE_AVATAR_CREATED:
+        case "PROFILE_AVATAR_CREATED":
             if (state.avatars.loaded) {
                 return immutable.insert(state, "avatars.avatars", action.payload.avatar, 0);
             }
             return state;
 
-        case PROFILE_AVATAR_DELETED:
+        case "PROFILE_AVATAR_DELETED":
             if (state.avatars.loaded) {
                 const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
                 return immutable.set(state, "avatars.avatars", avatars);

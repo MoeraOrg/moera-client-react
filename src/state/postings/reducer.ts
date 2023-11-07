@@ -13,7 +13,7 @@ import {
     EVENT_HOME_REMOTE_REACTION_ADDED,
     EVENT_HOME_REMOTE_REACTION_DELETED
 } from "api/events";
-import { STORY_ADDED, STORY_DELETED, STORY_UPDATED } from "state/stories/actions";
+import { STORY_UPDATED } from "state/stories/actions";
 import { findPostingIdsByRemote } from "state/postings/selectors";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
@@ -108,8 +108,8 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return istate.value();
         }
 
-        case STORY_ADDED:
-        case STORY_UPDATED: {
+        case "STORY_ADDED":
+        case "STORY_UPDATED": {
             const {id, posting} = action.payload.story;
             if (posting) {
                 const postingState = state[""]?.[posting.id];
@@ -122,7 +122,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case STORY_DELETED: {
+        case "STORY_DELETED": {
             const {id, posting} = action.payload.story;
             if (posting) {
                 const postingState = state[""]?.[posting.id];

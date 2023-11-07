@@ -1,23 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
-import {
-    CLOSE_REACTIONS_DIALOG,
-    OPEN_REACTIONS_DIALOG,
-    REACTION_VERIFY,
-    REACTION_VERIFY_FAILED,
-    REACTIONS_DIALOG_PAST_REACTIONS_LOAD,
-    REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED,
-    REACTIONS_DIALOG_PAST_REACTIONS_LOADED,
-    REACTIONS_DIALOG_SELECT_TAB,
-    REACTIONS_DIALOG_TOTALS_LOAD,
-    REACTIONS_DIALOG_TOTALS_LOAD_FAILED,
-    REACTIONS_DIALOG_TOTALS_LOADED,
-    REACTIONS_DIALOG_UNSET
-} from "state/reactionsdialog/actions";
-import {
-    EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED,
-    EVENT_HOME_REMOTE_REACTION_VERIFIED
-} from "api/events";
+import { EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED, EVENT_HOME_REMOTE_REACTION_VERIFIED } from "api/events";
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { ClientAction } from "state/action";
 
@@ -47,7 +30,7 @@ const initialState = {
 
 export default (state: ReactionsDialogState = initialState, action: ClientAction): ReactionsDialogState => {
     switch (action.type) {
-        case OPEN_REACTIONS_DIALOG: {
+        case "OPEN_REACTIONS_DIALOG": {
             const {nodeName, postingId, commentId, negative} = action.payload;
 
             if (state.postingId === postingId && state.commentId === commentId && state.negative === negative) {
@@ -66,18 +49,18 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             };
         }
 
-        case CLOSE_REACTIONS_DIALOG:
+        case "CLOSE_REACTIONS_DIALOG":
             return {
                 ...state,
                 show: false
             };
 
-        case REACTIONS_DIALOG_UNSET:
+        case "REACTIONS_DIALOG_UNSET":
             return {
                 ...initialState
             };
 
-        case REACTIONS_DIALOG_PAST_REACTIONS_LOAD: {
+        case "REACTIONS_DIALOG_PAST_REACTIONS_LOAD": {
             const tab = state.activeTab ?? 0;
             if (state.reactions[tab] == null) {
                 return immutable.set(state, ["reactions", tab], emptyReactions);
@@ -86,7 +69,7 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             }
         }
 
-        case REACTIONS_DIALOG_PAST_REACTIONS_LOADED: {
+        case "REACTIONS_DIALOG_PAST_REACTIONS_LOADED": {
             const {postingId, commentId, negative, emoji, before, after, total} = action.payload;
 
             if (state.postingId !== postingId || state.commentId !== commentId || state.negative !== negative) {
@@ -113,7 +96,7 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             return immutable.set(state, ["reactions", tab, "loading"], false);
         }
 
-        case REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED: {
+        case "REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED": {
             const {postingId, commentId, negative} = action.payload;
             if (state.postingId !== postingId || state.commentId !== commentId || state.negative !== negative) {
                 return state;
@@ -125,10 +108,10 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             return immutable.set(state, ["reactions", tab, "loading"], false);
         }
 
-        case REACTIONS_DIALOG_TOTALS_LOAD:
+        case "REACTIONS_DIALOG_TOTALS_LOAD":
             return immutable.set(state, "totals.loading", true);
 
-        case REACTIONS_DIALOG_TOTALS_LOADED: {
+        case "REACTIONS_DIALOG_TOTALS_LOADED": {
             let totals = !state.negative ? action.payload.positive : action.payload.negative;
             totals = totals.slice().filter(rt => rt.total == null || rt.total > 0);
             totals.sort((rt1, rt2) =>
@@ -144,13 +127,13 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             });
         }
 
-        case REACTIONS_DIALOG_TOTALS_LOAD_FAILED:
+        case "REACTIONS_DIALOG_TOTALS_LOAD_FAILED":
             return immutable.set(state, "totals.loading", false);
 
-        case REACTIONS_DIALOG_SELECT_TAB:
+        case "REACTIONS_DIALOG_SELECT_TAB":
             return immutable.set(state, "activeTab", action.payload.tab);
 
-        case REACTION_VERIFY: {
+        case "REACTION_VERIFY": {
             const {postingId, commentId, ownerName} = action.payload;
 
             if (postingId === state.postingId && commentId === state.commentId) {
@@ -159,7 +142,7 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             return state;
         }
 
-        case REACTION_VERIFY_FAILED: {
+        case "REACTION_VERIFY_FAILED": {
             const {postingId, commentId, ownerName} = action.payload;
 
             if (postingId === state.postingId && commentId === state.commentId) {

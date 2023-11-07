@@ -1,5 +1,5 @@
 import { disj, inv, trigger } from "state/trigger";
-import { GO_TO_PAGE, updateLocation } from "state/navigation/actions";
+import { updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage, isAtNewsPage, isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
 import {
     feedGeneralLoad,
@@ -50,7 +50,7 @@ import { isConnectedToHome } from "state/home/selectors";
 import { getOwnerName } from "state/node/selectors";
 import { storyAdded, storyDeleted, storyUpdated } from "state/stories/actions";
 import { postingSubscriptionSet, remotePostingSubscriptionSet } from "state/postings/actions";
-import { POST_INIT, POST_INIT_DELAYED } from "state/pulse/actions";
+import { POST_INIT_DELAYED } from "state/pulse/actions";
 import { WithContext } from "state/action-types";
 import { now } from "util/misc";
 
@@ -99,7 +99,7 @@ export default [
     trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":instant")),
     trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":news")),
     trigger(
-        [POST_INIT, POST_INIT_DELAYED],
+        ["POST_INIT", "POST_INIT_DELAYED"],
         state => isConnectedToHome(state) && isFeedToBeLoaded(state, ":instant"),
         feedPastSliceLoad(":instant")
     ),

@@ -1,16 +1,9 @@
 import * as immutable from 'object-path-immutable';
-import cloneDeep from "lodash.clonedeep";
+import cloneDeep from 'lodash.clonedeep';
 
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
 import { SheriffOrderDetailsDialogState } from "state/sherifforderdetailsdialog/state";
-import {
-    CLOSE_SHERIFF_ORDER_DETAILS_DIALOG,
-    OPEN_SHERIFF_ORDER_DETAILS_DIALOG,
-    SHERIFF_ORDER_DETAILS_DIALOG_LOAD,
-    SHERIFF_ORDER_DETAILS_DIALOG_LOAD_FAILED,
-    SHERIFF_ORDER_DETAILS_DIALOG_LOADED
-} from "state/sherifforderdetailsdialog/actions";
 
 const initialState: SheriffOrderDetailsDialogState = {
     show: false,
@@ -24,7 +17,7 @@ const initialState: SheriffOrderDetailsDialogState = {
 export default (state: SheriffOrderDetailsDialogState = initialState,
                 action: WithContext<ClientAction>): SheriffOrderDetailsDialogState => {
     switch (action.type) {
-        case OPEN_SHERIFF_ORDER_DETAILS_DIALOG:
+        case "OPEN_SHERIFF_ORDER_DETAILS_DIALOG":
             return {
                 ...cloneDeep(initialState),
                 show: true,
@@ -32,13 +25,13 @@ export default (state: SheriffOrderDetailsDialogState = initialState,
                 id: action.payload.id
             }
 
-        case CLOSE_SHERIFF_ORDER_DETAILS_DIALOG:
+        case "CLOSE_SHERIFF_ORDER_DETAILS_DIALOG":
             return immutable.set(state, "show", false);
 
-        case SHERIFF_ORDER_DETAILS_DIALOG_LOAD:
+        case "SHERIFF_ORDER_DETAILS_DIALOG_LOAD":
             return immutable.set(state, "loading", true);
 
-        case SHERIFF_ORDER_DETAILS_DIALOG_LOADED:
+        case "SHERIFF_ORDER_DETAILS_DIALOG_LOADED":
             return {
                 ...state,
                 loaded: true,
@@ -46,7 +39,7 @@ export default (state: SheriffOrderDetailsDialogState = initialState,
                 info: action.payload.info
             };
 
-        case SHERIFF_ORDER_DETAILS_DIALOG_LOAD_FAILED:
+        case "SHERIFF_ORDER_DETAILS_DIALOG_LOAD_FAILED":
             return immutable.set(state, "loading", false);
 
         default:

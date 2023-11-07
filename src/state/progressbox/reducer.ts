@@ -1,6 +1,5 @@
 import { ClientAction } from "state/action";
 import { ProgressBoxState } from "state/progressbox/state";
-import { CLOSE_PROGRESS_BOX, OPEN_PROGRESS_BOX, UPDATE_PROGRESS_BOX } from "state/progressbox/actions";
 
 const initialState = {
     show: false,
@@ -10,7 +9,7 @@ const initialState = {
 
 export default (state: ProgressBoxState = initialState, action: ClientAction): ProgressBoxState => {
     switch (action.type) {
-        case OPEN_PROGRESS_BOX:
+        case "OPEN_PROGRESS_BOX":
             return {
                 ...state,
                 show: true,
@@ -18,14 +17,14 @@ export default (state: ProgressBoxState = initialState, action: ClientAction): P
                 total: action.payload.total
             };
 
-        case UPDATE_PROGRESS_BOX:
+        case "UPDATE_PROGRESS_BOX":
             return {
                 ...state,
                 done: action.payload.done,
                 total: action.payload.total
             };
 
-        case CLOSE_PROGRESS_BOX:
+        case "CLOSE_PROGRESS_BOX":
             return {
                 ...state,
                 show: false

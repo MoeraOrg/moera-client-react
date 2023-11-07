@@ -11,13 +11,13 @@ import {
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
 import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction, ProfileUpdatedEvent } from "api/events";
 import { OwnerSetAction } from "state/node/actions";
-import { PROFILE_SET, ProfileSetAction } from "state/profile/actions";
+import { ProfileSetAction } from "state/profile/actions";
 import { WithContext } from "state/action-types";
 import { PULSE_6H } from "state/pulse/actions";
 
 export default [
     trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED"], true, nodeCardsClientSwitch),
-    trigger(PULSE_6H, true, nodeCardsRefresh),
+    trigger("PULSE_6H", true, nodeCardsRefresh),
     trigger(
         ["INIT_FROM_LOCATION", "HOME_INTRODUCED", "WAKE_UP"],
         true,

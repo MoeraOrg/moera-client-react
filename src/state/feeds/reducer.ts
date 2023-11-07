@@ -7,10 +7,8 @@ import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
-import { GO_TO_PAGE } from "state/navigation/actions";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
-import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
-import { STORY_ADDED, STORY_DELETED, STORY_READING_UPDATE, STORY_SATISFY, STORY_UPDATED } from "state/stories/actions";
+import { STORY_UPDATED } from "state/stories/actions";
 import { getInstantSummary, getInstantTypeDetails } from "ui/instant/instant-types";
 import { replaceEmojis } from "util/html";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -366,7 +364,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case STORY_ADDED: {
+        case "STORY_ADDED": {
             const {feedName, moment, posting} = action.payload.story;
             const {istate, feed} = getFeed(state, feedName);
             if (moment != null) {
@@ -391,7 +389,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case STORY_DELETED: {
+        case "STORY_DELETED": {
             const {feedName, moment, id} = action.payload.story;
             const {istate, feed} = getFeed(state, feedName);
             istate.set([feedName, "status", "total"], feed.status.total - 1);
@@ -410,7 +408,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case STORY_UPDATED: {
+        case "STORY_UPDATED": {
             const {id, feedName, moment} = action.payload.story;
             const {istate, feed} = getFeed(state, feedName);
             let stories = null;
@@ -456,7 +454,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case STORY_READING_UPDATE: {
+        case "STORY_READING_UPDATE": {
             const {feedName, id, read} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             const index = feed.stories.findIndex(t => t.id === id);
@@ -466,7 +464,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case STORY_SATISFY: {
+        case "STORY_SATISFY": {
             const {feedName, id} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             const index = feed.stories.findIndex(t => t.id === id);
@@ -476,7 +474,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case SETTINGS_LANGUAGE_CHANGED: {
+        case "SETTINGS_LANGUAGE_CHANGED": {
             const {homeOwnerName} = action.context;
             const istate = immutable.wrap(state);
             for (let [fn, feed] of Object.entries(state)) {

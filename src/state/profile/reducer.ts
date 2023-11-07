@@ -4,23 +4,6 @@ import { arrayMove } from '@dnd-kit/sortable';
 
 import { AvatarInfo } from "api";
 import { EVENT_NODE_AVATAR_ADDED, EVENT_NODE_AVATAR_DELETED, EVENT_NODE_AVATAR_ORDERED } from 'api/events';
-import {
-    PROFILE_AVATAR_CREATE,
-    PROFILE_AVATAR_CREATE_FAILED,
-    PROFILE_AVATAR_CREATED,
-    PROFILE_AVATAR_DELETED,
-    PROFILE_AVATARS_LOAD,
-    PROFILE_AVATARS_LOAD_FAILED,
-    PROFILE_AVATARS_LOADED,
-    PROFILE_AVATARS_REORDER,
-    PROFILE_CLOSE_AVATAR_EDIT_DIALOG,
-    PROFILE_IMAGE_UPLOAD,
-    PROFILE_IMAGE_UPLOAD_FAILED,
-    PROFILE_IMAGE_UPLOAD_PROGRESS,
-    PROFILE_IMAGE_UPLOADED,
-    PROFILE_OPEN_AVATAR_EDIT_DIALOG,
-    PROFILE_UPDATE_FAILED
-} from "state/profile/actions";
 import { ProfileState } from "state/profile/state";
 import { ClientAction } from "state/action";
 
@@ -141,20 +124,20 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 updating: false
             };
 
-        case PROFILE_AVATARS_LOAD:
+        case "PROFILE_AVATARS_LOAD":
             return immutable.set(state, "avatars.loading", true);
 
-        case PROFILE_AVATARS_LOADED:
+        case "PROFILE_AVATARS_LOADED":
             return immutable.assign(state, "avatars", {
                 loading: false,
                 loaded: true,
                 avatars: action.payload.avatars
             });
 
-        case PROFILE_AVATARS_LOAD_FAILED:
+        case "PROFILE_AVATARS_LOAD_FAILED":
             return immutable.set(state, "avatars.loading", false);
 
-        case PROFILE_OPEN_AVATAR_EDIT_DIALOG:
+        case "PROFILE_OPEN_AVATAR_EDIT_DIALOG":
             return immutable.wrap(state)
                 .assign("avatarEditDialog", {
                     ...emptyAvatarEditDialog,
@@ -163,20 +146,20 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 })
                 .value();
 
-        case PROFILE_CLOSE_AVATAR_EDIT_DIALOG:
+        case "PROFILE_CLOSE_AVATAR_EDIT_DIALOG":
             return immutable.set(state, "avatarEditDialog.show", false);
 
-        case PROFILE_IMAGE_UPLOAD:
+        case "PROFILE_IMAGE_UPLOAD":
             return immutable.assign(state, "avatarEditDialog", {
                 imageUploading: true,
                 imageUploadProgress: null
             });
 
-        case PROFILE_IMAGE_UPLOAD_PROGRESS:
+        case "PROFILE_IMAGE_UPLOAD_PROGRESS":
             return immutable.set(state, "avatarEditDialog.imageUploadProgress",
                 Math.round(action.payload.loaded * 100 / action.payload.total));
 
-        case PROFILE_IMAGE_UPLOADED:
+        case "PROFILE_IMAGE_UPLOADED":
             return immutable.assign(state, "avatarEditDialog", {
                 imageUploading: false,
                 imageUploadProgress: null,
@@ -187,16 +170,16 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
                 orientation: action.payload.orientation
             })
 
-        case PROFILE_IMAGE_UPLOAD_FAILED:
+        case "PROFILE_IMAGE_UPLOAD_FAILED":
             return immutable.assign(state, "avatarEditDialog", {
                 imageUploading: false,
                 imageUploadProgress: null
             });
 
-        case PROFILE_AVATAR_CREATE:
+        case "PROFILE_AVATAR_CREATE":
             return immutable.set(state, "avatarEditDialog.avatarCreating", true);
 
-        case PROFILE_AVATAR_CREATED: {
+        case "PROFILE_AVATAR_CREATED": {
             const istate = immutable.wrap(state);
             istate.assign("avatarEditDialog", {
                 show: false,
@@ -208,17 +191,17 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
             return istate.value();
         }
 
-        case PROFILE_AVATAR_CREATE_FAILED:
+        case "PROFILE_AVATAR_CREATE_FAILED":
             return immutable.set(state, "avatarEditDialog.avatarCreating", false);
 
-        case PROFILE_AVATAR_DELETED:
+        case "PROFILE_AVATAR_DELETED":
             if (state.avatars.loaded) {
                 const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
                 return immutable.set(state, "avatars.avatars", avatars);
             }
             return state;
 
-        case PROFILE_AVATARS_REORDER: {
+        case "PROFILE_AVATARS_REORDER": {
             const {avatarId, overAvatarId} = action.payload;
             if (state.avatars.loaded && avatarId !== overAvatarId) {
                 const index = state.avatars.avatars.findIndex(av => av.id === avatarId);

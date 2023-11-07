@@ -6,13 +6,12 @@ import { ClientState } from "state/state";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import {
-    SHERIFF_ORDER_DETAILS_DIALOG_LOAD,
     sheriffOrderDetailsDialogLoaded,
     sheriffOrderDetailsDialogLoadFailed
 } from "state/sherifforderdetailsdialog/actions";
 
 export default [
-    executor(SHERIFF_ORDER_DETAILS_DIALOG_LOAD, "", sheriffOrderDetailsDialogLoadSaga)
+    executor("SHERIFF_ORDER_DETAILS_DIALOG_LOAD", "", sheriffOrderDetailsDialogLoadSaga)
 ];
 
 function* sheriffOrderDetailsDialogLoadSaga() {

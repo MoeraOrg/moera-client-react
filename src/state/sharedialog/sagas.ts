@@ -5,9 +5,6 @@ import i18n from 'i18next';
 import {
     closeShareDialog,
     openShareDialog,
-    SHARE_DIALOG_COPY_LINK,
-    SHARE_DIALOG_PREPARE,
-    SHARE_PAGE_COPY_LINK,
     ShareDialogCopyLinkAction,
     ShareDialogPrepareAction,
     SharePageCopyLinkAction
@@ -22,9 +19,9 @@ import { getWindowSelectionHtml, hasWindowSelection } from "util/misc";
 import { quoteHtml } from "util/html";
 
 export default [
-    executor(SHARE_DIALOG_PREPARE, "", shareDialogPrepareSaga),
-    executor(SHARE_DIALOG_COPY_LINK, payload => payload.url, shareDialogCopyLinkSaga),
-    executor(SHARE_PAGE_COPY_LINK, null, sharePageCopyLink)
+    executor("SHARE_DIALOG_PREPARE", "", shareDialogPrepareSaga),
+    executor("SHARE_DIALOG_COPY_LINK", payload => payload.url, shareDialogCopyLinkSaga),
+    executor("SHARE_PAGE_COPY_LINK", null, sharePageCopyLink)
 ];
 
 function* share(url: string, text: string) {

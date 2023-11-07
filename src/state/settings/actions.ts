@@ -1,405 +1,279 @@
-import { Action } from 'redux';
-
-import { ActionWithPayload } from "state/action-types";
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { PluginInfo, SettingInfo, SettingMetaInfo, TokenInfo } from "api";
 import { SettingsTabId } from "state/settings/state";
 
-export const SETTINGS_GO_TO_TAB = "SETTINGS_GO_TO_TAB";
-export type SettingsGoToTabAction = ActionWithPayload<typeof SETTINGS_GO_TO_TAB, {
+export type SettingsGoToTabAction = ActionWithPayload<"SETTINGS_GO_TO_TAB", {
     tab: SettingsTabId;
 }>;
-export const settingsGoToTab = (tab: SettingsTabId): SettingsGoToTabAction => ({
-    type: SETTINGS_GO_TO_TAB,
-    payload: {tab}
-});
+export const settingsGoToTab = (tab: SettingsTabId): SettingsGoToTabAction =>
+    actionWithPayload("SETTINGS_GO_TO_TAB", {tab});
 
-export const SETTINGS_GO_TO_SHEET = "SETTINGS_GO_TO_SHEET";
-export type SettingsGoToSheetAction = ActionWithPayload<typeof SETTINGS_GO_TO_SHEET, {
+export type SettingsGoToSheetAction = ActionWithPayload<"SETTINGS_GO_TO_SHEET", {
     sheet: string;
 }>;
-export const settingsGoToSheet = (sheet: string): SettingsGoToSheetAction => ({
-    type: SETTINGS_GO_TO_SHEET,
-    payload: {sheet}
-});
+export const settingsGoToSheet = (sheet: string): SettingsGoToSheetAction =>
+    actionWithPayload("SETTINGS_GO_TO_SHEET", {sheet});
 
-export const SETTINGS_NODE_VALUES_LOAD = "SETTINGS_NODE_VALUES_LOAD";
-export type SettingsNodeValuesLoadAction = Action<typeof SETTINGS_NODE_VALUES_LOAD>;
-export const settingsNodeValuesLoad = (): SettingsNodeValuesLoadAction => ({
-    type: SETTINGS_NODE_VALUES_LOAD
-});
+export type SettingsNodeValuesLoadAction = ActionWithoutPayload<"SETTINGS_NODE_VALUES_LOAD">;
+export const settingsNodeValuesLoad = (): SettingsNodeValuesLoadAction =>
+    actionWithoutPayload("SETTINGS_NODE_VALUES_LOAD");
 
-export const SETTINGS_NODE_VALUES_LOADED = "SETTINGS_NODE_VALUES_LOADED";
-export type SettingsNodeValuesLoadedAction = ActionWithPayload<typeof SETTINGS_NODE_VALUES_LOADED, {
+export type SettingsNodeValuesLoadedAction = ActionWithPayload<"SETTINGS_NODE_VALUES_LOADED", {
     settings: SettingInfo[];
 }>;
-export const settingsNodeValuesLoaded = (settings: SettingInfo[]): SettingsNodeValuesLoadedAction => ({
-    type: SETTINGS_NODE_VALUES_LOADED,
-    payload: {settings}
-});
+export const settingsNodeValuesLoaded = (settings: SettingInfo[]): SettingsNodeValuesLoadedAction =>
+    actionWithPayload("SETTINGS_NODE_VALUES_LOADED", {settings});
 
-export const SETTINGS_NODE_VALUES_LOAD_FAILED = "SETTINGS_NODE_VALUES_LOAD_FAILED";
-export type SettingsNodeValuesLoadFailedAction = Action<typeof SETTINGS_NODE_VALUES_LOAD_FAILED>;
-export const settingsNodeValuesLoadFailed = (): SettingsNodeValuesLoadFailedAction => ({
-    type: SETTINGS_NODE_VALUES_LOAD_FAILED
-});
+export type SettingsNodeValuesLoadFailedAction = ActionWithoutPayload<"SETTINGS_NODE_VALUES_LOAD_FAILED">;
+export const settingsNodeValuesLoadFailed = (): SettingsNodeValuesLoadFailedAction =>
+    actionWithoutPayload("SETTINGS_NODE_VALUES_LOAD_FAILED");
 
-export const SETTINGS_NODE_VALUES_UNSET = "SETTINGS_NODE_VALUES_UNSET";
-export type SettingsNodeValuesUnsetAction = Action<typeof SETTINGS_NODE_VALUES_UNSET>;
-export const settingsNodeValuesUnset = (): SettingsNodeValuesUnsetAction => ({
-    type: SETTINGS_NODE_VALUES_UNSET
-});
+export type SettingsNodeValuesUnsetAction = ActionWithoutPayload<"SETTINGS_NODE_VALUES_UNSET">;
+export const settingsNodeValuesUnset = (): SettingsNodeValuesUnsetAction =>
+    actionWithoutPayload("SETTINGS_NODE_VALUES_UNSET");
 
-export const SETTINGS_NODE_CONFLICT = "SETTINGS_NODE_CONFLICT";
-export type SettingsNodeConflictAction = Action<typeof SETTINGS_NODE_CONFLICT>;
-export const settingsNodeConflict = (): SettingsNodeConflictAction => ({
-    type: SETTINGS_NODE_CONFLICT
-});
+export type SettingsNodeConflictAction = ActionWithoutPayload<"SETTINGS_NODE_CONFLICT">;
+export const settingsNodeConflict = (): SettingsNodeConflictAction =>
+    actionWithoutPayload("SETTINGS_NODE_CONFLICT");
 
-export const SETTINGS_NODE_CONFLICT_CLOSE = "SETTINGS_NODE_CONFLICT_CLOSE";
-export type SettingsNodeConflictCloseAction = Action<typeof SETTINGS_NODE_CONFLICT_CLOSE>;
-export const settingsNodeConflictClose = (): SettingsNodeConflictCloseAction => ({
-    type: SETTINGS_NODE_CONFLICT_CLOSE
-});
+export type SettingsNodeConflictCloseAction = ActionWithoutPayload<"SETTINGS_NODE_CONFLICT_CLOSE">;
+export const settingsNodeConflictClose = (): SettingsNodeConflictCloseAction =>
+    actionWithoutPayload("SETTINGS_NODE_CONFLICT_CLOSE");
 
-export const SETTINGS_NODE_META_LOAD = "SETTINGS_NODE_META_LOAD";
-export type SettingsNodeMetaLoadAction = Action<typeof SETTINGS_NODE_META_LOAD>;
-export const settingsNodeMetaLoad = (): SettingsNodeMetaLoadAction => ({
-    type: SETTINGS_NODE_META_LOAD
-});
+export type SettingsNodeMetaLoadAction = ActionWithoutPayload<"SETTINGS_NODE_META_LOAD">;
+export const settingsNodeMetaLoad = (): SettingsNodeMetaLoadAction =>
+    actionWithoutPayload("SETTINGS_NODE_META_LOAD");
 
-export const SETTINGS_NODE_META_LOADED = "SETTINGS_NODE_META_LOADED";
-export type SettingsNodeMetaLoadedAction = ActionWithPayload<typeof SETTINGS_NODE_META_LOADED, {
+export type SettingsNodeMetaLoadedAction = ActionWithPayload<"SETTINGS_NODE_META_LOADED", {
     meta: SettingMetaInfo[];
 }>;
-export const settingsNodeMetaLoaded = (meta: SettingMetaInfo[]): SettingsNodeMetaLoadedAction => ({
-    type: SETTINGS_NODE_META_LOADED,
-    payload: {meta}
-});
+export const settingsNodeMetaLoaded = (meta: SettingMetaInfo[]): SettingsNodeMetaLoadedAction =>
+    actionWithPayload("SETTINGS_NODE_META_LOADED", {meta});
 
-export const SETTINGS_NODE_META_LOAD_FAILED = "SETTINGS_NODE_META_LOAD_FAILED";
-export type SettingsNodeMetaLoadFailedAction = Action<typeof SETTINGS_NODE_META_LOAD_FAILED>;
-export const settingsNodeMetaLoadFailed = (): SettingsNodeMetaLoadFailedAction => ({
-    type: SETTINGS_NODE_META_LOAD_FAILED
-});
+export type SettingsNodeMetaLoadFailedAction = ActionWithoutPayload<"SETTINGS_NODE_META_LOAD_FAILED">;
+export const settingsNodeMetaLoadFailed = (): SettingsNodeMetaLoadFailedAction =>
+    actionWithoutPayload("SETTINGS_NODE_META_LOAD_FAILED");
 
-export const SETTINGS_NODE_META_UNSET = "SETTINGS_NODE_META_UNSET";
-export type SettingsNodeMetaUnsetAction = Action<typeof SETTINGS_NODE_META_UNSET>;
-export const settingsNodeMetaUnset = (): SettingsNodeMetaUnsetAction => ({
-    type: SETTINGS_NODE_META_UNSET
-});
+export type SettingsNodeMetaUnsetAction = ActionWithoutPayload<"SETTINGS_NODE_META_UNSET">;
+export const settingsNodeMetaUnset = (): SettingsNodeMetaUnsetAction =>
+    actionWithoutPayload("SETTINGS_NODE_META_UNSET");
 
-export const SETTINGS_CLIENT_VALUES_LOAD = "SETTINGS_CLIENT_VALUES_LOAD";
-export type SettingsClientValuesLoadAction = Action<typeof SETTINGS_CLIENT_VALUES_LOAD>;
-export const settingsClientValuesLoad = (): SettingsClientValuesLoadAction => ({
-    type: SETTINGS_CLIENT_VALUES_LOAD
-});
+export type SettingsClientValuesLoadAction = ActionWithoutPayload<"SETTINGS_CLIENT_VALUES_LOAD">;
+export const settingsClientValuesLoad = (): SettingsClientValuesLoadAction =>
+    actionWithoutPayload("SETTINGS_CLIENT_VALUES_LOAD");
 
-export const SETTINGS_CLIENT_VALUES_LOADED = "SETTINGS_CLIENT_VALUES_LOADED";
-export type SettingsClientValuesLoadedAction = ActionWithPayload<typeof SETTINGS_CLIENT_VALUES_LOADED, {
+export type SettingsClientValuesLoadedAction = ActionWithPayload<"SETTINGS_CLIENT_VALUES_LOADED", {
     settings: SettingInfo[];
 }>;
-export const settingsClientValuesLoaded = (settings: SettingInfo[]): SettingsClientValuesLoadedAction => ({
-    type: SETTINGS_CLIENT_VALUES_LOADED,
-    payload: {settings}
-});
+export const settingsClientValuesLoaded = (settings: SettingInfo[]): SettingsClientValuesLoadedAction =>
+    actionWithPayload("SETTINGS_CLIENT_VALUES_LOADED", {settings});
 
-export const SETTINGS_CLIENT_VALUES_LOAD_FAILED = "SETTINGS_CLIENT_VALUES_LOAD_FAILED";
-export type SettingsClientValuesLoadFailedAction = Action<typeof SETTINGS_CLIENT_VALUES_LOAD_FAILED>;
-export const settingsClientValuesLoadFailed = (): SettingsClientValuesLoadFailedAction => ({
-    type: SETTINGS_CLIENT_VALUES_LOAD_FAILED
-});
+export type SettingsClientValuesLoadFailedAction = ActionWithoutPayload<"SETTINGS_CLIENT_VALUES_LOAD_FAILED">;
+export const settingsClientValuesLoadFailed = (): SettingsClientValuesLoadFailedAction =>
+    actionWithoutPayload("SETTINGS_CLIENT_VALUES_LOAD_FAILED");
 
-export const SETTINGS_CLIENT_VALUES_SET = "SETTINGS_CLIENT_VALUES_SET";
-export type SettingsClientValuesSetAction = ActionWithPayload<typeof SETTINGS_CLIENT_VALUES_SET, {
+export type SettingsClientValuesSetAction = ActionWithPayload<"SETTINGS_CLIENT_VALUES_SET", {
     settings: SettingInfo[];
 }>;
-export const settingsClientValuesSet = (settings: SettingInfo[]): SettingsClientValuesSetAction => ({
-    type: SETTINGS_CLIENT_VALUES_SET,
-    payload: {settings}
-});
+export const settingsClientValuesSet = (settings: SettingInfo[]): SettingsClientValuesSetAction =>
+    actionWithPayload("SETTINGS_CLIENT_VALUES_SET", {settings});
 
-export const SETTINGS_CLIENT_VALUES_UNSET = "SETTINGS_CLIENT_VALUES_UNSET";
-export type SettingsClientValuesUnsetAction = Action<typeof SETTINGS_CLIENT_VALUES_UNSET>;
-export const settingsClientValuesUnset = (): SettingsClientValuesUnsetAction => ({
-    type: SETTINGS_CLIENT_VALUES_UNSET
-});
+export type SettingsClientValuesUnsetAction = ActionWithoutPayload<"SETTINGS_CLIENT_VALUES_UNSET">;
+export const settingsClientValuesUnset = (): SettingsClientValuesUnsetAction =>
+    actionWithoutPayload("SETTINGS_CLIENT_VALUES_UNSET");
 
-export const SETTINGS_CLIENT_CONFLICT = "SETTINGS_CLIENT_CONFLICT";
-export type SettingsClientConflictAction = Action<typeof SETTINGS_CLIENT_CONFLICT>;
-export const settingsClientConflict = (): SettingsClientConflictAction => ({
-    type: SETTINGS_CLIENT_CONFLICT
-});
+export type SettingsClientConflictAction = ActionWithoutPayload<"SETTINGS_CLIENT_CONFLICT">;
+export const settingsClientConflict = (): SettingsClientConflictAction =>
+    actionWithoutPayload("SETTINGS_CLIENT_CONFLICT");
 
-export const SETTINGS_CLIENT_CONFLICT_CLOSE = "SETTINGS_CLIENT_CONFLICT_CLOSE";
-export type SettingsClientConflictCloseAction = Action<typeof SETTINGS_CLIENT_CONFLICT_CLOSE>;
-export const settingsClientConflictClose = (): SettingsClientConflictCloseAction => ({
-    type: SETTINGS_CLIENT_CONFLICT_CLOSE
-});
+export type SettingsClientConflictCloseAction = ActionWithoutPayload<"SETTINGS_CLIENT_CONFLICT_CLOSE">;
+export const settingsClientConflictClose = (): SettingsClientConflictCloseAction =>
+    actionWithoutPayload("SETTINGS_CLIENT_CONFLICT_CLOSE");
 
-export const SETTINGS_UPDATE = "SETTINGS_UPDATE";
-export type SettingsUpdateAction = ActionWithPayload<typeof SETTINGS_UPDATE, {
+export type SettingsUpdateAction = ActionWithPayload<"SETTINGS_UPDATE", {
     settings: SettingInfo[];
     onSuccess: any;
 }>;
-export const settingsUpdate = (settings: SettingInfo[], onSuccess?: any): SettingsUpdateAction => ({
-    type: SETTINGS_UPDATE,
-    payload: {settings, onSuccess}
-});
+export const settingsUpdate = (settings: SettingInfo[], onSuccess?: any): SettingsUpdateAction =>
+    actionWithPayload("SETTINGS_UPDATE", {settings, onSuccess});
 
-export const SETTINGS_UPDATE_SUCCEEDED = "SETTINGS_UPDATE_SUCCEEDED";
-export type SettingsUpdateSucceededAction = ActionWithPayload<typeof SETTINGS_UPDATE_SUCCEEDED, {
+export type SettingsUpdateSucceededAction = ActionWithPayload<"SETTINGS_UPDATE_SUCCEEDED", {
     settings: SettingInfo[];
     onSuccess: any;
 }>;
-export const settingsUpdateSucceeded = (settings: SettingInfo[], onSuccess: any): SettingsUpdateSucceededAction => ({
-    type: SETTINGS_UPDATE_SUCCEEDED,
-    payload: {settings, onSuccess}
-});
+export const settingsUpdateSucceeded = (settings: SettingInfo[], onSuccess: any): SettingsUpdateSucceededAction =>
+    actionWithPayload("SETTINGS_UPDATE_SUCCEEDED", {settings, onSuccess});
 
-export const SETTINGS_UPDATE_FAILED = "SETTINGS_UPDATE_FAILED";
-export type SettingsUpdateFailedAction = Action<typeof SETTINGS_UPDATE_FAILED>;
-export const settingsUpdateFailed = (): SettingsUpdateFailedAction => ({
-    type: SETTINGS_UPDATE_FAILED
-});
+export type SettingsUpdateFailedAction = ActionWithoutPayload<"SETTINGS_UPDATE_FAILED">;
+export const settingsUpdateFailed = (): SettingsUpdateFailedAction =>
+    actionWithoutPayload("SETTINGS_UPDATE_FAILED");
 
-export const SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN = "SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN";
-export type SettingsChangePasswordDialogOpenAction = Action<typeof SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN>;
-export const settingsChangePasswordDialogOpen = (): SettingsChangePasswordDialogOpenAction => ({
-    type: SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN
-});
+export type SettingsChangePasswordDialogOpenAction = ActionWithoutPayload<"SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN">;
+export const settingsChangePasswordDialogOpen = (): SettingsChangePasswordDialogOpenAction =>
+    actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_DIALOG_OPEN");
 
-export const SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE = "SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE";
-export type SettingsChangePasswordDialogCloseAction = Action<typeof SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE>;
-export const settingsChangePasswordDialogClose = (): SettingsChangePasswordDialogCloseAction => ({
-    type: SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE
-});
+export type SettingsChangePasswordDialogCloseAction = ActionWithoutPayload<"SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE">;
+export const settingsChangePasswordDialogClose = (): SettingsChangePasswordDialogCloseAction =>
+    actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_DIALOG_CLOSE");
 
-export const SETTINGS_CHANGE_PASSWORD = "SETTINGS_CHANGE_PASSWORD";
-export type SettingsChangePasswordAction = ActionWithPayload<typeof SETTINGS_CHANGE_PASSWORD, {
+export type SettingsChangePasswordAction = ActionWithPayload<"SETTINGS_CHANGE_PASSWORD", {
     oldPassword: string;
     password: string;
     onLoginIncorrect: any;
 }>;
-export const settingsChangePassword = (oldPassword: string, password: string,
-                                       onLoginIncorrect: any): SettingsChangePasswordAction => ({
-    type: SETTINGS_CHANGE_PASSWORD,
-    payload: {oldPassword, password, onLoginIncorrect}
-});
+export const settingsChangePassword = (
+    oldPassword: string, password: string, onLoginIncorrect: any
+): SettingsChangePasswordAction =>
+    actionWithPayload("SETTINGS_CHANGE_PASSWORD", {oldPassword, password, onLoginIncorrect});
 
-export const SETTINGS_CHANGED_PASSWORD = "SETTINGS_CHANGED_PASSWORD";
-export type SettingsChangedPasswordAction = Action<typeof SETTINGS_CHANGED_PASSWORD>;
-export const settingsChangedPassword = (): SettingsChangedPasswordAction => ({
-    type: SETTINGS_CHANGED_PASSWORD
-});
+export type SettingsChangedPasswordAction = ActionWithoutPayload<"SETTINGS_CHANGED_PASSWORD">;
+export const settingsChangedPassword = (): SettingsChangedPasswordAction =>
+    actionWithoutPayload("SETTINGS_CHANGED_PASSWORD");
 
-export const SETTINGS_CHANGE_PASSWORD_FAILED = "SETTINGS_CHANGE_PASSWORD_FAILED";
-export type SettingsChangePasswordFailedAction = Action<typeof SETTINGS_CHANGE_PASSWORD_FAILED>;
-export const settingsChangePasswordFailed = (): SettingsChangePasswordFailedAction => ({
-    type: SETTINGS_CHANGE_PASSWORD_FAILED
-});
+export type SettingsChangePasswordFailedAction = ActionWithoutPayload<"SETTINGS_CHANGE_PASSWORD_FAILED">;
+export const settingsChangePasswordFailed = (): SettingsChangePasswordFailedAction =>
+    actionWithoutPayload("SETTINGS_CHANGE_PASSWORD_FAILED");
 
-export const SETTINGS_TOKENS_LOAD = "SETTINGS_TOKENS_LOAD";
-export type SettingsTokensLoadAction = Action<typeof SETTINGS_TOKENS_LOAD>;
-export const settingsTokensLoad = (): SettingsTokensLoadAction => ({
-    type: SETTINGS_TOKENS_LOAD
-});
+export type SettingsTokensLoadAction = ActionWithoutPayload<"SETTINGS_TOKENS_LOAD">;
+export const settingsTokensLoad = (): SettingsTokensLoadAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_LOAD");
 
-export const SETTINGS_TOKENS_LOADED = "SETTINGS_TOKENS_LOADED";
-export type SettingsTokensLoadedAction = ActionWithPayload<typeof SETTINGS_TOKENS_LOADED, {
+export type SettingsTokensLoadedAction = ActionWithPayload<"SETTINGS_TOKENS_LOADED", {
     tokens: TokenInfo[];
 }>;
-export const settingsTokensLoaded = (tokens: TokenInfo[]): SettingsTokensLoadedAction => ({
-    type: SETTINGS_TOKENS_LOADED,
-    payload: {tokens}
-});
+export const settingsTokensLoaded = (tokens: TokenInfo[]): SettingsTokensLoadedAction =>
+    actionWithPayload("SETTINGS_TOKENS_LOADED", {tokens});
 
-export const SETTINGS_TOKENS_LOAD_FAILED = "SETTINGS_TOKENS_LOAD_FAILED";
-export type SettingsTokensLoadFailedAction = Action<typeof SETTINGS_TOKENS_LOAD_FAILED>;
-export const settingsTokensLoadFailed = (): SettingsTokensLoadFailedAction => ({
-    type: SETTINGS_TOKENS_LOAD_FAILED
-});
+export type SettingsTokensLoadFailedAction = ActionWithoutPayload<"SETTINGS_TOKENS_LOAD_FAILED">;
+export const settingsTokensLoadFailed = (): SettingsTokensLoadFailedAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_LOAD_FAILED");
 
-export const SETTINGS_TOKENS_UNSET = "SETTINGS_TOKENS_UNSET";
-export type SettingsTokensUnsetAction = Action<typeof SETTINGS_TOKENS_UNSET>;
-export const settingsTokensUnset = (): SettingsTokensUnsetAction => ({
-    type: SETTINGS_TOKENS_UNSET
-});
+export type SettingsTokensUnsetAction = ActionWithoutPayload<"SETTINGS_TOKENS_UNSET">;
+export const settingsTokensUnset = (): SettingsTokensUnsetAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_UNSET");
 
-export const SETTINGS_TOKENS_DIALOG_OPEN = "SETTINGS_TOKENS_DIALOG_OPEN";
-export type SettingsTokensDialogOpenAction = ActionWithPayload<typeof SETTINGS_TOKENS_DIALOG_OPEN, {
+export type SettingsTokensDialogOpenAction = ActionWithPayload<"SETTINGS_TOKENS_DIALOG_OPEN", {
     token: TokenInfo | null;
 }>;
-export const settingsTokensDialogOpen = (token: TokenInfo | null): SettingsTokensDialogOpenAction => ({
-    type: SETTINGS_TOKENS_DIALOG_OPEN,
-    payload: {token}
-});
+export const settingsTokensDialogOpen = (token: TokenInfo | null): SettingsTokensDialogOpenAction =>
+    actionWithPayload("SETTINGS_TOKENS_DIALOG_OPEN", {token});
 
-export const SETTINGS_TOKENS_DIALOG_CLOSE = "SETTINGS_TOKENS_DIALOG_CLOSE";
-export type SettingsTokensDialogCloseAction = Action<typeof SETTINGS_TOKENS_DIALOG_CLOSE>;
-export const settingsTokensDialogClose = (): SettingsTokensDialogCloseAction => ({
-    type: SETTINGS_TOKENS_DIALOG_CLOSE
-});
+export type SettingsTokensDialogCloseAction = ActionWithoutPayload<"SETTINGS_TOKENS_DIALOG_CLOSE">;
+export const settingsTokensDialogClose = (): SettingsTokensDialogCloseAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_DIALOG_CLOSE");
 
-export const SETTINGS_TOKENS_CREATE = "SETTINGS_TOKENS_CREATE";
-export type SettingsTokensCreateAction = ActionWithPayload<typeof SETTINGS_TOKENS_CREATE, {
+export type SettingsTokensCreateAction = ActionWithPayload<"SETTINGS_TOKENS_CREATE", {
     password: string;
     name: string | null;
     onLoginIncorrect: () => void
 }>;
-export const settingsTokensCreate = (password: string, name: string | null,
-                                     onLoginIncorrect: () => void): SettingsTokensCreateAction => ({
-    type: SETTINGS_TOKENS_CREATE,
-    payload: {password, name, onLoginIncorrect}
-});
+export const settingsTokensCreate = (
+    password: string, name: string | null, onLoginIncorrect: () => void
+): SettingsTokensCreateAction =>
+    actionWithPayload("SETTINGS_TOKENS_CREATE", {password, name, onLoginIncorrect});
 
-export const SETTINGS_TOKENS_CREATED = "SETTINGS_TOKENS_CREATED";
-export type SettingsTokensCreatedAction = ActionWithPayload<typeof SETTINGS_TOKENS_CREATED, {
+export type SettingsTokensCreatedAction = ActionWithPayload<"SETTINGS_TOKENS_CREATED", {
     token: TokenInfo;
 }>;
-export const settingsTokensCreated = (token: TokenInfo): SettingsTokensCreatedAction => ({
-    type: SETTINGS_TOKENS_CREATED,
-    payload: {token}
-});
+export const settingsTokensCreated = (token: TokenInfo): SettingsTokensCreatedAction =>
+    actionWithPayload("SETTINGS_TOKENS_CREATED", {token});
 
-export const SETTINGS_TOKENS_CREATE_FAILED = "SETTINGS_TOKENS_CREATE_FAILED";
-export type SettingsTokensCreateFailedAction = Action<typeof SETTINGS_TOKENS_CREATE_FAILED>;
-export const settingsTokensCreateFailed = (): SettingsTokensCreateFailedAction => ({
-    type: SETTINGS_TOKENS_CREATE_FAILED
-});
+export type SettingsTokensCreateFailedAction = ActionWithoutPayload<"SETTINGS_TOKENS_CREATE_FAILED">;
+export const settingsTokensCreateFailed = (): SettingsTokensCreateFailedAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_CREATE_FAILED");
 
-export const SETTINGS_TOKENS_UPDATE = "SETTINGS_TOKENS_UPDATE";
-export type SettingsTokensUpdateAction = ActionWithPayload<typeof SETTINGS_TOKENS_UPDATE, {
+export type SettingsTokensUpdateAction = ActionWithPayload<"SETTINGS_TOKENS_UPDATE", {
     id: string;
     name: string | null;
 }>;
-export const settingsTokensUpdate = (id: string, name: string | null): SettingsTokensUpdateAction => ({
-    type: SETTINGS_TOKENS_UPDATE,
-    payload: {id, name}
-});
+export const settingsTokensUpdate = (id: string, name: string | null): SettingsTokensUpdateAction =>
+    actionWithPayload("SETTINGS_TOKENS_UPDATE", {id, name});
 
-export const SETTINGS_TOKENS_UPDATED = "SETTINGS_TOKENS_UPDATED";
-export type SettingsTokensUpdatedAction = ActionWithPayload<typeof SETTINGS_TOKENS_UPDATED, {
+export type SettingsTokensUpdatedAction = ActionWithPayload<"SETTINGS_TOKENS_UPDATED", {
     token: TokenInfo;
 }>;
-export const settingsTokensUpdated = (token: TokenInfo): SettingsTokensUpdatedAction => ({
-    type: SETTINGS_TOKENS_UPDATED,
-    payload: {token}
-});
+export const settingsTokensUpdated = (token: TokenInfo): SettingsTokensUpdatedAction =>
+    actionWithPayload("SETTINGS_TOKENS_UPDATED", {token});
 
-export const SETTINGS_TOKENS_UPDATE_FAILED = "SETTINGS_TOKENS_UPDATE_FAILED";
-export type SettingsTokensUpdateFailedAction = Action<typeof SETTINGS_TOKENS_UPDATE_FAILED>;
-export const settingsTokensUpdateFailed = (): SettingsTokensUpdateFailedAction => ({
-    type: SETTINGS_TOKENS_UPDATE_FAILED
-});
+export type SettingsTokensUpdateFailedAction = ActionWithoutPayload<"SETTINGS_TOKENS_UPDATE_FAILED">;
+export const settingsTokensUpdateFailed = (): SettingsTokensUpdateFailedAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_UPDATE_FAILED");
 
-export const SETTINGS_TOKENS_DELETE = "SETTINGS_TOKENS_DELETE";
-export type SettingsTokensDeleteAction = ActionWithPayload<typeof SETTINGS_TOKENS_DELETE, {
+export type SettingsTokensDeleteAction = ActionWithPayload<"SETTINGS_TOKENS_DELETE", {
     id: string;
 }>;
-export const settingsTokensDelete = (id: string): SettingsTokensDeleteAction => ({
-    type: SETTINGS_TOKENS_DELETE,
-    payload: {id}
-});
+export const settingsTokensDelete = (id: string): SettingsTokensDeleteAction =>
+    actionWithPayload("SETTINGS_TOKENS_DELETE", {id});
 
-export const SETTINGS_TOKENS_DELETED = "SETTINGS_TOKENS_DELETED";
-export type SettingsTokensDeletedAction = ActionWithPayload<typeof SETTINGS_TOKENS_DELETED, {
+export type SettingsTokensDeletedAction = ActionWithPayload<"SETTINGS_TOKENS_DELETED", {
     id: string;
 }>;
-export const settingsTokensDeleted = (id: string): SettingsTokensDeletedAction => ({
-    type: SETTINGS_TOKENS_DELETED,
-    payload: {id}
-});
+export const settingsTokensDeleted = (id: string): SettingsTokensDeletedAction =>
+    actionWithPayload("SETTINGS_TOKENS_DELETED", {id});
 
-export const SETTINGS_TOKENS_NEW_TOKEN_CLOSE = "SETTINGS_TOKENS_NEW_TOKEN_CLOSE";
-export type SettingsTokensNewTokenCloseAction = Action<typeof SETTINGS_TOKENS_NEW_TOKEN_CLOSE>;
-export const settingsTokensNewTokenClose = (): SettingsTokensNewTokenCloseAction => ({
-    type: SETTINGS_TOKENS_NEW_TOKEN_CLOSE
-});
+export type SettingsTokensNewTokenCloseAction = ActionWithoutPayload<"SETTINGS_TOKENS_NEW_TOKEN_CLOSE">;
+export const settingsTokensNewTokenClose = (): SettingsTokensNewTokenCloseAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_NEW_TOKEN_CLOSE");
 
-export const SETTINGS_TOKENS_NEW_TOKEN_COPY = "SETTINGS_TOKENS_NEW_TOKEN_COPY";
-export type SettingsTokensNewTokenCopyAction = Action<typeof SETTINGS_TOKENS_NEW_TOKEN_COPY>;
-export const settingsTokensNewTokenCopy = (): SettingsTokensNewTokenCopyAction => ({
-    type: SETTINGS_TOKENS_NEW_TOKEN_COPY
-});
+export type SettingsTokensNewTokenCopyAction = ActionWithoutPayload<"SETTINGS_TOKENS_NEW_TOKEN_COPY">;
+export const settingsTokensNewTokenCopy = (): SettingsTokensNewTokenCopyAction =>
+    actionWithoutPayload("SETTINGS_TOKENS_NEW_TOKEN_COPY");
 
-export const SETTINGS_PLUGINS_LOAD = "SETTINGS_PLUGINS_LOAD";
-export type SettingsPluginsLoadAction = Action<typeof SETTINGS_PLUGINS_LOAD>;
-export const settingsPluginsLoad = (): SettingsPluginsLoadAction => ({
-    type: SETTINGS_PLUGINS_LOAD
-});
+export type SettingsPluginsLoadAction = ActionWithoutPayload<"SETTINGS_PLUGINS_LOAD">;
+export const settingsPluginsLoad = (): SettingsPluginsLoadAction =>
+    actionWithoutPayload("SETTINGS_PLUGINS_LOAD");
 
-export const SETTINGS_PLUGINS_LOADED = "SETTINGS_PLUGINS_LOADED";
-export type SettingsPluginsLoadedAction = ActionWithPayload<typeof SETTINGS_PLUGINS_LOADED, {
+export type SettingsPluginsLoadedAction = ActionWithPayload<"SETTINGS_PLUGINS_LOADED", {
     plugins: PluginInfo[];
 }>;
-export const settingsPluginsLoaded = (plugins: PluginInfo[]): SettingsPluginsLoadedAction => ({
-    type: SETTINGS_PLUGINS_LOADED,
-    payload: {plugins}
-});
+export const settingsPluginsLoaded = (plugins: PluginInfo[]): SettingsPluginsLoadedAction =>
+    actionWithPayload("SETTINGS_PLUGINS_LOADED", {plugins});
 
-export const SETTINGS_PLUGINS_LOAD_FAILED = "SETTINGS_PLUGINS_LOAD_FAILED";
-export type SettingsPluginsLoadFailedAction = Action<typeof SETTINGS_PLUGINS_LOAD_FAILED>;
-export const settingsPluginsLoadFailed = (): SettingsPluginsLoadFailedAction => ({
-    type: SETTINGS_PLUGINS_LOAD_FAILED
-});
+export type SettingsPluginsLoadFailedAction = ActionWithoutPayload<"SETTINGS_PLUGINS_LOAD_FAILED">;
+export const settingsPluginsLoadFailed = (): SettingsPluginsLoadFailedAction =>
+    actionWithoutPayload("SETTINGS_PLUGINS_LOAD_FAILED");
 
-export const SETTINGS_PLUGINS_UNSET = "SETTINGS_PLUGINS_UNSET";
-export type SettingsPluginsUnsetAction = Action<typeof SETTINGS_PLUGINS_UNSET>;
-export const settingsPluginsUnset = (): SettingsPluginsUnsetAction => ({
-    type: SETTINGS_PLUGINS_UNSET
-});
+export type SettingsPluginsUnsetAction = ActionWithoutPayload<"SETTINGS_PLUGINS_UNSET">;
+export const settingsPluginsUnset = (): SettingsPluginsUnsetAction =>
+    actionWithoutPayload("SETTINGS_PLUGINS_UNSET");
 
-export const SETTINGS_PLUGINS_DELETE = "SETTINGS_PLUGINS_DELETE";
-export type SettingsPluginsDeleteAction = ActionWithPayload<typeof SETTINGS_PLUGINS_DELETE, {
+export type SettingsPluginsDeleteAction = ActionWithPayload<"SETTINGS_PLUGINS_DELETE", {
     name: string;
     tokenId: string;
 }>;
-export const settingsPluginsDelete = (name: string, tokenId: string): SettingsPluginsDeleteAction => ({
-    type: SETTINGS_PLUGINS_DELETE,
-    payload: {name, tokenId}
-});
+export const settingsPluginsDelete = (name: string, tokenId: string): SettingsPluginsDeleteAction =>
+    actionWithPayload("SETTINGS_PLUGINS_DELETE", {name, tokenId});
 
-export const SETTINGS_PLUGINS_DELETED = "SETTINGS_PLUGINS_DELETED";
-export type SettingsPluginsDeletedAction = ActionWithPayload<typeof SETTINGS_PLUGINS_DELETED, {
+export type SettingsPluginsDeletedAction = ActionWithPayload<"SETTINGS_PLUGINS_DELETED", {
     name: string;
 }>;
-export const settingsPluginsDeleted = (name: string): SettingsPluginsDeletedAction => ({
-    type: SETTINGS_PLUGINS_DELETED,
-    payload: {name}
-});
+export const settingsPluginsDeleted = (name: string): SettingsPluginsDeletedAction =>
+    actionWithPayload("SETTINGS_PLUGINS_DELETED", {name});
 
-export const SETTINGS_PLUGINS_CONFLICT = "SETTINGS_PLUGINS_CONFLICT";
-export type SettingsPluginsConflictAction = Action<typeof SETTINGS_PLUGINS_CONFLICT>;
-export const settingsPluginsConflict = (): SettingsPluginsConflictAction => ({
-    type: SETTINGS_PLUGINS_CONFLICT
-});
+export type SettingsPluginsConflictAction = ActionWithoutPayload<"SETTINGS_PLUGINS_CONFLICT">;
+export const settingsPluginsConflict = (): SettingsPluginsConflictAction =>
+    actionWithoutPayload("SETTINGS_PLUGINS_CONFLICT");
 
-export const SETTINGS_PLUGINS_CONFLICT_CLOSE = "SETTINGS_PLUGINS_CONFLICT_CLOSE";
-export type SettingsPluginsConflictCloseAction = Action<typeof SETTINGS_PLUGINS_CONFLICT_CLOSE>;
-export const settingsPluginsConflictClose = (): SettingsPluginsConflictCloseAction => ({
-    type: SETTINGS_PLUGINS_CONFLICT_CLOSE
-});
+export type SettingsPluginsConflictCloseAction = ActionWithoutPayload<"SETTINGS_PLUGINS_CONFLICT_CLOSE">;
+export const settingsPluginsConflictClose = (): SettingsPluginsConflictCloseAction =>
+    actionWithoutPayload("SETTINGS_PLUGINS_CONFLICT_CLOSE");
 
-export const SETTINGS_LANGUAGE_CHANGED = "SETTINGS_LANGUAGE_CHANGED";
-export type SettingsLanguageChangedAction = Action<typeof SETTINGS_LANGUAGE_CHANGED>;
-export const settingsLanguageChanged = (): SettingsLanguageChangedAction => ({
-    type: SETTINGS_LANGUAGE_CHANGED
-});
+export type SettingsLanguageChangedAction = ActionWithoutPayload<"SETTINGS_LANGUAGE_CHANGED">;
+export const settingsLanguageChanged = (): SettingsLanguageChangedAction =>
+    actionWithoutPayload("SETTINGS_LANGUAGE_CHANGED");
 
-export const SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY = "SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY";
-export type SettingsRemindSetSheriffGooglePlayAction = Action<typeof SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY>;
-export const settingsRemindSetSheriffGooglePlay = (): SettingsRemindSetSheriffGooglePlayAction => ({
-    type: SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY
-});
+export type SettingsRemindSetSheriffGooglePlayAction = ActionWithoutPayload<"SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY">;
+export const settingsRemindSetSheriffGooglePlay = (): SettingsRemindSetSheriffGooglePlayAction =>
+    actionWithoutPayload("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY");
 
-export const SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE = "SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE";
-export type SettingsRemindSetSheriffGooglePlayChoiceAction = ActionWithPayload<typeof SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE, {
+export type SettingsRemindSetSheriffGooglePlayChoiceAction =
+    ActionWithPayload<"SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", {
+        allow: boolean | null
+    }>;
+export const settingsRemindSetSheriffGooglePlayChoice = (
     allow: boolean | null
-}>;
-export const settingsRemindSetSheriffGooglePlayChoice = (allow: boolean | null): SettingsRemindSetSheriffGooglePlayChoiceAction => ({
-    type: SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE,
-    payload: {allow}
-});
+): SettingsRemindSetSheriffGooglePlayChoiceAction =>
+    actionWithPayload("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", {allow});
 
 export type SettingsAnyAction =
     SettingsGoToTabAction

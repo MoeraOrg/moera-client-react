@@ -1,18 +1,13 @@
 import { call, put, spawn } from 'typed-redux-saga';
 
 import { imageUpload, Node } from "api";
-import {
-    RICH_TEXT_EDITOR_IMAGE_COPY,
-    RICH_TEXT_EDITOR_IMAGES_UPLOAD,
-    RichTextEditorImageCopyAction,
-    RichTextEditorImagesUploadAction
-} from "state/richtexteditor/actions";
+import { RichTextEditorImageCopyAction, RichTextEditorImagesUploadAction } from "state/richtexteditor/actions";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
 
 export default [
-    executor(RICH_TEXT_EDITOR_IMAGES_UPLOAD, null, richTextEditorImagesUploadSaga),
-    executor(RICH_TEXT_EDITOR_IMAGE_COPY, null, richTextEditorImageCopySaga)
+    executor("RICH_TEXT_EDITOR_IMAGES_UPLOAD", null, richTextEditorImagesUploadSaga),
+    executor("RICH_TEXT_EDITOR_IMAGE_COPY", null, richTextEditorImageCopySaga)
 ];
 
 function* richTextEditorImageUpload(action: RichTextEditorImagesUploadAction, index: number) {

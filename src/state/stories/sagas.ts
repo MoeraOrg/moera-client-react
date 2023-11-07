@@ -3,9 +3,6 @@ import { call, put } from 'typed-redux-saga';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
-    STORY_PINNING_UPDATE,
-    STORY_READING_UPDATE,
-    STORY_SATISFY,
     StoryPinningUpdateAction,
     StoryReadingUpdateAction,
     StorySatisfyAction,
@@ -14,9 +11,9 @@ import {
 import { executor } from "state/executor";
 
 export default [
-    executor(STORY_PINNING_UPDATE, null, storyPinningUpdateSaga),
-    executor(STORY_READING_UPDATE, null, storyReadingUpdateSaga),
-    executor(STORY_SATISFY, null, storySatisfySaga)
+    executor("STORY_PINNING_UPDATE", null, storyPinningUpdateSaga),
+    executor("STORY_READING_UPDATE", null, storyReadingUpdateSaga),
+    executor("STORY_SATISFY", null, storySatisfySaga)
 ];
 
 function* storyPinningUpdateSaga(action: StoryPinningUpdateAction) {

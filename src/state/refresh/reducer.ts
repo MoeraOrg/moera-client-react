@@ -1,4 +1,3 @@
-import { REFRESH_HIDE, REFRESH_SHOW } from "state/refresh/actions";
 import { RefreshState } from "state/refresh/state";
 import { ClientAction } from "state/action";
 
@@ -8,13 +7,13 @@ const initialState = {
 
 export default (state: RefreshState = initialState, action: ClientAction): RefreshState => {
     switch (action.type) {
-        case REFRESH_SHOW:
+        case "REFRESH_SHOW":
             return {
                 ...state,
                 active: true
             }
 
-        case REFRESH_HIDE:
+        case "REFRESH_HIDE":
             return {
                 ...state,
                 active: false

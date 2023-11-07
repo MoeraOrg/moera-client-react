@@ -1,4 +1,3 @@
-import { CLOSE_SHARE_DIALOG, OPEN_SHARE_DIALOG } from "state/sharedialog/actions";
 import { ShareDialogState } from "state/sharedialog/state";
 import { ClientAction } from "state/action";
 
@@ -10,7 +9,7 @@ const initialState = {
 
 export default (state: ShareDialogState = initialState, action: ClientAction): ShareDialogState => {
     switch (action.type) {
-        case OPEN_SHARE_DIALOG:
+        case "OPEN_SHARE_DIALOG":
             return {
                 ...state,
                 show: true,
@@ -18,7 +17,7 @@ export default (state: ShareDialogState = initialState, action: ClientAction): S
                 url: action.payload.url
             }
 
-        case CLOSE_SHARE_DIALOG:
+        case "CLOSE_SHARE_DIALOG":
             return {
                 ...state,
                 show: false

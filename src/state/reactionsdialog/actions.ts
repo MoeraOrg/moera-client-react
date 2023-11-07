@@ -1,41 +1,30 @@
-import { Action } from 'redux';
-
-import { ActionWithPayload } from "state/action-types";
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { ReactionInfo, ReactionTotalInfo } from "api";
 
-export const OPEN_REACTIONS_DIALOG = "OPEN_REACTIONS_DIALOG";
-export type OpenReactionsDialogAction = ActionWithPayload<typeof OPEN_REACTIONS_DIALOG, {
+export type OpenReactionsDialogAction = ActionWithPayload<"OPEN_REACTIONS_DIALOG", {
     nodeName: string;
     postingId: string;
     commentId: string | null;
     negative: boolean;
 }>;
-export const openReactionsDialog = (nodeName: string, postingId: string, commentId: string | null,
-                                    negative: boolean): OpenReactionsDialogAction => ({
-    type: OPEN_REACTIONS_DIALOG,
-    payload: {nodeName, postingId, commentId, negative}
-});
+export const openReactionsDialog = (
+    nodeName: string, postingId: string, commentId: string | null, negative: boolean
+): OpenReactionsDialogAction =>
+    actionWithPayload("OPEN_REACTIONS_DIALOG", {nodeName, postingId, commentId, negative});
 
-export const CLOSE_REACTIONS_DIALOG = "CLOSE_REACTIONS_DIALOG";
-export type CloseReactionsDialogAction = Action<typeof CLOSE_REACTIONS_DIALOG>;
-export const closeReactionsDialog = (): CloseReactionsDialogAction => ({
-    type: CLOSE_REACTIONS_DIALOG
-});
+export type CloseReactionsDialogAction = ActionWithoutPayload<"CLOSE_REACTIONS_DIALOG">;
+export const closeReactionsDialog = (): CloseReactionsDialogAction =>
+    actionWithoutPayload("CLOSE_REACTIONS_DIALOG");
 
-export const REACTIONS_DIALOG_UNSET = "REACTIONS_DIALOG_UNSET";
-export type ReactionsDialogUnsetAction = Action<typeof REACTIONS_DIALOG_UNSET>;
-export const reactionsDialogUnset = (): ReactionsDialogUnsetAction => ({
-    type: REACTIONS_DIALOG_UNSET
-});
+export type ReactionsDialogUnsetAction = ActionWithoutPayload<"REACTIONS_DIALOG_UNSET">;
+export const reactionsDialogUnset = (): ReactionsDialogUnsetAction =>
+    actionWithoutPayload("REACTIONS_DIALOG_UNSET");
 
-export const REACTIONS_DIALOG_PAST_REACTIONS_LOAD = "REACTIONS_DIALOG_PAST_REACTIONS_LOAD";
-export type ReactionsDialogPastReactionsLoadAction = Action<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD>;
-export const reactionsDialogPastReactionsLoad = (): ReactionsDialogPastReactionsLoadAction => ({
-    type: REACTIONS_DIALOG_PAST_REACTIONS_LOAD
-});
+export type ReactionsDialogPastReactionsLoadAction = ActionWithoutPayload<"REACTIONS_DIALOG_PAST_REACTIONS_LOAD">;
+export const reactionsDialogPastReactionsLoad = (): ReactionsDialogPastReactionsLoadAction =>
+    actionWithoutPayload("REACTIONS_DIALOG_PAST_REACTIONS_LOAD");
 
-export const REACTIONS_DIALOG_PAST_REACTIONS_LOADED = "REACTIONS_DIALOG_PAST_REACTIONS_LOADED";
-export type ReactionsDialogPastReactionsLoadedAction = ActionWithPayload<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOADED, {
+export type ReactionsDialogPastReactionsLoadedAction = ActionWithPayload<"REACTIONS_DIALOG_PAST_REACTIONS_LOADED", {
     reactions: ReactionInfo[];
     postingId: string;
     commentId: string | null;
@@ -45,82 +34,69 @@ export type ReactionsDialogPastReactionsLoadedAction = ActionWithPayload<typeof 
     after: number;
     total: number | null;
 }>;
-export const reactionsDialogPastReactionsLoaded = (reactions: ReactionInfo[], postingId: string,
-                                                   commentId: string | null, negative: boolean, emoji: number,
-                                                   before: number, after: number,
-                                                   total: number | null): ReactionsDialogPastReactionsLoadedAction => ({
-    type: REACTIONS_DIALOG_PAST_REACTIONS_LOADED,
-    payload: {reactions, postingId, commentId, negative, emoji, before, after, total}
-});
+export const reactionsDialogPastReactionsLoaded = (
+    reactions: ReactionInfo[], postingId: string, commentId: string | null, negative: boolean, emoji: number,
+    before: number, after: number, total: number | null
+): ReactionsDialogPastReactionsLoadedAction =>
+    actionWithPayload(
+        "REACTIONS_DIALOG_PAST_REACTIONS_LOADED",
+        {reactions, postingId, commentId, negative, emoji, before, after, total}
+    );
 
-export const REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED = "REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED";
-export type ReactionsDialogPastReactionsLoadFailedAction = ActionWithPayload<typeof REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED, {
-    postingId: string;
-    commentId: string | null;
-    negative: boolean;
-    emoji: number;
-}>;
-export const reactionsDialogPastReactionsLoadFailed = (postingId: string, commentId: string | null, negative: boolean,
-                                                       emoji: number): ReactionsDialogPastReactionsLoadFailedAction => ({
-    type: REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED,
-    payload: {postingId, commentId, negative, emoji}
-});
+export type ReactionsDialogPastReactionsLoadFailedAction =
+    ActionWithPayload<"REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED", {
+        postingId: string;
+        commentId: string | null;
+        negative: boolean;
+        emoji: number;
+    }>;
+export const reactionsDialogPastReactionsLoadFailed = (
+    postingId: string, commentId: string | null, negative: boolean, emoji: number
+): ReactionsDialogPastReactionsLoadFailedAction =>
+    actionWithPayload("REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED", {postingId, commentId, negative, emoji});
 
-export const REACTIONS_DIALOG_TOTALS_LOAD = "REACTIONS_DIALOG_TOTALS_LOAD";
-export type ReactionsDialogTotalsLoadAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD>;
-export const reactionsDialogTotalsLoad = (): ReactionsDialogTotalsLoadAction => ({
-    type: REACTIONS_DIALOG_TOTALS_LOAD
-});
+export type ReactionsDialogTotalsLoadAction = ActionWithoutPayload<"REACTIONS_DIALOG_TOTALS_LOAD">;
+export const reactionsDialogTotalsLoad = (): ReactionsDialogTotalsLoadAction =>
+    actionWithoutPayload("REACTIONS_DIALOG_TOTALS_LOAD");
 
-export const REACTIONS_DIALOG_TOTALS_LOADED = "REACTIONS_DIALOG_TOTALS_LOADED";
-export type ReactionsDialogTotalsLoaded = ActionWithPayload<typeof REACTIONS_DIALOG_TOTALS_LOADED, {
+export type ReactionsDialogTotalsLoaded = ActionWithPayload<"REACTIONS_DIALOG_TOTALS_LOADED", {
     positive: ReactionTotalInfo[];
     negative: ReactionTotalInfo[];
 }>;
-export const reactionsDialogTotalsLoaded = (positive: ReactionTotalInfo[],
-                                            negative: ReactionTotalInfo[]): ReactionsDialogTotalsLoaded => ({
-    type: REACTIONS_DIALOG_TOTALS_LOADED,
-    payload: {positive, negative}
-});
+export const reactionsDialogTotalsLoaded = (
+    positive: ReactionTotalInfo[], negative: ReactionTotalInfo[]
+): ReactionsDialogTotalsLoaded =>
+    actionWithPayload("REACTIONS_DIALOG_TOTALS_LOADED", {positive, negative});
 
-export const REACTIONS_DIALOG_TOTALS_LOAD_FAILED = "REACTIONS_DIALOG_TOTALS_LOAD_FAILED";
-export type ReactionsDialogTotalsLoadFailedAction = Action<typeof REACTIONS_DIALOG_TOTALS_LOAD_FAILED>;
-export const reactionsDialogTotalsLoadFailed = (): ReactionsDialogTotalsLoadFailedAction => ({
-    type: REACTIONS_DIALOG_TOTALS_LOAD_FAILED
-});
+export type ReactionsDialogTotalsLoadFailedAction = ActionWithoutPayload<"REACTIONS_DIALOG_TOTALS_LOAD_FAILED">;
+export const reactionsDialogTotalsLoadFailed = (): ReactionsDialogTotalsLoadFailedAction =>
+    actionWithoutPayload("REACTIONS_DIALOG_TOTALS_LOAD_FAILED");
 
-export const REACTIONS_DIALOG_SELECT_TAB = "REACTIONS_DIALOG_SELECT_TAB";
-export type ReactionsDialogSelectTabAction = ActionWithPayload<typeof REACTIONS_DIALOG_SELECT_TAB, {
+export type ReactionsDialogSelectTabAction = ActionWithPayload<"REACTIONS_DIALOG_SELECT_TAB", {
     tab: number | null;
 }>;
-export const reactionsDialogSelectTab = (tab: number | null): ReactionsDialogSelectTabAction => ({
-    type: REACTIONS_DIALOG_SELECT_TAB,
-    payload: {tab}
-});
+export const reactionsDialogSelectTab = (tab: number | null): ReactionsDialogSelectTabAction =>
+    actionWithPayload("REACTIONS_DIALOG_SELECT_TAB", {tab});
 
-export const REACTION_VERIFY = "REACTION_VERIFY";
-export type ReactionVerifyAction = ActionWithPayload<typeof REACTION_VERIFY, {
+export type ReactionVerifyAction = ActionWithPayload<"REACTION_VERIFY", {
     postingId: string;
     commentId: string | null;
     ownerName: string;
 }>;
-export const reactionVerify = (postingId: string, commentId: string | null,
-                               ownerName: string): ReactionVerifyAction => ({
-    type: REACTION_VERIFY,
-    payload: {postingId, commentId, ownerName}
-});
+export const reactionVerify = (
+    postingId: string, commentId: string | null, ownerName: string
+): ReactionVerifyAction =>
+    actionWithPayload("REACTION_VERIFY", {postingId, commentId, ownerName});
 
-export const REACTION_VERIFY_FAILED = "REACTION_VERIFY_FAILED";
-export type ReactionVerifyFailedAction = ActionWithPayload<typeof REACTION_VERIFY_FAILED, {
+export type ReactionVerifyFailedAction = ActionWithPayload<"REACTION_VERIFY_FAILED", {
     postingId: string;
     commentId: string | null;
     ownerName: string;
 }>;
-export const reactionVerifyFailed = (postingId: string, commentId: string | null,
-                                     ownerName: string): ReactionVerifyFailedAction => ({
-    type: REACTION_VERIFY_FAILED,
-    payload: {postingId, commentId, ownerName}
-});
+export const reactionVerifyFailed = (
+    postingId: string, commentId: string | null, ownerName: string
+): ReactionVerifyFailedAction =>
+    actionWithPayload("REACTION_VERIFY_FAILED", {postingId, commentId, ownerName});
 
 export type ReactionsDialogAnyAction =
     OpenReactionsDialogAction

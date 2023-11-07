@@ -1,10 +1,10 @@
 import { delay, put } from 'typed-redux-saga';
 
-import { REFRESH_SHOW, refreshHide } from "state/refresh/actions";
+import { refreshHide } from "state/refresh/actions";
 import { executor } from "state/executor";
 
 export default [
-    executor(REFRESH_SHOW, "", refreshShowSaga)
+    executor("REFRESH_SHOW", "", refreshShowSaga)
 ];
 
 function* refreshShowSaga() {

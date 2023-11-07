@@ -17,9 +17,8 @@ import { newLocation, updateLocation } from "state/navigation/actions";
 import { nodeFeaturesLoad, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
 import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
 import { NamingNameLoadedAction } from "state/naming/actions";
-import { PULSE_6H } from "state/pulse/actions";
 import { messageBox } from "state/messagebox/actions";
-import { SETTINGS_PLUGINS_DELETED, SETTINGS_UPDATE_SUCCEEDED } from "state/settings/actions";
+import { SETTINGS_PLUGINS_DELETED } from "state/settings/actions";
 
 export default [
     trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED"], isAtNode, nodeFeaturesLoad),
@@ -31,7 +30,7 @@ export default [
         (state, signal: NamingNameLoadedAction) => signal.payload.name === getOwnerName(state),
         updateLocation
     ),
-    trigger(PULSE_6H, isOwnerNameSet, ownerVerify),
+    trigger("PULSE_6H", isOwnerNameSet, ownerVerify),
     trigger("OWNER_SWITCH_FAILED", true, () => messageBox(i18n.t("node-name-not-exists"))),
     trigger(
         EVENT_NODE_NODE_NAME_CHANGED,
@@ -52,5 +51,5 @@ export default [
         nodeFeaturesLoad
     ),
     trigger([EVENT_NODE_FRIENDSHIP_UPDATED, EVENT_NODE_ASK_SUBJECTS_CHANGED], inv(isAtHomeNode), nodeFeaturesLoad),
-    trigger([SETTINGS_PLUGINS_DELETED, SETTINGS_UPDATE_SUCCEEDED], isAtHomeNode, nodeFeaturesLoad)
+    trigger(["SETTINGS_PLUGINS_DELETED", "SETTINGS_UPDATE_SUCCEEDED"], isAtHomeNode, nodeFeaturesLoad)
 ]

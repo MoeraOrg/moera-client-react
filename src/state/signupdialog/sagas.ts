@@ -8,10 +8,6 @@ import { errorThrown } from "state/error/actions";
 import { connectedToHome, homeOwnerSet } from "state/home/actions";
 import { registerNameSucceeded } from "state/nodename/actions";
 import {
-    SIGN_UP,
-    SIGN_UP_DOMAIN_VERIFY,
-    SIGN_UP_FIND_DOMAIN,
-    SIGN_UP_NAME_VERIFY,
     SIGN_UP_STAGE_CONNECT,
     SIGN_UP_STAGE_DOMAIN,
     SIGN_UP_STAGE_NAME,
@@ -30,10 +26,10 @@ import { serializeSheriffs } from "util/sheriff";
 import { rootUrl } from "util/url";
 
 export default [
-    executor(SIGN_UP, "", signUpSaga),
-    executor(SIGN_UP_NAME_VERIFY, "", signUpNameVerifySaga),
-    executor(SIGN_UP_FIND_DOMAIN, "", signUpFindDomainSaga),
-    executor(SIGN_UP_DOMAIN_VERIFY, "", signUpDomainVerifySaga)
+    executor("SIGN_UP", "", signUpSaga),
+    executor("SIGN_UP_NAME_VERIFY", "", signUpNameVerifySaga),
+    executor("SIGN_UP_FIND_DOMAIN", "", signUpFindDomainSaga),
+    executor("SIGN_UP_DOMAIN_VERIFY", "", signUpDomainVerifySaga)
 ];
 
 function getProvider(name: string): Provider {

@@ -7,7 +7,6 @@ import { ClientAction, ClientActionType } from "state/action";
 import { ActionContext, WithContext } from "state/action-types";
 import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 import { ClientState } from "state/state";
-import { OWNER_SET } from "state/node/actions";
 
 type PayloadExtractor<T> = (payload: T, context: ActionContext | null) => string;
 
@@ -137,7 +136,7 @@ function* flushPostponedSaga() {
 export function* invokeExecutors(executors: ExecutorMap) {
     yield* takeEvery([...executors.keys()], executorsSaga, executors);
     yield* takeEvery(
-        ["HOME_INTRODUCED", SETTINGS_CLIENT_VALUES_LOADED, "OWNER_SET"],
+        ["HOME_INTRODUCED", "SETTINGS_CLIENT_VALUES_LOADED", "OWNER_SET"],
         flushPostponedSaga
     );
 }

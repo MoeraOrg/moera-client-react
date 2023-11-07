@@ -2,9 +2,6 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { Node } from "api";
 import {
-    REACTION_VERIFY,
-    REACTIONS_DIALOG_PAST_REACTIONS_LOAD,
-    REACTIONS_DIALOG_TOTALS_LOAD,
     reactionsDialogPastReactionsLoaded,
     reactionsDialogPastReactionsLoadFailed,
     reactionsDialogTotalsLoaded,
@@ -18,10 +15,10 @@ import { executor } from "state/executor";
 import { WithContext } from "state/action-types";
 
 export default [
-    executor(REACTIONS_DIALOG_PAST_REACTIONS_LOAD, "", reactionsDialogPastReactionsLoadSaga),
-    executor(REACTIONS_DIALOG_TOTALS_LOAD, "", reactionsDialogTotalsLoadSaga),
+    executor("REACTIONS_DIALOG_PAST_REACTIONS_LOAD", "", reactionsDialogPastReactionsLoadSaga),
+    executor("REACTIONS_DIALOG_TOTALS_LOAD", "", reactionsDialogTotalsLoadSaga),
     executor(
-        REACTION_VERIFY,
+        "REACTION_VERIFY",
         payload => `${payload.postingId}:${payload.commentId}:${payload.ownerName}`,
         reactionVerifySaga
     )

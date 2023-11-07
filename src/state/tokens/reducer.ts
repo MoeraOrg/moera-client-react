@@ -1,4 +1,3 @@
-import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { TokensState } from "state/tokens/state";
 import { ClientAction } from "state/action";
 

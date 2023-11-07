@@ -1,34 +1,24 @@
-import { Action } from 'redux';
+import { actionWithoutPayload, ActionWithoutPayload } from "state/action-types";
 
-export const POST_INIT = "POST_INIT";
-export type PostInitAction = Action<typeof POST_INIT>;
-export const postInit = (): PostInitAction => ({
-    type: POST_INIT
-});
+export type PostInitAction = ActionWithoutPayload<"POST_INIT">;
+export const postInit = (): PostInitAction =>
+    actionWithoutPayload("POST_INIT");
 
-export const POST_INIT_DELAYED = "POST_INIT_DELAYED";
-export type PostInitDelayedAction = Action<typeof POST_INIT_DELAYED>;
-export const postInitDelayed = (): PostInitDelayedAction => ({
-    type: POST_INIT_DELAYED
-});
+export type PostInitDelayedAction = ActionWithoutPayload<"POST_INIT_DELAYED">;
+export const postInitDelayed = (): PostInitDelayedAction =>
+    actionWithoutPayload("POST_INIT_DELAYED");
 
-export const PULSE_1MIN = "PULSE_1MIN";
-export type Pulse1MinAction = Action<typeof PULSE_1MIN>;
-export const pulse1Min = (): Pulse1MinAction => ({
-    type: PULSE_1MIN
-});
+export type Pulse1MinAction = ActionWithoutPayload<"PULSE_1MIN">;
+export const pulse1Min = (): Pulse1MinAction =>
+    actionWithoutPayload("PULSE_1MIN");
 
-export const PULSE_10MIN = "PULSE_10MIN";
-export type Pulse10MinAction = Action<typeof PULSE_10MIN>;
-export const pulse10Min = (): Pulse10MinAction => ({
-    type: PULSE_10MIN
-});
+export type Pulse10MinAction = ActionWithoutPayload<"PULSE_10MIN">;
+export const pulse10Min = (): Pulse10MinAction =>
+    actionWithoutPayload("PULSE_10MIN");
 
-export const PULSE_6H = "PULSE_6H";
-export type Pulse6HAction = Action<typeof PULSE_6H>;
-export const pulse6H = (): Pulse6HAction => ({
-    type: PULSE_6H
-});
+export type Pulse6HAction = ActionWithoutPayload<"PULSE_6H">;
+export const pulse6H = (): Pulse6HAction =>
+    actionWithoutPayload("PULSE_6H");
 
 export type PulseAnyAction =
     PostInitAction

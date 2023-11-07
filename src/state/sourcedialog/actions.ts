@@ -1,39 +1,28 @@
-import { Action } from 'redux';
+import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
-import { ActionWithPayload } from "state/action-types";
-
-export const OPEN_SOURCE_DIALOG = "OPEN_SOURCE_DIALOG";
-export type OpenSourceDialogAction = ActionWithPayload<typeof OPEN_SOURCE_DIALOG, {
+export type OpenSourceDialogAction = ActionWithPayload<"OPEN_SOURCE_DIALOG", {
     nodeName: string;
     postingId: string;
     commentId: string | null;
 }>;
-export const openSourceDialog = (nodeName: string, postingId: string,
-                                 commentId?: string | null): OpenSourceDialogAction => ({
-    type: OPEN_SOURCE_DIALOG,
-    payload: {nodeName, postingId, commentId: commentId ?? null}
-});
+export const openSourceDialog = (
+    nodeName: string, postingId: string, commentId?: string | null
+): OpenSourceDialogAction =>
+    actionWithPayload("OPEN_SOURCE_DIALOG", {nodeName, postingId, commentId: commentId ?? null});
 
-export const CLOSE_SOURCE_DIALOG = "CLOSE_SOURCE_DIALOG";
-export type CloseSourceDialogAction = Action<typeof CLOSE_SOURCE_DIALOG>;
-export const closeSourceDialog = (): CloseSourceDialogAction => ({
-    type: CLOSE_SOURCE_DIALOG
-});
+export type CloseSourceDialogAction = ActionWithoutPayload<"CLOSE_SOURCE_DIALOG">;
+export const closeSourceDialog = (): CloseSourceDialogAction =>
+    actionWithoutPayload("CLOSE_SOURCE_DIALOG");
 
-export const SOURCE_DIALOG_LOADED = "SOURCE_DIALOG_LOADED";
-export type SourceDialogLoadedAction = ActionWithPayload<typeof SOURCE_DIALOG_LOADED, {
+export type SourceDialogLoadedAction = ActionWithPayload<"SOURCE_DIALOG_LOADED", {
     text: string;
 }>;
-export const sourceDialogLoaded = (text: string): SourceDialogLoadedAction => ({
-    type: SOURCE_DIALOG_LOADED,
-    payload: {text}
-});
+export const sourceDialogLoaded = (text: string): SourceDialogLoadedAction =>
+    actionWithPayload("SOURCE_DIALOG_LOADED", {text});
 
-export const SOURCE_DIALOG_LOAD_FAILED = "SOURCE_DIALOG_LOAD_FAILED";
-export type SourceDialogLoadFailedAction = Action<typeof SOURCE_DIALOG_LOAD_FAILED>;
-export const sourceDialogLoadFailed = (): SourceDialogLoadFailedAction => ({
-    type: SOURCE_DIALOG_LOAD_FAILED
-});
+export type SourceDialogLoadFailedAction = ActionWithoutPayload<"SOURCE_DIALOG_LOAD_FAILED">;
+export const sourceDialogLoadFailed = (): SourceDialogLoadFailedAction =>
+    actionWithoutPayload("SOURCE_DIALOG_LOAD_FAILED");
 
 export type SourceDialogAnyAction =
     OpenSourceDialogAction

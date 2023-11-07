@@ -38,7 +38,7 @@ import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { introduced } from "state/init-selectors";
 import { executor } from "state/executor";
-import { STORY_ADDED, STORY_UPDATED, StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
+import { STORY_UPDATED, StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillBlockedOperationsInStories } from "state/blockedoperations/sagas";
@@ -76,8 +76,8 @@ export default [
     executor("FEED_PAST_SLICE_SET", null, feedExecuteSliceButtonsActions),
     executor("FEED_FUTURE_SLICE_SET", null, feedExecuteSliceButtonsActions),
     executor("FEED_SLICE_UPDATE", null, feedExecuteSliceButtonsActions),
-    executor(STORY_ADDED, null, feedExecuteButtonsActions),
-    executor(STORY_UPDATED, null, feedExecuteButtonsActions)
+    executor("STORY_ADDED", null, feedExecuteButtonsActions),
+    executor("STORY_UPDATED", null, feedExecuteButtonsActions)
 ];
 
 function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {

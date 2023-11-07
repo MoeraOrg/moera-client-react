@@ -1,11 +1,4 @@
-import {
-    CANCEL_SIGN_UP_DIALOG,
-    OPEN_SIGN_UP_DIALOG,
-    SIGN_UP,
-    SIGN_UP_FAILED,
-    SIGN_UP_STAGE_DOMAIN,
-    SIGNED_UP
-} from "state/signupdialog/actions";
+import { SIGN_UP_STAGE_DOMAIN } from "state/signupdialog/actions";
 import { SignUpDialogState } from "state/signupdialog/state";
 import { ClientAction } from "state/action";
 
@@ -21,20 +14,20 @@ const initialState = {
 
 export default (state: SignUpDialogState = initialState, action: ClientAction): SignUpDialogState => {
     switch (action.type) {
-        case OPEN_SIGN_UP_DIALOG:
+        case "OPEN_SIGN_UP_DIALOG":
             return {
                 ...initialState,
                 show: true
             };
 
-        case SIGNED_UP:
-        case CANCEL_SIGN_UP_DIALOG:
+        case "SIGNED_UP":
+        case "CANCEL_SIGN_UP_DIALOG":
             return {
                 ...state,
                 show: false
             };
 
-        case SIGN_UP:
+        case "SIGN_UP":
             return {
                 ...state,
                 processing: true,
@@ -44,7 +37,7 @@ export default (state: SignUpDialogState = initialState, action: ClientAction): 
                 email: action.payload.email
             };
 
-        case SIGN_UP_FAILED:
+        case "SIGN_UP_FAILED":
             return {
                 ...state,
                 processing: false,
