@@ -1,6 +1,5 @@
 import { trigger } from "state/trigger";
 import { dialogClosed, dialogOpened } from "state/navigation/actions";
-import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 import { closeQuickTips, openQuickTips } from "state/quicktips/actions";
 import { isQuickTipsToBeShown } from "state/quicktips/selectors";
 

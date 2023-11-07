@@ -1,6 +1,6 @@
 import { conj, trigger } from "state/trigger";
 import { closeLightBox, lightBoxMediaPostingLoad, OpenLightBoxAction } from "state/lightbox/actions";
-import { POSTING_SET, postingLoad } from "state/postings/actions";
+import { postingLoad } from "state/postings/actions";
 import {
     bodyScrollUpdate,
     dialogClosed,
@@ -15,7 +15,7 @@ export default [
     trigger(
         "OPEN_LIGHT_BOX",
         conj(isLightBoxShown, isLightBoxToBeLoaded),
-        (signal: OpenLightBoxAction) => postingLoad(signal.payload.postingId)
+        (signal: OpenLightBoxAction) => postingLoad(signal.payload.postingId, "")
     ),
     trigger("OPEN_LIGHT_BOX", true, dialogOpened(closeLightBox())),
     trigger("CLOSE_LIGHT_BOX", true, dialogClosed),

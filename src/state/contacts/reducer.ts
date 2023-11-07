@@ -1,7 +1,6 @@
 import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
-import { EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED, EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED } from "api/events";
 import { ContactsState } from "state/contacts/state";
 import { ClientAction } from "state/action";
 
@@ -48,7 +47,7 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
         case "CONTACTS_UNSET":
             return cloneDeep(initialState);
 
-        case EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED: {
+        case "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED": {
             const index = state.contacts.findIndex(c => c.nodeName === action.payload.name);
             if (index >= 0) {
                 return immutable.update(state, ["contacts", index],
@@ -57,7 +56,7 @@ export default (state: ContactsState = initialState, action: ClientAction): Cont
             return state;
         }
 
-        case EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED: {
+        case "EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED": {
             const index = state.contacts.findIndex(c => c.nodeName === action.payload.name);
             if (index >= 0) {
                 return immutable.update(state, ["contacts", index],

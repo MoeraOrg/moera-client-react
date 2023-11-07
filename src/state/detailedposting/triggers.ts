@@ -49,17 +49,9 @@ import {
     isGlanceCommentToBeLoaded,
     isPastCommentsToBeLoaded
 } from "state/detailedposting/selectors";
-import { POSTING_DELETED, PostingDeletedAction, postingSet, PostingSetAction } from "state/postings/actions";
+import { PostingDeletedAction, postingSet, PostingSetAction } from "state/postings/actions";
 import { getPostingMoment } from "state/postings/selectors";
-import {
-    CommentAddedEvent,
-    CommentReactionsChangedEvent,
-    CommentUpdatedEvent,
-    EVENT_RECEIVER_COMMENT_ADDED,
-    EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
-    EVENT_RECEIVER_COMMENT_UPDATED,
-    EventAction
-} from "api/events";
+import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent, EventAction } from "api/events";
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
@@ -67,7 +59,11 @@ export default [
     trigger("HOME_INTRODUCED", true, commentsUnset),
     trigger("WAKE_UP", isAtDetailedPostingPage, commentsUpdate),
     trigger("WAKE_UP", inv(isAtDetailedPostingPage), commentsUnset),
-    trigger("DETAILED_POSTING_LOADED", true, (signal: DetailedPostingLoadedAction) => postingSet(signal.payload.posting)),
+    trigger(
+        "DETAILED_POSTING_LOADED",
+        true,
+        (signal: DetailedPostingLoadedAction) => postingSet(signal.payload.posting, "")
+    ),
     trigger(
         "POSTING_SET",
         (state, signal: PostingSetAction) =>
@@ -158,14 +154,14 @@ export default [
             : commentDialogCommentReset(signal.payload.draft.id, false)
     ),
     trigger(
-        [EVENT_RECEIVER_COMMENT_ADDED, EVENT_RECEIVER_COMMENT_UPDATED],
+        ["EVENT_RECEIVER_COMMENT_ADDED", "EVENT_RECEIVER_COMMENT_UPDATED"],
         (state, signal: EventAction<CommentAddedEvent | CommentUpdatedEvent>) =>
             getCommentsReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentLoad(signal.payload.id)
     ),
     trigger(
-        EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED,
+        "EVENT_RECEIVER_COMMENT_REACTIONS_CHANGED",
         (state, signal: EventAction<CommentReactionsChangedEvent>) =>
             isAtDetailedPostingPage(state)
             && getCommentsReceiverPostingId(state) === signal.payload.postingId
@@ -177,7 +173,7 @@ export default [
     trigger("CLOSE_COMMENT_DIALOG", true, dialogClosed),
     trigger("COMMENT_POSTED", true, dialogClosed),
     trigger(
-        EVENT_RECEIVER_COMMENT_UPDATED,
+        "EVENT_RECEIVER_COMMENT_UPDATED",
         (state, signal: EventAction<CommentUpdatedEvent>) =>
             isAtDetailedPostingPage(state) && isCommentDialogShown(state)
             && getCommentsReceiverPostingId(state) === signal.payload.postingId

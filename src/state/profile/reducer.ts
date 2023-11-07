@@ -3,7 +3,6 @@ import cloneDeep from 'lodash.clonedeep';
 import { arrayMove } from '@dnd-kit/sortable';
 
 import { AvatarInfo } from "api";
-import { EVENT_NODE_AVATAR_ADDED, EVENT_NODE_AVATAR_DELETED, EVENT_NODE_AVATAR_ORDERED } from 'api/events';
 import { ProfileState } from "state/profile/state";
 import { ClientAction } from "state/action";
 
@@ -214,7 +213,7 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
             return state;
         }
 
-        case EVENT_NODE_AVATAR_ADDED:
+        case "EVENT_NODE_AVATAR_ADDED":
             if (state.avatars.loaded) {
                 const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.avatar.id);
                 avatars.push(action.payload.avatar);
@@ -223,14 +222,14 @@ export default (state: ProfileState = initialState, action: ClientAction): Profi
             }
             return state;
 
-        case EVENT_NODE_AVATAR_DELETED:
+        case "EVENT_NODE_AVATAR_DELETED":
             if (state.avatars.loaded) {
                 const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
                 return immutable.set(state, "avatars.avatars", avatars);
             }
             return state;
 
-        case EVENT_NODE_AVATAR_ORDERED:
+        case "EVENT_NODE_AVATAR_ORDERED":
             if (state.avatars.loaded) {
                 const avatars: AvatarInfo[] = [];
                 state.avatars.avatars.forEach(av => {

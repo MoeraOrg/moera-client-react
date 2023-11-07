@@ -20,8 +20,8 @@ const PostingReactionButton = ({icon, caption, invisible, id, negative, emoji, a
                                 postingReactionDelete}: Props) => (
     <ReactionButton icon={icon} emoji={emoji} caption={caption} className="posting-button" negative={negative}
                     accepted={accepted} invisible={invisible}
-                    onReactionAdd={(negative, emoji) => postingReact(id, negative, emoji)}
-                    onReactionDelete={() => postingReactionDelete(id)}/>
+                    onReactionAdd={(negative, emoji) => postingReact(id, negative, emoji, "")}
+                    onReactionDelete={() => postingReactionDelete(id, "")}/>
 );
 
 const connector = connect(

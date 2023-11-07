@@ -10,7 +10,6 @@ import {
     nodeNameUpdateDialogCancel,
     registerNameDialogCancel
 } from "state/nodename/actions";
-import { EVENT_NODE_NODE_NAME_CHANGED, EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS } from "api/events";
 import { isAtNode } from "state/node/selectors";
 import { flashBox } from "state/flashbox/actions";
 
@@ -26,12 +25,12 @@ export default [
     trigger("NODE_NAME_UPDATE_SUCCEEDED", true, nodeNameLoad),
     trigger("NODE_NAME_UPDATE_SUCCEEDED", true, () => flashBox(i18n.t("name-operation-started"))),
     trigger(
-        [EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS, EVENT_NODE_NODE_NAME_CHANGED],
+        ["EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS", "EVENT_NODE_NODE_NAME_CHANGED"],
         isAtProfilePage,
         nodeNameLoad
     ),
     trigger(
-        [EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS, EVENT_NODE_NODE_NAME_CHANGED],
+        ["EVENT_NODE_REGISTERED_NAME_OPERATION_STATUS", "EVENT_NODE_NODE_NAME_CHANGED"],
         inv(isAtProfilePage),
         nodeNameUnset
     )

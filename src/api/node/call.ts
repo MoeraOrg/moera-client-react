@@ -42,7 +42,7 @@ import { isSchemaValid } from "api/schema";
 import { ClientState } from "state/state";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
-import { CARTES_LOADED, cartesLoad } from "state/cartes/actions";
+import { cartesLoad } from "state/cartes/actions";
 import { getNodeRootLocation, getToken } from "state/node/selectors";
 import { getCurrentAllCarte } from "state/cartes/selectors";
 import { getHomeRootLocation, isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";

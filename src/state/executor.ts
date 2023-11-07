@@ -5,7 +5,6 @@ import { buffers, channel, Channel } from 'redux-saga';
 import getContext from "state/context";
 import { ClientAction, ClientActionType } from "state/action";
 import { ActionContext, WithContext } from "state/action-types";
-import { SETTINGS_CLIENT_VALUES_LOADED } from "state/settings/actions";
 import { ClientState } from "state/state";
 
 type PayloadExtractor<T> = (payload: T, context: ActionContext | null) => string;

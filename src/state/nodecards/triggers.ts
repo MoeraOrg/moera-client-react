@@ -9,11 +9,10 @@ import {
     nodeCardsRefresh
 } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
-import { EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED, EventAction, ProfileUpdatedEvent } from "api/events";
+import { EventAction, ProfileUpdatedEvent } from "api/events";
 import { OwnerSetAction } from "state/node/actions";
 import { ProfileSetAction } from "state/profile/actions";
 import { WithContext } from "state/action-types";
-import { PULSE_6H } from "state/pulse/actions";
 
 export default [
     trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED"], true, nodeCardsClientSwitch),
@@ -41,7 +40,7 @@ export default [
             nodeCardDetailsSet(signal.context.ownerNameOrUrl, signal.payload.profile)
     ),
     trigger(
-        [EVENT_HOME_PROFILE_UPDATED, EVENT_NODE_PROFILE_UPDATED],
+        ["EVENT_HOME_PROFILE_UPDATED", "EVENT_NODE_PROFILE_UPDATED"],
         (state, signal: EventAction<ProfileUpdatedEvent>) =>
             signal.payload.sourceNode != null && isNodeCardDetailsLoaded(state, signal.payload.sourceNode),
         signal => nodeCardDetailsLoad(signal.payload.sourceNode!)

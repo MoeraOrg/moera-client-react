@@ -9,7 +9,6 @@ import {
 import { isProfileEditing } from "state/profile/selectors";
 import { bottomMenuHide, bottomMenuShow, dialogClosed, dialogOpened, newLocation } from "state/navigation/actions";
 import { isAtProfilePage } from "state/navigation/selectors";
-import { EVENT_NODE_PROFILE_UPDATED } from "api/events";
 import { confirmBox } from "state/confirmbox/actions";
 
 export default [
@@ -31,5 +30,5 @@ export default [
     trigger("PROFILE_OPEN_AVATAR_EDIT_DIALOG", true, dialogOpened(profileCloseAvatarEditDialog())),
     trigger("PROFILE_CLOSE_AVATAR_EDIT_DIALOG", true, dialogClosed),
     trigger("PROFILE_AVATAR_CREATED", true, dialogClosed),
-    trigger(EVENT_NODE_PROFILE_UPDATED, conj(isAtProfilePage, isProfileEditing), profileEditConflict)
+    trigger("EVENT_NODE_PROFILE_UPDATED", conj(isAtProfilePage, isProfileEditing), profileEditConflict)
 ]

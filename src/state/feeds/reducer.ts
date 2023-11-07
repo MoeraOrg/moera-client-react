@@ -2,13 +2,11 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import { StoryInfo } from "api";
-import { EVENT_NODE_FEED_SHERIFF_DATA_UPDATED } from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
 import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
-import { STORY_UPDATED } from "state/stories/actions";
 import { getInstantSummary, getInstantTypeDetails } from "ui/instant/instant-types";
 import { replaceEmojis } from "util/html";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -488,7 +486,7 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             return istate.value();
         }
 
-        case EVENT_NODE_FEED_SHERIFF_DATA_UPDATED: {
+        case "EVENT_NODE_FEED_SHERIFF_DATA_UPDATED": {
             const {feedName, sheriffs, sheriffMarks} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
             if (!feed.loadedGeneral) {

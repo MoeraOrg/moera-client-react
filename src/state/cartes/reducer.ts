@@ -1,6 +1,5 @@
 import { CartesState } from "state/cartes/state";
 import { ClientAction } from "state/action";
-import { DISCONNECTED_FROM_HOME } from "state/home/actions";
 import { now } from "util/misc";
 
 const initialState = {

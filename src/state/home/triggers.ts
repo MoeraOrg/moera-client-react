@@ -7,7 +7,7 @@ import {
     homeOwnerSet,
     homeOwnerVerify
 } from "state/home/actions";
-import { EVENT_HOME_NODE_NAME_CHANGED, EventAction, NodeNameChangedEvent } from "api/events";
+import { EventAction, NodeNameChangedEvent } from "api/events";
 import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 
@@ -23,7 +23,7 @@ export default [
     trigger("HOME_INTRODUCED", isConnectedToHome, homeFriendGroupsLoad),
     trigger("HOME_INTRODUCED", isConnectedToHome, homeInvisibleUsersLoad),
     trigger(
-        EVENT_HOME_NODE_NAME_CHANGED,
+        "EVENT_HOME_NODE_NAME_CHANGED",
         true,
         (signal: EventAction<NodeNameChangedEvent>) =>
             homeOwnerSet(
@@ -33,5 +33,5 @@ export default [
                 signal.payload.avatar ?? null
             )
     ),
-    trigger(EVENT_HOME_NODE_NAME_CHANGED, true, homeOwnerVerify)
+    trigger("EVENT_HOME_NODE_NAME_CHANGED", true, homeOwnerVerify)
 ];

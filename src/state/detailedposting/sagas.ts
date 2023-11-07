@@ -353,7 +353,7 @@ function* commentPostSaga(action: CommentPostAction) {
         if (commentId == null) {
             yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, 1));
             const created = yield* call(Node.createComment, receiverName, receiverPostingId, commentText);
-            yield* put(postingCommentsSet(postingId, created.total));
+            yield* put(postingCommentsSet(postingId, created.total, ""));
             comment = created.comment;
         } else {
             comment = yield* call(Node.updateComment, receiverName, receiverPostingId, commentId, commentText);
@@ -507,7 +507,7 @@ function* commentDeleteSaga(action: CommentDeleteAction) {
     try {
         const info = yield* call(Node.deleteComment, receiverName, receiverPostingId, commentId);
         yield* put(commentDeleted(receiverName, receiverPostingId, commentId));
-        yield* put(postingCommentsSet(postingId, info.total));
+        yield* put(postingCommentsSet(postingId, info.total, ""));
         yield* call(Node.deleteRemoteComment, ":", receiverName, receiverPostingId, commentId);
     } catch (e) {
         yield* put(commentDeleteFailed(receiverName, receiverPostingId, commentId));

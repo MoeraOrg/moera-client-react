@@ -1,18 +1,9 @@
 import cloneDeep from 'lodash.clonedeep';
 import * as immutable from 'object-path-immutable';
 
-import {
-    EVENT_HOME_AVATAR_ADDED,
-    EVENT_HOME_AVATAR_DELETED,
-    EVENT_HOME_AVATAR_ORDERED,
-    EVENT_HOME_FRIEND_GROUP_ADDED,
-    EVENT_HOME_FRIEND_GROUP_DELETED,
-    EVENT_HOME_FRIEND_GROUP_UPDATED
-} from "api/events";
 import { AvatarInfo, BlockedUserInfo, FriendGroupInfo } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
-import { PROFILE_AVATAR_DELETED } from "state/profile/actions";
 import { HomeState } from "state/home/state";
 import { toWsUrl } from "util/url";
 
@@ -197,7 +188,7 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             }
             return state;
 
-        case EVENT_HOME_AVATAR_ADDED:
+        case "EVENT_HOME_AVATAR_ADDED":
             if (state.avatars.loaded) {
                 const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.avatar.id);
                 avatars.push(action.payload.avatar);
@@ -206,14 +197,14 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             }
             return state;
 
-        case EVENT_HOME_AVATAR_DELETED:
+        case "EVENT_HOME_AVATAR_DELETED":
             if (state.avatars.loaded) {
                 const avatars = state.avatars.avatars.filter(av => av.id !== action.payload.id);
                 return immutable.set(state, "avatars.avatars", avatars);
             }
             return state;
 
-        case EVENT_HOME_AVATAR_ORDERED:
+        case "EVENT_HOME_AVATAR_ORDERED":
             if (state.avatars.loaded) {
                 const avatars: AvatarInfo[] = [];
                 state.avatars.avatars.forEach(av => {
@@ -228,8 +219,8 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
             }
             return state;
 
-        case EVENT_HOME_FRIEND_GROUP_ADDED:
-        case EVENT_HOME_FRIEND_GROUP_UPDATED:
+        case "EVENT_HOME_FRIEND_GROUP_ADDED":
+        case "EVENT_HOME_FRIEND_GROUP_UPDATED":
             return immutable.update(
                 state,
                 "friendGroups",
@@ -238,7 +229,7 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                         .sort((a, b) => a.createdAt - b.createdAt)
             );
 
-        case EVENT_HOME_FRIEND_GROUP_DELETED:
+        case "EVENT_HOME_FRIEND_GROUP_DELETED":
             return immutable.update(
                 state,
                 "friendGroups",

@@ -1,7 +1,6 @@
 import * as immutable from 'object-path-immutable';
 
 import { DraftInfo, PostingInfo } from "api";
-import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_COMPOSE } from "state/navigation/pages";
 import { ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { ClientAction } from "state/action";

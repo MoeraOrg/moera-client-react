@@ -54,7 +54,7 @@ function PostingMenu({
 }: Props) {
     const {t} = useTranslation();
 
-    const onCopyLink = () => postingCopyLink(posting.id);
+    const onCopyLink = () => postingCopyLink(posting.id, "");
 
     const onCopyText = () => entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null);
 
@@ -74,23 +74,23 @@ function PostingMenu({
 
     const onFollowComments = () => {
         if (ownPosting) {
-            postingCommentAddedUnblock(posting.id);
+            postingCommentAddedUnblock(posting.id, "");
         } else {
-            postingCommentsSubscribe(posting.id);
+            postingCommentsSubscribe(posting.id, "");
         }
     }
 
     const onUnfollowComments = () => {
         if (ownPosting) {
-            postingCommentAddedBlock(posting.id);
+            postingCommentAddedBlock(posting.id, "");
         } else {
-            postingCommentsUnsubscribe(posting.id);
+            postingCommentsUnsubscribe(posting.id, "");
         }
     }
 
     const onDelete = () => {
         confirmBox(t("delete-post", {heading: posting.heading}), t("delete"), t("cancel"),
-            postingDelete(posting.id), null, "danger");
+            postingDelete(posting.id, ""), null, "danger");
     };
 
     const onPin = () => storyPinningUpdate(story.id, !story.pinned);

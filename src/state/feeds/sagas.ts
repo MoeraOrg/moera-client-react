@@ -38,7 +38,7 @@ import { errorThrown } from "state/error/actions";
 import { WithContext } from "state/action-types";
 import { introduced } from "state/init-selectors";
 import { executor } from "state/executor";
-import { STORY_UPDATED, StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
+import { StoryAddedAction, storySatisfy, StoryUpdatedAction } from "state/stories/actions";
 import { getAllFeeds, getFeedState } from "state/feeds/selectors";
 import { fillActivityReactionsInStories } from "state/activityreactions/sagas";
 import { fillBlockedOperationsInStories } from "state/blockedoperations/sagas";

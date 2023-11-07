@@ -2,26 +2,9 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import { BlockedByUserInfo, BlockedUserInfo, FriendGroupDetails, ProfileInfo } from "api";
-import {
-    EVENT_HOME_BLOCKED_BY_USER_ADDED,
-    EVENT_HOME_BLOCKED_BY_USER_DELETED,
-    EVENT_HOME_FRIEND_GROUP_DELETED,
-    EVENT_HOME_FRIENDSHIP_UPDATED,
-    EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED,
-    EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED,
-    EVENT_HOME_SUBSCRIBER_ADDED,
-    EVENT_HOME_SUBSCRIBER_DELETED,
-    EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED,
-    EVENT_HOME_SUBSCRIPTION_ADDED,
-    EVENT_HOME_SUBSCRIPTION_DELETED,
-    EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED,
-    EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED,
-    EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED
-} from "api/events";
 import { NodeCardsState, NodeCardState } from "state/nodecards/state";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { FRIENDSHIP_UPDATE_FAILED } from "state/people/actions";
 
 const emptyProfileInfo: ProfileInfo = {
     fullName: null,
@@ -516,21 +499,21 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED: {
+        case "EVENT_HOME_REMOTE_NODE_FULL_NAME_CHANGED": {
             const {name, fullName} = action.payload;
             return getCard(state, name).istate
                 .set(["cards", name, "details", "profile", "fullName"], fullName)
                 .value();
         }
 
-        case EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED: {
+        case "EVENT_HOME_REMOTE_NODE_AVATAR_CHANGED": {
             const {name, avatar} = action.payload;
             return getCard(state, name).istate
                 .set(["cards", name, "details", "profile", "avatar"], cloneDeep(avatar))
                 .value();
         }
 
-        case EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED: {
+        case "EVENT_NODE_SUBSCRIBERS_TOTAL_CHANGED": {
             const {feedSubscribersTotal} = action.payload;
             const {ownerName} = action.context;
             if (ownerName != null) {
@@ -541,7 +524,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED: {
+        case "EVENT_NODE_SUBSCRIPTIONS_TOTAL_CHANGED": {
             const {feedSubscriptionsTotal} = action.payload;
             const {ownerName} = action.context;
             if (ownerName != null) {
@@ -552,7 +535,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED: {
+        case "EVENT_HOME_SUBSCRIBERS_TOTAL_CHANGED": {
             const {feedSubscribersTotal} = action.payload;
             const {homeOwnerName} = action.context;
             if (homeOwnerName != null) {
@@ -563,7 +546,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED: {
+        case "EVENT_HOME_SUBSCRIPTIONS_TOTAL_CHANGED": {
             const {feedSubscriptionsTotal} = action.payload;
             const {homeOwnerName} = action.context;
             if (homeOwnerName != null) {
@@ -574,14 +557,14 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_HOME_SUBSCRIBER_ADDED: {
+        case "EVENT_HOME_SUBSCRIBER_ADDED": {
             const {subscriber} = action.payload;
             return getCard(state, subscriber.nodeName).istate
                 .set(["cards", subscriber.nodeName, "subscription", "subscriber"], subscriber)
                 .value();
         }
 
-        case EVENT_HOME_SUBSCRIBER_DELETED: {
+        case "EVENT_HOME_SUBSCRIBER_DELETED": {
             const {subscriber} = action.payload;
             const {istate, card} = getCard(state, subscriber.nodeName);
             if (card.subscription.subscriber?.id === subscriber.id) {
@@ -592,7 +575,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_HOME_SUBSCRIPTION_ADDED: {
+        case "EVENT_HOME_SUBSCRIPTION_ADDED": {
             const {subscription} = action.payload;
             if (subscription.type !== "feed") {
                 return state;
@@ -605,7 +588,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case EVENT_HOME_SUBSCRIPTION_DELETED: {
+        case "EVENT_HOME_SUBSCRIPTION_DELETED": {
             const {subscription} = action.payload;
             if (subscription.type !== "feed") {
                 return state;
@@ -618,7 +601,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
                 .value();
         }
 
-        case EVENT_HOME_FRIEND_GROUP_DELETED: {
+        case "EVENT_HOME_FRIEND_GROUP_DELETED": {
             const istate = immutable.wrap(state);
             for (let nodeName of Object.keys(state.cards)) {
                 if (state.cards[nodeName]?.friendship.groups != null) {
@@ -629,7 +612,7 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case EVENT_HOME_FRIENDSHIP_UPDATED: {
+        case "EVENT_HOME_FRIENDSHIP_UPDATED": {
             const {friend: {nodeName, groups}} = action.payload;
             const {istate, card} = getCard(state, nodeName);
             if (card.friendship.loaded) {
@@ -639,10 +622,10 @@ export default (state: NodeCardsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_HOME_BLOCKED_BY_USER_ADDED:
+        case "EVENT_HOME_BLOCKED_BY_USER_ADDED":
             return updateBlockedBy(state, action.payload.blockedByUser, true);
 
-        case EVENT_HOME_BLOCKED_BY_USER_DELETED:
+        case "EVENT_HOME_BLOCKED_BY_USER_DELETED":
             return updateBlockedBy(state, action.payload.blockedByUser, false);
 
         default:

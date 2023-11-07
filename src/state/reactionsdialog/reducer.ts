@@ -1,6 +1,5 @@
 import * as immutable from 'object-path-immutable';
 
-import { EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED, EVENT_HOME_REMOTE_REACTION_VERIFIED } from "api/events";
 import { ReactionsDialogState } from "state/reactionsdialog/state";
 import { ClientAction } from "state/action";
 
@@ -151,14 +150,14 @@ export default (state: ReactionsDialogState = initialState, action: ClientAction
             return state;
         }
 
-        case EVENT_HOME_REMOTE_REACTION_VERIFIED:
+        case "EVENT_HOME_REMOTE_REACTION_VERIFIED":
             if (action.payload.postingId === state.postingId) {
                 const status = action.payload.correct ? "correct" : "incorrect";
                 return immutable.set(state, ["verificationStatus", action.payload.reactionOwnerName], status);
             }
             return state;
 
-        case EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED:
+        case "EVENT_HOME_REMOTE_REACTION_VERIFICATION_FAILED":
             if (action.payload.postingId === state.postingId) {
                 return immutable.set(state, ["verificationStatus", action.payload.reactionOwnerName], "none");
             }

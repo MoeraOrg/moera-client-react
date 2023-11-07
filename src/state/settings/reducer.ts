@@ -4,7 +4,6 @@ import cloneDeep from 'lodash.clonedeep';
 import { CLIENT_SETTINGS_PREFIX, clientSettingsBuildMetaMap } from "api";
 import { ClientAction } from "state/action";
 import { SettingsState } from "state/settings/state";
-import { EVENT_HOME_TOKEN_ADDED, EVENT_HOME_TOKEN_DELETED, EVENT_HOME_TOKEN_UPDATED } from "api/events";
 
 const emptySettings = {
     node: {
@@ -283,7 +282,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 }].concat(state.tokens.tokens))
                 .value();
 
-        case EVENT_HOME_TOKEN_ADDED:
+        case "EVENT_HOME_TOKEN_ADDED":
             if (state.tokens.loaded) {
                 return immutable.set(state, "tokens.tokens", [action.payload.token].concat(state.tokens.tokens));
             }
@@ -300,7 +299,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
                 )
                 .value();
 
-        case EVENT_HOME_TOKEN_UPDATED:
+        case "EVENT_HOME_TOKEN_UPDATED":
             if (state.tokens.loaded) {
                 return immutable.set(state, "tokens.tokens",
                     state.tokens.tokens.map(t => t.id === action.payload.token.id ? action.payload.token : t))
@@ -314,7 +313,7 @@ export default (state: SettingsState = initialState, action: ClientAction): Sett
         case "SETTINGS_TOKENS_DELETED":
             return immutable.set(state, "tokens.tokens", state.tokens.tokens.filter(t => t.id !== action.payload.id));
 
-        case EVENT_HOME_TOKEN_DELETED:
+        case "EVENT_HOME_TOKEN_DELETED":
             if (state.tokens.loaded) {
                 return immutable.set(state, "tokens.tokens",
                     state.tokens.tokens.filter(t => t.id !== action.payload.id));

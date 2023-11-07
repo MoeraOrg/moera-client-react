@@ -3,10 +3,6 @@ import {
     DraftAddedEvent,
     DraftDeletedEvent,
     DraftUpdatedEvent,
-    EVENT_HOME_DRAFT_ADDED,
-    EVENT_HOME_DRAFT_DELETED,
-    EVENT_HOME_DRAFT_UPDATED,
-    EVENT_NODE_POSTING_UPDATED,
     EventAction,
     PostingUpdatedEvent
 } from "api/events";
@@ -26,7 +22,7 @@ import {
     composePreviewClose,
     composeSharedTextLoad
 } from "state/compose/actions";
-import { dialogClosed, dialogOpened, GO_TO_PAGE, goToPosting, updateLocation } from "state/navigation/actions";
+import { dialogClosed, dialogOpened, goToPosting, updateLocation } from "state/navigation/actions";
 import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposeDraftId,
@@ -58,7 +54,11 @@ export default [
         true,
         (signal: ComposePostSucceededAction) => goToPosting(signal.payload.posting.id)
     ),
-    trigger("COMPOSE_POST_SUCCEEDED", true, (signal: ComposePostSucceededAction) => postingSet(signal.payload.posting)),
+    trigger(
+        "COMPOSE_POST_SUCCEEDED",
+        true,
+        (signal: ComposePostSucceededAction) => postingSet(signal.payload.posting, "")
+    ),
     trigger(
         "COMPOSE_POST_SUCCEEDED",
         (state, signal: ComposePostSucceededAction) =>
@@ -72,7 +72,7 @@ export default [
         signal => storyUpdated(getPostingStory(signal.payload.posting, "timeline")!)
     ),
     trigger(
-        EVENT_NODE_POSTING_UPDATED,
+        "EVENT_NODE_POSTING_UPDATED",
         (state, signal: EventAction<PostingUpdatedEvent>) =>
             isAtComposePage(state) && getComposePostingId(state) === signal.payload.id,
         composeConflict
@@ -86,7 +86,7 @@ export default [
     trigger("COMPOSE_PREVIEW", true, dialogOpened(composePreviewClose())),
     trigger("COMPOSE_PREVIEW_CLOSE", true, dialogClosed),
     trigger(
-        [EVENT_HOME_DRAFT_ADDED, EVENT_HOME_DRAFT_UPDATED],
+        ["EVENT_HOME_DRAFT_ADDED", "EVENT_HOME_DRAFT_UPDATED"],
         (state, signal: EventAction<DraftAddedEvent | DraftUpdatedEvent>) =>
             signal.payload.draftType === "new-posting"
             && signal.payload.receiverName === getOwnerName(state)
@@ -94,7 +94,7 @@ export default [
         signal => composeDraftListItemReload(signal.payload.id)
     ),
     trigger(
-        EVENT_HOME_DRAFT_DELETED,
+        "EVENT_HOME_DRAFT_DELETED",
         (state, signal: EventAction<DraftDeletedEvent>) =>
             signal.payload.draftType === "new-posting"
             && signal.payload.receiverName === getOwnerName(state)

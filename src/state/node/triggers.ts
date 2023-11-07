@@ -1,24 +1,12 @@
 import i18n from 'i18next';
 
 import { inv, trigger } from "state/trigger";
-import {
-    EVENT_NODE_ASK_SUBJECTS_CHANGED,
-    EVENT_NODE_FRIEND_GROUP_ADDED,
-    EVENT_NODE_FRIEND_GROUP_DELETED,
-    EVENT_NODE_FRIEND_GROUP_UPDATED,
-    EVENT_NODE_FRIENDSHIP_UPDATED,
-    EVENT_NODE_NODE_NAME_CHANGED,
-    EVENT_NODE_NODE_SETTINGS_CHANGED,
-    EVENT_NODE_PLUGINS_UPDATED,
-    EventAction,
-    NodeNameChangedEvent
-} from "api/events";
+import { EventAction, NodeNameChangedEvent } from "api/events";
 import { newLocation, updateLocation } from "state/navigation/actions";
 import { nodeFeaturesLoad, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
 import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
 import { NamingNameLoadedAction } from "state/naming/actions";
 import { messageBox } from "state/messagebox/actions";
-import { SETTINGS_PLUGINS_DELETED } from "state/settings/actions";
 
 export default [
     trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED"], isAtNode, nodeFeaturesLoad),
@@ -33,7 +21,7 @@ export default [
     trigger("PULSE_6H", isOwnerNameSet, ownerVerify),
     trigger("OWNER_SWITCH_FAILED", true, () => messageBox(i18n.t("node-name-not-exists"))),
     trigger(
-        EVENT_NODE_NODE_NAME_CHANGED,
+        "EVENT_NODE_NODE_NAME_CHANGED",
         true,
         (signal: EventAction<NodeNameChangedEvent>) =>
             ownerSet(signal.payload.name, false, signal.payload.fullName ?? null, signal.payload.gender ?? null,
@@ -41,15 +29,15 @@ export default [
     ),
     trigger(
         [
-            EVENT_NODE_FRIEND_GROUP_ADDED,
-            EVENT_NODE_FRIEND_GROUP_UPDATED,
-            EVENT_NODE_FRIEND_GROUP_DELETED,
-            EVENT_NODE_PLUGINS_UPDATED,
-            EVENT_NODE_NODE_SETTINGS_CHANGED
+            "EVENT_NODE_FRIEND_GROUP_ADDED",
+            "EVENT_NODE_FRIEND_GROUP_UPDATED",
+            "EVENT_NODE_FRIEND_GROUP_DELETED",
+            "EVENT_NODE_PLUGINS_UPDATED",
+            "EVENT_NODE_NODE_SETTINGS_CHANGED"
         ],
         true,
         nodeFeaturesLoad
     ),
-    trigger([EVENT_NODE_FRIENDSHIP_UPDATED, EVENT_NODE_ASK_SUBJECTS_CHANGED], inv(isAtHomeNode), nodeFeaturesLoad),
+    trigger(["EVENT_NODE_FRIENDSHIP_UPDATED", "EVENT_NODE_ASK_SUBJECTS_CHANGED"], inv(isAtHomeNode), nodeFeaturesLoad),
     trigger(["SETTINGS_PLUGINS_DELETED", "SETTINGS_UPDATE_SUCCEEDED"], isAtHomeNode, nodeFeaturesLoad)
 ]

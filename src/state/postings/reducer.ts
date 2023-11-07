@@ -3,17 +3,6 @@ import * as immutable from 'object-path-immutable';
 import { BlockedEntryOperation, FeedReference, PostingInfo, StoryInfo, SubscriptionType } from "api";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
-import {
-    EVENT_HOME_BLOCKED_BY_USER_ADDED,
-    EVENT_HOME_BLOCKED_BY_USER_DELETED,
-    EVENT_HOME_BLOCKED_INSTANT_ADDED,
-    EVENT_HOME_BLOCKED_INSTANT_DELETED,
-    EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED,
-    EVENT_HOME_REMOTE_POSTING_VERIFIED,
-    EVENT_HOME_REMOTE_REACTION_ADDED,
-    EVENT_HOME_REMOTE_REACTION_DELETED
-} from "api/events";
-import { STORY_UPDATED } from "state/stories/actions";
 import { findPostingIdsByRemote } from "state/postings/selectors";
 import { ExtPostingInfo, PostingsState } from "state/postings/state";
 import { htmlEntities, replaceEmojis, safeHtml, safePreviewHtml } from "util/html";
@@ -163,7 +152,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return immutable.set(state, [nodeName, id, "posting", "operations"], operations);
         }
 
-        case EVENT_HOME_REMOTE_POSTING_VERIFIED: {
+        case "EVENT_HOME_REMOTE_POSTING_VERIFIED": {
             const nodeName = action.payload.nodeName === action.context.ownerName ? "" : action.payload.nodeName;
             const posting = state[nodeName]?.[action.payload.postingId]?.posting;
             if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
@@ -173,7 +162,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED: {
+        case "EVENT_HOME_REMOTE_POSTING_VERIFICATION_FAILED": {
             const nodeName = action.payload.nodeName === action.context.ownerName ? "" : action.payload.nodeName;
             const posting = state[nodeName]?.[action.payload.postingId]?.posting;
             if (posting && (!action.payload.revisionId || posting.revisionId === action.payload.revisionId)) {
@@ -252,7 +241,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return istate.value();
         }
 
-        case EVENT_HOME_REMOTE_REACTION_ADDED: {
+        case "EVENT_HOME_REMOTE_REACTION_ADDED": {
             const {remoteNodeName, remotePostingId, negative, emoji} = action.payload;
             const ids = findPostingIdsByRemote(state, remoteNodeName, remotePostingId);
             if (ids.length > 0) {
@@ -265,7 +254,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case EVENT_HOME_REMOTE_REACTION_DELETED: {
+        case "EVENT_HOME_REMOTE_REACTION_DELETED": {
             const {remoteNodeName, remotePostingId} = action.payload;
             const ids = findPostingIdsByRemote(state, remoteNodeName, remotePostingId);
             if (ids.length > 0) {
@@ -320,7 +309,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case EVENT_HOME_BLOCKED_INSTANT_ADDED: {
+        case "EVENT_HOME_BLOCKED_INSTANT_ADDED": {
             const {blockedInstant: {id, storyType, entryId}} = action.payload;
             const {ownerName, homeOwnerName} = action.context;
 
@@ -337,7 +326,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case EVENT_HOME_BLOCKED_INSTANT_DELETED: {
+        case "EVENT_HOME_BLOCKED_INSTANT_DELETED": {
             const {blockedInstant: {id, entryId}} = action.payload;
             const {ownerName, homeOwnerName} = action.context;
 
@@ -354,7 +343,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return state;
         }
 
-        case EVENT_HOME_BLOCKED_BY_USER_ADDED: {
+        case "EVENT_HOME_BLOCKED_BY_USER_ADDED": {
             const {blockedByUser} = action.payload;
             const {ownerName} = action.context;
 
@@ -380,7 +369,7 @@ export default (state: PostingsState = initialState, action: WithContext<ClientA
             return istate.value();
         }
 
-        case EVENT_HOME_BLOCKED_BY_USER_DELETED: {
+        case "EVENT_HOME_BLOCKED_BY_USER_DELETED": {
             const {blockedByUser} = action.payload;
             const {ownerName} = action.context;
 

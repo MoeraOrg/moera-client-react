@@ -1,5 +1,5 @@
 import { conj, trigger } from "state/trigger";
-import { GO_TO_PAGE, newLocation } from "state/navigation/actions";
+import { newLocation } from "state/navigation/actions";
 import { isAtComplainsPage } from "state/navigation/selectors";
 import {
     complainsComplainsLoad,

@@ -3,14 +3,8 @@ import cloneDeep from 'lodash.clonedeep';
 import { parse as parseEmojis } from 'twemoji-parser';
 
 import { BlockedUserInfo, CommentInfo } from "api";
-import {
-    EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED,
-    EVENT_HOME_REMOTE_COMMENT_VERIFIED,
-    EVENT_RECEIVER_COMMENT_DELETED
-} from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
-import { GO_TO_PAGE } from "state/navigation/actions";
 import { PAGE_DETAILED_POSTING } from "state/navigation/pages";
 import {
     CommentComposeState,
@@ -618,7 +612,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, ["comments", "comments", index, "deleting"], false);
         }
 
-        case EVENT_RECEIVER_COMMENT_DELETED: {
+        case "EVENT_RECEIVER_COMMENT_DELETED": {
             const {id, postingId, moment} = action.payload;
 
             if (state.comments.receiverPostingId !== postingId
@@ -718,7 +712,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         }
 
         case "COMMENT_VERIFY_FAILED":
-        case EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED: {
+        case "EVENT_HOME_REMOTE_COMMENT_VERIFICATION_FAILED": {
             const {nodeName, postingId, commentId} = action.payload;
 
             if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {
@@ -731,7 +725,7 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             return immutable.set(state, ["comments", "comments", index, "verificationStatus"], "none");
         }
 
-        case EVENT_HOME_REMOTE_COMMENT_VERIFIED: {
+        case "EVENT_HOME_REMOTE_COMMENT_VERIFIED": {
             const {nodeName, postingId, commentId, correct} = action.payload;
 
             if (nodeName !== state.comments.receiverName || postingId !== state.comments.receiverPostingId) {

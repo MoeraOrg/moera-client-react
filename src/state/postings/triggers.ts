@@ -2,10 +2,6 @@ import i18n from 'i18next';
 
 import { trigger } from "state/trigger";
 import {
-    EVENT_NODE_POSTING_COMMENTS_CHANGED,
-    EVENT_NODE_POSTING_REACTIONS_CHANGED,
-    EVENT_NODE_POSTING_RESTORED,
-    EVENT_NODE_POSTING_UPDATED,
     EventAction,
     PostingCommentsChangedEvent,
     PostingReactionsChangedEvent,
@@ -19,7 +15,7 @@ import {
     postingReactionsReload
 } from "state/postings/actions";
 import { isPostingCached } from "state/postings/selectors";
-import { STORY_UPDATED, StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
+import { StoryAddedAction, StoryUpdatedAction } from "state/stories/actions";
 import { isConnectedToHome } from "state/home/selectors";
 import { isCurrentNodeStory } from "state/stories/selectors";
 import { flashBox } from "state/flashbox/actions";
@@ -43,19 +39,19 @@ export default [
         signal => postingLoad(signal.payload.id, signal.payload.nodeName)
     ),
     trigger(
-        [EVENT_NODE_POSTING_UPDATED, EVENT_NODE_POSTING_RESTORED],
+        ["EVENT_NODE_POSTING_UPDATED", "EVENT_NODE_POSTING_RESTORED"],
         (state, signal: EventAction<PostingUpdatedEvent>) =>
             isPostingCached(state, signal.payload.id),
         signal => postingLoad(signal.payload.id, "")
     ),
     trigger(
-        EVENT_NODE_POSTING_REACTIONS_CHANGED,
+        "EVENT_NODE_POSTING_REACTIONS_CHANGED",
         (state, signal: EventAction<PostingReactionsChangedEvent>) =>
             isPostingCached(state, signal.payload.id) && isConnectedToHome(state),
         signal => postingReactionLoad(signal.payload.id, "")
     ),
     trigger(
-        EVENT_NODE_POSTING_COMMENTS_CHANGED,
+        "EVENT_NODE_POSTING_COMMENTS_CHANGED",
         (state, signal: EventAction<PostingCommentsChangedEvent>) =>
             isPostingCached(state, signal.payload.id),
         signal => postingCommentsSet(signal.payload.id, signal.payload.total, "")

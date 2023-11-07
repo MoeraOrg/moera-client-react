@@ -19,9 +19,9 @@ function LightBoxReactions({posting, homeOwnerName, enableSelf, postingReact, po
         return null;
     }
 
-    const onReactionAdd = (negative: boolean, emoji: number) => postingReact(posting.id, negative, emoji);
+    const onReactionAdd = (negative: boolean, emoji: number) => postingReact(posting.id, negative, emoji, "");
 
-    const onReactionDelete = () => postingReactionDelete(posting.id);
+    const onReactionDelete = () => postingReactionDelete(posting.id, "");
 
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;

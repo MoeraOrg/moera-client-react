@@ -2,22 +2,6 @@ import * as immutable from 'object-path-immutable';
 import cloneDeep from 'lodash.clonedeep';
 
 import { BlockedByUserInfo, BlockedUserInfo, ContactInfo, FriendInfo } from "api";
-import {
-    EVENT_NODE_BLOCKED_BY_USER_ADDED,
-    EVENT_NODE_BLOCKED_BY_USER_DELETED,
-    EVENT_NODE_BLOCKED_USER_ADDED,
-    EVENT_NODE_BLOCKED_USER_DELETED,
-    EVENT_NODE_FRIENDSHIP_UPDATED,
-    EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED,
-    EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED,
-    EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED,
-    EVENT_NODE_SUBSCRIBER_ADDED,
-    EVENT_NODE_SUBSCRIBER_DELETED,
-    EVENT_NODE_SUBSCRIBER_UPDATED,
-    EVENT_NODE_SUBSCRIPTION_ADDED,
-    EVENT_NODE_SUBSCRIPTION_DELETED,
-    EVENT_NODE_SUBSCRIPTION_UPDATED
-} from "api/events";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { ContactState, PeopleState } from "state/people/state";
@@ -511,7 +495,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             }
             return state;
 
-        case EVENT_NODE_SUBSCRIBER_ADDED: {
+        case "EVENT_NODE_SUBSCRIBER_ADDED": {
             if (action.payload.subscriber.type !== "feed") {
                 return state;
             }
@@ -530,7 +514,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_SUBSCRIBER_UPDATED: {
+        case "EVENT_NODE_SUBSCRIBER_UPDATED": {
             const {subscriber} = action.payload;
             if (subscriber.type !== "feed") {
                 return state;
@@ -548,7 +532,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_SUBSCRIBER_DELETED: {
+        case "EVENT_NODE_SUBSCRIBER_DELETED": {
             const {subscriber} = action.payload;
             if (subscriber.type !== "feed") {
                 return state;
@@ -569,7 +553,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_SUBSCRIPTION_ADDED: {
+        case "EVENT_NODE_SUBSCRIPTION_ADDED": {
             if (action.payload.subscription.type !== "feed") {
                 return state;
             }
@@ -588,7 +572,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_SUBSCRIPTION_UPDATED: {
+        case "EVENT_NODE_SUBSCRIPTION_UPDATED": {
             const {subscription} = action.payload;
             if (subscription.type !== "feed") {
                 return state;
@@ -606,7 +590,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_SUBSCRIPTION_DELETED: {
+        case "EVENT_NODE_SUBSCRIPTION_DELETED": {
             const {subscription} = action.payload;
             if (subscription.type !== "feed") {
                 return state;
@@ -627,10 +611,10 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_FRIENDSHIP_UPDATED:
+        case "EVENT_NODE_FRIENDSHIP_UPDATED":
             return updateFriendship(state, action.payload.friend);
 
-        case EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED: {
+        case "EVENT_NODE_REMOTE_FRIENDSHIP_UPDATED": {
             const {friendOf} = action.payload;
 
             const istate = immutable.wrap(state);
@@ -653,25 +637,25 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_BLOCKED_USER_ADDED:
+        case "EVENT_NODE_BLOCKED_USER_ADDED":
             if (action.context.ownerName !== action.context.homeOwnerName) { // otherwise home event handled by trigger
                 return updateBlocked(state, [action.payload.blockedUser], true);
             }
             return state;
 
-        case EVENT_NODE_BLOCKED_USER_DELETED:
+        case "EVENT_NODE_BLOCKED_USER_DELETED":
             if (action.context.ownerName !== action.context.homeOwnerName) { // otherwise home event handled by trigger
                 return updateBlocked(state, [action.payload.blockedUser], false);
             }
             return state;
 
-        case EVENT_NODE_BLOCKED_BY_USER_ADDED:
+        case "EVENT_NODE_BLOCKED_BY_USER_ADDED":
             return updateBlockedBy(state, action.payload.blockedByUser, true);
 
-        case EVENT_NODE_BLOCKED_BY_USER_DELETED:
+        case "EVENT_NODE_BLOCKED_BY_USER_DELETED":
             return updateBlockedBy(state, action.payload.blockedByUser, false);
 
-        case EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED: {
+        case "EVENT_NODE_REMOTE_NODE_FULL_NAME_CHANGED": {
             const {name, fullName} = action.payload;
 
             const istate = immutable.wrap(state);
@@ -680,7 +664,7 @@ export default (state: PeopleState = initialState, action: WithContext<ClientAct
             return istate.value();
         }
 
-        case EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED: {
+        case "EVENT_NODE_REMOTE_NODE_AVATAR_CHANGED": {
             const {name} = action.payload;
             const avatar = cloneDeep(action.payload.avatar);
 

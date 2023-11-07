@@ -1,7 +1,6 @@
 import { trigger } from "state/trigger";
 import { namingNamesMaintenance, namingNamesUsed } from "state/naming/actions";
 import { PostingSetAction } from "state/postings/actions";
-import { PULSE_1MIN } from "state/pulse/actions";
 
 export default [
     trigger(

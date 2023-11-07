@@ -1,4 +1,3 @@
-import { CONNECTED_TO_HOME } from "state/home/actions";
 import { ConnectDialogState } from "state/connectdialog/state";
 import { ClientAction } from "state/action";
 

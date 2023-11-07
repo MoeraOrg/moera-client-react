@@ -1,5 +1,4 @@
 import { trigger } from "state/trigger";
-import { HOME_INTRODUCED } from "state/home/actions";
 import { contactsLoad, ContactsPrepareAction, contactsUnset } from "state/contacts/actions";
 import { isContactsQueryToBeLoaded } from "state/contacts/selectors";
 import { isConnectedToHome } from "state/home/selectors";

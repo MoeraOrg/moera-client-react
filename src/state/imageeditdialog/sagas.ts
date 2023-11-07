@@ -34,7 +34,7 @@ function* imageEditDialogLoadSaga() {
     try {
         const posting = yield* call(Node.getPosting, nodeName, id, true, ["posting.not-found"]);
         yield* call(fillActivityReaction, posting);
-        yield* put(postingSet(posting));
+        yield* put(postingSet(posting, ""));
         yield* put(imageEditDialogLoaded());
     } catch (e) {
         yield* put(imageEditDialogLoadFailed());
@@ -59,7 +59,7 @@ function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>
         const posting = yield* call(Node.updatePosting, nodeName, id, postingText);
         yield* put(imageEditDialogPostSucceeded());
         yield* call(fillActivityReaction, posting);
-        yield* put(postingSet(posting));
+        yield* put(postingSet(posting, ""));
 
         const remoteNodeName = nodeName || action.context.ownerName;
         if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {

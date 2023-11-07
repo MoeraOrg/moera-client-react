@@ -2,14 +2,8 @@ import cloneDeep from 'lodash.clonedeep';
 import * as immutable from 'object-path-immutable';
 
 import { SheriffComplainGroupInfo, SheriffComplainInfo } from "api";
-import {
-    EVENT_HOME_SHERIFF_COMPLAIN_ADDED,
-    EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED,
-    EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED
-} from "api/events";
 import { WithContext } from "state/action-types";
 import { ClientAction } from "state/action";
-import { INIT_FROM_LOCATION } from "state/navigation/actions";
 import { ComplainsState, ExtComplainGroupInfo, ExtComplainInfo } from "state/complains/state";
 import { htmlEntities, replaceEmojis } from "util/html";
 
@@ -230,7 +224,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             }
             return state;
 
-        case EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED: {
+        case "EVENT_HOME_SHERIFF_COMPLAIN_GROUP_ADDED": {
             const {group} = action.payload;
             if (group.moment > state.before) {
                 return immutable.update(state, "totalInFuture", t => t + 1);
@@ -254,7 +248,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             return istate.value();
         }
 
-        case EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED: {
+        case "EVENT_HOME_SHERIFF_COMPLAIN_GROUP_UPDATED": {
             const {group} = action.payload;
             if (group.moment <= state.before && group.moment > state.after) {
                 return immutable.set(state, ["complainGroups", group.id], extractComplainGroup(group));
@@ -262,7 +256,7 @@ export default (state: ComplainsState = initialState, action: WithContext<Client
             return state;
         }
 
-        case EVENT_HOME_SHERIFF_COMPLAIN_ADDED: {
+        case "EVENT_HOME_SHERIFF_COMPLAIN_ADDED": {
             const {complain, groupId} = action.payload;
             if (state.activeComplainGroupId !== groupId || state.loadingComplains) {
                 return state;

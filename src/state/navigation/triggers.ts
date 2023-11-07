@@ -7,7 +7,6 @@ import {
     updateLocation
 } from "state/navigation/actions";
 import { isAtNode } from "state/node/selectors";
-import { SETTINGS_LANGUAGE_CHANGED } from "state/settings/actions";
 import { Browser } from "ui/browser";
 
 export default [

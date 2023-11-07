@@ -18,7 +18,7 @@ function PostingVerifyButton({id, connectedToHome, status, postingVerify}: Props
         return null;
     }
 
-    const onVerify = () => postingVerify(id);
+    const onVerify = () => postingVerify(id, "");
 
     return <SignatureVerifyButton status={status} onVerify={onVerify}/>;
 }
