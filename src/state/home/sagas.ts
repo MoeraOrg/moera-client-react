@@ -3,9 +3,10 @@ import { call, put, select } from 'typed-redux-saga';
 import { Node } from "api";
 import { Storage } from "storage";
 import {
+    HomeAvatarsLoadAction,
     homeAvatarsLoaded,
-    homeAvatarsLoadFailed,
-    homeFriendGroupsLoaded,
+    homeAvatarsLoadFailed, HomeFriendGroupsLoadAction,
+    homeFriendGroupsLoaded, HomeInvisibleUsersLoadAction,
     homeInvisibleUsersLoaded
 } from "state/home/actions";
 import { introduced } from "state/init-selectors";
@@ -19,37 +20,37 @@ export default [
     executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga, introduced)
 ];
 
-function* homeAvatarsLoadSaga() {
+function* homeAvatarsLoadSaga(action: HomeAvatarsLoadAction) {
     try {
-        const avatars = yield* call(Node.getAvatars, ":");
-        yield* put(homeAvatarsLoaded(avatars));
+        const avatars = yield* call(Node.getAvatars, action, ":");
+        yield* put(homeAvatarsLoaded(avatars).causedBy(action));
     } catch (e) {
-        yield* put(homeAvatarsLoadFailed());
+        yield* put(homeAvatarsLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-function* homeFriendGroupsLoadSaga() {
+function* homeFriendGroupsLoadSaga(action: HomeFriendGroupsLoadAction) {
     try {
-        const friendGroups = yield* call(Node.getFriendGroups, ":");
-        yield* put(homeFriendGroupsLoaded(friendGroups));
+        const friendGroups = yield* call(Node.getFriendGroups, action, ":");
+        yield* put(homeFriendGroupsLoaded(friendGroups).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* homeInvisibleUsersLoadSaga() {
+function* homeInvisibleUsersLoadSaga(action: HomeInvisibleUsersLoadAction) {
     const prevChecksum = yield* select(getHomeInvisibleUsersChecksum);
     try {
-        const checksums = yield* call(Node.getBlockedUsersChecksums, ":");
+        const checksums = yield* call(Node.getBlockedUsersChecksums, action, ":");
         if (checksums.visibility === prevChecksum) {
             return;
         }
-        const blockedUsers = yield* call(Node.searchBlockedUsers, ":", {
+        const blockedUsers = yield* call(Node.searchBlockedUsers, action, ":", {
             blockedOperations: ["visibility" as const],
             strict: true
         });
-        yield* put(homeInvisibleUsersLoaded(checksums.visibility, blockedUsers));
+        yield* put(homeInvisibleUsersLoaded(checksums.visibility, blockedUsers).causedBy(action));
         Storage.storeInvisibleUsers(checksums.visibility, blockedUsers);
     } catch (e) {
         yield* put(errorThrown(e));

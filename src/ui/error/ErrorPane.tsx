@@ -32,7 +32,15 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
                 }
             )
         } onClick={onClick}>
-            {!expanded ? message : messageVerbose}
+            {!expanded ?
+                message
+            :
+                <>
+                    {messageVerbose.split('\n').map((msg: string) =>
+                        <>{msg}<br/></>
+                    )}
+                </>
+            }
             <CloseButton onClick={() => errorDismiss()}/>
         </div>
     );

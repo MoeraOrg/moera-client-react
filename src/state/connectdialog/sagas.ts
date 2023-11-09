@@ -19,13 +19,13 @@ export default [
 function* connectDialogResetPasswordSaga(action: ConnectDialogResetPasswordAction) {
     const {location} = action.payload;
     try {
-        const hint = yield* call(Node.resetCredentials, location, ["credentials.email-not-set"]);
-        yield* put(connectDialogSetEmailHint(hint.emailHint));
-        yield* put(connectDialogSetForm(location, "admin", "reset"));
+        const hint = yield* call(Node.resetCredentials, action, location, ["credentials.email-not-set"]);
+        yield* put(connectDialogSetEmailHint(hint.emailHint).causedBy(action));
+        yield* put(connectDialogSetForm(location, "admin", "reset").causedBy(action));
     } catch (e) {
-        yield* put(connectDialogResetPasswordFailed());
+        yield* put(connectDialogResetPasswordFailed().causedBy(action));
         if (e instanceof NodeApiError) {
-            yield* put(messageBox(i18n.t("email-not-set", {location})));
+            yield* put(messageBox(i18n.t("email-not-set", {location})).causedBy(action));
         } else {
             yield* put(errorThrown(e));
         }

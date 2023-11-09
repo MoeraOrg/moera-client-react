@@ -4,7 +4,10 @@ import * as URI from 'uri-js';
 import { locationBuild, LocationInfo, locationTransform } from "location";
 import { executor } from "state/executor";
 import { getNodeUri } from "state/naming/sagas";
+import { ClientAction } from "state/action";
 import {
+    GoHomeAction,
+    GoHomeNewsAction,
     GoToLocationAction,
     initFromLocation,
     InitFromLocationAction,
@@ -31,24 +34,25 @@ export default [
     executor("BODY_SCROLL_UPDATE", "", bodyScrollUpdateSaga)
 ];
 
-function* transformation(srcPath: string | null, srcQuery: string | null, srcHash: string | null,
+function* transformation(caller: ClientAction,
+                         srcPath: string | null, srcQuery: string | null, srcHash: string | null,
                          dstPath: string | null, dstQuery: string | null, dstHash: string | null) {
     const srcInfo = srcPath != null ? LocationInfo.fromUrl(srcPath, srcQuery, srcHash) : new LocationInfo();
     dstPath = dstPath != null && dstPath.startsWith("/moera") ? dstPath.substring(6) : dstPath;
     const dstInfo = LocationInfo.fromUrl(dstPath, dstQuery, dstHash);
     const actions = locationTransform(srcInfo, dstInfo);
-    yield* put(locationLock());
+    yield* put(locationLock().causedBy(caller));
     for (let a of actions) {
-        yield* put(a);
+        yield* put(a.causedBy(caller));
     }
     yield* call(changeLocation, null);
-    yield* put(locationUnlock());
+    yield* put(locationUnlock().causedBy(caller));
 }
 
 function* initFromNodeLocationSaga(action: InitFromNodeLocationAction) {
     const {nodeName, location, fallbackUrl} = action.payload;
 
-    const nodeLocation = yield* call(getNodeUri, nodeName);
+    const nodeLocation = yield* call(getNodeUri, action, nodeName);
     if (nodeLocation == null) {
         window.location.href = fallbackUrl;
         return;
@@ -60,18 +64,19 @@ function* initFromNodeLocationSaga(action: InitFromNodeLocationAction) {
     }
     const rootLocation = rootUrl(scheme, host, port);
     const {path = null, query = null, fragment = null} = URI.parse(location);
-    yield* put(initFromLocation(rootLocation, path, query, fragment));
+    yield* put(initFromLocation(rootLocation, path, query, fragment).causedBy(action));
 }
 
 function* initFromLocationSaga(action: InitFromLocationAction) {
     const {path, query, hash} = action.payload;
-    yield* call(transformation, null, null, null, path, query, hash);
+    yield* call(transformation, action, null, null, null, path, query, hash);
 }
 
 function* goToLocationSaga(action: GoToLocationAction) {
     const current = URI.parse(yield* select(state => state.navigation.location));
     const {path, query, hash} = action.payload;
-    yield* call(transformation, current.path || "", current.query || "", current.fragment || "", path, query, hash);
+    yield* call(transformation, action, current.path || "", current.query || "", current.fragment || "", path, query,
+        hash);
 }
 
 function* newLocationSaga(action: NewLocationAction) {
@@ -84,10 +89,10 @@ function* updateLocationSaga(action: UpdateLocationAction) {
 
 function* changeLocation(action: NewLocationAction | UpdateLocationAction | null) {
     const info = yield* select(locationBuild, new LocationInfo());
-    yield* put(locationSet(info.toUrl(), info.title, action == null || action.type === "NEW_LOCATION"));
+    yield* put(locationSet(info.toUrl(), info.title, action == null || action.type === "NEW_LOCATION").causedBy(action));
 }
 
-function* goHomeSaga() {
+function* goHomeSaga(action: GoHomeAction) {
     const homeRootPage = yield* select(getHomeRootPage);
     if (homeRootPage == null) {
         return;
@@ -95,11 +100,11 @@ function* goHomeSaga() {
     const {scheme, host, port, path} = URI.parse(homeRootPage);
     if (scheme != null && host != null) {
         const rootLocation = rootUrl(scheme, host, port);
-        yield* put(initFromLocation(rootLocation, path ?? null, null, null));
+        yield* put(initFromLocation(rootLocation, path ?? null, null, null).causedBy(action));
     }
 }
 
-function* goHomeNewsSaga() {
+function* goHomeNewsSaga(action: GoHomeNewsAction) {
     const homeRootPage = yield* select(getHomeRootPage);
     if (homeRootPage == null) {
         return;
@@ -107,7 +112,7 @@ function* goHomeNewsSaga() {
     const {scheme, host, port, path} = URI.parse(homeRootPage);
     if (scheme != null && host != null) {
         const rootLocation = rootUrl(scheme, host, port);
-        yield* put(initFromLocation(rootLocation, path + "/news", null, null));
+        yield* put(initFromLocation(rootLocation, path + "/news", null, null).causedBy(action));
     }
 }
 

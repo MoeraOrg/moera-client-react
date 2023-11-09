@@ -14,23 +14,23 @@ export default [
 function* contactsLoadSaga(action: ContactsLoadAction) {
     const {query} = action.payload;
     try {
-        yield* spawn(contactsFindName, query);
-        const contact = yield* call(Node.getContacts, ":", query, 25);
-        yield* put(contactsLoaded(query, contact));
+        yield* spawn(contactsFindName, action, query);
+        const contact = yield* call(Node.getContacts, action, ":", query, 25);
+        yield* put(contactsLoaded(query, contact).causedBy(action));
     } catch (e) {
-        yield* put(contactsLoadFailed(query));
+        yield* put(contactsLoadFailed(query).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-function* contactsFindName(nodeName: string) {
+function* contactsFindName(action: ContactsLoadAction, nodeName: string) {
     const hasName = yield* select(state => hasContactsName(state, nodeName));
     if (hasName) {
         return;
     }
     const registeredName = new RegisteredName(nodeName).format();
-    const details = yield* call(getNameDetails, registeredName, true);
+    const details = yield* call(getNameDetails, action, registeredName, true);
     if (details.loaded && details.nodeUri != null) {
-        yield* put(contactsNameFound(details.nodeName ?? registeredName));
+        yield* put(contactsNameFound(details.nodeName ?? registeredName).causedBy(action));
     }
 }

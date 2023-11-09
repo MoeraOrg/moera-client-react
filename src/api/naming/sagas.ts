@@ -6,6 +6,7 @@ import { formatSchemaErrors, NamingApi, NamingError } from "api";
 import { RegisteredNameInfo } from "api/naming/api-types";
 import { retryFetch } from "api/fetch-timeout";
 import { isSchemaValid } from "api/schema";
+import { ClientAction } from "state/action";
 import { getSetting } from "state/settings/selectors";
 
 let callId = 1;
@@ -13,6 +14,7 @@ let callId = 1;
 type CallException = (e: any, details?: string | null) => NamingError;
 
 export type CallNamingParams<T> = {
+    caller: ClientAction | null,
     method: string;
     params: any[];
     schema: ValidateFunction<T>;
@@ -20,8 +22,8 @@ export type CallNamingParams<T> = {
 
 export type CallNamingResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect, T>;
 
-function* callNaming<T>({method, params, schema}: CallNamingParams<T>): CallNamingResult<T | null> {
-    const exception: CallException = (e, details = null) => new NamingError(method, e, details);
+function* callNaming<T>({caller, method, params, schema}: CallNamingParams<T>): CallNamingResult<T | null> {
+    const exception: CallException = (e, details = null) => new NamingError(method, e, details, caller);
     const data = yield* fetchNaming(method, params, exception);
     if (!isSchemaValid(NamingApi.ObjectResult, data)) {
         throw exception("Response format incorrect", formatSchemaErrors(NamingApi.ObjectResult.errors));
@@ -36,12 +38,13 @@ function* callNaming<T>({method, params, schema}: CallNamingParams<T>): CallNami
 }
 
 export type CallNamingBooleanParams = {
+    caller: ClientAction | null,
     method: string;
     params: any[];
 };
 
-function* callNamingBoolean({method, params}: CallNamingBooleanParams): CallNamingResult<boolean> {
-    const exception: CallException = (e, details = null) => new NamingError(method, e, details);
+function* callNamingBoolean({caller, method, params}: CallNamingBooleanParams): CallNamingResult<boolean> {
+    const exception: CallException = (e, details = null) => new NamingError(method, e, details, caller);
     const data = yield* fetchNaming(method, params, exception);
     if (!isSchemaValid(NamingApi.BooleanResult, data)) {
         throw exception("Response format incorrect", formatSchemaErrors(NamingApi.ObjectResult.errors));
@@ -90,14 +93,18 @@ function* fetchNaming(method: string, params: any[], exception: CallException): 
     return data;
 }
 
-export function* getCurrent(name: string, generation: number): CallNamingResult<RegisteredNameInfo | null> {
-    return yield* callNaming({method: "getCurrent", params: [name, generation], schema: NamingApi.RegisteredNameInfo});
+export function* getCurrent(
+    caller: ClientAction | null, name: string, generation: number
+): CallNamingResult<RegisteredNameInfo | null> {
+    return yield* callNaming({
+        caller, method: "getCurrent", params: [name, generation], schema: NamingApi.RegisteredNameInfo
+    });
 }
 
-export function* getSimilar(name: string): CallNamingResult<RegisteredNameInfo | null> {
-    return yield* callNaming({method: "getSimilar", params: [name], schema: NamingApi.RegisteredNameInfo});
+export function* getSimilar(caller: ClientAction | null, name: string): CallNamingResult<RegisteredNameInfo | null> {
+    return yield* callNaming({caller, method: "getSimilar", params: [name], schema: NamingApi.RegisteredNameInfo});
 }
 
-export function* isFree(name: string): CallNamingResult<boolean> {
-    return yield* callNamingBoolean({method: "isFree", params: [name]});
+export function* isFree(caller: ClientAction | null, name: string): CallNamingResult<boolean> {
+    return yield* callNamingBoolean({caller, method: "isFree", params: [name]});
 }

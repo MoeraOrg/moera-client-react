@@ -2,6 +2,7 @@ import { call, delay, put, select } from 'typed-redux-saga';
 import i18n from 'i18next';
 
 import { Node, PrincipalValue } from "api";
+import { ClientAction } from "state/action";
 import {
     FeedFutureSliceLoadAction,
     feedFutureSliceLoadFailed,
@@ -29,7 +30,7 @@ import {
     FeedSubscriberSetVisibilityAction,
     feedSubscriberUpdated,
     FeedSubscriptionSetVisibilityAction,
-    feedSubscriptionUpdated,
+    feedSubscriptionUpdated, FeedsUpdateAction,
     FeedUnsubscribeAction,
     feedUnsubscribed,
     feedUnsubscribeFailed
@@ -83,10 +84,10 @@ export default [
 function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
     const {feedName} = action.payload;
     try {
-        const info = yield* call(Node.getFeedGeneral, "", feedName);
-        yield* put(feedGeneralSet(feedName, info));
+        const info = yield* call(Node.getFeedGeneral, action, "", feedName);
+        yield* put(feedGeneralSet(feedName, info).causedBy(action));
     } catch (e) {
-        yield* put(feedGeneralLoadFailed(feedName));
+        yield* put(feedGeneralLoadFailed(feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -94,15 +95,15 @@ function* feedGeneralLoadSaga(action: WithContext<FeedGeneralLoadAction>) {
 function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
     const {nodeName, feedName, storyId} = action.payload;
     try {
-        const subscription = yield* call(Node.createSubscription, ":",
+        const subscription = yield* call(Node.createSubscription, action, ":",
             {type: "feed" as const, feedName: "news", remoteNodeName: nodeName, remoteFeedName: feedName});
-        yield* put(flashBox(i18n.t("you-subscribed")));
-        yield* put(feedSubscribed(nodeName, subscription));
+        yield* put(flashBox(i18n.t("you-subscribed")).causedBy(action));
+        yield* put(feedSubscribed(nodeName, subscription).causedBy(action));
         if (storyId != null) {
-            yield* put(storySatisfy(":instant", storyId));
+            yield* put(storySatisfy(":instant", storyId).causedBy(action));
         }
     } catch (e) {
-        yield* put(feedSubscribeFailed(nodeName, feedName));
+        yield* put(feedSubscribeFailed(nodeName, feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -110,30 +111,32 @@ function* feedSubscribeSaga(action: WithContext<FeedSubscribeAction>) {
 function* feedUnsubscribeSaga(action: FeedUnsubscribeAction) {
     const {nodeName, feedName, subscriptionId} = action.payload;
     try {
-        const contact = yield* call(Node.deleteSubscription, ":", subscriptionId);
-        yield* put(flashBox(i18n.t("you-no-longer-subscribed")));
-        yield* put(feedUnsubscribed(nodeName, feedName, contact));
+        const contact = yield* call(Node.deleteSubscription, action, ":", subscriptionId);
+        yield* put(flashBox(i18n.t("you-no-longer-subscribed")).causedBy(action));
+        yield* put(feedUnsubscribed(nodeName, feedName, contact).causedBy(action));
     } catch (e) {
-        yield* put(feedUnsubscribeFailed(nodeName, feedName));
+        yield* put(feedUnsubscribeFailed(nodeName, feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-export function* nodeFeedSubscriberSetVisibility(subscriberId: string, visible: boolean, homeOwnerName: string) {
+export function* nodeFeedSubscriberSetVisibility(
+    action: ClientAction, subscriberId: string, visible: boolean, homeOwnerName: string
+) {
     const view: PrincipalValue = visible ? "unset" : "private";
-    const subscriber = yield* call(Node.updateSubscriber, ":", subscriberId, {adminOperations: {view}});
-    yield* put(feedSubscriberUpdated(homeOwnerName, subscriber));
+    const subscriber = yield* call(Node.updateSubscriber, action, ":", subscriberId, {adminOperations: {view}});
+    yield* put(feedSubscriberUpdated(homeOwnerName, subscriber).causedBy(action));
 
     if (subscriber.feedName == null) {
         return;
     }
 
-    const subscriptions = yield* call(Node.searchSubscriptions, ":",
+    const subscriptions = yield* call(Node.searchSubscriptions, action, ":",
         {type: "feed" as const, feeds: [{nodeName: subscriber.nodeName, feedName: subscriber.feedName}]});
     if (subscriptions.length > 0) {
-        const subscription = yield* call(Node.updateSubscription, subscriber.nodeName, subscriptions[0].id,
+        const subscription = yield* call(Node.updateSubscription, action, subscriber.nodeName, subscriptions[0].id,
             {operations: {view}});
-        yield* put(feedSubscriptionUpdated(subscriber.nodeName, subscription));
+        yield* put(feedSubscriptionUpdated(subscriber.nodeName, subscription).causedBy(action));
     }
 }
 
@@ -146,16 +149,18 @@ function* feedSubscriberSetVisibilitySaga(action: WithContext<FeedSubscriberSetV
     }
 
     try {
-        yield* call(nodeFeedSubscriberSetVisibility, subscriberId, visible, homeOwnerName);
+        yield* call(nodeFeedSubscriberSetVisibility, action, subscriberId, visible, homeOwnerName);
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-export function* nodeFeedSubscriptionSetVisibility(subscriptionId: string, visible: boolean, homeOwnerName: string) {
+export function* nodeFeedSubscriptionSetVisibility(
+    action: ClientAction, subscriptionId: string, visible: boolean, homeOwnerName: string
+) {
     const view: PrincipalValue = visible ? "public" : "private";
-    const subscription = yield* call(Node.updateSubscription, ":", subscriptionId, {operations: {view}});
-    yield* put(feedSubscriptionUpdated(homeOwnerName, subscription));
+    const subscription = yield* call(Node.updateSubscription, action, ":", subscriptionId, {operations: {view}});
+    yield* put(feedSubscriptionUpdated(homeOwnerName, subscription).causedBy(action));
 }
 
 function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscriptionSetVisibilityAction>) {
@@ -167,7 +172,7 @@ function* feedSubscriptionSetVisibilitySaga(action: WithContext<FeedSubscription
     }
 
     try {
-        yield* call(nodeFeedSubscriptionSetVisibility, subscriptionId, visible, homeOwnerName);
+        yield* call(nodeFeedSubscriptionSetVisibility, action, subscriptionId, visible, homeOwnerName);
     } catch (e) {
         yield* put(errorThrown(e));
     }
@@ -177,11 +182,11 @@ function* feedStatusLoadSaga(action: FeedStatusLoadAction) {
     const {feedName} = action.payload;
     try {
         const status = feedName.startsWith(":")
-            ? yield* call(Node.getFeedStatus, ":", feedName.substring(1))
-            : yield* call(Node.getFeedStatus, "", feedName);
-        yield* put(feedStatusSet(feedName, status));
+            ? yield* call(Node.getFeedStatus, action, ":", feedName.substring(1))
+            : yield* call(Node.getFeedStatus, action, "", feedName);
+        yield* put(feedStatusSet(feedName, status).causedBy(action));
     } catch (e) {
-        yield* put(feedStatusLoadFailed(feedName));
+        yield* put(feedStatusLoadFailed(feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -189,18 +194,18 @@ function* feedStatusLoadSaga(action: FeedStatusLoadAction) {
 function* feedStatusUpdateSaga(action: WithContext<FeedStatusUpdateAction>) {
     const {feedName, viewed, read, before} = action.payload;
     try {
-        yield* put(feedStatusUpdated(feedName, viewed, read, before));
+        yield* put(feedStatusUpdated(feedName, viewed, read, before).causedBy(action));
         // feedName must start with ":"
         if (action.context.ownerName === action.context.homeOwnerName) {
-            yield* put(feedStatusUpdated(feedName.substring(1), viewed, read, before));
+            yield* put(feedStatusUpdated(feedName.substring(1), viewed, read, before).causedBy(action));
         }
-        const status = yield* call(Node.updateFeedStatus, ":", feedName.substring(1), {viewed, read, before});
-        yield* put(feedStatusSet(feedName, status));
+        const status = yield* call(Node.updateFeedStatus, action, ":", feedName.substring(1), {viewed, read, before});
+        yield* put(feedStatusSet(feedName, status).causedBy(action));
         if (action.context.ownerName === action.context.homeOwnerName) {
-            yield* put(feedStatusSet(feedName.substring(1), status));
+            yield* put(feedStatusSet(feedName.substring(1), status).causedBy(action));
         }
     } catch (e) {
-        yield* put(feedStatusUpdateFailed(feedName));
+        yield* put(feedStatusUpdateFailed(feedName).causedBy(action));
     }
 }
 
@@ -209,15 +214,16 @@ function* feedPastSliceLoadSaga(action: FeedPastSliceLoadAction) {
     try {
         const before = (yield* select(state => getFeedState(state, feedName))).after;
         const slice = feedName.startsWith(":")
-            ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), null, before, 20)
-            : yield* call(Node.getFeedSlice, "", feedName, null, before, 20);
-        yield* call(fillActivityReactionsInStories, slice.stories);
-        yield* call(fillBlockedOperationsInStories, slice.stories);
-        yield* put(feedPastSliceSet(feedName, slice.stories, slice.before, slice.after,
-            slice.totalInPast, slice.totalInFuture));
-        yield* call(fillSubscriptions, slice.stories);
+            ? yield* call(Node.getFeedSlice, action, ":", feedName.substring(1), null, before, 20)
+            : yield* call(Node.getFeedSlice, action, "", feedName, null, before, 20);
+        yield* call(fillActivityReactionsInStories, action, slice.stories);
+        yield* call(fillBlockedOperationsInStories, action, slice.stories);
+        yield* put(feedPastSliceSet(
+            feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
+        ).causedBy(action));
+        yield* call(fillSubscriptions, action, slice.stories);
     } catch (e) {
-        yield* put(feedPastSliceLoadFailed(feedName));
+        yield* put(feedPastSliceLoadFailed(feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -227,15 +233,16 @@ function* feedFutureSliceLoadSaga(action: FeedFutureSliceLoadAction) {
     try {
         const after = (yield* select(state => getFeedState(state, feedName))).before;
         const slice = feedName.startsWith(":")
-            ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
-            : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-        yield* call(fillActivityReactionsInStories, slice.stories);
-        yield* call(fillBlockedOperationsInStories, slice.stories);
-        yield* put(feedFutureSliceSet(feedName, slice.stories, slice.before, slice.after,
-            slice.totalInPast, slice.totalInFuture));
-        yield* call(fillSubscriptions, slice.stories);
+            ? yield* call(Node.getFeedSlice, action, ":", feedName.substring(1), after, null, 20)
+            : yield* call(Node.getFeedSlice, action, "", feedName, after, null, 20);
+        yield* call(fillActivityReactionsInStories, action, slice.stories);
+        yield* call(fillBlockedOperationsInStories, action, slice.stories);
+        yield* put(feedFutureSliceSet(
+            feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
+        ).causedBy(action));
+        yield* call(fillSubscriptions, action, slice.stories);
     } catch (e) {
-        yield* put(feedFutureSliceLoadFailed(feedName));
+        yield* put(feedFutureSliceLoadFailed(feedName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -247,36 +254,37 @@ function* feedStatusSetSaga(action: FeedStatusSetAction) {
     if (feedState.status.lastMoment != null && feedState.before >= Number.MAX_SAFE_INTEGER
         && feedState.stories.length > 0 && feedState.status.lastMoment > feedState.stories[0].moment
     ) {
-        yield* call(feedUpdateSlice, feedName, Number.MAX_SAFE_INTEGER, feedState.stories[0].moment);
+        yield* call(feedUpdateSlice, action, feedName, Number.MAX_SAFE_INTEGER, feedState.stories[0].moment);
     }
 }
 
-function* feedsUpdateSaga() {
+function* feedsUpdateSaga(action: FeedsUpdateAction) {
     const feedNames = yield* select(getAllFeeds);
     for (const feedName of feedNames) {
         try {
             const status = feedName.startsWith(":")
-                ? yield* call(Node.getFeedStatus, ":", feedName.substring(1))
-                : yield* call(Node.getFeedStatus, "", feedName);
-            yield* put(feedStatusSet(feedName, status));
+                ? yield* call(Node.getFeedStatus, action, ":", feedName.substring(1))
+                : yield* call(Node.getFeedStatus, action, "", feedName);
+            yield* put(feedStatusSet(feedName, status).causedBy(action));
         } catch (e) {
             yield* put(errorThrown(e));
         }
         let {before, after} = yield* select(state => getFeedState(state, feedName));
-        yield* call(feedUpdateSlice, feedName, before, after);
+        yield* call(feedUpdateSlice, action, feedName, before, after);
     }
 }
 
-function* feedUpdateSlice(feedName: string, before: number, after: number) {
+function* feedUpdateSlice(action: ClientAction, feedName: string, before: number, after: number) {
     try {
         while (before > after && after < Number.MAX_SAFE_INTEGER) {
             const slice = feedName.startsWith(":")
-                ? yield* call(Node.getFeedSlice, ":", feedName.substring(1), after, null, 20)
-                : yield* call(Node.getFeedSlice, "", feedName, after, null, 20);
-            yield* call(fillActivityReactionsInStories, slice.stories);
+                ? yield* call(Node.getFeedSlice, action, ":", feedName.substring(1), after, null, 20)
+                : yield* call(Node.getFeedSlice, action, "", feedName, after, null, 20);
+            yield* call(fillActivityReactionsInStories, action, slice.stories);
             yield* put(feedSliceUpdate(
-                feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture));
-            yield* call(fillSubscriptions, slice.stories);
+                feedName, slice.stories, slice.before, slice.after, slice.totalInPast, slice.totalInFuture
+            ).causedBy(action));
+            yield* call(fillSubscriptions, action, slice.stories);
             if (after === slice.before) {
                 break;
             }
@@ -295,7 +303,7 @@ function* feedExecuteSliceButtonsActions(
         if (details?.buttonsAction != null) {
             const storyAction = details.buttonsAction(story, action.context);
             if (storyAction != null) {
-                yield* put(storyAction);
+                yield* put(storyAction.causedBy(action));
             }
         }
     }
@@ -307,7 +315,7 @@ function* feedExecuteButtonsActions(action: WithContext<StoryAddedAction | Story
     if (details?.buttonsAction != null) {
         const storyAction = details.buttonsAction(story, action.context);
         if (storyAction != null) {
-            yield* put(storyAction);
+            yield* put(storyAction.causedBy(action));
         }
     }
 }

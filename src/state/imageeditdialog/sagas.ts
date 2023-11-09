@@ -3,6 +3,7 @@ import { call, put, select } from 'typed-redux-saga';
 import { Node } from "api";
 import { errorThrown } from "state/error/actions";
 import {
+    ImageEditDialogLoadAction,
     imageEditDialogLoaded,
     imageEditDialogLoadFailed,
     ImageEditDialogPostAction,
@@ -20,24 +21,24 @@ export default [
     executor("IMAGE_EDIT_DIALOG_POST", "", imageEditDialogPostSaga)
 ];
 
-function* imageEditDialogLoadSaga() {
+function* imageEditDialogLoadSaga(action: ImageEditDialogLoadAction) {
     const {id, nodeName} = yield* select((state: ClientState) => ({
         id: state.imageEditDialog.media?.postingId,
         nodeName: state.imageEditDialog.nodeName
     }));
 
     if (id == null) {
-        yield* put(imageEditDialogLoaded());
+        yield* put(imageEditDialogLoaded().causedBy(action));
         return;
     }
 
     try {
-        const posting = yield* call(Node.getPosting, nodeName, id, true, ["posting.not-found"]);
-        yield* call(fillActivityReaction, posting);
-        yield* put(postingSet(posting, ""));
-        yield* put(imageEditDialogLoaded());
+        const posting = yield* call(Node.getPosting, action, nodeName, id, true, ["posting.not-found"]);
+        yield* call(fillActivityReaction, action, posting);
+        yield* put(postingSet(posting, "").causedBy(action));
+        yield* put(imageEditDialogLoaded().causedBy(action));
     } catch (e) {
-        yield* put(imageEditDialogLoadFailed());
+        yield* put(imageEditDialogLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -51,15 +52,15 @@ function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>
     }));
 
     if (id == null) {
-        yield* put(imageEditDialogPostFailed());
+        yield* put(imageEditDialogPostFailed().causedBy(action));
         return;
     }
 
     try {
-        const posting = yield* call(Node.updatePosting, nodeName, id, postingText);
-        yield* put(imageEditDialogPostSucceeded());
-        yield* call(fillActivityReaction, posting);
-        yield* put(postingSet(posting, ""));
+        const posting = yield* call(Node.updatePosting, action, nodeName, id, postingText);
+        yield* put(imageEditDialogPostSucceeded().causedBy(action));
+        yield* call(fillActivityReaction, action, posting);
+        yield* put(postingSet(posting, "").causedBy(action));
 
         const remoteNodeName = nodeName || action.context.ownerName;
         if (remoteNodeName != null && remoteNodeName !== postingText.ownerName) {
@@ -68,10 +69,10 @@ function* imageEditDialogPostSaga(action: WithContext<ImageEditDialogPostAction>
                 bodySrcFormat: postingText.bodySrcFormat,
                 acceptedReactions: postingText.acceptedReactions
             }
-            yield* call(Node.updateRemotePosting, ":", remoteNodeName, id, sourceText);
+            yield* call(Node.updateRemotePosting, action, ":", remoteNodeName, id, sourceText);
         }
     } catch (e) {
-        yield* put(imageEditDialogPostFailed());
+        yield* put(imageEditDialogPostFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }

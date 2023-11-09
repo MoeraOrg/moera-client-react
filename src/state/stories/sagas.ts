@@ -19,8 +19,8 @@ export default [
 function* storyPinningUpdateSaga(action: StoryPinningUpdateAction) {
     const {id, pinned} = action.payload;
     try {
-        const story = yield* call(Node.updateStory, "", id, {pinned});
-        yield* put(storyUpdated(story));
+        const story = yield* call(Node.updateStory, action, "", id, {pinned});
+        yield* put(storyUpdated(story).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
@@ -29,8 +29,8 @@ function* storyPinningUpdateSaga(action: StoryPinningUpdateAction) {
 function* storyReadingUpdateSaga(action: StoryReadingUpdateAction) {
     const {id, read} = action.payload;
     try {
-        const story = yield* call(Node.updateStory, ":", id, {read});
-        yield* put(storyUpdated(story));
+        const story = yield* call(Node.updateStory, action, ":", id, {read});
+        yield* put(storyUpdated(story).causedBy(action));
     } catch (e) {
         // ignore, not important
     }
@@ -39,8 +39,8 @@ function* storyReadingUpdateSaga(action: StoryReadingUpdateAction) {
 function* storySatisfySaga(action: StorySatisfyAction) {
     const {id} = action.payload;
     try {
-        const story = yield* call(Node.updateStory, ":", id, {satisfied: true});
-        yield* put(storyUpdated(story));
+        const story = yield* call(Node.updateStory, action, ":", id, {satisfied: true});
+        yield* put(storyUpdated(story).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }

@@ -32,7 +32,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
     }
 
     if (mode === "ask") {
-        yield* put(openEntryCopyTextDialog(action.payload.body, nodeName, media));
+        yield* put(openEntryCopyTextDialog(action.payload.body, nodeName, media).causedBy(action));
         return;
     }
 
@@ -50,7 +50,7 @@ function* entryCopyTextSaga(action: EntryCopyTextAction) {
     }
     yield* call(clipboardCopy, text);
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("text-copied")));
+        yield* put(flashBox(i18n.t("text-copied")).causedBy(action));
     }
 }
 

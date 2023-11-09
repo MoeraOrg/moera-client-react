@@ -19,18 +19,24 @@ import {
     settingsChangedPassword,
     SettingsChangePasswordAction,
     settingsChangePasswordFailed,
+    SettingsClientValuesLoadAction,
     settingsClientValuesLoaded,
+    SettingsClientValuesLoadedAction,
     settingsClientValuesLoadFailed,
     SettingsClientValuesSetAction,
     settingsLanguageChanged,
+    SettingsNodeMetaLoadAction,
     settingsNodeMetaLoaded,
     settingsNodeMetaLoadFailed,
+    SettingsNodeValuesLoadAction,
     settingsNodeValuesLoaded,
     settingsNodeValuesLoadFailed,
     SettingsPluginsDeleteAction,
     settingsPluginsDeleted,
+    SettingsPluginsLoadAction,
     settingsPluginsLoaded,
     settingsPluginsLoadFailed,
+    SettingsRemindSetSheriffGooglePlayAction,
     settingsRemindSetSheriffGooglePlayChoice,
     SettingsRemindSetSheriffGooglePlayChoiceAction,
     SettingsTokensCreateAction,
@@ -38,8 +44,10 @@ import {
     settingsTokensCreateFailed,
     SettingsTokensDeleteAction,
     settingsTokensDeleted,
+    SettingsTokensLoadAction,
     settingsTokensLoaded,
     settingsTokensLoadFailed,
+    SettingsTokensNewTokenCopyAction,
     SettingsTokensUpdateAction,
     settingsTokensUpdated,
     settingsTokensUpdateFailed,
@@ -57,6 +65,7 @@ import { confirmBox } from "state/confirmbox/actions";
 import { Browser } from "ui/browser";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import { now } from "util/misc";
+import { ClientAction } from "state/action";
 
 export default [
     executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, introduced),
@@ -78,22 +87,22 @@ export default [
     executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", "", settingsRemindSetSheriffGooglePlayChoiceSaga)
 ];
 
-function* settingsNodeValuesLoadSaga() {
+function* settingsNodeValuesLoadSaga(action: SettingsNodeValuesLoadAction) {
     try {
-        const settings = yield* call(Node.getNodeSettings, ":");
-        yield* put(settingsNodeValuesLoaded(settings));
+        const settings = yield* call(Node.getNodeSettings, action, ":");
+        yield* put(settingsNodeValuesLoaded(settings).causedBy(action));
     } catch (e) {
-        yield* put(settingsNodeValuesLoadFailed());
+        yield* put(settingsNodeValuesLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-function* settingsNodeMetaLoadSaga() {
+function* settingsNodeMetaLoadSaga(action: SettingsNodeMetaLoadAction) {
     try {
-        const metadata = yield* call(Node.getNodeSettingsMetadata, ":");
-        yield* put(settingsNodeMetaLoaded(metadata));
+        const metadata = yield* call(Node.getNodeSettingsMetadata, action, ":");
+        yield* put(settingsNodeMetaLoaded(metadata).causedBy(action));
     } catch (e) {
-        yield* put(settingsNodeMetaLoadFailed());
+        yield* put(settingsNodeMetaLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -110,9 +119,9 @@ function* storeSettings() {
     Storage.storeSettings(yield* select(getSettingsClient));
 }
 
-function* settingsClientValuesLoadSaga() {
+function* settingsClientValuesLoadSaga(action: SettingsClientValuesLoadAction) {
     try {
-        let settings = yield* call(Node.getClientSettings, ":", CLIENT_SETTINGS_PREFIX);
+        let settings = yield* call(Node.getClientSettings, action, ":", CLIENT_SETTINGS_PREFIX);
         if (window.Android) {
             const mobileData = window.Android.loadSettings();
             if (mobileData != null) {
@@ -124,30 +133,30 @@ function* settingsClientValuesLoadSaga() {
         }
         const clientMeta = yield* select(getSettingsClientMeta);
         settings = settings.filter(t => !isDeviceSetting(clientMeta, t.name));
-        yield* put(settingsClientValuesLoaded(settings));
+        yield* put(settingsClientValuesLoaded(settings).causedBy(action));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
-            yield* put(settingsClientValuesLoaded([]));
+            yield* put(settingsClientValuesLoaded([]).causedBy(action));
         } else {
-            yield* put(settingsClientValuesLoadFailed());
+            yield* put(settingsClientValuesLoadFailed().causedBy(action));
             yield* put(errorThrown(e));
         }
     }
 }
 
-function* settingsClientValuesLoadedSaga() {
+function* settingsClientValuesLoadedSaga(action: SettingsClientValuesLoadedAction) {
     let lang = yield* select((state: ClientState) => getSetting(state, "language") as string);
     if (lang === "auto") {
         lang = findPreferredLanguage();
     }
     if (lang !== i18n.language) {
         yield* call(i18n.changeLanguage, lang);
-        yield* put(settingsLanguageChanged());
+        yield* put(settingsLanguageChanged().causedBy(action));
     }
     yield* call(storeSettings);
 }
 
-function* updateLanguage(settings: SettingInfo[]) {
+function* updateLanguage(action: ClientAction, settings: SettingInfo[]) {
     let lang = settings.find(st => st.name === CLIENT_SETTINGS_PREFIX + "language")?.value;
     if (lang != null) {
         if (lang === "auto") {
@@ -155,7 +164,7 @@ function* updateLanguage(settings: SettingInfo[]) {
         }
         if (lang !== i18n.language) {
             yield* call(i18n.changeLanguage, lang);
-            yield* put(settingsLanguageChanged());
+            yield* put(settingsLanguageChanged().causedBy(action));
         }
     }
 }
@@ -163,13 +172,13 @@ function* updateLanguage(settings: SettingInfo[]) {
 function* settingsClientValuesSetSaga(action: SettingsClientValuesSetAction) {
     const {settings} = action.payload;
 
-    yield* call(updateLanguage, settings);
+    yield* call(updateLanguage, action, settings);
 }
 
 function* settingsUpdateSaga(action: SettingsUpdateAction) {
     const {settings, onSuccess} = action.payload;
 
-    yield* call(updateLanguage, settings);
+    yield* call(updateLanguage, action, settings);
 
     const clientMeta = yield* select(getSettingsClientMeta);
     const toHome = settings
@@ -178,14 +187,14 @@ function* settingsUpdateSaga(action: SettingsUpdateAction) {
         .filter(t => isMobileSetting(clientMeta, t.name))
         .map(t => ({name: t.name.substring(CLIENT_SETTINGS_PREFIX.length), value: t.value}));
     try {
-        yield* call(Node.updateSettings, ":", toHome);
+        yield* call(Node.updateSettings, action, ":", toHome);
         if (window.Android && toMobile.length > 0) {
             window.Android.storeSettings(JSON.stringify(toMobile));
         }
-        yield* put(settingsUpdateSucceeded(settings, onSuccess));
+        yield* put(settingsUpdateSucceeded(settings, onSuccess).causedBy(action));
         yield* call(storeSettings);
     } catch (e) {
-        yield* put(settingsUpdateFailed());
+        yield* put(settingsUpdateFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -200,25 +209,25 @@ function* settingsChangePasswordSaga(action: SettingsChangePasswordAction) {
     const {oldPassword, password, onLoginIncorrect} = action.payload;
 
     try {
-        yield* call(Node.updateCredentials, ":", {oldPassword, login: "admin", password},
+        yield* call(Node.updateCredentials, action, ":", {oldPassword, login: "admin", password},
             ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
-        yield* put(settingsChangedPassword());
+        yield* put(settingsChangedPassword().causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
             onLoginIncorrect();
         } else {
             yield* put(errorThrown(e));
         }
-        yield* put(settingsChangePasswordFailed());
+        yield* put(settingsChangePasswordFailed().causedBy(action));
     }
 }
 
-function* settingsTokensLoadSaga() {
+function* settingsTokensLoadSaga(action: SettingsTokensLoadAction) {
     try {
-        const tokens = yield* call(Node.getTokens, ":");
-        yield* put(settingsTokensLoaded(tokens));
+        const tokens = yield* call(Node.getTokens, action, ":");
+        yield* put(settingsTokensLoaded(tokens).causedBy(action));
     } catch (e) {
-        yield* put(settingsTokensLoadFailed());
+        yield* put(settingsTokensLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -227,16 +236,16 @@ function* settingsTokensCreateSaga(action: SettingsTokensCreateAction) {
     const {password, name, onLoginIncorrect} = action.payload;
 
     try {
-        const token = yield* call(Node.createToken, ":", {login: "admin", password, name},
+        const token = yield* call(Node.createToken, action, ":", {login: "admin", password, name},
             ["credentials.login-incorrect", "credentials.not-created"]);
-        yield* put(settingsTokensCreated(token));
+        yield* put(settingsTokensCreated(token).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError && e.errorCode === "credentials.login-incorrect" && onLoginIncorrect != null) {
             onLoginIncorrect();
         } else {
             yield* put(errorThrown(e));
         }
-        yield* put(settingsTokensCreateFailed());
+        yield* put(settingsTokensCreateFailed().causedBy(action));
     }
 }
 
@@ -244,10 +253,10 @@ function* settingsTokensUpdateSaga(action: SettingsTokensUpdateAction) {
     const {id, name} = action.payload;
 
     try {
-        const token = yield* call(Node.updateToken, ":", id, {name});
-        yield* put(settingsTokensUpdated(token));
+        const token = yield* call(Node.updateToken, action, ":", id, {name});
+        yield* put(settingsTokensUpdated(token).causedBy(action));
     } catch (e) {
-        yield* put(settingsTokensUpdateFailed());
+        yield* put(settingsTokensUpdateFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -256,27 +265,27 @@ function* settingsTokensDeleteSaga(action: SettingsTokensDeleteAction) {
     const {id} = action.payload;
 
     try {
-        yield* call(Node.deleteToken, ":", id);
-        yield* put(settingsTokensDeleted(id));
+        yield* call(Node.deleteToken, action, ":", id);
+        yield* put(settingsTokensDeleted(id).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* settingsTokensNewTokenCopySaga() {
+function* settingsTokensNewTokenCopySaga(action: SettingsTokensNewTokenCopyAction) {
     const token = yield* select(state => state.settings.tokens.dialog.newToken);
     yield* call(clipboardCopy, token.token);
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("token-copied")));
+        yield* put(flashBox(i18n.t("token-copied")).causedBy(action));
     }
 }
 
-function* settingsPluginsLoadSaga() {
+function* settingsPluginsLoadSaga(action: SettingsPluginsLoadAction) {
     try {
-        const plugins = yield* call(Node.getPlugins, ":");
-        yield* put(settingsPluginsLoaded(plugins));
+        const plugins = yield* call(Node.getPlugins, action, ":");
+        yield* put(settingsPluginsLoaded(plugins).causedBy(action));
     } catch (e) {
-        yield* put(settingsPluginsLoadFailed());
+        yield* put(settingsPluginsLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -285,20 +294,22 @@ function* settingsPluginsDeleteSaga(action: SettingsPluginsDeleteAction) {
     const {name, tokenId} = action.payload;
 
     try {
-        yield* call(Node.deleteToken, ":", tokenId);
-        yield* put(settingsTokensDeleted(tokenId));
-        yield* call(Node.unregisterPlugin, ":", name);
-        yield* put(settingsPluginsDeleted(name));
+        yield* call(Node.deleteToken, action, ":", tokenId);
+        yield* put(settingsTokensDeleted(tokenId).causedBy(action));
+        yield* call(Node.unregisterPlugin, action, ":", name);
+        yield* put(settingsPluginsDeleted(name).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* settingsRemindSetSheriffGooglePlaySaga() {
+function* settingsRemindSetSheriffGooglePlaySaga(action: SettingsRemindSetSheriffGooglePlayAction) {
     const count = yield* select(state => getSetting(state, "sheriff.google-play.reminder.count") as number);
-    yield* put(confirmBox(i18n.t("do-want-allow-android-google-play"), null, null,
-        settingsRemindSetSheriffGooglePlayChoice(true), settingsRemindSetSheriffGooglePlayChoice(false), "primary",
-        count < 2 ? i18n.t("remind-later") : i18n.t("stop-asking"), settingsRemindSetSheriffGooglePlayChoice(null)));
+    yield* put(confirmBox(
+        i18n.t("do-want-allow-android-google-play"), null, null, settingsRemindSetSheriffGooglePlayChoice(true),
+        settingsRemindSetSheriffGooglePlayChoice(false), "primary",
+        count < 2 ? i18n.t("remind-later") : i18n.t("stop-asking"), settingsRemindSetSheriffGooglePlayChoice(null)
+    ).causedBy(action));
 }
 
 function* settingsRemindSetSheriffGooglePlayChoiceSaga(action: SettingsRemindSetSheriffGooglePlayChoiceAction) {
@@ -322,5 +333,5 @@ function* settingsRemindSetSheriffGooglePlayChoiceSaga(action: SettingsRemindSet
             {name: CLIENT_SETTINGS_PREFIX + "sheriff.google-play.reminder.shown-at", value: String(now())}
         );
     }
-    yield* put(settingsUpdate(updates));
+    yield* put(settingsUpdate(updates).causedBy(action));
 }

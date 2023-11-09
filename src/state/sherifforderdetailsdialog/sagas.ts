@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
 import {
+    SheriffOrderDetailsDialogLoadAction,
     sheriffOrderDetailsDialogLoaded,
     sheriffOrderDetailsDialogLoadFailed
 } from "state/sherifforderdetailsdialog/actions";
@@ -14,22 +15,22 @@ export default [
     executor("SHERIFF_ORDER_DETAILS_DIALOG_LOAD", "", sheriffOrderDetailsDialogLoadSaga)
 ];
 
-function* sheriffOrderDetailsDialogLoadSaga() {
+function* sheriffOrderDetailsDialogLoadSaga(action: SheriffOrderDetailsDialogLoadAction) {
     const {nodeName, id} = yield* select((state: ClientState) => ({
         nodeName: state.sheriffOrderDetailsDialog.nodeName,
         id: state.sheriffOrderDetailsDialog.id
     }));
 
     if (nodeName == null || id == null) {
-        yield* put(sheriffOrderDetailsDialogLoadFailed());
+        yield* put(sheriffOrderDetailsDialogLoadFailed().causedBy(action));
         return;
     }
 
     try {
-        const info = yield* call(Node.getRemoteSheriffOrder, SHERIFF_GOOGLE_PLAY_TIMELINE, nodeName, id);
-        yield* put(sheriffOrderDetailsDialogLoaded(info));
+        const info = yield* call(Node.getRemoteSheriffOrder, action, SHERIFF_GOOGLE_PLAY_TIMELINE, nodeName, id);
+        yield* put(sheriffOrderDetailsDialogLoaded(info).causedBy(action));
     } catch (e) {
-        yield* put(sheriffOrderDetailsDialogLoadFailed());
+        yield* put(sheriffOrderDetailsDialogLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }

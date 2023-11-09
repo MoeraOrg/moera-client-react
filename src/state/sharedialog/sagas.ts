@@ -24,7 +24,7 @@ export default [
     executor("SHARE_PAGE_COPY_LINK", null, sharePageCopyLink)
 ];
 
-function* share(url: string, text: string) {
+function* share(action: ShareDialogPrepareAction, url: string, text: string) {
     if (window.Android) {
         window.Android.share(url, text);
         return;
@@ -36,7 +36,7 @@ function* share(url: string, text: string) {
             return;
         }
     }
-    yield* put(openShareDialog(text, url));
+    yield* put(openShareDialog(text, url).causedBy(action));
 }
 
 function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
@@ -44,33 +44,33 @@ function* shareDialogPrepareSaga(action: ShareDialogPrepareAction) {
 
     const text = hasWindowSelection() ? (quoteHtml(getWindowSelectionHtml()) ?? "") : "";
 
-    const nodeUri = yield* call(getNodeUri, nodeName);
+    const nodeUri = yield* call(getNodeUri, action, nodeName);
     if (nodeUri == null) {
-        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName));
+        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
     const url = normalizeUrl(nodeUri) + href;
-    yield* call(share, url, text);
+    yield* call(share, action, url, text);
 }
 
 function* shareDialogCopyLinkSaga(action: ShareDialogCopyLinkAction) {
-    yield* put(closeShareDialog());
+    yield* put(closeShareDialog().causedBy(action));
     yield* call(clipboardCopy, action.payload.url);
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("link-copied")));
+        yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
     }
 }
 
 function* sharePageCopyLink(action: SharePageCopyLinkAction) {
     const {nodeName, href} = action.payload;
 
-    const nodeUri = yield* call(getNodeUri, nodeName);
+    const nodeUri = yield* call(getNodeUri, action, nodeName);
     if (nodeUri == null) {
-        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName));
+        yield* put(messageBox(i18n.t("cannot-resolve-name") + " " + nodeName).causedBy(action));
         return;
     }
     yield* call(clipboardCopy, normalizeUrl(nodeUri) + href);
     if (!Browser.isAndroidBrowser()) {
-        yield* put(flashBox(i18n.t("link-copied")));
+        yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
     }
 }

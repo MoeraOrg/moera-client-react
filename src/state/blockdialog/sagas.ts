@@ -39,9 +39,9 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
     const targetPostingId = entryNodeName == null || entryNodeName === homeOwnerName ? null : entryPostingId;
 
     try {
-        yield* all(prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, blockedUser.id)));
+        yield* all(prevBlockedUsers.map(blockedUser => call(deleteBlockedUserIfExists, action, blockedUser.id)));
         const blockedUsers = yield* all(
-            blockedOperations.map(blockedOperation => call(Node.blockUser, ":", {
+            blockedOperations.map(blockedOperation => call(Node.blockUser, action, ":", {
                 blockedOperation,
                 nodeName,
                 entryId: ownEntryId,
@@ -51,23 +51,23 @@ function* blockDialogSubmitSaga(action: WithContext<BlockDialogSubmitAction>) {
                 reasonSrc
             }))
         );
-        yield* put(blockDialogSubmitted(nodeName));
+        yield* put(blockDialogSubmitted(nodeName).causedBy(action));
 
         if (prevBlockedUsers.length > 0) {
-            yield* put(blockedUsersDeleted(prevBlockedUsers));
+            yield* put(blockedUsersDeleted(prevBlockedUsers).causedBy(action));
         }
         if (blockedUsers.length > 0) {
-            yield* put(blockedUsersAdded(blockedUsers));
-            yield* put(blockedUserUnfriend(nodeName, formattedName));
+            yield* put(blockedUsersAdded(blockedUsers).causedBy(action));
+            yield* put(blockedUserUnfriend(nodeName, formattedName).causedBy(action));
         }
     } catch (e) {
-        yield* put(blockDialogSubmitFailed());
+        yield* put(blockDialogSubmitFailed().causedBy(action));
     }
 }
 
-function* deleteBlockedUserIfExists(id: string) {
+function* deleteBlockedUserIfExists(action: BlockDialogSubmitAction, id: string) {
     try {
-        return yield* call(Node.unblockUser, ":", id, ["blocked-user.not-found"]);
+        return yield* call(Node.unblockUser, action, ":", id, ["blocked-user.not-found"]);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {
             throw e;
@@ -79,7 +79,7 @@ function* deleteBlockedUserIfExists(id: string) {
 function* blockedUserUnfriendSaga(action: BlockedUserUnfriendAction) {
     const {nodeName, formattedName} = action.payload;
 
-    const {groups} = yield* call(Node.getFriend, ":", nodeName);
+    const {groups} = yield* call(Node.getFriend, action, ":", nodeName);
     if (groups?.find(g => g.title === "t:friends") == null) {
         return;
     }
@@ -116,16 +116,16 @@ function* blockedUserUnfriendSaga(action: BlockedUserUnfriendAction) {
         yield* put(confirmBox(
             i18n.t("still-friend-blocked-user", {name: formattedName}), null, null, onYes, onNo, "primary", null,
             null, true
-        ));
+        ).causedBy(action));
     } else if (unfriend === "yes") {
-        yield* put(friendshipUpdate(nodeName, null));
+        yield* put(friendshipUpdate(nodeName, null).causedBy(action));
     }
 }
 
 function* blockedUserUnsubscribeSaga(action: BlockedUserUnsubscribeAction) {
     const {nodeName, formattedName} = action.payload;
 
-    const subscriptions = yield* call(Node.getSubscriptions, ":", nodeName, "feed" as const,
+    const subscriptions = yield* call(Node.getSubscriptions, action, ":", nodeName, "feed" as const,
         ["authentication.required"]);
     const subscriptionId = subscriptions.find(s => s.remoteFeedName === "timeline")?.id;
     if (subscriptionId == null) {
@@ -160,8 +160,8 @@ function* blockedUserUnsubscribeSaga(action: BlockedUserUnsubscribeAction) {
         yield* put(confirmBox(
             i18n.t("still-subscribed-blocked-user", {name: formattedName}), null, null, onYes, onNo, "primary", null,
             null, true
-        ));
+        ).causedBy(action));
     } else if (unsubscribe === "yes") {
-        yield* put(feedUnsubscribe(nodeName, "timeline", subscriptionId));
+        yield* put(feedUnsubscribe(nodeName, "timeline", subscriptionId).causedBy(action));
     }
 }

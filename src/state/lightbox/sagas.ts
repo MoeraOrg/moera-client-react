@@ -8,7 +8,12 @@ import { getNodeUri } from "state/naming/sagas";
 import { postingLoad } from "state/postings/actions";
 import { flashBox } from "state/flashbox/actions";
 import { errorThrown } from "state/error/actions";
-import { LightBoxCopyLinkAction, LightBoxCopyMediaLinkAction, LightBoxMediaSetAction } from "state/lightbox/actions";
+import {
+    LightBoxCopyLinkAction,
+    LightBoxCopyMediaLinkAction,
+    LightBoxMediaPostingLoadAction,
+    LightBoxMediaSetAction
+} from "state/lightbox/actions";
 import { getLightBoxMediaPostingId, getLightBoxNodeName } from "state/lightbox/selectors";
 import { Browser } from "ui/browser";
 
@@ -19,23 +24,23 @@ export default [
     executor("LIGHT_BOX_COPY_MEDIA_LINK", null, lightBoxCopyMediaLinkSaga)
 ];
 
-function* lightBoxMediaPostingLoadSaga() {
+function* lightBoxMediaPostingLoadSaga(action: LightBoxMediaPostingLoadAction) {
     const {nodeName, postingId} = yield* select((state: ClientState) => ({
         nodeName: getLightBoxNodeName(state),
         postingId: getLightBoxMediaPostingId(state)
     }));
     if (postingId != null) {
-        yield* put(postingLoad(postingId, nodeName));
+        yield* put(postingLoad(postingId, nodeName).causedBy(action));
     }
 }
 
 function* lightBoxMediaSetSaga(action: LightBoxMediaSetAction) {
     switch (action.payload.sequence) {
         case "next-loop":
-            yield* put(flashBox(i18n.t("returned-to-beginning"), true));
+            yield* put(flashBox(i18n.t("returned-to-beginning"), true).causedBy(action));
             break;
         case "prev-loop":
-            yield* put(flashBox(i18n.t("returned-to-end"), true));
+            yield* put(flashBox(i18n.t("returned-to-end"), true).causedBy(action));
             break;
     }
 }
@@ -43,10 +48,10 @@ function* lightBoxMediaSetSaga(action: LightBoxMediaSetAction) {
 function* lightBoxCopyLinkSaga(action: LightBoxCopyLinkAction) {
     const {nodeName, url} = action.payload;
     try {
-        const nodeUri = yield* call(getNodeUri, nodeName);
+        const nodeUri = yield* call(getNodeUri, action, nodeName);
         yield* call(clipboardCopy, nodeUri + url);
         if (!Browser.isAndroidBrowser()) {
-            yield* put(flashBox(i18n.t("link-copied")));
+            yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
         }
     } catch (e) {
         yield* put(errorThrown(e));
@@ -57,7 +62,7 @@ function* lightBoxCopyMediaLinkSaga(action: LightBoxCopyMediaLinkAction) {
     try {
         yield* call(clipboardCopy, action.payload.url);
         if (!Browser.isAndroidBrowser()) {
-            yield* put(flashBox(i18n.t("link-copied")));
+            yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
         }
     } catch (e) {
         yield* put(errorThrown(e));

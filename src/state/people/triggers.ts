@@ -59,7 +59,7 @@ export default [
     ),
     trigger(
         ["EVENT_NODE_SUBSCRIPTION_ADDED", "EVENT_NODE_SUBSCRIPTION_DELETED"],
-        (state, signal: EventAction<SubscriptionAddedEvent | SubscriptionDeletedEvent>) =>
+        (state, signal: EventAction<SubscriptionAddedEvent> | EventAction<SubscriptionDeletedEvent>) =>
             isAtPeoplePage(state) && signal.payload.subscription.type === "feed",
         peopleGeneralLoad
     ),
@@ -70,7 +70,7 @@ export default [
     ),
     trigger(
         ["EVENT_NODE_SUBSCRIPTION_ADDED", "EVENT_NODE_SUBSCRIPTION_DELETED"],
-        (state, signal: EventAction<SubscriptionAddedEvent | SubscriptionDeletedEvent>) =>
+        (state, signal: EventAction<SubscriptionAddedEvent> | EventAction<SubscriptionDeletedEvent>) =>
             !isAtPeoplePage(state) && signal.payload.subscription.type === "feed",
         peopleGeneralUnset
     )

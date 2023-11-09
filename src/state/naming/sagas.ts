@@ -10,7 +10,7 @@ import {
     namingNameLoad,
     NamingNameLoadAction,
     namingNameLoaded,
-    namingNameLoadFailed,
+    namingNameLoadFailed, NamingNamesMaintenanceAction,
     namingNamesPurge,
     namingNamesUsed,
     NamingNamesUsedAction
@@ -22,6 +22,7 @@ import { executor } from "state/executor";
 import { ClientState } from "state/state";
 import { namingInitialized } from "state/init-selectors";
 import { now } from "util/misc";
+import { ClientAction } from "state/action";
 
 const NAME_USAGE_UPDATE_PERIOD = 60;
 const MAX_NAMES_SIZE = 500;
@@ -40,16 +41,16 @@ function* namingNamesUsedSaga(action: NamingNamesUsedAction) {
     }
     const toBeLoaded = yield* select(state => getNamingNamesToBeLoaded(state, names));
     for (const name of toBeLoaded) {
-        yield* put(namingNameLoad(name));
+        yield* put(namingNameLoad(name).causedBy(action));
     }
 }
 
 function* namingNameLoadSaga(action: NamingNameLoadAction) {
-    yield* call(fetchName, action.payload.name, false);
+    yield* call(fetchName, action, action.payload.name, false);
 }
 
-export function* getNodeUri(nodeName: string): Generator<CallEffect, string | null> {
-    return (yield* call(getNameDetails, nodeName)).nodeUri;
+export function* getNodeUri(caller: ClientAction | null, nodeName: string): Generator<CallEffect, string | null> {
+    return (yield* call(getNameDetails, caller, nodeName)).nodeUri;
 }
 
 export interface NameInfo {
@@ -63,29 +64,31 @@ export interface NameInfo {
 
 type NameInfoGenerator = Generator<CallEffect | PutEffect | SelectEffect, NameInfo>;
 
-export function* getNameDetails(nodeName: string, includeSimilar: boolean = false): NameInfoGenerator {
+export function* getNameDetails(
+    caller: ClientAction | null, nodeName: string, includeSimilar: boolean = false
+): NameInfoGenerator {
     const details = yield* select(state => getNamingNameDetails(state, nodeName));
     if (details.loaded) {
         if (details.nodeUri != null && now() - details.accessed >= NAME_USAGE_UPDATE_PERIOD) {
             Storage.storeName(nodeName, details.nodeUri, details.updated);
-            yield* put(namingNamesUsed([nodeName]));
+            yield* put(namingNamesUsed([nodeName]).causedBy(caller));
         }
         return details;
     }
-    return yield* call(fetchName, nodeName, includeSimilar);
+    return yield* call(fetchName, caller, nodeName, includeSimilar);
 }
 
-function* fetchName(nodeName: string, includeSimilar: boolean): NameInfoGenerator {
+function* fetchName(caller: ClientAction | null, nodeName: string, includeSimilar: boolean): NameInfoGenerator {
     let nodeNameFound: string = nodeName;
     let nodeUri: string | null = null;
     try {
         const {name, generation} = NodeName.parse(nodeName);
         if (name != null && generation != null) {
-            const current = yield* call(Naming.getCurrent, name, generation);
+            const current = yield* call(Naming.getCurrent, caller, name, generation);
             if (current?.nodeUri != null) {
                 nodeUri = current.nodeUri;
             } else if (includeSimilar) {
-                const similar = yield* Naming.getSimilar(name);
+                const similar = yield* call(Naming.getSimilar, caller, name);
                 if (similar?.nodeUri != null) {
                     nodeNameFound = similar.name;
                     nodeUri = similar.nodeUri;
@@ -93,19 +96,19 @@ function* fetchName(nodeName: string, includeSimilar: boolean): NameInfoGenerato
             }
             if (nodeUri) {
                 Storage.storeName(nodeNameFound, nodeUri, now());
-                yield* put(namingNameLoaded(nodeNameFound, nodeUri, now()));
+                yield* put(namingNameLoaded(nodeNameFound, nodeUri, now()).causedBy(caller));
             }
         }
     } catch (e) {
-        yield* put(namingNameLoadFailed(nodeName));
+        yield* put(namingNameLoadFailed(nodeName).causedBy(caller));
     }
     return {nodeName: nodeNameFound, accessed: 0, updated: 0, loading: false, loaded: true, nodeUri};
 }
 
-function* namingNamesMaintenanceSaga() {
+function* namingNamesMaintenanceSaga(action: NamingNamesMaintenanceAction) {
     const used = yield* call(getUsedNames);
     if (used.size > 0) {
-        yield* put(namingNamesUsed(Array.from(used)));
+        yield* put(namingNamesUsed(Array.from(used)).causedBy(action));
     }
     const details = yield* select(state => state.naming.names);
     const names = Object.keys(details);
@@ -118,7 +121,7 @@ function* namingNamesMaintenanceSaga() {
     }
     unused.sort((a, b) => details[a].accessed - details[b].accessed);
     const purgeSize = Math.min(unused.length, names.length - MAX_NAMES_SIZE);
-    yield* put(namingNamesPurge(unused.splice(0, purgeSize)));
+    yield* put(namingNamesPurge(unused.splice(0, purgeSize)).causedBy(action));
 }
 
 function* getUsedNames(): Generator<SelectEffect, Set<string>> {

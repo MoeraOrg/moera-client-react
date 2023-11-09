@@ -9,7 +9,7 @@ import {
     connectionToHomeFailed,
     ConnectToHomeAction,
     homeOwnerSet,
-    homeOwnerVerified
+    homeOwnerVerified, HomeOwnerVerifyAction
 } from "state/home/actions";
 import { errorThrown } from "state/error/actions";
 import { getHomeConnectionData, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
@@ -25,7 +25,7 @@ export default [
 function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
     const {location, login} = action.payload;
 
-    yield* put(connectionToHomeFailed());
+    yield* put(connectionToHomeFailed().causedBy(action));
     let message = typeof(error) === "string" ? error : error.message;
     if (error instanceof NodeApiError) {
         switch (error.errorCode) {
@@ -34,13 +34,13 @@ function* connectToHomeFailure(action: ConnectToHomeAction, error: any) {
                 break;
             case "credentials.reset-token-expired":
                 message = i18n.t("reset-token-expired");
-                yield* put(connectDialogSetForm(location, login, "forgot"));
+                yield* put(connectDialogSetForm(location, login, "forgot").causedBy(action));
                 break;
             default:
                 break;
         }
     }
-    yield* put(messageBox(message));
+    yield* put(messageBox(message).causedBy(action));
 }
 
 function* connectToHomeSaga(action: ConnectToHomeAction) {
@@ -49,19 +49,19 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
     let info;
     try {
         if (assign) {
-            yield* call(Node.createCredentials, location, {login, password}, ["credentials.already-created"]);
+            yield* call(Node.createCredentials, action, location, {login, password}, ["credentials.already-created"]);
         } else if (oldPassword || resetToken) {
-            yield* call(Node.updateCredentials, location, {resetToken, oldPassword, login, password},
+            yield* call(Node.updateCredentials, action, location, {resetToken, oldPassword, login, password},
                 ["credentials.wrong-reset-token", "credentials.reset-token-expired", "credentials.login-incorrect"]);
         }
-        info = yield* call(Node.createToken, location, {login, password},
+        info = yield* call(Node.createToken, action, location, {login, password},
             ["credentials.login-incorrect", "credentials.not-created"]);
     } catch (e) {
         yield* call(connectToHomeFailure, action, e);
         return;
     }
 
-    const nodeUrl = normalizeUrl((yield* call(selectApi, location)).rootLocation);
+    const nodeUrl = normalizeUrl((yield* call(selectApi, action, location)).rootLocation);
     if (nodeUrl == null) {
         yield* call(connectToHomeFailure, action, "Node URL not found");
         return;
@@ -74,13 +74,14 @@ function* connectToHomeSaga(action: ConnectToHomeAction) {
         token: info.token,
         permissions: info.permissions,
         connectionSwitch: homeLocation != null && nodeUrl !== homeLocation
-    }));
+    }).causedBy(action));
 }
 
-function* homeOwnerVerifySaga() {
+function* homeOwnerVerifySaga(action: HomeOwnerVerifyAction) {
     try {
-        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} = yield* call(Node.whoAmI, ":");
-        yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar));
+        const {nodeName = null, nodeNameChanging, fullName = null, avatar = null} =
+            yield* call(Node.whoAmI, action, ":");
+        yield* put(homeOwnerSet(nodeName, nodeNameChanging ?? false, fullName, avatar).causedBy(action));
 
         const {location, login, token, permissions} = yield* select(getHomeConnectionData);
         if (location != null) {
@@ -94,10 +95,10 @@ function* homeOwnerVerifySaga() {
         if (name == null) {
             return;
         }
-        const ndata = yield* call(Naming.getCurrent, name, generation);
+        const ndata = yield* call(Naming.getCurrent, action, name, generation);
         const rootPage = yield* select(getHomeRootPage);
         const correct = ndata != null && normalizeUrl(ndata.nodeUri) === rootPage;
-        yield* put(homeOwnerVerified(nodeName, correct));
+        yield* put(homeOwnerVerified(nodeName, correct).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }

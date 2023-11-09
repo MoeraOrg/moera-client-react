@@ -155,7 +155,7 @@ export default [
     ),
     trigger(
         ["EVENT_RECEIVER_COMMENT_ADDED", "EVENT_RECEIVER_COMMENT_UPDATED"],
-        (state, signal: EventAction<CommentAddedEvent | CommentUpdatedEvent>) =>
+        (state, signal: EventAction<CommentAddedEvent> | EventAction<CommentUpdatedEvent>) =>
             getCommentsReceiverPostingId(state) === signal.payload.postingId
             && isCommentMomentInLoadedRange(state, signal.payload.moment),
         signal => commentLoad(signal.payload.id)

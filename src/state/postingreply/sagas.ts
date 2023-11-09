@@ -2,7 +2,7 @@ import { call, put, select } from 'typed-redux-saga';
 
 import { DraftText, Node, PostingInfo, PrincipalValue } from "api";
 import { errorThrown } from "state/error/actions";
-import { postingReplyFailed } from "state/postingreply/actions";
+import { PostingReplyAction, postingReplyFailed } from "state/postingreply/actions";
 import { getPosting } from "state/postings/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getNodeUri } from "state/naming/sagas";
@@ -17,7 +17,7 @@ export default [
     executor("POSTING_REPLY", "", postingReplySaga)
 ];
 
-function* postingReplySaga() {
+function* postingReplySaga(action: PostingReplyAction) {
     const {
         posting, nodeRootPage, homeOwnerName, homeRootPage, homeRootLocation, subjectPrefix, preambleTemplate, quoteAll,
         visibilityDefault, commentsVisibilityDefault, commentAdditionDefault, reactionsEnabledDefault,
@@ -48,7 +48,7 @@ function* postingReplySaga() {
     try {
         const subject = replySubject(posting.body.subject, subjectPrefix);
         const preamble = preambleTemplate
-            .replace("%POST%", yield* call(postingHref, posting, nodeRootPage))
+            .replace("%POST%", yield* call(postingHref, action, posting, nodeRootPage))
             .replace("%USER%", mentionName(posting.ownerName, posting.ownerFullName));
         let text = getWindowSelectionHtml();
         if (text) {
@@ -82,16 +82,16 @@ function* postingReplySaga() {
                 addNegativeReaction: reactionsNegativeEnabledDefault ? "public" : "none"
             }
         };
-        const draft = yield* call(Node.createDraft, ":", draftText);
+        const draft = yield* call(Node.createDraft, action, ":", draftText);
         if (nodeRootPage !== homeRootPage) {
             if (homeRootLocation != null) {
-                yield* put(initFromLocation(homeRootLocation, "/compose", `?draft=${draft.id}`, null))
+                yield* put(initFromLocation(homeRootLocation, "/compose", `?draft=${draft.id}`, null).causedBy(action))
             }
         } else {
-            yield* put(goToLocation("/compose", `?draft=${draft.id}`, null))
+            yield* put(goToLocation("/compose", `?draft=${draft.id}`, null).causedBy(action))
         }
     } catch (e) {
-        yield* put(postingReplyFailed());
+        yield* put(postingReplyFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -111,11 +111,11 @@ function replySubject(subject?: string | null, subjectPrefix?: string | null) {
     return subjectPrefix + "[" + (parseInt(m[1]) + 1) + "] " + m[2];
 }
 
-function* postingHref(posting: PostingInfo, rootNodePage: string) {
+function* postingHref(action: PostingReplyAction, posting: PostingInfo, rootNodePage: string) {
     if (posting.receiverName == null) {
         return `${rootNodePage}/post/${posting.id}`;
     } else {
-        const rootReceiverPage = yield* call(getNodeUri, posting.receiverName);
+        const rootReceiverPage = yield* call(getNodeUri, action, posting.receiverName);
         return `${rootReceiverPage}/post/${posting.receiverPostingId}`;
     }
 }

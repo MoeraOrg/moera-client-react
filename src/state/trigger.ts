@@ -34,13 +34,16 @@ export type Trigger = {
 
 type TriggerMap = Map<ClientActionType, TriggerFilteredAction[]>;
 
-export function trigger<T extends ClientAction>(signal: T["type"], filter: boolean | TriggerFilter<T>,
-                                                action: ClientAction | TriggerAction<T>): Trigger;
-export function trigger<T extends ClientAction>(signal: ClientActionType[], filter: boolean | TriggerFilter<T>,
-                        action: ClientAction | TriggerAction<T>): Trigger;
-export function trigger(signal: ClientActionType | ClientActionType[],
-                        filter: boolean | TriggerAnyFilter,
-                        action: ClientAction | TriggerAnyAction): Trigger {
+export function trigger<T extends ClientAction>(
+    signal: T["type"], filter: boolean | TriggerFilter<T>, action: ClientAction | TriggerAction<T>
+): Trigger;
+export function trigger<T extends ClientAction>(
+    signal: ClientActionType[], filter: boolean | TriggerFilter<T>, action: ClientAction | TriggerAction<T>
+): Trigger;
+export function trigger(
+    signal: ClientActionType | ClientActionType[], filter: boolean | TriggerAnyFilter,
+    action: ClientAction | TriggerAnyAction
+): Trigger {
     return {signal, filter, action};
 }
 
@@ -94,9 +97,9 @@ function* triggersSaga(triggers: TriggerMap, action: WithContext<ClientAction>) 
         }
         if (enabled) {
             if (typeof(trigger.action) === "function") {
-                yield* put(trigger.action(action));
+                yield* put(trigger.action(action).causedBy(action));
             } else {
-                yield* put(trigger.action);
+                yield* put(trigger.action.causedBy(action));
             }
         }
     }

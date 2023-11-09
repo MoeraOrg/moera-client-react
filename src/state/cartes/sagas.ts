@@ -5,7 +5,7 @@ import { Node, NodeApiError } from "api";
 import { Storage } from "storage";
 import { executor } from "state/executor";
 import { errorThrown } from "state/error/actions";
-import { cartesLoaded, cartesSet } from "state/cartes/actions";
+import { CartesLoadAction, cartesLoaded, cartesSet, ClockOffsetWarnAction } from "state/cartes/actions";
 import { messageBox } from "state/messagebox/actions";
 import { now } from "util/misc";
 
@@ -14,21 +14,21 @@ export default [
     executor("CLOCK_OFFSET_WARN", "", clockOffsetWarnSaga)
 ];
 
-function* cartesLoadSaga() {
+function* cartesLoadSaga(action: CartesLoadAction) {
     try {
-        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, ":", null, ["node-name-not-set"]);
+        const {cartesIp, cartes, createdAt} = yield* call(Node.getCartes, action, ":", null, ["node-name-not-set"]);
         Storage.storeCartesData(cartesIp ?? null, cartes);
-        yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()));
+        yield* put(cartesSet(cartesIp ?? null, cartes, createdAt - now()).causedBy(action));
     } catch (e) {
         if (e instanceof NodeApiError) {
-            yield* put(cartesSet(null, [], 0));
+            yield* put(cartesSet(null, [], 0).causedBy(action));
         } else {
             yield* put(errorThrown(e));
         }
     }
-    yield* put(cartesLoaded());
+    yield* put(cartesLoaded().causedBy(action));
 }
 
-function* clockOffsetWarnSaga() {
-    yield* put(messageBox(i18n.t("clock-differ")));
+function* clockOffsetWarnSaga(action: ClockOffsetWarnAction) {
+    yield* put(messageBox(i18n.t("clock-differ")).causedBy(action));
 }

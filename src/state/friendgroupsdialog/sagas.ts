@@ -32,23 +32,23 @@ function* nodeChangeFriendGroupsSaga(action: WithContext<NodeChangeFriendGroupsA
             if (!addedGroupTitles[i]) {
                 continue;
             }
-            const group = yield* call(Node.createFriendGroup, ":",
+            const group = yield* call(Node.createFriendGroup, action, ":",
                 {title: addedGroupTitles[i], operations: {view: addedGroupView[i]}});
             added.push(group);
             if (addedGroups.includes(i)) {
                 allGroups.push({id: group.id, operations: {view}});
             }
         }
-        const friends = yield* call(Node.updateFriends, ":", [{nodeName, groups: allGroups}]);
-        yield* put(closeFriendGroupsDialog());
+        const friends = yield* call(Node.updateFriends, action, ":", [{nodeName, groups: allGroups}]);
+        yield* put(closeFriendGroupsDialog().causedBy(action));
         if (friends.length > 0) {
-            yield* put(friendshipUpdated(friends[0]));
+            yield* put(friendshipUpdated(friends[0]).causedBy(action));
         }
     } catch (e) {
-        yield* put(nodeChangeFriendGroupsFailed())
+        yield* put(nodeChangeFriendGroupsFailed().causedBy(action))
         yield* put(errorThrown(e));
     }
     for (const group of added) {
-        yield* put(friendGroupAdded(homeOwnerNameOrUrl, group));
+        yield* put(friendGroupAdded(homeOwnerNameOrUrl, group).causedBy(action));
     }
 }

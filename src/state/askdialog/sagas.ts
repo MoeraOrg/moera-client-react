@@ -26,11 +26,13 @@ function* askDialogLoadSaga(action: WithContext<AskDialogLoadAction>) {
         if (nodeName === action.context.ownerName) {
             features = yield* select(getNodeFeatures);
         } else {
-            features = yield* call(Node.getFeatures, nodeName);
+            features = yield* call(Node.getFeatures, action, nodeName);
         }
-        yield* put(askDialogLoaded(nodeName, features?.friendGroups?.available ?? [], features?.ask ?? []));
+        yield* put(askDialogLoaded(
+            nodeName, features?.friendGroups?.available ?? [], features?.ask ?? []
+        ).causedBy(action));
     } catch (e) {
-        yield* put(askDialogLoadFailed(nodeName));
+        yield* put(askDialogLoadFailed(nodeName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -38,10 +40,10 @@ function* askDialogLoadSaga(action: WithContext<AskDialogLoadAction>) {
 function* askDialogSendSaga(action: AskDialogSendAction) {
     const {nodeName, subject, friendGroupId, message} = action.payload;
     try {
-        yield* call(Node.askRemoteNode, ":", nodeName, {subject, friendGroupId, message});
-        yield* put(askDialogSent(nodeName));
+        yield* call(Node.askRemoteNode, action, ":", nodeName, {subject, friendGroupId, message});
+        yield* put(askDialogSent(nodeName).causedBy(action));
     } catch (e) {
-        yield* put(askDialogSendFailed(nodeName));
+        yield* put(askDialogSendFailed(nodeName).causedBy(action));
         yield* put(errorThrown(e));
     }
 }

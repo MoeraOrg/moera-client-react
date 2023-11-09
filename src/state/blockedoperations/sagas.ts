@@ -3,16 +3,17 @@ import { call, select } from 'typed-redux-saga';
 import { BlockedByUserFilter, BlockedOperation, Node, PostingInfo, StoryInfo } from "api";
 import { isConnectedToHome } from "state/home/selectors";
 import { isAtHomeNode } from "state/node/selectors";
+import { ClientAction } from "state/action";
 
-export function* fillBlockedOperationsInStories(stories: StoryInfo[]) {
+export function* fillBlockedOperationsInStories(caller: ClientAction | null, stories: StoryInfo[]) {
     const postings: PostingInfo[] = stories
         .map(t => t.posting)
         .filter((p): p is PostingInfo => p != null)
         .filter(p => p.receiverName != null && p.receiverPostingId != null);
-    yield* call(fillBlockedOperationsInPostings, postings);
+    yield* call(fillBlockedOperationsInPostings, caller, postings);
 }
 
-export function* fillBlockedOperationsInPostings(postings: PostingInfo[]) {
+export function* fillBlockedOperationsInPostings(caller: ClientAction | null, postings: PostingInfo[]) {
     if (postings.length === 0) {
         return;
     }
@@ -24,7 +25,7 @@ export function* fillBlockedOperationsInPostings(postings: PostingInfo[]) {
         blockedOperations: ["comment", "reaction"],
         postings: postings.map(p => ({nodeName: p.receiverName!, postingId: p.receiverPostingId!}))
     };
-    const blockedByUsers = yield* call(Node.searchBlockedByUsers, ":", filter);
+    const blockedByUsers = yield* call(Node.searchBlockedByUsers, caller, ":", filter);
     if (blockedByUsers.length === 0) {
         return;
     }
@@ -44,7 +45,7 @@ export function* fillBlockedOperationsInPostings(postings: PostingInfo[]) {
     });
 }
 
-export function* fillBlockedOperations(posting: PostingInfo) {
+export function* fillBlockedOperations(caller: ClientAction | null, posting: PostingInfo) {
     if (posting.receiverName == null || posting.receiverPostingId == null) {
         return;
     }
@@ -56,7 +57,7 @@ export function* fillBlockedOperations(posting: PostingInfo) {
         blockedOperations: ["comment", "reaction"],
         postings: [{nodeName: posting.receiverName, postingId: posting.receiverPostingId}]
     };
-    const blockedByUsers = yield* call(Node.searchBlockedByUsers, ":", filter);
+    const blockedByUsers = yield* call(Node.searchBlockedByUsers, caller, ":", filter);
     blockedByUsers.forEach(bbu => addBlockedOperation(posting, bbu.blockedOperation));
 }
 

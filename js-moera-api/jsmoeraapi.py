@@ -378,7 +378,7 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
             if 'function' not in request:
                 continue
 
-            params = '    nodeName: string | null'
+            params = '    caller: ClientAction | null, nodeName: string | null'
             tail_params = ''
             url_params: dict[str, str] = {}
             flag_name: str | None = None
@@ -495,10 +495,10 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                 afile.write(f'    const {flag_js_name} = commaSeparatedFlags({{{items}}});\n')
             afile.write(f'    const location = {location};\n')
             if result_body:
-                afile.write('    return decodeBodies(yield* callApi({\n')
+                afile.write('    return decodeBodies(caller, yield* callApi({\n')
             else:
                 afile.write('    return yield* callApi({\n')
-            call_params = (f'        nodeName, method: "{method}", location{body}{auth}'
+            call_params = (f'        caller, nodeName, method: "{method}", location{body}{auth}'
                            f', schema: {result_schema}, errorFilter\n')
             afile.write(comma_wrap(call_params, 2))
             if result_body:
@@ -528,6 +528,7 @@ import * as NodeApiSchema from "api/node/api-schemas"
 import { callApi, CallApiResult, decodeBodies, ErrorFilter } from "api/node/call";
 import * as API from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
+import { ClientAction } from "state/action";
 import { urlWithParameters, ut } from "util/url";
 import { commaSeparatedFlags } from "util/misc";
 '''

@@ -5,6 +5,7 @@ import imageCompression from 'browser-image-compression';
 import i18n from 'i18next';
 
 import { Node, PostingFeatures, PrivateMediaFileInfo } from "api";
+import { ClientAction } from "state/action";
 import { messageBox } from "state/messagebox/actions";
 import { errorThrown } from "state/error/actions";
 import { readAsArrayBuffer } from "util/read-file";
@@ -20,8 +21,10 @@ const formatMb = (size: number): string =>
 
 type ImageUploadResult<T> = Generator<CallEffect | PutEffect<any>, T>;
 
-export function* imageUpload(features: PostingFeatures | null, nodeName: string | null, file: File, compress: boolean,
-                             onProgress?: ImageUploadProgressHandler): ImageUploadResult<VerifiedMediaFile | null> {
+export function* imageUpload(
+    caller: ClientAction, features: PostingFeatures | null, nodeName: string | null, file: File, compress: boolean,
+    onProgress?: ImageUploadProgressHandler
+): ImageUploadResult<VerifiedMediaFile | null> {
     try {
         if (features != null) {
             if (compress) {
@@ -51,7 +54,7 @@ export function* imageUpload(features: PostingFeatures | null, nodeName: string 
                 yield* call([window.crypto.subtle, window.crypto.subtle.digest], "SHA-256", fileContent)));
         }
 
-        const mediaFile = yield* call(Node.uploadPrivateMedia, nodeName, file, onProgress);
+        const mediaFile = yield* call(Node.uploadPrivateMedia, caller, nodeName, file, onProgress);
         return {...mediaFile, digest};
     } catch (e) {
         yield* put(errorThrown(e));

@@ -29,13 +29,13 @@ export type ReactionsDialogPastReactionsLoadedAction = ActionWithPayload<"REACTI
     postingId: string;
     commentId: string | null;
     negative: boolean;
-    emoji: number;
+    emoji: number | null;
     before: number;
     after: number;
     total: number | null;
 }>;
 export const reactionsDialogPastReactionsLoaded = (
-    reactions: ReactionInfo[], postingId: string, commentId: string | null, negative: boolean, emoji: number,
+    reactions: ReactionInfo[], postingId: string, commentId: string | null, negative: boolean, emoji: number | null,
     before: number, after: number, total: number | null
 ): ReactionsDialogPastReactionsLoadedAction =>
     actionWithPayload(
@@ -48,10 +48,10 @@ export type ReactionsDialogPastReactionsLoadFailedAction =
         postingId: string;
         commentId: string | null;
         negative: boolean;
-        emoji: number;
+        emoji: number | null;
     }>;
 export const reactionsDialogPastReactionsLoadFailed = (
-    postingId: string, commentId: string | null, negative: boolean, emoji: number
+    postingId: string, commentId: string | null, negative: boolean, emoji: number | null
 ): ReactionsDialogPastReactionsLoadFailedAction =>
     actionWithPayload("REACTIONS_DIALOG_PAST_REACTIONS_LOAD_FAILED", {postingId, commentId, negative, emoji});
 

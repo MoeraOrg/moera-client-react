@@ -2,6 +2,7 @@ import { call, put } from 'typed-redux-saga';
 
 import { errorThrown } from "state/error/actions";
 import {
+    NodeNameLoadAction,
     nodeNameLoadFailed,
     nodeNameSet,
     NodeNameUpdateAction,
@@ -21,13 +22,13 @@ export default [
     executor("NODE_NAME_UPDATE", null, nodeNameUpdateSaga)
 ];
 
-function* nodeNameLoadSaga() {
+function* nodeNameLoadSaga(action: NodeNameLoadAction) {
     try {
-        const {name = null} = yield* call(Node.getNodeName, "", false);
-        yield* put(nodeNameSet(name));
+        const {name = null} = yield* call(Node.getNodeName, action, "", false);
+        yield* put(nodeNameSet(name).causedBy(action));
         yield* put(ownerSet(name, null, false, false, false, null));
     } catch (e) {
-        yield* put(nodeNameLoadFailed());
+        yield* put(nodeNameLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -35,16 +36,16 @@ function* nodeNameLoadSaga() {
 function* registerNameSaga(action: RegisterNameAction) {
     const {name, onNameTaken} = action.payload;
     try {
-        const free = yield* call(Naming.isFree, name);
+        const free = yield* call(Naming.isFree, action, name);
         if (!free) {
             onNameTaken();
-            yield* put(registerNameFailed());
+            yield* put(registerNameFailed().causedBy(action));
             return;
         }
-        const secret = yield* call(Node.createNodeName, "", {name});
-        yield* put(registerNameSucceeded(secret.name, secret.mnemonic!));
+        const secret = yield* call(Node.createNodeName, action, "", {name});
+        yield* put(registerNameSucceeded(secret.name, secret.mnemonic!).causedBy(action));
     } catch (e) {
-        yield* put(registerNameFailed());
+        yield* put(registerNameFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -52,10 +53,10 @@ function* registerNameSaga(action: RegisterNameAction) {
 function* nodeNameUpdateSaga(action: NodeNameUpdateAction) {
     const {name, mnemonic} = action.payload;
     try {
-        yield* call(Node.updateNodeName, "", {name, mnemonic});
-        yield* put(nodeNameUpdateSucceeded());
+        yield* call(Node.updateNodeName, action, "", {name, mnemonic});
+        yield* put(nodeNameUpdateSucceeded().causedBy(action));
     } catch (e) {
-        yield* put(nodeNameUpdateFailed());
+        yield* put(nodeNameUpdateFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }

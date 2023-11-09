@@ -18,10 +18,10 @@ function* friendGroupAddSaga(action: WithContext<FriendGroupAddAction>) {
     const {title, view} = action.payload;
 
     try {
-        yield* call(Node.createFriendGroup, ":", {title, operations: {view}});
-        yield* put(closeFriendGroupAddDialog());
+        yield* call(Node.createFriendGroup, action, ":", {title, operations: {view}});
+        yield* put(closeFriendGroupAddDialog().causedBy(action));
     } catch (e) {
-        yield* put(friendGroupAddFailed())
+        yield* put(friendGroupAddFailed().causedBy(action))
         yield* put(errorThrown(e));
     }
 }

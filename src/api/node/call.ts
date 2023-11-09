@@ -37,9 +37,10 @@ import * as NodeApiSchema from "api/node/api-schemas"
 import { retryFetch } from "api/fetch-timeout";
 import { xhrFetch } from "api/node/xhr";
 import { ProgressHandler } from "api/fetcher";
-import { BodyError } from "api/error";
+import { BodyError, CausedError } from "api/error";
 import { isSchemaValid } from "api/schema";
 import { ClientState } from "state/state";
+import { ClientAction } from "state/action";
 import { errorAuthInvalid } from "state/error/actions";
 import { messageBox } from "state/messagebox/actions";
 import { cartesLoad } from "state/cartes/actions";
@@ -58,6 +59,7 @@ export type ErrorFilter = boolean | string[] | ((code: string) => boolean);
 type CallException = (e: any, details?: string | null) => NodeError;
 
 export type CallApiParams<T> = {
+    caller: ClientAction | null;
     location: string;
     nodeName?: string | null;
     method?: HttpMethod;
@@ -71,6 +73,7 @@ export type CallApiParams<T> = {
 export type CallApiResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect | TakeEffect, T>;
 
 export function* callApi<T>({
+    caller,
     location,
     nodeName = "",
     method = "GET" as const,
@@ -84,19 +87,22 @@ export function* callApi<T>({
     let rootApi = "";
     let errorTitle = "";
     try {
-        ({rootLocation, rootApi, errorTitle} = yield* call(selectApi, nodeName));
+        ({rootLocation, rootApi, errorTitle} = yield* call(selectApi, caller, nodeName));
     } catch (e) {
         if (e instanceof HomeNotConnectedError) {
             e.setQuery(method ?? "", location);
         }
+        if (e instanceof CausedError) {
+            e.cause = caller;
+        }
         throw e;
     }
     if (!rootLocation) {
-        throw new NameResolvingError(nodeName);
+        throw new NameResolvingError(nodeName, caller);
     }
 
     const exception: CallException =
-        (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details);
+        (e, details) => new NodeError(method, rootApi, location, errorTitle, e, details, caller);
     const headers = {
         "Accept": "application/json",
         "Content-Type": body instanceof Blob ? body.type : "application/json"
@@ -107,7 +113,7 @@ export function* callApi<T>({
     while (true) {
         const authSuccess = yield* call(authorize, headers, rootLocation, auth);
         if (!authSuccess && !cartesRenewed) {
-            yield* put(cartesLoad());
+            yield* put(cartesLoad().causedBy(caller));
             yield* peek("CARTES_LOADED");
             cartesRenewed = true;
             continue;
@@ -146,20 +152,20 @@ export function* callApi<T>({
             }
             if (data.errorCode === "authentication.invalid") {
                 yield* put(errorAuthInvalid());
-                throw new NodeApiError(data.errorCode, data.message);
+                throw new NodeApiError(data.errorCode, data.message, caller);
             }
             if (data.errorCode === "authentication.blocked") {
                 yield* put(messageBox(i18n.t("sorry-you-banned")));
-                throw new NodeApiError(data.errorCode, data.message);
+                throw new NodeApiError(data.errorCode, data.message, caller);
             }
             if (data.errorCode.startsWith("carte.") && !cartesRenewed) {
-                yield* put(cartesLoad());
+                yield* put(cartesLoad().causedBy(caller));
                 yield* peek("CARTES_LOADED");
                 cartesRenewed = true;
                 continue;
             }
             if (isErrorCodeAllowed(data.errorCode, errorFilter)) {
-                throw new NodeApiError(data.errorCode, data.message);
+                throw new NodeApiError(data.errorCode, data.message, caller);
             } else {
                 throw exception("Server returned error status: " + data.message);
             }
@@ -177,7 +183,9 @@ interface ApiSelection {
     errorTitle: string;
 }
 
-export function* selectApi(nodeName: string | null | undefined): Generator<CallEffect | SelectEffect, ApiSelection> {
+export function* selectApi(
+    caller: ClientAction | null, nodeName: string | null | undefined
+): Generator<CallEffect | SelectEffect, ApiSelection> {
     let root;
     let errorTitle = "";
     switch (nodeName) {
@@ -198,7 +206,7 @@ export function* selectApi(nodeName: string | null | undefined): Generator<CallE
                 api: state.home.root.api
             }));
             if (!root.connected) {
-                throw new HomeNotConnectedError();
+                throw new HomeNotConnectedError(caller);
             }
             errorTitle = "Home access error";
             break;
@@ -212,7 +220,7 @@ export function* selectApi(nodeName: string | null | undefined): Generator<CallE
                 };
                 errorTitle = "Home access error";
             } else {
-                const nodeUri = yield* call(getNodeUri, nodeName);
+                const nodeUri = yield* call(getNodeUri, caller, nodeName);
                 root = nodeUri != null ?
                     {
                         location: nodeUrlToLocation(nodeUri),
@@ -284,13 +292,13 @@ function isErrorCodeAllowed(errorCode: string, filter: ErrorFilter): boolean {
     return false;
 }
 
-function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): Body {
+function decodeBody(caller: ClientAction | null, encoded: string, format: BodyFormat | SourceFormat | null): Body {
     if (format != null && format.toLowerCase() === "application") {
         return {text: ""};
     }
     let body = JSON.parse(encoded);
     if (!isSchemaValid(NodeApiSchema.Body, body)) {
-        throw new BodyError(formatSchemaErrors(NodeApiSchema.Body.errors));
+        throw new BodyError(formatSchemaErrors(NodeApiSchema.Body.errors), caller);
     }
     return body;
 }
@@ -301,48 +309,50 @@ type EncodedEntities = Partial<EncodedPostingInfo | EncodedPostingRevisionInfo |
     | EncodedCommentRevisionInfo | EncodedStoryInfo | EncodedCommentCreated | EncodedDraftInfo | EncodedFeedSliceInfo
     | EncodedCommentsSliceInfo | EncodedEntryInfo>;
 
-export function decodeBodies(data: EncodedPostingInfo): PostingInfo;
-export function decodeBodies(data: EncodedPostingRevisionInfo): PostingRevisionInfo;
-export function decodeBodies(data: EncodedPostingInfo[]): PostingInfo[];
-export function decodeBodies(data: EncodedPostingRevisionInfo[]): PostingRevisionInfo[];
-export function decodeBodies(data: EncodedCommentInfo): CommentInfo;
-export function decodeBodies(data: EncodedCommentRevisionInfo): CommentRevisionInfo;
-export function decodeBodies(data: EncodedCommentRevisionInfo[]): CommentRevisionInfo[];
-export function decodeBodies(data: EncodedStoryInfo): StoryInfo;
-export function decodeBodies(data: EncodedCommentCreated): CommentCreated;
-export function decodeBodies(data: EncodedDraftInfo): DraftInfo;
-export function decodeBodies(data: EncodedDraftInfo[]): DraftInfo[];
-export function decodeBodies(data: EncodedFeedSliceInfo): FeedSliceInfo;
-export function decodeBodies(data: EncodedCommentsSliceInfo): CommentsSliceInfo;
-export function decodeBodies(data: EncodedEntryInfo): EntryInfo;
-export function decodeBodies(data: EncodedEntryInfo[]): EntryInfo[];
-export function decodeBodies(data: EncodedEntities): Entities;
-export function decodeBodies(data: EncodedEntities | EncodedEntities[]): Entities | Entities[] {
+export function decodeBodies(caller: ClientAction | null, data: EncodedPostingInfo): PostingInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedPostingRevisionInfo): PostingRevisionInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedPostingInfo[]): PostingInfo[];
+export function decodeBodies(caller: ClientAction | null, data: EncodedPostingRevisionInfo[]): PostingRevisionInfo[];
+export function decodeBodies(caller: ClientAction | null, data: EncodedCommentInfo): CommentInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedCommentRevisionInfo): CommentRevisionInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedCommentRevisionInfo[]): CommentRevisionInfo[];
+export function decodeBodies(caller: ClientAction | null, data: EncodedStoryInfo): StoryInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedCommentCreated): CommentCreated;
+export function decodeBodies(caller: ClientAction | null, data: EncodedDraftInfo): DraftInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedDraftInfo[]): DraftInfo[];
+export function decodeBodies(caller: ClientAction | null, data: EncodedFeedSliceInfo): FeedSliceInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedCommentsSliceInfo): CommentsSliceInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedEntryInfo): EntryInfo;
+export function decodeBodies(caller: ClientAction | null, data: EncodedEntryInfo[]): EntryInfo[];
+export function decodeBodies(caller: ClientAction | null, data: EncodedEntities): Entities;
+export function decodeBodies(
+    caller: ClientAction | null, data: EncodedEntities | EncodedEntities[]
+): Entities | Entities[] {
     if (Array.isArray(data)) {
-        return data.map(p => decodeBodies(p));
+        return data.map(p => decodeBodies(caller, p));
     }
 
     const decoded: any = {...data};
     if ("stories" in data && data.stories != null) {
-        decoded.stories = data.stories.map(p => decodeBodies(p));
+        decoded.stories = data.stories.map(p => decodeBodies(caller, p));
     }
     if ("comments" in data && data.comments != null) {
-        decoded.comments = data.comments.map(p => decodeBodies(p));
+        decoded.comments = data.comments.map(p => decodeBodies(caller, p));
     }
     if ("comment" in data && data.comment != null) {
-        decoded.comment = decodeBodies(data.comment);
+        decoded.comment = decodeBodies(caller, data.comment);
     }
     if ("posting" in data && data.posting != null) {
-        decoded.posting = decodeBodies(data.posting);
+        decoded.posting = decodeBodies(caller, data.posting);
     }
     if ("body" in data && data.body != null) {
-        decoded.body = decodeBody(data.body, data.bodyFormat ?? null);
+        decoded.body = decodeBody(caller, data.body, data.bodyFormat ?? null);
     }
     if ("bodyPreview" in data && data.bodyPreview != null) {
-        decoded.bodyPreview = decodeBody(data.bodyPreview, data.bodyFormat ?? null);
+        decoded.bodyPreview = decodeBody(caller, data.bodyPreview, data.bodyFormat ?? null);
     }
     if ("bodySrc" in data && data.bodySrc != null) {
-        decoded.bodySrc = decodeBody(data.bodySrc, data.bodySrcFormat ?? null);
+        decoded.bodySrc = decodeBody(caller, data.bodySrc, data.bodySrcFormat ?? null);
     }
     return decoded;
 }

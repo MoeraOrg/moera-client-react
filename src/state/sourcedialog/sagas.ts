@@ -15,13 +15,13 @@ function* openSourceDialogSaga(action: OpenSourceDialogAction) {
     try {
         let entry: PostingInfo | CommentInfo;
         if (commentId == null) {
-            entry = yield* call(Node.getPosting, nodeName, postingId, true, ["posting.not-found"]);
+            entry = yield* call(Node.getPosting, action, nodeName, postingId, true, ["posting.not-found"]);
         } else {
-            entry = yield* call(Node.getComment, nodeName, postingId, commentId, true, ["comment.not-found"]);
+            entry = yield* call(Node.getComment, action, nodeName, postingId, commentId, true, ["comment.not-found"]);
         }
-        yield* put(sourceDialogLoaded(entry.bodySrc?.text ?? ""));
+        yield* put(sourceDialogLoaded(entry.bodySrc?.text ?? "").causedBy(action));
     } catch (e) {
-        yield* put(sourceDialogLoadFailed());
+        yield* put(sourceDialogLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }

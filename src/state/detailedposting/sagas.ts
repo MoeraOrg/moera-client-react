@@ -19,13 +19,14 @@ import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
 import { introduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
+import { ClientAction } from "state/action";
 import {
-    closeCommentDialog,
+    closeCommentDialog, CommentComposeCancelAction,
     commentComposeCancelled,
     CommentCopyLinkAction,
     CommentDeleteAction,
     commentDeleted,
-    commentDeleteFailed,
+    commentDeleteFailed, CommentDialogCommentLoadAction,
     commentDialogCommentLoaded,
     commentDialogCommentLoadFailed,
     CommentDialogCommentResetAction,
@@ -54,23 +55,27 @@ import {
     commentsBlockedUsersLoaded,
     commentsBlockedUsersLoadFailed,
     commentSet,
-    CommentSetVisibilityAction,
+    CommentSetVisibilityAction, CommentsFutureSliceLoadAction,
     commentsFutureSliceLoadFailed,
     commentsFutureSliceSet,
+    CommentsLoadAllAction,
+    CommentsPastSliceLoadAction,
     commentsPastSliceLoadFailed,
     commentsPastSliceSet,
-    commentsReceiverFeaturesLoaded,
+    CommentsReceiverFeaturesLoadAction,
+    commentsReceiverFeaturesLoaded, CommentsReceiverSwitchAction,
     commentsReceiverSwitched,
     commentsScrollToComposer,
-    commentsSliceUpdate,
+    commentsSliceUpdate, CommentsUpdateAction,
     CommentVerifyAction,
     commentVerifyFailed,
     DetailedPostingLoadAction,
+    DetailedPostingLoadAttachedAction,
     detailedPostingLoaded,
     detailedPostingLoadedAttached,
-    detailedPostingLoadFailed,
+    detailedPostingLoadFailed, FocusedCommentLoadAction,
     focusedCommentLoaded,
-    focusedCommentLoadFailed,
+    focusedCommentLoadFailed, GlanceCommentLoadAction,
     glanceCommentLoaded,
     glanceCommentLoadFailed
 } from "state/detailedposting/actions";
@@ -147,18 +152,18 @@ function* detailedPostingLoadSaga(action: DetailedPostingLoadAction) {
     }
 
     try {
-        const posting = yield* call(Node.getPosting, "", id, false, ["posting.not-found"]);
-        yield* call(fillActivityReaction, posting)
-        yield* call(fillBlockedOperations, posting)
+        const posting = yield* call(Node.getPosting, action, "", id, false, ["posting.not-found"]);
+        yield* call(fillActivityReaction, action, posting)
+        yield* call(fillBlockedOperations, action, posting)
         yield* put(detailedPostingLoaded(posting).causedBy(action));
-        yield* call(fillSubscription, posting)
+        yield* call(fillSubscription, action, posting)
     } catch (e) {
-        yield* put(detailedPostingLoadFailed());
-        yield* put(errorThrown(e).causedBy(action));
+        yield* put(detailedPostingLoadFailed().causedBy(action));
+        yield* put(errorThrown(e));
     }
 }
 
-function* detailedPostingLoadAttachedSaga() {
+function* detailedPostingLoadAttachedSaga(action: DetailedPostingLoadAttachedAction) {
     const id = yield* select(getDetailedPostingId);
     if (id == null) {
         return;
@@ -176,22 +181,22 @@ function* detailedPostingLoadAttachedSaga() {
             .every(p => isPostingCached(state, p));
     });
     if (loaded) {
-        yield* put(detailedPostingLoadedAttached());
+        yield* put(detailedPostingLoadedAttached().causedBy(action));
         return;
     }
 
     try {
-        const postings = yield* call(Node.getPostingsAttachedToPosting, "", id);
-        yield* call(fillActivityReactionsInPostings, postings);
-        yield* call(fillBlockedOperationsInPostings, postings);
-        yield* put(postingsSet(postings, ""));
-        yield* put(detailedPostingLoadedAttached());
+        const postings = yield* call(Node.getPostingsAttachedToPosting, action, "", id);
+        yield* call(fillActivityReactionsInPostings, action, postings);
+        yield* call(fillBlockedOperationsInPostings, action, postings);
+        yield* put(postingsSet(postings, "").causedBy(action));
+        yield* put(detailedPostingLoadedAttached().causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* commentsReceiverSwitchSaga() {
+function* commentsReceiverSwitchSaga(action: CommentsReceiverSwitchAction) {
     const {ownerName, ownerFullName, posting} = yield* select(state => ({
         ownerName: getOwnerName(state),
         ownerFullName: getOwnerFullName(state),
@@ -203,38 +208,42 @@ function* commentsReceiverSwitchSaga() {
     const receiverName = posting.receiverName ?? ownerName;
     const receiverFullName = posting.receiverFullName ?? ownerFullName;
     const receiverPostingId = posting.receiverPostingId ?? posting.id;
-    yield* put(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId));
+    yield* put(commentsReceiverSwitched(receiverName, receiverFullName, receiverPostingId).causedBy(action));
 }
 
-function* commentsReceiverFeaturesLoadSaga() {
+function* commentsReceiverFeaturesLoadSaga(action: CommentsReceiverFeaturesLoadAction) {
     const nodeName = yield* select(getCommentsReceiverName);
     if (nodeName == null) {
         return;
     }
     try {
-        const features = yield* call(Node.getFeatures, nodeName);
-        yield* put(commentsReceiverFeaturesLoaded(nodeName, features));
+        const features = yield* call(Node.getFeatures, action, nodeName);
+        yield* put(commentsReceiverFeaturesLoaded(nodeName, features).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* commentsLoadAllSaga() {
+function* commentsLoadAllSaga(action: CommentsLoadAllAction) {
     let {receiverName, receiverPostingId, before, after} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
         while (after > Number.MIN_SAFE_INTEGER) {
-            const slice = yield* call(Node.getCommentsSlice, receiverName, receiverPostingId, null, after, 20);
-            yield* put(commentsPastSliceSet(receiverName, receiverPostingId, slice.comments, slice.before,
-                slice.after, slice.total, slice.totalInPast, slice.totalInFuture));
+            const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, null, after, 20);
+            yield* put(commentsPastSliceSet(
+                receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
+                slice.totalInPast, slice.totalInFuture
+            ).causedBy(action));
             after = slice.after;
         }
         while (before < Number.MAX_SAFE_INTEGER) {
-            const slice = yield* call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
-            yield* put(commentsFutureSliceSet(receiverName, receiverPostingId, slice.comments, slice.before,
-                slice.after, slice.total, slice.totalInPast, slice.totalInFuture));
+            const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, before, null, 20);
+            yield* put(commentsFutureSliceSet(
+                receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
+                slice.totalInPast, slice.totalInFuture
+            ).causedBy(action));
             before = slice.before;
         }
     } catch (e) {
@@ -242,48 +251,54 @@ function* commentsLoadAllSaga() {
     }
 }
 
-function* commentsPastSliceLoadSaga() {
+function* commentsPastSliceLoadSaga(action: CommentsPastSliceLoadAction) {
     const {receiverName, receiverPostingId, after} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
-        yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId));
+        yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         return;
     }
     try {
-        const slice = yield* call(Node.getCommentsSlice, receiverName, receiverPostingId, null, after, 20);
-        yield* put(commentsPastSliceSet(receiverName, receiverPostingId, slice.comments, slice.before, slice.after,
-            slice.total, slice.totalInPast, slice.totalInFuture));
+        const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, null, after, 20);
+        yield* put(commentsPastSliceSet(
+            receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
+            slice.totalInPast, slice.totalInFuture
+        ).causedBy(action));
     } catch (e) {
-        yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId));
+        yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-function* commentsFutureSliceLoadSaga() {
+function* commentsFutureSliceLoadSaga(action: CommentsFutureSliceLoadAction) {
     const {receiverName, receiverPostingId, before} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
-        yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId));
+        yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         return;
     }
     try {
-        const slice = yield* call(Node.getCommentsSlice, receiverName, receiverPostingId, before, null, 20);
-        yield* put(commentsFutureSliceSet(receiverName, receiverPostingId, slice.comments, slice.before, slice.after,
-            slice.total, slice.totalInPast, slice.totalInFuture));
+        const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, before, null, 20);
+        yield* put(commentsFutureSliceSet(
+            receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total, slice.totalInPast,
+            slice.totalInFuture
+        ).causedBy(action));
     } catch (e) {
-        yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId));
+        yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-function* commentsUpdateSaga() {
+function* commentsUpdateSaga(action: CommentsUpdateAction) {
     let {receiverName, receiverPostingId, before, after} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null) {
         return;
     }
     try {
         while (before > after) {
-            const slice = yield* call(Node.getCommentsSlice, receiverName, receiverPostingId, after, null, 20);
-            yield* put(commentsSliceUpdate(receiverName, receiverPostingId, slice.comments, slice.before, slice.after,
-                slice.total, slice.totalInPast, slice.totalInFuture));
+            const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, after, null, 20);
+            yield* put(commentsSliceUpdate(
+                receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
+                slice.totalInPast, slice.totalInFuture
+            ).causedBy(action));
             if (after === slice.before) {
                 break;
             }
@@ -302,7 +317,7 @@ function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersL
         receiverPostingId: getCommentsReceiverPostingId(state)
     }));
     if (receiverName == null || receiverPostingId == null || homeOwnerName == null) {
-        yield* put(commentsBlockedUsersLoadFailed());
+        yield* put(commentsBlockedUsersLoadFailed().causedBy(action));
         return;
     }
 
@@ -311,15 +326,15 @@ function* commentsBlockedUsersLoadSaga(action: WithContext<CommentsBlockedUsersL
     const entryPostingId = receiverName === homeOwnerName ? null : receiverPostingId;
 
     try {
-        const blocked = yield* call(Node.searchBlockedUsers, ":", {
+        const blocked = yield* call(Node.searchBlockedUsers, action, ":", {
             entryId,
             entryNodeName,
             entryPostingId,
             strict: true
         });
-        yield* put(commentsBlockedUsersLoaded(receiverName, receiverPostingId, blocked));
+        yield* put(commentsBlockedUsersLoaded(receiverName, receiverPostingId, blocked).causedBy(action));
     } catch (e) {
-        yield* put(commentsBlockedUsersLoadFailed());
+        yield* put(commentsBlockedUsersLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -332,11 +347,11 @@ function* commentLoadSaga(action: CommentLoadAction) {
         return;
     }
     try {
-        const comment = yield* call(Node.getComment, receiverName, receiverPostingId, commentId, false,
+        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, commentId, false,
             ["comment.not-found"]);
-        yield* put(commentSet(receiverName, comment));
+        yield* put(commentSet(receiverName, comment).causedBy(action));
     } catch (e) {
-        yield* put(commentLoadFailed(receiverName, receiverPostingId, commentId));
+        yield* put(commentLoadFailed(receiverName, receiverPostingId, commentId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -351,47 +366,50 @@ function* commentPostSaga(action: CommentPostAction) {
     try {
         let comment;
         if (commentId == null) {
-            yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, 1));
-            const created = yield* call(Node.createComment, receiverName, receiverPostingId, commentText);
-            yield* put(postingCommentsSet(postingId, created.total, ""));
+            yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, 1).causedBy(action));
+            const created = yield* call(Node.createComment, action, receiverName, receiverPostingId, commentText);
+            yield* put(postingCommentsSet(postingId, created.total, "").causedBy(action));
             comment = created.comment;
         } else {
-            comment = yield* call(Node.updateComment, receiverName, receiverPostingId, commentId, commentText);
+            comment = yield* call(Node.updateComment, action, receiverName, receiverPostingId, commentId, commentText);
         }
-        yield* put(commentSet(receiverName, comment));
+        yield* put(commentSet(receiverName, comment).causedBy(action));
 
         const draftId = yield* select((state: ClientState) =>
             (commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft)?.id);
 
-        yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment));
+        yield* put(commentPosted(receiverName, receiverPostingId, comment.id, comment.moment).causedBy(action));
 
         if (draftId != null) {
-            yield* call(Node.deleteDraft, ":", draftId, ["draft.not-found"]);
+            yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
         }
 
         if (receiverName !== commentText.ownerName) {
-            yield* call(Node.updateRemoteComment, ":", receiverName, receiverPostingId, comment.id, commentSourceText);
+            yield* call(Node.updateRemoteComment, action, ":", receiverName, receiverPostingId, comment.id,
+                commentSourceText);
         }
     } catch (e) {
-        yield* put(commentPostFailed(receiverName, receiverPostingId));
+        yield* put(commentPostFailed(receiverName, receiverPostingId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
 
-function* loadRemoteMediaAttachments(nodeName: string | null, attachments: MediaAttachment[] | null) {
+function* loadRemoteMediaAttachments(
+    action: ClientAction, nodeName: string | null, attachments: MediaAttachment[] | null
+) {
     if (attachments != null) {
         for (const attachment of attachments) {
             if (attachment.media == null && attachment.remoteMedia != null) {
-                attachment.media = yield* call(Node.getPrivateMediaInfo, nodeName, attachment.remoteMedia.id);
+                attachment.media = yield* call(Node.getPrivateMediaInfo, action, nodeName, attachment.remoteMedia.id);
             }
         }
     }
 }
 
-function* loadRepliedTo(nodeName: string, postingId: string, id: string) {
+function* loadRepliedTo(action: ClientAction, nodeName: string, postingId: string, id: string) {
     let repliedToComment: CommentInfo | null = yield* select(state => getComment(state, id));
     if (repliedToComment == null) {
-        repliedToComment = yield* call(Node.getComment, nodeName, postingId, id, false, ["comment.not-found"]);
+        repliedToComment = yield* call(Node.getComment, action, nodeName, postingId, id, false, ["comment.not-found"]);
     }
     if (repliedToComment != null) {
         return {
@@ -422,27 +440,28 @@ function* commentDraftLoadSaga(action: CommentDraftLoadAction) {
 
     try {
         const draftType: DraftType = commentId != null ? "comment-update" : "new-comment";
-        const drafts = yield* call(Node.getDrafts, ":", draftType, nodeName, postingId, commentId)
+        const drafts = yield* call(Node.getDrafts, action, ":", draftType, nodeName, postingId, commentId)
         const draft = drafts.length > 0 ? drafts[0] : null;
         if (draft != null) {
-            yield* call(loadRemoteMediaAttachments, nodeName, draft.media ?? null);
-            yield* put(commentDraftLoaded(draft));
+            yield* call(loadRemoteMediaAttachments, action, nodeName, draft.media ?? null);
+            yield* put(commentDraftLoaded(draft).causedBy(action));
 
             let repliedTo: RepliedTo | null = null;
             if (commentId == null && draft.repliedToId != null) {
-                repliedTo = yield* call(loadRepliedTo, nodeName, postingId, draft.repliedToId);
+                repliedTo = yield* call(loadRepliedTo, action, nodeName, postingId, draft.repliedToId);
             }
             if (repliedTo != null) {
-                yield* put(commentRepliedToSet(repliedTo.id, repliedTo.name, repliedTo.fullName ?? null,
-                    repliedTo.heading ?? ""));
+                yield* put(commentRepliedToSet(
+                    repliedTo.id, repliedTo.name, repliedTo.fullName ?? null, repliedTo.heading ?? ""
+                ).causedBy(action));
             } else {
-                yield* put(commentRepliedToUnset());
+                yield* put(commentRepliedToUnset().causedBy(action));
             }
         } else {
-            yield* put(commentDraftAbsent(nodeName, postingId, commentId));
+            yield* put(commentDraftAbsent(nodeName, postingId, commentId).causedBy(action));
         }
     } catch (e) {
-        yield* put(commentDraftLoadFailed(nodeName, postingId, commentId));
+        yield* put(commentDraftLoadFailed(nodeName, postingId, commentId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -457,15 +476,17 @@ function* commentDraftSaveSaga(action: CommentDraftSaveAction) {
     try {
         let draft: DraftInfo;
         if (draftId == null) {
-            draft = yield* call(Node.createDraft, ":", draftText);
+            draft = yield* call(Node.createDraft, action, ":", draftText);
         } else {
-            draft = yield* call(Node.updateDraft, ":", draftId, draftText);
+            draft = yield* call(Node.updateDraft, action, ":", draftId, draftText);
         }
-        yield* put(commentDraftSaved(draftText.receiverName, draftText.receiverPostingId,
-            draftText.receiverCommentId ?? null, draft, formId));
+        yield* put(commentDraftSaved(
+            draftText.receiverName, draftText.receiverPostingId, draftText.receiverCommentId ?? null, draft, formId
+        ).causedBy(action));
     } catch (e) {
-        yield* put(commentDraftSaveFailed(draftText.receiverName, draftText.receiverPostingId,
-            draftText.receiverCommentId ?? null));
+        yield* put(commentDraftSaveFailed(
+            draftText.receiverName, draftText.receiverPostingId, draftText.receiverCommentId ?? null
+        ).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -477,19 +498,19 @@ function* commentDraftDeleteSaga(action: CommentDraftDeleteAction) {
         return;
     }
 
-    yield* call(Node.deleteDraft, ":", draft.id, ["draft.not-found"]);
+    yield* call(Node.deleteDraft, action, ":", draft.id, ["draft.not-found"]);
     if (draft.receiverPostingId != null) {
-        yield* put(commentDraftDeleted(draft.receiverName, draft.receiverPostingId));
+        yield* put(commentDraftDeleted(draft.receiverName, draft.receiverPostingId).causedBy(action));
     }
 }
 
-function* commentComposeCancelSaga() {
+function* commentComposeCancelSaga(action: CommentComposeCancelAction) {
     const draftId = yield* select(state => state.detailedPosting.compose.draft?.id);
 
     if (draftId != null) {
-        yield* call(Node.deleteDraft, ":", draftId, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
     }
-    yield* put(commentComposeCancelled());
+    yield* put(commentComposeCancelled().causedBy(action));
 }
 
 function* commentDeleteSaga(action: CommentDeleteAction) {
@@ -503,14 +524,14 @@ function* commentDeleteSaga(action: CommentDeleteAction) {
     if (receiverName == null || receiverPostingId == null || postingId == null) {
         return;
     }
-    yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, -1));
+    yield* put(postingCommentCountUpdate(receiverPostingId, receiverName, -1).causedBy(action));
     try {
-        const info = yield* call(Node.deleteComment, receiverName, receiverPostingId, commentId);
-        yield* put(commentDeleted(receiverName, receiverPostingId, commentId));
-        yield* put(postingCommentsSet(postingId, info.total, ""));
-        yield* call(Node.deleteRemoteComment, ":", receiverName, receiverPostingId, commentId);
+        const info = yield* call(Node.deleteComment, action, receiverName, receiverPostingId, commentId);
+        yield* put(commentDeleted(receiverName, receiverPostingId, commentId).causedBy(action));
+        yield* put(postingCommentsSet(postingId, info.total, "").causedBy(action));
+        yield* call(Node.deleteRemoteComment, action, ":", receiverName, receiverPostingId, commentId);
     } catch (e) {
-        yield* put(commentDeleteFailed(receiverName, receiverPostingId, commentId));
+        yield* put(commentDeleteFailed(receiverName, receiverPostingId, commentId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -549,28 +570,28 @@ function* commentSetVisibilitySaga(action: CommentSetVisibilityAction) {
     }
 
     try {
-        const comment = yield* call(Node.updateComment, receiverName, receiverPostingId, commentId, commentText);
-        yield* put(commentSet(receiverName, comment));
+        const comment = yield* call(Node.updateComment, action, receiverName, receiverPostingId, commentId, commentText);
+        yield* put(commentSet(receiverName, comment).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* focusedCommentLoadSaga() {
+function* focusedCommentLoadSaga(action: FocusedCommentLoadAction) {
     const {receiverName, receiverPostingId, focusedCommentId} = yield* select(getCommentsState);
     if (receiverName == null || receiverPostingId == null || focusedCommentId == null) {
         return;
     }
     try {
-        const comment = yield* call(Node.getComment, receiverName, receiverPostingId, focusedCommentId, false,
+        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, focusedCommentId, false,
             ["comment.not-found"]);
-        yield* put(focusedCommentLoaded(receiverName, comment));
+        yield* put(focusedCommentLoaded(receiverName, comment).causedBy(action));
     } catch (e) {
-        yield* put(focusedCommentLoadFailed(receiverName, receiverPostingId));
+        yield* put(focusedCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
         if (!(e instanceof NodeApiError) || e.errorCode !== "comment.not-found") {
             yield* put(errorThrown(e));
         } else {
-            yield* put(flashBox(i18n.t("comment-not-found")));
+            yield* put(flashBox(i18n.t("comment-not-found")).causedBy(action));
         }
     }
 }
@@ -578,17 +599,17 @@ function* focusedCommentLoadSaga() {
 function* commentCopyLinkSaga(action: CommentCopyLinkAction) {
     const {id, postingId} = action.payload;
     try {
-        const href = yield* call(postingGetLink, postingId);
+        const href = yield* call(postingGetLink, action, postingId);
         yield* call(clipboardCopy, `${href}?comment=${id}`);
         if (!Browser.isAndroidBrowser()) {
-            yield* put(flashBox(i18n.t("link-copied")));
+            yield* put(flashBox(i18n.t("link-copied")).causedBy(action));
         }
     } catch (e) {
         yield* put(errorThrown(e));
     }
 }
 
-function* commentDialogCommentLoadSaga() {
+function* commentDialogCommentLoadSaga(action: CommentDialogCommentLoadAction) {
     const {receiverName, receiverPostingId, commentId} = yield* select(state => ({
         receiverName: getCommentsState(state).receiverName,
         receiverPostingId: getCommentsState(state).receiverPostingId,
@@ -598,11 +619,11 @@ function* commentDialogCommentLoadSaga() {
         return;
     }
     try {
-        const comment = yield* call(Node.getComment, receiverName, receiverPostingId, commentId, true,
+        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, commentId, true,
             ["comment.not-found"]);
-        yield* put(commentDialogCommentLoaded(comment));
+        yield* put(commentDialogCommentLoaded(comment).causedBy(action));
     } catch (e) {
-        yield* put(commentDialogCommentLoadFailed());
+        yield* put(commentDialogCommentLoadFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -611,10 +632,10 @@ function* commentDialogCommentResetSaga(action: CommentDialogCommentResetAction)
     const {draftId, closeDialog} = action.payload;
 
     if (closeDialog) {
-        yield* put(closeCommentDialog());
+        yield* put(closeCommentDialog().causedBy(action));
     }
     if (draftId != null) {
-        yield* call(Node.deleteDraft, ":", draftId, ["draft.not-found"]);
+        yield* call(Node.deleteDraft, action, ":", draftId, ["draft.not-found"]);
     }
 }
 
@@ -624,9 +645,9 @@ function* commentVerifySaga(action: CommentVerifyAction) {
         return;
     }
     try {
-        yield* call(Node.verifyRemoteComment, ":", receiverName, receiverPostingId, action.payload.commentId);
+        yield* call(Node.verifyRemoteComment, action, ":", receiverName, receiverPostingId, action.payload.commentId);
     } catch (e) {
-        yield* put(commentVerifyFailed(receiverName, receiverPostingId, action.payload.commentId));
+        yield* put(commentVerifyFailed(receiverName, receiverPostingId, action.payload.commentId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -644,15 +665,17 @@ function* commentReactSaga(action: WithContext<CommentReactAction>) {
         return;
     }
     try {
-        const created = yield* call(Node.createCommentReaction, receiverName, receiverPostingId, id,
+        const created = yield* call(Node.createCommentReaction, action, receiverName, receiverPostingId, id,
             {ownerName: homeOwnerName, ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender,
              ownerAvatar: toAvatarDescription(homeOwnerAvatar), negative, emoji});
         const seniorAttributes = seniorName !== homeOwnerName
             ? extractAttributes(seniorReaction)
             : {negative, emoji};
-        yield* put(commentReactionSet(receiverName, id, receiverPostingId, {negative, emoji},
-            seniorAttributes, created.totals));
-        yield* call(Node.createRemoteCommentReaction, ":", receiverName, receiverPostingId, id, {negative, emoji});
+        yield* put(commentReactionSet(
+            receiverName, id, receiverPostingId, {negative, emoji}, seniorAttributes, created.totals
+        ).causedBy(action));
+        yield* call(Node.createRemoteCommentReaction, action, ":", receiverName, receiverPostingId, id,
+            {negative, emoji});
     } catch (e) {
         yield* put(errorThrown(e));
     }
@@ -671,11 +694,13 @@ function* commentReactionLoadSaga(action: WithContext<CommentReactionLoadAction>
     }
     try {
         const reaction = extractAttributes(
-            yield* call(Node.getCommentReaction, receiverName, receiverPostingId, id, homeOwnerName));
+            yield* call(Node.getCommentReaction, action, receiverName, receiverPostingId, id, homeOwnerName));
         const seniorReaction = extractAttributes(
-            yield* call(Node.getCommentReaction, receiverName, receiverPostingId, id, seniorName));
-        const totals = yield* call(Node.getCommentReactionTotals, receiverName, receiverPostingId, id);
-        yield* put(commentReactionSet(receiverName, id, receiverPostingId, reaction, seniorReaction, totals));
+            yield* call(Node.getCommentReaction, action, receiverName, receiverPostingId, id, seniorName));
+        const totals = yield* call(Node.getCommentReactionTotals, action, receiverName, receiverPostingId, id);
+        yield* put(commentReactionSet(
+            receiverName, id, receiverPostingId, reaction, seniorReaction, totals
+        ).causedBy(action));
     } catch (e) {
         if (Browser.isDevMode()) {
             yield* put(errorThrown(e));
@@ -696,12 +721,15 @@ function* commentReactionDeleteSaga(action: WithContext<CommentReactionDeleteAct
         return;
     }
     try {
-        const totals = yield* call(Node.deleteCommentReaction, receiverName, receiverPostingId, id, homeOwnerName);
+        const totals = yield* call(Node.deleteCommentReaction, action, receiverName, receiverPostingId, id,
+            homeOwnerName);
         const seniorAttributes = seniorName !== homeOwnerName
             ? extractAttributes(seniorReaction)
             : null;
-        yield* put(commentReactionSet(receiverName, id, receiverPostingId, null, seniorAttributes, totals));
-        yield* call(Node.deleteRemoteCommentReaction, ":", receiverName, receiverPostingId, id);
+        yield* put(commentReactionSet(
+            receiverName, id, receiverPostingId, null, seniorAttributes, totals
+        ).causedBy(action));
+        yield* call(Node.deleteRemoteCommentReaction, action, ":", receiverName, receiverPostingId, id);
     } catch (e) {
         yield* put(errorThrown(e));
     }
@@ -728,7 +756,7 @@ function* commentReplySaga(action: CommentReplyAction) {
     }));
     const text = quoteHtml(getWindowSelectionHtml());
     if (body.textLength === 0 && !replied) {
-        yield* put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading));
+        yield* put(commentRepliedToSet(commentId, ownerName, ownerFullName, heading).causedBy(action));
         if (text) {
             insertText(body, `>>>\n${text}\n>>>\n`);
         }
@@ -744,10 +772,10 @@ function* commentReplySaga(action: CommentReplyAction) {
             insertText(body, `${mention} `);
         }
     }
-    yield* put(commentsScrollToComposer());
+    yield* put(commentsScrollToComposer().causedBy(action));
 }
 
-function* glanceCommentLoadSaga() {
+function* glanceCommentLoadSaga(action: GlanceCommentLoadAction) {
     const {receiverName, receiverPostingId, commentId, comment} = yield* select(
         state => {
             const comments = getCommentsState(state);
@@ -764,16 +792,16 @@ function* glanceCommentLoadSaga() {
         return;
     }
     if (comment != null) {
-        yield* put(glanceCommentLoaded(receiverName, comment));
+        yield* put(glanceCommentLoaded(receiverName, comment).causedBy(action));
         return;
     }
 
     try {
-        const comment = yield* call(Node.getComment, receiverName, receiverPostingId, commentId, false,
+        const comment = yield* call(Node.getComment, action, receiverName, receiverPostingId, commentId, false,
             ["comment.not-found"]);
-        yield* put(glanceCommentLoaded(receiverName, comment));
+        yield* put(glanceCommentLoaded(receiverName, comment).causedBy(action));
     } catch (e) {
-        yield* put(glanceCommentLoadFailed(receiverName, receiverPostingId));
+        yield* put(glanceCommentLoadFailed(receiverName, receiverPostingId).causedBy(action));
         yield* put(errorThrown(e));
     }
 }

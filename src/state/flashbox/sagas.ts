@@ -11,7 +11,7 @@ function* flashBoxSaga(action: FlashBoxAction) {
     const {short} = action.payload;
 
     yield* delay(!short ? 1000 : 0);
-    yield* put(flashBoxDismiss());
+    yield* put(flashBoxDismiss().causedBy(action));
     yield* delay(1000);
-    yield* put(flashBoxClose());
+    yield* put(flashBoxClose().causedBy(action));
 }

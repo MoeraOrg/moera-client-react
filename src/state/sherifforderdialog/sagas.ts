@@ -38,22 +38,22 @@ function* sheriffOrderDialogSubmitSaga(action: WithContext<SheriffOrderDialogSub
 
     try {
         if (isSheriff) {
-            yield* call(Node.createRemoteSheriffOrder, ":", nodeName, {
+            yield* call(Node.createRemoteSheriffOrder, action, ":", nodeName, {
                 delete: false, feedName, postingId, commentId, category: "visibility" as const, reasonCode,
                 reasonDetails
             });
         } else {
-            yield* call(Node.createSheriffComplaint, SHERIFF_GOOGLE_PLAY_TIMELINE, {
+            yield* call(Node.createSheriffComplaint, action, SHERIFF_GOOGLE_PLAY_TIMELINE, {
                 ownerFullName: homeOwnerFullName, ownerGender: homeOwnerGender, nodeName, fullName, feedName,
                 postingOwnerName, postingOwnerFullName, postingOwnerGender, postingHeading, postingId,
                 commentOwnerName, commentOwnerFullName, commentOwnerGender, commentHeading, commentId, reasonCode,
                 reasonDetails, anonymous
             });
         }
-        yield* put(sheriffOrderDialogSubmitted());
-        yield* put(flashBox(isSheriff ? i18n.t("sheriff-order-sent") : i18n.t("report-sheriff-sent")));
+        yield* put(sheriffOrderDialogSubmitted().causedBy(action));
+        yield* put(flashBox(isSheriff ? i18n.t("sheriff-order-sent") : i18n.t("report-sheriff-sent")).causedBy(action));
     } catch (e) {
-        yield* put(sheriffOrderDialogSubmitFailed());
+        yield* put(sheriffOrderDialogSubmitFailed().causedBy(action));
         yield* put(errorThrown(e));
     }
 }
@@ -62,10 +62,10 @@ function* sheriffOrderDeleteSaga(action: WithContext<SheriffOrderDeleteAction>) 
     const {nodeName, feedName, postingId, commentId} = action.payload.target;
 
     try {
-        yield* call(Node.createRemoteSheriffOrder, ":", nodeName, {
+        yield* call(Node.createRemoteSheriffOrder, action, ":", nodeName, {
             delete: true, feedName, postingId, commentId, category: "visibility" as const
         });
-        yield* put(flashBox(i18n.t("sheriff-order-sent")));
+        yield* put(flashBox(i18n.t("sheriff-order-sent")).causedBy(action));
     } catch (e) {
         yield* put(errorThrown(e));
     }

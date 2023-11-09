@@ -87,7 +87,7 @@ export default [
     trigger("COMPOSE_PREVIEW_CLOSE", true, dialogClosed),
     trigger(
         ["EVENT_HOME_DRAFT_ADDED", "EVENT_HOME_DRAFT_UPDATED"],
-        (state, signal: EventAction<DraftAddedEvent | DraftUpdatedEvent>) =>
+        (state, signal: EventAction<DraftAddedEvent> | EventAction<DraftUpdatedEvent>) =>
             signal.payload.draftType === "new-posting"
             && signal.payload.receiverName === getOwnerName(state)
             && isComposeDraftListLoaded(state),
