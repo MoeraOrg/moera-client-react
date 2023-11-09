@@ -17,7 +17,7 @@ import {
 } from "api";
 import { WithContext } from "state/action-types";
 import { executor } from "state/executor";
-import { introduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import { ClientAction } from "state/action";
 import {
@@ -105,16 +105,16 @@ import { quoteHtml } from "util/html";
 import { getWindowSelectionHtml, insertText, mentionName } from "util/misc";
 
 export default [
-    executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga, introduced),
-    executor("DETAILED_POSTING_LOAD_ATTACHED", "", detailedPostingLoadAttachedSaga, introduced),
-    executor("COMMENTS_RECEIVER_SWITCH", "", commentsReceiverSwitchSaga, introduced),
-    executor("COMMENTS_RECEIVER_FEATURES_LOAD", "", commentsReceiverFeaturesLoadSaga, introduced),
-    executor("COMMENTS_LOAD_ALL", "", commentsLoadAllSaga, introduced),
-    executor("COMMENTS_PAST_SLICE_LOAD", "", commentsPastSliceLoadSaga, introduced),
-    executor("COMMENTS_FUTURE_SLICE_LOAD", "", commentsFutureSliceLoadSaga, introduced),
-    executor("COMMENTS_UPDATE", "", commentsUpdateSaga, introduced),
-    executor("COMMENTS_BLOCKED_USERS_LOAD", "", commentsBlockedUsersLoadSaga, introduced),
-    executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga, introduced),
+    executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga, homeIntroduced),
+    executor("DETAILED_POSTING_LOAD_ATTACHED", "", detailedPostingLoadAttachedSaga, homeIntroduced),
+    executor("COMMENTS_RECEIVER_SWITCH", "", commentsReceiverSwitchSaga, homeIntroduced),
+    executor("COMMENTS_RECEIVER_FEATURES_LOAD", "", commentsReceiverFeaturesLoadSaga, homeIntroduced),
+    executor("COMMENTS_LOAD_ALL", "", commentsLoadAllSaga, homeIntroduced),
+    executor("COMMENTS_PAST_SLICE_LOAD", "", commentsPastSliceLoadSaga, homeIntroduced),
+    executor("COMMENTS_FUTURE_SLICE_LOAD", "", commentsFutureSliceLoadSaga, homeIntroduced),
+    executor("COMMENTS_UPDATE", "", commentsUpdateSaga, homeIntroduced),
+    executor("COMMENTS_BLOCKED_USERS_LOAD", "", commentsBlockedUsersLoadSaga, homeIntroduced),
+    executor("COMMENT_LOAD", payload => payload.commentId, commentLoadSaga, homeIntroduced),
     executor("COMMENT_POST", null, commentPostSaga),
     executor("COMMENT_DRAFT_LOAD", "", commentDraftLoadSaga),
     executor("COMMENT_DRAFT_SAVE", "", commentDraftSaveSaga),
@@ -127,18 +127,18 @@ export default [
     executor("COMMENT_DIALOG_COMMENT_LOAD", "", commentDialogCommentLoadSaga),
     executor("COMMENT_DIALOG_COMMENT_RESET", "", commentDialogCommentResetSaga),
     executor("COMMENT_VERIFY", payload => payload.commentId, commentVerifySaga),
-    executor("COMMENT_REACT", null, commentReactSaga, introduced),
+    executor("COMMENT_REACT", null, commentReactSaga, homeIntroduced),
     executor(
         "COMMENT_REACTION_LOAD",
         payload => `${payload.id}:${payload.postingId}`,
         commentReactionLoadSaga,
-        introduced
+        homeIntroduced
     ),
     executor(
         "COMMENT_REACTION_DELETE",
         payload => `${payload.id}:${payload.postingId}`,
         commentReactionDeleteSaga,
-        introduced
+        homeIntroduced
     ),
     executor("COMMENT_REPLY", "", commentReplySaga),
     executor("GLANCE_COMMENT_LOAD", null, glanceCommentLoadSaga)

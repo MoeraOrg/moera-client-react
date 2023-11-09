@@ -64,7 +64,7 @@ class Navigation extends React.PureComponent<Props> {
             goToLocation(path, query, hash);
         } else {
             if (root != null) {
-                initFromLocation(root, path, query, hash);
+                initFromLocation(null, root, path, query, hash);
             }
         }
         event.preventDefault();

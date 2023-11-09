@@ -26,7 +26,7 @@ function* nodeNameLoadSaga(action: NodeNameLoadAction) {
     try {
         const {name = null} = yield* call(Node.getNodeName, action, "", false);
         yield* put(nodeNameSet(name).causedBy(action));
-        yield* put(ownerSet(name, null, false, false, false, null));
+        yield* put(ownerSet(name, null, false, false, false, null).causedBy(action));
     } catch (e) {
         yield* put(nodeNameLoadFailed().causedBy(action));
         yield* put(errorThrown(e));

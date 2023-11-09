@@ -31,7 +31,7 @@ export default [
     trigger("OPEN_REACTIONS_DIALOG", isReactionsDialogTotalsToBeLoaded, reactionsDialogTotalsLoad),
     trigger("OPEN_REACTIONS_DIALOG", true, dialogOpened(closeReactionsDialog())),
     trigger("CLOSE_REACTIONS_DIALOG", true, dialogClosed),
-    trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED", "WAKE_UP"], true, reactionsDialogUnset),
+    trigger(["NODE_READY", "HOME_READY", "WAKE_UP"], true, reactionsDialogUnset),
     trigger(
         ["EVENT_NODE_POSTING_UPDATED", "EVENT_NODE_POSTING_REACTIONS_CHANGED"],
         (state, signal: EventAction<PostingUpdatedEvent> | EventAction<PostingReactionsChangedEvent>) =>

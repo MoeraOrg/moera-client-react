@@ -6,6 +6,7 @@ type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi"
 type UserAgentOs = "android" | "ios" | "unknown";
 
 interface DocumentLocation {
+    name?: string | null;
     rootLocation?: string;
     path?: string | null;
     query?: string | null;
@@ -107,6 +108,7 @@ export class Browser {
 
     static getLocation(rootLocation: string, path: string | null | undefined, query: string | null | undefined,
                        hash: string | null | undefined, header: string | null): DocumentLocation {
+        let name: string | null = null;
         if (header) {
             header
                 .split(/\s*;\s*/)
@@ -116,6 +118,9 @@ export class Browser {
                 .forEach(([name, value]) => {
                     let components;
                     switch(name) {
+                        case "name":
+                            name = value;
+                            break;
                         case "root":
                             components = URI.parse(value);
                             rootLocation += components.path || "";
@@ -133,7 +138,7 @@ export class Browser {
                 });
         }
 
-        return {rootLocation, path, query, hash};
+        return {name, rootLocation, path, query, hash};
     }
 
     static getDocumentPassedLocation(): DocumentLocation {

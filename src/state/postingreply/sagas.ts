@@ -85,7 +85,9 @@ function* postingReplySaga(action: PostingReplyAction) {
         const draft = yield* call(Node.createDraft, action, ":", draftText);
         if (nodeRootPage !== homeRootPage) {
             if (homeRootLocation != null) {
-                yield* put(initFromLocation(homeRootLocation, "/compose", `?draft=${draft.id}`, null).causedBy(action))
+                yield* put(initFromLocation(
+                    homeOwnerName, homeRootLocation, "/compose", `?draft=${draft.id}`, null
+                ).causedBy(action))
             }
         } else {
             yield* put(goToLocation("/compose", `?draft=${draft.id}`, null).causedBy(action))

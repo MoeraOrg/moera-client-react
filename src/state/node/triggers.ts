@@ -2,17 +2,24 @@ import i18n from 'i18next';
 
 import { inv, trigger } from "state/trigger";
 import { EventAction, NodeNameChangedEvent } from "api/events";
-import { newLocation, updateLocation } from "state/navigation/actions";
-import { nodeFeaturesLoad, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
+import { InitFromLocationAction, newLocation, updateLocation } from "state/navigation/actions";
+import { nodeFeaturesLoad, nodeReady, ownerLoad, ownerSet, ownerVerify } from "state/node/actions";
 import { getOwnerName, isAtHomeNode, isAtNode, isOwnerNameRecentlyChanged, isOwnerNameSet } from "state/node/selectors";
 import { NamingNameLoadedAction } from "state/naming/actions";
 import { messageBox } from "state/messagebox/actions";
+import { ClientState } from "state/state";
 
 export default [
-    trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED"], isAtNode, nodeFeaturesLoad),
     trigger("INIT_FROM_LOCATION", isAtNode, ownerLoad),
-    trigger("OWNER_SET", isOwnerNameRecentlyChanged, ownerVerify),
-    trigger("OWNER_SET", true, newLocation),
+    trigger(
+        "INIT_FROM_LOCATION",
+        (state: ClientState, signal: InitFromLocationAction) => signal.payload.nodeName != null,
+        nodeReady
+    ),
+    trigger("OWNER_SET", true, nodeReady),
+    trigger("NODE_READY", isOwnerNameRecentlyChanged, ownerVerify),
+    trigger("NODE_READY", true, newLocation),
+    trigger("NODE_READY", isAtNode, nodeFeaturesLoad),
     trigger(
         "NAMING_NAME_LOADED",
         (state, signal: NamingNameLoadedAction) => signal.payload.name === getOwnerName(state),

@@ -19,5 +19,5 @@ export default [
     trigger("COMPLAINS_INBOX_SET", isPastComplainGroupsToBeLoaded, complainsPastSliceLoad),
     trigger(["COMPLAINS_GROUP_OPEN", "COMPLAINS_GROUP_CLOSE", "COMPLAINS_DECISION_POSTED"], true, newLocation),
     trigger("COMPLAINS_GROUP_OPEN", isActiveComplainGroupToBeLoaded, complainsGroupLoad),
-    trigger(["COMPLAINS_GROUP_OPEN", "HOME_INTRODUCED"], true, complainsComplainsLoad)
+    trigger(["COMPLAINS_GROUP_OPEN", "HOME_READY"], true, complainsComplainsLoad)
 ];

@@ -51,25 +51,25 @@ import { fillBlockedOperations } from "state/blockedoperations/sagas";
 import { getNodeUri } from "state/naming/sagas";
 import { fillSubscription } from "state/subscriptions/sagas";
 import { isConnectedToHome } from "state/home/selectors";
-import { introduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-selectors";
 import { executor } from "state/executor";
 import { Browser } from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 
 export default [
     executor("POSTING_DELETE", payload => payload.id, postingDeleteSaga),
-    executor("POSTING_LOAD", payload => payload.id, postingLoadSaga, introduced),
+    executor("POSTING_LOAD", payload => payload.id, postingLoadSaga, homeIntroduced),
     executor("POSTING_VERIFY", payload => payload.id, postingVerifySaga),
     executor("POSTING_OPERATIONS_UPDATE", payload => payload.id, postingOperationsUpdateSaga),
-    executor("POSTING_REACT", null, postingReactSaga, introduced),
+    executor("POSTING_REACT", null, postingReactSaga, homeIntroduced),
     executor("POSTING_REACTION_LOAD", payload => payload.id, postingReactionLoadSaga),
     executor("POSTING_REACTIONS_RELOAD", "", postingReactionsReloadSaga),
-    executor("POSTING_REACTION_DELETE", payload => payload.id, postingReactionDeleteSaga, introduced),
+    executor("POSTING_REACTION_DELETE", payload => payload.id, postingReactionDeleteSaga, homeIntroduced),
     executor("POSTING_COPY_LINK", payload => payload.id, postingCopyLinkSaga),
-    executor("POSTING_COMMENTS_SUBSCRIBE", payload => payload.id, postingCommentsSubscribeSaga, introduced),
-    executor("POSTING_COMMENTS_UNSUBSCRIBE", payload => payload.id, postingCommentsUnsubscribeSaga, introduced),
-    executor("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga, introduced),
-    executor("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga, introduced)
+    executor("POSTING_COMMENTS_SUBSCRIBE", payload => payload.id, postingCommentsSubscribeSaga, homeIntroduced),
+    executor("POSTING_COMMENTS_UNSUBSCRIBE", payload => payload.id, postingCommentsUnsubscribeSaga, homeIntroduced),
+    executor("POSTING_COMMENT_ADDED_BLOCK", payload => payload.id, postingCommentAddedBlockSaga, homeIntroduced),
+    executor("POSTING_COMMENT_ADDED_UNBLOCK", payload => payload.id, postingCommentAddedUnblockSaga, homeIntroduced)
 ];
 
 function* postingDeleteSaga(action: PostingDeleteAction) {

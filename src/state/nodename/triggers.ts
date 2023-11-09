@@ -15,8 +15,8 @@ import { flashBox } from "state/flashbox/actions";
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtProfilePage, isNodeNameToBeLoaded), nodeNameLoad),
-    trigger("HOME_INTRODUCED", isAtProfilePage, nodeNameLoad),
-    trigger("HOME_INTRODUCED", inv(isAtProfilePage), nodeNameUnset),
+    trigger("HOME_READY", isAtProfilePage, nodeNameLoad),
+    trigger("HOME_READY", inv(isAtProfilePage), nodeNameUnset),
     trigger("REGISTER_NAME_DIALOG", true, dialogOpened(registerNameDialogCancel())),
     trigger("REGISTER_NAME_DIALOG_CANCEL", true, dialogClosed),
     trigger("REGISTER_NAME_SUCCEEDED", isAtNode, nodeNameLoad),

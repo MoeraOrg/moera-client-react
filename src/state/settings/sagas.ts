@@ -14,7 +14,7 @@ import {
 import { Storage } from "storage";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
-import { introduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-selectors";
 import {
     settingsChangedPassword,
     SettingsChangePasswordAction,
@@ -68,20 +68,20 @@ import { now } from "util/misc";
 import { ClientAction } from "state/action";
 
 export default [
-    executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, introduced),
-    executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga, introduced),
-    executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga, introduced),
+    executor("SETTINGS_NODE_VALUES_LOAD", "", settingsNodeValuesLoadSaga, homeIntroduced),
+    executor("SETTINGS_NODE_META_LOAD", "", settingsNodeMetaLoadSaga, homeIntroduced),
+    executor("SETTINGS_CLIENT_VALUES_LOAD", "", settingsClientValuesLoadSaga, homeIntroduced),
     executor("SETTINGS_CLIENT_VALUES_LOADED", "", settingsClientValuesLoadedSaga),
     executor("SETTINGS_CLIENT_VALUES_SET", "", settingsClientValuesSetSaga),
     executor("SETTINGS_UPDATE", null, settingsUpdateSaga),
     executor("SETTINGS_UPDATE_SUCCEEDED", null, settingsUpdateSucceededSaga),
     executor("SETTINGS_CHANGE_PASSWORD", "", settingsChangePasswordSaga),
-    executor("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga, introduced),
+    executor("SETTINGS_TOKENS_LOAD", "", settingsTokensLoadSaga, homeIntroduced),
     executor("SETTINGS_TOKENS_CREATE", null, settingsTokensCreateSaga),
     executor("SETTINGS_TOKENS_UPDATE", payload => payload.id, settingsTokensUpdateSaga),
     executor("SETTINGS_TOKENS_DELETE", payload => payload.id, settingsTokensDeleteSaga),
     executor("SETTINGS_TOKENS_NEW_TOKEN_COPY", null, settingsTokensNewTokenCopySaga),
-    executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga, introduced),
+    executor("SETTINGS_PLUGINS_LOAD", "", settingsPluginsLoadSaga, homeIntroduced),
     executor("SETTINGS_PLUGINS_DELETE", payload => payload.name, settingsPluginsDeleteSaga),
     executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY", "", settingsRemindSetSheriffGooglePlaySaga),
     executor("SETTINGS_REMIND_SET_SHERIFF_GOOGLE_PLAY_CHOICE", "", settingsRemindSetSheriffGooglePlayChoiceSaga)

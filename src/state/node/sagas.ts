@@ -17,7 +17,7 @@ import {
 } from "state/node/actions";
 import { getNodeRootPage, getOwnerName } from "state/node/selectors";
 import { initFromLocation } from "state/navigation/actions";
-import { introduced, namingInitialized } from "state/init-selectors";
+import { homeIntroduced, namingInitialized } from "state/init-selectors";
 import { getNodeUri } from "state/naming/sagas";
 import { normalizeUrl, rootUrl } from "util/url";
 import { WithContext } from "state/action-types";
@@ -26,7 +26,7 @@ export default [
     executor("OWNER_LOAD", "", ownerLoadSaga),
     executor("OWNER_VERIFY", null, ownerVerifySaga, namingInitialized),
     executor("OWNER_SWITCH", payload => payload.name, ownerSwitchSaga),
-    executor("NODE_FEATURES_LOAD", "", nodeFeaturesLoadSaga, introduced)
+    executor("NODE_FEATURES_LOAD", "", nodeFeaturesLoadSaga, homeIntroduced)
 ];
 
 function* ownerLoadSaga(action: OwnerLoadAction) {
@@ -72,8 +72,9 @@ function* ownerSwitchSaga(action: WithContext<OwnerSwitchAction>) {
         if (info && info.nodeUri) {
             const {scheme, host, port, path = null} = URI.parse(info.nodeUri);
             if (scheme != null && host != null) {
+                const nodeName = `${info.name}_${info.generation}`;
                 const rootLocation = rootUrl(scheme, host, port);
-                yield* put(initFromLocation(rootLocation, path, null, null).causedBy(action));
+                yield* put(initFromLocation(nodeName, rootLocation, path, null, null).causedBy(action));
             }
         } else {
             yield* put(ownerSwitchFailed().causedBy(action));

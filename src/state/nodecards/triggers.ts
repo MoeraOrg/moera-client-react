@@ -10,26 +10,20 @@ import {
 } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
 import { EventAction, ProfileUpdatedEvent } from "api/events";
-import { OwnerSetAction } from "state/node/actions";
 import { ProfileSetAction } from "state/profile/actions";
 import { WithContext } from "state/action-types";
 
 export default [
-    trigger(["INIT_FROM_LOCATION", "HOME_INTRODUCED"], true, nodeCardsClientSwitch),
+    trigger(["NODE_READY", "HOME_READY"], true, nodeCardsClientSwitch),
     trigger("PULSE_6H", true, nodeCardsRefresh),
     trigger(
-        ["INIT_FROM_LOCATION", "HOME_INTRODUCED", "WAKE_UP"],
+        ["NODE_READY", "HOME_READY", "WAKE_UP"],
         true,
         signal => nodeCardPrepare(signal.context.ownerNameOrUrl)
     ),
+    trigger("HOME_READY", true, signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)),
     trigger(
-        "OWNER_SET",
-        (state, signal: WithContext<OwnerSetAction>) => signal.payload.name != null,
-        signal => nodeCardPrepare(signal.payload.name!)
-    ),
-    trigger("HOME_INTRODUCED", true, signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)),
-    trigger(
-        "HOME_INTRODUCED",
+        "HOME_READY",
         (state, signal: WithContext<Action>) => signal.context.ownerName != null,
         (signal: WithContext<Action>) => nodeCardPrepare(signal.context.ownerName!)
     ),

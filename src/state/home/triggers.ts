@@ -2,7 +2,7 @@ import { trigger } from "state/trigger";
 import {
     ConnectedToHomeAction,
     homeFriendGroupsLoad,
-    homeIntroduced,
+    homeReady,
     homeInvisibleUsersLoad,
     homeOwnerSet,
     homeOwnerVerify
@@ -16,12 +16,12 @@ export default [
     trigger(
         "CONNECTED_TO_HOME",
         (state: ClientState, signal: ConnectedToHomeAction) => signal.payload.name != null,
-        homeIntroduced
+        homeReady
     ),
-    trigger("DISCONNECTED_FROM_HOME", true, homeIntroduced),
-    trigger("HOME_OWNER_SET", true, homeIntroduced),
-    trigger("HOME_INTRODUCED", isConnectedToHome, homeFriendGroupsLoad),
-    trigger("HOME_INTRODUCED", isConnectedToHome, homeInvisibleUsersLoad),
+    trigger("DISCONNECTED_FROM_HOME", true, homeReady),
+    trigger("HOME_OWNER_SET", true, homeReady),
+    trigger("HOME_READY", isConnectedToHome, homeFriendGroupsLoad),
+    trigger("HOME_READY", isConnectedToHome, homeInvisibleUsersLoad),
     trigger(
         "EVENT_HOME_NODE_NAME_CHANGED",
         true,

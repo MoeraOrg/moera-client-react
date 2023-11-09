@@ -135,7 +135,7 @@ function* flushPostponedSaga() {
 export function* invokeExecutors(executors: ExecutorMap) {
     yield* takeEvery([...executors.keys()], executorsSaga, executors);
     yield* takeEvery(
-        ["HOME_INTRODUCED", "SETTINGS_CLIENT_VALUES_LOADED", "OWNER_SET"],
+        ["HOME_READY", "SETTINGS_CLIENT_VALUES_LOADED", "NODE_READY"],
         flushPostponedSaga
     );
 }

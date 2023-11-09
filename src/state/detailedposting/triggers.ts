@@ -55,8 +55,8 @@ import { CommentAddedEvent, CommentReactionsChangedEvent, CommentUpdatedEvent, E
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtDetailedPostingPage, isDetailedPostingToBeLoaded), detailedPostingLoad),
-    trigger(["HOME_INTRODUCED", "WAKE_UP"], isDetailedPostingDefined, detailedPostingLoad),
-    trigger("HOME_INTRODUCED", true, commentsUnset),
+    trigger(["HOME_READY", "WAKE_UP"], isDetailedPostingDefined, detailedPostingLoad),
+    trigger("HOME_READY", true, commentsUnset),
     trigger("WAKE_UP", isAtDetailedPostingPage, commentsUpdate),
     trigger("WAKE_UP", inv(isAtDetailedPostingPage), commentsUnset),
     trigger(
@@ -76,17 +76,17 @@ export default [
         detailedPostingLoadAttached
     ),
     trigger(
-        ["GO_TO_PAGE", "POSTING_SET", "OWNER_SET"],
+        ["GO_TO_PAGE", "POSTING_SET", "NODE_READY"],
         conj(isAtDetailedPostingPage, isCommentsReceiverToBeSwitched),
         commentsReceiverSwitch
     ),
     trigger(
-        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "HOME_INTRODUCED"],
+        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "HOME_READY"],
         conj(isAtDetailedPostingPage, isCommentsReceiverFeaturesToBeLoaded),
         commentsReceiverFeaturesLoad
     ),
     trigger(
-        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "HOME_INTRODUCED"],
+        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "HOME_READY"],
         conj(isAtDetailedPostingPage, isCommentComposeDraftToBeLoaded),
         commentDraftLoad(false)
     ),
@@ -122,7 +122,7 @@ export default [
         commentsPastSliceLoad
     ),
     trigger(
-        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "HOME_INTRODUCED"],
+        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "HOME_READY"],
         conj(isAtDetailedPostingPage, isCommentsBlockedUsersToBeLoaded),
         commentsBlockedUsersLoad
     ),

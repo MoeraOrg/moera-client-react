@@ -6,7 +6,8 @@ import { ClientAction } from "state/action";
 import { NodeState } from "state/node/state";
 import { toWsUrl } from "util/url";
 
-const initialState = {
+const initialState: NodeState = {
+    introduced: false,
     root: {
         location: null,
         page: null,
@@ -43,9 +44,19 @@ export default (state: NodeState = initialState, action: ClientAction): NodeStat
                     page,
                     api,
                     events
+                },
+                owner: {
+                    ...cloneDeep(initialState.owner),
+                    name: action.payload.nodeName
                 }
             };
         }
+
+        case "NODE_READY":
+            return {
+                ...state,
+                introduced: true
+            };
 
         case "OWNER_SET": {
             const istate = immutable.wrap(state);

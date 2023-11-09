@@ -6,7 +6,7 @@ import { isCartesToBeUpdated } from "state/cartes/selectors";
 export default [
     trigger("PULSE_1MIN", true, cartesPurgeExpired),
     trigger(
-        ["HOME_INTRODUCED", "PULSE_1MIN", "WAKE_UP"],
+        ["HOME_READY", "PULSE_1MIN", "WAKE_UP"],
         conj(isConnectedToHome, isHomeOwnerNameSet, isCartesToBeUpdated),
         cartesLoad
     ),

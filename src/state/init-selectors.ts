@@ -1,14 +1,18 @@
 import { ClientState } from "state/state";
-import { isOwnerNameSet } from "state/node/selectors";
+import { isNodeIntroduced } from "state/node/selectors";
 import { isConnectedToHome, isHomeIntroduced } from "state/home/selectors";
 import { isSettingsClientValuesLoaded } from "state/settings/selectors";
 
-export function introduced(state: ClientState): boolean {
+export function homeIntroduced(state: ClientState): boolean {
     return isHomeIntroduced(state);
 }
 
+export function nodeIntroduced(state: ClientState): boolean {
+    return isNodeIntroduced(state);
+}
+
 export function mutuallyIntroduced(state: ClientState): boolean {
-    return isOwnerNameSet(state) && introduced(state);
+    return nodeIntroduced(state) && homeIntroduced(state);
 }
 
 export function namingInitialized(state: ClientState): boolean {

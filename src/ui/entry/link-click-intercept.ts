@@ -24,11 +24,11 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent, initFro
         const headers = response.headers;
         if (headers && headers.has("X-Moera")) {
             const rootPage = rootUrl(parts.scheme!, parts.host!, parts.port);
-            const {rootLocation, path = null, query = null, hash = null} =
+            const {name, rootLocation, path = null, query = null, hash = null} =
                 Browser.getLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
             if (rootLocation != null && rootLocation !== Browser.getRootLocation()) {
                 newLocation();
-                initFromLocation(rootLocation, path, query, hash);
+                initFromLocation(name, rootLocation, path, query, hash);
             } else {
                 goToLocation(path, query, hash);
             }

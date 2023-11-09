@@ -6,7 +6,7 @@ import {
     connectedToHome,
     connectionsSet,
     disconnectedFromHome,
-    homeIntroduced,
+    homeReady,
     homeInvisibleUsersLoaded
 } from "state/home/actions";
 import { getHomeConnectionData } from "state/home/selectors";
@@ -78,7 +78,7 @@ export function loadData(): void {
     const data = Access.loadData();
     loadedData(data);
     if (data.home?.location == null) {
-        store.dispatch(homeIntroduced());
+        store.dispatch(homeReady());
     }
 }
 

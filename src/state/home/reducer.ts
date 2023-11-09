@@ -96,7 +96,7 @@ export default (state: HomeState = initialState, action: WithContext<ClientActio
                 ...cloneDeep(emptyConnection)
             };
 
-        case "HOME_INTRODUCED":
+        case "HOME_READY":
             return {
                 ...state,
                 introduced: true

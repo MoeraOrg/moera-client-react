@@ -1,6 +1,10 @@
 import { AvatarImage, Features } from "api";
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 
+export type NodeReadyAction = ActionWithoutPayload<"NODE_READY">;
+export const nodeReady = (): NodeReadyAction =>
+    actionWithoutPayload("NODE_READY");
+
 export type OwnerLoadAction = ActionWithoutPayload<"OWNER_LOAD">;
 export const ownerLoad = (): OwnerLoadAction =>
     actionWithoutPayload("OWNER_LOAD");
@@ -59,7 +63,8 @@ export const nodeFeaturesLoaded = (features: Features): NodeFeaturesLoadedAction
     actionWithPayload("NODE_FEATURES_LOADED", {features});
 
 export type NodeAnyAction =
-    OwnerLoadAction
+    NodeReadyAction
+    | OwnerLoadAction
     | OwnerSetAction
     | OwnerVerifyAction
     | OwnerVerifiedLoadAction

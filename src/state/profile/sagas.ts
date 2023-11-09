@@ -29,10 +29,10 @@ import { messageBox } from "state/messagebox/actions";
 import { getAvatars } from "state/profile/selectors";
 import { settingsUpdate } from "state/settings/actions";
 import store from "state/store";
-import { introduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-selectors";
 
 export default [
-    executor("PROFILE_LOAD", "", profileLoadSaga, introduced),
+    executor("PROFILE_LOAD", "", profileLoadSaga, homeIntroduced),
     executor("PROFILE_UPDATE", null, profileUpdateSaga),
     executor("PROFILE_IMAGE_UPLOAD", null, profileImageUploadSaga),
     executor("PROFILE_AVATARS_LOAD", "", profileAvatarsLoadSaga),

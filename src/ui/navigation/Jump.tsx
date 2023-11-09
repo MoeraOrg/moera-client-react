@@ -69,7 +69,7 @@ class Jump extends React.PureComponent<Props> {
                 if (scheme != null && host != null) {
                     const rootLocation = rootUrl(scheme, host, port);
                     const {path = null, query = null, fragment = null} = URI.parse(location);
-                    initFromLocation(rootLocation, path, query, fragment);
+                    initFromLocation(nodeOwnerName, rootLocation, path, query, fragment);
                 }
             }
         }

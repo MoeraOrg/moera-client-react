@@ -1,7 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 
 import { executor } from "state/executor";
-import { introduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-selectors";
 import { Node, SheriffComplainStatus } from "api";
 import { ClientState } from "state/state";
 import { errorThrown } from "state/error/actions";
@@ -22,10 +22,10 @@ import {
 import { getActiveComplainGroupId } from "state/complains/selectors";
 
 export default [
-    executor("COMPLAINS_PAST_SLICE_LOAD", "", complainsPastSliceLoadSaga, introduced),
-    executor("COMPLAINS_FUTURE_SLICE_LOAD", "", complainsFutureSliceLoadSaga, introduced),
-    executor("COMPLAINS_GROUP_LOAD", null, complainsGroupLoadSaga, introduced),
-    executor("COMPLAINS_COMPLAINS_LOAD", null, complainsComplainsLoadSaga, introduced),
+    executor("COMPLAINS_PAST_SLICE_LOAD", "", complainsPastSliceLoadSaga, homeIntroduced),
+    executor("COMPLAINS_FUTURE_SLICE_LOAD", "", complainsFutureSliceLoadSaga, homeIntroduced),
+    executor("COMPLAINS_GROUP_LOAD", null, complainsGroupLoadSaga, homeIntroduced),
+    executor("COMPLAINS_COMPLAINS_LOAD", null, complainsComplainsLoadSaga, homeIntroduced),
     executor("COMPLAINS_DECISION_POST", payload => payload.groupId, complainsDecisionPostSaga)
 ];
 

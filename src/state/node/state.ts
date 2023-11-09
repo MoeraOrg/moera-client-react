@@ -1,6 +1,7 @@
 import { Features } from "api";
 
 export interface NodeState {
+    introduced: boolean;
     root: {
         location: string | null;
         page: string | null;

@@ -14,7 +14,7 @@ import { confirmBox } from "state/confirmbox/actions";
 export default [
     trigger("GO_TO_PAGE", conj(isAtProfilePage, isProfileEditing), () => profileLoad()),
     trigger(
-        ["HOME_INTRODUCED", "WAKE_UP", "PROFILE_EDIT"],
+        ["HOME_READY", "WAKE_UP", "PROFILE_EDIT"],
         conj(isAtProfilePage, isProfileEditing),
         () => profileLoad()
     ),

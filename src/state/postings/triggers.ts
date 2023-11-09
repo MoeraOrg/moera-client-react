@@ -31,7 +31,7 @@ export default [
     ),
     trigger("POSTING_COMMENTS_SUBSCRIBED", true, () => flashBox(i18n.t("following-comments"))),
     trigger("POSTING_COMMENTS_UNSUBSCRIBED", true, () => flashBox(i18n.t("not-following-comments"))),
-    trigger("HOME_INTRODUCED", true, postingReactionsReload),
+    trigger("HOME_READY", true, postingReactionsReload),
     trigger(
         "POSTING_OPERATIONS_UPDATED",
         (state, signal: PostingOperationsUpdatedAction) =>

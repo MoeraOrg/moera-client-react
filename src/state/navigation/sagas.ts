@@ -18,9 +18,10 @@ import {
     NewLocationAction,
     UpdateLocationAction
 } from "state/navigation/actions";
-import { getHomeRootPage } from "state/home/selectors";
+import { getHomeOwnerName, getHomeRootPage } from "state/home/selectors";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
+import { ClientState } from "state/state";
 
 export default [
     executor("INIT_FROM_NODE_LOCATION", "", initFromNodeLocationSaga),
@@ -64,7 +65,7 @@ function* initFromNodeLocationSaga(action: InitFromNodeLocationAction) {
     }
     const rootLocation = rootUrl(scheme, host, port);
     const {path = null, query = null, fragment = null} = URI.parse(location);
-    yield* put(initFromLocation(rootLocation, path, query, fragment).causedBy(action));
+    yield* put(initFromLocation(nodeName, rootLocation, path, query, fragment).causedBy(action));
 }
 
 function* initFromLocationSaga(action: InitFromLocationAction) {
@@ -93,26 +94,32 @@ function* changeLocation(action: NewLocationAction | UpdateLocationAction | null
 }
 
 function* goHomeSaga(action: GoHomeAction) {
-    const homeRootPage = yield* select(getHomeRootPage);
+    const {homeOwnerName, homeRootPage} = yield* select((state: ClientState) => ({
+        homeOwnerName: getHomeOwnerName(state),
+        homeRootPage: getHomeRootPage(state)
+    }));
     if (homeRootPage == null) {
         return;
     }
     const {scheme, host, port, path} = URI.parse(homeRootPage);
     if (scheme != null && host != null) {
         const rootLocation = rootUrl(scheme, host, port);
-        yield* put(initFromLocation(rootLocation, path ?? null, null, null).causedBy(action));
+        yield* put(initFromLocation(homeOwnerName, rootLocation, path ?? null, null, null).causedBy(action));
     }
 }
 
 function* goHomeNewsSaga(action: GoHomeNewsAction) {
-    const homeRootPage = yield* select(getHomeRootPage);
+    const {homeOwnerName, homeRootPage} = yield* select((state: ClientState) => ({
+        homeOwnerName: getHomeOwnerName(state),
+        homeRootPage: getHomeRootPage(state)
+    }));
     if (homeRootPage == null) {
         return;
     }
     const {scheme, host, port, path} = URI.parse(homeRootPage);
     if (scheme != null && host != null) {
         const rootLocation = rootUrl(scheme, host, port);
-        yield* put(initFromLocation(rootLocation, path + "/news", null, null).causedBy(action));
+        yield* put(initFromLocation(homeOwnerName, rootLocation, path + "/news", null, null).causedBy(action));
     }
 }
 

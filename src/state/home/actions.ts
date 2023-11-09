@@ -42,9 +42,9 @@ export type DisconnectedFromHomeAction = ActionWithoutPayload<"DISCONNECTED_FROM
 export const disconnectedFromHome = (): DisconnectedFromHomeAction =>
     actionWithoutPayload("DISCONNECTED_FROM_HOME");
 
-export type HomeIntroducedAction = ActionWithoutPayload<"HOME_INTRODUCED">;
-export const homeIntroduced = (): HomeIntroducedAction =>
-    actionWithoutPayload("HOME_INTRODUCED");
+export type HomeReadyAction = ActionWithoutPayload<"HOME_READY">;
+export const homeReady = (): HomeReadyAction =>
+    actionWithoutPayload("HOME_READY");
 
 export type HomeOwnerVerifyAction = ActionWithoutPayload<"HOME_OWNER_VERIFY">;
 export const homeOwnerVerify = (): HomeOwnerVerifyAction =>
@@ -116,7 +116,7 @@ export type HomeAnyAction =
     | ConnectionToHomeFailedAction
     | ConnectedToHomeAction
     | DisconnectedFromHomeAction
-    | HomeIntroducedAction
+    | HomeReadyAction
     | HomeOwnerVerifyAction
     | HomeOwnerSetAction
     | HomeOwnerVerifiedAction

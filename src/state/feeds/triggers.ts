@@ -68,16 +68,16 @@ export default [
     ),
     trigger("FEED_SCROLLED", true, updateLocation),
     trigger(
-        "HOME_INTRODUCED",
+        "HOME_READY",
         disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage),
         feedGeneralLoad("timeline")
     ),
     trigger(
-        "HOME_INTRODUCED",
+        "HOME_READY",
         inv(disj(isAtTimelinePage, isAtProfilePage, isAtDetailedPostingPage)),
         feedGeneralUnset("timeline")
     ),
-    trigger("HOME_INTRODUCED", true, feedsUnset),
+    trigger("HOME_READY", true, feedsUnset),
     trigger("WAKE_UP", true, feedsUpdate),
     trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":instant")),
     trigger("FEEDS_UNSET", isConnectedToHome, feedStatusLoad(":news")),

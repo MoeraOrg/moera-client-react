@@ -15,6 +15,10 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { isNodeNameOperationFinished } from "state/nodename/selectors";
 import { Browser } from "ui/browser";
 
+export function isNodeIntroduced(state: ClientState): boolean {
+    return state.node.introduced;
+}
+
 export function isAtNode(state: ClientState): boolean {
     return !!state.node.root.api;
 }

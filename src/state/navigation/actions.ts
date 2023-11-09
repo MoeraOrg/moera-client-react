@@ -22,15 +22,16 @@ export const initFromNodeLocation = (
     actionWithPayload("INIT_FROM_NODE_LOCATION", {nodeName, location, fallbackUrl});
 
 export type InitFromLocationAction = ActionWithPayload<"INIT_FROM_LOCATION", {
+    nodeName: string | null;
     rootLocation: string;
     path: string | null;
     query: string | null;
     hash: string | null;
 }>;
 export const initFromLocation = (
-    rootLocation: string, path: string | null, query: string | null, hash: string | null
+    nodeName: string | null, rootLocation: string, path: string | null, query: string | null, hash: string | null
 ): InitFromLocationAction =>
-    actionWithPayload("INIT_FROM_LOCATION", {rootLocation, path, query, hash});
+    actionWithPayload("INIT_FROM_LOCATION", {nodeName, rootLocation, path, query, hash});
 
 export type WakeUpAction = ActionWithoutPayload<"WAKE_UP">;
 export const wakeUp = (): WakeUpAction =>

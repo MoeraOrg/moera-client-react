@@ -10,5 +10,5 @@ export default [
             isConnectedToHome(state) && isContactsQueryToBeLoaded(state, signal.payload.query),
         signal => contactsLoad(signal.payload.query)
     ),
-    trigger("HOME_INTRODUCED", true, contactsUnset)
+    trigger("HOME_READY", true, contactsUnset)
 ];

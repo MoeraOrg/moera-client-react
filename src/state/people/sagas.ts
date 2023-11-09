@@ -55,7 +55,7 @@ import {
 import { executor } from "state/executor";
 import { ClientAction } from "state/action";
 import { ClientState } from "state/state";
-import { introduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-selectors";
 import { getHomeFriendsId } from "state/home/selectors";
 import { getNodeFriendGroups, isPrincipalIn } from "state/node/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
@@ -84,13 +84,13 @@ import { getSetting } from "state/settings/selectors";
 
 export default [
     executor("PEOPLE_GO_TO_DEFAULT_TAB", "", peopleGoToDefaultTabSaga),
-    executor("PEOPLE_GENERAL_LOAD", "", peopleGeneralLoadSaga, introduced),
-    executor("SUBSCRIBERS_LOAD", "", subscribersLoadSaga, introduced),
-    executor("SUBSCRIPTIONS_LOAD", "", subscriptionsLoadSaga, introduced),
-    executor("FRIENDS_LOAD", "", friendsLoadSaga, introduced),
-    executor("FRIEND_OFS_LOAD", "", friendOfsLoadSaga, introduced),
-    executor("BLOCKED_LOAD", "", blockedLoadSaga, introduced),
-    executor("BLOCKED_BY_LOAD", "", blockedByLoadSaga, introduced),
+    executor("PEOPLE_GENERAL_LOAD", "", peopleGeneralLoadSaga, homeIntroduced),
+    executor("SUBSCRIBERS_LOAD", "", subscribersLoadSaga, homeIntroduced),
+    executor("SUBSCRIPTIONS_LOAD", "", subscriptionsLoadSaga, homeIntroduced),
+    executor("FRIENDS_LOAD", "", friendsLoadSaga, homeIntroduced),
+    executor("FRIEND_OFS_LOAD", "", friendOfsLoadSaga, homeIntroduced),
+    executor("BLOCKED_LOAD", "", blockedLoadSaga, homeIntroduced),
+    executor("BLOCKED_BY_LOAD", "", blockedByLoadSaga, homeIntroduced),
     executor("FRIENDSHIP_UPDATE", payload => payload.nodeName, friendshipUpdateSaga),
     executor("FRIENDSHIP_SET_VISIBILITY", payload => payload.nodeName, friendshipSetVisibilitySaga),
     executor("PEOPLE_SELECTED_SUBSCRIBE", "", peopleSelectedSubscribeSaga),

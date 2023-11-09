@@ -9,15 +9,15 @@ import {
     homeFriendGroupsLoaded, HomeInvisibleUsersLoadAction,
     homeInvisibleUsersLoaded
 } from "state/home/actions";
-import { introduced } from "state/init-selectors";
+import { homeIntroduced } from "state/init-selectors";
 import { errorThrown } from "state/error/actions";
 import { getHomeInvisibleUsersChecksum } from "state/home/selectors";
 import { executor } from "state/executor";
 
 export default [
     executor("HOME_AVATARS_LOAD", "", homeAvatarsLoadSaga),
-    executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga, introduced),
-    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga, introduced)
+    executor("HOME_FRIEND_GROUPS_LOAD", "", homeFriendGroupsLoadSaga, homeIntroduced),
+    executor("HOME_INVISIBLE_USERS_LOAD", "", homeInvisibleUsersLoadSaga, homeIntroduced)
 ];
 
 function* homeAvatarsLoadSaga(action: HomeAvatarsLoadAction) {
