@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { connect, ConnectedProps, Provider } from 'react-redux';
 import 'katex/dist/katex.min.css';
 
@@ -12,8 +12,8 @@ import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
 import { interceptLinkClick } from "ui/entry/link-click-intercept";
-import { isNumericString } from "util/misc";
 import MrSpoiler from "ui/entry/MrSpoiler";
+import { isNumericString } from "util/misc";
 
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
@@ -57,16 +57,18 @@ function EntryHtml({
 
                 const text = (node as HTMLElement).innerText;
                 const fullName = text.startsWith("@") ? text.substring(1) : text;
-                ReactDOM.render(
+                createRoot(span).render(
                     <Provider store={store}>
                         <NodeNameMention name={name} fullName={fullName} text={text}/>
-                    </Provider>, span);
+                    </Provider>
+                );
             } else {
                 const html = node.innerHTML;
-                ReactDOM.render(
+                createRoot(span).render(
                     <Provider store={store}>
                         <Jump nodeName={name} href={href}><span dangerouslySetInnerHTML={{__html: html}}/></Jump>
-                    </Provider>, span);
+                    </Provider>
+                );
             }
         });
         dom.current.querySelectorAll("img").forEach(node => {
@@ -81,11 +83,12 @@ function EntryHtml({
                 const span = document.createElement("span");
                 node.replaceWith(span);
 
-                ReactDOM.render(
+                createRoot(span).render(
                     <Provider store={store}>
                         <EntryImage postingId={postingId} commentId={commentId} nodeName={nodeName ?? null}
                                     mediaFile={mediaFile} width={width} height={height} alt={alt} title={title}/>
-                    </Provider>, span);
+                    </Provider>
+                );
             } else {
                 const width = node.getAttribute("width");
                 const height = node.getAttribute("height");
@@ -100,25 +103,28 @@ function EntryHtml({
             }
         });
         dom.current.querySelectorAll("span.katex").forEach(node => {
-            ReactDOM.render(
+            createRoot(node).render(
                 <Suspense fallback={<>Loading math...</>}>
                     <InlineMath math={(node as HTMLElement).innerText}/>
-                </Suspense>, node);
+                </Suspense>
+            );
         });
         dom.current.querySelectorAll("div.katex").forEach(node => {
-            ReactDOM.render(
+            createRoot(node).render(
                 <Suspense fallback={<>Loading math...</>}>
                     <BlockMath math={(node as HTMLElement).innerText}/>
-                </Suspense>, node);
+                </Suspense>
+            );
         });
         dom.current.querySelectorAll("mr-spoiler").forEach(node => {
             const title = node.getAttribute("title") ?? undefined;
             const html = node.innerHTML;
 
-            ReactDOM.render(
+            createRoot(node).render(
                 <Provider store={store}>
                     <MrSpoiler title={title}><span dangerouslySetInnerHTML={{__html: html}}/></MrSpoiler>
-                </Provider>, node);
+                </Provider>
+            );
         });
     }
 

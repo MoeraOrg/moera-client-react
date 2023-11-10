@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { connect, ConnectedProps, Provider } from 'react-redux';
 
 import { ClientState } from "state/state";
@@ -30,10 +30,11 @@ function InstantHtml({story, mode}: Props) {
             span.appendChild(node);
 
             const fullName = (node as HTMLSpanElement).innerText;
-            ReactDOM.render(
+            createRoot(span).render(
                 <Provider store={store}>
                     <InstantMention name={name} fullName={fullName} mode={mode}/>
-                </Provider>, span);
+                </Provider>
+            );
         });
     }, [dom, html, mode]);
 

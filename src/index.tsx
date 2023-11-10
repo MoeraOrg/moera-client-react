@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-widgets/styles.css';
@@ -23,12 +23,14 @@ function sendInitAction(): void {
 
 Browser.init();
 initIconLibrary();
-ReactDOM.render(
-    <Provider store={store}>
-        <App/>
-    </Provider>,
-    document.getElementById("app-root")
-);
+const rootElement = document.getElementById("app-root");
+if (rootElement != null) {
+    createRoot(rootElement).render(
+        <Provider store={store}>
+            <App/>
+        </Provider>
+    )
+}
 sendInitAction();
 Storage.loadData();
 
