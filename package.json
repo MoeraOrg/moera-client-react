@@ -137,6 +137,7 @@
   },
   "eslintConfig": {
     "extends": "react-app",
+    "parser": "@typescript-eslint/parser",
     "rules": {
       "import/no-anonymous-default-export": "off"
     }
