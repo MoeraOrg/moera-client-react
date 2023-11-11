@@ -1,6 +1,6 @@
 #!/bin/bash
 
 ./build-number -j > src/build-number.js
-react-app-rewired build
+node scripts/build.js
 echo
 echo "Build number is `./build-number`"
