@@ -350,6 +350,7 @@ module.exports = function (webpackEnv) {
             /@babel(?:\/|\\{1,2})runtime/,
             /node_modules(?:\/|\\{1,2})react-widgets/,
             /node_modules(?:\/|\\{1,2})htmlparser2/,
+            /node_modules(?:\/|\\{1,2})entities/,
           ],
           test: /\.(js|mjs|jsx|ts|tsx|css)$/,
           loader: require.resolve('source-map-loader'),
