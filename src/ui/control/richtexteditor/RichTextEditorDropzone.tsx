@@ -162,7 +162,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
                                      selectImage={selectImage} onDeleted={onDeleted} onReorder={onReorder}/>
             <div className="upload">
                 {uploadProgress.length > 0 ?
-                    t("uploading-files", progressSummary)
+                    t("uploading-files", {...progressSummary})
                 : downloading ?
                     t("downloading-image")
                 :

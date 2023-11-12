@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { usePopper } from 'react-popper';
 import { Options, Placement } from '@popperjs/core';
+
 import { ClientState } from "state/state";
 
 type ButtonPopperOptions = Partial<Options> & {
@@ -24,7 +25,7 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
 
     const boxShown = useSelector<ClientState>(state => state.confirmBox.show || state.messageBox.show);
     const hideAlways = options.hideAlways ?? true;
-    const onHide = useCallback(event => {
+    const onHide = useCallback((event: MouseEvent) => {
         if (boxShown) {
             return;
         }
@@ -37,7 +38,7 @@ export function useButtonPopper(placement: Placement, options: ButtonPopperOptio
         }
         setVisible(false);
         event.preventDefault();
-    }, [setVisible, hideAlways, popperRef, boxShown]);
+    }, [setVisible, hideAlways, popperRef, boxShown]) as EventListener;
 
     useEffect(() => {
         if (visible) {

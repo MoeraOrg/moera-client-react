@@ -44,8 +44,8 @@ export function RichTextField({
     const {t} = useTranslation();
 
     // useCallback() and setFieldValue() (not setValue()) is mandatory here
-    const onChange = useCallback(v => setFieldValue(name, v), [name, setFieldValue]);
-    const onUrls = useCallback(v => urlsField && setFieldValue(urlsField, v), [urlsField, setFieldValue]);
+    const onChange = useCallback((v: RichTextValue) => setFieldValue(name, v), [name, setFieldValue]);
+    const onUrls = useCallback((v: string[]) => urlsField && setFieldValue(urlsField, v), [urlsField, setFieldValue]);
 
     return (
         <FormGroup

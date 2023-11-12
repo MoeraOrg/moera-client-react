@@ -10,6 +10,7 @@ interface ManagerProps {
     sticky?: boolean;
     onPreparePopper?: () => void;
     onShow?: () => boolean;
+    children?: any;
 }
 
 type ClickLocus = "out" | "main" | "popup";

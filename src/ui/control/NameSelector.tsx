@@ -33,7 +33,7 @@ function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, 
     const inputDom = useRef<HTMLInputElement>(null);
     const listDom = useRef<HTMLDivElement>(null);
 
-    const selectIndex = useCallback(index => {
+    const selectIndex = useCallback((index: number) => {
         setSelectedIndex(index);
         if (listDom.current != null && index >= 0) {
             const item = listDom.current.querySelector(`.item[data-index="${index}"]`);
