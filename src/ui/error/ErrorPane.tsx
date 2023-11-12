@@ -36,8 +36,8 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
                 message
             :
                 <>
-                    {messageVerbose.split('\n').map((msg: string) =>
-                        <>{msg}<br/></>
+                    {messageVerbose.split('\n').map((msg: string, index: number) =>
+                        <React.Fragment key={index}>{msg}<br/></React.Fragment>
                     )}
                 </>
             }
