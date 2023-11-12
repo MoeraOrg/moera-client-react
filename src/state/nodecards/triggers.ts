@@ -12,20 +12,25 @@ import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
 import { EventAction, ProfileUpdatedEvent } from "api/events";
 import { ProfileSetAction } from "state/profile/actions";
 import { WithContext } from "state/action-types";
+import { HomeReadyAction } from "state/home/actions";
 
 export default [
     trigger(["NODE_READY", "HOME_READY"], true, nodeCardsClientSwitch),
     trigger("PULSE_6H", true, nodeCardsRefresh),
     trigger(
         ["NODE_READY", "HOME_READY", "WAKE_UP"],
-        true,
+        (state, signal: WithContext<Action>) => !!signal.context.ownerNameOrUrl,
         signal => nodeCardPrepare(signal.context.ownerNameOrUrl)
     ),
-    trigger("HOME_READY", true, signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)),
     trigger(
         "HOME_READY",
-        (state, signal: WithContext<Action>) => signal.context.ownerName != null,
-        (signal: WithContext<Action>) => nodeCardPrepare(signal.context.ownerName!)
+        (state, signal: WithContext<HomeReadyAction>) => !!signal.context.homeOwnerNameOrUrl,
+        signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)
+    ),
+    trigger(
+        "HOME_READY",
+        (state, signal: WithContext<HomeReadyAction>) => signal.context.ownerName != null,
+        (signal: WithContext<HomeReadyAction>) => nodeCardPrepare(signal.context.ownerName!)
     ),
     trigger(
         "PROFILE_SET",

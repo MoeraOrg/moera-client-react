@@ -182,7 +182,7 @@ function* nodeCardFriendshipLoadSaga(action: WithContext<NodeCardFriendshipLoadA
 }
 
 function* loadFriendGroups(action: NodeCardFriendshipLoadAction, nodeName: string, homeOwnerName: string | null) {
-    if (homeOwnerName == null || nodeName === homeOwnerName || nodeName.includes(":")) {
+    if (!homeOwnerName || !nodeName || nodeName === homeOwnerName || nodeName.includes(":")) {
         return null;
     }
     const {groups} = yield* call(Node.getFriend, action, ":", nodeName);
@@ -190,7 +190,7 @@ function* loadFriendGroups(action: NodeCardFriendshipLoadAction, nodeName: strin
 }
 
 function* loadRemoteFriendGroups(action: NodeCardFriendshipLoadAction, nodeName: string, homeOwnerName: string | null) {
-    if (homeOwnerName == null || nodeName === homeOwnerName || homeOwnerName.includes(":")) {
+    if (!homeOwnerName || !nodeName || nodeName === homeOwnerName || homeOwnerName.includes(":")) {
         return null;
     }
     const {groups} = yield* call(Node.getFriend, action, nodeName, homeOwnerName);
