@@ -12,6 +12,9 @@ import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
 import MainMenu from "ui/mainmenu/MainMenu";
 import CurrentPage from "ui/page/CurrentPage";
+import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
+import SourceDialog from "ui/sourcedialog/SourceDialog";
+import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialog";
 import WelcomePage from "ui/welcome/WelcomePage";
 import BottomMenu from "ui/bottommenu/BottomMenu";
 import MessageBox from "ui/messagebox/MessageBox";
@@ -26,8 +29,6 @@ import "./zindex.css";
 import "./App.css";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
-const ChangeDateDialog = React.lazy(() => import("ui/changedatedialog/ChangeDateDialog"));
-const SourceDialog = React.lazy(() => import("ui/sourcedialog/SourceDialog"));
 const LightBox = React.lazy(() => import("ui/lightbox/LightBox"));
 const ImageEditDialog = React.lazy(() => import("ui/imageeditdialog/ImageEditDialog"));
 const DonateDialog = React.lazy(() => import("ui/donatedialog/DonateDialog"));
@@ -35,7 +36,6 @@ const PeopleHideDialog = React.lazy(() => import("ui/peoplehidedialog/PeopleHide
 const FriendGroupsDialog = React.lazy(() => import("ui/friendgroupsdialog/FriendGroupsDialog"));
 const AskDialog = React.lazy(() => import("ui/askdialog/AskDialog"));
 const BlockDialog = React.lazy(() => import("ui/blockdialog/BlockDialog"));
-const BlockingDetailsDialog = React.lazy(() => import("ui/blockingdetailsdialog/BlockingDetailsDialog"));
 const SheriffOrderDialog = React.lazy(() => import("ui/sherifforderdialog/SheriffOrderDialog"));
 const SheriffOrderDetailsDialog = React.lazy(() => import("ui/sherifforderdetailsdialog/SheriffOrderDetailsDialog"));
 const SignUpDialog = React.lazy(() => import("ui/signupdialog/SignUpDialog"));
@@ -63,12 +63,8 @@ const App = ({
                 <Suspense fallback={null}>
                     {showReactionsDialog && <ReactionsDialog/>}
                 </Suspense>
-                <Suspense fallback={null}>
-                    {showChangeDateDialog && <ChangeDateDialog/>}
-                </Suspense>
-                <Suspense fallback={null}>
-                    {showSourceDialog && <SourceDialog/>}
-                </Suspense>
+                {showChangeDateDialog && <ChangeDateDialog/>}
+                {showSourceDialog && <SourceDialog/>}
                 <Suspense fallback={null}>
                     {showLightBox && <LightBox/>}
                 </Suspense>
@@ -91,9 +87,7 @@ const App = ({
                 <Suspense fallback={null}>
                     {showBlockDialog && <BlockDialog/>}
                 </Suspense>
-                <Suspense fallback={null}>
-                    {showBlockingDetailsDialog && <BlockingDetailsDialog/>}
-                </Suspense>
+                {showBlockingDetailsDialog && <BlockingDetailsDialog/>}
                 <Suspense fallback={null}>
                     {showSheriffOrderDialog && <SheriffOrderDialog/>}
                 </Suspense>
