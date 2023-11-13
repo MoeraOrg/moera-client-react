@@ -9,7 +9,7 @@ import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
 import { closeLightBox, LightBoxMediaSequence, lightBoxMediaSet } from "state/lightbox/actions";
-import { getLightBoxMediaId, getLightBoxMediaPostingId, isLightBoxShown } from "state/lightbox/selectors";
+import { getLightBoxMediaId, getLightBoxMediaPostingId } from "state/lightbox/selectors";
 import { ExtPostingInfo } from "state/postings/state";
 import { getPosting } from "state/postings/selectors";
 import { ExtCommentInfo } from "state/detailedposting/state";
@@ -27,22 +27,15 @@ import "./LightBox.css";
 type Props = ConnectedProps<typeof connector>;
 
 function LightBox({
-    show, posting, comment, mediaId, mediaPosting, mediaNodeName, rootPage, carte, loopGallery, closeLightBox,
+    posting, comment, mediaId, mediaPosting, mediaNodeName, rootPage, carte, loopGallery, closeLightBox,
     lightBoxMediaSet
 }: Props) {
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            Browser.disableBodyScroll();
-        } else {
-            Browser.enableBodyScroll();
-        }
-    }, [show]);
-
-    if (!show) {
-        return null;
-    }
+        Browser.disableBodyScroll();
+        return () => Browser.enableBodyScroll();
+    }, []);
 
     const media = getGallery(posting, comment);
     const auth = carte != null ? "carte:" + carte : null;
@@ -120,7 +113,6 @@ function getGallery(posting: ExtPostingInfo | null, comment: ExtCommentInfo | nu
 
 const connector = connect(
     (state: ClientState) => ({
-        show: isLightBoxShown(state),
         posting: getPosting(state, state.lightBox.postingId),
         comment: state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null,
         mediaId: getLightBoxMediaId(state),

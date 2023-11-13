@@ -20,19 +20,13 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function ChangePasswordDialog(props: Props) {
-    const {show, changing, settingsChangePasswordDialogClose, resetForm} = props;
+    const {changing, settingsChangePasswordDialogClose, resetForm} = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: changePasswordLogic.mapPropsToValues()})
-        }
-    }, [show, resetForm]);
-
-    if (!show) {
-        return null;
-    }
+        resetForm({values: changePasswordLogic.mapPropsToValues()})
+    }, [resetForm]);
 
     return (
         <ModalDialog title={t("change-home-password")} onClose={settingsChangePasswordDialogClose}>
@@ -77,7 +71,6 @@ const changePasswordLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.settings.changePasswordDialogShow,
         changing: state.settings.changingPassword
     }),
     { settingsChangePassword, settingsChangePasswordDialogClose }

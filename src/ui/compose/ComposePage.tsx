@@ -45,7 +45,7 @@ type Props = ComposePageOuterProps & FormikProps<ComposePageValues>;
 function ComposePage(props: Props) {
     const {
         avatarDefault, features, loadingPosting, postingId, posting, loadingDraft, formId, postAllowed, conflict,
-        beingPosted, sharedText, smileysEnabled, composeConflictClose, values, resetForm
+        beingPosted, sharedText, showPreview, smileysEnabled, composeConflictClose, values, resetForm
     } = props;
     const [initialPostingText, setInitialPostingText] = useState<PostingText>({bodySrc: ""});
 
@@ -133,7 +133,7 @@ function ComposePage(props: Props) {
                         </div>
                     </Form>
                 </div>
-                <ComposePreviewDialog/>
+                {showPreview && <ComposePreviewDialog/>}
             </Page>
         </>
     );
@@ -157,6 +157,7 @@ const connector = connect(
         beingPosted: state.compose.beingPosted,
         sharedText: state.compose.sharedText,
         sharedTextType: state.compose.sharedTextType,
+        showPreview: state.compose.showPreview,
         visibilityDefault: getSetting(state, "posting.visibility.default") as PrincipalValue,
         commentsVisibilityDefault: getSetting(state, "posting.comments.visibility.default") as PrincipalValue,
         commentAdditionDefault: getSetting(state, "posting.comments.addition.default") as PrincipalValue,

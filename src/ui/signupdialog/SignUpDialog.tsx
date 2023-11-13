@@ -184,11 +184,7 @@ class SignUpDialog extends React.PureComponent<Props> {
     }
 
     render() {
-        const {show, processing, stage, languages, cancelSignUpDialog, t} = this.props;
-
-        if (!show) {
-            return null;
-        }
+        const {processing, stage, languages, cancelSignUpDialog, t} = this.props;
 
         const languageChoices = (languages ?? [{value: "auto"} as SelectFieldChoice])
             .map(l => ({

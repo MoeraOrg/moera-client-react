@@ -27,18 +27,16 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function AskSelectedDialog(props: Props) {
-    const {show, nodeName, nodeCount, sending, closeAskDialog, resetForm} = props;
+    const {nodeName, nodeCount, sending, closeAskDialog, resetForm} = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: askSelectedDialogLogic.mapPropsToValues()});
-        }
+        resetForm({values: askSelectedDialogLogic.mapPropsToValues()});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
+    }, []); // 'props' are missing on purpose
 
-    if (!show || nodeName != null) {
+    if (nodeName != null) {
         return null;
     }
 
@@ -81,7 +79,6 @@ const askSelectedDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.askDialog.show,
         nodeName: state.askDialog.nodeName,
         nodeCount: state.askDialog.nodeCount,
         sending: state.askDialog.sending

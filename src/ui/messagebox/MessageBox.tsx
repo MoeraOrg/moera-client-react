@@ -11,12 +11,8 @@ const forwardAction = (action: any) => action;
 
 type Props = ConnectedProps<typeof connector>;
 
-function MessageBox({show, message, onClose, closeMessageBox, forwardAction}: Props) {
+function MessageBox({message, onClose, closeMessageBox, forwardAction}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const onCloseClick = () => {
         closeMessageBox();

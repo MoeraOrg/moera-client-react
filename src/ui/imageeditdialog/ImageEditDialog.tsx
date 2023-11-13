@@ -27,20 +27,16 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function ImageEditDialog(props: Props) {
-    const {
-        show, media, rootPage, carte, loading, posting, saving, smileysEnabled, closeImageEditDialog, resetForm
-    } = props;
+    const {media, rootPage, carte, loading, posting, saving, smileysEnabled, closeImageEditDialog, resetForm} = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: logic.mapPropsToValues(props)});
-        }
+        resetForm({values: logic.mapPropsToValues(props)});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, posting, resetForm]); // 'props' are missing on purpose
+    }, [posting, resetForm]); // 'props' are missing on purpose
 
-    if (!show || media == null) {
+    if (media == null) {
         return null;
     }
 
@@ -96,7 +92,6 @@ const connector = connect(
     (state: ClientState) => ({
         homeOwnerName: getHomeOwnerName(state),
         homeOwnerFullName: getHomeOwnerFullName(state),
-        show: state.imageEditDialog.show,
         media: state.imageEditDialog.media,
         rootPage: state.imageEditDialog.nodeName
             ? getNamingNameNodeUri(state, state.imageEditDialog.nodeName)

@@ -16,7 +16,9 @@ import "./SettingsItemTokens.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensDialogOpen, confirmBox}: Props) {
+function SettingsItemTokens({
+    loading, loaded, tokens, homeToken, showTokenDialog, showNewTokenDialog, settingsTokensDialogOpen, confirmBox
+}: Props) {
     const [expanded, setExpanded] = useState<string | null>(null);
     const {t} = useTranslation();
 
@@ -88,8 +90,8 @@ function SettingsItemTokens({loading, loaded, tokens, homeToken, settingsTokensD
                     }
                 </div>
             )}
-            <TokenDialog/>
-            <NewTokenDialog/>
+            {showTokenDialog && <TokenDialog/>}
+            {showNewTokenDialog && <NewTokenDialog/>}
         </>
     );
 }
@@ -110,7 +112,9 @@ const connector = connect(
         loading: state.settings.tokens.loading,
         loaded: state.settings.tokens.loaded,
         tokens: state.settings.tokens.tokens,
-        homeToken: getHomeToken(state)
+        homeToken: getHomeToken(state),
+        showTokenDialog: state.settings.tokens.dialog.show,
+        showNewTokenDialog: state.settings.tokens.dialog.newToken != null
     }),
     { settingsTokensDialogOpen, confirmBox }
 );

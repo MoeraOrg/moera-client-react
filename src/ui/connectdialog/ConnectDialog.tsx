@@ -9,21 +9,17 @@ import { ClientState } from "state/state";
 
 type Props = ConnectedProps<typeof connector>;
 
-const ConnectDialog = ({show, form}: Props) => (
-    show ?
-        <>
-            {form === "connect" && <ConnectForm/>}
-            {form === "assign" && <AssignForm/>}
-            {form === "forgot" && <ForgotForm/>}
-            {form === "reset" && <ResetForm/>}
-        </>
-    :
-        null
+const ConnectDialog = ({form}: Props) => (
+    <>
+        {form === "connect" && <ConnectForm/>}
+        {form === "assign" && <AssignForm/>}
+        {form === "forgot" && <ForgotForm/>}
+        {form === "reset" && <ResetForm/>}
+    </>
 );
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.connectDialog.show && !state.messageBox.show && !state.home.connecting,
         form: state.connectDialog.form
     })
 );

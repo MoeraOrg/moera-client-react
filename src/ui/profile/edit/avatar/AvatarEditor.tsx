@@ -22,7 +22,7 @@ type Props = {
     name: string;
 } & ConnectedProps<typeof connector>;
 
-function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, profileAvatarsLoad,
+function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, showAvatarEditDialog, profileAvatarsLoad,
                        profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder}: Props) {
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
@@ -76,7 +76,7 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, p
                     </div>
                 }
             </div>
-            <AvatarEditDialog/>
+            {showAvatarEditDialog && <AvatarEditDialog/>}
         </>
     );
 }
@@ -86,7 +86,8 @@ const connector = connect(
         avatarsLoading: state.profile.avatars.loading,
         avatarsLoaded: state.profile.avatars.loaded,
         avatars: state.profile.avatars.avatars,
-        nodeName: getOwnerName(state)
+        nodeName: getOwnerName(state),
+        showAvatarEditDialog: state.profile.avatarEditDialog.show
     }),
     { profileAvatarsLoad, profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder }
 );

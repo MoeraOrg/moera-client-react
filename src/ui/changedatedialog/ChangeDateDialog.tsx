@@ -19,7 +19,7 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function ChangeDateDialog(props: Props) {
-    const {show, changing, publishedAt, closeChangeDateDialog} = props;
+    const {changing, publishedAt, closeChangeDateDialog} = props;
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -27,10 +27,6 @@ function ChangeDateDialog(props: Props) {
         props.resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [publishedAt]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
 
     return (
         <ModalDialog title={t("change-date-time")} onClose={closeChangeDateDialog} shadowClick={false}>
@@ -68,7 +64,6 @@ const changeDateDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.changeDateDialog.show,
         storyId: state.changeDateDialog.storyId,
         publishedAt: state.changeDateDialog.publishedAt,
         changing: state.changeDateDialog.changing

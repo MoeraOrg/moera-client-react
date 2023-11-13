@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
@@ -25,10 +25,11 @@ import {
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
-import CommentCompose from "ui/comment/CommentCompose";
-import CommentDialog from "ui/comment/CommentDialog";
+import CommentComposeLine from "ui/comment/CommentComposeLine";
 import { getPageHeaderHeight } from "util/misc";
 import "./Comments.css";
+
+const CommentDialog = React.lazy(() => import("ui/comment/CommentDialog"));
 
 type Props = ConnectedProps<typeof connector> & WithTranslation;
 
@@ -194,7 +195,7 @@ class Comments extends React.PureComponent<Props, State> {
     render() {
         const {
             total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture, focusedCommentId,
-            commentsVisible, t
+            showCommentDialog, commentsVisible, t
         } = this.props;
 
         if (!commentsVisible) {
@@ -232,8 +233,12 @@ class Comments extends React.PureComponent<Props, State> {
                         </>
                     }
                 </div>
-                <CommentCompose/>
-                <CommentDialog/>
+                <CommentComposeLine/>
+                {showCommentDialog &&
+                    <Suspense fallback={null}>
+                        <CommentDialog/>
+                    </Suspense>
+                }
             </>
         );
     }
@@ -257,6 +262,7 @@ const connector = connect(
         focusedCommentId: getCommentsState(state).focusedCommentId,
         focused: isCommentsFocused(state),
         composerFocused: isCommentComposerFocused(state),
+        showCommentDialog: state.detailedPosting.commentDialog.show,
         commentsVisible: isPermitted("viewComments", getDetailedPosting(state), "public", state)
     }),
     {

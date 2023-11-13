@@ -17,7 +17,9 @@ import "./PeoplePage.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => {
+const PeoplePage = ({
+    tab, loadingGeneral, ownerAvatar, ownerName, showAskDialog, showPeopleHideDialog, showFriendGroupAddDialog
+}: Props) => {
     const {t} = useTranslation();
 
     return (
@@ -35,9 +37,9 @@ const PeoplePage = ({tab, loadingGeneral, ownerAvatar, ownerName}: Props) => {
                     <PeopleTabs active={tab}/>
                     <PeopleContent/>
                 </div>
-                <AskSelectedDialog/>
-                <PeopleSelectedHideDialog/>
-                <FriendGroupAddDialog/>
+                {showAskDialog && <AskSelectedDialog/>}
+                {showPeopleHideDialog && <PeopleSelectedHideDialog/>}
+                {showFriendGroupAddDialog && <FriendGroupAddDialog/>}
             </Page>
         </>
     );
@@ -48,7 +50,10 @@ const connector = connect(
         tab: state.people.tab,
         loadingGeneral: state.people.loadingGeneral,
         ownerAvatar: getOwnerAvatar(state),
-        ownerName: getOwnerName(state)
+        ownerName: getOwnerName(state),
+        showAskDialog: state.askDialog.show,
+        showPeopleHideDialog: state.peopleHideDialog.show,
+        showFriendGroupAddDialog: state.friendGroupAddDialog.show
     })
 );
 

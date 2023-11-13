@@ -14,14 +14,8 @@ import { htmlEntities, replaceEmojis } from "util/html";
 
 type Props = ConnectedProps<typeof connector>;
 
-function SheriffOrderDetailsDialog({
-    show, loaded, loading, info, nameDisplayMode, closeSheriffOrderDetailsDialog
-}: Props) {
+function SheriffOrderDetailsDialog({loaded, loading, info, nameDisplayMode, closeSheriffOrderDetailsDialog}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const onClose = () => closeSheriffOrderDetailsDialog();
 
@@ -101,7 +95,6 @@ function SheriffOrderDetailsDialog({
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.sheriffOrderDetailsDialog.show,
         loaded: state.sheriffOrderDetailsDialog.loaded,
         loading: state.sheriffOrderDetailsDialog.loading,
         info: state.sheriffOrderDetailsDialog.info,

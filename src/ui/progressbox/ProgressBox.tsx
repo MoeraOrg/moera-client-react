@@ -8,12 +8,8 @@ import { ModalDialog } from "ui/control";
 
 type Props = ConnectedProps<typeof connector>;
 
-function ProgressBox({show, done, total}: Props) {
+function ProgressBox({done, total}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const preparing = total <= 0;
     const width = !preparing ? done * 100.0 / total : 100;

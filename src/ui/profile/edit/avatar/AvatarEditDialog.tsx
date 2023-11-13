@@ -19,9 +19,10 @@ import "./AvatarEditDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function AvatarEditDialog({show, imageUploading, imageUploadProgress, imageId, path, width, height, orientation,
-                           creating, rootPage, shapeDefault, profileCloseAvatarEditDialog, profileImageUpload,
-                           profileAvatarCreate}: Props) {
+function AvatarEditDialog({
+    imageUploading, imageUploadProgress, imageId, path, width, height, orientation, creating, rootPage, shapeDefault,
+    profileCloseAvatarEditDialog, profileImageUpload, profileAvatarCreate
+}: Props) {
 
     const {t} = useTranslation();
 
@@ -50,31 +51,19 @@ function AvatarEditDialog({show, imageUploading, imageUploadProgress, imageId, p
             return;
         }
 
-        if (show) {
-            editor.addEventListener("wheel", onEditorWheel);
-            return () => editor.removeEventListener("wheel", onEditorWheel);
-        } else {
-            editor.removeEventListener("wheel", onEditorWheel);
-        }
-    }, [show, onEditorWheel]);
+        editor.addEventListener("wheel", onEditorWheel);
+        return () => editor.removeEventListener("wheel", onEditorWheel);
+    }, [onEditorWheel]);
 
     useEffect(() => {
-        if (show) {
-            setShape(shapeDefault);
-        }
+        setShape(shapeDefault);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'shapeDefault' is missing on purpose
+    }, []); // 'shapeDefault' is missing on purpose
 
     useEffect(() => {
-        if (show) {
-            setScale(1);
-            setRotate(0);
-        }
-    }, [imageId, show]);
-
-    if (!show) {
-        return null;
-    }
+        setScale(1);
+        setRotate(0);
+    }, [imageId]);
 
     const onUploadClick = () => {
         if (domFile.current != null) {
@@ -171,7 +160,6 @@ function isSwapAxes(orientation: number | null): boolean {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.profile.avatarEditDialog.show,
         imageUploading: state.profile.avatarEditDialog.imageUploading,
         imageUploadProgress: state.profile.avatarEditDialog.imageUploadProgress,
         imageId: state.profile.avatarEditDialog.imageId,

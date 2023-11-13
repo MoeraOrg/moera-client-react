@@ -26,18 +26,16 @@ type Props = OuterProps & FormikProps<Values>;
 
 function PeopleHideDialog(props: Props) {
     const {
-        show, nodeName, card, subscribersHidden, subscriptionsHidden, friendsHidden, closePeopleHideDialog, resetForm
+        nodeName, card, subscribersHidden, subscriptionsHidden, friendsHidden, closePeopleHideDialog, resetForm
     } = props;
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: peopleHideDialogLogic.mapPropsToValues(props)});
-        }
+        resetForm({values: peopleHideDialogLogic.mapPropsToValues(props)});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
+    }, []); // 'props' are missing on purpose
 
-    if (!show || nodeName == null) {
+    if (nodeName == null) {
         return null;
     }
 
@@ -118,7 +116,6 @@ const peopleHideDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.peopleHideDialog.show,
         nodeName: state.peopleHideDialog.nodeName,
         feedName: state.peopleHideDialog.feedName,
         card: getNodeCard(state, state.peopleHideDialog.nodeName),

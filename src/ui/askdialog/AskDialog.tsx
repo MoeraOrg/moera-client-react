@@ -24,19 +24,17 @@ type Props = OuterProps & FormikProps<Values>;
 
 function AskDialog(props: Props) {
     const {
-        show, nodeName, card, loading, allGroups, subjectsAllowed, sending, nameDisplayMode, closeAskDialog, resetForm
+        nodeName, card, loading, allGroups, subjectsAllowed, sending, nameDisplayMode, closeAskDialog, resetForm
     } = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: askDialogLogic.mapPropsToValues()});
-        }
+        resetForm({values: askDialogLogic.mapPropsToValues()});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
+    }, []); // 'props' are missing on purpose
 
-    if (!show || nodeName == null) {
+    if (nodeName == null) {
         return null;
     }
 
@@ -111,7 +109,6 @@ const askDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.askDialog.show,
         nodeName: state.askDialog.nodeName,
         card: getNodeCard(state, state.askDialog.nodeName),
         loading: state.askDialog.loading,

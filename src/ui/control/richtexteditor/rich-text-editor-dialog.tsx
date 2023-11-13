@@ -6,7 +6,6 @@ import { ModalDialog } from "ui/control/ModalDialog";
 import { Button } from "ui/control/Button";
 
 export interface RichTextEditorDialogProps<V> {
-    show: boolean;
     risen?: boolean;
     onSubmit: (ok: boolean, values: Partial<V>) => void;
 }
@@ -27,24 +26,12 @@ export function richTextEditorDialog<P extends RichTextEditorDialogProps<V>, V e
 
     const dialog = class extends React.PureComponent<Props> {
 
-        componentDidUpdate(prevProps: Readonly<Props>) {
-            if (this.props.show !== prevProps.show && this.props.show) {
-                this.props.resetForm({
-                    values: logic.mapPropsToValues(this.props),
-                });
-            }
-        }
-
         onClose = () => {
             this.props.onSubmit(false, {});
         }
 
         render() {
-            const {show, risen, t} = this.props;
-
-            if (!show) {
-                return null;
-            }
+            const {risen, t} = this.props;
 
             return (
                 <ModalDialog title={t(title)} onClose={this.onClose} risen={risen}>

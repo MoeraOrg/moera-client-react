@@ -14,15 +14,11 @@ const forwardAction = (action: ClientAction) => action;
 type Props = ConnectedProps<typeof connector>;
 
 function ConfirmBox({
-    show, message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox, closeConfirmBox, forwardAction
+    message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox, closeConfirmBox, forwardAction
 }: Props) {
     const {t} = useTranslation();
 
     const [dontShowAgain, setDontShowAgain] = useState<boolean>(false);
-
-    if (!show) {
-        return null;
-    }
 
     const onClick = (buttonAction: ConfirmBoxButtonAction | null) => {
         closeConfirmBox();

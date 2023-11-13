@@ -6,11 +6,10 @@ import { NameSelector } from "ui/control/NameSelector";
 import { NameListItem } from "util/names-list";
 
 type Props = {
-    show: boolean;
     onSubmit: (ok: boolean, values: NameListItem) => void;
 };
 
-export default function RichTextMentionDialog({show, onSubmit}: Props) {
+export default function RichTextMentionDialog({onSubmit}: Props) {
     const [query, setQuery] = useState<string>("");
     const {t} = useTranslation();
 
@@ -19,10 +18,6 @@ export default function RichTextMentionDialog({show, onSubmit}: Props) {
     const onSubmitted = (success: boolean, data: NameListItem) => onSubmit(success, data);
 
     const onClose = () => onSubmit(false, {nodeName: query});
-
-    if (!show) {
-        return null;
-    }
 
     return (
         <ModalDialog title={t("insert-mention")} centered={false} onClose={onClose}>

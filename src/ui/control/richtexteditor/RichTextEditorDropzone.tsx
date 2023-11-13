@@ -185,7 +185,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
                 }
             </div>
             <input {...getInputProps()}/>
-            <RichTextCopyImageDialog show={copyImageShow} onSubmit={submitCopyImage}/>
+            {copyImageShow && <RichTextCopyImageDialog onSubmit={submitCopyImage}/>}
         </div>
     );
 }

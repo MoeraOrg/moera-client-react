@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -19,12 +19,13 @@ import { isFeedGeneralReady, isFeedSheriffProhibited } from "state/feeds/selecto
 import TimelinePage from "ui/timeline/TimelinePage";
 import ProfilePage from "ui/profile/ProfilePage";
 import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
-import ComposePage from "ui/compose/ComposePage";
-import SettingsPage from "ui/settings/SettingsPage";
 import NewsPage from "ui/news/NewsPage";
-import PeoplePage from "ui/people/PeoplePage";
-import ComplainsPage from "ui/complains/ComplainsPage";
 import GooglePlayProhibitedPage from "ui/page/GooglePlayProhibitedPage";
+
+const ComposePage = React.lazy(() => import("ui/compose/ComposePage"));
+const SettingsPage = React.lazy(() => import("ui/settings/SettingsPage"));
+const PeoplePage = React.lazy(() => import("ui/people/PeoplePage"));
+const ComplainsPage = React.lazy(() => import("ui/complains/ComplainsPage"));
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -47,15 +48,31 @@ function CurrentPage({page, positioned, googlePlayProhibited}: Props) {
         case PAGE_DETAILED_POSTING:
             return <DetailedPostingPage/>;
         case PAGE_COMPOSE:
-            return <ComposePage/>;
+            return (
+                <Suspense fallback={null}>
+                    <ComposePage/>;
+                </Suspense>
+            );
         case PAGE_SETTINGS:
-            return <SettingsPage/>;
+            return (
+                <Suspense fallback={null}>
+                    <SettingsPage/>
+                </Suspense>
+            );
         case PAGE_NEWS:
             return <NewsPage/>;
         case PAGE_PEOPLE:
-            return <PeoplePage/>;
+            return (
+                <Suspense fallback={null}>
+                    <PeoplePage/>
+                </Suspense>
+            );
         case PAGE_COMPLAINS:
-            return <ComplainsPage/>;
+            return (
+                <Suspense fallback={null}>
+                    <ComplainsPage/>
+                </Suspense>
+            );
         default:
             return null;
     }

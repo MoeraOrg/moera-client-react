@@ -15,7 +15,6 @@ interface Values {
 }
 
 interface OuterProps {
-    show: boolean;
     fundraiser: FundraiserInfo | null;
     onSubmit: (value: FundraiserInfo) => void;
     onCancel: () => void;
@@ -25,20 +24,14 @@ interface OuterProps {
 type Props = OuterProps & FormikProps<Values>;
 
 function FundraiserDialog(props: Props) {
-    const {show, fundraiser, onCancel, onDelete, resetForm} = props;
+    const {fundraiser, onCancel, onDelete, resetForm} = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: fundraiserDialogLogic.mapPropsToValues(props)});
-        }
+        resetForm({values: fundraiserDialogLogic.mapPropsToValues(props)});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
+    }, []); // 'props' are missing on purpose
 
     return (
         <ModalDialog title={fundraiser != null ? t("edit-donation") : t("add-donation")} onClose={onCancel}>

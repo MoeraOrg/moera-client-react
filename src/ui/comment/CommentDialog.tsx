@@ -32,9 +32,9 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentDialog(props: Props) {
     const {
-        show, ownerName, ownerFullName, receiverName, comment, draft, loaded, conflict, loading, beingPosted,
-        smileysEnabled, features, sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox,
-        submitKey, submitForm, resetForm
+        ownerName, ownerFullName, receiverName, comment, draft, loaded, conflict, loading, beingPosted, smileysEnabled,
+        features, sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey,
+        submitForm, resetForm
     } = props;
 
     const commentId = comment != null ? comment.id : null;
@@ -51,11 +51,7 @@ function CommentDialog(props: Props) {
         }
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, commentId, loaded, setInitialText]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
+    }, [commentId, loaded, setInitialText]); // 'props' are missing on purpose
 
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter") {
@@ -109,7 +105,6 @@ function CommentDialog(props: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.detailedPosting.commentDialog.show,
         ownerName: getHomeOwnerName(state),
         ownerFullName: getHomeOwnerFullName(state),
         ownerGender: getHomeOwnerGender(state),

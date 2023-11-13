@@ -26,19 +26,15 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function PeopleSelectedHideDialog(props: Props) {
-    const {
-        show, nodeName, subscribersHidden, subscriptionsHidden, friendsHidden, closePeopleHideDialog, resetForm
-    } = props;
+    const {nodeName, subscribersHidden, subscriptionsHidden, friendsHidden, closePeopleHideDialog, resetForm} = props;
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: peopleSelectedHideDialogLogic.mapPropsToValues()});
-        }
+        resetForm({values: peopleSelectedHideDialogLogic.mapPropsToValues()});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
+    }, []); // 'props' are missing on purpose
 
-    if (!show || nodeName != null) {
+    if (nodeName != null) {
         return null;
     }
 
@@ -94,7 +90,6 @@ const peopleSelectedHideDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.peopleHideDialog.show,
         nodeName: state.peopleHideDialog.nodeName,
         subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
         subscriptionsHidden: (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin",

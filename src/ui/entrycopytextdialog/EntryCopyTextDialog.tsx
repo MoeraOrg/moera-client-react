@@ -10,12 +10,8 @@ import "./EntryCopyTextDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function EntryCopyTextDialog({show, body, nodeName, media, closeEntryCopyTextDialog, entryCopyText}: Props) {
+function EntryCopyTextDialog({body, nodeName, media, closeEntryCopyTextDialog, entryCopyText}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const onSubmit = (mode: EntryCopyTextMode) => () => {
         closeEntryCopyTextDialog();
@@ -40,7 +36,6 @@ function EntryCopyTextDialog({show, body, nodeName, media, closeEntryCopyTextDia
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.entryCopyTextDialog.show,
         body: state.entryCopyTextDialog.body,
         nodeName: state.entryCopyTextDialog.nodeName,
         media: state.entryCopyTextDialog.media

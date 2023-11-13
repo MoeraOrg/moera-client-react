@@ -7,16 +7,12 @@ import "./FlashBox.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-const FlashBox = ({show, dismissing, message}: Props) => (
-    show ?
-        <div className={cx("flash-box", {"dismissing": dismissing})}>{message}</div>
-    :
-        null
+const FlashBox = ({dismissing, message}: Props) => (
+    <div className={cx("flash-box", {"dismissing": dismissing})}>{message}</div>
 );
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.flashBox.show,
         dismissing: state.flashBox.dismissing,
         message: state.flashBox.message,
     })

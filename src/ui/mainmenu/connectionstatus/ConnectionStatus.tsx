@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -16,8 +16,9 @@ import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import ConnectionsButton from "ui/mainmenu/connections/ConnectionsButton";
-import ConnectDialog from "ui/connectdialog/ConnectDialog";
 import "./ConnectionStatus.css";
+
+const ConnectDialog = React.lazy(() => import("ui/connectdialog/ConnectDialog"));
 
 type Props = ConnectedProps<typeof connector>;
 
@@ -61,7 +62,11 @@ const ConnectionStatus = (props: Props) => (
         <div className="connection-status">
             <ConnectionButtons {...props}/>
         </div>
-        <ConnectDialog/>
+        {props.showConnectDialog &&
+            <Suspense fallback={null}>
+                <ConnectDialog/>
+            </Suspense>
+        }
     </>
 );
 
@@ -70,7 +75,8 @@ const connector = connect(
         atNode: isAtNode(state),
         connecting: state.home.connecting,
         connected: isConnectedToHome(state),
-        showNavigator: state.node.owner.showNavigator
+        showNavigator: state.node.owner.showNavigator,
+        showConnectDialog: state.connectDialog.show && !state.messageBox.show && !state.home.connecting
     }),
     { openConnectDialog, openSignUpDialog }
 );

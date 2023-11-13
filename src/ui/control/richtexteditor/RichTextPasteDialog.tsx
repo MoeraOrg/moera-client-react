@@ -8,17 +8,12 @@ import "./RichTextPasteDialog.css";
 export type RichTextPasteMode = "none" | "text" | "html";
 
 type Props = {
-    show: boolean;
     onSubmit: (mode: RichTextPasteMode, persist: boolean) => void;
 };
 
-export default function RichTextPasteDialog({show, onSubmit}: Props) {
+export default function RichTextPasteDialog({onSubmit}: Props) {
     const [persist, setPersist] = useState(false);
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const onKeyDown = (event: KeyboardEvent) => {
         if (event.key === "t" || event.key === "\u0435" || event.key === "\u05d0") {

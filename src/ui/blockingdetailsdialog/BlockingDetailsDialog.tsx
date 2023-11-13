@@ -16,14 +16,10 @@ import { htmlEntities, replaceEmojis } from "util/html";
 type Props = ConnectedProps<typeof connector>;
 
 function BlockingDetailsDialog({
-    show, loaded, loading, nodeName, remoteNodeName, remotePostingId, remotePostingHeading, by, blocked,
-    nameDisplayMode, closeBlockingDetailsDialog
+    loaded, loading, nodeName, remoteNodeName, remotePostingId, remotePostingHeading, by, blocked, nameDisplayMode,
+    closeBlockingDetailsDialog
 }: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const onClose = () => closeBlockingDetailsDialog();
 
@@ -80,7 +76,6 @@ function BlockingDetailsDialog({
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.blockingDetailsDialog.show,
         loaded: state.blockingDetailsDialog.loaded,
         loading: state.blockingDetailsDialog.loading,
         nodeName: state.blockingDetailsDialog.nodeName,

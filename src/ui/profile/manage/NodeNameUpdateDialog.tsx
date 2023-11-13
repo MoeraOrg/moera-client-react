@@ -41,7 +41,7 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function NodeNameUpdateDialog(props: Props) {
-    const {show, showChangeName, updating, nodeNameUpdateDialogCancel, resetForm} = props;
+    const {showChangeName, updating, nodeNameUpdateDialogCancel, resetForm} = props;
 
     const {t} = useTranslation();
 
@@ -49,11 +49,7 @@ function NodeNameUpdateDialog(props: Props) {
         const values = nodeNameUpdateDialogLogic.mapPropsToValues(props);
         resetForm({values});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
+    }, []); // 'props' are missing on purpose
 
     return (
         <ModalDialog title={showChangeName ? t("transfer-node-name") : t("update-node-name")} size="lg"
@@ -125,7 +121,6 @@ const nodeNameUpdateDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.nodeName.showingUpdateDialog,
         showChangeName: state.nodeName.showingChangeName,
         updating: state.nodeName.updating,
         name: state.nodeName.name

@@ -57,20 +57,14 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function BlockDialog(props: Props) {
-    const {show, entryNodeName, submitting, homeOwnerName, closeBlockDialog, values, resetForm} = props;
+    const {entryNodeName, submitting, homeOwnerName, closeBlockDialog, values, resetForm} = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: blockDialogLogic.mapPropsToValues(props)});
-        }
+        resetForm({values: blockDialogLogic.mapPropsToValues(props)});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
+    }, []); // 'props' are missing on purpose
 
     const isChecked = (v: BlockingLevel) => (value: BlockingLevel) => value === v;
 
@@ -189,7 +183,6 @@ const blockDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.blockDialog.show,
         nodeName: state.blockDialog.nodeName,
         fullName: state.blockDialog.fullName,
         entryNodeName: state.blockDialog.entryNodeName,

@@ -29,7 +29,7 @@ function getPreferredFundraiserIndex(fundraisers: FundraiserInfo[], prefix: stri
 type Props = ConnectedProps<typeof connector>;
 
 function DonateDialog({
-    show, name, fullName, fundraisers, autoPreferred, preferredPrefix, closeDonateDialog, settingsUpdate
+    name, fullName, fundraisers, autoPreferred, preferredPrefix, closeDonateDialog, settingsUpdate
 }: Props) {
     const [fundraiserIndex, setFundraiserIndex] = useState<number>(0);
     const {t} = useTranslation();
@@ -37,10 +37,10 @@ function DonateDialog({
     useEffect(
         () => setFundraiserIndex(getPreferredFundraiserIndex(fundraisers, preferredPrefix)),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [show, fundraisers]
+        [fundraisers]
     );
 
-    if (!show || fundraisers.length === 0) {
+    if (fundraisers.length === 0) {
         return null;
     }
 
@@ -119,7 +119,6 @@ function DonateDialog({
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.donateDialog.show,
         name: state.donateDialog.name,
         fullName: state.donateDialog.fullName,
         fundraisers: state.donateDialog.fundraisers,

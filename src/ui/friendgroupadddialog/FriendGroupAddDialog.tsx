@@ -20,20 +20,14 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function FriendGroupAddDialog(props: Props) {
-    const {show, submitting, closeFriendGroupAddDialog} = props;
+    const {submitting, closeFriendGroupAddDialog} = props;
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            const values = friendGroupAddDialogLogic.mapPropsToValues(props);
-            props.resetForm({values});
-        }
+        const values = friendGroupAddDialogLogic.mapPropsToValues(props);
+        props.resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
+    }, []); // 'props' are missing on purpose
 
     return (
         <ModalDialog title={t("add-friend-group")} onClose={closeFriendGroupAddDialog}>
@@ -76,7 +70,6 @@ const friendGroupAddDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.friendGroupAddDialog.show,
         submitting: state.friendGroupAddDialog.submitting
     }),
     { closeFriendGroupAddDialog, friendGroupAdd }

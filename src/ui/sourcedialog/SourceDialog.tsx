@@ -10,12 +10,8 @@ import "./SourceDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}: Props) {
+function SourceDialog({text, loading, feedWidth, closeSourceDialog}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     return (
         <ModalDialog className="source-dialog" style={{"--feed-width": feedWidth + "px"}} title={t("view-source-title")}
@@ -36,7 +32,6 @@ function SourceDialog({show, text, loading, feedWidth, closeSourceDialog}: Props
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.sourceDialog.show,
         text: state.sourceDialog.text,
         loading: state.sourceDialog.loading,
         feedWidth: getFeedWidth(state)

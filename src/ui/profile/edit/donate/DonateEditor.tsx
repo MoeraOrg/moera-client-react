@@ -121,8 +121,10 @@ export default function DonateEditor({value, setValue}: Props) {
                 <FontAwesomeIcon className="icon" icon="plus"/>
                 {t("add-donation-button")}
             </button>
-            <FundraiserDialog show={showDialog} fundraiser={selected != null ? value[selected] : null}
-                              onSubmit={onSubmitDialog} onCancel={onCancelDialog} onDelete={onDelete}/>
+            {showDialog &&
+                <FundraiserDialog fundraiser={selected != null ? value[selected] : null} onSubmit={onSubmitDialog}
+                                  onCancel={onCancelDialog} onDelete={onDelete}/>
+            }
         </div>
     );
 }

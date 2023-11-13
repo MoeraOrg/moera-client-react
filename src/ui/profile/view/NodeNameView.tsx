@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
@@ -8,15 +8,18 @@ import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions
 import { ClientState } from "state/state";
 import ManagementMenu from "ui/profile/view/ManagementMenu";
 import OperationStatus from "ui/profile/view/OperationStatus";
-import RegisterNameDialog from "ui/profile/manage/RegisterNameDialog";
-import NodeNameUpdateDialog from "ui/profile/manage/NodeNameUpdateDialog";
 import { mentionName } from "util/misc";
 import "./NodeNameView.css";
 
+const RegisterNameDialog = React.lazy(() => import("ui/profile/manage/RegisterNameDialog"));
+const NodeNameUpdateDialog = React.lazy(() => import( "ui/profile/manage/NodeNameUpdateDialog"));
+
 type Props = ConnectedProps<typeof connector>;
 
-const NodeNameView = ({loading, name, nameDefined, manageable, operationPending, registerNameDialog,
-                       nodeNameUpdateDialog}: Props) => {
+const NodeNameView = ({
+    loading, name, nameDefined, manageable, operationPending, showRegisterNameDialog, showNodeNameUpdateDialog,
+    registerNameDialog, nodeNameUpdateDialog
+}: Props) => {
     const {t} = useTranslation();
 
     return (
@@ -44,8 +47,16 @@ const NodeNameView = ({loading, name, nameDefined, manageable, operationPending,
                 }
                 <Loading active={loading}/>
             </div>
-            <RegisterNameDialog/>
-            <NodeNameUpdateDialog/>
+            {showRegisterNameDialog &&
+                <Suspense fallback={null}>
+                    <RegisterNameDialog/>
+                </Suspense>
+            }
+            {showNodeNameUpdateDialog &&
+                <Suspense fallback={null}>
+                    <NodeNameUpdateDialog/>
+                </Suspense>
+            }
         </>
     );
 }
@@ -56,7 +67,9 @@ const connector = connect(
         name: state.nodeName.name,
         nameDefined: isNodeNameDefined(state),
         manageable: isNodeNameManageable(state),
-        operationPending: isNodeNameOperationPending(state)
+        operationPending: isNodeNameOperationPending(state),
+        showRegisterNameDialog: state.nodeName.showingRegisterDialog,
+        showNodeNameUpdateDialog: state.nodeName.showingUpdateDialog
     }),
     { registerNameDialog, nodeNameUpdateDialog }
 );

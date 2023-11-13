@@ -305,7 +305,7 @@ class RichTextArea extends React.PureComponent<Props, State> {
                     onChange={this.onChange}
                     innerRef={textArea} // impossible to pass lambda here
                 />
-                <RichTextPasteDialog show={pasteDialogShow} onSubmit={this.onPasteDialogSubmit}/>
+                {pasteDialogShow && <RichTextPasteDialog onSubmit={this.onPasteDialogSubmit}/>}
             </>
         );
     }

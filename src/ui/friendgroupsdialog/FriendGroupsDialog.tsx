@@ -33,20 +33,14 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function FriendGroupsDialog(props: Props) {
-    const {show, nodeName, nodeCard, changing, nameDisplayMode, closeFriendGroupsDialog, values, setFieldValue} = props;
+    const {nodeName, nodeCard, changing, nameDisplayMode, closeFriendGroupsDialog, values, setFieldValue} = props;
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            const values = friendGroupsDialogLogic.mapPropsToValues(props);
-            props.resetForm({values});
-        }
+        const values = friendGroupsDialogLogic.mapPropsToValues(props);
+        props.resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, nodeName]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
+    }, [nodeName]); // 'props' are missing on purpose
 
     const name = formatFullName(nodeName, nodeCard?.details.profile.fullName, nameDisplayMode);
     const gender = tGender(nodeCard?.details.profile.gender);
@@ -147,7 +141,6 @@ const friendGroupsDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.friendGroupsDialog.show,
         nodeName: state.friendGroupsDialog.nodeName,
         nodeCard: getNodeCard(state, state.friendGroupsDialog.nodeName),
         changing: state.friendGroupsDialog.changing,

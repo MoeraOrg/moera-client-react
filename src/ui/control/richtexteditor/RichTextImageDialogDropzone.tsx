@@ -156,7 +156,7 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
                 )
             }
             <input {...getInputProps()}/>
-            <RichTextCopyImageDialog show={copyImageShow} onSubmit={submitCopyImage} risen/>
+            {copyImageShow && <RichTextCopyImageDialog onSubmit={submitCopyImage} risen/>}
         </div>
     );
 }

@@ -14,12 +14,8 @@ import "./ComposePreviewDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function ComposePreviewDialog({show, draft, feedWidth, composePreviewClose}: Props) {
+function ComposePreviewDialog({draft, feedWidth, composePreviewClose}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const onClose = () => composePreviewClose();
 
@@ -47,7 +43,6 @@ function ComposePreviewDialog({show, draft, feedWidth, composePreviewClose}: Pro
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.compose.showPreview,
         draft: state.compose.draft ?? state.compose.posting,
         feedWidth: getFeedWidth(state)
     }),

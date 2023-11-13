@@ -17,12 +17,8 @@ import "./QuickTips.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function QuickTips({show, ownerName, shown, closeQuickTips, settingsUpdate}: Props) {
+function QuickTips({ownerName, shown, closeQuickTips, settingsUpdate}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     const onClose = () => {
         closeQuickTips();
@@ -125,7 +121,6 @@ const ListOfBlogsLink = ({children, onJump}: ListOfBlogsLinkProps) => (
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.quickTips.show,
         ownerName: getOwnerName(state),
         shown: getSetting(state, "invitation.quick-tips.shown") as boolean
     }),

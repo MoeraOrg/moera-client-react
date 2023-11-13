@@ -18,12 +18,8 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function RegisterNameDialog({show, registering, registerNameDialogCancel}: Props) {
+function RegisterNameDialog({registering, registerNameDialogCancel}: Props) {
     const {t} = useTranslation();
-
-    if (!show) {
-        return null;
-    }
 
     return (
         <ModalDialog title={t("register-new-name")} onClose={registerNameDialogCancel}>
@@ -67,7 +63,6 @@ const registerNameDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.nodeName.showingRegisterDialog,
         registering: state.nodeName.registering
     }),
     { registerNameDialogCancel, registerName }

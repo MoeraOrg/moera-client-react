@@ -11,7 +11,7 @@ import "./ReactionsDialog.css";
 
 type Props = ConnectedProps<typeof connector>;
 
-function ReactionsDialog({show, viewReactions, closeReactionsDialog}: Props) {
+function ReactionsDialog({viewReactions, closeReactionsDialog}: Props) {
     const itemsRef = useRef<HTMLDivElement>(null);
     const [chartView, setChartView] = useState<boolean>(false);
 
@@ -19,13 +19,9 @@ function ReactionsDialog({show, viewReactions, closeReactionsDialog}: Props) {
         if (itemsRef.current) {
             itemsRef.current.focus();
         }
-    }, [itemsRef, show, chartView]);
+    }, [itemsRef, chartView]);
 
     const onSwitchView = () => setChartView(!chartView);
-
-    if (!show) {
-        return null;
-    }
 
     return (
         <ModalDialog onClose={closeReactionsDialog}>
@@ -42,7 +38,6 @@ function ReactionsDialog({show, viewReactions, closeReactionsDialog}: Props) {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.reactionsDialog.show,
         viewReactions: isReactionsDialogPermitted("viewReactions", "public", state)
     }),
     { closeReactionsDialog }

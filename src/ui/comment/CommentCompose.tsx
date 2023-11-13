@@ -2,28 +2,22 @@ import React, { useEffect } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { commentPost } from "state/detailedposting/actions";
-import { openSignUpDialog } from "state/signupdialog/actions";
-import { openConnectDialog } from "state/connectdialog/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
-import { isPermitted, isPrincipalIn } from "state/node/selectors";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import {
     getCommentComposerRepliedToId,
-    getCommentsReceiverFeatures,
     getCommentsReceiverFullName,
     getCommentsReceiverName,
-    getCommentsReceiverPostingId,
-    getDetailedPosting
+    getCommentsReceiverPostingId
 } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
-import { Button } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
 import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
@@ -38,9 +32,9 @@ type Props = OuterProps & FormikProps<CommentComposeValues>;
 
 function CommentCompose(props: Props) {
     const {
-        ownerName, beingPosted, receiverName, receiverPostingId, loadedDraft, formId, submitKey, bottomMenuHide,
-        bottomMenuShow, receiverFullName, smileysEnabled, features, commentingAllowed, discussionClosed,
-        sourceFormatDefault, openSignUpDialog, openConnectDialog, values, resetForm, submitForm
+        beingPosted, receiverName, receiverPostingId, loadedDraft, formId, submitKey, bottomMenuHide,
+        bottomMenuShow, receiverFullName, smileysEnabled, features,
+        sourceFormatDefault, values, resetForm, submitForm
     } = props;
 
     const {t} = useTranslation();
@@ -52,29 +46,6 @@ function CommentCompose(props: Props) {
     }, [receiverName, receiverPostingId, loadedDraft, formId, resetForm]); // 'props' are missing on purpose
 
     useEffect(viewComposer, [values.body.text]);
-
-    if (!ownerName) {
-        return (
-            <div id="comment-composer" className="alert alert-info">
-                <Trans i18nKey="add-comments-need" values={{signup: t("sign-up"), connect: t("connect")}}>
-                    <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}/>
-                    <Button variant="success" size="sm" onClick={() => openConnectDialog()}/>
-                </Trans>
-            </div>
-        );
-    }
-
-    if (!commentingAllowed) {
-        if (discussionClosed) {
-            return (
-                <div id="comment-composer" className="disabled">{t("discussion-closed")}</div>
-            );
-        } else {
-            return (
-                <div id="comment-composer"/>
-            );
-        }
-    }
 
     const onFocus = () => {
         if (values.body.text.length !== 0) {
@@ -151,14 +122,9 @@ const connector = connect(
         sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
         submitKey: getSetting(state, "comment.submit-key") as string,
         smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
-        features: getPostingFeatures(state),
-        commentingAllowed: isPermitted("addComment", getDetailedPosting(state), "signed", state, {
-            objectSourceName: getCommentsReceiverName(state),
-            objectSourceFeatures: getCommentsReceiverFeatures(state)
-        }),
-        discussionClosed: isPrincipalIn("addComment", getDetailedPosting(state), "signed", "none")
+        features: getPostingFeatures(state)
     }),
-    { commentPost, openSignUpDialog, openConnectDialog, bottomMenuHide, bottomMenuShow }
+    { commentPost, bottomMenuHide, bottomMenuShow }
 );
 
 export default connector(

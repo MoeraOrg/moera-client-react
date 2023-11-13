@@ -19,20 +19,14 @@ interface Values {
 type Props = OuterProps & FormikProps<Values>;
 
 function TokenDialog(props: Props) {
-    const {show, token, updating, settingsTokensDialogClose, resetForm} = props;
+    const {token, updating, settingsTokensDialogClose, resetForm} = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: tokenLogic.mapPropsToValues(props)})
-        }
+        resetForm({values: tokenLogic.mapPropsToValues(props)})
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, resetForm]); // 'props' are missing on purpose
-
-    if (!show) {
-        return null;
-    }
+    }, [resetForm]); // 'props' are missing on purpose
 
     return (
         <ModalDialog title={token == null ? t("create-token") : t("rename-token")} onClose={settingsTokensDialogClose}>
@@ -82,7 +76,6 @@ const tokenLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.settings.tokens.dialog.show,
         token: state.settings.tokens.dialog.token,
         updating: state.settings.tokens.dialog.updating
     }),

@@ -30,20 +30,16 @@ type OuterProps = ConnectedProps<typeof connector>;
 type Props = OuterProps & FormikProps<Values>;
 
 function SheriffOrderDialog(props: Props) {
-    const {
-        show, target, submitting, isSheriff, nameDisplayMode, closeSheriffOrderDialog, resetForm
-    } = props;
+    const {target, submitting, isSheriff, nameDisplayMode, closeSheriffOrderDialog, resetForm} = props;
 
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({values: sheriffOrderDialogLogic.mapPropsToValues()});
-        }
+        resetForm({values: sheriffOrderDialogLogic.mapPropsToValues()});
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show]); // 'props' are missing on purpose
+    }, []); // 'props' are missing on purpose
 
-    if (!show || target == null) {
+    if (target == null) {
         return null;
     }
 
@@ -109,7 +105,6 @@ const sheriffOrderDialogLogic = {
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.sheriffOrderDialog.show,
         target: state.sheriffOrderDialog.target,
         submitting: state.sheriffOrderDialog.submitting,
         isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,

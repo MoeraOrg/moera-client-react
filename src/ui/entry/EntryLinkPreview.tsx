@@ -81,8 +81,10 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
                     {host.toUpperCase()}
                 </div>
             </div>
-            <EntryLinkPreviewEditDialog show={edit} title={title ?? ""} description={description ?? ""}
-                                        onSubmit={onEditSubmit}/>
+            {edit &&
+                <EntryLinkPreviewEditDialog title={title ?? ""} description={description ?? ""}
+                                            onSubmit={onEditSubmit}/>
+            }
         </Frame>
     );
 }

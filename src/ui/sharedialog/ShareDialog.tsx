@@ -46,26 +46,18 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>
 
-const ShareDialog = ({
-    show, title, url, socialButtons, closeShareDialog, shareDialogCopyLink, values, resetForm
-}: Props) => {
+const ShareDialog = ({title, url, socialButtons, closeShareDialog, shareDialogCopyLink, values, resetForm}: Props) => {
     const [mode, setMode] = useState("text" as ShareTextMode);
     const {t} = useTranslation();
 
     useEffect(() => {
-        if (show) {
-            resetForm({
-                values: shareDialogLogic.mapPropsToValues({
-                    title: mode === "text" ? clearHtml(title) : title,
-                    url
-                })
-            });
-        }
-    }, [show, mode, title, url, resetForm]);
-
-    if (!show) {
-        return null;
-    }
+        resetForm({
+            values: shareDialogLogic.mapPropsToValues({
+                title: mode === "text" ? clearHtml(title) : title,
+                url
+            })
+        });
+    }, [mode, title, url, resetForm]);
 
     const onModeClick = (mode: ShareTextMode) => (event: MouseEvent) => {
         setMode(mode);
@@ -133,7 +125,6 @@ const getSocialButtons = createSelector(
 
 const connector = connect(
     (state: ClientState) => ({
-        show: state.shareDialog.show,
         title: state.shareDialog.title,
         url: state.shareDialog.url ?? "",
         socialButtons: getSocialButtons(state)

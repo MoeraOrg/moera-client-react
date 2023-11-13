@@ -412,15 +412,17 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
                     <RichTextEditorButton icon="link" title={t("link")} letter="L" onClick={this.onLink}/>
                     <RichTextEditorButton icon="image" title={t("image")} letter="M" onClick={this.onImage}/>
                 </div>
-                <RichTextSpoilerDialog show={spoilerDialog} onSubmit={this.onSpoilerSubmit}/>
-                <RichTextFoldDialog show={foldDialog} onSubmit={this.onFoldSubmit}/>
-                <RichTextLinkDialog show={linkDialog} text={dialogText} onSubmit={this.onLinkSubmit}/>
-                <RichTextImageDialog show={imageDialog} onSubmit={this.onImageSubmit} nodeName={nodeName}
-                                     forceCompress={forceImageCompress} selectedImage={selectedImage}
-                                     features={features} noMedia={noMedia} onAdded={onImageAdded}
-                                     onDeleted={onImageDeleted} externalImage={externalImage}
-                                     uploadingExternalImage={uploadingExternalImage}/>
-                <RichTextMentionDialog show={mentionDialog} onSubmit={this.onMentionSubmit}/>
+                {spoilerDialog && <RichTextSpoilerDialog onSubmit={this.onSpoilerSubmit}/>}
+                {foldDialog && <RichTextFoldDialog onSubmit={this.onFoldSubmit}/>}
+                {linkDialog && <RichTextLinkDialog text={dialogText} onSubmit={this.onLinkSubmit}/>}
+                {imageDialog &&
+                    <RichTextImageDialog onSubmit={this.onImageSubmit} nodeName={nodeName}
+                                         forceCompress={forceImageCompress} selectedImage={selectedImage}
+                                         features={features} noMedia={noMedia} onAdded={onImageAdded}
+                                         onDeleted={onImageDeleted} externalImage={externalImage}
+                                         uploadingExternalImage={uploadingExternalImage}/>
+                }
+                {mentionDialog && <RichTextMentionDialog onSubmit={this.onMentionSubmit}/>}
             </div>
         );
     }

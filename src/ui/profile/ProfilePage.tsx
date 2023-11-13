@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 
-import ProfileView from "ui/profile/view/ProfileView";
-import ProfileEditor from "ui/profile/edit/ProfileEditor";
 import { ClientState } from "state/state";
+import ProfileView from "ui/profile/view/ProfileView";
+
+const ProfileEditor = React.lazy(() => import("ui/profile/edit/ProfileEditor"));
 
 type Props = ConnectedProps<typeof connector>;
 
 const ProfilePage = ({editing}: Props) => (
     <>
         {!editing && <ProfileView/>}
-        {editing && <ProfileEditor/>}
+        {editing &&
+            <Suspense fallback={null}>
+                <ProfileEditor/>
+            </Suspense>
+        }
     </>
 );
 
