@@ -12,9 +12,7 @@ type Props = ConnectedProps<typeof connector>;
 const NewsPage = ({visible}: Props) => {
     const {t} = useTranslation();
 
-    return (
-        <FeedPage feedName="news" title={getFeedTitle("news", t)} visible={visible}/>
-    );
+    return <FeedPage feedName="news" title={getFeedTitle("news", t)} visible={visible}/>;
 }
 
 const connector = connect(

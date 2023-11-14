@@ -12,7 +12,7 @@ type Props = ConnectedProps<typeof connector>;
 const TimelinePage = ({visible}: Props) => {
     const {t} = useTranslation();
 
-    return <FeedPage feedName="timeline" title={getFeedTitle("timeline", t)} shareable visible={visible}/>
+    return <FeedPage feedName="timeline" title={getFeedTitle("timeline", t)} shareable visible={visible}/>;
 };
 
 const connector = connect(
