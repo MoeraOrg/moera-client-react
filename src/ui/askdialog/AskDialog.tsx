@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -12,27 +12,30 @@ import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
+import store from "state/store";
+
+interface OuterProps {
+    nodeName: string | null;
+}
 
 interface Values {
     subject: string;
     message: string;
 }
 
-type OuterProps = ConnectedProps<typeof connector>;
-
 type Props = OuterProps & FormikProps<Values>;
 
-function AskDialog(props: Props) {
-    const {
-        nodeName, card, loading, allGroups, subjectsAllowed, sending, nameDisplayMode, closeAskDialog, resetForm
-    } = props;
-
+function AskDialog({nodeName}: Props) {
+    const card = useSelector((state: ClientState) => getNodeCard(state, state.askDialog.nodeName));
+    const loading = useSelector((state: ClientState) => state.askDialog.loading);
+    const allGroups = useSelector((state: ClientState) => state.askDialog.friendGroups);
+    const subjectsAllowed = useSelector((state: ClientState) => state.askDialog.subjectsAllowed);
+    const sending = useSelector((state: ClientState) => state.askDialog.sending);
+    const nameDisplayMode = useSelector(
+        (state: ClientState) => getSetting(state, "full-name.display")
+    ) as NameDisplayMode;
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        resetForm({values: askDialogLogic.mapPropsToValues()});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 'props' are missing on purpose
 
     if (nodeName == null) {
         return null;
@@ -62,8 +65,10 @@ function AskDialog(props: Props) {
         }
     }
 
+    const onClose = () => dispatch(closeAskDialog());
+
     return (
-        <ModalDialog title={t("ask-node", {name})} loading={loading} onClose={closeAskDialog}>
+        <ModalDialog title={t("ask-node", {name})} loading={loading} onClose={onClose}>
             {loading || subjects.length > 1 ?
                 <Form>
                     <div className="modal-body">
@@ -71,7 +76,7 @@ function AskDialog(props: Props) {
                         <InputField name="message" title={t("message")} maxLength={70} anyValue/>
                     </div>
                     <div className="modal-footer">
-                        <Button variant="secondary" onClick={closeAskDialog}>{t("cancel")}</Button>
+                        <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                         <Button variant="primary" type="submit" loading={sending}>{t("ask")}</Button>
                     </div>
                 </Form>
@@ -97,9 +102,9 @@ const askDialogLogic = {
         formik.setStatus("submitted");
         if (formik.props.nodeName != null) {
             if (values.subject === "s:subscribe") {
-                formik.props.askDialogSend(formik.props.nodeName, "subscribe", null, values.message);
+                store.dispatch(askDialogSend(formik.props.nodeName, "subscribe", null, values.message));
             } else {
-                formik.props.askDialogSend(formik.props.nodeName, "friend", values.subject, values.message);
+                store.dispatch(askDialogSend(formik.props.nodeName, "friend", values.subject, values.message));
             }
         }
         formik.setSubmitting(false);
@@ -107,17 +112,4 @@ const askDialogLogic = {
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        nodeName: state.askDialog.nodeName,
-        card: getNodeCard(state, state.askDialog.nodeName),
-        loading: state.askDialog.loading,
-        allGroups: state.askDialog.friendGroups,
-        subjectsAllowed: state.askDialog.subjectsAllowed,
-        sending: state.askDialog.sending,
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
-    { closeAskDialog, askDialogSend }
-);
-
-export default connector(withFormik(askDialogLogic)(AskDialog));
+export default withFormik(askDialogLogic)(AskDialog);

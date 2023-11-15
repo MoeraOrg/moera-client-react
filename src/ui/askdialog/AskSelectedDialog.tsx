@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import React from 'react';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { Form, FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +10,7 @@ import { closeAskDialog } from "state/askdialog/actions";
 import { peopleSelectedAsk } from "state/people/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
+import store from "state/store";
 
 const SUBJECTS: SelectFieldChoice[] = [
     {title: "choose-request", value: "s:select"},
@@ -22,33 +23,28 @@ interface Values {
     message: string;
 }
 
-type OuterProps = ConnectedProps<typeof connector>;
-
-type Props = OuterProps & FormikProps<Values>;
-
-function AskSelectedDialog(props: Props) {
-    const {nodeName, nodeCount, sending, closeAskDialog, resetForm} = props;
-
+function AskSelectedDialog() {
+    const nodeName = useSelector((state: ClientState) => state.askDialog.nodeName);
+    const nodeCount = useSelector((state: ClientState) => state.askDialog.nodeCount);
+    const sending = useSelector((state: ClientState) => state.askDialog.sending);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        resetForm({values: askSelectedDialogLogic.mapPropsToValues()});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 'props' are missing on purpose
 
     if (nodeName != null) {
         return null;
     }
 
+    const onClose = () => dispatch(closeAskDialog());
+
     return (
-        <ModalDialog title={t("ask-count", {count: nodeCount})} onClose={closeAskDialog}>
+        <ModalDialog title={t("ask-count", {count: nodeCount})} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <SelectField name="subject" choices={SUBJECTS}/>
                     <InputField name="message" title={t("message")} maxLength={70} anyValue/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeAskDialog}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={sending}>{t("ask")}</Button>
                 </div>
             </Form>
@@ -67,11 +63,11 @@ const askSelectedDialogLogic = {
         subject: yup.string().notOneOf(["s:select"], "need-to-choose")
     }),
 
-    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
+    handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
         formik.setStatus("submitted");
-        formik.props.closeAskDialog();
+        store.dispatch(closeAskDialog());
         const subject: AskSubject = values.subject === "s:subscribe" ? "subscribe" : "friend";
-        formik.props.peopleSelectedAsk(subject, values.message);
+        store.dispatch(peopleSelectedAsk(subject, values.message));
         formik.setSubmitting(false);
     }
 

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { isAtNode } from "state/node/selectors";
@@ -41,106 +41,105 @@ const SheriffOrderDetailsDialog = React.lazy(() => import("ui/sherifforderdetail
 const SignUpDialog = React.lazy(() => import("ui/signupdialog/SignUpDialog"));
 const ShareDialog = React.lazy(() => import("ui/sharedialog/ShareDialog"));
 
-type Props = ConnectedProps<typeof connector>;
+export default function App() {
+    const atNode = useSelector(isAtNode);
+    const feedWidth = useSelector(getFeedWidth);
+    const showReactionsDialog = useSelector((state: ClientState) => state.reactionsDialog.show);
+    const changeDateDialog = {
+        show: useSelector((state: ClientState) => state.changeDateDialog.show),
+        storyId: useSelector((state: ClientState) => state.changeDateDialog.storyId),
+        publishedAt: useSelector((state: ClientState) => state.changeDateDialog.publishedAt)
+    }
+    const showSourceDialog = useSelector((state: ClientState) => state.sourceDialog.show);
+    const showLightBox = useSelector(isLightBoxShown);
+    const showImageEditDialog = useSelector((state: ClientState) => state.imageEditDialog.show);
+    const showDonateDialog = useSelector((state: ClientState) => state.donateDialog.show);
+    const showEntryCopyTextDialog = useSelector((state: ClientState) => state.entryCopyTextDialog.show);
+    const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
+    const showFriendGroupsDialog = useSelector((state: ClientState) => state.friendGroupsDialog.show);
+    const askDialog = {
+        show: useSelector((state: ClientState) => state.askDialog.show),
+        nodeName: useSelector((state: ClientState) => state.askDialog.nodeName)
+    }
+    const showBlockDialog = useSelector((state: ClientState) => state.blockDialog.show);
+    const showBlockingDetailsDialog = useSelector((state: ClientState) => state.blockingDetailsDialog.show);
+    const showSheriffOrderDialog = useSelector((state: ClientState) => state.sheriffOrderDialog.show);
+    const showSheriffOrderDetailsDialog = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.show);
+    const showSignUpDialog = useSelector((state: ClientState) => state.signUpDialog.show);
+    const showMnemonicDialog = useSelector((state: ClientState) => !!state.nodeName.mnemonic);
+    const showQuickTips = useSelector((state: ClientState) => state.quickTips.show);
+    const showMessageBox = useSelector((state: ClientState) => state.messageBox.show);
+    const showConfirmBox = useSelector((state: ClientState) => state.confirmBox.show);
+    const showFlashBox = useSelector((state: ClientState) => state.flashBox.show);
+    const showProgressBox = useSelector((state: ClientState) => state.progressBox.show);
+    const showShareDialog = useSelector((state: ClientState) => state.shareDialog.show);
 
-const App = ({
-    atNode, feedWidth, showReactionsDialog, showChangeDateDialog, showSourceDialog, showLightBox, showImageEditDialog,
-    showDonateDialog, showEntryCopyTextDialog, showPeopleHideDialog, showFriendGroupsDialog, showAskDialog,
-    showBlockDialog, showBlockingDetailsDialog, showSheriffOrderDialog, showSheriffOrderDetailsDialog, showSignUpDialog,
-    showMnemonicDialog, showQuickTips, showMessageBox, showConfirmBox, showFlashBox, showProgressBox, showShareDialog
-}: Props) => (
-    // FIXME React.CSSProperties does not include CSS variables
-    <div style={{"--feed-width": feedWidth + "px"} as any}>
-        <HomeEvents/>
-        <NodeEvents/>
-        <ReceiverEvents/>
-        <Navigation/>
-        <ErrorPane/>
-        <MainMenu/>
-        {atNode ?
-            <>
-                <CurrentPage/>
-                <Suspense fallback={null}>
-                    {showReactionsDialog && <ReactionsDialog/>}
-                </Suspense>
-                {showChangeDateDialog && <ChangeDateDialog/>}
-                {showSourceDialog && <SourceDialog/>}
-                <Suspense fallback={null}>
-                    {showLightBox && <LightBox/>}
-                </Suspense>
-                <Suspense fallback={null}>
-                    {showImageEditDialog && <ImageEditDialog/>}
-                </Suspense>
-                <Suspense fallback={null}>
-                    {showDonateDialog && <DonateDialog/>}
-                </Suspense>
-                {showEntryCopyTextDialog && <EntryCopyTextDialog/>}
-                <Suspense fallback={null}>
-                    {showPeopleHideDialog && <PeopleHideDialog/>}
-                </Suspense>
-                <Suspense fallback={null}>
-                    {showFriendGroupsDialog && <FriendGroupsDialog/>}
-                </Suspense>
-                <Suspense fallback={null}>
-                    {showAskDialog && <AskDialog/>}
-                </Suspense>
-                <Suspense fallback={null}>
-                    {showBlockDialog && <BlockDialog/>}
-                </Suspense>
-                {showBlockingDetailsDialog && <BlockingDetailsDialog/>}
-                <Suspense fallback={null}>
-                    {showSheriffOrderDialog && <SheriffOrderDialog/>}
-                </Suspense>
-                <Suspense fallback={null}>
-                    {showSheriffOrderDetailsDialog && <SheriffOrderDetailsDialog/>}
-                </Suspense>
-            </>
-        :
-            <WelcomePage/>
-        }
-        <BottomMenu/>
-        <Suspense fallback={null}>
-            {showShareDialog && <ShareDialog/>}
-        </Suspense>
-        <Suspense fallback={null}>
-            {showSignUpDialog && <SignUpDialog/>}
-        </Suspense>
-        {showMnemonicDialog && <MnemonicDialog/>}
-        {showQuickTips && <QuickTips/>}
-        {showMessageBox && <MessageBox/>}
-        {showConfirmBox && <ConfirmBox/>}
-        {showFlashBox && <FlashBox/>}
-        {showProgressBox && <ProgressBox/>}
-    </div>
-);
-
-const connector = connect(
-    (state: ClientState) => ({
-        atNode: isAtNode(state),
-        feedWidth: getFeedWidth(state),
-        showReactionsDialog: state.reactionsDialog.show,
-        showChangeDateDialog: state.changeDateDialog.show,
-        showSourceDialog: state.sourceDialog.show,
-        showLightBox: isLightBoxShown(state),
-        showImageEditDialog: state.imageEditDialog.show,
-        showDonateDialog: state.donateDialog.show,
-        showEntryCopyTextDialog: state.entryCopyTextDialog.show,
-        showPeopleHideDialog: state.peopleHideDialog.show,
-        showFriendGroupsDialog: state.friendGroupsDialog.show,
-        showAskDialog: state.askDialog.show,
-        showBlockDialog: state.blockDialog.show,
-        showBlockingDetailsDialog: state.blockingDetailsDialog.show,
-        showSheriffOrderDialog: state.sheriffOrderDialog.show,
-        showSheriffOrderDetailsDialog: state.sheriffOrderDetailsDialog.show,
-        showSignUpDialog: state.signUpDialog.show,
-        showMnemonicDialog: !!state.nodeName.mnemonic,
-        showQuickTips: state.quickTips.show,
-        showMessageBox: state.messageBox.show,
-        showConfirmBox: state.confirmBox.show,
-        showFlashBox: state.flashBox.show,
-        showProgressBox: state.progressBox.show,
-        showShareDialog: state.shareDialog.show
-    })
-);
-
-export default connector(App);
+    return (
+        // FIXME React.CSSProperties does not include CSS variables
+        <div style={{"--feed-width": feedWidth + "px"} as any}>
+            <HomeEvents/>
+            <NodeEvents/>
+            <ReceiverEvents/>
+            <Navigation/>
+            <ErrorPane/>
+            <MainMenu/>
+            {atNode ?
+                <>
+                    <CurrentPage/>
+                    <Suspense fallback={null}>
+                        {showReactionsDialog && <ReactionsDialog/>}
+                    </Suspense>
+                    {changeDateDialog.show &&
+                        <ChangeDateDialog storyId={changeDateDialog.storyId}
+                                          publishedAt={changeDateDialog.publishedAt}/>
+                    }
+                    {showSourceDialog && <SourceDialog/>}
+                    <Suspense fallback={null}>
+                        {showLightBox && <LightBox/>}
+                    </Suspense>
+                    <Suspense fallback={null}>
+                        {showImageEditDialog && <ImageEditDialog/>}
+                    </Suspense>
+                    <Suspense fallback={null}>
+                        {showDonateDialog && <DonateDialog/>}
+                    </Suspense>
+                    {showEntryCopyTextDialog && <EntryCopyTextDialog/>}
+                    <Suspense fallback={null}>
+                        {showPeopleHideDialog && <PeopleHideDialog/>}
+                    </Suspense>
+                    <Suspense fallback={null}>
+                        {showFriendGroupsDialog && <FriendGroupsDialog/>}
+                    </Suspense>
+                    <Suspense fallback={null}>
+                        {askDialog.show && <AskDialog nodeName={askDialog.nodeName}/>}
+                    </Suspense>
+                    <Suspense fallback={null}>
+                        {showBlockDialog && <BlockDialog/>}
+                    </Suspense>
+                    {showBlockingDetailsDialog && <BlockingDetailsDialog/>}
+                    <Suspense fallback={null}>
+                        {showSheriffOrderDialog && <SheriffOrderDialog/>}
+                    </Suspense>
+                    <Suspense fallback={null}>
+                        {showSheriffOrderDetailsDialog && <SheriffOrderDetailsDialog/>}
+                    </Suspense>
+                </>
+            :
+                <WelcomePage/>
+            }
+            <BottomMenu/>
+            <Suspense fallback={null}>
+                {showShareDialog && <ShareDialog/>}
+            </Suspense>
+            <Suspense fallback={null}>
+                {showSignUpDialog && <SignUpDialog/>}
+            </Suspense>
+            {showMnemonicDialog && <MnemonicDialog/>}
+            {showQuickTips && <QuickTips/>}
+            {showMessageBox && <MessageBox/>}
+            {showConfirmBox && <ConfirmBox/>}
+            {showFlashBox && <FlashBox/>}
+            {showProgressBox && <ProgressBox/>}
+        </div>
+    );
+}

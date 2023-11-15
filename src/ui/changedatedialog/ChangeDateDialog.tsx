@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -9,33 +9,32 @@ import { ClientState } from "state/state";
 import { closeChangeDateDialog, storyChangeDate } from "state/changedatedialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { DateTimeField } from "ui/control/field";
+import store from "state/store";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    storyId: string | null;
+    publishedAt: number;
+}
 
 interface Values {
     publishedAt: Date;
 }
 
-type Props = OuterProps & FormikProps<Values>;
-
-function ChangeDateDialog(props: Props) {
-    const {changing, publishedAt, closeChangeDateDialog} = props;
+function ChangeDateDialog() {
+    const changing = useSelector((state: ClientState) => state.changeDateDialog.changing);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        const values = changeDateDialogLogic.mapPropsToValues(props);
-        props.resetForm({values});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [publishedAt]); // 'props' are missing on purpose
+    const onClose = () => dispatch(closeChangeDateDialog());
 
     return (
-        <ModalDialog title={t("change-date-time")} onClose={closeChangeDateDialog} shadowClick={false}>
+        <ModalDialog title={t("change-date-time")} onClose={onClose} shadowClick={false}>
             <Form>
                 <div className="modal-body">
                     <DateTimeField name="publishedAt"/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeChangeDateDialog}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={changing}>{t("change")}</Button>
                 </div>
             </Form>
@@ -55,20 +54,11 @@ const changeDateDialogLogic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         if (formik.props.storyId != null) {
-            formik.props.storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt));
+            store.dispatch(storyChangeDate(formik.props.storyId, getUnixTime(values.publishedAt)));
         }
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        storyId: state.changeDateDialog.storyId,
-        publishedAt: state.changeDateDialog.publishedAt,
-        changing: state.changeDateDialog.changing
-    }),
-    { closeChangeDateDialog, storyChangeDate }
-);
-
-export default connector(withFormik(changeDateDialogLogic)(ChangeDateDialog));
+export default withFormik(changeDateDialogLogic)(ChangeDateDialog);

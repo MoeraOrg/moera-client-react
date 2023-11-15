@@ -293,7 +293,7 @@ module.exports = function (webpackEnv) {
       ],
       splitChunks: {
         // include all types of chunks
-        chunks: 'all',
+        chunks: isEnvProduction ? 'all' : 'async',
       },
     },
     resolve: {
