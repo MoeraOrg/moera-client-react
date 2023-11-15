@@ -54,7 +54,7 @@ const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) 
             <Page>
                 <div className="profile-view content-panel">
                     <Avatar avatar={profile?.avatar} ownerName={ownerName} size={200}/>
-                    <Loading active={loading}/>
+                    {loading && <Loading/>}
                     <div className="full-name">
                         {profile?.fullName ?? NodeName.shorten(ownerName)}
                         {profile?.gender && <span className="gender">{shortGender(profile.gender, t)}</span>}

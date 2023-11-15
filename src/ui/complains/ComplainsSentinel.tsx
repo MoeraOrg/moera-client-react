@@ -16,7 +16,7 @@ export default function ComplainsSentinel({visible, loading, title, total, onCli
     if (loading) {
         return (
             <div className="complains-sentinel">
-                <Loading active={loading}/>
+                <Loading/>
             </div>
         );
     }

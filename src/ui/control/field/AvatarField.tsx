@@ -57,7 +57,7 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
                                 </div>
                             )
                         :
-                            <Loading active={avatarsLoading}/>
+                            (avatarsLoading ? <Loading/> : null)
                         }
                     </div>
                     <div ref={setArrowRef} style={arrowStyles} className="popover-arrow"/>

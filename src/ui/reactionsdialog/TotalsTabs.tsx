@@ -29,7 +29,7 @@ const TotalsTabs = ({loading, loaded, total, emojis, activeTab, reactionsDialogS
                     )}
                 </div>
             }
-            <Loading active={loading}/>
+            {loading && <Loading/>}
         </>
     );
 }

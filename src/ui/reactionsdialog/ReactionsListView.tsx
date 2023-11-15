@@ -68,7 +68,7 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
                     </button>
                 )
             }
-            <Loading active={reactionsLoading}/>
+            {reactionsLoading && <Loading/>}
         </>
     );
 }

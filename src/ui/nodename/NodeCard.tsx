@@ -100,7 +100,7 @@ function NodeCard({
                     <SubscribeButton nodeName={nodeName} feedName="timeline" onDialogOpened={hide}/>
                 }
             </div>
-            <Loading active={anyLoading}/>
+            {anyLoading && <Loading/>}
         </div>
     );
 }

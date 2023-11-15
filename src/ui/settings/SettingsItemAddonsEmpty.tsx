@@ -12,7 +12,7 @@ const SettingsItemAddonsEmpty = ({loading, loaded}: Props) => {
     if (loaded) {
         return <div className="mb-4">{t("no-addons")}</div>;
     } else {
-        return <Loading active={loading}/>;
+        return loading ? <Loading/> : null;
     }
 }
 

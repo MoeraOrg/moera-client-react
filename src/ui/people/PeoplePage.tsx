@@ -29,7 +29,7 @@ const PeoplePage = ({
                     <Jump href="/profile" title={t("profile")} className="avatar-link">
                         <Avatar avatar={ownerAvatar} ownerName={ownerName} size={40}/>
                     </Jump>
-                    {t("people")} <Loading active={loadingGeneral}/>
+                    {t("people")} {loadingGeneral && <Loading/>}
                 </h2>
             </PageHeader>
             <Page>

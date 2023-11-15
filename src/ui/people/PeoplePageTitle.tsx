@@ -16,7 +16,7 @@ const PeoplePageTitle = ({tab, friendGroups, loading}: Props) => {
 
     return (
         <>
-            <h3>{getPeopleTabTitle(tab, friendGroups, t)}{" "}<Loading active={loading}/></h3>
+            <h3>{getPeopleTabTitle(tab, friendGroups, t)}{" "}{loading && <Loading/>}</h3>
             <br/>
         </>
     );

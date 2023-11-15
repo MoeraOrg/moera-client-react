@@ -77,7 +77,7 @@ function ComposePage(props: Props) {
                             {t("to-post")}
                         </Jump>
                     }
-                    <Loading active={loadingContent}/>
+                    {loadingContent && <Loading/>}
                 </h2>
             </PageHeader>
             <Page className="compose-page">

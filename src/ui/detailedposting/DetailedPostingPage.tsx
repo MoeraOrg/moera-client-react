@@ -64,7 +64,7 @@ function DetailedPostingPage({loading, deleting, posting, googlePlayHiding}: Pro
                 }
                 {!postingReady && loading &&
                     <div className="posting">
-                        <Loading active={loading}/>
+                        <Loading/>
                     </div>
                 }
                 {!postingReady && !loading &&

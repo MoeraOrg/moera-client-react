@@ -44,7 +44,7 @@ export default class CommentsSentinel extends React.PureComponent<Props> {
         if (loading) {
             return (
                 <div className="comments-sentinel">
-                    <Loading active={loading}/>
+                    <Loading/>
                 </div>
             );
         }

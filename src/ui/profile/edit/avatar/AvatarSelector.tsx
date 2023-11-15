@@ -80,7 +80,7 @@ export default function AvatarSelector({nodeName, loaded, loading, avatars, acti
                             )}
                         </>
                     :
-                        <Loading active={loading}/>
+                        loading && <Loading/>
                     }
                 </div>
             </SortableContext>

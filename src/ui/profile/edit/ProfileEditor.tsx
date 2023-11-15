@@ -46,7 +46,7 @@ function ProfileEditor(props: Props) {
     return (
         <>
             <PageHeader>
-                <h2>{t("edit-profile")} <Loading active={loading}/></h2>
+                <h2>{t("edit-profile")} {loading && <Loading/>}</h2>
             </PageHeader>
             <Page>
                 <div className="profile-editor content-panel">

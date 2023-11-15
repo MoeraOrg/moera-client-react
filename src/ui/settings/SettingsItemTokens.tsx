@@ -40,7 +40,7 @@ function SettingsItemTokens({
 
     return (
         <>
-            <Loading active={loading}/>
+            {loading && <Loading/>}
             {loaded &&
                 <Button variant="primary" onClick={() => settingsTokensDialogOpen(null)}>{t("create-token")}</Button>
             }

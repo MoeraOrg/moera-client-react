@@ -58,7 +58,7 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
                     )
                 }
             </div>
-            <Loading active={loading}/>
+            {loading && <Loading/>}
         </>
     );
 }

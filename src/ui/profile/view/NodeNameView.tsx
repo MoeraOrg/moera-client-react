@@ -45,7 +45,7 @@ const NodeNameView = ({
                         </>
                     )
                 }
-                <Loading active={loading}/>
+                {loading && <Loading/>}
             </div>
             {showRegisterNameDialog &&
                 <Suspense fallback={null}>

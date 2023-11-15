@@ -38,7 +38,7 @@ const GlanceComment = ({loading, loaded, postingId, receiverName, comment}: Prop
             </div>
         </div>
     :
-        <Loading active={loading}/>
+        (loading ? <Loading/> : null)
 );
 
 const connector = connect(

@@ -32,7 +32,7 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
         return null;
     }
     if (!loadedDraftList) {
-        return <Loading active={loadingDraftList}/>;
+        return loadingDraftList ? <Loading/> : null;
     }
     if (draftList.length === 0) {
         return null;
@@ -43,7 +43,7 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
             <Button variant="info" className="dropdown-toggle" onClick={onToggle}>
                 {t("Drafts") + " "}
                 {loadingDraftList ?
-                    <LoadingInline active={loadingDraftList}/>
+                    <LoadingInline/>
                 :
                     <span className="badge bg-light text-dark">{draftList.length}</span>
                 }

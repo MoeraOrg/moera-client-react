@@ -1,15 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import cx from 'classnames';
 
 import "./LoadingInline.css";
 
 interface Props {
-    active?: boolean;
     className?: string | null;
 }
 
-export const LoadingInline = ({active = true, className = null}: Props) => (
-    active ?
+export function LoadingInline({className = null}: Props) {
+    const [visible, setVisible] = useState<boolean>(false);
+
+    useEffect(() => {
+        const id = setTimeout(() => setVisible(true), 500);
+        return () => clearTimeout(id);
+    });
+
+    if (!visible) {
+        return null;
+    }
+
+    return (
         <div className={cx("loading-inline", className)}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 10">
                 <circle transform="translate(8 0)" cx="0" r="0" cy="5">
@@ -29,6 +39,5 @@ export const LoadingInline = ({active = true, className = null}: Props) => (
                 </circle>
             </svg>
         </div>
-    :
-        null
-);
+    );
+}

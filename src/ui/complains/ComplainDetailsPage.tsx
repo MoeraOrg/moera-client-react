@@ -50,7 +50,7 @@ function ComplainsListPage({
             </PageHeader>
             <Page>
                 <div className="complain content-panel">
-                    <Loading active={loadingGroup}/>
+                    {loadingGroup && <Loading/>}
                     {complainGroup != null &&
                         <>
                             <h4>
@@ -63,7 +63,7 @@ function ComplainsListPage({
                                 {statusIcon && <FontAwesomeIcon icon={statusIcon}/>}
                                 {" " + t("complain-status." + complainGroup.status)}
                             </div>
-                            <Loading active={loadingComplains}/>
+                            {loadingComplains && <Loading/>}
                             {atHomeNode || !complainGroup.anonymous || complains.length > 0 ?
                                 <>
                                     {complains.map(complain =>

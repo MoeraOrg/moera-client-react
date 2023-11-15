@@ -16,10 +16,10 @@ type Props = {
 const SettingsTab = ({name, title, href, loading, tab}: Props) => (
     <li className="nav-item">{
         tab === name ?
-            <span className="nav-link active">{title} <Loading active={loading}/></span>
+            <span className="nav-link active">{title} {loading && <Loading/>}</span>
         :
             <Jump className="nav-link" href={href}>
-                {title} <Loading active={loading}/>
+                {title} {loading && <Loading/>}
             </Jump>
     }</li>
 );

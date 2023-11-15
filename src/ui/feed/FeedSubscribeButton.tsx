@@ -24,7 +24,7 @@ function FeedSubscribeButton({feedName, small, show, ownerName, generalReady, ge
             {(generalReady && (subscription?.loaded ?? false)) &&
                 <SubscribeButton nodeName={ownerName} feedName={feedName} small={small}/>
             }
-            <Loading active={generalLoading || subscription?.loading}/>
+            {(generalLoading || subscription?.loading) && <Loading/>}
         </>
     );
 }

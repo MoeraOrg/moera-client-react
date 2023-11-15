@@ -51,7 +51,7 @@ export default class FeedSentinel extends React.PureComponent<Props> {
         return (
             <div className={cx({"feed-sentinel": !loading && visible})} ref={this.observeSentinel} onClick={onClick}>
                 {!loading && visible && title}
-                <Loading active={loading}/>
+                {loading && <Loading/>}
             </div>
         );
     }

@@ -48,7 +48,7 @@ export function Button({
             {!(loading && (compact || Browser.isTinyScreen())) &&
                 <>{props.children}</>
             }
-            <LoadingInline active={loading}/>
+            {loading && <LoadingInline/>}
         </button>
     );
 }
