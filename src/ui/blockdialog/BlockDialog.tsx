@@ -1,18 +1,17 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikBag, FormikProps, useFormikContext, withFormik } from 'formik';
 import { add, getUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { BlockedOperation, BlockedUserInfo } from "api";
-import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
-import { getSetting } from "state/settings/selectors";
 import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { CheckboxField, NumberField, RadioField, RichTextField } from "ui/control/field";
 import { formatFullName } from "util/misc";
+import store from "state/store";
 import "./BlockDialog.css";
 
 type BlockingLevel = "none" | "ignore" | "comments" | "reactions" | "hide";
@@ -43,6 +42,15 @@ function blockingLevel(operations: BlockedOperation[]): BlockingLevel {
     }
 }
 
+interface OuterProps {
+    nodeName: string;
+    fullName: string | null;
+    entryNodeName: string | null;
+    entryPostingId: string | null;
+    prevBlocked: BlockedUserInfo[];
+    nameDisplayMode: NameDisplayMode;
+}
+
 interface Values {
     formattedName: string;
     level: BlockingLevel;
@@ -52,19 +60,13 @@ interface Values {
     reason: RichTextValue;
 }
 
-type OuterProps = ConnectedProps<typeof connector>;
-
 type Props = OuterProps & FormikProps<Values>;
 
-function BlockDialog(props: Props) {
-    const {entryNodeName, submitting, homeOwnerName, closeBlockDialog, values, resetForm} = props;
-
+function BlockDialog({entryNodeName}: Props) {
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const dispatch = useDispatch();
+    const {values, isSubmitting} = useFormikContext<Values>();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        resetForm({values: blockDialogLogic.mapPropsToValues(props)});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 'props' are missing on purpose
 
     const isChecked = (v: BlockingLevel) => (value: BlockingLevel) => value === v;
 
@@ -72,9 +74,11 @@ function BlockDialog(props: Props) {
         ? t("blocking-node", {name: values.formattedName})
         : t("kicking-node", {name: values.formattedName});
 
+    const onClose = () => dispatch(closeBlockDialog());
+
     return (
         <ModalDialog title={title}
-                     className="block-dialog" onClose={closeBlockDialog}>
+                     className="block-dialog" onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <RadioField<BlockingLevel> id="level-none" name="level"
@@ -129,8 +133,9 @@ function BlockDialog(props: Props) {
                     }
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeBlockDialog}>{t("cancel")}</Button>
-                    <Button variant={values.level !== "none" ? "danger" : "success"} type="submit" loading={submitting}>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
+                    <Button variant={values.level !== "none" ? "danger" : "success"} type="submit"
+                            loading={isSubmitting}>
                         {
                             entryNodeName == null
                                 ? (values.level !== "none" ? t("block") : t("unblock"))
@@ -168,31 +173,17 @@ const blockDialogLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const {nodeName, entryNodeName, entryPostingId, prevBlocked, blockDialogSubmit} = formik.props;
+        const {nodeName, entryNodeName, entryPostingId, prevBlocked} = formik.props;
 
         formik.setStatus("submitted");
         const deadline = values.temporary ? getUnixTime(add(new Date(), {days: values.days})) : null;
-        blockDialogSubmit(
+        store.dispatch(blockDialogSubmit(
             nodeName, values.formattedName, entryNodeName, entryPostingId, prevBlocked,
             BLOCKED_OPERATIONS[values.level], deadline, values.reason.text
-        );
+        ));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        nodeName: state.blockDialog.nodeName,
-        fullName: state.blockDialog.fullName,
-        entryNodeName: state.blockDialog.entryNodeName,
-        entryPostingId: state.blockDialog.entryPostingId,
-        prevBlocked: state.blockDialog.prevBlocked,
-        submitting: state.blockDialog.submitting,
-        homeOwnerName: getHomeOwnerName(state),
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
-    { closeBlockDialog, blockDialogSubmit }
-);
-
-export default connector(withFormik(blockDialogLogic)(BlockDialog));
+export default withFormik(blockDialogLogic)(BlockDialog);

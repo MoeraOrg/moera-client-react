@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -13,15 +13,22 @@ import { formatFullName } from "util/misc";
 import Jump from "ui/navigation/Jump";
 import { htmlEntities, replaceEmojis } from "util/html";
 
-type Props = ConnectedProps<typeof connector>;
-
-function BlockingDetailsDialog({
-    loaded, loading, nodeName, remoteNodeName, remotePostingId, remotePostingHeading, by, blocked, nameDisplayMode,
-    closeBlockingDetailsDialog
-}: Props) {
+export default function BlockingDetailsDialog() {
+    const loaded = useSelector((state: ClientState) => state.blockingDetailsDialog.loaded);
+    const loading = useSelector((state: ClientState) => state.blockingDetailsDialog.loading);
+    const nodeName = useSelector((state: ClientState) => state.blockingDetailsDialog.nodeName);
+    const remoteNodeName = useSelector((state: ClientState) => state.blockingDetailsDialog.remoteNodeName);
+    const remotePostingId = useSelector((state: ClientState) => state.blockingDetailsDialog.remotePostingId);
+    const remotePostingHeading = useSelector((state: ClientState) => state.blockingDetailsDialog.remotePostingHeading);
+    const by = useSelector((state: ClientState) => state.blockingDetailsDialog.by);
+    const blocked = useSelector((state: ClientState) => state.blockingDetailsDialog.blocked);
+    const nameDisplayMode = useSelector(
+        (state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode
+    );
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onClose = () => closeBlockingDetailsDialog();
+    const onClose = () => dispatch(closeBlockingDetailsDialog());
 
     const name = formatFullName(remoteNodeName, blocked[0]?.contact?.fullName, nameDisplayMode);
     const deadline = blocked[0]?.deadline;
@@ -73,20 +80,3 @@ function BlockingDetailsDialog({
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loaded: state.blockingDetailsDialog.loaded,
-        loading: state.blockingDetailsDialog.loading,
-        nodeName: state.blockingDetailsDialog.nodeName,
-        remoteNodeName: state.blockingDetailsDialog.remoteNodeName,
-        remotePostingId: state.blockingDetailsDialog.remotePostingId,
-        remotePostingHeading: state.blockingDetailsDialog.remotePostingHeading,
-        by: state.blockingDetailsDialog.by,
-        blocked: state.blockingDetailsDialog.blocked,
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
-    { closeBlockingDetailsDialog }
-);
-
-export default connector(BlockingDetailsDialog);

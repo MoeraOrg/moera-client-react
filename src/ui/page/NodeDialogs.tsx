@@ -7,6 +7,8 @@ import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import SourceDialog from "ui/sourcedialog/SourceDialog";
 import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialog";
+import { getSetting } from "state/settings/selectors";
+import { NameDisplayMode } from "ui/types";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
 const LightBox = React.lazy(() => import("ui/lightbox/LightBox"));
@@ -37,7 +39,15 @@ export default function NodeDialogs() {
         show: useSelector((state: ClientState) => state.askDialog.show),
         nodeName: useSelector((state: ClientState) => state.askDialog.nodeName)
     }
-    const showBlockDialog = useSelector((state: ClientState) => state.blockDialog.show);
+    const blockDialog = {
+        show: useSelector((state: ClientState) => state.blockDialog.show),
+        nodeName: useSelector((state: ClientState) => state.blockDialog.nodeName),
+        fullName: useSelector((state: ClientState) => state.blockDialog.fullName),
+        entryNodeName: useSelector((state: ClientState) => state.blockDialog.entryNodeName),
+        entryPostingId: useSelector((state: ClientState) => state.blockDialog.entryPostingId),
+        prevBlocked: useSelector((state: ClientState) => state.blockDialog.prevBlocked),
+        nameDisplayMode: useSelector((state: ClientState) => getSetting(state, "full-name.display")) as NameDisplayMode
+    }
     const showBlockingDetailsDialog = useSelector((state: ClientState) => state.blockingDetailsDialog.show);
     const showSheriffOrderDialog = useSelector((state: ClientState) => state.sheriffOrderDialog.show);
     const showSheriffOrderDetailsDialog = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.show);
@@ -72,7 +82,11 @@ export default function NodeDialogs() {
                 {askDialog.show && <AskDialog nodeName={askDialog.nodeName}/>}
             </Suspense>
             <Suspense fallback={null}>
-                {showBlockDialog && <BlockDialog/>}
+                {blockDialog.show &&
+                    <BlockDialog nodeName={blockDialog.nodeName} fullName={blockDialog.fullName}
+                                 entryNodeName={blockDialog.entryNodeName} entryPostingId={blockDialog.entryPostingId}
+                                 prevBlocked={blockDialog.prevBlocked} nameDisplayMode={blockDialog.nameDisplayMode}/>
+                }
             </Suspense>
             {showBlockingDetailsDialog && <BlockingDetailsDialog/>}
             <Suspense fallback={null}>

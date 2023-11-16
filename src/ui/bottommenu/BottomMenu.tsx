@@ -1,8 +1,14 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
+import { ClientState } from "state/state";
+import { isAtNode } from "state/node/selectors";
+import { isConnectedToHome } from "state/home/selectors";
+import { isBottomMenuVisible } from "state/navigation/selectors";
+import { openConnectDialog } from "state/connectdialog/actions";
+import { openSignUpDialog } from "state/signupdialog/actions";
 import { Button, Loading } from "ui/control";
 import QuickTipsButton from "ui/quicktips/QuickTipsButton";
 import NewPostButton from "ui/mainmenu/connectionstatus/NewPostButton";
@@ -10,17 +16,14 @@ import NewsButton from "ui/mainmenu/connectionstatus/NewsButton";
 import InstantButton from "ui/instant/InstantButton";
 import SettingsButton from "ui/mainmenu/connectionstatus/SettingsButton";
 import HomeButton from "ui/mainmenu/connectionstatus/HomeButton";
-import { isAtNode } from "state/node/selectors";
-import { isConnectedToHome } from "state/home/selectors";
-import { isBottomMenuVisible } from "state/navigation/selectors";
-import { openConnectDialog } from "state/connectdialog/actions";
-import { openSignUpDialog } from "state/signupdialog/actions";
-import { ClientState } from "state/state";
 import "./BottomMenu.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function BottomMenu({atNode, connecting,  connected, visible, openConnectDialog, openSignUpDialog}: Props) {
+export default function BottomMenu() {
+    const atNode = useSelector(isAtNode);
+    const connecting = useSelector((state: ClientState) => state.home.connecting);
+    const connected = useSelector(isConnectedToHome);
+    const visible = useSelector(isBottomMenuVisible);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
     const className = cx(["connection-status", "d-lg-none", "navbar-dark", "bg-dark"], {"invisible": !visible});
 
@@ -36,14 +39,19 @@ function BottomMenu({atNode, connecting,  connected, visible, openConnectDialog,
         if (!atNode) {
             return null;
         }
+
+        const onSignUp = () => dispatch(openSignUpDialog());
+        const onConnect = () => dispatch(openConnectDialog());
+
         return (
             <div id="bottom-menu" className={className}>
                 {t("not-connected-home")}
-                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>{t("sign-up")}</Button>
-                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>{t("connect")}</Button>
+                <Button variant="primary" size="sm" onClick={onSignUp}>{t("sign-up")}</Button>
+                <Button variant="success" size="sm" onClick={onConnect}>{t("connect")}</Button>
             </div>
         );
     }
+
     return (
         <div id="bottom-menu" className={className}>
             <NewPostButton/>
@@ -55,15 +63,3 @@ function BottomMenu({atNode, connecting,  connected, visible, openConnectDialog,
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        atNode: isAtNode(state),
-        connecting: state.home.connecting,
-        connected: isConnectedToHome(state),
-        visible: isBottomMenuVisible(state)
-    }),
-    { openConnectDialog, openSignUpDialog }
-);
-
-export default connector(BottomMenu);
