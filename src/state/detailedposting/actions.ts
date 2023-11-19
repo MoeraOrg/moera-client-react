@@ -69,9 +69,11 @@ export type CommentsLoadAllAction = ActionWithoutPayload<"COMMENTS_LOAD_ALL">;
 export const commentsLoadAll = (): CommentsLoadAllAction =>
     actionWithoutPayload("COMMENTS_LOAD_ALL");
 
-export type CommentsPastSliceLoadAction = ActionWithoutPayload<"COMMENTS_PAST_SLICE_LOAD">;
-export const commentsPastSliceLoad = (): CommentsPastSliceLoadAction =>
-    actionWithoutPayload("COMMENTS_PAST_SLICE_LOAD");
+export type CommentsPastSliceLoadAction = ActionWithPayload<"COMMENTS_PAST_SLICE_LOAD", {
+    anchor: number | null;
+}>;
+export const commentsPastSliceLoad = (anchor: number | null): CommentsPastSliceLoadAction =>
+    actionWithPayload("COMMENTS_PAST_SLICE_LOAD", {anchor});
 
 export type CommentsPastSliceLoadFailedAction = ActionWithPayload<"COMMENTS_PAST_SLICE_LOAD_FAILED", {
     nodeName: string | null;
@@ -82,9 +84,11 @@ export const commentsPastSliceLoadFailed = (
 ): CommentsPastSliceLoadFailedAction =>
     actionWithPayload("COMMENTS_PAST_SLICE_LOAD_FAILED", {nodeName, postingId});
 
-export type CommentsFutureSliceLoadAction = ActionWithoutPayload<"COMMENTS_FUTURE_SLICE_LOAD">;
-export const commentsFutureSliceLoad = (): CommentsFutureSliceLoadAction =>
-    actionWithoutPayload("COMMENTS_FUTURE_SLICE_LOAD");
+export type CommentsFutureSliceLoadAction = ActionWithPayload<"COMMENTS_FUTURE_SLICE_LOAD", {
+    anchor: number | null;
+}>;
+export const commentsFutureSliceLoad = (anchor: number | null): CommentsFutureSliceLoadAction =>
+    actionWithPayload("COMMENTS_FUTURE_SLICE_LOAD", {anchor});
 
 export type CommentsFutureSliceLoadFailedAction = ActionWithPayload<"COMMENTS_FUTURE_SLICE_LOAD_FAILED", {
     nodeName: string | null;
@@ -104,14 +108,15 @@ export type CommentsPastSliceSetAction = ActionWithPayload<"COMMENTS_PAST_SLICE_
     total: number;
     totalInPast: number;
     totalInFuture: number;
+    anchor: number | null;
 }>;
 export const commentsPastSliceSet = (
     nodeName: string, postingId: string, comments: CommentInfo[], before: number, after: number, total: number,
-    totalInPast: number, totalInFuture: number
+    totalInPast: number, totalInFuture: number, anchor: number | null
 ): CommentsPastSliceSetAction =>
     actionWithPayload(
         "COMMENTS_PAST_SLICE_SET",
-        {nodeName, postingId, comments, before, after, total, totalInPast, totalInFuture}
+        {nodeName, postingId, comments, before, after, total, totalInPast, totalInFuture, anchor}
     );
 
 export type CommentsFutureSliceSetAction = ActionWithPayload<"COMMENTS_FUTURE_SLICE_SET", {
@@ -123,14 +128,15 @@ export type CommentsFutureSliceSetAction = ActionWithPayload<"COMMENTS_FUTURE_SL
     total: number;
     totalInPast: number;
     totalInFuture: number;
+    anchor: number | null;
 }>;
 export const commentsFutureSliceSet = (
     nodeName: string, postingId: string, comments: CommentInfo[], before: number, after: number, total: number,
-    totalInPast: number, totalInFuture: number
+    totalInPast: number, totalInFuture: number, anchor: number | null
 ): CommentsFutureSliceSetAction =>
     actionWithPayload(
         "COMMENTS_FUTURE_SLICE_SET",
-        {nodeName, postingId, comments, before, after, total, totalInPast, totalInFuture}
+        {nodeName, postingId, comments, before, after, total, totalInPast, totalInFuture, anchor}
     );
 
 export type CommentsSliceUpdateAction = ActionWithPayload<"COMMENTS_SLICE_UPDATE", {

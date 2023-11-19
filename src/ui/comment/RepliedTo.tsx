@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ClientState } from "state/state";
@@ -12,34 +12,31 @@ import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import GlanceComment from "ui/comment/GlanceComment";
 import "./RepliedTo.css";
 
-type Props = {
+interface Props {
     postingId: string;
     commentId: string | null;
     ownerName: string;
     ownerFullName: string | null;
     headingHtml: string;
     unset: boolean;
-    onUnset?: () => void | null;
-} & ConnectedProps<typeof connector>;
+    onUnset?: (() => void) | null;
+}
 
-function RepliedTo({
-    postingId, commentId, ownerName, ownerFullName, headingHtml, unset, onUnset, popperEnabled, glanceComment
+export default function RepliedTo({
+    postingId, commentId, ownerName, ownerFullName, headingHtml, unset, onUnset
 }: Props) {
-    const onPreparePopper = () => {
-        if (commentId != null) {
-            glanceComment(commentId);
-        }
-    }
-
-    const onUnsetClick = () => {
-        if (onUnset != null) {
-            onUnset();
-        }
-    }
+    const popperEnabled = useSelector(
+        (state: ClientState) => getSetting(state, "comment.replied-to.glance.enabled")
+    ) as boolean && !Browser.isTouchScreen();
+    const dispatch = useDispatch();
 
     if (commentId == null) {
         return null;
     }
+
+    const onPreparePopper = () => dispatch(glanceComment(commentId));
+
+    const onUnsetClick = () => onUnset && onUnset();
 
     return (
         <div className="replied-to">
@@ -62,12 +59,3 @@ function RepliedTo({
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        popperEnabled: getSetting(state, "comment.replied-to.glance.enabled") as boolean && !Browser.isTouchScreen()
-    }),
-    { glanceComment }
-);
-
-export default connector(RepliedTo);

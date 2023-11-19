@@ -1,16 +1,17 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { getCommentsState } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
+import { getCommentsState } from "state/detailedposting/selectors";
 
-type Props = {
+interface Props {
     end: boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-function CommentsLeapButton({end, loadedCount}: Props) {
+export default function CommentsLeapButton({end}: Props) {
+    const loadedCount = useSelector((state: ClientState) => getCommentsState(state).comments.length);
     const {t} = useTranslation();
 
     if (loadedCount === 0) {
@@ -31,11 +32,3 @@ function CommentsLeapButton({end, loadedCount}: Props) {
         </button>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loadedCount: getCommentsState(state).comments.length,
-    })
-);
-
-export default connector(CommentsLeapButton);

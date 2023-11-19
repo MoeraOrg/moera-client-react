@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { CommentInfo } from "api";
@@ -9,11 +9,13 @@ import { getDetailedPosting } from "state/detailedposting/selectors";
 import { Principal } from "ui/control";
 import "./CommentVisibility.css";
 
-type Props = {
+interface Props {
     comment: CommentInfo;
-} & ConnectedProps<typeof connector>;
+}
 
-function CommentVisibility({comment, isSenior}: Props) {
+export default function CommentVisibility({comment}: Props) {
+    const isSenior = useSelector((state: ClientState) =>
+        isPermitted("overrideComment", getDetailedPosting(state), "owner", state));
     const {t} = useTranslation();
 
     const view = comment.operations?.view ?? "public";
@@ -39,11 +41,3 @@ function CommentVisibility({comment, isSenior}: Props) {
         </span>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        isSenior: isPermitted("overrideComment", getDetailedPosting(state), "owner", state)
-    })
-);
-
-export default connector(CommentVisibility);

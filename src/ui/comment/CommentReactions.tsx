@@ -1,33 +1,30 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { CommentInfo } from "api";
+import { ClientReactionInfo, ReactionTotalsInfo } from "api";
 import { ClientState } from "state/state";
 import { getPosting } from "state/postings/selectors";
 import { openReactionsDialog } from "state/reactionsdialog/actions";
 import { ReactionTotals } from "ui/control";
 import "./CommentReactions.css";
 
-interface OwnProps {
+interface Props {
     postingId: string;
-    comment: CommentInfo;
+    commentId: string;
+    reactions: ReactionTotalsInfo | null;
+    seniorReaction: ClientReactionInfo | null;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function CommentReactions({postingId, commentId, reactions, seniorReaction}: Props) {
+    const nodeName = useSelector((state: ClientState) => getPosting(state, postingId)?.receiverName ?? "");
+    const seniorName = useSelector((state: ClientState) => getPosting(state, postingId)?.ownerName);
+    const seniorFullName = useSelector((state: ClientState) => getPosting(state, postingId)?.ownerFullName ?? undefined);
+    const dispatch = useDispatch();
 
-const CommentReactions = ({postingId, comment, nodeName, seniorName, seniorFullName, openReactionsDialog}: Props) => (
-    <ReactionTotals reactions={comment.reactions ?? null} seniorReaction={comment.seniorReaction}
-                    seniorName={seniorName} seniorFullName={seniorFullName}
-                    onClick={negative => openReactionsDialog(nodeName, postingId, comment.id, negative)}/>
-);
+    const onClick = (negative: boolean) => dispatch(openReactionsDialog(nodeName, postingId, commentId, negative));
 
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        nodeName: getPosting(state, ownProps.postingId)?.receiverName ?? "",
-        seniorName: getPosting(state, ownProps.postingId)?.ownerName,
-        seniorFullName: getPosting(state, ownProps.postingId)?.ownerFullName ?? undefined
-    }),
-    { openReactionsDialog }
-);
-
-export default connector(CommentReactions);
+    return (
+        <ReactionTotals reactions={reactions} seniorReaction={seniorReaction} seniorName={seniorName}
+                        seniorFullName={seniorFullName} onClick={onClick}/>
+    );
+}

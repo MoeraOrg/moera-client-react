@@ -1,21 +1,22 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { CommentInfo } from "api";
 import { commentReply } from "state/detailedposting/actions";
 
-type Props = {
-    comment: CommentInfo;
-} & ConnectedProps<typeof connector>;
+interface Props {
+    id: string;
+    ownerName: string;
+    ownerFullName: string | null;
+    heading: string;
+}
 
-function CommentReplyButton({comment, commentReply}: Props) {
+export default function CommentReplyButton({id, ownerName, ownerFullName, heading}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onClick = () => {
-        commentReply(comment.id, comment.ownerName, comment.ownerFullName ?? null, comment.heading);
-    }
+    const onClick = () => dispatch(commentReply(id, ownerName, ownerFullName, heading));
 
     return (
         <button className="comment-button" onClick={onClick}>
@@ -24,10 +25,3 @@ function CommentReplyButton({comment, commentReply}: Props) {
         </button>
     );
 }
-
-const connector = connect(
-    null,
-    { commentReply }
-);
-
-export default connector(CommentReplyButton);

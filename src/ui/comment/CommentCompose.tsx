@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikProps, withFormik } from 'formik';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { useTranslation } from 'react-i18next';
 
@@ -8,11 +8,8 @@ import { SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
-import { commentPost } from "state/detailedposting/actions";
 import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import {
-    getCommentComposerRepliedToId,
     getCommentsReceiverFullName,
     getCommentsReceiverName,
     getCommentsReceiverPostingId
@@ -21,22 +18,33 @@ import { Browser } from "ui/browser";
 import { AvatarField, RichTextField } from "ui/control/field";
 import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import CommentComposeRepliedTo from "ui/comment/CommentComposeRepliedTo";
-import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
+import {
+    areValuesEmpty,
+    commentComposeLogic,
+    CommentComposeProps,
+    CommentComposeValues
+} from "ui/comment/comment-compose";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
 import { insertText, mentionName } from "util/misc";
 import "./CommentCompose.css";
 
-type OuterProps = ConnectedProps<typeof connector>;
-
-type Props = OuterProps & FormikProps<CommentComposeValues>;
+type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentCompose(props: Props) {
-    const {
-        beingPosted, receiverName, receiverPostingId, loadedDraft, formId, submitKey, bottomMenuHide,
-        bottomMenuShow, receiverFullName, smileysEnabled, features,
-        sourceFormatDefault, values, resetForm, submitForm
-    } = props;
+    const {values, resetForm, submitForm} = props;
 
+    const receiverName = useSelector(getCommentsReceiverName);
+    const receiverFullName = useSelector(getCommentsReceiverFullName);
+    const receiverPostingId = useSelector(getCommentsReceiverPostingId);
+    const loadedDraft = useSelector((state: ClientState) => state.detailedPosting.compose.loadedDraft);
+    const formId = useSelector((state: ClientState) => state.detailedPosting.compose.formId);
+    const beingPosted = useSelector((state: ClientState) => state.detailedPosting.compose.beingPosted);
+    const sourceFormatDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.body-src-format.default") as SourceFormat);
+    const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
+    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
+    const features = useSelector(getPostingFeatures);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -51,12 +59,12 @@ function CommentCompose(props: Props) {
         if (values.body.text.length !== 0) {
             viewComposer();
         }
-        bottomMenuHide();
+        dispatch(bottomMenuHide());
     }
 
     const onBlur = () => {
         if (values.body.text.trim().length === 0) {
-            bottomMenuShow();
+            dispatch(bottomMenuShow());
         }
     }
 
@@ -84,7 +92,7 @@ function CommentCompose(props: Props) {
                                    nodeName={receiverName} forceImageCompress anyValue
                                    placeholder={t("write-comment-here", {mention})} disabled={beingPosted}
                                    smileysEnabled={smileysEnabled}
-                                   hidingPanel={commentComposeLogic.areValuesEmpty(values)} format={sourceFormatDefault}
+                                   hidingPanel={areValuesEmpty(values)} format={sourceFormatDefault}
                                    onKeyDown={onKeyDown} urlsField="bodyUrls"/>
                     <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
                                           features={features} small/>
@@ -102,31 +110,4 @@ function viewComposer() {
     }
 }
 
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getHomeOwnerName(state),
-        ownerFullName: getHomeOwnerFullName(state),
-        ownerGender: getHomeOwnerGender(state),
-        avatarDefault: getHomeOwnerAvatar(state),
-        receiverName: getCommentsReceiverName(state),
-        receiverFullName: getCommentsReceiverFullName(state),
-        receiverPostingId: getCommentsReceiverPostingId(state),
-        comment: null,
-        draft: state.detailedPosting.compose.draft,
-        loadedDraft: state.detailedPosting.compose.loadedDraft,
-        formId: state.detailedPosting.compose.formId,
-        repliedToId: getCommentComposerRepliedToId(state),
-        beingPosted: state.detailedPosting.compose.beingPosted,
-        reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
-        reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
-        sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
-        submitKey: getSetting(state, "comment.submit-key") as string,
-        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
-        features: getPostingFeatures(state)
-    }),
-    { commentPost, bottomMenuHide, bottomMenuShow }
-);
-
-export default connector(
-    withFormik(commentComposeLogic as WithFormikConfig<OuterProps, CommentComposeValues>)(CommentCompose)
-);
+export default withFormik(commentComposeLogic)(CommentCompose);

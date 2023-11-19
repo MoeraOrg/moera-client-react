@@ -276,15 +276,17 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                     .filter(c => c.moment <= state.comments.after)
                     .forEach(c => comments.push(extractComment(c)));
                 comments.sort((a, b) => a.moment - b.moment);
-                return istate.assign("comments", {
+                istate.assign("comments", {
                     loadingPast: false,
                     after: action.payload.after,
                     comments,
                     totalInPast: action.payload.totalInPast
-                }).value();
+                });
             } else {
-                return istate.set("comments.loadingPast", false).value();
+                istate.set("comments.loadingPast", false);
             }
+            istate.set("comments.anchor", action.payload.anchor);
+            return istate.value();
         }
 
         case "COMMENTS_FUTURE_SLICE_SET": {
@@ -299,15 +301,17 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                     .filter(c => c.moment > state.comments.before)
                     .forEach(c => comments.push(extractComment(c)));
                 comments.sort((a, b) => a.moment - b.moment);
-                return istate.assign("comments", {
+                istate.assign("comments", {
                     loadingFuture: false,
                     before: action.payload.before,
                     comments,
                     totalInFuture: action.payload.totalInFuture
-                }).value();
+                });
             } else {
-                return istate.set("comments.loadingFuture", false).value();
+                istate.set("comments.loadingFuture", false);
             }
+            istate.set("comments.anchor", action.payload.anchor);
+            return istate.value();
         }
 
         case "COMMENTS_SLICE_UPDATE": {
@@ -375,6 +379,9 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
 
         case "COMMENTS_SCROLLED_TO_ANCHOR":
             return immutable.set(state, "comments.anchor", null);
+
+        case "DETAILED_POSTING_SCROLLED_TO_GALLERY":
+            return immutable.set(state, "galleryFocused", false);
 
         case "COMMENTS_SCROLLED_TO_COMMENTS":
             return immutable.set(state, "comments.focused", false);

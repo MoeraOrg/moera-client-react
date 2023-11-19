@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -8,12 +8,16 @@ import { getCommentsState, getDetailedPosting } from "state/detailedposting/sele
 import { commentsScrollToAnchor } from "state/detailedposting/actions";
 import "./CommentsRewindButton.css";
 
-type Props = {
+interface Props {
     end: boolean;
     forward: boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-function CommentsRewindButton({end, forward, before, after, total, commentsScrollToAnchor}: Props) {
+export default function CommentsRewindButton({end, forward}: Props) {
+    const before = useSelector((state: ClientState) => getCommentsState(state).before);
+    const after = useSelector((state: ClientState) => getCommentsState(state).after);
+    const total = useSelector((state: ClientState) => getDetailedPosting(state)?.totalComments ?? 0);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const visible = total > 1
@@ -24,7 +28,8 @@ function CommentsRewindButton({end, forward, before, after, total, commentsScrol
         return null;
     }
 
-    const onClick = () => commentsScrollToAnchor(forward ? Number.MAX_SAFE_INTEGER : Number.MIN_SAFE_INTEGER + 1);
+    const onClick = () =>
+        dispatch(commentsScrollToAnchor(forward ? Number.MAX_SAFE_INTEGER : Number.MIN_SAFE_INTEGER + 1));
 
     return (
         <button className="comments-rewind" title={forward ? t("go-last-comment") : t("go-first-comment")}
@@ -33,14 +38,3 @@ function CommentsRewindButton({end, forward, before, after, total, commentsScrol
         </button>
     )
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        before: getCommentsState(state).before,
-        after: getCommentsState(state).after,
-        total: getDetailedPosting(state)?.totalComments ?? 0
-    }),
-    { commentsScrollToAnchor }
-);
-
-export default connector(CommentsRewindButton);

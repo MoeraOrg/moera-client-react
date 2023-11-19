@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
 import { CommentText, DraftText, SourceFormat, VerifiedMediaFile } from "api";
@@ -14,18 +14,18 @@ import {
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
 import { DraftSaver } from "ui/control";
-import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
+import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/comment-compose";
 
-interface OwnProps {
+interface Props {
     initialized: boolean;
     initialText: CommentText;
     commentId: string | null;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-const toDraftText = (receiverName: string, postingId: string, commentId: string | null, repliedToId: string | null,
-                     commentText: CommentText, media: Map<string, VerifiedMediaFile>): DraftText => ({
+const toDraftText = (
+    receiverName: string, postingId: string, commentId: string | null, repliedToId: string | null,
+    commentText: CommentText, media: Map<string, VerifiedMediaFile>
+): DraftText => ({
     ...cloneDeep(commentText),
     media: commentText.media?.map(id => ({
         id,
@@ -39,17 +39,50 @@ const toDraftText = (receiverName: string, postingId: string, commentId: string 
     repliedToId
 } as DraftText);
 
-const ComposeDraftSaver = (props: Props) => {
-    const {
-        initialized, initialText, savingDraft, savedDraft, ownerName, receiverName, receiverPostingId, commentId,
-        repliedToId, comment, formId, draft, commentDraftSave, commentDraftDelete, commentDialogCommentReset
-    } = props;
+export default function ComposeDraftSaver({initialized, initialText, commentId}: Props) {
+    const ownerName = useSelector(getOwnerName);
+    const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerGender = useSelector(getHomeOwnerGender);
+    const receiverName = useSelector((state: ClientState) => getCommentsState(state).receiverName);
+    const receiverPostingId = useSelector((state: ClientState) => getCommentsState(state).receiverPostingId);
+    const repliedToId = useSelector(
+        (state: ClientState) =>
+            commentId == null
+                ? getCommentComposerRepliedToId(state)
+                : getCommentDialogComment(state)?.repliedTo?.id ?? null
+    );
+    const comment = useSelector((state: ClientState) =>
+        commentId != null ? state.detailedPosting.commentDialog.comment : null);
+    const formId = useSelector((state: ClientState) => commentId != null ? null : state.detailedPosting.compose.formId);
+    const draft = useSelector((state: ClientState) =>
+        commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft);
+    const savingDraft = useSelector(
+        (state: ClientState) =>
+            commentId == null
+                ? state.detailedPosting.compose.savingDraft
+                : state.detailedPosting.commentDialog.savingDraft
+    );
+    const savedDraft = useSelector((state: ClientState) =>
+        commentId == null ? state.detailedPosting.compose.savedDraft : state.detailedPosting.commentDialog.savedDraft);
+    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
+    const reactionsPositiveDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.positive.default") as string);
+    const reactionsNegativeDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.negative.default") as string);
+    const sourceFormatDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.body-src-format.default") as SourceFormat);
+    const dispatch = useDispatch();
 
     const toText = (values: CommentComposeValues): CommentText | null =>
-        commentComposeLogic.mapValuesToCommentText(values, props);
+        valuesToCommentText(
+            values,
+            {
+                ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault, reactionsPositiveDefault,
+                reactionsNegativeDefault, repliedToId
+            }
+        );
 
-    const isChanged = (commentText: CommentText): boolean =>
-        commentComposeLogic.isCommentTextChanged(commentText, comment);
+    const isChanged = (commentText: CommentText): boolean => isCommentTextChanged(commentText, comment);
 
     const save = (text: CommentText, values: CommentComposeValues): void => {
         if (ownerName != null && receiverPostingId != null) {
@@ -59,19 +92,22 @@ const ComposeDraftSaver = (props: Props) => {
                     .filter((rm): rm is VerifiedMediaFile => rm != null)
                     .map(rm => [rm.id, rm])
             );
-            commentDraftSave(draft?.id ?? null,
-                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media), formId);
+            dispatch(commentDraftSave(
+                draft?.id ?? null,
+                toDraftText(receiverName ?? ownerName, receiverPostingId, commentId, repliedToId, text, media),
+                formId
+            ));
         }
     };
 
     const drop = (): void => {
         if (commentId != null) {
             if (draft?.id != null) {
-                commentDialogCommentReset(draft.id, false);
+                dispatch(commentDialogCommentReset(draft.id, false));
             }
         } else {
             if (draft != null) {
-                commentDraftDelete(draft);
+                dispatch(commentDraftDelete(draft));
             }
         }
     }
@@ -81,34 +117,3 @@ const ComposeDraftSaver = (props: Props) => {
                     savedDraft={savedDraft} toText={toText} isChanged={isChanged} save={save} drop={drop}/>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        ownerName: getOwnerName(state),
-        ownerFullName: getHomeOwnerFullName(state),
-        ownerGender: getHomeOwnerGender(state),
-        receiverName: getCommentsState(state).receiverName,
-        receiverPostingId: getCommentsState(state).receiverPostingId,
-        repliedToId: ownProps.commentId == null
-            ? getCommentComposerRepliedToId(state)
-            : getCommentDialogComment(state)?.repliedTo?.id ?? null,
-        comment: ownProps.commentId != null ? state.detailedPosting.commentDialog.comment : null,
-        formId: ownProps.commentId != null ? null : state.detailedPosting.compose.formId,
-        draft: ownProps.commentId == null
-            ? state.detailedPosting.compose.draft
-            : state.detailedPosting.commentDialog.draft,
-        savingDraft: ownProps.commentId == null
-            ? state.detailedPosting.compose.savingDraft
-            : state.detailedPosting.commentDialog.savingDraft,
-        savedDraft: ownProps.commentId == null
-            ? state.detailedPosting.compose.savedDraft
-            : state.detailedPosting.commentDialog.savedDraft,
-        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
-        reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
-        reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
-        sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat
-    }),
-    { commentDraftSave, commentDraftDelete, commentDialogCommentReset }
-);
-
-export default connector(ComposeDraftSaver);

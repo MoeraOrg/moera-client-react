@@ -9,51 +9,24 @@ interface Props {
     loading: boolean;
     title: string;
     total: number;
-    onBoundary: (intersecting: boolean) => void;
     onClick: () => void;
 }
 
-export default class CommentsSentinel extends React.PureComponent<Props> {
-
-    boundaryObserver: IntersectionObserver;
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.boundaryObserver = new IntersectionObserver(this.onBoundary);
+export default function CommentsSentinel({visible, loading, title, total, onClick}: Props) {
+    if (!visible) {
+        return <div className="comments-sentinel"/>;
     }
-
-    observeSentinel = (sentinel: Element | null) => {
-        if (sentinel == null) {
-            this.boundaryObserver.disconnect();
-        } else {
-            this.boundaryObserver.observe(sentinel);
-        }
-    };
-
-    onBoundary = (entries: IntersectionObserverEntry[]) => {
-        entries.forEach(entry => this.props.onBoundary(entry.isIntersecting));
-    }
-
-    render() {
-        const {visible, loading, title, total, onClick} = this.props;
-
-        if (!visible) {
-            return <div className="comments-sentinel"/>;
-        }
-        if (loading) {
-            return (
-                <div className="comments-sentinel">
-                    <Loading/>
-                </div>
-            );
-        }
-        const fullTitle = total > 0 ? `${title} (${total})` : title;
+    if (loading) {
         return (
-            <button className="btn btn-link comments-sentinel" ref={this.observeSentinel} onClick={onClick}>
-                <FontAwesomeIcon className="icon" icon="sync-alt"/>&nbsp;&nbsp;{fullTitle}
-            </button>
+            <div className="comments-sentinel">
+                <Loading/>
+            </div>
         );
     }
-
+    const fullTitle = total > 0 ? `${title} (${total})` : title;
+    return (
+        <button className="btn btn-link comments-sentinel" onClick={onClick}>
+            <FontAwesomeIcon className="icon" icon="sync-alt"/>&nbsp;&nbsp;{fullTitle}
+        </button>
+    );
 }

@@ -228,3 +228,19 @@ export function getFeedHeaderHeight(): number {
     const feedTitleHeight = feedTitle != null ? feedTitle.getBoundingClientRect().height : 0;
     return headerHeight + feedTitleHeight;
 }
+
+export function isElementVisible(element: Element, threshold: number = 0): boolean {
+    const rect = element.getBoundingClientRect();
+    const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+    return !(rect.bottom < threshold || rect.top + threshold >= viewHeight);
+}
+
+export function isElementCompletelyVisible(element: Element): boolean {
+    const rect = element.getBoundingClientRect();
+    const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+    if (viewHeight <= rect.height) {
+        return rect.bottom >= 0 && rect.top < viewHeight;
+    } else {
+        return rect.bottom >= 0 && rect.bottom < viewHeight && rect.top >= 0 && rect.top < viewHeight;
+    }
+}

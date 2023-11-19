@@ -234,7 +234,7 @@ function* commentsLoadAllSaga(action: CommentsLoadAllAction) {
             const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, null, after, 20);
             yield* put(commentsPastSliceSet(
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
-                slice.totalInPast, slice.totalInFuture
+                slice.totalInPast, slice.totalInFuture, null
             ).causedBy(action));
             after = slice.after;
         }
@@ -242,7 +242,7 @@ function* commentsLoadAllSaga(action: CommentsLoadAllAction) {
             const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, before, null, 20);
             yield* put(commentsFutureSliceSet(
                 receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
-                slice.totalInPast, slice.totalInFuture
+                slice.totalInPast, slice.totalInFuture, null
             ).causedBy(action));
             before = slice.before;
         }
@@ -261,7 +261,7 @@ function* commentsPastSliceLoadSaga(action: CommentsPastSliceLoadAction) {
         const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, null, after, 20);
         yield* put(commentsPastSliceSet(
             receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total,
-            slice.totalInPast, slice.totalInFuture
+            slice.totalInPast, slice.totalInFuture, action.payload.anchor
         ).causedBy(action));
     } catch (e) {
         yield* put(commentsPastSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));
@@ -279,7 +279,7 @@ function* commentsFutureSliceLoadSaga(action: CommentsFutureSliceLoadAction) {
         const slice = yield* call(Node.getCommentsSlice, action, receiverName, receiverPostingId, before, null, 20);
         yield* put(commentsFutureSliceSet(
             receiverName, receiverPostingId, slice.comments, slice.before, slice.after, slice.total, slice.totalInPast,
-            slice.totalInFuture
+            slice.totalInFuture, action.payload.anchor
         ).causedBy(action));
     } catch (e) {
         yield* put(commentsFutureSliceLoadFailed(receiverName, receiverPostingId).causedBy(action));

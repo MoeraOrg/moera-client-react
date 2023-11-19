@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, CommentInfo } from "api";
@@ -13,16 +13,24 @@ import CommentReplyButton from "ui/comment/CommentReplyButton";
 import CommentShareButton from "ui/comment/CommentShareButton";
 import "./CommentButtons.css";
 
-interface OwnProps {
+interface Props {
     nodeName: string;
     postingId: string;
     comment: CommentInfo;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-function CommentButtons({nodeName, postingId, comment, homeOwnerName, enableSelf, reactionsEnabled,
-                         reactionsNegativeEnabled}: Props) {
+export default function CommentButtons({nodeName, postingId, comment}: Props) {
+    const options: Partial<IsPermittedOptions> = {
+        objectSourceName: nodeName,
+        objectSourceFeatures: useSelector(getCommentsReceiverFeatures)
+    };
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const enableSelf = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.self.enabled") as boolean);
+    const reactionsEnabled = useSelector((state: ClientState) =>
+        isPermitted("addReaction", comment, "public", state, options));
+    const reactionsNegativeEnabled = useSelector((state: ClientState) =>
+        isPermitted("addNegativeReaction", comment, "signed", state, options));
     const {t} = useTranslation();
 
     const cr = comment.clientReaction || {} as ClientReactionInfo;
@@ -37,25 +45,9 @@ function CommentButtons({nodeName, postingId, comment, homeOwnerName, enableSelf
             <CommentReactionButton icon="thumbs-down" caption={t("oppose")} invisible={hideNegative} id={comment.id}
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={comment.acceptedReactions?.negative ?? ""}/>
-            <CommentReplyButton comment={comment}/>
+            <CommentReplyButton id={comment.id} ownerName={comment.ownerName}
+                                ownerFullName={comment.ownerFullName ?? null} heading={comment.heading}/>
             <CommentShareButton nodeName={nodeName} postingId={postingId} commentId={comment.id}/>
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState, props: OwnProps) => {
-        const options: Partial<IsPermittedOptions> = {
-            objectSourceName: props.nodeName,
-            objectSourceFeatures: getCommentsReceiverFeatures(state)
-        };
-        return ({
-            homeOwnerName: getHomeOwnerName(state),
-            enableSelf: getSetting(state, "comment.reactions.self.enabled") as boolean,
-            reactionsEnabled: isPermitted("addReaction", props.comment, "public", state, options),
-            reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.comment, "signed", state, options)
-        });
-    }
-);
-
-export default connector(CommentButtons);

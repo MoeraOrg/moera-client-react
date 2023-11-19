@@ -1,14 +1,13 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IconName } from '@fortawesome/free-regular-svg-icons';
 
-import { ReactionButton } from "ui/control";
-import { ClientState } from "state/state";
 import { commentReact, commentReactionDelete } from "state/detailedposting/actions";
 import { getCommentsReceiverPostingId } from "state/detailedposting/selectors";
+import { ReactionButton } from "ui/control";
 import "./CommentButton.css";
 
-type Props = {
+interface Props {
     icon: IconName;
     caption: string;
     invisible: boolean;
@@ -16,24 +15,22 @@ type Props = {
     negative: boolean;
     emoji: number | null;
     accepted: string;
-} & ConnectedProps<typeof connector>;
+}
 
-const CommentReactionButton = ({icon, caption, invisible, id, negative, emoji, accepted, postingId, commentReact,
-                                commentReactionDelete}: Props) => (
-    postingId != null ?
+export default function CommentReactionButton({icon, caption, invisible, id, negative, emoji, accepted}: Props) {
+    const postingId = useSelector(getCommentsReceiverPostingId);
+    const dispatch = useDispatch();
+
+    if (postingId == null) {
+        return null;
+    }
+
+    const onReactionAdd = (negative: boolean, emoji: number) => dispatch(commentReact(id, negative, emoji));
+    const onReactionDelete = () => dispatch(commentReactionDelete(id, postingId));
+
+    return (
         <ReactionButton icon={icon} emoji={emoji} caption={caption} className="comment-button" negative={negative}
-                        accepted={accepted} invisible={invisible}
-                        onReactionAdd={(negative, emoji) => commentReact(id, negative, emoji)}
-                        onReactionDelete={() => commentReactionDelete(id, postingId)}/>
-    :
-        null
-);
-
-const connector = connect(
-    (state: ClientState) => ({
-        postingId: getCommentsReceiverPostingId(state)
-    }),
-    { commentReact, commentReactionDelete }
-);
-
-export default connector(CommentReactionButton);
+                        accepted={accepted} invisible={invisible} onReactionAdd={onReactionAdd}
+                        onReactionDelete={onReactionDelete}/>
+    );
+}

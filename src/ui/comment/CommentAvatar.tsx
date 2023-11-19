@@ -1,16 +1,17 @@
 import React from 'react';
 
+import { AvatarImage } from "api";
 import { AvatarWithPopup } from "ui/control";
-import { CommentInfo } from "api";
 
 interface Props {
-    comment: CommentInfo;
+    ownerName: string;
+    ownerFullName?: string | null;
+    avatar?: AvatarImage | null;
     nodeName?: string;
 }
 
-const CommentAvatar = ({comment, nodeName}: Props) => (
-    <AvatarWithPopup ownerName={comment.ownerName} ownerFullName={comment.ownerFullName} avatar={comment.ownerAvatar}
-                     nodeName={nodeName} size={36}/>
+const CommentAvatar = ({ownerName, ownerFullName, avatar, nodeName}: Props) => (
+    <AvatarWithPopup ownerName={ownerName} ownerFullName={ownerFullName} avatar={avatar} nodeName={nodeName} size={36}/>
 );
 
 export default CommentAvatar;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
@@ -12,16 +12,26 @@ import EntryHtml from "ui/entry/EntryHtml";
 import EntryGallery from "ui/entry/EntryGallery";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 
-type Props = ConnectedProps<typeof connector>;
+export default function GlanceComment() {
+    const loading = useSelector((state: ClientState) => getCommentsState(state).loadingGlanceComment);
+    const loaded = useSelector((state: ClientState) => getCommentsState(state).loadedGlanceComment);
+    const postingId = useSelector(getDetailedPostingId);
+    const receiverName = useSelector((state: ClientState) => getCommentsState(state).receiverName);
+    const comment = useSelector((state: ClientState) => getCommentsState(state).glanceComment);
 
-const GlanceComment = ({loading, loaded, postingId, receiverName, comment}: Props) => (
-    loaded && !loading && postingId != null && comment != null ?
+    if (!loaded || loading || postingId == null || comment == null) {
+        return (loading ? <Loading/> : null);
+    }
+
+    return (
         <div className={cx("comment", "entry", {"single-emoji": comment.singleEmoji})}>
             <div className="details">
                 <div className="owner-line">
                     <CommentOwner comment={comment} popup={false}/>
-                    <CommentDate postingId={postingId} comment={comment}/>
-                    <CommentUpdated comment={comment}/>
+                    <CommentDate postingId={postingId} commentId={comment.id} createdAt={comment.createdAt}/>
+                    {comment.totalRevisions > 1 &&
+                        <CommentUpdated createdAt={comment.createdAt} editedAt={comment.editedAt}/>
+                    }
                 </div>
                 <div className="content">
                     <EntryHtml postingId={comment.postingId} commentId={comment.id} html={comment.body.text}
@@ -37,18 +47,5 @@ const GlanceComment = ({loading, loaded, postingId, receiverName, comment}: Prop
                 </div>
             </div>
         </div>
-    :
-        (loading ? <Loading/> : null)
-);
-
-const connector = connect(
-    (state: ClientState) => ({
-        loading: getCommentsState(state).loadingGlanceComment,
-        loaded: getCommentsState(state).loadedGlanceComment,
-        postingId: getDetailedPostingId(state),
-        receiverName: getCommentsState(state).receiverName,
-        comment: getCommentsState(state).glanceComment
-    })
-);
-
-export default connector(GlanceComment);
+    );
+}

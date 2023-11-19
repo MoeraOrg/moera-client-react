@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikProps, withFormik, WithFormikConfig } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { CommentText, SourceFormat } from "api";
+import { CommentText } from "api";
 import { ClientState } from "state/state";
 import {
     closeCommentDialog,
     commentDialogCommentReset,
-    commentDialogConflictClose,
-    commentPost
+    commentDialogConflictClose
 } from "state/detailedposting/actions";
 import { getSetting } from "state/settings/selectors";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
-import { getCommentDialogComment, getCommentsState, isCommentDialogConflict } from "state/detailedposting/selectors";
+import { getCommentsState, isCommentDialogConflict } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { Browser } from "ui/browser";
@@ -21,35 +19,43 @@ import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
 import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
-import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
+import {
+    commentComposeLogic,
+    CommentComposeProps,
+    CommentComposeValues,
+    valuesToCommentText
+} from "ui/comment/comment-compose";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import { insertText } from "util/misc";
 import "./CommentDialog.css";
 
-type OuterProps = ConnectedProps<typeof connector>;
-
-type Props = OuterProps & FormikProps<CommentComposeValues>;
+type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentDialog(props: Props) {
-    const {
-        ownerName, ownerFullName, receiverName, comment, draft, loaded, conflict, loading, beingPosted, smileysEnabled,
-        features, sourceFormatDefault, closeCommentDialog, commentDialogConflictClose, confirmBox, submitKey,
-        submitForm, resetForm
-    } = props;
+    const {ownerName, ownerFullName, draft, comment, smileysEnabled, sourceFormatDefault, submitForm} = props;
 
-    const commentId = comment != null ? comment.id : null;
+    const commentId = comment?.id ?? null;
 
+    const receiverName = useSelector((state: ClientState) => getCommentsState(state).receiverName);
+    const conflict = useSelector(isCommentDialogConflict);
+    const loading = useSelector((state: ClientState) =>
+        state.detailedPosting.commentDialog.loading || state.detailedPosting.commentDialog.loadingDraft);
+    const loaded = useSelector((state: ClientState) =>
+        state.detailedPosting.commentDialog.loaded && state.detailedPosting.commentDialog.loadedDraft);
+    const beingPosted = useSelector((state: ClientState) => state.detailedPosting.commentDialog.beingPosted);
+    const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
+    const features = useSelector(getPostingFeatures);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
 
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
-        const commentText = commentComposeLogic.mapValuesToCommentText(values, props);
+        const commentText = valuesToCommentText(values, props);
         if (commentText != null) {
             setInitialText(commentText);
         }
-        resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [commentId, loaded, setInitialText]); // 'props' are missing on purpose
 
@@ -68,19 +74,20 @@ function CommentDialog(props: Props) {
 
     const onCancel = (event: React.MouseEvent) => {
         if (draft == null) {
-            closeCommentDialog();
+            dispatch(closeCommentDialog());
         } else {
-            confirmBox(t("forget-changes"), t("forget"), t("cancel"),
-                commentDialogCommentReset(draft.id, true), null, "danger");
+            dispatch(confirmBox(
+                t("forget-changes"), t("forget"), t("cancel"), commentDialogCommentReset(draft.id, true), null, "danger"
+            ));
         }
         event.preventDefault();
     };
 
     return (
         <ModalDialog title={t("edit-comment")} className="comment-dialog" loading={loading}
-                     onClose={closeCommentDialog}>
+                     onClose={() => dispatch(closeCommentDialog())}>
             <ConflictWarning text={t("comment-edited-conflict")} show={conflict}
-                             onClose={commentDialogConflictClose}/>
+                             onClose={() => dispatch(commentDialogConflictClose())}/>
             <Form>
                 <div className="modal-body">
                     <div className="owner-line">
@@ -103,31 +110,4 @@ function CommentDialog(props: Props) {
     );
 }
 
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getHomeOwnerName(state),
-        ownerFullName: getHomeOwnerFullName(state),
-        ownerGender: getHomeOwnerGender(state),
-        avatarDefault: getHomeOwnerAvatar(state),
-        receiverName: getCommentsState(state).receiverName,
-        receiverPostingId: getCommentsState(state).receiverPostingId,
-        comment: getCommentDialogComment(state),
-        draft: state.detailedPosting.commentDialog.draft,
-        repliedToId: getCommentDialogComment(state)?.repliedTo?.id ?? null,
-        conflict: isCommentDialogConflict(state),
-        reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
-        reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
-        sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat,
-        loading: state.detailedPosting.commentDialog.loading || state.detailedPosting.commentDialog.loadingDraft,
-        loaded: state.detailedPosting.commentDialog.loaded && state.detailedPosting.commentDialog.loadedDraft,
-        beingPosted: state.detailedPosting.commentDialog.beingPosted,
-        submitKey: getSetting(state, "comment.submit-key") as string,
-        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
-        features: getPostingFeatures(state)
-    }),
-    { commentPost, closeCommentDialog, commentDialogConflictClose, confirmBox }
-);
-
-export default connector(
-    withFormik(commentComposeLogic as WithFormikConfig<OuterProps, CommentComposeValues>)(CommentDialog)
-);
+export default withFormik(commentComposeLogic)(CommentDialog);

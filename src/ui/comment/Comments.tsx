@@ -1,8 +1,10 @@
-import React, { Suspense } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import React, { Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
+import { SourceFormat } from "api";
 import { ClientState } from "state/state";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import {
     commentsFutureSliceLoad,
@@ -13,6 +15,8 @@ import {
     detailedPostingScrolledToGallery
 } from "state/detailedposting/actions";
 import {
+    getCommentDialogComment,
+    getCommentsReceiverPostingId,
     getCommentsState,
     getCommentsWithVisibility,
     getDetailedPosting,
@@ -23,252 +27,194 @@ import {
     isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
+import { getSetting } from "state/settings/selectors";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
 import CommentComposeLine from "ui/comment/CommentComposeLine";
-import { getPageHeaderHeight } from "util/misc";
+import { getPageHeaderHeight, isElementCompletelyVisible } from "util/misc";
 import "./Comments.css";
 
 const CommentDialog = React.lazy(() => import("ui/comment/CommentDialog"));
 
-type Props = ConnectedProps<typeof connector> & WithTranslation;
+export default function Comments() {
+    const visible = useSelector(isAtDetailedPostingPage);
+    const galleryFocused = useSelector(isDetailedPostingGalleryFocused);
+    const total = useSelector((state: ClientState) =>
+        isDetailedPostingCached(state) ? (getDetailedPosting(state)!.totalComments ?? 0) : 0);
+    const loadingFuture = useSelector((state: ClientState) => getCommentsState(state).loadingFuture);
+    const loadingPast = useSelector((state: ClientState) => getCommentsState(state).loadingPast);
+    const before = useSelector((state: ClientState) => getCommentsState(state).before);
+    const after = useSelector((state: ClientState) => getCommentsState(state).after);
+    const totalInPast = useSelector((state: ClientState) => getCommentsState(state).totalInPast);
+    const totalInFuture = useSelector((state: ClientState) => getCommentsState(state).totalInFuture);
+    const comments = useSelector(
+        (state: ClientState) =>
+            isCommentsShowInvisible(state)
+                ? getCommentsWithVisibility(state)
+                : getCommentsWithVisibility(state).filter(c => !c.invisible)
+    );
+    const anchor = useSelector((state: ClientState) => getCommentsState(state).anchor);
+    const focusedCommentId = useSelector((state: ClientState) => getCommentsState(state).focusedCommentId);
+    const focused = useSelector(isCommentsFocused);
+    const composerFocused = useSelector(isCommentComposerFocused);
+    const showCommentDialog = useSelector((state: ClientState) => state.detailedPosting.commentDialog.show);
+    const commentsVisible = useSelector((state: ClientState) =>
+        isPermitted("viewComments", getDetailedPosting(state), "public", state));
 
-interface State {
-    atTop: boolean;
-    atBottom: boolean;
-}
+    const ownerName = useSelector(getHomeOwnerName);
+    const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerGender = useSelector(getHomeOwnerGender);
+    const avatarDefault = useSelector(getHomeOwnerAvatar);
+    const receiverPostingId = useSelector(getCommentsReceiverPostingId);
+    const comment = useSelector(getCommentDialogComment);
+    const draft = useSelector((state: ClientState) => state.detailedPosting.commentDialog.draft);
+    const reactionsPositiveDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.positive.default") as string);
+    const reactionsNegativeDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.negative.default") as string);
+    const sourceFormatDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.body-src-format.default") as SourceFormat);
+    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
 
-class Comments extends React.PureComponent<Props, State> {
+    const dispatch = useDispatch();
+    const {t} = useTranslation();
 
-    newAnchor: number | null = null;
-    topmostBeforeUpdate: number | null = null;
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.newAnchor = null;
-        this.topmostBeforeUpdate = null;
-
-        this.state = {
-            atTop: true,
-            atBottom: false
-        };
-    }
-
-    componentDidMount() {
-        this.newAnchor = this.props.anchor;
-        this.scrollToAnchor();
-    }
-
-    getSnapshotBeforeUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
-        this.topmostBeforeUpdate = Comments.getTopmostMoment();
-        return null;
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>) {
-        if (this.props.anchor !== prevProps.anchor) {
-            this.newAnchor = this.props.anchor;
-        }
-        if (this.props.visible) {
-            const topmost = Comments.getTopmostMoment();
-            if (this.topmostBeforeUpdate != null && this.topmostBeforeUpdate !== topmost) {
-                Comments.scrollTo(this.topmostBeforeUpdate);
-                this.topmostBeforeUpdate = null;
-            }
-            this.scrollToAnchor();
-        }
-    }
-
-    scrollToAnchor() {
-        if (this.props.galleryFocused) {
-            Comments.scrollToElement(document.getElementById("posting-gallery")!);
-            this.props.detailedPostingScrolledToGallery();
+    useEffect(() => {
+        if (!visible) {
             return;
         }
-        if (this.props.focused) {
-            Comments.scrollToElement(document.getElementById("comments")!);
-            this.props.commentsScrolledToComments();
+        if (galleryFocused) {
+            scrollToElement(document.getElementById("posting-gallery")!);
+            dispatch(detailedPostingScrolledToGallery());
             return;
         }
-        if (this.props.composerFocused) {
-            Comments.scrollToElement(document.getElementById("comment-composer")!);
+        if (focused) {
+            scrollToElement(document.getElementById("comments")!);
+            dispatch(commentsScrolledToComments());
+            return;
+        }
+        if (composerFocused) {
+            scrollToElement(document.getElementById("comment-composer")!);
             const body = document.getElementById("body");
             if (body != null) {
                 body.focus();
             }
-            this.props.commentsScrolledToComposer();
+            dispatch(commentsScrolledToComposer());
             return;
         }
-        if (this.newAnchor != null
-            && (this.newAnchor <= this.props.before
-                || (this.newAnchor >= Number.MAX_SAFE_INTEGER && this.props.before >= Number.MAX_SAFE_INTEGER))
-            && (this.newAnchor > this.props.after
-                || (this.newAnchor <= Number.MIN_SAFE_INTEGER && this.props.after <= Number.MIN_SAFE_INTEGER))) {
-
-            if (Comments.scrollTo(this.newAnchor)) {
-                this.newAnchor = null;
-                this.props.commentsScrolledToAnchor();
+        if (
+            anchor != null
+            && (anchor <= before || (anchor >= Number.MAX_SAFE_INTEGER && before >= Number.MAX_SAFE_INTEGER))
+            && (anchor > after || (anchor <= Number.MIN_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER))
+        ) {
+            if (scrollTo(anchor)) {
+                dispatch(commentsScrolledToAnchor());
             }
         }
-    }
+    }, [dispatch, after, anchor, before, composerFocused, focused, galleryFocused, visible]);
 
-    static getTopmostMoment() {
-        const comments = document.getElementsByClassName("comment");
-        if (comments == null || comments.length === 0) {
-            return null;
-        }
-        for (let i = 0; i < comments.length; i++) {
-            const comment = comments.item(i) as HTMLElement;
-            if (comment == null) {
-                continue;
-            }
-            if (comment.getBoundingClientRect().top >= 0 && comment.dataset.moment) {
-                return parseInt(comment.dataset.moment);
-            }
-        }
-        return Number.MAX_SAFE_INTEGER;
-    }
-
-    static getCommentAt(moment: number): HTMLElement | null {
-        const comments = document.getElementsByClassName("comment");
-        for (let i = 0; i < comments.length; i++) {
-            const comment = comments.item(i) as HTMLElement;
-            if (comment == null) {
-                continue;
-            }
-            if (comment.dataset.moment != null && parseInt(comment.dataset.moment) >= moment) {
-                return comment;
-            }
-        }
-        return null;
-    }
-
-    static scrollTo(moment: number): boolean {
-        if (moment === Number.MAX_SAFE_INTEGER) {
-            Comments.scrollToEnd();
-            return true;
-        } else {
-            const comment = Comments.getCommentAt(moment);
-            if (comment != null) {
-                Comments.scrollToElement(comment);
-            }
-            return comment != null;
-        }
-    }
-
-    static scrollToEnd(): void {
-        setTimeout(() => {
-            const y = document.getElementById("comments")!.getBoundingClientRect().bottom;
-            window.scrollBy(0, y - getPageHeaderHeight());
-        });
-    }
-
-    static scrollToElement(element: Element): void {
-        setTimeout(() => {
-            const y = element.getBoundingClientRect().top;
-            window.scrollBy(0, y - getPageHeaderHeight());
-        });
-    }
-
-    loadFuture = () => {
-        if (this.props.loadingFuture || this.props.before >= Number.MAX_SAFE_INTEGER) {
+    const loadFuture = () => {
+        if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {
             return;
         }
-        this.props.commentsFutureSliceLoad();
+        dispatch(commentsFutureSliceLoad(null));
     }
 
-    loadPast = () => {
-        if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
+    const loadPast = () => {
+        if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        this.props.commentsPastSliceLoad();
+        dispatch(commentsPastSliceLoad(null));
     }
 
-    onBoundaryFuture = (intersecting: boolean) => {
-        this.setState({atTop: intersecting});
-    };
+    if (!commentsVisible) {
+        return <div id="comments" className="disabled">{t("comments-disabled")}</div>;
+    }
 
-    onBoundaryPast = (intersecting: boolean) => {
-        this.setState({atBottom: intersecting});
-    };
+    const empty = comments.length === 0 && !loadingFuture && !loadingPast
+        && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
 
-    render() {
-        const {
-            total, loadingFuture, loadingPast, comments, before, after, totalInPast, totalInFuture, focusedCommentId,
-            showCommentDialog, commentsVisible, t
-        } = this.props;
-
-        if (!commentsVisible) {
-            return <div id="comments" className="disabled">{t("comments-disabled")}</div>;
-        }
-
-        const empty = comments.length === 0 && !loadingFuture && !loadingPast
-            && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER;
-
-        return (
-            <>
-                <div id="comments">
-                    {empty ||
-                        <>
-                            {comments.length > 0 &&
-                                <CommentsSentinelLine end={false} loading={loadingPast}
-                                                      title={t("view-earlier-comments")} total={totalInPast}
-                                                      visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
-                                                      onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
-                            }
-                            {comments.map((comment, index) =>
-                                <Comment key={comment.moment} comment={comment}
-                                         previousId={index > 0 ? comments[index - 1].id : null}
-                                         focused={comment.id === focusedCommentId}/>
-                            )}
-                            <CommentsSentinelLine end={true} loading={loadingFuture}
-                                                  title={
-                                                      comments.length !== 0
-                                                          ? t("view-later-comments")
-                                                          : t("view-comments")
-                                                  }
-                                                  total={totalInFuture}
-                                                  visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
-                                                  onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
-                        </>
-                    }
-                </div>
-                <CommentComposeLine/>
-                {showCommentDialog &&
-                    <Suspense fallback={null}>
-                        <CommentDialog/>
-                    </Suspense>
+    return (
+        <>
+            <div id="comments">
+                {empty ||
+                    <>
+                        {comments.length > 0 &&
+                            <CommentsSentinelLine end={false} loading={loadingPast}
+                                                  title={t("view-earlier-comments")} total={totalInPast}
+                                                  visible={total > 0 && after > Number.MIN_SAFE_INTEGER}
+                                                  onClick={loadPast}/>
+                        }
+                        {comments.map((comment, index) =>
+                            <Comment key={comment.moment} comment={comment}
+                                     previousId={index > 0 ? comments[index - 1].id : null}
+                                     focused={comment.id === focusedCommentId}/>
+                        )}
+                        <CommentsSentinelLine end={true} loading={loadingFuture}
+                                              title={
+                                                  comments.length !== 0
+                                                      ? t("view-later-comments")
+                                                      : t("view-comments")
+                                              }
+                                              total={totalInFuture}
+                                              visible={total > 0 && before < Number.MAX_SAFE_INTEGER}
+                                              onClick={loadFuture}/>
+                    </>
                 }
-            </>
-        );
+            </div>
+            <CommentComposeLine/>
+            {showCommentDialog &&
+                <Suspense fallback={null}>
+                    <CommentDialog avatarDefault={avatarDefault} receiverPostingId={receiverPostingId} comment={comment}
+                                   draft={draft} ownerName={ownerName} ownerFullName={ownerFullName}
+                                   ownerGender={ownerGender} smileysEnabled={smileysEnabled}
+                                   sourceFormatDefault={sourceFormatDefault}
+                                   reactionsPositiveDefault={reactionsPositiveDefault}
+                                   reactionsNegativeDefault={reactionsNegativeDefault}
+                                   repliedToId={comment?.repliedTo?.id ?? null}/>
+                </Suspense>
+            }
+        </>
+    );
+}
+
+function getCommentAt(moment: number): HTMLElement | null {
+    const comments = document.getElementsByClassName("comment");
+    for (let i = 0; i < comments.length; i++) {
+        const comment = comments.item(i) as HTMLElement;
+        if (comment == null) {
+            continue;
+        }
+        if (comment.dataset.moment != null && parseInt(comment.dataset.moment) >= moment) {
+            return comment;
+        }
+    }
+    return null;
+}
+
+function scrollTo(moment: number): boolean {
+    if (moment === Number.MAX_SAFE_INTEGER) {
+        scrollToEnd();
+        return true;
+    } else {
+        const comment = getCommentAt(moment);
+        if (comment != null && !isElementCompletelyVisible(comment)) {
+            scrollToElement(comment);
+        }
+        return comment != null;
     }
 }
 
-const connector = connect(
-    (state: ClientState) => ({
-        visible: isAtDetailedPostingPage(state),
-        galleryFocused: isDetailedPostingGalleryFocused(state),
-        total: isDetailedPostingCached(state) ? (getDetailedPosting(state)!.totalComments ?? 0) : 0,
-        loadingFuture: getCommentsState(state).loadingFuture,
-        loadingPast: getCommentsState(state).loadingPast,
-        before: getCommentsState(state).before,
-        after: getCommentsState(state).after,
-        totalInPast: getCommentsState(state).totalInPast,
-        totalInFuture: getCommentsState(state).totalInFuture,
-        comments: isCommentsShowInvisible(state)
-            ? getCommentsWithVisibility(state)
-            : getCommentsWithVisibility(state).filter(c => !c.invisible),
-        anchor: getCommentsState(state).anchor,
-        focusedCommentId: getCommentsState(state).focusedCommentId,
-        focused: isCommentsFocused(state),
-        composerFocused: isCommentComposerFocused(state),
-        showCommentDialog: state.detailedPosting.commentDialog.show,
-        commentsVisible: isPermitted("viewComments", getDetailedPosting(state), "public", state)
-    }),
-    {
-        detailedPostingScrolledToGallery, commentsFutureSliceLoad, commentsPastSliceLoad, commentsScrolledToAnchor,
-        commentsScrolledToComments, commentsScrolledToComposer
-    }
-);
+function scrollToEnd(): void {
+    setTimeout(() => {
+        const y = document.getElementById("comments")!.getBoundingClientRect().bottom;
+        window.scrollBy(0, y - getPageHeaderHeight());
+    });
+}
 
-export default withTranslation()(connector(Comments));
+function scrollToElement(element: Element): void {
+    setTimeout(() => {
+        const y = element.getBoundingClientRect().top;
+        window.scrollBy(0, y - getPageHeaderHeight());
+    });
+}

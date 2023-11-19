@@ -1,25 +1,22 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { CommentInfo } from "api";
 import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 
-type Props = {
-    comment: CommentInfo;
-} & ConnectedProps<typeof connector>;
+interface Props {
+    createdAt: number;
+    editedAt: number | null | undefined;
+}
 
-function CommentUpdated({comment}: Props) {
+export default function CommentUpdated({createdAt, editedAt}: Props) {
+    useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
     const {t} = useTranslation();
 
-    if (comment.totalRevisions <= 1) {
-        return null;
-    }
-
-    const editedAt = comment.editedAt ?? comment.createdAt;
-    const editedImmediately = Math.abs(editedAt - comment.createdAt) < 20 * 60;
+    editedAt = editedAt ?? createdAt;
+    const editedImmediately = Math.abs(editedAt - createdAt) < 20 * 60;
 
     if (editedImmediately) {
         return null;
@@ -35,11 +32,3 @@ function CommentUpdated({comment}: Props) {
         </time>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        pulse: state.pulse.pulse // To force re-rendering only
-    })
-);
-
-export default connector(CommentUpdated);

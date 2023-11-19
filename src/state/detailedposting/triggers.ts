@@ -17,14 +17,14 @@ import {
     commentsPastSliceLoad,
     commentsReceiverFeaturesLoad,
     commentsReceiverSwitch,
-    commentsScrollToAnchor,
+    commentsScrollToAnchor, CommentsScrollToAnchorAction,
     commentsUnset,
     commentsUpdate,
     detailedPostingLoad,
     detailedPostingLoadAttached,
     DetailedPostingLoadedAction,
     focusComment,
-    focusedCommentLoad,
+    focusedCommentLoad, FocusedCommentLoadedAction,
     glanceCommentLoad
 } from "state/detailedposting/actions";
 import {
@@ -106,20 +106,34 @@ export default [
         focusedCommentLoad
     ),
     trigger(
-        [
-            "GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "COMMENTS_UNSET", "FOCUSED_COMMENT_LOADED", "FOCUSED_COMMENT_LOAD_FAILED",
-            "COMMENTS_SCROLL_TO_ANCHOR"
-        ],
+        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "COMMENTS_UNSET", "FOCUSED_COMMENT_LOAD_FAILED"],
         conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded),
-        commentsFutureSliceLoad
+        commentsFutureSliceLoad(null)
     ),
     trigger(
-        [
-            "GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "COMMENTS_UNSET", "FOCUSED_COMMENT_LOADED", "FOCUSED_COMMENT_LOAD_FAILED",
-            "COMMENTS_SCROLL_TO_ANCHOR"
-        ],
+        "FOCUSED_COMMENT_LOADED",
+        conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded),
+        (signal: FocusedCommentLoadedAction) => commentsFutureSliceLoad(signal.payload.comment.moment)
+    ),
+    trigger(
+        "COMMENTS_SCROLL_TO_ANCHOR",
+        conj(isAtDetailedPostingPage, isFutureCommentsToBeLoaded),
+        (signal: CommentsScrollToAnchorAction) => commentsFutureSliceLoad(signal.payload.anchor)
+    ),
+    trigger(
+        ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "COMMENTS_UNSET", "FOCUSED_COMMENT_LOAD_FAILED"],
         conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
-        commentsPastSliceLoad
+        commentsPastSliceLoad(null)
+    ),
+    trigger(
+        "FOCUSED_COMMENT_LOADED",
+        conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
+        (signal: FocusedCommentLoadedAction) => commentsPastSliceLoad(signal.payload.comment.moment)
+    ),
+    trigger(
+        "COMMENTS_SCROLL_TO_ANCHOR",
+        conj(isAtDetailedPostingPage, isPastCommentsToBeLoaded),
+        (signal: CommentsScrollToAnchorAction) => commentsPastSliceLoad(signal.payload.anchor)
     ),
     trigger(
         ["GO_TO_PAGE", "COMMENTS_RECEIVER_SWITCHED", "HOME_READY"],

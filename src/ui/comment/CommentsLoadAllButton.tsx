@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -7,30 +7,23 @@ import { getCommentsState, getDetailedPosting } from "state/detailedposting/sele
 import { commentsLoadAll } from "state/detailedposting/actions";
 import "./CommentsLoadAllButton.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const CommentsLoadAllButton = ({totalInPast, loadedCount, totalCount, commentsLoadAll}: Props) => {
+export default function CommentsLoadAllButton() {
+    const totalInPast = useSelector((state: ClientState) => getCommentsState(state).totalInPast);
+    const loadedCount = useSelector((state: ClientState) => getCommentsState(state).comments.length);
+    const totalCount = useSelector((state: ClientState) => getDetailedPosting(state)?.totalComments ?? 0);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (totalCount <= 0) {
         return null;
     }
 
+    const onClick = () => dispatch(commentsLoadAll());
+
     return (
-        <button className="comments-load-all" title={t("load-all-comments")} onClick={commentsLoadAll}
+        <button className="comments-load-all" title={t("load-all-comments")} onClick={onClick}
                 disabled={loadedCount >= totalCount}>
             {loadedCount > 0 ? `${totalInPast + 1}..${totalInPast + loadedCount}` : "0"} of {totalCount}
         </button>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-            totalInPast: getCommentsState(state).totalInPast,
-            loadedCount: getCommentsState(state).comments.length,
-            totalCount: getDetailedPosting(state)?.totalComments ?? 0
-    }),
-    { commentsLoadAll }
-);
-
-export default connector(CommentsLoadAllButton);

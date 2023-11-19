@@ -13,7 +13,7 @@ interface Props {
     receiverName: string | null;
 }
 
-function CommentContent({comment, previousId, receiverName}: Props) {
+export default function CommentContent({comment, previousId, receiverName}: Props) {
     const [preview, setPreview] = useState(true);
 
     const {t} = useTranslation();
@@ -51,10 +51,8 @@ function CommentContent({comment, previousId, receiverName}: Props) {
 
     return (
         <div className={cx("content", {"preview": preview})}>
-            <CommentRepliedTo comment={comment} previousId={previousId}/>
+            <CommentRepliedTo repliedTo={comment.repliedTo} previousId={previousId}/>
             {renderText()}
         </div>
     );
 }
-
-export default CommentContent;

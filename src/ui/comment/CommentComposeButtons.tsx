@@ -1,35 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { CommentText, SourceFormat } from "api";
 import { commentComposeCancel } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
-import { getOwnerName } from "state/node/selectors";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
 import { Button } from "ui/control";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
-import commentComposeLogic, { CommentComposeValues } from "ui/comment/comment-compose-logic";
+import {
+    areImagesUploaded,
+    areValuesEmpty,
+    commentComposeLogic,
+    CommentComposeValues,
+    valuesToCommentText
+} from "ui/comment/comment-compose";
 import "./CommentComposeButtons.css";
 
-type Props = {
+interface Props {
     loading: boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-function CommentComposeButtons(props: Props) {
-    const {loading, ownerName, draft, confirmBox} = props;
-
+export default function CommentComposeButtons({loading}: Props) {
+    const ownerName = useSelector(getHomeOwnerName);
+    const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerGender = useSelector(getHomeOwnerGender);
+    const avatarDefault = useSelector(getHomeOwnerAvatar);
+    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
+    const sourceFormatDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.body-src-format.default") as SourceFormat);
+    const reactionsPositiveDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.positive.default") as string);
+    const reactionsNegativeDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.negative.default") as string);
+    const repliedToId = useSelector(getCommentComposerRepliedToId);
+    const draft = useSelector((state: ClientState) => state.detailedPosting.compose.draft);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
 
     useEffect(() => {
-        const values = commentComposeLogic.mapPropsToValues(props);
-        const commentText = commentComposeLogic.mapValuesToCommentText(values, props);
+        const commentText = valuesToCommentText(
+            commentComposeLogic.mapPropsToValues({comment: null, draft, avatarDefault}),
+            {
+                ownerName, ownerFullName, ownerGender, smileysEnabled, sourceFormatDefault, reactionsPositiveDefault,
+                reactionsNegativeDefault, repliedToId
+            }
+        );
         if (commentText != null) {
             setInitialText(commentText);
         }
@@ -37,13 +59,14 @@ function CommentComposeButtons(props: Props) {
     }, [ownerName, draft, setInitialText]); // 'props' are missing on purpose
 
     const onCancel = (e: React.MouseEvent) => {
-        confirmBox(t("forget-unfinished-comment"), t("forget"), t("cancel"), commentComposeCancel(), null, "danger");
+        dispatch(confirmBox(
+            t("forget-unfinished-comment"), t("forget"), t("cancel"), commentComposeCancel(), null, "danger"
+        ));
         e.preventDefault();
     };
 
     const {values} = useFormikContext<CommentComposeValues>();
-    const invisible = (draft == null && commentComposeLogic.areValuesEmpty(values))
-        || !commentComposeLogic.areImagesUploaded(values);
+    const invisible = (draft == null && areValuesEmpty(values)) || !areImagesUploaded(values);
 
     return (
         <div className="buttons">
@@ -57,22 +80,3 @@ function CommentComposeButtons(props: Props) {
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getOwnerName(state),
-        ownerFullName: getHomeOwnerFullName(state),
-        ownerGender: getHomeOwnerGender(state),
-        avatarDefault: getHomeOwnerAvatar(state),
-        draft: state.detailedPosting.compose.draft,
-        comment: null,
-        repliedToId: getCommentComposerRepliedToId(state),
-        smileysEnabled: getSetting(state, "comment.smileys.enabled") as boolean,
-        reactionsPositiveDefault: getSetting(state, "comment.reactions.positive.default") as string,
-        reactionsNegativeDefault: getSetting(state, "comment.reactions.negative.default") as string,
-        sourceFormatDefault: getSetting(state, "comment.body-src-format.default") as SourceFormat
-    }),
-    { confirmBox }
-);
-
-export default connector(CommentComposeButtons);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -29,16 +29,19 @@ import EntryGallery from "ui/entry/EntryGallery";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import "./Comment.css";
 
-type Props = {
+interface Props {
     comment: ExtCommentInfo;
     previousId: string | null;
     focused: boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-const Comment = ({
-     comment, previousId, focused, connectedToHome, isSheriff, postingId, postingOwnerName, postingReceiverName,
-     postingReceiverPostingId
-}: Props) => {
+export default function Comment({comment, previousId, focused}: Props) {
+    const connectedToHome = useSelector(isConnectedToHome);
+    const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const postingId = useSelector(getDetailedPostingId);
+    const postingOwnerName = useSelector((state: ClientState) => getDetailedPosting(state)?.ownerName);
+    const postingReceiverName = useSelector(getCommentsReceiverName);
+    const postingReceiverPostingId = useSelector(getCommentsReceiverPostingId);
     const {t} = useTranslation();
 
     const realOwnerName = postingReceiverName ?? postingOwnerName;
@@ -58,16 +61,20 @@ const Comment = ({
             :
                 <>
                     <CommentMenu comment={comment} nodeName={realOwnerName} postingId={postingId}/>
-                    <CommentAvatar comment={comment} nodeName={realOwnerName}/>
+                    <CommentAvatar ownerName={comment.ownerName} ownerFullName={comment.ownerFullName}
+                                   avatar={comment.ownerAvatar} nodeName={realOwnerName}/>
                     <div className="details">
                         <div className="owner-line">
                             <CommentOwner comment={comment} nodeName={realOwnerName}/>
-                            <CommentInvisible comment={comment}/>
+                            {comment.invisible && <CommentInvisible/>}
                             {isSheriff &&
                                 <CommentSheriffVisibility comment={comment}/>
                             }
-                            <CommentDate nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
-                            <CommentUpdated comment={comment}/>
+                            <CommentDate nodeName={realOwnerName} postingId={realPostingId} commentId={comment.id}
+                                         createdAt={comment.createdAt}/>
+                            {comment.totalRevisions > 1 &&
+                                <CommentUpdated createdAt={comment.createdAt} editedAt={comment.editedAt}/>
+                            }
                             <CommentVisibility comment={comment}/>
                         </div>
                         <CommentContent comment={comment} previousId={previousId} receiverName={postingReceiverName}/>
@@ -80,7 +87,9 @@ const Comment = ({
                             {connectedToHome && comment.signature != null &&
                                 <CommentButtons nodeName={realOwnerName} postingId={realPostingId} comment={comment}/>
                             }
-                            <CommentReactions postingId={postingId} comment={comment}/>
+                            <CommentReactions postingId={postingId} commentId={comment.id}
+                                              reactions={comment.reactions ?? null}
+                                              seniorReaction={comment.seniorReaction ?? null}/>
                         </div>
                     </div>
                 </>
@@ -88,16 +97,3 @@ const Comment = ({
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        connectedToHome: isConnectedToHome(state),
-        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
-        postingId: getDetailedPostingId(state),
-        postingOwnerName: getDetailedPosting(state)?.ownerName,
-        postingReceiverName: getCommentsReceiverName(state),
-        postingReceiverPostingId: getCommentsReceiverPostingId(state)
-    })
-);
-
-export default connector(Comment);

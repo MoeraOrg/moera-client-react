@@ -1,11 +1,11 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
-import { CommentInfo, PrincipalValue } from "api";
+import { CommentInfo } from "api";
 import { ClientState } from "state/state";
-import { isPermitted, IsPermittedOptions, IsPrincipalEqualsOptions, isPrincipalIn } from "state/node/selectors";
+import { isPermitted, IsPermittedOptions, isPrincipalIn } from "state/node/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import { entryCopyText } from "state/entrycopytextdialog/actions";
 import { commentCopyLink, commentDelete, commentSetVisibility, openCommentDialog } from "state/detailedposting/actions";
@@ -27,53 +27,69 @@ import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdi
 import { DropdownMenu } from "ui/control";
 import { Browser } from "ui/browser";
 
-interface OwnProps {
+interface Props {
     nodeName: string;
     postingId: string;
     comment: CommentInfo;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function CommentMenu({nodeName, postingId, comment}: Props) {
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const receiverName = useSelector(getCommentsReceiverName);
+    const receiverFeatures = useSelector(getCommentsReceiverFeatures);
+    const receiverFullName = useSelector(getCommentsReceiverFullName);
+    const receiverPostingId = useSelector(getCommentsReceiverPostingId);
+    const posting = useSelector(getDetailedPosting);
+    const blockedUsers = useSelector(getCommentsBlockedUsers);
+    const commentOverridable = useSelector((state: ClientState) =>
+        isPermitted("overrideComment", posting, "owner", state));
 
-function CommentMenu({
-    nodeName, postingId, comment, homeOwnerName, receiverName, receiverFullName, receiverPostingId, posting,
-    blockedUsers, isPostingPermitted, isCommentPermitted, isCommentPrincipalIn, googlePlayGoverned, googlePlaySheriff,
-    googlePlayPostingProhibited, googlePlayProhibited, commentCopyLink, openCommentDialog, openSourceDialog, confirmBox,
-    shareDialogPrepare, entryCopyText, commentSetVisibility, openBlockDialog, openSheriffOrderDialog
-}: Props) {
+    const options: Partial<IsPermittedOptions> = {
+        objectSourceName: receiverName,
+        objectSourceFeatures: receiverFeatures
+    };
+    const commentEditable = useSelector((state: ClientState) => isPermitted("edit", comment, "owner", state, options));
+    const commentDeletable = useSelector((state: ClientState) => isPermitted("edit", comment, "owner", state, options));
+
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onCopyLink = () => commentCopyLink(comment.id, postingId);
+    const googlePlayGoverned = isPostingSheriff(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const googlePlaySheriff = homeOwnerName === SHERIFF_GOOGLE_PLAY_TIMELINE;
+    const googlePlayPostingProhibited = isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const googlePlayProhibited = isCommentSheriffProhibited(posting, comment, SHERIFF_GOOGLE_PLAY_TIMELINE);
 
-    const onCopyText = () => entryCopyText(comment.body, "ask", receiverName ?? "", comment.media ?? null);
+    const onCopyLink = () => dispatch(commentCopyLink(comment.id, postingId));
+
+    const onCopyText = () => dispatch(entryCopyText(comment.body, "ask", receiverName ?? "", comment.media ?? null));
 
     const onShare = () => {
         const href = `/post/${postingId}?comment=${comment.id}`;
-        shareDialogPrepare(nodeName, href);
+        dispatch(shareDialogPrepare(nodeName, href));
     };
 
-    const onEdit = () => openCommentDialog(comment.id);
+    const onEdit = () => dispatch(openCommentDialog(comment.id));
 
     const onDelete = () => {
-        confirmBox(t("delete-comment", {heading: comment.heading}), t("delete"), t("cancel"),
-            commentDelete(comment.id), null, "danger");
+        dispatch(confirmBox(t("delete-comment", {heading: comment.heading}), t("delete"), t("cancel"),
+            commentDelete(comment.id), null, "danger"));
     };
 
     const onViewSource = () => {
         if (receiverName != null && receiverPostingId != null) {
-            openSourceDialog(receiverName, receiverPostingId, comment.id);
+            dispatch(openSourceDialog(receiverName, receiverPostingId, comment.id));
         }
     };
 
-    const onHide = () => commentSetVisibility(comment.id, false);
+    const onHide = () => dispatch(commentSetVisibility(comment.id, false));
 
-    const onShow = () => commentSetVisibility(comment.id, true);
+    const onShow = () => dispatch(commentSetVisibility(comment.id, true));
 
     const onBlockDialog = () => {
         if (receiverName != null && receiverPostingId != null) {
-            openBlockDialog(
+            dispatch(openBlockDialog(
                 comment.ownerName, comment.ownerFullName ?? null, receiverName, receiverPostingId, blockedUsers
-            );
+            ));
         }
     }
 
@@ -83,7 +99,7 @@ function CommentMenu({
             const postingOwnerFullName = posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName;
             const postingOwnerGender = posting.receiverName != null ? posting.receiverGender : posting.ownerGender;
 
-            openSheriffOrderDialog({
+            dispatch(openSheriffOrderDialog({
                 nodeName: receiverName,
                 fullName: receiverFullName,
                 feedName: "timeline",
@@ -94,31 +110,29 @@ function CommentMenu({
                 postingHeading: posting.heading,
                 commentId: comment.id,
                 commentHeading: comment.heading
-            });
+            }));
         }
     }
 
     const onUnhideInGooglePlay = () => {
         if (receiverName != null && receiverPostingId != null) {
-            confirmBox(t("unhide-comment-google-play", {heading: comment.heading}), t("unhide"), t("cancel"),
+            dispatch(confirmBox(t("unhide-comment-google-play", {heading: comment.heading}), t("unhide"), t("cancel"),
                 sheriffOrderDelete({
                     nodeName: receiverName,
                     feedName: "timeline",
                     postingId: receiverPostingId,
                     commentId: comment.id
-                }), null, "success");
+                }), null, "success"));
         }
     };
 
     const commentHref = `/post/${postingId}?comment=${comment.id}`;
-    const hideable = (isCommentPermitted("edit", "owner", {})
-            && isCommentPrincipalIn("view", "public", "public", {useOperations: "owner"}))
-        || (isPostingPermitted("overrideComment", "owner", {}) && !isCommentPermitted("edit", "owner", {})
-            && isCommentPrincipalIn("view", "unset", ["unset", "public"], {useOperations: "senior"}));
-    const unhideable = (isCommentPermitted("edit", "owner", {})
-            && isCommentPrincipalIn("view", "public", "private", {useOperations: "owner"}))
-        || (isPostingPermitted("overrideComment", "owner", {})
-            && isCommentPrincipalIn("view", "unset", "private", {useOperations: "senior"}));
+    const hideable = (commentEditable && isPrincipalIn("view", comment, "public", "public", {useOperations: "owner"}))
+        || (commentOverridable && !commentEditable
+            && isPrincipalIn("view", comment, "unset", ["unset", "public"], {useOperations: "senior"}));
+    const unhideable = (commentEditable
+            && isPrincipalIn("view", comment, "public", "private", {useOperations: "owner"}))
+        || (commentOverridable && isPrincipalIn("view", comment, "unset", "private", {useOperations: "senior"}));
     return (
         <DropdownMenu items={[
             {
@@ -150,7 +164,7 @@ function CommentMenu({
                 nodeName: "",
                 href: commentHref,
                 onClick: onEdit,
-                show: isCommentPermitted("edit", "owner", {}),
+                show: commentEditable,
             },
             {
                 title: t("view-source"),
@@ -164,7 +178,7 @@ function CommentMenu({
                 nodeName: "",
                 href: commentHref,
                 onClick: onDelete,
-                show: isCommentPermitted("delete", "private", {})
+                show: commentDeletable
             },
             {
                 divider: true
@@ -217,37 +231,3 @@ function CommentMenu({
         ]}/>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        homeOwnerName: getHomeOwnerName(state),
-        receiverName: getCommentsReceiverName(state),
-        receiverFullName: getCommentsReceiverFullName(state),
-        receiverPostingId: getCommentsReceiverPostingId(state),
-        posting: getDetailedPosting(state),
-        blockedUsers: getCommentsBlockedUsers(state),
-        isPostingPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
-            isPermitted(operation, getDetailedPosting(state), defaultValue, state, options),
-        isCommentPermitted: (operation: string, defaultValue: PrincipalValue, options: Partial<IsPermittedOptions>) =>
-            isPermitted(operation, ownProps.comment, defaultValue, state, {
-                ...options,
-                objectSourceName: getCommentsReceiverName(state),
-                objectSourceFeatures: getCommentsReceiverFeatures(state)
-            }),
-        isCommentPrincipalIn: (operation: string, defaultValue: PrincipalValue,
-                               value: PrincipalValue | PrincipalValue[], options: Partial<IsPrincipalEqualsOptions>) =>
-            isPrincipalIn(operation, ownProps.comment, defaultValue, value, options),
-        googlePlayGoverned: isPostingSheriff(getDetailedPosting(state), SHERIFF_GOOGLE_PLAY_TIMELINE),
-        googlePlaySheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
-        googlePlayPostingProhibited: isPostingSheriffProhibited(
-            getDetailedPosting(state), SHERIFF_GOOGLE_PLAY_TIMELINE),
-        googlePlayProhibited: isCommentSheriffProhibited(
-            getDetailedPosting(state), ownProps.comment, SHERIFF_GOOGLE_PLAY_TIMELINE)
-    }),
-    {
-        commentCopyLink, openCommentDialog, openSourceDialog, confirmBox, shareDialogPrepare, entryCopyText,
-        commentSetVisibility, openBlockDialog, openSheriffOrderDialog
-    }
-);
-
-export default connector(CommentMenu);

@@ -11,15 +11,13 @@ interface Props {
     loading: boolean;
     title: string;
     total: number;
-    onBoundary: (intersecting: boolean) => void;
     onClick: () => void;
     end: boolean;
 }
 
-const CommentsSentinelLine = ({visible, loading, title, total, onBoundary, onClick, end}: Props) => (
+const CommentsSentinelLine = ({visible, loading, title, total, onClick, end}: Props) => (
     <div className="comments-sentinel-line">
-        <CommentsSentinel loading={loading} title={title} total={total} visible={visible} onBoundary={onBoundary}
-                          onClick={onClick}/>
+        <CommentsSentinel loading={loading} title={title} total={total} visible={visible} onClick={onClick}/>
         <div className="comments-counter">
             <CommentsRewindButton end={end} forward={false}/>
             <CommentsLoadAllButton/>
