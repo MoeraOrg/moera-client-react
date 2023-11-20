@@ -1,26 +1,27 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cloneDeep from 'lodash.clonedeep';
 
 import { DraftText, PostingText, StoryAttributes, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
+import { getHomeOwnerGender } from "state/home/selectors";
+import { getOwnerName } from "state/node/selectors";
 import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete } from "state/compose/actions";
 import { getPostingFeatures } from "state/compose/selectors";
-import { getOwnerName } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
+import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
 import { DraftSaver } from "ui/control";
-import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
-import { getHomeOwnerGender } from "state/home/selectors";
 
-type Props = {
+interface Props {
     initialText: PostingText;
-} & ConnectedProps<typeof connector>;
+}
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
     publications != null && publications.length > 0 ? publications[0].publishAt : null;
 
-const toDraftText = (ownerName: string, postingId: string | null, postingText: PostingText,
-                     media: Map<string, VerifiedMediaFile>): DraftText => ({
+const toDraftText = (
+    ownerName: string, postingId: string | null, postingText: PostingText, media: Map<string, VerifiedMediaFile>
+): DraftText => ({
     ...cloneDeep(postingText),
     media: postingText.media?.filter(id => id != null).map(id => ({
         id,
@@ -35,17 +36,27 @@ const toDraftText = (ownerName: string, postingId: string | null, postingText: P
 } as DraftText);
 
 
-const ComposeDraftSaver = (props: Props) => {
-    const {
-        initialText, savingDraft, savedDraft, ownerName, postingId, posting, draftId, composeDraftSave,
-        composeDraftListItemDelete, composeUpdateDraftDelete
-    } = props;
+export default function ComposeDraftSaver({initialText}: Props) {
+    const ownerName = useSelector(getOwnerName);
+    const gender = useSelector(getHomeOwnerGender);
+    const features = useSelector(getPostingFeatures);
+    const postingId = useSelector((state: ClientState) => state.compose.postingId);
+    const posting = useSelector((state: ClientState) => state.compose.posting);
+    const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const savingDraft = useSelector((state: ClientState) => state.compose.savingDraft);
+    const savedDraft = useSelector((state: ClientState) => state.compose.savedDraft);
+    const smileysEnabled = useSelector((state: ClientState) =>
+        getSetting(state, "posting.smileys.enabled") as boolean);
+    const newsFeedEnabled = useSelector((state: ClientState) =>
+        getSetting(state, "posting.feed.news.enabled") as boolean);
+    const avatarShapeDefault = useSelector((state: ClientState) =>
+        getSetting(state, "avatar.shape.default") as string);
+    const dispatch = useDispatch();
 
     const toText = (values: ComposePageValues): PostingText =>
-        composePageLogic.mapValuesToPostingText(values, props);
+        valuesToPostingText(values, {gender, postingId, features, smileysEnabled, newsFeedEnabled, avatarShapeDefault});
 
-    const isChanged = (postingText: PostingText): boolean =>
-        composePageLogic.isPostingTextChanged(postingText, posting);
+    const isChanged = (postingText: PostingText): boolean => isPostingTextChanged(postingText, posting);
 
     const save = (text: PostingText, values: ComposePageValues): void => {
         if (ownerName != null) {
@@ -55,16 +66,16 @@ const ComposeDraftSaver = (props: Props) => {
                     .filter((rm): rm is VerifiedMediaFile => rm != null)
                     .map(rm => [rm.id, rm])
             );
-            composeDraftSave(props.draftId, toDraftText(ownerName, postingId, text, media));
+            dispatch(composeDraftSave(draftId, toDraftText(ownerName, postingId, text, media)));
         }
     }
 
     const drop = (): void => {
         if (draftId != null) {
             if (postingId == null) {
-                composeDraftListItemDelete(draftId, false);
+                dispatch(composeDraftListItemDelete(draftId, false));
             } else {
-                composeUpdateDraftDelete(false);
+                dispatch(composeUpdateDraftDelete(false));
             }
         }
     }
@@ -74,22 +85,3 @@ const ComposeDraftSaver = (props: Props) => {
                     isChanged={isChanged} save={save} drop={drop}/>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getOwnerName(state),
-        gender: getHomeOwnerGender(state),
-        features: getPostingFeatures(state),
-        postingId: state.compose.postingId,
-        posting: state.compose.posting,
-        draftId: state.compose.draftId,
-        savingDraft: state.compose.savingDraft,
-        savedDraft: state.compose.savedDraft,
-        smileysEnabled: getSetting(state, "posting.smileys.enabled") as boolean,
-        newsFeedEnabled: getSetting(state, "posting.feed.news.enabled") as boolean,
-        avatarShapeDefault: getSetting(state, "avatar.shape.default") as string
-    }),
-    { composeDraftSave, composeDraftListItemDelete, composeUpdateDraftDelete }
-);
-
-export default connector(ComposeDraftSaver);

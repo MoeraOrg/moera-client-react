@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, formatISO } from 'date-fns';
@@ -7,14 +7,14 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
-import { getHomeOwnerName } from "state/home/selectors";
 import useComposeTextEditable from "ui/compose/compose-text-editable";
 import ComposeTextEditableIcon from "ui/compose/ComposeTextEditableIcon";
 import { Browser } from "ui/browser";
 
-type Props = ConnectedProps<typeof connector>;
+export default function ComposePublishAt() {
+    const postingId = useSelector((state: ClientState) => state.compose.postingId);
+    const draftId = useSelector((state: ClientState) => state.compose.draftId);
 
-function ComposePublishAt({postingId, draftId}: Props) {
     const {
         edit, field, value, setValue, onEdit, onReset, onKeyDown
     } = useComposeTextEditable<Date, HTMLDivElement>("publishAt", postingId, draftId);
@@ -51,13 +51,3 @@ function ComposePublishAt({postingId, draftId}: Props) {
             </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getHomeOwnerName(state),
-        postingId: state.compose.postingId,
-        draftId: state.compose.draftId
-    })
-);
-
-export default connector(ComposePublishAt);

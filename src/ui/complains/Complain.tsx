@@ -1,20 +1,20 @@
 import React from 'react';
-import { connect, ConnectedProps } from "react-redux";
+import { useSelector } from "react-redux";
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
 import { getDateFnsLocale } from "i18n";
-import { ClientState } from 'state/state';
 import { isAtHomeNode } from "state/node/selectors";
 import { ExtComplainInfo } from "state/complains/state";
 import NodeName from "ui/nodename/NodeName";
 import "./Complain.css";
 
-type Props = {
+interface Props {
     complain: ExtComplainInfo;
-} & ConnectedProps<typeof connector>
+}
 
-function Complain({complain, atHomeNode}: Props) {
+export default function Complain({complain}: Props) {
+    const atHomeNode = useSelector(isAtHomeNode);
     const {t} = useTranslation();
 
     const date = fromUnixTime(complain.createdAt);
@@ -44,11 +44,3 @@ function Complain({complain, atHomeNode}: Props) {
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        atHomeNode: isAtHomeNode(state)
-    })
-);
-
-export default connector(Complain);

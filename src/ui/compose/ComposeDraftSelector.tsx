@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -10,10 +10,15 @@ import ComposeDraftItem from "ui/compose/ComposeDraftItem";
 import ComposeNewPost from "ui/compose/ComposeNewPost";
 import "./ComposeDraftSelector.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function ComposeDraftSelector() {
+    const postingId = useSelector((state: ClientState) => state.compose.postingId);
+    const draftId = useSelector((state: ClientState) => state.compose.draftId);
+    const draftList = useSelector((state: ClientState) => state.compose.draftList);
+    const loadingDraftList = useSelector((state: ClientState) => state.compose.loadingDraftList);
+    const loadedDraftList = useSelector((state: ClientState) => state.compose.loadedDraftList);
+    useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
+    const dispatch = useDispatch();
 
-function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, loadedDraftList, composeDraftSelect,
-                               composeDraftListItemDelete}: Props) {
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-start");
@@ -22,11 +27,11 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
 
     const onSelect = (id: string) => {
         if (id !== draftId) {
-            composeDraftSelect(id);
+            dispatch(composeDraftSelect(id));
         }
    };
 
-    const onDelete = (id: string) => composeDraftListItemDelete(id, true);
+    const onDelete = (id: string) => dispatch(composeDraftListItemDelete(id, true));
 
     if (postingId != null) {
         return null;
@@ -61,17 +66,3 @@ function ComposeDraftSelector({postingId, draftId, draftList, loadingDraftList, 
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        postingId: state.compose.postingId,
-        draftId: state.compose.draftId,
-        draftList: state.compose.draftList,
-        loadingDraftList: state.compose.loadingDraftList,
-        loadedDraftList: state.compose.loadedDraftList,
-        pulse: state.pulse.pulse // To force re-rendering only
-    }),
-    { composeDraftSelect, composeDraftListItemDelete }
-);
-
-export default connector(ComposeDraftSelector);

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
 
-import { ComposePageToolsTab } from "ui/compose/compose-page-logic";
+import { ComposePageToolsTab } from "ui/compose/posting-compose";
 import "./ComposeIconButton.css";
 
 interface Props {

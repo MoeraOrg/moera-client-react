@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
 import { getSetting } from "state/settings/selectors";
-import { complainsPastSliceLoad } from "state/complains/actions";
 import { getActiveComplainGroup } from "state/complains/selectors";
 import { NameDisplayMode } from "ui/types";
 import { Loading } from "ui/control";
@@ -20,11 +19,14 @@ import ComplainDecisionEditor from "ui/complains/ComplainDecisionEditor";
 import ComplainDecisionView from "ui/complains/ComplainDecisionView";
 import "./ComplainDetailsPage.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function ComplainsListPage({
-    complainGroup, loadingGroup, complains, loadingComplains, atHomeNode, nameDisplayMode
-}: Props) {
+export default function ComplainsListPage() {
+    const complainGroup = useSelector(getActiveComplainGroup);
+    const loadingGroup = useSelector((state: ClientState) => state.complains.loadingActive);
+    const complains = useSelector((state: ClientState) => state.complains.complains);
+    const loadingComplains = useSelector((state: ClientState) => state.complains.loadingComplains);
+    const atHomeNode = useSelector(isAtHomeNode);
+    const nameDisplayMode = useSelector((state: ClientState) =>
+        getSetting(state, "full-name.display") as NameDisplayMode);
     const {t} = useTranslation();
 
     const {icon: statusIcon, className: statusClass} = getComplainStatusDetails(complainGroup?.status);
@@ -75,7 +77,7 @@ function ComplainsListPage({
                             }
                             {atHomeNode ?
                                 (complainGroup.status !== "posted" &&
-                                    <ComplainDecisionEditor/>
+                                    <ComplainDecisionEditor group={complainGroup}/>
                                 )
                             :
                                 ((complainGroup.status === "approved"
@@ -90,17 +92,3 @@ function ComplainsListPage({
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        complainGroup: getActiveComplainGroup(state),
-        loadingGroup: state.complains.loadingActive,
-        complains: state.complains.complains,
-        loadingComplains: state.complains.loadingComplains,
-        atHomeNode: isAtHomeNode(state),
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
-    { complainsPastSliceLoad }
-);
-
-export default connector(ComplainsListPage);

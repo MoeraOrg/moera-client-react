@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { createSelector } from 'reselect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,16 +13,19 @@ import ComplainGroupLine from "ui/complains/ComplainGroupLine";
 import ComplainsSentinel from "ui/complains/ComplainsSentinel";
 import "./ComplainsListPage.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function ComplainsListPage({
-    complainGroups, loadingPast, total, totalInPast, before, inboxOnly, complainsPastSliceLoad, complainsInboxSet
-}: Props) {
+export default function ComplainsListPage() {
+    const complainGroups = useSelector(getComplainGroups);
+    const loadingPast = useSelector((state: ClientState) => state.complains.loadingPast);
+    const total = useSelector((state: ClientState) => state.complains.total);
+    const totalInPast = useSelector((state: ClientState) => state.complains.totalInPast);
+    const before = useSelector((state: ClientState) => state.complains.before);
+    const inboxOnly = useSelector((state: ClientState) => state.complains.inboxOnly);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onLoadPast = () => complainsPastSliceLoad();
+    const onLoadPast = () => dispatch(complainsPastSliceLoad());
 
-    const onInboxToggle = () => complainsInboxSet(!inboxOnly);
+    const onInboxToggle = () => dispatch(complainsInboxSet(!inboxOnly));
 
     return (
         <>
@@ -59,17 +62,3 @@ const getComplainGroups = createSelector(
     (state: ClientState) => state.complains.complainGroups,
     (list, groups) => list.map(id => groups[id])
 );
-
-const connector = connect(
-    (state: ClientState) => ({
-        complainGroups: getComplainGroups(state),
-        loadingPast: state.complains.loadingPast,
-        total: state.complains.total,
-        totalInPast: state.complains.totalInPast,
-        before: state.complains.before,
-        inboxOnly: state.complains.inboxOnly
-    }),
-    { complainsPastSliceLoad, complainsInboxSet }
-);
-
-export default connector(ComplainsListPage);

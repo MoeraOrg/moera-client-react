@@ -10,7 +10,7 @@ interface Props {
     disabled: boolean;
 }
 
-const ComposeSubmitButton = ({loading, update, disabled}: Props) => {
+export default function ComposeSubmitButton({loading, update, disabled}: Props) {
     const {t} = useTranslation();
 
     return (
@@ -19,5 +19,3 @@ const ComposeSubmitButton = ({loading, update, disabled}: Props) => {
         </Button>
     );
 }
-
-export default ComposeSubmitButton;

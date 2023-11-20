@@ -1,20 +1,21 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from "ui/control";
 import { composePreview } from "state/compose/actions";
+import { Button } from "ui/control";
 import "./ComposePreviewButton.css";
 
-type Props = {
+interface Props {
     disabled: boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-function ComposePreviewButton({disabled, composePreview}: Props) {
+export default function ComposePreviewButton({disabled}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onClick = (event: React.MouseEvent) => {
-        composePreview();
+        dispatch(composePreview());
         event.preventDefault();
     }
 
@@ -24,10 +25,3 @@ function ComposePreviewButton({disabled, composePreview}: Props) {
         </Button>
     );
 }
-
-const connector = connect(
-    null,
-    { composePreview }
-);
-
-export default connector(ComposePreviewButton);

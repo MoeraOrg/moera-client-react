@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { CheckboxField, PrincipalField } from "ui/control/field";
 import ComposePageTool from "ui/compose/ComposePageTool";
 
-const ComposeComments = () => {
+export default function ComposeComments() {
     const {t} = useTranslation();
 
     return (
@@ -23,5 +23,3 @@ const ComposeComments = () => {
         </ComposePageTool>
     );
 }
-
-export default ComposeComments;

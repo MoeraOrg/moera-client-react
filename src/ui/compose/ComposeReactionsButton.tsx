@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import ComposeIconButton from "ui/compose/ComposeIconButton";
-import { ComposePageValues } from "ui/compose/compose-page-logic";
+import { ComposePageValues } from "ui/compose/posting-compose";
 
 export default function ComposeReactionsButton() {
     const {values} = useFormikContext<ComposePageValues>();

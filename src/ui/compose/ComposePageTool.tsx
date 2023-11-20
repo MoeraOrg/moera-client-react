@@ -1,6 +1,6 @@
 import { useField } from 'formik';
 
-import { ComposePageToolsTab } from "ui/compose/compose-page-logic";
+import { ComposePageToolsTab } from "ui/compose/posting-compose";
 
 interface Props {
     name: string;

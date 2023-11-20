@@ -1,29 +1,23 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
 import { composeDraftSelect } from "state/compose/actions";
-import { getComposePostingId, getPostingFeatures } from "state/compose/selectors";
-import { getSetting } from "state/settings/selectors";
-import composePageLogic, { ComposePageValues } from "ui/compose/compose-page-logic";
+import { getComposePostingId } from "state/compose/selectors";
+import { areValuesEmpty, ComposePageValues } from "ui/compose/posting-compose";
 import "./ComposeNewPost.css";
 
-function isEmpty(values: ComposePageValues): boolean {
-    return composePageLogic.areValuesEmpty(values);
-}
-
-type Props = ConnectedProps<typeof connector>;
-
-function ComposeNewPost({postingId, composeDraftSelect}: Props) {
+export default function ComposeNewPost() {
+    const postingId = useSelector(getComposePostingId);
+    const dispatch = useDispatch();
     const {values} = useFormikContext<ComposePageValues>();
     const {t} = useTranslation();
 
-    const onClick = () => composeDraftSelect(null);
+    const onClick = () => dispatch(composeDraftSelect(null));
 
-    if (postingId != null || isEmpty(values)) {
+    if (postingId != null || areValuesEmpty(values)) {
         return null;
     }
     return (
@@ -33,17 +27,3 @@ function ComposeNewPost({postingId, composeDraftSelect}: Props) {
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        features: getPostingFeatures(state),
-        postingId: getComposePostingId(state),
-        posting: state.compose.posting,
-        smileysEnabled: getSetting(state, "posting.smileys.enabled") as boolean,
-        newsFeedEnabled: getSetting(state, "posting.feed.news.enabled") as boolean,
-        avatarShapeDefault: getSetting(state, "avatar.shape.default") as string
-    }),
-    { composeDraftSelect }
-);
-
-export default connector(ComposeNewPost);

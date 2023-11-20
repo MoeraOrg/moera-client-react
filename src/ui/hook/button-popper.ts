@@ -12,6 +12,7 @@ type ButtonPopperOptions = Partial<Options> & {
 export function useButtonPopper(placement: Placement, options: ButtonPopperOptions = {}) {
     const [visible, setVisible] = useState(false);
 
+    // Such usage of useState() is counter-intuitive, but required by react-popper
     const [buttonRef, setButtonRef] = useState<Element | null>(null);
     const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
     const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);

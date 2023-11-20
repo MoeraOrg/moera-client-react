@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useField } from 'formik';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -10,19 +10,20 @@ import { settingsUpdate } from "state/settings/actions";
 import { CloseButton } from "ui/control";
 import "./ComposeFormattingHelp.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function ComposeFormattingHelp() {
+    const show = useSelector((state: ClientState) => getSetting(state, "posting.body-src-format.show-help") as boolean);
+    const dispatch = useDispatch();
 
-function ComposeFormattingHelp({show, settingsUpdate}: Props) {
     const [visible, setVisible] = useState<boolean>(show);
 
     const {t} = useTranslation();
 
     const toggleHelp = (show: boolean) => {
         setVisible(show);
-        settingsUpdate([{
+        dispatch(settingsUpdate([{
             name: CLIENT_SETTINGS_PREFIX + "posting.body-src-format.show-help",
             value: show.toString()
-        }]);
+        }]));
     };
 
     const showHelp = () => toggleHelp(true);
@@ -60,12 +61,3 @@ function ComposeFormattingHelp({show, settingsUpdate}: Props) {
         );
     }
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        show: getSetting(state, "posting.body-src-format.show-help") as boolean
-    }),
-    { settingsUpdate }
-);
-
-export default connector(ComposeFormattingHelp);

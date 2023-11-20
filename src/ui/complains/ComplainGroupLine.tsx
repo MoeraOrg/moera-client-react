@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
@@ -12,11 +12,13 @@ import { NameDisplayMode } from "ui/types";
 import Jump from "ui/navigation/Jump";
 import "./ComplainGroupLine.css";
 
-type Props = {
+interface Props {
     group: ExtComplainGroupInfo;
-} & ConnectedProps<typeof connector>;
+}
 
-function ComplainGroupLine({group, nameDisplayMode}: Props) {
+export default function ComplainGroupLine({group}: Props) {
+    const nameDisplayMode = useSelector((state: ClientState) =>
+        getSetting(state, "full-name.display") as NameDisplayMode);
     const {t} = useTranslation();
 
     const {icon: statusIcon, className: statusClass, unread} = getComplainStatusDetails(group.status);
@@ -33,11 +35,3 @@ function ComplainGroupLine({group, nameDisplayMode}: Props) {
         </Jump>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    })
-);
-
-export default connector(ComplainGroupLine);

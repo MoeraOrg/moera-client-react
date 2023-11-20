@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { CheckboxField, EmojiListInputField } from "ui/control/field";
 import ComposePageTool from "ui/compose/ComposePageTool";
 
-const ComposeReactions = () => {
+export default function ComposeReactions() {
     const [, {value: reactionsEnabled}] = useField<boolean>("reactionsEnabled");
     const [, {value: reactionsNegativeEnabled}] = useField<boolean>("reactionsNegativeEnabled");
 
@@ -37,5 +37,3 @@ const ComposeReactions = () => {
         </ComposePageTool>
     );
 }
-
-export default ComposeReactions;

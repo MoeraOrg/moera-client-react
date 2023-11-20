@@ -1,15 +1,12 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
-import { complainsDecisionPost } from "state/complains/actions";
 import { getActiveComplainGroup } from "state/complains/selectors";
 import "./ComplainDecisionView.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function ComplainDecisionView({group}: Props) {
+export default function ComplainDecisionView() {
+    const group = useSelector(getActiveComplainGroup);
     const {t} = useTranslation();
 
     return (
@@ -24,12 +21,3 @@ function ComplainDecisionView({group}: Props) {
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        group: getActiveComplainGroup(state)
-    }),
-    { complainsDecisionPost }
-);
-
-export default connector(ComplainDecisionView);
