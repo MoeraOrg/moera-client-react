@@ -33,14 +33,14 @@ export default function EntryLinkSelector({urls, onSelect}: Props) {
 
     return (
         <div className="entry-link-selector">
-            <div ref={setButtonRef} className="btn-group dropdown">
+            <div ref={setButtonRef} className="btn-group">
                 <Button variant="outline-secondary" size="sm" className="dropdown-toggle" onClick={onToggle}>
                     {t("links") + " "}
                     <span className="badge bg-info text-light">{uniqueUrls.length}</span>
                 </Button>
                 {visible &&
                     <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
-                         className="fade popover shadow-sm show">
+                         className="fade dropdown-menu popover shadow-sm show">
                         {uniqueUrls.map(url =>
                             <div key={url} className="item" onClick={onClick(url)}>
                                 <FontAwesomeIcon icon="link"/>

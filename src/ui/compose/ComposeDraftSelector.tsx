@@ -44,7 +44,7 @@ export default function ComposeDraftSelector() {
     }
 
     return (
-        <div ref={setButtonRef} className="draft-selector btn-group dropdown">
+        <div ref={setButtonRef} className="draft-selector btn-group">
             <Button variant="info" className="dropdown-toggle" onClick={onToggle}>
                 {t("Drafts") + " "}
                 {loadingDraftList ?
@@ -55,7 +55,7 @@ export default function ComposeDraftSelector() {
             </Button>
             {visible &&
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
-                     className="fade popover shadow-sm show">
+                     className="fade dropdown-menu popover shadow-sm show">
                     <ComposeNewPost/>
                     {draftList.map(draft =>
                         <ComposeDraftItem key={draft.id} draft={draft} current={draftId === draft.id}
