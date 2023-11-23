@@ -20,7 +20,7 @@ interface Props {
 }
 
 export function ModalDialog({
-    title, size, className, style, centered, risen, shadowClick = true, loading, children, onClose, onKeyDown
+    title, size, className, style, centered = true, risen, shadowClick = true, loading, children, onClose, onKeyDown
 }: Props) {
     const mouseDownX = useRef<number>();
     const mouseDownY = useRef<number>();
@@ -106,7 +106,3 @@ export function ModalDialog({
         document.getElementById("modal-root")!
     );
 }
-
-ModalDialog.defaultProps = {
-    centered: true
-};

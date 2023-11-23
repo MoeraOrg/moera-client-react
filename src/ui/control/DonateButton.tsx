@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -9,15 +9,16 @@ import { openDonateDialog } from "state/donatedialog/actions";
 import { Button } from "ui/control";
 import { Browser } from "ui/browser";
 
-type Props = {
+interface Props {
     name: string | null;
     fullName: string | null;
     fundraisers: FundraiserInfo[] | null;
     styles?: "large" | "small" | "icon";
     className?: string;
-} & ConnectedProps<typeof connector>;
+}
 
-const DonateButtonImpl = ({name, fullName, fundraisers, styles = "large", className, openDonateDialog}: Props) => {
+export function DonateButton({name, fullName, fundraisers, styles = "large", className}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (name == null || fundraisers == null || fundraisers.length === 0) {
@@ -30,7 +31,7 @@ const DonateButtonImpl = ({name, fullName, fundraisers, styles = "large", classN
 
     const onClick = () => {
         document.dispatchEvent(new Event("hidepopper"));
-        openDonateDialog(name, fullName, fundraisers);
+        dispatch(openDonateDialog(name, fullName, fundraisers));
     };
 
     return (
@@ -44,10 +45,3 @@ const DonateButtonImpl = ({name, fullName, fundraisers, styles = "large", classN
         </Button>
     );
 }
-
-const connector = connect(
-    null,
-    { openDonateDialog }
-);
-
-export const DonateButton = connector(DonateButtonImpl);

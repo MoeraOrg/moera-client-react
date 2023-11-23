@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import { useField } from 'formik';
@@ -19,7 +19,7 @@ import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { urlWithParameters } from "util/url";
 import "./RichTextImageDialogDropzone.css";
 
-interface OwnProps {
+interface Props {
     features: PostingFeatures | null;
     nodeName: string | null;
     forceCompress?: boolean;
@@ -29,11 +29,16 @@ interface OwnProps {
     uploadingExternalImage?: () => void;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function RichTextImageDialogDropzone({
+    features, nodeName, forceCompress = false, onAdded, onDeleted, externalImage, uploadingExternalImage
+}: Props) {
+    const rootPage = useSelector((state: ClientState) =>
+        nodeName ? getNamingNameNodeUri(state, nodeName) : getNodeRootPage(state));
+    const carte = useSelector(getCurrentViewMediaCarte);
+    const compressImages = useSelector((state: ClientState) =>
+        getSetting(state, "posting.media.compress.default") as boolean);
+    const dispatch = useDispatch();
 
-function RichTextImageDialogDropzone({features, nodeName, forceCompress = false, onAdded, onDeleted, rootPage, carte,
-                                      compressImages, richTextEditorImagesUpload, richTextEditorImageCopy,
-                                      externalImage, uploadingExternalImage}: Props) {
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploading, setUploading] = useState<boolean>(false);
     const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -60,8 +65,8 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
         if (files != null && files.length > 0) {
             setUploading(true);
             setUploadProgress(0);
-            richTextEditorImagesUpload(nodeName, [files[0]], features, compress, onImageUploadSuccess,
-                onImageUploadFailure, onImageUploadProgress);
+            dispatch(richTextEditorImagesUpload(nodeName, [files[0]], features, compress, onImageUploadSuccess,
+                onImageUploadFailure, onImageUploadProgress));
         }
     }
 
@@ -97,7 +102,7 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
             return;
         }
         setDownloading(true);
-        richTextEditorImageCopy(url, onImageDownloadSuccess, onImageDownloadFailure);
+        dispatch(richTextEditorImageCopy(url, onImageDownloadSuccess, onImageDownloadFailure));
     }
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
@@ -160,14 +165,3 @@ function RichTextImageDialogDropzone({features, nodeName, forceCompress = false,
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState, props: OwnProps) => ({
-        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
-        carte: getCurrentViewMediaCarte(state),
-        compressImages: getSetting(state, "posting.media.compress.default") as boolean
-    }),
-    { richTextEditorImagesUpload, richTextEditorImageCopy }
-);
-
-export default connector(RichTextImageDialogDropzone);

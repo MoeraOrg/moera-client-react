@@ -1,5 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import cx from 'classnames';
 import * as immutable from 'object-path-immutable';
@@ -57,7 +57,7 @@ function updateStatus(progress: UploadProgress[], index: number, status: UploadS
 
 type ImageLoadStartedHandler = (count: number) => void;
 type ImageLoadedHandler = (index: number, image: VerifiedMediaFile) => void;
-type Props = {
+interface Props {
     value: RichTextValue;
     features: PostingFeatures | null;
     hiding?: boolean;
@@ -69,11 +69,16 @@ type Props = {
     onLoaded?: ImageLoadedHandler;
     onDeleted?: (id: string) => void;
     onReorder?: (activeId: string, overId: string) => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function RichTextEditorDropzone({value, features, hiding = false, nodeName, forceCompress = false, selectedImage,
-                                 selectImage, onLoadStarted, onLoaded, onDeleted, onReorder, compressImages,
-                                 richTextEditorImagesUpload, richTextEditorImageCopy}: Props) {
+export default function RichTextEditorDropzone({
+    value, features, hiding = false, nodeName, forceCompress = false, selectedImage, selectImage, onLoadStarted,
+    onLoaded, onDeleted, onReorder
+}: Props) {
+    const compressImages = useSelector((state: ClientState) =>
+        getSetting(state, "posting.media.compress.default") as boolean);
+    const dispatch = useDispatch();
+
     const [compress, setCompress] = useState<boolean>(forceCompress || compressImages);
     const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
     // Refs are needed here, because callbacks passed to richTextEditorImagesUpload() cannot be changed, while
@@ -110,8 +115,8 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
             if (onLoadStartedRef.current) {
                 onLoadStartedRef.current(files.length);
             }
-            richTextEditorImagesUpload(nodeName, files, features, compress,
-                onImageUploadSuccess(value.media?.length ?? 0), onImageUploadFailure, onImageUploadProgress);
+            dispatch(richTextEditorImagesUpload(nodeName, files, features, compress,
+                onImageUploadSuccess(value.media?.length ?? 0), onImageUploadFailure, onImageUploadProgress));
         }
     };
 
@@ -138,7 +143,7 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
             return;
         }
         setDownloading(true);
-        richTextEditorImageCopy(url, onImageDownloadSuccess, onImageDownloadFailure);
+        dispatch(richTextEditorImageCopy(url, onImageDownloadSuccess, onImageDownloadFailure));
     }
 
     const {getRootProps, getInputProps, isDragAccept, isDragReject, open} =
@@ -189,12 +194,3 @@ function RichTextEditorDropzone({value, features, hiding = false, nodeName, forc
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        compressImages: getSetting(state, "posting.media.compress.default") as boolean
-    }),
-    { richTextEditorImagesUpload, richTextEditorImageCopy }
-);
-
-export default connector(RichTextEditorDropzone);

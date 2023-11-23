@@ -136,5 +136,4 @@ export function DropdownMenu({items, className, disabled, onDialogOpened, childr
             }
         </>
     );
-
 }

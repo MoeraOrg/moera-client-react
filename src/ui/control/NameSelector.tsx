@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { createSelector } from 'reselect';
 import cloneDeep from 'lodash.clonedeep';
@@ -8,24 +8,27 @@ import debounce from 'lodash.debounce';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { NodeName } from "api";
+import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
 import { Avatar } from "ui/control/Avatar";
-import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
-import { ClientState } from "state/state";
 import { mentionName } from "util/misc";
 import { NameListItem, namesListQuery } from "util/names-list";
 import "./NameSelector.css";
 
-type Props = {
+interface Props {
     defaultQuery?: string;
     onChange?: (query: string | null) => void;
     onSubmit: (success: boolean, result: NameListItem) => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, homeName, homeAvatar,
-                           contactsPrepare}: Props) {
+export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
+    const contactNames = useSelector(getNames);
+    const homeName = useSelector(getHomeOwnerName);
+    const homeAvatar = useSelector(getHomeOwnerAvatar);
+    const dispatch = useDispatch();
+
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [names, setNames] = useState<NameListItem[]>([]);
     const [query, setQuery] = useState<string | null>(null);
@@ -47,8 +50,8 @@ function NameSelectorImpl({defaultQuery = "", onChange, onSubmit, contactNames, 
     queryRef.current = query;
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const loadContacts = useCallback(debounce(() => {
-        contactsPrepare(queryRef.current ?? "");
-    }, 500), [contactsPrepare, queryRef]);
+        dispatch(contactsPrepare(queryRef.current ?? ""));
+    }, 500), [dispatch, queryRef]);
 
     useEffect(() => {
         if (inputDom.current) {
@@ -171,14 +174,3 @@ const getNames = createSelector(
         return result;
     }
 );
-
-const connector = connect(
-    (state: ClientState) => ({
-        contactNames: getNames(state),
-        homeName: getHomeOwnerName(state),
-        homeAvatar: getHomeOwnerAvatar(state)
-    }),
-    { contactsPrepare }
-);
-
-export const NameSelector = connector(NameSelectorImpl);

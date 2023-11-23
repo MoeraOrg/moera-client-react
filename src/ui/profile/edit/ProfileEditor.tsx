@@ -51,8 +51,9 @@ function ProfileEditor(props: Props) {
             <Page>
                 <div className="profile-editor content-panel">
                     <Form>
-                        <ConflictWarning text={t("profile-edited-conflict")} show={conflict}
-                                         onClose={profileEditConflictClose}/>
+                        {conflict &&
+                            <ConflictWarning text={t("profile-edited-conflict")} onClose={profileEditConflictClose}/>
+                        }
                         <AvatarEditor name="avatar"/>
                         <InputField title={t("full-name")} name="fullName" maxLength={96} anyValue autoFocus/>
                         <InputField title={t("title")} name="title" maxLength={120}/>

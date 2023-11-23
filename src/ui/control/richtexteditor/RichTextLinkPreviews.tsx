@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useField } from 'formik';
 import deepEqual from 'react-fast-compare';
 import * as immutable from 'object-path-immutable';
+import * as URI from 'uri-js';
 
 import { LinkPreview, MediaAttachment, PostingFeatures, VerifiedMediaFile } from "api";
 import { ClientState } from "state/state";
@@ -13,15 +14,14 @@ import { LinkPreviewsState } from "state/linkpreviews/state";
 import { EntryLinkPreview } from "ui/entry/EntryLinkPreview";
 import EntryLinkSelector from "ui/entry/EntryLinkSelector";
 import { extractUrls } from "util/text";
-import * as URI from "uri-js";
 
-type Props = {
+interface Props {
     name: string;
     urlsField: string;
     nodeName?: string | null;
     features: PostingFeatures | null;
     small?: boolean | null;
-} & ConnectedProps<typeof connector>;
+}
 
 type RichTextLinkPreviewStatus = "deleted" | "edited" | "loaded" | null;
 
@@ -33,11 +33,9 @@ export interface RichTextLinkPreviewsValue {
     status: RichTextLinkPreviewsStatus;
 }
 
-export function bodyToLinkPreviews(body: string,
-                                   linkPreviewsInfo: LinkPreview[],
-                                   media: VerifiedMediaFile[]): [RichTextLinkPreviewsValue,
-                                                                 string[],
-                                                                 VerifiedMediaFile[]] {
+export function bodyToLinkPreviews(
+    body: string, linkPreviewsInfo: LinkPreview[], media: VerifiedMediaFile[]
+): [RichTextLinkPreviewsValue, string[], VerifiedMediaFile[]] {
     const bodyUrls = extractUrls(body);
     const linkPreviewsUrls = new Set(linkPreviewsInfo.map(lp => lp.url));
     const linkPreviewsImages = new Set(
@@ -56,8 +54,13 @@ export function bodyToLinkPreviews(body: string,
     return [linkPreviews, bodyUrls, media];
 }
 
-function RichTextLinkPreviews({name, urlsField, nodeName, features, small, ownerName, linkPreviewsState, maxAutomatic,
-                               linkPreviewLoad, linkPreviewImageUpload}: Props) {
+export default function RichTextLinkPreviews({name, urlsField, nodeName, features, small}: Props) {
+    const ownerName = useSelector(getOwnerName);
+    const linkPreviewsState = useSelector((state: ClientState) => state.linkPreviews);
+    const maxAutomatic = useSelector((state: ClientState) =>
+        getSetting(state, "rich-text-editor.link-previews.max-automatic") as number);
+    const dispatch = useDispatch();
+
     const [, {value}, {setValue}] = useField<RichTextLinkPreviewsValue>(name);
     const [, {value: urls}] = useField<string[]>(urlsField);
 
@@ -68,15 +71,14 @@ function RichTextLinkPreviews({name, urlsField, nodeName, features, small, owner
         [urls, targetNodeName, linkPreviewsState, value, maxAutomatic]
     );
     useEffect(() => {
-        urlsToLoad.forEach(url => linkPreviewLoad(url));
+        urlsToLoad.forEach(url => dispatch(linkPreviewLoad(url)));
         if (targetNodeName != null) {
-            imagesToLoad.forEach(url => linkPreviewImageUpload(url, targetNodeName, features));
+            imagesToLoad.forEach(url => dispatch(linkPreviewImageUpload(url, targetNodeName, features)));
         }
         if (!deepEqual(value, newValue)) {
             setValue(newValue)
         }
-    }, [urlsToLoad, imagesToLoad, newValue, value, setValue, targetNodeName, linkPreviewLoad, linkPreviewImageUpload,
-        features]);
+    }, [urlsToLoad, imagesToLoad, newValue, value, setValue, targetNodeName, dispatch, features]);
 
     const onUpdate = (url: string | null | undefined) => (title: string, description: string) => {
         if (url == null) {
@@ -123,10 +125,10 @@ interface ValueChange {
     value: RichTextLinkPreviewsValue;
 }
 
-function buildValue(urls: string[], nodeName: string | null,
-                    linkPreviewsState: LinkPreviewsState,
-                    value: RichTextLinkPreviewsValue,
-                    maxAutomatic: number): ValueChange {
+function buildValue(
+    urls: string[], nodeName: string | null, linkPreviewsState: LinkPreviewsState, value: RichTextLinkPreviewsValue,
+    maxAutomatic: number
+): ValueChange {
     if (nodeName == null || urls.length === 0) {
         return {urlsToLoad: [], imagesToLoad: [], value: {previews: [], media: [], status: value.status}};
     }
@@ -216,21 +218,11 @@ function isUrlPreviewBanned(url: string) {
     return false;
 }
 
-function isImageUploading(linkPreviewsState: LinkPreviewsState, url: string | null | undefined,
-                          nodeName: string | null): boolean {
+function isImageUploading(
+    linkPreviewsState: LinkPreviewsState, url: string | null | undefined, nodeName: string | null
+): boolean {
     if (url == null || nodeName == null) {
         return false;
     }
     return linkPreviewsState[url]?.images[nodeName]?.uploading ?? false;
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getOwnerName(state),
-        linkPreviewsState: state.linkPreviews,
-        maxAutomatic: getSetting(state, "rich-text-editor.link-previews.max-automatic") as number
-    }),
-    { linkPreviewLoad, linkPreviewImageUpload }
-);
-
-export default connector(RichTextLinkPreviews);

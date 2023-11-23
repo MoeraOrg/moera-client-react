@@ -1,5 +1,5 @@
 import React from 'react';
-import { WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
@@ -18,11 +18,15 @@ const mapPropsToValues = (props: Props): RichTextLinkValues => ({
     href: ""
 });
 
-const RichTextLinkDialog = ({t}: Props & WithTranslation) => (
-    <>
-        <InputField name="text" title={t("text")}/>
-        <InputField name="href" title={t("url")} autoFocus/>
-    </>
-);
+function RichTextLinkDialog() {
+    const {t} = useTranslation();
+
+    return (
+        <>
+            <InputField name="text" title={t("text")}/>
+            <InputField name="href" title={t("url")} autoFocus/>
+        </>
+    );
+}
 
 export default richTextEditorDialog<Props, RichTextLinkValues>("insert-link", mapPropsToValues, RichTextLinkDialog);

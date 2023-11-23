@@ -1,15 +1,15 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import avatarPlaceholder from "./avatar.png";
-import { getSetting } from "state/settings/selectors";
-import { getHomeRootPage } from "state/home/selectors";
-import { getNamingNameNodeUri } from "state/naming/selectors";
-import { getNodeRootPage } from "state/node/selectors";
-import { ClientState } from "state/state";
 import { AvatarImage } from "api";
+import { ClientState } from "state/state";
+import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getHomeRootPage } from "state/home/selectors";
+import { getNodeRootPage } from "state/node/selectors";
+import { getSetting } from "state/settings/selectors";
+import avatarPlaceholder from "./avatar.png";
 import "./Avatar.css";
 
 function effectiveShape(shape: string | null, shapeLocal: string | null | undefined,
@@ -37,7 +37,7 @@ function getRootPage(state: ClientState, nodeName: string | null | undefined): s
         : getNodeRootPage(state);
 }
 
-interface OwnProps {
+interface Props {
     avatar: AvatarImage | null | undefined;
     ownerName: string | null | undefined; // Node that owns the avatar
     size: number;
@@ -52,10 +52,12 @@ interface OwnProps {
     imageRef?: React.Ref<HTMLImageElement>;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-export function AvatarImpl({avatar, ownerName, size, shape: shapeLocal, className, draggable = true, onClick,
-                            onMouseEnter, onMouseLeave, onTouchStart, imageRef, rootPage, shapeGlobal}: Props) {
+export function Avatar({
+    avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName, onClick, onMouseEnter,
+    onMouseLeave, onTouchStart, imageRef
+}: Props) {
+    const rootPage = useSelector((state: ClientState) => getRootPage(state, nodeName));
+    const shapeGlobal = useSelector((state: ClientState) => getSetting(state, "avatar.shape") as string);
     const {t} = useTranslation();
 
     if (window.loadedAvatars == null) {
@@ -82,12 +84,3 @@ export function AvatarImpl({avatar, ownerName, size, shape: shapeLocal, classNam
              className={cx("avatar", `avatar-${shape}`, className)} style={style}/>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        rootPage: getRootPage(state, ownProps.nodeName),
-        shapeGlobal: getSetting(state, "avatar.shape") as string
-    })
-);
-
-export const Avatar = connector(AvatarImpl);

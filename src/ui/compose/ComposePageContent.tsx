@@ -91,10 +91,13 @@ function ComposePageContent(props: Props) {
             <Page className="compose-page">
                 <div className="composer">
                     <Form>
-                        <ConflictWarning text={t("post-not-allowed")} show={!postAllowed && !postWarningClosed}
-                                         onClose={postWarningClose}/>
-                        <ConflictWarning text={t("post-edited-conflict")} show={conflict}
-                                         onClose={() => dispatch(composeConflictClose())}/>
+                        {(!postAllowed && !postWarningClosed) &&
+                            <ConflictWarning text={t("post-not-allowed")} onClose={postWarningClose}/>
+                        }
+                        {conflict &&
+                            <ConflictWarning text={t("post-edited-conflict")}
+                                             onClose={() => dispatch(composeConflictClose())}/>
+                        }
                         <div className="info">
                             <AvatarField name="avatar" size={56}/>
                             <div className="body">

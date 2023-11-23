@@ -1,17 +1,20 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { connectToHome } from "state/home/actions";
-import { getNodeRootLocation } from "state/node/selectors";
 import { connectDialogSetForm } from "state/connectdialog/actions";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import store from "state/store";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    location: string;
+    nodeRoot: string | null;
+}
 
 interface Values {
     resetToken: string;
@@ -22,20 +25,13 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ResetForm(props: Props) {
-    const {show, emailHint, connectDialogSetForm, values, resetForm} = props;
-
+function ResetForm({values}: Props) {
+    const emailHint = useSelector((state: ClientState) => state.connectDialog.emailHint);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        if (show) {
-            resetForm({values: resetFormLogic.mapPropsToValues(props)})
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, resetForm]); // 'props' are missing on purpose
-
     const onResend = (event: React.MouseEvent) => {
-        connectDialogSetForm(values.location, "admin", "forgot");
+        dispatch(connectDialogSetForm(values.location, "admin", "forgot"));
         event.preventDefault();
     }
 
@@ -75,21 +71,11 @@ const resetFormLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.connectToHome(values.location.trim(), false, "admin", values.password, null,
-            values.resetToken.trim());
+        store.dispatch(connectToHome(values.location.trim(), false, "admin", values.password, null,
+            values.resetToken.trim()));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        show: state.connectDialog.show,
-        emailHint: state.connectDialog.emailHint,
-        location: state.connectDialog.location,
-        nodeRoot: getNodeRootLocation(state)
-    }),
-    { connectToHome, connectDialogSetForm }
-);
-
-export default connector(withFormik(resetFormLogic)(ResetForm));
+export default withFormik(resetFormLogic)(ResetForm);

@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
-import { ClientState } from "state/state";
 import { connectToHome } from "state/home/actions";
-import { getNodeRootLocation } from "state/node/selectors";
-import { cancelConnectDialog, connectDialogSetForm } from "state/connectdialog/actions";
+import { connectDialogSetForm } from "state/connectdialog/actions";
 import { ConnectDialogForm } from "state/connectdialog/state";
 import { Button } from "ui/control";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import store from "state/store";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    location: string;
+    nodeRoot: string | null;
+}
 
 interface Values {
     location: string;
@@ -23,21 +25,12 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ConnectForm(props: Props) {
-    const {show, connectDialogSetForm, values, resetForm} = props;
-
+function ConnectForm({values}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        if (show) {
-            resetForm({values: connectFormLogic.mapPropsToValues(props)})
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, resetForm]); // 'props' are missing on purpose
-
-    const setForm = (form: ConnectDialogForm) => {
-        connectDialogSetForm(values.location, "admin", form);
-    }
+    const setForm = (form: ConnectDialogForm) =>
+        dispatch(connectDialogSetForm(values.location, "admin", form));
 
     const onSetPassword = (event: React.MouseEvent) => {
         setForm("assign");
@@ -88,19 +81,10 @@ const connectFormLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.connectToHome(values.location.trim(), false, "admin", values.password);
+        store.dispatch(connectToHome(values.location.trim(), false, "admin", values.password));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        show: state.connectDialog.show,
-        location: state.connectDialog.location,
-        nodeRoot: getNodeRootLocation(state)
-    }),
-    { cancelConnectDialog, connectToHome, connectDialogSetForm }
-);
-
-export default connector(withFormik(connectFormLogic)(ConnectForm));
+export default withFormik(connectFormLogic)(ConnectForm);

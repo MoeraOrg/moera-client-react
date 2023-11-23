@@ -1,10 +1,9 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { NodeName, PostingFeatures, PrivateMediaFileInfo } from "api";
-import { ClientState } from "state/state";
+import { NodeName, PostingFeatures, PrivateMediaFileInfo, SourceFormat } from "api";
 import { getNodeRootPage } from "state/node/selectors";
 import RichTextEditorButton from "ui/control/richtexteditor/RichTextEditorButton";
 import RichTextSpoilerDialog, { RichTextSpoilerValues } from "ui/control/richtexteditor/RichTextSpoilerDialog";
@@ -21,11 +20,11 @@ import { redirectUrl } from "util/url";
 import { NameListItem } from "util/names-list";
 import "./RichTextEditorPanel.css";
 
-type Props = {
+interface Props {
     textArea: React.RefObject<HTMLTextAreaElement>,
     panel: React.RefObject<HTMLDivElement>,
     hiding?: boolean;
-    format: string;
+    format: Exclude<SourceFormat, "plain-text">;
     features: PostingFeatures | null;
     noMedia?: boolean;
     nodeName?: string | null;
@@ -36,55 +35,95 @@ type Props = {
     onImageDeleted?: (id: string) => void;
     externalImage?: File;
     uploadingExternalImage?: () => void;
-} & ConnectedProps<typeof connector> & WithTranslation;
-
-interface State {
-    spoilerDialog: boolean;
-    foldDialog: boolean;
-    linkDialog: boolean;
-    imageDialog: boolean;
-    mentionDialog: boolean;
-    dialogText: string;
 }
 
-class RichTextEditorPanel extends React.PureComponent<Props, State> {
+export default function RichTextEditorPanel({
+    textArea, panel, hiding, format, features, noMedia, nodeName, forceImageCompress, selectedImage, selectImage,
+    onImageAdded, onImageDeleted, externalImage, uploadingExternalImage
+}: Props) {
+    const nodeRootPage = useSelector(getNodeRootPage);
 
-    constructor(props: Props, context: any) {
-        super(props, context);
+    const [spoilerDialog, setSpoilerDialog] = useState<boolean>(false);
+    const [foldDialog, setFoldDialog] = useState<boolean>(false);
+    const [linkDialog, setLinkDialog] = useState<boolean>(false);
+    const [imageDialog, setImageDialog] = useState<boolean>(false);
+    const [mentionDialog, setMentionDialog] = useState<boolean>(false);
+    const [dialogText, setDialogText] = useState<string>("");
 
-        this.state = {
-            spoilerDialog: false,
-            foldDialog: false,
-            linkDialog: false,
-            imageDialog: false,
-            mentionDialog: false,
-            dialogText: ""
-        }
-    }
+    const {t} = useTranslation();
 
-    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<State>, snapshot?: any) {
-        if (this.props.selectedImage != null && prevProps.selectedImage == null) {
-            this.setState({imageDialog: true});
-            window.closeLightDialog = this.onImageClose;
-        }
-    }
-
-    componentWillUnmount() {
+    const onImageClose = useCallback(() => {
+        setImageDialog(false);
         window.closeLightDialog = null;
+        selectImage(null);
+    }, [setImageDialog, selectImage]);
+
+    const onImage = (event: React.MouseEvent) => {
+        setImageDialog(true);
+        window.closeLightDialog = onImageClose;
+        event.preventDefault();
     }
 
-    isMarkdown() {
-        return this.props.format === "markdown";
-    }
-
-    onBold = (event: React.MouseEvent) => {
-        const {textArea} = this.props;
+    const onImageSubmit = (
+        ok: boolean,
+        {
+            source, mediaFile, href, standardSize = "large", customWidth, customHeight, align, caption, title, alt
+        }: RichTextImageValues
+    ) => {
+        onImageClose();
 
         if (textArea.current == null) {
             return;
         }
 
-        if (this.isMarkdown()) {
+        const src = source === "device" ? (mediaFile != null ? "hash:" + mediaFile.hash : null) : href;
+        if (ok) {
+            const figureBegin = caption ? "<figure>" : "";
+            const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
+            const divBegin = align != null && align !== "text-start" ? `<div class="${align}">` : "";
+            const divEnd = align != null && align !== "text-start" ? "</div>" : "";
+            const {width, height} = getImageDimensions(standardSize, customWidth, customHeight);
+            const widthAttr = width != null ? ` width="${width}"` : "";
+            const heightAttr = height != null ? ` height="${height}"` : "";
+            const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
+            const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
+
+            const tagBegin = `${divBegin}${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
+            const tagEnd = `">${figureEnd}${divEnd}`;
+            if (src) {
+                insertText(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
+            } else {
+                wrapSelection(textArea.current, tagBegin, tagEnd);
+            }
+        }
+        textArea.current.focus();
+    }
+
+    useEffect(() => {
+        if (selectedImage) {
+            setImageDialog(true);
+            window.closeLightDialog = onImageClose;
+
+            return () => {
+                window.closeLightDialog = null;
+            }
+        }
+    }, [selectedImage, setImageDialog, onImageClose])
+
+    useEffect(() => {
+        if (externalImage) {
+            setImageDialog(true);
+        }
+    }, [externalImage, setImageDialog]);
+
+    const isMarkdown = () => format === "markdown";
+
+    const onBold = (event: React.MouseEvent) => {
+        if (textArea.current == null) {
+            return;
+        }
+
+        if (isMarkdown()) {
             wrapSelectionLines(textArea.current, "**");
         } else {
             wrapSelection(textArea.current, "<b>", "</b>");
@@ -93,14 +132,12 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         event.preventDefault();
     }
 
-    onItalic = (event: React.MouseEvent) => {
-        const {textArea} = this.props;
-
+    const onItalic = (event: React.MouseEvent) => {
         if (textArea.current == null) {
             return;
         }
 
-        if (this.isMarkdown()) {
+        if (isMarkdown()) {
             wrapSelectionLines(textArea.current, "_");
         } else {
             wrapSelection(textArea.current, "<i>", "</i>");
@@ -109,14 +146,12 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         event.preventDefault();
     }
 
-    onStrike = (event: React.MouseEvent) => {
-        const {textArea} = this.props;
-
+    const onStrike = (event: React.MouseEvent) => {
         if (textArea.current == null) {
             return;
         }
 
-        if (this.isMarkdown()) {
+        if (isMarkdown()) {
             wrapSelectionLines(textArea.current, "~~");
         } else {
             wrapSelection(textArea.current, "<strike>", "</strike>");
@@ -125,30 +160,28 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         event.preventDefault();
     }
 
-    onSpoiler = (event: React.MouseEvent) => {
-        this.setState({spoilerDialog: true});
-        window.closeLightDialog = this.onSpoilerClose;
-        event.preventDefault();
-    }
-
-    onSpoilerClose = () => {
-        this.setState({spoilerDialog: false});
+    const onSpoilerClose = () => {
+        setSpoilerDialog(false);
         window.closeLightDialog = null;
     }
 
-    onSpoilerSubmit = (ok: boolean, {title}: RichTextSpoilerValues) => {
-        const {textArea} = this.props;
+    const onSpoiler = (event: React.MouseEvent) => {
+        setSpoilerDialog(true);
+        window.closeLightDialog = onSpoilerClose;
+        event.preventDefault();
+    }
 
+    const onSpoilerSubmit = (ok: boolean, {title}: RichTextSpoilerValues) => {
         if (textArea.current == null) {
             return;
         }
 
-        this.onSpoilerClose();
+        onSpoilerClose();
         if (ok) {
             if (title) {
                 wrapSelection(textArea.current, `<mr-spoiler title="${htmlEntities(title)}">`, "</mr-spoiler>");
             } else {
-                if (this.isMarkdown()) {
+                if (isMarkdown()) {
                     wrapSelection(textArea.current, "||");
                 } else {
                     wrapSelection(textArea.current, "<mr-spoiler>", "</mr-spoiler>");
@@ -158,25 +191,23 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         textArea.current.focus();
     }
 
-    onFold = (event: React.MouseEvent) => {
-        this.setState({foldDialog: true});
-        window.closeLightDialog = this.onFoldClose;
-        event.preventDefault();
-    }
-
-    onFoldClose = () => {
-        this.setState({foldDialog: false});
+    const onFoldClose = () => {
+        setFoldDialog(false);
         window.closeLightDialog = null;
     }
 
-    onFoldSubmit = (ok: boolean, {summary}: RichTextFoldValues) => {
-        const {textArea} = this.props;
+    const onFold = (event: React.MouseEvent) => {
+        setFoldDialog(true);
+        window.closeLightDialog = onFoldClose;
+        event.preventDefault();
+    }
 
+    const onFoldSubmit = (ok: boolean, {summary}: RichTextFoldValues) => {
         if (textArea.current == null) {
             return;
         }
 
-        this.onFoldClose();
+        onFoldClose();
         if (ok) {
             let wrapBegin = "<details>";
             let wrapEnd = "</details>";
@@ -197,21 +228,19 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         textArea.current.focus();
     }
 
-    onMention = (event: React.MouseEvent) => {
-        this.setState({mentionDialog: true});
-        window.closeLightDialog = this.onMentionClose;
-        event.preventDefault();
-    }
-
-    onMentionClose = () => {
-        this.setState({mentionDialog: false});
+    const onMentionClose = () => {
+        setMentionDialog(false);
         window.closeLightDialog = null;
     }
 
-    onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
-        const {textArea, nodeRootPage} = this.props;
+    const onMention = (event: React.MouseEvent) => {
+        setMentionDialog(true);
+        window.closeLightDialog = onMentionClose;
+        event.preventDefault();
+    }
 
-        this.onMentionClose();
+    const onMentionSubmit = (ok: boolean, {nodeName, fullName}: NameListItem) => {
+        onMentionClose();
 
         if (textArea.current == null) {
             return;
@@ -224,7 +253,7 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         }
 
         if (ok) {
-            if (this.isMarkdown() || nodeRootPage == null) {
+            if (isMarkdown() || nodeRootPage == null) {
                 insertText(textArea.current, mentionName(nodeName, fullName))
             } else {
                 const text = (fullName || NodeName.shorten(nodeName)) ?? nodeName ?? "";
@@ -239,15 +268,13 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         textArea.current.focus();
     }
 
-    onQuote = (event: React.MouseEvent) => {
-        const {textArea} = this.props;
-
+    const onQuote = (event: React.MouseEvent) => {
         if (textArea.current == null) {
             return;
         }
 
-        let wrapBegin = this.isMarkdown() ? ">>>" : "<blockquote>";
-        let wrapEnd = this.isMarkdown() ? ">>>\n" : "</blockquote>\n";
+        let wrapBegin = isMarkdown() ? ">>>" : "<blockquote>";
+        let wrapEnd = isMarkdown() ? ">>>\n" : "</blockquote>\n";
 
         const value = textArea.current.value;
         const start = textArea.current.selectionStart;
@@ -267,37 +294,31 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         event.preventDefault();
     }
 
-    onLink = (event: React.MouseEvent) => {
-        const {textArea} = this.props;
+    const onLinkClose = () => {
+        setLinkDialog(false);
+        window.closeLightDialog = null;
+    }
 
+    const onLink = (event: React.MouseEvent) => {
         if (textArea.current == null) {
             return;
         }
 
-        this.setState({
-            linkDialog: true,
-            dialogText: getTextSelection(textArea.current)
-        });
-        window.closeLightDialog = this.onLinkClose;
+        setLinkDialog(true);
+        setDialogText(getTextSelection(textArea.current));
+        window.closeLightDialog = onLinkClose;
         event.preventDefault();
     }
 
-    onLinkClose = () => {
-        this.setState({linkDialog: false});
-        window.closeLightDialog = null;
-    }
-
-    onLinkSubmit = (ok: boolean, {href, text}: RichTextLinkValues) => {
-        const {textArea} = this.props;
-
-        this.onLinkClose();
+    const onLinkSubmit = (ok: boolean, {href, text}: RichTextLinkValues) => {
+        onLinkClose();
 
         if (textArea.current == null) {
             return;
         }
 
         if (ok) {
-            if (this.isMarkdown()) {
+            if (isMarkdown()) {
                 if (text) {
                     if (href) {
                         insertText(textArea.current, `[${text}](${href})`);
@@ -332,107 +353,37 @@ class RichTextEditorPanel extends React.PureComponent<Props, State> {
         textArea.current.focus();
     }
 
-    onImage = (event: React.MouseEvent) => {
-        this.setState({imageDialog: true});
-        window.closeLightDialog = this.onImageClose;
-        event.preventDefault();
-    }
-
-    onImageClose = () => {
-        this.setState({imageDialog: false});
-        window.closeLightDialog = null;
-        this.props.selectImage(null);
-    }
-
-    onImageSubmit = (ok: boolean, {source, mediaFile, href, standardSize = "large", customWidth, customHeight,
-                                   align, caption, title, alt}: RichTextImageValues) => {
-        const {textArea} = this.props;
-
-        this.onImageClose();
-
-        if (textArea.current == null) {
-            return;
-        }
-
-        const src = source === "device" ? (mediaFile != null ? "hash:" + mediaFile.hash : null) : href;
-        if (ok) {
-            const figureBegin = caption ? "<figure>" : "";
-            const figureEnd = caption ? `<figcaption>${htmlEntities(caption)}</figcaption></figure>` : "";
-            const divBegin = align != null && align !== "text-start" ? `<div class="${align}">` : "";
-            const divEnd = align != null && align !== "text-start" ? "</div>" : "";
-            const {width, height} = getImageDimensions(standardSize, customWidth, customHeight);
-            const widthAttr = width != null ? ` width="${width}"` : "";
-            const heightAttr = height != null ? ` height="${height}"` : "";
-            const titleAttr = title ? ` title="${htmlEntities(title)}"` : "";
-            const altAttr = alt ? ` alt="${htmlEntities(alt)}"` : "";
-
-            const tagBegin = `${divBegin}${figureBegin}<img${altAttr}${titleAttr}${widthAttr}${heightAttr} src="`;
-            const tagEnd = `">${figureEnd}${divEnd}`;
-            if (src) {
-                insertText(textArea.current, tagBegin + htmlEntities(src) + tagEnd);
-            } else {
-                wrapSelection(textArea.current, tagBegin, tagEnd);
-            }
-        }
-        textArea.current.focus();
-    }
-
-    render() {
-        const {
-            hiding, format, panel, features, noMedia, nodeName, forceImageCompress, selectedImage, onImageAdded,
-            onImageDeleted, externalImage, uploadingExternalImage, t
-        } = this.props;
-        const {spoilerDialog, foldDialog, linkDialog, imageDialog, mentionDialog, dialogText} = this.state;
-
-        if (format === "plain-text") {
-            return null;
-        }
-
-        if (externalImage) {
-            this.setState({imageDialog: true});
-        }
-
-        return (
-            <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
-                <div className="group">
-                    <RichTextEditorButton icon="bold" title={t("bold")} letter="B" onClick={this.onBold}/>
-                    <RichTextEditorButton icon="italic" title={t("italic")} letter="I" onClick={this.onItalic}/>
-                    <RichTextEditorButton icon="strikethrough" title={t("strikeout")} letter="R"
-                                          onClick={this.onStrike}/>
-                </div>
-                <div className="group">
-                    <RichTextEditorButton icon="exclamation-circle" title={t("spoiler")} onClick={this.onSpoiler}/>
-                    <RichTextEditorButton icon="caret-square-down" title={t("fold")} onClick={this.onFold}/>
-                </div>
-                <div className="group">
-                    <RichTextEditorButton icon="at" title={t("mention")} className="mention" onClick={this.onMention}/>
-                    <RichTextEditorButton icon="quote-left" title={t("quote")} letter="Q" onClick={this.onQuote}/>
-                </div>
-                <div className="group">
-                    <RichTextEditorButton icon="link" title={t("link")} letter="L" onClick={this.onLink}/>
-                    <RichTextEditorButton icon="image" title={t("image")} letter="M" onClick={this.onImage}/>
-                </div>
-                {spoilerDialog && <RichTextSpoilerDialog onSubmit={this.onSpoilerSubmit}/>}
-                {foldDialog && <RichTextFoldDialog onSubmit={this.onFoldSubmit}/>}
-                {linkDialog && <RichTextLinkDialog text={dialogText} onSubmit={this.onLinkSubmit}/>}
-                {imageDialog &&
-                    <RichTextImageDialog onSubmit={this.onImageSubmit} nodeName={nodeName}
-                                         forceCompress={forceImageCompress} selectedImage={selectedImage}
-                                         features={features} noMedia={noMedia} onAdded={onImageAdded}
-                                         onDeleted={onImageDeleted} externalImage={externalImage}
-                                         uploadingExternalImage={uploadingExternalImage}/>
-                }
-                {mentionDialog && <RichTextMentionDialog onSubmit={this.onMentionSubmit}/>}
+    return (
+        <div className={cx("rich-text-editor-panel", {"hiding": hiding})} ref={panel}>
+            <div className="group">
+                <RichTextEditorButton icon="bold" title={t("bold")} letter="B" onClick={onBold}/>
+                <RichTextEditorButton icon="italic" title={t("italic")} letter="I" onClick={onItalic}/>
+                <RichTextEditorButton icon="strikethrough" title={t("strikeout")} letter="R"
+                                      onClick={onStrike}/>
             </div>
-        );
-    }
-
+            <div className="group">
+                <RichTextEditorButton icon="exclamation-circle" title={t("spoiler")} onClick={onSpoiler}/>
+                <RichTextEditorButton icon="caret-square-down" title={t("fold")} onClick={onFold}/>
+            </div>
+            <div className="group">
+                <RichTextEditorButton icon="at" title={t("mention")} className="mention" onClick={onMention}/>
+                <RichTextEditorButton icon="quote-left" title={t("quote")} letter="Q" onClick={onQuote}/>
+            </div>
+            <div className="group">
+                <RichTextEditorButton icon="link" title={t("link")} letter="L" onClick={onLink}/>
+                <RichTextEditorButton icon="image" title={t("image")} letter="M" onClick={onImage}/>
+            </div>
+            {spoilerDialog && <RichTextSpoilerDialog onSubmit={onSpoilerSubmit}/>}
+            {foldDialog && <RichTextFoldDialog onSubmit={onFoldSubmit}/>}
+            {linkDialog && <RichTextLinkDialog text={dialogText} onSubmit={onLinkSubmit}/>}
+            {imageDialog &&
+                <RichTextImageDialog onSubmit={onImageSubmit} nodeName={nodeName}
+                                     forceCompress={forceImageCompress} selectedImage={selectedImage}
+                                     features={features} noMedia={noMedia} onAdded={onImageAdded}
+                                     onDeleted={onImageDeleted} externalImage={externalImage}
+                                     uploadingExternalImage={uploadingExternalImage}/>
+            }
+            {mentionDialog && <RichTextMentionDialog onSubmit={onMentionSubmit}/>}
+        </div>
+    );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        nodeRootPage: getNodeRootPage(state)
-    })
-);
-
-export default withTranslation()(connector(RichTextEditorPanel));

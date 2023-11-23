@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
-import { Manager, Popper, Reference } from 'react-popper';
+import { Modifier, usePopper } from 'react-popper';
 import { PositioningStrategy } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
@@ -28,31 +28,34 @@ interface Props {
     children: ((props: ChildrenProps) => React.ReactNode) | React.ReactNode;
 }
 
-interface State {
-    visible: boolean;
-}
+export function Popover({
+    className, text, textClassName, icon, title, element, detached, strategy = "fixed", offset, onToggle, children
+}: Props) {
+    const [visible, setVisible] = useState<boolean>(false);
 
-export class Popover extends React.PureComponent<Props, State> {
-
-    static defaultProps = {
-        strategy: "fixed"
-    };
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.state = {visible: false};
-    }
-
-    toggle = () => {
-        if (!this.state.visible) {
-            this.show();
-        } else {
-            this.hide();
+    const show = () => {
+        if (visible) {
+            return;
+        }
+        setVisible(true);
+        document.getElementById("app-root")!.addEventListener("click", documentClick);
+        if (onToggle != null) {
+            onToggle(true);
         }
     };
 
-    documentClick = (event: MouseEvent) => {
+    const hide = () => {
+        if (!visible) {
+            return;
+        }
+        setVisible(false);
+        document.getElementById("app-root")!.removeEventListener("click", documentClick);
+        if (onToggle != null) {
+            onToggle(false);
+        }
+    };
+
+    const documentClick = (event: MouseEvent) => {
         for (let element of document.querySelectorAll(".popover.show").values()) {
             const r = element.getBoundingClientRect();
             if (r.left <= event.clientX && r.right >= event.clientX
@@ -60,75 +63,54 @@ export class Popover extends React.PureComponent<Props, State> {
                 return;
             }
         }
-        this.hide();
+        hide();
     };
 
-    show = () => {
-        if (this.state.visible) {
-            return;
-        }
-        this.setState({visible: true});
-        document.getElementById("app-root")!.addEventListener("click", this.documentClick);
-        if (this.props.onToggle != null) {
-            this.props.onToggle(true);
+    const toggle = () => {
+        if (!visible) {
+            show();
+        } else {
+            hide();
         }
     };
 
-    hide = () => {
-        if (!this.state.visible) {
-            return;
-        }
-        this.setState({visible: false});
-        document.getElementById("app-root")!.removeEventListener("click", this.documentClick);
-        if (this.props.onToggle != null) {
-            this.props.onToggle(false);
-        }
-    };
-
-    render() {
-        const {className, text, textClassName, icon, title, element, detached, strategy, offset, children} = this.props;
-
-        const modifiers = offset != null ? [{name: "offset", options: {offset}}] : undefined;
-
-        return (
-            <Manager>
-                <Reference>
-                    {({ref}) => (
-                        <span ref={ref} onClick={this.toggle} title={title} className={cx(
-                            textClassName,
-                            {"active": this.state.visible}
-                        )}>
-                            {element && React.createElement(element)}
-                            {icon && <FontAwesomeIcon icon={icon}/>}
-                            {text}
-                        </span>
-                    )}
-                </Reference>
-                {ReactDOM.createPortal(
-                    (!detached || this.state.visible) &&
-                        <Popper placement="bottom" strategy={strategy} modifiers={modifiers}>
-                            {({ref, style, placement, arrowProps, forceUpdate}) => (
-                                <div ref={ref} style={style} className={cx(
-                                    "popover",
-                                    "fade",
-                                    `bs-popover-${placement}`, // activates Bootstrap style for .popover-arrow
-                                    {"show": this.state.visible},
-                                    className
-                                )}>
-                                    <div ref={arrowProps.ref} style={arrowProps.style} className="popover-arrow"/>
-                                    <div className="popover-body">{
-                                        isFunction(children) ?
-                                            children({hide: this.hide, update: forceUpdate})
-                                        :
-                                            children
-                                    }</div>
-                                </div>
-                            )}
-                        </Popper>,
-                    document.querySelector("#modal-root")!
-                )}
-            </Manager>
-        );
+    // Such usage of useState() is counter-intuitive, but required by react-popper
+    const [buttonRef, setButtonRef] = useState<Element | null>(null);
+    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
+    const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
+    const modifiers: Modifier<any>[] = [{name: "arrow", options: {element: arrowRef}}];
+    if (offset != null) {
+        modifiers.push({name: "offset", options: {offset}});
     }
+    const {styles, attributes, state, forceUpdate} =
+        usePopper(buttonRef, popperRef, {placement: "bottom", strategy, modifiers});
 
+    return (
+        <>
+            <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
+                {element && React.createElement(element)}
+                {icon && <FontAwesomeIcon icon={icon}/>}
+                {text}
+            </span>
+            {ReactDOM.createPortal(
+                (!detached || visible) &&
+                    <div ref={setPopperRef} style={styles.popper} {...attributes.popper} className={cx(
+                        "popover",
+                        "fade",
+                        `bs-popover-${state?.placement}`, // activates Bootstrap style for .popover-arrow
+                        {"show": visible},
+                        className
+                    )}>
+                        <div ref={setArrowRef} style={styles.arrow} {...attributes.arrow} className="popover-arrow"/>
+                        <div className="popover-body">{
+                            isFunction(children) ?
+                                children({hide: hide, update: forceUpdate ?? (() => {})})
+                            :
+                                children
+                        }</div>
+                    </div>,
+                document.querySelector("#modal-root")!
+            )}
+        </>
+    );
 }

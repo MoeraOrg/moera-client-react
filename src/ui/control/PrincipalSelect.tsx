@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
@@ -15,7 +15,7 @@ import { useButtonPopper } from "ui/hook";
 import { getPrincipalDisplay, PrincipalDisplay } from "ui/control/principal-display";
 import "./PrincipalSelect.css";
 
-type Props = {
+interface Props {
     value: PrincipalValue | null | undefined;
     values? : PrincipalFlag[] | null;
     icons?: Partial<Record<PrincipalValue, IconProp>> | null;
@@ -25,11 +25,13 @@ type Props = {
     className?: string;
     disabled?: boolean | null;
     onChange?: (value: PrincipalValue) => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function PrincipalSelectImpl({
-    value, values, icons, titles, caption, long, className, disabled, onChange, friendGroups, publicDisabled
-}: Props) {
+export function PrincipalSelect({value, values, icons, titles, caption, long, className, disabled, onChange}: Props) {
+    const friendGroups = useSelector(getNodeFriendGroups);
+    const publicDisabled = useSelector((state: ClientState) =>
+        getSetting(state, "principal.public.disabled") as boolean);
+
     const {
         visible, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-end");
@@ -83,12 +85,3 @@ function getValues(flags: PrincipalFlag[] | null | undefined, friendGroups: Frie
     }
     return values;
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        friendGroups: getNodeFriendGroups(state),
-        publicDisabled: getSetting(state, "principal.public.disabled") as boolean
-    })
-);
-
-export const PrincipalSelect = connector(PrincipalSelectImpl);

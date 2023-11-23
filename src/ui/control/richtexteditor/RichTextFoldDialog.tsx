@@ -1,5 +1,5 @@
 import React from 'react';
-import { WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { InputField } from "ui/control/field";
 import { richTextEditorDialog, RichTextEditorDialogProps } from "ui/control/richtexteditor/rich-text-editor-dialog";
@@ -14,8 +14,10 @@ const mapPropsToValues = (): RichTextFoldValues => ({
     summary: ""
 });
 
-const RichTextFoldDialog = ({t}: Props & WithTranslation) => (
-    <InputField name="summary" title={t("summary")} placeholder="Details" autoFocus/>
-);
+function RichTextFoldDialog() {
+    const {t} = useTranslation();
+
+    return <InputField name="summary" title={t("summary")} placeholder="Details" autoFocus/>;
+}
 
 export default richTextEditorDialog<Props, RichTextFoldValues>("fold", mapPropsToValues, RichTextFoldDialog);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 import cx from 'classnames';
@@ -13,13 +13,19 @@ import { Avatar } from "ui/control/Avatar";
 import { Loading } from "ui/control/Loading";
 import "./AvatarField.css";
 
-type Props = {
+interface Props {
     name: string;
     size: number;
-} & ConnectedProps<typeof connector>;
+}
 
-function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, avatarDefault, homeOwnerName,
-                          homeAvatarsLoad}: Props) {
+export function AvatarField({name, size}: Props) {
+    const avatarsLoading = useSelector((state: ClientState) => state.home.avatars.loading);
+    const avatarsLoaded = useSelector((state: ClientState) => state.home.avatars.loaded);
+    const avatars = useSelector((state: ClientState) => state.home.avatars.avatars);
+    const avatarDefault = useSelector(getHomeOwnerAvatar);
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const dispatch = useDispatch();
+
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
     const {
@@ -29,7 +35,7 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
 
     const onClick = (event: React.MouseEvent) => {
         if (!avatarsLoaded && !avatarsLoading) {
-            homeAvatarsLoad();
+            dispatch(homeAvatarsLoad());
         }
         if (value || avatarDefault) {
             onToggle(event);
@@ -66,16 +72,3 @@ function AvatarFieldImpl({name, size, avatarsLoading, avatarsLoaded, avatars, av
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        avatarsLoading: state.home.avatars.loading,
-        avatarsLoaded: state.home.avatars.loaded,
-        avatars: state.home.avatars.avatars,
-        avatarDefault: getHomeOwnerAvatar(state),
-        homeOwnerName: getHomeOwnerName(state)
-    }),
-    { homeAvatarsLoad }
-);
-
-export const AvatarField = connector(AvatarFieldImpl);

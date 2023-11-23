@@ -21,9 +21,9 @@ interface Props {
     children?: any;
 }
 
-export const Label = ({
+export function Label({
     title, titleHtml, name, htmlFor, className, horizontal, checkbox, undo, reset, setting, onUndo, onReset, children
-}: Props) => {
+}: Props) {
     const {t} = useTranslation();
 
     return (
@@ -55,7 +55,7 @@ export const Label = ({
                     <LabelButton icon="backspace" className="form-label-button-reset" title={t("reset-to-default")}
                                  onClick={onReset}/>
                 }
-                {name &&
+                {(name && setting != null) &&
                     <SetDefaultButton name={name} setting={setting}/>
                 }
             </Wrapper>

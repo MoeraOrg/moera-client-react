@@ -1,16 +1,20 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { FormikBag, FormikProps, withFormik } from 'formik';
+import React from 'react';
+import { connect } from 'react-redux';
+import { FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import { InputField } from "ui/control/field";
-import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import { ClientState } from "state/state";
 import { connectToHome } from "state/home/actions";
 import { getNodeRootLocation } from "state/node/selectors";
-import { ClientState } from "state/state";
+import { InputField } from "ui/control/field";
+import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
+import store from "state/store";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    location: string;
+    nodeRoot: string | null;
+}
 
 interface Values {
     location: string;
@@ -18,20 +22,8 @@ interface Values {
     confirmPassword: string;
 }
 
-type Props = OuterProps & FormikProps<Values>;
-
-function AssignForm(props: Props) {
-    const {show, resetForm} = props;
-
+function AssignForm() {
     const {t} = useTranslation();
-
-    useEffect(() => {
-        if (show) {
-            resetForm({values: assignFormLogic.mapPropsToValues(props)})
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [show, resetForm]); // 'props' are missing on purpose
-
 
     return (
         <ConnectDialogModal title={t("set-home-password")} buttonCaption={t("set-password-and-connect")}>
@@ -59,19 +51,10 @@ const assignFormLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.connectToHome(values.location.trim(), true, "admin", values.password);
+        store.dispatch(connectToHome(values.location.trim(), true, "admin", values.password));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        show: state.connectDialog.show,
-        location: state.connectDialog.location,
-        nodeRoot: getNodeRootLocation(state)
-    }),
-    { connectToHome }
-);
-
-export default connector(withFormik(assignFormLogic)(AssignForm));
+export default withFormik(assignFormLogic)(AssignForm);

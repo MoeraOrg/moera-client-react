@@ -1,21 +1,21 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { IconName } from '@fortawesome/free-regular-svg-icons';
+import { createSelector } from 'reselect';
 
-import { ClientState } from "state/state";
-import { EmojiProps, EmojiSelector, ReactionEmojiButton } from "ui/control";
-import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
-import { getSetting } from "state/settings/selectors";
 import {
     MAIN_NEGATIVE_REACTIONS,
     MAIN_NEGATIVE_REACTIONS_SET,
     MAIN_POSITIVE_REACTIONS,
     MAIN_POSITIVE_REACTIONS_SET
 } from "api";
+import { ClientState } from "state/state";
+import { getSetting } from "state/settings/selectors";
+import { EmojiProps, EmojiSelector, ReactionEmojiButton } from "ui/control";
+import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
 import EmojiList from "util/emoji-list";
-import { createSelector } from "reselect";
 
-interface OwnProps {
+interface Props {
     icon: IconName,
     emoji: number | null;
     caption?: string;
@@ -27,67 +27,39 @@ interface OwnProps {
     onReactionDelete: () => void;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export function ReactionButton(props: Props) {
+    const {emoji, negative, accepted, invisible, onReactionAdd, onReactionDelete} = props;
 
-interface State {
-    reactions: EmojiProps[];
-}
+    const availableList = useSelector((state: ClientState) => getAvailableReactions(state, negative));
 
-class ReactionButtonImpl extends React.PureComponent<Props, State> {
+    const pastEmoji = useRef<number | null>(null);
+    const [reactions, setReactions] = useState<EmojiProps[]>([]);
 
-    #pastEmoji: number | null = null;
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.state = {
-            reactions: []
-        };
-    }
-
-    componentDidMount() {
-        this.updateReactions();
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.available !== prevProps.available) {
-            this.updateReactions();
-        }
-    }
-
-    updateReactions(): void {
-        const {negative, available} = this.props;
-        const accepted = new EmojiList(this.props.accepted);
+    useEffect(() => {
+        const acceptedList = new EmojiList(accepted);
 
         const mainReactions = !negative ? MAIN_POSITIVE_REACTIONS : MAIN_NEGATIVE_REACTIONS;
         const mainReactionsSet = !negative ? MAIN_POSITIVE_REACTIONS_SET : MAIN_NEGATIVE_REACTIONS_SET;
         const main = mainReactions.map(
             r => ({
                 emoji: r,
-                invisible: (!accepted.recommends(r) && !available.recommends(r))
-                    || !accepted.includes(r) || !available.includes(r),
-                dimmed: !accepted.recommends(r)
+                invisible: (!acceptedList.recommends(r) && !availableList.recommends(r))
+                    || !acceptedList.includes(r) || !availableList.includes(r),
+                dimmed: !acceptedList.recommends(r)
             } as EmojiProps)
         );
-        const additionalNode = accepted.recommended()
+        const additionalNode = acceptedList.recommended()
             .filter(r => !mainReactionsSet.has(r))
-            .filter(r => available.includes(r))
+            .filter(r => availableList.includes(r))
             .map(r => ({emoji: r} as EmojiProps));
-        const additionalClient = available.recommended()
+        const additionalClient = availableList.recommended()
             .filter(r => !mainReactionsSet.has(r))
-            .filter(r => accepted.includes(r) && !accepted.recommends(r))
+            .filter(r => acceptedList.includes(r) && !acceptedList.recommends(r))
             .map(r => ({emoji: r, dimmed: true} as EmojiProps));
-        this.setState({reactions: main.concat(additionalNode, additionalClient)});
-    }
+        setReactions(main.concat(additionalNode, additionalClient));
+    }, [availableList, accepted, negative]);
 
-    isInvisible(): boolean {
-        return this.props.invisible || this.state.reactions.every(r => r.invisible);
-    }
-
-    getDefaultEmoji(): number | null {
-        const {negative} = this.props;
-        const {reactions} = this.state;
-
+    const getDefaultEmoji = (): number | null => {
         const thumbsEmoji = negative ? 0x1f44e : 0x1f44d;
         const thumbs = reactions.find(r => r.emoji === thumbsEmoji);
 
@@ -106,74 +78,55 @@ class ReactionButtonImpl extends React.PureComponent<Props, State> {
         return second ? second.emoji : null;
     }
 
-    defaultReactionAdd = () => {
-        const {negative, onReactionAdd} = this.props;
-
-        const emoji = this.getDefaultEmoji();
+    const defaultReactionAdd = () => {
+        const emoji = getDefaultEmoji();
         if (emoji != null) {
             onReactionAdd(negative, emoji);
         }
     }
 
-    reactionAdd = (negative: boolean, emoji: number) => {
-        this.props.onReactionAdd(negative, emoji);
+    const reactionAdd = (negative: boolean, emoji: number) => onReactionAdd(negative, emoji);
+
+    const reactionDelete = () => onReactionDelete();
+
+    const preparePopper = () => {
+        pastEmoji.current = emoji;
     }
 
-    reactionDelete = () => {
-        this.props.onReactionDelete();
-    }
+    const show = (): boolean => pastEmoji.current === emoji;
 
-    preparePopper = () => {
-        this.#pastEmoji = this.props.emoji;
-    }
+    const buttonInvisible = invisible || reactions.every(r => r.invisible);
 
-    show = () => {
-        return this.#pastEmoji === this.props.emoji;
-    }
-
-    render() {
-        const {negative} = this.props;
-
-        return (
-            <Manager onPreparePopper={this.preparePopper} onShow={this.show}>
-                <Reference>
-                    {(ref, mainEnter, mainLeave, mainTouch) =>
-                        <ReactionEmojiButton
-                            {...this.props}
-                            invisible={this.isInvisible()}
-                            buttonRef={ref}
-                            onMouseEnter={mainEnter}
-                            onMouseLeave={mainLeave}
-                            onTouchStart={mainTouch}
-                            onReactionAdd={this.defaultReactionAdd}
-                            onReactionDelete={this.reactionDelete}
-                        />
-                    }
-                </Reference>
-                <DelayedPopper placement="top" arrow>
-                    <EmojiSelector
-                        negative={negative}
-                        reactions={this.state.reactions}
-                        fixedWidth={true}
-                        onClick={this.reactionAdd}
+    return (
+        <Manager onPreparePopper={preparePopper} onShow={show}>
+            <Reference>
+                {(ref, mainEnter, mainLeave, mainTouch) =>
+                    <ReactionEmojiButton
+                        {...props}
+                        invisible={buttonInvisible}
+                        buttonRef={ref}
+                        onMouseEnter={mainEnter}
+                        onMouseLeave={mainLeave}
+                        onTouchStart={mainTouch}
+                        onReactionAdd={defaultReactionAdd}
+                        onReactionDelete={reactionDelete}
                     />
-                </DelayedPopper>
-            </Manager>
-        );
-    }
-
+                }
+            </Reference>
+            <DelayedPopper placement="top" arrow>
+                <EmojiSelector
+                    negative={negative}
+                    reactions={reactions}
+                    fixedWidth={true}
+                    onClick={reactionAdd}
+                />
+            </DelayedPopper>
+        </Manager>
+    );
 }
 
 const getAvailableReactions = createSelector(
-    (state: ClientState, ownProps: OwnProps) => getSetting(state,
-        !ownProps.negative ? "reactions.positive.available" : "reactions.negative.available") as string,
+    (state: ClientState, negative: boolean) =>
+        getSetting(state, !negative ? "reactions.positive.available" : "reactions.negative.available") as string,
     available => new EmojiList(available)
 );
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        available: getAvailableReactions(state, ownProps)
-    }),
-);
-
-export const ReactionButton = connector(ReactionButtonImpl);

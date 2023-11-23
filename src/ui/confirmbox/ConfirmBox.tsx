@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -9,19 +9,16 @@ import { closeConfirmBox } from "state/confirmbox/actions";
 import { Button, Checkbox, ModalDialog } from "ui/control";
 import { htmlEntities } from "util/html";
 
-const forwardAction = (action: ClientAction) => action;
-
-type Props = ConnectedProps<typeof connector>;
-
-function ConfirmBox({
-    message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox, closeConfirmBox, forwardAction
-}: Props) {
+export default function ConfirmBox() {
+    const {message, yes, no, cancel, onYes, onNo, onCancel, variant, dontShowAgainBox} =
+        useSelector((state: ClientState) => state.confirmBox);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const [dontShowAgain, setDontShowAgain] = useState<boolean>(false);
 
     const onClick = (buttonAction: ConfirmBoxButtonAction | null) => {
-        closeConfirmBox();
+        dispatch(closeConfirmBox());
         if (buttonAction) {
             let action: ClientAction | ClientAction[] | null | undefined | void;
             if (typeof(buttonAction) === "function") {
@@ -31,9 +28,9 @@ function ConfirmBox({
             }
             if (action != null) {
                 if (Array.isArray(action)) {
-                    action.forEach(forwardAction);
+                    action.forEach(dispatch);
                 } else {
-                    forwardAction(action);
+                    dispatch(action);
                 }
             }
         }
@@ -78,10 +75,3 @@ function ConfirmBox({
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => state.confirmBox,
-    { closeConfirmBox, forwardAction }
-);
-
-export default connector(ConfirmBox);

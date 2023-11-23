@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
@@ -25,20 +25,26 @@ import { Button, DropdownMenu } from "ui/control";
 import { tGender } from "i18n";
 import "./SubscribeButton.css";
 
-interface OwnProps {
+interface Props {
     small?: boolean | null;
     nodeName: string;
     feedName: string;
     onDialogOpened?: () => void;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export function SubscribeButton({small, nodeName, feedName, onDialogOpened}: Props) {
+    const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
+    const homeGender = useSelector(getHomeOwnerGender);
+    const friendsId = useSelector(getHomeFriendsId);
+    const ownerName = useSelector(getOwnerName);
+    const googlePlayGoverned = useSelector((state: ClientState) =>
+        isFeedSheriff(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
+    const googlePlaySheriff = useSelector((state: ClientState) =>
+        getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const googlePlayProhibited = useSelector((state: ClientState) =>
+        isFeedSheriffProhibited(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE));
+    const dispatch = useDispatch();
 
-function SubscribeButtonImpl({
-    small, nodeName, feedName, onDialogOpened, card, homeGender, friendsId, ownerName, googlePlayGoverned,
-    googlePlaySheriff, googlePlayProhibited, feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog,
-    openAskDialog, openPeopleHideDialog, openBlockDialog, openSheriffOrderDialog, confirmBox
-}: Props) {
     const fullName = card?.details.profile.fullName ?? null;
     const blogName = fullName || NodeName.shorten(nodeName);
     const subscribing = card?.subscription.subscribing ?? false;
@@ -53,46 +59,46 @@ function SubscribeButtonImpl({
 
     const {t} = useTranslation();
 
-    const onSubscribe = () => feedSubscribe(nodeName, feedName);
+    const onSubscribe = () => dispatch(feedSubscribe(nodeName, feedName));
 
     const onUnsubscribe = () => {
         if (subscription != null) {
-            feedUnsubscribe(nodeName, feedName, subscription.id);
+            dispatch(feedUnsubscribe(nodeName, feedName, subscription.id));
         }
     }
 
     const onAddFriend = () => {
         if (friendsId != null) {
-            friendshipUpdate(nodeName, [friendsId]);
+            dispatch(friendshipUpdate(nodeName, [friendsId]));
         }
     }
 
-    const onFriendGroups = () => openFriendGroupsDialog(nodeName);
+    const onFriendGroups = () => dispatch(openFriendGroupsDialog(nodeName));
 
-    const onUnfriend = () => friendshipUpdate(nodeName, null);
+    const onUnfriend = () => dispatch(friendshipUpdate(nodeName, null));
 
-    const onAskDialog = () => openAskDialog(nodeName);
+    const onAskDialog = () => dispatch(openAskDialog(nodeName));
 
-    const onHideDialog = () => openPeopleHideDialog(nodeName, feedName);
+    const onHideDialog = () => dispatch(openPeopleHideDialog(nodeName, feedName));
 
-    const onBlockDialog = () => openBlockDialog(nodeName, fullName, null, null, blockedList ?? []);
+    const onBlockDialog = () => dispatch(openBlockDialog(nodeName, fullName, null, null, blockedList ?? []));
 
     const onHideInGooglePlay = () =>
-        openSheriffOrderDialog({nodeName, fullName, feedName: "timeline"});
+        dispatch(openSheriffOrderDialog({nodeName, fullName, feedName: "timeline"}));
 
     const onUnhideInGooglePlay = () => {
-        confirmBox(t("unhide-blog-google-play", {"name": blogName}), t("unhide"), t("cancel"),
-            sheriffOrderDelete({nodeName, feedName: "timeline"}), null, "success");
+        dispatch(confirmBox(t("unhide-blog-google-play", {"name": blogName}), t("unhide"), t("cancel"),
+            sheriffOrderDelete({nodeName, feedName: "timeline"}), null, "success"));
     };
 
     const onHideContentInGooglePlay = () => {
-        confirmBox(t("hide-content-user-in-google-play", {"name": blogName}), t("hide"), t("cancel"),
-            sheriffListAdd(nodeName), null, "danger");
+        dispatch(confirmBox(t("hide-content-user-in-google-play", {"name": blogName}), t("hide"), t("cancel"),
+            sheriffListAdd(nodeName), null, "danger"));
     };
 
     const onUnhideContentInGooglePlay = () => {
-        confirmBox(t("unhide-content-user-in-google-play", {"name": blogName}), t("unhide"), t("cancel"),
-            sheriffListDelete(nodeName), null, "success");
+        dispatch(confirmBox(t("unhide-content-user-in-google-play", {"name": blogName}), t("unhide"), t("cancel"),
+            sheriffListDelete(nodeName), null, "success"));
     };
 
     const subscribed = subscription != null;
@@ -266,21 +272,3 @@ function SubscribeButtonImpl({
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        card: getNodeCard(state, ownProps.nodeName),
-        homeGender: getHomeOwnerGender(state),
-        friendsId: getHomeFriendsId(state),
-        ownerName: getOwnerName(state),
-        googlePlayGoverned: isFeedSheriff(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE),
-        googlePlaySheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
-        googlePlayProhibited: isFeedSheriffProhibited(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
-    }),
-    {
-        feedSubscribe, feedUnsubscribe, friendshipUpdate, openFriendGroupsDialog, openAskDialog, openPeopleHideDialog,
-        openBlockDialog, openSheriffOrderDialog, confirmBox
-    }
-);
-
-export const SubscribeButton = connector(SubscribeButtonImpl);

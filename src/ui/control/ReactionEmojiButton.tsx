@@ -20,10 +20,10 @@ interface Props {
     onReactionDelete: MouseEventHandler<HTMLButtonElement>;
 }
 
-const ReactionEmojiButton = ({
+export function ReactionEmojiButton({
     icon, emoji, negative, caption, className, invisible, buttonRef, onMouseEnter, onMouseLeave, onTouchStart,
     onReactionAdd, onReactionDelete
-}: Props) => {
+}: Props) {
     const {t} = useTranslation();
 
     if (emoji == null) {
@@ -37,5 +37,3 @@ const ReactionEmojiButton = ({
                             onMouseLeave={onMouseLeave} onTouchStart={onTouchStart} onClick={onReactionDelete}/>;
     }
 }
-
-export { ReactionEmojiButton };

@@ -5,9 +5,9 @@ import { ModalDialog } from "ui/control/ModalDialog";
 import { NameSelector } from "ui/control/NameSelector";
 import { NameListItem } from "util/names-list";
 
-type Props = {
+interface Props {
     onSubmit: (ok: boolean, values: NameListItem) => void;
-};
+}
 
 export default function RichTextMentionDialog({onSubmit}: Props) {
     const [query, setQuery] = useState<string>("");

@@ -1,13 +1,6 @@
 import { MediaWithDigest, VerifiedMediaFile } from "api";
 import { mediaHashesExtract } from "util/media-images";
 
-function toMediaWithDigest(media: VerifiedMediaFile): MediaWithDigest {
-    return {
-        id: media.id,
-        digest: media.digest
-    }
-}
-
 export class RichTextValue {
 
     text: string;
@@ -27,8 +20,11 @@ export class RichTextValue {
         const mediaMap = new Map(bodyMedia.map(mf => [mf.hash, mf]));
         const embeddedHashes = mediaHashesExtract(this.text);
 
-        return [...embeddedHashes].map(hash => mediaMap.get(hash)).filter((mf): mf is VerifiedMediaFile => mf != null)
-            .concat(bodyMedia.filter(mf => !embeddedHashes.has(mf.hash))).map(toMediaWithDigest);
+        return [...embeddedHashes]
+            .map(hash => mediaMap.get(hash))
+            .filter((mf): mf is VerifiedMediaFile => mf != null)
+            .concat(bodyMedia.filter(mf => !embeddedHashes.has(mf.hash)))
+            .map(media => ({id: media.id, digest: media.digest}));
     }
 
     orderedMediaList(): string[] | null {

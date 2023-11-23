@@ -8,15 +8,15 @@ interface Props {
     onClick?: MouseEventHandler;
 }
 
-export const DeleteButton = ({onClick}: Props) => {
+export function DeleteButton({onClick}: Props) {
     const {t} = useTranslation();
 
     return (
         <div className="delete-button" title={t("delete")} onClick={onClick}>
-        <span className="fa-layers fa-fw">
-            <FontAwesomeIcon icon="times" color="white"/>
-            <FontAwesomeIcon icon="times-circle"/>
-        </span>
+            <span className="fa-layers fa-fw">
+                <FontAwesomeIcon icon="times" color="white"/>
+                <FontAwesomeIcon icon="times-circle"/>
+            </span>
         </div>
     );
 }

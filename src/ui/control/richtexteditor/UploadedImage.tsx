@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +12,7 @@ import { DropdownMenu } from "ui/control";
 import AttachedImage from "ui/control/richtexteditor/AttachedImage";
 import "./UploadedImage.css";
 
-interface OwnProps {
+interface Props {
     media: VerifiedMediaFile;
     nodeName: string | null;
     dragged?: boolean | null;
@@ -21,15 +21,13 @@ interface OwnProps {
     onClick?: React.MouseEventHandler<HTMLImageElement>;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDelete, onClick,
-                        openImageEditDialog}: Props) {
+export default function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDelete, onClick}: Props) {
     const sortable = useSortable({id: media.id});
     const sortableStyle = {
         transform: CSS.Transform.toString(sortable.transform),
         transition: sortable.transition ?? undefined,
     };
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     return (
@@ -40,7 +38,7 @@ function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDel
                         title: t("edit-ellipsis"),
                         nodeName: "",
                         href: null,
-                        onClick: () => openImageEditDialog(nodeName, media),
+                        onClick: () => dispatch(openImageEditDialog(nodeName, media)),
                         show: media.postingId != null
                     },
                     {
@@ -66,10 +64,3 @@ function UploadedImage({media, nodeName, dragged = false, showMenu = true, onDel
         </div>
     );
 }
-
-const connector = connect(
-    null,
-    { openImageEditDialog }
-);
-
-export default connector(UploadedImage);

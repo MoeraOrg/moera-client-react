@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
@@ -73,13 +73,4 @@ const askSelectedDialogLogic = {
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        nodeName: state.askDialog.nodeName,
-        nodeCount: state.askDialog.nodeCount,
-        sending: state.askDialog.sending
-    }),
-    { closeAskDialog, peopleSelectedAsk }
-);
-
-export default connector(withFormik(askSelectedDialogLogic)(AskSelectedDialog));
+export default withFormik(askSelectedDialogLogic)(AskSelectedDialog);

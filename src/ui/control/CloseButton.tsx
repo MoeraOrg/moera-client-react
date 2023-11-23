@@ -5,7 +5,7 @@ interface Props {
     onClick?: MouseEventHandler | null;
 }
 
-export const CloseButton = ({onClick}: Props) => {
+export function CloseButton({onClick}: Props) {
     const {t} = useTranslation();
 
     return (

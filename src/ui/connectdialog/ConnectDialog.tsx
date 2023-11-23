@@ -1,27 +1,24 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
+import { ClientState } from "state/state";
+import { getNodeRootLocation } from "state/node/selectors";
 import ConnectForm from "ui/connectdialog/ConnectForm";
 import AssignForm from "ui/connectdialog/AssignForm";
 import ForgotForm from "ui/connectdialog/ForgotForm";
 import ResetForm from "ui/connectdialog/ResetForm";
-import { ClientState } from "state/state";
 
-type Props = ConnectedProps<typeof connector>;
+export default function ConnectDialog() {
+    const form = useSelector((state: ClientState) => state.connectDialog.form);
+    const location = useSelector((state: ClientState) => state.connectDialog.location);
+    const nodeRoot = useSelector(getNodeRootLocation);
 
-const ConnectDialog = ({form}: Props) => (
-    <>
-        {form === "connect" && <ConnectForm/>}
-        {form === "assign" && <AssignForm/>}
-        {form === "forgot" && <ForgotForm/>}
-        {form === "reset" && <ResetForm/>}
-    </>
-);
-
-const connector = connect(
-    (state: ClientState) => ({
-        form: state.connectDialog.form
-    })
-);
-
-export default connector(ConnectDialog);
+    return (
+        <>
+            {form === "connect" && <ConnectForm location={location} nodeRoot={nodeRoot}/>}
+            {form === "assign" && <AssignForm location={location} nodeRoot={nodeRoot}/>}
+            {form === "forgot" && <ForgotForm location={location} nodeRoot={nodeRoot}/>}
+            {form === "reset" && <ResetForm location={location} nodeRoot={nodeRoot}/>}
+        </>
+    );
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useField } from 'formik';
-import { WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { PostingFeatures, VerifiedMediaFile } from "api";
 import { PlusButton } from "ui/control";
@@ -89,14 +89,16 @@ const mapPropsToValues = (props: Props): RichTextImageValues => ({
     alt: ""
 });
 
-function RichTextImageDialog({features, noMedia = false, nodeName, forceCompress,
-                              onAdded, onDeleted, externalImage, uploadingExternalImage, t}: Props & WithTranslation) {
+function RichTextImageDialog({
+    features, noMedia = false, nodeName, forceCompress, onAdded, onDeleted, externalImage, uploadingExternalImage
+}: Props) {
     const [showAlign, setShowAlign] = useState<boolean>(false);
     const [showCaption, setShowCaption] = useState<boolean>(false);
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const [showAlt, setShowAlt] = useState<boolean>(false);
     const [, {value: source}] = useField<string>("source");
     const [, {value: standardSize}] = useField<RichTextImageStandardSize>("standardSize");
+    const {t} = useTranslation();
 
     return (
         <>

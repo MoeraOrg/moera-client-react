@@ -19,17 +19,14 @@ const SettingsConflicts = ({tab, nodeConflict, clientConflict, pluginsConflict,
 
     return (
         <>
-            {tab === "node" &&
-                <ConflictWarning text={t("node-settings-changed-conflict")} show={nodeConflict}
-                                 onClose={settingsNodeConflictClose}/>
+            {(tab === "node" && nodeConflict) &&
+                <ConflictWarning text={t("node-settings-changed-conflict")} onClose={settingsNodeConflictClose}/>
             }
-            {tab === "client" &&
-                <ConflictWarning text={t("client-settings-changed-conflict")} show={clientConflict}
-                                 onClose={settingsClientConflictClose}/>
+            {(tab === "client" && clientConflict) &&
+                <ConflictWarning text={t("client-settings-changed-conflict")} onClose={settingsClientConflictClose}/>
             }
-            {tab === "node" &&
-                <ConflictWarning text={t("addons-changed-conflict")} show={pluginsConflict}
-                                 onClose={settingsPluginsConflictClose}/>
+            {(tab === "node" && pluginsConflict) &&
+                <ConflictWarning text={t("addons-changed-conflict")} onClose={settingsPluginsConflictClose}/>
             }
         </>
     );

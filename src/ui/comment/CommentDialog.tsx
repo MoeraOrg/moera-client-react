@@ -86,8 +86,10 @@ function CommentDialog(props: Props) {
     return (
         <ModalDialog title={t("edit-comment")} className="comment-dialog" loading={loading}
                      onClose={() => dispatch(closeCommentDialog())}>
-            <ConflictWarning text={t("comment-edited-conflict")} show={conflict}
-                             onClose={() => dispatch(commentDialogConflictClose())}/>
+            {conflict &&
+                <ConflictWarning text={t("comment-edited-conflict")}
+                                 onClose={() => dispatch(commentDialogConflictClose())}/>
+            }
             <Form>
                 <div className="modal-body">
                     <div className="owner-line">

@@ -21,10 +21,10 @@ type Props = {
     noMedia?: boolean;
 } & Omit<RichTextAreaProps, "textArea" | "panel" | "value" | "onChange">;
 
-const RichTextEditor = ({
+export function RichTextEditor({
     name, value, features, rows, maxHeight, placeholder, className, autoFocus, autoComplete, disabled, smileysEnabled,
     hidingPanel, format, nodeName, forceImageCompress, onKeyDown, onChange, onBlur, onUrls, noMedia
-}: Props) => {
+}: Props) {
     const panel = useRef<HTMLDivElement>(null);
     const textArea = useRef<HTMLTextAreaElement>(null);
     const [selectedImage, setSelectedImage] = useState<PrivateMediaFileInfo | null>(null);
@@ -87,12 +87,14 @@ const RichTextEditor = ({
 
     return (
         <div className={cx("rich-text-editor", className)}>
-            <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
-                                 features={features} noMedia={noMedia} nodeName={nodeName}
-                                 forceImageCompress={forceImageCompress} selectedImage={selectedImage}
-                                 selectImage={setSelectedImage} onImageAdded={onImageAdded}
-                                 onImageDeleted={onImageDeleted} externalImage={imageFromClipboard}
-                                 uploadingExternalImage={() => setImageFromClipboard(undefined)}/>
+            {format !== "plain-text" &&
+                <RichTextEditorPanel panel={panel} textArea={textArea} hiding={hidingPanel} format={format}
+                                     features={features} noMedia={noMedia} nodeName={nodeName}
+                                     forceImageCompress={forceImageCompress} selectedImage={selectedImage}
+                                     selectImage={setSelectedImage} onImageAdded={onImageAdded}
+                                     onImageDeleted={onImageDeleted} externalImage={imageFromClipboard}
+                                     uploadingExternalImage={() => setImageFromClipboard(undefined)}/>
+            }
             <RichTextArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
                           placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
                           disabled={disabled} smileysEnabled={smileysEnabled} onKeyDown={onKeyDown}
@@ -107,6 +109,4 @@ const RichTextEditor = ({
             }
         </div>
     );
-};
-
-export { RichTextEditor };
+}

@@ -7,9 +7,9 @@ import "./RichTextPasteDialog.css";
 
 export type RichTextPasteMode = "none" | "text" | "html";
 
-type Props = {
+interface Props {
     onSubmit: (mode: RichTextPasteMode, persist: boolean) => void;
-};
+}
 
 export default function RichTextPasteDialog({onSubmit}: Props) {
     const [persist, setPersist] = useState(false);
