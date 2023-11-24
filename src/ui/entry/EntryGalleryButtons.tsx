@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientReactionInfo, PostingInfo } from "api";
@@ -9,12 +9,15 @@ import { getHomeOwnerName } from "state/home/selectors";
 import PostingReactionButton from "ui/posting/PostingReactionButton";
 import EntryGalleryShareButton from "ui/entry/EntryGalleryShareButton";
 
-type Props = {
+interface Props {
     posting: PostingInfo;
     mediaId: string;
-} & ConnectedProps<typeof connector>;
+}
 
-function EntryGalleryButtons({posting, mediaId, homeOwnerName, enableSelf}: Props) {
+export default function EntryGalleryButtons({posting, mediaId}: Props) {
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const enableSelf = useSelector((state: ClientState) =>
+        getSetting(state, "posting.reactions.self.enabled") as boolean);
     const {t} = useTranslation();
 
     const cr = posting.clientReaction || {} as ClientReactionInfo;
@@ -29,16 +32,8 @@ function EntryGalleryButtons({posting, mediaId, homeOwnerName, enableSelf}: Prop
                                    invisible={hide || (cr.emoji != null && !cr.negative)} id={posting.id}
                                    negative={true} emoji={cr.negative ? cr.emoji : null}
                                    accepted={posting.acceptedReactions?.negative ?? ""}/>
-            <EntryGalleryShareButton posting={posting} mediaId={mediaId}/>
+            <EntryGalleryShareButton postingId={posting.id} postingReceiverName={posting.receiverName}
+                                     postingReceiverPostingId={posting.receiverPostingId} mediaId={mediaId}/>
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        homeOwnerName: getHomeOwnerName(state),
-        enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean
-    })
-);
-
-export default connector(EntryGalleryButtons);

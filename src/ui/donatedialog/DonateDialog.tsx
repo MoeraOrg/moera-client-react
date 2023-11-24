@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import QRCode from 'react-qr-code';
 import { Trans, useTranslation } from 'react-i18next';
@@ -26,12 +26,18 @@ function getPreferredFundraiserIndex(fundraisers: FundraiserInfo[], prefix: stri
     return index >= 0 ? index : 0;
 }
 
-type Props = ConnectedProps<typeof connector>;
+export default function DonateDialog() {
+    const name = useSelector((state: ClientState) => state.donateDialog.name);
+    const fullName = useSelector((state: ClientState) => state.donateDialog.fullName);
+    const fundraisers = useSelector((state: ClientState) => state.donateDialog.fundraisers);
+    const autoPreferred = useSelector((state: ClientState) =>
+        getSetting(state, "fundraiser.preferred.auto") as boolean);
+    const preferredPrefix = useSelector((state: ClientState) =>
+        getSetting(state, "fundraiser.preferred.prefix") as string);
+    const dispatch = useDispatch();
 
-function DonateDialog({
-    name, fullName, fundraisers, autoPreferred, preferredPrefix, closeDonateDialog, settingsUpdate
-}: Props) {
     const [fundraiserIndex, setFundraiserIndex] = useState<number>(0);
+
     const {t} = useTranslation();
 
     useEffect(
@@ -44,9 +50,11 @@ function DonateDialog({
         return null;
     }
 
+    const onClose = () => dispatch(closeDonateDialog());
+
     if (Browser.isAndroidGooglePlay()) {
         return (
-            <ModalDialog title={t("donate")} className="donate-dialog" onClose={closeDonateDialog}>
+            <ModalDialog title={t("donate")} className="donate-dialog" onClose={onClose}>
                 <div className="modal-body">
                     <Trans i18nKey="donations-android-prohibited">
                         {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
@@ -56,7 +64,7 @@ function DonateDialog({
                     </Trans>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="danger" onClick={closeDonateDialog}>{t("close")}</Button>
+                    <Button variant="danger" onClick={onClose}>{t("close")}</Button>
                 </div>
             </ModalDialog>
         );
@@ -69,15 +77,15 @@ function DonateDialog({
     const onClick = (index: number) => () => {
         setFundraiserIndex(index);
         if (autoPreferred) {
-            settingsUpdate([{
+            dispatch(settingsUpdate([{
                 name: CLIENT_SETTINGS_PREFIX + "fundraiser.preferred.prefix",
                 value: getSchemeOrDomain(fundraisers[index].href) ?? getSchemeOrDomain(fundraisers[index].qrCode)
-            }]);
+            }]));
         }
     }
 
     return (
-        <ModalDialog title={t("donate")} className="donate-dialog" onClose={closeDonateDialog}>
+        <ModalDialog title={t("donate")} className="donate-dialog" onClose={onClose}>
             <div className="modal-body">
                 <div className="recipient">
                     <Trans i18nKey="donate-to-recipient" values={{recipientName}}><span className="name"/></Trans>
@@ -116,16 +124,3 @@ function DonateDialog({
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        name: state.donateDialog.name,
-        fullName: state.donateDialog.fullName,
-        fundraisers: state.donateDialog.fundraisers,
-        autoPreferred: getSetting(state, "fundraiser.preferred.auto") as boolean,
-        preferredPrefix: getSetting(state, "fundraiser.preferred.prefix") as string
-    }),
-    { closeDonateDialog, settingsUpdate }
-);
-
-export default connector(DonateDialog);

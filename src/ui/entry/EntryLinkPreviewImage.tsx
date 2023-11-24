@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { PrivateMediaFileInfo } from "api";
@@ -14,15 +14,16 @@ import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "uti
 import { urlWithParameters } from "util/url";
 import "./EntryLinkPreviewImage.css";
 
-interface OwnProps {
+interface Props {
     nodeName: string | null;
     mediaFile?: PrivateMediaFileInfo | null;
     loading: boolean;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-function EntryLinkPreviewImage({mediaFile, loading, rootPage, carte}: Props) {
+export default function EntryLinkPreviewImage({nodeName, mediaFile, loading}: Props) {
+    const rootPage = useSelector((state: ClientState) =>
+        nodeName ? getNamingNameNodeUri(state, nodeName) : getNodeRootPage(state));
+    const carte = useSelector(getCurrentViewMediaCarte);
     const {t} = useTranslation();
 
     if (mediaFile == null) {
@@ -46,12 +47,3 @@ function EntryLinkPreviewImage({mediaFile, loading, rootPage, carte}: Props) {
                         className={vertical ? "vertical" : undefined}/>
     );
 }
-
-const connector = connect(
-    (state: ClientState, props: OwnProps) => ({
-        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
-        carte: getCurrentViewMediaCarte(state)
-    })
-);
-
-export default connector(EntryLinkPreviewImage);

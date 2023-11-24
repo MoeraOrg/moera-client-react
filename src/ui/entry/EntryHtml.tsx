@@ -1,13 +1,11 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { connect, ConnectedProps, Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import 'katex/dist/katex.min.css';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
-import { ClientState } from "state/state";
 import store from "state/store";
 import { getPostingBodyFontMagnitude } from "state/settings/selectors";
-import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
 import NodeNameMention from "ui/nodename/NodeNameMention";
 import Jump from "ui/navigation/Jump";
 import EntryImage from "ui/entry/EntryImage";
@@ -18,7 +16,7 @@ import { isNumericString } from "util/misc";
 const InlineMath = React.lazy(() => import("ui/katex/InlineMath"));
 const BlockMath = React.lazy(() => import("ui/katex/BlockMath"));
 
-type Props = {
+interface Props {
     className?: string;
     postingId?: string | null;
     commentId?: string | null;
@@ -26,12 +24,11 @@ type Props = {
     nodeName?: string | null;
     media?: MediaAttachment[] | null;
     onClick?: (event: React.MouseEvent) => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function EntryHtml({
-    className, postingId, commentId, html, nodeName, media, onClick, fontMagnitude, initFromLocation, goToLocation,
-    newLocation
-}: Props) {
+export default function EntryHtml({className, postingId, commentId, html, nodeName, media, onClick}: Props) {
+    const fontMagnitude = useSelector(getPostingBodyFontMagnitude);
+
     const dom = useRef<HTMLDivElement>(null);
     const mediaMap: Map<string, PrivateMediaFileInfo> = new Map(
         (media ?? [])
@@ -128,8 +125,6 @@ function EntryHtml({
         });
     }
 
-    const onClickLink = (event: MouseEvent) => interceptLinkClick(event, initFromLocation, newLocation, goToLocation);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => hydrate(), [html]);
 
@@ -143,7 +138,7 @@ function EntryHtml({
         root.querySelectorAll("a").forEach(node => {
             const name = node.getAttribute("data-nodename");
             if (!name) {
-                node.addEventListener("click", onClickLink);
+                node.addEventListener("click", interceptLinkClick);
             }
         });
 
@@ -151,21 +146,12 @@ function EntryHtml({
             root.querySelectorAll("a").forEach(node => {
                 const name = node.getAttribute("data-nodename");
                 if (!name) {
-                    node.removeEventListener("click", onClickLink);
+                    node.removeEventListener("click", interceptLinkClick);
                 }
             });
         }
-    });
+    }, [html]);
 
     return <div ref={dom} className={className} style={{fontSize: `${fontMagnitude}%`}} onClick={onClick}
                 dangerouslySetInnerHTML={{__html: html ?? ""}}/>
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        fontMagnitude: getPostingBodyFontMagnitude(state)
-    }),
-    { initFromLocation, goToLocation, newLocation }
-);
-
-export default connector(EntryHtml);

@@ -1,12 +1,10 @@
 import React, { MouseEventHandler, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import * as URI from 'uri-js';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
-import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
 import { DeleteButton } from "ui/control";
 import EntryLinkPreviewImage from "ui/entry/EntryLinkPreviewImage";
 import EntryLinkPreviewEditDialog, { EntryLinkPreviewEditValues } from "ui/entry/EntryLinkPreviewEditDialog";
@@ -89,18 +87,16 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
     );
 }
 
-type FrameProps = {
+interface FrameProps {
     editing?: boolean;
     className: string;
     url: string;
     onEdit?: MouseEventHandler;
     onDelete?: MouseEventHandler;
     children: React.ReactNode;
-} & ConnectedProps<typeof frameConnector>;
+}
 
-function FrameImpl({
-    editing, className, url, children, onEdit, onDelete, initFromLocation, newLocation, goToLocation
-}: FrameProps) {
+function Frame({editing, className, url, children, onEdit, onDelete}: FrameProps) {
     if (editing) {
         return (
             <div className={className} title="Edit">
@@ -110,21 +106,13 @@ function FrameImpl({
             </div>
         );
     } else {
-        const onClick = (event: React.MouseEvent) =>
-            interceptLinkClick(event, initFromLocation, newLocation, goToLocation);
+        const onClick = (event: React.MouseEvent) => interceptLinkClick(event);
 
         return (
             <a className={className} href={url} onClick={onClick}>{children}</a>
         );
     }
 }
-
-const frameConnector = connect(
-    null,
-    { initFromLocation, newLocation, goToLocation }
-);
-
-const Frame = frameConnector(FrameImpl);
 
 interface EditButtonProps {
     onClick?: MouseEventHandler;

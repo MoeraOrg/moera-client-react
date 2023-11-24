@@ -1,11 +1,12 @@
 import React from 'react';
 import * as URI from 'uri-js';
 
+import { goToLocation, initFromLocation, newLocation } from "state/navigation/actions";
 import { Browser } from "ui/browser";
 import { rootUrl } from "util/url";
+import store from "state/store";
 
-export function interceptLinkClick(event: MouseEvent | React.MouseEvent, initFromLocation: any, newLocation: any,
-                                   goToLocation: any) {
+export function interceptLinkClick(event: MouseEvent | React.MouseEvent) {
     if (event.currentTarget == null) {
         return;
     }
@@ -19,6 +20,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent, initFro
     }
     fetch(URI.serialize(parts), {
         method: "GET",
+        // FIXME without X-Accept-Moera header this request redirects to web.moera.org and don't return X-Moera
         referrerPolicy: "no-referrer"
     }).then(response => {
         const headers = response.headers;
@@ -27,10 +29,10 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent, initFro
             const {name, rootLocation, path = null, query = null, hash = null} =
                 Browser.getLocation(rootPage, parts.path, parts.query, parts.fragment, headers.get("X-Moera"));
             if (rootLocation != null && rootLocation !== Browser.getRootLocation()) {
-                newLocation();
-                initFromLocation(name, rootLocation, path, query, hash);
+                store.dispatch(newLocation());
+                store.dispatch(initFromLocation(name ?? null, rootLocation, path, query, hash));
             } else {
-                goToLocation(path, query, hash);
+                store.dispatch(goToLocation(path, query, hash));
             }
         } else {
             window.location.href = href;

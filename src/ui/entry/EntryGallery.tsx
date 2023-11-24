@@ -1,21 +1,20 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { MediaAttachment, PrivateMediaFileInfo } from "api";
-import { ClientState } from "state/state";
 import { getFeedWidth } from "state/settings/selectors";
 import EntryImage from "ui/entry/EntryImage";
 import EntryGalleryExpandButton from "ui/entry/EntryGalleryExpandButton";
 import "./EntryGallery.css";
 
-type Props = {
+interface Props {
     postingId?: string;
     commentId?: string | null;
     nodeName: string | null;
     media: MediaAttachment[] | null;
     onCollapse?: () => void;
     onExpand?: () => void;
-} & ConnectedProps<typeof connector>;
+}
 
 function singleImageHeight(image: PrivateMediaFileInfo, feedWidth: number, isComment: boolean): number {
     const maxWidth = isComment ? (feedWidth - 65) / 2 : feedWidth - 25;
@@ -30,7 +29,9 @@ function majorOrientation(images: PrivateMediaFileInfo[]) {
     return balance >= 0 ? "vertical" : "horizontal";
 }
 
-function EntryGallery({postingId, commentId, nodeName, media, onCollapse, onExpand, feedWidth}: Props) {
+export default function EntryGallery({postingId, commentId, nodeName, media, onCollapse, onExpand}: Props) {
+    const feedWidth = useSelector(getFeedWidth);
+
     if (media == null || media.length === 0) {
         return null;
     }
@@ -141,11 +142,3 @@ function EntryGallery({postingId, commentId, nodeName, media, onCollapse, onExpa
             );
     }
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        feedWidth: getFeedWidth(state)
-    })
-);
-
-export default connector(EntryGallery);

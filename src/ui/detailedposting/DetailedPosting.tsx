@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { PostingInfo } from "api";
@@ -29,17 +29,19 @@ import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
 import { getPageHeaderHeight } from "util/misc";
 
-interface OwnProps {
+interface Props {
     story: MinimalStoryInfo;
     posting: PostingInfo;
     deleting?: boolean | null;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function DetailedPosting({story, posting, deleting}: Props) {
+    const loadedAttached = useSelector((state: ClientState) => state.detailedPosting.loadedAttached);
+    const galleryExpanded = useSelector((state: ClientState) => state.detailedPosting.galleryExpanded);
+    const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
+    const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const dispatch = useDispatch();
 
-function DetailedPosting({
-    story, posting, deleting, loadedAttached, galleryExpanded, postingEditable, isSheriff, detailedPostingLoadAttached
-}: Props) {
     const [expanded, setExpanded] = useState<boolean>(galleryExpanded);
 
     if (deleting) {
@@ -53,7 +55,7 @@ function DetailedPosting({
     const onExpand = () => {
         setExpanded(true);
         if (!loadedAttached) {
-            detailedPostingLoadAttached();
+            dispatch(detailedPostingLoadAttached());
         }
         scrollToPostingGallery();
     }
@@ -112,15 +114,3 @@ function scrollToPostingGallery() {
         window.scrollBy(0, y - getPageHeaderHeight());
     });
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        loadedAttached: state.detailedPosting.loadedAttached,
-        galleryExpanded: state.detailedPosting.galleryExpanded,
-        postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
-        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE
-    }),
-    { detailedPostingLoadAttached }
-);
-
-export default connector(DetailedPosting);

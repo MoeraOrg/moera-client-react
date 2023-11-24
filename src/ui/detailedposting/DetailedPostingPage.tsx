@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
@@ -47,9 +47,11 @@ function getFeedAndStory(posting: PostingInfo | null, t: TFunction): {
     return {story, href, feedTitle};
 }
 
-type Props = ConnectedProps<typeof connector>;
-
-function DetailedPostingPage({loading, deleting, posting, googlePlayHiding}: Props) {
+export default function DetailedPostingPage() {
+    const loading = useSelector((state: ClientState) => state.detailedPosting.loading);
+    const deleting = useSelector(isDetailedPostingBeingDeleted);
+    const posting = useSelector(getDetailedPosting);
+    const googlePlayHiding = useSelector(isGooglePlayHiding);
     const {t} = useTranslation();
 
     const {story = null, href, feedTitle} = getFeedAndStory(posting, t);
@@ -82,14 +84,3 @@ function DetailedPostingPage({loading, deleting, posting, googlePlayHiding}: Pro
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loading: state.detailedPosting.loading,
-        deleting: isDetailedPostingBeingDeleted(state),
-        posting: getDetailedPosting(state),
-        googlePlayHiding: isGooglePlayHiding(state)
-    })
-);
-
-export default connector(DetailedPostingPage);

@@ -11,7 +11,7 @@ interface Props {
     feedTitle: string;
 }
 
-const DetailedPostingPageHeader = ({story, href, feedTitle}: Props) => {
+export default function DetailedPostingPageHeader({story, href, feedTitle}: Props) {
     const {t} = useTranslation();
 
     if (story == null) {
@@ -28,5 +28,3 @@ const DetailedPostingPageHeader = ({story, href, feedTitle}: Props) => {
         </PageHeader>
     );
 }
-
-export default DetailedPostingPageHeader;

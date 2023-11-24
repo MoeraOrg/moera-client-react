@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { PrivateMediaFileInfo } from "api";
@@ -14,7 +14,7 @@ import { mediaImagePreview, mediaImageSize, mediaSizes, mediaSources } from "uti
 import { urlWithParameters, ut } from "util/url";
 import "./EntryImage.css";
 
-interface OwnProps {
+interface Props {
     postingId?: string | null;
     commentId?: string | null;
     nodeName: string | null;
@@ -27,10 +27,14 @@ interface OwnProps {
     count?: number;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function EntryImage({
+    postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count
+}: Props) {
+    const rootPage = useSelector((state: ClientState) =>
+        nodeName ? getNamingNameNodeUri(state, nodeName) : getNodeRootPage(state));
+    const carte = useSelector(getCurrentViewMediaCarte);
+    const dispatch = useDispatch();
 
-function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, alt, title, flex, count, rootPage,
-                     carte, openLightBox}: Props) {
     const isPublic = (mediaFile.operations?.view ?? "public") === "public";
     const auth = !isPublic && carte != null ? "carte:" + carte : null;
     const mediaLocation = urlWithParameters(rootPage + "/media/" + mediaFile.path, {auth});
@@ -41,7 +45,7 @@ function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, a
 
     const onNear = () => {
         if (postingId != null) {
-            openLightBox(nodeName ?? "", postingId, commentId ?? null, mediaFile.id);
+            dispatch(openLightBox(nodeName ?? "", postingId, commentId ?? null, mediaFile.id));
         }
     }
 
@@ -63,13 +67,3 @@ function EntryImage({postingId, commentId, nodeName, mediaFile, width, height, a
         </Jump>
     );
 }
-
-const connector = connect(
-    (state: ClientState, props: OwnProps) => ({
-        rootPage: props.nodeName ? getNamingNameNodeUri(state, props.nodeName) : getNodeRootPage(state),
-        carte: getCurrentViewMediaCarte(state)
-    }),
-    { openLightBox }
-);
-
-export default connector(EntryImage);
