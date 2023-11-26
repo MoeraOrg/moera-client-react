@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { getToken } from "state/node/selectors";
@@ -8,22 +8,14 @@ import { getCurrentAllCarte } from "state/cartes/selectors";
 import Events from "ui/events/Events";
 import { nodeUrlToEvents, nodeUrlToLocation } from "util/url";
 
-type Props = ConnectedProps<typeof connector>;
+export default function ReceiverEvents() {
+    const receiverNodeUri = useSelector(getReceiverNodeUri);
+    const nodeEvents = nodeUrlToEvents(receiverNodeUri);
+    const token = useSelector((state: ClientState) => getToken(state, nodeUrlToLocation(receiverNodeUri)));
+    const carte = useSelector(getCurrentAllCarte);
+    const sourceNode = useSelector(getReceiverNodeName);
 
-const ReceiverEvents = ({nodeEvents, token, carte, sourceNode}: Props) => (
-    <Events location={nodeEvents} token={token} carte={carte} prefix="RECEIVER" sourceNode={sourceNode}/>
-);
-
-const connector = connect(
-    (state: ClientState) => {
-        const receiverNodeUri = getReceiverNodeUri(state);
-        return ({
-            nodeEvents: nodeUrlToEvents(receiverNodeUri),
-            token: getToken(state, nodeUrlToLocation(receiverNodeUri)),
-            carte: getCurrentAllCarte(state),
-            sourceNode: getReceiverNodeName(state)
-        });
-    }
-);
-
-export default connector(ReceiverEvents);
+    return (
+        <Events location={nodeEvents} token={token} carte={carte} prefix="RECEIVER" sourceNode={sourceNode}/>
+    );
+}

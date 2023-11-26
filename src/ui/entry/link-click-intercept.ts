@@ -20,7 +20,7 @@ export function interceptLinkClick(event: MouseEvent | React.MouseEvent) {
     }
     fetch(URI.serialize(parts), {
         method: "GET",
-        // FIXME without X-Accept-Moera header this request redirects to web.moera.org and don't return X-Moera
+        // FIXME without X-Accept-Moera header this request redirects to web.moera.org and doesn't return X-Moera
         referrerPolicy: "no-referrer"
     }).then(response => {
         const headers = response.headers;

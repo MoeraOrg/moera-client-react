@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
@@ -7,9 +7,12 @@ import { errorDismiss } from "state/error/actions";
 import { CloseButton } from "ui/control";
 import "./ErrorPane.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function ErrorPane() {
+    const message = useSelector((state: ClientState) => state.error.message);
+    const messageVerbose = useSelector((state: ClientState) => state.error.messageVerbose);
+    const visible = useSelector((state: ClientState) => state.error.visible);
+    const dispatch = useDispatch();
 
-function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
     useEffect(() => {
         if (visible && message) {
             console.error(messageVerbose);
@@ -41,14 +44,7 @@ function ErrorPane({message, messageVerbose, visible, errorDismiss}: Props) {
                     )}
                 </>
             }
-            <CloseButton onClick={() => errorDismiss()}/>
+            <CloseButton onClick={() => dispatch(errorDismiss())}/>
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => state.error,
-    { errorDismiss }
-)
-
-export default connector(ErrorPane);

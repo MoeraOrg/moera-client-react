@@ -1,12 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
 import { connectToHome } from "state/home/actions";
-import { getNodeRootLocation } from "state/node/selectors";
 import { InputField } from "ui/control/field";
 import ConnectDialogModal from "ui/connectdialog/ConnectDialogModal";
 import store from "state/store";
