@@ -2,13 +2,16 @@ import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
+import { getHomeFriendGroups, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { isLightBoxShown } from "state/lightbox/selectors";
+import { getNodeCard } from "state/nodecards/selectors";
+import { getSetting } from "state/settings/selectors";
 import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import SourceDialog from "ui/sourcedialog/SourceDialog";
 import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialog";
-import { getSetting } from "state/settings/selectors";
 import { NameDisplayMode } from "ui/types";
+import { getPosting } from "state/postings/selectors";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
 const LightBox = React.lazy(() => import("ui/lightbox/LightBox"));
@@ -30,11 +33,22 @@ export default function NodeDialogs() {
     }
     const showSourceDialog = useSelector((state: ClientState) => state.sourceDialog.show);
     const showLightBox = useSelector(isLightBoxShown);
-    const showImageEditDialog = useSelector((state: ClientState) => state.imageEditDialog.show);
+    const imageEditDialog = {
+        show: useSelector((state: ClientState) => state.imageEditDialog.show),
+        homeOwnerName: useSelector(getHomeOwnerName),
+        homeOwnerFullName: useSelector(getHomeOwnerFullName),
+        posting: useSelector((state: ClientState) => getPosting(state, state.imageEditDialog.media?.postingId ?? null)),
+        smileysEnabled: useSelector((state: ClientState) => getSetting(state, "posting.smileys.enabled") as boolean)
+    };
     const showDonateDialog = useSelector((state: ClientState) => state.donateDialog.show);
     const showEntryCopyTextDialog = useSelector((state: ClientState) => state.entryCopyTextDialog.show);
     const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
-    const showFriendGroupsDialog = useSelector((state: ClientState) => state.friendGroupsDialog.show);
+    const friendGroupsDialog = {
+        show: useSelector((state: ClientState) => state.friendGroupsDialog.show),
+        nodeName: useSelector((state: ClientState) => state.friendGroupsDialog.nodeName),
+        nodeCard: useSelector((state: ClientState) => getNodeCard(state, state.friendGroupsDialog.nodeName)),
+        availableGroups: useSelector(getHomeFriendGroups)
+    };
     const askDialog = {
         show: useSelector((state: ClientState) => state.askDialog.show),
         nodeName: useSelector((state: ClientState) => state.askDialog.nodeName)
@@ -66,7 +80,11 @@ export default function NodeDialogs() {
                 {showLightBox && <LightBox/>}
             </Suspense>
             <Suspense fallback={null}>
-                {showImageEditDialog && <ImageEditDialog/>}
+                {imageEditDialog.show &&
+                    <ImageEditDialog homeOwnerName={imageEditDialog.homeOwnerName}
+                                     homeOwnerFullName={imageEditDialog.homeOwnerFullName}
+                                     posting={imageEditDialog.posting} smileysEnabled={imageEditDialog.smileysEnabled}/>
+                }
             </Suspense>
             <Suspense fallback={null}>
                 {showDonateDialog && <DonateDialog/>}
@@ -76,7 +94,10 @@ export default function NodeDialogs() {
                 {showPeopleHideDialog && <PeopleHideDialog/>}
             </Suspense>
             <Suspense fallback={null}>
-                {showFriendGroupsDialog && <FriendGroupsDialog/>}
+                {friendGroupsDialog.show &&
+                    <FriendGroupsDialog nodeName={friendGroupsDialog.nodeName} nodeCard={friendGroupsDialog.nodeCard}
+                                        availableGroups={friendGroupsDialog.availableGroups}/>
+                }
             </Suspense>
             <Suspense fallback={null}>
                 {askDialog.show && <AskDialog nodeName={askDialog.nodeName}/>}

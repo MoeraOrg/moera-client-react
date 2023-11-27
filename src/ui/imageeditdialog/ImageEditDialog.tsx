@@ -1,24 +1,28 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
 import { ClientState } from "state/state";
-import { getPosting } from "state/postings/selectors";
 import { getNamingNameNodeUri } from "state/naming/selectors";
 import { getNodeRootPage } from "state/node/selectors";
-import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
-import { getSetting } from "state/settings/selectors";
+import { ExtPostingInfo } from "state/postings/state";
+import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { RichTextField } from "ui/control/field";
 import { mediaImagePreview, mediaImageSize } from "util/media-images";
 import { replaceSmileys } from "util/text";
 import { urlWithParameters } from "util/url";
+import store from "state/store";
 import "./ImageEditDialog.css";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    homeOwnerName: string | null;
+    homeOwnerFullName: string | null;
+    posting: ExtPostingInfo | null;
+    smileysEnabled: boolean;
+}
 
 interface Values {
     caption: RichTextValue;
@@ -26,21 +30,24 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ImageEditDialog(props: Props) {
-    const {media, rootPage, carte, loading, posting, saving, smileysEnabled, closeImageEditDialog, resetForm} = props;
-
+function ImageEditDialog({posting, smileysEnabled}: Props) {
+    const media = useSelector((state: ClientState) => state.imageEditDialog.media);
+    const rootPage = useSelector(
+        (state: ClientState) => state.imageEditDialog.nodeName
+            ? getNamingNameNodeUri(state, state.imageEditDialog.nodeName)
+            : getNodeRootPage(state)
+    );
+    const carte = useSelector(getCurrentViewMediaCarte);
+    const loading = useSelector((state: ClientState) => state.imageEditDialog.loading);
+    const saving = useSelector((state: ClientState) => state.imageEditDialog.saving);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        resetForm({values: logic.mapPropsToValues(props)});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [posting, resetForm]); // 'props' are missing on purpose
 
     if (media == null) {
         return null;
     }
 
-    const onClose = () => closeImageEditDialog();
+    const onClose = () => dispatch(closeImageEditDialog());
 
     const auth = carte != null ? "carte:" + carte : null;
     const src = mediaImagePreview(urlWithParameters(rootPage + "/media/" + media.path, {auth}), 800);
@@ -75,34 +82,17 @@ const logic = {
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");
-        formik.props.imageEditDialogPost({
+        store.dispatch(imageEditDialogPost({
             ownerName: formik.props.homeOwnerName,
             ownerFullName: formik.props.homeOwnerFullName,
             bodySrc: JSON.stringify({
                 text: this._replaceSmileys(formik.props.smileysEnabled, values.caption.text.trim())
             }),
             bodySrcFormat: formik.props.posting?.bodySrcFormat || "markdown"
-        });
+        }));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        homeOwnerName: getHomeOwnerName(state),
-        homeOwnerFullName: getHomeOwnerFullName(state),
-        media: state.imageEditDialog.media,
-        rootPage: state.imageEditDialog.nodeName
-            ? getNamingNameNodeUri(state, state.imageEditDialog.nodeName)
-            : getNodeRootPage(state),
-        carte: getCurrentViewMediaCarte(state),
-        loading: state.imageEditDialog.loading,
-        posting: getPosting(state, state.imageEditDialog.media?.postingId ?? null),
-        saving: state.imageEditDialog.saving,
-        smileysEnabled: getSetting(state, "posting.smileys.enabled") as boolean
-    }),
-    { closeImageEditDialog, imageEditDialogPost }
-);
-
-export default connector(withFormik(logic)(ImageEditDialog));
+export default withFormik(logic)(ImageEditDialog);

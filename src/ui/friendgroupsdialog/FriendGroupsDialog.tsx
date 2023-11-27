@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { tGender } from "i18n";
 import { FriendGroupInfo, PrincipalValue } from "api";
 import { ClientState } from "state/state";
-import { getHomeFriendGroups } from "state/home/selectors";
-import { getNodeCard } from "state/nodecards/selectors";
+import { NodeCardState } from "state/nodecards/state";
 import { getSetting } from "state/settings/selectors";
 import { closeFriendGroupsDialog, nodeChangeFriendGroups } from "state/friendgroupsdialog/actions";
 import { peopleSelectedChangeFriendGroups } from "state/people/actions";
@@ -15,9 +14,14 @@ import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
+import store from "state/store";
 import "./FriendGroupsDialog.css";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    nodeName: string | null;
+    nodeCard: NodeCardState | null;
+    availableGroups: FriendGroupInfo[];
+}
 
 type TitledFriendGroupInfo = Omit<FriendGroupInfo, "title"> & { title: string };
 
@@ -32,15 +36,12 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function FriendGroupsDialog(props: Props) {
-    const {nodeName, nodeCard, changing, nameDisplayMode, closeFriendGroupsDialog, values, setFieldValue} = props;
+function FriendGroupsDialog({nodeName, nodeCard, values, setFieldValue}: Props) {
+    const changing = useSelector((state: ClientState) => state.friendGroupsDialog.changing);
+    const nameDisplayMode = useSelector((state: ClientState) =>
+        getSetting(state, "full-name.display") as NameDisplayMode);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        const values = friendGroupsDialogLogic.mapPropsToValues(props);
-        props.resetForm({values});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [nodeName]); // 'props' are missing on purpose
 
     const name = formatFullName(nodeName, nodeCard?.details.profile.fullName, nameDisplayMode);
     const gender = tGender(nodeCard?.details.profile.gender);
@@ -61,9 +62,11 @@ function FriendGroupsDialog(props: Props) {
         }
     }
 
+    const onClose = () => dispatch(closeFriendGroupsDialog());
+
     return (
         <ModalDialog title={nodeName != null ? t("change-friend-groups", {name, gender}) : t("change-groups")}
-                     className="friend-groups-dialog" onClose={closeFriendGroupsDialog}>
+                     className="friend-groups-dialog" onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     {values.availableGroups.map(fg =>
@@ -88,7 +91,7 @@ function FriendGroupsDialog(props: Props) {
                     <Button variant="outline-secondary" size="sm" onClick={onAddGroup}>{t("add-group")}</Button>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeFriendGroupsDialog}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={changing}>{t("change")}</Button>
                 </div>
             </Form>
@@ -126,28 +129,17 @@ const friendGroupsDialogLogic = {
             const view: PrincipalValue = prevGroups != null && prevGroups.length > 0
                 ? (prevGroups[0].operations?.view ?? "public")
                 : "public";
-            formik.props.nodeChangeFriendGroups(formik.props.nodeName, values.groups, view,
-                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView);
+            store.dispatch(nodeChangeFriendGroups(formik.props.nodeName, values.groups, view,
+                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView));
         } else {
-            formik.props.closeFriendGroupsDialog();
+            store.dispatch(closeFriendGroupsDialog());
             const excludedGroups = values.touchedGroups.filter(g => !values.addedGroups.includes(g));
-            formik.props.peopleSelectedChangeFriendGroups(values.groups, excludedGroups,
-                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView);
+            store.dispatch(peopleSelectedChangeFriendGroups(values.groups, excludedGroups,
+                values.addedGroups.map(g => parseInt(g)), values.addedGroupTitles, values.addedGroupView));
         }
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        nodeName: state.friendGroupsDialog.nodeName,
-        nodeCard: getNodeCard(state, state.friendGroupsDialog.nodeName),
-        changing: state.friendGroupsDialog.changing,
-        availableGroups: getHomeFriendGroups(state),
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
-    { closeFriendGroupsDialog, nodeChangeFriendGroups, peopleSelectedChangeFriendGroups }
-);
-
-export default connector(withFormik(friendGroupsDialogLogic)(FriendGroupsDialog));
+export default withFormik(friendGroupsDialogLogic)(FriendGroupsDialog);

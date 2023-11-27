@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
@@ -9,28 +9,22 @@ import { ClientState } from "state/state";
 import { closeFriendGroupAddDialog, friendGroupAdd } from "state/friendgroupadddialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, PrincipalField } from "ui/control/field";
-
-type OuterProps = ConnectedProps<typeof connector>;
+import store from "state/store";
 
 interface Values {
     title: string;
     view: PrincipalValue;
 }
 
-type Props = OuterProps & FormikProps<Values>;
-
-function FriendGroupAddDialog(props: Props) {
-    const {submitting, closeFriendGroupAddDialog} = props;
+function FriendGroupAddDialog() {
+    const submitting = useSelector((state: ClientState) => state.friendGroupAddDialog.submitting);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        const values = friendGroupAddDialogLogic.mapPropsToValues(props);
-        props.resetForm({values});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 'props' are missing on purpose
+    const onClose = () => dispatch(closeFriendGroupAddDialog());
 
     return (
-        <ModalDialog title={t("add-friend-group")} onClose={closeFriendGroupAddDialog}>
+        <ModalDialog title={t("add-friend-group")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <InputField name="title" title={t("name")} maxLength={63}/>
@@ -42,7 +36,7 @@ function FriendGroupAddDialog(props: Props) {
                                     }} long/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeFriendGroupAddDialog}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={submitting}>{t("add-group")}</Button>
                 </div>
             </Form>
@@ -52,7 +46,7 @@ function FriendGroupAddDialog(props: Props) {
 
 const friendGroupAddDialogLogic = {
 
-    mapPropsToValues: (props: OuterProps): Values => ({
+    mapPropsToValues: (): Values => ({
         title: "",
         view: "public"
     }),
@@ -61,18 +55,11 @@ const friendGroupAddDialogLogic = {
         title: yup.string().trim().required("must-not-empty")
     }),
 
-    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.friendGroupAdd(values.title, values.view);
+    handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
+        store.dispatch(friendGroupAdd(values.title, values.view));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        submitting: state.friendGroupAddDialog.submitting
-    }),
-    { closeFriendGroupAddDialog, friendGroupAdd }
-);
-
-export default connector(withFormik(friendGroupAddDialogLogic)(FriendGroupAddDialog));
+export default withFormik(friendGroupAddDialogLogic)(FriendGroupAddDialog);
