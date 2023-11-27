@@ -1,20 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
+import { Avatar } from "ui/control";
+import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";
+import PageShareButton from "ui/page/PageShareButton";
 import FeedSubscribeButton from "ui/feed/FeedSubscribeButton";
 import FeedGotoButton from "ui/feed/FeedGotoButton";
 import FeedTopButton from "ui/feed/FeedTopButton";
-import PageShareButton from "ui/page/PageShareButton";
-import { Avatar } from "ui/control";
-import Jump from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
 import { getPageHeaderHeight } from "util/misc";
 
-type Props = {
+interface Props {
     feedName: string;
     title: string;
     empty?: boolean;
@@ -24,10 +23,14 @@ type Props = {
     totalAfterTop: number;
     notViewed: number;
     notViewedMoment: number | null;
-} & ConnectedProps<typeof connector>;
+}
 
-function FeedPageHeader({feedName, title, empty = false, shareable = false, atTop, atBottom, totalAfterTop, notViewed,
-                         notViewedMoment, avatar, ownerName}: Props) {
+export default function FeedPageHeader({
+    feedName, title, empty = false, shareable = false, atTop, atBottom, totalAfterTop, notViewed, notViewedMoment
+}: Props) {
+    const avatar = useSelector(getOwnerAvatar);
+    const ownerName = useSelector(getOwnerName);
+
     const [avatarVisible, setAvatarVisible] = useState(window.scrollY >= getPageHeaderHeight());
     const {t} = useTranslation();
 
@@ -63,12 +66,3 @@ function FeedPageHeader({feedName, title, empty = false, shareable = false, atTo
         </PageHeader>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        avatar: getOwnerAvatar(state),
-        ownerName: getOwnerName(state)
-    })
-);
-
-export default connector(FeedPageHeader);

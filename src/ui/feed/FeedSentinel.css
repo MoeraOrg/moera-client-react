@@ -2,9 +2,16 @@
     text-align: center;
     font-size: large;
     font-weight: bold;
+    height: 1.6em;
     color: var(--bs-cyan);
-    border: 1px var(--bs-cyan) solid;
+    border: .1em var(--body-background) solid;
+    border-radius: .5em;
+    background-color: var(--bs-gray-100);
     cursor: pointer;
+}
+
+.feed-sentinel.bottom {
+    margin-bottom: 1rem;
 }
 
 .feed-sentinel:hover {

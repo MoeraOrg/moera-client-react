@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { getOwnerCard, getOwnerName, isAtHomeNode, isOwnerNameSet } from "state/node/selectors";
@@ -7,14 +7,19 @@ import { isConnectedToHome, isHomeOwnerNameSet } from "state/home/selectors";
 import { isFeedGeneralLoading, isFeedGeneralReady } from "state/feeds/selectors";
 import { Loading, SubscribeButton } from "ui/control";
 
-interface OwnProps {
+interface Props {
     feedName: string;
     small?: boolean | null;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function FeedSubscribeButton({feedName, small}: Props) {
+    const show = useSelector((state: ClientState) =>
+        isOwnerNameSet(state) && !isAtHomeNode(state) && isConnectedToHome(state) && isHomeOwnerNameSet(state));
+    const ownerName = useSelector(getOwnerName);
+    const generalReady = useSelector((state: ClientState) => isFeedGeneralReady(state, feedName));
+    const generalLoading = useSelector((state: ClientState) => isFeedGeneralLoading(state, feedName));
+    const subscription = useSelector((state: ClientState) => getOwnerCard(state)?.subscription);
 
-function FeedSubscribeButton({feedName, small, show, ownerName, generalReady, generalLoading, subscription}: Props) {
     if (ownerName == null || !show) {
         return null;
     }
@@ -28,15 +33,3 @@ function FeedSubscribeButton({feedName, small, show, ownerName, generalReady, ge
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        show: isOwnerNameSet(state) && !isAtHomeNode(state) && isConnectedToHome(state) && isHomeOwnerNameSet(state),
-        ownerName: getOwnerName(state),
-        generalReady: isFeedGeneralReady(state, ownProps.feedName),
-        generalLoading: isFeedGeneralLoading(state, ownProps.feedName),
-        subscription: getOwnerCard(state)?.subscription
-    })
-);
-
-export default connector(FeedSubscribeButton);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
@@ -11,14 +11,15 @@ import { feedScrollToAnchor } from "state/feeds/actions";
 import { Browser } from "ui/browser";
 import { Button, CloseButton } from "ui/control";
 
-interface OwnProps {
+interface Props {
     feedName: string;
     atBottom: boolean;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function FeedGotoButton({feedName, atBottom}: Props) {
+    const timestamp = useSelector((state: ClientState) => getFeedAtTimestamp(state, feedName));
+    const dispatch = useDispatch();
 
-function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Props) {
     const [active, setActive] = useState<boolean>(false);
     const {t} = useTranslation();
 
@@ -31,11 +32,11 @@ function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Pro
         if (isNaN(moment)) {
             return;
         }
-        feedScrollToAnchor(feedName, moment);
+        dispatch(feedScrollToAnchor(feedName, moment));
     };
 
     const toBottom = (e: React.MouseEvent) => {
-        feedScrollToAnchor(feedName, Number.MIN_SAFE_INTEGER);
+        dispatch(feedScrollToAnchor(feedName, Number.MIN_SAFE_INTEGER));
         e.preventDefault();
     };
 
@@ -62,12 +63,3 @@ function FeedGotoButton({feedName, atBottom, timestamp, feedScrollToAnchor}: Pro
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        timestamp: getFeedAtTimestamp(state, ownProps.feedName)
-    }),
-    { feedScrollToAnchor }
-);
-
-export default connector(FeedGotoButton);

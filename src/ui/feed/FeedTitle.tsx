@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
@@ -10,9 +10,12 @@ import Jump from "ui/navigation/Jump";
 import { mentionName } from "util/misc";
 import "./FeedTitle.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const FeedTitle = ({nodeName, fullName, title, avatar, fundraisers}: Props) => {
+export default function FeedTitle() {
+    const nodeName = useSelector(getOwnerName);
+    const fullName = useSelector(getOwnerFullName);
+    const title = useSelector(getOwnerTitle);
+    const avatar = useSelector(getOwnerAvatar);
+    const fundraisers = useSelector((state: ClientState) => state.profile.profile.fundraisers);
     const {t} = useTranslation();
 
     return (
@@ -24,7 +27,8 @@ const FeedTitle = ({nodeName, fullName, title, avatar, fundraisers}: Props) => {
                 <div className="body">
                     <div className="full-name">
                         {fullName || NodeName.shorten(nodeName)}
-                        <DonateButton name={nodeName} fullName={fullName} fundraisers={fundraisers ?? null} styles="icon"/>
+                        <DonateButton name={nodeName} fullName={fullName} fundraisers={fundraisers ?? null}
+                                      styles="icon"/>
                     </div>
                     <div className="mention">{mentionName(nodeName)}</div>
                     {title && <div className="title">{title}</div>}
@@ -33,15 +37,3 @@ const FeedTitle = ({nodeName, fullName, title, avatar, fundraisers}: Props) => {
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        nodeName: getOwnerName(state),
-        fullName: getOwnerFullName(state),
-        title: getOwnerTitle(state),
-        avatar: getOwnerAvatar(state),
-        fundraisers: state.profile.profile.fundraisers
-    })
-);
-
-export default connector(FeedTitle);

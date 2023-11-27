@@ -134,14 +134,12 @@ export default function Events({location, token, carte, prefix, sourceNode, onWa
     }, []);
 
     useEffect(() => {
-        console.log(`Changed data for ${prefix} (${sourceNode})`);
         disconnect();
         connect();
     }, [location, homeRoot, token, disconnect, connect]);
 
     useEffect(() => {
         if (currentCarte.current == null && carte != null) {
-            console.log(`Set carte for ${prefix} (${sourceNode})`);
             disconnect();
             connect();
         }
@@ -166,7 +164,6 @@ export default function Events({location, token, carte, prefix, sourceNode, onWa
         if (pingReceived.current) {
             pingReceived.current = false;
         } else {
-            console.log(`Not received PING from ${prefix} (${sourceNode})`);
             disconnect();
             connect();
         }

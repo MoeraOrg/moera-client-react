@@ -1,8 +1,8 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 import { createSelector } from 'reselect';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
@@ -24,259 +24,125 @@ import FeedSentinel from "ui/feed/FeedSentinel";
 import { getPageHeaderHeight } from "util/misc";
 import "./FeedPage.css";
 
-function postingMoment(posting: HTMLElement): number {
-    return posting.dataset.moment != null ? parseInt(posting.dataset.moment) : 0;
-}
-
-interface OwnProps {
+interface Props {
     feedName: string;
     visible: boolean;
     title: string;
     shareable?: boolean;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector> & WithTranslation;
+export default function FeedPage({feedName, visible, title, shareable}: Props) {
+    const loadingFuture = useSelector((state: ClientState) => getFeedState(state, feedName).loadingFuture);
+    const loadingPast = useSelector((state: ClientState) => getFeedState(state, feedName).loadingPast);
+    const before = useSelector((state: ClientState) => getFeedState(state, feedName).before);
+    const after = useSelector((state: ClientState) => getFeedState(state, feedName).after);
+    const stories = useSelector((state: ClientState) => getStories(state, feedName));
+    const totalInFuture = useSelector((state: ClientState) => getFeedState(state, feedName).totalInFuture);
+    const totalPinned = useSelector((state: ClientState) => getFeedState(state, feedName).status.totalPinned);
+    const notViewed = useSelector((state: ClientState) => getFeedState(state, feedName).status.notViewed);
+    const notViewedMoment = useSelector((state: ClientState) => getFeedState(state, feedName).status.notViewedMoment);
+    const anchor = useSelector((state: ClientState) => getFeedState(state, feedName).anchor);
+    const atHomeNode = useSelector(isAtHomeNode);
+    const dispatch = useDispatch();
 
-interface State {
-    atTop: boolean;
-    atBottom: boolean;
-    scrolled: boolean;
-    topmostMoment: number;
-}
+    const prevAt = useRef<number>(Number.MAX_SAFE_INTEGER);
 
-class FeedPage extends React.PureComponent<Props, State> {
+    const [atTop, setAtTop] = useState<boolean>(true);
+    const [atBottom, setAtBottom] = useState<boolean>(false);
+    const [topmostMoment, setTopmostMoment] = useState<number>(Number.MAX_SAFE_INTEGER);
 
-    mounted: boolean;
-    prevAt: number;
-    newAnchor: number | null;
-    topmostBeforeUpdate: number | null;
-    futureIntersecting: boolean;
-    pastIntersecting: boolean;
+    const {t} = useTranslation();
 
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.mounted = false;
-        this.prevAt = Number.MAX_SAFE_INTEGER;
-        this.newAnchor = null;
-        this.topmostBeforeUpdate = null;
-
-        this.updateOnScrollHandler();
-
-        this.futureIntersecting = true;
-        this.pastIntersecting = true;
-        this.state = {
-            atTop: true,
-            atBottom: false,
-            scrolled: false,
-            topmostMoment: Number.MAX_SAFE_INTEGER
-        };
-    }
-
-    componentDidMount() {
-        this.mounted = true;
-        this.updateOnScrollHandler();
-        this.newAnchor = this.props.anchor;
-        this.scrollToAnchor();
-    }
-
-    componentWillUnmount() {
-        this.mounted = false;
-        this.updateOnScrollHandler();
-    }
-
-    getSnapshotBeforeUpdate() {
-        this.topmostBeforeUpdate = FeedPage.getTopmostMoment();
-        return null;
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.anchor !== prevProps.anchor) {
-            this.newAnchor = this.props.anchor;
-        }
-        if (this.props.visible !== prevProps.visible) {
-            this.updateOnScrollHandler();
-        }
-        if (this.props.visible) {
-            if (this.props.before !== prevProps.before && this.futureIntersecting) {
-                this.loadFuture();
-            }
-            if (this.props.after !== prevProps.after && this.pastIntersecting) {
-                this.loadPast();
-            }
-            const topmost = FeedPage.getTopmostMoment();
-            if (this.topmostBeforeUpdate != null && this.topmostBeforeUpdate !== topmost) {
-                FeedPage.scrollTo(this.topmostBeforeUpdate);
-                this.topmostBeforeUpdate = null;
-            }
-            this.scrollToAnchor();
-            this.onView();
-        }
-    }
-
-    scrollToAnchor() {
-        if (this.newAnchor != null
-            && (this.newAnchor <= this.props.before
-                || (this.newAnchor >= Number.MAX_SAFE_INTEGER && this.props.before >= Number.MAX_SAFE_INTEGER))
-            && (this.newAnchor > this.props.after
-                || (this.newAnchor <= Number.MIN_SAFE_INTEGER && this.props.after <= Number.MIN_SAFE_INTEGER))) {
-
-            if (FeedPage.scrollTo(this.newAnchor)) {
-                this.newAnchor = null;
-                this.props.feedScrolledToAnchor(this.props.feedName);
+    useEffect(() => {
+        if (
+            anchor != null
+            && (anchor <= before || (anchor >= Number.MAX_SAFE_INTEGER && before >= Number.MAX_SAFE_INTEGER))
+            && (anchor > after || (anchor <= Number.MIN_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER))
+        ) {
+            if (scrollTo(anchor)) {
+                dispatch(feedScrolledToAnchor(feedName));
             }
         }
-    }
+    }, [after, anchor, before, dispatch, feedName]);
 
-    updateOnScrollHandler() {
-        window.onscroll = this.mounted && this.props.visible ? this.onScroll : null;
-    }
-
-    onScroll = () => {
-        this.updateAtMoment();
-        this.setState({scrolled: window.scrollY > 5, topmostMoment: FeedPage.getTopmostMoment()});
-        this.onView();
-    };
-
-    updateAtMoment = debounce(() => {
-        const at = FeedPage.getTopmostMoment();
-        if (at !== this.prevAt) {
-            this.props.feedScrolled(this.props.feedName, at);
+    useEffect(() => {
+        if (anchor == null) {
+            scrollTo(topmostMoment);
         }
-        this.prevAt = at;
-    }, 500);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [before]);
 
-    onView = debounce(() => {
-        const {feedName, atHomeNode, feedStatusUpdate} = this.props;
-
-        if (!atHomeNode) {
+    const loadFuture = useCallback(() => {
+        if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {
             return;
         }
-        const moment = FeedPage.getNotViewedMoment();
-        if (moment != null) {
-            FeedPage.markAllViewed();
-            feedStatusUpdate(":" + feedName, true, null, moment);
-        }
-    }, 1000);
+        dispatch(feedFutureSliceLoad(feedName));
+    }, [before, dispatch, feedName, loadingFuture]);
 
-    static getTopmostMoment() {
-        const top = getPageHeaderHeight();
-        const postings = document.getElementsByClassName("posting");
-        for (let i = 0; i < postings.length; i++) {
-            const posting = postings.item(i) as HTMLElement;
-            if (posting == null) {
-                continue;
-            }
-            if (posting.getBoundingClientRect().top >= top) {
-                return postingMoment(posting);
-            }
-        }
-        return Number.MAX_SAFE_INTEGER;
-    }
-
-    static getPostingAt(moment: number) {
-        const postings = document.getElementsByClassName("posting");
-        for (let i = 0; i < postings.length; i++) {
-            const posting = postings.item(i) as HTMLElement;
-            if (posting == null) {
-                continue;
-            }
-            if (postingMoment(posting) <= moment) {
-                return posting;
-            }
-        }
-        return null;
-    }
-
-    static getEarliestPosting() {
-        const postings = document.getElementsByClassName("posting");
-        return postings.length > 0 ? postings.item(postings.length - 1) : null;
-    }
-
-    static getNotViewedMoment() {
-        const top = getPageHeaderHeight();
-        const postings = document.getElementsByClassName("posting");
-        for (let i = 0; i < postings.length; i++) {
-            const posting = postings.item(i) as HTMLElement;
-            if (posting == null) {
-                continue;
-            }
-            if (posting.getBoundingClientRect().top >= top && posting.dataset.viewed === "false") {
-                return postingMoment(posting);
-            }
-        }
-        return null;
-    }
-
-    static markAllViewed() {
-        const top = getPageHeaderHeight();
-        const postings = document.getElementsByClassName("posting");
-        for (let i = 0; i < postings.length; i++) {
-            const posting = postings.item(i) as HTMLElement;
-            if (posting == null) {
-                continue;
-            }
-            if (posting.getBoundingClientRect().top >= top) {
-                posting.dataset.viewed = "true";
-                posting.classList.remove("not-viewed");
-            }
-        }
-    }
-
-    static scrollTo(moment: number) {
-        const posting = moment > Number.MIN_SAFE_INTEGER ?
-            FeedPage.getPostingAt(moment) : FeedPage.getEarliestPosting();
-        if (posting == null) {
-            return false;
-        }
-        setTimeout(() => {
-            const y = posting.getBoundingClientRect().top;
-            const minY = getPageHeaderHeight() + 10;
-            window.scrollBy(0, y - minY - 25);
-        });
-        return true;
-    }
-
-    onSentinelFuture = (intersecting: boolean) => {
-        this.futureIntersecting = intersecting;
-        if (this.futureIntersecting) {
-            this.loadFuture();
-        }
-    };
-
-    loadFuture = () => {
-        if (this.props.loadingFuture || this.props.before >= Number.MAX_SAFE_INTEGER) {
+    const loadPast = useCallback(() => {
+        if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        this.props.feedFutureSliceLoad(this.props.feedName);
-    }
+        dispatch(feedPastSliceLoad(feedName));
+    }, [after, dispatch, feedName, loadingPast]);
 
-    onSentinelPast = (intersecting: boolean) => {
-        this.pastIntersecting = intersecting;
-        if (this.pastIntersecting) {
-            this.loadPast();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const updateAtMoment = useCallback(
+        debounce(() => {
+            const at = getTopmostMoment();
+            if (at !== prevAt.current) {
+                dispatch(feedScrolled(feedName, at));
+            }
+            prevAt.current = at;
+        }, 500),
+        [prevAt, feedName]
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const onView = useCallback(
+        debounce(() => {
+            if (!atHomeNode) {
+                return;
+            }
+            const moment = getNotViewedMoment();
+            if (moment != null) {
+                markAllViewed();
+                dispatch(feedStatusUpdate(":" + feedName, true, null, moment));
+            }
+        }, 1000),
+        [atHomeNode, feedName]
+    );
+
+    const onScroll = useCallback(() => {
+        updateAtMoment();
+        setTopmostMoment(getTopmostMoment());
+        onView();
+    }, [onView, updateAtMoment]);
+
+    useEffect(() => {
+        if (visible) {
+            window.addEventListener("scroll", onScroll);
+        }
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [onScroll, visible]);
+
+    const onSentinelFuture = (intersecting: boolean) => {
+        if (intersecting) {
+            loadFuture();
         }
     };
 
-    loadPast = () => {
-        if (this.props.loadingPast || this.props.after <= Number.MIN_SAFE_INTEGER) {
-            return;
+    const onSentinelPast = (intersecting: boolean) => {
+        if (intersecting) {
+            loadPast();
         }
-        this.props.feedPastSliceLoad(this.props.feedName);
-    }
-
-    onBoundaryFuture = (intersecting: boolean) => {
-        this.setState({atTop: intersecting});
     };
 
-    onBoundaryPast = (intersecting: boolean) => {
-        this.setState({atBottom: intersecting});
-    };
+    const onBoundaryFuture = (intersecting: boolean) => setAtTop(intersecting);
 
-    getTotalAfterTop(): number {
-        const {stories, totalInFuture, totalPinned} = this.props;
-        const {topmostMoment} = this.state;
+    const onBoundaryPast = (intersecting: boolean) => setAtBottom(intersecting);
 
+    const totalAfterTop = useMemo((): number => {
         if (topmostMoment >= Number.MAX_SAFE_INTEGER) {
             return 0;
         }
@@ -284,52 +150,44 @@ class FeedPage extends React.PureComponent<Props, State> {
         const total = afterTop + totalInFuture - totalPinned;
 
         return total > 0 ? total : 0;
-    }
+    }, [stories, topmostMoment, totalInFuture, totalPinned]);
 
-    render() {
-        const {
-            feedName, title, shareable, loadingFuture, loadingPast, stories, notViewed, notViewedMoment, before, after,
-            t
-        } = this.props;
-        const {atTop, atBottom} = this.state;
-
-        if (stories.length === 0 && !loadingFuture && !loadingPast
-            && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
-
-            return (
-                <>
-                    <FeedTitle/>
-                    <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}
-                                    totalAfterTop={0} notViewed={0} notViewedMoment={null}/>
-                    <div className="no-postings">{t("nothing-yet")}</div>
-                </>
-            );
-        }
+    if (stories.length === 0 && !loadingFuture && !loadingPast
+        && before >= Number.MAX_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER) {
 
         return (
             <>
                 <FeedTitle/>
-                <FeedPageHeader feedName={feedName} title={title} shareable={shareable}
-                                atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
-                                atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
-                                totalAfterTop={this.getTotalAfterTop()}
-                                notViewed={notViewed ?? 0} notViewedMoment={notViewedMoment ?? null}/>
-                <Page>
-                    <FeedSentinel loading={loadingFuture} title={t("load-newer-posts")} margin="250px 0px 0px 0px"
-                                  visible={before < Number.MAX_SAFE_INTEGER} onSentinel={this.onSentinelFuture}
-                                  onBoundary={this.onBoundaryFuture} onClick={this.loadFuture}/>
-                    {stories
-                        .map(({story, posting, deleting}) =>
-                            <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
-                    <FeedSentinel loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 250px 0px"
-                                  visible={after > Number.MIN_SAFE_INTEGER} onSentinel={this.onSentinelPast}
-                                  onBoundary={this.onBoundaryPast} onClick={this.loadPast}/>
-                    {after <= Number.MIN_SAFE_INTEGER
-                        && <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>}
-                </Page>
+                <FeedPageHeader feedName={feedName} title={title} empty atTop={true} atBottom={true}
+                                totalAfterTop={0} notViewed={0} notViewedMoment={null}/>
+                <div className="no-postings">{t("nothing-yet")}</div>
             </>
         );
     }
+
+    return (
+        <>
+            <FeedTitle/>
+            <FeedPageHeader feedName={feedName} title={title} shareable={shareable}
+                            atTop={atTop && before >= Number.MAX_SAFE_INTEGER}
+                            atBottom={atBottom && after <= Number.MIN_SAFE_INTEGER}
+                            totalAfterTop={totalAfterTop}
+                            notViewed={notViewed ?? 0} notViewedMoment={notViewedMoment ?? null}/>
+            <Page>
+                <FeedSentinel loading={loadingFuture} title={t("load-newer-posts")} margin="50% 0px 0px 0px"
+                              visible={before < Number.MAX_SAFE_INTEGER} onSentinel={onSentinelFuture}
+                              onBoundary={onBoundaryFuture} onClick={loadFuture}/>
+                {stories
+                    .map(({story, posting, deleting}) =>
+                        <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
+                <FeedSentinel bottom loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 50% 0px"
+                              visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
+                              onBoundary={onBoundaryPast} onClick={loadPast}/>
+                {after <= Number.MIN_SAFE_INTEGER
+                    && <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>}
+            </Page>
+        </>
+    );
 }
 
 export const getStories = createSelector(
@@ -344,21 +202,83 @@ export const getStories = createSelector(
             .filter(({posting}) => !hiding || !isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE))
 );
 
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        loadingFuture: getFeedState(state, ownProps.feedName).loadingFuture,
-        loadingPast: getFeedState(state, ownProps.feedName).loadingPast,
-        before: getFeedState(state, ownProps.feedName).before,
-        after: getFeedState(state, ownProps.feedName).after,
-        stories: getStories(state, ownProps.feedName),
-        totalInFuture: getFeedState(state, ownProps.feedName).totalInFuture,
-        totalPinned: getFeedState(state, ownProps.feedName).status.totalPinned,
-        notViewed: getFeedState(state, ownProps.feedName).status.notViewed,
-        notViewedMoment: getFeedState(state, ownProps.feedName).status.notViewedMoment,
-        anchor: getFeedState(state, ownProps.feedName).anchor,
-        atHomeNode: isAtHomeNode(state)
-    }),
-    { feedFutureSliceLoad, feedPastSliceLoad, feedScrolled, feedScrolledToAnchor, feedStatusUpdate }
-);
+function postingMoment(posting: HTMLElement): number {
+    return posting.dataset.moment != null ? parseInt(posting.dataset.moment) : 0;
+}
 
-export default connector(withTranslation()(FeedPage));
+function getTopmostMoment(): number {
+    const top = getPageHeaderHeight();
+    const postings = document.getElementsByClassName("posting");
+    for (let i = 0; i < postings.length; i++) {
+        const posting = postings.item(i) as HTMLElement;
+        if (posting == null) {
+            continue;
+        }
+        if (posting.getBoundingClientRect().top >= top) {
+            return postingMoment(posting);
+        }
+    }
+    return Number.MAX_SAFE_INTEGER;
+}
+
+function getPostingAt(moment: number): HTMLElement | null {
+    const postings = document.getElementsByClassName("posting");
+    for (let i = 0; i < postings.length; i++) {
+        const posting = postings.item(i) as HTMLElement;
+        if (posting == null) {
+            continue;
+        }
+        if (postingMoment(posting) <= moment) {
+            return posting;
+        }
+    }
+    return null;
+}
+
+function getEarliestPosting(): Element | null {
+    const postings = document.getElementsByClassName("posting");
+    return postings.length > 0 ? postings.item(postings.length - 1) : null;
+}
+
+function getNotViewedMoment(): number | null {
+    const top = getPageHeaderHeight();
+    const postings = document.getElementsByClassName("posting");
+    for (let i = 0; i < postings.length; i++) {
+        const posting = postings.item(i) as HTMLElement;
+        if (posting == null) {
+            continue;
+        }
+        if (posting.getBoundingClientRect().top >= top && posting.dataset.viewed === "false") {
+            return postingMoment(posting);
+        }
+    }
+    return null;
+}
+
+function markAllViewed(): void {
+    const top = getPageHeaderHeight();
+    const postings = document.getElementsByClassName("posting");
+    for (let i = 0; i < postings.length; i++) {
+        const posting = postings.item(i) as HTMLElement;
+        if (posting == null) {
+            continue;
+        }
+        if (posting.getBoundingClientRect().top >= top) {
+            posting.dataset.viewed = "true";
+            posting.classList.remove("not-viewed");
+        }
+    }
+}
+
+function scrollTo(moment: number): boolean {
+    const posting = moment > Number.MIN_SAFE_INTEGER ? getPostingAt(moment) : getEarliestPosting();
+    if (posting == null) {
+        return false;
+    }
+    setTimeout(() => {
+        const y = posting.getBoundingClientRect().top;
+        const minY = getPageHeaderHeight() + 10;
+        window.scrollBy(0, y - minY - 25);
+    });
+    return true;
+}
