@@ -1,4 +1,4 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { StoryInfo } from "api";
@@ -9,14 +9,14 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { InstantStoryButtonsActionSupplier } from "ui/instant/instant-types";
 import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 
-type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
-
-function InstantStorySubscribeButtons({story, hide, subscription, feedSubscribe}: Props) {
+export default function InstantStorySubscribeButtons({story, hide}: InstantStoryButtonsProps) {
+    const subscription = useSelector((state: ClientState) => getNodeCard(state, story.remoteNodeName)?.subscription);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onSubscribe = () => {
         if (story.remoteNodeName != null) {
-            feedSubscribe(story.remoteNodeName, "timeline", story.id);
+            dispatch(feedSubscribe(story.remoteNodeName, "timeline", story.id));
         }
     }
 
@@ -31,12 +31,3 @@ function InstantStorySubscribeButtons({story, hide, subscription, feedSubscribe}
 
 export const instantStorySubscribeAction: InstantStoryButtonsActionSupplier =
     (story: StoryInfo) => story.remoteNodeName != null ? nodeCardPrepare(story.remoteNodeName) : null;
-
-const connector = connect(
-    (state: ClientState, ownProps: InstantStoryButtonsProps) => ({
-        subscription: getNodeCard(state, ownProps.story.remoteNodeName)?.subscription
-    }),
-    { feedSubscribe }
-);
-
-export default connector(InstantStorySubscribeButtons);

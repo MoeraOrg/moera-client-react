@@ -1,4 +1,4 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { StoryInfo } from "api";
@@ -9,9 +9,9 @@ import { friendshipUpdate } from "state/people/actions";
 import { InstantStoryButtonsActionSupplier } from "ui/instant/instant-types";
 import { InstantStoryButtons, InstantStoryButtonsProps } from "ui/instant/buttons/InstantStoryButtons";
 
-type Props = InstantStoryButtonsProps & ConnectedProps<typeof connector>;
-
-function InstantStoryFriendGroupButtons({story, hide, friendship, friendshipUpdate}: Props) {
+export default function InstantStoryFriendGroupButtons({story, hide}: InstantStoryButtonsProps) {
+    const friendship = useSelector((state: ClientState) => getNodeCard(state, story.remoteNodeName)?.friendship);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const friendGroupIds = friendship?.groups?.map(fg => fg.id) ?? [];
@@ -19,7 +19,7 @@ function InstantStoryFriendGroupButtons({story, hide, friendship, friendshipUpda
 
     const onAddFriend = () => {
         if (story.remoteNodeName != null && friendGroupId != null) {
-            friendshipUpdate(story.remoteNodeName, [...friendGroupIds, friendGroupId], story.id);
+            dispatch(friendshipUpdate(story.remoteNodeName, [...friendGroupIds, friendGroupId], story.id));
         }
     }
 
@@ -34,12 +34,3 @@ function InstantStoryFriendGroupButtons({story, hide, friendship, friendshipUpda
 
 export const instantStoryFriendGroupAction: InstantStoryButtonsActionSupplier =
     (story: StoryInfo) => story.remoteNodeName != null ? nodeCardPrepare(story.remoteNodeName) : null;
-
-const connector = connect(
-    (state: ClientState, ownProps: InstantStoryButtonsProps) => ({
-        friendship: getNodeCard(state, ownProps.story.remoteNodeName)?.friendship
-    }),
-    { friendshipUpdate }
-);
-
-export default connector(InstantStoryFriendGroupButtons);

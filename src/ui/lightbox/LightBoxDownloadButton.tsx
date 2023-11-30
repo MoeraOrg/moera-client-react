@@ -9,7 +9,7 @@ interface Props {
     mediaMimeType: string;
 }
 
-function LightBoxDownloadButton({mediaUrl, mediaMimeType}: Props) {
+export default function LightBoxDownloadButton({mediaUrl, mediaMimeType}: Props) {
     const {t} = useTranslation();
 
     const onDownload = window.Android
@@ -26,5 +26,3 @@ function LightBoxDownloadButton({mediaUrl, mediaMimeType}: Props) {
         </a>
     );
 }
-
-export default LightBoxDownloadButton;

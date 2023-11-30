@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import cx from 'classnames';
 
 import { Loading } from "ui/control";
@@ -14,37 +14,29 @@ interface Props {
     onClick: (event: React.MouseEvent) => void;
 }
 
-export default class InstantsSentinel extends React.PureComponent<Props> {
+export default function InstantsSentinel({visible, loading, title, margin, onSentinel, onClick}: Props) {
+    const sentinel = useRef<HTMLDivElement>(null);
 
-    sentinelObserver: IntersectionObserver;
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.sentinelObserver = new IntersectionObserver(this.onSentinel, {rootMargin: this.props.margin});
+    const onSentinelHandler = (entries: IntersectionObserverEntry[]) => {
+        entries.forEach(entry => onSentinel(entry.isIntersecting));
     }
 
-    observeSentinel = (sentinel: HTMLDivElement | null) => {
-        if (sentinel == null) {
-            this.sentinelObserver.disconnect();
-        } else {
-            this.sentinelObserver.observe(sentinel);
+    const sentinelObserver = useRef<IntersectionObserver>(
+        new IntersectionObserver(onSentinelHandler, {rootMargin: margin}));
+
+    useEffect(() => {
+        if (sentinel.current != null) {
+            const observer = sentinelObserver.current;
+            observer.observe(sentinel.current);
+
+            return () => observer.disconnect();
         }
-    };
+    }, []);
 
-    onSentinel = (entries: IntersectionObserverEntry[]) => {
-        entries.forEach(entry => this.props.onSentinel(entry.isIntersecting));
-    }
-
-    render() {
-        const {visible, loading, title, onClick} = this.props;
-
-        return (
-            <div className={cx({"sentinel": !loading && visible})} ref={this.observeSentinel} onClick={onClick}>
-                {!loading && visible && title}
-                {loading && <Loading/>}
-            </div>
-        );
-    }
-
+    return (
+        <div className={cx({"sentinel": !loading && visible})} ref={sentinel} onClick={onClick}>
+            {!loading && visible && title}
+            {loading && <Loading/>}
+        </div>
+    );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
@@ -17,24 +17,28 @@ import { getInstantTarget, getInstantTypeDetails } from "ui/instant/instant-type
 import InstantHtml from "ui/instant/InstantHtml";
 import "./InstantStory.css";
 
-type Props = {
+interface Props {
     story: ExtStoryInfo;
     lastNew: boolean;
     hide: () => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function InstantStory({story, lastNew, hide, profileLink, googlePlayHiding, storyReadingUpdate}: Props) {
+export default function InstantStory({story, lastNew, hide}: Props) {
+    useSelector((state: ClientState) => state.pulse.pulse); // To force re-rendering only
+    const profileLink = useSelector((state: ClientState) => getSetting(state, "instants.profile-link") as boolean);
+    const googlePlayHiding = useSelector(isHomeGooglePlayHiding);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onJump = (href: string, performJump: () => void) => {
+    const onJump = (_: string, performJump: () => void) => {
         hide();
         performJump();
         if (!story.read) {
-            storyReadingUpdate(":instant", story.id, true);
+            dispatch(storyReadingUpdate(":instant", story.id, true));
         }
     }
 
-    const onEnvelope = () => storyReadingUpdate(":instant", story.id, !story.read);
+    const onEnvelope = () => dispatch(storyReadingUpdate(":instant", story.id, !story.read));
 
     const {nodeName, href} = getInstantTarget(story);
     const buttons = getInstantTypeDetails(story.storyType)?.buttons;
@@ -83,14 +87,3 @@ function InstantStory({story, lastNew, hide, profileLink, googlePlayHiding, stor
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        pulse: state.pulse.pulse, // To force re-rendering only
-        profileLink: getSetting(state, "instants.profile-link") as boolean,
-        googlePlayHiding: isHomeGooglePlayHiding(state)
-    }),
-    { storyReadingUpdate }
-);
-
-export default connector(InstantStory);

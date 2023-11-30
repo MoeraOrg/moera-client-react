@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Lightbox from 'react-image-lightbox';
 import 'react-image-lightbox/style.css';
 import { useTranslation } from 'react-i18next';
@@ -24,12 +24,21 @@ import LightBoxDownloadButton from "ui/lightbox/LightBoxDownloadButton";
 import { urlWithParameters } from "util/url";
 import "./LightBox.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function LightBox({
-    posting, comment, mediaId, mediaPosting, mediaNodeName, rootPage, carte, loopGallery, closeLightBox,
-    lightBoxMediaSet
-}: Props) {
+export default function LightBox() {
+    const posting = useSelector((state: ClientState) => getPosting(state, state.lightBox.postingId));
+    const comment = useSelector((state: ClientState) =>
+        state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null);
+    const mediaId = useSelector(getLightBoxMediaId);
+    const mediaPosting = useSelector((state: ClientState) => getPosting(state, getLightBoxMediaPostingId(state)));
+    const mediaNodeName = useSelector((state: ClientState) => state.lightBox.nodeName);
+    const rootPage = useSelector(
+        (state: ClientState) => state.lightBox.nodeName
+            ? getNamingNameNodeUri(state, state.lightBox.nodeName)
+            : getNodeRootPage(state)
+    );
+    const carte = useSelector(getCurrentViewMediaCarte);
+    const loopGallery = useSelector((state: ClientState) => getSetting(state, "entry.gallery.loop") as boolean);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -37,7 +46,7 @@ function LightBox({
         return () => Browser.enableBodyScroll();
     }, []);
 
-    const media = getGallery(posting, comment);
+    const media = useMemo(() => getGallery(posting, comment), [comment, posting]);
     const auth = carte != null ? "carte:" + carte : null;
     let mainHref = "";
     let mainSrc = "";
@@ -77,14 +86,17 @@ function LightBox({
         title = `${index + 1} / ${media.length}`;
     }
 
+    const onCloseRequest = () => dispatch(closeLightBox());
+
+    const onMovePrevRequest = () => prevMediaId != null ? dispatch(lightBoxMediaSet(prevMediaId, prevSequence)) : null;
+
+    const onMoveNextRequest = () => nextMediaId != null ? dispatch(lightBoxMediaSet(nextMediaId, nextSequence)) : null;
+
     return (
         <Lightbox mainSrc={mainSrc} prevSrc={prevSrc} nextSrc={nextSrc} imageTitle={title}
-                  onCloseRequest={() => closeLightBox()}
-                  closeLabel={t("close")}
-                  onMovePrevRequest={() => prevMediaId != null ? lightBoxMediaSet(prevMediaId, prevSequence) : null}
-                  prevLabel={t("previous-image")}
-                  onMoveNextRequest={() => nextMediaId != null ? lightBoxMediaSet(nextMediaId, nextSequence) : null}
-                  nextLabel={t("next-image")}
+                  onCloseRequest={onCloseRequest} closeLabel={t("close")}
+                  onMovePrevRequest={onMovePrevRequest} prevLabel={t("previous-image")}
+                  onMoveNextRequest={onMoveNextRequest} nextLabel={t("next-image")}
                   reactModalStyle={{overlay: {zIndex: 1040}}}
                   toolbarButtons={[
                       <LightBoxShareButton mediaNodeName={mediaNodeName} mediaHref={mainHref} mediaUrl={mainSrc}/>,
@@ -110,21 +122,3 @@ function getGallery(posting: ExtPostingInfo | null, comment: ExtCommentInfo | nu
     const linkPreviewImages = new Set(linkPreviews.map(lp => lp.imageHash));
     return media.filter(mf => !linkPreviewImages.has(mf.media?.hash));
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        posting: getPosting(state, state.lightBox.postingId),
-        comment: state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null,
-        mediaId: getLightBoxMediaId(state),
-        mediaPosting: getPosting(state, getLightBoxMediaPostingId(state)),
-        mediaNodeName: state.lightBox.nodeName,
-        rootPage: state.lightBox.nodeName
-            ? getNamingNameNodeUri(state, state.lightBox.nodeName)
-            : getNodeRootPage(state),
-        carte: getCurrentViewMediaCarte(state),
-        loopGallery: getSetting(state, "entry.gallery.loop") as boolean
-    }),
-    { closeLightBox, lightBoxMediaSet }
-);
-
-export default connector(LightBox);

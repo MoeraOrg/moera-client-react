@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientReactionInfo } from "api";
 import { ClientState } from "state/state";
@@ -12,16 +12,21 @@ import { ReactionButton } from "ui/control";
 import PostingReactions from "ui/posting/PostingReactions";
 import "./LightBoxReactions.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function LightBoxReactions() {
+    const posting = useSelector((state: ClientState) =>
+        getPosting(state, getLightBoxMediaPostingId(state), getLightBoxNodeName(state)));
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const enableSelf = useSelector((state: ClientState) =>
+        getSetting(state, "posting.reactions.self.enabled") as boolean);
+    const dispatch = useDispatch();
 
-function LightBoxReactions({posting, homeOwnerName, enableSelf, postingReact, postingReactionDelete}: Props) {
     if (posting == null) {
         return null;
     }
 
-    const onReactionAdd = (negative: boolean, emoji: number) => postingReact(posting.id, negative, emoji, "");
+    const onReactionAdd = (negative: boolean, emoji: number) => dispatch(postingReact(posting.id, negative, emoji, ""));
 
-    const onReactionDelete = () => postingReactionDelete(posting.id, "");
+    const onReactionDelete = () => dispatch(postingReactionDelete(posting.id, ""));
 
     const cr = posting.clientReaction || {} as ClientReactionInfo;
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
@@ -45,14 +50,3 @@ function LightBoxReactions({posting, homeOwnerName, enableSelf, postingReact, po
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        posting: getPosting(state, getLightBoxMediaPostingId(state), getLightBoxNodeName(state)),
-        homeOwnerName: getHomeOwnerName(state),
-        enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean
-    }),
-    { postingReact, postingReactionDelete }
-);
-
-export default connector(LightBoxReactions);

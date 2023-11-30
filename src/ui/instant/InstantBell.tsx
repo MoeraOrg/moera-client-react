@@ -1,15 +1,13 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
 import { getInstantCount } from "state/feeds/selectors";
 import "./InstantBell.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const InstantBell = ({count}: Props) => {
+export default function InstantBell() {
+    const count = useSelector(getInstantCount);
     const {t} = useTranslation();
 
     return (
@@ -18,11 +16,3 @@ const InstantBell = ({count}: Props) => {
         </span>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        count: getInstantCount(state)
-    })
-);
-
-export default connector(InstantBell);

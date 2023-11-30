@@ -1,4 +1,4 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -11,25 +11,24 @@ export interface InstantStoryButtonsProps {
     hide: () => void;
 }
 
-type Props = InstantStoryButtonsProps & {
+interface Props extends InstantStoryButtonsProps {
     ready: boolean;
     accepting: boolean;
     accepted: boolean;
     acceptTitle: string;
     acceptedTitle: string;
     onAccept: () => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function InstantStoryButtonsImpl({
-    story, ready, accepting, accepted, acceptTitle, acceptedTitle, onAccept, storySatisfy
-}: Props) {
+export function InstantStoryButtons({story, ready, accepting, accepted, acceptTitle, acceptedTitle, onAccept}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!ready) {
         return null;
     }
 
-    const onIgnore = () => storySatisfy(":instant", story.id);
+    const onIgnore = () => dispatch(storySatisfy(":instant", story.id));
 
     return (
         <div className="buttons">
@@ -50,10 +49,3 @@ function InstantStoryButtonsImpl({
         </div>
     );
 }
-
-const connector = connect(
-    null,
-    { storySatisfy }
-);
-
-export const InstantStoryButtons = connector(InstantStoryButtonsImpl);

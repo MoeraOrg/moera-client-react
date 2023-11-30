@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
@@ -8,69 +8,41 @@ import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 import Instants from "ui/instant/Instants";
 
-type Props = ConnectedProps<typeof connector>;
+export default function InstantButton() {
+    const stories = useSelector((state: ClientState) => getFeedState(state, ":instant").stories);
+    const notViewedCount = useSelector((state: ClientState) => getFeedNotViewed(state, ":instant"));
+    const instantBorder = useSelector(getInstantBorder);
+    const dispatch = useDispatch();
 
-interface State {
-    instantBorder: number;
-}
+    const visible = useRef<boolean>(false);
+    const topMoment = useRef<number>(Number.MIN_SAFE_INTEGER);
 
-class InstantButton extends React.PureComponent<Props, State> {
+    const [border, setBorder] = useState<number>(Number.MAX_SAFE_INTEGER);
 
-    #visible: boolean = false;
-    #topMoment: number = Number.MIN_SAFE_INTEGER;
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.state = {
-            instantBorder: Number.MAX_SAFE_INTEGER
-        };
-    }
-
-    componentDidUpdate() {
-        this.viewAll();
-    }
-
-    onToggle = (visible: boolean) => {
-        if (visible && this.#visible !== visible) {
-            this.setState({instantBorder: this.props.instantBorder});
-        }
-        this.#visible = visible;
-        this.viewAll();
-    }
-
-    viewAll() {
-        const {stories, notViewedCount, feedStatusUpdate} = this.props;
-
-        if (document.visibilityState !== "visible" || !this.#visible || stories == null || stories.length === 0
-            || notViewedCount === 0 || this.#topMoment === stories[0].moment) {
+    const viewAll = () => {
+        if (document.visibilityState !== "visible" || !visible.current || stories == null || stories.length === 0
+            || notViewedCount === 0 || topMoment.current === stories[0].moment) {
 
             return;
         }
-        this.#topMoment = stories[0].moment;
-        feedStatusUpdate(":instant", true, null, this.#topMoment);
+        topMoment.current = stories[0].moment;
+        dispatch(feedStatusUpdate(":instant", true, null, topMoment.current));
     }
 
-    render() {
-        return (
-            <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
-                     onToggle={this.onToggle}>
-                {({hide}) =>
-                    <Instants hide={hide} instantBorder={this.state.instantBorder}/>
-                }
-            </Popover>
-        );
+    const onToggle = (v: boolean) => {
+        if (v && visible.current !== v) {
+            setBorder(instantBorder);
+        }
+        visible.current = v;
+        viewAll();
     }
 
+    return (
+        <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
+                 onToggle={onToggle}>
+            {({hide}) =>
+                <Instants hide={hide} instantBorder={border}/>
+            }
+        </Popover>
+    );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        stories: getFeedState(state, ":instant").stories,
-        notViewedCount: getFeedNotViewed(state, ":instant"),
-        instantBorder: getInstantBorder(state)
-    }),
-    { feedStatusUpdate }
-);
-
-export default connector(InstantButton);

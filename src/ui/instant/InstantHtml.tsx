@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { connect, ConnectedProps, Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import store from "state/store";
@@ -10,11 +10,13 @@ import InstantMention from "ui/instant/InstantMention";
 import { NameDisplayMode } from "ui/types";
 import InstantIcon from "ui/instant/InstantIcon";
 
-type Props = {
+interface Props {
     story: ExtStoryInfo;
-} & ConnectedProps<typeof connector>;
+}
 
-function InstantHtml({story, mode}: Props) {
+export default function InstantHtml({story}: Props) {
+    const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
+
     const dom = useRef<HTMLDivElement>(null);
     const html = story.summary ?? "";
 
@@ -45,11 +47,3 @@ function InstantHtml({story, mode}: Props) {
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        mode: getSetting(state, "full-name.display") as NameDisplayMode
-    })
-);
-
-export default connector(InstantHtml);

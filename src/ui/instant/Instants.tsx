@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -12,13 +12,16 @@ import InstantsSentinel from "ui/instant/InstantsSentinel";
 import { BUILD_NUMBER } from "build-number";
 import "./Instants.css";
 
-type Props = {
+interface Props {
     hide: () => void;
     instantBorder: number;
-} & ConnectedProps<typeof connector>;
+}
 
-function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSliceLoad, feedStatusUpdate,
-                   swipeRefreshUpdate, bodyScrollUpdate}: Props) {
+export default function Instants({hide, instantBorder}: Props) {
+    const loadingPast = useSelector((state: ClientState) => getFeedState(state, ":instant").loadingPast);
+    const after = useSelector((state: ClientState) => getFeedState(state, ":instant").after);
+    const stories = useSelector((state: ClientState) => getFeedState(state, ":instant").stories);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const pastIntersecting = useRef<boolean>(true);
@@ -26,24 +29,24 @@ function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSli
     useEffect(() => {
         window.closeLightDialog = hide;
         if (Browser.isAndroidApp()) {
-            swipeRefreshUpdate();
+            dispatch(swipeRefreshUpdate());
         }
-        bodyScrollUpdate();
+        dispatch(bodyScrollUpdate());
 
         return () => {
             window.closeLightDialog = null;
             if (Browser.isAndroidApp()) {
-                swipeRefreshUpdate();
+                dispatch(swipeRefreshUpdate());
             }
-            bodyScrollUpdate();
+            dispatch(bodyScrollUpdate());
         }
-    }, [hide, swipeRefreshUpdate, bodyScrollUpdate]);
+    }, [hide, dispatch]);
 
     const loadPast = () => {
         if (loadingPast || after <= Number.MIN_SAFE_INTEGER) {
             return;
         }
-        feedPastSliceLoad(":instant");
+        dispatch(feedPastSliceLoad(":instant"));
     }
 
     const onSentinelPast = (intersecting: boolean) => {
@@ -57,7 +60,7 @@ function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSli
         if (stories == null || stories.length === 0) {
             return;
         }
-        feedStatusUpdate(":instant", null, true, stories[0].moment);
+        dispatch(feedStatusUpdate(":instant", null, true, stories[0].moment));
     }
 
     return (
@@ -80,14 +83,3 @@ function Instants({hide, instantBorder, loadingPast, after, stories, feedPastSli
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loadingPast: getFeedState(state, ":instant").loadingPast,
-        after: getFeedState(state, ":instant").after,
-        stories: getFeedState(state, ":instant").stories
-    }),
-    { feedPastSliceLoad, feedStatusUpdate, swipeRefreshUpdate, bodyScrollUpdate }
-);
-
-export default connector(Instants);
