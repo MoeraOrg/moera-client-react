@@ -8,7 +8,7 @@ interface Props {
     pinned?: boolean | null;
 }
 
-const PostingPin = ({pinned}: Props) => {
+export default function PostingPin({pinned}: Props) {
     const {t} = useTranslation();
 
     if (!pinned) {
@@ -23,5 +23,3 @@ const PostingPin = ({pinned}: Props) => {
         </div>
     );
 }
-
-export default PostingPin;

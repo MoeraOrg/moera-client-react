@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -9,9 +9,10 @@ import { Loading } from "ui/control";
 import { getPeopleTabTitle } from "ui/people/people-tabs";
 import "./PeoplePage.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const PeoplePageTitle = ({tab, friendGroups, loading}: Props) => {
+export default function PeoplePageTitle() {
+    const tab = useSelector((state: ClientState) => state.people.tab);
+    const friendGroups = useSelector(getNodeFriendGroups);
+    const loading = useSelector(isPeopleContactsLoading);
     const {t} = useTranslation();
 
     return (
@@ -21,13 +22,3 @@ const PeoplePageTitle = ({tab, friendGroups, loading}: Props) => {
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        tab: state.people.tab,
-        friendGroups: getNodeFriendGroups(state),
-        loading: isPeopleContactsLoading(state)
-    })
-);
-
-export default connector(PeoplePageTitle);

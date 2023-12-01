@@ -1,26 +1,25 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { Button, ModalDialog } from "ui/control";
-import { closeMessageBox } from "state/messagebox/actions";
 import { ClientState } from "state/state";
+import { closeMessageBox } from "state/messagebox/actions";
+import { Button, ModalDialog } from "ui/control";
 import { htmlEntities } from "util/html";
 
-const forwardAction = (action: any) => action;
-
-type Props = ConnectedProps<typeof connector>;
-
-function MessageBox({message, onClose, closeMessageBox, forwardAction}: Props) {
+export default function MessageBox() {
+    const message = useSelector((state: ClientState) => state.messageBox.message);
+    const onClose = useSelector((state: ClientState) => state.messageBox.onClose);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onCloseClick = () => {
-        closeMessageBox();
+        dispatch(closeMessageBox());
         if (onClose) {
             if (typeof(onClose) === "function") {
                 onClose();
             } else {
-                forwardAction(onClose);
+                dispatch(onClose);
             }
         }
     };
@@ -30,7 +29,7 @@ function MessageBox({message, onClose, closeMessageBox, forwardAction}: Props) {
             .replace("&lt;/b&gt;", "</b>");
 
     return (
-        <ModalDialog risen onClose={onClose}>
+        <ModalDialog risen onClose={onCloseClick}>
             <div className="modal-body" dangerouslySetInnerHTML={{__html: escapedMessage}}/>
             <div className="modal-footer">
                 <Button variant="primary" onClick={onCloseClick} autoFocus>{t("ok")}</Button>
@@ -38,10 +37,3 @@ function MessageBox({message, onClose, closeMessageBox, forwardAction}: Props) {
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => state.messageBox,
-    { closeMessageBox, forwardAction }
-);
-
-export default connector(MessageBox);

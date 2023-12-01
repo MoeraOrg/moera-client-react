@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -10,9 +10,8 @@ import { isAtTimelinePage } from "state/navigation/selectors";
 import Jump from "ui/navigation/Jump";
 import "./HomeButton.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const HomeButton = ({atHomeTimeline}: Props) => {
+export default function HomeButton() {
+    const atHomeTimeline = useSelector((state: ClientState) => isAtHomeNode(state) && isAtTimelinePage(state));
     const {t} = useTranslation();
 
     return (
@@ -22,11 +21,3 @@ const HomeButton = ({atHomeTimeline}: Props) => {
         </Jump>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        atHomeTimeline: isAtHomeNode(state) && isAtTimelinePage(state),
-    })
-);
-
-export default connector(HomeButton);

@@ -1,36 +1,33 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo } from "api";
 import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { MinimalStoryInfo } from "ui/types";
 
-type Props = {
-    posting: PostingInfo;
-    story: MinimalStoryInfo | null;
-} & ConnectedProps<typeof connector>;
+interface Props {
+    createdAt: number;
+    editedAt: number | null | undefined;
+    publishedAt: number;
+}
 
-function PostingUpdated({posting, story, timeRelative}: Props) {
+export default function PostingUpdated({createdAt, editedAt, publishedAt}: Props) {
+    const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
+    useSelector((state: ClientState) =>
+        getSetting(state, "posting.time.relative") ? state.pulse.pulse : null); // To force re-rendering only
     const {t} = useTranslation();
 
-    if (posting.totalRevisions <= 1) {
+    const updatedAt = editedAt ?? createdAt;
+    const updatedImmediately = Math.abs(updatedAt - publishedAt) < 20 * 60;
+
+    if (updatedImmediately) {
         return null;
     }
 
-    const editedAt = posting.editedAt ?? posting.createdAt;
-    const publishedAt = story != null ? story.publishedAt : posting.createdAt;
-    const editedImmediately = Math.abs(editedAt - publishedAt) < 20 * 60;
-
-    if (editedImmediately) {
-        return null;
-    }
-
-    const date = fromUnixTime(editedAt);
-    const editedSoon = Math.abs(editedAt - publishedAt) < 24 * 60 * 60;
+    const date = fromUnixTime(updatedAt);
+    const editedSoon = Math.abs(updatedAt - publishedAt) < 24 * 60 * 60;
 
     return (
         <time className="date" dateTime={formatISO(date)}>
@@ -45,12 +42,3 @@ function PostingUpdated({posting, story, timeRelative}: Props) {
         </time>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        timeRelative: getSetting(state, "posting.time.relative") as boolean,
-        pulse: getSetting(state, "posting.time.relative") ? state.pulse.pulse : null // To force re-rendering only
-    })
-);
-
-export default connector(PostingUpdated);

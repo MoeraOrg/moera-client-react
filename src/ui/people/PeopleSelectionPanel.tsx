@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -11,11 +11,11 @@ import PeopleSelectedButton from "ui/people/PeopleSelectedButton";
 import PeopleSearch from "ui/people/PeopleSearch";
 import "./PeopleSelectionPanel.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function PeopleSelectionPanel({
-    atHome, selecting, sortAlpha, peopleStartSelection, peopleStopSelection, peopleSetSort
-}: Props) {
+export default function PeopleSelectionPanel() {
+    const atHome = useSelector(isAtHomeNode);
+    const selecting = useSelector((state: ClientState) => state.people.selecting);
+    const sortAlpha = useSelector((state: ClientState) => state.people.sortAlpha);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!atHome) {
@@ -24,13 +24,13 @@ function PeopleSelectionPanel({
 
     const onSelectClick = () => {
         if (!selecting) {
-            peopleStartSelection();
+            dispatch(peopleStartSelection());
         } else {
-            peopleStopSelection();
+            dispatch(peopleStopSelection());
         }
     }
 
-    const onSortClick = () => peopleSetSort(!sortAlpha);
+    const onSortClick = () => dispatch(peopleSetSort(!sortAlpha));
 
     return (
         <div className="people-panel">
@@ -50,14 +50,3 @@ function PeopleSelectionPanel({
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        atHome: isAtHomeNode(state),
-        selecting: state.people.selecting,
-        sortAlpha: state.people.sortAlpha
-    }),
-    { peopleStartSelection, peopleStopSelection, peopleSetSort }
-);
-
-export default connector(PeopleSelectionPanel);

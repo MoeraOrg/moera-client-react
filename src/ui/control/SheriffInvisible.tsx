@@ -4,16 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import "./SheriffVisibility.css";
 
-interface Props {
-    invisible: boolean;
-}
-
-export function SheriffVisibility({invisible}: Props) {
+export function SheriffInvisible() {
     const {t} = useTranslation();
-
-    if (!invisible) {
-        return null;
-    }
 
     return (
         <span className="sheriff-visibility" title={t("banned-android-google-play")}>

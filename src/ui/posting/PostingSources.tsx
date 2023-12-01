@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { TFunction } from 'i18next';
@@ -14,13 +14,15 @@ interface Props {
     posting: PostingInfo;
 }
 
-const PostingSources = ({posting}: Props) => {
+export default function PostingSources({posting}: Props) {
     const {t} = useTranslation();
+
+    const list = useMemo(() => sourcesList(posting, t), [posting, t]);
 
     return (
         <div className="posting-sources">
             <div className="title">{t("where-from")}</div>
-            {sourcesList(posting, t).map((line, index) =>
+            {list.map((line, index) =>
                 <div className="source" key={index}>
                 <span className={cx("icon", {"original": line.original})}>
                     <FontAwesomeIcon icon={line.original ? "star" : "share-square"}/>
@@ -74,5 +76,3 @@ function sourcesList(posting: PostingInfo, t: TFunction): SourcesLine[] {
 
     return list;
 }
-
-export default PostingSources;

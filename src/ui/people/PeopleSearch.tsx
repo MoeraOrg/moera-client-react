@@ -1,21 +1,21 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { peopleSetSearchPrefix } from "state/people/actions";
 
-type Props = ConnectedProps<typeof connector>;
+export default function PeopleSearch() {
+    const dispatch = useDispatch();
 
-function PeopleSearch({peopleSetSearchPrefix}: Props) {
     const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Escape") {
             (event.currentTarget as HTMLInputElement).value = "";
-            peopleSetSearchPrefix("");
+            dispatch(peopleSetSearchPrefix(""));
         }
     };
 
     const onChange = (event: React.ChangeEvent) =>
-        peopleSetSearchPrefix((event.currentTarget as HTMLInputElement).value);
+        dispatch(peopleSetSearchPrefix((event.currentTarget as HTMLInputElement).value));
 
     return (
         <div className="mt-1 row">
@@ -30,10 +30,3 @@ function PeopleSearch({peopleSetSearchPrefix}: Props) {
         </div>
     );
 }
-
-const connector = connect(
-    null,
-    { peopleSetSearchPrefix }
-);
-
-export default connector(PeopleSearch);

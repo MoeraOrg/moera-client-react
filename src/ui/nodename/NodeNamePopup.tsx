@@ -1,25 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { AvatarImage } from "api";
 import { nodeCardPrepare } from "state/nodecards/actions";
 import { DelayedPopper, DelayedPopperChildren, Manager, Reference } from "ui/control/DelayedPopper";
 import NodeCard from "ui/nodename/NodeCard";
 
-type Props = {
+interface Props {
     nodeName: string;
     fullName?: string | null;
     avatar?: AvatarImage | null;
     avatarNodeName?: string;
     disabled?: boolean;
     children: DelayedPopperChildren;
-} & ConnectedProps<typeof connector>;
+}
 
-function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children, nodeCardPrepare}: Props) {
-    const onPreparePopper = () => {
-        nodeCardPrepare(nodeName);
-    }
+export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children}: Props) {
+    const dispatch = useDispatch();
+
+    const onPreparePopper = () => dispatch(nodeCardPrepare(nodeName));
 
     return (
         <Manager onPreparePopper={onPreparePopper} disabled={disabled} clickable>
@@ -38,10 +38,3 @@ function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, ch
         </Manager>
     );
 }
-
-const connector = connect(
-    null,
-    { nodeCardPrepare }
-);
-
-export default connector(NodeNamePopup);

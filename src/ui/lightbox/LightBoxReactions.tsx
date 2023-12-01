@@ -32,7 +32,8 @@ export default function LightBoxReactions() {
     const hide = posting.ownerName === homeOwnerName && !enableSelf && !cr.emoji;
     return (
         <div className="lightbox-reactions">
-            <PostingReactions posting={posting}/>
+            <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
+                              reactions={posting.reactions}/>
             {!hide &&
                 <ReactionButton icon="thumbs-up" className="lightbox-reaction-button positive"
                                 invisible={cr.emoji != null && cr.negative} negative={false}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -8,9 +8,10 @@ import { ClientState } from "state/state";
 import { confirmBox } from "state/confirmbox/actions";
 import { getHomeRootLocation } from "state/home/selectors";
 
-type Props = ConnectedProps<typeof connector>;
-
-function DisconnectButton({location, login, confirmBox}: Props) {
+export default function DisconnectButton() {
+    const location = useSelector(getHomeRootLocation);
+    const login = useSelector((state: ClientState) => state.home.login);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onConfirmed = () => {
@@ -20,7 +21,8 @@ function DisconnectButton({location, login, confirmBox}: Props) {
         Storage.deleteData(location);
     };
 
-    const onClick = () => confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger");
+    const onClick = () =>
+        dispatch(confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger"));
 
     return (
         <span className="connection-button" title={t("disconnect")} onClick={onClick}>
@@ -28,13 +30,3 @@ function DisconnectButton({location, login, confirmBox}: Props) {
         </span>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        location: getHomeRootLocation(state),
-        login: state.home.login
-    }),
-    { confirmBox }
-);
-
-export default connector(DisconnectButton);

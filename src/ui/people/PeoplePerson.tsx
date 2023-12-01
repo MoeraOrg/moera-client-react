@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
@@ -16,22 +16,23 @@ import NodeName from "ui/nodename/NodeName";
 import PeopleContactIcons from "ui/people/PeopleContactIcons";
 import "./PeoplePerson.css";
 
-interface OwnProps {
+interface Props {
     contact: ContactState;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-const PeoplePerson = ({
-    contact, ownerName, selecting, selected, tab, peopleSelectToggle, openBlockingDetailsDialog
-}: Props) => {
+export default function PeoplePerson({contact}: Props) {
+    const ownerName = useSelector(getOwnerName);
+    const selecting = useSelector((state: ClientState) => state.people.selecting);
+    const selected = useSelector((state: ClientState) => state.people.selected[contact.contact.nodeName] ?? false);
+    const tab = useSelector(getPeopleTab);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onSelectClick = () => peopleSelectToggle(contact.contact.nodeName);
+    const onSelectClick = () => dispatch(peopleSelectToggle(contact.contact.nodeName));
 
     const onBlockingDetailsClick = () => {
         if (ownerName != null) {
-            openBlockingDetailsDialog(ownerName, contact.contact.nodeName, null, null, tab === "blocked-by");
+            dispatch(openBlockingDetailsDialog(ownerName, contact.contact.nodeName, null, null, tab === "blocked-by"));
         }
     }
 
@@ -63,15 +64,3 @@ const PeoplePerson = ({
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        ownerName: getOwnerName(state),
-        selecting: state.people.selecting,
-        selected: state.people.selected[ownProps.contact.contact.nodeName] ?? false,
-        tab: getPeopleTab(state)
-    }),
-    { peopleSelectToggle, openBlockingDetailsDialog }
-);
-
-export default connector(PeoplePerson);

@@ -1,17 +1,18 @@
 import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
+import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getHomeFriendGroups, getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
+import { getPosting } from "state/postings/selectors";
 import { isLightBoxShown } from "state/lightbox/selectors";
 import { getNodeCard } from "state/nodecards/selectors";
-import { getSetting } from "state/settings/selectors";
+import { getSetting, getSettingNode } from "state/settings/selectors";
 import ChangeDateDialog from "ui/changedatedialog/ChangeDateDialog";
 import SourceDialog from "ui/sourcedialog/SourceDialog";
 import EntryCopyTextDialog from "ui/entrycopytextdialog/EntryCopyTextDialog";
 import BlockingDetailsDialog from "ui/blockingdetailsdialog/BlockingDetailsDialog";
 import { NameDisplayMode } from "ui/types";
-import { getPosting } from "state/postings/selectors";
 
 const ReactionsDialog = React.lazy(() => import("ui/reactionsdialog/ReactionsDialog"));
 const LightBox = React.lazy(() => import("ui/lightbox/LightBox"));
@@ -42,7 +43,18 @@ export default function NodeDialogs() {
     };
     const showDonateDialog = useSelector((state: ClientState) => state.donateDialog.show);
     const showEntryCopyTextDialog = useSelector((state: ClientState) => state.entryCopyTextDialog.show);
-    const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
+    const peopleHideDialog = {
+        show: useSelector((state: ClientState) => state.peopleHideDialog.show),
+        nodeName: useSelector((state: ClientState) => state.peopleHideDialog.nodeName),
+        feedName: useSelector((state: ClientState) => state.peopleHideDialog.feedName),
+        card: useSelector((state: ClientState) => getNodeCard(state, state.peopleHideDialog.nodeName)),
+        subscribersHidden: useSelector((state: ClientState) =>
+            (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin"),
+        subscriptionsHidden: useSelector((state: ClientState) =>
+            (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin"),
+        friendsHidden: useSelector((state: ClientState) =>
+            (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin")
+    };
     const friendGroupsDialog = {
         show: useSelector((state: ClientState) => state.friendGroupsDialog.show),
         nodeName: useSelector((state: ClientState) => state.friendGroupsDialog.nodeName),
@@ -91,7 +103,12 @@ export default function NodeDialogs() {
             </Suspense>
             {showEntryCopyTextDialog && <EntryCopyTextDialog/>}
             <Suspense fallback={null}>
-                {showPeopleHideDialog && <PeopleHideDialog/>}
+                {peopleHideDialog.show &&
+                    <PeopleHideDialog nodeName={peopleHideDialog.nodeName} feedName={peopleHideDialog.feedName}
+                                      card={peopleHideDialog.card}
+                                      subscribersHidden={peopleHideDialog.subscribersHidden}
+                                      subscriptionsHidden={peopleHideDialog.subscriptionsHidden}
+                                      friendsHidden={peopleHideDialog.friendsHidden}/>}
             </Suspense>
             <Suspense fallback={null}>
                 {friendGroupsDialog.show &&

@@ -40,7 +40,8 @@ export default function EntryGalleryExpanded({nodeName, postingId, media, onColl
                                 <EntryHtml className="content" postingId={posting.id} html={posting.body.text}
                                            nodeName=""/>
                                 <div className="reactions-line">
-                                    <PostingReactions posting={posting}/>
+                                    <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
+                                                      reactions={posting.reactions}/>
                                 </div>
                                 {connectedToHome && <EntryGalleryButtons posting={posting} mediaId={mediaFile.id}/>}
                             </>

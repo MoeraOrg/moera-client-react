@@ -1,14 +1,14 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
 import { ClientState } from "state/state";
 import "./HomeName.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function HomeName({ownerName, changing}: Props) {
+export default function HomeName() {
+    const ownerName = useSelector((state: ClientState) => state.home.owner.name);
+    const changing = useSelector((state: ClientState) => state.home.owner.changing);
     const {t} = useTranslation();
 
     const {name, generation} = NodeName.parse(ownerName);
@@ -24,12 +24,3 @@ function HomeName({ownerName, changing}: Props) {
         </span>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: state.home.owner.name,
-        changing: state.home.owner.changing,
-    })
-);
-
-export default connector(HomeName);

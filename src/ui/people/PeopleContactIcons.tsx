@@ -1,7 +1,6 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { ClientState } from "state/state";
 import { getHomeOwnerGender } from "state/home/selectors";
 import { ContactState } from "state/people/state";
 import { getPeopleTab } from "state/people/selectors";
@@ -10,11 +9,14 @@ import SubscriberVisibility from "ui/people/SubscriberVisibility";
 import PeopleIconSet from "ui/people/PeopleIconSet";
 import "./PeopleContactIcons.css";
 
-type Props = {
+interface Props {
     contact: ContactState
-} & ConnectedProps<typeof connector>;
+}
 
-function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
+export default function PeopleContactIcons({contact}: Props) {
+    const tab = useSelector(getPeopleTab);
+    const homeOwnerGender = useSelector(getHomeOwnerGender);
+
     const hasSubscriber = contact.contact.hasFeedSubscriber ?? false;
     const hasSubscription = contact.contact.hasFeedSubscription ?? false;
     const hasFriend = contact.contact.hasFriend ?? false;
@@ -289,12 +291,3 @@ function PeopleContactIcons({contact, tab, homeOwnerGender}: Props) {
     }
     return null;
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        tab: getPeopleTab(state),
-        homeOwnerGender: getHomeOwnerGender(state)
-    })
-);
-
-export default connector(PeopleContactIcons);

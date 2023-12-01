@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -10,9 +10,8 @@ import { getFeedNotViewed } from "state/feeds/selectors";
 import { useMainMenuHomeNews } from "ui/mainmenu/main-menu";
 import "./NewsButton.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function NewsButton({count}: Props) {
+export default function NewsButton() {
+    const count = useSelector((state: ClientState) => getFeedNotViewed(state, ":news"));
     const {href, active} = useMainMenuHomeNews();
     const {t} = useTranslation();
 
@@ -24,11 +23,3 @@ function NewsButton({count}: Props) {
         </Jump>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        count: getFeedNotViewed(state, ":news")
-    })
-);
-
-export default connector(NewsButton);

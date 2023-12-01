@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { isAtHomeNode } from "state/node/selectors";
@@ -16,37 +16,36 @@ import PeoplePerson from "ui/people/PeoplePerson";
 import PeoplePageTitle from "ui/people/PeoplePageTitle";
 import { nameListItemMatch } from "util/names-list";
 
-type Props = ConnectedProps<typeof connector>;
+export default function PeopleContent() {
+    const atHome = useSelector(isAtHomeNode);
+    const loadingGeneral = useSelector((state: ClientState) => state.people.loadingGeneral);
+    const contacts = useSelector(
+        (state: ClientState) =>
+            state.people.sortAlpha ? getPeopleContactsByAlpha(state) : getPeopleContactsByCloseness(state)
+    );
+    const contactsTotal = useSelector(getPeopleContactsTotal);
+    const contactsMax = useSelector(getPeopleContactsMaxInTabs);
+    const searchRegexes = useSelector((state: ClientState) => state.people.searchRegexes);
 
-const PeopleContent = ({
-    atHome, loadingGeneral, contacts, contactsTotal, contactsMax, searchRegexes
-}: Props) => (
-    <div className="flex-fill">
-        {(atHome && !loadingGeneral && contactsTotal > 0 && (Browser.isDevMode() || contactsMax > 12)) &&
-            <PeopleSelectionPanel/>
-        }
-        <PeoplePageTitle/>
-        {contacts
+    const found = useMemo(() =>
+        contacts
             .filter(cs => matchesSearch(cs, searchRegexes))
-            .map((cs, index) => <PeoplePerson key={index} contact={cs}/>)
-        }
-    </div>
-);
+            .map((cs, index) => <PeoplePerson key={index} contact={cs}/>),
+        [contacts, searchRegexes]
+    );
+
+    return (
+        <div className="flex-fill">
+            {(atHome && !loadingGeneral && contactsTotal > 0 && (Browser.isDevMode() || contactsMax > 12)) &&
+                <PeopleSelectionPanel/>
+            }
+            <PeoplePageTitle/>
+            {found}
+        </div>
+    );
+}
 
 function matchesSearch(contactState: ContactState, searchRegexes: RegExp[]): boolean {
     const {nodeName, fullName} = contactState.contact;
     return nameListItemMatch({nodeName, fullName}, searchRegexes);
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        atHome: isAtHomeNode(state),
-        loadingGeneral: state.people.loadingGeneral,
-        contacts: state.people.sortAlpha ? getPeopleContactsByAlpha(state) : getPeopleContactsByCloseness(state),
-        contactsTotal: getPeopleContactsTotal(state),
-        contactsMax: getPeopleContactsMaxInTabs(state),
-        searchRegexes: state.people.searchRegexes
-    })
-);
-
-export default connector(PeopleContent);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
@@ -16,31 +16,29 @@ import {
 } from "state/people/actions";
 import { DropdownMenu } from "ui/control";
 
-type Props = ConnectedProps<typeof connector>;
-
-function PeopleSelectedButton({
-    totalSelected, summary, peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend,
-    peopleSelectedUnfriend, openAskDialog, openPeopleHideDialog, openFriendGroupsDialog
-}: Props) {
+export default function PeopleSelectedButton() {
+    const totalSelected = useSelector(getTotalSelected);
+    const summary = useSelector(getSelectedSummary);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (totalSelected <= 0) {
         return null;
     }
 
-    const onSubscribe = () => peopleSelectedSubscribe();
+    const onSubscribe = () => dispatch(peopleSelectedSubscribe());
 
-    const onUnsubscribe = () => peopleSelectedUnsubscribe();
+    const onUnsubscribe = () => dispatch(peopleSelectedUnsubscribe());
 
-    const onAddFriend = () => peopleSelectedFriend();
+    const onAddFriend = () => dispatch(peopleSelectedFriend());
 
-    const onFriendGroups = () => openFriendGroupsDialog(null);
+    const onFriendGroups = () => dispatch(openFriendGroupsDialog(null));
 
-    const onUnfriend = () => peopleSelectedUnfriend();
+    const onUnfriend = () => dispatch(peopleSelectedUnfriend());
 
-    const onAskDialog = () => openAskDialog(null, totalSelected);
+    const onAskDialog = () => dispatch(openAskDialog(null, totalSelected));
 
-    const onHideDialog = () => openPeopleHideDialog(null, null);
+    const onHideDialog = () => dispatch(openPeopleHideDialog(null, null));
 
     return (
         <DropdownMenu className="btn btn-sm btn-primary ms-1" items={[
@@ -153,16 +151,3 @@ const getSelectedSummary = createSelector(
         }
     )
 );
-
-const connector = connect(
-    (state: ClientState) => ({
-        totalSelected: getTotalSelected(state),
-        summary: getSelectedSummary(state)
-    }),
-    {
-        peopleSelectedSubscribe, peopleSelectedUnsubscribe, peopleSelectedFriend, peopleSelectedUnfriend, openAskDialog,
-        openPeopleHideDialog, openFriendGroupsDialog
-    }
-);
-
-export default connector(PeopleSelectedButton);

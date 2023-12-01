@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import cx from 'classnames';
 
 import { AvatarImage } from "api";
@@ -12,7 +12,7 @@ import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import { NameDisplayMode } from "ui/types";
 import "./NodeName.css";
 
-interface OwnProps {
+interface Props {
     name?: string | null;
     fullName?: string | null;
     avatar?: AvatarImage | null;
@@ -23,10 +23,12 @@ interface OwnProps {
     popup?: boolean;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function NodeName({
+    name, fullName, avatar, avatarNodeName, verified = false, correct = false, linked = true, popup = true
+}: Props) {
+    const details = useSelector((state: ClientState) => getNamingNameDetails(state, name));
+    const mode = useSelector((state: ClientState) => getSetting(state, "full-name.display") as NameDisplayMode);
 
-function NodeName({name, fullName, avatar, avatarNodeName, verified = false, correct = false, linked = true,
-                   popup = true, details, mode}: Props) {
     if (!name) {
         return null;
     }
@@ -58,12 +60,3 @@ function NodeName({name, fullName, avatar, avatarNodeName, verified = false, cor
 
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        details: getNamingNameDetails(state, ownProps.name),
-        mode: getSetting(state, "full-name.display") as NameDisplayMode
-    })
-);
-
-export default connector(NodeName);

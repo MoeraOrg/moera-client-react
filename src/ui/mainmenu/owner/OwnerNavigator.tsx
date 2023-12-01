@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
-import { Button, NameSelector } from "ui/control";
 import { ClientState } from "state/state";
 import { ownerSwitch, ownerSwitchClose } from "state/node/actions";
+import { Button, NameSelector } from "ui/control";
 import { NameListItem } from "util/names-list";
 import "./OwnerNavigator.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function OwnerNavigator() {
+    const ownerName = useSelector((state: ClientState) => state.node.owner.name);
+    const switching = useSelector((state: ClientState) => state.node.owner.switching);
+    const dispatch = useDispatch();
 
-function OwnerNavigator({ownerName, switching, ownerSwitch, ownerSwitchClose}: Props) {
     const [query, setQuery] = useState<string>("");
     const {t} = useTranslation();
 
@@ -23,9 +25,9 @@ function OwnerNavigator({ownerName, switching, ownerSwitch, ownerSwitchClose}: P
 
     const onSubmit = (success: boolean, {nodeName}: NameListItem) => {
         if (success && nodeName) {
-            ownerSwitch(nodeName);
+            dispatch(ownerSwitch(nodeName));
         } else {
-            ownerSwitchClose();
+            dispatch(ownerSwitchClose());
         }
     }
 
@@ -41,13 +43,3 @@ function OwnerNavigator({ownerName, switching, ownerSwitch, ownerSwitchClose}: P
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: state.node.owner.name,
-        switching: state.node.owner.switching
-    }),
-    { ownerSwitch, ownerSwitchClose }
-);
-
-export default connector(OwnerNavigator);

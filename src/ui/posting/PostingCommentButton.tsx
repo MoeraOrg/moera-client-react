@@ -2,26 +2,23 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo } from "api";
 import Jump from "ui/navigation/Jump";
 
 interface Props {
-    posting: PostingInfo;
+    postingId: string;
     invisible: boolean;
 }
 
-const PostingCommentButton = ({posting, invisible}: Props) => {
+export default function PostingCommentButton({postingId, invisible}: Props) {
     const {t} = useTranslation();
 
     return (
         invisible ?
             <span className="posting-button"/>
         :
-            <Jump className="posting-button" href={`/post/${posting.id}#comment-add`}>
+            <Jump className="posting-button" href={`/post/${postingId}#comment-add`}>
                 <FontAwesomeIcon icon={["far", "comment"]}/>
                 <span className="caption">{t("comment-button")}</span>
             </Jump>
     );
 }
-
-export default PostingCommentButton;

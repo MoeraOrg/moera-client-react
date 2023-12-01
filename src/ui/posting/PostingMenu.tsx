@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
@@ -36,27 +36,37 @@ import { DropdownMenu } from "ui/control";
 import { Browser } from "ui/browser";
 import "ui/entry/EntryMenu.css";
 
-interface OwnProps {
+interface Props {
     posting: PostingInfo;
     story: MinimalStoryInfo;
     detailed?: boolean;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-function PostingMenu({
-     posting, story, nodeOwnerName, homeOwnerName, commentsSubscriptionId, commentAddedInstantBlockId,
-     hasInvisibleComments, showInvisibleComments, postingEditable, postingDeletable, storyEditable, googlePlayGoverned,
-     googlePlaySheriff, googlePlayProhibited, confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink,
-     postingReply, postingCommentsSubscribe, postingCommentsUnsubscribe, postingCommentAddedBlock,
-     postingCommentAddedUnblock, openSourceDialog, shareDialogPrepare, entryCopyText, commentsShowInvisibleSet,
-     openSheriffOrderDialog
-}: Props) {
+export default function PostingMenu({posting, story, detailed}: Props) {
+    const nodeOwnerName = useSelector(getOwnerName);
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const commentsSubscriptionId = useSelector((state: ClientState) =>
+        getPostingCommentsSubscriptionId(state, posting.id));
+    const commentAddedInstantBlockId = useSelector((state: ClientState) =>
+        getPostingCommentAddedInstantBlockId(state, posting.id));
+    const containsInvisibleComments = useSelector((state: ClientState) =>
+        (detailed ?? false) && hasInvisibleComments(state));
+    const showInvisibleComments = useSelector((state: ClientState) =>
+        (detailed ?? false) && isCommentsShowInvisible(state));
+    const postingEditable = useSelector((state: ClientState) => isPermitted("edit", posting, "owner", state));
+    const postingDeletable = useSelector((state: ClientState) => isPermitted("delete", posting, "private", state));
+    const storyEditable = useSelector((state: ClientState) => isPermitted("edit", story, "admin", state));
+    const googlePlayGoverned = isPostingSheriff(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const googlePlaySheriff = useSelector((state: ClientState) =>
+        getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const googlePlayProhibited = isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onCopyLink = () => postingCopyLink(posting.id, "");
+    const onCopyLink = () => dispatch(postingCopyLink(posting.id, ""));
 
-    const onCopyText = () => entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null);
+    const onCopyText = () =>
+        dispatch(entryCopyText(posting.body, "ask", posting.receiverName ?? "", posting.media ?? null));
 
     const onShare = () => {
         const originalDeleted = posting.receiverDeletedAt != null;
@@ -64,52 +74,52 @@ function PostingMenu({
         const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
         const href = `/post/${postingId}`;
 
-        shareDialogPrepare(nodeName, href);
+        dispatch(shareDialogPrepare(nodeName, href));
     };
 
-    const onReply = () => postingReply(posting.id);
+    const onReply = () => dispatch(postingReply(posting.id));
 
     const ownPosting = (posting.receiverName ?? posting.ownerName) === homeOwnerName;
     const followingComments = ownPosting ? commentAddedInstantBlockId == null : commentsSubscriptionId != null;
 
     const onFollowComments = () => {
         if (ownPosting) {
-            postingCommentAddedUnblock(posting.id, "");
+            dispatch(postingCommentAddedUnblock(posting.id, ""));
         } else {
-            postingCommentsSubscribe(posting.id, "");
+            dispatch(postingCommentsSubscribe(posting.id, ""));
         }
     }
 
     const onUnfollowComments = () => {
         if (ownPosting) {
-            postingCommentAddedBlock(posting.id, "");
+            dispatch(postingCommentAddedBlock(posting.id, ""));
         } else {
-            postingCommentsUnsubscribe(posting.id, "");
+            dispatch(postingCommentsUnsubscribe(posting.id, ""));
         }
     }
 
     const onDelete = () => {
-        confirmBox(t("delete-post", {heading: posting.heading}), t("delete"), t("cancel"),
-            postingDelete(posting.id, ""), null, "danger");
+        dispatch(confirmBox(t("delete-post", {heading: posting.heading}), t("delete"), t("cancel"),
+            postingDelete(posting.id, ""), null, "danger"));
     };
 
-    const onPin = () => storyPinningUpdate(story.id, !story.pinned);
+    const onPin = () => dispatch(storyPinningUpdate(story.id, !story.pinned));
 
-    const onChangeDate = () => openChangeDateDialog(story.id, story.publishedAt);
+    const onChangeDate = () => dispatch(openChangeDateDialog(story.id, story.publishedAt));
 
     const onViewSource = () => {
         if (posting.receiverName == null) {
-            openSourceDialog("", posting.id);
+            dispatch(openSourceDialog("", posting.id));
         } else {
             if (posting.receiverPostingId != null) {
-                openSourceDialog(posting.receiverName, posting.receiverPostingId);
+                dispatch(openSourceDialog(posting.receiverName, posting.receiverPostingId));
             }
         }
     };
 
-    const onShowInvisibleComments = () => commentsShowInvisibleSet(true);
+    const onShowInvisibleComments = () => dispatch(commentsShowInvisibleSet(true));
 
-    const onHideInvisibleComments = () => commentsShowInvisibleSet(false);
+    const onHideInvisibleComments = () => dispatch(commentsShowInvisibleSet(false));
 
     const ownerName = posting.receiverName ?? posting.ownerName;
     const fullName = (posting.receiverName != null ? posting.receiverFullName : posting.ownerFullName) ?? null;
@@ -117,7 +127,7 @@ function PostingMenu({
     const postingId = posting.receiverPostingId ?? posting.id;
 
     const onHideInGooglePlay = () =>
-        openSheriffOrderDialog({
+        dispatch(openSheriffOrderDialog({
             nodeName: ownerName,
             fullName,
             feedName: "timeline",
@@ -126,11 +136,11 @@ function PostingMenu({
             postingOwnerGender: gender,
             postingId,
             postingHeading: posting.heading
-        });
+        }));
 
     const onUnhideInGooglePlay = () => {
-        confirmBox(t("unhide-post-google-play", {heading: posting.heading}), t("unhide"), t("cancel"),
-            sheriffOrderDelete({nodeName: ownerName, feedName: "timeline", postingId}), null, "success");
+        dispatch(confirmBox(t("unhide-post-google-play", {heading: posting.heading}), t("unhide"), t("cancel"),
+            sheriffOrderDelete({nodeName: ownerName, feedName: "timeline", postingId}), null, "success"));
     };
 
     const postingHref = `/post/${posting.id}`;
@@ -226,14 +236,14 @@ function PostingMenu({
                 nodeName: "",
                 href: postingHref,
                 onClick: onShowInvisibleComments,
-                show: hasInvisibleComments && !showInvisibleComments
+                show: containsInvisibleComments && !showInvisibleComments
             },
             {
                 title: t("hide-hidden-comments"),
                 nodeName: "",
                 href: postingHref,
                 onClick: onHideInvisibleComments,
-                show: hasInvisibleComments && showInvisibleComments
+                show: containsInvisibleComments && showInvisibleComments
             },
             {
                 divider: true
@@ -262,27 +272,3 @@ function PostingMenu({
         ]}/>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        nodeOwnerName: getOwnerName(state),
-        homeOwnerName: getHomeOwnerName(state),
-        commentsSubscriptionId: getPostingCommentsSubscriptionId(state, ownProps.posting.id),
-        commentAddedInstantBlockId: getPostingCommentAddedInstantBlockId(state, ownProps.posting.id),
-        hasInvisibleComments: (ownProps.detailed ?? false) && hasInvisibleComments(state),
-        showInvisibleComments: (ownProps.detailed ?? false) && isCommentsShowInvisible(state),
-        postingEditable: isPermitted("edit", ownProps.posting, "owner", state),
-        postingDeletable: isPermitted("delete", ownProps.posting, "private", state),
-        storyEditable: isPermitted("edit", ownProps.story, "admin", state),
-        googlePlayGoverned: isPostingSheriff(ownProps.posting, SHERIFF_GOOGLE_PLAY_TIMELINE),
-        googlePlaySheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
-        googlePlayProhibited: isPostingSheriffProhibited(ownProps.posting, SHERIFF_GOOGLE_PLAY_TIMELINE)
-    }),
-    {
-        confirmBox, storyPinningUpdate, openChangeDateDialog, postingCopyLink, postingReply, postingCommentsSubscribe,
-        postingCommentsUnsubscribe, postingCommentAddedBlock, postingCommentAddedUnblock, openSourceDialog,
-        shareDialogPrepare, entryCopyText, commentsShowInvisibleSet, openSheriffOrderDialog
-    }
-);
-
-export default connector(PostingMenu);

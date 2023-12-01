@@ -1,22 +1,21 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { PostingInfo } from "api";
+import { ReactionTotalsInfo } from "api";
 import { openReactionsDialog } from "state/reactionsdialog/actions";
 import { ReactionTotals } from "ui/control";
 
-type Props = {
-    posting: PostingInfo;
-} & ConnectedProps<typeof connector>;
+interface Props {
+    postingId: string;
+    postingReceiverName: string | null | undefined;
+    reactions: ReactionTotalsInfo | null | undefined;
+}
 
-const PostingReactions = ({posting, openReactionsDialog}: Props) => (
-    <ReactionTotals reactions={posting.reactions ?? null}
-                    onClick={negative => openReactionsDialog(posting.receiverName ?? "", posting.id, null, negative)}/>
-);
+export default function PostingReactions({postingId, postingReceiverName, reactions}: Props) {
+    const dispatch = useDispatch();
 
-const connector = connect(
-    null,
-    { openReactionsDialog }
-);
+    const onClick = (negative: boolean) =>
+        dispatch(openReactionsDialog(postingReceiverName ?? "", postingId, null, negative));
 
-export default connector(PostingReactions);
+    return <ReactionTotals reactions={reactions ?? null} onClick={onClick}/>;
+}

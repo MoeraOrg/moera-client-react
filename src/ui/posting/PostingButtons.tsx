@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
@@ -16,18 +16,27 @@ import PostingShareButton from "ui/posting/PostingShareButton";
 import PostingMenu from "ui/posting/PostingMenu";
 import "./PostingButtons.css";
 
-interface OwnProps {
+interface Props {
     posting: PostingInfo;
     story: MinimalStoryInfo;
     menu?: boolean;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-function PostingButtons({
-    posting, story, menu = false, connectedToHome, homeOwnerName, enableSelf, commentsVisible, reactionsEnabled,
-    reactionsNegativeEnabled
-}: Props) {
+export default function PostingButtons({posting, story, menu = false}: Props) {
+    const options: Partial<IsPermittedOptions> = {
+        objectSourceName: useSelector(getCommentsReceiverName),
+        objectSourceFeatures: useSelector(getCommentsReceiverFeatures)
+    }
+    const connectedToHome = useSelector(isConnectedToHome);
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const enableSelf = useSelector((state: ClientState) =>
+        getSetting(state, "posting.reactions.self.enabled") as boolean);
+    const commentsVisible = useSelector((state: ClientState) =>
+        isPermitted("viewComments", posting, "public", state, options));
+    const reactionsEnabled = useSelector((state: ClientState) =>
+        isPermitted("addReaction", posting, "signed", state, options));
+    const reactionsNegativeEnabled = useSelector((state: ClientState) =>
+        isPermitted("addNegativeReaction", posting, "signed", state, options));
     const {t} = useTranslation();
 
     const showButtons = connectedToHome && posting.receiverDeletedAt == null;
@@ -51,30 +60,12 @@ function PostingButtons({
                                            invisible={hideNegative} id={posting.id} negative={true}
                                            emoji={cr.negative ? cr.emoji : null}
                                            accepted={posting.acceptedReactions?.negative ?? ""}/>
-                    <PostingCommentButton posting={posting} invisible={!commentsVisible}/>
-                    <PostingShareButton posting={posting}/>
+                    <PostingCommentButton postingId={posting.id} invisible={!commentsVisible}/>
+                    <PostingShareButton postingId={posting.id} postingReceiverName={posting.receiverName}
+                                        postingReceiverPostingId={posting.receiverPostingId}/>
                 </>
             }
             {menu && <PostingMenu posting={posting} story={story} detailed/>}
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState, props: OwnProps) => {
-        const options: Partial<IsPermittedOptions> = {
-            objectSourceName: getCommentsReceiverName(state),
-            objectSourceFeatures: getCommentsReceiverFeatures(state)
-        }
-        return ({
-            connectedToHome: isConnectedToHome(state),
-            homeOwnerName: getHomeOwnerName(state),
-            enableSelf: getSetting(state, "posting.reactions.self.enabled") as boolean,
-            commentsVisible: isPermitted("viewComments", props.posting, "public", state, options),
-            reactionsEnabled: isPermitted("addReaction", props.posting, "signed", state, options),
-            reactionsNegativeEnabled: isPermitted("addNegativeReaction", props.posting, "signed", state, options)
-        });
-    }
-);
-
-export default connector(PostingButtons);

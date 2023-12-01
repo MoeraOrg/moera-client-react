@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 
 import { PostingInfo } from "api";
@@ -7,22 +7,20 @@ import { getDateFnsLocale } from "i18n";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
 import Jump from "ui/navigation/Jump";
-import { MinimalStoryInfo } from "ui/types";
 import "./PostingDate.css"
 
-type Props = {
+interface Props {
     posting: PostingInfo;
-    story: MinimalStoryInfo | null;
-} & ConnectedProps<typeof connector>;
+    publishedAt: number;
+}
 
-function PostingDate({posting, story, timeRelative}: Props) {
-    let publishedAt;
-    if (posting.receiverName) {
-        publishedAt = posting.receiverCreatedAt ?? posting.createdAt;
-    } else {
-        publishedAt = story != null ? story.publishedAt : posting.createdAt;
-    }
-    const date = fromUnixTime(publishedAt);
+export default function PostingDate({posting, publishedAt}: Props) {
+    const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
+    useSelector((state: ClientState) =>
+        getSetting(state, "posting.time.relative") ? state.pulse.pulse : null); // To force re-rendering only
+
+    const unixTime = posting.receiverName ? (posting.receiverCreatedAt ?? posting.createdAt) : publishedAt;
+    const date = fromUnixTime(unixTime);
     const originalDeleted = posting.receiverDeletedAt != null;
     const nodeName = originalDeleted ? "" : (posting.receiverName ?? posting.ownerName);
     const postingId = originalDeleted ? posting.id : (posting.receiverPostingId ?? posting.id);
@@ -39,12 +37,3 @@ function PostingDate({posting, story, timeRelative}: Props) {
         }</Jump>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        timeRelative: getSetting(state, "posting.time.relative") as boolean,
-        pulse: getSetting(state, "posting.time.relative") ? state.pulse.pulse : null // To force re-rendering only
-    })
-);
-
-export default connector(PostingDate);

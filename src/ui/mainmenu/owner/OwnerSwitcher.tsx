@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { ownerSwitchClose, ownerSwitchOpen } from "state/node/actions";
@@ -7,72 +7,58 @@ import OwnerName from "ui/mainmenu/owner/OwnerName";
 import OwnerNavigator from "ui/mainmenu/owner/OwnerNavigator";
 import "./OwnerSwitcher.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function OwnerSwitcher() {
+    const showNavigator = useSelector((state: ClientState) => state.node.owner.showNavigator);
+    const dispatch = useDispatch();
 
-class OwnerSwitcher extends React.PureComponent<Props> {
+    const startedInner = useRef<boolean>(false);
 
-    #startedInner: boolean = false;
 
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (!prevProps.showNavigator && this.props.showNavigator) {
-            document.addEventListener("click", this.outerClick);
-            document.addEventListener("mousedown", this.mouseDown);
-        }
-        if (prevProps.showNavigator && !this.props.showNavigator) {
-            document.removeEventListener("click", this.outerClick);
-            document.removeEventListener("mousedown", this.mouseDown);
-        }
-    }
+    const mouseDown = useCallback((e: MouseEvent) => {
+        startedInner.current = isInner(e);
+    }, []);
 
-    nameClick = () => {
-        const {showNavigator, ownerSwitchOpen} = this.props;
-
-        if (!showNavigator) {
-            ownerSwitchOpen();
-        }
-    }
-
-    mouseDown = (e: MouseEvent) => {
-        this.#startedInner = this.isInner(e);
-    }
-
-    outerClick = (e: MouseEvent) => {
-        if (this.#startedInner) {
+    const outerClick = useCallback((e: MouseEvent) => {
+        if (startedInner.current) {
             return;
         }
 
-        if (e.detail > 0 /* Not a simulated button click caused by Enter key */ && !this.isInner(e)) {
-            this.props.ownerSwitchClose();
+        if (e.detail > 0 /* Not a simulated button click caused by Enter key */ && !isInner(e)) {
+            dispatch(ownerSwitchClose());
         }
-    };
+    }, [dispatch]);
 
-    isInner(e: MouseEvent) {
-        const ownerArea = document.getElementById("owner-switcher")!.getBoundingClientRect();
-        return e.clientY >= ownerArea.top && e.clientY < ownerArea.bottom
-            && e.clientX >= ownerArea.left && e.clientX < ownerArea.right;
+    useEffect(() => {
+        if (showNavigator) {
+            document.addEventListener("click", outerClick);
+            document.addEventListener("mousedown", mouseDown);
+
+            return () => {
+                document.removeEventListener("click", outerClick);
+                document.removeEventListener("mousedown", mouseDown);
+            }
+        }
+    }, [mouseDown, outerClick, showNavigator]);
+
+    const nameClick = () => {
+        if (!showNavigator) {
+            dispatch(ownerSwitchOpen());
+        }
     }
 
-    render() {
-        const {showNavigator} = this.props;
-
-        return (
-            <div id="owner-switcher" onClick={this.nameClick}>
-                {showNavigator ?
-                    <OwnerNavigator/>
-                :
-                    <OwnerName/>
-                }
-            </div>
-        );
-    }
-
+    return (
+        <div id="owner-switcher" onClick={nameClick}>
+            {showNavigator ?
+                <OwnerNavigator/>
+            :
+                <OwnerName/>
+            }
+        </div>
+    );
 }
 
-const connector = connect(
-    (state: ClientState) => ({
-        showNavigator: state.node.owner.showNavigator
-    }),
-    { ownerSwitchOpen, ownerSwitchClose }
-);
-
-export default connector(OwnerSwitcher);
+function isInner(e: MouseEvent) {
+    const ownerArea = document.getElementById("owner-switcher")!.getBoundingClientRect();
+    return e.clientY >= ownerArea.top && e.clientY < ownerArea.bottom
+        && e.clientX >= ownerArea.left && e.clientX < ownerArea.right;
+}

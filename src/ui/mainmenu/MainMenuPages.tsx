@@ -7,7 +7,7 @@ import MainMenuLink from "ui/mainmenu/MainMenuLink";
 import MainMenuNewsLink from "ui/mainmenu/MainMenuNewsLink";
 import MainMenuComplainsLink from "ui/mainmenu/MainMenuComplainsLink";
 
-const MainMenuPages = () => {
+export default function MainMenuPages() {
     const {t} = useTranslation();
 
     return (
@@ -20,5 +20,3 @@ const MainMenuPages = () => {
         </ul>
     );
 }
-
-export default MainMenuPages;

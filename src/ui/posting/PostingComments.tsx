@@ -2,28 +2,26 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
-import { PostingInfo } from "api";
 import Jump from "ui/navigation/Jump";
 import { Browser } from "ui/browser";
 import "./PostingComments.css";
 
 interface Props {
-    posting: PostingInfo;
+    postingId: string;
+    totalComments: number | null | undefined;
 }
 
-export default function PostingComments({posting}: Props) {
+export default function PostingComments({postingId, totalComments}: Props) {
     const {t} = useTranslation();
 
-    if (posting.totalComments == null || posting.totalComments <= 0) {
+    if (totalComments == null || totalComments <= 0) {
         return null;
     }
 
-    const commentsText = !Browser.isTinyScreen()
-        ? t("count-comments", {count: posting.totalComments})
-        : `${posting.totalComments}`;
+    const commentsText = !Browser.isTinyScreen() ? t("count-comments", {count: totalComments}) : `${totalComments}`;
     return (
         <div className="posting-comments">
-            <Jump className="total-comments" href={`/post/${posting.id}#comments`}>
+            <Jump className="total-comments" href={`/post/${postingId}#comments`}>
                 <FontAwesomeIcon icon="comment"/>{" "}&nbsp;{commentsText}
             </Jump>
         </div>

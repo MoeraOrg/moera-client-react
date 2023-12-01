@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -8,9 +8,9 @@ import { isAtHomeNode } from "state/node/selectors";
 import NodeName from "ui/nodename/NodeName";
 import "./OwnerName.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const OwnerName = ({name, changing, atHome, ...props}: Props) => {
+export default function OwnerName() {
+    const {name, changing, ...props} = useSelector((state: ClientState) => state.node.owner);
+    const atHome = useSelector(isAtHomeNode);
     const {t} = useTranslation();
 
     return (
@@ -26,12 +26,3 @@ const OwnerName = ({name, changing, atHome, ...props}: Props) => {
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ...state.node.owner,
-        atHome: isAtHomeNode(state)
-    })
-);
-
-export default connector(OwnerName);

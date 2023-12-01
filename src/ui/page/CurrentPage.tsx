@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
@@ -27,9 +27,15 @@ const SettingsPage = React.lazy(() => import("ui/settings/SettingsPage"));
 const PeoplePage = React.lazy(() => import("ui/people/PeoplePage"));
 const ComplainsPage = React.lazy(() => import("ui/complains/ComplainsPage"));
 
-type Props = ConnectedProps<typeof connector>;
+export default function CurrentPage() {
+    const page = useSelector((state: ClientState) => state.navigation.page);
+    const positioned = useSelector(isDetailedPostingPositioned);
+    const googlePlayProhibited = useSelector(
+        (state: ClientState) => isGooglePlayHiding(state)
+            && isFeedGeneralReady(state, "timeline")
+            && isFeedSheriffProhibited(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
+    );
 
-function CurrentPage({page, positioned, googlePlayProhibited}: Props) {
     useEffect(() => {
         if (page !== PAGE_TIMELINE && page !== PAGE_NEWS && (page !== PAGE_DETAILED_POSTING || !positioned)) {
             setTimeout(() => window.scrollTo(0, 0));
@@ -77,15 +83,3 @@ function CurrentPage({page, positioned, googlePlayProhibited}: Props) {
             return null;
     }
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        page: state.navigation.page,
-        positioned: isDetailedPostingPositioned(state),
-        googlePlayProhibited: isGooglePlayHiding(state)
-            && isFeedGeneralReady(state, "timeline")
-            && isFeedSheriffProhibited(state, "timeline", SHERIFF_GOOGLE_PLAY_TIMELINE)
-    })
-);
-
-export default connector(CurrentPage);

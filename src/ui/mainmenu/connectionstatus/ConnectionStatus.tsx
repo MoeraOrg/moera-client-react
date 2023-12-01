@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -20,10 +20,12 @@ import "./ConnectionStatus.css";
 
 const ConnectDialog = React.lazy(() => import("ui/connectdialog/ConnectDialog"));
 
-type Props = ConnectedProps<typeof connector>;
-
-function ConnectionButtons({atNode, connecting,  connected, showNavigator, openConnectDialog,
-                            openSignUpDialog}: Props) {
+function ConnectionButtons() {
+    const atNode = useSelector(isAtNode);
+    const connecting = useSelector((state: ClientState) => state.home.connecting);
+    const connected = useSelector(isConnectedToHome);
+    const showNavigator = useSelector((state: ClientState) => state.node.owner.showNavigator);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (showNavigator && Browser.isTinyScreen()) {
@@ -39,8 +41,12 @@ function ConnectionButtons({atNode, connecting,  connected, showNavigator, openC
         return (
             <span className="d-none d-lg-inline me-lg-2">
                 {t("not-connected-home")}
-                <Button variant="primary" size="sm" onClick={() => openSignUpDialog()}>{t("sign-up")}</Button>
-                <Button variant="success" size="sm" onClick={() => openConnectDialog()}>{t("connect")}</Button>
+                <Button variant="primary" size="sm" onClick={() => dispatch(openSignUpDialog())}>
+                    {t("sign-up")}
+                </Button>
+                <Button variant="success" size="sm" onClick={() => dispatch(openConnectDialog())}>
+                    {t("connect")}
+                </Button>
             </span>
         );
     }
@@ -57,28 +63,20 @@ function ConnectionButtons({atNode, connecting,  connected, showNavigator, openC
     );
 }
 
-const ConnectionStatus = (props: Props) => (
-    <>
-        <div className="connection-status">
-            <ConnectionButtons {...props}/>
-        </div>
-        {props.showConnectDialog &&
-            <Suspense fallback={null}>
-                <ConnectDialog/>
-            </Suspense>
-        }
-    </>
-);
+export default function ConnectionStatus() {
+    const showConnectDialog = useSelector((state: ClientState) =>
+        state.connectDialog.show && !state.messageBox.show && !state.home.connecting);
 
-const connector = connect(
-    (state: ClientState) => ({
-        atNode: isAtNode(state),
-        connecting: state.home.connecting,
-        connected: isConnectedToHome(state),
-        showNavigator: state.node.owner.showNavigator,
-        showConnectDialog: state.connectDialog.show && !state.messageBox.show && !state.home.connecting
-    }),
-    { openConnectDialog, openSignUpDialog }
-);
-
-export default connector(ConnectionStatus);
+    return (
+        <>
+            <div className="connection-status">
+                <ConnectionButtons/>
+            </div>
+            {showConnectDialog &&
+                <Suspense fallback={null}>
+                    <ConnectDialog/>
+                </Suspense>
+            }
+        </>
+    );
+}

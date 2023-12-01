@@ -1,20 +1,21 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
 import { nodeCardCopyMention } from "state/nodecards/actions";
 import { Button } from "ui/control";
 
-type Props = {
+interface Props {
     nodeName: string;
     fullName: string | null;
-} & ConnectedProps<typeof connector>;
+}
 
-function CopyMentionButton({nodeName, fullName, nodeCardCopyMention}: Props) {
+export default function CopyMentionButton({nodeName, fullName}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onClick = () => nodeCardCopyMention(nodeName, fullName);
+    const onClick = () => dispatch(nodeCardCopyMention(nodeName, fullName));
 
     return (
         <Button variant="outline-info" size="sm" onClick={onClick}>
@@ -22,10 +23,3 @@ function CopyMentionButton({nodeName, fullName, nodeCardCopyMention}: Props) {
         </Button>
     );
 }
-
-const connector = connect(
-    null,
-    { nodeCardCopyMention }
-);
-
-export default connector(CopyMentionButton);

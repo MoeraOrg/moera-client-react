@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { format, formatDistanceToNow, formatISO, fromUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -15,7 +15,7 @@ import { mentionName, shortGender } from "util/misc";
 import { Browser } from "ui/browser";
 import "./NodeCard.css";
 
-interface OwnProps {
+interface Props {
     nodeName: string;
     fullName?: string | null;
     avatar?: AvatarImage | null;
@@ -23,11 +23,11 @@ interface OwnProps {
     hide: () => void;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
-
-function NodeCard({
-    nodeName, fullName, avatar, avatarNodeName, hide, card, anyLoaded, anyLoading, homeOwnerName
-}: Props) {
+export default function NodeCard({nodeName, fullName, avatar, avatarNodeName, hide}: Props) {
+    const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
+    const anyLoaded = useSelector((state: ClientState) => isNodeCardAnyLoaded(state, nodeName));
+    const anyLoading = useSelector((state: ClientState) => isNodeCardAnyLoading(state, nodeName));
+    const homeOwnerName = useSelector(getHomeOwnerName);
     const {t} = useTranslation();
 
     if (card == null || (!anyLoaded && !anyLoading)) {
@@ -104,14 +104,3 @@ function NodeCard({
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        card: getNodeCard(state, ownProps.nodeName),
-        anyLoaded: isNodeCardAnyLoaded(state, ownProps.nodeName),
-        anyLoading: isNodeCardAnyLoading(state, ownProps.nodeName),
-        homeOwnerName: getHomeOwnerName(state)
-    })
-);
-
-export default connector(NodeCard);

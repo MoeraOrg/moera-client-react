@@ -1,24 +1,25 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { ClientState } from "state/state";
 import { shareDialogPrepare, sharePageCopyLink } from "state/sharedialog/actions";
 import { getOwnerName } from "state/node/selectors";
 import { Browser } from "ui/browser";
 import { DropdownMenu } from "ui/control";
 import "./PageShareButton.css";
 
-type Props = {
+interface Props {
     href: string;
-} & ConnectedProps<typeof connector>;
+}
 
-function PageShareButton({href, ownerName, shareDialogPrepare, sharePageCopyLink}: Props) {
+export default function PageShareButton({href}: Props) {
+    const ownerName = useSelector(getOwnerName);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onShare = () => shareDialogPrepare(ownerName ?? "", href);
-    const onCopyLink = () => sharePageCopyLink(ownerName ?? "", href);
+    const onShare = () => dispatch(shareDialogPrepare(ownerName ?? "", href));
+    const onCopyLink = () => dispatch(sharePageCopyLink(ownerName ?? "", href));
 
     // @ts-ignore
     if (Browser.isAndroidApp() || navigator.share) {
@@ -50,12 +51,3 @@ function PageShareButton({href, ownerName, shareDialogPrepare, sharePageCopyLink
         );
     }
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getOwnerName(state)
-    }),
-    { shareDialogPrepare, sharePageCopyLink }
-);
-
-export default connector(PageShareButton);

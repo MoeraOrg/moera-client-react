@@ -31,7 +31,7 @@ export { ReactionEmojiButton } from "ui/control/ReactionEmojiButton";
 export { ReactionTotals } from "ui/control/ReactionTotals";
 export { RichTextEditor } from "ui/control/richtexteditor/RichTextEditor";
 export { RichTextValue } from "ui/control/richtexteditor/rich-text-value";
-export { SheriffVisibility } from "ui/control/SheriffVisibility";
+export { SheriffInvisible } from "ui/control/SheriffInvisible";
 export { SignatureVerifyButton } from "ui/control/SignatureVerifyButton";
 export { SubscribeButton } from "ui/control/subscribebutton/SubscribeButton";
 export { TextareaAutosize } from "ui/control/TextareaAutosize";

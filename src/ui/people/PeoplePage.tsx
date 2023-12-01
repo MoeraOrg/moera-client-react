@@ -1,9 +1,11 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
+import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
+import { getSettingNode } from "state/settings/selectors";
 import { Avatar, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";
@@ -15,11 +17,23 @@ import PeopleSelectedHideDialog from "ui/peoplehidedialog/PeopleSelectedHideDial
 import FriendGroupAddDialog from "ui/friendgroupadddialog/FriendGroupAddDialog";
 import "./PeoplePage.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const PeoplePage = ({
-    tab, loadingGeneral, ownerAvatar, ownerName, showAskDialog, showPeopleHideDialog, showFriendGroupAddDialog
-}: Props) => {
+export default function PeoplePage() {
+    const tab = useSelector((state: ClientState) => state.people.tab);
+    const loadingGeneral = useSelector((state: ClientState) => state.people.loadingGeneral);
+    const ownerAvatar = useSelector(getOwnerAvatar);
+    const ownerName = useSelector(getOwnerName);
+    const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
+    const peopleHideDialog = {
+        show: useSelector((state: ClientState) => state.peopleHideDialog.show),
+        nodeName: useSelector((state: ClientState) => state.peopleHideDialog.nodeName),
+        subscribersHidden: useSelector((state: ClientState) =>
+                (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin"),
+        subscriptionsHidden: useSelector((state: ClientState) =>
+                (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin"),
+        friendsHidden: useSelector((state: ClientState) =>
+            (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin")
+    };
+    const showFriendGroupAddDialog = useSelector((state: ClientState) => state.friendGroupAddDialog.show);
     const {t} = useTranslation();
 
     return (
@@ -38,23 +52,14 @@ const PeoplePage = ({
                     <PeopleContent/>
                 </div>
                 {showAskDialog && <AskSelectedDialog/>}
-                {showPeopleHideDialog && <PeopleSelectedHideDialog/>}
+                {peopleHideDialog.show &&
+                    <PeopleSelectedHideDialog nodeName={peopleHideDialog.nodeName}
+                                              subscribersHidden={peopleHideDialog.subscribersHidden}
+                                              subscriptionsHidden={peopleHideDialog.subscriptionsHidden}
+                                              friendsHidden={peopleHideDialog.friendsHidden}/>
+                }
                 {showFriendGroupAddDialog && <FriendGroupAddDialog/>}
             </Page>
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        tab: state.people.tab,
-        loadingGeneral: state.people.loadingGeneral,
-        ownerAvatar: getOwnerAvatar(state),
-        ownerName: getOwnerName(state),
-        showAskDialog: state.askDialog.show,
-        showPeopleHideDialog: state.peopleHideDialog.show,
-        showFriendGroupAddDialog: state.friendGroupAddDialog.show
-    })
-);
-
-export default connector(PeoplePage);

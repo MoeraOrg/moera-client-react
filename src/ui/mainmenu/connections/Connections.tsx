@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -14,20 +14,25 @@ import NodeName from "ui/nodename/NodeName";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";
 
-type Props = {
+interface Props {
     hide: () => void;
-} & ConnectedProps<typeof connector>;
+}
 
-function Connections({hide, location, login, owner, roots, openConnectDialog, openSignUpDialog, confirmBox}: Props) {
+export default function Connections({hide}: Props) {
+    const location = useSelector(getHomeRootLocation);
+    const login = useSelector((state: ClientState) => state.home.login);
+    const owner = useSelector((state: ClientState) => state.home.owner);
+    const roots = useSelector((state: ClientState) => state.home.roots);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onAddClick = () => {
-        openConnectDialog();
+        dispatch(openConnectDialog());
         hide();
     };
 
     const onSignUpClick = () => {
-        openSignUpDialog();
+        dispatch(openSignUpDialog());
         hide();
     };
 
@@ -49,7 +54,7 @@ function Connections({hide, location, login, owner, roots, openConnectDialog, op
 
     const onDisconnectActive = () => {
         hide();
-        confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger");
+        dispatch(confirmBox(t("want-disconnect"), t("disconnect"), t("cancel"), onConfirmed, null, "danger"));
     }
 
     return (
@@ -85,15 +90,3 @@ function Connections({hide, location, login, owner, roots, openConnectDialog, op
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        location: getHomeRootLocation(state),
-        login: state.home.login,
-        owner: state.home.owner,
-        roots: state.home.roots
-    }),
-    { openConnectDialog, openSignUpDialog, confirmBox }
-);
-
-export default connector(Connections);

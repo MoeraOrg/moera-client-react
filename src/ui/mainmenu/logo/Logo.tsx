@@ -1,15 +1,13 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { ClientState } from "state/state";
 import { isConnectedToHome } from "state/home/selectors";
 import { useMainMenuHomeNews, useMainMenuTimeline } from "ui/mainmenu/main-menu";
 import Jump from "ui/navigation/Jump";
 import "./Logo.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function Logo({connectedToHome}: Props) {
+export default function Logo() {
+    const connectedToHome = useSelector(isConnectedToHome);
     const {href: timelineHref} = useMainMenuTimeline();
     const {href: newsHref} = useMainMenuHomeNews();
 
@@ -24,11 +22,3 @@ function Logo({connectedToHome}: Props) {
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        connectedToHome: isConnectedToHome(state)
-    })
-);
-
-export default connector(Logo);

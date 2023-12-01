@@ -78,8 +78,11 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                         <PostingSheriffVisibility posting={posting}/>
                     }
                     <br/>
-                    <PostingDate posting={posting} story={story}/>
-                    <PostingUpdated posting={posting} story={story}/>
+                    <PostingDate posting={posting} publishedAt={story.publishedAt}/>
+                    {posting.totalRevisions > 1 &&
+                        <PostingUpdated createdAt={posting.createdAt} editedAt={posting.editedAt}
+                                        publishedAt={story.publishedAt}/>
+                    }
                     <PostingVisibility posting={posting} editable={postingEditable}/>
                 </div>
             </div>
@@ -93,8 +96,9 @@ export default function DetailedPosting({story, posting, deleting}: Props) {
                 </div>
             }
             <div className="reactions-line">
-                <PostingReactions posting={posting}/>
-                <PostingComments posting={posting}/>
+                <PostingReactions postingId={posting.id} postingReceiverName={posting.receiverName}
+                                  reactions={posting.reactions}/>
+                <PostingComments postingId={posting.id} totalComments={posting.totalComments}/>
             </div>
             <PostingButtons posting={posting} story={story} menu/>
             {expanded &&

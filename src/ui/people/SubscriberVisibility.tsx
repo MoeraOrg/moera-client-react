@@ -1,17 +1,17 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SubscriberInfo } from "api";
-import { ClientState } from "state/state";
 import { isNodeAdmin } from "state/node/selectors";
 import { Principal } from "ui/control";
 
-type Props = {
+interface Props {
     subscriber: SubscriberInfo;
-} & ConnectedProps<typeof connector>;
+}
 
-function SubscriberVisibility({subscriber, isAdmin}: Props) {
+export default function SubscriberVisibility({subscriber}: Props) {
+    const isAdmin = useSelector(isNodeAdmin);
     const {t} = useTranslation();
 
     const view = subscriber.operations?.view ?? "public";
@@ -27,11 +27,3 @@ function SubscriberVisibility({subscriber, isAdmin}: Props) {
 
     return <Principal value={view}/>;
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        isAdmin: isNodeAdmin(state)
-    })
-);
-
-export default connector(SubscriberVisibility);

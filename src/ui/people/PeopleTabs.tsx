@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -13,28 +13,42 @@ import { getFriendGroupTitle } from "ui/control/principal-display";
 import PeopleTabsItem from "ui/people/PeopleTabsItem";
 import "./PeopleTabs.css";
 
-type PeopleTabsProps = {
+interface PeopleTabsProps {
     active: PeopleTab;
-} & ConnectedProps<typeof connector>;
+}
 
-const PeopleTabs = ({
-    active, loadedGeneral, subscribersTotal, subscriptionsTotal, friendsTotal, friendOfsTotal, blockedTotal,
-    blockedByTotal, viewSubscribers, viewSubscriptions, viewFriends, viewFriendOfs, viewBlocked, viewBlockedBy,
-    friendGroups, atHome, peopleGoToTab, openFriendGroupAddDialog
-}: PeopleTabsProps) => {
+export default function PeopleTabs({active}: PeopleTabsProps) {
+    const loadedGeneral = useSelector((state: ClientState) => state.people.loadedGeneral);
+    const subscribersTotal = useSelector((state: ClientState) => state.people.subscribersTotal);
+    const subscriptionsTotal = useSelector((state: ClientState) => state.people.subscriptionsTotal);
+    const friendsTotal = useSelector((state: ClientState) => state.people.friendsTotal);
+    const friendOfsTotal = useSelector((state: ClientState) => state.people.friendOfsTotal);
+    const blockedTotal = useSelector((state: ClientState) => state.people.blockedTotal);
+    const blockedByTotal = useSelector((state: ClientState) => state.people.blockedByTotal);
+    const viewSubscribers = useSelector((state: ClientState) => state.people.operations.viewSubscribers ?? "public");
+    const viewSubscriptions = useSelector((state: ClientState) => state.people.operations.viewSubscriptions ?? "public");
+    const viewFriends = useSelector((state: ClientState) => state.people.operations.viewFriends ?? "public");
+    const viewFriendOfs = useSelector((state: ClientState) => state.people.operations.viewFriendOfs ?? "public");
+    const viewBlocked = useSelector((state: ClientState) => state.people.operations.viewBlocked ?? "public");
+    const viewBlockedBy = useSelector((state: ClientState) => state.people.operations.viewBlockedBy ?? "admin");
+    const friendGroups = useSelector(getNodeFriendGroups);
+    const atHome = useSelector(isAtHomeNode);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    const goToTab = (tab: string) => dispatch(peopleGoToTab(tab));
 
     return (
         <ul className="nav nav-pills flex-md-column people-tabs">
             {subscribersTotal != null &&
                 <PeopleTabsItem name="subscribers" title={t("subscribers")} principal={viewSubscribers}
                                 total={subscribersTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={peopleGoToTab}/>
+                                peopleGoToTab={goToTab}/>
             }
             {subscriptionsTotal != null &&
                 <PeopleTabsItem name="subscriptions" title={t("subscriptions")} principal={viewSubscriptions}
                                 total={subscriptionsTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={peopleGoToTab}/>
+                                peopleGoToTab={goToTab}/>
             }
             {friendsTotal != null &&
                 friendGroups.map(friendGroup => {
@@ -52,52 +66,29 @@ const PeopleTabs = ({
                     const total = friendsTotal[friendGroup.id] ?? 0;
                     return <PeopleTabsItem name={friendGroup.id} title={title} principal={principal}
                                            principalTitles={principalTitles} total={total} loaded={loadedGeneral}
-                                           active={active} peopleGoToTab={peopleGoToTab} key={friendGroup.id}/>;
+                                           active={active} peopleGoToTab={goToTab} key={friendGroup.id}/>;
                 })
             }
             {friendOfsTotal != null &&
                 <PeopleTabsItem name="friend-ofs" title={t("in-friends")} principal={viewFriendOfs}
                                 total={friendOfsTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={peopleGoToTab}/>
+                                peopleGoToTab={goToTab}/>
             }
             {blockedTotal != null &&
                 <PeopleTabsItem name="blocked" title={t("blocked-plural")} principal={viewBlocked}
                                 total={blockedTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={peopleGoToTab}/>
+                                peopleGoToTab={goToTab}/>
             }
             {blockedByTotal != null &&
                 <PeopleTabsItem name="blocked-by" title={t("in-blocked-plural")} principal={viewBlockedBy}
                                 total={blockedByTotal} loaded={loadedGeneral} active={active}
-                                peopleGoToTab={peopleGoToTab}/>
+                                peopleGoToTab={goToTab}/>
             }
             {atHome &&
-                <Button variant="outline-info" size="sm" onClick={() => openFriendGroupAddDialog()}>
+                <Button variant="outline-info" size="sm" onClick={() => dispatch(openFriendGroupAddDialog())}>
                     <FontAwesomeIcon icon="plus"/>{" "}{t("add-friend-group")}
                 </Button>
             }
         </ul>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loadedGeneral: state.people.loadedGeneral,
-        subscribersTotal: state.people.subscribersTotal,
-        subscriptionsTotal: state.people.subscriptionsTotal,
-        friendsTotal: state.people.friendsTotal,
-        friendOfsTotal: state.people.friendOfsTotal,
-        blockedTotal: state.people.blockedTotal,
-        blockedByTotal: state.people.blockedByTotal,
-        viewSubscribers: state.people.operations.viewSubscribers ?? "public",
-        viewSubscriptions: state.people.operations.viewSubscriptions ?? "public",
-        viewFriends: state.people.operations.viewFriends ?? "public",
-        viewFriendOfs: state.people.operations.viewFriendOfs ?? "public",
-        viewBlocked: state.people.operations.viewBlocked ?? "public",
-        viewBlockedBy: state.people.operations.viewBlockedBy ?? "admin",
-        friendGroups: getNodeFriendGroups(state),
-        atHome: isAtHomeNode(state)
-    }),
-    { peopleGoToTab, openFriendGroupAddDialog }
-);
-
-export default connector(PeopleTabs);

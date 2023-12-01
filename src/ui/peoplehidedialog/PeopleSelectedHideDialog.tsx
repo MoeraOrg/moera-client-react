@@ -1,11 +1,8 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PrincipalValue } from "api";
-import { ClientState } from "state/state";
-import { getSettingNode } from "state/settings/selectors";
 import {
     peopleSelectedFriendshipSetVisibility,
     peopleSelectedSubscriberSetVisibility,
@@ -14,6 +11,7 @@ import {
 import { closePeopleHideDialog } from "state/peoplehidedialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField } from "ui/control/field";
+import store from "state/store";
 
 interface Values {
     hideMySubscription: boolean | null;
@@ -21,25 +19,27 @@ interface Values {
     hideFriend: boolean | null;
 }
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    nodeName: string | null;
+    subscribersHidden: boolean;
+    subscriptionsHidden: boolean;
+    friendsHidden: boolean;
+}
 
 type Props = OuterProps & FormikProps<Values>;
 
-function PeopleSelectedHideDialog(props: Props) {
-    const {nodeName, subscribersHidden, subscriptionsHidden, friendsHidden, closePeopleHideDialog, resetForm} = props;
+function PeopleSelectedHideDialog({nodeName, subscribersHidden, subscriptionsHidden, friendsHidden}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        resetForm({values: peopleSelectedHideDialogLogic.mapPropsToValues()});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 'props' are missing on purpose
 
     if (nodeName != null) {
         return null;
     }
 
+    const onClose = () => dispatch(closePeopleHideDialog());
+
     return (
-        <ModalDialog title={t("hide")} onClose={closePeopleHideDialog}>
+        <ModalDialog title={t("hide")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <CheckboxField title={t("hide-my-subscription")} name="hideMySubscription"
@@ -50,7 +50,7 @@ function PeopleSelectedHideDialog(props: Props) {
                                    disabled={friendsHidden} anyValue/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closePeopleHideDialog}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit">{t("ok")}</Button>
                 </div>
             </Form>
@@ -67,38 +67,22 @@ const peopleSelectedHideDialogLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const {
-            subscriptionsHidden, subscribersHidden, friendsHidden, peopleSelectedSubscriptionSetVisibility,
-            peopleSelectedSubscriberSetVisibility, peopleSelectedFriendshipSetVisibility, closePeopleHideDialog
-        } = formik.props;
+        const {subscriptionsHidden, subscribersHidden, friendsHidden} = formik.props;
 
         formik.setStatus("submitted");
         if (!subscriptionsHidden && values.hideMySubscription !== null) {
-            peopleSelectedSubscriptionSetVisibility(!values.hideMySubscription);
+            store.dispatch(peopleSelectedSubscriptionSetVisibility(!values.hideMySubscription));
         }
         if (!subscribersHidden && values.hideSubscriptionToMe !== null) {
-            peopleSelectedSubscriberSetVisibility(!values.hideSubscriptionToMe);
+            store.dispatch(peopleSelectedSubscriberSetVisibility(!values.hideSubscriptionToMe));
         }
         if (!friendsHidden && values.hideFriend !== null) {
-            peopleSelectedFriendshipSetVisibility(!values.hideFriend);
+            store.dispatch(peopleSelectedFriendshipSetVisibility(!values.hideFriend));
         }
-        closePeopleHideDialog();
+        store.dispatch(closePeopleHideDialog());
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        nodeName: state.peopleHideDialog.nodeName,
-        subscribersHidden: (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin",
-        subscriptionsHidden: (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin",
-        friendsHidden: (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin"
-    }),
-    {
-        peopleSelectedSubscriberSetVisibility, peopleSelectedSubscriptionSetVisibility,
-        peopleSelectedFriendshipSetVisibility, closePeopleHideDialog
-    }
-);
-
-export default connector(withFormik(peopleSelectedHideDialogLogic)(PeopleSelectedHideDialog));
+export default withFormik(peopleSelectedHideDialogLogic)(PeopleSelectedHideDialog);

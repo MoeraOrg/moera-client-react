@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, formatDistanceToNow, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -12,15 +12,17 @@ import { getSetting } from "state/settings/selectors";
 import { Principal, PrincipalSelect } from "ui/control";
 import "./PostingVisibility.css";
 
-type Props = {
+interface Props {
     posting: PostingInfo;
     editable: boolean;
-} & ConnectedProps<typeof connector>;
+}
 
-const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUpdate}: Props) => {
+export default function PostingVisibility({posting, editable}: Props) {
+    const timeRelative = useSelector((state: ClientState) => getSetting(state, "posting.time.relative") as boolean);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onChange = (value: PrincipalValue) => postingOperationsUpdate(posting.id, "", {view: value});
+    const onChange = (value: PrincipalValue) => dispatch(postingOperationsUpdate(posting.id, "", {view: value}));
 
     const value = posting.receiverOperations?.view ?? posting.operations?.view ?? "public";
     let deletionDate = "";
@@ -50,12 +52,3 @@ const PostingVisibility = ({posting, editable, timeRelative, postingOperationsUp
         </span>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        timeRelative: getSetting(state, "posting.time.relative") as boolean
-    }),
-    { postingOperationsUpdate }
-);
-
-export default connector(PostingVisibility);
