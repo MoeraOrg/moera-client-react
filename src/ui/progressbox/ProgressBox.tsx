@@ -1,14 +1,14 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
 import { ClientState } from "state/state";
 import { ModalDialog } from "ui/control";
 
-type Props = ConnectedProps<typeof connector>;
-
-function ProgressBox({done, total}: Props) {
+export default function ProgressBox() {
+    const done = useSelector((state: ClientState) => state.progressBox.done);
+    const total = useSelector((state: ClientState) => state.progressBox.total);
     const {t} = useTranslation();
 
     const preparing = total <= 0;
@@ -29,9 +29,3 @@ function ProgressBox({done, total}: Props) {
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => state.progressBox
-);
-
-export default connector(ProgressBox);

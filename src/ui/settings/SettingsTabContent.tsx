@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 
 import { ClientState } from "state/state";
@@ -17,13 +17,19 @@ import SettingsItemAddonsEmpty from "ui/settings/SettingsItemAddonsEmpty";
 import SettingsPluginControls from "ui/settings/SettingsPluginControls";
 import SettingsModerationSheet from "ui/settings/SettingsModerationSheet";
 
-interface OwnProps {
+interface Props {
     tab: SettingsTabId;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function SettingsTabContent({tab}: Props) {
+    const sheet = useSelector((state: ClientState) => getSheet(tab, getActualSheetName(tab, state.settings.sheet)));
+    const otherItems = useSelector((state: ClientState) => getOtherItems(state, tab));
+    const addonsItems = useSelector(getAddonsItems);
+    const clientValues = useSelector((state: ClientState) =>
+        tab === "node" ? state.settings.node.values : state.settings.client.values);
+    const clientMeta = useSelector((state: ClientState) =>
+        tab === "node" ? state.settings.node.meta : state.settings.client.meta);
 
-function SettingsTabContent({sheet, otherItems, addonsItems, clientValues, clientMeta}: Props) {
     if (sheet == null) {
         return null;
     }
@@ -58,15 +64,3 @@ const getAddonsItems = createSelector(
         ? getPluginsItems(plugins, SettingsPluginControls)
         : [component(SettingsItemAddonsEmpty)]
 );
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        sheet: getSheet(ownProps.tab, getActualSheetName(ownProps.tab, state.settings.sheet)),
-        otherItems: getOtherItems(state, ownProps.tab),
-        addonsItems: getAddonsItems(state),
-        clientValues: ownProps.tab === "node" ? state.settings.node.values : state.settings.client.values,
-        clientMeta: ownProps.tab === "node" ? state.settings.node.meta : state.settings.client.meta
-    })
-);
-
-export default connector(SettingsTabContent);

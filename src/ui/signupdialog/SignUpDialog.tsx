@@ -1,10 +1,10 @@
-import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import debounce from 'lodash.debounce';
 import i18n, { TFunction } from 'i18next';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 import PROVIDERS from "providers";
 import { NamingRules } from "api";
@@ -27,8 +27,20 @@ import { Browser } from "ui/browser";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
+import store from "state/store";
+import { SignUpStage } from "state/signupdialog/state";
 
-type OuterProps = ConnectedProps<typeof connector> & WithTranslation;
+const PROVIDER_CHOICES = (Browser.isDevMode() ? PROVIDERS : PROVIDERS.filter(p => !p.dev))
+    .map(p => ({title: p.title, value: p.name}));
+
+interface OuterProps {
+    stage: SignUpStage;
+    name: string | null;
+    domain: string | null;
+    password: string | null;
+    email: string | null;
+    language: string;
+}
 
 interface Values {
     language: string;
@@ -45,63 +57,28 @@ interface Values {
     googlePlayAllowed: boolean;
 }
 
-type Props = OuterProps  & FormikProps<Values>;
+type Props = OuterProps & FormikProps<Values>;
 
-class SignUpDialog extends React.PureComponent<Props> {
+function SignUpDialogInner({stage, values, setFieldValue, setFieldTouched}: Props) {
+    const processing = useSelector((state: ClientState) => state.signUpDialog.processing);
+    const languages = useSelector((state: ClientState) => getSettingMeta(state, "language")?.modifiers?.items);
+    const connectedToHome = useSelector(isConnectedToHome);
+    const dispatch = useDispatch();
 
-    #languageSelectDom: HTMLSelectElement | null = null;
-    #providerSelectDom: HTMLSelectElement | null = null;
-    #nameInputDom: HTMLInputElement | null = null;
-    #lastVerifiedName: string | null = null;
-    #lastVerifiedDomain: string | null = null;
+    const languageSelectRef = useRef<HTMLSelectElement>(null);
+    const providerSelectRef = useRef<HTMLSelectElement>(null);
+    const nameInputRef = useRef<HTMLInputElement>(null);
+    const lastVerifiedName = useRef<string | null>(null);
+    const lastVerifiedDomain = useRef<string | null>(null);
 
-    setLanguageSelectRef = (dom: HTMLSelectElement | null) => {
-        this.#languageSelectDom = dom;
-        if (this.#languageSelectDom) {
-            this.#languageSelectDom.addEventListener("click", this.onLanguageClick);
-            this.onLanguageClick();
-        }
-    }
+    const currentValues = useRef<Values>(values); // To be used in debounced callbacks
+    currentValues.current = values;
 
-    setProviderSelectRef = (dom: HTMLSelectElement | null) => {
-        this.#providerSelectDom = dom;
-        if (this.#providerSelectDom) {
-            this.#providerSelectDom.addEventListener("click", this.onProviderClick);
-        }
-    }
+    const {t} = useTranslation();
 
-    setNameInputRef = (dom: HTMLInputElement | null) => {
-        this.#nameInputDom = dom;
-        if (this.#nameInputDom) {
-            this.#nameInputDom.addEventListener("input", this.onNameInput);
-            this.#nameInputDom.addEventListener("blur", this.onNameBlur);
-        }
-    }
-
-    componentWillUnmount() {
-        if (this.#languageSelectDom) {
-            this.#languageSelectDom.removeEventListener("click", this.onLanguageClick);
-        }
-        if (this.#providerSelectDom) {
-            this.#providerSelectDom.removeEventListener("click", this.onProviderClick);
-        }
-        if (this.#nameInputDom) {
-            this.#nameInputDom.removeEventListener("input", this.onNameInput);
-            this.#nameInputDom.removeEventListener("blur", this.onNameBlur);
-        }
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (this.props.show !== prevProps.show && this.props.show) {
-            this.props.resetForm({
-                values: signUpDialogLogic.mapPropsToValues(this.props),
-            });
-        }
-    }
-
-    onLanguageClick = () => {
-        if (!this.props.connectedToHome) {
-            let lang = this.#languageSelectDom?.value;
+    const onLanguageClick = useCallback(() => {
+        if (!connectedToHome) {
+            let lang = languageSelectRef.current?.value;
             if (lang === "auto") {
                 lang = findPreferredLanguage();
             }
@@ -109,125 +86,157 @@ class SignUpDialog extends React.PureComponent<Props> {
                 i18n.changeLanguage(lang);
             }
         }
-    }
+    }, [connectedToHome]);
 
-    onProviderClick = () => {
-        this.verifyName(this.props.values.name);
-        this.verifyName.flush();
-    }
+    useEffect(() => {
+        const dom = languageSelectRef.current;
+        if (dom != null) {
+            dom.addEventListener("click", onLanguageClick);
+            onLanguageClick();
 
-    onNameInput = (event: Event) => {
-        this.verifyName((event.target as HTMLInputElement).value);
-    };
-
-    onNameBlur = (event: Event) => {
-        this.verifyName((event.target as HTMLInputElement).value);
-        this.verifyName.flush();
-    };
-
-    onDomainInput = (domain: string) => {
-        this.verifyDomain(domain);
-    };
-
-    onDomainBlur = (domain: string) => {
-        this.verifyDomain(domain);
-        this.verifyDomain.flush();
-    };
-
-    onAutoDomainChange = () => {
-        this.verifyName(this.props.values.name);
-    }
-
-    verifyName = debounce(name => {
-        const {values, setFieldValue, setFieldTouched, signUpNameVerify, signUpFindDomain} = this.props;
-
-        const verifiedName = `${values.provider};${values.autoDomain};${name}`;
-        if (this.#lastVerifiedName === verifiedName) {
-            return;
+            return () => dom.removeEventListener("click", onLanguageClick);
         }
-        this.#lastVerifiedName = verifiedName;
-        if (!name || name.length > NamingRules.NAME_MAX_LENGTH || !NamingRules.isRegisteredNameValid(name)) {
-            setFieldValue("domain", "");
-            return;
-        }
-        signUpNameVerify(name, (name, free) => {
-            setFieldValue("nameTaken", free ? null : name);
-            setFieldTouched("name", true, true);
-        });
-        if (values.autoDomain) {
-            signUpFindDomain(values.provider, name, (provider, name, domainName) => {
-                if (name === values.name && provider === values.provider) {
-                    const i = domainName.indexOf(".");
-                    setFieldValue("domain", i > 0 ? domainName.substring(0, i) : domainName);
-                }
-            });
-        }
-    }, 500);
+    }, [onLanguageClick]);
 
-    verifyDomain = debounce(domain => {
-        const {values, setFieldValue, setFieldTouched, signUpDomainVerify} = this.props;
-
-        const verifiedDomain = `${values.provider};${domain}`;
-        if (this.#lastVerifiedDomain === verifiedDomain) {
-            return;
-        }
-        this.#lastVerifiedDomain = verifiedDomain;
-        signUpDomainVerify(values.provider, domain, (domain, free) => {
-            setFieldValue("domainTaken", free ? null : domain);
-            setFieldTouched("domain", true, true);
-        });
-    }, 500);
-
-    getProviders() {
-        const providers = Browser.isDevMode() ? PROVIDERS : PROVIDERS.filter(p => !p.dev);
-        return providers.map(p => ({title: p.title, value: p.name}));
-    }
-
-    render() {
-        const {processing, stage, languages, cancelSignUpDialog, t} = this.props;
-
-        const languageChoices = (languages ?? [{value: "auto"} as SelectFieldChoice])
-            .map(l => ({
-                title: t(`setting.client.mercy.language-items.${l.value}`, {defaultValue: l.title}),
-                value: l.value
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const verifyName = useCallback(
+        debounce(name => {
+            const verifiedName = `${currentValues.current.provider};${currentValues.current.autoDomain};${name}`;
+            if (lastVerifiedName.current === verifiedName) {
+                return;
+            }
+            lastVerifiedName.current = verifiedName;
+            if (!name || name.length > NamingRules.NAME_MAX_LENGTH || !NamingRules.isRegisteredNameValid(name)) {
+                setFieldValue("domain", "");
+                return;
+            }
+            dispatch(signUpNameVerify(name, (name, free) => {
+                setFieldValue("nameTaken", free ? null : name);
+                setFieldTouched("name", true, true);
             }));
-        return (
-            <ModalDialog title={t("create-blog")} onClose={cancelSignUpDialog}>
-                <Form>
-                    <div className="modal-body sign-up-dialog">
-                        <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
-                                     disabled={processing || stage > SIGN_UP_STAGE_PROFILE}
-                                     selectRef={this.setLanguageSelectRef} autoFocus/>
-                        <SelectField name="provider" title={t("provider")} choices={this.getProviders()} anyValue
-                                     disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
-                                     selectRef={this.setProviderSelectRef}/>
-                        <InputField name="name" title={t("name")} inputRef={this.setNameInputRef}
-                                    disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
-                        <NameHelp/>
-                        <DomainField name="domain" title={t("domain")}
-                                     disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
-                                     onDomainInput={this.onDomainInput} onDomainBlur={this.onDomainBlur}
-                                     onAutoChange={this.onAutoDomainChange}/>
-                        <InputField name="password" title={t("new-password")}
-                                    disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
-                        <InputField name="confirmPassword" title={t("confirm-password")}
-                                    disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
-                        <InputField name="email" title={t("e-mail")}
-                                    disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
-                        {Browser.isAndroidGooglePlay() &&
-                            <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>
-                        }
-                        <CheckboxField title={t("want-allow-android-google-play")} name="googlePlayAllowed"/>
-                    </div>
-                    <div className="modal-footer">
-                        <Button variant="secondary" onClick={cancelSignUpDialog}>{t("cancel")}</Button>
-                        <Button variant="primary" type="submit" loading={processing}>{t("create")}</Button>
-                    </div>
-                </Form>
-            </ModalDialog>
-        );
+            if (currentValues.current.autoDomain) {
+                dispatch(signUpFindDomain(currentValues.current.provider, name, (provider, name, domainName) => {
+                    if (name === currentValues.current.name && provider === currentValues.current.provider) {
+                        const i = domainName.indexOf(".");
+                        setFieldValue("domain", i > 0 ? domainName.substring(0, i) : domainName);
+                    }
+                }));
+            }
+        }, 500),
+        [setFieldValue, setFieldTouched, dispatch]
+    );
+
+    const onProviderClick = useCallback(() => {
+        verifyName(values.name);
+        verifyName.flush();
+    }, [values.name, verifyName]);
+
+    useEffect(() => {
+        const dom = providerSelectRef.current;
+        if (dom != null) {
+            dom.addEventListener("click", onProviderClick);
+
+            return () => dom.removeEventListener("click", onProviderClick);
+        }
+    }, [onProviderClick]);
+
+    const onNameInput = useCallback((event: Event) => {
+        verifyName((event.target as HTMLInputElement).value);
+    }, [verifyName]);
+
+    const onNameBlur = useCallback((event: Event) => {
+        verifyName((event.target as HTMLInputElement).value);
+        verifyName.flush();
+    }, [verifyName]);
+
+    useEffect(() => {
+        const dom = nameInputRef.current;
+        if (dom != null) {
+            dom.addEventListener("input", onNameInput);
+            dom.addEventListener("blur", onNameBlur);
+
+            return () => {
+                dom.removeEventListener("input", onNameInput);
+                dom.removeEventListener("blur", onNameBlur);
+            }
+        }
+    }, [onNameBlur, onNameInput]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const verifyDomain = useCallback(
+        debounce(domain => {
+            const verifiedDomain = `${currentValues.current.provider};${domain}`;
+            if (lastVerifiedDomain.current === verifiedDomain) {
+                return;
+            }
+            lastVerifiedDomain.current = verifiedDomain;
+            dispatch(signUpDomainVerify(currentValues.current.provider, domain, (domain, free) => {
+                setFieldValue("domainTaken", free ? null : domain);
+                setFieldTouched("domain", true, true);
+            }));
+        }, 500),
+        [setFieldValue, setFieldTouched, dispatch]
+    );
+
+    const onDomainInput = (domain: string) => {
+        verifyDomain(domain);
+    };
+
+    const onDomainBlur = (domain: string) => {
+        verifyDomain(domain);
+        verifyDomain.flush();
+    };
+
+    const onAutoDomainChange = () => {
+        verifyName(values.name);
     }
 
+    const languageChoices = useMemo(
+        () => (languages ?? [{value: "auto"} as SelectFieldChoice])
+                .map(l => ({
+                    title: t(`setting.client.mercy.language-items.${l.value}`, {defaultValue: l.title}),
+                    value: l.value
+                })),
+        [languages, t]
+    );
+
+    const onClose = () => dispatch(cancelSignUpDialog());
+
+    return (
+        <ModalDialog title={t("create-blog")} onClose={onClose}>
+            <Form>
+                <div className="modal-body sign-up-dialog">
+                    <SelectField name="language" title={t("language")} choices={languageChoices} anyValue
+                                 disabled={processing || stage > SIGN_UP_STAGE_PROFILE}
+                                 selectRef={languageSelectRef} autoFocus/>
+                    <SelectField name="provider" title={t("provider")} choices={PROVIDER_CHOICES} anyValue
+                                 disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
+                                 selectRef={providerSelectRef}/>
+                    <InputField name="name" title={t("name")} inputRef={nameInputRef}
+                                disabled={processing || stage > SIGN_UP_STAGE_NAME}/>
+                    <NameHelp/>
+                    <DomainField name="domain" title={t("domain")}
+                                 disabled={processing || stage > SIGN_UP_STAGE_DOMAIN}
+                                 onDomainInput={onDomainInput} onDomainBlur={onDomainBlur}
+                                 onAutoChange={onAutoDomainChange}/>
+                    <InputField name="password" title={t("new-password")}
+                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
+                    <InputField name="confirmPassword" title={t("confirm-password")}
+                                disabled={processing || stage > SIGN_UP_STAGE_PASSWORD}/>
+                    <InputField name="email" title={t("e-mail")}
+                                disabled={processing || stage > SIGN_UP_STAGE_PROFILE}/>
+                    {Browser.isAndroidGooglePlay() &&
+                        <CheckboxField titleHtml={getTermsTitle(t)} name="termsAgree"/>
+                    }
+                    <CheckboxField title={t("want-allow-android-google-play")} name="googlePlayAllowed"/>
+                </div>
+                <div className="modal-footer">
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
+                    <Button variant="primary" type="submit" loading={processing}>{t("create")}</Button>
+                </div>
+            </Form>
+        </ModalDialog>
+    );
 }
 
 function getTermsTitle(t: TFunction): string {
@@ -283,23 +292,25 @@ const signUpDialogLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.signUp(values.language, values.provider, values.name.trim(),
+        store.dispatch(signUp(values.language, values.provider, values.name.trim(),
             values.autoDomain && formik.props.stage <= SIGN_UP_STAGE_DOMAIN ? null : values.domain.trim(),
             values.password, values.email, values.googlePlayAllowed,
-            (fieldName, message) => formik.setFieldError(fieldName, message));
+            (fieldName, message) => formik.setFieldError(fieldName, message)));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        ...state.signUpDialog,
-        language: getSetting(state, "language") as string,
-        languages: getSettingMeta(state, "language")?.modifiers?.items,
-        connectedToHome: isConnectedToHome(state)
-    }),
-    { cancelSignUpDialog, signUp, signUpNameVerify, signUpFindDomain, signUpDomainVerify }
-);
+const SignUpDialogOuter = withFormik(signUpDialogLogic)(SignUpDialogInner);
 
-export default connector(withTranslation()(withFormik(signUpDialogLogic)(SignUpDialog)));
+export default function SignUpDialog() {
+    const stage = useSelector((state: ClientState) => state.signUpDialog.stage);
+    const name = useSelector((state: ClientState) => state.signUpDialog.name);
+    const domain = useSelector((state: ClientState) => state.signUpDialog.domain);
+    const password = useSelector((state: ClientState) => state.signUpDialog.password);
+    const email = useSelector((state: ClientState) => state.signUpDialog.email);
+    const language = useSelector((state: ClientState) => getSetting(state, "language") as string);
+
+    return <SignUpDialogOuter stage={stage} name={name} domain={domain} password={password} email={email}
+                              language={language}/>;
+}

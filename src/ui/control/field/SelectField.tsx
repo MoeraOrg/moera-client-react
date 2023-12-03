@@ -34,7 +34,7 @@ interface Props {
     initialValue?: string | null;
     defaultValue?: string | null;
     disabled?: boolean;
-    selectRef?: (dom: HTMLSelectElement | null) => void;
+    selectRef?: React.LegacyRef<HTMLSelectElement>;
     setting?: string;
 }
 
@@ -85,12 +85,7 @@ export function SelectField({
                     multiple={multiple}
                     autoComplete={autoComplete}
                     disabled={disabled}
-                    ref={dom => {
-                        inputDom.current = dom ?? undefined;
-                        if (selectRef != null) {
-                            selectRef(dom);
-                        }
-                    }}
+                    ref={selectRef}
                 >
                     {choices.map((c, index) =>
                         <option key={index} value={c.value}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -7,9 +7,8 @@ import { ClientState } from "state/state";
 import { Button } from "ui/control";
 import "./SettingsButtons.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function SettingsButtons({updating}: Props) {
+export default function SettingsButtons() {
+    const updating = useSelector((state: ClientState) => state.settings.updating);
     const {dirty, handleReset} = useFormikContext();
     const {t} = useTranslation();
 
@@ -25,11 +24,3 @@ function SettingsButtons({updating}: Props) {
         </div>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        updating: state.settings.updating
-    })
-);
-
-export default connector(SettingsButtons);

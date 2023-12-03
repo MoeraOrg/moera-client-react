@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
@@ -9,27 +9,28 @@ import { ClientState } from "state/state";
 import { registerName, registerNameDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { InputField } from "ui/control/field";
-
-type OuterProps = ConnectedProps<typeof connector>;
+import store from "state/store";
 
 interface Values {
     name: string;
 }
 
-type Props = OuterProps & FormikProps<Values>;
-
-function RegisterNameDialog({registering, registerNameDialogCancel}: Props) {
+function RegisterNameDialog() {
+    const registering = useSelector((state: ClientState) => state.nodeName.registering);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
+    const onClose = () => dispatch(registerNameDialogCancel());
+
     return (
-        <ModalDialog title={t("register-new-name")} onClose={registerNameDialogCancel}>
+        <ModalDialog title={t("register-new-name")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <InputField name="name" title={t("name")} autoFocus/>
                     <NameHelp/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={registerNameDialogCancel}
+                    <Button variant="secondary" onClick={onClose}
                             disabled={registering}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={registering}>{t("register")}</Button>
                 </div>
@@ -40,7 +41,7 @@ function RegisterNameDialog({registering, registerNameDialogCancel}: Props) {
 
 const registerNameDialogLogic = {
 
-    mapPropsToValues: (props: OuterProps): Values => ({
+    mapPropsToValues: (): Values => ({
         name: ""
     }),
 
@@ -52,20 +53,13 @@ const registerNameDialogLogic = {
     validateOnBlur: false,
     validateOnChange: false,
 
-    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.registerName(
+    handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
+        store.dispatch(registerName(
             values.name.trim(),
-            () => formik.setFieldError("name", "name-already-taken"));
+            () => formik.setFieldError("name", "name-already-taken")));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        registering: state.nodeName.registering
-    }),
-    { registerNameDialogCancel, registerName }
-);
-
-export default connector(withFormik(registerNameDialogLogic)(RegisterNameDialog));
+export default withFormik(registerNameDialogLogic)(RegisterNameDialog);

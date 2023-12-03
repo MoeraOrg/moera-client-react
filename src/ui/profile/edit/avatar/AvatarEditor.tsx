@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 
@@ -18,12 +18,18 @@ import AvatarSelector from "ui/profile/edit/avatar/AvatarSelector";
 import AvatarEditDialog from "ui/profile/edit/avatar/AvatarEditDialog";
 import "./AvatarEditor.css";
 
-type Props = {
+interface Props {
     name: string;
-} & ConnectedProps<typeof connector>;
+}
 
-function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, showAvatarEditDialog, profileAvatarsLoad,
-                       profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder}: Props) {
+export default function AvatarEditor({name}: Props) {
+    const avatarsLoading = useSelector((state: ClientState) => state.profile.avatars.loading);
+    const avatarsLoaded = useSelector((state: ClientState) => state.profile.avatars.loaded);
+    const avatars = useSelector((state: ClientState) => state.profile.avatars.avatars);
+    const nodeName = useSelector(getOwnerName);
+    const showAvatarEditDialog = useSelector((state: ClientState) => state.profile.avatarEditDialog.show);
+    const dispatch = useDispatch();
+
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
     const {
@@ -35,17 +41,17 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, s
 
     const onEdit = (event: React.MouseEvent) => {
         if (!avatarsLoaded && !avatarsLoading) {
-            profileAvatarsLoad();
+            dispatch(profileAvatarsLoad());
         }
         if (value) {
             onToggle(event);
         } else {
-            profileOpenAvatarEditDialog(onSelect);
+            dispatch(profileOpenAvatarEditDialog(onSelect));
         }
     };
 
     const onNew = () => {
-        profileOpenAvatarEditDialog(onSelect);
+        dispatch(profileOpenAvatarEditDialog(onSelect));
         hide();
     };
 
@@ -55,9 +61,9 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, s
         }
     }
 
-    const onDelete = (id: string) => profileAvatarConfirmDelete(id, onDeleted);
+    const onDelete = (id: string) => dispatch(profileAvatarConfirmDelete(id, onDeleted));
 
-    const onReorder = (activeId: string, overId: string) => profileAvatarsReorder(activeId, overId);
+    const onReorder = (activeId: string, overId: string) => dispatch(profileAvatarsReorder(activeId, overId));
 
     return (
         <>
@@ -80,16 +86,3 @@ function AvatarEditor({name, avatarsLoading, avatarsLoaded, avatars, nodeName, s
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        avatarsLoading: state.profile.avatars.loading,
-        avatarsLoaded: state.profile.avatars.loaded,
-        avatars: state.profile.avatars.avatars,
-        nodeName: getOwnerName(state),
-        showAvatarEditDialog: state.profile.avatarEditDialog.show
-    }),
-    { profileAvatarsLoad, profileOpenAvatarEditDialog, profileAvatarConfirmDelete, profileAvatarsReorder }
-);
-
-export default connector(AvatarEditor);

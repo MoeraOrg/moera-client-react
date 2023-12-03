@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { formatISO, fromUnixTime } from 'date-fns';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -8,9 +8,11 @@ import { ClientState } from "state/state";
 import { Popover } from "ui/control";
 import "./OperationStatus.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function OperationStatus({status, statusUpdated, errorCode, errorMessage}: Props) {
+export default function OperationStatus() {
+    const status = useSelector((state: ClientState) => state.nodeName.operationStatus);
+    const statusUpdated = useSelector((state: ClientState) => state.nodeName.operationStatusUpdated);
+    const errorCode = useSelector((state: ClientState) => state.nodeName.operationErrorCode);
+    const errorMessage = useSelector((state: ClientState) => state.nodeName.operationErrorMessage);
     const {t} = useTranslation();
 
     const text = status != null ? t(`operation-status.${status}`) : undefined;
@@ -38,14 +40,3 @@ function OperationStatus({status, statusUpdated, errorCode, errorMessage}: Props
         </span>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        status: state.nodeName.operationStatus,
-        statusUpdated: state.nodeName.operationStatusUpdated,
-        errorCode: state.nodeName.operationErrorCode,
-        errorMessage: state.nodeName.operationErrorMessage,
-    })
-);
-
-export default connector(OperationStatus);

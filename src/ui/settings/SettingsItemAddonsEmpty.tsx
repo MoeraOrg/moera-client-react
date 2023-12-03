@@ -1,12 +1,12 @@
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { Loading } from "ui/control";
 
-type Props = ConnectedProps<typeof connector>;
-
-const SettingsItemAddonsEmpty = ({loading, loaded}: Props) => {
+export default function SettingsItemAddonsEmpty() {
+    const loading = useSelector((state: ClientState) => state.settings.plugins.loading);
+    const loaded = useSelector((state: ClientState) => state.settings.plugins.loaded);
     const {t} = useTranslation();
 
     if (loaded) {
@@ -15,12 +15,3 @@ const SettingsItemAddonsEmpty = ({loading, loaded}: Props) => {
         return loading ? <Loading/> : null;
     }
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loading: state.settings.plugins.loading,
-        loaded: state.settings.plugins.loaded
-    })
-);
-
-export default connector(SettingsItemAddonsEmpty);

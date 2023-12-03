@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -11,9 +11,8 @@ import SettingsMenu from "ui/settings/SettingsMenu";
 import SettingsTabContent from "ui/settings/SettingsTabContent";
 import "./SettingsPage.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const SettingsPage = ({tab}: Props) => {
+export default function SettingsPage() {
+    const tab = useSelector((state: ClientState) => state.settings.tab);
     const {t} = useTranslation();
 
     return (
@@ -34,11 +33,3 @@ const SettingsPage = ({tab}: Props) => {
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        tab: state.settings.tab
-    })
-);
-
-export default connector(SettingsPage);

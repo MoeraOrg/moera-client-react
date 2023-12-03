@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { closeReactionsDialog } from "state/reactionsdialog/actions";
@@ -9,9 +9,11 @@ import ReactionsListView from "ui/reactionsdialog/ReactionsListView";
 import ReactionsChartView from "ui/reactionsdialog/ReactionsChartView";
 import "./ReactionsDialog.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function ReactionsDialog() {
+    const viewReactions = useSelector((state: ClientState) =>
+        isReactionsDialogPermitted("viewReactions", "public", state));
+    const dispatch = useDispatch();
 
-function ReactionsDialog({viewReactions, closeReactionsDialog}: Props) {
     const itemsRef = useRef<HTMLDivElement>(null);
     const [chartView, setChartView] = useState<boolean>(false);
 
@@ -24,7 +26,7 @@ function ReactionsDialog({viewReactions, closeReactionsDialog}: Props) {
     const onSwitchView = () => setChartView(!chartView);
 
     return (
-        <ModalDialog onClose={closeReactionsDialog}>
+        <ModalDialog onClose={() => dispatch(closeReactionsDialog())}>
             <div className="reactions-dialog modal-body">
                 {chartView || !viewReactions ?
                     <ReactionsChartView itemsRef={itemsRef} onSwitchView={viewReactions ? onSwitchView : undefined}/>
@@ -35,12 +37,3 @@ function ReactionsDialog({viewReactions, closeReactionsDialog}: Props) {
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        viewReactions: isReactionsDialogPermitted("viewReactions", "public", state)
-    }),
-    { closeReactionsDialog }
-);
-
-export default connector(ReactionsDialog);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -7,9 +7,10 @@ import { settingsPluginsDelete } from "state/settings/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { PluginProps } from "ui/settings/settings-menu";
 
-type Props = PluginProps & ConnectedProps<typeof connector>;
+type Props = PluginProps;
 
-const SettingsPluginControls = ({plugin, confirmBox}: Props) => {
+export default function SettingsPluginControls({plugin}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!plugin.local || plugin.tokenId == null) {
@@ -17,8 +18,8 @@ const SettingsPluginControls = ({plugin, confirmBox}: Props) => {
     }
 
     const onDelete = (e: React.MouseEvent) => {
-        confirmBox(t("want-delete-addon", {name: plugin.title ?? plugin.name}), t("delete"), t("cancel"),
-            settingsPluginsDelete(plugin.name, plugin.tokenId!), null, "danger");
+        dispatch(confirmBox(t("want-delete-addon", {name: plugin.title ?? plugin.name}), t("delete"), t("cancel"),
+            settingsPluginsDelete(plugin.name, plugin.tokenId!), null, "danger"));
         e.preventDefault();
     }
 
@@ -28,10 +29,3 @@ const SettingsPluginControls = ({plugin, confirmBox}: Props) => {
         </button>
     );
 }
-
-const connector = connect(
-    null,
-    { confirmBox }
-);
-
-export default connector(SettingsPluginControls);

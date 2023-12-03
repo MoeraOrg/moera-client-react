@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { ClientState } from "state/state";
 import { mnemonicClose } from "state/nodename/actions";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField } from "ui/control/field";
+import store from "state/store";
 
 interface ColumnProps {
     mnemonic: string[];
@@ -22,18 +23,16 @@ const Column = ({mnemonic, start, end}: ColumnProps) => (
     </div>
 );
 
-type OuterProps = ConnectedProps<typeof connector>;
-
 interface Values {
     confirmed: boolean;
 }
 
-type Props = OuterProps & FormikProps<Values>;
+type Props = FormikProps<Values>;
 
-function MnemonicDialog({name, mnemonic, values: {confirmed}, resetForm}: Props) {
+function MnemonicDialog({values: {confirmed}}: Props) {
+    const name = useSelector((state: ClientState) => state.nodeName.mnemonicName);
+    const mnemonic = useSelector((state: ClientState) => state.nodeName.mnemonic);
     const {t} = useTranslation();
-
-    useEffect(() => resetForm(), [mnemonic, resetForm]);
 
     if (!mnemonic) {
         return null;
@@ -61,23 +60,15 @@ function MnemonicDialog({name, mnemonic, values: {confirmed}, resetForm}: Props)
 
 const mnemonicDialogLogic = {
 
-    mapPropsToValues: (props: OuterProps): Values => ({
+    mapPropsToValues: (): Values => ({
         confirmed: false
     }),
 
-    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.mnemonicClose();
+    handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
+        store.dispatch(mnemonicClose());
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        name: state.nodeName.mnemonicName,
-        mnemonic: state.nodeName.mnemonic,
-    }),
-    { mnemonicClose }
-);
-
-export default connector(withFormik(mnemonicDialogLogic)(MnemonicDialog));
+export default withFormik(mnemonicDialogLogic)(MnemonicDialog);

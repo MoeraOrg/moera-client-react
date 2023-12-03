@@ -1,5 +1,5 @@
 import React, { MouseEvent } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clipboardCopy from 'clipboard-copy';
 import { useTranslation } from 'react-i18next';
@@ -11,11 +11,11 @@ import { flashBox } from "state/flashbox/actions";
 import { htmlEntities } from "util/html";
 import "./CopyQuoteButton.css";
 
-type Props = {
+interface Props {
     url: string;
     title: string;
     mode: ShareTextMode;
-} & ConnectedProps<typeof connector>;
+}
 
 function formatLink(url: string, mode: ShareTextMode) {
     if (mode === "text") {
@@ -25,15 +25,16 @@ function formatLink(url: string, mode: ShareTextMode) {
     return `<a href="${qurl}">${qurl}</a>`;
 }
 
-function CopyQuoteButton({url, title, mode, closeShareDialog, flashBox}: Props) {
+export default function CopyQuoteButton({url, title, mode}: Props) {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onClick = (event: MouseEvent) => {
-        closeShareDialog();
+        dispatch(closeShareDialog());
         clipboardCopy((title ? title + "\n\n" : "") + formatLink(url, mode))
             .then(() => {
                 if (!Browser.isAndroidBrowser()) {
-                    flashBox(t("quote-copied"));
+                    dispatch(flashBox(t("quote-copied")));
                 }
             });
         event.preventDefault();
@@ -45,10 +46,3 @@ function CopyQuoteButton({url, title, mode, closeShareDialog, flashBox}: Props) 
         </button>
     );
 }
-
-const connector = connect(
-    null,
-    { closeShareDialog, flashBox }
-);
-
-export default connector(CopyQuoteButton);

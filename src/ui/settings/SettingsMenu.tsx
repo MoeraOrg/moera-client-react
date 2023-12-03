@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +9,10 @@ import { getActualSheetName, getActualTab, getSheets } from "ui/settings/setting
 import Jump from "ui/navigation/Jump";
 import "./SettingsMenu.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const SettingsMenu = ({tab, sheetName, settingsGoToSheet}: Props) => {
+export default function SettingsMenu() {
+    const tab = useSelector((state: ClientState) => getActualTab(state.settings.tab));
+    const sheetName = useSelector((state: ClientState) => getActualSheetName(state.settings.tab, state.settings.sheet));
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     return (
@@ -19,7 +20,7 @@ const SettingsMenu = ({tab, sheetName, settingsGoToSheet}: Props) => {
             getSheets(tab).map(sh =>
                 <li className="nav-item" key={sh.name}>
                     <span className={cx("nav-link", {"active": sh.name === sheetName})}
-                          onClick={() => settingsGoToSheet(sh.name)}>{
+                          onClick={() => dispatch(settingsGoToSheet(sh.name))}>{
                         sh.name === sheetName ?
                             t(`setting.sheet.${sh.name}`)
                         :
@@ -30,13 +31,3 @@ const SettingsMenu = ({tab, sheetName, settingsGoToSheet}: Props) => {
         }</ul>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        tab: getActualTab(state.settings.tab),
-        sheetName: getActualSheetName(state.settings.tab, state.settings.sheet)
-    }),
-    { settingsGoToSheet }
-);
-
-export default connector(SettingsMenu);

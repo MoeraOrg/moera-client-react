@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -8,9 +8,10 @@ import Twemoji from "ui/twemoji/Twemoji";
 import { reactionsDialogSelectTab } from "state/reactionsdialog/actions";
 import { ClientState } from "state/state";
 
-type Props = ConnectedProps<typeof connector>;
-
-const TotalsTabs = ({loading, loaded, total, emojis, activeTab, reactionsDialogSelectTab}: Props) => {
+export default function TotalsTabs() {
+    const {loading, loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
+    const activeTab = useSelector((state: ClientState) => state.reactionsDialog.activeTab);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     return (
@@ -18,12 +19,12 @@ const TotalsTabs = ({loading, loaded, total, emojis, activeTab, reactionsDialogS
             {loaded &&
                 <div className="total-tabs">
                     <div className={cx("total", {"active": activeTab == null})}
-                         onClick={() => reactionsDialogSelectTab(null)}>
+                         onClick={() => dispatch(reactionsDialogSelectTab(null))}>
                         {t("all")} {total}
                     </div>
                     {emojis.map(rt =>
                         <div key={rt.emoji} className={cx("total", {"active": activeTab === rt.emoji})}
-                             onClick={() => reactionsDialogSelectTab(rt.emoji)}>
+                             onClick={() => dispatch(reactionsDialogSelectTab(rt.emoji))}>
                             <Twemoji code={rt.emoji}/>{" "}{rt.total}
                         </div>
                     )}
@@ -33,13 +34,3 @@ const TotalsTabs = ({loading, loaded, total, emojis, activeTab, reactionsDialogS
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ...state.reactionsDialog.totals,
-        activeTab: state.reactionsDialog.activeTab
-    }),
-    { reactionsDialogSelectTab }
-);
-
-export default connector(TotalsTabs);

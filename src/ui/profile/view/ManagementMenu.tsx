@@ -1,13 +1,12 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions";
 import { DropdownMenu } from "ui/control";
 
-type Props = ConnectedProps<typeof connector>;
-
-const ManagementMenu = ({registerNameDialog, nodeNameUpdateDialog}: Props) => {
+export default function ManagementMenu() {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     return (
@@ -16,30 +15,23 @@ const ManagementMenu = ({registerNameDialog, nodeNameUpdateDialog}: Props) => {
                 title: t("update-current-name"),
                 nodeName: "",
                 href: "/profile?edit=true",
-                onClick: () => nodeNameUpdateDialog(false),
+                onClick: () => dispatch(nodeNameUpdateDialog(false)),
                 show: true
             },
             {
                 title: t("register-different-name"),
                 nodeName: "",
                 href: "/profile?edit=true",
-                onClick: registerNameDialog,
+                onClick: () => dispatch(registerNameDialog()),
                 show: true
             },
             {
                 title: t("transfer-existing-name"),
                 nodeName: "",
                 href: "/profile?edit=true",
-                onClick: () => nodeNameUpdateDialog(true),
+                onClick: () => dispatch(nodeNameUpdateDialog(true)),
                 show: true
             }
         ]}/>
     );
 }
-
-const connector = connect(
-    null,
-    { registerNameDialog, nodeNameUpdateDialog }
-);
-
-export default connector(ManagementMenu);

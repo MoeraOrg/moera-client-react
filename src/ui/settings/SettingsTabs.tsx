@@ -1,14 +1,15 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import SettingsTab from "ui/settings/SettingsTab";
 import "./SettingsTabs.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-const SettingsTabs = ({loadingNodeValues, loadingNodeMeta, loadingClientValues}: Props) => {
+export default function SettingsTabs() {
+    const loadingNodeValues = useSelector((state: ClientState) => state.settings.node.loadingValues);
+    const loadingNodeMeta = useSelector((state: ClientState) => state.settings.node.loadingMeta);
+    const loadingClientValues = useSelector((state: ClientState) => state.settings.client.loadingValues);
     const {t} = useTranslation();
 
     return (
@@ -20,13 +21,3 @@ const SettingsTabs = ({loadingNodeValues, loadingNodeMeta, loadingClientValues}:
         </ul>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loadingNodeValues: state.settings.node.loadingValues,
-        loadingNodeMeta: state.settings.node.loadingMeta,
-        loadingClientValues: state.settings.client.loadingValues
-    })
-);
-
-export default connector(SettingsTabs);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { NodeName } from "api";
@@ -17,28 +17,24 @@ import EntryHtml from "ui/entry/EntryHtml";
 import { shortGender } from "util/misc";
 import "./ProfileView.css";
 
-type EditButtonProps = ConnectedProps<typeof editButtonConnector>;
-
-const EditButtonImpl = ({profileEdit}: EditButtonProps) => {
+function EditButton() {
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
+    const onClick = () => dispatch(profileEdit());
+
     return (
-        <Button variant="outline-primary" size="sm" style={{marginLeft: "1rem"}} onClick={profileEdit}>
+        <Button variant="outline-primary" size="sm" style={{marginLeft: "1rem"}} onClick={onClick}>
             {t("edit")}
         </Button>
     );
 }
 
-const editButtonConnector = connect(
-    null,
-    {profileEdit}
-);
-
-const EditButton = editButtonConnector(EditButtonImpl);
-
-type ProfileViewProps = ConnectedProps<typeof profileViewConnector>;
-
-const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) => {
+export default function ProfileView() {
+    const loading = useSelector((state: ClientState) => getOwnerCard(state)?.details?.loading ?? true);
+    const profile = useSelector((state: ClientState) => getOwnerCard(state)?.details?.profile);
+    const ownerName = useSelector(getOwnerName);
+    const editable = useSelector(isProfileEditable);
     const {t} = useTranslation();
 
     return (
@@ -75,17 +71,3 @@ const ProfileView = ({loading, profile, ownerName, editable}: ProfileViewProps) 
         </>
     );
 }
-
-const profileViewConnector = connect(
-    (state: ClientState) => {
-        const details = getOwnerCard(state)?.details;
-        return ({
-            loading: details?.loading ?? true,
-            profile: details?.profile,
-            ownerName: getOwnerName(state),
-            editable: isProfileEditable(state)
-        });
-    }
-);
-
-export default profileViewConnector(ProfileView);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -18,14 +18,20 @@ import Twemoji from "ui/twemoji/Twemoji";
 import ReactionVerifyButton from "ui/reactionsdialog/ReactionVerifyButton";
 import TotalsTabs from "ui/reactionsdialog/TotalsTabs";
 
-type Props = {
+interface Props {
     itemsRef?: React.LegacyRef<HTMLDivElement>;
     onSwitchView?: () => void;
-} & ConnectedProps<typeof connector>;
+}
 
-const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reactionsNodeName, remaining,
-                            reactionsLoading, reactionsLoaded, reactions, closeReactionsDialog,
-                            reactionsDialogPastReactionsLoad}: Props) => {
+export default function ReactionsListView({itemsRef, onSwitchView}: Props) {
+    const postingId = useSelector((state: ClientState) => state.reactionsDialog.postingId);
+    const commentId = useSelector((state: ClientState) => state.reactionsDialog.commentId);
+    const reactionsNodeName = useSelector(getReactionsDialogNodeName);
+    const remaining = useSelector(getReactionsDialogRemainingCount);
+    const reactionsLoading = useSelector(isReactionsDialogReactionsLoading);
+    const reactionsLoaded = useSelector(isReactionsDialogReactionsAllLoaded);
+    const reactions = useSelector(getReactionsDialogItems);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     return (
@@ -36,7 +42,7 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
                     <div className="switch-view" title={t("view-as-chart")} onClick={onSwitchView}>
                         <FontAwesomeIcon icon="chart-bar"/>
                     </div>
-                    <CloseButton onClick={closeReactionsDialog}/>
+                    <CloseButton onClick={() => dispatch(closeReactionsDialog())}/>
                 </div>
             </div>
             <div className="items" tabIndex={-1} ref={itemsRef}>
@@ -63,7 +69,7 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
                         {t("more-reactions-hidden", {remaining})}
                     </div>
                 :
-                    <button className="more" onClick={reactionsDialogPastReactionsLoad}>
+                    <button className="more" onClick={() => dispatch(reactionsDialogPastReactionsLoad())}>
                         {t("more-reactions", {remaining})}
                     </button>
                 )
@@ -72,18 +78,3 @@ const ReactionsListView = ({itemsRef, onSwitchView, postingId, commentId, reacti
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        postingId: state.reactionsDialog.postingId,
-        commentId: state.reactionsDialog.commentId,
-        reactionsNodeName: getReactionsDialogNodeName(state),
-        remaining: getReactionsDialogRemainingCount(state),
-        reactionsLoading: isReactionsDialogReactionsLoading(state),
-        reactionsLoaded: isReactionsDialogReactionsAllLoaded(state),
-        reactions: getReactionsDialogItems(state)
-    }),
-    { closeReactionsDialog, reactionsDialogPastReactionsLoad }
-);
-
-export default connector(ReactionsListView);

@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import { NodeName, NamingRules } from "api";
+import { NamingRules, NodeName } from "api";
 import { ClientState } from "state/state";
 import { nodeNameUpdate, nodeNameUpdateDialogCancel } from "state/nodename/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 import { range } from "util/misc";
+import store from "state/store";
 import "./NodeNameUpdateDialog.css";
 
 interface ColumnProps {
@@ -31,7 +32,10 @@ const Column = ({start, end, autoFocus = false}: ColumnProps) => (
     </div>
 );
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    showChangeName: boolean;
+    name: string | null;
+}
 
 interface Values {
     name: string;
@@ -40,20 +44,16 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function NodeNameUpdateDialog(props: Props) {
-    const {showChangeName, updating, nodeNameUpdateDialogCancel, resetForm} = props;
-
+function NodeNameUpdateDialogInner({showChangeName}: Props) {
+    const updating = useSelector((state: ClientState) => state.nodeName.updating);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        const values = nodeNameUpdateDialogLogic.mapPropsToValues(props);
-        resetForm({values});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 'props' are missing on purpose
+    const onClose = () => dispatch(nodeNameUpdateDialogCancel());
 
     return (
         <ModalDialog title={showChangeName ? t("transfer-node-name") : t("update-node-name")} size="lg"
-                     onClose={nodeNameUpdateDialogCancel}>
+                     onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     {showChangeName &&
@@ -71,7 +71,7 @@ function NodeNameUpdateDialog(props: Props) {
                     </div>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={nodeNameUpdateDialogCancel} disabled={updating}>
+                    <Button variant="secondary" onClick={onClose} disabled={updating}>
                         {t("cancel")}
                     </Button>
                     <Button variant="primary" type="submit" loading={updating}>
@@ -111,21 +111,19 @@ const nodeNameUpdateDialogLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.nodeNameUpdate(
+        store.dispatch(nodeNameUpdate(
             NodeName.parse(values.name.trim()).format(),
-            values.mnemonic.map(v => v.trim().toLowerCase()));
+            values.mnemonic.map(v => v.trim().toLowerCase())));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        showChangeName: state.nodeName.showingChangeName,
-        updating: state.nodeName.updating,
-        name: state.nodeName.name
-    }),
-    { nodeNameUpdateDialogCancel, nodeNameUpdate }
-);
+const NodeNameUpdateDialogOuter = withFormik(nodeNameUpdateDialogLogic)(NodeNameUpdateDialogInner);
 
-export default connector(withFormik(nodeNameUpdateDialogLogic)(NodeNameUpdateDialog));
+export default function NodeNameUpdateDialog() {
+    const showChangeName = useSelector((state: ClientState) => state.nodeName.showingChangeName);
+    const name = useSelector((state: ClientState) => state.nodeName.name);
+
+    return <NodeNameUpdateDialogOuter showChangeName={showChangeName} name={name}/>;
+}

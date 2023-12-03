@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTranslation } from 'react-i18next';
 
@@ -8,12 +8,14 @@ import { closeReactionsDialog } from "state/reactionsdialog/actions";
 import { CloseButton, Loading } from "ui/control";
 import Twemoji from "ui/twemoji/Twemoji";
 
-type Props = {
+interface Props {
     itemsRef?: React.LegacyRef<HTMLDivElement>;
     onSwitchView?: () => void;
-} & ConnectedProps<typeof connector>;
+}
 
-const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emojis, closeReactionsDialog}: Props) => {
+export default function ReactionsChartView({itemsRef, onSwitchView}: Props) {
+    const {loading, loaded, total, emojis} = useSelector((state: ClientState) => state.reactionsDialog.totals);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     if (!loaded) {
@@ -29,7 +31,7 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
                             <FontAwesomeIcon icon="list"/>
                         </div>
                     }
-                    <CloseButton onClick={closeReactionsDialog}/>
+                    <CloseButton onClick={() => dispatch(closeReactionsDialog())}/>
                 </div>
             </div>
             <div className="items" tabIndex={-1} ref={itemsRef}>
@@ -62,12 +64,3 @@ const ReactionsChartView = ({itemsRef, onSwitchView, loading, loaded, total, emo
         </>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        ...state.reactionsDialog.totals,
-    }),
-    { closeReactionsDialog }
-);
-
-export default connector(ReactionsChartView);

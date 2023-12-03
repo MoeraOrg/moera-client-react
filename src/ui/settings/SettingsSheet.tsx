@@ -1,91 +1,38 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import { Property } from 'csstype';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import i18n from 'i18next';
 
 import { ClientSettingMetaInfo, SettingInfo, SettingMetaInfo, SettingTypes, SettingValue } from "api";
 import { messageBox } from "state/messagebox/actions";
-import { Item } from "ui/settings/settings-menu";
 import { settingsUpdate } from "state/settings/actions";
+import { useSettingsSheetResize } from "ui/settings/settings-hooks";
+import { Item } from "ui/settings/settings-menu";
 import { SettingsSheetItems, toFieldName } from "ui/settings/SettingsSheetItems";
 import SettingsButtons from "ui/settings/SettingsButtons";
-import { mapEquals } from "util/map";
+import store from "state/store";
 import "./SettingsSheet.css";
 
-type OuterProps = {
+interface OuterProps {
     items: Item[];
     valuesMap: Map<string, string | null>;
     metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
-} & ConnectedProps<typeof connector> & WithTranslation;
+}
 
 type Values = Partial<Record<string, SettingValue>>;
 
 type Props = OuterProps & FormikProps<Values>;
 
-interface State {
-    sheetMaxHeight: Property.MaxHeight;
-}
+function SettingsSheet({valuesMap, metaMap, items}: Props) {
+    const sheetMaxHeight = useSettingsSheetResize();
 
-class SettingsSheet extends React.PureComponent<Props, State> {
-
-    constructor(props: Props, context: any) {
-        super(props, context);
-
-        this.state = { sheetMaxHeight: "none" };
-    }
-
-    componentDidMount() {
-        window.addEventListener("resize", this.onResize);
-        this.setState({ sheetMaxHeight: this._calcListMaxHeight() });
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.onResize);
-    }
-
-    onResize = () => {
-        this.setState({ sheetMaxHeight: this._calcListMaxHeight() });
-    };
-
-    _calcListMaxHeight() {
-        const sheetElement = document.getElementsByClassName("settings-sheet").item(0);
-        if (sheetElement == null) {
-            return "none";
-        }
-        const buttonsElement = document.getElementsByClassName("settings-buttons").item(0);
-        if (buttonsElement == null) {
-            return "none";
-        }
-        const topHeight = sheetElement.getBoundingClientRect().top + window.scrollY;
-        const bottomHeight = buttonsElement.getBoundingClientRect().height + 40;
-        const maxHeight = window.innerHeight - topHeight - bottomHeight;
-        return `${maxHeight}px`;
-    }
-
-    componentDidUpdate(prevProps: Readonly<Props>) {
-        if (!mapEquals(this.props.valuesMap, prevProps.valuesMap)
-            || ((this.props.metaMap.size > 0) !== (prevProps.metaMap.size > 0))) {
-
-            this.props.resetForm({
-                values: settingsSheetLogic.mapPropsToValues(this.props),
-            });
-        }
-    }
-
-    render() {
-        const {valuesMap, metaMap, items} = this.props;
-
-        return (
-            <Form>
-                <div className="settings-sheet" style={{maxHeight: this.state.sheetMaxHeight}}>
-                    <SettingsSheetItems items={items} valuesMap={valuesMap} metaMap={metaMap}/>
-                </div>
-                <SettingsButtons/>
-            </Form>
-        );
-    }
-
+    return (
+        <Form>
+            <div className="settings-sheet" style={{maxHeight: sheetMaxHeight}}>
+                <SettingsSheetItems items={items} valuesMap={valuesMap} metaMap={metaMap}/>
+            </div>
+            <SettingsButtons/>
+        </Form>
+    );
 }
 
 const settingsSheetLogic = {
@@ -109,7 +56,7 @@ const settingsSheetLogic = {
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const {valuesMap, metaMap, messageBox, settingsUpdate, t} = formik.props;
+        const {valuesMap, metaMap} = formik.props;
 
         if (metaMap.size === 0) {
             formik.setSubmitting(false);
@@ -138,9 +85,9 @@ const settingsSheetLogic = {
         });
 
         if (hasErrors) {
-            messageBox(t("settings-incorrect-values"));
+            store.dispatch(messageBox(i18n.t("settings-incorrect-values")));
         } else {
-            settingsUpdate(settingsToUpdate);
+            store.dispatch(settingsUpdate(settingsToUpdate));
         }
 
         formik.setSubmitting(false);
@@ -148,9 +95,4 @@ const settingsSheetLogic = {
 
 };
 
-const connector = connect(
-    null,
-    { messageBox, settingsUpdate }
-);
-
-export default connector(withTranslation()(withFormik(settingsSheetLogic)(SettingsSheet)));
+export default withFormik(settingsSheetLogic)(SettingsSheet);

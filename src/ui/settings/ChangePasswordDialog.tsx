@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
@@ -8,8 +8,7 @@ import { ClientState } from "state/state";
 import { settingsChangePassword, settingsChangePasswordDialogClose } from "state/settings/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
-
-type OuterProps = ConnectedProps<typeof connector>;
+import store from "state/store";
 
 interface Values {
     oldPassword: string;
@@ -17,19 +16,15 @@ interface Values {
     confirmPassword: string;
 }
 
-type Props = OuterProps & FormikProps<Values>;
-
-function ChangePasswordDialog(props: Props) {
-    const {changing, settingsChangePasswordDialogClose, resetForm} = props;
-
+function ChangePasswordDialog() {
+    const changing = useSelector((state: ClientState) => state.settings.changingPassword);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        resetForm({values: changePasswordLogic.mapPropsToValues()})
-    }, [resetForm]);
+    const onClose = () => dispatch(settingsChangePasswordDialogClose());
 
     return (
-        <ModalDialog title={t("change-home-password")} onClose={settingsChangePasswordDialogClose}>
+        <ModalDialog title={t("change-home-password")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <InputField name="oldPassword" title={t("current-password")} autoFocus/>
@@ -37,7 +32,7 @@ function ChangePasswordDialog(props: Props) {
                     <InputField name="confirmPassword" title={t("confirm-password")}/>
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={settingsChangePasswordDialogClose}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={changing}>{t("change-password")}</Button>
                 </div>
             </Form>
@@ -61,19 +56,12 @@ const changePasswordLogic = {
         )
     }),
 
-    handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.settingsChangePassword(values.oldPassword.trim(), values.password.trim(),
-            () => formik.setFieldError("oldPassword", "password-incorrect"));
+    handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
+        store.dispatch(settingsChangePassword(values.oldPassword.trim(), values.password.trim(),
+            () => formik.setFieldError("oldPassword", "password-incorrect")));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        changing: state.settings.changingPassword
-    }),
-    { settingsChangePassword, settingsChangePasswordDialogClose }
-);
-
-export default connector(withFormik(changePasswordLogic)(ChangePasswordDialog));
+export default withFormik(changePasswordLogic)(ChangePasswordDialog);

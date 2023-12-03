@@ -1,15 +1,19 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
+import { TokenInfo } from "api";
 import { ClientState } from "state/state";
 import { settingsTokensCreate, settingsTokensDialogClose, settingsTokensUpdate } from "state/settings/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
+import store from "state/store";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    token: TokenInfo | null;
+}
 
 interface Values {
     name: string;
@@ -18,18 +22,15 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function TokenDialog(props: Props) {
-    const {token, updating, settingsTokensDialogClose, resetForm} = props;
-
+function TokenDialogInner({token}: Props) {
+    const updating = useSelector((state: ClientState) => state.settings.tokens.dialog.updating);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    useEffect(() => {
-        resetForm({values: tokenLogic.mapPropsToValues(props)})
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [resetForm]); // 'props' are missing on purpose
+    const onClose = () => dispatch(settingsTokensDialogClose());
 
     return (
-        <ModalDialog title={token == null ? t("create-token") : t("rename-token")} onClose={settingsTokensDialogClose}>
+        <ModalDialog title={token == null ? t("create-token") : t("rename-token")} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <InputField name="name" title={t("token-name")} autoFocus/>
@@ -38,7 +39,7 @@ function TokenDialog(props: Props) {
                     }
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={settingsTokensDialogClose}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={updating}>
                         {token == null ? t("create") : t("rename")}
                     </Button>
@@ -64,22 +65,21 @@ const tokenLogic = {
         let name: string | null = values.name.trim();
         name = name.length > 0 ? name : null;
         if (formik.props.token == null) {
-            formik.props.settingsTokensCreate(values.password.trim(), name,
-                () => formik.setFieldError("password", "password-incorrect"));
+            store.dispatch(settingsTokensCreate(
+                values.password.trim(), name, () => formik.setFieldError("password", "password-incorrect")
+            ));
         } else {
-            formik.props.settingsTokensUpdate(formik.props.token.id, name);
+            store.dispatch(settingsTokensUpdate(formik.props.token.id, name));
         }
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        token: state.settings.tokens.dialog.token,
-        updating: state.settings.tokens.dialog.updating
-    }),
-    { settingsTokensDialogClose, settingsTokensCreate, settingsTokensUpdate }
-);
+const TokenDialogOuter = withFormik(tokenLogic)(TokenDialogInner);
 
-export default connector(withFormik(tokenLogic)(TokenDialog));
+export default function TokenDialog() {
+    const token = useSelector((state: ClientState) => state.settings.tokens.dialog.token);
+
+    return <TokenDialogOuter token={token}/>;
+}

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ReactAvatarEditor from 'react-avatar-editor';
 import Dropzone from 'react-dropzone';
 import cx from 'classnames';
@@ -17,13 +17,18 @@ import AvatarShape from "ui/profile/edit/avatar/AvatarShape";
 import Scale from "ui/profile/edit/avatar/Scale";
 import "./AvatarEditDialog.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function AvatarEditDialog({
-    imageUploading, imageUploadProgress, imageId, path, width, height, orientation, creating, rootPage, shapeDefault,
-    profileCloseAvatarEditDialog, profileImageUpload, profileAvatarCreate
-}: Props) {
-
+export default function AvatarEditDialog() {
+    const imageUploading = useSelector((state: ClientState) => state.profile.avatarEditDialog.imageUploading);
+    const imageUploadProgress = useSelector((state: ClientState) => state.profile.avatarEditDialog.imageUploadProgress);
+    const imageId = useSelector((state: ClientState) => state.profile.avatarEditDialog.imageId);
+    const path = useSelector((state: ClientState) => state.profile.avatarEditDialog.path);
+    const width = useSelector((state: ClientState) => state.profile.avatarEditDialog.width);
+    const height = useSelector((state: ClientState) => state.profile.avatarEditDialog.height);
+    const orientation = useSelector((state: ClientState) => state.profile.avatarEditDialog.orientation);
+    const creating = useSelector((state: ClientState) => state.profile.avatarEditDialog.avatarCreating);
+    const rootPage = useSelector(getNodeRootPage);
+    const shapeDefault = useSelector((state: ClientState) => getSetting(state, "avatar.shape.default") as string);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const domFile = useRef<HTMLInputElement>(null);
@@ -73,7 +78,7 @@ function AvatarEditDialog({
 
     const imageUpload = (files: {[index: number]: File, length: number}) => {
         if (files.length > 0) {
-            profileImageUpload(files[0]);
+            dispatch(profileImageUpload(files[0]));
         }
     }
 
@@ -103,7 +108,7 @@ function AvatarEditDialog({
         const imageWidth = isSwapAxes(orientation) ? height : width;
         const imageHeight = isSwapAxes(orientation) ? width : height;
         const clip = refEditor.current.getCroppingRect();
-        profileAvatarCreate({
+        dispatch(profileAvatarCreate({
             mediaId: imageId,
             clipX: Math.round(clip.x * imageWidth),
             clipY: Math.round(clip.y * imageHeight),
@@ -111,11 +116,13 @@ function AvatarEditDialog({
             avatarSize: 200,
             rotate,
             shape
-        });
+        }));
     }
 
+    const onClose = () => dispatch(profileCloseAvatarEditDialog());
+
     return (
-        <ModalDialog title={t("create-avatar")} className="avatar-edit-dialog" onClose={profileCloseAvatarEditDialog}>
+        <ModalDialog title={t("create-avatar")} className="avatar-edit-dialog" onClose={onClose}>
             <div className="modal-body">
                 <div className="tools">
                     <Rotate value={rotate} onChange={onRotateChange}/>
@@ -145,7 +152,7 @@ function AvatarEditDialog({
                 <input type="file" accept="image/*" ref={domFile} onChange={onFileChange}/>
             </div>
             <div className="modal-footer">
-                <Button variant="secondary" onClick={profileCloseAvatarEditDialog}>{t("cancel")}</Button>
+                <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                 <Button variant="primary" type="submit" loading={creating} disabled={!imageId} onClick={onCreateClick}>
                     {t("create")}
                 </Button>
@@ -157,21 +164,3 @@ function AvatarEditDialog({
 function isSwapAxes(orientation: number | null): boolean {
     return orientation != null && orientation >= 5 && orientation <= 8;
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        imageUploading: state.profile.avatarEditDialog.imageUploading,
-        imageUploadProgress: state.profile.avatarEditDialog.imageUploadProgress,
-        imageId: state.profile.avatarEditDialog.imageId,
-        path: state.profile.avatarEditDialog.path,
-        width: state.profile.avatarEditDialog.width,
-        height: state.profile.avatarEditDialog.height,
-        orientation: state.profile.avatarEditDialog.orientation,
-        creating: state.profile.avatarEditDialog.avatarCreating,
-        rootPage: getNodeRootPage(state),
-        shapeDefault: getSetting(state, "avatar.shape.default") as string
-    }),
-    { profileCloseAvatarEditDialog, profileImageUpload, profileAvatarCreate }
-);
-
-export default connector(AvatarEditDialog);

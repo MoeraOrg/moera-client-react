@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -15,18 +15,19 @@ import NodeName from "ui/nodename/NodeName";
 import Jump, { JumpCallback } from "ui/navigation/Jump";
 import "./QuickTips.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function QuickTips({ownerName, shown, closeQuickTips, settingsUpdate}: Props) {
+export default function QuickTips() {
+    const ownerName = useSelector(getOwnerName);
+    const shown = useSelector((state: ClientState) => getSetting(state, "invitation.quick-tips.shown") as boolean);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
     const onClose = () => {
-        closeQuickTips();
+        dispatch(closeQuickTips());
         if (!shown) {
-            settingsUpdate([{
+            dispatch(settingsUpdate([{
                 name: CLIENT_SETTINGS_PREFIX + "invitation.quick-tips.shown",
                 value: "true"
-            }]);
+            }]));
         }
     };
 
@@ -118,13 +119,3 @@ const ListOfBlogsLink = ({children, onJump}: ListOfBlogsLinkProps) => (
         <b>{children}</b>
     </Jump>
 );
-
-const connector = connect(
-    (state: ClientState) => ({
-        ownerName: getOwnerName(state),
-        shown: getSetting(state, "invitation.quick-tips.shown") as boolean
-    }),
-    { closeQuickTips, settingsUpdate }
-);
-
-export default connector(QuickTips);

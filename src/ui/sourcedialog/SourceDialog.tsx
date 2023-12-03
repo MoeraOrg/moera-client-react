@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -8,14 +8,18 @@ import { closeSourceDialog } from "state/sourcedialog/actions";
 import { Button, Loading, ModalDialog } from "ui/control";
 import "./SourceDialog.css";
 
-type Props = ConnectedProps<typeof connector>;
-
-function SourceDialog({text, loading, feedWidth, closeSourceDialog}: Props) {
+export default function SourceDialog() {
+    const text = useSelector((state: ClientState) => state.sourceDialog.text);
+    const loading = useSelector((state: ClientState) => state.sourceDialog.loading);
+    const feedWidth = useSelector(getFeedWidth);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    const onClose = () => dispatch(closeSourceDialog());
 
     return (
         <ModalDialog className="source-dialog" style={{"--feed-width": feedWidth + "px"}} title={t("view-source-title")}
-                     onClose={closeSourceDialog}>
+                     onClose={onClose}>
             <div className="modal-body">
                 {loading ?
                     <Loading/>
@@ -24,19 +28,8 @@ function SourceDialog({text, loading, feedWidth, closeSourceDialog}: Props) {
                 }
             </div>
             <div className="modal-footer">
-                <Button variant="primary" onClick={closeSourceDialog}>{t("close")}</Button>
+                <Button variant="primary" onClick={onClose}>{t("close")}</Button>
             </div>
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        text: state.sourceDialog.text,
-        loading: state.sourceDialog.loading,
-        feedWidth: getFeedWidth(state)
-    }),
-    { closeSourceDialog }
-);
-
-export default connector(SourceDialog);

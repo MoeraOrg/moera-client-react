@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { SignatureVerifyButton } from "ui/control";
 import { ClientState } from "state/state";
@@ -7,26 +7,18 @@ import { isConnectedToHome } from "state/home/selectors";
 import { reactionVerify } from "state/reactionsdialog/actions";
 import { getReactionVerificationStatus } from "state/reactionsdialog/selectors";
 
-interface OwnProps {
+interface Props {
     postingId: string;
     commentId: string | null;
     ownerName: string;
 }
 
-type Props = OwnProps & ConnectedProps<typeof connector>;
+export default function ReactionVerifyButton({postingId, commentId, ownerName}: Props) {
+    const connectedToHome = useSelector(isConnectedToHome);
+    const status = useSelector((state: ClientState) => getReactionVerificationStatus(state, ownerName));
+    const dispatch = useDispatch();
 
-function ReactionVerifyButton({postingId, commentId, ownerName, connectedToHome, status, reactionVerify}: Props) {
-    const onVerify = () => reactionVerify(postingId, commentId, ownerName);
+    const onVerify = () => dispatch(reactionVerify(postingId, commentId, ownerName));
 
     return connectedToHome ? <SignatureVerifyButton status={status} onVerify={onVerify}/> : null;
 }
-
-const connector = connect(
-    (state: ClientState, ownProps: OwnProps) => ({
-        connectedToHome: isConnectedToHome(state),
-        status: getReactionVerificationStatus(state, ownProps.ownerName)
-    }),
-    { reactionVerify }
-);
-
-export default connector(ReactionVerifyButton);

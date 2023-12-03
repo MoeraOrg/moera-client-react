@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Trans, useTranslation } from 'react-i18next';
 import cx from 'classnames';
 
@@ -12,15 +12,19 @@ import Jump from "ui/navigation/Jump";
 import { formatFullName } from "util/misc";
 import { htmlEntities, replaceEmojis } from "util/html";
 
-type Props = ConnectedProps<typeof connector>;
-
-function SheriffOrderDetailsDialog({loaded, loading, info, nameDisplayMode, closeSheriffOrderDetailsDialog}: Props) {
+export default function SheriffOrderDetailsDialog() {
+    const loaded = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.loaded);
+    const loading = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.loading);
+    const info = useSelector((state: ClientState) => state.sheriffOrderDetailsDialog.info);
+    const nameDisplayMode = useSelector((state: ClientState) =>
+        getSetting(state, "full-name.display") as NameDisplayMode);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const onClose = () => closeSheriffOrderDetailsDialog();
+    const onClose = () => dispatch(closeSheriffOrderDetailsDialog());
 
-    const onOpenComplain = (href: string, performJump: () => void) => {
-        closeSheriffOrderDetailsDialog();
+    const onOpenComplain = (_: string, performJump: () => void) => {
+        dispatch(closeSheriffOrderDetailsDialog());
         performJump();
     }
 
@@ -92,15 +96,3 @@ function SheriffOrderDetailsDialog({loaded, loading, info, nameDisplayMode, clos
         </ModalDialog>
     );
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loaded: state.sheriffOrderDetailsDialog.loaded,
-        loading: state.sheriffOrderDetailsDialog.loading,
-        info: state.sheriffOrderDetailsDialog.info,
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
-    { closeSheriffOrderDetailsDialog }
-);
-
-export default connector(SheriffOrderDetailsDialog);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, fromUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -14,11 +14,15 @@ import TokenDialog from "ui/settings/TokenDialog";
 import NewTokenDialog from "ui/settings/NewTokenDialog";
 import "./SettingsItemTokens.css";
 
-type Props = ConnectedProps<typeof connector>;
+export default function SettingsItemTokens() {
+    const loading = useSelector((state: ClientState) => state.settings.tokens.loading);
+    const loaded = useSelector((state: ClientState) => state.settings.tokens.loaded);
+    const tokens = useSelector((state: ClientState) => state.settings.tokens.tokens);
+    const homeToken = useSelector(getHomeToken);
+    const showTokenDialog = useSelector((state: ClientState) => state.settings.tokens.dialog.show);
+    const showNewTokenDialog = useSelector((state: ClientState) => state.settings.tokens.dialog.newToken != null);
+    const dispatch = useDispatch();
 
-function SettingsItemTokens({
-    loading, loaded, tokens, homeToken, showTokenDialog, showNewTokenDialog, settingsTokensDialogOpen, confirmBox
-}: Props) {
     const [expanded, setExpanded] = useState<string | null>(null);
     const {t} = useTranslation();
 
@@ -28,13 +32,13 @@ function SettingsItemTokens({
     }
 
     const onEdit = (token: TokenInfo) => (e: React.MouseEvent) => {
-        settingsTokensDialogOpen(token);
+        dispatch(settingsTokensDialogOpen(token));
         e.preventDefault();
     }
 
     const onDelete = (token: TokenInfo) => (e: React.MouseEvent) => {
-        confirmBox(t("want-delete-token", {name: getName(token)}), t("delete"), t("cancel"),
-            settingsTokensDelete(token.id), null, "danger");
+        dispatch(confirmBox(t("want-delete-token", {name: getName(token)}), t("delete"), t("cancel"),
+            settingsTokensDelete(token.id), null, "danger"));
         e.preventDefault();
     }
 
@@ -42,7 +46,9 @@ function SettingsItemTokens({
         <>
             {loading && <Loading/>}
             {loaded &&
-                <Button variant="primary" onClick={() => settingsTokensDialogOpen(null)}>{t("create-token")}</Button>
+                <Button variant="primary" onClick={() => dispatch(settingsTokensDialogOpen(null))}>
+                    {t("create-token")}
+                </Button>
             }
             <br/>
             <br/>
@@ -106,17 +112,3 @@ function isHomeToken(info: TokenInfo, homeToken: string | null): boolean {
     }
     return info.token.substring(0, 4) === homeToken.substring(0, 4);
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        loading: state.settings.tokens.loading,
-        loaded: state.settings.tokens.loaded,
-        tokens: state.settings.tokens.tokens,
-        homeToken: getHomeToken(state),
-        showTokenDialog: state.settings.tokens.dialog.show,
-        showNewTokenDialog: state.settings.tokens.dialog.newToken != null
-    }),
-    { settingsTokensDialogOpen, confirmBox }
-);
-
-export default connector(SettingsItemTokens);

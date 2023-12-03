@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
@@ -9,15 +9,21 @@ import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeSheriffOrderDialog, sheriffOrderDialogSubmit } from "state/sherifforderdialog/actions";
+import { SheriffOrderTarget } from "state/sherifforderdialog/state";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { CheckboxField, RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { formatFullName } from "util/misc";
+import store from "state/store";
 
 const REASON_CODES: SelectFieldChoice[] = SHERIFF_ORDER_REASON_CODES.map(code => ({
     title: `sheriff-order-reason.${code}`,
     value: code
 }));
+
+interface OuterProps {
+    target: SheriffOrderTarget | null;
+}
 
 interface Values {
     reasonCode: SheriffOrderReason;
@@ -25,19 +31,15 @@ interface Values {
     anonymous: boolean;
 }
 
-type OuterProps = ConnectedProps<typeof connector>;
-
 type Props = OuterProps & FormikProps<Values>;
 
-function SheriffOrderDialog(props: Props) {
-    const {target, submitting, isSheriff, nameDisplayMode, closeSheriffOrderDialog, resetForm} = props;
-
+function SheriffOrderDialogInner({target}: Props) {
+    const submitting = useSelector((state: ClientState) => state.sheriffOrderDialog.submitting);
+    const isSheriff = useSelector((state: ClientState) => getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE);
+    const nameDisplayMode = useSelector((state: ClientState) =>
+        getSetting(state, "full-name.display") as NameDisplayMode);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        resetForm({values: sheriffOrderDialogLogic.mapPropsToValues()});
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 'props' are missing on purpose
 
     if (target == null) {
         return null;
@@ -58,8 +60,10 @@ function SheriffOrderDialog(props: Props) {
         messageValues = {heading: target.commentHeading};
     }
 
+    const onClose = () => dispatch(closeSheriffOrderDialog());
+
     return (
-        <ModalDialog title={title} onClose={closeSheriffOrderDialog}>
+        <ModalDialog title={title} onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <p dangerouslySetInnerHTML={{__html: t(messageKey, messageValues)}}/>
@@ -75,7 +79,7 @@ function SheriffOrderDialog(props: Props) {
                     }
                 </div>
                 <div className="modal-footer">
-                    <Button variant="secondary" onClick={closeSheriffOrderDialog}>{t("cancel")}</Button>
+                    <Button variant="secondary" onClick={onClose}>{t("cancel")}</Button>
                     <Button variant="primary" type="submit" loading={submitting}>{t("send")}</Button>
                 </div>
             </Form>
@@ -92,25 +96,22 @@ const sheriffOrderDialogLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        const {target, sheriffOrderDialogSubmit} = formik.props;
+        const {target} = formik.props;
 
         formik.setStatus("submitted");
         if (target != null) {
-            sheriffOrderDialogSubmit(target, values.reasonCode, values.reasonDetails.text, values.anonymous);
+            store.dispatch(sheriffOrderDialogSubmit(
+                target, values.reasonCode, values.reasonDetails.text, values.anonymous));
         }
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        target: state.sheriffOrderDialog.target,
-        submitting: state.sheriffOrderDialog.submitting,
-        isSheriff: getHomeOwnerName(state) === SHERIFF_GOOGLE_PLAY_TIMELINE,
-        nameDisplayMode: getSetting(state, "full-name.display") as NameDisplayMode
-    }),
-    { closeSheriffOrderDialog, sheriffOrderDialogSubmit }
-);
+const SheriffOrderDialogOuter = withFormik(sheriffOrderDialogLogic)(SheriffOrderDialogInner);
 
-export default connector(withFormik(sheriffOrderDialogLogic)(SheriffOrderDialog));
+export default function SheriffOrderDialog() {
+    const target = useSelector((state: ClientState) => state.sheriffOrderDialog.target);
+
+    return <SheriffOrderDialogOuter target={target}/>;
+}

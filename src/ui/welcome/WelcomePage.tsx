@@ -7,7 +7,7 @@ import Invitation from "ui/welcome/Invitation";
 import Jump from "ui/navigation/Jump";
 import "./WelcomePage.css";
 
-const WelcomePage = () => {
+export default function WelcomePage() {
     const {t} = useTranslation();
 
     return (
@@ -25,5 +25,3 @@ const WelcomePage = () => {
         </Page>
     );
 }
-
-export default WelcomePage;

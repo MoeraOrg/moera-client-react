@@ -32,8 +32,9 @@ interface Props {
     onReorder: (activeId: string, overId: string) => void;
 }
 
-export default function AvatarSelector({nodeName, loaded, loading, avatars, active, onSelect, onNew, onDelete,
-                                        onReorder}: Props) {
+export default function AvatarSelector({
+    nodeName, loaded, loading, avatars, active, onSelect, onNew, onDelete, onReorder
+}: Props) {
     const mouseSensor = useSensor(PointerSensor, {
         activationConstraint: {
             distance: 10

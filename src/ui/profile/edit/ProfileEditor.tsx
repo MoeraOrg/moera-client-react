@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Form, FormikBag, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
-import { AvatarInfo, FundraiserInfo, PrincipalValue } from "api";
+import { AvatarInfo, FundraiserInfo, PrincipalValue, ProfileInfo } from "api";
 import { ClientState } from "state/state";
 import { profileEditCancel, profileEditConflictClose, profileUpdate } from "state/profile/actions";
 import { Browser } from "ui/browser";
@@ -15,9 +15,12 @@ import { Page } from "ui/page/Page";
 import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import DonateField from "ui/profile/edit/donate/DonateField";
 import { longGender } from "util/misc";
+import store from "state/store";
 import "./ProfileEditor.css";
 
-type OuterProps = ConnectedProps<typeof connector>;
+interface OuterProps {
+    profile: ProfileInfo;
+}
 
 interface Values {
     fullName: string;
@@ -30,18 +33,12 @@ interface Values {
     viewEmail: PrincipalValue;
 }
 
-type Props = OuterProps & FormikProps<Values>;
-
-function ProfileEditor(props: Props) {
-    const {loading, loaded, updating, conflict, profile, profileEditCancel, profileEditConflictClose, resetForm} = props;
-
+function ProfileEditorInner() {
+    const loading = useSelector((state: ClientState) => state.profile.loading);
+    const conflict = useSelector((state: ClientState) => state.profile.conflict);
+    const updating = useSelector((state: ClientState) => state.profile.updating);
+    const dispatch = useDispatch();
     const {t} = useTranslation();
-
-    useEffect(() => {
-        const values = profileEditorLogic.mapPropsToValues(props);
-        resetForm({values});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loaded, profile.bioSrc, resetForm]); // 'props' are missing on purpose
 
     return (
         <>
@@ -52,7 +49,8 @@ function ProfileEditor(props: Props) {
                 <div className="profile-editor content-panel">
                     <Form>
                         {conflict &&
-                            <ConflictWarning text={t("profile-edited-conflict")} onClose={profileEditConflictClose}/>
+                            <ConflictWarning text={t("profile-edited-conflict")}
+                                             onClose={() => dispatch(profileEditConflictClose())}/>
                         }
                         <AvatarEditor name="avatar"/>
                         <InputField title={t("full-name")} name="fullName" maxLength={96} anyValue autoFocus/>
@@ -71,7 +69,7 @@ function ProfileEditor(props: Props) {
                                        format="markdown" smileysEnabled anyValue noMedia/>
                         <DonateField title={t("donate")} name="fundraisers"/>
                         <div className="profile-editor-footer">
-                            <Button variant="secondary" onClick={profileEditCancel}
+                            <Button variant="secondary" onClick={() => dispatch(profileEditCancel())}
                                     disabled={updating}>{t("cancel")}</Button>
                             <Button variant="primary" type="submit" loading={updating}>{t("update")}</Button>
                         </div>
@@ -106,7 +104,7 @@ const profileEditorLogic = {
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
-        formik.props.profileUpdate({
+        store.dispatch(profileUpdate({
             fullName: values.fullName.trim(),
             title: values.title.trim(),
             gender: values.gender.trim(),
@@ -118,21 +116,16 @@ const profileEditorLogic = {
             operations: {
                 viewEmail: values.viewEmail
             }
-        });
+        }));
         formik.setSubmitting(false);
     }
 
 };
 
-const connector = connect(
-    (state: ClientState) => ({
-        loading: state.profile.loading,
-        loaded: state.profile.loaded,
-        conflict: state.profile.conflict,
-        updating: state.profile.updating,
-        profile: state.profile.profile
-    }),
-    { profileEditCancel, profileEditConflictClose, profileUpdate }
-);
+const ProfileEditorOuter = withFormik(profileEditorLogic)(ProfileEditorInner);
 
-export default connector(withFormik(profileEditorLogic)(ProfileEditor));
+export default function ProfileEditor() {
+    const profile = useSelector((state: ClientState) => state.profile.profile);
+
+    return <ProfileEditorOuter profile={profile}/>;
+}

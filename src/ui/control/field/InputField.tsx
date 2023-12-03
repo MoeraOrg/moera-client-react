@@ -23,7 +23,7 @@ interface Props {
     initialValue?: string | null;
     defaultValue?: string | null;
     onEscape?: () => void;
-    inputRef?: (dom: HTMLInputElement | null) => void;
+    inputRef?: React.LegacyRef<HTMLInputElement>;
 }
 
 export function InputField({name, title, placeholder, disabled, maxLength, horizontal = false, groupClassName,
@@ -74,12 +74,7 @@ export function InputField({name, title, placeholder, disabled, maxLength, horiz
                     autoComplete={autoComplete}
                     disabled={disabled}
                     maxLength={maxLength}
-                    ref={dom => {
-                        inputDom.current = dom ?? undefined;
-                        if (inputRef != null) {
-                            inputRef(dom);
-                        }
-                    }}
+                    ref={inputRef}
                     onKeyDown={onKeyDown}
                 />
                 {!noFeedback && touched && <FieldError error={error}/>}

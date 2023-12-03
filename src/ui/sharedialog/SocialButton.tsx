@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     EmailIcon,
     EmailShareButton,
@@ -38,20 +38,24 @@ import { settingsUpdate } from "state/settings/actions";
 import { getSetting } from "state/settings/selectors";
 import { closeShareDialog } from "state/sharedialog/actions";
 
-type Props = {
+interface Props {
     type: string;
     url: string;
     title?: string;
-} & ConnectedProps<typeof connector>;
+}
 
-function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog}: Props) {
+export default function SocialButton({type, url, title}: Props) {
+    const usage = useSelector((state: ClientState) =>
+        getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>);
+    const dispatch = useDispatch();
+
     const onClick = () => {
-        closeShareDialog();
+        dispatch(closeShareDialog());
         const data = immutable.update(usage, [type], n => (n ?? 0) + 1);
-        settingsUpdate([{
+        dispatch(settingsUpdate([{
             name: CLIENT_SETTINGS_PREFIX + "share.social-buttons.usage",
             value: JSON.stringify(data)
-        }])
+        }]));
     };
 
     switch (type) {
@@ -143,12 +147,3 @@ function SocialButton({type, url, title, usage, settingsUpdate, closeShareDialog
             return null;
     }
 }
-
-const connector = connect(
-    (state: ClientState) => ({
-        usage: getSetting(state, "share.social-buttons.usage") as any as Partial<Record<string, number>>
-    }),
-    { settingsUpdate, closeShareDialog }
-);
-
-export default connector(SocialButton);

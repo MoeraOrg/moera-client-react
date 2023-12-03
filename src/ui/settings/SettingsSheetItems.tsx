@@ -27,7 +27,7 @@ interface Props {
     metaMap: Map<string, SettingMetaInfo> | Map<string, ClientSettingMetaInfo>;
 }
 
-export const SettingsSheetItems = ({items, valuesMap, metaMap}: Props) => {
+export function SettingsSheetItems({items, valuesMap, metaMap}: Props) {
     const {t} = useTranslation();
 
     return (
