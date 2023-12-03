@@ -411,7 +411,7 @@ function* loadRepliedTo(action: ClientAction, nodeName: string, postingId: strin
     if (repliedToComment == null) {
         repliedToComment = yield* call(Node.getComment, action, nodeName, postingId, id, false, ["comment.not-found"]);
     }
-    if (repliedToComment != null) {
+    if (repliedToComment != null && repliedToComment.digest != null) {
         return {
             id: repliedToComment.id,
             name: repliedToComment.ownerName,

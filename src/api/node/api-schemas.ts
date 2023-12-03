@@ -2865,7 +2865,8 @@ export const CommentRevisionInfoType: JSONSchemaType<API.EncodedCommentRevisionI
             nullable: true
         },
         "digest": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "signature": {
             type: "string",
@@ -2891,7 +2892,6 @@ export const CommentRevisionInfoType: JSONSchemaType<API.EncodedCommentRevisionI
         "body",
         "heading",
         "createdAt",
-        "digest",
     ],
     additionalProperties: false
 };
@@ -3141,7 +3141,8 @@ export const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
             nullable: true
         },
         "digest": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "signature": {
             type: "string",
@@ -3239,7 +3240,6 @@ export const PostingInfoType: JSONSchemaType<API.EncodedPostingInfo> = {
         "heading",
         "createdAt",
         "revisionCreatedAt",
-        "digest",
     ],
     additionalProperties: false
 };
@@ -3307,7 +3307,8 @@ export const PostingRevisionInfoType: JSONSchemaType<API.EncodedPostingRevisionI
             nullable: true
         },
         "digest": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "signature": {
             type: "string",
@@ -3332,7 +3333,6 @@ export const PostingRevisionInfoType: JSONSchemaType<API.EncodedPostingRevisionI
         "body",
         "heading",
         "createdAt",
-        "digest",
     ],
     additionalProperties: false
 };
@@ -3565,7 +3565,8 @@ export const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
             nullable: true
         },
         "digest": {
-            type: "string"
+            type: "string",
+            nullable: true
         },
         "signature": {
             type: "string",
@@ -3633,7 +3634,6 @@ export const CommentInfoType: JSONSchemaType<API.EncodedCommentInfo> = {
         "moment",
         "createdAt",
         "revisionCreatedAt",
-        "digest",
     ],
     additionalProperties: false
 };

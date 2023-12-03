@@ -1103,7 +1103,7 @@ export interface CommentRevisionInfoBase<B> {
     createdAt: number;
     deletedAt?: number | null;
     deadline?: number | null;
-    digest: string;
+    digest?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
     clientReaction?: ClientReactionInfo | null;
@@ -1227,7 +1227,7 @@ export interface PostingInfoBase<B> {
     revisionCreatedAt: number;
     receiverRevisionCreatedAt?: number | null;
     deadline?: number | null;
-    digest: string;
+    digest?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
     feedReferences?: FeedReference[] | null;
@@ -1266,7 +1266,7 @@ export interface PostingRevisionInfoBase<B> {
     deletedAt?: number | null;
     receiverCreatedAt?: number | null;
     receiverDeletedAt?: number | null;
-    digest: string;
+    digest?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
     clientReaction?: ClientReactionInfo | null;
@@ -1377,7 +1377,7 @@ export interface CommentInfoBase<B> {
     deletedAt?: number | null;
     revisionCreatedAt: number;
     deadline?: number | null;
-    digest: string;
+    digest?: string | null;
     signature?: string | null;
     signatureVersion?: number | null;
     operations?: CommentOperations | null;

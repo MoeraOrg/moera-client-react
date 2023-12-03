@@ -681,7 +681,7 @@ export function* deleteDraft(
     auth: true | string = true
 ): CallApiResult<API.Result> {
 
-    const location = ut`/draft/${id}`;
+    const location = ut`/drafts/${id}`;
     return yield* callApi({
         caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
     });
