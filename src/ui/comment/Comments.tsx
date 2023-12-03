@@ -2,9 +2,7 @@ import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { SourceFormat } from "api";
 import { ClientState } from "state/state";
-import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { isPermitted } from "state/node/selectors";
 import {
     commentsFutureSliceLoad,
@@ -15,8 +13,6 @@ import {
     detailedPostingScrolledToGallery
 } from "state/detailedposting/actions";
 import {
-    getCommentDialogComment,
-    getCommentsReceiverPostingId,
     getCommentsState,
     getCommentsWithVisibility,
     getDetailedPosting,
@@ -27,7 +23,6 @@ import {
     isDetailedPostingGalleryFocused
 } from "state/detailedposting/selectors";
 import { isAtDetailedPostingPage } from "state/navigation/selectors";
-import { getSetting } from "state/settings/selectors";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
 import CommentComposeLine from "ui/comment/CommentComposeLine";
@@ -60,21 +55,6 @@ export default function Comments() {
     const showCommentDialog = useSelector((state: ClientState) => state.detailedPosting.commentDialog.show);
     const commentsVisible = useSelector((state: ClientState) =>
         isPermitted("viewComments", getDetailedPosting(state), "public", state));
-
-    const ownerName = useSelector(getHomeOwnerName);
-    const ownerFullName = useSelector(getHomeOwnerFullName);
-    const ownerGender = useSelector(getHomeOwnerGender);
-    const avatarDefault = useSelector(getHomeOwnerAvatar);
-    const receiverPostingId = useSelector(getCommentsReceiverPostingId);
-    const comment = useSelector(getCommentDialogComment);
-    const draft = useSelector((state: ClientState) => state.detailedPosting.commentDialog.draft);
-    const reactionsPositiveDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.positive.default") as string);
-    const reactionsNegativeDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.reactions.negative.default") as string);
-    const sourceFormatDefault = useSelector((state: ClientState) =>
-        getSetting(state, "comment.body-src-format.default") as SourceFormat);
-    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
 
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -173,13 +153,7 @@ export default function Comments() {
             <CommentComposeLine/>
             {showCommentDialog &&
                 <Suspense fallback={null}>
-                    <CommentDialog avatarDefault={avatarDefault} receiverPostingId={receiverPostingId} comment={comment}
-                                   draft={draft} ownerName={ownerName} ownerFullName={ownerFullName}
-                                   ownerGender={ownerGender} smileysEnabled={smileysEnabled}
-                                   sourceFormatDefault={sourceFormatDefault}
-                                   reactionsPositiveDefault={reactionsPositiveDefault}
-                                   reactionsNegativeDefault={reactionsNegativeDefault}
-                                   repliedToId={comment?.repliedTo?.id ?? null}/>
+                    <CommentDialog/>
                 </Suspense>
             }
         </>

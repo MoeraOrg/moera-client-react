@@ -2,10 +2,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { PrincipalValue } from "api";
 import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerName } from "state/node/selectors";
-import { getSettingNode } from "state/settings/selectors";
 import { Avatar, Loading } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import PageHeader from "ui/page/PageHeader";
@@ -23,16 +21,7 @@ export default function PeoplePage() {
     const ownerAvatar = useSelector(getOwnerAvatar);
     const ownerName = useSelector(getOwnerName);
     const showAskDialog = useSelector((state: ClientState) => state.askDialog.show);
-    const peopleHideDialog = {
-        show: useSelector((state: ClientState) => state.peopleHideDialog.show),
-        nodeName: useSelector((state: ClientState) => state.peopleHideDialog.nodeName),
-        subscribersHidden: useSelector((state: ClientState) =>
-                (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin"),
-        subscriptionsHidden: useSelector((state: ClientState) =>
-                (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin"),
-        friendsHidden: useSelector((state: ClientState) =>
-            (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin")
-    };
+    const showPeopleHideDialog = useSelector((state: ClientState) => state.peopleHideDialog.show);
     const showFriendGroupAddDialog = useSelector((state: ClientState) => state.friendGroupAddDialog.show);
     const {t} = useTranslation();
 
@@ -52,12 +41,7 @@ export default function PeoplePage() {
                     <PeopleContent/>
                 </div>
                 {showAskDialog && <AskSelectedDialog/>}
-                {peopleHideDialog.show &&
-                    <PeopleSelectedHideDialog nodeName={peopleHideDialog.nodeName}
-                                              subscribersHidden={peopleHideDialog.subscribersHidden}
-                                              subscriptionsHidden={peopleHideDialog.subscriptionsHidden}
-                                              friendsHidden={peopleHideDialog.friendsHidden}/>
-                }
+                {showPeopleHideDialog && <PeopleSelectedHideDialog/>}
                 {showFriendGroupAddDialog && <FriendGroupAddDialog/>}
             </Page>
         </>

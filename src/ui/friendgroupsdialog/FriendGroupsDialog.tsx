@@ -16,6 +16,8 @@ import { NameDisplayMode } from "ui/types";
 import { formatFullName } from "util/misc";
 import store from "state/store";
 import "./FriendGroupsDialog.css";
+import { getNodeCard } from "state/nodecards/selectors";
+import { getHomeFriendGroups } from "state/home/selectors";
 
 interface OuterProps {
     nodeName: string | null;
@@ -36,7 +38,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function FriendGroupsDialog({nodeName, nodeCard, values, setFieldValue}: Props) {
+function FriendGroupsDialogInner({nodeName, nodeCard, values, setFieldValue}: Props) {
     const changing = useSelector((state: ClientState) => state.friendGroupsDialog.changing);
     const nameDisplayMode = useSelector((state: ClientState) =>
         getSetting(state, "full-name.display") as NameDisplayMode);
@@ -142,4 +144,12 @@ const friendGroupsDialogLogic = {
 
 };
 
-export default withFormik(friendGroupsDialogLogic)(FriendGroupsDialog);
+const FriendGroupsDialogOuter = withFormik(friendGroupsDialogLogic)(FriendGroupsDialogInner);
+
+export default function FriendGroupsDialog() {
+    const nodeName = useSelector((state: ClientState) => state.friendGroupsDialog.nodeName);
+    const nodeCard = useSelector((state: ClientState) => getNodeCard(state, state.friendGroupsDialog.nodeName));
+    const availableGroups = useSelector(getHomeFriendGroups);
+
+    return <FriendGroupsDialogOuter nodeName={nodeName} nodeCard={nodeCard} availableGroups={availableGroups}/>;
+}

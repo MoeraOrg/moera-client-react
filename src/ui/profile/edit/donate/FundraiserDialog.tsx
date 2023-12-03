@@ -7,18 +7,18 @@ import { FundraiserInfo } from "api";
 import { Button, ModalDialog } from "ui/control";
 import { InputField } from "ui/control/field";
 
-interface Values {
-    title: string;
-    qrCode: string;
-    text: string;
-    href: string;
-}
-
 interface OuterProps {
     fundraiser: FundraiserInfo | null;
     onSubmit: (value: FundraiserInfo) => void;
     onCancel: () => void;
     onDelete: () => void;
+}
+
+interface Values {
+    title: string;
+    qrCode: string;
+    text: string;
+    href: string;
 }
 
 type Props = OuterProps & FormikProps<Values>;

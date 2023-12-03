@@ -25,7 +25,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function AskDialog({nodeName}: Props) {
+function AskDialogInner({nodeName}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, state.askDialog.nodeName));
     const loading = useSelector((state: ClientState) => state.askDialog.loading);
     const allGroups = useSelector((state: ClientState) => state.askDialog.friendGroups);
@@ -112,4 +112,10 @@ const askDialogLogic = {
 
 };
 
-export default withFormik(askDialogLogic)(AskDialog);
+const AskDialogOuter = withFormik(askDialogLogic)(AskDialogInner);
+
+export default function AskDialog() {
+    const nodeName = useSelector((state: ClientState) => state.askDialog.nodeName);
+
+    return <AskDialogOuter nodeName={nodeName}/>
+}

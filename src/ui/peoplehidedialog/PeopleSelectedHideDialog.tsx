@@ -1,8 +1,11 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
+import { PrincipalValue } from "api";
+import { ClientState } from "state/state";
+import { getSettingNode } from "state/settings/selectors";
 import {
     peopleSelectedFriendshipSetVisibility,
     peopleSelectedSubscriberSetVisibility,
@@ -13,12 +16,6 @@ import { Button, ModalDialog } from "ui/control";
 import { CheckboxField } from "ui/control/field";
 import store from "state/store";
 
-interface Values {
-    hideMySubscription: boolean | null;
-    hideSubscriptionToMe: boolean | null;
-    hideFriend: boolean | null;
-}
-
 interface OuterProps {
     nodeName: string | null;
     subscribersHidden: boolean;
@@ -26,9 +23,15 @@ interface OuterProps {
     friendsHidden: boolean;
 }
 
+interface Values {
+    hideMySubscription: boolean | null;
+    hideSubscriptionToMe: boolean | null;
+    hideFriend: boolean | null;
+}
+
 type Props = OuterProps & FormikProps<Values>;
 
-function PeopleSelectedHideDialog({nodeName, subscribersHidden, subscriptionsHidden, friendsHidden}: Props) {
+function PeopleSelectedHideDialogInner({nodeName, subscribersHidden, subscriptionsHidden, friendsHidden}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -85,4 +88,17 @@ const peopleSelectedHideDialogLogic = {
 
 };
 
-export default withFormik(peopleSelectedHideDialogLogic)(PeopleSelectedHideDialog);
+const PeopleSelectedHideDialogOuter = withFormik(peopleSelectedHideDialogLogic)(PeopleSelectedHideDialogInner);
+
+export default function PeopleSelectedHideDialog() {
+    const nodeName = useSelector((state: ClientState) => state.peopleHideDialog.nodeName);
+    const subscribersHidden = useSelector((state: ClientState) =>
+        (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin");
+    const subscriptionsHidden = useSelector((state: ClientState) =>
+        (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin");
+    const friendsHidden = useSelector((state: ClientState) =>
+        (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin");
+
+    return <PeopleSelectedHideDialogOuter nodeName={nodeName} subscribersHidden={subscribersHidden}
+                                          subscriptionsHidden={subscriptionsHidden} friendsHidden={friendsHidden}/>;
+}

@@ -20,7 +20,7 @@ interface Values {
     publishedAt: Date;
 }
 
-function ChangeDateDialog() {
+function ChangeDateDialogInner() {
     const changing = useSelector((state: ClientState) => state.changeDateDialog.changing);
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -61,4 +61,11 @@ const changeDateDialogLogic = {
 
 };
 
-export default withFormik(changeDateDialogLogic)(ChangeDateDialog);
+const ChangeDateDialogOuter = withFormik(changeDateDialogLogic)(ChangeDateDialogInner);
+
+export default function ChangeDateDialog() {
+    const storyId = useSelector((state: ClientState) => state.changeDateDialog.storyId);
+    const publishedAt = useSelector((state: ClientState) => state.changeDateDialog.publishedAt);
+
+    return <ChangeDateDialogOuter storyId={storyId} publishedAt={publishedAt}/>;
+}

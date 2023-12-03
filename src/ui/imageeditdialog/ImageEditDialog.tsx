@@ -5,9 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { getNamingNameNodeUri } from "state/naming/selectors";
+import { getHomeOwnerFullName, getHomeOwnerName } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { getCurrentViewMediaCarte } from "state/cartes/selectors";
+import { getSetting } from "state/settings/selectors";
 import { ExtPostingInfo } from "state/postings/state";
+import { getPosting } from "state/postings/selectors";
 import { closeImageEditDialog, imageEditDialogPost } from "state/imageeditdialog/actions";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { RichTextField } from "ui/control/field";
@@ -30,7 +33,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ImageEditDialog({posting, smileysEnabled}: Props) {
+function ImageEditDialogInner({posting, smileysEnabled}: Props) {
     const media = useSelector((state: ClientState) => state.imageEditDialog.media);
     const rootPage = useSelector(
         (state: ClientState) => state.imageEditDialog.nodeName
@@ -95,4 +98,15 @@ const logic = {
 
 };
 
-export default withFormik(logic)(ImageEditDialog);
+const ImageEditDialogOuter = withFormik(logic)(ImageEditDialogInner);
+
+export default function ImageEditDialog() {
+    const homeOwnerName = useSelector(getHomeOwnerName);
+    const homeOwnerFullName = useSelector(getHomeOwnerFullName);
+    const posting = useSelector((state: ClientState) =>
+        getPosting(state, state.imageEditDialog.media?.postingId ?? null));
+    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "posting.smileys.enabled") as boolean);
+
+    return <ImageEditDialogOuter homeOwnerName={homeOwnerName} homeOwnerFullName={homeOwnerFullName} posting={posting}
+                                 smileysEnabled={smileysEnabled}/>;
+}

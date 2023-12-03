@@ -5,7 +5,9 @@ import { add, getUnixTime } from 'date-fns';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { BlockedOperation, BlockedUserInfo } from "api";
+import { ClientState } from "state/state";
 import { getHomeOwnerName } from "state/home/selectors";
+import { getSetting } from "state/settings/selectors";
 import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
@@ -62,7 +64,7 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function BlockDialog({entryNodeName}: Props) {
+function BlockDialogInner({entryNodeName}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const dispatch = useDispatch();
     const {values, isSubmitting} = useFormikContext<Values>();
@@ -186,4 +188,18 @@ const blockDialogLogic = {
 
 };
 
-export default withFormik(blockDialogLogic)(BlockDialog);
+const BlockDialogOuter = withFormik(blockDialogLogic)(BlockDialogInner);
+
+export default function BlockDialog() {
+    const nodeName = useSelector((state: ClientState) => state.blockDialog.nodeName);
+    const fullName = useSelector((state: ClientState) => state.blockDialog.fullName);
+    const entryNodeName = useSelector((state: ClientState) => state.blockDialog.entryNodeName);
+    const entryPostingId = useSelector((state: ClientState) => state.blockDialog.entryPostingId);
+    const prevBlocked = useSelector((state: ClientState) => state.blockDialog.prevBlocked);
+    const nameDisplayMode = useSelector((state: ClientState) =>
+        getSetting(state, "full-name.display")) as NameDisplayMode;
+
+    return <BlockDialogOuter nodeName={nodeName} fullName={fullName} entryNodeName={entryNodeName}
+                             entryPostingId={entryPostingId} prevBlocked={prevBlocked}
+                             nameDisplayMode={nameDisplayMode}/>;
+}

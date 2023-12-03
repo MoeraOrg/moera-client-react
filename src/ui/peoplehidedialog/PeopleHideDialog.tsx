@@ -1,12 +1,15 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { FriendGroupDetails, SubscriberInfo, SubscriptionInfo } from "api";
+import { FriendGroupDetails, PrincipalValue, SubscriberInfo, SubscriptionInfo } from "api";
+import { ClientState } from "state/state";
 import { isPrincipalIn } from "state/node/selectors";
+import { getSettingNode } from "state/settings/selectors";
 import { feedSubscriberSetVisibility, feedSubscriptionSetVisibility } from "state/feeds/actions";
 import { NodeCardState } from "state/nodecards/state";
+import { getNodeCard } from "state/nodecards/selectors";
 import { friendshipSetVisibility } from "state/people/actions";
 import { closePeopleHideDialog } from "state/peoplehidedialog/actions";
 import { Button, ModalDialog } from "ui/control";
@@ -30,7 +33,7 @@ interface OuterProps {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function PeopleHideDialog({nodeName, card, subscribersHidden, subscriptionsHidden, friendsHidden}: Props) {
+function PeopleHideDialogInner({nodeName, card, subscribersHidden, subscriptionsHidden, friendsHidden}: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -112,4 +115,20 @@ const peopleHideDialogLogic = {
 
 };
 
-export default withFormik(peopleHideDialogLogic)(PeopleHideDialog);
+const PeopleHideDialogOuter = withFormik(peopleHideDialogLogic)(PeopleHideDialogInner);
+
+export default function PeopleHideDialog() {
+    const nodeName = useSelector((state: ClientState) => state.peopleHideDialog.nodeName);
+    const feedName = useSelector((state: ClientState) => state.peopleHideDialog.feedName);
+    const card = useSelector((state: ClientState) => getNodeCard(state, state.peopleHideDialog.nodeName));
+    const subscribersHidden = useSelector((state: ClientState) =>
+        (getSettingNode(state, "subscribers.view") as PrincipalValue ?? "public") === "admin");
+    const subscriptionsHidden = useSelector((state: ClientState) =>
+        (getSettingNode(state, "subscriptions.view") as PrincipalValue ?? "public") === "admin");
+    const friendsHidden = useSelector((state: ClientState) =>
+        (getSettingNode(state, "friends.view") as PrincipalValue ?? "public") === "admin");
+
+    return <PeopleHideDialogOuter nodeName={nodeName} feedName={feedName} card={card}
+                                  subscribersHidden={subscribersHidden} subscriptionsHidden={subscriptionsHidden}
+                                  friendsHidden={friendsHidden}/>;
+}

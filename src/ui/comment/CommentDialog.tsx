@@ -3,15 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { CommentText } from "api";
+import { CommentText, SourceFormat } from "api";
 import { ClientState } from "state/state";
+import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
+import { getSetting } from "state/settings/selectors";
 import {
     closeCommentDialog,
     commentDialogCommentReset,
     commentDialogConflictClose
 } from "state/detailedposting/actions";
-import { getSetting } from "state/settings/selectors";
-import { getCommentsState, isCommentDialogConflict } from "state/detailedposting/selectors";
+import {
+    getCommentDialogComment,
+    getCommentsReceiverPostingId,
+    getCommentsState,
+    isCommentDialogConflict
+} from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
 import { Browser } from "ui/browser";
@@ -31,7 +37,7 @@ import "./CommentDialog.css";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
-function CommentDialog(props: Props) {
+function CommentDialogInner(props: Props) {
     const {ownerName, ownerFullName, draft, comment, smileysEnabled, sourceFormatDefault, submitForm} = props;
 
     const commentId = comment?.id ?? null;
@@ -112,4 +118,29 @@ function CommentDialog(props: Props) {
     );
 }
 
-export default withFormik(commentComposeLogic)(CommentDialog);
+const CommentDialogOuter = withFormik(commentComposeLogic)(CommentDialogInner);
+
+export default function CommentDialog() {
+    const ownerName = useSelector(getHomeOwnerName);
+    const ownerFullName = useSelector(getHomeOwnerFullName);
+    const ownerGender = useSelector(getHomeOwnerGender);
+    const avatarDefault = useSelector(getHomeOwnerAvatar);
+    const receiverPostingId = useSelector(getCommentsReceiverPostingId);
+    const comment = useSelector(getCommentDialogComment);
+    const draft = useSelector((state: ClientState) => state.detailedPosting.commentDialog.draft);
+    const reactionsPositiveDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.positive.default") as string);
+    const reactionsNegativeDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.reactions.negative.default") as string);
+    const sourceFormatDefault = useSelector((state: ClientState) =>
+        getSetting(state, "comment.body-src-format.default") as SourceFormat);
+    const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
+
+    return <CommentDialogOuter avatarDefault={avatarDefault} receiverPostingId={receiverPostingId} comment={comment}
+                               draft={draft} ownerName={ownerName} ownerFullName={ownerFullName}
+                               ownerGender={ownerGender} smileysEnabled={smileysEnabled}
+                               sourceFormatDefault={sourceFormatDefault}
+                               reactionsPositiveDefault={reactionsPositiveDefault}
+                               reactionsNegativeDefault={reactionsNegativeDefault}
+                               repliedToId={comment?.repliedTo?.id ?? null}/>;
+}
