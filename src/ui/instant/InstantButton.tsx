@@ -1,12 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React, { Suspense, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedNotViewed, getFeedState, getInstantBorder } from "state/feeds/selectors";
-import { Popover } from "ui/control";
+import { Loading, Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
-import Instants from "ui/instant/Instants";
+
+const Instants = React.lazy(() => import("ui/instant/Instants"));
 
 export default function InstantButton() {
     const stories = useSelector((state: ClientState) => getFeedState(state, ":instant").stories);
@@ -41,7 +42,9 @@ export default function InstantButton() {
         <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
                  onToggle={onToggle}>
             {({hide}) =>
-                <Instants hide={hide} instantBorder={border}/>
+                <Suspense fallback={<Loading/>}>
+                    <Instants hide={hide} instantBorder={border}/>
+                </Suspense>
             }
         </Popover>
     );

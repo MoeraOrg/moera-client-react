@@ -12,7 +12,7 @@ import { mentionName } from "util/misc";
 import "./NodeNameView.css";
 
 const RegisterNameDialog = React.lazy(() => import("ui/profile/manage/RegisterNameDialog"));
-const NodeNameUpdateDialog = React.lazy(() => import( "ui/profile/manage/NodeNameUpdateDialog"));
+const NodeNameUpdateDialog = React.lazy(() => import("ui/profile/manage/NodeNameUpdateDialog"));
 
 export default function NodeNameView() {
     const loading = useSelector((state: ClientState) => state.nodeName.loading);
