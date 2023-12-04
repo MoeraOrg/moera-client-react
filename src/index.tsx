@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,7 +27,9 @@ const rootElement = document.getElementById("app-root");
 if (rootElement != null) {
     createRoot(rootElement).render(
         <Provider store={store}>
-            <App/>
+            <StrictMode>
+                <App/>
+            </StrictMode>
         </Provider>
     )
 }
