@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ClientState } from "state/state";
+import { Loading } from "ui/control";
 import ProfileView from "ui/profile/view/ProfileView";
 
 const ProfileEditor = React.lazy(() => import("ui/profile/edit/ProfileEditor"));
@@ -12,7 +13,7 @@ export default function ProfilePage() {
         <>
             {!editing && <ProfileView/>}
             {editing &&
-                <Suspense fallback={null}>
+                <Suspense fallback={<Loading/>}>
                     <ProfileEditor/>
                 </Suspense>
             }

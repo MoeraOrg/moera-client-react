@@ -16,6 +16,7 @@ import {
 import { isDetailedPostingPositioned } from "state/detailedposting/selectors";
 import { isGooglePlayHiding } from "state/node/selectors";
 import { isFeedGeneralReady, isFeedSheriffProhibited } from "state/feeds/selectors";
+import { Loading } from "ui/control";
 import TimelinePage from "ui/timeline/TimelinePage";
 import ProfilePage from "ui/profile/ProfilePage";
 import DetailedPostingPage from "ui/detailedposting/DetailedPostingPage";
@@ -55,13 +56,13 @@ export default function CurrentPage() {
             return <DetailedPostingPage/>;
         case PAGE_COMPOSE:
             return (
-                <Suspense fallback={null}>
+                <Suspense fallback={<Loading/>}>
                     <ComposePage/>;
                 </Suspense>
             );
         case PAGE_SETTINGS:
             return (
-                <Suspense fallback={null}>
+                <Suspense fallback={<Loading/>}>
                     <SettingsPage/>
                 </Suspense>
             );
@@ -69,13 +70,13 @@ export default function CurrentPage() {
             return <NewsPage/>;
         case PAGE_PEOPLE:
             return (
-                <Suspense fallback={null}>
+                <Suspense fallback={<Loading/>}>
                     <PeoplePage/>
                 </Suspense>
             );
         case PAGE_COMPLAINS:
             return (
-                <Suspense fallback={null}>
+                <Suspense fallback={<Loading/>}>
                     <ComplainsPage/>
                 </Suspense>
             );
