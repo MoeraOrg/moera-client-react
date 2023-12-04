@@ -6,6 +6,8 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { Browser } from "ui/browser";
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 
+const EMPTY_ARRAY: any[] = [];
+
 export function isHomeIntroduced(state: ClientState): boolean {
     return state.home.introduced;
 }
@@ -28,7 +30,7 @@ export function isConnectedToHome(state: ClientState): boolean {
 
 export function getHomePermissions(state: ClientState): string[] {
     const location = getHomeRootLocation(state);
-    return location != null ? (state.tokens[location]?.permissions ?? []) : [];
+    return location != null ? (state.tokens[location]?.permissions ?? EMPTY_ARRAY) : EMPTY_ARRAY;
 }
 
 export function getHomeOwnerName(state: ClientState): string | null {
@@ -89,10 +91,6 @@ export function getHomeConnectionData(state: ClientState): HomeConnectionData {
         token: getHomeToken(state),
         permissions: getHomePermissions(state)
     }
-}
-
-export function hasInactiveConnections(state: ClientState): boolean {
-    return state.home.roots.length > 1;
 }
 
 export function isHomeGooglePlayHiding(state: ClientState): boolean {

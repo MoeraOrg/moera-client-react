@@ -6,6 +6,8 @@ import { getPosting } from "state/postings/selectors";
 import { getComment, getCommentsReceiverFeatures, getCommentsReceiverName } from "state/detailedposting/selectors";
 import { ReactionsDialogTabsState } from "state/reactionsdialog/state";
 
+const EMPTY_ARRAY: any[] = [];
+
 export function getReactionsDialogNodeName(state: ClientState): string | null {
     return state.reactionsDialog.nodeName;
 }
@@ -38,7 +40,7 @@ export function isReactionsDialogReactionsLoading(state: ClientState): boolean {
 
 export function getReactionsDialogItems(state: ClientState): ReactionInfo[] {
     const reactions = getReactions(state);
-    return reactions != null ? reactions.items : [];
+    return reactions != null ? reactions.items : EMPTY_ARRAY;
 }
 
 export function getReactionsDialogRemainingCount(state: ClientState): number {

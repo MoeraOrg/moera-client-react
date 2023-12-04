@@ -15,6 +15,8 @@ import { getNodeCard } from "state/nodecards/selectors";
 import { isNodeNameOperationFinished } from "state/nodename/selectors";
 import { Browser } from "ui/browser";
 
+const EMPTY_ARRAY: any[] = [];
+
 export function isNodeIntroduced(state: ClientState): boolean {
     return state.node.introduced;
 }
@@ -40,16 +42,16 @@ export function getNodeFeatures(state: ClientState): Features | null {
 }
 
 export function getNodeFriendGroups(state: ClientState): FriendGroupInfo[] {
-    return getNodeFeatures(state)?.friendGroups?.available ?? [];
+    return getNodeFeatures(state)?.friendGroups?.available ?? EMPTY_ARRAY;
 }
 
 export function getNodeFriendGroupsMemberOf(state: ClientState): FriendGroupDetails[] {
-    return getNodeFeatures(state)?.friendGroups?.memberOf ?? [];
+    return getNodeFeatures(state)?.friendGroups?.memberOf ?? EMPTY_ARRAY;
 }
 
 export function getReceiverFriendGroupsMemberOf(state: ClientState,
                                                 receiverFeatures: Features | null): FriendGroupDetails[] {
-    return receiverFeatures?.friendGroups?.memberOf ?? [];
+    return receiverFeatures?.friendGroups?.memberOf ?? EMPTY_ARRAY;
 }
 
 export function isNodeSubscribedToHome(state: ClientState): boolean {
@@ -74,17 +76,17 @@ export function getNodeToken(state: ClientState): string | null {
 export function getNodePermissions(state: ClientState): string[] {
     const rootLocation = getNodeRootLocation(state);
     if (rootLocation == null) {
-        return [];
+        return EMPTY_ARRAY;
     }
-    return state.tokens[rootLocation]?.permissions ?? [];
+    return state.tokens[rootLocation]?.permissions ?? EMPTY_ARRAY;
 }
 
 export function getHomePermissions(state: ClientState): string[] {
     const rootLocation = getHomeRootLocation(state);
     if (rootLocation == null) {
-        return [];
+        return EMPTY_ARRAY;
     }
-    return state.tokens[rootLocation]?.permissions ?? [];
+    return state.tokens[rootLocation]?.permissions ?? EMPTY_ARRAY;
 }
 
 export function isNodeAdmin(state: ClientState): boolean {

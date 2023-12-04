@@ -18,15 +18,17 @@ export function getNamingNamesToBeLoaded(state: ClientState, names: (string | nu
     return names.filter((name): name is string => isNamingNameToBeLoaded(state, name));
 }
 
+const EMPTY_DETAILS: NameState = {
+    loading: false,
+    loaded: false,
+    nodeUri: null,
+    accessed: 0,
+    updated: 0
+}
+
 export function getNamingNameDetails(state: ClientState, name?: string | null): NameState {
     const details = name != null ? state.naming.names[name] : null;
-    return details ? details : {
-        loading: false,
-        loaded: false,
-        nodeUri: null,
-        accessed: 0,
-        updated: 0
-    }
+    return details ? details : EMPTY_DETAILS;
 }
 
 export function getNamingNameNodeUri(state: ClientState, name?: string | null): string | null {

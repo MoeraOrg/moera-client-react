@@ -40,6 +40,7 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
 
     const onClick = (value: PrincipalValue) => onChange ? () => onChange(value) : undefined;
 
+    const principalValues = getValues(values, friendGroups, publicDisabled && value !== "public", t);
     return (
         <>
             <button className={cx("principal-select", className, {long})} ref={setButtonRef} onClick={onToggle}
@@ -51,14 +52,12 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
                 <div ref={setPopperRef} style={popperStyles} {...popperAttributes}
                      className="fade dropdown-menu shadow-sm show">
                     {caption && <div className="caption">{caption}</div>}
-                    {getValues(values, friendGroups, publicDisabled && value !== "public", t)
-                        .map(({value: v, icon, title}) =>
-                            <div key={v} className="dropdown-item" onClick={onClick(v)}>
-                                <FontAwesomeIcon icon="check" className={cx({"invisible": v !== value})}/>{" "}
-                                <FontAwesomeIcon icon={icons?.[v] ?? icon} fixedWidth/>&nbsp;&nbsp;{titles?.[v] ?? title}
-                            </div>
-                        )
-                    }
+                    {principalValues.map(({value: v, icon, title}) =>
+                        <div key={v} className="dropdown-item" onClick={onClick(v)}>
+                            <FontAwesomeIcon icon="check" className={cx({"invisible": v !== value})}/>{" "}
+                            <FontAwesomeIcon icon={icons?.[v] ?? icon} fixedWidth/>&nbsp;&nbsp;{titles?.[v] ?? title}
+                        </div>
+                    )}
                 </div>
             }
         </>
