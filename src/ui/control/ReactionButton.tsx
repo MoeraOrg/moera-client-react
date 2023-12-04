@@ -30,7 +30,8 @@ interface Props {
 export function ReactionButton(props: Props) {
     const {emoji, negative, accepted, invisible, onReactionAdd, onReactionDelete} = props;
 
-    const availableList = useSelector((state: ClientState) => getAvailableReactions(state, negative));
+    const availableList = useSelector((state: ClientState) =>
+        !negative ? getAvailableReactionsPositive(state) : getAvailableReactionsNegative(state));
 
     const pastEmoji = useRef<number | null>(null);
     const [reactions, setReactions] = useState<EmojiProps[]>([]);
@@ -125,8 +126,14 @@ export function ReactionButton(props: Props) {
     );
 }
 
-const getAvailableReactions = createSelector(
-    (state: ClientState, negative: boolean) =>
-        getSetting(state, !negative ? "reactions.positive.available" : "reactions.negative.available") as string,
+// createSelector() has only one memoized value per selector, so we need two of them
+
+const getAvailableReactionsPositive = createSelector(
+    (state: ClientState) => getSetting(state, "reactions.positive.available") as string,
+    available => new EmojiList(available)
+);
+
+const getAvailableReactionsNegative = createSelector(
+    (state: ClientState) => getSetting(state, "reactions.negative.available") as string,
     available => new EmojiList(available)
 );
