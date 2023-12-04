@@ -6,6 +6,7 @@ import { ClientState } from "state/state";
 import { getFeedState } from "state/feeds/selectors";
 import { feedPastSliceLoad, feedStatusUpdate } from "state/feeds/actions";
 import { bodyScrollUpdate, swipeRefreshUpdate } from "state/navigation/actions";
+import { usePopover } from "ui/control";
 import { Browser } from "ui/browser";
 import InstantStory from "ui/instant/InstantStory";
 import InstantsSentinel from "ui/instant/InstantsSentinel";
@@ -13,11 +14,10 @@ import { BUILD_NUMBER } from "build-number";
 import "./Instants.css";
 
 interface Props {
-    hide: () => void;
     instantBorder: number;
 }
 
-export default function Instants({hide, instantBorder}: Props) {
+export default function Instants({instantBorder}: Props) {
     const loadingPast = useSelector((state: ClientState) => getFeedState(state, ":instant").loadingPast);
     const after = useSelector((state: ClientState) => getFeedState(state, ":instant").after);
     const stories = useSelector((state: ClientState) => getFeedState(state, ":instant").stories);
@@ -25,6 +25,8 @@ export default function Instants({hide, instantBorder}: Props) {
     const {t} = useTranslation();
 
     const pastIntersecting = useRef<boolean>(true);
+
+    const {hide} = usePopover();
 
     useEffect(() => {
         window.closeLightDialog = hide;

@@ -9,9 +9,7 @@ const ConnectionsButton = () => (
     <>
         <HomeAvatar/>
         <Popover element={HomeName} detached>
-            {({hide}) => (
-                <Connections hide={hide}/>
-            )}
+            <Connections/>
         </Popover>
     </>
 );

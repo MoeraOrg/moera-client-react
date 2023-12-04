@@ -9,22 +9,20 @@ import { getHomeRootLocation } from "state/home/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { openConnectDialog } from "state/connectdialog/actions";
 import { openSignUpDialog } from "state/signupdialog/actions";
-import { Button } from "ui/control";
+import { Button, usePopover } from "ui/control";
 import NodeName from "ui/nodename/NodeName";
 import ConnectionItem from "ui/mainmenu/connections/ConnectionItem";
 import "./Connections.css";
 
-interface Props {
-    hide: () => void;
-}
-
-export default function Connections({hide}: Props) {
+export default function Connections() {
     const location = useSelector(getHomeRootLocation);
     const login = useSelector((state: ClientState) => state.home.login);
     const owner = useSelector((state: ClientState) => state.home.owner);
     const roots = useSelector((state: ClientState) => state.home.roots);
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    const {hide} = usePopover();
 
     const onAddClick = () => {
         dispatch(openConnectDialog());

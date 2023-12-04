@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
 import { PositioningStrategy } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { isFunction } from 'formik';
 
 import "./Popover.css";
 
-interface ChildrenProps {
+export interface PopoverInterface {
     hide: () => void;
     update: () => void;
 }
+
+const PopoverContext = createContext<PopoverInterface>({
+    hide: () => {},
+    update: () => {}
+});
+
+export const usePopover = (): PopoverInterface => useContext(PopoverContext);
 
 interface Props {
     className?: string;
@@ -25,7 +31,7 @@ interface Props {
     strategy?: PositioningStrategy;
     offset?: [number, number?];
     onToggle?: (visible: boolean) => void;
-    children: ((props: ChildrenProps) => React.ReactNode) | React.ReactNode;
+    children: React.ReactNode;
 }
 
 export function Popover({
@@ -86,7 +92,7 @@ export function Popover({
         usePopper(buttonRef, popperRef, {placement: "bottom", strategy, modifiers});
 
     return (
-        <>
+        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
             <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
                 {element && React.createElement(element)}
                 {icon && <FontAwesomeIcon icon={icon}/>}
@@ -102,15 +108,12 @@ export function Popover({
                         className
                     )}>
                         <div ref={setArrowRef} style={styles.arrow} {...attributes.arrow} className="popover-arrow"/>
-                        <div className="popover-body">{
-                            isFunction(children) ?
-                                children({hide: hide, update: forceUpdate ?? (() => {})})
-                            :
-                                children
-                        }</div>
+                        <div className="popover-body">
+                            {children}
+                        </div>
                     </div>,
                 document.querySelector("#modal-root")!
             )}
-        </>
+        </PopoverContext.Provider>
     );
 }
