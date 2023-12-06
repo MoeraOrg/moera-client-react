@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, TouchEventHandler } from 'react';
+import React, { ForwardedRef, forwardRef, MouseEventHandler } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import cx from 'classnames';
@@ -12,22 +12,19 @@ interface Props {
     color?: string | null;
     invisible?: boolean;
     className?: string;
-    buttonRef?: React.Ref<HTMLButtonElement>;
-    onMouseEnter?: MouseEventHandler<HTMLButtonElement>;
-    onMouseLeave?: MouseEventHandler<HTMLButtonElement>;
-    onTouchStart?: TouchEventHandler<HTMLButtonElement>;
     onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
-const EmojiButton = ({icon, emoji, caption, color, invisible, className, buttonRef, onMouseEnter, onMouseLeave,
-                      onTouchStart, onClick}: Props) => (
-    <button className={cx(className, {"invisible": invisible})} style={color ? {color} : undefined}
-            onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onMouseDown={onMouseEnter}
-            onTouchStart={onTouchStart} onClick={onClick} ref={buttonRef}>
+const EmojiButton = forwardRef((
+    {icon, emoji, caption, color, invisible, className, onClick}: Props,
+    ref: ForwardedRef<HTMLButtonElement>
+) => (
+    <button className={cx(className, {"invisible": invisible})} style={color ? {color} : undefined} onClick={onClick}
+            ref={ref}>
         {icon && <FontAwesomeIcon icon={icon}/>}
         {emoji && <Twemoji code={emoji}/>}
         <span className="caption">{caption}</span>
     </button>
-);
+));
 
 export { EmojiButton };

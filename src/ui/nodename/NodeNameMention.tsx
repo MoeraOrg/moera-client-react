@@ -43,9 +43,8 @@ export default function NodeNameMention({name, fullName, text}: Props) {
 
     return (
         <NodeNamePopup nodeName={name} fullName={fullName}>
-            {(ref, mainEnter, mainLeave, mainTouch) =>
-                <Jump nodeName={name} href="/" anchorRef={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}
-                      onTouchStart={mainTouch}>
+            {ref =>
+                <Jump nodeName={name} href="/" ref={ref}>
                     {content}
                 </Jump>
             }

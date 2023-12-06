@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
@@ -6,19 +6,9 @@ import { PositioningStrategy } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
+import { PopoverContext } from "ui/control";
+
 import "./Popover.css";
-
-export interface PopoverInterface {
-    hide: () => void;
-    update: () => void;
-}
-
-const PopoverContext = createContext<PopoverInterface>({
-    hide: () => {},
-    update: () => {}
-});
-
-export const usePopover = (): PopoverInterface => useContext(PopoverContext);
 
 interface Props {
     className?: string;

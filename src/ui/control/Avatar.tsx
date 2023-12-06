@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ForwardedRef, forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -46,16 +46,12 @@ interface Props {
     draggable?: boolean;
     nodeName?: string | null; // Node the avatar is loaded from
     onClick?: (event: React.MouseEvent) => void;
-    onMouseEnter?: () => void;
-    onMouseLeave?: () => void;
-    onTouchStart?: () => void;
-    imageRef?: React.Ref<HTMLImageElement>;
 }
 
-export function Avatar({
-    avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName, onClick, onMouseEnter,
-    onMouseLeave, onTouchStart, imageRef
-}: Props) {
+function AvatarImpl(
+    {avatar, ownerName, size, shape: shapeLocal, className, draggable = true, nodeName, onClick}: Props,
+    ref: ForwardedRef<HTMLImageElement>
+) {
     const rootPage = useSelector((state: ClientState) => getRootPage(state, nodeName));
     const shapeGlobal = useSelector((state: ClientState) => getSetting(state, "avatar.shape") as string);
     const {t} = useTranslation();
@@ -79,8 +75,11 @@ export function Avatar({
     }
 
     return (
-        <img src={src} alt={alt} width={size} height={size} draggable={draggable} ref={imageRef} onClick={onClick}
-             onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onTouchStart={onTouchStart}
+        <img src={src} alt={alt} width={size} height={size} draggable={draggable} ref={ref} onClick={onClick}
              className={cx("avatar", `avatar-${shape}`, className)} style={style}/>
     );
 }
+
+const Avatar = forwardRef(AvatarImpl);
+
+export { Avatar };

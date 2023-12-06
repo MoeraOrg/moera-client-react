@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { AvatarImage } from "api";
 import { nodeCardPrepare } from "state/nodecards/actions";
-import { DelayedPopper, DelayedPopperChildren, Manager, Reference } from "ui/control/DelayedPopper";
+import { DelayedPopover, DelayedPopoverElement } from "ui/control";
 import NodeCard from "ui/nodename/NodeCard";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
     avatar?: AvatarImage | null;
     avatarNodeName?: string;
     disabled?: boolean;
-    children: DelayedPopperChildren;
+    children: DelayedPopoverElement;
 }
 
 export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeName, disabled, children}: Props) {
@@ -22,19 +22,12 @@ export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeNam
     const onPreparePopper = () => dispatch(nodeCardPrepare(nodeName));
 
     return (
-        <Manager onPreparePopper={onPreparePopper} disabled={disabled} clickable>
-            <Reference>
-                {(ref, mainEnter, mainLeave, mainTouch) => children(ref, mainEnter, mainLeave, mainTouch)}
-            </Reference>
+        <DelayedPopover placement="top" className="node-name-popover" onPreparePopper={onPreparePopper}
+                        disabled={disabled} clickable element={children}>
             {ReactDOM.createPortal(
-                <DelayedPopper placement="top" className="node-name-popover">
-                    {(hide) =>
-                        <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar}
-                                  avatarNodeName={avatarNodeName} hide={hide}/>
-                    }
-                </DelayedPopper>,
+                <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>,
                 document.getElementById("hovercard-root")!
             )}
-        </Manager>
+        </DelayedPopover>
     );
 }

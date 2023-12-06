@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api";
 import { openDonateDialog } from "state/donatedialog/actions";
-import { Button } from "ui/control";
+import { Button, usePopover } from "ui/control";
 import { Browser } from "ui/browser";
 
 interface Props {
@@ -21,6 +21,8 @@ export function DonateButton({name, fullName, fundraisers, styles = "large", cla
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
+    const {hide: hidePopover} = usePopover();
+
     if (name == null || fundraisers == null || fundraisers.length === 0) {
         return null;
     }
@@ -30,7 +32,7 @@ export function DonateButton({name, fullName, fundraisers, styles = "large", cla
     }
 
     const onClick = () => {
-        document.dispatchEvent(new Event("hidepopper"));
+        hidePopover();
         dispatch(openDonateDialog(name, fullName, fundraisers));
     };
 

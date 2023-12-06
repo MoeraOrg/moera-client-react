@@ -11,8 +11,7 @@ import {
 } from "api";
 import { ClientState } from "state/state";
 import { getSetting } from "state/settings/selectors";
-import { EmojiProps, EmojiSelector, ReactionEmojiButton } from "ui/control";
-import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
+import { DelayedPopover, EmojiProps, EmojiSelector, ReactionEmojiButton } from "ui/control";
 import EmojiList from "util/emoji-list";
 
 interface Props {
@@ -99,30 +98,23 @@ export function ReactionButton(props: Props) {
     const buttonInvisible = invisible || reactions.every(r => r.invisible);
 
     return (
-        <Manager onPreparePopper={preparePopper} onShow={show}>
-            <Reference>
-                {(ref, mainEnter, mainLeave, mainTouch) =>
-                    <ReactionEmojiButton
-                        {...props}
-                        invisible={buttonInvisible}
-                        buttonRef={ref}
-                        onMouseEnter={mainEnter}
-                        onMouseLeave={mainLeave}
-                        onTouchStart={mainTouch}
-                        onReactionAdd={defaultReactionAdd}
-                        onReactionDelete={reactionDelete}
-                    />
-                }
-            </Reference>
-            <DelayedPopper placement="top" arrow>
-                <EmojiSelector
-                    negative={negative}
-                    reactions={reactions}
-                    fixedWidth={true}
-                    onClick={reactionAdd}
+        <DelayedPopover placement="top" arrow onPreparePopper={preparePopper} onShow={show} element={
+            ref =>
+                <ReactionEmojiButton
+                    {...props}
+                    invisible={buttonInvisible}
+                    ref={ref}
+                    onReactionAdd={defaultReactionAdd}
+                    onReactionDelete={reactionDelete}
                 />
-            </DelayedPopper>
-        </Manager>
+        }>
+            <EmojiSelector
+                negative={negative}
+                reactions={reactions}
+                fixedWidth={true}
+                onClick={reactionAdd}
+            />
+        </DelayedPopover>
     );
 }
 

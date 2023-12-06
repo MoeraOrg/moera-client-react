@@ -43,18 +43,15 @@ export default function NodeName({
     return (
         <NodeNamePopup nodeName={name} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}
                        disabled={!popup}>
-            {(ref, mainEnter, mainLeave, mainTouch) =>
-                linked ? (
-                    <Jump className={klass} nodeName={name} href="/" anchorRef={ref} onMouseEnter={mainEnter}
-                          onMouseLeave={mainLeave} onTouchStart={mainTouch}>
+            {ref =>
+                linked ?
+                    <Jump className={klass} nodeName={name} href="/" ref={ref}>
                         <NodeNameText name={name} fullName={fullName} mode={mode}/>
                     </Jump>
-                ) : (
-                    <span className={klass} ref={ref} onMouseEnter={mainEnter} onMouseLeave={mainLeave}
-                          onTouchStart={mainTouch}>
+                :
+                    <span className={klass} ref={ref}>
                         <NodeNameText name={name} fullName={fullName} mode={mode}/>
                     </span>
-                )
             }
         </NodeNamePopup>
 

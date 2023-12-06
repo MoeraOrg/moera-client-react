@@ -8,7 +8,7 @@ import { getSetting } from "state/settings/selectors";
 import { Browser } from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
 import Jump from "ui/navigation/Jump";
-import { DelayedPopper, Manager, Reference } from "ui/control/DelayedPopper";
+import { DelayedPopover } from "ui/control";
 import GlanceComment from "ui/comment/GlanceComment";
 import "./RepliedTo.css";
 
@@ -41,21 +41,17 @@ export default function RepliedTo({
     return (
         <div className="replied-to">
             {unset && <button className="unset" onClick={onUnsetClick}>&times;</button>}
-            <Manager onPreparePopper={onPreparePopper} disabled={!popperEnabled}>
-                <Reference>
-                    {(ref, mainEnter, mainLeave, mainTouch) =>
-                        <Jump href={`/post/${postingId}?comment=${commentId}`} anchorRef={ref}
-                              onMouseEnter={mainEnter} onMouseLeave={mainLeave} onTouchStart={mainTouch}>
-                            <span className="icon"><FontAwesomeIcon icon="reply"/></span>
-                            <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
-                            <span className="heading" dangerouslySetInnerHTML={{__html: headingHtml}}/>
-                        </Jump>
-                    }
-                </Reference>
-                <DelayedPopper placement="top" className="glance-comment-popover">
-                    <GlanceComment/>
-                </DelayedPopper>
-            </Manager>
+            <DelayedPopover  placement="top" className="glance-comment-popover" onPreparePopper={onPreparePopper}
+                             disabled={!popperEnabled} element={
+                ref =>
+                    <Jump href={`/post/${postingId}?comment=${commentId}`} ref={ref}>
+                        <span className="icon"><FontAwesomeIcon icon="reply"/></span>
+                        <NodeName name={ownerName} fullName={ownerFullName} linked={false}/>
+                        <span className="heading" dangerouslySetInnerHTML={{__html: headingHtml}}/>
+                    </Jump>
+            }>
+                <GlanceComment/>
+            </DelayedPopover>
         </div>
     );
 }

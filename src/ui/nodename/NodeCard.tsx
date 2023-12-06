@@ -9,7 +9,7 @@ import { ClientState } from "state/state";
 import { getNodeCard, isNodeCardAnyLoaded, isNodeCardAnyLoading } from "state/nodecards/selectors";
 import { getHomeOwnerName } from "state/home/selectors";
 import CopyMentionButton from "ui/nodename/CopyMentionButton";
-import { Avatar, DonateButton, Loading, SubscribeButton } from "ui/control";
+import { Avatar, DonateButton, Loading, SubscribeButton, usePopover } from "ui/control";
 import Jump from "ui/navigation/Jump";
 import { mentionName, shortGender } from "util/misc";
 import { Browser } from "ui/browser";
@@ -20,15 +20,16 @@ interface Props {
     fullName?: string | null;
     avatar?: AvatarImage | null;
     avatarNodeName?: string;
-    hide: () => void;
 }
 
-export default function NodeCard({nodeName, fullName, avatar, avatarNodeName, hide}: Props) {
+export default function NodeCard({nodeName, fullName, avatar, avatarNodeName}: Props) {
     const card = useSelector((state: ClientState) => getNodeCard(state, nodeName));
     const anyLoaded = useSelector((state: ClientState) => isNodeCardAnyLoaded(state, nodeName));
     const anyLoading = useSelector((state: ClientState) => isNodeCardAnyLoading(state, nodeName));
     const homeOwnerName = useSelector(getHomeOwnerName);
     const {t} = useTranslation();
+
+    const {hide: hidePopover} = usePopover();
 
     if (card == null || (!anyLoaded && !anyLoading)) {
         return (
@@ -97,7 +98,7 @@ export default function NodeCard({nodeName, fullName, avatar, avatarNodeName, hi
             <div className="buttons">
                 <CopyMentionButton nodeName={nodeName} fullName={card.details.profile.fullName ?? fullName ?? null}/>
                 {(homeOwnerName != null && nodeName !== homeOwnerName && (card.subscription.loaded ?? false)) &&
-                    <SubscribeButton nodeName={nodeName} feedName="timeline" onDialogOpened={hide}/>
+                    <SubscribeButton nodeName={nodeName} feedName="timeline" onDialogOpened={hidePopover}/>
                 }
             </div>
             {anyLoading && <Loading/>}

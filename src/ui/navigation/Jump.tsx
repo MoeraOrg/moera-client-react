@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, TouchEventHandler } from 'react';
+import React, { ForwardedRef, forwardRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as URI from 'uri-js';
 
@@ -21,17 +21,13 @@ interface Props {
     trackingId?: string | null;
     onNear?: JumpCallback;
     onFar?: JumpCallback;
-    anchorRef?: React.Ref<HTMLAnchorElement> | null,
-    onMouseEnter?: MouseEventHandler<HTMLAnchorElement>,
-    onMouseLeave?: MouseEventHandler<HTMLAnchorElement>,
-    onTouchStart?: TouchEventHandler<HTMLAnchorElement>,
     children?: any;
 }
 
-export default function Jump({
-    nodeName, nodeUri, href, className, style, title, trackingId, onNear, onFar, anchorRef, onMouseEnter, onMouseLeave,
-    onTouchStart, children
-}: Props) {
+function Jump(
+    {nodeName, nodeUri, href, className, style, title, trackingId, onNear, onFar, children}: Props,
+    ref: ForwardedRef<HTMLAnchorElement>
+) {
     const ownerName = useSelector(getOwnerName);
     const rootPage = useSelector(getNodeRootPage);
     const homeOwnerName = useSelector(getHomeOwnerName);
@@ -92,8 +88,7 @@ export default function Jump({
         const nodeLocation = rootPage ?? nodeUri ?? "unknown";
         const url = redirectUrl(true, redirectPage, ownerName, nodeLocation, href, trackingId);
         return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
-                  data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                  onTouchStart={onTouchStart} onClick={onNearClick} suppressHydrationWarning>{children}</a>;
+                  data-href={href} ref={ref} onClick={onNearClick} suppressHydrationWarning>{children}</a>;
     } else {
         let nodeLocation;
         if (nodeOwnerName === homeOwnerName) {
@@ -106,8 +101,9 @@ export default function Jump({
         nodeLocation ??= null;
         const url = redirectUrl(true, redirectPage, nodeOwnerName, nodeLocation, href, trackingId);
         return <a href={url} className={className} style={style} title={title} data-nodename={nodeOwnerName}
-                  data-href={href} ref={anchorRef} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}
-                  onTouchStart={onTouchStart} onClick={onFarClick(url, nodeLocation, nodeOwnerName)}
+                  data-href={href} ref={ref} onClick={onFarClick(url, nodeLocation, nodeOwnerName)}
                   suppressHydrationWarning>{children}</a>;
     }
 }
+
+export default forwardRef(Jump);
