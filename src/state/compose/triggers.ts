@@ -39,12 +39,16 @@ import { postingSet } from "state/postings/actions";
 import { getPostingStory, hasPostingFeedReference } from "state/postings/selectors";
 import { storyAdded, storyUpdated } from "state/stories/actions";
 
-const isConnectionSwitch = (state: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
+const isConnectionSwitch = (_: ClientState, action: ConnectedToHomeAction) => action.payload.connectionSwitch;
 
 export default [
     trigger("GO_TO_PAGE", conj(isAtComposePage, isComposePostingToBeLoaded), composePostingLoad),
     trigger(["GO_TO_PAGE", "CONNECTED_TO_HOME"], conj(isAtComposePage, isComposeDraftToBeLoaded), composeDraftLoad),
-    trigger(["GO_TO_PAGE", "CONNECTED_TO_HOME"], conj(isAtComposePage, isComposeDraftListToBeLoaded), composeDraftListLoad),
+    trigger(
+        ["GO_TO_PAGE", "CONNECTED_TO_HOME"],
+        conj(isAtComposePage, isComposeDraftListToBeLoaded),
+        composeDraftListLoad
+    ),
     trigger("CONNECTED_TO_HOME", conj(isAtComposePage, isConnectionSwitch), composeDraftListLoad),
     trigger("GO_TO_PAGE", conj(isAtComposePage, isComposeSharedTextToBeLoaded), composeSharedTextLoad),
     trigger("COMPOSE_POST_SUCCEEDED", state => getComposeDraftId(state) != null, composeDraftDelete),
