@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { PostingText, PrincipalValue, SourceFormat } from "api";
+import { PrincipalValue, SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -15,8 +15,7 @@ import {
     areValuesEmpty,
     composePageLogic,
     ComposePageProps,
-    ComposePageValues,
-    valuesToPostingText
+    ComposePageValues
 } from "ui/compose/posting-compose";
 import { ConflictWarning, Loading } from "ui/control";
 import { AvatarField, InputField, RichTextField } from "ui/control/field";
@@ -51,8 +50,8 @@ function ComposePageInner(props: Props) {
 
     const ready = useSelector(isComposeReady);
     const formId = useSelector((state: ClientState) => state.compose.formId);
-    const loadingPosting = useSelector((state: ClientState) => state.compose.loadingPosting);
-    const loadingDraft = useSelector((state: ClientState) => state.compose.loadingDraft);
+    const loadingContent = useSelector((state: ClientState) =>
+        state.compose.loadingPosting || state.compose.loadingDraft);
     const atHomeNode = useSelector(isAtHomeNode);
     const postAllowed = features?.post ?? atHomeNode;
     const conflict = useSelector((state: ClientState) => state.compose.conflict);
@@ -61,22 +60,18 @@ function ComposePageInner(props: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const [initialPostingText, setInitialPostingText] = useState<PostingText>({bodySrc: ""});
-
     const [postWarningClosed, setPostWarningClosed] = useState<boolean>(false);
 
     const postWarningClose = () => setPostWarningClosed(true);
 
     useEffect(() => {
         const values = composePageLogic.mapPropsToValues(props);
-        setInitialPostingText(valuesToPostingText(values, props));
         resetForm({values});
         setPostWarningClosed(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [posting, avatarDefault, formId, sharedText, setInitialPostingText, setPostWarningClosed]); // 'props' are missing on purpose
+    }, [posting, avatarDefault, formId, sharedText, setPostWarningClosed]); // 'props' are missing on purpose
 
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
-    const loadingContent = loadingPosting || loadingDraft;
     const sourceFormats = features?.sourceFormats ?? [];
     const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
     return (
@@ -131,7 +126,7 @@ function ComposePageInner(props: Props) {
                                 }
                             </div>
                             <div className="drafts">
-                                <ComposeDraftSaver initialText={initialPostingText}/>
+                                <ComposeDraftSaver/>
                                 <ComposeResetButton/>
                                 <ComposeDraftSelector/>
                             </div>

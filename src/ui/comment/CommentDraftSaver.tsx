@@ -13,7 +13,7 @@ import {
     getCommentsState
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
-import { DraftSaver } from "ui/control";
+import { DraftSaver, DraftSaver2 } from "ui/control";
 import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/comment-compose";
 
 interface Props {
@@ -113,7 +113,17 @@ export default function ComposeDraftSaver({initialized, initialText, commentId}:
     }
 
     return (
-        <DraftSaver initialized={initialized} initialText={initialText} savingDraft={savingDraft}
-                    savedDraft={savedDraft} toText={toText} isChanged={isChanged} save={save} drop={drop}/>
+        <DraftSaver2 toText={toText} isChanged={isChanged} save={save} drop={drop}
+                     savingDraftSelector={
+                         (state: ClientState) =>
+                             commentId == null
+                                 ? state.detailedPosting.compose.savingDraft
+                                 : state.detailedPosting.commentDialog.savingDraft
+                     }
+                     savedDraftSelector={
+                         (state: ClientState) =>
+                             commentId == null
+                                 ? state.detailedPosting.compose.savedDraft
+                                 : state.detailedPosting.commentDialog.savedDraft}/>
     );
 }

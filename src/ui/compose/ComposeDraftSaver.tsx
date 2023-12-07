@@ -10,11 +10,7 @@ import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete 
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
-import { DraftSaver } from "ui/control";
-
-interface Props {
-    initialText: PostingText;
-}
+import { DraftSaver2 } from "ui/control";
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
     publications != null && publications.length > 0 ? publications[0].publishAt : null;
@@ -31,20 +27,18 @@ const toDraftText = (
     publications: undefined,
     receiverName: ownerName,
     draftType: postingId == null ? "new-posting" : "posting-update",
-    receiverPostingId: postingId == null ? null /* important, should not be undefined */ : postingId,
+    receiverPostingId: postingId == null ? null /* important: should not be undefined */ : postingId,
     publishAt: getPublishAt(postingText.publications)
 } as DraftText);
 
 
-export default function ComposeDraftSaver({initialText}: Props) {
+export default function ComposeDraftSaver() {
     const ownerName = useSelector(getOwnerName);
     const gender = useSelector(getHomeOwnerGender);
     const features = useSelector(getPostingFeatures);
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
     const posting = useSelector((state: ClientState) => state.compose.posting);
     const draftId = useSelector((state: ClientState) => state.compose.draftId);
-    const savingDraft = useSelector((state: ClientState) => state.compose.savingDraft);
-    const savedDraft = useSelector((state: ClientState) => state.compose.savedDraft);
     const smileysEnabled = useSelector((state: ClientState) =>
         getSetting(state, "posting.smileys.enabled") as boolean);
     const newsFeedEnabled = useSelector((state: ClientState) =>
@@ -81,7 +75,8 @@ export default function ComposeDraftSaver({initialText}: Props) {
     }
 
     return (
-        <DraftSaver initialText={initialText} savingDraft={savingDraft} savedDraft={savedDraft} toText={toText}
-                    isChanged={isChanged} save={save} drop={drop}/>
+        <DraftSaver2 toText={toText} isChanged={isChanged} save={save} drop={drop}
+                     savingDraftSelector={(state: ClientState) => state.compose.savingDraft}
+                     savedDraftSelector={(state: ClientState) => state.compose.savedDraft}/>
     );
 }
