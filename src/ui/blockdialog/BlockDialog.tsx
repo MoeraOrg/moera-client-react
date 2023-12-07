@@ -79,8 +79,7 @@ function BlockDialogInner({entryNodeName}: Props) {
     const onClose = () => dispatch(closeBlockDialog());
 
     return (
-        <ModalDialog title={title}
-                     className="block-dialog" onClose={onClose}>
+        <ModalDialog title={title} className="block-dialog" onClose={onClose}>
             <Form>
                 <div className="modal-body">
                     <RadioField<BlockingLevel> id="level-none" name="level"
