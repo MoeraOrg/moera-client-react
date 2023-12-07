@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { useDispatch } from 'react-redux';
 
 import { AvatarImage } from "api";
@@ -23,11 +22,9 @@ export default function NodeNamePopup({nodeName, fullName, avatar, avatarNodeNam
 
     return (
         <DelayedPopover placement="top" className="node-name-popover" onPreparePopper={onPreparePopper}
-                        disabled={disabled} clickable element={children}>
-            {ReactDOM.createPortal(
-                <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>,
-                document.getElementById("hovercard-root")!
-            )}
+                        disabled={disabled} clickable element={children}
+                        popoverContainer={document.getElementById("hovercard-root")}>
+            <NodeCard nodeName={nodeName} fullName={fullName} avatar={avatar} avatarNodeName={avatarNodeName}/>
         </DelayedPopover>
     );
 }

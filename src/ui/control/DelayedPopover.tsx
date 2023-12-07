@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { Modifier, usePopper } from 'react-popper';
 import PopperJS from '@popperjs/core';
 import cx from "classnames";
 
 import { PopoverContext } from "ui/control";
+import ReactDOM from "react-dom";
 
 export type DelayedPopoverElement = (ref: (dom: Element | null) => void) => any;
 
@@ -18,6 +19,7 @@ interface Props {
     onPreparePopper?: () => void;
     onShow?: () => boolean;
     element: DelayedPopoverElement;
+    popoverContainer?: Element | DocumentFragment | null;
     children: React.ReactNode;
 }
 
@@ -27,7 +29,7 @@ type TouchLocus = "none" | "touch" | "lock";
 
 export function DelayedPopover({
     placement, arrow, className, styles = "popover", disabled, clickable, sticky, onPreparePopper, onShow, element,
-    children
+    popoverContainer, children
 }: Props) {
     // Such usage of useState() is counter-intuitive, but required by react-popper
     const [buttonRef, setButtonRef] = useState<Element | null>(null);
@@ -198,7 +200,7 @@ export function DelayedPopover({
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
             {element(setButtonRef)}
-            {(popup || locus !== "out") &&
+            {(popup || locus !== "out") && createPortalIfNeeded(
                 <div ref={setPopperRef} style={popperStyles.popper} {...attributes.popper} className={cx(
                     "shadow",
                     "fade",
@@ -219,8 +221,9 @@ export function DelayedPopover({
                          onMouseLeave={!sticky ? popupLeave : undefined}>
                         {children}
                     </div>
-                </div>
-            }
+                </div>,
+                popoverContainer
+            )}
         </PopoverContext.Provider>
     );
 }
@@ -238,4 +241,11 @@ function isInElements(event: MouseEvent, selector: string) {
         }
     }
     return false;
+}
+
+function createPortalIfNeeded(children: ReactNode, container?: Element | DocumentFragment | null, key?: null | string) {
+    if (container == null) {
+        return children;
+    }
+    return ReactDOM.createPortal(children, container, key);
 }

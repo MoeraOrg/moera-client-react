@@ -41,8 +41,8 @@ export default function RepliedTo({
     return (
         <div className="replied-to">
             {unset && <button className="unset" onClick={onUnsetClick}>&times;</button>}
-            <DelayedPopover  placement="top" className="glance-comment-popover" onPreparePopper={onPreparePopper}
-                             disabled={!popperEnabled} element={
+            <DelayedPopover placement="top" className="glance-comment-popover" onPreparePopper={onPreparePopper}
+                            disabled={!popperEnabled} element={
                 ref =>
                     <Jump href={`/post/${postingId}?comment=${commentId}`} ref={ref}>
                         <span className="icon"><FontAwesomeIcon icon="reply"/></span>
