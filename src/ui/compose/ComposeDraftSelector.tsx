@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeDraftSelect } from "state/compose/actions";
+import { isComposeReady } from "state/compose/selectors";
 import { Button, Loading, LoadingInline } from "ui/control";
 import { useButtonPopper } from "ui/hook";
 import ComposeDraftItem from "ui/compose/ComposeDraftItem";
@@ -11,6 +12,7 @@ import ComposeNewPost from "ui/compose/ComposeNewPost";
 import "./ComposeDraftSelector.css";
 
 export default function ComposeDraftSelector() {
+    const ready = useSelector(isComposeReady);
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
     const draftId = useSelector((state: ClientState) => state.compose.draftId);
     const draftList = useSelector((state: ClientState) => state.compose.draftList);
@@ -45,7 +47,7 @@ export default function ComposeDraftSelector() {
 
     return (
         <div ref={setButtonRef} className="draft-selector btn-group">
-            <Button variant="info" className="dropdown-toggle" onClick={onToggle}>
+            <Button variant="info" className="dropdown-toggle" disabled={!ready} onClick={onToggle}>
                 {t("Drafts") + " "}
                 {loadingDraftList ?
                     <LoadingInline/>

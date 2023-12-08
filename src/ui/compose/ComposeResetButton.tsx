@@ -5,11 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
 import { composeDraftListItemDelete, composeUpdateDraftDelete } from "state/compose/actions";
+import { isComposeReady } from "state/compose/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { Button } from "ui/control";
 import "./ComposeResetButton.css";
 
 export default function ComposeResetButton() {
+    const ready = useSelector(isComposeReady);
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
     const draftId = useSelector((state: ClientState) => state.compose.draftId);
     const dispatch = useDispatch();
@@ -29,13 +31,14 @@ export default function ComposeResetButton() {
 
     if (postingId == null) {
         return (
-            <Button variant="danger" className="reset-button" title={t("delete-draft")} onClick={onClick}>
+            <Button variant="danger" className="reset-button" title={t("delete-draft")} disabled={!ready}
+                    onClick={onClick}>
                 <FontAwesomeIcon icon="trash-can"/>
             </Button>
         );
     } else {
         return (
-            <Button variant="info" className="reset-button" onClick={onClick}>
+            <Button variant="info" className="reset-button" disabled={!ready} onClick={onClick}>
                 <FontAwesomeIcon icon="undo-alt"/>
                 {" " + t("undo")}
             </Button>

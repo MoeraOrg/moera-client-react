@@ -23,7 +23,7 @@ import {
     ComposePostingLoadAction,
     composePostingLoaded,
     composePostingLoadFailed,
-    composePostSucceeded, ComposeSharedTextLoadAction,
+    composePostSucceeded, composeSharedTextAbsent, ComposeSharedTextLoadAction,
     composeSharedTextSet,
     ComposeUpdateDraftDeleteAction
 } from "state/compose/actions";
@@ -207,11 +207,14 @@ function* composeUpdateDraftDeleteSaga(action: ComposeUpdateDraftDeleteAction) {
 
 function* composeSharedTextLoadSaga(action: ComposeSharedTextLoadAction) {
     if (!window.Android) {
+        yield* put(composeSharedTextAbsent().causedBy(action));
         return;
     }
     const text = window.Android.getSharedText();
     const type = window.Android.getSharedTextType();
     if (text != null) {
         yield* put(composeSharedTextSet(text, type).causedBy(action));
+    } else {
+        yield* put(composeSharedTextAbsent().causedBy(action));
     }
 }

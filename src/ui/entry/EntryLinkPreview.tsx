@@ -23,12 +23,15 @@ interface Props {
     media: MediaAttachment[] | null;
     small?: boolean | null;
     editing?: boolean;
+    disabled?: boolean;
     onUpdate?: (title: string, description: string) => void;
     onDelete?: MouseEventHandler;
 }
 
-export function EntryLinkPreview({nodeName, siteName, url, title, description, imageUploading, imageHash, media,
-                                  small = false, editing, onUpdate, onDelete}: Props) {
+export function EntryLinkPreview({
+    nodeName, siteName, url, title, description, imageUploading, imageHash, media, small = false, editing, disabled,
+    onUpdate, onDelete
+}: Props) {
     const [edit, setEdit] = useState<boolean>(false);
 
     if (url == null) {
@@ -62,8 +65,8 @@ export function EntryLinkPreview({nodeName, siteName, url, title, description, i
     }
 
     return (
-        <Frame className={cx("link-preview", {"large": large}, {"small": small})} url={url} editing={editing}
-               onEdit={onEdit} onDelete={onDelete}>
+        <Frame className={cx("link-preview", {"large": large}, {"small": small})} url={url}
+               editing={editing && !disabled} onEdit={onEdit} onDelete={onDelete}>
             <EntryLinkPreviewImage nodeName={nodeName} mediaFile={mediaFile} loading={imageUploading ?? false}/>
             <div className="details">
                 {title &&

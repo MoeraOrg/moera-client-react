@@ -2,11 +2,11 @@ import * as immutable from 'object-path-immutable';
 
 import { DraftInfo, PostingInfo } from "api";
 import { PAGE_COMPOSE } from "state/navigation/pages";
-import { ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
+import { ComposePostingState, ComposeState, DraftPostingInfo, ExtDraftInfo } from "state/compose/state";
 import { ClientAction } from "state/action";
 import { htmlEntities, replaceEmojis, safeHtml } from "util/html";
 
-const emptyPosting = {
+const emptyPosting: ComposePostingState = {
     postingId: null,
     posting: null,
     loadingPosting: false,
@@ -19,7 +19,9 @@ const emptyPosting = {
     savingDraft: false,
     savedDraft: false,
     sharedText: null,
-    sharedTextType: null
+    sharedTextType: null,
+    sharedTextLoaded: false,
+    ready: false
 };
 
 const initialState: ComposeState = {
@@ -269,7 +271,20 @@ export default (state: ComposeState = initialState, action: ClientAction): Compo
             return {
                 ...state,
                 sharedText: action.payload.text,
-                sharedTextType: action.payload.type
+                sharedTextType: action.payload.type,
+                sharedTextLoaded: true
+            };
+
+        case "COMPOSE_SHARED_TEXT_ABSENT":
+            return {
+                ...state,
+                sharedTextLoaded: true
+            };
+
+        case "COMPOSE_READY":
+            return {
+                ...state,
+                ready: true
             };
 
         default:

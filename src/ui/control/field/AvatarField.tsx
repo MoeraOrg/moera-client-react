@@ -16,9 +16,10 @@ import "./AvatarField.css";
 interface Props {
     name: string;
     size: number;
+    disabled?: boolean;
 }
 
-export function AvatarField({name, size}: Props) {
+export function AvatarField({name, size, disabled}: Props) {
     const avatarsLoading = useSelector((state: ClientState) => state.home.avatars.loading);
     const avatarsLoaded = useSelector((state: ClientState) => state.home.avatars.loaded);
     const avatars = useSelector((state: ClientState) => state.home.avatars.avatars);
@@ -34,6 +35,9 @@ export function AvatarField({name, size}: Props) {
     } = useButtonPopper("bottom-start");
 
     const onClick = (event: React.MouseEvent) => {
+        if (disabled) {
+            return;
+        }
         if (!avatarsLoaded && !avatarsLoading) {
             dispatch(homeAvatarsLoad());
         }

@@ -46,3 +46,18 @@ export function isComposeDraftListToBeLoaded(state: ClientState): boolean {
 export function isComposeDraftListLoaded(state: ClientState): boolean {
     return state.compose.loadedDraftList && !state.compose.loadingDraftList;
 }
+
+export function isComposeBecameReady(state: ClientState): boolean {
+    return !state.compose.ready
+        && ((state.compose.postingId == null && state.compose.posting == null)
+            || (state.compose.postingId != null && state.compose.posting != null))
+        && !state.compose.loadingPosting
+        && ((state.compose.draftId == null && state.compose.draft == null)
+            || (state.compose.draftId != null && state.compose.draft != null))
+        && !state.compose.loadingDraft
+        && (!isComposeSharedTextToBeLoaded(state) || state.compose.sharedTextLoaded);
+}
+
+export function isComposeReady(state: ClientState): boolean {
+    return state.compose.ready;
+}

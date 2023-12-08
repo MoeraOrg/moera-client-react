@@ -160,6 +160,14 @@ export type ComposeSharedTextSetAction = ActionWithPayload<"COMPOSE_SHARED_TEXT_
 export const composeSharedTextSet = (text: string, type: SharedTextType): ComposeSharedTextSetAction =>
     actionWithPayload("COMPOSE_SHARED_TEXT_SET", {text, type});
 
+export type ComposeSharedTextAbsentAction = ActionWithoutPayload<"COMPOSE_SHARED_TEXT_ABSENT">;
+export const composeSharedTextAbsent = (): ComposeSharedTextAbsentAction =>
+    actionWithoutPayload("COMPOSE_SHARED_TEXT_ABSENT");
+
+export type ComposeReadyAction = ActionWithoutPayload<"COMPOSE_READY">;
+export const composeReady = (): ComposeReadyAction =>
+    actionWithoutPayload("COMPOSE_READY");
+
 export type ComposeAnyAction =
     ComposePostingLoadAction
     | ComposePostingLoadedAction
@@ -189,4 +197,6 @@ export type ComposeAnyAction =
     | ComposePreviewAction
     | ComposePreviewCloseAction
     | ComposeSharedTextLoadAction
-    | ComposeSharedTextSetAction;
+    | ComposeSharedTextSetAction
+    | ComposeSharedTextAbsentAction
+    | ComposeReadyAction;

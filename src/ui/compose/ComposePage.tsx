@@ -9,7 +9,7 @@ import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender } from "st
 import { getSetting } from "state/settings/selectors";
 import { isAtHomeNode } from "state/node/selectors";
 import { composeConflictClose } from "state/compose/actions";
-import { getPostingFeatures } from "state/compose/selectors";
+import { getPostingFeatures, isComposeReady } from "state/compose/selectors";
 import {
     areImagesUploaded,
     areValuesEmpty,
@@ -49,6 +49,7 @@ type Props = ComposePageProps & FormikProps<ComposePageValues>;
 function ComposePageInner(props: Props) {
     const {postingId, features, avatarDefault, posting, sharedText, smileysEnabled, values, resetForm} = props;
 
+    const ready = useSelector(isComposeReady);
     const formId = useSelector((state: ClientState) => state.compose.formId);
     const loadingPosting = useSelector((state: ClientState) => state.compose.loadingPosting);
     const loadingDraft = useSelector((state: ClientState) => state.compose.loadingDraft);
@@ -77,7 +78,7 @@ function ComposePageInner(props: Props) {
     const title = postingId == null ? t("new-post-title") : t("edit-post-title");
     const loadingContent = loadingPosting || loadingDraft;
     const sourceFormats = features?.sourceFormats ?? [];
-    const submitDisabled = areValuesEmpty(values) || !areImagesUploaded(values);
+    const submitDisabled = !ready || areValuesEmpty(values) || !areImagesUploaded(values);
     return (
         <>
             <PageHeader>
@@ -102,7 +103,7 @@ function ComposePageInner(props: Props) {
                                              onClose={() => dispatch(composeConflictClose())}/>
                         }
                         <div className="info">
-                            <AvatarField name="avatar" size={56}/>
+                            <AvatarField name="avatar" size={56} disabled={!ready}/>
                             <div className="body">
                                 <ComposeFullName/>
                                 <ComposePublishAt/>
@@ -110,14 +111,15 @@ function ComposePageInner(props: Props) {
                             </div>
                         </div>
                         {features?.subjectPresent &&
-                            <InputField name="subject" title="Title" anyValue disabled={loadingContent}/>
+                            <InputField name="subject" title="Title" anyValue disabled={!ready}/>
                         }
-                        <RichTextField name="body" disabled={loadingContent || beingPosted}
+                        <RichTextField name="body" disabled={!ready || beingPosted}
                                        format={values.bodyFormat ?? "markdown"} smileysEnabled={smileysEnabled}
                                        features={features} nodeName="" urlsField="bodyUrls" anyValue autoFocus
                                        maxHeight="max(100vh - 26rem, 9em)"/>
                         <ComposeFormattingHelp/>
-                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features}/>
+                        <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" features={features}
+                                              disabled={!ready}/>
 
                         <div className="features">
                             <div className="feature-buttons">

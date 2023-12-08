@@ -21,6 +21,7 @@ interface Props {
     nodeName?: string | null;
     features: PostingFeatures | null;
     small?: boolean | null;
+    disabled?: boolean;
 }
 
 type RichTextLinkPreviewStatus = "deleted" | "edited" | "loaded" | null;
@@ -54,7 +55,7 @@ export function bodyToLinkPreviews(
     return [linkPreviews, bodyUrls, media];
 }
 
-export default function RichTextLinkPreviews({name, urlsField, nodeName, features, small}: Props) {
+export default function RichTextLinkPreviews({name, urlsField, nodeName, features, small, disabled}: Props) {
     const ownerName = useSelector(getOwnerName);
     const linkPreviewsState = useSelector((state: ClientState) => state.linkPreviews);
     const maxAutomatic = useSelector((state: ClientState) =>
@@ -107,13 +108,15 @@ export default function RichTextLinkPreviews({name, urlsField, nodeName, feature
 
     return (
         <>
-            <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}/>
+            <EntryLinkSelector urls={urls.filter(url => value.status[url] === "deleted")} onSelect={onRestore}
+                               disabled={disabled}/>
             {value.previews.map((preview, index) =>
                 <EntryLinkPreview key={index} nodeName={targetNodeName} url={preview.url} title={preview.title}
                                   description={preview.description}
                                   imageUploading={isImageUploading(linkPreviewsState, preview.url, targetNodeName)}
                                   imageHash={preview.imageHash} siteName={preview.siteName} media={media} small={small}
-                                  editing onUpdate={onUpdate(preview.url)} onDelete={onDelete(preview.url)}/>
+                                  editing disabled={disabled} onUpdate={onUpdate(preview.url)}
+                                  onDelete={onDelete(preview.url)}/>
             )}
         </>
     );

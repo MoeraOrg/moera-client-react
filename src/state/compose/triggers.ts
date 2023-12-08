@@ -1,11 +1,5 @@
 import { conj, trigger } from "state/trigger";
-import {
-    DraftAddedEvent,
-    DraftDeletedEvent,
-    DraftUpdatedEvent,
-    EventAction,
-    PostingUpdatedEvent
-} from "api/events";
+import { DraftAddedEvent, DraftDeletedEvent, DraftUpdatedEvent, EventAction, PostingUpdatedEvent } from "api/events";
 import { ClientState } from "state/state";
 import { getOwnerName } from "state/node/selectors";
 import { ConnectedToHomeAction } from "state/home/actions";
@@ -20,6 +14,7 @@ import {
     composePostingLoad,
     ComposePostSucceededAction,
     composePreviewClose,
+    composeReady,
     composeSharedTextLoad
 } from "state/compose/actions";
 import { dialogClosed, dialogOpened, goToPosting, updateLocation } from "state/navigation/actions";
@@ -27,6 +22,7 @@ import { isAtComposePage } from "state/navigation/selectors";
 import {
     getComposeDraftId,
     getComposePostingId,
+    isComposeBecameReady,
     isComposeDraftListLoaded,
     isComposeDraftListToBeLoaded,
     isComposeDraftToBeLoaded,
@@ -87,6 +83,15 @@ export default [
     trigger("COMPOSE_DRAFT_UNSET", true, updateLocation),
     trigger("COMPOSE_DRAFT_LIST_ITEM_DELETED", true, updateLocation),
     trigger("CONNECTED_TO_HOME", conj(isAtComposePage, isConnectionSwitch), () => composeDraftUnset(true)),
+    trigger(
+        [
+            "CONNECTED_TO_HOME", "GO_TO_PAGE", "COMPOSE_POSTING_LOADED", "COMPOSE_POSTING_LOAD_FAILED",
+            "COMPOSE_DRAFT_LOADED", "COMPOSE_DRAFT_LOAD_FAILED", "COMPOSE_DRAFT_SELECT", "COMPOSE_DRAFT_UNSET",
+            "COMPOSE_DRAFT_LIST_ITEM_DELETED", "COMPOSE_SHARED_TEXT_SET", "COMPOSE_SHARED_TEXT_ABSENT"
+        ],
+        conj(isAtComposePage, isComposeBecameReady),
+        composeReady
+    ),
     trigger("COMPOSE_PREVIEW", true, dialogOpened(composePreviewClose())),
     trigger("COMPOSE_PREVIEW_CLOSE", true, dialogClosed),
     trigger(

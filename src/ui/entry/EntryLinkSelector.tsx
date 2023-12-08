@@ -11,9 +11,10 @@ import "./EntryLinkSelector.css";
 interface Props {
     urls: string[];
     onSelect: (url: string) => void;
+    disabled?: boolean;
 }
 
-export default function EntryLinkSelector({urls, onSelect}: Props) {
+export default function EntryLinkSelector({urls, onSelect, disabled}: Props) {
     const {
         visible, hide, onToggle, setButtonRef, setPopperRef, popperStyles, popperAttributes
     } = useButtonPopper("bottom-start");
@@ -34,7 +35,8 @@ export default function EntryLinkSelector({urls, onSelect}: Props) {
     return (
         <div className="entry-link-selector">
             <div ref={setButtonRef} className="btn-group">
-                <Button variant="outline-secondary" size="sm" className="dropdown-toggle" onClick={onToggle}>
+                <Button variant="outline-secondary" size="sm" className="dropdown-toggle" disabled={disabled}
+                        onClick={onToggle}>
                     {t("links") + " "}
                     <span className="badge bg-info text-light">{uniqueUrls.length}</span>
                 </Button>

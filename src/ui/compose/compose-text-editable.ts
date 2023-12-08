@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { FieldInputProps, useField } from 'formik';
+
+import { isComposeReady } from "state/compose/selectors";
 
 interface ComposeTextEditableProps<T, E> {
     edit: boolean;
@@ -12,12 +15,18 @@ interface ComposeTextEditableProps<T, E> {
     onKeyDown: (event: React.KeyboardEvent<E>) => void;
 }
 
-export default function useComposeTextEditable<T, E>(name: string, postingId: string | null,
-                                                     draftId: string | null): ComposeTextEditableProps<T, E> {
+export default function useComposeTextEditable<T, E>(
+    name: string, postingId: string | null, draftId: string | null
+): ComposeTextEditableProps<T, E> {
+    const ready = useSelector(isComposeReady);
     const [field, {value, initialValue}, {setValue}] = useField<T>(name);
     const [edit, setEdit] = useState(false);
 
-    const onEdit = () => setEdit(true);
+    const onEdit = () => {
+        if (ready) {
+            setEdit(true);
+        }
+    }
 
     const onReset = () => {
         if (initialValue) {
@@ -43,5 +52,5 @@ export default function useComposeTextEditable<T, E>(name: string, postingId: st
         setEdit(false);
     }, [postingId, draftId, setEdit]);
 
-    return {edit, field, value, setValue, inputRef, onEdit, onReset, onKeyDown};
+    return {edit: ready && edit, field, value, setValue, inputRef, onEdit, onReset, onKeyDown};
 }

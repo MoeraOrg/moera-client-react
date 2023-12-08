@@ -10,7 +10,7 @@ export interface DraftPostingInfo extends PostingInfo {
     subjectHtml: string | null;
 }
 
-export interface ComposeState {
+export interface ComposePostingState {
     postingId: string | null;
     posting: DraftPostingInfo | null;
     loadingPosting: boolean;
@@ -24,6 +24,11 @@ export interface ComposeState {
     savedDraft: boolean;
     sharedText: string | null;
     sharedTextType: SharedTextType | null;
+    sharedTextLoaded: boolean;
+    ready: boolean;
+}
+
+export type ComposeState = ComposePostingState & {
     formId: number;
     draftList: ExtDraftInfo[];
     loadingDraftList: boolean;
