@@ -126,7 +126,7 @@ function ComposePageInner(props: Props) {
                                 }
                             </div>
                             <div className="drafts">
-                                <ComposeDraftSaver/>
+                                {ready && <ComposeDraftSaver/>}
                                 <ComposeResetButton/>
                                 <ComposeDraftSelector/>
                             </div>

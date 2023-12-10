@@ -13,12 +13,10 @@ import {
     getCommentsState
 } from "state/detailedposting/selectors";
 import { commentDialogCommentReset, commentDraftDelete, commentDraftSave } from "state/detailedposting/actions";
-import { DraftSaver, DraftSaver2 } from "ui/control";
+import { DraftSaver } from "ui/control";
 import { CommentComposeValues, isCommentTextChanged, valuesToCommentText } from "ui/comment/comment-compose";
 
 interface Props {
-    initialized: boolean;
-    initialText: CommentText;
     commentId: string | null;
 }
 
@@ -39,7 +37,7 @@ const toDraftText = (
     repliedToId
 } as DraftText);
 
-export default function ComposeDraftSaver({initialized, initialText, commentId}: Props) {
+export default function CommentDraftSaver({commentId}: Props) {
     const ownerName = useSelector(getOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
@@ -56,14 +54,6 @@ export default function ComposeDraftSaver({initialized, initialText, commentId}:
     const formId = useSelector((state: ClientState) => commentId != null ? null : state.detailedPosting.compose.formId);
     const draft = useSelector((state: ClientState) =>
         commentId == null ? state.detailedPosting.compose.draft : state.detailedPosting.commentDialog.draft);
-    const savingDraft = useSelector(
-        (state: ClientState) =>
-            commentId == null
-                ? state.detailedPosting.compose.savingDraft
-                : state.detailedPosting.commentDialog.savingDraft
-    );
-    const savedDraft = useSelector((state: ClientState) =>
-        commentId == null ? state.detailedPosting.compose.savedDraft : state.detailedPosting.commentDialog.savedDraft);
     const smileysEnabled = useSelector((state: ClientState) => getSetting(state, "comment.smileys.enabled") as boolean);
     const reactionsPositiveDefault = useSelector((state: ClientState) =>
         getSetting(state, "comment.reactions.positive.default") as string);
@@ -113,14 +103,14 @@ export default function ComposeDraftSaver({initialized, initialText, commentId}:
     }
 
     return (
-        <DraftSaver2 toText={toText} isChanged={isChanged} save={save} drop={drop}
-                     savingDraftSelector={
+        <DraftSaver toText={toText} isChanged={isChanged} save={save} drop={drop}
+                    savingDraftSelector={
                          (state: ClientState) =>
                              commentId == null
                                  ? state.detailedPosting.compose.savingDraft
                                  : state.detailedPosting.commentDialog.savingDraft
                      }
-                     savedDraftSelector={
+                    savedDraftSelector={
                          (state: ClientState) =>
                              commentId == null
                                  ? state.detailedPosting.compose.savedDraft

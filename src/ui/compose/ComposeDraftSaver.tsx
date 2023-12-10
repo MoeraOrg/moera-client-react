@@ -10,7 +10,7 @@ import { composeDraftListItemDelete, composeDraftSave, composeUpdateDraftDelete 
 import { getPostingFeatures } from "state/compose/selectors";
 import { getSetting } from "state/settings/selectors";
 import { ComposePageValues, isPostingTextChanged, valuesToPostingText } from "ui/compose/posting-compose";
-import { DraftSaver2 } from "ui/control";
+import { DraftSaver } from "ui/control";
 
 const getPublishAt = (publications: StoryAttributes[] | null | undefined): number | null | undefined =>
     publications != null && publications.length > 0 ? publications[0].publishAt : null;
@@ -75,8 +75,8 @@ export default function ComposeDraftSaver() {
     }
 
     return (
-        <DraftSaver2 toText={toText} isChanged={isChanged} save={save} drop={drop}
-                     savingDraftSelector={(state: ClientState) => state.compose.savingDraft}
-                     savedDraftSelector={(state: ClientState) => state.compose.savedDraft}/>
+        <DraftSaver toText={toText} isChanged={isChanged} save={save} drop={drop}
+                    savingDraftSelector={(state: ClientState) => state.compose.savingDraft}
+                    savedDraftSelector={(state: ClientState) => state.compose.savedDraft}/>
     );
 }

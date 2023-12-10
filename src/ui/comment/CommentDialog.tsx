@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { CommentText, SourceFormat } from "api";
+import { SourceFormat } from "api";
 import { ClientState } from "state/state";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
@@ -26,12 +26,7 @@ import NodeName from "ui/nodename/NodeName";
 import { Button, ConflictWarning, ModalDialog } from "ui/control";
 import { AvatarField, RichTextField } from "ui/control/field";
 import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
-import {
-    commentComposeLogic,
-    CommentComposeProps,
-    CommentComposeValues,
-    valuesToCommentText
-} from "ui/comment/comment-compose";
+import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
 import { insertText } from "util/misc";
 import "./CommentDialog.css";
@@ -56,17 +51,11 @@ function CommentDialogInner(props: Props) {
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
-    const [initialText, setInitialText] = useState<CommentText>({ownerName: "", bodySrc: ""});
-
     useEffect(() => {
         const values = commentComposeLogic.mapPropsToValues(props);
-        const commentText = valuesToCommentText(values, props);
-        if (commentText != null) {
-            setInitialText(commentText);
-        }
         resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [commentId, ready, setInitialText]); // 'props' are missing on purpose
+    }, [commentId, ready]); // 'props' are missing on purpose
 
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter") {
@@ -112,7 +101,7 @@ function CommentDialogInner(props: Props) {
                                           features={features} small disabled={!ready || beingPosted}/>
                 </div>
                 <div className="modal-footer">
-                    <CommentDraftSaver initialized={ready} initialText={initialText} commentId={commentId}/>
+                    {ready && <CommentDraftSaver commentId={commentId}/>}
                     <Button variant="secondary" disabled={!ready || beingPosted} onClick={onCancel}>
                         {t("cancel")}
                     </Button>
