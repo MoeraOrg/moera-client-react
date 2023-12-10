@@ -59,6 +59,7 @@ export interface CommentComposeState {
     draft: DraftInfo | null;
     savingDraft: boolean;
     savedDraft: boolean;
+    ready: boolean;
 }
 
 export interface CommentDialogState {

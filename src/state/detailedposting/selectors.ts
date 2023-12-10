@@ -177,18 +177,14 @@ export function isCommentComposerFocused(state: ClientState): boolean {
     return state.detailedPosting.compose.focused;
 }
 
-export function getCommentDialogCommentId(state: ClientState): string | null {
-    return state.detailedPosting.commentDialog.commentId;
-}
-
-export function getCommentDialogComment(state: ClientState): CommentInfo | null {
-    return state.detailedPosting.commentDialog.comment;
-}
-
 export function isCommentComposeDraftToBeLoaded(state: ClientState): boolean {
     const posting = getDetailedPosting(state);
     return posting != null && isConnectedToHome(state) && !state.detailedPosting.compose.loadedDraft
         && !state.detailedPosting.compose.loadingDraft;
+}
+
+export function isCommentComposerReady(state: ClientState): boolean {
+    return state.detailedPosting.compose.ready;
 }
 
 export function getCommentComposerRepliedToId(state: ClientState): string | null {
@@ -225,10 +221,22 @@ export function isCommentDialogConflict(state: ClientState): boolean {
     return state.detailedPosting.commentDialog.conflict;
 }
 
+export function getCommentDialogCommentId(state: ClientState): string | null {
+    return state.detailedPosting.commentDialog.commentId;
+}
+
+export function getCommentDialogComment(state: ClientState): CommentInfo | null {
+    return state.detailedPosting.commentDialog.comment;
+}
+
 export function isCommentDialogDraftToBeLoaded(state: ClientState): boolean {
     const posting = getDetailedPosting(state);
     return posting != null && isConnectedToHome(state) && !state.detailedPosting.commentDialog.loadedDraft
         && !state.detailedPosting.commentDialog.loadingDraft;
+}
+
+export function isCommentDialogReady(state: ClientState): boolean {
+    return state.detailedPosting.commentDialog.loaded && state.detailedPosting.commentDialog.loadedDraft;
 }
 
 export function isGlanceCommentToBeLoaded(state: ClientState): boolean {

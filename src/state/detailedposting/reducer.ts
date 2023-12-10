@@ -55,7 +55,8 @@ const emptyCompose: Omit<CommentComposeState, "formId"> = {
     loadedDraft: false,
     draft: null,
     savingDraft: false,
-    savedDraft: false
+    savedDraft: false,
+    ready: false
 };
 
 const emptyComposeDialog: CommentDialogState = {
@@ -418,7 +419,8 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
         case "COMMENT_COMPOSE_CANCELLED":
             return immutable.assign(state, "compose", {
                 formId: state.compose.formId + 1,
-                ...emptyCompose
+                ...emptyCompose,
+                ready: true
             });
 
         case "COMMENT_POST":
@@ -451,7 +453,8 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
             } else {
                 istate.assign("compose", {
                     formId: state.compose.formId + 1,
-                    ...emptyCompose
+                    ...emptyCompose,
+                    ready: true
                 });
             }
             return istate.value();
@@ -480,12 +483,17 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 return state;
             }
 
+            const istate = immutable.wrap(state);
             const property = action.payload.draft.receiverCommentId != null ? "commentDialog" : "compose";
-            return immutable.assign(state, property, {
+            istate.assign(property, {
                 draft: action.payload.draft,
                 loadingDraft: false,
-                loadedDraft: true
+                loadedDraft: true,
             });
+            if (property === "compose") {
+                istate.set([property, "ready"], true);
+            }
+            return istate.value();
         }
 
         case "COMMENT_DRAFT_LOAD_FAILED": {
@@ -497,10 +505,17 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 return state;
             }
 
+            const istate = immutable.wrap(state);
             const property = action.payload.commentId != null ? "commentDialog" : "compose";
-            return immutable.assign(state, property, {
+            istate.assign(property, {
                 loadingDraft: false
             });
+            if (property === "compose") {
+                istate.set([property, "ready"], true);
+                // Not very logical, comment drafts are not so important, so ignoring this error makes
+                // users' life easier
+            }
+            return istate.value();
         }
 
         case "COMMENT_DRAFT_ABSENT": {
@@ -512,11 +527,16 @@ export default (state: DetailedPostingState = initialState, action: WithContext<
                 return state;
             }
 
+            const istate = immutable.wrap(state);
             const property = action.payload.commentId != null ? "commentDialog" : "compose";
-            return immutable.assign(state, property, {
+            istate.assign(property, {
                 loadingDraft: false,
-                loadedDraft: true
+                loadedDraft: true,
             });
+            if (property === "compose") {
+                istate.set([property, "ready"], true);
+            }
+            return istate.value();
         }
 
         case "COMMENT_DRAFT_SAVE": {

@@ -18,12 +18,13 @@ interface Props {
     ownerName: string;
     ownerFullName: string | null;
     headingHtml: string;
+    disabled?: boolean;
     unset: boolean;
     onUnset?: (() => void) | null;
 }
 
 export default function RepliedTo({
-    postingId, commentId, ownerName, ownerFullName, headingHtml, unset, onUnset
+    postingId, commentId, ownerName, ownerFullName, headingHtml, disabled, unset, onUnset
 }: Props) {
     const popperEnabled = useSelector(
         (state: ClientState) => getSetting(state, "comment.replied-to.glance.enabled")
@@ -40,7 +41,7 @@ export default function RepliedTo({
 
     return (
         <div className="replied-to">
-            {unset && <button className="unset" onClick={onUnsetClick}>&times;</button>}
+            {unset && <button className="unset" disabled={disabled} onClick={onUnsetClick}>&times;</button>}
             <DelayedPopover placement="top" className="glance-comment-popover" onPreparePopper={onPreparePopper}
                             disabled={!popperEnabled} element={
                 ref =>

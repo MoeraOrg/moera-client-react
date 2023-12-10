@@ -12,7 +12,11 @@ import {
 import RepliedTo from "ui/comment/RepliedTo";
 import { htmlEntities, replaceEmojis } from "util/html";
 
-export default function CommentComposeRepliedTo() {
+interface Props {
+    disabled?: boolean;
+}
+
+export default function CommentComposeRepliedTo({disabled}: Props) {
     const postingId = useSelector(getDetailedPostingId);
     const commentId = useSelector(getCommentComposerRepliedToId);
     const ownerName = useSelector(getCommentComposerRepliedToName);
@@ -28,6 +32,7 @@ export default function CommentComposeRepliedTo() {
 
     return (
         <RepliedTo postingId={postingId} commentId={commentId} ownerName={ownerName} ownerFullName={ownerFullName}
-                   headingHtml={replaceEmojis(htmlEntities(heading ?? ""))} unset={true} onUnset={onUnset}/>
+                   headingHtml={replaceEmojis(htmlEntities(heading ?? ""))} disabled={disabled} unset={true}
+                   onUnset={onUnset}/>
     );
 }

@@ -12,7 +12,8 @@ import { bottomMenuHide, bottomMenuShow } from "state/navigation/actions";
 import {
     getCommentsReceiverFullName,
     getCommentsReceiverName,
-    getCommentsReceiverPostingId
+    getCommentsReceiverPostingId,
+    isCommentComposerReady
 } from "state/detailedposting/selectors";
 import { Browser } from "ui/browser";
 import { AvatarField, RichTextField } from "ui/control/field";
@@ -33,6 +34,7 @@ type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 function CommentCompose(props: Props) {
     const {values, resetForm, submitForm} = props;
 
+    const ready = useSelector(isCommentComposerReady);
     const receiverName = useSelector(getCommentsReceiverName);
     const receiverFullName = useSelector(getCommentsReceiverFullName);
     const receiverPostingId = useSelector(getCommentsReceiverPostingId);
@@ -85,19 +87,19 @@ function CommentCompose(props: Props) {
     return (
         <div id="comment-composer" onFocus={onFocus} onBlur={onBlur}>
             <Form>
-                <AvatarField name="avatar" size={36}/>
+                <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
                 <div className="content">
-                    <CommentComposeRepliedTo/>
+                    <CommentComposeRepliedTo disabled={!ready || beingPosted}/>
                     <RichTextField name="body" rows={1} maxHeight="max(100vh - 26rem, 7.5em)" features={features}
                                    nodeName={receiverName} forceImageCompress anyValue
-                                   placeholder={t("write-comment-here", {mention})} disabled={beingPosted}
+                                   placeholder={t("write-comment-here", {mention})} disabled={!ready || beingPosted}
                                    smileysEnabled={smileysEnabled}
                                    hidingPanel={areValuesEmpty(values)} format={sourceFormatDefault}
                                    onKeyDown={onKeyDown} urlsField="bodyUrls"/>
                     <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
-                                          features={features} small/>
+                                          features={features} small disabled={!ready || beingPosted}/>
                 </div>
-                <CommentComposeButtons loading={beingPosted}/>
+                <CommentComposeButtons/>
             </Form>
         </div>
     );

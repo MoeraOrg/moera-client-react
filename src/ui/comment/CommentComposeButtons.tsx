@@ -8,7 +8,7 @@ import { commentComposeCancel } from "state/detailedposting/actions";
 import { confirmBox } from "state/confirmbox/actions";
 import { getHomeOwnerAvatar, getHomeOwnerFullName, getHomeOwnerGender, getHomeOwnerName } from "state/home/selectors";
 import { getSetting } from "state/settings/selectors";
-import { getCommentComposerRepliedToId } from "state/detailedposting/selectors";
+import { getCommentComposerRepliedToId, isCommentComposerReady } from "state/detailedposting/selectors";
 import { ClientState } from "state/state";
 import { Button } from "ui/control";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
@@ -21,11 +21,8 @@ import {
 } from "ui/comment/comment-compose";
 import "./CommentComposeButtons.css";
 
-interface Props {
-    loading: boolean;
-}
-
-export default function CommentComposeButtons({loading}: Props) {
+export default function CommentComposeButtons() {
+    const ready = useSelector(isCommentComposerReady);
     const ownerName = useSelector(getHomeOwnerName);
     const ownerFullName = useSelector(getHomeOwnerFullName);
     const ownerGender = useSelector(getHomeOwnerGender);
@@ -39,6 +36,7 @@ export default function CommentComposeButtons({loading}: Props) {
         getSetting(state, "comment.reactions.negative.default") as string);
     const repliedToId = useSelector(getCommentComposerRepliedToId);
     const draft = useSelector((state: ClientState) => state.detailedPosting.compose.draft);
+    const beingPosted = useSelector((state: ClientState) => state.detailedPosting.compose.beingPosted);
     const dispatch = useDispatch();
     const {t} = useTranslation();
 
@@ -66,7 +64,7 @@ export default function CommentComposeButtons({loading}: Props) {
     };
 
     const {values} = useFormikContext<CommentComposeValues>();
-    const invisible = (draft == null && areValuesEmpty(values)) || !areImagesUploaded(values);
+    const invisible = !ready || (draft == null && areValuesEmpty(values)) || !areImagesUploaded(values);
 
     return (
         <div className="buttons">
@@ -74,7 +72,7 @@ export default function CommentComposeButtons({loading}: Props) {
             <Button variant="secondary" invisible={invisible} onClick={onCancel}>
                 {t("cancel")}
             </Button>
-            <Button variant="primary" type="submit" loading={loading} invisible={invisible}>
+            <Button variant="primary" type="submit" loading={beingPosted} invisible={invisible}>
                 {t("add-comment")}
             </Button>
         </div>

@@ -16,7 +16,8 @@ import {
     getCommentDialogComment,
     getCommentsReceiverPostingId,
     getCommentsState,
-    isCommentDialogConflict
+    isCommentDialogConflict,
+    isCommentDialogReady
 } from "state/detailedposting/selectors";
 import { confirmBox } from "state/confirmbox/actions";
 import { getPostingFeatures } from "state/compose/selectors";
@@ -38,16 +39,17 @@ import "./CommentDialog.css";
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;
 
 function CommentDialogInner(props: Props) {
-    const {ownerName, ownerFullName, draft, comment, smileysEnabled, sourceFormatDefault, submitForm} = props;
+    const {
+        ownerName, ownerFullName, draft, comment, smileysEnabled, sourceFormatDefault, resetForm, submitForm
+    } = props;
 
     const commentId = comment?.id ?? null;
 
+    const ready = useSelector(isCommentDialogReady);
     const receiverName = useSelector((state: ClientState) => getCommentsState(state).receiverName);
     const conflict = useSelector(isCommentDialogConflict);
     const loading = useSelector((state: ClientState) =>
         state.detailedPosting.commentDialog.loading || state.detailedPosting.commentDialog.loadingDraft);
-    const loaded = useSelector((state: ClientState) =>
-        state.detailedPosting.commentDialog.loaded && state.detailedPosting.commentDialog.loadedDraft);
     const beingPosted = useSelector((state: ClientState) => state.detailedPosting.commentDialog.beingPosted);
     const submitKey = useSelector((state: ClientState) => getSetting(state, "comment.submit-key") as string);
     const features = useSelector(getPostingFeatures);
@@ -62,8 +64,9 @@ function CommentDialogInner(props: Props) {
         if (commentText != null) {
             setInitialText(commentText);
         }
+        resetForm({values});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [commentId, loaded, setInitialText]); // 'props' are missing on purpose
+    }, [commentId, ready, setInitialText]); // 'props' are missing on purpose
 
     const onKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === "Enter") {
@@ -99,19 +102,23 @@ function CommentDialogInner(props: Props) {
             <Form>
                 <div className="modal-body">
                     <div className="owner-line">
-                        <AvatarField name="avatar" size={36}/>
+                        <AvatarField name="avatar" size={36} disabled={!ready || beingPosted}/>
                         <NodeName name={ownerName} fullName={ownerFullName} linked={false} popup={false}/>
                     </div>
                     <RichTextField name="body" rows={5} features={features} nodeName={receiverName} forceImageCompress
-                                   anyValue autoFocus disabled={loading || beingPosted} smileysEnabled={smileysEnabled}
+                                   anyValue autoFocus disabled={!ready || beingPosted} smileysEnabled={smileysEnabled}
                                    format={sourceFormatDefault} onKeyDown={onKeyDown} urlsField="bodyUrls"/>
                     <RichTextLinkPreviews name="linkPreviews" urlsField="bodyUrls" nodeName={receiverName}
-                                          features={features} small/>
+                                          features={features} small disabled={!ready || beingPosted}/>
                 </div>
                 <div className="modal-footer">
-                    <CommentDraftSaver initialized={loaded} initialText={initialText} commentId={commentId}/>
-                    <Button variant="secondary" onClick={onCancel}>{t("cancel")}</Button>
-                    <Button variant="primary" type="submit" loading={beingPosted}>{t("update")}</Button>
+                    <CommentDraftSaver initialized={ready} initialText={initialText} commentId={commentId}/>
+                    <Button variant="secondary" disabled={!ready || beingPosted} onClick={onCancel}>
+                        {t("cancel")}
+                    </Button>
+                    <Button variant="primary" type="submit" loading={beingPosted} disabled={!ready || beingPosted}>
+                        {t("update")}
+                    </Button>
                 </div>
             </Form>
         </ModalDialog>
