@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import debounce from 'lodash.debounce';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
+import { useDebounce } from '@uidotdev/usehooks';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
@@ -45,8 +45,6 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
     const atHomeNode = useSelector(isAtHomeNode);
     const dispatch = useDispatch();
 
-    const prevAt = useRef<number>(Number.MAX_SAFE_INTEGER);
-
     const [atTop, setAtTop] = useState<boolean>(true);
     const [atBottom, setAtBottom] = useState<boolean>(false);
     const [topmostMoment, setTopmostMoment] = useState<number>(Number.MAX_SAFE_INTEGER);
@@ -86,38 +84,7 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         dispatch(feedPastSliceLoad(feedName));
     }, [after, dispatch, feedName, loadingPast]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const updateAtMoment = useCallback(
-        debounce(() => {
-            const at = getTopmostMoment();
-            if (at !== prevAt.current) {
-                dispatch(feedScrolled(feedName, at));
-            }
-            prevAt.current = at;
-        }, 500),
-        [prevAt, feedName]
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onView = useCallback(
-        debounce(() => {
-            if (!atHomeNode) {
-                return;
-            }
-            const moment = getNotViewedMoment();
-            if (moment != null) {
-                markAllViewed();
-                dispatch(feedStatusUpdate(":" + feedName, true, null, moment));
-            }
-        }, 1000),
-        [atHomeNode, feedName]
-    );
-
-    const onScroll = useCallback(() => {
-        updateAtMoment();
-        setTopmostMoment(getTopmostMoment());
-        onView();
-    }, [onView, updateAtMoment]);
+    const onScroll = useCallback(() => setTopmostMoment(getTopmostMoment()), []);
 
     useEffect(() => {
         if (visible) {
@@ -125,6 +92,22 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         }
         return () => window.removeEventListener("scroll", onScroll);
     }, [onScroll, visible]);
+
+    const at = useDebounce(topmostMoment, 500);
+    useEffect(() => {
+        dispatch(feedScrolled(feedName, at));
+    }, [at, dispatch, feedName]);
+
+    const momentToView = useDebounce(getNotViewedMoment(), 1000);
+    useEffect(() => {
+        if (!atHomeNode) {
+            return;
+        }
+        if (momentToView != null) {
+            markAllViewed();
+            dispatch(feedStatusUpdate(":" + feedName, true, null, momentToView));
+        }
+    }, [atHomeNode, dispatch, feedName, momentToView]);
 
     const onSentinelFuture = (intersecting: boolean) => {
         if (intersecting) {
@@ -177,14 +160,15 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
                 <FeedSentinel loading={loadingFuture} title={t("load-newer-posts")} margin="50% 0px 0px 0px"
                               visible={before < Number.MAX_SAFE_INTEGER} onSentinel={onSentinelFuture}
                               onBoundary={onBoundaryFuture} onClick={loadFuture}/>
-                {stories
-                    .map(({story, posting, deleting}) =>
-                        <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)}
+                {stories.map(({story, posting, deleting}) =>
+                    <FeedPosting key={story.moment} posting={posting} story={story} deleting={deleting}/>)
+                }
                 <FeedSentinel bottom loading={loadingPast} title={t("load-older-posts")} margin="0px 0px 50% 0px"
                               visible={after > Number.MIN_SAFE_INTEGER} onSentinel={onSentinelPast}
                               onBoundary={onBoundaryPast} onClick={loadPast}/>
-                {after <= Number.MIN_SAFE_INTEGER
-                    && <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>}
+                {after <= Number.MIN_SAFE_INTEGER &&
+                    <div className="feed-end">&mdash; {t("reached-bottom")} &mdash;</div>
+                }
             </Page>
         </>
     );
