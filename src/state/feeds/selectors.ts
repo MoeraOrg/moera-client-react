@@ -96,3 +96,13 @@ export function isFeedToBeLoaded(state: ClientState, feedName: string): boolean 
     return feed.stories.length === 0 && !feed.loadingFuture && !feed.loadingPast
         && (feed.after > Number.MIN_SAFE_INTEGER || feed.before < Number.MAX_SAFE_INTEGER);
 }
+
+export function isFeedPastToBeLoaded(state: ClientState, feedName: string): boolean {
+    const feed = getFeedState(state, feedName);
+    return feed.stories.length === 0 && !feed.loadingPast && feed.after > Number.MIN_SAFE_INTEGER;
+}
+
+export function isFeedFutureToBeLoaded(state: ClientState, feedName: string): boolean {
+    const feed = getFeedState(state, feedName);
+    return feed.stories.length === 0 && !feed.loadingFuture && feed.before < Number.MAX_SAFE_INTEGER;
+}

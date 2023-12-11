@@ -50,7 +50,7 @@ export default function FeedSentinel({
     }, []);
 
     return (
-        <div className={cx({"feed-sentinel": visible, "bottom": bottom})}
+        <div className={cx({"feed-sentinel": visible, bottom, loading})}
              onClick={!loading && visible ? onClick: undefined} ref={sentinel}>
             {!loading && visible && title}
             {loading && <Loading/>}

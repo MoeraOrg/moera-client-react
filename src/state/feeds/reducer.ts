@@ -344,13 +344,23 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
             const istate = immutable.wrap(state);
             for (let [feedName, feed] of Object.entries(state)) {
                 if (feed != null) {
-                    istate.assign([feedName], {
-                        before: feed.at,
-                        after: feed.at,
-                        stories: [],
-                        anchor: feed.at,
-                        loadedStatus: false
-                    });
+                    if (feed.anchor != null) {
+                        istate.assign([feedName], {
+                            before: feed.anchor,
+                            after: feed.anchor,
+                            stories: [],
+                            at: feed.anchor,
+                            loadedStatus: false
+                        });
+                    } else {
+                        istate.assign([feedName], {
+                            before: feed.at,
+                            after: feed.at,
+                            stories: [],
+                            anchor: feed.at,
+                            loadedStatus: false
+                        });
+                    }
                     istate.assign([feedName, "status"], {
                         notViewed: 0,
                         notRead: 0,

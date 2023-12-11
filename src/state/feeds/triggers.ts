@@ -2,6 +2,7 @@ import { disj, inv, trigger } from "state/trigger";
 import { updateLocation } from "state/navigation/actions";
 import { isAtDetailedPostingPage, isAtNewsPage, isAtProfilePage, isAtTimelinePage } from "state/navigation/selectors";
 import {
+    feedFutureSliceLoad,
     feedGeneralLoad,
     feedGeneralUnset,
     feedPastSliceLoad,
@@ -15,7 +16,13 @@ import {
     feedsUpdate,
     feedUnsubscribed
 } from "state/feeds/actions";
-import { isFeedGeneralToBeLoaded, isFeedStatusToBeLoaded, isFeedToBeLoaded } from "state/feeds/selectors";
+import {
+    isFeedFutureToBeLoaded,
+    isFeedGeneralToBeLoaded,
+    isFeedPastToBeLoaded,
+    isFeedStatusToBeLoaded,
+    isFeedToBeLoaded
+} from "state/feeds/selectors";
 import { StoryInfo } from "api";
 import {
     EventAction,
@@ -65,6 +72,26 @@ export default [
         ["GO_TO_PAGE", "FEEDS_UNSET"],
         state => isAtNewsPage(state) && isFeedStatusToBeLoaded(state, "news"),
         feedStatusLoad("news")
+    ),
+    trigger(
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        state => isAtTimelinePage(state) && isFeedFutureToBeLoaded(state, "timeline"),
+        feedFutureSliceLoad("timeline")
+    ),
+    trigger(
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        state => isAtTimelinePage(state) && isFeedPastToBeLoaded(state, "timeline"),
+        feedPastSliceLoad("timeline")
+    ),
+    trigger(
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        state => isAtNewsPage(state) && isFeedFutureToBeLoaded(state, "news"),
+        feedFutureSliceLoad("timeline")
+    ),
+    trigger(
+        ["GO_TO_PAGE", "FEEDS_UNSET"],
+        state => isAtNewsPage(state) && isFeedPastToBeLoaded(state, "news"),
+        feedPastSliceLoad("timeline")
     ),
     trigger("FEED_SCROLLED", true, updateLocation),
     trigger(
@@ -201,25 +228,25 @@ export default [
     ),
     trigger(
         "EVENT_HOME_SUBSCRIBER_UPDATED",
-        (state, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
+        (_, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
         (signal: WithContext<EventAction<SubscriberUpdatedEvent>>) =>
             feedSubscriberUpdated(signal.context.homeOwnerName!, signal.payload.subscriber)
     ),
     trigger(
         "EVENT_NODE_SUBSCRIBER_UPDATED",
-        (state, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
+        (_, signal: EventAction<SubscriberUpdatedEvent>) => signal.payload.subscriber.type === "feed",
         (signal: WithContext<EventAction<SubscriberUpdatedEvent>>) =>
             feedSubscriberUpdated(signal.context.ownerName!, signal.payload.subscriber)
     ),
     trigger(
         "EVENT_HOME_SUBSCRIPTION_UPDATED",
-        (state, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
+        (_, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
         (signal: WithContext<EventAction<SubscriptionUpdatedEvent>>) =>
             feedSubscriptionUpdated(signal.context.homeOwnerName!, signal.payload.subscription)
     ),
     trigger(
         "EVENT_NODE_SUBSCRIPTION_UPDATED",
-        (state, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
+        (_, signal: EventAction<SubscriptionUpdatedEvent>) => signal.payload.subscription.type === "feed",
         (signal: WithContext<EventAction<SubscriptionUpdatedEvent>>) =>
             feedSubscriptionUpdated(signal.context.ownerName!, signal.payload.subscription)
     )
