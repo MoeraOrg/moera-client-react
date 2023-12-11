@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,9 @@ interface Values {
 
 type Props = OuterProps & FormikProps<Values>;
 
-function ImageEditDialogInner({posting, smileysEnabled}: Props) {
+function ImageEditDialogInner(props: Props) {
+    const {posting, smileysEnabled, resetForm} = props;
+
     const media = useSelector((state: ClientState) => state.imageEditDialog.media);
     const rootPage = useSelector(
         (state: ClientState) => state.imageEditDialog.nodeName
@@ -45,6 +47,12 @@ function ImageEditDialogInner({posting, smileysEnabled}: Props) {
     const saving = useSelector((state: ClientState) => state.imageEditDialog.saving);
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    useEffect(() => {
+        const values = logic.mapPropsToValues(props);
+        resetForm({values});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [posting, resetForm]); // 'props' are missing on purpose
 
     if (media == null) {
         return null;

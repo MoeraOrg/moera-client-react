@@ -5,7 +5,7 @@ import i18n from 'i18next';
 import { ClientSettingMetaInfo, SettingInfo, SettingMetaInfo, SettingTypes, SettingValue } from "api";
 import { messageBox } from "state/messagebox/actions";
 import { settingsUpdate } from "state/settings/actions";
-import { useSettingsSheetResize } from "ui/settings/settings-hooks";
+import { useSettingsResetForm, useSettingsSheetResize } from "ui/settings/settings-hooks";
 import { Item } from "ui/settings/settings-menu";
 import { SettingsSheetItems, toFieldName } from "ui/settings/SettingsSheetItems";
 import SettingsButtons from "ui/settings/SettingsButtons";
@@ -22,8 +22,11 @@ type Values = Partial<Record<string, SettingValue>>;
 
 type Props = OuterProps & FormikProps<Values>;
 
-function SettingsSheet({valuesMap, metaMap, items}: Props) {
+function SettingsSheet(props: Props) {
+    const {valuesMap, metaMap, items} = props;
+
     const sheetMaxHeight = useSettingsSheetResize();
+    useSettingsResetForm(settingsSheetLogic, props);
 
     return (
         <Form>

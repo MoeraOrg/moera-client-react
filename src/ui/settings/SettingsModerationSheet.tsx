@@ -1,11 +1,11 @@
 import React from 'react';
-import { Form, FormikBag, withFormik } from 'formik';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { settingsUpdate } from "state/settings/actions";
 import { CheckboxField } from "ui/control/field";
-import { useSettingsSheetResize } from "ui/settings/settings-hooks";
+import { useSettingsResetForm, useSettingsSheetResize } from "ui/settings/settings-hooks";
 import SettingsButtons from "ui/settings/SettingsButtons";
 import { deserializeSheriffs, serializeSheriffs } from "util/sheriff";
 import store from "state/store";
@@ -19,10 +19,13 @@ interface Values {
     googlePlayAllowed: boolean;
 }
 
-function SettingsModerationSheet() {
+type Props = OuterProps & FormikProps<Values>;
+
+function SettingsModerationSheet(props: Props) {
     const {t} = useTranslation();
 
     const sheetMaxHeight = useSettingsSheetResize();
+    useSettingsResetForm(settingsModerationSheetLogic, props);
 
     return (
         <Form>
@@ -34,7 +37,7 @@ function SettingsModerationSheet() {
     );
 }
 
-const settingsSheetLogic = {
+const settingsModerationSheetLogic = {
 
     mapPropsToValues(props: OuterProps): Values {
         const sheriffs = deserializeSheriffs(props.valuesMap.get("sheriffs.timeline"));
@@ -54,4 +57,4 @@ const settingsSheetLogic = {
 
 };
 
-export default withFormik(settingsSheetLogic)(SettingsModerationSheet);
+export default withFormik(settingsModerationSheetLogic)(SettingsModerationSheet);

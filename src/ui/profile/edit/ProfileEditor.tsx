@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, withFormik } from 'formik';
+import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import { useTranslation } from 'react-i18next';
 
@@ -33,12 +33,23 @@ interface Values {
     viewEmail: PrincipalValue;
 }
 
-function ProfileEditorInner() {
+type Props = OuterProps & FormikProps<Values>;
+
+function ProfileEditorInner(props: Props) {
+    const {profile, resetForm} = props;
+
     const loading = useSelector((state: ClientState) => state.profile.loading);
+    const loaded = useSelector((state: ClientState) => state.profile.loaded);
     const conflict = useSelector((state: ClientState) => state.profile.conflict);
     const updating = useSelector((state: ClientState) => state.profile.updating);
     const dispatch = useDispatch();
     const {t} = useTranslation();
+
+    useEffect(() => {
+        const values = profileEditorLogic.mapPropsToValues(props);
+        resetForm({values});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loaded, profile.bioSrc, resetForm]); // 'props' are missing on purpose
 
     return (
         <>

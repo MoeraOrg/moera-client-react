@@ -49,6 +49,10 @@ export function mapFilter<Key, Value>(map: Map<Key, Value> | null,
     return result;
 }
 
+export function mapIsEmpty(map: Map<any, any> | null | undefined): boolean {
+    return map == null || map.size === 0;
+}
+
 export function mapEquals<Key, Value>(map1: Map<Key, Value> | null, map2: Map<Key, Value> | null): boolean {
     if ((map1 == null || map1.size === 0) && (map2 == null || map2.size === 0)) {
         return true;
