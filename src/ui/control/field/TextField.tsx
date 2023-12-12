@@ -25,9 +25,10 @@ interface Props {
     onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
-export function TextField({name, title, rows = 3, maxHeight, maxLength, placeholder, autoFocus, anyValue, className,
-                           autoComplete, noFeedback = false, disabled = false, groupClassName, initialValue,
-                           defaultValue, onKeyDown}: Props) {
+export function TextField({
+    name, title, rows = 3, maxHeight, maxLength, placeholder, autoFocus, anyValue, className, autoComplete,
+    noFeedback = false, disabled = false, groupClassName, initialValue, defaultValue, onKeyDown
+}: Props) {
 
     const {t} = useTranslation();
 
@@ -71,7 +72,7 @@ export function TextField({name, title, rows = 3, maxHeight, maxLength, placehol
                     maxLength={maxLength}
                     disabled={disabled}
                     onKeyDown={onKeyDown}
-                    innerRef={inputDom}
+                    ref={inputDom}
                 />
                 {!noFeedback && touched && <FieldError error={error}/>}
             </>

@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
 import cx from 'classnames';
+import composeRefs from '@seznam/compose-react-refs';
 
 import { FormGroup, Wrapper } from "ui/control";
 import { useUndoableField } from "ui/control/field/undoable-field";
@@ -23,18 +24,20 @@ interface Props {
     initialValue?: string | null;
     defaultValue?: string | null;
     onEscape?: () => void;
-    inputRef?: React.LegacyRef<HTMLInputElement>;
 }
 
-export function InputField({name, title, placeholder, disabled, maxLength, horizontal = false, groupClassName,
-                            labelClassName, col, autoFocus, anyValue, className, autoComplete, noFeedback = false,
-                            initialValue, defaultValue, onEscape, inputRef}: Props) {
-
-    const inputDom = useRef<HTMLInputElement>();
+function InputFieldImpl(
+    {
+        name, title, placeholder, disabled, maxLength, horizontal = false, groupClassName, labelClassName, col,
+        autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, onEscape
+    }: Props,
+    ref: ForwardedRef<HTMLInputElement>
+) {
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        if (autoFocus && inputDom.current != null) {
-            inputDom.current.focus();
+        if (autoFocus && inputRef.current != null) {
+            inputRef.current.focus();
         }
     }, [autoFocus]);
 
@@ -74,7 +77,7 @@ export function InputField({name, title, placeholder, disabled, maxLength, horiz
                     autoComplete={autoComplete}
                     disabled={disabled}
                     maxLength={maxLength}
-                    ref={inputRef}
+                    ref={composeRefs(ref, inputRef)}
                     onKeyDown={onKeyDown}
                 />
                 {!noFeedback && touched && <FieldError error={error}/>}
@@ -82,3 +85,7 @@ export function InputField({name, title, placeholder, disabled, maxLength, horiz
         </FormGroup>
     );
 }
+
+const InputField = forwardRef(InputFieldImpl);
+
+export { InputField };

@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
+import composeRefs from '@seznam/compose-react-refs';
 import { useTranslation } from 'react-i18next';
 
 import { CLIENT_SETTINGS_PREFIX, SourceFormat } from "api";
@@ -31,17 +32,21 @@ export interface RichTextAreaProps {
     onChange?: (event: React.FormEvent) => void;
     onBlur?: (event: React.FocusEvent) => void;
     onUrls?: (urls: string[]) => void;
-    textArea: React.RefObject<HTMLTextAreaElement>;
     panel: React.RefObject<HTMLDivElement>;
     uploadImage?: (image: File) => void;
 }
 
-export default function RichTextArea({
-    name, value, format, className, autoFocus, autoComplete, maxHeight, placeholder, rows = 3, disabled, smileysEnabled,
-    onKeyDown, onChange, onBlur, onUrls, textArea, panel, uploadImage
-}: RichTextAreaProps) {
+function RichTextArea(
+    {
+        name, value, format, className, autoFocus, autoComplete, maxHeight, placeholder, rows = 3, disabled,
+        smileysEnabled, onKeyDown, onChange, onBlur, onUrls, panel, uploadImage
+    }: RichTextAreaProps,
+    ref: ForwardedRef<HTMLTextAreaElement>
+) {
     const pasteRich = useSelector((state: ClientState) => getSetting(state, "rich-text-editor.paste-rich") as string);
     const dispatch = useDispatch();
+
+    const textArea = useRef<HTMLTextAreaElement>(null);
 
     const sentenceInput = useRef<boolean>(false);
     const spaceInput = useRef<boolean>(false);
@@ -256,7 +261,7 @@ export default function RichTextArea({
                 onKeyDown={onKeyDownHandler}
                 onBlur={onBlur}
                 onChange={onChangeHandler}
-                innerRef={textArea} // impossible to pass lambda here
+                ref={composeRefs(ref, textArea)}
             />
             {pasteDialogShow && <RichTextPasteDialog onSubmit={onPasteDialogSubmit}/>}
         </>
@@ -273,3 +278,5 @@ function shouldPastePlainText(text: string, html: string): boolean {
 function shouldPasteHtml(html: string): boolean {
     return !containsTags(safeImportHtml(html), "all");
 }
+
+export default forwardRef(RichTextArea);

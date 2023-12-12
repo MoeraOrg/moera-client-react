@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { ForwardedRef, forwardRef, useEffect, useRef } from 'react';
 import cx from 'classnames';
+import composeRefs from '@seznam/compose-react-refs';
 import { TOptions } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -34,22 +35,23 @@ interface Props {
     initialValue?: string | null;
     defaultValue?: string | null;
     disabled?: boolean;
-    selectRef?: React.LegacyRef<HTMLSelectElement>;
     setting?: string;
 }
 
-export function SelectField({
-    name, title, horizontal = false, layout, groupClassName, labelClassName, col, size, choices = [], multiple,
-    autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, disabled, selectRef,
-    setting
-}: Props) {
+function SelectFieldImpl(
+    {
+        name, title, horizontal = false, layout, groupClassName, labelClassName, col, size, choices = [], multiple,
+        autoFocus, anyValue, className, autoComplete, noFeedback = false, initialValue, defaultValue, disabled, setting
+    }: Props,
+    ref: ForwardedRef<HTMLSelectElement>
+) {
     const {t} = useTranslation();
 
-    const inputDom = useRef<HTMLSelectElement>();
+    const selectRef = useRef<HTMLSelectElement>(null);
 
     useEffect(() => {
-        if (autoFocus && inputDom.current != null) {
-            inputDom.current.focus();
+        if (autoFocus && selectRef.current != null) {
+            selectRef.current.focus();
         }
     }, [autoFocus]);
 
@@ -85,7 +87,7 @@ export function SelectField({
                     multiple={multiple}
                     autoComplete={autoComplete}
                     disabled={disabled}
-                    ref={selectRef}
+                    ref={composeRefs(ref, selectRef)}
                 >
                     {choices.map((c, index) =>
                         <option key={index} value={c.value}>
@@ -98,3 +100,7 @@ export function SelectField({
         </FormGroup>
     );
 }
+
+const SelectField = forwardRef(SelectFieldImpl);
+
+export { SelectField };

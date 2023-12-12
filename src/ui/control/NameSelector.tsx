@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { createSelector } from 'reselect';
 import cloneDeep from 'lodash.clonedeep';
 import deepEqual from 'react-fast-compare';
-import debounce from 'lodash.debounce';
+import { useDebounce } from '@uidotdev/usehooks';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { NodeName } from "api";
@@ -46,12 +46,10 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
         }
     }, [listDom])
 
-    const queryRef = useRef<string | null>();
-    queryRef.current = query;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const loadContacts = useCallback(debounce(() => {
-        dispatch(contactsPrepare(queryRef.current ?? ""));
-    }, 500), [dispatch, queryRef]);
+    const queryToLoad = useDebounce(query, 500);
+    useEffect(() => {
+        dispatch(contactsPrepare(queryToLoad ?? ""));
+    }, [dispatch, queryToLoad]);
 
     useEffect(() => {
         if (inputDom.current) {
@@ -70,8 +68,7 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
         if (onChange) {
             onChange(query);
         }
-        loadContacts();
-    }, [contactNames, loadContacts, onChange, query, selectIndex]);
+    }, [contactNames, onChange, query, selectIndex]);
 
     const handleSubmit = (success: boolean, index: number) => {
         if (onSubmit) {

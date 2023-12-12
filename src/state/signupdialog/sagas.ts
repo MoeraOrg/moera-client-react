@@ -188,7 +188,7 @@ function* signUpDomainVerifySaga(action: SignUpDomainVerifyAction) {
     const domain = name + "." + provider.domain;
 
     try {
-        yield* call(Node.getDomain, action, provider.controller, domain, ["domain.not-found"]);
+        yield* call(Node.getDomain, action, provider.controller, domain, ["domain.not-found"], false);
         onVerify(name, false);
     } catch (e) {
         if (!(e instanceof NodeApiError)) {

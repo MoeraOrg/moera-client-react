@@ -98,7 +98,7 @@ export function RichTextEditor({
             <RichTextArea name={name} value={value.text} format={format} rows={rows} maxHeight={maxHeight}
                           placeholder={placeholder} autoFocus={autoFocus} autoComplete={autoComplete}
                           disabled={disabled} smileysEnabled={smileysEnabled} onKeyDown={onKeyDown}
-                          onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} textArea={textArea} panel={panel}
+                          onChange={onTextChange} onBlur={onBlur} onUrls={onUrls} ref={textArea} panel={panel}
                           uploadImage={setImageFromClipboard}/>
             {!noMedia &&
                 <RichTextEditorDropzone value={value} features={features} hiding={hidingPanel}
