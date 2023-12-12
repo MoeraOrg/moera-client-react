@@ -2,10 +2,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
-import { useThrottle } from '@uidotdev/usehooks';
 import deepEqual from 'react-fast-compare';
 
 import { ClientState } from "state/state";
+import { useThrottle } from "ui/hook";
 import "./DraftSaver.css";
 
 interface Props<Text, Values> {
@@ -26,7 +26,7 @@ export function DraftSaver<Text, Values>({
 
     const {status, values, initialValues} = useFormikContext<Values>();
     const [savedValues, setSavedValues] = useState<Values>(initialValues);
-    const unsavedValues = useThrottle(values, 1500);
+    const unsavedValues = useThrottle(values, 1500, 5000);
     const savingValues = useRef<Values | null>(null);
 
     useEffect(() => setSavedValues(initialValues), [initialValues]);

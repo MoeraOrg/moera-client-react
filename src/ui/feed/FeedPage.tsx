@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
-import { useDebounce } from '@uidotdev/usehooks';
 
 import { SHERIFF_GOOGLE_PLAY_TIMELINE } from "sheriffs";
 import { ClientState } from "state/state";
@@ -16,6 +15,7 @@ import {
 } from "state/feeds/actions";
 import { getFeedState } from "state/feeds/selectors";
 import { isPostingSheriffProhibited } from "state/postings/selectors";
+import { useDebounce } from "ui/hook";
 import { Page } from "ui/page/Page";
 import FeedTitle from "ui/feed/FeedTitle";
 import FeedPageHeader from "ui/feed/FeedPageHeader";
@@ -93,12 +93,12 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         return () => window.removeEventListener("scroll", onScroll);
     }, [onScroll, visible]);
 
-    const at = useDebounce(topmostMoment, 500);
+    const [at] = useDebounce(topmostMoment, 500);
     useEffect(() => {
         dispatch(feedScrolled(feedName, at));
     }, [at, dispatch, feedName]);
 
-    const momentToView = useDebounce(getNotViewedMoment(), 1000);
+    const [momentToView] = useDebounce(getNotViewedMoment(), 1000);
     useEffect(() => {
         if (!atHomeNode) {
             return;

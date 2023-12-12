@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, FormikProps, withFormik } from 'formik';
 import * as yup from 'yup';
 import i18n, { TFunction } from 'i18next';
-import { useDebounce } from '@uidotdev/usehooks';
 import { useTranslation } from 'react-i18next';
 
 import PROVIDERS from "providers";
@@ -25,7 +24,7 @@ import {
 import { SignUpStage } from "state/signupdialog/state";
 import { findPreferredLanguage } from "i18n";
 import { Browser } from "ui/browser";
-import { useForcibleDebounce } from "ui/hook";
+import { useDebounce } from "ui/hook";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
@@ -69,11 +68,11 @@ function SignUpDialogInner({stage, values, setFieldValue, touched, setFieldTouch
     const languageSelectRef = useRef<HTMLSelectElement>(null);
 
     const nameInputRef = useRef<HTMLInputElement>(null);
-    const nameToVerify = useDebounce(values.name, 500);
+    const [nameToVerify] = useDebounce(values.name, 500);
     const lastVerifiedName = useRef<string | null>(null);
 
     const [domain, setDomain] = useState<string | null>(null);
-    const [domainToVerify, setDomainToVerify] = useForcibleDebounce(domain, 500);
+    const [domainToVerify, setDomainToVerify] = useDebounce(domain, 500);
     const lastVerifiedDomain = useRef<string | null>(null);
 
     const {t} = useTranslation();

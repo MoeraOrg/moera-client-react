@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { createSelector } from 'reselect';
 import cloneDeep from 'lodash.clonedeep';
 import deepEqual from 'react-fast-compare';
-import { useDebounce } from '@uidotdev/usehooks';
 import scrollIntoView from 'scroll-into-view-if-needed';
 
 import { NodeName } from "api";
@@ -12,6 +11,7 @@ import { getHomeOwnerAvatar, getHomeOwnerName } from "state/home/selectors";
 import { contactsPrepare } from "state/contacts/actions";
 import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
+import { useDebounce } from "ui/hook";
 import { Avatar } from "ui/control/Avatar";
 import { mentionName } from "util/misc";
 import { NameListItem, namesListQuery } from "util/names-list";
@@ -46,7 +46,7 @@ export function NameSelector({defaultQuery = "", onChange, onSubmit}: Props) {
         }
     }, [listDom])
 
-    const queryToLoad = useDebounce(query, 500);
+    const [queryToLoad] = useDebounce(query, 500);
     useEffect(() => {
         dispatch(contactsPrepare(queryToLoad ?? ""));
     }, [dispatch, queryToLoad]);
