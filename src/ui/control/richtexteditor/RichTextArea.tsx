@@ -1,6 +1,5 @@
 import React, { ForwardedRef, forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import debounce from 'lodash.debounce';
 import composeRefs from '@seznam/compose-react-refs';
 import { useTranslation } from 'react-i18next';
 
@@ -70,16 +69,22 @@ function RichTextArea(
             || inputEvent.inputType.startsWith("history")
             || spaceInput.current;
         anyDelete.current = inputEvent.inputType.startsWith("delete");
-    }, [anyInput, spaceInput, sentenceInput, anyDelete]);
+    }, []);
 
     const updateUrls = useCallback(() => {
         if (onUrls && textArea.current) {
             onUrls(extractUrls(textArea.current.value));
         }
-    }, [textArea, onUrls]);
+    }, [onUrls]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const delayedUpdateUrls = useCallback(debounce(updateUrls, 1500), [updateUrls]);
+    const updateUrlsTimeout = useRef<number | NodeJS.Timeout | null>(null);
+
+    const delayedUpdateUrls = () => {
+        if (updateUrlsTimeout.current != null) {
+            clearTimeout(updateUrlsTimeout.current);
+        }
+        updateUrlsTimeout.current = setTimeout(updateUrls, 1500);
+    };
 
     const pasteRichText = useCallback((mode: RichTextPasteMode, text: string | null, html: string | null) => {
         if (textArea.current == null) {
@@ -111,7 +116,7 @@ function RichTextArea(
             updateUrls();
         }
         textArea.current.focus();
-    }, [format, textArea, updateUrls]);
+    }, [format, updateUrls]);
 
     const onPaste = useCallback((event: ClipboardEvent) => {
         if (!textArea.current || event.clipboardData == null || format === "plain-text" || pasteRich === "text") {
@@ -151,7 +156,7 @@ function RichTextArea(
             setPasteText(text);
             setPasteHtml(html);
         }
-    }, [textArea, format, pasteRich, uploadImage, pasteRichText, setPasteDialogShow, setPasteText, setPasteHtml]);
+    }, [format, pasteRich, uploadImage, pasteRichText]);
 
     useEffect(() => {
         if (textArea.current) {
@@ -167,13 +172,13 @@ function RichTextArea(
                 theTextArea.removeEventListener("paste", onPaste);
             }
         }
-    }, [textArea, autoFocus, onInput, onPaste]);
+    }, [autoFocus, onInput, onPaste]);
 
     useEffect(() => {
         if (!disabled && autoFocus && textArea.current) {
             textArea.current.focus();
         }
-    }, [disabled, autoFocus, textArea]);
+    }, [disabled, autoFocus]);
 
     const onChangeHandler = (event: React.FormEvent) => {
         const textArea = event.target as HTMLTextAreaElement;
