@@ -56,7 +56,7 @@ export default function AvatarEditDialog() {
             return;
         }
 
-        editor.addEventListener("wheel", onEditorWheel);
+        editor.addEventListener("wheel", onEditorWheel, {passive: true});
         return () => editor.removeEventListener("wheel", onEditorWheel);
     }, [onEditorWheel]);
 

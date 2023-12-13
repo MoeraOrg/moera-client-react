@@ -177,7 +177,7 @@ export function DelayedPopover({
             if (!sticky) {
                 buttonRef.addEventListener("mouseleave", mainLeave);
             }
-            buttonRef.addEventListener("touchstart", mainTouch);
+            buttonRef.addEventListener("touchstart", mainTouch, {passive: true});
 
             return () => {
                 buttonRef.removeEventListener("mouseenter", mainEnter);
