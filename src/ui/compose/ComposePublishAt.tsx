@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
-import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { format, formatISO } from 'date-fns';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
+import { Browser } from "ui/browser";
+import { Loading } from "ui/control";
 import useComposeTextEditable from "ui/compose/compose-text-editable";
 import ComposeTextEditableIcon from "ui/compose/ComposeTextEditableIcon";
-import { Browser } from "ui/browser";
+
+const DatePicker = React.lazy(() => import('react-datepicker'));
 
 export default function ComposePublishAt() {
     const postingId = useSelector((state: ClientState) => state.compose.postingId);
@@ -24,24 +26,26 @@ export default function ComposePublishAt() {
     return (
         edit ?
             <div className="input-resettable">
-                <DatePicker name={field.name}
-                            selected={value}
-                            onChange={v => {
-                                if (v instanceof Date) {
-                                    setValue(v);
-                                }
-                            }}
-                            onBlur={field.onBlur}
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeIntervals={15}
-                            dateFormat="dd-MM-yyyy, HH:mm"
-                            withPortal={Browser.isTinyScreen()}
-                            onKeyDown={onKeyDown}
-                            autoFocus/>
-                <button title={t("reset-to-default")} onClick={onReset}>
-                    <FontAwesomeIcon icon="backspace"/>
-                </button>
+                <Suspense fallback={<Loading/>}>
+                    <DatePicker name={field.name}
+                                selected={value}
+                                onChange={v => {
+                                    if (v instanceof Date) {
+                                        setValue(v);
+                                    }
+                                }}
+                                onBlur={field.onBlur}
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={15}
+                                dateFormat="dd-MM-yyyy, HH:mm"
+                                withPortal={Browser.isTinyScreen()}
+                                onKeyDown={onKeyDown}
+                                autoFocus/>
+                    <button title={t("reset-to-default")} onClick={onReset}>
+                        <FontAwesomeIcon icon="backspace"/>
+                    </button>
+                </Suspense>
             </div>
         :
             <div className={cx("text-editable", {"disabled": postingId != null})}

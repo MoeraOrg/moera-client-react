@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import DatePicker from 'react-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { endOfDay, fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +8,9 @@ import { ClientState } from "state/state";
 import { getFeedAtTimestamp } from "state/feeds/selectors";
 import { feedScrollToAnchor } from "state/feeds/actions";
 import { Browser } from "ui/browser";
-import { Button, CloseButton } from "ui/control";
+import { Button, CloseButton, Loading } from "ui/control";
+
+const DatePicker = React.lazy(() => import('react-datepicker'));
 
 interface Props {
     feedName: string;
@@ -45,7 +46,7 @@ export default function FeedGotoButton({feedName, atBottom}: Props) {
             {!active ?
                 <Button variant="outline-info" size="sm" onClick={activate}>{t("go-to")}</Button>
             :
-                <>
+                <Suspense fallback={<Loading/>}>
                     <CloseButton onClick={deactivate}/>
                     <DatePicker selected={fromUnixTime(timestamp >= 0 ? timestamp : 0)}
                                 onChange={v => {
@@ -58,7 +59,7 @@ export default function FeedGotoButton({feedName, atBottom}: Props) {
                     <Button variant="outline-info" size="sm" className="ms-2" invisible={atBottom} onClick={toBottom}>
                         <FontAwesomeIcon icon="arrow-down"/>&nbsp;{t("bottom")}
                     </Button>
-                </>
+                </Suspense>
             }
         </>
     );

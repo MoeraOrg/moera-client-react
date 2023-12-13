@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useField } from 'formik';
-import DatePicker from 'react-datepicker';
 
 import { FormGroup, Wrapper } from "ui/control";
 import FieldError from "ui/control/field/FieldError";
 import { Browser } from "ui/browser";
 import "./DateTimeField.css";
+
+const DatePicker = React.lazy(() => import('react-datepicker'));
 
 interface Props {
     name: string;
@@ -25,25 +26,27 @@ export const DateTimeField = ({name, title, horizontal = false, groupClassName, 
         <FormGroup name={name} title={title} horizontal={horizontal} groupClassName={groupClassName}
                    labelClassName={labelClassName}>
             <Wrapper className={col}>
-                <DatePicker
-                    id={name}
-                    name={name}
-                    selected={value}
-                    onChange={v => {
-                        if (v instanceof Date) {
-                            setValue(v);
-                        }
-                    }}
-                    onBlur={onBlur}
-                    autoFocus={autoFocus}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    dateFormat="dd-MM-yyyy, HH:mm"
-                    portalId={!Browser.isTinyScreen() ? "modal-root" : undefined}
-                    withPortal={Browser.isTinyScreen()}
-                />
-                {touched && <FieldError error={error}/>}
+                <Suspense fallback={null}>
+                    <DatePicker
+                        id={name}
+                        name={name}
+                        selected={value}
+                        onChange={v => {
+                            if (v instanceof Date) {
+                                setValue(v);
+                            }
+                        }}
+                        onBlur={onBlur}
+                        autoFocus={autoFocus}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        dateFormat="dd-MM-yyyy, HH:mm"
+                        portalId={!Browser.isTinyScreen() ? "modal-root" : undefined}
+                        withPortal={Browser.isTinyScreen()}
+                    />
+                    {touched && <FieldError error={error}/>}
+                </Suspense>
             </Wrapper>
         </FormGroup>
     );
