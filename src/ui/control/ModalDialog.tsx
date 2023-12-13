@@ -26,7 +26,7 @@ export function ModalDialog({
     const mouseDownY = useRef<number>();
 
     const onModalKeyDown = useCallback((event: KeyboardEvent) => {
-        if (event.key === "Escape" && onClose) {
+        if ((event.key === "Escape" || event.key === "Esc") && onClose) {
             onClose();
         }
         if (onKeyDown) {

@@ -8,7 +8,7 @@ export default function PeopleSearch() {
     const dispatch = useDispatch();
 
     const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Escape") {
+        if (event.key === "Escape" || event.key === "Esc") {
             (event.currentTarget as HTMLInputElement).value = "";
             dispatch(peopleSetSearchPrefix(""));
         }

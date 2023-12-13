@@ -36,7 +36,7 @@ export default function useComposeTextEditable<T, E>(
     };
 
     const onKeyDown = (event: React.KeyboardEvent<E>) => {
-        if (event.key === "Escape" && onReset) {
+        if ((event.key === "Escape" || event.key === "Esc") && onReset) {
             onReset();
         }
     };
@@ -48,9 +48,7 @@ export default function useComposeTextEditable<T, E>(
         }
     }, [inputRef, edit]);
 
-    useEffect(() => {
-        setEdit(false);
-    }, [postingId, draftId, setEdit]);
+    useEffect(() => setEdit(false), [postingId, draftId, setEdit]);
 
     return {edit: ready && edit, field, value, setValue, inputRef, onEdit, onReset, onKeyDown};
 }
