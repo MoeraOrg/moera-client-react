@@ -107,7 +107,8 @@ export function DropdownMenu({items, className, disabled, onDialogOpened, childr
     const itemList = buildItems(items);
     return (
         <>
-            <button className={cx("menu", className)} disabled={disabled} ref={setButtonRef} onClick={onToggle}>
+            <button className={cx("menu", className)} disabled={disabled} ref={setButtonRef} aria-label={t("menu")}
+                    onClick={onToggle}>
                 {children ??
                     <FontAwesomeIcon icon="chevron-down" className="chevron"/>
                 }

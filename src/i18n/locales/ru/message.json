@@ -366,6 +366,7 @@
   "mark-unread" : "Отметить как непрочитанное",
   "mention" : "Упомянуть",
   "mention-copied" : "Упоминание скопировано в буфер обмена",
+  "menu" : "Меню",
   "message" : "Сообщение",
   "more-links" : "{count} {count, plural, one {ссылка} few {ссылки} other {ссылок}}",
   "more-reactions" : "Ещё {remaining}",

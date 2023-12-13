@@ -100,7 +100,7 @@ function SubscribeButton() {
     const {t} = useTranslation();
 
     return (
-        <Button variant="outline-primary" size="sm">
+        <Button variant="outline-primary" size="sm" aria-label={t("subscribe")}>
             {t("subscribe")}
             &nbsp;&nbsp;
             <FontAwesomeIcon icon="chevron-down"/>

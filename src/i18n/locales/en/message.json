@@ -366,6 +366,7 @@
   "mark-unread" : "Mark as Unread",
   "mention" : "Mention",
   "mention-copied" : "Mention copied to the clipboard",
+  "menu" : "Menu",
   "message" : "Message",
   "more-links" : "{count} {count, plural, one {link} other {links}}",
   "more-reactions" : "{remaining} more",

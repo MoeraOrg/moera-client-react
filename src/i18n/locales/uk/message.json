@@ -366,6 +366,7 @@
   "mark-unread" : "Позначити як непрочитане",
   "mention" : "Згадати",
   "mention-copied" : "Згадка скопійована до буфера обміну",
+  "menu" : "Меню",
   "message" : "Повідомлення",
   "more-links" : "{count} {count, plural, one {посилання} few {посилання} other {посилань}}",
   "more-reactions" : "Ще {remaining}",

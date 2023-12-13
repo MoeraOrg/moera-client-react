@@ -43,8 +43,8 @@ export function PrincipalSelect({value, values, icons, titles, caption, long, cl
     const principalValues = getValues(values, friendGroups, publicDisabled && value !== "public", t);
     return (
         <>
-            <button className={cx("principal-select", className, {long})} ref={setButtonRef} onClick={onToggle}
-                    disabled={disabled ?? undefined}>
+            <button className={cx("principal-select", className, {long})} ref={setButtonRef} aria-label={t("select")}
+                    onClick={onToggle} disabled={disabled ?? undefined}>
                 <Principal value={value} long={long} icons={icons} titles={titles}/>
                 <FontAwesomeIcon icon="chevron-down" className="chevron"/>
             </button>

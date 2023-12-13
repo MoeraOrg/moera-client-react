@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useField } from 'formik';
 import cx from 'classnames';
+import { useTranslation } from 'react-i18next';
 
 import { AvatarInfo } from "api";
 import { ClientState } from "state/state";
@@ -26,6 +27,7 @@ export function AvatarField({name, size, disabled}: Props) {
     const avatarDefault = useSelector(getHomeOwnerAvatar);
     const homeOwnerName = useSelector(getHomeOwnerName);
     const dispatch = useDispatch();
+    const {t} = useTranslation();
 
     const [, {value}, {setValue}] = useField<AvatarInfo | null>(name);
 
@@ -50,7 +52,7 @@ export function AvatarField({name, size, disabled}: Props) {
 
     return (
         <div className={cx("avatar-field", {"disabled": !value && !avatarDefault})}>
-            <div ref={setButtonRef} onClick={onClick}>
+            <div ref={setButtonRef} aria-label={t("select")} onClick={onClick}>
                 <div className="icon"><FontAwesomeIcon icon="chevron-down"/></div>
                 <Avatar avatar={value} ownerName={homeOwnerName} size={size}/>
             </div>
