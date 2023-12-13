@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
 import { Loading } from "ui/control";
-
+import { useIntersect } from "ui/hook";
 import "./InstantsSentinel.css";
 
 interface Props {
@@ -15,23 +15,7 @@ interface Props {
 }
 
 export default function InstantsSentinel({visible, loading, title, margin, onSentinel, onClick}: Props) {
-    const sentinel = useRef<HTMLDivElement>(null);
-
-    const onSentinelHandler = (entries: IntersectionObserverEntry[]) => {
-        entries.forEach(entry => onSentinel(entry.isIntersecting));
-    }
-
-    const sentinelObserver = useRef<IntersectionObserver>(
-        new IntersectionObserver(onSentinelHandler, {rootMargin: margin}));
-
-    useEffect(() => {
-        if (sentinel.current != null) {
-            const observer = sentinelObserver.current;
-            observer.observe(sentinel.current);
-
-            return () => observer.disconnect();
-        }
-    }, []);
+    const sentinel = useIntersect(onSentinel, {rootMargin: margin});
 
     return (
         <div className={cx({"sentinel": !loading && visible})} ref={sentinel} onClick={onClick}>

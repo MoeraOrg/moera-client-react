@@ -51,21 +51,24 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
 
     const {t} = useTranslation();
 
+    const onScroll = useCallback(() => setTopmostMoment(getTopmostMoment()), []);
+
     useEffect(() => {
         if (
             anchor != null
             && (anchor <= before || (anchor >= Number.MAX_SAFE_INTEGER && before >= Number.MAX_SAFE_INTEGER))
             && (anchor > after || (anchor <= Number.MIN_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER))
         ) {
-            if (scrollTo(anchor)) {
+            if (scrollTo(anchor, after <= Number.MIN_SAFE_INTEGER)) {
+                onScroll();
                 dispatch(feedScrolledToAnchor(feedName));
             }
         }
-    }, [after, anchor, before, dispatch, feedName]);
+    }, [after, anchor, before, dispatch, feedName, onScroll]);
 
     useEffect(() => {
         if (anchor == null) {
-            scrollTo(topmostMoment);
+            scrollTo(topmostMoment, after <= Number.MIN_SAFE_INTEGER);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [before]);
@@ -83,8 +86,6 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         }
         dispatch(feedPastSliceLoad(feedName));
     }, [after, dispatch, feedName, loadingPast]);
-
-    const onScroll = useCallback(() => setTopmostMoment(getTopmostMoment()), []);
 
     useEffect(() => {
         if (visible) {
@@ -254,15 +255,18 @@ function markAllViewed(): void {
     }
 }
 
-function scrollTo(moment: number): boolean {
-    const posting = moment > Number.MIN_SAFE_INTEGER ? getPostingAt(moment) : getEarliestPosting();
+function scrollTo(moment: number, bottomLoaded: boolean): boolean {
+    let posting = moment > Number.MIN_SAFE_INTEGER ? getPostingAt(moment) : getEarliestPosting();
     if (posting == null) {
-        return false;
+        if (!bottomLoaded) {
+            return false;
+        }
+        posting = getEarliestPosting();
     }
-    setTimeout(() => {
+    if (posting != null) {
         const y = posting.getBoundingClientRect().top;
         const minY = getPageHeaderHeight() + 10;
         window.scrollBy(0, y - minY - 25);
-    });
+    }
     return true;
 }
