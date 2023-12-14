@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Form, FormikBag, withFormik } from 'formik';
-import * as yup from 'yup';
 import { fromUnixTime, getUnixTime } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 
@@ -46,10 +45,6 @@ const changeDateDialogLogic = {
 
     mapPropsToValues: (props: OuterProps): Values => ({
         publishedAt: fromUnixTime(props.publishedAt)
-    }),
-
-    validationSchema: yup.object().shape({
-        publishedAt: yup.date()
     }),
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -94,9 +93,15 @@ const askDialogLogic = {
         message: ""
     }),
 
-    validationSchema: yup.object().shape({
-        subject: yup.string().notOneOf(["s:select"], "need-to-choose")
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (values.subject === "s:select") {
+            errors.subject = "need-to-choose";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         formik.setStatus("submitted");

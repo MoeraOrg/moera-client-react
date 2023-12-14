@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -49,9 +48,15 @@ const forgotFormLogic = {
         location: props.location || props.nodeRoot || ""
     }),
 
-    validationSchema: yup.object().shape({
-        location: yup.string().trim().required("must-not-empty")
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (!values.location.trim()) {
+            errors.location = "must-not-empty";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         store.dispatch(connectDialogResetPassword(values.location.trim()));

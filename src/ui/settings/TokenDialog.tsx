@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { TokenInfo } from "api";
@@ -56,10 +55,15 @@ const tokenLogic = {
         password: ""
     }),
 
-    validationSchema: (props: OuterProps) =>
-        yup.object().shape(props.token == null ? {
-            password: yup.string().required("must-not-empty")
-        } : {}),
+    validate: (values: Values, props: OuterProps): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (props.token == null && !values.password) {
+            errors.password = "must-not-empty";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         let name: string | null = values.name.trim();

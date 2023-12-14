@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { FundraiserInfo } from "api";
@@ -63,9 +62,15 @@ const fundraiserDialogLogic = {
         href: props.fundraiser?.href ?? ""
     }),
 
-    validationSchema: yup.object().shape({
-        title: yup.string().trim().required("must-not-empty")
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (!values.title.trim()) {
+            errors.title = "must-not-empty";
+        }
+
+        return errors;
+    },
 
     mapValuesToFundraiserInfo: (values: Values): FundraiserInfo => ({
         title: values.title,

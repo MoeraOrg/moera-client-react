@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { AvatarInfo, FundraiserInfo, PrincipalValue, ProfileInfo } from "api";
@@ -14,7 +13,7 @@ import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import DonateField from "ui/profile/edit/donate/DonateField";
-import { longGender } from "util/misc";
+import { isEmail, longGender } from "util/misc";
 import store from "state/store";
 import "./ProfileEditor.css";
 
@@ -104,15 +103,29 @@ const profileEditorLogic = {
         viewEmail: props.profile.operations?.viewEmail ?? "admin"
     }),
 
-    validationSchema: yup.object().shape({
-        fullName: yup.string().trim().max(96, "too-long"),
-        title: yup.string().trim().max(120, "too-long"),
-        gender: yup.string().trim().max(31, "too-long"),
-        email: yup.string().trim().max(63, "too-long").email("not-valid-e-mail"),
-        bioSrc: yup.object().shape({
-            text: yup.string().trim().max(4096, "too-long")
-        })
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (values.fullName.length > 96) {
+            errors.fullName = "too-long";
+        }
+        if (values.title.length > 120) {
+            errors.title = "too-long";
+        }
+        if (values.gender.length > 31) {
+            errors.gender = "too-long";
+        }
+        if (values.email.length > 63) {
+            errors.email = "too-long";
+        } else if (!isEmail(values.email)) {
+            errors.email = "not-valid-e-mail";
+        }
+        if (values.bioSrc.text.length > 4096) {
+            errors.bioSrc = {text: "too-long"};
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         store.dispatch(profileUpdate({

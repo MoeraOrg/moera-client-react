@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -61,14 +60,26 @@ const resetFormLogic = {
         confirmPassword: ""
     }),
 
-    validationSchema: yup.object().shape({
-        resetToken: yup.string().trim().required("must-not-empty"),
-        location: yup.string().trim().required("must-not-empty"),
-        password: yup.string().required("must-not-empty"),
-        confirmPassword: yup.string().when(["password"], ([password]: string[], schema: yup.StringSchema) =>
-                schema.required("retype-password").oneOf([password], "passwords-different")
-        )
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (!values.resetToken.trim()) {
+            errors.resetToken = "must-not-empty";
+        }
+        if (!values.location.trim()) {
+            errors.location = "must-not-empty";
+        }
+        if (!values.password) {
+            errors.password = "must-not-empty";
+        }
+        if (!values.confirmPassword) {
+            errors.confirmPassword = "retype-password";
+        } else if (values.confirmPassword !== values.password) {
+            errors.confirmPassword = "passwords-different";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         store.dispatch(connectToHome(values.location.trim(), false, "admin", values.password, null,

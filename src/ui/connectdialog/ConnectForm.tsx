@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
@@ -61,24 +60,21 @@ const connectFormLogic = {
         password: ""
     }),
 
-    validationSchema: yup.object().shape({
-        location: yup.string().trim()
-            .required("must-not-empty")
-            .test(
-                "is-allowed",
-                "name-or-node-url-not-valid",
-                (name: string | undefined) => {
-                    if (!name) {
-                        return false;
-                    }
-                    if (/^http[s]?:/.test(name)) {
-                        return true;
-                    }
-                    return NamingRules.isRegisteredNameValid(name)
-                }
-            ),
-        password: yup.string().required("must-not-empty")
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        const location = values.location.trim();
+        if (!location) {
+            errors.location = "must-not-empty";
+        } else if (!/^http[s]?:/.test(location) && !NamingRules.isRegisteredNameValid(location)) {
+            errors.location = "name-or-node-url-not-valid";
+        }
+        if (!values.password) {
+            errors.password = "must-not-empty";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         store.dispatch(connectToHome(values.location.trim(), false, "admin", values.password));

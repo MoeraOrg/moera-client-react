@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules } from "api";
@@ -45,10 +44,18 @@ const registerNameDialogLogic = {
         name: ""
     }),
 
-    validationSchema: yup.object().shape({
-        name: yup.string().trim().required("must-not-empty").max(NamingRules.NAME_MAX_LENGTH)
-            .test("is-allowed", "name-not-allowed", NamingRules.isRegisteredNameValid)
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        const name = values.name.trim();
+        if (!name) {
+            errors.name = "must-not-empty";
+        } else if (name.length > NamingRules.NAME_MAX_LENGTH || !NamingRules.isRegisteredNameValid(name)) {
+            errors.name = "name-not-allowed";
+        }
+
+        return errors;
+    },
 
     validateOnBlur: false,
     validateOnChange: false,

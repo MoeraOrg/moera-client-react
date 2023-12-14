@@ -9,6 +9,7 @@ import { getOwnerName } from "state/node/selectors";
 import { NameDisplayMode } from "ui/types";
 
 const DIGITS = /^\d+$/;
+const EMAIL = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 export function mentionName(name: string | null | undefined, fullName?: string | null): string {
     if (!name) {
@@ -105,6 +106,13 @@ export function isSpaces(value: string | null | undefined): boolean {
         }
     }
     return true;
+}
+
+export function isEmail(value: string | null | undefined): boolean {
+    if (value == null) {
+        return false;
+    }
+    return value.match(EMAIL) != null;
 }
 
 export function now(): number {

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Form, FormikBag, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -36,9 +35,15 @@ const welcomeNavigatorLogic = {
         ownerName: ""
     }),
 
-    validationSchema: yup.object().shape({
-        ownerName: yup.string().trim().required("must-not-empty")
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (!values.ownerName.trim()) {
+            errors.ownerName = "must-not-empty";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
         store.dispatch(ownerSwitch(values.ownerName.trim()));

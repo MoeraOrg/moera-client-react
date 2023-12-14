@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { ClientState } from "state/state";
@@ -48,13 +47,23 @@ const changePasswordLogic = {
         confirmPassword: ""
     }),
 
-    validationSchema: yup.object().shape({
-        oldPassword: yup.string().trim().required("must-not-empty"),
-        password: yup.string().required("must-not-empty"),
-        confirmPassword: yup.string().when(["password"], ([password]: string[], schema: yup.StringSchema) =>
-            schema.required("retype-password").oneOf([password], "passwords-different")
-        )
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (!values.oldPassword.trim()) {
+            errors.oldPassword = "must-not-empty";
+        }
+        if (!values.password) {
+            errors.password = "must-not-empty";
+        }
+        if (!values.confirmPassword) {
+            errors.confirmPassword = "retype-password";
+        } else if (values.confirmPassword !== values.password) {
+            errors.confirmPassword = "passwords-different";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
         store.dispatch(settingsChangePassword(values.oldPassword.trim(), values.password.trim(),

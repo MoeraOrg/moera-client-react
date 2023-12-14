@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, withFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import { PrincipalValue } from "api";
@@ -51,9 +50,15 @@ const friendGroupAddDialogLogic = {
         view: "public"
     }),
 
-    validationSchema: yup.object().shape({
-        title: yup.string().trim().required("must-not-empty")
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        if (!values.title.trim()) {
+            errors.title = "must-not-empty";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<{}, Values>): void {
         store.dispatch(friendGroupAdd(values.title, values.view));

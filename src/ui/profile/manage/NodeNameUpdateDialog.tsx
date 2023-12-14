@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
+import * as immutable from 'object-path-immutable';
 import { useTranslation } from 'react-i18next';
 
 import { NamingRules, NodeName } from "api";
@@ -90,24 +90,31 @@ const nodeNameUpdateDialogLogic = {
         mnemonic: Array(24).fill("")
     }),
 
-    validationSchema(props: OuterProps) {
-        const mnemonic = yup.array().transform(value =>
-                Array(24).fill("").map((v, i) => value[i] ?? v)
-            ).of(yup.string().trim()
-                    .required("must-not-empty")
-                    .matches(/^[A-Za-z]*$/, "must-single-english-word"));
-        return props.showChangeName ?
-            yup.object().shape({
-                name: yup.string().trim()
-                    .required("must-not-empty")
-                    .max(NamingRules.NAME_MAX_LENGTH)
-                    .test("is-allowed", "name-not-allowed", NamingRules.isRegisteredNameValid),
-                mnemonic
-            })
-        :
-            yup.object().shape({
-                mnemonic
-            })
+    validate: (values: Values, props: OuterProps): FormikErrors<Values> => {
+        let errors: FormikErrors<Values> = {};
+
+        if (props.showChangeName) {
+            const name = values.name.trim();
+            if (!name) {
+                errors.name = "must-not-empty";
+            } else if (name.length > NamingRules.NAME_MAX_LENGTH || !NamingRules.isRegisteredNameValid(name)) {
+                errors.name = "name-not-allowed";
+            }
+        }
+        values.mnemonic.forEach((value, i) => {
+            const word = value.trim();
+            let error: string | null = null;
+            if (!word) {
+                error = "must-not-empty";
+            } else if (!word.match(/^[A-Za-z]*$/)) {
+                error = "must-single-english-word";
+            }
+            if (error != null) {
+                errors = immutable.set(errors, ["mnemonic", i], error);
+            }
+        });
+
+        return errors;
     },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {

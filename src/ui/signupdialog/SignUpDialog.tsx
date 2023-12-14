@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, FormikBag, FormikProps, withFormik } from 'formik';
-import * as yup from 'yup';
+import { Form, FormikBag, FormikErrors, FormikProps, withFormik } from 'formik';
 import i18n, { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -28,6 +27,7 @@ import { useDebounce } from "ui/hook";
 import { Button, ModalDialog, NameHelp } from "ui/control";
 import { CheckboxField, InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import DomainField from "ui/signupdialog/DomainField";
+import { isEmail } from "util/misc";
 import store from "state/store";
 
 const PROVIDER_CHOICES = (Browser.isDevMode() ? PROVIDERS : PROVIDERS.filter(p => !p.dev))
@@ -240,33 +240,53 @@ const signUpDialogLogic = {
         googlePlayAllowed: true
     }),
 
-    validationSchema: yup.object().shape({
-        name: yup.string().trim().required("must-not-empty").max(NamingRules.NAME_MAX_LENGTH)
-            .test("is-allowed", "not-allowed", NamingRules.isRegisteredNameValid)
-            .when("nameTaken", ([nameTaken]: string[], schema: yup.StringSchema) =>
-                schema.notOneOf([nameTaken], "name-already-taken")),
-        domain: yup.string()
-            .when("autoDomain", {
-                is: true,
-                then: () => yup.string().notRequired(),
-                otherwise: () => yup.string().trim()
-                    .required("must-not-empty")
-                    .min(4, "domain-too-short")
-                    .lowercase().matches(/^[a-z-][a-z0-9-]+$/, "not-allowed")
-                    .when("domainTaken",
-                        ([domainTaken]: string[], schema: yup.StringSchema) =>
-                            schema.notOneOf([domainTaken], "domain-already-taken")),
-            }),
-        password: yup.string().required("must-not-empty"),
-        confirmPassword: yup.string().when("password",
-            ([password]: string[], schema: yup.StringSchema) =>
-                schema.required("retype-password").oneOf([password], "passwords-different")
-        ),
-        email: yup.string().email("not-valid-e-mail"),
-        termsAgree: yup.boolean().test("agree", "need-agree-with-terms", v => v ?? false),
-        googlePlayAllowed: yup.boolean().test("agree", "need-allow-google-play",
-                v => !Browser.isAndroidGooglePlay() || (v ?? false))
-    }),
+    validate: (values: Values): FormikErrors<Values> => {
+        const errors: FormikErrors<Values> = {};
+
+        const name = values.name.trim();
+        if (!name) {
+            errors.name = "must-not-empty";
+        } else if (name.length > NamingRules.NAME_MAX_LENGTH || !NamingRules.isRegisteredNameValid(name)) {
+            errors.name = "not-allowed";
+        } else if (values.nameTaken?.includes(name)) {
+            errors.name = "name-already-taken";
+        }
+
+        if (!values.autoDomain) {
+            const domain = values.domain.trim();
+            if (!domain) {
+                errors.domain = "must-not-empty";
+            } else if (domain.length < 4) {
+                errors.domain = "domain-too-short";
+            } else if (!domain.toLowerCase().match(/^[a-z-][a-z0-9-]+$/)) {
+                errors.domain = "not-allowed";
+            } else if (values.domainTaken?.includes(name)) {
+                errors.domain = "domain-already-taken";
+            }
+        }
+
+        if (!values.password) {
+            errors.password = "must-not-empty";
+        }
+        if (!values.confirmPassword) {
+            errors.confirmPassword = "retype-password";
+        } else if (values.confirmPassword !== values.password) {
+            errors.confirmPassword = "passwords-different";
+        }
+
+        if (values.email && !isEmail(values.email)) {
+            errors.email = "not-valid-e-mail";
+        }
+
+        if (!values.termsAgree) {
+            errors.termsAgree = "need-agree-with-terms";
+        }
+        if (Browser.isAndroidGooglePlay() && !values.googlePlayAllowed) {
+            errors.googlePlayAllowed = "need-allow-google-play";
+        }
+
+        return errors;
+    },
 
     handleSubmit(values: Values, formik: FormikBag<OuterProps, Values>): void {
         store.dispatch(signUp(values.language, values.provider, values.name.trim(),
