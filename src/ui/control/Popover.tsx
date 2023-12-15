@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
@@ -29,6 +29,17 @@ export function Popover({
 }: Props) {
     const [visible, setVisible] = useState<boolean>(false);
 
+    // Such usage of useState() is counter-intuitive, but required by react-popper
+    const [buttonRef, setButtonRef] = useState<Element | null>(null);
+    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
+    const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
+    const modifiers: Modifier<any>[] = [{name: "arrow", options: {element: arrowRef}}];
+    if (offset != null) {
+        modifiers.push({name: "offset", options: {offset}});
+    }
+    const {styles, attributes, state, forceUpdate} =
+        usePopper(buttonRef, popperRef, {placement: "bottom", strategy, modifiers});
+
     const show = () => {
         if (visible) {
             return;
@@ -51,6 +62,12 @@ export function Popover({
         }
     };
 
+    useEffect(() => {
+        if (visible) {
+            forceUpdate && forceUpdate();
+        }
+    }, [forceUpdate, visible]);
+
     const documentClick = (event: MouseEvent) => {
         for (let element of document.querySelectorAll(".popover.show").values()) {
             const r = element.getBoundingClientRect();
@@ -69,17 +86,6 @@ export function Popover({
             hide();
         }
     };
-
-    // Such usage of useState() is counter-intuitive, but required by react-popper
-    const [buttonRef, setButtonRef] = useState<Element | null>(null);
-    const [popperRef, setPopperRef] = useState<HTMLElement | null>(null);
-    const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null);
-    const modifiers: Modifier<any>[] = [{name: "arrow", options: {element: arrowRef}}];
-    if (offset != null) {
-        modifiers.push({name: "offset", options: {offset}});
-    }
-    const {styles, attributes, state, forceUpdate} =
-        usePopper(buttonRef, popperRef, {placement: "bottom", strategy, modifiers});
 
     return (
         <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>

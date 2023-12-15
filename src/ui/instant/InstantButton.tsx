@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ClientState } from "state/state";
 import { feedStatusUpdate } from "state/feeds/actions";
 import { getFeedNotViewed, getFeedState, getInstantBorder } from "state/feeds/selectors";
-import { Loading, Popover } from "ui/control";
+import { Popover } from "ui/control";
 import InstantBell from "ui/instant/InstantBell";
 
 const Instants = React.lazy(() => import("ui/instant/Instants"));
@@ -39,11 +39,11 @@ export default function InstantButton() {
     }
 
     return (
-        <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
-                 onToggle={onToggle}>
-            <Suspense fallback={<Loading/>}>
+        <Suspense fallback={<InstantBell/>}>
+            <Popover element={InstantBell} className="instant-popover" detached offset={[0, 10]}
+                     onToggle={onToggle}>
                 <Instants instantBorder={border}/>
-            </Suspense>
-        </Popover>
+            </Popover>
+        </Suspense>
     );
 }
