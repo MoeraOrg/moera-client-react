@@ -1,6 +1,7 @@
 import { call, put, select } from 'typed-redux-saga';
 
-import { imageUpload, Node } from "api";
+import { Node } from "api";
+import { imageUpload } from "api/node/images-upload";
 import {
     LinkPreviewImageUploadAction,
     linkPreviewImageUploaded,

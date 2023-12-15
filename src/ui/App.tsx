@@ -3,9 +3,7 @@ import { useSelector } from 'react-redux';
 
 import { isAtNode } from "state/node/selectors";
 import { getFeedWidth } from "state/settings/selectors";
-import HomeEvents from "ui/events/HomeEvents";
-import NodeEvents from "ui/events/NodeEvents";
-import ReceiverEvents from "ui/events/ReceiverEvents";
+import EventsFrontend from "ui/events/EventsFrontend";
 import Navigation from "ui/navigation/Navigation";
 import ErrorPane from "ui/error/ErrorPane";
 import MainMenu from "ui/mainmenu/MainMenu";
@@ -24,9 +22,7 @@ export default function App() {
     return (
         // FIXME React.CSSProperties does not include CSS variables
         <div style={{"--feed-width": feedWidth + "px"} as any}>
-            <HomeEvents/>
-            <NodeEvents/>
-            <ReceiverEvents/>
+            <EventsFrontend/>
             <Navigation/>
             <ErrorPane/>
             <MainMenu/>

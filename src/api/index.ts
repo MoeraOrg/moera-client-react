@@ -7,7 +7,8 @@ export { NamingApi, Naming } from "api/naming";
 export * from "api/node/api-types"
 export { selectApi } from "api/node/call"
 export type { VerifiedMediaFile } from "api/node/images-upload";
-export { imageUpload } from "api/node/images-upload";
+// imageUpload from "api/node/images-upload" is not included here, because it drags all sagas as dependencies
+// into web workers
 export {
     HomeNotConnectedError,
     NameResolvingError,

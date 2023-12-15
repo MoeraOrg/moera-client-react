@@ -1,6 +1,7 @@
 import { call, put, spawn } from 'typed-redux-saga';
 
-import { imageUpload, Node } from "api";
+import { Node } from "api";
+import { imageUpload } from "api/node/images-upload";
 import { RichTextEditorImageCopyAction, RichTextEditorImagesUploadAction } from "state/richtexteditor/actions";
 import { errorThrown } from "state/error/actions";
 import { executor } from "state/executor";
