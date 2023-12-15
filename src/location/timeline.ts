@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { getFeedAt } from "state/feeds/selectors";
 import { goToTimeline } from "state/navigation/actions";
 import { getFeedTitle } from "ui/feed/feeds";
-import { atOwner } from "util/misc";
+import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     const before = dstInfo.parameters["before"];

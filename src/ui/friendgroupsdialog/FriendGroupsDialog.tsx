@@ -6,18 +6,18 @@ import { useTranslation } from 'react-i18next';
 import { tGender } from "i18n";
 import { FriendGroupInfo, PrincipalValue } from "api";
 import { ClientState } from "state/state";
+import { getHomeFriendGroups } from "state/home/selectors";
 import { NodeCardState } from "state/nodecards/state";
+import { getNodeCard } from "state/nodecards/selectors";
 import { getSetting } from "state/settings/selectors";
 import { closeFriendGroupsDialog, nodeChangeFriendGroups } from "state/friendgroupsdialog/actions";
 import { peopleSelectedChangeFriendGroups } from "state/people/actions";
 import { Button, ModalDialog } from "ui/control";
 import { CheckboxField, InputField, PrincipalField } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
-import { formatFullName } from "util/misc";
+import { formatFullName } from "util/names";
 import store from "state/store";
 import "./FriendGroupsDialog.css";
-import { getNodeCard } from "state/nodecards/selectors";
-import { getHomeFriendGroups } from "state/home/selectors";
 
 interface OuterProps {
     nodeName: string | null;

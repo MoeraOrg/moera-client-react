@@ -2,7 +2,7 @@ import { ClientState } from "state/state";
 import { LocationInfo } from "location/LocationInfo";
 import { getLightBoxCommentId, getLightBoxMediaId, getLightBoxPostingId } from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
-import { atOwner } from "util/misc";
+import { atOwner } from "util/names";
 
 export function build(state: ClientState, info: LocationInfo): LocationInfo {
     const postingId = getLightBoxPostingId(state);

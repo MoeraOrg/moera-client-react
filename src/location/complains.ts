@@ -6,7 +6,7 @@ import { ClientState } from "state/state";
 import { goToComplains } from "state/navigation/actions";
 import { complainsGroupClose, complainsGroupOpen } from "state/complains/actions";
 import { getActiveComplainGroupId } from "state/complains/selectors";
-import { atOwner } from "util/misc";
+import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     const actions: ClientAction[] = [goToComplains()];

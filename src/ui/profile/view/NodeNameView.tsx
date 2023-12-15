@@ -8,7 +8,7 @@ import { nodeNameUpdateDialog, registerNameDialog } from "state/nodename/actions
 import { ClientState } from "state/state";
 import ManagementMenu from "ui/profile/view/ManagementMenu";
 import OperationStatus from "ui/profile/view/OperationStatus";
-import { mentionName } from "util/misc";
+import { mentionName } from "util/names";
 import "./NodeNameView.css";
 
 const RegisterNameDialog = React.lazy(() => import("ui/profile/manage/RegisterNameDialog"));

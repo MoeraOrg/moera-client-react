@@ -102,7 +102,8 @@ import { fillSubscription } from "state/subscriptions/sagas";
 import { Browser } from "ui/browser";
 import { toAvatarDescription } from "util/avatar";
 import { quoteHtml } from "util/html";
-import { getWindowSelectionHtml, insertText, mentionName } from "util/misc";
+import { mentionName } from "util/names";
+import { getWindowSelectionHtml, insertText } from "util/ui";
 
 export default [
     executor("DETAILED_POSTING_LOAD", "", detailedPostingLoadSaga, homeIntroduced),

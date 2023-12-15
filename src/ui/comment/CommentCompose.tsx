@@ -26,7 +26,8 @@ import {
     CommentComposeValues
 } from "ui/comment/comment-compose";
 import CommentComposeButtons from "ui/comment/CommentComposeButtons";
-import { insertText, mentionName } from "util/misc";
+import { insertText } from "util/ui";
+import { mentionName } from "util/names";
 import "./CommentCompose.css";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;

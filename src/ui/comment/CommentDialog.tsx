@@ -28,7 +28,7 @@ import { AvatarField, RichTextField } from "ui/control/field";
 import RichTextLinkPreviews from "ui/control/richtexteditor/RichTextLinkPreviews";
 import { commentComposeLogic, CommentComposeProps, CommentComposeValues } from "ui/comment/comment-compose";
 import CommentDraftSaver from "ui/comment/CommentDraftSaver";
-import { insertText } from "util/misc";
+import { insertText } from "util/ui";
 import "./CommentDialog.css";
 
 type Props = CommentComposeProps & FormikProps<CommentComposeValues>;

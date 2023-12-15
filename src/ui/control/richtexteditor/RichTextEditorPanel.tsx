@@ -15,7 +15,8 @@ import RichTextImageDialog, {
 } from "ui/control/richtexteditor/RichTextImageDialog";
 import RichTextMentionDialog from "ui/control/richtexteditor/RichTextMentionDialog";
 import { htmlEntities } from "util/html";
-import { getTextSelection, insertText, mentionName, wrapSelection, wrapSelectionLines } from "util/misc";
+import { getTextSelection, insertText, wrapSelection, wrapSelectionLines } from "util/ui";
+import { mentionName } from "util/names";
 import { redirectUrl } from "util/url";
 import { NameListItem } from "util/names-list";
 import "./RichTextEditorPanel.css";

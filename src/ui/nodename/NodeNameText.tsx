@@ -2,7 +2,7 @@ import React from 'react';
 
 import { NodeName as NodeNameParser } from "api";
 import { NameDisplayMode } from "ui/types";
-import { mentionName } from "util/misc";
+import { mentionName } from "util/names";
 
 interface Props {
     name?: string | null;

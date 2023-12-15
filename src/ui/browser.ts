@@ -1,6 +1,6 @@
 import * as URI from 'uri-js';
 import { rootUrl } from "util/url";
-import { randomId } from "util/misc";
+import { randomId } from "util/ui";
 
 type UserAgent = "firefox" | "chrome" | "opera" | "yandex" | "brave" | "vivaldi" | "dolphin" | "unknown";
 type UserAgentOs = "android" | "ios" | "unknown";

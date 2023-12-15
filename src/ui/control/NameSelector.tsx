@@ -13,7 +13,7 @@ import { getContacts } from "state/contacts/selectors";
 import { getNamesInComments } from "state/detailedposting/selectors";
 import { useDebounce } from "ui/hook";
 import { Avatar } from "ui/control/Avatar";
-import { mentionName } from "util/misc";
+import { mentionName } from "util/names";
 import { NameListItem, namesListQuery } from "util/names-list";
 import "./NameSelector.css";
 

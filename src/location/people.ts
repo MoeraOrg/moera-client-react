@@ -7,7 +7,7 @@ import { peopleGoToTab } from "state/people/actions";
 import { getNodeFriendGroups } from "state/node/selectors";
 import { LocationInfo } from "location/LocationInfo";
 import { getPeopleTabTitle } from "ui/people/people-tabs";
-import { atOwner } from "util/misc";
+import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     let actions: ClientAction[] = [];

@@ -9,7 +9,7 @@ import { closeSheriffOrderDetailsDialog } from "state/sherifforderdetailsdialog/
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import Jump from "ui/navigation/Jump";
-import { formatFullName } from "util/misc";
+import { formatFullName } from "util/names";
 import { htmlEntities, replaceEmojis } from "util/html";
 
 export default function SheriffOrderDetailsDialog() {

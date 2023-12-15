@@ -6,7 +6,7 @@ import { goToProfile } from "state/navigation/actions";
 import { profileEdit, profileEditCancel } from "state/profile/actions";
 import { isProfileEditing } from "state/profile/selectors";
 import { LocationInfo } from "location/LocationInfo";
-import { atOwner } from "util/misc";
+import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     let actions = [];

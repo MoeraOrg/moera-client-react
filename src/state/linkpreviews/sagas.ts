@@ -11,7 +11,7 @@ import {
 } from "state/linkpreviews/actions";
 import { executor } from "state/executor";
 import { getLinkPreviewInfo } from "state/linkpreviews/selectors";
-import { randomId } from "util/misc";
+import { randomId } from "util/ui";
 
 export default [
     executor("LINK_PREVIEW_LOAD", payload => payload.url, linkPreviewLoadSaga),

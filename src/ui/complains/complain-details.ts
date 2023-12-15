@@ -4,7 +4,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { SheriffComplainStatus } from "api";
 import { ExtComplainGroupInfo } from "state/complains/state";
 import { NameDisplayMode } from "ui/types";
-import { formatFullName } from "util/misc";
+import { formatFullName } from "util/names";
 
 interface ComplainStatusDetails {
     icon: IconProp | null,

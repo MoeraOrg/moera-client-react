@@ -10,7 +10,7 @@ import { askDialogSend, closeAskDialog } from "state/askdialog/actions";
 import { Button, ModalDialog } from "ui/control";
 import { InputField, SelectField, SelectFieldChoice } from "ui/control/field";
 import { NameDisplayMode } from "ui/types";
-import { formatFullName } from "util/misc";
+import { formatFullName } from "util/names";
 import store from "state/store";
 
 interface OuterProps {

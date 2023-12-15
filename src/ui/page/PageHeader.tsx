@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import cx from 'classnames';
 
 import { Browser } from "ui/browser";
-import { getFeedHeaderHeight } from "util/misc";
+import { getFeedHeaderHeight } from "util/ui";
 import "./PageHeader.css";
 
 const HIDING_DISTANCE = 16;

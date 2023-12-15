@@ -9,8 +9,8 @@ import { closeBlockingDetailsDialog } from "state/blockingdetailsdialog/actions"
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog } from "ui/control";
 import EntryHtml from "ui/entry/EntryHtml";
-import { formatFullName } from "util/misc";
 import Jump from "ui/navigation/Jump";
+import { formatFullName } from "util/names";
 import { htmlEntities, replaceEmojis } from "util/html";
 
 export default function BlockingDetailsDialog() {

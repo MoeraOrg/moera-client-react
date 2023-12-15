@@ -10,7 +10,8 @@ import { goToLocation, initFromLocation } from "state/navigation/actions";
 import { getHomeOwnerName, getHomeRootLocation, getHomeRootPage } from "state/home/selectors";
 import { getNodeRootPage } from "state/node/selectors";
 import { executor } from "state/executor";
-import { getWindowSelectionHtml, mentionName } from "util/misc";
+import { getWindowSelectionHtml } from "util/ui";
+import { mentionName } from "util/names";
 import { quoteHtml } from "util/html";
 
 export default [

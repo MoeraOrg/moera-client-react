@@ -27,7 +27,7 @@ import EntryGalleryExpanded from "ui/entry/EntryGalleryExpanded";
 import EntryLinkPreviews from "ui/entry/EntryLinkPreviews";
 import PostingComments from "ui/posting/PostingComments";
 import Comments from "ui/comment/Comments";
-import { getPageHeaderHeight } from "util/misc";
+import { getPageHeaderHeight } from "util/ui";
 
 interface Props {
     story: MinimalStoryInfo;

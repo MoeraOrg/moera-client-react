@@ -14,7 +14,7 @@ import PageHeader from "ui/page/PageHeader";
 import PageShareButton from "ui/page/PageShareButton";
 import NodeNameView from "ui/profile/view/NodeNameView";
 import EntryHtml from "ui/entry/EntryHtml";
-import { shortGender } from "util/misc";
+import { shortGender } from "util/names";
 import "./ProfileView.css";
 
 function EditButton() {

@@ -13,7 +13,7 @@ import { SheriffOrderTarget } from "state/sherifforderdialog/state";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { CheckboxField, RichTextField, SelectField, SelectFieldChoice } from "ui/control/field";
-import { formatFullName } from "util/misc";
+import { formatFullName } from "util/names";
 import store from "state/store";
 
 const REASON_CODES: SelectFieldChoice[] = SHERIFF_ORDER_REASON_CODES.map(code => ({

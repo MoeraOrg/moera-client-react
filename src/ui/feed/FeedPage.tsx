@@ -21,7 +21,7 @@ import FeedTitle from "ui/feed/FeedTitle";
 import FeedPageHeader from "ui/feed/FeedPageHeader";
 import FeedPosting from "ui/feed/FeedPosting";
 import FeedSentinel from "ui/feed/FeedSentinel";
-import { getPageHeaderHeight } from "util/misc";
+import { getPageHeaderHeight } from "util/ui";
 import "./FeedPage.css";
 
 interface Props {

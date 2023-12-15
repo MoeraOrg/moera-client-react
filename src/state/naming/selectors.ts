@@ -1,6 +1,6 @@
-import { now } from "util/misc";
 import { ClientState } from "state/state";
 import { NameState } from "state/naming/state";
+import { now } from "util/misc";
 
 const USED_NAME_RELOAD_PERIOD = 6 * 60 * 60;
 

@@ -5,7 +5,7 @@ import { ClientAction } from "state/action";
 import { goToSettings } from "state/navigation/actions";
 import { settingsGoToSheet, settingsGoToTab } from "state/settings/actions";
 import { LocationInfo } from "location/LocationInfo";
-import { atOwner } from "util/misc";
+import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     let actions = [];

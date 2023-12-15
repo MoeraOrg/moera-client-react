@@ -5,7 +5,7 @@ import { ClientAction } from "state/action";
 import { goToCompose } from "state/navigation/actions";
 import { getComposeDraftId, getComposePostingId } from "state/compose/selectors";
 import { LocationInfo } from "location/LocationInfo";
-import { atOwner } from "util/misc";
+import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     return [goToCompose(dstInfo.parameters["id"], dstInfo.parameters["draft"])];

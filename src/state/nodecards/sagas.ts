@@ -43,7 +43,7 @@ import { errorThrown } from "state/error/actions";
 import { flashBox } from "state/flashbox/actions";
 import { getNodeCard } from "state/nodecards/selectors";
 import { Browser } from "ui/browser";
-import { mentionName } from "util/misc";
+import { mentionName } from "util/names";
 
 export default [
     executor("NODE_CARD_PREPARE", payload => payload.nodeName, nodeCardPrepareSaga),

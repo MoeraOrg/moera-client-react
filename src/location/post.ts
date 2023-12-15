@@ -1,10 +1,10 @@
+import { ClientState } from "state/state";
+import { ClientAction } from "state/action";
 import { goToPosting } from "state/navigation/actions";
 import { openLightBox } from "state/lightbox/actions";
 import { getDetailedPosting, getDetailedPostingId, getFocusedCommentId } from "state/detailedposting/selectors";
-import { atOwner } from "util/misc";
 import { LocationInfo } from "location/LocationInfo";
-import { ClientAction } from "state/action";
-import { ClientState } from "state/state";
+import { atOwner } from "util/names";
 
 export function transform(srcInfo: LocationInfo, dstInfo: LocationInfo): ClientAction[] {
     const postingId = dstInfo.directories[1];

@@ -7,7 +7,7 @@ import { ClientState } from "state/state";
 import { getOwnerAvatar, getOwnerFullName, getOwnerName, getOwnerTitle } from "state/node/selectors";
 import { Avatar, DonateButton } from "ui/control";
 import Jump from "ui/navigation/Jump";
-import { mentionName } from "util/misc";
+import { mentionName } from "util/names";
 import "./FeedTitle.css";
 
 export default function FeedTitle() {

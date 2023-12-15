@@ -12,7 +12,7 @@ import { blockDialogSubmit, closeBlockDialog } from "state/blockdialog/actions";
 import { NameDisplayMode } from "ui/types";
 import { Button, ModalDialog, RichTextValue } from "ui/control";
 import { CheckboxField, NumberField, RadioField, RichTextField } from "ui/control/field";
-import { formatFullName } from "util/misc";
+import { formatFullName } from "util/names";
 import store from "state/store";
 import "./BlockDialog.css";
 

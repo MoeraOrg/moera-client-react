@@ -26,7 +26,7 @@ import { isAtDetailedPostingPage } from "state/navigation/selectors";
 import CommentsSentinelLine from "ui/comment/CommentsSentinelLine";
 import Comment from "ui/comment/Comment";
 import CommentComposeLine from "ui/comment/CommentComposeLine";
-import { getPageHeaderHeight, isElementCompletelyVisible } from "util/misc";
+import { getPageHeaderHeight, isElementCompletelyVisible } from "util/ui";
 import "./Comments.css";
 
 const CommentDialog = React.lazy(() => import("ui/comment/CommentDialog"));

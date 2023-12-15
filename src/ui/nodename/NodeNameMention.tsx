@@ -6,7 +6,7 @@ import { getSetting } from "state/settings/selectors";
 import NodeNamePopup from "ui/nodename/NodeNamePopup";
 import { NameDisplayMode } from "ui/types";
 import Jump from "ui/navigation/Jump";
-import { mentionName } from "util/misc";
+import { mentionName } from "util/names";
 
 interface Props {
     name: string | null;

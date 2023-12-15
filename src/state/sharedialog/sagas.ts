@@ -15,7 +15,7 @@ import { messageBox } from "state/messagebox/actions";
 import { flashBox } from "state/flashbox/actions";
 import { Browser } from "ui/browser";
 import { normalizeUrl } from "util/url";
-import { getWindowSelectionHtml, hasWindowSelection } from "util/misc";
+import { getWindowSelectionHtml, hasWindowSelection } from "util/ui";
 import { quoteHtml } from "util/html";
 
 export default [

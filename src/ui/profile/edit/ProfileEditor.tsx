@@ -13,7 +13,8 @@ import PageHeader from "ui/page/PageHeader";
 import { Page } from "ui/page/Page";
 import AvatarEditor from "ui/profile/edit/avatar/AvatarEditor";
 import DonateField from "ui/profile/edit/donate/DonateField";
-import { isEmail, longGender } from "util/misc";
+import { longGender } from "util/names";
+import { isEmail } from "util/misc";
 import store from "state/store";
 import "./ProfileEditor.css";
 
