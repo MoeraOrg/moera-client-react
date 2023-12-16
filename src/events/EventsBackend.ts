@@ -146,6 +146,7 @@ export default class EventsBackend {
             this.disconnect();
             this.connect(location, token, carte, prefix, sourceNode);
         } else {
+            this.carte = carte;
             this.prefix = prefix;
             this.sourceNode = sourceNode;
         }
