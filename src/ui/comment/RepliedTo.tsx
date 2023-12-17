@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ClientState } from "state/state";
 import { glanceComment } from "state/detailedposting/actions";
+import { isGlanceCommentByIdToBeLoaded } from "state/detailedposting/selectors";
 import { getSetting } from "state/settings/selectors";
 import { Browser } from "ui/browser";
 import NodeName from "ui/nodename/NodeName";
@@ -29,13 +30,18 @@ export default function RepliedTo({
     const popperEnabled = useSelector(
         (state: ClientState) => getSetting(state, "comment.replied-to.glance.enabled")
     ) as boolean && !Browser.isTouchScreen();
+    const glanceToBeLoaded = useSelector((state: ClientState) => isGlanceCommentByIdToBeLoaded(state, commentId));
     const dispatch = useDispatch();
 
     if (commentId == null) {
         return null;
     }
 
-    const onPreparePopper = () => dispatch(glanceComment(commentId));
+    const onPreparePopper = () => {
+        if (glanceToBeLoaded) {
+            dispatch(glanceComment(commentId));
+        }
+    }
 
     const onUnsetClick = () => onUnset && onUnset();
 

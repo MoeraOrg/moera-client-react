@@ -239,6 +239,12 @@ export function isCommentDialogReady(state: ClientState): boolean {
     return state.detailedPosting.commentDialog.loaded && state.detailedPosting.commentDialog.loadedDraft;
 }
 
+export function isGlanceCommentByIdToBeLoaded(state: ClientState, id: string | null): boolean {
+    const comments = getCommentsState(state);
+    return !comments.loadedGlanceComment
+        || (id != null && (comments.glanceComment == null || comments.glanceComment.id !== id));
+}
+
 export function isGlanceCommentToBeLoaded(state: ClientState): boolean {
     const comments = getCommentsState(state);
     return !comments.loadedGlanceComment
