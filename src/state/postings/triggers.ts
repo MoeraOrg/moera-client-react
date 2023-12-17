@@ -24,10 +24,10 @@ export default [
     trigger(
         ["STORY_ADDED", "STORY_UPDATED"],
         (state, signal: (StoryAddedAction | StoryUpdatedAction)) =>
-            signal.payload.story.posting != null
+            signal.payload.story.postingId != null
             && isCurrentNodeStory(state, signal.payload.story)
-            && !isPostingCached(state, signal.payload.story.posting.id),
-        signal => postingLoad(signal.payload.story.posting!.id, "")
+            && !isPostingCached(state, signal.payload.story.postingId),
+        signal => postingLoad(signal.payload.story.postingId!, "")
     ),
     trigger("POSTING_COMMENTS_SUBSCRIBED", true, () => flashBox(i18n.t("following-comments"))),
     trigger("POSTING_COMMENTS_UNSUBSCRIBED", true, () => flashBox(i18n.t("not-following-comments"))),
