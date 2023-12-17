@@ -49,7 +49,8 @@ export default function CommentMenu({nodeName, postingId, comment}: Props) {
         objectSourceFeatures: receiverFeatures
     };
     const commentEditable = useSelector((state: ClientState) => isPermitted("edit", comment, "owner", state, options));
-    const commentDeletable = useSelector((state: ClientState) => isPermitted("edit", comment, "owner", state, options));
+    const commentDeletable = useSelector((state: ClientState) =>
+        isPermitted("delete", comment, "private", state, options));
 
     const dispatch = useDispatch();
     const {t} = useTranslation();
