@@ -66,12 +66,13 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         }
     }, [after, anchor, before, dispatch, feedName, onScroll]);
 
+    const beginning = stories.length > 0 ? stories[0].story.moment : null;
     useEffect(() => {
         if (anchor == null) {
             scrollTo(topmostMoment, after <= Number.MIN_SAFE_INTEGER);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [before]);
+    }, [before, beginning]);
 
     const loadFuture = useCallback(() => {
         if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {
