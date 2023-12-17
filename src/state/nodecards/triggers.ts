@@ -28,11 +28,6 @@ export default [
         signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)
     ),
     trigger(
-        "HOME_READY",
-        (state, signal: WithContext<HomeReadyAction>) => signal.context.ownerName != null,
-        (signal: WithContext<HomeReadyAction>) => nodeCardPrepare(signal.context.ownerName!)
-    ),
-    trigger(
         "PROFILE_SET",
         true,
         (signal: WithContext<ProfileSetAction>) =>
