@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import { useTranslation } from 'react-i18next';
@@ -48,31 +48,38 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
     const [atTop, setAtTop] = useState<boolean>(true);
     const [atBottom, setAtBottom] = useState<boolean>(false);
     const [topmostMoment, setTopmostMoment] = useState<number>(Number.MAX_SAFE_INTEGER);
+    const currentTopmostMoment = useRef<number>(Number.MAX_SAFE_INTEGER);
 
     const {t} = useTranslation();
 
-    const onScroll = useCallback(() => setTopmostMoment(getTopmostMoment()), []);
-
-    useEffect(() => {
-        if (
-            anchor != null
-            && (anchor <= before || (anchor >= Number.MAX_SAFE_INTEGER && before >= Number.MAX_SAFE_INTEGER))
-            && (anchor > after || (anchor <= Number.MIN_SAFE_INTEGER && after <= Number.MIN_SAFE_INTEGER))
-        ) {
-            if (scrollTo(anchor, after <= Number.MIN_SAFE_INTEGER)) {
-                onScroll();
-                dispatch(feedScrolledToAnchor(feedName));
-            }
-        }
-    }, [after, anchor, before, dispatch, feedName, onScroll]);
+    const onScroll = useCallback(() => {
+        const moment = getTopmostMoment();
+        currentTopmostMoment.current = moment;
+        setTopmostMoment(moment);
+    }, []);
 
     const beginning = stories.length > 0 ? stories[0].story.moment : null;
+    const prevBeginning = useRef<number | null>(null)
+
     useEffect(() => {
         if (anchor == null) {
-            scrollTo(topmostMoment, after <= Number.MIN_SAFE_INTEGER);
+            if (beginning !== prevBeginning.current) {
+                scrollTo(currentTopmostMoment.current);
+            }
+            prevBeginning.current = beginning;
+            return;
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [before, beginning]);
+        prevBeginning.current = beginning;
+
+        const sanchor = toSafeRange(anchor);
+        const sbefore = toSafeRange(before);
+        const safter = toSafeRange(after);
+        if (sbefore > safter && sanchor <= sbefore && sanchor >= safter) {
+            scrollTo(sanchor);
+            onScroll();
+            dispatch(feedScrolledToAnchor(feedName));
+        }
+    }, [after, anchor, before, beginning, dispatch, feedName, onScroll]);
 
     const loadFuture = useCallback(() => {
         if (loadingFuture || before >= Number.MAX_SAFE_INTEGER) {
@@ -188,8 +195,18 @@ export const getStories = createSelector(
             .filter(({posting}) => !hiding || !isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE))
 );
 
-function postingMoment(posting: HTMLElement): number {
-    return posting.dataset.moment != null ? parseInt(posting.dataset.moment) : 0;
+function toSafeRange(moment: number): number {
+    if (moment > Number.MAX_SAFE_INTEGER) {
+        return Number.MAX_SAFE_INTEGER;
+    }
+    if (moment < Number.MIN_SAFE_INTEGER) {
+        return Number.MIN_SAFE_INTEGER;
+    }
+    return moment;
+}
+
+function postingMoment(posting: HTMLElement | null): number {
+    return posting?.dataset.moment != null ? parseInt(posting.dataset.moment) : 0;
 }
 
 function getTopmostMoment(): number {
@@ -209,21 +226,18 @@ function getTopmostMoment(): number {
 
 function getPostingAt(moment: number): HTMLElement | null {
     const postings = document.getElementsByClassName("posting");
+    let lastPosting = null;
     for (let i = 0; i < postings.length; i++) {
         const posting = postings.item(i) as HTMLElement;
         if (posting == null) {
             continue;
         }
+        lastPosting = posting;
         if (postingMoment(posting) <= moment) {
             return posting;
         }
     }
-    return null;
-}
-
-function getEarliestPosting(): Element | null {
-    const postings = document.getElementsByClassName("posting");
-    return postings.length > 0 ? postings.item(postings.length - 1) : null;
+    return lastPosting;
 }
 
 function getNotViewedMoment(): number | null {
@@ -256,18 +270,11 @@ function markAllViewed(): void {
     }
 }
 
-function scrollTo(moment: number, bottomLoaded: boolean): boolean {
-    let posting = moment > Number.MIN_SAFE_INTEGER ? getPostingAt(moment) : getEarliestPosting();
-    if (posting == null) {
-        if (!bottomLoaded) {
-            return false;
-        }
-        posting = getEarliestPosting();
-    }
+function scrollTo(moment: number): void {
+    const posting = getPostingAt(moment);
     if (posting != null) {
         const y = posting.getBoundingClientRect().top;
         const minY = getPageHeaderHeight() + 10;
         window.scrollBy(0, y - minY - 25);
     }
-    return true;
 }
