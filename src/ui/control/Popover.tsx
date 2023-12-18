@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import cx from 'classnames';
 import { Modifier, usePopper } from 'react-popper';
@@ -40,27 +40,35 @@ export function Popover({
     const {styles, attributes, state, forceUpdate} =
         usePopper(buttonRef, popperRef, {placement: "bottom", strategy, modifiers});
 
-    const show = () => {
-        if (visible) {
-            return;
-        }
-        setVisible(true);
-        document.getElementById("app-root")!.addEventListener("click", documentClick);
-        if (onToggle != null) {
-            onToggle(true);
-        }
-    };
-
-    const hide = () => {
-        if (!visible) {
-            return;
+    const documentClick = useCallback((event: MouseEvent) => {
+        if (popperRef != null) {
+            const r = popperRef.getBoundingClientRect();
+            if (r.left <= event.clientX && r.right >= event.clientX
+                && r.top <= event.clientY && r.bottom >= event.clientY
+            ) {
+                return;
+            }
         }
         setVisible(false);
-        document.getElementById("app-root")!.removeEventListener("click", documentClick);
-        if (onToggle != null) {
-            onToggle(false);
+    }, [popperRef]);
+
+    useEffect(() => {
+        if (visible) {
+            document.getElementById("app-root")!.addEventListener("click", documentClick);
+            document.getElementById("modal-root")!.addEventListener("click", documentClick);
+
+            return () => {
+                document.getElementById("app-root")!.removeEventListener("click", documentClick);
+                document.getElementById("modal-root")!.removeEventListener("click", documentClick);
+            }
         }
-    };
+    }, [documentClick, visible]);
+
+    useEffect(() => {
+        if (onToggle != null) {
+            onToggle(visible);
+        }
+    }, [onToggle, visible]);
 
     useEffect(() => {
         if (visible) {
@@ -68,27 +76,10 @@ export function Popover({
         }
     }, [forceUpdate, visible]);
 
-    const documentClick = (event: MouseEvent) => {
-        for (let element of document.querySelectorAll(".popover.show").values()) {
-            const r = element.getBoundingClientRect();
-            if (r.left <= event.clientX && r.right >= event.clientX
-                && r.top <= event.clientY && r.bottom >= event.clientY) {
-                return;
-            }
-        }
-        hide();
-    };
-
-    const toggle = () => {
-        if (!visible) {
-            show();
-        } else {
-            hide();
-        }
-    };
+    const toggle = () => setVisible(!visible);
 
     return (
-        <PopoverContext.Provider value={{hide, update: forceUpdate ?? (() => {})}}>
+        <PopoverContext.Provider value={{hide: () => setVisible(false), update: forceUpdate ?? (() => {})}}>
             <span ref={setButtonRef} onClick={toggle} title={title} className={cx(textClassName, {"active": visible})}>
                 {element && React.createElement(element)}
                 {icon && <FontAwesomeIcon icon={icon}/>}
