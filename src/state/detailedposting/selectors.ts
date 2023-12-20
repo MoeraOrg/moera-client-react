@@ -279,6 +279,11 @@ export const getCommentsWithVisibility = createSelector(
     }
 );
 
+export const getVisibleComments = createSelector(
+    getCommentsWithVisibility,
+    comments => comments.filter(c => !c.invisible)
+);
+
 export function hasInvisibleComments(state: ClientState): boolean {
     return !getCommentsWithVisibility(state).every(c => !c.invisible);
 }

@@ -16,6 +16,7 @@ import {
     getCommentsState,
     getCommentsWithVisibility,
     getDetailedPosting,
+    getVisibleComments,
     isCommentComposerFocused,
     isCommentsFocused,
     isCommentsShowInvisible,
@@ -42,12 +43,8 @@ export default function Comments() {
     const after = useSelector((state: ClientState) => getCommentsState(state).after);
     const totalInPast = useSelector((state: ClientState) => getCommentsState(state).totalInPast);
     const totalInFuture = useSelector((state: ClientState) => getCommentsState(state).totalInFuture);
-    const comments = useSelector(
-        (state: ClientState) =>
-            isCommentsShowInvisible(state)
-                ? getCommentsWithVisibility(state)
-                : getCommentsWithVisibility(state).filter(c => !c.invisible)
-    );
+    const comments = useSelector((state: ClientState) =>
+        isCommentsShowInvisible(state) ? getCommentsWithVisibility(state) : getVisibleComments(state));
     const anchor = useSelector((state: ClientState) => getCommentsState(state).anchor);
     const focusedCommentId = useSelector((state: ClientState) => getCommentsState(state).focusedCommentId);
     const focused = useSelector(isCommentsFocused);
