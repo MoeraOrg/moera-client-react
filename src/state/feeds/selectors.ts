@@ -75,10 +75,6 @@ export function getFeedAtTimestamp(state: ClientState, feedName: string): number
     return at < MAX_MOMENT ? Math.floor(at / 1000) : getUnixTime(new Date());
 }
 
-export function isFeedAtBeginning(state: ClientState, feedName: string): boolean {
-    return getFeedAt(state, feedName) >= MAX_MOMENT;
-}
-
 export function getInstantCount(state: ClientState): number {
     const feed = getFeedState(state, ":instant");
     const mode = getSetting(state, "instants.number.mode") as string;
