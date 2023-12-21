@@ -6,11 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { ClientState } from "state/state";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { lightBoxCopyLink, lightBoxCopyMediaLink } from "state/lightbox/actions";
-import { getLightBoxMediaId, getLightBoxNodeName, getLightBoxPostingId } from "state/lightbox/selectors";
+import {
+    getLightBoxCommentId,
+    getLightBoxMediaId,
+    getLightBoxNodeName,
+    getLightBoxPostingId
+} from "state/lightbox/selectors";
 import { getPosting } from "state/postings/selectors";
 import { getComment } from "state/detailedposting/selectors";
 import { getOwnerName } from "state/node/selectors";
-import { DropdownMenu } from "ui/control";
+import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { urlWithParameters, ut } from "util/url";
 import './LightBoxShareButton.css';
 
@@ -20,11 +25,13 @@ interface Props {
     mediaUrl: string;
 }
 
-export default function LightBoxShareButton({mediaNodeName, mediaHref, mediaUrl}: Props) {
+function LightBoxShareItems({mediaNodeName, mediaHref, mediaUrl}: Props) {
     const sourceNodeName = useSelector((state: ClientState) => getLightBoxNodeName(state) || getOwnerName(state));
     const posting = useSelector((state: ClientState) => getPosting(state, getLightBoxPostingId(state)));
-    const comment = useSelector((state: ClientState) =>
-        state.lightBox.commentId != null ? getComment(state, state.lightBox.commentId) : null);
+    const comment = useSelector((state: ClientState) => {
+        const commentId = getLightBoxCommentId(state);
+        return commentId != null ? getComment(state, commentId) : null;
+    });
     const mediaId = useSelector(getLightBoxMediaId);
     const dispatch = useDispatch();
     const {t} = useTranslation();
@@ -56,7 +63,7 @@ export default function LightBoxShareButton({mediaNodeName, mediaHref, mediaUrl}
     const onShare = () => dispatch(shareDialogPrepare(nodeName, href));
 
     return (
-        <DropdownMenu className="lightbox-button lightbox-share" items={[
+        <DropdownMenuItems items={[
             {
                 title: t("share-ellipsis"),
                 nodeName: nodeName,
@@ -81,7 +88,17 @@ export default function LightBoxShareButton({mediaNodeName, mediaHref, mediaUrl}
                 onClick: () => dispatch(lightBoxCopyMediaLink(mediaUrl)),
                 show: true
             },
-        ]}>
+        ]}/>
+    );
+}
+
+export default function LightBoxShareButton({mediaNodeName, mediaHref, mediaUrl}: Props) {
+    const {t} = useTranslation();
+
+    return (
+        <DropdownMenu className="lightbox-button lightbox-share" content={
+            <LightBoxShareItems mediaNodeName={mediaNodeName} mediaHref={mediaHref} mediaUrl={mediaUrl}/>
+        }>
             <FontAwesomeIcon icon="share-alt" title={t("share")}/>
         </DropdownMenu>
     );

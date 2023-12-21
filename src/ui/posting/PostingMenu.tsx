@@ -32,7 +32,7 @@ import { commentsShowInvisibleSet } from "state/detailedposting/actions";
 import { hasInvisibleComments, isCommentsShowInvisible } from "state/detailedposting/selectors";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
 import { MinimalStoryInfo } from "ui/types";
-import { DropdownMenu } from "ui/control";
+import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { Browser } from "ui/browser";
 import "ui/entry/EntryMenu.css";
 
@@ -42,7 +42,7 @@ interface Props {
     detailed?: boolean;
 }
 
-export default function PostingMenu({posting, story, detailed}: Props) {
+function PostingMenuItems({posting, story, detailed}: Props) {
     const nodeOwnerName = useSelector(getOwnerName);
     const homeOwnerName = useSelector(getHomeOwnerName);
     const commentsSubscriptionId = useSelector((state: ClientState) =>
@@ -145,7 +145,7 @@ export default function PostingMenu({posting, story, detailed}: Props) {
 
     const postingHref = `/post/${posting.id}`;
     return (
-        <DropdownMenu items={[
+        <DropdownMenuItems items={[
             {
                 title: t("copy-link"),
                 nodeName: "",
@@ -272,3 +272,10 @@ export default function PostingMenu({posting, story, detailed}: Props) {
         ]}/>
     );
 }
+
+const PostingMenu = ({posting, story, detailed}: Props) =>
+    <DropdownMenu content={
+        <PostingMenuItems posting={posting} story={story} detailed={detailed}/>
+    }/>;
+
+export default PostingMenu;

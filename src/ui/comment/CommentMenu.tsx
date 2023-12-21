@@ -24,7 +24,7 @@ import { confirmBox } from "state/confirmbox/actions";
 import { shareDialogPrepare } from "state/sharedialog/actions";
 import { openBlockDialog } from "state/blockdialog/actions";
 import { openSheriffOrderDialog, sheriffOrderDelete } from "state/sherifforderdialog/actions";
-import { DropdownMenu } from "ui/control";
+import { DropdownMenu, DropdownMenuItems } from "ui/control";
 import { Browser } from "ui/browser";
 
 interface Props {
@@ -33,7 +33,7 @@ interface Props {
     comment: CommentInfo;
 }
 
-export default function CommentMenu({nodeName, postingId, comment}: Props) {
+function CommentMenuItems({nodeName, postingId, comment}: Props) {
     const homeOwnerName = useSelector(getHomeOwnerName);
     const receiverName = useSelector(getCommentsReceiverName);
     const receiverFeatures = useSelector(getCommentsReceiverFeatures);
@@ -135,7 +135,7 @@ export default function CommentMenu({nodeName, postingId, comment}: Props) {
             && isPrincipalIn("view", comment, "public", "private", {useOperations: "owner"}))
         || (commentOverridable && isPrincipalIn("view", comment, "unset", "private", {useOperations: "senior"}));
     return (
-        <DropdownMenu items={[
+        <DropdownMenuItems items={[
             {
                 title: t("copy-link"),
                 nodeName: "",
@@ -232,3 +232,10 @@ export default function CommentMenu({nodeName, postingId, comment}: Props) {
         ]}/>
     );
 }
+
+const CommentMenu = ({nodeName, postingId, comment}: Props) =>
+    <DropdownMenu content={
+        <CommentMenuItems nodeName={nodeName} postingId={postingId} comment={comment}/>
+    }/>;
+
+export default CommentMenu;
