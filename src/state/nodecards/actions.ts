@@ -8,6 +8,10 @@ import {
     SubscriptionInfo
 } from "api";
 
+export type NodeCardPrepareOwnersAction = ActionWithoutPayload<"NODE_CARD_PREPARE_OWNERS">;
+export const nodeCardPrepareOwners = (): NodeCardPrepareOwnersAction =>
+    actionWithoutPayload("NODE_CARD_PREPARE_OWNERS");
+
 export type NodeCardPrepareAction = ActionWithPayload<"NODE_CARD_PREPARE", {
     nodeName: string;
 }>;
@@ -190,7 +194,8 @@ export const sheriffListDelete = (nodeName: string): SheriffListDeleteAction =>
     actionWithPayload("SHERIFF_LIST_DELETE", {nodeName});
 
 export type NodeCardsAnyAction =
-    NodeCardPrepareAction
+    NodeCardPrepareOwnersAction
+    | NodeCardPrepareAction
     | NodeCardDetailsLoadAction
     | NodeCardDetailsLoadFailedAction
     | NodeCardDetailsSetAction

@@ -1,32 +1,22 @@
-import { Action } from 'redux';
-
-import { trigger } from "state/trigger";
+import { conj, trigger } from "state/trigger";
+import { EventAction, ProfileUpdatedEvent } from "api/events";
+import { WithContext } from "state/action-types";
 import {
     nodeCardDetailsLoad,
     nodeCardDetailsSet,
-    nodeCardPrepare,
+    nodeCardPrepareOwners,
     nodeCardsClientSwitch,
     nodeCardsRefresh
 } from "state/nodecards/actions";
 import { isNodeCardDetailsLoaded } from "state/nodecards/selectors";
-import { EventAction, ProfileUpdatedEvent } from "api/events";
 import { ProfileSetAction } from "state/profile/actions";
-import { WithContext } from "state/action-types";
-import { HomeReadyAction } from "state/home/actions";
+import { isHomeIntroduced } from "state/home/selectors";
+import { isNodeIntroduced } from "state/node/selectors";
 
 export default [
     trigger(["NODE_READY", "HOME_READY"], true, nodeCardsClientSwitch),
     trigger("PULSE_6H", true, nodeCardsRefresh),
-    trigger(
-        ["NODE_READY", "HOME_READY", "WAKE_UP"],
-        (state, signal: WithContext<Action>) => !!signal.context.ownerNameOrUrl,
-        signal => nodeCardPrepare(signal.context.ownerNameOrUrl)
-    ),
-    trigger(
-        "HOME_READY",
-        (state, signal: WithContext<HomeReadyAction>) => !!signal.context.homeOwnerNameOrUrl,
-        signal => nodeCardPrepare(signal.context.homeOwnerNameOrUrl)
-    ),
+    trigger(["NODE_READY", "HOME_READY", "WAKE_UP"], conj(isNodeIntroduced, isHomeIntroduced), nodeCardPrepareOwners),
     trigger(
         "PROFILE_SET",
         true,
