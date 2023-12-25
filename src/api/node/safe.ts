@@ -1,6 +1,6 @@
 import { safeValidateMessage, SafeValidationErrors, SafeWorkerResponse } from "safe/message-types";
 
-const safeWorker = new Worker(new URL('../../safe/index.ts', import.meta.url));
+const NUM_WORKERS = 1;
 
 interface ValidationResult {
     valid: boolean;
@@ -15,11 +15,12 @@ let nextId: number = 1;
 export function validateSchema(schemaName: string, data: any, decodeBodies: boolean): Promise<ValidationResult> {
     const id = nextId++;
     const promise = new Promise<ValidationResult>(resolve => pending.set(id, resolve));
+    const safeWorker = workers[id % workers.length];
     safeWorker.postMessage(safeValidateMessage(id, schemaName, data, decodeBodies));
     return promise;
 }
 
-safeWorker.onmessage = (event: MessageEvent) => {
+const onMessage = (event: MessageEvent) => {
     const message = event.data as SafeWorkerResponse;
     switch (message.type) {
         case "VALIDATE": {
@@ -32,3 +33,11 @@ safeWorker.onmessage = (event: MessageEvent) => {
         }
     }
 }
+
+function createWorker(): Worker {
+    const worker = new Worker(new URL('../../safe/index.ts', import.meta.url));
+    worker.onmessage = onMessage;
+    return worker;
+}
+
+const workers: Worker[] = Array(NUM_WORKERS).fill(0).map(createWorker);
