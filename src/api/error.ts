@@ -1,4 +1,5 @@
 import { ClientAction } from "state/action";
+import { SafeValidationErrors } from "safe/message-types";
 
 function extractMessage(messageOrError: any): string {
     if (messageOrError instanceof DOMException && messageOrError.name === "AbortError") {
@@ -10,7 +11,7 @@ function extractMessage(messageOrError: any): string {
     return String(messageOrError);
 }
 
-export function formatSchemaErrors(errors: {message?: string}[] | null | undefined): string {
+export function formatSchemaErrors(errors: SafeValidationErrors | null | undefined): string {
     return errors != null ? errors.map(({message}) => message).join(", ") : "";
 }
 
@@ -42,16 +43,6 @@ export class NodeError extends VerboseError {
                 details: string | null = null, cause: ClientAction | null = null) {
         const message = (title ? `${title}: ` : "") + extractMessage(messageOrError);
         const messageVerbose = `${method} ${rootApi}${location}: ${message}` + (details ? `: ${details}` : "");
-        super(message, messageVerbose, cause);
-    }
-
-}
-
-export class BodyError extends VerboseError {
-
-    constructor(details: string | null = null, cause: ClientAction | null = null) {
-        const message = "Server returned incorrect Body";
-        const messageVerbose = `${message}` + (details ? `: ${details}` : "");
         super(message, messageVerbose, cause);
     }
 

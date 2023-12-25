@@ -337,6 +337,19 @@ def generate_structures(structs: dict[str, Structure], tfile: TextIO, sfile: Tex
     if len(loop) > 0:
         print('Dependency loop in structures: ' + ', '.join(loop))
         exit(1)
+    generate_schema_map(structs, sfile)
+
+
+def generate_schema_map(structs: dict[str, Structure], sfile: TextIO) -> None:
+    sfile.write(f'\nexport const NODE_API_SCHEMAS: Partial<Record<string, ValidateFunction<any>>> = {{\n')
+    for struct in structs.values():
+        if not struct.output:
+            continue
+        name = struct.data['name']
+        sfile.write(f'    {name},\n')
+        if struct.output_array:
+            sfile.write(f'    {name}Array,\n')
+    sfile.write('};\n')
 
 
 def comma_wrap(s: str, indent: int) -> str:
@@ -468,7 +481,7 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                                 .replace(')', '\n    )'))
 
             result = 'API.Result'
-            result_schema = 'NodeApiSchema.Result'
+            result_schema = 'Result'
             result_body = False
             if 'out' in request:
                 if 'type' in request['out']:
@@ -477,11 +490,11 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                               .format(type=request['out']['type'], method=request['type'], url=request['url']))
                         exit(1)
                     result = 'Blob'
-                    result_schema = '"blob"'
+                    result_schema = 'blob'
                 else:
                     struct = request['out']['struct']
                     result = 'API.' + struct
-                    result_schema = 'NodeApiSchema.' + struct
+                    result_schema = struct
                     if struct in structs and structs[struct].uses_body:
                         result_body = True
                     if request['out'].get('array', False):
@@ -494,17 +507,14 @@ def generate_sagas(api: Any, structs: dict[str, Structure], afile: TextIO) -> No
                 items = ', '.join('"%s": with%s' % (flag, flag.capitalize()) for flag in flags)
                 afile.write(f'    const {flag_js_name} = commaSeparatedFlags({{{items}}});\n')
             afile.write(f'    const location = {location};\n')
+            afile.write(f'    return yield* callApi<{result}>({{\n')
+            decode_bodies = ''
             if result_body:
-                afile.write('    return decodeBodies(caller, yield* callApi({\n')
-            else:
-                afile.write('    return yield* callApi({\n')
+                decode_bodies = ', decodeBodies: true'
             call_params = (f'        caller, nodeName, method: "{method}", location{body}{auth}'
-                           f', schema: {result_schema}, errorFilter\n')
+                           f', schema: "{result_schema}"{decode_bodies}, errorFilter\n')
             afile.write(comma_wrap(call_params, 2))
-            if result_body:
-                afile.write('    }));\n')
-            else:
-                afile.write('    });\n')
+            afile.write('    });\n')
             afile.write('}\n')
 
 
@@ -516,7 +526,7 @@ export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" |
 
 PREAMBLE_SCHEMAS = '''// This file is generated
 
-import { JSONSchemaType } from 'ajv';
+import { JSONSchemaType, ValidateFunction } from 'ajv';
 
 import schema from "api/schema";
 import * as API from "api/node/api-types";
@@ -524,8 +534,7 @@ import * as API from "api/node/api-types";
 
 PREAMBLE_SAGAS = '''// This file is generated
 
-import * as NodeApiSchema from "api/node/api-schemas"
-import { callApi, CallApiResult, decodeBodies, ErrorFilter } from "api/node/call";
+import { callApi, CallApiResult, ErrorFilter } from "api/node/call";
 import * as API from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
 import { ClientAction } from "state/action";

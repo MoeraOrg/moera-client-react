@@ -1,7 +1,6 @@
 // This file is generated
 
-import * as NodeApiSchema from "api/node/api-schemas"
-import { callApi, CallApiResult, decodeBodies, ErrorFilter } from "api/node/call";
+import { callApi, CallApiResult, ErrorFilter } from "api/node/call";
 import * as API from "api/node/api-types";
 import { ProgressHandler } from 'api/fetcher';
 import { ClientAction } from "state/action";
@@ -14,9 +13,9 @@ export function* searchActivityReactions(
 ): CallApiResult<API.ActivityReactionInfo[]> {
 
     const location = "/activity/reactions/search";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: filter, auth,
-        schema: NodeApiSchema.ActivityReactionInfoArray, errorFilter
+    return yield* callApi<API.ActivityReactionInfo[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "ActivityReactionInfoArray",
+        errorFilter
     });
 }
 
@@ -26,9 +25,8 @@ export function* getRemotePostingVerificationStatus(
 ): CallApiResult<API.RemotePostingVerificationInfo> {
 
     const location = ut`/async-operations/remote-posting-verification/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.RemotePostingVerificationInfo,
-        errorFilter
+    return yield* callApi<API.RemotePostingVerificationInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "RemotePostingVerificationInfo", errorFilter
     });
 }
 
@@ -38,9 +36,8 @@ export function* getRemoteReactionVerificationStatus(
 ): CallApiResult<API.RemoteReactionVerificationInfo> {
 
     const location = ut`/async-operations/remote-reaction-verification/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.RemoteReactionVerificationInfo,
-        errorFilter
+    return yield* callApi<API.RemoteReactionVerificationInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "RemoteReactionVerificationInfo", errorFilter
     });
 }
 
@@ -49,8 +46,8 @@ export function* getAvatars(
 ): CallApiResult<API.AvatarInfo[]> {
 
     const location = "/avatars";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.AvatarInfoArray, errorFilter
+    return yield* callApi<API.AvatarInfo[]>({
+        caller, nodeName, method: "GET", location, schema: "AvatarInfoArray", errorFilter
     });
 }
 
@@ -60,9 +57,8 @@ export function* createAvatar(
 ): CallApiResult<API.AvatarInfo> {
 
     const location = "/avatars";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: avatar, auth, schema: NodeApiSchema.AvatarInfo,
-        errorFilter
+    return yield* callApi<API.AvatarInfo>({
+        caller, nodeName, method: "POST", location, body: avatar, auth, schema: "AvatarInfo", errorFilter
     });
 }
 
@@ -71,8 +67,8 @@ export function* getAvatar(
 ): CallApiResult<API.AvatarInfo> {
 
     const location = ut`/avatars/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.AvatarInfo, errorFilter
+    return yield* callApi<API.AvatarInfo>({
+        caller, nodeName, method: "GET", location, schema: "AvatarInfo", errorFilter
     });
 }
 
@@ -82,8 +78,8 @@ export function* deleteAvatar(
 ): CallApiResult<API.Result> {
 
     const location = ut`/avatars/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -93,8 +89,8 @@ export function* reorderAvatars(
 ): CallApiResult<API.AvatarOrdinal[]> {
 
     const location = "/avatars/reorder";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: order, auth, schema: NodeApiSchema.AvatarOrdinalArray,
+    return yield* callApi<API.AvatarOrdinal[]>({
+        caller, nodeName, method: "POST", location, body: order, auth, schema: "AvatarOrdinalArray",
         errorFilter
     });
 }
@@ -105,9 +101,9 @@ export function* blockInstant(
 ): CallApiResult<API.BlockedInstantInfo> {
 
     const location = "/blocked-instants";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: instant, auth,
-        schema: NodeApiSchema.BlockedInstantInfo, errorFilter
+    return yield* callApi<API.BlockedInstantInfo>({
+        caller, nodeName, method: "POST", location, body: instant, auth, schema: "BlockedInstantInfo",
+        errorFilter
     });
 }
 
@@ -117,8 +113,8 @@ export function* getBlockedInstant(
 ): CallApiResult<API.BlockedInstantInfo> {
 
     const location = ut`/blocked-instants/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.BlockedInstantInfo, errorFilter
+    return yield* callApi<API.BlockedInstantInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "BlockedInstantInfo", errorFilter
     });
 }
 
@@ -128,8 +124,8 @@ export function* unblockInstant(
 ): CallApiResult<API.Result> {
 
     const location = ut`/blocked-instants/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -139,9 +135,9 @@ export function* searchBlockedInstants(
 ): CallApiResult<API.BlockedInstantInfo[]> {
 
     const location = "/blocked-instants/search";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: filter, auth,
-        schema: NodeApiSchema.BlockedInstantInfoArray, errorFilter
+    return yield* callApi<API.BlockedInstantInfo[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "BlockedInstantInfoArray",
+        errorFilter
     });
 }
 
@@ -151,9 +147,8 @@ export function* blockUser(
 ): CallApiResult<API.BlockedUserInfo> {
 
     const location = "/people/blocked-users";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: user, auth, schema: NodeApiSchema.BlockedUserInfo,
-        errorFilter
+    return yield* callApi<API.BlockedUserInfo>({
+        caller, nodeName, method: "POST", location, body: user, auth, schema: "BlockedUserInfo", errorFilter
     });
 }
 
@@ -163,8 +158,8 @@ export function* getBlockedUser(
 ): CallApiResult<API.BlockedUserInfo> {
 
     const location = ut`/people/blocked-users/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.BlockedUserInfo, errorFilter
+    return yield* callApi<API.BlockedUserInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "BlockedUserInfo", errorFilter
     });
 }
 
@@ -174,8 +169,8 @@ export function* unblockUser(
 ): CallApiResult<API.Result> {
 
     const location = ut`/people/blocked-users/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -185,9 +180,9 @@ export function* searchBlockedUsers(
 ): CallApiResult<API.BlockedUserInfo[]> {
 
     const location = "/people/blocked-users/search";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: filter, auth,
-        schema: NodeApiSchema.BlockedUserInfoArray, errorFilter
+    return yield* callApi<API.BlockedUserInfo[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "BlockedUserInfoArray",
+        errorFilter
     });
 }
 
@@ -197,9 +192,8 @@ export function* getBlockedUsersChecksums(
 ): CallApiResult<API.BlockedUsersChecksums> {
 
     const location = "/people/blocked-users/checksums";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.BlockedUsersChecksums,
-        errorFilter
+    return yield* callApi<API.BlockedUsersChecksums>({
+        caller, nodeName, method: "GET", location, auth, schema: "BlockedUsersChecksums", errorFilter
     });
 }
 
@@ -209,8 +203,8 @@ export function* getBlockedByUser(
 ): CallApiResult<API.BlockedByUserInfo> {
 
     const location = ut`/people/blocked-by-users/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.BlockedByUserInfo, errorFilter
+    return yield* callApi<API.BlockedByUserInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "BlockedByUserInfo", errorFilter
     });
 }
 
@@ -220,9 +214,9 @@ export function* searchBlockedByUsers(
 ): CallApiResult<API.BlockedByUserInfo[]> {
 
     const location = "/people/blocked-by-users/search";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: filter, auth,
-        schema: NodeApiSchema.BlockedByUserInfoArray, errorFilter
+    return yield* callApi<API.BlockedByUserInfo[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "BlockedByUserInfoArray",
+        errorFilter
     });
 }
 
@@ -232,8 +226,8 @@ export function* getCartes(
 ): CallApiResult<API.CarteSet> {
 
     const location = urlWithParameters(ut`/cartes`, {limit});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.CarteSet, errorFilter
+    return yield* callApi<API.CarteSet>({
+        caller, nodeName, method: "GET", location, auth, schema: "CarteSet", errorFilter
     });
 }
 
@@ -244,9 +238,10 @@ export function* getCommentsSlice(
 ): CallApiResult<API.CommentsSliceInfo> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/comments`, {after, before, limit});
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.CommentsSliceInfo, errorFilter
-    }));
+    return yield* callApi<API.CommentsSliceInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "CommentsSliceInfo", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* createComment(
@@ -255,10 +250,10 @@ export function* createComment(
 ): CallApiResult<API.CommentCreated> {
 
     const location = ut`/postings/${postingId}/comments`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "POST", location, body: comment, auth, schema: NodeApiSchema.CommentCreated,
-        errorFilter
-    }));
+    return yield* callApi<API.CommentCreated>({
+        caller, nodeName, method: "POST", location, body: comment, auth, schema: "CommentCreated",
+        decodeBodies: true, errorFilter
+    });
 }
 
 export function* getComment(
@@ -268,9 +263,9 @@ export function* getComment(
 
     const include = commaSeparatedFlags({"source": withSource});
     const location = urlWithParameters(ut`/postings/${postingId}/comments/${commentId}`, {include});
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.CommentInfo, errorFilter
-    }));
+    return yield* callApi<API.CommentInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "CommentInfo", decodeBodies: true, errorFilter
+    });
 }
 
 export function* updateAllComments(
@@ -279,9 +274,8 @@ export function* updateAllComments(
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${postingId}/comments`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: attributes, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, body: attributes, auth, schema: "Result", errorFilter
     });
 }
 
@@ -291,10 +285,10 @@ export function* updateComment(
 ): CallApiResult<API.CommentInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "PUT", location, body: comment, auth, schema: NodeApiSchema.CommentInfo,
-        errorFilter
-    }));
+    return yield* callApi<API.CommentInfo>({
+        caller, nodeName, method: "PUT", location, body: comment, auth, schema: "CommentInfo",
+        decodeBodies: true, errorFilter
+    });
 }
 
 export function* deleteComment(
@@ -303,8 +297,8 @@ export function* deleteComment(
 ): CallApiResult<API.CommentTotalInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.CommentTotalInfo, errorFilter
+    return yield* callApi<API.CommentTotalInfo>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "CommentTotalInfo", errorFilter
     });
 }
 
@@ -314,9 +308,10 @@ export function* getPostingsAttachedToComment(
 ): CallApiResult<API.PostingInfo[]> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/attached`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingInfoArray, errorFilter
-    }));
+    return yield* callApi<API.PostingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingInfoArray", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* getCommentRevisions(
@@ -325,10 +320,10 @@ export function* getCommentRevisions(
 ): CallApiResult<API.CommentRevisionInfo[]> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/revisions`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.CommentRevisionInfoArray,
+    return yield* callApi<API.CommentRevisionInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "CommentRevisionInfoArray", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* getCommentRevision(
@@ -337,9 +332,10 @@ export function* getCommentRevision(
 ): CallApiResult<API.CommentRevisionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/revisions/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.CommentRevisionInfo, errorFilter
-    }));
+    return yield* callApi<API.CommentRevisionInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "CommentRevisionInfo", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* createCommentReaction(
@@ -348,8 +344,8 @@ export function* createCommentReaction(
 ): CallApiResult<API.ReactionCreated> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: reaction, auth, schema: NodeApiSchema.ReactionCreated,
+    return yield* callApi<API.ReactionCreated>({
+        caller, nodeName, method: "POST", location, body: reaction, auth, schema: "ReactionCreated",
         errorFilter
     });
 }
@@ -360,9 +356,8 @@ export function* updateCommentReaction(
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: reaction, auth, schema: NodeApiSchema.ReactionInfo,
-        errorFilter
+    return yield* callApi<API.ReactionInfo>({
+        caller, nodeName, method: "PUT", location, body: reaction, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
@@ -376,8 +371,8 @@ export function* getCommentReactionsSlice(
         ut`/postings/${postingId}/comments/${commentId}/reactions`,
         {negative, emoji, before, limit}
     );
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ReactionsSliceInfo, errorFilter
+    return yield* callApi<API.ReactionsSliceInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "ReactionsSliceInfo", errorFilter
     });
 }
 
@@ -387,8 +382,8 @@ export function* getCommentReaction(
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ReactionInfo, errorFilter
+    return yield* callApi<API.ReactionInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
@@ -398,8 +393,8 @@ export function* deleteAllCommentReactions(
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -409,9 +404,8 @@ export function* deleteCommentReaction(
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reactions/${ownerName}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.ReactionTotalsInfo,
-        errorFilter
+    return yield* callApi<API.ReactionTotalsInfo>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
@@ -421,8 +415,8 @@ export function* getCommentReactionTotals(
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/comments/${commentId}/reaction-totals`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ReactionTotalsInfo, errorFilter
+    return yield* callApi<API.ReactionTotalsInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
@@ -432,8 +426,8 @@ export function* getContacts(
 ): CallApiResult<API.ContactInfo[]> {
 
     const location = urlWithParameters(ut`/people/contacts`, {query, limit});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ContactInfoArray, errorFilter
+    return yield* callApi<API.ContactInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "ContactInfoArray", errorFilter
     });
 }
 
@@ -442,8 +436,8 @@ export function* checkCredentials(
 ): CallApiResult<API.CredentialsCreated> {
 
     const location = "/credentials";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.CredentialsCreated, errorFilter
+    return yield* callApi<API.CredentialsCreated>({
+        caller, nodeName, method: "GET", location, schema: "CredentialsCreated", errorFilter
     });
 }
 
@@ -453,9 +447,8 @@ export function* createCredentials(
 ): CallApiResult<API.Result> {
 
     const location = "/credentials";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: credentials, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: credentials, schema: "Result", errorFilter
     });
 }
 
@@ -465,8 +458,8 @@ export function* updateCredentials(
 ): CallApiResult<API.Result> {
 
     const location = "/credentials";
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: credentials, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, body: credentials, schema: "Result", errorFilter
     });
 }
 
@@ -476,8 +469,8 @@ export function* deleteCredentials(
 ): CallApiResult<API.Result> {
 
     const location = "/credentials";
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -486,8 +479,8 @@ export function* resetCredentials(
 ): CallApiResult<API.EmailHint> {
 
     const location = "/credentials/reset";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, schema: NodeApiSchema.EmailHint, errorFilter
+    return yield* callApi<API.EmailHint>({
+        caller, nodeName, method: "POST", location, schema: "EmailHint", errorFilter
     });
 }
 
@@ -497,9 +490,10 @@ export function* getDeletedPostings(
 ): CallApiResult<API.PostingInfo[]> {
 
     const location = urlWithParameters(ut`/deleted-postings`, {page, limit});
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingInfoArray, errorFilter
-    }));
+    return yield* callApi<API.PostingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingInfoArray", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* getDeletedPosting(
@@ -508,9 +502,9 @@ export function* getDeletedPosting(
 ): CallApiResult<API.PostingInfo> {
 
     const location = ut`/deleted-postings/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingInfo, errorFilter
-    }));
+    return yield* callApi<API.PostingInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingInfo", decodeBodies: true, errorFilter
+    });
 }
 
 export function* restoreDeletedPosting(
@@ -519,9 +513,10 @@ export function* restoreDeletedPosting(
 ): CallApiResult<API.PostingInfo> {
 
     const location = ut`/deleted-postings/${id}/restore`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.PostingInfo, errorFilter
-    }));
+    return yield* callApi<API.PostingInfo>({
+        caller, nodeName, method: "POST", location, auth, schema: "PostingInfo", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* getDeletePostingRevisions(
@@ -530,10 +525,10 @@ export function* getDeletePostingRevisions(
 ): CallApiResult<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/deleted-postings/${postingId}/revisions`, {limit});
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingRevisionInfoArray,
+    return yield* callApi<API.PostingRevisionInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfoArray", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* getDeletedPostingRevision(
@@ -542,9 +537,10 @@ export function* getDeletedPostingRevision(
 ): CallApiResult<API.PostingRevisionInfo> {
 
     const location = ut`/deleted-postings/${postingId}/revisions/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingRevisionInfo, errorFilter
-    }));
+    return yield* callApi<API.PostingRevisionInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* restoreDeletedPostingRevision(
@@ -553,10 +549,10 @@ export function* restoreDeletedPostingRevision(
 ): CallApiResult<API.PostingRevisionInfo> {
 
     const location = ut`/postings/${postingId}/revisions/${id}/restore`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.PostingRevisionInfo,
+    return yield* callApi<API.PostingRevisionInfo>({
+        caller, nodeName, method: "POST", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* getDomains(
@@ -565,8 +561,8 @@ export function* getDomains(
 ): CallApiResult<API.DomainInfo[]> {
 
     const location = "/domains";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.DomainInfoArray, errorFilter
+    return yield* callApi<API.DomainInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "DomainInfoArray", errorFilter
     });
 }
 
@@ -576,8 +572,8 @@ export function* getDomain(
 ): CallApiResult<API.DomainInfo> {
 
     const location = ut`/domains/${name}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.DomainInfo, errorFilter
+    return yield* callApi<API.DomainInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "DomainInfo", errorFilter
     });
 }
 
@@ -587,9 +583,8 @@ export function* createDomain(
 ): CallApiResult<API.DomainInfo> {
 
     const location = "/domains";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: domain, auth, schema: NodeApiSchema.DomainInfo,
-        errorFilter
+    return yield* callApi<API.DomainInfo>({
+        caller, nodeName, method: "POST", location, body: domain, auth, schema: "DomainInfo", errorFilter
     });
 }
 
@@ -599,9 +594,8 @@ export function* updateDomain(
 ): CallApiResult<API.DomainInfo> {
 
     const location = ut`/domains/${name}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: domain, auth, schema: NodeApiSchema.DomainInfo,
-        errorFilter
+    return yield* callApi<API.DomainInfo>({
+        caller, nodeName, method: "PUT", location, body: domain, auth, schema: "DomainInfo", errorFilter
     });
 }
 
@@ -611,8 +605,8 @@ export function* deleteDomain(
 ): CallApiResult<API.Result> {
 
     const location = ut`/domains/${name}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -621,8 +615,8 @@ export function* isDomainAvailable(
 ): CallApiResult<API.DomainAvailable> {
 
     const location = urlWithParameters(ut`/domains/available`, {nodeName: remoteNodeName});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.DomainAvailable, errorFilter
+    return yield* callApi<API.DomainAvailable>({
+        caller, nodeName, method: "GET", location, schema: "DomainAvailable", errorFilter
     });
 }
 
@@ -636,9 +630,10 @@ export function* getDrafts(
         ut`/drafts`,
         {draftType, nodeName: remoteNodeName, postingId, commentId, page, limit}
     );
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.DraftInfoArray, errorFilter
-    }));
+    return yield* callApi<API.DraftInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "DraftInfoArray", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* createDraft(
@@ -647,10 +642,10 @@ export function* createDraft(
 ): CallApiResult<API.DraftInfo> {
 
     const location = "/drafts";
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "POST", location, body: draft, auth, schema: NodeApiSchema.DraftInfo,
+    return yield* callApi<API.DraftInfo>({
+        caller, nodeName, method: "POST", location, body: draft, auth, schema: "DraftInfo", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* getDraft(
@@ -659,9 +654,9 @@ export function* getDraft(
 ): CallApiResult<API.DraftInfo> {
 
     const location = ut`/drafts/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.DraftInfo, errorFilter
-    }));
+    return yield* callApi<API.DraftInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "DraftInfo", decodeBodies: true, errorFilter
+    });
 }
 
 export function* updateDraft(
@@ -670,10 +665,10 @@ export function* updateDraft(
 ): CallApiResult<API.DraftInfo> {
 
     const location = ut`/drafts/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "PUT", location, body: draft, auth, schema: NodeApiSchema.DraftInfo,
+    return yield* callApi<API.DraftInfo>({
+        caller, nodeName, method: "PUT", location, body: draft, auth, schema: "DraftInfo", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* deleteDraft(
@@ -682,8 +677,8 @@ export function* deleteDraft(
 ): CallApiResult<API.Result> {
 
     const location = ut`/drafts/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -693,8 +688,8 @@ export function* getFeatures(
 ): CallApiResult<API.Features> {
 
     const location = "/features";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.Features, errorFilter
+    return yield* callApi<API.Features>({
+        caller, nodeName, method: "GET", location, auth, schema: "Features", errorFilter
     });
 }
 
@@ -704,8 +699,8 @@ export function* getFeeds(
 ): CallApiResult<API.FeedInfo[]> {
 
     const location = "/feeds";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FeedInfoArray, errorFilter
+    return yield* callApi<API.FeedInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "FeedInfoArray", errorFilter
     });
 }
 
@@ -715,8 +710,8 @@ export function* getFeedGeneral(
 ): CallApiResult<API.FeedInfo> {
 
     const location = ut`/feeds/${feedName}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FeedInfo, errorFilter
+    return yield* callApi<API.FeedInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "FeedInfo", errorFilter
     });
 }
 
@@ -726,8 +721,8 @@ export function* getFeedStatus(
 ): CallApiResult<API.FeedStatus> {
 
     const location = ut`/feeds/${feedName}/status`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FeedStatus, errorFilter
+    return yield* callApi<API.FeedStatus>({
+        caller, nodeName, method: "GET", location, auth, schema: "FeedStatus", errorFilter
     });
 }
 
@@ -737,9 +732,8 @@ export function* updateFeedStatus(
 ): CallApiResult<API.FeedStatus> {
 
     const location = ut`/feeds/${feedName}/status`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: change, auth, schema: NodeApiSchema.FeedStatus,
-        errorFilter
+    return yield* callApi<API.FeedStatus>({
+        caller, nodeName, method: "PUT", location, body: change, auth, schema: "FeedStatus", errorFilter
     });
 }
 
@@ -750,9 +744,10 @@ export function* getFeedSlice(
 ): CallApiResult<API.FeedSliceInfo> {
 
     const location = urlWithParameters(ut`/feeds/${feedName}/stories`, {after, before, limit});
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FeedSliceInfo, errorFilter
-    }));
+    return yield* callApi<API.FeedSliceInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "FeedSliceInfo", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* getFriendGroups(
@@ -761,9 +756,8 @@ export function* getFriendGroups(
 ): CallApiResult<API.FriendGroupInfo[]> {
 
     const location = "/people/friends/groups";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FriendGroupInfoArray,
-        errorFilter
+    return yield* callApi<API.FriendGroupInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "FriendGroupInfoArray", errorFilter
     });
 }
 
@@ -773,8 +767,8 @@ export function* getFriendGroup(
 ): CallApiResult<API.FriendGroupInfo> {
 
     const location = ut`/people/friends/groups/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FriendGroupInfo, errorFilter
+    return yield* callApi<API.FriendGroupInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "FriendGroupInfo", errorFilter
     });
 }
 
@@ -784,9 +778,9 @@ export function* createFriendGroup(
 ): CallApiResult<API.FriendGroupInfo> {
 
     const location = "/people/friends/groups";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: friendGroup, auth,
-        schema: NodeApiSchema.FriendGroupInfo, errorFilter
+    return yield* callApi<API.FriendGroupInfo>({
+        caller, nodeName, method: "POST", location, body: friendGroup, auth, schema: "FriendGroupInfo",
+        errorFilter
     });
 }
 
@@ -796,9 +790,9 @@ export function* updateFriendGroup(
 ): CallApiResult<API.FriendGroupInfo> {
 
     const location = ut`/people/friends/groups/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: friendGroup, auth,
-        schema: NodeApiSchema.FriendGroupInfo, errorFilter
+    return yield* callApi<API.FriendGroupInfo>({
+        caller, nodeName, method: "PUT", location, body: friendGroup, auth, schema: "FriendGroupInfo",
+        errorFilter
     });
 }
 
@@ -808,8 +802,8 @@ export function* deleteFriendGroup(
 ): CallApiResult<API.Result> {
 
     const location = ut`/people/friends/groups/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -819,8 +813,8 @@ export function* getFriends(
 ): CallApiResult<API.FriendInfo[]> {
 
     const location = urlWithParameters(ut`/people/friends`, {groupId});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FriendInfoArray, errorFilter
+    return yield* callApi<API.FriendInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "FriendInfoArray", errorFilter
     });
 }
 
@@ -830,8 +824,8 @@ export function* getFriend(
 ): CallApiResult<API.FriendInfo> {
 
     const location = ut`/people/friends/${name}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FriendInfo, errorFilter
+    return yield* callApi<API.FriendInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "FriendInfo", errorFilter
     });
 }
 
@@ -841,9 +835,8 @@ export function* updateFriends(
 ): CallApiResult<API.FriendInfo[]> {
 
     const location = "/people/friends";
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: friends, auth, schema: NodeApiSchema.FriendInfoArray,
-        errorFilter
+    return yield* callApi<API.FriendInfo[]>({
+        caller, nodeName, method: "PUT", location, body: friends, auth, schema: "FriendInfoArray", errorFilter
     });
 }
 
@@ -853,8 +846,8 @@ export function* getFriendOfs(
 ): CallApiResult<API.FriendOfInfo[]> {
 
     const location = "/people/friend-ofs";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FriendOfInfoArray, errorFilter
+    return yield* callApi<API.FriendOfInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "FriendOfInfoArray", errorFilter
     });
 }
 
@@ -864,8 +857,8 @@ export function* getFriendOf(
 ): CallApiResult<API.FriendOfInfo> {
 
     const location = ut`/people/friend-ofs/${name}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.FriendOfInfo, errorFilter
+    return yield* callApi<API.FriendOfInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "FriendOfInfo", errorFilter
     });
 }
 
@@ -875,9 +868,9 @@ export function* uploadPrivateMedia(
 ): CallApiResult<API.PrivateMediaFileInfo> {
 
     const location = "/media/private";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: file, onProgress, auth,
-        schema: NodeApiSchema.PrivateMediaFileInfo, errorFilter
+    return yield* callApi<API.PrivateMediaFileInfo>({
+        caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PrivateMediaFileInfo",
+        errorFilter
     });
 }
 
@@ -887,7 +880,7 @@ export function* getPrivateMedia(
 ): CallApiResult<Blob> {
 
     const location = urlWithParameters(ut`/media/private/${id}/data`, {width, download});
-    return yield* callApi({
+    return yield* callApi<Blob>({
         caller, nodeName, method: "GET", location, auth, schema: "blob", errorFilter
     });
 }
@@ -898,9 +891,8 @@ export function* getPrivateMediaInfo(
 ): CallApiResult<API.PrivateMediaFileInfo> {
 
     const location = ut`/media/private/${id}/info`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PrivateMediaFileInfo,
-        errorFilter
+    return yield* callApi<API.PrivateMediaFileInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "PrivateMediaFileInfo", errorFilter
     });
 }
 
@@ -910,9 +902,10 @@ export function* getPrivateMediaParentEntry(
 ): CallApiResult<API.EntryInfo[]> {
 
     const location = ut`/media/private/${id}/parent`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.EntryInfoArray, errorFilter
-    }));
+    return yield* callApi<API.EntryInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "EntryInfoArray", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* uploadPublicMedia(
@@ -921,9 +914,9 @@ export function* uploadPublicMedia(
 ): CallApiResult<API.PublicMediaFileInfo> {
 
     const location = "/media/public";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: file, onProgress, auth,
-        schema: NodeApiSchema.PublicMediaFileInfo, errorFilter
+    return yield* callApi<API.PublicMediaFileInfo>({
+        caller, nodeName, method: "POST", location, body: file, onProgress, auth, schema: "PublicMediaFileInfo",
+        errorFilter
     });
 }
 
@@ -933,7 +926,7 @@ export function* getPublicMedia(
 ): CallApiResult<Blob> {
 
     const location = urlWithParameters(ut`/media/public/${id}/data`, {width, download});
-    return yield* callApi({
+    return yield* callApi<Blob>({
         caller, nodeName, method: "GET", location, schema: "blob", errorFilter
     });
 }
@@ -943,8 +936,8 @@ export function* getPublicMediaInfo(
 ): CallApiResult<API.PublicMediaFileInfo> {
 
     const location = ut`/media/public/${id}/info`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.PublicMediaFileInfo, errorFilter
+    return yield* callApi<API.PublicMediaFileInfo>({
+        caller, nodeName, method: "GET", location, schema: "PublicMediaFileInfo", errorFilter
     });
 }
 
@@ -954,8 +947,8 @@ export function* getNodeName(
 ): CallApiResult<API.NodeNameInfo> {
 
     const location = "/node-name";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.NodeNameInfo, errorFilter
+    return yield* callApi<API.NodeNameInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "NodeNameInfo", errorFilter
     });
 }
 
@@ -965,9 +958,9 @@ export function* createNodeName(
 ): CallApiResult<API.RegisteredNameSecret> {
 
     const location = "/node-name";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: nameToRegister, auth,
-        schema: NodeApiSchema.RegisteredNameSecret, errorFilter
+    return yield* callApi<API.RegisteredNameSecret>({
+        caller, nodeName, method: "POST", location, body: nameToRegister, auth, schema: "RegisteredNameSecret",
+        errorFilter
     });
 }
 
@@ -977,9 +970,8 @@ export function* updateNodeName(
 ): CallApiResult<API.Result> {
 
     const location = "/node-name";
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: secret, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, body: secret, auth, schema: "Result", errorFilter
     });
 }
 
@@ -989,8 +981,8 @@ export function* deleteNodeName(
 ): CallApiResult<API.Result> {
 
     const location = "/node-name";
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1000,8 +992,8 @@ export function* sendNotification(
 ): CallApiResult<API.Result> {
 
     const location = "/notifications";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: packet, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: packet, schema: "Result", errorFilter
     });
 }
 
@@ -1011,8 +1003,8 @@ export function* getPeopleGeneral(
 ): CallApiResult<API.PeopleGeneralInfo> {
 
     const location = "/people";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PeopleGeneralInfo, errorFilter
+    return yield* callApi<API.PeopleGeneralInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "PeopleGeneralInfo", errorFilter
     });
 }
 
@@ -1022,9 +1014,8 @@ export function* registerPlugin(
 ): CallApiResult<API.PluginInfo> {
 
     const location = "/plugins";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: plugin, auth, schema: NodeApiSchema.PluginInfo,
-        errorFilter
+    return yield* callApi<API.PluginInfo>({
+        caller, nodeName, method: "POST", location, body: plugin, auth, schema: "PluginInfo", errorFilter
     });
 }
 
@@ -1034,8 +1025,8 @@ export function* getPlugins(
 ): CallApiResult<API.PluginInfo[]> {
 
     const location = "/plugins";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PluginInfoArray, errorFilter
+    return yield* callApi<API.PluginInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "PluginInfoArray", errorFilter
     });
 }
 
@@ -1045,8 +1036,8 @@ export function* getPlugin(
 ): CallApiResult<API.PluginInfo> {
 
     const location = ut`/plugins/${pluginName}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PluginInfo, errorFilter
+    return yield* callApi<API.PluginInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "PluginInfo", errorFilter
     });
 }
 
@@ -1056,8 +1047,8 @@ export function* unregisterPlugin(
 ): CallApiResult<API.Result> {
 
     const location = ut`/plugins/${pluginName}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1067,10 +1058,10 @@ export function* createPosting(
 ): CallApiResult<API.PostingInfo> {
 
     const location = "/postings";
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "POST", location, body: posting, auth, schema: NodeApiSchema.PostingInfo,
-        errorFilter
-    }));
+    return yield* callApi<API.PostingInfo>({
+        caller, nodeName, method: "POST", location, body: posting, auth, schema: "PostingInfo",
+        decodeBodies: true, errorFilter
+    });
 }
 
 export function* updatePosting(
@@ -1079,10 +1070,10 @@ export function* updatePosting(
 ): CallApiResult<API.PostingInfo> {
 
     const location = ut`/postings/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "PUT", location, body: posting, auth, schema: NodeApiSchema.PostingInfo,
-        errorFilter
-    }));
+    return yield* callApi<API.PostingInfo>({
+        caller, nodeName, method: "PUT", location, body: posting, auth, schema: "PostingInfo",
+        decodeBodies: true, errorFilter
+    });
 }
 
 export function* getPosting(
@@ -1092,9 +1083,9 @@ export function* getPosting(
 
     const include = commaSeparatedFlags({"source": withSource});
     const location = urlWithParameters(ut`/postings/${id}`, {include});
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingInfo, errorFilter
-    }));
+    return yield* callApi<API.PostingInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingInfo", decodeBodies: true, errorFilter
+    });
 }
 
 export function* deletePosting(
@@ -1103,8 +1094,8 @@ export function* deletePosting(
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1114,9 +1105,10 @@ export function* getPostingsAttachedToPosting(
 ): CallApiResult<API.PostingInfo[]> {
 
     const location = ut`/postings/${id}/attached`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingInfoArray, errorFilter
-    }));
+    return yield* callApi<API.PostingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingInfoArray", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* getPostingRevisions(
@@ -1125,10 +1117,10 @@ export function* getPostingRevisions(
 ): CallApiResult<API.PostingRevisionInfo[]> {
 
     const location = urlWithParameters(ut`/postings/${postingId}/revisions`, {limit});
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingRevisionInfoArray,
+    return yield* callApi<API.PostingRevisionInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfoArray", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* getPostingRevision(
@@ -1137,9 +1129,10 @@ export function* getPostingRevision(
 ): CallApiResult<API.PostingRevisionInfo> {
 
     const location = ut`/postings/${postingId}/revisions/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.PostingRevisionInfo, errorFilter
-    }));
+    return yield* callApi<API.PostingRevisionInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
+        errorFilter
+    });
 }
 
 export function* restorePostingRevision(
@@ -1148,10 +1141,10 @@ export function* restorePostingRevision(
 ): CallApiResult<API.PostingRevisionInfo> {
 
     const location = ut`/postings/${postingId}/revisions/${id}/restore`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.PostingRevisionInfo,
+    return yield* callApi<API.PostingRevisionInfo>({
+        caller, nodeName, method: "POST", location, auth, schema: "PostingRevisionInfo", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* createPostingReaction(
@@ -1160,8 +1153,8 @@ export function* createPostingReaction(
 ): CallApiResult<API.ReactionCreated> {
 
     const location = ut`/postings/${postingId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: reaction, auth, schema: NodeApiSchema.ReactionCreated,
+    return yield* callApi<API.ReactionCreated>({
+        caller, nodeName, method: "POST", location, body: reaction, auth, schema: "ReactionCreated",
         errorFilter
     });
 }
@@ -1176,8 +1169,8 @@ export function* getPostingReactionsSlice(
         ut`/postings/${postingId}/reactions`,
         {negative, emoji, before, limit}
     );
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ReactionsSliceInfo, errorFilter
+    return yield* callApi<API.ReactionsSliceInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "ReactionsSliceInfo", errorFilter
     });
 }
 
@@ -1187,9 +1180,8 @@ export function* updatePostingReaction(
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: reaction, auth, schema: NodeApiSchema.ReactionInfo,
-        errorFilter
+    return yield* callApi<API.ReactionInfo>({
+        caller, nodeName, method: "PUT", location, body: reaction, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
@@ -1199,8 +1191,8 @@ export function* getPostingReaction(
 ): CallApiResult<API.ReactionInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ReactionInfo, errorFilter
+    return yield* callApi<API.ReactionInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "ReactionInfo", errorFilter
     });
 }
 
@@ -1210,8 +1202,8 @@ export function* deleteAllPostingReactions(
 ): CallApiResult<API.Result> {
 
     const location = ut`/postings/${postingId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1221,9 +1213,8 @@ export function* deletePostingReaction(
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/reactions/${ownerName}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.ReactionTotalsInfo,
-        errorFilter
+    return yield* callApi<API.ReactionTotalsInfo>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
@@ -1233,8 +1224,8 @@ export function* searchPostingReactions(
 ): CallApiResult<API.ReactionInfo[]> {
 
     const location = "/postings/reactions/search";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: filter, auth, schema: NodeApiSchema.ReactionInfoArray,
+    return yield* callApi<API.ReactionInfo[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "ReactionInfoArray",
         errorFilter
     });
 }
@@ -1245,8 +1236,8 @@ export function* getPostingReactionTotals(
 ): CallApiResult<API.ReactionTotalsInfo> {
 
     const location = ut`/postings/${postingId}/reaction-totals`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ReactionTotalsInfo, errorFilter
+    return yield* callApi<API.ReactionTotalsInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "ReactionTotalsInfo", errorFilter
     });
 }
 
@@ -1256,9 +1247,9 @@ export function* searchPostingReactionTotals(
 ): CallApiResult<API.ReactionTotalsInfo[]> {
 
     const location = "/postings/reaction-totals/search";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: filter, auth,
-        schema: NodeApiSchema.ReactionTotalsInfoArray, errorFilter
+    return yield* callApi<API.ReactionTotalsInfo[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "ReactionTotalsInfoArray",
+        errorFilter
     });
 }
 
@@ -1269,8 +1260,8 @@ export function* getProfile(
 
     const include = commaSeparatedFlags({"source": withSource});
     const location = urlWithParameters(ut`/profile`, {include});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.ProfileInfo, errorFilter
+    return yield* callApi<API.ProfileInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "ProfileInfo", errorFilter
     });
 }
 
@@ -1280,9 +1271,8 @@ export function* updateProfile(
 ): CallApiResult<API.ProfileInfo> {
 
     const location = "/profile";
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: profile, auth, schema: NodeApiSchema.ProfileInfo,
-        errorFilter
+    return yield* callApi<API.ProfileInfo>({
+        caller, nodeName, method: "PUT", location, body: profile, auth, schema: "ProfileInfo", errorFilter
     });
 }
 
@@ -1292,7 +1282,7 @@ export function* proxyMedia(
 ): CallApiResult<Blob> {
 
     const location = urlWithParameters(ut`/proxy/media`, {url});
-    return yield* callApi({
+    return yield* callApi<Blob>({
         caller, nodeName, method: "GET", location, auth, schema: "blob", errorFilter
     });
 }
@@ -1303,8 +1293,8 @@ export function* proxyLinkPreview(
 ): CallApiResult<API.LinkPreviewInfo> {
 
     const location = urlWithParameters(ut`/proxy/link-preview`, {url});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.LinkPreviewInfo, errorFilter
+    return yield* callApi<API.LinkPreviewInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "LinkPreviewInfo", errorFilter
     });
 }
 
@@ -1314,9 +1304,8 @@ export function* askRemoteNode(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/ask`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: details, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: details, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1326,9 +1315,8 @@ export function* createRemoteComment(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: comment, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: comment, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1338,9 +1326,8 @@ export function* updateRemoteComment(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: comment, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, body: comment, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1350,8 +1337,8 @@ export function* deleteRemoteComment(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1361,9 +1348,8 @@ export function* verifyRemoteComment(
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/verify`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.AsyncOperationCreated,
-        errorFilter
+    return yield* callApi<API.AsyncOperationCreated>({
+        caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
@@ -1373,9 +1359,8 @@ export function* createRemoteCommentReaction(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: reaction, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: reaction, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1385,8 +1370,8 @@ export function* deleteRemoteCommentReaction(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1396,9 +1381,8 @@ export function* verifyRemoteCommentReaction(
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/comments/${commentId}/reactions/${ownerName}/verify`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.AsyncOperationCreated,
-        errorFilter
+    return yield* callApi<API.AsyncOperationCreated>({
+        caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
@@ -1408,9 +1392,8 @@ export function* createRemotePosting(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: posting, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: posting, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1420,9 +1403,8 @@ export function* updateRemotePosting(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: posting, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, body: posting, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1432,8 +1414,8 @@ export function* deleteRemotePosting(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1443,9 +1425,8 @@ export function* verifyRemotePosting(
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${id}/verify`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.AsyncOperationCreated,
-        errorFilter
+    return yield* callApi<API.AsyncOperationCreated>({
+        caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
@@ -1455,9 +1436,8 @@ export function* verifyRemotePostingRevision(
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${id}/revisions/${revisionId}/verify`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.AsyncOperationCreated,
-        errorFilter
+    return yield* callApi<API.AsyncOperationCreated>({
+        caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
@@ -1467,9 +1447,8 @@ export function* createRemotePostingReaction(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: reaction, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: reaction, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1479,8 +1458,8 @@ export function* deleteRemotePostingReaction(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1490,9 +1469,8 @@ export function* verifyRemotePostingReaction(
 ): CallApiResult<API.AsyncOperationCreated> {
 
     const location = ut`/nodes/${remoteNodeName}/postings/${postingId}/reactions/${ownerName}/verify`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, auth, schema: NodeApiSchema.AsyncOperationCreated,
-        errorFilter
+    return yield* callApi<API.AsyncOperationCreated>({
+        caller, nodeName, method: "POST", location, auth, schema: "AsyncOperationCreated", errorFilter
     });
 }
 
@@ -1502,9 +1480,8 @@ export function* createRemoteSheriffOrder(
 ): CallApiResult<API.Result> {
 
     const location = ut`/nodes/${remoteNodeName}/sheriff/orders`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: sheriffOrder, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: sheriffOrder, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1514,8 +1491,8 @@ export function* getRemoteSheriffOrder(
 ): CallApiResult<API.SheriffOrderInfo> {
 
     const location = ut`/nodes/${remoteNodeName}/sheriff/orders/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.SheriffOrderInfo, errorFilter
+    return yield* callApi<API.SheriffOrderInfo>({
+        caller, nodeName, method: "GET", location, schema: "SheriffOrderInfo", errorFilter
     });
 }
 
@@ -1525,9 +1502,8 @@ export function* updateSettings(
 ): CallApiResult<API.Result> {
 
     const location = "/settings";
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: settings, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, body: settings, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1537,8 +1513,8 @@ export function* getClientSettings(
 ): CallApiResult<API.SettingInfo[]> {
 
     const location = urlWithParameters(ut`/settings/client`, {prefix});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.SettingInfoArray, errorFilter
+    return yield* callApi<API.SettingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "SettingInfoArray", errorFilter
     });
 }
 
@@ -1548,8 +1524,8 @@ export function* getNodeSettings(
 ): CallApiResult<API.SettingInfo[]> {
 
     const location = urlWithParameters(ut`/settings/node`, {prefix});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.SettingInfoArray, errorFilter
+    return yield* callApi<API.SettingInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "SettingInfoArray", errorFilter
     });
 }
 
@@ -1559,9 +1535,8 @@ export function* getNodeSettingsMetadata(
 ): CallApiResult<API.SettingMetaInfo[]> {
 
     const location = urlWithParameters(ut`/settings/node/metadata`, {prefix});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.SettingMetaInfoArray,
-        errorFilter
+    return yield* callApi<API.SettingMetaInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "SettingMetaInfoArray", errorFilter
     });
 }
 
@@ -1571,9 +1546,8 @@ export function* updateNodeSettingsMetadata(
 ): CallApiResult<API.Result> {
 
     const location = "/settings/node/metadata";
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: metadata, auth, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "PUT", location, body: metadata, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1583,9 +1557,8 @@ export function* getSheriffComplaintGroupsSlice(
 ): CallApiResult<API.SheriffComplainGroupsSliceInfo> {
 
     const location = urlWithParameters(ut`/sheriff/complains/groups`, {after, before, limit, status});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.SheriffComplainGroupsSliceInfo,
-        errorFilter
+    return yield* callApi<API.SheriffComplainGroupsSliceInfo>({
+        caller, nodeName, method: "GET", location, schema: "SheriffComplainGroupsSliceInfo", errorFilter
     });
 }
 
@@ -1594,8 +1567,8 @@ export function* getSheriffComplaintGroup(
 ): CallApiResult<API.SheriffComplainGroupInfo> {
 
     const location = ut`/sheriff/complains/groups/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.SheriffComplainGroupInfo, errorFilter
+    return yield* callApi<API.SheriffComplainGroupInfo>({
+        caller, nodeName, method: "GET", location, schema: "SheriffComplainGroupInfo", errorFilter
     });
 }
 
@@ -1604,8 +1577,8 @@ export function* getSheriffComplaintsByGroup(
 ): CallApiResult<API.SheriffComplainInfo[]> {
 
     const location = ut`/sheriff/complains/groups/${id}/complains`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.SheriffComplainInfoArray, errorFilter
+    return yield* callApi<API.SheriffComplainInfo[]>({
+        caller, nodeName, method: "GET", location, schema: "SheriffComplainInfoArray", errorFilter
     });
 }
 
@@ -1615,9 +1588,9 @@ export function* updateSheriffComplaintGroup(
 ): CallApiResult<API.SheriffComplainGroupInfo> {
 
     const location = ut`/sheriff/complains/groups/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: decision, auth,
-        schema: NodeApiSchema.SheriffComplainGroupInfo, errorFilter
+    return yield* callApi<API.SheriffComplainGroupInfo>({
+        caller, nodeName, method: "PUT", location, body: decision, auth, schema: "SheriffComplainGroupInfo",
+        errorFilter
     });
 }
 
@@ -1627,9 +1600,9 @@ export function* createSheriffComplaint(
 ): CallApiResult<API.SheriffComplainInfo> {
 
     const location = "/sheriff/complains";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: complaint, auth,
-        schema: NodeApiSchema.SheriffComplainInfo, errorFilter
+    return yield* callApi<API.SheriffComplainInfo>({
+        caller, nodeName, method: "POST", location, body: complaint, auth, schema: "SheriffComplainInfo",
+        errorFilter
     });
 }
 
@@ -1639,9 +1612,8 @@ export function* createSheriffOrder(
 ): CallApiResult<API.Result> {
 
     const location = "/sheriff/orders";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: sheriffOrder, schema: NodeApiSchema.Result,
-        errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "POST", location, body: sheriffOrder, schema: "Result", errorFilter
     });
 }
 
@@ -1651,9 +1623,9 @@ export function* getStory(
 ): CallApiResult<API.StoryInfo> {
 
     const location = ut`/stories/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.StoryInfo, errorFilter
-    }));
+    return yield* callApi<API.StoryInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "StoryInfo", decodeBodies: true, errorFilter
+    });
 }
 
 export function* updateStory(
@@ -1662,10 +1634,10 @@ export function* updateStory(
 ): CallApiResult<API.StoryInfo> {
 
     const location = ut`/stories/${id}`;
-    return decodeBodies(caller, yield* callApi({
-        caller, nodeName, method: "PUT", location, body: story, auth, schema: NodeApiSchema.StoryInfo,
+    return yield* callApi<API.StoryInfo>({
+        caller, nodeName, method: "PUT", location, body: story, auth, schema: "StoryInfo", decodeBodies: true,
         errorFilter
-    }));
+    });
 }
 
 export function* getSubscribers(
@@ -1678,8 +1650,8 @@ export function* getSubscribers(
         ut`/people/subscribers`,
         {nodeName: remoteNodeName, type, feedName, entryId}
     );
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.SubscriberInfoArray, errorFilter
+    return yield* callApi<API.SubscriberInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "SubscriberInfoArray", errorFilter
     });
 }
 
@@ -1689,8 +1661,8 @@ export function* createSubscriber(
 ): CallApiResult<API.SubscriberInfo> {
 
     const location = "/people/subscribers";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: subscriber, auth, schema: NodeApiSchema.SubscriberInfo,
+    return yield* callApi<API.SubscriberInfo>({
+        caller, nodeName, method: "POST", location, body: subscriber, auth, schema: "SubscriberInfo",
         errorFilter
     });
 }
@@ -1701,8 +1673,8 @@ export function* getSubscriber(
 ): CallApiResult<API.SubscriberInfo> {
 
     const location = ut`/people/subscribers/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.SubscriberInfo, errorFilter
+    return yield* callApi<API.SubscriberInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "SubscriberInfo", errorFilter
     });
 }
 
@@ -1712,8 +1684,8 @@ export function* updateSubscriber(
 ): CallApiResult<API.SubscriberInfo> {
 
     const location = ut`/people/subscribers/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: subscriber, auth, schema: NodeApiSchema.SubscriberInfo,
+    return yield* callApi<API.SubscriberInfo>({
+        caller, nodeName, method: "PUT", location, body: subscriber, auth, schema: "SubscriberInfo",
         errorFilter
     });
 }
@@ -1724,8 +1696,8 @@ export function* deleteSubscriber(
 ): CallApiResult<API.ContactInfo> {
 
     const location = ut`/people/subscribers/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.ContactInfo, errorFilter
+    return yield* callApi<API.ContactInfo>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "ContactInfo", errorFilter
     });
 }
 
@@ -1735,9 +1707,8 @@ export function* getSubscriptions(
 ): CallApiResult<API.SubscriptionInfo[]> {
 
     const location = urlWithParameters(ut`/people/subscriptions`, {nodeName: remoteNodeName, type});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.SubscriptionInfoArray,
-        errorFilter
+    return yield* callApi<API.SubscriptionInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "SubscriptionInfoArray", errorFilter
     });
 }
 
@@ -1747,9 +1718,9 @@ export function* createSubscription(
 ): CallApiResult<API.SubscriptionInfo> {
 
     const location = "/people/subscriptions";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: subscription, auth,
-        schema: NodeApiSchema.SubscriptionInfo, errorFilter
+    return yield* callApi<API.SubscriptionInfo>({
+        caller, nodeName, method: "POST", location, body: subscription, auth, schema: "SubscriptionInfo",
+        errorFilter
     });
 }
 
@@ -1759,9 +1730,9 @@ export function* updateSubscription(
 ): CallApiResult<API.SubscriptionInfo> {
 
     const location = ut`/people/subscriptions/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: subscription, auth,
-        schema: NodeApiSchema.SubscriptionInfo, errorFilter
+    return yield* callApi<API.SubscriptionInfo>({
+        caller, nodeName, method: "PUT", location, body: subscription, auth, schema: "SubscriptionInfo",
+        errorFilter
     });
 }
 
@@ -1771,8 +1742,8 @@ export function* deleteSubscription(
 ): CallApiResult<API.ContactInfo> {
 
     const location = ut`/people/subscriptions/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.ContactInfo, errorFilter
+    return yield* callApi<API.ContactInfo>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "ContactInfo", errorFilter
     });
 }
 
@@ -1782,9 +1753,9 @@ export function* searchSubscriptions(
 ): CallApiResult<API.SubscriptionInfo[]> {
 
     const location = "/people/subscriptions/search";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: filter, auth,
-        schema: NodeApiSchema.SubscriptionInfoArray, errorFilter
+    return yield* callApi<API.SubscriptionInfo[]>({
+        caller, nodeName, method: "POST", location, body: filter, auth, schema: "SubscriptionInfoArray",
+        errorFilter
     });
 }
 
@@ -1794,8 +1765,8 @@ export function* getTokens(
 ): CallApiResult<API.TokenInfo[]> {
 
     const location = "/tokens";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.TokenInfoArray, errorFilter
+    return yield* callApi<API.TokenInfo[]>({
+        caller, nodeName, method: "GET", location, auth, schema: "TokenInfoArray", errorFilter
     });
 }
 
@@ -1805,8 +1776,8 @@ export function* createToken(
 ): CallApiResult<API.TokenInfo> {
 
     const location = "/tokens";
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: token, schema: NodeApiSchema.TokenInfo, errorFilter
+    return yield* callApi<API.TokenInfo>({
+        caller, nodeName, method: "POST", location, body: token, schema: "TokenInfo", errorFilter
     });
 }
 
@@ -1816,8 +1787,8 @@ export function* getTokenInfo(
 ): CallApiResult<API.TokenInfo> {
 
     const location = ut`/tokens/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, auth, schema: NodeApiSchema.TokenInfo, errorFilter
+    return yield* callApi<API.TokenInfo>({
+        caller, nodeName, method: "GET", location, auth, schema: "TokenInfo", errorFilter
     });
 }
 
@@ -1827,9 +1798,8 @@ export function* updateToken(
 ): CallApiResult<API.TokenInfo> {
 
     const location = ut`/tokens/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "PUT", location, body: token, auth, schema: NodeApiSchema.TokenInfo,
-        errorFilter
+    return yield* callApi<API.TokenInfo>({
+        caller, nodeName, method: "PUT", location, body: token, auth, schema: "TokenInfo", errorFilter
     });
 }
 
@@ -1839,8 +1809,8 @@ export function* deleteToken(
 ): CallApiResult<API.Result> {
 
     const location = ut`/tokens/${id}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1849,8 +1819,8 @@ export function* getUserListGeneral(
 ): CallApiResult<API.UserListInfo> {
 
     const location = ut`/user-lists/${name}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.UserListInfo, errorFilter
+    return yield* callApi<API.UserListInfo>({
+        caller, nodeName, method: "GET", location, schema: "UserListInfo", errorFilter
     });
 }
 
@@ -1860,8 +1830,8 @@ export function* getUserListSlice(
 ): CallApiResult<API.UserListSliceInfo> {
 
     const location = urlWithParameters(ut`/user-lists/${name}/items`, {after, before, limit});
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.UserListSliceInfo, errorFilter
+    return yield* callApi<API.UserListSliceInfo>({
+        caller, nodeName, method: "GET", location, schema: "UserListSliceInfo", errorFilter
     });
 }
 
@@ -1871,8 +1841,8 @@ export function* getUserListItem(
 ): CallApiResult<API.UserListItemInfo> {
 
     const location = ut`/user-lists/${name}/items/${remoteNodeName}`;
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.UserListItemInfo, errorFilter
+    return yield* callApi<API.UserListItemInfo>({
+        caller, nodeName, method: "GET", location, schema: "UserListItemInfo", errorFilter
     });
 }
 
@@ -1882,9 +1852,8 @@ export function* createUserListItem(
 ): CallApiResult<API.UserListItemInfo> {
 
     const location = ut`/user-lists/${name}/items`;
-    return yield* callApi({
-        caller, nodeName, method: "POST", location, body: item, auth, schema: NodeApiSchema.UserListItemInfo,
-        errorFilter
+    return yield* callApi<API.UserListItemInfo>({
+        caller, nodeName, method: "POST", location, body: item, auth, schema: "UserListItemInfo", errorFilter
     });
 }
 
@@ -1894,8 +1863,8 @@ export function* deleteUserListItem(
 ): CallApiResult<API.Result> {
 
     const location = ut`/user-lists/${name}/items/${remoteNodeName}`;
-    return yield* callApi({
-        caller, nodeName, method: "DELETE", location, auth, schema: NodeApiSchema.Result, errorFilter
+    return yield* callApi<API.Result>({
+        caller, nodeName, method: "DELETE", location, auth, schema: "Result", errorFilter
     });
 }
 
@@ -1904,7 +1873,7 @@ export function* whoAmI(
 ): CallApiResult<API.WhoAmI> {
 
     const location = "/whoami";
-    return yield* callApi({
-        caller, nodeName, method: "GET", location, schema: NodeApiSchema.WhoAmI, errorFilter
+    return yield* callApi<API.WhoAmI>({
+        caller, nodeName, method: "GET", location, schema: "WhoAmI", errorFilter
     });
 }

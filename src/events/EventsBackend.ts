@@ -3,7 +3,8 @@ import * as URI from 'uri-js';
 import { addMinutes, isBefore } from 'date-fns';
 
 import { formatSchemaErrors } from "api/error";
-import { ALLOWED_SELF_EVENTS, EVENT_SCHEMAS, eventAction, EventPacket, EventSource } from "api/events";
+import { eventAction, EventSource } from "api/events";
+import { ALLOWED_SELF_EVENTS, EVENT_SCHEMAS, EventPacket } from "api/events/api-schemas";
 import { ActionWithoutPayload } from "state/action-types";
 import { wakeUp } from "state/navigation/actions";
 import { now } from "util/misc";

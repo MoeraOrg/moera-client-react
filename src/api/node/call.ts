@@ -1,44 +1,13 @@
 import { apply, call, put, select } from 'typed-redux-saga';
 import { CallEffect, PutEffect, SelectEffect, TakeEffect } from 'redux-saga/effects';
-import { ValidateFunction } from 'ajv';
 import i18n from 'i18next';
 
-import {
-    Body,
-    BodyFormat,
-    CommentCreated,
-    CommentInfo,
-    CommentRevisionInfo,
-    CommentsSliceInfo,
-    DraftInfo,
-    EncodedCommentCreated,
-    EncodedCommentInfo,
-    EncodedCommentRevisionInfo,
-    EncodedCommentsSliceInfo,
-    EncodedDraftInfo,
-    EncodedEntryInfo,
-    EncodedFeedSliceInfo,
-    EncodedPostingInfo,
-    EncodedPostingRevisionInfo,
-    EncodedStoryInfo,
-    EntryInfo,
-    FeedSliceInfo,
-    formatSchemaErrors,
-    HomeNotConnectedError,
-    NameResolvingError,
-    NodeApiError,
-    NodeError,
-    PostingInfo,
-    PostingRevisionInfo,
-    SourceFormat,
-    StoryInfo
-} from "api";
-import * as NodeApiSchema from "api/node/api-schemas"
+import { formatSchemaErrors, HomeNotConnectedError, NameResolvingError, NodeApiError, NodeError } from "api";
+import { validateSchema } from "api/node/safe";
 import { retryFetch } from "api/fetch-timeout";
 import { xhrFetch } from "api/node/xhr";
 import { ProgressHandler } from "api/fetcher";
-import { BodyError, CausedError } from "api/error";
-import { isSchemaValid } from "api/schema";
+import { CausedError } from "api/error";
 import { ClientState } from "state/state";
 import { ClientAction } from "state/action";
 import { errorAuthInvalid } from "state/error/actions";
@@ -58,17 +27,18 @@ export type ErrorFilter = boolean | string[] | ((code: string) => boolean);
 
 type CallException = (e: any, details?: string | null) => NodeError;
 
-export type CallApiParams<T> = {
+export interface CallApiParams {
     caller: ClientAction | null;
     location: string;
     nodeName?: string | null;
     method?: HttpMethod;
     auth?: boolean | string;
     body?: any;
-    schema: ValidateFunction<T> | "blob";
+    schema: string;
+    decodeBodies?: boolean;
     errorFilter?: ErrorFilter;
     onProgress?: ProgressHandler;
-};
+}
 
 export type CallApiResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect | TakeEffect, T>;
 
@@ -80,9 +50,10 @@ export function* callApi<T>({
     auth = false,
     body = null,
     schema,
+    decodeBodies: decode = false,
     errorFilter = false,
     onProgress
-}: CallApiParams<T>):  CallApiResult<T> {
+}: CallApiParams):  CallApiResult<T> {
     let rootLocation: string | null = null;
     let rootApi = "";
     let errorTitle = "";
@@ -147,7 +118,8 @@ export function* callApi<T>({
         }
 
         if (!response.ok) {
-            if (!isSchemaValid(NodeApiSchema.Result, data)) {
+            const {valid} = yield* call(validateSchema, "Result", data, false);
+            if (!valid) {
                 throw exception("Server returned error status");
             }
             if (data.errorCode === "authentication.invalid") {
@@ -170,9 +142,15 @@ export function* callApi<T>({
                 throw exception("Server returned error status: " + data.message);
             }
         }
-        if (schema !== "blob" && !isSchemaValid(schema, data)) {
-            throw exception("Server returned incorrect response", formatSchemaErrors(schema.errors));
+        if (schema !== "blob") {
+            const result = yield* call(validateSchema, schema, data, decode);
+            const {valid, errors} = result;
+            if (!valid) {
+                throw exception("Server returned incorrect response", formatSchemaErrors(errors));
+            }
+            data = result.data;
         }
+
         return data;
     }
 }
@@ -290,69 +268,4 @@ function isErrorCodeAllowed(errorCode: string, filter: ErrorFilter): boolean {
         return filter(errorCode);
     }
     return false;
-}
-
-function decodeBody(caller: ClientAction | null, encoded: string, format: BodyFormat | SourceFormat | null): Body {
-    if (format != null && format.toLowerCase() === "application") {
-        return {text: ""};
-    }
-    let body = JSON.parse(encoded);
-    if (!isSchemaValid(NodeApiSchema.Body, body)) {
-        throw new BodyError(formatSchemaErrors(NodeApiSchema.Body.errors), caller);
-    }
-    return body;
-}
-
-type Entities = Partial<PostingInfo | PostingRevisionInfo | CommentInfo | CommentRevisionInfo | StoryInfo
-    | CommentCreated | DraftInfo | FeedSliceInfo | CommentsSliceInfo | EntryInfo>;
-type EncodedEntities = Partial<EncodedPostingInfo | EncodedPostingRevisionInfo | EncodedCommentInfo
-    | EncodedCommentRevisionInfo | EncodedStoryInfo | EncodedCommentCreated | EncodedDraftInfo | EncodedFeedSliceInfo
-    | EncodedCommentsSliceInfo | EncodedEntryInfo>;
-
-export function decodeBodies(caller: ClientAction | null, data: EncodedPostingInfo): PostingInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedPostingRevisionInfo): PostingRevisionInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedPostingInfo[]): PostingInfo[];
-export function decodeBodies(caller: ClientAction | null, data: EncodedPostingRevisionInfo[]): PostingRevisionInfo[];
-export function decodeBodies(caller: ClientAction | null, data: EncodedCommentInfo): CommentInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedCommentRevisionInfo): CommentRevisionInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedCommentRevisionInfo[]): CommentRevisionInfo[];
-export function decodeBodies(caller: ClientAction | null, data: EncodedStoryInfo): StoryInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedCommentCreated): CommentCreated;
-export function decodeBodies(caller: ClientAction | null, data: EncodedDraftInfo): DraftInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedDraftInfo[]): DraftInfo[];
-export function decodeBodies(caller: ClientAction | null, data: EncodedFeedSliceInfo): FeedSliceInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedCommentsSliceInfo): CommentsSliceInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedEntryInfo): EntryInfo;
-export function decodeBodies(caller: ClientAction | null, data: EncodedEntryInfo[]): EntryInfo[];
-export function decodeBodies(caller: ClientAction | null, data: EncodedEntities): Entities;
-export function decodeBodies(
-    caller: ClientAction | null, data: EncodedEntities | EncodedEntities[]
-): Entities | Entities[] {
-    if (Array.isArray(data)) {
-        return data.map(p => decodeBodies(caller, p));
-    }
-
-    const decoded: any = {...data};
-    if ("stories" in data && data.stories != null) {
-        decoded.stories = data.stories.map(p => decodeBodies(caller, p));
-    }
-    if ("comments" in data && data.comments != null) {
-        decoded.comments = data.comments.map(p => decodeBodies(caller, p));
-    }
-    if ("comment" in data && data.comment != null) {
-        decoded.comment = decodeBodies(caller, data.comment);
-    }
-    if ("posting" in data && data.posting != null) {
-        decoded.posting = decodeBodies(caller, data.posting);
-    }
-    if ("body" in data && data.body != null) {
-        decoded.body = decodeBody(caller, data.body, data.bodyFormat ?? null);
-    }
-    if ("bodyPreview" in data && data.bodyPreview != null) {
-        decoded.bodyPreview = decodeBody(caller, data.bodyPreview, data.bodyFormat ?? null);
-    }
-    if ("bodySrc" in data && data.bodySrc != null) {
-        decoded.bodySrc = decodeBody(caller, data.bodySrc, data.bodySrcFormat ?? null);
-    }
-    return decoded;
 }
