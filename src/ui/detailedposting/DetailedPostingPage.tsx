@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TFunction } from 'i18next';
@@ -54,7 +54,7 @@ export default function DetailedPostingPage() {
     const googlePlayHiding = useSelector(isGooglePlayHiding);
     const {t} = useTranslation();
 
-    const {story = null, href, feedTitle} = getFeedAndStory(posting, t);
+    const {story = null, href, feedTitle} = useMemo(() => getFeedAndStory(posting, t), [posting, t]);
     const googlePlayProhibited = googlePlayHiding && isPostingSheriffProhibited(posting, SHERIFF_GOOGLE_PLAY_TIMELINE);
     const postingReady = posting != null && posting.parentMediaId == null && !googlePlayProhibited;
     return (
