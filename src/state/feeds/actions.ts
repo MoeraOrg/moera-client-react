@@ -1,5 +1,6 @@
 import { actionWithoutPayload, ActionWithoutPayload, actionWithPayload, ActionWithPayload } from "state/action-types";
 import { ContactInfo, FeedInfo, FeedStatus, StoryInfo, SubscriberInfo, SubscriptionInfo } from "api";
+import { FeedSlice } from "state/feeds/state";
 
 export type FeedGeneralLoadAction = ActionWithPayload<"FEED_GENERAL_LOAD", {
     feedName: string;
@@ -181,12 +182,7 @@ export const feedFutureSliceLoadFailed = (feedName: string): FeedFutureSliceLoad
 
 export type FeedPastSliceSetAction = ActionWithPayload<"FEED_PAST_SLICE_SET", {
     feedName: string;
-    stories: StoryInfo[];
-    before: number;
-    after: number;
-    totalInPast: number;
-    totalInFuture: number;
-}>;
+} & FeedSlice>;
 export const feedPastSliceSet = (
     feedName: string, stories: StoryInfo[], before: number, after: number, totalInPast: number, totalInFuture: number
 ): FeedPastSliceSetAction =>
@@ -194,12 +190,7 @@ export const feedPastSliceSet = (
 
 export type FeedFutureSliceSetAction = ActionWithPayload<"FEED_FUTURE_SLICE_SET", {
     feedName: string;
-    stories: StoryInfo[];
-    before: number;
-    after: number;
-    totalInPast: number;
-    totalInFuture: number;
-}>;
+} & FeedSlice>;
 export const feedFutureSliceSet = (
     feedName: string, stories: StoryInfo[], before: number, after: number, totalInPast: number, totalInFuture: number
 ): FeedFutureSliceSetAction =>

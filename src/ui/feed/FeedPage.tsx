@@ -74,7 +74,10 @@ export default function FeedPage({feedName, visible, title, shareable}: Props) {
         const sanchor = toSafeRange(anchor);
         const sbefore = toSafeRange(before);
         const safter = toSafeRange(after);
-        if (sbefore > safter && sanchor <= sbefore && sanchor >= safter) {
+        if (sbefore > safter
+            && sanchor <= sbefore
+            && ((sanchor > safter) || (sanchor === safter && safter === Number.MIN_SAFE_INTEGER))
+        ) {
             scrollTo(sanchor);
             onScroll();
             dispatch(feedScrolledToAnchor(feedName));
@@ -226,18 +229,13 @@ function getTopmostMoment(): number {
 
 function getPostingAt(moment: number): HTMLElement | null {
     const postings = document.getElementsByClassName("posting");
-    let lastPosting = null;
     for (let i = 0; i < postings.length; i++) {
         const posting = postings.item(i) as HTMLElement;
-        if (posting == null) {
-            continue;
-        }
-        lastPosting = posting;
         if (postingMoment(posting) <= moment) {
             return posting;
         }
     }
-    return lastPosting;
+    return postings.length > 0 ? postings.item(postings.length - 1) as HTMLElement : null;
 }
 
 function getNotViewedMoment(): number | null {

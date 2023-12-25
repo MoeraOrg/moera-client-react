@@ -5,7 +5,7 @@ import { StoryInfo } from "api";
 import { ClientAction } from "state/action";
 import { WithContext } from "state/action-types";
 import { emptyFeed, emptyInfo } from "state/feeds/empty";
-import { ExtStoryInfo, FeedsState, FeedState } from "state/feeds/state";
+import { ExtStoryInfo, FeedSlice, FeedsState, FeedState } from "state/feeds/state";
 import { Page, PAGE_NEWS, PAGE_TIMELINE } from "state/navigation/pages";
 import { getInstantSummary, getInstantTypeDetails } from "ui/instant/instant-types";
 import { replaceEmojis } from "util/html";
@@ -263,56 +263,57 @@ export default (state: FeedsState = initialState, action: WithContext<ClientActi
                 .value();
         }
 
-        case "FEED_PAST_SLICE_SET": {
-            const {feedName} = action.payload;
+        case "FEED_PAST_SLICE_SET":
+        case "FEED_FUTURE_SLICE_SET": {
+            const {feedName, ...loadedSlice} = action.payload;
             const {istate, feed} = getFeed(state, feedName);
-            if (action.payload.before >= feed.after && action.payload.after < feed.after) {
-                const stories = feed.stories.slice();
-                action.payload.stories
-                    .filter(t => t.moment <= feed.after)
-                    .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
-                stories.sort((a, b) => b.moment - a.moment);
-                istate.assign([feedName], {
-                    loadingPast: false,
-                    after: action.payload.after,
-                    stories
-                });
-            } else {
+
+            if (action.type === "FEED_PAST_SLICE_SET") {
                 istate.set([feedName, "loadingPast"], false);
             }
-            if (action.payload.after <= feed.after) {
-                istate.set([feedName, "totalInPast"], action.payload.totalInPast);
-            }
-            if (action.payload.before >= feed.before) {
-                istate.set([feedName, "totalInFuture"], action.payload.totalInFuture);
-            }
-            return istate.value();
-        }
-
-        case "FEED_FUTURE_SLICE_SET": {
-            const {feedName} = action.payload;
-            const {istate, feed} = getFeed(state, feedName);
-            if (action.payload.before > feed.before && action.payload.after <= feed.before) {
-                const stories = feed.stories.slice();
-                action.payload.stories
-                    .filter(t => t.moment > feed.before)
-                    .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
-                stories.sort((a, b) => b.moment - a.moment);
-                istate.assign([feedName], {
-                    loadingFuture: false,
-                    before: action.payload.before,
-                    stories,
-                    totalInFuture: action.payload.totalInFuture
-                });
-            } else {
+            if (action.type === "FEED_FUTURE_SLICE_SET") {
                 istate.set([feedName, "loadingFuture"], false);
             }
-            if (action.payload.after <= feed.after) {
-                istate.set([feedName, "totalInPast"], action.payload.totalInPast);
+
+            let {pending, before, after} = feed;
+            pending.push(loadedSlice);
+            const stories = feed.stories.slice();
+
+            let changed = true;
+            while (changed) {
+                changed = false;
+                const posponed: FeedSlice[] = [];
+                for (const slice of pending) {
+                    const prevBefore = before;
+                    const prevAfter = after;
+                    if (slice.before >= prevAfter && slice.after < prevAfter) {
+                        slice.stories
+                            .filter(t => t.moment <= prevAfter)
+                            .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
+                        after = slice.after;
+                    } else if (slice.before > prevBefore && slice.after <= prevBefore) {
+                        slice.stories
+                            .filter(t => t.moment > prevBefore)
+                            .forEach(t => stories.push(extractStory(t, action.context.homeOwnerName)));
+                        before = slice.before;
+                    } else {
+                        posponed.push(slice);
+                        continue;
+                    }
+
+                    if (slice.after <= prevAfter) {
+                        istate.set([feedName, "totalInPast"], slice.totalInPast);
+                    }
+                    if (slice.before >= prevBefore) {
+                        istate.set([feedName, "totalInFuture"], slice.totalInFuture);
+                    }
+                    changed = true;
+                }
+                pending = posponed;
             }
-            if (action.payload.before >= feed.before) {
-                istate.set([feedName, "totalInFuture"], action.payload.totalInFuture);
-            }
+
+            stories.sort((a, b) => b.moment - a.moment);
+            istate.assign([feedName], {before, after, stories, pending});
             return istate.value();
         }
 
