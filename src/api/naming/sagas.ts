@@ -5,7 +5,7 @@ import { ValidateFunction } from 'ajv';
 import { formatSchemaErrors, NamingApi, NamingError } from "api";
 import { RegisteredNameInfo } from "api/naming/api-types";
 import { retryFetch } from "api/fetch-timeout";
-import { isSchemaValid } from "api/schema";
+import { BasicValidateFunction, isSchemaValid } from "api/schema";
 import { ClientAction } from "state/action";
 import { getSetting } from "state/settings/selectors";
 
@@ -17,7 +17,7 @@ export type CallNamingParams<T> = {
     caller: ClientAction | null,
     method: string;
     params: any[];
-    schema: ValidateFunction<T>;
+    schema: BasicValidateFunction<T>;
 };
 
 export type CallNamingResult<T> = Generator<CallEffect | PutEffect<any> | SelectEffect, T>;
@@ -47,7 +47,7 @@ function* callNamingBoolean({caller, method, params}: CallNamingBooleanParams): 
     const exception: CallException = (e, details = null) => new NamingError(method, e, details, caller);
     const data = yield* fetchNaming(method, params, exception);
     if (!isSchemaValid(NamingApi.BooleanResult, data)) {
-        throw exception("Response format incorrect", formatSchemaErrors(NamingApi.ObjectResult.errors));
+        throw exception("Response format incorrect", formatSchemaErrors(NamingApi.BooleanResult.errors));
     }
     if (data.result == null) {
         throw exception("Return value is null");
