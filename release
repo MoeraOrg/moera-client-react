@@ -1,6 +1,0 @@
-#!/bin/bash
-
-./build-number -j > src/build-number.js
-node scripts/build.js "$@"
-echo
-echo "Build number is `./build-number`"

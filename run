@@ -1,4 +1,3 @@
 #!/bin/sh
 
-./build-number -j > src/build-number.js
 PORT=3000 yarn start
