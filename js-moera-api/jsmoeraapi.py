@@ -38,26 +38,27 @@ def generate_enum(enum: Any, tfile: TextIO) -> None:
 
 def schema_type(sfile: TextIO, indent: int, a_type: str, struct: bool = False, nullable: bool = False,
                 default: Any = None, min: float | None = None, max: float | None = None) -> None:
-    if struct and not nullable:
-        sfile.write(a_type + 'Type')
-        return
     sfile.write('{\n')
     if struct:
-        sfile.write(ind(indent + 1) + f'...{a_type}Type')
+        sfile.write(ind(indent + 1) + f'$ref: "#/definitions/{a_type}"')
+        if nullable:
+            sfile.write(',\n')
+            sfile.write(ind(indent + 1) + 'type: "object",\n')
+            sfile.write(ind(indent + 1) + 'nullable: true')
     else:
         sfile.write(ind(indent + 1) + f'type: "{a_type}"')
-    if nullable:
-        sfile.write(',\n')
-        sfile.write(ind(indent + 1) + 'nullable: true')
-    if default is not None:
-        sfile.write(',\n')
-        sfile.write(ind(indent + 1) + f'default: {default}')
-    if min is not None:
-        sfile.write(',\n')
-        sfile.write(ind(indent + 1) + f'minimum: {min}')
-    if max is not None:
-        sfile.write(',\n')
-        sfile.write(ind(indent + 1) + f'maximum: {max}')
+        if nullable:
+            sfile.write(',\n')
+            sfile.write(ind(indent + 1) + 'nullable: true')
+        if default is not None:
+            sfile.write(',\n')
+            sfile.write(ind(indent + 1) + f'default: {default}')
+        if min is not None:
+            sfile.write(',\n')
+            sfile.write(ind(indent + 1) + f'minimum: {min}')
+        if max is not None:
+            sfile.write(',\n')
+            sfile.write(ind(indent + 1) + f'maximum: {max}')
     sfile.write('\n')
     sfile.write(ind(indent) + '}')
 
@@ -108,16 +109,16 @@ def generate_operations(operations: Any, tfile: TextIO, sfile: TextIO) -> None:
     tfile.write('}\n')
 
     sfile.write('\n')
-    sfile.write('const {name}Type: JSONSchemaType<API.{name}> = {{\n'.format(name=operations['name']))
-    sfile.write('    type: "object",\n')
-    sfile.write('    properties: {\n')
+    sfile.write(f'{ind(2)}{operations["name"]}: {{\n')
+    sfile.write(f'{ind(3)}type: "object",\n')
+    sfile.write(f'{ind(3)}properties: {{\n')
     for field in operations['fields']:
-        sfile.write(f'{ind(2)}"{field["name"]}": ')
-        schema_type(sfile, 2, "string", nullable=True)
+        sfile.write(f'{ind(4)}"{field["name"]}": ')
+        schema_type(sfile, 4, "string", nullable=True)
         sfile.write(',\n')
-    sfile.write('    },\n')
-    sfile.write('    additionalProperties: false\n')
-    sfile.write('};\n')
+    sfile.write(f'{ind(3)}}},\n')
+    sfile.write(f'{ind(3)}additionalProperties: false\n')
+    sfile.write(f'{ind(2)}}},\n')
 
 
 JS_TYPES = {
@@ -202,20 +203,15 @@ class Structure:
             tfile.write('export type {name} = {name}Base<Body>;\n'.format(name=self.data['name']))
 
     def generate_schema(self, sfile: TextIO) -> None:
-        if self.uses_body:
-            sfile.write('\nexport const {name}Type: JSONSchemaType<API.Encoded{name}> = {{\n'
-                        .format(name=self.data['name']))
-        else:
-            sfile.write('\nexport const {name}Type: JSONSchemaType<API.{name}> = {{\n'
-                        .format(name=self.data['name']))
-        sfile.write('    type: "object",\n')
-        sfile.write('    properties: {\n')
+        sfile.write(f'\n{ind(2)}{self.data["name"]}: {{\n')
+        sfile.write(f'{ind(3)}type: "object",\n')
+        sfile.write(f'{ind(3)}properties: {{\n')
         required: list[str] = []
         for field in self.data['fields']:
             if field.get('type') == 'any':
                 continue
 
-            sfile.write(f'{ind(2)}"{field["name"]}": ')
+            sfile.write(f'{ind(4)}"{field["name"]}": ')
             default = field.get('js-default')
             optional = field.get('optional', False) and default is None
             array = field.get('array', False)
@@ -234,37 +230,32 @@ class Structure:
                 s_type = SCHEMA_TYPES.get(field['type'])
                 if callable(s_type):
                     t = None
-                    s_type(sfile, 2, nullable=optional)
+                    s_type(sfile, 4, nullable=optional)
                 else:
                     assert isinstance(s_type, tuple)
                     t, array = s_type
             if t is not None:
                 if array:
-                    schema_array(sfile, 2, t, struct=struct, nullable=optional, default=default,
+                    schema_array(sfile, 4, t, struct=struct, nullable=optional, default=default,
                                  min_items=field.get('min-items'), max_items=field.get('max-items'),
                                  min=field.get('min'), max=field.get('max'))
                 else:
-                    schema_type(sfile, 2, t, struct=struct, nullable=optional, default=default,
+                    schema_type(sfile, 4, t, struct=struct, nullable=optional, default=default,
                                 min=field.get('min'), max=field.get('max'))
             sfile.write(',\n')
-        sfile.write('    },\n')
+        sfile.write(f'{ind(3)}}},\n')
         if len(required) > 0:
-            sfile.write('    required: [\n')
+            sfile.write(f'{ind(3)}required: [\n')
             for name in required:
-                sfile.write(f'        "{name}",\n')
-            sfile.write('    ],\n')
-        sfile.write('    additionalProperties: false\n')
-        sfile.write('};\n')
-        sfile.write('\nexport const {name} = schema({name}Type);\n'.format(name=self.data['name']))
+                sfile.write(f'{ind(4)}"{name}",\n')
+            sfile.write(f'{ind(3)}],\n')
+        sfile.write(f'{ind(3)}additionalProperties: false\n')
+        sfile.write(f'{ind(2)}}},\n')
 
         if self.output_array:
-            sfile.write(f'\nexport const {self.data["name"]}Array = schema(')
-            schema_array(sfile, 0, self.data['name'], struct=True)
-            if self.uses_body:
-                tmpl = ' as JSONSchemaType<API.Encoded%s[]>);\n'
-            else:
-                tmpl = ' as JSONSchemaType<API.%s[]>);\n'
-            sfile.write(tmpl % self.data['name'])
+            sfile.write(f'\n{ind(2)}{self.data["name"]}Array: ')
+            schema_array(sfile, 2, self.data['name'], struct=True)
+            sfile.write(',\n')
 
     def generate(self, tfile: TextIO, sfile: TextIO, structs: dict[str, Structure]) -> None:
         self.generate_class(tfile, structs)
@@ -337,19 +328,6 @@ def generate_structures(structs: dict[str, Structure], tfile: TextIO, sfile: Tex
     if len(loop) > 0:
         print('Dependency loop in structures: ' + ', '.join(loop))
         exit(1)
-    generate_schema_map(structs, sfile)
-
-
-def generate_schema_map(structs: dict[str, Structure], sfile: TextIO) -> None:
-    sfile.write(f'\nexport const NODE_API_SCHEMAS: Partial<Record<string, ValidateFunction<any>>> = {{\n')
-    for struct in structs.values():
-        if not struct.output:
-            continue
-        name = struct.data['name']
-        sfile.write(f'    {name},\n')
-        if struct.output_array:
-            sfile.write(f'    {name}Array,\n')
-    sfile.write('};\n')
 
 
 def comma_wrap(s: str, indent: int) -> str:
@@ -524,12 +502,10 @@ export type PrincipalValue = "none" | "private" | "admin" | "owner" | "secret" |
     | "signed" | "subscribed" | "public" | "unset" | string;
 '''
 
-PREAMBLE_SCHEMAS = '''// This file is generated
+PREAMBLE_SCHEMAS = '''// This file is generated for schema compiler only, do not use directly
 
-import { JSONSchemaType, ValidateFunction } from 'ajv';
-
-import schema from "api/schema";
-import * as API from "api/node/api-types";
+export const NODE_API_SCHEMAS = {
+    definitions: {
 '''
 
 PREAMBLE_SAGAS = '''// This file is generated
@@ -547,7 +523,7 @@ def generate_types(api: Any, outdir: str) -> None:
     structs = scan_structures(api)
 
     with open(outdir + '/api-types.ts', 'w+') as tfile:
-        with open(outdir + '/api-schemas.ts', 'w+') as sfile:
+        with open(outdir + '/api-schemas.mjs', 'w+') as sfile:
             tfile.write(PREAMBLE_TYPES)
             sfile.write(PREAMBLE_SCHEMAS)
             for enum in api['enums']:
@@ -555,6 +531,8 @@ def generate_types(api: Any, outdir: str) -> None:
             for operations in api['operations']:
                 generate_operations(operations, tfile, sfile)
             generate_structures(structs, tfile, sfile)
+            sfile.write('\n    }\n')
+            sfile.write('}\n')
 
     with open(outdir + '/api-sagas.ts', 'w+') as afile:
         afile.write(PREAMBLE_SAGAS)

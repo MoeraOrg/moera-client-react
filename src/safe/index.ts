@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-globals */
 
 import { isSchemaValid } from "api/schema";
-import * as NodeApiSchema from "api/node/api-schemas";
-import { NODE_API_SCHEMAS } from "api/node/api-schemas";
+import { NODE_API_VALIDATORS } from "api/node/api-validators";
 import { safeValidateResponse, SafeValidationErrors, SafeWorkerMessage } from "safe/message-types";
 import {
     Body,
@@ -35,9 +34,9 @@ self.onmessage = (e: MessageEvent) => {
     switch (message.type) {
         case "VALIDATE": {
             let {id, schemaName, data, decodeBodies: decode} = message.payload;
-            const schema = NODE_API_SCHEMAS[schemaName];
+            const schema = NODE_API_VALIDATORS[schemaName];
             if (schema == null) {
-                postMessage(safeValidateResponse(id, false, [{message: `Schema ${schemaName} not found`}]));
+                postMessage(safeValidateResponse(id, false, [{message: `Schema ${schemaName} is not found`}]));
                 break;
             }
             let valid = isSchemaValid(schema, data);
@@ -74,8 +73,12 @@ function decodeBody(encoded: string, format: BodyFormat | SourceFormat | null): 
         return {text: ""};
     }
     let body = JSON.parse(encoded);
-    if (!isSchemaValid(NodeApiSchema.Body, body)) {
-        throw new BodyError(NodeApiSchema.Body.errors);
+    const schema = NODE_API_VALIDATORS['Body'];
+    if (schema == null) {
+        throw new BodyError([{message: "Schema Body is not found"}]);
+    }
+    if (!isSchemaValid(schema, body)) {
+        throw new BodyError(schema.errors);
     }
     return body;
 }

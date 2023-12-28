@@ -1,7 +1,7 @@
 import { JSONSchemaType, ValidateFunction } from 'ajv';
 
 import schema from "api/schema";
-import * as NodeApiSchema from "api/node/api-schemas";
+import * as NodeApiSchema from "api/node/api-schemas.old";
 import {
     AskSubjectsChangedEvent,
     AvatarAddedEvent,

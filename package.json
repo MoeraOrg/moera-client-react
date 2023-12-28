@@ -141,7 +141,8 @@
     "parser": "@typescript-eslint/parser",
     "rules": {
       "import/no-anonymous-default-export": "off"
-    }
+    },
+    "ignorePatterns": ["**/api-validators.js"]
   },
   "browserslist": [
     ">0.2%",

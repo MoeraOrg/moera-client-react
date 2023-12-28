@@ -1,6 +1,5 @@
 import { apply, call, select } from 'typed-redux-saga';
 import { CallEffect, PutEffect, SelectEffect } from 'redux-saga/effects';
-import { ValidateFunction } from 'ajv';
 
 import { formatSchemaErrors, NamingApi, NamingError } from "api";
 import { RegisteredNameInfo } from "api/naming/api-types";
